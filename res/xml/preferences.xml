@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+	<PreferenceScreen android:summary="Connection settings"
+		android:title="Network">
+		<PreferenceCategory android:summary="(If active service will run in background)"
+			android:title="For incoming calls">
+			<CheckBoxPreference android:title="Use wifi"
+				android:defaultValue="true" android:summary="Use wifi for incoming calls"
+				android:key="use_wifi_in"></CheckBoxPreference>
+			<CheckBoxPreference android:title="Use 3G"
+				android:summary="Use gsm for VoIP (your carrier must allow you to use this option)"
+				android:defaultValue="false" android:key="use_3g_in"></CheckBoxPreference>
+		</PreferenceCategory>
+
+		<PreferenceCategory android:title="For outgoing call">
+			<CheckBoxPreference android:summary="Use wifi for outgoing calls"
+				android:key="use_wifi_out" android:title="Use Wifi"
+				android:defaultValue="true"></CheckBoxPreference>
+			<CheckBoxPreference
+				android:summary="Use gsm for VoIP (your carrier must allow you to use this option)"
+				android:key="use_3g_out" android:title="Use 3G"
+				android:defaultValue="false"></CheckBoxPreference>
+
+		</PreferenceCategory>
+		<PreferenceCategory android:title="Misc">
+			<ListPreference android:key="network_transport"
+				android:summary="Network transport used" android:title="Transport"
+				android:entries="@array/transport_choices" android:entryValues="@array/transport_values"
+				android:defaultValue="UDP"></ListPreference>
+		</PreferenceCategory>
+
+
+	</PreferenceScreen>
+	<PreferenceScreen android:summary="Media stream options"
+		android:title="Media">
+		<CheckBoxPreference android:summary="Activate echo cancellation"
+			android:title="Echo cancellation" android:key="echo_cancellation"
+			android:defaultValue="true"></CheckBoxPreference>
+	</PreferenceScreen>
+</PreferenceScreen>

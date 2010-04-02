@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<resources>
+	<string-array name="scheme_choices">
+		<item>Digest</item>
+		<item>PGP</item>
+	</string-array>
+	<string-array name="scheme_values">
+		<item>Digest</item>
+		<item>PGP</item>
+	</string-array>
+	<string-array name="data_type_choices">
+		<item>Plain password</item>
+		<item>Data digest</item>
+		<item>Ext aka</item>
+	</string-array>
+	<string-array name="data_type_values">
+		<item>0</item>
+		<item>1</item>
+		<item>16</item>
+	</string-array>
+
+<string-array name="transport_choices"><item>TCP</item>
+<item>UDP</item>
+<item>SRTP</item>
+</string-array>
+<string-array name="transport_values"><item>TCP</item>
+<item>UDP</item>
+<item>SRTP</item>
+</string-array>
+</resources>

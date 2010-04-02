@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	android:versionCode="1" android:versionName="1.0" package="com.csipsimple">
+	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone">
+	<!-- android:launchMode="singleTask" android:name=".ui.Acompanion" -->
+		<activity android:label="@string/app_name"
+			android:name=".ui.SipHome"
+			android:launchMode="singleTask" android:theme="@android:style/Theme.NoTitleBar">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".ui.Preferences"></activity>
+		<activity android:name=".ui.CallHandler" android:label="Incoming call"
+			android:screenOrientation="nosensor" android:excludeFromRecents="true" android:launchMode="singleInstance" android:theme="@android:style/Theme.Dialog"></activity>
+		<activity android:name=".ui.AccountsList" android:label="Accounts"
+			android:launchMode="singleTask"></activity>
+		<activity android:name=".ui.CStackUpdater" android:launchMode="singleTask" android:theme="@android:style/Theme.Light.NoTitleBar"></activity>
+
+		<service android:name=".service.SipService" android:exported="true">
+		<intent-filter >
+				<action android:name="com.csipsimple.service.ISipService"/>
+		</intent-filter>
+		</service>
+
+		<activity android:name=".wizards.AddAccountWizard"
+			android:label="Account Wizard" android:theme="@android:style/Theme.Dialog"></activity>
+		<activity android:name=".wizards.impl.Expert" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name=".wizards.impl.Ecs" android:theme="@android:style/Theme.NoTitleBar"></activity>
+	<activity android:name=".ui.Dialer" android:launchMode="singleTask"></activity>
+<activity android:launchMode="singleTask" android:name=".ui.BuddyList"></activity>
+<activity android:name=".wizards.impl.Freephonie" android:theme="@android:style/Theme.NoTitleBar"></activity>
+<receiver android:name=".service.DeviceStateReceiver">
+<intent-filter><action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
+
+
+</intent-filter>
+</receiver>
+<activity android:name=".ui.WelcomeScreen" android:theme="@android:style/Theme.Dialog" android:label="Thanks for using CSipSimple"></activity>
+</application>
+	<uses-sdk android:minSdkVersion="3"/>
+
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>
+	<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"></uses-permission>
+	<uses-permission android:name="android.permission.WRITE_SETTINGS"></uses-permission>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+	<uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
+	<uses-permission android:name="android.permission.WRITE_CONTACTS"></uses-permission>
+	<uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
+
+	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+
+
+</manifest> 

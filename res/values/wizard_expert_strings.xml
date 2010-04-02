@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<resources>
+<string name="w_expert_display_name">Account name</string>
+<string name="w_expert_display_name_desc">Display name for this account</string>
+<string name="w_expert_acc_id">Account id</string>
+<string name="w_expert_acc_id_desc">For example : &quot;DisplayName &lt;sip:login@registrar&gt;&quot;</string>
+<string name="w_expert_reg_uri">Registration URI</string>
+<string name="w_expert_reg_uri_desc">For example : &quot;sip:registrar.net&quot;</string>
+<string name="w_expert_realm">Realm</string>
+<string name="w_expert_realm_desc">Identify the secure domain (if you don\'t know, you can use *) </string>
+<string name="w_expert_username">User name</string>
+<string name="w_expert_username_desc">Login to use to authentify</string>
+<string name="w_expert_data">Data</string>
+<string name="w_expert_data_desc">Data to be used to authentify (could be a password)</string>
+</resources>
