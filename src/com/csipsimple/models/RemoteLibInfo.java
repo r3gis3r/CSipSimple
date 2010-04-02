@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -29,25 +32,71 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5622422102685917690L;
+	public int PrimaryKey = -1;
 	private String mFileName;
 	private File mFilePath;
 	private URI mURI;
+	private String mVersion;
+	
+	//Blabla
+	private String mLabel;
+	private String mChangelog;
+	private String mDescription;
+	
+	private boolean isValid = false;
+	
 
 	public RemoteLibInfo(Parcel in) {
-		// TODO Auto-generated constructor stub
+        readFromParcel(in);
+
+	}
+
+
+	public RemoteLibInfo(JSONObject stack) {
+		JSONObject latestUpJSON;
+		try {
+			latestUpJSON = stack.getJSONArray("versions").getJSONObject(0);
+			mChangelog = latestUpJSON.getString("changelog");
+			mVersion = latestUpJSON.getString("version");
+			mURI= URI.create(latestUpJSON.getString("download_url"));
+			mDescription = stack.getString("description");
+			mLabel = stack.getString("label");
+			isValid = true;
+		} catch (JSONException e) {
+			isValid = false;
+		}
 	}
 
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
+    public void readFromParcel(Parcel in){
+            PrimaryKey = in.readInt();
+            mFileName = in.readString();
+            mFilePath = new File(in.readString());
+            mURI = URI.create(in.readString());
+            mVersion = in.readString();
+            mLabel = in.readString();
+            mChangelog = in.readString();
+            mDescription = in.readString();
+    }
+    
 	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
+    public void writeToParcel(Parcel arg0, int arg1){
+            arg0.writeInt(PrimaryKey);
+            arg0.writeString(mFileName);
+            arg0.writeString(mFilePath.getAbsolutePath());
+            arg0.writeString(mURI.toString());
+            arg0.writeString(mVersion);
+            arg0.writeString(mLabel);
+            arg0.writeString(mChangelog);
+            arg0.writeString(mDescription);
+    }
 
-	}
+	
+	
 
 	public static final Parcelable.Creator<RemoteLibInfo> CREATOR = new Parcelable.Creator<RemoteLibInfo>() {
 		public RemoteLibInfo createFromParcel(Parcel in) {

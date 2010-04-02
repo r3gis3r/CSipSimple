@@ -22,20 +22,30 @@ package com.csipsimple.service;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.lang.reflect.Field;
 import java.net.URI;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.csipsimple.models.RemoteLibInfo;
-import com.csipsimple.utils.MD5;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -53,13 +63,15 @@ import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.csipsimple.R;
-import com.csipsimple.service.IDownloadLibService;
-import com.csipsimple.service.IDownloadLibServiceCallback;
+import com.csipsimple.models.RemoteLibInfo;
+import com.csipsimple.utils.MD5;
 
 public class DownloadLibService extends Service {
 
 	private static final String THIS_FILE = "DownloadLibService";
+	private static final int BUFFER = 2048;
 	private WifiLock mWifiLock;
 	private ConnectivityManager mConnectivityManager;
 	private ConnectionChangeReceiver myConnectionChangeReceiver;
@@ -67,38 +79,44 @@ public class DownloadLibService extends Service {
 	private final RemoteCallbackList<IDownloadLibServiceCallback> mCallbacks = new RemoteCallbackList<IDownloadLibServiceCallback>();
 	private RemoteLibInfo mCurrentUpdate;
 	private boolean prepareForDownloadCancel;
+	private boolean mDownloading;
+	private long localFileSize;
+	private long mTotalDownloaded;
+	private long mContentLength;
 
 	// Implement public interface for the service
 	private final IDownloadLibService.Stub mBinder = new IDownloadLibService.Stub() {
 
 		@Override
 		public void startDownload(RemoteLibInfo lib) throws RemoteException {
-			// TODO Auto-generated method stub
-
+			mDownloading = true;
+			boolean success = checkForConnectionAndDownload(lib);
+			mDownloading = false;
+			if(success) {
+				downloadFinished();
+			}else {
+				downloadError();
+			}
 		}
 
 		@Override
 		public boolean isDownloadRunning() throws RemoteException {
-			// TODO Auto-generated method stub
-			return false;
+			return mDownloading;
 		}
 
 		@Override
 		public boolean pauseDownload() throws RemoteException {
-			// TODO Auto-generated method stub
-			return false;
+			return stopDownload();
 		}
 
 		@Override
 		public boolean cancelDownload() throws RemoteException {
-			// TODO Auto-generated method stub
-			return false;
+			return cancelCurrentDownload();
 		}
 
 		@Override
-		public RemoteLibInfo getCurrentUpdate() throws RemoteException {
-			// TODO Auto-generated method stub
-			return null;
+		public RemoteLibInfo getCurrentRemoteLib() throws RemoteException {
+			return mCurrentUpdate;
 		}
 
 		@Override
@@ -115,8 +133,17 @@ public class DownloadLibService extends Service {
 			}
 		}
 
+		@Override
+		public RemoteLibInfo getLibForDevice(String uri, String for_what) throws RemoteException {
+			return getLibUpdate(URI.create(uri), for_what);
+		}
+
+		@Override
+		public boolean installLib(RemoteLibInfo lib) throws RemoteException {
+			return installRemoteLib(lib);
+		}
+
 	};
-	private long localFileSize;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -125,6 +152,7 @@ public class DownloadLibService extends Service {
 
 	@Override
 	public void onCreate() {
+		Log.d(THIS_FILE, "Download Lib Service started");
 		// Lock wifi if possible to ensure download will be done
 		mWifiLock = ((WifiManager) getSystemService(WIFI_SERVICE)).createWifiLock("com.csipsimple.service.DownloadLibService");
 		mConnectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -134,10 +162,12 @@ public class DownloadLibService extends Service {
 		connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
 	}
 
+	
 	@Override
 	public void onDestroy() {
 		mCallbacks.kill();
 		unregisterReceiver(myConnectionChangeReceiver);
+		
 		super.onDestroy();
 	}
 
@@ -159,6 +189,7 @@ public class DownloadLibService extends Service {
 			}
 		}
 		try {
+			Log.d(THIS_FILE, "we will downlad : "+updateToDownload.getFileName()+" from "+updateToDownload.getDownloadURI().toString());
 			success = downloadFile(updateToDownload);
 		} catch (RuntimeException ex) {
 			Log.e(THIS_FILE, "RuntimeEx while downloading file", ex);
@@ -194,7 +225,7 @@ public class DownloadLibService extends Service {
 		URI updateURI;
 		File destinationFile = null;
 		File partialDestinationFile = null;
-		
+
 		String downloadedMD5 = null;
 
 		String fileName = updateInfo.getFileName();
@@ -203,8 +234,6 @@ public class DownloadLibService extends Service {
 		// Set the Filename to update.zip.partial
 		partialDestinationFile = new File(filePath, fileName + ".part");
 		destinationFile = new File(filePath, fileName + ".gz");
-		
-		
 
 		if (partialDestinationFile.exists()) {
 			localFileSize = partialDestinationFile.length();
@@ -273,8 +302,7 @@ public class DownloadLibService extends Service {
 
 					// Download Update ZIP if md5sum went ok
 					HttpEntity entity = response.getEntity();
-					// dumpFile(entity, partialDestinationFile,
-					// destinationFile);
+					dumpFile(entity, partialDestinationFile, destinationFile);
 					// Was the download canceled?
 					if (prepareForDownloadCancel) {
 						ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.unable_to_download_file, 0));
@@ -308,7 +336,284 @@ public class DownloadLibService extends Service {
 		return false;
 	}
 
+	private void dumpFile(HttpEntity entity, File partialDestinationFile, File destinationFile) throws IOException {
+		if (!prepareForDownloadCancel) {
+			mContentLength = (int) entity.getContentLength();
+			if (mContentLength <= 0) {
+				mContentLength = 1024;
+			}
+			
+			byte[] buff = new byte[64 * 1024];
+			int read = 0;
+			RandomAccessFile out = new RandomAccessFile(partialDestinationFile, "rw");
+			out.seek(localFileSize);
+			InputStream is = entity.getContent();
+			TimerTask progressUpdateTimerTask = new TimerTask() {
+				@Override
+				public void run() {
+					onProgressUpdate();
+				}
+			};
+			Timer progressUpdateTimer = new Timer();
+			try {
+				// If File exists, set the Progress to it. Otherwise it will be
+				// initial 0
+				mTotalDownloaded = localFileSize;
+				progressUpdateTimer.scheduleAtFixedRate(progressUpdateTimerTask, 100, 100);
+				while ((read = is.read(buff)) > 0 && !prepareForDownloadCancel) {
+					out.write(buff, 0, read);
+					mTotalDownloaded += read;
+				}
+				out.close();
+				is.close();
+				if (!prepareForDownloadCancel) {
+					partialDestinationFile.renameTo(destinationFile);
+				}
+			} catch (IOException e) {
+				out.close();
+				try {
+					destinationFile.delete();
+				} catch (SecurityException ex) {
+					Log.e(THIS_FILE, "Unable to delete downloaded File. Continue anyway.", ex);
+				}
+			} finally {
+				progressUpdateTimer.cancel();
+				buff = null;
+			}
+		}
+	}
+	
+	private boolean cancelCurrentDownload() {
+		prepareForDownloadCancel = true;
+		String fileName = mCurrentUpdate.getFileName();
+		File filePath = mCurrentUpdate.getFilePath();
+
+		File partialDestinationFile = new File(filePath, fileName + ".part");
+		File destinationFile = new File(filePath, fileName + ".gz");
+
+		if (partialDestinationFile.exists()) {
+			partialDestinationFile.delete();
+		}
+		if (destinationFile.exists()) {
+			destinationFile.delete();
+		}
+		mDownloading = false;
+		stopSelf();
+		return true;
+	}
+
+	private Boolean stopDownload() {
+		// TODO: Pause download
+		prepareForDownloadCancel = true;
+		mDownloading = false;
+		stopSelf();
+		return true;
+	}
+
+	private void onProgressUpdate() {
+		if (!prepareForDownloadCancel) {
+			// localFileSize because the contentLength will only be the missing
+			// bytes and not the whole file
+			long contentLengthOfFullDownload = mContentLength + localFileSize;
+			// long speed = ((mTotalDownloaded - localFileSize) /
+			// (System.currentTimeMillis() - mStartTime));
+			// speed = (speed > 0) ? speed : 1;
+			// long remainingTime = ((contentLengthOfFullDownload -
+			// mTotalDownloaded) / speed);
+			// String stringDownloaded = mTotalDownloaded / 1048576 + "/" +
+			// contentLengthOfFullDownload / 1048576 + " MB";
+			// String stringSpeed = speed + " kB/s";
+			// String stringRemainingTime = remainingTime / 60000 + " m " +
+			// remainingTime % 60 + " s";
+
+			// Update the DownloadProgress
+			updateDownloadProgress(mTotalDownloaded, (int) contentLengthOfFullDownload);
+		}
+	}
+
+	private void updateDownloadProgress(final long downloaded, final int total) {
+		final int N = mCallbacks.beginBroadcast();
+		for (int i = 0; i < N; i++) {
+			try {
+				mCallbacks.getBroadcastItem(i).updateDownloadProgress(downloaded, total);
+			} catch (RemoteException e) {
+				// The RemoteCallbackList will take care of removing
+				// the dead object for us.
+			}
+		}
+		mCallbacks.finishBroadcast();
+	}
+	
+	
+	private void downloadFinished() {
+		final int M = mCallbacks.beginBroadcast();
+		for (int i = 0; i < M; i++) {
+			try {
+				mCallbacks.getBroadcastItem(i).onDownloadFinished(mCurrentUpdate);
+			} catch (RemoteException e) {
+				// The RemoteCallbackList will take care of removing
+				// the dead object for us.
+			}
+		}
+		mCallbacks.finishBroadcast();
+	}
+
+	private void downloadError() {
+		final int M = mCallbacks.beginBroadcast();
+		for (int i = 0; i < M; i++) {
+			try {
+				mCallbacks.getBroadcastItem(i).onDownloadError();
+			} catch (RemoteException e) {
+				// The RemoteCallbackList will take care of removing
+				// the dead object for us.
+			}
+		}
+		mCallbacks.finishBroadcast();
+	}
+
+	
+	
+	private RemoteLibInfo getLibUpdate(URI updateServerUri, String for_what) {
+		HttpClient updateHttpClient = new DefaultHttpClient();
+
+		HttpUriRequest updateReq = new HttpGet(updateServerUri);
+		updateReq.addHeader("Cache-Control", "no-cache");
+
+		try {
+			HttpResponse updateResponse;
+			HttpEntity updateResponseEntity = null;
+
+			updateResponse = updateHttpClient.execute(updateReq);
+			int updateServerResponse = updateResponse.getStatusLine().getStatusCode();
+			if (updateServerResponse != HttpStatus.SC_OK) {
+				Log.e(THIS_FILE, "can't get updates from site");
+				downloadError();
+				return null;
+			}
+
+			updateResponseEntity = updateResponse.getEntity();
+			BufferedReader upLineReader = new BufferedReader(new InputStreamReader(updateResponseEntity.getContent()), 2 * 1024);
+			StringBuffer upBuf = new StringBuffer();
+			String upLine;
+			while ((upLine = upLineReader.readLine()) != null) {
+				upBuf.append(upLine);
+			}
+			upLineReader.close();
+
+			try {
+				JSONObject mainJSONObject = new JSONObject(upBuf.toString());
+
+				JSONArray coreJSONArray = mainJSONObject.getJSONArray(for_what);
+
+				JSONObject stack = getCompatibleStack(coreJSONArray);
+				Log.d(THIS_FILE, "Here we are");
+				if (stack != null) {
+					Log.d(THIS_FILE, "we are about to return a stack...");
+					return new RemoteLibInfo(stack);
+				}
+			} catch (JSONException e) {
+				downloadError();
+			}
+
+		} catch (ClientProtocolException e) {
+			downloadError();
+		} catch (IOException e) {
+			downloadError();
+		}
+
+		return null;
+	}
+	
+	private JSONObject getCompatibleStack(JSONArray availableStacks ){
+		int core_count = availableStacks.length();
+		for ( int i=0; i< core_count; i++) {
+			JSONObject plateform_stack;
+			try{
+				plateform_stack = availableStacks.getJSONObject(i);
+				if(isCompatibleStack(plateform_stack.getJSONObject("filters"))){
+					Log.d(THIS_FILE, "Found : "+plateform_stack.getString("id"));
+					return plateform_stack;
+				}else{
+					Log.d(THIS_FILE, "NOT VALID : "+plateform_stack.getString("id"));
+				}
+			}catch(Exception e){
+				Log.w(THIS_FILE, "INVALID FILTER FOR");
+				e.printStackTrace();
+			}
+			
+		}
+		return null;
+	}
+	
+	
+	
+	
+	private boolean isCompatibleStack(JSONObject filter) throws SecurityException, NoSuchFieldException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, JSONException {
+		
+		//For each filter keys, we check if the filter is not invalid
+		Iterator<?> iter = filter.keys();
+		while(iter.hasNext()){
+			//Each filter key correspond to a android class which values has to be checked
+			String class_filter = (String) iter.next();
+			//Get this class
+			Class<?> cls = Class.forName(class_filter);
+			
+			//Then for this class, we have to check if each static field matches defined regexp rule
+			Iterator<?> cls_iter = filter.getJSONObject(class_filter).keys();
+			
+			while(cls_iter.hasNext()){
+				String field_name = (String) cls_iter.next();
+				Field field = cls.getField(field_name);
+				//Get the current value on the system
+				String current_value = field.get(null).toString();
+				//Get the filter for this value
+				String regexp_filter = filter.getJSONObject(class_filter).getString(field_name);
+				
+				//Check if matches
+				if(! Pattern.matches(regexp_filter, current_value)){
+					Log.d(THIS_FILE, "Regexp not match : "+current_value+" matches /"+regexp_filter+"/");
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	private boolean installRemoteLib(RemoteLibInfo lib) {
+		String fileName = lib.getFileName();
+		File filePath = lib.getFilePath();
+		
+		File tmp_gz = new File(filePath, fileName+".gz");
+		File dest = new File(filePath, fileName);
+		
+		
+		try {
+			if(dest.exists()){
+				dest.delete();
+			}
+			RandomAccessFile out = new RandomAccessFile(dest, "rw");
+			out.seek(0);
+			GZIPInputStream zis = new GZIPInputStream(new FileInputStream(tmp_gz));
+			int len;
+			byte[] buf = new byte[BUFFER];
+	        while ((len = zis.read(buf)) > 0) {
+	          out.write(buf, 0, len);
+	        }
+			zis.close();
+			out.close();
+			Log.d(THIS_FILE, "Ungzip is in : "+dest.getAbsolutePath());
+			tmp_gz.delete();
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+
 	private Handler ToastHandler = new Handler() {
+		@Override
 		public void handleMessage(Message msg) {
 			if (msg.arg1 != 0) {
 				Toast.makeText(DownloadLibService.this, msg.arg1, Toast.LENGTH_LONG).show();
@@ -326,5 +631,6 @@ public class DownloadLibService extends Service {
 			connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
 		}
 	}
+	
 
 }

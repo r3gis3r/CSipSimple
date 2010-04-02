@@ -14,20 +14,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.csipsimple.models;
 
-package com.csipsimple.service;
-import com.csipsimple.models.RemoteLibInfo;
-import com.csipsimple.service.IDownloadLibServiceCallback;
+public class DownloadProgress {
+	private final long mDownloaded;
+	private final int mTotal;
 
-interface IDownloadLibService {
-    RemoteLibInfo getLibForDevice(String uri, String for_what);
-	void startDownload(in RemoteLibInfo lib);
-	boolean installLib(in RemoteLibInfo lib);
-	RemoteLibInfo getCurrentRemoteLib();
-	boolean isDownloadRunning();
-	boolean pauseDownload();
-	boolean cancelDownload();
-	void registerCallback(in IDownloadLibServiceCallback cb);
-	void unregisterCallback(in IDownloadLibServiceCallback cb);
+	public DownloadProgress(long downloaded, int total) {
+		mDownloaded = downloaded;
+		mTotal = total;
+	}
+
+	public long getDownloaded() {
+		return mDownloaded;
+	}
+
+	public int getTotal() {
+		return mTotal;
+	}
 }
-

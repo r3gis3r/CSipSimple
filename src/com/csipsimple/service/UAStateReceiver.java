@@ -57,20 +57,21 @@ public class UAStateReceiver extends Callback {
 		pjsua.call_get_info(call_id, info);
 		Log.i(THIS_FILE, "Has incoming call !!! "+info.getRemote_info().getPtr());
 		*/
+		final  int c_id = call_id;
 		
+				// Automatically answer incoming calls with 100/RINGING 
+				pjsua.call_answer(c_id, 180, null, null);
+				if(auto_accept_current){
+					// Automatically answer incoming calls with 200/OK 
+					pjsua.call_answer(c_id, 200, null, null);
+					auto_accept_current = false;
+					showNotificationForCall(c_id);
+				}else{
+					showNotificationForCall(c_id);
+					anounceCall(c_id);
+					
+				}
 		
-		// Automatically answer incoming calls with 100/RINGING 
-		pjsua.call_answer(call_id, 180, null, null);
-		if(auto_accept_current){
-			// Automatically answer incoming calls with 200/OK 
-			pjsua.call_answer(call_id, 200, null, null);
-			auto_accept_current = false;
-			showNotificationForCall(call_id);
-		}else{
-			showNotificationForCall(call_id);
-			anounceCall(call_id);
-			
-		}
 		
 	}
 	

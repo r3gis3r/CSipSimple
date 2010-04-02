@@ -122,7 +122,6 @@ public class DownloadBubbleView extends LinearLayout implements OnClickListener 
 		}
 	};
 	private int mcontentLength;
-	private long mStartTime;
 	private long localFileSize;
 	private long mtotalDownloaded;
 
@@ -227,7 +226,6 @@ public class DownloadBubbleView extends LinearLayout implements OnClickListener 
 			mcontentLength = 1024;
 		}
 
-		mStartTime = System.currentTimeMillis();
 
 		byte[] buff = new byte[64 * 1024];
 		int read = 0;

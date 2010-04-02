@@ -37,22 +37,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.csipsimple.service.SipService;
-import com.csipsimple.widgets.DownloadBubbleView;
-
 import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
+
 import com.csipsimple.R;
+import com.csipsimple.service.SipService;
+import com.csipsimple.widgets.DownloadBubbleView;
 
 public class CStackUpdater extends Activity {
 
 	protected static final String THIS_FILE = "CStackUpdater";
 
-	private Uri updateUri = Uri.parse("http://localhost/test.json");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +170,7 @@ public class CStackUpdater extends Activity {
 	private boolean isCompatibleStack(JSONObject filter) throws SecurityException, NoSuchFieldException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, JSONException {
 		
 		//For each filter keys, we check if the filter is not invalid
-		Iterator iter = filter.keys();
+		Iterator<?> iter = filter.keys();
 		while(iter.hasNext()){
 			//Each filter key correspond to a android class which values has to be checked
 			String class_filter = (String) iter.next();
@@ -181,7 +178,7 @@ public class CStackUpdater extends Activity {
 			Class<?> cls = Class.forName(class_filter);
 			
 			//Then for this class, we have to check if each static field matches defined regexp rule
-			Iterator cls_iter = filter.getJSONObject(class_filter).keys();
+			Iterator<?> cls_iter = filter.getJSONObject(class_filter).keys();
 			
 			while(cls_iter.hasNext()){
 				String field_name = (String) cls_iter.next();

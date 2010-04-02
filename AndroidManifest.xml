@@ -38,6 +38,7 @@
 </intent-filter>
 </receiver>
 <activity android:name=".ui.WelcomeScreen" android:label="Thanks for using CSipSimple" android:theme="@style/CupcakeDialog"></activity>
+<service android:name=".service.DownloadLibService"></service>
 </application>
 	<uses-sdk android:minSdkVersion="3"/>
 

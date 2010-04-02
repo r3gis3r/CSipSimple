@@ -47,7 +47,7 @@ public class SipHome extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d(THIS_FILE, "On Create SIPHOME");
         super.onCreate(savedInstanceState);
-        if( ! libExists() ){
+        if( !SipService.hasStackLibFile(this) ){
 			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
 			welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(welcomeIntent);
@@ -56,7 +56,6 @@ public class SipHome extends TabActivity {
 	        serviceIntent = new Intent(SipHome.this, SipService.class);
 	        startService(serviceIntent);
         }
-        
         
         TabHost tabHost = getTabHost();
         Resources r = getResources();
@@ -127,18 +126,5 @@ public class SipHome extends TabActivity {
 		return super.onOptionsItemSelected(item);
 	}
     
-    
-    private boolean libExists(){
-    	String sEnv = System.getenv("LD_LIBRARY_PATH");
-    	Log.d(THIS_FILE, "LDPATH : "+sEnv);
-    	//Standard case
-    	if( getApplicationContext().getFileStreamPath(SipService.STACK_FILE_NAME).exists() ){
-    		return true;
-    	}
-    	//One target build
-    	
-    	
-    	return false;
-    }
     
 }

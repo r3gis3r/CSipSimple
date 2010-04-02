@@ -19,7 +19,7 @@ package com.csipsimple.service;
 import com.csipsimple.models.RemoteLibInfo;
 
 interface IDownloadLibServiceCallback {    
-    void updateDownloadProgress(long downloaded, int total, String downloadedText, String speedText, String remainingTimeText);
+    void updateDownloadProgress(long downloaded, int total /*, String downloadedText, String speedText, String remainingTimeText*/);
     void onDownloadFinished(in RemoteLibInfo u);
     void onDownloadError();
 }
