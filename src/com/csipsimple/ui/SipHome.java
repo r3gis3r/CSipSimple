@@ -16,20 +16,17 @@
  */
 package com.csipsimple.ui;
 
-import com.csipsimple.service.SipService;
-
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.TabHost;
+
 import com.csipsimple.R;
+import com.csipsimple.service.SipService;
 
 public class SipHome extends TabActivity {
 	
@@ -37,6 +34,7 @@ public class SipHome extends TabActivity {
     public static final int ACCOUNTS_MENU = Menu.FIRST + 1;
 	public static final int PARAMS_MENU = Menu.FIRST + 2;
 	public static final int CLOSE_MENU = Menu.FIRST + 3;
+	
 	private static final String THIS_FILE = "SIP HOME";
 	
 	
@@ -49,22 +47,18 @@ public class SipHome extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d(THIS_FILE, "On Create SIPHOME");
         super.onCreate(savedInstanceState);
-       
-        if( ! getApplicationContext().getFileStreamPath(SipService.STACK_FILE_NAME).exists()){
+        if( ! libExists() ){
 			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
 			welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(welcomeIntent);
         }else{
-        
-	        Window w = getWindow();
-	        w.setFormat(PixelFormat.OPAQUE);
-	        w.setBackgroundDrawable((Drawable) null);
 	        //Start the service
 	        serviceIntent = new Intent(SipHome.this, SipService.class);
 	        startService(serviceIntent);
         }
-
-        final TabHost tabHost = getTabHost();
+        
+        
+        TabHost tabHost = getTabHost();
         Resources r = getResources();
         dialerIntent = new Intent(this, Dialer.class);
         csipIntent = new Intent(this, BuddyList.class);
@@ -75,7 +69,6 @@ public class SipHome extends TabActivity {
         tabHost.addTab(tabHost.newTabSpec("tab2")
                 .setIndicator("Buddy list")
                 .setContent(csipIntent));
-        
     }
     
     @Override
@@ -92,9 +85,7 @@ public class SipHome extends TabActivity {
     
     @Override
 	protected void onDestroy() {
-    	Log.d(THIS_FILE, "---DESTROY SIP HOME---");
 		super.onDestroy();
-		
 		Log.d(THIS_FILE, "---DESTROY SIP HOME END---");
 	}
     
@@ -135,5 +126,19 @@ public class SipHome extends TabActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+    
+    
+    private boolean libExists(){
+    	String sEnv = System.getenv("LD_LIBRARY_PATH");
+    	Log.d(THIS_FILE, "LDPATH : "+sEnv);
+    	//Standard case
+    	if( getApplicationContext().getFileStreamPath(SipService.STACK_FILE_NAME).exists() ){
+    		return true;
+    	}
+    	//One target build
+    	
+    	
+    	return false;
+    }
     
 }

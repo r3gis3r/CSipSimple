@@ -37,7 +37,7 @@
 
 </intent-filter>
 </receiver>
-<activity android:name=".ui.WelcomeScreen" android:theme="@android:style/Theme.Dialog" android:label="Thanks for using CSipSimple"></activity>
+<activity android:name=".ui.WelcomeScreen" android:label="Thanks for using CSipSimple" android:theme="@style/CupcakeDialog"></activity>
 </application>
 	<uses-sdk android:minSdkVersion="3"/>
 

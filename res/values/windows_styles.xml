@@ -24,5 +24,8 @@
 	     <item name="android:windowIsFloating">false</item>
 	     <item name="android:backgroundDimEnabled">false</item>
 	</style>
+	<style name="CupcakeDialog" parent="android:Theme.Dialog">
+		<item name="android:windowAnimationStyle">@null</item>
+	</style>
 	
 </resources>
