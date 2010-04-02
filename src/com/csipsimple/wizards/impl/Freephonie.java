@@ -49,6 +49,9 @@ public class Freephonie extends BasePrefsWizard {
 
 		mAccountDisplayName.setText(mAccount.display_name);
 		String account_cfgid = mAccount.cfg.getId().getPtr();
+		if(account_cfgid == null) {
+			account_cfgid = "";
+		}
 		Pattern p = Pattern.compile("[^<]*<sip:([^@]*)@.*");
 		Matcher m = p.matcher(account_cfgid);
 
