@@ -48,10 +48,12 @@ public class SipHome extends TabActivity {
     	Log.d(THIS_FILE, "On Create SIPHOME");
         super.onCreate(savedInstanceState);
         if( !SipService.hasStackLibFile(this) ){
+        	Log.d(THIS_FILE, "Has no sip stack....");
 			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
-			welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			//welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(welcomeIntent);
         }else{
+        	Log.d(THIS_FILE, "We have already the sip stack, start sip service");
 	        //Start the service
 	        serviceIntent = new Intent(SipHome.this, SipService.class);
 	        startService(serviceIntent);

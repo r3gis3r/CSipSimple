@@ -48,9 +48,9 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 
 	public RemoteLibInfo(Parcel in) {
         readFromParcel(in);
-
 	}
 
+	
 
 	public RemoteLibInfo(JSONObject stack) {
 		JSONObject latestUpJSON;

@@ -81,7 +81,6 @@ public class AccountsList extends ListActivity {
 	private static final int REQUEST_ADD = 0;
 	private static final int REQUEST_MODIFY = REQUEST_ADD+1;
 	
-	
 	private ISipService m_service;
 	private ServiceConnection m_connection = new ServiceConnection(){
 
@@ -284,9 +283,7 @@ public class AccountsList extends ListActivity {
 	    public View getView(int position, View convertView, ViewGroup parent) {
 			
 			//Log.d(THIS_FILE, "try to do convertView :: "+position+" / "+getCount());
-			
 			//View v = super.getView(position, convertView, parent);
-			
 			View v = convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -26,4 +26,6 @@ interface ISipService{
 	
 	void switchToAutoAnswer();
 	
+	void makeCall(in String callee);
+	
 }

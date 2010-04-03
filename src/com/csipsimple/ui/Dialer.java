@@ -16,16 +16,18 @@
  */
 package com.csipsimple.ui;
 
-import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsua_msg_data;
-
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.method.DialerKeyListener;
 import android.util.Log;
@@ -33,9 +35,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 import com.csipsimple.R;
+import com.csipsimple.animation.Flip3dAnimation;
+import com.csipsimple.service.ISipService;
+import com.csipsimple.service.SipService;
 
 public class Dialer extends Activity implements OnClickListener,
 		OnLongClickListener {
@@ -54,6 +63,26 @@ public class Dialer extends Activity implements OnClickListener,
 	private Drawable mDigitsEmptyBackground;
 	private EditText digitsView;
 	private ImageButton dialButton, deleteButton;
+	
+	private View mDigitDialer, mTextDialer, mRootView;
+	private boolean isDigit;
+	
+
+	private Activity mToBindTo = this;
+	private ISipService mService;
+	private ServiceConnection mConnection = new ServiceConnection(){
+
+		@Override
+		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
+			Log.d(THIS_FILE, "now i am binded");
+			mService = ISipService.Stub.asInterface(arg1);
+		}
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			
+		}
+		
+    };
 
 	//private Vibrator mVibrator;
 
@@ -62,6 +91,14 @@ public class Dialer extends Activity implements OnClickListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		//Bind to the service
+		Log.d(THIS_FILE, "Try to bind service");
+		if(getParent() != null) {
+			mToBindTo = getParent();
+		}
+		boolean mBound = mToBindTo.bindService(new Intent(mToBindTo, SipService.class), mConnection, Context.BIND_AUTO_CREATE);
+		Log.d(THIS_FILE, "Bound is "+mBound);
+		
 		setContentView(R.layout.dialer_activity);
 
 		Resources r = getResources();
@@ -70,46 +107,32 @@ public class Dialer extends Activity implements OnClickListener,
 		dialButton = (ImageButton) findViewById(R.id.dialButton);
 		deleteButton = (ImageButton) findViewById(R.id.deleteButton);
 		digitsView = (EditText) findViewById(R.id.digitsText);
-
-		initButtons();
 		
-
+		TextView atxt = (TextView) findViewById(R.id.arobase_txt);
+		atxt.setText("@");
+		
+		mDigitDialer = (View) findViewById(R.id.dialer_digit);
+		mTextDialer = (View) findViewById(R.id.dialer_text);
+		mRootView = (View) findViewById(R.id.toplevel);
+		
+		//TODO : set default in params
+		isDigit = true;
+		mDigitDialer.setVisibility(View.VISIBLE);
+		mTextDialer.setVisibility(View.GONE);
+		
+		initButtons();
 	}
-
-	private void setupButton(int id) {
-		ImageButton button = (ImageButton) findViewById(id);
-		button.setOnClickListener(this);
-
-		if (id == R.id.button0 || id == R.id.button1 || id == R.id.deleteButton) {
-			button.setOnLongClickListener(this);
-		}
-	}
-
-	private void initButtons() {
-		setupButton(R.id.button0);
-		setupButton(R.id.button1);
-		setupButton(R.id.button2);
-		setupButton(R.id.button3);
-		setupButton(R.id.button4);
-		setupButton(R.id.button5);
-		setupButton(R.id.button6);
-		setupButton(R.id.button7);
-		setupButton(R.id.button8);
-		setupButton(R.id.button9);
-		setupButton(R.id.buttonstar);
-		setupButton(R.id.buttonpound);
-		setupButton(R.id.dialButton);
-		setupButton(R.id.deleteButton);
-
-		digitsView.setOnClickListener(this);
-		digitsView.setKeyListener(DialerKeyListener.getInstance());
-		digitsView.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-		digitsView.setInputType(android.text.InputType.TYPE_NULL);
-		toggleDrawable();
-	}
-
 	
-
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	if(mService != null) {
+    		mToBindTo.unbindService(mConnection);
+    	}
+		mService = null;
+    }
+	
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -145,6 +168,46 @@ public class Dialer extends Activity implements OnClickListener,
 				mToneGenerator = null;
 			}
 		}
+	}
+	
+	private void setupButton(int id) {
+		ImageButton button = (ImageButton) findViewById(id);
+		button.setOnClickListener(this);
+
+		if (id == R.id.button0 || id == R.id.button1 || id == R.id.deleteButton) {
+			button.setOnLongClickListener(this);
+		}
+	}
+
+	private void initButtons() {
+		
+		//Digital dialer
+		setupButton(R.id.button0);
+		setupButton(R.id.button1);
+		setupButton(R.id.button2);
+		setupButton(R.id.button3);
+		setupButton(R.id.button4);
+		setupButton(R.id.button5);
+		setupButton(R.id.button6);
+		setupButton(R.id.button7);
+		setupButton(R.id.button8);
+		setupButton(R.id.button9);
+		setupButton(R.id.buttonstar);
+		setupButton(R.id.buttonpound);
+		setupButton(R.id.dialButton);
+		setupButton(R.id.deleteButton);
+		setupButton(R.id.domainButton);
+		
+		//Text dialer
+		setupButton(R.id.dialTextButton);
+		setupButton(R.id.deleteTextButton);
+		setupButton(R.id.domainTextButton);
+		
+		digitsView.setOnClickListener(this);
+		digitsView.setKeyListener(DialerKeyListener.getInstance());
+		digitsView.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+		digitsView.setInputType(android.text.InputType.TYPE_NULL);
+		toggleDrawable();
 	}
 
 	void playTone(int tone) {
@@ -239,10 +302,36 @@ public class Dialer extends Activity implements OnClickListener,
 			keyPressed(KeyEvent.KEYCODE_DEL);
 			break;
 		}
-		case R.id.dialButton: {
-			doCall();
+		case R.id.deleteTextButton:{
+			EditText et;
+			et = (EditText) findViewById(R.id.dialtxt_user);
+			et.setText("");
+			et = (EditText) findViewById(R.id.dialtext_domain);
+			et.setText("");
+			
 			break;
 		}
+		case R.id.dialButton: {
+			Log.d(THIS_FILE, "Asked to dial...."+mService);
+			if(mService != null) {
+				try {
+					mService.makeCall(digitsView.getText().toString());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			break;
+		}
+		case R.id.domainButton : {
+			flipView(true);
+			break;
+		}
+		case R.id.domainTextButton : {
+			flipView(false);
+			break;
+		}
+		
 		case R.id.digitsText: {
 			digitsView.setCursorVisible(false);
 			if (digitsView.length() != 0) {
@@ -277,19 +366,9 @@ public class Dialer extends Activity implements OnClickListener,
 		digitsView.getText().clear();
 	}
 
-	private void doCall() {
-		byte[] user_data = new byte[1];
-		pjsua_msg_data msg = new pjsua_msg_data();
-		int[] call_id = new int[1];
-
-		pjsua.call_make_call(0, pjsua.pj_str_copy("sip:"
-				+ digitsView.getText().toString() + "@freephonie.net"), 0,
-				user_data, msg, call_id);
-	}
 
 	private void toggleDrawable() {
 		final boolean notEmpty = digitsView.length() != 0;
-		Log.d(THIS_FILE, "Here : "+notEmpty);
 		if (notEmpty) {
 			digitsView.setBackgroundDrawable(mDigitsBackground);
 			dialButton.setEnabled(true);
@@ -300,6 +379,34 @@ public class Dialer extends Activity implements OnClickListener,
 			dialButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 		}
+	}
+	
+	
+	private void flipView(boolean forward) {
+		if(forward && !isDigit) {
+			return;
+		}
+		if(!forward && isDigit) {
+			return;
+		}
+		
+		isDigit = !isDigit;
+	    int cx = mRootView.getWidth() / 2;
+	    int cy = mRootView.getHeight() / 2;
+	    Animation animation = new Flip3dAnimation(mDigitDialer, mTextDialer, cx, cy, forward);
+	    animation.setAnimationListener(new AnimationListener() {
+	      @Override
+	      public void onAnimationEnd(Animation animation) {
+	      }
+	      @Override
+	      public void onAnimationRepeat(Animation animation) {
+	      }
+	      @Override
+	      public void onAnimationStart(Animation animation) {
+	      }
+	    });
+	    
+	    mRootView.startAnimation(animation);
 	}
 
 }

@@ -28,6 +28,7 @@ import android.os.RemoteException;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -64,6 +65,14 @@ public class WelcomeScreen extends Activity {
         mProgressBar = (ProgressBar) findViewById(R.id.dl_progressbar);
         mProgressBarText = (TextView) findViewById(R.id.dl_text);
         mNextButton = (Button) findViewById(R.id.next_button);
+        mNextButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+				
+			}
+		});
         
         mProgressBar.setMax(100);
 	}

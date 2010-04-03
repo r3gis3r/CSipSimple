@@ -20,4 +20,5 @@
 <string name="unable_to_download_file">Unable to download file</string>
 <string name="download_resume_download">Resume download</string>
 <string name="download_resume_not_supported">Resume not supported</string>
+
 </resources>

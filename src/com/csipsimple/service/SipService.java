@@ -19,13 +19,20 @@ package com.csipsimple.service;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pj_pool_t;
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_transport_type_e;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
+import org.pjsip.pjsua.pjsua_acc_config;
+import org.pjsip.pjsua.pjsua_acc_info;
 import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
 import org.pjsip.pjsua.pjsua_media_config;
+import org.pjsip.pjsua.pjsua_msg_data;
 import org.pjsip.pjsua.pjsua_transport_config;
 
 import android.app.Service;
@@ -93,6 +100,54 @@ public class SipService extends Service {
 			}
 			// TODO: popup here
 		}
+
+		@Override
+		public void makeCall(String callee) throws RemoteException {
+			//Nothing to do with this values
+			byte[] user_data = new byte[1];
+			pjsua_msg_data msg = new pjsua_msg_data();
+			int[] call_id = new int[1];
+			
+			//Check integrity of callee field
+			if( ! Pattern.matches("^.*(<)?sip(s)?:[^@]*@[^@]*(>)?", callee) ) {
+				int default_acc = pjsua.acc_get_default();
+				Log.d(THIS_FILE, "default acc : "+default_acc);
+				pjsua_acc_info acc_info = new pjsua_acc_info();
+				pjsua.acc_get_info(default_acc, acc_info);
+				//Reformat with default account
+				String default_domain = acc_info.getAcc_uri().getPtr();
+				if(default_domain == null) {
+					Log.e(THIS_FILE, "No default domain can't gess a domain for what you are asking");
+					return;
+				}
+				Pattern p = Pattern.compile(".*<sip(s)?:[^@]*@([^@]*)>", Pattern.CASE_INSENSITIVE);
+				Matcher m = p.matcher(default_domain);
+				Log.d(THIS_FILE, "Try to find into "+default_domain);
+				if(!m.matches()) {
+					Log.e(THIS_FILE, "Default domain can't be guessed from regUri of this account");
+					return;
+				}
+				default_domain = m.group(2);
+				Log.d(THIS_FILE, "default domain : "+default_domain);
+				//TODO : split domain
+				callee = "sip:"+callee+"@"+default_domain;
+			}
+			
+			Log.d(THIS_FILE, "will call "+callee);
+			if(pjsua.verify_sip_url(callee) == 0) {
+				pj_str_t uri = pjsua.pj_str_copy(callee);
+				Log.d(THIS_FILE, "get for outgoing");
+				int acc_id = pjsua.acc_find_for_outgoing(uri);
+				Log.d(THIS_FILE, "acc id : "+acc_id);
+			}else {
+				Log.e(THIS_FILE, "asked for a bad uri "+callee);
+			}
+			
+			//pjsua.call_make_call(acc_id, uri , 0, user_data, msg, call_id);
+			
+		}
+		
+		
 	};
 
 	private DBAdapter db;
@@ -191,6 +246,7 @@ public class SipService extends Service {
 
 	private void sipStart() {
 		if (!has_sip_stack) {
+			Log.e(THIS_FILE, "We have no sip stack, we can't start");
 			return;
 		}
 
@@ -294,7 +350,11 @@ public class SipService extends Service {
 	/**
 	 * Add accounts from database
 	 */
-	private void registerAllAccounts() {
+	private synchronized void registerAllAccounts() {
+		if(!created) {
+			Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
+			return;
+		}
 		db.open();
 		List<Account> acc_list = db.getListAccounts();
 		db.close();
@@ -331,7 +391,11 @@ public class SipService extends Service {
 	/**
 	 * Remove accounts from database
 	 */
-	private void unregisterAllAccounts() {
+	private synchronized void unregisterAllAccounts() {
+		if(!created) {
+			Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
+			return;
+		}
 		for (int c_acc_id : active_acc_map.values()) {
 			pjsua.acc_set_registration(c_acc_id, 0);
 			// pjsua.acc_del(c_acc_id);
