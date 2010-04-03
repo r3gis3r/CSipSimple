@@ -39,11 +39,11 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 	private String mVersion;
 	
 	//Blabla
+	private String mId;
 	private String mLabel;
 	private String mChangelog;
 	private String mDescription;
 	
-	private boolean isValid = false;
 	
 
 	public RemoteLibInfo(Parcel in) {
@@ -52,19 +52,15 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 
 	
 
-	public RemoteLibInfo(JSONObject stack) {
+	public RemoteLibInfo(JSONObject stack) throws JSONException {
 		JSONObject latestUpJSON;
-		try {
-			latestUpJSON = stack.getJSONArray("versions").getJSONObject(0);
-			mChangelog = latestUpJSON.getString("changelog");
-			mVersion = latestUpJSON.getString("version");
-			mURI= URI.create(latestUpJSON.getString("download_url"));
-			mDescription = stack.getString("description");
-			mLabel = stack.getString("label");
-			isValid = true;
-		} catch (JSONException e) {
-			isValid = false;
-		}
+		latestUpJSON = stack.getJSONArray("versions").getJSONObject(0);
+		mChangelog = latestUpJSON.getString("changelog");
+		mVersion = latestUpJSON.getString("version");
+		mURI= URI.create(latestUpJSON.getString("download_url"));
+		mDescription = stack.getString("description");
+		mLabel = stack.getString("label");
+		mId = stack.getString("id");
 	}
 
 	@Override
@@ -81,6 +77,7 @@ public class RemoteLibInfo implements Parcelable, Serializable {
             mLabel = in.readString();
             mChangelog = in.readString();
             mDescription = in.readString();
+            mId = in.readString();
     }
     
 	@Override
@@ -93,6 +90,7 @@ public class RemoteLibInfo implements Parcelable, Serializable {
             arg0.writeString(mLabel);
             arg0.writeString(mChangelog);
             arg0.writeString(mDescription);
+            arg0.writeString(mId);
     }
 
 	
@@ -133,6 +131,30 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 	 */
 	public File getFilePath() {
 		return mFilePath;
+	}
+
+
+
+	public String getId() {
+		return mId;
+	}
+
+
+
+	public void setId(String id) {
+		mId = id;
+	}
+
+
+
+	public String getVersion() {
+		return mVersion;
+	}
+
+
+
+	public void setVersion(String version) {
+		mVersion = version;
 	}
 
 }

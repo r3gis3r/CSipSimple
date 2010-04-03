@@ -467,7 +467,7 @@ public class SipService extends Service {
 		}
 
 		// One target build
-		// TODO : find a clean way to access the libPath
+		// TODO : find a clean way to access the libPath for one shot builds
 		File target_for_build = new File(ctx.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
 		Log.d(THIS_FILE, "Search for " + target_for_build.getAbsolutePath());
 		if (target_for_build.exists()) {

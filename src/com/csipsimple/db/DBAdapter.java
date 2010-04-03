@@ -358,7 +358,8 @@ public class DBAdapter {
 				
 				ContentValues args = new ContentValues();
 				DatabaseUtils.cursorRowToContentValues(c, args);
-				Log.i(THIS_FILE, "Content values extracted : "+args.toString());
+				//Commented since password can be print and other app could get back this info
+				//Log.i(THIS_FILE, "Content values extracted : "+args.toString());
 				
 				Account acc = contentValuesToAccount(args);
 				

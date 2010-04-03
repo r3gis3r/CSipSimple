@@ -52,6 +52,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -61,6 +63,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -83,6 +86,7 @@ public class DownloadLibService extends Service {
 	private long localFileSize;
 	private long mTotalDownloaded;
 	private long mContentLength;
+	private SharedPreferences prefs;
 
 	// Implement public interface for the service
 	private final IDownloadLibService.Stub mBinder = new IDownloadLibService.Stub() {
@@ -153,6 +157,9 @@ public class DownloadLibService extends Service {
 	@Override
 	public void onCreate() {
 		Log.d(THIS_FILE, "Download Lib Service started");
+		
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		// Lock wifi if possible to ensure download will be done
 		mWifiLock = ((WifiManager) getSystemService(WIFI_SERVICE)).createWifiLock("com.csipsimple.service.DownloadLibService");
 		mConnectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -603,6 +610,12 @@ public class DownloadLibService extends Service {
 			out.close();
 			Log.d(THIS_FILE, "Ungzip is in : "+dest.getAbsolutePath());
 			tmp_gz.delete();
+			//Update preferences fields with current stack values
+			Editor editor = prefs.edit();
+			editor.putString("current_stack_id", lib.getId());
+			editor.putString("current_stack_version", lib.getVersion());
+			editor.putString("current_stack_uri", lib.getDownloadURI().toString());
+			editor.commit();
 			return true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

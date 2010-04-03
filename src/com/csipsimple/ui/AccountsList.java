@@ -266,50 +266,20 @@ public class AccountsList extends ListActivity {
 			//Log.d(THIS_FILE, "try to do convertView :: "+position+" / "+getCount());
 			//View v = super.getView(position, convertView, parent);
 			View v = convertView;
+			boolean should_attach_cb_listener = false;
             if (v == null) {
+            	should_attach_cb_listener = true;
                 LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = vi.inflate(R.layout.account_row, parent, false);
-                
-                CheckBox cbLu = (CheckBox)v.findViewById(R.id.AccCheckBoxActive);
-	            cbLu.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-							//Log.d(THIS_FILE, "Checked : "+isChecked+" tag : "+buttonView.getTag());
-							db.open();
-							Account acc = db.getAccount( (Integer) buttonView.getTag());
-							
-							//This test is required to make sure when list is updated / or just initialized 
-							//that service is not restarted
-							if(acc.active != isChecked){
-								acc.active = isChecked;
-								db.updateAccount(acc);
-								db.close();
-								//TODO : we should maybe do something more clever than 
-								//remove and re-add all accounts
-								if(m_service != null){
-									try {
-										m_service.removeAllAccounts();
-										m_service.addAllAccounts();
-									} catch (RemoteException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-								}
-							}else{
-								db.close();
-							}
-						}
-		            });
             }
             
+            CheckBox cbLu = (CheckBox)v.findViewById(R.id.AccCheckBoxActive);
 	        
 	        Account acc = getItem(position);
 	        //Log.d(THIS_FILE, "has account");
 	        if (acc != null){
 	            TextView tvObjet = (TextView)v.findViewById(R.id.AccTextView);
 	            TextView tvsObjet = (TextView)v.findViewById(R.id.AccTextStatusView);
-	            CheckBox cbLu = (CheckBox)v.findViewById(R.id.AccCheckBoxActive);
 	            ImageView icoObjet = (ImageView)v.findViewById(R.id.wizard_icon);
 	            
 	            cbLu.setTag(acc.id);
@@ -368,6 +338,47 @@ public class AccountsList extends ListActivity {
 	            WizardInfo wizard_infos = WizardUtils.getWizardClassInfos(acc.wizard);
 	            icoObjet.setImageResource(wizard_infos.icon);
 	        }
+	        
+			if (should_attach_cb_listener) {
+				cbLu.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+						// Log.d(THIS_FILE,
+						// "Checked : "+isChecked+" tag : "+buttonView.getTag());
+						db.open();
+						Account acc = db.getAccount((Integer) buttonView.getTag());
+
+						// This test is required to make sure when list is
+						// updated / or just initialized
+						// that service is not restarted
+						if (acc.active != isChecked) {
+							acc.active = isChecked;
+							db.updateAccount(acc);
+							db.close();
+							// TODO : we should maybe do something more clever
+							// than
+							// remove and re-add all accounts
+							Thread t = new Thread() {
+								public void run() {
+									if (m_service != null) {
+										try {
+											m_service.removeAllAccounts();
+											m_service.addAllAccounts();
+										} catch (RemoteException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+									}
+								};
+							};
+							t.start();
+
+						} else {
+							db.close();
+						}
+					}
+				});
+			}
 	        
 	        return v;
 	    }

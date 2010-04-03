@@ -45,7 +45,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 		//Preferences
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
-		//Other case (update IP etc are handled directly inside the service
+		//Other case (ie update IP etc) are handled directly inside the service if started
 		if( isValidConnectionForOutgoing(ni) ){
 			Intent sip_service_intent = new Intent(context, SipService.class);
 			context.startService(sip_service_intent);
