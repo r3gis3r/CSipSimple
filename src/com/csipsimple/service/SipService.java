@@ -22,12 +22,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_pool_t;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_transport_type_e;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
-import org.pjsip.pjsua.pjsua_acc_config;
 import org.pjsip.pjsua.pjsua_acc_info;
 import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
@@ -103,13 +101,12 @@ public class SipService extends Service {
 
 		@Override
 		public void makeCall(String callee) throws RemoteException {
-			//Nothing to do with this values
-			byte[] user_data = new byte[1];
-			pjsua_msg_data msg = new pjsua_msg_data();
-			int[] call_id = new int[1];
+
 			
 			//Check integrity of callee field
 			if( ! Pattern.matches("^.*(<)?sip(s)?:[^@]*@[^@]*(>)?", callee) ) {
+				//Assume this is a direct call using digit dialer
+				
 				int default_acc = pjsua.acc_get_default();
 				Log.d(THIS_FILE, "default acc : "+default_acc);
 				pjsua_acc_info acc_info = new pjsua_acc_info();
@@ -139,12 +136,16 @@ public class SipService extends Service {
 				Log.d(THIS_FILE, "get for outgoing");
 				int acc_id = pjsua.acc_find_for_outgoing(uri);
 				Log.d(THIS_FILE, "acc id : "+acc_id);
-			}else {
+				
+				//Nothing to do with this values
+				byte[] user_data = new byte[1];
+				pjsua_msg_data msg = new pjsua_msg_data();
+				int[] call_id = new int[1];
+				pjsua.call_make_call(acc_id, uri , 0, user_data, msg, call_id);
+			} else {
 				Log.e(THIS_FILE, "asked for a bad uri "+callee);
+				
 			}
-			
-			//pjsua.call_make_call(acc_id, uri , 0, user_data, msg, call_id);
-			
 		}
 		
 		
@@ -247,6 +248,11 @@ public class SipService extends Service {
 	private void sipStart() {
 		if (!has_sip_stack) {
 			Log.e(THIS_FILE, "We have no sip stack, we can't start");
+			return;
+		}
+		
+		if(!isValidConnectionForIncoming() || !isValidConnectionForOutgoing()) {
+			Log.e(THIS_FILE, "Not able to start sip stack");
 			return;
 		}
 
@@ -364,7 +370,7 @@ public class SipService extends Service {
 				if (active_acc_map.containsKey(acc.id)) {
 					status = pjsua.acc_modify(active_acc_map.get(acc.id), acc.cfg);
 					// if(status == pjsuaConstants.PJ_SUCCESS){
-					//						
+					//		
 					// }else{
 					// Log.w(THIS_FILE,
 					// "Modify account "+acc.display_name+" failed !!! ");

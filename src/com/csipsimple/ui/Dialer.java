@@ -312,13 +312,29 @@ public class Dialer extends Activity implements OnClickListener,
 			break;
 		}
 		case R.id.dialButton: {
-			Log.d(THIS_FILE, "Asked to dial...."+mService);
 			if(mService != null) {
 				try {
 					mService.makeCall(digitsView.getText().toString());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.e(THIS_FILE, "Service can't be called to make the call");
+				}
+			}
+			break;
+		}
+		case R.id.dialTextButton: {
+			if(mService != null) {
+				try {
+					//TODO: allow to choose between sip and sips
+					String callee = "sip:";
+					EditText et;
+					et = (EditText) findViewById(R.id.dialtxt_user);
+					callee += et.getText();
+					callee += "@";
+					et = (EditText) findViewById(R.id.dialtext_domain);
+					callee += et.getText();
+					mService.makeCall(callee);
+				} catch (RemoteException e) {
+					Log.e(THIS_FILE, "Service can't be called to make the call");
 				}
 			}
 			break;

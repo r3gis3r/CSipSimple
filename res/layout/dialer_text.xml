@@ -32,7 +32,7 @@
 
 		<ImageButton android:layout_height="50dip"
 			android:layout_gravity="center_vertical|top" android:layout_weight="1"
-			android:state_enabled="false" android:background="@drawable/btn_dial_action_middle_normal"
+			android:state_enabled="false" android:background="@drawable/btn_dial_action"
 			android:src="@drawable/ic_dial_action_call" android:layout_width="fill_parent"
 			android:scaleType="centerInside" android:id="@+id/dialTextButton" />
 

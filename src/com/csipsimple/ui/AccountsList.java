@@ -83,17 +83,14 @@ public class AccountsList extends ListActivity {
 	
 	private ISipService m_service;
 	private ServiceConnection m_connection = new ServiceConnection(){
-
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			m_service = ISipService.Stub.asInterface(arg1);
-			
 		}
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
 			
 		}
-		
     };
     
     
@@ -106,38 +103,34 @@ public class AccountsList extends ListActivity {
 	        if(extras != null){
 	        	call_id = extras.getInt("call_id",-1);
 	        }
-	        
 	        */
 			updateList();
 		}
 	};
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(THIS_FILE, "Starting");
-		
-		//Build window
+
+		// Build window
 		Window w = getWindow();
 		w.requestFeature(Window.FEATURE_LEFT_ICON);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.account_list);
-		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
-				R.drawable.ic_list_accounts);
-		
-		
+		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
+
 		// Fill accounts with currently avalaible accounts
 		db = new DBAdapter(this);
 		db.open();
 		accounts_list = db.getListAccounts();
 		db.close();
-		//And set as adapter
+		// And set as adapter
 		ad = new CheckAdapter(this, accounts_list);
 		setListAdapter(ad);
-		
-        // Inform the list we provide context menus for items
-        getListView().setOnCreateContextMenuListener(this);
 
-		
+		// Inform the list we provide context menus for items
+		getListView().setOnCreateContextMenuListener(this);
+
 		LinearLayout add_row = (LinearLayout) findViewById(R.id.add_row);
 		add_row.setOnClickListener(new OnClickListener() {
 			@Override
@@ -145,26 +138,17 @@ public class AccountsList extends ListActivity {
 				startActivityForResult(new Intent(AccountsList.this, AddAccountWizard.class), REQUEST_ADD);
 			}
 		});
-		
-		
-		bindService(new Intent(this, SipService.class), 
-    			m_connection, Context.BIND_AUTO_CREATE);
-		
-
-        registerReceiver(regStateReceiver, new IntentFilter(UAStateReceiver.UA_REG_STATE_CHANGED));
-        
-		 
+		bindService(new Intent(this, SipService.class), m_connection, Context.BIND_AUTO_CREATE);
+		registerReceiver(regStateReceiver, new IntentFilter(UAStateReceiver.UA_REG_STATE_CHANGED));
 	}
 	
 	 
-    @Override
-    protected void onDestroy() {
-    	
-    	super.onDestroy();
-    	unbindService(m_connection);
-    	unregisterReceiver(regStateReceiver);
-		
-    }
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unbindService(m_connection);
+		unregisterReceiver(regStateReceiver);
+	}
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
@@ -218,8 +202,6 @@ public class AccountsList extends ListActivity {
         return false;
     }
     
-    
-
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
@@ -272,7 +254,6 @@ public class AccountsList extends ListActivity {
 	}
 	
 	
-	
 	class CheckAdapter extends ArrayAdapter<Account> {
 
 		CheckAdapter(Activity context, List<Account> list) {
@@ -319,7 +300,6 @@ public class AccountsList extends ListActivity {
 								db.close();
 							}
 						}
-		            	
 		            });
             }
             
