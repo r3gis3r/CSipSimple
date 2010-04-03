@@ -34,7 +34,7 @@ public class Freephonie extends BasePrefsWizard {
 	public static String id = "FREEPHONIE";
 	public static int icon = R.drawable.ic_wizard_freephonie;
 	public static int priority = 0;
-	protected static final String TAG = "Freephonie W";
+	protected static final String THIS_FILE = "Freephonie W";
 
 	private EditTextPreference mAccountDisplayName;
 	private EditTextPreference mAccountPhoneNumber;
@@ -79,7 +79,7 @@ public class Freephonie extends BasePrefsWizard {
 	}
 
 	protected void buildAccount() {
-		Log.d(TAG, "begin of save ....");
+		Log.d(THIS_FILE, "begin of save ....");
 		mAccount.display_name = mAccountDisplayName.getText();
 		// TODO add an user display name
 		mAccount.cfg.setId(pjsua.pj_str_copy("<sip:"
