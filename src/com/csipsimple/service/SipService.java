@@ -210,6 +210,35 @@ public class SipService extends Service {
 		// intentfilter.addAction(Receiver.ACTION_VPN_CONNECTIVITY);
 		registerReceiver(sd_receiver = new ServiceDeviceStateReceiver(), intentfilter);
 
+		tryToLoadStack();
+		
+//		Intent cstackupdate = new Intent(this, CStackUpdater.class);
+//		cstackupdate.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		startActivity(cstackupdate);
+
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+
+		Log.i(THIS_FILE, "Destroy SIP Service");
+		unregisterReceiver(sd_receiver);
+		sipStop();
+	}
+	
+	@Override
+	public void onStart(Intent intent, int startId) {
+		super.onStart(intent, startId);
+
+		// Autostart the stack
+		if(!has_sip_stack) {
+			tryToLoadStack();
+		}
+		sipStart();
+	}
+
+	private void tryToLoadStack() {
 		// TODO : autodetect version
 		File stack_file = getStackLibFile(this);
 		if(stack_file != null) {
@@ -222,22 +251,6 @@ public class SipService extends Service {
 				Log.d(THIS_FILE, "We have a problem with the current stack.... NOT YET Implemented");
 			}
 		}
-		
-//		Intent cstackupdate = new Intent(this, CStackUpdater.class);
-//		cstackupdate.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		startActivity(cstackupdate);
-
-		// Autostart the stack
-		sipStart();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-
-		Log.i(THIS_FILE, "Destroy SIP Service");
-		unregisterReceiver(sd_receiver);
-		sipStop();
 	}
 
 	@Override

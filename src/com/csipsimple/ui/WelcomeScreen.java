@@ -17,7 +17,9 @@
 package com.csipsimple.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -45,6 +47,10 @@ public class WelcomeScreen extends Activity {
 	
 	private static final String THIS_FILE = "WelcomeScreen";
 	
+	private static final String DEFAULT_UPDATE_URI = "http://csipsimple.googlecode.com/files/update.json";
+	//"http://10.0.2.2/android/update.json"
+	
+	
 	private RemoteLibInfo mCurrentDownload;
 
 	private ProgressBar mProgressBar;
@@ -69,6 +75,10 @@ public class WelcomeScreen extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				//Start the service
+		        startService( new Intent(WelcomeScreen.this, SipService.class));
+				startActivity(new Intent(WelcomeScreen.this, AccountsList.class));
+				
 				finish();
 				
 			}
@@ -158,7 +168,19 @@ public class WelcomeScreen extends Activity {
 	}
 	
 	private void setStepError(String error) {
-		// TODO Auto-generated method stub
+		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+	    alertDialog.setTitle("Oups there is a problem...");
+	    alertDialog.setMessage(error);
+	    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+	      public void onClick(DialogInterface dialog, int which) {
+	    	  WelcomeScreen.this.finish();
+	        return;
+	    } }); 
+	    try {
+	    	alertDialog.show();
+	    }catch(Exception e) {
+	    	Log.e(THIS_FILE, "error while trying to show dialog : TODO defer it later : (in case activity not yet running)");
+	    }
 	}
 	
 	
@@ -178,12 +200,12 @@ public class WelcomeScreen extends Activity {
 			Thread t = new Thread() {
 				public void run() {
 					try {
-						setStepGetLibForDevice();
-						mCurrentDownload = mService.getLibForDevice("http://10.0.2.2/android/update.json", "sip_core");
+						mHandler.sendMessage(mHandler.obtainMessage(GET_LIB));
+						mCurrentDownload = mService.getLibForDevice(DEFAULT_UPDATE_URI, "sip_core");
 						
 						if(mCurrentDownload != null) {
 							Log.d(THIS_FILE, "We have a library for you : "+mCurrentDownload.getDownloadURI().toString());
-							setStepStartDownloading();
+							mHandler.sendMessage(mHandler.obtainMessage(DOWNLOAD_STARTED));
 							mCurrentDownload.setFileName( SipService.STACK_FILE_NAME );
 							mCurrentDownload.setFilePath( SipService.getGuessedStackLibFile(WelcomeScreen.this).getParentFile() );
 							
@@ -195,7 +217,8 @@ public class WelcomeScreen extends Activity {
 							}
 							
 						}else {
-							Log.d(THIS_FILE, "No lib have been found...");
+							
+							Log.e(THIS_FILE, "No lib have been found...");
 						}
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Exception on calling DownloadService", e);
@@ -220,10 +243,19 @@ public class WelcomeScreen extends Activity {
     private static final int UPDATE_DOWNLOAD_PROGRESS = 1;
     private static final int DOWNLOAD_FINISHED = 2;
     private static final int DOWNLOAD_ERROR = 3;
+    private static final int INCOMPATIBLE_HARDWARE = 4;
+    private static final int DOWNLOAD_STARTED = 5;
+    private static final int GET_LIB = 6;
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
+			case GET_LIB:
+				setStepGetLibForDevice();
+				break;
+			case DOWNLOAD_STARTED:
+				setStepStartDownloading();
+				break;
 			case UPDATE_DOWNLOAD_PROGRESS:
 				DownloadProgress dp = (DownloadProgress) msg.obj;
 				updateDownloadProgress(dp.getDownloaded(), dp.getTotal());
@@ -248,6 +280,9 @@ public class WelcomeScreen extends Activity {
 					unbindService(mConnection);
 					mBound = false;
 				}
+				break;
+			case INCOMPATIBLE_HARDWARE:
+				setStepError("Can't find library for your device please report the problem on www.csipsimple.com");
 				break;
 			case DOWNLOAD_ERROR:
 				setStepError("Download error. Check your connection and retry");

@@ -485,6 +485,8 @@ public class DownloadLibService extends Service {
 
 		HttpUriRequest updateReq = new HttpGet(updateServerUri);
 		updateReq.addHeader("Cache-Control", "no-cache");
+		
+		Log.d(THIS_FILE, "Get updates from "+updateServerUri.toString());
 
 		try {
 			HttpResponse updateResponse;
@@ -493,7 +495,7 @@ public class DownloadLibService extends Service {
 			updateResponse = updateHttpClient.execute(updateReq);
 			int updateServerResponse = updateResponse.getStatusLine().getStatusCode();
 			if (updateServerResponse != HttpStatus.SC_OK) {
-				Log.e(THIS_FILE, "can't get updates from site");
+				Log.e(THIS_FILE, "can't get updates from site : "+updateResponse.getStatusLine().getReasonPhrase()+" - ");
 				downloadError();
 				return null;
 			}
@@ -506,9 +508,9 @@ public class DownloadLibService extends Service {
 				upBuf.append(upLine);
 			}
 			upLineReader.close();
-
+			String content = upBuf.toString();
 			try {
-				JSONObject mainJSONObject = new JSONObject(upBuf.toString());
+				JSONObject mainJSONObject = new JSONObject(content);
 
 				JSONArray coreJSONArray = mainJSONObject.getJSONArray(for_what);
 
@@ -519,6 +521,7 @@ public class DownloadLibService extends Service {
 					return new RemoteLibInfo(stack);
 				}
 			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Unable to parse "+content, e);
 				downloadError();
 			}
 
