@@ -231,11 +231,43 @@ public class AccountsList extends ListActivity {
 		case REQUEST_ADD:
 			if(resultCode == RESULT_OK){
 				updateList();
+				//Force reflush accounts
+				Thread t = new Thread() {
+					public void run() {
+						if (m_service != null) {
+							try {
+								m_service.removeAllAccounts();
+								m_service.addAllAccounts();
+							} catch (RemoteException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					};
+				};
+				t.start();
 			}
+			break;
 		case REQUEST_MODIFY:
 			if(resultCode == RESULT_OK){
 				updateList();
+				//Force reflush accounts
+				Thread t = new Thread() {
+					public void run() {
+						if (m_service != null) {
+							try {
+								m_service.removeAllAccounts();
+								m_service.addAllAccounts();
+							} catch (RemoteException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					};
+				};
+				t.start();
 			}
+			break;
 		}
 	}
 	
@@ -298,26 +330,28 @@ public class AccountsList extends ListActivity {
 	            		
 	            		if(SipService.active_acc_map.containsKey(acc.id)){
 		            		pjsua_acc_info acc_info = new pjsua_acc_info();
-		            		pjsua.acc_get_info(SipService.active_acc_map.get(acc.id), acc_info);
-	            			status = acc_info.getStatus_text().getPtr();
-	            			pjsip_status_code status_code = acc_info.getStatus();
-	            			
-	            			if( status_code == pjsip_status_code.PJSIP_SC_OK ){
-
-			            		if(acc_info.getExpires() > 0){
-			            			color = Color.argb(255, 63, 255, 0);
-			            		}else{
-			            			color = Color.argb(255, 100, 100, 100); //Default color for not added account
-			        	            status = "Unregistred";
+		            		int success = pjsua.acc_get_info(SipService.active_acc_map.get(acc.id), acc_info);
+		            		if(success == pjsuaConstants.PJ_SUCCESS) {
+		            			status = acc_info.getStatus_text().getPtr();
+		            			pjsip_status_code status_code;
+		            			status_code = acc_info.getStatus();
+		            			if( status_code == pjsip_status_code.PJSIP_SC_OK ){
+	
+				            		if(acc_info.getExpires() > 0){
+				            			color = Color.argb(255, 63, 255, 0);
+				            		}else{
+				            			color = Color.argb(255, 100, 100, 100); //Default color for not added account
+				        	            status = "Unregistred";
+				            		}
+		            			}else{
+		            				Log.d(THIS_FILE, "Status is "+status_code);
+		            				if(status_code == pjsip_status_code.PJSIP_SC_PROGRESS ||
+		            						status_code == pjsip_status_code.PJSIP_SC_TRYING){
+		            					color = Color.argb(255, 255, 194, 0);
+		            				}else{
+		            					color = Color.argb(255, 255, 0, 0);
+		            				}
 			            		}
-	            			}else{
-	            				Log.d(THIS_FILE, "Status is "+status_code);
-	            				if(status_code == pjsip_status_code.PJSIP_SC_PROGRESS ||
-	            						status_code == pjsip_status_code.PJSIP_SC_TRYING){
-	            					color = Color.argb(255, 255, 194, 0);
-	            				}else{
-	            					color = Color.argb(255, 255, 0, 0);
-	            				}
 		            		}
 	            		}
 	            	}else{
@@ -343,8 +377,7 @@ public class AccountsList extends ListActivity {
 				cbLu.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-						// Log.d(THIS_FILE,
-						// "Checked : "+isChecked+" tag : "+buttonView.getTag());
+						//Log.d(THIS_FILE,  "Checked : "+isChecked+" tag : "+buttonView.getTag());
 						db.open();
 						Account acc = db.getAccount((Integer) buttonView.getTag());
 

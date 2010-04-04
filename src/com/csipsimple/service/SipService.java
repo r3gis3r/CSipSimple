@@ -417,7 +417,12 @@ public class SipService extends Service {
 		}
 		for (int c_acc_id : active_acc_map.values()) {
 			pjsua.acc_set_registration(c_acc_id, 0);
-			// pjsua.acc_del(c_acc_id);
+			pjsua.acc_del(c_acc_id);
+		}
+		status_acc_map.clear();
+		active_acc_map.clear();
+		if (mUAReceiver != null) {
+			mUAReceiver.forceDeleteNotifications();
 		}
 	}
 
