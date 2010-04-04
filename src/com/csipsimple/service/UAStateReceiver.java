@@ -28,6 +28,7 @@ import org.pjsip.pjsua.pjsua_acc_info;
 import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_call_media_status;
 
+import com.csipsimple.models.CallInfo;
 import com.csipsimple.ui.CallHandler;
 import com.csipsimple.ui.SipHome;
 
@@ -59,61 +60,47 @@ public class UAStateReceiver extends Callback {
 		*/
 		final  int c_id = call_id;
 		
-				// Automatically answer incoming calls with 100/RINGING 
-				pjsua.call_answer(c_id, 180, null, null);
-				if(auto_accept_current){
-					// Automatically answer incoming calls with 200/OK 
-					pjsua.call_answer(c_id, 200, null, null);
-					auto_accept_current = false;
-					showNotificationForCall(c_id);
-				}else{
-					showNotificationForCall(c_id);
-					anounceCall(c_id);
-					
-				}
+		// Automatically answer incoming calls with 100/RINGING 
+		mRingtone = RingtoneManager.getRingtone(service, Settings.System.DEFAULT_RINGTONE_URI);
+        mRingtone.play();
+        
+        CallInfo incomingCall = new CallInfo(c_id);
+        
+		pjsua.call_answer(c_id, 180, null, null);
 		
-		
+		if(auto_accept_current){
+			// Automatically answer incoming calls with 200/OK 
+			pjsua.call_answer(c_id, 200, null, null);
+			auto_accept_current = false;
+			showNotificationForCall(incomingCall);
+		}else{
+			showNotificationForCall(incomingCall);
+			anounceCall(incomingCall);
+		}
 	}
 	
 	
 	@Override
 	public void on_call_state(int call_id, pjsip_event e) {
 		
-		pjsua_call_info info = new pjsua_call_info();
-		pjsua.call_get_info(call_id, info);
+		CallInfo call_info = new CallInfo(call_id);
+		Log.i(THIS_FILE, "State of call "+call_id+" :: "+call_info.getStringCallState());
 		
-		pjsip_inv_state call_state = info.getState();
+		pjsip_inv_state call_state = call_info.getCallState();
 		
-		String state = "";
-		if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)){
-			state = "CALLING";
-		}else if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)){
-			state = "CONFIRMED";
-		}else if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CONNECTING)){
-			state = "CONNECTING";
-		}else if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)){
-			state = "DISCONNECTED";
-		}else if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)){
-			state = "EARLY";
-		}else if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING)){
-			state = "INCOMING";
-		}else if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)){
-			state = "NULL";
+		if( call_state .equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) ||
+				call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING) ) {
+			showNotificationForCall(call_info);
+			anounceCall(call_info);
 			
-			
-		}
-		Log.i(THIS_FILE, "State of call "+call_id+" :: "+state);
-		
-		
-		if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING) ||
-				call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) ||
-				call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY) ){
-			Log.i(THIS_FILE, "State ringing ... (should be ringing)");
+		}else if( call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY) ){
+			Log.d(THIS_FILE, "Early state");
 		}else{
-			Log.i(THIS_FILE, "State not ringing");
+			Log.d(THIS_FILE, "Will stop ringing");
 			if(mRingtone != null){
 				mRingtone.stop();
 			}
+			//Call is now ended
 			if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)){
 				mNotificationManager.cancel(CALL_NOTIF_ID);
 			}
@@ -121,8 +108,7 @@ public class UAStateReceiver extends Callback {
 		
 		
 		Intent callStateChangedIntent = new Intent(UA_CALL_STATE_CHANGED);
-		callStateChangedIntent.putExtra("call_id", call_id);
-		//callStateChangedIntent.putExtra("call_status", call_state);
+		callStateChangedIntent.putExtra("call_info", call_info);
 		
 		
 		service.sendBroadcast(callStateChangedIntent);
@@ -130,7 +116,7 @@ public class UAStateReceiver extends Callback {
 	}
 	
 	
-	
+
 	@Override
 	public void on_reg_state(int acc_id) {
 		Log.d(THIS_FILE, "New reg state for : "+acc_id);
@@ -152,9 +138,6 @@ public class UAStateReceiver extends Callback {
 		Log.i(THIS_FILE, "call media state changed "+call_id);
 		pjsua.call_get_info(call_id, info);
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
-			
-			
-			
 			
 	//		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 	//		am.setSpeakerphoneOn(true);
@@ -257,7 +240,7 @@ public class UAStateReceiver extends Callback {
 	}
 	
 	
-	private void showNotificationForCall(int call_id){
+	private void showNotificationForCall(CallInfo call_info){
 		 //This is the pending call notification
         int icon = R.drawable.ic_incall_ongoing;
 		CharSequence tickerText = "Ongoing call";
@@ -267,8 +250,7 @@ public class UAStateReceiver extends Callback {
 		Context context = service.getApplicationContext();
         
         Intent notificationIntent = new Intent(service, CallHandler.class);
-        notificationIntent.putExtra("call_id", call_id);
-        notificationIntent.putExtra("prevent_ale_hack", true);
+        notificationIntent.putExtra("call_info", call_info);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, 0);
 		
@@ -280,21 +262,23 @@ public class UAStateReceiver extends Callback {
 		mNotificationManager.notify(CALL_NOTIF_ID, notification);
 	}
 	
-	private void anounceCall(int call_id){
+	private void anounceCall(CallInfo call_info){
 		//TODO : manage Vibrate / sound on/off
 		Log.i(THIS_FILE, "Anounce call");
-        mRingtone = RingtoneManager.getRingtone(service, Settings.System.DEFAULT_RINGTONE_URI);
-        mRingtone.play();
+
         //TODO : manage wakelock
 		
         
         // Launch activity to choose what to do with this call
         Intent callHandlerIntent = new Intent(service, CallHandler.class);
-        callHandlerIntent.putExtra("call_id", call_id);
+        callHandlerIntent.putExtra("call_info", call_info);
         callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         
         Log.i(THIS_FILE, "Anounce call activity please");
         service.startActivity(callHandlerIntent);
 	}
+	
+
+
 
 }
