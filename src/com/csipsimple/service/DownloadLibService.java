@@ -147,6 +147,12 @@ public class DownloadLibService extends Service {
 			return installRemoteLib(lib);
 		}
 
+		@Override
+		public void forceStopService() throws RemoteException {
+			stopSelf();
+			
+		}
+
 	};
 
 	@Override

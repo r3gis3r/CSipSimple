@@ -147,6 +147,13 @@ public class SipService extends Service {
 				
 			}
 		}
+
+		@Override
+		public void forceStopService() throws RemoteException {
+			Log.d(THIS_FILE,"Try to force service stop");
+			stopSelf();
+			
+		}
 		
 		
 	};
@@ -222,9 +229,10 @@ public class SipService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 
-		Log.i(THIS_FILE, "Destroy SIP Service");
 		unregisterReceiver(sd_receiver);
 		sipStop();
+
+		Log.i(THIS_FILE, "Destroyed SIP Service");
 	}
 	
 	@Override
@@ -433,15 +441,17 @@ public class SipService extends Service {
 		if (mUAReceiver != null) {
 			mUAReceiver.forceDeleteNotifications();
 		}
+		if (wl != null && wl.isHeld()) {
+			wl.release();
+		}
+		
 		if (created) {
 			Log.d(THIS_FILE, "Detroying...");
 
 			pjsua.destroy();
 			status_acc_map.clear();
 			active_acc_map.clear();
-			if (wl != null && wl.isHeld()) {
-				wl.release();
-			}
+			
 		}
 		created = false;
 	}

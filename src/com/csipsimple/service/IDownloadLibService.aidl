@@ -29,5 +29,7 @@ interface IDownloadLibService {
 	boolean cancelDownload();
 	void registerCallback(in IDownloadLibServiceCallback cb);
 	void unregisterCallback(in IDownloadLibServiceCallback cb);
+	
+	void forceStopService();
 }
 

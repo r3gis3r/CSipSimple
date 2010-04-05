@@ -28,4 +28,6 @@ interface ISipService{
 	
 	void makeCall(in String callee);
 	
+	void forceStopService();
+	
 }

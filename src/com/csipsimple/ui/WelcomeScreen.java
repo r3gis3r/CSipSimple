@@ -277,6 +277,11 @@ public class WelcomeScreen extends Activity {
 				}
 				
 				if (mService != null && mBound) {
+					try {
+						mService.forceStopService();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
 					unbindService(mConnection);
 					mBound = false;
 				}

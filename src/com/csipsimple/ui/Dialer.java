@@ -79,7 +79,8 @@ public class Dialer extends Activity implements OnClickListener,
 		}
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
-			
+			Log.d(THIS_FILE, "Unbind done");
+			mService = null;
 		}
 		
     };
@@ -129,7 +130,7 @@ public class Dialer extends Activity implements OnClickListener,
     	if(mService != null) {
     		mToBindTo.unbindService(mConnection);
     	}
-		mService = null;
+    	Log.d(THIS_FILE, "Dialer destroyed");
     }
 	
     

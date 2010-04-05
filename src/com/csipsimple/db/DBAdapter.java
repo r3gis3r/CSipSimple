@@ -70,7 +70,7 @@ public class DBAdapter {
 	public static final String FIELD_DATA = "data";
 
 	// Creation sql command
-	private static final String DATABASE_CREATE = "CREATE TABLE "
+	private static final String DATABASE_CREATE = "CREATE TABLE IF NOT EXISTS "
 			+ ACCOUNTS_TABLE_NAME
 			+ " ("
 			+ FIELD_ID+ 				" INTEGER PRIMARY KEY AUTOINCREMENT,"
