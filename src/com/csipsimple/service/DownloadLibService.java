@@ -546,6 +546,7 @@ public class DownloadLibService extends Service {
 			JSONObject plateform_stack;
 			try{
 				plateform_stack = availableStacks.getJSONObject(i);
+				Log.d(THIS_FILE, "Check if stack "+plateform_stack.getString("id")+" is compatible");
 				if(isCompatibleStack(plateform_stack.getJSONObject("filters"))){
 					Log.d(THIS_FILE, "Found : "+plateform_stack.getString("id"));
 					return plateform_stack;
@@ -556,7 +557,6 @@ public class DownloadLibService extends Service {
 				Log.w(THIS_FILE, "INVALID FILTER FOR");
 				e.printStackTrace();
 			}
-			
 		}
 		return null;
 	}
