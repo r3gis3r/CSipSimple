@@ -40,7 +40,7 @@
 <activity android:name=".ui.WelcomeScreen" android:label="Thanks for using CSipSimple" android:theme="@style/CupcakeDialog" android:launchMode="singleTask"></activity>
 <service android:name=".service.DownloadLibService"></service>
 </application>
-	<uses-sdk android:minSdkVersion="3"/>
+	<uses-sdk android:minSdkVersion="4"/>
 
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
