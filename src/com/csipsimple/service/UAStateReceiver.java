@@ -236,7 +236,9 @@ public class UAStateReceiver extends Callback {
 	}
 	
 	public void forceDeleteNotifications(){
-		mNotificationManager.cancel(REGISTER_NOTIF_ID);
+		if(mNotificationManager != null) {
+			mNotificationManager.cancel(REGISTER_NOTIF_ID);
+		}
 	}
 	
 	
