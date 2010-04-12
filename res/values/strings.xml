@@ -21,4 +21,5 @@
 <string name="download_resume_download">Resume download</string>
 <string name="download_resume_not_supported">Resume not supported</string>
 
+<string name="connection_not_valid">Your connection is not valid for SIP (activate WIFI or change preferences to use 3G)</string>
 </resources>

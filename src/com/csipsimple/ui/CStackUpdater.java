@@ -39,7 +39,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import com.csipsimple.utils.Log;
 import android.view.ViewGroup;
 
 import com.csipsimple.R;

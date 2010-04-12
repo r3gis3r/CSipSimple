@@ -30,7 +30,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.method.DialerKeyListener;
-import android.util.Log;
+import com.csipsimple.utils.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -97,8 +97,7 @@ public class Dialer extends Activity implements OnClickListener,
 		if(getParent() != null) {
 			mToBindTo = getParent();
 		}
-		boolean mBound = mToBindTo.bindService(new Intent(mToBindTo, SipService.class), mConnection, Context.BIND_AUTO_CREATE);
-		Log.d(THIS_FILE, "Bound is "+mBound);
+
 		
 		setContentView(R.layout.dialer_activity);
 
@@ -123,13 +122,11 @@ public class Dialer extends Activity implements OnClickListener,
 		
 		initButtons();
 	}
-	
-    @Override
+
+	@Override
     protected void onDestroy() {
     	super.onDestroy();
-    	if(mService != null) {
-    		mToBindTo.unbindService(mConnection);
-    	}
+    	
     	Log.d(THIS_FILE, "Dialer destroyed");
     }
 	
@@ -137,6 +134,9 @@ public class Dialer extends Activity implements OnClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		boolean mBound = mToBindTo.bindService(new Intent(mToBindTo, SipService.class), mConnection, Context.BIND_AUTO_CREATE);
+		Log.d(THIS_FILE, "Bound is "+mBound);
 
 		// if the mToneGenerator creation fails, just continue without it. It is
 		// a local audio signal, and is not as important as the dtmf tone
@@ -162,7 +162,11 @@ public class Dialer extends Activity implements OnClickListener,
 	@Override
 	protected void onPause() {
 		super.onPause();
-
+		
+		if(mService != null) {
+    		mToBindTo.unbindService(mConnection);
+    	}
+		
 		synchronized (mToneGeneratorLock) {
 			if (mToneGenerator != null) {
 				mToneGenerator.release();
@@ -210,6 +214,9 @@ public class Dialer extends Activity implements OnClickListener,
 		digitsView.setInputType(android.text.InputType.TYPE_NULL);
 		toggleDrawable();
 	}
+	
+	
+
 
 	void playTone(int tone) {
 		// if (!true) {

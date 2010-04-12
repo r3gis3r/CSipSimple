@@ -64,7 +64,7 @@ import android.os.Message;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import com.csipsimple.utils.Log;
 import android.widget.Toast;
 
 import com.csipsimple.R;

@@ -16,6 +16,8 @@
  */
 package com.csipsimple.wizards;
 
+import java.util.regex.Pattern;
+
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsua;
 
@@ -117,6 +119,12 @@ public abstract class BasePrefsWizard extends PreferenceActivity implements OnSh
 		return false;
 	}
 	
+	protected boolean isMatching(EditTextPreference edt, String regex) {
+		if(edt.getText() == null){
+			return false;
+		}
+		return Pattern.matches(regex, edt.getText());
+	}
 
 	protected pj_str_t getPjText(EditTextPreference edt){
 		return pjsua.pj_str_copy(edt.getText());

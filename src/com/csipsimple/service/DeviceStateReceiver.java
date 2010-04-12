@@ -24,7 +24,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import com.csipsimple.utils.Log;
 
 public class DeviceStateReceiver extends BroadcastReceiver {
 
@@ -37,7 +37,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
-		Log.i(THIS_FILE, "Connectivity has changed");
+		Log.i(THIS_FILE, ">>> Connectivity has changed");
 		// New connection info :
 		Bundle extras = intent.getExtras();
 		NetworkInfo ni =  (NetworkInfo) extras.get(ConnectivityManager.EXTRA_NETWORK_INFO);
@@ -50,7 +50,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			Intent sip_service_intent = new Intent(context, SipService.class);
 			context.startService(sip_service_intent);
 		}
-
+		Log.i(THIS_FILE, "<<< Connectivity has changed");
 	}
 	
 	private boolean isValidConnectionForOutgoing(NetworkInfo ni){

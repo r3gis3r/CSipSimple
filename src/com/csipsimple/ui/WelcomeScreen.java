@@ -22,13 +22,17 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -42,6 +46,7 @@ import com.csipsimple.service.DownloadLibService;
 import com.csipsimple.service.IDownloadLibService;
 import com.csipsimple.service.IDownloadLibServiceCallback;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Log;
 
 public class WelcomeScreen extends Activity {
 	
@@ -57,17 +62,33 @@ public class WelcomeScreen extends Activity {
 	private TextView mProgressBarText;
 
 	private Button mNextButton;
+
+	private SharedPreferences prefs;
 	
+	public static String KEY_MODE = "mode";
+	public static int MODE_WELCOME = 0;
+	public static int MODE_CHANGELOG = 1;
+	private int mode = MODE_WELCOME;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			mode =  extras.getInt(KEY_MODE, MODE_WELCOME);
+		}
+
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
 		setContentView(R.layout.welcome);
 		//Update welcome screen with the good html value
         TextView textContent = (TextView) findViewById(R.id.FirstLaunchText);
-        textContent.setText(Html.fromHtml(getString(R.string.first_launch_text)));
-        
+        if(mode == MODE_WELCOME){
+        	textContent.setText(Html.fromHtml(getString(R.string.first_launch_text)));
+        }else{
+        	textContent.setText(Html.fromHtml(getString(R.string.changelog_text)));
+        }
         mProgressBar = (ProgressBar) findViewById(R.id.dl_progressbar);
         mProgressBarText = (TextView) findViewById(R.id.dl_text);
         mNextButton = (Button) findViewById(R.id.next_button);
@@ -75,9 +96,10 @@ public class WelcomeScreen extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				//Start the service
-		        startService( new Intent(WelcomeScreen.this, SipService.class));
-				startActivity(new Intent(WelcomeScreen.this, AccountsList.class));
+				//and now we can go to home
+				Intent homeIntent = new Intent(WelcomeScreen.this, SipHome.class);
+				homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(homeIntent);
 				
 				finish();
 				
@@ -205,15 +227,23 @@ public class WelcomeScreen extends Activity {
 						
 						if(mCurrentDownload != null) {
 							Log.d(THIS_FILE, "We have a library for you : "+mCurrentDownload.getDownloadURI().toString());
-							mHandler.sendMessage(mHandler.obtainMessage(DOWNLOAD_STARTED));
-							mCurrentDownload.setFileName( SipService.STACK_FILE_NAME );
-							mCurrentDownload.setFilePath( SipService.getGuessedStackLibFile(WelcomeScreen.this).getParentFile() );
+							String old_stack_version = prefs.getString("current_stack_version", "0.00-00");
 							
-							if (mService.isDownloadRunning()) {
-								//TODO : check whether it's a sip path.
-								mCurrentDownload = mService.getCurrentRemoteLib();
-							} else {
-								mService.startDownload(mCurrentDownload);
+							Log.d(THIS_FILE, "Compare old : "+old_stack_version+ " et "+mCurrentDownload.getVersion());
+							if(mCurrentDownload.isMoreUpToDateThan(old_stack_version)) {
+								mHandler.sendMessage(mHandler.obtainMessage(DOWNLOAD_STARTED));
+								mCurrentDownload.setFileName( SipService.STACK_FILE_NAME );
+								mCurrentDownload.setFilePath( SipService.getGuessedStackLibFile(WelcomeScreen.this).getParentFile() );
+								
+								if (mService.isDownloadRunning()) {
+									//TODO : check whether it's a sip path.
+									mCurrentDownload = mService.getCurrentRemoteLib();
+								} else {
+									mService.startDownload(mCurrentDownload);
+								}
+							}else {
+								Log.d(THIS_FILE, "Nothing to update...");
+								mHandler.sendMessage(mHandler.obtainMessage(INSTALLED));
 							}
 							
 						}else {
@@ -246,6 +276,7 @@ public class WelcomeScreen extends Activity {
     private static final int INCOMPATIBLE_HARDWARE = 4;
     private static final int DOWNLOAD_STARTED = 5;
     private static final int GET_LIB = 6;
+    private static final int INSTALLED = 7;
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -267,6 +298,11 @@ public class WelcomeScreen extends Activity {
 					boolean installed = mService.installLib(u);
 					if(installed) {
 						Log.d(THIS_FILE, "Is installed ok");
+		    			PackageInfo pinfo = getPackageManager().getPackageInfo(WelcomeScreen.this.getPackageName(), 0);
+		    			int running_version = pinfo.versionCode;
+	    				Editor editor = prefs.edit();
+	    				editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, running_version);
+	    				editor.commit();
 						setStepInstalled();
 					}else {
 						Log.d(THIS_FILE, "Failed to install");
@@ -274,6 +310,8 @@ public class WelcomeScreen extends Activity {
 					}
 				} catch (RemoteException e) {
 					Log.d(THIS_FILE, "Remote exception ", e);
+				} catch (NameNotFoundException e) {
+					//Will never happen
 				}
 				
 				if (mService != null && mBound) {
@@ -284,6 +322,22 @@ public class WelcomeScreen extends Activity {
 					}
 					unbindService(mConnection);
 					mBound = false;
+				}
+				
+				
+				break;
+			case INSTALLED:
+				Log.d(THIS_FILE, "Is installed ok (here nothing was done in fact)");
+    			PackageInfo pinfo;
+				try {
+					pinfo = getPackageManager().getPackageInfo(WelcomeScreen.this.getPackageName(), 0);
+					int running_version = pinfo.versionCode;
+					Editor editor = prefs.edit();
+					editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, running_version);
+					editor.commit();
+					setStepInstalled();
+				} catch (NameNotFoundException e) {
+					//Will never happen
 				}
 				break;
 			case INCOMPATIBLE_HARDWARE:

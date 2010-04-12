@@ -40,10 +40,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.provider.Settings;
-import android.util.Log;
+import com.csipsimple.utils.Log;
 
 public class UAStateReceiver extends Callback {
 
@@ -85,6 +86,8 @@ public class UAStateReceiver extends Callback {
 		
 		CallInfo call_info = new CallInfo(call_id);
 		Log.i(THIS_FILE, "State of call "+call_id+" :: "+call_info.getStringCallState());
+		AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
+		
 		
 		pjsip_inv_state call_state = call_info.getCallState();
 		
@@ -103,14 +106,13 @@ public class UAStateReceiver extends Callback {
 			//Call is now ended
 			if(call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)){
 				mNotificationManager.cancel(CALL_NOTIF_ID);
+				am.setMode(AudioManager.MODE_NORMAL);
 			}
 		}
 		
 		
 		Intent callStateChangedIntent = new Intent(UA_CALL_STATE_CHANGED);
 		callStateChangedIntent.putExtra("call_info", call_info);
-		
-		
 		service.sendBroadcast(callStateChangedIntent);
 		
 	}
@@ -135,14 +137,15 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_call_media_state(int call_id) {
 		pjsua_call_info info = new pjsua_call_info();
-		Log.i(THIS_FILE, "call media state changed "+call_id);
+		Log.w(THIS_FILE, "call media state changed "+call_id);
 		pjsua.call_get_info(call_id, info);
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
 			
-	//		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-	//		am.setSpeakerphoneOn(true);
-	//		am.setMicrophoneMute(false);
-	//		am.setMode(AudioManager.MODE_IN_CALL);
+			AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
+		//	am.setSpeakerphoneOn(true);
+			am.setMicrophoneMute(false);
+			am.setMode(AudioManager.MODE_IN_CALL);
+	
 			
 			//May be done under media thread instead of this one
 			android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
@@ -156,9 +159,8 @@ public class UAStateReceiver extends Callback {
 				info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ERROR){
 		//	pjsua.call_hangup(call_id, 0, null, null);
 		}
-		
-		
 	}
+	
 	
 	
 	// -------
@@ -267,10 +269,8 @@ public class UAStateReceiver extends Callback {
 	private void anounceCall(CallInfo call_info){
 		//TODO : manage Vibrate / sound on/off
 		Log.i(THIS_FILE, "Anounce call");
-
-        //TODO : manage wakelock
-		
         
+		
         // Launch activity to choose what to do with this call
         Intent callHandlerIntent = new Intent(service, CallHandler.class);
         callHandlerIntent.putExtra("call_info", call_info);
@@ -278,6 +278,7 @@ public class UAStateReceiver extends Callback {
         
         Log.i(THIS_FILE, "Anounce call activity please");
         service.startActivity(callHandlerIntent);
+        
 	}
 	
 

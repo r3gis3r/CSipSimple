@@ -27,7 +27,7 @@ import com.csipsimple.R;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.util.Log;
+import com.csipsimple.utils.Log;
 
 public class Expert extends BasePrefsWizard{
 

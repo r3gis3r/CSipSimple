@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.csipsimple" android:versionName="0.00-03" android:versionCode="3">
+	package="com.csipsimple" android:versionName="0.00-04" android:versionCode="4">
 	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone">
 	<!-- android:launchMode="singleTask" android:name=".ui.Acompanion" -->
 		<activity android:label="@string/app_name"
@@ -39,6 +39,9 @@
 </receiver>
 <activity android:name=".ui.WelcomeScreen" android:label="Thanks for using CSipSimple" android:theme="@style/CupcakeDialog" android:launchMode="singleTask"></activity>
 <service android:name=".service.DownloadLibService"></service>
+
+
+
 </application>
 	<uses-sdk android:minSdkVersion="3"/>
 
@@ -59,6 +62,7 @@
 
 	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+	<uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY"></uses-permission>
 
 
 </manifest> 

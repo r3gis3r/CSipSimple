@@ -17,6 +17,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/toplevel" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
   <include android:id="@+id/dialer_digit" layout="@layout/dialer_digit" />
   <include android:id="@+id/dialer_text" layout="@layout/dialer_text" />
 </RelativeLayout>

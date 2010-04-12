@@ -114,7 +114,10 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 				unbindService(restart_srv_conn);
 			}
 		};
-		bindService(new Intent(this, SipService.class), restart_srv_conn, 0);
+		Intent serviceIntent =  new Intent(this, SipService.class);
+		bindService(serviceIntent, restart_srv_conn, 0);
+		startService(serviceIntent);
+		
 	}
 
 	@Override

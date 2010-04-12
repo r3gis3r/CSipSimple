@@ -32,7 +32,7 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+import com.csipsimple.utils.Log;
 
 public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
@@ -399,6 +399,15 @@ public class DBAdapter {
 		
 		return null;
 		
+	}
+	
+	public int getNbrOfAccount() {
+		Cursor c = db.query(ACCOUNTS_TABLE_NAME, new String[] {
+			FIELD_ID	
+		}, null, null, null, null, null);
+		int numRows = c.getCount();
+		c.close();
+		return numRows;
 	}
 
 }

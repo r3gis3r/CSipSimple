@@ -19,26 +19,26 @@ package com.csipsimple.ui;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 
 import com.csipsimple.R;
+import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Log;
 
 public class SipHome extends TabActivity {
     public static final int ACCOUNTS_MENU = Menu.FIRST + 1;
 	public static final int PARAMS_MENU = Menu.FIRST + 2;
 	public static final int CLOSE_MENU = Menu.FIRST + 3;
 	
-	private static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
+	public static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
 	
 	private static final String THIS_FILE = "SIP HOME";
 	
@@ -53,6 +53,49 @@ public class SipHome extends TabActivity {
     	Log.d(THIS_FILE, "On Create SIPHOME");
         super.onCreate(savedInstanceState);
         
+        //Check sip stack
+        if( !SipService.hasStackLibFile(this) ){
+        	Log.d(THIS_FILE, "Has no sip stack....");
+			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
+			welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			welcomeIntent.putExtra(WelcomeScreen.KEY_MODE, WelcomeScreen.MODE_WELCOME);
+			startActivity(welcomeIntent);
+			finish();
+			return;
+        }else{
+            //We have to check and save current version
+            try {
+    			PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+    			int running_version = pinfo.versionCode;
+    			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    			int last_seen_version = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
+    			
+    			Log.d(THIS_FILE, "Last known version is "+last_seen_version+" and currently we are running "+running_version);
+    			if(last_seen_version != running_version) {
+    				//TODO : check if greater version
+    				//(should be most of the case...but if not we should maybe popup the user that 
+    				//if n+1 version doesn't work for him he could fill a bug on bug tracker)
+    				
+    				
+    				Log.d(THIS_FILE, "Has no sip stack....");
+    				Intent changelogIntent = new Intent(this, WelcomeScreen.class);
+    				changelogIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    				changelogIntent.putExtra(WelcomeScreen.KEY_MODE, WelcomeScreen.MODE_CHANGELOG);
+    				startActivity(changelogIntent);
+    				finish();
+    				return;
+    			}else {
+    	        	Log.d(THIS_FILE, "WE CAN NOW start SIP service");
+    		        //Start the service
+    		        serviceIntent = new Intent(SipHome.this, SipService.class);
+    		        startService(serviceIntent);
+    			}
+    		} catch (NameNotFoundException e) {
+    			//Should not happen....or something is wrong with android...
+    		}
+        }
+        
+        
         TabHost tabHost = getTabHost();
         Resources r = getResources();
         dialerIntent = new Intent(this, Dialer.class);
@@ -65,44 +108,16 @@ public class SipHome extends TabActivity {
                 .setIndicator("Buddy list")
                 .setContent(csipIntent));
         
-        //Check sip stack
-        if( !SipService.hasStackLibFile(this) ){
-        	Log.d(THIS_FILE, "Has no sip stack....");
-			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
-			//welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(welcomeIntent);
-        }else{
-        	Log.d(THIS_FILE, "We have already the sip stack, start sip service");
-	        //Start the service
-	        serviceIntent = new Intent(SipHome.this, SipService.class);
-	        startService(serviceIntent);
+        //If we have no account yet, open account panel,
+        DBAdapter db = new DBAdapter(this);
+        db.open();
+        int nbrOfAccount = db.getNbrOfAccount();
+        db.close();
+        if(nbrOfAccount == 0) {
+	        Intent accountIntent = new Intent(this, AccountsList.class);
+	        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(accountIntent);
         }
-        
-        
-        //We have to check and save current version
-        try {
-			PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-			int running_version = pinfo.versionCode;
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			int last_seen_version = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
-			
-			Log.d(THIS_FILE, "Last known version is "+last_seen_version+" and currently we are running "+running_version);
-			if(last_seen_version != running_version) {
-				//TODO : check if greater version
-				//(should be most of the case...but if not we should maybe popup the user that 
-				//if n+1 version doesn't work for him he could fill a bug on bug tracker)
-				
-				
-				//TODO : add a changelog screen 
-				//(maybe we could brick the app while we are in alpha releases to force reinstall)
-				Editor editor = prefs.edit();
-				editor.putInt(LAST_KNOWN_VERSION_PREF, running_version);
-				editor.commit();
-			}
-		} catch (NameNotFoundException e) {
-			//Should not happen....or something is wrong with android...
-		}
-        
     }
     
     @Override

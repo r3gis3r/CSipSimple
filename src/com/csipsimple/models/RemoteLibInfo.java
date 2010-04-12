@@ -23,6 +23,8 @@ import java.net.URI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.csipsimple.utils.Log;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -43,7 +45,8 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 	private String mLabel;
 	private String mChangelog;
 	private String mDescription;
-	
+
+	private static final String THIS_FILE = "RemoteLib";
 	
 
 	public RemoteLibInfo(Parcel in) {
@@ -155,6 +158,57 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 
 	public void setVersion(String version) {
 		mVersion = version;
+	}
+
+
+
+	public boolean isMoreUpToDateThan(String oldStackVersion) {
+		if(oldStackVersion.equalsIgnoreCase("0.01-00")) {
+			//FORCE SINCE WE MADE A PRIMARY BAD COMMIT
+			return true;
+		}
+		String[] split_master_old = oldStackVersion.split("\\.");
+		String[] split_master = mVersion.split("\\.");
+		try {
+			Log.d(THIS_FILE, "We have "+split_master_old.length);
+			int int_master_old = Integer.decode(split_master_old[0]);
+			int int_master = Integer.decode(split_master[0]);
+			if(int_master>int_master_old) {
+				return true;
+			}
+			if(int_master < int_master_old) {
+				return false;
+			}
+			
+			String[] split_build_old = split_master_old[1].split("-");
+			String[] split_build = split_master[1].split("-");
+			
+			int int_vers_old = Integer.decode(split_build_old[0]);
+			int int_vers = Integer.decode(split_build[0]);
+			if(int_vers>int_vers_old) {
+				return true;
+			}
+			if(int_vers<int_vers_old) {
+				return false;
+			}
+			
+			int int_build_old = Integer.decode(split_build_old[1]);
+			int int_build = Integer.decode(split_build[1]);
+			if(int_build>int_build_old) {
+				return true;
+			}
+			if(int_build<int_build_old) {
+				return false;
+			}
+			
+		}catch(NumberFormatException e) {
+			return true;
+		}catch(Exception e) {
+			Log.w(THIS_FILE, "Error while trying to decode versions", e);
+			return true;
+		}
+		
+		return false;
 	}
 
 }

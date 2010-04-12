@@ -23,11 +23,11 @@ import org.pjsip.pjsua.pjsip_cred_data_type;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 
-import com.csipsimple.wizards.BasePrefsWizard;
-
 import android.preference.EditTextPreference;
-import android.util.Log;
+import com.csipsimple.utils.Log;
+
 import com.csipsimple.R;
+import com.csipsimple.wizards.BasePrefsWizard;
 
 public class Freephonie extends BasePrefsWizard {
 	public static String label = "Freephonie";
@@ -40,14 +40,19 @@ public class Freephonie extends BasePrefsWizard {
 	private EditTextPreference mAccountPhoneNumber;
 	private EditTextPreference mAccountPassword;
 
+	
 	protected void fillLayout() {
 		mAccountDisplayName = (EditTextPreference) findPreference("display_name");
 		mAccountPhoneNumber = (EditTextPreference) findPreference("phone_number");
 		mAccountPassword = (EditTextPreference) findPreference("password");
 
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
-
-		mAccountDisplayName.setText(mAccount.display_name);
+		
+		
+		String display_name = mAccount.display_name;
+		if(display_name.equalsIgnoreCase("")) {
+			display_name = "Freephonie";
+		}
+		mAccountDisplayName.setText(display_name);
 		String account_cfgid = mAccount.cfg.getId().getPtr();
 		if(account_cfgid == null) {
 			account_cfgid = "";
@@ -60,6 +65,8 @@ public class Freephonie extends BasePrefsWizard {
 		}
 
 		mAccountPhoneNumber.setText(account_cfgid);
+		
+		pjsip_cred_info ci = mAccount.cfg.getCred_info();
 		mAccountPassword.setText(ci.getData().getPtr());
 	}
 
@@ -70,8 +77,16 @@ public class Freephonie extends BasePrefsWizard {
 	}
 
 	protected boolean canSave() {
-		if (isEmpty(mAccountDisplayName) || isEmpty(mAccountPassword)
-				|| isEmpty(mAccountPhoneNumber)) {
+		if( isEmpty(mAccountDisplayName)) {
+//			View pref_view = (View) getPreferenceScreen().getRootAdapter().getItem(mAccountDisplayName.getOrder());
+//			TextView tv = (TextView) pref_view.findViewById(R.id.title); 
+//			tv.setTextColor(Color.RED);
+			return false;
+		}
+		if( isEmpty(mAccountPassword) ) {
+			return false;
+		}
+		if( isEmpty(mAccountPhoneNumber)) {
 			return false;
 		}
 

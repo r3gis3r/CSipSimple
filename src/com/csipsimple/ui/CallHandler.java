@@ -16,6 +16,8 @@
  */
 package com.csipsimple.ui;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +37,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.util.Log;
+import com.csipsimple.utils.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -83,6 +85,9 @@ public class CallHandler extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+
+		
+		
 		setContentView(R.layout.callhandler);
 		Log.d(THIS_FILE, "Creating call handler.....");
 		m_servicedBind = bindService(new Intent(this, SipService.class), m_connection, Context.BIND_AUTO_CREATE);
@@ -98,36 +103,52 @@ public class CallHandler extends Activity {
 		}
 
 		Log.d(THIS_FILE, "Creating call handler for " + mCallInfo.getCallId());
-
-		registerReceiver(callStateReceiver, new IntentFilter(UAStateReceiver.UA_CALL_STATE_CHANGED));
-
-		mTakeCall = (Button) findViewById(R.id.take_call);
-		mTakeCall.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// TODO : should be done into the service
-				if (mCallInfo != null) {
-					pjsua.call_answer(mCallInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue(), null, null);
-				}
-			}
-		});
-
-		mClearCall = (Button) findViewById(R.id.hangup);
-		mClearCall.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// TODO : should be done into the service
-				if (mCallInfo != null) {
-					pjsua.call_hangup(mCallInfo.getCallId(), 0, null, null);
-				}
-
-			}
-		});
+		
+		
+		
+		
 
 		mRemoteContact = (TextView) findViewById(R.id.remoteContact);
 		mMainFrame = (LinearLayout) findViewById(R.id.mainFrame);
+		mTakeCall = (Button) findViewById(R.id.take_call);
+		mClearCall = (Button) findViewById(R.id.hangup);
 		updateUIFromCall();
+		
+		CallInfo call_info = new CallInfo(mCallInfo.getCallId());
+		if(call_info.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED) ||
+				call_info.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)) {
+			Log.w(THIS_FILE, "Early failure for call "+mCallInfo.getCallId());
+			delayedQuit();
+			
+		}else {		
+			registerReceiver(callStateReceiver, new IntentFilter(UAStateReceiver.UA_CALL_STATE_CHANGED));
+			
+			
+	
+			mTakeCall.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					// TODO : should be done into the service
+					if (mCallInfo != null) {
+						pjsua.call_answer(mCallInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue(), null, null);
+					}
+				}
+			});
+	
+			mClearCall.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					// TODO : should be done into the service
+					if (mCallInfo != null) {
+						pjsua.call_hangup(mCallInfo.getCallId(), 0, null, null);
+					}
+	
+				}
+			});
 
+		}
+		
 	}
 	
+
 	private boolean manage_keyguard = false;
 	
 	@Override
@@ -208,8 +229,7 @@ public class CallHandler extends Activity {
 			break;
 		case PJSIP_INV_STATE_DISCONNECTED:
 			Log.i(THIS_FILE, "Disconnected here !!!");
-			
-			finish();
+			delayedQuit();
 			return;
 		case PJSIP_INV_STATE_EARLY:
 		case PJSIP_INV_STATE_CONNECTING:
@@ -219,6 +239,20 @@ public class CallHandler extends Activity {
 		mMainFrame.setBackgroundResource(backgroundResId);
 	}
 
+
+	private void delayedQuit() {
+		mMainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				finish();
+			}
+		}, 3000);
+	}
+	
+	
 	@Override
 	protected void onDestroy() {
 		if (m_servicedBind) {
@@ -227,9 +261,11 @@ public class CallHandler extends Activity {
 		if (wl != null && wl.isHeld()) {
             wl.release();
         }
-
-		unregisterReceiver(callStateReceiver);
-
+		try {
+			unregisterReceiver(callStateReceiver);
+		}catch (IllegalArgumentException e) {
+			//That's the case if not registered (early quit)
+		}
 		super.onDestroy();
 	}
 

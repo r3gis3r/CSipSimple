@@ -41,12 +41,18 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import android.widget.Toast;
+
+import com.csipsimple.R;
+import com.csipsimple.utils.Log;
 
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
@@ -54,9 +60,10 @@ import com.csipsimple.models.Account;
 public class SipService extends Service {
 
 	static boolean created = false;
-
+	static boolean creating = false;
 	static String THIS_FILE = "SIP SRV";
 
+	
 	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 	final static String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
 
@@ -164,6 +171,7 @@ public class SipService extends Service {
 	private SharedPreferences prefs;
 	private ConnectivityManager connManager;
 	private boolean has_sip_stack = false;
+	private boolean sip_stack_corrupted = false;
 	private ServiceDeviceStateReceiver sd_receiver;
 
 	// Broadcast receiver for the service
@@ -171,22 +179,33 @@ public class SipService extends Service {
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-
 			if (intent.getAction().equals(ACTION_CONNECTIVITY_CHANGED)) {
-				Log.i(THIS_FILE, "Connectivity has changed");
-
-				if (isValidConnectionForOutgoing() || isValidConnectionForIncoming()) {
-					if (!created) {
-						sipStart();
-					} else {
-						// update registration IP
-						unregisterAllAccounts();
-						registerAllAccounts();
+				Log.i(THIS_FILE, "+++ Connectivity has changed");
+				Thread t = new Thread() {
+					@Override
+					public void run() {
+						if (isValidConnectionForOutgoing() || isValidConnectionForIncoming()) {
+							if (!created) {
+								sipStart();
+							} else {
+								// update registration IP
+								unregisterAllAccounts();
+								registerAllAccounts();
+							}
+						} else {
+							Log.i(THIS_FILE, "Stop SERVICE");
+							SipService.this.unregisterReceiver(sd_receiver);
+							SipService.this.sipStop();
+							//OK, this will be done only if the last bind is released
+							SipService.this.stopSelf();
+							
+						}
 					}
-				} else {
-					sipStop();
-				}
+				};
+				t.start();
+				Log.i(THIS_FILE, "--- Connectivity has changed");
 			}
+			
 		}
 
 	}
@@ -219,6 +238,7 @@ public class SipService extends Service {
 
 		tryToLoadStack();
 		
+		
 //		Intent cstackupdate = new Intent(this, CStackUpdater.class);
 //		cstackupdate.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		startActivity(cstackupdate);
@@ -229,7 +249,13 @@ public class SipService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 
-		unregisterReceiver(sd_receiver);
+		Log.i(THIS_FILE, "Destroying SIP Service");
+		try {
+			unregisterReceiver(sd_receiver);
+		}catch(IllegalArgumentException e) {
+			//This is the case if already unregistered itself
+			//Python like usage of try ;)
+		}
 		sipStop();
 
 		Log.i(THIS_FILE, "Destroyed SIP Service");
@@ -249,14 +275,26 @@ public class SipService extends Service {
 	private void tryToLoadStack() {
 		// TODO : autodetect version
 		File stack_file = getStackLibFile(this);
-		if(stack_file != null) {
+		if(stack_file != null && !sip_stack_corrupted) {
 			try {
 	
 				System.load(stack_file.getAbsolutePath());
 				has_sip_stack = true;
+			} catch (UnsatisfiedLinkError e) {
+				Log.e(THIS_FILE, "We have a problem with the current stack.... NOT YET Implemented", e);
+				has_sip_stack = false;
+				sip_stack_corrupted = true;
+
+				//TODO: explain user what is happening
+				Intent it = new Intent(Intent.ACTION_VIEW);
+				it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				it.setData(Uri.parse("http://code.google.com/p/csipsimple/wiki/NewHardwareSupportRequest"));
+				startActivity(it);
+				stopSelf();
+
+				
 			} catch (Exception e) {
-				e.printStackTrace();
-				Log.d(THIS_FILE, "We have a problem with the current stack.... NOT YET Implemented");
+				Log.e(THIS_FILE, "We have a problem with the current stack....", e);
 			}
 		}
 	}
@@ -266,20 +304,21 @@ public class SipService extends Service {
 		return mBinder;
 	}
 
-	private void sipStart() {
+	private synchronized void sipStart() {
 		if (!has_sip_stack) {
 			Log.e(THIS_FILE, "We have no sip stack, we can't start");
 			return;
 		}
 		
-		if(!isValidConnectionForIncoming() || !isValidConnectionForOutgoing()) {
+		if(!isValidConnectionForIncoming() && !isValidConnectionForOutgoing()) {
+			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.connection_not_valid, 0));
 			Log.e(THIS_FILE, "Not able to start sip stack");
 			return;
 		}
 
 		Log.i(THIS_FILE, "Will start sip : " + (!created));
-		if (!created) {
-
+		if (!created && !creating) {
+			creating = true;
 			Thread thread = new Thread() {
 
 				@Override
@@ -306,18 +345,18 @@ public class SipService extends Service {
 
 						// LOGGING CONFIG
 						pjsua.logging_config_default(log_cfg);
-						log_cfg.setConsole_level(4);
-						log_cfg.setLevel(4);
+						log_cfg.setConsole_level(Log.LOG_LEVEL);
+						log_cfg.setLevel(Log.LOG_LEVEL);
 
+						
 						log_cfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
 
 						// MEDIA CONFIG
 						pjsua.media_config_default(media_cfg);
 
 						// For now only this cfg is supported
-						media_cfg.setClock_rate(8000);
 						media_cfg.setChannel_count(1);
-
+						
 						// To avoid crash after hangup -- android 1.5 only but
 						// even sometimes crash
 						// media_cfg.setSnd_auto_close_time(3);
@@ -334,6 +373,7 @@ public class SipService extends Service {
 						if (status != pjsuaConstants.PJ_SUCCESS) {
 							Log.e(THIS_FILE, "Fail to init pjsua with failure code " + status);
 							pjsua.destroy();
+							creating = false;
 							created = false;
 							return;
 						}
@@ -349,6 +389,7 @@ public class SipService extends Service {
 						if (status != pjsuaConstants.PJ_SUCCESS) {
 							Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
 							pjsua.destroy();
+							creating = false;
 							created = false;
 							return;
 						}
@@ -356,15 +397,11 @@ public class SipService extends Service {
 
 					// Initialization is done, now start pjsua
 					status = pjsua.start();
-					PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-					if (wl == null) {
-						wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ACompanion.MainUI");
-					}
-					wl.acquire();
+					
 
 					// Add accounts
 					registerAllAccounts();
-
+					creating = false;
 					super.run();
 				}
 
@@ -374,6 +411,25 @@ public class SipService extends Service {
 		}
 	}
 
+	
+	/**
+	 * Stop sip service
+	 */
+	private synchronized void sipStop() {
+		if (mUAReceiver != null) {
+			mUAReceiver.forceDeleteNotifications();
+		}
+
+		if (created) {
+			Log.d(THIS_FILE, "Detroying...");
+
+			pjsua.destroy();
+			status_acc_map.clear();
+			active_acc_map.clear();
+		}
+		created = false;
+	}
+	
 	/**
 	 * Add accounts from database
 	 */
@@ -382,6 +438,10 @@ public class SipService extends Service {
 			Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
 			return;
 		}
+		
+
+		
+		boolean has_some_success = false;
 		db.open();
 		List<Account> acc_list = db.getListAccounts();
 		db.close();
@@ -406,12 +466,22 @@ public class SipService extends Service {
 					if (status == pjsuaConstants.PJ_SUCCESS) {
 						Log.i(THIS_FILE, "Account " + acc.display_name + " ( " + acc.id + " ) added as " + acc_id[0]);
 						active_acc_map.put(acc.id, acc_id[0]);
+						has_some_success = true;
 					} else {
 						Log.w(THIS_FILE, "Add account " + acc.display_name + " failed !!! ");
 
 					}
 				}
 			}
+		}
+		
+		if(has_some_success) {
+			//Add a wake lock
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			if (wl == null) {
+				wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
+			}
+			wl.acquire();
 		}
 	}
 
@@ -423,6 +493,10 @@ public class SipService extends Service {
 			Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
 			return;
 		}
+		if (wl != null && wl.isHeld()) {
+			wl.release();
+		}
+		
 		for (int c_acc_id : active_acc_map.values()) {
 			pjsua.acc_set_registration(c_acc_id, 0);
 			pjsua.acc_del(c_acc_id);
@@ -434,27 +508,7 @@ public class SipService extends Service {
 		}
 	}
 
-	/**
-	 * Stop sip service
-	 */
-	private void sipStop() {
-		if (mUAReceiver != null) {
-			mUAReceiver.forceDeleteNotifications();
-		}
-		if (wl != null && wl.isHeld()) {
-			wl.release();
-		}
-		
-		if (created) {
-			Log.d(THIS_FILE, "Detroying...");
 
-			pjsua.destroy();
-			status_acc_map.clear();
-			active_acc_map.clear();
-			
-		}
-		created = false;
-	}
 
 	private boolean isValidConnectionFor(String suffix) {
 
@@ -516,4 +570,16 @@ public class SipService extends Service {
 	public static File getGuessedStackLibFile(Context ctx) {
 		return ctx.getFileStreamPath(SipService.STACK_FILE_NAME);
 	}
+	
+
+	private Handler ToastHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			if (msg.arg1 != 0) {
+				Toast.makeText(SipService.this, msg.arg1, Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(SipService.this, (String) msg.obj, Toast.LENGTH_LONG).show();
+			}
+		}
+	};
 }
