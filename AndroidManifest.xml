@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.csipsimple" android:versionName="0.00-04" android:versionCode="4">
-	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone">
-	<!-- android:launchMode="singleTask" android:name=".ui.Acompanion" -->
-		<activity android:label="@string/app_name"
-			android:name=".ui.SipHome"
+	package="com.csipsimple" android:versionName="0.00-04"
+	android:versionCode="4">
+	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="true">
+		<!-- android:launchMode="singleTask" android:name=".ui.Acompanion" -->
+		<activity android:label="@string/app_name" android:name=".ui.SipHome"
 			android:launchMode="singleTask" android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -13,36 +13,49 @@
 		</activity>
 		<activity android:name=".ui.Preferences"></activity>
 		<activity android:name=".ui.CallHandler" android:label="Incoming call"
-			android:screenOrientation="nosensor" android:excludeFromRecents="true" android:launchMode="singleInstance" android:theme="@android:style/Theme.NoTitleBar"></activity>
-		<activity android:name=".ui.AccountsList" android:launchMode="singleTask" android:label="@string/accounts"></activity>
-		<activity android:name=".ui.CStackUpdater" android:launchMode="singleTask" android:theme="@android:style/Theme.Light.NoTitleBar"></activity>
+			android:screenOrientation="nosensor" android:excludeFromRecents="true"
+			android:launchMode="singleInstance" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name=".ui.AccountsList" android:launchMode="singleTask"
+			android:label="@string/accounts"></activity>
+		<activity android:name=".ui.CStackUpdater"
+			android:launchMode="singleTask" android:theme="@android:style/Theme.Light.NoTitleBar"></activity>
 
 		<service android:name=".service.SipService" android:exported="true">
-		<intent-filter >
-				<action android:name="com.csipsimple.service.ISipService"/>
-		</intent-filter>
+			<intent-filter>
+				<action android:name="com.csipsimple.service.ISipService" />
+			</intent-filter>
 		</service>
 
 		<activity android:name=".wizards.AddAccountWizard"
-			android:label="Account Wizard" android:theme="@android:style/Theme.Dialog"></activity>
+			android:theme="@android:style/Theme.Dialog" android:label="@string/choose_wizard"></activity>
+
+		<activity android:name=".ui.Dialer" android:launchMode="singleTask"></activity>
+		<activity android:launchMode="singleTask" android:name=".ui.BuddyList"></activity>
+		
+		<!-- Wizards -->
+		<activity android:name=".wizards.impl.Basic" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name=".wizards.impl.Freephonie" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Expert" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Ecs" android:theme="@android:style/Theme.NoTitleBar"></activity>
-	<activity android:name=".ui.Dialer" android:launchMode="singleTask"></activity>
-<activity android:launchMode="singleTask" android:name=".ui.BuddyList"></activity>
-<activity android:name=".wizards.impl.Freephonie" android:theme="@android:style/Theme.NoTitleBar"></activity>
-<receiver android:name=".service.DeviceStateReceiver">
-<intent-filter><action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
+			
+		<receiver android:name=".service.DeviceStateReceiver">
+			<intent-filter>
+				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
 
 
+			</intent-filter>
+		</receiver>
+		<activity android:name=".ui.WelcomeScreen" android:label="Thanks for using CSipSimple"
+			android:theme="@style/CupcakeDialog" android:launchMode="singleTask"></activity>
+		<service android:name=".service.DownloadLibService"></service>
+
+
+
+	<receiver android:name=".service.OutgoingCall"><intent-filter android:priority="-1"><action android:name="android.intent.action.NEW_OUTGOING_CALL"></action>
 </intent-filter>
 </receiver>
-<activity android:name=".ui.WelcomeScreen" android:label="Thanks for using CSipSimple" android:theme="@style/CupcakeDialog" android:launchMode="singleTask"></activity>
-<service android:name=".service.DownloadLibService"></service>
-
-
-
 </application>
-	<uses-sdk android:minSdkVersion="3"/>
+	<uses-sdk android:minSdkVersion="3" />
 
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>

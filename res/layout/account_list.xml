@@ -25,9 +25,8 @@
 	android:orientation="horizontal" android:gravity="center_vertical" android:id="@+id/add_row" android:clickable="true" android:focusable="true" android:background="@android:drawable/menuitem_background" android:layout_height="?android:attr/listPreferredItemHeight">
 		<ImageView android:id="@+id/favicon" android:focusable="false"
 			android:src="@drawable/ic_list_new_account" android:scaleType="fitCenter" android:layout_height="48px" android:layout_width="48px" android:layout_margin="6dip" android:layout_gravity="center_vertical"/>
-		<TextView android:id="@+id/title" android:text="Add account"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textStyle="bold" android:layout_height="wrap_content" android:layout_marginBottom="2dip" android:layout_gravity="center_vertical" android:layout_width="fill_parent" android:layout_weight="1"/>
+		<TextView android:id="@+id/title" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textStyle="bold" android:layout_height="wrap_content" android:layout_marginBottom="2dip" android:layout_gravity="center_vertical" android:layout_width="fill_parent" android:layout_weight="1" android:text="@string/add_account"/>
 	</LinearLayout>
 
 </LinearLayout>

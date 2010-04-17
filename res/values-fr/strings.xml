@@ -18,10 +18,12 @@
     
     <string name="app_name">CSipSimple</string>
 <string name="unable_to_download_file">Impossible de télécharger le fichier</string>
-<string name="download_resume_download">Reprendre le téléchargement</string>
-<string name="download_resume_not_supported">Reprise non supportée</string>
 <string name="connection_not_valid">Votre connection n'est actuellement pas valide pour faire du SIP (activez le WIFI ou changez vos préférences pour pouvoir utiliser la 3G)</string>
 <string name="accounts">Comptes</string>
 <string name="save">Enregistrer</string>
 <string name="cancel">Annuler</string>
+<string name="delete">Supprimer</string>
+<string name="modify">Modifier</string>
+<string name="add_account">Ajouter un compte</string>
+<string name="choose_wizard">Choisissez l'assistant</string>
 </resources>

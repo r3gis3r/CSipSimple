@@ -82,9 +82,9 @@ public class DownloadLibService extends Service {
 	private boolean connected;
 	private final RemoteCallbackList<IDownloadLibServiceCallback> mCallbacks = new RemoteCallbackList<IDownloadLibServiceCallback>();
 	private RemoteLibInfo mCurrentUpdate;
-	private boolean prepareForDownloadCancel;
+	private boolean hasToCancelDownload;
 	private boolean mDownloading;
-	private long localFileSize;
+	private long downloadedFileSize;
 	private long mTotalDownloaded;
 	private long mContentLength;
 	private SharedPreferences prefs;
@@ -107,11 +107,6 @@ public class DownloadLibService extends Service {
 		@Override
 		public boolean isDownloadRunning() throws RemoteException {
 			return mDownloading;
-		}
-
-		@Override
-		public boolean pauseDownload() throws RemoteException {
-			return stopDownload();
 		}
 
 		@Override
@@ -151,7 +146,11 @@ public class DownloadLibService extends Service {
 		@Override
 		public void forceStopService() throws RemoteException {
 			stopSelf();
-			
+		}
+
+		@Override
+		public void stopDownload() throws RemoteException {
+			cancelCurrentDownload();
 		}
 
 	};
@@ -172,7 +171,7 @@ public class DownloadLibService extends Service {
 		mConnectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 		myConnectionChangeReceiver = new ConnectionChangeReceiver();
 		registerReceiver(myConnectionChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-		android.net.NetworkInfo.State state = mConnectivityManager.getActiveNetworkInfo().getState();
+		NetworkInfo.State state = mConnectivityManager.getActiveNetworkInfo().getState();
 		connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
 	}
 
@@ -217,7 +216,7 @@ public class DownloadLibService extends Service {
 			mWifiLock.release();
 		}
 		// Be sure to return false if the User canceled the Download
-		if (prepareForDownloadCancel) {
+		if (hasToCancelDownload) {
 			return false;
 		} else {
 			return success;
@@ -248,11 +247,12 @@ public class DownloadLibService extends Service {
 		// Set the Filename to update.zip.partial
 		partialDestinationFile = new File(filePath, fileName + ".part");
 		destinationFile = new File(filePath, fileName + ".gz");
-
+		
 		if (partialDestinationFile.exists()) {
-			localFileSize = partialDestinationFile.length();
+			partialDestinationFile.delete();
 		}
-		if (!prepareForDownloadCancel) {
+		downloadedFileSize = 0;
+		if (!hasToCancelDownload) {
 			updateURI = updateInfo.getDownloadURI();
 
 			boolean md5Available = true;
@@ -264,38 +264,21 @@ public class DownloadLibService extends Service {
 				// Add no-cache Header, so the File gets downloaded each time
 				req.addHeader("Cache-Control", "no-cache");
 				md5req.addHeader("Cache-Control", "no-cache");
+				//Proceed request
 				md5response = MD5httpClient.execute(md5req);
-
-				if (localFileSize > 0) {
-					req.addHeader("Range", "bytes=" + localFileSize + "-");
-				}
 				response = httpClient.execute(req);
-
+				
+				//Get responses codes
 				int serverResponse = response.getStatusLine().getStatusCode();
 				int md5serverResponse = md5response.getStatusLine().getStatusCode();
-
-				if (serverResponse == HttpStatus.SC_NOT_FOUND) {
-
-				} else if (serverResponse != HttpStatus.SC_OK && serverResponse != HttpStatus.SC_PARTIAL_CONTENT) {
-
-				} else {
-					// server must support partial content for resume
-					if (localFileSize > 0 && serverResponse != HttpStatus.SC_PARTIAL_CONTENT) {
-						ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.download_resume_not_supported, 0));
-						// To get the UdpateProgressBar working correctly, when
-						// server does not support resume
-						localFileSize = 0;
-					} else if (localFileSize > 0 && serverResponse == HttpStatus.SC_PARTIAL_CONTENT) {
-						ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.download_resume_download, 0));
-					}
-
-					if (md5serverResponse != HttpStatus.SC_OK) {
-						md5Available = false;
-
-					}
-
+				
+				if (md5serverResponse != HttpStatus.SC_OK) {
+					md5Available = false;
+				}
+				
+				if (serverResponse == HttpStatus.SC_OK) {
 					if (md5Available) {
-
+						//Get the md5 sum and save it into a string
 						try {
 							HttpEntity temp = md5response.getEntity();
 							InputStreamReader isr = new InputStreamReader(temp.getContent());
@@ -308,21 +291,20 @@ public class DownloadLibService extends Service {
 								temp.consumeContent();
 							}
 						} catch (IOException e) {
-							// TODO: Do not throw, continue with zipfile
-							// download
-							throw new IOException("MD5 Response cannot be read");
+							//Nothing to do, just imagine there is a problem with download
+							md5Available = false;
 						}
 					}
 
 					// Download Update ZIP if md5sum went ok
 					HttpEntity entity = response.getEntity();
 					dumpFile(entity, partialDestinationFile, destinationFile);
-					// Was the download canceled?
-					if (prepareForDownloadCancel) {
-						ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.unable_to_download_file, 0));
+					//Will cancel download
+					if (hasToCancelDownload) {
+						mToastHandler.sendMessage(mToastHandler.obtainMessage(0, R.string.unable_to_download_file, 0));
 						return false;
 					}
-					if (entity != null && !prepareForDownloadCancel) {
+					if (entity != null && !hasToCancelDownload) {
 						entity.consumeContent();
 					} else {
 						entity = null;
@@ -333,25 +315,24 @@ public class DownloadLibService extends Service {
 							throw new IOException("md5_verification_failed");
 						}
 					}
-
-					// If we reach here, download & MD5 check went fine :)
+					
 					return true;
 				}
 			} catch (IOException ex) {
-				ToastHandler.sendMessage(ToastHandler.obtainMessage(0, ex.getMessage()));
+				mToastHandler.sendMessage(mToastHandler.obtainMessage(0, ex.getMessage()));
 			}
 			if (Thread.currentThread().isInterrupted() || !Thread.currentThread().isAlive()) {
-				ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.unable_to_download_file, 0));
+				mToastHandler.sendMessage(mToastHandler.obtainMessage(0, R.string.unable_to_download_file, 0));
 				return false;
 			}
 		}
 
-		ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.unable_to_download_file, 0));
+		mToastHandler.sendMessage(mToastHandler.obtainMessage(0, R.string.unable_to_download_file, 0));
 		return false;
 	}
 
 	private void dumpFile(HttpEntity entity, File partialDestinationFile, File destinationFile) throws IOException {
-		if (!prepareForDownloadCancel) {
+		if (!hasToCancelDownload) {
 			mContentLength = (int) entity.getContentLength();
 			if (mContentLength <= 0) {
 				mContentLength = 1024;
@@ -360,7 +341,7 @@ public class DownloadLibService extends Service {
 			byte[] buff = new byte[64 * 1024];
 			int read = 0;
 			RandomAccessFile out = new RandomAccessFile(partialDestinationFile, "rw");
-			out.seek(localFileSize);
+			out.seek(downloadedFileSize);
 			InputStream is = entity.getContent();
 			TimerTask progressUpdateTimerTask = new TimerTask() {
 				@Override
@@ -372,15 +353,15 @@ public class DownloadLibService extends Service {
 			try {
 				// If File exists, set the Progress to it. Otherwise it will be
 				// initial 0
-				mTotalDownloaded = localFileSize;
+				mTotalDownloaded = downloadedFileSize;
 				progressUpdateTimer.scheduleAtFixedRate(progressUpdateTimerTask, 100, 100);
-				while ((read = is.read(buff)) > 0 && !prepareForDownloadCancel) {
+				while ((read = is.read(buff)) > 0 && !hasToCancelDownload) {
 					out.write(buff, 0, read);
 					mTotalDownloaded += read;
 				}
 				out.close();
 				is.close();
-				if (!prepareForDownloadCancel) {
+				if (!hasToCancelDownload) {
 					partialDestinationFile.renameTo(destinationFile);
 				}
 			} catch (IOException e) {
@@ -398,7 +379,7 @@ public class DownloadLibService extends Service {
 	}
 	
 	private boolean cancelCurrentDownload() {
-		prepareForDownloadCancel = true;
+		hasToCancelDownload = true;
 		String fileName = mCurrentUpdate.getFileName();
 		File filePath = mCurrentUpdate.getFilePath();
 
@@ -416,43 +397,21 @@ public class DownloadLibService extends Service {
 		return true;
 	}
 
-	private Boolean stopDownload() {
-		// TODO: Pause download
-		prepareForDownloadCancel = true;
-		mDownloading = false;
-		stopSelf();
-		return true;
-	}
-
 	private void onProgressUpdate() {
-		if (!prepareForDownloadCancel) {
-			// localFileSize because the contentLength will only be the missing
-			// bytes and not the whole file
-			long contentLengthOfFullDownload = mContentLength + localFileSize;
-			// long speed = ((mTotalDownloaded - localFileSize) /
-			// (System.currentTimeMillis() - mStartTime));
-			// speed = (speed > 0) ? speed : 1;
-			// long remainingTime = ((contentLengthOfFullDownload -
-			// mTotalDownloaded) / speed);
-			// String stringDownloaded = mTotalDownloaded / 1048576 + "/" +
-			// contentLengthOfFullDownload / 1048576 + " MB";
-			// String stringSpeed = speed + " kB/s";
-			// String stringRemainingTime = remainingTime / 60000 + " m " +
-			// remainingTime % 60 + " s";
-
+		if (!hasToCancelDownload) {
+			long contentLengthOfFullDownload = mContentLength + downloadedFileSize;
 			// Update the DownloadProgress
 			updateDownloadProgress(mTotalDownloaded, (int) contentLengthOfFullDownload);
 		}
 	}
 
 	private void updateDownloadProgress(final long downloaded, final int total) {
-		final int N = mCallbacks.beginBroadcast();
-		for (int i = 0; i < N; i++) {
+		final int n = mCallbacks.beginBroadcast();
+		for (int i = 0; i < n; i++) {
 			try {
 				mCallbacks.getBroadcastItem(i).updateDownloadProgress(downloaded, total);
 			} catch (RemoteException e) {
-				// The RemoteCallbackList will take care of removing
-				// the dead object for us.
+				//Should not happen
 			}
 		}
 		mCallbacks.finishBroadcast();
@@ -460,26 +419,24 @@ public class DownloadLibService extends Service {
 	
 	
 	private void downloadFinished() {
-		final int M = mCallbacks.beginBroadcast();
-		for (int i = 0; i < M; i++) {
+		final int n = mCallbacks.beginBroadcast();
+		for (int i = 0; i < n; i++) {
 			try {
 				mCallbacks.getBroadcastItem(i).onDownloadFinished(mCurrentUpdate);
 			} catch (RemoteException e) {
-				// The RemoteCallbackList will take care of removing
-				// the dead object for us.
+				//Should not happen
 			}
 		}
 		mCallbacks.finishBroadcast();
 	}
 
 	private void downloadError() {
-		final int M = mCallbacks.beginBroadcast();
-		for (int i = 0; i < M; i++) {
+		final int n = mCallbacks.beginBroadcast();
+		for (int i = 0; i < n; i++) {
 			try {
 				mCallbacks.getBroadcastItem(i).onDownloadError();
 			} catch (RemoteException e) {
-				// The RemoteCallbackList will take care of removing
-				// the dead object for us.
+				//Should not happen
 			}
 		}
 		mCallbacks.finishBroadcast();
@@ -635,7 +592,7 @@ public class DownloadLibService extends Service {
 	}
 	
 
-	private Handler ToastHandler = new Handler() {
+	private Handler mToastHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			if (msg.arg1 != 0) {

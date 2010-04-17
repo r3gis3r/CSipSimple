@@ -75,8 +75,9 @@ public class AccountsList extends ListActivity {
 	
 	private static final String THIS_FILE = "SIP AccountList";
 	
+	public static final int MENU_ITEM_MODIFY = Menu.FIRST;
+	public static final int MENU_ITEM_DELETE = Menu.FIRST+1;
 	
-	public static final int MENU_ITEM_DELETE = Menu.FIRST;
 
 	
 	private static final int REQUEST_ADD = 0;
@@ -171,7 +172,8 @@ public class AccountsList extends ListActivity {
         menu.setHeaderTitle(cAcc.display_name);
 
         // Add a menu item to delete the note
-        menu.add(0, MENU_ITEM_DELETE, 0, "Delete");
+        menu.add(0, MENU_ITEM_MODIFY, 0, R.string.modify);
+        menu.add(0, MENU_ITEM_DELETE, 0, R.string.delete).setIcon(android.R.drawable.ic_menu_delete);
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -198,6 +200,16 @@ public class AccountsList extends ListActivity {
         		ad.notifyDataSetChanged();
 
                 return true;
+            }
+            case MENU_ITEM_MODIFY : {
+            	Class<?> selected_class = WizardUtils.getWizardClass(cAcc.wizard);
+        		if(selected_class != null){
+        			
+        			Intent it = new Intent(this, selected_class);
+        			it.putExtra(Intent.EXTRA_UID,  (int) cAcc.id);
+        			
+        			startActivityForResult(it, REQUEST_MODIFY);
+        		}
             }
         }
         return false;
@@ -226,8 +238,6 @@ public class AccountsList extends ListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data); 
-		Log.d(THIS_FILE, "Well this is done i get a result....");
-		
 		switch(requestCode){
 		case REQUEST_ADD:
 			if(resultCode == RESULT_OK){

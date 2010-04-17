@@ -22,9 +22,6 @@ import java.util.regex.Pattern;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsua;
 
-import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -36,7 +33,11 @@ import android.preference.PreferenceScreen;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
 import com.csipsimple.R;
+import com.csipsimple.db.DBAdapter;
+import com.csipsimple.models.Account;
+import com.csipsimple.utils.Log;
 
 public abstract class BasePrefsWizard extends PreferenceActivity implements OnSharedPreferenceChangeListener{
 	private long mAccountId = -1;

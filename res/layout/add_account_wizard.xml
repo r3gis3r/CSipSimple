@@ -21,7 +21,7 @@
 	<LinearLayout android:id="@+id/LinearLayout01"
 		android:orientation="horizontal"
   		style="@android:style/ButtonBar"
-		android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="0"><Button android:layout_height="wrap_content" android:text="Cancel" android:layout_width="wrap_content" android:layout_weight="1" android:layout_marginLeft="20dip" android:layout_marginRight="20dip" android:id="@+id/cancel_bt"></Button></LinearLayout>
+		android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="0"><Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:layout_marginLeft="20dip" android:layout_marginRight="20dip" android:id="@+id/cancel_bt" android:text="@string/cancel"></Button></LinearLayout>
 
 
 </LinearLayout>

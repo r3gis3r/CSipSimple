@@ -34,7 +34,7 @@ public class Basic extends BasePrefsWizard {
 	public static String label = "Basic";
 	public static String id = "BASIC";
 	public static int icon = R.drawable.ic_wizard_basic;
-	public static int priority = 1;
+	public static int priority = 100;
 	protected static final String THIS_FILE = "Basic W";
 
 	private EditTextPreference mAccountDisplayName;
@@ -64,6 +64,7 @@ public class Basic extends BasePrefsWizard {
 			account_cfgid = m.group(1);
 			server = m.group(2);
 		}
+		
 
 		mAccountUserName.setText(account_cfgid);
 		mAccountServer.setText(server);
@@ -126,7 +127,7 @@ public class Basic extends BasePrefsWizard {
 
 	@Override
 	protected int getXmlPreferences() {
-		return R.xml.w_freephonie_preferences;
+		return R.xml.w_basic_preferences;
 	}
 
 	@Override

@@ -23,10 +23,10 @@ import com.csipsimple.service.IDownloadLibServiceCallback;
 interface IDownloadLibService {
     RemoteLibInfo getLibForDevice(String uri, String for_what);
 	void startDownload(in RemoteLibInfo lib);
+	void stopDownload();
 	boolean installLib(in RemoteLibInfo lib);
 	RemoteLibInfo getCurrentRemoteLib();
 	boolean isDownloadRunning();
-	boolean pauseDownload();
 	boolean cancelDownload();
 	void registerCallback(in IDownloadLibServiceCallback cb);
 	void unregisterCallback(in IDownloadLibServiceCallback cb);
