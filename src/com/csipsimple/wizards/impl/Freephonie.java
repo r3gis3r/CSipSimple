@@ -1,4 +1,5 @@
 /**
+ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -33,7 +34,7 @@ public class Freephonie extends BasePrefsWizard {
 	public static String label = "Freephonie";
 	public static String id = "FREEPHONIE";
 	public static int icon = R.drawable.ic_wizard_freephonie;
-	public static int priority = 0;
+	public static int priority = 10;
 	protected static final String THIS_FILE = "Freephonie W";
 
 	private EditTextPreference mAccountDisplayName;

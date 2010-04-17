@@ -1,4 +1,5 @@
 /**
+ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -62,7 +63,7 @@ public class SipHome extends TabActivity {
 			startActivity(welcomeIntent);
 			finish();
 			return;
-        }else{
+        }else if(!SipService.isBundleStack(this)){
             //We have to check and save current version
             try {
     			PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -93,6 +94,11 @@ public class SipHome extends TabActivity {
     		} catch (NameNotFoundException e) {
     			//Should not happen....or something is wrong with android...
     		}
+        }else {
+        	Log.d(THIS_FILE, "WE CAN NOW start SIP service");
+	        //Start the service
+	        serviceIntent = new Intent(SipHome.this, SipService.class);
+	        startService(serviceIntent);
         }
         
         
@@ -140,7 +146,7 @@ public class SipHome extends TabActivity {
     
 
     private void populateMenu(Menu menu) {
-    	menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE, "Accounts").setIcon(
+    	menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE, R.string.accounts).setIcon(
 				R.drawable.ic_menu_accounts);
 		menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, "Params").setIcon(
 				android.R.drawable.ic_menu_preferences);

@@ -14,8 +14,7 @@
 		<activity android:name=".ui.Preferences"></activity>
 		<activity android:name=".ui.CallHandler" android:label="Incoming call"
 			android:screenOrientation="nosensor" android:excludeFromRecents="true" android:launchMode="singleInstance" android:theme="@android:style/Theme.NoTitleBar"></activity>
-		<activity android:name=".ui.AccountsList" android:label="Accounts"
-			android:launchMode="singleTask"></activity>
+		<activity android:name=".ui.AccountsList" android:launchMode="singleTask" android:label="@string/accounts"></activity>
 		<activity android:name=".ui.CStackUpdater" android:launchMode="singleTask" android:theme="@android:style/Theme.Light.NoTitleBar"></activity>
 
 		<service android:name=".service.SipService" android:exported="true">

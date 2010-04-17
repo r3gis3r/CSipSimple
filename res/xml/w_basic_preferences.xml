@@ -20,15 +20,20 @@
 	<PreferenceCategory android:title="Sip account">
 		<EditTextPreference android:key="display_name"
 			android:singleLine="true"
-			android:title="@string/w_freephonie_display_name"></EditTextPreference>
+			android:title="@string/w_basic_display_name"></EditTextPreference>
 
-		<EditTextPreference android:key="phone_number"
+		<EditTextPreference android:key="username"
 			android:singleLine="true"
-			android:title="@string/w_freephonie_phone_number"></EditTextPreference>
+			android:title="@string/w_basic_username"></EditTextPreference>
+			
+		<EditTextPreference android:key="server"
+			android:singleLine="true"
+			android:title="@string/w_basic_server"></EditTextPreference>
+			
 		<EditTextPreference android:key="password"
 			android:singleLine="true"
 			android:password="true"
-			android:title="@string/w_freephonie_password"></EditTextPreference>
+			android:title="@string/w_basic_password"></EditTextPreference>
 	</PreferenceCategory>
 
 

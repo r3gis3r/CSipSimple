@@ -1,4 +1,5 @@
 /**
+ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -42,6 +43,10 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.NetworkInfo.DetailedState;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.WifiLock;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -166,13 +171,16 @@ public class SipService extends Service {
 	};
 
 	private DBAdapter db;
-	private WakeLock wl;
+	private WakeLock wakelock;
+	private WifiLock wifilock;
 	private UAStateReceiver mUAReceiver;
 	private SharedPreferences prefs;
 	private ConnectivityManager connManager;
 	private boolean has_sip_stack = false;
 	private boolean sip_stack_corrupted = false;
 	private ServiceDeviceStateReceiver sd_receiver;
+	
+	 
 
 	// Broadcast receiver for the service
 
@@ -477,11 +485,28 @@ public class SipService extends Service {
 		
 		if(has_some_success) {
 			//Add a wake lock
-			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			if (wl == null) {
-				wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
+			PowerManager pman = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			if (wakelock == null) {
+				wakelock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
 			}
-			wl.acquire();
+			wakelock.acquire();
+			
+			WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			if(wifilock == null) {
+				wifilock = wman.createWifiLock("com.csipsimple.SipService");
+			}
+			if(prefs.getBoolean("lock_wifi", true) ) {
+				WifiInfo winfo = wman.getConnectionInfo();
+				if(winfo != null) {
+					DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());
+					//We assume that if obtaining ip addr, we are almost connected so can keep wifi lock
+					if(dstate == DetailedState.OBTAINING_IPADDR || dstate == DetailedState.CONNECTED) {
+						wifilock.acquire();
+					}
+				}
+
+			}
+			
 		}
 	}
 
@@ -493,9 +518,13 @@ public class SipService extends Service {
 			Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
 			return;
 		}
-		if (wl != null && wl.isHeld()) {
-			wl.release();
+		if (wakelock != null && wakelock.isHeld()) {
+			wakelock.release();
 		}
+		if(wifilock != null && wifilock.isHeld()) {
+			wifilock.release();
+		}
+		
 		
 		for (int c_acc_id : active_acc_map.values()) {
 			pjsua.acc_set_registration(c_acc_id, 0);
@@ -557,6 +586,12 @@ public class SipService extends Service {
 		}
 
 		return null;
+	}
+	
+	public static boolean isBundleStack(Context ctx) {
+		File target_for_build = new File(ctx.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
+		Log.d(THIS_FILE, "Search for " + target_for_build.getAbsolutePath());
+		return target_for_build.exists();
 	}
 	
 	public static boolean hasStackLibFile(Context ctx) {

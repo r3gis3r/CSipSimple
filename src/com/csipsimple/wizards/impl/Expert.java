@@ -1,4 +1,5 @@
 /**
+ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -123,6 +124,13 @@ public class Expert extends BasePrefsWizard{
 				isEmpty(mAccountAccId) || 
 				isEmpty(mAccountRegUri)
 		){
+			return false;
+		}
+		
+		if(!isMatching(mAccountAccId, "[^<]*<sip(s)?:[^@]*@[^@]*>")) {
+			return false;
+		}
+		if(!isMatching(mAccountRegUri, "sip(s)?:.*")) {
 			return false;
 		}
 		

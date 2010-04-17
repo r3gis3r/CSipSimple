@@ -15,13 +15,11 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <resources>
-    
-    <string name="app_name">CSipSimple</string>
-<string name="unable_to_download_file">Unable to download file</string>
-<string name="download_resume_download">Resume download</string>
-<string name="download_resume_not_supported">Resume not supported</string>
-<string name="connection_not_valid">Your connection is not valid for SIP (activate WIFI or change preferences to use 3G)</string>
-<string name="accounts">Accounts</string>
-<string name="save">Save</string>
-<string name="cancel">Cancel</string>
+<string name="w_freephonie_display_name">Nom pour affichage</string>
+<string name="w_freephonie_display_name_desc">Nom utilisé pour l\'affichage</string>
+<string name="w_freephonie_phone_number">Numéro de téléphone</string>
+<string name="w_freephonie_phone_number_desc">Numéro de téléphone SIP de votre compte (numéro de téléphone Free)</string>
+<string name="w_freephonie_password">Mot de passe</string>
+<string name="w_freephonie_password_desc">Mot de passe tel que rempli dans le panneau d'administration Free</string>
+
 </resources>
