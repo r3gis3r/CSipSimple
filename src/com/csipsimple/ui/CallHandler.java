@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsip_status_code;
-import org.pjsip.pjsua.pjsua;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -37,6 +36,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
 import com.csipsimple.utils.Log;
 import android.view.View;
@@ -57,18 +57,18 @@ public class CallHandler extends Activity {
 	 * Service binding
 	 */
 	private boolean m_servicedBind = false;
+	private ISipService mService;
 	private ServiceConnection m_connection = new ServiceConnection() {
 
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-			ISipService.Stub.asInterface(arg1);
+			mService = ISipService.Stub.asInterface(arg1);
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
-
+			
 		}
-
 	};
 
 	private CallInfo mCallInfo = null;
@@ -86,8 +86,6 @@ public class CallHandler extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
-		
 		
 		setContentView(R.layout.callhandler);
 		Log.d(THIS_FILE, "Creating call handler.....");
@@ -128,18 +126,30 @@ public class CallHandler extends Activity {
 	
 			mTakeCall.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					// TODO : should be done into the service
 					if (mCallInfo != null) {
-						pjsua.call_answer(mCallInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue(), null, null);
+						if(mService != null) {
+							try {
+								mService.answer(mCallInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
+							} catch (RemoteException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
 					}
 				}
 			});
 	
 			mClearCall.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					// TODO : should be done into the service
 					if (mCallInfo != null) {
-						pjsua.call_hangup(mCallInfo.getCallId(), 0, null, null);
+						if(mService != null) {
+							try {
+								mService.hangup(mCallInfo.getCallId(), 0);
+							} catch (RemoteException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
 					}
 	
 				}
@@ -258,6 +268,7 @@ public class CallHandler extends Activity {
 	protected void onDestroy() {
 		if (m_servicedBind) {
 			unbindService(m_connection);
+			m_servicedBind = false;
 		}
 		if (wl != null && wl.isHeld()) {
             wl.release();

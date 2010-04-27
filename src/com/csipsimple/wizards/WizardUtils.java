@@ -39,6 +39,7 @@ public class WizardUtils {
 	private static String[] wizards_classes_names = new String[]{
 		"Basic",
 		"Ecs",
+		"Ekiga",
 		"Expert",
 		"Freephonie"
 	};

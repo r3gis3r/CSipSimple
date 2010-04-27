@@ -37,6 +37,7 @@
 		<activity android:name=".wizards.impl.Freephonie" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Expert" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Ecs" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name=".wizards.impl.Ekiga" android:theme="@android:style/Theme.NoTitleBar"></activity>
 			
 		<receiver android:name=".service.DeviceStateReceiver">
 			<intent-filter>
@@ -54,6 +55,7 @@
 	<receiver android:name=".service.OutgoingCall"><intent-filter android:priority="-1"><action android:name="android.intent.action.NEW_OUTGOING_CALL"></action>
 </intent-filter>
 </receiver>
+<activity android:name=".ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog" android:launchMode="singleInstance"></activity>
 </application>
 	<uses-sdk android:minSdkVersion="3" />
 

@@ -32,27 +32,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
@@ -61,26 +54,19 @@ import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.UAStateReceiver;
 import com.csipsimple.utils.Log;
-import com.csipsimple.wizards.AddAccountWizard;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public class AccountsList extends ListActivity {
+public class OutgoingCallChooser extends ListActivity {
 	
 	private DBAdapter db;
-	private CheckAdapter ad;
+	private AccAdapter ad;
+	
+	String number;
 	
 	private List<Account> accounts_list;
 	
-	private static final String THIS_FILE = "SIP AccountList";
-	
-	public static final int MENU_ITEM_MODIFY = Menu.FIRST;
-	public static final int MENU_ITEM_DELETE = Menu.FIRST+1;
-	
-
-	
-	private static final int REQUEST_ADD = 0;
-	private static final int REQUEST_MODIFY = REQUEST_ADD+1;
+	private static final String THIS_FILE = "SIP OUTChoose";
 	
 	private ISipService m_service;
 	private ServiceConnection m_connection = new ServiceConnection(){
@@ -98,13 +84,6 @@ public class AccountsList extends ListActivity {
     
    	private BroadcastReceiver regStateReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
-			/*
-			int call_id = -1;
-			Bundle extras = intent.getExtras();
-	        if(extras != null){
-	        	call_id = extras.getInt("call_id",-1);
-	        }
-	        */
 			updateList();
 		}
 	};
@@ -112,12 +91,18 @@ public class AccountsList extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(THIS_FILE, "Starting");
-
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			number = extras.getString("number");
+		}
+		
+		
 		// Build window
 		Window w = getWindow();
 		w.requestFeature(Window.FEATURE_LEFT_ICON);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.account_list);
+		setContentView(R.layout.outgoing_account_list);
 		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
 
 		// Fill accounts with currently avalaible accounts
@@ -126,20 +111,29 @@ public class AccountsList extends ListActivity {
 		accounts_list = db.getListAccounts();
 		db.close();
 		// And set as adapter
-		ad = new CheckAdapter(this, accounts_list);
+		ad = new AccAdapter(this, accounts_list);
 		setListAdapter(ad);
 
 		// Inform the list we provide context menus for items
 		getListView().setOnCreateContextMenuListener(this);
 
-		LinearLayout add_row = (LinearLayout) findViewById(R.id.add_row);
+		LinearLayout add_row = (LinearLayout) findViewById(R.id.use_pstn_row);
 		add_row.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivityForResult(new Intent(AccountsList.this, AddAccountWizard.class), REQUEST_ADD);
+				Log.d(THIS_FILE, "Choosen : pstn");
+				Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
+				intentMakePstnCall.setData(Uri.parse("tel:"+number+"#PSTN"));
+				startActivity(intentMakePstnCall);
+				finish();
 			}
 		});
-		bindService(new Intent(this, SipService.class), m_connection, Context.BIND_AUTO_CREATE);
+		
+		Intent sipServ = new Intent(this, SipService.class);
+		
+		//Start service and bind it
+		startService(sipServ);
+		bindService(sipServ, m_connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(UAStateReceiver.UA_REG_STATE_CHANGED));
 	}
 	
@@ -151,68 +145,7 @@ public class AccountsList extends ListActivity {
 		unregisterReceiver(regStateReceiver);
 	}
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
-        AdapterView.AdapterContextMenuInfo info;
-        try {
-             info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        } catch (ClassCastException e) {
-            Log.e(THIS_FILE, "bad menuInfo", e);
-            return;
-        }
 
-        Account cAcc = (Account) getListAdapter().getItem(info.position);
-        if (cAcc == null) {
-            // For some reason the requested item isn't available, do nothing
-            return;
-        }
-
-        // Setup the menu header
-        menu.setHeaderTitle(cAcc.display_name);
-
-        // Add a menu item to delete the note
-        menu.add(0, MENU_ITEM_MODIFY, 0, R.string.modify);
-        menu.add(0, MENU_ITEM_DELETE, 0, R.string.delete).setIcon(android.R.drawable.ic_menu_delete);
-    }
-
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info;
-        try {
-             info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        } catch (ClassCastException e) {
-            Log.e(THIS_FILE, "bad menuInfo", e);
-            return false;
-        }
-        Account cAcc = (Account) getListAdapter().getItem(info.position);
-        
-        switch (item.getItemId()) {
-            case MENU_ITEM_DELETE: {
-            	db.open();
-        		db.deleteAccount((int) cAcc.id);
-        		accounts_list = db.getListAccounts();
-        		ad.clear();
-        		for(Account acc : accounts_list){
-        			ad.add(acc);
-        		}
-        		db.close();
-        		
-        		ad.notifyDataSetChanged();
-
-                return true;
-            }
-            case MENU_ITEM_MODIFY : {
-            	Class<?> selected_class = WizardUtils.getWizardClass(cAcc.wizard);
-        		if(selected_class != null){
-        			
-        			Intent it = new Intent(this, selected_class);
-        			it.putExtra(Intent.EXTRA_UID,  (int) cAcc.id);
-        			
-        			startActivityForResult(it, REQUEST_MODIFY);
-        		}
-            }
-        }
-        return false;
-    }
     
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -223,63 +156,30 @@ public class AccountsList extends ListActivity {
 		Class<?> selected_class = WizardUtils.getWizardClass(cAcc.wizard);
 		if(selected_class != null){
 			
-			Intent it = new Intent(this, selected_class);
-			it.putExtra(Intent.EXTRA_UID,  (int) cAcc.id);
 			
-			startActivityForResult(it, REQUEST_MODIFY);
+			if(m_service != null) {
+				if(SipService.active_acc_map.containsKey(cAcc.id)) {
+					pjsua_acc_info acc_info =  cAcc.getPjAccountInfo();
+            		if(acc_info != null) {
+            			pjsip_status_code status_code;
+            			status_code = acc_info.getStatus();
+            			if( status_code == pjsip_status_code.PJSIP_SC_OK ){
+							try {
+								m_service.makeCall(number);
+								finish();
+							} catch (RemoteException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+            			}
+            		}
+				}
+			}
 		}
 	}
+	
 
 	
-	/**
-	 * FOr now appears when we come back from a add/modify 
-	 */
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data); 
-		switch(requestCode){
-		case REQUEST_ADD:
-			if(resultCode == RESULT_OK){
-				updateList();
-				//Force reflush accounts
-				Thread t = new Thread() {
-					public void run() {
-						if (m_service != null) {
-							try {
-								m_service.removeAllAccounts();
-								m_service.addAllAccounts();
-							} catch (RemoteException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					};
-				};
-				t.start();
-			}
-			break;
-		case REQUEST_MODIFY:
-			if(resultCode == RESULT_OK){
-				updateList();
-				//Force reflush accounts
-				Thread t = new Thread() {
-					public void run() {
-						if (m_service != null) {
-							try {
-								m_service.removeAllAccounts();
-								m_service.addAllAccounts();
-							} catch (RemoteException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					};
-				};
-				t.start();
-			}
-			break;
-		}
-	}
 	
 	/**
 	 * Flush and re-populate static list of account (static because should not exceed 3 or 4 accounts)
@@ -296,10 +196,10 @@ public class AccountsList extends ListActivity {
 	}
 	
 	
-	class CheckAdapter extends ArrayAdapter<Account> {
+	class AccAdapter extends ArrayAdapter<Account> {
 
-		CheckAdapter(Activity context, List<Account> list) {
-			super(context, R.layout.account_row, list);
+		AccAdapter(Activity context, List<Account> list) {
+			super(context, R.layout.choose_account_row, list);
 		}
 		
 		@Override
@@ -308,15 +208,14 @@ public class AccountsList extends ListActivity {
 			//Log.d(THIS_FILE, "try to do convertView :: "+position+" / "+getCount());
 			//View v = super.getView(position, convertView, parent);
 			View v = convertView;
-			boolean should_attach_cb_listener = false;
             if (v == null) {
-            	should_attach_cb_listener = true;
                 LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.account_row, parent, false);
+                v = vi.inflate(R.layout.choose_account_row, parent, false);
             }
             
-            CheckBox cbLu = (CheckBox)v.findViewById(R.id.AccCheckBoxActive);
-	        
+            v.setClickable(true);
+            
+            
 	        Account acc = getItem(position);
 	        //Log.d(THIS_FILE, "has account");
 	        if (acc != null){
@@ -324,7 +223,6 @@ public class AccountsList extends ListActivity {
 	            TextView tvsObjet = (TextView)v.findViewById(R.id.AccTextStatusView);
 	            ImageView icoObjet = (ImageView)v.findViewById(R.id.wizard_icon);
 	            
-	            cbLu.setTag(acc.id);
 	            Log.d(THIS_FILE, "Is rendering "+acc.display_name);
 	            tvObjet.setText(acc.display_name);
 	            
@@ -339,7 +237,7 @@ public class AccountsList extends ListActivity {
 	            		color = Color.argb(255, 255, 255, 255);
 	            		
 	            		if(SipService.active_acc_map.containsKey(acc.id)){
-		            		pjsua_acc_info acc_info = acc.getPjAccountInfo();
+		            		pjsua_acc_info acc_info =  acc.getPjAccountInfo();
 		            		if(acc_info != null) {
 		            			status = acc_info.getStatus_text().getPtr();
 		            			pjsip_status_code status_code;
@@ -347,7 +245,9 @@ public class AccountsList extends ListActivity {
 		            			if( status_code == pjsip_status_code.PJSIP_SC_OK ){
 	
 				            		if(acc_info.getExpires() > 0){
+				            			//Green, account is available
 				            			color = Color.argb(255, 63, 255, 0);
+				            			v.setClickable(false);
 				            		}else{
 				            			color = Color.argb(255, 100, 100, 100); //Default color for not added account
 				        	            status = "Unregistred";
@@ -375,52 +275,11 @@ public class AccountsList extends ListActivity {
 	            tvsObjet.setText(status);
 	            tvObjet.setTextColor(color);
 	            
-	            //Update checkbox selection - Note : this will fire the onCheckClick listener
-	            cbLu.setChecked( acc.active );
 	            //Update account image
 	            WizardInfo wizard_infos = WizardUtils.getWizardClassInfos(acc.wizard);
 	            icoObjet.setImageResource(wizard_infos.icon);
 	        }
 	        
-			if (should_attach_cb_listener) {
-				cbLu.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-						//Log.d(THIS_FILE,  "Checked : "+isChecked+" tag : "+buttonView.getTag());
-						db.open();
-						Account acc = db.getAccount((Integer) buttonView.getTag());
-
-						// This test is required to make sure when list is
-						// updated / or just initialized
-						// that service is not restarted
-						if (acc.active != isChecked) {
-							acc.active = isChecked;
-							db.updateAccount(acc);
-							db.close();
-							// TODO : we should maybe do something more clever
-							// than
-							// remove and re-add all accounts
-							Thread t = new Thread() {
-								public void run() {
-									if (m_service != null) {
-										try {
-											m_service.removeAllAccounts();
-											m_service.addAllAccounts();
-										} catch (RemoteException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-									}
-								};
-							};
-							t.start();
-
-						} else {
-							db.close();
-						}
-					}
-				});
-			}
 	        
 	        return v;
 	    }

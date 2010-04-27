@@ -28,6 +28,9 @@ interface ISipService{
 	void switchToAutoAnswer();
 	
 	void makeCall(in String callee);
+	int answer(int call_id, int status);
+	int hangup(int call_id, int status);
+	
 	
 	void forceStopService();
 	

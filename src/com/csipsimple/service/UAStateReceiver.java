@@ -29,12 +29,6 @@ import org.pjsip.pjsua.pjsua_acc_info;
 import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_call_media_status;
 
-import com.csipsimple.models.CallInfo;
-import com.csipsimple.ui.CallHandler;
-import com.csipsimple.ui.SipHome;
-
-import com.csipsimple.R;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -45,6 +39,11 @@ import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.provider.Settings;
+
+import com.csipsimple.R;
+import com.csipsimple.models.CallInfo;
+import com.csipsimple.ui.CallHandler;
+import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
 
 public class UAStateReceiver extends Callback {
@@ -138,7 +137,6 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_call_media_state(int call_id) {
 		pjsua_call_info info = new pjsua_call_info();
-		Log.w(THIS_FILE, "call media state changed "+call_id);
 		pjsua.call_get_info(call_id, info);
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
 			
@@ -233,6 +231,7 @@ public class UAStateReceiver extends Callback {
 			//notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 			
 			mNotificationManager.notify(REGISTER_NOTIF_ID, notification);
+			((SipService) service).lockResources();
 		}else{
 			mNotificationManager.cancel(REGISTER_NOTIF_ID);
 		}

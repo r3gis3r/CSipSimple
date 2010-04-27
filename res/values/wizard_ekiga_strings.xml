@@ -15,16 +15,11 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <resources>
-    
-    <string name="app_name">CSipSimple</string>
-<string name="unable_to_download_file">Unable to download file</string>
-<string name="connection_not_valid">Your connection is not valid for SIP (activate WIFI or change preferences to use 3G)</string>
-<string name="accounts">Accounts</string>
-<string name="save">Save</string>
-<string name="cancel">Cancel</string>
-<string name="delete">Delete</string>
-<string name="modify">Modify</string>
-<string name="add_account">Add account</string>
-<string name="choose_wizard">Choose wizard</string>
-<string name="use_pstn">Use PSTN</string>
+<string name="w_ekiga_display_name">Account name</string>
+<string name="w_ekiga_display_name_desc">Display name for this account</string>
+<string name="w_ekiga_phone_number">User name</string>
+<string name="w_ekiga_phone_number_desc">Sip account login</string>
+<string name="w_ekiga_password">Password</string>
+<string name="w_ekiga_password_desc">Password for your account</string>
+
 </resources>

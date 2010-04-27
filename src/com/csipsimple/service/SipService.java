@@ -57,10 +57,9 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.csipsimple.R;
-import com.csipsimple.utils.Log;
-
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
+import com.csipsimple.utils.Log;
 
 public class SipService extends Service {
 
@@ -113,7 +112,9 @@ public class SipService extends Service {
 
 		@Override
 		public void makeCall(String callee) throws RemoteException {
-
+			if(!created) {
+				return;
+			}
 			
 			//Check integrity of callee field
 			if( ! Pattern.matches("^.*(<)?sip(s)?:[^@]*@[^@]*(>)?", callee) ) {
@@ -166,8 +167,22 @@ public class SipService extends Service {
 			stopSelf();
 			
 		}
+
+		@Override
+		public int answer(int callId, int status) throws RemoteException {
+			if(created) {
+				return pjsua.call_answer(callId, status, null, null);
+			}
+			return 0;
+		}
 		
-		
+		@Override
+		public int hangup(int callId, int status) throws RemoteException {
+			if(created) {
+				return pjsua.call_hangup(callId, status, null, null);
+			}
+			return 0;
+		}
 	};
 
 	private DBAdapter db;
@@ -279,13 +294,13 @@ public class SipService extends Service {
 		}
 		sipStart();
 	}
+	
 
 	private void tryToLoadStack() {
 		// TODO : autodetect version
 		File stack_file = getStackLibFile(this);
 		if(stack_file != null && !sip_stack_corrupted) {
 			try {
-	
 				System.load(stack_file.getAbsolutePath());
 				has_sip_stack = true;
 			} catch (UnsatisfiedLinkError e) {
@@ -299,13 +314,12 @@ public class SipService extends Service {
 				it.setData(Uri.parse("http://code.google.com/p/csipsimple/wiki/NewHardwareSupportRequest"));
 				startActivity(it);
 				stopSelf();
-
-				
 			} catch (Exception e) {
 				Log.e(THIS_FILE, "We have a problem with the current stack....", e);
 			}
 		}
 	}
+	
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -365,10 +379,13 @@ public class SipService extends Service {
 						// For now only this cfg is supported
 						media_cfg.setChannel_count(1);
 						
+						
 						// To avoid crash after hangup -- android 1.5 only but
 						// even sometimes crash
-						// media_cfg.setSnd_auto_close_time(3);
-
+						String snd_auto_close_time = prefs.getString("snd_auto_close_time", "-1");
+						media_cfg.setSnd_auto_close_time(Integer.parseInt(snd_auto_close_time));
+						
+						
 						// Disable echo cancellation
 						boolean echo_cancellation = prefs.getBoolean("echo_cancellation", true);
 						if (!echo_cancellation) {
@@ -404,8 +421,10 @@ public class SipService extends Service {
 					}
 
 					// Initialization is done, now start pjsua
-					status = pjsua.start();
+					status = pjsua.start();					
 					
+					// Init media codecs
+					setCodecsPriorities();
 
 					// Add accounts
 					registerAllAccounts();
@@ -484,28 +503,7 @@ public class SipService extends Service {
 		}
 		
 		if(has_some_success) {
-			//Add a wake lock
-			PowerManager pman = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			if (wakelock == null) {
-				wakelock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
-			}
-			wakelock.acquire();
-			
-			WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-			if(wifilock == null) {
-				wifilock = wman.createWifiLock("com.csipsimple.SipService");
-			}
-			if(prefs.getBoolean("lock_wifi", true) ) {
-				WifiInfo winfo = wman.getConnectionInfo();
-				if(winfo != null) {
-					DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());
-					//We assume that if obtaining ip addr, we are almost connected so can keep wifi lock
-					if(dstate == DetailedState.OBTAINING_IPADDR || dstate == DetailedState.CONNECTED) {
-						wifilock.acquire();
-					}
-				}
-
-			}
+			lockResources();
 			
 		}
 	}
@@ -534,6 +532,32 @@ public class SipService extends Service {
 		active_acc_map.clear();
 		if (mUAReceiver != null) {
 			mUAReceiver.forceDeleteNotifications();
+		}
+	}
+	
+	public synchronized void lockResources() {
+		//Add a wake lock
+		PowerManager pman = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		if (wakelock == null) {
+			wakelock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
+			wakelock.setReferenceCounted(false);
+		}
+		wakelock.acquire();
+		
+		WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		if(wifilock == null) {
+			wifilock = wman.createWifiLock("com.csipsimple.SipService");
+		}
+		if(prefs.getBoolean("lock_wifi", true) ) {
+			WifiInfo winfo = wman.getConnectionInfo();
+			if(winfo != null) {
+				DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());
+				//We assume that if obtaining ip addr, we are almost connected so can keep wifi lock
+				if(dstate == DetailedState.OBTAINING_IPADDR || dstate == DetailedState.CONNECTED) {
+					wifilock.acquire();
+				}
+			}
+
 		}
 	}
 
@@ -604,6 +628,25 @@ public class SipService extends Service {
 	
 	public static File getGuessedStackLibFile(Context ctx) {
 		return ctx.getFileStreamPath(SipService.STACK_FILE_NAME);
+	}
+	
+	
+	private void setCodecsPriorities() {
+		pj_str_t current_codec;
+		current_codec = pjsua.pj_str_copy("speex/16000/1");
+		pjsua.codec_set_priority(current_codec, (short) Integer.parseInt(prefs.getString("codec_speex_16000", "130")));
+		current_codec = pjsua.pj_str_copy("speex/8000/1");
+		pjsua.codec_set_priority(current_codec, (short) Integer.parseInt(prefs.getString("codec_speex_8000", "129")));
+		current_codec = pjsua.pj_str_copy("speex/32000/1");
+		pjsua.codec_set_priority(current_codec, (short) Integer.parseInt(prefs.getString("codec_speex_32000", "128")));
+		current_codec = pjsua.pj_str_copy("GSM/8000/1");
+		pjsua.codec_set_priority(current_codec, (short) Integer.parseInt(prefs.getString("codec_gsm_8000", "128")));
+		current_codec = pjsua.pj_str_copy("PCMU/8000/1");
+		pjsua.codec_set_priority(current_codec, (short) Integer.parseInt(prefs.getString("codec_pcmu_8000", "128")));
+		current_codec = pjsua.pj_str_copy("PCMA/8000/1");
+		pjsua.codec_set_priority(current_codec, (short) Integer.parseInt(prefs.getString("codec_pcma_8000", "128")));
+		current_codec = pjsua.pj_str_copy("g722/8000/1");
+		pjsua.codec_set_priority(current_codec, (short) Integer.parseInt(prefs.getString("codec_g722_8000", "128")));
 	}
 	
 
