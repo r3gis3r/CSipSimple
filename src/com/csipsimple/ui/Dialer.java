@@ -17,6 +17,10 @@
  */
 package com.csipsimple.ui;
 
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -29,9 +33,9 @@ import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.Vibrator;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.method.DialerKeyListener;
-import com.csipsimple.utils.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,27 +50,50 @@ import com.csipsimple.R;
 import com.csipsimple.animation.Flip3dAnimation;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Log;
 
 public class Dialer extends Activity implements OnClickListener,
 		OnLongClickListener {
-
 	
-
-	//private static final int TONE_LENGTH_MS = 150;
+	
 	private ToneGenerator mToneGenerator;
 	private Object mToneGeneratorLock = new Object();
-	private static final int TONE_RELATIVE_VOLUME = 80;
-	private static final int DIAL_TONE_STREAM_TYPE = AudioManager.STREAM_MUSIC;
-
 	private static final String THIS_FILE = "Dialer";
 
 	private Drawable mDigitsBackground;
 	private Drawable mDigitsEmptyBackground;
 	private EditText digitsView;
 	private ImageButton dialButton, deleteButton;
+	private Vibrator mVibrator;
 	
 	private View mDigitDialer, mTextDialer, mRootView;
 	private boolean isDigit;
+	
+	
+	private int[] buttonsToAttach = new int[] {
+		//Digital dialer
+		R.id.button0,
+		R.id.button1,
+		R.id.button2,
+		R.id.button3,
+		R.id.button4,
+		R.id.button5,
+		R.id.button6,
+		R.id.button7,
+		R.id.button8,
+		R.id.button9,
+		R.id.buttonstar,
+		R.id.buttonpound,
+		R.id.dialButton,
+		R.id.deleteButton,
+		R.id.domainButton,
+		//Text dialer
+		R.id.dialTextButton,
+		R.id.deleteTextButton,
+		R.id.domainTextButton
+	};
+	
+	private HashMap<Integer, int[]> digitsButtons;
 	
 
 	private Activity mToBindTo = this;
@@ -85,8 +112,8 @@ public class Dialer extends Activity implements OnClickListener,
 		}
 		
     };
+	private int ringerMode;
 
-	//private Vibrator mVibrator;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -98,28 +125,51 @@ public class Dialer extends Activity implements OnClickListener,
 		if(getParent() != null) {
 			mToBindTo = getParent();
 		}
-
-		
 		setContentView(R.layout.dialer_activity);
 
+		
+		//Pfff java is so so verbose.... if only it was python ...
+		//I don't want to use introspection since could impact perfs, so the best way i found is using a map
+		digitsButtons = new HashMap<Integer, int[]>();
+		digitsButtons.put(R.id.button0, new int[] {ToneGenerator.TONE_DTMF_0, KeyEvent.KEYCODE_0});
+		digitsButtons.put(R.id.button1, new int[] {ToneGenerator.TONE_DTMF_1, KeyEvent.KEYCODE_1});
+		digitsButtons.put(R.id.button2, new int[] {ToneGenerator.TONE_DTMF_2, KeyEvent.KEYCODE_2});
+		digitsButtons.put(R.id.button3, new int[] {ToneGenerator.TONE_DTMF_3, KeyEvent.KEYCODE_3});
+		digitsButtons.put(R.id.button4, new int[] {ToneGenerator.TONE_DTMF_4, KeyEvent.KEYCODE_4});
+		digitsButtons.put(R.id.button5, new int[] {ToneGenerator.TONE_DTMF_5, KeyEvent.KEYCODE_5});
+		digitsButtons.put(R.id.button6, new int[] {ToneGenerator.TONE_DTMF_6, KeyEvent.KEYCODE_6});
+		digitsButtons.put(R.id.button7, new int[] {ToneGenerator.TONE_DTMF_7, KeyEvent.KEYCODE_7});
+		digitsButtons.put(R.id.button8, new int[] {ToneGenerator.TONE_DTMF_8, KeyEvent.KEYCODE_8});
+		digitsButtons.put(R.id.button9, new int[] {ToneGenerator.TONE_DTMF_9, KeyEvent.KEYCODE_9});
+		digitsButtons.put(R.id.buttonpound, new int[] {ToneGenerator.TONE_DTMF_P, KeyEvent.KEYCODE_POUND});
+		digitsButtons.put(R.id.buttonstar, new int[] {ToneGenerator.TONE_DTMF_S, KeyEvent.KEYCODE_STAR});
+		
+		
+		// Store the backgrounds objects that will be in use later
 		Resources r = getResources();
 		mDigitsBackground = r.getDrawable(R.drawable.btn_dial_textfield_active);
 		mDigitsEmptyBackground = r.getDrawable(R.drawable.btn_dial_textfield_normal);
+		
+		
+		// Store some object that could be useful later
 		dialButton = (ImageButton) findViewById(R.id.dialButton);
 		deleteButton = (ImageButton) findViewById(R.id.deleteButton);
 		digitsView = (EditText) findViewById(R.id.digitsText);
-		
-		TextView atxt = (TextView) findViewById(R.id.arobase_txt);
-		atxt.setText("@");
-		
 		mDigitDialer = (View) findViewById(R.id.dialer_digit);
 		mTextDialer = (View) findViewById(R.id.dialer_text);
 		mRootView = (View) findViewById(R.id.toplevel);
+		
+		
+		// @ is a special char for layouts, I didn't find another way to set @ as text in xml
+		TextView atxt = (TextView) findViewById(R.id.arobase_txt);
+		atxt.setText("@");
+		
 		
 		//TODO : set default in params
 		isDigit = true;
 		mDigitDialer.setVisibility(View.VISIBLE);
 		mTextDialer.setVisibility(View.GONE);
+		
 		
 		initButtons();
 	}
@@ -136,38 +186,41 @@ public class Dialer extends Activity implements OnClickListener,
 	protected void onResume() {
 		super.onResume();
 		
-		boolean mBound = mToBindTo.bindService(new Intent(mToBindTo, SipService.class), mConnection, Context.BIND_AUTO_CREATE);
-		Log.d(THIS_FILE, "Bound is "+mBound);
+		//Bind service
+		mToBindTo.bindService(new Intent(mToBindTo, SipService.class), mConnection, Context.BIND_AUTO_CREATE);
 
-		// if the mToneGenerator creation fails, just continue without it. It is
-		// a local audio signal, and is not as important as the dtmf tone
-		// itself.
+		//Create dialtone just for user feedback
 		synchronized (mToneGeneratorLock) {
 			if (mToneGenerator == null) {
 				try {
-					// we want the user to be able to control the volume of the
-					// dial tones
-					// outside of a call, so we use the stream type that is also
-					// mapped to the
-					// volume control keys for this activity
-					mToneGenerator = new ToneGenerator(DIAL_TONE_STREAM_TYPE,
-							TONE_RELATIVE_VOLUME);
-					setVolumeControlStream(DIAL_TONE_STREAM_TYPE);
+					mToneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC, 80);
+					//Allow user to control dialtone
+					setVolumeControlStream(AudioManager.STREAM_MUSIC);
 				} catch (RuntimeException e) {
+					//If impossible, nothing to do
 					mToneGenerator = null;
 				}
 			}
 		}
+		
+		//Create the virator
+		mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		//Store the current ringer mode
+		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		ringerMode = am.getRingerMode();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		
+		//Unbind service
+		//TODO : should be done by a cleaner way (check if bind function has been launched is better than check if bind has been done)
 		if(mService != null) {
     		mToBindTo.unbindService(mConnection);
     	}
 		
+		//Destroy dialtone
 		synchronized (mToneGeneratorLock) {
 			if (mToneGenerator != null) {
 				mToneGenerator.release();
@@ -176,7 +229,7 @@ public class Dialer extends Activity implements OnClickListener,
 		}
 	}
 	
-	private void setupButton(int id) {
+	private void attachButtonListener(int id) {
 		ImageButton button = (ImageButton) findViewById(id);
 		button.setOnClickListener(this);
 
@@ -186,29 +239,9 @@ public class Dialer extends Activity implements OnClickListener,
 	}
 
 	private void initButtons() {
-		
-		//Digital dialer
-		setupButton(R.id.button0);
-		setupButton(R.id.button1);
-		setupButton(R.id.button2);
-		setupButton(R.id.button3);
-		setupButton(R.id.button4);
-		setupButton(R.id.button5);
-		setupButton(R.id.button6);
-		setupButton(R.id.button7);
-		setupButton(R.id.button8);
-		setupButton(R.id.button9);
-		setupButton(R.id.buttonstar);
-		setupButton(R.id.buttonpound);
-		setupButton(R.id.dialButton);
-		setupButton(R.id.deleteButton);
-		setupButton(R.id.domainButton);
-		
-		//Text dialer
-		setupButton(R.id.dialTextButton);
-		setupButton(R.id.deleteTextButton);
-		setupButton(R.id.domainTextButton);
-		
+		for (int btn_id : buttonsToAttach) {
+			attachButtonListener(btn_id);
+		}
 		digitsView.setOnClickListener(this);
 		digitsView.setKeyListener(DialerKeyListener.getInstance());
 		digitsView.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
@@ -216,18 +249,16 @@ public class Dialer extends Activity implements OnClickListener,
 		toggleDrawable();
 	}
 	
-	
 
-
-	void playTone(int tone) {
-		// if (!true) {
-		// return;
-		// }
-
-		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		int ringerMode = audioManager.getRingerMode();
-		if ((ringerMode == AudioManager.RINGER_MODE_SILENT)
-				|| (ringerMode == AudioManager.RINGER_MODE_VIBRATE)) {
+	private void playTone(int tone) {
+		boolean silent = (ringerMode == AudioManager.RINGER_MODE_SILENT) || (ringerMode == AudioManager.RINGER_MODE_VIBRATE);
+		//TODO add user pref for that
+		boolean vibrate = silent || true;
+		
+		if(vibrate) {
+			mVibrator.vibrate(30);
+		}
+		if(silent) {
 			return;
 		}
 
@@ -235,7 +266,21 @@ public class Dialer extends Activity implements OnClickListener,
 			if (mToneGenerator == null) {
 				return;
 			}
-			//mToneGenerator.startTone(tone, TONE_LENGTH_MS);
+			mToneGenerator.startTone(tone);
+			
+			//TODO : see if it could not be factorized
+			Timer toneTimer = new Timer();
+			toneTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					synchronized (mToneGeneratorLock) {
+						if (mToneGenerator == null) {
+							return;
+						}
+						mToneGenerator.stopTone();
+					}
+				}
+			}, 100);
 		}
 	}
 
@@ -246,124 +291,72 @@ public class Dialer extends Activity implements OnClickListener,
 	}
 
 	public void onClick(View view) {
-		switch (view.getId()) {
-		case R.id.button0: {
-			playTone(ToneGenerator.TONE_DTMF_0);
-			keyPressed(KeyEvent.KEYCODE_0);
-			break;
-		}
-		case R.id.button1: {
-			playTone(ToneGenerator.TONE_DTMF_1);
-			keyPressed(KeyEvent.KEYCODE_1);
-			break;
-		}
-		case R.id.button2: {
-			playTone(ToneGenerator.TONE_DTMF_2);
-			keyPressed(KeyEvent.KEYCODE_2);
-			break;
-		}
-		case R.id.button3: {
-			playTone(ToneGenerator.TONE_DTMF_3);
-			keyPressed(KeyEvent.KEYCODE_3);
-			break;
-		}
-		case R.id.button4: {
-			playTone(ToneGenerator.TONE_DTMF_4);
-			keyPressed(KeyEvent.KEYCODE_4);
-			break;
-		}
-		case R.id.button5: {
-			playTone(ToneGenerator.TONE_DTMF_5);
-			keyPressed(KeyEvent.KEYCODE_5);
-			break;
-		}
-		case R.id.button6: {
-			playTone(ToneGenerator.TONE_DTMF_6);
-			keyPressed(KeyEvent.KEYCODE_6);
-			break;
-		}
-		case R.id.button7: {
-			playTone(ToneGenerator.TONE_DTMF_7);
-			keyPressed(KeyEvent.KEYCODE_7);
-			break;
-		}
-		case R.id.button8: {
-			playTone(ToneGenerator.TONE_DTMF_8);
-			keyPressed(KeyEvent.KEYCODE_8);
-			break;
-		}
-		case R.id.button9: {
-			playTone(ToneGenerator.TONE_DTMF_9);
-			keyPressed(KeyEvent.KEYCODE_9);
-			break;
-		}
-		case R.id.buttonpound: {
-			playTone(ToneGenerator.TONE_DTMF_P);
-			keyPressed(KeyEvent.KEYCODE_POUND);
-			break;
-		}
-		case R.id.buttonstar: {
-			playTone(ToneGenerator.TONE_DTMF_S);
-			keyPressed(KeyEvent.KEYCODE_STAR);
-			break;
-		}
-		case R.id.deleteButton: {
-			keyPressed(KeyEvent.KEYCODE_DEL);
-			break;
-		}
-		case R.id.deleteTextButton:{
-			EditText et;
-			et = (EditText) findViewById(R.id.dialtxt_user);
-			et.setText("");
-			et = (EditText) findViewById(R.id.dialtext_domain);
-			et.setText("");
-			
-			break;
-		}
-		case R.id.dialButton: {
-			if(mService != null) {
-				try {
-					mService.makeCall(digitsView.getText().toString());
-				} catch (RemoteException e) {
-					Log.e(THIS_FILE, "Service can't be called to make the call");
+		int view_id = view.getId();
+		if (digitsButtons.containsKey(view.getId())) {
+			int[] btn_infos = digitsButtons.get(view_id);
+			playTone(btn_infos[0]);
+			keyPressed(btn_infos[1]);
+		} else {
+
+			switch (view_id) {
+			case R.id.deleteButton: {
+				keyPressed(KeyEvent.KEYCODE_DEL);
+				break;
+			}
+			case R.id.deleteTextButton: {
+				EditText et;
+				et = (EditText) findViewById(R.id.dialtxt_user);
+				et.setText("");
+				et = (EditText) findViewById(R.id.dialtext_domain);
+				et.setText("");
+
+				break;
+			}
+			case R.id.dialButton: {
+				if (mService != null) {
+					try {
+						mService.makeCall(digitsView.getText().toString());
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Service can't be called to make the call");
+					}
 				}
+				break;
 			}
-			break;
-		}
-		case R.id.dialTextButton: {
-			if(mService != null) {
-				try {
-					//TODO: allow to choose between sip and sips
-					String callee = "sip:";
-					EditText et;
-					et = (EditText) findViewById(R.id.dialtxt_user);
-					callee += et.getText();
-					callee += "@";
-					et = (EditText) findViewById(R.id.dialtext_domain);
-					callee += et.getText();
-					mService.makeCall(callee);
-				} catch (RemoteException e) {
-					Log.e(THIS_FILE, "Service can't be called to make the call");
+			case R.id.dialTextButton: {
+				if (mService != null) {
+					try {
+						// TODO: allow to choose between sip and sips
+						String callee = "sip:";
+						EditText et;
+						et = (EditText) findViewById(R.id.dialtxt_user);
+						callee += et.getText();
+						callee += "@";
+						et = (EditText) findViewById(R.id.dialtext_domain);
+						callee += et.getText();
+						mService.makeCall(callee);
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Service can't be called to make the call");
+					}
 				}
+				break;
 			}
-			break;
-		}
-		case R.id.domainButton : {
-			flipView(true);
-			break;
-		}
-		case R.id.domainTextButton : {
-			flipView(false);
-			break;
-		}
-		
-		case R.id.digitsText: {
-			digitsView.setCursorVisible(false);
-			if (digitsView.length() != 0) {
-				digitsView.setCursorVisible(true);
+			case R.id.domainButton: {
+				flipView(true);
+				break;
 			}
-			break;
-		}
+			case R.id.domainTextButton: {
+				flipView(false);
+				break;
+			}
+
+			case R.id.digitsText: {
+				digitsView.setCursorVisible(false);
+				if (digitsView.length() != 0) {
+					digitsView.setCursorVisible(true);
+				}
+				break;
+			}
+			}
 		}
 		toggleDrawable();
 	}

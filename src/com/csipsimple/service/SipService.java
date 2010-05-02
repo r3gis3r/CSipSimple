@@ -47,6 +47,7 @@ import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -225,6 +226,7 @@ public class SipService extends Service {
 						}
 					}
 				};
+				
 				t.start();
 				Log.i(THIS_FILE, "--- Connectivity has changed");
 			}
@@ -247,7 +249,7 @@ public class SipService extends Service {
 		// Register own broadcast receiver
 		IntentFilter intentfilter = new IntentFilter();
 		intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-		// TODO : handle theses receiver filters (-- take from SipDroid project
+		// TODO : handle theses receiver filters (-- inspired from SipDroid project
 		// : sipdroid.org)
 		// intentfilter.addAction(Receiver.ACTION_DATA_STATE_CHANGED);
 		// intentfilter.addAction(Receiver.ACTION_PHONE_STATE_CHANGED);
@@ -261,10 +263,6 @@ public class SipService extends Service {
 
 		tryToLoadStack();
 		
-		
-//		Intent cstackupdate = new Intent(this, CStackUpdater.class);
-//		cstackupdate.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		startActivity(cstackupdate);
 
 	}
 
@@ -379,10 +377,14 @@ public class SipService extends Service {
 						// For now only this cfg is supported
 						media_cfg.setChannel_count(1);
 						
-						
 						// To avoid crash after hangup -- android 1.5 only but
 						// even sometimes crash
-						String snd_auto_close_time = prefs.getString("snd_auto_close_time", "-1");
+						String default_value = "-1";
+						if(Build.VERSION.SDK == "3") {
+							default_value = "5";
+						}
+						String snd_auto_close_time = prefs.getString("snd_auto_close_time", default_value);
+						
 						media_cfg.setSnd_auto_close_time(Integer.parseInt(snd_auto_close_time));
 						
 						
@@ -561,6 +563,13 @@ public class SipService extends Service {
 		}
 	}
 
+	
+	public void callAnswer(int c_id, int code) {
+		if(!created) {
+			return;
+		}
+		pjsua.call_answer(c_id, code, null, null);
+	}
 
 
 	private boolean isValidConnectionFor(String suffix) {

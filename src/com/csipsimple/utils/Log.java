@@ -19,7 +19,7 @@ package com.csipsimple.utils;
 
 
 public class Log {
-	public static int LOG_LEVEL = 4;
+	public static int LOG_LEVEL = 2;
 	
 	public static void v(String tag, String msg) {
 		if(LOG_LEVEL >= 5) {

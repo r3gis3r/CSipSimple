@@ -33,12 +33,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
 import com.csipsimple.utils.Log;
+
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -279,6 +282,32 @@ public class CallHandler extends Activity {
 			//That's the case if not registered (early quit)
 		}
 		super.onDestroy();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+        case KeyEvent.KEYCODE_VOLUME_UP:
+        	int action = AudioManager.ADJUST_RAISE;
+        	if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+        		action = AudioManager.ADJUST_LOWER;
+        	}
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            am.adjustStreamVolume( AudioManager.STREAM_VOICE_CALL, action, AudioManager.FLAG_SHOW_UI);
+        	return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_VOLUME_DOWN:
+		case KeyEvent.KEYCODE_VOLUME_UP:
+			return true;
+		}
+		return super.onKeyUp(keyCode, event);
 	}
 
 	private BroadcastReceiver callStateReceiver = new BroadcastReceiver() {

@@ -57,7 +57,7 @@ public class Flip3dAnimation extends Animation {
 		this.centerY = centerY;
 		this.forward = forward;
 
-		setDuration(1000);
+		setDuration(500);
 		setFillAfter(true);
 		setInterpolator(new AccelerateDecelerateInterpolator());
 	}
