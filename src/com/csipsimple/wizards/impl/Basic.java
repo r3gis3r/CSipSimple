@@ -37,23 +37,23 @@ public class Basic extends BasePrefsWizard {
 	public static int priority = 100;
 	protected static final String THIS_FILE = "Basic W";
 
-	private EditTextPreference mAccountDisplayName;
-	private EditTextPreference mAccountUserName;
-	private EditTextPreference mAccountServer;
-	private EditTextPreference mAccountPassword;
+	private EditTextPreference accountDisplayName;
+	private EditTextPreference accountUserName;
+	private EditTextPreference accountServer;
+	private EditTextPreference accountPassword;
 
 	
 	protected void fillLayout() {
-		mAccountDisplayName = (EditTextPreference) findPreference("display_name");
-		mAccountUserName = (EditTextPreference) findPreference("username");
-		mAccountServer = (EditTextPreference) findPreference("server");
-		mAccountPassword = (EditTextPreference) findPreference("password");
+		accountDisplayName = (EditTextPreference) findPreference("display_name");
+		accountUserName = (EditTextPreference) findPreference("username");
+		accountServer = (EditTextPreference) findPreference("server");
+		accountPassword = (EditTextPreference) findPreference("password");
 
 		
 		
-		mAccountDisplayName.setText(mAccount.display_name);
+		accountDisplayName.setText(account.display_name);
 		String server = "";
-		String account_cfgid = mAccount.cfg.getId().getPtr();
+		String account_cfgid = account.cfg.getId().getPtr();
 		if(account_cfgid == null) {
 			account_cfgid = "";
 		}
@@ -66,11 +66,11 @@ public class Basic extends BasePrefsWizard {
 		}
 		
 
-		mAccountUserName.setText(account_cfgid);
-		mAccountServer.setText(server);
+		accountUserName.setText(account_cfgid);
+		accountServer.setText(server);
 		
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
-		mAccountPassword.setText(ci.getData().getPtr());
+		pjsip_cred_info ci = account.cfg.getCred_info();
+		accountPassword.setText(ci.getData().getPtr());
 	}
 
 	protected void updateDescriptions() {
@@ -81,39 +81,30 @@ public class Basic extends BasePrefsWizard {
 	}
 
 	protected boolean canSave() {
-		if( isEmpty(mAccountDisplayName)) {
-//			View pref_view = (View) getPreferenceScreen().getRootAdapter().getItem(mAccountDisplayName.getOrder());
-//			TextView tv = (TextView) pref_view.findViewById(R.id.title); 
-//			tv.setTextColor(Color.RED);
-			return false;
-		}
-		if( isEmpty(mAccountPassword) ) {
-			return false;
-		}
-		if( isEmpty(mAccountServer)) {
-			return false;
-		}
-		if( isEmpty(mAccountUserName)) {
-			return false;
-		}
+		boolean isValid = true;
+		
+		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
+		isValid &= checkField(accountPassword, isEmpty(accountPassword));
+		isValid &= checkField(accountServer, isEmpty(accountServer));
+		isValid &= checkField(accountUserName, isEmpty(accountUserName));
 
-		return true;
+		return isValid;
 	}
 
 	protected void buildAccount() {
 		Log.d(THIS_FILE, "begin of save ....");
-		mAccount.display_name = mAccountDisplayName.getText();
+		account.display_name = accountDisplayName.getText();
 		// TODO add an user display name
-		mAccount.cfg.setId(pjsua.pj_str_copy("<sip:"
-				+ mAccountUserName.getText() + "@"+mAccountServer.getText()+">"));
-		mAccount.cfg.setReg_uri(pjsua.pj_str_copy("sip:"+mAccountServer.getText()));
+		account.cfg.setId(pjsua.pj_str_copy("<sip:"
+				+ accountUserName.getText() + "@"+accountServer.getText()+">"));
+		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:"+accountServer.getText()));
 
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
+		pjsip_cred_info ci = account.cfg.getCred_info();
 
-		mAccount.cfg.setCred_count(1);
+		account.cfg.setCred_count(1);
 		ci.setRealm(pjsua.pj_str_copy("*"));
-		ci.setUsername(getPjText(mAccountUserName));
-		ci.setData(getPjText(mAccountPassword));
+		ci.setUsername(getPjText(accountUserName));
+		ci.setData(getPjText(accountPassword));
 		ci.setScheme(pjsua.pj_str_copy("Digest"));
 		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
 				.swigValue());

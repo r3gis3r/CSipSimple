@@ -13,24 +13,22 @@
 
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+    
+    Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-	<PreferenceCategory android:title="Sip account">
 		<EditTextPreference android:key="display_name"
 			android:singleLine="true"
 			android:title="@string/w_freephonie_display_name"></EditTextPreference>
 
 		<EditTextPreference android:key="phone_number"
 			android:singleLine="true"
+			android:numeric="integer"
 			android:title="@string/w_freephonie_phone_number"></EditTextPreference>
 		<EditTextPreference android:key="password"
 			android:singleLine="true"
 			android:password="true"
 			android:title="@string/w_freephonie_password"></EditTextPreference>
-	</PreferenceCategory>
-
-
 
 </PreferenceScreen>

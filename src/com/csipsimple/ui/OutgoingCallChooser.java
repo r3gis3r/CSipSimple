@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsuaConstants;
-import org.pjsip.pjsua.pjsua_acc_info;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -50,6 +49,7 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
+import com.csipsimple.models.AccountInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.UAStateReceiver;
@@ -60,7 +60,7 @@ import com.csipsimple.wizards.WizardUtils.WizardInfo;
 public class OutgoingCallChooser extends ListActivity {
 	
 	private DBAdapter db;
-	private AccAdapter ad;
+	private AccountAdapter ad;
 	
 	String number;
 	
@@ -68,11 +68,11 @@ public class OutgoingCallChooser extends ListActivity {
 	
 	private static final String THIS_FILE = "SIP OUTChoose";
 	
-	private ISipService m_service;
+	private ISipService service;
 	private ServiceConnection m_connection = new ServiceConnection(){
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-			m_service = ISipService.Stub.asInterface(arg1);
+			service = ISipService.Stub.asInterface(arg1);
 		}
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
@@ -111,7 +111,8 @@ public class OutgoingCallChooser extends ListActivity {
 		accounts_list = db.getListAccounts();
 		db.close();
 		// And set as adapter
-		ad = new AccAdapter(this, accounts_list);
+		ad = new AccountAdapter(this, accounts_list);
+		ad.setNotifyOnChange(false);
 		setListAdapter(ad);
 
 		// Inform the list we provide context menus for items
@@ -150,31 +151,29 @@ public class OutgoingCallChooser extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		Log.d(THIS_FILE, "Click at index "+position+" id "+id);
-		
-		Account cAcc = ad.getItem(position);
-		Class<?> selected_class = WizardUtils.getWizardClass(cAcc.wizard);
-		if(selected_class != null){
-			
-			
-			if(m_service != null) {
-				if(SipService.active_acc_map.containsKey(cAcc.id)) {
-					pjsua_acc_info acc_info =  cAcc.getPjAccountInfo();
-            		if(acc_info != null) {
-            			pjsip_status_code status_code;
-            			status_code = acc_info.getStatus();
-            			if( status_code == pjsip_status_code.PJSIP_SC_OK ){
-							try {
-								m_service.makeCall(number);
-								finish();
-							} catch (RemoteException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-            			}
-            		}
+		Log.d(THIS_FILE, "Click at index " + position + " id " + id);
+
+		Account account = ad.getItem(position);
+		Class<?> selected_class = WizardUtils.getWizardClass(account.wizard);
+		if (selected_class != null && service != null) {
+			AccountInfo accountInfo;
+			try {
+				accountInfo = service.getAccountInfo(account.id);
+			} catch (RemoteException e) {
+				accountInfo = null;
+			}
+			if (accountInfo != null && accountInfo.isActive()) {
+				if (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+					try {
+						// TODO : enable to choose your account
+						service.makeCall(number);
+						finish();
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Unable to make the call", e);
+					}
 				}
 			}
+			//TODO : toast for elses
 		}
 	}
 	
@@ -196,9 +195,9 @@ public class OutgoingCallChooser extends ListActivity {
 	}
 	
 	
-	class AccAdapter extends ArrayAdapter<Account> {
+	class AccountAdapter extends ArrayAdapter<Account> {
 
-		AccAdapter(Activity context, List<Account> list) {
+		AccountAdapter(Activity context, List<Account> list) {
 			super(context, R.layout.choose_account_row, list);
 		}
 		
@@ -214,70 +213,68 @@ public class OutgoingCallChooser extends ListActivity {
             }
             
             v.setClickable(true);
+
+            TextView labelView = (TextView)v.findViewById(R.id.AccTextView);
+            TextView statusView = (TextView)v.findViewById(R.id.AccTextStatusView);
+            ImageView iconImage = (ImageView)v.findViewById(R.id.wizard_icon);
             
-            
-	        Account acc = getItem(position);
+	        Account account = getItem(position);
 	        //Log.d(THIS_FILE, "has account");
-	        if (acc != null){
-	            TextView tvObjet = (TextView)v.findViewById(R.id.AccTextView);
-	            TextView tvsObjet = (TextView)v.findViewById(R.id.AccTextStatusView);
-	            ImageView icoObjet = (ImageView)v.findViewById(R.id.wizard_icon);
-	            
-	            Log.d(THIS_FILE, "Is rendering "+acc.display_name);
-	            tvObjet.setText(acc.display_name);
-	            
+	        if (account != null){
+	            labelView.setText(account.display_name);
 	            int color = Color.argb(255, 100, 100, 100); //Default color for not added account
 	            String status = "Not added";
-	            //Set status according to what we can get from service
-	            if(SipService.status_acc_map.containsKey(acc.id)){
-	            	Log.d(THIS_FILE, "Has adding status");
-	            	if(SipService.status_acc_map.get(acc.id) == pjsuaConstants.PJ_SUCCESS){
-	            		
-	            		status = "Not yet registered";
-	            		color = Color.argb(255, 255, 255, 255);
-	            		
-	            		if(SipService.active_acc_map.containsKey(acc.id)){
-		            		pjsua_acc_info acc_info =  acc.getPjAccountInfo();
-		            		if(acc_info != null) {
-		            			status = acc_info.getStatus_text().getPtr();
-		            			pjsip_status_code status_code;
-		            			status_code = acc_info.getStatus();
-		            			if( status_code == pjsip_status_code.PJSIP_SC_OK ){
-	
-				            		if(acc_info.getExpires() > 0){
-				            			//Green, account is available
-				            			color = Color.argb(255, 63, 255, 0);
-				            			v.setClickable(false);
-				            		}else{
-				            			color = Color.argb(255, 100, 100, 100); //Default color for not added account
-				        	            status = "Unregistred";
-				            		}
-		            			}else{
-		            				Log.d(THIS_FILE, "Status is "+status_code);
-		            				if(status_code == pjsip_status_code.PJSIP_SC_PROGRESS ||
-		            						status_code == pjsip_status_code.PJSIP_SC_TRYING){
-		            					color = Color.argb(255, 255, 194, 0);
-		            				}else{
-		            					color = Color.argb(255, 255, 0, 0);
-		            				}
-			            		}
-		            		}
-	            		}
-	            	}else{
-	            		status = "Unable to register ! Check your configuration";
-	            		color = 0xFF0000FF;
-	            		color = Color.argb(255, 255, 15, 0);
-	            	}
-	            	
-	            }
+	            
+				if (service != null) {
+					AccountInfo accountInfo;
+					try {
+						accountInfo = service.getAccountInfo(account.id);
+					} catch (RemoteException e) {
+						accountInfo = null;
+					}
+					if (accountInfo != null && accountInfo.isActive()) {
+						if (accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS) {
+
+							status = "Not yet registered";
+							color = Color.argb(255, 255, 255, 255);
+
+							if (accountInfo.getPjsuaId() >= 0) {
+								status = accountInfo.getStatusText();
+								pjsip_status_code statusCode = accountInfo.getStatusCode();
+								if (statusCode == pjsip_status_code.PJSIP_SC_OK) {
+
+									if (accountInfo.getExpires() > 0) {
+										// Green, account is available
+										color = Color.argb(255, 63, 255, 0);
+										v.setClickable(false);
+									} else {
+										// Default color for  not added ccount
+										color = Color.argb(255, 100, 100, 100);
+										status = "Unregistred";
+									}
+								} else {
+									if (statusCode == pjsip_status_code.PJSIP_SC_PROGRESS || statusCode == pjsip_status_code.PJSIP_SC_TRYING) {
+										color = Color.argb(255, 255, 194, 0);
+									} else {
+										color = Color.argb(255, 255, 0, 0);
+									}
+								}
+							}
+						}
+					} else {
+						status = "Unable to register ! Check your configuration";
+						color = 0xFF0000FF;
+						color = Color.argb(255, 255, 15, 0);
+					}
+				}
 	            
 	            //Update status label and color
-	            tvsObjet.setText(status);
-	            tvObjet.setTextColor(color);
+	            statusView.setText(status);
+	            labelView.setTextColor(color);
 	            
 	            //Update account image
-	            WizardInfo wizard_infos = WizardUtils.getWizardClassInfos(acc.wizard);
-	            icoObjet.setImageResource(wizard_infos.icon);
+	            WizardInfo wizard_infos = WizardUtils.getWizardClassInfos(account.wizard);
+	            iconImage.setImageResource(wizard_infos.icon);
 	        }
 	        
 	        

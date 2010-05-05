@@ -22,22 +22,22 @@ import java.util.regex.Pattern;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
 
 import com.csipsimple.ui.OutgoingCallChooser;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class OutgoingCall extends BroadcastReceiver {
 
 	private static final String THIS_FILE = "Outgoing RCV";
-	Context ctxt;
+	private Context context;
+	private PreferencesWrapper prefsWrapper;
+	
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
-		ctxt = context;
+	public void onReceive(Context aContext, Intent intent) {
+		context = aContext;
+		prefsWrapper = new PreferencesWrapper(context);
 		String action = intent.getAction();
 		String number = getResultData();
 		String full_number = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");
@@ -52,7 +52,7 @@ public class OutgoingCall extends BroadcastReceiver {
 		// If this is an outgoing call with a valid number
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) && number != null) {
 			Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
-			if (isCallableNumber(number) && isConnectionOk()) {
+			if (isCallableNumber(number) && prefsWrapper.isValidConnectionForOutgoing()) {
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(context, OutgoingCallChooser.class);
 				outgoingCallChooserIntent.putExtra("number", number);
@@ -70,33 +70,14 @@ public class OutgoingCall extends BroadcastReceiver {
 		}
 	}
 
+	/**
+	 * Check whether a number can be call using sip
+	 * Should check if not matches preferences of excluded patterns
+	 * @param number the number to test
+	 * @return true if we should handle this number using SIP
+	 */
 	private boolean isCallableNumber(String number) {
 		return true;
 	}
 
-	private boolean isConnectionOk() {
-
-		ConnectivityManager connManager = (ConnectivityManager) ctxt.getSystemService(Context.CONNECTIVITY_SERVICE);
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctxt);
-
-		// Check for gsm
-		boolean valid_for_gsm = prefs.getBoolean("use_3g_out", false);
-		NetworkInfo ni;
-		if (valid_for_gsm) {
-			ni = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-			if (ni.getState() == NetworkInfo.State.CONNECTED) {
-				return true;
-			}
-		}
-
-		// Check for wifi
-		boolean valid_for_wifi = prefs.getBoolean("use_wifi_out", true);
-		if (valid_for_wifi) {
-			ni = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-			if (ni.getState() == NetworkInfo.State.CONNECTED) {
-				return true;
-			}
-		}
-		return false;
-	}
 }

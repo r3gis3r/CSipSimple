@@ -50,12 +50,12 @@ public class Flip3dAnimation extends Animation {
 	 *            The direction of the animation.
 	 */
 
-	public Flip3dAnimation(View view1, View view2, int centerX, int centerY, boolean forward) {
-		this.view1 = view1;
-		this.view2 = view2;
-		this.centerX = centerX;
-		this.centerY = centerY;
-		this.forward = forward;
+	public Flip3dAnimation(View aView1, View aView2, int aCenterX, int aCenterY, boolean aForward) {
+		view1 = aView1;
+		view2 = aView2;
+		centerX = aCenterX;
+		centerY = aCenterY;
+		forward = aForward;
 
 		setDuration(500);
 		setFillAfter(true);

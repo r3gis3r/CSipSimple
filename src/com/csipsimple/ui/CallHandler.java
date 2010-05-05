@@ -56,31 +56,13 @@ import com.csipsimple.service.UAStateReceiver;
 public class CallHandler extends Activity {
 	private static String THIS_FILE = "SIP CALL HANDLER";
 
-	/**
-	 * Service binding
-	 */
-	private boolean m_servicedBind = false;
-	private ISipService mService;
-	private ServiceConnection m_connection = new ServiceConnection() {
+	private CallInfo callInfo = null;
+	private Button takeCallButton;
+	private Button clearCallButton;
+	private TextView remoteContact;
+	private LinearLayout mainFrame;
 
-		@Override
-		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-			mService = ISipService.Stub.asInterface(arg1);
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			
-		}
-	};
-
-	private CallInfo mCallInfo = null;
-	private Button mTakeCall;
-	private Button mClearCall;
-	private TextView mRemoteContact;
-	private LinearLayout mMainFrame;
-
-	private WakeLock wl;
+	private WakeLock wakeLock;
     private KeyguardManager mKeyguardManager;
     private KeyguardManager.KeyguardLock mKeyguardLock;
 
@@ -92,34 +74,34 @@ public class CallHandler extends Activity {
 		
 		setContentView(R.layout.callhandler);
 		Log.d(THIS_FILE, "Creating call handler.....");
-		m_servicedBind = bindService(new Intent(this, SipService.class), m_connection, Context.BIND_AUTO_CREATE);
+		serviceBound = bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			mCallInfo = (CallInfo) extras.get("call_info");
+			callInfo = (CallInfo) extras.get("call_info");
 		}
 
-		if (mCallInfo == null) {
+		if (callInfo == null) {
 			Log.e(THIS_FILE, "You provide an empty call info....");
 			finish();
 		}
 
-		Log.d(THIS_FILE, "Creating call handler for " + mCallInfo.getCallId());
+		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId());
 		
 		
 		
 		
 
-		mRemoteContact = (TextView) findViewById(R.id.remoteContact);
-		mMainFrame = (LinearLayout) findViewById(R.id.mainFrame);
-		mTakeCall = (Button) findViewById(R.id.take_call);
-		mClearCall = (Button) findViewById(R.id.hangup);
+		remoteContact = (TextView) findViewById(R.id.remoteContact);
+		mainFrame = (LinearLayout) findViewById(R.id.mainFrame);
+		takeCallButton = (Button) findViewById(R.id.take_call);
+		clearCallButton = (Button) findViewById(R.id.hangup);
 		updateUIFromCall();
 		
-		CallInfo call_info = new CallInfo(mCallInfo.getCallId());
+		CallInfo call_info = new CallInfo(callInfo.getCallId());
 		if(call_info.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED) ||
 				call_info.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)) {
-			Log.w(THIS_FILE, "Early failure for call "+mCallInfo.getCallId());
+			Log.w(THIS_FILE, "Early failure for call "+callInfo.getCallId());
 			delayedQuit();
 			
 		}else {		
@@ -127,12 +109,12 @@ public class CallHandler extends Activity {
 			
 			
 	
-			mTakeCall.setOnClickListener(new View.OnClickListener() {
+			takeCallButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					if (mCallInfo != null) {
-						if(mService != null) {
+					if (callInfo != null) {
+						if(service != null) {
 							try {
-								mService.answer(mCallInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
+								service.answer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
 							} catch (RemoteException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -142,12 +124,12 @@ public class CallHandler extends Activity {
 				}
 			});
 	
-			mClearCall.setOnClickListener(new View.OnClickListener() {
+			clearCallButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					if (mCallInfo != null) {
-						if(mService != null) {
+					if (callInfo != null) {
+						if(service != null) {
 							try {
-								mService.hangup(mCallInfo.getCallId(), 0);
+								service.hangup(callInfo.getCallId(), 0);
 							} catch (RemoteException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -189,10 +171,10 @@ public class CallHandler extends Activity {
 
 	private void updateUIFromCall() {
 
-		Log.d(THIS_FILE, "Update ui from call " + mCallInfo.getCallId() + " state " + mCallInfo.getStringCallState());
+		Log.d(THIS_FILE, "Update ui from call " + callInfo.getCallId() + " state " + callInfo.getStringCallState());
 
-		pjsip_inv_state state = mCallInfo.getCallState();
-		String remote_contact = mCallInfo.getRemoteContact();
+		pjsip_inv_state state = callInfo.getCallState();
+		String remote_contact = callInfo.getRemoteContact();
 		Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*<sip(?:s)?:([^@]*@[^>]*)>");
 		Matcher m = p.matcher(remote_contact);
 		if (m.matches()) {
@@ -202,43 +184,43 @@ public class CallHandler extends Activity {
 			}
 		}
 		
-		mRemoteContact.setText(remote_contact);
+		remoteContact.setText(remote_contact);
 
 		int backgroundResId = R.drawable.bg_in_call_gradient_unidentified;
-        if (wl == null) {
+        if (wakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
+            wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
         }
 
 
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
-			mTakeCall.setVisibility(View.VISIBLE);
-			mClearCall.setVisibility(View.VISIBLE);
-			mClearCall.setText("Decline");
-		    wl.acquire();
+			takeCallButton.setVisibility(View.VISIBLE);
+			clearCallButton.setVisibility(View.VISIBLE);
+			clearCallButton.setText("Decline");
+		    wakeLock.acquire();
 			break;
 		case PJSIP_INV_STATE_CALLING:
-			mTakeCall.setVisibility(View.GONE);
-			mClearCall.setVisibility(View.VISIBLE);
-			mClearCall.setText("Hang up");
-            if (wl != null && wl.isHeld()) {
-                wl.release();
+			takeCallButton.setVisibility(View.GONE);
+			clearCallButton.setVisibility(View.VISIBLE);
+			clearCallButton.setText("Hang up");
+            if (wakeLock != null && wakeLock.isHeld()) {
+                wakeLock.release();
             }
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
-			mTakeCall.setVisibility(View.GONE);
-			mClearCall.setVisibility(View.VISIBLE);
-			mClearCall.setText("Hang up");
+			takeCallButton.setVisibility(View.GONE);
+			clearCallButton.setVisibility(View.VISIBLE);
+			clearCallButton.setText("Hang up");
 			backgroundResId = R.drawable.bg_in_call_gradient_connected;
-			if (wl != null && wl.isHeld()) {
-                wl.release();
+			if (wakeLock != null && wakeLock.isHeld()) {
+                wakeLock.release();
             }
 			break;
 		case PJSIP_INV_STATE_NULL:
 			Log.i(THIS_FILE, "WTF?");
-			if (wl != null && wl.isHeld()) {
-                wl.release();
+			if (wakeLock != null && wakeLock.isHeld()) {
+                wakeLock.release();
             }
 			break;
 		case PJSIP_INV_STATE_DISCONNECTED:
@@ -250,15 +232,16 @@ public class CallHandler extends Activity {
 			break;
 		}
 
-		mMainFrame.setBackgroundResource(backgroundResId);
+		mainFrame.setBackgroundResource(backgroundResId);
 	}
 
 
 	private void delayedQuit() {
-		mMainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
+		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
+		takeCallButton.setEnabled(false);
+		clearCallButton.setEnabled(false);
 		Timer t = new Timer();
 		t.schedule(new TimerTask() {
-			
 			@Override
 			public void run() {
 				finish();
@@ -269,12 +252,12 @@ public class CallHandler extends Activity {
 	
 	@Override
 	protected void onDestroy() {
-		if (m_servicedBind) {
-			unbindService(m_connection);
-			m_servicedBind = false;
+		if (serviceBound) {
+			unbindService(connection);
+			serviceBound = false;
 		}
-		if (wl != null && wl.isHeld()) {
-            wl.release();
+		if (wakeLock != null && wakeLock.isHeld()) {
+            wakeLock.release();
         }
 		try {
 			unregisterReceiver(callStateReceiver);
@@ -318,12 +301,29 @@ public class CallHandler extends Activity {
 				notif_call = (CallInfo) extras.get("call_info");
 			}
 
-			Log.d(THIS_FILE, "BC recieve");
-
-			if (notif_call != null && mCallInfo.equals(notif_call)) {
-				mCallInfo = notif_call;
+			if (notif_call != null && callInfo.equals(notif_call)) {
+				callInfo = notif_call;
 				updateUIFromCall();
 			}
+		}
+	};
+	
+
+	/**
+	 * Service binding
+	 */
+	private boolean serviceBound = false;
+	private ISipService service;
+	private ServiceConnection connection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
+			service = ISipService.Stub.asInterface(arg1);
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			
 		}
 	};
 }

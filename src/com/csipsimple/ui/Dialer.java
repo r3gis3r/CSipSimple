@@ -34,7 +34,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.Vibrator;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.method.DialerKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
@@ -56,17 +55,16 @@ public class Dialer extends Activity implements OnClickListener,
 		OnLongClickListener {
 	
 	
-	private ToneGenerator mToneGenerator;
-	private Object mToneGeneratorLock = new Object();
+	private ToneGenerator toneGenerator;
+	private Object toneGeneratorLock = new Object();
 	private static final String THIS_FILE = "Dialer";
 
-	private Drawable mDigitsBackground;
-	private Drawable mDigitsEmptyBackground;
+	private Drawable digitsBackground, digitsEmptyBackground;
 	private EditText digitsView;
 	private ImageButton dialButton, deleteButton;
-	private Vibrator mVibrator;
+	private Vibrator vibrator;
 	
-	private View mDigitDialer, mTextDialer, mRootView;
+	private View digitDialer, textDialer, rootView;
 	private boolean isDigit;
 	
 	
@@ -96,19 +94,17 @@ public class Dialer extends Activity implements OnClickListener,
 	private HashMap<Integer, int[]> digitsButtons;
 	
 
-	private Activity mToBindTo = this;
-	private ISipService mService;
-	private ServiceConnection mConnection = new ServiceConnection(){
+	private Activity contextToBindTo = this;
+	private ISipService service;
+	private ServiceConnection connection = new ServiceConnection(){
 
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-			Log.d(THIS_FILE, "now i am binded");
-			mService = ISipService.Stub.asInterface(arg1);
+			service = ISipService.Stub.asInterface(arg1);
 		}
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
-			Log.d(THIS_FILE, "Unbind done");
-			mService = null;
+			service = null;
 		}
 		
     };
@@ -121,9 +117,8 @@ public class Dialer extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 
 		//Bind to the service
-		Log.d(THIS_FILE, "Try to bind service");
 		if(getParent() != null) {
-			mToBindTo = getParent();
+			contextToBindTo = getParent();
 		}
 		setContentView(R.layout.dialer_activity);
 
@@ -147,17 +142,17 @@ public class Dialer extends Activity implements OnClickListener,
 		
 		// Store the backgrounds objects that will be in use later
 		Resources r = getResources();
-		mDigitsBackground = r.getDrawable(R.drawable.btn_dial_textfield_active);
-		mDigitsEmptyBackground = r.getDrawable(R.drawable.btn_dial_textfield_normal);
+		digitsBackground = r.getDrawable(R.drawable.btn_dial_textfield_active);
+		digitsEmptyBackground = r.getDrawable(R.drawable.btn_dial_textfield_normal);
 		
 		
 		// Store some object that could be useful later
 		dialButton = (ImageButton) findViewById(R.id.dialButton);
 		deleteButton = (ImageButton) findViewById(R.id.deleteButton);
 		digitsView = (EditText) findViewById(R.id.digitsText);
-		mDigitDialer = (View) findViewById(R.id.dialer_digit);
-		mTextDialer = (View) findViewById(R.id.dialer_text);
-		mRootView = (View) findViewById(R.id.toplevel);
+		digitDialer = (View) findViewById(R.id.dialer_digit);
+		textDialer = (View) findViewById(R.id.dialer_text);
+		rootView = (View) findViewById(R.id.toplevel);
 		
 		
 		// @ is a special char for layouts, I didn't find another way to set @ as text in xml
@@ -167,8 +162,8 @@ public class Dialer extends Activity implements OnClickListener,
 		
 		//TODO : set default in params
 		isDigit = true;
-		mDigitDialer.setVisibility(View.VISIBLE);
-		mTextDialer.setVisibility(View.GONE);
+		digitDialer.setVisibility(View.VISIBLE);
+		textDialer.setVisibility(View.GONE);
 		
 		
 		initButtons();
@@ -187,24 +182,24 @@ public class Dialer extends Activity implements OnClickListener,
 		super.onResume();
 		
 		//Bind service
-		mToBindTo.bindService(new Intent(mToBindTo, SipService.class), mConnection, Context.BIND_AUTO_CREATE);
+		contextToBindTo.bindService(new Intent(contextToBindTo, SipService.class), connection, Context.BIND_AUTO_CREATE);
 
 		//Create dialtone just for user feedback
-		synchronized (mToneGeneratorLock) {
-			if (mToneGenerator == null) {
+		synchronized (toneGeneratorLock) {
+			if (toneGenerator == null) {
 				try {
-					mToneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC, 80);
+					toneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC, 80);
 					//Allow user to control dialtone
 					setVolumeControlStream(AudioManager.STREAM_MUSIC);
 				} catch (RuntimeException e) {
 					//If impossible, nothing to do
-					mToneGenerator = null;
+					toneGenerator = null;
 				}
 			}
 		}
 		
 		//Create the virator
-		mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		//Store the current ringer mode
 		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		ringerMode = am.getRingerMode();
@@ -216,15 +211,15 @@ public class Dialer extends Activity implements OnClickListener,
 		
 		//Unbind service
 		//TODO : should be done by a cleaner way (check if bind function has been launched is better than check if bind has been done)
-		if(mService != null) {
-    		mToBindTo.unbindService(mConnection);
+		if(service != null) {
+    		contextToBindTo.unbindService(connection);
     	}
 		
 		//Destroy dialtone
-		synchronized (mToneGeneratorLock) {
-			if (mToneGenerator != null) {
-				mToneGenerator.release();
-				mToneGenerator = null;
+		synchronized (toneGeneratorLock) {
+			if (toneGenerator != null) {
+				toneGenerator.release();
+				toneGenerator = null;
 			}
 		}
 	}
@@ -242,9 +237,11 @@ public class Dialer extends Activity implements OnClickListener,
 		for (int btn_id : buttonsToAttach) {
 			attachButtonListener(btn_id);
 		}
+		
 		digitsView.setOnClickListener(this);
 		digitsView.setKeyListener(DialerKeyListener.getInstance());
-		digitsView.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+//		PhoneNumberFormattingTextWatcher digitFormater = new PhoneNumberFormattingTextWatcher();
+//		digitsView.addTextChangedListener(digitFormater);
 		digitsView.setInputType(android.text.InputType.TYPE_NULL);
 		toggleDrawable();
 	}
@@ -256,28 +253,28 @@ public class Dialer extends Activity implements OnClickListener,
 		boolean vibrate = silent || true;
 		
 		if(vibrate) {
-			mVibrator.vibrate(30);
+			vibrator.vibrate(30);
 		}
 		if(silent) {
 			return;
 		}
 
-		synchronized (mToneGeneratorLock) {
-			if (mToneGenerator == null) {
+		synchronized (toneGeneratorLock) {
+			if (toneGenerator == null) {
 				return;
 			}
-			mToneGenerator.startTone(tone);
+			toneGenerator.startTone(tone);
 			
 			//TODO : see if it could not be factorized
 			Timer toneTimer = new Timer();
 			toneTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					synchronized (mToneGeneratorLock) {
-						if (mToneGenerator == null) {
+					synchronized (toneGeneratorLock) {
+						if (toneGenerator == null) {
 							return;
 						}
-						mToneGenerator.stopTone();
+						toneGenerator.stopTone();
 					}
 				}
 			}, 100);
@@ -313,9 +310,10 @@ public class Dialer extends Activity implements OnClickListener,
 				break;
 			}
 			case R.id.dialButton: {
-				if (mService != null) {
+				if (service != null) {
 					try {
-						mService.makeCall(digitsView.getText().toString());
+						//digitsView.getText().
+						service.makeCall(digitsView.getText().toString());
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Service can't be called to make the call");
 					}
@@ -323,7 +321,7 @@ public class Dialer extends Activity implements OnClickListener,
 				break;
 			}
 			case R.id.dialTextButton: {
-				if (mService != null) {
+				if (service != null) {
 					try {
 						// TODO: allow to choose between sip and sips
 						String callee = "sip:";
@@ -333,7 +331,7 @@ public class Dialer extends Activity implements OnClickListener,
 						callee += "@";
 						et = (EditText) findViewById(R.id.dialtext_domain);
 						callee += et.getText();
-						mService.makeCall(callee);
+						service.makeCall(callee);
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Service can't be called to make the call");
 					}
@@ -388,12 +386,12 @@ public class Dialer extends Activity implements OnClickListener,
 	private void toggleDrawable() {
 		final boolean notEmpty = digitsView.length() != 0;
 		if (notEmpty) {
-			digitsView.setBackgroundDrawable(mDigitsBackground);
+			digitsView.setBackgroundDrawable(digitsBackground);
 			dialButton.setEnabled(true);
 			deleteButton.setEnabled(true);
 		} else {
 			digitsView.setCursorVisible(false);
-			digitsView.setBackgroundDrawable(mDigitsEmptyBackground);
+			digitsView.setBackgroundDrawable(digitsEmptyBackground);
 			dialButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 		}
@@ -409,9 +407,9 @@ public class Dialer extends Activity implements OnClickListener,
 		}
 		
 		isDigit = !isDigit;
-	    int cx = mRootView.getWidth() / 2;
-	    int cy = mRootView.getHeight() / 2;
-	    Animation animation = new Flip3dAnimation(mDigitDialer, mTextDialer, cx, cy, forward);
+	    int cx = rootView.getWidth() / 2;
+	    int cy = rootView.getHeight() / 2;
+	    Animation animation = new Flip3dAnimation(digitDialer, textDialer, cx, cy, forward);
 	    animation.setAnimationListener(new AnimationListener() {
 	      @Override
 	      public void onAnimationEnd(Animation animation) {
@@ -424,7 +422,7 @@ public class Dialer extends Activity implements OnClickListener,
 	      }
 	    });
 	    
-	    mRootView.startAnimation(animation);
+	    rootView.startAnimation(animation);
 	}
 
 }

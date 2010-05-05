@@ -76,17 +76,16 @@ public class DownloadLibService extends Service {
 
 	private static final String THIS_FILE = "DownloadLibService";
 	private static final int BUFFER = 2048;
-	private WifiLock mWifiLock;
-	private ConnectivityManager mConnectivityManager;
-	private ConnectionChangeReceiver myConnectionChangeReceiver;
+	private WifiLock wifiLock;
+	private ConnectivityManager connectivityManager;
+	private ConnectionChangeReceiver connectionChangeReceiver;
 	private boolean connected;
-	private final RemoteCallbackList<IDownloadLibServiceCallback> mCallbacks = new RemoteCallbackList<IDownloadLibServiceCallback>();
-	private RemoteLibInfo mCurrentUpdate;
-	private boolean hasToCancelDownload;
-	private boolean mDownloading;
-	private long downloadedFileSize;
-	private long mTotalDownloaded;
-	private long mContentLength;
+	private final RemoteCallbackList<IDownloadLibServiceCallback> callbacks = new RemoteCallbackList<IDownloadLibServiceCallback>();
+	private RemoteLibInfo currentUpdate;
+	private boolean cancellingDownload;
+	private boolean downloading;
+	private long downloadedSize;
+	private long totalSize;
 	private SharedPreferences prefs;
 
 	// Implement public interface for the service
@@ -94,9 +93,9 @@ public class DownloadLibService extends Service {
 
 		@Override
 		public void startDownload(RemoteLibInfo lib) throws RemoteException {
-			mDownloading = true;
+			downloading = true;
 			boolean success = checkForConnectionAndDownload(lib);
-			mDownloading = false;
+			downloading = false;
 			if(success) {
 				downloadFinished();
 			}else {
@@ -106,7 +105,7 @@ public class DownloadLibService extends Service {
 
 		@Override
 		public boolean isDownloadRunning() throws RemoteException {
-			return mDownloading;
+			return downloading;
 		}
 
 		@Override
@@ -116,20 +115,20 @@ public class DownloadLibService extends Service {
 
 		@Override
 		public RemoteLibInfo getCurrentRemoteLib() throws RemoteException {
-			return mCurrentUpdate;
+			return currentUpdate;
 		}
 
 		@Override
 		public void registerCallback(IDownloadLibServiceCallback cb) throws RemoteException {
 			if (cb != null) {
-				mCallbacks.register(cb);
+				callbacks.register(cb);
 			}
 		}
 
 		@Override
 		public void unregisterCallback(IDownloadLibServiceCallback cb) throws RemoteException {
 			if (cb != null) {
-				mCallbacks.unregister(cb);
+				callbacks.unregister(cb);
 			}
 		}
 
@@ -167,34 +166,34 @@ public class DownloadLibService extends Service {
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		// Lock wifi if possible to ensure download will be done
-		mWifiLock = ((WifiManager) getSystemService(WIFI_SERVICE)).createWifiLock("com.csipsimple.service.DownloadLibService");
-		mConnectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-		myConnectionChangeReceiver = new ConnectionChangeReceiver();
-		registerReceiver(myConnectionChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-		NetworkInfo.State state = mConnectivityManager.getActiveNetworkInfo().getState();
+		wifiLock = ((WifiManager) getSystemService(WIFI_SERVICE)).createWifiLock("com.csipsimple.service.DownloadLibService");
+		connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+		connectionChangeReceiver = new ConnectionChangeReceiver();
+		registerReceiver(connectionChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+		NetworkInfo.State state = connectivityManager.getActiveNetworkInfo().getState();
 		connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
 	}
 
 	
 	@Override
 	public void onDestroy() {
-		mCallbacks.kill();
-		unregisterReceiver(myConnectionChangeReceiver);
+		callbacks.kill();
+		unregisterReceiver(connectionChangeReceiver);
 		
 		super.onDestroy();
 	}
 
 	private boolean checkForConnectionAndDownload(RemoteLibInfo updateToDownload) {
-		mCurrentUpdate = updateToDownload;
+		currentUpdate = updateToDownload;
 
 		boolean success;
-		mWifiLock.acquire();
+		wifiLock.acquire();
 
 		// wait for a data connection
 		while (!connected) {
-			synchronized (mConnectivityManager) {
+			synchronized (connectivityManager) {
 				try {
-					mConnectivityManager.wait();
+					connectivityManager.wait();
 					break;
 				} catch (InterruptedException e) {
 					Log.e(THIS_FILE, "Error in connectivityManager.wait", e);
@@ -202,7 +201,7 @@ public class DownloadLibService extends Service {
 			}
 		}
 		try {
-			Log.d(THIS_FILE, "we will downlad : "+updateToDownload.getFileName()+" from "+updateToDownload.getDownloadURI().toString());
+			Log.d(THIS_FILE, "we will downlad : "+updateToDownload.getFileName()+" from "+updateToDownload.getDownloadUri().toString());
 			success = downloadFile(updateToDownload);
 		} catch (RuntimeException ex) {
 			Log.e(THIS_FILE, "RuntimeEx while downloading file", ex);
@@ -213,10 +212,10 @@ public class DownloadLibService extends Service {
 			notificateDownloadError(ex.getMessage());
 			return false;
 		} finally {
-			mWifiLock.release();
+			wifiLock.release();
 		}
 		// Be sure to return false if the User canceled the Download
-		if (hasToCancelDownload) {
+		if (cancellingDownload) {
 			return false;
 		} else {
 			return success;
@@ -251,9 +250,8 @@ public class DownloadLibService extends Service {
 		if (partialDestinationFile.exists()) {
 			partialDestinationFile.delete();
 		}
-		downloadedFileSize = 0;
-		if (!hasToCancelDownload) {
-			updateURI = updateInfo.getDownloadURI();
+		if (!cancellingDownload) {
+			updateURI = updateInfo.getDownloadUri();
 
 			boolean md5Available = true;
 
@@ -300,11 +298,11 @@ public class DownloadLibService extends Service {
 					HttpEntity entity = response.getEntity();
 					dumpFile(entity, partialDestinationFile, destinationFile);
 					//Will cancel download
-					if (hasToCancelDownload) {
+					if (cancellingDownload) {
 						mToastHandler.sendMessage(mToastHandler.obtainMessage(0, R.string.unable_to_download_file, 0));
 						return false;
 					}
-					if (entity != null && !hasToCancelDownload) {
+					if (entity != null && !cancellingDownload) {
 						entity.consumeContent();
 					} else {
 						entity = null;
@@ -332,16 +330,16 @@ public class DownloadLibService extends Service {
 	}
 
 	private void dumpFile(HttpEntity entity, File partialDestinationFile, File destinationFile) throws IOException {
-		if (!hasToCancelDownload) {
-			mContentLength = (int) entity.getContentLength();
-			if (mContentLength <= 0) {
-				mContentLength = 1024;
+		if (!cancellingDownload) {
+			totalSize = (int) entity.getContentLength();
+			if (totalSize <= 0) {
+				totalSize = 1024;
 			}
 			
 			byte[] buff = new byte[64 * 1024];
 			int read = 0;
 			RandomAccessFile out = new RandomAccessFile(partialDestinationFile, "rw");
-			out.seek(downloadedFileSize);
+			out.seek(0);
 			InputStream is = entity.getContent();
 			TimerTask progressUpdateTimerTask = new TimerTask() {
 				@Override
@@ -353,15 +351,15 @@ public class DownloadLibService extends Service {
 			try {
 				// If File exists, set the Progress to it. Otherwise it will be
 				// initial 0
-				mTotalDownloaded = downloadedFileSize;
+				downloadedSize = 0;
 				progressUpdateTimer.scheduleAtFixedRate(progressUpdateTimerTask, 100, 100);
-				while ((read = is.read(buff)) > 0 && !hasToCancelDownload) {
+				while ((read = is.read(buff)) > 0 && !cancellingDownload) {
 					out.write(buff, 0, read);
-					mTotalDownloaded += read;
+					downloadedSize += read;
 				}
 				out.close();
 				is.close();
-				if (!hasToCancelDownload) {
+				if (!cancellingDownload) {
 					partialDestinationFile.renameTo(destinationFile);
 				}
 			} catch (IOException e) {
@@ -379,9 +377,9 @@ public class DownloadLibService extends Service {
 	}
 	
 	private boolean cancelCurrentDownload() {
-		hasToCancelDownload = true;
-		String fileName = mCurrentUpdate.getFileName();
-		File filePath = mCurrentUpdate.getFilePath();
+		cancellingDownload = true;
+		String fileName = currentUpdate.getFileName();
+		File filePath = currentUpdate.getFilePath();
 
 		File partialDestinationFile = new File(filePath, fileName + ".part");
 		File destinationFile = new File(filePath, fileName + ".gz");
@@ -392,54 +390,53 @@ public class DownloadLibService extends Service {
 		if (destinationFile.exists()) {
 			destinationFile.delete();
 		}
-		mDownloading = false;
+		downloading = false;
 		stopSelf();
 		return true;
 	}
 
 	private void onProgressUpdate() {
-		if (!hasToCancelDownload) {
-			long contentLengthOfFullDownload = mContentLength + downloadedFileSize;
+		if (!cancellingDownload) {
 			// Update the DownloadProgress
-			updateDownloadProgress(mTotalDownloaded, (int) contentLengthOfFullDownload);
+			updateDownloadProgress(downloadedSize, totalSize);
 		}
 	}
 
-	private void updateDownloadProgress(final long downloaded, final int total) {
-		final int n = mCallbacks.beginBroadcast();
+	private void updateDownloadProgress(final long downloaded, final long total) {
+		final int n = callbacks.beginBroadcast();
 		for (int i = 0; i < n; i++) {
 			try {
-				mCallbacks.getBroadcastItem(i).updateDownloadProgress(downloaded, total);
+				callbacks.getBroadcastItem(i).updateDownloadProgress(downloaded, total);
 			} catch (RemoteException e) {
 				//Should not happen
 			}
 		}
-		mCallbacks.finishBroadcast();
+		callbacks.finishBroadcast();
 	}
 	
 	
 	private void downloadFinished() {
-		final int n = mCallbacks.beginBroadcast();
+		final int n = callbacks.beginBroadcast();
 		for (int i = 0; i < n; i++) {
 			try {
-				mCallbacks.getBroadcastItem(i).onDownloadFinished(mCurrentUpdate);
+				callbacks.getBroadcastItem(i).onDownloadFinished(currentUpdate);
 			} catch (RemoteException e) {
 				//Should not happen
 			}
 		}
-		mCallbacks.finishBroadcast();
+		callbacks.finishBroadcast();
 	}
 
 	private void downloadError() {
-		final int n = mCallbacks.beginBroadcast();
+		final int n = callbacks.beginBroadcast();
 		for (int i = 0; i < n; i++) {
 			try {
-				mCallbacks.getBroadcastItem(i).onDownloadError();
+				callbacks.getBroadcastItem(i).onDownloadError();
 			} catch (RemoteException e) {
 				//Should not happen
 			}
 		}
-		mCallbacks.finishBroadcast();
+		callbacks.finishBroadcast();
 	}
 
 	
@@ -479,9 +476,7 @@ public class DownloadLibService extends Service {
 				JSONArray coreJSONArray = mainJSONObject.getJSONArray(for_what);
 
 				JSONObject stack = getCompatibleStack(coreJSONArray);
-				Log.d(THIS_FILE, "Here we are");
 				if (stack != null) {
-					Log.d(THIS_FILE, "we are about to return a stack...");
 					return new RemoteLibInfo(stack);
 				}
 			} catch (JSONException e) {
@@ -581,7 +576,7 @@ public class DownloadLibService extends Service {
 			Editor editor = prefs.edit();
 			editor.putString("current_stack_id", lib.getId());
 			editor.putString("current_stack_version", lib.getVersion());
-			editor.putString("current_stack_uri", lib.getDownloadURI().toString());
+			editor.putString("current_stack_uri", lib.getDownloadUri().toString());
 			editor.commit();
 			return true;
 		} catch (IOException e) {
@@ -607,7 +602,7 @@ public class DownloadLibService extends Service {
 	private class ConnectionChangeReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			android.net.NetworkInfo.State state = mConnectivityManager.getActiveNetworkInfo().getState();
+			android.net.NetworkInfo.State state = connectivityManager.getActiveNetworkInfo().getState();
 			connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
 		}
 	}

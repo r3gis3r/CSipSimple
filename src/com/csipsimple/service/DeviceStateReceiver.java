@@ -33,12 +33,9 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 	private static final String THIS_FILE = "Device State";
 	private SharedPreferences prefs;
 	
-	
-	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// TODO Auto-generated method stub
-		Log.i(THIS_FILE, ">>> Connectivity has changed");
+		Log.d(THIS_FILE, ">>> Connectivity has changed");
 		// New connection info :
 		Bundle extras = intent.getExtras();
 		NetworkInfo ni =  (NetworkInfo) extras.get(ConnectivityManager.EXTRA_NETWORK_INFO);
@@ -51,9 +48,10 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			Intent sip_service_intent = new Intent(context, SipService.class);
 			context.startService(sip_service_intent);
 		}
-		Log.i(THIS_FILE, "<<< Connectivity has changed");
+		Log.d(THIS_FILE, "<<< Connectivity has changed");
 	}
 	
+	// Say whether the current connection is valid to register sip
 	private boolean isValidConnectionForOutgoing(NetworkInfo ni){
 		if(ni.getState() == NetworkInfo.State.CONNECTED ){
 			if(ni.getType() == ConnectivityManager.TYPE_MOBILE){

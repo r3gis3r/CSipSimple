@@ -17,20 +17,38 @@
  */
 package com.csipsimple.models;
 
+/**
+ * Utility class to be passed as message for example
+ * @author r3gis3r
+ *
+ */
 public class DownloadProgress {
-	private final long mDownloaded;
-	private final int mTotal;
+	private final long downloaded;
+	private final long total;
 
-	public DownloadProgress(long downloaded, int total) {
-		mDownloaded = downloaded;
-		mTotal = total;
+	/**
+	 * Create a new download progress info object
+	 * @param downloaded amount of downloaded bytes
+	 * @param total total of bytes to be downloaded
+	 */
+	public DownloadProgress(long aDownloaded, long aTotal) {
+		downloaded = aDownloaded;
+		total = aTotal;
 	}
-
+	
+	/**
+	 * Get the amount of downloaded bytes
+	 * @return amount of downloaded bytes
+	 */
 	public long getDownloaded() {
-		return mDownloaded;
+		return downloaded;
 	}
-
-	public int getTotal() {
-		return mTotal;
+	
+	/**
+	 * Get the amount of downloaded bytes
+	 * @return amount of downloaded bytes
+	 */
+	public long getTotal() {
+		return total;
 	}
 }

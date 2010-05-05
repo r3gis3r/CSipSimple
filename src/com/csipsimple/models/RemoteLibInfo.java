@@ -29,42 +29,47 @@ import com.csipsimple.utils.Log;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Parcelable/Serializable class to store information of a dynamic library (.so) stored on the network 
+ * @author r3gis3r
+ *
+ */
 public class RemoteLibInfo implements Parcelable, Serializable {
-
-	/**
-	 * 
-	 */
+	private static final String THIS_FILE = "RemoteLib";
+	
 	private static final long serialVersionUID = -5622422102685917690L;
 	public int PrimaryKey = -1;
-	private String mFileName;
-	private File mFilePath;
-	private URI mURI;
-	private String mVersion;
+	private String fileName;
+	private File filePath;
+	private URI uri;
+	private String version;
 	
 	//Blabla
-	private String mId;
-	private String mLabel;
-	private String mChangelog;
-	private String mDescription;
+	private String id;
+	private String label;
+	private String changelog;
+	private String description;
 
-	private static final String THIS_FILE = "RemoteLib";
 	
 
 	public RemoteLibInfo(Parcel in) {
         readFromParcel(in);
 	}
 
-	
-
-	public RemoteLibInfo(JSONObject stack) throws JSONException {
-		JSONObject latestUpJSON;
-		latestUpJSON = stack.getJSONArray("versions").getJSONObject(0);
-		mChangelog = latestUpJSON.getString("changelog");
-		mVersion = latestUpJSON.getString("version");
-		mURI= URI.create(latestUpJSON.getString("download_url"));
-		mDescription = stack.getString("description");
-		mLabel = stack.getString("label");
-		mId = stack.getString("id");
+	/**
+	 * Constructor from json object (retrieved on the web)
+	 * @param library
+	 * @throws JSONException if json is not well formated or doesn't contains everything we want
+	 */
+	public RemoteLibInfo(JSONObject library) throws JSONException {
+		JSONObject latestVersion;
+		latestVersion = library.getJSONArray("versions").getJSONObject(0);
+		changelog = latestVersion.getString("changelog");
+		version = latestVersion.getString("version");
+		uri= URI.create(latestVersion.getString("download_url"));
+		description = library.getString("description");
+		label = library.getString("label");
+		id = library.getString("id");
 	}
 
 	@Override
@@ -74,27 +79,27 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 
     public void readFromParcel(Parcel in){
             PrimaryKey = in.readInt();
-            mFileName = in.readString();
-            mFilePath = new File(in.readString());
-            mURI = URI.create(in.readString());
-            mVersion = in.readString();
-            mLabel = in.readString();
-            mChangelog = in.readString();
-            mDescription = in.readString();
-            mId = in.readString();
+            fileName = in.readString();
+            filePath = new File(in.readString());
+            uri = URI.create(in.readString());
+            version = in.readString();
+            label = in.readString();
+            changelog = in.readString();
+            description = in.readString();
+            id = in.readString();
     }
     
 	@Override
     public void writeToParcel(Parcel arg0, int arg1){
             arg0.writeInt(PrimaryKey);
-            arg0.writeString(mFileName);
-            arg0.writeString(mFilePath.getAbsolutePath());
-            arg0.writeString(mURI.toString());
-            arg0.writeString(mVersion);
-            arg0.writeString(mLabel);
-            arg0.writeString(mChangelog);
-            arg0.writeString(mDescription);
-            arg0.writeString(mId);
+            arg0.writeString(fileName);
+            arg0.writeString(filePath.getAbsolutePath());
+            arg0.writeString(uri.toString());
+            arg0.writeString(version);
+            arg0.writeString(label);
+            arg0.writeString(changelog);
+            arg0.writeString(description);
+            arg0.writeString(id);
     }
 
 	
@@ -110,66 +115,85 @@ public class RemoteLibInfo implements Parcelable, Serializable {
 		}
 	};
 
-	public String getFileName() {
-		return mFileName;
-	}
-
-	public void setFileName(String fileName) {
-		mFileName = fileName;
-	}
-
-	public URI getDownloadURI() {
-		return mURI;
-	}
-
+	// Setters/Getters
+	
+	
 	/**
-	 * @param mFilePath
-	 *            the mFilePath to set
+	 * Set the library file name
+	 * @param fileName the library file name : the name the library has to be saved to
 	 */
-	public void setFilePath(File mFilePath) {
-		this.mFilePath = mFilePath;
+	public void setFileName(String aFileName) {
+		fileName = aFileName;
+	}
+	
+	/**
+	 * Get the library file name
+	 * @return the library file name : the name the library has to be saved to
+	 */
+	public String getFileName() {
+		return fileName;
+	}
+	
+	
+	/**
+	 * Set the file path to save the library to 
+	 * @param filePath  the filePath to save the library to
+	 */
+	public void setFilePath(File aFilePath) {
+		this.filePath = aFilePath;
 	}
 
 	/**
-	 * @return the mFilePath
+	 * Get the file path to save the library to 
+	 * @param filePath  the filePath to save the library to
 	 */
 	public File getFilePath() {
-		return mFilePath;
+		return filePath;
 	}
 
+	/**
+	 * Get the uri from where it the library has to be downloaded
+	 * @return the library uri
+	 */
+	public URI getDownloadUri() {
+		return uri;
+	}
 
-
+	/**
+	 * Get the library id
+	 * @return the library id (internal use)
+	 */
 	public String getId() {
-		return mId;
+		return id;
 	}
 
-
-
-	public void setId(String id) {
-		mId = id;
-	}
-
-
-
+	/**
+	 * Get the library version
+	 * @return the library version string, should be formated like that : \d.\d{2}-\d{2}
+	 */
 	public String getVersion() {
-		return mVersion;
+		return version;
 	}
 
 
-
-	public void setVersion(String version) {
-		mVersion = version;
-	}
-
-
-
-	public boolean isMoreUpToDateThan(String oldStackVersion) {
-		if(oldStackVersion.equalsIgnoreCase("0.01-00")) {
+	/**
+	 * Test whether this lib is more up to date than an other version of the lib
+	 * @param oldLibVersion the other version to compare to
+	 * @return true if our lib is more up to date
+	 */
+	public boolean isMoreUpToDateThan(String oldLibVersion) {
+		if(oldLibVersion.equalsIgnoreCase("0.01-00")) {
 			//FORCE SINCE WE MADE A PRIMARY BAD COMMIT
 			return true;
 		}
-		String[] split_master_old = oldStackVersion.split("\\.");
-		String[] split_master = mVersion.split("\\.");
+		//Speed up things if version is the same
+		if(version.equalsIgnoreCase(oldLibVersion)) {
+			return false;
+		}
+		
+		//Else do a real comparaison parsing versions
+		String[] split_master_old = oldLibVersion.split("\\.");
+		String[] split_master = version.split("\\.");
 		try {
 			Log.d(THIS_FILE, "We have "+split_master_old.length);
 			int int_master_old = Integer.decode(split_master_old[0]);

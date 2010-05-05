@@ -22,8 +22,10 @@
 <string name="accounts">Accounts</string>
 <string name="save">Save</string>
 <string name="cancel">Cancel</string>
-<string name="delete">Delete</string>
-<string name="modify">Modify</string>
+<string name="activate_account">Activate account</string>
+<string name="deactivate_account">Deactivate account</string>
+<string name="delete_account">Delete account</string>
+<string name="modify_account">Modify account</string>
 <string name="add_account">Add account</string>
 <string name="choose_wizard">Choose wizard</string>
 <string name="use_pstn">Use PSTN</string>

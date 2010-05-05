@@ -23,9 +23,7 @@ import org.pjsip.pjsua.SWIGTYPE_p_pjmedia_session;
 import org.pjsip.pjsua.SWIGTYPE_p_pjsip_rx_data;
 import org.pjsip.pjsua.pjsip_event;
 import org.pjsip.pjsua.pjsip_inv_state;
-import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsua_acc_info;
 import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_call_media_status;
 
@@ -44,7 +42,6 @@ import android.provider.Settings;
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.ui.CallHandler;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
 
 public class UAStateReceiver extends Callback {
@@ -86,16 +83,16 @@ public class UAStateReceiver extends Callback {
 
 
 	@Override
-	public void on_call_state(int call_id, pjsip_event e) {
+	public void on_call_state(int callId, pjsip_event e) {
 
-		CallInfo call_info = new CallInfo(call_id);
-		Log.i(THIS_FILE, "State of call " + call_id + " :: " + call_info.getStringCallState());
+		CallInfo callInfo = new CallInfo(callId);
+		Log.i(THIS_FILE, "State of call " + callId + " :: " + callInfo.getStringCallState());
 
-		pjsip_inv_state call_state = call_info.getCallState();
+		pjsip_inv_state call_state = callInfo.getCallState();
 
 		if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
-			showNotificationForCall(call_info);
-			launchCallHandler(call_info);
+			showNotificationForCall(callInfo);
+			launchCallHandler(callInfo);
 
 		} else if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
 			Log.d(THIS_FILE, "Early state");
@@ -104,24 +101,22 @@ public class UAStateReceiver extends Callback {
 			stopRing();
 			// Call is now ended
 			if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-				mNotificationManager.cancel(CALL_NOTIF_ID);
+				notificationManager.cancel(CALL_NOTIF_ID);
 				Log.d(THIS_FILE, "Finish call2");
 				unsetAudioInCall();
 			}
 		}
-
-		Intent callStateChangedIntent = new Intent(UA_CALL_STATE_CHANGED);
-		callStateChangedIntent.putExtra("call_info", call_info);
-		service.sendBroadcast(callStateChangedIntent);
+		
+		//Thread to avoid deadlocks
+		onMediaState(callInfo);
 
 	}
 
 	@Override
-	public void on_reg_state(int acc_id) {
-		Log.d(THIS_FILE, "New reg state for : " + acc_id);
-		pjsua_acc_info info = new pjsua_acc_info();
-		pjsua.acc_get_info(acc_id, info);
-		onRegisterState(info);
+	public void on_reg_state(int accountId) {
+		Log.d(THIS_FILE, "New reg state for : " + accountId);
+		
+		onRegisterState(accountId);
 	}
 
 	@Override
@@ -131,9 +126,9 @@ public class UAStateReceiver extends Callback {
 	}
 
 	@Override
-	public void on_call_media_state(int call_id) {
+	public void on_call_media_state(int callId) {
 		pjsua_call_info info = new pjsua_call_info();
-		pjsua.call_get_info(call_id, info);
+		pjsua.call_get_info(callId, info);
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
 
 			setAudioInCall();
@@ -168,69 +163,60 @@ public class UAStateReceiver extends Callback {
 
 	public void initService(SipService srv) {
 		service = srv;
-		mNotificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 
 	// --------
 	// Private methods
 	// --------
 
-	private static final int REGISTER_NOTIF_ID = 1;
-	private static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
+	private static final int CALL_NOTIF_ID =  1;
 
 	private boolean auto_accept_current = false;
-	private Ringtone mRingtone;
-	private NotificationManager mNotificationManager;
+	private Ringtone ringtone;
+	private Vibrator vibrator;
+
+	private NotificationManager notificationManager;
 	private SipService service;
 
-	private int saved_mode;
-
-	private Vibrator mVibrator;
+	private int savedMode;
 
 	/**
 	 * Register state for an account
 	 * 
 	 * @param info
 	 */
-	private void onRegisterState(pjsua_acc_info info) {
-		// First of all send a broadcast message that for an account
-		// registration state has changed
-		Intent regStateChangedIntent = new Intent(UA_REG_STATE_CHANGED);
-
-		regStateChangedIntent.putExtra("acc_id", info.getAcc_uri().getPtr());
-		regStateChangedIntent.putExtra("acc_expires", info.getExpires());
-		regStateChangedIntent.putExtra("acc_status", info.getStatus());
-
-		// Send notification to broadcaster
-		service.sendBroadcast(regStateChangedIntent);
-
-		// Handle status bar notification
-		if (info.getExpires() > 0 && info.getStatus() == pjsip_status_code.PJSIP_SC_OK) {
-			int icon = R.drawable.sipok;
-			CharSequence tickerText = "Sip Registred";
-			long when = System.currentTimeMillis();
-
-			Notification notification = new Notification(icon, tickerText, when);
-			Context context = service.getApplicationContext();
-			CharSequence contentTitle = "SIP";
-			CharSequence contentText = "Registred";
-
-			Intent notificationIntent = new Intent(service, SipHome.class);
-			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, 0);
-
-			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-			notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-			// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
-
-			mNotificationManager.notify(REGISTER_NOTIF_ID, notification);
-			((SipService) service).lockResources();
-		} else {
-			mNotificationManager.cancel(REGISTER_NOTIF_ID);
-		}
+	private void onRegisterState(final int accountId) {
+		//This has to be threaded to avoid deadlocks
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				
+				// Update sip service (for notifications
+				((SipService) service).updateRegistrationsState();
+				
+				// Send a broadcast message that for an account
+				// registration state has changed
+				Intent regStateChangedIntent = new Intent(UA_REG_STATE_CHANGED);
+				service.sendBroadcast(regStateChangedIntent);
+			}
+		};
+		t.start();
 	}
 
-	
+	private void onMediaState(final CallInfo callInfo) {
+		//This has to be threaded to avoid deadlocks
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+
+				Intent callStateChangedIntent = new Intent(UA_CALL_STATE_CHANGED);
+				callStateChangedIntent.putExtra("call_info", callInfo);
+				service.sendBroadcast(callStateChangedIntent);
+			}
+		};
+		t.start();
+	}
 
 	private void showNotificationForCall(CallInfo call_info) {
 		// This is the pending call notification
@@ -250,14 +236,9 @@ public class UAStateReceiver extends Callback {
 		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 		// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 
-		mNotificationManager.notify(CALL_NOTIF_ID, notification);
+		notificationManager.notify(CALL_NOTIF_ID, notification);
 	}
 	
-	public void forceDeleteNotifications() {
-		if (mNotificationManager != null) {
-			mNotificationManager.cancel(REGISTER_NOTIF_ID);
-		}
-	}
 	
 
 	
@@ -272,20 +253,20 @@ public class UAStateReceiver extends Callback {
 		
 		if(vibrate) {
 			//Create the virator
-			mVibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
-			mVibrator.vibrate(new long[] {1000, 1500}, 0);
+			vibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
+			vibrator.vibrate(new long[] {1000, 1500}, 0);
 		}
 		
-		mRingtone = RingtoneManager.getRingtone(service, Settings.System.DEFAULT_RINGTONE_URI);
-		mRingtone.play();
+		ringtone = RingtoneManager.getRingtone(service, Settings.System.DEFAULT_RINGTONE_URI);
+		ringtone.play();
 	}
 	
 	private void stopRing() {
-		if(mRingtone != null) {
-			mRingtone.stop();
+		if(ringtone != null) {
+			ringtone.stop();
 		}
-		if(mVibrator != null) {
-			mVibrator.cancel();
+		if(vibrator != null) {
+			vibrator.cancel();
 		}
 	}
 
@@ -318,7 +299,7 @@ public class UAStateReceiver extends Callback {
 		saved_wifi_policy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
 		saved_volume = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 		saved_speaker_phone = am.isSpeakerphoneOn();
-		saved_mode = am.getMode();
+		savedMode = am.getMode();
 
 		int speaker = AudioManager.MODE_IN_CALL;
 
@@ -346,7 +327,7 @@ public class UAStateReceiver extends Callback {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, saved_vibrade_notif);
 		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, saved_volume, 0);
 		am.setSpeakerphoneOn(saved_speaker_phone);
-		am.setMode(saved_mode);
+		am.setMode(savedMode);
 	}
 
 }

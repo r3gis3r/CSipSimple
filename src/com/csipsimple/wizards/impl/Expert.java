@@ -39,75 +39,75 @@ public class Expert extends BasePrefsWizard{
 	public static int priority = -1;
 	
 	
-	private EditTextPreference mAccountDisplayName;
-	private EditTextPreference mAccountAccId;
-	private EditTextPreference mAccountRegUri;
-	private EditTextPreference mAccountUserName;
-	private EditTextPreference mAccountData;
-	private ListPreference mAccountDataType;
-	private EditTextPreference mAccountRealm;
-	private ListPreference mAccountScheme;
-	private CheckBoxPreference mAccountPublishEnabled;
-	private EditTextPreference mAccountRegTimeout;
-	private EditTextPreference mAccountForceContact;
-	private EditTextPreference mAccountProxy;
+	private EditTextPreference accountDisplayName;
+	private EditTextPreference accountAccId;
+	private EditTextPreference accountRegUri;
+	private EditTextPreference accountUserName;
+	private EditTextPreference accountData;
+	private ListPreference accountDataType;
+	private EditTextPreference accountRealm;
+	private ListPreference accountScheme;
+	private CheckBoxPreference accountPublishEnabled;
+	private EditTextPreference accountRegTimeout;
+	private EditTextPreference accountForceContact;
+	private EditTextPreference accountProxy;
 	
 	
 	
 	
 	protected void fillLayout(){
-		mAccountDisplayName = (EditTextPreference) findPreference("display_name");
-		mAccountAccId = (EditTextPreference) findPreference("acc_id");
-		mAccountRegUri = (EditTextPreference) findPreference("reg_uri");
-		mAccountRealm = (EditTextPreference) findPreference("realm");
-		mAccountUserName = (EditTextPreference) findPreference("username");
-		mAccountData = (EditTextPreference) findPreference("data");
-		mAccountDataType = (ListPreference) findPreference("data_type");
-		mAccountScheme = (ListPreference) findPreference("scheme");
-		mAccountPublishEnabled = (CheckBoxPreference) findPreference("publish_enabled");
-		mAccountRegTimeout = (EditTextPreference) findPreference("reg_timeout");
-		mAccountForceContact = (EditTextPreference) findPreference("force_contact");
-		mAccountProxy = (EditTextPreference) findPreference("proxy");
+		accountDisplayName = (EditTextPreference) findPreference("display_name");
+		accountAccId = (EditTextPreference) findPreference("acc_id");
+		accountRegUri = (EditTextPreference) findPreference("reg_uri");
+		accountRealm = (EditTextPreference) findPreference("realm");
+		accountUserName = (EditTextPreference) findPreference("username");
+		accountData = (EditTextPreference) findPreference("data");
+		accountDataType = (ListPreference) findPreference("data_type");
+		accountScheme = (ListPreference) findPreference("scheme");
+		accountPublishEnabled = (CheckBoxPreference) findPreference("publish_enabled");
+		accountRegTimeout = (EditTextPreference) findPreference("reg_timeout");
+		accountForceContact = (EditTextPreference) findPreference("force_contact");
+		accountProxy = (EditTextPreference) findPreference("proxy");
 		
 		
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
+		pjsip_cred_info ci = account.cfg.getCred_info();
 		
-		mAccountDisplayName.setText(mAccount.display_name);
-		mAccountAccId.setText(mAccount.cfg.getId().getPtr());
-		mAccountRegUri.setText(mAccount.cfg.getReg_uri().getPtr());
-		mAccountRealm.setText(ci.getRealm().getPtr());
-		mAccountUserName.setText(ci.getUsername().getPtr());
-		mAccountData.setText(ci.getData().getPtr());
+		accountDisplayName.setText(account.display_name);
+		accountAccId.setText(account.cfg.getId().getPtr());
+		accountRegUri.setText(account.cfg.getReg_uri().getPtr());
+		accountRealm.setText(ci.getRealm().getPtr());
+		accountUserName.setText(ci.getUsername().getPtr());
+		accountData.setText(ci.getData().getPtr());
 		
 		{
 			String scheme = ci.getScheme().getPtr();
 			if(scheme != null && !scheme.equals("")){
-				mAccountScheme.setValue(ci.getScheme().getPtr());
+				accountScheme.setValue(ci.getScheme().getPtr());
 			}else{
-				mAccountScheme.setValue("Digest");
+				accountScheme.setValue("Digest");
 			}
 		}
 		{
 			int ctype=ci.getData_type();
 			if(ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue()){
-				mAccountDataType.setValueIndex(0);
+				accountDataType.setValueIndex(0);
 			}else if(ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_DIGEST.swigValue()){
-				mAccountDataType.setValueIndex(1);
+				accountDataType.setValueIndex(1);
 			}else if(ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_EXT_AKA.swigValue()){
-				mAccountDataType.setValueIndex(2);
+				accountDataType.setValueIndex(2);
 			}else{
-				mAccountDataType.setValueIndex(0);
+				accountDataType.setValueIndex(0);
 			}
 		}
 		
-		mAccountPublishEnabled.setChecked((mAccount.cfg.getPublish_enabled() == 1));
-		if(mAccount.cfg.getReg_timeout() > 0){
-			mAccountRegTimeout.setText(""+mAccount.cfg.getReg_timeout());
+		accountPublishEnabled.setChecked((account.cfg.getPublish_enabled() == 1));
+		if(account.cfg.getReg_timeout() > 0){
+			accountRegTimeout.setText(""+account.cfg.getReg_timeout());
 		}else{
-			mAccountRegTimeout.setText("");
+			accountRegTimeout.setText("");
 		}
-		mAccountForceContact.setText(mAccount.cfg.getForce_contact().getPtr());
-		mAccountProxy.setText(mAccount.cfg.getProxy().getPtr());
+		accountForceContact.setText(account.cfg.getForce_contact().getPtr());
+		accountProxy.setText(account.cfg.getProxy().getPtr());
 	}
 	
 	protected void updateDescriptions(){
@@ -116,66 +116,59 @@ public class Expert extends BasePrefsWizard{
 		setStringFieldSummary("reg_uri");
 		setStringFieldSummary("realm");
 		setStringFieldSummary("username");
+		setStringFieldSummary("proxy");
 		setPasswordFieldSummary("data");
 	}
 	
 	protected boolean canSave(){
-		if(isEmpty(mAccountDisplayName) ||
-				isEmpty(mAccountAccId) || 
-				isEmpty(mAccountRegUri)
-		){
-			return false;
-		}
+		boolean isValid = true;
 		
-		if(!isMatching(mAccountAccId, "[^<]*<sip(s)?:[^@]*@[^@]*>")) {
-			return false;
-		}
-		if(!isMatching(mAccountRegUri, "sip(s)?:.*")) {
-			return false;
-		}
+		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
+		isValid &= checkField(accountAccId, isEmpty(accountAccId) ||  !isMatching(accountAccId, "[^<]*<sip(s)?:[^@]*@[^@]*>"));
+		isValid &= checkField(accountRegUri, isEmpty(accountRegUri) || !isMatching(accountRegUri, "sip(s)?:.*" ));
+		isValid &= checkField(accountProxy, ! isEmpty(accountProxy) && !isMatching(accountProxy, "[^<]*<sip(s)?:[^@]*@[^@]*>"));
 		
-		return true;
+		return isValid;
 	}
 	
 
 	protected void buildAccount(){
 		Log.d(TAG, "begin of build ....");
-		mAccount.display_name = mAccountDisplayName.getText();
-		mAccount.cfg.setId(getPjText(mAccountAccId));
-		mAccount.cfg.setReg_uri(getPjText(mAccountRegUri));
+		account.display_name = accountDisplayName.getText();
+		account.cfg.setId(getPjText(accountAccId));
+		account.cfg.setReg_uri(getPjText(accountRegUri));
 		
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
+		pjsip_cred_info ci = account.cfg.getCred_info();
 		
-		if( !isEmpty(mAccountUserName) ){
-			mAccount.cfg.setCred_count(1);
-			ci.setRealm(getPjText(mAccountRealm));
-			ci.setUsername(getPjText(mAccountUserName));
-			ci.setData(getPjText(mAccountData));
-			ci.setScheme(pjsua.pj_str_copy(mAccountScheme.getValue()));
+		if( !isEmpty(accountUserName) ){
+			account.cfg.setCred_count(1);
+			ci.setRealm(getPjText(accountRealm));
+			ci.setUsername(getPjText(accountUserName));
+			ci.setData(getPjText(accountData));
+			ci.setScheme(pjsua.pj_str_copy(accountScheme.getValue()));
 			// FIXME this is not the good value !
 			ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
 			
 		}else{
-			mAccount.cfg.setCred_count(0);
+			account.cfg.setCred_count(0);
 		}
 		
 		
-		mAccount.cfg.setPublish_enabled((mAccountPublishEnabled.isChecked())?1:0);
+		account.cfg.setPublish_enabled((accountPublishEnabled.isChecked())?1:0);
 		try{
-			mAccount.cfg.setReg_timeout(Integer.parseInt(mAccountRegTimeout.getText()));
+			account.cfg.setReg_timeout(Integer.parseInt(accountRegTimeout.getText()));
 		}catch(NumberFormatException e){
-			mAccount.cfg.setReg_timeout(0);
+			account.cfg.setReg_timeout(0);
 		}
 		/*
-		mAccount.cfg.setForce_contact(getPjText(mAccountForceContact));
-		
-		if( !isEmpty(mAccountProxy) ){
-			mAccount.cfg.setProxy_cnt(1);
-			mAccount.cfg.setProxy(getPjText(mAccountProxy));
-		}else{
-			mAccount.cfg.setProxy_cnt(0);
-		}
+		account.cfg.setForce_contact(getPjText(accountForceContact));
 		*/
+		if( !isEmpty(accountProxy) ){
+			account.cfg.setProxy_cnt(1);
+			account.cfg.setProxy(getPjText(accountProxy));
+		}else{
+			account.cfg.setProxy_cnt(0);
+		}
 		
 	}
 

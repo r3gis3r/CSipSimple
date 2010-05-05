@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!--
+		This file is part of CSipSimple. CSipSimple is free software: you can
+		redistribute it and/or modify it under the terms of the GNU General
+		Public License as published by the Free Software Foundation, either
+		version 3 of the License, or (at your option) any later version.
+
+		CSipSimple is distributed in the hope that it will be useful, but
+		WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+		General Public License for more details. You should have received a
+		copy of the GNU General Public License along with CSipSimple. If not,
+		see <http://www.gnu.org/licenses/>. Copyright (C) 2010 Regis Montoya
+		(aka r3gis - www.r3gis.fr)
+	-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory android:title="Native dialer integration">
+		<CheckBoxPreference android:title="Activate integration"
+			android:defaultValue="true"
+			android:summary="When dial with native dialer you'll be asked if you want to use SIP or GSM"
+			android:key="integrate_with_native_dialer"></CheckBoxPreference>
+		<EditTextPreference android:key="exclude_for_outgoing_call"
+			android:title="Exclude patterns" android:summary="Exclude patterns for outgoing calls"
+			android:defaultValue=""></EditTextPreference>
+	</PreferenceCategory>
+</PreferenceScreen>

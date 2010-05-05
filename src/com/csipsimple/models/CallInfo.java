@@ -27,9 +27,9 @@ import android.os.Parcelable;
 public class CallInfo implements Parcelable {
 
 	public int PrimaryKey = -1;
-	private int mCallId;
-	private pjsip_inv_state mCallState;
-	private String mRemoteContact;
+	private int callId;
+	private pjsip_inv_state callState;
+	private String remoteContact;
 
 	public static final Parcelable.Creator<CallInfo> CREATOR = new Parcelable.Creator<CallInfo>() {
 		public CallInfo createFromParcel(Parcel in) {
@@ -56,9 +56,9 @@ public class CallInfo implements Parcelable {
 	}
 
 	private void fillFromPj(pjsua_call_info pj_callinfo) {
-		mCallId = pj_callinfo.getId();
-		mCallState = pj_callinfo.getState();
-		mRemoteContact = pj_callinfo.getRemote_info().getPtr();
+		callId = pj_callinfo.getId();
+		callState = pj_callinfo.getState();
+		remoteContact = pj_callinfo.getRemote_info().getPtr();
 	}
 
 	@Override
@@ -69,50 +69,56 @@ public class CallInfo implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeInt(PrimaryKey);
-		dest.writeInt(mCallId);
-		dest.writeInt(mCallState.swigValue());
-		dest.writeString(mRemoteContact);
+		dest.writeInt(callId);
+		dest.writeInt(callState.swigValue());
+		dest.writeString(remoteContact);
 	}
 
 	public void readFromParcel(Parcel in) {
 		PrimaryKey = in.readInt();
-		mCallId = in.readInt();
-		mCallState = pjsip_inv_state.swigToEnum(in.readInt());
-		mRemoteContact = in.readString();
+		callId = in.readInt();
+		callState = pjsip_inv_state.swigToEnum(in.readInt());
+		remoteContact = in.readString();
 	}
 
 	// Getters / Setters
+	/**
+	 * Get the call id of this call info
+	 * @return id of this call
+	 */
 	public int getCallId() {
-		return mCallId;
+		return callId;
 	}
 
-	public void setCallId(int callId) {
-		mCallId = callId;
-	}
-
+	/**
+	 * Get the call state of this call info
+	 * @return the pjsip invitation state
+	 */
 	public pjsip_inv_state getCallState() {
-		return mCallState;
+		return callState;
 	}
+	
 
-	public void setCallState(pjsip_inv_state callState) {
-		mCallState = callState;
-	}
-
+	/**
+	 * Get the corresponding string for a given state
+	 * Can be used to translate or debug current state
+	 * @return the string reprensenting this call info state
+	 */
 	public String getStringCallState() {
 		String state = "";
-		if (mCallState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
+		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
 			state = "CALLING";
-		} else if (mCallState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
+		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
 			state = "CONFIRMED";
-		} else if (mCallState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONNECTING)) {
+		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONNECTING)) {
 			state = "CONNECTING";
-		} else if (mCallState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
 			state = "DISCONNECTED";
-		} else if (mCallState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
+		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
 			state = "EARLY";
-		} else if (mCallState.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING)) {
+		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING)) {
 			state = "INCOMING";
-		} else if (mCallState.equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)) {
+		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)) {
 			state = "NULL";
 		}
 		return state;
@@ -127,14 +133,18 @@ public class CallInfo implements Parcelable {
 			return false;
 		}
 		CallInfo ci = (CallInfo) o;
-		if (ci.getCallId() == mCallId) {
+		if (ci.getCallId() == callId) {
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Get the remote contact for this call info
+	 * @return string representing the remote contact
+	 */
 	public String getRemoteContact() {
-		return mRemoteContact;
+		return remoteContact;
 	}
 
 }

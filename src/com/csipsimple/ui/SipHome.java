@@ -32,6 +32,7 @@ import android.widget.TabHost;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
+import com.csipsimple.ui.prefs.MainPrefs;
 import com.csipsimple.utils.Log;
 
 public class SipHome extends TabActivity {
@@ -167,7 +168,7 @@ public class SipHome extends TabActivity {
 			startActivity(new Intent(this, AccountsList.class));
 			return true;
 		case PARAMS_MENU:
-			startActivity(new Intent(this, Preferences.class));
+			startActivity(new Intent(this, MainPrefs.class));
 			return true;
 		case CLOSE_MENU:
 	    	Log.d(THIS_FILE, "CLOSE");

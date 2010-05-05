@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	This file is part of CSipSimple. CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+	
+	
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<CheckBoxPreference android:summary="Activate echo cancellation"
+			android:title="Echo cancellation" android:key="echo_cancellation"
+			android:defaultValue="true"></CheckBoxPreference>
+		<EditTextPreference android:key="snd_auto_close_time"
+			android:title="Auto close time"
+			android:numeric="signed"
+			android:summary="Time to wait for close audio channel (should be set to fix the android 1.5 bug)"
+			android:defaultValue="1"></EditTextPreference>
+		<PreferenceCategory android:title="Codec">
+			<EditTextPreference android:key="codec_speex_16000"
+				android:title="Speex 16kHz" android:summary="Priority (0 is disabled)"
+				android:numeric="integer"
+				android:defaultValue="130"></EditTextPreference>
+			<EditTextPreference android:key="codec_speex_8000"
+				android:title="Speex 8kHz" android:summary="Priority (0 is disabled)"
+				android:numeric="integer"
+				android:defaultValue="129"></EditTextPreference>
+			<EditTextPreference android:key="codec_speex_32000"
+				android:title="Speex 32kHz" android:summary="Priority (0 is disabled)"
+				android:numeric="integer"
+				android:defaultValue="128"></EditTextPreference>
+			<EditTextPreference android:key="codec_gsm_8000"
+				android:title="GSM 8kHz" android:summary="Priority (0 is disabled)"
+				android:numeric="integer"
+				android:defaultValue="128"></EditTextPreference>
+			<EditTextPreference android:key="codec_pcmu_8000"
+				android:title="PCMU 8kHz" android:summary="Priority (0 is disabled)"
+				android:numeric="integer"
+				android:defaultValue="128"></EditTextPreference>
+			<EditTextPreference android:key="codec_pcma_8000"
+				android:title="PCMA 8kHz" android:summary="Priority (0 is disabled)"
+				android:numeric="integer"
+				android:defaultValue="128"></EditTextPreference>
+			<EditTextPreference android:key="codec_g722_8000"
+				android:title="G722 8kHz" android:summary="Priority (0 is disabled)"
+				android:numeric="integer"
+				android:defaultValue="128"></EditTextPreference>
+		</PreferenceCategory>
+</PreferenceScreen>

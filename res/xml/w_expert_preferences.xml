@@ -20,11 +20,11 @@
 	<PreferenceCategory android:title="Sip account">
 		<EditTextPreference android:key="display_name"
 			android:title="@string/w_expert_display_name"></EditTextPreference>
-		<EditTextPreference android:key="acc_id" android:title="@string/w_expert_acc_id"></EditTextPreference>
-		<EditTextPreference android:key="reg_uri" android:title="@string/w_expert_reg_uri"></EditTextPreference>	
+		<EditTextPreference android:key="acc_id" android:title="@string/w_expert_acc_id" android:dialogMessage="@string/w_expert_acc_id_desc"></EditTextPreference>
+		<EditTextPreference android:key="reg_uri" android:title="@string/w_expert_reg_uri" android:dialogMessage="@string/w_expert_reg_uri_desc"></EditTextPreference>	
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Sip authentification">
-		<EditTextPreference android:key="realm" android:title="@string/w_expert_realm"></EditTextPreference>	
+		<EditTextPreference android:key="realm" android:title="@string/w_expert_realm" android:dialogMessage="@string/w_expert_realm_desc"></EditTextPreference>	
 		<EditTextPreference android:title="Username (login)" android:key="username"></EditTextPreference>
 			
 			
@@ -40,6 +40,6 @@
 <EditTextPreference android:key="reg_timeout" android:title="Register timeout"></EditTextPreference>
 <EditTextPreference android:key="force_contact" android:title="Force contact"></EditTextPreference>
 </PreferenceCategory>
-<PreferenceCategory android:title="Proxy"><EditTextPreference android:key="proxy" android:title="Proxy"></EditTextPreference>
+<PreferenceCategory android:title="@string/w_expert_t_proxy"><EditTextPreference android:key="proxy" android:title="@string/w_expert_proxy" android:dialogMessage="@string/w_expert_proxy_desc"></EditTextPreference>
 </PreferenceCategory>
 </PreferenceScreen>

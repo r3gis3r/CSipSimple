@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="prefs_network">Network</string>
+<string name="prefs_network_desc">How SIP can be connected to the network</string>
+<string name="prefs_media">Media</string>
+<string name="prefs_media_desc">Codecs and in call sound behavior</string>
+<string name="prefs_ui">User interface</string>
+<string name="prefs_ui_desc">Tweak the user interface</string>
+</resources>

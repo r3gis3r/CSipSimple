@@ -24,12 +24,9 @@ import org.pjsip.pjsua.pjsua;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,28 +34,26 @@ import android.widget.Button;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
-import com.csipsimple.utils.Log;
+import com.csipsimple.ui.prefs.GenericPrefs;
 
-public abstract class BasePrefsWizard extends PreferenceActivity implements OnSharedPreferenceChangeListener{
-	private long mAccountId = -1;
-	protected Account mAccount = null;
-	private Button mSaveButton;
-	private DBAdapter db;
+public abstract class BasePrefsWizard extends GenericPrefs{
+	private long accountId = -1;
+	protected Account account = null;
+	private Button saveButton;
+	private DBAdapter database;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//Get back the concerned account and if any set the current (if not a new account is created)
+		Intent intent = getIntent();
+        accountId = intent.getIntExtra(Intent.EXTRA_UID, -1);
+        
+        database = new DBAdapter(this);
+		database.open();
+		account = database.getAccount(accountId);
+		database.close();
+
 		super.onCreate(savedInstanceState);
-		
-		//Use our custom wizard view
-		setContentView(R.layout.wizard_prefs_base);
-		// Use preference resource. Since it's easier to manage,
-		// i use prefs here : (inspired from android Email application
-		// Things should be done by a cleaner way (besides, right now prefs remains in shared prefs)
-		// but for now it's ok, since it's well managed
-		addPreferencesFromResource(getXmlPreferences());
-		
-		
-		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		
 		//Bind buttons to their actions
 		Button bt = (Button) findViewById(R.id.cancel_bt);
@@ -71,11 +66,9 @@ public abstract class BasePrefsWizard extends PreferenceActivity implements OnSh
 			}
 		});
 		
-		
-		
-		mSaveButton = (Button) findViewById(R.id.save_bt);
-		mSaveButton.setEnabled(false);
-		mSaveButton.setOnClickListener(new OnClickListener(){
+		saveButton = (Button) findViewById(R.id.save_bt);
+		saveButton.setEnabled(false);
+		saveButton.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				//TODO: clean prefs
@@ -84,22 +77,14 @@ public abstract class BasePrefsWizard extends PreferenceActivity implements OnSh
 				finish();
 			}
 		});
-		
-		
-		Intent i = getIntent();
-        mAccountId = i.getIntExtra(Intent.EXTRA_UID, -1);
-        
-        db = new DBAdapter(this);
-		db.open();
-		mAccount = db.getAccount(mAccountId);
-		db.close();
-		
-		
-        
 		fillLayout();
 		
-		updateDescriptions();
-		
+	}
+	
+	@Override
+	protected void beforeBuildPrefs() {
+		//Use our custom wizard view
+		setContentView(R.layout.wizard_prefs_base);
 	}
 	
 	@Override
@@ -107,7 +92,7 @@ public abstract class BasePrefsWizard extends PreferenceActivity implements OnSh
 			String key) {
 
 		updateDescriptions();
-		mSaveButton.setEnabled(canSave());	
+		saveButton.setEnabled(canSave());	
 	}
 	
 	
@@ -135,19 +120,19 @@ public abstract class BasePrefsWizard extends PreferenceActivity implements OnSh
 	protected void saveAccount(){
 		buildAccount();		
 		
-		mAccount.wizard = getWizardId();
-		db.open();
-		if(mAccount.id == null || mAccount.id.equals(0)){
-			mAccount.id = (int) db.insertAccount(mAccount);
+		account.wizard = getWizardId();
+		database.open();
+		if(account.id == null || account.id.equals(0)){
+			account.id = (int) database.insertAccount(account);
 		}else{
-			db.updateAccount(mAccount);
+			database.updateAccount(account);
 		}
-		db.close();
+		database.close();
 		
 	}
 	
-	
-	private String getDefaultFieldSummary(String field_name){
+	@Override
+	protected String getDefaultFieldSummary(String field_name){
 		String val = "";
 		try {
 			String keyid = R.string.class.getField("w_"+getXmlPrefix()+"_"+field_name+"_desc").get(null).toString();
@@ -164,32 +149,28 @@ public abstract class BasePrefsWizard extends PreferenceActivity implements OnSh
 		return val;
 	}
 	
-
-	protected void setStringFieldSummary(String field_name){
-		PreferenceScreen pfs = getPreferenceScreen();
-		SharedPreferences sp = pfs.getSharedPreferences();
-		Preference pref = pfs.findPreference(field_name);
-		
-		String val = sp.getString(field_name, "");
-		if(val.equals("")){
-			val = getDefaultFieldSummary(field_name);
-		}
-		pref.setSummary(val);
+	private void markFieldInvalid(Preference field) {
+		field.setLayoutResource(R.layout.invalid_preference_row);
 	}
 	
-	protected void setPasswordFieldSummary(String field_name){
-		PreferenceScreen pfs = getPreferenceScreen();
-		SharedPreferences sp = pfs.getSharedPreferences();
-		Preference pref = pfs.findPreference(field_name);
-		
-		String val = sp.getString(field_name, "");
-		
-		if(val.equals("")){
-			val = getDefaultFieldSummary(field_name);
-		}else{
-			val = val.replaceAll(".", "*");
+	private void markFieldValid(Preference field) {
+		field.setLayoutResource(R.layout.valid_preference_row);
+	}
+	
+	/**
+	 * Check the validity of a field and if invalid mark it as invalid
+	 * @param field field to check
+	 * @param isNotValid if true this field is considered as invalid
+	 * @return if the field is valid (!isNotValid)
+	 * This is convenient for &= from a true variable over multiple fields
+	 */
+	protected boolean checkField(Preference field, boolean isNotValid) {
+		if(isNotValid) {
+			markFieldInvalid(field);
+		}else {
+			markFieldValid(field);
 		}
-		pref.setSummary(val);
+		return !isNotValid;
 	}
 
 	protected abstract void fillLayout();

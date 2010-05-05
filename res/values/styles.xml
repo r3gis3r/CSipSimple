@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="list_left_column">
+		<item name="android:layout_width">68dip</item>
+		<item name="android:layout_height">68dip</item>
+	</style>
+</resources>

@@ -16,7 +16,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.csipsimple.service;
-
+import com.csipsimple.models.AccountInfo;
 
 interface ISipService{
 	void sipStart();
@@ -24,14 +24,17 @@ interface ISipService{
 	
 	void addAllAccounts();
 	void removeAllAccounts();
+	void reAddAllAccounts();
 	
 	void switchToAutoAnswer();
 	
 	void makeCall(in String callee);
-	int answer(int call_id, int status);
-	int hangup(int call_id, int status);
+	int answer(int callId, int status);
+	int hangup(int callId, int status);
 	
 	
 	void forceStopService();
+	
+	AccountInfo getAccountInfo(int accountId);
 	
 }

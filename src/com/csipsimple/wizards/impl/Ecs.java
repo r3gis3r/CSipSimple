@@ -35,27 +35,28 @@ public class Ecs extends BasePrefsWizard {
 	public static int icon = R.drawable.ic_wizard_ale;
 	public static int priority = 20;
 
-	private EditTextPreference mAccountDisplayName;
-	private EditTextPreference mAccountPhoneNumber;
-	private EditTextPreference mAccountUsername;
-	private EditTextPreference mAccountPassword;
-	private EditTextPreference mAccountServerDomain;
-	private EditTextPreference mAccountServerIp;
+	private EditTextPreference accountDisplayName;
+	private EditTextPreference accountPhoneNumber;
+	private EditTextPreference accountUsername;
+	private EditTextPreference accountPassword;
+	private EditTextPreference accountServerDomain;
+	private EditTextPreference accountServerIp;
 
 	protected void fillLayout() {
-		mAccountDisplayName = (EditTextPreference) findPreference("display_name");
-		mAccountPhoneNumber = (EditTextPreference) findPreference("phone_number");
-		mAccountUsername = (EditTextPreference) findPreference("user_name");
-		mAccountPassword = (EditTextPreference) findPreference("password");
-		mAccountServerDomain = (EditTextPreference) findPreference("server_domain");
-		mAccountServerIp = (EditTextPreference) findPreference("server_ip");
+		accountDisplayName = (EditTextPreference) findPreference("display_name");
+		accountPhoneNumber = (EditTextPreference) findPreference("phone_number");
+		accountUsername = (EditTextPreference) findPreference("user_name");
+		accountPassword = (EditTextPreference) findPreference("password");
+		accountServerDomain = (EditTextPreference) findPreference("server_domain");
+		accountServerIp = (EditTextPreference) findPreference("server_ip");
 
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
+		pjsip_cred_info ci = account.cfg.getCred_info();
 
-		mAccountDisplayName.setText(mAccount.display_name);
+		
+		accountDisplayName.setText(account.display_name);
 
 		String domain_name = "";
-		String account_cfgid = mAccount.cfg.getId().getPtr();
+		String account_cfgid = account.cfg.getId().getPtr();
 
 		if (account_cfgid == null) {
 			account_cfgid = "";
@@ -67,7 +68,7 @@ public class Ecs extends BasePrefsWizard {
 			domain_name = m.group(2);
 		}
 
-		String server_ip = mAccount.cfg.getReg_uri().getPtr();
+		String server_ip = account.cfg.getReg_uri().getPtr();
 		if (server_ip == null) {
 			server_ip = "";
 		}
@@ -81,11 +82,11 @@ public class Ecs extends BasePrefsWizard {
 			server_ip = "";
 		}
 
-		mAccountPhoneNumber.setText(account_cfgid);
-		mAccountServerDomain.setText(domain_name);
+		accountPhoneNumber.setText(account_cfgid);
+		accountServerDomain.setText(domain_name);
 
-		mAccountUsername.setText(ci.getUsername().getPtr());
-		mAccountPassword.setText(ci.getData().getPtr());
+		accountUsername.setText(ci.getUsername().getPtr());
+		accountPassword.setText(ci.getData().getPtr());
 	}
 
 	protected void updateDescriptions() {
@@ -98,34 +99,39 @@ public class Ecs extends BasePrefsWizard {
 	}
 
 	protected boolean canSave() {
-		if (isEmpty(mAccountDisplayName) || isEmpty(mAccountPassword) || isEmpty(mAccountPhoneNumber) || isEmpty(mAccountServerDomain) || isEmpty(mAccountUsername)) {
-			return false;
-		}
+		boolean isValid = true;
+		
+		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
+		isValid &= checkField(accountPassword, isEmpty(accountPassword));
+		isValid &= checkField(accountPhoneNumber, isEmpty(accountPhoneNumber));
+		isValid &= checkField(accountServerDomain, isEmpty(accountServerDomain));
+		isValid &= checkField(accountUsername, isEmpty(accountUsername));
 
-		return true;
+		return isValid;
 	}
 
 	protected void buildAccount() {
 
-		mAccount.display_name = mAccountDisplayName.getText();
+		account.display_name = accountDisplayName.getText();
 
 		// TODO add an user display name
-		mAccount.cfg.setId(pjsua.pj_str_copy("<sip:" + mAccountPhoneNumber.getText() + "@" + mAccountServerDomain.getText() + ">"));
+		account.cfg.setId(pjsua.pj_str_copy("<sip:" + accountPhoneNumber.getText() + "@" + accountServerDomain.getText() + ">"));
 
-		String server_ip = mAccountServerIp.getText();
+		String server_ip = accountServerIp.getText();
 		if (server_ip.equalsIgnoreCase("")) {
-			server_ip = mAccountServerDomain.getText();
+			server_ip = accountServerDomain.getText();
 		}
-		mAccount.cfg.setReg_uri(pjsua.pj_str_copy("sip:" + server_ip));
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
-		mAccount.cfg.setCred_count(1);
+		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:" + server_ip));
+		pjsip_cred_info ci = account.cfg.getCred_info();
+		account.cfg.setCred_count(1);
 		ci.setRealm(pjsua.pj_str_copy("*"));
-		ci.setUsername(getPjText(mAccountUsername));
-		ci.setData(getPjText(mAccountPassword));
+		ci.setUsername(getPjText(accountUsername));
+		ci.setData(getPjText(accountPassword));
 		ci.setScheme(pjsua.pj_str_copy("Digest"));
 		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
 	}
 
+	
 	@Override
 	protected String getWizardId() {
 		return id;

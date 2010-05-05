@@ -23,9 +23,6 @@ import java.util.List;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 
-import com.csipsimple.models.Account;
-
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -33,6 +30,8 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.csipsimple.models.Account;
 import com.csipsimple.utils.Log;
 
 public class DBAdapter {
@@ -124,13 +123,12 @@ public class DBAdapter {
 			FIELD_DATA };
 
 	private final Context context;
-
-	private DatabaseHelper DBHelper;
+	private DatabaseHelper databaseHelper;
 	private SQLiteDatabase db;
 
-	public DBAdapter(Context ctx) {
-		this.context = ctx;
-		DBHelper = new DatabaseHelper(context);
+	public DBAdapter(Context aContext) {
+		context = aContext;
+		databaseHelper = new DatabaseHelper(context);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -160,7 +158,7 @@ public class DBAdapter {
 	 * @throws SQLException
 	 */
 	public DBAdapter open() throws SQLException {
-		db = DBHelper.getWritableDatabase();
+		db = databaseHelper.getWritableDatabase();
 		return this;
 	}
 
@@ -168,41 +166,39 @@ public class DBAdapter {
 	 * Close database
 	 */
 	public void close() {
-		DBHelper.close();
+		databaseHelper.close();
 	}
-
-	// TODO : deleteAccount, getAllAccounts, updateAccount, createAccount
 
 	// Transform pjsua_acc_config into ContentValues that can be insert into
 	// database
-	private ContentValues accountToContentValues(Account acc) {
+	private ContentValues accountToContentValues(Account account) {
 		ContentValues args = new ContentValues();
 		
-		if(acc.id != null){
-			args.put(FIELD_ACTIVE, acc.id);
+		if(account.id != null){
+			args.put(FIELD_ACTIVE, account.id);
 		}
-		args.put(FIELD_ACTIVE, acc.active?"1":"0");
-		args.put(FIELD_WIZARD, acc.wizard);
-		args.put(FIELD_DISPLAY_NAME, acc.display_name);
+		args.put(FIELD_ACTIVE, account.active?"1":"0");
+		args.put(FIELD_WIZARD, account.wizard);
+		args.put(FIELD_DISPLAY_NAME, account.display_name);
 
-		args.put(FIELD_PRIORITY, acc.cfg.getPriority());
-		args.put(FIELD_ACC_ID, acc.cfg.getId().getPtr());
-		args.put(FIELD_REG_URI, acc.cfg.getReg_uri().getPtr());
+		args.put(FIELD_PRIORITY, account.cfg.getPriority());
+		args.put(FIELD_ACC_ID, account.cfg.getId().getPtr());
+		args.put(FIELD_REG_URI, account.cfg.getReg_uri().getPtr());
 
 		// MWI not yet in JNI
 
-		args.put(FIELD_PUBLISH_ENABLED, acc.cfg.getPublish_enabled());
-		args.put(FIELD_REG_TIMEOUT, acc.cfg.getReg_timeout());
-		args.put(FIELD_PIDF_TUPLE_ID, acc.cfg.getPidf_tuple_id().getPtr());
-		args.put(FIELD_FORCE_CONTACT, acc.cfg.getForce_contact().getPtr());
+		args.put(FIELD_PUBLISH_ENABLED, account.cfg.getPublish_enabled());
+		args.put(FIELD_REG_TIMEOUT, account.cfg.getReg_timeout());
+		args.put(FIELD_PIDF_TUPLE_ID, account.cfg.getPidf_tuple_id().getPtr());
+		args.put(FIELD_FORCE_CONTACT, account.cfg.getForce_contact().getPtr());
 
 		// CONTACT_PARAM and CONTACT_PARAM_URI not yet in JNI
 
 		// Assume we have an unique proxy
-		args.put(FIELD_PROXY, acc.cfg.getProxy().getPtr());
+		args.put(FIELD_PROXY, account.cfg.getProxy().getPtr());
 
 		// Assume we have an unique credential
-		pjsip_cred_info cred_info = acc.cfg.getCred_info();
+		pjsip_cred_info cred_info = account.cfg.getCred_info();
 		args.put(FIELD_REALM, cred_info.getRealm().getPtr());
 		args.put(FIELD_SCHEME, cred_info.getScheme().getPtr());
 		args.put(FIELD_USERNAME, cred_info.getUsername().getPtr());
@@ -216,73 +212,71 @@ public class DBAdapter {
 	// use cursorRowToContentValues from dbHelper to transform cursor into
 	// ContentValues
 	private Account contentValuesToAccount(ContentValues args) {
-		Account acc = new Account();
-		
-
+		Account account = new Account();
 		Integer tmp_i;
 		String tmp_s;
 		
 		//Application specific settings
 		tmp_i = args.getAsInteger(FIELD_ID);
 		if (tmp_i != null) {
-			acc.id = tmp_i;
+			account.id = tmp_i;
 		}
 		tmp_s = args.getAsString(FIELD_DISPLAY_NAME);
 		if (tmp_s != null) {
-			acc.display_name = tmp_s;
+			account.display_name = tmp_s;
 		}
 		tmp_s = args.getAsString(FIELD_WIZARD);
 		if (tmp_s != null) {
-			acc.wizard = tmp_s;
+			account.wizard = tmp_s;
 		}
 		
 		tmp_i = args.getAsInteger(FIELD_ACTIVE);
 		if (tmp_i != null) {
-			acc.active = (tmp_i != 0);
+			account.active = (tmp_i != 0);
 		}else{
-			acc.active = true;
+			account.active = true;
 		}
 		
 		// Credentials
-		acc.cfg.setCred_count(1);
+		account.cfg.setCred_count(1);
 
 		// General account settings
 		tmp_i = args.getAsInteger(FIELD_PRIORITY);
 		if (tmp_i != null) {
-			acc.cfg.setPriority((int) tmp_i);
+			account.cfg.setPriority((int) tmp_i);
 		}
 		tmp_s = args.getAsString(FIELD_ACC_ID);
 		if (tmp_s != null) {
-			acc.cfg.setId(pjsua.pj_str_copy(tmp_s));
+			account.cfg.setId(pjsua.pj_str_copy(tmp_s));
 		}
 		tmp_s = args.getAsString(FIELD_REG_URI);
 		if (tmp_s != null) {
-			acc.cfg.setReg_uri(pjsua.pj_str_copy(tmp_s));
+			account.cfg.setReg_uri(pjsua.pj_str_copy(tmp_s));
 		}
 		tmp_i = args.getAsInteger(FIELD_PUBLISH_ENABLED);
 		if (tmp_i != null) {
-			acc.cfg.setPublish_enabled(tmp_i);
+			account.cfg.setPublish_enabled(tmp_i);
 		}
 		tmp_i = args.getAsInteger(FIELD_REG_TIMEOUT);
 		if (tmp_i != null) {
-			acc.cfg.setReg_timeout(tmp_i);
+			account.cfg.setReg_timeout(tmp_i);
 		}
 		tmp_s = args.getAsString(FIELD_PIDF_TUPLE_ID);
 		if (tmp_s != null) {
-			acc.cfg.setPidf_tuple_id(pjsua.pj_str_copy(tmp_s));
+			account.cfg.setPidf_tuple_id(pjsua.pj_str_copy(tmp_s));
 		}
 		tmp_s = args.getAsString(FIELD_FORCE_CONTACT);
 		if (tmp_s != null) {
-			acc.cfg.setForce_contact(pjsua.pj_str_copy(tmp_s));
+			account.cfg.setForce_contact(pjsua.pj_str_copy(tmp_s));
 		}
 		// Proxy
 		tmp_s = args.getAsString(FIELD_PROXY);
 		if (tmp_s != null) {
-			acc.cfg.setProxy_cnt(1);
-			acc.cfg.setProxy(pjsua.pj_str_copy(tmp_s));
+			account.cfg.setProxy_cnt(1);
+			account.cfg.setProxy(pjsua.pj_str_copy(tmp_s));
 		}
 		
-		pjsip_cred_info cred_info = acc.cfg.getCred_info();
+		pjsip_cred_info cred_info = account.cfg.getCred_info();
 
 		tmp_s = args.getAsString(FIELD_REALM);
 		if (tmp_s != null) {
@@ -306,46 +300,50 @@ public class DBAdapter {
 		}
 		
 		
-		return acc;
+		return account;
 	}
 
+	
 	/**
 	 * Delete account
 	 * 
-	 * @param account_id
-	 *            account identifier (primary key in database)
+	 * @param account account to delete into the database 
+	 * You have to be sure this account exists before deleting it
 	 * @return true if succeed
 	 */
-	public boolean deleteAccount(int account_id) {
-		return db
-				.delete(ACCOUNTS_TABLE_NAME, FIELD_ID + "=" + account_id, null) > 0;
+	public boolean deleteAccount(Account account) {
+		return db.delete(ACCOUNTS_TABLE_NAME, FIELD_ID + "=" + account.id, null) > 0;
 	}
 
 	/**
 	 * Update an account with new values
 	 * 
-	 * @param account_id
-	 *            account identifier (primary key in database)
-	 * @param cfg
-	 *            account pjsip configuration structure
-	 * @param active
-	 *            whether account is active
+	 * @param account account to update into the database
+	 * You have to be sure this account exists before update it 
 	 * @return true if succeed
 	 */
-	public boolean updateAccount(Account acc) {
-		ContentValues args = accountToContentValues(acc);
+	public boolean updateAccount(Account account) {
+		ContentValues args = accountToContentValues(account);
 
 		return db.update(ACCOUNTS_TABLE_NAME, args,
-				FIELD_ID + "=" + acc.id, null) > 0;
+				FIELD_ID + "=" + account.id, null) > 0;
 	}
 	
-	
-	public long insertAccount(Account acc){
-		ContentValues args = accountToContentValues(acc);
+	/**
+	 * Insert a new account into the database
+	 * @param account account to add into the database
+	 * @return the id of inserted row into database
+	 */
+	public long insertAccount(Account account){
+		ContentValues args = accountToContentValues(account);
 		
 		return db.insert(ACCOUNTS_TABLE_NAME, null, args);
 	}
 
+	/**
+	 * Get the list of all saved account
+	 * @return the list of accounts
+	 */
 	public List<Account> getListAccounts() {
 		ArrayList<Account> ret = new ArrayList<Account>();
 		try {
@@ -353,7 +351,7 @@ public class DBAdapter {
 					null, null, null, null, FIELD_PRIORITY
 							+ " ASC");
 			int numRows = c.getCount();
-			Log.i(THIS_FILE, "Found rows : "+numRows);
+		//	Log.d(THIS_FILE, "Found rows : "+numRows);
 			c.moveToFirst();
 			for (int i = 0; i < numRows; ++i) {
 				
@@ -375,15 +373,21 @@ public class DBAdapter {
 		return ret;
 	}
 	
-	
-	public Account getAccount(long account_id){
+	/**
+	 * Get the corresponding account for a give id (id is database id)
+	 * If account_id is < 0 a new account is created and returned
+	 * If account_id is not found null is returned
+	 * @param accountId id of the account in the sqlite database
+	 * @return The corresponding account
+	 */
+	public Account getAccount(long accountId){
 		
-		if(account_id <0){
+		if(accountId <0){
 			return new Account();
 		}
 		try {
 			Cursor c = db.query(ACCOUNTS_TABLE_NAME, common_projection,
-					FIELD_ID + "=" + account_id, null, null, null, null);
+					FIELD_ID + "=" + accountId, null, null, null, null);
 			int numRows = c.getCount();
 			if(numRows > 0){
 				c.moveToFirst();
@@ -402,6 +406,10 @@ public class DBAdapter {
 		
 	}
 	
+	/**
+	 * Count the number of account saved in database
+	 * @return the number of account
+	 */
 	public int getNbrOfAccount() {
 		Cursor c = db.query(ACCOUNTS_TABLE_NAME, new String[] {
 			FIELD_ID	

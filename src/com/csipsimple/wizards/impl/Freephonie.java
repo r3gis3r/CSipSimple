@@ -37,24 +37,24 @@ public class Freephonie extends BasePrefsWizard {
 	public static int priority = 10;
 	protected static final String THIS_FILE = "Freephonie W";
 
-	private EditTextPreference mAccountDisplayName;
-	private EditTextPreference mAccountPhoneNumber;
-	private EditTextPreference mAccountPassword;
+	private EditTextPreference accountDisplayName;
+	private EditTextPreference accountPhoneNumber;
+	private EditTextPreference accountPassword;
 
 	
 	protected void fillLayout() {
-		mAccountDisplayName = (EditTextPreference) findPreference("display_name");
-		mAccountPhoneNumber = (EditTextPreference) findPreference("phone_number");
-		mAccountPassword = (EditTextPreference) findPreference("password");
+		accountDisplayName = (EditTextPreference) findPreference("display_name");
+		accountPhoneNumber = (EditTextPreference) findPreference("phone_number");
+		accountPassword = (EditTextPreference) findPreference("password");
 
 		
 		
-		String display_name = mAccount.display_name;
+		String display_name = account.display_name;
 		if(display_name.equalsIgnoreCase("")) {
 			display_name = "Freephonie";
 		}
-		mAccountDisplayName.setText(display_name);
-		String account_cfgid = mAccount.cfg.getId().getPtr();
+		accountDisplayName.setText(display_name);
+		String account_cfgid = account.cfg.getId().getPtr();
 		if(account_cfgid == null) {
 			account_cfgid = "";
 		}
@@ -65,10 +65,10 @@ public class Freephonie extends BasePrefsWizard {
 			account_cfgid = m.group(1);
 		}
 
-		mAccountPhoneNumber.setText(account_cfgid);
+		accountPhoneNumber.setText(account_cfgid);
 		
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
-		mAccountPassword.setText(ci.getData().getPtr());
+		pjsip_cred_info ci = account.cfg.getCred_info();
+		accountPassword.setText(ci.getData().getPtr());
 	}
 
 	protected void updateDescriptions() {
@@ -78,41 +78,34 @@ public class Freephonie extends BasePrefsWizard {
 	}
 
 	protected boolean canSave() {
-		if( isEmpty(mAccountDisplayName)) {
-//			View pref_view = (View) getPreferenceScreen().getRootAdapter().getItem(mAccountDisplayName.getOrder());
-//			TextView tv = (TextView) pref_view.findViewById(R.id.title); 
-//			tv.setTextColor(Color.RED);
-			return false;
-		}
-		if( isEmpty(mAccountPassword) ) {
-			return false;
-		}
-		if( isEmpty(mAccountPhoneNumber)) {
-			return false;
-		}
+		boolean isValid = true;
+		
+		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
+		isValid &= checkField(accountPassword, isEmpty(accountPassword));
+		isValid &= checkField(accountPhoneNumber, isEmpty(accountPhoneNumber));
 
-		return true;
+		return isValid;
 	}
 
 	protected void buildAccount() {
 		Log.d(THIS_FILE, "begin of save ....");
-		mAccount.display_name = mAccountDisplayName.getText();
+		account.display_name = accountDisplayName.getText();
 		// TODO add an user display name
-		mAccount.cfg.setId(pjsua.pj_str_copy("<sip:"
-				+ mAccountPhoneNumber.getText() + "@freephonie.net>"));
-		mAccount.cfg.setReg_uri(pjsua.pj_str_copy("sip:freephonie.net"));
+		account.cfg.setId(pjsua.pj_str_copy("<sip:"
+				+ accountPhoneNumber.getText() + "@freephonie.net>"));
+		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:freephonie.net"));
 
-		pjsip_cred_info ci = mAccount.cfg.getCred_info();
+		pjsip_cred_info credentials = account.cfg.getCred_info();
 
-		mAccount.cfg.setCred_count(1);
-		ci.setRealm(pjsua.pj_str_copy("freephonie.net"));
-		ci.setUsername(getPjText(mAccountPhoneNumber));
-		ci.setData(getPjText(mAccountPassword));
-		ci.setScheme(pjsua.pj_str_copy("Digest"));
-		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
+		account.cfg.setCred_count(1);
+		credentials.setRealm(pjsua.pj_str_copy("freephonie.net"));
+		credentials.setUsername(getPjText(accountPhoneNumber));
+		credentials.setData(getPjText(accountPassword));
+		credentials.setScheme(pjsua.pj_str_copy("Digest"));
+		credentials.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
 				.swigValue());
 
-		mAccount.cfg.setReg_timeout(1800); // Minimum value for freephonie
+		account.cfg.setReg_timeout(1800); // Minimum value for freephonie
 											// server
 	}
 

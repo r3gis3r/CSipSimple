@@ -58,12 +58,11 @@ public class WelcomeScreen extends Activity {
 	//"http://10.0.2.2/android/update.json"
 	
 	
-	private RemoteLibInfo mCurrentDownload;
+	private RemoteLibInfo currentDownload;
 
-	private ProgressBar mProgressBar;
-	private TextView mProgressBarText;
-
-	private Button mNextButton;
+	private ProgressBar progressBar;
+	private TextView progressBarText;
+	private Button nextButton;
 
 	private SharedPreferences prefs;
 	
@@ -91,10 +90,10 @@ public class WelcomeScreen extends Activity {
         }else{
         	textContent.setText(Html.fromHtml(getString(R.string.changelog_text)));
         }
-        mProgressBar = (ProgressBar) findViewById(R.id.dl_progressbar);
-        mProgressBarText = (TextView) findViewById(R.id.dl_text);
-        mNextButton = (Button) findViewById(R.id.next_button);
-        mNextButton.setOnClickListener(new OnClickListener() {
+        progressBar = (ProgressBar) findViewById(R.id.dl_progressbar);
+        progressBarText = (TextView) findViewById(R.id.dl_text);
+        nextButton = (Button) findViewById(R.id.next_button);
+        nextButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -108,7 +107,7 @@ public class WelcomeScreen extends Activity {
 			}
 		});
         
-        mProgressBar.setMax(100);
+        progressBar.setMax(100);
 	}
 	
 	@Override
@@ -116,18 +115,18 @@ public class WelcomeScreen extends Activity {
 		super.onResume();
 		setStepInit();
 		try {
-			if (mService != null && mService.isDownloadRunning()) {
-				mCurrentDownload = mService.getCurrentRemoteLib();
-				mService.registerCallback(mCallback);
-				mBound = true;
+			if (service != null && service.isDownloadRunning()) {
+				currentDownload = service.getCurrentRemoteLib();
+				service.registerCallback(callback);
+				bound = true;
 			} else {
 				Intent serviceIntent = new Intent(this, DownloadLibService.class);
 				startService(serviceIntent);
-				mBound = bindService(serviceIntent, mConnection, 0);
+				bound = bindService(serviceIntent, connection, 0);
 			}
 		} catch (RemoteException ex) {
 			Log.e(THIS_FILE, "Error on DownloadService call", ex);
-			mService = null;
+			service = null;
 			finish();
 		}
 
@@ -139,9 +138,9 @@ public class WelcomeScreen extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		try {
-			if (mService != null && !mService.isDownloadRunning() && mBound) {
-				unbindService(mConnection);
-				mBound = false;
+			if (service != null && !service.isDownloadRunning() && bound) {
+				unbindService(connection);
+				bound = false;
 			}
 		} catch (RemoteException e) {
 			Log.e(THIS_FILE, "Exception on calling DownloadService", e);
@@ -153,41 +152,41 @@ public class WelcomeScreen extends Activity {
 	// ---
 	private void setStepInit() {
 		Log.d(THIS_FILE, "Step init ...");
-		mProgressBar.setIndeterminate(true);
-		mNextButton.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.VISIBLE);
-		mProgressBarText.setVisibility(View.VISIBLE);
+		progressBar.setIndeterminate(true);
+		nextButton.setVisibility(View.GONE);
+		progressBar.setVisibility(View.VISIBLE);
+		progressBarText.setVisibility(View.VISIBLE);
 		
-		mProgressBarText.setText("Initialize");
+		progressBarText.setText("Initialize");
 	}
 	
 	private void setStepGetLibForDevice() {
-		mProgressBarText.setText("Detecting correct library for your device");
+		progressBarText.setText("Detecting correct library for your device");
 	}
 	
 	private void setStepStartDownloading() {
-		mProgressBar.setIndeterminate(false);
-		mProgressBar.setProgress(0);
-		mProgressBarText.setText("Downloading 0%");
+		progressBar.setIndeterminate(false);
+		progressBar.setProgress(0);
+		progressBarText.setText("Downloading 0%");
 	}
 	
-	private void updateDownloadProgress(long downloaded, int total) {
+	private void updateDownloadProgress(long downloaded, long total) {
 		int progress = (int) (100.0*downloaded/total);
-		mProgressBar.setProgress(progress);
-		mProgressBarText.setText("Downloading "+progress+"%");
+		progressBar.setProgress(progress);
+		progressBarText.setText("Downloading "+progress+"%");
 		
 	}
 	
 	private void setStepDownloadFinished() {
-		mProgressBar.setIndeterminate(true);
-		mProgressBarText.setText("Installing library...");
+		progressBar.setIndeterminate(true);
+		progressBarText.setText("Installing library...");
 	}
 	
 	private void setStepInstalled() {
 		Log.d(THIS_FILE, "Set step installed");
-		mNextButton.setVisibility(View.VISIBLE);
-		mProgressBar.setVisibility(View.GONE);
-		mProgressBarText.setVisibility(View.GONE);
+		nextButton.setVisibility(View.VISIBLE);
+		progressBar.setVisibility(View.GONE);
+		progressBarText.setVisibility(View.GONE);
 		
 	}
 	
@@ -209,43 +208,43 @@ public class WelcomeScreen extends Activity {
 	
 	
 	// ---
-	// Link with service
+	// Link to the service
 	// ---
-	private IDownloadLibService mService;
-	private boolean mBound;
-	private ServiceConnection mConnection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			mService = IDownloadLibService.Stub.asInterface(service);
+	private IDownloadLibService service;
+	private boolean bound;
+	private ServiceConnection connection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName name, IBinder aService) {
+			service = IDownloadLibService.Stub.asInterface(aService);
 			try {
-				mService.registerCallback(mCallback);
+				service.registerCallback(callback);
 			} catch (RemoteException e) {
 			}
 			// Start looking for latest update
 			Thread t = new Thread() {
 				public void run() {
 					try {
-						mHandler.sendMessage(mHandler.obtainMessage(GET_LIB));
-						mCurrentDownload = mService.getLibForDevice(DEFAULT_UPDATE_URI, "sip_core");
+						handler.sendMessage(handler.obtainMessage(GET_LIB));
+						currentDownload = service.getLibForDevice(DEFAULT_UPDATE_URI, "sip_core");
 						
-						if(mCurrentDownload != null) {
-							Log.d(THIS_FILE, "We have a library for you : "+mCurrentDownload.getDownloadURI().toString());
+						if(currentDownload != null) {
+							Log.d(THIS_FILE, "We have a library for you : "+currentDownload.getDownloadUri().toString());
 							String old_stack_version = prefs.getString("current_stack_version", "0.00-00");
 							
-							Log.d(THIS_FILE, "Compare old : "+old_stack_version+ " et "+mCurrentDownload.getVersion());
-							if(mCurrentDownload.isMoreUpToDateThan(old_stack_version)) {
-								mHandler.sendMessage(mHandler.obtainMessage(DOWNLOAD_STARTED));
-								mCurrentDownload.setFileName( SipService.STACK_FILE_NAME );
-								mCurrentDownload.setFilePath( SipService.getGuessedStackLibFile(WelcomeScreen.this).getParentFile() );
+							Log.d(THIS_FILE, "Compare old : "+old_stack_version+ " et "+currentDownload.getVersion());
+							if(currentDownload.isMoreUpToDateThan(old_stack_version)) {
+								handler.sendMessage(handler.obtainMessage(DOWNLOAD_STARTED));
+								currentDownload.setFileName( SipService.STACK_FILE_NAME );
+								currentDownload.setFilePath( SipService.getGuessedStackLibFile(WelcomeScreen.this).getParentFile() );
 								
-								if (mService.isDownloadRunning()) {
+								if (service.isDownloadRunning()) {
 									//TODO : check whether it's a sip path.
-									mCurrentDownload = mService.getCurrentRemoteLib();
+									currentDownload = service.getCurrentRemoteLib();
 								} else {
-									mService.startDownload(mCurrentDownload);
+									service.startDownload(currentDownload);
 								}
 							}else {
 								Log.d(THIS_FILE, "Nothing to update...");
-								mHandler.sendMessage(mHandler.obtainMessage(INSTALLED));
+								handler.sendMessage(handler.obtainMessage(INSTALLED));
 							}
 							
 						}else {
@@ -262,15 +261,15 @@ public class WelcomeScreen extends Activity {
 
 		public void onServiceDisconnected(ComponentName name) {
 			try {
-				mService.unregisterCallback(mCallback);
+				service.unregisterCallback(callback);
 			} catch (RemoteException e) {
 			}
-			mService = null;
+			service = null;
 		}
 	};
 	
 	// ----
-	// Link with the service callbacks
+	// Link from the service (callback)
 	// ----
     private static final int UPDATE_DOWNLOAD_PROGRESS = 1;
     private static final int DOWNLOAD_FINISHED = 2;
@@ -280,7 +279,7 @@ public class WelcomeScreen extends Activity {
     private static final int GET_LIB = 6;
     private static final int INSTALLED = 7;
 
-	private Handler mHandler = new Handler() {
+	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case GET_LIB:
@@ -290,15 +289,14 @@ public class WelcomeScreen extends Activity {
 				setStepStartDownloading();
 				break;
 			case UPDATE_DOWNLOAD_PROGRESS:
-				DownloadProgress dp = (DownloadProgress) msg.obj;
-				updateDownloadProgress(dp.getDownloaded(), dp.getTotal());
+				DownloadProgress downloadProgress = (DownloadProgress) msg.obj;
+				updateDownloadProgress(downloadProgress.getDownloaded(), downloadProgress.getTotal());
 				break;
 			case DOWNLOAD_FINISHED:
-				RemoteLibInfo u = (RemoteLibInfo) msg.obj;
+				RemoteLibInfo library = (RemoteLibInfo) msg.obj;
 				setStepDownloadFinished();
 				try {
-					boolean installed = mService.installLib(u);
-					if(installed) {
+					if(service.installLib(library)) {
 						Log.d(THIS_FILE, "Is installed ok");
 		    			PackageInfo pinfo = getPackageManager().getPackageInfo(WelcomeScreen.this.getPackageName(), 0);
 		    			int running_version = pinfo.versionCode;
@@ -316,14 +314,14 @@ public class WelcomeScreen extends Activity {
 					//Will never happen
 				}
 				
-				if (mService != null && mBound) {
+				if (service != null && bound) {
 					try {
-						mService.forceStopService();
+						service.forceStopService();
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}
-					unbindService(mConnection);
-					mBound = false;
+					unbindService(connection);
+					bound = false;
 				}
 				
 				
@@ -347,9 +345,9 @@ public class WelcomeScreen extends Activity {
 				break;
 			case DOWNLOAD_ERROR:
 				setStepError("Download error. Check your connection and retry");
-				if (mService != null && mBound) {
-					unbindService(mConnection);
-					mBound = false;
+				if (service != null && bound) {
+					unbindService(connection);
+					bound = false;
 				}
 				break;
 			default:
@@ -359,22 +357,22 @@ public class WelcomeScreen extends Activity {
 
 	};
 
-	private IDownloadLibServiceCallback mCallback = new IDownloadLibServiceCallback.Stub() {
+	private IDownloadLibServiceCallback callback = new IDownloadLibServiceCallback.Stub() {
 
 		@Override
 		public void onDownloadError() throws RemoteException {
-			mHandler.sendMessage(mHandler.obtainMessage(DOWNLOAD_ERROR));
+			handler.sendMessage(handler.obtainMessage(DOWNLOAD_ERROR));
 
 		}
 
 		@Override
 		public void onDownloadFinished(RemoteLibInfo u) throws RemoteException {
-			mHandler.sendMessage(mHandler.obtainMessage(DOWNLOAD_FINISHED, u));
+			handler.sendMessage(handler.obtainMessage(DOWNLOAD_FINISHED, u));
 		}
 
 		@Override
-		public void updateDownloadProgress(long downloaded, int total) throws RemoteException {
-			mHandler.sendMessage(mHandler.obtainMessage(UPDATE_DOWNLOAD_PROGRESS, new DownloadProgress(downloaded, total)));
+		public void updateDownloadProgress(long downloaded, long total) throws RemoteException {
+			handler.sendMessage(handler.obtainMessage(UPDATE_DOWNLOAD_PROGRESS, new DownloadProgress(downloaded, total)));
 
 		}
 	};
