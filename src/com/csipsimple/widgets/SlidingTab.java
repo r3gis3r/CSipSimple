@@ -1,5 +1,7 @@
 /**
  * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2008 The Android Open Source Project
+ * 
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -45,6 +47,7 @@ import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Log;
 
 /**
  * A special widget containing two Sliders and a threshold for each. Moving
@@ -71,29 +74,25 @@ public class SlidingTab extends ViewGroup {
 	private Slider leftSlider, rightSlider, currentSlider;
 	private boolean tracking;
 	private float targetZone;
+	private static final String THIS_FILE = "SlidingTab";
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
 	 * by moving it beyond a target zone.
 	 */
 	public interface OnTriggerListener {
-		/**
-		 * The interface was triggered because the user let go of the handle
-		 * without reaching the target zone.
-		 */
-		public static final int NO_HANDLE = 0;
 
 		/**
 		 * The interface was triggered because the user grabbed the left handle
 		 * and moved it past the target zone.
 		 */
-		public static final int LEFT_HANDLE = 1;
+		public static final int LEFT_HANDLE = 0;
 
 		/**
 		 * The interface was triggered because the user grabbed the right handle
 		 * and moved it past the target zone.
 		 */
-		public static final int RIGHT_HANDLE = 2;
+		public static final int RIGHT_HANDLE = 1;
 
 		/**
 		 * Called when the user moves a handle beyond the target zone.
@@ -147,10 +146,11 @@ public class SlidingTab extends ViewGroup {
 		 * @param targetId
 		 *            drawable for the target
 		 */
-		Slider(ViewGroup parent, int tabId, int barId, int targetId) {
+		Slider(ViewGroup parent, int iconId, int targetId, int barId, int tabId) {
 			// Create tab
 			tab = new ImageView(parent.getContext());
 			tab.setBackgroundResource(tabId);
+			tab.setImageResource(iconId);
 			tab.setScaleType(ScaleType.CENTER);
 			tab.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
@@ -180,6 +180,7 @@ public class SlidingTab extends ViewGroup {
 			text.setBackgroundResource(barId);
 			target.setImageResource(targetId);
 		}
+		
 
 		void setHintText(int resId) {
 			text.setText(resId);
@@ -284,9 +285,8 @@ public class SlidingTab extends ViewGroup {
 		super(context, attrs);
 
 		density = getResources().getDisplayMetrics().density;
-
-		leftSlider = new Slider(this, R.drawable.jog_tab_left_generic, R.drawable.jog_tab_bar_left_generic, R.drawable.jog_tab_target_gray);
-		rightSlider = new Slider(this, R.drawable.jog_tab_right_generic, R.drawable.jog_tab_bar_right_generic, R.drawable.jog_tab_target_gray);
+		leftSlider = new Slider(this, R.drawable.ic_jog_dial_answer, R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_answer, R.drawable.jog_tab_left_answer);
+		rightSlider = new Slider(this, R.drawable.ic_jog_dial_decline, R.drawable.jog_tab_target_red, R.drawable.jog_tab_bar_right_decline, R.drawable.jog_tab_right_decline);
 	}
 
 	@Override
@@ -310,7 +310,7 @@ public class SlidingTab extends ViewGroup {
 		width = Math.max(widthSpecSize, leftTabWidth + rightTabWidth);
 		height = Math.max(leftTabHeight, rightTabHeight);
 
-		setMeasuredDimension(width, height);
+		setMeasuredDimension(width, height*2);
 	}
 
 	@Override
@@ -506,7 +506,9 @@ public class SlidingTab extends ViewGroup {
 	 */
 	private void dispatchTriggerEvent(int whichHandle) {
 		vibrate(VIBRATE_LONG);
+		Log.d(THIS_FILE, "We take the call....");
 		if (onTriggerListener != null) {
+			Log.d(THIS_FILE, "We transmit to the parent....");
 			onTriggerListener.onTrigger(this, whichHandle);
 		}
 	}

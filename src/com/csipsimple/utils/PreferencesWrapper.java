@@ -25,6 +25,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 public class PreferencesWrapper {
 	
@@ -141,6 +142,11 @@ public class PreferencesWrapper {
 			return (short) Integer.parseInt(prefs.getString("codec_"+codecParts[0].toLowerCase()+"_"+codecParts[1], defaultValue));
 		}
 		return (short) Integer.parseInt(defaultValue);
+	}
+
+
+	public String getRingtone() {
+		return prefs.getString("ringtone", Settings.System.DEFAULT_RINGTONE_URI.toString());
 	}
 	
 }

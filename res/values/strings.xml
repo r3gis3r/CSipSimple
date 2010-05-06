@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of CSipSimple.
+	<!--
+		This file is part of CSipSimple. CSipSimple is free software: you can
+		redistribute it and/or modify it under the terms of the GNU General
+		Public License as published by the Free Software Foundation, either
+		version 3 of the License, or (at your option) any later version.
 
-    CSipSimple is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    CSipSimple is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
- -->
+		CSipSimple is distributed in the hope that it will be useful, but
+		WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+		General Public License for more details. You should have received a
+		copy of the GNU General Public License along with CSipSimple. If not,
+		see <http://www.gnu.org/licenses/>.
+	-->
 <resources>
-    
-    <string name="app_name">CSipSimple</string>
-<string name="unable_to_download_file">Unable to download file</string>
-<string name="connection_not_valid">Your connection is not valid for SIP (activate WIFI or change preferences to use 3G)</string>
-<string name="accounts">Accounts</string>
-<string name="save">Save</string>
-<string name="cancel">Cancel</string>
-<string name="activate_account">Activate account</string>
-<string name="deactivate_account">Deactivate account</string>
-<string name="delete_account">Delete account</string>
-<string name="modify_account">Modify account</string>
-<string name="add_account">Add account</string>
-<string name="choose_wizard">Choose wizard</string>
-<string name="use_pstn">Use PSTN</string>
+
+	<string name="app_name">CSipSimple</string>
+	<string name="unable_to_download_file">Unable to download file</string>
+	<string name="connection_not_valid">Your connection is not valid for SIP (activate WIFI or change preferences to use 3G)</string>
+	<string name="accounts">Accounts</string>
+	<string name="save">Save</string>
+	<string name="cancel">Cancel</string>
+	<string name="activate_account">Activate account</string>
+	<string name="deactivate_account">Deactivate account</string>
+	<string name="delete_account">Delete account</string>
+	<string name="modify_account">Modify account</string>
+	<string name="add_account">Add account</string>
+	<string name="choose_wizard">Choose wizard</string>
+	<string name="use_pstn">Use PSTN</string>
+
 </resources>

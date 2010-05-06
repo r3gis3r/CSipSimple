@@ -1,5 +1,7 @@
 /**
  * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2008 The Android Open Source Project
+ * 
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -19,8 +21,6 @@ package com.csipsimple.ui;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsip_status_code;
@@ -39,32 +39,32 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
-import com.csipsimple.utils.Log;
-
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.UAStateReceiver;
+import com.csipsimple.utils.Log;
+import com.csipsimple.widgets.InCallControls;
+import com.csipsimple.widgets.InCallInfo;
+import com.csipsimple.widgets.InCallControls.OnTriggerListener;
 
-public class CallHandler extends Activity {
+public class InCallActivity extends Activity implements OnTriggerListener {
 	private static String THIS_FILE = "SIP CALL HANDLER";
 
 	private CallInfo callInfo = null;
-	private Button takeCallButton;
-	private Button clearCallButton;
-	private TextView remoteContact;
-	private LinearLayout mainFrame;
+	private FrameLayout mainFrame;
+	private InCallControls inCallControls;
+	private InCallInfo inCallInfo;
 
 	private WakeLock wakeLock;
-    private KeyguardManager mKeyguardManager;
-    private KeyguardManager.KeyguardLock mKeyguardLock;
+    private KeyguardManager keyguardManager;
+    private KeyguardManager.KeyguardLock keyguardLock;
+
+
 
 
 	@Override
@@ -72,7 +72,7 @@ public class CallHandler extends Activity {
 		super.onCreate(savedInstanceState);
 
 		
-		setContentView(R.layout.callhandler);
+		setContentView(R.layout.in_call_main);
 		Log.d(THIS_FILE, "Creating call handler.....");
 		serviceBound = bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 
@@ -92,79 +92,58 @@ public class CallHandler extends Activity {
 		
 		
 
-		remoteContact = (TextView) findViewById(R.id.remoteContact);
-		mainFrame = (LinearLayout) findViewById(R.id.mainFrame);
-		takeCallButton = (Button) findViewById(R.id.take_call);
-		clearCallButton = (Button) findViewById(R.id.hangup);
+		//remoteContact = (TextView) findViewById(R.id.remoteContact);
+		mainFrame = (FrameLayout) findViewById(R.id.mainFrame);
+		inCallControls = (InCallControls) findViewById(R.id.inCallControls);
+		inCallControls.setOnTriggerListener(this);
+		
+		inCallInfo = (InCallInfo) findViewById(R.id.inCallInfo);
+		
+		registerReceiver(callStateReceiver, new IntentFilter(UAStateReceiver.UA_CALL_STATE_CHANGED));
+		
+		
+		
+		//Check if currently in use call is not already invalid (could be the case for example if we are not authorized to make the call)
+		//There is a time between when the call change notification that starts the InCallActivity and
+		//when this view registers the on ua call state changed
+		CallInfo realCallInfo = new CallInfo(callInfo.getCallId());
+		callInfo = realCallInfo;
 		updateUIFromCall();
 		
-		CallInfo call_info = new CallInfo(callInfo.getCallId());
-		if(call_info.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED) ||
-				call_info.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)) {
+		/*
+		if(realCallInfo.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED) ||
+				realCallInfo.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)) {
 			Log.w(THIS_FILE, "Early failure for call "+callInfo.getCallId());
+			
 			delayedQuit();
 			
 		}else {		
-			registerReceiver(callStateReceiver, new IntentFilter(UAStateReceiver.UA_CALL_STATE_CHANGED));
 			
 			
-	
-			takeCallButton.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					if (callInfo != null) {
-						if(service != null) {
-							try {
-								service.answer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
-							} catch (RemoteException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					}
-				}
-			});
-	
-			clearCallButton.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					if (callInfo != null) {
-						if(service != null) {
-							try {
-								service.hangup(callInfo.getCallId(), 0);
-							} catch (RemoteException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					}
-	
-				}
-			});
-
 		}
-		
+		*/
 	}
 	
-
-	private boolean manage_keyguard = false;
+	private boolean manageKeyguard = false;
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
-        if (mKeyguardManager == null) {
-            mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-            mKeyguardLock = mKeyguardManager.newKeyguardLock("com.csipsimple.inCallKeyguard");
+        if (keyguardManager == null) {
+            keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+            keyguardLock = keyguardManager.newKeyguardLock("com.csipsimple.inCallKeyguard");
         }
-        if(mKeyguardManager.inKeyguardRestrictedInputMode()) {
-        	manage_keyguard = true;
-        	mKeyguardLock.disableKeyguard();
+        if(keyguardManager.inKeyguardRestrictedInputMode()) {
+        	manageKeyguard = true;
+        	keyguardLock.disableKeyguard();
         }
 	}
 	
 	@Override
 	protected void onStop() {
 		super.onStop();
-		if(manage_keyguard) {
-			mKeyguardLock.reenableKeyguard();
+		if(manageKeyguard) {
+			keyguardLock.reenableKeyguard();
 		}
 
 	}
@@ -172,46 +151,31 @@ public class CallHandler extends Activity {
 	private void updateUIFromCall() {
 
 		Log.d(THIS_FILE, "Update ui from call " + callInfo.getCallId() + " state " + callInfo.getStringCallState());
-
-		pjsip_inv_state state = callInfo.getCallState();
-		String remote_contact = callInfo.getRemoteContact();
-		Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*<sip(?:s)?:([^@]*@[^>]*)>");
-		Matcher m = p.matcher(remote_contact);
-		if (m.matches()) {
-			remote_contact = m.group(1);
-			if(remote_contact == null || remote_contact.equalsIgnoreCase("")) {
-				remote_contact = m.group(2);
-			}
-		}
 		
-		remoteContact.setText(remote_contact);
+		pjsip_inv_state state = callInfo.getCallState();
 
+
+		//Update in call actions
+		inCallInfo.setCallState(callInfo);
+		inCallControls.setCallState(callInfo);
+		
+		
 		int backgroundResId = R.drawable.bg_in_call_gradient_unidentified;
         if (wakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
         }
-
-
+        
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
-			takeCallButton.setVisibility(View.VISIBLE);
-			clearCallButton.setVisibility(View.VISIBLE);
-			clearCallButton.setText("Decline");
 		    wakeLock.acquire();
 			break;
 		case PJSIP_INV_STATE_CALLING:
-			takeCallButton.setVisibility(View.GONE);
-			clearCallButton.setVisibility(View.VISIBLE);
-			clearCallButton.setText("Hang up");
             if (wakeLock != null && wakeLock.isHeld()) {
                 wakeLock.release();
             }
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
-			takeCallButton.setVisibility(View.GONE);
-			clearCallButton.setVisibility(View.VISIBLE);
-			clearCallButton.setText("Hang up");
 			backgroundResId = R.drawable.bg_in_call_gradient_connected;
 			if (wakeLock != null && wakeLock.isHeld()) {
                 wakeLock.release();
@@ -224,22 +188,18 @@ public class CallHandler extends Activity {
             }
 			break;
 		case PJSIP_INV_STATE_DISCONNECTED:
-			Log.i(THIS_FILE, "Disconnected here !!!");
 			delayedQuit();
 			return;
 		case PJSIP_INV_STATE_EARLY:
 		case PJSIP_INV_STATE_CONNECTING:
 			break;
 		}
-
 		mainFrame.setBackgroundResource(backgroundResId);
 	}
 
 
 	private void delayedQuit() {
 		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
-		takeCallButton.setEnabled(false);
-		clearCallButton.setEnabled(false);
 		Timer t = new Timer();
 		t.schedule(new TimerTask() {
 			@Override
@@ -326,4 +286,45 @@ public class CallHandler extends Activity {
 			
 		}
 	};
+
+
+
+	@Override
+	public void onTrigger(int whichAction) {
+		Log.d(THIS_FILE, "In Call Activity is triggered");
+		Log.d(THIS_FILE, "We have a call info : "+callInfo);
+		Log.d(THIS_FILE, "And a service : "+service);
+		switch(whichAction) {
+			case TAKE_CALL:{
+				if (callInfo != null && service != null) {
+					try {
+						service.answer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Was not able to take the call", e);
+					}
+				}
+				break;
+			}
+			case DECLINE_CALL: {
+				if (callInfo != null && service != null) {
+					try {
+						service.hangup(callInfo.getCallId(), 0);
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Was not able to decline the call", e);
+					}
+				}
+				break;
+			}
+			case CLEAR_CALL: {
+				if (callInfo != null && service != null) {
+					try {
+						service.hangup(callInfo.getCallId(), 0);
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Was not able to clear the call", e);
+					}
+				}
+				break;
+			}
+		}
+	}
 }

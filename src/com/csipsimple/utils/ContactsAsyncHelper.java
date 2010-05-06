@@ -1,7 +1,6 @@
 /**
  * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
  * Copyright (C) 2008 The Android Open Source Project
- * 
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -17,26 +16,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.widgets;
+package com.csipsimple.utils;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.os.Handler;
 
-public class DontPressWithParentLayout extends LinearLayout {
-
-	public DontPressWithParentLayout(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-	
-	
-	@Override
-	public void setPressed(boolean pressed) {// If the parent is pressed, do not set to pressed.
-		if (pressed && ((View) getParent()).isPressed()) {
-			return;
-		}
-		super.setPressed(pressed);
-	}
+public class ContactsAsyncHelper extends Handler {
+	/**
+     * Interface for a WorkerHandler result return.
+     */
+    public interface OnImageLoadCompleteListener {
+        /**
+         * Called when the image load is complete.
+         * 
+         * @param imagePresent true if an image was found
+         */  
+        public void onImageLoadComplete(int token, Object cookie, ImageView iView,
+                boolean imagePresent);
+    }
+     
 
 }

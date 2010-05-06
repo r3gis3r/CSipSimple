@@ -38,18 +38,15 @@ public enum pjsua_call_media_status {
     throw new IllegalArgumentException("No enum " + pjsua_call_media_status.class + " with value " + swigValue);
   }
 
-  @SuppressWarnings("unused")
   private pjsua_call_media_status() {
     this.swigValue = SwigNext.next++;
   }
 
-  @SuppressWarnings("unused")
   private pjsua_call_media_status(int swigValue) {
     this.swigValue = swigValue;
     SwigNext.next = swigValue+1;
   }
 
-  @SuppressWarnings("unused")
   private pjsua_call_media_status(pjsua_call_media_status swigEnum) {
     this.swigValue = swigEnum.swigValue;
     SwigNext.next = this.swigValue+1;

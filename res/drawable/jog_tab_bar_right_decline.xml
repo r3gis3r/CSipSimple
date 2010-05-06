@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
+<!-- StateListDrawable used for buttons in the in-call onscreen touch UI. -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_window_focused="false" android:state_enabled="true" android:drawable="@drawable/tray_handle_tab_normal" />
-    <item android:state_pressed="true" android:drawable="@drawable/tray_handle_tab_pressed" />
-    <item android:state_focused="true" android:state_enabled="true" android:drawable="@drawable/tray_handle_tab_selected" />
-    <item android:state_enabled="true" android:drawable="@drawable/tray_handle_tab_normal" />
-    <item android:state_focused="true" android:drawable="@drawable/tray_handle_tab_selected" />
+    <item android:state_pressed="true" android:drawable="@drawable/jog_tab_bar_right_end_pressed"/>
+    <item android:state_enabled="true" android:drawable="@drawable/jog_tab_bar_right_end_normal"/>
+    <item android:state_active="true" android:drawable="@drawable/jog_tab_bar_right_end_confirm_red"/>
 </selector>

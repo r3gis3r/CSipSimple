@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of CSipSimple.
-
+<!-- 
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr) 
+	
+	This file is part of CSipSimple.
     CSipSimple is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -16,91 +18,74 @@
  -->
  
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/top_digit_dialer" android:orientation="vertical"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	android:id="@+id/top_digit_dialer" android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 
 
 	<EditText android:id="@+id/digitsText" android:layout_width="fill_parent"
-		android:layout_height="50dip"
-		android:maxLines="1"
-		android:scrollHorizontally="true" android:textSize="28sp"
-		android:freezesText="true" android:background="@drawable/btn_dial_textfield"
-		android:focusableInTouchMode="true" android:editable="true"
-		android:cursorVisible="false" android:layout_marginBottom="10dip"/>
+		android:layout_height="50dip" android:maxLines="1" android:scrollHorizontally="true"
+		android:textSize="28sp" android:freezesText="true" android:background="@drawable/btn_dial_textfield"
+		android:focusableInTouchMode="true" android:editable="true" android:cursorVisible="false"
+		android:layout_marginBottom="10dip" />
 
 
-	<LinearLayout android:id="@+id/dial_actions" 
-		android:layout_width="fill_parent" android:layout_centerHorizontal="true"
-		android:layout_height="wrap_content" android:layout_marginTop="2dip"
-		android:layout_marginLeft="1dip" android:layout_marginRight="1dip"
-		android:orientation="horizontal" android:layout_alignParentBottom="true" android:gravity="center" android:padding="10dp">
-		
-		<ImageButton android:id="@+id/domainButton"
-			android:layout_width="87dip" android:layout_height="50dip"
-			android:layout_gravity="center_vertical|top" android:state_enabled="false"
-			android:background="@drawable/btn_dial_domain" android:src="@drawable/ic_tab_selected_dialer"/>
-			
-		<ImageButton android:layout_height="50dip"
-			android:layout_gravity="center_vertical|top" android:layout_weight="1"
-			android:state_enabled="false" android:background="@drawable/btn_dial_action"
-			android:src="@drawable/ic_dial_action_call" android:layout_width="fill_parent"
-			android:scaleType="centerInside" android:id="@+id/dialButton" />
-			
-		<ImageButton android:id="@+id/deleteButton"
-			android:layout_width="87dip" android:layout_height="50dip"
-			android:layout_gravity="center_vertical|top" android:state_enabled="false"
-			android:src="@drawable/ic_dial_action_delete" android:background="@drawable/btn_dial_delete"/>
+	<LinearLayout android:id="@+id/dial_actions" android:layout_width="fill_parent"
+		android:layout_centerHorizontal="true" android:layout_height="wrap_content"
+		android:layout_marginTop="2dip" android:layout_marginLeft="1dip" android:layout_marginRight="1dip"
+		android:orientation="horizontal" android:layout_alignParentBottom="true" android:gravity="center"
+		android:padding="10dp">
+
+		<ImageButton android:id="@+id/domainButton" android:layout_width="87dip"
+			android:layout_height="50dip" android:layout_gravity="center_vertical|top" android:state_enabled="false"
+			android:background="@drawable/btn_dial_domain" android:src="@drawable/ic_tab_selected_dialer" />
+
+		<ImageButton android:layout_height="50dip" android:layout_gravity="center_vertical|top"
+			android:layout_weight="1" android:state_enabled="false" android:background="@drawable/btn_dial_action"
+			android:src="@drawable/ic_dial_action_call" android:layout_width="fill_parent" android:scaleType="centerInside"
+			android:id="@+id/dialButton" />
+
+		<ImageButton android:id="@+id/deleteButton" android:layout_width="87dip"
+			android:layout_height="50dip" android:layout_gravity="center_vertical|top" android:state_enabled="false"
+			android:src="@drawable/ic_dial_action_delete" android:background="@drawable/btn_dial_delete" />
 	</LinearLayout>
 
 
 
 	<TableLayout android:id="@+id/keypad" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:layout_centerHorizontal="true"
-		android:layout_below="@id/digitsText" android:layout_above="@id/dial_actions"
-		android:stretchColumns="*">
+		android:layout_height="fill_parent" android:layout_centerHorizontal="true" android:layout_below="@id/digitsText"
+		android:layout_above="@id/dial_actions" android:stretchColumns="*">
 
 		<TableRow>
-			<ImageButton android:id="@+id/button1"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_1_no_vm" android:background="@drawable/btn_dial" />
-			<ImageButton android:id="@+id/button2"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_2" android:background="@drawable/btn_dial" />
-			<ImageButton android:id="@+id/button3"
-				android:layout_height="48dp" android:src="@drawable/dial_num_3" android:background="@drawable/btn_dial" android:layout_margin="5dp"/>
+			<ImageButton android:id="@+id/button1" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_1_no_vm" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button2" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_2" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button3" android:layout_height="48dp" android:src="@drawable/dial_num_3"
+				android:background="@drawable/btn_dial" android:layout_margin="5dp" />
 		</TableRow>
 		<TableRow>
-			<ImageButton android:id="@+id/button4"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_4" android:background="@drawable/btn_dial" />
-			<ImageButton android:id="@+id/button5"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_5" android:background="@drawable/btn_dial" />
-			<ImageButton android:id="@+id/button6"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_6" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button4" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_4" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button5" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_5" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button6" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_6" android:background="@drawable/btn_dial" />
 		</TableRow>
 		<TableRow>
-			<ImageButton android:id="@+id/button7"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_7" android:background="@drawable/btn_dial" />
-			<ImageButton android:id="@+id/button8"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_8" android:background="@drawable/btn_dial" />
-			<ImageButton android:id="@+id/button9"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_9" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button7" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_7" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button8" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_8" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button9" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_9" android:background="@drawable/btn_dial" />
 		</TableRow>
 		<TableRow>
-			<ImageButton android:id="@+id/buttonstar"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_star" android:background="@drawable/btn_dial" />
-			<ImageButton android:id="@+id/button0"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_0" android:background="@drawable/btn_dial" />
-			<ImageButton android:id="@+id/buttonpound"
-				android:layout_height="48dp" android:layout_margin="5dp"
-				android:src="@drawable/dial_num_pound" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/buttonstar" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_star" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/button0" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_0" android:background="@drawable/btn_dial" />
+			<ImageButton android:id="@+id/buttonpound" android:layout_height="48dp"
+				android:layout_margin="5dp" android:src="@drawable/dial_num_pound" android:background="@drawable/btn_dial" />
 		</TableRow>
 	</TableLayout>
 </RelativeLayout>

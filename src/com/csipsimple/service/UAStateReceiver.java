@@ -36,12 +36,14 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
-import com.csipsimple.ui.CallHandler;
+import com.csipsimple.ui.InCallActivity;
 import com.csipsimple.utils.Log;
 
 public class UAStateReceiver extends Callback {
@@ -62,7 +64,7 @@ public class UAStateReceiver extends Callback {
 		service.callAnswer(callId, 180);
 		startRing();
 		
-		CallInfo incomingCall = new CallInfo(callId);
+		final CallInfo incomingCall = new CallInfo(callId);
 		showNotificationForCall(incomingCall);
 		
 		if (auto_accept_current) {
@@ -70,39 +72,50 @@ public class UAStateReceiver extends Callback {
 			service.callAnswer(callId, 200);
 			auto_accept_current = false;
 		} else {
-			launchCallHandler(incomingCall);
+			Thread t = new Thread() {
+				@Override
+				public void run() {
+					launchCallHandler(incomingCall);
+				};
+			};
+			t.start();
 		}
 	}
 
 
 	@Override
 	public void on_call_state(int callId, pjsip_event e) {
-
-		CallInfo callInfo = new CallInfo(callId);
+		//Get current infos
+		final CallInfo callInfo = new CallInfo(callId);
+		final pjsip_inv_state call_state = callInfo.getCallState();
 		Log.i(THIS_FILE, "State of call " + callId + " :: " + callInfo.getStringCallState());
 
-		pjsip_inv_state call_state = callInfo.getCallState();
-
-		if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
-			showNotificationForCall(callInfo);
-			launchCallHandler(callInfo);
-
-		} else if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
-			Log.d(THIS_FILE, "Early state");
-		} else {
-			Log.d(THIS_FILE, "Will stop ringing");
-			stopRing();
-			// Call is now ended
-			if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-				notificationManager.cancel(SipService.CALL_NOTIF_ID);
-				Log.d(THIS_FILE, "Finish call2");
-				unsetAudioInCall();
-			}
-		}
-		
 		//Thread to avoid deadlocks
-		onMediaState(callInfo);
+/*		Thread t = new Thread() {
+			@Override
+			public void run() {*/
+				if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
+					showNotificationForCall(callInfo);
+					launchCallHandler(callInfo);
 
+				} else if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
+					Log.d(THIS_FILE, "Early state");
+				} else {
+					Log.d(THIS_FILE, "Will stop ringing");
+					stopRing();
+					// Call is now ended
+					if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+						notificationManager.cancel(SipService.CALL_NOTIF_ID);
+						Log.d(THIS_FILE, "Finish call2");
+						unsetAudioInCall();
+					}
+				}
+				
+				onMediaState(callInfo);
+		/*	}
+		};
+		t.start();
+		*/
 	}
 
 	@Override
@@ -115,7 +128,6 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_stream_created(int call_id, SWIGTYPE_p_pjmedia_session sess, long stream_idx, SWIGTYPE_p_p_pjmedia_port p_port) {
 		Log.d(THIS_FILE, "Stream created");
-
 	}
 
 	@Override
@@ -126,7 +138,7 @@ public class UAStateReceiver extends Callback {
 
 			setAudioInCall();
 
-			// May be done under media thread instead of this one
+			// Should maybe done under media thread instead of this one
 			android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
 
 			// When media is active, connect call to sound device.
@@ -197,18 +209,11 @@ public class UAStateReceiver extends Callback {
 		t.start();
 	}
 
-	private void onMediaState(final CallInfo callInfo) {
-		//This has to be threaded to avoid deadlocks
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-
-				Intent callStateChangedIntent = new Intent(UA_CALL_STATE_CHANGED);
-				callStateChangedIntent.putExtra("call_info", callInfo);
-				service.sendBroadcast(callStateChangedIntent);
-			}
-		};
-		t.start();
+	private void onMediaState(final CallInfo callInfo) {	
+		Intent callStateChangedIntent = new Intent(UA_CALL_STATE_CHANGED);
+		callStateChangedIntent.putExtra("call_info", callInfo);
+		service.sendBroadcast(callStateChangedIntent);
+	
 	}
 
 	private void showNotificationForCall(CallInfo call_info) {
@@ -220,7 +225,7 @@ public class UAStateReceiver extends Callback {
 		Notification notification = new Notification(icon, tickerText, when);
 		Context context = service.getApplicationContext();
 
-		Intent notificationIntent = new Intent(service, CallHandler.class);
+		Intent notificationIntent = new Intent(service, InCallActivity.class);
 		notificationIntent.putExtra("call_info", call_info);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, 0);
@@ -248,11 +253,26 @@ public class UAStateReceiver extends Callback {
 			//Create the virator
 			vibrator = (Vibrator) service.getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(new long[] {1000, 1500}, 0);
+		}else {
+			vibrator = null;
 		}
 		
-		ringtone = RingtoneManager.getRingtone(service, Settings.System.DEFAULT_RINGTONE_URI);
-		ringtone.play();
+		if (am.getStreamVolume(AudioManager.STREAM_RING) > 0) {                          
+            String ringtoneUri = service.getPrefs().getRingtone();
+            if(!TextUtils.isEmpty(ringtoneUri)) {
+				try {
+					ringtone = RingtoneManager.getRingtone(service, Uri.parse(ringtoneUri));
+					ringtone.play();
+				}catch(Exception e) {
+					Log.e(THIS_FILE, "Your device has probably no ringtone");
+					ringtone = null;
+				}
+            }
+		}else {
+			ringtone = null;
+		}
 	}
+	
 	
 	private void stopRing() {
 		if(ringtone != null) {
@@ -270,7 +290,7 @@ public class UAStateReceiver extends Callback {
 	private void launchCallHandler(CallInfo callInfo) {
 
 		// Launch activity to choose what to do with this call
-		Intent callHandlerIntent = new Intent(service, CallHandler.class);
+		Intent callHandlerIntent = new Intent(service, InCallActivity.class);
 		callHandlerIntent.putExtra("call_info", callInfo);
 		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

@@ -601,6 +601,15 @@ public class SipService extends Service {
 	}
 	
 	/**
+	 * Get the currently instanciated prefsWrapper (to be used by UAStateReceiver)
+	 * @return the preferenceWrapper instanciated
+	 */
+	public PreferencesWrapper getPrefs() {
+		//Is never null when call so ok, just not check...
+		return prefsWrapper;
+	}
+	
+	/**
 	 * Ask to take the control of the wifi and the partial wake lock if configured
 	 */
 	private void acquireResources() {

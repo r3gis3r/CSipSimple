@@ -10,7 +10,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".ui.CallHandler" android:label="Incoming call"
+		<activity android:name=".ui.InCallActivity" android:label="Incoming call"
 			android:screenOrientation="nosensor" android:excludeFromRecents="true"
 			android:launchMode="singleInstance" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".ui.AccountsList" android:launchMode="singleTask"

@@ -36,18 +36,15 @@ public enum pjsua_buddy_status {
     throw new IllegalArgumentException("No enum " + pjsua_buddy_status.class + " with value " + swigValue);
   }
 
-  @SuppressWarnings("unused")
   private pjsua_buddy_status() {
     this.swigValue = SwigNext.next++;
   }
 
-  @SuppressWarnings("unused")
   private pjsua_buddy_status(int swigValue) {
     this.swigValue = swigValue;
     SwigNext.next = swigValue+1;
   }
 
-  @SuppressWarnings("unused")
   private pjsua_buddy_status(pjsua_buddy_status swigEnum) {
     this.swigValue = swigEnum.swigValue;
     SwigNext.next = this.swigValue+1;

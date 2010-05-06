@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+	Copyright (C) 2008 The Android Open Source Project
+	
+	This file is part of CSipSimple. CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+	<com.csipsimple.widgets.SlidingTab
+		android:id="@+id/takeCallUnlocker" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:visibility="gone"
+		android:layout_alignParentTop="true" android:layout_marginTop="286dip" />
+		
+		
+	<RelativeLayout android:id="@+id/inCallButtons"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:layout_alignParentTop="true" android:visibility="gone">
+
+		<LinearLayout android:id="@+id/holdContainer"
+			android:orientation="horizontal" android:gravity="center_vertical"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+			android:layout_marginTop="10dip" android:layout_marginLeft="10dip"
+			android:visibility="gone">
+			<ImageButton android:id="@+id/holdButton"
+				android:gravity="center" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:background="@drawable/incall_round_button"
+				android:src="@drawable/ic_in_call_touch_round_hold" />
+			<TextView android:id="@+id/holdButtonLabel"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="14sp" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="5dip"
+				android:layout_marginRight="5dip" />
+		</LinearLayout>
+
+
+		<LinearLayout android:id="@+id/bottomButtonsContainer"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:paddingLeft="4dip"
+			android:paddingRight="4dip" android:paddingBottom="4dip"
+			android:layout_alignParentBottom="true">
+
+			<LinearLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:orientation="horizontal">
+				<Button android:id="@+id/addCallButton" style="@style/CallButton"
+					android:layout_width="1dip" android:layout_weight="1"
+					android:enabled="false"
+					android:layout_height="wrap_content" android:text="@string/add_call"
+					android:drawableTop="@drawable/ic_in_call_touch_add_call" />
+				<Button android:id="@+id/clearCallButton" style="@style/CallButton"
+					android:layout_width="1dip" android:layout_weight="1"
+					android:layout_height="wrap_content" android:text="@string/clear_call"
+					android:drawableTop="@drawable/ic_in_call_touch_end"
+					android:textColor="#FF6072" />
+				<Button android:id="@+id/dialpadButton" style="@style/CallButton"
+					android:drawableTop="@drawable/ic_in_call_touch_dialpad"
+					android:layout_width="1dip" android:layout_weight="1"
+					android:layout_height="wrap_content" android:text="@string/dialpad" />
+			</LinearLayout>
+			<LinearLayout android:orientation="horizontal"
+				android:layout_width="fill_parent" android:layout_height="wrap_content">
+				<ToggleButton android:id="@+id/bluetoothButton" style="@style/CallToggleButton"
+					android:layout_width="1dip" android:layout_weight="1"
+					android:layout_height="wrap_content" android:textOn="@string/bluetooth"
+					android:textOff="@string/bluetooth" />
+				<ToggleButton android:id="@+id/muteButton" style="@style/CallToggleButton"
+					android:layout_width="1dip" android:layout_weight="1"
+					android:layout_height="wrap_content" android:textOn="@string/mute"
+					android:textOff="@string/mute" />
+				<ToggleButton android:id="@+id/speakerButton" style="@style/CallToggleButton"
+					android:layout_width="1dip" android:layout_weight="1"
+					android:layout_height="wrap_content" android:textOn="@string/speaker"
+					android:textOff="@string/speaker" />
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</RelativeLayout>
+
+</RelativeLayout>
