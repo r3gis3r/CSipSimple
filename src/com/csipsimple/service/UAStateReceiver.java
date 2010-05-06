@@ -55,26 +55,19 @@ public class UAStateReceiver extends Callback {
 	private boolean saved_speaker_phone;
 
 	@Override
-	public void on_incoming_call(int acc_id, int call_id, SWIGTYPE_p_pjsip_rx_data rdata) {
-		Log.d(THIS_FILE, "Has incoming call " + call_id);
-		/*
-		 * pjsua_call_info info = new pjsua_call_info();
-		 * pjsua.call_get_info(call_id, info); Log.i(THIS_FILE,
-		 * "Has incoming call !!! "+info.getRemote_info().getPtr());
-		 */
-		final int c_id = call_id;
-
+	public void on_incoming_call(int acc_id, int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
+		Log.d(THIS_FILE, "Has incoming call " + callId);
 		
 		// Automatically answer incoming calls with 100/RINGING
-		service.callAnswer(c_id, 180);
+		service.callAnswer(callId, 180);
 		startRing();
 		
-		CallInfo incomingCall = new CallInfo(c_id);
+		CallInfo incomingCall = new CallInfo(callId);
 		showNotificationForCall(incomingCall);
 		
 		if (auto_accept_current) {
 			// Automatically answer incoming calls with 200/OK
-			service.callAnswer(c_id, 200);
+			service.callAnswer(callId, 200);
 			auto_accept_current = false;
 		} else {
 			launchCallHandler(incomingCall);
@@ -101,7 +94,7 @@ public class UAStateReceiver extends Callback {
 			stopRing();
 			// Call is now ended
 			if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-				notificationManager.cancel(CALL_NOTIF_ID);
+				notificationManager.cancel(SipService.CALL_NOTIF_ID);
 				Log.d(THIS_FILE, "Finish call2");
 				unsetAudioInCall();
 			}
@@ -170,7 +163,6 @@ public class UAStateReceiver extends Callback {
 	// Private methods
 	// --------
 
-	private static final int CALL_NOTIF_ID =  1;
 
 	private boolean auto_accept_current = false;
 	private Ringtone ringtone;
@@ -181,6 +173,7 @@ public class UAStateReceiver extends Callback {
 
 	private int savedMode;
 
+	
 	/**
 	 * Register state for an account
 	 * 
@@ -236,7 +229,7 @@ public class UAStateReceiver extends Callback {
 		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 		// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 
-		notificationManager.notify(CALL_NOTIF_ID, notification);
+		notificationManager.notify(SipService.CALL_NOTIF_ID, notification);
 	}
 	
 	
@@ -272,13 +265,13 @@ public class UAStateReceiver extends Callback {
 
 	/**
 	 * 
-	 * @param call_info
+	 * @param callInfo
 	 */
-	private void launchCallHandler(CallInfo call_info) {
+	private void launchCallHandler(CallInfo callInfo) {
 
 		// Launch activity to choose what to do with this call
 		Intent callHandlerIntent = new Intent(service, CallHandler.class);
-		callHandlerIntent.putExtra("call_info", call_info);
+		callHandlerIntent.putExtra("call_info", callInfo);
 		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		Log.i(THIS_FILE, "Anounce call activity please");

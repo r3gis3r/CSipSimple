@@ -35,10 +35,13 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.Vibrator;
 import android.text.method.DialerKeyListener;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.EditText;
@@ -109,6 +112,7 @@ public class Dialer extends Activity implements OnClickListener,
 		
     };
 	private int ringerMode;
+	private GestureDetector gestureDetector;
 
 
 	/** Called when the activity is first created. */
@@ -167,6 +171,20 @@ public class Dialer extends Activity implements OnClickListener,
 		
 		
 		initButtons();
+		//Add gesture detector
+		gestureDetector = new GestureDetector(this, new SwitchDialerGestureDetector());
+		
+		//Add switcher gesture detector
+		OnTouchListener touchTransmiter = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				gestureDetector.onTouchEvent(event);
+				return true;
+			}
+		};
+		digitDialer.setOnTouchListener(touchTransmiter);
+		textDialer.setOnTouchListener(touchTransmiter);
+		
 	}
 
 	@Override
@@ -423,6 +441,29 @@ public class Dialer extends Activity implements OnClickListener,
 	    });
 	    
 	    rootView.startAnimation(animation);
+	}
+	
+	
+	// Gesture detector
+	private class SwitchDialerGestureDetector extends GestureDetector.SimpleOnGestureListener {
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			if(e1 == null || e2 == null) {
+				return false;
+			}
+			float deltaX = e2.getX() - e1.getX();
+			float deltaY = e2.getY() - e1.getY();
+			if(Math.abs(deltaX) > Math.abs(deltaY * 5)) {
+				if(deltaX > 0 ) {
+					flipView(true);
+				}else {
+					flipView(false);
+				}
+				
+				return true;
+			}
+			return false;
+		}
 	}
 
 }

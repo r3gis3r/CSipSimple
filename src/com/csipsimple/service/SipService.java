@@ -75,7 +75,9 @@ public class SipService extends Service {
 	final static String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
 	
 
-	private final static int REGISTER_NOTIF_ID = 1;
+	public final static int REGISTER_NOTIF_ID = 1;
+	public static final int CALL_NOTIF_ID =  REGISTER_NOTIF_ID+1;
+	
 	private NotificationManager notificationManager;
 
 	public final static String STACK_FILE_NAME = "libpjsipjni.so";

@@ -36,14 +36,17 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -72,6 +75,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	
 	private List<Account> accounts_list;
 	private ListView accountsList;
+	private GestureDetector gestureDetector;
 	
 	private static final String THIS_FILE = "SIP AccountList";
 	
@@ -99,11 +103,16 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		
 		// Fill accounts with currently avalaible accounts
 		updateList();
+
+		
+		
+		
 		accountsList = (ListView) findViewById(R.id.account_list);
 		
 		accountsList.setAdapter(adapter);
 		accountsList.setOnItemClickListener(this);
 		accountsList.setOnCreateContextMenuListener(this);
+		
 
 		//Add add row
 		LinearLayout add_row = (LinearLayout) findViewById(R.id.add_account);
@@ -117,7 +126,18 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 		//And register to ua state events
 		registerReceiver(registrationStateReceiver, new IntentFilter(UAStateReceiver.UA_REG_STATE_CHANGED));
+		
+		//Add gesture detector
+		gestureDetector = new GestureDetector(this, new BackGestureDetector());
+		accountsList.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				gestureDetector.onTouchEvent(event);
+				return true;
+			}
+		});
 	}
+	
 	
 	 
 	@Override
@@ -217,7 +237,6 @@ public class AccountsList extends Activity implements OnItemClickListener {
     		}
     		adapter.notifyDataSetChanged();
     	}
-    	Log.d(THIS_FILE, "Update is done now");
     }
     
     
@@ -416,7 +435,6 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	};
 	
 	// Ui handler
-	
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -427,7 +445,24 @@ public class AccountsList extends Activity implements OnItemClickListener {
 				super.handleMessage(msg);
 			}
 		}
-
 	};
+	
+	// Gesture detector
+	private class BackGestureDetector extends GestureDetector.SimpleOnGestureListener {
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			if(e1 == null || e2 == null) {
+				return false;
+			}
+			float deltaX = e2.getX() - e1.getX();
+			float deltaY = e2.getY() - e1.getY();
+			
+			if(deltaX > 0 && deltaX > Math.abs(deltaY * 3) ) {
+				finish();
+				return true;
+			}
+			return false;
+		}
+	}
 
 }
