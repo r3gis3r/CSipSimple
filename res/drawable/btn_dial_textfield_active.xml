@@ -18,7 +18,7 @@
     <item android:state_pressed="true" 
         android:drawable="@drawable/btn_dial_textfield_pressed" />
     <item android:state_focused="true"
-        android:drawable="@drawable/btn_dial_textfield_selected" />
+        android:drawable="@drawable/btn_dial_textfield_activated" />
     <item
         android:drawable="@drawable/btn_dial_textfield_activated" />
 </selector>

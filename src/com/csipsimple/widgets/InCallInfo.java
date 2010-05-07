@@ -98,11 +98,14 @@ public class InCallInfo extends FrameLayout {
 			remoteUri = aRemoteUri;
 			String remoteContact = aRemoteUri;
 			String phoneNumber = null;
-			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*<sip(?:s)?:([^@]*)@[^>]*>");
+			Log.d(THIS_FILE, "Parsing ...."+remoteContact);
+			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
 			Matcher m = p.matcher(remoteContact);
 			if (m.matches()) {
+				
 				remoteContact = m.group(1);
 				phoneNumber =  m.group(2);
+				Log.d(THIS_FILE, "We found .... "+remoteContact+" et "+phoneNumber);
 				if(!TextUtils.isEmpty(phoneNumber) && TextUtils.isEmpty(remoteContact)) {
 					remoteContact = phoneNumber;
 				}

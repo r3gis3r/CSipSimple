@@ -134,10 +134,15 @@ public class InCallActivity extends Activity implements OnTriggerListener {
             keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
             keyguardLock = keyguardManager.newKeyguardLock("com.csipsimple.inCallKeyguard");
         }
+        
         if(keyguardManager.inKeyguardRestrictedInputMode()) {
         	manageKeyguard = true;
         	keyguardLock.disableKeyguard();
         }
+        
+        //Enlight the screen
+        
+        
 	}
 	
 	@Override
@@ -162,6 +167,8 @@ public class InCallActivity extends Activity implements OnTriggerListener {
 		
 		
 		int backgroundResId = R.drawable.bg_in_call_gradient_unidentified;
+		
+		Log.d(THIS_FILE, "Manage wake lock");
         if (wakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
@@ -169,6 +176,7 @@ public class InCallActivity extends Activity implements OnTriggerListener {
         
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
+		case PJSIP_INV_STATE_EARLY:
 		    wakeLock.acquire();
 			break;
 		case PJSIP_INV_STATE_CALLING:
@@ -191,7 +199,6 @@ public class InCallActivity extends Activity implements OnTriggerListener {
 		case PJSIP_INV_STATE_DISCONNECTED:
 			delayedQuit();
 			return;
-		case PJSIP_INV_STATE_EARLY:
 		case PJSIP_INV_STATE_CONNECTING:
 			break;
 		}
@@ -349,15 +356,15 @@ public class InCallActivity extends Activity implements OnTriggerListener {
 				break;
 			}
 			case BLUETOOTH_ON:{
-				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				am.setBluetoothScoOn(true);
-				mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_bluetooth);
+		//		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		//		am.setBluetoothA2dpOn(true);
+		//		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_bluetooth);
 				break;
 			}
 			case BLUETOOTH_OFF:{
-				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				am.setBluetoothScoOn(false);
-				mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_connected);
+		//		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		//		am.setBluetoothA2dpOn(false);
+		//		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_connected);
 				break;
 			}
 		}
