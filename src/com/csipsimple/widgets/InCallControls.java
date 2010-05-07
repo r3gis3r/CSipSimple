@@ -138,6 +138,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		dialButton.setOnClickListener(this);
 		bluetoothButton.setOnClickListener(this);
 		speakerButton.setOnClickListener(this);
+		muteButton.setOnClickListener(this);
 
 	}
 
@@ -244,7 +245,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			if (((ToggleButton) v).isChecked()) {
 				dispatchTriggerEvent(OnTriggerListener.MUTE_ON);
 			} else {
-				dispatchTriggerEvent(OnTriggerListener.MUTE_ON);
+				dispatchTriggerEvent(OnTriggerListener.MUTE_OFF);
 			}
 			break;
 		}

@@ -326,6 +326,40 @@ public class InCallActivity extends Activity implements OnTriggerListener {
 				}
 				break;
 			}
+			case MUTE_ON:{
+				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				am.setMicrophoneMute(true);
+				Log.d(THIS_FILE, "Microphone is now muted");
+				break;
+			}
+			case MUTE_OFF:{
+				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				am.setMicrophoneMute(false);
+				Log.d(THIS_FILE, "Microphone is now un muted");
+				break;
+			}
+			case SPEAKER_ON :{
+				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				am.setSpeakerphoneOn(true);
+				break;
+			}
+			case SPEAKER_OFF :{
+				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				am.setSpeakerphoneOn(false);
+				break;
+			}
+			case BLUETOOTH_ON:{
+				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				am.setBluetoothScoOn(true);
+				mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_bluetooth);
+				break;
+			}
+			case BLUETOOTH_OFF:{
+				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				am.setBluetoothScoOn(false);
+				mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_connected);
+				break;
+			}
 		}
 	}
 }

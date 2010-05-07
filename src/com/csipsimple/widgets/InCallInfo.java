@@ -54,6 +54,7 @@ public class InCallInfo extends FrameLayout {
 	private int colorEnd;
 	
 	private Context context;
+	private TextView remotePhoneNumber;
 	
 	public InCallInfo(Context aContext, AttributeSet attrs) {
 		super(aContext, attrs);
@@ -72,7 +73,7 @@ public class InCallInfo extends FrameLayout {
 		remoteName = (TextView) findViewById(R.id.name);
 		title = (TextView) findViewById(R.id.title);
 		elapsedTime = (Chronometer) findViewById(R.id.elapsedTime);
-		
+		remotePhoneNumber = (TextView) findViewById(R.id.phoneNumber);
 		
 		//Colors
 		colorConnected = Color.parseColor("#99CE3F");
@@ -92,6 +93,7 @@ public class InCallInfo extends FrameLayout {
 
 	private void updateRemoteName() {
 		String aRemoteUri = callInfo.getRemoteContact();
+		//If not already set with the same value, just ignore it
 		if(!aRemoteUri.equalsIgnoreCase(remoteUri)) {
 			remoteUri = aRemoteUri;
 			String remoteContact = aRemoteUri;
@@ -108,9 +110,9 @@ public class InCallInfo extends FrameLayout {
 				
 			}
 			remoteName.setText(remoteContact);
+			remotePhoneNumber.setText(phoneNumber);
 			if(!TextUtils.isEmpty(phoneNumber)) {
 				if(Pattern.matches("^[0-9\\-#]*$", phoneNumber)) {
-					//TODO : thread this
 					//Looks like a phone number so search the contact throw contacts
 					CallerInfo callerInfo = CallerInfo.getCallerInfo(context, phoneNumber);
 					if(callerInfo != null && callerInfo.contactExists) {
@@ -120,13 +122,9 @@ public class InCallInfo extends FrameLayout {
 									R.drawable.picture_unknown);
 						remoteName.setText(callerInfo.name);
 					}
-					
-					Log.d(THIS_FILE, "CallerInfo : "+callerInfo.toString());
 				}
 			}
 			
-		}else {
-			Log.d(THIS_FILE, "Already set with the same value, ignore it ");
 		}
 	}
 	

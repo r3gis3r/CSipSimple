@@ -53,6 +53,28 @@
 				android:textSize="28sp" android:singleLine="true"
 				android:layout_marginTop="-22dip" android:paddingLeft="4dip"
 				android:paddingRight="4dip" />
+			<LinearLayout android:orientation="horizontal"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginTop="-6dip">
+	        <TextView android:id="@+id/label"
+	                  android:textAppearance="?android:attr/textAppearanceSmall"
+	                  android:textSize="18sp"
+	                  android:textColor="?android:attr/textColorSecondary"
+	                  android:singleLine="true"
+	                  android:layout_width="wrap_content"
+	                  android:layout_height="wrap_content"
+	                  android:paddingRight="6dip"
+	                  android:text="SIP"/>
+	        <TextView android:id="@+id/phoneNumber"
+	                  android:textAppearance="?android:attr/textAppearanceSmall"
+	                  android:textSize="18sp"
+	                  android:textColor="?android:attr/textColorSecondary"
+	                  android:singleLine="true"
+	                  android:layout_width="wrap_content"
+	                  android:layout_height="wrap_content" />
+    </LinearLayout>
 		</LinearLayout>
 	</LinearLayout>
 </RelativeLayout>

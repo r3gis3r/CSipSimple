@@ -50,11 +50,21 @@ public class UAStateReceiver extends Callback {
 
 	static String THIS_FILE = "SIP UA Receiver";
 
-	private int saved_vibrate_ring;
-	private int saved_vibrade_notif;
-	private int saved_wifi_policy;
-	private int saved_volume;
-	private boolean saved_speaker_phone;
+	private int savedVibrateRing;
+	private int savedVibradeNotif;
+	private int savedWifiPolicy;
+	private int savedVolume;
+	private boolean savedSpeakerPhone;
+	private boolean savedMicrophoneMute;
+	private boolean autoAcceptCurrent = false;
+	private Ringtone ringtone;
+	private Vibrator vibrator;
+
+	private NotificationManager notificationManager;
+	private SipService service;
+
+	private int savedMode;
+
 
 	@Override
 	public void on_incoming_call(int acc_id, int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
@@ -67,10 +77,10 @@ public class UAStateReceiver extends Callback {
 		final CallInfo incomingCall = new CallInfo(callId);
 		showNotificationForCall(incomingCall);
 		
-		if (auto_accept_current) {
+		if (autoAcceptCurrent) {
 			// Automatically answer incoming calls with 200/OK
 			service.callAnswer(callId, 200);
-			auto_accept_current = false;
+			autoAcceptCurrent = false;
 		} else {
 			Thread t = new Thread() {
 				@Override
@@ -163,7 +173,7 @@ public class UAStateReceiver extends Callback {
 	// Public configuration for receiver
 	// -------
 	public void setAutoAnswerNext(boolean auto_response) {
-		auto_accept_current = auto_response;
+		autoAcceptCurrent = auto_response;
 	}
 
 	public void initService(SipService srv) {
@@ -176,14 +186,7 @@ public class UAStateReceiver extends Callback {
 	// --------
 
 
-	private boolean auto_accept_current = false;
-	private Ringtone ringtone;
-	private Vibrator vibrator;
 
-	private NotificationManager notificationManager;
-	private SipService service;
-
-	private int savedMode;
 
 	
 	/**
@@ -307,11 +310,12 @@ public class UAStateReceiver extends Callback {
 		AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		ContentResolver ctntResolver = service.getContentResolver();
 
-		saved_vibrate_ring = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-		saved_vibrade_notif = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
-		saved_wifi_policy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-		saved_volume = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-		saved_speaker_phone = am.isSpeakerphoneOn();
+		savedVibrateRing = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+		savedVibradeNotif = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
+		savedWifiPolicy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+		savedVolume = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+		savedSpeakerPhone = am.isSpeakerphoneOn();
+		savedMicrophoneMute = am.isMicrophoneMute();
 		savedMode = am.getMode();
 
 		int speaker = AudioManager.MODE_IN_CALL;
@@ -335,11 +339,12 @@ public class UAStateReceiver extends Callback {
 		AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		ContentResolver ctntResolver = service.getContentResolver();
 
-		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, saved_wifi_policy);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, saved_vibrate_ring);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, saved_vibrade_notif);
-		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, saved_volume, 0);
-		am.setSpeakerphoneOn(saved_speaker_phone);
+		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, savedWifiPolicy);
+		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
+		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
+		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
+		am.setSpeakerphoneOn(savedSpeakerPhone);
+		am.setMicrophoneMute(savedMicrophoneMute);
 		am.setMode(savedMode);
 	}
 
