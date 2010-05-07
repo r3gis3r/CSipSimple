@@ -23,20 +23,23 @@ import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pjsip_inv_state;
 
-import com.csipsimple.R;
-import com.csipsimple.models.CallInfo;
-import com.csipsimple.utils.ContactsAsyncHelper;
-import com.csipsimple.utils.Log;
-
+import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Color;
-import android.text.format.DateUtils;
+import android.provider.Contacts;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.csipsimple.R;
+import com.csipsimple.models.CallInfo;
+import com.csipsimple.models.CallerInfo;
+import com.csipsimple.utils.ContactsAsyncHelper;
+import com.csipsimple.utils.Log;
 
 public class InCallInfo extends FrameLayout {
 	
@@ -49,14 +52,14 @@ public class InCallInfo extends FrameLayout {
 	private Chronometer elapsedTime;
 	private int colorConnected;
 	private int colorEnd;
-	private Object photoTracker;
 	
-	public InCallInfo(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		
+	private Context context;
+	
+	public InCallInfo(Context aContext, AttributeSet attrs) {
+		super(aContext, attrs);
+		context = aContext;
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.in_call_info, this, true);
-	//	photoTracker = new ContactsAsyncHelper.ImageTracker();
 		
 	}
 	
@@ -89,23 +92,41 @@ public class InCallInfo extends FrameLayout {
 
 	private void updateRemoteName() {
 		String aRemoteUri = callInfo.getRemoteContact();
-		if(aRemoteUri.equalsIgnoreCase(remoteUri)) {
+		if(!aRemoteUri.equalsIgnoreCase(remoteUri)) {
+			remoteUri = aRemoteUri;
 			String remoteContact = aRemoteUri;
-			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*<sip(?:s)?:([^@]*@[^>]*)>");
+			String phoneNumber = null;
+			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*<sip(?:s)?:([^@]*)@[^>]*>");
 			Matcher m = p.matcher(remoteContact);
 			if (m.matches()) {
 				remoteContact = m.group(1);
-				if(remoteContact == null || remoteContact.equalsIgnoreCase("")) {
-					remoteContact = m.group(2);
+				phoneNumber =  m.group(2);
+				if(!TextUtils.isEmpty(phoneNumber) && TextUtils.isEmpty(remoteContact)) {
+					remoteContact = phoneNumber;
 				}
-			}
-			remoteName.setText(remoteContact);
-			
-			if(Pattern.matches("^[0-9\\-#]*$", remoteContact)) {
-				//Looks like a phone number so search the contact throw contacts
+				
 				
 			}
+			remoteName.setText(remoteContact);
+			if(!TextUtils.isEmpty(phoneNumber)) {
+				if(Pattern.matches("^[0-9\\-#]*$", phoneNumber)) {
+					//TODO : thread this
+					//Looks like a phone number so search the contact throw contacts
+					CallerInfo callerInfo = CallerInfo.getCallerInfo(context, phoneNumber);
+					if(callerInfo != null && callerInfo.contactExists) {
+						ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(context, 
+									photo, 
+									ContentUris.withAppendedId(Contacts.People.CONTENT_URI, callerInfo.personId), 
+									R.drawable.picture_unknown);
+						remoteName.setText(callerInfo.name);
+					}
+					
+					Log.d(THIS_FILE, "CallerInfo : "+callerInfo.toString());
+				}
+			}
 			
+		}else {
+			Log.d(THIS_FILE, "Already set with the same value, ignore it ");
 		}
 	}
 	

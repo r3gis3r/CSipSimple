@@ -52,6 +52,7 @@ import com.csipsimple.widgets.InCallControls;
 import com.csipsimple.widgets.InCallInfo;
 import com.csipsimple.widgets.InCallControls.OnTriggerListener;
 
+
 public class InCallActivity extends Activity implements OnTriggerListener {
 	private static String THIS_FILE = "SIP CALL HANDLER";
 

@@ -34,6 +34,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.Vibrator;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
 import android.text.method.DialerKeyListener;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -258,8 +260,8 @@ public class Dialer extends Activity implements OnClickListener,
 		
 		digitsView.setOnClickListener(this);
 		digitsView.setKeyListener(DialerKeyListener.getInstance());
-//		PhoneNumberFormattingTextWatcher digitFormater = new PhoneNumberFormattingTextWatcher();
-//		digitsView.addTextChangedListener(digitFormater);
+		PhoneNumberFormattingTextWatcher digitFormater = new PhoneNumberFormattingTextWatcher();
+		digitsView.addTextChangedListener(digitFormater);
 		digitsView.setInputType(android.text.InputType.TYPE_NULL);
 		toggleDrawable();
 	}
@@ -331,7 +333,7 @@ public class Dialer extends Activity implements OnClickListener,
 				if (service != null) {
 					try {
 						//digitsView.getText().
-						service.makeCall(digitsView.getText().toString());
+						service.makeCall(PhoneNumberUtils.stripSeparators(digitsView.getText().toString()));
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Service can't be called to make the call");
 					}
