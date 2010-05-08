@@ -34,13 +34,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
@@ -48,12 +51,14 @@ import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.UAStateReceiver;
 import com.csipsimple.utils.Log;
+import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.InCallControls;
 import com.csipsimple.widgets.InCallInfo;
+import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.InCallControls.OnTriggerListener;
 
 
-public class InCallActivity extends Activity implements OnTriggerListener {
+public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener {
 	private static String THIS_FILE = "SIP CALL HANDLER";
 
 	private CallInfo callInfo = null;
@@ -64,6 +69,10 @@ public class InCallActivity extends Activity implements OnTriggerListener {
 	private WakeLock wakeLock;
     private KeyguardManager keyguardManager;
     private KeyguardManager.KeyguardLock keyguardLock;
+
+	private Dialpad dialPad;
+
+	private View callInfoPanel;
 
 
 
@@ -99,6 +108,9 @@ public class InCallActivity extends Activity implements OnTriggerListener {
 		inCallControls.setOnTriggerListener(this);
 		
 		inCallInfo = (InCallInfo) findViewById(R.id.inCallInfo);
+		dialPad = (Dialpad) findViewById(R.id.dialPad);
+		dialPad.setOnDialKeyListener(this);
+		callInfoPanel = (View) findViewById(R.id.callInfoPanel);
 		
 		registerReceiver(callStateReceiver, new IntentFilter(UAStateReceiver.UA_CALL_STATE_CHANGED));
 		
@@ -197,6 +209,8 @@ public class InCallActivity extends Activity implements OnTriggerListener {
             }
 			break;
 		case PJSIP_INV_STATE_DISCONNECTED:
+			dialPad.setVisibility(View.GONE);
+			callInfoPanel.setVisibility(View.VISIBLE);
 			delayedQuit();
 			return;
 		case PJSIP_INV_STATE_CONNECTING:
@@ -367,6 +381,28 @@ public class InCallActivity extends Activity implements OnTriggerListener {
 		//		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_connected);
 				break;
 			}
+			case DIALPAD_ON:{
+				dialPad.setVisibility(View.VISIBLE);
+				callInfoPanel.setVisibility(View.GONE);
+				break;
+			}
+			case DIALPAD_OFF:{
+				dialPad.setVisibility(View.GONE);
+				callInfoPanel.setVisibility(View.VISIBLE);
+				break;
+			}
 		}
+	}
+
+	@Override
+	public void onTrigger(int keyCode, int dialTone) {
+		if (callInfo != null && service != null) {
+			try {
+				service.sendDtmf(callInfo.getCallId(), keyCode);
+			} catch (RemoteException e) {
+				Log.e(THIS_FILE, "Was not able to take the call", e);
+			}
+		}
+		
 	}
 }

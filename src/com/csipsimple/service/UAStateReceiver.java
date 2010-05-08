@@ -34,12 +34,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Vibrator;
 import android.provider.Settings;
-import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
@@ -69,6 +65,7 @@ public class UAStateReceiver extends Callback {
 	private Ringer ringer;
 
 	private boolean isSavedAudioState = false;
+
 
 
 	@Override
@@ -122,6 +119,7 @@ public class UAStateReceiver extends Callback {
 					ringer.stopRing();
 					// Call is now ended
 					if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+						service.stopDialtoneGenerator();
 						notificationManager.cancel(SipService.CALL_NOTIF_ID);
 						Log.d(THIS_FILE, "Finish call2");
 						unsetAudioInCall();
@@ -189,6 +187,8 @@ public class UAStateReceiver extends Callback {
 	}
 	
 	
+	
+
 
 	// -------
 	// Static constants

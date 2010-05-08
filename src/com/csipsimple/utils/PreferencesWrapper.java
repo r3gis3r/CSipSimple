@@ -103,24 +103,100 @@ public class PreferencesWrapper {
 	 * even sometimes crash
 	 */
 	public int getAutoCloseTime() {
-		String default_value = "1";
+		String defaultValue = "1";
 		if(Build.VERSION.SDK == "3") {
-			default_value = "5";
+			defaultValue = "5";
 		}
-		String autoCloseTime = prefs.getString("snd_auto_close_time", default_value);
+		String autoCloseTime = prefs.getString("snd_auto_close_time", defaultValue);
 		try {
 			return Integer.parseInt(autoCloseTime);
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Auto close time "+autoCloseTime+" not well formated");
 		}
-		return 0;
+		return 1;
 	}
 	
-	public boolean hasAutoCancellation() {
+	
+	/**
+	 * Whether echo cancellation is enabled
+	 * @return true if enabled
+	 */
+	public boolean hasEchoCancellation() {
 		return prefs.getBoolean("echo_cancellation", true);
 	}
+	
 
+	/**
+	 * Whether voice audio detection is enabled
+	 * @return 1 if Voice audio detection is disabled
+	 */
+	public int getNoVad() {
+		return prefs.getBoolean("enable_vad", true)?0:1;
+	}
 
+	
+	/**
+	 * Get the audio codec quality setting
+	 * @return the audio quality
+	 */
+	public long getMediaQuality() {
+		int defaultValue = 4;
+		int prefsValue = 4;
+		String mediaQuality = prefs.getString("snd_media_quality", String.valueOf(defaultValue));
+		try {
+			prefsValue = Integer.parseInt(mediaQuality);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Audio quality "+mediaQuality+" not well formated");
+		}
+		if(prefsValue <= 10 && prefsValue >= 0) {
+			return prefsValue;
+		}
+		return defaultValue;
+	}
+	
+	
+	/**
+	 * Get current clock rate
+	 * @return clock rate in Hz
+	 */
+	public long getClockRate() {
+		String clockRate = prefs.getString("snd_clock_rate", "16000");
+		try {
+			return Integer.parseInt(clockRate);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Clock rate "+clockRate+" not well formated");
+		}
+		return 16000;
+	}
+	
+	/**
+	 * Get whether ice is enabled
+	 * @return 1 if enabled (pjstyle)
+	 */
+	public int getIceEnabled() {
+		return prefs.getBoolean("enable_ice", false)?1:0;
+	}
+
+	/**
+	 * Get whether turn is enabled
+	 * @return 1 if enabled (pjstyle)
+	 */ 
+	public int getTurnEnabled() {
+		return prefs.getBoolean("enable_turn", false)?1:0;
+	}
+	
+	/**
+	 * Get turn server
+	 * @return host:port or blank if not set
+	 */
+	public String getTurnServer() {
+		return prefs.getString("turn_server", "");
+	}
+	
+	/**
+	 * Get the media transport type
+	 * @return the transport type choosen
+	 */
 	public pjsip_transport_type_e getTransportType() {
 		String choosenTransport = prefs.getString("network_transport", "UDP");
 		if(choosenTransport.equalsIgnoreCase("TCP")) {
@@ -144,9 +220,26 @@ public class PreferencesWrapper {
 		return (short) Integer.parseInt(defaultValue);
 	}
 
-
+	/**
+	 * Get sip ringtone
+	 * @return string uri
+	 */
 	public String getRingtone() {
 		return prefs.getString("ringtone", Settings.System.DEFAULT_RINGTONE_URI.toString());
 	}
+
+
+
+
+	// ---- 
+	// UI related
+	// ----
+	public boolean startIsDigit() {
+		return !prefs.getBoolean("start_with_text_dialer", false);
+	}
+
+
+
+
 	
 }

@@ -18,42 +18,51 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  -->
  
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/top_digit_dialer" android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
 
-	<EditText android:id="@+id/digitsText" android:layout_width="fill_parent"
-		android:layout_height="60dp" android:maxLines="1" android:scrollHorizontally="true"
+	<EditText android:id="@+id/digitsText" 
+		android:layout_weight="2.5"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:maxLines="1" android:scrollHorizontally="true"
 		android:textSize="28sp" android:freezesText="true" android:background="@drawable/btn_dial_textfield"
 		android:focusableInTouchMode="true" android:editable="true" android:cursorVisible="false"
 		android:layout_marginBottom="10dip" />
 		
-	<LinearLayout android:id="@+id/dial_actions" android:layout_width="fill_parent"
-		android:layout_centerHorizontal="true" android:layout_height="wrap_content"
+		
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1" >
+		<com.csipsimple.widgets.Dialpad android:id="@+id/dialPad" 
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_below="@id/digitsText" />
+	</LinearLayout>
+	<LinearLayout android:id="@+id/dial_actions" 
+		android:layout_weight="2.5"
+		android:layout_width="fill_parent"
+		android:layout_centerHorizontal="true" android:layout_height="fill_parent"
 		android:layout_marginTop="2dip" android:layout_marginLeft="1dip" android:layout_marginRight="1dip"
-		android:orientation="horizontal" android:layout_alignParentBottom="true" android:gravity="center"
+		android:orientation="horizontal" android:gravity="center"
 		android:padding="10dp">
 
 		<ImageButton android:id="@+id/domainButton" android:layout_width="87dip"
-			android:layout_height="50dip" android:layout_gravity="center_vertical|top" android:state_enabled="false"
+			android:layout_height="fill_parent" android:layout_gravity="center" android:state_enabled="false"
 			android:background="@drawable/btn_dial_domain" android:src="@drawable/ic_tab_selected_dialer" />
 
-		<ImageButton android:layout_height="50dip" android:layout_gravity="center_vertical|top"
+		<ImageButton android:layout_height="fill_parent" android:layout_gravity="center"
 			android:layout_weight="1" android:state_enabled="false" android:background="@drawable/btn_dial_action"
 			android:src="@drawable/ic_dial_action_call" android:layout_width="fill_parent" android:scaleType="centerInside"
 			android:id="@+id/dialButton" />
 
 		<ImageButton android:id="@+id/deleteButton" android:layout_width="87dip"
-			android:layout_height="50dip" android:layout_gravity="center_vertical|top" android:state_enabled="false"
+			android:layout_height="fill_parent" android:layout_gravity="center" android:state_enabled="false"
 			android:src="@drawable/ic_dial_action_delete" android:background="@drawable/btn_dial_delete" />
 	</LinearLayout>
 
 
 
-	<com.csipsimple.widgets.Dialpad android:id="@+id/dialPad"
-	android:layout_weight="1"
-	android:layout_below="@id/digitsText" android:layout_above="@id/dial_actions" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" />
 	
-</RelativeLayout>
+</LinearLayout>

@@ -20,14 +20,19 @@ package com.csipsimple.service;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pj_pool_t;
 import org.pjsip.pjsua.pj_str_t;
+import org.pjsip.pjsua.pjmedia_port;
+import org.pjsip.pjsua.pjmedia_tone_desc;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_info;
+import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
 import org.pjsip.pjsua.pjsua_media_config;
@@ -54,6 +59,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
+import android.view.KeyCharacterMap;
 import android.widget.Toast;
 
 import com.csipsimple.R;
@@ -174,6 +180,9 @@ public class SipService extends Service {
 		 */
 		@Override
 		public AccountInfo getAccountInfo(int accountId) throws RemoteException { return SipService.this.getAccountInfo(accountId);}
+
+		@Override
+		public int sendDtmf(int callId, int keyCode) throws RemoteException { return SipService.this.sendDtmf(callId, keyCode); }
 		
 		
 		
@@ -188,6 +197,9 @@ public class SipService extends Service {
 	private boolean sipStackIsCorrupted = false;
 	private ServiceDeviceStateReceiver deviceStateReceiver;
 	private PreferencesWrapper prefsWrapper;
+	private pj_pool_t dialtonePool;
+	private pjmedia_port dialtoneGen;
+	private int dialtoneSlot = -1;
 	
 	 
 
@@ -255,9 +267,6 @@ public class SipService extends Service {
 
 		tryToLoadStack();
 	}
-
-
-
 
 
 
@@ -372,9 +381,22 @@ public class SipService extends Service {
 						media_cfg.setChannel_count(1);
 						media_cfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
 						// Disable echo cancellation
-						if (!prefsWrapper.hasAutoCancellation()) {
+						if (!prefsWrapper.hasEchoCancellation()) {
 							media_cfg.setEc_tail_len(0);
 						}
+						media_cfg.setNo_vad(prefsWrapper.getNoVad());
+						media_cfg.setQuality(prefsWrapper.getMediaQuality());
+						media_cfg.setClock_rate(prefsWrapper.getClockRate());
+						
+						media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
+						
+						int isTurnEnabled = prefsWrapper.getTurnEnabled();
+						
+						if(isTurnEnabled == 1) {
+							media_cfg.setEnable_turn(isTurnEnabled);
+							media_cfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
+						}
+						
 
 						// INITIALIZE
 						status = pjsua.init(cfg, log_cfg, media_cfg);
@@ -654,9 +676,9 @@ public class SipService extends Service {
 	 */
 	public int callAnswer(int callId, int code) {
 		if(created) {
-			pjsua.call_answer(callId, code, null, null);
+			return pjsua.call_answer(callId, code, null, null);
 		}
-		return 0;
+		return -1;
 	}
 	
 	
@@ -668,9 +690,9 @@ public class SipService extends Service {
 	 */
 	public int callHangup(int callId, int code) {
 		if(created) {
-			pjsua.call_hangup(callId, code, null, null);
+			return pjsua.call_hangup(callId, code, null, null);
 		}
-		return 0;
+		return -1;
 	}
 	
 	/**
@@ -678,9 +700,9 @@ public class SipService extends Service {
 	 * @param callee remote contact ot call
 	 * If not well formated we try to add domain name of the default account
 	 */
-	public void makeCall(String callee) {
+	public int makeCall(String callee) {
 		if(!created) {
-			return;
+			return -1;
 		}
 		
 		//Check integrity of callee field
@@ -695,14 +717,14 @@ public class SipService extends Service {
 			String default_domain = acc_info.getAcc_uri().getPtr();
 			if(default_domain == null) {
 				Log.e(THIS_FILE, "No default domain can't gess a domain for what you are asking");
-				return;
+				return -1;
 			}
 			Pattern p = Pattern.compile(".*<sip(s)?:[^@]*@([^@]*)>", Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(default_domain);
 			Log.d(THIS_FILE, "Try to find into "+default_domain);
 			if(!m.matches()) {
 				Log.e(THIS_FILE, "Default domain can't be guessed from regUri of this account");
-				return;
+				return -1;
 			}
 			default_domain = m.group(2);
 			Log.d(THIS_FILE, "default domain : "+default_domain);
@@ -721,13 +743,145 @@ public class SipService extends Service {
 			byte[] user_data = new byte[1];
 			pjsua_msg_data msg = new pjsua_msg_data();
 			int[] call_id = new int[1];
-			pjsua.call_make_call(acc_id, uri , 0, user_data, msg, call_id);
+			return pjsua.call_make_call(acc_id, uri , 0, user_data, msg, call_id);
 		} else {
 			Log.e(THIS_FILE, "asked for a bad uri "+callee);
 			
 		}
+		return -1;
 		
 	}
+	
+	
+	/**
+	 * Send a dtmf signal to a call
+	 * @param callId the call to send the signal
+	 * @param keyCode the keyCode to send (android style)
+	 * @return
+	 */
+	protected int sendDtmf(int callId, int keyCode) {
+		if(!created) {
+			return -1;
+		}
+		
+		KeyCharacterMap km = KeyCharacterMap.load(KeyCharacterMap.NUMERIC);
+		
+		String keyPressed = String.valueOf(km.getNumber(keyCode));
+		int res = pjsua.call_dial_dtmf(callId, pjsua.pj_str_copy(keyPressed));
+		if(res != pjsua.PJ_SUCCESS) {
+			res = sendPjMediaDialTone(callId, keyPressed);
+		}
+		return res;
+	}
+	
+	
+	
+	// ------
+	// Dialtone generator
+	// ------
+	
+	private final static Map<String, short[]> digitMap = new HashMap<String, short[]>(){
+		private static final long serialVersionUID = -6656807954448449227L;
+
+		{
+	    	put("0", new short[] {941, 1336});
+	    	put("1", new short[] {697, 1209});
+	    	put("2", new short[] {697, 1336});
+	    	put("3", new short[] {697, 1477});
+	    	put("4", new short[] {770, 1209});
+	    	put("5", new short[] {770, 1336});
+	    	put("6", new short[] {770, 1477});
+	    	put("7", new short[] {852, 1209});
+	    	put("8", new short[] {852, 1336});
+	    	put("9", new short[] {852, 1477});
+	    	put("a", new short[] {697, 1633});
+	    	put("b", new short[] {770, 1633});
+	    	put("c", new short[] {852, 1633});
+	    	put("d", new short[] {941, 1633});
+	    	put("*", new short[] {941, 1209});
+	    	put("#", new short[] {941, 1477});
+	    }
+	};
+	
+	private int startDialtoneGenerator(int callId) {
+		pjsua_call_info info = new pjsua_call_info();
+		pjsua.call_get_info(callId, info);
+		int status;
+		
+		dialtonePool = pjsua.pjsua_pool_create("mycall", 512, 512);
+
+		pj_str_t name = pjsua.pj_str_copy("dialtoneGen");
+		long clock_rate = 8000;
+		long channel_count = 1;
+		long samples_per_frame = 160;
+		long bits_per_sample = 16;
+		long options = 0;
+		int[] dialtoneSlotPtr = new int[1];
+		dialtoneGen = new pjmedia_port();
+		status = pjsua.pjmedia_tonegen_create2(dialtonePool, name, clock_rate, channel_count, samples_per_frame, bits_per_sample, options, dialtoneGen);
+		if(status != pjsua.PJ_SUCCESS) {
+			stopDialtoneGenerator();
+			return status;
+		}
+		status = pjsua.conf_add_port(dialtonePool, dialtoneGen, dialtoneSlotPtr);
+		if(status != pjsua.PJ_SUCCESS) {
+			stopDialtoneGenerator();
+			return status;
+		}
+		dialtoneSlot = dialtoneSlotPtr[0];
+		status = pjsua.conf_connect(dialtoneSlot, info.getConf_slot());
+		if(status != pjsua.PJ_SUCCESS) {
+			dialtoneSlot = -1;
+			stopDialtoneGenerator();
+			return status;
+		}
+		return pjsua.PJ_SUCCESS;
+	}
+	
+	public void stopDialtoneGenerator() {
+		//Destroy the port
+		if(dialtoneSlot != -1) {
+			pjsua.conf_remove_port(dialtoneSlot);
+		}
+		
+		dialtoneGen = null;
+		//pjsua.port_destroy(dialtoneGen);
+		
+		if(dialtonePool != null) {
+			pjsua.pj_pool_release(dialtonePool);
+		}
+			  
+	}
+	
+	private int sendPjMediaDialTone(int callId, String character) {
+		if(!digitMap.containsKey(character)) {
+			return -1;
+		}
+		if(dialtoneGen == null) {
+			int status = startDialtoneGenerator(callId);
+			if(status != pjsua.PJ_SUCCESS) {
+				return -1;
+			}
+			
+		}
+		
+		
+		short freq1 = digitMap.get(character)[0];
+		short freq2 = digitMap.get(character)[1];
+		
+		//Play the tone
+
+		pjmedia_tone_desc[] d = new pjmedia_tone_desc[1];
+		d[0] = new pjmedia_tone_desc();
+		d[0].setVolume((short) 0);
+		d[0].setOn_msec((short) 100);
+		d[0].setOff_msec((short) 200);
+		d[0].setFreq1(freq1);
+		d[0].setFreq2(freq2);
+		
+		return pjsua.pjmedia_tonegen_play(dialtoneGen, 1, d, 0);
+	}
+	
 	
 
 	/**
@@ -743,6 +897,7 @@ public class SipService extends Service {
 		if (standard_out.exists()) {
 			return standard_out;
 		}
+		
 
 		// One target build
 		// TODO : find a clean way to access the libPath for one shot builds

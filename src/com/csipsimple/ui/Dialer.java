@@ -60,6 +60,7 @@ import com.csipsimple.animation.Flip3dAnimation;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 
@@ -120,6 +121,12 @@ public class Dialer extends Activity implements OnClickListener,
 	private GestureDetector gestureDetector;
 	private Dialpad dialPad;
 
+	private EditText dialUser;
+
+	private EditText dialDomain;
+
+	private PreferencesWrapper prefsWrapper;
+
 
 	/** Called when the activity is first created. */
 	@Override
@@ -130,6 +137,9 @@ public class Dialer extends Activity implements OnClickListener,
 		if(getParent() != null) {
 			contextToBindTo = getParent();
 		}
+		
+		prefsWrapper = new PreferencesWrapper(this);
+		
 		setContentView(R.layout.dialer_activity);
 		
 		
@@ -146,6 +156,8 @@ public class Dialer extends Activity implements OnClickListener,
 		dialPad = (Dialpad) findViewById(R.id.dialPad);
 		digitDialer = (View) findViewById(R.id.dialer_digit);
 		textDialer = (View) findViewById(R.id.dialer_text);
+		dialUser = (EditText) findViewById(R.id.dialtxt_user);
+		dialDomain = (EditText) findViewById(R.id.dialtext_domain);
 		rootView = (View) findViewById(R.id.toplevel);
 		
 		
@@ -154,10 +166,9 @@ public class Dialer extends Activity implements OnClickListener,
 		atxt.setText("@");
 		
 		
-		//TODO : set default in params
-		isDigit = true;
-		digitDialer.setVisibility(View.VISIBLE);
-		textDialer.setVisibility(View.GONE);
+		isDigit = prefsWrapper.startIsDigit();
+		digitDialer.setVisibility(isDigit?View.VISIBLE:View.GONE);
+		textDialer.setVisibility(isDigit?View.GONE:View.VISIBLE);
 
 		dialPad.setOnDialKeyListener(this);
 		initButtons();
@@ -335,11 +346,8 @@ public class Dialer extends Activity implements OnClickListener,
 		if(isDigit) {
 			toCall = PhoneNumberUtils.stripSeparators(digits.getText().toString());
 		}else {
-			EditText et;
-			et = (EditText) findViewById(R.id.dialtxt_user);
-			String userName = et.getText().toString();
-			et = (EditText) findViewById(R.id.dialtext_domain);
-			String domain = et.getText().toString();
+			String userName = dialUser.getText().toString();
+			String domain = dialDomain.getText().toString();
 			if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(domain)) {
 				return;
 			}
@@ -348,6 +356,11 @@ public class Dialer extends Activity implements OnClickListener,
 		if(TextUtils.isEmpty(toCall) ) {
 			return;
 		}
+		
+		//Well we have now the fields, clear theses fields
+		digits.getText().clear();
+		dialUser.getText().clear();
+		dialDomain.getText().clear();
 		try {
 			service.makeCall(toCall);
 		} catch (RemoteException e) {
@@ -366,8 +379,8 @@ public class Dialer extends Activity implements OnClickListener,
 			break;
 		}
 		case R.id.deleteTextButton: {
-			((EditText) findViewById(R.id.dialtxt_user)).getText().clear();
-			((EditText) findViewById(R.id.dialtext_domain)).getText().clear();
+			dialUser.getText().clear();
+			dialDomain.getText().clear();
 			break;
 		}
 		case R.id.dialButton: 

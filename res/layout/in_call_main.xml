@@ -29,6 +29,14 @@
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent" />
 		</RelativeLayout>
+		
+		<com.csipsimple.widgets.Dialpad android:id="@+id/dialPad"
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent"
+			android:paddingBottom="170px"
+			android:paddingLeft="6dip"
+			android:paddingRight="6dip"
+			android:visibility="gone"/>
 	</FrameLayout>
 
 	<RelativeLayout android:id="@+id/lockerOverlay"

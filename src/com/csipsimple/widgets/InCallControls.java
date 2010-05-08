@@ -47,6 +47,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	private ToggleButton speakerButton;
 	private RelativeLayout inCallButtons;
 	private ToggleButton muteButton;
+	private boolean isDialpadOn = false;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -68,11 +69,15 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		/**
 		 * When user clics on dialpad
 		 */
-		public static final int DIALPAD = DECLINE_CALL + 1;
+		public static final int DIALPAD_ON = DECLINE_CALL + 1;
+		/**
+		 * When user clics on dialpad
+		 */
+		public static final int DIALPAD_OFF = DIALPAD_ON + 1;
 		/**
 		 * When mute is set on
 		 */
-		public static final int MUTE_ON = DIALPAD + 1;
+		public static final int MUTE_ON = DIALPAD_OFF + 1;
 		/**
 		 * When mute is set off
 		 */
@@ -224,8 +229,9 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		case R.id.clearCallButton:
 			dispatchTriggerEvent(OnTriggerListener.CLEAR_CALL);
 			break;
-		case R.id.dialButton:
-			dispatchTriggerEvent(OnTriggerListener.DIALPAD);
+		case R.id.dialpadButton:
+			dispatchTriggerEvent(isDialpadOn?OnTriggerListener.DIALPAD_OFF:OnTriggerListener.DIALPAD_ON);
+			isDialpadOn = ! isDialpadOn;
 			break;
 		case R.id.bluetoothButton:
 			if (((ToggleButton) v).isChecked()) {

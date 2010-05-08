@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	This file is part of CSipSimple. CSipSimple is free software: you can
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
 	redistribute it and/or modify it under the terms of the GNU General
 	Public License as published by the Free Software Foundation, either
 	version 3 of the License, or (at your option) any later version.
@@ -13,17 +16,29 @@
 	see <http://www.gnu.org/licenses/>.
 	
 	
-	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<CheckBoxPreference android:summary="Activate echo cancellation"
-			android:title="Echo cancellation" android:key="echo_cancellation"
-			android:defaultValue="true"></CheckBoxPreference>
-		<EditTextPreference android:key="snd_auto_close_time"
-			android:title="Auto close time"
-			android:numeric="signed"
-			android:summary="Time to wait for close audio channel (should be set to fix the android 1.5 bug)"
-			android:defaultValue="1"></EditTextPreference>
+		<PreferenceCategory android:title="Audio quality">
+			<CheckBoxPreference android:summary="Activate echo cancellation"
+				android:title="Echo cancellation" android:key="echo_cancellation"
+				android:defaultValue="true"></CheckBoxPreference>
+			<CheckBoxPreference android:summary="Activate voice audio detection"
+				android:title="Voice audio detection" android:key="enable_vad"
+				android:defaultValue="true"></CheckBoxPreference>
+			<EditTextPreference android:key="snd_auto_close_time"
+				android:title="Auto close time"
+				android:numeric="signed"
+				android:summary="Time to wait for close audio channel (should be set to fix the android 1.5 bug)"
+				android:defaultValue="1"></EditTextPreference>
+			<EditTextPreference android:key="snd_media_quality"
+				android:title="Media quality"
+				android:numeric="signed"
+				android:summary="Quality of the media stream (modify only if you know what you are doing)"
+				android:defaultValue="4"></EditTextPreference>
+			<ListPreference android:title="Clock Rate" android:key="snd_clock_rate"
+				android:defaultValue="16000"
+				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
+		</PreferenceCategory>
 		<PreferenceCategory android:title="Codec">
 			<EditTextPreference android:key="codec_speex_16000"
 				android:title="Speex 16kHz" android:summary="Priority (0 is disabled)"
@@ -53,5 +68,18 @@
 				android:title="G722 8kHz" android:summary="Priority (0 is disabled)"
 				android:numeric="integer"
 				android:defaultValue="128"></EditTextPreference>
+		</PreferenceCategory>
+		<PreferenceCategory android:title="ICE/TURN">
+			<CheckBoxPreference android:summary="Turn on ICE feature"
+				android:title="Enable ICE" android:key="enable_ice"
+				android:defaultValue="false"></CheckBoxPreference>
+			<CheckBoxPreference android:summary="Turn on TURN feature"
+				android:title="Enable TURN" android:key="enable_turn"
+				android:defaultValue="false"></CheckBoxPreference>
+			<EditTextPreference android:key="turn_server"
+				android:title="Turn server"
+				android:dependency="enable_turn"
+				android:summary="Turn server HOST:PORT"
+				android:defaultValue=""></EditTextPreference>
 		</PreferenceCategory>
 </PreferenceScreen>

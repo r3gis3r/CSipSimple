@@ -31,7 +31,7 @@ interface ISipService{
 	void makeCall(in String callee);
 	int answer(int callId, int status);
 	int hangup(int callId, int status);
-	
+	int sendDtmf(int callId, int keyCode);
 	
 	void forceStopService();
 	

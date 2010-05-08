@@ -94,7 +94,7 @@ public class InCallInfo extends FrameLayout {
 	private void updateRemoteName() {
 		String aRemoteUri = callInfo.getRemoteContact();
 		//If not already set with the same value, just ignore it
-		if(!aRemoteUri.equalsIgnoreCase(remoteUri)) {
+		if(aRemoteUri != null && !aRemoteUri.equalsIgnoreCase(remoteUri)) {
 			remoteUri = aRemoteUri;
 			String remoteContact = aRemoteUri;
 			String phoneNumber = null;
