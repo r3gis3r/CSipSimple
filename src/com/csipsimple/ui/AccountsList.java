@@ -62,7 +62,6 @@ import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
-import com.csipsimple.service.UAStateReceiver;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.AddAccountWizard;
 import com.csipsimple.wizards.WizardUtils;
@@ -125,7 +124,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		//Bind to sip service
 		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 		//And register to ua state events
-		registerReceiver(registrationStateReceiver, new IntentFilter(UAStateReceiver.UA_REG_STATE_CHANGED));
+		registerReceiver(registrationStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
 		
 		//Add gesture detector
 		gestureDetector = new GestureDetector(this, new BackGestureDetector());

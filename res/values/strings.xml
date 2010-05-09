@@ -32,5 +32,6 @@
 	<string name="add_account">Add account</string>
 	<string name="choose_wizard">Choose wizard</string>
 	<string name="use_pstn">Use GSM</string>
+	<string name="ongoing_call">Ongoing Call</string>
 	
 </resources>

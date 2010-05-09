@@ -47,7 +47,6 @@ import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
-import com.csipsimple.service.UAStateReceiver;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.InCallControls;
@@ -108,7 +107,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		dialPad.setOnDialKeyListener(this);
 		callInfoPanel = (View) findViewById(R.id.callInfoPanel);
 		
-		registerReceiver(callStateReceiver, new IntentFilter(UAStateReceiver.UA_CALL_STATE_CHANGED));
+		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
 		
 		
 		

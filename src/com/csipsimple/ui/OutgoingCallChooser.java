@@ -52,7 +52,6 @@ import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
-import com.csipsimple.service.UAStateReceiver;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
@@ -135,7 +134,7 @@ public class OutgoingCallChooser extends ListActivity {
 		//Start service and bind it
 		startService(sipServ);
 		bindService(sipServ, m_connection, Context.BIND_AUTO_CREATE);
-		registerReceiver(regStateReceiver, new IntentFilter(UAStateReceiver.UA_REG_STATE_CHANGED));
+		registerReceiver(regStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
 	}
 	
 	 

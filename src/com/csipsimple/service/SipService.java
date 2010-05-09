@@ -79,10 +79,16 @@ public class SipService extends Service {
 	
 	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 	final static String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
+	// -------
+	// Static constants
+	// -------
+
+	final public static String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
+	final public static String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
 	
 
-	public final static int REGISTER_NOTIF_ID = 1;
-	public static final int CALL_NOTIF_ID =  REGISTER_NOTIF_ID+1;
+	final public static int REGISTER_NOTIF_ID = 1;
+	final public static int CALL_NOTIF_ID =  REGISTER_NOTIF_ID+1;
 	
 	private NotificationManager notificationManager;
 
@@ -540,7 +546,7 @@ public class SipService extends Service {
 			
 			// Send a broadcast message that for an account
 			// registration state has changed
-			Intent regStateChangedIntent = new Intent(UAStateReceiver.UA_REG_STATE_CHANGED);
+			Intent regStateChangedIntent = new Intent(ACTION_SIP_REGISTRATION_CHANGED);
 			sendBroadcast(regStateChangedIntent);
 			
 			if (notificationManager != null && cancelNotification) {

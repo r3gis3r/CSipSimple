@@ -192,12 +192,7 @@ public class UAStateReceiver extends Callback {
 	
 
 
-	// -------
-	// Static constants
-	// -------
 
-	public static String UA_CALL_STATE_CHANGED = "com.csipsimple.ua.CALL_STATE_CHANGED";
-	public static String UA_REG_STATE_CHANGED = "com.csipsimple.ua.REG_STATE_CHANGED";
 
 	// -------
 	// Public configuration for receiver
@@ -236,7 +231,7 @@ public class UAStateReceiver extends Callback {
 				
 				// Send a broadcast message that for an account
 				// registration state has changed
-				Intent regStateChangedIntent = new Intent(UA_REG_STATE_CHANGED);
+				Intent regStateChangedIntent = new Intent(SipService.ACTION_SIP_REGISTRATION_CHANGED);
 				service.sendBroadcast(regStateChangedIntent);
 			}
 		};
@@ -244,27 +239,29 @@ public class UAStateReceiver extends Callback {
 	}
 
 	private void onBroadcastCallState(final CallInfo callInfo) {	
-		Intent callStateChangedIntent = new Intent(UA_CALL_STATE_CHANGED);
+		Intent callStateChangedIntent = new Intent(SipService.ACTION_SIP_CALL_CHANGED);
 		callStateChangedIntent.putExtra("call_info", callInfo);
 		service.sendBroadcast(callStateChangedIntent);
 	
+		
 	}
 
-	private void showNotificationForCall(CallInfo call_info) {
+	private void showNotificationForCall(CallInfo callInfo) {
 		// This is the pending call notification
 		int icon = R.drawable.ic_incall_ongoing;
-		CharSequence tickerText = "Ongoing call";
+		CharSequence tickerText =  service.getText(R.string.ongoing_call);
 		long when = System.currentTimeMillis();
 
 		Notification notification = new Notification(icon, tickerText, when);
 		Context context = service.getApplicationContext();
 
 		Intent notificationIntent = new Intent(service, InCallActivity.class);
-		notificationIntent.putExtra("call_info", call_info);
+		notificationIntent.putExtra("call_info", callInfo);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, 0);
 
-		notification.setLatestEventInfo(context, "Ongoing Call", "There is a current call", contentIntent);
+		
+		notification.setLatestEventInfo(context, service.getText(R.string.ongoing_call), callInfo.getRemoteContact(), contentIntent);
 		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 		// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 

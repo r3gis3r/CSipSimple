@@ -32,5 +32,6 @@
 	<string name="add_account">Ajouter un compte</string>
 	<string name="choose_wizard">Choisissez l'assistant</string>
 	<string name="use_pstn">Passer par le GSM</string>
+	<string name="ongoing_call">Appel en cours</string>
 	
 </resources>
