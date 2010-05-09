@@ -18,12 +18,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-	<com.csipsimple.widgets.SlidingTab
-		android:id="@+id/takeCallUnlocker" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:visibility="gone"
-		android:layout_alignParentTop="true" android:layout_marginTop="286dip" />
-		
-		
 	<RelativeLayout android:id="@+id/inCallButtons"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
 		android:layout_alignParentTop="true" android:visibility="gone">
@@ -88,5 +82,24 @@
 		</LinearLayout>
 
 	</RelativeLayout>
+	
+	<com.csipsimple.widgets.SlidingTab
+		android:id="@+id/takeCallUnlocker" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:visibility="gone"
+		android:layout_alignParentTop="true" android:layout_marginTop="286dip" />
+		
+	<LinearLayout android:id="@+id/takeCallUnlockerAlternate" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:visibility="gone"
+		android:layout_alignParentTop="true" android:layout_marginTop="286dip" android:orientation="horizontal">
+		<Button android:id="@+id/takeCallButton" style="@style/CallButton"
+					android:layout_width="1dip" android:layout_weight="1"
+					android:layout_height="wrap_content" android:text="@string/take_call"
+					android:drawableTop="@drawable/ic_in_call_touch_answer" />
+		<Button android:id="@+id/declineCallButton" style="@style/CallButton"
+			android:layout_width="1dip" android:layout_weight="1"
+			android:layout_height="wrap_content" android:text="@string/decline_call"
+			android:drawableTop="@drawable/ic_in_call_touch_end"
+			android:textColor="#FF6072" />
+	</LinearLayout>
 
 </RelativeLayout>

@@ -71,31 +71,33 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_incoming_call(int acc_id, int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 		Log.d(THIS_FILE, "Has incoming call " + callId);
-		
-		// Automatically answer incoming calls with 100/RINGING
-		service.callAnswer(callId, 180);
-		
-		saveAudioState();
-		String ringtoneUri = service.getPrefs().getRingtone();
-		ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
-		ringer.ring();
-		
-		final CallInfo incomingCall = new CallInfo(callId);
-		showNotificationForCall(incomingCall);
-		
-		if (autoAcceptCurrent) {
-			// Automatically answer incoming calls with 200/OK
-			service.callAnswer(callId, 200);
-			autoAcceptCurrent = false;
-		} else {
-			Thread t = new Thread() {
-				@Override
-				public void run() {
+		final int fCallId = callId; 
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				
+				// Automatically answer incoming calls with 100/RINGING
+				service.callAnswer(fCallId, 180);
+				
+				saveAudioState();
+				String ringtoneUri = service.getPrefs().getRingtone();
+				ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
+				ringer.ring();
+				
+				final CallInfo incomingCall = new CallInfo(fCallId);
+				showNotificationForCall(incomingCall);
+				
+				if (autoAcceptCurrent) {
+					// Automatically answer incoming calls with 200/OK
+					service.callAnswer(fCallId, 200);
+					autoAcceptCurrent = false;
+				} else {
 					launchCallHandler(incomingCall);
-				};
-			};
-			t.start();
-		}
+				}
+			}
+		};
+		t.start();
+		
 	}
 
 

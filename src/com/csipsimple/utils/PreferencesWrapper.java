@@ -122,6 +122,9 @@ public class PreferencesWrapper {
 	 * @return true if enabled
 	 */
 	public boolean hasEchoCancellation() {
+		if(Build.VERSION.SDK == "3") {
+			return false;
+		}
 		return prefs.getBoolean("echo_cancellation", true);
 	}
 	
@@ -236,6 +239,11 @@ public class PreferencesWrapper {
 	// ----
 	public boolean startIsDigit() {
 		return !prefs.getBoolean("start_with_text_dialer", false);
+	}
+
+
+	public boolean getUseAlternateUnlocker() {
+		return prefs.getBoolean("use_alternate_unlocker", false);
 	}
 
 

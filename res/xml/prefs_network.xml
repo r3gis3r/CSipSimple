@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+	
+	
 	This file is part of CSipSimple. CSipSimple is free software: you can
 	redistribute it and/or modify it under the terms of the GNU General
 	Public License as published by the Free Software Foundation, either
@@ -13,43 +16,41 @@
 	see <http://www.gnu.org/licenses/>.
 	
 	
-	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:summary="(If active service will run in background)"
-		android:title="For incoming calls">
-		<CheckBoxPreference android:title="Use wifi"
-			android:defaultValue="true" android:summary="Use wifi for incoming calls"
+	<PreferenceCategory android:title="@string/for_incomings">
+		<CheckBoxPreference android:title="@string/use_wifi"
+			android:defaultValue="true" android:summary="@string/use_wifi_in_desc"
 			android:key="use_wifi_in"></CheckBoxPreference>
-		<CheckBoxPreference android:title="Use 3G"
-			android:summary="Use gsm for VoIP (your carrier must allow you to use this option)"
+		<CheckBoxPreference android:title="@string/use_3g" 
+			android:summary="@string/use_3g_disclamer"
 			android:defaultValue="false" android:key="use_3g_in"></CheckBoxPreference>
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="For outgoing call">
-		<CheckBoxPreference android:summary="Use wifi for outgoing calls"
-			android:key="use_wifi_out" android:title="Use Wifi"
+	<PreferenceCategory android:title="@string/for_outgoings">
+		<CheckBoxPreference android:summary="@string/use_wifi_out_desc"
+			android:key="use_wifi_out" android:title="@string/use_wifi"
 			android:defaultValue="true"></CheckBoxPreference>
-		<CheckBoxPreference
-			android:summary="Use gsm for VoIP (your carrier must allow you to use this option)"
-			android:key="use_3g_out" android:title="Use 3G" android:defaultValue="false"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/use_3g"
+			android:summary="@string/use_3g_disclamer"
+			android:key="use_3g_out" android:defaultValue="false"></CheckBoxPreference>
 
 	</PreferenceCategory>
-	<PreferenceCategory android:title="Performances">
-		<CheckBoxPreference android:summary="Prevent wifi idle when SIP is connected"
-			android:key="lock_wifi" android:title="Lock wifi"
+	<PreferenceCategory android:title="@string/perfs">
+		<CheckBoxPreference android:summary="@string/lock_wifi_desc"
+			android:key="lock_wifi" android:title="@string/lock_wifi"
 			android:defaultValue="true"></CheckBoxPreference>
 	</PreferenceCategory>
-	<PreferenceCategory android:title="Transport">
+	<PreferenceCategory android:title="@string/transport">
 		<ListPreference android:key="network_transport"
-			android:summary="Network transport used" android:title="Transport"
+			android:summary="@string/network_transport_desc" android:title="@string/network_transport"
 			android:entries="@array/transport_choices" android:entryValues="@array/transport_values"
 			android:defaultValue="UDP"></ListPreference>
 		
 		<EditTextPreference android:key="network_transport_port"
-			android:title="Port"
+			android:title="@string/network_transport_port"
 			android:numeric="integer"
-			android:summary="Port number to bind locally"
+			android:summary="@string/network_transport_port_desc"
 			android:defaultValue="5060"></EditTextPreference>
 	</PreferenceCategory>
 </PreferenceScreen>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.csipsimple" android:versionName="0.00-06" android:versionCode="6">
-	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="true">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
+	android:versionCode="7" android:versionName="0.00-07">
+	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone"
+		android:debuggable="true">
 		<!-- android:launchMode="singleTask" android:name=".ui.Acompanion" -->
-		<activity android:label="@string/app_name" android:name=".ui.SipHome"
-			android:launchMode="singleTask" android:theme="@android:style/Theme.NoTitleBar">
+		<activity android:label="@string/app_name" android:name=".ui.SipHome" android:launchMode="singleTask"
+			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
 		<activity android:name=".ui.InCallActivity" android:label="Incoming call"
-			android:screenOrientation="nosensor" android:excludeFromRecents="true"
-			android:launchMode="singleInstance" android:theme="@android:style/Theme.NoTitleBar"></activity>
-		<activity android:name=".ui.AccountsList" android:launchMode="singleTask"
-			android:label="@string/accounts"></activity>
+			android:screenOrientation="nosensor" android:excludeFromRecents="true" android:launchMode="singleInstance"
+			android:theme="@android:style/Theme.NoTitleBar" android:clearTaskOnLaunch="true"></activity>
+		<activity android:name=".ui.AccountsList" android:launchMode="singleTask" android:label="@string/accounts"></activity>
 
 		<service android:name=".service.SipService" android:exported="true">
 			<intent-filter>
@@ -22,25 +22,25 @@
 			</intent-filter>
 		</service>
 
-		<activity android:name=".wizards.AddAccountWizard"
-			android:theme="@android:style/Theme.Dialog" android:label="@string/choose_wizard"></activity>
+		<activity android:name=".wizards.AddAccountWizard" android:theme="@android:style/Theme.Dialog"
+			android:label="@string/choose_wizard"></activity>
 
 		<activity android:name=".ui.Dialer" android:launchMode="singleTask"></activity>
 		<activity android:launchMode="singleTask" android:name=".ui.BuddyList"></activity>
-		
+
 		<!-- Preferences -->
 		<activity android:name=".ui.prefs.MainPrefs" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".ui.prefs.PrefsNetwork" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar"></activity>
-		
+
 		<!-- Wizards -->
 		<activity android:name=".wizards.impl.Basic" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Freephonie" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Expert" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Ecs" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Ekiga" android:theme="@android:style/Theme.NoTitleBar"></activity>
-			
+
 		<receiver android:name=".service.DeviceStateReceiver">
 			<intent-filter>
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
@@ -54,11 +54,14 @@
 
 
 
-	<receiver android:name=".service.OutgoingCall"><intent-filter android:priority="-1"><action android:name="android.intent.action.NEW_OUTGOING_CALL"></action>
-</intent-filter>
-</receiver>
-<activity android:name=".ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog" android:launchMode="singleInstance"></activity>
-</application>
+		<receiver android:name=".service.OutgoingCall">
+			<intent-filter android:priority="-1">
+				<action android:name="android.intent.action.NEW_OUTGOING_CALL"></action>
+			</intent-filter>
+		</receiver>
+		<activity android:name=".ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog"
+			android:launchMode="singleInstance"></activity>
+	</application>
 	<uses-sdk android:minSdkVersion="3" />
 
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>

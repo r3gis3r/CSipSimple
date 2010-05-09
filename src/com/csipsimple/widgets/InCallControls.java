@@ -28,12 +28,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.SlidingTab.OnTriggerListener;
 
 public class InCallControls extends FrameLayout implements OnTriggerListener, OnClickListener {
@@ -48,6 +50,10 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	private RelativeLayout inCallButtons;
 	private ToggleButton muteButton;
 	private boolean isDialpadOn = false;
+	private Button takeCallButton;
+	private Button declineCallButton;
+	private boolean useSlider;
+	private LinearLayout alternateLockerWidget;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -113,6 +119,8 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.in_call_controls, this, true);
+		PreferencesWrapper prefs = new PreferencesWrapper(context);
+		useSlider = !prefs.getUseAlternateUnlocker();
 
 	}
 
@@ -121,6 +129,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		super.onFinishInflate();
 
 		slidingTabWidget = (SlidingTab) findViewById(R.id.takeCallUnlocker);
+		alternateLockerWidget = (LinearLayout) findViewById(R.id.takeCallUnlockerAlternate);
 		inCallButtons = (RelativeLayout) findViewById(R.id.inCallButtons);
 
 		clearCallButton = (Button) findViewById(R.id.clearCallButton);
@@ -128,13 +137,16 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		bluetoothButton = (ToggleButton) findViewById(R.id.bluetoothButton);
 		speakerButton = (ToggleButton) findViewById(R.id.speakerButton);
 		muteButton = (ToggleButton) findViewById(R.id.muteButton);
-
+		
+		takeCallButton = (Button) findViewById(R.id.takeCallButton);
+		declineCallButton = (Button) findViewById(R.id.declineCallButton);
+		
 		// Finalize object style
 		slidingTabWidget.setLeftHintText(R.string.take_call);
 		slidingTabWidget.setRightHintText(R.string.decline_call);
 		setEnabledMediaButtons(false);
 		inCallButtons.setVisibility(GONE);
-		slidingTabWidget.setVisibility(VISIBLE);
+		setCallLockerVisibility(VISIBLE);
 		inCallButtons.setVisibility(GONE);
 
 		// Attach objects
@@ -144,6 +156,8 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		bluetoothButton.setOnClickListener(this);
 		speakerButton.setOnClickListener(this);
 		muteButton.setOnClickListener(this);
+		takeCallButton.setOnClickListener(this);
+		declineCallButton.setOnClickListener(this);
 
 	}
 
@@ -153,6 +167,15 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		bluetoothButton.setEnabled(isInCall);
 		dialButton.setEnabled(isInCall);
 	}
+	
+	
+	private void setCallLockerVisibility(int visibility) {
+		if(useSlider) {
+			slidingTabWidget.setVisibility(visibility);
+		}else {
+			alternateLockerWidget.setVisibility(visibility);
+		}
+	}
 
 
 	public void setCallState(CallInfo callInfo) {
@@ -160,18 +183,18 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
 			inCallButtons.setVisibility(GONE);
-			slidingTabWidget.setVisibility(VISIBLE);
+			setCallLockerVisibility(VISIBLE);
 			inCallButtons.setVisibility(GONE);
 			break;
 		case PJSIP_INV_STATE_CALLING:
-			slidingTabWidget.setVisibility(GONE);
+			setCallLockerVisibility(GONE);
 			inCallButtons.setVisibility(VISIBLE);
 
 			clearCallButton.setEnabled(true);
 			setEnabledMediaButtons(false);
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
-			slidingTabWidget.setVisibility(GONE);
+			setCallLockerVisibility(GONE);
 			inCallButtons.setVisibility(VISIBLE);
 
 			clearCallButton.setEnabled(true);
@@ -180,7 +203,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		case PJSIP_INV_STATE_NULL:
 		case PJSIP_INV_STATE_DISCONNECTED:
 			inCallButtons.setVisibility(GONE);
-			slidingTabWidget.setVisibility(GONE);
+			setCallLockerVisibility(GONE);
 			break;
 		case PJSIP_INV_STATE_EARLY:
 		case PJSIP_INV_STATE_CONNECTING:
@@ -253,6 +276,12 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			} else {
 				dispatchTriggerEvent(OnTriggerListener.MUTE_OFF);
 			}
+			break;
+		case R.id.takeCallButton:
+			dispatchTriggerEvent(OnTriggerListener.TAKE_CALL);
+			break;
+		case R.id.declineCallButton:
+			dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
 			break;
 		}
 	}

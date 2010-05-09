@@ -15,8 +15,8 @@
 	copy of the GNU General Public License along with CSipSimple. If not,
 	see <http://www.gnu.org/licenses/>.
 	
-	
 -->
+
 <resources>
 
 	<string name="app_name">CSipSimple</string>
@@ -31,7 +31,6 @@
 	<string name="modify_account">Modify account</string>
 	<string name="add_account">Add account</string>
 	<string name="choose_wizard">Choose wizard</string>
-	<string name="use_pstn">Use PSTN</string>
-	<string name="dtmf_no_supported">Remote user does not support RFC2833 and analogical send is not yet supported by the android client</string>
-
+	<string name="use_pstn">Use GSM</string>
+	
 </resources>

@@ -34,7 +34,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -43,7 +42,6 @@ import android.os.PowerManager.WakeLock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
@@ -73,8 +71,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private Dialpad dialPad;
 
 	private View callInfoPanel;
-
-
 
 
 	@Override
@@ -310,17 +306,21 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	};
 
 
+	private boolean canTakeCall = true;
+	private boolean canDeclineCall = true;
 
 	@Override
 	public void onTrigger(int whichAction) {
 		Log.d(THIS_FILE, "In Call Activity is triggered");
 		Log.d(THIS_FILE, "We have a call info : "+callInfo);
 		Log.d(THIS_FILE, "And a service : "+service);
+		
 		switch(whichAction) {
 			case TAKE_CALL:{
-				if (callInfo != null && service != null) {
+				if (callInfo != null && service != null && canTakeCall) {
 					try {
 						service.answer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
+						canTakeCall = false;
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Was not able to take the call", e);
 					}
@@ -328,9 +328,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				break;
 			}
 			case DECLINE_CALL: {
-				if (callInfo != null && service != null) {
+				if (callInfo != null && service != null && canDeclineCall) {
 					try {
 						service.hangup(callInfo.getCallId(), 0);
+						canDeclineCall = false;
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Was not able to decline the call", e);
 					}
@@ -338,9 +339,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				break;
 			}
 			case CLEAR_CALL: {
-				if (callInfo != null && service != null) {
+				if (callInfo != null && service != null && canDeclineCall) {
 					try {
 						service.hangup(callInfo.getCallId(), 0);
+						canDeclineCall=false;
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Was not able to clear the call", e);
 					}

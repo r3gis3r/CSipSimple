@@ -18,68 +18,69 @@
 	
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-		<PreferenceCategory android:title="Audio quality">
-			<CheckBoxPreference android:summary="Activate echo cancellation"
-				android:title="Echo cancellation" android:key="echo_cancellation"
+		<PreferenceCategory android:title="@string/audio_quality">
+			<CheckBoxPreference android:summary="@string/echo_cancellation_desc"
+				android:title="@string/echo_cancellation" android:key="echo_cancellation"
 				android:defaultValue="true"></CheckBoxPreference>
-			<CheckBoxPreference android:summary="Activate voice audio detection"
-				android:title="Voice audio detection" android:key="enable_vad"
+			<CheckBoxPreference android:summary="@string/enable_vad_desc"
+				android:title="@string/enable_vad" android:key="enable_vad"
 				android:defaultValue="true"></CheckBoxPreference>
 			<EditTextPreference android:key="snd_auto_close_time"
-				android:title="Auto close time"
+				android:title="@string/snd_auto_close_time"
 				android:numeric="signed"
-				android:summary="Time to wait for close audio channel (should be set to fix the android 1.5 bug)"
+				android:summary="@string/snd_auto_close_time_desc"
 				android:defaultValue="1"></EditTextPreference>
 			<EditTextPreference android:key="snd_media_quality"
-				android:title="Media quality"
+				android:title="@string/snd_media_quality"
 				android:numeric="signed"
-				android:summary="Quality of the media stream (modify only if you know what you are doing)"
+				android:summary="@string/snd_media_quality_desc"
 				android:defaultValue="4"></EditTextPreference>
-			<ListPreference android:title="Clock Rate" android:key="snd_clock_rate"
+			<ListPreference android:title="@string/snd_clock_rate" android:key="snd_clock_rate"
+				android:summary="@string/snd_clock_rate_desc"
 				android:defaultValue="16000"
 				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
 		</PreferenceCategory>
-		<PreferenceCategory android:title="Codec">
+		<PreferenceCategory android:title="@string/codecs">
 			<EditTextPreference android:key="codec_speex_16000"
-				android:title="Speex 16kHz" android:summary="Priority (0 is disabled)"
+				android:title="Speex 16kHz" android:summary="@string/codecs_desc"
 				android:numeric="integer"
 				android:defaultValue="130"></EditTextPreference>
 			<EditTextPreference android:key="codec_speex_8000"
-				android:title="Speex 8kHz" android:summary="Priority (0 is disabled)"
+				android:title="Speex 8kHz" android:summary="@string/codecs_desc"
 				android:numeric="integer"
 				android:defaultValue="129"></EditTextPreference>
 			<EditTextPreference android:key="codec_speex_32000"
-				android:title="Speex 32kHz" android:summary="Priority (0 is disabled)"
+				android:title="Speex 32kHz" android:summary="@string/codecs_desc"
 				android:numeric="integer"
 				android:defaultValue="128"></EditTextPreference>
 			<EditTextPreference android:key="codec_gsm_8000"
-				android:title="GSM 8kHz" android:summary="Priority (0 is disabled)"
+				android:title="GSM 8kHz" android:summary="@string/codecs_desc"
 				android:numeric="integer"
 				android:defaultValue="128"></EditTextPreference>
 			<EditTextPreference android:key="codec_pcmu_8000"
-				android:title="PCMU 8kHz" android:summary="Priority (0 is disabled)"
+				android:title="PCMU 8kHz" android:summary="@string/codecs_desc"
 				android:numeric="integer"
 				android:defaultValue="128"></EditTextPreference>
 			<EditTextPreference android:key="codec_pcma_8000"
-				android:title="PCMA 8kHz" android:summary="Priority (0 is disabled)"
+				android:title="PCMA 8kHz" android:summary="@string/codecs_desc"
 				android:numeric="integer"
 				android:defaultValue="128"></EditTextPreference>
 			<EditTextPreference android:key="codec_g722_8000"
-				android:title="G722 8kHz" android:summary="Priority (0 is disabled)"
+				android:title="G722 8kHz" android:summary="@string/codecs_desc"
 				android:numeric="integer"
 				android:defaultValue="128"></EditTextPreference>
 		</PreferenceCategory>
-		<PreferenceCategory android:title="ICE/TURN">
-			<CheckBoxPreference android:summary="Turn on ICE feature"
-				android:title="Enable ICE" android:key="enable_ice"
+		<PreferenceCategory android:title="@string/ice_turn">
+			<CheckBoxPreference android:summary="@string/enable_ice_desc"
+				android:title="@string/enable_ice" android:key="enable_ice"
 				android:defaultValue="false"></CheckBoxPreference>
-			<CheckBoxPreference android:summary="Turn on TURN feature"
-				android:title="Enable TURN" android:key="enable_turn"
+			<CheckBoxPreference android:summary="@string/enable_turn_desc"
+				android:title="@string/enable_turn" android:key="enable_turn"
 				android:defaultValue="false"></CheckBoxPreference>
 			<EditTextPreference android:key="turn_server"
-				android:title="Turn server"
+				android:title="@string/turn_server"
+				android:summary="@string/turn_server_desc"
 				android:dependency="enable_turn"
-				android:summary="Turn server HOST:PORT"
 				android:defaultValue=""></EditTextPreference>
 		</PreferenceCategory>
 </PreferenceScreen>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!--
-		This file is part of CSipSimple. CSipSimple is free software: you can
+		Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+		
+		This file is part of CSipSimple.
+
+		CSipSimple is free software: you can
 		redistribute it and/or modify it under the terms of the GNU General
 		Public License as published by the Free Software Foundation, either
 		version 3 of the License, or (at your option) any later version.
@@ -10,23 +14,28 @@
 		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 		General Public License for more details. You should have received a
 		copy of the GNU General Public License along with CSipSimple. If not,
-		see <http://www.gnu.org/licenses/>. Copyright (C) 2010 Regis Montoya
-		(aka r3gis - www.r3gis.fr)
+		see <http://www.gnu.org/licenses/>. 
 	-->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<PreferenceCategory android:title="Native dialer integration">
-		<CheckBoxPreference android:title="Activate integration"
-			android:defaultValue="true"
-			android:summary="When dial with native dialer you'll be asked if you want to use SIP or GSM"
-			android:key="integrate_with_native_dialer"></CheckBoxPreference>
-			
-		<CheckBoxPreference android:title="Text Dialer"
-			android:defaultValue="false"
-			android:summary="Start with text dialer"
-			android:key="start_with_text_dialer"></CheckBoxPreference>
+	<PreferenceCategory android:title="@string/native_dialer_integration">
+		<CheckBoxPreference android:title="@string/integrate_with_native_dialer"
+			android:summary="@string/integrate_with_native_dialer_desc"
+			android:key="integrate_with_native_dialer"
+			android:defaultValue="true"></CheckBoxPreference>
 		<EditTextPreference android:key="exclude_for_outgoing_call"
-			android:title="Exclude patterns" android:summary="Exclude patterns for outgoing calls"
+			android:dependency="integrate_with_native_dialer"
+			android:title="@string/integrate_with_native_dialer" android:summary="@string/integrate_with_native_dialer_desc"
 			android:defaultValue=""></EditTextPreference>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/general_ui">
+		<CheckBoxPreference android:title="@string/start_with_text_dialer"
+			android:defaultValue="false"
+			android:summary="@string/start_with_text_dialer_desc"
+			android:key="start_with_text_dialer"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/use_alternate_unlocker"
+			android:defaultValue="false"
+			android:summary="@string/use_alternate_unlocker_desc"
+			android:key="use_alternate_unlocker"></CheckBoxPreference>
 	</PreferenceCategory>
 </PreferenceScreen>

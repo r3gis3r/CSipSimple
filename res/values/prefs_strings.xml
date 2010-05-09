@@ -1,9 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<string name="prefs">Settings</string>
+
 <string name="prefs_network">Network</string>
 <string name="prefs_network_desc">How SIP can be connected to the network</string>
 <string name="prefs_media">Media</string>
 <string name="prefs_media_desc">Codecs and in call sound behavior</string>
 <string name="prefs_ui">User interface</string>
 <string name="prefs_ui_desc">Tweak the user interface</string>
+
+<!-- Network -->
+<string name="for_incomings">For incoming calls</string>
+<string name="for_outgoings">For outgoing calls</string>
+<string name="perfs">Performances</string>
+<string name="transport">Transport</string>
+
+<string name="use_wifi">Use wifi</string>
+<string name="use_wifi_in_desc">Use wifi for incoming calls</string>
+<string name="use_wifi_out_desc">Use wifi for outgoing calls</string>
+<string name="use_3g">Use 3G</string>
+<string name="use_3g_disclamer">Your carrier MUST allow you to use this option</string>
+<string name="lock_wifi">Lock wifi</string>
+<string name="lock_wifi_desc">Prevent wifi idle when SIP is connected</string>
+<string name="network_transport">Transport</string>
+<string name="network_transport_desc">Network transport to use</string>
+<string name="network_transport_port">Port</string>
+<string name="network_transport_port_desc">Port number to bind locally</string>
+
+<!-- Media -->
+
+<string name="audio_quality">Audio quality</string>
+<string name="codecs">Codecs</string>
+<string name="ice_turn">ICE/TURN</string>
+
+<string name="echo_cancellation">Echo cancellation</string>
+<string name="echo_cancellation_desc">Activate echo cancellation</string>
+<string name="enable_vad">Voice audio detection</string>
+<string name="enable_vad_desc">Activate voice audio detection</string>
+<string name="snd_auto_close_time">Auto close time</string>
+<string name="snd_auto_close_time_desc">Time to wait for close audio channel (should be set to fix the android 1.5 bug)</string>
+<string name="snd_media_quality">Media quality</string>
+<string name="snd_media_quality_desc">Quality of the media stream (modify only if you know what you are doing)</string>
+<string name="snd_clock_rate">Clock rate</string>
+<string name="snd_clock_rate_desc">Audio channel frequency</string>
+<string name="enable_ice">Enable ICE</string>
+<string name="enable_ice_desc">Turn on ICE feature</string>
+<string name="enable_turn">Enable TURN</string>
+<string name="enable_turn_desc">Turn on TURN feature</string>
+<string name="turn_server">Turn server</string>
+<string name="turn_server_desc">Turn server (HOST:PORT)</string>
+<string name="codecs_desc">Priority (0 is disabled)</string>
+
+<!-- UI -->
+<string name="general_ui">General user interface</string>
+<string name="native_dialer_integration">Native dialer integration</string>
+
+<string name="integrate_with_native_dialer">Activate integration</string>
+<string name="integrate_with_native_dialer_desc">When dial with native dialer you'll be asked if you want to use SIP or GSM</string>
+<string name="exclude_for_outgoing_call">Exclude patterns</string>
+<string name="exclude_for_outgoing_call_desc">Exclude patterns for outgoing calls</string>
+<string name="start_with_text_dialer">Text dialer</string>
+<string name="start_with_text_dialer_desc">Start with text dialer</string>
+<string name="use_alternate_unlocker">Don't use slide unlocker</string>
+<string name="use_alternate_unlocker_desc">Use buttons instead of slide to take incoming calls</string>
+
 </resources>

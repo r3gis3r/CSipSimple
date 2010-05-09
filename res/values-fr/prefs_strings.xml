@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="prefs">Options</string>
+
+<string name="prefs_network">Réseau</string>
+<string name="prefs_network_desc">La façon dont le SIP se connecte au réseau</string>
+<string name="prefs_media">Média</string>
+<string name="prefs_media_desc">Comportement des codecs et du son en communication</string>
+<string name="prefs_ui">Apparence et comportement</string>
+<string name="prefs_ui_desc">Modifier l&quot;apparence et les comportement de l&quot;application</string>
+
+<!-- Network -->
+<string name="for_incomings">Pour les appels entrants</string>
+<string name="for_outgoings">Pour les appels sortants</string>
+<string name="perfs">Performances</string>
+<string name="transport">Transport</string>
+
+<string name="use_wifi">Utiliser le WIFI</string>
+<string name="use_wifi_in_desc">Utiliser le WIFI pour les appels entrants</string>
+<string name="use_wifi_out_desc">Utiliser le WIFI pour les appels sortants</string>
+<string name="use_3g">Utiliser la 3G</string>
+<string name="use_3g_disclamer">Votre opérateur DOIT vous l&quot;autoriser pour activer cette option</string>
+<string name="lock_wifi">Verouiller le WIFI</string>
+<string name="lock_wifi_desc">Empêche la mise en veille du WIFI lorsque le SIP est connecté</string>
+<string name="network_transport">Transport</string>
+<string name="network_transport_desc">Transport réseau à utiliser</string>
+<string name="network_transport_port">Port</string>
+<string name="network_transport_port_desc">Numéro de port à utiliser localement</string>
+
+<!-- Media -->
+
+<string name="audio_quality">Qualité audio</string>
+<string name="codecs">Codecs</string>
+<string name="ice_turn">ICE/TURN</string>
+
+<string name="echo_cancellation">Annulation de l&quot;echo</string>
+<string name="echo_cancellation_desc">Activer l&quot;annulation d&quot;echo</string>
+<string name="enable_vad">Détection de silence</string>
+<string name="enable_vad_desc">Activer la détection active de voix (réduit la bande passante utilisée)</string>
+<string name="snd_auto_close_time">Fermeture automatique du canal audio</string>
+<string name="snd_auto_close_time_desc">Temps avant fermture du canal audio (peut dans certain cas régler le problème de fermeture du canal audio sur android 1.5)</string>
+<string name="snd_media_quality">Qualité du média</string>
+<string name="snd_media_quality_desc">Qualité du flux média (à ne modifier que si vous savez exactement ce que vous faites)</string>
+<string name="snd_clock_rate">Fréquence</string>
+<string name="snd_clock_rate_desc">Fréquence du canal audio</string>
+<string name="enable_ice">Activer ICE</string>
+<string name="enable_ice_desc">Activer la fonctionnalité ICE</string>
+<string name="enable_turn">Activer TURN</string>
+<string name="enable_turn_desc">Activer la fonctionnalité TURN</string>
+<string name="turn_server">Serveur TURN</string>
+<string name="turn_server_desc">Serveur TURN (HOST:PORT)</string>
+<string name="codecs_desc">Priorité (0 = désactivé)</string>
+
+<!-- UI -->
+<string name="general_ui">Interface utilisateur générale</string>
+<string name="native_dialer_integration">Intégration au numéroteur Android</string>
+
+<string name="integrate_with_native_dialer">Activer l&quot;intégration</string>
+<string name="integrate_with_native_dialer_desc">Quand un appel est initié partout dans Android il vous sera demandé si vous voulez utiliser le GSM ou le SIP</string>
+<string name="exclude_for_outgoing_call">Motifs à exclures</string>
+<string name="exclude_for_outgoing_call_desc">Motifs (regexp) pour les appels sortant à ne pas traiter en SIP</string>
+<string name="start_with_text_dialer">Numérotation texte</string>
+<string name="start_with_text_dialer_desc">Démarrer avec le numéroteur de type texte</string>
+<string name="use_alternate_unlocker">Dévérouillage bouttons</string>
+<string name="use_alternate_unlocker_desc">Ne pas utiliser le dévérouillage glissant pour prendre les appels</string>
+
+</resources>

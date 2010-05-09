@@ -149,7 +149,7 @@ public class SipHome extends TabActivity {
     private void populateMenu(Menu menu) {
     	menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE, R.string.accounts).setIcon(
 				R.drawable.ic_menu_accounts);
-		menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, "Params").setIcon(
+		menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, R.string.prefs).setIcon(
 				android.R.drawable.ic_menu_preferences);
 		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, "Quit").setIcon(
 				android.R.drawable.ic_menu_close_clear_cancel);

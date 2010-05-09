@@ -65,7 +65,7 @@ public class SlidingTab extends ViewGroup {
 	private static final long VIBRATE_LONG = 40;
 
 	private OnTriggerListener onTriggerListener;
-	private boolean mTriggered = false;
+	private boolean triggered = false;
 	private Vibrator mVibrator;
 	// used to scale dimensions for bitmaps.
 	private float density; 
@@ -266,11 +266,11 @@ public class SlidingTab extends ViewGroup {
 		}
 
 		public int getTabWidth() {
-			return tab.getDrawable().getIntrinsicWidth();
+			return tab.getBackground().getIntrinsicWidth();
 		}
 
 		public int getTabHeight() {
-			return tab.getDrawable().getIntrinsicHeight();
+			return tab.getBackground().getIntrinsicHeight();
 		}
 	}
 
@@ -309,8 +309,8 @@ public class SlidingTab extends ViewGroup {
 
 		width = Math.max(widthSpecSize, leftTabWidth + rightTabWidth);
 		height = Math.max(leftTabHeight, rightTabHeight);
-
-		setMeasuredDimension(width, height*2);
+		Log.d(THIS_FILE, "Heights are : "+leftTabHeight+" and "+rightTabHeight+" density "+density);
+		setMeasuredDimension(width, height);
 	}
 
 	@Override
@@ -335,7 +335,7 @@ public class SlidingTab extends ViewGroup {
 		switch (action) {
 		case MotionEvent.ACTION_DOWN: {
 			tracking = true;
-			mTriggered = false;
+			triggered = false;
 			vibrate(VIBRATE_SHORT);
 			if (leftHit) {
 				currentSlider = leftSlider;
@@ -354,6 +354,7 @@ public class SlidingTab extends ViewGroup {
 
 		return true;
 	}
+	
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -369,8 +370,8 @@ public class SlidingTab extends ViewGroup {
 				float target = targetZone * getWidth();
 				boolean targetZoneReached = (currentSlider == leftSlider ? position > target : position < target);
 
-				if (!mTriggered && targetZoneReached) {
-					mTriggered = true;
+				if (!triggered && targetZoneReached) {
+					triggered = true;
 					tracking = false;
 					currentSlider.setState(Slider.STATE_ACTIVE);
 					dispatchTriggerEvent(currentSlider == leftSlider ? OnTriggerListener.LEFT_HANDLE : OnTriggerListener.RIGHT_HANDLE);
@@ -380,11 +381,10 @@ public class SlidingTab extends ViewGroup {
 					break;
 				}
 				// Intentionally fall through - we're outside tracking rectangle
-
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
 				tracking = false;
-				mTriggered = false;
+				triggered = false;
 				resetView();
 				break;
 			}
@@ -392,6 +392,8 @@ public class SlidingTab extends ViewGroup {
 
 		return tracking || super.onTouchEvent(event);
 	}
+	
+	
 
 	private void resetView() {
 		leftSlider.reset();
