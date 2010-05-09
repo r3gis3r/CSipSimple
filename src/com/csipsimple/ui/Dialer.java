@@ -181,8 +181,7 @@ public class Dialer extends Activity implements OnClickListener,
 		OnTouchListener touchTransmiter = new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				gestureDetector.onTouchEvent(event);
-				return true;
+				return gestureDetector.onTouchEvent(event);
 			}
 		};
 		digitDialer.setOnTouchListener(touchTransmiter);

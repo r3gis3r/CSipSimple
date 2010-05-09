@@ -131,8 +131,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		accountsList.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				gestureDetector.onTouchEvent(event);
-				return true;
+				return gestureDetector.onTouchEvent(event);
 			}
 		});
 	}

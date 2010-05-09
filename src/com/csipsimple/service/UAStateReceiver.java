@@ -44,9 +44,9 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
 
 public class UAStateReceiver extends Callback {
-
 	static String THIS_FILE = "SIP UA Receiver";
 
+	
 	private int savedVibrateRing;
 	private int savedVibradeNotif;
 	private int savedWifiPolicy;
