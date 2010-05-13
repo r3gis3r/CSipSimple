@@ -174,12 +174,10 @@ public class ContactsAsyncHelper extends Handler {
                 	Bitmap img = null;
                 	try {
                 		img = People.loadContactPhoto(args.context, args.uri, args.defaultResource, null);
-                		Log.d(THIS_FILE, "Image loaded "+img.getHeight()+"x"+img.getWidth());
                 	}catch(IllegalArgumentException e) {
                 		Log.w(THIS_FILE, "Impossible to found this contact photo ", e);
                 	}
                     if (img != null) {
-                    	
                         args.result = img;
 
                         Log.d(THIS_FILE, "Loading image: " + msg.arg1 +

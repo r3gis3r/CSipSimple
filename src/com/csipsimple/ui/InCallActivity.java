@@ -95,6 +95,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 		
 		
+		takeKeyEvents(true);
 		
 
 		//remoteContact = (TextView) findViewById(R.id.remoteContact);
@@ -161,7 +162,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	}
 
-	private void updateUIFromCall() {
+	private synchronized void updateUIFromCall() {
 
 		Log.d(THIS_FILE, "Update ui from call " + callInfo.getCallId() + " state " + callInfo.getStringCallState());
 		
@@ -202,8 +203,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			if (wakeLock != null && wakeLock.isHeld()) {
                 wakeLock.release();
             }
+			backgroundResId = R.drawable.bg_in_call_gradient_ended;
+			dialPad.setVisibility(View.GONE);
+			callInfoPanel.setVisibility(View.VISIBLE);
+			delayedQuit();
 			break;
 		case PJSIP_INV_STATE_DISCONNECTED:
+			if (wakeLock != null && wakeLock.isHeld()) {
+                wakeLock.release();
+            }
+			backgroundResId = R.drawable.bg_in_call_gradient_ended;
 			dialPad.setVisibility(View.GONE);
 			callInfoPanel.setVisibility(View.VISIBLE);
 			delayedQuit();
@@ -212,6 +221,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			break;
 		}
 		mainFrame.setBackgroundResource(backgroundResId);
+		
+		Log.d(THIS_FILE, "we leave the update ui function");
 	}
 
 
@@ -270,7 +281,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		return super.onKeyUp(keyCode, event);
 	}
 
+	
 	private BroadcastReceiver callStateReceiver = new BroadcastReceiver() {
+		
+
 		public void onReceive(Context context, Intent intent) {
 			Bundle extras = intent.getExtras();
 			CallInfo notif_call = null;
@@ -282,6 +296,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				callInfo = notif_call;
 				updateUIFromCall();
 			}
+			
 		}
 	};
 	
@@ -351,23 +366,31 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			case MUTE_ON:{
 				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				am.setMicrophoneMute(true);
-				Log.d(THIS_FILE, "Microphone is now muted");
 				break;
 			}
 			case MUTE_OFF:{
 				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				am.setMicrophoneMute(false);
-				Log.d(THIS_FILE, "Microphone is now un muted");
 				break;
 			}
 			case SPEAKER_ON :{
 				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				am.setSpeakerphoneOn(true);
+				if(android.os.Build.VERSION.SDK.equals("3")) {
+					am.setRouting(AudioManager.MODE_NORMAL,
+							 AudioManager.ROUTE_SPEAKER,
+							 AudioManager.ROUTE_ALL);
+				}
 				break;
 			}
 			case SPEAKER_OFF :{
 				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				am.setSpeakerphoneOn(false);
+				if(android.os.Build.VERSION.SDK.equals("3")) {
+					am.setRouting(AudioManager.MODE_NORMAL,
+							 AudioManager.ROUTE_EARPIECE,
+							 AudioManager.ROUTE_ALL);
+				}
 				break;
 			}
 			case BLUETOOTH_ON:{
@@ -394,6 +417,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			}
 		}
 	}
+	
+	
 
 	@Override
 	public void onTrigger(int keyCode, int dialTone) {
@@ -406,4 +431,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 		
 	}
+	
+
+	
 }

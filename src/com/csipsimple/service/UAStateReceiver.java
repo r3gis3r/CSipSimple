@@ -57,15 +57,13 @@ public class UAStateReceiver extends Callback {
 
 	private NotificationManager notificationManager;
 	private SipService service;
-
 	private int savedMode;
 
 	private boolean savedBluetooth;
 
 	private Ringer ringer;
-
 	private boolean isSavedAudioState = false;
-
+	private Object treatCallStateMutex = new Object();
 
 
 	@Override
@@ -76,7 +74,7 @@ public class UAStateReceiver extends Callback {
 			@Override
 			public void run() {
 				
-				// Automatically answer incoming calls with 100/RINGING
+				// Automatically answer incoming calls with 180/RINGING
 				service.callAnswer(fCallId, 180);
 				
 				saveAudioState();
@@ -84,9 +82,9 @@ public class UAStateReceiver extends Callback {
 				ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
 				ringer.ring();
 				
-				final CallInfo incomingCall = new CallInfo(fCallId);
+				CallInfo incomingCall = new CallInfo(fCallId);
+				Log.d(THIS_FILE, "Show notif for"+incomingCall.getCallId());
 				showNotificationForCall(incomingCall);
-				
 				if (autoAcceptCurrent) {
 					// Automatically answer incoming calls with 200/OK
 					service.callAnswer(fCallId, 200);
@@ -97,42 +95,39 @@ public class UAStateReceiver extends Callback {
 			}
 		};
 		t.start();
-		
 	}
-
-
+	
+	
 	@Override
 	public void on_call_state(int callId, pjsip_event e) {
 		//Get current infos
 		final CallInfo callInfo = new CallInfo(callId);
 		final pjsip_inv_state call_state = callInfo.getCallState();
 		Log.i(THIS_FILE, "State of call " + callId + " :: " + callInfo.getStringCallState());
-
-		//Thread to avoid deadlocks
-/*		Thread t = new Thread() {
-			@Override
-			public void run() {*/
-				if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
-					showNotificationForCall(callInfo);
-					launchCallHandler(callInfo);
-
-				} else if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
-				} else {
-					ringer.stopRing();
-					// Call is now ended
-					if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-						service.stopDialtoneGenerator();
-						notificationManager.cancel(SipService.CALL_NOTIF_ID);
-						Log.d(THIS_FILE, "Finish call2");
-						unsetAudioInCall();
+		Thread t = new Thread() {
+			public void run() {
+				synchronized (treatCallStateMutex) {
+					if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
+						showNotificationForCall(callInfo);
+						launchCallHandler(callInfo);
+	
+					} else if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
+					} else {
+						ringer.stopRing();
+						// Call is now ended
+						if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+							service.stopDialtoneGenerator();
+							notificationManager.cancel(SipService.CALL_NOTIF_ID);
+							Log.d(THIS_FILE, "Finish call2");
+							unsetAudioInCall();
+						}
 					}
+					onBroadcastCallState(callInfo);
 				}
-				
-				onBroadcastCallState(callInfo);
-		/*	}
+			};
 		};
 		t.start();
-		*/
+		
 	}
 
 	@Override
@@ -161,22 +156,32 @@ public class UAStateReceiver extends Callback {
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
 
 			// Should maybe done under media thread instead of this one
-			android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+			//android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+
+			ringer.stopRing();
+			if(android.os.Build.VERSION.SDK.equals("3")) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			
-			setAudioInCall();
-
-
 			// When media is active, connect call to sound device.
 			pjsua.conf_connect(info.getConf_slot(), 0);
 			pjsua.conf_connect(0, info.getConf_slot());
-
-		} else if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_NONE || info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ERROR) {
+			
+			setAudioInCall();
+			
+		} else if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_NONE || 
+				info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ERROR) {
 			//
 		}else {
 			//
 		}
-//		
-//		Log.d(THIS_FILE, "Media state has changed :------------------------");
+		
+//		Log.d(THIS_FILE, "Media state has changed<<<<");
 //		Log.d(THIS_FILE, info.getMedia_dir().name());
 //		Log.d(THIS_FILE, info.getMedia_status().name());
 //		Log.d(THIS_FILE, info.getState_text().getPtr());
@@ -241,11 +246,18 @@ public class UAStateReceiver extends Callback {
 	private void onBroadcastCallState(final CallInfo callInfo) {	
 		Intent callStateChangedIntent = new Intent(SipService.ACTION_SIP_CALL_CHANGED);
 		callStateChangedIntent.putExtra("call_info", callInfo);
-		service.sendBroadcast(callStateChangedIntent);
-	
-		
+		service.sendBroadcast(callStateChangedIntent);	
 	}
 
+	
+	private Class<?> getInCallClass(){
+		Class<?> inCallClass = InCallActivity.class;
+	//	if(android.os.Build.VERSION.SDK.equals("3")) {
+	//		inCallClass = InCall3Activity.class;
+	//	}
+		return inCallClass;
+	}
+	
 	private void showNotificationForCall(CallInfo callInfo) {
 		// This is the pending call notification
 		int icon = R.drawable.ic_incall_ongoing;
@@ -255,13 +267,14 @@ public class UAStateReceiver extends Callback {
 		Notification notification = new Notification(icon, tickerText, when);
 		Context context = service.getApplicationContext();
 
-		Intent notificationIntent = new Intent(service, InCallActivity.class);
+		Intent notificationIntent = new Intent(service, getInCallClass());
 		notificationIntent.putExtra("call_info", callInfo);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, 0);
 
 		
-		notification.setLatestEventInfo(context, service.getText(R.string.ongoing_call), callInfo.getRemoteContact(), contentIntent);
+		notification.setLatestEventInfo(context, service.getText(R.string.ongoing_call), 
+										callInfo.getRemoteContact(), contentIntent);
 		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 		// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 
@@ -271,16 +284,16 @@ public class UAStateReceiver extends Callback {
 	
 
 	
-	
-	
 	/**
 	 * 
 	 * @param callInfo
 	 */
 	private void launchCallHandler(CallInfo callInfo) {
 
+		
+		
 		// Launch activity to choose what to do with this call
-		Intent callHandlerIntent = new Intent(service, InCallActivity.class);
+		Intent callHandlerIntent = new Intent(service, getInCallClass());
 		callHandlerIntent.putExtra("call_info", callInfo);
 		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -313,22 +326,29 @@ public class UAStateReceiver extends Callback {
 	 */
 	private void setAudioInCall() {
 		AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
-
+		
 		if(!isSavedAudioState) {
 			saveAudioState();
 		}
-
+		
+		am.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
 
 		// Settings.System.putInt(ctntResolver,
 		// Settings.System.WIFI_SLEEP_POLICY,
 		// Settings.System.WIFI_SLEEP_POLICY_NEVER);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
-		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, am.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0);
+		//For android 1.5
+		//TODO : save / restore it
+		am.setRouting(AudioManager.MODE_NORMAL,
+					   AudioManager.ROUTE_EARPIECE,
+					   AudioManager.ROUTE_ALL);
+
+		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, am.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*2/3, 0);
 
 		am.setSpeakerphoneOn(false);
 		am.setMicrophoneMute(false);
-		
+	
 		setAudioMode(service,  AudioManager.MODE_IN_CALL);
 	}
 
@@ -337,6 +357,9 @@ public class UAStateReceiver extends Callback {
 	 */
 	private void unsetAudioInCall() {
 		
+		if(!isSavedAudioState) {
+			return;
+		}
 		
 		AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		ContentResolver ctntResolver = service.getContentResolver();
@@ -349,6 +372,8 @@ public class UAStateReceiver extends Callback {
 		am.setMicrophoneMute(savedMicrophoneMute);
 	//	am.setBluetoothA2dpOn(savedBluetooth);
 		am.setMode(savedMode);
+		
+		am.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
 		
 		isSavedAudioState = false;
 	}

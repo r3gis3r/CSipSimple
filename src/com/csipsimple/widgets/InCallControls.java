@@ -23,6 +23,7 @@ import org.pjsip.pjsua.pjsip_inv_state;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,6 +55,12 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	private Button declineCallButton;
 	private boolean useSlider;
 	private LinearLayout alternateLockerWidget;
+	
+	
+	private static final int MODE_LOCKER = 0;
+	private static final int MODE_CONTROL = 1;
+	private static final int MODE_NO_ACTION = 2;
+	private int controlMode;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -145,6 +152,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		slidingTabWidget.setLeftHintText(R.string.take_call);
 		slidingTabWidget.setRightHintText(R.string.decline_call);
 		setEnabledMediaButtons(false);
+		controlMode = MODE_LOCKER;
 		inCallButtons.setVisibility(GONE);
 		setCallLockerVisibility(VISIBLE);
 		inCallButtons.setVisibility(GONE);
@@ -182,18 +190,20 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		pjsip_inv_state state = callInfo.getCallState();
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
+			controlMode = MODE_LOCKER;
 			inCallButtons.setVisibility(GONE);
 			setCallLockerVisibility(VISIBLE);
 			inCallButtons.setVisibility(GONE);
 			break;
 		case PJSIP_INV_STATE_CALLING:
+			controlMode = MODE_CONTROL;
 			setCallLockerVisibility(GONE);
 			inCallButtons.setVisibility(VISIBLE);
-
 			clearCallButton.setEnabled(true);
 			setEnabledMediaButtons(false);
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
+			controlMode = MODE_CONTROL;
 			setCallLockerVisibility(GONE);
 			inCallButtons.setVisibility(VISIBLE);
 
@@ -202,6 +212,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			break;
 		case PJSIP_INV_STATE_NULL:
 		case PJSIP_INV_STATE_DISCONNECTED:
+			controlMode = MODE_NO_ACTION;
 			inCallButtons.setVisibility(GONE);
 			setCallLockerVisibility(GONE);
 			break;
@@ -231,9 +242,15 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	@Override
 	public void onTrigger(View v, int whichHandle) {
 		Log.d(THIS_FILE, "Call controls receive info from slider " + whichHandle);
+		if(controlMode != MODE_LOCKER) {
+			//Oups we are not in locker mode and we get a trigger from locker...
+			// Should not happen... but... to be sure
+			return;
+		}
 		switch (whichHandle) {
 		case LEFT_HANDLE:
 			Log.d(THIS_FILE, "We take the call");
+			
 			dispatchTriggerEvent(OnTriggerListener.TAKE_CALL);
 			break;
 		case RIGHT_HANDLE:
@@ -284,5 +301,32 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
 			break;
 		}
+	}
+	
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Log.d(THIS_FILE, "Hey you hit the key : "+keyCode);
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_CALL:
+			if(controlMode == MODE_LOCKER) {
+				dispatchTriggerEvent(OnTriggerListener.TAKE_CALL);
+				return true;
+			}
+			break;
+		case KeyEvent.KEYCODE_ENDCALL:
+			if(controlMode == MODE_LOCKER) {
+				dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
+				return true;
+			}else if (controlMode == MODE_CONTROL) {
+				dispatchTriggerEvent(OnTriggerListener.CLEAR_CALL);
+				return true;
+			}
+		default:
+			
+			break;
+		}
+		
+		return super.onKeyDown(keyCode, event);
 	}
 }

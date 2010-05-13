@@ -206,6 +206,7 @@ public class SipService extends Service {
 	private pj_pool_t dialtonePool;
 	private pjmedia_port dialtoneGen;
 	private int dialtoneSlot = -1;
+	private Object dialtoneMutext = new Object();
 	
 	 
 
@@ -249,12 +250,19 @@ public class SipService extends Service {
 		super.onCreate();
 		
 
-		// TODO : check connectivity, else just finish itself
-
+		
 		Log.i(THIS_FILE, "Create SIP Service");
 		db = new DBAdapter(this);
 		prefsWrapper = new PreferencesWrapper(this);
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		
+		// TODO : check connectivity, else just finish itself
+		if ( !prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
+			stopSelf();
+			return;
+		}
+
 
 		// Register own broadcast receiver
 		IntentFilter intentfilter = new IntentFilter();
@@ -460,11 +468,14 @@ public class SipService extends Service {
 
 		if (created) {
 			Log.d(THIS_FILE, "Detroying...");
-
-			pjsua.destroy();
-			accountsAddingStatus.clear();
-			activeAccounts.clear();
+			//This will destroy all accounts so synchronize with accounts management lock
+			synchronized (pjAccountsCreationLock) {
+				pjsua.destroy();
+				accountsAddingStatus.clear();
+				activeAccounts.clear();
+			}
 		}
+		
 		created = false;
 	}
 	
@@ -810,51 +821,57 @@ public class SipService extends Service {
 	};
 	
 	private int startDialtoneGenerator(int callId) {
-		pjsua_call_info info = new pjsua_call_info();
-		pjsua.call_get_info(callId, info);
-		int status;
-		
-		dialtonePool = pjsua.pjsua_pool_create("mycall", 512, 512);
-
-		pj_str_t name = pjsua.pj_str_copy("dialtoneGen");
-		long clock_rate = 8000;
-		long channel_count = 1;
-		long samples_per_frame = 160;
-		long bits_per_sample = 16;
-		long options = 0;
-		int[] dialtoneSlotPtr = new int[1];
-		dialtoneGen = new pjmedia_port();
-		status = pjsua.pjmedia_tonegen_create2(dialtonePool, name, clock_rate, channel_count, samples_per_frame, bits_per_sample, options, dialtoneGen);
-		if(status != pjsua.PJ_SUCCESS) {
-			stopDialtoneGenerator();
-			return status;
+		synchronized(dialtoneMutext) {
+			pjsua_call_info info = new pjsua_call_info();
+			pjsua.call_get_info(callId, info);
+			int status;
+			
+			dialtonePool = pjsua.pjsua_pool_create("mycall", 512, 512);
+	
+			pj_str_t name = pjsua.pj_str_copy("dialtoneGen");
+			long clock_rate = 8000;
+			long channel_count = 1;
+			long samples_per_frame = 160;
+			long bits_per_sample = 16;
+			long options = 0;
+			int[] dialtoneSlotPtr = new int[1];
+			dialtoneGen = new pjmedia_port();
+			status = pjsua.pjmedia_tonegen_create2(dialtonePool, name, clock_rate, channel_count, samples_per_frame, bits_per_sample, options, dialtoneGen);
+			if(status != pjsua.PJ_SUCCESS) {
+				stopDialtoneGenerator();
+				return status;
+			}
+			status = pjsua.conf_add_port(dialtonePool, dialtoneGen, dialtoneSlotPtr);
+			if(status != pjsua.PJ_SUCCESS) {
+				stopDialtoneGenerator();
+				return status;
+			}
+			dialtoneSlot = dialtoneSlotPtr[0];
+			status = pjsua.conf_connect(dialtoneSlot, info.getConf_slot());
+			if(status != pjsua.PJ_SUCCESS) {
+				dialtoneSlot = -1;
+				stopDialtoneGenerator();
+				return status;
+			}
+			return pjsua.PJ_SUCCESS;
 		}
-		status = pjsua.conf_add_port(dialtonePool, dialtoneGen, dialtoneSlotPtr);
-		if(status != pjsua.PJ_SUCCESS) {
-			stopDialtoneGenerator();
-			return status;
-		}
-		dialtoneSlot = dialtoneSlotPtr[0];
-		status = pjsua.conf_connect(dialtoneSlot, info.getConf_slot());
-		if(status != pjsua.PJ_SUCCESS) {
-			dialtoneSlot = -1;
-			stopDialtoneGenerator();
-			return status;
-		}
-		return pjsua.PJ_SUCCESS;
 	}
 	
 	public void stopDialtoneGenerator() {
-		//Destroy the port
-		if(dialtoneSlot != -1) {
-			pjsua.conf_remove_port(dialtoneSlot);
-		}
-		
-		dialtoneGen = null;
-		//pjsua.port_destroy(dialtoneGen);
-		
-		if(dialtonePool != null) {
-			pjsua.pj_pool_release(dialtonePool);
+		synchronized(dialtoneMutext) {
+			//Destroy the port
+			if(dialtoneSlot != -1) {
+				pjsua.conf_remove_port(dialtoneSlot);
+				dialtoneSlot = -1;
+			}
+			
+			dialtoneGen = null;
+			//pjsua.port_destroy(dialtoneGen);
+			
+			if(dialtonePool != null) {
+				pjsua.pj_pool_release(dialtonePool);
+				dialtonePool = null;
+			}
 		}
 			  
 	}

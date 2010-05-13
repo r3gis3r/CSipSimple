@@ -26,6 +26,8 @@ import org.pjsip.pjsua.pjsip_inv_state;
 import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Contacts;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -83,9 +85,14 @@ public class InCallInfo extends FrameLayout {
 
 	public void setCallState(CallInfo aCallInfo) {
 		callInfo = aCallInfo;
-		updateRemoteName();
+//		Thread t = new Thread() {
+//			public void run() {
+				updateRemoteName();
+				updateTitle();
+//			};
+//		};
+//		t.start();
 		updateElapsedTimer();
-		updateTitle();
 		
 	}
 	
@@ -116,15 +123,18 @@ public class InCallInfo extends FrameLayout {
 			remotePhoneNumber.setText(phoneNumber);
 			if(!TextUtils.isEmpty(phoneNumber)) {
 				if(Pattern.matches("^[0-9\\-#]*$", phoneNumber)) {
-					//Looks like a phone number so search the contact throw contacts
-					CallerInfo callerInfo = CallerInfo.getCallerInfo(context, phoneNumber);
-					if(callerInfo != null && callerInfo.contactExists) {
-						ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(context, 
-									photo, 
-									ContentUris.withAppendedId(Contacts.People.CONTENT_URI, callerInfo.personId), 
-									R.drawable.picture_unknown);
-						remoteName.setText(callerInfo.name);
-					}
+					final String launchPhoneNumber = phoneNumber;
+					Thread t = new Thread() {
+						public void run() {
+							//Looks like a phone number so search the contact throw contacts
+							CallerInfo callerInfo = CallerInfo.getCallerInfo(context, launchPhoneNumber);
+							if(callerInfo != null && callerInfo.contactExists) {
+								userHandler.sendMessage(userHandler.obtainMessage(LOAD_CALLER_INFO, callerInfo));
+							}
+						};
+					};
+					t.start();
+					
 				}
 			}
 			
@@ -144,9 +154,11 @@ public class InCallInfo extends FrameLayout {
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
 			Log.d(THIS_FILE, "we start the timer now ");
+			
 			elapsedTime.start();
 			elapsedTime.setVisibility(VISIBLE);
 			elapsedTime.setTextColor(colorConnected);
+			
 			break;
 		case PJSIP_INV_STATE_NULL:
 		case PJSIP_INV_STATE_DISCONNECTED:
@@ -162,5 +174,25 @@ public class InCallInfo extends FrameLayout {
 		
 	}
 
+	
+	final private int LOAD_CALLER_INFO = 0;
+	private Handler userHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.arg1) {
+			case LOAD_CALLER_INFO:
+				CallerInfo callerInfo = (CallerInfo) msg.obj;
+				ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(context, 
+						photo, 
+						ContentUris.withAppendedId(Contacts.People.CONTENT_URI, callerInfo.personId), 
+						R.drawable.picture_unknown);
+				remoteName.setText(callerInfo.name);
+				break;
+
+			default:
+				break;
+			}
+			
+		};
+	};
 
 }

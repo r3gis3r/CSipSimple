@@ -25,7 +25,7 @@
 			android:defaultValue="true"></CheckBoxPreference>
 		<EditTextPreference android:key="exclude_for_outgoing_call"
 			android:dependency="integrate_with_native_dialer"
-			android:title="@string/integrate_with_native_dialer" android:summary="@string/integrate_with_native_dialer_desc"
+			android:title="@string/exclude_for_outgoing_call" android:summary="@string/exclude_for_outgoing_call_desc"
 			android:defaultValue=""></EditTextPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/general_ui">

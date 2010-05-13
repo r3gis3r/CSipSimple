@@ -67,6 +67,7 @@
 				android:layout_width="fill_parent" android:layout_height="wrap_content">
 				<ToggleButton android:id="@+id/bluetoothButton" style="@style/CallToggleButton"
 					android:layout_width="1dip" android:layout_weight="1"
+					android:enabled="false"
 					android:layout_height="wrap_content" android:textOn="@string/bluetooth"
 					android:textOff="@string/bluetooth" />
 				<ToggleButton android:id="@+id/muteButton" style="@style/CallToggleButton"

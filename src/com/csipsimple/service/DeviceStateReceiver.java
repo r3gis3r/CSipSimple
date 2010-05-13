@@ -45,6 +45,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 		
 		//Other case (ie update IP etc) are handled directly inside the service if started
 		if( isValidConnectionForOutgoing(ni) ){
+			Log.d(THIS_FILE, "Connectivity changed....");
 			Intent sip_service_intent = new Intent(context, SipService.class);
 			context.startService(sip_service_intent);
 		}
