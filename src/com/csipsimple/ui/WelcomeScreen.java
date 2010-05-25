@@ -54,7 +54,7 @@ public class WelcomeScreen extends Activity {
 	private static final String THIS_FILE = "WelcomeScreen";
 	
 	//private static final String DEFAULT_UPDATE_URI = "http://csipsimple.googlecode.com/files/update.json";
-	private static final String DEFAULT_UPDATE_URI = "http://csipsimple.googlecode.com/svn/trunk/pjsip_android/update.json";
+	private static final String DEFAULT_UPDATE_URI = "http://csipsimple.googlecode.com/svn/trunk/pjsip_android/dev_update.json";
 	//"http://10.0.2.2/android/update.json"
 	
 	private RemoteLibInfo currentDownload;

@@ -17,17 +17,26 @@
  */
 package com.csipsimple.utils;
 
+import java.lang.reflect.Field;
+
 public class Compatibility {
 
 	public static int getApiLevel() {
 		if(android.os.Build.VERSION.SDK.equalsIgnoreCase("3")) {
 			return 3;
 		}else {
-			return android.os.Build.VERSION.SDK_INT;
+			try {
+				Field f = android.os.Build.VERSION.class.getDeclaredField("SDK_INT");
+				return (Integer) f.get(null);
+			} catch (Exception e) {
+				return 0;
+			} 
 		}
 	}
 	
+	
 	public static boolean isCompatible(int apiLevel) {
+		Log.d("Compat", "Current api is "+apiLevel);
 		return getApiLevel() >= apiLevel;
 	}
 }

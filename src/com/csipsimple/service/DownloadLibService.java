@@ -170,8 +170,14 @@ public class DownloadLibService extends Service {
 		connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 		connectionChangeReceiver = new ConnectionChangeReceiver();
 		registerReceiver(connectionChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-		NetworkInfo.State state = connectivityManager.getActiveNetworkInfo().getState();
-		connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
+		NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+		if(activeNetwork != null) {
+			NetworkInfo.State state = activeNetwork.getState();
+			connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
+		}else {
+			connected = false;
+		}
+		
 	}
 
 	
@@ -580,8 +586,7 @@ public class DownloadLibService extends Service {
 			editor.commit();
 			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(THIS_FILE, "We failed to install it ", e);
 		}
 		return false;
 	}
@@ -602,8 +607,13 @@ public class DownloadLibService extends Service {
 	private class ConnectionChangeReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			android.net.NetworkInfo.State state = connectivityManager.getActiveNetworkInfo().getState();
-			connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
+			NetworkInfo currentConnection = connectivityManager.getActiveNetworkInfo();
+			if(currentConnection != null) {
+				android.net.NetworkInfo.State state = currentConnection.getState();
+				connected = (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.SUSPENDED);
+			}else {
+				connected = false;
+			}
 		}
 	}
 	

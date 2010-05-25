@@ -29,6 +29,7 @@
 		
 		<!-- First setup -->
 		<activity android:name=".ui.WelcomeScreen" android:label="Thanks for using CSipSimple"
+			android:screenOrientation="nosensor"
 			android:theme="@style/CupcakeDialog" android:launchMode="singleTask"></activity>
 		<service android:name=".service.DownloadLibService"></service>
 		

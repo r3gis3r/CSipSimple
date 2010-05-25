@@ -17,6 +17,9 @@
  */
 package com.csipsimple.ui;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +30,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -56,6 +60,8 @@ public class SipHome extends TabActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d(THIS_FILE, "On Create SIPHOME");
+
+    	
         super.onCreate(savedInstanceState);
         
         //Check sip stack
@@ -127,16 +133,23 @@ public class SipHome extends TabActivity {
     
     private void addTab(String tag, String label, int icon, Intent content) {
     	TabHost tabHost = getTabHost();
-        Resources r = getResources();
     	
 		TabSpec tabspecDialer = tabHost.newTabSpec(tag).setContent(content);
-		 
+		
+		boolean fails = true;
 		if(Compatibility.isCompatible(4)) {
 			IndicatorTab icTab = new IndicatorTab(this, null);
 		 	icTab.setResources(label, icon);
-		 	tabspecDialer.setIndicator(icTab);
+		 	try {
+				Method method = tabspecDialer.getClass().getDeclaredMethod("setIndicator", View.class);
+				method.invoke(tabspecDialer, icTab);
+				fails = false;
+			} catch (Exception e) {
+				Log.d(THIS_FILE, "We are probably on 1.5 use standard simple tabs");
+			} 
 		 	
-		}else {
+		}
+		if(fails){
 		    tabspecDialer.setIndicator(label /*, r.getDrawable(R.drawable.ic_tab_selected_dialer)*/ );
 		}
 		
