@@ -35,18 +35,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
-import com.csipsimple.ui.InCallActivity;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
 
 public class UAStateReceiver extends Callback {
 	static String THIS_FILE = "SIP UA Receiver";
 
-	
 	private int savedVibrateRing;
 	private int savedVibradeNotif;
 	private int savedWifiPolicy;
@@ -59,82 +61,29 @@ public class UAStateReceiver extends Callback {
 	private SipService service;
 	private int savedMode;
 
-	private boolean savedBluetooth;
+//	private boolean savedBluetooth;
 
 	private Ringer ringer;
 	private boolean isSavedAudioState = false;
-	private Object treatCallStateMutex = new Object();
-
-
+	
 	@Override
-	public void on_incoming_call(int acc_id, int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
-		Log.d(THIS_FILE, "Has incoming call " + callId);
-		final int fCallId = callId; 
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				
-				// Automatically answer incoming calls with 180/RINGING
-				service.callAnswer(fCallId, 180);
-				
-				saveAudioState();
-				String ringtoneUri = service.getPrefs().getRingtone();
-				ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
-				ringer.ring();
-				
-				CallInfo incomingCall = new CallInfo(fCallId);
-				Log.d(THIS_FILE, "Show notif for"+incomingCall.getCallId());
-				showNotificationForCall(incomingCall);
-				if (autoAcceptCurrent) {
-					// Automatically answer incoming calls with 200/OK
-					service.callAnswer(fCallId, 200);
-					autoAcceptCurrent = false;
-				} else {
-					launchCallHandler(incomingCall);
-				}
-			}
-		};
-		t.start();
+	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
+		updateCallInfo(callId);
+		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL));
 	}
 	
 	
 	@Override
 	public void on_call_state(int callId, pjsip_event e) {
 		//Get current infos
-		final CallInfo callInfo = new CallInfo(callId);
-		final pjsip_inv_state call_state = callInfo.getCallState();
-		Log.i(THIS_FILE, "State of call " + callId + " :: " + callInfo.getStringCallState());
-		Thread t = new Thread() {
-			public void run() {
-				synchronized (treatCallStateMutex) {
-					if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
-						showNotificationForCall(callInfo);
-						launchCallHandler(callInfo);
-	
-					} else if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
-					} else {
-						ringer.stopRing();
-						// Call is now ended
-						if (call_state.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-							service.stopDialtoneGenerator();
-							notificationManager.cancel(SipService.CALL_NOTIF_ID);
-							Log.d(THIS_FILE, "Finish call2");
-							unsetAudioInCall();
-						}
-					}
-					onBroadcastCallState(callInfo);
-				}
-			};
-		};
-		t.start();
-		
+		updateCallInfo(callId);
+		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE));
 	}
 
 	@Override
 	public void on_reg_state(int accountId) {
 		Log.d(THIS_FILE, "New reg state for : " + accountId);
-		
-		onRegisterState(accountId);
+		msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
 	}
 
 	@Override
@@ -154,33 +103,14 @@ public class UAStateReceiver extends Callback {
 		pjsua_call_info info = new pjsua_call_info();
 		pjsua.call_get_info(callId, info);
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
-
-			// Should maybe done under media thread instead of this one
-			//android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-
 			ringer.stopRing();
-			if(android.os.Build.VERSION.SDK.equals("3")) {
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
 			// When media is active, connect call to sound device.
-			pjsua.conf_connect(info.getConf_slot(), 0);
-			pjsua.conf_connect(0, info.getConf_slot());
-			
+			// THIS IS NOW DONE IN NATIVE PART
+//			pjsua.conf_connect(info.getConf_slot(), 0);
+//			pjsua.conf_connect(0, info.getConf_slot());
 			setAudioInCall();
 			
-		} else if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_NONE || 
-				info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ERROR) {
-			//
-		}else {
-			//
 		}
-		
 //		Log.d(THIS_FILE, "Media state has changed<<<<");
 //		Log.d(THIS_FILE, info.getMedia_dir().name());
 //		Log.d(THIS_FILE, info.getMedia_status().name());
@@ -195,9 +125,100 @@ public class UAStateReceiver extends Callback {
 	
 	
 	
+	// -------
+	// Current call management -- assume for now one unique call is managed
+	// -------
+
+	private CallInfo currentCallInfo;
 
 
+	private com.csipsimple.service.UAStateReceiver.WorkerHandler msgHandler;
+	private void updateCallInfo(int callId) {
+		if(currentCallInfo == null) {
+			currentCallInfo = new CallInfo(callId);
+			
+		}else {
+			if(currentCallInfo.getCallId() == callId) {
+				currentCallInfo.updateFromPj();
+			}else {
+				currentCallInfo = new CallInfo(callId);
+				Log.w(THIS_FILE, "Multiple call management is not yet implemented");
+			}
+		}
+		if(currentCallInfo != null) {
+			Log.i(THIS_FILE, "State of call " + callId + " :: " + currentCallInfo.getStringCallState());
+			
+		}
+	}
+	
 
+	
+	private static final int ON_INCOMING_CALL = 1;
+	private static final int ON_CALL_STATE = 2;
+	private static final int ON_REGISTRATION_STATE = 3;
+	private class WorkerHandler extends Handler {
+
+		public WorkerHandler(Looper looper) {
+            super(looper);
+        }
+			
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case ON_INCOMING_CALL:{
+				int callId = currentCallInfo.getCallId();
+				// Automatically answer incoming calls with 180/RINGING
+				service.callAnswer(callId, 180);
+				
+				saveAudioState();
+				
+				String ringtoneUri = service.getPrefs().getRingtone();
+				ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
+				ringer.ring();
+				
+				
+				showNotificationForCall();
+				if (autoAcceptCurrent) {
+					// Automatically answer incoming calls with 200/OK
+					service.callAnswer(callId, 200);
+					autoAcceptCurrent = false;
+				} else {
+					launchCallHandler();
+				}
+				break;
+			}
+			case ON_CALL_STATE:{
+				pjsip_inv_state callState = currentCallInfo.getCallState();
+				if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
+					showNotificationForCall();
+					launchCallHandler();
+		
+				} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
+				} else {
+					ringer.stopRing();
+					// Call is now ended
+					if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+						service.stopDialtoneGenerator();
+						notificationManager.cancel(SipService.CALL_NOTIF_ID);
+						Log.d(THIS_FILE, "Finish call2");
+						unsetAudioInCall();
+					}
+				}
+				onBroadcastCallState(currentCallInfo);
+				break;
+			}
+			case ON_REGISTRATION_STATE:{
+				Log.d(THIS_FILE, "In reg state");
+				// Update sip service (for notifications
+				((SipService) service).updateRegistrationsState();
+				// Send a broadcast message that for an account
+				// registration state has changed
+				Intent regStateChangedIntent = new Intent(SipService.ACTION_SIP_REGISTRATION_CHANGED);
+				service.sendBroadcast(regStateChangedIntent);
+				break;
+			}
+			}
+		}
+	};
 
 	// -------
 	// Public configuration for receiver
@@ -210,38 +231,16 @@ public class UAStateReceiver extends Callback {
 		service = srv;
 		notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
 		ringer = new Ringer(service);
+		
+		HandlerThread thread = new HandlerThread("UAStateAsyncWorker");
+        thread.start();
+        msgHandler = new WorkerHandler(thread.getLooper());
 	}
 
 	// --------
 	// Private methods
 	// --------
-
-
-
-
 	
-	/**
-	 * Register state for an account
-	 * 
-	 * @param info
-	 */
-	private void onRegisterState(final int accountId) {
-		//This has to be threaded to avoid deadlocks
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				
-				// Update sip service (for notifications
-				((SipService) service).updateRegistrationsState();
-				
-				// Send a broadcast message that for an account
-				// registration state has changed
-				Intent regStateChangedIntent = new Intent(SipService.ACTION_SIP_REGISTRATION_CHANGED);
-				service.sendBroadcast(regStateChangedIntent);
-			}
-		};
-		t.start();
-	}
 
 	private void onBroadcastCallState(final CallInfo callInfo) {	
 		Intent callStateChangedIntent = new Intent(SipService.ACTION_SIP_CALL_CHANGED);
@@ -250,15 +249,8 @@ public class UAStateReceiver extends Callback {
 	}
 
 	
-	private Class<?> getInCallClass(){
-		Class<?> inCallClass = InCallActivity.class;
-	//	if(android.os.Build.VERSION.SDK.equals("3")) {
-	//		inCallClass = InCall3Activity.class;
-	//	}
-		return inCallClass;
-	}
 	
-	private void showNotificationForCall(CallInfo callInfo) {
+	private void showNotificationForCall() {
 		// This is the pending call notification
 		int icon = R.drawable.ic_incall_ongoing;
 		CharSequence tickerText =  service.getText(R.string.ongoing_call);
@@ -267,14 +259,14 @@ public class UAStateReceiver extends Callback {
 		Notification notification = new Notification(icon, tickerText, when);
 		Context context = service.getApplicationContext();
 
-		Intent notificationIntent = new Intent(service, getInCallClass());
-		notificationIntent.putExtra("call_info", callInfo);
+		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALL_UI);
+		notificationIntent.putExtra("call_info", currentCallInfo);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, 0);
 
 		
 		notification.setLatestEventInfo(context, service.getText(R.string.ongoing_call), 
-										callInfo.getRemoteContact(), contentIntent);
+				currentCallInfo.getRemoteContact(), contentIntent);
 		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 		// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 
@@ -288,13 +280,11 @@ public class UAStateReceiver extends Callback {
 	 * 
 	 * @param callInfo
 	 */
-	private void launchCallHandler(CallInfo callInfo) {
-
-		
+	private void launchCallHandler() {
 		
 		// Launch activity to choose what to do with this call
-		Intent callHandlerIntent = new Intent(service, getInCallClass());
-		callHandlerIntent.putExtra("call_info", callInfo);
+		Intent callHandlerIntent = new Intent(SipService.ACTION_SIP_CALL_UI); //new Intent(service, getInCallClass());
+		callHandlerIntent.putExtra("call_info", currentCallInfo);
 		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		Log.i(THIS_FILE, "Anounce call activity please");
@@ -340,11 +330,13 @@ public class UAStateReceiver extends Callback {
 		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
 		//For android 1.5
 		//TODO : save / restore it
-		am.setRouting(AudioManager.MODE_NORMAL,
+		am.setRouting(AudioManager.MODE_IN_CALL,
 					   AudioManager.ROUTE_EARPIECE,
 					   AudioManager.ROUTE_ALL);
 
-		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, am.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*2/3, 0);
+		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 
+				am.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*8/9, 
+				0);
 
 		am.setSpeakerphoneOn(false);
 		am.setMicrophoneMute(false);

@@ -127,6 +127,8 @@ public class Dialer extends Activity implements OnClickListener,
 
 	private PreferencesWrapper prefsWrapper;
 
+	private Timer toneTimer;
+
 
 	/** Called when the activity is first created. */
 	@Override
@@ -159,6 +161,7 @@ public class Dialer extends Activity implements OnClickListener,
 		dialUser = (EditText) findViewById(R.id.dialtxt_user);
 		dialDomain = (EditText) findViewById(R.id.dialtext_domain);
 		rootView = (View) findViewById(R.id.toplevel);
+		
 		
 		
 		// @ is a special char for layouts, I didn't find another way to set @ as text in xml
@@ -207,6 +210,9 @@ public class Dialer extends Activity implements OnClickListener,
 
 		//Create dialtone just for user feedback
 		synchronized (toneGeneratorLock) {
+			if(toneTimer == null) {
+				toneTimer = new Timer();
+			}
 			if (toneGenerator == null) {
 				try {
 					toneGenerator = new ToneGenerator(DIAL_TONE_STREAM_TYPE, TONE_RELATIVE_VOLUME);
@@ -241,6 +247,11 @@ public class Dialer extends Activity implements OnClickListener,
 			if (toneGenerator != null) {
 				toneGenerator.release();
 				toneGenerator = null;
+			}
+			if(toneTimer != null) {
+				toneTimer.cancel();
+				toneTimer.purge();
+				toneTimer = null;
 			}
 		}
 	}
@@ -305,20 +316,22 @@ public class Dialer extends Activity implements OnClickListener,
 			toneGenerator.startTone(tone);
 			
 			//TODO : see if it could not be factorized
-			Timer toneTimer = new Timer();
-			toneTimer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					synchronized (toneGeneratorLock) {
-						if (toneGenerator == null) {
-							return;
-						}
-						toneGenerator.stopTone();
-					}
-				}
-			}, TONE_LENGTH_MS);
+			toneTimer.schedule(new StopTimerTask(), TONE_LENGTH_MS);
 		}
 	}
+	
+	class StopTimerTask extends TimerTask{
+		@Override
+		public void run() {
+			synchronized (toneGeneratorLock) {
+				if (toneGenerator == null) {
+					return;
+				}
+				toneGenerator.stopTone();
+			}
+		}
+	}
+	
 
 	private void keyPressed(int keyCode) {
 		KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);

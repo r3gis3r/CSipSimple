@@ -51,6 +51,7 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.service.ISipService;
+import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
@@ -63,6 +64,7 @@ public class OutgoingCallChooser extends ListActivity {
 	
 	String number;
 	
+	public final static int AUTO_CHOOSE_TIME = 8000;
 	private List<Account> accounts_list;
 	
 	private static final String THIS_FILE = "SIP OUTChoose";
@@ -122,8 +124,9 @@ public class OutgoingCallChooser extends ListActivity {
 			@Override
 			public void onClick(View v) {
 				Log.d(THIS_FILE, "Choosen : pstn");
+				OutgoingCall.ignoreNext = number;
 				Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
-				intentMakePstnCall.setData(Uri.parse("tel:"+number+"#PSTN"));
+				intentMakePstnCall.setData(Uri.parse("tel:"+number));
 				startActivity(intentMakePstnCall);
 				finish();
 			}

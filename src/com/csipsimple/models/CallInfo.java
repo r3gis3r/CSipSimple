@@ -17,7 +17,6 @@
  */
 package com.csipsimple.models;
 
-import org.pjsip.pjsua.SWIGTYPE_p_pj_time_val;
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_call_info;
@@ -60,6 +59,12 @@ public class CallInfo implements Parcelable {
 		callId = pjCallInfo.getId();
 		callState = pjCallInfo.getState();
 		remoteContact = pjCallInfo.getRemote_info().getPtr();
+	}
+	
+	public void updateFromPj() {
+		pjsua_call_info pj_info = new pjsua_call_info();
+		pjsua.call_get_info(callId, pj_info);
+		fillFromPj(pj_info);
 	}
 
 	@Override
@@ -147,6 +152,7 @@ public class CallInfo implements Parcelable {
 	public String getRemoteContact() {
 		return remoteContact;
 	}
+	
 
 	//TODO : implement this (could be usefull to get from the native stack instead of managing it in java
 //	public long getDuration() {

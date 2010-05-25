@@ -28,12 +28,15 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.prefs.MainPrefs;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+import com.csipsimple.widgets.IndicatorTab;
 
 public class SipHome extends TabActivity {
     public static final int ACCOUNTS_MENU = Menu.FIRST + 1;
@@ -48,7 +51,7 @@ public class SipHome extends TabActivity {
 	private Intent serviceIntent;
 	
 	private Intent dialerIntent;
-	private Intent csipIntent;
+	private Intent calllogsIntent;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,17 +106,12 @@ public class SipHome extends TabActivity {
         }
         
         
-        TabHost tabHost = getTabHost();
-        Resources r = getResources();
         dialerIntent = new Intent(this, Dialer.class);
-        csipIntent = new Intent(this, BuddyList.class);
-        tabHost.addTab(tabHost.newTabSpec("tab1")
-                .setIndicator("Dialer", r.getDrawable(R.drawable.ic_tab_selected_dialer))
-                .setContent(dialerIntent));
-
-        tabHost.addTab(tabHost.newTabSpec("tab2")
-                .setIndicator("Buddy list")
-                .setContent(csipIntent));
+        calllogsIntent = new Intent(this, BuddyList.class);
+        
+        addTab("tab1", "Dial", R.drawable.ic_tab_selected_dialer, dialerIntent);
+        addTab("tab2", "CallLogs", R.drawable.ic_tab_selected_recent, calllogsIntent);
+        
         
         //If we have no account yet, open account panel,
         DBAdapter db = new DBAdapter(this);
@@ -125,6 +123,24 @@ public class SipHome extends TabActivity {
 	        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(accountIntent);
         }
+    }
+    
+    private void addTab(String tag, String label, int icon, Intent content) {
+    	TabHost tabHost = getTabHost();
+        Resources r = getResources();
+    	
+		TabSpec tabspecDialer = tabHost.newTabSpec(tag).setContent(content);
+		 
+		if(Compatibility.isCompatible(4)) {
+			IndicatorTab icTab = new IndicatorTab(this, null);
+		 	icTab.setResources(label, icon);
+		 	tabspecDialer.setIndicator(icTab);
+		 	
+		}else {
+		    tabspecDialer.setIndicator(label /*, r.getDrawable(R.drawable.ic_tab_selected_dialer)*/ );
+		}
+		
+		tabHost.addTab(tabspecDialer);
     }
     
     @Override

@@ -43,18 +43,15 @@ public enum pjsip_transport_type_e {
     throw new IllegalArgumentException("No enum " + pjsip_transport_type_e.class + " with value " + swigValue);
   }
 
-  @SuppressWarnings("unused")
   private pjsip_transport_type_e() {
     this.swigValue = SwigNext.next++;
   }
 
-  @SuppressWarnings("unused")
   private pjsip_transport_type_e(int swigValue) {
     this.swigValue = swigValue;
     SwigNext.next = swigValue+1;
   }
 
-  @SuppressWarnings("unused")
   private pjsip_transport_type_e(pjsip_transport_type_e swigEnum) {
     this.swigValue = swigEnum.swigValue;
     SwigNext.next = this.swigValue+1;

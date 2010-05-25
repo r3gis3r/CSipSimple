@@ -66,6 +66,7 @@ import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
+import com.csipsimple.models.CallInfo;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -82,9 +83,11 @@ public class SipService extends Service {
 	// -------
 	// Static constants
 	// -------
-
+	
 	final public static String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
 	final public static String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
+	final public static String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
+
 	
 
 	final public static int REGISTER_NOTIF_ID = 1;
@@ -116,6 +119,16 @@ public class SipService extends Service {
 		public void sipStop() throws RemoteException { SipService.this.sipStop(); }
 
 		/**
+		 * Force the stop of the service
+		 */
+		@Override
+		public void forceStopService() throws RemoteException {
+			Log.d(THIS_FILE,"Try to force service stop");
+			stopSelf();
+		}
+		
+		
+		/**
 		 * Populate pjsip accounts with accounts saved in sqlite
 		 */
 		@Override
@@ -135,6 +148,13 @@ public class SipService extends Service {
 		@Override
 		public void reAddAllAccounts() throws RemoteException { SipService.this.reRegisterAllAccounts(); }
 		
+		/**
+		 * Get account and it's informations
+		 * @param accountId the id (sqlite id) of the account
+		 */
+		@Override
+		public AccountInfo getAccountInfo(int accountId) throws RemoteException { return SipService.this.getAccountInfo(accountId);}
+
 
 		/**
 		 * Switch in autoanswer mode
@@ -155,14 +175,7 @@ public class SipService extends Service {
 		@Override
 		public void makeCall(String callee) throws RemoteException { SipService.this.makeCall(callee); }
 
-		/**
-		 * Force the stop of the service
-		 */
-		@Override
-		public void forceStopService() throws RemoteException {
-			Log.d(THIS_FILE,"Try to force service stop");
-			stopSelf();
-		}
+		
 		
 		/**
 		 * Answer an incoming call
@@ -180,19 +193,17 @@ public class SipService extends Service {
 		@Override
 		public int hangup(int callId, int status) throws RemoteException { return SipService.this.callHangup(callId, status); }
 
-		/**
-		 * Get account and it's informations
-		 * @param accountId the id (sqlite id) of the account
-		 */
-		@Override
-		public AccountInfo getAccountInfo(int accountId) throws RemoteException { return SipService.this.getAccountInfo(accountId);}
-
+		
 		@Override
 		public int sendDtmf(int callId, int keyCode) throws RemoteException { return SipService.this.sendDtmf(callId, keyCode); }
-		
-		
-		
-		
+
+		@Override
+		public CallInfo getCallInfo(int callId) throws RemoteException {
+			if(created) {
+				return new CallInfo(callId);
+			}
+			return null;
+		}
 	};
 
 	private DBAdapter db;
@@ -232,7 +243,13 @@ public class SipService extends Service {
 							}
 						} else {
 							Log.i(THIS_FILE, "Stop SERVICE");
-							SipService.this.unregisterReceiver(deviceStateReceiver);
+							try {
+								SipService.this.unregisterReceiver(deviceStateReceiver);
+							}catch(IllegalArgumentException e) {
+								//This is the case if already unregistered itself
+								//Python like usage of try ;) : nothing to do here since it could be a standard case
+								//And in this case nothing has to be done
+							}
 							SipService.this.sipStop();
 							//OK, this will be done only if the last bind is released
 							SipService.this.stopSelf();
@@ -244,6 +261,7 @@ public class SipService extends Service {
 			}
 		}
 	}
+	
 
 	@Override
 	public void onCreate() {
@@ -384,10 +402,12 @@ public class SipService extends Service {
 						pjsua.logging_config_default(log_cfg);
 						log_cfg.setConsole_level(Log.LOG_LEVEL);
 						log_cfg.setLevel(Log.LOG_LEVEL);
-
-						
 						log_cfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
 
+						
+						
+						
+						
 						// MEDIA CONFIG
 						pjsua.media_config_default(media_cfg);
 
@@ -411,7 +431,6 @@ public class SipService extends Service {
 							media_cfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
 						}
 						
-
 						// INITIALIZE
 						status = pjsua.init(cfg, log_cfg, media_cfg);
 						if (status != pjsuaConstants.PJ_SUCCESS) {
@@ -440,7 +459,15 @@ public class SipService extends Service {
 					}
 
 					// Initialization is done, now start pjsua
-					status = pjsua.start();					
+					status = pjsua.start();
+					
+					if(status != pjsua.PJ_SUCCESS) {
+						Log.e(THIS_FILE, "Fail to start pjsip " + status);
+						pjsua.destroy();
+						creating = false;
+						created = false;
+						return;
+					}
 					
 					// Init media codecs
 					setCodecsPriorities();
@@ -478,6 +505,7 @@ public class SipService extends Service {
 		
 		created = false;
 	}
+	private boolean isRegistering = false;
 	
 	/**
 	 * Add accounts from database
@@ -488,6 +516,8 @@ public class SipService extends Service {
 			return;
 		}
 		synchronized (pjAccountsCreationLock) {
+			isRegistering = true;
+			
 			boolean hasSomeSuccess = false;
 			List<Account> accountList;
 			synchronized (db) {
@@ -533,6 +563,7 @@ public class SipService extends Service {
 					notificationManager.cancel(REGISTER_NOTIF_ID);
 				}
 			}
+			isRegistering = false;
 		}
 	}
 
@@ -567,8 +598,10 @@ public class SipService extends Service {
 	}
 	
 	private void reRegisterAllAccounts() {
-		unregisterAllAccounts(false);
-		registerAllAccounts();
+		if(!isRegistering) {
+			unregisterAllAccounts(false);
+			registerAllAccounts();
+		}
 	}
 	
 	
@@ -578,6 +611,7 @@ public class SipService extends Service {
 			return null;
 		}
 		AccountInfo accountInfo;
+		Log.d(THIS_FILE, "Get account infos....");
 		synchronized (pjAccountsCreationLock) {
 			Account account;
 			synchronized (db) {
@@ -591,6 +625,7 @@ public class SipService extends Service {
 				if(activeAccounts.containsKey(accountDbId)) {
 					accountInfo.setPjsuaId(activeAccounts.get(accountDbId));
 					pjsua_acc_info pjAccountInfo = new pjsua_acc_info();
+					Log.d(THIS_FILE, "Get account info for "+accountDbId+" ==> "+activeAccounts.get(accountDbId));
 					int success = pjsua.acc_get_info(activeAccounts.get(accountDbId), pjAccountInfo);
 					if(success == pjsuaConstants.PJ_SUCCESS) {
 						accountInfo.fillWithPjInfo(pjAccountInfo);
@@ -600,7 +635,8 @@ public class SipService extends Service {
 		}
 		return accountInfo;
 	}
-
+	
+	
 	public void updateRegistrationsState() {
 		boolean hasSomeSuccess = false;
 		AccountInfo info;
@@ -728,6 +764,7 @@ public class SipService extends Service {
 			
 			int default_acc = pjsua.acc_get_default();
 			Log.d(THIS_FILE, "default acc : "+default_acc);
+			//TODO : use the standard call 
 			pjsua_acc_info acc_info = new pjsua_acc_info();
 			pjsua.acc_get_info(default_acc, acc_info);
 			//Reformat with default account
@@ -819,6 +856,7 @@ public class SipService extends Service {
 	    	put("#", new short[] {941, 1477});
 	    }
 	};
+	
 	
 	private int startDialtoneGenerator(int callId) {
 		synchronized(dialtoneMutext) {

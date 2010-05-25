@@ -90,18 +90,15 @@ public enum pjsip_status_code {
     throw new IllegalArgumentException("No enum " + pjsip_status_code.class + " with value " + swigValue);
   }
 
-  @SuppressWarnings("unused")
   private pjsip_status_code() {
     this.swigValue = SwigNext.next++;
   }
 
-  @SuppressWarnings("unused")
   private pjsip_status_code(int swigValue) {
     this.swigValue = swigValue;
     SwigNext.next = swigValue+1;
   }
 
-  @SuppressWarnings("unused")
   private pjsip_status_code(pjsip_status_code swigEnum) {
     this.swigValue = swigEnum.swigValue;
     SwigNext.next = this.swigValue+1;

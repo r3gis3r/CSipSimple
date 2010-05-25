@@ -55,9 +55,9 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.pjmedia_tonegen_play(pjmedia_port.getCPtr(tonegen), tonegen, count, pjmedia_tone_desc.cArrayUnwrap(tones), options);
   }
 
-  public static int pjmedia_tonegen_rewind(pjmedia_port tonegen) {
-    return pjsuaJNI.pjmedia_tonegen_rewind(pjmedia_port.getCPtr(tonegen), tonegen);
-  }
+//  public static int pjmedia_tonegen_rewind(pjmedia_port tonegen) {
+//    return pjsuaJNI.pjmedia_tonegen_rewind(pjmedia_port.getCPtr(tonegen), tonegen);
+//  }
 
   public synchronized static void logging_config_default(pjsua_logging_config cfg) {
     pjsuaJNI.logging_config_default(pjsua_logging_config.getCPtr(cfg), cfg);

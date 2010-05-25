@@ -71,6 +71,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	private View callInfoPanel;
 
+	private Timer quitTimer;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -108,29 +110,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		dialPad.setOnDialKeyListener(this);
 		callInfoPanel = (View) findViewById(R.id.callInfoPanel);
 		
+		quitTimer = new Timer();
+		
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
-		
-		
-		
-		//Check if currently in use call is not already invalid (could be the case for example if we are not authorized to make the call)
-		//There is a time between when the call change notification that starts the InCallActivity and
-		//when this view registers the on ua call state changed
-		CallInfo realCallInfo = new CallInfo(callInfo.getCallId());
-		callInfo = realCallInfo;
-		updateUIFromCall();
-		
-		/*
-		if(realCallInfo.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED) ||
-				realCallInfo.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)) {
-			Log.w(THIS_FILE, "Early failure for call "+callInfo.getCallId());
-			
-			delayedQuit();
-			
-		}else {		
-			
-			
-		}
-		*/
 	}
 	
 	private boolean manageKeyguard = false;
@@ -182,6 +164,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
         }
         
+        
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
 		case PJSIP_INV_STATE_EARLY:
@@ -224,18 +207,18 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 		Log.d(THIS_FILE, "we leave the update ui function");
 	}
-
-
+	
 	private void delayedQuit() {
 		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
-		Timer t = new Timer();
-		t.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				finish();
-			}
-		}, 3000);
+		quitTimer.schedule(new QuitTimerTask(), 3000);
 	}
+	
+	private class QuitTimerTask extends TimerTask{
+		@Override
+		public void run() {
+			finish();
+		}
+	};
 	
 	
 	@Override
@@ -296,11 +279,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				callInfo = notif_call;
 				updateUIFromCall();
 			}
-			
 		}
 	};
 	
-
+	
 	/**
 	 * Service binding
 	 */
@@ -311,6 +293,22 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
+			//Check if currently in use call is not already invalid (could be the case for example if we are not authorized to make the call)
+			//There is a time between when the call change notification that starts the InCallActivity and
+			//when this view registers the on ua call state changed
+			CallInfo realCallInfo;
+			try {
+				realCallInfo = service.getCallInfo(callInfo.getCallId());
+				callInfo = realCallInfo;
+				if(callInfo == null) {
+					finish();
+				}else {
+					updateUIFromCall();
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		@Override
@@ -319,7 +317,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 	};
 
-
+	
 	private boolean canTakeCall = true;
 	private boolean canDeclineCall = true;
 

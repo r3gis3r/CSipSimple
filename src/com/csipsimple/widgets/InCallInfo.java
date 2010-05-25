@@ -43,6 +43,7 @@ import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 
+@SuppressWarnings("deprecation")
 public class InCallInfo extends FrameLayout {
 	
 	private static final String THIS_FILE = "InCallInfo";

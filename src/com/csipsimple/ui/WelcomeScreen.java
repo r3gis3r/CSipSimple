@@ -57,7 +57,6 @@ public class WelcomeScreen extends Activity {
 	private static final String DEFAULT_UPDATE_URI = "http://csipsimple.googlecode.com/svn/trunk/pjsip_android/update.json";
 	//"http://10.0.2.2/android/update.json"
 	
-	
 	private RemoteLibInfo currentDownload;
 
 	private ProgressBar progressBar;

@@ -54,12 +54,15 @@ public class MainPrefs extends ListActivity {
 		super.onCreate(savedInstanceState);
 		
 		List<PrefGroup> prefs_list = new ArrayList<PrefGroup>();
+		prefs_list.add(new PrefGroup(R.string.prefs_fast, R.string.prefs_fast_desc, 
+				R.drawable.ic_prefs_fast, new Intent(this, PrefsFast.class)));
 		prefs_list.add(new PrefGroup(R.string.prefs_network, R.string.prefs_network_desc, 
 				R.drawable.ic_prefs_network, new Intent(this, PrefsNetwork.class)));
 		prefs_list.add(new PrefGroup(R.string.prefs_media, R.string.prefs_media_desc, 
 				R.drawable.ic_prefs_media, new Intent(this, PrefsMedia.class)));		
 		prefs_list.add(new PrefGroup(R.string.prefs_ui, R.string.prefs_ui_desc, 
 				R.drawable.ic_prefs_ui, new Intent(this, PrefsUI.class)));
+		
 		
 		adapter = new PrefGroupAdapter(this, prefs_list);
 		setListAdapter(adapter);

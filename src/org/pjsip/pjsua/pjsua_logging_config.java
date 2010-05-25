@@ -45,52 +45,52 @@ public class pjsua_logging_config {
   public void setMsg_logging(int value) {
     pjsuaJNI.pjsua_logging_config_msg_logging_set(swigCPtr, this, value);
   }
-
-  public int getMsg_logging() {
-    return pjsuaJNI.pjsua_logging_config_msg_logging_get(swigCPtr, this);
-  }
+//
+//  public int getMsg_logging() {
+//    return pjsuaJNI.pjsua_logging_config_msg_logging_get(swigCPtr, this);
+//  }
 
   public void setLevel(long value) {
     pjsuaJNI.pjsua_logging_config_level_set(swigCPtr, this, value);
   }
 
-  public long getLevel() {
-    return pjsuaJNI.pjsua_logging_config_level_get(swigCPtr, this);
-  }
+//  public long getLevel() {
+//    return pjsuaJNI.pjsua_logging_config_level_get(swigCPtr, this);
+//  }
 
   public void setConsole_level(long value) {
     pjsuaJNI.pjsua_logging_config_console_level_set(swigCPtr, this, value);
   }
 
-  public long getConsole_level() {
-    return pjsuaJNI.pjsua_logging_config_console_level_get(swigCPtr, this);
-  }
-
-  public void setDecor(long value) {
-    pjsuaJNI.pjsua_logging_config_decor_set(swigCPtr, this, value);
-  }
-
-  public long getDecor() {
-    return pjsuaJNI.pjsua_logging_config_decor_get(swigCPtr, this);
-  }
-
-  public void setLog_filename(pj_str_t value) {
-    pjsuaJNI.pjsua_logging_config_log_filename_set(swigCPtr, this, pj_str_t.getCPtr(value), value);
-  }
-
-  public pj_str_t getLog_filename() {
-    long cPtr = pjsuaJNI.pjsua_logging_config_log_filename_get(swigCPtr, this);
-    return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
-  }
-
-  public void setCb(SWIGTYPE_p_f_int_p_q_const__char_int__void value) {
-    pjsuaJNI.pjsua_logging_config_cb_set(swigCPtr, this, SWIGTYPE_p_f_int_p_q_const__char_int__void.getCPtr(value));
-  }
-
-  public SWIGTYPE_p_f_int_p_q_const__char_int__void getCb() {
-    long cPtr = pjsuaJNI.pjsua_logging_config_cb_get(swigCPtr, this);
-    return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_p_q_const__char_int__void(cPtr, false);
-  }
+//  public long getConsole_level() {
+//    return pjsuaJNI.pjsua_logging_config_console_level_get(swigCPtr, this);
+//  }
+//
+//  public void setDecor(long value) {
+//    pjsuaJNI.pjsua_logging_config_decor_set(swigCPtr, this, value);
+//  }
+//
+//  public long getDecor() {
+//    return pjsuaJNI.pjsua_logging_config_decor_get(swigCPtr, this);
+//  }
+//
+//  public void setLog_filename(pj_str_t value) {
+//    pjsuaJNI.pjsua_logging_config_log_filename_set(swigCPtr, this, pj_str_t.getCPtr(value), value);
+//  }
+//
+//  public pj_str_t getLog_filename() {
+//    long cPtr = pjsuaJNI.pjsua_logging_config_log_filename_get(swigCPtr, this);
+//    return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
+//  }
+//
+//  public void setCb(SWIGTYPE_p_f_int_p_q_const__char_int__void value) {
+//    pjsuaJNI.pjsua_logging_config_cb_set(swigCPtr, this, SWIGTYPE_p_f_int_p_q_const__char_int__void.getCPtr(value));
+//  }
+//
+//  public SWIGTYPE_p_f_int_p_q_const__char_int__void getCb() {
+//    long cPtr = pjsuaJNI.pjsua_logging_config_cb_get(swigCPtr, this);
+//    return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_p_q_const__char_int__void(cPtr, false);
+//  }
 
   public pjsua_logging_config() {
     this(pjsuaJNI.new_pjsua_logging_config(), true);

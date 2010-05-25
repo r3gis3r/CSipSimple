@@ -174,7 +174,6 @@ public class Ringer {
                 ringHandler.removeCallbacksAndMessages(null);
                 Message msg = ringHandler.obtainMessage(STOP_RING);
                 msg.obj = ringtone;
-                ringtone.stop();
                 ringHandler.sendMessage(msg);
                 UAStateReceiver.setAudioMode(context, AudioManager.MODE_NORMAL);
                 ringThread = null;

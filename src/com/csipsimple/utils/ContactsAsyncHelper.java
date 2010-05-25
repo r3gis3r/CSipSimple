@@ -32,6 +32,7 @@ import android.widget.ImageView;
 
 import com.csipsimple.models.CallerInfo;
 
+@SuppressWarnings("deprecation")
 public class ContactsAsyncHelper extends Handler {
     private static final String THIS_FILE = "ContactsAsyncHelper";
 	/**
@@ -165,7 +166,7 @@ public class ContactsAsyncHelper extends Handler {
 		
 		
         
-        public void handleMessage(Message msg) {
+		public void handleMessage(Message msg) {
             WorkerArgs args = (WorkerArgs) msg.obj;
             
             switch (msg.arg1) {

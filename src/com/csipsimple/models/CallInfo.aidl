@@ -15,26 +15,5 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
-import com.csipsimple.models.AccountInfo;
-import com.csipsimple.models.CallInfo;
-
-interface ISipService{
-	void sipStart();
-	void sipStop();
-	void forceStopService();
-	
-	void addAllAccounts();
-	void removeAllAccounts();
-	void reAddAllAccounts();
-	AccountInfo getAccountInfo(int accountId);
-	
-	void switchToAutoAnswer();
-	
-	void makeCall(in String callee);
-	int answer(int callId, int status);
-	int hangup(int callId, int status);
-	int sendDtmf(int callId, int keyCode);
-	CallInfo getCallInfo(int callId);
-	
-}
+package com.csipsimple.models;
+parcelable CallInfo;

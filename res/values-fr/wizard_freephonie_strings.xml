@@ -20,6 +20,6 @@
 <string name="w_freephonie_phone_number">Numéro de téléphone</string>
 <string name="w_freephonie_phone_number_desc">Numéro de téléphone SIP de votre compte (numéro de téléphone Free)</string>
 <string name="w_freephonie_password">Mot de passe</string>
-<string name="w_freephonie_password_desc">Mot de passe tel que rempli dans le panneau d'administration Free</string>
+<string name="w_freephonie_password_desc">Mot de passe tel que rempli dans le panneau d\'administration Free</string>
 
 </resources>

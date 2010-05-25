@@ -245,9 +245,9 @@ public class PreferencesWrapper {
 	public boolean getUseAlternateUnlocker() {
 		return prefs.getBoolean("use_alternate_unlocker", false);
 	}
-
-
-
-
+	
+	public boolean useIntegrateDialer() {
+		return prefs.getBoolean("integrate_with_native_dialer", true);
+	}
 	
 }

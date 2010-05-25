@@ -37,18 +37,15 @@ public enum pjmedia_dir {
     throw new IllegalArgumentException("No enum " + pjmedia_dir.class + " with value " + swigValue);
   }
 
-  @SuppressWarnings("unused")
   private pjmedia_dir() {
     this.swigValue = SwigNext.next++;
   }
 
-  @SuppressWarnings("unused")
   private pjmedia_dir(int swigValue) {
     this.swigValue = swigValue;
     SwigNext.next = swigValue+1;
   }
-
-  @SuppressWarnings("unused")
+  
   private pjmedia_dir(pjmedia_dir swigEnum) {
     this.swigValue = swigEnum.swigValue;
     SwigNext.next = this.swigValue+1;

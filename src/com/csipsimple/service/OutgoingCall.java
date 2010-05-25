@@ -17,8 +17,6 @@
  */
 package com.csipsimple.service;
 
-import java.util.regex.Pattern;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +31,9 @@ public class OutgoingCall extends BroadcastReceiver {
 	private Context context;
 	private PreferencesWrapper prefsWrapper;
 	
+	public static String ignoreNext = "";
+	
+	
 
 	@Override
 	public void onReceive(Context aContext, Intent intent) {
@@ -43,12 +44,13 @@ public class OutgoingCall extends BroadcastReceiver {
 		String full_number = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");
 
 		Log.d(THIS_FILE, "We are trying to call " + full_number);
-		if (Pattern.matches("^.*#PSTN$", full_number)) {
+		if (!prefsWrapper.useIntegrateDialer() || ignoreNext.equalsIgnoreCase(number)) {
 			Log.d(THIS_FILE, "we will force it ");
 			setResultData(number);
 			return;
 		}
 
+		
 		// If this is an outgoing call with a valid number
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) && number != null) {
 			Log.d(THIS_FILE, "This is a work for super outgoing call handler....");

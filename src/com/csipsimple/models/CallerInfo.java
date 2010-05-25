@@ -29,6 +29,7 @@ import android.text.TextUtils;
 /**
  * Looks up caller information for the given phone number.
  */
+@SuppressWarnings("deprecation")
 public class CallerInfo {
 
 

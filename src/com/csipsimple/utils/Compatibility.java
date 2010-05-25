@@ -15,26 +15,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
-import com.csipsimple.models.AccountInfo;
-import com.csipsimple.models.CallInfo;
+package com.csipsimple.utils;
 
-interface ISipService{
-	void sipStart();
-	void sipStop();
-	void forceStopService();
+public class Compatibility {
+
+	public static int getApiLevel() {
+		if(android.os.Build.VERSION.SDK.equalsIgnoreCase("3")) {
+			return 3;
+		}else {
+			return android.os.Build.VERSION.SDK_INT;
+		}
+	}
 	
-	void addAllAccounts();
-	void removeAllAccounts();
-	void reAddAllAccounts();
-	AccountInfo getAccountInfo(int accountId);
-	
-	void switchToAutoAnswer();
-	
-	void makeCall(in String callee);
-	int answer(int callId, int status);
-	int hangup(int callId, int status);
-	int sendDtmf(int callId, int keyCode);
-	CallInfo getCallInfo(int callId);
-	
+	public static boolean isCompatible(int apiLevel) {
+		return getApiLevel() >= apiLevel;
+	}
 }

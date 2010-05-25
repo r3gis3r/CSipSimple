@@ -40,18 +40,15 @@ public enum pjsip_inv_state {
     throw new IllegalArgumentException("No enum " + pjsip_inv_state.class + " with value " + swigValue);
   }
 
-  @SuppressWarnings("unused")
   private pjsip_inv_state() {
     this.swigValue = SwigNext.next++;
   }
 
-  @SuppressWarnings("unused")
   private pjsip_inv_state(int swigValue) {
     this.swigValue = swigValue;
     SwigNext.next = swigValue+1;
   }
 
-  @SuppressWarnings("unused")
   private pjsip_inv_state(pjsip_inv_state swigEnum) {
     this.swigValue = swigEnum.swigValue;
     SwigNext.next = this.swigValue+1;
