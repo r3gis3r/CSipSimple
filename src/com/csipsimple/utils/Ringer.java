@@ -73,7 +73,7 @@ public class Ringer {
      * @see isVibrating
      * @see isRingtonePlaying
      */
-    boolean isRinging() {
+    public boolean isRinging() {
         synchronized (this) {
             return (isRingtonePlaying() || isVibrating());
         }
@@ -175,7 +175,6 @@ public class Ringer {
                 Message msg = ringHandler.obtainMessage(STOP_RING);
                 msg.obj = ringtone;
                 ringHandler.sendMessage(msg);
-                UAStateReceiver.setAudioMode(context, AudioManager.MODE_NORMAL);
                 ringThread = null;
                 ringHandler = null;
                 ringtone = null;
@@ -267,7 +266,6 @@ public class Ringer {
                             }
                             r = ringtone;
                             if (r != null && !hasMessages(STOP_RING)) {
-                                UAStateReceiver.setAudioMode(context, AudioManager.MODE_RINGTONE);
                                 r.play();
                                 synchronized (Ringer.this) {
                                     ringPending = false;

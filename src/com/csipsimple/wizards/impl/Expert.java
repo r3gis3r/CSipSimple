@@ -126,7 +126,7 @@ public class Expert extends BasePrefsWizard{
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
 		isValid &= checkField(accountAccId, isEmpty(accountAccId) ||  !isMatching(accountAccId, "[^<]*<sip(s)?:[^@]*@[^@]*>"));
 		isValid &= checkField(accountRegUri, isEmpty(accountRegUri) || !isMatching(accountRegUri, "sip(s)?:.*" ));
-		isValid &= checkField(accountProxy, ! isEmpty(accountProxy) && !isMatching(accountProxy, "[^<]*<sip(s)?:[^@]*@[^@]*>"));
+		isValid &= checkField(accountProxy, ! isEmpty(accountProxy) && !isMatching(accountProxy, "sip(s)?:.*" ));
 		
 		return isValid;
 	}

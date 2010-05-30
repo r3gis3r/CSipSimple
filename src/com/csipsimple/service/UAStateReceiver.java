@@ -43,6 +43,7 @@ import android.provider.Settings;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
 
@@ -103,6 +104,8 @@ public class UAStateReceiver extends Callback {
 		pjsua_call_info info = new pjsua_call_info();
 		pjsua.call_get_info(callId, info);
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
+
+            setAudioMode(AudioManager.MODE_NORMAL);
 			ringer.stopRing();
 			// When media is active, connect call to sound device.
 			// THIS IS NOW DONE IN NATIVE PART
@@ -133,6 +136,8 @@ public class UAStateReceiver extends Callback {
 
 
 	private com.csipsimple.service.UAStateReceiver.WorkerHandler msgHandler;
+
+	private AudioManager audioManager;
 	private void updateCallInfo(int callId) {
 		if(currentCallInfo == null) {
 			currentCallInfo = new CallInfo(callId);
@@ -150,8 +155,6 @@ public class UAStateReceiver extends Callback {
 			
 		}
 	}
-	
-
 	
 	private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
@@ -173,6 +176,7 @@ public class UAStateReceiver extends Callback {
 				
 				String ringtoneUri = service.getPrefs().getRingtone();
 				ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
+				setAudioMode(AudioManager.MODE_RINGTONE);
 				ringer.ring();
 				
 				
@@ -194,7 +198,10 @@ public class UAStateReceiver extends Callback {
 		
 				} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
 				} else {
-					ringer.stopRing();
+					if(ringer.isRinging()) {
+						setAudioMode(AudioManager.MODE_NORMAL);
+						ringer.stopRing();
+					}
 					// Call is now ended
 					if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
 						service.stopDialtoneGenerator();
@@ -229,6 +236,7 @@ public class UAStateReceiver extends Callback {
 
 	public void initService(SipService srv) {
 		service = srv;
+        audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
 		ringer = new Ringer(service);
 		
@@ -295,17 +303,16 @@ public class UAStateReceiver extends Callback {
 	
 	private void saveAudioState() {
 
-		AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		ContentResolver ctntResolver = service.getContentResolver();
 		
-		savedVibrateRing = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-		savedVibradeNotif = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
+		savedVibrateRing = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+		savedVibradeNotif = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
 		savedWifiPolicy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-		savedVolume = am.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-		savedSpeakerPhone = am.isSpeakerphoneOn();
-		savedMicrophoneMute = am.isMicrophoneMute();
+		savedVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+		savedSpeakerPhone = audioManager.isSpeakerphoneOn();
+		savedMicrophoneMute = audioManager.isMicrophoneMute();
 	//	savedBluetooth = am.isBluetoothA2dpOn();
-		savedMode = am.getMode();
+		savedMode = audioManager.getMode();
 		
 		isSavedAudioState = true;
 	}
@@ -315,33 +322,36 @@ public class UAStateReceiver extends Callback {
 	 * Set the audio mode as in call
 	 */
 	private void setAudioInCall() {
-		AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		
 		if(!isSavedAudioState) {
 			saveAudioState();
 		}
 		
-		am.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
 
-		// Settings.System.putInt(ctntResolver,
-		// Settings.System.WIFI_SLEEP_POLICY,
-		// Settings.System.WIFI_SLEEP_POLICY_NEVER);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
+		//Wifi management if necessary
+		ContentResolver ctntResolver = service.getContentResolver();
+		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
+		
+		
+		
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
 		//For android 1.5
-		//TODO : save / restore it
-		am.setRouting(AudioManager.MODE_IN_CALL,
-					   AudioManager.ROUTE_EARPIECE,
-					   AudioManager.ROUTE_ALL);
-
-		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 
-				am.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*8/9, 
+		if(!Compatibility.isCompatible(4)) {
+			//TODO : save / restore it
+			audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
+			audioManager.setRouting(AudioManager.MODE_IN_CALL,
+						   AudioManager.ROUTE_EARPIECE,
+						   AudioManager.ROUTE_ALL);
+		}
+		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 
+				audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*3/4, 
 				0);
 
-		am.setSpeakerphoneOn(false);
-		am.setMicrophoneMute(false);
-	
-		setAudioMode(service,  AudioManager.MODE_IN_CALL);
+		audioManager.setSpeakerphoneOn(false);
+		audioManager.setMicrophoneMute(false);
+		
+	//	setAudioMode(AudioManager.MODE_IN_CALL);
 	}
 
 	/**
@@ -353,28 +363,32 @@ public class UAStateReceiver extends Callback {
 			return;
 		}
 		
-		AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		ContentResolver ctntResolver = service.getContentResolver();
 
 		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, savedWifiPolicy);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
-		am.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
-		am.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
-		am.setSpeakerphoneOn(savedSpeakerPhone);
-		am.setMicrophoneMute(savedMicrophoneMute);
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
+		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
+		audioManager.setSpeakerphoneOn(savedSpeakerPhone);
+		audioManager.setMicrophoneMute(savedMicrophoneMute);
 	//	am.setBluetoothA2dpOn(savedBluetooth);
-		am.setMode(savedMode);
+		audioManager.setMode(savedMode);
 		
-		am.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
-		
+		if(!Compatibility.isCompatible(4)) {
+			audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
+		}
 		isSavedAudioState = false;
 	}
 
+	private static Object audioModeMutex = new Object();
 	
-	
-	
-	public static void setAudioMode(Context context, int mode) {
-        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        am.setMode(mode);
+	private void setAudioMode(int mode) {
+		
+        synchronized (audioModeMutex) {
+            audioManager.setMode(mode);
+		}
 	}
+	
+	//TODO : lock/unlock wifi while in call if 3G not valid 
+	
 }

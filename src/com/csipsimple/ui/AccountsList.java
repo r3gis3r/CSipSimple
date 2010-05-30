@@ -72,8 +72,8 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	private DBAdapter database;
 	private AccountAdapter adapter;
 	
-	private List<Account> accounts_list;
-	private ListView accountsList;
+	private List<Account> accountsList;
+	private ListView accountsListView;
 	private GestureDetector gestureDetector;
 	
 	private static final String THIS_FILE = "SIP AccountList";
@@ -102,15 +102,12 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		
 		// Fill accounts with currently avalaible accounts
 		updateList();
-
 		
+		accountsListView = (ListView) findViewById(R.id.account_list);
 		
-		
-		accountsList = (ListView) findViewById(R.id.account_list);
-		
-		accountsList.setAdapter(adapter);
-		accountsList.setOnItemClickListener(this);
-		accountsList.setOnCreateContextMenuListener(this);
+		accountsListView.setAdapter(adapter);
+		accountsListView.setOnItemClickListener(this);
+		accountsListView.setOnCreateContextMenuListener(this);
 		
 
 		//Add add row
@@ -128,7 +125,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		
 		//Add gesture detector
 		gestureDetector = new GestureDetector(this, new BackGestureDetector());
-		accountsList.setOnTouchListener(new OnTouchListener() {
+		accountsListView.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				return gestureDetector.onTouchEvent(event);
@@ -222,15 +219,15 @@ public class AccountsList extends Activity implements OnItemClickListener {
     	}
     	
     	database.open();
-		accounts_list = database.getListAccounts();
+		accountsList = database.getListAccounts();
 		database.close();
     	
     	if(adapter == null) {
-    		adapter = new AccountAdapter(this, accounts_list);
+    		adapter = new AccountAdapter(this, accountsList);
     		adapter.setNotifyOnChange(false);
     	}else {
     		adapter.clear();
-    		for(Account acc : accounts_list){
+    		for(Account acc : accountsList){
     			adapter.add(acc);
     		}
     		adapter.notifyDataSetChanged();
@@ -326,6 +323,8 @@ public class AccountsList extends Activity implements OnItemClickListener {
             labelView.setText(account.display_name);
             // Default color for not added account
             int color = Color.argb(255, 100, 100, 100); 
+            int indicatorResource = R.drawable.ic_indicator_yellow;
+            
             String status = "Not added";
             
             if(service != null) {
@@ -339,7 +338,8 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	            	if( accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS){
 	            		
 	            		status = "Not yet registered";
-	            		color = Color.argb(255, 255, 255, 255);
+	            		color = Color.argb(255, 255, 194, 0);
+	            		indicatorResource = R.drawable.ic_indicator_yellow;
 	            		
 	            		if(accountInfo.getPjsuaId()>=0){
 		            			status = accountInfo.getStatusText();
@@ -347,17 +347,25 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		            			if( statusCode == pjsip_status_code.PJSIP_SC_OK ){
 		            			//	Log.d(THIS_FILE, "Now account "+account.display_name+" has expires "+accountInfo.getExpires());
 				            		if(accountInfo.getExpires() > 0){
-				            			color = Color.argb(255, 63, 255, 0);
+				            			//Green
+				            			color = Color.argb(255, 132, 227, 0);
+				            			indicatorResource = R.drawable.ic_indicator_on;
 				            		}else{
-				            			color = Color.argb(255, 100, 100, 100); //Default color for not added account
+				            			//Yellow unregistred
+				            			color = Color.argb(255, 255, 194, 0);
+				            			indicatorResource = R.drawable.ic_indicator_yellow;
 				        	            status = "Unregistred";
 				            		}
 		            			}else{
 		            				if(statusCode == pjsip_status_code.PJSIP_SC_PROGRESS ||
 		            						statusCode == pjsip_status_code.PJSIP_SC_TRYING){
+		            					//Yellow progressing ...
 		            					color = Color.argb(255, 255, 194, 0);
+		            					indicatorResource = R.drawable.ic_indicator_yellow;
 		            				}else{
+		            					//Red : error
 		            					color = Color.argb(255, 255, 0, 0);
+		            					indicatorResource = R.drawable.ic_indicator_red;
 		            				}
 			            		}
 		            	}
@@ -380,7 +388,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
             final ImageView barOnOff = (ImageView) indicator.findViewById(R.id.bar_onoff);
             //Update checkbox selection
             activeCheckbox.setChecked( account.active );
-            barOnOff.setImageResource(account.active?R.drawable.ic_indicator_on : R.drawable.ic_indicator_off);
+            barOnOff.setImageResource(account.active?indicatorResource : R.drawable.ic_indicator_off);
             
             //Update account image
             WizardInfo wizardInfos = WizardUtils.getWizardClassInfos(account.wizard);

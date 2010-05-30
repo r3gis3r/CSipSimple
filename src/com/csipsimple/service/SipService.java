@@ -173,7 +173,7 @@ public class SipService extends Service {
 		 * If not well formated we try to add domain name of the default account
 		 */
 		@Override
-		public void makeCall(String callee) throws RemoteException { SipService.this.makeCall(callee); }
+		public void makeCall(String callee, int accountId) throws RemoteException { SipService.this.makeCall(callee, accountId); }
 
 		
 		
@@ -640,10 +640,12 @@ public class SipService extends Service {
 	public void updateRegistrationsState() {
 		boolean hasSomeSuccess = false;
 		AccountInfo info;
-		for (int accountDbId : activeAccounts.keySet()) {
-			info = getAccountInfo(accountDbId);
-			if (info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
-				hasSomeSuccess = true;
+		synchronized (pjAccountsCreationLock) {
+			for (int accountDbId : activeAccounts.keySet()) {
+				info = getAccountInfo(accountDbId);
+				if (info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+					hasSomeSuccess = true;
+				}
 			}
 		}
 		
@@ -753,7 +755,7 @@ public class SipService extends Service {
 	 * @param callee remote contact ot call
 	 * If not well formated we try to add domain name of the default account
 	 */
-	public int makeCall(String callee) {
+	public int makeCall(String callee, int accountId) {
 		if(!created) {
 			return -1;
 		}
@@ -762,11 +764,14 @@ public class SipService extends Service {
 		if( ! Pattern.matches("^.*(<)?sip(s)?:[^@]*@[^@]*(>)?", callee) ) {
 			//Assume this is a direct call using digit dialer
 			
-			int default_acc = pjsua.acc_get_default();
-			Log.d(THIS_FILE, "default acc : "+default_acc);
+			int defaultAccount = accountId;
+			if(defaultAccount == -1) {
+				defaultAccount = pjsua.acc_get_default();
+			}
+			Log.d(THIS_FILE, "default acc : "+defaultAccount);
 			//TODO : use the standard call 
 			pjsua_acc_info acc_info = new pjsua_acc_info();
-			pjsua.acc_get_info(default_acc, acc_info);
+			pjsua.acc_get_info(defaultAccount, acc_info);
 			//Reformat with default account
 			String default_domain = acc_info.getAcc_uri().getPtr();
 			if(default_domain == null) {
@@ -790,15 +795,17 @@ public class SipService extends Service {
 		if(pjsua.verify_sip_url(callee) == 0) {
 			pj_str_t uri = pjsua.pj_str_copy(callee);
 			Log.d(THIS_FILE, "get for outgoing");
-			int acc_id = pjsua.acc_find_for_outgoing(uri);
-			Log.d(THIS_FILE, "acc id : "+acc_id);
+			if(accountId == -1) {
+				accountId = pjsua.acc_find_for_outgoing(uri);
+			}
 			
 			//Nothing to do with this values
 			byte[] user_data = new byte[1];
 			pjsua_msg_data msg = new pjsua_msg_data();
 			int[] call_id = new int[1];
-			return pjsua.call_make_call(acc_id, uri , 0, user_data, msg, call_id);
+			return pjsua.call_make_call(accountId, uri , 0, user_data, msg, call_id);
 		} else {
+			//TODO : toast error
 			Log.e(THIS_FILE, "asked for a bad uri "+callee);
 			
 		}

@@ -59,18 +59,18 @@ import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class OutgoingCallChooser extends ListActivity {
 	
-	private DBAdapter db;
-	private AccountAdapter ad;
+	private DBAdapter database;
+	private AccountAdapter adapter;
 	
 	String number;
 	
 	public final static int AUTO_CHOOSE_TIME = 8000;
-	private List<Account> accounts_list;
-	
+	private List<Account> accountsList;
+
 	private static final String THIS_FILE = "SIP OUTChoose";
 	
 	private ISipService service;
-	private ServiceConnection m_connection = new ServiceConnection(){
+	private ServiceConnection connection = new ServiceConnection(){
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
@@ -107,17 +107,12 @@ public class OutgoingCallChooser extends ListActivity {
 		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
 
 		// Fill accounts with currently avalaible accounts
-		db = new DBAdapter(this);
-		db.open();
-		accounts_list = db.getListAccounts();
-		db.close();
-		// And set as adapter
-		ad = new AccountAdapter(this, accounts_list);
-		ad.setNotifyOnChange(false);
-		setListAdapter(ad);
+		updateList();
+		setListAdapter(adapter);
+		
 
 		// Inform the list we provide context menus for items
-		getListView().setOnCreateContextMenuListener(this);
+	//	getListView().setOnCreateContextMenuListener(this);
 
 		LinearLayout add_row = (LinearLayout) findViewById(R.id.use_pstn_row);
 		add_row.setOnClickListener(new OnClickListener() {
@@ -132,11 +127,11 @@ public class OutgoingCallChooser extends ListActivity {
 			}
 		});
 		
-		Intent sipServ = new Intent(this, SipService.class);
+		Intent sipService = new Intent(this, SipService.class);
 		
 		//Start service and bind it
-		startService(sipServ);
-		bindService(sipServ, m_connection, Context.BIND_AUTO_CREATE);
+		startService(sipService);
+		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
 	}
 	
@@ -144,7 +139,7 @@ public class OutgoingCallChooser extends ListActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unbindService(m_connection);
+		unbindService(connection);
 		unregisterReceiver(regStateReceiver);
 	}
 
@@ -155,7 +150,7 @@ public class OutgoingCallChooser extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 		Log.d(THIS_FILE, "Click at index " + position + " id " + id);
 
-		Account account = ad.getItem(position);
+		Account account = adapter.getItem(position);
 		Class<?> selected_class = WizardUtils.getWizardClass(account.wizard);
 		if (selected_class != null && service != null) {
 			AccountInfo accountInfo;
@@ -167,8 +162,7 @@ public class OutgoingCallChooser extends ListActivity {
 			if (accountInfo != null && accountInfo.isActive()) {
 				if (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
 					try {
-						// TODO : enable to choose your account
-						service.makeCall(number);
+						service.makeCall(number, accountInfo.getPjsuaId());
 						finish();
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Unable to make the call", e);
@@ -182,19 +176,33 @@ public class OutgoingCallChooser extends ListActivity {
 
 	
 	
+	
 	/**
 	 * Flush and re-populate static list of account (static because should not exceed 3 or 4 accounts)
 	 */
-	private void updateList(){
-		db.open();
-		accounts_list = db.getListAccounts();
-		ad.clear();
-		for(Account acc : accounts_list){
-			ad.add(acc);
-		}
-		db.close();
-		ad.notifyDataSetChanged();
-	}
+    
+    private synchronized void updateList() {
+    //	Log.d(THIS_FILE, "We are updating the list");
+    	if(database == null) {
+    		database = new DBAdapter(this);
+    	}
+    	
+    	database.open();
+		accountsList = database.getListAccounts();
+		database.close();
+    	
+    	if(adapter == null) {
+    		adapter = new AccountAdapter(this, accountsList);
+    		adapter.setNotifyOnChange(false);
+    	}else {
+    		adapter.clear();
+    		for(Account acc : accountsList){
+    			adapter.add(acc);
+    		}
+    		adapter.notifyDataSetChanged();
+    	}
+    }
+    
 	
 	
 	class AccountAdapter extends ArrayAdapter<Account> {

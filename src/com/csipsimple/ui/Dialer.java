@@ -129,6 +129,8 @@ public class Dialer extends Activity implements OnClickListener,
 
 	private Timer toneTimer;
 
+	private boolean useDialtone = true;
+
 
 	/** Called when the activity is first created. */
 	@Override
@@ -208,19 +210,22 @@ public class Dialer extends Activity implements OnClickListener,
 		//Bind service
 		contextToBindTo.bindService(new Intent(contextToBindTo, SipService.class), connection, Context.BIND_AUTO_CREATE);
 
-		//Create dialtone just for user feedback
-		synchronized (toneGeneratorLock) {
-			if(toneTimer == null) {
-				toneTimer = new Timer();
-			}
-			if (toneGenerator == null) {
-				try {
-					toneGenerator = new ToneGenerator(DIAL_TONE_STREAM_TYPE, TONE_RELATIVE_VOLUME);
-					//Allow user to control dialtone
-					setVolumeControlStream(DIAL_TONE_STREAM_TYPE);
-				} catch (RuntimeException e) {
-					//If impossible, nothing to do
-					toneGenerator = null;
+		
+		if(useDialtone ) {
+			//Create dialtone just for user feedback
+			synchronized (toneGeneratorLock) {
+				if(toneTimer == null) {
+					toneTimer = new Timer();
+				}
+				if (toneGenerator == null) {
+					try {
+						toneGenerator = new ToneGenerator(DIAL_TONE_STREAM_TYPE, TONE_RELATIVE_VOLUME);
+						//Allow user to control dialtone
+						setVolumeControlStream(DIAL_TONE_STREAM_TYPE);
+					} catch (RuntimeException e) {
+						//If impossible, nothing to do
+						toneGenerator = null;
+					}
 				}
 			}
 		}
@@ -298,6 +303,7 @@ public class Dialer extends Activity implements OnClickListener,
 	
 
 	private void playTone(int tone) {
+		
 		boolean silent = (ringerMode == AudioManager.RINGER_MODE_SILENT) || (ringerMode == AudioManager.RINGER_MODE_VIBRATE);
 		//TODO add user pref for that
 		boolean vibrate = silent || true;
@@ -374,7 +380,7 @@ public class Dialer extends Activity implements OnClickListener,
 		dialUser.getText().clear();
 		dialDomain.getText().clear();
 		try {
-			service.makeCall(toCall);
+			service.makeCall(toCall, -1);
 		} catch (RemoteException e) {
 			Log.e(THIS_FILE, "Service can't be called to make the call");
 		}

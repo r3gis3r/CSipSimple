@@ -78,7 +78,13 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 			}
 		});
 		fillLayout();
-		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateDescriptions();
+		saveButton.setEnabled(canSave());
 	}
 	
 	@Override
@@ -92,7 +98,7 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 			String key) {
 
 		updateDescriptions();
-		saveButton.setEnabled(canSave());	
+		saveButton.setEnabled(canSave());
 	}
 	
 	

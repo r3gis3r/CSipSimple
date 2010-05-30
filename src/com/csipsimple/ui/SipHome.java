@@ -17,7 +17,6 @@
  */
 package com.csipsimple.ui;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import android.app.TabActivity;
@@ -25,7 +24,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -50,7 +48,6 @@ public class SipHome extends TabActivity {
 	public static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
 	
 	private static final String THIS_FILE = "SIP HOME";
-	
 	
 	private Intent serviceIntent;
 	

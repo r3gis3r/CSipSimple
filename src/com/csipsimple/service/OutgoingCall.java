@@ -46,6 +46,7 @@ public class OutgoingCall extends BroadcastReceiver {
 		Log.d(THIS_FILE, "We are trying to call " + full_number);
 		if (!prefsWrapper.useIntegrateDialer() || ignoreNext.equalsIgnoreCase(number)) {
 			Log.d(THIS_FILE, "we will force it ");
+			ignoreNext = "";
 			setResultData(number);
 			return;
 		}

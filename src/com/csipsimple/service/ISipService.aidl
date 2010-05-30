@@ -31,7 +31,7 @@ interface ISipService{
 	
 	void switchToAutoAnswer();
 	
-	void makeCall(in String callee);
+	void makeCall(in String callee, int accountId);
 	int answer(int callId, int status);
 	int hangup(int callId, int status);
 	int sendDtmf(int callId, int keyCode);

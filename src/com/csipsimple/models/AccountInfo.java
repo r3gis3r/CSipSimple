@@ -63,7 +63,12 @@ public class AccountInfo implements Parcelable, Serializable{
 	
 	
 	public void fillWithPjInfo(pjsua_acc_info pjInfo) {
-		statusCode = pjInfo.getStatus();
+		try {
+			statusCode = pjInfo.getStatus();
+		}catch (IllegalArgumentException e) {
+			//TODO : find a better default?
+			statusCode = pjsip_status_code.PJSIP_SC_INTERNAL_SERVER_ERROR;
+		}
 		statusText = pjInfo.getStatus_text().getPtr();
 		expires = pjInfo.getExpires();
 	}
