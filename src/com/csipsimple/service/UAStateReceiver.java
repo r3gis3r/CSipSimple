@@ -17,6 +17,8 @@
  */
 package com.csipsimple.service;
 
+import java.util.Date;
+
 import org.pjsip.pjsua.Callback;
 import org.pjsip.pjsua.SWIGTYPE_p_p_pjmedia_port;
 import org.pjsip.pjsua.SWIGTYPE_p_pjmedia_session;
@@ -31,6 +33,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -39,10 +42,12 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.CallLog;
 import android.provider.Settings;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
+import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
@@ -54,13 +59,16 @@ public class UAStateReceiver extends Callback {
 	private int savedVibradeNotif;
 	private int savedWifiPolicy;
 	private int savedVolume;
-	private boolean savedSpeakerPhone;
+	//private boolean savedSpeakerPhone;
 	private boolean savedMicrophoneMute;
+	//private int savedRouting;
+	private int savedMode;
+	
+	
 	private boolean autoAcceptCurrent = false;
 
 	private NotificationManager notificationManager;
 	private SipService service;
-	private int savedMode;
 
 //	private boolean savedBluetooth;
 
@@ -133,11 +141,21 @@ public class UAStateReceiver extends Callback {
 	// -------
 
 	private CallInfo currentCallInfo;
+	private long currentCallStart = 0;
+	private boolean currentCallIncoming = false;
+	
+	public CallInfo getCurrentCallInfo() {
+		return currentCallInfo;
+	}
 
 
 	private com.csipsimple.service.UAStateReceiver.WorkerHandler msgHandler;
 
 	private AudioManager audioManager;
+
+	private HandlerThread handlerThread;
+
+
 	private void updateCallInfo(int callId) {
 		if(currentCallInfo == null) {
 			currentCallInfo = new CallInfo(callId);
@@ -169,6 +187,8 @@ public class UAStateReceiver extends Callback {
 			switch (msg.what) {
 			case ON_INCOMING_CALL:{
 				int callId = currentCallInfo.getCallId();
+				currentCallIncoming = true;
+				
 				// Automatically answer incoming calls with 180/RINGING
 				service.callAnswer(callId, 180);
 				
@@ -197,17 +217,42 @@ public class UAStateReceiver extends Callback {
 					launchCallHandler();
 		
 				} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
+					//Nothing to do...
 				} else {
 					if(ringer.isRinging()) {
 						setAudioMode(AudioManager.MODE_NORMAL);
 						ringer.stopRing();
 					}
-					// Call is now ended
-					if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+					
+					if(callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
+						currentCallStart = System.currentTimeMillis();
+						
+					}else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+						// Call is now ended
 						service.stopDialtoneGenerator();
 						notificationManager.cancel(SipService.CALL_NOTIF_ID);
 						Log.d(THIS_FILE, "Finish call2");
 						unsetAudioInCall();
+						//CallLog
+						ContentValues cv = CallLogHelper.logValuesForCall(currentCallInfo);
+						cv.put(CallLog.Calls.NEW, (currentCallStart > 0)?1:0);
+						cv.put(CallLog.Calls.DATE, (currentCallStart>0 )?currentCallStart:System.currentTimeMillis());
+						int type = CallLog.Calls.OUTGOING_TYPE;
+						if(currentCallIncoming) {
+							type = CallLog.Calls.MISSED_TYPE;
+							if(currentCallStart>0) {
+								type = CallLog.Calls.INCOMING_TYPE;
+							}
+						}
+						Log.d(THIS_FILE, "We write call log : "+type+" / "+currentCallIncoming+" -- "+currentCallStart);
+						cv.put(CallLog.Calls.TYPE, type);
+						cv.put(CallLog.Calls.DURATION, (currentCallStart>0)?(System.currentTimeMillis()-currentCallStart)/1000:0);
+						if(service.prefsWrapper.useIntegrateDialer()) {
+							CallLogHelper.addCallLog(service.getContentResolver(), cv);
+						}
+						
+						currentCallIncoming = false;
+						currentCallStart = 0;
 					}
 				}
 				onBroadcastCallState(currentCallInfo);
@@ -240,10 +285,11 @@ public class UAStateReceiver extends Callback {
 		notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
 		ringer = new Ringer(service);
 		
-		HandlerThread thread = new HandlerThread("UAStateAsyncWorker");
-        thread.start();
-        msgHandler = new WorkerHandler(thread.getLooper());
+		handlerThread = new HandlerThread("UAStateAsyncWorker");
+		handlerThread.start();
+        msgHandler = new WorkerHandler(handlerThread.getLooper());
 	}
+	
 
 	// --------
 	// Private methods
@@ -309,11 +355,11 @@ public class UAStateReceiver extends Callback {
 		savedVibradeNotif = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
 		savedWifiPolicy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
 		savedVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-		savedSpeakerPhone = audioManager.isSpeakerphoneOn();
+	//	savedSpeakerPhone = audioManager.isSpeakerphoneOn();
 		savedMicrophoneMute = audioManager.isMicrophoneMute();
 	//	savedBluetooth = am.isBluetoothA2dpOn();
-		savedMode = audioManager.getMode();
-		
+		savedMode = getAudioMode();
+	//	savedRouting = audioManager.getRouting(audioManager.getMode());
 		isSavedAudioState = true;
 	}
 	
@@ -336,20 +382,22 @@ public class UAStateReceiver extends Callback {
 		
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
-		//For android 1.5
-		if(!Compatibility.isCompatible(4)) {
-			//TODO : save / restore it
+		//For android 1.5 - 1.6
+		/*
+		if(!Compatibility.isCompatible(5)) {
 			audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
-			audioManager.setRouting(AudioManager.MODE_IN_CALL,
+			audioManager.setRouting(audioManager.getMode(),
 						   AudioManager.ROUTE_EARPIECE,
 						   AudioManager.ROUTE_ALL);
 		}
+		*/
+		setAudioMode(AudioManager.MODE_IN_CALL);
+		audioManager.setMicrophoneMute(false);
+		
 		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 
 				audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*3/4, 
 				0);
 
-		audioManager.setSpeakerphoneOn(false);
-		audioManager.setMicrophoneMute(false);
 		
 	//	setAudioMode(AudioManager.MODE_IN_CALL);
 	}
@@ -369,23 +417,41 @@ public class UAStateReceiver extends Callback {
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
 		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
-		audioManager.setSpeakerphoneOn(savedSpeakerPhone);
+		
+	//	audioManager.setSpeakerphoneOn(savedSpeakerPhone);
+		setAudioMode(savedMode);
 		audioManager.setMicrophoneMute(savedMicrophoneMute);
 	//	am.setBluetoothA2dpOn(savedBluetooth);
-		audioManager.setMode(savedMode);
+	//	audioManager.setMode(savedMode);
 		
-		if(!Compatibility.isCompatible(4)) {
-			audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
+		/*
+		if(!Compatibility.isCompatible(5)) {
+		//	audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
+			audioManager.setRouting(audioManager.getMode(), savedRouting, AudioManager.ROUTE_ALL);
 		}
+		*/
 		isSavedAudioState = false;
 	}
 
 	private static Object audioModeMutex = new Object();
 	
 	private void setAudioMode(int mode) {
-		
         synchronized (audioModeMutex) {
-            audioManager.setMode(mode);
+        	if(Compatibility.isCompatible(5)) {
+        		audioManager.setSpeakerphoneOn(mode == AudioManager.MODE_NORMAL);
+        	}else {
+        		audioManager.setMode(mode);
+        	}
+		}
+	}
+	
+	private int getAudioMode() {
+		synchronized (audioModeMutex) {
+            if(Compatibility.isCompatible(5)) {
+            	return audioManager.isSpeakerphoneOn()?AudioManager.MODE_NORMAL:AudioManager.MODE_IN_CALL;
+            }else {
+            	return audioManager.getMode();
+            }
 		}
 	}
 	

@@ -110,7 +110,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		dialPad.setOnDialKeyListener(this);
 		callInfoPanel = (View) findViewById(R.id.callInfoPanel);
 		
-		quitTimer = new Timer();
 		
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
 	}
@@ -130,6 +129,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         	keyguardLock.disableKeyguard();
         }
         
+        if(quitTimer == null) {
+    		quitTimer = new Timer();
+        }
+        
         //Enlight the screen
         
         
@@ -141,8 +144,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if(manageKeyguard) {
 			keyguardLock.reenableKeyguard();
 		}
-
+		if(quitTimer != null) {
+			quitTimer.cancel();
+			quitTimer.purge();
+			quitTimer = null;
+		}
 	}
+	
+	
 
 	private synchronized void updateUIFromCall() {
 
@@ -210,7 +219,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	private void delayedQuit() {
 		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
-		quitTimer.schedule(new QuitTimerTask(), 3000);
+		if(quitTimer != null) {
+			quitTimer.schedule(new QuitTimerTask(), 3000);
+		}else {
+			finish();
+		}
 	}
 	
 	private class QuitTimerTask extends TimerTask{
@@ -298,8 +311,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			//when this view registers the on ua call state changed
 			CallInfo realCallInfo;
 			try {
+				Log.d(THIS_FILE, "Service started get real call info "+callInfo.getCallId());
 				realCallInfo = service.getCallInfo(callInfo.getCallId());
 				callInfo = realCallInfo;
+				Log.d(THIS_FILE, "Real call info "+callInfo.getCallId());
 				if(callInfo == null) {
 					finish();
 				}else {

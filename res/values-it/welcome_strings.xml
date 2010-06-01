@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Gianluca Lenti
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+	
+	
+-->
+<resources>
+<string name="first_launch_text">&lt;h2&gt;Stai per eseguire questa applicazione per la prima volta.&lt;/h2&gt;&lt;br/&gt;&lt;b&gt;Si prega di prestare attenzione alle seguenti istruzioni:&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;1 .&lt;/b&gt; Attendere che il seguente download termini &lt;br/&gt;&lt;i&gt;(è il download di una parte del software che dipende dal dispositivo Android)&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;2 .&lt;/b&gt;Successivamente verrà chiesto di compilare la configurazione del tuo account SIP.&lt;br /&gt;&lt;br/&gt;&lt;b&gt;3 . &lt;/b&gt;Infine si dovrà scegliere come utilizzare l\'account SIP cellulare&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;h2&gt;Questo è un software OpenSource&lt;/h2&gt;&lt;br/&gt;...and TU puoi contribuire (segnalazione di bug, traduzioni e documentazione sono preziosi contributi).&lt;br/&gt;Puoi consultare il sito web della community a &lt;a href=&quot;http://www.csipsimple.com&quot;&gt;www.csipsimple.com&lt;/a&gt;&lt;br/&gt;Questo software è distribuito sotto i termini della licenza GPLv3 (più dettagli sul nostro sito web).&lt;br/&gt;Per alcune funzionalità (come il VoIP tramite GSM), si deve essere sicuri che il contratto con l\'operatore telefonico permetta questa funzione prima di attivare nell\'applicazione. &lt;i&gt;(In caso contrario, cambia operatore o fai pressioni per garantire la neutralità di rete sul contratto).&lt;/i&gt;</string>
+<string name="changelog_text">&lt;h2&gt;Novità in questa versione?&lt;/h2&gt;L\'applicazione è ancora in fase alfa. Si può seguire il log dei cambiamenti sul blog dell\'applicazione</string>
+</resources>

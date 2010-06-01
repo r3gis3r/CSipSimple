@@ -200,7 +200,12 @@ public class SipService extends Service {
 		@Override
 		public CallInfo getCallInfo(int callId) throws RemoteException {
 			if(created) {
-				return new CallInfo(callId);
+				CallInfo callInfo = userAgentReceiver.getCurrentCallInfo();
+				if(callId != callInfo.getCallId()) {
+					Log.w(THIS_FILE, "we try to get an info for a call that is not the current one :  "+callId);
+					callInfo = new CallInfo(callId);
+				}
+				return callInfo;
 			}
 			return null;
 		}
@@ -213,7 +218,7 @@ public class SipService extends Service {
 	private boolean hasSipStack = false;
 	private boolean sipStackIsCorrupted = false;
 	private ServiceDeviceStateReceiver deviceStateReceiver;
-	private PreferencesWrapper prefsWrapper;
+	PreferencesWrapper prefsWrapper;
 	private pj_pool_t dialtonePool;
 	private pjmedia_port dialtoneGen;
 	private int dialtoneSlot = -1;
@@ -393,8 +398,12 @@ public class SipService extends Service {
 						// GLOBAL CONFIG
 						pjsua.config_default(cfg);
 						cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
-						pjsua.setCallbackObject(userAgentReceiver = new UAStateReceiver());
-						userAgentReceiver.initService(SipService.this);
+						if(userAgentReceiver == null) {
+							userAgentReceiver = new UAStateReceiver();
+							userAgentReceiver.initService(SipService.this);
+						}
+						pjsua.setCallbackObject(userAgentReceiver);
+						
 
 						Log.d(THIS_FILE, "Attach is done to callback");
 
@@ -500,6 +509,9 @@ public class SipService extends Service {
 				pjsua.destroy();
 				accountsAddingStatus.clear();
 				activeAccounts.clear();
+			}
+			if(userAgentReceiver != null) {
+				userAgentReceiver = null;
 			}
 		}
 		

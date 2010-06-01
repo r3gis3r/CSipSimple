@@ -23,10 +23,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.View.MeasureSpec;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 
-public class SlidingChooser extends ViewGroup {
+public class SlidingChooser extends HorizontalScrollView {
 	
 	private static final String THIS_FILE = "Sliding chooser";
+	private LinearLayout choicesWrapper;
 
 	public SlidingChooser(Context context) {
 		this(context, null);
@@ -34,26 +37,40 @@ public class SlidingChooser extends ViewGroup {
 	
 	public SlidingChooser(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
+		choicesWrapper = new LinearLayout(context);
+		choicesWrapper.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
+		addView(choicesWrapper);
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		// TODO Auto-generated method stub
+		if (!changed) {
+			return;
+		}
+		
+		
+		invalidate();
 
 	}
 	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	//	super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		
 		int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
-		int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
-
 		int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
+		
+		int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+		int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
+
 
 		if (widthSpecMode == MeasureSpec.UNSPECIFIED || heightSpecMode == MeasureSpec.UNSPECIFIED) {
 			throw new RuntimeException("Sliding chooser cannot have UNSPECIFIED dimensions");
 		}
 
-		setMeasuredDimension(widthSpecSize, 10);
+		setMeasuredDimension(widthSpecSize, 50);
+		
 	}
 
 }

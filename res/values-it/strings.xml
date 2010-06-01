@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Gianluca Lenti
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+	
+-->
+
+<resources>
+
+	<string name="app_name">CSipSimple</string>
+	<string name="unable_to_download_file">Impossibile scaricare file</string>
+	<string name="connection_not_valid">La tua connessione non è valida per SIP (attiva WIFI o cambia preferenze per usare 3G)</string>
+	<string name="accounts">Account</string>
+	<string name="save">Salva</string>
+	<string name="cancel">Cancella</string>
+	<string name="activate_account">Attiva account</string>
+	<string name="deactivate_account">Disattiva account</string>
+	<string name="delete_account">Cancella account</string>
+	<string name="modify_account">Modifica account</string>
+	<string name="add_account">Aggiungi account</string>
+	<string name="choose_wizard">Wizard di scelta</string>
+	<string name="use_pstn">Usa GSM</string>
+	<string name="ongoing_call">Chiamate in uscita</string>
+	
+</resources>

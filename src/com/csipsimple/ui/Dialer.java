@@ -129,7 +129,8 @@ public class Dialer extends Activity implements OnClickListener,
 
 	private Timer toneTimer;
 
-	private boolean useDialtone = true;
+	//TODO : add an option for that
+	private boolean useDialtone = false;
 
 
 	/** Called when the activity is first created. */

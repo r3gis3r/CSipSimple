@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Gianluca Lenti
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+	
+-->
+<resources>
+<string name="prefs">Impostazioni</string>
+
+<string name="prefs_fast">Configurazione facile</string>
+<string name="prefs_fast_desc">Opzioni  rapide da utilizzare se non si sa come funziona SIP</string>
+<string name="prefs_network">Rete</string>
+<string name="prefs_network_desc">How SIP can be connected to the network</string>
+<string name="prefs_media">Audio</string>
+<string name="prefs_media_desc">Codec e qualità del suono in chiamata</string>
+<string name="prefs_ui">Interfaccia utente</string>
+<string name="prefs_ui_desc">Tweak interfaccia utente</string>
+
+<!-- Network -->
+<string name="for_incomings">Per chiamate in ingresso</string>
+<string name="for_outgoings">Per chiamate in uscita</string>
+<string name="perfs">Prestazioni</string>
+<string name="transport">Trasporto</string>
+
+<string name="use_wifi">Usa wifi</string>
+<string name="use_wifi_in_desc">Usa wifi per chiamate in ingresso</string>
+<string name="use_wifi_out_desc">Usa wifi per chiamate in uscita</string>
+<string name="use_3g">Usa 3G</string>
+<string name="use_3g_disclamer">La tua compagnia telefonica DEVE consentire questa opzione</string>
+<string name="lock_wifi">Blocca wifi</string>
+<string name="lock_wifi_desc">Evita la dissattivazione del wifi quando SIP è connesso</string>
+<string name="network_transport">Protocollo</string>
+<string name="network_transport_desc">Protocollo di rete da utilizzare</string>
+<string name="network_transport_port">Porta</string>
+<string name="network_transport_port_desc">Numero di porta</string>
+
+<!-- Media -->
+
+<string name="audio_quality">Qualità audio </string>
+<string name="codecs">Codec</string>
+<string name="ice_turn">ICE/TURN</string>
+
+<string name="echo_cancellation">Cancellazione echo</string>
+<string name="echo_cancellation_desc">Attiva la cancellazione dell\'echo</string>
+<string name="enable_vad">Rilevamento della voce</string>
+<string name="enable_vad_desc">Attiva il rilevamento della voce</string>
+<string name="snd_auto_close_time">Tempo di chiusura automatica</string>
+<string name="snd_auto_close_time_desc">Tempo di attesa per la chiusura del canale audio (dovrebbe essere impostato per risolvere un bug su android 1.5)</string>
+<string name="snd_media_quality">Qualità audio</string>
+<string name="snd_media_quality_desc">Qualità dell\'audio (modifica solo se  sai cosa stai facendo)</string>
+<string name="snd_clock_rate">Clock rate</string>
+<string name="snd_clock_rate_desc">Frequenza del canale audio</string>
+<string name="enable_ice">Abilita ICE</string>
+<string name="enable_ice_desc">Attiva ICE </string>
+<string name="enable_turn">Attiva TURN</string>
+<string name="enable_turn_desc">Attiva TURN </string>
+<string name="turn_server">Turn server</string>
+<string name="turn_server_desc">Turn server (HOST:PORT)</string>
+<string name="codecs_desc">Priorità (0 disabilita)</string>
+
+<!-- UI -->
+<string name="general_ui">Interfaccia utente generale</string>
+<string name="native_dialer_integration">Integrazione con il  dialer nativo</string>
+
+<string name="integrate_with_native_dialer">Attiva integrazione</string>
+<string name="integrate_with_native_dialer_desc">Quando componi il numero con il dialer nativo ti verrà chiesto se vuoi usrae SIP o GSM</string>
+<string name="exclude_for_outgoing_call">Escludi patterns</string>
+<string name="exclude_for_outgoing_call_desc">Escludi patterns per chiamate inuscita</string>
+<string name="start_with_text_dialer">Dialer testuale</string>
+<string name="start_with_text_dialer_desc">Inizia con il dialer testuale</string>
+<string name="use_alternate_unlocker">Non usare sblocco scorrevole</string>
+<string name="use_alternate_unlocker_desc">Usa i bottoni invece dello slide per accettare le chiamate in ingresso</string>
+
+<!-- Fast settings -->
+<string name="android_integration">Integrazione con Android</string>
+<string name="android_integration_desc">Integration con il dialer nativor e log delle chiamate</string>
+<string name="availability_profile">Profilo di disponibilità</string>
+<string name="always_available">Sempre disponbile</string>
+<string name="always_available_desc">Utilizzerà la batteria ma le chiamate in ingresso sono sempre ricevibili</string>
+<string name="wifi_available">Disponibile su WIFI</string>
+<string name="wifi_available_desc">Availability off incoming calls based on wifi profile</string>
+<string name="never_available">Solo in uscita</string>
+<string name="never_available_desc">Attiverà il client SIPautomaticamente quando necessario</string>
+<string name="availability_tg">Disponibile su 3G </string>
+<string name="tg_allowed">Mi è consentito usare il 3G</string>
+<string name="tg_allowed_desc">Selezionando questa opzione confermi che il tuo operatore telefonico permette l\'uso della connessione dati GSM per il VoIP</string>
+
+</resources>
