@@ -20,8 +20,8 @@ package com.csipsimple.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
-import com.csipsimple.ui.OutgoingCallChooser;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -57,8 +57,8 @@ public class OutgoingCall extends BroadcastReceiver {
 			Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
 			if (isCallableNumber(number) && prefsWrapper.isValidConnectionForOutgoing()) {
 				// Launch activity to choose what to do with this call
-				Intent outgoingCallChooserIntent = new Intent(context, OutgoingCallChooser.class);
-				outgoingCallChooserIntent.putExtra("number", number);
+				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
+				outgoingCallChooserIntent.setData(Uri.parse("sip:"+number));
 				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 				context.startActivity(outgoingCallChooserIntent);

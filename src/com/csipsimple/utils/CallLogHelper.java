@@ -30,10 +30,28 @@ public class CallLogHelper {
 	}
 	
 	
-	public static ContentValues logValuesForCall(CallInfo call) {
+	public static ContentValues logValuesForCall(CallInfo call, long callStart) {
 		ContentValues cv = new ContentValues();
 		
 		cv.put(CallLog.Calls.NUMBER, call.getRemoteContact());
+		
+		cv.put(CallLog.Calls.NEW, (callStart > 0)?1:0);
+		cv.put(CallLog.Calls.DATE, (callStart>0 )?callStart:System.currentTimeMillis());
+		int type = CallLog.Calls.OUTGOING_TYPE;
+		int nonAcknowledge = 0; 
+		if(call.isIncoming()) {
+			type = CallLog.Calls.MISSED_TYPE;
+			nonAcknowledge = 1;
+			if(callStart>0) {
+				nonAcknowledge = 0;
+				type = CallLog.Calls.INCOMING_TYPE;
+			}
+		}
+		cv.put(CallLog.Calls.TYPE, type);
+		cv.put(CallLog.Calls.NEW, nonAcknowledge);
+		cv.put(CallLog.Calls.DURATION, (callStart>0)?(System.currentTimeMillis()-callStart)/1000:0);
+		
+		
 		return cv;
 	}
 }

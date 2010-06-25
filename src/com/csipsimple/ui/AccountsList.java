@@ -19,9 +19,6 @@ package com.csipsimple.ui;
 
 import java.util.List;
 
-import org.pjsip.pjsua.pjsip_status_code;
-import org.pjsip.pjsua.pjsuaConstants;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -29,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -59,11 +55,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
-import com.csipsimple.models.AccountInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.Log;
-import com.csipsimple.wizards.AddAccountWizard;
+import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
+import com.csipsimple.wizards.WizardChooser;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
@@ -84,8 +81,8 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	
 
 	
-	private static final int REQUEST_ADD = 0;
-	private static final int REQUEST_MODIFY = REQUEST_ADD+1;
+	private static final int CHOOSE_WIZARD = 0;
+	private static final int REQUEST_MODIFY = CHOOSE_WIZARD+1;
 	
 	private static final int NEED_LIST_UPDATE = 1;
 	
@@ -115,7 +112,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		add_row.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivityForResult(new Intent(AccountsList.this, AddAccountWizard.class), REQUEST_ADD);
+				startActivityForResult(new Intent(AccountsList.this, WizardChooser.class), CHOOSE_WIZARD);
 			}
 		});
 		//Bind to sip service
@@ -158,7 +155,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
             return;
         }
         
-        WizardInfo wizardInfos = WizardUtils.getWizardClassInfos(account.wizard);
+        WizardInfo wizardInfos = WizardUtils.getWizardClass(account.wizard);
 
         // Setup the menu header
         menu.setHeaderTitle(account.display_name);
@@ -189,10 +186,10 @@ public class AccountsList extends Activity implements OnItemClickListener {
                 return true;
             }
             case MENU_ITEM_MODIFY : {
-            	Class<?> selected_class = WizardUtils.getWizardClass(account.wizard);
-        		if(selected_class != null){
+            	WizardInfo wizard = WizardUtils.getWizardClass(account.wizard);
+        		if(wizard != null){
         			
-        			Intent it = new Intent(this, selected_class);
+        			Intent it = new Intent(this, wizard.implementation);
         			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
         			
         			startActivityForResult(it, REQUEST_MODIFY);
@@ -213,6 +210,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
     
     
     private synchronized void updateList() {
+    	
     //	Log.d(THIS_FILE, "We are updating the list");
     	if(database == null) {
     		database = new DBAdapter(this);
@@ -241,10 +239,10 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		Account account = adapter.getItem(position);
-		Class<?> selected_class = WizardUtils.getWizardClass(account.wizard);
-		if(selected_class != null){
+		WizardInfo wizard = WizardUtils.getWizardClass(account.wizard);
+		if(wizard != null){
 			
-			Intent intent = new Intent(this, selected_class);
+			Intent intent = new Intent(this, wizard.implementation);
 			intent.putExtra(Intent.EXTRA_UID,  (int) account.id);
 			
 			startActivityForResult(intent, REQUEST_MODIFY);
@@ -260,7 +258,17 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data); 
 		switch(requestCode){
-		case REQUEST_ADD:
+		case CHOOSE_WIZARD:
+			if(resultCode == RESULT_OK) {
+				if(data != null && data.getExtras() != null) {
+					String wizard_id = data.getExtras().getString(WizardUtils.ID);
+					if(wizard_id != null) {
+						WizardInfo wizard = WizardUtils.getWizardClass(wizard_id);
+						startActivityForResult(new Intent(this, wizard.implementation), REQUEST_MODIFY);
+					}
+				}
+			}
+			break;
 		case REQUEST_MODIFY:
 			if(resultCode == RESULT_OK){
 				reloadAsyncAccounts();
@@ -318,80 +326,28 @@ public class AccountsList extends Activity implements OnItemClickListener {
 //            Log.d(THIS_FILE, "Is rendering "+account.display_name);
 	        
             //The status part of the view
-	        TextView labelView = (TextView)view.findViewById(R.id.AccTextView);
-	        TextView statusView = (TextView)view.findViewById(R.id.AccTextStatusView);
-            labelView.setText(account.display_name);
-            // Default color for not added account
-            int color = Color.argb(255, 100, 100, 100); 
-            int indicatorResource = R.drawable.ic_indicator_yellow;
-            
-            String status = "Not added";
-            
-            if(service != null) {
-	            AccountInfo accountInfo;
-				try {
-					accountInfo = service.getAccountInfo(account.id);
-				} catch (RemoteException e) {
-					accountInfo = null;
-				}
-	            if( accountInfo != null && accountInfo.isActive()){
-	            	if( accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS){
-	            		
-	            		status = "Not yet registered";
-	            		color = Color.argb(255, 255, 194, 0);
-	            		indicatorResource = R.drawable.ic_indicator_yellow;
-	            		
-	            		if(accountInfo.getPjsuaId()>=0){
-		            			status = accountInfo.getStatusText();
-		            			pjsip_status_code statusCode = accountInfo.getStatusCode();
-		            			if( statusCode == pjsip_status_code.PJSIP_SC_OK ){
-		            			//	Log.d(THIS_FILE, "Now account "+account.display_name+" has expires "+accountInfo.getExpires());
-				            		if(accountInfo.getExpires() > 0){
-				            			//Green
-				            			color = Color.argb(255, 132, 227, 0);
-				            			indicatorResource = R.drawable.ic_indicator_on;
-				            		}else{
-				            			//Yellow unregistred
-				            			color = Color.argb(255, 255, 194, 0);
-				            			indicatorResource = R.drawable.ic_indicator_yellow;
-				        	            status = "Unregistred";
-				            		}
-		            			}else{
-		            				if(statusCode == pjsip_status_code.PJSIP_SC_PROGRESS ||
-		            						statusCode == pjsip_status_code.PJSIP_SC_TRYING){
-		            					//Yellow progressing ...
-		            					color = Color.argb(255, 255, 194, 0);
-		            					indicatorResource = R.drawable.ic_indicator_yellow;
-		            				}else{
-		            					//Red : error
-		            					color = Color.argb(255, 255, 0, 0);
-		            					indicatorResource = R.drawable.ic_indicator_red;
-		            				}
-			            		}
-		            	}
-	            	}else{
-	            		status = "Unable to register ! Check your configuration";
-	            		color = 0xFF0000FF;
-	            		color = Color.argb(255, 255, 15, 0);
-	            	}
-	            }
-            
-            }
-            //Update status label and color
-            statusView.setText(status);
-            labelView.setTextColor(color);
-            
-            
+	        final TextView labelView = (TextView)view.findViewById(R.id.AccTextView);
+	        final TextView statusView = (TextView)view.findViewById(R.id.AccTextStatusView);
+	        final View indicator = view.findViewById(R.id.indicator);
+	        final AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(service, account.id);
             //The activation part of the view
-            View indicator = view.findViewById(R.id.indicator);
             final CheckBox activeCheckbox = (CheckBox)view.findViewById(R.id.AccCheckBoxActive);
             final ImageView barOnOff = (ImageView) indicator.findViewById(R.id.bar_onoff);
+            
+            
+            labelView.setText(account.display_name);
+            
+            //Update status label and color
+            statusView.setText(accountStatusDisplay.statusLabel);
+            labelView.setTextColor(accountStatusDisplay.statusColor);
+            
+            
             //Update checkbox selection
             activeCheckbox.setChecked( account.active );
-            barOnOff.setImageResource(account.active?indicatorResource : R.drawable.ic_indicator_off);
+            barOnOff.setImageResource( account.active ? accountStatusDisplay.checkBoxIndicator : R.drawable.ic_indicator_off );
             
             //Update account image
-            WizardInfo wizardInfos = WizardUtils.getWizardClassInfos(account.wizard);
+            final WizardInfo wizardInfos = WizardUtils.getWizardClass(account.wizard);
             activeCheckbox.setBackgroundResource(wizardInfos.icon);
 	        
 	        

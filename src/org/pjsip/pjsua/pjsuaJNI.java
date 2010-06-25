@@ -836,6 +836,8 @@ class pjsuaJNI {
   public final static native int set_ec(long jarg1, long jarg2);
   public final static native int get_ec_tail(long jarg1);
   public final static native int enum_codecs(long jarg1, pjsua_codec_info jarg1_, long[] jarg2);
+  public final static native int get_nbr_of_codecs();
+  public final static native long codec_get_id(int jarg1);
   public final static native int codec_set_priority(long jarg1, pj_str_t jarg1_, short jarg2);
   public final static native int codec_get_param(long jarg1, pj_str_t jarg1_, long jarg2, pjmedia_codec_param jarg2_);
   public final static native int codec_set_param(long jarg1, pj_str_t jarg1_, long jarg2, pjmedia_codec_param jarg2_);

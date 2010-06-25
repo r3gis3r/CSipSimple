@@ -16,7 +16,7 @@
 <!-- StateListDrawable used for buttons in the in-call onscreen touch UI. -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-<item android:state_selected="false" android:color="#FFFFFF" />
-<item android:state_selected="true" android:color="#101010" />
 
+<item android:state_selected="true" android:color="#101010" />
+<item android:color="#FFFFFF" />
 </selector>

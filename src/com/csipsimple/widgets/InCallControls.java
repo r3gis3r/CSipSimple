@@ -145,6 +145,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		speakerButton = (ToggleButton) findViewById(R.id.speakerButton);
 		muteButton = (ToggleButton) findViewById(R.id.muteButton);
 		
+		
 		takeCallButton = (Button) findViewById(R.id.takeCallButton);
 		declineCallButton = (Button) findViewById(R.id.declineCallButton);
 		
@@ -196,6 +197,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			inCallButtons.setVisibility(GONE);
 			break;
 		case PJSIP_INV_STATE_CALLING:
+		case PJSIP_INV_STATE_CONNECTING:
 			controlMode = MODE_CONTROL;
 			setCallLockerVisibility(GONE);
 			inCallButtons.setVisibility(VISIBLE);
@@ -217,11 +219,23 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			setCallLockerVisibility(GONE);
 			break;
 		case PJSIP_INV_STATE_EARLY:
-		case PJSIP_INV_STATE_CONNECTING:
 		default:
+			if(callInfo.isIncoming()) {
+				controlMode = MODE_LOCKER;
+				inCallButtons.setVisibility(GONE);
+				setCallLockerVisibility(VISIBLE);
+				inCallButtons.setVisibility(GONE);
+			}else {
+				controlMode = MODE_CONTROL;
+				setCallLockerVisibility(GONE);
+				inCallButtons.setVisibility(VISIBLE);
+				clearCallButton.setEnabled(true);
+				setEnabledMediaButtons(false);
+			}
 			break;
 		}
 	}
+	
 
 	/**
 	 * Registers a callback to be invoked when the user triggers an event.

@@ -17,110 +17,38 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.pjsip.pjsua.pjsip_cred_data_type;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
-
-import android.preference.EditTextPreference;
-import com.csipsimple.utils.Log;
+import java.util.Locale;
 
 import com.csipsimple.R;
-import com.csipsimple.wizards.BasePrefsWizard;
+import com.csipsimple.wizards.SimplePrefsWizard;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public class Freephonie extends BasePrefsWizard {
-	public static String label = "Freephonie";
-	public static String id = "FREEPHONIE";
-	public static int icon = R.drawable.ic_wizard_freephonie;
-	public static int priority = 10;
-	protected static final String THIS_FILE = "Freephonie W";
-
-	private EditTextPreference accountDisplayName;
-	private EditTextPreference accountPhoneNumber;
-	private EditTextPreference accountPassword;
-
+public class Freephonie extends SimplePrefsWizard {
 	
-	protected void fillLayout() {
-		accountDisplayName = (EditTextPreference) findPreference("display_name");
-		accountPhoneNumber = (EditTextPreference) findPreference("phone_number");
-		accountPassword = (EditTextPreference) findPreference("password");
-
-		
-		
-		String display_name = account.display_name;
-		if(display_name.equalsIgnoreCase("")) {
-			display_name = "Freephonie";
-		}
-		accountDisplayName.setText(display_name);
-		String account_cfgid = account.cfg.getId().getPtr();
-		if(account_cfgid == null) {
-			account_cfgid = "";
-		}
-		Pattern p = Pattern.compile("[^<]*<sip:([^@]*)@.*");
-		Matcher m = p.matcher(account_cfgid);
-
-		if (m.matches()) {
-			account_cfgid = m.group(1);
-		}
-
-		accountPhoneNumber.setText(account_cfgid);
-		
-		pjsip_cred_info ci = account.cfg.getCred_info();
-		accountPassword.setText(ci.getData().getPtr());
+	public static WizardInfo getWizardInfo() {
+		WizardInfo result = new WizardInfo();
+		result.id =  "FREEPHONIE";
+		result.label = "Freephonie";
+		result.icon = R.drawable.ic_wizard_freephonie;
+		result.priority = 10;
+		result.countries = new Locale[]{
+			Locale.FRANCE
+		};
+		return result;
 	}
 
-	protected void updateDescriptions() {
-		setStringFieldSummary("display_name");
-		setStringFieldSummary("phone_number");
-		setPasswordFieldSummary("password");
+	@Override
+	protected String getDomain() {
+		return "freephonie.net";
 	}
-
-	protected boolean canSave() {
-		boolean isValid = true;
-		
-		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
-		isValid &= checkField(accountPassword, isEmpty(accountPassword));
-		isValid &= checkField(accountPhoneNumber, isEmpty(accountPhoneNumber));
-
-		return isValid;
-	}
-
-	protected void buildAccount() {
-		Log.d(THIS_FILE, "begin of save ....");
-		account.display_name = accountDisplayName.getText();
-		// TODO add an user display name
-		account.cfg.setId(pjsua.pj_str_copy("<sip:"
-				+ accountPhoneNumber.getText() + "@freephonie.net>"));
-		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:freephonie.net"));
-
-		pjsip_cred_info credentials = account.cfg.getCred_info();
-
-		account.cfg.setCred_count(1);
-		credentials.setRealm(pjsua.pj_str_copy("freephonie.net"));
-		credentials.setUsername(getPjText(accountPhoneNumber));
-		credentials.setData(getPjText(accountPassword));
-		credentials.setScheme(pjsua.pj_str_copy("Digest"));
-		credentials.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
-				.swigValue());
-
-		account.cfg.setReg_timeout(1800); // Minimum value for freephonie
-											// server
+	
+	@Override
+	protected String getDefaultName() {
+		return getWizardInfo().label;
 	}
 
 	@Override
 	protected String getWizardId() {
-		return id;
-	}
-
-	@Override
-	protected int getXmlPreferences() {
-		return R.xml.w_freephonie_preferences;
-	}
-
-	@Override
-	protected String getXmlPrefix() {
-		return "freephonie";
+		return getWizardInfo().id;
 	}
 }

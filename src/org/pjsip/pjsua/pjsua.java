@@ -535,6 +535,15 @@ public class pjsua implements pjsuaConstants {
   public synchronized static int enum_codecs(pjsua_codec_info id, long[] count) {
     return pjsuaJNI.enum_codecs(pjsua_codec_info.getCPtr(id), id, count);
   }
+  
+  public synchronized static int get_nbr_of_codecs() {
+	  return pjsuaJNI.get_nbr_of_codecs();
+  }
+  
+  public synchronized static pj_str_t codec_get_id(int index) {
+	  long cPtr = pjsuaJNI.codec_get_id(index);
+	  return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
+  }
 
   public synchronized static int codec_set_priority(pj_str_t codec_id, short priority) {
     return pjsuaJNI.codec_set_priority(pj_str_t.getCPtr(codec_id), codec_id, priority);

@@ -19,8 +19,6 @@
  */
 package com.csipsimple.utils;
 
-import com.csipsimple.service.UAStateReceiver;
-
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -175,6 +173,7 @@ public class Ringer {
                 Message msg = ringHandler.obtainMessage(STOP_RING);
                 msg.obj = ringtone;
                 ringHandler.sendMessage(msg);
+                PhoneUtils.setAudioMode(context, AudioManager.MODE_NORMAL);
                 ringThread = null;
                 ringHandler = null;
                 ringtone = null;
@@ -266,6 +265,7 @@ public class Ringer {
                             }
                             r = ringtone;
                             if (r != null && !hasMessages(STOP_RING)) {
+                            	PhoneUtils.setAudioMode(context, AudioManager.MODE_RINGTONE);
                                 r.play();
                                 synchronized (Ringer.this) {
                                     ringPending = false;
@@ -287,5 +287,4 @@ public class Ringer {
             };
         }
     }
-
 }

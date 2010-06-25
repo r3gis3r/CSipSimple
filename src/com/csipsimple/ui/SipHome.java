@@ -108,12 +108,13 @@ public class SipHome extends TabActivity {
 	        startService(serviceIntent);
         }
         
+        setContentView(R.layout.home);
         
         dialerIntent = new Intent(this, Dialer.class);
-        calllogsIntent = new Intent(this, BuddyList.class);
+        calllogsIntent = new Intent(this, CallLogsList.class);
         
-        addTab("tab1", "Dial", R.drawable.ic_tab_selected_dialer, dialerIntent);
-        addTab("tab2", "CallLogs", R.drawable.ic_tab_selected_recent, calllogsIntent);
+        addTab("tab1", "Dial", R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
+        addTab("tab2", "CallLogs", R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
         
         
         //If we have no account yet, open account panel,
@@ -128,7 +129,7 @@ public class SipHome extends TabActivity {
         }
     }
     
-    private void addTab(String tag, String label, int icon, Intent content) {
+    private void addTab(String tag, String label, int icon, int ficon, Intent content) {
     	TabHost tabHost = getTabHost();
     	
 		TabSpec tabspecDialer = tabHost.newTabSpec(tag).setContent(content);
@@ -136,18 +137,19 @@ public class SipHome extends TabActivity {
 		boolean fails = true;
 		if(Compatibility.isCompatible(4)) {
 			IndicatorTab icTab = new IndicatorTab(this, null);
-		 	icTab.setResources(label, icon);
+		 	icTab.setResources(label, icon, ficon);
 		 	try {
 				Method method = tabspecDialer.getClass().getDeclaredMethod("setIndicator", View.class);
 				method.invoke(tabspecDialer, icTab);
 				fails = false;
 			} catch (Exception e) {
-				Log.d(THIS_FILE, "We are probably on 1.5 use standard simple tabs");
+				Log.d(THIS_FILE, "We are probably on 1.5 : use standard simple tabs");
 			} 
 		 	
 		}
 		if(fails){
-		    tabspecDialer.setIndicator(label /*, r.getDrawable(R.drawable.ic_tab_selected_dialer)*/ );
+			// Fallback to old style icons
+		    tabspecDialer.setIndicator(label, getResources().getDrawable(icon));
 		}
 		
 		tabHost.addTab(tabspecDialer);

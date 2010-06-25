@@ -17,28 +17,34 @@
  */
 package com.csipsimple.wizards.impl;
 
+import java.util.Locale;
 
 import org.pjsip.pjsua.pjsip_cred_data_type;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 
-import com.csipsimple.wizards.BasePrefsWizard;
-
-import com.csipsimple.R;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import com.csipsimple.utils.Log;
 
-public class Expert extends BasePrefsWizard{
+import com.csipsimple.R;
+import com.csipsimple.wizards.BasePrefsWizard;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-	private static final String TAG = "Expert W";
-	public static String label = "Expert";
-	public static String id = "EXPERT";
-	public static int icon = R.drawable.ic_wizard_expert;
-	public static int priority = -1;
-	
-	
+public class Expert extends BasePrefsWizard {
+
+	public static WizardInfo getWizardInfo() {
+		WizardInfo result = new WizardInfo();
+		result.id = "EXPERT";
+		result.label = "Expert";
+		result.icon = R.drawable.ic_wizard_expert;
+		result.priority = -1;
+		result.countries = new Locale[] {};
+		result.isGeneric = true;
+		return result;
+	}
+
+
 	private EditTextPreference accountDisplayName;
 	private EditTextPreference accountAccId;
 	private EditTextPreference accountRegUri;
@@ -49,13 +55,11 @@ public class Expert extends BasePrefsWizard{
 	private ListPreference accountScheme;
 	private CheckBoxPreference accountPublishEnabled;
 	private EditTextPreference accountRegTimeout;
+	private EditTextPreference accountKaInterval;
 	private EditTextPreference accountForceContact;
 	private EditTextPreference accountProxy;
-	
-	
-	
-	
-	protected void fillLayout(){
+
+	protected void fillLayout() {
 		accountDisplayName = (EditTextPreference) findPreference("display_name");
 		accountAccId = (EditTextPreference) findPreference("acc_id");
 		accountRegUri = (EditTextPreference) findPreference("reg_uri");
@@ -66,51 +70,57 @@ public class Expert extends BasePrefsWizard{
 		accountScheme = (ListPreference) findPreference("scheme");
 		accountPublishEnabled = (CheckBoxPreference) findPreference("publish_enabled");
 		accountRegTimeout = (EditTextPreference) findPreference("reg_timeout");
+		accountKaInterval = (EditTextPreference) findPreference("ka_interval");
 		accountForceContact = (EditTextPreference) findPreference("force_contact");
 		accountProxy = (EditTextPreference) findPreference("proxy");
-		
-		
+
 		pjsip_cred_info ci = account.cfg.getCred_info();
-		
+
 		accountDisplayName.setText(account.display_name);
 		accountAccId.setText(account.cfg.getId().getPtr());
 		accountRegUri.setText(account.cfg.getReg_uri().getPtr());
 		accountRealm.setText(ci.getRealm().getPtr());
 		accountUserName.setText(ci.getUsername().getPtr());
 		accountData.setText(ci.getData().getPtr());
-		
+
 		{
 			String scheme = ci.getScheme().getPtr();
-			if(scheme != null && !scheme.equals("")){
+			if (scheme != null && !scheme.equals("")) {
 				accountScheme.setValue(ci.getScheme().getPtr());
-			}else{
+			} else {
 				accountScheme.setValue("Digest");
 			}
 		}
 		{
-			int ctype=ci.getData_type();
-			if(ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue()){
+			int ctype = ci.getData_type();
+			if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue()) {
 				accountDataType.setValueIndex(0);
-			}else if(ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_DIGEST.swigValue()){
+			} else if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_DIGEST.swigValue()) {
 				accountDataType.setValueIndex(1);
-			}else if(ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_EXT_AKA.swigValue()){
+			} else if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_EXT_AKA.swigValue()) {
 				accountDataType.setValueIndex(2);
-			}else{
+			} else {
 				accountDataType.setValueIndex(0);
 			}
 		}
-		
+
 		accountPublishEnabled.setChecked((account.cfg.getPublish_enabled() == 1));
-		if(account.cfg.getReg_timeout() > 0){
-			accountRegTimeout.setText(""+account.cfg.getReg_timeout());
-		}else{
+		if (account.cfg.getReg_timeout() > 0) {
+			accountRegTimeout.setText("" + account.cfg.getReg_timeout());
+		} else {
 			accountRegTimeout.setText("");
 		}
+		if (account.cfg.getKa_interval() > 0) {
+			accountRegTimeout.setText("" + account.cfg.getKa_interval());
+		} else {
+			accountRegTimeout.setText("");
+		}
+		
 		accountForceContact.setText(account.cfg.getForce_contact().getPtr());
 		accountProxy.setText(account.cfg.getProxy().getPtr());
 	}
-	
-	protected void updateDescriptions(){
+
+	protected void updateDescriptions() {
 		setStringFieldSummary("display_name");
 		setStringFieldSummary("acc_id");
 		setStringFieldSummary("reg_uri");
@@ -119,28 +129,26 @@ public class Expert extends BasePrefsWizard{
 		setStringFieldSummary("proxy");
 		setPasswordFieldSummary("data");
 	}
-	
-	protected boolean canSave(){
+
+	protected boolean canSave() {
 		boolean isValid = true;
-		
+
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
-		isValid &= checkField(accountAccId, isEmpty(accountAccId) ||  !isMatching(accountAccId, "[^<]*<sip(s)?:[^@]*@[^@]*>"));
-		isValid &= checkField(accountRegUri, isEmpty(accountRegUri) || !isMatching(accountRegUri, "sip(s)?:.*" ));
-		isValid &= checkField(accountProxy, ! isEmpty(accountProxy) && !isMatching(accountProxy, "sip(s)?:.*" ));
-		
+		isValid &= checkField(accountAccId, isEmpty(accountAccId) || !isMatching(accountAccId, "[^<]*<sip(s)?:[^@]*@[^@]*>"));
+		isValid &= checkField(accountRegUri, isEmpty(accountRegUri) || !isMatching(accountRegUri, "sip(s)?:.*"));
+		isValid &= checkField(accountProxy, !isEmpty(accountProxy) && !isMatching(accountProxy, "sip(s)?:.*"));
+
 		return isValid;
 	}
-	
 
-	protected void buildAccount(){
-		Log.d(TAG, "begin of build ....");
+	protected void buildAccount() {
 		account.display_name = accountDisplayName.getText();
 		account.cfg.setId(getPjText(accountAccId));
 		account.cfg.setReg_uri(getPjText(accountRegUri));
-		
+
 		pjsip_cred_info ci = account.cfg.getCred_info();
-		
-		if( !isEmpty(accountUserName) ){
+
+		if (!isEmpty(accountUserName)) {
 			account.cfg.setCred_count(1);
 			ci.setRealm(getPjText(accountRealm));
 			ci.setUsername(getPjText(accountUserName));
@@ -148,33 +156,38 @@ public class Expert extends BasePrefsWizard{
 			ci.setScheme(pjsua.pj_str_copy(accountScheme.getValue()));
 			// FIXME this is not the good value !
 			ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
-			
-		}else{
+
+		} else {
 			account.cfg.setCred_count(0);
 		}
-		
-		
-		account.cfg.setPublish_enabled((accountPublishEnabled.isChecked())?1:0);
-		try{
+
+		account.cfg.setPublish_enabled((accountPublishEnabled.isChecked()) ? 1 : 0);
+		try {
 			account.cfg.setReg_timeout(Integer.parseInt(accountRegTimeout.getText()));
-		}catch(NumberFormatException e){
+		} catch (NumberFormatException e) {
 			account.cfg.setReg_timeout(0);
 		}
-		/*
-		account.cfg.setForce_contact(getPjText(accountForceContact));
-		*/
-		if( !isEmpty(accountProxy) ){
-			account.cfg.setProxy_cnt(1);
-			account.cfg.setProxy(getPjText(accountProxy));
-		}else{
-			account.cfg.setProxy_cnt(0);
+		try {
+			account.cfg.setKa_interval(Integer.parseInt(accountKaInterval.getText()));
+		} catch (NumberFormatException e) {
+			account.cfg.setKa_interval(0);
 		}
 		
+		/*
+		 * account.cfg.setForce_contact(getPjText(accountForceContact));
+		 */
+		if (!isEmpty(accountProxy)) {
+			account.cfg.setProxy_cnt(1);
+			account.cfg.setProxy(getPjText(accountProxy));
+		} else {
+			account.cfg.setProxy_cnt(0);
+		}
+
 	}
 
 	@Override
 	protected String getWizardId() {
-		return id;
+		return getWizardInfo().id;
 	}
 
 	@Override

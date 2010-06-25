@@ -15,11 +15,13 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <resources>
-<string name="w_ekiga_display_name">Account name</string>
-<string name="w_ekiga_display_name_desc">Display name for this account</string>
-<string name="w_ekiga_phone_number">User name</string>
-<string name="w_ekiga_phone_number_desc">Sip account login</string>
-<string name="w_ekiga_password">Password</string>
-<string name="w_ekiga_password_desc">Password for your account</string>
+<string name="w_common_display_name">Account name</string>
+<string name="w_common_display_name_desc">Display name for this account</string>
+<string name="w_common_username">User name</string>
+<string name="w_common_username_desc">Sip account login</string>
+<string name="w_common_phone_number">Phone number</string>
+<string name="w_common_phone_number_desc">Sip phone number attributed by your provider</string>
+<string name="w_common_password">Password</string>
+<string name="w_common_password_desc">Password for your account</string>
 
 </resources>

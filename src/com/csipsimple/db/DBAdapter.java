@@ -30,17 +30,19 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.CallLog;
 
 import com.csipsimple.models.Account;
+import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 
 public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
-
+	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	
 	// Fields for table accounts
 	public static final String FIELD_ID = "id";
@@ -58,19 +60,21 @@ public class DBAdapter {
 	public static final String FIELD_FORCE_CONTACT = "force_contact";
 	public static final String FIELD_CONTACT_PARAMS = "contact_params";
 	public static final String FIELD_CONTACT_URI_PARAMS = "contact_uri_params";
-
 	// For now, assume unique proxy
 	public static final String FIELD_PROXY = "proxy";
-
 	// For now, assume unique credential
 	public static final String FIELD_REALM = "realm";
 	public static final String FIELD_SCHEME = "scheme";
 	public static final String FIELD_USERNAME = "username";
 	public static final String FIELD_DATATYPE = "datatype";
 	public static final String FIELD_DATA = "data";
+	
+	
+	//Fields for table calllogs are calllogs fields + ...
+	
 
 	// Creation sql command
-	private static final String DATABASE_CREATE = "CREATE TABLE IF NOT EXISTS "
+	private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
 			+ ACCOUNTS_TABLE_NAME
 			+ " ("
 			+ FIELD_ID+ 				" INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -103,6 +107,20 @@ public class DBAdapter {
 			+ FIELD_DATATYPE 			+ " INTEGER," 
 			+ FIELD_DATA 				+ " TEXT"
 			+ ");";
+	
+	private final static String TABLE_CALLLOGS_CREATE = "CREATE TABLE IF NOT EXISTS "
+			+ CALLLOGS_TABLE_NAME
+			+ " ("
+			+ CallLog.Calls._ID					+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
+			+ CallLog.Calls.CACHED_NAME			+ " TEXT,"
+			+ CallLog.Calls.CACHED_NUMBER_LABEL	+ " TEXT,"
+			+ CallLog.Calls.CACHED_NUMBER_TYPE	+ " INTEGER,"
+			+ CallLog.Calls.DATE				+ " INTEGER,"
+			+ CallLog.Calls.DURATION			+ " INTEGER,"
+			+ CallLog.Calls.NEW					+ " INTEGER,"
+			+ CallLog.Calls.NUMBER				+ " TEXT,"
+			+ CallLog.Calls.TYPE				+ " INTEGER"
+			+");";
 
 	private final static String[] common_projection = {
 			FIELD_ID,
@@ -138,7 +156,8 @@ public class DBAdapter {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			db.execSQL(DATABASE_CREATE);
+			db.execSQL(TABLE_ACCOUNT_CREATE);
+			db.execSQL(TABLE_CALLLOGS_CREATE);
 		}
 
 		@Override
@@ -146,7 +165,9 @@ public class DBAdapter {
 			Log.w(THIS_FILE, "Upgrading database from version "
 							+ oldVersion + " to " + newVersion
 							+ ", which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS_TABLE_NAME);
+			if(oldVersion < 1) {
+				db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS_TABLE_NAME);
+			}
 			onCreate(db);
 		}
 	}
@@ -346,28 +367,30 @@ public class DBAdapter {
 	 */
 	public List<Account> getListAccounts() {
 		ArrayList<Account> ret = new ArrayList<Account>();
-		try {
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, common_projection,
-					null, null, null, null, FIELD_PRIORITY
-							+ " ASC");
-			int numRows = c.getCount();
-		//	Log.d(THIS_FILE, "Found rows : "+numRows);
-			c.moveToFirst();
-			for (int i = 0; i < numRows; ++i) {
-				
-				ContentValues args = new ContentValues();
-				DatabaseUtils.cursorRowToContentValues(c, args);
-				//Commented since password can be print and other app could get back this info
-				//Log.i(THIS_FILE, "Content values extracted : "+args.toString());
-				
-				Account acc = contentValuesToAccount(args);
-				
-				ret.add(acc);
-				c.moveToNext();
+		if(SipService.hasSipStack) {
+			try {
+				Cursor c = db.query(ACCOUNTS_TABLE_NAME, common_projection,
+						null, null, null, null, FIELD_PRIORITY
+								+ " ASC");
+				int numRows = c.getCount();
+			//	Log.d(THIS_FILE, "Found rows : "+numRows);
+				c.moveToFirst();
+				for (int i = 0; i < numRows; ++i) {
+					
+					ContentValues args = new ContentValues();
+					DatabaseUtils.cursorRowToContentValues(c, args);
+					//Commented since password can be print and other app could get back this info
+					//Log.i(THIS_FILE, "Content values extracted : "+args.toString());
+					
+					Account acc = contentValuesToAccount(args);
+					
+					ret.add(acc);
+					c.moveToNext();
+				}
+				c.close();
+			} catch (SQLException e) {
+				Log.e("Exception on query", e.toString());
 			}
-			c.close();
-		} catch (SQLException e) {
-			Log.e("Exception on query", e.toString());
 		}
 
 		return ret;
@@ -417,6 +440,86 @@ public class DBAdapter {
 		int numRows = c.getCount();
 		c.close();
 		return numRows;
+	}
+	
+	
+	
+	// -------------
+	// Call logs
+	// -------------
+	
+	private final static String[] logs_projection = {
+		CallLog.Calls._ID,
+		CallLog.Calls.CACHED_NAME,
+		CallLog.Calls.CACHED_NUMBER_LABEL,
+		CallLog.Calls.CACHED_NUMBER_TYPE,
+		CallLog.Calls.DURATION,
+		CallLog.Calls.DATE,
+		CallLog.Calls.NEW,
+		CallLog.Calls.NUMBER,
+		CallLog.Calls.TYPE
+	};
+	
+	public static final int ID_COLUMN_INDEX = 0;
+	// Cached columns, not yet supported
+	public static final int CALLER_NAME_COLUMN_INDEX = 1;
+	public static final int CALLER_NUMBERLABEL_COLUMN_INDEX = 2;
+	public static final int CALLER_NUMBERTYPE_COLUMN_INDEX = 3;
+	// Sure this columns are filled
+	public static final int DURATION_COLUMN_INDEX = 4;
+	public static final int DATE_COLUMN_INDEX = 5;
+	public static final int NEW_COLUMN_INDEX = 6;
+	public static final int NUMBER_COLUMN_INDEX = 7;
+	public static final int CALL_TYPE_COLUMN_INDEX = 8;
+	
+	
+	/**
+	 * Insert a new calllog into the database
+	 * @param values calllogs values
+	 * @return the id of inserted row into database
+	 */
+	public long insertCallLog(ContentValues args){
+		return db.insert(CALLLOGS_TABLE_NAME, null, args);
+	}
+	
+	/**
+	 * Count the number of account saved in database
+	 * @return the number of account
+	 */
+	public int getNbrOfCallLogs() {
+		Cursor c = db.rawQuery("SELECT COUNT("+CallLog.Calls._ID+");", null);
+		int numRows = 0;
+		if(c.getCount() > 0){
+			c.moveToFirst();
+			numRows = c.getInt(0);
+			
+		}
+		c.close();
+		return numRows;
+	}
+	
+	
+	
+	public Cursor getAllCallLogs() {
+		return db.query(CALLLOGS_TABLE_NAME, logs_projection, null, null, null, null, CallLog.Calls.DEFAULT_SORT_ORDER);
+	}
+
+	public Cursor getCallLog(int logId) {
+		if(logId <0){
+			return null;
+		}
+		try {
+			return db.query(CALLLOGS_TABLE_NAME, logs_projection,
+					CallLog.Calls._ID + "=" + logId, null, null, null, null);
+		} catch (SQLException e) {
+			Log.e(THIS_FILE, "Exception on query", e);
+		}
+		
+		return null;
+	}
+	
+	public boolean deleteCallLog(int calllogId) {
+		return db.delete(CALLLOGS_TABLE_NAME, CallLog.Calls._ID  + "=" + calllogId, null) > 0;
 	}
 
 }

@@ -17,108 +17,57 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.pjsip.pjsua.pjsip_cred_data_type;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
+import java.util.Locale;
 
 import android.preference.EditTextPreference;
-import com.csipsimple.utils.Log;
 
 import com.csipsimple.R;
-import com.csipsimple.wizards.BasePrefsWizard;
+import com.csipsimple.wizards.SimplePrefsWizard;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public class Ekiga extends BasePrefsWizard {
-	public static String label = "Ekiga";
-	public static String id = "EKIGA";
-	public static int icon = R.drawable.ic_wizard_ekiga;
-	public static int priority = 9;
-	protected static final String THIS_FILE = "Ekiga W";
-
-	private EditTextPreference accountDisplayName;
-	private EditTextPreference accountPhoneNumber;
-	private EditTextPreference accountPassword;
-
+public class Ekiga extends SimplePrefsWizard {
 	
-	protected void fillLayout() {
-		accountDisplayName = (EditTextPreference) findPreference("display_name");
-		accountPhoneNumber = (EditTextPreference) findPreference("phone_number");
-		accountPassword = (EditTextPreference) findPreference("password");
-
-		
-		
-		String display_name = account.display_name;
-		if(display_name.equalsIgnoreCase("")) {
-			display_name = "Ekiga";
-		}
-		accountDisplayName.setText(display_name);
-		String account_cfgid = account.cfg.getId().getPtr();
-		if(account_cfgid == null) {
-			account_cfgid = "";
-		}
-		Pattern p = Pattern.compile("[^<]*<sip:([^@]*)@.*");
-		Matcher m = p.matcher(account_cfgid);
-
-		if (m.matches()) {
-			account_cfgid = m.group(1);
-		}
-
-		accountPhoneNumber.setText(account_cfgid);
-		
-		pjsip_cred_info ci = account.cfg.getCred_info();
-		accountPassword.setText(ci.getData().getPtr());
+	public static WizardInfo getWizardInfo() {
+		WizardInfo result = new WizardInfo();
+		result.id =  "EKIGA";
+		result.label = "Ekiga";
+		result.icon = R.drawable.ic_wizard_ekiga;
+		result.priority = 10;
+		result.countries = new Locale[]{};
+		result.isWorld = true;
+		return result;
+	}
+	
+	@Override
+	protected String getDomain() {
+		return "ekiga.net";
 	}
 
-	protected void updateDescriptions() {
-		setStringFieldSummary("display_name");
-		setStringFieldSummary("phone_number");
-		setPasswordFieldSummary("password");
+	@Override
+	protected String getDefaultName() {
+		return getWizardInfo().label;
 	}
-
-	protected boolean canSave() {
-		boolean isValid = true;
-		
-		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
-		isValid &= checkField(accountPassword, isEmpty(accountPassword));
-		isValid &= checkField(accountPhoneNumber, isEmpty(accountPhoneNumber));
-
-		return isValid;
-	}
-
-	protected void buildAccount() {
-		Log.d(THIS_FILE, "begin of save ....");
-		account.display_name = accountDisplayName.getText();
-		// TODO add an user display name
-		account.cfg.setId(pjsua.pj_str_copy("<sip:"
-				+ accountPhoneNumber.getText() + "@ekiga.net>"));
-		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:ekiga.net"));
-
-		pjsip_cred_info credentials = account.cfg.getCred_info();
-
-		account.cfg.setCred_count(1);
-		credentials.setRealm(pjsua.pj_str_copy("ekiga.net"));
-		credentials.setUsername(getPjText(accountPhoneNumber));
-		credentials.setData(getPjText(accountPassword));
-		credentials.setScheme(pjsua.pj_str_copy("Digest"));
-		credentials.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
-				.swigValue());
-
-	}
-
+	
 	@Override
 	protected String getWizardId() {
-		return id;
+		return getWizardInfo().id;
+	}
+	
+	
+	//Customization
+	protected void fillLayout() {
+		super.fillLayout();
+		((EditTextPreference) findPreference("phone_number")).setTitle(R.string.w_common_username);
+	}
+	
+	@Override
+	protected String getDefaultFieldSummary(String field_name){
+		if(field_name.equalsIgnoreCase("phone_number")) {
+			return getString(R.string.w_common_username_desc);
+		}else {
+			return super.getDefaultFieldSummary(field_name);
+		}
 	}
 
-	@Override
-	protected int getXmlPreferences() {
-		return R.xml.w_ekiga_preferences;
-	}
-
-	@Override
-	protected String getXmlPrefix() {
-		return "ekiga";
-	}
+	
 }

@@ -21,6 +21,7 @@ import org.pjsip.pjsua.pjsip_transport_type_e;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -206,6 +207,7 @@ public class PreferencesWrapper {
 			return pjsip_transport_type_e.PJSIP_TRANSPORT_TCP;
 		}
 		
+		
 		return pjsip_transport_type_e.PJSIP_TRANSPORT_UDP;
 	}
 	
@@ -221,6 +223,24 @@ public class PreferencesWrapper {
 			return (short) Integer.parseInt(prefs.getString("codec_"+codecParts[0].toLowerCase()+"_"+codecParts[1], defaultValue));
 		}
 		return (short) Integer.parseInt(defaultValue);
+	}
+	
+	public void setCodecPriority(String codecName, String newValue) {
+		String[] codecParts = codecName.split("/");
+		if(codecParts.length >=2 ) {
+			Editor editor = prefs.edit();
+			editor.putString("codec_"+codecParts[0].toLowerCase()+"_"+codecParts[1], newValue);
+			editor.commit();
+		}
+		//TODO : else raise error
+	}
+	
+	public boolean hasCodecPriority(String codecName) {
+		String[] codecParts = codecName.split("/");
+		if(codecParts.length >=2 ) {
+			return prefs.contains("codec_"+codecParts[0].toLowerCase()+"_"+codecParts[1]);
+		}
+		return false;
 	}
 
 	/**
@@ -249,5 +269,7 @@ public class PreferencesWrapper {
 	public boolean useIntegrateDialer() {
 		return prefs.getBoolean("integrate_with_native_dialer", true);
 	}
-	
+	public boolean useIntegrateCallLogs() {
+		return prefs.getBoolean("integrate_with_native_calllogs", true);
+	}
 }

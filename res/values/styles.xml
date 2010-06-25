@@ -61,16 +61,20 @@
     </style>
 
 	<style name="DialPadButton">
-			<item name="android:layout_height">fill_parent</item>
-			<item name="android:layout_width">fill_parent</item>
-			<item name="android:layout_weight">0.33</item>
-			<item name="android:layout_margin">5dp</item>
-			<item name="android:background">@drawable/btn_dial</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_weight">0.33</item>
+		<item name="android:layout_margin">5dp</item>
+		<item name="android:background">@drawable/btn_dial</item>
 	</style>
 	<style name="DialPadRow">
-			<item name="android:layout_height">fill_parent</item>
-			<item name="android:layout_width">fill_parent</item>
-			<item name="android:layout_weight">0.25</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_weight">0.25</item>
+	</style>
+	<style name="homeTabIndicatorText">
+		<item name="android:textColor">@color/tab_cond_text</item>
+		<item name="android:textStyle">bold</item>
 	</style>
 	
 </resources>

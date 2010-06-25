@@ -40,6 +40,12 @@
 				android:defaultValue="16000"
 				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
 		</PreferenceCategory>
+		<PreferenceScreen android:title="@string/codecs">
+			<intent android:action="android.intent.action.MAIN"
+                   android:targetPackage="com.csipsimple"
+                   android:targetClass="com.csipsimple.ui.prefs.Codecs" ></intent>
+		</PreferenceScreen>
+		<!-- 
 		<PreferenceCategory android:title="@string/codecs">
 			<EditTextPreference android:key="codec_speex_16000"
 				android:title="Speex 16kHz" android:summary="@string/codecs_desc"
@@ -70,6 +76,7 @@
 				android:numeric="integer"
 				android:defaultValue="128"></EditTextPreference>
 		</PreferenceCategory>
+		 -->
 		<PreferenceCategory android:title="@string/ice_turn">
 			<CheckBoxPreference android:summary="@string/enable_ice_desc"
 				android:title="@string/enable_ice" android:key="enable_ice"

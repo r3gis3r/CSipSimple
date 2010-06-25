@@ -23,6 +23,11 @@
 			android:summary="@string/integrate_with_native_dialer_desc"
 			android:key="integrate_with_native_dialer"
 			android:defaultValue="true"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/integrate_with_native_calllogs"
+			android:summary="@string/integrate_with_native_calllogs_desc"
+			android:key="integrate_with_native_calllogs"
+			android:defaultValue="true"></CheckBoxPreference>
+			
 		<EditTextPreference android:key="exclude_for_outgoing_call"
 			android:dependency="integrate_with_native_dialer"
 			android:title="@string/exclude_for_outgoing_call" android:summary="@string/exclude_for_outgoing_call_desc"

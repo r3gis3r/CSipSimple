@@ -47,7 +47,9 @@ import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PhoneUtils;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.InCallControls;
 import com.csipsimple.widgets.InCallInfo;
@@ -70,8 +72,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private Dialpad dialPad;
 
 	private View callInfoPanel;
-
 	private Timer quitTimer;
+	private AudioManager audioManager;
 
 
 	@Override
@@ -92,9 +94,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			Log.e(THIS_FILE, "You provide an empty call info....");
 			finish();
 		}
+		
 
 		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId());
-		
+		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		
 		
 		takeKeyEvents(true);
@@ -151,6 +154,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateUIFromCall();
+	}
 	
 
 	private synchronized void updateUIFromCall() {
@@ -210,6 +218,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			delayedQuit();
 			return;
 		case PJSIP_INV_STATE_CONNECTING:
+			
 			break;
 		}
 		mainFrame.setBackgroundResource(backgroundResId);
@@ -377,35 +386,22 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				break;
 			}
 			case MUTE_ON:{
-				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				am.setMicrophoneMute(true);
+				if(Compatibility.isCompatible(5)) {
+					audioManager.setMicrophoneMute(true);
+				}
 				break;
 			}
 			case MUTE_OFF:{
-				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				am.setMicrophoneMute(false);
-				break;
-			}
-			case SPEAKER_ON :{
-				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				am.setSpeakerphoneOn(true);
-				if(android.os.Build.VERSION.SDK.equals("3")) {
-					am.setRouting(AudioManager.MODE_NORMAL,
-							 AudioManager.ROUTE_SPEAKER,
-							 AudioManager.ROUTE_ALL);
+				if(Compatibility.isCompatible(5)) {
+					audioManager.setMicrophoneMute(false);
 				}
 				break;
 			}
-			case SPEAKER_OFF :{
-				AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				am.setSpeakerphoneOn(false);
-				if(android.os.Build.VERSION.SDK.equals("3")) {
-					am.setRouting(AudioManager.MODE_NORMAL,
-							 AudioManager.ROUTE_EARPIECE,
-							 AudioManager.ROUTE_ALL);
-				}
+			case SPEAKER_ON :
+			case SPEAKER_OFF :
+				PhoneUtils.turnOnSpeaker(this, !PhoneUtils.isSpeakerOn(this));
 				break;
-			}
+			
 			case BLUETOOTH_ON:{
 		//		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		//		am.setBluetoothA2dpOn(true);
@@ -430,6 +426,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			}
 		}
 	}
+	
 	
 	
 

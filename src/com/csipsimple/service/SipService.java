@@ -18,6 +18,7 @@
 package com.csipsimple.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -215,7 +216,7 @@ public class SipService extends Service {
 	private WakeLock wakeLock;
 	private WifiLock wifiLock;
 	private UAStateReceiver userAgentReceiver;
-	private boolean hasSipStack = false;
+	public static boolean hasSipStack = false;
 	private boolean sipStackIsCorrupted = false;
 	private ServiceDeviceStateReceiver deviceStateReceiver;
 	PreferencesWrapper prefsWrapper;
@@ -272,8 +273,6 @@ public class SipService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		
-
-		
 		Log.i(THIS_FILE, "Create SIP Service");
 		db = new DBAdapter(this);
 		prefsWrapper = new PreferencesWrapper(this);
@@ -315,10 +314,13 @@ public class SipService extends Service {
 			unregisterReceiver(deviceStateReceiver);
 		}catch(IllegalArgumentException e) {
 			//This is the case if already unregistered itself
-			//Python like usage of try ;) : nothing to do here since it could be a standard case
+			//Python style usage of try ;) : nothing to do here since it could be a standard case
 			//And in this case nothing has to be done
 		}
 		sipStop();
+		notificationManager.cancelAll();
+		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
+		
 	}
 	
 	@Override
@@ -357,7 +359,6 @@ public class SipService extends Service {
 			}
 		}
 	}
-	
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -365,7 +366,7 @@ public class SipService extends Service {
 	}
 
 	// Start the sip stack according to current settings
-	private synchronized void sipStart() {
+	synchronized void sipStart() {
 		if (!hasSipStack) {
 			Log.e(THIS_FILE, "We have no sip stack, we can't start");
 			return;
@@ -388,7 +389,6 @@ public class SipService extends Service {
 					int status;
 					status = pjsua.create();
 					Log.i(THIS_FILE, "Created " + status);
-					created = true;
 					//General config
 					{
 						pjsua_config cfg = new pjsua_config();
@@ -413,10 +413,6 @@ public class SipService extends Service {
 						log_cfg.setLevel(Log.LOG_LEVEL);
 						log_cfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
 
-						
-						
-						
-						
 						// MEDIA CONFIG
 						pjsua.media_config_default(media_cfg);
 
@@ -445,8 +441,8 @@ public class SipService extends Service {
 						if (status != pjsuaConstants.PJ_SUCCESS) {
 							Log.e(THIS_FILE, "Fail to init pjsua with failure code " + status);
 							pjsua.destroy();
-							creating = false;
 							created = false;
+							creating = false;
 							return;
 						}
 					}
@@ -479,7 +475,10 @@ public class SipService extends Service {
 					}
 					
 					// Init media codecs
+					initCodecs();
 					setCodecsPriorities();
+					
+					created = true;
 
 					// Add accounts
 					registerAllAccounts();
@@ -497,7 +496,7 @@ public class SipService extends Service {
 	/**
 	 * Stop sip service
 	 */
-	private synchronized void sipStop() {
+	synchronized void sipStop() {
 		if (notificationManager != null) {
 			notificationManager.cancel(REGISTER_NOTIF_ID);
 		}
@@ -511,24 +510,31 @@ public class SipService extends Service {
 				activeAccounts.clear();
 			}
 			if(userAgentReceiver != null) {
+				userAgentReceiver.stopService();
 				userAgentReceiver = null;
 			}
 		}
+		releaseResources();
 		
 		created = false;
 	}
 	private boolean isRegistering = false;
 	
+	
+	
 	/**
 	 * Add accounts from database
 	 */
 	private void registerAllAccounts() {
-		if(!created) {
-			Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
-			return;
-		}
 		synchronized (pjAccountsCreationLock) {
+			if(!created) {
+				Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
+				return;
+			}
+			
 			isRegistering = true;
+			Log.d(THIS_FILE, "We are registring all accounts right now....");
+			
 			
 			boolean hasSomeSuccess = false;
 			List<Account> accountList;
@@ -800,7 +806,11 @@ public class SipService extends Service {
 			default_domain = m.group(2);
 			Log.d(THIS_FILE, "default domain : "+default_domain);
 			//TODO : split domain
-			callee = "sip:"+callee+"@"+default_domain;
+			if(Pattern.matches("^sip(s)?:[^@]*$", callee)) {
+				callee = callee+"@"+default_domain;
+			}else {
+				callee = "sip:"+callee+"@"+default_domain;
+			}
 		}
 		
 		Log.d(THIS_FILE, "will call "+callee);
@@ -1008,24 +1018,31 @@ public class SipService extends Service {
 		return ctx.getFileStreamPath(SipService.STACK_FILE_NAME);
 	}
 	
+	//TODO : provide a getter
+	public static ArrayList<String> codecs;
+	
+	private void initCodecs(){
+		//TODO : provide a way to flush this var
+		if(codecs == null) {
+			int nbr_codecs = pjsua.get_nbr_of_codecs();
+			Log.d(THIS_FILE, "Codec nbr : "+nbr_codecs);
+			codecs = new ArrayList<String>();
+			for (int i = 0; i< nbr_codecs; i++) {
+				String codecId = pjsua.codec_get_id(i).getPtr();
+				codecs.add(codecId);
+				Log.d(THIS_FILE, "Added codec "+codecId);
+			}
+		}
+	}
 	
 	private void setCodecsPriorities() {
-		//TODO : we should get back the available codecs from stack
-		pj_str_t current_codec;
-		current_codec = pjsua.pj_str_copy("speex/16000/1");
-		pjsua.codec_set_priority(current_codec, prefsWrapper.getCodecPriority("speex/16000/1", "130"));
-		current_codec = pjsua.pj_str_copy("speex/8000/1");
-		pjsua.codec_set_priority(current_codec, prefsWrapper.getCodecPriority("speex/8000/1", "129")); 
-		current_codec = pjsua.pj_str_copy("speex/32000/1");
-		pjsua.codec_set_priority(current_codec, prefsWrapper.getCodecPriority("speex/32000/1", "128"));
-		current_codec = pjsua.pj_str_copy("GSM/8000/1");
-		pjsua.codec_set_priority(current_codec, prefsWrapper.getCodecPriority("GSM/8000/1", "128"));
-		current_codec = pjsua.pj_str_copy("PCMU/8000/1");
-		pjsua.codec_set_priority(current_codec, prefsWrapper.getCodecPriority("PCMU/8000/1", "128"));
-		current_codec = pjsua.pj_str_copy("PCMA/8000/1");
-		pjsua.codec_set_priority(current_codec, prefsWrapper.getCodecPriority("PCMA/8000/1", "128"));
-		current_codec = pjsua.pj_str_copy("g722/8000/1");
-		pjsua.codec_set_priority(current_codec, prefsWrapper.getCodecPriority("g722/8000/1", "128"));
+		if(codecs != null) {
+			for(String codec : codecs) {
+				if(prefsWrapper.hasCodecPriority(codec)) {
+					pjsua.codec_set_priority(pjsua.pj_str_copy(codec), prefsWrapper.getCodecPriority(codec, "130"));
+				}
+			}
+		}
 	}
 	
 

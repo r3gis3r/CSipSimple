@@ -57,14 +57,17 @@
 <string name="general_ui">General user interface</string>
 <string name="native_dialer_integration">Native dialer integration</string>
 
-<string name="integrate_with_native_dialer">Activate integration</string>
+<string name="integrate_with_native_dialer">Dialer integration</string>
 <string name="integrate_with_native_dialer_desc">When dial with native dialer you\'ll be asked if you want to use SIP or GSM</string>
+<string name="integrate_with_native_calllogs">Call logs integration</string>
+<string name="integrate_with_native_calllogs_desc">SIP calls will be reported (if possible) into native call logs</string>
 <string name="exclude_for_outgoing_call">Exclude patterns</string>
 <string name="exclude_for_outgoing_call_desc">Exclude patterns for outgoing calls</string>
 <string name="start_with_text_dialer">Text dialer</string>
 <string name="start_with_text_dialer_desc">Start with text dialer</string>
 <string name="use_alternate_unlocker">Don\'t use slide unlocker</string>
 <string name="use_alternate_unlocker_desc">Use buttons instead of slide to take incoming calls</string>
+
 
 <!-- Fast settings -->
 <string name="android_integration">Integrate with Android</string>

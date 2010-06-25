@@ -30,6 +30,7 @@ public class CallInfo implements Parcelable {
 	private int callId;
 	private pjsip_inv_state callState;
 	private String remoteContact;
+	private boolean isIncoming;
 
 	public static final Parcelable.Creator<CallInfo> CREATOR = new Parcelable.Creator<CallInfo>() {
 		public CallInfo createFromParcel(Parcel in) {
@@ -78,6 +79,7 @@ public class CallInfo implements Parcelable {
 		dest.writeInt(callId);
 		dest.writeInt(callState.swigValue());
 		dest.writeString(remoteContact);
+		dest.writeInt(isIncoming()?1:0);
 	}
 
 	public void readFromParcel(Parcel in) {
@@ -85,6 +87,7 @@ public class CallInfo implements Parcelable {
 		callId = in.readInt();
 		callState = pjsip_inv_state.swigToEnum(in.readInt());
 		remoteContact = in.readString();
+		setIncoming((in.readInt() == 1));
 	}
 
 	// Getters / Setters
@@ -151,6 +154,20 @@ public class CallInfo implements Parcelable {
 	 */
 	public String getRemoteContact() {
 		return remoteContact;
+	}
+
+	/**
+	 * @param isIncoming the isIncoming to set
+	 */
+	public void setIncoming(boolean isIncoming) {
+		this.isIncoming = isIncoming;
+	}
+
+	/**
+	 * @return the isIncoming
+	 */
+	public boolean isIncoming() {
+		return isIncoming;
 	}
 	
 

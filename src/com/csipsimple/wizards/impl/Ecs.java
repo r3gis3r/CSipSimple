@@ -17,6 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,12 +29,20 @@ import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
 import com.csipsimple.wizards.BasePrefsWizard;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class Ecs extends BasePrefsWizard {
-	public static String label = "Alcatel-Lucent OmniPCX Office";
-	public static String id = "ECS";
-	public static int icon = R.drawable.ic_wizard_ale;
-	public static int priority = 20;
+	
+	public static WizardInfo getWizardInfo() {
+		WizardInfo result = new WizardInfo();
+		result.id =  "ECS";
+		result.label = "Alcatel-Lucent OmniPCX Office";
+		result.icon = R.drawable.ic_wizard_ale;
+		result.priority = 20;
+		result.countries = new Locale[]{};
+		result.isWorld = true;
+		return result;
+	}
 
 	private EditTextPreference accountDisplayName;
 	private EditTextPreference accountPhoneNumber;
@@ -134,7 +143,7 @@ public class Ecs extends BasePrefsWizard {
 	
 	@Override
 	protected String getWizardId() {
-		return id;
+		return getWizardInfo().id;
 	}
 
 	@Override

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr) 
+	Copyright (C) 2009 The Android Open Source Project 
+	
+	This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+ 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
+
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:background="@android:drawable/title_bar_tall" android:orientation="horizontal"
+		android:gravity="center_vertical" android:paddingLeft="9dip" android:paddingRight="5dip">
+
+		<ImageView android:id="@+id/icon" android:layout_width="32dip" android:layout_height="32dip"
+			android:layout_marginRight="5dip" />
+
+		<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:gravity="center_vertical" android:orientation="vertical" android:layout_marginLeft="5dip">
+
+			<TextView android:id="@+id/type" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" />
+
+			<TextView android:id="@+id/time" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textColor="?android:attr/textColorPrimaryInverse" />
+
+			<TextView android:id="@+id/duration" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textColor="?android:attr/textColorPrimaryInverse" />
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="vertical" android:gravity="center_horizontal" >
+		<TextView android:id="@+id/callBackType" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="?android:attr/textColorPrimary" />
+		<TextView android:id="@+id/callBackNumber" android:layout_width="wrap_content"
+			android:ellipsize="marquee" android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	</LinearLayout>
+
+	<FrameLayout android:layout_height="0dip" android:layout_width="fill_parent"
+		android:layout_weight="1">
+		<ListView android:id="@android:id/list" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:scrollbarStyle="outsideOverlay" />
+
+		<ScrollView android:id="@android:id/empty" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:fillViewport="true">
+
+			<TextView android:id="@+id/emptyText" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="@string/unknown" android:textSize="20sp"
+				android:textColor="?android:attr/textColorSecondary" android:paddingLeft="10dip"
+				android:paddingRight="10dip" android:paddingTop="10dip" android:gravity="center"
+				android:lineSpacingMultiplier="0.92" />
+
+		</ScrollView>
+
+		<View android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:background="@drawable/title_bar_shadow" />
+
+	</FrameLayout>
+</LinearLayout>

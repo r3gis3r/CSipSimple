@@ -27,6 +27,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,6 +39,12 @@ import com.csipsimple.models.Account;
 import com.csipsimple.ui.prefs.GenericPrefs;
 
 public abstract class BasePrefsWizard extends GenericPrefs{
+    public static final int SAVE_MENU = Menu.FIRST + 1;
+	public static final int TRANSFORM_MENU = Menu.FIRST + 2;
+	public static final int DELETE_MENU = Menu.FIRST + 3;
+	
+	public static final int CHOOSE_WIZARD = 0;
+	
 	private long accountId = -1;
 	protected Account account = null;
 	private Button saveButton;
@@ -102,6 +110,65 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 	}
 	
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, SAVE_MENU, Menu.NONE, R.string.save).setIcon(
+				android.R.drawable.ic_menu_save);
+
+		if(account.id != null && !account.id.equals(0)){
+			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.prefs).setIcon(
+					android.R.drawable.ic_menu_edit);
+			menu.add(Menu.NONE, DELETE_MENU, Menu.NONE, R.string.delete_account).setIcon(
+					android.R.drawable.ic_menu_delete);
+		}
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	 @Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case SAVE_MENU:
+			saveAccount();
+			setResult(RESULT_OK, getIntent());
+			finish();
+			return true;
+		case TRANSFORM_MENU:
+			startActivityForResult(new Intent(this, WizardChooser.class), CHOOSE_WIZARD);
+			return true;
+		case DELETE_MENU:
+			if(account.id != null && !account.id.equals(0)){
+				database.open();
+				database.deleteAccount(account);
+				database.close();
+				setResult(RESULT_OK, getIntent());
+				finish();
+				return true;
+			}
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	 
+	 @Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch(requestCode){
+		case CHOOSE_WIZARD:
+			if(resultCode == RESULT_OK) {
+				if(data != null && data.getExtras() != null) {
+					String wizardId = data.getExtras().getString(WizardUtils.ID);
+					if(wizardId != null) {
+						saveAccount(wizardId);
+						setResult(RESULT_OK, getIntent());
+						finish();
+					}
+				}
+			}
+			break;
+		}
+	}
+	
+	
+	//Utilities functions
 	protected boolean isEmpty(EditTextPreference edt){
 		if(edt.getText() == null){
 			return true;
@@ -123,10 +190,13 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 		return pjsua.pj_str_copy(edt.getText());
 	}
 	
-	protected void saveAccount(){
-		buildAccount();		
-		
-		account.wizard = getWizardId();
+	protected void saveAccount() {
+		saveAccount(getWizardId());
+	}
+	
+	protected void saveAccount(String wizardId){
+		buildAccount();
+		account.wizard = wizardId;
 		database.open();
 		if(account.id == null || account.id.equals(0)){
 			account.id = (int) database.insertAccount(account);
@@ -137,6 +207,7 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 		
 	}
 	
+
 	@Override
 	protected String getDefaultFieldSummary(String field_name){
 		String val = "";
@@ -184,8 +255,8 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 	protected abstract boolean canSave();
 	protected abstract void buildAccount();
 	protected abstract int getXmlPreferences();
-	protected abstract String getWizardId();
 	protected abstract String getXmlPrefix();
+	protected abstract String getWizardId();
 	
 	
 }

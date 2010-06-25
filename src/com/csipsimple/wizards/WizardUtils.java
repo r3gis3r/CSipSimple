@@ -17,10 +17,12 @@
  */
 package com.csipsimple.wizards;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -32,6 +34,11 @@ public class WizardUtils {
 		public String label;
 		public String id;
 		public int icon;
+		public int priority=99;
+		public Locale[] countries;
+		public boolean isGeneric = false;
+		public boolean isWorld = false;
+		public Class<?> implementation;
 	};
 
 	//I didn't manage to introspect since in dalvik package aren't directly visible
@@ -40,6 +47,7 @@ public class WizardUtils {
 		"Basic",
 		"Ecs",
 		"Ekiga",
+		"Eutelia",
 		"Expert",
 		"Freephonie"
 	};
@@ -49,100 +57,88 @@ public class WizardUtils {
     public static final String LABEL = "LABEL";
     public static final String ICON  = "ICON";
     public static final String ID  = "ID";
+    public static final String LANG_DISPLAY  = "DISPLAY";
     
     
     private static ArrayList<Map<String, Object>> wizards_list;
-    private static Class<?>[] wizards_classes;
+    private static ArrayList<WizardInfo> wizards_classes;
     
-    private static class WizardPrioComparator implements Comparator<Class<?>> {
-
+    private static class WizardPrioComparator implements Comparator<WizardInfo> {
 		@Override
-		public int compare(Class<?> object1, Class<?> object2) {
-			try {
-				int p1 = object1.getField("priority").getInt(null);
-				int p2 = object2.getField("priority").getInt(null);
-				if(p1 > p2){
+		public int compare(WizardInfo infos1, WizardInfo infos2) {
+			if (infos1 != null && infos2 != null) {
+				if (infos1.priority > infos2.priority) {
 					return -1;
 				}
-				if(p1 < p2 ){
+				if (infos1.priority < infos2.priority) {
 					return 1;
 				}
-				
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+
 			return 0;
 		}
-
     }
+    
+    
 	
     /**
      * Initialize wizards list
      */
     private static void init_wizards() {
-    	try {
-    		wizards_classes = getClasses();
-			Arrays.sort(wizards_classes, new WizardPrioComparator());
-			
-			wizards_list = new ArrayList< Map<String,Object> >();
-			
-			
-			for( Class<?> cls : wizards_classes ){
-				Map<String,Object> map = new HashMap<String,Object>();
-				
-				map.put( LABEL, (String) cls.getField("label").get(null) );
-		        map.put( ID, (String) cls.getField("id").get(null));
-		        map.put( ICON,  cls.getField("icon").getInt(null));
-		        
-		        wizards_list.add(map);
-			}
-			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		wizards_classes = getWizards();
+		
+		Collections.sort(wizards_classes, new WizardPrioComparator());
+		
+		wizards_list = new ArrayList< Map<String,Object> >();
+		for( WizardInfo infos : wizards_classes ){
+	        wizards_list.add(wizardInfoToMap(infos));
 		}
 		
 		init_done = true;
 	}
 	
+    private static Map<String, Object> wizardInfoToMap(WizardInfo infos){
+    	Map<String,Object> map = new HashMap<String,Object>();
+		map.put( LABEL, infos.label);
+        map.put( ID, infos.id);
+        map.put( ICON, infos.icon);
+    	return map;
+    }
 	
 	/** 
 	 * List wizard classes
 	 */
-	private static Class<?>[] getClasses() throws ClassNotFoundException {
-		
-		
-		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+	private static ArrayList<WizardInfo> getWizards() {
+		ArrayList<WizardInfo> classes = new ArrayList<WizardInfo>();
 		for(String cls : wizards_classes_names){
-			classes.add(Class.forName("com.csipsimple.wizards.impl." + cls));
+			try {
+				Class<?> classe = Class.forName("com.csipsimple.wizards.impl." + cls);
+				WizardInfo infos = getWizardClassInfos(classe);
+				infos.implementation = classe;
+				if(infos != null) {
+					classes.add(infos);
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
-		Class<?>[] classesA = new Class[classes.size()];
-		classes.toArray(classesA);
-		return classesA;
+		return classes;
 	}
     
+	//Ok, what could have be done is declaring an interface but not able with static fields
+	// I'll later check whether this is more interesting to declare an interface or an info class
+	// used to declare wizards
+	public static WizardInfo getWizardClassInfos(Class<?> wizard) {
+		Method method;
+		try {
+			method = wizard.getMethod("getWizardInfo", (Class[]) null);
+			return (WizardInfo) method.invoke(null, (Object[]) null);
+		} catch (Exception e) {
+			//Generic catch : we are not interested in more details
+			e.printStackTrace();
+		} 
+		return null;
+	}
    
 	public static ArrayList<Map<String, Object>> getWizardsList(){
 		if(!init_done){
@@ -151,69 +147,96 @@ public class WizardUtils {
 		return wizards_list;
 	}
 	
-	public static Class<?>[] getWizardsClasses(){
+	public static ArrayList<WizardInfo> getWizardsClasses(){
 		if(!init_done){
 			init_wizards();
 		}
 		return wizards_classes;
 	}
 	
-	//Ok, what could have be done is declaring an interface but not able with static fields
-	// I'll later check whether this is more interesting to declare an interface or an info class
-	// used to declare wizards
-	public static WizardInfo getWizardClassInfos(String wizard_id) {
-		Class<?> candidate_class = getWizardClass(wizard_id);
-		if(candidate_class != null){
-			WizardInfo result = new WizardInfo();
-			try {
-				result.label = (String) candidate_class.getField("label").get(null);
-				result.id = (String) candidate_class.getField("id").get(null);
-				result.icon =  (Integer) candidate_class.getField("icon").get(null);
-
-				return result;
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return null;
-		
-	}
 	
 	
-	public static Class<?> getWizardClass(String wizard_id) {
+	public static WizardInfo getWizardClass(String wizard_id) {
 		if(!init_done){
 			init_wizards();
 		}
-		for(Class<?> candidate_class : wizards_classes){
-			try {
-				if( candidate_class.getField("id").get(null).equals(wizard_id) ){
-					return candidate_class;
+		for(WizardInfo candidate_class : wizards_classes){
+			if(candidate_class.id.equalsIgnoreCase(wizard_id)) {
+				return candidate_class;
+			}
+		}
+		return null;
+	}
+
+
+	public static ArrayList<HashMap<String, String>> getWizardsGroups() {
+		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> m;
+		
+		//Local
+		m = new HashMap<String, String>();
+		
+	//	m.put("lang", Locale.getDefault().getCountry());
+		m.put(LANG_DISPLAY, Locale.getDefault().getDisplayCountry());
+		result.add(m);
+		
+		//Generic
+		m = new HashMap<String, String>();
+	//	m.put("lang", "generic");
+		m.put(LANG_DISPLAY, "Generic wizards");
+		result.add(m);
+		
+		//World
+		m = new HashMap<String, String>();
+	//	m.put("lang", "world");
+		m.put(LANG_DISPLAY, "World wide providers");
+		result.add(m);
+		
+		//Others
+		m = new HashMap<String, String>();
+	//	m.put("lang", "others");
+		m.put(LANG_DISPLAY, "Other country providers");
+		result.add(m);
+		
+		return result;
+	}
+
+
+	public static ArrayList<ArrayList<Map<String, Object>>> getWizardsGroupedList() {
+		ArrayList<Map<String, Object>> locale_list = new ArrayList<Map<String, Object>>();
+		ArrayList<Map<String, Object>> generic_list = new ArrayList<Map<String, Object>>();
+		ArrayList<Map<String, Object>> world_list = new ArrayList<Map<String, Object>>();
+		ArrayList<Map<String, Object>> others_list = new ArrayList<Map<String, Object>>();
+		
+		ArrayList<WizardInfo> wizards = getWizardsClasses();
+		for( WizardInfo wizard : wizards) {
+			boolean found = false;
+			
+			for (Locale country : wizard.countries) {
+				if(country.equals(Locale.getDefault())) {
+					found = true;
+					locale_list.add(wizardInfoToMap(wizard));
 				}
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			}
+			if(!found) {
+				if(wizard.isGeneric) {
+					generic_list.add(wizardInfoToMap(wizard));
+					found = true;
+				}else if(wizard.isWorld) {
+					world_list.add(wizardInfoToMap(wizard));
+					found = true;
+				}
+			}
+			if(!found) {
+				others_list.add(wizardInfoToMap(wizard));
 			}
 		}
 		
-		return null;
+		ArrayList<ArrayList<Map<String, Object>>> result = new ArrayList<ArrayList<Map<String,Object>>>();
+		result.add(locale_list);
+		result.add(generic_list);
+		result.add(world_list);
+		result.add(others_list);
+		return result;
 	}
 }
