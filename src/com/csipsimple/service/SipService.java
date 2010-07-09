@@ -406,6 +406,14 @@ public class SipService extends Service {
 						
 
 						Log.d(THIS_FILE, "Attach is done to callback");
+						
+						// MAIN CONFIG
+						int isStunEnabled = prefsWrapper.getStunEnabled();
+						if(isStunEnabled == 1) {
+							//TODO : WARNING : This is deprecated, should use array instead but ok for now
+							cfg.setStun_host(pjsua.pj_str_copy(prefsWrapper.getStunServer()));
+						}
+						cfg.setUser_agent(pjsua.pj_str_copy("CSipSimple"));
 
 						// LOGGING CONFIG
 						pjsua.logging_config_default(log_cfg);
@@ -435,6 +443,8 @@ public class SipService extends Service {
 							media_cfg.setEnable_turn(isTurnEnabled);
 							media_cfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
 						}
+						
+						
 						
 						// INITIALIZE
 						status = pjsua.init(cfg, log_cfg, media_cfg);

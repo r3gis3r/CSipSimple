@@ -81,6 +81,17 @@
 			<CheckBoxPreference android:summary="@string/enable_ice_desc"
 				android:title="@string/enable_ice" android:key="enable_ice"
 				android:defaultValue="false"></CheckBoxPreference>
+			
+			<CheckBoxPreference android:summary="@string/enable_stun_desc"
+				android:title="@string/enable_stun" android:key="enable_stun"
+				android:defaultValue="false"></CheckBoxPreference>
+			<EditTextPreference android:key="stun_server"
+				android:title="@string/stun_server"
+				android:summary="@string/stun_server_desc"
+				android:dependency="enable_stun"
+				android:defaultValue=""></EditTextPreference>	
+				
+			
 			<CheckBoxPreference android:summary="@string/enable_turn_desc"
 				android:title="@string/enable_turn" android:key="enable_turn"
 				android:defaultValue="false"></CheckBoxPreference>
@@ -89,5 +100,7 @@
 				android:summary="@string/turn_server_desc"
 				android:dependency="enable_turn"
 				android:defaultValue=""></EditTextPreference>
+				
+			
 		</PreferenceCategory>
 </PreferenceScreen>

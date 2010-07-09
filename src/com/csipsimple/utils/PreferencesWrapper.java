@@ -193,6 +193,23 @@ public class PreferencesWrapper {
 	 * Get turn server
 	 * @return host:port or blank if not set
 	 */
+	public String getStunServer() {
+		return prefs.getString("stun_server", "");
+	}
+	
+	
+	/**
+	 * Get whether turn is enabled
+	 * @return 1 if enabled (pjstyle)
+	 */ 
+	public int getStunEnabled() {
+		return prefs.getBoolean("enable_stun", false)?1:0;
+	}
+	
+	/**
+	 * Get turn server
+	 * @return host:port or blank if not set
+	 */
 	public String getTurnServer() {
 		return prefs.getString("turn_server", "");
 	}

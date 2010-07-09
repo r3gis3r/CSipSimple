@@ -33,7 +33,7 @@
 
 <string name="audio_quality">Audio quality</string>
 <string name="codecs">Codecs</string>
-<string name="ice_turn">ICE/TURN</string>
+<string name="ice_turn">ICE/TURN/STUN</string>
 
 <string name="echo_cancellation">Echo cancellation</string>
 <string name="echo_cancellation_desc">Activate echo cancellation</string>
@@ -50,7 +50,11 @@
 <string name="enable_turn">Enable TURN</string>
 <string name="enable_turn_desc">Turn on TURN feature</string>
 <string name="turn_server">Turn server</string>
-<string name="turn_server_desc">Turn server (HOST:PORT)</string>
+<string name="turn_server_desc">TURN server (HOST:PORT)</string>
+<string name="enable_stun">Enable STUN</string>
+<string name="enable_stun_desc">Turn on STUN feature</string>
+<string name="stun_server">STUN server</string>
+<string name="stun_server_desc">STUN server (HOST:PORT)</string>
 <string name="codecs_desc">Priority (0 is disabled)</string>
 
 <!-- UI -->
