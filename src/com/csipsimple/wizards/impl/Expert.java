@@ -105,21 +105,13 @@ public class Expert extends BasePrefsWizard {
 		}
 
 		accountPublishEnabled.setChecked((account.cfg.getPublish_enabled() == 1));
-		if (account.cfg.getReg_timeout() > 0) {
-			accountRegTimeout.setText("" + account.cfg.getReg_timeout());
-		} else {
-			accountRegTimeout.setText("");
-		}
-		if (account.cfg.getKa_interval() > 0) {
-			accountKaInterval.setText("" + account.cfg.getKa_interval());
-		} else {
-			accountKaInterval.setText("");
-		}
-		
+		accountRegTimeout.setText(Long.toString(account.cfg.getReg_timeout()));
+		accountKaInterval.setText(Long.toString(account.cfg.getKa_interval()));
 		
 		accountForceContact.setText(account.cfg.getForce_contact().getPtr());
 		accountProxy.setText(account.cfg.getProxy().getPtr());
 	}
+	
 
 	protected void updateDescriptions() {
 		setStringFieldSummary("display_name");
