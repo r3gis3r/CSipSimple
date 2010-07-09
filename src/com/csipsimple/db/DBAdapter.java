@@ -40,7 +40,7 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
@@ -57,6 +57,7 @@ public class DBAdapter {
 	public static final String FIELD_MWI_ENABLED = "mwi_enabled";
 	public static final String FIELD_PUBLISH_ENABLED = "publish_enabled";
 	public static final String FIELD_REG_TIMEOUT = "reg_timeout";
+	public static final String FIELD_KA_INTERVAL = "ka_interval";
 	public static final String FIELD_PIDF_TUPLE_ID = "pidf_tuple_id";
 	public static final String FIELD_FORCE_CONTACT = "force_contact";
 	public static final String FIELD_CONTACT_PARAMS = "contact_params";
@@ -98,6 +99,7 @@ public class DBAdapter {
 			+ FIELD_MWI_ENABLED 		+ " BOOLEAN,"
 			+ FIELD_PUBLISH_ENABLED 	+ " INTEGER," 
 			+ FIELD_REG_TIMEOUT 		+ " INTEGER," 
+			+ FIELD_KA_INTERVAL 		+ " INTEGER," 
 			+ FIELD_PIDF_TUPLE_ID 		+ " TEXT,"
 			+ FIELD_FORCE_CONTACT 		+ " TEXT,"
 			+ FIELD_CONTACT_PARAMS 		+ " TEXT,"
@@ -175,6 +177,9 @@ public class DBAdapter {
 			if(oldVersion < 1) {
 				db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS_TABLE_NAME);
 			}
+			if(oldVersion >= 1 && oldVersion < 5) {
+				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+FIELD_KA_INTERVAL+" INTEGER");
+			}
 			onCreate(db);
 		}
 	}
@@ -209,7 +214,8 @@ public class DBAdapter {
 
 		// Here comes pjsua_acc_config fields
 		FIELD_PRIORITY, FIELD_ACC_ID, FIELD_REG_URI, FIELD_MWI_ENABLED,
-		FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_PIDF_TUPLE_ID,
+		FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_KA_INTERVAL, 
+		FIELD_PIDF_TUPLE_ID,
 		FIELD_FORCE_CONTACT, FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
 
 		// Proxy infos
@@ -240,6 +246,7 @@ public class DBAdapter {
 
 		args.put(FIELD_PUBLISH_ENABLED, account.cfg.getPublish_enabled());
 		args.put(FIELD_REG_TIMEOUT, account.cfg.getReg_timeout());
+		args.put(FIELD_KA_INTERVAL, account.cfg.getKa_interval());
 		args.put(FIELD_PIDF_TUPLE_ID, account.cfg.getPidf_tuple_id().getPtr());
 		args.put(FIELD_FORCE_CONTACT, account.cfg.getForce_contact().getPtr());
 
@@ -311,6 +318,10 @@ public class DBAdapter {
 		tmp_i = args.getAsInteger(FIELD_REG_TIMEOUT);
 		if (tmp_i != null) {
 			account.cfg.setReg_timeout(tmp_i);
+		}
+		tmp_i = args.getAsInteger(FIELD_KA_INTERVAL);
+		if (tmp_i != null) {
+			account.cfg.setKa_interval(tmp_i);
 		}
 		tmp_s = args.getAsString(FIELD_PIDF_TUPLE_ID);
 		if (tmp_s != null) {
