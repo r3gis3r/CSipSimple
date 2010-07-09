@@ -97,9 +97,12 @@ public class Expert extends BasePrefsWizard {
 				accountDataType.setValueIndex(0);
 			} else if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_DIGEST.swigValue()) {
 				accountDataType.setValueIndex(1);
-			} else if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_EXT_AKA.swigValue()) {
+			}
+			//DISABLED SINCE NOT SUPPORTED YET
+			/*
+			else if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_EXT_AKA.swigValue()) {
 				accountDataType.setValueIndex(2);
-			} else {
+			} */else {
 				accountDataType.setValueIndex(0);
 			}
 		}
@@ -147,9 +150,20 @@ public class Expert extends BasePrefsWizard {
 			ci.setUsername(getPjText(accountUserName));
 			ci.setData(getPjText(accountData));
 			ci.setScheme(pjsua.pj_str_copy(accountScheme.getValue()));
-			// FIXME this is not the good value !
-			ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
-
+			
+			
+			String dataType = accountDataType.getValue();
+			if(dataType.equalsIgnoreCase("0")) {
+				ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
+			}else if(dataType.equalsIgnoreCase("1")){
+				ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_DIGEST.swigValue());
+			}
+			//DISABLED SINCE NOT SUPPORTED YET
+			/*else if(dataType.equalsIgnoreCase("16")){
+				ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_EXT_AKA.swigValue());
+			} */else {
+				ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
+			}
 		} else {
 			account.cfg.setCred_count(0);
 		}
