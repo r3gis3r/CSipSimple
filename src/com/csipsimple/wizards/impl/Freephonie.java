@@ -19,6 +19,9 @@ package com.csipsimple.wizards.impl;
 
 import java.util.Locale;
 
+import android.preference.EditTextPreference;
+import android.text.InputType;
+
 import com.csipsimple.R;
 import com.csipsimple.wizards.SimplePrefsWizard;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
@@ -50,5 +53,12 @@ public class Freephonie extends SimplePrefsWizard {
 	@Override
 	protected String getWizardId() {
 		return getWizardInfo().id;
+	}
+	
+	//Customization
+	protected void fillLayout() {
+		super.fillLayout();
+		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
+		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 }

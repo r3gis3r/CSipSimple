@@ -35,6 +35,7 @@
 	<string name="use_pstn">Use GSM</string>
 	<string name="ongoing_call">Ongoing Call</string>
 	<string name="recentCalls_empty">No CallLogs</string>
+	<string name="filters">Filters</string>
 	
 	
 </resources>

@@ -36,14 +36,17 @@ import android.widget.Button;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
+import com.csipsimple.ui.AccountFilters;
 import com.csipsimple.ui.prefs.GenericPrefs;
 
 public abstract class BasePrefsWizard extends GenericPrefs{
     public static final int SAVE_MENU = Menu.FIRST + 1;
 	public static final int TRANSFORM_MENU = Menu.FIRST + 2;
-	public static final int DELETE_MENU = Menu.FIRST + 3;
+	public static final int FILTERS_MENU = Menu.FIRST + 3;
+	public static final int DELETE_MENU = Menu.FIRST + 4;
 	
 	public static final int CHOOSE_WIZARD = 0;
+	public static final int MODIFY_FILTERS = 1;
 	
 	private long accountId = -1;
 	protected Account account = null;
@@ -116,8 +119,10 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 				android.R.drawable.ic_menu_save);
 
 		if(account.id != null && !account.id.equals(0)){
-			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.prefs).setIcon(
+			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.choose_wizard).setIcon(
 					android.R.drawable.ic_menu_edit);
+			menu.add(Menu.NONE, FILTERS_MENU, Menu.NONE, R.string.filters).setIcon(
+					android.R.drawable.ic_menu_manage);
 			menu.add(Menu.NONE, DELETE_MENU, Menu.NONE, R.string.delete_account).setIcon(
 					android.R.drawable.ic_menu_delete);
 		}
@@ -142,6 +147,13 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 				database.close();
 				setResult(RESULT_OK, getIntent());
 				finish();
+			}
+			return true;
+		case FILTERS_MENU:
+			if(account.id != null && !account.id.equals(0)){
+				Intent it = new Intent(this, AccountFilters.class);
+    			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
+    			startActivityForResult(it, MODIFY_FILTERS);
 				return true;
 			}
 		}

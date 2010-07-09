@@ -100,7 +100,7 @@ public class OutgoingCallChooser extends ListActivity {
 			number = extras.getString("number");
 		}
 		*/
-		Log.d(THIS_FILE, "Choose to call : "+number);
+		Log.d(THIS_FILE, "Choose to call : " + number);
 		
 		// Build window
 		Window w = getWindow();
@@ -108,8 +108,8 @@ public class OutgoingCallChooser extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.outgoing_account_list);
 		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
-		
 
+		
 		// Fill accounts with currently avalaible accounts
 		updateList();
 		

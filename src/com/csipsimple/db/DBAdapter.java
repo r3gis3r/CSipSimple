@@ -40,9 +40,10 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
+	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
 	
 	// Fields for table accounts
 	public static final String FIELD_ID = "id";
@@ -71,6 +72,12 @@ public class DBAdapter {
 	
 	
 	//Fields for table calllogs are calllogs fields + ...
+	
+	//Fields for filters
+	public static final String FIELD_ACCOUNT = "account";
+	public static final String FIELD_MATCHES = "matches";
+	public static final String FIELD_REPLACE = "replace";
+	public static final String FIELD_ACTION = "action";
 	
 
 	// Creation sql command
@@ -121,24 +128,24 @@ public class DBAdapter {
 			+ CallLog.Calls.NUMBER				+ " TEXT,"
 			+ CallLog.Calls.TYPE				+ " INTEGER"
 			+");";
+	
+	private static final String TABLE_FILTERS_CREATE =  "CREATE TABLE IF NOT EXISTS "
+		+ FILTERS_TABLE_NAME
+		+ " ("
+		+ FIELD_ID+ 				" INTEGER PRIMARY KEY AUTOINCREMENT,"
+		+ FIELD_PRIORITY 			+ " INTEGER," 
 
-	private final static String[] common_projection = {
-			FIELD_ID,
-			// Application relative fields
-			FIELD_ACTIVE, FIELD_WIZARD, FIELD_DISPLAY_NAME,
+		// Foreign key to account
+		+ FIELD_ACCOUNT				+ " INTEGER,"
+		// Match/replace
+		+ FIELD_MATCHES				+ " TEXT,"
+		+ FIELD_REPLACE				+ " TEXT,"
 
-			// Here comes pjsua_acc_config fields
-			FIELD_PRIORITY, FIELD_ACC_ID, FIELD_REG_URI, FIELD_MWI_ENABLED,
-			FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_PIDF_TUPLE_ID,
-			FIELD_FORCE_CONTACT, FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
+		+ FIELD_ACTION 				+ " INTEGER" 
+		+ ");";
+	
 
-			// Proxy infos
-			FIELD_PROXY,
 
-			// And now cred_info since for now only one cred info can be managed
-			// In future release a credential table should be created
-			FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
-			FIELD_DATA };
 
 	private final Context context;
 	private DatabaseHelper databaseHelper;
@@ -158,13 +165,13 @@ public class DBAdapter {
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(TABLE_ACCOUNT_CREATE);
 			db.execSQL(TABLE_CALLLOGS_CREATE);
+			db.execSQL(TABLE_FILTERS_CREATE);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(THIS_FILE, "Upgrading database from version "
-							+ oldVersion + " to " + newVersion
-							+ ", which will destroy all old data");
+							+ oldVersion + " to " + newVersion);
 			if(oldVersion < 1) {
 				db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS_TABLE_NAME);
 			}
@@ -189,6 +196,29 @@ public class DBAdapter {
 	public void close() {
 		databaseHelper.close();
 	}
+	
+	
+	// --------
+	// Accounts
+	// --------
+	
+	private final static String[] account_common_projection = {
+		FIELD_ID,
+		// Application relative fields
+		FIELD_ACTIVE, FIELD_WIZARD, FIELD_DISPLAY_NAME,
+
+		// Here comes pjsua_acc_config fields
+		FIELD_PRIORITY, FIELD_ACC_ID, FIELD_REG_URI, FIELD_MWI_ENABLED,
+		FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_PIDF_TUPLE_ID,
+		FIELD_FORCE_CONTACT, FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
+
+		// Proxy infos
+		FIELD_PROXY,
+
+		// And now cred_info since for now only one cred info can be managed
+		// In future release a credential table should be created
+		FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
+		FIELD_DATA };
 
 	// Transform pjsua_acc_config into ContentValues that can be insert into
 	// database
@@ -369,7 +399,7 @@ public class DBAdapter {
 		ArrayList<Account> ret = new ArrayList<Account>();
 		if(SipService.hasSipStack) {
 			try {
-				Cursor c = db.query(ACCOUNTS_TABLE_NAME, common_projection,
+				Cursor c = db.query(ACCOUNTS_TABLE_NAME, account_common_projection,
 						null, null, null, null, FIELD_PRIORITY
 								+ " ASC");
 				int numRows = c.getCount();
@@ -409,7 +439,7 @@ public class DBAdapter {
 			return new Account();
 		}
 		try {
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, common_projection,
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, account_common_projection,
 					FIELD_ID + "=" + accountId, null, null, null, null);
 			int numRows = c.getCount();
 			if(numRows > 0){
@@ -442,6 +472,10 @@ public class DBAdapter {
 		return numRows;
 	}
 	
+	public int countAvailableAccountsForNumber(String number) {
+		
+		return 0;
+	}
 	
 	
 	// -------------
@@ -522,4 +556,33 @@ public class DBAdapter {
 		return db.delete(CALLLOGS_TABLE_NAME, CallLog.Calls._ID  + "=" + calllogId, null) > 0;
 	}
 
+	
+	// --------
+	// Filters
+	// --------
+	private final static String[] filters_projection = {
+		FIELD_ID,
+		FIELD_PRIORITY,
+		FIELD_MATCHES,
+		FIELD_REPLACE,
+		FIELD_ACTION
+	};
+	
+	/**
+	 * Insert a new filter into the database
+	 * @param values filter values
+	 * @return the id of inserted row into database
+	 */
+	public long insertFilter(ContentValues args){
+		return db.insert(FILTERS_TABLE_NAME, null, args);
+	}
+	
+	
+	public Cursor getFiltersForAccount(int account_id) {
+		return db.query(CALLLOGS_TABLE_NAME, filters_projection, 
+				FIELD_ACCOUNT+"=?", new String[]{Integer.toString(account_id)}, 
+				null, null, null);
+	}
+	
+	
 }

@@ -17,7 +17,6 @@
  */
 package com.csipsimple.service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,7 +70,7 @@ public class UAStateReceiver extends Callback {
 	private int savedVibradeNotif;
 	private int savedWifiPolicy;
 	private int savedVolume;
-	//private boolean savedSpeakerPhone;
+	private boolean savedSpeakerPhone;
 	//private boolean savedMicrophoneMute;
 	//private boolean savedBluetooth;
 	//private int savedRouting;
@@ -100,6 +99,8 @@ public class UAStateReceiver extends Callback {
 		updateCallInfo(callId);
 		pjsip_inv_state callState = currentCallInfo.getCallState();
 		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+			
+			
 			stopRing();
 			// Call is now ended
 			service.stopDialtoneGenerator();
@@ -397,16 +398,17 @@ public class UAStateReceiver extends Callback {
 		savedWifiPolicy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
 		savedVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 		
+		if(Compatibility.isCompatible(5)) {
+			savedSpeakerPhone = audioManager.isSpeakerphoneOn();
+		}
+		
 		isSavedAudioState = true;
 	}
-	
 	
 	/**
 	 * Set the audio mode as in call
 	 */
 	private void setAudioInCall() {
-		
-		
 		saveAudioState();
 		
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
@@ -457,8 +459,11 @@ public class UAStateReceiver extends Callback {
 		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
 		
 		PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_IDLE);
-		PhoneUtils.setAudioMode(service, AudioManager.MODE_NORMAL);
-		
+		if(Compatibility.isCompatible(5)) {
+			audioManager.setSpeakerphoneOn(savedSpeakerPhone);
+		}else {
+			PhoneUtils.setAudioMode(service, AudioManager.MODE_NORMAL);
+		}
 		
 		if(wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();

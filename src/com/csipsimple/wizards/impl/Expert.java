@@ -111,10 +111,11 @@ public class Expert extends BasePrefsWizard {
 			accountRegTimeout.setText("");
 		}
 		if (account.cfg.getKa_interval() > 0) {
-			accountRegTimeout.setText("" + account.cfg.getKa_interval());
+			accountKaInterval.setText("" + account.cfg.getKa_interval());
 		} else {
-			accountRegTimeout.setText("");
+			accountKaInterval.setText("");
 		}
+		
 		
 		accountForceContact.setText(account.cfg.getForce_contact().getPtr());
 		accountProxy.setText(account.cfg.getProxy().getPtr());

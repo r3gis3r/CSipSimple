@@ -202,7 +202,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			setCallLockerVisibility(GONE);
 			inCallButtons.setVisibility(VISIBLE);
 			clearCallButton.setEnabled(true);
-			setEnabledMediaButtons(false);
+			setEnabledMediaButtons(true);
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
 			controlMode = MODE_CONTROL;
@@ -230,7 +230,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 				setCallLockerVisibility(GONE);
 				inCallButtons.setVisibility(VISIBLE);
 				clearCallButton.setEnabled(true);
-				setEnabledMediaButtons(false);
+				setEnabledMediaButtons(true);
 			}
 			break;
 		}

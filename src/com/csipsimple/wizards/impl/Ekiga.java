@@ -20,6 +20,7 @@ package com.csipsimple.wizards.impl;
 import java.util.Locale;
 
 import android.preference.EditTextPreference;
+import android.text.InputType;
 
 import com.csipsimple.R;
 import com.csipsimple.wizards.SimplePrefsWizard;
@@ -57,7 +58,9 @@ public class Ekiga extends SimplePrefsWizard {
 	//Customization
 	protected void fillLayout() {
 		super.fillLayout();
-		((EditTextPreference) findPreference("phone_number")).setTitle(R.string.w_common_username);
+		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
+		phoneNumber.setTitle(R.string.w_common_username);
+		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
 	}
 	
 	@Override

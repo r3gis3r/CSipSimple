@@ -5,6 +5,7 @@
 	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="true">
 		<!-- android:launchMode="singleTask" android:name=".ui.Acompanion" -->
 		<activity android:label="@string/app_name" android:name=".ui.SipHome" android:launchMode="singleTask"
+			android:screenOrientation="nosensor"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -39,6 +40,8 @@
 		
 		<!-- Accounts -->
 		<activity android:name=".ui.AccountsList" android:launchMode="singleTask" android:label="@string/accounts"></activity>
+		<activity android:name=".ui.AccountFilters" android:launchMode="singleTask" android:label="@string/filters"></activity>
+		
 
 		<activity android:name=".wizards.WizardChooser" android:theme="@android:style/Theme.Dialog"
 			android:label="@string/choose_wizard"></activity>

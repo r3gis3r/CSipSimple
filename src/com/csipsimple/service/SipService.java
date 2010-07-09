@@ -952,15 +952,12 @@ public class SipService extends Service {
 			if(status != pjsua.PJ_SUCCESS) {
 				return -1;
 			}
-			
 		}
-		
 		
 		short freq1 = digitMap.get(character)[0];
 		short freq2 = digitMap.get(character)[1];
 		
 		//Play the tone
-
 		pjmedia_tone_desc[] d = new pjmedia_tone_desc[1];
 		d[0] = new pjmedia_tone_desc();
 		d[0].setVolume((short) 0);
@@ -972,8 +969,6 @@ public class SipService extends Service {
 		return pjsua.pjmedia_tonegen_play(dialtoneGen, 1, d, 0);
 	}
 	
-	
-
 	/**
 	 * Get the native library file
 	 * First search in local files of the app (previously downloaded from the network)

@@ -50,7 +50,8 @@ public class OutgoingCall extends BroadcastReceiver {
 			setResultData(number);
 			return;
 		}
-
+		
+		
 		
 		// If this is an outgoing call with a valid number
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) && number != null) {
