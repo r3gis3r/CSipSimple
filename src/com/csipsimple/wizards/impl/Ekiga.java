@@ -60,6 +60,7 @@ public class Ekiga extends SimplePrefsWizard {
 		super.fillLayout();
 		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
 		phoneNumber.setTitle(R.string.w_common_username);
+		phoneNumber.setDialogTitle(R.string.w_common_username);
 		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
 	}
 	
