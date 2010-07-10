@@ -80,16 +80,7 @@ public class PreferencesWrapper {
 	public boolean isValidConnectionForIncoming() {
 		return isValidConnectionFor("in");
 	}
-	
-	
-	public int getTransportPort() {
-		try {
-			return Integer.parseInt(prefs.getString("network_transport_port", "5060"));
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return 5060;
-	}
+
 	
 	public boolean getLockWifi() {
 		return prefs.getBoolean("lock_wifi", true);
@@ -214,19 +205,35 @@ public class PreferencesWrapper {
 		return prefs.getString("turn_server", "");
 	}
 	
-	/**
-	 * Get the media transport type
-	 * @return the transport type choosen
-	 */
-	public pjsip_transport_type_e getTransportType() {
-		String choosenTransport = prefs.getString("network_transport", "UDP");
-		if(choosenTransport.equalsIgnoreCase("TCP")) {
-			return pjsip_transport_type_e.PJSIP_TRANSPORT_TCP;
-		}
-		
-		
-		return pjsip_transport_type_e.PJSIP_TRANSPORT_UDP;
+	
+	
+	
+	public boolean isTCPEnabled() {
+		return prefs.getBoolean("enable_tcp", false);
 	}
+	
+	public boolean isUDPEnabled() {
+		return prefs.getBoolean("enable_udp", true);
+	}
+	
+	public int getTCPTransportPort() {
+		try {
+			return Integer.parseInt(prefs.getString("network_tcp_transport_port", "5060"));
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 5060;
+	}
+	
+	public int getUDPTransportPort() {
+		try {
+			return Integer.parseInt(prefs.getString("network_udp_transport_port", "5060"));
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 5060;
+	}
+	
 	
 	/**
 	 * Get the codec priority

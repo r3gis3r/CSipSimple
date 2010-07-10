@@ -30,6 +30,7 @@ import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_port;
 import org.pjsip.pjsua.pjmedia_tone_desc;
 import org.pjsip.pjsua.pjsip_status_code;
+import org.pjsip.pjsua.pjsip_transport_type_e;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_info;
@@ -457,20 +458,40 @@ public class SipService extends Service {
 						}
 					}
 
-					// Add UDP transport
+					// Add transports
 					{
-						pjsua_transport_config cfg = new pjsua_transport_config();
+						//TODO : factorize this !!
+						if(prefsWrapper.isTCPEnabled()) {
+							pjsua_transport_config cfg = new pjsua_transport_config();
 
-						pjsua.transport_config_default(cfg);
-						cfg.setPort(prefsWrapper.getTransportPort());
-						status = pjsua.transport_create(prefsWrapper.getTransportType(), cfg, null);
-						if (status != pjsuaConstants.PJ_SUCCESS) {
-							Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
-							pjsua.destroy();
-							creating = false;
-							created = false;
-							return;
+							pjsua.transport_config_default(cfg);
+							cfg.setPort(prefsWrapper.getTCPTransportPort());
+							
+							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, cfg, null);
+							if (status != pjsuaConstants.PJ_SUCCESS) {
+								Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
+								pjsua.destroy();
+								creating = false;
+								created = false;
+								return;
+							}
 						}
+						if(prefsWrapper.isUDPEnabled()) {
+							pjsua_transport_config cfg = new pjsua_transport_config();
+
+							pjsua.transport_config_default(cfg);
+							cfg.setPort(prefsWrapper.getUDPTransportPort());
+							
+							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, cfg, null);
+							if (status != pjsuaConstants.PJ_SUCCESS) {
+								Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
+								pjsua.destroy();
+								creating = false;
+								created = false;
+								return;
+							}
+						}
+						
 					}
 
 					// Initialization is done, now start pjsua

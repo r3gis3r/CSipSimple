@@ -42,15 +42,26 @@
 			android:defaultValue="true"></CheckBoxPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/transport">
-		<ListPreference android:key="network_transport"
-			android:summary="@string/network_transport_desc" android:title="@string/network_transport"
-			android:entries="@array/transport_choices" android:entryValues="@array/transport_values"
-			android:defaultValue="UDP"></ListPreference>
-		
-		<EditTextPreference android:key="network_transport_port"
-			android:title="@string/network_transport_port"
+		<CheckBoxPreference android:title="@string/enable_udp"
+			android:summary="@string/enable_udp_desc"
+			android:key="enable_udp" android:defaultValue="true"></CheckBoxPreference>
+		<EditTextPreference android:key="network_udp_transport_port"
+			android:title="@string/network_udp_transport_port"
 			android:numeric="integer"
-			android:summary="@string/network_transport_port_desc"
+			android:summary="@string/network_udp_transport_port_desc"
 			android:defaultValue="5060"></EditTextPreference>
+			
+			
+	
+		<CheckBoxPreference android:title="@string/enable_tcp"
+			android:summary="@string/enable_tcp_desc"
+			android:key="enable_tcp" android:defaultValue="false"></CheckBoxPreference>
+		<EditTextPreference android:key="network_tcp_transport_port"
+			android:title="@string/network_tcp_transport_port"
+			android:numeric="integer"
+			android:summary="@string/network_tcp_transport_port_desc"
+			android:defaultValue="5060"></EditTextPreference>
+			
+		
 	</PreferenceCategory>
 </PreferenceScreen>

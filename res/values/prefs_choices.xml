@@ -41,17 +41,6 @@
 		 -->
 	</string-array>
 
-	<string-array name="transport_choices">
-		<item>TCP</item>
-		<item>UDP</item>
-		<!-- <item>SRTP</item> -->
-	</string-array>
-	<string-array name="transport_values">
-		<item>TCP</item>
-		<item>UDP</item>
-		<!-- <item>SRTP</item> -->
-	</string-array>
-	
 	<string-array name="clock_rate_choices">
 		<item>8KHz</item>
 		<item>16KHz</item>

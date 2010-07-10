@@ -24,11 +24,14 @@
 <string name="use_3g_disclamer">Your carrier MUST allow you to use this option</string>
 <string name="lock_wifi">Lock wifi</string>
 <string name="lock_wifi_desc">Prevent wifi idle when SIP is connected</string>
-<string name="network_transport">Transport</string>
-<string name="network_transport_desc">Network transport to use</string>
-<string name="network_transport_port">Port</string>
-<string name="network_transport_port_desc">Port number to bind locally</string>
-
+<string name="enable_tcp">TCP</string>
+<string name="enable_tcp_desc">Enable TCP transport</string>
+<string name="enable_udp">UDP</string>
+<string name="enable_udp_desc">Enable UDP transport</string>
+<string name="network_udp_transport_port">UDP Port</string>
+<string name="network_udp_transport_port_desc">Port number to bind locally</string>
+<string name="network_tcp_transport_port">TCP Port</string>
+<string name="network_tcp_transport_port_desc">Port number to bind locally</string>
 <!-- Media -->
 
 <string name="audio_quality">Audio quality</string>
