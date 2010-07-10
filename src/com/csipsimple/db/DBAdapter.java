@@ -256,7 +256,7 @@ public class DBAdapter {
 		if (account.cfg.getProxy_cnt() > 0) {
 			args.put(FIELD_PROXY, account.cfg.getProxy().getPtr());
 		}else {
-			args.put(FIELD_PROXY, "");
+			args.put(FIELD_PROXY, (String) null);
 		}
 		
 		// Assume we have an unique credential
