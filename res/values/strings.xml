@@ -21,7 +21,7 @@
 
 	<string name="app_name">CSipSimple</string>
 	<string name="unable_to_download_file">Unable to download file</string>
-	<string name="connection_not_valid">Your connection is not valid for SIP (activate WIFI or change preferences to use 3G)</string>
+	<string name="connection_not_valid">Selected network route not available (activate WiFi or change preferences to use 3G)</string>
 	<string name="accounts">Accounts</string>
 	<string name="save">Save</string>
 	<string name="cancel">Cancel</string>
@@ -32,9 +32,9 @@
 	<string name="add_account">Add account</string>
 	<string name="choose_wizard">Choose wizard</string>
 	<string name="use">Use :</string>
-	<string name="use_pstn">Use GSM</string>
-	<string name="ongoing_call">Ongoing Call</string>
-	<string name="recentCalls_empty">No CallLogs</string>
+	<string name="use_pstn">Use mobile</string>
+	<string name="ongoing_call">Call in Progress</string>
+	<string name="recentCalls_empty">No Call Logs</string>
 	<string name="filters">Filters</string>
 	
 	

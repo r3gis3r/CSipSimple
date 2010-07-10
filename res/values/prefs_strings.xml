@@ -3,11 +3,11 @@
 <string name="prefs">Settings</string>
 
 <string name="prefs_fast">Easy configuration</string>
-<string name="prefs_fast_desc">Quick options to use if you don\'t known how SIP works</string>
+<string name="prefs_fast_desc">Quick options to use if you don\'t know how SIP works</string>
 <string name="prefs_network">Network</string>
 <string name="prefs_network_desc">How SIP can be connected to the network</string>
 <string name="prefs_media">Media</string>
-<string name="prefs_media_desc">Codecs and in call sound behavior</string>
+<string name="prefs_media_desc">Codecs and in-call sound behavior</string>
 <string name="prefs_ui">User interface</string>
 <string name="prefs_ui_desc">Tweak the user interface</string>
 
@@ -17,13 +17,13 @@
 <string name="perfs">Performances</string>
 <string name="transport">Transport</string>
 
-<string name="use_wifi">Use wifi</string>
-<string name="use_wifi_in_desc">Use wifi for incoming calls</string>
-<string name="use_wifi_out_desc">Use wifi for outgoing calls</string>
+<string name="use_wifi">Use WiFi</string>
+<string name="use_wifi_in_desc">Use WiFi for incoming calls</string>
+<string name="use_wifi_out_desc">Use WiFi for outgoing calls</string>
 <string name="use_3g">Use 3G</string>
 <string name="use_3g_disclamer">Your carrier MUST allow you to use this option</string>
-<string name="lock_wifi">Lock wifi</string>
-<string name="lock_wifi_desc">Prevent wifi idle when SIP is connected</string>
+<string name="lock_wifi">Lock WiFi</string>
+<string name="lock_wifi_desc">Prevent WiFi idle when SIP is connected</string>
 <string name="enable_tcp">TCP</string>
 <string name="enable_tcp_desc">Enable TCP transport</string>
 <string name="enable_udp">UDP</string>
@@ -65,9 +65,9 @@
 <string name="native_dialer_integration">Native dialer integration</string>
 
 <string name="integrate_with_native_dialer">Dialer integration</string>
-<string name="integrate_with_native_dialer_desc">When dial with native dialer you\'ll be asked if you want to use SIP or GSM</string>
+<string name="integrate_with_native_dialer_desc">When dialing with native dialer you\'ll be asked if you want to use SIP or mobile</string>
 <string name="integrate_with_native_calllogs">Call logs integration</string>
-<string name="integrate_with_native_calllogs_desc">SIP calls will be reported (if possible) into native call logs</string>
+<string name="integrate_with_native_calllogs_desc">SIP calls will be merged (if possible) into native call logs</string>
 <string name="exclude_for_outgoing_call">Exclude patterns</string>
 <string name="exclude_for_outgoing_call_desc">Exclude patterns for outgoing calls</string>
 <string name="start_with_text_dialer">Text dialer</string>
@@ -78,16 +78,16 @@
 
 <!-- Fast settings -->
 <string name="android_integration">Integrate with Android</string>
-<string name="android_integration_desc">Integration with native dialer and calllogs</string>
+<string name="android_integration_desc">Integration with native dialer and call logs</string>
 <string name="availability_profile">Availability profile</string>
 <string name="always_available">Always available</string>
 <string name="always_available_desc">Will use battery but incoming calls are always received</string>
-<string name="wifi_available">Available on WIFI</string>
-<string name="wifi_available_desc">Availability off incoming calls based on wifi profile</string>
+<string name="wifi_available">Available on WiFi</string>
+<string name="wifi_available_desc">Availability of incoming calls based on WiFi profile</string>
 <string name="never_available">Only for outgoing</string>
-<string name="never_available_desc">It will activate the SIP client automatically when necessary</string>
+<string name="never_available_desc">Activate the SIP client automatically when necessary</string>
 <string name="availability_tg">3G availability</string>
 <string name="tg_allowed">I\'m allowed to use 3G</string>
-<string name="tg_allowed_desc">By checking this box you confirm that your carrier allow you to use your GSM data connection to do VoIP</string>
+<string name="tg_allowed_desc">Your carrier allows VoIP over your mobile data connection</string>
 
 </resources>

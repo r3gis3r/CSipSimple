@@ -22,11 +22,11 @@
 <string name="w_expert_reg_uri">Registration URI</string>
 <string name="w_expert_reg_uri_desc">Format : &quot;sip:registrar.net&quot;</string>
 <string name="w_expert_realm">Realm</string>
-<string name="w_expert_realm_desc">Identify the secure domain (if you don\'t know, you can use *) </string>
-<string name="w_expert_username">User name</string>
-<string name="w_expert_username_desc">Login to use to authentify</string>
-<string name="w_expert_data">Data</string>
-<string name="w_expert_data_desc">Data to be used to authentify (could be a password)</string>
+<string name="w_expert_realm_desc">Authentication domain (if you don\'t know, use \'*\')</string>
+<string name="w_expert_username">Username</string>
+<string name="w_expert_username_desc">Username for authentication</string>
+<string name="w_expert_data">Password</string>
+<string name="w_expert_data_desc">Password (or other data) for authentication</string>
 <string name="w_expert_t_proxy">Proxy</string>
 <string name="w_expert_proxy">Proxy URI</string>
 <string name="w_expert_proxy_desc">Format : &quot;sip:proxy.net&quot;</string>

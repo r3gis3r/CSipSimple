@@ -45,6 +45,7 @@ public class WizardUtils {
 	//from ClassLoader resources
 	private static String[] wizards_classes_names = new String[]{
 		"Basic",
+		"Callcentric",
 		"Ecs",
 		"Ekiga",
 		"Eutelia",
