@@ -37,7 +37,8 @@ public class Account {
 		
 		cfg = new pjsua_acc_config();
 		pjsua.acc_config_default(cfg);
-		
+		// Change the default ka interval to 40s
+		cfg.setKa_interval(40);
 	}
 	
 }
