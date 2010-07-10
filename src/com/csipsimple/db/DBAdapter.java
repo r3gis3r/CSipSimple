@@ -253,8 +253,12 @@ public class DBAdapter {
 		// CONTACT_PARAM and CONTACT_PARAM_URI not yet in JNI
 
 		// Assume we have an unique proxy
-		args.put(FIELD_PROXY, account.cfg.getProxy().getPtr());
-
+		if (account.cfg.getProxy_cnt() > 0) {
+			args.put(FIELD_PROXY, account.cfg.getProxy().getPtr());
+		}else {
+			args.put(FIELD_PROXY, "");
+		}
+		
 		// Assume we have an unique credential
 		pjsip_cred_info cred_info = account.cfg.getCred_info();
 		args.put(FIELD_REALM, cred_info.getRealm().getPtr());
