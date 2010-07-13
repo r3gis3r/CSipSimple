@@ -323,10 +323,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				Log.d(THIS_FILE, "Service started get real call info "+callInfo.getCallId());
 				realCallInfo = service.getCallInfo(callInfo.getCallId());
 				callInfo = realCallInfo;
-				Log.d(THIS_FILE, "Real call info "+callInfo.getCallId());
 				if(callInfo == null) {
 					finish();
 				}else {
+					Log.d(THIS_FILE, "Real call info "+callInfo.getCallId());
 					updateUIFromCall();
 				}
 			} catch (RemoteException e) {

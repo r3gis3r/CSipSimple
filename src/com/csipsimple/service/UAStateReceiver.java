@@ -18,6 +18,7 @@
 package com.csipsimple.service;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,16 +89,16 @@ public class UAStateReceiver extends Callback {
 	
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
-		updateCallInfo(callId);
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL));
+		CallInfo callInfo = getCallInfo(callId);
+		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
 	}
 	
 	
 	@Override
 	public void on_call_state(int callId, pjsip_event e) {
 		//Get current infos
-		updateCallInfo(callId);
-		pjsip_inv_state callState = currentCallInfo.getCallState();
+		CallInfo callInfo = getCallInfo(callId);
+		pjsip_inv_state callState = callInfo.getCallState();
 		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
 			
 			
@@ -106,7 +107,7 @@ public class UAStateReceiver extends Callback {
 			service.stopDialtoneGenerator();
 			unsetAudioInCall();
 		}
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE));
+		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
 	}
 
 	@Override
@@ -143,14 +144,21 @@ public class UAStateReceiver extends Callback {
 	// -------
 	// Current call management -- assume for now one unique call is managed
 	// -------
-
-	private CallInfo currentCallInfo;
-	private long currentCallStart = 0;
+	private HashMap<Integer, CallInfo> callsList = new HashMap<Integer, CallInfo>();
+	//private long currentCallStart = 0;
 	
-	public CallInfo getCurrentCallInfo() {
-		return currentCallInfo;
+	public CallInfo getCallInfo(Integer callId) {
+		CallInfo callInfo = callsList.get(callId);
+		if(callInfo == null) {
+			callInfo = new CallInfo(callId);
+			callsList.put(callId, callInfo);
+		} else {
+			//Update from pjsip
+			callInfo.updateFromPj();
+		}
+		
+		return callInfo;
 	}
-	
 
 
 	private WorkerHandler msgHandler;
@@ -160,27 +168,6 @@ public class UAStateReceiver extends Callback {
 	private WifiLock wifiLock;
 
 
-	private void updateCallInfo(int callId) {
-		if(currentCallInfo == null) {
-			currentCallInfo = new CallInfo(callId);
-			
-		}else {
-			if(currentCallInfo.getCallId() == callId) {
-				currentCallInfo.updateFromPj();
-			}else {
-				currentCallInfo = null;
-				System.gc();
-				
-				currentCallInfo = new CallInfo(callId);
-				Log.w(THIS_FILE, "Multiple call management is not yet implemented");
-			}
-		}
-		if(currentCallInfo != null) {
-			Log.i(THIS_FILE, "State of call " + callId + " :: " + currentCallInfo.getStringCallState());
-			
-		}
-	}
-	
 	private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
 	private static final int ON_REGISTRATION_STATE = 3;
@@ -197,42 +184,44 @@ public class UAStateReceiver extends Callback {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case ON_INCOMING_CALL:{
-				int callId = currentCallInfo.getCallId();
-				currentCallInfo.setIncoming(true);
+				CallInfo callInfo = (CallInfo) msg.obj;
+				int callId = callInfo.getCallId();
+				callInfo.setIncoming(true);
+				showNotificationForCall(callInfo);
+				startRing();
 				
 				// Automatically answer incoming calls with 180/RINGING
 				service.callAnswer(callId, 180);
-				startRing();
-				showNotificationForCall();
 				if (autoAcceptCurrent) {
 					// Automatically answer incoming calls with 200/OK
 					service.callAnswer(callId, 200);
 					autoAcceptCurrent = false;
 				} else {
-					launchCallHandler();
+					launchCallHandler(callInfo);
 				}
 				
 				break;
 			}
 			
 			case ON_CALL_STATE:{
-				pjsip_inv_state callState = currentCallInfo.getCallState();
+				CallInfo callInfo = (CallInfo) msg.obj;
+				pjsip_inv_state callState = callInfo.getCallState();
 				
 				if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || 
 						callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
-					showNotificationForCall();
-					launchCallHandler();
+					showNotificationForCall(callInfo);
+					launchCallHandler(callInfo);
 		
 				} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
 					//Nothing to do...
 				} else if(callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
-					currentCallStart = System.currentTimeMillis();
+					callInfo.callStart = System.currentTimeMillis();
 				}else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
 					notificationManager.cancel(SipService.CALL_NOTIF_ID);
 					Log.d(THIS_FILE, "Finish call2");
 					
 					//CallLog
-					ContentValues cv = CallLogHelper.logValuesForCall(currentCallInfo, currentCallStart);
+					ContentValues cv = CallLogHelper.logValuesForCall(callInfo, callInfo.callStart);
 					
 					//Fill our own database
 					DBAdapter database = new DBAdapter(service);
@@ -256,10 +245,10 @@ public class UAStateReceiver extends Callback {
 						}
 						
 					}
-					currentCallInfo.setIncoming(false);
-					currentCallStart = 0;
+					callInfo.setIncoming(false);
+					callInfo.callStart = 0;
 				}
-				onBroadcastCallState(currentCallInfo);
+				onBroadcastCallState(callInfo);
 				break;
 			}
 			case ON_REGISTRATION_STATE:{
@@ -344,7 +333,7 @@ public class UAStateReceiver extends Callback {
 
 	
 	
-	private void showNotificationForCall() {
+	private void showNotificationForCall(CallInfo currentCallInfo2) {
 		// This is the pending call notification
 		int icon = R.drawable.ic_incall_ongoing;
 		CharSequence tickerText =  service.getText(R.string.ongoing_call);
@@ -354,13 +343,13 @@ public class UAStateReceiver extends Callback {
 		Context context = service.getApplicationContext();
 
 		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALL_UI);
-		notificationIntent.putExtra("call_info", currentCallInfo);
+		notificationIntent.putExtra("call_info", currentCallInfo2);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, 0);
 
 		
 		notification.setLatestEventInfo(context, service.getText(R.string.ongoing_call), 
-				currentCallInfo.getRemoteContact(), contentIntent);
+				currentCallInfo2.getRemoteContact(), contentIntent);
 		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 		// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 
@@ -372,13 +361,14 @@ public class UAStateReceiver extends Callback {
 	
 	/**
 	 * 
+	 * @param currentCallInfo2 
 	 * @param callInfo
 	 */
-	private void launchCallHandler() {
+	private void launchCallHandler(CallInfo currentCallInfo2) {
 		
 		// Launch activity to choose what to do with this call
 		Intent callHandlerIntent = new Intent(SipService.ACTION_SIP_CALL_UI); //new Intent(service, getInCallClass());
-		callHandlerIntent.putExtra("call_info", currentCallInfo);
+		callHandlerIntent.putExtra("call_info", currentCallInfo2);
 		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		Log.i(THIS_FILE, "Anounce call activity please");

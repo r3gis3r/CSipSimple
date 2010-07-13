@@ -202,7 +202,7 @@ public class SipService extends Service {
 		@Override
 		public CallInfo getCallInfo(int callId) throws RemoteException {
 			if(created) {
-				CallInfo callInfo = userAgentReceiver.getCurrentCallInfo();
+				CallInfo callInfo = userAgentReceiver.getCallInfo(callId);
 				if(callId != callInfo.getCallId()) {
 					Log.w(THIS_FILE, "we try to get an info for a call that is not the current one :  "+callId);
 					callInfo = new CallInfo(callId);

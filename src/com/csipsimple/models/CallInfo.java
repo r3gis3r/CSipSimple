@@ -31,6 +31,8 @@ public class CallInfo implements Parcelable {
 	private pjsip_inv_state callState;
 	private String remoteContact;
 	private boolean isIncoming;
+	
+	public long callStart = 0;
 
 	public static final Parcelable.Creator<CallInfo> CREATOR = new Parcelable.Creator<CallInfo>() {
 		public CallInfo createFromParcel(Parcel in) {
