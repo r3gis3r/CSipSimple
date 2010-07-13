@@ -65,6 +65,7 @@
 		<activity android:name=".wizards.impl.Ekiga" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Eutelia" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Callcentric" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name=".wizards.impl.Sip2Sip" android:theme="@android:style/Theme.NoTitleBar"></activity>
 
 		<!-- Call management -->
 		<receiver android:name=".service.OutgoingCall">

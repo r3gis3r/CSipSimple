@@ -50,7 +50,8 @@ public class WizardUtils {
 		"Ekiga",
 		"Eutelia",
 		"Expert",
-		"Freephonie"
+		"Freephonie",
+		"Sip2Sip"
 	};
 	
 	private static boolean init_done = false;
