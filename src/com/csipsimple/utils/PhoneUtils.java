@@ -21,73 +21,98 @@ import android.content.Context;
 import android.media.AudioManager;
 
 public class PhoneUtils {
-	
-    // State of the Phone's audio modes
-    // Each state can move to the other states, but within the state only certain
-    //  transitions for AudioManager.setMode() are allowed.
-	public static final int AUDIO_IDLE = 0;  /** audio behaviour at phone idle */
-    public static final int AUDIO_RINGING = 1;  /** audio behaviour while ringing */
-    public static final int AUDIO_OFFHOOK = 2;
-	private static final String THIS_FILE = "PhoneUtils";  /** audio behaviour while in call. */
-    private static int sAudioBehaviourState = AUDIO_IDLE;
+
+	// State of the Phone's audio modes
+	// Each state can move to the other states, but within the state only
+	// certain
+	// transitions for AudioManager.setMode() are allowed.
+	public static final int AUDIO_IDLE = 0;
+	/** audio behaviour at phone idle */
+	public static final int AUDIO_RINGING = 1;
+	/** audio behaviour while ringing */
+	public static final int AUDIO_OFFHOOK = 2;
+	/** audio behaviour while in call. */
+	private static final String THIS_FILE = "PhoneUtils";
+	private static int sAudioBehaviourState = AUDIO_IDLE;
 
 	public static boolean isSpeakerOn(Context context) {
 		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		return audioManager.isSpeakerphoneOn();
 	}
-	
+
 	public static void turnOnSpeaker(Context context, boolean flag) {
 		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		audioManager.setSpeakerphoneOn(flag);
 	}
 
-	//Audio mode management for all api versions
-	
-    //static method to set the audio control state.
-    public static void setAudioControlState(int newState) {
-        sAudioBehaviourState = newState;
-    }
+	// Audio mode management for all api versions
 
-	
-	public static void setAudioMode(Context ctx, int mode) {
-		
-		AudioManager aManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-    	if(Compatibility.isCompatible(5)) {
-    		aManager.setSpeakerphoneOn(mode == AudioManager.MODE_NORMAL || mode == AudioManager.MODE_RINGTONE);
-    	
-    	} else {
-    	      //decide whether or not to ignore the audio setting
-            boolean ignore = false;
-
-            switch (sAudioBehaviourState) {
-                case AUDIO_RINGING:
-                    ignore = ((mode == AudioManager.MODE_NORMAL) || (mode == AudioManager.MODE_IN_CALL));
-                    break;
-                case AUDIO_OFFHOOK:
-                    ignore = ((mode == AudioManager.MODE_NORMAL) || (mode == AudioManager.MODE_RINGTONE));
-                    break;
-                case AUDIO_IDLE:
-                default:
-                    ignore = (mode == AudioManager.MODE_IN_CALL);
-                    break;
-            }
-
-     //       if (!ignore) {
-            	aManager.setMode(mode);
-            	Log.d(THIS_FILE, "PhoneUtils.setAudioMode(), >> " + sAudioBehaviourState + " doing " + mode + " request");
-            	aManager.setRouting(mode, 
-        				(mode == AudioManager.MODE_NORMAL)?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, 
-        				AudioManager.ROUTE_ALL);
-      //      } else {
-       //         Log.d(THIS_FILE, "PhoneUtils.setAudioMode(), state is " + sAudioBehaviourState + " ignoring " + mode + " request");
-      //      }
-            
-            /*
-        		audioManager.setMode(mode);
-        		
-        	*/
-    		
-    	}
-		
+	// static method to set the audio control state.
+	public static void setAudioControlState(int newState) {
+		sAudioBehaviourState = newState;
 	}
+
+	/*
+	 * public static void setAudioMode(Context ctx, int mode) {
+	 * 
+	 * AudioManager aManager = (AudioManager)
+	 * ctx.getSystemService(Context.AUDIO_SERVICE);
+	 * if(Compatibility.isCompatible(5)) { aManager.setSpeakerphoneOn(mode ==
+	 * AudioManager.MODE_NORMAL || mode == AudioManager.MODE_RINGTONE);
+	 * 
+	 * } else { //decide whether or not to ignore the audio setting boolean
+	 * ignore = false;
+	 * 
+	 * switch (sAudioBehaviourState) { case AUDIO_RINGING: ignore = ((mode ==
+	 * AudioManager.MODE_NORMAL) || (mode == AudioManager.MODE_IN_CALL)); break;
+	 * case AUDIO_OFFHOOK: ignore = ((mode == AudioManager.MODE_NORMAL) || (mode
+	 * == AudioManager.MODE_RINGTONE)); break; case AUDIO_IDLE: default: ignore
+	 * = (mode == AudioManager.MODE_IN_CALL); break; }
+	 * 
+	 * // if (!ignore) { aManager.setMode(mode); Log.d(THIS_FILE,
+	 * "PhoneUtils.setAudioMode(), >> " + sAudioBehaviourState + " doing " +
+	 * mode + " request"); aManager.setRouting(mode, (mode ==
+	 * AudioManager.MODE_NORMAL
+	 * )?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE,
+	 * AudioManager.ROUTE_ALL); // } else { // Log.d(THIS_FILE,
+	 * "PhoneUtils.setAudioMode(), state is " + sAudioBehaviourState +
+	 * " ignoring " + mode + " request"); // }
+	 * 
+	 * audioManager.setMode(mode);
+	 * 
+	 * 
+	 * }
+	 */
+
+	public static void setAudioMode(Context ctx, int mode) {
+
+		AudioManager aManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+		
+		// decide whether or not to ignore the audio setting
+		boolean ignore = false;
+
+		switch (sAudioBehaviourState) {
+		case AUDIO_RINGING:
+			ignore = ((mode == AudioManager.MODE_NORMAL) || (mode == AudioManager.MODE_IN_CALL));
+			break;
+		case AUDIO_OFFHOOK:
+			ignore = ((mode == AudioManager.MODE_NORMAL) || (mode == AudioManager.MODE_RINGTONE));
+			break;
+		case AUDIO_IDLE:
+		default:
+			ignore = (mode == AudioManager.MODE_IN_CALL);
+			break;
+		}
+
+		if (!ignore) {
+			Log.d(THIS_FILE, "PhoneUtils.setAudioMode(), >> " + sAudioBehaviourState + " SWITCHING " + mode );
+			aManager.setMode(mode);
+			
+			aManager.setRouting(mode, (mode == AudioManager.MODE_NORMAL) ? AudioManager.ROUTE_SPEAKER : AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
+			aManager.setSpeakerphoneOn(mode == AudioManager.MODE_NORMAL || mode == AudioManager.MODE_RINGTONE);
+		}else {
+			Log.d(THIS_FILE, "PhoneUtils.setAudioMode(), >> " + sAudioBehaviourState + " IGNORING "+mode);
+		}
+	}
+	
 }

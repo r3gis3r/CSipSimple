@@ -42,6 +42,10 @@
 <string name="echo_cancellation_desc">Activate echo cancellation</string>
 <string name="enable_vad">Voice audio detection</string>
 <string name="enable_vad_desc">Activate voice audio detection</string>
+<string name="snd_mic_level">Micro amplification</string>
+<string name="snd_mic_level_desc">Adjust the micro signal level (1 do nothing)</string>
+<string name="snd_speaker_level">Speaker amplification</string>
+<string name="snd_speaker_level_desc">Adjust the speaker signal level (1 do nothing)</string>
 <string name="snd_auto_close_time">Auto close time</string>
 <string name="snd_auto_close_time_desc">Time to wait for close audio channel (should be set to fix the android 1.5 bug)</string>
 <string name="snd_media_quality">Media quality</string>

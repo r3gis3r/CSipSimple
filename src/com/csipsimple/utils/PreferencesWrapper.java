@@ -17,8 +17,6 @@
  */
 package com.csipsimple.utils;
 
-import org.pjsip.pjsua.pjsip_transport_type_e;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -295,5 +293,14 @@ public class PreferencesWrapper {
 	}
 	public boolean useIntegrateCallLogs() {
 		return prefs.getBoolean("integrate_with_native_calllogs", true);
+	}
+
+
+	public float getMicLevel() {
+		return prefs.getFloat("snd_mic_level", (float) 1.0);
+	}
+	
+	public float getSpeakerLevel() {
+		return prefs.getFloat("snd_speaker_level", (float) 1.0);
 	}
 }

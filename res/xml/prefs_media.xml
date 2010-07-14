@@ -30,6 +30,16 @@
 				android:numeric="signed"
 				android:summary="@string/snd_auto_close_time_desc"
 				android:defaultValue="1"></EditTextPreference>
+			
+			<com.csipsimple.widgets.SeekBarPreference android:key="snd_mic_level"
+				android:title="@string/snd_mic_level"
+				android:summary="@string/snd_mic_level_desc" 
+				android:defaultValue="1.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
+			<com.csipsimple.widgets.SeekBarPreference android:key="snd_speaker_level"
+				android:title="@string/snd_speaker_level"
+				android:summary="@string/snd_speaker_level_desc" 
+				android:defaultValue="1.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
+			
 			<EditTextPreference android:key="snd_media_quality"
 				android:title="@string/snd_media_quality"
 				android:numeric="signed"
