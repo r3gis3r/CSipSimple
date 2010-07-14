@@ -138,7 +138,7 @@ public class SipService extends Service {
 		
 
 		/**
-		 * Unregister and delete accounts registred
+		 * Unregister and delete accounts registered
 		 */
 		@Override
 		public void removeAllAccounts() throws RemoteException { SipService.this.unregisterAllAccounts(true); }
@@ -694,6 +694,7 @@ public class SipService extends Service {
 				info = getAccountInfo(accountDbId);
 				if (info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
 					hasSomeSuccess = true;
+					break;												// No need to look further
 				}
 			}
 		}
@@ -701,13 +702,13 @@ public class SipService extends Service {
 		// Handle status bar notification
 		if (hasSomeSuccess) {
 			int icon = R.drawable.sipok;
-			CharSequence tickerText = "Sip Registred";
+			CharSequence tickerText = "SIP Registered";
 			long when = System.currentTimeMillis();
 
 			Notification notification = new Notification(icon, tickerText, when);
 			Context context = getApplicationContext();
 			CharSequence contentTitle = "SIP";
-			CharSequence contentText = "Registred";
+			CharSequence contentText = "Registered";
 
 			Intent notificationIntent = new Intent(this, SipHome.class);
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -39,9 +39,11 @@ import android.widget.TextView;
 public class AccountAdapter extends ArrayAdapter<Account> {
 
 	private ISipService service;
+	Activity context;
 
 	public AccountAdapter(Activity aContext, List<Account> list) {
 		super(aContext, R.layout.choose_account_row, list);
+		this.context= aContext;
 	}
 	
 	public void updateService(ISipService aService) {
@@ -69,7 +71,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         //Log.d(THIS_FILE, "has account");
         if (account != null){
             
-            AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(service, account.id);
+            AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
             
             labelView.setText(account.display_name);
             //Update status label and color

@@ -20,6 +20,7 @@ package com.csipsimple.utils;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsuaConstants;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.RemoteException;
 
@@ -38,9 +39,9 @@ public class AccountListUtils {
 	}
 	
 	
-	public static AccountStatusDisplay getAccountDisplay(ISipService service, int accountId) {
+	public static AccountStatusDisplay getAccountDisplay(Activity context, ISipService service, int accountId) {
 		AccountStatusDisplay accountDisplay = new AccountStatusDisplay();
-		accountDisplay.statusLabel = "Not added";
+		accountDisplay.statusLabel = context.getString(R.string.acct_inactive);
 		accountDisplay.statusColor = Color.argb(255, 100, 100, 100); 
 		accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
 		accountDisplay.availableForCalls = false;
@@ -55,12 +56,12 @@ public class AccountListUtils {
 			if (accountInfo != null && accountInfo.isActive()) {
 				if (accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS) {
 
-					accountDisplay.statusLabel = "Not yet registered";
+					accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 					accountDisplay.statusColor = Color.argb(255, 255, 194, 0);
 					accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
 
 					if (accountInfo.getPjsuaId() >= 0) {
-						accountDisplay.statusLabel = accountInfo.getStatusText();
+						String pjStat = accountInfo.getStatusText();	// Used only on error status message
 						pjsip_status_code statusCode = accountInfo.getStatusCode();
 						if (statusCode == pjsip_status_code.PJSIP_SC_OK) {
 							// Log.d(THIS_FILE,
@@ -69,27 +70,30 @@ public class AccountListUtils {
 								// Green
 								accountDisplay.statusColor = Color.argb(255, 132, 227, 0);
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_on;
+								accountDisplay.statusLabel = context.getString(R.string.acct_registered);
 								accountDisplay.availableForCalls = true;
 							} else {
-								// Yellow unregistred
+								// Yellow unregistered (expired)
 								accountDisplay.statusColor = Color.argb(255, 255, 194, 0);
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
-								accountDisplay.statusLabel = "Unregistred";
+								accountDisplay.statusLabel = context.getString(R.string.acct_expired);
 							}
 						} else {
 							if (statusCode == pjsip_status_code.PJSIP_SC_PROGRESS || statusCode == pjsip_status_code.PJSIP_SC_TRYING) {
 								// Yellow progressing ...
 								accountDisplay.statusColor = Color.argb(255, 255, 194, 0);
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
+								accountDisplay.statusLabel = context.getString(R.string.acct_registering);
 							} else {
 								// Red : error
 								accountDisplay.statusColor = Color.argb(255, 255, 0, 0);
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_red;
+								accountDisplay.statusLabel = context.getString(R.string.acct_regerror) + " - " + pjStat;	// Why can't ' - ' be in resource?
 							}
 						}
 					}
 				} else {
-					accountDisplay.statusLabel = "Unable to register ! Check your configuration";
+					accountDisplay.statusLabel = context.getString(R.string.acct_regfailed);
 					accountDisplay.statusColor = Color.argb(255, 255, 15, 0);
 				}
 			}

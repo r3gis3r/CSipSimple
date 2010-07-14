@@ -300,8 +300,11 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	
 	class AccountAdapter extends ArrayAdapter<Account> {
 
+		Activity context;
+		
 		AccountAdapter(Activity context, List<Account> list) {
 			super(context, R.layout.account_row, list);
+			this.context = context;
 		}
 		
 		
@@ -329,7 +332,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	        final TextView labelView = (TextView)view.findViewById(R.id.AccTextView);
 	        final TextView statusView = (TextView)view.findViewById(R.id.AccTextStatusView);
 	        final View indicator = view.findViewById(R.id.indicator);
-	        final AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(service, account.id);
+	        final AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
             //The activation part of the view
             final CheckBox activeCheckbox = (CheckBox)view.findViewById(R.id.AccCheckBoxActive);
             final ImageView barOnOff = (ImageView) indicator.findViewById(R.id.bar_onoff);
