@@ -32,8 +32,6 @@ public class OutgoingCall extends BroadcastReceiver {
 	private PreferencesWrapper prefsWrapper;
 	
 	public static String ignoreNext = "";
-	
-	
 
 	@Override
 	public void onReceive(Context aContext, Intent intent) {
@@ -43,30 +41,34 @@ public class OutgoingCall extends BroadcastReceiver {
 		String number = getResultData();
 		String full_number = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");
 
-		Log.d(THIS_FILE, "We are trying to call " + full_number);
+		Log.d(THIS_FILE, "act=" + action + " num=" + number + " fnum=" + full_number + " ignx=" + ignoreNext);	
+		
+		if (number == null) return;
+		
+		//Log.d(THIS_FILE, "We are trying to call " + full_number);
 		if (!prefsWrapper.useIntegrateDialer() || ignoreNext.equalsIgnoreCase(number)) {
-			Log.d(THIS_FILE, "we will force it ");
+			Log.d(THIS_FILE, "Our selector disabled, or Mobile chosen in our selector, send to tel");
+			//Log.d(THIS_FILE, "we will force it ");
 			ignoreNext = "";
 			setResultData(number);
 			return;
 		}
 		
-		
-		
 		// If this is an outgoing call with a valid number
-		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) && number != null) {
-			Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
+		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL)) {					// Filter should assure this!
+			//Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
 			if (isCallableNumber(number) && prefsWrapper.isValidConnectionForOutgoing()) {
+				Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
 				outgoingCallChooserIntent.setData(Uri.parse("sip:"+number));
 				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
 				context.startActivity(outgoingCallChooserIntent);
 				// We will treat this by ourselves
 				setResultData(null);
 				return;
 			} else {
+				Log.d(THIS_FILE, "Can't use SIP, pass number along");
 				// Pass the call to pstn handle
 				setResultData(number);
 				return;

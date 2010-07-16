@@ -30,7 +30,7 @@
 			android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
 		
 		<MultiAutoCompleteTextView
-			android:layout_height="wrap_content" android:text="freephonie.net"
+			android:layout_height="wrap_content" android:text=""
 			android:id="@+id/dialtext_domain" android:layout_width="fill_parent"
 			android:gravity="center" android:background="@drawable/btn_dial_textfield"
 			android:textColor="#FFF" android:lines="1" android:inputType="textFilter"></MultiAutoCompleteTextView>

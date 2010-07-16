@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pjsip.pjsua.pjsip_cred_info;
+import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,11 +32,14 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.RemoteException;
 import android.provider.CallLog;
 
 import com.csipsimple.models.Account;
+import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
+import com.csipsimple.models.AccountInfo;
 
 public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
@@ -411,6 +416,16 @@ public class DBAdapter {
 	 * @return the list of accounts
 	 */
 	public List<Account> getListAccounts() {
+		return getListAccounts(true, null);
+	}
+	
+	/**
+	 * Get the list of saved accounts, optionally including the unusable ones
+	 * @param includeUnusable true if list should contain accounts that can NOT presently be used for calls
+	 * @param service Ignored if includeUsable is false. If non-null, full usability test is done, else only disabled accounts are skipped.
+	 * @return the list of accounts
+	 */
+	public List<Account> getListAccounts(boolean includeUnusable, ISipService service) {
 		ArrayList<Account> ret = new ArrayList<Account>();
 		if(SipService.hasSipStack) {
 			try {
@@ -428,8 +443,24 @@ public class DBAdapter {
 					//Log.i(THIS_FILE, "Content values extracted : "+args.toString());
 					
 					Account acc = contentValuesToAccount(args);
-					
-					ret.add(acc);
+					if (includeUnusable) {
+						ret.add(acc);
+					} else {
+						if (service == null) {									// No service, just skip inactive accounts
+							if (acc.active)
+								ret.add(acc);
+						} else {												// Service available, skip accounts that can't be used for calling
+							try {
+								AccountInfo accountInfo = service.getAccountInfo(acc.id);
+								if (accountInfo != null && accountInfo.isActive() &&
+										accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS &&
+										accountInfo.getPjsuaId() >= 0 &&	// ?? needed ??
+										accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK &&
+										accountInfo.getExpires() > 0)
+									ret.add(acc);
+							} catch (RemoteException e) { }
+						}
+					}
 					c.moveToNext();
 				}
 				c.close();

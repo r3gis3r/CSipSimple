@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -54,28 +55,52 @@ public class OutgoingCallChooser extends ListActivity {
 	private AccountAdapter adapter;
 	
 	String number;
+	Window w;
 	
 	public final static int AUTO_CHOOSE_TIME = 8000;
 	private List<Account> accountsList;
 
 	private static final String THIS_FILE = "SIP OUTChoose";
 	
-	private ISipService service;
+	private ISipService service = null;											// [sentinel]
 	private ServiceConnection connection = new ServiceConnection(){
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
-			if(adapter != null) {
-				adapter.updateService(service);
+			
+			// Fill accounts with currently -usable- accounts
+			// At this point we need 'service' to be live (see DBAdapter)
+			updateList();
+			
+			if (adapter.isEmpty()) {
+				Log.d(THIS_FILE, "No usable accounts for SIP, skip the chooser, -> PSTN call");
+				placePstnCall();
+				return;
 			}
+
+			// Need full selector, finish layout
+			setContentView(R.layout.outgoing_account_list);
+			w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
+
+			// Inform the list we provide context menus for items
+			//	getListView().setOnCreateContextMenuListener(this);
+
+			LinearLayout add_row = (LinearLayout) findViewById(R.id.use_pstn_row);
+			add_row.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Log.d(THIS_FILE, "Choosen : pstn");
+					placePstnCall();
+				}
+			});
+			
 		}
+		
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
 			
 		}
     };
-    
-    
     
    	private BroadcastReceiver regStateReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
@@ -90,6 +115,7 @@ public class OutgoingCallChooser extends ListActivity {
 			number = getIntent().getDataString();
 		}else {
 			Log.e(THIS_FILE, "This action : "+getIntent().getAction()+" is not supported by this view");
+			return;
 		}
 		/*
 		Log.d(THIS_FILE, getIntent().getAction());
@@ -100,39 +126,16 @@ public class OutgoingCallChooser extends ListActivity {
 			number = extras.getString("number");
 		}
 		*/
-		Log.d(THIS_FILE, "Choose to call : " + number);
 		
-		// Build window
-		Window w = getWindow();
+		Log.d(THIS_FILE, "Choose to call : " + number);
+
+		// Build minimal activity window
+		w = getWindow();
 		w.requestFeature(Window.FEATURE_LEFT_ICON);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.outgoing_account_list);
-		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
 
-		
-		// Fill accounts with currently avalaible accounts
-		updateList();
-		
-
-		// Inform the list we provide context menus for items
-	//	getListView().setOnCreateContextMenuListener(this);
-
-		LinearLayout add_row = (LinearLayout) findViewById(R.id.use_pstn_row);
-		add_row.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(THIS_FILE, "Choosen : pstn");
-				String phoneNumber = number.replaceAll("^sip:", "");
-				OutgoingCall.ignoreNext = phoneNumber;
-				Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
-				intentMakePstnCall.setData(Uri.parse("tel:"+phoneNumber));
-				startActivity(intentMakePstnCall);
-				finish();
-			}
-		});
-		
+		// Start service and bind it. Finish selector in onServiceConnected
 		Intent sipService = new Intent(this, SipService.class);
-		//Start service and bind it
 		startService(sipService);
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
@@ -142,10 +145,23 @@ public class OutgoingCallChooser extends ListActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unbindService(connection);
-		unregisterReceiver(regStateReceiver);
+		if (service != null) {
+			unbindService(connection);
+			unregisterReceiver(regStateReceiver);
+		}
 	}
 
+	/**
+	 * Place a PSTN call
+	 */
+	private void placePstnCall() {
+		String phoneNumber = number.replaceAll("^sip:", "");
+		OutgoingCall.ignoreNext = phoneNumber;
+		Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
+		intentMakePstnCall.setData(Uri.parse("tel:"+phoneNumber));
+		startActivity(intentMakePstnCall);
+		finish();
+	}
 
 	/**
 	 * Flush and re-populate static list of account (static because should not exceed 3 or 4 accounts)
@@ -157,7 +173,7 @@ public class OutgoingCallChooser extends ListActivity {
     	}
     	
     	database.open();
-		accountsList = database.getListAccounts();
+		accountsList = database.getListAccounts(false, service);
 		database.close();
     	
     	if(adapter == null) {
@@ -169,7 +185,7 @@ public class OutgoingCallChooser extends ListActivity {
     		}
     	}else {
     		adapter.clear();
-    		for(Account acc : accountsList){
+    		for(Account acc : accountsList) {
     			adapter.add(acc);
     		}
     		adapter.notifyDataSetChanged();
