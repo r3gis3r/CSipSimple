@@ -65,7 +65,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private InCallControls inCallControls;
 	private InCallInfo inCallInfo;
 
+	//Screen wake lock for incoming call
 	private WakeLock wakeLock;
+	//Keygard for incoming call
+	private boolean manageKeyguard = false;
     private KeyguardManager keyguardManager;
     private KeyguardManager.KeyguardLock keyguardLock;
 
@@ -117,7 +120,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
 	}
 	
-	private boolean manageKeyguard = false;
 	
 	@Override
 	protected void onStart() {
@@ -345,6 +347,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private boolean canTakeCall = true;
 	private boolean canDeclineCall = true;
 
+	private boolean showDetails = true;
+
 	@Override
 	public void onTrigger(int whichAction) {
 		Log.d(THIS_FILE, "In Call Activity is triggered");
@@ -424,6 +428,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				callInfoPanel.setVisibility(View.VISIBLE);
 				break;
 			}
+			case DETAILED_DISPLAY:{
+				inCallInfo.switchDetailedInfo( showDetails );
+				showDetails = !showDetails;
+			}
 		}
 	}
 	
@@ -442,6 +450,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 	}
 	
+	private void showScreenLocker() {
+		
+	}
 
 	
 }

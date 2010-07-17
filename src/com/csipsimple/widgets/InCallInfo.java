@@ -35,6 +35,7 @@ import android.view.LayoutInflater;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
@@ -50,11 +51,11 @@ public class InCallInfo extends FrameLayout {
 	CallInfo callInfo;
 	String remoteUri = "";
 	private ImageView photo;
-	private TextView remoteName;
-	private TextView title;
+	private TextView remoteName, title;
 	private Chronometer elapsedTime;
-	private int colorConnected;
-	private int colorEnd;
+	private int colorConnected, colorEnd;
+	private LinearLayout currentInfo, currentDetailedInfo;
+	
 	
 	private Context context;
 	private TextView remotePhoneNumber;
@@ -77,6 +78,9 @@ public class InCallInfo extends FrameLayout {
 		title = (TextView) findViewById(R.id.title);
 		elapsedTime = (Chronometer) findViewById(R.id.elapsedTime);
 		remotePhoneNumber = (TextView) findViewById(R.id.phoneNumber);
+		
+		currentInfo = (LinearLayout) findViewById(R.id.currentCallInfo);
+		currentDetailedInfo = (LinearLayout) findViewById(R.id.currentCallDetailedInfo);
 		
 		//Colors
 		colorConnected = Color.parseColor("#99CE3F");
@@ -173,6 +177,17 @@ public class InCallInfo extends FrameLayout {
 	private void updateTitle() {
 		title.setText(callInfo.getStringCallState());
 		
+	}
+	
+	
+	public void switchDetailedInfo(boolean showDetails) {
+		currentInfo.setVisibility(showDetails?GONE:VISIBLE);
+		currentDetailedInfo.setVisibility(showDetails?VISIBLE:GONE);
+		if(showDetails && callInfo != null) {
+			String infos = callInfo.dumpCallInfo();
+			TextView detailText = (TextView) findViewById(R.id.detailsText);
+			detailText.setText(infos);
+		}
 	}
 
 	

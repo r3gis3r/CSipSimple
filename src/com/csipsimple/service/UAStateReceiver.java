@@ -49,6 +49,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.provider.CallLog.Calls;
 import android.text.TextUtils;
@@ -57,11 +59,11 @@ import android.view.View;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.CallInfo;
+import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PhoneUtils;
-import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Ringer;
 
 public class UAStateReceiver extends Callback {
@@ -136,8 +138,8 @@ public class UAStateReceiver extends Callback {
 			setAudioInCall();
 			pjsua.conf_connect(info.getConf_slot(), 0);
 			pjsua.conf_connect(0, info.getConf_slot());
-			pjsua.conf_adjust_rx_level(0, prefWrapper.getSpeakerLevel());
-			pjsua.conf_adjust_tx_level(0, prefWrapper.getMicLevel());
+			pjsua.conf_adjust_rx_level(0, service.prefsWrapper.getSpeakerLevel());
+			pjsua.conf_adjust_tx_level(0, service.prefsWrapper.getMicLevel());
 			
 		}
 	}
@@ -153,11 +155,19 @@ public class UAStateReceiver extends Callback {
 	public CallInfo getCallInfo(Integer callId) {
 		CallInfo callInfo = callsList.get(callId);
 		if(callInfo == null) {
-			callInfo = new CallInfo(callId);
-			callsList.put(callId, callInfo);
+			try {
+				callInfo = new CallInfo(callId);
+				callsList.put(callId, callInfo);
+			} catch (UnavailableException e) {
+				//TODO : treat error
+			}
 		} else {
 			//Update from pjsip
-			callInfo.updateFromPj();
+			try {
+				callInfo.updateFromPj();
+			} catch (UnavailableException e) {
+				//TODO : treat error
+			}
 		}
 		
 		return callInfo;
@@ -171,7 +181,8 @@ public class UAStateReceiver extends Callback {
 	private WifiLock wifiLock;
 
 
-	private PreferencesWrapper prefWrapper;
+	private WakeLock screenLock;
+
 
 
 	private static final int ON_INCOMING_CALL = 1;
@@ -300,7 +311,6 @@ public class UAStateReceiver extends Callback {
 		service = srv;
         audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
-		prefWrapper = new PreferencesWrapper(service);
 		ringer = new Ringer(service);
 		
 		handlerThread = new HandlerThread("UAStateAsyncWorker");
@@ -418,7 +428,10 @@ public class UAStateReceiver extends Callback {
 		}
 		
 		PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_OFFHOOK);
-	//	PhoneUtils.setAudioMode(service, AudioManager.MODE_IN_CALL);
+		int audioMode = service.prefsWrapper.getAudioMode();
+		if(audioMode > -2) {
+				PhoneUtils.setAudioMode(service, audioMode);
+		}
 		
 		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
 		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 
@@ -433,6 +446,8 @@ public class UAStateReceiver extends Callback {
 		//Wifi management if necessary
 		ContentResolver ctntResolver = service.getContentResolver();
 		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
+		
+		
 		//Acquire wifi lock
 		WifiManager wman = (WifiManager) service.getSystemService(Context.WIFI_SERVICE);
 		if(wifiLock == null) {
@@ -445,7 +460,18 @@ public class UAStateReceiver extends Callback {
 			if(dstate == DetailedState.OBTAINING_IPADDR || dstate == DetailedState.CONNECTED) {
 				wifiLock.acquire();
 			}
+			
+			//This wake lock purpose is to prevent PSP wifi mode 
+			if(service.prefsWrapper.keepAwakeInCall()) {
+				if(screenLock == null) {
+					PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
+		            screenLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
+				}
+				screenLock.acquire();
+			}
 		}
+		
+		
 	}
 	
 	
@@ -475,6 +501,9 @@ public class UAStateReceiver extends Callback {
 				
 		if(wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();
+		}
+		if(screenLock != null && screenLock.isHeld()) {
+			screenLock.release();
 		}
 		
 		isSavedAudioState = false;

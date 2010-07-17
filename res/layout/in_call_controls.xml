@@ -38,6 +38,23 @@
 				android:layout_height="wrap_content" android:layout_marginLeft="5dip"
 				android:layout_marginRight="5dip" />
 		</LinearLayout>
+		<LinearLayout android:id="@+id/detailedContainer"
+			android:orientation="horizontal" android:gravity="center_vertical"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+			android:layout_marginTop="10dip" android:layout_marginLeft="10dip">
+			<ImageButton android:id="@+id/detailsButton"
+				android:gravity="center" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:background="@drawable/incall_round_button"
+				android:src="@drawable/ic_in_call_touch_round_details" />
+			<TextView android:id="@+id/detailsButtonLabel"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="14sp" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="5dip"
+				android:layout_marginRight="5dip" />
+		</LinearLayout>
+		
+		
 
 
 		<LinearLayout android:id="@+id/bottomButtonsContainer"

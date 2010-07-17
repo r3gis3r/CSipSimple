@@ -89,6 +89,7 @@ public class PhoneUtils {
 		AudioManager aManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 		
 		// decide whether or not to ignore the audio setting
+		
 		boolean ignore = false;
 
 		switch (sAudioBehaviourState) {
@@ -104,7 +105,7 @@ public class PhoneUtils {
 			break;
 		}
 
-		if (!ignore) {
+		if (!ignore || true) {
 			Log.d(THIS_FILE, "PhoneUtils.setAudioMode(), >> " + sAudioBehaviourState + " SWITCHING " + mode );
 			aManager.setMode(mode);
 			

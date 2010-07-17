@@ -21,6 +21,8 @@ import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_call_info;
 
+import com.csipsimple.utils.Log;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -33,6 +35,15 @@ public class CallInfo implements Parcelable {
 	private boolean isIncoming;
 	
 	public long callStart = 0;
+	
+	@SuppressWarnings("serial")
+	public class UnavailableException extends Exception {
+
+		public UnavailableException() {
+			super("Unable to find call infos from stack");
+		}
+	}
+	  
 
 	public static final Parcelable.Creator<CallInfo> CREATOR = new Parcelable.Creator<CallInfo>() {
 		public CallInfo createFromParcel(Parcel in) {
@@ -43,6 +54,7 @@ public class CallInfo implements Parcelable {
 			return new CallInfo[size];
 		}
 	};
+	private static final String THIS_FILE = "CallInfo";
 
 	public CallInfo(Parcel in) {
 		readFromParcel(in);
@@ -52,21 +64,28 @@ public class CallInfo implements Parcelable {
 		fillFromPj(pj_callinfo);
 	}
 
-	public CallInfo(int aCallId) {
-		pjsua_call_info pj_info = new pjsua_call_info();
-		pjsua.call_get_info(aCallId, pj_info);
-		fillFromPj(pj_info);
+	public CallInfo(int aCallId) throws UnavailableException {
+		callId = aCallId;
+		updateFromPj();
+		
+		
 	}
 
 	private void fillFromPj(pjsua_call_info pjCallInfo) {
 		callId = pjCallInfo.getId();
 		callState = pjCallInfo.getState();
 		remoteContact = pjCallInfo.getRemote_info().getPtr();
+		
 	}
 	
-	public void updateFromPj() {
+	public void updateFromPj() throws UnavailableException {
 		pjsua_call_info pj_info = new pjsua_call_info();
-		pjsua.call_get_info(callId, pj_info);
+		int status = pjsua.call_get_info(callId, pj_info);
+		Log.d(THIS_FILE, "Getting file infos.....");
+		if(status != pjsua.PJ_SUCCESS) {
+			Log.e(THIS_FILE, "Error while getting Call info from stack");
+			throw new UnavailableException();
+		}
 		fillFromPj(pj_info);
 	}
 
@@ -180,5 +199,11 @@ public class CallInfo implements Parcelable {
 //		SWIGTYPE_p_pj_time_val pjDuration = pjInfo.getConnect_duration();
 //		return ;
 //	}
+	
+	
+	public String dumpCallInfo() {
+		
+		return pjsua.call_dump(callId, pjsua.PJ_TRUE, " ");
+	}
 
 }

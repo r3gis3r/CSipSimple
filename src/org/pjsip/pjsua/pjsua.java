@@ -359,8 +359,8 @@ public class pjsua implements pjsuaConstants {
     pjsuaJNI.call_hangup_all();
   }
 
-  public synchronized static int call_dump(int call_id, int with_media, String buffer, long maxlen, String indent) {
-    return pjsuaJNI.call_dump(call_id, with_media, buffer, maxlen, indent);
+  public synchronized static String call_dump(int call_id, int with_media, String indent) {
+    return pjsuaJNI.call_dump(call_id, with_media, indent);
   }
 
   public synchronized static void buddy_config_default(pjsua_buddy_config cfg) {

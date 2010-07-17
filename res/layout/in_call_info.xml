@@ -17,6 +17,27 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	
+	<LinearLayout android:id="@+id/currentCallDetailedInfo"
+		android:orientation="vertical" android:gravity="center_horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_alignParentTop="true" 
+		
+		android:layout_marginTop="18dip"
+		android:layout_marginBottom="170px"
+		android:layout_marginLeft="55dip"
+		android:layout_marginRight="5dip"
+		
+		android:visibility="gone">
+		<ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent"  >
+			<HorizontalScrollView android:layout_width="fill_parent" android:layout_height="fill_parent" >
+				<TextView android:id="@+id/detailsText" 
+					android:layout_width="wrap_content" android:layout_height="wrap_content" 
+					android:textAppearance="?android:attr/textAppearanceSmall" android:textSize="13sp" 
+					android:singleLine="false"/>
+			</HorizontalScrollView>
+		</ScrollView>
+	</LinearLayout>
 
 	<LinearLayout android:id="@+id/currentCallInfo"
 		android:orientation="vertical" android:gravity="center_horizontal"
@@ -58,7 +79,7 @@
                   android:layout_height="wrap_content"
                   android:layout_gravity="center_horizontal"
                   android:layout_marginTop="-6dip">
-	        <TextView android:id="@+id/label"
+	        	<TextView android:id="@+id/label"
 	                  android:textAppearance="?android:attr/textAppearanceSmall"
 	                  android:textSize="18sp"
 	                  android:textColor="?android:attr/textColorSecondary"
@@ -67,14 +88,14 @@
 	                  android:layout_height="wrap_content"
 	                  android:paddingRight="6dip"
 	                  android:text="SIP"/>
-	        <TextView android:id="@+id/phoneNumber"
+	        	<TextView android:id="@+id/phoneNumber"
 	                  android:textAppearance="?android:attr/textAppearanceSmall"
 	                  android:textSize="18sp"
 	                  android:textColor="?android:attr/textColorSecondary"
 	                  android:singleLine="true"
 	                  android:layout_width="wrap_content"
 	                  android:layout_height="wrap_content" />
-    </LinearLayout>
+    		</LinearLayout>
 		</LinearLayout>
 	</LinearLayout>
 </RelativeLayout>

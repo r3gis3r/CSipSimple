@@ -43,4 +43,11 @@
 			android:summary="@string/use_alternate_unlocker_desc"
 			android:key="use_alternate_unlocker"></CheckBoxPreference>
 	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/advanced_ui">
+		<CheckBoxPreference android:title="@string/keep_awake_incall"
+			android:defaultValue="true"
+			android:summary="@string/keep_awake_incall_desc"
+			android:key="keep_awake_incall"></CheckBoxPreference>
+	</PreferenceCategory>
+	
 </PreferenceScreen>

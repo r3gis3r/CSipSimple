@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
@@ -44,15 +45,12 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	private static final String THIS_FILE = "InCallControls";
 	OnTriggerListener onTriggerListener;
 	private SlidingTab slidingTabWidget;
-	private Button clearCallButton;
-	private Button dialButton;
-	private ToggleButton bluetoothButton;
-	private ToggleButton speakerButton;
+	private Button clearCallButton, dialButton;
+	private ToggleButton bluetoothButton, speakerButton, muteButton;
 	private RelativeLayout inCallButtons;
-	private ToggleButton muteButton;
 	private boolean isDialpadOn = false;
-	private Button takeCallButton;
-	private Button declineCallButton;
+	private Button takeCallButton, declineCallButton;
+	ImageButton detailsButton;
 	private boolean useSlider;
 	private LinearLayout alternateLockerWidget;
 	
@@ -104,13 +102,18 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		 */
 		public static final int BLUETOOTH_OFF = BLUETOOTH_ON + 1;
 		/**
-		 * When bluetooth is set on
+		 * When speaker is set on
 		 */
 		public static final int SPEAKER_ON = BLUETOOTH_OFF + 1;
 		/**
-		 * When bluetooth is set off
+		 * When speaker is set off
 		 */
 		public static final int SPEAKER_OFF = SPEAKER_ON + 1;
+		/**
+		 * When speaker is set off
+		 */
+		public static final int DETAILED_DISPLAY = SPEAKER_OFF + 1;
+		
 
 		/**
 		 * Called when the user make an action
@@ -148,6 +151,8 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		
 		takeCallButton = (Button) findViewById(R.id.takeCallButton);
 		declineCallButton = (Button) findViewById(R.id.declineCallButton);
+		detailsButton = (ImageButton) findViewById(R.id.detailsButton);
+		
 		
 		// Finalize object style
 		slidingTabWidget.setLeftHintText(R.string.take_call);
@@ -167,6 +172,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		muteButton.setOnClickListener(this);
 		takeCallButton.setOnClickListener(this);
 		declineCallButton.setOnClickListener(this);
+		detailsButton.setOnClickListener(this);
 
 	}
 
@@ -313,6 +319,10 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			break;
 		case R.id.declineCallButton:
 			dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
+			break;
+			
+		case R.id.detailsButton:
+			dispatchTriggerEvent(OnTriggerListener.DETAILED_DISPLAY);
 			break;
 		}
 	}

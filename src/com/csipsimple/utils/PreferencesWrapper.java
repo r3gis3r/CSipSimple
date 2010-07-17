@@ -264,6 +264,16 @@ public class PreferencesWrapper {
 		}
 		return false;
 	}
+	
+	// For debug only for now
+	public int getAudioMode() {
+		try {
+			return Integer.parseInt(prefs.getString("set_audio_mode", "-2"));
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Audio mode not well formated");
+		}
+		return -2;
+	}
 
 	/**
 	 * Get sip ringtone
@@ -274,6 +284,13 @@ public class PreferencesWrapper {
 	}
 
 
+	public float getMicLevel() {
+		return prefs.getFloat("snd_mic_level", (float) 1.0);
+	}
+	
+	public float getSpeakerLevel() {
+		return prefs.getFloat("snd_speaker_level", (float) 1.0);
+	}
 
 
 	// ---- 
@@ -296,11 +313,8 @@ public class PreferencesWrapper {
 	}
 
 
-	public float getMicLevel() {
-		return prefs.getFloat("snd_mic_level", (float) 1.0);
+	public boolean keepAwakeInCall() {
+		return prefs.getBoolean("keep_awake_incall", true);
 	}
 	
-	public float getSpeakerLevel() {
-		return prefs.getFloat("snd_speaker_level", (float) 1.0);
-	}
 }

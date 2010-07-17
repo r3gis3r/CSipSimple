@@ -672,7 +672,7 @@ class pjsuaJNI {
   public final static native int call_send_typing_ind(int jarg1, int jarg2, long jarg3, pjsua_msg_data jarg3_);
   public final static native int call_send_request(int jarg1, long jarg2, pj_str_t jarg2_, long jarg3, pjsua_msg_data jarg3_);
   public final static native void call_hangup_all();
-  public final static native int call_dump(int jarg1, int jarg2, String jarg3, long jarg4, String jarg5);
+  public final static native String call_dump(int jarg1, int jarg2, String jarg5);
   public final static native int PJSUA_MAX_BUDDIES_get();
   public final static native int PJSUA_PRES_TIMER_get();
   public final static native void pjsua_buddy_config_uri_set(long jarg1, pjsua_buddy_config jarg1_, long jarg2, pj_str_t jarg2_);

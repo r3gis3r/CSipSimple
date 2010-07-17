@@ -69,6 +69,7 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
+import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -205,7 +206,11 @@ public class SipService extends Service {
 				CallInfo callInfo = userAgentReceiver.getCallInfo(callId);
 				if(callId != callInfo.getCallId()) {
 					Log.w(THIS_FILE, "we try to get an info for a call that is not the current one :  "+callId);
-					callInfo = new CallInfo(callId);
+					try {
+						callInfo = new CallInfo(callId);
+					} catch (UnavailableException e) {
+						throw new RemoteException();
+					}
 				}
 				return callInfo;
 			}
