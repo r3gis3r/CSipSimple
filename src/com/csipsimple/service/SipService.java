@@ -751,13 +751,15 @@ public class SipService extends Service {
 			wakeLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
 			wakeLock.setReferenceCounted(false);
 		}
-		wakeLock.acquire();
+		if(!wakeLock.isHeld()) {
+			wakeLock.acquire();
+		}
 		
 		WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if(wifiLock == null) {
 			wifiLock = wman.createWifiLock("com.csipsimple.SipService");
 		}
-		if( prefsWrapper.getLockWifi() ) {
+		if( prefsWrapper.getLockWifi() && !wifiLock.isHeld() ) {
 			WifiInfo winfo = wman.getConnectionInfo();
 			if(winfo != null) {
 				DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());

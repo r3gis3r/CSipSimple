@@ -193,7 +193,9 @@ public class DownloadLibService extends Service {
 		currentUpdate = updateToDownload;
 
 		boolean success;
-		wifiLock.acquire();
+		if(wifiLock != null && !wifiLock.isHeld()) {
+			wifiLock.acquire();
+		}
 
 		// wait for a data connection
 		while (!connected) {

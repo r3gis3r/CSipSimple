@@ -88,7 +88,7 @@ public class UAStateReceiver extends Callback {
 
 
 	private Ringer ringer;
-	private boolean isSavedAudioState = false;
+	private boolean isSavedAudioState = false, isSetAudioMode = false;
 	
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
@@ -415,17 +415,15 @@ public class UAStateReceiver extends Callback {
 	/**
 	 * Set the audio mode as in call
 	 */
-	private void setAudioInCall() {
+	private synchronized void setAudioInCall() {
+		//Ensure not already set
+		if(isSetAudioMode) {
+			return;
+		}
+		
 		saveAudioState();
 		
-		
 		Log.d(THIS_FILE, "Set mode audio in call");
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
 		PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_OFFHOOK);
 		int audioMode = service.prefsWrapper.getAudioMode();
@@ -458,7 +456,9 @@ public class UAStateReceiver extends Callback {
 			DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());
 			//We assume that if obtaining ip addr, we are almost connected so can keep wifi lock
 			if(dstate == DetailedState.OBTAINING_IPADDR || dstate == DetailedState.CONNECTED) {
-				wifiLock.acquire();
+				if(!wifiLock.isHeld()) {
+					wifiLock.acquire();
+				}
 			}
 			
 			//This wake lock purpose is to prevent PSP wifi mode 
@@ -474,14 +474,16 @@ public class UAStateReceiver extends Callback {
 				
 			}
 		}
+		
+		isSetAudioMode = true;
 	}
 	
 	
 	/**
 	 * Reset the audio mode
 	 */
-	private void unsetAudioInCall() {
-		if(!isSavedAudioState) {
+	private synchronized void unsetAudioInCall() {
+		if(!isSavedAudioState || !isSetAudioMode) {
 			return;
 		}
 		
@@ -511,6 +513,7 @@ public class UAStateReceiver extends Callback {
 		}
 		
 		isSavedAudioState = false;
+		isSetAudioMode = false;
 	}
 
 }
