@@ -22,11 +22,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import org.pjsip.pjsua.pj_str_t;
-
 import android.app.ListActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.SimpleAdapter.ViewBinder;
 
 import com.csipsimple.R;
 import com.csipsimple.service.SipService;
@@ -43,6 +51,7 @@ public class Codecs extends ListActivity {
 	private static final String CODEC_ID = "codec_id";
 	private static final String CODEC_PRIORITY = "codec_priority";
 	
+	public static final int MENU_ITEM_ACTIVATE = Menu.FIRST;
 	
 	private SimpleAdapter adapter;
 	ArrayList<HashMap<String, Object>> codecs;
@@ -61,12 +70,36 @@ public class Codecs extends ListActivity {
 		
 		
 		adapter = new SimpleAdapter(this, codecs, R.layout.codec_pref_line, new String []{
-			CODEC_NAME
+			CODEC_NAME,
+			CODEC_PRIORITY
 		}, new int[] {
-			R.id.line1
+			R.id.line1,
+			R.id.entiere_line
+		});
+		adapter.setViewBinder(new ViewBinder() {
+			@Override
+			public boolean setViewValue(View view, Object data, String textRepresentation) {
+				Log.d(THIS_FILE, "View binder call with "+data+" et "+textRepresentation);
+				if(view.getId() == R.id.entiere_line) {
+					Log.d(THIS_FILE, "Entiere line is binded");
+					TextView tv = (TextView) view.findViewById(R.id.line1);
+					ImageView grabber = (ImageView) view.findViewById(R.id.icon);
+					if((Short) data == -1) {
+						tv.setTextColor(Color.GRAY);
+						grabber.setImageResource(R.drawable.ic_mp_disabled);
+					}else {
+						tv.setTextColor(Color.WHITE);
+						grabber.setImageResource(R.drawable.ic_mp_move);
+					}
+					return true;
+				}
+				return false;
+			}
+			
 		});
 		
 		setListAdapter(adapter);
+		
 		
 		DragnDropListView listView = (DragnDropListView) getListView();
 		listView.setOnDropListener(new DropListener() {
@@ -77,18 +110,25 @@ public class Codecs extends ListActivity {
 				
 				Log.d(THIS_FILE, "Dropped "+item.get(CODEC_NAME)+" -> "+to);
 				
+				//Prevent disabled codecs to be reordered
+				if((Short) item.get(CODEC_PRIORITY) < 0 ) {
+					return ;
+				}
+				
 				codecs.remove(from);
 				codecs.add(to, item);
 				
 				//Update priorities
 				short currentPriority = 130;
 				for(HashMap<String, Object> codec : codecs) {
-					if(currentPriority != (Short) codec.get(CODEC_PRIORITY)) {
-						prefsWrapper.setCodecPriority((String)codec.get(CODEC_ID), Short.toString(currentPriority));
-						codec.put(CODEC_PRIORITY, currentPriority);
+					if((Short) codec.get(CODEC_PRIORITY) > -1) {
+						if(currentPriority != (Short) codec.get(CODEC_PRIORITY)) {
+							prefsWrapper.setCodecPriority((String)codec.get(CODEC_ID), Short.toString(currentPriority));
+							codec.put(CODEC_PRIORITY, currentPriority);
+						}
+						//Log.d(THIS_FILE, "Reorder : "+codec.toString());
+						currentPriority --;
 					}
-					//Log.d(THIS_FILE, "Reorder : "+codec.toString());
-					currentPriority --;
 				}
 				
 				
@@ -96,6 +136,8 @@ public class Codecs extends ListActivity {
 				((SimpleAdapter) adapter).notifyDataSetChanged();
 			}
 		});
+		
+		listView.setOnCreateContextMenuListener(this);
 		
 	}
 	
@@ -128,12 +170,13 @@ public class Codecs extends ListActivity {
 	private Comparator<HashMap<String, Object>> codecsComparator = new Comparator<HashMap<String, Object>>() {
 		@Override
 		public int compare(HashMap<String, Object> infos1, HashMap<String, Object> infos2) {
-			
 			if (infos1 != null && infos2 != null) {
-				if ((Short)infos1.get(CODEC_PRIORITY) > (Short)infos2.get(CODEC_PRIORITY)) {
+				short c1 = (Short)infos1.get(CODEC_PRIORITY);
+				short c2 = (Short)infos2.get(CODEC_PRIORITY);
+				if (c1 > c2) {
 					return -1;
 				}
-				if ((Short)infos1.get(CODEC_PRIORITY) < (Short)infos2.get(CODEC_PRIORITY)) {
+				if (c1 < c2) {
 					return 1;
 				}
 			}
@@ -141,4 +184,60 @@ public class Codecs extends ListActivity {
 			return 0;
 		}
 	};
+	
+	
+
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		AdapterView.AdapterContextMenuInfo info;
+        try {
+             info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        } catch (ClassCastException e) {
+            Log.e(THIS_FILE, "bad menuInfo", e);
+            return;
+        }
+
+        HashMap<String, Object> codec = (HashMap<String, Object>) adapter.getItem(info.position);
+        if (codec == null) {
+            // If for some reason the requested item isn't available, do nothing
+            return;
+        }
+        
+        boolean isDisabled = ((Short)codec.get(CODEC_PRIORITY) == -1);
+        menu.add(0, MENU_ITEM_ACTIVATE, 0, isDisabled?"Activate":"Deactivate");
+        
+	}
+	
+	public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info;
+        try {
+             info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        } catch (ClassCastException e) {
+            Log.e(THIS_FILE, "bad menuInfo", e);
+            return false;
+        }
+        HashMap<String, Object> codec = (HashMap<String, Object>) adapter.getItem(info.position);
+        if (codec == null) {
+            // If for some reason the requested item isn't available, do nothing
+            return false;
+        }
+        
+        switch (item.getItemId()) {
+		case MENU_ITEM_ACTIVATE: {
+			boolean isDisabled = ((Short) codec.get(CODEC_PRIORITY) == -1);
+			
+			short newPrio = isDisabled ? (short) 0 : (short) -1;
+			codec.put(CODEC_PRIORITY, newPrio);
+			prefsWrapper.setCodecPriority((String) codec.get(CODEC_ID), Short.toString(newPrio));
+			
+			Collections.sort(codecs, codecsComparator);
+
+			((SimpleAdapter) adapter).notifyDataSetChanged();
+			return true;
+		}
+		}
+        return false;
+    }
+	
 }

@@ -18,7 +18,7 @@
 	<string name="take_call">Answer</string>
 	<string name="decline_call">Ignore</string>
 	<string name="clear_call">End</string>
-	<string name="touch_lock">Touch to unlock</string>
+	<string name="touch_lock">Double tap to unlock</string>
 	<string name="dialpad">Dialpad</string>
 	<string name="bluetooth">Bluetooth</string>
 	<string name="speaker">Speaker</string>

@@ -42,6 +42,7 @@ import android.os.PowerManager.WakeLock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
@@ -53,6 +54,7 @@ import com.csipsimple.utils.PhoneUtils;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.InCallControls;
 import com.csipsimple.widgets.InCallInfo;
+import com.csipsimple.widgets.ScreenLocker;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.InCallControls.OnTriggerListener;
 
@@ -64,6 +66,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private FrameLayout mainFrame;
 	private InCallControls inCallControls;
 	private InCallInfo inCallInfo;
+	private ScreenLocker lockOverlay;
 
 	//Screen wake lock for incoming call
 	private WakeLock wakeLock;
@@ -77,6 +80,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private View callInfoPanel;
 	private Timer quitTimer;
 	private AudioManager audioManager;
+
+	private LinearLayout detailedContainer, holdContainer;
 
 
 	@Override
@@ -101,7 +106,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId());
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
 		
 		takeKeyEvents(true);
 		
@@ -115,6 +121,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		dialPad = (Dialpad) findViewById(R.id.dialPad);
 		dialPad.setOnDialKeyListener(this);
 		callInfoPanel = (View) findViewById(R.id.callInfoPanel);
+		
+		detailedContainer = (LinearLayout) findViewById(R.id.detailedContainer);
+		holdContainer = (LinearLayout) findViewById(R.id.holdContainer);
+		
+		lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
 		
 		
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
@@ -136,11 +147,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         
         if(quitTimer == null) {
     		quitTimer = new Timer();
-        }
-        
-        //Enlight the screen
-        
-        
+        }        
 	}
 	
 	@Override
@@ -154,6 +161,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			quitTimer.purge();
 			quitTimer = null;
 		}
+		
+		lockOverlay.tearDown();
 	}
 	
 	@Override
@@ -178,45 +187,36 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		int backgroundResId = R.drawable.bg_in_call_gradient_unidentified;
 		
 		Log.d(THIS_FILE, "Manage wake lock");
-        if (wakeLock == null) {
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
-        }
+        
         
         
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
 		case PJSIP_INV_STATE_EARLY:
-		    wakeLock.acquire();
-			break;
 		case PJSIP_INV_STATE_CALLING:
-            if (wakeLock != null && wakeLock.isHeld()) {
-                wakeLock.release();
-            }
+			Log.d(THIS_FILE, "Acquire wake up lock");
+			if(wakeLock != null && !wakeLock.isHeld()) {
+				wakeLock.acquire();
+			}
+			lockOverlay.hide();
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
 			backgroundResId = R.drawable.bg_in_call_gradient_connected;
 			if (wakeLock != null && wakeLock.isHeld()) {
+				Log.d(THIS_FILE, "Releasing wake up lock - confirmed");
                 wakeLock.release();
             }
+			
+			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
 			break;
 		case PJSIP_INV_STATE_NULL:
 			Log.i(THIS_FILE, "WTF?");
-			if (wakeLock != null && wakeLock.isHeld()) {
-                wakeLock.release();
-            }
-			backgroundResId = R.drawable.bg_in_call_gradient_ended;
-			dialPad.setVisibility(View.GONE);
-			callInfoPanel.setVisibility(View.VISIBLE);
-			delayedQuit();
-			break;
 		case PJSIP_INV_STATE_DISCONNECTED:
 			if (wakeLock != null && wakeLock.isHeld()) {
+				Log.d(THIS_FILE, "Releasing wake up lock");
                 wakeLock.release();
             }
-			backgroundResId = R.drawable.bg_in_call_gradient_ended;
-			dialPad.setVisibility(View.GONE);
-			callInfoPanel.setVisibility(View.VISIBLE);
+			//Set background to red and delay quit
 			delayedQuit();
 			return;
 		case PJSIP_INV_STATE_CONNECTING:
@@ -229,7 +229,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	}
 	
 	private void delayedQuit() {
+		//Update ui
+		lockOverlay.hide();
+		setDialpadVisibility(View.GONE);
+		callInfoPanel.setVisibility(View.VISIBLE);
 		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
+		
+		
 		if(quitTimer != null) {
 			quitTimer.schedule(new QuitTimerTask(), 3000);
 		}else {
@@ -243,6 +249,15 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			finish();
 		}
 	};
+	
+	
+	private void setDialpadVisibility(int visibility) {
+		dialPad.setVisibility(visibility);
+		int antiVisibility = visibility == View.GONE? View.VISIBLE:View.GONE;
+		detailedContainer.setVisibility(antiVisibility);
+		callInfoPanel.setVisibility(antiVisibility);
+	}
+	
 	
 	
 	@Override
@@ -354,7 +369,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		Log.d(THIS_FILE, "In Call Activity is triggered");
 		Log.d(THIS_FILE, "We have a call info : "+callInfo);
 		Log.d(THIS_FILE, "And a service : "+service);
-		
+		lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
 		switch(whichAction) {
 			case TAKE_CALL:{
 				if (callInfo != null && service != null && canTakeCall) {
@@ -419,13 +434,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				break;
 			}
 			case DIALPAD_ON:{
-				dialPad.setVisibility(View.VISIBLE);
-				callInfoPanel.setVisibility(View.GONE);
+				setDialpadVisibility(View.VISIBLE);
 				break;
 			}
 			case DIALPAD_OFF:{
-				dialPad.setVisibility(View.GONE);
-				callInfoPanel.setVisibility(View.VISIBLE);
+				setDialpadVisibility(View.GONE);
 				break;
 			}
 			case DETAILED_DISPLAY:{
@@ -434,6 +447,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			}
 		}
 	}
+	
+	
 	
 	
 	
@@ -450,9 +465,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 	}
 	
-	private void showScreenLocker() {
-		
-	}
 
 	
 }

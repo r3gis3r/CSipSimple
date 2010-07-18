@@ -420,12 +420,12 @@ public class UAStateReceiver extends Callback {
 		
 		
 		Log.d(THIS_FILE, "Set mode audio in call");
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_OFFHOOK);
 		int audioMode = service.prefsWrapper.getAudioMode();
@@ -467,13 +467,14 @@ public class UAStateReceiver extends Callback {
 					PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
 		            screenLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
 				}
-				screenLock.acquire();
+				//Ensure single lock
+				if(!screenLock.isHeld()) {
+					screenLock.acquire();
+				}
+				
 			}
 		}
-		
-		
 	}
-	
 	
 	
 	/**
@@ -483,6 +484,8 @@ public class UAStateReceiver extends Callback {
 		if(!isSavedAudioState) {
 			return;
 		}
+		
+		Log.d(THIS_FILE, "Unset Audio In call");
 		
 		ContentResolver ctntResolver = service.getContentResolver();
 
@@ -503,6 +506,7 @@ public class UAStateReceiver extends Callback {
 			wifiLock.release();
 		}
 		if(screenLock != null && screenLock.isHeld()) {
+			Log.d(THIS_FILE, "Release screen lock");
 			screenLock.release();
 		}
 		
