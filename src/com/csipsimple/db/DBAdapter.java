@@ -452,11 +452,12 @@ public class DBAdapter {
 						} else {												// Service available, skip accounts that can't be used for calling
 							try {
 								AccountInfo accountInfo = service.getAccountInfo(acc.id);
+								pjsip_status_code stat = accountInfo.getStatusCode();
 								if (accountInfo != null && accountInfo.isActive() &&
 										accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS &&
-										accountInfo.getPjsuaId() >= 0 &&	// ?? needed ??
-										accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK &&
-										accountInfo.getExpires() > 0)
+										(stat == pjsip_status_code.PJSIP_SC_OK ||	// If trying/registering, include. May be OK shortly.
+											 stat == pjsip_status_code.PJSIP_SC_PROGRESS || 
+											 stat == pjsip_status_code.PJSIP_SC_TRYING))
 									ret.add(acc);
 							} catch (RemoteException e) { }
 						}
