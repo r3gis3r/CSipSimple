@@ -87,20 +87,24 @@ public class PrefsFast extends Activity implements OnClickListener {
 		globIntegrate.setChecked(prefsWrapper.useIntegrateDialer());
 		boolean tgIn = prefs.getBoolean("use_3g_in", false);
 		boolean tgOut = prefs.getBoolean("use_3g_out", false);
+		boolean edgeIn = prefs.getBoolean("use_edge_in", false);
+		boolean edgeOut = prefs.getBoolean("use_edge_out", false);
+		boolean gsmIn = prefs.getBoolean("use_gsm_in", false);
+		boolean gsmOut = prefs.getBoolean("use_gsm_out", false);
 		boolean wifiIn = prefs.getBoolean("use_wifi_in", true);
 		boolean wifiOut = prefs.getBoolean("use_wifi_out", true);
-		boolean useTg = (tgIn || tgOut);
+		boolean useTg = (tgIn || tgOut || edgeIn || edgeOut || gsmIn || gsmOut);
 		boolean lockWifi = prefs.getBoolean("lock_wifi", true);
 		
 		globTg.setChecked( useTg);
 		
 		Profile mode = Profile.UNKOWN;
 		if( ( !useTg && wifiIn && wifiOut && lockWifi) ||
-			(  useTg && wifiIn && wifiOut && tgIn && tgOut && lockWifi)) {
+			(  useTg && wifiIn && wifiOut && tgIn && tgOut && edgeIn && edgeOut && gsmIn && gsmOut && lockWifi)) {
 			mode = Profile.ALWAYS;
-		} else if(  wifiIn && wifiOut ) {
+		} else if (wifiIn && wifiOut ) {
 			mode = Profile.WIFI;
-		} else if (!wifiIn && !tgIn) {
+		} else if (!wifiIn && !tgIn && !edgeIn && !gsmIn) {
 			mode = Profile.NEVER;
 		}
 		

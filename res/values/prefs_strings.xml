@@ -22,7 +22,7 @@
 <string name="use_wifi_out_desc">Use WiFi for outgoing calls</string>
 <string name="use_3g">Use 3G</string>
 <string name="use_3g_disclamer">Your carrier MUST allow you to use this option</string>
-<string name="lock_wifi">Lock WiFi</string>
+<string name="use_edge">Use EDGE</string><string name="use_gsm">Use GPRS</string><string name="lock_wifi">Lock WiFi</string>
 <string name="lock_wifi_desc">Prevent WiFi idle when SIP is connected</string>
 <string name="enable_tcp">TCP</string>
 <string name="enable_tcp_desc">Enable TCP transport</string>

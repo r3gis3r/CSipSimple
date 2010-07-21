@@ -25,6 +25,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
+
 
 public class PreferencesWrapper {
 	
@@ -37,25 +39,16 @@ public class PreferencesWrapper {
 		connectivityManager = (ConnectivityManager) aContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 	}
 	
+	// Network part
 	
-	// Network part 
-	
-	//Private generic function for both incoming and outgoing
-	private boolean isValidConnectionFor(String suffix) {
-		// Check for gsm
-		boolean valid_for_gsm = prefs.getBoolean("use_3g_" + suffix, false);
-		NetworkInfo ni;
-		if (valid_for_gsm) {
-			ni = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-			if (ni.getState() == NetworkInfo.State.CONNECTED) {
-				return true;
-			}
-		}
-
-		// Check for wifi
-		boolean valid_for_wifi = prefs.getBoolean("use_wifi_" + suffix, true);
-		if (valid_for_wifi) {
-			ni = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	// Check for wifi
+	static public boolean isValidWifiConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
+		
+		boolean valid_for_wifi = aPrefs.getBoolean("use_wifi_" + suffix, true);
+		if (valid_for_wifi && 
+			ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
+			
+			// Wifi connected
 			if (ni.getState() == NetworkInfo.State.CONNECTED) {
 				return true;
 			}
@@ -63,12 +56,57 @@ public class PreferencesWrapper {
 		return false;
 	}
 	
+	// Check for acceptable mobile data network connection
+	static public boolean isValidMobileConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
+
+		boolean valid_for_3g = aPrefs.getBoolean("use_3g_" + suffix, false);
+		boolean valid_for_edge = aPrefs.getBoolean("use_edge_" + suffix, false);
+		boolean valid_for_gsm = aPrefs.getBoolean("use_gsm_" + suffix, false);
+		
+		if ((valid_for_3g || valid_for_edge || valid_for_gsm) &&
+			 ni != null && ni.getType() == ConnectivityManager.TYPE_MOBILE) {
+
+			// Any mobile network connected
+			if (ni.getState() == NetworkInfo.State.CONNECTED) {
+				int subType = ni.getSubtype();
+				
+				// 3G (or better)
+				if (valid_for_3g &&
+					subType >= TelephonyManager.NETWORK_TYPE_UMTS) {
+					return true;
+				}
+				
+				// EDGE
+				if (valid_for_edge &&
+					subType == TelephonyManager.NETWORK_TYPE_EDGE) {
+					return true;
+				}
+				
+				// GPRS (or unknown)
+				if (valid_for_gsm &&	
+					(subType == TelephonyManager.NETWORK_TYPE_GPRS || subType == TelephonyManager.NETWORK_TYPE_UNKNOWN)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	// Generic function for both incoming and outgoing
+	static public boolean isValidConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
+		if (isValidWifiConnectionFor(ni, aPrefs, suffix)) {
+			return true;
+		}
+		return isValidMobileConnectionFor(ni, aPrefs, suffix);
+	}
+	
 	/**
 	 * Say whether current connection is valid for outgoing calls 
 	 * @return true if connection is valid
 	 */
 	public boolean isValidConnectionForOutgoing() {
-		return isValidConnectionFor("out");
+		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+		return isValidConnectionFor(ni, prefs, "out");
 	}
 
 	/**
@@ -76,7 +114,8 @@ public class PreferencesWrapper {
 	 * @return true if connection is valid
 	 */
 	public boolean isValidConnectionForIncoming() {
-		return isValidConnectionFor("in");
+		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+		return isValidConnectionFor(ni, prefs, "in");
 	}
 
 	

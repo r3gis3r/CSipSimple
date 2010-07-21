@@ -20,52 +20,70 @@ package com.csipsimple.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class DeviceStateReceiver extends BroadcastReceiver {
 
-	
+	private static final String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
+	private static final String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
 	private static final String THIS_FILE = "Device State";
-	private SharedPreferences prefs;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(THIS_FILE, ">>> Connectivity has changed");
-		// New connection info :
-		Bundle extras = intent.getExtras();
-		NetworkInfo ni =  (NetworkInfo) extras.get(ConnectivityManager.EXTRA_NETWORK_INFO);
 		
-		//Preferences
-		prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		PreferencesWrapper prefWrapper = new PreferencesWrapper(context);
+		String intentAction = intent.getAction();
 		
-		//Other case (ie update IP etc) are handled directly inside the service if started
-		if( isValidConnectionForOutgoing(ni) ){
-			Log.d(THIS_FILE, "Connectivity now available");
-			Intent sip_service_intent = new Intent(context, SipService.class);
-			context.startService(sip_service_intent);
-		}
-		
-		prefs = null;
-		Log.d(THIS_FILE, "<<< Connectivity has changed");
-		
-	}
-	
-	// Say whether the current connection is valid to register sip
-	private boolean isValidConnectionForOutgoing(NetworkInfo ni){
-		if(ni.getState() == NetworkInfo.State.CONNECTED ){
-			if(ni.getType() == ConnectivityManager.TYPE_MOBILE){
-				return prefs.getBoolean("use_3g_in", false);
+		//
+		// ACTION_DATA_STATE_CHANGED
+		// Data state change is used to detect changes in the mobile
+		// network such as a switch of network type (GPRS, EDGE, 3G) 
+		// which are not detected by the Connectivity changed broadcast.
+		//
+		if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
+			Log.d(THIS_FILE, ">>> Data state change detected");
+			
+			if (prefWrapper.isValidConnectionForOutgoing()) {
+				Log.d(THIS_FILE, "Data state indicates connectivity now available");
+				Intent sip_service_intent = new Intent(context, SipService.class);
+				context.startService(sip_service_intent);
 			}
-			if(ni.getType() == ConnectivityManager.TYPE_WIFI){
-				return prefs.getBoolean("use_wifi_in", true);
-			}
+			Log.d(THIS_FILE, "<<< Data state change detected");
+			
 		}
-		return false;
+		//
+		// ACTION_CONNECTIVITY_CHANGED
+		// Connectivity change is used to detect changes in the overall
+		// data network status as well as a switch between wifi and mobile
+		// networks.
+		//
+		else if (intentAction.equals(ACTION_CONNECTIVITY_CHANGED)) {
+			Log.d(THIS_FILE, ">>> Connectivity change detected");
+			
+			if (prefWrapper.isValidConnectionForOutgoing()) {
+				Log.d(THIS_FILE, "Connectivity now available");
+				Intent sip_service_intent = new Intent(context, SipService.class);
+				context.startService(sip_service_intent);
+			}
+			Log.d(THIS_FILE, "<<< Connectivity change detected");
+			
+			/* Perhaps use the possible upcomming network information
+			 * when performing the connectivity check instead of the 
+			 * current information, but it does not seem to be necessary.
+
+			// New connection info
+			Bundle extras = intent.getExtras();
+			NetworkInfo ni = (NetworkInfo) extras.get(ConnectivityManager.EXTRA_NETWORK_INFO);
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			
+			// Other case (ie update IP etc) are handled directly inside the
+			// service if started
+			if (PreferencesWrapper.isValidConnectionFor(ni, prefs, "out")) {
+				Log.d(THIS_FILE, "Connectivity now available");
+				Intent sip_service_intent = new Intent(context, SipService.class);
+				context.startService(sip_service_intent);
+			}*/
+		}
 	}
-	
 }

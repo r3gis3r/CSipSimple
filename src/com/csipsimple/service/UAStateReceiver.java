@@ -325,15 +325,33 @@ public class UAStateReceiver extends Callback {
 			
 			if(Compatibility.isCompatible(5)) {
 				try {
+					fails = handlerThread.quit();
+					
+					/*
+					 *  Removing the following and using above instead since the code
+					 *  below always seems to be causing the exception error log
 					Method method = handlerThread.getClass().getDeclaredMethod("quit", View.class);
 					method.invoke(handlerThread);
-					fails = false;
+					fails = false;*/
+
 				} catch (Exception e) {
 					Log.d(THIS_FILE, "Something is wrong with api level declared use fallback method");
 				}
 			}
-			if(fails) {
-				handlerThread.stop();
+			if (fails && handlerThread.isAlive()) {
+				try {
+					handlerThread.join(500);
+					
+					// The following should be removed since stopping threads the way
+					// below is depreciated and seems to generate nice read errors in
+					// the log
+					if (handlerThread.isAlive()) {
+						handlerThread.stop();
+					}
+					
+				} catch (Exception e) {
+					// Nothing to do here...
+				}
 			}
 		}
 	}

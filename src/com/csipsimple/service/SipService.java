@@ -83,6 +83,8 @@ public class SipService extends Service {
 	
 	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 	final static String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
+	final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
+
 	// -------
 	// Static constants
 	// -------
@@ -237,10 +239,19 @@ public class SipService extends Service {
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			// Handle the connectivity changed method
-			// should re-register sip
-			if (intent.getAction().equals(ACTION_CONNECTIVITY_CHANGED)) {
-				Log.v(THIS_FILE, "Connectivity has changed");
+			//
+			// ACTION_CONNECTIVITY_CHANGED
+			// Connectivity change is used to detect changes in the overall
+			// data network status as well as a switch between wifi and mobile
+			// networks.
+			//
+			// ACTION_DATA_STATE_CHANGED
+			// Data state change is used to detect changes in the mobile
+			// network such as a switch of network type (GPRS, EDGE, 3G) 
+			// which are not detected by the Connectivity changed broadcast.
+			//
+			if (intent.getAction().equals(ACTION_CONNECTIVITY_CHANGED) || intent.getAction().equals(ACTION_DATA_STATE_CHANGED)) {
+				Log.v(THIS_FILE, "Connectivity or data state has changed");
 				//Thread it to be sure to not block the device if registration take time
 				Thread t = new Thread() {
 					@Override
@@ -295,6 +306,8 @@ public class SipService extends Service {
 		// Register own broadcast receiver
 		IntentFilter intentfilter = new IntentFilter();
 		intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		intentfilter.addAction(ACTION_DATA_STATE_CHANGED);
+		
 		// TODO : handle theses receiver filters (-- inspired from SipDroid project
 		// : sipdroid.org)
 		// intentfilter.addAction(Receiver.ACTION_DATA_STATE_CHANGED);
@@ -581,6 +594,22 @@ public class SipService extends Service {
 			}
 			for (Account account : accountList) {
 				if (account.active) {
+					
+					//
+					// To prevent pjsip from registering the account for incoming
+					// connections if the network is disabled for incoming connections
+					// the registration uri should be set empty
+					//
+					
+					/* TODO:
+					 * Requires changes to the way the state of accounts are handled
+					 * to show status active for outgoing calls even though account is
+					 * not registered.
+
+					if(!prefsWrapper.isValidConnectionForIncoming()) {
+						account.cfg.setReg_uri(pjsua.pj_str_copy(""));
+					}*/
+					
 					int status;
 					if (activeAccounts.containsKey(account.id)) {
 						status = pjsua.acc_modify(activeAccounts.get(account.id), account.cfg);
