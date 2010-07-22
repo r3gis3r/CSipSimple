@@ -19,6 +19,8 @@ package com.csipsimple.utils;
 
 import java.lang.reflect.Field;
 
+import android.media.AudioManager;
+
 public class Compatibility {
 	
 	private static int currentApi = 0;
@@ -45,5 +47,19 @@ public class Compatibility {
 	
 	public static boolean isCompatible(int apiLevel) {
 		return getApiLevel() >= apiLevel;
+	}
+
+
+	/**
+	 * Get the stream id for in call track. Can differ on some devices.
+	 * Current device for which it's different :
+	 * Archos 5IT
+	 * @return
+	 */
+	public static int getInCallStream() {
+		if(android.os.Build.BRAND.equalsIgnoreCase("archos")) {
+			return AudioManager.STREAM_MUSIC;
+		}
+		return AudioManager.STREAM_VOICE_CALL;
 	}
 }

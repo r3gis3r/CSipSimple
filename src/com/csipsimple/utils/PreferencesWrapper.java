@@ -95,6 +95,7 @@ public class PreferencesWrapper {
 	// Generic function for both incoming and outgoing
 	static public boolean isValidConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
 		if (isValidWifiConnectionFor(ni, aPrefs, suffix)) {
+			Log.d(THIS_FILE, "Is valid for wifi !");
 			return true;
 		}
 		return isValidMobileConnectionFor(ni, aPrefs, suffix);
@@ -192,13 +193,13 @@ public class PreferencesWrapper {
 	 * @return clock rate in Hz
 	 */
 	public long getClockRate() {
-		String clockRate = prefs.getString("snd_clock_rate", "16000");
+		String clockRate = prefs.getString("snd_clock_rate", "8000");
 		try {
 			return Integer.parseInt(clockRate);
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Clock rate "+clockRate+" not well formated");
 		}
-		return 16000;
+		return 8000;
 	}
 	
 	/**

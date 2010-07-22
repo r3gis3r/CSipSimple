@@ -51,19 +51,4 @@
 		<item>16000</item>
 		<item>32000</item>
 	</string-array>
-	
-	<string-array name="audio_mode_choices">
-		<item>No changes</item>
-		<item>Invalid</item>
-		<item>In call</item>
-		<item>Normal</item>
-		<item>Ringtone</item>
-	</string-array>
-	<string-array name="audio_mode_values">
-		<item>-2</item>
-		<item>-1</item>
-		<item>2</item>
-		<item>0</item>
-		<item>1</item>
-	</string-array>
 </resources>

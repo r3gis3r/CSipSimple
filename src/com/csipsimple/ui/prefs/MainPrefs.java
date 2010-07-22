@@ -88,12 +88,20 @@ public class MainPrefs extends ListActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				try {
 				unbindService(restartServiceConnection);
+				}catch(Exception e) {
+					
+				}
 			}
 		};
 		Intent serviceIntent =  new Intent(this, SipService.class);
-		bindService(serviceIntent, restartServiceConnection, 0);
-		startService(serviceIntent);
+		try {
+			bindService(serviceIntent, restartServiceConnection, 0);
+			startService(serviceIntent);
+		}catch(Exception e) {
+			
+		}
 	}
 	
 	@Override

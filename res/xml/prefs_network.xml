@@ -24,7 +24,13 @@
 			android:key="use_wifi_in"></CheckBoxPreference>
 		<CheckBoxPreference android:title="@string/use_3g" 
 			android:summary="@string/use_3g_disclamer"
-			android:defaultValue="false" android:key="use_3g_in"></CheckBoxPreference><CheckBoxPreference android:summary="@string/use_3g_disclamer" android:defaultValue="false" android:title="@string/use_edge" android:key="use_edge_in"></CheckBoxPreference><CheckBoxPreference android:summary="@string/use_3g_disclamer" android:defaultValue="false" android:title="@string/use_gsm" android:key="use_gsm_in"></CheckBoxPreference>
+			android:defaultValue="false" android:key="use_3g_in"></CheckBoxPreference>
+		<CheckBoxPreference android:summary="@string/use_3g_disclamer" 
+			android:defaultValue="false" android:title="@string/use_edge" 
+			android:key="use_edge_in"></CheckBoxPreference>
+		<CheckBoxPreference android:summary="@string/use_3g_disclamer" 
+			android:defaultValue="false" android:title="@string/use_gsm" 
+			android:key="use_gsm_in"></CheckBoxPreference>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/for_outgoings">
@@ -33,9 +39,13 @@
 			android:defaultValue="true"></CheckBoxPreference>
 		<CheckBoxPreference android:title="@string/use_3g"
 			android:summary="@string/use_3g_disclamer"
-			android:key="use_3g_out" android:defaultValue="false"></CheckBoxPreference><CheckBoxPreference android:summary="@string/use_3g_disclamer"
-			android:defaultValue="false" android:title="@string/use_edge" android:key="use_edge_out"></CheckBoxPreference><CheckBoxPreference android:summary="@string/use_3g_disclamer"
-			android:defaultValue="false" android:title="@string/use_gsm" android:key="use_gsm_out"></CheckBoxPreference>
+			android:key="use_3g_out" android:defaultValue="false"></CheckBoxPreference>
+		<CheckBoxPreference android:summary="@string/use_3g_disclamer"
+			android:defaultValue="false" android:title="@string/use_edge" 
+			android:key="use_edge_out"></CheckBoxPreference>
+		<CheckBoxPreference android:summary="@string/use_3g_disclamer"
+			android:defaultValue="false" android:title="@string/use_gsm" 
+			android:key="use_gsm_out"></CheckBoxPreference>
 
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/perfs">

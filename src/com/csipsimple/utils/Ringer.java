@@ -173,6 +173,7 @@ public class Ringer {
                 Message msg = ringHandler.obtainMessage(STOP_RING);
                 msg.obj = ringtone;
                 ringHandler.sendMessage(msg);
+            //Should we reactivate this???    
             //    PhoneUtils.setAudioMode(context, AudioManager.MODE_NORMAL);
                 ringThread = null;
                 ringHandler = null;
@@ -265,7 +266,7 @@ public class Ringer {
                             }
                             r = ringtone;
                             if (r != null && !hasMessages(STOP_RING)) {
-                            	PhoneUtils.setAudioMode(context, AudioManager.MODE_RINGTONE);
+                            //	PhoneUtils.setAudioMode(context, AudioManager.MODE_RINGTONE);
                                 r.play();
                                 synchronized (Ringer.this) {
                                     ringPending = false;

@@ -46,7 +46,7 @@
 				android:defaultValue="4"></EditTextPreference>
 			<ListPreference android:title="@string/snd_clock_rate" android:key="snd_clock_rate"
 				android:summary="@string/snd_clock_rate_desc"
-				android:defaultValue="16000"
+				android:defaultValue="8000"
 				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
 		</PreferenceCategory>
 		<PreferenceScreen android:title="@string/codecs" android:summary="Only available if sip is currently registered">
@@ -78,11 +78,6 @@
 				android:dependency="enable_turn"
 				android:defaultValue=""></EditTextPreference>
 		</PreferenceCategory>
-		<PreferenceCategory android:title="@string/advanced_ui">
-			<ListPreference android:title="Audio mode while in SIP call" android:key="set_audio_mode"
-				android:summary=""
-				android:defaultValue="-2"
-				android:entryValues="@array/audio_mode_values" android:entries="@array/audio_mode_choices"></ListPreference>
-		</PreferenceCategory>
+		
 		
 </PreferenceScreen>

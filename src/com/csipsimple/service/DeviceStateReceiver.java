@@ -44,7 +44,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 		if (intentAction.equals(ACTION_DATA_STATE_CHANGED)) {
 			Log.d(THIS_FILE, ">>> Data state change detected");
 			
-			if (prefWrapper.isValidConnectionForOutgoing()) {
+			if (prefWrapper.isValidConnectionForIncoming()) {
 				Log.d(THIS_FILE, "Data state indicates connectivity now available");
 				Intent sip_service_intent = new Intent(context, SipService.class);
 				context.startService(sip_service_intent);
@@ -61,7 +61,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 		else if (intentAction.equals(ACTION_CONNECTIVITY_CHANGED)) {
 			Log.d(THIS_FILE, ">>> Connectivity change detected");
 			
-			if (prefWrapper.isValidConnectionForOutgoing()) {
+			if (prefWrapper.isValidConnectionForIncoming()) {
 				Log.d(THIS_FILE, "Connectivity now available");
 				Intent sip_service_intent = new Intent(context, SipService.class);
 				context.startService(sip_service_intent);

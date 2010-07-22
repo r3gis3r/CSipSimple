@@ -54,7 +54,6 @@ import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.provider.CallLog.Calls;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
@@ -74,15 +73,12 @@ public class UAStateReceiver extends Callback {
 	final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
 
 
-	private int savedVibrateRing;
-	private int savedVibradeNotif;
-	private int savedWifiPolicy;
+	private int savedVibrateRing, savedVibradeNotif, savedWifiPolicy;
 	private int savedVolume;
 	private boolean savedSpeakerPhone;
 	//private boolean savedMicrophoneMute;
 	//private boolean savedBluetooth;
-	//private int savedRouting;
-	private int savedMode;
+	private int savedRoute, savedMode;
 	
 	
 	private boolean autoAcceptCurrent = false;
@@ -197,6 +193,7 @@ public class UAStateReceiver extends Callback {
 
 		public WorkerHandler(Looper looper) {
             super(looper);
+			Log.d(THIS_FILE, "Create async worker !!!");
         }
 			
 		public void handleMessage(Message msg) {
@@ -290,13 +287,13 @@ public class UAStateReceiver extends Callback {
 	
 	private void startRing() {
 		saveAudioState();
+		
 		if(!ringer.isRinging()) {
 			String ringtoneUri = service.getPrefs().getRingtone();
 			ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
 			ringer.ring();
-			PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_RINGING);
-			PhoneUtils.setAudioMode(service, AudioManager.MODE_RINGTONE);
 		}
+		
 	}
 	
 	private void stopRing() {
@@ -318,9 +315,13 @@ public class UAStateReceiver extends Callback {
 		notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
 		ringer = new Ringer(service);
 		
-		handlerThread = new HandlerThread("UAStateAsyncWorker");
-		handlerThread.start();
-        msgHandler = new WorkerHandler(handlerThread.getLooper());
+		if(handlerThread == null) {
+			handlerThread = new HandlerThread("UAStateAsyncWorker");
+			handlerThread.start();
+		}
+		if(msgHandler == null) {
+			msgHandler = new WorkerHandler(handlerThread.getLooper());
+		}
 	}
 	
 
@@ -339,19 +340,18 @@ public class UAStateReceiver extends Callback {
 			}
 			if (fails && handlerThread.isAlive()) {
 				try {
+					//This is needed for android 4 and lower
 					handlerThread.join(500);
-					
-					// The following should be removed since stopping threads the way
-					// below is depreciated and seems to generate nice read errors in
-					// the log
+					/*
 					if (handlerThread.isAlive()) {
-						handlerThread.stop();
+						handlerThread.
 					}
-					
+					*/
 				} catch (Exception e) {
-					// Nothing to do here...
+					Log.e(THIS_FILE, "Can t finish handler thread....", e);
 				}
 			}
+			handlerThread = null;
 		}
 	}
 
@@ -438,6 +438,7 @@ public class UAStateReceiver extends Callback {
 		
 		savedSpeakerPhone = audioManager.isSpeakerphoneOn();
 		savedMode = audioManager.getMode();
+		savedRoute = audioManager.getRouting(AudioManager.MODE_IN_CALL);
 		
 		isSavedAudioState = true;
 		
@@ -457,26 +458,21 @@ public class UAStateReceiver extends Callback {
 		
 		Log.d(THIS_FILE, "Set mode audio in call");
 		
-		PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_OFFHOOK);
+	//	PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_OFFHOOK);
 		
 		
-		int audioMode = service.prefsWrapper.getAudioMode();
-		if(audioMode > -2) {
-			PhoneUtils.setAudioMode(service, audioMode);
-		}else {
-			if(Compatibility.isCompatible(5)) {
-				audioManager.setSpeakerphoneOn(false);
-			}else {
-				audioManager.setMode(AudioManager.MODE_IN_CALL);
-			}
+		if(!Compatibility.isCompatible(5)) {
+			audioManager.setRouting(AudioManager.MODE_IN_CALL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
+			audioManager.setMode(AudioManager.MODE_IN_CALL);
 		}
+		audioManager.setSpeakerphoneOn(false);
 		
 		//Set stream solo/volume
-		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
-		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 
-				audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 
-				0);
+		int inCallStream = Compatibility.getInCallStream();
 		
+		
+		audioManager.setStreamSolo(inCallStream, true);
+		audioManager.setStreamVolume(inCallStream,  audioManager.getStreamMaxVolume(inCallStream),  0);
 		
 		//Set the rest of the phone in a better state to not interferate with current call
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
@@ -537,7 +533,7 @@ public class UAStateReceiver extends Callback {
 		if(!isSavedAudioState || !isSetAudioMode) {
 			return;
 		}
-		
+
 		Log.d(THIS_FILE, "Unset Audio In call");
 		
 		ContentResolver ctntResolver = service.getContentResolver();
@@ -545,21 +541,12 @@ public class UAStateReceiver extends Callback {
 		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, savedWifiPolicy);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
-
 		
-		PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_IDLE);
-		
-		int audioMode = service.prefsWrapper.getAudioMode();
-		if(audioMode > -2) {
-			PhoneUtils.setAudioMode(service, savedMode);
-		}else {
-			if(Compatibility.isCompatible(5)) {
-				audioManager.setSpeakerphoneOn(savedSpeakerPhone);
-			}else {
-				audioManager.setMode(savedMode);
-			}
+		if(!Compatibility.isCompatible(5)) {
+			audioManager.setMode(savedMode);
+			audioManager.setRouting(AudioManager.MODE_IN_CALL, savedRoute, AudioManager.ROUTE_ALL);
 		}
-		
+		audioManager.setSpeakerphoneOn(savedSpeakerPhone);
 		
 		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
 		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
