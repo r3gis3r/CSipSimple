@@ -173,7 +173,7 @@ public class Ringer {
                 Message msg = ringHandler.obtainMessage(STOP_RING);
                 msg.obj = ringtone;
                 ringHandler.sendMessage(msg);
-                PhoneUtils.setAudioMode(context, AudioManager.MODE_NORMAL);
+            //    PhoneUtils.setAudioMode(context, AudioManager.MODE_NORMAL);
                 ringThread = null;
                 ringHandler = null;
                 ringtone = null;

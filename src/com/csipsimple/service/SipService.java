@@ -206,6 +206,9 @@ public class SipService extends Service {
 		public CallInfo getCallInfo(int callId) throws RemoteException {
 			if(created) {
 				CallInfo callInfo = userAgentReceiver.getCallInfo(callId);
+				if(callInfo == null) {
+					return null;
+				}
 				if(callId != callInfo.getCallId()) {
 					Log.w(THIS_FILE, "we try to get an info for a call that is not the current one :  "+callId);
 					try {
@@ -223,7 +226,7 @@ public class SipService extends Service {
 	private DBAdapter db;
 	private WakeLock wakeLock;
 	private WifiLock wifiLock;
-	private UAStateReceiver userAgentReceiver;
+	private static UAStateReceiver userAgentReceiver;
 	public static boolean hasSipStack = false;
 	private boolean sipStackIsCorrupted = false;
 	private ServiceDeviceStateReceiver deviceStateReceiver;
@@ -1120,5 +1123,21 @@ public class SipService extends Service {
 		}
 	};
 
+	
+	
+	public static void setAudioInCall() {
+		Log.i(THIS_FILE, "Audio driver ask to set in call");
+		if(userAgentReceiver != null) {
+			userAgentReceiver.setAudioInCall();
+		}
+	}
+	
+	
+	public static void unsetAudioInCall() {
+		Log.i(THIS_FILE, "Audio driver ask to unset in call");
+		if(userAgentReceiver != null) {
+			userAgentReceiver.unsetAudioInCall();
+		}
+	}
 
 }

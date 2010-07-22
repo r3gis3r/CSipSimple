@@ -69,6 +69,10 @@ import com.csipsimple.utils.Ringer;
 public class UAStateReceiver extends Callback {
 	static String THIS_FILE = "SIP UA Receiver";
 
+	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
+	final static String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
+	final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
+
 
 	private int savedVibrateRing;
 	private int savedVibradeNotif;
@@ -88,7 +92,7 @@ public class UAStateReceiver extends Callback {
 
 
 	private Ringer ringer;
-	private boolean isSavedAudioState = false, isSetAudioMode = false;
+	private boolean isSavedAudioState = false, isSetAudioMode = false, isMusicActive = false;
 	
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
@@ -103,12 +107,11 @@ public class UAStateReceiver extends Callback {
 		CallInfo callInfo = getCallInfo(callId);
 		pjsip_inv_state callState = callInfo.getCallState();
 		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-			
-			
 			stopRing();
 			// Call is now ended
 			service.stopDialtoneGenerator();
-			unsetAudioInCall();
+
+			//unsetAudioInCall();
 		}
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
 	}
@@ -135,11 +138,10 @@ public class UAStateReceiver extends Callback {
 		pjsua_call_info info = new pjsua_call_info();
 		pjsua.call_get_info(callId, info);
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
-			setAudioInCall();
 			pjsua.conf_connect(info.getConf_slot(), 0);
 			pjsua.conf_connect(0, info.getConf_slot());
-			pjsua.conf_adjust_rx_level(0, service.prefsWrapper.getSpeakerLevel());
-			pjsua.conf_adjust_tx_level(0, service.prefsWrapper.getMicLevel());
+			pjsua.conf_adjust_tx_level(0, service.prefsWrapper.getSpeakerLevel());
+			pjsua.conf_adjust_rx_level(0, service.prefsWrapper.getMicLevel());
 			
 		}
 	}
@@ -179,9 +181,8 @@ public class UAStateReceiver extends Callback {
 	private HandlerThread handlerThread;
 
 	private WifiLock wifiLock;
-
-
 	private WakeLock screenLock;
+
 
 
 
@@ -206,9 +207,11 @@ public class UAStateReceiver extends Callback {
 				callInfo.setIncoming(true);
 				showNotificationForCall(callInfo);
 				startRing();
+				broadCastAndroidCallState("RINGING", callInfo.getRemoteContact());
 				
 				// Automatically answer incoming calls with 180/RINGING
 				service.callAnswer(callId, 180);
+				
 				if (autoAcceptCurrent) {
 					// Automatically answer incoming calls with 200/OK
 					service.callAnswer(callId, 200);
@@ -228,10 +231,11 @@ public class UAStateReceiver extends Callback {
 						callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
 					showNotificationForCall(callInfo);
 					launchCallHandler(callInfo);
-		
+					broadCastAndroidCallState("RINGING", callInfo.getRemoteContact());
 				} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
-					//Nothing to do...
+					broadCastAndroidCallState("OFFHOOK", callInfo.getRemoteContact());
 				} else if(callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
+					broadCastAndroidCallState("OFFHOOK", callInfo.getRemoteContact());
 					callInfo.callStart = System.currentTimeMillis();
 				}else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
 					notificationManager.cancel(SipService.CALL_NOTIF_ID);
@@ -264,6 +268,7 @@ public class UAStateReceiver extends Callback {
 					}
 					callInfo.setIncoming(false);
 					callInfo.callStart = 0;
+					broadCastAndroidCallState("IDLE", callInfo.getRemoteContact());
 				}
 				onBroadcastCallState(callInfo);
 				break;
@@ -355,12 +360,25 @@ public class UAStateReceiver extends Callback {
 	// --------
 	
 
-	private void onBroadcastCallState(final CallInfo callInfo) {	
+	private void onBroadcastCallState(final CallInfo callInfo) {
+		//Internal event
 		Intent callStateChangedIntent = new Intent(SipService.ACTION_SIP_CALL_CHANGED);
 		callStateChangedIntent.putExtra("call_info", callInfo);
-		service.sendBroadcast(callStateChangedIntent);	
+		service.sendBroadcast(callStateChangedIntent);
+		
+		
 	}
 
+	private void broadCastAndroidCallState(String state, String number) {
+		//Android normalized event
+		Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
+		intent.putExtra("state", state);
+		if (number != null) {
+			intent.putExtra("incoming_number", number);
+		}
+		intent.putExtra(service.getString(R.string.app_name), true);
+		service.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
+	}
 	
 	
 	private void showNotificationForCall(CallInfo currentCallInfo2) {
@@ -422,12 +440,14 @@ public class UAStateReceiver extends Callback {
 		savedMode = audioManager.getMode();
 		
 		isSavedAudioState = true;
+		
+		isMusicActive = audioManager.isMusicActive();
 	}
 	
 	/**
 	 * Set the audio mode as in call
 	 */
-	private synchronized void setAudioInCall() {
+	public synchronized void setAudioInCall() {
 		//Ensure not already set
 		if(isSetAudioMode) {
 			return;
@@ -438,20 +458,36 @@ public class UAStateReceiver extends Callback {
 		Log.d(THIS_FILE, "Set mode audio in call");
 		
 		PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_OFFHOOK);
+		
+		
 		int audioMode = service.prefsWrapper.getAudioMode();
 		if(audioMode > -2) {
-				PhoneUtils.setAudioMode(service, audioMode);
+			PhoneUtils.setAudioMode(service, audioMode);
+		}else {
+			if(Compatibility.isCompatible(5)) {
+				audioManager.setSpeakerphoneOn(false);
+			}else {
+				audioManager.setMode(AudioManager.MODE_IN_CALL);
+			}
 		}
 		
+		//Set stream solo/volume
 		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
 		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 
-				audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)*3/4, 
+				audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 
 				0);
 		
 		
+		//Set the rest of the phone in a better state to not interferate with current call
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
+
+		if(isMusicActive) {
+			service.sendBroadcast(new Intent(PAUSE_ACTION));
+		}
 		
+		
+		//LOCKS
 		
 		//Wifi management if necessary
 		ContentResolver ctntResolver = service.getContentResolver();
@@ -487,14 +523,17 @@ public class UAStateReceiver extends Callback {
 			}
 		}
 		
+		
+		
 		isSetAudioMode = true;
+		System.gc();
 	}
 	
 	
 	/**
 	 * Reset the audio mode
 	 */
-	private synchronized void unsetAudioInCall() {
+	public synchronized void unsetAudioInCall() {
 		if(!isSavedAudioState || !isSetAudioMode) {
 			return;
 		}
@@ -509,12 +548,21 @@ public class UAStateReceiver extends Callback {
 
 		
 		PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_IDLE);
-		PhoneUtils.setAudioMode(service, savedMode);
+		
+		int audioMode = service.prefsWrapper.getAudioMode();
+		if(audioMode > -2) {
+			PhoneUtils.setAudioMode(service, savedMode);
+		}else {
+			if(Compatibility.isCompatible(5)) {
+				audioManager.setSpeakerphoneOn(savedSpeakerPhone);
+			}else {
+				audioManager.setMode(savedMode);
+			}
+		}
 		
 		
 		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
 		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
-		audioManager.setSpeakerphoneOn(savedSpeakerPhone);
 				
 		if(wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();
@@ -524,8 +572,16 @@ public class UAStateReceiver extends Callback {
 			screenLock.release();
 		}
 		
+		if(isMusicActive) {
+			service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
+		}
+		
 		isSavedAudioState = false;
 		isSetAudioMode = false;
+		isMusicActive = false;
 	}
+	
+	
+	
 
 }

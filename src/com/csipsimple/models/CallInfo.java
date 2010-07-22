@@ -176,6 +176,7 @@ public class CallInfo implements Parcelable {
 	public String getRemoteContact() {
 		return remoteContact;
 	}
+	
 
 	/**
 	 * @param isIncoming the isIncoming to set

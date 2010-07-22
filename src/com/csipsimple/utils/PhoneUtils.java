@@ -105,7 +105,7 @@ public class PhoneUtils {
 			break;
 		}
 
-		if (!ignore || true) {
+		if (!ignore) {
 			Log.d(THIS_FILE, "PhoneUtils.setAudioMode(), >> " + sAudioBehaviourState + " SWITCHING " + mode );
 			aManager.setMode(mode);
 			
