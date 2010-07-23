@@ -280,11 +280,22 @@ public class CallLogsList extends ListActivity {
 	private void placeCallLogCall(String number) {
 		Matcher m = getSipMatcher(number);
 		if (m.matches()) {
+			if ( !TextUtils.isEmpty(m.group(2)) && !TextUtils.isEmpty(m.group(3)) ) {
+				Intent intent = new Intent(Intent.ACTION_CALL);
+				intent.setData( Uri.parse("sip:" + m.group(2) + "@" + m.group(3)) );
+				startActivity(intent);
+				return;
+			}else {
+				Log.e(THIS_FILE, "Failed to place call"+number);
+			}
+			/*
+			
 			if (!TextUtils.isEmpty(m.group(2))) {
 				String phoneNumber = m.group(2);
 				Pattern p = Pattern.compile("^[0-9]+$");
 				Matcher matchDigits = p.matcher(phoneNumber);
-				if (matchDigits.matches()) {
+				if (matchDigits.matches() || false) {
+					//Disabled since if we do that
 					try {
 						Intent intent = new Intent(Intent.ACTION_CALL);
 						intent.setData(Uri.parse("tel:" + phoneNumber));
@@ -306,6 +317,7 @@ public class CallLogsList extends ListActivity {
 					}
 				}
 			}
+			*/
 		}
 	}
 	

@@ -471,7 +471,7 @@ public class UAStateReceiver extends Callback {
 		
 		
 		audioManager.setStreamSolo(inCallStream, true);
-		audioManager.setStreamVolume(inCallStream,  audioManager.getStreamMaxVolume(inCallStream),  0);
+		audioManager.setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
 		
 		//Set the rest of the phone in a better state to not interferate with current call
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);

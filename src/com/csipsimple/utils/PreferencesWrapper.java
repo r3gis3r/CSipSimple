@@ -356,5 +356,9 @@ public class PreferencesWrapper {
 	public boolean keepAwakeInCall() {
 		return prefs.getBoolean("keep_awake_incall", true);
 	}
+
+	public float getInitialVolumeLevel() {
+		return (float) 0.8;
+	}
 	
 }
