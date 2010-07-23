@@ -21,11 +21,15 @@
 	android:orientation="vertical" android:gravity="center_horizontal">
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:layout_weight="1"
-		android:orientation="vertical" android:gravity="center_horizontal">
+		android:orientation="horizontal" android:gravity="center_horizontal">
+		<TextView android:text="sip:" 
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:paddingRight="10dip"></TextView>
 		<EditText android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:id="@+id/dialtxt_user"
 			android:gravity="center" android:background="@drawable/btn_dial_textfield"
 			android:textColor="#FFF" android:lines="1" android:inputType="textFilter"></EditText>
+		<!-- 
 		<TextView android:layout_width="wrap_content" android:id="@+id/arobase_txt"
 			android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
 		
@@ -34,6 +38,7 @@
 			android:id="@+id/dialtext_domain" android:layout_width="fill_parent"
 			android:gravity="center" android:background="@drawable/btn_dial_textfield"
 			android:textColor="#FFF" android:lines="1" android:inputType="textFilter"></MultiAutoCompleteTextView>
+			 -->
 	</LinearLayout>
 	<LinearLayout android:id="@+id/dial_actions"
 		android:layout_width="fill_parent" android:layout_centerHorizontal="true"

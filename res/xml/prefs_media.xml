@@ -21,10 +21,10 @@
 		<PreferenceCategory android:title="@string/audio_quality">
 			<CheckBoxPreference android:summary="@string/echo_cancellation_desc"
 				android:title="@string/echo_cancellation" android:key="echo_cancellation"
-				android:defaultValue="true"></CheckBoxPreference>
+				android:defaultValue="false"></CheckBoxPreference>
 			<CheckBoxPreference android:summary="@string/enable_vad_desc"
 				android:title="@string/enable_vad" android:key="enable_vad"
-				android:defaultValue="true"></CheckBoxPreference>
+				android:defaultValue="false"></CheckBoxPreference>
 			<EditTextPreference android:key="snd_auto_close_time"
 				android:title="@string/snd_auto_close_time"
 				android:numeric="signed"
@@ -43,7 +43,7 @@
 				android:title="@string/snd_media_quality"
 				android:numeric="signed"
 				android:summary="@string/snd_media_quality_desc"
-				android:defaultValue="4"></EditTextPreference>
+				android:defaultValue="3"></EditTextPreference>
 			<ListPreference android:title="@string/snd_clock_rate" android:key="snd_clock_rate"
 				android:summary="@string/snd_clock_rate_desc"
 				android:defaultValue="8000"

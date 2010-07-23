@@ -58,7 +58,6 @@ public class Codecs extends ListActivity {
 
 	private PreferencesWrapper prefsWrapper;
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,7 +83,7 @@ public class Codecs extends ListActivity {
 					Log.d(THIS_FILE, "Entiere line is binded");
 					TextView tv = (TextView) view.findViewById(R.id.line1);
 					ImageView grabber = (ImageView) view.findViewById(R.id.icon);
-					if((Short) data == -1) {
+					if((Short) data == 0) {
 						tv.setTextColor(Color.GRAY);
 						grabber.setImageResource(R.drawable.ic_mp_disabled);
 					}else {
@@ -111,7 +110,7 @@ public class Codecs extends ListActivity {
 				Log.d(THIS_FILE, "Dropped "+item.get(CODEC_NAME)+" -> "+to);
 				
 				//Prevent disabled codecs to be reordered
-				if((Short) item.get(CODEC_PRIORITY) < 0 ) {
+				if((Short) item.get(CODEC_PRIORITY) <= 0 ) {
 					return ;
 				}
 				
@@ -121,7 +120,7 @@ public class Codecs extends ListActivity {
 				//Update priorities
 				short currentPriority = 130;
 				for(HashMap<String, Object> codec : codecs) {
-					if((Short) codec.get(CODEC_PRIORITY) > -1) {
+					if((Short) codec.get(CODEC_PRIORITY) > 0) {
 						if(currentPriority != (Short) codec.get(CODEC_PRIORITY)) {
 							prefsWrapper.setCodecPriority((String)codec.get(CODEC_ID), Short.toString(currentPriority));
 							codec.put(CODEC_PRIORITY, currentPriority);
@@ -204,7 +203,7 @@ public class Codecs extends ListActivity {
             return;
         }
         
-        boolean isDisabled = ((Short)codec.get(CODEC_PRIORITY) == -1);
+        boolean isDisabled = ((Short)codec.get(CODEC_PRIORITY) == 0);
         menu.add(0, MENU_ITEM_ACTIVATE, 0, isDisabled?"Activate":"Deactivate");
         
 	}
@@ -225,9 +224,9 @@ public class Codecs extends ListActivity {
         
         switch (item.getItemId()) {
 		case MENU_ITEM_ACTIVATE: {
-			boolean isDisabled = ((Short) codec.get(CODEC_PRIORITY) == -1);
+			boolean isDisabled = ((Short) codec.get(CODEC_PRIORITY) == 0);
 			
-			short newPrio = isDisabled ? (short) 0 : (short) -1;
+			short newPrio = isDisabled ? (short) 1 : (short) 0;
 			codec.put(CODEC_PRIORITY, newPrio);
 			prefsWrapper.setCodecPriority((String) codec.get(CODEC_ID), Short.toString(newPrio));
 			

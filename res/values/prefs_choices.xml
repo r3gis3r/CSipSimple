@@ -45,10 +45,12 @@
 		<item>8KHz</item>
 		<item>16KHz</item>
 		<item>32KHz</item>
+		<item>44.1KHz</item>
 	</string-array>
 	<string-array name="clock_rate_values">
 		<item>8000</item>
 		<item>16000</item>
 		<item>32000</item>
+		<item>44100</item>
 	</string-array>
 </resources>

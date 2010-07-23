@@ -123,7 +123,7 @@ public class Dialer extends Activity implements OnClickListener,
 
 	private EditText dialUser;
 
-	private EditText dialDomain;
+//	private EditText dialDomain;
 
 	private PreferencesWrapper prefsWrapper;
 
@@ -162,14 +162,14 @@ public class Dialer extends Activity implements OnClickListener,
 		digitDialer = (View) findViewById(R.id.dialer_digit);
 		textDialer = (View) findViewById(R.id.dialer_text);
 		dialUser = (EditText) findViewById(R.id.dialtxt_user);
-		dialDomain = (EditText) findViewById(R.id.dialtext_domain);
+	//	dialDomain = (EditText) findViewById(R.id.dialtext_domain);
 		rootView = (View) findViewById(R.id.toplevel);
 		
 		
 		
 		// @ is a special char for layouts, I didn't find another way to set @ as text in xml
-		TextView atxt = (TextView) findViewById(R.id.arobase_txt);
-		atxt.setText("@");
+	//	TextView atxt = (TextView) findViewById(R.id.arobase_txt);
+	//	atxt.setText("@");
 		
 		
 		isDigit = prefsWrapper.startIsDigit();
@@ -366,11 +366,11 @@ public class Dialer extends Activity implements OnClickListener,
 			toCall = PhoneNumberUtils.stripSeparators(digits.getText().toString());
 		}else {
 			String userName = dialUser.getText().toString();
-			String domain = dialDomain.getText().toString();
-			if(TextUtils.isEmpty(userName) || TextUtils.isEmpty(domain)) {
+		//	String domain = dialDomain.getText().toString();
+			if(TextUtils.isEmpty(userName) /* || TextUtils.isEmpty(domain)*/) {
 				return;
 			}
-			toCall = "sip:"+userName+"@"+domain;
+			toCall = "sip:"+userName; //+"@"+domain;
 		}
 		if(TextUtils.isEmpty(toCall) ) {
 			return;
@@ -379,7 +379,7 @@ public class Dialer extends Activity implements OnClickListener,
 		//Well we have now the fields, clear theses fields
 		digits.getText().clear();
 		dialUser.getText().clear();
-		dialDomain.getText().clear();
+	//	dialDomain.getText().clear();
 		try {
 			service.makeCall(toCall, -1);
 		} catch (RemoteException e) {
@@ -399,7 +399,7 @@ public class Dialer extends Activity implements OnClickListener,
 		}
 		case R.id.deleteTextButton: {
 			dialUser.getText().clear();
-			dialDomain.getText().clear();
+		//	dialDomain.getText().clear();
 			break;
 		}
 		case R.id.dialButton: 

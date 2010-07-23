@@ -457,7 +457,6 @@ public class UAStateReceiver extends Callback {
 		saveAudioState();
 		
 		Log.d(THIS_FILE, "Set mode audio in call");
-		
 	//	PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_OFFHOOK);
 		
 		
