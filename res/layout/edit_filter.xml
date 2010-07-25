@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical">
+	
+	<LinearLayout android:layout_weight="1" android:orientation="vertical"
+		android:layout_height="fill_parent" android:layout_width="fill_parent">
+		<Spinner android:id="@+id/filter_action" 
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:entries="@array/filters_action"></Spinner>
+		<EditText android:id="@+id/filter_matches" 
+			android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+		<EditText android:id="@+id/filter_replace" 
+			android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+		
+	</LinearLayout>
+	<LinearLayout
+		android:orientation="horizontal" style="@android:style/ButtonBar"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_weight="0">
+		<Button android:layout_height="wrap_content" android:text="@string/save"
+			android:layout_weight="0.5"
+			android:layout_width="fill_parent" android:id="@+id/save_bt"></Button>
+			
+		<Button android:layout_height="wrap_content" android:text="@string/cancel"
+			android:layout_weight="0.5"
+			android:layout_width="fill_parent" android:id="@+id/cancel_bt"></Button>
+	</LinearLayout>
+</LinearLayout>

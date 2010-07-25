@@ -62,13 +62,13 @@ public class Codecs extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.codec_picker_activity);
+		setContentView(R.layout.codecs_list);
 		
 		prefsWrapper = new PreferencesWrapper(this);
 		initDatas();
 		
 		
-		adapter = new SimpleAdapter(this, codecs, R.layout.codec_pref_line, new String []{
+		adapter = new SimpleAdapter(this, codecs, R.layout.codecs_list_item, new String []{
 			CODEC_NAME,
 			CODEC_PRIORITY
 		}, new int[] {
@@ -78,7 +78,6 @@ public class Codecs extends ListActivity {
 		adapter.setViewBinder(new ViewBinder() {
 			@Override
 			public boolean setViewValue(View view, Object data, String textRepresentation) {
-				Log.d(THIS_FILE, "View binder call with "+data+" et "+textRepresentation);
 				if(view.getId() == R.id.entiere_line) {
 					Log.d(THIS_FILE, "Entiere line is binded");
 					TextView tv = (TextView) view.findViewById(R.id.line1);

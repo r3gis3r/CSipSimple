@@ -53,7 +53,6 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.animation.Flip3dAnimation;

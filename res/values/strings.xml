@@ -36,6 +36,7 @@
 	<string name="ongoing_call">Call in Progress</string>
 	<string name="recentCalls_empty">No Call Logs</string>
 	<string name="filters">Filters</string>
+	<string name="add_filter">Add filter / rewrite rule</string>
 	
 	
 </resources>

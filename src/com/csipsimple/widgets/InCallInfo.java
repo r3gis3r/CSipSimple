@@ -115,7 +115,7 @@ public class InCallInfo extends FrameLayout {
 			Matcher m = p.matcher(remoteContact);
 			if (m.matches()) {
 				
-				remoteContact = m.group(1);
+				remoteContact = m.group(1).trim();
 				phoneNumber =  m.group(2);
 				Log.d(THIS_FILE, "We found .... "+remoteContact+" et "+phoneNumber);
 				if(!TextUtils.isEmpty(phoneNumber) && TextUtils.isEmpty(remoteContact)) {

@@ -89,6 +89,7 @@ public class SipService extends Service {
 	// Static constants
 	// -------
 	
+	
 	final public static String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
 	final public static String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
 	final public static String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";

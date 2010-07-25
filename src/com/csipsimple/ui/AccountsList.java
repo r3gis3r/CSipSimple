@@ -93,7 +93,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		Window w = getWindow();
 		w.requestFeature(Window.FEATURE_LEFT_ICON);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.account_list);
+		setContentView(R.layout.accounts_list);
 		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
 
 		
@@ -303,7 +303,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		Activity context;
 		
 		AccountAdapter(Activity context, List<Account> list) {
-			super(context, R.layout.account_row, list);
+			super(context, R.layout.accounts_list_item, list);
 			this.context = context;
 		}
 		
@@ -314,7 +314,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			View view = convertView;
             if (view == null) {
                 LayoutInflater viewInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = viewInflater.inflate(R.layout.account_row, parent, false);
+                view = viewInflater.inflate(R.layout.accounts_list_item, parent, false);
             }
             
             

@@ -62,7 +62,6 @@ import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PhoneUtils;
 import com.csipsimple.utils.Ringer;
 
 public class UAStateReceiver extends Callback {

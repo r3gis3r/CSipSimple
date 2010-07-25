@@ -83,6 +83,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	private LinearLayout detailedContainer, holdContainer;
 
+	private boolean inTest;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -90,8 +92,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 		
 		setContentView(R.layout.in_call_main);
-		Log.d(THIS_FILE, "Creating call handler.....");
-		serviceBound = bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -101,10 +101,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if (callInfo == null) {
 			Log.e(THIS_FILE, "You provide an empty call info....");
 			finish();
+			return;
 		}
 		
+		inTest = extras.getBoolean("in_test", false);
+		if(!inTest) {
+			Log.d(THIS_FILE, "Creating call handler.....");
+			serviceBound = bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
+		}
 
-		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId());
+		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
