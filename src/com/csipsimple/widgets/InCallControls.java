@@ -191,6 +191,15 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			alternateLockerWidget.setVisibility(visibility);
 		}
 	}
+	
+	
+	/**
+	 * Toggle the mute button as if pressed by the user.
+	 */
+	public void toggleMuteButton() {
+		muteButton.setChecked(!muteButton.isChecked());
+		muteButton.performClick();
+	}
 
 
 	public void setCallState(CallInfo callInfo) {

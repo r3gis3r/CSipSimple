@@ -35,10 +35,13 @@ import org.pjsip.pjsua.pjsua_call_media_status;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
@@ -54,6 +57,7 @@ import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.provider.CallLog.Calls;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
@@ -84,6 +88,7 @@ public class UAStateReceiver extends Callback {
 
 	private NotificationManager notificationManager;
 	private SipService service;
+	private ComponentName remoteControlResponder;
 
 
 	private Ringer ringer;
@@ -307,6 +312,7 @@ public class UAStateReceiver extends Callback {
 	public void setAutoAnswerNext(boolean auto_response) {
 		autoAcceptCurrent = auto_response;
 	}
+	
 
 	public void initService(SipService srv) {
 		service = srv;
@@ -320,6 +326,17 @@ public class UAStateReceiver extends Callback {
 		}
 		if(msgHandler == null) {
 			msgHandler = new WorkerHandler(handlerThread.getLooper());
+		}
+		
+		//
+		// Android 2.2 has introduced a new way of handling headset
+		// action button presses. This involves registering to handle
+		// the button presses every time one needs it and unregistering
+		// once the button events are no longer needed. Last app to
+		// register gets the focus.
+		//
+		if (Compatibility.isCompatible(8)) {
+			remoteControlResponder = new ComponentName(service.getPackageName(), DeviceStateReceiver.class.getName());
 		}
 	}
 	
@@ -444,10 +461,171 @@ public class UAStateReceiver extends Callback {
 		isMusicActive = audioManager.isMusicActive();
 	}
 	
+	
+	/**
+	 * Check if the specific call info indicate it is an active
+	 * call in progress.
+	 */
+	private boolean isActiveCallInProgress(CallInfo callInfo) {
+    	if (callInfo != null) {
+    		pjsip_inv_state state = callInfo.getCallState();
+
+    		switch (state) {
+    		case PJSIP_INV_STATE_INCOMING:
+    		case PJSIP_INV_STATE_EARLY:
+    		case PJSIP_INV_STATE_CALLING:
+    		case PJSIP_INV_STATE_CONFIRMED:
+    		case PJSIP_INV_STATE_CONNECTING:
+    			return true;
+    			
+    		case PJSIP_INV_STATE_DISCONNECTED:
+    		case PJSIP_INV_STATE_NULL:
+    			break;
+    		}
+    	}
+    	return false;
+	}
+	
+	
+	/**
+	 * Check if any of call infos indicate there is an active
+	 * call in progress.
+	 */
+	public boolean isActiveCallInProgress() {
+		Log.d(THIS_FILE, "isActiveCallInProgress(), number of calls: " + callsList.keySet().size());
+		
+		//
+		// Go through the whole list of calls and check if
+		// any call is in an active state.
+		//
+		for (Integer i : callsList.keySet()) { 
+			CallInfo callInfo = getCallInfo(i);
+			if (isActiveCallInProgress(callInfo)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Broadcast the Headset button press event internally if
+	 * there is any call in progress.
+	 */
+	public boolean handleHeadsetButton() {
+		
+		if (isActiveCallInProgress()) {
+			Intent regStateChangedIntent = new Intent(SipService.ACTION_SIP_SERVICE_HEADSET);
+			service.sendBroadcast(regStateChangedIntent);
+			return true;
+		}	
+		return false;
+	}
+	
+	
+	/**
+	 * Internal receiver of Headset button presses events.
+	 * This class is only used for Android versions prior to
+	 * v2.2 (API-Level 8). For older versions the DeviceStateReceiver
+	 * is used to handle the incoming button actions.
+	 */
+	private BroadcastReceiver headsetButtonReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d(THIS_FILE, "headsetButtonReceiver::onReceive");
+
+	    	//
+			// Headset button has been pressed by user. Normally when 
+			// the UI is active this event will never be generated instead
+			// a headset button press will be handled as a regular key
+			// press event.
+			//
+	        if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
+				KeyEvent event = (KeyEvent)intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+				
+				if (event != null && event.getAction() == KeyEvent.ACTION_DOWN) {
+		        	if (handleHeadsetButton()) {
+			        	//
+						// After processing the event we will prevent other applications
+						// from receiving the button press since we have handled it ourself
+						// and do not want any media player to start playing for example.
+						//
+		        		abortBroadcast();
+		        	}
+				}
+			}
+		}
+	};
+	
+	
+	/**
+	 * Register to be the sole handler of Headset button presses
+	 * to prevent other applications such as media players from
+	 * acting on the button presses.
+	 */
+	private void registerMediaButtonReceiver() {
+		Log.d(THIS_FILE, "registerMediaButtonReceiver");
+		
+		if (Compatibility.isCompatible(8)) {
+			//
+			// Register as the sole headset button receiver
+			// (for Android 2.2 or above).
+			//
+			try {
+				Method method = AudioManager.class.getMethod("registerMediaButtonEventReceiver", new Class[] { ComponentName.class } );
+				method.invoke(audioManager, remoteControlResponder);
+			} catch (Exception e) {
+				Log.d(THIS_FILE, "Something is wrong with api level declared when registering media button receiver, " + e.getMessage());
+			}
+		} else {
+			//
+			// Register am event receiver for ACTION_MEDIA_BUTTON events,
+			// and adjust its priority to make sure we get these events
+			// before any media player which hijacks the button presses.
+			//
+			IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
+			intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
+			service.registerReceiver(headsetButtonReceiver, intentFilter);
+		}
+	}
+	
+	
+	/**
+	 * Unregister as the the sole handler of Headset button presses
+	 * to enable other applications such as media players to handle
+	 * the button presses instead.
+	 */
+	private void unregisterMediaButtonReceiver() {
+		Log.d(THIS_FILE, "unregisterMediaButtonReceiver");
+		
+		if (Compatibility.isCompatible(8)) {
+			//
+			// Unregister as the sole headset button receiver
+			// (for Android 2.2 or above).
+			//
+			try {
+				Method method = AudioManager.class.getMethod("unregisterMediaButtonEventReceiver", new Class[] { ComponentName.class } );
+				method.invoke(audioManager, remoteControlResponder);
+			} catch (Exception e) {
+				Log.d(THIS_FILE, "Something is wrong with api level declared when unregistering media button receiver, " + e.getMessage());
+			}
+		} else {
+			//
+			// Unregister the receiver of headset button pressed events
+			// for older versions of Android that do not support the
+			// unregisterMediaButtonEventReceiver method.
+			//
+			service.unregisterReceiver(headsetButtonReceiver);
+		}
+	}
+	
+	
 	/**
 	 * Set the audio mode as in call
 	 */
 	public synchronized void setAudioInCall() {
+		registerMediaButtonReceiver();
+
 		//Ensure not already set
 		if(isSetAudioMode) {
 			return;
@@ -528,6 +706,8 @@ public class UAStateReceiver extends Callback {
 	 * Reset the audio mode
 	 */
 	public synchronized void unsetAudioInCall() {
+		unregisterMediaButtonReceiver();
+		
 		if(!isSavedAudioState || !isSetAudioMode) {
 			return;
 		}

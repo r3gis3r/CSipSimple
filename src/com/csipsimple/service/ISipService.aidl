@@ -30,6 +30,7 @@ interface ISipService{
 	AccountInfo getAccountInfo(int accountId);
 	
 	void switchToAutoAnswer();
+	boolean performHeadsetAction();
 	
 	void makeCall(in String callee, int accountId);
 	int answer(int callId, int status);

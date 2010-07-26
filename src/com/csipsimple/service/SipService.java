@@ -84,7 +84,7 @@ public class SipService extends Service {
 	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 	final static String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
 	final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
-
+	
 	// -------
 	// Static constants
 	// -------
@@ -93,6 +93,7 @@ public class SipService extends Service {
 	final public static String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
 	final public static String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
 	final public static String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
+	final public static String ACTION_SIP_SERVICE_HEADSET = "com.csipsimple.service.HEADSET";
 
 	
 
@@ -171,6 +172,20 @@ public class SipService extends Service {
 				userAgentReceiver.setAutoAnswerNext(true);
 			}
 			// TODO: popup here
+		}
+		
+		
+		/**
+		 * Call to perform headset action
+		 */
+		@Override
+		public boolean performHeadsetAction() throws RemoteException {
+			Log.d(THIS_FILE, "SipService::performHeadsetAction()");
+			
+			if (userAgentReceiver == null) {
+				return false;
+			}
+			return userAgentReceiver.handleHeadsetButton();
 		}
 
 		/**

@@ -34,6 +34,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -51,12 +52,14 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PhoneUtils;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.InCallControls;
 import com.csipsimple.widgets.InCallInfo;
 import com.csipsimple.widgets.ScreenLocker;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.InCallControls.OnTriggerListener;
+//import com.csipsimple.service.DeviceStateReceiver;
 
 
 public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener {
@@ -84,6 +87,28 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private LinearLayout detailedContainer, holdContainer;
 
 	private boolean inTest;
+
+
+	/**
+	 * Broadcast receiver for the internal equivalent to the
+	 * ACTION_MEDIA_BUTTON intent, ACTION_SIP_SERVICE_HEADSET.
+	 */
+	private BroadcastReceiver headsetButtonReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d(THIS_FILE, "headsetButtonReceiver::onReceive");
+			
+	        //
+			// Headset button has been pressed by user. Normally when 
+			// the UI is active this event will never be generated instead
+			// a headset button press will be handled as a regular key
+			// press event.
+			//
+	        if (SipService.ACTION_SIP_SERVICE_HEADSET.equals(intent.getAction())) {
+	        	handleHeadsetButton();
+	        }
+		}
+	};
 
 
 	@Override
@@ -135,6 +160,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 		
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
+		registerReceiver(headsetButtonReceiver, new IntentFilter(SipService.ACTION_SIP_SERVICE_HEADSET));
 	}
 	
 	
@@ -283,11 +309,83 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		super.onDestroy();
 	}
 	
+	
+	/**
+	 * Check if the Headset button shall be used to hangup the call
+	 * or mute the microphone.
+	 */
+	boolean getMuteMicrophone() {
+		// TODO: Add setting to preferences to select if mirophone should
+		// be muted during call. Retrieve the setting from the preferences
+		// somehow here...
+		return false;
+	}
+	
+	
+	/**
+	 * Headset button has been pressed by user. If there is an
+	 * incoming call ringing the button will be used to answer the
+	 * call. If there is an ongoing call in progress the button will
+	 * be used to hangup the call or mute the microphone.
+	 */
+	private boolean handleHeadsetButton() {
+    	if (callInfo != null) {
+    		pjsip_inv_state state = callInfo.getCallState();
+
+    		switch (state) {
+    		case PJSIP_INV_STATE_INCOMING:
+    		case PJSIP_INV_STATE_EARLY:
+    			if (callInfo.isIncoming()) {
+					onTrigger(TAKE_CALL);
+				} else {
+					//
+					// In the Android phone app using the media button during
+					// a call mutes the microphone instead of terminating the call.
+					// We check here if this should be the behavior here or if
+					// the call should be cleared.
+					//
+					if (getMuteMicrophone()) {
+						inCallControls.toggleMuteButton();
+					} else {
+						onTrigger(CLEAR_CALL);
+					}
+				}
+    			return true;
+    			
+    		case PJSIP_INV_STATE_CALLING:
+    		case PJSIP_INV_STATE_CONFIRMED:
+    		case PJSIP_INV_STATE_CONNECTING:
+    			//
+				// In the Android phone app using the media button during
+				// a call mutes the microphone instead of terminating the call.
+				// We check here if this should be the behavior here or if
+				// the call should be cleared.
+				//
+				if (getMuteMicrophone()) {
+					inCallControls.toggleMuteButton();
+				} else {
+					onTrigger(CLEAR_CALL);
+				}
+    			return true;
+    			
+    		case PJSIP_INV_STATE_DISCONNECTED:
+    		case PJSIP_INV_STATE_NULL:
+    			break;
+    		}
+    	}
+    	return false;
+	}
+	
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_DOWN:
         case KeyEvent.KEYCODE_VOLUME_UP:
+        	//
+    		// Volume has been adjusted by the user.
+    		//
+        	Log.d(THIS_FILE, "onKeyDown: Volume button pressed");
         	int action = AudioManager.ADJUST_RAISE;
         	if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
         		action = AudioManager.ADJUST_LOWER;
@@ -295,6 +393,18 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             am.adjustStreamVolume( AudioManager.STREAM_VOICE_CALL, action, AudioManager.FLAG_SHOW_UI);
         	return true;
+        
+        // Wired Headset button
+        case KeyEvent.KEYCODE_HEADSETHOOK:
+        // Bluetooth Headset button
+        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+        case KeyEvent.KEYCODE_MEDIA_STOP:
+        	//
+        	// Headset button has been pressed.
+        	//
+        	Log.d(THIS_FILE, "onKeyDown: Headset button pressed");
+        	handleHeadsetButton();
+			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -304,6 +414,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 		case KeyEvent.KEYCODE_VOLUME_UP:
+		case KeyEvent.KEYCODE_HEADSETHOOK:
+        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+        case KeyEvent.KEYCODE_MEDIA_STOP:
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);
@@ -312,7 +425,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	private BroadcastReceiver callStateReceiver = new BroadcastReceiver() {
 		
-
+		@Override
 		public void onReceive(Context context, Intent intent) {
 			Bundle extras = intent.getExtras();
 			CallInfo notif_call = null;
