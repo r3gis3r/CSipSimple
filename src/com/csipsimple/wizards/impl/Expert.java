@@ -53,6 +53,7 @@ public class Expert extends BasePrefsWizard {
 	private ListPreference accountDataType;
 	private EditTextPreference accountRealm;
 	private ListPreference accountScheme;
+	private CheckBoxPreference accountUseTcp;
 	private CheckBoxPreference accountPublishEnabled;
 	private EditTextPreference accountRegTimeout;
 	private EditTextPreference accountKaInterval;
@@ -68,6 +69,7 @@ public class Expert extends BasePrefsWizard {
 		accountData = (EditTextPreference) findPreference("data");
 		accountDataType = (ListPreference) findPreference("data_type");
 		accountScheme = (ListPreference) findPreference("scheme");
+		accountUseTcp = (CheckBoxPreference) findPreference("use_tcp");
 		accountPublishEnabled = (CheckBoxPreference) findPreference("publish_enabled");
 		accountRegTimeout = (EditTextPreference) findPreference("reg_timeout");
 		accountKaInterval = (EditTextPreference) findPreference("ka_interval");
@@ -107,6 +109,7 @@ public class Expert extends BasePrefsWizard {
 			}
 		}
 
+		accountUseTcp.setChecked((account.use_tcp));
 		accountPublishEnabled.setChecked((account.cfg.getPublish_enabled() == 1));
 		accountRegTimeout.setText(Long.toString(account.cfg.getReg_timeout()));
 		accountKaInterval.setText(Long.toString(account.cfg.getKa_interval()));
@@ -139,6 +142,7 @@ public class Expert extends BasePrefsWizard {
 
 	protected void buildAccount() {
 		account.display_name = accountDisplayName.getText();
+		account.use_tcp = accountUseTcp.isChecked();
 		account.cfg.setId(getPjText(accountAccId));
 		account.cfg.setReg_uri(getPjText(accountRegUri));
 

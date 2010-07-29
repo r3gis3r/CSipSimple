@@ -629,6 +629,25 @@ public class SipService extends Service {
 						account.cfg.setReg_uri(pjsua.pj_str_copy(""));
 					}*/
 					
+					//
+					// Handle TCP mode by temporarily changing the reg uri and
+					// adding a fake proxy if needed
+					//
+					String reg_uri = "";
+					String proxy_uri = "";
+					if (account.use_tcp) {
+						reg_uri = account.cfg.getReg_uri().getPtr();
+						String buf = reg_uri + ";transport=tcp";
+						account.cfg.setReg_uri(pjsua.pj_str_copy(buf));
+						proxy_uri =  account.cfg.getProxy().getPtr();
+						if (proxy_uri == null || proxy_uri == "") {
+							account.cfg.setProxy(pjsua.pj_str_copy(buf));
+						} else {
+							buf = proxy_uri + ";transport=tcp";
+							account.cfg.setProxy(pjsua.pj_str_copy(buf));
+						}
+					}
+
 					int status;
 					if (activeAccounts.containsKey(account.id)) {
 						status = pjsua.acc_modify(activeAccounts.get(account.id), account.cfg);
@@ -653,6 +672,17 @@ public class SipService extends Service {
 							Log.w(THIS_FILE, "Add account " + account.display_name + " failed !!! ");
 	
 						}
+					}
+					
+					//
+					// For TCP, undo the appending of ;transport=tcp and fake proxy
+					//
+					if (account.use_tcp) {
+						account.cfg.setReg_uri(pjsua.pj_str_copy(reg_uri));
+						if (proxy_uri == null)
+							account.cfg.setReg_uri(pjsua.pj_str_copy(""));
+						else
+							account.cfg.setReg_uri(pjsua.pj_str_copy(proxy_uri));
 					}
 				}
 			}

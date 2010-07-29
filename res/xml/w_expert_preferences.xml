@@ -44,10 +44,11 @@
 
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Connection">
-		<CheckBoxPreference android:title="Publish enabled" android:key="publish_enabled"></CheckBoxPreference>
-		<EditTextPreference android:key="reg_timeout" android:title="Register timeout"></EditTextPreference>
-		<EditTextPreference android:key="ka_interval" android:title="Keep alive interval"></EditTextPreference>
-		<EditTextPreference android:key="force_contact" android:title="Force contact"></EditTextPreference>
+		<CheckBoxPreference android:key="use_tcp" android:title="@string/w_expert_use_tcp"></CheckBoxPreference>
+		<CheckBoxPreference android:key="publish_enabled" android:title="@string/w_expert_publish_enabled"></CheckBoxPreference>
+		<EditTextPreference android:key="reg_timeout" android:title="@string/w_expert_reg_timeout"></EditTextPreference>
+		<EditTextPreference android:key="ka_interval" android:title="@string/w_expert_ka_interval"></EditTextPreference>
+		<EditTextPreference android:key="force_contact" android:title="@string/w_expert_force_contact"></EditTextPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/w_expert_t_proxy">
 		<EditTextPreference android:key="proxy" android:title="@string/w_expert_proxy"

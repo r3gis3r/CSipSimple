@@ -67,7 +67,7 @@
 	
 		<CheckBoxPreference android:title="@string/enable_tcp"
 			android:summary="@string/enable_tcp_desc"
-			android:key="enable_tcp" android:defaultValue="false"></CheckBoxPreference>
+			android:key="enable_tcp" android:defaultValue="true"></CheckBoxPreference>
 		<EditTextPreference android:key="network_tcp_transport_port"
 			android:title="@string/network_tcp_transport_port"
 			android:numeric="integer"
