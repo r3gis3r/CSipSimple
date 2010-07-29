@@ -44,6 +44,7 @@ public class WizardUtils {
 	//I didn't manage to introspect since in dalvik package aren't directly visible
 	//from ClassLoader resources
 	private static String[] wizards_classes_names = new String[]{
+		"Advanced",
 		"Basic",
 		"Callcentric",
 		"Ecs",

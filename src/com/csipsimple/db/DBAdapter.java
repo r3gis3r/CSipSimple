@@ -147,10 +147,12 @@ public class DBAdapter {
 			if(oldVersion < 1) {
 				db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS_TABLE_NAME);
 			} else if(oldVersion < 7) {
-				if(oldVersion < 5)
+				if(oldVersion < 5) {
 					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_KA_INTERVAL+" INTEGER");
-				if(oldVersion < 6) 
+				}
+				if(oldVersion < 6) {
 					db.execSQL("DROP TABLE IF EXISTS "+FILTERS_TABLE_NAME);
+				}
 				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_TCP+" BOOLEAN");
 			}
 			onCreate(db);

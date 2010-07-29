@@ -17,15 +17,21 @@
  */
 package com.csipsimple.ui.prefs;
 
+import android.telephony.TelephonyManager;
+
 import com.csipsimple.R;
 
 
 public class PrefsNetwork extends GenericPrefs {
-
-
+	
 	@Override
 	protected int getXmlPreferences() {
-		return R.xml.prefs_network;
+		TelephonyManager TM = (TelephonyManager) getApplicationContext().getSystemService(TELEPHONY_SERVICE);
+		if (TM.getPhoneType() == TelephonyManager.PHONE_TYPE_CDMA) {
+			return R.xml.prefs_network_cdma;
+		} else {
+			return R.xml.prefs_network;
+		}
 	}
 
 	@Override
@@ -33,7 +39,5 @@ public class PrefsNetwork extends GenericPrefs {
 		// TODO Auto-generated method stub
 		
 	}
-
-
 	
 }

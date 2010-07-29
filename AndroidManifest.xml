@@ -22,9 +22,9 @@
 		<receiver android:name=".service.DeviceStateReceiver">
 			<intent-filter>
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
-			<action android:name="android.intent.action.ANY_DATA_STATE"></action>
-<action android:name="android.intent.action.MEDIA_BUTTON"></action>
-</intent-filter>
+				<action android:name="android.intent.action.ANY_DATA_STATE"></action>
+				<action android:name="android.intent.action.MEDIA_BUTTON"></action>
+			</intent-filter>
 		</receiver>
 		
 		<!--  Main ui -->
@@ -61,6 +61,7 @@
 		
 
 		<!-- Wizards -->
+		<activity android:name=".wizards.impl.Advanced" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Basic" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Freephonie" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		<activity android:name=".wizards.impl.Expert" android:theme="@android:style/Theme.NoTitleBar"></activity>

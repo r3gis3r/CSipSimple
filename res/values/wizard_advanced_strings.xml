@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<resources>
+<string name="w_advanced_display_name">Account name</string>
+<string name="w_advanced_display_name_desc">Display name for this account</string>
+<string name="w_advanced_caller_id">Caller ID</string>
+<string name="w_advanced_caller_id_desc">Caller ID to send with calls</string>
+<string name="w_advanced_server">Server</string>
+<string name="w_advanced_server_desc">SIP server domain name</string>
+<string name="w_advanced_username">Username</string>
+<string name="w_advanced_username_desc">Username for authentication</string>
+<string name="w_advanced_password">Password</string>
+<string name="w_advanced_password_desc">Password for authentication</string>
+<string name="w_advanced_use_tcp">Use TCP (not UDP)</string>
+<string name="w_advanced_proxy">Proxy</string>
+<string name="w_advanced_proxy_desc">Proxy domain name (optional)</string>
+
+</resources>
