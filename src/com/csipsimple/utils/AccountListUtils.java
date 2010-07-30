@@ -73,10 +73,10 @@ public class AccountListUtils {
 								accountDisplay.statusLabel = context.getString(R.string.acct_registered);
 								accountDisplay.availableForCalls = true;
 							} else {
-								// Yellow unregistered (expired)
+								// Yellow unregistered
 								accountDisplay.statusColor = Color.argb(255, 255, 194, 0);
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
-								accountDisplay.statusLabel = context.getString(R.string.acct_expired);
+								accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 							}
 						} else {
 							if (statusCode == pjsip_status_code.PJSIP_SC_PROGRESS || statusCode == pjsip_status_code.PJSIP_SC_TRYING) {

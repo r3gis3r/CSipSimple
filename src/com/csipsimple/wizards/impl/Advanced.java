@@ -89,7 +89,12 @@ public class Advanced extends BasePrefsWizard {
 		accountPassword.setText(ci.getData().getPtr());
 
 		accountUseTcp.setChecked((account.use_tcp));
-		accountProxy.setText(account.cfg.getProxy().getPtr());
+		String account_cfPrx = account.cfg.getProxy().getPtr();
+		if(account_cfPrx == null) {
+			accountProxy.setText("");
+		} else {
+			accountProxy.setText(account_cfPrx.replaceFirst("sip:", ""));
+		}
 
 	}
 
@@ -135,7 +140,7 @@ public class Advanced extends BasePrefsWizard {
 
 		if (!isEmpty(accountProxy)) {
 			account.cfg.setProxy_cnt(1);
-			account.cfg.setProxy(getPjText(accountProxy));
+			account.cfg.setProxy(pjsua.pj_str_copy("sip:"+accountProxy.getText()));
 		} else {
 			account.cfg.setProxy_cnt(0);
 		}

@@ -15,7 +15,7 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <resources>
-<string name="w_callcentric_display_name">Account Name</string>
+<string name="w_callcentric_display_name">Account name</string>
 <string name="w_callcentric_display_name_desc">Display name for this account</string>
 <string name="w_callcentric_phone_number">SIP Phone Number</string>
 <string name="w_callcentric_phone_number_desc">Callcentric SIP phone number (1777xxxxxxx)</string>
