@@ -77,14 +77,14 @@ public class Dialer extends Activity implements OnClickListener,
 
 
 	
-	private ToneGenerator toneGenerator;
+	private ToneGenerator toneGenerator = null;
 	private Object toneGeneratorLock = new Object();
 	private static final String THIS_FILE = "Dialer";
 
 	private Drawable digitsBackground, digitsEmptyBackground;
 	private EditText digits;
 	private ImageButton dialButton, deleteButton;
-	private Vibrator vibrator;
+	private Vibrator vibrator = null;
 	
 	private View digitDialer, textDialer, rootView;
 	private boolean isDigit;
@@ -126,11 +126,10 @@ public class Dialer extends Activity implements OnClickListener,
 
 	private PreferencesWrapper prefsWrapper;
 
-	private Timer toneTimer;
+	private Timer toneTimer = null;
 
-	//TODO : add an option for that
-	private boolean useDialtone = false;
-
+	private boolean dialPressTone = false;
+	private boolean dialPressVibrate = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -210,8 +209,10 @@ public class Dialer extends Activity implements OnClickListener,
 		//Bind service
 		contextToBindTo.bindService(new Intent(contextToBindTo, SipService.class), connection, Context.BIND_AUTO_CREATE);
 
+		dialPressTone = prefsWrapper.getDialPressTone();
+		dialPressVibrate = prefsWrapper.getDialPressVibrate();
 		
-		if(useDialtone ) {
+		if(dialPressTone ) {
 			//Create dialtone just for user feedback
 			synchronized (toneGeneratorLock) {
 				if(toneTimer == null) {
@@ -228,10 +229,20 @@ public class Dialer extends Activity implements OnClickListener,
 					}
 				}
 			}
+		} else {
+			toneTimer = null;
+			toneGenerator = null;
 		}
 		
-		//Create the virator
-		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		//Create the vibrator
+		if (dialPressVibrate) {
+			if (vibrator == null) {
+				vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+			}
+		} else {
+			vibrator = null;
+		}
+
 		//Store the current ringer mode
 		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		ringerMode = am.getRingerMode();
@@ -304,25 +315,26 @@ public class Dialer extends Activity implements OnClickListener,
 
 	private void playTone(int tone) {
 		
-		boolean silent = (ringerMode == AudioManager.RINGER_MODE_SILENT) || (ringerMode == AudioManager.RINGER_MODE_VIBRATE);
-		//TODO add user pref for that
-		boolean vibrate = silent || true;
-		
-		if(vibrate) {
-			vibrator.vibrate(30);
-		}
-		if(silent) {
-			return;
-		}
-
-		synchronized (toneGeneratorLock) {
-			if (toneGenerator == null) {
-				return;
-			}
-			toneGenerator.startTone(tone);
-			
-			//TODO : see if it could not be factorized
-			toneTimer.schedule(new StopTimerTask(), TONE_LENGTH_MS);
+		switch (ringerMode) {
+			case AudioManager.RINGER_MODE_NORMAL:
+				if (dialPressVibrate) vibrator.vibrate(30);
+				if (dialPressTone) {
+					synchronized (toneGeneratorLock) {
+						if (toneGenerator == null) {
+							return;
+						}
+						toneGenerator.startTone(tone);
+						
+						//TODO : see if it could not be factorized
+						toneTimer.schedule(new StopTimerTask(), TONE_LENGTH_MS);
+					}					
+				}
+				break;
+			case AudioManager.RINGER_MODE_VIBRATE:
+				if (dialPressVibrate) vibrator.vibrate(30);
+				break;
+			case AudioManager.RINGER_MODE_SILENT:
+				break;
 		}
 	}
 	

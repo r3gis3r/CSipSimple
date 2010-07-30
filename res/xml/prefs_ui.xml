@@ -34,6 +34,14 @@
 			android:defaultValue=""></EditTextPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/general_ui">
+		<CheckBoxPreference android:title="@string/dial_press_tone"
+			android:defaultValue="true"
+			android:summary="@string/dial_press_tone_desc"
+			android:key="dial_press_tone"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/dial_press_vibrate"
+			android:defaultValue="true"
+			android:summary="@string/dial_press_vibrate_desc"
+			android:key="dial_press_vibrate"></CheckBoxPreference>
 		<CheckBoxPreference android:title="@string/start_with_text_dialer"
 			android:defaultValue="false"
 			android:summary="@string/start_with_text_dialer_desc"

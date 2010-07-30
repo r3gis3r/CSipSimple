@@ -336,10 +336,17 @@ public class PreferencesWrapper {
 	// ---- 
 	// UI related
 	// ----
+	public boolean getDialPressTone() {
+		return prefs.getBoolean("dial_press_tone", true);
+	}
+
+	public boolean getDialPressVibrate() {
+		return prefs.getBoolean("dial_press_vibrate", true);
+	}
+
 	public boolean startIsDigit() {
 		return !prefs.getBoolean("start_with_text_dialer", false);
 	}
-
 
 	public boolean getUseAlternateUnlocker() {
 		return prefs.getBoolean("use_alternate_unlocker", false);
