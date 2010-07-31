@@ -35,7 +35,7 @@
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/general_ui">
 		<CheckBoxPreference android:title="@string/dial_press_tone"
-			android:defaultValue="true"
+			android:defaultValue="false"
 			android:summary="@string/dial_press_tone_desc"
 			android:key="dial_press_tone"></CheckBoxPreference>
 		<CheckBoxPreference android:title="@string/dial_press_vibrate"

@@ -337,7 +337,7 @@ public class PreferencesWrapper {
 	// UI related
 	// ----
 	public boolean getDialPressTone() {
-		return prefs.getBoolean("dial_press_tone", true);
+		return prefs.getBoolean("dial_press_tone", false);
 	}
 
 	public boolean getDialPressVibrate() {
