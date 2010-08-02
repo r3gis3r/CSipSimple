@@ -85,6 +85,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	private static final int REQUEST_MODIFY = CHOOSE_WIZARD+1;
 	
 	private static final int NEED_LIST_UPDATE = 1;
+	private static final int UPDATE_LINE = 2;
 	
 
 	@Override
@@ -282,6 +283,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	private void reloadAsyncAccounts() {
 		//Force reflush accounts
 		Thread t = new Thread() {
+			@Override
 			public void run() {
 				if (service != null) {
 					try {
@@ -298,7 +300,23 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	}
 	
 	
-	class AccountAdapter extends ArrayAdapter<Account> {
+	private static final class AccountListItemViews {
+		TextView labelView;
+		TextView statusView;
+		View indicator;
+		CheckBox activeCheckbox;
+		ImageView barOnOff;
+		int accountPosition;
+	}
+	
+	/*
+	private static final class AccountListItemUpdate {
+		AccountListItemViews itemViews;
+		AccountStatusDisplay statusDisplay;
+	}
+	*/
+	
+	class AccountAdapter extends ArrayAdapter<Account> implements OnClickListener {
 
 		Activity context;
 		
@@ -315,65 +333,90 @@ public class AccountsList extends Activity implements OnItemClickListener {
             if (view == null) {
                 LayoutInflater viewInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = viewInflater.inflate(R.layout.accounts_list_item, parent, false);
+                
+                AccountListItemViews tagView = new AccountListItemViews();
+                tagView.labelView = (TextView)view.findViewById(R.id.AccTextView);
+                tagView.indicator = view.findViewById(R.id.indicator);
+                tagView.activeCheckbox = (CheckBox)view.findViewById(R.id.AccCheckBoxActive);
+                tagView.statusView =  (TextView) view.findViewById(R.id.AccTextStatusView);
+                tagView.barOnOff = (ImageView) tagView.indicator.findViewById(R.id.bar_onoff);
+                
+                view.setTag(tagView);
+                
+                tagView.indicator.setOnClickListener(this);
+                tagView.indicator.setTag(view);
             }
             
             
-            // Get the view object and account object for the row
+            bindView(view, position);
+           
+	        return view;
+	        
+	    }
+		
+		
+		public void bindView(View view, int position) {
+			AccountListItemViews tagView = (AccountListItemViews) view.getTag();
+			tagView.accountPosition = position;
+			view.setTag(tagView);
+			
+			
+			// Get the view object and account object for the row
 	        final Account account = getItem(position);
-	        
-	        
 	        if (account == null){
-	        	return view;
+	        	return;
 	        }
-
-//            Log.d(THIS_FILE, "Is rendering "+account.display_name);
 	        
-            //The status part of the view
-	        final TextView labelView = (TextView)view.findViewById(R.id.AccTextView);
-	        final TextView statusView = (TextView)view.findViewById(R.id.AccTextStatusView);
-	        final View indicator = view.findViewById(R.id.indicator);
-	        final AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
-            //The activation part of the view
-            final CheckBox activeCheckbox = (CheckBox)view.findViewById(R.id.AccCheckBoxActive);
-            final ImageView barOnOff = (ImageView) indicator.findViewById(R.id.bar_onoff);
-            
-            
-            labelView.setText(account.display_name);
+	        //Threaded since we can encounter a lock due to a pending registration. ?
+//	        Thread t = new Thread() {
+//	        	@Override
+//	        	public void run() {
+//	        		AccountListItemUpdate
+//	        	};
+//	        }
+//	        t.start();
+			final AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
+			
+			tagView.labelView.setText(account.display_name);
             
             //Update status label and color
-            statusView.setText(accountStatusDisplay.statusLabel);
-            labelView.setTextColor(accountStatusDisplay.statusColor);
-            
+			tagView.statusView.setText(accountStatusDisplay.statusLabel);
+			tagView.labelView.setTextColor(accountStatusDisplay.statusColor);
             
             //Update checkbox selection
-            activeCheckbox.setChecked( account.active );
-            barOnOff.setImageResource( account.active ? accountStatusDisplay.checkBoxIndicator : R.drawable.ic_indicator_off );
+			tagView.activeCheckbox.setChecked( account.active );
+			tagView.barOnOff.setImageResource( account.active ? accountStatusDisplay.checkBoxIndicator : R.drawable.ic_indicator_off );
             
             //Update account image
             final WizardInfo wizardInfos = WizardUtils.getWizardClass(account.wizard);
-            activeCheckbox.setBackgroundResource(wizardInfos.icon);
+            tagView.activeCheckbox.setBackgroundResource(wizardInfos.icon);
 	        
-	        
-			indicator.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					activeCheckbox.toggle();
-					boolean isActive = activeCheckbox.isChecked();
-					
-					//Update database and reload accounts
-					database.open();
-					account.active = isActive;
-					database.updateAccount(account);
-					database.close();
-					reloadAsyncAccounts();
-					
-					//Update visual
-					barOnOff.setImageResource(account.active?R.drawable.ic_indicator_on : R.drawable.ic_indicator_off);
-				}
-			});
-	        
-	        return view;
-	    }
+		}
+
+
+		@Override
+		public void onClick(View view) {
+			AccountListItemViews tagView = (AccountListItemViews) ((View)view.getTag()).getTag();
+			
+			final Account account = getItem(tagView.accountPosition);
+			if(account == null) {
+				return;
+			}
+			tagView.activeCheckbox.toggle();
+			boolean isActive = tagView.activeCheckbox.isChecked();
+			
+			//Update database and reload accounts
+			database.open();
+			account.active = isActive;
+			database.updateAccount(account);
+			database.close();
+			reloadAsyncAccounts();
+			
+			//Update visual
+			tagView.barOnOff.setImageResource(account.active?R.drawable.ic_indicator_on : R.drawable.ic_indicator_off);
+			
+			
+		}
 
 	}
 	
@@ -406,6 +449,8 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			case NEED_LIST_UPDATE:
 				updateList();
 				break;
+			case UPDATE_LINE:
+				
 			default:
 				super.handleMessage(msg);
 			}

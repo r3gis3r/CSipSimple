@@ -34,7 +34,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -49,17 +48,14 @@ import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
-import com.csipsimple.utils.Compatibility;
+import com.csipsimple.service.MediaManager.MediaState;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PhoneUtils;
-import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.InCallControls;
 import com.csipsimple.widgets.InCallInfo;
 import com.csipsimple.widgets.ScreenLocker;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.InCallControls.OnTriggerListener;
-//import com.csipsimple.service.DeviceStateReceiver;
 
 
 public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener {
@@ -82,34 +78,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	private View callInfoPanel;
 	private Timer quitTimer;
-	private AudioManager audioManager;
 
 	private LinearLayout detailedContainer, holdContainer;
 
+	//True if running unit tests
 	private boolean inTest;
 
-
-	/**
-	 * Broadcast receiver for the internal equivalent to the
-	 * ACTION_MEDIA_BUTTON intent, ACTION_SIP_SERVICE_HEADSET.
-	 */
-	private BroadcastReceiver headsetButtonReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Log.d(THIS_FILE, "headsetButtonReceiver::onReceive");
-			
-	        //
-			// Headset button has been pressed by user. Normally when 
-			// the UI is active this event will never be generated instead
-			// a headset button press will be handled as a regular key
-			// press event.
-			//
-	        if (SipService.ACTION_SIP_SERVICE_HEADSET.equals(intent.getAction())) {
-	        	handleHeadsetButton();
-	        }
-		}
-	};
-
+	private MediaState lastMediaState;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -136,7 +111,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 
 		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
-		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
 		
@@ -157,10 +131,12 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		holdContainer = (LinearLayout) findViewById(R.id.holdContainer);
 		
 		lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
+		lockOverlay.setActivity(this);
 		
 		
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
-		registerReceiver(headsetButtonReceiver, new IntentFilter(SipService.ACTION_SIP_SERVICE_HEADSET));
+		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_MEDIA_CHANGED));
+		
 	}
 	
 	
@@ -172,14 +148,18 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             keyguardLock = keyguardManager.newKeyguardLock("com.csipsimple.inCallKeyguard");
         }
         
-        if(keyguardManager.inKeyguardRestrictedInputMode()) {
-        	manageKeyguard = true;
-        	keyguardLock.disableKeyguard();
-        }
+        // If this line is uncommented keyguard will be prevented only if in keyguard mode is locked 
+        // when incoming call arrives
+        //if(keyguardManager.inKeyguardRestrictedInputMode()) {
+        
+        manageKeyguard = true;
+        keyguardLock.disableKeyguard();
+        //}
         
         if(quitTimer == null) {
     		quitTimer = new Timer();
-        }        
+        }
+        
 	}
 	
 	@Override
@@ -234,6 +214,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
 			backgroundResId = R.drawable.bg_in_call_gradient_connected;
+			if(lastMediaState != null && lastMediaState.isBluetoothScoOn) {
+				backgroundResId = R.drawable.bg_in_call_gradient_bluetooth;
+			}
 			if (wakeLock != null && wakeLock.isHeld()) {
 				Log.d(THIS_FILE, "Releasing wake up lock - confirmed");
                 wakeLock.release();
@@ -257,7 +240,31 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 		mainFrame.setBackgroundResource(backgroundResId);
 		
+		
 		Log.d(THIS_FILE, "we leave the update ui function");
+	}
+	
+	
+	private synchronized void updateUIFromMedia() {
+		if(SipService.mediaManager != null) {
+			MediaState mediaState = SipService.mediaManager.getMediaState();
+			Log.d(THIS_FILE, "Media update ....");
+			if(!mediaState.equals(lastMediaState)) {
+				lastMediaState = mediaState;
+				
+				if(callInfo != null) {
+					pjsip_inv_state state = callInfo.getCallState();
+					
+					// Background
+					if(state == pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED) {
+						mainFrame.setBackgroundResource(lastMediaState.isBluetoothScoOn?R.drawable.bg_in_call_gradient_bluetooth:R.drawable.bg_in_call_gradient_connected);
+					}
+				}
+				
+				// Actions
+				inCallControls.setMediaState(lastMediaState);
+			}
+		}
 	}
 	
 	private void delayedQuit() {
@@ -310,71 +317,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	}
 	
 	
-	/**
-	 * Check if the Headset button shall be used to hangup the call
-	 * or mute the microphone.
-	 */
-	boolean getMuteMicrophone() {
-		// TODO: Add setting to preferences to select if mirophone should
-		// be muted during call. Retrieve the setting from the preferences
-		// somehow here...
-		return false;
-	}
 	
-	
-	/**
-	 * Headset button has been pressed by user. If there is an
-	 * incoming call ringing the button will be used to answer the
-	 * call. If there is an ongoing call in progress the button will
-	 * be used to hangup the call or mute the microphone.
-	 */
-	private boolean handleHeadsetButton() {
-    	if (callInfo != null) {
-    		pjsip_inv_state state = callInfo.getCallState();
-
-    		switch (state) {
-    		case PJSIP_INV_STATE_INCOMING:
-    		case PJSIP_INV_STATE_EARLY:
-    			if (callInfo.isIncoming()) {
-					onTrigger(TAKE_CALL);
-				} else {
-					//
-					// In the Android phone app using the media button during
-					// a call mutes the microphone instead of terminating the call.
-					// We check here if this should be the behavior here or if
-					// the call should be cleared.
-					//
-					if (getMuteMicrophone()) {
-						inCallControls.toggleMuteButton();
-					} else {
-						onTrigger(CLEAR_CALL);
-					}
-				}
-    			return true;
-    			
-    		case PJSIP_INV_STATE_CALLING:
-    		case PJSIP_INV_STATE_CONFIRMED:
-    		case PJSIP_INV_STATE_CONNECTING:
-    			//
-				// In the Android phone app using the media button during
-				// a call mutes the microphone instead of terminating the call.
-				// We check here if this should be the behavior here or if
-				// the call should be cleared.
-				//
-				if (getMuteMicrophone()) {
-					inCallControls.toggleMuteButton();
-				} else {
-					onTrigger(CLEAR_CALL);
-				}
-    			return true;
-    			
-    		case PJSIP_INV_STATE_DISCONNECTED:
-    		case PJSIP_INV_STATE_NULL:
-    			break;
-    		}
-    	}
-    	return false;
-	}
 	
 	
 	@Override
@@ -393,18 +336,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             am.adjustStreamVolume( AudioManager.STREAM_VOICE_CALL, action, AudioManager.FLAG_SHOW_UI);
         	return true;
-        
-        // Wired Headset button
-        case KeyEvent.KEYCODE_HEADSETHOOK:
-        // Bluetooth Headset button
-        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-        case KeyEvent.KEYCODE_MEDIA_STOP:
-        	//
-        	// Headset button has been pressed.
-        	//
-        	Log.d(THIS_FILE, "onKeyDown: Headset button pressed");
-        	handleHeadsetButton();
-			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -414,9 +345,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 		case KeyEvent.KEYCODE_VOLUME_UP:
-		case KeyEvent.KEYCODE_HEADSETHOOK:
-        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-        case KeyEvent.KEYCODE_MEDIA_STOP:
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);
@@ -427,15 +355,21 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Bundle extras = intent.getExtras();
-			CallInfo notif_call = null;
-			if (extras != null) {
-				notif_call = (CallInfo) extras.get("call_info");
-			}
-
-			if (notif_call != null && callInfo.equals(notif_call)) {
-				callInfo = notif_call;
-				updateUIFromCall();
+			String action = intent.getAction();
+			
+			if(action.equals(SipService.ACTION_SIP_CALL_CHANGED)){
+				Bundle extras = intent.getExtras();
+				CallInfo notif_call = null;
+				if (extras != null) {
+					notif_call = (CallInfo) extras.get("call_info");
+				}
+	
+				if (notif_call != null && callInfo.equals(notif_call)) {
+					callInfo = notif_call;
+					updateUIFromCall();
+				}
+			}else if(action.equals(SipService.ACTION_SIP_MEDIA_CHANGED)) {
+				updateUIFromMedia();
 			}
 		}
 	};
@@ -464,6 +398,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				}else {
 					Log.d(THIS_FILE, "Real call info "+callInfo.getCallId());
 					updateUIFromCall();
+					updateUIFromMedia();
 				}
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
@@ -489,81 +424,60 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		Log.d(THIS_FILE, "We have a call info : "+callInfo);
 		Log.d(THIS_FILE, "And a service : "+service);
 		lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
-		switch(whichAction) {
-			case TAKE_CALL:{
-				if (callInfo != null && service != null && canTakeCall) {
-					try {
+		try {
+			switch(whichAction) {
+				case TAKE_CALL:{
+					if (callInfo != null && service != null && canTakeCall) {
 						service.answer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
 						canTakeCall = false;
-					} catch (RemoteException e) {
-						Log.e(THIS_FILE, "Was not able to take the call", e);
 					}
+					break;
 				}
-				break;
-			}
-			case DECLINE_CALL: {
-				if (callInfo != null && service != null && canDeclineCall) {
-					try {
+				case DECLINE_CALL: 
+				case CLEAR_CALL:
+				{
+					if (callInfo != null && service != null && canDeclineCall) {
 						service.hangup(callInfo.getCallId(), 0);
 						canDeclineCall = false;
-					} catch (RemoteException e) {
-						Log.e(THIS_FILE, "Was not able to decline the call", e);
 					}
+					break;
 				}
-				break;
-			}
-			case CLEAR_CALL: {
-				if (callInfo != null && service != null && canDeclineCall) {
-					try {
-						service.hangup(callInfo.getCallId(), 0);
-						canDeclineCall=false;
-					} catch (RemoteException e) {
-						Log.e(THIS_FILE, "Was not able to clear the call", e);
+				case MUTE_ON:
+				case MUTE_OFF:
+				{
+					if (callInfo != null && service != null) {
+						service.setMicrophoneMute((whichAction == MUTE_ON)?true:false);
 					}
+					break;
 				}
-				break;
-			}
-			case MUTE_ON:{
-				if(Compatibility.isCompatible(5)) {
-					audioManager.setMicrophoneMute(true);
+				case SPEAKER_ON :
+				case SPEAKER_OFF :
+				{
+					if (callInfo != null && service != null) {
+						service.setSpeakerphoneOn((whichAction == SPEAKER_ON)?true:false);
+					}
+					break;
 				}
-				break;
-			}
-			case MUTE_OFF:{
-				if(Compatibility.isCompatible(5)) {
-					audioManager.setMicrophoneMute(false);
+				case BLUETOOTH_ON:
+				case BLUETOOTH_OFF: {
+					if (callInfo != null && service != null) {
+						service.setBluetoothOn((whichAction == BLUETOOTH_ON)?true:false);
+					}
+					break;
 				}
-				break;
+				case DIALPAD_ON:
+				case DIALPAD_OFF:
+				{
+					setDialpadVisibility((whichAction == DIALPAD_ON)?View.VISIBLE:View.GONE);
+					break;
+				}
+				case DETAILED_DISPLAY:{
+					inCallInfo.switchDetailedInfo( showDetails );
+					showDetails = !showDetails;
+				}
 			}
-			case SPEAKER_ON :
-			case SPEAKER_OFF :
-				PhoneUtils.turnOnSpeaker(this, !PhoneUtils.isSpeakerOn(this));
-				break;
-			
-			case BLUETOOTH_ON:{
-		//		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		//		am.setBluetoothA2dpOn(true);
-		//		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_bluetooth);
-				break;
-			}
-			case BLUETOOTH_OFF:{
-		//		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		//		am.setBluetoothA2dpOn(false);
-		//		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_connected);
-				break;
-			}
-			case DIALPAD_ON:{
-				setDialpadVisibility(View.VISIBLE);
-				break;
-			}
-			case DIALPAD_OFF:{
-				setDialpadVisibility(View.GONE);
-				break;
-			}
-			case DETAILED_DISPLAY:{
-				inCallInfo.switchDetailedInfo( showDetails );
-				showDetails = !showDetails;
-			}
+		} catch (RemoteException e) {
+			Log.e(THIS_FILE, "Was not able to call service method", e);
 		}
 	}
 	

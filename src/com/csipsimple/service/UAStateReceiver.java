@@ -28,6 +28,7 @@ import org.pjsip.pjsua.SWIGTYPE_p_pjmedia_session;
 import org.pjsip.pjsua.SWIGTYPE_p_pjsip_rx_data;
 import org.pjsip.pjsua.pjsip_event;
 import org.pjsip.pjsua.pjsip_inv_state;
+import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_call_media_status;
@@ -36,25 +37,14 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
-import android.net.Uri;
-import android.net.NetworkInfo.DetailedState;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.net.wifi.WifiManager.WifiLock;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
-import android.provider.Settings;
 import android.provider.CallLog.Calls;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -66,33 +56,20 @@ import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.Ringer;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class UAStateReceiver extends Callback {
 	static String THIS_FILE = "SIP UA Receiver";
 
 	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
-	final static String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
-	final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
-
-
-	private int savedVibrateRing, savedVibradeNotif, savedWifiPolicy;
-	private int savedVolume;
-	private boolean savedSpeakerPhone;
-	//private boolean savedMicrophoneMute;
-	//private boolean savedBluetooth;
-	private int savedRoute, savedMode;
-	
 	
 	private boolean autoAcceptCurrent = false;
 
 	private NotificationManager notificationManager;
 	private SipService service;
-	private ComponentName remoteControlResponder;
+//	private ComponentName remoteControlResponder;
 
 
-	private Ringer ringer;
-	private boolean isSavedAudioState = false, isSetAudioMode = false, isMusicActive = false;
 	
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
@@ -107,7 +84,9 @@ public class UAStateReceiver extends Callback {
 		CallInfo callInfo = getCallInfo(callId);
 		pjsip_inv_state callState = callInfo.getCallState();
 		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-			stopRing();
+			if(SipService.mediaManager != null) {
+				SipService.mediaManager.stopRing();
+			}
 			// Call is now ended
 			service.stopDialtoneGenerator();
 
@@ -134,7 +113,9 @@ public class UAStateReceiver extends Callback {
 
 	@Override
 	public void on_call_media_state(int callId) {
-		stopRing();
+		if(SipService.mediaManager != null) {
+			SipService.mediaManager.stopRing();
+		}
 		pjsua_call_info info = new pjsua_call_info();
 		pjsua.call_get_info(callId, info);
 		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
@@ -177,14 +158,7 @@ public class UAStateReceiver extends Callback {
 
 
 	private WorkerHandler msgHandler;
-	private AudioManager audioManager;
 	private HandlerThread handlerThread;
-
-	private WifiLock wifiLock;
-	private WakeLock screenLock;
-
-
-
 
 	private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
@@ -207,7 +181,9 @@ public class UAStateReceiver extends Callback {
 				int callId = callInfo.getCallId();
 				callInfo.setIncoming(true);
 				showNotificationForCall(callInfo);
-				startRing();
+				if(SipService.mediaManager != null) {
+					SipService.mediaManager.startRing();
+				}
 				broadCastAndroidCallState("RINGING", callInfo.getRemoteContact());
 				
 				// Automatically answer incoming calls with 180/RINGING
@@ -289,22 +265,7 @@ public class UAStateReceiver extends Callback {
 	};
 
 	
-	private void startRing() {
-		saveAudioState();
-		
-		if(!ringer.isRinging()) {
-			String ringtoneUri = service.getPrefs().getRingtone();
-			ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
-			ringer.ring();
-		}
-		
-	}
 	
-	private void stopRing() {
-		if(ringer.isRinging()) {
-			ringer.stopRing();
-		}
-	}
 	
 	// -------
 	// Public configuration for receiver
@@ -316,9 +277,8 @@ public class UAStateReceiver extends Callback {
 
 	public void initService(SipService srv) {
 		service = srv;
-        audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
+
 		notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
-		ringer = new Ringer(service);
 		
 		if(handlerThread == null) {
 			handlerThread = new HandlerThread("UAStateAsyncWorker");
@@ -335,13 +295,34 @@ public class UAStateReceiver extends Callback {
 		// once the button events are no longer needed. Last app to
 		// register gets the focus.
 		//
-		if (Compatibility.isCompatible(8)) {
-			remoteControlResponder = new ComponentName(service.getPackageName(), DeviceStateReceiver.class.getName());
-		}
+		
+		//r3gis.3r : not really needed, old api is not deprecated. 
+		// Besides, this method should not be used by csipsimple since we do not want to stop 
+		//the broadcast to all other apps.
+		// We are registered even if no active call and when button is pressed, we look if there is an active call
+		// And if so treat the button pressure.
+//		if (Compatibility.isCompatible(8)) {
+//			remoteControlResponder = new ComponentName(service.getPackageName(), DeviceStateReceiver.class.getName());
+//		}
+		
+		
+		//
+		// Register am event receiver for ACTION_MEDIA_BUTTON events,
+		// and adjust its priority to make sure we get these events
+		// before any media player which hijacks the button presses.
+		//
+		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
+		intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
+		service.registerReceiver(headsetButtonReceiver, intentFilter);
+		
+		
+		
 	}
 	
 
 	public void stopService() {
+		service.unregisterReceiver(headsetButtonReceiver);
+		
 		if(handlerThread != null) {
 			boolean fails = true;
 			
@@ -441,58 +422,12 @@ public class UAStateReceiver extends Callback {
 	}
 
 	
-	private void saveAudioState() {
-		if(isSavedAudioState) {
-			return;
-		}
-		ContentResolver ctntResolver = service.getContentResolver();
-		
-		savedVibrateRing = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-		savedVibradeNotif = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
-		savedWifiPolicy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-		savedVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-		
-		savedSpeakerPhone = audioManager.isSpeakerphoneOn();
-		savedMode = audioManager.getMode();
-		savedRoute = audioManager.getRouting(AudioManager.MODE_IN_CALL);
-		
-		isSavedAudioState = true;
-		
-		isMusicActive = audioManager.isMusicActive();
-	}
-	
-	
-	/**
-	 * Check if the specific call info indicate it is an active
-	 * call in progress.
-	 */
-	private boolean isActiveCallInProgress(CallInfo callInfo) {
-    	if (callInfo != null) {
-    		pjsip_inv_state state = callInfo.getCallState();
-
-    		switch (state) {
-    		case PJSIP_INV_STATE_INCOMING:
-    		case PJSIP_INV_STATE_EARLY:
-    		case PJSIP_INV_STATE_CALLING:
-    		case PJSIP_INV_STATE_CONFIRMED:
-    		case PJSIP_INV_STATE_CONNECTING:
-    			return true;
-    			
-    		case PJSIP_INV_STATE_DISCONNECTED:
-    		case PJSIP_INV_STATE_NULL:
-    			break;
-    		}
-    	}
-    	return false;
-	}
-	
-	
 	/**
 	 * Check if any of call infos indicate there is an active
 	 * call in progress.
 	 */
-	public boolean isActiveCallInProgress() {
-		Log.d(THIS_FILE, "isActiveCallInProgress(), number of calls: " + callsList.keySet().size());
+	public CallInfo getActiveCallInProgress() {
+		//Log.d(THIS_FILE, "isActiveCallInProgress(), number of calls: " + callsList.keySet().size());
 		
 		//
 		// Go through the whole list of calls and check if
@@ -500,11 +435,11 @@ public class UAStateReceiver extends Callback {
 		//
 		for (Integer i : callsList.keySet()) { 
 			CallInfo callInfo = getCallInfo(i);
-			if (isActiveCallInProgress(callInfo)) {
-				return true;
+			if (callInfo.isActive()) {
+				return callInfo;
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	
@@ -513,27 +448,53 @@ public class UAStateReceiver extends Callback {
 	 * there is any call in progress.
 	 */
 	public boolean handleHeadsetButton() {
-		
-		if (isActiveCallInProgress()) {
-			Intent regStateChangedIntent = new Intent(SipService.ACTION_SIP_SERVICE_HEADSET);
-			service.sendBroadcast(regStateChangedIntent);
-			return true;
-		}	
+		CallInfo callInfo = getActiveCallInProgress();
+		if (callInfo != null) {
+			// Headset button has been pressed by user. If there is an
+			// incoming call ringing the button will be used to answer the
+			// call. If there is an ongoing call in progress the button will
+			// be used to hangup the call or mute the microphone.
+    		pjsip_inv_state state = callInfo.getCallState();
+    		if (callInfo.isIncoming() && 
+    				(state == pjsip_inv_state.PJSIP_INV_STATE_INCOMING || 
+    				state == pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
+    			service.callAnswer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
+    			return true;
+    		}else if(state == pjsip_inv_state.PJSIP_INV_STATE_INCOMING || 
+    				state == pjsip_inv_state.PJSIP_INV_STATE_EARLY ||
+    				state == pjsip_inv_state.PJSIP_INV_STATE_CALLING ||
+    				state == pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED ||
+    				state == pjsip_inv_state.PJSIP_INV_STATE_CONNECTING){
+    			//
+				// In the Android phone app using the media button during
+				// a call mutes the microphone instead of terminating the call.
+				// We check here if this should be the behavior here or if
+				// the call should be cleared.
+				//
+				switch(service.prefsWrapper.getHeadsetAction()) {
+				//TODO : add hold -
+				case PreferencesWrapper.HEADSET_ACTION_CLEAR_CALL:
+					service.callHangup(callInfo.getCallId(), 0);
+					break;
+				case PreferencesWrapper.HEADSET_ACTION_MUTE:
+					SipService.mediaManager.toggleMute();
+					break;
+				}
+				return true;
+    		}
+		}
 		return false;
 	}
 	
 	
 	/**
 	 * Internal receiver of Headset button presses events.
-	 * This class is only used for Android versions prior to
-	 * v2.2 (API-Level 8). For older versions the DeviceStateReceiver
-	 * is used to handle the incoming button actions.
 	 */
 	private BroadcastReceiver headsetButtonReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.d(THIS_FILE, "headsetButtonReceiver::onReceive");
-
+		//	abortBroadcast();
 	    	//
 			// Headset button has been pressed by user. Normally when 
 			// the UI is active this event will never be generated instead
@@ -542,8 +503,11 @@ public class UAStateReceiver extends Callback {
 			//
 	        if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
 				KeyEvent event = (KeyEvent)intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-				
-				if (event != null && event.getAction() == KeyEvent.ACTION_DOWN) {
+				Log.d(THIS_FILE, "Key : "+event.getKeyCode());
+				if (event != null && 
+						event.getAction() == KeyEvent.ACTION_DOWN && 
+						event.getKeyCode() == KeyEvent.KEYCODE_HEADSETHOOK) {
+					
 		        	if (handleHeadsetButton()) {
 			        	//
 						// After processing the event we will prevent other applications
@@ -558,195 +522,4 @@ public class UAStateReceiver extends Callback {
 	};
 	
 	
-	/**
-	 * Register to be the sole handler of Headset button presses
-	 * to prevent other applications such as media players from
-	 * acting on the button presses.
-	 */
-	private void registerMediaButtonReceiver() {
-		Log.d(THIS_FILE, "registerMediaButtonReceiver");
-		
-		if (Compatibility.isCompatible(8)) {
-			//
-			// Register as the sole headset button receiver
-			// (for Android 2.2 or above).
-			//
-			try {
-				Method method = AudioManager.class.getMethod("registerMediaButtonEventReceiver", new Class[] { ComponentName.class } );
-				method.invoke(audioManager, remoteControlResponder);
-			} catch (Exception e) {
-				Log.d(THIS_FILE, "Something is wrong with api level declared when registering media button receiver, " + e.getMessage());
-			}
-		} else {
-			//
-			// Register am event receiver for ACTION_MEDIA_BUTTON events,
-			// and adjust its priority to make sure we get these events
-			// before any media player which hijacks the button presses.
-			//
-			IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
-			intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
-			service.registerReceiver(headsetButtonReceiver, intentFilter);
-		}
-	}
-	
-	
-	/**
-	 * Unregister as the the sole handler of Headset button presses
-	 * to enable other applications such as media players to handle
-	 * the button presses instead.
-	 */
-	private void unregisterMediaButtonReceiver() {
-		Log.d(THIS_FILE, "unregisterMediaButtonReceiver");
-		
-		if (Compatibility.isCompatible(8)) {
-			//
-			// Unregister as the sole headset button receiver
-			// (for Android 2.2 or above).
-			//
-			try {
-				Method method = AudioManager.class.getMethod("unregisterMediaButtonEventReceiver", new Class[] { ComponentName.class } );
-				method.invoke(audioManager, remoteControlResponder);
-			} catch (Exception e) {
-				Log.d(THIS_FILE, "Something is wrong with api level declared when unregistering media button receiver, " + e.getMessage());
-			}
-		} else {
-			//
-			// Unregister the receiver of headset button pressed events
-			// for older versions of Android that do not support the
-			// unregisterMediaButtonEventReceiver method.
-			//
-			service.unregisterReceiver(headsetButtonReceiver);
-		}
-	}
-	
-	
-	/**
-	 * Set the audio mode as in call
-	 */
-	public synchronized void setAudioInCall() {
-		registerMediaButtonReceiver();
-
-		//Ensure not already set
-		if(isSetAudioMode) {
-			return;
-		}
-		
-		saveAudioState();
-		
-		Log.d(THIS_FILE, "Set mode audio in call");
-	//	PhoneUtils.setAudioControlState(PhoneUtils.AUDIO_OFFHOOK);
-		
-		
-		if(!Compatibility.isCompatible(5)) {
-			audioManager.setRouting(AudioManager.MODE_IN_CALL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
-			audioManager.setMode(AudioManager.MODE_IN_CALL);
-		}
-		audioManager.setSpeakerphoneOn(false);
-		
-		//Set stream solo/volume
-		int inCallStream = Compatibility.getInCallStream();
-		
-		
-		audioManager.setStreamSolo(inCallStream, true);
-		audioManager.setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
-		
-		//Set the rest of the phone in a better state to not interferate with current call
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
-
-		if(isMusicActive) {
-			service.sendBroadcast(new Intent(PAUSE_ACTION));
-		}
-		
-		
-		//LOCKS
-		
-		//Wifi management if necessary
-		ContentResolver ctntResolver = service.getContentResolver();
-		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
-		
-		
-		//Acquire wifi lock
-		WifiManager wman = (WifiManager) service.getSystemService(Context.WIFI_SERVICE);
-		if(wifiLock == null) {
-			wifiLock = wman.createWifiLock("com.csipsimple.InCallLock");
-		}
-		WifiInfo winfo = wman.getConnectionInfo();
-		if(winfo != null) {
-			DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());
-			//We assume that if obtaining ip addr, we are almost connected so can keep wifi lock
-			if(dstate == DetailedState.OBTAINING_IPADDR || dstate == DetailedState.CONNECTED) {
-				if(!wifiLock.isHeld()) {
-					wifiLock.acquire();
-				}
-			}
-			
-			//This wake lock purpose is to prevent PSP wifi mode 
-			if(service.prefsWrapper.keepAwakeInCall()) {
-				if(screenLock == null) {
-					PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
-		            screenLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
-				}
-				//Ensure single lock
-				if(!screenLock.isHeld()) {
-					screenLock.acquire();
-				}
-				
-			}
-		}
-		
-		
-		
-		isSetAudioMode = true;
-		System.gc();
-	}
-	
-	
-	/**
-	 * Reset the audio mode
-	 */
-	public synchronized void unsetAudioInCall() {
-		unregisterMediaButtonReceiver();
-		
-		if(!isSavedAudioState || !isSetAudioMode) {
-			return;
-		}
-
-		Log.d(THIS_FILE, "Unset Audio In call");
-		
-		ContentResolver ctntResolver = service.getContentResolver();
-
-		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, savedWifiPolicy);
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
-		
-		if(!Compatibility.isCompatible(5)) {
-			audioManager.setMode(savedMode);
-			audioManager.setRouting(AudioManager.MODE_IN_CALL, savedRoute, AudioManager.ROUTE_ALL);
-		}
-		audioManager.setSpeakerphoneOn(savedSpeakerPhone);
-		
-		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
-		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
-				
-		if(wifiLock != null && wifiLock.isHeld()) {
-			wifiLock.release();
-		}
-		if(screenLock != null && screenLock.isHeld()) {
-			Log.d(THIS_FILE, "Release screen lock");
-			screenLock.release();
-		}
-		
-		if(isMusicActive) {
-			service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
-		}
-		
-		isSavedAudioState = false;
-		isSetAudioMode = false;
-		isMusicActive = false;
-	}
-	
-	
-	
-
 }

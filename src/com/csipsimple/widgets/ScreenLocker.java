@@ -20,8 +20,7 @@ package com.csipsimple.widgets;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.csipsimple.utils.Log;
-
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -29,16 +28,21 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
+
+import com.csipsimple.utils.Log;
 
 public class ScreenLocker extends RelativeLayout implements OnTouchListener, OnGestureListener, OnDoubleTapListener{
 
 	private static final String THIS_FILE = "ScreenLocker";
 	private GestureDetector gestureScanner;
 	private Timer lockTimer;
+	private Activity activity;
 
 	public static final int WAIT_BEFORE_LOCK_LONG = 20000;
 	public static final int WAIT_BEFORE_LOCK_START = 5000;
@@ -55,6 +59,11 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener, OnG
 		gestureScanner.setOnDoubleTapListener(this);
 		setOnTouchListener(this);
 		
+	}
+	
+
+	public void setActivity(Activity anActivity) {
+		activity = anActivity;
 	}
 	
 	public boolean onTouch(View v, MotionEvent event) {
@@ -96,10 +105,20 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener, OnG
 	
 	public void show() {
 		setVisibility(VISIBLE);
+		if(activity != null) {
+			Window win = activity.getWindow();
+			win.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	        win.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+		}
 	}
 	
 	public void hide() {
 		setVisibility(GONE);
+		if(activity != null) {
+			Window win = activity.getWindow();
+			win.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+	        win.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		}
 	}
 	
 	public void tearDown() {
@@ -152,4 +171,5 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener, OnG
 	
 	@Override
 	public boolean onDown(MotionEvent e) { return false;}
+
 }

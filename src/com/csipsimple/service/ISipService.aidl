@@ -20,22 +20,29 @@ import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
 
 interface ISipService{
+	//Stack control
 	void sipStart();
 	void sipStop();
 	void forceStopService();
 	
+	//Account control
 	void addAllAccounts();
 	void removeAllAccounts();
 	void reAddAllAccounts();
 	AccountInfo getAccountInfo(int accountId);
 	
+	//Call configuration control
 	void switchToAutoAnswer();
-	boolean performHeadsetAction();
 	
+	//Call control
 	void makeCall(in String callee, int accountId);
 	int answer(int callId, int status);
 	int hangup(int callId, int status);
 	int sendDtmf(int callId, int keyCode);
 	CallInfo getCallInfo(int callId);
 	
+	//Media control
+	void setMicrophoneMute(boolean on);
+	void setSpeakerphoneOn(boolean on);
+	void setBluetoothOn(boolean on);
 }

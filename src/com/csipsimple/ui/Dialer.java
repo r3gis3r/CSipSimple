@@ -198,7 +198,7 @@ public class Dialer extends Activity implements OnClickListener,
     protected void onDestroy() {
     	super.onDestroy();
     	
-    	Log.d(THIS_FILE, "Dialer destroyed");
+    	Log.d(THIS_FILE, "--- DIALER DESTROYED ---");
     }
 	
     

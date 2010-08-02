@@ -22,9 +22,9 @@
 		<receiver android:name=".service.DeviceStateReceiver">
 			<intent-filter>
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
-				<action android:name="android.intent.action.ANY_DATA_STATE"></action>
+				<action android:name="android.intent.action.ANY_DATA_STATE"></action><!--
 				<action android:name="android.intent.action.MEDIA_BUTTON"></action>
-			</intent-filter>
+			--></intent-filter>
 		</receiver>
 		
 		<!--  Main ui -->

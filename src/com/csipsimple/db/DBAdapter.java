@@ -250,17 +250,23 @@ public class DBAdapter {
 							}
 						} else {
 							// Service available, skip accounts that can't be used for calling
+							
+							// Maybe this is not really a good idea to do it here (should be only db related...).
 							try {
 								AccountInfo accountInfo = service.getAccountInfo(acc.id);
-								pjsip_status_code stat = accountInfo.getStatusCode();
-								if (accountInfo != null && accountInfo.isActive() &&
-										accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS &&
-										(stat == pjsip_status_code.PJSIP_SC_OK ||	// If trying/registering, include. May be OK shortly.
-											 stat == pjsip_status_code.PJSIP_SC_PROGRESS || 
-											 stat == pjsip_status_code.PJSIP_SC_TRYING)) {
-									ret.add(acc);
+								if(accountInfo != null) {
+									pjsip_status_code stat = accountInfo.getStatusCode();
+									if (accountInfo != null && accountInfo.isActive() &&
+											accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS &&
+											(stat == pjsip_status_code.PJSIP_SC_OK ||	// If trying/registering, include. May be OK shortly.
+												 stat == pjsip_status_code.PJSIP_SC_PROGRESS || 
+												 stat == pjsip_status_code.PJSIP_SC_TRYING)) {
+										ret.add(acc);
+									}
 								}
-							} catch (RemoteException e) { }
+							} catch (RemoteException e) { 
+								Log.w(THIS_FILE, "Sip service not available", e);
+							}
 						}
 					}
 					c.moveToNext();

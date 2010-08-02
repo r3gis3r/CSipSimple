@@ -17,13 +17,18 @@
  */
 package com.csipsimple.models;
 
-import com.csipsimple.R;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
+
+import com.csipsimple.R;
+import com.csipsimple.utils.Log;
 
 public class Filter {
 	public static final String _ID = "_id";
@@ -45,6 +50,7 @@ public class Filter {
 		FIELD_ACTION
 	};
 	public static final String DEFAULT_ORDER = FIELD_PRIORITY+" desc"; //TODO : should be a os constant... just find it
+	private static final String THIS_FILE = "Filter";
 	
 	public Integer id;
 	public Integer priority;
@@ -113,6 +119,43 @@ public class Filter {
 			repr += " > "+replace;
 		}
 		return repr;
+	}
+	
+	public boolean canCall(String number) {
+		if(action == ACTION_CANT_CALL) {
+			try {
+				return !Pattern.matches(matches, number);
+			}catch(PatternSyntaxException e) {
+				Log.e(THIS_FILE, "Invalid pattern ", e);
+			}
+			
+		}
+		return true;
+	}
+	
+	public boolean stopProcessing(String number) {
+		if(action == ACTION_CAN_CALL) {
+			try {
+				return Pattern.matches(matches, number);
+			}catch(PatternSyntaxException e) {
+				Log.e(THIS_FILE, "Invalid pattern ", e);
+			}
+			
+		}
+		return false;
+	}
+	
+	public String rewrite(String number) {
+		if(action == ACTION_REPLACE) {
+			try {
+				Pattern pattern = Pattern.compile(matches);
+				Matcher matcher = pattern.matcher(replace);
+				return matcher.replaceAll(number); 
+			}catch(PatternSyntaxException e) {
+				Log.e(THIS_FILE, "Invalid pattern ", e);
+			}
+		}
+		return number;
 	}
 
 }

@@ -20,11 +20,7 @@ package com.csipsimple.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.view.KeyEvent;
-import android.os.IBinder;
-import android.os.RemoteException;
 
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -89,51 +85,6 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 				Intent sip_service_intent = new Intent(context, SipService.class);
 				context.startService(sip_service_intent);
 			}*/
-		}
-    	//
-		// Headset button has been pressed by user. Normally when 
-		// the UI is active this event will never be generated instead
-		// a headset button press will be handled as a regular key
-		// press event.
-		//
-		// This event should only be handled for Android versions higher
-		// then v2.2 (API-Level 8). For older versions the event is
-		// handled locally in the UAStateReceiver class.
-		//
-		else if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
-			KeyEvent event = (KeyEvent)intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-			
-			//
-			// Specific handling for Android versions higher then v2.2
-			// previous versions use a separate receiver in UAStateReceiver
-			// class.
-			//
-			if (Compatibility.isCompatible(8)) {
-				if (event != null && event.getAction() == KeyEvent.ACTION_DOWN) {
-					//
-					// Retrieve reference to the sip service to trigger the Headset
-					// action button pressed event.
-					//
-					try {
-						Log.d(THIS_FILE, ">>> Media button state change detected");
-						
-						Intent sip_service_intent = new Intent(context, SipService.class);
-						if (sip_service_intent != null) {
-							IBinder arg = peekService(context, sip_service_intent);
-							if (arg != null) {
-								ISipService service = ISipService.Stub.asInterface(arg);
-								if (service != null) {
-									service.performHeadsetAction();
-								}
-							}
-						}
-						Log.d(THIS_FILE, "<<< Media button state change detected");
-						
-					} catch (RemoteException e) {
-						Log.d(THIS_FILE, "Failed to perform Headset button action");
-					}
-				}
-			}
 		}
 	}
 }

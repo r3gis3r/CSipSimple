@@ -367,5 +367,25 @@ public class PreferencesWrapper {
 	public float getInitialVolumeLevel() {
 		return (float) 0.8;
 	}
+
+	public boolean usePartialWakeLock() {
+		return prefs.getBoolean("use_partial_wake_lock", false);
+	}
+
+	public final static int HEADSET_ACTION_CLEAR_CALL = 0;
+	public final static int HEADSET_ACTION_MUTE = 1;
+	public final static int HEADSET_ACTION_HOLD = 2;
+	/**
+	 * Action do do when headset is pressed
+	 * @return
+	 */
+	public int getHeadsetAction() {
+		try {
+			return Integer.parseInt(prefs.getString("headset_action", "0"));
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Headset action option not well formated");
+		}
+		return HEADSET_ACTION_CLEAR_CALL;
+	}
 	
 }

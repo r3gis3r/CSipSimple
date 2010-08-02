@@ -92,8 +92,9 @@ public class SipService extends Service {
 	
 	final public static String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
 	final public static String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
+	final public static String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
 	final public static String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
-	final public static String ACTION_SIP_SERVICE_HEADSET = "com.csipsimple.service.HEADSET";
+	
 
 	
 
@@ -105,6 +106,7 @@ public class SipService extends Service {
 	public final static String STACK_FILE_NAME = "libpjsipjni.so";
 
 	private static Object pjAccountsCreationLock = new Object();
+	private static Object activeAccountsLock = new Object();
 	
 	// Map active account id (id for sql settings database) with acc_id (id for
 	// pjsip)
@@ -174,19 +176,6 @@ public class SipService extends Service {
 			// TODO: popup here
 		}
 		
-		
-		/**
-		 * Call to perform headset action
-		 */
-		@Override
-		public boolean performHeadsetAction() throws RemoteException {
-			Log.d(THIS_FILE, "SipService::performHeadsetAction()");
-			
-			if (userAgentReceiver == null) {
-				return false;
-			}
-			return userAgentReceiver.handleHeadsetButton();
-		}
 
 		/**
 		 * Make a call
@@ -237,12 +226,36 @@ public class SipService extends Service {
 			}
 			return null;
 		}
+
+		@Override
+		public void setBluetoothOn(boolean on) throws RemoteException {
+			if(created && mediaManager != null) { 
+				mediaManager.setBluetoothOn(on);
+			}
+		}
+
+		@Override
+		public void setMicrophoneMute(boolean on) throws RemoteException {
+			if(created && mediaManager != null) { 
+				mediaManager.setMicrophoneMute(on);
+			}
+		}
+
+		@Override
+		public void setSpeakerphoneOn(boolean on) throws RemoteException {
+			if(created && mediaManager != null) { 
+				mediaManager.setSpeakerphoneOn(on);
+			}
+		}
+
+		
 	};
 
 	private DBAdapter db;
 	private WakeLock wakeLock;
 	private WifiLock wifiLock;
 	private static UAStateReceiver userAgentReceiver;
+	public static MediaManager mediaManager;
 	public static boolean hasSipStack = false;
 	private boolean sipStackIsCorrupted = false;
 	private ServiceDeviceStateReceiver deviceStateReceiver;
@@ -252,7 +265,7 @@ public class SipService extends Service {
 	private int dialtoneSlot = -1;
 	private Object dialtoneMutext = new Object();
 	
-	 
+	public boolean startBluetooth = true;
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
@@ -422,6 +435,8 @@ public class SipService extends Service {
 			creating = true;
 			//Thread it to not lock everything
 			Thread thread = new Thread() {
+				
+
 				@Override
 				public void run() {
 					int status;
@@ -439,6 +454,9 @@ public class SipService extends Service {
 						if(userAgentReceiver == null) {
 							userAgentReceiver = new UAStateReceiver();
 							userAgentReceiver.initService(SipService.this);
+						}
+						if(mediaManager == null) {
+							mediaManager = new MediaManager(SipService.this);
 						}
 						pjsua.setCallbackObject(userAgentReceiver);
 						
@@ -575,7 +593,9 @@ public class SipService extends Service {
 			synchronized (pjAccountsCreationLock) {
 				pjsua.destroy();
 				accountsAddingStatus.clear();
-				activeAccounts.clear();
+				synchronized (activeAccountsLock) {
+					activeAccounts.clear();
+				}
 			}
 			if(userAgentReceiver != null) {
 				userAgentReceiver.stopService();
@@ -649,6 +669,7 @@ public class SipService extends Service {
 					}
 
 					int status;
+					
 					if (activeAccounts.containsKey(account.id)) {
 						status = pjsua.acc_modify(activeAccounts.get(account.id), account.cfg);
 						// if(status == pjsuaConstants.PJ_SUCCESS){
@@ -662,15 +683,18 @@ public class SipService extends Service {
 					} else {
 						int[] acc_id = new int[1];
 						status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_TRUE, acc_id);
-						accountsAddingStatus.put(account.id, status);
-	
-						if (status == pjsuaConstants.PJ_SUCCESS) {
-							Log.i(THIS_FILE, "Account " + account.display_name + " ( " + account.id + " ) added as " + acc_id[0]);
-							activeAccounts.put(account.id, acc_id[0]);
-							hasSomeSuccess = true;
-						} else {
-							Log.w(THIS_FILE, "Add account " + account.display_name + " failed !!! ");
-	
+						
+						synchronized (activeAccountsLock) {
+							accountsAddingStatus.put(account.id, status);
+							
+							if (status == pjsuaConstants.PJ_SUCCESS) {
+								Log.i(THIS_FILE, "Account " + account.display_name + " ( " + account.id + " ) added as " + acc_id[0]);
+								activeAccounts.put(account.id, acc_id[0]);
+								hasSomeSuccess = true;
+							} else {
+								Log.w(THIS_FILE, "Add account " + account.display_name + " failed !!! ");
+		
+							}
 						}
 					}
 					
@@ -707,26 +731,29 @@ public class SipService extends Service {
 			Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
 			return;
 		}
-
+		releaseResources();
+		
 		synchronized (pjAccountsCreationLock) {
-			releaseResources();
-			
-			for (int c_acc_id : activeAccounts.values()) {
-				pjsua.acc_set_registration(c_acc_id, 0);
-				pjsua.acc_del(c_acc_id);
-			}
-			accountsAddingStatus.clear();
-			activeAccounts.clear();
-			
-			// Send a broadcast message that for an account
-			// registration state has changed
-			Intent regStateChangedIntent = new Intent(ACTION_SIP_REGISTRATION_CHANGED);
-			sendBroadcast(regStateChangedIntent);
-			
-			if (notificationManager != null && cancelNotification) {
-				notificationManager.cancel(REGISTER_NOTIF_ID);
+			synchronized (activeAccountsLock) {
+				
+				
+				for (int c_acc_id : activeAccounts.values()) {
+					pjsua.acc_set_registration(c_acc_id, 0);
+					pjsua.acc_del(c_acc_id);
+				}
+				accountsAddingStatus.clear();
+				activeAccounts.clear();
 			}
 		}
+		// Send a broadcast message that for an account
+		// registration state has changed
+		Intent regStateChangedIntent = new Intent(ACTION_SIP_REGISTRATION_CHANGED);
+		sendBroadcast(regStateChangedIntent);
+		
+		if (notificationManager != null && cancelNotification) {
+			notificationManager.cancel(REGISTER_NOTIF_ID);
+		}
+		
 	}
 	
 	private void reRegisterAllAccounts() {
@@ -744,7 +771,7 @@ public class SipService extends Service {
 		}
 		AccountInfo accountInfo;
 		Log.d(THIS_FILE, "Get account infos....");
-		synchronized (pjAccountsCreationLock) {
+		synchronized (activeAccountsLock) {
 			Account account;
 			synchronized (db) {
 				db.open();
@@ -772,12 +799,13 @@ public class SipService extends Service {
 	public void updateRegistrationsState() {
 		boolean hasSomeSuccess = false;
 		AccountInfo info;
-		synchronized (pjAccountsCreationLock) {
+		synchronized (activeAccountsLock) {
 			for (int accountDbId : activeAccounts.keySet()) {
 				info = getAccountInfo(accountDbId);
 				if (info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
 					hasSomeSuccess = true;
-					break;												// No need to look further
+					// No need to look further
+					break;
 				}
 			}
 		}
@@ -824,13 +852,16 @@ public class SipService extends Service {
 	 */
 	private void acquireResources() {
 		//Add a wake lock
-		PowerManager pman = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		if (wakeLock == null) {
-			wakeLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
-			wakeLock.setReferenceCounted(false);
-		}
-		if(!wakeLock.isHeld()) {
-			wakeLock.acquire();
+		if(prefsWrapper.usePartialWakeLock()) {
+			PowerManager pman = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			if (wakeLock == null) {
+				wakeLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");
+				wakeLock.setReferenceCounted(false);
+			}
+			//Extra check if set reference counted is false ???
+			if(!wakeLock.isHeld()) {
+				wakeLock.acquire();
+			}
 		}
 		
 		WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -1170,19 +1201,23 @@ public class SipService extends Service {
 	};
 
 	
-	
+	/**
+	 * Method called by the native sip stack to set the audio mode to a valid state for a call
+	 */
 	public static void setAudioInCall() {
 		Log.i(THIS_FILE, "Audio driver ask to set in call");
-		if(userAgentReceiver != null) {
-			userAgentReceiver.setAudioInCall();
+		if(mediaManager != null) {
+			mediaManager.setAudioInCall();
 		}
 	}
 	
-	
+	/**
+	 * Method called by the native sip stack to unset audio mode when track and recorder are stopped
+	 */
 	public static void unsetAudioInCall() {
 		Log.i(THIS_FILE, "Audio driver ask to unset in call");
-		if(userAgentReceiver != null) {
-			userAgentReceiver.unsetAudioInCall();
+		if(mediaManager != null) {
+			mediaManager.unsetAudioInCall();
 		}
 	}
 

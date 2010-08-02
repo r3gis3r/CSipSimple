@@ -206,5 +206,24 @@ public class CallInfo implements Parcelable {
 		
 		return pjsua.call_dump(callId, pjsua.PJ_TRUE, " ");
 	}
-
+	
+	/**
+	 * Check if the specific call info indicate it is an active
+	 * call in progress.
+	 */
+	public boolean isActive() {
+		switch (callState) {
+		case PJSIP_INV_STATE_INCOMING:
+		case PJSIP_INV_STATE_EARLY:
+		case PJSIP_INV_STATE_CALLING:
+		case PJSIP_INV_STATE_CONFIRMED:
+		case PJSIP_INV_STATE_CONNECTING:
+			return true;
+			
+		case PJSIP_INV_STATE_DISCONNECTED:
+		case PJSIP_INV_STATE_NULL:
+			break;
+		}
+		return false;
+	}
 }

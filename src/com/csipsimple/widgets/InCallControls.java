@@ -36,6 +36,7 @@ import android.widget.ToggleButton;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
+import com.csipsimple.service.MediaManager.MediaState;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.SlidingTab.OnTriggerListener;
@@ -59,6 +60,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	private static final int MODE_CONTROL = 1;
 	private static final int MODE_NO_ACTION = 2;
 	private int controlMode;
+	private MediaState lastMediaState;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -162,6 +164,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		inCallButtons.setVisibility(GONE);
 		setCallLockerVisibility(VISIBLE);
 		inCallButtons.setVisibility(GONE);
+		
 
 		// Attach objects
 		slidingTabWidget.setOnTriggerListener(this);
@@ -177,9 +180,17 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	}
 
 	public void setEnabledMediaButtons(boolean isInCall) {
-		speakerButton.setEnabled(isInCall);
-		muteButton.setEnabled(isInCall);
-		bluetoothButton.setEnabled(isInCall);
+		if(lastMediaState == null) {
+			speakerButton.setEnabled(isInCall);
+			muteButton.setEnabled(isInCall);
+			bluetoothButton.setEnabled(isInCall);
+			
+		}else {
+			speakerButton.setEnabled(lastMediaState.canSpeakerphoneOn && isInCall);
+			muteButton.setEnabled(lastMediaState.canMicrophoneMute && isInCall);
+			bluetoothButton.setEnabled(lastMediaState.canBluetoothSco && isInCall);
+		}
+		
 		dialButton.setEnabled(isInCall);
 	}
 	
@@ -361,5 +372,20 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		}
 		
 		return super.onKeyDown(keyCode, event);
+	}
+
+	public void setMediaState(MediaState mediaState) {
+		lastMediaState = mediaState;
+		muteButton.setEnabled(mediaState.canMicrophoneMute);
+		muteButton.setChecked(mediaState.isMicrophoneMute);
+		
+		Log.d(THIS_FILE, ">>> Can bluetooth : "+mediaState.canBluetoothSco);
+		bluetoothButton.setEnabled(mediaState.canBluetoothSco);
+		bluetoothButton.setChecked(mediaState.isBluetoothScoOn);
+		
+		speakerButton.setEnabled(mediaState.canSpeakerphoneOn);
+		speakerButton.setChecked(mediaState.isSpeakerphoneOn);
+		
+		
 	}
 }

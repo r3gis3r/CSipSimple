@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -83,7 +84,14 @@ public class OutgoingCall extends BroadcastReceiver {
 	 * @return true if we should handle this number using SIP
 	 */
 	private boolean isCallableNumber(String number) {
+		DBAdapter db = new DBAdapter(context);
+	//	db.get
 		return true;
+	}
+	
+	private String rewriteNumber(String number) {
+		
+		return number;
 	}
 
 }

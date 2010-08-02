@@ -56,6 +56,10 @@
 			android:defaultValue="true"
 			android:summary="@string/keep_awake_incall_desc"
 			android:key="keep_awake_incall"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/use_partial_wake_lock"
+			android:defaultValue="true"
+			android:summary="@string/use_partial_wake_lock_desc"
+			android:key="use_partial_wake_lock"></CheckBoxPreference>
 	</PreferenceCategory>
 	
 </PreferenceScreen>

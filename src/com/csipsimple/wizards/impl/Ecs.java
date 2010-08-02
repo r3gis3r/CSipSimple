@@ -26,6 +26,7 @@ import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 
 import android.preference.EditTextPreference;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.wizards.BasePrefsWizard;
@@ -127,7 +128,7 @@ public class Ecs extends BasePrefsWizard {
 		account.cfg.setId(pjsua.pj_str_copy("<sip:" + accountPhoneNumber.getText() + "@" + accountServerDomain.getText() + ">"));
 
 		String server_ip = accountServerIp.getText();
-		if (server_ip.equalsIgnoreCase("")) {
+		if (TextUtils.isEmpty(server_ip)) {
 			server_ip = accountServerDomain.getText();
 		}
 		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:" + server_ip));
