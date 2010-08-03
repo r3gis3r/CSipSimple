@@ -33,7 +33,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -62,8 +61,10 @@ public class OutgoingCallChooser extends ListActivity {
 
 	private static final String THIS_FILE = "SIP OUTChoose";
 	
-	private ISipService service = null;											// [sentinel]
+	// [sentinel]
+	private ISipService service = null;
 	private ServiceConnection connection = new ServiceConnection(){
+
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
@@ -72,15 +73,24 @@ public class OutgoingCallChooser extends ListActivity {
 			// At this point we need 'service' to be live (see DBAdapter)
 			updateList();
 			
+			/*
+			 * Disabled since we don't want to force user to do a pstn call if sip should have been applied.
 			if (adapter.isEmpty()) {
 				Log.d(THIS_FILE, "No usable accounts for SIP, skip the chooser, -> PSTN call");
 				placePstnCall();
 				return;
 			}
+			*/
 
 			// Need full selector, finish layout
 			setContentView(R.layout.outgoing_account_list);
-			w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
+			
+			//This need to be done after setContentView call
+			w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
+					android.R.drawable.ic_menu_call);
+			//TODO : internationalisation should be %s form
+			String phoneNumber = number.replaceAll("^sip:", "");
+			setTitle("Call " + phoneNumber);
 
 			// Inform the list we provide context menus for items
 			//	getListView().setOnCreateContextMenuListener(this);
@@ -128,10 +138,14 @@ public class OutgoingCallChooser extends ListActivity {
 		*/
 		
 		Log.d(THIS_FILE, "Choose to call : " + number);
+		
+		
 
 		// Build minimal activity window
 		w = getWindow();
 		w.requestFeature(Window.FEATURE_LEFT_ICON);
+
+		
 		super.onCreate(savedInstanceState);
 
 		// Start service and bind it. Finish selector in onServiceConnected
@@ -139,6 +153,8 @@ public class OutgoingCallChooser extends ListActivity {
 		startService(sipService);
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
+		
+		
 	}
 	
 	 
@@ -173,7 +189,7 @@ public class OutgoingCallChooser extends ListActivity {
     	}
     	
     	database.open();
-		accountsList = database.getListAccounts(false, service);
+		accountsList = database.getListAccounts(true/*, service*/);
 		database.close();
     	
     	if(adapter == null) {

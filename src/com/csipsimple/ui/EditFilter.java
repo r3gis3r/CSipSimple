@@ -124,7 +124,10 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 	private void fillLayout() {
 		matchesView.setText(filter.matches);
 		replaceView.setText(filter.replace);
-		actionView.setSelection(filter.action);
+		if(filter.action != null) {
+			actionView.setSelection(filter.action);
+		}
+		
 	}
 	
 	private void checkFormValidity() {

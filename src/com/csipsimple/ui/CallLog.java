@@ -226,7 +226,7 @@ public class CallLog extends ListActivity {
         	}
         	
         	database.open();
-    		accountsList = database.getListAccounts();
+    		accountsList = database.getListAccounts(true);
     		database.close();
         	
         	if(adapter == null) {

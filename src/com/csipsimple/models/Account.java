@@ -25,6 +25,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 
+import com.csipsimple.db.DBAdapter;
+import com.csipsimple.utils.Log;
+
 public class Account {
 	// Fields for table accounts
 	public static final String FIELD_ID = "id";
@@ -70,6 +73,7 @@ public class Account {
 		// In future release a credential table should be created
 		FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
 		FIELD_DATA };
+	private static final String THIS_FILE = "AccountModel";
 	
 	
 	//For now everything is public, easiest to manage
@@ -240,6 +244,29 @@ public class Account {
 		args.put(FIELD_DATA, cred_info.getData().getPtr());
 
 		return args;
+	}
+
+	public boolean isCallableNumber(String number, DBAdapter db) {
+		boolean canCall = true;
+		db.open();
+		Cursor c = db.getFiltersForAccount(id);
+		int numRows = c.getCount();
+		Log.d(THIS_FILE, "This account has "+numRows+" filters");
+		c.moveToFirst();
+		for (int i = 0; i < numRows; ++i) {
+			Filter f = new Filter();
+			f.createFromDb(c);
+			Log.d(THIS_FILE, "Test filter "+f.matches);
+			canCall &= f.canCall(number);
+			if(!f.stopProcessing(number)) {
+				c.close();
+				db.close();
+				return canCall;
+			}
+		}
+		c.close();
+		db.close();
+		return canCall;
 	}
 	
 	

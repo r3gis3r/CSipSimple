@@ -40,4 +40,11 @@
 			android:textColor="#888888"
 			android:layout_height="wrap_content"></TextView>
 	</LinearLayout>
+	<com.csipsimple.widgets.DontPressWithParentLayout
+		style="@style/list_left_column" android:id="@+id/refresh_button"
+		android:gravity="center" android:orientation="vertical"
+		android:background="@drawable/account_selector">
+		<ImageView android:src="@drawable/ic_menu_reload" android:layout_width="wrap_content"
+			android:layout_height="wrap_content"></ImageView>
+	</com.csipsimple.widgets.DontPressWithParentLayout>
 </LinearLayout>

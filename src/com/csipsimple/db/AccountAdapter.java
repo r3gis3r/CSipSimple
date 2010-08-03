@@ -19,6 +19,18 @@ package com.csipsimple.db;
 
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.RemoteException;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.csipsimple.R;
 import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
@@ -27,19 +39,18 @@ import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-import android.app.Activity;
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+public class AccountAdapter extends ArrayAdapter<Account> implements OnClickListener {
 
-public class AccountAdapter extends ArrayAdapter<Account> {
-
+	private static final String THIS_FILE = "Account adapter";
 	private ISipService service;
 	Activity context;
+	
+	public static final class AccountListItemViews {
+		TextView labelView;
+		TextView statusView;
+		ImageView iconImage;
+		View refreshView;
+	}
 
 	public AccountAdapter(Activity aContext, List<Account> list) {
 		super(aContext, R.layout.choose_account_row, list);
@@ -59,34 +70,60 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.choose_account_row, parent, false);
+            
+            AccountListItemViews tagView = new AccountListItemViews();
+            tagView.iconImage = (ImageView)v.findViewById(R.id.wizard_icon);
+            tagView.labelView = (TextView)v.findViewById(R.id.AccTextView);
+            tagView.statusView = (TextView)v.findViewById(R.id.AccTextStatusView);
+            tagView.refreshView = v.findViewById(R.id.refresh_button);
+            tagView.refreshView.setOnClickListener(this);
+            
+            v.setTag(tagView);
+            
         }
+        bindView(v, position);
         
-        v.setClickable(true);
-
-        TextView labelView = (TextView)v.findViewById(R.id.AccTextView);
-        TextView statusView = (TextView)v.findViewById(R.id.AccTextStatusView);
-        ImageView iconImage = (ImageView)v.findViewById(R.id.wizard_icon);
-        
-        Account account = getItem(position);
-        //Log.d(THIS_FILE, "has account");
-        if (account != null){
-            
-            AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
-            
-            labelView.setText(account.display_name);
-            //Update status label and color
-            statusView.setText(accountStatusDisplay.statusLabel);
-            labelView.setTextColor(accountStatusDisplay.statusColor);
-            v.setClickable(!accountStatusDisplay.availableForCalls);
-            
-            //Update account image
-            WizardInfo wizard_infos = WizardUtils.getWizardClass(account.wizard);
-            if(wizard_infos != null) {
-            	iconImage.setImageResource(wizard_infos.icon);
-            }
-        }
+       
         
         
         return v;
     }
+	
+	public void bindView(View v, int position) {
+		
+		final AccountListItemViews tagView = (AccountListItemViews) v.getTag();
+		v.setClickable(true);
+
+		Account account = getItem(position);
+		// Log.d(THIS_FILE, "has account");
+		if (account != null) {
+
+			AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
+
+			tagView.labelView.setText(account.display_name);
+			// Update status label and color
+			tagView.statusView.setText(accountStatusDisplay.statusLabel);
+			tagView.labelView.setTextColor(accountStatusDisplay.statusColor);
+			v.setClickable(!accountStatusDisplay.availableForCalls);
+			tagView.refreshView.setVisibility(accountStatusDisplay.availableForCalls?View.GONE:View.VISIBLE);
+
+			// Update account image
+			WizardInfo wizard_infos = WizardUtils.getWizardClass(account.wizard);
+			if (wizard_infos != null) {
+				tagView.iconImage.setImageResource(wizard_infos.icon);
+			}
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(service != null) {
+			try {
+				service.reAddAllAccounts();
+			} catch (RemoteException e) {
+				Log.e(THIS_FILE, "Unable to contact service", e);
+			}
+		}
+		
+	}
 }

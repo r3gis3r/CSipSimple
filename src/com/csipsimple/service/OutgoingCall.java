@@ -17,12 +17,15 @@
  */
 package com.csipsimple.service;
 
+import java.util.List;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.models.Account;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -84,9 +87,19 @@ public class OutgoingCall extends BroadcastReceiver {
 	 * @return true if we should handle this number using SIP
 	 */
 	private boolean isCallableNumber(String number) {
+		boolean canCall = false;
 		DBAdapter db = new DBAdapter(context);
-	//	db.get
-		return true;
+		db.open();
+		List<Account> accounts = db.getListAccounts(true);
+		db.close();
+		for(Account account : accounts) {
+			Log.d(THIS_FILE, "Checking if number valid for account "+account.display_name);
+			if(account.isCallableNumber(number, db)) {
+				Log.d(THIS_FILE, ">> Response is YES");
+				return true;
+			}
+		}
+		return canCall;
 	}
 	
 	private String rewriteNumber(String number) {

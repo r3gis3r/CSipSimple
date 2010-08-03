@@ -49,6 +49,7 @@ public class Filter {
 		FIELD_REPLACE,
 		FIELD_ACTION
 	};
+	
 	public static final String DEFAULT_ORDER = FIELD_PRIORITY+" desc"; //TODO : should be a os constant... just find it
 	private static final String THIS_FILE = "Filter";
 	
@@ -122,6 +123,7 @@ public class Filter {
 	}
 	
 	public boolean canCall(String number) {
+		Log.d(THIS_FILE, "Check if filter is valid for "+number+" >> "+action+" and "+matches);
 		if(action == ACTION_CANT_CALL) {
 			try {
 				return !Pattern.matches(matches, number);
@@ -140,7 +142,6 @@ public class Filter {
 			}catch(PatternSyntaxException e) {
 				Log.e(THIS_FILE, "Invalid pattern ", e);
 			}
-			
 		}
 		return false;
 	}

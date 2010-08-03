@@ -37,6 +37,6 @@
 	<string name="recentCalls_empty">No Call Logs</string>
 	<string name="filters">Filters</string>
 	<string name="add_filter">Add filter / rewrite rule</string>
-	
+	<string name="delete_filter">Delete filter</string>
 	
 </resources>

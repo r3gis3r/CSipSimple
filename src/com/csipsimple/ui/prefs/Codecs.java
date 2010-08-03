@@ -59,6 +59,7 @@ public class Codecs extends ListActivity {
 	private PreferencesWrapper prefsWrapper;
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -187,6 +188,7 @@ public class Codecs extends ListActivity {
 
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		AdapterView.AdapterContextMenuInfo info;
         try {
@@ -207,6 +209,7 @@ public class Codecs extends ListActivity {
         
 	}
 	
+	@SuppressWarnings("unchecked")
 	public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info;
         try {
@@ -215,7 +218,10 @@ public class Codecs extends ListActivity {
             Log.e(THIS_FILE, "bad menuInfo", e);
             return false;
         }
-        HashMap<String, Object> codec = (HashMap<String, Object>) adapter.getItem(info.position);
+        
+        HashMap<String, Object> codec = null;
+        codec = (HashMap<String, Object>) adapter.getItem(info.position);
+        
         if (codec == null) {
             // If for some reason the requested item isn't available, do nothing
             return false;

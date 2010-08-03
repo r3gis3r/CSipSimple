@@ -22,10 +22,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,9 +51,11 @@ public class AccountFilters extends ListActivity {
 	
 	private static final int MODIFY_FILTER = 0;
 	private static final int ADD_FILTER = MODIFY_FILTER+1;
+	private static final int MENU_ITEM_DELETE = Menu.FIRST;
 	
 	private DBAdapter database;
 	private int accountId = -1;
+	private Cursor cursor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class AccountFilters extends ListActivity {
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			accountId = extras.getInt("account_id");
+			accountId = extras.getInt(Intent.EXTRA_UID, -1);
 		}
 		
 		if (accountId == -1) {
@@ -80,7 +85,7 @@ public class AccountFilters extends ListActivity {
 		
 		database = new DBAdapter(this);
 		database.open();
-		Cursor cursor = database.getFiltersForAccount(accountId);
+		cursor = database.getFiltersForAccount(accountId);
 		startManagingCursor(cursor);
 		CursorAdapter adapter = new FiltersCursorAdapter(this, cursor);
 		setListAdapter(adapter);
@@ -92,6 +97,8 @@ public class AccountFilters extends ListActivity {
 				//TODO ...
 			}
 		});
+		
+		listView.setOnCreateContextMenuListener(this);
 	}
 	
 	@Override
@@ -138,8 +145,6 @@ public class AccountFilters extends ListActivity {
 		editFilterActivity((int)id);
 	}
 	
-	// Context Menu
-	//TODO
 	
 	// Menu
     @Override
@@ -159,7 +164,38 @@ public class AccountFilters extends ListActivity {
 		return super.onOptionsItemSelected(item);
 	}
     
+    //Context menu
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+    	menu.add(0, MENU_ITEM_DELETE, 0, R.string.delete_filter);
+    }
     
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info;
+		try {
+			info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		} catch (ClassCastException e) {
+			Log.e(THIS_FILE, "bad menuInfo", e);
+			return false;
+		}
+		
+		long id = info.id;
+		if(id < 0) {
+			return false;
+		}
+
+		switch (item.getItemId()) {
+		case MENU_ITEM_DELETE: {
+			database.deleteFilter((int)id);
+			cursor.requery();
+		}
+		}
+		return super.onContextItemSelected(item);
+	}
+    
+    
+    //Edit
     private void editFilterActivity(int filterId) {
     	Intent it = new Intent(this, EditFilter.class);
 		it.putExtra(Intent.EXTRA_UID, filterId);
