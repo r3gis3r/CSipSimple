@@ -179,12 +179,13 @@ public class UAStateReceiver extends Callback {
 			case ON_INCOMING_CALL:{
 				CallInfo callInfo = (CallInfo) msg.obj;
 				int callId = callInfo.getCallId();
+				String remContact = callInfo.getRemoteContact();
 				callInfo.setIncoming(true);
 				showNotificationForCall(callInfo);
 				if(SipService.mediaManager != null) {
-					SipService.mediaManager.startRing();
+					SipService.mediaManager.startRing(remContact);
 				}
-				broadCastAndroidCallState("RINGING", callInfo.getRemoteContact());
+				broadCastAndroidCallState("RINGING", remContact);
 				
 				// Automatically answer incoming calls with 180/RINGING
 				service.callAnswer(callId, 180);

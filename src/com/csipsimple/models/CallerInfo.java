@@ -20,10 +20,13 @@
 package com.csipsimple.models;
 
 
+import com.csipsimple.utils.Log;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Contacts;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 
 /**
@@ -129,10 +132,10 @@ public class CallerInfo {
     }
 
     /**
-     * getCallerInfo given a URI, look up in the call-log database
+     * getCallerInfo given a URI, look up in the People database
      * for the uri unique key.
      * @param context the context used to get the ContentResolver
-     * @param contactRef the URI used to lookup caller id
+     * @param contactRef the URI used to lookup caller id (differs before and after API level 5!)
      * @return the CallerInfo which contains the caller id for the given
      * number. The returned CallerInfo is null if no number is supplied.
      */
@@ -143,7 +146,7 @@ public class CallerInfo {
     }
 
     /**
-     * getCallerInfo given a phone number, look up in the call-log database
+     * getCallerInfo given a phone number, look up in the People database
      * for the matching caller id info.
      * @param context the context used to get the ContentResolver
      * @param number the phone number used to lookup caller id
@@ -156,16 +159,22 @@ public class CallerInfo {
         if (TextUtils.isEmpty(number)) {
             return null;
         }
-        Uri contactUri = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
 
-        CallerInfo info = getCallerInfo(context, contactUri);
+        // Must try V5+ ContactsContract first, as the old API fails on 
+        // newer OS levels.
+        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+        CallerInfo info = CallerInfo.getCallerInfo(context, contactUri);
+        if (info == null) {
+        	contactUri = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
+			info = CallerInfo.getCallerInfo(context, contactUri);
+        }
 
         // if no query results were returned with a viable number,
         // fill in the original number value we used to query with.
         if (TextUtils.isEmpty(info.phoneNumber)) {
             info.phoneNumber = number;
         }
-
+        
         return info;
     }
 

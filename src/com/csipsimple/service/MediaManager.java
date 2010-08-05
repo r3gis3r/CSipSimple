@@ -23,7 +23,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -262,13 +261,11 @@ public class MediaManager {
 	
 	
 	
-	public void startRing() {
+	public void startRing(String remoteContact) {
 		saveAudioState();
 		
 		if(!ringer.isRinging()) {
-			String ringtoneUri = service.getPrefs().getRingtone();
-			ringer.setCustomRingtoneUri(Uri.parse(ringtoneUri));
-			ringer.ring();
+			ringer.ring(remoteContact, service.getPrefs().getRingtone());
 		}
 		
 	}

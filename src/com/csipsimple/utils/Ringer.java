@@ -19,16 +19,20 @@
  */
 package com.csipsimple.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.csipsimple.models.CallerInfo;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.os.SystemClock;
 import android.os.Vibrator;
+import android.provider.Contacts;
+import android.provider.ContactsContract;
+
 /**
  * Ringer manager for the Phone app.
  */
@@ -53,11 +57,10 @@ public class Ringer {
     }
 
     /**
-     * Starts the ringtone and/or vibrator. Note that "some" GSM networks cause 
-     * this to be called repeatedly. 
+     * Starts the ringtone and/or vibrator. 
      * 
      */
-    public void ring() {
+    public void ring(String remoteContact, String defaultRingtone) {
         Log.d(THIS_FILE, "==> ring() called...");
 
         synchronized (this) {
@@ -98,9 +101,8 @@ public class Ringer {
             }
 
             // Ringer normal, audio set for ring, do it
-            // TODO = Select ringtone from contact (so ringtone fetched here not constructor)
             
-            ringtone = RingtoneManager.getRingtone(context, customRingtoneUri);
+            ringtone = getRingtone(remoteContact, defaultRingtone);
 
             Log.d(THIS_FILE, "Starting ring with " + ringtone.getTitle(context));
             
@@ -185,17 +187,33 @@ public class Ringer {
     		Log.d(THIS_FILE, "Ringer thread exiting");
     	}
     }
-    
 
-    /**
-     * Sets the ringtone uri in preparation for ringtone creation
-     * in makeLooper().  This uri is defaulted to the phone-wide
-     * default ringtone.
-     */
-    public void setCustomRingtoneUri (Uri uri) {
-        if (uri != null) {
-            customRingtoneUri = uri;
-        }
+    private Ringtone getRingtone(String remoteContact, String defaultRingtone) {
+    	Uri ringtoneUri = Uri.parse(defaultRingtone);
+		String phoneNumber = null;
+		
+		// Copied loosely from InCallInfo.java
+		Log.d(THIS_FILE, "Parsing " + remoteContact);
+		Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
+		Matcher m = p.matcher(remoteContact);
+		if (m.matches()) {
+			remoteContact = m.group(1).trim();
+			phoneNumber =  m.group(2);
+			Log.d(THIS_FILE, "  name=" + remoteContact + "  number=" + phoneNumber);
+		}
+    	if (phoneNumber != null && Pattern.matches("^[0-9\\-#]*$", phoneNumber)) {
+    		Log.d(THIS_FILE, "Number looks usable, try People lookup");
+    		// TODO - Should this be in a separate thread? We would still have to wait for
+    		// it to complete, so at present, no.
+            CallerInfo callerInfo = CallerInfo.getCallerInfo(context, phoneNumber);
+			if (callerInfo == null) {
+				Log.d(THIS_FILE, "Not found, use default ringtone");
+			}
+			if(callerInfo != null && callerInfo.contactExists && callerInfo.contactRingtoneUri != null) {
+				Log.d(THIS_FILE, "Found ringtone for " + callerInfo.name);
+				ringtoneUri = callerInfo.contactRingtoneUri;
+			}  		
+    	}
+		return RingtoneManager.getRingtone(context, ringtoneUri);
     }
-
 }
