@@ -19,16 +19,54 @@ package com.csipsimple.utils.bluetooth;
 
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
+
+import com.csipsimple.service.MediaManager;
+import com.csipsimple.utils.Log;
 
 public class BluetoothUtils8 {
 
-//	private static final String THIS_FILE = "BT 8";
+	private static final String THIS_FILE = "BT8";
 	private AudioManager audioManager;
+	
+	private boolean isBluetoothConnected = false;
+	
+	private BroadcastReceiver mediaStateReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			Log.d(THIS_FILE, ">>> Bluetooth SCO state changed !!! ");
+			if(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED.equals(action)) {
+				int status = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, AudioManager.SCO_AUDIO_STATE_ERROR );
+				Log.d(THIS_FILE, "Bluetooth sco state changed : " + status);
+				if(status == AudioManager.SCO_AUDIO_STATE_CONNECTED) {
+					isBluetoothConnected = true;
+				}else if(status == AudioManager.SCO_AUDIO_STATE_DISCONNECTED) {
+					isBluetoothConnected = false;
+				}
+				manager.broadcastMediaChanged();
+			}
+		}
+	};
+	private Context context;
+	private MediaManager manager;
 
-	public BluetoothUtils8(Context context) {
+	public BluetoothUtils8(Context aContext, MediaManager aManager) {
+		context = aContext;
+		manager = aManager;
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		context.registerReceiver(mediaStateReceiver , new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		context.unregisterReceiver(mediaStateReceiver);
+		super.finalize();
 	}
 
 	
@@ -39,7 +77,7 @@ public class BluetoothUtils8 {
 		    // Device does not support Bluetooth
 			return false;
 		}
-		boolean hasBoundedDevice = false;
+		boolean hasConnectedDevice = false;
 		//If bluetooth is on
 		if(mBluetoothAdapter.isEnabled()) {
 			/*
@@ -58,11 +96,11 @@ public class BluetoothUtils8 {
 				}
 			}
 			*/
-			hasBoundedDevice = true;
+			hasConnectedDevice = true;
 		}
 
 		
-		return hasBoundedDevice && audioManager.isBluetoothScoAvailableOffCall();
+		return hasConnectedDevice && audioManager.isBluetoothScoAvailableOffCall();
 	}
 
 	public void setBluetoothOn(boolean on) {
@@ -73,6 +111,10 @@ public class BluetoothUtils8 {
 			audioManager.stopBluetoothSco();
 			audioManager.setBluetoothScoOn(false);
 		}
+	}
+	
+	public boolean isBluetoothOn() {
+		return isBluetoothConnected;
 	}
 
 }

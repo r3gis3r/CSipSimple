@@ -65,6 +65,8 @@ public class MediaManager {
 	private static boolean bluetoothClassAvailable;
 	private BluetoothWrapper bluetoothWrapper;
 
+	
+
 	/* establish whether the "new" class is available to us */
 	static {
 		try {
@@ -80,13 +82,10 @@ public class MediaManager {
 		audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		ringer = new Ringer(service);
 		
-		//Register media state receiver
-	//	service.registerReceiver(mediaStateReceiver, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
-
 		mediaStateChangedIntent = new Intent(SipService.ACTION_SIP_MEDIA_CHANGED);
 		
 		if(bluetoothClassAvailable) {
-			bluetoothWrapper = new BluetoothWrapper(service);
+			bluetoothWrapper = new BluetoothWrapper(service, this);
 		}
 	}
 	
@@ -116,14 +115,13 @@ public class MediaManager {
 		
 		//Set stream solo/volume
 		int inCallStream = Compatibility.getInCallStream();
-		
 		audioManager.setStreamSolo(inCallStream, true);
 		audioManager.setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
 		
 
 		audioManager.setSpeakerphoneOn(false);
 		audioManager.setMicrophoneMute(false);
-		if(bluetoothClassAvailable && userWantBluetooth) {
+		if(bluetoothClassAvailable && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
 			bluetoothWrapper.setBluetoothOn(true);
 		}
 		
@@ -252,13 +250,7 @@ public class MediaManager {
 		isSetAudioMode = false;
 		isMusicActive = false;
 		
-		
-		
 	}
-	
-	
-
-	
 	
 	
 	public void startRing(String remoteContact) {
@@ -277,33 +269,11 @@ public class MediaManager {
 	}
 	
 
-	/**
-	 * Monitor media state
-	 */
-	/*
-	private BroadcastReceiver mediaStateReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if(!isSetAudioMode) {
-				return;
-			}
-			String action = intent.getAction();
-			
-			if(action.equals(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED)) {
-				int status = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, AudioManager.SCO_AUDIO_STATE_ERROR );
-				Log.d(THIS_FILE, "Bluetooth sco state changed : " + status);
-				if(status == AudioManager.SCO_AUDIO_STATE_CONNECTED) {
-					audioManager.setBluetoothScoOn(true);
-				}else if(status == AudioManager.SCO_AUDIO_STATE_DISCONNECTED) {
-					audioManager.setBluetoothScoOn(false);
-				}
-			}
-		}
-		
-	};
-	*/
 
-	private boolean userWantBluetooth;
+	//By default we assume user want bluetooth.
+	//If bluetooth is not available connection will never be done and then
+	//UI will not show bluetooth is activated
+	private boolean userWantBluetooth = true;
 
 	public void toggleMute() {
 		setMicrophoneMute(!audioManager.isMicrophoneMute());
@@ -312,7 +282,7 @@ public class MediaManager {
 	public synchronized void setMicrophoneMute(boolean on) {
 		if(audioManager.isMicrophoneMute() != on) {
 			audioManager.setMicrophoneMute(on);
-			service.sendBroadcast(mediaStateChangedIntent);
+			broadcastMediaChanged();
 		}
 	}
 	
@@ -322,7 +292,7 @@ public class MediaManager {
 				audioManager.setRouting(AudioManager.MODE_IN_CALL, on?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 			}
 			audioManager.setSpeakerphoneOn(on);
-			service.sendBroadcast(mediaStateChangedIntent);
+			broadcastMediaChanged();
 		}
 	}
 
@@ -342,7 +312,7 @@ public class MediaManager {
 			pjsua.set_snd_dev(0, 0);
 			
 		}
-		service.sendBroadcast(mediaStateChangedIntent);
+		broadcastMediaChanged();
 	}
 	
 	public class MediaState {
@@ -374,24 +344,36 @@ public class MediaManager {
 		}
 	}
 	
+	
 	public MediaState getMediaState() {
 		MediaState mediaState = new MediaState();
+		
+		// Micro 
 		mediaState.isMicrophoneMute = audioManager.isMicrophoneMute();
+		mediaState.canMicrophoneMute = true /*&& !mediaState.isBluetoothScoOn*/; //Compatibility.isCompatible(5);
+		
+		// Speaker
 		if(Compatibility.isCompatible(4)) {
 			mediaState.isSpeakerphoneOn = audioManager.isSpeakerphoneOn();
 		}else {
 			mediaState.isSpeakerphoneOn = (audioManager.getRouting(audioManager.getMode()) == AudioManager.ROUTE_SPEAKER);
 		}
-		mediaState.isBluetoothScoOn = audioManager.isBluetoothScoOn();
-		
-		mediaState.canMicrophoneMute = true /*&& !mediaState.isBluetoothScoOn*/; //Compatibility.isCompatible(5);
 		mediaState.canSpeakerphoneOn = true && !mediaState.isBluetoothScoOn; //Compatibility.isCompatible(5);
+		
+		//Bluetooth
+		
 		if(bluetoothClassAvailable) {
+			mediaState.isBluetoothScoOn = bluetoothWrapper.isBluetoothOn();
 			mediaState.canBluetoothSco = bluetoothWrapper.canBluetooth();
 		}else {
+			mediaState.isBluetoothScoOn = false;
 			mediaState.canBluetoothSco = false;
 		}
 		
 		return mediaState;
+	}
+	
+	public void broadcastMediaChanged() {
+		service.sendBroadcast(mediaStateChangedIntent);
 	}
 }

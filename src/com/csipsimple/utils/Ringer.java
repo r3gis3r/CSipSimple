@@ -30,8 +30,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
-import android.provider.Contacts;
-import android.provider.ContactsContract;
 
 /**
  * Ringer manager for the Phone app.

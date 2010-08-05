@@ -17,6 +17,8 @@
  */
 package com.csipsimple.utils.bluetooth;
 
+import com.csipsimple.service.MediaManager;
+
 import android.content.Context;
 import android.media.AudioManager;
 
@@ -24,7 +26,7 @@ public class BluetoothUtils7 {
 
 	private AudioManager audioManager;
 
-	public BluetoothUtils7(Context context) {
+	public BluetoothUtils7(Context context, MediaManager manager) {
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 	}
 
@@ -38,4 +40,7 @@ public class BluetoothUtils7 {
 		
 	}
 
+	public boolean isBluetoothOn() {
+		return false;
+	}
 }

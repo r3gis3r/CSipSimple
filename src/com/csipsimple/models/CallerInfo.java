@@ -26,7 +26,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Contacts;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 
 /**
@@ -160,14 +159,10 @@ public class CallerInfo {
             return null;
         }
 
-        // Must try V5+ ContactsContract first, as the old API fails on 
-        // newer OS levels.
-        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+        //Old api works even if on a level 5 + device. Android coders has already done a mapping between old and new api.
+        
+        Uri contactUri = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
         CallerInfo info = CallerInfo.getCallerInfo(context, contactUri);
-        if (info == null) {
-        	contactUri = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
-			info = CallerInfo.getCallerInfo(context, contactUri);
-        }
 
         // if no query results were returned with a viable number,
         // fill in the original number value we used to query with.

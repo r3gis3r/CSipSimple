@@ -136,9 +136,10 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		if(TextUtils.isEmpty(matchesView.getText().toString())) {
 			isValid = false;
 		}
-		
-		if(TextUtils.isEmpty(replaceView.getText().toString())) {
-			isValid = false;
+		if(actionView.getSelectedItemPosition() == Filter.ACTION_REPLACE) {
+			if(TextUtils.isEmpty(replaceView.getText().toString())) {
+				isValid = false;
+			}
 		}
 		
 		saveButton.setEnabled(isValid);
@@ -147,6 +148,9 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		if(actionView.getSelectedItemPosition() == Filter.ACTION_REPLACE) {
+			
+		}
 		checkFormValidity();
 	}
 	

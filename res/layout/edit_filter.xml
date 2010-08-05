@@ -8,10 +8,29 @@
 		<Spinner android:id="@+id/filter_action" 
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:entries="@array/filters_action"></Spinner>
-		<EditText android:id="@+id/filter_matches" 
-			android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
-		<EditText android:id="@+id/filter_replace" 
-			android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+		
+		<LinearLayout android:id="@+id/matcher_block" android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="wrap_content">
+			
+			<Spinner android:id="@+id/matcher_type" 
+				android:layout_weight="0.7"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></Spinner>
+			<EditText android:id="@+id/filter_matches" 
+				android:layout_weight="0.3"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+		</LinearLayout>
+		
+		<LinearLayout android:id="@+id/replace_block" android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="wrap_content">
+			<Spinner android:id="@+id/replace_type" 
+				android:layout_weight="0.7"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></Spinner>
+			
+			<EditText android:id="@+id/filter_replace" 
+				android:layout_weight="0.3"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+		</LinearLayout>
+		
 		
 	</LinearLayout>
 	<LinearLayout

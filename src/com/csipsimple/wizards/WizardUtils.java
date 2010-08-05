@@ -52,7 +52,8 @@ public class WizardUtils {
 		"Eutelia",
 		"Expert",
 		"Freephonie",
-		"Sip2Sip"
+		"Sip2Sip",
+		"Ippi"
 	};
 	
 	private static boolean init_done = false;
@@ -216,7 +217,7 @@ public class WizardUtils {
 			boolean found = false;
 			
 			for (Locale country : wizard.countries) {
-				if(country.equals(Locale.getDefault())) {
+				if(country.getCountry().equals(Locale.getDefault().getCountry())) {
 					found = true;
 					locale_list.add(wizardInfoToMap(wizard));
 				}

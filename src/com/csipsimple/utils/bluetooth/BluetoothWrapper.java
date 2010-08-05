@@ -19,6 +19,7 @@ package com.csipsimple.utils.bluetooth;
 
 import android.content.Context;
 
+import com.csipsimple.service.MediaManager;
 import com.csipsimple.utils.Compatibility;
 
 public class BluetoothWrapper {
@@ -38,11 +39,11 @@ public class BluetoothWrapper {
 		}
 	}
 	
-	public BluetoothWrapper(Context context) {
+	public BluetoothWrapper(Context context, MediaManager manager) {
 		if(Compatibility.isCompatible(8)) {
-			butils8 = new BluetoothUtils8(context);
+			butils8 = new BluetoothUtils8(context, manager);
 		}else if(Compatibility.isCompatible(7)) {
-			butils7 = new BluetoothUtils7(context);
+			butils7 = new BluetoothUtils7(context, manager);
 		}
 	}
 
@@ -64,5 +65,14 @@ public class BluetoothWrapper {
 		}else if(butils7 != null) {
 			butils7.setBluetoothOn(on);
 		}
+	}
+	
+	public boolean isBluetoothOn() {
+		if(butils8 != null) {
+			return butils8.isBluetoothOn();
+		}else if(butils7 != null) {
+			return butils7.isBluetoothOn();
+		}
+		return false;
 	}
 }
