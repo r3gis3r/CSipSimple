@@ -18,9 +18,13 @@
  */
 package com.csipsimple.utils;
 
-import android.content.ContentUris;
+import java.io.InputStream;
+import java.lang.reflect.*;
+
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -83,13 +87,33 @@ public class ContactsAsyncHelper extends Handler {
                 case EVENT_LOAD_IMAGE:
                 	Log.d(THIS_FILE, "get : "+args.uri.toString());
                 	Bitmap img = null;
-                	
-                	try {
-                		img = People.loadContactPhoto(args.context, args.uri, args.defaultResource, null);
-                	}catch(IllegalArgumentException e) {
-                		Log.w(THIS_FILE, "Impossible to found this contact photo ", e);
-                	}
-                	
+
+                    if(Compatibility.isCompatible(5) ) {
+                    	Log.d(THIS_FILE, "Trying Api 5 for loading photo");
+                    	try {
+                    		Class<?>[] paramTypes = new Class<?>[] {ContentResolver.class, Uri.class } ;
+                    		Object[] params = new Object[] { args.context.getContentResolver(), args.uri } ;
+                    		
+                    		Class<?> c = Class.forName("android.provider.ContactsContract$Contacts");
+                    		Method m = c.getDeclaredMethod("openContactPhotoInputStream", paramTypes);
+                    		InputStream s = (InputStream) m.invoke(null, params);	// Static method
+                    		img = BitmapFactory.decodeStream(s);
+                    		if (img != null) {
+                    			Log.d(THIS_FILE, "Success! Photo Bitmap ready to load");
+                    		}
+	                	} catch(IllegalArgumentException e) {
+	                		Log.w(THIS_FILE, "Failed to find contact photo");
+                    	} catch (Exception e) {
+                    		Log.e(THIS_FILE, "Failed to late-bind get photo Bitmap: ", e);
+                    	}
+                    }
+                    if (img == null) {
+	                	try {
+	                		img = People.loadContactPhoto(args.context, args.uri, args.defaultResource, null);
+	                	} catch(IllegalArgumentException e) {
+	                		Log.w(THIS_FILE, "Failed to find contact photo");
+	                	}
+                    }
                     if (img != null) {
                         args.result = img;
 
@@ -142,7 +166,7 @@ public class ContactsAsyncHelper extends Handler {
      */
     public static final void updateImageViewWithContactPhotoAsync(int token, 
             OnImageLoadCompleteListener listener, Object cookie, Context context, 
-            ImageView imageView, CallerInfo person, int placeholderImageResource) {
+            ImageView imageView, CallerInfo callerInfo, int placeholderImageResource) {
         if(sThreadHandler == null) {
         	Log.d(THIS_FILE, "Update image view with contact async");
         	new ContactsAsyncHelper();
@@ -150,8 +174,8 @@ public class ContactsAsyncHelper extends Handler {
     	
         // in case the source caller info is null, the URI will be null as well.
         // just update using the placeholder image in this case.
-        if (person == null) {
-            Log.d(THIS_FILE, "target image is null, just display placeholder.");
+        if (callerInfo == null) {
+            Log.d(THIS_FILE, "No CallerInfo, just display placeholder.");
             imageView.setVisibility(View.VISIBLE);
             imageView.setImageResource(placeholderImageResource);
             return;
@@ -165,7 +189,7 @@ public class ContactsAsyncHelper extends Handler {
         args.cookie = cookie;
         args.context = context;
         args.view = imageView;
-        args.uri = getPhotoUri(person);
+        args.uri = callerInfo.contactContentUri;
         args.defaultResource = placeholderImageResource;
         args.listener = listener;
         
@@ -224,8 +248,4 @@ public class ContactsAsyncHelper extends Handler {
         }
     }
     
-	private static Uri getPhotoUri(CallerInfo ci) {
-		return ContentUris.withAppendedId(People.CONTENT_URI, ci.personId);
-	}
-
 }

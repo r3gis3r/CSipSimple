@@ -19,8 +19,12 @@
  */
 package com.csipsimple.models;
 
+import java.lang.reflect.Field;
 
+import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.Log;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -33,6 +37,7 @@ import android.text.TextUtils;
 @SuppressWarnings("deprecation")
 public class CallerInfo {
 
+	private static final String THIS_FILE = "CallerInfo";
 
 	public boolean contactExists;
     
@@ -49,22 +54,26 @@ public class CallerInfo {
     // uri reference.
     public Uri contactRingtoneUri;
 	public Uri contactRefUri;
-
-
+	public Uri contactContentUri;
 
     public CallerInfo() {
        
     }
 
     /**
-     * getCallerInfo given a Cursor.
-     * @param context the context used to retrieve string constants
-     * @param contactRef the URI to attach to this CallerInfo object
-     * @param cursor the first object in the cursor is used to build the CallerInfo object.
+     * getCallerInfo given a phone number, look up in the People database
+     * for the matching caller id info.
+     * @param context the context used to get the ContentResolver
+     * @param number the phone number used to lookup caller
      * @return the CallerInfo which contains the caller id for the given
-     * number. The returned CallerInfo is null if no number is supplied.
+     * number. The returned CallerInfo is null if no number is supplied. If
+     * a matching number is not found, then a generic caller info is returned,
+     * with all relevant fields empty or null.
      */
-    public static CallerInfo getCallerInfo(Context context, Uri contactRef, Cursor cursor) {
+    public static CallerInfo getCallerInfo(Context context, String number) {
+
+        Uri contactUri = null;		// [sentinel]
+        Uri contentUri = null;		// [sentinel]
 
         CallerInfo info = new CallerInfo();
         info.phoneLabel = null;
@@ -73,6 +82,33 @@ public class CallerInfo {
         info.contactExists = false;
 
 
+        if (TextUtils.isEmpty(number)) {
+            return null;
+        }
+        
+        // Must try V5+ ContactsContract first, as the old API fails on 
+        // newer OS levels.
+        if(Compatibility.isCompatible(5) ) {
+        	Log.d(THIS_FILE, "Trying Api 5 for PhoneLookup");
+        	try {
+        		Class<?> contactClass = Class.forName("android.provider.ContactsContract$PhoneLookup");
+        		Field uriField = contactClass.getField("CONTENT_FILTER_URI");
+        		Uri u = (Uri) uriField.get(null);
+        		contactUri = Uri.withAppendedPath(u, Uri.encode(number));
+    	        Log.d(THIS_FILE, "Api 5 succeeded, uri=" + contactUri.toString());
+        	} catch (Exception e) {
+        		Log.e(THIS_FILE, "Api compatible 5 but uri not available", e);
+        	}
+	        
+        }   // TODO Should be simply 'else'?
+        if (contactUri == null) {
+        	contactUri = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
+        	Log.d(THIS_FILE, "Old Api lookup, phone uri=" + contactUri.toString());
+        }
+        
+    	Cursor cursor = context.getContentResolver().query(contactUri, null, null, null, null);
+    	
+    	// TODO - Strictly speaking the column indexes below should be old/new API switched
         if (cursor != null) {
             if (cursor.moveToFirst()) {
 
@@ -104,7 +140,7 @@ public class CallerInfo {
                 }
 
                 // Look for the person ID
-                columnIndex = cursor.getColumnIndex(Contacts.Phones.PERSON_ID);
+                columnIndex = cursor.getColumnIndex(Contacts.Phones._ID);	// REGIS - NOTE THIS CHANGE (rbd)
                 if (columnIndex != -1) {
                     info.personId = cursor.getLong(columnIndex);
                 }
@@ -118,112 +154,42 @@ public class CallerInfo {
                     info.contactRingtoneUri = null;
                 }
 
+                //
+                // Get the content Uri for this person
+                if(Compatibility.isCompatible(5) ) {
+                	Log.d(THIS_FILE, "Trying Api 5 for Contacts");
+                	try {
+                		Class<?> contactClass = Class.forName("android.provider.ContactsContract$Contacts");
+                		Field uriField = contactClass.getField("CONTENT_URI");
+                		Uri u = (Uri) uriField.get(null);
+                		contentUri = ContentUris.withAppendedId(u, info.personId);
+            	        Log.d(THIS_FILE, "Api 5 succeeded, uri=" + contentUri.toString());
+                	} catch (Exception e) {
+                		Log.e(THIS_FILE, "Api compatible 5 but uri not available", e);
+                	}
+        	        
+                }   // TODO Should be simply 'else'?
+                if (contentUri == null) {
+                	contentUri = ContentUris.withAppendedId(Contacts.People.CONTENT_URI, info.personId);
+                	Log.d(THIS_FILE, "Old Api lookup, uri=" + contentUri.toString());
+                }
+                
                 info.contactExists = true;
             }
             cursor.close();
         }
 
         info.name = normalize(info.name);
-        info.contactRefUri = contactRef;
-
-        return info;
-    }
-
-    /**
-     * getCallerInfo given a URI, look up in the People database
-     * for the uri unique key.
-     * @param context the context used to get the ContentResolver
-     * @param contactRef the URI used to lookup caller id (differs before and after API level 5!)
-     * @return the CallerInfo which contains the caller id for the given
-     * number. The returned CallerInfo is null if no number is supplied.
-     */
-    public static CallerInfo getCallerInfo(Context context, Uri contactRef) {
-
-        return getCallerInfo(context, contactRef,
-                context.getContentResolver().query(contactRef, null, null, null, null));
-    }
-
-    /**
-     * getCallerInfo given a phone number, look up in the People database
-     * for the matching caller id info.
-     * @param context the context used to get the ContentResolver
-     * @param number the phone number used to lookup caller id
-     * @return the CallerInfo which contains the caller id for the given
-     * number. The returned CallerInfo is null if no number is supplied. If
-     * a matching number is not found, then a generic caller info is returned,
-     * with all relevant fields empty or null.
-     */
-    public static CallerInfo getCallerInfo(Context context, String number) {
-        if (TextUtils.isEmpty(number)) {
-            return null;
-        }
-        
-        Uri contactUri = null;
-        CallerInfo info = null;
-        // Must try V5+ ContactsContract first, as the old API fails on 
-        // newer OS levels.
-        /*
-        if(Compatibility.isCompatible(5) ) {
-        	try {
-        		Class<?> contactClass = Class.forName("android.provider.ContactsContract$PhoneLookup");
-        		Field uriField = contactClass.getField("CONTENT_FILTER_URI");
-        		Uri phoneUri = (Uri) uriField.get(null);
-        		contactUri = Uri.withAppendedPath(phoneUri, Uri.encode(number));
-    	        info = CallerInfo.getCallerInfo(context, contactUri);
-        	} catch (Exception e) {
-        		//Nothing to do, just an incompatible class, fallback will be done on older api
-        		Log.e(THIS_FILE, "Api compatible 5 but phone uri not available", e);
-        	}
-	        
-        }
-        
-        if (info == null) {
-        */
-        	contactUri = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
-			info = CallerInfo.getCallerInfo(context, contactUri);
-		/*
-        }
-        */
+        info.contactRefUri = contactUri;
+        info.contactContentUri = contentUri;
 
         // if no query results were returned with a viable number,
         // fill in the original number value we used to query with.
         if (TextUtils.isEmpty(info.phoneNumber)) {
             info.phoneNumber = number;
         }
-        
+
         return info;
-    }
-
-    /**
-     * getCallerId: a convenience method to get the caller id for a given
-     * number.
-     *
-     * @param context the context used to get the ContentResolver.
-     * @param number a phone number.
-     * @return if the number belongs to a contact, the contact's name is
-     * returned; otherwise, the number itself is returned.
-     *
-     * TODO NOTE: This MAY need to refer to the Asynchronous Query API
-     * [startQuery()], instead of getCallerInfo, but since it looks like
-     * it is only being used by the provider calls in the messaging app:
-     *   1. android.provider.Telephony.Mms.getDisplayAddress()
-     *   2. android.provider.Telephony.Sms.getDisplayAddress()
-     * We may not need to make the change.
-     */
-    public static String getCallerId(Context context, String number) {
-        CallerInfo info = getCallerInfo(context, number);
-        String callerID = null;
-
-        if (info != null) {
-            String name = info.name;
-
-            if (!TextUtils.isEmpty(name)) {
-                callerID = name;
-            } else {
-                callerID = number;
-            }
-        }
-        return callerID;
     }
 
     private static String normalize(String s) {
