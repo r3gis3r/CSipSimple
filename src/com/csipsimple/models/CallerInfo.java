@@ -20,7 +20,6 @@
 package com.csipsimple.models;
 
 
-import com.csipsimple.utils.Log;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -35,7 +34,7 @@ import android.text.TextUtils;
 public class CallerInfo {
 
 
-    public boolean contactExists;
+	public boolean contactExists;
     
     public long personId;
     public String name;
@@ -158,11 +157,33 @@ public class CallerInfo {
         if (TextUtils.isEmpty(number)) {
             return null;
         }
-
-        //Old api works even if on a level 5 + device. Android coders has already done a mapping between old and new api.
         
-        Uri contactUri = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
-        CallerInfo info = CallerInfo.getCallerInfo(context, contactUri);
+        Uri contactUri = null;
+        CallerInfo info = null;
+        // Must try V5+ ContactsContract first, as the old API fails on 
+        // newer OS levels.
+        /*
+        if(Compatibility.isCompatible(5) ) {
+        	try {
+        		Class<?> contactClass = Class.forName("android.provider.ContactsContract$PhoneLookup");
+        		Field uriField = contactClass.getField("CONTENT_FILTER_URI");
+        		Uri phoneUri = (Uri) uriField.get(null);
+        		contactUri = Uri.withAppendedPath(phoneUri, Uri.encode(number));
+    	        info = CallerInfo.getCallerInfo(context, contactUri);
+        	} catch (Exception e) {
+        		//Nothing to do, just an incompatible class, fallback will be done on older api
+        		Log.e(THIS_FILE, "Api compatible 5 but phone uri not available", e);
+        	}
+	        
+        }
+        
+        if (info == null) {
+        */
+        	contactUri = Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
+			info = CallerInfo.getCallerInfo(context, contactUri);
+		/*
+        }
+        */
 
         // if no query results were returned with a viable number,
         // fill in the original number value we used to query with.

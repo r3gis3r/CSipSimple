@@ -65,96 +65,6 @@ public class ContactsAsyncHelper extends Handler {
     }
     
     /**
-     * public inner class to help out the ContactsAsyncHelper callers 
-     * with tracking the state of the CallerInfo Queries and image 
-     * loading.
-     * 
-     * Logic contained herein is used to remove the race conditions
-     * that exist as the CallerInfo queries run and mix with the image
-     * loads, which then mix with the Phone state changes.
-     */
-    public static class ImageTracker {
-
-        // Image display states
-        public static final int DISPLAY_UNDEFINED = 0;
-        public static final int DISPLAY_IMAGE = -1;
-        public static final int DISPLAY_DEFAULT = -2;
-        
-        // State of the image on the imageview.
-        private CallerInfo currentCallerInfo;
-        private int displayMode;
-        
-        public ImageTracker() {
-            currentCallerInfo = null;
-            displayMode = DISPLAY_UNDEFINED;
-        }
-
-        /**
-         * Used to see if the requested call / connection has a
-         * different caller attached to it than the one we currently
-         * have in the CallCard. 
-         */
-        public boolean isDifferentImageRequest(CallerInfo ci) {
-            // note, since the connections are around for the lifetime of the
-            // call, and the CallerInfo-related items as well, we can 
-            // definitely use a simple != comparison.
-            return (currentCallerInfo != ci);
-        }
-        /*
-        public boolean isDifferentImageRequest(Connection connection) {
-            // if the connection does not exist, see if the 
-            // currentCallerInfo is also null to match.
-            if (connection == null) {
-                return (currentCallerInfo != null);
-            }
-            Object o = connection.getUserData();
-
-            // if the call does NOT have a callerInfo attached
-            // then it is ok to query.
-            boolean runQuery = true;
-            if (o instanceof CallerInfo) {
-                runQuery = isDifferentImageRequest((CallerInfo) o);
-            }
-            return runQuery;
-        }
-        */
-        
-        /**
-         * Simple setter for the CallerInfo object. 
-         */
-        public void setPhotoRequest(CallerInfo ci) {
-            currentCallerInfo = ci; 
-        }
-        
-        /**
-         * Convenience method used to retrieve the URI 
-         * representing the Photo file recorded in the attached 
-         * CallerInfo Object. 
-         */
-        public Uri getPhotoUri() {
-            if (currentCallerInfo != null) {
-                return ContentUris.withAppendedId(People.CONTENT_URI, 
-                        currentCallerInfo.personId);
-            }
-            return null; 
-        }
-        
-        /**
-         * Simple setter for the Photo state. 
-         */
-        public void setPhotoState(int state) {
-            displayMode = state;
-        }
-        
-        /**
-         * Simple getter for the Photo state. 
-         */
-        public int getPhotoState() {
-            return displayMode;
-        }
-    }
-    
-    /**
      * Thread worker class that handles the task of opening the stream and loading 
      * the images.
      */
@@ -173,11 +83,13 @@ public class ContactsAsyncHelper extends Handler {
                 case EVENT_LOAD_IMAGE:
                 	Log.d(THIS_FILE, "get : "+args.uri.toString());
                 	Bitmap img = null;
+                	
                 	try {
                 		img = People.loadContactPhoto(args.context, args.uri, args.defaultResource, null);
                 	}catch(IllegalArgumentException e) {
                 		Log.w(THIS_FILE, "Impossible to found this contact photo ", e);
                 	}
+                	
                     if (img != null) {
                         args.result = img;
 
@@ -215,7 +127,7 @@ public class ContactsAsyncHelper extends Handler {
      * Convenience method for calls that do not want to deal with listeners and tokens.
      */
     public static final void updateImageViewWithContactPhotoAsync(Context context, 
-            ImageView imageView, Uri person, int placeholderImageResource) {
+            ImageView imageView, CallerInfo person, int placeholderImageResource) {
         // Added additional Cookie field in the callee.
         updateImageViewWithContactPhotoAsync (DEFAULT_TOKEN, null, null, context, 
                 imageView, person, placeholderImageResource);
@@ -230,7 +142,7 @@ public class ContactsAsyncHelper extends Handler {
      */
     public static final void updateImageViewWithContactPhotoAsync(int token, 
             OnImageLoadCompleteListener listener, Object cookie, Context context, 
-            ImageView imageView, Uri person, int placeholderImageResource) {
+            ImageView imageView, CallerInfo person, int placeholderImageResource) {
         if(sThreadHandler == null) {
         	Log.d(THIS_FILE, "Update image view with contact async");
         	new ContactsAsyncHelper();
@@ -253,7 +165,7 @@ public class ContactsAsyncHelper extends Handler {
         args.cookie = cookie;
         args.context = context;
         args.view = imageView;
-        args.uri = person;
+        args.uri = getPhotoUri(person);
         args.defaultResource = placeholderImageResource;
         args.listener = listener;
         
@@ -311,6 +223,9 @@ public class ContactsAsyncHelper extends Handler {
             default:    
         }
     }
-
+    
+	private static Uri getPhotoUri(CallerInfo ci) {
+		return ContentUris.withAppendedId(People.CONTENT_URI, ci.personId);
+	}
 
 }

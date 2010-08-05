@@ -23,12 +23,10 @@ import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pjsip_inv_state;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Contacts;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -44,7 +42,7 @@ import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 
-@SuppressWarnings("deprecation")
+
 public class InCallInfo extends FrameLayout {
 	
 	private static final String THIS_FILE = "InCallInfo";
@@ -90,6 +88,7 @@ public class InCallInfo extends FrameLayout {
 
 	public void setCallState(CallInfo aCallInfo) {
 		callInfo = aCallInfo;
+		//TODO: see if should be threaded now could improve loading speed of this view on old devices
 //		Thread t = new Thread() {
 //			public void run() {
 				updateRemoteName();
@@ -198,8 +197,8 @@ public class InCallInfo extends FrameLayout {
 			case LOAD_CALLER_INFO:
 				CallerInfo callerInfo = (CallerInfo) msg.obj;
 				ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(context, 
-						photo, 
-						ContentUris.withAppendedId(Contacts.People.CONTENT_URI, callerInfo.personId), 
+						photo,
+						callerInfo,
 						R.drawable.picture_unknown);
 				remoteName.setText(callerInfo.name);
 				break;
