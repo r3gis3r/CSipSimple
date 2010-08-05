@@ -140,7 +140,12 @@ public class CallerInfo {
                 }
 
                 // Look for the person ID
-                columnIndex = cursor.getColumnIndex(Contacts.Phones._ID);	// REGIS - NOTE THIS CHANGE (rbd)
+                if(Compatibility.isCompatible(5)) {
+                	//Not really relevent for api 5
+                	columnIndex = cursor.getColumnIndex(Contacts.Phones._ID);	// REGIS - NOTE THIS CHANGE (rbd)
+                }else {
+                	columnIndex = cursor.getColumnIndex(Contacts.Phones.PERSON_ID);
+                }
                 if (columnIndex != -1) {
                     info.personId = cursor.getLong(columnIndex);
                 }
