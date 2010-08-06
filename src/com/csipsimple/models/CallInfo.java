@@ -21,8 +21,10 @@ import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_call_info;
 
+import com.csipsimple.R;
 import com.csipsimple.utils.Log;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -134,22 +136,22 @@ public class CallInfo implements Parcelable {
 	 * Can be used to translate or debug current state
 	 * @return the string reprensenting this call info state
 	 */
-	public String getStringCallState() {
+	public String getStringCallState(Context context) {
 		String state = "";
 		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
-			state = "CALLING";
+			state = context.getString(R.string.call_state_calling);
 		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
-			state = "CONFIRMED";
+			state = context.getString(R.string.call_state_confirmed);
 		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONNECTING)) {
-			state = "CONNECTING";
+			state = context.getString(R.string.call_state_connecting);
 		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-			state = "DISCONNECTED";
+			state = context.getString(R.string.call_state_disconnected);
 		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
-			state = "EARLY";
+			state = context.getString(R.string.call_state_early);
 		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING)) {
-			state = "INCOMING";
+			state = context.getString(R.string.call_state_incoming);
 		} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_NULL)) {
-			state = "NULL";
+			state = context.getString(R.string.call_state_null);
 		}
 		return state;
 	}

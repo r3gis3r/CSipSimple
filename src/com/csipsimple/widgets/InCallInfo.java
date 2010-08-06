@@ -174,7 +174,7 @@ public class InCallInfo extends FrameLayout {
 	}
 	
 	private void updateTitle() {
-		title.setText(callInfo.getStringCallState());
+		title.setText(callInfo.getStringCallState(context));
 		
 	}
 	

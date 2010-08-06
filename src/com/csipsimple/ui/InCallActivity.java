@@ -186,7 +186,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	private synchronized void updateUIFromCall() {
 
-		Log.d(THIS_FILE, "Update ui from call " + callInfo.getCallId() + " state " + callInfo.getStringCallState());
+		Log.d(THIS_FILE, "Update ui from call " + callInfo.getCallId() + " state " + callInfo.getStringCallState(this));
 		
 		pjsip_inv_state state = callInfo.getCallState();
 
