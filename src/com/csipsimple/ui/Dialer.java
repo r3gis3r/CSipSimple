@@ -44,6 +44,7 @@ import android.text.method.DialerKeyListener;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -74,9 +75,7 @@ public class Dialer extends Activity implements OnClickListener,
 
     /** Stream type used to play the DTMF tones off call, and mapped to the volume control keys */
     private static final int DIAL_TONE_STREAM_TYPE = AudioManager.STREAM_MUSIC;
-
-
-	
+    
 	private ToneGenerator toneGenerator = null;
 	private Object toneGeneratorLock = new Object();
 	private static final String THIS_FILE = "Dialer";
@@ -91,6 +90,7 @@ public class Dialer extends Activity implements OnClickListener,
 	
 	
 	private int[] buttonsToAttach = new int[] {
+		R.id.button0,
 		R.id.dialButton,
 		R.id.deleteButton,
 		R.id.domainButton,
@@ -190,7 +190,6 @@ public class Dialer extends Activity implements OnClickListener,
 		};
 		digitDialer.setOnTouchListener(touchTransmiter);
 		textDialer.setOnTouchListener(touchTransmiter);
-		
 		
 	}
 
@@ -292,7 +291,7 @@ public class Dialer extends Activity implements OnClickListener,
 		ImageButton button = (ImageButton) findViewById(id);
 		button.setOnClickListener(this);
 
-		if (id == R.id.button0 || id == R.id.button1 || id == R.id.deleteButton) {
+		if (id == R.id.button0 || id == R.id.deleteButton) {
 			button.setOnLongClickListener(this);
 		}
 	}
@@ -400,11 +399,26 @@ public class Dialer extends Activity implements OnClickListener,
 	}
 
 	public void onClick(View view) {
+		// ImageButton b = null;
 		int view_id = view.getId();
 		Log.d(THIS_FILE, "Im clicked....");
-
+		
+		//if (view_id != R.id.digitsText) {	// Prevent IllegalCast if add non-Button here!
+		//	b = (ImageButton)view;
+		//}
+		
 		switch (view_id) {
+		
+		case R.id.button0: {
+			playTone(ToneGenerator.TONE_DTMF_0);
+			keyPressed(KeyEvent.KEYCODE_0);
+			break;
+		}
 		case R.id.deleteButton: {
+			// TODO (dc3denny) How to get this to come through speaker. Regis is doing
+			// things with audio and Bluetooth, so I'm not going to do anything here!
+			// Commented out in other places... and creating 'b' above
+			//b.playSoundEffect(SoundEffectConstants.CLICK);	// Plays through earpiece (typ.)
 			keyPressed(KeyEvent.KEYCODE_DEL);
 			break;
 		}
@@ -419,10 +433,12 @@ public class Dialer extends Activity implements OnClickListener,
 			break;
 		}
 		case R.id.domainButton: {
+			//b.playSoundEffect(SoundEffectConstants.CLICK);
 			flipView(true);
 			break;
 		}
 		case R.id.domainTextButton: {
+			//b.playSoundEffect(SoundEffectConstants.CLICK);
 			flipView(false);
 			break;
 		}
@@ -435,12 +451,15 @@ public class Dialer extends Activity implements OnClickListener,
 	}
 
 	public boolean onLongClick(View view) {
+		ImageButton b = (ImageButton)view;
 		switch (view.getId()) {
 			case R.id.button0: {
+				//b.playSoundEffect(SoundEffectConstants.CLICK);
 				keyPressed(KeyEvent.KEYCODE_PLUS);
 				return true;
 			}
 			case R.id.deleteButton: {
+				//b.playSoundEffect(SoundEffectConstants.CLICK);
 				digits.getText().clear();
 				deleteButton.setPressed(false);
 				return true;
