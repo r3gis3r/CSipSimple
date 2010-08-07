@@ -18,9 +18,6 @@
 package com.csipsimple.widgets;
 
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.pjsip.pjsua.pjsip_inv_state;
 
 import android.content.Context;
@@ -39,6 +36,7 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallerInfo;
+import com.csipsimple.models.CallerInfo.ParsedSipUriInfos;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 
@@ -103,44 +101,34 @@ public class InCallInfo extends FrameLayout {
 
 
 	private void updateRemoteName() {
-		String aRemoteUri = callInfo.getRemoteContact();
+		final String aRemoteUri = callInfo.getRemoteContact();
 		//If not already set with the same value, just ignore it
 		if(aRemoteUri != null && !aRemoteUri.equalsIgnoreCase(remoteUri)) {
 			remoteUri = aRemoteUri;
 			String remoteContact = aRemoteUri;
-			String phoneNumber = null;
-			Log.d(THIS_FILE, "Parsing ...."+remoteContact);
-			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
-			Matcher m = p.matcher(remoteContact);
-			if (m.matches()) {
-				
-				remoteContact = m.group(1).trim();
-				phoneNumber =  m.group(2);
-				Log.d(THIS_FILE, "We found .... "+remoteContact+" et "+phoneNumber);
-				if(!TextUtils.isEmpty(phoneNumber) && TextUtils.isEmpty(remoteContact)) {
-					remoteContact = phoneNumber;
-				}
-				
-				
+			
+			ParsedSipUriInfos uriInfos = CallerInfo.parseSipUri(remoteUri);
+			
+			if(!TextUtils.isEmpty(uriInfos.displayName)) {
+				remoteContact = uriInfos.displayName;
+			}else if(!TextUtils.isEmpty(uriInfos.userName)) {
+				remoteContact = uriInfos.userName;
 			}
+			
 			remoteName.setText(remoteContact);
-			remotePhoneNumber.setText(phoneNumber);
-			if(!TextUtils.isEmpty(phoneNumber)) {
-				if(Pattern.matches("^[0-9\\-#]*$", phoneNumber)) {
-					final String launchPhoneNumber = phoneNumber;
-					Thread t = new Thread() {
-						public void run() {
-							//Looks like a phone number so search the contact throw contacts
-							CallerInfo callerInfo = CallerInfo.getCallerInfo(context, launchPhoneNumber);
-							if(callerInfo != null && callerInfo.contactExists) {
-								userHandler.sendMessage(userHandler.obtainMessage(LOAD_CALLER_INFO, callerInfo));
-							}
-						};
-					};
-					t.start();
-					
-				}
-			}
+			remotePhoneNumber.setText(uriInfos.userName);
+			
+			Thread t = new Thread() {
+				public void run() {
+					//Looks like a phone number so search the contact throw contacts
+					CallerInfo callerInfo = CallerInfo.getCallerInfoFromSipUri(context, remoteUri);
+					if(callerInfo != null && callerInfo.contactExists) {
+						userHandler.sendMessage(userHandler.obtainMessage(LOAD_CALLER_INFO, callerInfo));
+					}
+				};
+			};
+			t.start();
+			
 			
 		}
 	}

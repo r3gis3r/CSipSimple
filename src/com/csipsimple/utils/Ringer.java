@@ -19,17 +19,14 @@
  */
 package com.csipsimple.utils;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.csipsimple.models.CallerInfo;
-
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
+
+import com.csipsimple.models.CallerInfo;
 
 /**
  * Ringer manager for the Phone app.
@@ -188,30 +185,16 @@ public class Ringer {
 
     private Ringtone getRingtone(String remoteContact, String defaultRingtone) {
     	Uri ringtoneUri = Uri.parse(defaultRingtone);
-		String phoneNumber = null;
 		
-		// Copied loosely from InCallInfo.java
-		Log.d(THIS_FILE, "Parsing " + remoteContact);
-		Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
-		Matcher m = p.matcher(remoteContact);
-		if (m.matches()) {
-			remoteContact = m.group(1).trim();
-			phoneNumber =  m.group(2);
-			Log.d(THIS_FILE, "  name=" + remoteContact + "  number=" + phoneNumber);
+		// TODO - Should this be in a separate thread? We would still have to wait for
+		// it to complete, so at present, no.
+		CallerInfo callerInfo = CallerInfo.getCallerInfoFromSipUri(context, remoteContact);
+		
+		if(callerInfo != null && callerInfo.contactExists && callerInfo.contactRingtoneUri != null) {
+			Log.d(THIS_FILE, "Found ringtone for " + callerInfo.name);
+			ringtoneUri = callerInfo.contactRingtoneUri;
 		}
-    	if (phoneNumber != null && Pattern.matches("^[0-9\\-#]*$", phoneNumber)) {
-    		Log.d(THIS_FILE, "Number looks usable, try People lookup");
-    		// TODO - Should this be in a separate thread? We would still have to wait for
-    		// it to complete, so at present, no.
-            CallerInfo callerInfo = CallerInfo.getCallerInfo(context, phoneNumber);
-			if (callerInfo == null) {
-				Log.d(THIS_FILE, "Not found, use default ringtone");
-			}
-			if(callerInfo != null && callerInfo.contactExists && callerInfo.contactRingtoneUri != null) {
-				Log.d(THIS_FILE, "Found ringtone for " + callerInfo.name);
-				ringtoneUri = callerInfo.contactRingtoneUri;
-			}  		
-    	}
+		
 		return RingtoneManager.getRingtone(context, ringtoneUri);
     }
 }
