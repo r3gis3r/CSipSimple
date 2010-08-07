@@ -67,6 +67,9 @@ import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 public class Dialer extends Activity implements OnClickListener,
 		OnLongClickListener, OnDialKeyListener, TextWatcher {
 	
+	/** The length of vibrate (haptic) feedback in milliseconds */
+	private static final int HAPTIC_LENGTH_MS = 50;
+	
     /** The length of DTMF tones in milliseconds */
     private static final int TONE_LENGTH_MS = 150;
 
@@ -316,7 +319,7 @@ public class Dialer extends Activity implements OnClickListener,
 		
 		switch (ringerMode) {
 			case AudioManager.RINGER_MODE_NORMAL:
-				if (dialPressVibrate) vibrator.vibrate(30);
+				if (dialPressVibrate) vibrator.vibrate(HAPTIC_LENGTH_MS);
 				if (dialPressTone) {
 					synchronized (toneGeneratorLock) {
 						if (toneGenerator == null) {
@@ -330,7 +333,7 @@ public class Dialer extends Activity implements OnClickListener,
 				}
 				break;
 			case AudioManager.RINGER_MODE_VIBRATE:
-				if (dialPressVibrate) vibrator.vibrate(30);
+				if (dialPressVibrate) vibrator.vibrate(HAPTIC_LENGTH_MS);
 				break;
 			case AudioManager.RINGER_MODE_SILENT:
 				break;
@@ -455,6 +458,7 @@ public class Dialer extends Activity implements OnClickListener,
 		switch (view.getId()) {
 			case R.id.button0: {
 				//b.playSoundEffect(SoundEffectConstants.CLICK);
+				if (dialPressVibrate) vibrator.vibrate(HAPTIC_LENGTH_MS);
 				keyPressed(KeyEvent.KEYCODE_PLUS);
 				return true;
 			}
