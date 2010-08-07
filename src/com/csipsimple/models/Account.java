@@ -251,24 +251,48 @@ public class Account {
 		db.open();
 		Cursor c = db.getFiltersForAccount(id);
 		int numRows = c.getCount();
-		Log.d(THIS_FILE, "This account has "+numRows+" filters");
+		Log.d(THIS_FILE, "F > This account has "+numRows+" filters");
 		c.moveToFirst();
 		for (int i = 0; i < numRows; ++i) {
 			Filter f = new Filter();
 			f.createFromDb(c);
 			Log.d(THIS_FILE, "Test filter "+f.matches);
 			canCall &= f.canCall(number);
-			if(!f.stopProcessing(number)) {
+			if(f.stopProcessing(number)) {
 				c.close();
 				db.close();
 				return canCall;
 			}
+			c.moveToNext();
 		}
 		c.close();
 		db.close();
 		return canCall;
 	}
 	
+	
+	public String rewritePhoneNumber(String number, DBAdapter db) {
+		db.open();
+		Cursor c = db.getFiltersForAccount(id);
+		int numRows = c.getCount();
+		Log.d(THIS_FILE, "RW > This account has "+numRows+" filters");
+		c.moveToFirst();
+		for (int i = 0; i < numRows; ++i) {
+			Filter f = new Filter();
+			f.createFromDb(c);
+			Log.d(THIS_FILE, "RW > Test filter "+f.matches);
+			number = f.rewrite(number);
+			if(f.stopProcessing(number)) {
+				c.close();
+				db.close();
+				return number;
+			}
+			c.moveToNext();
+		}
+		c.close();
+		db.close();
+		return number;
+	}
 	
 	
 }

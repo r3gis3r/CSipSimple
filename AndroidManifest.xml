@@ -43,7 +43,7 @@
 		<!-- Accounts -->
 		<activity android:name=".ui.AccountsList" android:launchMode="singleTask" android:label="@string/accounts"></activity>
 		<activity android:name=".ui.AccountFilters" android:launchMode="singleTask" android:label="@string/filters"></activity>
-		<activity android:name=".ui.EditFilter" android:launchMode="singleTask" android:label="@string/filters"></activity>
+		<activity android:name=".ui.EditFilter" android:launchMode="singleTask" android:label="@string/filters" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		
 
 		<activity android:name=".wizards.WizardChooser" android:theme="@android:style/Theme.Dialog"

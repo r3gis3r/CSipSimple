@@ -17,6 +17,7 @@
  */
 package com.csipsimple.ui;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -309,22 +310,22 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		int accountPosition;
 	}
 	
-	/*
-	private static final class AccountListItemUpdate {
-		AccountListItemViews itemViews;
-		AccountStatusDisplay statusDisplay;
-	}
-	*/
 	
 	class AccountAdapter extends ArrayAdapter<Account> implements OnClickListener {
-
 		Activity context;
+		private HashMap<Integer, AccountStatusDisplay> cacheStatusDisplay;
 		
 		AccountAdapter(Activity context, List<Account> list) {
 			super(context, R.layout.accounts_list_item, list);
 			this.context = context;
+			cacheStatusDisplay = new HashMap<Integer, AccountStatusDisplay>();
 		}
 		
+		@Override
+		public void notifyDataSetChanged() {
+			cacheStatusDisplay.clear();
+			super.notifyDataSetChanged();
+		}
 		
 		@Override
 	    public View getView(int position, View convertView, ViewGroup parent) {
@@ -366,16 +367,13 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	        if (account == null){
 	        	return;
 	        }
-	        
-	        //Threaded since we can encounter a lock due to a pending registration. ?
-//	        Thread t = new Thread() {
-//	        	@Override
-//	        	public void run() {
-//	        		AccountListItemUpdate
-//	        	};
-//	        }
-//	        t.start();
-			final AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
+	        AccountStatusDisplay accountStatusDisplay = null;
+			accountStatusDisplay = (AccountStatusDisplay) cacheStatusDisplay.get(position);
+			if(accountStatusDisplay == null) {
+				//In an ideal world, should be threaded
+				accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
+				cacheStatusDisplay.put(position, accountStatusDisplay);
+			}
 			
 			tagView.labelView.setText(account.display_name);
             

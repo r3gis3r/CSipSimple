@@ -108,7 +108,7 @@ public class MediaManager {
 		Log.d(THIS_FILE, "Set mode audio in call");
 	
 		
-		if(!Compatibility.isCompatible(5)) {
+		if(Compatibility.useRoutingApi()) {
 			audioManager.setRouting(AudioManager.MODE_IN_CALL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 			audioManager.setMode(AudioManager.MODE_IN_CALL);
 		}
@@ -216,7 +216,7 @@ public class MediaManager {
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
 		
-		if(!Compatibility.isCompatible(5)) {
+		if(Compatibility.useRoutingApi()) {
 			audioManager.setMode(savedMode);
 			audioManager.setRouting(AudioManager.MODE_IN_CALL, savedRoute, AudioManager.ROUTE_ALL);
 		}
@@ -288,7 +288,7 @@ public class MediaManager {
 	
 	public synchronized void setSpeakerphoneOn(boolean on) {
 		if(audioManager.isSpeakerphoneOn() != on) {
-			if(!Compatibility.isCompatible(5)) {
+			if(Compatibility.useRoutingApi()) {
 				audioManager.setRouting(AudioManager.MODE_IN_CALL, on?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 			}
 			audioManager.setSpeakerphoneOn(on);

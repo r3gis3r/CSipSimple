@@ -17,6 +17,8 @@
  */
 package com.csipsimple.models;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -30,6 +32,7 @@ import android.text.TextUtils;
 import com.csipsimple.R;
 import com.csipsimple.utils.Log;
 
+@SuppressWarnings("serial")
 public class Filter {
 	public static final String _ID = "_id";
 	public static final String FIELD_PRIORITY = "priority";
@@ -41,6 +44,18 @@ public class Filter {
 	public static final int ACTION_CAN_CALL = 0;
 	public static final int ACTION_CANT_CALL = 1;
 	public static final int ACTION_REPLACE = 2;
+	
+	public static final int MATCHER_START = 0;
+	public static final int MATCHER_HAS_N_DIGIT = 1;
+	public static final int MATCHER_HAS_MORE_N_DIGIT = 2;
+	public static final int MATCHER_IS_EXACTLY = 3;
+	public static final int MATCHER_REGEXP = 4;
+	
+	public static final int REPLACE_PREFIX = 0;
+	public static final int REPLACE_MATCH_TO = 1;
+	public static final int REPLACE_TRANSFORM = 2;
+	public static final int REPLACE_REGEXP = 3;
+	
 	
 	public static final String[] common_projection = {
 		_ID,
@@ -114,7 +129,7 @@ public class Filter {
 	public String getRepresentation(Context context) {
 		String[] choices = context.getResources().getStringArray(R.array.filters_action);
 		String repr = "";
-		repr += choices[action];
+		repr += choices[getPositionForAction(action)];
 		repr += " "+matches;
 		if(!TextUtils.isEmpty(replace) && action == ACTION_REPLACE) {
 			repr += " > "+replace;
@@ -136,6 +151,7 @@ public class Filter {
 	}
 	
 	public boolean stopProcessing(String number) {
+		Log.d(THIS_FILE, "Should stop processing "+number+" ? ");
 		if(action == ACTION_CAN_CALL) {
 			try {
 				return Pattern.matches(matches, number);
@@ -143,6 +159,7 @@ public class Filter {
 				Log.e(THIS_FILE, "Invalid pattern ", e);
 			}
 		}
+		Log.d(THIS_FILE, "Response : false");
 		return false;
 	}
 	
@@ -150,13 +167,162 @@ public class Filter {
 		if(action == ACTION_REPLACE) {
 			try {
 				Pattern pattern = Pattern.compile(matches);
-				Matcher matcher = pattern.matcher(replace);
-				return matcher.replaceAll(number); 
+				Matcher matcher = pattern.matcher(number);
+				return matcher.replaceAll(replace); 
 			}catch(PatternSyntaxException e) {
 				Log.e(THIS_FILE, "Invalid pattern ", e);
 			}
 		}
 		return number;
+	}
+
+	
+	
+	//Utilities functions
+	private static int getForPosition(HashMap<Integer, Integer> positions, Integer key) {
+		return positions.get(key);
+	}
+	private static int getPositionFor(HashMap<Integer, Integer> positions, Integer value) {
+		if(value != null) {
+			for (Entry<Integer, Integer> entry : positions.entrySet()) {
+				if (entry.getValue().equals(value)) {
+					return entry.getKey();
+				}
+			}
+		}
+		return 0;
+	}
+	
+
+	/**
+	 * Available actions
+	 */
+	private static HashMap<Integer, Integer> filterActionPositions = new HashMap<Integer, Integer>() {{
+		put(0, ACTION_CANT_CALL);
+		put(1, ACTION_REPLACE);
+		put(2, ACTION_CAN_CALL);
+	}};
+	
+	public static int getActionForPosition(Integer selectedItemPosition) {
+		return getForPosition(filterActionPositions, selectedItemPosition);
+	}
+
+	public static int getPositionForAction(Integer selectedAction) {
+		return getPositionFor(filterActionPositions, selectedAction);
+	}
+	
+	/**
+	 * Available matches patterns
+	 */
+	private static HashMap<Integer, Integer> matcherTypePositions = new HashMap<Integer, Integer>() {{
+		put(0, MATCHER_START);
+		put(1, MATCHER_HAS_N_DIGIT);
+		put(2, MATCHER_HAS_MORE_N_DIGIT);
+		put(3, MATCHER_IS_EXACTLY);
+		put(4, MATCHER_REGEXP);
+	}};
+	
+	public static int getMatcherForPosition(Integer selectedItemPosition) {
+		return getForPosition(matcherTypePositions, selectedItemPosition);
+	}
+
+	public static int getPositionForMatcher(Integer selectedAction) {
+		return getPositionFor(matcherTypePositions, selectedAction);
+	}
+	
+	
+	/**
+	 * Represent a typed regexp
+	 * Utility for visualisation of regexp (typed, for example start with, number of digit etc etc) 
+	 * @author r3gis3r
+	 *
+	 */
+	public static final class RegExpRepresentation {
+		public Integer type;
+		public String fieldContent;
+	}
+	
+	/**
+	 * Set matches field according to a RegExpRepresentation (for UI display)
+	 * @param representation the regexp representation
+	 */
+	public void setMatcherRepresentation(RegExpRepresentation representation) {
+		switch(representation.type) {
+		case MATCHER_START:
+			matches = "^"+Pattern.quote(representation.fieldContent)+"(.*)$";
+			break;
+		case MATCHER_HAS_N_DIGIT:
+			//TODO: is dot the best char?
+			//TODO ... we should probably test the fieldContent type to ensure it's well digits...
+			matches = "^(.{"+representation.fieldContent+"})$";
+			break;
+		case MATCHER_HAS_MORE_N_DIGIT:
+			//TODO ... we should probably test the fieldContent type to ensure it's well digits...
+			matches = "^(.{"+representation.fieldContent+",})$";
+			break;
+		case MATCHER_IS_EXACTLY:
+			matches = "^("+Pattern.quote(representation.fieldContent)+")$";
+			break;
+		case MATCHER_REGEXP:
+		default:
+			matches = representation.fieldContent;
+			break;
+		}
+	}
+	
+	/**
+	 * Get the represantation for current matcher
+	 * @return RegExpReprestation object with type of matcher and content for matcher 
+	 * (content that should be shown in a text field for user)
+	 */
+	public RegExpRepresentation getRepresentationForMatcher() {
+		RegExpRepresentation repr = new RegExpRepresentation();
+		repr.type = MATCHER_REGEXP;
+		if(matches == null) {
+			repr.fieldContent = "";
+			return repr;
+		}else {
+			repr.fieldContent = matches;
+		}
+		
+		Matcher matcher = null;
+		
+		//Well... here we are... Some awful regexp matcher to test a regexp... Isn't it nice?
+		matcher = Pattern.compile("^\\^\\\\Q(.+)\\\\E\\(\\.\\*\\)\\$$").matcher(matches);
+		if(matcher.matches()) {
+			repr.type = MATCHER_START;
+			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		
+		matcher = Pattern.compile("^\\^\\(\\.\\{([0-9]+)\\}\\)\\$$").matcher(matches);
+		if(matcher.matches()) {
+			repr.type = MATCHER_HAS_N_DIGIT;
+			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		matcher = Pattern.compile("^\\^\\(\\.\\{([0-9]+),\\}\\)\\$$").matcher(matches);
+		if(matcher.matches()) {
+			repr.type = MATCHER_HAS_MORE_N_DIGIT;
+			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		matcher = Pattern.compile("^\\^\\(\\\\Q(.+)\\\\E\\)\\$$").matcher(matches);
+		if(matcher.matches()) {
+			repr.type = MATCHER_IS_EXACTLY;
+			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		
+		
+		return repr;
+	}
+	
+	
+	public void setReplaceRepresentation(RegExpRepresentation representation){
+		switch(representation.type) {
+		
+		}
 	}
 
 }

@@ -39,6 +39,11 @@
 				android:summary="@string/snd_speaker_level_desc" 
 				android:defaultValue="1.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
 			
+			<com.csipsimple.widgets.SeekBarPreference android:key="snd_stream_level"
+				android:title="@string/snd_stream_level"
+				android:summary="@string/snd_stream_level_desc" 
+				android:defaultValue="8.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
+			
 			<EditTextPreference android:key="snd_media_quality"
 				android:title="@string/snd_media_quality"
 				android:numeric="signed"

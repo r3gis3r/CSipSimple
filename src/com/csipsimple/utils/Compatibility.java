@@ -23,6 +23,7 @@ import android.media.AudioManager;
 
 public class Compatibility {
 	
+	private static final String THIS_FILE = "Compat";
 	private static int currentApi = 0;
 
 	public static int getApiLevel() {
@@ -58,8 +59,19 @@ public class Compatibility {
 	 */
 	public static int getInCallStream() {
 		if(android.os.Build.BRAND.equalsIgnoreCase("archos")) {
+			//Since archos has no voice call capabilities, voice call stream is not implemented
+			//So we have to choose the good stream tag, which is by default falled back to music
 			return AudioManager.STREAM_MUSIC;
 		}
 		return AudioManager.STREAM_VOICE_CALL;
+	}
+	
+	public static boolean useRoutingApi() {
+		Log.d(THIS_FILE, "Current device is an "+android.os.Build.BRAND);
+		if(android.os.Build.BRAND.equalsIgnoreCase("htc") ||
+				android.os.Build.BRAND.equalsIgnoreCase("google") ) {
+			return false;
+		}
+		return true;
 	}
 }

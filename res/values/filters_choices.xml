@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="filters_action">
+        <item>Can\'t call</item>
+        <item>Rewrite</item>
+        <item>Stop processing</item>
+    </string-array>
+    
+    <string-array name="filters_type">
+        <item>Starts with</item>
+        <item>Has exactly N digit</item>
+        <item>Has more than N digit</item>
+        <item>Is exactly</item>
+        <item>Custom RegExp</item>
+    </string-array>
+    
+    <string-array name="replace_type">
+        <item>Prefix by</item>
+        <item>Replace match by</item>
+        <item>Transform to</item>
+        <item>Custom RegExp</item>
+    </string-array>
+</resources>

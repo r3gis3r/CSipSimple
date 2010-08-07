@@ -770,7 +770,6 @@ public class SipService extends Service {
 			return null;
 		}
 		AccountInfo accountInfo;
-		Log.d(THIS_FILE, "Get account infos....");
 		synchronized (activeAccountsLock) {
 			Account account;
 			synchronized (db) {
@@ -784,7 +783,7 @@ public class SipService extends Service {
 				if(activeAccounts.containsKey(accountDbId)) {
 					accountInfo.setPjsuaId(activeAccounts.get(accountDbId));
 					pjsua_acc_info pjAccountInfo = new pjsua_acc_info();
-					Log.d(THIS_FILE, "Get account info for "+accountDbId+" ==> "+activeAccounts.get(accountDbId));
+					Log.d(THIS_FILE, "Get account info for account id "+accountDbId+" ==> (active within pjsip as) "+activeAccounts.get(accountDbId));
 					int success = pjsua.acc_get_info(activeAccounts.get(accountDbId), pjAccountInfo);
 					if(success == pjsuaConstants.PJ_SUCCESS) {
 						accountInfo.fillWithPjInfo(pjAccountInfo);

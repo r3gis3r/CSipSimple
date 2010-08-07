@@ -34,6 +34,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
+import com.csipsimple.models.Filter.RegExpRepresentation;
 import com.csipsimple.utils.Log;
 
 public class EditFilter extends Activity implements OnItemSelectedListener, TextWatcher {
@@ -45,8 +46,14 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 	private Button saveButton;
 	private int accountId;
 	private EditText replaceView;
-	private Spinner actionView;
+	private Spinner actionSpinner;
 	private EditText matchesView;
+//	private View matchesContainer;
+	private View replaceContainer;
+	private Spinner replaceSpinner;
+	private Spinner matcherSpinner;
+	private boolean initMatcherSpinner;
+	private boolean initReplaceSpinner;
 	
 
 	@Override
@@ -73,11 +80,24 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		
 		
 		// Bind view objects
-		actionView = (Spinner) findViewById(R.id.filter_action);
+		actionSpinner = (Spinner) findViewById(R.id.filter_action);
+		matcherSpinner = (Spinner) findViewById(R.id.matcher_type);
+		replaceSpinner = (Spinner) findViewById(R.id.replace_type);
+		
 		replaceView = (EditText) findViewById(R.id.filter_replace);
 		matchesView = (EditText) findViewById(R.id.filter_matches);
 		
-		actionView.setOnItemSelectedListener(this);
+		//Bind containers objects
+//		matchesContainer = (View) findViewById(R.id.matcher_block);
+		replaceContainer = (View) findViewById(R.id.replace_block);
+		
+		
+
+		actionSpinner.setOnItemSelectedListener(this);
+		matcherSpinner.setOnItemSelectedListener(this);
+		initMatcherSpinner = false;
+		replaceSpinner.setOnItemSelectedListener(this);
+		initReplaceSpinner = false;
 		matchesView.addTextChangedListener(this);
 		replaceView.addTextChangedListener(this);
 		
@@ -106,12 +126,29 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		checkFormValidity();
 	}
 	
-	
 	private void saveFilter() {
+		//Update filter object
+		
 		filter.account = accountId;
-		filter.matches = matchesView.getText().toString();
-		filter.replace = replaceView.getText().toString();
-		filter.action = actionView.getSelectedItemPosition();
+		filter.action = Filter.getActionForPosition(actionSpinner.getSelectedItemPosition());
+		RegExpRepresentation repr = new RegExpRepresentation();
+		//Matcher
+		repr.type = Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition());
+		repr.fieldContent = matchesView.getText().toString();
+		filter.setMatcherRepresentation(repr);
+		
+		
+		//Rewriter
+		if(filter.action == Filter.ACTION_REPLACE) {
+		//	repr.fieldContent = matchesView.getText().toString();
+		//	repr.type = Filter.getReplaceForPosition(replaceSpinner.getSelectedItemPosition());
+		//	filter.replace = Filter.getRegexpForReplaceRepresentation(repr);
+			filter.replace = replaceView.getText().toString();
+		}else {
+			filter.replace = "";
+		}
+		
+		//Save
 		database.open();
 		if(filterId < 0) {
 			database.insertFilter(filter);
@@ -122,11 +159,14 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 	}
 	
 	private void fillLayout() {
-		matchesView.setText(filter.matches);
+		//Set action
+		actionSpinner.setSelection(Filter.getPositionForAction(filter.action));
+		RegExpRepresentation repr = filter.getRepresentationForMatcher();
+		//Set matcher - selection must be done first since raise on item change listener
+		matcherSpinner.setSelection(Filter.getPositionForMatcher(repr.type));
+		matchesView.setText(repr.fieldContent);
+		
 		replaceView.setText(filter.replace);
-		if(filter.action != null) {
-			actionView.setSelection(filter.action);
-		}
 		
 	}
 	
@@ -136,7 +176,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		if(TextUtils.isEmpty(matchesView.getText().toString())) {
 			isValid = false;
 		}
-		if(actionView.getSelectedItemPosition() == Filter.ACTION_REPLACE) {
+		if(Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) == Filter.ACTION_REPLACE) {
 			if(TextUtils.isEmpty(replaceView.getText().toString())) {
 				isValid = false;
 			}
@@ -147,9 +187,29 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		if(actionView.getSelectedItemPosition() == Filter.ACTION_REPLACE) {
-			
+	public void onItemSelected(AdapterView<?> spinner, View arg1, int arg2, long arg3) {
+		switch(spinner.getId()) {
+		case R.id.filter_action:
+			if(Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) == Filter.ACTION_REPLACE) {
+				replaceContainer.setVisibility(View.VISIBLE);
+			}else {
+				replaceContainer.setVisibility(View.GONE);
+			}
+			break;
+		case R.id.matcher_type:
+			if(initMatcherSpinner) {
+				matchesView.setText("");
+			}else {
+				initMatcherSpinner = true;
+			}
+			break;
+		case R.id.replace_type:
+			if(initReplaceSpinner) {
+				replaceView.setText("");
+			}else {
+				initReplaceSpinner = true;
+			}
+			break;
 		}
 		checkFormValidity();
 	}
@@ -158,8 +218,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
-		
+		checkFormValidity();
 	}
 
 	@Override
@@ -180,6 +239,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		checkFormValidity();
 		
 	}
+
 
 
 }

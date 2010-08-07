@@ -379,7 +379,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		muteButton.setEnabled(mediaState.canMicrophoneMute);
 		muteButton.setChecked(mediaState.isMicrophoneMute);
 		
-		Log.d(THIS_FILE, ">>> Can bluetooth : "+mediaState.canBluetoothSco);
+	//	Log.d(THIS_FILE, ">>> Can bluetooth : "+mediaState.canBluetoothSco);
 		bluetoothButton.setEnabled(mediaState.canBluetoothSco);
 		bluetoothButton.setChecked(mediaState.isBluetoothScoOn);
 		

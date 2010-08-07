@@ -17,6 +17,7 @@
  */
 package com.csipsimple.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.pjsip.pjsua.pjsip_status_code;
@@ -191,9 +192,21 @@ public class OutgoingCallChooser extends ListActivity {
     	database.open();
 		accountsList = database.getListAccounts(true/*, service*/);
 		database.close();
-    	
+		
+		//Exclude filtered accounts - TODO : move to db?
+		List<Account> excludedAccounts = new ArrayList<Account>();
+		String phoneNumber = number.replaceAll("^sip:", "");
+		for(Account acc : accountsList) {
+			if(! acc.isCallableNumber(phoneNumber, database) ) {
+				excludedAccounts.add(acc);
+			}
+		}
+		for(Account acc : excludedAccounts) {
+			accountsList.remove(acc);
+		}
+		
     	if(adapter == null) {
-    		adapter = new AccountAdapter(this, accountsList);
+    		adapter = new AccountAdapter(this, accountsList, phoneNumber, database);
     		adapter.setNotifyOnChange(false);
     		setListAdapter(adapter);
     		if(service != null) {

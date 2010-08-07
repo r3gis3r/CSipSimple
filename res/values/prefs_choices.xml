@@ -55,11 +55,5 @@
 	</string-array>
 	
 	
-    <string-array name="filters_action">
-        <item>Can call</item>
-        <item>Can\'t call</item>
-        <item>Rewrite</item>
-    </string-array>
-    
     
 </resources>

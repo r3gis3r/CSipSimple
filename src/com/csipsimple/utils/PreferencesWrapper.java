@@ -367,7 +367,7 @@ public class PreferencesWrapper {
 	}
 
 	public float getInitialVolumeLevel() {
-		return (float) 0.8;
+		return (float) ((float) (prefs.getFloat("snd_stream_level", (float) 8.0)) / 10.0);
 	}
 
 	public boolean usePartialWakeLock() {
