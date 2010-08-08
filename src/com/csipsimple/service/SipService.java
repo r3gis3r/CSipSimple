@@ -333,6 +333,8 @@ public class SipService extends Service {
 			stopSelf();
 			return;
 		}
+		
+		Log.setLogLevel(prefsWrapper.getLogLevel());
 
 
 		// Register own broadcast receiver
@@ -418,6 +420,8 @@ public class SipService extends Service {
 
 	// Start the sip stack according to current settings
 	synchronized void sipStart() {
+		Log.setLogLevel(prefsWrapper.getLogLevel());
+
 		if (!hasSipStack) {
 			Log.e(THIS_FILE, "We have no sip stack, we can't start");
 			return;
@@ -473,8 +477,8 @@ public class SipService extends Service {
 
 						// LOGGING CONFIG
 						pjsua.logging_config_default(log_cfg);
-						log_cfg.setConsole_level(Log.LOG_LEVEL);
-						log_cfg.setLevel(Log.LOG_LEVEL);
+						log_cfg.setConsole_level(prefsWrapper.getLogLevel());
+						log_cfg.setLevel(prefsWrapper.getLogLevel());
 						log_cfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
 
 						// MEDIA CONFIG

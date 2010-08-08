@@ -94,7 +94,25 @@ public class AccountFilters extends ListActivity {
 		listView.setOnDropListener(new DropListener() {
 			@Override
 			public void drop(int from, int to) {
-				//TODO ...
+				//Update priorities
+				CursorAdapter ad = (CursorAdapter) getListAdapter();
+				int numRows = ad.getCount();
+				
+				for(int i=0; i<numRows; i++) {
+					//Log.d(THIS_FILE, "i= "+i+" from ="+from+" to="+to);
+					if(i != from) {
+						if( from > i && i>=to) {
+							database.updateFilterPriority(ad.getItemId(i), i+1);
+						}else if(from <i && i<=to){
+							database.updateFilterPriority(ad.getItemId(i), i-1);
+						}else{
+							database.updateFilterPriority(ad.getItemId(i), i);
+						}
+					}else {
+						database.updateFilterPriority(ad.getItemId(from), to);
+					}
+				}
+				cursor.requery();
 			}
 		});
 		
@@ -121,7 +139,7 @@ public class AccountFilters extends ListActivity {
 
 			
 			TextView tv = (TextView) view.findViewById(R.id.line1);
-			tv.setText(filter.getRepresentation(context));
+			tv.setText(filter.id+" > "+filter.priority+filter.getRepresentation(context));
 			ImageView icon = (ImageView) view.findViewById(R.id.action_icon);
 			switch (filter.action) {
 			case Filter.ACTION_CAN_CALL:

@@ -307,15 +307,6 @@ public class PreferencesWrapper {
 		return false;
 	}
 	
-	// For debug only for now
-	public int getAudioMode() {
-		try {
-			return Integer.parseInt(prefs.getString("set_audio_mode", "-2"));
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Audio mode not well formated");
-		}
-		return -2;
-	}
 
 	/**
 	 * Get sip ringtone
@@ -372,6 +363,21 @@ public class PreferencesWrapper {
 
 	public boolean usePartialWakeLock() {
 		return prefs.getBoolean("use_partial_wake_lock", false);
+	}
+	
+	public int getLogLevel() {
+		int defaultValue = 1;
+		int prefsValue = 1;
+		String logLevel = prefs.getString("log_level", String.valueOf(defaultValue));
+		try {
+			prefsValue = Integer.parseInt(logLevel);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Audio quality "+logLevel+" not well formated");
+		}
+		if(prefsValue <= 5 && prefsValue >= 1) {
+			return prefsValue;
+		}
+		return defaultValue;
 	}
 
 	public final static int HEADSET_ACTION_CLEAR_CALL = 0;

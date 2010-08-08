@@ -394,7 +394,7 @@ public class DBAdapter {
 	 * @return the number of account
 	 */
 	public int getNbrOfCallLogs() {
-		Cursor c = db.rawQuery("SELECT COUNT("+CallLog.Calls._ID+");", null);
+		Cursor c = db.rawQuery("SELECT COUNT("+CallLog.Calls._ID+") FROM "+CALLLOGS_TABLE_NAME+";", null);
 		int numRows = 0;
 		if(c.getCount() > 0){
 			c.moveToFirst();
@@ -451,6 +451,21 @@ public class DBAdapter {
 				Filter.FIELD_ACCOUNT+"=?", new String[]{Integer.toString(account_id)}, 
 				null, null, Filter.DEFAULT_ORDER);
 	}
+	
+	public int getCountFiltersForAccount(int account_id) {
+		Cursor c = db.rawQuery("SELECT COUNT("+Filter.FIELD_ACCOUNT+") FROM "+FILTERS_TABLE_NAME+" WHERE "+Filter.FIELD_ACCOUNT+"=?;", 
+				new String[]{Integer.toString(account_id)});
+		int numRows = 0;
+		if(c.getCount() > 0){
+			c.moveToFirst();
+			numRows = c.getInt(0);
+			
+		}
+		c.close();
+		return numRows;
+	}
+	
+	
 
 	public Filter getFilter(int filterId) {
 
@@ -500,6 +515,13 @@ public class DBAdapter {
 	public boolean updateFilter(Filter filter) {
 		return db.update(FILTERS_TABLE_NAME, filter.getDbContentValues(),
 				Filter._ID + "=" + filter.id, null) > 0;
+	}
+	
+	public boolean updateFilterPriority(long filterId, int newPriority) {
+		ContentValues args = new ContentValues();
+		args.put(Filter.FIELD_PRIORITY, newPriority);
+		return db.update(FILTERS_TABLE_NAME, args,
+				Filter._ID + "=" + filterId, null) > 0;
 	}
 	
 	/**

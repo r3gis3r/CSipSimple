@@ -89,6 +89,8 @@
 <string name="keep_awake_incall_desc">Fixes if you get choppy sound when screen turn off while in WIFI call</string>
 <string name="use_partial_wake_lock">Use partial wake lock</string>
 <string name="use_partial_wake_lock_desc">Ensure CPU is always running for CSipSimple (drain battery)</string>
+<string name="log_level">Log level</string>
+<string name="log_level_desc">Log level for debug between 0 (none) and 5 (verbose)</string>
 
 
 <!-- Fast settings -->

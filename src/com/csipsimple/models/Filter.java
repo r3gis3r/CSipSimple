@@ -65,7 +65,7 @@ public class Filter {
 		FIELD_ACTION
 	};
 	
-	public static final String DEFAULT_ORDER = FIELD_PRIORITY+" desc"; //TODO : should be a os constant... just find it
+	public static final String DEFAULT_ORDER = FIELD_PRIORITY+" asc"; //TODO : should be a os constant... just find it
 	private static final String THIS_FILE = "Filter";
 	
 	public Integer id;
@@ -230,6 +230,21 @@ public class Filter {
 		return getPositionFor(matcherTypePositions, selectedAction);
 	}
 	
+	private static HashMap<Integer, Integer> replaceTypePositions = new HashMap<Integer, Integer>() {{
+		put(0, REPLACE_PREFIX);
+		put(1, REPLACE_MATCH_TO);
+		put(2, REPLACE_TRANSFORM);
+		put(3, REPLACE_REGEXP);
+	}};
+	
+	public static int getReplaceForPosition(Integer selectedItemPosition) {
+		return getForPosition(replaceTypePositions, selectedItemPosition);
+	}
+
+	public static int getPositionForReplace(Integer selectedAction) {
+		return getPositionFor(replaceTypePositions, selectedAction);
+	}
+	
 	
 	/**
 	 * Represent a typed regexp
@@ -321,8 +336,60 @@ public class Filter {
 	
 	public void setReplaceRepresentation(RegExpRepresentation representation){
 		switch(representation.type) {
-		
+		case REPLACE_PREFIX:
+			replace = representation.fieldContent+"$0";
+			break;
+		case REPLACE_MATCH_TO:
+			replace = representation.fieldContent+"$1";
+			break;
+		case REPLACE_TRANSFORM:
+			//If $ is inside... well, next time will be considered as a regexp
+			replace = representation.fieldContent;
+			break;
+		case REPLACE_REGEXP:
+		default:
+			replace = representation.fieldContent;
+			break;
 		}
 	}
+	
+	
+	public RegExpRepresentation getRepresentationForReplace() {
+		RegExpRepresentation repr = new RegExpRepresentation();
+		repr.type = REPLACE_REGEXP;
+		if(replace == null) {
+			repr.fieldContent = "";
+			return repr;
+		}else {
+			repr.fieldContent = replace;
+		}
+		
+		Matcher matcher = null;
+		
+		
+		matcher = Pattern.compile("^(.+)\\$0$").matcher(replace);
+		if(matcher.matches()) {
+			repr.type = REPLACE_PREFIX;
+			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		matcher = Pattern.compile("^(.+)\\$1$").matcher(replace);
+		if(matcher.matches()) {
+			repr.type = REPLACE_MATCH_TO;
+			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		
+		matcher = Pattern.compile("^([^\\$]+)$").matcher(replace);
+		if(matcher.matches()) {
+			repr.type = REPLACE_TRANSFORM;
+			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		
+		return repr;
+	}
+
+
 
 }

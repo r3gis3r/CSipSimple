@@ -18,7 +18,11 @@
 package com.csipsimple.utils;
 
 public class Log {
-	public static int LOG_LEVEL = 4;
+	private static int LOG_LEVEL = 1;
+	
+	public static void setLogLevel(int level) {
+		LOG_LEVEL = level;
+	}
 	
 	public static void v(String tag, String msg) {
 		if(LOG_LEVEL >= 5) {

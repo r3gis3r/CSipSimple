@@ -60,6 +60,12 @@
 			android:defaultValue="false"
 			android:summary="@string/use_partial_wake_lock_desc"
 			android:key="use_partial_wake_lock"></CheckBoxPreference>
+		
+		<EditTextPreference android:key="log_level"
+				android:title="@string/log_level"
+				android:numeric="signed"
+				android:summary="@string/log_level_desc"
+				android:defaultValue="1"></EditTextPreference>
 	</PreferenceCategory>
 	
 </PreferenceScreen>

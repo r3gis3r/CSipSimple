@@ -140,10 +140,9 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		
 		//Rewriter
 		if(filter.action == Filter.ACTION_REPLACE) {
-		//	repr.fieldContent = matchesView.getText().toString();
-		//	repr.type = Filter.getReplaceForPosition(replaceSpinner.getSelectedItemPosition());
-		//	filter.replace = Filter.getRegexpForReplaceRepresentation(repr);
-			filter.replace = replaceView.getText().toString();
+			repr.fieldContent = replaceView.getText().toString();
+			repr.type = Filter.getReplaceForPosition(replaceSpinner.getSelectedItemPosition());
+			filter.setReplaceRepresentation(repr);
 		}else {
 			filter.replace = "";
 		}
@@ -151,6 +150,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		//Save
 		database.open();
 		if(filterId < 0) {
+			filter.priority = database.getCountFiltersForAccount(filter.account);
 			database.insertFilter(filter);
 		}else {
 			database.updateFilter(filter);
@@ -165,8 +165,10 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		//Set matcher - selection must be done first since raise on item change listener
 		matcherSpinner.setSelection(Filter.getPositionForMatcher(repr.type));
 		matchesView.setText(repr.fieldContent);
-		
-		replaceView.setText(filter.replace);
+		//Set replace
+		repr = filter.getRepresentationForReplace();
+		replaceSpinner.setSelection(Filter.getPositionForReplace(repr.type));
+		replaceView.setText(repr.fieldContent);
 		
 	}
 	
