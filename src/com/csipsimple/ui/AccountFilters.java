@@ -139,20 +139,19 @@ public class AccountFilters extends ListActivity {
 
 			
 			TextView tv = (TextView) view.findViewById(R.id.line1);
-			tv.setText(filter.id+" > "+filter.priority+filter.getRepresentation(context));
+			tv.setText(filter.getRepresentation(context));
 			ImageView icon = (ImageView) view.findViewById(R.id.action_icon);
 			switch (filter.action) {
 			case Filter.ACTION_CAN_CALL:
-				icon.setImageResource(android.R.drawable.ic_menu_call);
+				icon.setImageResource(R.drawable.ic_menu_stop);
 				break;
 			case Filter.ACTION_CANT_CALL:
-				icon.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+				icon.setImageResource(R.drawable.ic_menu_prevent);
 				break;
 			case Filter.ACTION_REPLACE:
-				icon.setImageResource(android.R.drawable.ic_menu_edit);
+				icon.setImageResource(R.drawable.ic_menu_rewrite);
 				break;
 			}
-			
 		}
 
 	}

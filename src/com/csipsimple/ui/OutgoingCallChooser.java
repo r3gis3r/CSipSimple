@@ -237,7 +237,10 @@ public class OutgoingCallChooser extends ListActivity {
 			if (accountInfo != null && accountInfo.isActive()) {
 				if (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
 					try {
-						service.makeCall(number, accountInfo.getPjsuaId());
+						String phoneNumber = number.replaceAll("^sip:", "");
+						String toCall = account.rewritePhoneNumber(phoneNumber, database);
+						
+						service.makeCall("sip:"+toCall, accountInfo.getPjsuaId());
 						finish();
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Unable to make the call", e);

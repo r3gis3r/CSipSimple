@@ -38,6 +38,6 @@
 		<TextView android:id="@+id/line1" android:textAppearance="?android:attr/textAppearanceMedium"
 			android:layout_width="wrap_content" android:paddingLeft="9dip" android:layout_height="wrap_content"
 			android:layout_alignWithParentIfMissing="true" android:layout_toRightOf="@id/action_icon"
-			android:ellipsize="marquee" android:singleLine="true" />
+			android:ellipsize="marquee" />
 	</RelativeLayout>
 </LinearLayout>

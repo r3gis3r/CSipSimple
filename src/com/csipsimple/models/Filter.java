@@ -127,12 +127,17 @@ public class Filter {
 
 
 	public String getRepresentation(Context context) {
-		String[] choices = context.getResources().getStringArray(R.array.filters_action);
+		String[] matches_array = context.getResources().getStringArray(R.array.filters_type);
+		String[] replace_array = context.getResources().getStringArray(R.array.replace_type);
+		RegExpRepresentation m = getRepresentationForMatcher();
 		String repr = "";
-		repr += choices[getPositionForAction(action)];
-		repr += " "+matches;
+		repr += matches_array[getPositionForMatcher(m.type)];
+		repr += " "+m.fieldContent;
 		if(!TextUtils.isEmpty(replace) && action == ACTION_REPLACE) {
-			repr += " > "+replace;
+			m = getRepresentationForReplace();
+			repr += "\n";
+			repr += replace_array[getPositionForReplace(m.type)];
+			repr += " "+m.fieldContent;
 		}
 		return repr;
 	}
