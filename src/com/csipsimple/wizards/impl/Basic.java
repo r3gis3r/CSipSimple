@@ -40,7 +40,7 @@ public class Basic extends BasePrefsWizard {
 		result.id =  "BASIC";
 		result.label = "Basic";
 		result.icon = R.drawable.ic_wizard_basic;
-		result.priority = 1;
+		result.priority = 3;
 		result.countries = new Locale[]{};
 		result.isGeneric = true;
 		return result;
