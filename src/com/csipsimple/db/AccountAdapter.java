@@ -128,7 +128,11 @@ public class AccountAdapter extends ArrayAdapter<Account> implements OnClickList
 			// Update account image
 			WizardInfo wizard_infos = WizardUtils.getWizardClass(account.wizard);
 			if (wizard_infos != null) {
-				tagView.iconImage.setImageResource(wizard_infos.icon);
+				if(wizard_infos.isGeneric) {
+					tagView.iconImage.setImageResource(R.drawable.ic_launcher_phone);
+				}else {
+					tagView.iconImage.setImageResource(wizard_infos.icon);
+				}
 			}
 		}
 	}
