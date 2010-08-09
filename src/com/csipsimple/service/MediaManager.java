@@ -129,7 +129,7 @@ public class MediaManager {
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
 
-		if(isMusicActive) {
+		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
 			service.sendBroadcast(new Intent(PAUSE_ACTION));
 		}
 		
@@ -241,7 +241,7 @@ public class MediaManager {
 			screenLock.release();
 		}
 		
-		if(isMusicActive) {
+		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
 			service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
 		}
 		

@@ -365,6 +365,11 @@ public class PreferencesWrapper {
 		return prefs.getBoolean("use_partial_wake_lock", false);
 	}
 	
+
+	public boolean integrateWithMusicApp() {
+		return prefs.getBoolean("integrate_with_native_music", true);
+	}
+	
 	public int getLogLevel() {
 		int defaultValue = 1;
 		int prefsValue = 1;

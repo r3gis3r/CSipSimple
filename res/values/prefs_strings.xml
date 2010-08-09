@@ -91,6 +91,8 @@
 <string name="use_partial_wake_lock_desc">Ensure CPU is always running for CSipSimple (drain battery)</string>
 <string name="log_level">Log level</string>
 <string name="log_level_desc">Log level for debug between 0 (none) and 5 (verbose)</string>
+<string name="integrate_with_native_music">Integrate with Music application</string>
+<string name="integrate_with_native_music_desc">Disable it if you use another music application than the official one</string>
 
 
 <!-- Fast settings -->
