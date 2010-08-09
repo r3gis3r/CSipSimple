@@ -33,6 +33,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -58,7 +62,7 @@ import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.InCallControls.OnTriggerListener;
 
 
-public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener {
+public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener, SensorEventListener {
 	private static String THIS_FILE = "SIP CALL HANDLER";
 
 	private CallInfo callInfo = null;
@@ -85,6 +89,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private boolean inTest;
 
 	private MediaState lastMediaState;
+
+	private SensorManager sensorManager;
+	private Sensor proximitySensor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -137,6 +144,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_MEDIA_CHANGED));
 		
+		// Sensor management
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+		Log.d(THIS_FILE, "Proximty sensor : "+proximitySensor);
 	}
 	
 	
@@ -181,8 +192,21 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	protected void onResume() {
 		super.onResume();
 		updateUIFromCall();
+		if(proximitySensor != null) {
+			sensorManager.registerListener(this, 
+	                proximitySensor,
+	                SensorManager.SENSOR_DELAY_UI);
+		}
+
 	}
 	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if(proximitySensor != null) {
+			sensorManager.unregisterListener(this);
+		}
+	}
 
 	private synchronized void updateUIFromCall() {
 
@@ -210,7 +234,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			if(wakeLock != null && !wakeLock.isHeld()) {
 				wakeLock.acquire();
 			}
-			lockOverlay.hide();
+			if(proximitySensor == null) {
+				lockOverlay.hide();
+			}
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
 			backgroundResId = R.drawable.bg_in_call_gradient_connected;
@@ -221,8 +247,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				Log.d(THIS_FILE, "Releasing wake up lock - confirmed");
                 wakeLock.release();
             }
-			
-			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
+			if(proximitySensor == null) {
+				lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
+			}
 			break;
 		case PJSIP_INV_STATE_NULL:
 			Log.i(THIS_FILE, "WTF?");
@@ -423,7 +450,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		Log.d(THIS_FILE, "In Call Activity is triggered");
 		Log.d(THIS_FILE, "We have a call info : "+callInfo);
 		Log.d(THIS_FILE, "And a service : "+service);
-		lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
+		if(proximitySensor == null) {
+			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
+		}
 		try {
 			switch(whichAction) {
 				case TAKE_CALL:{
@@ -494,6 +523,25 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Was not able to take the call", e);
 			}
+		}
+		
+	}
+
+
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// Nothing to do here
+		
+	}
+
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		if(event.values[0]<1) {
+			lockOverlay.show();
+		}else {
+			lockOverlay.hide();
 		}
 		
 	}

@@ -32,7 +32,7 @@ public class Ippi extends SimplePrefsWizard {
 	public static WizardInfo getWizardInfo() {
 		WizardInfo result = new WizardInfo();
 		result.id =  "IPPI";
-		result.label = "Ippi";
+		result.label = "ippi";
 		result.icon = R.drawable.ic_wizard_ippi;
 		result.priority = 10;
 		//France, Belgique, Suisse, Canada, USA, Maroc, Algérie, Tunisie.

@@ -110,6 +110,7 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener, OnG
 			win.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	        win.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
+		
 	}
 	
 	public void hide() {
