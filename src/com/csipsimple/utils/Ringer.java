@@ -98,6 +98,10 @@ public class Ringer {
             // Ringer normal, audio set for ring, do it
             
             ringtone = getRingtone(remoteContact, defaultRingtone);
+            if(ringtone == null) {
+            	Log.d(THIS_FILE, "No ringtone available - do not ring");
+            	return;
+            }
 
             Log.d(THIS_FILE, "Starting ring with " + ringtone.getTitle(context));
             
