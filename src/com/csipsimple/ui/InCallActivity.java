@@ -53,6 +53,7 @@ import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.MediaManager.MediaState;
+import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.InCallControls;
@@ -93,6 +94,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private SensorManager sensorManager;
 	private Sensor proximitySensor;
 
+	private DialingFeedback dialFeedback;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -148,6 +151,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 		Log.d(THIS_FILE, "Proximty sensor : "+proximitySensor);
+		
+		dialFeedback = new DialingFeedback(this, true);
 	}
 	
 	
@@ -197,7 +202,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	                proximitySensor,
 	                SensorManager.SENSOR_DELAY_UI);
 		}
-
+		dialFeedback.resume();
 	}
 	
 	@Override
@@ -206,6 +211,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if(proximitySensor != null) {
 			sensorManager.unregisterListener(this);
 		}
+		dialFeedback.pause();
 	}
 
 	private synchronized void updateUIFromCall() {
@@ -510,16 +516,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 	}
 	
-	
-	
-	
-	
 
 	@Override
 	public void onTrigger(int keyCode, int dialTone) {
 		if (callInfo != null && service != null) {
 			try {
 				service.sendDtmf(callInfo.getCallId(), keyCode);
+				dialFeedback.giveFeedback(dialTone);
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Was not able to take the call", e);
 			}
@@ -527,8 +530,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 	}
 
-
-
+	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// Nothing to do here

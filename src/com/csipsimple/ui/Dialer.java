@@ -59,6 +59,7 @@ import com.csipsimple.R;
 import com.csipsimple.animation.Flip3dAnimation;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.Dialpad;
@@ -67,30 +68,16 @@ import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 public class Dialer extends Activity implements OnClickListener,
 		OnLongClickListener, OnDialKeyListener, TextWatcher {
 	
-	/** The length of vibrate (haptic) feedback in milliseconds */
-	private static final int HAPTIC_LENGTH_MS = 50;
-	
-    /** The length of DTMF tones in milliseconds */
-    private static final int TONE_LENGTH_MS = 150;
-
-    /** The DTMF tone volume relative to other sounds in the stream */
-    private static final int TONE_RELATIVE_VOLUME = 80;
-
-    /** Stream type used to play the DTMF tones off call, and mapped to the volume control keys */
-    private static final int DIAL_TONE_STREAM_TYPE = AudioManager.STREAM_MUSIC;
-    
-	private ToneGenerator toneGenerator = null;
-	private Object toneGeneratorLock = new Object();
 	private static final String THIS_FILE = "Dialer";
 
 	private Drawable digitsBackground, digitsEmptyBackground;
 	private EditText digits;
 	private ImageButton dialButton, deleteButton;
-	private Vibrator vibrator = null;
 	
 	private View digitDialer, textDialer, rootView;
 	private boolean isDigit;
 	
+	private DialingFeedback dialFeedback;
 	
 	private int[] buttonsToAttach = new int[] {
 		R.id.button0,
@@ -119,8 +106,8 @@ public class Dialer extends Activity implements OnClickListener,
 		}
 		
     };
-	private int ringerMode;
-	private GestureDetector gestureDetector;
+
+    private GestureDetector gestureDetector;
 	private Dialpad dialPad;
 
 	private EditText dialUser;
@@ -128,11 +115,6 @@ public class Dialer extends Activity implements OnClickListener,
 //	private EditText dialDomain;
 
 	private PreferencesWrapper prefsWrapper;
-
-	private Timer toneTimer = null;
-
-	private boolean dialPressTone = false;
-	private boolean dialPressVibrate = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -193,7 +175,9 @@ public class Dialer extends Activity implements OnClickListener,
 		};
 		digitDialer.setOnTouchListener(touchTransmiter);
 		textDialer.setOnTouchListener(touchTransmiter);
-		
+
+		dialFeedback = new DialingFeedback(this, false);
+
 	}
 
 	@Override
@@ -210,44 +194,8 @@ public class Dialer extends Activity implements OnClickListener,
 		
 		//Bind service
 		contextToBindTo.bindService(new Intent(contextToBindTo, SipService.class), connection, Context.BIND_AUTO_CREATE);
-
-		dialPressTone = prefsWrapper.getDialPressTone();
-		dialPressVibrate = prefsWrapper.getDialPressVibrate();
 		
-		if(dialPressTone ) {
-			//Create dialtone just for user feedback
-			synchronized (toneGeneratorLock) {
-				if(toneTimer == null) {
-					toneTimer = new Timer();
-				}
-				if (toneGenerator == null) {
-					try {
-						toneGenerator = new ToneGenerator(DIAL_TONE_STREAM_TYPE, TONE_RELATIVE_VOLUME);
-						//Allow user to control dialtone
-						setVolumeControlStream(DIAL_TONE_STREAM_TYPE);
-					} catch (RuntimeException e) {
-						//If impossible, nothing to do
-						toneGenerator = null;
-					}
-				}
-			}
-		} else {
-			toneTimer = null;
-			toneGenerator = null;
-		}
-		
-		//Create the vibrator
-		if (dialPressVibrate) {
-			if (vibrator == null) {
-				vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			}
-		} else {
-			vibrator = null;
-		}
-
-		//Store the current ringer mode
-		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		ringerMode = am.getRingerMode();
+		dialFeedback.resume();
 	}
 
 	@Override
@@ -260,18 +208,7 @@ public class Dialer extends Activity implements OnClickListener,
     		contextToBindTo.unbindService(connection);
     	}
 		
-		//Destroy dialtone
-		synchronized (toneGeneratorLock) {
-			if (toneGenerator != null) {
-				toneGenerator.release();
-				toneGenerator = null;
-			}
-			if(toneTimer != null) {
-				toneTimer.cancel();
-				toneTimer.purge();
-				toneTimer = null;
-			}
-		}
+		dialFeedback.pause();
 	}
 	
     @Override
@@ -313,45 +250,7 @@ public class Dialer extends Activity implements OnClickListener,
 		digits.setCursorVisible(false);
 		afterTextChanged(digits.getText());
 	}
-	
-
-	private void playTone(int tone) {
 		
-		switch (ringerMode) {
-			case AudioManager.RINGER_MODE_NORMAL:
-				if (dialPressVibrate) vibrator.vibrate(HAPTIC_LENGTH_MS);
-				if (dialPressTone) {
-					synchronized (toneGeneratorLock) {
-						if (toneGenerator == null) {
-							return;
-						}
-						toneGenerator.startTone(tone);
-						
-						//TODO : see if it could not be factorized
-						toneTimer.schedule(new StopTimerTask(), TONE_LENGTH_MS);
-					}					
-				}
-				break;
-			case AudioManager.RINGER_MODE_VIBRATE:
-				if (dialPressVibrate) vibrator.vibrate(HAPTIC_LENGTH_MS);
-				break;
-			case AudioManager.RINGER_MODE_SILENT:
-				break;
-		}
-	}
-	
-	class StopTimerTask extends TimerTask{
-		@Override
-		public void run() {
-			synchronized (toneGeneratorLock) {
-				if (toneGenerator == null) {
-					return;
-				}
-				toneGenerator.stopTone();
-			}
-		}
-	}
-	
 
 	private void keyPressed(int keyCode) {
 		KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
@@ -413,7 +312,7 @@ public class Dialer extends Activity implements OnClickListener,
 		switch (view_id) {
 		
 		case R.id.button0: {
-			playTone(ToneGenerator.TONE_DTMF_0);
+			dialFeedback.giveFeedback(ToneGenerator.TONE_DTMF_0);
 			keyPressed(KeyEvent.KEYCODE_0);
 			break;
 		}
@@ -421,6 +320,10 @@ public class Dialer extends Activity implements OnClickListener,
 			// TODO (dc3denny) How to get this to come through speaker. Regis is doing
 			// things with audio and Bluetooth, so I'm not going to do anything here!
 			// Commented out in other places... and creating 'b' above
+			//
+			// UPDATE: in r194 the keypress sounds are playing anyway! This stuff
+			// can probably be removed.
+			//
 			//b.playSoundEffect(SoundEffectConstants.CLICK);	// Plays through earpiece (typ.)
 			keyPressed(KeyEvent.KEYCODE_DEL);
 			break;
@@ -458,7 +361,7 @@ public class Dialer extends Activity implements OnClickListener,
 		switch (view.getId()) {
 			case R.id.button0: {
 				//b.playSoundEffect(SoundEffectConstants.CLICK);
-				if (dialPressVibrate) vibrator.vibrate(HAPTIC_LENGTH_MS);
+				dialFeedback.hapticFeedback();
 				keyPressed(KeyEvent.KEYCODE_PLUS);
 				return true;
 			}
@@ -534,7 +437,7 @@ public class Dialer extends Activity implements OnClickListener,
 
 	@Override
 	public void onTrigger(int keyCode, int dialTone) {
-		playTone(dialTone);
+		dialFeedback.giveFeedback(dialTone);
 		keyPressed(keyCode);
 	}
 
