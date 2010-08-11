@@ -62,11 +62,12 @@ public class DialingFeedback {
 		this.inCall = inCall;
 		toneStream = inCall ? AudioManager.STREAM_VOICE_CALL : AudioManager.STREAM_MUSIC;
 		prefsWrapper = new PreferencesWrapper(context);
-		dialPressTone = prefsWrapper.getDialPressTone();
-		dialPressVibrate = prefsWrapper.getDialPressVibrate();
 	}
 	
 	public void resume() {
+		
+		dialPressTone = prefsWrapper.getDialPressTone();
+		dialPressVibrate = prefsWrapper.getDialPressVibrate();
 		
 		if(dialPressTone ) {
 			//Create dialtone just for user feedback
