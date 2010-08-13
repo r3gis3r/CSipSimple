@@ -32,6 +32,8 @@
 <string name="network_udp_transport_port_desc">Port number to bind locally</string>
 <string name="network_tcp_transport_port">TCP Port</string>
 <string name="network_tcp_transport_port_desc">Port number to bind locally</string>
+<string name="network_rtp_port">RTP port</string>
+<string name="network_rtp_port_desc">Port for RTP ports range start</string>
 <!-- Media -->
 
 <string name="audio_quality">Audio quality</string>

@@ -59,6 +59,12 @@
 			android:numeric="integer"
 			android:summary="@string/network_tcp_transport_port_desc"
 			android:defaultValue="5060"></EditTextPreference>
+			
+		<EditTextPreference android:key="network_rtp_port"
+			android:title="@string/network_rtp_port"
+			android:numeric="integer"
+			android:summary="@string/network_rtp_port_desc"
+			android:defaultValue="4000"></EditTextPreference>
 	</PreferenceCategory>
 	
 </PreferenceScreen>

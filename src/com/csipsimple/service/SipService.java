@@ -474,6 +474,7 @@ public class SipService extends Service {
 							cfg.setStun_host(pjsua.pj_str_copy(prefsWrapper.getStunServer()));
 						}
 						cfg.setUser_agent(pjsua.pj_str_copy("CSipSimple"));
+						
 
 						// LOGGING CONFIG
 						pjsua.logging_config_default(log_cfg);
@@ -544,6 +545,22 @@ public class SipService extends Service {
 							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, cfg, null);
 							if (status != pjsuaConstants.PJ_SUCCESS) {
 								Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
+								pjsua.destroy();
+								creating = false;
+								created = false;
+								return;
+							}
+						}
+						
+						//RTP transport
+						{
+							pjsua_transport_config cfg = new pjsua_transport_config();
+							pjsua.transport_config_default(cfg);
+							cfg.setPort(prefsWrapper.getRTPPort());
+							
+							status = pjsua.media_transports_create(cfg);
+							if (status != pjsuaConstants.PJ_SUCCESS) {
+								Log.e(THIS_FILE, "Fail to add media transport with failure code " + status);
 								pjsua.destroy();
 								creating = false;
 								created = false;

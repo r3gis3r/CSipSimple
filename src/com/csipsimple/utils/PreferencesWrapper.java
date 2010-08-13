@@ -258,6 +258,7 @@ public class PreferencesWrapper {
 	
 	public int getTCPTransportPort() {
 		try {
+			//TODO : check port validity (see rtp)
 			return Integer.parseInt(prefs.getString("network_tcp_transport_port", "5060"));
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport port not well formated");
@@ -268,10 +269,23 @@ public class PreferencesWrapper {
 	public int getUDPTransportPort() {
 		try {
 			return Integer.parseInt(prefs.getString("network_udp_transport_port", "5060"));
+			//TODO : check port validity (see rtp)
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport port not well formated");
 		}
 		return 5060;
+	}
+	
+	public int getRTPPort() {
+		try {
+			int port = Integer.parseInt(prefs.getString("network_rtp_port", "4000"));
+			if(port>0 && port < 65535) {
+				return port;
+			}
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 4000;
 	}
 	
 	
