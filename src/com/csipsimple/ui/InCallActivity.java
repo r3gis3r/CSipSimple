@@ -24,6 +24,7 @@ import java.util.TimerTask;
 
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsip_status_code;
+import org.pjsip.pjsua.pjsuaConstants;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -99,7 +100,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		
 		setContentView(R.layout.in_call_main);
 

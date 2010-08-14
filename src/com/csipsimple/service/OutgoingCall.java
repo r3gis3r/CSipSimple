@@ -65,7 +65,7 @@ public class OutgoingCall extends BroadcastReceiver {
 				Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
-				outgoingCallChooserIntent.setData(Uri.parse("sip:"+number));
+				outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
 				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(outgoingCallChooserIntent);
 				// We will treat this by ourselves

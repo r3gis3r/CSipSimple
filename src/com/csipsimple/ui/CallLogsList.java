@@ -282,7 +282,7 @@ public class CallLogsList extends ListActivity {
 		if (m.matches()) {
 			if ( !TextUtils.isEmpty(m.group(2)) && !TextUtils.isEmpty(m.group(3)) ) {
 				Intent intent = new Intent(Intent.ACTION_CALL);
-				intent.setData( Uri.parse("sip:" + m.group(2) + "@" + m.group(3)) );
+				intent.setData( Uri.fromParts("sip",  m.group(2) + "@" + m.group(3), null));
 				startActivity(intent);
 				return;
 			}else {
@@ -298,7 +298,7 @@ public class CallLogsList extends ListActivity {
 					//Disabled since if we do that
 					try {
 						Intent intent = new Intent(Intent.ACTION_CALL);
-						intent.setData(Uri.parse("tel:" + phoneNumber));
+						intent.setData(Uri.fromParts("tel", phoneNumber, null));
 						startActivity(intent);
 						return;
 					} catch (Exception e) {
@@ -308,7 +308,7 @@ public class CallLogsList extends ListActivity {
 					if (!TextUtils.isEmpty(m.group(2))) {
 						try {
 							Intent intent = new Intent(Intent.ACTION_CALL);
-							intent.setData(Uri.parse("sip:" + m.group(2) + "@" + m.group(3)));
+							intent.setData(Uri.fromParts("sip" ,m.group(2) + "@" + m.group(3), null));
 							startActivity(intent);
 							return;
 						} catch (Exception e) {

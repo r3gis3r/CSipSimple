@@ -90,7 +90,7 @@ public class OutgoingCallChooser extends ListActivity {
 			w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
 					android.R.drawable.ic_menu_call);
 			//TODO : internationalisation should be %s form
-			String phoneNumber = number.replaceAll("^sip:", "");
+			String phoneNumber = number;
 			setTitle("Call " + phoneNumber);
 
 			// Inform the list we provide context menus for items
@@ -123,7 +123,7 @@ public class OutgoingCallChooser extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(THIS_FILE, "Starting ");
 		if(getIntent().getAction().equalsIgnoreCase(Intent.ACTION_CALL)) {
-			number = getIntent().getDataString();
+			number = getIntent().getData().getSchemeSpecificPart();
 		}else {
 			Log.e(THIS_FILE, "This action : "+getIntent().getAction()+" is not supported by this view");
 			return;
@@ -172,10 +172,10 @@ public class OutgoingCallChooser extends ListActivity {
 	 * Place a PSTN call
 	 */
 	private void placePstnCall() {
-		String phoneNumber = number.replaceAll("^sip:", "");
+		String phoneNumber = number;
 		OutgoingCall.ignoreNext = phoneNumber;
 		Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
-		intentMakePstnCall.setData(Uri.parse("tel:"+phoneNumber));
+		intentMakePstnCall.setData(Uri.fromParts("tel", phoneNumber, null));
 		startActivity(intentMakePstnCall);
 		finish();
 	}
@@ -195,7 +195,7 @@ public class OutgoingCallChooser extends ListActivity {
 		
 		//Exclude filtered accounts - TODO : move to db?
 		List<Account> excludedAccounts = new ArrayList<Account>();
-		String phoneNumber = number.replaceAll("^sip:", "");
+		String phoneNumber = number;
 		for(Account acc : accountsList) {
 			if(! acc.isCallableNumber(phoneNumber, database) ) {
 				excludedAccounts.add(acc);
@@ -237,7 +237,7 @@ public class OutgoingCallChooser extends ListActivity {
 			if (accountInfo != null && accountInfo.isActive()) {
 				if (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
 					try {
-						String phoneNumber = number.replaceAll("^sip:", "");
+						String phoneNumber = number;
 						String toCall = account.rewritePhoneNumber(phoneNumber, database);
 						
 						service.makeCall("sip:"+toCall, accountInfo.getPjsuaId());

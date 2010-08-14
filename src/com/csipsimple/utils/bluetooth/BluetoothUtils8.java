@@ -72,7 +72,12 @@ public class BluetoothUtils8 {
 	
 	public boolean canBluetooth() {
 		// Detect if any bluetooth a device is available for call
-		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		BluetoothAdapter mBluetoothAdapter = null;
+		try {
+			mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		}catch(RuntimeException e) {
+			Log.w(THIS_FILE, "Cant get default bluetooth adapter ", e);
+		}
 		if (mBluetoothAdapter == null) {
 		    // Device does not support Bluetooth
 			return false;
