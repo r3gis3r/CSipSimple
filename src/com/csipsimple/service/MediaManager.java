@@ -116,7 +116,7 @@ public class MediaManager {
 		//Set stream solo/volume
 		int inCallStream = Compatibility.getInCallStream();
 		audioManager.setStreamSolo(inCallStream, true);
-		audioManager.setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
+		setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
 		
 
 		audioManager.setSpeakerphoneOn(false);
@@ -230,7 +230,7 @@ public class MediaManager {
 		/*
 		audioManager.stopBluetoothSco();*/
 		
-		audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
+		setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
 		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
 				
 		if(wifiLock != null && wifiLock.isHeld()) {
@@ -375,5 +375,31 @@ public class MediaManager {
 	
 	public void broadcastMediaChanged() {
 		service.sendBroadcast(mediaStateChangedIntent);
+	}
+	
+	
+	private static final String ACTION_AUDIO_VOLUME_UPDATE = "org.openintents.audio.action_volume_update";
+	private static final String EXTRA_STREAM_TYPE = "org.openintents.audio.extra_stream_type";
+	private static final String EXTRA_VOLUME_INDEX = "org.openintents.audio.extra_volume_index";
+	private static final String EXTRA_RINGER_MODE = "org.openintents.audio.extra_ringer_mode";
+	private static final int EXTRA_VALUE_UNKNOWN = -9999;
+	
+	private void broadcastVolumeWillBeUpdated(int streamType, int index) {
+		Intent notificationIntent = new Intent(ACTION_AUDIO_VOLUME_UPDATE);
+		notificationIntent.putExtra(EXTRA_STREAM_TYPE, streamType);
+		notificationIntent.putExtra(EXTRA_VOLUME_INDEX, index);
+		notificationIntent.putExtra(EXTRA_RINGER_MODE, EXTRA_VALUE_UNKNOWN);
+
+		service.sendBroadcast(notificationIntent, null);
+	}
+	
+	public void setStreamVolume(int streamType, int index, int flags) {
+		broadcastVolumeWillBeUpdated(streamType, index);
+        audioManager.setStreamVolume(streamType, index, flags);
+	}
+	
+	public void adjustStreamVolume(int streamType, int direction, int flags) {
+		broadcastVolumeWillBeUpdated(streamType, EXTRA_VALUE_UNKNOWN);
+        audioManager.adjustStreamVolume(streamType, direction, flags);
 	}
 }

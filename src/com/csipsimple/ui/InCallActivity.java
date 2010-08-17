@@ -24,7 +24,6 @@ import java.util.TimerTask;
 
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsip_status_code;
-import org.pjsip.pjsua.pjsuaConstants;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -54,6 +53,7 @@ import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.MediaManager.MediaState;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.Dialpad;
@@ -351,8 +351,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	
 	
-	
-	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
@@ -366,12 +364,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         	if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
         		action = AudioManager.ADJUST_LOWER;
         	}
-            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            am.adjustStreamVolume( AudioManager.STREAM_VOICE_CALL, action, AudioManager.FLAG_SHOW_UI);
+        	if(SipService.mediaManager != null) {
+        		SipService.mediaManager.adjustStreamVolume(Compatibility.getInCallStream(), action, AudioManager.FLAG_SHOW_UI);
+        	}
         	return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {

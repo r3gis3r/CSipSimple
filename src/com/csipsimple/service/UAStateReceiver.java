@@ -322,8 +322,11 @@ public class UAStateReceiver extends Callback {
 	
 
 	public void stopService() {
-		service.unregisterReceiver(headsetButtonReceiver);
-		
+		try {
+			service.unregisterReceiver(headsetButtonReceiver);
+		}catch(Exception e) {
+			//Nothing to do else. just consider it has not been registered
+		}
 		if(handlerThread != null) {
 			boolean fails = true;
 			
