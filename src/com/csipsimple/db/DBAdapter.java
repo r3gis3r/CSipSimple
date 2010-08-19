@@ -425,10 +425,13 @@ public class DBAdapter {
 		return null;
 	}
 	
-	public boolean deleteCallLog(int calllogId) {
+	public boolean deleteOneCallLog(int calllogId) {
 		return db.delete(CALLLOGS_TABLE_NAME, CallLog.Calls._ID  + "=" + calllogId, null) > 0;
 	}
 
+	public boolean deleteAllCallLogs() {
+		return db.delete(CALLLOGS_TABLE_NAME, null, null) > 0;
+	}
 	
 	// --------
 	// Filters

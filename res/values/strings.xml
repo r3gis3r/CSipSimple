@@ -38,5 +38,11 @@
 	<string name="filters">Filters</string>
 	<string name="add_filter">Add filter / rewrite rule</string>
 	<string name="delete_filter">Delete filter</string>
+	<string name="callLog_delete_entry">Delete this call</string>
+	<string name="callLog_delete_all">Delete all calls</string>
+	<string name="callLog_delDialog_title">Delete Call Logs</string>
+	<string name="callLog_delDialog_message">Are you sure you want to delete all calls from the log?</string>
+	<string name="callLog_delDialog_yes">Yes</string>
+	<string name="callLog_delDialog_no">No</string>
 	
 </resources>

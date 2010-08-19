@@ -21,8 +21,10 @@ package com.csipsimple.ui;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -58,8 +60,9 @@ public class CallLogsList extends ListActivity {
 
 	private static final String THIS_FILE = "Call log list";
 	
-	public static final int MENU_ITEM_CALL = Menu.FIRST;
-	public static final int MENU_ITEM_DELETE = Menu.FIRST+1;
+	public static final int MENU_ITEM_DELETE_CALL = Menu.FIRST;
+	public static final int MENU_ITEM_DELETE_ALL = Menu.FIRST+1;
+	
 
 	public static final class RecentCallsListItemViews {
 		TextView line1View;
@@ -75,6 +78,7 @@ public class CallLogsList extends ListActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.recent_calls);
+		registerForContextMenu(getListView());
 
 		// Ressources
 		drawableIncoming = getResources().getDrawable(R.drawable.ic_call_log_list_incoming_call);
@@ -93,7 +97,7 @@ public class CallLogsList extends ListActivity {
 		CallLogsCursorAdapter cad = new CallLogsCursorAdapter(this, cursor);
 
 		setListAdapter(cad);
-
+		
 	}
 
 	@Override
@@ -203,43 +207,9 @@ public class CallLogsList extends ListActivity {
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		AdapterView.AdapterContextMenuInfo info;
-        try {
-             info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        } catch (ClassCastException e) {
-            Log.e(THIS_FILE, "bad menuInfo", e);
-            return;
-        }
 
-        Cursor cursor = (Cursor) getListAdapter().getItem(info.position);
-        if (cursor == null) {
-            // For some reason the requested item isn't available, do nothing
-            return;
-        }
-        String number = cursor.getString(DBAdapter.NUMBER_COLUMN_INDEX);
-        int type = cursor.getInt(DBAdapter.CALL_TYPE_COLUMN_INDEX);
-        String action = "";
-        switch (type) {
-		case Calls.INCOMING_TYPE:
-			action = getResources().getString(R.string.returnCall);
-			break;
-		case Calls.OUTGOING_TYPE:
-			action = getResources().getString(R.string.callAgain);
-			break;
-
-		case Calls.MISSED_TYPE:
-			action = getResources().getString(R.string.callBack);
-			break;
-		}
-        
-        
-        // Setup the menu header
-        menu.setHeaderTitle(number);
-        // Add a menu item to delete the note
-        if(getSipMatcher(number).matches()) {
-        	menu.add(0, MENU_ITEM_CALL, 0, action+" "+number);
-        }
-        menu.add(0, MENU_ITEM_DELETE, 0, R.string.delete_account);
+        menu.add(0, MENU_ITEM_DELETE_CALL, 0, R.string.callLog_delete_entry);
+        menu.add(0, MENU_ITEM_DELETE_ALL, 0, R.string.callLog_delete_all);
 	}
 	
 	
@@ -258,18 +228,32 @@ public class CallLogsList extends ListActivity {
             return false;
         }
         
-        String number = cursor.getString(DBAdapter.NUMBER_COLUMN_INDEX);
         int calllogId = cursor.getInt(DBAdapter.ID_COLUMN_INDEX);
-        
         switch (item.getItemId()) {
-            case MENU_ITEM_DELETE: {
-            	database.open();
-        		database.deleteCallLog(calllogId);
-        		database.close();
+            case MENU_ITEM_DELETE_CALL: {
+        		database.deleteOneCallLog(calllogId);
+        		CallLogsCursorAdapter cad = (CallLogsCursorAdapter) getListAdapter();
+        		cad.getCursor().requery();
+        		//cad.notifyDataSetChanged();	// Apparently not needed
                 return true;
             }
-            case MENU_ITEM_CALL : {
-            	placeCallLogCall(number);
+            case MENU_ITEM_DELETE_ALL: {
+        		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        	    alertDialog.setTitle(R.string.callLog_delDialog_title);
+        	    alertDialog.setMessage(getString(R.string.callLog_delDialog_message));
+        	    alertDialog.setButton(getString(R.string.callLog_delDialog_yes), new DialogInterface.OnClickListener() {	// DEPRECATED
+        	      public void onClick(DialogInterface dialog, int which) {
+        	    	database.deleteAllCallLogs();
+            		CallLogsCursorAdapter cad = (CallLogsCursorAdapter) getListAdapter();
+            		cad.getCursor().requery();
+        	        return;
+        	    } }); 
+        	    alertDialog.setButton2(getString(R.string.callLog_delDialog_no), (DialogInterface.OnClickListener)null);	// DEPRECATED
+        	    try {
+        	    	alertDialog.show();
+        	    }catch(Exception e) {
+        	    	Log.e(THIS_FILE, "error while trying to show deletion yes/no dialog");
+        	    }
             }
         }
         return false;
