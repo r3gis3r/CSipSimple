@@ -561,4 +561,7 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.media_transports_create(pjsua_transport_config.getCPtr(cfg), cfg);
   }
 
+  public synchronized static void test_audio_dev(long clock_rate, long ptime) {
+    pjsuaJNI.test_audio_dev(clock_rate, ptime);
+  }
 }

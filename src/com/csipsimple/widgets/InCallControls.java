@@ -20,6 +20,7 @@
 package com.csipsimple.widgets;
 
 import org.pjsip.pjsua.pjsip_inv_state;
+import org.pjsip.pjsua.pjsua_call_media_status;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -61,6 +62,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	private static final int MODE_NO_ACTION = 2;
 	private int controlMode;
 	private MediaState lastMediaState;
+	private ImageButton holdButton;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -112,10 +114,13 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		 */
 		public static final int SPEAKER_OFF = SPEAKER_ON + 1;
 		/**
-		 * When speaker is set off
+		 * When detailed display is asked
 		 */
 		public static final int DETAILED_DISPLAY = SPEAKER_OFF + 1;
-		
+		/**
+		 * When hold / reinvite is asked
+		 */
+		public static final int TOGGLE_HOLD = DETAILED_DISPLAY + 1;
 
 		/**
 		 * Called when the user make an action
@@ -154,6 +159,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		takeCallButton = (Button) findViewById(R.id.takeCallButton);
 		declineCallButton = (Button) findViewById(R.id.declineCallButton);
 		detailsButton = (ImageButton) findViewById(R.id.detailsButton);
+		holdButton = (ImageButton) findViewById(R.id.holdButton);
 		
 		
 		// Finalize object style
@@ -176,7 +182,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		takeCallButton.setOnClickListener(this);
 		declineCallButton.setOnClickListener(this);
 		detailsButton.setOnClickListener(this);
-
+		holdButton.setOnClickListener(this);
 	}
 
 	public void setEnabledMediaButtons(boolean isInCall) {
@@ -260,9 +266,23 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			}
 			break;
 		}
+		
+		pjsua_call_media_status mediaStatus = callInfo.getMediaStatus();
+		switch (mediaStatus) {
+		case PJSUA_CALL_MEDIA_ACTIVE:
+		case PJSUA_CALL_MEDIA_REMOTE_HOLD:
+			holdButton.setImageResource(R.drawable.ic_in_call_touch_round_hold);
+			break;
+		case PJSUA_CALL_MEDIA_LOCAL_HOLD:
+		case PJSUA_CALL_MEDIA_NONE:
+			holdButton.setImageResource(R.drawable.ic_in_call_touch_round_unhold);
+			break;
+		case PJSUA_CALL_MEDIA_ERROR:
+		default:
+			break;
+		}
 	}
 	
-
 	/**
 	 * Registers a callback to be invoked when the user triggers an event.
 	 * 
@@ -343,6 +363,9 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			
 		case R.id.detailsButton:
 			dispatchTriggerEvent(OnTriggerListener.DETAILED_DISPLAY);
+			break;
+		case R.id.holdButton:
+			dispatchTriggerEvent(OnTriggerListener.TOGGLE_HOLD);
 			break;
 		}
 	}

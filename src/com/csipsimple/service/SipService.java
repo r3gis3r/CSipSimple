@@ -248,6 +248,12 @@ public class SipService extends Service {
 			}
 		}
 
+		@Override
+		public int hold(int callId) throws RemoteException {return SipService.this.callHold(callId);}
+
+		@Override
+		public int reinvite(int callId, boolean unhold) throws RemoteException {return SipService.this.callReinvite(callId, unhold);}
+
 		
 	};
 
@@ -293,9 +299,15 @@ public class SipService extends Service {
 								// we was not yet started, so start now
 								sipStart();
 							} else {
-								// update registration IP : for now remove / reregister all accounts
-								reRegisterAllAccounts();
+								Log.i(THIS_FILE, "Ip changed remove/re - add all accounts");
+								if(userAgentReceiver.getActiveCallInProgress() != null) {
+									Log.d(THIS_FILE, "We should restart the stack ! ");
+								}else {
+									// update registration IP : for now remove / reregister all accounts
+									reRegisterAllAccounts();
+								}
 							}
+							
 						} else {
 							Log.i(THIS_FILE, "Stop SERVICE");
 							try {
@@ -356,6 +368,7 @@ public class SipService extends Service {
 
 		tryToLoadStack();
 	}
+
 
 
 
@@ -495,8 +508,10 @@ public class SipService extends Service {
 						media_cfg.setNo_vad(prefsWrapper.getNoVad());
 						media_cfg.setQuality(prefsWrapper.getMediaQuality());
 						media_cfg.setClock_rate(prefsWrapper.getClockRate());
-						
+						//media_cfg.setJb_min_pre(60);
+						//media_cfg.setJb_max(600);
 						media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
+						
 						
 						int isTurnEnabled = prefsWrapper.getTurnEnabled();
 						
@@ -622,9 +637,14 @@ public class SipService extends Service {
 				userAgentReceiver.stopService();
 				userAgentReceiver = null;
 			}
+			
+			if(mediaManager != null) {
+				mediaManager.stopService();
+				mediaManager = null;
+			}
 		}
 		releaseResources();
-		
+		Log.i(THIS_FILE, ">> Media m "+mediaManager);
 		created = false;
 	}
 	private boolean isRegistering = false;
@@ -756,8 +776,7 @@ public class SipService extends Service {
 		
 		synchronized (pjAccountsCreationLock) {
 			synchronized (activeAccountsLock) {
-				
-				
+				Log.d(THIS_FILE, "Remove all accounts");
 				for (int c_acc_id : activeAccounts.values()) {
 					pjsua.acc_set_registration(c_acc_id, 0);
 					pjsua.acc_del(c_acc_id);
@@ -1026,6 +1045,25 @@ public class SipService extends Service {
 	}
 	
 	
+
+
+	protected int callHold(int callId) {
+		if(created) {
+			return pjsua.call_set_hold(callId, null);
+		}
+		return -1;
+	}
+
+
+
+	protected int callReinvite(int callId, boolean unhold) {
+		if(created) {
+			return pjsua.call_reinvite(callId, unhold?1:0, null);
+		}
+		return -1;
+	}
+
+	
 	
 	// ------
 	// Dialtone generator
@@ -1202,13 +1240,14 @@ public class SipService extends Service {
 		if(codecs != null) {
 			for(String codec : codecs) {
 				if(prefsWrapper.hasCodecPriority(codec)) {
+					Log.d(THIS_FILE, "Set codec "+codec+" : "+prefsWrapper.getCodecPriority(codec, "130"));
 					pjsua.codec_set_priority(pjsua.pj_str_copy(codec), prefsWrapper.getCodecPriority(codec, "130"));
 				}
 			}
 		}
 	}
 	
-
+	
 	private Handler ToastHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {

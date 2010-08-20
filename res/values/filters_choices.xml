@@ -17,8 +17,9 @@
     
     <string-array name="replace_type">
         <item>Prefix by</item>
+        <item>Suffix with</item>
         <item>Replace match by</item>
-        <item>Transform to</item>
+        <item>Replace all by</item>
         <item>Custom RegExp</item>
     </string-array>
 </resources>

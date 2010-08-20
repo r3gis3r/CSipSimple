@@ -39,6 +39,8 @@ interface ISipService{
 	int answer(int callId, int status);
 	int hangup(int callId, int status);
 	int sendDtmf(int callId, int keyCode);
+	int hold(int callId);
+	int reinvite(int callId, boolean unhold);
 	CallInfo getCallInfo(int callId);
 	
 	//Media control

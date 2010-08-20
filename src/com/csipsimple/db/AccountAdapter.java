@@ -136,6 +136,7 @@ public class AccountAdapter extends ArrayAdapter<Account> implements OnClickList
 			}
 		}
 	}
+	
 
 	@Override
 	public void onClick(View v) {

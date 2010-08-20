@@ -67,11 +67,13 @@ public class Compatibility {
 	}
 	
 	public static boolean useRoutingApi() {
-		Log.d(THIS_FILE, "Current device is an "+android.os.Build.BRAND);
+		Log.d(THIS_FILE, "Current device "+android.os.Build.BRAND+" - "+android.os.Build.DEVICE);
 		if(android.os.Build.BRAND.equalsIgnoreCase("htc") ||
-				android.os.Build.BRAND.equalsIgnoreCase("google") ) {
+				android.os.Build.BRAND.equalsIgnoreCase("google") ||
+				android.os.Build.DEVICE.equals("GT-I9000")) {
 			return false;
 		}
 		return true;
 	}
 }
+

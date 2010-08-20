@@ -20,6 +20,7 @@ package com.csipsimple.models;
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_call_info;
+import org.pjsip.pjsua.pjsua_call_media_status;
 
 import com.csipsimple.R;
 import com.csipsimple.utils.Log;
@@ -37,6 +38,7 @@ public class CallInfo implements Parcelable {
 	private boolean isIncoming;
 	
 	public long callStart = 0;
+	private pjsua_call_media_status mediaStatus;
 	
 	@SuppressWarnings("serial")
 	public class UnavailableException extends Exception {
@@ -76,6 +78,7 @@ public class CallInfo implements Parcelable {
 	private void fillFromPj(pjsua_call_info pjCallInfo) {
 		callId = pjCallInfo.getId();
 		callState = pjCallInfo.getState();
+		mediaStatus = pjCallInfo.getMedia_status();
 		remoteContact = pjCallInfo.getRemote_info().getPtr();
 		
 	}
@@ -101,6 +104,7 @@ public class CallInfo implements Parcelable {
 		dest.writeInt(PrimaryKey);
 		dest.writeInt(callId);
 		dest.writeInt(callState.swigValue());
+		dest.writeInt(mediaStatus.swigValue());
 		dest.writeString(remoteContact);
 		dest.writeInt(isIncoming()?1:0);
 	}
@@ -109,6 +113,7 @@ public class CallInfo implements Parcelable {
 		PrimaryKey = in.readInt();
 		callId = in.readInt();
 		callState = pjsip_inv_state.swigToEnum(in.readInt());
+		mediaStatus = pjsua_call_media_status.swigToEnum(in.readInt());
 		remoteContact = in.readString();
 		setIncoming((in.readInt() == 1));
 	}
@@ -130,6 +135,9 @@ public class CallInfo implements Parcelable {
 		return callState;
 	}
 	
+	public pjsua_call_media_status getMediaStatus() {
+		return mediaStatus;
+	}
 
 	/**
 	 * Get the corresponding string for a given state
@@ -227,5 +235,9 @@ public class CallInfo implements Parcelable {
 			break;
 		}
 		return false;
+	}
+
+	public void setMediaState(pjsua_call_media_status mediaStatus2) {
+		mediaStatus = mediaStatus2;
 	}
 }

@@ -116,15 +116,19 @@ public class UAStateReceiver extends Callback {
 		if(SipService.mediaManager != null) {
 			SipService.mediaManager.stopRing();
 		}
+		
 		pjsua_call_info info = new pjsua_call_info();
 		pjsua.call_get_info(callId, info);
-		if (info.getMedia_status() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
+		CallInfo callInfo = new CallInfo(info);
+		if (callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE)) {
 			pjsua.conf_connect(info.getConf_slot(), 0);
 			pjsua.conf_connect(0, info.getConf_slot());
 			pjsua.conf_adjust_tx_level(0, service.prefsWrapper.getSpeakerLevel());
 			pjsua.conf_adjust_rx_level(0, service.prefsWrapper.getMicLevel());
 			
 		}
+		
+		msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
 	}
 	
 	
@@ -160,9 +164,12 @@ public class UAStateReceiver extends Callback {
 	private WorkerHandler msgHandler;
 	private HandlerThread handlerThread;
 
+	private Notification inCallNotification;
+
 	private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
-	private static final int ON_REGISTRATION_STATE = 3;
+	private static final int ON_MEDIA_STATE = 3;
+	private static final int ON_REGISTRATION_STATE = 4;
 
 
 
@@ -242,12 +249,18 @@ public class UAStateReceiver extends Callback {
 								CallLogHelper.addCallLog(service.getContentResolver(), cv);
 							}
 						}
-						
 					}
 					callInfo.setIncoming(false);
 					callInfo.callStart = 0;
 					broadCastAndroidCallState("IDLE", callInfo.getRemoteContact());
 				}
+				onBroadcastCallState(callInfo);
+				break;
+			}
+			case ON_MEDIA_STATE:{
+				CallInfo mediaCallInfo = (CallInfo) msg.obj;
+				CallInfo callInfo = callsList.get(mediaCallInfo.getCallId());
+				callInfo.setMediaState(mediaCallInfo.getMediaStatus());
 				onBroadcastCallState(callInfo);
 				break;
 			}
@@ -264,9 +277,6 @@ public class UAStateReceiver extends Callback {
 			}
 		}
 	};
-
-	
-	
 	
 	// -------
 	// Public configuration for receiver
@@ -302,20 +312,37 @@ public class UAStateReceiver extends Callback {
 		//the broadcast to all other apps.
 		// We are registered even if no active call and when button is pressed, we look if there is an active call
 		// And if so treat the button pressure.
-//		if (Compatibility.isCompatible(8)) {
-//			remoteControlResponder = new ComponentName(service.getPackageName(), DeviceStateReceiver.class.getName());
-//		}
-		
-		
-		//
-		// Register am event receiver for ACTION_MEDIA_BUTTON events,
-		// and adjust its priority to make sure we get these events
-		// before any media player which hijacks the button presses.
-		//
-		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
-		intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
-		service.registerReceiver(headsetButtonReceiver, intentFilter);
-		
+		/*
+		if (Compatibility.isCompatible(8)) {
+			try {
+			//TODO : if we want to activate it, we must : 
+			// Create HeadsetButtonReceiver as new class and declare it into the manifest file !
+			// Ensure that it will not prevent media app to get the information 
+			// Add service method to get the current call info in order to have access to the info inside the broadcastreceiver
+				Method method = AudioManager.class.getMethod("registerMediaButtonEventReceiver", new Class[]{ComponentName.class} );
+				AudioManager audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
+				method.invoke(audioManager, new ComponentName(service.getPackageName(), HeadsetButtonReceiver.class.getName()));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}else{
+		*/
+			//
+			// Register am event receiver for ACTION_MEDIA_BUTTON events,
+			// and adjust its priority to make sure we get these events
+			// before any media player which hijacks the button presses.
+			//
+			Log.d(THIS_FILE, "Register media button");
+			IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
+			intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY +1 );
+			if(headsetButtonReceiver == null) {
+				headsetButtonReceiver = new HeadsetButtonReceiver();
+			}
+			service.registerReceiver(headsetButtonReceiver, intentFilter);
+/*		
+		}
+	*/
 		
 		
 	}
@@ -324,6 +351,7 @@ public class UAStateReceiver extends Callback {
 	public void stopService() {
 		try {
 			service.unregisterReceiver(headsetButtonReceiver);
+			headsetButtonReceiver = null;
 		}catch(Exception e) {
 			//Nothing to do else. just consider it has not been registered
 		}
@@ -354,6 +382,9 @@ public class UAStateReceiver extends Callback {
 			}
 			handlerThread = null;
 		}
+		
+		msgHandler = null;
+		
 	}
 
 	// --------
@@ -387,22 +418,26 @@ public class UAStateReceiver extends Callback {
 		int icon = R.drawable.ic_incall_ongoing;
 		CharSequence tickerText =  service.getText(R.string.ongoing_call);
 		long when = System.currentTimeMillis();
-
-		Notification notification = new Notification(icon, tickerText, when);
+		
+		if(inCallNotification == null) {
+			inCallNotification = new Notification(icon, tickerText, when);
+			inCallNotification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
+			// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
+		}
 		Context context = service.getApplicationContext();
 
 		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALL_UI);
+		Log.d(THIS_FILE, "Show notification for "+currentCallInfo2.getCallId());
 		notificationIntent.putExtra("call_info", currentCallInfo2);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, 0);
+		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		
-		notification.setLatestEventInfo(context, service.getText(R.string.ongoing_call), 
+		inCallNotification.setLatestEventInfo(context, service.getText(R.string.ongoing_call) /*+" / "+currentCallInfo2.getCallId()*/, 
 				currentCallInfo2.getRemoteContact(), contentIntent);
-		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-		// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 
-		notificationManager.notify(SipService.CALL_NOTIF_ID, notification);
+		notificationManager.notify(SipService.CALL_NOTIF_ID, inCallNotification);
+		
 	}
 	
 	
@@ -420,7 +455,7 @@ public class UAStateReceiver extends Callback {
 		callHandlerIntent.putExtra("call_info", currentCallInfo2);
 		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		Log.i(THIS_FILE, "Anounce call activity please");
+		Log.d(THIS_FILE, "Anounce call activity");
 		service.startActivity(callHandlerIntent);
 
 	}
@@ -494,7 +529,8 @@ public class UAStateReceiver extends Callback {
 	/**
 	 * Internal receiver of Headset button presses events.
 	 */
-	private BroadcastReceiver headsetButtonReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver headsetButtonReceiver = null;
+	class HeadsetButtonReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.d(THIS_FILE, "headsetButtonReceiver::onReceive");
@@ -518,7 +554,9 @@ public class UAStateReceiver extends Callback {
 						// from receiving the button press since we have handled it ourself
 						// and do not want any media player to start playing for example.
 						//
-		        		abortBroadcast();
+		        		if (isOrderedBroadcast()) {
+		        			abortBroadcast();
+		        		}
 		        	}
 				}
 			}

@@ -55,6 +55,7 @@ public class Filter {
 	public static final int REPLACE_MATCH_TO = 1;
 	public static final int REPLACE_TRANSFORM = 2;
 	public static final int REPLACE_REGEXP = 3;
+	public static final int REPLACE_SUFIX = 4;
 	
 	
 	public static final String[] common_projection = {
@@ -237,9 +238,10 @@ public class Filter {
 	
 	private static HashMap<Integer, Integer> replaceTypePositions = new HashMap<Integer, Integer>() {{
 		put(0, REPLACE_PREFIX);
-		put(1, REPLACE_MATCH_TO);
-		put(2, REPLACE_TRANSFORM);
-		put(3, REPLACE_REGEXP);
+		put(1, REPLACE_SUFIX);
+		put(2, REPLACE_MATCH_TO);
+		put(3, REPLACE_TRANSFORM);
+		put(4, REPLACE_REGEXP);
 	}};
 	
 	public static int getReplaceForPosition(Integer selectedItemPosition) {
@@ -344,6 +346,9 @@ public class Filter {
 		case REPLACE_PREFIX:
 			replace = representation.fieldContent+"$0";
 			break;
+		case REPLACE_SUFIX:
+			replace = "$0"+representation.fieldContent;
+			break;
 		case REPLACE_MATCH_TO:
 			replace = representation.fieldContent+"$1";
 			break;
@@ -378,6 +383,14 @@ public class Filter {
 			repr.fieldContent = matcher.group(1);
 			return repr;
 		}
+		
+		matcher = Pattern.compile("^\\$0(.+)$").matcher(replace);
+		if(matcher.matches()) {
+			repr.type = REPLACE_SUFIX;
+			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		
 		matcher = Pattern.compile("^(.+)\\$1$").matcher(replace);
 		if(matcher.matches()) {
 			repr.type = REPLACE_MATCH_TO;

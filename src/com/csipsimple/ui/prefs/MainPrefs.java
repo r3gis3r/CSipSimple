@@ -20,6 +20,8 @@ package com.csipsimple.ui.prefs;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pjsip.pjsua.pjsua;
+
 import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -29,6 +31,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -160,10 +164,36 @@ public class MainPrefs extends ListActivity {
             
             return v;
 	    }
-		
 	}
 	
+	//Menu
+	public static final int MENU_EXPERT_VIEW = Menu.FIRST + 1;
+	public static final int MENU_TEST_AUDIO = MENU_EXPERT_VIEW + 1;
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, MENU_EXPERT_VIEW, Menu.NONE, "Expert preferences").setIcon(
+				R.drawable.ic_wizard_expert);
+		menu.add(Menu.NONE, MENU_TEST_AUDIO, Menu.NONE, "Test audio").setIcon(
+				R.drawable.ic_prefs_media);
+		return super.onCreateOptionsMenu(menu);
+	}
 	
+	 @Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case MENU_TEST_AUDIO:
+				Thread t = new Thread() {
+					public void run() {
+						pjsua.test_audio_dev(16000, 10);
+					};
+				};
+				
+				t.start();
+				return true;
+			}
+			return super.onOptionsItemSelected(item);
+		}
+	    
 	
 }

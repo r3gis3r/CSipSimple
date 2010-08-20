@@ -89,13 +89,17 @@ public class MediaManager {
 		}
 	}
 	
+	public void stopService() {
+		Log.i(THIS_FILE, "Remove media manager....");
+		bluetoothWrapper.destroy();
+		bluetoothWrapper = null;
+	}
 	
 	/**
 	 * Set the audio mode as in call
 	 */
 	public synchronized void setAudioInCall() {
 		
-
 		//Ensure not already set
 		if(isSetAudioMode) {
 			return;
@@ -103,11 +107,8 @@ public class MediaManager {
 		
 		saveAudioState();
 		
-		
-		
 		Log.d(THIS_FILE, "Set mode audio in call");
 	
-		
 		if(Compatibility.useRoutingApi()) {
 			audioManager.setRouting(AudioManager.MODE_IN_CALL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 			audioManager.setMode(AudioManager.MODE_IN_CALL);
@@ -118,7 +119,6 @@ public class MediaManager {
 		audioManager.setStreamSolo(inCallStream, true);
 		setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
 		
-
 		audioManager.setSpeakerphoneOn(false);
 		audioManager.setMicrophoneMute(false);
 		if(bluetoothClassAvailable && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
@@ -169,7 +169,6 @@ public class MediaManager {
 				
 			}
 		}
-		
 		
 		isSetAudioMode = true;
 		System.gc();

@@ -24,6 +24,7 @@ import java.util.TimerTask;
 
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsip_status_code;
+import org.pjsip.pjsua.pjsua_call_media_status;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -88,7 +89,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private LinearLayout detailedContainer, holdContainer;
 
 	//True if running unit tests
-	private boolean inTest;
+//	private boolean inTest;
 
 	private MediaState lastMediaState;
 
@@ -114,11 +115,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			return;
 		}
 		
+		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
+		/*
 		inTest = extras.getBoolean("in_test", false);
 		if(!inTest) {
+		*/
 			Log.d(THIS_FILE, "Creating call handler.....");
 			serviceBound = bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
+			/*
 		}
+		*/
 
 		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -327,6 +333,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		dialPad.setVisibility(visibility);
 		int antiVisibility = visibility == View.GONE? View.VISIBLE:View.GONE;
 		detailedContainer.setVisibility(antiVisibility);
+		holdContainer.setVisibility(antiVisibility);
 		callInfoPanel.setVisibility(antiVisibility);
 	}
 	
@@ -338,6 +345,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			unbindService(connection);
 			serviceBound = false;
 		}
+		
 		if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
@@ -509,6 +517,18 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				case DETAILED_DISPLAY:{
 					inCallInfo.switchDetailedInfo( showDetails );
 					showDetails = !showDetails;
+					break;
+				}
+				case TOGGLE_HOLD:{
+					if (callInfo != null && service != null) {
+						Log.d(THIS_FILE, "Current state is : "+callInfo.getCallState().name()+" / "+callInfo.getMediaStatus().name());
+						if(callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_LOCAL_HOLD) ||
+								callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_NONE)) {
+							service.reinvite(callInfo.getCallId(), true);
+						}else {
+							service.hold(callInfo.getCallId());
+						}
+					}
 				}
 			}
 		} catch (RemoteException e) {

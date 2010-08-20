@@ -842,7 +842,8 @@ class pjsuaJNI {
   public final static native int codec_get_param(long jarg1, pj_str_t jarg1_, long jarg2, pjmedia_codec_param jarg2_);
   public final static native int codec_set_param(long jarg1, pj_str_t jarg1_, long jarg2, pjmedia_codec_param jarg2_);
   public final static native int media_transports_create(long jarg1, pjsua_transport_config jarg1_);
-
+  public final static native void test_audio_dev(long jarg1, long jarg2); 
+  
   public static void SwigDirector_Callback_on_call_state(Callback self, int call_id, long e) {
     self.on_call_state(call_id, new pjsip_event(e, false));
   }

@@ -63,13 +63,6 @@ public class BluetoothUtils8 {
 		context.registerReceiver(mediaStateReceiver , new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
 	}
 	
-	@Override
-	protected void finalize() throws Throwable {
-		context.unregisterReceiver(mediaStateReceiver);
-		super.finalize();
-	}
-
-	
 	public boolean canBluetooth() {
 		// Detect if any bluetooth a device is available for call
 		BluetoothAdapter mBluetoothAdapter = null;
@@ -120,6 +113,15 @@ public class BluetoothUtils8 {
 	
 	public boolean isBluetoothOn() {
 		return isBluetoothConnected;
+	}
+
+	public void destroy() {
+		Log.w(THIS_FILE, ">> Finalize myself");
+		try {
+			context.unregisterReceiver(mediaStateReceiver);
+		}catch(Exception e) {
+			//Nothing has to be done here...
+		}
 	}
 
 }
