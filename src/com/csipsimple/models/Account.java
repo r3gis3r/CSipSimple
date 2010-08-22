@@ -17,6 +17,9 @@
  */
 package com.csipsimple.models;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_acc_config;
@@ -292,6 +295,42 @@ public class Account {
 		c.close();
 		db.close();
 		return number;
+	}
+
+	public void applyExtraParams() {
+		
+		//TODO : should NOT be done here !!! 
+		String reg_uri = "";
+		String proxy_uri = "";
+		if (use_tcp) {
+			reg_uri = cfg.getReg_uri().getPtr();
+			String buf = reg_uri + ";transport=tcp";
+			cfg.setReg_uri(pjsua.pj_str_copy(buf));
+			proxy_uri =  cfg.getProxy().getPtr();
+			if (proxy_uri == null || proxy_uri == "") {
+				cfg.setProxy(pjsua.pj_str_copy(buf));
+			} else {
+				buf = proxy_uri + ";transport=tcp";
+				cfg.setProxy(pjsua.pj_str_copy(buf));
+			}
+		}
+		
+	}
+	
+	public String getDefaultDomain() {
+		String regUri = cfg.getReg_uri().getPtr();
+		if(regUri == null) {
+			return null;
+		}
+		
+		Pattern p = Pattern.compile("^sip(s)?:([^@]*)$", Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(regUri);
+		Log.d(THIS_FILE, "Try to find into "+regUri);
+		if(!m.matches()) {
+			Log.e(THIS_FILE, "Default domain can't be guessed from regUri of this account");
+			return null;
+		}
+		return m.group(2);
 	}
 	
 	

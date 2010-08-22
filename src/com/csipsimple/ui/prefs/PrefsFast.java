@@ -36,7 +36,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 	private RadioButton globProfileAlways;
 	private RadioButton globProfileWifi;
 	private RadioButton globProfileNever;
-	private CheckBox globTg;
+	private CheckBox globGsm;
 	private PreferencesWrapper prefsWrapper;
 	private SharedPreferences prefs;
 	
@@ -60,7 +60,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 		globProfileAlways = (RadioButton) findViewById(R.id.glob_profile_always);
 		globProfileWifi = (RadioButton) findViewById(R.id.glob_profile_wifi);
 		globProfileNever = (RadioButton) findViewById(R.id.glob_profile_never);
-		globTg = (CheckBox) findViewById(R.id.glob_tg);
+		globGsm = (CheckBox) findViewById(R.id.glob_tg);
 		
 		globProfileAlways.setOnClickListener(this);
 		globProfileNever.setOnClickListener(this);
@@ -87,24 +87,29 @@ public class PrefsFast extends Activity implements OnClickListener {
 		globIntegrate.setChecked(prefsWrapper.useIntegrateDialer());
 		boolean tgIn = prefs.getBoolean("use_3g_in", false);
 		boolean tgOut = prefs.getBoolean("use_3g_out", false);
+		boolean gprsIn = prefs.getBoolean("use_gprs_in", false);
+		boolean gprsOut = prefs.getBoolean("use_gprs_out", false);
 		boolean edgeIn = prefs.getBoolean("use_edge_in", false);
 		boolean edgeOut = prefs.getBoolean("use_edge_out", false);
-		boolean gsmIn = prefs.getBoolean("use_gsm_in", false);
-		boolean gsmOut = prefs.getBoolean("use_gsm_out", false);
 		boolean wifiIn = prefs.getBoolean("use_wifi_in", true);
 		boolean wifiOut = prefs.getBoolean("use_wifi_out", true);
-		boolean useTg = (tgIn || tgOut || edgeIn || edgeOut || gsmIn || gsmOut);
+		
+		boolean useGsmIn = (tgIn || gprsIn || edgeIn);
+		boolean useGsmOut = (tgOut || gprsOut || edgeOut);
+		
+		boolean useGsm = useGsmIn || useGsmOut ;
 		boolean lockWifi = prefs.getBoolean("lock_wifi", true);
 		
-		globTg.setChecked( useTg);
+		globGsm.setChecked( useGsm );
 		
 		Profile mode = Profile.UNKOWN;
-		if( ( !useTg && wifiIn && wifiOut && lockWifi) ||
-			(  useTg && wifiIn && wifiOut && tgIn && tgOut && edgeIn && edgeOut && gsmIn && gsmOut && lockWifi)) {
+		
+		if( ( !useGsm && wifiIn && wifiOut && lockWifi) ||
+			(  useGsm && wifiIn && wifiOut && lockWifi && tgIn && tgOut && gprsIn && gprsOut && edgeIn && edgeOut )) {
 			mode = Profile.ALWAYS;
 		} else if (wifiIn && wifiOut ) {
 			mode = Profile.WIFI;
-		} else if (!wifiIn && !tgIn && !edgeIn && !gsmIn) {
+		} else if (!wifiIn && !useGsmIn) {
 			mode = Profile.NEVER;
 		}
 		
@@ -132,13 +137,13 @@ public class PrefsFast extends Activity implements OnClickListener {
 		}else if( id == R.id.row_glob_integrate ) {
 			globIntegrate.toggle();
 		}else if( id == R.id.row_glob_tg ) {
-			globTg.toggle();
+			globGsm.toggle();
 		}
 	}
 	
 	private void applyPrefs() {
 		boolean integrate = globIntegrate.isChecked();
-		boolean useTg = globTg.isChecked();
+		boolean useGsm = globGsm.isChecked();
 		Profile mode = Profile.UNKOWN;
 		if(globProfileAlways.isChecked()) {
 			mode = Profile.ALWAYS;
@@ -151,8 +156,14 @@ public class PrefsFast extends Activity implements OnClickListener {
 		Editor edt = prefs.edit();
 		edt.putBoolean("integrate_with_native_dialer", integrate);
 		if(mode != Profile.UNKOWN) {
-			edt.putBoolean("use_3g_in", (useTg && mode == Profile.ALWAYS));
-			edt.putBoolean("use_3g_out", useTg);
+			
+			edt.putBoolean("use_3g_in", (useGsm && mode == Profile.ALWAYS));
+			edt.putBoolean("use_3g_out", useGsm);
+			edt.putBoolean("use_gprs_in", (useGsm && mode == Profile.ALWAYS));
+			edt.putBoolean("use_gprs_out", useGsm);
+			edt.putBoolean("use_edge_in", (useGsm && mode == Profile.ALWAYS));
+			edt.putBoolean("use_edge_out", useGsm);
+			
 			edt.putBoolean("use_wifi_in", mode != Profile.NEVER);
 			edt.putBoolean("use_wifi_out", true);
 			edt.putBoolean("lock_wifi", mode == Profile.ALWAYS);

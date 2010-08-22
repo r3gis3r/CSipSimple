@@ -184,7 +184,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
             	database.open();
         		database.deleteAccount(account);
         		database.close();
-				reloadAsyncAccounts();
+				reloadAsyncAccounts(account.id, 0);
                 return true;
             }
             case MENU_ITEM_MODIFY : {
@@ -203,7 +203,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
             	database.open();
             	database.updateAccount(account);
             	database.close();
-				reloadAsyncAccounts();
+				reloadAsyncAccounts(account.id, account.active?1:0);
 				return true;
             }
         }
@@ -273,7 +273,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			break;
 		case REQUEST_MODIFY:
 			if(resultCode == RESULT_OK){
-				reloadAsyncAccounts();
+				reloadAsyncAccounts(null, 1);
 			}
 			break;
 		}
@@ -281,14 +281,18 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	
 
 	
-	private void reloadAsyncAccounts() {
+	private void reloadAsyncAccounts(final Integer accountId, final Integer renew) {
 		//Force reflush accounts
 		Thread t = new Thread() {
 			@Override
 			public void run() {
 				if (service != null) {
 					try {
-						service.reAddAllAccounts();
+						if(accountId == null) {
+							service.reAddAllAccounts();
+						}else {
+							service.setAccountRegistration(accountId, renew);
+						}
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Impossible to reload accounts", e);
 					}finally {
@@ -408,7 +412,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			account.active = isActive;
 			database.updateAccount(account);
 			database.close();
-			reloadAsyncAccounts();
+			reloadAsyncAccounts(account.id, account.active?1:0);
 			
 			//Update visual
 			tagView.barOnOff.setImageResource(account.active?R.drawable.ic_indicator_on : R.drawable.ic_indicator_off);

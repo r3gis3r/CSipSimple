@@ -17,6 +17,8 @@
  */
 package com.csipsimple.utils;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -63,9 +65,9 @@ public class PreferencesWrapper {
 
 		boolean valid_for_3g = aPrefs.getBoolean("use_3g_" + suffix, false);
 		boolean valid_for_edge = aPrefs.getBoolean("use_edge_" + suffix, false);
-		boolean valid_for_gsm = aPrefs.getBoolean("use_gsm_" + suffix, false);
+		boolean valid_for_gprs = aPrefs.getBoolean("use_gprs_" + suffix, false);
 		
-		if ((valid_for_3g || valid_for_edge || valid_for_gsm) &&
+		if ((valid_for_3g || valid_for_edge || valid_for_gprs) &&
 			 ni != null && ni.getType() == ConnectivityManager.TYPE_MOBILE) {
 
 			// Any mobile network connected
@@ -78,17 +80,19 @@ public class PreferencesWrapper {
 					return true;
 				}
 				
+				// GPRS (or unknown)
+				if (valid_for_gprs &&	
+					(subType == TelephonyManager.NETWORK_TYPE_GPRS || subType == TelephonyManager.NETWORK_TYPE_UNKNOWN)) {
+					return true;
+				}
+				
 				// EDGE
 				if (valid_for_edge &&
 					subType == TelephonyManager.NETWORK_TYPE_EDGE) {
 					return true;
 				}
 				
-				// GPRS (or unknown)
-				if (valid_for_gsm &&	
-					(subType == TelephonyManager.NETWORK_TYPE_GPRS || subType == TelephonyManager.NETWORK_TYPE_UNKNOWN)) {
-					return true;
-				}
+				
 			}
 		}
 		return false;
@@ -121,6 +125,17 @@ public class PreferencesWrapper {
 		return isValidConnectionFor(ni, prefs, "in");
 	}
 
+	public ArrayList<String> getAllIncomingNetworks(){
+		ArrayList<String> incomingNetworks = new ArrayList<String>();
+		String[] availableNetworks = {"3g", "edge", "gprs", "wifi"};
+		for(String network:availableNetworks) {
+			if(prefs.getBoolean("use_"+network+"_in", network.equals("wifi")?true:false)) {
+				incomingNetworks.add(network);
+			}
+		}
+		
+		return incomingNetworks;
+	}
 	
 	public boolean getLockWifi() {
 		return prefs.getBoolean("lock_wifi", true);
@@ -157,7 +172,7 @@ public class PreferencesWrapper {
 		if(Build.VERSION.SDK == "3") {
 			return false;
 		}
-		return prefs.getBoolean("echo_cancellation", true);
+		return prefs.getBoolean("echo_cancellation", false);
 	}
 	
 
@@ -166,7 +181,7 @@ public class PreferencesWrapper {
 	 * @return 1 if Voice audio detection is disabled
 	 */
 	public int getNoVad() {
-		return prefs.getBoolean("enable_vad", true)?0:1;
+		return prefs.getBoolean("enable_vad", false)?0:1;
 	}
 
 	

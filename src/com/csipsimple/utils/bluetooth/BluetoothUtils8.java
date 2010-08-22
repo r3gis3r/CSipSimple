@@ -116,7 +116,6 @@ public class BluetoothUtils8 {
 	}
 
 	public void destroy() {
-		Log.w(THIS_FILE, ">> Finalize myself");
 		try {
 			context.unregisterReceiver(mediaStateReceiver);
 		}catch(Exception e) {

@@ -134,6 +134,7 @@ public class AccountAdapter extends ArrayAdapter<Account> implements OnClickList
 					tagView.iconImage.setImageResource(wizard_infos.icon);
 				}
 			}
+			tagView.refreshView.setTag(account.id);
 		}
 	}
 	
@@ -142,7 +143,7 @@ public class AccountAdapter extends ArrayAdapter<Account> implements OnClickList
 	public void onClick(View v) {
 		if(service != null) {
 			try {
-				service.reAddAllAccounts();
+				service.setAccountRegistration((Integer)v.getTag(), 1);
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Unable to contact service", e);
 			}

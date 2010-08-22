@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pj_pool_t;
@@ -141,7 +140,7 @@ public class SipService extends Service {
 		 * Populate pjsip accounts with accounts saved in sqlite
 		 */
 		@Override
-		public void addAllAccounts() throws RemoteException { SipService.this.registerAllAccounts(); }
+		public void addAllAccounts() throws RemoteException { SipService.this.addAllAccounts(); }
 		
 
 		/**
@@ -156,6 +155,19 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void reAddAllAccounts() throws RemoteException { SipService.this.reRegisterAllAccounts(); }
+		
+
+		@Override
+		public void setAccountRegistration(int accountId, int renew) throws RemoteException {
+			Account account;
+			synchronized (db) {
+				db.open();
+				account = db.getAccount(accountId);
+				db.close();
+			}
+			SipService.this.setAccountRegistration(account, renew);
+		}
+
 		
 		/**
 		 * Get account and it's informations
@@ -271,7 +283,6 @@ public class SipService extends Service {
 	private int dialtoneSlot = -1;
 	private Object dialtoneMutext = new Object();
 	
-	public boolean startBluetooth = true;
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
@@ -288,8 +299,9 @@ public class SipService extends Service {
 			// network such as a switch of network type (GPRS, EDGE, 3G) 
 			// which are not detected by the Connectivity changed broadcast.
 			//
+			Log.d(THIS_FILE, "ServiceDeviceStateReceiver");
 			if (intent.getAction().equals(ACTION_CONNECTIVITY_CHANGED) || intent.getAction().equals(ACTION_DATA_STATE_CHANGED)) {
-				Log.v(THIS_FILE, "Connectivity or data state has changed");
+				Log.d(THIS_FILE, "Connectivity or data state has changed");
 				//Thread it to be sure to not block the device if registration take time
 				Thread t = new Thread() {
 					@Override
@@ -301,7 +313,7 @@ public class SipService extends Service {
 							} else {
 								Log.i(THIS_FILE, "Ip changed remove/re - add all accounts");
 								if(userAgentReceiver.getActiveCallInProgress() != null) {
-									Log.d(THIS_FILE, "We should restart the stack ! ");
+									Log.e(THIS_FILE, "We should restart the stack ! ");
 								}else {
 									// update registration IP : for now remove / reregister all accounts
 									reRegisterAllAccounts();
@@ -310,6 +322,7 @@ public class SipService extends Service {
 							
 						} else {
 							Log.i(THIS_FILE, "Stop SERVICE");
+							/*
 							try {
 								SipService.this.unregisterReceiver(deviceStateReceiver);
 							}catch(IllegalArgumentException e) {
@@ -317,6 +330,7 @@ public class SipService extends Service {
 								//Python like usage of try ;) : nothing to do here since it could be a standard case
 								//And in this case nothing has to be done
 							}
+							*/
 							SipService.this.sipStop();
 							//OK, this will be done only if the last bind is released
 							SipService.this.stopSelf();
@@ -446,7 +460,7 @@ public class SipService extends Service {
 			return;
 		}
 
-		Log.i(THIS_FILE, "Will start sip : " + (!created));
+		Log.i(THIS_FILE, "Will start sip : " + (!created && !creating));
 		//Ensure the stack is not already created or is being created
 		if (!created && !creating) {
 			creating = true;
@@ -487,7 +501,7 @@ public class SipService extends Service {
 							cfg.setStun_host(pjsua.pj_str_copy(prefsWrapper.getStunServer()));
 						}
 						cfg.setUser_agent(pjsua.pj_str_copy("CSipSimple"));
-						
+						//cfg.setThread_cnt(4); // one thread seems to be enough for now
 
 						// LOGGING CONFIG
 						pjsua.logging_config_default(log_cfg);
@@ -603,7 +617,7 @@ public class SipService extends Service {
 					created = true;
 
 					// Add accounts
-					registerAllAccounts();
+					addAllAccounts();
 					creating = false;
 					super.run();
 				}
@@ -647,121 +661,107 @@ public class SipService extends Service {
 		Log.i(THIS_FILE, ">> Media m "+mediaManager);
 		created = false;
 	}
-	private boolean isRegistering = false;
 	
 	
 	
 	/**
 	 * Add accounts from database
 	 */
-	private void registerAllAccounts() {
+	private void addAllAccounts() {
+		Log.d(THIS_FILE, "We are adding all accounts right now....");
+		
+		boolean hasSomeSuccess = false;
+		List<Account> accountList;
+		synchronized (db) {
+			db.open();
+			accountList = db.getListAccounts();
+			db.close();
+		}
+		
+		for (Account account : accountList) {
+			if (account.active) {
+				if(addAccount(account) == pjsuaConstants.PJ_SUCCESS) {
+					hasSomeSuccess = true;
+				}
+			}
+		}
+		
+		if(hasSomeSuccess) {
+			acquireResources();
+		}else {
+			releaseResources();
+			if (notificationManager != null) {
+				notificationManager.cancel(REGISTER_NOTIF_ID);
+			}
+		}
+	}
+	
+	private int addAccount(Account account) {
+		int status = pjsuaConstants.PJ_FALSE;
 		synchronized (pjAccountsCreationLock) {
 			if(!created) {
 				Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
-				return;
+				return status;
 			}
-			
-			isRegistering = true;
-			Log.d(THIS_FILE, "We are registring all accounts right now....");
+			account.applyExtraParams();
 			
 			
-			boolean hasSomeSuccess = false;
-			List<Account> accountList;
-			synchronized (db) {
-				db.open();
-				accountList = db.getListAccounts();
-				db.close();
-			}
-			for (Account account : accountList) {
-				if (account.active) {
+			if (activeAccounts.containsKey(account.id)) {
+				status = pjsua.acc_modify(activeAccounts.get(account.id), account.cfg);
+				accountsAddingStatus.put(account.id, status);
+				if(status == pjsuaConstants.PJ_SUCCESS){
+					status = pjsua.acc_set_registration(activeAccounts.get(account.id), 1);
 					
-					//
-					// To prevent pjsip from registering the account for incoming
-					// connections if the network is disabled for incoming connections
-					// the registration uri should be set empty
-					//
-					
-					/* TODO:
-					 * Requires changes to the way the state of accounts are handled
-					 * to show status active for outgoing calls even though account is
-					 * not registered.
-
-					if(!prefsWrapper.isValidConnectionForIncoming()) {
-						account.cfg.setReg_uri(pjsua.pj_str_copy(""));
-					}*/
-					
-					//
-					// Handle TCP mode by temporarily changing the reg uri and
-					// adding a fake proxy if needed
-					//
-					String reg_uri = "";
-					String proxy_uri = "";
-					if (account.use_tcp) {
-						reg_uri = account.cfg.getReg_uri().getPtr();
-						String buf = reg_uri + ";transport=tcp";
-						account.cfg.setReg_uri(pjsua.pj_str_copy(buf));
-						proxy_uri =  account.cfg.getProxy().getPtr();
-						if (proxy_uri == null || proxy_uri == "") {
-							account.cfg.setProxy(pjsua.pj_str_copy(buf));
-						} else {
-							buf = proxy_uri + ";transport=tcp";
-							account.cfg.setProxy(pjsua.pj_str_copy(buf));
-						}
-					}
-
-					int status;
-					
-					if (activeAccounts.containsKey(account.id)) {
-						status = pjsua.acc_modify(activeAccounts.get(account.id), account.cfg);
-						// if(status == pjsuaConstants.PJ_SUCCESS){
-						//		
-						// }else{
-						// Log.w(THIS_FILE,
-						// "Modify account "+acc.display_name+" failed !!! ");
-						// activeAccounts.put(acc.id, activeAccounts.get(acc.id));
-						// }
-						pjsua.acc_set_registration(activeAccounts.get(account.id), 1);
-					} else {
-						int[] acc_id = new int[1];
-						status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_TRUE, acc_id);
-						
-						synchronized (activeAccountsLock) {
-							accountsAddingStatus.put(account.id, status);
-							
-							if (status == pjsuaConstants.PJ_SUCCESS) {
-								Log.i(THIS_FILE, "Account " + account.display_name + " ( " + account.id + " ) added as " + acc_id[0]);
-								activeAccounts.put(account.id, acc_id[0]);
-								hasSomeSuccess = true;
-							} else {
-								Log.w(THIS_FILE, "Add account " + account.display_name + " failed !!! ");
-		
-							}
-						}
-					}
-					
-					//
-					// For TCP, undo the appending of ;transport=tcp and fake proxy
-					//
-					if (account.use_tcp) {
-						account.cfg.setReg_uri(pjsua.pj_str_copy(reg_uri));
-						if (proxy_uri == null)
-							account.cfg.setReg_uri(pjsua.pj_str_copy(""));
-						else
-							account.cfg.setReg_uri(pjsua.pj_str_copy(proxy_uri));
+				}
+			} else {
+				int[] acc_id = new int[1];
+				status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, acc_id);
+				accountsAddingStatus.put(account.id, status);
+				if(status == pjsuaConstants.PJ_SUCCESS) {
+					synchronized (activeAccountsLock) {
+						activeAccounts.put(account.id, acc_id[0]);
 					}
 				}
 			}
 			
-			if(hasSomeSuccess) {
-				acquireResources();
-			}else {
-				releaseResources();
-				if (notificationManager != null) {
-					notificationManager.cancel(REGISTER_NOTIF_ID);
-				}
-			}
-			isRegistering = false;
 		}
+		
+		return status;
+	}
+	
+	private int setAccountRegistration(Account account, int renew) {
+		int status = pjsuaConstants.PJ_FALSE;
+		synchronized (pjAccountsCreationLock) {
+			if(!created || account == null) {
+				Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
+				return status;
+			}
+			if (activeAccounts.containsKey(account.id)) {
+				int c_acc_id = activeAccounts.get(account.id);
+				synchronized (activeAccountsLock) {
+					activeAccounts.remove(account.id);
+					accountsAddingStatus.remove(account.id);
+				}
+				
+				if(renew ==1) {
+					status = pjsua.acc_set_registration(c_acc_id, renew);
+				}else {
+				//if(status == pjsuaConstants.PJ_SUCCESS && renew == 0) {
+					status = pjsua.acc_del(c_acc_id);
+				}
+			}else {
+				if(renew == 1) {
+					addAccount(account);
+				}
+			}
+		}
+		// Send a broadcast message that for an account
+		// registration state has changed
+		Intent regStateChangedIntent = new Intent(ACTION_SIP_REGISTRATION_CHANGED);
+		sendBroadcast(regStateChangedIntent);
+		
+		updateRegistrationsState();
+		return status;
 	}
 
 	/**
@@ -775,32 +775,29 @@ public class SipService extends Service {
 		releaseResources();
 		
 		synchronized (pjAccountsCreationLock) {
-			synchronized (activeAccountsLock) {
-				Log.d(THIS_FILE, "Remove all accounts");
-				for (int c_acc_id : activeAccounts.values()) {
-					pjsua.acc_set_registration(c_acc_id, 0);
-					pjsua.acc_del(c_acc_id);
-				}
-				accountsAddingStatus.clear();
-				activeAccounts.clear();
+			Log.d(THIS_FILE, "Remove all accounts");
+			List<Account> accountList;
+			synchronized (db) {
+				db.open();
+				accountList = db.getListAccounts();
+				db.close();
 			}
+			
+			for (Account account : accountList) {
+				setAccountRegistration(account, 0);
+			}
+			
 		}
-		// Send a broadcast message that for an account
-		// registration state has changed
-		Intent regStateChangedIntent = new Intent(ACTION_SIP_REGISTRATION_CHANGED);
-		sendBroadcast(regStateChangedIntent);
+		
 		
 		if (notificationManager != null && cancelNotification) {
 			notificationManager.cancel(REGISTER_NOTIF_ID);
 		}
-		
 	}
 	
 	private void reRegisterAllAccounts() {
-		if(!isRegistering) {
-			unregisterAllAccounts(false);
-			registerAllAccounts();
-		}
+		unregisterAllAccounts(false);
+		addAllAccounts();
 	}
 	
 	
@@ -851,6 +848,7 @@ public class SipService extends Service {
 		
 		// Handle status bar notification
 		if (hasSomeSuccess) {
+			
 			int icon = R.drawable.sipok;
 			CharSequence tickerText = "SIP Registered";
 			long when = System.currentTimeMillis();
@@ -862,7 +860,7 @@ public class SipService extends Service {
 
 			Intent notificationIntent = new Intent(this, SipHome.class);
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 			notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
@@ -972,31 +970,31 @@ public class SipService extends Service {
 			int defaultAccount = accountId;
 			if(defaultAccount == -1) {
 				defaultAccount = pjsua.acc_get_default();
+				if(!activeAccounts.containsKey(defaultAccount)) {
+					for (Integer accId : activeAccounts.keySet()) {
+						if(accId != null) {
+							defaultAccount = accId;
+							break;
+						}
+					}
+				}
 			}
 			Log.d(THIS_FILE, "default acc : "+defaultAccount);
-			//TODO : use the standard call 
-			pjsua_acc_info acc_info = new pjsua_acc_info();
-			pjsua.acc_get_info(defaultAccount, acc_info);
-			//Reformat with default account
-			String default_domain = acc_info.getAcc_uri().getPtr();
-			if(default_domain == null) {
-				Log.e(THIS_FILE, "No default domain can't gess a domain for what you are asking");
-				return -1;
+			Account account;
+			synchronized (db) {
+				db.open();
+				account = db.getAccount(defaultAccount);
+				db.close();
 			}
-			Pattern p = Pattern.compile(".*<sip(s)?:[^@]*@([^@]*)>", Pattern.CASE_INSENSITIVE);
-			Matcher m = p.matcher(default_domain);
-			Log.d(THIS_FILE, "Try to find into "+default_domain);
-			if(!m.matches()) {
-				Log.e(THIS_FILE, "Default domain can't be guessed from regUri of this account");
-				return -1;
-			}
-			default_domain = m.group(2);
-			Log.d(THIS_FILE, "default domain : "+default_domain);
+			String defaultDomain = account.getDefaultDomain();
+			
+			
+			Log.d(THIS_FILE, "default domain : "+defaultDomain);
 			//TODO : split domain
 			if(Pattern.matches("^sip(s)?:[^@]*$", callee)) {
-				callee = callee+"@"+default_domain;
+				callee = callee+"@"+defaultDomain;
 			}else {
-				callee = "sip:"+callee+"@"+default_domain;
+				callee = "sip:"+callee+"@"+defaultDomain;
 			}
 		}
 		

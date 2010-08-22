@@ -80,6 +80,5 @@ public class BluetoothWrapper {
 		if(butils8 != null) {
 			butils8.destroy();
 		}
-		
 	}
 }

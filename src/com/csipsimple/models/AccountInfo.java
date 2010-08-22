@@ -24,6 +24,7 @@ import org.pjsip.pjsua.pjsua_acc_info;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 public class AccountInfo implements Parcelable, Serializable{
 
@@ -89,7 +90,6 @@ public class AccountInfo implements Parcelable, Serializable{
 		statusText = in.readString();
 		addedStatus = in.readInt();
 		expires = in.readInt();
-		
 	}
 
 	@Override
@@ -233,4 +233,5 @@ public class AccountInfo implements Parcelable, Serializable{
 		return expires;
 	}
 
+	
 }

@@ -91,8 +91,10 @@ public class MediaManager {
 	
 	public void stopService() {
 		Log.i(THIS_FILE, "Remove media manager....");
-		bluetoothWrapper.destroy();
-		bluetoothWrapper = null;
+		if(bluetoothWrapper != null) {
+			bluetoothWrapper.destroy();
+			bluetoothWrapper = null;
+		}
 	}
 	
 	/**
@@ -171,8 +173,9 @@ public class MediaManager {
 		}
 		
 		isSetAudioMode = true;
-		System.gc();
+	//	System.gc();
 	}
+	
 	
 	/**
 	 * Save current audio mode in order to be able to restore it once done

@@ -29,6 +29,7 @@ interface ISipService{
 	void addAllAccounts();
 	void removeAllAccounts();
 	void reAddAllAccounts();
+	void setAccountRegistration(int accountId, int renew);
 	AccountInfo getAccountInfo(int accountId);
 	
 	//Call configuration control

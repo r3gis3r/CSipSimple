@@ -18,6 +18,7 @@
 package com.csipsimple.ui;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -26,10 +27,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 import com.csipsimple.R;
@@ -38,6 +41,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.ui.prefs.MainPrefs;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.IndicatorTab;
 
 public class SipHome extends TabActivity {
@@ -127,6 +131,7 @@ public class SipHome extends TabActivity {
 	        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(accountIntent);
         }
+        
     }
     
     private void addTab(String tag, String label, int icon, int ficon, Intent content) {
@@ -181,7 +186,15 @@ public class SipHome extends TabActivity {
 				android.R.drawable.ic_menu_preferences);
 		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, "Quit").setIcon(
 				android.R.drawable.ic_menu_close_clear_cancel);
+		
 	}
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+    	
+    	PreferencesWrapper prefsWrapper = new PreferencesWrapper(this);
+    	menu.findItem(CLOSE_MENU).setVisible(!prefsWrapper.isValidConnectionForIncoming());
+    	return super.onPrepareOptionsMenu(menu);
+    }
     
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -204,6 +217,16 @@ public class SipHome extends TabActivity {
 				stopService(serviceIntent);
 			}
 	    	serviceIntent = null;
+	    	PreferencesWrapper prefsWrapper = new PreferencesWrapper(this);
+	    	ArrayList<String> networks = prefsWrapper.getAllIncomingNetworks();
+	    	if(networks.size()>0) {
+	    		//TODO: translate %s style
+	    		String msg =  "Will automatically restart when : ";
+	    		msg += TextUtils.join(", ", networks);
+	    		msg += " will become available (change settings if you don't want)";
+	    		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+	    	}
+	    	
 			this.finish();
 			
 			return true;
