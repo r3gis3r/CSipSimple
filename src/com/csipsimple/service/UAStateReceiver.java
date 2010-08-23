@@ -554,9 +554,14 @@ public class UAStateReceiver extends Callback {
 						// from receiving the button press since we have handled it ourself
 						// and do not want any media player to start playing for example.
 						//
+		        		/*
+		        		 * TODO : enable this test if api > 5
 		        		if (isOrderedBroadcast()) {
+		        		*/
 		        			abortBroadcast();
+		        			/*
 		        		}
+		        		*/
 		        	}
 				}
 			}
