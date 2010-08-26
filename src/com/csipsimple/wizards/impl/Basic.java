@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_cred_data_type;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
@@ -106,7 +107,11 @@ public class Basic extends BasePrefsWizard {
 		// TODO add an user display name
 		account.cfg.setId(pjsua.pj_str_copy("<sip:"
 				+ accountUserName.getText() + "@"+accountServer.getText()+">"));
-		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:"+accountServer.getText()));
+		
+		pj_str_t regUri = pjsua.pj_str_copy("sip:"+accountServer.getText());
+		account.cfg.setReg_uri(regUri);
+		account.cfg.setProxy_cnt(1);
+		account.cfg.setProxy(regUri);
 
 		pjsip_cred_info ci = account.cfg.getCred_info();
 

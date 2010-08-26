@@ -24,7 +24,6 @@ import org.pjsip.pjsua.pjsua_acc_info;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.TextUtils;
 
 public class AccountInfo implements Parcelable, Serializable{
 
@@ -41,6 +40,7 @@ public class AccountInfo implements Parcelable, Serializable{
 	private String statusText;
 	private int addedStatus;
 	private int expires;
+	private String displayName;
 	
 	
 	
@@ -53,6 +53,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		databaseId = account.id;
 		wizard = account.wizard;
 		active = account.active;
+		displayName = account.display_name;
 		
 		//Set default values
 		addedStatus = -1;
@@ -60,6 +61,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		statusCode = pjsip_status_code.PJSIP_SC_NOT_FOUND;
 		statusText = "";
 		expires = 0;
+		
 	}
 	
 	
@@ -90,6 +92,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		statusText = in.readString();
 		addedStatus = in.readInt();
 		expires = in.readInt();
+		displayName = in.readString();
 	}
 
 	@Override
@@ -103,6 +106,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		out.writeString(statusText);
 		out.writeInt(addedStatus);
 		out.writeInt(expires);
+		out.writeString(displayName);
 	}
 	
 
@@ -231,6 +235,11 @@ public class AccountInfo implements Parcelable, Serializable{
 	 */
 	public int getExpires() {
 		return expires;
+	}
+
+
+	public CharSequence getDisplayName() {
+		return displayName;
 	}
 
 	

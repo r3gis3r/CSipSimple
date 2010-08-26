@@ -1,7 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr) 
+
+	This file is part of CSipSimple.
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/accounts_container"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:orientation="horizontal">
+  
+  <!--  Unfortunately to be compatible with 1.6 devices, we need to write it as flat file -->
+	  <RelativeLayout
+			style="@style/list_left_column" android:id="@+id/cell1"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:paddingLeft="5dip"
+			android:paddingTop="4dip"
+			android:gravity="center" android:orientation="vertical">
+			<LinearLayout android:layout_width="wrap_content" android:layout_height="fill_parent"
+				android:id="@+id/iconContainer1" android:orientation="vertical">
+				<ImageView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:id="@+id/icon1" android:layout_gravity="center"></ImageView>
+				<ImageView android:id="@+id/bar_onoff" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:layout_gravity="center"
+					android:layout_below="@id/icon1" android:scaleType="centerCrop"
+					android:src="@drawable/ic_indicator_on" />
+			</LinearLayout>
+			<TextView android:layout_toRightOf="@id/iconContainer1" android:id="@+id/account_label1" 
+				android:paddingLeft="16dip" android:ellipsize="marquee"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textStyle="bold" android:textColor="@android:color/tertiary_text_light"
+				android:layout_width="fill_parent"
+				android:layout_centerVertical="true" android:layout_height="wrap_content"></TextView>
+	</RelativeLayout>
+  <!--  Unfortunately to be compatible with 1.6 devices, we need to write it as flat file -->
+	  <RelativeLayout
+			style="@style/list_left_column" android:id="@+id/cell2"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:paddingLeft="5dip"
+			android:paddingTop="4dip"
+			android:gravity="center" android:orientation="vertical">
+			<LinearLayout android:layout_width="wrap_content" android:layout_height="fill_parent" 
+				android:id="@+id/iconContainer2" android:orientation="vertical">
+				<ImageView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:id="@+id/icon2" android:layout_gravity="center"></ImageView>
+				<ImageView android:id="@+id/bar_onoff" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:layout_gravity="center"
+					android:layout_below="@id/icon2" android:scaleType="centerCrop"
+					android:src="@drawable/ic_indicator_on" />
+			</LinearLayout>
+			<TextView android:layout_toRightOf="@id/iconContainer2" android:id="@+id/account_label2" 
+				android:paddingLeft="16dip" android:ellipsize="marquee"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textStyle="bold" android:textColor="@android:color/tertiary_text_light"
+				android:layout_width="fill_parent"
+				android:layout_centerVertical="true" android:layout_height="wrap_content"></TextView>
+	</RelativeLayout>
+  <!--  Unfortunately to be compatible with 1.6 devices, we need to write it as flat file -->
+	  <RelativeLayout
+			style="@style/list_left_column" android:id="@+id/cell3"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:paddingLeft="5dip"
+			android:paddingTop="4dip"
+			android:gravity="center" android:orientation="vertical">
+			<LinearLayout android:layout_width="wrap_content" android:layout_height="fill_parent" 
+				android:id="@+id/iconContainer3" android:orientation="vertical">
+				<ImageView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:id="@+id/icon3" android:layout_gravity="center"></ImageView>
+				<ImageView android:id="@+id/bar_onoff" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:layout_gravity="center"
+					android:layout_below="@id/icon3" android:scaleType="centerCrop"
+					android:src="@drawable/ic_indicator_on" />
+			</LinearLayout>
+			<TextView android:layout_toRightOf="@id/iconContainer3" android:id="@+id/account_label3" 
+				android:paddingLeft="16dip" android:ellipsize="marquee"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textStyle="bold" android:textColor="@android:color/tertiary_text_light"
+				android:layout_width="fill_parent"
+				android:layout_centerVertical="true" android:layout_height="wrap_content"></TextView>
+	</RelativeLayout>
+<!-- TODO : add a more label -->
+  
 </LinearLayout>

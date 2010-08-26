@@ -17,15 +17,60 @@
  */
 package com.csipsimple.widgets;
 
-import com.csipsimple.R;
+import java.util.ArrayList;
 
+import android.content.Context;
+import android.view.View;
 import android.widget.RemoteViews;
+
+import com.csipsimple.R;
+import com.csipsimple.models.AccountInfo;
+import com.csipsimple.wizards.WizardUtils;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class RegistrationNotification extends RemoteViews {
 
-	public RegistrationNotification(String packageName) {
-		super(packageName, R.layout.notification_registration_layout);
-		// TODO Auto-generated constructor stub
+	private static final Integer[] cells = new Integer[] {
+		R.id.cell1,
+		R.id.cell2,
+		R.id.cell3,
+	};
+	
+	private static final Integer[] icons = new Integer[] {
+		R.id.icon1,
+		R.id.icon2,
+		R.id.icon3,
+	};
+	
+	private static final Integer[] texts = new Integer[] {
+		R.id.account_label1,
+		R.id.account_label2,
+		R.id.account_label3,
+	};
+	
+	public RegistrationNotification(String aPackageName) {
+		super(aPackageName, R.layout.notification_registration_layout);
 	}
+
+	public void clearRegistrations() {
+		for (Integer cellId : cells) {
+			setViewVisibility(cellId, View.GONE);
+		}
+	}
+
+	public void addAccountInfos(Context context, ArrayList<AccountInfo> activeAccountsInfos) {
+		int i = 0;
+		for(AccountInfo accountInfo : activeAccountsInfos ) {
+			if(i<cells.length) {
+				setViewVisibility(cells[i], View.VISIBLE);
+				WizardInfo wizardInfos = WizardUtils.getWizardClass(accountInfo.getWizard());
+				setImageViewResource(icons[i], wizardInfos.icon);
+				setTextViewText(texts[i], accountInfo.getDisplayName());
+				i++;
+			}
+		}
+		
+	}
+	
 
 }

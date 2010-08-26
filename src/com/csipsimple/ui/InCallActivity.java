@@ -46,6 +46,7 @@ import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -82,6 +83,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     private KeyguardManager.KeyguardLock keyguardLock;
 
 	private Dialpad dialPad;
+	private LinearLayout dialPadContainer;
+	private EditText dialPadTextView;
 
 	private View callInfoPanel;
 	private Timer quitTimer;
@@ -141,6 +144,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		inCallInfo = (InCallInfo) findViewById(R.id.inCallInfo);
 		dialPad = (Dialpad) findViewById(R.id.dialPad);
 		dialPad.setOnDialKeyListener(this);
+		dialPadContainer = (LinearLayout) findViewById(R.id.dialPadContainer);
+		dialPadTextView = (EditText) findViewById(R.id.digitsText);
 		callInfoPanel = (View) findViewById(R.id.callInfoPanel);
 		
 		detailedContainer = (LinearLayout) findViewById(R.id.detailedContainer);
@@ -330,7 +335,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	
 	private void setDialpadVisibility(int visibility) {
-		dialPad.setVisibility(visibility);
+		dialPadContainer.setVisibility(visibility);
 		int antiVisibility = visibility == View.GONE? View.VISIBLE:View.GONE;
 		detailedContainer.setVisibility(antiVisibility);
 		holdContainer.setVisibility(antiVisibility);
@@ -543,8 +548,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			try {
 				service.sendDtmf(callInfo.getCallId(), keyCode);
 				dialFeedback.giveFeedback(dialTone);
+				KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+				char nbr = event.getNumber();
+				dialPadTextView.getText().append(nbr);
 			} catch (RemoteException e) {
-				Log.e(THIS_FILE, "Was not able to take the call", e);
+				Log.e(THIS_FILE, "Was not able to send dtmf tone", e);
 			}
 		}
 		

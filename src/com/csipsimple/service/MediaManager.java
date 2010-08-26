@@ -65,6 +65,7 @@ public class MediaManager {
 	private static boolean bluetoothClassAvailable;
 	private BluetoothWrapper bluetoothWrapper;
 
+	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
 
 	/* establish whether the "new" class is available to us */
@@ -87,6 +88,8 @@ public class MediaManager {
 		if(bluetoothClassAvailable) {
 			bluetoothWrapper = new BluetoothWrapper(service, this);
 		}
+		MODE_SIP_IN_CALL = Compatibility.getInCallMode();
+		
 	}
 	
 	public void stopService() {
@@ -110,10 +113,11 @@ public class MediaManager {
 		saveAudioState();
 		
 		Log.d(THIS_FILE, "Set mode audio in call");
-	
+		audioManager.setMode(MODE_SIP_IN_CALL);
+		
+		
 		if(Compatibility.useRoutingApi()) {
-			audioManager.setRouting(AudioManager.MODE_IN_CALL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
-			audioManager.setMode(AudioManager.MODE_IN_CALL);
+			audioManager.setRouting(MODE_SIP_IN_CALL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 		}
 		
 		//Set stream solo/volume
@@ -193,7 +197,7 @@ public class MediaManager {
 		
 		savedSpeakerPhone = audioManager.isSpeakerphoneOn();
 		savedMode = audioManager.getMode();
-		savedRoute = audioManager.getRouting(AudioManager.MODE_IN_CALL);
+		savedRoute = audioManager.getRouting(MODE_SIP_IN_CALL);
 		
 		isSavedAudioState = true;
 		
@@ -218,9 +222,9 @@ public class MediaManager {
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
 		
+		audioManager.setMode(savedMode);
 		if(Compatibility.useRoutingApi()) {
-			audioManager.setMode(savedMode);
-			audioManager.setRouting(AudioManager.MODE_IN_CALL, savedRoute, AudioManager.ROUTE_ALL);
+			audioManager.setRouting(MODE_SIP_IN_CALL, savedRoute, AudioManager.ROUTE_ALL);
 		}
 		
 		if(bluetoothClassAvailable) {
@@ -232,8 +236,9 @@ public class MediaManager {
 		/*
 		audioManager.stopBluetoothSco();*/
 		
-		setStreamVolume(AudioManager.STREAM_VOICE_CALL, savedVolume, 0);
-		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
+		int inCallStream = Compatibility.getInCallStream();
+		setStreamVolume(inCallStream, savedVolume, 0);
+		audioManager.setStreamSolo(inCallStream, false);
 				
 		if(wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();
@@ -275,7 +280,7 @@ public class MediaManager {
 	//By default we assume user want bluetooth.
 	//If bluetooth is not available connection will never be done and then
 	//UI will not show bluetooth is activated
-	private boolean userWantBluetooth = true;
+	private boolean userWantBluetooth = false;
 
 	public void toggleMute() {
 		setMicrophoneMute(!audioManager.isMicrophoneMute());
@@ -291,7 +296,9 @@ public class MediaManager {
 	public synchronized void setSpeakerphoneOn(boolean on) {
 		if(audioManager.isSpeakerphoneOn() != on) {
 			if(Compatibility.useRoutingApi()) {
-				audioManager.setRouting(AudioManager.MODE_IN_CALL, on?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
+				audioManager.setRouting(MODE_SIP_IN_CALL, 
+						on?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, 
+								AudioManager.ROUTE_ALL);
 			}
 			audioManager.setSpeakerphoneOn(on);
 			broadcastMediaChanged();
@@ -352,7 +359,7 @@ public class MediaManager {
 		
 		// Micro 
 		mediaState.isMicrophoneMute = audioManager.isMicrophoneMute();
-		mediaState.canMicrophoneMute = true /*&& !mediaState.isBluetoothScoOn*/; //Compatibility.isCompatible(5);
+		mediaState.canMicrophoneMute = Compatibility.isCompatible(5); /*&& !mediaState.isBluetoothScoOn*/ //Compatibility.isCompatible(5);
 		
 		// Speaker
 		if(Compatibility.isCompatible(4)) {
@@ -378,7 +385,6 @@ public class MediaManager {
 	public void broadcastMediaChanged() {
 		service.sendBroadcast(mediaStateChangedIntent);
 	}
-	
 	
 	private static final String ACTION_AUDIO_VOLUME_UPDATE = "org.openintents.audio.action_volume_update";
 	private static final String EXTRA_STREAM_TYPE = "org.openintents.audio.extra_stream_type";

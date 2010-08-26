@@ -18,7 +18,11 @@
 package com.csipsimple.service;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +53,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
+import android.net.NetworkInfo.State;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -60,6 +66,8 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.view.KeyCharacterMap;
 import android.widget.Toast;
 
@@ -72,6 +80,7 @@ import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.widgets.RegistrationNotification;
 
 public class SipService extends Service {
 
@@ -81,8 +90,8 @@ public class SipService extends Service {
 
 	
 	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
-	final static String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
-	final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
+//	final static String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
+//	final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
 	
 	// -------
 	// Static constants
@@ -282,6 +291,10 @@ public class SipService extends Service {
 	private pjmedia_port dialtoneGen;
 	private int dialtoneSlot = -1;
 	private Object dialtoneMutext = new Object();
+	private RegistrationNotification contentView;
+	private ServicePhoneStateReceiver phoneConnectivityReceiver;
+	private TelephonyManager telephonyManager;
+	private ConnectivityManager connectivityManager;
 	
 
 	// Broadcast receiver for the service
@@ -300,48 +313,34 @@ public class SipService extends Service {
 			// which are not detected by the Connectivity changed broadcast.
 			//
 			Log.d(THIS_FILE, "ServiceDeviceStateReceiver");
-			if (intent.getAction().equals(ACTION_CONNECTIVITY_CHANGED) || intent.getAction().equals(ACTION_DATA_STATE_CHANGED)) {
+			if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION) /*|| 
+					intent.getAction().equals(ACTION_DATA_STATE_CHANGED)*/) {
 				Log.d(THIS_FILE, "Connectivity or data state has changed");
 				//Thread it to be sure to not block the device if registration take time
 				Thread t = new Thread() {
 					@Override
 					public void run() {
-						if (prefsWrapper.isValidConnectionForOutgoing() || prefsWrapper.isValidConnectionForIncoming()) {
-							if (!created) {
-								// we was not yet started, so start now
-								sipStart();
-							} else {
-								Log.i(THIS_FILE, "Ip changed remove/re - add all accounts");
-								if(userAgentReceiver.getActiveCallInProgress() != null) {
-									Log.e(THIS_FILE, "We should restart the stack ! ");
-								}else {
-									// update registration IP : for now remove / reregister all accounts
-									reRegisterAllAccounts();
-								}
-							}
-							
-						} else {
-							Log.i(THIS_FILE, "Stop SERVICE");
-							/*
-							try {
-								SipService.this.unregisterReceiver(deviceStateReceiver);
-							}catch(IllegalArgumentException e) {
-								//This is the case if already unregistered itself
-								//Python like usage of try ;) : nothing to do here since it could be a standard case
-								//And in this case nothing has to be done
-							}
-							*/
-							SipService.this.sipStop();
-							//OK, this will be done only if the last bind is released
-							SipService.this.stopSelf();
-							
-						}
+						
+						dataConnectionChanged();
+						
 					}
 				};
 				t.start();
 			}
 		}
 	}
+	
+	
+	private class ServicePhoneStateReceiver extends PhoneStateListener {
+		@Override
+		public void onDataConnectionStateChanged(int state) {
+			Log.d(THIS_FILE, "Data connection state changed : "+state);
+			dataConnectionChanged();
+			super.onDataConnectionStateChanged(state);
+		}
+	}
+	
+	
 	
 
 	@Override
@@ -352,7 +351,8 @@ public class SipService extends Service {
 		db = new DBAdapter(this);
 		prefsWrapper = new PreferencesWrapper(this);
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		
+		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		
 		// TODO : check connectivity, else just finish itself
 		if ( !prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
@@ -366,7 +366,7 @@ public class SipService extends Service {
 		// Register own broadcast receiver
 		IntentFilter intentfilter = new IntentFilter();
 		intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-		intentfilter.addAction(ACTION_DATA_STATE_CHANGED);
+	//	intentfilter.addAction(ACTION_DATA_STATE_CHANGED);
 		
 		// TODO : handle theses receiver filters (-- inspired from SipDroid project
 		// : sipdroid.org)
@@ -378,8 +378,11 @@ public class SipService extends Service {
 		// intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
 		// intentfilter.addAction(Intent.ACTION_SCREEN_ON);
 		// intentfilter.addAction(Receiver.ACTION_VPN_CONNECTIVITY);
-		registerReceiver(deviceStateReceiver = new ServiceDeviceStateReceiver(), intentfilter);
-
+		registerReceiver(deviceStateReceiver = new ServiceDeviceStateReceiver(), 
+				intentfilter);
+		
+		telephonyManager.listen(phoneConnectivityReceiver = new ServicePhoneStateReceiver(), 
+				PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
 		tryToLoadStack();
 	}
 
@@ -396,6 +399,10 @@ public class SipService extends Service {
 			//This is the case if already unregistered itself
 			//Python style usage of try ;) : nothing to do here since it could be a standard case
 			//And in this case nothing has to be done
+		}
+		if(phoneConnectivityReceiver != null) {
+			telephonyManager.listen(phoneConnectivityReceiver, 
+					PhoneStateListener.LISTEN_NONE);
 		}
 		sipStop();
 		notificationManager.cancelAll();
@@ -833,36 +840,42 @@ public class SipService extends Service {
 	
 	
 	public void updateRegistrationsState() {
-		boolean hasSomeSuccess = false;
 		AccountInfo info;
+		ArrayList<AccountInfo> activeAccountsInfos = new ArrayList<AccountInfo>();
 		synchronized (activeAccountsLock) {
 			for (int accountDbId : activeAccounts.keySet()) {
 				info = getAccountInfo(accountDbId);
 				if (info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
-					hasSomeSuccess = true;
-					// No need to look further
-					break;
+					activeAccountsInfos.add(info);
 				}
 			}
 		}
 		
 		// Handle status bar notification
-		if (hasSomeSuccess) {
+		if (activeAccountsInfos.size()>0) {
 			
 			int icon = R.drawable.sipok;
 			CharSequence tickerText = "SIP Registered";
 			long when = System.currentTimeMillis();
 
 			Notification notification = new Notification(icon, tickerText, when);
-			Context context = getApplicationContext();
-			CharSequence contentTitle = "SIP";
-			CharSequence contentText = "Registered";
+	//		Context context = getApplicationContext();
+	//		CharSequence contentTitle = "SIP";
+	//		CharSequence contentText = "Registered";
 
 			Intent notificationIntent = new Intent(this, SipHome.class);
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
+			if(contentView == null) {
+				contentView = new RegistrationNotification(getPackageName());
+			}
+			contentView.clearRegistrations();
+			contentView.addAccountInfos(this, activeAccountsInfos);
 
-			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+			//notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+			notification.contentIntent = contentIntent;
+			notification.contentView = contentView;
 			notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 			// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 
@@ -962,28 +975,50 @@ public class SipService extends Service {
 		if(!created) {
 			return -1;
 		}
+		int pjsipAccountId = -1;
+		
+		//If this is an invalid account id
+		if(accountId == -1 || !activeAccounts.containsKey(accountId)) {
+			int defaultPjsipAccount = pjsua.acc_get_default();
+			
+			//If default account is not active
+			if(!activeAccounts.containsValue(defaultPjsipAccount)) {
+				for (Integer accId : activeAccounts.keySet()) {
+					//Use the first account as valid account
+					if(accId != null) {
+						accountId = accId;
+						pjsipAccountId = activeAccounts.get(accId);
+						break;
+					}
+				}
+			}else {
+				//Use the default account 
+				for (Integer accId : activeAccounts.keySet()) {
+					if(activeAccounts.get(accId) == defaultPjsipAccount) {
+						accountId = accId;
+						pjsipAccountId = defaultPjsipAccount;
+						break;
+					}
+				}
+			}
+		}else {
+			pjsipAccountId = activeAccounts.get(accountId);
+		}
+		
+		if(pjsipAccountId == -1 || accountId == -1) {
+			Log.e(THIS_FILE, "Unable to find a valid account for this call");
+			return -1;
+		}
+		
 		
 		//Check integrity of callee field
 		if( ! Pattern.matches("^.*(<)?sip(s)?:[^@]*@[^@]*(>)?", callee) ) {
 			//Assume this is a direct call using digit dialer
-			
-			int defaultAccount = accountId;
-			if(defaultAccount == -1) {
-				defaultAccount = pjsua.acc_get_default();
-				if(!activeAccounts.containsKey(defaultAccount)) {
-					for (Integer accId : activeAccounts.keySet()) {
-						if(accId != null) {
-							defaultAccount = accId;
-							break;
-						}
-					}
-				}
-			}
-			Log.d(THIS_FILE, "default acc : "+defaultAccount);
+			Log.d(THIS_FILE, "default acc : "+accountId);
 			Account account;
 			synchronized (db) {
 				db.open();
-				account = db.getAccount(defaultAccount);
+				account = db.getAccount(accountId);
 				db.close();
 			}
 			String defaultDomain = account.getDefaultDomain();
@@ -998,6 +1033,8 @@ public class SipService extends Service {
 			}
 		}
 		
+		
+		
 		Log.d(THIS_FILE, "will call "+callee);
 		if(pjsua.verify_sip_url(callee) == 0) {
 			pj_str_t uri = pjsua.pj_str_copy(callee);
@@ -1010,7 +1047,7 @@ public class SipService extends Service {
 			byte[] user_data = new byte[1];
 			pjsua_msg_data msg = new pjsua_msg_data();
 			int[] call_id = new int[1];
-			return pjsua.call_make_call(accountId, uri , 0, user_data, msg, call_id);
+			return pjsua.call_make_call(pjsipAccountId, uri , 0, user_data, msg, call_id);
 		} else {
 			//TODO : toast error
 			Log.e(THIS_FILE, "asked for a bad uri "+callee);
@@ -1240,6 +1277,13 @@ public class SipService extends Service {
 				if(prefsWrapper.hasCodecPriority(codec)) {
 					Log.d(THIS_FILE, "Set codec "+codec+" : "+prefsWrapper.getCodecPriority(codec, "130"));
 					pjsua.codec_set_priority(pjsua.pj_str_copy(codec), prefsWrapper.getCodecPriority(codec, "130"));
+					
+					/*
+					pjmedia_codec_param param = new pjmedia_codec_param();
+					pjsua.codec_get_param(pjsua.pj_str_copy(codec), param);
+					param.getSetting().setPenh(0);
+					pjsua.codec_set_param(pjsua.pj_str_copy(codec), param );
+					*/
 				}
 			}
 		}
@@ -1275,6 +1319,89 @@ public class SipService extends Service {
 		Log.i(THIS_FILE, "Audio driver ask to unset in call");
 		if(mediaManager != null) {
 			mediaManager.unsetAudioInCall();
+		}
+	}
+	
+	private String getLocalIpAddress() {
+	    try {
+	        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+	            NetworkInterface intf = en.nextElement();
+	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+	                InetAddress inetAddress = enumIpAddr.nextElement();
+	                if (!inetAddress.isLoopbackAddress()) {
+	                    return inetAddress.getHostAddress().toString();
+	                }
+	            }
+	        }
+	    } catch (SocketException ex) {
+	        Log.e(THIS_FILE, "Error while getting self IP",  ex);
+	    }
+	    return null;
+	}
+	
+	private Integer oldNetworkType = null;
+	private State oldNetworkState = null;
+	private String oldIPAddress = null;
+	
+	private void dataConnectionChanged() {
+		//Check if it should be ignored first
+		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+		
+		boolean stopOnly = false;
+		
+		if(ni != null) {
+			Integer currentType = ni.getType();
+			String currentIPAddress = getLocalIpAddress();
+			State currentState = ni.getState();
+			if(currentType == oldNetworkType && currentState == oldNetworkState) {
+				if(oldIPAddress != null && oldIPAddress.equalsIgnoreCase(currentIPAddress)) {
+					//We just ignore this one
+					Log.d(THIS_FILE, "Non IP changing request >> Only stop if network unauthorized");
+					stopOnly = true;
+				}
+			}
+			
+			oldIPAddress = currentIPAddress;
+			oldNetworkState = currentState;
+			oldNetworkType = currentType;
+		}else {
+			oldIPAddress = null;
+			oldNetworkState = null;
+			oldNetworkType = null;
+		}
+		
+		if (prefsWrapper.isValidConnectionForOutgoing() || prefsWrapper.isValidConnectionForIncoming()) {
+			if (!created) {
+				// we was not yet started, so start now
+				sipStart();
+			} else if(!stopOnly) {
+				// Check if IP has changed between 
+				Log.i(THIS_FILE, "Ip changed remove/re - add all accounts");
+				if(userAgentReceiver.getActiveCallInProgress() != null) {
+					Log.e(THIS_FILE, "We should restart the stack ! ");
+				}else {
+					// update registration IP : for now remove / reregister all accounts
+					reRegisterAllAccounts();
+				}
+			}else {
+				Log.d(THIS_FILE, "Nothing done since already well registered");
+			}
+			
+		} else {
+			Log.i(THIS_FILE, "Stop SERVICE");
+			/*
+			try {
+				SipService.this.unregisterReceiver(deviceStateReceiver);
+			}catch(IllegalArgumentException e) {
+				//This is the case if already unregistered itself
+				//Python like usage of try ;) : nothing to do here since it could be a standard case
+				//And in this case nothing has to be done
+			}
+			*/
+			SipService.this.sipStop();
+			//OK, this will be done only if the last bind is released
+			SipService.this.stopSelf();
+			
 		}
 	}
 

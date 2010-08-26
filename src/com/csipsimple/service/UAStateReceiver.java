@@ -46,6 +46,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.CallLog.Calls;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
@@ -404,9 +405,9 @@ public class UAStateReceiver extends Callback {
 	private void broadCastAndroidCallState(String state, String number) {
 		//Android normalized event
 		Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
-		intent.putExtra("state", state);
+		intent.putExtra(TelephonyManager.EXTRA_STATE, state);
 		if (number != null) {
-			intent.putExtra("incoming_number", number);
+			intent.putExtra(TelephonyManager.EXTRA_INCOMING_NUMBER, number);
 		}
 		intent.putExtra(service.getString(R.string.app_name), true);
 		service.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);

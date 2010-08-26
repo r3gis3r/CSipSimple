@@ -78,7 +78,5 @@ public class Ippi extends SimplePrefsWizard {
 	
 	protected void buildAccount() {
 		super.buildAccount();
-		account.cfg.setProxy_cnt(1);
-		account.cfg.setProxy(pjsua.pj_str_copy("sip:ippi.fr"));
 	}
 }

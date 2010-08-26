@@ -27,6 +27,7 @@ public class Compatibility {
 	private static int currentApi = 0;
 
 	public static int getApiLevel() {
+		
 		if(currentApi>0) {
 			return currentApi;
 		}
@@ -74,6 +75,15 @@ public class Compatibility {
 			return false;
 		}
 		return true;
+	}
+
+
+	public static int getInCallMode() {
+		if(android.os.Build.BRAND.equalsIgnoreCase("sdg")) {
+			return 3;
+		}
+		
+		return AudioManager.MODE_NORMAL;
 	}
 }
 

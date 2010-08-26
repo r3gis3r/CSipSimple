@@ -240,7 +240,7 @@ public class OutgoingCallChooser extends ListActivity {
 						String phoneNumber = number;
 						String toCall = account.rewritePhoneNumber(phoneNumber, database);
 						
-						service.makeCall("sip:"+toCall, accountInfo.getPjsuaId());
+						service.makeCall("sip:"+toCall, account.id);
 						finish();
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Unable to make the call", e);

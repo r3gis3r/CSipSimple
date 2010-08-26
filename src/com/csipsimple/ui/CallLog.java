@@ -275,7 +275,7 @@ public class CallLog extends ListActivity {
 			if (accountInfo != null && accountInfo.isActive()) {
 				if (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
 					try {
-						service.makeCall(number, accountInfo.getPjsuaId());
+						service.makeCall(number, account.id);
 						finish();
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Unable to make the call", e);
