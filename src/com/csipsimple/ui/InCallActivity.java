@@ -458,9 +458,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 	};
 
-	
-	private boolean canTakeCall = true;
-	private boolean canDeclineCall = true;
 
 	private boolean showDetails = true;
 
@@ -475,18 +472,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		try {
 			switch(whichAction) {
 				case TAKE_CALL:{
-					if (callInfo != null && service != null && canTakeCall) {
+					if (callInfo != null && service != null) {
 						service.answer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
-						canTakeCall = false;
 					}
 					break;
 				}
 				case DECLINE_CALL: 
 				case CLEAR_CALL:
 				{
-					if (callInfo != null && service != null && canDeclineCall) {
+					if (callInfo != null && service != null) {
 						service.hangup(callInfo.getCallId(), 0);
-						canDeclineCall = false;
 					}
 					break;
 				}

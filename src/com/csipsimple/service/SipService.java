@@ -115,6 +115,7 @@ public class SipService extends Service {
 
 	private static Object pjAccountsCreationLock = new Object();
 	private static Object activeAccountsLock = new Object();
+	private static Object callActionLock = new Object();
 	
 	// Map active account id (id for sql settings database) with acc_id (id for
 	// pjsip)
@@ -204,7 +205,9 @@ public class SipService extends Service {
 		 * If not well formated we try to add domain name of the default account
 		 */
 		@Override
-		public void makeCall(String callee, int accountId) throws RemoteException { SipService.this.makeCall(callee, accountId); }
+		public void makeCall(String callee, int accountId) throws RemoteException { 
+			SipService.this.makeCall(callee, accountId);
+		}
 
 		
 		
@@ -214,7 +217,12 @@ public class SipService extends Service {
 		 * @param status the status code to send
 		 */
 		@Override
-		public int answer(int callId, int status) throws RemoteException { return SipService.this.callAnswer(callId, status); }
+		public int answer(int callId, int status) throws RemoteException { 
+			synchronized (callActionLock) {
+				
+				return SipService.this.callAnswer(callId, status);
+			}
+		}
 		
 		/**
 		 * Hangup a call
@@ -222,11 +230,19 @@ public class SipService extends Service {
 		 * @param status the status code to send
 		 */
 		@Override
-		public int hangup(int callId, int status) throws RemoteException { return SipService.this.callHangup(callId, status); }
+		public int hangup(int callId, int status) throws RemoteException { 
+			synchronized (callActionLock) {
+				return SipService.this.callHangup(callId, status); 
+			}
+		}
 
 		
 		@Override
-		public int sendDtmf(int callId, int keyCode) throws RemoteException { return SipService.this.sendDtmf(callId, keyCode); }
+		public int sendDtmf(int callId, int keyCode) throws RemoteException { 
+			synchronized (callActionLock) {
+				return SipService.this.sendDtmf(callId, keyCode); 
+			}
+		}
 
 		@Override
 		public CallInfo getCallInfo(int callId) throws RemoteException {
@@ -270,10 +286,18 @@ public class SipService extends Service {
 		}
 
 		@Override
-		public int hold(int callId) throws RemoteException {return SipService.this.callHold(callId);}
+		public int hold(int callId) throws RemoteException {
+			synchronized (callActionLock) {
+				return SipService.this.callHold(callId);
+			}
+		}
 
 		@Override
-		public int reinvite(int callId, boolean unhold) throws RemoteException {return SipService.this.callReinvite(callId, unhold);}
+		public int reinvite(int callId, boolean unhold) throws RemoteException {
+			synchronized (callActionLock) {
+				return SipService.this.callReinvite(callId, unhold);
+			}
+		}
 
 		
 	};
