@@ -18,7 +18,13 @@
 package com.csipsimple.utils.bluetooth;
 
 
+import java.util.Set;
+
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothClass.Device;
+import android.bluetooth.BluetoothClass.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -78,23 +84,24 @@ public class BluetoothUtils8 {
 		boolean hasConnectedDevice = false;
 		//If bluetooth is on
 		if(mBluetoothAdapter.isEnabled()) {
-			/*
+			
 			//We get all bounded bluetooth devices
 			// bounded is not enough, should search for connected devices....
 			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 			for(BluetoothDevice device : pairedDevices) {
-				Log.d(THIS_FILE, "BT : "+ device.getBondState()+" - "+device.getAddress()+" - "+device.getName());
-				Log.d(THIS_FILE, "Can telephony : "+ device.getBluetoothClass().hasService(BluetoothClass.Service.TELEPHONY));
-				Log.d(THIS_FILE, "Can audio : "+device.getBluetoothClass().hasService( BluetoothClass.Service.AUDIO));
-				if( //device.getBondState() == BluetoothDevice.BOND_BONDED &&  // Inutil since getBoundedDevices... 
-						device.getBluetoothClass().hasService(BluetoothClass.Service.TELEPHONY)) {
-					//And if any can be used as a audio handset
-					hasBoundedDevice = true;
-				//	break;
+				BluetoothClass bluetoothClass = device.getBluetoothClass();
+                if (bluetoothClass != null) {
+                	int deviceClass = bluetoothClass.getDeviceClass();
+                	if(bluetoothClass.hasService(Service.RENDER) ||
+                		deviceClass == Device.AUDIO_VIDEO_WEARABLE_HEADSET ||
+                		deviceClass == Device.AUDIO_VIDEO_CAR_AUDIO ||
+                		deviceClass == Device.AUDIO_VIDEO_HANDSFREE ) {
+	                    	//And if any can be used as a audio handset
+	                    	hasConnectedDevice = true;
+	                    	break;
+                	}
 				}
 			}
-			*/
-			hasConnectedDevice = true;
 		}
 
 		
@@ -102,12 +109,16 @@ public class BluetoothUtils8 {
 	}
 
 	public void setBluetoothOn(boolean on) {
-		if(on) {
-			audioManager.setBluetoothScoOn(true);
-			audioManager.startBluetoothSco();
-		}else {
-			audioManager.stopBluetoothSco();
-			audioManager.setBluetoothScoOn(false);
+		if(on != audioManager.isBluetoothScoOn()) {
+			if(on) {
+				Log.d(THIS_FILE, "BT on >>>");
+				audioManager.setBluetoothScoOn(true);
+				audioManager.startBluetoothSco();
+			}else {
+				Log.d(THIS_FILE, "BT off >>>");
+				audioManager.setBluetoothScoOn(false);
+				audioManager.stopBluetoothSco();
+			}
 		}
 	}
 	
@@ -119,7 +130,7 @@ public class BluetoothUtils8 {
 		try {
 			context.unregisterReceiver(mediaStateReceiver);
 		}catch(Exception e) {
-			//Nothing has to be done here...
+			Log.w(THIS_FILE, "Failed to unregister media state receiver",e);
 		}
 	}
 

@@ -128,6 +128,7 @@ public class MediaManager {
 		audioManager.setSpeakerphoneOn(false);
 		audioManager.setMicrophoneMute(false);
 		if(bluetoothClassAvailable && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
+			Log.d(THIS_FILE, "Try to enable bluetooth");
 			bluetoothWrapper.setBluetoothOn(true);
 		}
 		
@@ -228,13 +229,11 @@ public class MediaManager {
 		}
 		
 		if(bluetoothClassAvailable) {
-			bluetoothWrapper.setBluetoothOn(false);
+			bluetoothWrapper.setBluetoothOn(true);
 		}
 		audioManager.setSpeakerphoneOn(savedSpeakerPhone);
 		audioManager.setMicrophoneMute(false);
 
-		/*
-		audioManager.stopBluetoothSco();*/
 		
 		int inCallStream = Compatibility.getInCallStream();
 		setStreamVolume(inCallStream, savedVolume, 0);
@@ -275,7 +274,6 @@ public class MediaManager {
 		}
 	}
 	
-
 
 	//By default we assume user want bluetooth.
 	//If bluetooth is not available connection will never be done and then
