@@ -53,10 +53,12 @@ public class WizardUtils {
 		"Expert",
 		"Freephonie",
 		"Sip2Sip",
-		"Ippi"
+		"Ippi",
+		"Pbxes"
 	};
 	
 	private static boolean init_done = false;
+	
 	
     public static final String LABEL = "LABEL";
     public static final String ICON  = "ICON";

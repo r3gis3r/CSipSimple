@@ -43,7 +43,7 @@
 			<TextView android:layout_toRightOf="@id/iconContainer1" android:id="@+id/account_label1" 
 				android:paddingLeft="16dip" android:ellipsize="marquee"
 				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:textStyle="bold" android:textColor="@android:color/tertiary_text_light"
+				android:textStyle="bold" android:textColor="@android:color/tertiary_text_dark"
 				android:layout_width="fill_parent"
 				android:layout_centerVertical="true" android:layout_height="wrap_content"></TextView>
 	</RelativeLayout>
@@ -67,7 +67,7 @@
 			<TextView android:layout_toRightOf="@id/iconContainer2" android:id="@+id/account_label2" 
 				android:paddingLeft="16dip" android:ellipsize="marquee"
 				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:textStyle="bold" android:textColor="@android:color/tertiary_text_light"
+				android:textStyle="bold" android:textColor="@android:color/tertiary_text_dark"
 				android:layout_width="fill_parent"
 				android:layout_centerVertical="true" android:layout_height="wrap_content"></TextView>
 	</RelativeLayout>
@@ -91,7 +91,7 @@
 			<TextView android:layout_toRightOf="@id/iconContainer3" android:id="@+id/account_label3" 
 				android:paddingLeft="16dip" android:ellipsize="marquee"
 				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:textStyle="bold" android:textColor="@android:color/tertiary_text_light"
+				android:textStyle="bold" android:textColor="@android:color/tertiary_text_dark"
 				android:layout_width="fill_parent"
 				android:layout_centerVertical="true" android:layout_height="wrap_content"></TextView>
 	</RelativeLayout>
