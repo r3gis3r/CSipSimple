@@ -273,6 +273,28 @@ public class Account {
 		return canCall;
 	}
 	
+
+	public boolean isMustCallNumber(String number, DBAdapter db) {
+		db.open();
+		Cursor c = db.getFiltersForAccount(id);
+		int numRows = c.getCount();
+		c.moveToFirst();
+		for (int i = 0; i < numRows; ++i) {
+			Filter f = new Filter();
+			f.createFromDb(c);
+			Log.d(THIS_FILE, "Test filter "+f.matches);
+			if(f.mustCall(number)) {
+				c.close();
+				db.close();
+				return true;
+			}
+			c.moveToNext();
+		}
+		c.close();
+		db.close();
+		return false;
+	}
+	
 	
 	public String rewritePhoneNumber(String number, DBAdapter db) {
 		db.open();
@@ -332,6 +354,7 @@ public class Account {
 		}
 		return m.group(2);
 	}
+
 	
 	
 }

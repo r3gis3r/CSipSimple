@@ -44,6 +44,7 @@ public class Filter {
 	public static final int ACTION_CAN_CALL = 0;
 	public static final int ACTION_CANT_CALL = 1;
 	public static final int ACTION_REPLACE = 2;
+	public static final int ACTION_DIRECTLY_CALL = 3;
 	
 	public static final int MATCHER_START = 0;
 	public static final int MATCHER_HAS_N_DIGIT = 1;
@@ -156,9 +157,21 @@ public class Filter {
 		return true;
 	}
 	
+	public boolean mustCall(String number) {
+		if(action == ACTION_DIRECTLY_CALL) {
+			try {
+				return Pattern.matches(matches, number);
+			}catch(PatternSyntaxException e) {
+				Log.e(THIS_FILE, "Invalid pattern ", e);
+			}
+			
+		}
+		return false;
+	}
+	
 	public boolean stopProcessing(String number) {
 		Log.d(THIS_FILE, "Should stop processing "+number+" ? ");
-		if(action == ACTION_CAN_CALL) {
+		if(action == ACTION_CAN_CALL || action == ACTION_DIRECTLY_CALL) {
 			try {
 				return Pattern.matches(matches, number);
 			}catch(PatternSyntaxException e) {
@@ -207,6 +220,7 @@ public class Filter {
 		put(0, ACTION_CANT_CALL);
 		put(1, ACTION_REPLACE);
 		put(2, ACTION_CAN_CALL);
+		put(3, ACTION_DIRECTLY_CALL);
 	}};
 	
 	public static int getActionForPosition(Integer selectedItemPosition) {

@@ -151,6 +151,9 @@ public class AccountFilters extends ListActivity {
 			case Filter.ACTION_REPLACE:
 				icon.setImageResource(R.drawable.ic_menu_rewrite);
 				break;
+			case Filter.ACTION_DIRECTLY_CALL:
+				icon.setImageResource(R.drawable.ic_menu_answer_call);
+				break;
 			}
 		}
 

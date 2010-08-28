@@ -18,6 +18,7 @@
 package com.csipsimple.service;
 
 import java.util.List;
+import java.util.Set;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -61,13 +62,24 @@ public class OutgoingCall extends BroadcastReceiver {
 		// If this is an outgoing call with a valid number
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL)) {					// Filter should assure this!
 			//Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
-			if (isCallableNumber(number) && prefsWrapper.isValidConnectionForOutgoing()) {
+			DBAdapter db = new DBAdapter(context);
+			db.open();
+			List<Account> accounts = db.getListAccounts(true);
+			db.close();
+			
+			if (isCallableNumber(number, accounts, db) && prefsWrapper.isValidConnectionForOutgoing()) {
 				Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
 				outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
 				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				
+				Account mustCallAccount = isMustCallableNumber(number, accounts, db);
+				if(mustCallAccount != null) {
+					outgoingCallChooserIntent.putExtra(Account.FIELD_ACC_ID, mustCallAccount.id);
+				}
 				context.startActivity(outgoingCallChooserIntent);
+				
 				// We will treat this by ourselves
 				setResultData(null);
 				return;
@@ -84,14 +96,12 @@ public class OutgoingCall extends BroadcastReceiver {
 	 * Check whether a number can be call using sip
 	 * Should check if not matches preferences of excluded patterns
 	 * @param number the number to test
+	 * @param accounts 
 	 * @return true if we should handle this number using SIP
 	 */
-	private boolean isCallableNumber(String number) {
+	private boolean isCallableNumber(String number, List<Account> accounts, DBAdapter db  ) {
 		boolean canCall = false;
-		DBAdapter db = new DBAdapter(context);
-		db.open();
-		List<Account> accounts = db.getListAccounts(true);
-		db.close();
+		
 		for(Account account : accounts) {
 			Log.d(THIS_FILE, "Checking if number valid for account "+account.display_name);
 			if(account.isCallableNumber(number, db)) {
@@ -102,9 +112,15 @@ public class OutgoingCall extends BroadcastReceiver {
 		return canCall;
 	}
 	
-	private String rewriteNumber(String number) {
-		
-		return number;
+	private Account isMustCallableNumber(String number, List<Account> accounts, DBAdapter db ) {
+		for(Account account : accounts) {
+			Log.d(THIS_FILE, "Checking if number must be call for account "+account.display_name);
+			if(account.isMustCallNumber(number, db)) {
+				Log.d(THIS_FILE, ">> Response is YES");
+				return account;
+			}
+		}
+		return null;
 	}
 
 }

@@ -175,7 +175,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 	private void checkFormValidity() {
 		boolean isValid = true;
 		
-		if(TextUtils.isEmpty(matchesView.getText().toString())) {
+		if(TextUtils.isEmpty(matchesView.getText().toString()) && Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) != Filter.ACTION_REPLACE) {
 			isValid = false;
 		}
 		if(Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) == Filter.ACTION_REPLACE) {

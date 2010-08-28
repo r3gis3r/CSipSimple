@@ -118,6 +118,8 @@ public class OutgoingCallChooser extends ListActivity {
 			updateList();
 		}
 	};
+	
+	private Integer accountToCallTo = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -131,12 +133,11 @@ public class OutgoingCallChooser extends ListActivity {
 		/*
 		Log.d(THIS_FILE, getIntent().getAction());
 		Log.d(THIS_FILE, getIntent().getDataString());
-		
+		*/
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			number = extras.getString("number");
+			accountToCallTo = extras.getInt(Account.FIELD_ACC_ID);
 		}
-		*/
 		
 		Log.d(THIS_FILE, "Choose to call : " + number);
 		
@@ -187,6 +188,11 @@ public class OutgoingCallChooser extends ListActivity {
     //	Log.d(THIS_FILE, "We are updating the list");
     	if(database == null) {
     		database = new DBAdapter(this);
+    	}
+    	
+    	if(checkIfMustAccountNotValid()) {
+    		//We need to do nothing else
+    		return;
     	}
     	
     	database.open();
@@ -249,6 +255,40 @@ public class OutgoingCallChooser extends ListActivity {
 			}
 			//TODO : toast for elses
 		}
+	}
+	
+	private boolean checkIfMustAccountNotValid() {
+		
+		if (service != null && accountToCallTo != null) {
+
+	    	database.open();
+			Account account = database.getAccount(accountToCallTo);
+			database.close();
+			if(account == null) {
+				return false;
+			}
+			AccountInfo accountInfo;
+			try {
+				accountInfo = service.getAccountInfo(account.id);
+			} catch (RemoteException e) {
+				accountInfo = null;
+			}
+			if (accountInfo != null && accountInfo.isActive()) {
+				if (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+					try {
+						String phoneNumber = number;
+						String toCall = account.rewritePhoneNumber(phoneNumber, database);
+						
+						service.makeCall("sip:"+toCall, account.id);
+						finish();
+						return true;
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Unable to make the call", e);
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 
