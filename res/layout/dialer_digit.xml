@@ -21,23 +21,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/top_digit_dialer" android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
+	<LinearLayout android:id="@+id/topField" android:layout_weight="2.5"
+		android:layout_width="fill_parent" android:layout_height="fill_parent" 
+		android:background="@drawable/btn_dial_textfield"
+		android:layout_marginBottom="10dip" android:orientation="horizontal" >
+		<EditText android:id="@+id/digitsText" android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_weight="1" android:maxLines="1" android:scrollHorizontally="true"
+			android:textSize="28sp" android:freezesText="true" android:background="@android:color/transparent"
+			android:layout_margin="0dip"
+			android:focusableInTouchMode="true" android:editable="true" android:cursorVisible="false" />
+		<com.csipsimple.widgets.AccountChooserButton android:layout_width="wrap_content"
+			android:layout_weight="0" android:id="@+id/accountChooserButton"
+			android:layout_height="fill_parent" />
+	</LinearLayout>
 
-
-	<EditText android:id="@+id/digitsText" 
-		android:layout_weight="2.5"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:maxLines="1" android:scrollHorizontally="true"
-		android:textSize="28sp" android:freezesText="true" android:background="@drawable/btn_dial_textfield"
-		android:focusableInTouchMode="true" android:editable="true" android:cursorVisible="false"
-		android:layout_marginBottom="10dip" />
-		<!-- 
-	<com.csipsimple.widgets.SlidingChooser android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		layout_weight="2.3"/>
-		 -->
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:layout_weight="1" >
+		android:layout_weight="1">
 		<com.csipsimple.widgets.Dialpad android:id="@+id/dialPad" 
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent"

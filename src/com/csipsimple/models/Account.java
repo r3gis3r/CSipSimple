@@ -28,8 +28,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 
+import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
+import com.csipsimple.wizards.WizardUtils;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class Account {
 	// Fields for table accounts
@@ -355,6 +358,24 @@ public class Account {
 		return m.group(2);
 	}
 
+	public int getIconResource() {
+		// Update account image
+		WizardInfo wizard_infos = WizardUtils.getWizardClass(wizard);
+		if (wizard_infos != null) {
+			if(!wizard_infos.isGeneric) {
+				return wizard_infos.icon;
+			}
+		}
+		return R.drawable.ic_launcher_phone;
+	}
 	
 	
+	@Override
+	public boolean equals(Object o) {
+		if(o != null && o.getClass() == Account.class) {
+			Account oAccount = (Account) o;
+			return oAccount.id == id;
+		}
+		return super.equals(o);
+	}
 }

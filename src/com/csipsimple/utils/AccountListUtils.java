@@ -21,6 +21,7 @@ import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsuaConstants;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.RemoteException;
 
@@ -39,7 +40,7 @@ public class AccountListUtils {
 	}
 	
 	
-	public static AccountStatusDisplay getAccountDisplay(Activity context, ISipService service, int accountId) {
+	public static AccountStatusDisplay getAccountDisplay(Context context, ISipService service, int accountId) {
 		AccountStatusDisplay accountDisplay = new AccountStatusDisplay();
 		accountDisplay.statusLabel = context.getString(R.string.acct_inactive);
 		final Resources resources = context.getResources();

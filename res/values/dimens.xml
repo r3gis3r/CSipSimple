@@ -17,4 +17,9 @@
 <resources>
 	<dimen name="normal_height">64dip</dimen>
 	<dimen name="expanded_height">128dip</dimen>
+	
+    <dimen name="quickaction_shadow_horiz">0dip</dimen>
+    <dimen name="quickaction_shadow_vert">30dip</dimen>
+    <dimen name="quickaction_shadow_touch">20dip</dimen>
+
 </resources>

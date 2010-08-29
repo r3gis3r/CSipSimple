@@ -229,7 +229,9 @@ public class MediaManager {
 		}
 		
 		if(bluetoothClassAvailable) {
-			bluetoothWrapper.setBluetoothOn(true);
+			//This fixes the BT activation but... but... seems to introduce a lot of other issues
+			//bluetoothWrapper.setBluetoothOn(true);
+			bluetoothWrapper.setBluetoothOn(false);
 		}
 		audioManager.setSpeakerphoneOn(savedSpeakerPhone);
 		audioManager.setMicrophoneMute(false);

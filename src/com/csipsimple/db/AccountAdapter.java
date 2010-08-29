@@ -37,8 +37,6 @@ import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
-import com.csipsimple.wizards.WizardUtils;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class AccountAdapter extends ArrayAdapter<Account> implements OnClickListener {
 
@@ -126,14 +124,7 @@ public class AccountAdapter extends ArrayAdapter<Account> implements OnClickList
 			tagView.refreshView.setVisibility(accountStatusDisplay.availableForCalls?View.GONE:View.VISIBLE);
 
 			// Update account image
-			WizardInfo wizard_infos = WizardUtils.getWizardClass(account.wizard);
-			if (wizard_infos != null) {
-				if(wizard_infos.isGeneric) {
-					tagView.iconImage.setImageResource(R.drawable.ic_launcher_phone);
-				}else {
-					tagView.iconImage.setImageResource(wizard_infos.icon);
-				}
-			}
+			tagView.iconImage.setImageResource(account.getIconResource());
 			tagView.refreshView.setTag(account.id);
 		}
 	}
