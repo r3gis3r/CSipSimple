@@ -100,6 +100,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private Sensor proximitySensor;
 
 	private DialingFeedback dialFeedback;
+
+	private boolean proximitySensorTracked = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -211,7 +213,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if(proximitySensor != null) {
 			sensorManager.registerListener(this, 
 	                proximitySensor,
-	                SensorManager.SENSOR_DELAY_UI);
+	                SensorManager.SENSOR_DELAY_NORMAL);
+			proximitySensorTracked  = true;
 		}
 		dialFeedback.resume();
 	}
@@ -220,6 +223,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	protected void onPause() {
 		super.onPause();
 		if(proximitySensor != null) {
+			proximitySensorTracked = false;
 			sensorManager.unregisterListener(this);
 		}
 		dialFeedback.pause();
@@ -574,21 +578,24 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	
 	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// Nothing to do here
-		
-	}
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
 
+	private static final float PROXIMITY_THRESHOLD = 5.0f;
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		// Credit goes to linphone guyes here. Don't know why 3 but I've not enough devices to test on.
-		if(event.values[0] != event.sensor.getMaximumRange() && event.values[0] < 3) {
-			lockOverlay.show();
-		}else {
-			lockOverlay.hide();
+		Log.d(THIS_FILE, "Tracked : "+proximitySensorTracked);
+		if(proximitySensorTracked) {
+			pjsip_inv_state state = callInfo.getCallState();
+			float distance = event.values[0];
+			boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
+			Log.d(THIS_FILE, "Distance is now "+distance);
+			if(state.equals( pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED) && active) {
+				lockOverlay.show();
+			}else {
+				lockOverlay.hide();
+			}
 		}
-		
 	}
 	
 
