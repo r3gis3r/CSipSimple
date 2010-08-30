@@ -282,6 +282,25 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			
 			break;
 		}
+		
+		pjsua_call_media_status mediaStatus = callInfo.getMediaStatus();
+		switch (mediaStatus) {
+		case PJSUA_CALL_MEDIA_ACTIVE:
+			break;
+		case PJSUA_CALL_MEDIA_REMOTE_HOLD:
+		case PJSUA_CALL_MEDIA_LOCAL_HOLD:
+		case PJSUA_CALL_MEDIA_NONE:
+			if(backgroundResId == R.drawable.bg_in_call_gradient_connected ||
+					backgroundResId == R.drawable.bg_in_call_gradient_bluetooth) {
+				backgroundResId = R.drawable.bg_in_call_gradient_on_hold;
+			}
+			break;
+		case PJSUA_CALL_MEDIA_ERROR:
+		default:
+			break;
+		}
+		
+		
 		mainFrame.setBackgroundResource(backgroundResId);
 		
 		
@@ -563,7 +582,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		if(event.values[0]<1) {
+		// Credit goes to linphone guyes here. Don't know why 3 but I've not enough devices to test on.
+		if(event.values[0] != event.sensor.getMaximumRange() && event.values[0] < 3) {
 			lockOverlay.show();
 		}else {
 			lockOverlay.hide();

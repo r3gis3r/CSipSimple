@@ -49,6 +49,23 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 	private DBAdapter database;
 
 	private ISipService service;
+	
+	private OnAccountChangeListener onAccountChange = null;
+
+	/**
+	 * Interface definition for a callback to be invoked when 
+	 * Account is choosen
+	 */
+	public interface OnAccountChangeListener {
+		
+		/**
+		 * Called when the user make an action
+		 * 
+		 * @param keyCode keyCode pressed
+		 * @param dialTone corresponding dialtone
+		 */
+		void onChooseAccount(Account account);
+	}
 
 	public AccountChooserButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -119,6 +136,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 			textView.setText(account.display_name);
 			imageView.setImageResource(account.getIconResource());
 		}
+		if(onAccountChange != null) {
+			onAccountChange.onChooseAccount(account);
+		}
+		
 	}
 
 	public void updateRegistration(boolean canChangeIfValid) {
@@ -148,6 +169,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
 	public Account getSelectedAccount() {
 		return account;
+	}
+	
+	public void setOnAccountChangeListener(OnAccountChangeListener anAccountChangeListener) {
+		onAccountChange = anAccountChangeListener;
 	}
 
 }

@@ -19,6 +19,8 @@
  */
 package com.csipsimple.ui;
 
+import java.util.regex.Pattern;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -52,6 +54,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.animation.Flip3dAnimation;
@@ -64,6 +67,7 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.AccountChooserButton;
 import com.csipsimple.widgets.Dialpad;
+import com.csipsimple.widgets.AccountChooserButton.OnAccountChangeListener;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 
 public class Dialer extends Activity implements OnClickListener, OnLongClickListener, OnDialKeyListener, TextWatcher {
@@ -77,7 +81,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	private View digitDialer, textDialer, rootView;
 
 	private LinearLayout digitsWrapper;
-	private AccountChooserButton accountChooserButton;
+	private AccountChooserButton accountChooserButton, accountChooserButtonText;
 	private boolean isDigit;
 
 	private DialingFeedback dialFeedback;
@@ -94,6 +98,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
 			accountChooserButton.updateService(service);
+			accountChooserButtonText.updateService(service);
 			updateRegistrations();
 		}
 
@@ -114,6 +119,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	private PreferencesWrapper prefsWrapper;
 
 	private BroadcastReceiver registrationReceiver;
+
+	private TextView domainTextHelper;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -146,6 +153,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		// dialDomain = (EditText) findViewById(R.id.dialtext_domain);
 		rootView = (View) findViewById(R.id.toplevel);
 		accountChooserButton = (AccountChooserButton) findViewById(R.id.accountChooserButton);
+		accountChooserButtonText = (AccountChooserButton) findViewById(R.id.accountChooserButtonText);
+		domainTextHelper = (TextView) findViewById(R.id.dialtxt_domain_helper);
 
 		// @ is a special char for layouts, I didn't find another way to set @
 		// as text in xml
@@ -171,6 +180,14 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		};
 		digitDialer.setOnTouchListener(touchTransmiter);
 		textDialer.setOnTouchListener(touchTransmiter);
+		accountChooserButtonText.setOnAccountChangeListener(new OnAccountChangeListener() {
+			@Override
+			public void onChooseAccount(Account account) {
+				updateDialTextHelper();
+			}
+		});
+		
+		
 
 		dialFeedback = new DialingFeedback(this, false);
 
@@ -188,6 +205,9 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		Log.d(THIS_FILE, "Update chooser choice");
 		boolean canChangeIfValid = TextUtils.isEmpty(digits.getText().toString());
 		accountChooserButton.updateRegistration(canChangeIfValid);
+		
+		canChangeIfValid = TextUtils.isEmpty(dialUser.getText().toString());
+		accountChooserButtonText.updateRegistration(canChangeIfValid);
 	}
 
 	@Override
@@ -263,6 +283,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		digits.setInputType(android.text.InputType.TYPE_NULL);
 		digits.setCursorVisible(false);
 		afterTextChanged(digits.getText());
+		
+		dialUser.addTextChangedListener(this);
 	}
 
 	private void keyPressed(int keyCode) {
@@ -283,7 +305,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	}
 
 	private static final int USE_GSM = -2;
-	private static final int USE_DEFAULT = -1;
 
 	private void placeCall() {
 		if (service == null) {
@@ -303,8 +324,18 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			if (TextUtils.isEmpty(userName)) {
 				return;
 			}
-			toCall = "sip:" + userName;
-			accountToUse = USE_DEFAULT;
+			
+			Account acc = accountChooserButton.getSelectedAccount();
+			if (acc != null) {
+				accountToUse = acc.id;
+				if(Pattern.matches(".*@.*", userName)) {
+					toCall = "sip:" + userName ;
+				}else {
+					toCall = "sip:" + userName + "@"+acc.getDefaultDomain();
+				}
+			}else {
+				toCall = userName;
+			}
 		}
 		if (TextUtils.isEmpty(toCall)) {
 			return;
@@ -410,12 +441,27 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	}
 
 	public void afterTextChanged(Editable input) {
-
+		//Change state of digit dialer
 		final boolean notEmpty = digits.length() != 0;
 		digitsWrapper.setBackgroundDrawable(notEmpty ? digitsBackground : digitsEmptyBackground);
 		digitsWrapper.setPadding(15, 0, 0, 2);
 		dialButton.setEnabled(notEmpty);
 		deleteButton.setEnabled(notEmpty);
+		
+		//Change state of text dialer
+		updateDialTextHelper();
+	}
+	
+	private void updateDialTextHelper() {
+
+		String dialUserValue = dialUser.getText().toString();
+		Account acc = accountChooserButtonText.getSelectedAccount();
+		if(!Pattern.matches(".*@.*", dialUserValue) && acc != null) {
+			domainTextHelper.setText("@"+acc.getDefaultDomain());
+		}else {
+			domainTextHelper.setText("");
+		}
+		
 	}
 
 	private void flipView(boolean forward) {

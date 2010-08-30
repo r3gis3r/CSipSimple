@@ -21,24 +21,29 @@
 	android:orientation="vertical" android:gravity="center_horizontal">
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:layout_weight="1"
-		android:orientation="horizontal" android:gravity="center_horizontal">
-		<TextView android:text="sip:" 
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:paddingRight="10dip"></TextView>
-		<EditText android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:id="@+id/dialtxt_user"
-			android:gravity="center" android:background="@drawable/btn_dial_textfield"
-			android:textColor="#FFF" android:lines="1" android:inputType="textFilter"></EditText>
-		<!-- 
-		<TextView android:layout_width="wrap_content" android:id="@+id/arobase_txt"
-			android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+		android:orientation="vertical" android:gravity="center_horizontal">
 		
-		<MultiAutoCompleteTextView
-			android:layout_height="wrap_content" android:text=""
-			android:id="@+id/dialtext_domain" android:layout_width="fill_parent"
-			android:gravity="center" android:background="@drawable/btn_dial_textfield"
-			android:textColor="#FFF" android:lines="1" android:inputType="textFilter"></MultiAutoCompleteTextView>
-			 -->
+		
+		<LinearLayout android:id="@+id/topFieldText"
+			android:layout_width="fill_parent" android:layout_height="wrap_content" 
+			android:background="@drawable/btn_dial_textfield"
+			android:layout_marginBottom="10dip" android:orientation="horizontal" android:padding="0dip" >
+			<TextView android:text="sip:" 
+				android:gravity="left|center_vertical"
+				android:layout_width="wrap_content" android:layout_height="fill_parent"
+				android:paddingRight="10dip"></TextView>
+			<EditText android:layout_height="fill_parent"
+				android:layout_width="fill_parent" android:id="@+id/dialtxt_user"
+				android:gravity="left|center_vertical"
+				android:layout_weight="1" android:background="@android:color/transparent"
+				android:textColor="#FFF" android:lines="1" android:inputType="textFilter"></EditText>
+			<com.csipsimple.widgets.AccountChooserButton android:layout_width="wrap_content"
+				android:layout_weight="0" android:id="@+id/accountChooserButtonText"
+				android:layout_height="fill_parent" />
+		</LinearLayout>
+		<TextView android:id="@+id/dialtxt_domain_helper"
+			android:layout_width="fill_parent" android:layout_height="wrap_content" 
+			android:gravity="right|center_vertical" android:paddingRight="10dip"/>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/dial_actions"
 		android:layout_width="fill_parent" android:layout_centerHorizontal="true"
