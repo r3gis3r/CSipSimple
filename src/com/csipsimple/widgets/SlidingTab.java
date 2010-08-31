@@ -291,14 +291,16 @@ public class SlidingTab extends ViewGroup {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
+		
 		int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
-
+		/*
+		int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
 		int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
 
 		if (widthSpecMode == MeasureSpec.UNSPECIFIED || heightSpecMode == MeasureSpec.UNSPECIFIED) {
 			throw new RuntimeException("Sliding tab cannot have UNSPECIFIED dimensions");
 		}
+		*/
 
 		final int leftTabWidth = (int) (density * leftSlider.getTabWidth() + 0.5f);
 		final int rightTabWidth = (int) (density * rightSlider.getTabWidth() + 0.5f);
