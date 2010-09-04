@@ -17,6 +17,8 @@
  */
 package com.csipsimple.service;
 
+import java.lang.reflect.Method;
+
 import org.pjsip.pjsua.pjsua;
 
 import android.content.ContentResolver;
@@ -258,6 +260,7 @@ public class MediaManager {
 	public void startRing(String remoteContact) {
 		saveAudioState();
 		stopMusic();
+		
 		if(!ringer.isRinging()) {
 			ringer.ring(remoteContact, service.getPrefs().getRingtone());
 		}
@@ -270,16 +273,43 @@ public class MediaManager {
 		}
 	}
 	
-	private void stopMusic() {
-		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
-			service.sendBroadcast(new Intent(PAUSE_ACTION));
+	private boolean hasFocus = false;
+	public void stopMusic() {
+		if(Compatibility.isCompatible(8)) {
+			try {
+				if(!hasFocus) {
+					Method method = AudioManager.class.getDeclaredMethod("requestAudioFocus", 
+							AudioManager.OnAudioFocusChangeListener.class, int.class, int.class);
+					method.invoke(audioManager, (AudioManager.OnAudioFocusChangeListener) null, Compatibility.getInCallStream(), 2);
+					hasFocus = true;
+				}
+			} catch (Exception e) {
+				Log.d(THIS_FILE, "Audio focus api failed");
+			}
+		}else {
+			if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
+				service.sendBroadcast(new Intent(PAUSE_ACTION));
+			}
 		}
 		
 	}
 	
-	private void restartMusic() {
-		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
-			service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
+	public void restartMusic() {
+		if(Compatibility.isCompatible(8)) {
+			try {
+				if(hasFocus) {
+					Method method = AudioManager.class.getDeclaredMethod("abandonAudioFocus", 
+							AudioManager.OnAudioFocusChangeListener.class);
+					method.invoke(audioManager, (AudioManager.OnAudioFocusChangeListener)null);
+					hasFocus = false;
+				}
+			} catch (Exception e) {
+				Log.e(THIS_FILE, "Audio focus api failed");
+			}
+		}else {
+			if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
+				service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
+			}
 		}
 	}
 
@@ -300,7 +330,7 @@ public class MediaManager {
 	}
 	
 	public synchronized void setSpeakerphoneOn(boolean on) {
-		if(audioManager.isSpeakerphoneOn() != on) {
+		if(isSpeakerphoneOn() != on) {
 			if(Compatibility.useRoutingApi()) {
 				audioManager.setRouting(MODE_SIP_IN_CALL, 
 						on?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, 
@@ -359,6 +389,13 @@ public class MediaManager {
 		}
 	}
 	
+	private boolean isSpeakerphoneOn() {
+		if(!Compatibility.useRoutingApi()) {
+			return audioManager.isSpeakerphoneOn();
+		}else {
+			return (audioManager.getRouting(audioManager.getMode()) == AudioManager.ROUTE_SPEAKER);
+		}
+	}
 	
 	public MediaState getMediaState() {
 		MediaState mediaState = new MediaState();
@@ -368,11 +405,7 @@ public class MediaManager {
 		mediaState.canMicrophoneMute = Compatibility.isCompatible(5); /*&& !mediaState.isBluetoothScoOn*/ //Compatibility.isCompatible(5);
 		
 		// Speaker
-		if(Compatibility.isCompatible(4)) {
-			mediaState.isSpeakerphoneOn = audioManager.isSpeakerphoneOn();
-		}else {
-			mediaState.isSpeakerphoneOn = (audioManager.getRouting(audioManager.getMode()) == AudioManager.ROUTE_SPEAKER);
-		}
+		mediaState.isSpeakerphoneOn = isSpeakerphoneOn();
 		mediaState.canSpeakerphoneOn = true && !mediaState.isBluetoothScoOn; //Compatibility.isCompatible(5);
 		
 		//Bluetooth
