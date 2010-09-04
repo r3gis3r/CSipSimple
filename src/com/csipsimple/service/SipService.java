@@ -556,6 +556,7 @@ public class SipService extends Service {
 						//media_cfg.setJb_min_pre(60);
 						//media_cfg.setJb_max(600);
 						media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
+						media_cfg.setAudio_frame_ptime(30);
 						
 						
 						int isTurnEnabled = prefsWrapper.getTurnEnabled();

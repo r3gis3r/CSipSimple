@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -47,6 +48,7 @@ import com.csipsimple.models.AccountInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 
 public class OutgoingCallChooser extends ListActivity {
@@ -105,6 +107,11 @@ public class OutgoingCallChooser extends ListActivity {
 				}
 			});
 			
+			
+			if(!Compatibility.canMakeGSMCall(OutgoingCallChooser.this)) {
+				add_row.setVisibility(View.GONE);
+			}
+			
 		}
 		
 		@Override
@@ -124,10 +131,22 @@ public class OutgoingCallChooser extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(THIS_FILE, "Starting ");
-		if(getIntent().getAction().equalsIgnoreCase(Intent.ACTION_CALL)) {
+		
+		number = PhoneNumberUtils.getNumberFromIntent(getIntent(), this);
+		
+		if(number == null && getIntent().getAction().equalsIgnoreCase(Intent.ACTION_CALL)) {
 			number = getIntent().getData().getSchemeSpecificPart();
-		}else {
+		}
+		/*else {
 			Log.e(THIS_FILE, "This action : "+getIntent().getAction()+" is not supported by this view");
+			return;
+		}
+		*/
+		
+		if(number == null) {
+			Log.e(THIS_FILE, "No number detected for : "+getIntent().getAction());
+			super.onCreate(savedInstanceState);
+			finish();
 			return;
 		}
 		/*

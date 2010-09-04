@@ -1,0 +1,126 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FULL NAME <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-03 19:03+0200\n"
+"PO-Revision-Date: 2010-09-03 22:24+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "app_name"
+msgid "CSipSimple"
+msgstr "CSipSimple"
+
+msgctxt "unable_to_download_file"
+msgid "Unable to download file"
+msgstr "Impossible de télécharger le fichier"
+
+msgctxt "connection_not_valid"
+msgid ""
+"Selected network route not available (activate WiFi or change preferences to "
+"use 3G)"
+msgstr ""
+"Votre connection n'est actuellement pas valide pour faire du SIP (activez le "
+"WIFI ou changez vos préférences pour pouvoir utiliser la 3G)"
+
+msgctxt "accounts"
+msgid "Accounts"
+msgstr "Comptes"
+
+msgctxt "save"
+msgid "Save"
+msgstr "Enregistrer"
+
+msgctxt "cancel"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "activate_account"
+msgid "Activate account"
+msgstr "Activer le compte"
+
+msgctxt "deactivate_account"
+msgid "Deactivate account"
+msgstr "Désactiver le compte"
+
+msgctxt "delete_account"
+msgid "Delete account"
+msgstr "Supprimer le compte"
+
+msgctxt "modify_account"
+msgid "Modify account"
+msgstr "Modifier le compte"
+
+msgctxt "add_account"
+msgid "Add account"
+msgstr "Ajouter un compte"
+
+msgctxt "choose_wizard"
+msgid "Choose wizard"
+msgstr "Choisissez l'assistant"
+
+msgctxt "use"
+msgid "Use :"
+msgstr "Utiliser :"
+
+msgctxt "use_pstn"
+msgid "Use mobile"
+msgstr "Passer par le GSM"
+
+msgctxt "ongoing_call"
+msgid "Call in Progress"
+msgstr "Appel en cours"
+
+msgctxt "recentCalls_empty"
+msgid "No Call Logs"
+msgstr "Journal d'appel vide"
+
+msgctxt "filters"
+msgid "Filters"
+msgstr "Filtres"
+
+msgctxt "add_filter"
+msgid "Add filter / rewrite rule"
+msgstr "Ajouter une règle (filtre/réécriture)"
+
+msgctxt "delete_filter"
+msgid "Delete filter"
+msgstr "Supprimer le filtre"
+
+msgctxt "callLog_delete_entry"
+msgid "Delete this call"
+msgstr "Supprimer cet appel"
+
+msgctxt "callLog_delete_all"
+msgid "Delete all calls"
+msgstr "Supprimer tous les appels"
+
+msgctxt "callLog_delDialog_title"
+msgid "Delete Call Logs"
+msgstr "Supprimer le journal d'appel"
+
+msgctxt "callLog_delDialog_message"
+msgid "Are you sure you want to delete all calls from the log?"
+msgstr "Etes vous sûr de vouloir supprimer tout le journal d'appel?"
+
+msgctxt "callLog_delDialog_yes"
+msgid "Yes"
+msgstr "Oui"
+
+msgctxt "callLog_delDialog_no"
+msgid "No"
+msgstr "Non"
+
+msgctxt "gsm"
+msgid "GSM"
+msgstr "GSM"

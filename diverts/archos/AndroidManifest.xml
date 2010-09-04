@@ -99,6 +99,25 @@
 			  -->
 		</activity>
 		
+         <activity-alias android:name="PrivilegedOutgoingCallBroadcaster"
+                 android:targetActivity=".ui.OutgoingCallChooser"
+                 android:theme="@style/CupcakeDialog"
+				android:launchMode="singleInstance"
+                 android:permission="android.permission.CALL_PRIVILEGED">
+             <intent-filter>
+                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
+                 <category android:name="android.intent.category.DEFAULT" />
+                 <data android:scheme="tel" />
+             </intent-filter>
+             <intent-filter>
+                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
+                 <category android:name="android.intent.category.DEFAULT" />
+                 <data android:mimeType="vnd.android.cursor.item/phone" />
+                 <data android:mimeType="vnd.android.cursor.item/phone_v2" />
+                 <data android:mimeType="vnd.android.cursor.item/person" />
+             </intent-filter>
+         </activity-alias>
+		
 		
 		<activity android:name=".ui.InCallActivity" android:label="Incoming call"
 			android:screenOrientation="portrait" android:excludeFromRecents="true" android:launchMode="singleInstance"
@@ -112,6 +131,9 @@
 		
 	</application>
 	<uses-sdk android:minSdkVersion="3" />
+	
+	<!--  Archos 5 IT again ... -->
+	<uses-permission android:name="android.permission.CALL_PRIVILEGED" />
 
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>

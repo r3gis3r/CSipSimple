@@ -62,6 +62,7 @@ import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -473,24 +474,29 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		}
 
 		isDigit = !isDigit;
-		int cx = rootView.getWidth() / 2;
-		int cy = rootView.getHeight() / 2;
-		Animation animation = new Flip3dAnimation(digitDialer, textDialer, cx, cy, forward);
-		animation.setAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationEnd(Animation animation) {
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-			}
-
-			@Override
-			public void onAnimationStart(Animation animation) {
-			}
-		});
-
-		rootView.startAnimation(animation);
+		if(Compatibility.useFlipAnimation()) {
+			int cx = rootView.getWidth() / 2;
+			int cy = rootView.getHeight() / 2;
+			Animation animation = new Flip3dAnimation(digitDialer, textDialer, cx, cy, forward);
+			animation.setAnimationListener(new AnimationListener() {
+				@Override
+				public void onAnimationEnd(Animation animation) {
+				}
+	
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+				}
+	
+				@Override
+				public void onAnimationStart(Animation animation) {
+				}
+			});
+	
+			rootView.startAnimation(animation);
+		}else {
+			digitDialer.setVisibility(isDigit?View.VISIBLE:View.GONE);
+			textDialer.setVisibility(isDigit?View.GONE:View.VISIBLE);
+		}
 	}
 
 	// Gesture detector

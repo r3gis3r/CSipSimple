@@ -18,8 +18,14 @@
 package com.csipsimple.utils;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
+import android.net.Uri;
 
 public class Compatibility {
 	
@@ -69,7 +75,7 @@ public class Compatibility {
 	
 	public static boolean useRoutingApi() {
 		Log.d(THIS_FILE, "Current device "+android.os.Build.BRAND+" - "+android.os.Build.DEVICE);
-		if(android.os.Build.BRAND.equalsIgnoreCase("htc") ||
+		if( (android.os.Build.BRAND.equalsIgnoreCase("htc") && !isCompatible(5)) ||
 				android.os.Build.BRAND.equalsIgnoreCase("google") ||
 				android.os.Build.DEVICE.equals("GT-I9000")) {
 			return false;
@@ -83,7 +89,45 @@ public class Compatibility {
 			return 3;
 		}
 		
+		if(android.os.Build.BRAND.equalsIgnoreCase("htc") && 
+				!isCompatible(4)) {
+			return AudioManager.MODE_IN_CALL;
+		}
+		
 		return AudioManager.MODE_NORMAL;
+	}
+	
+	
+	public static void setFirstRunParameters(PreferencesWrapper preferencesWrapper) {
+		//TODO : make it compatible with 1.5 deviceso
+		//preferencesWrapper.setCodecPriority("iLBC/8000/1", 
+		//		android.os.Build.CPU_ABI.equalsIgnoreCase("armeabi-v7a")?"125":"0");
+	}
+	
+	public static boolean useFlipAnimation() {
+		if(android.os.Build.BRAND.equalsIgnoreCase("archos")) {
+			return false;
+		}
+		return true;
+	}
+	
+	
+	public static boolean canResolveIntent(Context context, final Intent intent) {
+		 final PackageManager packageManager = context.getPackageManager();
+		 //final Intent intent = new Intent(action);
+		 List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+		 return list.size() > 0;
+	}
+	
+	private static Boolean canMakeGSMCall = null;
+	
+	public static boolean canMakeGSMCall(Context context) {
+		if(canMakeGSMCall == null) {
+			Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
+			intentMakePstnCall.setData(Uri.fromParts("tel", "1", null));
+			canMakeGSMCall = canResolveIntent(context, intentMakePstnCall);
+		}
+		return canMakeGSMCall;
 	}
 }
 

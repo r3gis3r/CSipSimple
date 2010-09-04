@@ -115,7 +115,6 @@ public class MediaManager {
 		Log.d(THIS_FILE, "Set mode audio in call");
 		audioManager.setMode(MODE_SIP_IN_CALL);
 		
-		
 		if(Compatibility.useRoutingApi()) {
 			audioManager.setRouting(MODE_SIP_IN_CALL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 		}
@@ -135,11 +134,8 @@ public class MediaManager {
 		//Set the rest of the phone in a better state to not interferate with current call
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
-
-		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
-			service.sendBroadcast(new Intent(PAUSE_ACTION));
-		}
 		
+		stopMusic();
 		
 		//LOCKS
 		
@@ -249,9 +245,7 @@ public class MediaManager {
 			screenLock.release();
 		}
 		
-		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
-			service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
-		}
+		restartMusic();
 		
 		
 		isSavedAudioState = false;
@@ -263,7 +257,7 @@ public class MediaManager {
 	
 	public void startRing(String remoteContact) {
 		saveAudioState();
-		
+		stopMusic();
 		if(!ringer.isRinging()) {
 			ringer.ring(remoteContact, service.getPrefs().getRingtone());
 		}
@@ -276,6 +270,18 @@ public class MediaManager {
 		}
 	}
 	
+	private void stopMusic() {
+		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
+			service.sendBroadcast(new Intent(PAUSE_ACTION));
+		}
+		
+	}
+	
+	private void restartMusic() {
+		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
+			service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
+		}
+	}
 
 	//By default we assume user want bluetooth.
 	//If bluetooth is not available connection will never be done and then

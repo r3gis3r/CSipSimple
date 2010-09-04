@@ -19,8 +19,6 @@ package com.csipsimple.wizards.impl;
 
 import java.util.Locale;
 
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.EditTextPreference;
 import android.text.InputType;
 
@@ -35,7 +33,7 @@ public class Ippi extends SimplePrefsWizard {
 		result.label = "ippi";
 		result.icon = R.drawable.ic_wizard_ippi;
 		result.priority = 10;
-		//France, Belgique, Suisse, Canada, USA, Maroc, Algérie, Tunisie.
+		//France, Belgique, Suisse, Canada, USA, Maroc, Algerie, Tunisie.
 		result.countries = new Locale[]{
 			Locale.FRANCE,
 			new Locale("FR", "be"),

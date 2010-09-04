@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">Nom du compte</string>
+  <string name="w_expert_display_name_desc">Nom d\'affichage pour ce compte</string>
+  <string name="w_expert_acc_id">Identifiant pour le compte</string>
+  <string name="w_expert_acc_id_desc">Format : NomDAffichage &lt;sip:login@registrar&gt;</string>
+  <string name="w_expert_reg_uri">URI du registrar</string>
+  <string name="w_expert_reg_uri_desc">Format : sip:registrar.net[:port]</string>
+  <string name="w_expert_realm">Realm</string>
+  <string name="w_expert_realm_desc">Domaine d\'authentification (si vous ne savez pas utilisez *)</string>
+  <string name="w_expert_username">Nom utilisateur</string>
+  <string name="w_expert_username_desc">Login pour l\'authentification</string>
+  <string name="w_expert_data">Mot de passe</string>
+  <string name="w_expert_data_desc">Mot de passe pour l\'authentification</string>
+  <string name="w_expert_t_proxy">Serveur proxy</string>
+  <string name="w_expert_proxy">Uri du proxy</string>
+  <string name="w_expert_proxy_desc">Format : sip:proxy.net[:port]</string>
+  <string name="w_expert_use_tcp">Utiliser le TCP (non=UDP)</string>
+  <string name="w_expert_publish_enabled">Publier la présence</string>
+  <string name="w_expert_reg_timeout">Timeout du register (sec)</string>
+  <string name="w_expert_ka_interval">Intervalle Keep-alive (sec)</string>
+  <string name="w_expert_force_contact">Forcer le champ contact</string>
+</resources>

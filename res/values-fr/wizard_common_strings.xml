@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_common_display_name">Nom du compte</string>
+  <string name="w_common_display_name_desc">Nom d\'affichage du compte</string>
+  <string name="w_common_username">Nom de l\'utilisateur</string>
+  <string name="w_common_username_desc">Login du compte SIP</string>
+  <string name="w_common_phone_number">Numéro de téléphone</string>
+  <string name="w_common_phone_number_desc">Numéro de téléphone SIP attribué par l\'opérateur</string>
+  <string name="w_common_password">Mot de passe</string>
+  <string name="w_common_password_desc">Mot de passe du compte SIP</string>
+</resources>

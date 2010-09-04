@@ -33,7 +33,9 @@ import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
+import com.csipsimple.ui.OutgoingCallChooser;
 import com.csipsimple.utils.AccountListUtils;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 
@@ -115,13 +117,14 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 				}
 			}
 		}
-		
-		quickAction.addItem(getResources().getDrawable(R.drawable.ic_wizard_gsm), getResources().getString(R.string.gsm), new OnClickListener() {
-			public void onClick(View v) {
-				setAccount(null);
-				quickAction.dismiss();
-			}
-		});
+		if(Compatibility.canMakeGSMCall(getContext())) {
+			quickAction.addItem(getResources().getDrawable(R.drawable.ic_wizard_gsm), getResources().getString(R.string.gsm), new OnClickListener() {
+				public void onClick(View v) {
+					setAccount(null);
+					quickAction.dismiss();
+				}
+			});
+		}
 		
 		quickAction.show();
 	}

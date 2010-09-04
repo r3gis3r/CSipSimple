@@ -1,84 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
-
-	This file is part of CSipSimple. 
-	CSipSimple is free software: you can
-	redistribute it and/or modify it under the terms of the GNU General
-	Public License as published by the Free Software Foundation, either
-	version 3 of the License, or (at your option) any later version.
-
-	CSipSimple is distributed in the hope that it will be useful, but
-	WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-	General Public License for more details. You should have received a
-	copy of the GNU General Public License along with CSipSimple. If not,
-	see <http://www.gnu.org/licenses/>.
-	
--->
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
-<string name="prefs">Options</string>
-
-<string name="prefs_network">Réseau</string>
-<string name="prefs_network_desc">La façon dont le SIP se connecte au réseau</string>
-<string name="prefs_media">Média</string>
-<string name="prefs_media_desc">Comportement des codecs et du son en communication</string>
-<string name="prefs_ui">Apparence et comportement</string>
-<string name="prefs_ui_desc">Modifier l&quot;apparence et les comportement de l&quot;application</string>
-
-<!-- Network -->
-<string name="for_incomings">Pour les appels entrants</string>
-<string name="for_outgoings">Pour les appels sortants</string>
-<string name="perfs">Performances</string>
-<string name="transport">Transport</string>
-
-<string name="use_wifi">Utiliser le WIFI</string>
-<string name="use_wifi_in_desc">Utiliser le WIFI pour les appels entrants</string>
-<string name="use_wifi_out_desc">Utiliser le WIFI pour les appels sortants</string>
-<string name="use_3g">Utiliser la 3G</string>
-<string name="use_3g_disclamer">Votre opérateur DOIT vous l&quot;autoriser pour activer cette option</string>
-<string name="lock_wifi">Verouiller le WIFI</string>
-<string name="lock_wifi_desc">Empêche la mise en veille du WIFI lorsque le SIP est connecté</string>
-<string name="network_transport">Transport</string>
-<string name="network_transport_desc">Transport réseau à utiliser</string>
-<string name="network_transport_port">Port</string>
-<string name="network_transport_port_desc">Numéro de port à utiliser localement</string>
-
-<!-- Media -->
-
-<string name="audio_quality">Qualité audio</string>
-<string name="codecs">Codecs</string>
-<string name="ice_turn">ICE/TURN</string>
-
-<string name="echo_cancellation">Annulation de l&quot;echo</string>
-<string name="echo_cancellation_desc">Activer l&quot;annulation d&quot;echo</string>
-<string name="enable_vad">Détection de silence</string>
-<string name="enable_vad_desc">Activer la détection active de voix (réduit la bande passante utilisée)</string>
-<string name="snd_auto_close_time">Fermeture automatique du canal audio</string>
-<string name="snd_auto_close_time_desc">Temps avant fermture du canal audio (peut dans certain cas régler le problème de fermeture du canal audio sur android 1.5)</string>
-<string name="snd_media_quality">Qualité du média</string>
-<string name="snd_media_quality_desc">Qualité du flux média (à ne modifier que si vous savez exactement ce que vous faites)</string>
-<string name="snd_clock_rate">Fréquence</string>
-<string name="snd_clock_rate_desc">Fréquence du canal audio</string>
-<string name="enable_ice">Activer ICE</string>
-<string name="enable_ice_desc">Activer la fonctionnalité ICE</string>
-<string name="enable_turn">Activer TURN</string>
-<string name="enable_turn_desc">Activer la fonctionnalité TURN</string>
-<string name="turn_server">Serveur TURN</string>
-<string name="turn_server_desc">Serveur TURN (HOST:PORT)</string>
-<string name="codecs_desc">Priorité (0 = désactivé)</string>
-
-<!-- UI -->
-<string name="general_ui">Interface utilisateur générale</string>
-<string name="native_dialer_integration">Intégration au numéroteur Android</string>
-
-<string name="integrate_with_native_dialer">Activer l&quot;intégration</string>
-<string name="integrate_with_native_dialer_desc">Quand un appel est initié partout dans Android il vous sera demandé si vous voulez utiliser le GSM ou le SIP</string>
-<string name="exclude_for_outgoing_call">Motifs à exclures</string>
-<string name="exclude_for_outgoing_call_desc">Motifs (regexp) pour les appels sortant à ne pas traiter en SIP</string>
-<string name="start_with_text_dialer">Numérotation texte</string>
-<string name="start_with_text_dialer_desc">Démarrer avec le numéroteur de type texte</string>
-<string name="use_alternate_unlocker">Dévérouillage bouttons</string>
-<string name="use_alternate_unlocker_desc">Ne pas utiliser le dévérouillage glissant pour prendre les appels</string>
-
+  <string name="prefs">Options</string>
+  <string name="prefs_fast">Configuration simplifiée</string>
+  <string name="prefs_fast_desc">Options rapides (pour ceux qui ne connaissent pas le SIP)</string>
+  <string name="prefs_network">Réseau</string>
+  <string name="prefs_network_desc">La façon dont le SIP se connecte au réseau</string>
+  <string name="prefs_media">Média</string>
+  <string name="prefs_media_desc">Comportement des codecs et du son en communication</string>
+  <string name="prefs_ui">Apparence et comportement</string>
+  <string name="prefs_ui_desc">Modifier lapparence et les comportement de lapplication</string>
+  <string name="for_incomings">Pour les appels entrants</string>
+  <string name="for_outgoings">Pour les appels sortants</string>
+  <string name="perfs">Performances</string>
+  <string name="transport">Transport</string>
+  <string name="use_wifi">Utiliser le WIFI</string>
+  <string name="use_wifi_in_desc">Utiliser le WIFI pour les appels entrants</string>
+  <string name="use_wifi_out_desc">Utiliser le WIFI pour les appels sortants</string>
+  <string name="use_3g">Utiliser la 3G</string>
+  <string name="use_3g_disclamer">Votre opérateur DOIT vous lautoriser pour activer cette option</string>
+  <string name="use_edge">Utiliser le EDGE</string>
+  <string name="use_gprs">Utiliser le GPRS</string>
+  <string name="lock_wifi">Verouiller le WIFI</string>
+  <string name="lock_wifi_desc">Empêche la mise en veille du WIFI lorsque le SIP est connecté</string>
+  <string name="enable_tcp">TCP</string>
+  <string name="enable_tcp_desc">Autoriser le transport TCP</string>
+  <string name="enable_udp">UDP</string>
+  <string name="enable_udp_desc">Autoriser le transport UDP</string>
+  <string name="network_udp_transport_port">Port UDP</string>
+  <string name="network_udp_transport_port_desc">Numéro du port sur lequel écouter localement</string>
+  <string name="network_tcp_transport_port">Port TCP</string>
+  <string name="network_tcp_transport_port_desc">Numéro du port sur lequel écouter localement</string>
+  <string name="network_rtp_port">Port RTP</string>
+  <string name="network_rtp_port_desc">Port pour le début de la fourchette de port RTP</string>
+  <string name="audio_quality">Qualité audio</string>
+  <string name="codecs">Codecs</string>
+  <string name="ice_turn">ICE/TURN</string>
+  <string name="echo_cancellation">Annulation de l\'echo</string>
+  <string name="echo_cancellation_desc">Activer l\'annulation d\'echo</string>
+  <string name="enable_vad">Détection de silence</string>
+  <string name="enable_vad_desc">Activer la détection active de voix (réduit la bande passante utilisée)</string>
+  <string name="snd_mic_level">Amplification du micro</string>
+  <string name="snd_mic_level_desc">Ajuster le gain du signal du micro (1 n\'a pas d\'effet)</string>
+  <string name="snd_speaker_level">Amplification de l\'écoute</string>
+  <string name="snd_speaker_level_desc">Ajuster le gain du signal de l\'écouteur (1 n\'a pas d\'effet)</string>
+  <string name="snd_stream_level">Niveau sonore initial</string>
+  <string name="snd_stream_level_desc">Choix du niveau initial du flux sonore Android</string>
+  <string name="snd_auto_close_time">Fermeture automatique du canal audio</string>
+  <string name="snd_auto_close_time_desc">Temps avant fermture du canal audio (peut dans certain cas régler le problème de fermeture du canal audio sur android 1.5)</string>
+  <string name="snd_media_quality">Qualité du média</string>
+  <string name="snd_media_quality_desc">Qualité du flux média (à ne modifier que si vous savez exactement ce que vous faites)</string>
+  <string name="snd_clock_rate">Fréquence</string>
+  <string name="snd_clock_rate_desc">Fréquence du canal audio</string>
+  <string name="enable_ice">Activer ICE</string>
+  <string name="enable_ice_desc">Activer la fonctionnalité ICE</string>
+  <string name="enable_turn">Activer TURN</string>
+  <string name="enable_turn_desc">Activer la fonctionnalité TURN</string>
+  <string name="turn_server">Serveur TURN</string>
+  <string name="turn_server_desc">Serveur TURN (HOST:PORT)</string>
+  <string name="enable_stun">Activer STUN</string>
+  <string name="enable_stun_desc">Activer la foncionnalité STUN</string>
+  <string name="stun_server">Serveur STUN</string>
+  <string name="stun_server_desc">Server STUN (hôte:port)</string>
+  <string name="codecs_desc">Priorité (0 = désactivé)</string>
+  <string name="general_ui">Interface utilisateur générale</string>
+  <string name="native_dialer_integration">Intégration au numéroteur Android</string>
+  <string name="advanced_ui">Modifications avancées</string>
+  <string name="integrate_with_native_dialer">Activer lintégration</string>
+  <string name="integrate_with_native_dialer_desc">Quand un appel est initié partout dans Android il vous sera demandé si vous voulez utiliser le GSM ou le SIP</string>
+  <string name="integrate_with_native_calllogs">Intégrations au journal d\'appel</string>
+  <string name="integrate_with_native_calllogs_desc">Les appels SIP seront rajoutés (si possible) aux journaux d\'appels d\'Android</string>
+  <string name="exclude_for_outgoing_call">Motifs à exclures</string>
+  <string name="exclude_for_outgoing_call_desc">Motifs (regexp) pour les appels sortant à ne pas traiter en SIP</string>
+  <string name="dial_press_tone">Retour sonore du numéroteur</string>
+  <string name="dial_press_tone_desc">Jouer un son à l\'appui sur un numéro</string>
+  <string name="dial_press_vibrate">Retour vibration du numéroteur</string>
+  <string name="dial_press_vibrate_desc">Vibrer lors de l\'appui sur un numéro</string>
+  <string name="start_with_text_dialer">Numérotation texte</string>
+  <string name="start_with_text_dialer_desc">Démarrer avec le numéroteur de type texte</string>
+  <string name="use_alternate_unlocker">Dévérouillage bouttons</string>
+  <string name="use_alternate_unlocker_desc">Ne pas utiliser le dévérouillage glissant pour prendre les appels</string>
+  <string name="keep_awake_incall">Rester allumer lorsqu\'en cours d\'appel</string>
+  <string name="keep_awake_incall_desc">Corrige le son haché lorsque le téléphone est en WIFI (par exemple pour le Nexus One)</string>
+  <string name="use_partial_wake_lock">Utiliser le verouillage CPU</string>
+  <string name="use_partial_wake_lock_desc">S\'assure que le CPU est toujours actif pour CSipSimple (use de la batterie)</string>
+  <string name="log_level">Niveau de traces</string>
+  <string name="log_level_desc">Niveau des traces produites entre 0 (aucune) et 5 (verbeux)</string>
+  <string name="integrate_with_native_music">S\'intégrer à l\'application musique</string>
+  <string name="integrate_with_native_music_desc">A désactiver si vous utilisez un autre application que l\'application officielle</string>
+  <string name="android_integration">S\'intégrer à Android</string>
+  <string name="android_integration_desc">S\'intégrer à la numérotation et aux journaux d\'appel d\'Android</string>
+  <string name="availability_profile">Profil de disponibilité</string>
+  <string name="always_available">Toujours disponible</string>
+  <string name="always_available_desc">Utilisera de la batterie mais vous recevrai vos appels</string>
+  <string name="wifi_available">Disponible en même temps que le WIFI</string>
+  <string name="wifi_available_desc">Votre disponibilité est basée la connexion Wifi</string>
+  <string name="never_available">Seulement pour les appels sortant</string>
+  <string name="never_available_desc">N\'activer CSipSimple que lorsque j\'initie un appel.</string>
+  <string name="availability_tg">Disponibilité du canal data GSM</string>
+  <string name="tg_allowed">Je suis autorisé à faire de la VoIP sur le GSM</string>
+  <string name="tg_allowed_desc">Votre opérateur vous autorise à faire de la VoIP sur la canal data de sa connection</string>
 </resources>

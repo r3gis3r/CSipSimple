@@ -185,7 +185,15 @@ public class MainPrefs extends ListActivity {
 			case MENU_TEST_AUDIO:
 				Thread t = new Thread() {
 					public void run() {
+						pjsua.test_audio_dev(8000, 10);
 						pjsua.test_audio_dev(16000, 10);
+						pjsua.test_audio_dev(8000, 20);
+						pjsua.test_audio_dev(16000, 20);
+						pjsua.test_audio_dev(8000, 30);
+						pjsua.test_audio_dev(16000, 30);
+						pjsua.test_audio_dev(8000, 40);
+						pjsua.test_audio_dev(16000, 40);
+						
 					};
 				};
 				

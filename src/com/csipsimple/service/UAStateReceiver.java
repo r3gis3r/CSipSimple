@@ -75,12 +75,16 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 		CallInfo callInfo = getCallInfo(callId);
+		Log.d(THIS_FILE, "Incoming call <<");
+		treatIncominCall(callInfo);
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
+		Log.d(THIS_FILE, "Incoming call >>");
 	}
 	
 	
 	@Override
 	public void on_call_state(int callId, pjsip_event e) {
+		Log.d(THIS_FILE, "Call state <<");
 		//Get current infos
 		CallInfo callInfo = getCallInfo(callId);
 		pjsip_inv_state callState = callInfo.getCallState();
@@ -94,6 +98,7 @@ public class UAStateReceiver extends Callback {
 			//unsetAudioInCall();
 		}
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
+		Log.d(THIS_FILE, "Call state >>");
 	}
 
 	@Override
@@ -185,26 +190,8 @@ public class UAStateReceiver extends Callback {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case ON_INCOMING_CALL:{
-				CallInfo callInfo = (CallInfo) msg.obj;
-				int callId = callInfo.getCallId();
-				String remContact = callInfo.getRemoteContact();
-				callInfo.setIncoming(true);
-				showNotificationForCall(callInfo);
-				if(SipService.mediaManager != null) {
-					SipService.mediaManager.startRing(remContact);
-				}
-				broadCastAndroidCallState("RINGING", remContact);
+				//CallInfo callInfo = (CallInfo) msg.obj;
 				
-				// Automatically answer incoming calls with 180/RINGING
-				service.callAnswer(callId, 180);
-				
-				if (autoAcceptCurrent) {
-					// Automatically answer incoming calls with 200/OK
-					service.callAnswer(callId, 200);
-					autoAcceptCurrent = false;
-				} else {
-					launchCallHandler(callInfo);
-				}
 				
 				break;
 			}
@@ -278,6 +265,29 @@ public class UAStateReceiver extends Callback {
 			}
 		}
 	};
+	
+	
+	private void treatIncominCall(CallInfo callInfo) {
+		int callId = callInfo.getCallId();
+		String remContact = callInfo.getRemoteContact();
+		callInfo.setIncoming(true);
+		showNotificationForCall(callInfo);
+		if(SipService.mediaManager != null) {
+			SipService.mediaManager.startRing(remContact);
+		}
+		broadCastAndroidCallState("RINGING", remContact);
+		
+		// Automatically answer incoming calls with 180/RINGING
+		service.callAnswer(callId, 180);
+		
+		if (autoAcceptCurrent) {
+			// Automatically answer incoming calls with 200/OK
+			service.callAnswer(callId, 200);
+			autoAcceptCurrent = false;
+		} else {
+			launchCallHandler(callInfo);
+		}
+	}
 	
 	// -------
 	// Public configuration for receiver
