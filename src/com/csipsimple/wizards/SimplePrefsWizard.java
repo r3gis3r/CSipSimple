@@ -102,7 +102,7 @@ public abstract class SimplePrefsWizard extends BasePrefsWizard {
 		credentials.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
 				.swigValue());
 
-		account.cfg.setReg_timeout(600);
+		account.cfg.setReg_timeout(1800);
 	}
 
 	protected abstract String getDomain();

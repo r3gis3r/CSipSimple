@@ -17,21 +17,19 @@
  */
 package com.csipsimple.utils.bluetooth;
 
-import com.csipsimple.service.MediaManager;
-
 import android.content.Context;
-import android.media.AudioManager;
+
+import com.csipsimple.service.MediaManager;
 
 public class BluetoothUtils7 {
 
-	private AudioManager audioManager;
+	//private AudioManager audioManager;
 
 	public BluetoothUtils7(Context context, MediaManager manager) {
-		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		//audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 	}
 
 	public boolean canBluetooth() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

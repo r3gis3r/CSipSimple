@@ -321,6 +321,29 @@ public class Account {
 		db.close();
 		return number;
 	}
+	
+	public boolean isAutoAnswerNumber(String number, DBAdapter db) {
+		db.open();
+		Cursor c = db.getFiltersForAccount(id);
+		int numRows = c.getCount();
+		c.moveToFirst();
+		for (int i = 0; i < numRows; ++i) {
+			Filter f = new Filter();
+			f.createFromDb(c);
+			if( f.autoAnswer(number) ) {
+				return true;
+			}
+			if(f.stopProcessing(number)) {
+				c.close();
+				db.close();
+				return false;
+			}
+			c.moveToNext();
+		}
+		c.close();
+		db.close();
+		return false;
+	}
 
 	public void applyExtraParams() {
 		

@@ -26,6 +26,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pj_pool_t;
@@ -287,6 +288,7 @@ public class SipService extends Service {
 
 		@Override
 		public int hold(int callId) throws RemoteException {
+			Log.d(THIS_FILE, "HOLDING");
 			synchronized (callActionLock) {
 				return SipService.this.callHold(callId);
 			}
@@ -294,6 +296,7 @@ public class SipService extends Service {
 
 		@Override
 		public int reinvite(int callId, boolean unhold) throws RemoteException {
+			Log.d(THIS_FILE, "REINVITING");
 			synchronized (callActionLock) {
 				return SipService.this.callReinvite(callId, unhold);
 			}
@@ -302,7 +305,7 @@ public class SipService extends Service {
 		
 	};
 
-	private DBAdapter db;
+	protected DBAdapter db;
 	private WakeLock wakeLock;
 	private WifiLock wifiLock;
 	private static UAStateReceiver userAgentReceiver;
@@ -310,7 +313,7 @@ public class SipService extends Service {
 	public static boolean hasSipStack = false;
 	private boolean sipStackIsCorrupted = false;
 	private ServiceDeviceStateReceiver deviceStateReceiver;
-	PreferencesWrapper prefsWrapper;
+	public PreferencesWrapper prefsWrapper;
 	private pj_pool_t dialtonePool;
 	private pjmedia_port dialtoneGen;
 	private int dialtoneSlot = -1;
@@ -556,7 +559,7 @@ public class SipService extends Service {
 						//media_cfg.setJb_min_pre(60);
 						//media_cfg.setJb_max(600);
 						media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
-						media_cfg.setAudio_frame_ptime(30);
+						media_cfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
 						
 						
 						int isTurnEnabled = prefsWrapper.getTurnEnabled();
@@ -852,7 +855,7 @@ public class SipService extends Service {
 				if(activeAccounts.containsKey(accountDbId)) {
 					accountInfo.setPjsuaId(activeAccounts.get(accountDbId));
 					pjsua_acc_info pjAccountInfo = new pjsua_acc_info();
-					Log.d(THIS_FILE, "Get account info for account id "+accountDbId+" ==> (active within pjsip as) "+activeAccounts.get(accountDbId));
+					//Log.d(THIS_FILE, "Get account info for account id "+accountDbId+" ==> (active within pjsip as) "+activeAccounts.get(accountDbId));
 					int success = pjsua.acc_get_info(activeAccounts.get(accountDbId), pjAccountInfo);
 					if(success == pjsuaConstants.PJ_SUCCESS) {
 						accountInfo.fillWithPjInfo(pjAccountInfo);
@@ -863,6 +866,24 @@ public class SipService extends Service {
 		return accountInfo;
 	}
 	
+	
+	protected Account getAccountForPjsipId(int acc_id) {
+		synchronized (activeAccountsLock) {
+			if(activeAccounts.containsValue(acc_id)) {
+				for( Entry<Integer, Integer> entry : activeAccounts.entrySet()) {
+					if(entry.getValue().equals(acc_id)) {
+						synchronized (db) {
+							db.open();
+							Account account = db.getAccount(entry.getKey());
+							db.close();
+							return account;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
 	
 	public void updateRegistrationsState() {
 		AccountInfo info;
@@ -1347,6 +1368,10 @@ public class SipService extends Service {
 		}
 	}
 	
+	public static UAStateReceiver getUAStateReceiver() {
+		return userAgentReceiver;
+	}
+	
 	private String getLocalIpAddress() {
 	    try {
 	        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
@@ -1402,12 +1427,14 @@ public class SipService extends Service {
 			} else if(!stopOnly) {
 				// Check if IP has changed between 
 				Log.i(THIS_FILE, "Ip changed remove/re - add all accounts");
-				if(userAgentReceiver.getActiveCallInProgress() != null) {
-					Log.e(THIS_FILE, "We should restart the stack ! ");
-				}else {
+		//		if(userAgentReceiver.getActiveCallInProgress() != null) {
+					sipStop();
+					sipStart();
+					//Log.e(THIS_FILE, "We should restart the stack ! ");
+		//		}else {
 					// update registration IP : for now remove / reregister all accounts
-					reRegisterAllAccounts();
-				}
+		//			reRegisterAllAccounts();
+		//		}
 			}else {
 				Log.d(THIS_FILE, "Nothing done since already well registered");
 			}

@@ -6,6 +6,7 @@
         <item>Rewrite</item>
         <item>Stop processing</item>
         <item>Directly call</item>
+        <item>Auto answer</item>
     </string-array>
     
     <string-array name="filters_type">

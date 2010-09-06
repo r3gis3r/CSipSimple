@@ -69,22 +69,8 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			}
 			Log.d(THIS_FILE, "<<< Connectivity change detected");
 			
-			/* Perhaps use the possible upcomming network information
-			 * when performing the connectivity check instead of the 
-			 * current information, but it does not seem to be necessary.
-
-			// New connection info
-			Bundle extras = intent.getExtras();
-			NetworkInfo ni = (NetworkInfo) extras.get(ConnectivityManager.EXTRA_NETWORK_INFO);
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-			
 			// Other case (ie update IP etc) are handled directly inside the
 			// service if started
-			if (PreferencesWrapper.isValidConnectionFor(ni, prefs, "out")) {
-				Log.d(THIS_FILE, "Connectivity now available");
-				Intent sip_service_intent = new Intent(context, SipService.class);
-				context.startService(sip_service_intent);
-			}*/
 		}
 	}
 }

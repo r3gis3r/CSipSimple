@@ -36,11 +36,9 @@ import org.pjsip.pjsua.pjsua_call_media_status;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -48,10 +46,10 @@ import android.os.Message;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.models.Account;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.utils.CallLogHelper;
@@ -76,7 +74,7 @@ public class UAStateReceiver extends Callback {
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 		CallInfo callInfo = getCallInfo(callId);
 		Log.d(THIS_FILE, "Incoming call <<");
-		treatIncominCall(callInfo);
+		treatIncominCall(acc_id, callInfo);
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
 		Log.d(THIS_FILE, "Incoming call >>");
 	}
@@ -90,8 +88,7 @@ public class UAStateReceiver extends Callback {
 		pjsip_inv_state callState = callInfo.getCallState();
 		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
 			if(SipService.mediaManager != null) {
-				SipService.mediaManager.stopRing();
-				SipService.mediaManager.restartMusic();
+				SipService.mediaManager.stopAnnoucing();
 			}
 			// Call is now ended
 			service.stopDialtoneGenerator();
@@ -268,24 +265,40 @@ public class UAStateReceiver extends Callback {
 	};
 	
 	
-	private void treatIncominCall(CallInfo callInfo) {
+	private void treatIncominCall(int accountId, CallInfo callInfo) {
 		int callId = callInfo.getCallId();
+		
 		String remContact = callInfo.getRemoteContact();
 		callInfo.setIncoming(true);
 		showNotificationForCall(callInfo);
-		if(SipService.mediaManager != null) {
-			SipService.mediaManager.startRing(remContact);
+
+		//Auto answer feature
+		boolean shouldAutoAnswer = false;
+		//In account
+		Account acc = service.getAccountForPjsipId(accountId);
+		if(acc != null) {
+			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*@[^>]*)(?:>)?");
+			Matcher m = p.matcher(remContact);
+			String number = remContact;
+			if (m.matches()) {
+				number = m.group(2);
+			}
+			Log.w(THIS_FILE, "Search if should auto answer : "+number);
+			shouldAutoAnswer = acc.isAutoAnswerNumber(number, service.db);
 		}
-		broadCastAndroidCallState("RINGING", remContact);
-		
-		// Automatically answer incoming calls with 180/RINGING
-		service.callAnswer(callId, 180);
-		
-		if (autoAcceptCurrent) {
+		//Or by api
+		if (autoAcceptCurrent || shouldAutoAnswer) {
 			// Automatically answer incoming calls with 200/OK
 			service.callAnswer(callId, 200);
 			autoAcceptCurrent = false;
 		} else {
+
+			// Automatically answer incoming calls with 180/RINGING
+			service.callAnswer(callId, 180);
+			if(SipService.mediaManager != null) {
+				SipService.mediaManager.startRing(remContact);
+			}
+			broadCastAndroidCallState("RINGING", remContact);
 			launchCallHandler(callInfo);
 		}
 	}
@@ -310,63 +323,10 @@ public class UAStateReceiver extends Callback {
 		if(msgHandler == null) {
 			msgHandler = new WorkerHandler(handlerThread.getLooper());
 		}
-		
-		//
-		// Android 2.2 has introduced a new way of handling headset
-		// action button presses. This involves registering to handle
-		// the button presses every time one needs it and unregistering
-		// once the button events are no longer needed. Last app to
-		// register gets the focus.
-		//
-		
-		//r3gis.3r : not really needed, old api is not deprecated. 
-		// Besides, this method should not be used by csipsimple since we do not want to stop 
-		//the broadcast to all other apps.
-		// We are registered even if no active call and when button is pressed, we look if there is an active call
-		// And if so treat the button pressure.
-		/*
-		if (Compatibility.isCompatible(8)) {
-			try {
-			//TODO : if we want to activate it, we must : 
-			// Create HeadsetButtonReceiver as new class and declare it into the manifest file !
-			// Ensure that it will not prevent media app to get the information 
-			// Add service method to get the current call info in order to have access to the info inside the broadcastreceiver
-				Method method = AudioManager.class.getMethod("registerMediaButtonEventReceiver", new Class[]{ComponentName.class} );
-				AudioManager audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
-				method.invoke(audioManager, new ComponentName(service.getPackageName(), HeadsetButtonReceiver.class.getName()));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}else{
-		*/
-			//
-			// Register am event receiver for ACTION_MEDIA_BUTTON events,
-			// and adjust its priority to make sure we get these events
-			// before any media player which hijacks the button presses.
-			//
-			Log.d(THIS_FILE, "Register media button");
-			IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
-			intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY +1 );
-			if(headsetButtonReceiver == null) {
-				headsetButtonReceiver = new HeadsetButtonReceiver();
-			}
-			service.registerReceiver(headsetButtonReceiver, intentFilter);
-/*		
-		}
-	*/
-		
-		
 	}
 	
 
 	public void stopService() {
-		try {
-			service.unregisterReceiver(headsetButtonReceiver);
-			headsetButtonReceiver = null;
-		}catch(Exception e) {
-			//Nothing to do else. just consider it has not been registered
-		}
 		if(handlerThread != null) {
 			boolean fails = true;
 			
@@ -536,49 +496,6 @@ public class UAStateReceiver extends Callback {
 		}
 		return false;
 	}
-	
-	
-	/**
-	 * Internal receiver of Headset button presses events.
-	 */
-	private BroadcastReceiver headsetButtonReceiver = null;
-	class HeadsetButtonReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Log.d(THIS_FILE, "headsetButtonReceiver::onReceive");
-		//	abortBroadcast();
-	    	//
-			// Headset button has been pressed by user. Normally when 
-			// the UI is active this event will never be generated instead
-			// a headset button press will be handled as a regular key
-			// press event.
-			//
-	        if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
-				KeyEvent event = (KeyEvent)intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-				Log.d(THIS_FILE, "Key : "+event.getKeyCode());
-				if (event != null && 
-						event.getAction() == KeyEvent.ACTION_DOWN && 
-						event.getKeyCode() == KeyEvent.KEYCODE_HEADSETHOOK) {
-					
-		        	if (handleHeadsetButton()) {
-			        	//
-						// After processing the event we will prevent other applications
-						// from receiving the button press since we have handled it ourself
-						// and do not want any media player to start playing for example.
-						//
-		        		/*
-		        		 * TODO : enable this test if api > 5
-		        		if (isOrderedBroadcast()) {
-		        		*/
-		        			abortBroadcast();
-		        			/*
-		        		}
-		        		*/
-		        	}
-				}
-			}
-		}
-	};
 	
 	
 }

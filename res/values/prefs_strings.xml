@@ -58,6 +58,8 @@
 <string name="snd_media_quality_desc">Quality of the media stream (modify only if you know what you are doing)</string>
 <string name="snd_clock_rate">Clock rate</string>
 <string name="snd_clock_rate_desc">Audio channel frequency</string>
+<string name="snd_ptime">Frame ptime</string>
+<string name="snd_ptime_desc">Specifying lower ptime will normally reduce the latency</string>
 <string name="enable_ice">Enable ICE</string>
 <string name="enable_ice_desc">Turn on ICE feature</string>
 <string name="enable_turn">Enable TURN</string>

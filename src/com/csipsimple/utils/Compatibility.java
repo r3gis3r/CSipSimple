@@ -100,11 +100,34 @@ public class Compatibility {
 		return AudioManager.MODE_NORMAL;
 	}
 	
+	public static String getCpuAbi() {
+		if(isCompatible(4)) {
+			Field field;
+			try {
+				field = android.os.Build.class.getField("CPU_ABI");
+				return field.get(null).toString();
+			} catch (Exception e) {
+				Log.w(THIS_FILE, "Announce to be android 1.6 but no CPU ABI field", e);
+			}
+			
+		}
+		return "armeabi";
+	}
 	
 	public static void setFirstRunParameters(PreferencesWrapper preferencesWrapper) {
-		//TODO : make it compatible with 1.5 deviceso
-		//preferencesWrapper.setCodecPriority("iLBC/8000/1", 
-		//		android.os.Build.CPU_ABI.equalsIgnoreCase("armeabi-v7a")?"125":"0");
+		//Disable iLBC if not armv7
+		preferencesWrapper.setCodecPriority("iLBC/8000/1", 
+				getCpuAbi().equalsIgnoreCase("armeabi-v7a")?"189":"0");
+		
+		//Values get from wince pjsip app
+		preferencesWrapper.setCodecPriority("PCMU/8000/1", "240");
+		preferencesWrapper.setCodecPriority("PCMA/8000/1", "230");
+		preferencesWrapper.setCodecPriority("speex/8000/1", "190");
+		preferencesWrapper.setCodecPriority("speex/16000/1", "180");
+		preferencesWrapper.setCodecPriority("speex/32000/1", "0");
+		preferencesWrapper.setCodecPriority("GSM/8000/1", "100");
+		preferencesWrapper.setCodecPriority("G722/16000/1", "0");
+		
 	}
 	
 	public static boolean useFlipAnimation() {

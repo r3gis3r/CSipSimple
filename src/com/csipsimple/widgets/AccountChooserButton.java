@@ -33,7 +33,6 @@ import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
-import com.csipsimple.ui.OutgoingCallChooser;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;

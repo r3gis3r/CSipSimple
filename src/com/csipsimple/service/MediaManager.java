@@ -17,8 +17,6 @@
  */
 package com.csipsimple.service;
 
-import java.lang.reflect.Method;
-
 import org.pjsip.pjsua.pjsua;
 
 import android.content.ContentResolver;
@@ -36,14 +34,13 @@ import android.provider.Settings;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
+import com.csipsimple.utils.audio.AudioFocusWrapper;
 import com.csipsimple.utils.bluetooth.BluetoothWrapper;
 
 public class MediaManager {
 	
 	final private static String THIS_FILE = "MediaManager";
 	
-	final static String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
-	final static String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
 	
 	private SipService service;
 	private AudioManager audioManager;
@@ -59,13 +56,15 @@ public class MediaManager {
 	private boolean savedSpeakerPhone;
 	//private boolean savedMicrophoneMute;
 	private int savedRoute, savedMode;
-	private boolean isSavedAudioState = false, isSetAudioMode = false, isMusicActive = false;
+	private boolean isSavedAudioState = false, isSetAudioMode = false;
 
 	private Intent mediaStateChangedIntent;
 	
 	//Bluetooth related
 	private static boolean bluetoothClassAvailable;
 	private BluetoothWrapper bluetoothWrapper;
+
+	private AudioFocusWrapper audioFocusWrapper;
 
 	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
@@ -90,6 +89,7 @@ public class MediaManager {
 		if(bluetoothClassAvailable) {
 			bluetoothWrapper = new BluetoothWrapper(service, this);
 		}
+		audioFocusWrapper = new AudioFocusWrapper(service, audioManager);
 		MODE_SIP_IN_CALL = Compatibility.getInCallMode();
 		
 	}
@@ -137,7 +137,7 @@ public class MediaManager {
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
 		
-		stopMusic();
+		audioFocusWrapper.focus();
 		
 		//LOCKS
 		
@@ -200,7 +200,6 @@ public class MediaManager {
 		
 		isSavedAudioState = true;
 		
-		isMusicActive = audioManager.isMusicActive();
 	}
 
 	
@@ -247,19 +246,18 @@ public class MediaManager {
 			screenLock.release();
 		}
 		
-		restartMusic();
+		audioFocusWrapper.unFocus();
 		
 		
 		isSavedAudioState = false;
 		isSetAudioMode = false;
-		isMusicActive = false;
 		
 	}
 	
 	
 	public void startRing(String remoteContact) {
 		saveAudioState();
-		stopMusic();
+		audioFocusWrapper.focus();
 		
 		if(!ringer.isRinging()) {
 			ringer.ring(remoteContact, service.getPrefs().getRingtone());
@@ -273,45 +271,11 @@ public class MediaManager {
 		}
 	}
 	
-	private boolean hasFocus = false;
-	public void stopMusic() {
-		if(Compatibility.isCompatible(8)) {
-			try {
-				if(!hasFocus) {
-					Method method = AudioManager.class.getDeclaredMethod("requestAudioFocus", 
-							AudioManager.OnAudioFocusChangeListener.class, int.class, int.class);
-					method.invoke(audioManager, (AudioManager.OnAudioFocusChangeListener) null, Compatibility.getInCallStream(), 2);
-					hasFocus = true;
-				}
-			} catch (Exception e) {
-				Log.d(THIS_FILE, "Audio focus api failed");
-			}
-		}else {
-			if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
-				service.sendBroadcast(new Intent(PAUSE_ACTION));
-			}
-		}
-		
+	public void stopAnnoucing() {
+		stopRing();
+		audioFocusWrapper.unFocus();
 	}
 	
-	public void restartMusic() {
-		if(Compatibility.isCompatible(8)) {
-			try {
-				if(hasFocus) {
-					Method method = AudioManager.class.getDeclaredMethod("abandonAudioFocus", 
-							AudioManager.OnAudioFocusChangeListener.class);
-					method.invoke(audioManager, (AudioManager.OnAudioFocusChangeListener)null);
-					hasFocus = false;
-				}
-			} catch (Exception e) {
-				Log.e(THIS_FILE, "Audio focus api failed");
-			}
-		}else {
-			if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
-				service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
-			}
-		}
-	}
 
 	//By default we assume user want bluetooth.
 	//If bluetooth is not available connection will never be done and then

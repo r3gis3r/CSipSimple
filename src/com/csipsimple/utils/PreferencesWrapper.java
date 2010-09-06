@@ -353,6 +353,16 @@ public class PreferencesWrapper {
 	public float getSpeakerLevel() {
 		return prefs.getFloat("snd_speaker_level", (float) 1.0);
 	}
+	
+	public int getAudioFramePtime() {
+		try {
+			int value = Integer.parseInt(prefs.getString("snd_ptime", "30"));
+			return value;
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 30;
+	}
 
 
 	// ---- 

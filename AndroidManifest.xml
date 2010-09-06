@@ -109,6 +109,8 @@
             </intent-filter>
 		</activity>
         
+        
+        <receiver android:name=".service.HeadsetButtonReceiver"></receiver>
 		
 	</application>
 	<uses-sdk android:minSdkVersion="3" />
