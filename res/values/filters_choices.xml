@@ -11,6 +11,7 @@
     
     <string-array name="filters_type">
         <item>Starts with</item>
+        <item>Ends with</item>
         <item>Has exactly N digit</item>
         <item>Has more than N digit</item>
         <item>Is exactly</item>
