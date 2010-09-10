@@ -55,7 +55,7 @@
 				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
 			<EditTextPreference android:title="@string/snd_ptime" android:key="snd_ptime"
 				android:summary="@string/snd_ptime_desc"
-				android:defaultValue="30"
+				android:defaultValue="20"
 				android:numeric="signed"></EditTextPreference>
 		</PreferenceCategory>
 		<PreferenceScreen android:title="@string/codecs" android:summary="Only available if sip is currently registered">

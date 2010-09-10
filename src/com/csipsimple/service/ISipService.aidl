@@ -24,6 +24,7 @@ interface ISipService{
 	void sipStart();
 	void sipStop();
 	void forceStopService();
+	void askThreadedRestart();
 	
 	//Account control
 	void addAllAccounts();

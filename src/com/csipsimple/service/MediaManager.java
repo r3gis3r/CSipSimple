@@ -57,6 +57,8 @@ public class MediaManager {
 	//private boolean savedMicrophoneMute;
 	private int savedRoute, savedMode;
 	private boolean isSavedAudioState = false, isSetAudioMode = false;
+	
+	private boolean isAudioManagerMicrophoneMute = false;
 
 	private Intent mediaStateChangedIntent;
 	
@@ -119,6 +121,8 @@ public class MediaManager {
 		
 		if(Compatibility.useRoutingApi()) {
 			audioManager.setRouting(MODE_SIP_IN_CALL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
+		}else {
+			audioManager.setSpeakerphoneOn(false);
 		}
 		
 		//Set stream solo/volume
@@ -126,8 +130,10 @@ public class MediaManager {
 		audioManager.setStreamSolo(inCallStream, true);
 		setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
 		
-		audioManager.setSpeakerphoneOn(false);
+		
 		audioManager.setMicrophoneMute(false);
+		isAudioManagerMicrophoneMute = false;
+		
 		if(bluetoothClassAvailable && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
 			Log.d(THIS_FILE, "Try to enable bluetooth");
 			bluetoothWrapper.setBluetoothOn(true);
@@ -150,6 +156,7 @@ public class MediaManager {
 		WifiManager wman = (WifiManager) service.getSystemService(Context.WIFI_SERVICE);
 		if(wifiLock == null) {
 			wifiLock = wman.createWifiLock("com.csipsimple.InCallLock");
+			wifiLock.setReferenceCounted(false);
 		}
 		WifiInfo winfo = wman.getConnectionInfo();
 		if(winfo != null) {
@@ -166,10 +173,12 @@ public class MediaManager {
 				if(screenLock == null) {
 					PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
 		            screenLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
+		            screenLock.setReferenceCounted(false);
 				}
 				//Ensure single lock
 				if(!screenLock.isHeld()) {
 					screenLock.acquire();
+					
 				}
 				
 			}
@@ -223,6 +232,8 @@ public class MediaManager {
 		audioManager.setMode(savedMode);
 		if(Compatibility.useRoutingApi()) {
 			audioManager.setRouting(MODE_SIP_IN_CALL, savedRoute, AudioManager.ROUTE_ALL);
+		}else {
+			audioManager.setSpeakerphoneOn(savedSpeakerPhone);
 		}
 		
 		if(bluetoothClassAvailable) {
@@ -230,9 +241,9 @@ public class MediaManager {
 			//bluetoothWrapper.setBluetoothOn(true);
 			bluetoothWrapper.setBluetoothOn(false);
 		}
-		audioManager.setSpeakerphoneOn(savedSpeakerPhone);
+		
 		audioManager.setMicrophoneMute(false);
-
+		isAudioManagerMicrophoneMute = false;
 		
 		int inCallStream = Compatibility.getInCallStream();
 		setStreamVolume(inCallStream, savedVolume, 0);
@@ -287,8 +298,9 @@ public class MediaManager {
 	}
 	
 	public synchronized void setMicrophoneMute(boolean on) {
-		if(audioManager.isMicrophoneMute() != on) {
-			audioManager.setMicrophoneMute(on);
+		if(on != isAudioManagerMicrophoneMute ) {
+			pjsua.conf_adjust_rx_level(0, on ? 0 : service.prefsWrapper.getMicLevel() );
+			isAudioManagerMicrophoneMute = on;
 			broadcastMediaChanged();
 		}
 	}
@@ -299,8 +311,9 @@ public class MediaManager {
 				audioManager.setRouting(MODE_SIP_IN_CALL, 
 						on?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, 
 								AudioManager.ROUTE_ALL);
+			}else {
+				audioManager.setSpeakerphoneOn(on);
 			}
-			audioManager.setSpeakerphoneOn(on);
 			broadcastMediaChanged();
 		}
 	}
@@ -365,8 +378,8 @@ public class MediaManager {
 		MediaState mediaState = new MediaState();
 		
 		// Micro 
-		mediaState.isMicrophoneMute = audioManager.isMicrophoneMute();
-		mediaState.canMicrophoneMute = Compatibility.isCompatible(5); /*&& !mediaState.isBluetoothScoOn*/ //Compatibility.isCompatible(5);
+		mediaState.isMicrophoneMute = isAudioManagerMicrophoneMute;
+		mediaState.canMicrophoneMute = true; /*&& !mediaState.isBluetoothScoOn*/ //Compatibility.isCompatible(5);
 		
 		// Speaker
 		mediaState.isSpeakerphoneOn = isSpeakerphoneOn();

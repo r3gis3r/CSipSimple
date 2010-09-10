@@ -45,6 +45,7 @@ public class Account {
 	public static final String FIELD_ACC_ID = "acc_id";
 	public static final String FIELD_REG_URI = "reg_uri";
 	public static final String FIELD_USE_TCP = "use_tcp";
+	public static final String FIELD_PREVENT_TCP = "prevent_tcp";
 	public static final String FIELD_MWI_ENABLED = "mwi_enabled";
 	public static final String FIELD_PUBLISH_ENABLED = "publish_enabled";
 	public static final String FIELD_REG_TIMEOUT = "reg_timeout";
@@ -68,8 +69,9 @@ public class Account {
 		FIELD_ACTIVE, FIELD_WIZARD, FIELD_DISPLAY_NAME,
 
 		// Here comes pjsua_acc_config fields
-		FIELD_PRIORITY, FIELD_ACC_ID, FIELD_REG_URI, FIELD_USE_TCP,	FIELD_MWI_ENABLED,
-		FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_KA_INTERVAL, FIELD_PIDF_TUPLE_ID,
+		FIELD_PRIORITY, FIELD_ACC_ID, FIELD_REG_URI, 
+		FIELD_USE_TCP, FIELD_PREVENT_TCP,
+		FIELD_MWI_ENABLED, FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_KA_INTERVAL, FIELD_PIDF_TUPLE_ID,
 		FIELD_FORCE_CONTACT, FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
 
 		// Proxy infos
@@ -89,12 +91,14 @@ public class Account {
 	public pjsua_acc_config cfg;
 	public Integer id;
 	public boolean use_tcp;
+	public boolean prevent_tcp;
 	
 	public Account() {
 		display_name = "";
 		wizard = "EXPERT";
 		active = true;
 		use_tcp = false;
+		prevent_tcp = false;
 		
 		cfg = new pjsua_acc_config();
 		pjsua.acc_config_default(cfg);
@@ -125,11 +129,17 @@ public class Account {
 		if (tmp_s != null) {
 			wizard = tmp_s;
 		}
-		tmp_i = args.getAsInteger(FIELD_USE_TCP);	// Why doesn't getAsBoolean() work? The value is 1
+		tmp_i = args.getAsInteger(FIELD_USE_TCP);
 		if (tmp_i != null) {
 			use_tcp =(tmp_i != 0);
 		} else {
 			use_tcp = false;
+		}
+		tmp_i = args.getAsInteger(FIELD_PREVENT_TCP);
+		if (tmp_i != null) {
+			prevent_tcp =(tmp_i != 0);
+		} else {
+			prevent_tcp = false;
 		}
 		tmp_i = args.getAsInteger(FIELD_ACTIVE);
 		if (tmp_i != null) {
@@ -219,6 +229,7 @@ public class Account {
 		args.put(FIELD_WIZARD, wizard);
 		args.put(FIELD_DISPLAY_NAME, display_name);
 		args.put(FIELD_USE_TCP, use_tcp);
+		args.put(FIELD_PREVENT_TCP, prevent_tcp);
 		
 		args.put(FIELD_PRIORITY, cfg.getPriority());
 		args.put(FIELD_ACC_ID, cfg.getId().getPtr());
@@ -348,6 +359,7 @@ public class Account {
 	public void applyExtraParams() {
 		
 		//TODO : should NOT be done here !!! 
+		
 		String reg_uri = "";
 		String proxy_uri = "";
 		if (use_tcp) {
@@ -361,6 +373,7 @@ public class Account {
 				buf = proxy_uri + ";transport=tcp";
 				cfg.setProxy(pjsua.pj_str_copy(buf));
 			}
+			Log.w(THIS_FILE, "We are using TCP !!!");
 		}
 		
 	}

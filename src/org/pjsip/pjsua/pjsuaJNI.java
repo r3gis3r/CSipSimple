@@ -502,7 +502,7 @@ class pjsuaJNI {
   public final static native long pjsua_transport_info_usage_count_get(long jarg1, pjsua_transport_info jarg1_);
   public final static native long new_pjsua_transport_info();
   public final static native void delete_pjsua_transport_info(long jarg1);
-  public final static native int transport_create(int jarg1, long jarg2, pjsua_transport_config jarg2_, long jarg3);
+  public final static native int transport_create(int jarg1, long jarg2, pjsua_transport_config jarg2_, int[] jarg3);
   public final static native int transport_register(long jarg1, long jarg2);
   public final static native long transport_get_count();
   public final static native int enum_transports(int[] jarg1, long[] jarg2);

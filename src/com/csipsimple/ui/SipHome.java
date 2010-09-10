@@ -99,17 +99,14 @@ public class SipHome extends TabActivity {
     			}else {
     	        	Log.d(THIS_FILE, "WE CAN NOW start SIP service");
     		        //Start the service
-    		        serviceIntent = new Intent(SipHome.this, SipService.class);
-    		        startService(serviceIntent);
+    		        startSipService();
     			}
     		} catch (NameNotFoundException e) {
     			//Should not happen....or something is wrong with android...
     		}
         }else {
         	Log.d(THIS_FILE, "WE CAN NOW start SIP service");
-	        //Start the service
-	        serviceIntent = new Intent(SipHome.this, SipService.class);
-	        startService(serviceIntent);
+	        startSipService();
         }
         
         setContentView(R.layout.home);
@@ -131,6 +128,14 @@ public class SipHome extends TabActivity {
 	        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(accountIntent);
         }
+        
+    }
+    
+    private void startSipService() {
+    	if(serviceIntent == null) {
+    		serviceIntent = new Intent(SipHome.this, SipService.class);
+    	}
+    	startService(serviceIntent);
         
     }
     

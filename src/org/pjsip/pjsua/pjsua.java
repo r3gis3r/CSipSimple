@@ -151,8 +151,8 @@ public class pjsua implements pjsuaConstants {
     pjsuaJNI.transport_config_dup(pj_pool_t.getCPtr(pool), pool, pjsua_transport_config.getCPtr(dst), dst, pjsua_transport_config.getCPtr(src), src);
   }
 
-  public synchronized static int transport_create(pjsip_transport_type_e type, pjsua_transport_config cfg, SWIGTYPE_p_int p_id) {
-    return pjsuaJNI.transport_create(type.swigValue(), pjsua_transport_config.getCPtr(cfg), cfg, SWIGTYPE_p_int.getCPtr(p_id));
+  public synchronized static int transport_create(pjsip_transport_type_e type, pjsua_transport_config cfg, int[] p_id) {
+    return pjsuaJNI.transport_create(type.swigValue(), pjsua_transport_config.getCPtr(cfg), cfg, p_id);
   }
 
   public synchronized static int transport_register(SWIGTYPE_p_pjsip_transport tp, SWIGTYPE_p_int p_id) {

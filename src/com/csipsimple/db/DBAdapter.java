@@ -37,7 +37,7 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 8;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
@@ -57,6 +57,7 @@ public class DBAdapter {
 			+ Account.FIELD_WIZARD				+ " TEXT,"
 			+ Account.FIELD_DISPLAY_NAME		+ " TEXT,"
 			+ Account.FIELD_USE_TCP				+ " BOOLEAN,"
+			+ Account.FIELD_PREVENT_TCP			+ " BOOLEAN,"
 
 			// Here comes pjsua_acc_config fields
 			+ Account.FIELD_PRIORITY 			+ " INTEGER," 
@@ -140,14 +141,18 @@ public class DBAdapter {
 							+ oldVersion + " to " + newVersion);
 			if(oldVersion < 1) {
 				db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS_TABLE_NAME);
-			} else if(oldVersion < 7) {
-				if(oldVersion < 5) {
-					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_KA_INTERVAL+" INTEGER");
-				}
-				if(oldVersion < 6) {
-					db.execSQL("DROP TABLE IF EXISTS "+FILTERS_TABLE_NAME);
-				}
+			}
+			if(oldVersion < 5) {
+				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_KA_INTERVAL+" INTEGER");
+			}
+			if(oldVersion < 6) {
+				db.execSQL("DROP TABLE IF EXISTS "+FILTERS_TABLE_NAME);
+			}
+			if(oldVersion < 7) {
 				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_TCP+" BOOLEAN");
+			}
+			if(oldVersion < 8) {
+				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_PREVENT_TCP+" BOOLEAN");
 			}
 			onCreate(db);
 		}

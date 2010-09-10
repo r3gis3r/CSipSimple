@@ -70,5 +70,6 @@ public class Freephonie extends SimplePrefsWizard {
 		account.cfg.setReg_timeout(1800);
 		account.cfg.setProxy_cnt(0);
 		account.cfg.setProxy(pjsua.pj_str_copy(""));
+		account.prevent_tcp = true;
 	}
 }

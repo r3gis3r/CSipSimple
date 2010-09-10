@@ -26,6 +26,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
@@ -57,7 +58,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
-import android.net.NetworkInfo.State;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -129,7 +129,7 @@ public class SipService extends Service {
 		 * Start the sip stack according to current settings (create pjsua)
 		 */
 		@Override
-		public void sipStart() throws RemoteException { SipService.this.sipStart(); }
+		public void sipStart() throws RemoteException {	SipService.this.sipStart();	}
 		
 		/**
 		 * Stop the sip stack (destroy pjsua)
@@ -145,6 +145,20 @@ public class SipService extends Service {
 			Log.d(THIS_FILE,"Try to force service stop");
 			stopSelf();
 		}
+
+		/**
+		 * Restart the service (threaded)
+		 */
+		@Override
+		public void askThreadedRestart() throws RemoteException {
+			Thread t = new Thread() {
+				public void run() {
+					SipService.this.sipStop();
+					SipService.this.sipStart();
+				}
+			};
+			t.start();
+		};
 		
 		
 		/**
@@ -220,7 +234,6 @@ public class SipService extends Service {
 		@Override
 		public int answer(int callId, int status) throws RemoteException { 
 			synchronized (callActionLock) {
-				
 				return SipService.this.callAnswer(callId, status);
 			}
 		}
@@ -247,7 +260,7 @@ public class SipService extends Service {
 
 		@Override
 		public CallInfo getCallInfo(int callId) throws RemoteException {
-			if(created) {
+			if(created && !creating) {
 				CallInfo callInfo = userAgentReceiver.getCallInfo(callId);
 				if(callInfo == null) {
 					return null;
@@ -322,6 +335,8 @@ public class SipService extends Service {
 	private ServicePhoneStateReceiver phoneConnectivityReceiver;
 	private TelephonyManager telephonyManager;
 	private ConnectivityManager connectivityManager;
+	private Integer udpTranportId;
+	private Integer tcpTranportId;
 	
 
 	// Broadcast receiver for the service
@@ -362,7 +377,13 @@ public class SipService extends Service {
 		@Override
 		public void onDataConnectionStateChanged(int state) {
 			Log.d(THIS_FILE, "Data connection state changed : "+state);
-			dataConnectionChanged();
+			Thread t = new Thread() {
+				@Override
+				public void run() {
+					dataConnectionChanged();
+				}
+			};
+			t.start();
 			super.onDataConnectionStateChanged(state);
 		}
 	}
@@ -410,7 +431,16 @@ public class SipService extends Service {
 		
 		telephonyManager.listen(phoneConnectivityReceiver = new ServicePhoneStateReceiver(), 
 				PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
-		tryToLoadStack();
+		
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				Log.d(THIS_FILE, "TRY TO LOAD SIP STACK");
+				tryToLoadStack();
+			}
+		};
+		t.start();
+		
 	}
 
 
@@ -445,7 +475,12 @@ public class SipService extends Service {
 		if(!hasSipStack) {
 			tryToLoadStack();
 		}
-		sipStart();
+		Thread t = new Thread() {
+			public void run() {
+				sipStart();
+			}
+		};
+		t.start();
 	}
 	
 
@@ -498,12 +533,14 @@ public class SipService extends Service {
 		//Ensure the stack is not already created or is being created
 		if (!created && !creating) {
 			creating = true;
+			udpTranportId = null;
+			tcpTranportId = null;
+			/*
 			//Thread it to not lock everything
 			Thread thread = new Thread() {
-				
-
 				@Override
 				public void run() {
+				*/
 					int status;
 					status = pjsua.create();
 					Log.i(THIS_FILE, "Created " + status);
@@ -585,28 +622,13 @@ public class SipService extends Service {
 					// Add transports
 					{
 						//TODO : factorize this !!
-						if(prefsWrapper.isTCPEnabled()) {
-							pjsua_transport_config cfg = new pjsua_transport_config();
-
-							pjsua.transport_config_default(cfg);
-							cfg.setPort(prefsWrapper.getTCPTransportPort());
-							
-							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, cfg, null);
-							if (status != pjsuaConstants.PJ_SUCCESS) {
-								Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
-								pjsua.destroy();
-								creating = false;
-								created = false;
-								return;
-							}
-						}
 						if(prefsWrapper.isUDPEnabled()) {
 							pjsua_transport_config cfg = new pjsua_transport_config();
-
+							int[] t_id = new int[1];
 							pjsua.transport_config_default(cfg);
 							cfg.setPort(prefsWrapper.getUDPTransportPort());
 							
-							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, cfg, null);
+							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, cfg, t_id);
 							if (status != pjsuaConstants.PJ_SUCCESS) {
 								Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
 								pjsua.destroy();
@@ -614,7 +636,27 @@ public class SipService extends Service {
 								created = false;
 								return;
 							}
+							udpTranportId = t_id[0];
+							
 						}
+						
+						if(prefsWrapper.isTCPEnabled()) {
+							pjsua_transport_config cfg = new pjsua_transport_config();
+							int[] t_id = new int[1];
+							pjsua.transport_config_default(cfg);
+							cfg.setPort(prefsWrapper.getTCPTransportPort());
+							
+							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, cfg, t_id);
+							if (status != pjsuaConstants.PJ_SUCCESS) {
+								Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
+								pjsua.destroy();
+								creating = false;
+								created = false;
+								return;
+							}
+							tcpTranportId = t_id[0];
+						}
+						
 						
 						//RTP transport
 						{
@@ -654,12 +696,13 @@ public class SipService extends Service {
 					// Add accounts
 					addAllAccounts();
 					creating = false;
-					super.run();
+				/*	super.run();
 				}
 
 			};
 
 			thread.start();
+			*/
 		}
 	}
 
@@ -677,8 +720,8 @@ public class SipService extends Service {
 			//This will destroy all accounts so synchronize with accounts management lock
 			synchronized (pjAccountsCreationLock) {
 				pjsua.destroy();
-				accountsAddingStatus.clear();
 				synchronized (activeAccountsLock) {
+					accountsAddingStatus.clear();
 					activeAccounts.clear();
 				}
 			}
@@ -740,20 +783,32 @@ public class SipService extends Service {
 			}
 			account.applyExtraParams();
 			
+			Integer currentAccountId = null;
+			synchronized (activeAccountsLock) {
+				currentAccountId = activeAccounts.get(account.id);	
+			}
 			
-			if (activeAccounts.containsKey(account.id)) {
-				status = pjsua.acc_modify(activeAccounts.get(account.id), account.cfg);
-				accountsAddingStatus.put(account.id, status);
+			if(account.use_tcp && tcpTranportId != null) {
+				account.cfg.setTransport_id(tcpTranportId);
+			}else if(account.prevent_tcp && udpTranportId != null) {
+				account.cfg.setTransport_id(udpTranportId);
+			}
+			
+			
+			if (currentAccountId != null) {
+				status = pjsua.acc_modify(currentAccountId, account.cfg);
+				synchronized (activeAccountsLock) {
+					accountsAddingStatus.put(account.id, status);
+				}
 				if(status == pjsuaConstants.PJ_SUCCESS){
-					status = pjsua.acc_set_registration(activeAccounts.get(account.id), 1);
-					
+					status = pjsua.acc_set_registration(currentAccountId, 1);
 				}
 			} else {
 				int[] acc_id = new int[1];
 				status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, acc_id);
-				accountsAddingStatus.put(account.id, status);
-				if(status == pjsuaConstants.PJ_SUCCESS) {
-					synchronized (activeAccountsLock) {
+				synchronized (activeAccountsLock) {
+					accountsAddingStatus.put(account.id, status);
+					if(status == pjsuaConstants.PJ_SUCCESS) {
 						activeAccounts.put(account.id, acc_id[0]);
 					}
 				}
@@ -842,60 +897,80 @@ public class SipService extends Service {
 			return null;
 		}
 		AccountInfo accountInfo;
+		
+		Integer activeAccountStatus = null;
+		Integer activeAccountPjsuaId = null;
 		synchronized (activeAccountsLock) {
-			Account account;
-			synchronized (db) {
-				db.open();
-				account = db.getAccount(accountDbId);
-				db.close();
+			activeAccountStatus = accountsAddingStatus.get(accountDbId);
+			if(activeAccountStatus != null) {
+				activeAccountPjsuaId = activeAccounts.get(accountDbId);
 			}
-			accountInfo = new AccountInfo(account);
-			if(accountsAddingStatus.containsKey(accountDbId)) {
-				accountInfo.setAddedStatus(accountsAddingStatus.get(accountDbId));
-				if(activeAccounts.containsKey(accountDbId)) {
-					accountInfo.setPjsuaId(activeAccounts.get(accountDbId));
-					pjsua_acc_info pjAccountInfo = new pjsua_acc_info();
-					//Log.d(THIS_FILE, "Get account info for account id "+accountDbId+" ==> (active within pjsip as) "+activeAccounts.get(accountDbId));
-					int success = pjsua.acc_get_info(activeAccounts.get(accountDbId), pjAccountInfo);
-					if(success == pjsuaConstants.PJ_SUCCESS) {
-						accountInfo.fillWithPjInfo(pjAccountInfo);
-					}
+		}
+		Account account;
+		synchronized (db) {
+			db.open();
+			account = db.getAccount(accountDbId);
+			db.close();
+		}
+		accountInfo = new AccountInfo(account);
+		if(activeAccountStatus != null) {
+			accountInfo.setAddedStatus(activeAccountStatus);
+			if(activeAccountPjsuaId != null) {
+				accountInfo.setPjsuaId(activeAccountPjsuaId);
+				pjsua_acc_info pjAccountInfo = new pjsua_acc_info();
+				//Log.d(THIS_FILE, "Get account info for account id "+accountDbId+" ==> (active within pjsip as) "+activeAccounts.get(accountDbId));
+				int success = pjsua.acc_get_info(activeAccountPjsuaId, pjAccountInfo);
+				if(success == pjsuaConstants.PJ_SUCCESS) {
+					accountInfo.fillWithPjInfo(pjAccountInfo);
 				}
 			}
 		}
+		
 		return accountInfo;
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	protected Account getAccountForPjsipId(int acc_id) {
+		Set<Entry<Integer, Integer>> activeAccountsClone;
 		synchronized (activeAccountsLock) {
-			if(activeAccounts.containsValue(acc_id)) {
-				for( Entry<Integer, Integer> entry : activeAccounts.entrySet()) {
-					if(entry.getValue().equals(acc_id)) {
-						synchronized (db) {
-							db.open();
-							Account account = db.getAccount(entry.getKey());
-							db.close();
-							return account;
-						}
-					}
+			activeAccountsClone = ((HashMap<Integer, Integer>) activeAccounts.clone()).entrySet();
+			//Quick quit
+			if(!activeAccounts.containsValue(acc_id)) {
+				return null;
+			}
+		}
+		
+		for( Entry<Integer, Integer> entry : activeAccountsClone) {
+			if(entry.getValue().equals(acc_id)) {
+				synchronized (db) {
+					db.open();
+					Account account = db.getAccount(entry.getKey());
+					db.close();
+					return account;
 				}
 			}
 		}
+		
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void updateRegistrationsState() {
 		AccountInfo info;
-		ArrayList<AccountInfo> activeAccountsInfos = new ArrayList<AccountInfo>();
+		Set<Integer> activeAccountsClone;
 		synchronized (activeAccountsLock) {
-			for (int accountDbId : activeAccounts.keySet()) {
-				info = getAccountInfo(accountDbId);
-				if (info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
-					activeAccountsInfos.add(info);
-				}
+			activeAccountsClone = ((HashMap<Integer, Integer>) activeAccounts.clone()).keySet();
+		}
+		
+		ArrayList<AccountInfo> activeAccountsInfos = new ArrayList<AccountInfo>();
+		for (int accountDbId : activeAccountsClone) {
+			info = getAccountInfo(accountDbId);
+			if (info != null && info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+				activeAccountsInfos.add(info);
 			}
 		}
+		
 		
 		// Handle status bar notification
 		if (activeAccountsInfos.size()>0) {
@@ -963,6 +1038,7 @@ public class SipService extends Service {
 		WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if(wifiLock == null) {
 			wifiLock = wman.createWifiLock("com.csipsimple.SipService");
+			wifiLock.setReferenceCounted(false);
 		}
 		if( prefsWrapper.getLockWifi() && !wifiLock.isHeld() ) {
 			WifiInfo winfo = wman.getConnectionInfo();
@@ -970,7 +1046,9 @@ public class SipService extends Service {
 				DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());
 				//We assume that if obtaining ip addr, we are almost connected so can keep wifi lock
 				if(dstate == DetailedState.OBTAINING_IPADDR || dstate == DetailedState.CONNECTED) {
-					wifiLock.acquire();
+					if(!wifiLock.isHeld()) {
+						wifiLock.acquire();
+					}
 				}
 			}
 		}
@@ -1389,48 +1467,69 @@ public class SipService extends Service {
 	    return null;
 	}
 	
-	private Integer oldNetworkType = null;
-	private State oldNetworkState = null;
-	private String oldIPAddress = null;
+//	private Integer oldNetworkType = null;
+//	private State oldNetworkState = null;
+	private String oldIPAddress = "0.0.0.0";
 	
-	private void dataConnectionChanged() {
+	private synchronized void dataConnectionChanged() {
 		//Check if it should be ignored first
 		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 		
-		boolean stopOnly = false;
-		
+		boolean ipHasChanged = false;
+
 		if(ni != null) {
-			Integer currentType = ni.getType();
+//			Integer currentType = ni.getType();
 			String currentIPAddress = getLocalIpAddress();
-			State currentState = ni.getState();
-			if(currentType == oldNetworkType && currentState == oldNetworkState) {
-				if(oldIPAddress != null && oldIPAddress.equalsIgnoreCase(currentIPAddress)) {
-					//We just ignore this one
-					Log.d(THIS_FILE, "Non IP changing request >> Only stop if network unauthorized");
-					stopOnly = true;
+//			State currentState = ni.getState();
+			Log.d(THIS_FILE, "IP changes ?"+oldIPAddress+" vs "+currentIPAddress);
+		//	if(/*currentType == oldNetworkType &&*/ currentState == oldNetworkState) {
+				if(oldIPAddress == null || !oldIPAddress.equalsIgnoreCase(currentIPAddress)) {
+					
+					if(oldIPAddress == null || ( oldIPAddress != null && !oldIPAddress.equalsIgnoreCase("0.0.0.0") )) {
+						//We just ignore this one
+						Log.d(THIS_FILE, "IP changing request >> Must restart sip stack");
+						ipHasChanged = true;
+					}
 				}
-			}
+		//	}
 			
 			oldIPAddress = currentIPAddress;
-			oldNetworkState = currentState;
-			oldNetworkType = currentType;
+//			oldNetworkState = currentState;
+//			oldNetworkType = currentType;
 		}else {
 			oldIPAddress = null;
-			oldNetworkState = null;
-			oldNetworkType = null;
+//			oldNetworkState = null;
+//			oldNetworkType = null;
 		}
 		
 		if (prefsWrapper.isValidConnectionForOutgoing() || prefsWrapper.isValidConnectionForIncoming()) {
 			if (!created) {
 				// we was not yet started, so start now
-				sipStart();
-			} else if(!stopOnly) {
+				Thread t = new Thread() {
+					public void run() {
+						sipStart();
+						super.run();
+					}
+				};
+				t.start();
+			} else if(ipHasChanged) {
 				// Check if IP has changed between 
-				Log.i(THIS_FILE, "Ip changed remove/re - add all accounts");
-		//		if(userAgentReceiver.getActiveCallInProgress() != null) {
-					sipStop();
-					sipStart();
+			/*	Log.i(THIS_FILE, "Ip changed remove/re - add all accounts");
+				reRegisterAllAccounts();
+				if(created) {
+					pjsua.med
+				}*/
+				if(userAgentReceiver.getActiveCallInProgress() == null) {
+					Thread t = new Thread() {
+						public void run() {
+							sipStop();
+							sipStart();
+						}
+					};
+					t.start();
 					//Log.e(THIS_FILE, "We should restart the stack ! ");
+				}
+				//TODO : else refine things => STUN, registration etc...
 		//		}else {
 					// update registration IP : for now remove / reregister all accounts
 		//			reRegisterAllAccounts();
@@ -1440,7 +1539,7 @@ public class SipService extends Service {
 			}
 			
 		} else {
-			Log.i(THIS_FILE, "Stop SERVICE");
+			
 			/*
 			try {
 				SipService.this.unregisterReceiver(deviceStateReceiver);
@@ -1450,9 +1549,22 @@ public class SipService extends Service {
 				//And in this case nothing has to be done
 			}
 			*/
-			SipService.this.sipStop();
-			//OK, this will be done only if the last bind is released
-			SipService.this.stopSelf();
+			if(created && userAgentReceiver != null) {
+				if(userAgentReceiver.getActiveCallInProgress() != null) {
+					Log.w(THIS_FILE, "There is an ongoing call ! don't stop !! and wait for network to be back...");
+					return;
+				}
+			}
+			Log.d(THIS_FILE, "Will stop SERVICE");
+			Thread t = new Thread() {
+				public void run() {
+					Log.i(THIS_FILE, "Stop SERVICE");
+					sipStop();
+					//OK, this will be done only if the last bind is released
+					stopSelf();
+				}
+			};
+			t.start();
 			
 		}
 	}

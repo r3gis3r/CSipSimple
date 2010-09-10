@@ -75,15 +75,19 @@ public class Compatibility {
 	
 	public static boolean useRoutingApi() {
 		Log.d(THIS_FILE, "Current device "+android.os.Build.BRAND+" - "+android.os.Build.DEVICE);
-		if(!isCompatible(4)) {
+		if(!isCompatible(5)) {
+			return true;
+		}else {
 			return false;
 		}
+		/*
 		if( (android.os.Build.BRAND.equalsIgnoreCase("htc")) ||
 				android.os.Build.BRAND.equalsIgnoreCase("google") ||
 				android.os.Build.DEVICE.equals("GT-I9000")) {
 			return false;
 		}
 		return true;
+		*/
 	}
 
 

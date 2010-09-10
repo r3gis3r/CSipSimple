@@ -49,9 +49,17 @@ public class MainPrefs extends ListActivity {
 	
 	private static final String THIS_FILE = "Main prefs";
 	private PrefGroupAdapter adapter;
-	private ServiceConnection restartServiceConnection;
+	private ISipService sipService = null;
 	
-	
+	private ServiceConnection restartServiceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceDisconnected(ComponentName name) {}
+		
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder aService) {
+			sipService = ISipService.Stub.asInterface(aService);
+		}
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,39 +80,36 @@ public class MainPrefs extends ListActivity {
 		setListAdapter(adapter);
 		
 		getListView().setOnCreateContextMenuListener(this);
-	}
-	
-	@Override
-	public void onDestroy(){
-		super.onDestroy();
-		//Restart SIP service -> Bind and when bound just restart
-		restartServiceConnection = new ServiceConnection() {
-			@Override
-			public void onServiceDisconnected(ComponentName name) {}
-			
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				ISipService sipservice = ISipService.Stub.asInterface(service);
-				try {
-					sipservice.sipStop();
-					sipservice.sipStart();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-				unbindService(restartServiceConnection);
-				}catch(Exception e) {
-					
-				}
-			}
-		};
+		
+		//Attach to the service
 		Intent serviceIntent =  new Intent(this, SipService.class);
 		try {
 			bindService(serviceIntent, restartServiceConnection, 0);
 			startService(serviceIntent);
 		}catch(Exception e) {
 			
+		}
+	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		
+		if(sipService !=null ) {
+			try {
+				sipService.askThreadedRestart();
+			} catch (RemoteException e) {
+				Log.e(THIS_FILE, "Impossible to restart sip", e);
+			}
+		}
+		
+		sipService = null;
+		if(restartServiceConnection != null) {
+			try {
+				unbindService(restartServiceConnection);
+			}catch(Exception e) {
+				//Nothing to do service was just not binded
+			}
 		}
 	}
 	

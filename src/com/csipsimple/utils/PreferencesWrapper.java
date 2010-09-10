@@ -356,7 +356,7 @@ public class PreferencesWrapper {
 	
 	public int getAudioFramePtime() {
 		try {
-			int value = Integer.parseInt(prefs.getString("snd_ptime", "30"));
+			int value = Integer.parseInt(prefs.getString("snd_ptime", "20"));
 			return value;
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport port not well formated");
