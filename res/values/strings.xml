@@ -44,5 +44,5 @@
 	<string name="callLog_delDialog_message">Are you sure you want to delete all calls from the log?</string>
 	<string name="callLog_delDialog_yes">Yes</string>
 	<string name="callLog_delDialog_no">No</string>
-	<string name="gsm">GSM</string>
+	<string name="gsm">Mobile</string>
 </resources>
