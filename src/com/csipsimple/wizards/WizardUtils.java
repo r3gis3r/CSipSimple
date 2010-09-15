@@ -40,7 +40,7 @@ public class WizardUtils {
 		public boolean isWorld = false;
 		public Class<?> implementation;
 	};
-
+	
 	//I didn't manage to introspect since in dalvik package aren't directly visible
 	//from ClassLoader resources
 	private static String[] wizards_classes_names = new String[]{
@@ -54,7 +54,8 @@ public class WizardUtils {
 		"Freephonie",
 		"Sip2Sip",
 		"Ippi",
-		"Pbxes"
+		"Pbxes",
+		"MagicJack"
 	};
 	
 	private static boolean init_done = false;

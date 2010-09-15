@@ -89,11 +89,10 @@ public class UAStateReceiver extends Callback {
 		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
 			if(SipService.mediaManager != null) {
 				SipService.mediaManager.stopAnnoucing();
+				SipService.mediaManager.resetSettings();
 			}
 			// Call is now ended
 			service.stopDialtoneGenerator();
-
-			//unsetAudioInCall();
 		}
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
 		Log.d(THIS_FILE, "Call state >>");

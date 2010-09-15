@@ -17,14 +17,14 @@
  */
 package com.csipsimple.ui.prefs;
 
-import com.csipsimple.R;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+
+import com.csipsimple.R;
 
 public abstract class GenericPrefs extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	
@@ -96,9 +96,6 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		}
 		pref.setSummary(val);
 	}
-
-	
-	
 
 
 }

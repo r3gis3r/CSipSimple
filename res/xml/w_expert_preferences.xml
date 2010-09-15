@@ -33,8 +33,8 @@
 		<EditTextPreference android:title="Username (login)" android:key="username"></EditTextPreference>
 
 
-		<EditTextPreference android:password="true" android:title="Data (password)"
-			android:key="data"></EditTextPreference>
+		<com.csipsimple.widgets.PasswordPreference android:password="true" android:title="Data (password)"
+			android:key="data"></com.csipsimple.widgets.PasswordPreference>
 
 
 		<ListPreference android:title="Data Type" android:key="data_type"

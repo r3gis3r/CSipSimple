@@ -136,6 +136,7 @@ public class Ringer {
             // vibrator.cancel();
             // ringtone.stop();
             
+        	
             if (vibratorThread != null) {
                 vibratorThread.interrupt();
                 try {

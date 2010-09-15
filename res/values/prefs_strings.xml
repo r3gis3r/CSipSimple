@@ -60,6 +60,8 @@
 <string name="snd_clock_rate_desc">Audio channel frequency</string>
 <string name="snd_ptime">Frame ptime</string>
 <string name="snd_ptime_desc">Specifying lower ptime will normally reduce the latency</string>
+<string name="echo_cancellation_tail">Echo cancellation tail</string>
+<string name="echo_cancellation_tail_desc">Tail length of echo cancellation</string>
 <string name="enable_ice">Enable ICE</string>
 <string name="enable_ice_desc">Turn on ICE feature</string>
 <string name="enable_turn">Enable TURN</string>
@@ -71,6 +73,7 @@
 <string name="stun_server">STUN server</string>
 <string name="stun_server_desc">STUN server (HOST:PORT)</string>
 <string name="codecs_desc">Priority (0 is disabled)</string>
+
 
 <!-- UI -->
 <string name="general_ui">General user interface</string>

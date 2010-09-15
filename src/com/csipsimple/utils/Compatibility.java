@@ -132,6 +132,14 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("GSM/8000/1", "100");
 		preferencesWrapper.setCodecPriority("G722/16000/1", "0");
 		
+		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_AUTO_CLOSE_TIME, isCompatible(4)?"1":"5");
+		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_CLOCK_RATE, isCompatible(4)?"16000":"8000");
+		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, isCompatible(4)?true:false);
+		//N1 PSP mode hack
+		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, 
+				android.os.Build.BRAND.equalsIgnoreCase("google")?true:false);
+		
+		
 	}
 	
 	public static boolean useFlipAnimation() {

@@ -390,8 +390,10 @@ public class DBAdapter {
 	 * @param values calllogs values
 	 * @return the id of inserted row into database
 	 */
-	public long insertCallLog(ContentValues args){
-		return db.insert(CALLLOGS_TABLE_NAME, null, args);
+	public long insertCallLog(ContentValues args) {
+		long result = db.insert(CALLLOGS_TABLE_NAME, null, args);
+		removeCallLogExpiredEntries();
+		return result;
 	}
 	
 	/**
@@ -436,6 +438,13 @@ public class DBAdapter {
 
 	public boolean deleteAllCallLogs() {
 		return db.delete(CALLLOGS_TABLE_NAME, null, null) > 0;
+	}
+	
+	
+	private void removeCallLogExpiredEntries() {
+		db.delete(CALLLOGS_TABLE_NAME, CallLog.Calls._ID + " IN " +
+			"(SELECT "+CallLog.Calls._ID+" FROM "+CALLLOGS_TABLE_NAME+" ORDER BY " + 
+				CallLog.Calls.DEFAULT_SORT_ORDER + " LIMIT -1 OFFSET 500)", null);
 	}
 	
 	// --------

@@ -24,16 +24,26 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import com.csipsimple.service.HeadsetButtonReceiver;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.Log;
 
 
 public class AudioFocus8 {
 	
 	
+	protected static final String THIS_FILE = "AudioFocus 8";
 	private AudioManager audioManager;
 	private SipService service;
 	private ComponentName headsetButtonReceiverName;
 	
 	private boolean isFocused = false;
+	
+	private OnAudioFocusChangeListener focusChangedListener = new OnAudioFocusChangeListener() {
+		
+		@Override
+		public void onAudioFocusChange(int focusChange) {
+			Log.d(THIS_FILE, "Focus changed");
+		}
+	};
 	
 	public AudioFocus8(SipService aService, AudioManager manager) {
 		service = aService;
@@ -47,7 +57,7 @@ public class AudioFocus8 {
 		if(!isFocused) {
 			HeadsetButtonReceiver.setService(SipService.getUAStateReceiver());
 			audioManager.registerMediaButtonEventReceiver(headsetButtonReceiverName);
-			audioManager.requestAudioFocus((OnAudioFocusChangeListener) null, 
+			audioManager.requestAudioFocus(focusChangedListener, 
 					Compatibility.getInCallStream(), AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 			isFocused = true;
 		}
@@ -57,7 +67,8 @@ public class AudioFocus8 {
 		if(isFocused) {
 			HeadsetButtonReceiver.setService(null);
 			audioManager.unregisterMediaButtonEventReceiver(headsetButtonReceiverName);
-			audioManager.abandonAudioFocus((OnAudioFocusChangeListener) null);
+		//	int status = audioManager.abandonAudioFocus(focusChangedListener);
+		//	Log.d(THIS_FILE, "Status is "+status);
 			isFocused = false;
 		}
 	}

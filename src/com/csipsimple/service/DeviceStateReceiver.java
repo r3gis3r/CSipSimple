@@ -21,7 +21,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
 
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -54,6 +53,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 				intentAction.equals(Intent.ACTION_BOOT_COMPLETED)
 		) {
 			Log.d(THIS_FILE, ">>> Data device change detected" + intentAction);
+			
 			
 			if (prefWrapper.isValidConnectionForIncoming()) {
 				Log.d(THIS_FILE, "Try to start service if not already started");

@@ -61,6 +61,7 @@ import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -317,6 +318,11 @@ public class SipService extends Service {
 
 		
 	};
+	
+	
+	private final ISipConfiguration.Stub binderConfiguration = new ISipConfiguration.Stub() {
+		
+	};
 
 	protected DBAdapter db;
 	private WakeLock wakeLock;
@@ -511,6 +517,17 @@ public class SipService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
+		
+		String serviceName = null;
+		Bundle extras = intent.getExtras();
+		if(extras != null) {
+			serviceName = extras.getString("com.csipsimple.extra.SERVICE_NAME");
+		}
+		if(serviceName == null || serviceName.equalsIgnoreCase("SipService")) {
+			return binder;
+		}else if(serviceName.equalsIgnoreCase("SipConfiguration")) {
+			return binderConfiguration;
+		}
 		return binder;
 	}
 
@@ -586,10 +603,8 @@ public class SipService extends Service {
 						// For now only this cfg is supported
 						media_cfg.setChannel_count(1);
 						media_cfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
-						// Disable echo cancellation
-						if (!prefsWrapper.hasEchoCancellation()) {
-							media_cfg.setEc_tail_len(0);
-						}
+						// Echo cancellation
+						media_cfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
 						media_cfg.setNo_vad(prefsWrapper.getNoVad());
 						media_cfg.setQuality(prefsWrapper.getMediaQuality());
 						media_cfg.setClock_rate(prefsWrapper.getClockRate());
@@ -671,6 +686,15 @@ public class SipService extends Service {
 								creating = false;
 								created = false;
 								return;
+							}
+						}
+						
+						//Local account for transport
+						{
+							if(udpTranportId != null || tcpTranportId != null) {
+								int[] p_acc_id = new int[1];
+								int tid = (udpTranportId != null)?udpTranportId:tcpTranportId;
+								pjsua.acc_add_local(tid, pjsua.PJ_TRUE, p_acc_id);
 							}
 						}
 						
@@ -911,6 +935,10 @@ public class SipService extends Service {
 			db.open();
 			account = db.getAccount(accountDbId);
 			db.close();
+		}
+		//If account has been removed meanwhile
+		if(account == null) {
+			return null;
 		}
 		accountInfo = new AccountInfo(account);
 		if(activeAccountStatus != null) {

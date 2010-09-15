@@ -22,30 +22,20 @@
 
 		<EditTextPreference android:key="display_name"
 			android:singleLine="true"
-			android:title="@string/w_advanced_display_name"></EditTextPreference>
+			android:title="@string/w_magicjack_display_name"></EditTextPreference>
 
-		<EditTextPreference android:key="caller_id"
-			android:singleLine="true"
-			android:title="@string/w_advanced_caller_id"></EditTextPreference>
-
-		<EditTextPreference android:key="server"
-			android:singleLine="true"
-			android:title="@string/w_advanced_server"></EditTextPreference>
 			
 		<EditTextPreference android:key="username"
 			android:singleLine="true"
-			android:title="@string/w_advanced_username"></EditTextPreference>
+			android:title="@string/w_magicjack_username"></EditTextPreference>
 			
 		<com.csipsimple.widgets.PasswordPreference android:key="password"
 			android:singleLine="true"
 			android:password="true"
-			android:title="@string/w_advanced_password"></com.csipsimple.widgets.PasswordPreference>
+			android:title="@string/w_magicjack_password"></com.csipsimple.widgets.PasswordPreference>
 
-		<CheckBoxPreference android:key="use_tcp" 
-			android:title="@string/w_advanced_use_tcp"></CheckBoxPreference>
-
-		<EditTextPreference android:key="proxy"
+		<EditTextPreference android:key="server"
 			android:singleLine="true"
-			android:title="@string/w_advanced_proxy"></EditTextPreference>
+			android:title="@string/w_magicjack_server"></EditTextPreference>
 
 </PreferenceScreen>

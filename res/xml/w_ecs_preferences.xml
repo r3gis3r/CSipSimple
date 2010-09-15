@@ -28,9 +28,9 @@
 			android:singleLine="true" android:title="@string/w_ecs_phone_number"></EditTextPreference>
 		<EditTextPreference android:key="user_name"
 			android:singleLine="true" android:title="@string/w_ecs_user_name"></EditTextPreference>
-		<EditTextPreference android:key="password"
+		<com.csipsimple.widgets.PasswordPreference android:key="password"
 			android:singleLine="true"
-			android:password="true" android:title="@string/w_ecs_password"></EditTextPreference>
+			android:password="true" android:title="@string/w_ecs_password"></com.csipsimple.widgets.PasswordPreference>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="Server">

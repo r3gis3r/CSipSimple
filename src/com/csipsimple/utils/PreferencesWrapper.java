@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -36,9 +35,28 @@ public class PreferencesWrapper {
 	private SharedPreferences prefs;
 	private ConnectivityManager connectivityManager;
 	
+	public final static String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
+	public final static String SND_CLOCK_RATE = "snd_clock_rate";
+	public final static String ECHO_CANCELLATION = "echo_cancellation";
+	public final static String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
+	
 	public PreferencesWrapper(Context aContext) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
 		connectivityManager = (ConnectivityManager) aContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+	}
+	
+
+	public void setPreferenceStringValue(String key, String value) {
+		Editor editor = prefs.edit();
+		editor.putString(key, value);
+		editor.commit();
+	}
+	
+
+	public void setPreferenceBooleanValue(String key, boolean value) {
+		Editor editor = prefs.edit();
+		editor.putBoolean(key, value);
+		editor.commit();
 	}
 	
 	// Network part
@@ -150,11 +168,7 @@ public class PreferencesWrapper {
 	 * even sometimes crash
 	 */
 	public int getAutoCloseTime() {
-		String defaultValue = "1";
-		if(Build.VERSION.SDK == "3") {
-			defaultValue = "5";
-		}
-		String autoCloseTime = prefs.getString("snd_auto_close_time", defaultValue);
+		String autoCloseTime = prefs.getString(SND_AUTO_CLOSE_TIME, "1");
 		try {
 			return Integer.parseInt(autoCloseTime);
 		}catch(NumberFormatException e) {
@@ -169,12 +183,22 @@ public class PreferencesWrapper {
 	 * @return true if enabled
 	 */
 	public boolean hasEchoCancellation() {
-		if(Build.VERSION.SDK == "3") {
-			return false;
-		}
-		return prefs.getBoolean("echo_cancellation", false);
+		return prefs.getBoolean(ECHO_CANCELLATION, true);
 	}
 	
+
+	public long getEchoCancellationTail() {
+		if(!hasEchoCancellation()) {
+			return 0;
+		}
+		String tailLength = prefs.getString("echo_cancellation_tail", "200");
+		try {
+			return Integer.parseInt(tailLength);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Tail length "+tailLength+" not well formated");
+		}
+		return 0;
+	}
 
 	/**
 	 * Whether voice audio detection is enabled
@@ -204,13 +228,12 @@ public class PreferencesWrapper {
 		return defaultValue;
 	}
 	
-	
 	/**
 	 * Get current clock rate
 	 * @return clock rate in Hz
 	 */
 	public long getClockRate() {
-		String clockRate = prefs.getString("snd_clock_rate", "8000");
+		String clockRate = prefs.getString(SND_CLOCK_RATE, "8000");
 		try {
 			return Integer.parseInt(clockRate);
 		}catch(NumberFormatException e) {
@@ -321,12 +344,11 @@ public class PreferencesWrapper {
 	public void setCodecPriority(String codecName, String newValue) {
 		String[] codecParts = codecName.split("/");
 		if(codecParts.length >=2 ) {
-			Editor editor = prefs.edit();
-			editor.putString("codec_"+codecParts[0].toLowerCase()+"_"+codecParts[1], newValue);
-			editor.commit();
+			setPreferenceStringValue("codec_"+codecParts[0].toLowerCase()+"_"+codecParts[1], newValue);
 		}
 		//TODO : else raise error
 	}
+	
 	
 	public boolean hasCodecPriority(String codecName) {
 		String[] codecParts = codecName.split("/");
@@ -393,7 +415,7 @@ public class PreferencesWrapper {
 
 
 	public boolean keepAwakeInCall() {
-		return prefs.getBoolean("keep_awake_incall", true);
+		return prefs.getBoolean(KEEP_AWAKE_IN_CALL, false);
 	}
 
 	public float getInitialVolumeLevel() {
@@ -439,5 +461,6 @@ public class PreferencesWrapper {
 		}
 		return HEADSET_ACTION_CLEAR_CALL;
 	}
+
 	
 }

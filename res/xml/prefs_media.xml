@@ -57,6 +57,10 @@
 				android:summary="@string/snd_ptime_desc"
 				android:defaultValue="20"
 				android:numeric="signed"></EditTextPreference>
+			<EditTextPreference android:title="@string/echo_cancellation_tail" android:key="echo_cancellation_tail"
+				android:summary="@string/echo_cancellation_tail_desc"
+				android:defaultValue="200"
+				android:numeric="signed"></EditTextPreference>
 		</PreferenceCategory>
 		<PreferenceScreen android:title="@string/codecs" android:summary="Only available if sip is currently registered">
 			<intent android:action="android.intent.action.MAIN"

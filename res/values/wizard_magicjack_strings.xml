@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 
 	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
-	
+
 	This file is part of CSipSimple.
 
     CSipSimple is free software: you can redistribute it and/or modify
@@ -17,26 +17,18 @@
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<resources>
+<string name="w_magicjack_display_name">Account name</string>
+<string name="w_magicjack_display_name_desc">Display name for this account</string>
+
+<string name="w_magicjack_username">Username</string>
+<string name="w_magicjack_username_desc">Something like EXXXXXXXXXX01</string>
+
+<string name="w_magicjack_password">Password</string>
+<string name="w_magicjack_password_desc">Password for SIP server authentication</string>
+
+<string name="w_magicjack_server">Server</string>
+<string name="w_magicjack_server_desc">Something like that : proxy01.yourcity.talk4free.com</string>
 
 
-		<EditTextPreference android:key="display_name"
-			android:singleLine="true"
-			android:title="@string/w_basic_display_name"></EditTextPreference>
-
-		<EditTextPreference android:key="username"
-			android:singleLine="true"
-			android:title="@string/w_basic_username"></EditTextPreference>
-			
-		<EditTextPreference android:key="server"
-			android:singleLine="true"
-			android:title="@string/w_basic_server"></EditTextPreference>
-			
-		<com.csipsimple.widgets.PasswordPreference android:key="password"
-			android:singleLine="true"
-			android:password="true"
-			android:title="@string/w_basic_password"></com.csipsimple.widgets.PasswordPreference>
-
-
-
-</PreferenceScreen>
+</resources>
