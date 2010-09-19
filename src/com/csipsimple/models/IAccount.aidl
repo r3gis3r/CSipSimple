@@ -15,10 +15,5 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
-import com.csipsimple.models.IAccount;
-
-interface ISipConfiguration {
-	long addOrUpdateAccount(in IAccount acc);
-	IAccount getAccount(long acc_id);
-}
+package com.csipsimple.models;
+parcelable IAccount;

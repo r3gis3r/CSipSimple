@@ -58,7 +58,7 @@
 
 		<ImageButton android:layout_height="fill_parent" android:layout_gravity="center"
 			android:layout_weight="1" android:state_enabled="false" android:background="@drawable/btn_dial_action"
-			android:src="@drawable/ic_dial_action_call" android:layout_width="fill_parent" android:scaleType="centerInside"
+			android:src="@drawable/ic_dial_action_call" android:layout_width="fill_parent" android:scaleType="center"
 			android:id="@+id/dialButton" />
 
 		<ImageButton android:id="@+id/deleteButton" android:layout_width="87dip"

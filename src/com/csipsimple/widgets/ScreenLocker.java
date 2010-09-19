@@ -25,24 +25,22 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.GestureDetector.OnDoubleTapListener;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 
-import com.csipsimple.utils.Log;
+import com.csipsimple.R;
+import com.csipsimple.widgets.SlidingTab.OnTriggerListener;
 
-public class ScreenLocker extends RelativeLayout implements OnTouchListener, OnGestureListener, OnDoubleTapListener{
+public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 
-	private static final String THIS_FILE = "ScreenLocker";
-	private GestureDetector gestureScanner;
+	//private static final String THIS_FILE = "ScreenLocker";
 	private Timer lockTimer;
 	private Activity activity;
+	private SlidingTab stab;
 
 	public static final int WAIT_BEFORE_LOCK_LONG = 20000;
 	public static final int WAIT_BEFORE_LOCK_START = 5000;
@@ -54,32 +52,44 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener, OnG
 	
 	public ScreenLocker(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		gestureScanner = new GestureDetector(context, this);
-		gestureScanner.setIsLongpressEnabled(false);
-		gestureScanner.setOnDoubleTapListener(this);
 		setOnTouchListener(this);
 		
-	}
-	
-
-	public void setActivity(Activity anActivity) {
-		activity = anActivity;
-	}
-	
-	public boolean onTouch(View v, MotionEvent event) {
-		gestureScanner.onTouchEvent(event);
-		return true;
+		
+		stab = new SlidingTab(getContext());
+		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		//lp.setMargins(0, 286, 0, 0);
+		stab.setLayoutParams(lp);
+		stab.setLeftHintText(R.string.unlock);
+		stab.setLeftTabResources(R.drawable.ic_jog_dial_unlock, R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_answer, R.drawable.jog_tab_left_answer);
+		stab.setRightHintText(R.string.clear_call);
+		
+		addView(stab);
 	}
 	
 	@Override
-	public boolean onDoubleTap(MotionEvent e) {
-		Log.d(THIS_FILE, "Double tap");
-		hide();
-		delayedLock(WAIT_BEFORE_LOCK_LONG);
-		return true;
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		super.onLayout(changed, l, t, r, b);
+		
+		final int parentWidth = r - l;
+		final int parentHeight = b - t;
+		final int top = parentHeight * 3/4 - stab.getHeight()/2;
+		final int bottom = parentHeight * 3/4 + stab.getHeight() / 2;
+		stab.layout(0, top, parentWidth, bottom);
+		
+	}
+
+	public void setActivity(Activity anActivity, OnTriggerListener l) {
+		activity = anActivity;
+		stab.setOnTriggerListener(l);
 	}
 	
-
+	public void reset() {
+		stab.resetView();
+	}
+	
+	public boolean onTouch(View v, MotionEvent event) {
+		return true;
+	}
 	
 
 	private class LockTimerTask extends TimerTask{
@@ -145,32 +155,5 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener, OnG
 			}
 		}
 	};
-	
-
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) { return false; }
-	
-	@Override
-	public void onShowPress(MotionEvent e) {}
-	
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {return false;}
-	
-	@Override
-	public void onLongPress(MotionEvent e) {}
-	
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		return false;
-	}
-	
-	@Override
-	public boolean onSingleTapConfirmed(MotionEvent e) {return false;}
-	
-	@Override
-	public boolean onDoubleTapEvent(MotionEvent e) {return false;}
-	
-	@Override
-	public boolean onDown(MotionEvent e) { return false;}
 
 }

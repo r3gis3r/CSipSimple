@@ -16,14 +16,15 @@
 		<service android:name=".service.SipService" android:exported="true">
 			<intent-filter>
 				<action android:name="com.csipsimple.service.SipService" />
+				<action android:name="com.csipsimple.service.SipConfiguration" />
 			</intent-filter>
 		</service>
 		<receiver android:name=".service.DeviceStateReceiver">
 			<intent-filter>
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
-				<action android:name="android.intent.action.ANY_DATA_STATE"></action><!--
-				<action android:name="android.intent.action.MEDIA_BUTTON"></action>
-			--></intent-filter>
+				<action android:name="android.intent.action.ANY_DATA_STATE"></action>
+				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
+			</intent-filter>
 		</receiver>
 		
 		<!--  Main ui -->
@@ -71,6 +72,7 @@
 		<activity android:name=".wizards.impl.Sip2Sip" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.Ippi" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.Pbxes" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name=".wizards.impl.MagicJack" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 
 		<!-- Call management -->
 		<receiver android:name=".service.OutgoingCall">
@@ -128,6 +130,8 @@
             </intent-filter>
 		</activity>
         
+        
+        <receiver android:name=".service.HeadsetButtonReceiver"></receiver>
 		
 	</application>
 	<uses-sdk android:minSdkVersion="3" />
@@ -149,7 +153,7 @@
 	<uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
 	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
-
+	
 	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 	<!-- 
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>

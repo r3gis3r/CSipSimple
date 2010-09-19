@@ -22,12 +22,11 @@ import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_call_media_status;
 
-import com.csipsimple.R;
-import com.csipsimple.utils.Log;
-
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.csipsimple.R;
 
 public class CallInfo implements Parcelable {
 
@@ -58,7 +57,7 @@ public class CallInfo implements Parcelable {
 			return new CallInfo[size];
 		}
 	};
-	private static final String THIS_FILE = "CallInfo";
+	//private static final String THIS_FILE = "CallInfo";
 
 	public CallInfo(Parcel in) {
 		readFromParcel(in);
@@ -86,9 +85,8 @@ public class CallInfo implements Parcelable {
 	public void updateFromPj() throws UnavailableException {
 		pjsua_call_info pj_info = new pjsua_call_info();
 		int status = pjsua.call_get_info(callId, pj_info);
-		Log.d(THIS_FILE, "Getting file infos.....");
 		if(status != pjsua.PJ_SUCCESS) {
-			Log.e(THIS_FILE, "Error while getting Call info from stack");
+			//Log.e(THIS_FILE, "Error while getting Call info from stack");
 			throw new UnavailableException();
 		}
 		fillFromPj(pj_info);

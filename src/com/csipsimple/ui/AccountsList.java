@@ -117,10 +117,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 				startActivityForResult(new Intent(AccountsList.this, WizardChooser.class), CHOOSE_WIZARD);
 			}
 		});
-		//Bind to sip service
-		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
-		//And register to ua state events
-		registerReceiver(registrationStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
+		
 		
 		//Add gesture detector
 		gestureDetector = new GestureDetector(this, new BackGestureDetector());
@@ -132,13 +129,29 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		});
 	}
 	
-	
-	 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		unbindService(connection);
-		unregisterReceiver(registrationStateReceiver);
+	protected void onResume() {
+		super.onResume();
+		//Bind to sip service
+		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
+		//And register to ua state events
+		registerReceiver(registrationStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		try {
+			unbindService(connection);
+		}catch(Exception e) {
+			//Just ignore that
+		}
+		service = null;
+		try {
+			unregisterReceiver(registrationStateReceiver);
+		}catch(Exception e) {
+			//Just ignore that
+		}
 	}
 
     @Override

@@ -65,11 +65,13 @@
 	<com.csipsimple.widgets.ScreenLocker android:id="@+id/lockerOverlay"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
 		android:visibility="gone" android:background="#8000">
+		<!-- 
 		<TextView android:id="@+id/lockerIcon"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:gravity="center" android:layout_alignParentBottom="true"
 			android:layout_centerHorizontal="true" android:layout_marginBottom="70dip"
 			android:text="@string/touch_lock" android:textAppearance="?android:attr/textAppearanceLarge"
 			android:background="@drawable/dialpad_lock" />
+			-->
 	</com.csipsimple.widgets.ScreenLocker>
 </FrameLayout>

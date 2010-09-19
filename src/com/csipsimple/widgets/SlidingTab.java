@@ -397,7 +397,7 @@ public class SlidingTab extends ViewGroup {
 	
 	
 
-	private void resetView() {
+	public void resetView() {
 		leftSlider.reset();
 		rightSlider.reset();
 		onLayout(true, getLeft(), getTop(), getLeft() + getWidth(), getTop() + getHeight());

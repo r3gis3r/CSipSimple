@@ -50,7 +50,9 @@ public class AccountInfo implements Parcelable, Serializable{
 	
 	
 	public AccountInfo(Account account) {
-		databaseId = account.id;
+		if(account.id != null) {
+			databaseId = account.id;
+		}
 		wizard = account.wizard;
 		active = account.active;
 		displayName = account.display_name;

@@ -66,7 +66,7 @@ import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.InCallControls.OnTriggerListener;
 
 
-public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener, SensorEventListener {
+public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener, SensorEventListener, com.csipsimple.widgets.SlidingTab.OnTriggerListener {
 	private static String THIS_FILE = "SIP CALL HANDLER";
 
 	private CallInfo callInfo = null;
@@ -154,7 +154,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		holdContainer = (LinearLayout) findViewById(R.id.holdContainer);
 		
 		lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
-		lockOverlay.setActivity(this);
+		lockOverlay.setActivity(this, this);
 		
 		
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
@@ -596,6 +596,26 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				lockOverlay.hide();
 			}
 		}
+	}
+
+
+	@Override
+	public void onTrigger(View v, int whichHandle) {
+		switch (whichHandle) {
+		case LEFT_HANDLE:
+			Log.d(THIS_FILE, "We unlock");
+			lockOverlay.hide();
+			lockOverlay.reset();
+			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
+			break;
+		case RIGHT_HANDLE:
+			Log.d(THIS_FILE, "We clear the call");
+			onTrigger(OnTriggerListener.CLEAR_CALL);
+			lockOverlay.reset();
+		default:
+			break;
+		}
+		
 	}
 	
 

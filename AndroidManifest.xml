@@ -16,6 +16,7 @@
 		<service android:name=".service.SipService" android:exported="true">
 			<intent-filter>
 				<action android:name="com.csipsimple.service.SipService" />
+				<action android:name="com.csipsimple.service.SipConfiguration" />
 			</intent-filter>
 		</service>
 		<receiver android:name=".service.DeviceStateReceiver">

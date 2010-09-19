@@ -86,6 +86,7 @@ public class AccountListUtils {
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
 								accountDisplay.statusLabel = context.getString(R.string.acct_registering);
 							} else {
+								//TODO : treat 403 with special message
 								// Red : error
 								accountDisplay.statusColor = resources.getColor(R.color.account_error);
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_red;

@@ -24,25 +24,25 @@ public class IAccount implements Parcelable {
 	public int PrimaryKey = -1;
 
 
-	private int id;
-	private String display_name;
-	private String wizard;
-	private boolean use_tcp;
-	private boolean prevent_tcp;
-	private boolean active;
-	private int priority;
-	private String acc_id;
-	private String reg_uri;
-	private int published_enabled;
-	private int reg_timeout;
-	private int ka_interval;
-	private String pidf_tuple_id;
-	private String force_contact;
-	private String proxy;
-	private String realm;
-	private String username;
-	private int datatype;
-	private String data;
+	public int id = -1;
+	public String display_name = "";
+	public String wizard = "EXPERT";
+	public boolean use_tcp = false;
+	public boolean prevent_tcp = false;
+	public boolean active = true;
+	public int priority = 100;
+	public String acc_id = null;
+	public String reg_uri = null;
+	public int published_enabled = -1;
+	public int reg_timeout = -1;
+	public int ka_interval = -1;
+	public String pidf_tuple_id = null;
+	public String force_contact = null;
+	public String proxy = null;
+	public String realm = null;
+	public String username = null;
+	public int datatype = 0;
+	public String data = null;
 	
 	
 
@@ -56,6 +56,10 @@ public class IAccount implements Parcelable {
 		}
 	};
 	
+	public IAccount() {
+		
+	}
+	
 	public IAccount(Parcel in) {
 		readFromParcel(in);
 	}
@@ -64,6 +68,14 @@ public class IAccount implements Parcelable {
 	@Override
 	public int describeContents() {
 		return 0;
+	}
+	
+	private String getWriteParcelableString(String str) {
+		return (str == null)?"null":str;
+	}
+	
+	private String getReadParcelableString(String str) {
+		return str.equalsIgnoreCase("null")?null:str;
 	}
 
 	@Override
@@ -76,18 +88,18 @@ public class IAccount implements Parcelable {
 		dest.writeInt(prevent_tcp?1:0);
 		dest.writeInt(active?1:0);
 		dest.writeInt(priority);
-		dest.writeString(acc_id);
-		dest.writeString(reg_uri);
+		dest.writeString(getWriteParcelableString(acc_id));
+		dest.writeString(getWriteParcelableString(reg_uri));
 		dest.writeInt(published_enabled);
 		dest.writeInt(reg_timeout);
 		dest.writeInt(ka_interval);
-		dest.writeString(pidf_tuple_id);
-		dest.writeString(force_contact);
-		dest.writeString(proxy);
-		dest.writeString(realm);
-		dest.writeString(username);
+		dest.writeString(getWriteParcelableString(pidf_tuple_id));
+		dest.writeString(getWriteParcelableString(force_contact));
+		dest.writeString(getWriteParcelableString(proxy));
+		dest.writeString(getWriteParcelableString(realm));
+		dest.writeString(getWriteParcelableString(username));
 		dest.writeInt(datatype);
-		dest.writeString(data);
+		dest.writeString(getWriteParcelableString(data));
 	}
 
 	public void readFromParcel(Parcel in) {
@@ -99,17 +111,17 @@ public class IAccount implements Parcelable {
 		prevent_tcp = (in.readInt()!=0)?true:false;
 		active = (in.readInt()!=0)?true:false;
 		priority = in.readInt();
-		acc_id = in.readString();
-		reg_uri = in.readString();
+		acc_id = getReadParcelableString(in.readString());
+		reg_uri = getReadParcelableString(in.readString());
 		published_enabled = in.readInt();
 		reg_timeout = in.readInt();
 		ka_interval = in.readInt();
-		pidf_tuple_id = in.readString();
-		force_contact = in.readString();
-		proxy = in.readString();
-		realm = in.readString();
-		username = in.readString();
+		pidf_tuple_id = getReadParcelableString(in.readString());
+		force_contact = getReadParcelableString(in.readString());
+		proxy = getReadParcelableString(in.readString());
+		realm = getReadParcelableString(in.readString());
+		username = getReadParcelableString(in.readString());
 		datatype = in.readInt();
-		data = in.readString();
+		data = getReadParcelableString(in.readString());
 	}
 }

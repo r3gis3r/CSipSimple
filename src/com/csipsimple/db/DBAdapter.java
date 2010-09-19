@@ -30,7 +30,6 @@ import android.provider.CallLog;
 
 import com.csipsimple.models.Account;
 import com.csipsimple.models.Filter;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 
 public class DBAdapter {
@@ -224,73 +223,34 @@ public class DBAdapter {
 	/**
 	 * Get the list of saved accounts, optionally including the unusable ones
 	 * @param includeUnusable true if list should contain accounts that can NOT presently be used for calls
-	 * @param service Ignored if includeUsable is false. If non-null, full usability test is done, else only disabled accounts are skipped.
 	 * @return the list of accounts
 	 */
-	public List<Account> getListAccounts(boolean activesOnly/*, ISipService service*/) {
+	public List<Account> getListAccounts(boolean activesOnly) {
 		ArrayList<Account> ret = new ArrayList<Account>();
-		if(SipService.hasSipStack) {
-			try {
-				String whereClause = null;
-				String[] whereArgs = null;
-				if (activesOnly) {
-					whereClause = Account.FIELD_ACTIVE+"=?";
-					whereArgs = new String[] {"1"};
-				}
-				
-				Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
-						whereClause, whereArgs, null, null, Account.FIELD_PRIORITY
-								+ " ASC");
-				int numRows = c.getCount();
-				c.moveToFirst();
-				for (int i = 0; i < numRows; ++i) {
-					Account acc = new Account();
-					acc.createFromDb(c);
-					ret.add(acc);
-					/*
-					// Maybe this is not really a good idea to do it here (should be only db related...).
-					// Besides : Removed from here : if we do it here several issues :
-					// If sipservice not yet started and accounts not yet added, nothing will appear and gsm will be 
-					// launched without asking user. Not a good idea since user must have the choice to cancel call if not
-					// sip call.
-					if (includeUnusable) {
-						ret.add(acc);
-					} else {
-						
-						if (service == null) {
-							// No service, just skip inactive accounts
-							if (acc.active) {
-								ret.add(acc);
-							}
-						} else {
-							// Service available, skip accounts that can't be used for calling
-							
-							try {
-								AccountInfo accountInfo = service.getAccountInfo(acc.id);
-								if(accountInfo != null) {
-									pjsip_status_code stat = accountInfo.getStatusCode();
-									if (accountInfo != null && accountInfo.isActive() &&
-											accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS &&
-											(stat == pjsip_status_code.PJSIP_SC_OK ||	// If trying/registering, include. May be OK shortly.
-												 stat == pjsip_status_code.PJSIP_SC_PROGRESS || 
-												 stat == pjsip_status_code.PJSIP_SC_TRYING)) {
-										ret.add(acc);
-									}
-								}
-							} catch (RemoteException e) { 
-								Log.w(THIS_FILE, "Sip service not available", e);
-							}
-							
-						}
-					}
-					*/
-					c.moveToNext();
-				}
-				c.close();
-			} catch (SQLException e) {
-				Log.e("Exception on query", e.toString());
+		try {
+			String whereClause = null;
+			String[] whereArgs = null;
+			if (activesOnly) {
+				whereClause = Account.FIELD_ACTIVE+"=?";
+				whereArgs = new String[] {"1"};
 			}
+			
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
+					whereClause, whereArgs, null, null, Account.FIELD_PRIORITY
+							+ " ASC");
+			int numRows = c.getCount();
+			c.moveToFirst();
+			for (int i = 0; i < numRows; ++i) {
+				Account acc = new Account();
+				acc.createFromDb(c);
+				ret.add(acc);
+				c.moveToNext();
+			}
+			c.close();
+		} catch (SQLException e) {
+			Log.e("Exception on query", e.toString());
 		}
+		
 
 		return ret;
 	}

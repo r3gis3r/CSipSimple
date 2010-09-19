@@ -118,7 +118,7 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 		menu.add(Menu.NONE, SAVE_MENU, Menu.NONE, R.string.save).setIcon(
 				android.R.drawable.ic_menu_save);
 
-		if(account.id != null && !account.id.equals(0)){
+		if(account.id != null && !account.id.equals(-1)){
 			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.choose_wizard).setIcon(
 					android.R.drawable.ic_menu_edit);
 			menu.add(Menu.NONE, FILTERS_MENU, Menu.NONE, R.string.filters).setIcon(
@@ -141,7 +141,7 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 			startActivityForResult(new Intent(this, WizardChooser.class), CHOOSE_WIZARD);
 			return true;
 		case DELETE_MENU:
-			if(account.id != null && !account.id.equals(0)){
+			if(account.id != null && !account.id.equals(-1)){
 				database.open();
 				database.deleteAccount(account);
 				database.close();
@@ -150,7 +150,7 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 			}
 			return true;
 		case FILTERS_MENU:
-			if(account.id != null && !account.id.equals(0)){
+			if(account.id != null && !account.id.equals(-1)){
 				Intent it = new Intent(this, AccountFilters.class);
     			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
     			startActivityForResult(it, MODIFY_FILTERS);
@@ -210,7 +210,7 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 		buildAccount();
 		account.wizard = wizardId;
 		database.open();
-		if(account.id == null || account.id.equals(0)){
+		if(account.id == null || account.id.equals(-1)){
 			account.id = (int) database.insertAccount(account);
 		}else{
 			database.updateAccount(account);

@@ -96,14 +96,104 @@ public class Account {
 	public Account() {
 		display_name = "";
 		wizard = "EXPERT";
-		active = true;
 		use_tcp = false;
 		prevent_tcp = false;
+		active = true;
 		
 		cfg = new pjsua_acc_config();
 		pjsua.acc_config_default(cfg);
 		// Change the default ka interval to 40s
 		cfg.setKa_interval(40);
+	}
+	
+	public Account(IAccount parcelable) {
+		if(parcelable.id != -1) {
+			id = parcelable.id;
+		}
+		display_name = parcelable.display_name;
+		wizard = parcelable.wizard;
+		use_tcp = parcelable.use_tcp;
+		prevent_tcp = parcelable.prevent_tcp;
+		active = parcelable.active;
+		
+
+		cfg = new pjsua_acc_config();
+		pjsua.acc_config_default(cfg);
+		
+		cfg.setPriority(parcelable.priority);
+		if(parcelable.acc_id != null) {
+			cfg.setId(pjsua.pj_str_copy(parcelable.acc_id));
+		}
+		if(parcelable.reg_uri != null) {
+			cfg.setReg_uri(pjsua.pj_str_copy(parcelable.reg_uri));
+		}
+		if(parcelable.published_enabled != -1) {
+			cfg.setPublish_enabled(parcelable.published_enabled);
+		}
+		if(parcelable.reg_timeout != -1) {
+			cfg.setReg_timeout(parcelable.reg_timeout);
+		}
+		if(parcelable.ka_interval != -1) {
+			cfg.setKa_interval(parcelable.ka_interval);
+		}
+		if(parcelable.pidf_tuple_id != null) {
+			cfg.setPidf_tuple_id(pjsua.pj_str_copy(parcelable.pidf_tuple_id));
+		}
+		if(parcelable.force_contact != null) {
+			cfg.setForce_contact(pjsua.pj_str_copy(parcelable.force_contact));
+		}
+		if(parcelable.proxy != null) {
+			cfg.setProxy_cnt(1);
+			cfg.setProxy(pjsua.pj_str_copy(parcelable.proxy));
+		}
+
+		cfg.setCred_count(1);
+		pjsip_cred_info cred_info = cfg.getCred_info();
+		
+		if(parcelable.realm != null) {
+			cred_info.setRealm(pjsua.pj_str_copy(parcelable.realm));
+		}
+		if(parcelable.username != null) {
+			cred_info.setUsername(pjsua.pj_str_copy(parcelable.username));
+		}
+		if(parcelable.datatype != -1) {
+			cred_info.setData_type(parcelable.datatype);
+		}
+		if(parcelable.data != null) {
+			cred_info.setData(pjsua.pj_str_copy(parcelable.data));
+		}
+	}
+	
+	
+	public IAccount getIAccount() {
+		IAccount parcelable = new IAccount();
+		if(id != null) {
+			parcelable.id = id;
+		}
+		parcelable.display_name = display_name;
+		parcelable.wizard = wizard ;
+		parcelable.use_tcp = use_tcp;
+		parcelable.prevent_tcp = prevent_tcp;
+		parcelable.active = active ;
+		
+		parcelable.priority = cfg.getPriority();
+		parcelable.acc_id = cfg.getId().getPtr();
+		parcelable.reg_uri = cfg.getReg_uri().getPtr();
+		parcelable.published_enabled = cfg.getPublish_enabled();
+		parcelable.reg_timeout = (int) cfg.getReg_timeout();
+		parcelable.ka_interval = (int) cfg.getKa_interval();
+		parcelable.pidf_tuple_id = cfg.getPidf_tuple_id().getPtr();
+		parcelable.force_contact = cfg.getForce_contact().getPtr();
+		parcelable.proxy = (cfg.getProxy_cnt()>0)? cfg.getProxy().getPtr():null;
+		
+		pjsip_cred_info cred_info = cfg.getCred_info();
+		if(cfg.getCred_count()>0) {
+			parcelable.realm = cred_info.getRealm().getPtr();
+			parcelable.username = cred_info.getUsername().getPtr();
+			parcelable.datatype = cred_info.getData_type();
+			parcelable.data = cred_info.getData().getPtr();
+		}
+		return parcelable;
 	}
 	
 	/** 

@@ -119,21 +119,5 @@ public abstract class SimplePrefsWizard extends BasePrefsWizard {
 	protected String getXmlPrefix() {
 		return "common";
 	}
-	
-	/*
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		Log.d(THIS_FILE, "Create dialog : "+id);
-		return super.onCreateDialog(id);
-	}
-	@Override
-	public boolean onPreferenceTreeClick(PreferenceScreen screen, Preference preference) {
-		Log.d(THIS_FILE, preference.getKey());
-		if(preference.equals(accountPassword)) {
-			Log.d(THIS_FILE, "Passowrd is clicked !!");
-		}
-		return super.onPreferenceTreeClick(screen, preference);
-	}
-	*/
 
 }

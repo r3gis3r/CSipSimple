@@ -74,7 +74,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 		inflater.inflate(R.layout.account_chooser_button, this, true);
 		LinearLayout root = (LinearLayout) findViewById(R.id.quickaction_button);
 		root.setOnClickListener(this);
-		quickAction = new QuickActionWindow(getContext(), root);
+		
 
 		textView = (TextView) findViewById(R.id.quickaction_text);
 		imageView = (ImageView) findViewById(R.id.quickaction_icon);
@@ -96,6 +96,12 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 		int[] xy = new int[2];
 		v.getLocationInWindow(xy);
 		Rect r = new Rect(xy[0], xy[1], xy[0] + v.getWidth(), xy[1] + v.getHeight());
+		
+		if(quickAction == null) {
+			LinearLayout root = (LinearLayout) findViewById(R.id.quickaction_button);
+			quickAction = new QuickActionWindow(getContext(), root);
+		}
+		
 		quickAction.setAnchor(r);
 		quickAction.removeAllItems();
 		

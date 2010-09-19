@@ -74,7 +74,7 @@ public class UAStateReceiver extends Callback {
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 		CallInfo callInfo = getCallInfo(callId);
 		Log.d(THIS_FILE, "Incoming call <<");
-		treatIncominCall(acc_id, callInfo);
+		treatIncomingCall(acc_id, callInfo);
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
 		Log.d(THIS_FILE, "Incoming call >>");
 	}
@@ -143,6 +143,7 @@ public class UAStateReceiver extends Callback {
 	//private long currentCallStart = 0;
 	
 	public CallInfo getCallInfo(Integer callId) {
+		Log.d(THIS_FILE, "Get call info");
 		CallInfo callInfo = callsList.get(callId);
 		if(callInfo == null) {
 			try {
@@ -264,7 +265,7 @@ public class UAStateReceiver extends Callback {
 	};
 	
 	
-	private void treatIncominCall(int accountId, CallInfo callInfo) {
+	private void treatIncomingCall(int accountId, CallInfo callInfo) {
 		int callId = callInfo.getCallId();
 		
 		String remContact = callInfo.getRemoteContact();

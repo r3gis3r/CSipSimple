@@ -56,12 +56,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -78,6 +76,7 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
+import com.csipsimple.models.IAccount;
 import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
@@ -87,7 +86,7 @@ import com.csipsimple.widgets.RegistrationNotification;
 public class SipService extends Service {
 
 	static boolean created = false;
-	static boolean creating = false;
+//	static boolean creating = false;
 	static String THIS_FILE = "SIP SRV";
 
 	
@@ -105,9 +104,6 @@ public class SipService extends Service {
 	final public static String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
 	final public static String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
 	
-
-	
-
 	final public static int REGISTER_NOTIF_ID = 1;
 	final public static int CALL_NOTIF_ID =  REGISTER_NOTIF_ID+1;
 	
@@ -118,6 +114,8 @@ public class SipService extends Service {
 	private static Object pjAccountsCreationLock = new Object();
 	private static Object activeAccountsLock = new Object();
 	private static Object callActionLock = new Object();
+	
+	private static Object creatingSipStack = new Object();
 	
 	// Map active account id (id for sql settings database) with acc_id (id for
 	// pjsip)
@@ -180,7 +178,9 @@ public class SipService extends Service {
 		 * Reload all accounts with values found in database
 		 */
 		@Override
-		public void reAddAllAccounts() throws RemoteException { SipService.this.reRegisterAllAccounts(); }
+		public void reAddAllAccounts() throws RemoteException { 
+			SipService.this.reRegisterAllAccounts(); 
+		}
 		
 
 		@Override
@@ -211,7 +211,6 @@ public class SipService extends Service {
 			if (userAgentReceiver != null) {
 				userAgentReceiver.setAutoAnswerNext(true);
 			}
-			// TODO: popup here
 		}
 		
 
@@ -261,20 +260,22 @@ public class SipService extends Service {
 
 		@Override
 		public CallInfo getCallInfo(int callId) throws RemoteException {
-			if(created && !creating) {
-				CallInfo callInfo = userAgentReceiver.getCallInfo(callId);
-				if(callInfo == null) {
-					return null;
-				}
-				if(callId != callInfo.getCallId()) {
-					Log.w(THIS_FILE, "we try to get an info for a call that is not the current one :  "+callId);
-					try {
-						callInfo = new CallInfo(callId);
-					} catch (UnavailableException e) {
-						throw new RemoteException();
+			synchronized (creatingSipStack) {
+				if(created/* && !creating*/) {
+					CallInfo callInfo = userAgentReceiver.getCallInfo(callId);
+					if(callInfo == null) {
+						return null;
 					}
+					if(callId != callInfo.getCallId()) {
+						Log.w(THIS_FILE, "we try to get an info for a call that is not the current one :  "+callId);
+						try {
+							callInfo = new CallInfo(callId);
+						} catch (UnavailableException e) {
+							throw new RemoteException();
+						}
+					}
+					return callInfo;
 				}
-				return callInfo;
 			}
 			return null;
 		}
@@ -321,6 +322,39 @@ public class SipService extends Service {
 	
 	
 	private final ISipConfiguration.Stub binderConfiguration = new ISipConfiguration.Stub() {
+
+		@Override
+		public long addOrUpdateAccount(IAccount acc) throws RemoteException {
+			Log.d(THIS_FILE, ">>> addOrUpdateAccount from service");
+			Account account = new Account(acc);
+			long final_id = -1;
+			synchronized(db){
+				db.open();
+				if(account.id == null) {
+					final_id = db.insertAccount(account);
+				}else {
+					db.updateAccount(account);
+					final_id = account.id;
+				}
+				db.close();
+			}
+			return final_id;
+		}
+
+		@Override
+		public IAccount getAccount(long accId) throws RemoteException {
+			IAccount result = null;
+			Account account;
+			synchronized(db){
+				db.open();
+				account = db.getAccount(accId);
+				db.close();
+			}
+			if(account !=null) {
+				result = account.getIAccount();
+			}
+			return result;
+		}
 		
 	};
 
@@ -408,64 +442,38 @@ public class SipService extends Service {
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		
-		// TODO : check connectivity, else just finish itself
+		// Check connectivity, else just finish itself
 		if ( !prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
+			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
 			stopSelf();
 			return;
 		}
 		
 		Log.setLogLevel(prefsWrapper.getLogLevel());
-
-
-		// Register own broadcast receiver
-		IntentFilter intentfilter = new IntentFilter();
-		intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-	//	intentfilter.addAction(ACTION_DATA_STATE_CHANGED);
 		
-		// TODO : handle theses receiver filters (-- inspired from SipDroid project
-		// : sipdroid.org)
-		// intentfilter.addAction(Receiver.ACTION_DATA_STATE_CHANGED);
-		// intentfilter.addAction(Receiver.ACTION_PHONE_STATE_CHANGED);
-		// intentfilter.addAction(Receiver.ACTION_DOCK_EVENT);
-		// intentfilter.addAction(Intent.ACTION_HEADSET_PLUG);
-		// intentfilter.addAction(Intent.ACTION_USER_PRESENT);
-		// intentfilter.addAction(Intent.ACTION_SCREEN_OFF);
-		// intentfilter.addAction(Intent.ACTION_SCREEN_ON);
-		// intentfilter.addAction(Receiver.ACTION_VPN_CONNECTIVITY);
-		registerReceiver(deviceStateReceiver = new ServiceDeviceStateReceiver(), 
-				intentfilter);
-		
-		telephonyManager.listen(phoneConnectivityReceiver = new ServicePhoneStateReceiver(), 
-				PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
-		
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				Log.d(THIS_FILE, "TRY TO LOAD SIP STACK");
-				tryToLoadStack();
-			}
-		};
-		t.start();
-		
+		//Do not thread since must ensure stack is loaded
+		loadAndConnectStack();
 	}
 
-
-
-
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		Log.i(THIS_FILE, "Destroying SIP Service");
 		try {
+			Log.d(THIS_FILE, "Unregister telephony receiver");
 			unregisterReceiver(deviceStateReceiver);
+			deviceStateReceiver = null;
 		}catch(IllegalArgumentException e) {
 			//This is the case if already unregistered itself
 			//Python style usage of try ;) : nothing to do here since it could be a standard case
 			//And in this case nothing has to be done
 		}
 		if(phoneConnectivityReceiver != null) {
+			Log.d(THIS_FILE, "Unregister telephony receiver");
 			telephonyManager.listen(phoneConnectivityReceiver, 
 					PhoneStateListener.LISTEN_NONE);
+			phoneConnectivityReceiver = null;
 		}
 		sipStop();
 		notificationManager.cancelAll();
@@ -478,17 +486,39 @@ public class SipService extends Service {
 		super.onStart(intent, startId);
 
 		// Autostart the stack
-		if(!hasSipStack) {
-			tryToLoadStack();
+		loadAndConnectStack();
+		if(hasSipStack) {
+			Thread t = new Thread() {
+				public void run() {
+					Log.d(THIS_FILE, "Start sip stack because start asked");
+					sipStart();
+				}
+			};
+			t.start();
 		}
-		Thread t = new Thread() {
-			public void run() {
-				sipStart();
-			}
-		};
-		t.start();
 	}
 	
+	private void loadAndConnectStack() {
+		if(!hasSipStack) {
+			Log.d(THIS_FILE, "TRY TO LOAD SIP STACK");
+			tryToLoadStack();
+		}
+		
+		if(hasSipStack) {
+			// Register own broadcast receiver
+			if(deviceStateReceiver == null) {
+				IntentFilter intentfilter = new IntentFilter();
+				intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+				registerReceiver(deviceStateReceiver = new ServiceDeviceStateReceiver(), 
+						intentfilter);
+			}
+			if(phoneConnectivityReceiver == null) {
+				telephonyManager.listen(phoneConnectivityReceiver = new ServicePhoneStateReceiver(), 
+						PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
+			}
+			
+		}
+	}
 
 	private void tryToLoadStack() {
 		File stack_file = getStackLibFile(this);
@@ -503,11 +533,14 @@ public class SipService extends Service {
 				hasSipStack = false;
 				sipStackIsCorrupted = true;
 
-				//TODO: explain user what is happening
+				/*
+				//Obsolete
 				Intent it = new Intent(Intent.ACTION_VIEW);
 				it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				it.setData(Uri.parse("http://code.google.com/p/csipsimple/wiki/NewHardwareSupportRequest"));
+				
 				startActivity(it);
+				*/
 				stopSelf();
 			} catch (Exception e) {
 				Log.e(THIS_FILE, "We have a problem with the current stack....", e);
@@ -518,18 +551,20 @@ public class SipService extends Service {
 	@Override
 	public IBinder onBind(Intent intent) {
 		
-		String serviceName = null;
-		Bundle extras = intent.getExtras();
-		if(extras != null) {
-			serviceName = extras.getString("com.csipsimple.extra.SERVICE_NAME");
-		}
-		if(serviceName == null || serviceName.equalsIgnoreCase("SipService")) {
+		String serviceName = intent.getAction();
+		Log.d(THIS_FILE, "Action is "+serviceName);
+		if(serviceName == null || serviceName.equalsIgnoreCase("com.csipsimple.service.SipService")) {
+			Log.d(THIS_FILE, "Service returned");
 			return binder;
-		}else if(serviceName.equalsIgnoreCase("SipConfiguration")) {
+		}else if(serviceName.equalsIgnoreCase("com.csipsimple.service.SipConfiguration")) {
+			Log.d(THIS_FILE, "Conf returned");
 			return binderConfiguration;
 		}
+		Log.d(THIS_FILE, "Default service (SipService) returned");
 		return binder;
 	}
+	
+	
 
 	// Start the sip stack according to current settings
 	synchronized void sipStart() {
@@ -546,187 +581,159 @@ public class SipService extends Service {
 			return;
 		}
 
-		Log.i(THIS_FILE, "Will start sip : " + (!created && !creating));
-		//Ensure the stack is not already created or is being created
-		if (!created && !creating) {
-			creating = true;
-			udpTranportId = null;
-			tcpTranportId = null;
-			/*
-			//Thread it to not lock everything
-			Thread thread = new Thread() {
-				@Override
-				public void run() {
-				*/
-					int status;
-					status = pjsua.create();
-					Log.i(THIS_FILE, "Created " + status);
-					//General config
-					{
-						pjsua_config cfg = new pjsua_config();
-						pjsua_logging_config log_cfg = new pjsua_logging_config();
-						pjsua_media_config media_cfg = new pjsua_media_config();
-
-						// GLOBAL CONFIG
-						pjsua.config_default(cfg);
-						cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
-						if(userAgentReceiver == null) {
-							userAgentReceiver = new UAStateReceiver();
-							userAgentReceiver.initService(SipService.this);
-						}
-						if(mediaManager == null) {
-							mediaManager = new MediaManager(SipService.this);
-						}
-						pjsua.setCallbackObject(userAgentReceiver);
-						
-
-						Log.d(THIS_FILE, "Attach is done to callback");
-						
-						// MAIN CONFIG
-						int isStunEnabled = prefsWrapper.getStunEnabled();
-						if(isStunEnabled == 1) {
-							//TODO : WARNING : This is deprecated, should use array instead but ok for now
-							cfg.setStun_host(pjsua.pj_str_copy(prefsWrapper.getStunServer()));
-						}
-						cfg.setUser_agent(pjsua.pj_str_copy("CSipSimple"));
-						//cfg.setThread_cnt(4); // one thread seems to be enough for now
-
-						// LOGGING CONFIG
-						pjsua.logging_config_default(log_cfg);
-						log_cfg.setConsole_level(prefsWrapper.getLogLevel());
-						log_cfg.setLevel(prefsWrapper.getLogLevel());
-						log_cfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
-
-						// MEDIA CONFIG
-						pjsua.media_config_default(media_cfg);
-
-						// For now only this cfg is supported
-						media_cfg.setChannel_count(1);
-						media_cfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
-						// Echo cancellation
-						media_cfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
-						media_cfg.setNo_vad(prefsWrapper.getNoVad());
-						media_cfg.setQuality(prefsWrapper.getMediaQuality());
-						media_cfg.setClock_rate(prefsWrapper.getClockRate());
-						//media_cfg.setJb_min_pre(60);
-						//media_cfg.setJb_max(600);
-						media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
-						media_cfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
-						
-						
-						int isTurnEnabled = prefsWrapper.getTurnEnabled();
-						
-						if(isTurnEnabled == 1) {
-							media_cfg.setEnable_turn(isTurnEnabled);
-							media_cfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
-						}
-						
-						
-						
-						// INITIALIZE
-						status = pjsua.init(cfg, log_cfg, media_cfg);
-						if (status != pjsuaConstants.PJ_SUCCESS) {
-							Log.e(THIS_FILE, "Fail to init pjsua with failure code " + status);
+		Log.i(THIS_FILE, "Will start sip : " + (!created /*&& !creating*/));
+		synchronized (creatingSipStack) {
+			//Ensure the stack is not already created or is being created
+			if (!created/* && !creating*/) {
+//				creating = true;
+				udpTranportId = null;
+				tcpTranportId = null;
+				
+				int status;
+				status = pjsua.create();
+				Log.i(THIS_FILE, "Created " + status);
+				//General config
+				{
+					pjsua_config cfg = new pjsua_config();
+					pjsua_logging_config log_cfg = new pjsua_logging_config();
+					pjsua_media_config media_cfg = new pjsua_media_config();
+	
+					// GLOBAL CONFIG
+					pjsua.config_default(cfg);
+					cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
+					if(userAgentReceiver == null) {
+						userAgentReceiver = new UAStateReceiver();
+						userAgentReceiver.initService(SipService.this);
+					}
+					if(mediaManager == null) {
+						mediaManager = new MediaManager(SipService.this);
+					}
+					pjsua.setCallbackObject(userAgentReceiver);
+					
+	
+					Log.d(THIS_FILE, "Attach is done to callback");
+					
+					// MAIN CONFIG
+					int isStunEnabled = prefsWrapper.getStunEnabled();
+					if(isStunEnabled == 1) {
+						//TODO : WARNING : This is deprecated, should use array instead but ok for now
+						cfg.setStun_host(pjsua.pj_str_copy(prefsWrapper.getStunServer()));
+					}
+					cfg.setUser_agent(pjsua.pj_str_copy("CSipSimple"));
+					//cfg.setThread_cnt(4); // one thread seems to be enough for now
+	
+					// LOGGING CONFIG
+					pjsua.logging_config_default(log_cfg);
+					log_cfg.setConsole_level(prefsWrapper.getLogLevel());
+					log_cfg.setLevel(prefsWrapper.getLogLevel());
+					log_cfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
+	
+					// MEDIA CONFIG
+					pjsua.media_config_default(media_cfg);
+	
+					// For now only this cfg is supported
+					media_cfg.setChannel_count(1);
+					media_cfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
+					// Echo cancellation
+					media_cfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
+					media_cfg.setNo_vad(prefsWrapper.getNoVad());
+					media_cfg.setQuality(prefsWrapper.getMediaQuality());
+					media_cfg.setClock_rate(prefsWrapper.getClockRate());
+					//media_cfg.setJb_min_pre(60);
+					//media_cfg.setJb_max(600);
+					media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
+					media_cfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
+					
+					
+					int isTurnEnabled = prefsWrapper.getTurnEnabled();
+					
+					if(isTurnEnabled == 1) {
+						media_cfg.setEnable_turn(isTurnEnabled);
+						media_cfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
+					}
+					
+					
+					
+					// INITIALIZE
+					status = pjsua.init(cfg, log_cfg, media_cfg);
+					if (status != pjsuaConstants.PJ_SUCCESS) {
+						Log.e(THIS_FILE, "Fail to init pjsua with failure code " + status);
+						pjsua.destroy();
+						created = false;
+//						creating = false;
+						return;
+					}
+				}
+	
+				// Add transports
+				{
+					//UDP
+					if(prefsWrapper.isUDPEnabled()) {
+						udpTranportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, prefsWrapper.getUDPTransportPort());
+						if (udpTranportId == null) {
 							pjsua.destroy();
+//							creating = false;
 							created = false;
-							creating = false;
 							return;
 						}
 					}
-
-					// Add transports
+					//TCP
+					if(prefsWrapper.isTCPEnabled()) {
+						tcpTranportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, prefsWrapper.getTCPTransportPort());
+						if (tcpTranportId == null) {
+							pjsua.destroy();
+//							creating = false;
+							created = false;
+							return;
+						}
+					}
+					//RTP transport
 					{
-						//TODO : factorize this !!
-						if(prefsWrapper.isUDPEnabled()) {
-							pjsua_transport_config cfg = new pjsua_transport_config();
-							int[] t_id = new int[1];
-							pjsua.transport_config_default(cfg);
-							cfg.setPort(prefsWrapper.getUDPTransportPort());
-							
-							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, cfg, t_id);
-							if (status != pjsuaConstants.PJ_SUCCESS) {
-								Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
-								pjsua.destroy();
-								creating = false;
-								created = false;
-								return;
-							}
-							udpTranportId = t_id[0];
-							
+						pjsua_transport_config cfg = new pjsua_transport_config();
+						pjsua.transport_config_default(cfg);
+						cfg.setPort(prefsWrapper.getRTPPort());
+						
+						status = pjsua.media_transports_create(cfg);
+						if (status != pjsuaConstants.PJ_SUCCESS) {
+							Log.e(THIS_FILE, "Fail to add media transport with failure code " + status);
+							pjsua.destroy();
+//							creating = false;
+							created = false;
+							return;
 						}
-						
-						if(prefsWrapper.isTCPEnabled()) {
-							pjsua_transport_config cfg = new pjsua_transport_config();
-							int[] t_id = new int[1];
-							pjsua.transport_config_default(cfg);
-							cfg.setPort(prefsWrapper.getTCPTransportPort());
-							
-							status = pjsua.transport_create(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, cfg, t_id);
-							if (status != pjsuaConstants.PJ_SUCCESS) {
-								Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
-								pjsua.destroy();
-								creating = false;
-								created = false;
-								return;
-							}
-							tcpTranportId = t_id[0];
-						}
-						
-						
-						//RTP transport
-						{
-							pjsua_transport_config cfg = new pjsua_transport_config();
-							pjsua.transport_config_default(cfg);
-							cfg.setPort(prefsWrapper.getRTPPort());
-							
-							status = pjsua.media_transports_create(cfg);
-							if (status != pjsuaConstants.PJ_SUCCESS) {
-								Log.e(THIS_FILE, "Fail to add media transport with failure code " + status);
-								pjsua.destroy();
-								creating = false;
-								created = false;
-								return;
-							}
-						}
-						
-						//Local account for transport
-						{
-							if(udpTranportId != null || tcpTranportId != null) {
-								int[] p_acc_id = new int[1];
-								int tid = (udpTranportId != null)?udpTranportId:tcpTranportId;
-								pjsua.acc_add_local(tid, pjsua.PJ_TRUE, p_acc_id);
-							}
-						}
-						
-					}
-
-					// Initialization is done, now start pjsua
-					status = pjsua.start();
-					
-					if(status != pjsua.PJ_SUCCESS) {
-						Log.e(THIS_FILE, "Fail to start pjsip " + status);
-						pjsua.destroy();
-						creating = false;
-						created = false;
-						return;
 					}
 					
-					// Init media codecs
-					initCodecs();
-					setCodecsPriorities();
-					
-					created = true;
-
-					// Add accounts
-					addAllAccounts();
-					creating = false;
-				/*	super.run();
+					//Local account for transport ? Usefull?
+					{
+						if(udpTranportId != null || tcpTranportId != null) {
+							int[] p_acc_id = new int[1];
+							int tid = (udpTranportId != null)?udpTranportId:tcpTranportId;
+							pjsua.acc_add_local(tid, pjsua.PJ_TRUE, p_acc_id);
+						}
+					}
 				}
-
-			};
-
-			thread.start();
-			*/
+	
+				// Initialization is done, now start pjsua
+				status = pjsua.start();
+				
+				if(status != pjsua.PJ_SUCCESS) {
+					Log.e(THIS_FILE, "Fail to start pjsip " + status);
+					pjsua.destroy();
+//					creating = false;
+					created = false;
+					return;
+				}
+				
+				// Init media codecs
+				initCodecs();
+				setCodecsPriorities();
+				
+				created = true;
+	
+				// Add accounts
+				addAllAccounts();
+//				creating = false;
+			}
 		}
 	}
 
@@ -738,25 +745,26 @@ public class SipService extends Service {
 		if (notificationManager != null) {
 			notificationManager.cancel(REGISTER_NOTIF_ID);
 		}
-
-		if (created) {
-			Log.d(THIS_FILE, "Detroying...");
-			//This will destroy all accounts so synchronize with accounts management lock
-			synchronized (pjAccountsCreationLock) {
-				pjsua.destroy();
-				synchronized (activeAccountsLock) {
-					accountsAddingStatus.clear();
-					activeAccounts.clear();
+		synchronized (creatingSipStack) {
+			if (created) {
+				Log.d(THIS_FILE, "Detroying...");
+				//This will destroy all accounts so synchronize with accounts management lock
+				synchronized (pjAccountsCreationLock) {
+					pjsua.destroy();
+					synchronized (activeAccountsLock) {
+						accountsAddingStatus.clear();
+						activeAccounts.clear();
+					}
 				}
-			}
-			if(userAgentReceiver != null) {
-				userAgentReceiver.stopService();
-				userAgentReceiver = null;
-			}
-			
-			if(mediaManager != null) {
-				mediaManager.stopService();
-				mediaManager = null;
+				if(userAgentReceiver != null) {
+					userAgentReceiver.stopService();
+					userAgentReceiver = null;
+				}
+				
+				if(mediaManager != null) {
+					mediaManager.stopService();
+					mediaManager = null;
+				}
 			}
 		}
 		releaseResources();
@@ -765,6 +773,24 @@ public class SipService extends Service {
 	}
 	
 	
+	/**
+	 * Utility to create a transport
+	 * @return transport id or -1 if failed
+	 */
+	private Integer createTransport(pjsip_transport_type_e type, int port) {
+		pjsua_transport_config cfg = new pjsua_transport_config();
+		int[] t_id = new int[1];
+		int status;
+		pjsua.transport_config_default(cfg);
+		cfg.setPort(port);
+		
+		status = pjsua.transport_create(type, cfg, t_id);
+		if (status != pjsuaConstants.PJ_SUCCESS) {
+			Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
+			return null;
+		}
+		return t_id[0];
+	}
 	
 	/**
 	 * Add accounts from database
@@ -812,6 +838,7 @@ public class SipService extends Service {
 				currentAccountId = activeAccounts.get(account.id);	
 			}
 			
+			//Force the use of a transport
 			if(account.use_tcp && tcpTranportId != null) {
 				account.cfg.setTransport_id(tcpTranportId);
 			}else if(account.prevent_tcp && udpTranportId != null) {
@@ -910,6 +937,7 @@ public class SipService extends Service {
 	}
 	
 	private void reRegisterAllAccounts() {
+		Log.d(THIS_FILE, "RE REGISTER ALL ACCOUNTS");
 		unregisterAllAccounts(false);
 		addAllAccounts();
 	}
@@ -1177,7 +1205,6 @@ public class SipService extends Service {
 			
 			
 			Log.d(THIS_FILE, "default domain : "+defaultDomain);
-			//TODO : split domain
 			if(Pattern.matches("^sip(s)?:[^@]*$", callee)) {
 				callee = callee+"@"+defaultDomain;
 			}else {
@@ -1201,8 +1228,9 @@ public class SipService extends Service {
 			int[] call_id = new int[1];
 			return pjsua.call_make_call(pjsipAccountId, uri , 0, user_data, msg, call_id);
 		} else {
-			//TODO : toast error
-			Log.e(THIS_FILE, "asked for a bad uri "+callee);
+			Log.e(THIS_FILE, "Asked for a bad uri "+callee);
+			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.invalid_sip_uri, 0));
+			
 			
 		}
 		return -1;
@@ -1406,11 +1434,9 @@ public class SipService extends Service {
 		return ctx.getFileStreamPath(SipService.STACK_FILE_NAME);
 	}
 	
-	//TODO : provide a getter
 	public static ArrayList<String> codecs;
 	
 	private void initCodecs(){
-		//TODO : provide a way to flush this var
 		if(codecs == null) {
 			int nbr_codecs = pjsua.get_nbr_of_codecs();
 			Log.d(THIS_FILE, "Codec nbr : "+nbr_codecs);
@@ -1556,27 +1582,15 @@ public class SipService extends Service {
 					};
 					t.start();
 					//Log.e(THIS_FILE, "We should restart the stack ! ");
+				}else {
+					//TODO : else refine things => STUN, registration etc...
+					ToastHandler.sendMessage(ToastHandler.obtainMessage(0, 0, 0, "Connection have been lost... you may have lost your communication. Hand over is not yet supported"));
 				}
-				//TODO : else refine things => STUN, registration etc...
-		//		}else {
-					// update registration IP : for now remove / reregister all accounts
-		//			reRegisterAllAccounts();
-		//		}
 			}else {
 				Log.d(THIS_FILE, "Nothing done since already well registered");
 			}
 			
 		} else {
-			
-			/*
-			try {
-				SipService.this.unregisterReceiver(deviceStateReceiver);
-			}catch(IllegalArgumentException e) {
-				//This is the case if already unregistered itself
-				//Python like usage of try ;) : nothing to do here since it could be a standard case
-				//And in this case nothing has to be done
-			}
-			*/
 			if(created && userAgentReceiver != null) {
 				if(userAgentReceiver.getActiveCallInProgress() != null) {
 					Log.w(THIS_FILE, "There is an ongoing call ! don't stop !! and wait for network to be back...");
