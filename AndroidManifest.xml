@@ -56,7 +56,11 @@
 		<activity android:name=".ui.prefs.PrefsNetwork" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".ui.prefs.PrefsFast" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name=".ui.prefs.PrefsFast" android:label="@string/prefs_fast" android:theme="@style/CupcakeDialog" android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="com.csipsimple.ui.prefs.PrefsFast" />
+			</intent-filter>
+		</activity>
 		<activity android:name=".ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		
 
@@ -131,13 +135,9 @@
 	<uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
 	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
-	
 	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
-	<!-- 
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-	 -->
+	<uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+	 <!-- Not taken into account? -->
 	<uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY"></uses-permission>
-
-
-<uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+	
 </manifest> 

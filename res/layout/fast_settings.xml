@@ -16,10 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<ScrollView 
+ <LinearLayout 
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView 
+  android:layout_width="fill_parent" android:layout_height="fill_parent"
+  android:layout_weight="1"
   android:fadingEdge="vertical"
   android:scrollbars="vertical">
 <LinearLayout
@@ -182,3 +186,7 @@
 	</LinearLayout>
 </LinearLayout>
 </ScrollView>
+<Button android:text="@string/save" android:id="@+id/save_bt" 
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:layout_weight="0"/>
+</LinearLayout>

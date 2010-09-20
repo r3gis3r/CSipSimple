@@ -91,8 +91,8 @@
   <string name="android_integration_desc">S\'intégrer à la numérotation et aux journaux d\'appel d\'Android</string>
   <string name="availability_profile">Profil de disponibilité</string>
   <string name="always_available">Toujours disponible</string>
-  <string name="always_available_desc">Utilisera de la batterie mais vous recevrai vos appels</string>
-  <string name="wifi_available">Disponible en même temps que le WIFI</string>
+  <string name="always_available_desc">Utilisera de la batterie mais vous recevrez vos appels</string>
+  <string name="wifi_available">Disponible en WIFI</string>
   <string name="wifi_available_desc">Votre disponibilité est basée la connexion Wifi</string>
   <string name="never_available">Seulement pour les appels sortant</string>
   <string name="never_available_desc">N\'activer CSipSimple que lorsque j\'initie un appel.</string>
