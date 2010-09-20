@@ -39,6 +39,7 @@ import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.prefs.MainPrefs;
+import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -50,6 +51,7 @@ public class SipHome extends TabActivity {
 	public static final int CLOSE_MENU = Menu.FIRST + 3;
 	
 	public static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
+	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 	
 	private static final String THIS_FILE = "SIP HOME";
 	
@@ -57,6 +59,7 @@ public class SipHome extends TabActivity {
 	
 	private Intent dialerIntent;
 	private Intent calllogsIntent;
+	private PreferencesWrapper prefWrapper;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,8 @@ public class SipHome extends TabActivity {
 
     	
         super.onCreate(savedInstanceState);
+        
+        prefWrapper = new PreferencesWrapper(this);
         
         //Check sip stack
         if( !SipService.hasStackLibFile(this) ){
@@ -89,7 +94,7 @@ public class SipHome extends TabActivity {
     				//if n+1 version doesn't work for him he could fill a bug on bug tracker)
     				
     				
-    				Log.d(THIS_FILE, "Has no sip stack....");
+    				Log.d(THIS_FILE, "Sip stack may have changed");
     				Intent changelogIntent = new Intent(this, WelcomeScreen.class);
     				changelogIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     				changelogIntent.putExtra(WelcomeScreen.KEY_MODE, WelcomeScreen.MODE_CHANGELOG);
@@ -118,16 +123,9 @@ public class SipHome extends TabActivity {
         addTab("tab2", "CallLogs", R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
         
         
-        //If we have no account yet, open account panel,
-        DBAdapter db = new DBAdapter(this);
-        db.open();
-        int nbrOfAccount = db.getNbrOfAccount();
-        db.close();
-        if(nbrOfAccount == 0) {
-	        Intent accountIntent = new Intent(this, AccountsList.class);
-	        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(accountIntent);
-        }
+        
+        
+        
         
     }
     
@@ -175,6 +173,26 @@ public class SipHome extends TabActivity {
     protected void onResume() {
     	Log.d(THIS_FILE, "On Resume SIPHOME");
     	super.onResume();
+    	
+    	//If we have never set fast settings
+    	if(!prefWrapper.hasAlreadySetup()) {
+    		Intent prefsIntent = new Intent(this, PrefsFast.class);
+    		prefsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+ 			startActivity(prefsIntent);
+ 			return;
+    	}
+    	
+    	//If we have no account yet, open account panel,
+        DBAdapter db = new DBAdapter(this);
+        db.open();
+        int nbrOfAccount = db.getNbrOfAccount();
+        db.close();
+        if(nbrOfAccount == 0) {
+	        Intent accountIntent = new Intent(this, AccountsList.class);
+	        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(accountIntent);
+			return;
+        }
     }
     
     @Override
@@ -183,7 +201,7 @@ public class SipHome extends TabActivity {
 		Log.d(THIS_FILE, "---DESTROY SIP HOME END---");
 	}
     
-
+    
     private void populateMenu(Menu menu) {
     	menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE, R.string.accounts).setIcon(
 				R.drawable.ic_menu_accounts);

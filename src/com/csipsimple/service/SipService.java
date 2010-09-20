@@ -840,7 +840,8 @@ public class SipService extends Service {
 			
 			//Force the use of a transport
 			if(account.use_tcp && tcpTranportId != null) {
-				account.cfg.setTransport_id(tcpTranportId);
+			//	Log.d(THIS_FILE, "Attach account to transport : "+tcpTranportId);
+			//	account.cfg.setTransport_id(tcpTranportId);
 			}else if(account.prevent_tcp && udpTranportId != null) {
 				account.cfg.setTransport_id(udpTranportId);
 			}

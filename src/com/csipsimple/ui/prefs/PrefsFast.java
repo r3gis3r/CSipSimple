@@ -24,10 +24,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class PrefsFast extends Activity implements OnClickListener {
@@ -39,6 +41,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 	private CheckBox globGsm;
 	private PreferencesWrapper prefsWrapper;
 	private SharedPreferences prefs;
+	private Button saveBtn;
 	
 	enum Profile {
 		UNKOWN,
@@ -62,6 +65,9 @@ public class PrefsFast extends Activity implements OnClickListener {
 		globProfileNever = (RadioButton) findViewById(R.id.glob_profile_never);
 		globGsm = (CheckBox) findViewById(R.id.glob_tg);
 		
+		saveBtn = (Button) findViewById(R.id.save_bt);
+		
+		saveBtn.setOnClickListener(this);
 		globProfileAlways.setOnClickListener(this);
 		globProfileNever.setOnClickListener(this);
 		globProfileWifi.setOnClickListener(this);
@@ -138,6 +144,12 @@ public class PrefsFast extends Activity implements OnClickListener {
 			globIntegrate.toggle();
 		}else if( id == R.id.row_glob_tg ) {
 			globGsm.toggle();
+		}else if (id == R.id.save_bt) {
+			if(!prefsWrapper.hasAlreadySetup()) {
+				prefsWrapper.setHasAlreadySetup(true);
+				Compatibility.setFirstRunParameters(prefsWrapper);
+			}
+			finish();
 		}
 	}
 	

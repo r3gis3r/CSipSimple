@@ -122,7 +122,7 @@ public class Advanced extends BasePrefsWizard {
 	protected void buildAccount() {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
-		account.cfg.setId(pjsua.pj_str_copy(accountCallerId.getText() + " <sip:"
+		account.cfg.setId(pjsua.pj_str_copy(accountCallerId.getText().trim() + " <sip:"
 				+ accountUserName.getText() + "@"+accountServer.getText()+">"));
 		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:"+accountServer.getText()));
 
@@ -137,7 +137,8 @@ public class Advanced extends BasePrefsWizard {
 				.swigValue());
 
 		account.use_tcp = accountUseTcp.isChecked();
-
+		account.prevent_tcp = false;
+		
 		if (!isEmpty(accountProxy)) {
 			account.cfg.setProxy_cnt(1);
 			account.cfg.setProxy(pjsua.pj_str_copy("sip:"+accountProxy.getText()));

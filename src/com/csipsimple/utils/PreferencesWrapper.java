@@ -19,6 +19,8 @@ package com.csipsimple.utils;
 
 import java.util.ArrayList;
 
+import com.csipsimple.ui.SipHome;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -460,6 +462,19 @@ public class PreferencesWrapper {
 			Log.e(THIS_FILE, "Headset action option not well formated");
 		}
 		return HEADSET_ACTION_CLEAR_CALL;
+	}
+
+	
+	private static final String HAS_ALREADY_SETUP = "has_already_setup";
+
+	public void setHasAlreadySetup(boolean b) {
+		Editor edt = prefs.edit();
+		edt.putBoolean(SipHome.HAS_ALREADY_SETUP, true);
+		edt.commit();
+	}
+	
+	public boolean hasAlreadySetup() {
+		return prefs.getBoolean(HAS_ALREADY_SETUP, false);
 	}
 
 	

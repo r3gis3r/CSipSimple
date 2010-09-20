@@ -122,6 +122,9 @@ public class Basic extends BasePrefsWizard {
 		ci.setScheme(pjsua.pj_str_copy("Digest"));
 		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
 				.swigValue());
+		//By default force use tcp
+		account.use_tcp = false;
+		account.prevent_tcp = true;
 
 	}
 

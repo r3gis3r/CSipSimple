@@ -17,6 +17,7 @@
  */
 package com.csipsimple.widgets;
 
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 
 import android.content.Context;
@@ -50,6 +51,7 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 	}
 	
 	
+	
 	@Override
 	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
@@ -61,7 +63,11 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 				((ViewGroup) oldParent).removeView(checkbox);
 			}
 		}
-		ViewGroup container = (ViewGroup) ((ViewGroup) view).getChildAt(0);
+		
+		ViewGroup container = (ViewGroup) view;
+		if(Compatibility.isCompatible(8)) {
+			container = (ViewGroup) container.getChildAt(0);
+		}
 		if (container != null) {
 			container.addView(checkbox, ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		}

@@ -19,6 +19,8 @@
  */
 package com.csipsimple.ui;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,6 +41,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -58,6 +62,7 @@ import com.csipsimple.service.MediaManager.MediaState;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.InCallControls;
 import com.csipsimple.widgets.InCallInfo;
@@ -102,6 +107,12 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private DialingFeedback dialFeedback;
 
 	private boolean proximitySensorTracked = false;
+
+	private PowerManager powerManager;
+
+	private WakeLock proximityWakeLock;
+
+	private PreferencesWrapper prefsWrapper;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -130,10 +141,12 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			/*
 		}
 		*/
+			
+		prefsWrapper = new PreferencesWrapper(this);
 
 		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
+        powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
 		
 		takeKeyEvents(true);
 		
@@ -211,10 +224,43 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		super.onResume();
 		updateUIFromCall();
 		if(proximitySensor != null) {
-			sensorManager.registerListener(this, 
-	                proximitySensor,
-	                SensorManager.SENSOR_DELAY_NORMAL);
-			proximitySensorTracked  = true;
+			WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			WifiInfo winfo = wman.getConnectionInfo();
+			if(winfo == null || !prefsWrapper.keepAwakeInCall()) {
+				// Try to use powermanager proximity sensor
+				if(powerManager != null) {
+					try {
+						Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
+						int supportedFlags = (Integer) method.invoke(powerManager);
+						Log.d(THIS_FILE, ">>> Flags supported : "+supportedFlags);
+						Field f = PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK");
+						int proximityScreenOffWakeLock = (Integer) f.get(null);
+						if( (supportedFlags & proximityScreenOffWakeLock) != 0x0 ) {
+							Log.d(THIS_FILE, ">>> We can use native screen locker !!");
+							proximityWakeLock = powerManager.newWakeLock(proximityScreenOffWakeLock, "com.csipsimple.CallProximity");
+							proximityWakeLock.setReferenceCounted(false);
+						}
+						
+					} catch (Exception e) {
+						Log.d(THIS_FILE, "Impossible to get power manager supported wake lock flags");
+					} 
+					/*
+					if ((powerManager.getSupportedWakeLockFlags()  & PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) != 0x0) {
+						mProximityWakeLock = pm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, THIS_FILE);
+					}
+					*/
+				}
+			}
+			
+			if(proximityWakeLock == null) {
+				//Fall back to manual mode
+				isFirstRun = true;
+				sensorManager.registerListener(this, 
+		                proximitySensor,
+		                SensorManager.SENSOR_DELAY_NORMAL);
+				proximitySensorTracked  = true;
+			}
+			
 		}
 		dialFeedback.resume();
 	}
@@ -225,6 +271,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if(proximitySensor != null) {
 			proximitySensorTracked = false;
 			sensorManager.unregisterListener(this);
+		}
+		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
+			proximityWakeLock.release();
 		}
 		dialFeedback.pause();
 	}
@@ -258,6 +307,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			if(proximitySensor == null) {
 				lockOverlay.hide();
 			}
+			if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
+				proximityWakeLock.release();
+			}
 			break;
 		case PJSIP_INV_STATE_CONFIRMED:
 			backgroundResId = R.drawable.bg_in_call_gradient_connected;
@@ -271,6 +323,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			if(proximitySensor == null) {
 				lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
 			}
+			
+			if(proximityWakeLock != null && !proximityWakeLock.isHeld()) {
+				proximityWakeLock.acquire();
+			}
+			
 			break;
 		case PJSIP_INV_STATE_NULL:
 			Log.i(THIS_FILE, "WTF?");
@@ -279,6 +336,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				Log.d(THIS_FILE, "Releasing wake up lock");
                 wakeLock.release();
             }
+			if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
+				proximityWakeLock.release();
+			}
+			
 			//Set background to red and delay quit
 			delayedQuit();
 			return;
@@ -484,6 +545,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	private boolean showDetails = true;
 
+	private boolean isFirstRun = true;
+
 	@Override
 	public void onTrigger(int whichAction) {
 		Log.d(THIS_FILE, "In Call Activity is triggered");
@@ -585,16 +648,23 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		Log.d(THIS_FILE, "Tracked : "+proximitySensorTracked);
-		if(proximitySensorTracked) {
+		if(proximitySensorTracked && !isFirstRun) {
 			pjsip_inv_state state = callInfo.getCallState();
 			float distance = event.values[0];
 			boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
 			Log.d(THIS_FILE, "Distance is now "+distance);
-			if(state.equals( pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED) && active) {
+			boolean isValidCallState = state.equals( pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED) || 
+										state.equals(pjsip_inv_state.PJSIP_INV_STATE_CONNECTING)|| 
+										state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)|| 
+										state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY);
+			if( isValidCallState && active) {
 				lockOverlay.show();
 			}else {
 				lockOverlay.hide();
 			}
+		}
+		if(isFirstRun) {
+			isFirstRun = false;
 		}
 	}
 

@@ -296,6 +296,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	
 	private void reloadAsyncAccounts(final Integer accountId, final Integer renew) {
 		//Force reflush accounts
+		Log.d(THIS_FILE, "Reload async accounts"+accountId+" renew : "+renew);
 		Thread t = new Thread() {
 			@Override
 			public void run() {
@@ -309,6 +310,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Impossible to reload accounts", e);
 					}finally {
+						Log.d(THIS_FILE, "> Need to update list !");
 						handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
 					}
 				}
@@ -443,6 +445,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
+			handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
 		}
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
