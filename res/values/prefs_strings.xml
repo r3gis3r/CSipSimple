@@ -114,8 +114,8 @@
 <string name="wifi_available_desc">Availability of incoming calls based on WiFi profile</string>
 <string name="never_available">Only for outgoing</string>
 <string name="never_available_desc">Activate the SIP client automatically when necessary</string>
-<string name="availability_tg">GSM data availability</string>
-<string name="tg_allowed">I\'m allowed to use GSM</string>
+<string name="availability_tg">Mobile data availability</string>
+<string name="tg_allowed">I\'m allowed to use mobile</string>
 <string name="tg_allowed_desc">Your carrier allows VoIP over your mobile data connection</string>
 
 </resources>
