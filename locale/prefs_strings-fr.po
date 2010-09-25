@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# French translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-03 19:03+0200\n"
-"PO-Revision-Date: 2010-09-03 19:22+0200\n"
+"POT-Creation-Date: 2010-09-25 11:25+0200\n"
+"PO-Revision-Date: 2010-09-25 11:31+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -227,6 +228,22 @@ msgctxt "snd_clock_rate_desc"
 msgid "Audio channel frequency"
 msgstr "Fréquence du canal audio"
 
+msgctxt "snd_ptime"
+msgid "Frame ptime"
+msgstr "Ptime de la frame"
+
+msgctxt "snd_ptime_desc"
+msgid "Specifying lower ptime will normally reduce the latency"
+msgstr "Un ptime plus petit réduit la latence"
+
+msgctxt "echo_cancellation_tail"
+msgid "Echo cancellation tail"
+msgstr "Longueur d'annulation de l'echo"
+
+msgctxt "echo_cancellation_tail_desc"
+msgid "Tail length of echo cancellation"
+msgstr "Longueur de la trainée sur laquelle appliquer l'annulation d'écho"
+
 msgctxt "enable_ice"
 msgid "Enable ICE"
 msgstr "Activer ICE"
@@ -418,15 +435,19 @@ msgid "Activate the SIP client automatically when necessary"
 msgstr "N'activer CSipSimple que lorsque j'initie un appel."
 
 msgctxt "availability_tg"
-msgid "GSM data availability"
-msgstr "Disponibilité du canal data GSM"
+msgid "Mobile data availability"
+msgstr "Disponibilité du canal donnée mobile"
 
 msgctxt "tg_allowed"
-msgid "I'm allowed to use GSM"
-msgstr "Je suis autorisé à faire de la VoIP sur le GSM"
+msgid "I'm allowed to use mobile"
+msgstr "Je suis autorisé à faire de la VoIP sur le canal donnée du mobile"
 
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
 msgstr ""
 "Votre opérateur vous autorise à faire de la VoIP sur la canal data de sa "
 "connection"
+
+msgctxt "codecs_availability_text"
+msgid "Only available if sip is currently registered"
+msgstr "Disponible seulement si le SIP est actuellement enregistré"

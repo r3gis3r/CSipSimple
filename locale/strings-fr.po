@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# French translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-03 19:03+0200\n"
-"PO-Revision-Date: 2010-09-03 22:24+0200\n"
+"POT-Creation-Date: 2010-09-25 11:25+0200\n"
+"PO-Revision-Date: 2010-09-25 11:33+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,6 +33,10 @@ msgid ""
 msgstr ""
 "Votre connection n'est actuellement pas valide pour faire du SIP (activez le "
 "WIFI ou changez vos préférences pour pouvoir utiliser la 3G)"
+
+msgctxt "invalid_sip_uri"
+msgid "Sip uri is invalid for call"
+msgstr "L'URI SIP n'est pas valide pour effectuer un appel"
 
 msgctxt "accounts"
 msgid "Accounts"
@@ -122,5 +127,25 @@ msgid "No"
 msgstr "Non"
 
 msgctxt "gsm"
-msgid "GSM"
-msgstr "GSM"
+msgid "Mobile"
+msgstr "Passer par le mobile"
+
+msgctxt "dial_tab_name_text"
+msgid "Dial"
+msgstr "Numéroter"
+
+msgctxt "calllog_tab_name_text"
+msgid "CallLogs"
+msgstr "Journal d'appel"
+
+msgctxt "menu_quit_text"
+msgid "Quit"
+msgstr "Quitter"
+
+msgctxt "service_ticker_registered_text"
+msgid "SIP Registered"
+msgstr "SIP enregistré"
+
+msgctxt "outgoing_call_chooser_call_text"
+msgid "Call"
+msgstr "Appeler"

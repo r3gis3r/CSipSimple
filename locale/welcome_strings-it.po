@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# Italian translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -8,15 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-03 19:03+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2010-09-25 11:25+0200\n"
+"PO-Revision-Date: 2010-09-25 11:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: it <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+#, fuzzy
 msgctxt "first_launch_text"
 msgid ""
 "&lt;h2&gt;You are about to run this application for the first "
@@ -35,8 +37,8 @@ msgid ""
 "href=http://www.csipsimple.com&gt;www.csipsimple.com&lt;/a&gt;&lt;br/&gt;This"
 " software is distribute under the terms of the GPLv3 licence (more "
 "details on our website).&lt;br/&gt;For some features (such as voIP over "
-"GSM), you must be sure that your contract with you carrier allow you this"
-" feature before activating it in the application. &lt;i&gt;(If not, "
+"Mobile), you must be sure that your contract with you carrier allow you "
+"this feature before activating it in the application. &lt;i&gt;(If not, "
 "change of carrier or make pressures on him to ensure network neutrality "
 "on your contract).&lt;/i&gt;"
 msgstr ""
@@ -71,4 +73,24 @@ msgstr ""
 "&lt;h2&gt;Novità in questa versione?&lt;/h2&gt;L'applicazione è ancora in"
 " fase alfa. Si può seguire il log dei cambiamenti sul blog "
 "dell'applicazione"
+
+msgctxt "detecting_text"
+msgid "Detecting correct library for your device"
+msgstr ""
+
+msgctxt "intializing_text"
+msgid "Initialize"
+msgstr ""
+
+msgctxt "downloading_text"
+msgid "Downloading"
+msgstr ""
+
+msgctxt "installing_library_text"
+msgid "Installing library..."
+msgstr ""
+
+msgctxt "welcome_caption_text"
+msgid "Thanks for using CSipSimple"
+msgstr ""
 

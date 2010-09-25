@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-03 19:02+0200\n"
+"POT-Creation-Date: 2010-09-25 11:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,10 @@ msgctxt "connection_not_valid"
 msgid ""
 "Selected network route not available (activate WiFi or change preferences"
 " to use 3G)"
+msgstr ""
+
+msgctxt "invalid_sip_uri"
+msgid "Sip uri is invalid for call"
 msgstr ""
 
 msgctxt "accounts"
@@ -120,6 +124,26 @@ msgid "No"
 msgstr ""
 
 msgctxt "gsm"
-msgid "GSM"
+msgid "Mobile"
+msgstr ""
+
+msgctxt "dial_tab_name_text"
+msgid "Dial"
+msgstr ""
+
+msgctxt "calllog_tab_name_text"
+msgid "CallLogs"
+msgstr ""
+
+msgctxt "menu_quit_text"
+msgid "Quit"
+msgstr ""
+
+msgctxt "service_ticker_registered_text"
+msgid "SIP Registered"
+msgstr ""
+
+msgctxt "outgoing_call_chooser_call_text"
+msgid "Call"
 msgstr ""
 

@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# German translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -9,9 +9,10 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-09-25 11:25+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2010-09-25 11:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,419 +20,429 @@ msgstr ""
 
 msgctxt "prefs"
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 msgctxt "prefs_fast"
 msgid "Easy configuration"
-msgstr ""
+msgstr "Einfache Konfiguration"
 
 msgctxt "prefs_fast_desc"
 msgid "Quick options to use if you don't know how SIP works"
-msgstr ""
+msgstr "Einfache Konfiguration, wenn du nicht weißt wie SIP funktioniert"
 
 msgctxt "prefs_network"
 msgid "Network"
-msgstr ""
+msgstr "Netzwerk"
 
 msgctxt "prefs_network_desc"
 msgid "How SIP can be connected to the network"
-msgstr ""
+msgstr "Über welches Netzwerk darf sich SIP verbinden"
 
 msgctxt "prefs_media"
 msgid "Media"
-msgstr ""
+msgstr "Audio"
 
 msgctxt "prefs_media_desc"
 msgid "Codecs and in-call sound behavior"
-msgstr ""
+msgstr "Codecs and Verhalten während eines Anrufs"
 
 msgctxt "prefs_ui"
 msgid "User interface"
-msgstr ""
+msgstr "Benutzeroberfläche"
 
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
-msgstr ""
+msgstr "Anpassen der Benutzeroberfläche"
 
 msgctxt "for_incomings"
 msgid "For incoming calls"
-msgstr ""
+msgstr "Für eingehende Anrufe"
 
 msgctxt "for_outgoings"
 msgid "For outgoing calls"
-msgstr ""
+msgstr "Für ausgehende Anrufe"
 
 msgctxt "perfs"
 msgid "Performances"
-msgstr ""
+msgstr "Performanz"
 
 msgctxt "transport"
 msgid "Transport"
-msgstr ""
+msgstr "Protokoll"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
-msgstr ""
+msgstr "Verwende WLAN"
 
 msgctxt "use_wifi_in_desc"
 msgid "Use WiFi for incoming calls"
-msgstr ""
+msgstr "Verwendet WLAN für eingehende Anrufe"
 
 msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
-msgstr ""
+msgstr "Verwendet WLAN für ausgehende Anrufe"
 
 msgctxt "use_3g"
 msgid "Use 3G"
-msgstr ""
+msgstr "Verwende UMTS"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr ""
+msgstr "Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
-msgstr ""
+msgstr "Verwende EDGE"
 
 msgctxt "use_gprs"
 msgid "Use GPRS"
-msgstr ""
+msgstr "Verwende GPRS"
 
 msgctxt "lock_wifi"
 msgid "Lock WiFi"
-msgstr ""
+msgstr "WLAN Performanz"
 
 msgctxt "lock_wifi_desc"
 msgid "Prevent WiFi idle when SIP is connected"
-msgstr ""
+msgstr "Verhindere das Einschlafen, wenn SIP über WLAN verbunden ist"
 
 msgctxt "enable_tcp"
 msgid "TCP"
-msgstr ""
+msgstr "TCP"
 
 msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
-msgstr ""
+msgstr "Aktiviert das TCP Protokoll"
 
 msgctxt "enable_udp"
 msgid "UDP"
-msgstr ""
+msgstr "UDP"
 
 msgctxt "enable_udp_desc"
 msgid "Enable UDP transport"
-msgstr ""
+msgstr "Aktiviert das UDP Protokoll"
 
 msgctxt "network_udp_transport_port"
 msgid "UDP Port"
-msgstr ""
+msgstr "UDP Port"
 
 msgctxt "network_udp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Lokale UDP Portnummer"
 
 msgctxt "network_tcp_transport_port"
 msgid "TCP Port"
-msgstr ""
+msgstr "TCP Port"
 
 msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Lokale TCP Portnummer"
 
 msgctxt "network_rtp_port"
 msgid "RTP port"
-msgstr ""
+msgstr "RTP port"
 
 msgctxt "network_rtp_port_desc"
 msgid "Port for RTP ports range start"
-msgstr ""
+msgstr "Port an dem die RTP Ports beginnen"
 
 msgctxt "audio_quality"
 msgid "Audio quality"
-msgstr ""
+msgstr "Audioqualität"
 
 msgctxt "codecs"
 msgid "Codecs"
-msgstr ""
+msgstr "Codecs"
 
 msgctxt "ice_turn"
 msgid "ICE/TURN/STUN"
-msgstr ""
+msgstr "ICE/TURN/STUN"
 
 msgctxt "echo_cancellation"
 msgid "Echo cancellation"
-msgstr ""
+msgstr "Echounterdrückung"
 
 msgctxt "echo_cancellation_desc"
 msgid "Activate echo cancellation"
-msgstr ""
+msgstr "Aktiviert die Echounterdrückung"
 
 msgctxt "enable_vad"
 msgid "Voice audio detection"
-msgstr ""
+msgstr "Sprachaktivitätserkennung"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr ""
+msgstr "Aktiviert die Sprachaktivitätserkennung"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
-msgstr ""
+msgstr "Mikrofonpegel"
 
 msgctxt "snd_mic_level_desc"
 msgid "Adjust the micro signal level (1 do nothing)"
-msgstr ""
+msgstr "Stellt den Mikrofonpegel ein (1=keine Veränderung)"
 
 msgctxt "snd_speaker_level"
 msgid "Speaker amplification"
-msgstr ""
+msgstr "Lautsprecherpegel"
 
 msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
-msgstr ""
+msgstr "Stellt den Lautsprecherpegel ein (1=keine Veränderung)"
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
-msgstr ""
+msgstr "Audiodatenpegel"
 
 msgctxt "snd_stream_level_desc"
 msgid "Set the initial level for audio stream (Android stream)"
-msgstr ""
+msgstr "Stellt den Mikrofonpegel ein"
 
 msgctxt "snd_auto_close_time"
 msgid "Auto close time"
-msgstr ""
+msgstr "Audioabschaltung"
 
 msgctxt "snd_auto_close_time_desc"
 msgid "Time to wait for close audio channel"
-msgstr ""
+msgstr "Wartezeit bis Audio abgeschaltet wird"
 
 msgctxt "snd_media_quality"
 msgid "Media quality"
-msgstr ""
+msgstr "Audioqualität"
 
 msgctxt "snd_media_quality_desc"
 msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
+"Qualität der Audiodaten (Verändere diesen Wert nur, wenn du weißt was du "
+"tust)"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
-msgstr ""
+msgstr "Abtastrate"
 
 msgctxt "snd_clock_rate_desc"
 msgid "Audio channel frequency"
-msgstr ""
+msgstr "Verändert die Abtastrate der Audiodaten"
 
 msgctxt "snd_ptime"
 msgid "Frame ptime"
-msgstr ""
+msgstr "Paket ptime"
 
 msgctxt "snd_ptime_desc"
 msgid "Specifying lower ptime will normally reduce the latency"
-msgstr ""
+msgstr "Eine kleinere ptime reduziert normaler Weise die Latenz"
 
 msgctxt "echo_cancellation_tail"
 msgid "Echo cancellation tail"
-msgstr ""
+msgstr "Echounterdrückungslänge"
 
 msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
-msgstr ""
+msgstr "Länge des Echos das unterdrückt werden kann"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
-msgstr ""
+msgstr "Aktiviert ICE"
 
 msgctxt "enable_ice_desc"
 msgid "Turn on ICE feature"
-msgstr ""
+msgstr "Aktiviert die ICE Funktionalität"
 
 msgctxt "enable_turn"
 msgid "Enable TURN"
-msgstr ""
+msgstr "Aktiviert TURN"
 
 msgctxt "enable_turn_desc"
 msgid "Turn on TURN feature"
-msgstr ""
+msgstr "Aktiviert die TURN Funktionalität"
 
 msgctxt "turn_server"
 msgid "Turn server"
-msgstr ""
+msgstr "TURN Server"
 
 msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
-msgstr ""
+msgstr "TURN Server (HOST:PORT)"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
-msgstr ""
+msgstr "Aktiviert STUN"
 
 msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
-msgstr ""
+msgstr "Aktiviert die STUN Funktionalität"
 
 msgctxt "stun_server"
 msgid "STUN server"
-msgstr ""
+msgstr "STUN Server"
 
 msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
-msgstr ""
+msgstr "STUN Server (HOST:PORT)"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
-msgstr ""
+msgstr "Priorität (0=deaktiviert)"
 
 msgctxt "general_ui"
 msgid "General user interface"
-msgstr ""
+msgstr "Standard-Benutzeroberfläche"
 
 msgctxt "native_dialer_integration"
 msgid "Native dialer integration"
-msgstr ""
+msgstr "Native dialer integration"
 
 msgctxt "advanced_ui"
 msgid "Advanced tweaks"
-msgstr ""
+msgstr "Advanced tweaks"
 
 msgctxt "integrate_with_native_dialer"
 msgid "Dialer integration"
-msgstr ""
+msgstr "Nachfragen beim Wählen"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
 "When dialing with native dialer you'll be asked if you want to use SIP or"
 " mobile"
 msgstr ""
+"Beim Wählen einer Nummer mit der Standardanwendung werden sie gefragt, ob"
+" sie SIP oder GSM verwenden wollen"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
-msgstr ""
+msgstr "Anrufliste einbinden"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
-msgstr ""
+msgstr "SIP Anrufe werden (wenn möglich) in die Standardanwendung eingeplegt"
 
 msgctxt "exclude_for_outgoing_call"
 msgid "Exclude patterns"
-msgstr ""
+msgstr "Ausschlussmuster"
 
 msgctxt "exclude_for_outgoing_call_desc"
 msgid "Exclude patterns for outgoing calls"
-msgstr ""
+msgstr "Ausschlussmuster für ausgehende Anrufe"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
-msgstr ""
+msgstr "Wählton beim Wählen"
 
 msgctxt "dial_press_tone_desc"
 msgid "Play touch tones when dialing"
-msgstr ""
+msgstr "Es werden Wähltöne beim Wählen abgespielt"
 
 msgctxt "dial_press_vibrate"
 msgid "Dialing vibrate feedback"
-msgstr ""
+msgstr "Feedback durch Vibrator"
 
 msgctxt "dial_press_vibrate_desc"
 msgid "Haptic (vibrate) feedback when dialing"
-msgstr ""
+msgstr "Haptisches Feedback (Vibrieren) beim Wählen"
 
 msgctxt "start_with_text_dialer"
 msgid "Text dialer"
-msgstr ""
+msgstr "Start mit Textwähler"
 
 msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
-msgstr ""
+msgstr "Startet mit Textwähler"
 
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide unlocker"
-msgstr ""
+msgstr "Rufannahme durch Schieben verhindern"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr ""
+msgstr "Verwende Schaltfächen zum Annehmen von eingehenden Anrufen"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
-msgstr ""
+msgstr "Einschlafen verhindern"
 
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
+"Beim Telefonieren das Einschlafen verhindern. (Behebt Probleme mit "
+"abgehacktem Audio)"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
-msgstr ""
+msgstr "Blockiere Einschlafen"
 
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for CSipSimple (drain battery)"
-msgstr ""
+msgstr "Stellt sicher das CSipSimple immer ausgeführt wird (Belastet die Batterie)"
 
 msgctxt "log_level"
 msgid "Log level"
-msgstr ""
+msgstr "Protokollierungsstufe"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr ""
+msgstr "Protokollierungsstufe beim Debuggen (0=none, 5=verbose)"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
-msgstr ""
+msgstr "Musikanwendungsintegration"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
+"Deaktiviere diese Funktion, wenn du eine andere als die Standard-"
+"Musikanwendung verwendest"
 
 msgctxt "android_integration"
 msgid "Integrate with Android"
-msgstr ""
+msgstr "Integration mit Android"
 
 msgctxt "android_integration_desc"
 msgid "Integration with native dialer and call logs"
-msgstr ""
+msgstr "Integration mit Standardwählprogramm und Anrufliste"
 
 msgctxt "availability_profile"
 msgid "Availability profile"
-msgstr ""
+msgstr "Verfügbarkeitsprofil"
 
 msgctxt "always_available"
 msgid "Always available"
-msgstr ""
+msgstr "Immer erreichbar"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr ""
+msgstr "Belastet die Batterie stark, dafür bist du immer erreichbar"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
-msgstr ""
+msgstr "Erreichbar bei WLAN"
 
 msgctxt "wifi_available_desc"
 msgid "Availability of incoming calls based on WiFi profile"
-msgstr ""
+msgstr "Erreichbar für eingehende Anrufe, wenn das WLAN Profil aktiv ist"
 
 msgctxt "never_available"
 msgid "Only for outgoing"
-msgstr ""
+msgstr "Nur ausgehende Verbindungen"
 
 msgctxt "never_available_desc"
 msgid "Activate the SIP client automatically when necessary"
-msgstr ""
+msgstr "Aktiviert die SIP Anwendung nur wenn es nötig ist"
 
 msgctxt "availability_tg"
 msgid "Mobile data availability"
-msgstr ""
+msgstr "Verfügbarkeit UMTS"
 
 msgctxt "tg_allowed"
 msgid "I'm allowed to use mobile"
-msgstr ""
+msgstr "Ich darf UMTS verwenden"
 
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
 msgstr ""
+"Aktivert die Verwendung von UMTS. (Ich habe sichergestellt, daß mein "
+"Provider die Verwendung von VoIP über UMTS erlaubt)"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
-msgstr ""
+msgstr "Nur verfügbar, wenn SIP registriert ist"
 

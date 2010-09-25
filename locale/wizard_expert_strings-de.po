@@ -1,18 +1,18 @@
-# French translations for PROJECT.
+# German translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
-# FULL NAME <EMAIL@ADDRESS>, 2010.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-09-25 11:25+0200\n"
-"PO-Revision-Date: 2010-09-03 22:37+0200\n"
+"PO-Revision-Date: 2010-09-25 11:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,27 +20,27 @@ msgstr ""
 
 msgctxt "w_expert_display_name"
 msgid "Account name"
-msgstr "Nom du compte"
+msgstr "Kontoname"
 
 msgctxt "w_expert_display_name_desc"
 msgid "Display name for this account"
-msgstr "Nom d'affichage pour ce compte"
+msgstr "Zeigt den Namen dieses Kontos"
 
 msgctxt "w_expert_acc_id"
 msgid "Account id"
-msgstr "Identifiant pour le compte"
+msgstr "Konto ID"
 
 msgctxt "w_expert_acc_id_desc"
 msgid "Format : DisplayName &lt;sip:login@registrar&gt;"
-msgstr "Format : NomDAffichage &lt;sip:login@registrar&gt;"
+msgstr "Format: Displayname &lt;sip:login@registrar&gt;"
 
 msgctxt "w_expert_reg_uri"
 msgid "Registration URI"
-msgstr "URI du registrar"
+msgstr "Registrar URL"
 
 msgctxt "w_expert_reg_uri_desc"
 msgid "Format : sip:registrar.net[:port]"
-msgstr "Format : sip:registrar.net[:port]"
+msgstr "Format: sip:registrar.net[:Port]"
 
 msgctxt "w_expert_realm"
 msgid "Realm"
@@ -48,53 +48,53 @@ msgstr "Realm"
 
 msgctxt "w_expert_realm_desc"
 msgid "Authentication domain (if you don't know, use '*')"
-msgstr "Domaine d'authentification (si vous ne savez pas utilisez *)"
+msgstr "Authentifikationsdomain (benutze '*', wenn du sie nicht kennst)"
 
 msgctxt "w_expert_username"
 msgid "Username"
-msgstr "Nom utilisateur"
+msgstr "Benutzername"
 
 msgctxt "w_expert_username_desc"
 msgid "Username for authentication"
-msgstr "Login pour l'authentification"
+msgstr "Benutzername / Login"
 
 msgctxt "w_expert_data"
 msgid "Password"
-msgstr "Mot de passe"
+msgstr "Passwort"
 
 msgctxt "w_expert_data_desc"
 msgid "Password (or other data) for authentication"
-msgstr "Mot de passe pour l'authentification"
+msgstr "Passwort für dieses Konto"
 
 msgctxt "w_expert_t_proxy"
 msgid "Proxy"
-msgstr "Serveur proxy"
+msgstr "Proxy"
 
 msgctxt "w_expert_proxy"
 msgid "Proxy URI"
-msgstr "Uri du proxy"
+msgstr "Proxy URL"
 
 msgctxt "w_expert_proxy_desc"
 msgid "Format : sip:proxy.net[:port]"
-msgstr "Format : sip:proxy.net[:port]"
+msgstr "Format: sip:proxy.net[:Port]"
 
 msgctxt "w_expert_use_tcp"
 msgid "Use TCP (not UDP)"
-msgstr "Utiliser le TCP (non=UDP)"
+msgstr "Verwende TCP (nicht UDP)"
 
 msgctxt "w_expert_publish_enabled"
 msgid "Publish enabled"
-msgstr "Publier la présence"
+msgstr "Publish enabled"
 
 msgctxt "w_expert_reg_timeout"
 msgid "Register timeout (sec)"
-msgstr "Timeout du register (sec)"
+msgstr "Register Timeout (sec)"
 
 msgctxt "w_expert_ka_interval"
 msgid "Keep-alive interval (sec)"
-msgstr "Intervalle Keep-alive (sec)"
+msgstr "Keep-alive Interval (sec)"
 
 msgctxt "w_expert_force_contact"
 msgid "Force contact"
-msgstr "Forcer le champ contact"
+msgstr "Force contact"
 

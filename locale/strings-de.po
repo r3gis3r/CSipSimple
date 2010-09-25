@@ -1,4 +1,4 @@
-# Italian translations for PROJECT.
+# German translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -11,7 +11,7 @@ msgstr ""
 "POT-Creation-Date: 2010-09-25 11:25+0200\n"
 "PO-Revision-Date: 2010-09-25 11:22+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: it <LL@li.org>\n"
+"Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -20,134 +20,133 @@ msgstr ""
 
 msgctxt "app_name"
 msgid "CSipSimple"
-msgstr "CSipSimple"
+msgstr ""
 
 msgctxt "unable_to_download_file"
 msgid "Unable to download file"
-msgstr "Impossibile scaricare file"
+msgstr "Datei konnte nicht heruntergeladen werden"
 
 msgctxt "connection_not_valid"
 msgid ""
 "Selected network route not available (activate WiFi or change preferences"
 " to use 3G)"
 msgstr ""
-"La tua connessione non è valida per SIP (attiva WIFI o cambia preferenze "
-"per usare 3G)"
+"Ausgewähltes Netzwerk nicht verfügbar (aktiviere WLAN oder erlaube "
+"Verbindungen über UMTS)"
 
 msgctxt "invalid_sip_uri"
 msgid "Sip uri is invalid for call"
-msgstr ""
+msgstr "Die Sip URL ist für diesen Anruf ungültig"
 
 msgctxt "accounts"
 msgid "Accounts"
-msgstr "Account"
+msgstr "Konten"
 
 msgctxt "save"
 msgid "Save"
-msgstr "Salva"
+msgstr "Speichern"
 
 msgctxt "cancel"
 msgid "Cancel"
-msgstr "Cancella"
+msgstr "Abbrechen"
 
 msgctxt "activate_account"
 msgid "Activate account"
-msgstr "Attiva account"
+msgstr "Aktiviere Konto"
 
 msgctxt "deactivate_account"
 msgid "Deactivate account"
-msgstr "Disattiva account"
+msgstr "Deaktiviere Konto"
 
 msgctxt "delete_account"
 msgid "Delete account"
-msgstr "Cancella account"
+msgstr "Lösche Konto"
 
 msgctxt "modify_account"
 msgid "Modify account"
-msgstr "Modifica account"
+msgstr "Konto bearbeiten"
 
 msgctxt "add_account"
 msgid "Add account"
-msgstr "Aggiungi account"
+msgstr "Konto hinzufügen"
 
 msgctxt "choose_wizard"
 msgid "Choose wizard"
-msgstr "Wizard di scelta"
+msgstr "Wähle Assistenten"
 
 msgctxt "use"
 msgid "Use :"
-msgstr ""
+msgstr "Verwende :"
 
 msgctxt "use_pstn"
 msgid "Use mobile"
-msgstr "Usa GSM"
+msgstr "Verwende GSM"
 
 msgctxt "ongoing_call"
 msgid "Call in Progress"
-msgstr "Chiamate in uscita"
+msgstr "aktiver Anruf"
 
 msgctxt "recentCalls_empty"
 msgid "No Call Logs"
-msgstr ""
+msgstr "Anrufliste leer"
 
 msgctxt "filters"
 msgid "Filters"
-msgstr ""
+msgstr "Filter"
 
 msgctxt "add_filter"
 msgid "Add filter / rewrite rule"
-msgstr ""
+msgstr "Filter hinzufügen / Regel bearbeiten"
 
 msgctxt "delete_filter"
 msgid "Delete filter"
-msgstr ""
+msgstr "Filter löschen"
 
 msgctxt "callLog_delete_entry"
 msgid "Delete this call"
-msgstr ""
+msgstr "Diesen Anruf löschen"
 
 msgctxt "callLog_delete_all"
 msgid "Delete all calls"
-msgstr ""
+msgstr "Alle Anrufe löschen"
 
 msgctxt "callLog_delDialog_title"
 msgid "Delete Call Logs"
-msgstr ""
+msgstr "Anrufliste löschen"
 
 msgctxt "callLog_delDialog_message"
 msgid "Are you sure you want to delete all calls from the log?"
-msgstr ""
+msgstr "Bist du sicher, dass du alle Anrufe aus der Liste löschen möchtest?"
 
 msgctxt "callLog_delDialog_yes"
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 msgctxt "callLog_delDialog_no"
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
-#, fuzzy
 msgctxt "gsm"
 msgid "Mobile"
-msgstr "Usa GSM"
+msgstr "GSM"
 
 msgctxt "dial_tab_name_text"
 msgid "Dial"
-msgstr ""
+msgstr "Telefon"
 
 msgctxt "calllog_tab_name_text"
 msgid "CallLogs"
-msgstr ""
+msgstr "Anrufliste"
 
 msgctxt "menu_quit_text"
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 msgctxt "service_ticker_registered_text"
 msgid "SIP Registered"
-msgstr ""
+msgstr "SIP registriert"
 
 msgctxt "outgoing_call_chooser_call_text"
 msgid "Call"
-msgstr ""
+msgstr "Wähle"
 
