@@ -1,0 +1,149 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 14:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "app_name"
+msgid "CSipSimple"
+msgstr ""
+
+msgctxt "unable_to_download_file"
+msgid "Unable to download file"
+msgstr ""
+
+msgctxt "connection_not_valid"
+msgid ""
+"Selected network route not available (activate WiFi or change preferences"
+" to use 3G)"
+msgstr ""
+
+msgctxt "invalid_sip_uri"
+msgid "Sip uri is invalid for call"
+msgstr ""
+
+msgctxt "accounts"
+msgid "Accounts"
+msgstr ""
+
+msgctxt "save"
+msgid "Save"
+msgstr ""
+
+msgctxt "cancel"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "activate_account"
+msgid "Activate account"
+msgstr ""
+
+msgctxt "deactivate_account"
+msgid "Deactivate account"
+msgstr ""
+
+msgctxt "delete_account"
+msgid "Delete account"
+msgstr ""
+
+msgctxt "modify_account"
+msgid "Modify account"
+msgstr ""
+
+msgctxt "add_account"
+msgid "Add account"
+msgstr ""
+
+msgctxt "choose_wizard"
+msgid "Choose wizard"
+msgstr ""
+
+msgctxt "use"
+msgid "Use :"
+msgstr ""
+
+msgctxt "use_pstn"
+msgid "Use mobile"
+msgstr ""
+
+msgctxt "ongoing_call"
+msgid "Call in Progress"
+msgstr ""
+
+msgctxt "recentCalls_empty"
+msgid "No Call Logs"
+msgstr ""
+
+msgctxt "filters"
+msgid "Filters"
+msgstr ""
+
+msgctxt "add_filter"
+msgid "Add filter / rewrite rule"
+msgstr ""
+
+msgctxt "delete_filter"
+msgid "Delete filter"
+msgstr ""
+
+msgctxt "callLog_delete_entry"
+msgid "Delete this call"
+msgstr ""
+
+msgctxt "callLog_delete_all"
+msgid "Delete all calls"
+msgstr ""
+
+msgctxt "callLog_delDialog_title"
+msgid "Delete Call Logs"
+msgstr ""
+
+msgctxt "callLog_delDialog_message"
+msgid "Are you sure you want to delete all calls from the log?"
+msgstr ""
+
+msgctxt "callLog_delDialog_yes"
+msgid "Yes"
+msgstr ""
+
+msgctxt "callLog_delDialog_no"
+msgid "No"
+msgstr ""
+
+msgctxt "gsm"
+msgid "Mobile"
+msgstr ""
+
+msgctxt "dial_tab_name_text"
+msgid "Dial"
+msgstr ""
+
+msgctxt "calllog_tab_name_text"
+msgid "CallLogs"
+msgstr ""
+
+msgctxt "menu_quit_text"
+msgid "Quit"
+msgstr ""
+
+msgctxt "service_ticker_registered_text"
+msgid "SIP Registered"
+msgstr ""
+
+msgctxt "outgoing_call_chooser_call_text"
+msgid "Call"
+msgstr ""
+

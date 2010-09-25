@@ -1,0 +1,152 @@
+# German translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 14:29+0200\n"
+"PO-Revision-Date: 2010-09-25 14:29+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "app_name"
+msgid "CSipSimple"
+msgstr ""
+
+msgctxt "unable_to_download_file"
+msgid "Unable to download file"
+msgstr "Datei konnte nicht heruntergeladen werden"
+
+msgctxt "connection_not_valid"
+msgid ""
+"Selected network route not available (activate WiFi or change preferences"
+" to use 3G)"
+msgstr ""
+"Ausgewähltes Netzwerk nicht verfügbar (aktiviere WLAN oder erlaube "
+"Verbindungen über UMTS)"
+
+msgctxt "invalid_sip_uri"
+msgid "Sip uri is invalid for call"
+msgstr "Die Sip URL ist für diesen Anruf ungültig"
+
+msgctxt "accounts"
+msgid "Accounts"
+msgstr "Konten"
+
+msgctxt "save"
+msgid "Save"
+msgstr "Speichern"
+
+msgctxt "cancel"
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgctxt "activate_account"
+msgid "Activate account"
+msgstr "Aktiviere Konto"
+
+msgctxt "deactivate_account"
+msgid "Deactivate account"
+msgstr "Deaktiviere Konto"
+
+msgctxt "delete_account"
+msgid "Delete account"
+msgstr "Lösche Konto"
+
+msgctxt "modify_account"
+msgid "Modify account"
+msgstr "Konto bearbeiten"
+
+msgctxt "add_account"
+msgid "Add account"
+msgstr "Konto hinzufügen"
+
+msgctxt "choose_wizard"
+msgid "Choose wizard"
+msgstr "Wähle Assistenten"
+
+msgctxt "use"
+msgid "Use :"
+msgstr "Verwende :"
+
+msgctxt "use_pstn"
+msgid "Use mobile"
+msgstr "Verwende GSM"
+
+msgctxt "ongoing_call"
+msgid "Call in Progress"
+msgstr "aktiver Anruf"
+
+msgctxt "recentCalls_empty"
+msgid "No Call Logs"
+msgstr "Anrufliste leer"
+
+msgctxt "filters"
+msgid "Filters"
+msgstr "Filter"
+
+msgctxt "add_filter"
+msgid "Add filter / rewrite rule"
+msgstr "Filter hinzufügen / Regel bearbeiten"
+
+msgctxt "delete_filter"
+msgid "Delete filter"
+msgstr "Filter löschen"
+
+msgctxt "callLog_delete_entry"
+msgid "Delete this call"
+msgstr "Diesen Anruf löschen"
+
+msgctxt "callLog_delete_all"
+msgid "Delete all calls"
+msgstr "Alle Anrufe löschen"
+
+msgctxt "callLog_delDialog_title"
+msgid "Delete Call Logs"
+msgstr "Anrufliste löschen"
+
+msgctxt "callLog_delDialog_message"
+msgid "Are you sure you want to delete all calls from the log?"
+msgstr "Bist du sicher, dass du alle Anrufe aus der Liste löschen möchtest?"
+
+msgctxt "callLog_delDialog_yes"
+msgid "Yes"
+msgstr "Ja"
+
+msgctxt "callLog_delDialog_no"
+msgid "No"
+msgstr "Nein"
+
+msgctxt "gsm"
+msgid "Mobile"
+msgstr "GSM"
+
+msgctxt "dial_tab_name_text"
+msgid "Dial"
+msgstr "Telefon"
+
+msgctxt "calllog_tab_name_text"
+msgid "CallLogs"
+msgstr "Anrufliste"
+
+msgctxt "menu_quit_text"
+msgid "Quit"
+msgstr "Beenden"
+
+msgctxt "service_ticker_registered_text"
+msgid "SIP Registered"
+msgstr "SIP registriert"
+
+msgctxt "outgoing_call_chooser_call_text"
+msgid "Call"
+msgstr "Wähle"
+

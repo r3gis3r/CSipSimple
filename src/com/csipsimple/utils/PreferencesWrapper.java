@@ -118,13 +118,37 @@ public class PreferencesWrapper {
 		return false;
 	}
 	
+	// Check for other (wimax for example)
+	static public boolean isValidOtherConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
+		
+		//boolean valid_for_other = aPrefs.getBoolean("use_other_" + suffix, true);
+		boolean valid_for_other = true;
+		if (valid_for_other && 
+			ni != null && 
+			ni.getType() != ConnectivityManager.TYPE_MOBILE && ni.getType() != ConnectivityManager.TYPE_WIFI) {
+			
+			if (ni.getState() == NetworkInfo.State.CONNECTED) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	// Generic function for both incoming and outgoing
 	static public boolean isValidConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
 		if (isValidWifiConnectionFor(ni, aPrefs, suffix)) {
-			Log.d(THIS_FILE, "Is valid for wifi !");
+			Log.d(THIS_FILE, "We are valid for WIFI");
 			return true;
 		}
-		return isValidMobileConnectionFor(ni, aPrefs, suffix);
+		if(isValidMobileConnectionFor(ni, aPrefs, suffix)) {
+			Log.d(THIS_FILE, "We are valid for MOBILE");
+			return true;
+		}
+		if(isValidOtherConnectionFor(ni, aPrefs, suffix)) {
+			Log.d(THIS_FILE, "We are valid for OTHER");
+			return true;
+		}
+		return false;
 	}
 	
 	/**

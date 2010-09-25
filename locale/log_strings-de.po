@@ -1,0 +1,57 @@
+# German translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 14:29+0200\n"
+"PO-Revision-Date: 2010-09-25 14:29+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "unknown"
+msgid "Unknown"
+msgstr "Unbekannt"
+
+msgctxt "type_incoming"
+msgid "Incoming"
+msgstr "Eingehend"
+
+msgctxt "type_outgoing"
+msgid "Outgoing"
+msgstr "Ausgehend"
+
+msgctxt "type_missed"
+msgid "Missed"
+msgstr "Entgangen"
+
+msgctxt "callBack"
+msgid "Call back"
+msgstr "Rückruf"
+
+msgctxt "callAgain"
+msgid "Call again"
+msgstr "Wahlwiederholung"
+
+msgctxt "returnCall"
+msgid "Return call"
+msgstr "Rückruf"
+
+#, python-format
+msgctxt "callDetailsDurationFormat"
+msgid ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> secs"
+msgstr ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> secs"
+

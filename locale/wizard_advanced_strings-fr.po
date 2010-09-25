@@ -1,0 +1,72 @@
+# French translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 14:29+0200\n"
+"PO-Revision-Date: 2010-09-25 14:29+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "w_advanced_display_name"
+msgid "Account name"
+msgstr "Nom du compte"
+
+msgctxt "w_advanced_display_name_desc"
+msgid "Display name for this account"
+msgstr "Nom d'affichage du compte"
+
+msgctxt "w_advanced_caller_id"
+msgid "Caller ID"
+msgstr "Identifiant"
+
+msgctxt "w_advanced_caller_id_desc"
+msgid "Caller ID to send with calls"
+msgstr "Identifiant vu par les vos correspondants"
+
+msgctxt "w_advanced_server"
+msgid "Server"
+msgstr "Serveur"
+
+msgctxt "w_advanced_server_desc"
+msgid "SIP server domain/IP[:port]"
+msgstr "Serveur sip : domaine/IP[:port]"
+
+msgctxt "w_advanced_username"
+msgid "Username"
+msgstr "Nom utilisateur"
+
+msgctxt "w_advanced_username_desc"
+msgid "Username for SIP server authentication"
+msgstr "Nom de l'utilisateur SIP"
+
+msgctxt "w_advanced_password"
+msgid "Password"
+msgstr "Mot de passe"
+
+msgctxt "w_advanced_password_desc"
+msgid "Password for SIP server authentication"
+msgstr "Mot de passe de l'utilisateur SIP"
+
+msgctxt "w_advanced_use_tcp"
+msgid "Use TCP (not UDP)"
+msgstr "Utiliser le TCP (non=UDP)"
+
+msgctxt "w_advanced_proxy"
+msgid "Proxy"
+msgstr "Serveur proxy"
+
+msgctxt "w_advanced_proxy_desc"
+msgid "Proxy domain/IP[:port] (optional, not always needed)"
+msgstr "Proxy domaine/IP[:port] (optionnel)"
+

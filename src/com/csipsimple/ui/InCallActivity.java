@@ -202,28 +202,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     		quitTimer = new Timer();
         }
         
-	}
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		if(manageKeyguard) {
-			keyguardLock.reenableKeyguard();
-		}
-		if(quitTimer != null) {
-			quitTimer.cancel();
-			quitTimer.purge();
-			quitTimer = null;
-		}
-		
-		lockOverlay.tearDown();
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		updateUIFromCall();
-		if(proximitySensor != null) {
+        if(proximitySensor != null) {
 			WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 			WifiInfo winfo = wman.getConnectionInfo();
 			if(winfo == null || !prefsWrapper.keepAwakeInCall()) {
@@ -262,22 +241,40 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			}
 			
 		}
-		dialFeedback.resume();
+        dialFeedback.resume();
+        
+        updateUIFromCall();
 	}
 	
 	@Override
-	protected void onPause() {
-		super.onPause();
+	protected void onStop() {
+		super.onStop();
+		
+		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
+			proximityWakeLock.release();
+		}
+		
 		if(proximitySensor != null) {
 			proximitySensorTracked = false;
 			sensorManager.unregisterListener(this);
 		}
-		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
-			proximityWakeLock.release();
-		}
+		
 		dialFeedback.pause();
+		
+		if(quitTimer != null) {
+			quitTimer.cancel();
+			quitTimer.purge();
+			quitTimer = null;
+		}
+		
+		lockOverlay.tearDown();
+		
+		if(manageKeyguard) {
+			keyguardLock.reenableKeyguard();
+		}
 	}
-
+	
+	
 	private synchronized void updateUIFromCall() {
 
 		Log.d(THIS_FILE, "Update ui from call " + callInfo.getCallId() + " state " + callInfo.getStringCallState(this));
@@ -438,6 +435,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
+		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
+			proximityWakeLock.release();
+		}
 		try {
 			unregisterReceiver(callStateReceiver);
 		}catch (IllegalArgumentException e) {

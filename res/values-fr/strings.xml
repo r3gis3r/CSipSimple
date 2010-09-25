@@ -26,9 +26,9 @@
   <string name="callLog_delDialog_message">Etes vous sûr de vouloir supprimer tout le journal d\'appel?</string>
   <string name="callLog_delDialog_yes">Oui</string>
   <string name="callLog_delDialog_no">Non</string>
-  <string name="gsm">Passer par le mobile</string>
-  <string name="dial_tab_name_text">Numéroter</string>
-  <string name="calllog_tab_name_text">Journal d\'appel</string>
+  <string name="gsm">Mobile</string>
+  <string name="dial_tab_name_text">Tél.</string>
+  <string name="calllog_tab_name_text">Appels</string>
   <string name="menu_quit_text">Quitter</string>
   <string name="service_ticker_registered_text">SIP enregistré</string>
   <string name="outgoing_call_chooser_call_text">Appeler</string>

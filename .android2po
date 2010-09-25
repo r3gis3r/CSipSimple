@@ -1,0 +1,3 @@
+#--layout gnu
+#--no-template
+#--template locale/template.pot

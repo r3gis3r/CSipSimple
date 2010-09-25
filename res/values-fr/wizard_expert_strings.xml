@@ -3,7 +3,7 @@
   <string name="w_expert_display_name">Nom du compte</string>
   <string name="w_expert_display_name_desc">Nom d\'affichage pour ce compte</string>
   <string name="w_expert_acc_id">Identifiant pour le compte</string>
-  <string name="w_expert_acc_id_desc">Format : NomDAffichage &lt;sip:login@registrar&gt;</string>
+  <string name="w_expert_acc_id_desc">Format : NomDAffichage &lt;sip:login\@registrar&gt;</string>
   <string name="w_expert_reg_uri">URI du registrar</string>
   <string name="w_expert_reg_uri_desc">Format : sip:registrar.net[:port]</string>
   <string name="w_expert_realm">Realm</string>
