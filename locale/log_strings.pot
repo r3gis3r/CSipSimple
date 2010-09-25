@@ -17,4 +17,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+msgctxt "unknown"
+msgid "Unknown"
+msgstr ""
+
+msgctxt "type_incoming"
+msgid "Incoming"
+msgstr ""
+
+msgctxt "type_outgoing"
+msgid "Outgoing"
+msgstr ""
+
+msgctxt "type_missed"
+msgid "Missed"
+msgstr ""
+
+msgctxt "callBack"
+msgid "Call back"
+msgstr ""
+
+msgctxt "callAgain"
+msgid "Call again"
+msgstr ""
+
+msgctxt "returnCall"
+msgid "Return call"
+msgstr ""
+
+#, python-format
+msgctxt "callDetailsDurationFormat"
+msgid ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> secs"
+msgstr ""
 

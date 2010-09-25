@@ -17,4 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+msgctxt "w_callcentric_display_name"
+msgid "Account name"
+msgstr ""
+
+msgctxt "w_callcentric_display_name_desc"
+msgid "Display name for this account"
+msgstr ""
+
+msgctxt "w_callcentric_phone_number"
+msgid "SIP Phone Number"
+msgstr ""
+
+msgctxt "w_callcentric_phone_number_desc"
+msgid "Callcentric SIP phone number (1777xxxxxxx)"
+msgstr ""
+
+msgctxt "w_callcentric_password"
+msgid "Password"
+msgstr ""
+
+msgctxt "w_callcentric_password_desc"
+msgid "Password for your Callcentric account"
+msgstr ""
 

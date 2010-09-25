@@ -1,0 +1,99 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 12:22+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "w_expert_display_name"
+msgid "Account name"
+msgstr ""
+
+msgctxt "w_expert_display_name_desc"
+msgid "Display name for this account"
+msgstr ""
+
+msgctxt "w_expert_acc_id"
+msgid "Account id"
+msgstr ""
+
+msgctxt "w_expert_acc_id_desc"
+msgid "Format : DisplayName &lt;sip:login@registrar&gt;"
+msgstr ""
+
+msgctxt "w_expert_reg_uri"
+msgid "Registration URI"
+msgstr ""
+
+msgctxt "w_expert_reg_uri_desc"
+msgid "Format : sip:registrar.net[:port]"
+msgstr ""
+
+msgctxt "w_expert_realm"
+msgid "Realm"
+msgstr ""
+
+msgctxt "w_expert_realm_desc"
+msgid "Authentication domain (if you don't know, use '*')"
+msgstr ""
+
+msgctxt "w_expert_username"
+msgid "Username"
+msgstr ""
+
+msgctxt "w_expert_username_desc"
+msgid "Username for authentication"
+msgstr ""
+
+msgctxt "w_expert_data"
+msgid "Password"
+msgstr ""
+
+msgctxt "w_expert_data_desc"
+msgid "Password (or other data) for authentication"
+msgstr ""
+
+msgctxt "w_expert_t_proxy"
+msgid "Proxy"
+msgstr ""
+
+msgctxt "w_expert_proxy"
+msgid "Proxy URI"
+msgstr ""
+
+msgctxt "w_expert_proxy_desc"
+msgid "Format : sip:proxy.net[:port]"
+msgstr ""
+
+msgctxt "w_expert_use_tcp"
+msgid "Use TCP (not UDP)"
+msgstr ""
+
+msgctxt "w_expert_publish_enabled"
+msgid "Publish enabled"
+msgstr ""
+
+msgctxt "w_expert_reg_timeout"
+msgid "Register timeout (sec)"
+msgstr ""
+
+msgctxt "w_expert_ka_interval"
+msgid "Keep-alive interval (sec)"
+msgstr ""
+
+msgctxt "w_expert_force_contact"
+msgid "Force contact"
+msgstr ""
+

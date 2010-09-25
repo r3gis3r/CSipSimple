@@ -17,4 +17,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+msgctxt "w_common_display_name"
+msgid "Account name"
+msgstr ""
+
+msgctxt "w_common_display_name_desc"
+msgid "Display name for this account"
+msgstr ""
+
+msgctxt "w_common_username"
+msgid "User name"
+msgstr ""
+
+msgctxt "w_common_username_desc"
+msgid "Sip account login"
+msgstr ""
+
+msgctxt "w_common_phone_number"
+msgid "Phone number"
+msgstr ""
+
+msgctxt "w_common_phone_number_desc"
+msgid "Sip phone number given by your provider"
+msgstr ""
+
+msgctxt "w_common_password"
+msgid "Password"
+msgstr ""
+
+msgctxt "w_common_password_desc"
+msgid "Password for your account"
+msgstr ""
 

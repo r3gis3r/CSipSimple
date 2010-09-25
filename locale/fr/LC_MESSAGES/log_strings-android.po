@@ -1,0 +1,56 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 12:22+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "unknown"
+msgid "Unknown"
+msgstr "Inconnu"
+
+msgctxt "type_incoming"
+msgid "Incoming"
+msgstr "Entrant"
+
+msgctxt "type_outgoing"
+msgid "Outgoing"
+msgstr "Sortant"
+
+msgctxt "type_missed"
+msgid "Missed"
+msgstr "Manqué"
+
+msgctxt "callBack"
+msgid "Call back"
+msgstr "Rappeler"
+
+msgctxt "callAgain"
+msgid "Call again"
+msgstr "Appeler de nouveau"
+
+msgctxt "returnCall"
+msgid "Return call"
+msgstr "Rappeler"
+
+#, python-format
+msgctxt "callDetailsDurationFormat"
+msgid ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> secs"
+msgstr ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> secs"
+

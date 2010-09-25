@@ -17,4 +17,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+msgctxt "w_magicjack_display_name"
+msgid "Account name"
+msgstr ""
+
+msgctxt "w_magicjack_display_name_desc"
+msgid "Display name for this account"
+msgstr ""
+
+msgctxt "w_magicjack_username"
+msgid "Username"
+msgstr ""
+
+msgctxt "w_magicjack_username_desc"
+msgid "Something like EXXXXXXXXXX01"
+msgstr ""
+
+msgctxt "w_magicjack_password"
+msgid "Password"
+msgstr ""
+
+msgctxt "w_magicjack_password_desc"
+msgid "Password for SIP server authentication"
+msgstr ""
+
+msgctxt "w_magicjack_server"
+msgid "Server"
+msgstr ""
+
+msgctxt "w_magicjack_server_desc"
+msgid "Something like that : proxy01.yourcity.talk4free.com"
+msgstr ""
 

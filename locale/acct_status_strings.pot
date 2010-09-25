@@ -17,4 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+msgctxt "acct_inactive"
+msgid "Inactive"
+msgstr ""
+
+msgctxt "acct_unregistered"
+msgid "Not Registered"
+msgstr ""
+
+msgctxt "acct_expired"
+msgid "Registration Expired"
+msgstr ""
+
+msgctxt "acct_registering"
+msgid "Registering..."
+msgstr ""
+
+msgctxt "acct_registered"
+msgid "Registered"
+msgstr ""
+
+msgctxt "acct_regerror"
+msgid "Error while registering"
+msgstr ""
+
+msgctxt "acct_regfailed"
+msgid "Register Failed - Check your Configuration"
+msgstr ""
 

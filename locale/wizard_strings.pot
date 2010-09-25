@@ -17,4 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+msgctxt "other_country_providers_text"
+msgid "Other country providers"
+msgstr ""
+
+msgctxt "world_wide_providers_text"
+msgid "World wide providers"
+msgstr ""
+
+msgctxt "generic_wizards_text"
+msgid "Generic wizards"
+msgstr ""
 
