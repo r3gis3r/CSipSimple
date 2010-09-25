@@ -156,29 +156,29 @@ public class WelcomeScreen extends Activity {
 		progressBar.setVisibility(View.VISIBLE);
 		progressBarText.setVisibility(View.VISIBLE);
 		
-		progressBarText.setText("Initialize");
+		progressBarText.setText(getString(R.string.intializing_text));
 	}
 	
 	private void setStepGetLibForDevice() {
-		progressBarText.setText("Detecting correct library for your device");
+		progressBarText.setText(getString(R.string.detecting_text));
 	}
 	
 	private void setStepStartDownloading() {
 		progressBar.setIndeterminate(false);
 		progressBar.setProgress(0);
-		progressBarText.setText("Downloading 0%");
+		progressBarText.setText(getString(R.string.downloading_text)+" 0%");
 	}
 	
 	private void updateDownloadProgress(long downloaded, long total) {
 		int progress = (int) (100.0*downloaded/total);
 		progressBar.setProgress(progress);
-		progressBarText.setText("Downloading "+progress+"%");
+		progressBarText.setText(getString(R.string.downloading_text)+" "+progress+"%");
 		
 	}
 	
 	private void setStepDownloadFinished() {
 		progressBar.setIndeterminate(true);
-		progressBarText.setText("Installing library...");
+		progressBarText.setText(getString(R.string.installing_library_text));
 	}
 	
 	private void setStepInstalled() {

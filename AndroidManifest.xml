@@ -33,9 +33,8 @@
 		<activity android:name=".ui.CallLog" android:launchMode="singleTask" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		
 		<!-- First setup -->
-		<activity android:name=".ui.WelcomeScreen" android:label="Thanks for using CSipSimple"
-			android:screenOrientation="nosensor"
-			android:theme="@style/CupcakeDialog" android:launchMode="singleTask"></activity>
+		<activity android:name=".ui.WelcomeScreen" android:screenOrientation="nosensor"
+			android:theme="@style/CupcakeDialog" android:launchMode="singleTask" android:label="@string/welcome_caption_text"></activity>
 		<service android:name=".service.DownloadLibService"></service>
 		
 		
@@ -56,9 +55,11 @@
 		<activity android:name=".ui.prefs.PrefsNetwork" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".ui.prefs.PrefsFast" android:label="@string/prefs_fast" android:theme="@style/CupcakeDialog" android:screenOrientation="portrait">
+		<activity android:name=".ui.prefs.PrefsFast" android:label="@string/prefs_fast" 
+			android:theme="@style/CupcakeDialog" android:screenOrientation="portrait" android:excludeFromRecents="true" android:launchMode="singleInstance">
 			<intent-filter>
 				<action android:name="com.csipsimple.ui.prefs.PrefsFast" />
+                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		<activity android:name=".ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>

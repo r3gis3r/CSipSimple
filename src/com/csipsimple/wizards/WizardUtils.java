@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.csipsimple.R;
+import android.content.Context;
 
 
 public class WizardUtils {
@@ -176,7 +178,7 @@ public class WizardUtils {
 	}
 
 
-	public static ArrayList<HashMap<String, String>> getWizardsGroups() {
+	public static ArrayList<HashMap<String, String>> getWizardsGroups(Context context) {
 		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> m;
 		
@@ -190,19 +192,19 @@ public class WizardUtils {
 		//Generic
 		m = new HashMap<String, String>();
 	//	m.put("lang", "generic");
-		m.put(LANG_DISPLAY, "Generic wizards");
+		m.put(LANG_DISPLAY, context.getString(R.string.generic_wizards_text));
 		result.add(m);
 		
 		//World
 		m = new HashMap<String, String>();
 	//	m.put("lang", "world");
-		m.put(LANG_DISPLAY, "World wide providers");
+		m.put(LANG_DISPLAY, context.getString(R.string.world_wide_providers_text));
 		result.add(m);
 		
 		//Others
 		m = new HashMap<String, String>();
 	//	m.put("lang", "others");
-		m.put(LANG_DISPLAY, "Other country providers");
+		m.put(LANG_DISPLAY, context.getString(R.string.other_country_providers_text));
 		result.add(m);
 		
 		return result;

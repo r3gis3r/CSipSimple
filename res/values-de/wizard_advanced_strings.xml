@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Copyright (C) 2010 Jan Tschirschwitz <jan.tschirschwitz@googlemail.com>
+
+    This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<resources>
+<string name="w_advanced_display_name">Kontoname</string>
+<string name="w_advanced_display_name_desc">Zeigt den Namen dieses Kontos</string>
+<string name="w_advanced_caller_id">Eigene Nummer senden</string>
+<string name="w_advanced_caller_id_desc">Sende die eigene Nummer bei ausgehenden Anrufen</string>
+<string name="w_advanced_server">Server</string>
+<string name="w_advanced_server_desc">SIP Server Domain/IP[:Port]</string>
+<string name="w_advanced_username">Benutzername</string>
+<string name="w_advanced_username_desc">Benutzername für SIP Server Authentifizierung</string>
+<string name="w_advanced_password">Passwort</string>
+<string name="w_advanced_password_desc">Passwort für SIP Server Authentifizierung</string>
+<string name="w_advanced_use_tcp">Verwende TCP (nicht UDP)</string>
+<string name="w_advanced_proxy">Proxy</string>
+<string name="w_advanced_proxy_desc">Proxy Domain/IP[:Port] (optional, wird nicht immer benötigt)</string>
+</resources>

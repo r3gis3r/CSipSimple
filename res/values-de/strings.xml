@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Copyright (C) 2010 Jan Tschirschwitz <jan.tschirschwitz@googlemail.com>
+
+    This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<resources>
+<string name="unable_to_download_file">Datei konnte nicht heruntergeladen werden</string>
+<string name="connection_not_valid">Ausgewähltes Netzwerk nicht verfügbar (aktiviere WLAN oder erlaube Verbindungen über UMTS)</string>
+<string name="invalid_sip_uri">Die Sip URL ist für diesen Anruf ungültig</string>
+<string name="accounts">Konten</string>
+<string name="save">Speichern</string>
+<string name="cancel">Abbrechen</string>
+<string name="activate_account">Aktiviere Konto</string>
+<string name="deactivate_account">Deaktiviere Konto</string>
+<string name="delete_account">Lösche Konto</string>
+<string name="modify_account">Konto bearbeiten</string>
+<string name="add_account">Konto hinzufügen</string>
+<string name="choose_wizard">Wähle Assistenten</string>
+<string name="use">Verwende :</string>
+<string name="use_pstn">Verwende GSM</string>
+<string name="ongoing_call">aktiver Anruf </string>
+<string name="recentCalls_empty">Anrufliste leer</string>
+<string name="filters">Filter</string>
+<string name="add_filter">Filter hinzufügen / Regel bearbeiten</string>
+<string name="delete_filter">Filter löschen</string>
+<string name="callLog_delete_entry">Diesen Anruf löschen</string>
+<string name="callLog_delete_all">Alle Anrufe löschen</string>
+<string name="callLog_delDialog_title">Anrufliste löschen</string>
+<string name="callLog_delDialog_message">Bist du sicher, dass du alle Anrufe aus der Liste löschen möchtest?</string>
+<string name="callLog_delDialog_yes">Ja</string>
+<string name="callLog_delDialog_no">Nein</string>
+<string name="gsm">GSM</string>
+<string name="dial_tab_name_text">Telefon</string>
+<string name="calllog_tab_name_text">Anrufliste</string>
+<string name="menu_quit_text">Beenden</string>
+<string name="service_ticker_registered_text">SIP registriert</string>
+<string name="outgoing_call_chooser_call_text">Wähle</string>
+</resources>

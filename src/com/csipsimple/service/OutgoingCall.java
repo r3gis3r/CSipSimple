@@ -59,35 +59,38 @@ public class OutgoingCall extends BroadcastReceiver {
 		}
 		
 		// If this is an outgoing call with a valid number
-		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL)) {					// Filter should assure this!
-			//Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
-			DBAdapter db = new DBAdapter(context);
-			db.open();
-			List<Account> accounts = db.getListAccounts(true);
-			db.close();
-			
-			if (isCallableNumber(number, accounts, db) && prefsWrapper.isValidConnectionForOutgoing()) {
-				Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
-				// Launch activity to choose what to do with this call
-				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
-				outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
-				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
+			if(prefsWrapper.isValidConnectionForOutgoing()) {
+				// Filter should assure this!
+				//Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
+				DBAdapter db = new DBAdapter(context);
+				db.open();
+				List<Account> accounts = db.getListAccounts(true);
+				db.close();
 				
-				Account mustCallAccount = isMustCallableNumber(number, accounts, db);
-				if(mustCallAccount != null) {
-					outgoingCallChooserIntent.putExtra(Account.FIELD_ACC_ID, mustCallAccount.id);
+				if (isCallableNumber(number, accounts, db)) {
+					Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
+					// Launch activity to choose what to do with this call
+					Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
+					outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
+					outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					
+					Account mustCallAccount = isMustCallableNumber(number, accounts, db);
+					if(mustCallAccount != null) {
+						outgoingCallChooserIntent.putExtra(Account.FIELD_ACC_ID, mustCallAccount.id);
+					}
+					context.startActivity(outgoingCallChooserIntent);
+					
+					// We will treat this by ourselves
+					setResultData(null);
+					return;
 				}
-				context.startActivity(outgoingCallChooserIntent);
-				
-				// We will treat this by ourselves
-				setResultData(null);
-				return;
-			} else {
-				Log.d(THIS_FILE, "Can't use SIP, pass number along");
-				// Pass the call to pstn handle
-				setResultData(number);
-				return;
 			}
+			
+			Log.d(THIS_FILE, "Can't use SIP, pass number along");
+			// Pass the call to pstn handle
+			setResultData(number);
+			return;
 		}
 	}
 

@@ -61,6 +61,8 @@ public class SipHome extends TabActivity {
 	private Intent calllogsIntent;
 	private PreferencesWrapper prefWrapper;
 	
+	private boolean has_tried_once_to_activate_account = false;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d(THIS_FILE, "On Create SIPHOME");
@@ -119,14 +121,11 @@ public class SipHome extends TabActivity {
         dialerIntent = new Intent(this, Dialer.class);
         calllogsIntent = new Intent(this, CallLogsList.class);
         
-        addTab("tab1", "Dial", R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
-        addTab("tab2", "CallLogs", R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
+        addTab("tab1", getString(R.string.dial_tab_name_text), R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
+        addTab("tab2", getString(R.string.calllog_tab_name_text), R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
+
         
-        
-        
-        
-        
-        
+        has_tried_once_to_activate_account = false;
     }
     
     private void startSipService() {
@@ -183,16 +182,20 @@ public class SipHome extends TabActivity {
     	}
     	
     	//If we have no account yet, open account panel,
-        DBAdapter db = new DBAdapter(this);
-        db.open();
-        int nbrOfAccount = db.getNbrOfAccount();
-        db.close();
-        if(nbrOfAccount == 0) {
-	        Intent accountIntent = new Intent(this, AccountsList.class);
-	        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(accountIntent);
-			return;
-        }
+    	if(!has_tried_once_to_activate_account) {
+	        DBAdapter db = new DBAdapter(this);
+	        db.open();
+	        int nbrOfAccount = db.getNbrOfAccount();
+	        db.close();
+	        if(nbrOfAccount == 0) {
+		        Intent accountIntent = new Intent(this, AccountsList.class);
+		        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(accountIntent);
+				has_tried_once_to_activate_account = true;
+				return;
+	        }
+	        has_tried_once_to_activate_account = true;
+    	}
     }
     
     @Override
@@ -207,7 +210,7 @@ public class SipHome extends TabActivity {
 				R.drawable.ic_menu_accounts);
 		menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, R.string.prefs).setIcon(
 				android.R.drawable.ic_menu_preferences);
-		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, "Quit").setIcon(
+		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, R.string.menu_quit_text).setIcon(
 				android.R.drawable.ic_menu_close_clear_cancel);
 		
 	}

@@ -49,6 +49,8 @@ public class WizardChooser extends ExpandableListActivity {
 
 		setContentView(R.layout.add_account_wizard);
 
+		Context context = getApplicationContext();
+		
 		// Now build the list adapter
 		childFrom = new String[] { WizardUtils.LABEL, WizardUtils.ICON };
 		childTo = new int[] { android.R.id.text1, R.id.icon };
@@ -57,7 +59,7 @@ public class WizardChooser extends ExpandableListActivity {
 		WizardsListAdapter adapter = new WizardsListAdapter(
 				this,
 				// Groups
-				WizardUtils.getWizardsGroups(),
+				WizardUtils.getWizardsGroups(context),
 				android.R.layout.simple_expandable_list_item_1,
 				new String[] { WizardUtils.LANG_DISPLAY },
                 new int[] { android.R.id.text1 },

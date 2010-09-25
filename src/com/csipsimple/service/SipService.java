@@ -98,7 +98,6 @@ public class SipService extends Service {
 	// Static constants
 	// -------
 	
-	
 	final public static String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
 	final public static String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
 	final public static String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
@@ -1033,7 +1032,7 @@ public class SipService extends Service {
 		if (activeAccountsInfos.size()>0) {
 			
 			int icon = R.drawable.sipok;
-			CharSequence tickerText = "SIP Registered";
+			CharSequence tickerText = getString(R.string.service_ticker_registered_text);
 			long when = System.currentTimeMillis();
 
 			Notification notification = new Notification(icon, tickerText, when);

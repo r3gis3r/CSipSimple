@@ -365,11 +365,15 @@ public class Account {
 			f.createFromDb(c);
 			Log.d(THIS_FILE, "Test filter "+f.matches);
 			canCall &= f.canCall(number);
+			
+			//Stop processing & rewrite
 			if(f.stopProcessing(number)) {
 				c.close();
 				db.close();
 				return canCall;
 			}
+			number = f.rewrite(number);
+			//Move to next
 			c.moveToNext();
 		}
 		c.close();
@@ -392,6 +396,14 @@ public class Account {
 				db.close();
 				return true;
 			}
+			//Stop processing & rewrite
+			if(f.stopProcessing(number)) {
+				c.close();
+				db.close();
+				return false;
+			}
+			number = f.rewrite(number);
+			//Move to next
 			c.moveToNext();
 		}
 		c.close();
@@ -434,11 +446,14 @@ public class Account {
 			if( f.autoAnswer(number) ) {
 				return true;
 			}
+			//Stop processing & rewrite
 			if(f.stopProcessing(number)) {
 				c.close();
 				db.close();
 				return false;
 			}
+			number = f.rewrite(number);
+			//Move to next
 			c.moveToNext();
 		}
 		c.close();

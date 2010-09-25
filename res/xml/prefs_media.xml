@@ -62,7 +62,7 @@
 				android:defaultValue="200"
 				android:numeric="signed"></EditTextPreference>
 		</PreferenceCategory>
-		<PreferenceScreen android:title="@string/codecs" android:summary="Only available if sip is currently registered">
+		<PreferenceScreen android:title="@string/codecs" android:summary="@string/codecs_availability_text">
 			<intent android:action="android.intent.action.MAIN"
                    android:targetPackage="com.csipsimple"
                    android:targetClass="com.csipsimple.ui.prefs.Codecs" ></intent>

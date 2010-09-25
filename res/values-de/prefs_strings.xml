@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Copyright (C) 2010 Jan Tschirschwitz <jan.tschirschwitz@googlemail.com>
+
+    This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<resources>
+<string name="prefs">Einstellungen</string>
+
+<string name="prefs_fast">Einfache Konfiguration</string>
+<string name="prefs_fast_desc">Einfache Konfiguration, wenn du nicht weißt wie SIP funktioniert</string>
+<string name="prefs_network">Netzwerk</string>
+<string name="prefs_network_desc">Über welches Netzwerk darf sich SIP verbinden</string>
+<string name="prefs_media">Audio</string>
+<string name="prefs_media_desc">Codecs and Verhalten während eines Anrufs</string>
+<string name="prefs_ui">Benutzeroberfläche</string>
+<string name="prefs_ui_desc">Anpassen der Benutzeroberfläche</string>
+
+<!-- Network -->
+<string name="for_incomings">Für eingehende Anrufe</string>
+<string name="for_outgoings">Für ausgehende Anrufe</string>
+<string name="perfs">Performanz</string>
+<string name="transport">Protokoll</string>
+
+<string name="use_wifi">Verwende WLAN</string>
+<string name="use_wifi_in_desc">Verwendet WLAN für eingehende Anrufe</string>
+<string name="use_wifi_out_desc">Verwendet WLAN für ausgehende Anrufe</string>
+<string name="use_3g">Verwende UMTS</string>
+<string name="use_3g_disclamer">Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben</string>
+<string name="use_edge">Verwende EDGE</string>
+<string name="use_gprs">Verwende GPRS</string>
+<string name="lock_wifi">WLAN Performanz</string>
+<string name="lock_wifi_desc">Verhindere das Einschlafen, wenn SIP über WLAN verbunden ist</string>
+<string name="enable_tcp">TCP</string>
+<string name="enable_tcp_desc">Aktiviert das TCP Protokoll</string>
+<string name="enable_udp">UDP</string>
+<string name="enable_udp_desc">Aktiviert das UDP Protokoll</string>
+<string name="network_udp_transport_port">UDP Port</string>
+<string name="network_udp_transport_port_desc">Lokale UDP Portnummer </string>
+<string name="network_tcp_transport_port">TCP Port</string>
+<string name="network_tcp_transport_port_desc">Lokale TCP Portnummer </string>
+<string name="network_rtp_port">RTP port</string>
+<string name="network_rtp_port_desc">Port an dem die RTP Ports beginnen</string>
+<!-- Media -->
+
+<string name="audio_quality">Audioqualität</string>
+<string name="codecs">Codecs</string>
+<string name="ice_turn">ICE/TURN/STUN</string>
+
+<string name="echo_cancellation">Echounterdrückung</string>
+<string name="echo_cancellation_desc">Aktiviert die Echounterdrückung</string>
+<string name="enable_vad">Sprachaktivitätserkennung</string>
+<string name="enable_vad_desc">Aktiviert die Sprachaktivitätserkennung</string>
+<string name="snd_mic_level">Mikrofonpegel</string>
+<string name="snd_mic_level_desc">Stellt den Mikrofonpegel ein (1=keine Veränderung)</string>
+<string name="snd_speaker_level">Lautsprecherpegel</string>
+<string name="snd_speaker_level_desc">Stellt den Lautsprecherpegel ein (1=keine Veränderung)</string>
+<string name="snd_stream_level">Audiodatenpegel</string>
+<string name="snd_stream_level_desc">Stellt den Mikrofonpegel ein</string>
+<string name="snd_auto_close_time">Audioabschaltung</string>
+<string name="snd_auto_close_time_desc">Wartezeit bis Audio abgeschaltet wird</string>
+<string name="snd_media_quality">Audioqualität</string>
+<string name="snd_media_quality_desc">Qualität der Audiodaten (Verändere diesen Wert nur, wenn du weißt was du tust)</string>
+<string name="snd_clock_rate">Abtastrate</string>
+<string name="snd_clock_rate_desc">Verändert die Abtastrate der Audiodaten</string>
+<string name="snd_ptime">Paket ptime</string>
+<string name="snd_ptime_desc">Eine kleinere ptime reduziert normaler Weise die Latenz</string>
+<string name="echo_cancellation_tail">Echounterdrückungslänge</string>
+<string name="echo_cancellation_tail_desc">Länge des Echos das unterdrückt werden kann</string>
+<string name="enable_ice">Aktiviert ICE</string>
+<string name="enable_ice_desc">Aktiviert die ICE Funktionalität</string>
+<string name="enable_turn">Aktiviert TURN</string>
+<string name="enable_turn_desc">Aktiviert die TURN Funktionalität</string>
+<string name="turn_server">TURN Server</string>
+<string name="turn_server_desc">TURN Server (HOST:PORT)</string>
+<string name="enable_stun">Aktiviert STUN</string>
+<string name="enable_stun_desc">Aktiviert die STUN Funktionalität</string>
+<string name="stun_server">STUN Server</string>
+<string name="stun_server_desc">STUN Server (HOST:PORT)</string>
+<string name="codecs_desc">Priorität (0=deaktiviert)</string>
+
+
+<!-- UI -->
+<string name="general_ui">Standard-Benutzeroberfläche</string>
+<string name="native_dialer_integration">Native dialer integration</string>
+<string name="advanced_ui">Advanced tweaks</string>
+
+<string name="integrate_with_native_dialer">Nachfragen beim Wählen</string>
+<string name="integrate_with_native_dialer_desc">Beim Wählen einer Nummer mit der Standardanwendung werden sie gefragt, ob sie SIP oder GSM verwenden wollen</string>
+<string name="integrate_with_native_calllogs">Anrufliste einbinden</string>
+<string name="integrate_with_native_calllogs_desc">SIP Anrufe werden (wenn möglich) in die Standardanwendung eingeplegt</string>
+<string name="exclude_for_outgoing_call">Ausschlussmuster</string>
+<string name="exclude_for_outgoing_call_desc">Ausschlussmuster für ausgehende Anrufe </string>
+<string name="dial_press_tone">Wählton beim Wählen</string>
+<string name="dial_press_tone_desc">Es werden Wähltöne beim Wählen abgespielt</string>
+<string name="dial_press_vibrate">Feedback durch Vibrator</string>
+<string name="dial_press_vibrate_desc">Haptisches Feedback (Vibrieren) beim Wählen</string>
+<string name="start_with_text_dialer">Start mit Textwähler</string>
+<string name="start_with_text_dialer_desc">Startet mit Textwähler</string>
+<string name="use_alternate_unlocker">Rufannahme durch Schieben verhindern</string>
+<string name="use_alternate_unlocker_desc">Verwende Schaltfächen zum Annehmen von eingehenden Anrufen</string>
+<string name="keep_awake_incall">Einschlafen verhindern</string>
+<string name="keep_awake_incall_desc">Beim Telefonieren das Einschlafen verhindern. (Behebt Probleme mit abgehacktem Audio)</string>
+<string name="use_partial_wake_lock">Blockiere Einschlafen</string>
+<string name="use_partial_wake_lock_desc">Stellt sicher das CSipSimple immer ausgeführt wird (Belastet die Batterie)</string>
+<string name="log_level">Protokollierungsstufe</string>
+<string name="log_level_desc">Protokollierungsstufe beim Debuggen (0=none, 5=verbose)</string>
+<string name="integrate_with_native_music">Musikanwendungsintegration</string>
+<string name="integrate_with_native_music_desc">Deaktiviere diese Funktion, wenn du eine andere als die Standard-Musikanwendung verwendest</string>
+
+
+<!-- Fast settings -->
+<string name="android_integration">Integration mit Android</string>
+<string name="android_integration_desc">Integration mit Standardwählprogramm und Anrufliste</string>
+<string name="availability_profile">Verfügbarkeitsprofil</string>
+<string name="always_available">Immer erreichbar</string>
+<string name="always_available_desc">Belastet die Batterie stark, dafür bist du immer erreichbar</string>
+<string name="wifi_available">Erreichbar bei WLAN</string>
+<string name="wifi_available_desc">Erreichbar für eingehende Anrufe, wenn das WLAN Profil aktiv ist</string>
+<string name="never_available">Nur ausgehende Verbindungen</string>
+<string name="never_available_desc">Aktiviert die SIP Anwendung nur wenn es nötig ist</string>
+<string name="availability_tg">Verfügbarkeit UMTS</string>
+<string name="tg_allowed">Ich darf UMTS verwenden</string>
+<string name="tg_allowed_desc">Aktivert die Verwendung von UMTS. (Ich habe sichergestellt, daß mein Provider die Verwendung von VoIP über UMTS erlaubt)</string>
+
+<string name="codecs_availability_text">Nur verfügbar, wenn SIP registriert ist</string>
+</resources>

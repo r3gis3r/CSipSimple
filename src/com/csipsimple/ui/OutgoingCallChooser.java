@@ -93,7 +93,7 @@ public class OutgoingCallChooser extends ListActivity {
 					android.R.drawable.ic_menu_call);
 			//TODO : internationalisation should be %s form
 			String phoneNumber = number;
-			setTitle("Call " + phoneNumber);
+			setTitle(getString(R.string.outgoing_call_chooser_call_text) + " " + phoneNumber);
 
 			// Inform the list we provide context menus for items
 			//	getListView().setOnCreateContextMenuListener(this);

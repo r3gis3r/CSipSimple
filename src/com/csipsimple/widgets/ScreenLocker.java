@@ -42,7 +42,7 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 	private Activity activity;
 	private SlidingTab stab;
 
-	public static final int WAIT_BEFORE_LOCK_LONG = 20000;
+	public static final int WAIT_BEFORE_LOCK_LONG = 10000;
 	public static final int WAIT_BEFORE_LOCK_START = 5000;
 
 	private final static int SHOW_LOCKER = 0;

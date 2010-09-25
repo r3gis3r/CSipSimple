@@ -117,7 +117,7 @@ public class AccountAdapter extends ArrayAdapter<Account> implements OnClickList
 			if(!accountStatusDisplay.availableForCalls || forNumber == null || db == null) {
 				tagView.statusView.setText(accountStatusDisplay.statusLabel);
 			}else {
-				tagView.statusView.setText("Call : "+account.rewritePhoneNumber(forNumber, db));
+				tagView.statusView.setText(context.getString(R.string.outgoing_call_chooser_call_text)+" : "+account.rewritePhoneNumber(forNumber, db));
 			}
 			tagView.labelView.setTextColor(accountStatusDisplay.statusColor);
 			v.setClickable(!accountStatusDisplay.availableForCalls);

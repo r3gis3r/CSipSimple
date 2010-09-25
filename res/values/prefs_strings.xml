@@ -118,4 +118,5 @@
 <string name="tg_allowed">I\'m allowed to use mobile</string>
 <string name="tg_allowed_desc">Your carrier allows VoIP over your mobile data connection</string>
 
+<string name="codecs_availability_text">Only available if sip is currently registered</string>
 </resources>

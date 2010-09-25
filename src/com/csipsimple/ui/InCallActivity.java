@@ -304,7 +304,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			if(wakeLock != null && !wakeLock.isHeld()) {
 				wakeLock.acquire();
 			}
-			if(proximitySensor == null) {
+			if(proximitySensor == null && proximityWakeLock == null) {
 				lockOverlay.hide();
 			}
 			if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
@@ -320,7 +320,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				Log.d(THIS_FILE, "Releasing wake up lock - confirmed");
                 wakeLock.release();
             }
-			if(proximitySensor == null) {
+			if(proximitySensor == null && proximityWakeLock == null) {
 				lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
 			}
 			
@@ -552,7 +552,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		Log.d(THIS_FILE, "In Call Activity is triggered");
 		Log.d(THIS_FILE, "We have a call info : "+callInfo);
 		Log.d(THIS_FILE, "And a service : "+service);
-		if(proximitySensor == null) {
+		if(proximitySensor == null && proximityWakeLock == null) {
 			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
 		}
 		try {
