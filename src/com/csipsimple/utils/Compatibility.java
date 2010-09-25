@@ -137,7 +137,8 @@ public class Compatibility {
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, isCompatible(4)?true:false);
 		//N1 PSP mode hack
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, 
-				android.os.Build.BRAND.equalsIgnoreCase("google")?true:false);
+				( android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/ || 
+				   android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/ )?true:false);
 		
 		
 	}
