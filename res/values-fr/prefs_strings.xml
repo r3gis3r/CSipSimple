@@ -51,6 +51,10 @@
   <string name="snd_media_quality_desc">Qualité du flux média (à ne modifier que si vous savez exactement ce que vous faites)</string>
   <string name="snd_clock_rate">Fréquence</string>
   <string name="snd_clock_rate_desc">Fréquence du canal audio</string>
+  <string name="snd_ptime">Ptime de la frame</string>
+  <string name="snd_ptime_desc">Un ptime plus petit réduit la latence</string>
+  <string name="echo_cancellation_tail">Longueur d\'annulation de l\'echo</string>
+  <string name="echo_cancellation_tail_desc">Longueur de la trainée sur laquelle appliquer l\'annulation d\'écho</string>
   <string name="enable_ice">Activer ICE</string>
   <string name="enable_ice_desc">Activer la fonctionnalité ICE</string>
   <string name="enable_turn">Activer TURN</string>
@@ -91,12 +95,13 @@
   <string name="android_integration_desc">S\'intégrer à la numérotation et aux journaux d\'appel d\'Android</string>
   <string name="availability_profile">Profil de disponibilité</string>
   <string name="always_available">Toujours disponible</string>
-  <string name="always_available_desc">Utilisera de la batterie mais vous recevrez vos appels</string>
-  <string name="wifi_available">Disponible en WIFI</string>
+  <string name="always_available_desc">Utilisera de la batterie mais vous recevrai vos appels</string>
+  <string name="wifi_available">Disponible en même temps que le WIFI</string>
   <string name="wifi_available_desc">Votre disponibilité est basée la connexion Wifi</string>
   <string name="never_available">Seulement pour les appels sortant</string>
   <string name="never_available_desc">N\'activer CSipSimple que lorsque j\'initie un appel.</string>
-  <string name="availability_tg">Disponibilité du canal data GSM</string>
-  <string name="tg_allowed">Je suis autorisé à faire de la VoIP sur le GSM</string>
+  <string name="availability_tg">Disponibilité du canal donnée mobile</string>
+  <string name="tg_allowed">Je suis autorisé à faire de la VoIP sur le canal donnée du mobile</string>
   <string name="tg_allowed_desc">Votre opérateur vous autorise à faire de la VoIP sur la canal data de sa connection</string>
+  <string name="codecs_availability_text">Disponible seulement si le SIP est actuellement enregistré</string>
 </resources>
