@@ -31,6 +31,9 @@
 		<CheckBoxPreference android:summary="@string/use_3g_disclamer" 
 			android:defaultValue="false" android:title="@string/use_edge" 
 			android:key="use_edge_in"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/use_other"
+			android:defaultValue="true" android:summary="@string/use_other_in_desc"
+			android:key="use_other_in"></CheckBoxPreference>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/for_outgoings">
@@ -46,7 +49,9 @@
 		<CheckBoxPreference android:summary="@string/use_3g_disclamer"
 			android:defaultValue="false" android:title="@string/use_edge" 
 			android:key="use_edge_out"></CheckBoxPreference>
-
+		<CheckBoxPreference android:title="@string/use_other"
+			android:defaultValue="true" android:summary="@string/use_other_out_desc"
+			android:key="use_other_out"></CheckBoxPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/perfs">
 		<CheckBoxPreference android:summary="@string/lock_wifi_desc"

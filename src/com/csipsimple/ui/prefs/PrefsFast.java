@@ -111,7 +111,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 		Profile mode = Profile.UNKOWN;
 		
 		if( ( !useGsm && wifiIn && wifiOut && lockWifi) ||
-			(  useGsm && wifiIn && wifiOut && lockWifi && tgIn && tgOut && gprsIn && gprsOut && edgeIn && edgeOut )) {
+			(  useGsm && wifiIn && wifiOut && tgIn && tgOut && gprsIn && gprsOut && edgeIn && edgeOut )) {
 			mode = Profile.ALWAYS;
 		} else if (wifiIn && wifiOut ) {
 			mode = Profile.WIFI;
@@ -178,7 +178,11 @@ public class PrefsFast extends Activity implements OnClickListener {
 			
 			edt.putBoolean("use_wifi_in", mode != Profile.NEVER);
 			edt.putBoolean("use_wifi_out", true);
-			edt.putBoolean("lock_wifi", mode == Profile.ALWAYS);
+			
+			edt.putBoolean("use_other_in", mode != Profile.NEVER);
+			edt.putBoolean("use_other_out", true);
+			
+			edt.putBoolean("lock_wifi", (mode == Profile.ALWAYS) && !useGsm);
 		}
 		edt.commit();
 		

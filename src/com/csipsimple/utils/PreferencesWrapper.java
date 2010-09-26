@@ -121,8 +121,8 @@ public class PreferencesWrapper {
 	// Check for other (wimax for example)
 	static public boolean isValidOtherConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
 		
-		//boolean valid_for_other = aPrefs.getBoolean("use_other_" + suffix, true);
-		boolean valid_for_other = true;
+		boolean valid_for_other = aPrefs.getBoolean("use_other_" + suffix, true);
+		//boolean valid_for_other = true;
 		if (valid_for_other && 
 			ni != null && 
 			ni.getType() != ConnectivityManager.TYPE_MOBILE && ni.getType() != ConnectivityManager.TYPE_WIFI) {

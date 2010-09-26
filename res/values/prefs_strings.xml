@@ -20,6 +20,11 @@
 <string name="use_wifi">Use WiFi</string>
 <string name="use_wifi_in_desc">Use WiFi for incoming calls</string>
 <string name="use_wifi_out_desc">Use WiFi for outgoing calls</string>
+
+<string name="use_other">Use other networks</string>
+<string name="use_other_in_desc">For example WiMax for incoming calls</string>
+<string name="use_other_out_desc">For example WiMax for outgoing calls</string>
+
 <string name="use_3g">Use 3G</string>
 <string name="use_3g_disclamer">Your carrier MUST allow you to use this option</string>
 <string name="use_edge">Use EDGE</string>
