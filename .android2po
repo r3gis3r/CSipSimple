@@ -1,3 +1,5 @@
 #--layout gnu
+--domain csipsimple
+--layout %(domain)s/%(group)s/%(locale)s.po
 #--no-template
-#--template locale/template.pot
+--template %(domain)s/%(group)s/%(group)s.pot

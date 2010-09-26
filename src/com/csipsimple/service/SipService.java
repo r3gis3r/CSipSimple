@@ -43,7 +43,6 @@ import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
 import org.pjsip.pjsua.pjsua_media_config;
-import org.pjsip.pjsua.pjsua_msg_data;
 import org.pjsip.pjsua.pjsua_transport_config;
 
 import android.app.Notification;
@@ -1213,7 +1212,6 @@ public class SipService extends Service {
 		}
 		
 		
-		
 		Log.d(THIS_FILE, "will call "+callee);
 		if(pjsua.verify_sip_url(callee) == 0) {
 			pj_str_t uri = pjsua.pj_str_copy(callee);
@@ -1224,17 +1222,13 @@ public class SipService extends Service {
 			
 			//Nothing to do with this values
 			byte[] user_data = new byte[1];
-			pjsua_msg_data msg = new pjsua_msg_data();
 			int[] call_id = new int[1];
-			return pjsua.call_make_call(pjsipAccountId, uri , 0, user_data, msg, call_id);
+			return pjsua.call_make_call(pjsipAccountId, uri , 0, user_data, null, call_id);
 		} else {
 			Log.e(THIS_FILE, "Asked for a bad uri "+callee);
 			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.invalid_sip_uri, 0));
-			
-			
 		}
 		return -1;
-		
 	}
 	
 	
