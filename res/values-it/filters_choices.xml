@@ -1,2 +1,25 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string-array name="filters_action">
+    <item>Non può chiamare</item>
+    <item>Riscrivere</item>
+    <item>Fermare esecuzione</item>
+    <item>Chiamare direttamente</item>
+    <item>Rispondere automaticamente</item>
+  </string-array>
+  <string-array name="filters_type">
+    <item>Inizia con</item>
+    <item>Finisce con</item>
+    <item>Ha esattamente N cifre</item>
+    <item>Ha più di N cifre</item>
+    <item>E\' esattamente</item>
+    <item>RegExp personalizzata</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>Prefisso con</item>
+    <item>Suffisso con</item>
+    <item>Rimpiazza corrispondenza con</item>
+    <item>Rimpiazza tutto con</item>
+    <item>RegExp personalizzata</item>
+  </string-array>
+</resources>

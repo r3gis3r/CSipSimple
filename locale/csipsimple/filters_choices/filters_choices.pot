@@ -1,0 +1,83 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "filters_action:0"
+msgid "Can't call"
+msgstr ""
+
+msgctxt "filters_action:1"
+msgid "Rewrite"
+msgstr ""
+
+msgctxt "filters_action:2"
+msgid "Stop processing"
+msgstr ""
+
+msgctxt "filters_action:3"
+msgid "Directly call"
+msgstr ""
+
+msgctxt "filters_action:4"
+msgid "Auto answer"
+msgstr ""
+
+msgctxt "filters_type:0"
+msgid "Starts with"
+msgstr ""
+
+msgctxt "filters_type:1"
+msgid "Ends with"
+msgstr ""
+
+msgctxt "filters_type:2"
+msgid "Has exactly N digit"
+msgstr ""
+
+msgctxt "filters_type:3"
+msgid "Has more than N digit"
+msgstr ""
+
+msgctxt "filters_type:4"
+msgid "Is exactly"
+msgstr ""
+
+msgctxt "filters_type:5"
+msgid "Custom RegExp"
+msgstr ""
+
+msgctxt "replace_type:0"
+msgid "Prefix by"
+msgstr ""
+
+msgctxt "replace_type:1"
+msgid "Suffix with"
+msgstr ""
+
+msgctxt "replace_type:2"
+msgid "Replace match by"
+msgstr ""
+
+msgctxt "replace_type:3"
+msgid "Replace all by"
+msgstr ""
+
+msgctxt "replace_type:4"
+msgid "Custom RegExp"
+msgstr ""
+

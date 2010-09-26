@@ -1,2 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="take_call">Répondre</string>
+  <string name="decline_call">Ignorer</string>
+  <string name="clear_call">Fin</string>
+  <string name="touch_lock">Tapotter deux fois pour débloquer</string>
+  <string name="dialpad">Pavé numérique</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Haut-parleur</string>
+  <string name="mute">Muet</string>
+  <string name="add_call">Ajout Appel</string>
+  <string name="call_state_calling">Appel...</string>
+  <string name="call_state_confirmed">En conversation</string>
+  <string name="call_state_connecting">Connexion...</string>
+  <string name="call_state_disconnected">Raccrocher</string>
+  <string name="call_state_early">En train de sonner...</string>
+  <string name="call_state_incoming">Appel entrant...</string>
+  <string name="call_state_null">ERREUR</string>
+  <string name="unlock">Déverrouiller</string>
+</resources>

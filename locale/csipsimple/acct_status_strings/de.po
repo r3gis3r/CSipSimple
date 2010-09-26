@@ -1,0 +1,47 @@
+# German translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"PO-Revision-Date: 2010-09-25 18:54+0000\n"
+"Last-Translator: r3gis <r3gis@r3gis.fr>\n"
+"Language-Team: de <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-09-26 05:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "acct_inactive"
+msgid "Inactive"
+msgstr "Inaktiv"
+
+msgctxt "acct_unregistered"
+msgid "Not Registered"
+msgstr "Nicht registriert"
+
+msgctxt "acct_expired"
+msgid "Registration Expired"
+msgstr "Registrierung abgelaufen"
+
+msgctxt "acct_registering"
+msgid "Registering..."
+msgstr "Registriere..."
+
+msgctxt "acct_registered"
+msgid "Registered"
+msgstr "Registriert"
+
+msgctxt "acct_regerror"
+msgid "Error while registering"
+msgstr "Fehler beim Registrieren"
+
+msgctxt "acct_regfailed"
+msgid "Register Failed - Check your Configuration"
+msgstr "Registrierung fehlgeschlagen - Überprüfe die Konfiguration"

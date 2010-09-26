@@ -1,0 +1,70 @@
+# French translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"PO-Revision-Date: 2010-09-25 18:54+0000\n"
+"Last-Translator: r3gis <r3gis@r3gis.fr>\n"
+"Language-Team: fr <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-09-26 05:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "w_ecs_display_name"
+msgid "Account name"
+msgstr "Nom du compte"
+
+msgctxt "w_ecs_display_name_desc"
+msgid "Display name for this account"
+msgstr "Nom d'affichage pour ce compte"
+
+msgctxt "w_ecs_phone_number"
+msgid "Phone number"
+msgstr "Numéro de téléphone"
+
+msgctxt "w_ecs_phone_number_desc"
+msgid "Account sip phone number"
+msgstr "Numéro de téléphone du compte SIP"
+
+msgctxt "w_ecs_user_name"
+msgid "User login"
+msgstr "Nom d'utilisateur"
+
+msgctxt "w_ecs_user_name_desc"
+msgid "Your virtual desk login"
+msgstr "Votre login dans le virtualdesk"
+
+msgctxt "w_ecs_password"
+msgid "User password"
+msgstr "Mot de passe"
+
+msgctxt "w_ecs_password_desc"
+msgid "Password for your account"
+msgstr "Mot de passe de votre compte"
+
+msgctxt "w_ecs_server_domain"
+msgid "SIP domain"
+msgstr "Domaine SIP"
+
+msgctxt "w_ecs_server_domain_desc"
+msgid "Domain name for SIP accounts"
+msgstr "Nom de domaine pour vos comptes sip"
+
+msgctxt "w_ecs_server_ip"
+msgid "Server"
+msgstr "Serveur"
+
+msgctxt "w_ecs_server_ip_desc"
+msgid ""
+"Domain name or IP to access the ECS (leave blank if same as SIP domain)"
+msgstr ""
+"Nom de domaine ou IP pour accéder à l'ECS (laisser vide si identique au "
+"domaine SIP)"

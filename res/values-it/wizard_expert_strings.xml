@@ -1,2 +1,23 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_expert_display_name">Nome account</string>
+  <string name="w_expert_display_name_desc">Nome visualizzato per questo account</string>
+  <string name="w_expert_acc_id">Id account</string>
+  <string name="w_expert_acc_id_desc">Formato : NomeVisualizzato &lt;sip:login\@registrar.net&gt;</string>
+  <string name="w_expert_reg_uri">URI di registrazione</string>
+  <string name="w_expert_reg_uri_desc">Formato : sip:registrar.net[:porta]</string>
+  <string name="w_expert_realm">Realm</string>
+  <string name="w_expert_realm_desc">Dominio di autenticazione (se non lo conosci, usa \'*\')</string>
+  <string name="w_expert_username">Username</string>
+  <string name="w_expert_username_desc">Nome utente per autenticazione</string>
+  <string name="w_expert_data">Password</string>
+  <string name="w_expert_data_desc">"Password (o altri dati)  per autenticazione"</string>
+  <string name="w_expert_t_proxy">Proxy</string>
+  <string name="w_expert_proxy">Proxy URI</string>
+  <string name="w_expert_proxy_desc">Formato : sip:proxy.net[:porta]</string>
+  <string name="w_expert_use_tcp">Usa TCP (no UDP)</string>
+  <string name="w_expert_publish_enabled">Publish abilitato</string>
+  <string name="w_expert_reg_timeout">Register timeout (sec)</string>
+  <string name="w_expert_ka_interval">Keep-alive interval (sec)</string>
+  <string name="w_expert_force_contact">Force contact</string>
+</resources>

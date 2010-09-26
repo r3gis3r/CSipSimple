@@ -1,2 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_common_display_name">Nome account</string>
+  <string name="w_common_display_name_desc">Nome visualizzato per questo account</string>
+  <string name="w_common_username">Username</string>
+  <string name="w_common_username_desc">Username del tuo account</string>
+  <string name="w_common_phone_number">Numero di telefono</string>
+  <string name="w_common_phone_number_desc">Numero di telefono fornito dal tuo provider SIP</string>
+  <string name="w_common_password">Password</string>
+  <string name="w_common_password_desc">Password per il tuo account</string>
+</resources>

@@ -1,0 +1,71 @@
+# German translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"PO-Revision-Date: 2010-09-25 18:55+0000\n"
+"Last-Translator: r3gis <r3gis@r3gis.fr>\n"
+"Language-Team: de <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-09-26 05:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "w_advanced_display_name"
+msgid "Account name"
+msgstr "Kontoname"
+
+msgctxt "w_advanced_display_name_desc"
+msgid "Display name for this account"
+msgstr "Zeigt den Namen dieses Kontos"
+
+msgctxt "w_advanced_caller_id"
+msgid "Caller ID"
+msgstr "Eigene Nummer senden"
+
+msgctxt "w_advanced_caller_id_desc"
+msgid "Caller ID to send with calls"
+msgstr "Sende die eigene Nummer bei ausgehenden Anrufen"
+
+msgctxt "w_advanced_server"
+msgid "Server"
+msgstr "Server"
+
+msgctxt "w_advanced_server_desc"
+msgid "SIP server domain/IP[:port]"
+msgstr "SIP Server Domain/IP[:Port]"
+
+msgctxt "w_advanced_username"
+msgid "Username"
+msgstr "Benutzername"
+
+msgctxt "w_advanced_username_desc"
+msgid "Username for SIP server authentication"
+msgstr "Benutzername für SIP Server Authentifizierung"
+
+msgctxt "w_advanced_password"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "w_advanced_password_desc"
+msgid "Password for SIP server authentication"
+msgstr "Passwort für SIP Server Authentifizierung"
+
+msgctxt "w_advanced_use_tcp"
+msgid "Use TCP (not UDP)"
+msgstr "Verwende TCP (nicht UDP)"
+
+msgctxt "w_advanced_proxy"
+msgid "Proxy"
+msgstr "Proxy"
+
+msgctxt "w_advanced_proxy_desc"
+msgid "Proxy domain/IP[:port] (optional, not always needed)"
+msgstr "Proxy Domain/IP[:Port] (optional, wird nicht immer benötigt)"
