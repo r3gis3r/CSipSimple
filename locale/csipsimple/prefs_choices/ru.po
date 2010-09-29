@@ -1,0 +1,82 @@
+# Russian translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"PO-Revision-Date: 2010-09-28 21:06+0000\n"
+"Last-Translator: Dmitry Kutsenko <Unknown>\n"
+"Language-Team: Russian <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-09-29 05:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+msgctxt "scheme_choices:0"
+msgid "Digest"
+msgstr "Справочник"
+
+msgctxt "scheme_choices:1"
+msgid "PGP"
+msgstr "PGP"
+
+msgctxt "scheme_values:0"
+msgid "Digest"
+msgstr "Справочник"
+
+msgctxt "scheme_values:1"
+msgid "PGP"
+msgstr "PGP"
+
+msgctxt "data_type_choices:0"
+msgid "Plain password"
+msgstr "Обычный пароль"
+
+msgctxt "data_type_choices:1"
+msgid "Data digest"
+msgstr "Справочные данные"
+
+msgctxt "data_type_values:0"
+msgid "0"
+msgstr ""
+
+msgctxt "data_type_values:1"
+msgid "1"
+msgstr ""
+
+msgctxt "clock_rate_choices:0"
+msgid "8KHz"
+msgstr ""
+
+msgctxt "clock_rate_choices:1"
+msgid "16KHz"
+msgstr ""
+
+msgctxt "clock_rate_choices:2"
+msgid "32KHz"
+msgstr ""
+
+msgctxt "clock_rate_choices:3"
+msgid "44.1KHz"
+msgstr ""
+
+msgctxt "clock_rate_values:0"
+msgid "8000"
+msgstr ""
+
+msgctxt "clock_rate_values:1"
+msgid "16000"
+msgstr ""
+
+msgctxt "clock_rate_values:2"
+msgid "32000"
+msgstr ""
+
+msgctxt "clock_rate_values:3"
+msgid "44100"
+msgstr ""
