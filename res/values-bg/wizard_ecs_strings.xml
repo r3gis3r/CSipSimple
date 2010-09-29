@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_ecs_display_name">Име на профила</string>
+  <string name="w_ecs_display_name_desc">Покажи име за този профил</string>
+  <string name="w_ecs_phone_number">Тел. номер</string>
+  <string name="w_ecs_phone_number_desc">Тел. номер на sip профила</string>
+  <string name="w_ecs_user_name">Потребителски вход</string>
+  <string name="w_ecs_user_name_desc">Вашият виртуален настолен вход</string>
+  <string name="w_ecs_password">Потребителска парола</string>
+  <string name="w_ecs_password_desc">Парола за Вашия профил</string>
+  <string name="w_ecs_server_domain">SIP домейн</string>
+  <string name="w_ecs_server_domain_desc">Домейн адрес за SIP профилите</string>
+  <string name="w_ecs_server_ip">Сървър</string>
+  <string name="w_ecs_server_ip_desc">Домейн адрес или IP за достъп до ECS (оставете празно ако е същото като SIP домейн адреса)</string>
+</resources>

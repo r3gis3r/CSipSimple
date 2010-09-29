@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_basic_display_name">Название аккаунта</string>
+  <string name="w_basic_display_name_desc">Отображаемое название аккаунта</string>
+  <string name="w_basic_username">Пользователь</string>
+  <string name="w_basic_username_desc">Название аккаунта / Логин</string>
+  <string name="w_basic_server">Сервер</string>
+  <string name="w_basic_server_desc">Сервер / SIP домен</string>
+  <string name="w_basic_password">Пароль</string>
+  <string name="w_basic_password_desc">Пароль доступа к аккаунту</string>
+</resources>

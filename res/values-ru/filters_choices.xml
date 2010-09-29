@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="filters_action">
+    <item>Невозможно позвонить</item>
+    <item>Переписать</item>
+    <item>Остановить обработку</item>
+    <item>Прямой вызов</item>
+  </string-array>
+  <string-array name="filters_type">
+    <item>Начинается с</item>
+    <item>Заканчивается на</item>
+    <item>Имеет ровно N цифр</item>
+    <item>Имеет более N цифр</item>
+    <item>Ровно</item>
+    <item>Пользовательский RegExp</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>Префикс</item>
+    <item>Суффикс с</item>
+    <item>Заменить совпадение на</item>
+    <item>Заменить всё на</item>
+    <item>Пользовательский RegExp</item>
+  </string-array>
+</resources>

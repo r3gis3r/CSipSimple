@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
 	android:versionName="0.00-13" android:versionCode="13">
-	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="false">
+	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="true">
 		<activity android:label="@string/app_name" android:name=".ui.SipHome" android:launchMode="singleTask"
 			android:screenOrientation="portrait"
 			android:theme="@android:style/Theme.NoTitleBar">
@@ -78,6 +78,7 @@
 		<activity android:name=".wizards.impl.Ippi" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.Pbxes" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.MagicJack" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name=".wizards.impl.PlanetPhone" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 
 		<!-- Call management -->
 		<receiver android:name=".service.OutgoingCall">

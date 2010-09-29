@@ -134,6 +134,9 @@ public class MediaManager {
 		
 		Log.d(THIS_FILE, "Set mode audio in call");
 		//Set mode
+		//For galaxy S we need to set in call mode before to reset stack
+		audioManager.setMode(AudioManager.MODE_IN_CALL);
+		
 		audioManager.setMode(MODE_SIP_IN_CALL);
 		//Routing
 		if(Compatibility.useRoutingApi()) {
@@ -251,6 +254,7 @@ public class MediaManager {
 		if(bluetoothClassAvailable) {
 			//This fixes the BT activation but... but... seems to introduce a lot of other issues
 			//bluetoothWrapper.setBluetoothOn(true);
+			Log.d(THIS_FILE, "Unset bt");
 			bluetoothWrapper.setBluetoothOn(false);
 		}
 		

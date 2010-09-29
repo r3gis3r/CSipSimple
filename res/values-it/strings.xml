@@ -28,7 +28,7 @@
   <string name="callLog_delDialog_no">No</string>
   <string name="gsm">Mobile</string>
   <string name="dial_tab_name_text">Componi</string>
-  <string name="calllog_tab_name_text">Log delle chiamate</string>
+  <string name="calllog_tab_name_text">Log chiamate</string>
   <string name="menu_quit_text">Esci</string>
   <string name="service_ticker_registered_text">SIP Registrato</string>
   <string name="outgoing_call_chooser_call_text">Chiama</string>

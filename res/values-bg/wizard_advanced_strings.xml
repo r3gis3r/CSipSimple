@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_advanced_display_name">Име на профила</string>
+  <string name="w_advanced_display_name_desc">Покажи име за този профил</string>
+  <string name="w_advanced_caller_id">Идентификатор на позвъняващ</string>
+  <string name="w_advanced_caller_id_desc">Идентификатор на позвъняващия, който да се изпраща с разговорите</string>
+  <string name="w_advanced_server">Сървър</string>
+  <string name="w_advanced_server_desc">SIP сървър домейн/IP[:порт]</string>
+  <string name="w_advanced_username">Потребителско име</string>
+  <string name="w_advanced_username_desc">Потребителско име за удостоверяване на SIP сървъра</string>
+  <string name="w_advanced_password">Парола</string>
+  <string name="w_advanced_password_desc">Парола за удостоверяване на SIP сървъра</string>
+  <string name="w_advanced_use_tcp">Използвай TCP (не UDP)</string>
+  <string name="w_advanced_proxy">Прокси</string>
+  <string name="w_advanced_proxy_desc">Proxy домейн/IP[:порт] (по избор, не винаги е необходимо)</string>
+</resources>

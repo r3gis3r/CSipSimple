@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">CSipSimple</string>
+  <string name="unable_to_download_file">Файла не може да бъде свален</string>
+  <string name="connection_not_valid">Избраната маршрутна мрежа не е на разположение (активирайте WiFi или променете опцията на използване на 3G)</string>
+  <string name="invalid_sip_uri">Sip uri е невалиден за повикване</string>
+  <string name="accounts">Профили</string>
+  <string name="save">Запиши</string>
+  <string name="cancel">Отказ</string>
+  <string name="activate_account">Активирай профила</string>
+  <string name="deactivate_account">Деактивирай профила</string>
+  <string name="delete_account">Изтрий профила</string>
+  <string name="modify_account">Промени профила</string>
+  <string name="add_account">Добави профил</string>
+  <string name="choose_wizard">Избери помощник</string>
+  <string name="use">Използвай :</string>
+  <string name="use_pstn">Използвай мобилен</string>
+  <string name="ongoing_call">Разговора е в прогрес</string>
+  <string name="recentCalls_empty">Няма записи на разговорите</string>
+  <string name="filters">Филтри</string>
+  <string name="add_filter">Добавяне на филтър / пренаписване на правило</string>
+  <string name="delete_filter">Изтрий филтър</string>
+  <string name="callLog_delete_entry">Изтрий този разговор</string>
+  <string name="callLog_delete_all">Изтрий всички разговори</string>
+  <string name="callLog_delDialog_title">Изтрий записите на разговорите</string>
+  <string name="callLog_delDialog_message">Наистина ли искате да изтриете всички разговори от записите?</string>
+  <string name="callLog_delDialog_yes">Да</string>
+  <string name="callLog_delDialog_no">Не</string>
+  <string name="gsm">Мобилен</string>
+  <string name="dial_tab_name_text">Набиране</string>
+  <string name="calllog_tab_name_text">Дневник</string>
+  <string name="menu_quit_text">Изход</string>
+  <string name="service_ticker_registered_text">SIP е регистриран</string>
+  <string name="outgoing_call_chooser_call_text">Разговор</string>
+</resources>

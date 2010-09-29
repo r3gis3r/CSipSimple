@@ -104,12 +104,12 @@ public class BluetoothUtils8 {
 			}
 		}
 
-		
 		return hasConnectedDevice && audioManager.isBluetoothScoAvailableOffCall();
 	}
 
 	public void setBluetoothOn(boolean on) {
-		if(on != audioManager.isBluetoothScoOn()) {
+		Log.d(THIS_FILE, "Ask for "+on+" vs "+audioManager.isBluetoothScoOn());
+		if(on != /* audioManager.isBluetoothScoOn()*/ isBluetoothConnected) {
 			if(on) {
 				Log.d(THIS_FILE, "BT on >>>");
 				audioManager.setBluetoothScoOn(true);

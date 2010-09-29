@@ -489,7 +489,11 @@ public class SipService extends Service {
 			Thread t = new Thread() {
 				public void run() {
 					Log.d(THIS_FILE, "Start sip stack because start asked");
-					sipStart();
+					try {
+						sipStart();
+					}catch(IllegalMonitorStateException e) {
+						Log.e(THIS_FILE, "Not able to start sip right now", e);
+					}
 				}
 			};
 			t.start();
@@ -641,7 +645,6 @@ public class SipService extends Service {
 					//media_cfg.setJb_max(600);
 					media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
 					media_cfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
-					
 					
 					int isTurnEnabled = prefsWrapper.getTurnEnabled();
 					
@@ -1555,8 +1558,11 @@ public class SipService extends Service {
 				// we was not yet started, so start now
 				Thread t = new Thread() {
 					public void run() {
-						sipStart();
-						super.run();
+						try {
+							sipStart();
+						}catch(IllegalMonitorStateException e) {
+							Log.e(THIS_FILE, "Not able to start sip right now", e);
+						}
 					}
 				};
 				t.start();
@@ -1570,8 +1576,12 @@ public class SipService extends Service {
 				if(userAgentReceiver.getActiveCallInProgress() == null) {
 					Thread t = new Thread() {
 						public void run() {
-							sipStop();
-							sipStart();
+							try {
+								sipStop();
+								sipStart();
+							}catch(IllegalMonitorStateException e) {
+								Log.e(THIS_FILE, "Not able to start sip right now", e);
+							}
 						}
 					};
 					t.start();

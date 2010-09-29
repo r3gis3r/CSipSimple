@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="take_call">Ответить</string>
+  <string name="decline_call">Игнорировать</string>
+  <string name="clear_call">Завершить</string>
+  <string name="touch_lock">Дважды нажмите, чтобы разблокировать</string>
+  <string name="dialpad">Кнопки</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Динамик</string>
+  <string name="mute">Откл. звук</string>
+  <string name="add_call">Новый вызов</string>
+  <string name="call_state_calling">Набор номера</string>
+  <string name="call_state_confirmed">Разговор</string>
+  <string name="call_state_connecting">Набор номера</string>
+  <string name="call_state_disconnected">Вызов завершен</string>
+  <string name="call_state_incoming">Входящий вызов...</string>
+  <string name="call_state_null">Ошибка</string>
+  <string name="unlock">Разблокировать</string>
+</resources>

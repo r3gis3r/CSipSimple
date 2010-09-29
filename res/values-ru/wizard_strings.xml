@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="other_country_providers_text">Другие провайдеры</string>
+  <string name="world_wide_providers_text">Мировые провайдеры</string>
+  <string name="generic_wizards_text">Мастер настройки</string>
+</resources>

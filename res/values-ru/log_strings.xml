@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="unknown">Неизвестные</string>
+  <string name="type_incoming">Входящие</string>
+  <string name="type_outgoing">Исходящие</string>
+  <string name="type_missed">Пропущенные</string>
+  <string name="callBack">Позвонить</string>
+  <string name="callAgain">Перезвонить</string>
+</resources>

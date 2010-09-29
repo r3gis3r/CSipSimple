@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">Название аккаунта</string>
+  <string name="w_expert_display_name_desc">Отображаемое название аккаунта</string>
+  <string name="w_expert_acc_id">Идентификатор аккаунта</string>
+  <string name="w_expert_acc_id_desc">Формат: DisplayName &lt;sip:login\@registrar&gt;</string>
+  <string name="w_expert_reg_uri">Регистрация URI</string>
+  <string name="w_expert_reg_uri_desc">Формат: sip:registrar.net[:port]</string>
+  <string name="w_expert_realm">Область</string>
+  <string name="w_expert_realm_desc">Домен аутентификации (используйте \'*\' если не знаете)</string>
+  <string name="w_expert_username">Имя пользователя</string>
+  <string name="w_expert_username_desc">Имя пользователя для аутентификации</string>
+  <string name="w_expert_data">Пароль</string>
+  <string name="w_expert_data_desc">Пароль (или другие данные) для аутентификации</string>
+  <string name="w_expert_t_proxy">Прокси-сервер</string>
+  <string name="w_expert_proxy">Прокси-сервер URI</string>
+  <string name="w_expert_proxy_desc">Формат: sip:proxy.net[:port]</string>
+  <string name="w_expert_use_tcp">Использовать TCP (не UDP)</string>
+  <string name="w_expert_publish_enabled">Публикация включена</string>
+  <string name="w_expert_reg_timeout">Время регистрации (сек.)</string>
+  <string name="w_expert_ka_interval">Интервал обновления (сек.)</string>
+</resources>

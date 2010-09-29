@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_callcentric_display_name">Име на профила</string>
+  <string name="w_callcentric_display_name_desc">Покажи име за този профил</string>
+  <string name="w_callcentric_phone_number">SIP телефонен номер</string>
+  <string name="w_callcentric_phone_number_desc">Callcentric SIP телефонен номер (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">Парола</string>
+  <string name="w_callcentric_password_desc">Парола за Вашата Callcentric сметка</string>
+</resources>

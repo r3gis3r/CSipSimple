@@ -625,6 +625,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	@Override
 	public void onTrigger(int keyCode, int dialTone) {
+		if(proximitySensor == null && proximityWakeLock == null) {
+			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
+		}
 		if (callInfo != null && service != null) {
 			try {
 				service.sendDtmf(callInfo.getCallId(), keyCode);

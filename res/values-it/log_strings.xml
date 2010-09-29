@@ -4,5 +4,8 @@
   <string name="type_incoming">In entrata</string>
   <string name="type_outgoing">In uscita</string>
   <string name="type_missed">Persa</string>
+  <string name="callBack">Call back</string>
+  <string name="callAgain">Richiama</string>
+  <string name="returnCall">Chiamata di ritorno</string>
   <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" mins "<xliff:g id="seconds" example="28">%s</xliff:g>" secs"</string>
 </resources>

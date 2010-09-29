@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_common_display_name">Име на профила</string>
+  <string name="w_common_display_name_desc">Покажи име за този профил</string>
+  <string name="w_common_username">Потребителско име</string>
+  <string name="w_common_username_desc">Вход в SIP профила</string>
+  <string name="w_common_phone_number">Тел. номер</string>
+  <string name="w_common_phone_number_desc">Sip телефонен номер даден от вашия доставчик</string>
+  <string name="w_common_password">Парола</string>
+  <string name="w_common_password_desc">Парола за Вашия профил</string>
+</resources>

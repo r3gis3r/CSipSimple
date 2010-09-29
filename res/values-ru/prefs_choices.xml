@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="scheme_choices">
+    <item>Справочник</item>
+    <item>PGP</item>
+  </string-array>
+  <string-array name="scheme_values">
+    <item>Справочник</item>
+    <item>PGP</item>
+  </string-array>
+  <string-array name="data_type_choices">
+    <item>Обычный пароль</item>
+    <item>Справочные данные</item>
+  </string-array>
+</resources>

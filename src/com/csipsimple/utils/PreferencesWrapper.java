@@ -40,6 +40,7 @@ public class PreferencesWrapper {
 	public final static String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
 	public final static String SND_CLOCK_RATE = "snd_clock_rate";
 	public final static String ECHO_CANCELLATION = "echo_cancellation";
+	public final static String ENABLE_VAD = "enable_vad";
 	public final static String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
 	
 	public PreferencesWrapper(Context aContext) {
@@ -231,7 +232,7 @@ public class PreferencesWrapper {
 	 * @return 1 if Voice audio detection is disabled
 	 */
 	public int getNoVad() {
-		return prefs.getBoolean("enable_vad", false)?0:1;
+		return prefs.getBoolean(ENABLE_VAD, false)?0:1;
 	}
 
 	

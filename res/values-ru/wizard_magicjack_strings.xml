@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_magicjack_display_name">Название аккаунта</string>
+  <string name="w_magicjack_display_name_desc">Отображаемое название аккаунта</string>
+  <string name="w_magicjack_username">Пользователь</string>
+  <string name="w_magicjack_username_desc">Формат вида EXXXXXXXXXX01</string>
+  <string name="w_magicjack_password">Пароль</string>
+  <string name="w_magicjack_password_desc">Пароль аутентификации на SIP сервере</string>
+  <string name="w_magicjack_server">Сервер</string>
+  <string name="w_magicjack_server_desc">Формат вида: proxy01.yourcity.talk4free.com</string>
+</resources>

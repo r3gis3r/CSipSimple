@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="other_country_providers_text">Други доставчици от страната</string>
+  <string name="world_wide_providers_text">Доставчици в световен мащаб</string>
+  <string name="generic_wizards_text">Общи помощници</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">Име на профила</string>
+  <string name="w_expert_display_name_desc">Покажи име за този профил</string>
+  <string name="w_expert_acc_id">Абонатен номер</string>
+  <string name="w_expert_reg_uri">Регистрация URI</string>
+  <string name="w_expert_realm">Област</string>
+  <string name="w_expert_realm_desc">Домейн за удостоверяване (ако не го знаете, използвайте \"*\")</string>
+  <string name="w_expert_username">Потребителско име</string>
+  <string name="w_expert_username_desc">Потребителско име за удостоверяване</string>
+  <string name="w_expert_data">Парола</string>
+  <string name="w_expert_data_desc">Парола (или други данни) за удостоверяване</string>
+  <string name="w_expert_t_proxy">Прокси</string>
+  <string name="w_expert_proxy">Прокси URI</string>
+  <string name="w_expert_use_tcp">Използвай TCP (не UDP)</string>
+  <string name="w_expert_publish_enabled">Публикуването позволено</string>
+  <string name="w_expert_reg_timeout">Регистрирането изтече (сек)</string>
+  <string name="w_expert_ka_interval">Поддържай активен интервал (сек)</string>
+  <string name="w_expert_force_contact">Принуди контакт</string>
+</resources>

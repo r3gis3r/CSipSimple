@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="take_call">Отговори</string>
+  <string name="decline_call">Игнорирай</string>
+  <string name="clear_call">Край</string>
+  <string name="touch_lock">Двойно почукване за отключване</string>
+  <string name="dialpad">Панел за набиране</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Говорител</string>
+  <string name="mute">Заглушаване</string>
+  <string name="add_call">Добавяне на повикване</string>
+  <string name="call_state_calling">Обаждане</string>
+  <string name="call_state_confirmed">Говорите</string>
+  <string name="call_state_connecting">Свързване...</string>
+  <string name="call_state_disconnected">Затваряне</string>
+  <string name="call_state_early">Звънене...</string>
+  <string name="call_state_incoming">Входящо повикване...</string>
+  <string name="call_state_null">ГРЕШКА</string>
+  <string name="unlock">Отключване</string>
+</resources>
