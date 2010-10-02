@@ -1,14 +1,14 @@
-# Translations template for PROJECT.
-# Copyright (C) 2010 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# Translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# Regis Montoya <http://www.r3gis.fr>, 2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"POT-Creation-Date: 2010-09-30 13:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"

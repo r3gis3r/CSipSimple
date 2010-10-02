@@ -82,6 +82,20 @@ msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
 msgstr "Usa wifi per chiamate in uscita"
 
+msgctxt "use_other"
+msgid "Use other networks"
+msgstr ""
+
+#, fuzzy
+msgctxt "use_other_in_desc"
+msgid "For example WiMax for incoming calls"
+msgstr "Usa wifi per chiamate in ingresso"
+
+#, fuzzy
+msgctxt "use_other_out_desc"
+msgid "For example WiMax for outgoing calls"
+msgstr "Usa wifi per chiamate in uscita"
+
 msgctxt "use_3g"
 msgid "Use 3G"
 msgstr "Usa 3G"
@@ -114,6 +128,15 @@ msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
 msgstr "Abilita trasporto TCP"
 
+msgctxt "enable_tls"
+msgid "TLS"
+msgstr ""
+
+#, fuzzy
+msgctxt "enable_tls_desc"
+msgid "Enable TLS transport"
+msgstr "Abilita trasporto UDP"
+
 msgctxt "enable_udp"
 msgid "UDP"
 msgstr "UDP"
@@ -135,6 +158,16 @@ msgid "TCP Port"
 msgstr "Porta TCP"
 
 msgctxt "network_tcp_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "Numero di porta da impegnare in locale"
+
+#, fuzzy
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr "Porta RTP"
+
+#, fuzzy
+msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Numero di porta da impegnare in locale"
 

@@ -82,6 +82,20 @@ msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
 msgstr "Verwendet WLAN für ausgehende Anrufe"
 
+msgctxt "use_other"
+msgid "Use other networks"
+msgstr ""
+
+#, fuzzy
+msgctxt "use_other_in_desc"
+msgid "For example WiMax for incoming calls"
+msgstr "Verwendet WLAN für eingehende Anrufe"
+
+#, fuzzy
+msgctxt "use_other_out_desc"
+msgid "For example WiMax for outgoing calls"
+msgstr "Verwendet WLAN für ausgehende Anrufe"
+
 msgctxt "use_3g"
 msgid "Use 3G"
 msgstr "Verwende UMTS"
@@ -115,6 +129,15 @@ msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
 msgstr "Aktiviert das TCP Protokoll"
 
+msgctxt "enable_tls"
+msgid "TLS"
+msgstr ""
+
+#, fuzzy
+msgctxt "enable_tls_desc"
+msgid "Enable TLS transport"
+msgstr "Aktiviert das UDP Protokoll"
+
 msgctxt "enable_udp"
 msgid "UDP"
 msgstr "UDP"
@@ -136,6 +159,16 @@ msgid "TCP Port"
 msgstr "TCP Port"
 
 msgctxt "network_tcp_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "Lokale TCP Portnummer"
+
+#, fuzzy
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr "RTP port"
+
+#, fuzzy
+msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Lokale TCP Portnummer"
 

@@ -43,7 +43,6 @@ public abstract class SimplePrefsWizard extends BasePrefsWizard {
 		accountPassword = (EditTextPreference) findPreference("password");
 
 		
-		
 		String display_name = account.display_name;
 		if(display_name.equalsIgnoreCase("")) {
 			display_name = getDefaultName();
@@ -96,7 +95,7 @@ public abstract class SimplePrefsWizard extends BasePrefsWizard {
 		pjsip_cred_info credentials = account.cfg.getCred_info();
 
 		account.cfg.setCred_count(1);
-		credentials.setRealm(pjsua.pj_str_copy(getDomain()));
+		credentials.setRealm(pjsua.pj_str_copy("*"));
 		credentials.setUsername(getPjText(accountPhoneNumber));
 		credentials.setData(getPjText(accountPassword));
 		credentials.setScheme(pjsua.pj_str_copy("Digest"));

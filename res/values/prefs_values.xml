@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+	<string-array name="scheme_values">
+		<item>Digest</item>
+		<item>PGP</item>
+	</string-array>
+	<string-array name="data_type_values">
+		<item>0</item>
+		<item>1</item>
+		<!-- 
+		<item>16</item>
+		 -->
+	</string-array>
+	<string-array name="clock_rate_values">
+		<item>8000</item>
+		<item>16000</item>
+		<item>32000</item>
+		<item>44100</item>
+	</string-array>
+	<string-array name="use_srtp_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+</resources>

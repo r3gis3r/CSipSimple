@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"POT-Creation-Date: 2010-09-30 13:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,28 +25,12 @@ msgctxt "scheme_choices:1"
 msgid "PGP"
 msgstr ""
 
-msgctxt "scheme_values:0"
-msgid "Digest"
-msgstr ""
-
-msgctxt "scheme_values:1"
-msgid "PGP"
-msgstr ""
-
 msgctxt "data_type_choices:0"
 msgid "Plain password"
 msgstr ""
 
 msgctxt "data_type_choices:1"
 msgid "Data digest"
-msgstr ""
-
-msgctxt "data_type_values:0"
-msgid "0"
-msgstr ""
-
-msgctxt "data_type_values:1"
-msgid "1"
 msgstr ""
 
 msgctxt "clock_rate_choices:0"
@@ -65,19 +49,15 @@ msgctxt "clock_rate_choices:3"
 msgid "44.1KHz"
 msgstr ""
 
-msgctxt "clock_rate_values:0"
-msgid "8000"
+msgctxt "use_srtp_choices:0"
+msgid "Disabled"
 msgstr ""
 
-msgctxt "clock_rate_values:1"
-msgid "16000"
+msgctxt "use_srtp_choices:1"
+msgid "Optional"
 msgstr ""
 
-msgctxt "clock_rate_values:2"
-msgid "32000"
-msgstr ""
-
-msgctxt "clock_rate_values:3"
-msgid "44100"
+msgctxt "use_srtp_choices:2"
+msgid "Mandatory"
 msgstr ""
 

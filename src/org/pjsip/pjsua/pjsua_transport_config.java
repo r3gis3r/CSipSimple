@@ -61,12 +61,13 @@ public class pjsua_transport_config {
     return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
   }
 
-  public void setTls_setting(SWIGTYPE_p_pjsip_tls_setting value) {
-    pjsuaJNI.pjsua_transport_config_tls_setting_set(swigCPtr, this, SWIGTYPE_p_pjsip_tls_setting.getCPtr(value));
+  public void setTls_setting(pjsip_tls_setting value) {
+    pjsuaJNI.pjsua_transport_config_tls_setting_set(swigCPtr, this, pjsip_tls_setting.getCPtr(value), value);
   }
 
-  public SWIGTYPE_p_pjsip_tls_setting getTls_setting() {
-    return new SWIGTYPE_p_pjsip_tls_setting(pjsuaJNI.pjsua_transport_config_tls_setting_get(swigCPtr, this), true);
+  public pjsip_tls_setting getTls_setting() {
+    long cPtr = pjsuaJNI.pjsua_transport_config_tls_setting_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new pjsip_tls_setting(cPtr, false);
   }
 
   public void setQos_type(SWIGTYPE_p_pj_qos_type value) {

@@ -1,0 +1,71 @@
+# Hungarian translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"PO-Revision-Date: 2010-10-02 01:13+0000\n"
+"Last-Translator: B. Zoli <tec@webpress.hu>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-10-02 05:24+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+msgctxt "w_advanced_display_name"
+msgid "Account name"
+msgstr "Fiók neve"
+
+msgctxt "w_advanced_display_name_desc"
+msgid "Display name for this account"
+msgstr "Megjelenítendő név a fiók használatakor"
+
+msgctxt "w_advanced_caller_id"
+msgid "Caller ID"
+msgstr "Hívó neve"
+
+msgctxt "w_advanced_caller_id_desc"
+msgid "Caller ID to send with calls"
+msgstr "Hívottnál megjelenő név"
+
+msgctxt "w_advanced_server"
+msgid "Server"
+msgstr "Szerver"
+
+msgctxt "w_advanced_server_desc"
+msgid "SIP server domain/IP[:port]"
+msgstr "SIP szerver domain/IP[:port]"
+
+msgctxt "w_advanced_username"
+msgid "Username"
+msgstr "Felhasználónév"
+
+msgctxt "w_advanced_username_desc"
+msgid "Username for SIP server authentication"
+msgstr "Felhasználói azonosító név a SIP szerveren"
+
+msgctxt "w_advanced_password"
+msgid "Password"
+msgstr "Jelszó"
+
+msgctxt "w_advanced_password_desc"
+msgid "Password for SIP server authentication"
+msgstr "Jelszó a SIP szerveren"
+
+msgctxt "w_advanced_use_tcp"
+msgid "Use TCP (not UDP)"
+msgstr "Használjon TCP-t (ne UDP-t)"
+
+msgctxt "w_advanced_proxy"
+msgid "Proxy"
+msgstr "Proxy"
+
+msgctxt "w_advanced_proxy_desc"
+msgid "Proxy domain/IP[:port] (optional, not always needed)"
+msgstr ""
+"Proxy domain/IP[:port] (opcionális, nem minden SIP fiókhoz szükséges)"

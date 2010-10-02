@@ -1,0 +1,63 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-10-02 20:40+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "scheme_choices:0"
+msgid "Digest"
+msgstr ""
+
+msgctxt "scheme_choices:1"
+msgid "PGP"
+msgstr ""
+
+msgctxt "data_type_choices:0"
+msgid "Plain password"
+msgstr ""
+
+msgctxt "data_type_choices:1"
+msgid "Data digest"
+msgstr ""
+
+msgctxt "clock_rate_choices:0"
+msgid "8KHz"
+msgstr ""
+
+msgctxt "clock_rate_choices:1"
+msgid "16KHz"
+msgstr ""
+
+msgctxt "clock_rate_choices:2"
+msgid "32KHz"
+msgstr ""
+
+msgctxt "clock_rate_choices:3"
+msgid "44.1KHz"
+msgstr ""
+
+msgctxt "use_srtp_choices:0"
+msgid "Disabled"
+msgstr ""
+
+msgctxt "use_srtp_choices:1"
+msgid "Optional"
+msgstr ""
+
+msgctxt "use_srtp_choices:2"
+msgid "Mandatory"
+msgstr ""
+

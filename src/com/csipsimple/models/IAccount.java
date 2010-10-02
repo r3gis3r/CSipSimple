@@ -43,6 +43,7 @@ public class IAccount implements Parcelable {
 	public String username = null;
 	public int datatype = 0;
 	public String data = null;
+	public int use_srtp = -1;
 	
 	
 
@@ -100,6 +101,7 @@ public class IAccount implements Parcelable {
 		dest.writeString(getWriteParcelableString(username));
 		dest.writeInt(datatype);
 		dest.writeString(getWriteParcelableString(data));
+		dest.writeInt(use_srtp);
 	}
 
 	public void readFromParcel(Parcel in) {
@@ -123,5 +125,6 @@ public class IAccount implements Parcelable {
 		username = getReadParcelableString(in.readString());
 		datatype = in.readInt();
 		data = getReadParcelableString(in.readString());
+		use_srtp = in.readInt();
 	}
 }

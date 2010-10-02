@@ -79,6 +79,16 @@
 			android:summary="@string/network_tcp_transport_port_desc"
 			android:defaultValue="5060"></EditTextPreference>
 		
+		<CheckBoxPreference android:title="@string/enable_tls"
+			android:summary="@string/enable_tls_desc"
+			android:key="enable_tls" android:defaultValue="false"></CheckBoxPreference>
+		<EditTextPreference android:key="network_tls_transport_port"
+			android:title="@string/network_tls_transport_port"
+			android:numeric="integer"
+			android:summary="@string/network_tls_transport_port_desc"
+			android:defaultValue="5061"></EditTextPreference>
+		
+		
 		<EditTextPreference android:key="network_rtp_port"
 			android:title="@string/network_rtp_port"
 			android:numeric="integer"

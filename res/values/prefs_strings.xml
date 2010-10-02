@@ -33,12 +33,16 @@
 <string name="lock_wifi_desc">Prevent WiFi idle when SIP is connected</string>
 <string name="enable_tcp">TCP</string>
 <string name="enable_tcp_desc">Enable TCP transport</string>
+<string name="enable_tls">TLS</string>
+<string name="enable_tls_desc">Enable TLS transport</string>
 <string name="enable_udp">UDP</string>
 <string name="enable_udp_desc">Enable UDP transport</string>
 <string name="network_udp_transport_port">UDP Port</string>
 <string name="network_udp_transport_port_desc">Port number to bind locally</string>
 <string name="network_tcp_transport_port">TCP Port</string>
 <string name="network_tcp_transport_port_desc">Port number to bind locally</string>
+<string name="network_tls_transport_port">TLS Port</string>
+<string name="network_tls_transport_port_desc">Port number to bind locally</string>
 <string name="network_rtp_port">RTP port</string>
 <string name="network_rtp_port_desc">Port for RTP ports range start</string>
 <!-- Media -->
@@ -78,6 +82,8 @@
 <string name="stun_server">STUN server</string>
 <string name="stun_server_desc">STUN server (HOST:PORT)</string>
 <string name="codecs_desc">Priority (0 is disabled)</string>
+<string name="use_srtp">SRTP mode</string>
+<string name="use_srtp_desc">Mode for Secure RTP</string>
 
 
 <!-- UI -->

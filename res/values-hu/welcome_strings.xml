@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="first_launch_text">&lt;h2&gt;Az alkalmazás első futtatására készül.&lt;/h2&gt;&lt;br/&gt;&lt;b&gt;Vegye figyelembe a következőket:&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;1 .&lt;/b&gt; Várjon a letöltés befejezéséig &lt;br/&gt;&lt;i&gt;(letöltődik a szoftver Android-eszközfüggő része)&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;2 .&lt;/b&gt;Ezután be lesznek kérve a SIP hozzáférés adatok.&lt;br /&gt;&lt;br/&gt;&lt;b&gt;3 . &lt;/b&gt;Végül ki kell választani hogyan fusson a SIP rendszer a készüléken&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;h2&gt;Ez egy nyílt forráskódú szoftver&lt;/h2&gt;&lt;br/&gt;...és ÖN is hozzájárulhat (Hibabejelentéssel, fordítással, használható dokumentációkkal).&lt;br/&gt;Itt konzultálhat a közösségünkkel: &lt;a href=http://www.csipsimple.com&gt;www.csipsimple.com&lt;/a&gt;&lt;br/&gt;Erre a szoftverre a GPLv3 licensz vonatkozik (bővebb információ erről a weboldalunkon).&lt;br/&gt;Néhány funkcióthoz (pl. a voIP a mobilon), szügséges lehet azt a szolgáltatói szerződésében engedélyeztetni, mielőtt aktiválja az alkalmazásban. &lt;i&gt;(Ha nincs rá mód, váltson szolgáltatót vagy próbálja meg a jelenlegi szerződés korlátait felszabadíttatni).&lt;/i&gt;</string>
+  <string name="changelog_text">&lt;h2&gt;Mi az újdonság ebben a verzióban?&lt;/h2&gt;Az alkalmazás még egy alfa fázisban van. Az alkalmazás blogján tudja követni a változásokat</string>
+  <string name="detecting_text">A készüléke paramétereinek a megállapítása</string>
+  <string name="intializing_text">Inicializálás</string>
+  <string name="downloading_text">Letöltés</string>
+  <string name="installing_library_text">Könyvtár telepítés..</string>
+  <string name="welcome_caption_text">Köszönjük hogy a CSipSimple-t használja!</string>
+</resources>

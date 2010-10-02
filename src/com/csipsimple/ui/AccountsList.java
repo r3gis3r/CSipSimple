@@ -130,17 +130,20 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	}
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
+		Log.d(THIS_FILE, "Bind to service");
 		//Bind to sip service
 		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 		//And register to ua state events
 		registerReceiver(registrationStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
+		
 	}
 	
 	@Override
-	protected void onPause() {
-		super.onPause();
+	protected void onStop() {
+		super.onStop();
+		Log.d(THIS_FILE, "Unbind from service");
 		try {
 			unbindService(connection);
 		}catch(Exception e) {
@@ -293,14 +296,18 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	}
 	
 
-	
+	private abstract class OnServiceConnect{
+		protected abstract void serviceConnected(); 
+	}
+	private OnServiceConnect onServiceConnect = null;
 	private void reloadAsyncAccounts(final Integer accountId, final Integer renew) {
 		//Force reflush accounts
-		Log.d(THIS_FILE, "Reload async accounts"+accountId+" renew : "+renew);
-		Thread t = new Thread() {
+		Log.d(THIS_FILE, "Reload async accounts "+accountId+" renew : "+renew);
+		onServiceConnect = new OnServiceConnect() {
 			@Override
-			public void run() {
+			protected void serviceConnected() {
 				if (service != null) {
+					Log.d(THIS_FILE, "Will reload all accounts !");
 					try {
 						if(accountId == null) {
 							service.reAddAllAccounts();
@@ -314,11 +321,21 @@ public class AccountsList extends Activity implements OnItemClickListener {
 						handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
 					}
 				}
+			}
+		};
+		
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				Log.d(THIS_FILE, "Would like to reload all accounts");
+				if(service != null) {
+					onServiceConnect.serviceConnected();
+					onServiceConnect = null;
+				}
 			};
 		};
 		t.start();
 	}
-	
 	
 	private static final class AccountListItemViews {
 		TextView labelView;
@@ -445,6 +462,10 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
+			if(onServiceConnect != null) {
+				onServiceConnect.serviceConnected();
+				onServiceConnect = null;
+			}
 			handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
 		}
 		@Override

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="acct_inactive">Használaton kívül</string>
+  <string name="acct_unregistered">Nincs bejelentkezve</string>
+  <string name="acct_expired">Lejárt bejelentkezési adatok</string>
+  <string name="acct_registering">Bejelentkezés..</string>
+  <string name="acct_registered">Bejelentkezve</string>
+  <string name="acct_regerror">Bejelentkezéskor hiba történt</string>
+  <string name="acct_regfailed">Sikertelen bejelentkezés - Ellenőrizze a beállításokat</string>
+</resources>

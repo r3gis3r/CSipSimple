@@ -1,0 +1,50 @@
+# Russian translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"PO-Revision-Date: 2010-09-29 08:16+0000\n"
+"Last-Translator: r3gis <r3gis@r3gis.fr>\n"
+"Language-Team: Russian <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-09-30 05:07+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+msgctxt "w_basic_display_name"
+msgid "Account name"
+msgstr "Название аккаунта"
+
+msgctxt "w_basic_display_name_desc"
+msgid "Display name for this account"
+msgstr "Отображаемое название аккаунта"
+
+msgctxt "w_basic_username"
+msgid "User"
+msgstr "Пользователь"
+
+msgctxt "w_basic_username_desc"
+msgid "Account name / Login"
+msgstr "Название аккаунта / Логин"
+
+msgctxt "w_basic_server"
+msgid "Server"
+msgstr "Сервер"
+
+msgctxt "w_basic_server_desc"
+msgid "Server / SIP domain name"
+msgstr "Сервер / SIP домен"
+
+msgctxt "w_basic_password"
+msgid "Password"
+msgstr "Пароль"
+
+msgctxt "w_basic_password_desc"
+msgid "Password to access your account"
+msgstr "Пароль доступа к аккаунту"

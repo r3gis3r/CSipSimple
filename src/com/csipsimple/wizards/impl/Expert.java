@@ -19,6 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import java.util.Locale;
 
+import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsip_cred_data_type;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
@@ -28,10 +29,13 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class Expert extends BasePrefsWizard {
+
+	private static final String THIS_FILE = "Expert";
 
 	public static WizardInfo getWizardInfo() {
 		WizardInfo result = new WizardInfo();
@@ -59,6 +63,7 @@ public class Expert extends BasePrefsWizard {
 	private EditTextPreference accountKaInterval;
 	private EditTextPreference accountForceContact;
 	private EditTextPreference accountProxy;
+	private ListPreference accountUseSrtp;
 
 	protected void fillLayout() {
 		accountDisplayName = (EditTextPreference) findPreference("display_name");
@@ -70,6 +75,7 @@ public class Expert extends BasePrefsWizard {
 		accountDataType = (ListPreference) findPreference("data_type");
 		accountScheme = (ListPreference) findPreference("scheme");
 		accountUseTcp = (CheckBoxPreference) findPreference("use_tcp");
+		accountUseSrtp = (ListPreference) findPreference("use_srtp");
 		accountPublishEnabled = (CheckBoxPreference) findPreference("publish_enabled");
 		accountRegTimeout = (EditTextPreference) findPreference("reg_timeout");
 		accountKaInterval = (EditTextPreference) findPreference("ka_interval");
@@ -116,6 +122,8 @@ public class Expert extends BasePrefsWizard {
 		
 		accountForceContact.setText(account.cfg.getForce_contact().getPtr());
 		accountProxy.setText(account.cfg.getProxy().getPtr());
+		
+		accountUseSrtp.setValueIndex(account.cfg.getUse_srtp().swigValue());
 	}
 	
 
@@ -145,7 +153,11 @@ public class Expert extends BasePrefsWizard {
 		account.use_tcp = accountUseTcp.isChecked();
 		account.cfg.setId(getPjText(accountAccId));
 		account.cfg.setReg_uri(getPjText(accountRegUri));
-
+		try {
+			account.cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(Integer.parseInt(accountUseSrtp.getValue())));
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Use srtp is not a number");
+		}
 		pjsip_cred_info ci = account.cfg.getCred_info();
 
 		if (!isEmpty(accountUserName)) {
@@ -170,6 +182,11 @@ public class Expert extends BasePrefsWizard {
 			}
 		} else {
 			account.cfg.setCred_count(0);
+			ci.setRealm(pjsua.pj_str_copy(""));
+			ci.setUsername(pjsua.pj_str_copy(""));
+			ci.setData(pjsua.pj_str_copy(""));
+			ci.setScheme(pjsua.pj_str_copy("Digest"));
+			ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
 		}
 
 		account.cfg.setPublish_enabled((accountPublishEnabled.isChecked()) ? 1 : 0);

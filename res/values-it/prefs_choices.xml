@@ -4,28 +4,14 @@
     <item>Digest</item>
     <item>PGP</item>
   </string-array>
-  <string-array name="scheme_values">
-    <item>Digest</item>
-    <item>PGP</item>
-  </string-array>
   <string-array name="data_type_choices">
     <item>Password in chiaro</item>
     <item>Data digest</item>
-  </string-array>
-  <string-array name="data_type_values">
-    <item>0</item>
-    <item>1</item>
   </string-array>
   <string-array name="clock_rate_choices">
     <item>8KHz</item>
     <item>16KHz</item>
     <item>32KHz</item>
     <item>44.1KHz</item>
-  </string-array>
-  <string-array name="clock_rate_values">
-    <item>8000</item>
-    <item>16000</item>
-    <item>32000</item>
-    <item>44100</item>
   </string-array>
 </resources>

@@ -135,15 +135,15 @@ public class WelcomeScreen extends Activity {
 
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	protected void onPause() {
+		super.onPause();
 		try {
-			if (service != null && !service.isDownloadRunning() && bound) {
+			if (service != null /*&& !service.isDownloadRunning()*/ && bound) {
 				unbindService(connection);
 				bound = false;
 			}
-		} catch (RemoteException e) {
-			Log.e(THIS_FILE, "Exception on calling DownloadService", e);
+		} catch (Exception e) {
+			Log.e(THIS_FILE, "Exception on unbinding service", e);
 		}
 	}
 	

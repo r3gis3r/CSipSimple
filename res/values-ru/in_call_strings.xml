@@ -8,11 +8,12 @@
   <string name="bluetooth">Bluetooth</string>
   <string name="speaker">Динамик</string>
   <string name="mute">Откл. звук</string>
-  <string name="add_call">Новый вызов</string>
+  <string name="add_call">+ вызов</string>
   <string name="call_state_calling">Набор номера</string>
   <string name="call_state_confirmed">Разговор</string>
   <string name="call_state_connecting">Набор номера</string>
   <string name="call_state_disconnected">Вызов завершен</string>
+  <string name="call_state_early">Вызов...</string>
   <string name="call_state_incoming">Входящий вызов...</string>
   <string name="call_state_null">Ошибка</string>
   <string name="unlock">Разблокировать</string>

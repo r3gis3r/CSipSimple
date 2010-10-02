@@ -13,10 +13,6 @@ public class pjsua implements pjsuaConstants {
     return new pj_str_t(pjsuaJNI.pj_str_copy(str), true);
   }
 
-  public static int get_snd_dev_info(pjmedia_snd_dev_info info, int id) {
-    return pjsuaJNI.get_snd_dev_info(pjmedia_snd_dev_info.getCPtr(info), info, id);
-  }
-
   public static void setCallbackObject(Callback callback) {
     pjsuaJNI.setCallbackObject(Callback.getCPtr(callback), callback);
   }
@@ -28,14 +24,6 @@ public class pjsua implements pjsuaConstants {
 
   public static void pj_pool_release(pj_pool_t pool) {
     pjsuaJNI.pj_pool_release(pj_pool_t.getCPtr(pool), pool);
-  }
-
-  public static int snd_get_dev_count() {
-    return pjsuaJNI.snd_get_dev_count();
-  }
-
-  public static int pjmedia_snd_set_latency(long input_latency, long output_latency) {
-    return pjsuaJNI.pjmedia_snd_set_latency(input_latency, output_latency);
   }
 
   public static int pjmedia_tonegen_create2(pj_pool_t pool, pj_str_t name, long clock_rate, long channel_count, long samples_per_frame, long bits_per_sample, long options, pjmedia_port pp_port) {
@@ -134,6 +122,10 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.verify_sip_url(url);
   }
 
+  public synchronized static int verify_url(String url) {
+    return pjsuaJNI.verify_url(url);
+  }
+
   public synchronized static int schedule_timer(SWIGTYPE_p_pj_timer_entry entry, SWIGTYPE_p_pj_time_val delay) {
     return pjsuaJNI.schedule_timer(SWIGTYPE_p_pj_timer_entry.getCPtr(entry), SWIGTYPE_p_pj_time_val.getCPtr(delay));
   }
@@ -162,12 +154,8 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.transport_create(type.swigValue(), pjsua_transport_config.getCPtr(cfg), cfg, p_id);
   }
 
-  public synchronized static int transport_register(SWIGTYPE_p_pjsip_transport tp, SWIGTYPE_p_int p_id) {
-    return pjsuaJNI.transport_register(SWIGTYPE_p_pjsip_transport.getCPtr(tp), SWIGTYPE_p_int.getCPtr(p_id));
-  }
-
-  public synchronized static long transport_get_count() {
-    return pjsuaJNI.transport_get_count();
+  public synchronized static int transport_register(SWIGTYPE_p_pjsip_transport tp, int[] p_id) {
+    return pjsuaJNI.transport_register(SWIGTYPE_p_pjsip_transport.getCPtr(tp), p_id);
   }
 
   public synchronized static int enum_transports(int[] id, long[] count) {
@@ -293,7 +281,7 @@ public class pjsua implements pjsuaConstants {
   public synchronized static int enum_calls(int[] ids, long[] count) {
     return pjsuaJNI.enum_calls(ids, count);
   }
-  
+
   public synchronized static int call_make_call(int acc_id, pj_str_t dst_uri, long options, byte[] user_data, SWIGTYPE_p_pjsua_msg_data msg_data, int[] p_call_id) {
     return pjsuaJNI.call_make_call(acc_id, pj_str_t.getCPtr(dst_uri), dst_uri, options, user_data, SWIGTYPE_p_pjsua_msg_data.getCPtr(msg_data), p_call_id);
   }

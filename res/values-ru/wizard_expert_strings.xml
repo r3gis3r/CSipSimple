@@ -7,7 +7,7 @@
   <string name="w_expert_reg_uri">Регистрация URI</string>
   <string name="w_expert_reg_uri_desc">Формат: sip:registrar.net[:port]</string>
   <string name="w_expert_realm">Область</string>
-  <string name="w_expert_realm_desc">Домен аутентификации (используйте \'*\' если не знаете)</string>
+  <string name="w_expert_realm_desc">Домен аутентификации (если не знаете, используйте \'*\')</string>
   <string name="w_expert_username">Имя пользователя</string>
   <string name="w_expert_username_desc">Имя пользователя для аутентификации</string>
   <string name="w_expert_data">Пароль</string>

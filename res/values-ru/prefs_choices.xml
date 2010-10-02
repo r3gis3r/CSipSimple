@@ -4,12 +4,14 @@
     <item>Справочник</item>
     <item>PGP</item>
   </string-array>
-  <string-array name="scheme_values">
-    <item>Справочник</item>
-    <item>PGP</item>
-  </string-array>
   <string-array name="data_type_choices">
     <item>Обычный пароль</item>
     <item>Справочные данные</item>
+  </string-array>
+  <string-array name="clock_rate_choices">
+    <item>8КГц</item>
+    <item>16КГц</item>
+    <item>32КГц</item>
+    <item>44.1КГц</item>
   </string-array>
 </resources>

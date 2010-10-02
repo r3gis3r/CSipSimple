@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">CSipSimple</string>
+  <string name="unable_to_download_file">Nem lehet letölteni a fájlt</string>
+  <string name="connection_not_valid">A kiválasztott hálózaton a forgalmazás nem lehetséges (kapcsolja be a WiFi-t vagy a beállításoknál a 3G használatot)</string>
+  <string name="invalid_sip_uri">Helytelen Sip uri hívás</string>
+  <string name="accounts">Fiókok</string>
+  <string name="save">Ment</string>
+  <string name="cancel">Mégsem</string>
+  <string name="activate_account">Fiók aktíválása</string>
+  <string name="deactivate_account">Fiók felfüggesztése</string>
+  <string name="delete_account">Fiók törlése</string>
+  <string name="modify_account">Fiók módósítása</string>
+  <string name="add_account">Új fiók</string>
+  <string name="choose_wizard">Válassz módot</string>
+  <string name="use">Fiók:</string>
+  <string name="use_pstn">GSM hivás</string>
+  <string name="ongoing_call">Hívás folyamatban</string>
+  <string name="recentCalls_empty">Nincs hívás lista</string>
+  <string name="filters">Szűrők</string>
+  <string name="add_filter">Szűrő létrehozás / átírás</string>
+  <string name="delete_filter">Szűrő törlés</string>
+  <string name="callLog_delete_entry">E hívás törlése</string>
+  <string name="callLog_delete_all">Minden hívás törlése</string>
+  <string name="callLog_delDialog_title">Híváslisták törlése</string>
+  <string name="callLog_delDialog_message">Tényleg törlődjön az egész lista?</string>
+  <string name="callLog_delDialog_yes">Igen</string>
+  <string name="callLog_delDialog_no">Nem</string>
+  <string name="gsm">Mobil</string>
+  <string name="dial_tab_name_text">Hívás</string>
+  <string name="calllog_tab_name_text">Híváslista</string>
+  <string name="menu_quit_text">Kilép</string>
+  <string name="service_ticker_registered_text">SIP Regisztrálva</string>
+  <string name="outgoing_call_chooser_call_text">Hívás</string>
+</resources>

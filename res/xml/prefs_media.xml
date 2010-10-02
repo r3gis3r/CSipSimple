@@ -91,6 +91,9 @@
 				android:dependency="enable_turn"
 				android:defaultValue=""></EditTextPreference>
 		</PreferenceCategory>
-		
+		<ListPreference android:title="@string/use_srtp" android:key="use_srtp"
+				android:summary="@string/use_srtp_desc"
+				android:defaultValue="0"
+				android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"></ListPreference>
 		
 </PreferenceScreen>

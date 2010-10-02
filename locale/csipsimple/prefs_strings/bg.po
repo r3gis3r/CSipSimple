@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-25 18:18+0200\n"
-"PO-Revision-Date: 2010-09-28 17:16+0000\n"
-"Last-Translator: Dimitar Dimitrov <bez.syanka.na.samnenie@gmail.com>\n"
+"POT-Creation-Date: 2010-09-30 13:24+0200\n"
+"PO-Revision-Date: 2010-09-30 04:53+0000\n"
+"Last-Translator: Lubomir Christov <Unknown>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-29 05:45+0000\n"
+"X-Launchpad-Export-Date: 2010-10-01 09:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 msgctxt "prefs"
@@ -35,7 +35,7 @@ msgstr "Мрежа"
 
 msgctxt "prefs_network_desc"
 msgid "How SIP can be connected to the network"
-msgstr "Как SIP може да бъде свързан към мрежата"
+msgstr "Свързване към SIP мрежата"
 
 msgctxt "prefs_media"
 msgid "Media"
@@ -43,7 +43,7 @@ msgstr "Мултимедия"
 
 msgctxt "prefs_media_desc"
 msgid "Codecs and in-call sound behavior"
-msgstr "Кодеци и поведение при разговор"
+msgstr "Кодировки и поведение при разговор"
 
 msgctxt "prefs_ui"
 msgid "User interface"
@@ -51,7 +51,7 @@ msgstr "Потребителски интерфейс"
 
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
-msgstr "Откъсни потребителския интерфейс"
+msgstr "Оптимизиране на интерфейса"
 
 msgctxt "for_incomings"
 msgid "For incoming calls"
@@ -71,40 +71,53 @@ msgstr "Транспорт"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
-msgstr "Използвай WiFi"
+msgstr "Използване на WiFi"
 
 msgctxt "use_wifi_in_desc"
 msgid "Use WiFi for incoming calls"
-msgstr "Използвай WiFi за входящи обаждания"
+msgstr "Използване на WiFi за входящи повиквания"
 
 msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
-msgstr "Използвай WiFi за изходящи обаждания"
+msgstr "Използване на WiFi за изходящи повиквания"
+
+msgctxt "use_other"
+msgid "Use other networks"
+msgstr ""
+
+#, fuzzy
+msgctxt "use_other_in_desc"
+msgid "For example WiMax for incoming calls"
+msgstr "Използване на WiFi за входящи повиквания"
+
+#, fuzzy
+msgctxt "use_other_out_desc"
+msgid "For example WiMax for outgoing calls"
+msgstr "Използване на WiFi за изходящи повиквания"
 
 msgctxt "use_3g"
 msgid "Use 3G"
-msgstr "Използвай 3G"
+msgstr "Използване на 3G"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr ""
-"Вашият мобилен оператор трябва да Ви позволи да използвате тази опция"
+msgstr "Оператора Ви трябва да разрешава използването на този параметър"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
-msgstr "Използвай EDGE"
+msgstr "Използване на EDGE"
 
 msgctxt "use_gprs"
 msgid "Use GPRS"
-msgstr "Използвай GPRS"
+msgstr "Използване на GPRS"
 
 msgctxt "lock_wifi"
 msgid "Lock WiFi"
-msgstr "Заключи WiFi"
+msgstr "Заключване на WiFi"
 
 msgctxt "lock_wifi_desc"
 msgid "Prevent WiFi idle when SIP is connected"
-msgstr "Предотврати спирането на WiFi, когато SIP е свързан"
+msgstr "Предотвратяване изключването на WiFi, когато SIP е свързан"
 
 msgctxt "enable_tcp"
 msgid "TCP"
@@ -112,7 +125,16 @@ msgstr "TCP"
 
 msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
-msgstr "Разреши TCP пренос"
+msgstr "Разрешаване на TCP пренос"
+
+msgctxt "enable_tls"
+msgid "TLS"
+msgstr ""
+
+#, fuzzy
+msgctxt "enable_tls_desc"
+msgid "Enable TLS transport"
+msgstr "Разрешаване на UDP пренос"
 
 msgctxt "enable_udp"
 msgid "UDP"
@@ -120,7 +142,7 @@ msgstr "UDP"
 
 msgctxt "enable_udp_desc"
 msgid "Enable UDP transport"
-msgstr "Разреши UDP пренос"
+msgstr "Разрешаване на UDP пренос"
 
 msgctxt "network_udp_transport_port"
 msgid "UDP Port"
@@ -128,7 +150,7 @@ msgstr "UDP порт"
 
 msgctxt "network_udp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr "Номера на порта да се обвързва на местно ниво"
+msgstr "Номер на порт, който ще се ползва локално"
 
 msgctxt "network_tcp_transport_port"
 msgid "TCP Port"
@@ -136,7 +158,17 @@ msgstr "TCP порт"
 
 msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr "Номера на порта да се обвързва на местно ниво"
+msgstr "Номер на порт, който ще се ползва локално"
+
+#, fuzzy
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr "RTP порт"
+
+#, fuzzy
+msgctxt "network_tls_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "Номер на порт, който ще се ползва локално"
 
 msgctxt "network_rtp_port"
 msgid "RTP port"
@@ -144,7 +176,7 @@ msgstr "RTP порт"
 
 msgctxt "network_rtp_port_desc"
 msgid "Port for RTP ports range start"
-msgstr "Порта за портовете на RTP започва от"
+msgstr "Начален RTP порт"
 
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -152,7 +184,7 @@ msgstr "Качество на звука"
 
 msgctxt "codecs"
 msgid "Codecs"
-msgstr "Кодеци"
+msgstr "Кодировки"
 
 msgctxt "ice_turn"
 msgid "ICE/TURN/STUN"
@@ -160,27 +192,27 @@ msgstr "ICE/TURN/STUN"
 
 msgctxt "echo_cancellation"
 msgid "Echo cancellation"
-msgstr "Намаляване на ехото"
+msgstr "Намаляване на ехо"
 
 msgctxt "echo_cancellation_desc"
 msgid "Activate echo cancellation"
-msgstr "Активирай намаляване на ехото"
+msgstr "Активиране намаляване на ехо"
 
 msgctxt "enable_vad"
 msgid "Voice audio detection"
-msgstr "Гласово аудио откриване"
+msgstr "VAD (откриване на глас)"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr "Активирай гласово аудио откриване"
+msgstr "Активиране на VAD (откриване на глас)"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
-msgstr "Микро усилване"
+msgstr "Усилване на микрофон"
 
 msgctxt "snd_mic_level_desc"
 msgid "Adjust the micro signal level (1 do nothing)"
-msgstr "Регулиране на микро нивото на сигнала (1 не прави нищо)"
+msgstr "Регулиране на нивото на сигнала (1 не прави нищо)"
 
 msgctxt "snd_speaker_level"
 msgid "Speaker amplification"
@@ -204,7 +236,7 @@ msgstr "Автоматично време за затваряне"
 
 msgctxt "snd_auto_close_time_desc"
 msgid "Time to wait for close audio channel"
-msgstr "Време за изчакване за затваряне на аудио канала"
+msgstr "Време за изчакване преди затваряне на аудио канала"
 
 msgctxt "snd_media_quality"
 msgid "Media quality"
@@ -213,11 +245,11 @@ msgstr "Качество на връзката"
 msgctxt "snd_media_quality_desc"
 msgid ""
 "Quality of the media stream (modify only if you know what you are doing)"
-msgstr "Качество на медия връзката (променяй само ако знаеш какво правиш)"
+msgstr "Качество на връзката (променяй само ако знаеш какво правиш)"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
-msgstr "Цена на обаждането"
+msgstr "Тактова честота"
 
 msgctxt "snd_clock_rate_desc"
 msgid "Audio channel frequency"
@@ -225,35 +257,36 @@ msgstr "Аудио честота на канала"
 
 msgctxt "snd_ptime"
 msgid "Frame ptime"
-msgstr "Рамка на п-времето"
+msgstr "Рамка на п-време (ptime)"
 
 msgctxt "snd_ptime_desc"
 msgid "Specifying lower ptime will normally reduce the latency"
-msgstr "Определянето на по-ниско п-време обикновено намалява латентността"
+msgstr ""
+"Използването на по-ниско п-време (ptime) обикновено намалява латентността"
 
 msgctxt "echo_cancellation_tail"
 msgid "Echo cancellation tail"
-msgstr "Опашка на ехо намаляването"
+msgstr "Буфер за намаляване на ехо"
 
 msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
-msgstr "Дължина на опашката на ехо намаляването"
+msgstr "Големина на буфера за намаляване на ехо"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
-msgstr "Позволи ICE"
+msgstr "Активиране на ICE"
 
 msgctxt "enable_ice_desc"
 msgid "Turn on ICE feature"
-msgstr "Включи ICE функцията"
+msgstr "Включване на ICE функция"
 
 msgctxt "enable_turn"
 msgid "Enable TURN"
-msgstr "Позволи TURN"
+msgstr "Активиране на TURN"
 
 msgctxt "enable_turn_desc"
 msgid "Turn on TURN feature"
-msgstr "Включи TURN функцията"
+msgstr "Включване на TURN функцията"
 
 msgctxt "turn_server"
 msgid "Turn server"
@@ -265,11 +298,11 @@ msgstr "TURN сървър (ХОСТ:ПОРТ)"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
-msgstr "Разреши STUN"
+msgstr "Активиране на STUN"
 
 msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
-msgstr "Включи функцията STUN"
+msgstr "Включване на STUN функция"
 
 msgctxt "stun_server"
 msgid "STUN server"
@@ -289,33 +322,32 @@ msgstr "Общ потребителски интерфейс"
 
 msgctxt "native_dialer_integration"
 msgid "Native dialer integration"
-msgstr "Интегриране със стандартното избиране"
+msgstr "Интегриране с програмата за избиране на телефона"
 
 msgctxt "advanced_ui"
 msgid "Advanced tweaks"
-msgstr ""
+msgstr "Допълнителна оптимизация"
 
 msgctxt "integrate_with_native_dialer"
 msgid "Dialer integration"
-msgstr "Интегриране на избиране"
+msgstr "Интегриране с програмата за избиране на телефона"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
 "When dialing with native dialer you'll be asked if you want to use SIP or "
 "mobile"
 msgstr ""
-"При набиране със стандартното избиране ще бъдете попитани дали искате да "
-"използвате SIP или мобилен"
+"Преди всяко набиране с програмата за обаждания ще бъдете питани кой "
+"доставчик предпочитате да използвате: SIP или GSM доставчик"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
-msgstr "Интеграция на лога с обажданията"
+msgstr "Интеграция с история на повикванията"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"SIP обажданията ще бъдат обединени (ако е възможно) със стандартните логове "
-"на обажданията"
+"SIP повикванията ще бъдат обединени (ако е възможно) в история на обажданията"
 
 msgctxt "exclude_for_outgoing_call"
 msgid "Exclude patterns"
@@ -327,19 +359,19 @@ msgstr "Изключи модели за изходящи повиквания"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
-msgstr "Обратна връзка с тон при набиране"
+msgstr "Тон при набиране"
 
 msgctxt "dial_press_tone_desc"
 msgid "Play touch tones when dialing"
-msgstr "Възпроизведи тонове на натискане при избиране"
+msgstr "Възпроизвеждане на тонове при набиране"
 
 msgctxt "dial_press_vibrate"
 msgid "Dialing vibrate feedback"
-msgstr "Обратна връзка с вибрация при набиране"
+msgstr "Вибрация при набиране"
 
 msgctxt "dial_press_vibrate_desc"
 msgid "Haptic (vibrate) feedback when dialing"
-msgstr "Тактична (вибрираща) обратна връзка при набиране"
+msgstr "Вибрираща обратна връзка при набиране"
 
 msgctxt "start_with_text_dialer"
 msgid "Text dialer"
@@ -347,96 +379,107 @@ msgstr "Текстово избиране"
 
 msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
-msgstr ""
+msgstr "Стартиране с текстово избиране"
 
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide unlocker"
-msgstr ""
+msgstr "Да не се използва плъзгащо отключване"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
 msgstr ""
+"Използвай бутоните вместо плъзгането за приемане на входящи повиквания"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
-msgstr ""
+msgstr "Включен дисплей по време на разговор"
 
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
+"Предпазва от сериозно влошаване на качеството при изключване на екрана и "
+"използване на WiFi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
-msgstr ""
+msgstr "Използване на частично заключване"
 
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for CSipSimple (drain battery)"
-msgstr ""
+msgstr "Осигурява винаги работещ процесор за cSIPsimple (изтощава батерията)"
 
 msgctxt "log_level"
 msgid "Log level"
-msgstr ""
+msgstr "Ниво на запис на история"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
 msgstr ""
+"Ниво на запис на история за отстраняване на грешки от 0 (няма) до 5 "
+"(подробно)"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
-msgstr ""
+msgstr "Интегрирай с приложение Музика"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
+"Изключете го, ако използвате друго музикално приложение, различно от това по "
+"подразбиране"
 
 msgctxt "android_integration"
 msgid "Integrate with Android"
-msgstr ""
+msgstr "Интегриране с Android"
 
 msgctxt "android_integration_desc"
 msgid "Integration with native dialer and call logs"
 msgstr ""
+"Интегриране с програмата за разговори по подразбиране и история на "
+"повикванията"
 
 msgctxt "availability_profile"
 msgid "Availability profile"
-msgstr ""
+msgstr "Достъпност на профила"
 
 msgctxt "always_available"
 msgid "Always available"
-msgstr ""
+msgstr "Винаги достъпен"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr ""
+msgstr "Използва батерията, но винаги ще получавате входящите си обаждания"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
-msgstr ""
+msgstr "На разположение при WiFi"
 
 msgctxt "wifi_available_desc"
 msgid "Availability of incoming calls based on WiFi profile"
-msgstr ""
+msgstr "Наличие на входящи повиквания въз основа на WiFi профила"
 
 msgctxt "never_available"
 msgid "Only for outgoing"
-msgstr ""
+msgstr "Само за изходящи"
 
 msgctxt "never_available_desc"
 msgid "Activate the SIP client automatically when necessary"
-msgstr ""
+msgstr "Активиране на SIP клиента автоматично, когато е необходимо"
 
 msgctxt "availability_tg"
 msgid "Mobile data availability"
-msgstr ""
+msgstr "Наличност на мобилна връзка за данни"
 
 msgctxt "tg_allowed"
 msgid "I'm allowed to use mobile"
-msgstr ""
+msgstr "Позволено ми е да използвам мобилния"
 
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
 msgstr ""
+"Вашият мобилен оператор позволява използването на VoIP през мобилната връзка "
+"за данни"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
-msgstr ""
+msgstr "Предлага се само, ако в момента SIP е регистриран"

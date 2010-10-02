@@ -20,6 +20,7 @@ package com.csipsimple.models;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_acc_config;
@@ -54,6 +55,7 @@ public class Account {
 	public static final String FIELD_FORCE_CONTACT = "force_contact";
 	public static final String FIELD_CONTACT_PARAMS = "contact_params";
 	public static final String FIELD_CONTACT_URI_PARAMS = "contact_uri_params";
+	public static final String FIELD_USE_SRTP = "use_srtp";
 	// For now, assume unique proxy
 	public static final String FIELD_PROXY = "proxy";
 	// For now, assume unique credential
@@ -73,6 +75,7 @@ public class Account {
 		FIELD_USE_TCP, FIELD_PREVENT_TCP,
 		FIELD_MWI_ENABLED, FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_KA_INTERVAL, FIELD_PIDF_TUPLE_ID,
 		FIELD_FORCE_CONTACT, FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
+		FIELD_USE_SRTP,
 
 		// Proxy infos
 		FIELD_PROXY,
@@ -142,6 +145,11 @@ public class Account {
 		if(parcelable.force_contact != null) {
 			cfg.setForce_contact(pjsua.pj_str_copy(parcelable.force_contact));
 		}
+		if(parcelable.use_srtp != -1) {
+			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(parcelable.use_srtp));
+			cfg.setSrtp_secure_signaling(0);
+		}
+		
 		if(parcelable.proxy != null) {
 			cfg.setProxy_cnt(1);
 			cfg.setProxy(pjsua.pj_str_copy(parcelable.proxy));
@@ -185,6 +193,7 @@ public class Account {
 		parcelable.pidf_tuple_id = cfg.getPidf_tuple_id().getPtr();
 		parcelable.force_contact = cfg.getForce_contact().getPtr();
 		parcelable.proxy = (cfg.getProxy_cnt()>0)? cfg.getProxy().getPtr():null;
+		parcelable.use_srtp = cfg.getUse_srtp().swigValue();
 		
 		pjsip_cred_info cred_info = cfg.getCred_info();
 		if(cfg.getCred_count()>0) {
@@ -274,6 +283,14 @@ public class Account {
 		if (tmp_s != null) {
 			cfg.setForce_contact(pjsua.pj_str_copy(tmp_s));
 		}
+		tmp_i = args.getAsInteger(FIELD_USE_SRTP);
+		if (tmp_i != null) {
+			Log.w(THIS_FILE, "SRTP -> "+tmp_i);
+			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(tmp_i));
+			cfg.setSrtp_secure_signaling(0);
+		}
+		
+		
 		// Proxy
 		tmp_s = args.getAsString(FIELD_PROXY);
 		if (tmp_s != null) {
@@ -332,6 +349,7 @@ public class Account {
 		args.put(FIELD_KA_INTERVAL, cfg.getKa_interval());
 		args.put(FIELD_PIDF_TUPLE_ID, cfg.getPidf_tuple_id().getPtr());
 		args.put(FIELD_FORCE_CONTACT, cfg.getForce_contact().getPtr());
+		args.put(FIELD_USE_SRTP, cfg.getUse_srtp().swigValue());
 
 		// CONTACT_PARAM and CONTACT_PARAM_URI not yet in JNI
 
@@ -416,12 +434,12 @@ public class Account {
 		db.open();
 		Cursor c = db.getFiltersForAccount(id);
 		int numRows = c.getCount();
-		Log.d(THIS_FILE, "RW > This account has "+numRows+" filters");
+		//Log.d(THIS_FILE, "RW > This account has "+numRows+" filters");
 		c.moveToFirst();
 		for (int i = 0; i < numRows; ++i) {
 			Filter f = new Filter();
 			f.createFromDb(c);
-			Log.d(THIS_FILE, "RW > Test filter "+f.matches);
+			//Log.d(THIS_FILE, "RW > Test filter "+f.matches);
 			number = f.rewrite(number);
 			if(f.stopProcessing(number)) {
 				c.close();

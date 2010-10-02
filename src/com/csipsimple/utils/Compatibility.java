@@ -140,6 +140,11 @@ public class Compatibility {
 				( android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/ || 
 				   android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/ )?true:false);
 		
+		//Galaxy S default settings
+		if( android.os.Build.DEVICE.equals("GT-I9000") ) {
+			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float)0.4);
+			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float)0.2);
+		}
 		
 	}
 	

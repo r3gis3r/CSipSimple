@@ -5,6 +5,7 @@
     <item>Переписать</item>
     <item>Остановить обработку</item>
     <item>Прямой вызов</item>
+    <item>Автоответ</item>
   </string-array>
   <string-array name="filters_type">
     <item>Начинается с</item>

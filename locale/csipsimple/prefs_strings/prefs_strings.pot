@@ -1,14 +1,14 @@
-# Translations template for PROJECT.
-# Copyright (C) 2010 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# Translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# Regis Montoya <http://www.r3gis.fr>, 2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"POT-Creation-Date: 2010-09-30 13:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,6 +81,18 @@ msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
 msgstr ""
 
+msgctxt "use_other"
+msgid "Use other networks"
+msgstr ""
+
+msgctxt "use_other_in_desc"
+msgid "For example WiMax for incoming calls"
+msgstr ""
+
+msgctxt "use_other_out_desc"
+msgid "For example WiMax for outgoing calls"
+msgstr ""
+
 msgctxt "use_3g"
 msgid "Use 3G"
 msgstr ""
@@ -113,6 +125,14 @@ msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
 msgstr ""
 
+msgctxt "enable_tls"
+msgid "TLS"
+msgstr ""
+
+msgctxt "enable_tls_desc"
+msgid "Enable TLS transport"
+msgstr ""
+
 msgctxt "enable_udp"
 msgid "UDP"
 msgstr ""
@@ -134,6 +154,14 @@ msgid "TCP Port"
 msgstr ""
 
 msgctxt "network_tcp_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr ""
+
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr ""
+
+msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr ""
 

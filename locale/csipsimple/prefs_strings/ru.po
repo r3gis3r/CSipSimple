@@ -1,437 +1,477 @@
-# Translations template for PROJECT.
-# Copyright (C) 2010 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
+# Russian translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-25 18:18+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2010-10-01 12:09+0000\n"
+"Last-Translator: Dmitry Kutsenko <Unknown>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.0dev\n"
+"X-Launchpad-Export-Date: 2010-10-02 05:24+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 msgctxt "prefs"
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 msgctxt "prefs_fast"
 msgid "Easy configuration"
-msgstr ""
+msgstr "Быстрая настройка"
 
 msgctxt "prefs_fast_desc"
 msgid "Quick options to use if you don't know how SIP works"
-msgstr ""
+msgstr "Основные опции и настройки SIP"
 
 msgctxt "prefs_network"
 msgid "Network"
-msgstr ""
+msgstr "Беспроводные сети"
 
 msgctxt "prefs_network_desc"
 msgid "How SIP can be connected to the network"
-msgstr ""
+msgstr "Способы подключения к SIP"
 
 msgctxt "prefs_media"
 msgid "Media"
-msgstr ""
+msgstr "Мультимедиа"
 
 msgctxt "prefs_media_desc"
 msgid "Codecs and in-call sound behavior"
-msgstr ""
+msgstr "Аудиокодеки и звук"
 
 msgctxt "prefs_ui"
 msgid "User interface"
-msgstr ""
+msgstr "Интерфейс"
 
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
-msgstr ""
+msgstr "Настройки интерфейса"
 
 msgctxt "for_incomings"
 msgid "For incoming calls"
-msgstr ""
+msgstr "Входящие вызовы"
 
 msgctxt "for_outgoings"
 msgid "For outgoing calls"
-msgstr ""
+msgstr "Исходящие вызовы"
 
 msgctxt "perfs"
 msgid "Performances"
-msgstr ""
+msgstr "Производительность"
 
 msgctxt "transport"
 msgid "Transport"
-msgstr ""
+msgstr "Передача данных"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
-msgstr ""
+msgstr "Использовать WiFi"
 
 msgctxt "use_wifi_in_desc"
 msgid "Use WiFi for incoming calls"
-msgstr ""
+msgstr "Использовать WiFi для входящих вызовов"
 
 msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
+msgstr "Использовать WiFi для исходящих вызовов"
+
+msgctxt "use_other"
+msgid "Use other networks"
 msgstr ""
+
+#, fuzzy
+msgctxt "use_other_in_desc"
+msgid "For example WiMax for incoming calls"
+msgstr "Использовать WiFi для входящих вызовов"
+
+#, fuzzy
+msgctxt "use_other_out_desc"
+msgid "For example WiMax for outgoing calls"
+msgstr "Использовать WiFi для исходящих вызовов"
 
 msgctxt "use_3g"
 msgid "Use 3G"
-msgstr ""
+msgstr "Использовать 3G"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr ""
+msgstr "Передача SIP по 3G должна быть разрешена оператором сотовой связи"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
-msgstr ""
+msgstr "Использовать EDGE"
 
 msgctxt "use_gprs"
 msgid "Use GPRS"
-msgstr ""
+msgstr "Использовать GPRS"
 
 msgctxt "lock_wifi"
 msgid "Lock WiFi"
-msgstr ""
+msgstr "Поддерживать WiFi"
 
 msgctxt "lock_wifi_desc"
 msgid "Prevent WiFi idle when SIP is connected"
-msgstr ""
+msgstr "Не отключать WiFi соединение, если используется SIP"
 
 msgctxt "enable_tcp"
 msgid "TCP"
-msgstr ""
+msgstr "TCP"
 
 msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
+msgstr "Поддерживать TCP протокол"
+
+msgctxt "enable_tls"
+msgid "TLS"
 msgstr ""
+
+#, fuzzy
+msgctxt "enable_tls_desc"
+msgid "Enable TLS transport"
+msgstr "Поддерживать UDP протокол"
 
 msgctxt "enable_udp"
 msgid "UDP"
-msgstr ""
+msgstr "UDP"
 
 msgctxt "enable_udp_desc"
 msgid "Enable UDP transport"
-msgstr ""
+msgstr "Поддерживать UDP протокол"
 
 msgctxt "network_udp_transport_port"
 msgid "UDP Port"
-msgstr ""
+msgstr "UDP порт"
 
 msgctxt "network_udp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Номер порта для локальной привязки"
 
 msgctxt "network_tcp_transport_port"
 msgid "TCP Port"
-msgstr ""
+msgstr "TCP порт"
 
 msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Номер порта для локальной привязки"
+
+#, fuzzy
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr "RTP порт"
+
+#, fuzzy
+msgctxt "network_tls_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "Номер порта для локальной привязки"
 
 msgctxt "network_rtp_port"
 msgid "RTP port"
-msgstr ""
+msgstr "RTP порт"
 
 msgctxt "network_rtp_port_desc"
 msgid "Port for RTP ports range start"
-msgstr ""
+msgstr "Начало диапазона для RTP портов"
 
 msgctxt "audio_quality"
 msgid "Audio quality"
-msgstr ""
+msgstr "Качество аудио"
 
 msgctxt "codecs"
 msgid "Codecs"
-msgstr ""
+msgstr "Кодеки"
 
 msgctxt "ice_turn"
 msgid "ICE/TURN/STUN"
-msgstr ""
+msgstr "ICE/TURN/STUN"
 
 msgctxt "echo_cancellation"
 msgid "Echo cancellation"
-msgstr ""
+msgstr "Подавление эха"
 
 msgctxt "echo_cancellation_desc"
 msgid "Activate echo cancellation"
-msgstr ""
+msgstr "Активировать подавление эха"
 
 msgctxt "enable_vad"
 msgid "Voice audio detection"
-msgstr ""
+msgstr "Активировать систему VAD"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
 msgstr ""
+"Обнаружение голосовой активности в микрофоне для отделения от фонового шума"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
-msgstr ""
+msgstr "Настройка микрофона"
 
 msgctxt "snd_mic_level_desc"
 msgid "Adjust the micro signal level (1 do nothing)"
-msgstr ""
+msgstr "Настройка уровня сигнала в микрофоне (1 - не менять)"
 
 msgctxt "snd_speaker_level"
 msgid "Speaker amplification"
-msgstr ""
+msgstr "Настройка спикера"
 
 msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
-msgstr ""
+msgstr "Настройка уровня сигнала в спикере (1 - не менять)"
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
-msgstr ""
+msgstr "Начальный уровень потока"
 
 msgctxt "snd_stream_level_desc"
 msgid "Set the initial level for audio stream (Android stream)"
-msgstr ""
+msgstr "Установить начальный уровень аудио-потока (поток Андроид)"
 
 msgctxt "snd_auto_close_time"
 msgid "Auto close time"
-msgstr ""
+msgstr "Время автозавершения"
 
 msgctxt "snd_auto_close_time_desc"
 msgid "Time to wait for close audio channel"
-msgstr ""
+msgstr "Время ожидания до закрытия аудио канала"
 
 msgctxt "snd_media_quality"
 msgid "Media quality"
-msgstr ""
+msgstr "Качество медиа"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
-msgstr ""
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
+msgstr "Качество медиа потока (только для опытных пользователей)"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
-msgstr ""
+msgstr "Частота"
 
 msgctxt "snd_clock_rate_desc"
 msgid "Audio channel frequency"
-msgstr ""
+msgstr "Частота аудиоканала"
 
 msgctxt "snd_ptime"
 msgid "Frame ptime"
-msgstr ""
+msgstr "Фрейм ptime"
 
 msgctxt "snd_ptime_desc"
 msgid "Specifying lower ptime will normally reduce the latency"
-msgstr ""
+msgstr "Указание нижнего уровня ptime обычно снижает латентность"
 
 msgctxt "echo_cancellation_tail"
 msgid "Echo cancellation tail"
-msgstr ""
+msgstr "Шлейф подавления эха"
 
 msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
-msgstr ""
+msgstr "Длина шлейфа подавления эха"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
-msgstr ""
+msgstr "Включить ICE"
 
 msgctxt "enable_ice_desc"
 msgid "Turn on ICE feature"
-msgstr ""
+msgstr "Поддерживать возможности ICE"
 
 msgctxt "enable_turn"
 msgid "Enable TURN"
-msgstr ""
+msgstr "Включить TURN"
 
 msgctxt "enable_turn_desc"
 msgid "Turn on TURN feature"
-msgstr ""
+msgstr "Поддерживать возможности TURN"
 
 msgctxt "turn_server"
 msgid "Turn server"
-msgstr ""
+msgstr "TURN-сервер"
 
 msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
-msgstr ""
+msgstr "TURN сервер (HOST:PORT)"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
-msgstr ""
+msgstr "Использовать STUN"
 
 msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
-msgstr ""
+msgstr "Настроить STUN-сервер"
 
 msgctxt "stun_server"
 msgid "STUN server"
-msgstr ""
+msgstr "STUN-сервер"
 
 msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
-msgstr ""
+msgstr "STUN сервер (HOST:PORT)"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
-msgstr ""
+msgstr "Приоритет (0 - отключено)"
 
 msgctxt "general_ui"
 msgid "General user interface"
-msgstr ""
+msgstr "Общие настройки интерфейса"
 
 msgctxt "native_dialer_integration"
 msgid "Native dialer integration"
-msgstr ""
+msgstr "Интеграция с телефонной частью"
 
 msgctxt "advanced_ui"
 msgid "Advanced tweaks"
-msgstr ""
+msgstr "Дополнительные настройки"
 
 msgctxt "integrate_with_native_dialer"
 msgid "Dialer integration"
-msgstr ""
+msgstr "Номеронабиратель"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
+"При наборе номера в телефоне будет предложено использовать SIP или мобильную "
+"связь"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
-msgstr ""
+msgstr "Список вызовов"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
-msgstr ""
+msgstr "SIP вызовы будут отражены в общем списке вызовов (если возможно)"
 
 msgctxt "exclude_for_outgoing_call"
 msgid "Exclude patterns"
-msgstr ""
+msgstr "Исключения набора номера"
 
 msgctxt "exclude_for_outgoing_call_desc"
 msgid "Exclude patterns for outgoing calls"
-msgstr ""
+msgstr "Исключения для исходящих вызовов"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
-msgstr ""
+msgstr "Звук клавиш"
 
 msgctxt "dial_press_tone_desc"
 msgid "Play touch tones when dialing"
-msgstr ""
+msgstr "Воспроизводить тональные сигналы при нажатии клавиш"
 
 msgctxt "dial_press_vibrate"
 msgid "Dialing vibrate feedback"
-msgstr ""
+msgstr "Виброотклик"
 
 msgctxt "dial_press_vibrate_desc"
 msgid "Haptic (vibrate) feedback when dialing"
-msgstr ""
+msgstr "Включить виброотклик при касании экрана"
 
 msgctxt "start_with_text_dialer"
 msgid "Text dialer"
-msgstr ""
+msgstr "Текстовый номеронабиратель"
 
 msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
-msgstr ""
+msgstr "Использовать изначально текстовый номеронабиратель"
 
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide unlocker"
-msgstr ""
+msgstr "Не использовать слайдер"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
 msgstr ""
+"Использовать клавиши вместо слайдера для разблокировки экрана при ответе на "
+"вызов"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
-msgstr ""
+msgstr "Не выключать экран"
 
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
-msgstr ""
+msgstr "Воспроизводить звук при входящем вызове, когда экран выключен"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
-msgstr ""
+msgstr "Частичная блокировка"
 
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for CSipSimple (drain battery)"
 msgstr ""
+"Процессор не будет отключаться при CSipSimple (быстрее разряжается батарея)"
 
 msgctxt "log_level"
 msgid "Log level"
-msgstr ""
+msgstr "Отчёт об ошибках"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
 msgstr ""
+"Уровень отчёта об ошибках для отладки программы (0 - нет, 5 - подробный)"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
-msgstr ""
+msgstr "Интеграция с музыкальными приложениями"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
-msgstr ""
+msgstr "Отмените интеграцию, если используется нестандартное приложение"
 
 msgctxt "android_integration"
 msgid "Integrate with Android"
-msgstr ""
+msgstr "Интегрировать с Андроид"
 
 msgctxt "android_integration_desc"
 msgid "Integration with native dialer and call logs"
-msgstr ""
+msgstr "Интеграция со стандарными номеронабирателем и списком вызовов"
 
 msgctxt "availability_profile"
 msgid "Availability profile"
-msgstr ""
+msgstr "Профиль доступности"
 
 msgctxt "always_available"
 msgid "Always available"
-msgstr ""
+msgstr "Всегда доступен"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr ""
+msgstr "Входящие вызовы всегда принимаются"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
-msgstr ""
+msgstr "Доступен при WiFi соединении"
 
 msgctxt "wifi_available_desc"
 msgid "Availability of incoming calls based on WiFi profile"
-msgstr ""
+msgstr "Доступен для входящих вызовов только при WiFi соединении"
 
 msgctxt "never_available"
 msgid "Only for outgoing"
-msgstr ""
+msgstr "Доступны только исходящие вызовы"
 
 msgctxt "never_available_desc"
 msgid "Activate the SIP client automatically when necessary"
-msgstr ""
+msgstr "Активировать SIP-клиент автоматически при вызовах"
 
 msgctxt "availability_tg"
 msgid "Mobile data availability"
-msgstr ""
+msgstr "Передача через сотовую связь"
 
 msgctxt "tg_allowed"
 msgid "I'm allowed to use mobile"
-msgstr ""
+msgstr "Я могу использовать сотовую связь"
 
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
-msgstr ""
+msgstr "Передача VoIP пакетов должна быть разрешена сотовым оператором"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
-msgstr ""
-
+msgstr "Доступно только, если SIP зарегистрирован в сети"

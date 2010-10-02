@@ -3,3 +3,4 @@
 --layout %(domain)s/%(group)s/%(locale)s.po
 #--no-template
 --template %(domain)s/%(group)s/%(group)s.pot
+#--ignore /.*_values/

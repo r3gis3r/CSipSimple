@@ -82,6 +82,20 @@ msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
 msgstr "Utiliser le WIFI pour les appels sortants"
 
+msgctxt "use_other"
+msgid "Use other networks"
+msgstr ""
+
+#, fuzzy
+msgctxt "use_other_in_desc"
+msgid "For example WiMax for incoming calls"
+msgstr "Utiliser le WIFI pour les appels entrants"
+
+#, fuzzy
+msgctxt "use_other_out_desc"
+msgid "For example WiMax for outgoing calls"
+msgstr "Utiliser le WIFI pour les appels sortants"
+
 msgctxt "use_3g"
 msgid "Use 3G"
 msgstr "Utiliser la 3G"
@@ -114,6 +128,15 @@ msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
 msgstr "Autoriser le transport TCP"
 
+msgctxt "enable_tls"
+msgid "TLS"
+msgstr ""
+
+#, fuzzy
+msgctxt "enable_tls_desc"
+msgid "Enable TLS transport"
+msgstr "Autoriser le transport UDP"
+
 msgctxt "enable_udp"
 msgid "UDP"
 msgstr "UDP"
@@ -135,6 +158,16 @@ msgid "TCP Port"
 msgstr "Port TCP"
 
 msgctxt "network_tcp_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "Numéro du port sur lequel écouter localement"
+
+#, fuzzy
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr "Port RTP"
+
+#, fuzzy
+msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Numéro du port sur lequel écouter localement"
 
@@ -214,8 +247,7 @@ msgid "Media quality"
 msgstr "Qualité du média"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualité du flux média (à ne modifier que si vous savez exactement ce que "
 "vous faites)"

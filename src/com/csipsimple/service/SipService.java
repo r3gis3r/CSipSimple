@@ -177,7 +177,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void reAddAllAccounts() throws RemoteException { 
-			SipService.this.reRegisterAllAccounts(); 
+			SipService.this.reAddAllAccounts(); 
 		}
 		
 
@@ -373,8 +373,7 @@ public class SipService extends Service {
 	private ServicePhoneStateReceiver phoneConnectivityReceiver;
 	private TelephonyManager telephonyManager;
 	private ConnectivityManager connectivityManager;
-	private Integer udpTranportId;
-	private Integer tcpTranportId;
+	private Integer udpTranportId, tcpTranportId, tlsTransportId;
 	
 
 	// Broadcast receiver for the service
@@ -623,6 +622,8 @@ public class SipService extends Service {
 					}
 					cfg.setUser_agent(pjsua.pj_str_copy("CSipSimple"));
 					//cfg.setThread_cnt(4); // one thread seems to be enough for now
+					cfg.setUse_srtp(prefsWrapper.getUseSrtp());
+					cfg.setSrtp_secure_signaling(0);
 	
 					// LOGGING CONFIG
 					pjsua.logging_config_default(log_cfg);
@@ -677,6 +678,10 @@ public class SipService extends Service {
 							created = false;
 							return;
 						}
+						int[] p_acc_id = new int[1];
+					//	pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE, p_acc_id);
+						Log.d(THIS_FILE, "Udp account "+p_acc_id);
+						
 					}
 					//TCP
 					if(prefsWrapper.isTCPEnabled()) {
@@ -687,7 +692,27 @@ public class SipService extends Service {
 							created = false;
 							return;
 						}
+						int[] p_acc_id = new int[1];
+					//	pjsua.acc_add_local(tcpTranportId, pjsua.PJ_FALSE, p_acc_id);
+						
 					}
+					
+					//TLS
+					if(prefsWrapper.isTLSEnabled()){
+						tlsTransportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, prefsWrapper.getTLSTransportPort() );
+						
+						if (tlsTransportId == null) {
+							pjsua.destroy();
+//							creating = false;
+							created = false;
+							return;
+						}
+						int[] p_acc_id = new int[1];
+					//	pjsua.acc_add_local(tlsTransportId, pjsua.PJ_FALSE, p_acc_id);
+					}
+					
+					
+					
 					//RTP transport
 					{
 						pjsua_transport_config cfg = new pjsua_transport_config();
@@ -701,15 +726,6 @@ public class SipService extends Service {
 //							creating = false;
 							created = false;
 							return;
-						}
-					}
-					
-					//Local account for transport ? Usefull?
-					{
-						if(udpTranportId != null || tcpTranportId != null) {
-							int[] p_acc_id = new int[1];
-							int tid = (udpTranportId != null)?udpTranportId:tcpTranportId;
-							pjsua.acc_add_local(tid, pjsua.PJ_TRUE, p_acc_id);
 						}
 					}
 				}
@@ -890,12 +906,16 @@ public class SipService extends Service {
 					status = pjsua.acc_set_registration(c_acc_id, renew);
 				}else {
 				//if(status == pjsuaConstants.PJ_SUCCESS && renew == 0) {
+					Log.d(THIS_FILE, "Delete account !!");
 					status = pjsua.acc_del(c_acc_id);
 				}
 			}else {
 				if(renew == 1) {
 					addAccount(account);
+				}else {
+					Log.w(THIS_FILE, "Ask to delete an unexisting account !!"+account.id);
 				}
+				
 			}
 		}
 		// Send a broadcast message that for an account
@@ -938,7 +958,7 @@ public class SipService extends Service {
 		}
 	}
 	
-	private void reRegisterAllAccounts() {
+	private void reAddAllAccounts() {
 		Log.d(THIS_FILE, "RE REGISTER ALL ACCOUNTS");
 		unregisterAllAccounts(false);
 		addAllAccounts();

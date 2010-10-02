@@ -69,6 +69,14 @@ public class pjsua_acc_config {
     return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
   }
 
+  public void setReg_hdr_list(SWIGTYPE_p_pjsip_hdr value) {
+    pjsuaJNI.pjsua_acc_config_reg_hdr_list_set(swigCPtr, this, SWIGTYPE_p_pjsip_hdr.getCPtr(value));
+  }
+
+  public SWIGTYPE_p_pjsip_hdr getReg_hdr_list() {
+    return new SWIGTYPE_p_pjsip_hdr(pjsuaJNI.pjsua_acc_config_reg_hdr_list_get(swigCPtr, this), true);
+  }
+
   public void setMwi_enabled(int value) {
     pjsuaJNI.pjsua_acc_config_mwi_enabled_set(swigCPtr, this, value);
   }
@@ -260,12 +268,12 @@ public class pjsua_acc_config {
     return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
   }
 
-  public void setUse_srtp(SWIGTYPE_p_pjmedia_srtp_use value) {
-    pjsuaJNI.pjsua_acc_config_use_srtp_set(swigCPtr, this, SWIGTYPE_p_pjmedia_srtp_use.getCPtr(value));
+  public void setUse_srtp(pjmedia_srtp_use value) {
+    pjsuaJNI.pjsua_acc_config_use_srtp_set(swigCPtr, this, value.swigValue());
   }
 
-  public SWIGTYPE_p_pjmedia_srtp_use getUse_srtp() {
-    return new SWIGTYPE_p_pjmedia_srtp_use(pjsuaJNI.pjsua_acc_config_use_srtp_get(swigCPtr, this), true);
+  public pjmedia_srtp_use getUse_srtp() {
+    return pjmedia_srtp_use.swigToEnum(pjsuaJNI.pjsua_acc_config_use_srtp_get(swigCPtr, this));
   }
 
   public void setSrtp_secure_signaling(int value) {
@@ -306,6 +314,14 @@ public class pjsua_acc_config {
 
   public long getReg_use_proxy() {
     return pjsuaJNI.pjsua_acc_config_reg_use_proxy_get(swigCPtr, this);
+  }
+
+  public void setCall_hold_type(pjsua_call_hold_type value) {
+    pjsuaJNI.pjsua_acc_config_call_hold_type_set(swigCPtr, this, value.swigValue());
+  }
+
+  public pjsua_call_hold_type getCall_hold_type() {
+    return pjsua_call_hold_type.swigToEnum(pjsuaJNI.pjsua_acc_config_call_hold_type_get(swigCPtr, this));
   }
 
   public pjsua_acc_config() {

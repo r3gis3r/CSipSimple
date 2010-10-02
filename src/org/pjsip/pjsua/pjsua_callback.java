@@ -143,6 +143,15 @@ public class pjsua_callback {
     return (cPtr == 0) ? null : new SWIGTYPE_p_f_int__void(cPtr, false);
   }
 
+  public void setOn_reg_state2(SWIGTYPE_p_f_int_p_pjsua_reg_info__void value) {
+    pjsuaJNI.pjsua_callback_on_reg_state2_set(swigCPtr, this, SWIGTYPE_p_f_int_p_pjsua_reg_info__void.getCPtr(value));
+  }
+
+  public SWIGTYPE_p_f_int_p_pjsua_reg_info__void getOn_reg_state2() {
+    long cPtr = pjsuaJNI.pjsua_callback_on_reg_state2_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_p_pjsua_reg_info__void(cPtr, false);
+  }
+
   public void setOn_incoming_subscribe(SWIGTYPE_p_f_int_p_pjsua_srv_pres_int_p_q_const__pj_str_t_p_pjsip_rx_data_p_enum_pjsip_status_code_p_pj_str_t_p_pjsua_msg_data__void value) {
     pjsuaJNI.pjsua_callback_on_incoming_subscribe_set(swigCPtr, this, SWIGTYPE_p_f_int_p_pjsua_srv_pres_int_p_q_const__pj_str_t_p_pjsip_rx_data_p_enum_pjsip_status_code_p_pj_str_t_p_pjsua_msg_data__void.getCPtr(value));
   }

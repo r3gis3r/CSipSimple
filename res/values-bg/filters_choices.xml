@@ -13,13 +13,13 @@
     <item>Има точно N цифри</item>
     <item>Има повече от N цифри</item>
     <item>Е точно</item>
-    <item>RegExp по избор</item>
+    <item>Регулярен израз по избор</item>
   </string-array>
   <string-array name="replace_type">
     <item>Префикс от</item>
     <item>Суфикс с</item>
-    <item>Замяна на съвпадащото с</item>
+    <item>Замяна при съвпадение с</item>
     <item>Замяна на всички с</item>
-    <item>RegExp по избор</item>
+    <item>Регулярен израз по избор</item>
   </string-array>
 </resources>

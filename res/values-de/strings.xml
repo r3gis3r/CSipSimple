@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="app_name">CSipSimple</string>
   <string name="unable_to_download_file">Datei konnte nicht heruntergeladen werden</string>
   <string name="connection_not_valid">Ausgewähltes Netzwerk nicht verfügbar (aktiviere WLAN oder erlaube Verbindungen über UMTS)</string>
   <string name="invalid_sip_uri">Die Sip URL ist für diesen Anruf ungültig</string>

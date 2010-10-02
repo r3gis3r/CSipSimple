@@ -16,6 +16,8 @@
   <string name="use_wifi">Usa wifi</string>
   <string name="use_wifi_in_desc">Usa wifi per chiamate in ingresso</string>
   <string name="use_wifi_out_desc">Usa wifi per chiamate in uscita</string>
+  <string name="use_other_in_desc">Usa wifi per chiamate in ingresso</string>
+  <string name="use_other_out_desc">Usa wifi per chiamate in uscita</string>
   <string name="use_3g">Usa 3G</string>
   <string name="use_3g_disclamer">La tua compagnia telefonica DEVE consentire questa opzione</string>
   <string name="use_edge">Usa EDGE</string>
@@ -24,12 +26,15 @@
   <string name="lock_wifi_desc">Evita la dissattivazione del wifi quando SIP è connesso</string>
   <string name="enable_tcp">TCP</string>
   <string name="enable_tcp_desc">Abilita trasporto TCP</string>
+  <string name="enable_tls_desc">Abilita trasporto UDP</string>
   <string name="enable_udp">UDP</string>
   <string name="enable_udp_desc">Abilita trasporto UDP</string>
   <string name="network_udp_transport_port">Porta UDP</string>
   <string name="network_udp_transport_port_desc">Numero di porta da impegnare in locale</string>
   <string name="network_tcp_transport_port">Porta TCP</string>
   <string name="network_tcp_transport_port_desc">Numero di porta da impegnare in locale</string>
+  <string name="network_tls_transport_port">Porta RTP</string>
+  <string name="network_tls_transport_port_desc">Numero di porta da impegnare in locale</string>
   <string name="network_rtp_port">Porta RTP</string>
   <string name="network_rtp_port_desc">Porta RTP di partenza per l\'intervallo</string>
   <string name="audio_quality">Qualità audio</string>

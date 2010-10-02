@@ -19,6 +19,8 @@ package com.csipsimple.utils;
 
 import java.util.ArrayList;
 
+import org.pjsip.pjsua.pjmedia_srtp_use;
+
 import com.csipsimple.ui.SipHome;
 
 import android.content.Context;
@@ -43,6 +45,9 @@ public class PreferencesWrapper {
 	public final static String ENABLE_VAD = "enable_vad";
 	public final static String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
 	
+	public final static String SND_MIC_LEVEL = "snd_mic_level";
+	public final static String SND_SPEAKER_LEVEL = "snd_speaker_level";
+	
 	public PreferencesWrapper(Context aContext) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
 		connectivityManager = (ConnectivityManager) aContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -59,6 +64,12 @@ public class PreferencesWrapper {
 	public void setPreferenceBooleanValue(String key, boolean value) {
 		Editor editor = prefs.edit();
 		editor.putBoolean(key, value);
+		editor.commit();
+	}
+	
+	public void setPreferenceFloatValue(String key, float value) {
+		Editor editor = prefs.edit();
+		editor.putFloat(key, value);
 		editor.commit();
 	}
 	
@@ -311,40 +322,73 @@ public class PreferencesWrapper {
 	}
 	
 	
+
+	public pjmedia_srtp_use getUseSrtp() {
+		try {
+			int use_srtp = Integer.parseInt(prefs.getString("use_srtp", "0"));
+			pjmedia_srtp_use.swigToEnum(use_srtp);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return pjmedia_srtp_use.PJMEDIA_SRTP_DISABLED;
+	}
+	
 	
 	
 	public boolean isTCPEnabled() {
-		return prefs.getBoolean("enable_tcp", false);
+		return prefs.getBoolean("enable_tcp", true);
 	}
 	
 	public boolean isUDPEnabled() {
 		return prefs.getBoolean("enable_udp", true);
 	}
+
+	public boolean isTLSEnabled() {
+		return prefs.getBoolean("enable_tls", false);
+	}
 	
-	public int getTCPTransportPort() {
+	
+	
+	public int getUDPTransportPort() {
 		try {
-			//TODO : check port validity (see rtp)
-			return Integer.parseInt(prefs.getString("network_tcp_transport_port", "5060"));
+			int port = Integer.parseInt(prefs.getString("network_udp_transport_port", "5060"));
+			if(isValidPort(port)) {
+				return port;
+			}
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport port not well formated");
 		}
 		return 5060;
 	}
 	
-	public int getUDPTransportPort() {
+	public int getTCPTransportPort() {
 		try {
-			return Integer.parseInt(prefs.getString("network_udp_transport_port", "5060"));
-			//TODO : check port validity (see rtp)
+			int port =  Integer.parseInt(prefs.getString("network_tcp_transport_port", "5060"));
+			if(isValidPort(port)) {
+				return port;
+			}
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport port not well formated");
 		}
 		return 5060;
+	}
+	
+	public int getTLSTransportPort() {
+		try {
+			int port =  Integer.parseInt(prefs.getString("network_tls_transport_port", "5061"));
+			if(isValidPort(port)) {
+				return port;
+			}
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 5061;
 	}
 	
 	public int getRTPPort() {
 		try {
 			int port = Integer.parseInt(prefs.getString("network_rtp_port", "4000"));
-			if(port>0 && port < 65535) {
+			if(isValidPort(port)) {
 				return port;
 			}
 		}catch(NumberFormatException e) {
@@ -396,11 +440,11 @@ public class PreferencesWrapper {
 
 
 	public float getMicLevel() {
-		return prefs.getFloat("snd_mic_level", (float) 1.0);
+		return prefs.getFloat(SND_MIC_LEVEL, (float) 1.0);
 	}
 	
 	public float getSpeakerLevel() {
-		return prefs.getFloat("snd_speaker_level", (float) 1.0);
+		return prefs.getFloat(SND_SPEAKER_LEVEL, (float) 1.0);
 	}
 	
 	public int getAudioFramePtime() {
@@ -501,6 +545,12 @@ public class PreferencesWrapper {
 	public boolean hasAlreadySetup() {
 		return prefs.getBoolean(HAS_ALREADY_SETUP, false);
 	}
+
+
+	private boolean isValidPort(int port) {
+		return (port>0 && port < 65535);
+	}
+
 
 	
 }

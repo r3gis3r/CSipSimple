@@ -1,9 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="unknown">Неизвестные</string>
   <string name="type_incoming">Входящие</string>
   <string name="type_outgoing">Исходящие</string>
   <string name="type_missed">Пропущенные</string>
   <string name="callBack">Позвонить</string>
   <string name="callAgain">Перезвонить</string>
+  <string name="returnCall">Обратный вызов</string>
+  <string name="callDetailsDurationFormat"><xliff:g id="минуты" example="42">%s</xliff:g>" mins "<xliff:g id="секунды" example="28">%s</xliff:g>" secs"</string>
 </resources>

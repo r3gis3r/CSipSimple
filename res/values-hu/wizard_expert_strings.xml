@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">Fiók neve</string>
+  <string name="w_expert_display_name_desc">Megjelenítendő név a fiók használatakor</string>
+  <string name="w_expert_acc_id">Fiók azonosító</string>
+  <string name="w_expert_acc_id_desc">Alak: MegjelenítendőNév &lt;sip:felhasználóinév\@SIPdomain&gt;</string>
+  <string name="w_expert_reg_uri">Bejelentkezési URI</string>
+  <string name="w_expert_reg_uri_desc">Alak: sip:registrar.net[:port]</string>
+  <string name="w_expert_realm">Tartomány</string>
+  <string name="w_expert_realm_desc">Hitelesítői domain (ha nem ismeret akkor \'*\')</string>
+  <string name="w_expert_username">Felhasználónév</string>
+  <string name="w_expert_username_desc">Felhasználónév a hitelesítéshez</string>
+  <string name="w_expert_data">Jelszó</string>
+  <string name="w_expert_data_desc">Jelszó (és egyéb adat) a hitelesítéshez</string>
+  <string name="w_expert_t_proxy">Proxy</string>
+  <string name="w_expert_proxy">Proxy URI</string>
+  <string name="w_expert_proxy_desc">Alak : sip:proxy.net[:port]</string>
+  <string name="w_expert_use_tcp">Használjon TCP-t (ne UDP-t)</string>
+  <string name="w_expert_publish_enabled">Közzététel engedélyezése</string>
+  <string name="w_expert_reg_timeout">Bejelentkezési időtúllépés (másodperc)</string>
+  <string name="w_expert_ka_interval">Újrapróbálkozás X másodpercenként</string>
+  <string name="w_expert_force_contact">Kapcsolat kényszerítése</string>
+</resources>

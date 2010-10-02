@@ -36,7 +36,7 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 8;
+	private static final int DATABASE_VERSION = 9;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
@@ -70,6 +70,7 @@ public class DBAdapter {
 			+ Account.FIELD_FORCE_CONTACT 		+ " TEXT,"
 			+ Account.FIELD_CONTACT_PARAMS 		+ " TEXT,"
 			+ Account.FIELD_CONTACT_URI_PARAMS	+ " TEXT,"
+			+ Account.FIELD_USE_SRTP	 		+ " INTEGER," 
 
 			// Proxy infos
 			+ Account.FIELD_PROXY				+ " TEXT,"
@@ -152,6 +153,9 @@ public class DBAdapter {
 			}
 			if(oldVersion < 8) {
 				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_PREVENT_TCP+" BOOLEAN");
+			}
+			if(oldVersion < 9) {
+				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_SRTP+" INTEGER");
 			}
 			onCreate(db);
 		}

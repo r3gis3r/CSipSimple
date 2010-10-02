@@ -211,12 +211,12 @@ public class pjsua_config {
     return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
   }
 
-  public void setUse_srtp(SWIGTYPE_p_pjmedia_srtp_use value) {
-    pjsuaJNI.pjsua_config_use_srtp_set(swigCPtr, this, SWIGTYPE_p_pjmedia_srtp_use.getCPtr(value));
+  public void setUse_srtp(pjmedia_srtp_use value) {
+    pjsuaJNI.pjsua_config_use_srtp_set(swigCPtr, this, value.swigValue());
   }
 
-  public SWIGTYPE_p_pjmedia_srtp_use getUse_srtp() {
-    return new SWIGTYPE_p_pjmedia_srtp_use(pjsuaJNI.pjsua_config_use_srtp_get(swigCPtr, this), true);
+  public pjmedia_srtp_use getUse_srtp() {
+    return pjmedia_srtp_use.swigToEnum(pjsuaJNI.pjsua_config_use_srtp_get(swigCPtr, this));
   }
 
   public void setSrtp_secure_signaling(int value) {

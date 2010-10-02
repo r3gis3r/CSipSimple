@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_ecs_display_name">Fiók neve</string>
+  <string name="w_ecs_display_name_desc">Megjelenítendő név a fiók használatakor</string>
+  <string name="w_ecs_phone_number">Telefonszám</string>
+  <string name="w_ecs_phone_number_desc">A fiók SIP telefonszáma</string>
+  <string name="w_ecs_user_name">Felhasználói név</string>
+  <string name="w_ecs_user_name_desc">Felhasználói név a virtuális felülethez</string>
+  <string name="w_ecs_password">Jelszó</string>
+  <string name="w_ecs_password_desc">Jelszó a fiókhoz</string>
+  <string name="w_ecs_server_domain">SIP domain</string>
+  <string name="w_ecs_server_domain_desc">A SIP fiók domain neve</string>
+  <string name="w_ecs_server_ip">Szerver</string>
+  <string name="w_ecs_server_ip_desc">ECS domain neve vayg IP címe (nem szükséges ha megegyezik a SIP domainnel)</string>
+</resources>

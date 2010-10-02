@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-25 18:18+0200\n"
-"PO-Revision-Date: 2010-09-28 18:37+0000\n"
+"PO-Revision-Date: 2010-09-30 08:06+0000\n"
 "Last-Translator: Dimitar Dimitrov <bez.syanka.na.samnenie@gmail.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-29 05:45+0000\n"
+"X-Launchpad-Export-Date: 2010-10-01 09:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 msgctxt "w_expert_display_name"
@@ -23,7 +23,7 @@ msgstr "Име на профила"
 
 msgctxt "w_expert_display_name_desc"
 msgid "Display name for this account"
-msgstr "Покажи име за този профил"
+msgstr "Показване на име за този профил"
 
 msgctxt "w_expert_acc_id"
 msgid "Account id"
@@ -31,7 +31,7 @@ msgstr "Абонатен номер"
 
 msgctxt "w_expert_acc_id_desc"
 msgid "Format : DisplayName &lt;sip:login@registrar&gt;"
-msgstr ""
+msgstr "Формат : Име за показване &lt;sip:login@registrar&gt;"
 
 msgctxt "w_expert_reg_uri"
 msgid "Registration URI"
@@ -39,11 +39,11 @@ msgstr "Регистрация URI"
 
 msgctxt "w_expert_reg_uri_desc"
 msgid "Format : sip:registrar.net[:port]"
-msgstr ""
+msgstr "Формат : sip:registrar.net[:порт]"
 
 msgctxt "w_expert_realm"
 msgid "Realm"
-msgstr "Област"
+msgstr "Realm"
 
 msgctxt "w_expert_realm_desc"
 msgid "Authentication domain (if you don't know, use '*')"
@@ -55,7 +55,7 @@ msgstr "Потребителско име"
 
 msgctxt "w_expert_username_desc"
 msgid "Username for authentication"
-msgstr "Потребителско име за удостоверяване"
+msgstr "Потребителско име за ауторизация"
 
 msgctxt "w_expert_data"
 msgid "Password"
@@ -63,7 +63,7 @@ msgstr "Парола"
 
 msgctxt "w_expert_data_desc"
 msgid "Password (or other data) for authentication"
-msgstr "Парола (или други данни) за удостоверяване"
+msgstr "Парола (или други данни) за ауторизация"
 
 msgctxt "w_expert_t_proxy"
 msgid "Proxy"
@@ -75,7 +75,7 @@ msgstr "Прокси URI"
 
 msgctxt "w_expert_proxy_desc"
 msgid "Format : sip:proxy.net[:port]"
-msgstr ""
+msgstr "Формат : sip:proxy.net[:порт]"
 
 msgctxt "w_expert_use_tcp"
 msgid "Use TCP (not UDP)"
@@ -91,7 +91,7 @@ msgstr "Регистрирането изтече (сек)"
 
 msgctxt "w_expert_ka_interval"
 msgid "Keep-alive interval (sec)"
-msgstr "Поддържай активен интервал (сек)"
+msgstr "Поддържане на активност интервал (сек)"
 
 msgctxt "w_expert_force_contact"
 msgid "Force contact"

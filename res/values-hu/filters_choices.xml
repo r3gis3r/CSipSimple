@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="filters_action">
+    <item>Nem hívható</item>
+    <item>Átírás</item>
+    <item>Feldolgozás leállítása</item>
+    <item>Közvetlen hívás</item>
+    <item>Automatikus válasz</item>
+  </string-array>
+  <string-array name="filters_type">
+    <item>Eleje ez:</item>
+    <item>Vége ez:</item>
+    <item>Pontosan N jegyű</item>
+    <item>Több mint N jegyű</item>
+    <item>Pontosan ez:</item>
+    <item>Saját RegExp</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>Előtag:</item>
+    <item>Utótag:</item>
+    <item>Találat felcserlése ezzel:</item>
+    <item>Mind felcserélése ezzel:</item>
+    <item>Saját RegExp</item>
+  </string-array>
+</resources>
