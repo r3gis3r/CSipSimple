@@ -215,6 +215,9 @@ public class PreferencesWrapper {
 		return 1;
 	}
 	
+	public String getUserAgent() {
+		return prefs.getString("user_agent","CSipSimple");
+	}
 	
 	/**
 	 * Whether echo cancellation is enabled
@@ -503,6 +506,8 @@ public class PreferencesWrapper {
 	}
 	
 	public int getLogLevel() {
+		return 4;
+		/*
 		int defaultValue = 1;
 		int prefsValue = 1;
 		String logLevel = prefs.getString("log_level", String.valueOf(defaultValue));
@@ -515,6 +520,7 @@ public class PreferencesWrapper {
 			return prefsValue;
 		}
 		return defaultValue;
+		*/
 	}
 
 	public final static int HEADSET_ACTION_CLEAR_CALL = 0;
@@ -550,6 +556,8 @@ public class PreferencesWrapper {
 	private boolean isValidPort(int port) {
 		return (port>0 && port < 65535);
 	}
+
+
 
 
 	

@@ -285,7 +285,6 @@ public class Account {
 		}
 		tmp_i = args.getAsInteger(FIELD_USE_SRTP);
 		if (tmp_i != null) {
-			Log.w(THIS_FILE, "SRTP -> "+tmp_i);
 			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(tmp_i));
 			cfg.setSrtp_secure_signaling(0);
 		}

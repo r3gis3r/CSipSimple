@@ -84,6 +84,8 @@ public class OutgoingCallChooser extends ListActivity {
 				return;
 			}
 			*/
+			
+			checkNumberWithSipStarted();
 
 			// Need full selector, finish layout
 			setContentView(R.layout.outgoing_account_list);
@@ -149,14 +151,6 @@ public class OutgoingCallChooser extends ListActivity {
 			finish();
 			return;
 		}
-		/*
-		Log.d(THIS_FILE, getIntent().getAction());
-		Log.d(THIS_FILE, getIntent().getDataString());
-		*/
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			accountToCallTo = extras.getInt(Account.FIELD_ACC_ID);
-		}
 		
 		Log.d(THIS_FILE, "Choose to call : " + number);
 		
@@ -199,7 +193,57 @@ public class OutgoingCallChooser extends ListActivity {
 		startActivity(intentMakePstnCall);
 		finish();
 	}
+	
+	private void checkNumberWithSipStarted() {
+		database.open();
+		List<Account> accounts = database.getListAccounts(true);
+		database.close();
+		
+		if (isCallableNumber(number, accounts, database)) {
+			Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
 
+			Account mustCallAccount = isMustCallableNumber(number, accounts, database);
+			if(mustCallAccount != null) {
+				accountToCallTo = mustCallAccount.id;
+				checkIfMustAccountNotValid();
+			}
+		}else {
+			placePstnCall();
+		}
+	}
+
+	/**
+	 * Check whether a number can be call using sip
+	 * Should check if not matches preferences of excluded patterns
+	 * @param number the number to test
+	 * @param accounts 
+	 * @return true if we should handle this number using SIP
+	 */
+	private boolean isCallableNumber(String number, List<Account> accounts, DBAdapter db  ) {
+		boolean canCall = false;
+		
+		for(Account account : accounts) {
+			Log.d(THIS_FILE, "Checking if number valid for account "+account.display_name);
+			if(account.isCallableNumber(number, db)) {
+				Log.d(THIS_FILE, ">> Response is YES");
+				return true;
+			}
+		}
+		return canCall;
+	}
+	
+	private Account isMustCallableNumber(String number, List<Account> accounts, DBAdapter db ) {
+		for(Account account : accounts) {
+			Log.d(THIS_FILE, "Checking if number must be call for account "+account.display_name);
+			if(account.isMustCallNumber(number, db)) {
+				Log.d(THIS_FILE, ">> Response is YES");
+				return account;
+			}
+		}
+		return null;
+	}
+
+	
 	/**
 	 * Flush and re-populate static list of account (static because should not exceed 3 or 4 accounts)
 	 */

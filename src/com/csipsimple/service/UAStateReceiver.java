@@ -295,10 +295,15 @@ public class UAStateReceiver extends Callback {
 
 			// Automatically answer incoming calls with 180/RINGING
 			service.callAnswer(callId, 180);
-			if(SipService.mediaManager != null) {
-				SipService.mediaManager.startRing(remContact);
+			
+			if(service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
+				if(SipService.mediaManager != null) {
+					SipService.mediaManager.startRing(remContact);
+				}
+				broadCastAndroidCallState("RINGING", remContact);
 			}
-			broadCastAndroidCallState("RINGING", remContact);
+			
+			
 			launchCallHandler(callInfo);
 		}
 	}

@@ -17,7 +17,10 @@
  */
 package com.csipsimple.service;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -77,7 +80,6 @@ import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.IAccount;
 import com.csipsimple.models.CallInfo.UnavailableException;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.RegistrationNotification;
@@ -89,10 +91,6 @@ public class SipService extends Service {
 	static String THIS_FILE = "SIP SRV";
 
 	
-	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
-//	final static String ACTION_CONNECTIVITY_CHANGED = "android.net.conn.CONNECTIVITY_CHANGE";
-//	final static String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
-	
 	// -------
 	// Static constants
 	// -------
@@ -101,6 +99,7 @@ public class SipService extends Service {
 	final public static String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
 	final public static String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
 	final public static String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
+	final public static String ACTION_SIP_DIALER = "com.csipsimple.phone.action.DIALER";
 	
 	final public static int REGISTER_NOTIF_ID = 1;
 	final public static int CALL_NOTIF_ID =  REGISTER_NOTIF_ID+1;
@@ -353,6 +352,28 @@ public class SipService extends Service {
 			}
 			return result;
 		}
+
+		@Override
+		public void setPreferenceBoolean(String key, boolean value) throws RemoteException {
+			if(prefsWrapper != null) {
+				prefsWrapper.setPreferenceBooleanValue(key, value);
+			}
+			
+		}
+
+		@Override
+		public void setPreferenceFloat(String key, float value) throws RemoteException {
+			if(prefsWrapper != null) {
+				prefsWrapper.setPreferenceFloatValue(key, value);
+			}
+			
+		}
+
+		@Override
+		public void setPreferenceString(String key, String value) throws RemoteException {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	};
 
@@ -422,6 +443,25 @@ public class SipService extends Service {
 			};
 			t.start();
 			super.onDataConnectionStateChanged(state);
+		}
+		
+		@Override
+		public void onCallStateChanged(int state, String incomingNumber) {
+			Log.d(THIS_FILE, "Call state has changed !"+state+" : "+incomingNumber);
+			
+			//Avoid ringing while not idle
+			if(state != TelephonyManager.CALL_STATE_IDLE && mediaManager != null) {
+				mediaManager.stopRing();
+			}
+			
+			if(state != TelephonyManager.CALL_STATE_IDLE) {
+				CallInfo currentActiveCall = userAgentReceiver.getActiveCallInProgress();
+				if(currentActiveCall != null && state != TelephonyManager.CALL_STATE_RINGING) {
+					SipService.this.callHold(currentActiveCall.getCallId());
+				}
+			}
+			
+			super.onCallStateChanged(state, incomingNumber);
 		}
 	}
 	
@@ -514,8 +554,9 @@ public class SipService extends Service {
 						intentfilter);
 			}
 			if(phoneConnectivityReceiver == null) {
+				Log.d(THIS_FILE, "Listen for phone state ");
 				telephonyManager.listen(phoneConnectivityReceiver = new ServicePhoneStateReceiver(), 
-						PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
+						PhoneStateListener.LISTEN_DATA_CONNECTION_STATE | PhoneStateListener.LISTEN_CALL_STATE);
 			}
 			
 		}
@@ -620,10 +661,18 @@ public class SipService extends Service {
 						//TODO : WARNING : This is deprecated, should use array instead but ok for now
 						cfg.setStun_host(pjsua.pj_str_copy(prefsWrapper.getStunServer()));
 					}
-					cfg.setUser_agent(pjsua.pj_str_copy("CSipSimple"));
+					cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent()));
 					//cfg.setThread_cnt(4); // one thread seems to be enough for now
 					cfg.setUse_srtp(prefsWrapper.getUseSrtp());
 					cfg.setSrtp_secure_signaling(0);
+					
+					//DNS
+					String dnsName1 = getDNSServer();
+					Log.d(THIS_FILE, "DNS server will be set to : "+dnsName1);
+					if(dnsName1 != null) {
+						cfg.setNameserver_count(1);
+						cfg.setNameserver(pjsua.pj_str_copy(dnsName1));
+					}
 	
 					// LOGGING CONFIG
 					pjsua.logging_config_default(log_cfg);
@@ -678,9 +727,9 @@ public class SipService extends Service {
 							created = false;
 							return;
 						}
-						int[] p_acc_id = new int[1];
+					//	int[] p_acc_id = new int[1];
 					//	pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE, p_acc_id);
-						Log.d(THIS_FILE, "Udp account "+p_acc_id);
+					//	Log.d(THIS_FILE, "Udp account "+p_acc_id);
 						
 					}
 					//TCP
@@ -692,7 +741,7 @@ public class SipService extends Service {
 							created = false;
 							return;
 						}
-						int[] p_acc_id = new int[1];
+					//	int[] p_acc_id = new int[1];
 					//	pjsua.acc_add_local(tcpTranportId, pjsua.PJ_FALSE, p_acc_id);
 						
 					}
@@ -707,7 +756,7 @@ public class SipService extends Service {
 							created = false;
 							return;
 						}
-						int[] p_acc_id = new int[1];
+					//	int[] p_acc_id = new int[1];
 					//	pjsua.acc_add_local(tlsTransportId, pjsua.PJ_FALSE, p_acc_id);
 					}
 					
@@ -1058,11 +1107,8 @@ public class SipService extends Service {
 			long when = System.currentTimeMillis();
 
 			Notification notification = new Notification(icon, tickerText, when);
-	//		Context context = getApplicationContext();
-	//		CharSequence contentTitle = "SIP";
-	//		CharSequence contentText = "Registered";
 
-			Intent notificationIntent = new Intent(this, SipHome.class);
+			Intent notificationIntent = new Intent(ACTION_SIP_DIALER);
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			
@@ -1538,6 +1584,25 @@ public class SipService extends Service {
 	    return null;
 	}
 	
+	private String getDNSServer() {
+		//String re1 = "^\\d+(\\.\\d+){3}$";
+		//String re2 = "^[0-9a-f]+(:[0-9a-f]*)+:[0-9a-f]+$";
+		try {
+			String line; 
+			Process p = Runtime.getRuntime().exec("getprop net.dns1"); 
+			InputStream in = p.getInputStream();
+			InputStreamReader isr = new InputStreamReader(in);
+			BufferedReader br = new BufferedReader(isr);
+			while ((line = br.readLine()) != null ) { 
+				return line;
+			}
+		} catch ( Exception e ) { 
+			// ignore resolutely
+		}
+		return null;
+	}
+	
+	
 //	private Integer oldNetworkType = null;
 //	private State oldNetworkState = null;
 	private String oldIPAddress = "0.0.0.0";
@@ -1547,6 +1612,9 @@ public class SipService extends Service {
 		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 		
 		boolean ipHasChanged = false;
+
+		String dnsName1 = getDNSServer();
+		Log.d(THIS_FILE, "DNS server will be set to : "+dnsName1);
 
 		if(ni != null) {
 //			Integer currentType = ni.getType();
@@ -1633,6 +1701,11 @@ public class SipService extends Service {
 			t.start();
 			
 		}
+	}
+
+
+	public int getGSMCallState() {
+		return telephonyManager.getCallState();
 	}
 
 }

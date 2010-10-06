@@ -19,6 +19,12 @@ package com.csipsimple.service;
 import com.csipsimple.models.IAccount;
 
 interface ISipConfiguration {
+	//Account management
 	long addOrUpdateAccount(in IAccount acc);
 	IAccount getAccount(long acc_id);
+	
+	//Prefs
+	void setPreferenceString(in String key, in String value);
+	void setPreferenceBoolean(in String key, boolean value);
+	void setPreferenceFloat(in String key, float value);
 }

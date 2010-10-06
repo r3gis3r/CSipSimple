@@ -17,15 +17,11 @@
  */
 package com.csipsimple.service;
 
-import java.util.List;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -63,28 +59,14 @@ public class OutgoingCall extends BroadcastReceiver {
 			if(prefsWrapper.isValidConnectionForOutgoing()) {
 				// Filter should assure this!
 				//Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
-				DBAdapter db = new DBAdapter(context);
-				db.open();
-				List<Account> accounts = db.getListAccounts(true);
-				db.close();
-				
-				if (isCallableNumber(number, accounts, db)) {
-					Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
-					// Launch activity to choose what to do with this call
-					Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
-					outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
-					outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					
-					Account mustCallAccount = isMustCallableNumber(number, accounts, db);
-					if(mustCallAccount != null) {
-						outgoingCallChooserIntent.putExtra(Account.FIELD_ACC_ID, mustCallAccount.id);
-					}
-					context.startActivity(outgoingCallChooserIntent);
-					
-					// We will treat this by ourselves
-					setResultData(null);
-					return;
-				}
+				// Launch activity to choose what to do with this call
+				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
+				outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
+				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(outgoingCallChooserIntent);
+				// We will treat this by ourselves
+				setResultData(null);
+				return;
 			}
 			
 			Log.d(THIS_FILE, "Can't use SIP, pass number along");
@@ -94,35 +76,5 @@ public class OutgoingCall extends BroadcastReceiver {
 		}
 	}
 
-	/**
-	 * Check whether a number can be call using sip
-	 * Should check if not matches preferences of excluded patterns
-	 * @param number the number to test
-	 * @param accounts 
-	 * @return true if we should handle this number using SIP
-	 */
-	private boolean isCallableNumber(String number, List<Account> accounts, DBAdapter db  ) {
-		boolean canCall = false;
-		
-		for(Account account : accounts) {
-			Log.d(THIS_FILE, "Checking if number valid for account "+account.display_name);
-			if(account.isCallableNumber(number, db)) {
-				Log.d(THIS_FILE, ">> Response is YES");
-				return true;
-			}
-		}
-		return canCall;
-	}
-	
-	private Account isMustCallableNumber(String number, List<Account> accounts, DBAdapter db ) {
-		for(Account account : accounts) {
-			Log.d(THIS_FILE, "Checking if number must be call for account "+account.display_name);
-			if(account.isMustCallNumber(number, db)) {
-				Log.d(THIS_FILE, ">> Response is YES");
-				return account;
-			}
-		}
-		return null;
-	}
 
 }

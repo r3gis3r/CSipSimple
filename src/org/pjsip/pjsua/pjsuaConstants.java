@@ -10,6 +10,7 @@ package org.pjsip.pjsua;
 
 public interface pjsuaConstants {
   public final static int PJMEDIA_HAS_SRTP = pjsuaJNI.PJMEDIA_HAS_SRTP_get();
+  public final static int PJ_HAS_SSL_SOCK = pjsuaJNI.PJ_HAS_SSL_SOCK_get();
   public final static pjsua_callback WRAPPER_CALLBACK_STRUCT = new pjsua_callback(pjsuaJNI.WRAPPER_CALLBACK_STRUCT_get(), false);
   public final static int PJ_SUCCESS = pjsuaJNI.PJ_SUCCESS_get();
   public final static int PJ_TRUE = pjsuaJNI.PJ_TRUE_get();

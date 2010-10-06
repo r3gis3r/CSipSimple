@@ -10,6 +10,10 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+			<intent-filter android:priority="10">
+                 <action android:name="com.csipsimple.phone.action.DIALER" />
+                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
 		</activity>
 		
 		<!-- Main service -->

@@ -42,7 +42,6 @@ public abstract class SimplePrefsWizard extends BasePrefsWizard {
 		accountPhoneNumber = (EditTextPreference) findPreference("phone_number");
 		accountPassword = (EditTextPreference) findPreference("password");
 
-		
 		String display_name = account.display_name;
 		if(display_name.equalsIgnoreCase("")) {
 			display_name = getDefaultName();

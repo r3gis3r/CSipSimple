@@ -10,6 +10,7 @@ package org.pjsip.pjsua;
 
 class pjsuaJNI {
   public final static native int PJMEDIA_HAS_SRTP_get();
+  public final static native int PJ_HAS_SSL_SOCK_get();
   public final static native long pj_str_copy(String jarg1);
   public final static native void delete_Callback(long jarg1);
   public final static native void Callback_on_call_state(long jarg1, Callback jarg1_, int jarg2, long jarg3, pjsip_event jarg3_);

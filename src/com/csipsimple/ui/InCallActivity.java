@@ -465,6 +465,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         		SipService.mediaManager.adjustStreamVolume(Compatibility.getInCallStream(), action, AudioManager.FLAG_SHOW_UI);
         	}
         	return true;
+        case KeyEvent.KEYCODE_CALL:
+		case KeyEvent.KEYCODE_ENDCALL:
+        	return inCallControls.onKeyDown(keyCode, event);
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -475,6 +478,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 		case KeyEvent.KEYCODE_VOLUME_UP:
+		case KeyEvent.KEYCODE_CALL:
+		case KeyEvent.KEYCODE_ENDCALL:
+
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);
@@ -650,8 +656,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private static final float PROXIMITY_THRESHOLD = 5.0f;
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		Log.d(THIS_FILE, "Tracked : "+proximitySensorTracked);
-		if(proximitySensorTracked && !isFirstRun) {
+		//Log.d(THIS_FILE, "Tracked : "+proximitySensorTracked);
+		if(proximitySensorTracked && !isFirstRun && callInfo != null) {
 			pjsip_inv_state state = callInfo.getCallState();
 			float distance = event.values[0];
 			boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());

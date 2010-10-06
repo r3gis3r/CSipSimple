@@ -298,6 +298,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			onTriggerListener.onTrigger(whichHandle);
 		}
 	}
+	
 
 	@Override
 	public void onTrigger(View v, int whichHandle) {

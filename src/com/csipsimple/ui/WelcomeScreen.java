@@ -346,7 +346,12 @@ public class WelcomeScreen extends Activity {
 			case DOWNLOAD_ERROR:
 				setStepError("Download error. Check your connection and retry");
 				if (service != null && bound) {
-					unbindService(connection);
+					try {
+						unbindService(connection);
+					}catch(IllegalArgumentException e) {
+						//Nothing to do, just ignore that we were not able to unbind... we were already unbinded
+						//python style ignore
+					}
 					bound = false;
 				}
 				break;
