@@ -19,6 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import java.util.Locale;
 
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsua;
 
 import android.preference.EditTextPreference;
@@ -68,6 +69,8 @@ public class Sip2Sip extends SimplePrefsWizard {
 	protected void buildAccount() {
 		super.buildAccount();
 		account.cfg.setProxy_cnt(1);
-		account.cfg.setProxy(pjsua.pj_str_copy("sip:proxy.sipthor.net"));
+		pj_str_t[] proxies = account.cfg.getProxy();
+		proxies[0] = pjsua.pj_str_copy("sip:proxy.sipthor.net");
+		account.cfg.setProxy(proxies);
 	}
 }

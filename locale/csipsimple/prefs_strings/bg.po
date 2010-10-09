@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 13:24+0200\n"
-"PO-Revision-Date: 2010-09-30 04:53+0000\n"
-"Last-Translator: Lubomir Christov <Unknown>\n"
+"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"PO-Revision-Date: 2010-09-30 08:04+0000\n"
+"Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -81,20 +81,6 @@ msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
 msgstr "Използване на WiFi за изходящи повиквания"
 
-msgctxt "use_other"
-msgid "Use other networks"
-msgstr ""
-
-#, fuzzy
-msgctxt "use_other_in_desc"
-msgid "For example WiMax for incoming calls"
-msgstr "Използване на WiFi за входящи повиквания"
-
-#, fuzzy
-msgctxt "use_other_out_desc"
-msgid "For example WiMax for outgoing calls"
-msgstr "Използване на WiFi за изходящи повиквания"
-
 msgctxt "use_3g"
 msgid "Use 3G"
 msgstr "Използване на 3G"
@@ -127,15 +113,6 @@ msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
 msgstr "Разрешаване на TCP пренос"
 
-msgctxt "enable_tls"
-msgid "TLS"
-msgstr ""
-
-#, fuzzy
-msgctxt "enable_tls_desc"
-msgid "Enable TLS transport"
-msgstr "Разрешаване на UDP пренос"
-
 msgctxt "enable_udp"
 msgid "UDP"
 msgstr "UDP"
@@ -157,16 +134,6 @@ msgid "TCP Port"
 msgstr "TCP порт"
 
 msgctxt "network_tcp_transport_port_desc"
-msgid "Port number to bind locally"
-msgstr "Номер на порт, който ще се ползва локално"
-
-#, fuzzy
-msgctxt "network_tls_transport_port"
-msgid "TLS Port"
-msgstr "RTP порт"
-
-#, fuzzy
-msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Номер на порт, който ще се ползва локално"
 

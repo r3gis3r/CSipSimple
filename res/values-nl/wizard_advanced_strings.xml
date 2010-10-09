@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_advanced_display_name">Accountnaam</string>
+  <string name="w_advanced_display_name_desc">Weergavenaam voor dit account</string>
+  <string name="w_advanced_caller_id">Nummerweergave</string>
+  <string name="w_advanced_caller_id_desc">Nummerweergave dat moet worden verzonden tijdens gesprek</string>
+  <string name="w_advanced_server">Server</string>
+  <string name="w_advanced_server_desc">SIP server domein/IP[:poort]</string>
+  <string name="w_advanced_username">Gebruikersnaam</string>
+  <string name="w_advanced_username_desc">Gebruikersnaam voor SIP server authenticatie</string>
+  <string name="w_advanced_password">Wachtwoord</string>
+  <string name="w_advanced_password_desc">Wachtwoord voor SIP server authenticatie</string>
+</resources>

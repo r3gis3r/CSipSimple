@@ -111,7 +111,9 @@ public class Basic extends BasePrefsWizard {
 		pj_str_t regUri = pjsua.pj_str_copy("sip:"+accountServer.getText());
 		account.cfg.setReg_uri(regUri);
 		account.cfg.setProxy_cnt(1);
-		account.cfg.setProxy(regUri);
+		pj_str_t[] proxies = account.cfg.getProxy();
+		proxies[0] = regUri;
+		account.cfg.setProxy(proxies);
 
 		pjsip_cred_info ci = account.cfg.getCred_info();
 

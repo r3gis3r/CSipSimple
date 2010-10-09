@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_cred_data_type;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
@@ -89,7 +90,7 @@ public class Advanced extends BasePrefsWizard {
 		accountPassword.setText(ci.getData().getPtr());
 
 		accountUseTcp.setChecked((account.use_tcp));
-		String account_cfPrx = account.cfg.getProxy().getPtr();
+		String account_cfPrx = account.cfg.getProxy()[0].getPtr();
 		if(account_cfPrx == null) {
 			accountProxy.setText("");
 		} else {
@@ -141,7 +142,9 @@ public class Advanced extends BasePrefsWizard {
 		
 		if (!isEmpty(accountProxy)) {
 			account.cfg.setProxy_cnt(1);
-			account.cfg.setProxy(pjsua.pj_str_copy("sip:"+accountProxy.getText()));
+			pj_str_t[] proxies = account.cfg.getProxy();
+			proxies[0] = pjsua.pj_str_copy("sip:"+accountProxy.getText());
+			account.cfg.setProxy(proxies);
 		} else {
 			account.cfg.setProxy_cnt(0);
 		}

@@ -19,6 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import java.util.Locale;
 
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsip_cred_data_type;
 import org.pjsip.pjsua.pjsip_cred_info;
@@ -121,7 +122,7 @@ public class Expert extends BasePrefsWizard {
 		accountKaInterval.setText(Long.toString(account.cfg.getKa_interval()));
 		
 		accountForceContact.setText(account.cfg.getForce_contact().getPtr());
-		accountProxy.setText(account.cfg.getProxy().getPtr());
+		accountProxy.setText(account.cfg.getProxy()[0].getPtr());
 		
 		accountUseSrtp.setValueIndex(account.cfg.getUse_srtp().swigValue());
 	}
@@ -206,7 +207,9 @@ public class Expert extends BasePrefsWizard {
 		 */
 		if (!isEmpty(accountProxy)) {
 			account.cfg.setProxy_cnt(1);
-			account.cfg.setProxy(getPjText(accountProxy));
+			pj_str_t[] proxies = account.cfg.getProxy();
+			proxies[0] = getPjText(accountProxy);
+			account.cfg.setProxy(proxies);
 		} else {
 			account.cfg.setProxy_cnt(0);
 		}

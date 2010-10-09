@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="acct_inactive">Inactief</string>
+  <string name="acct_unregistered">Niet geregistreerd</string>
+  <string name="acct_expired">Registratie verlopen</string>
+  <string name="acct_registering">Bezig met registratie...</string>
+  <string name="acct_registered">Geregistreerd</string>
+  <string name="acct_regerror">Fout tijdens registratie</string>
+  <string name="acct_regfailed">Registratie mislukt</string>
+</resources>

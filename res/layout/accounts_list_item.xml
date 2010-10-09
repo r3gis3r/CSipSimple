@@ -34,15 +34,15 @@
 	</com.csipsimple.widgets.DontPressWithParentLayout>
 
 	<ImageView android:src="@drawable/divider_vertical_dark"
-		android:background="?android:attr/windowBackground"
-		android:layout_width="wrap_content" android:layout_height="fill_parent"
+		android:layout_width="1dip" android:layout_height="fill_parent"
 		android:paddingTop="4dip" android:paddingBottom="4dip"
-		android:scaleType="fitXY" android:gravity="fill_vertical" />
+		android:scaleType="fitXY" />
 
 	<LinearLayout android:layout_weight="1"
 		android:layout_width="fill_parent" android:orientation="vertical"
 		android:paddingLeft="16dip" android:paddingRight="16dip"
-		android:layout_gravity="center_vertical" android:layout_height="wrap_content">
+		android:layout_gravity="center_vertical" android:layout_height="fill_parent" 
+		android:gravity="center_vertical">
 		<TextView android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:id="@+id/AccTextView"
 			android:text="Display name" android:ellipsize="marquee"

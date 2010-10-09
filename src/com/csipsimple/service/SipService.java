@@ -17,10 +17,7 @@
  */
 package com.csipsimple.service;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -56,6 +53,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
@@ -355,23 +353,18 @@ public class SipService extends Service {
 
 		@Override
 		public void setPreferenceBoolean(String key, boolean value) throws RemoteException {
-			if(prefsWrapper != null) {
-				prefsWrapper.setPreferenceBooleanValue(key, value);
-			}
-			
+			prefsWrapper.setPreferenceBooleanValue(key, value);
 		}
 
 		@Override
 		public void setPreferenceFloat(String key, float value) throws RemoteException {
-			if(prefsWrapper != null) {
-				prefsWrapper.setPreferenceFloatValue(key, value);
-			}
+			prefsWrapper.setPreferenceFloatValue(key, value);
 			
 		}
 
 		@Override
 		public void setPreferenceString(String key, String value) throws RemoteException {
-			// TODO Auto-generated method stub
+			prefsWrapper.setPreferenceStringValue(key, value);
 			
 		}
 		
@@ -396,6 +389,7 @@ public class SipService extends Service {
 	private ConnectivityManager connectivityManager;
 	private Integer udpTranportId, tcpTranportId, tlsTransportId;
 	
+	private Integer hasBeenHoldByGSM = null;
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
@@ -457,7 +451,18 @@ public class SipService extends Service {
 			if(state != TelephonyManager.CALL_STATE_IDLE) {
 				CallInfo currentActiveCall = userAgentReceiver.getActiveCallInProgress();
 				if(currentActiveCall != null && state != TelephonyManager.CALL_STATE_RINGING) {
-					SipService.this.callHold(currentActiveCall.getCallId());
+					hasBeenHoldByGSM = currentActiveCall.getCallId();
+					SipService.this.callHold(hasBeenHoldByGSM);
+					pjsua.set_no_snd_dev();
+					
+					AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+					am.setMode(AudioManager.MODE_IN_CALL);
+				}
+			}else {
+				if(hasBeenHoldByGSM != null) {
+					pjsua.set_snd_dev(0, 0);
+					SipService.this.callReinvite(hasBeenHoldByGSM, true);
+					hasBeenHoldByGSM = null;
 				}
 			}
 			
@@ -656,30 +661,40 @@ public class SipService extends Service {
 					Log.d(THIS_FILE, "Attach is done to callback");
 					
 					// MAIN CONFIG
-					int isStunEnabled = prefsWrapper.getStunEnabled();
-					if(isStunEnabled == 1) {
-						//TODO : WARNING : This is deprecated, should use array instead but ok for now
-						cfg.setStun_host(pjsua.pj_str_copy(prefsWrapper.getStunServer()));
-					}
+					
 					cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent()));
 					//cfg.setThread_cnt(4); // one thread seems to be enough for now
 					cfg.setUse_srtp(prefsWrapper.getUseSrtp());
 					cfg.setSrtp_secure_signaling(0);
 					
 					//DNS
-					String dnsName1 = getDNSServer();
-					Log.d(THIS_FILE, "DNS server will be set to : "+dnsName1);
-					if(dnsName1 != null) {
-						cfg.setNameserver_count(1);
-						cfg.setNameserver(pjsua.pj_str_copy(dnsName1));
+					if(prefsWrapper.enableDNSSRV() && !prefsWrapper.useIPv6()) {
+						pj_str_t[] nameservers = prefsWrapper.getNameservers();
+						if(nameservers != null) {
+							cfg.setNameserver_count(nameservers.length);
+							cfg.setNameserver(nameservers);
+						}else {
+							cfg.setNameserver_count(0);
+						}
 					}
+					//STUN
+					int isStunEnabled = prefsWrapper.getStunEnabled();
+					if(isStunEnabled == 1) {
+						cfg.setStun_srv_cnt(1);
+						pj_str_t[] stun_servers = cfg.getStun_srv();
+						stun_servers[0] = pjsua.pj_str_copy(prefsWrapper.getStunServer());
+						cfg.setStun_srv(stun_servers);
+					}
+					
+					//IGNORE NOTIFY -- TODO : for now that's something we want since it polute battery life
+					cfg.setEnable_unsolicited_mwi(pjsuaConstants.PJ_FALSE);
 	
 					// LOGGING CONFIG
 					pjsua.logging_config_default(log_cfg);
 					log_cfg.setConsole_level(prefsWrapper.getLogLevel());
 					log_cfg.setLevel(prefsWrapper.getLogLevel());
 					log_cfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
-	
+
 					// MEDIA CONFIG
 					pjsua.media_config_default(media_cfg);
 	
@@ -691,25 +706,22 @@ public class SipService extends Service {
 					media_cfg.setNo_vad(prefsWrapper.getNoVad());
 					media_cfg.setQuality(prefsWrapper.getMediaQuality());
 					media_cfg.setClock_rate(prefsWrapper.getClockRate());
-					//media_cfg.setJb_min_pre(60);
-					//media_cfg.setJb_max(600);
-					media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
 					media_cfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
 					
+					//ICE
+					media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
+					//TURN
 					int isTurnEnabled = prefsWrapper.getTurnEnabled();
-					
 					if(isTurnEnabled == 1) {
 						media_cfg.setEnable_turn(isTurnEnabled);
 						media_cfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
 					}
 					
-					
-					
 					// INITIALIZE
-					status = pjsua.init(cfg, log_cfg, media_cfg);
+					status = pjsua.csipsimple_init(cfg, log_cfg, media_cfg);
 					if (status != pjsuaConstants.PJ_SUCCESS) {
 						Log.e(THIS_FILE, "Fail to init pjsua with failure code " + status);
-						pjsua.destroy();
+						pjsua.csipsimple_destroy();
 						created = false;
 //						creating = false;
 						return;
@@ -720,9 +732,13 @@ public class SipService extends Service {
 				{
 					//UDP
 					if(prefsWrapper.isUDPEnabled()) {
-						udpTranportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, prefsWrapper.getUDPTransportPort());
+						pjsip_transport_type_e t = pjsip_transport_type_e.PJSIP_TRANSPORT_UDP;
+						if(prefsWrapper.useIPv6()) {
+							t = pjsip_transport_type_e.PJSIP_TRANSPORT_UDP6;
+						}
+						udpTranportId = createTransport(t, prefsWrapper.getUDPTransportPort());
 						if (udpTranportId == null) {
-							pjsua.destroy();
+							pjsua.csipsimple_destroy();
 //							creating = false;
 							created = false;
 							return;
@@ -734,9 +750,13 @@ public class SipService extends Service {
 					}
 					//TCP
 					if(prefsWrapper.isTCPEnabled()) {
-						tcpTranportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, prefsWrapper.getTCPTransportPort());
+						pjsip_transport_type_e t = pjsip_transport_type_e.PJSIP_TRANSPORT_TCP;
+						if(prefsWrapper.useIPv6()) {
+							t = pjsip_transport_type_e.PJSIP_TRANSPORT_TCP6;
+						}
+						tcpTranportId = createTransport(t, prefsWrapper.getTCPTransportPort());
 						if (tcpTranportId == null) {
-							pjsua.destroy();
+							pjsua.csipsimple_destroy();
 //							creating = false;
 							created = false;
 							return;
@@ -747,11 +767,11 @@ public class SipService extends Service {
 					}
 					
 					//TLS
-					if(prefsWrapper.isTLSEnabled()){
+					if(prefsWrapper.isTLSEnabled() && (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE ) ){
 						tlsTransportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, prefsWrapper.getTLSTransportPort() );
 						
 						if (tlsTransportId == null) {
-							pjsua.destroy();
+							pjsua.csipsimple_destroy();
 //							creating = false;
 							created = false;
 							return;
@@ -760,18 +780,20 @@ public class SipService extends Service {
 					//	pjsua.acc_add_local(tlsTransportId, pjsua.PJ_FALSE, p_acc_id);
 					}
 					
-					
-					
 					//RTP transport
 					{
 						pjsua_transport_config cfg = new pjsua_transport_config();
 						pjsua.transport_config_default(cfg);
 						cfg.setPort(prefsWrapper.getRTPPort());
 						
-						status = pjsua.media_transports_create(cfg);
+						if(prefsWrapper.useIPv6()) {
+							status = pjsua.media_transports_create_ipv6(cfg);
+						}else {
+							status = pjsua.media_transports_create(cfg);
+						}
 						if (status != pjsuaConstants.PJ_SUCCESS) {
 							Log.e(THIS_FILE, "Fail to add media transport with failure code " + status);
-							pjsua.destroy();
+							pjsua.csipsimple_destroy();
 //							creating = false;
 							created = false;
 							return;
@@ -784,7 +806,7 @@ public class SipService extends Service {
 				
 				if(status != pjsua.PJ_SUCCESS) {
 					Log.e(THIS_FILE, "Fail to start pjsip " + status);
-					pjsua.destroy();
+					pjsua.csipsimple_destroy();
 //					creating = false;
 					created = false;
 					return;
@@ -816,7 +838,7 @@ public class SipService extends Service {
 				Log.d(THIS_FILE, "Detroying...");
 				//This will destroy all accounts so synchronize with accounts management lock
 				synchronized (pjAccountsCreationLock) {
-					pjsua.destroy();
+					pjsua.csipsimple_destroy();
 					synchronized (activeAccountsLock) {
 						accountsAddingStatus.clear();
 						activeAccounts.clear();
@@ -1378,7 +1400,6 @@ public class SipService extends Service {
 			int status;
 			
 			dialtonePool = pjsua.pjsua_pool_create("mycall", 512, 512);
-	
 			pj_str_t name = pjsua.pj_str_copy("dialtoneGen");
 			long clock_rate = 8000;
 			long channel_count = 1;
@@ -1449,7 +1470,6 @@ public class SipService extends Service {
 		d[0].setOff_msec((short) 200);
 		d[0].setFreq1(freq1);
 		d[0].setFreq2(freq2);
-		
 		return pjsua.pjmedia_tonegen_play(dialtoneGen, 1, d, 0);
 	}
 	
@@ -1501,16 +1521,17 @@ public class SipService extends Service {
 	
 	private void initCodecs(){
 		if(codecs == null) {
-			int nbr_codecs = pjsua.get_nbr_of_codecs();
+			int nbr_codecs = pjsua.codecs_get_nbr();
 			Log.d(THIS_FILE, "Codec nbr : "+nbr_codecs);
 			codecs = new ArrayList<String>();
 			for (int i = 0; i< nbr_codecs; i++) {
-				String codecId = pjsua.codec_get_id(i).getPtr();
+				String codecId = pjsua.codecs_get_id(i).getPtr();
 				codecs.add(codecId);
 				Log.d(THIS_FILE, "Added codec "+codecId);
 			}
 		}
 	}
+	
 	
 	private void setCodecsPriorities() {
 		if(codecs != null) {
@@ -1584,23 +1605,6 @@ public class SipService extends Service {
 	    return null;
 	}
 	
-	private String getDNSServer() {
-		//String re1 = "^\\d+(\\.\\d+){3}$";
-		//String re2 = "^[0-9a-f]+(:[0-9a-f]*)+:[0-9a-f]+$";
-		try {
-			String line; 
-			Process p = Runtime.getRuntime().exec("getprop net.dns1"); 
-			InputStream in = p.getInputStream();
-			InputStreamReader isr = new InputStreamReader(in);
-			BufferedReader br = new BufferedReader(isr);
-			while ((line = br.readLine()) != null ) { 
-				return line;
-			}
-		} catch ( Exception e ) { 
-			// ignore resolutely
-		}
-		return null;
-	}
 	
 	
 //	private Integer oldNetworkType = null;
@@ -1612,9 +1616,6 @@ public class SipService extends Service {
 		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 		
 		boolean ipHasChanged = false;
-
-		String dnsName1 = getDNSServer();
-		Log.d(THIS_FILE, "DNS server will be set to : "+dnsName1);
 
 		if(ni != null) {
 //			Integer currentType = ni.getType();

@@ -20,6 +20,7 @@ package com.csipsimple.models;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
@@ -152,7 +153,9 @@ public class Account {
 		
 		if(parcelable.proxy != null) {
 			cfg.setProxy_cnt(1);
-			cfg.setProxy(pjsua.pj_str_copy(parcelable.proxy));
+			pj_str_t[] proxies = cfg.getProxy();
+			proxies[0] = pjsua.pj_str_copy(parcelable.proxy);
+			cfg.setProxy(proxies);
 		}
 
 		cfg.setCred_count(1);
@@ -192,7 +195,7 @@ public class Account {
 		parcelable.ka_interval = (int) cfg.getKa_interval();
 		parcelable.pidf_tuple_id = cfg.getPidf_tuple_id().getPtr();
 		parcelable.force_contact = cfg.getForce_contact().getPtr();
-		parcelable.proxy = (cfg.getProxy_cnt()>0)? cfg.getProxy().getPtr():null;
+		parcelable.proxy = (cfg.getProxy_cnt()>0)? cfg.getProxy()[0].getPtr():null;
 		parcelable.use_srtp = cfg.getUse_srtp().swigValue();
 		
 		pjsip_cred_info cred_info = cfg.getCred_info();
@@ -289,12 +292,13 @@ public class Account {
 			cfg.setSrtp_secure_signaling(0);
 		}
 		
-		
 		// Proxy
 		tmp_s = args.getAsString(FIELD_PROXY);
 		if (tmp_s != null) {
 			cfg.setProxy_cnt(1);
-			cfg.setProxy(pjsua.pj_str_copy(tmp_s));
+			pj_str_t[] proxies = cfg.getProxy();
+			proxies[0] = pjsua.pj_str_copy(tmp_s);
+			cfg.setProxy(proxies);
 		}
 
 		pjsip_cred_info cred_info = cfg.getCred_info();
@@ -319,7 +323,6 @@ public class Account {
 		if (tmp_s != null) {
 			cred_info.setData(pjsua.pj_str_copy(tmp_s));
 		}
-
 	}
 	
 	/**
@@ -354,7 +357,7 @@ public class Account {
 
 		// Assume we have an unique proxy
 		if (cfg.getProxy_cnt() > 0) {
-			args.put(FIELD_PROXY, cfg.getProxy().getPtr());
+			args.put(FIELD_PROXY, cfg.getProxy()[0].getPtr());
 		}else {
 			args.put(FIELD_PROXY, (String) null);
 		}
@@ -483,17 +486,19 @@ public class Account {
 		//TODO : should NOT be done here !!! 
 		
 		String reg_uri = "";
-		String proxy_uri = "";
 		if (use_tcp) {
 			reg_uri = cfg.getReg_uri().getPtr();
-			String buf = reg_uri + ";transport=tcp";
-			cfg.setReg_uri(pjsua.pj_str_copy(buf));
-			proxy_uri =  cfg.getProxy().getPtr();
-			if (proxy_uri == null || proxy_uri == "") {
-				cfg.setProxy(pjsua.pj_str_copy(buf));
+			pj_str_t[] proxies = cfg.getProxy();
+			
+			String proposed_server = reg_uri + ";transport=tcp";
+			cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
+			
+			if (cfg.getProxy_cnt() == 0 || proxies[0].getPtr() == null || proxies[0].getPtr() == "") {
+				proxies[0] = pjsua.pj_str_copy(proposed_server);
+				cfg.setProxy(proxies);
 			} else {
-				buf = proxy_uri + ";transport=tcp";
-				cfg.setProxy(pjsua.pj_str_copy(buf));
+				proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + ";transport=tcp");
+				cfg.setProxy(proxies);
 			}
 			Log.w(THIS_FILE, "We are using TCP !!!");
 		}

@@ -87,15 +87,24 @@
 			android:numeric="integer"
 			android:summary="@string/network_tls_transport_port_desc"
 			android:defaultValue="5061"></EditTextPreference>
-		
-		
+			
 		<EditTextPreference android:key="network_rtp_port"
 			android:title="@string/network_rtp_port"
 			android:numeric="integer"
 			android:summary="@string/network_rtp_port_desc"
 			android:defaultValue="4000"></EditTextPreference>
-			
-			
+	
+	
+		<CheckBoxPreference android:title="@string/use_ipv6"
+			android:summary="@string/use_ipv6_desc"
+			android:key="use_ipv6" android:defaultValue="false"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/enable_dns_srv"
+			android:summary="@string/enable_dns_srv_desc"
+			android:key="enable_dns_srv" android:defaultValue="true"></CheckBoxPreference>
+		<EditTextPreference android:key="override_nameserver"
+			android:title="@string/override_nameserver"
+			android:summary="@string/override_nameserver_desc"
+			android:defaultValue=""></EditTextPreference>
 		
 	</PreferenceCategory>
 </PreferenceScreen>

@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-25 18:18+0200\n"
-"PO-Revision-Date: 2010-09-25 18:56+0000\n"
-"Last-Translator: r3gis <r3gis@r3gis.fr>\n"
+"POT-Creation-Date: 2010-09-30 13:24+0200\n"
+"PO-Revision-Date: 2010-10-06 13:32+0000\n"
+"Last-Translator: Jan Tschirschwitz <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-26 05:45+0000\n"
+"X-Launchpad-Export-Date: 2010-10-08 04:59+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: Babel 1.0dev\n"
 
@@ -84,17 +84,15 @@ msgstr "Verwendet WLAN für ausgehende Anrufe"
 
 msgctxt "use_other"
 msgid "Use other networks"
-msgstr ""
+msgstr "Verwende andere Netwerke"
 
-#, fuzzy
 msgctxt "use_other_in_desc"
 msgid "For example WiMax for incoming calls"
-msgstr "Verwendet WLAN für eingehende Anrufe"
+msgstr "z.B. WiMax für eingehende Anrufe"
 
-#, fuzzy
 msgctxt "use_other_out_desc"
 msgid "For example WiMax for outgoing calls"
-msgstr "Verwendet WLAN für ausgehende Anrufe"
+msgstr "z.B. WiMax für ausgehende Anrufe"
 
 msgctxt "use_3g"
 msgid "Use 3G"
@@ -131,12 +129,11 @@ msgstr "Aktiviert das TCP Protokoll"
 
 msgctxt "enable_tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
-#, fuzzy
 msgctxt "enable_tls_desc"
 msgid "Enable TLS transport"
-msgstr "Aktiviert das UDP Protokoll"
+msgstr "Aktiviert die TLS Verschlüsselung"
 
 msgctxt "enable_udp"
 msgid "UDP"
@@ -162,15 +159,13 @@ msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Lokale TCP Portnummer"
 
-#, fuzzy
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
-msgstr "RTP port"
+msgstr "TLS Port"
 
-#, fuzzy
 msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr "Lokale TCP Portnummer"
+msgstr "Lokale TLS Portnummer"
 
 msgctxt "network_rtp_port"
 msgid "RTP port"

@@ -17,11 +17,14 @@
  */
 package com.csipsimple.utils;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
-
-import com.csipsimple.ui.SipHome;
+import org.pjsip.pjsua.pjsua;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,6 +34,7 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 
 public class PreferencesWrapper {
@@ -38,7 +42,8 @@ public class PreferencesWrapper {
 	private static final String THIS_FILE = "PreferencesWrapper";
 	private SharedPreferences prefs;
 	private ConnectivityManager connectivityManager;
-	
+
+	public final static String HAS_ALREADY_SETUP = "has_already_setup";
 	public final static String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
 	public final static String SND_CLOCK_RATE = "snd_clock_rate";
 	public final static String ECHO_CANCELLATION = "echo_cancellation";
@@ -183,7 +188,7 @@ public class PreferencesWrapper {
 
 	public ArrayList<String> getAllIncomingNetworks(){
 		ArrayList<String> incomingNetworks = new ArrayList<String>();
-		String[] availableNetworks = {"3g", "edge", "gprs", "wifi"};
+		String[] availableNetworks = {"3g", "edge", "gprs", "wifi", "other"};
 		for(String network:availableNetworks) {
 			if(prefs.getBoolean("use_"+network+"_in", network.equals("wifi")?true:false)) {
 				incomingNetworks.add(network);
@@ -196,6 +201,119 @@ public class PreferencesWrapper {
 	public boolean getLockWifi() {
 		return prefs.getBoolean("lock_wifi", true);
 	}
+	
+
+	public pjmedia_srtp_use getUseSrtp() {
+		try {
+			int use_srtp = Integer.parseInt(prefs.getString("use_srtp", "0"));
+			pjmedia_srtp_use.swigToEnum(use_srtp);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return pjmedia_srtp_use.PJMEDIA_SRTP_DISABLED;
+	}
+	
+	
+	
+	public boolean isTCPEnabled() {
+		return prefs.getBoolean("enable_tcp", true);
+	}
+	
+	public boolean isUDPEnabled() {
+		return prefs.getBoolean("enable_udp", true);
+	}
+
+	public boolean isTLSEnabled() {
+		return prefs.getBoolean("enable_tls", false);
+	}
+	
+	public boolean useIPv6() {
+		return prefs.getBoolean("use_ipv6", false);
+	}
+	
+	
+	
+	public int getUDPTransportPort() {
+		try {
+			int port = Integer.parseInt(prefs.getString("network_udp_transport_port", "5060"));
+			if(isValidPort(port)) {
+				return port;
+			}
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 5060;
+	}
+	
+	public int getTCPTransportPort() {
+		try {
+			int port =  Integer.parseInt(prefs.getString("network_tcp_transport_port", "5060"));
+			if(isValidPort(port)) {
+				return port;
+			}
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 5060;
+	}
+	
+	public int getTLSTransportPort() {
+		try {
+			int port =  Integer.parseInt(prefs.getString("network_tls_transport_port", "5061"));
+			if(isValidPort(port)) {
+				return port;
+			}
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 5061;
+	}
+	
+	public int getRTPPort() {
+		try {
+			int port = Integer.parseInt(prefs.getString("network_rtp_port", "4000"));
+			if(isValidPort(port)) {
+				return port;
+			}
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return 4000;
+	}
+	
+
+	public boolean enableDNSSRV() {
+		return prefs.getBoolean("enable_dns_srv", true);
+	}
+	
+	public pj_str_t[] getNameservers() {
+		pj_str_t[] nameservers = null;
+		
+		if(enableDNSSRV()) {
+			String prefsDNS = prefs.getString("override_nameserver", "");
+			if(TextUtils.isEmpty(prefsDNS)) {
+				String dnsName1 = getSystemProp("net.dns1");
+				String dnsName2 = getSystemProp("net.dns2");
+				Log.d(THIS_FILE, "DNS server will be set to : "+dnsName1+ " / "+dnsName2);
+				
+				if(dnsName1 == null && dnsName2 == null) {
+					//TODO : WARNING : In this case....we have probably a problem !
+					nameservers = new pj_str_t[] {};
+				}else if(dnsName1 == null) {
+					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName2)};
+				}else if(dnsName2 == null) {
+					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName1)};
+				}else {
+					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName1), pjsua.pj_str_copy(dnsName2)};
+				}
+			}else {
+				nameservers = new pj_str_t[] {pjsua.pj_str_copy(prefsDNS)};
+			}
+		}
+		return nameservers;
+	}
+	
+	
 	
 	
 	//Media part
@@ -274,7 +392,7 @@ public class PreferencesWrapper {
 	 * @return clock rate in Hz
 	 */
 	public long getClockRate() {
-		String clockRate = prefs.getString(SND_CLOCK_RATE, "8000");
+		String clockRate = prefs.getString(SND_CLOCK_RATE, "16000");
 		try {
 			return Integer.parseInt(clockRate);
 		}catch(NumberFormatException e) {
@@ -323,83 +441,6 @@ public class PreferencesWrapper {
 	public String getTurnServer() {
 		return prefs.getString("turn_server", "");
 	}
-	
-	
-
-	public pjmedia_srtp_use getUseSrtp() {
-		try {
-			int use_srtp = Integer.parseInt(prefs.getString("use_srtp", "0"));
-			pjmedia_srtp_use.swigToEnum(use_srtp);
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return pjmedia_srtp_use.PJMEDIA_SRTP_DISABLED;
-	}
-	
-	
-	
-	public boolean isTCPEnabled() {
-		return prefs.getBoolean("enable_tcp", true);
-	}
-	
-	public boolean isUDPEnabled() {
-		return prefs.getBoolean("enable_udp", true);
-	}
-
-	public boolean isTLSEnabled() {
-		return prefs.getBoolean("enable_tls", false);
-	}
-	
-	
-	
-	public int getUDPTransportPort() {
-		try {
-			int port = Integer.parseInt(prefs.getString("network_udp_transport_port", "5060"));
-			if(isValidPort(port)) {
-				return port;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return 5060;
-	}
-	
-	public int getTCPTransportPort() {
-		try {
-			int port =  Integer.parseInt(prefs.getString("network_tcp_transport_port", "5060"));
-			if(isValidPort(port)) {
-				return port;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return 5060;
-	}
-	
-	public int getTLSTransportPort() {
-		try {
-			int port =  Integer.parseInt(prefs.getString("network_tls_transport_port", "5061"));
-			if(isValidPort(port)) {
-				return port;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return 5061;
-	}
-	
-	public int getRTPPort() {
-		try {
-			int port = Integer.parseInt(prefs.getString("network_rtp_port", "4000"));
-			if(isValidPort(port)) {
-				return port;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return 4000;
-	}
-	
 	
 	/**
 	 * Get the codec priority
@@ -506,8 +547,6 @@ public class PreferencesWrapper {
 	}
 	
 	public int getLogLevel() {
-		return 4;
-		/*
 		int defaultValue = 1;
 		int prefsValue = 1;
 		String logLevel = prefs.getString("log_level", String.valueOf(defaultValue));
@@ -520,7 +559,6 @@ public class PreferencesWrapper {
 			return prefsValue;
 		}
 		return defaultValue;
-		*/
 	}
 
 	public final static int HEADSET_ACTION_CLEAR_CALL = 0;
@@ -540,21 +578,44 @@ public class PreferencesWrapper {
 	}
 
 	
-	private static final String HAS_ALREADY_SETUP = "has_already_setup";
-
-	public void setHasAlreadySetup(boolean b) {
-		Editor edt = prefs.edit();
-		edt.putBoolean(SipHome.HAS_ALREADY_SETUP, true);
-		edt.commit();
-	}
-	
+	/**
+	 * Check wether setup has already been done
+	 * @return
+	 */
 	public boolean hasAlreadySetup() {
 		return prefs.getBoolean(HAS_ALREADY_SETUP, false);
 	}
 
-
+	//Utils
+	
+	/**
+	 * Check TCP/UDP validity of a network port
+	 */
 	private boolean isValidPort(int port) {
 		return (port>0 && port < 65535);
+	}
+
+	/**
+	 * Get a property from android property subsystem
+	 * @param prop property to get
+	 * @return the value of the property command line or null if failed
+	 */
+	private String getSystemProp(String prop) {
+		//String re1 = "^\\d+(\\.\\d+){3}$";
+		//String re2 = "^[0-9a-f]+(:[0-9a-f]*)+:[0-9a-f]+$";
+		try {
+			String line; 
+			Process p = Runtime.getRuntime().exec("getprop "+prop); 
+			InputStream in = p.getInputStream();
+			InputStreamReader isr = new InputStreamReader(in);
+			BufferedReader br = new BufferedReader(isr);
+			while ((line = br.readLine()) != null ) { 
+				return line;
+			}
+		} catch ( Exception e ) { 
+			// ignore resolutely
+		}
+		return null;
 	}
 
 

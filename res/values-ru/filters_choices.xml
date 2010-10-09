@@ -17,8 +17,8 @@
   </string-array>
   <string-array name="replace_type">
     <item>Префикс</item>
-    <item>Суффикс с</item>
-    <item>Заменить совпадение на</item>
+    <item>Суффикс</item>
+    <item>Заменить на</item>
     <item>Заменить всё на</item>
     <item>Пользовательский RegExp</item>
   </string-array>

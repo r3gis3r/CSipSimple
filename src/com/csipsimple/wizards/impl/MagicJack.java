@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 
@@ -124,7 +125,9 @@ public class MagicJack extends BasePrefsWizard {
 		ci.setData_type(8); // 8 is MJ digest auth
 
 		account.cfg.setProxy_cnt(1);
-		account.cfg.setProxy(pjsua.pj_str_copy("sip:"+accountServer.getText()+":"+port));
+		pj_str_t[] proxies = account.cfg.getProxy();
+		proxies[0] = pjsua.pj_str_copy("sip:"+accountServer.getText()+":"+port);
+		account.cfg.setProxy(proxies);
 		
 	}
 

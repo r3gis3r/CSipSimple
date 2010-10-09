@@ -104,17 +104,10 @@ public class SipHome extends TabActivity {
     				startActivity(changelogIntent);
     				finish();
     				return;
-    			}else {
-    	        	Log.d(THIS_FILE, "WE CAN NOW start SIP service");
-    		        //Start the service
-    		        startSipService();
     			}
     		} catch (NameNotFoundException e) {
     			//Should not happen....or something is wrong with android...
     		}
-        }else {
-        	Log.d(THIS_FILE, "WE CAN NOW start SIP service");
-	        startSipService();
         }
         
         setContentView(R.layout.home);
@@ -173,6 +166,10 @@ public class SipHome extends TabActivity {
     protected void onResume() {
     	Log.d(THIS_FILE, "On Resume SIPHOME");
     	super.onResume();
+    	
+
+    	Log.d(THIS_FILE, "WE CAN NOW start SIP service");
+    	startSipService();
     	
     	//If we have never set fast settings
     	if(!prefWrapper.hasAlreadySetup()) {

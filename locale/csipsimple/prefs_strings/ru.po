@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-25 18:18+0200\n"
-"PO-Revision-Date: 2010-10-01 12:09+0000\n"
+"POT-Creation-Date: 2010-09-30 13:24+0200\n"
+"PO-Revision-Date: 2010-10-05 18:28+0000\n"
 "Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-02 05:24+0000\n"
+"X-Launchpad-Export-Date: 2010-10-08 04:59+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 msgctxt "prefs"
@@ -83,17 +83,15 @@ msgstr "Использовать WiFi для исходящих вызовов"
 
 msgctxt "use_other"
 msgid "Use other networks"
-msgstr ""
+msgstr "Использовать другие сети"
 
-#, fuzzy
 msgctxt "use_other_in_desc"
 msgid "For example WiMax for incoming calls"
-msgstr "Использовать WiFi для входящих вызовов"
+msgstr "Например WiMax для входящих вызовов"
 
-#, fuzzy
 msgctxt "use_other_out_desc"
 msgid "For example WiMax for outgoing calls"
-msgstr "Использовать WiFi для исходящих вызовов"
+msgstr "Например WiMax для исходящих вызовов"
 
 msgctxt "use_3g"
 msgid "Use 3G"
@@ -129,12 +127,11 @@ msgstr "Поддерживать TCP протокол"
 
 msgctxt "enable_tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
-#, fuzzy
 msgctxt "enable_tls_desc"
 msgid "Enable TLS transport"
-msgstr "Поддерживать UDP протокол"
+msgstr "Включить TLS"
 
 msgctxt "enable_udp"
 msgid "UDP"
@@ -160,12 +157,10 @@ msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Номер порта для локальной привязки"
 
-#, fuzzy
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
-msgstr "RTP порт"
+msgstr "Порт TLS"
 
-#, fuzzy
 msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Номер порта для локальной привязки"
@@ -184,7 +179,7 @@ msgstr "Качество аудио"
 
 msgctxt "codecs"
 msgid "Codecs"
-msgstr "Кодеки"
+msgstr "Аудиокодеки"
 
 msgctxt "ice_turn"
 msgid "ICE/TURN/STUN"
@@ -200,12 +195,12 @@ msgstr "Активировать подавление эха"
 
 msgctxt "enable_vad"
 msgid "Voice audio detection"
-msgstr "Активировать систему VAD"
+msgstr "Активировать VAD"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
 msgstr ""
-"Обнаружение голосовой активности в микрофоне для отделения от фонового шума"
+"Определять голосовую активность в микрофоне для отделения от фонового шума"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
@@ -274,7 +269,7 @@ msgstr "Длина шлейфа подавления эха"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
-msgstr "Включить ICE"
+msgstr "ICE"
 
 msgctxt "enable_ice_desc"
 msgid "Turn on ICE feature"
@@ -282,11 +277,11 @@ msgstr "Поддерживать возможности ICE"
 
 msgctxt "enable_turn"
 msgid "Enable TURN"
-msgstr "Включить TURN"
+msgstr "TURN"
 
 msgctxt "enable_turn_desc"
 msgid "Turn on TURN feature"
-msgstr "Поддерживать возможности TURN"
+msgstr "Настроить TURN-сервер"
 
 msgctxt "turn_server"
 msgid "Turn server"
@@ -298,7 +293,7 @@ msgstr "TURN сервер (HOST:PORT)"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
-msgstr "Использовать STUN"
+msgstr "STUN"
 
 msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
@@ -336,9 +331,7 @@ msgctxt "integrate_with_native_dialer_desc"
 msgid ""
 "When dialing with native dialer you'll be asked if you want to use SIP or "
 "mobile"
-msgstr ""
-"При наборе номера в телефоне будет предложено использовать SIP или мобильную "
-"связь"
+msgstr "Предлагать использовать SIP или мобильную связь при вызовах"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -346,11 +339,11 @@ msgstr "Список вызовов"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
-msgstr "SIP вызовы будут отражены в общем списке вызовов (если возможно)"
+msgstr "Показывать SIP вызовы в общем списке вызовов (если возможно)"
 
 msgctxt "exclude_for_outgoing_call"
 msgid "Exclude patterns"
-msgstr "Исключения набора номера"
+msgstr "Исключения"
 
 msgctxt "exclude_for_outgoing_call_desc"
 msgid "Exclude patterns for outgoing calls"
@@ -386,9 +379,7 @@ msgstr "Не использовать слайдер"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr ""
-"Использовать клавиши вместо слайдера для разблокировки экрана при ответе на "
-"вызов"
+msgstr "Использовать клавиши вместо слайдера при ответе на вызов"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
@@ -405,7 +396,7 @@ msgstr "Частичная блокировка"
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for CSipSimple (drain battery)"
 msgstr ""
-"Процессор не будет отключаться при CSipSimple (быстрее разряжается батарея)"
+"Не отключать процессор при работе CSipSimple (быстрее разряжается батарея)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -418,11 +409,13 @@ msgstr ""
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
-msgstr "Интеграция с музыкальными приложениями"
+msgstr "Интеграция с плеером"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
-msgstr "Отмените интеграцию, если используется нестандартное приложение"
+msgstr ""
+"Не используйте интеграцию с музыкальным плеером, если используется "
+"нестандартное приложение"
 
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -466,7 +459,7 @@ msgstr "Передача через сотовую связь"
 
 msgctxt "tg_allowed"
 msgid "I'm allowed to use mobile"
-msgstr "Я могу использовать сотовую связь"
+msgstr "Я могу использовать сотовую связь для SIP"
 
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
@@ -474,4 +467,5 @@ msgstr "Передача VoIP пакетов должна быть разреш�
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
-msgstr "Доступно только, если SIP зарегистрирован в сети"
+msgstr ""
+"Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети"

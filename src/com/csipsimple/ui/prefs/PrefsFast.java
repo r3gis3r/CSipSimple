@@ -146,7 +146,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 			globGsm.toggle();
 		}else if (id == R.id.save_bt) {
 			if(!prefsWrapper.hasAlreadySetup()) {
-				prefsWrapper.setHasAlreadySetup(true);
+				prefsWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, true);
 				Compatibility.setFirstRunParameters(prefsWrapper);
 			}
 			finish();

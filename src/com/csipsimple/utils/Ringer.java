@@ -108,6 +108,7 @@ public class Ringer {
             if (ringerThread == null) {
             	ringerThread = new RingerThread();
             	Log.d(THIS_FILE, "Starting ringer...");
+            	audioManager.setMode(AudioManager.MODE_RINGTONE);
             	ringerThread.start();
             }
         }
@@ -176,8 +177,9 @@ public class Ringer {
             try {
 	    		while (true) {
 	    			ringtone.play();
-	    			while (ringtone.isPlaying())
+	    			while (ringtone.isPlaying()) {
 	    				Thread.sleep(100);
+	    			}
 	    		}
             } catch (InterruptedException ex) {
         		Log.d(THIS_FILE, "Ringer thread interrupt");

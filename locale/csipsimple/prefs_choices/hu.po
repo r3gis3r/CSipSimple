@@ -1,63 +1,62 @@
-# Translations template for PROJECT.
-# Copyright (C) 2010 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
+# Hungarian translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-02 20:40+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-09-30 13:24+0200\n"
+"PO-Revision-Date: 2010-10-02 23:06+0000\n"
+"Last-Translator: B. Zoli <tec@webpress.hu>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.0dev\n"
+"X-Launchpad-Export-Date: 2010-10-03 05:13+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 msgctxt "scheme_choices:0"
 msgid "Digest"
-msgstr ""
+msgstr "Digest"
 
 msgctxt "scheme_choices:1"
 msgid "PGP"
-msgstr ""
+msgstr "PGP"
 
 msgctxt "data_type_choices:0"
 msgid "Plain password"
-msgstr ""
+msgstr "Kódolatlan jelszó"
 
 msgctxt "data_type_choices:1"
 msgid "Data digest"
-msgstr ""
+msgstr "Digest adat"
 
 msgctxt "clock_rate_choices:0"
 msgid "8KHz"
-msgstr ""
+msgstr "8KHz"
 
 msgctxt "clock_rate_choices:1"
 msgid "16KHz"
-msgstr ""
+msgstr "16KHz"
 
 msgctxt "clock_rate_choices:2"
 msgid "32KHz"
-msgstr ""
+msgstr "32KHz"
 
 msgctxt "clock_rate_choices:3"
 msgid "44.1KHz"
-msgstr ""
+msgstr "44.1KHz"
 
 msgctxt "use_srtp_choices:0"
 msgid "Disabled"
-msgstr ""
+msgstr "Letiltva"
 
 msgctxt "use_srtp_choices:1"
 msgid "Optional"
-msgstr ""
+msgstr "Ha szükséges"
 
 msgctxt "use_srtp_choices:2"
 msgid "Mandatory"
-msgstr ""
-
+msgstr "Mindenképpen"

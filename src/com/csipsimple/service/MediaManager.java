@@ -288,6 +288,8 @@ public class MediaManager {
 		
 		if(!ringer.isRinging()) {
 			ringer.ring(remoteContact, service.getPrefs().getRingtone());
+		}else {
+			Log.d(THIS_FILE, "Already ringing ....");
 		}
 		
 	}

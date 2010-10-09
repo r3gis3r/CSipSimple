@@ -89,7 +89,9 @@ public abstract class SimplePrefsWizard extends BasePrefsWizard {
 		pj_str_t regUri = pjsua.pj_str_copy("sip:"+getDomain());
 		account.cfg.setReg_uri(regUri);
 		account.cfg.setProxy_cnt(1);
-		account.cfg.setProxy(regUri);
+		pj_str_t[] proxies = account.cfg.getProxy();
+		proxies[0] = regUri;
+		account.cfg.setProxy(proxies);
 
 		pjsip_cred_info credentials = account.cfg.getCred_info();
 

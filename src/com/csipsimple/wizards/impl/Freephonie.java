@@ -19,7 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import java.util.Locale;
 
-import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pj_str_t;
 
 import android.preference.EditTextPreference;
 import android.text.InputType;
@@ -69,7 +69,8 @@ public class Freephonie extends SimplePrefsWizard {
 		//Ensure registration timeout value
 		account.cfg.setReg_timeout(1800);
 		account.cfg.setProxy_cnt(0);
-		account.cfg.setProxy(pjsua.pj_str_copy(""));
+		pj_str_t[] proxies = account.cfg.getProxy();
+		account.cfg.setProxy(proxies);
 		account.prevent_tcp = true;
 	}
 }
