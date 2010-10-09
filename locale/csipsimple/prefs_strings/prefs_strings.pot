@@ -1,14 +1,13 @@
-# Translation for csipsimple
-# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
-# This file is distributed under the same license as the csipsimple package.
-# Regis Montoya <http://www.r3gis.fr>, 2010.
-#
+# Translations template for CSipSimple.
+# Copyright (C) 2010 CSipSimple translation team
+# This file is distributed under the same license as the project CSipSimple.
+# Regis Montoya (www.r3gis.fr), 2010.
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-09-30 13:24+0200\n"
+"Project-Id-Version: CSipSimple 0.01\n"
+"Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
+"POT-Creation-Date: 2010-10-09 23:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,6 +172,30 @@ msgctxt "network_rtp_port_desc"
 msgid "Port for RTP ports range start"
 msgstr ""
 
+msgctxt "use_ipv6"
+msgid "Use IPv6"
+msgstr ""
+
+msgctxt "use_ipv6_desc"
+msgid "Switch to IPv6 mode (your network and phone must support it)"
+msgstr ""
+
+msgctxt "enable_dns_srv"
+msgid "Resolve DNS SRV"
+msgstr ""
+
+msgctxt "enable_dns_srv_desc"
+msgid "Use CSipSimple nameserver resolver resolve names"
+msgstr ""
+
+msgctxt "override_nameserver"
+msgid "Use a custom DNS"
+msgstr ""
+
+msgctxt "override_nameserver_desc"
+msgid "Left blank to retrieve DNS from Android"
+msgstr ""
+
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr ""
@@ -307,6 +330,14 @@ msgstr ""
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
+msgstr ""
+
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr ""
+
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
 msgstr ""
 
 msgctxt "general_ui"
