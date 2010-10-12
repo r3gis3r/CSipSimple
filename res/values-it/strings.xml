@@ -23,7 +23,7 @@
   <string name="callLog_delete_entry">Elimina questa chiamata</string>
   <string name="callLog_delete_all">Elimina tutte le chiamate</string>
   <string name="callLog_delDialog_title">Elimina il log delle chiamate</string>
-  <string name="callLog_delDialog_message">Se sicuro di voler eliminare tutte le chiamate dal lo?</string>
+  <string name="callLog_delDialog_message">Se sicuro di voler eliminare tutte le chiamate dal log?</string>
   <string name="callLog_delDialog_yes">Si</string>
   <string name="callLog_delDialog_no">No</string>
   <string name="gsm">Mobile</string>

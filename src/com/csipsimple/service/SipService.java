@@ -749,7 +749,7 @@ public class SipService extends Service {
 						
 					}
 					//TCP
-					if(prefsWrapper.isTCPEnabled()) {
+					if(prefsWrapper.isTCPEnabled() && !prefsWrapper.useIPv6()) {
 						pjsip_transport_type_e t = pjsip_transport_type_e.PJSIP_TRANSPORT_TCP;
 						if(prefsWrapper.useIPv6()) {
 							t = pjsip_transport_type_e.PJSIP_TRANSPORT_TCP6;
@@ -767,7 +767,7 @@ public class SipService extends Service {
 					}
 					
 					//TLS
-					if(prefsWrapper.isTLSEnabled() && (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE ) ){
+					if(prefsWrapper.isTLSEnabled() && !prefsWrapper.useIPv6() && (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE ) ){
 						tlsTransportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, prefsWrapper.getTLSTransportPort() );
 						
 						if (tlsTransportId == null) {
@@ -1337,9 +1337,17 @@ public class SipService extends Service {
 		KeyCharacterMap km = KeyCharacterMap.load(KeyCharacterMap.NUMERIC);
 		
 		String keyPressed = String.valueOf(km.getNumber(keyCode));
-		int res = pjsua.call_dial_dtmf(callId, pjsua.pj_str_copy(keyPressed));
-		if(res != pjsua.PJ_SUCCESS) {
-			res = sendPjMediaDialTone(callId, keyPressed);
+		pj_str_t pjKeyPressed = pjsua.pj_str_copy(keyPressed);
+		
+		int res = -1;
+		if(prefsWrapper.useSipInfoDtmf()) {
+			res = pjsua.send_dtmf_info(callId, pjKeyPressed);
+			Log.d(THIS_FILE, "Has been sent DTMF : "+res);
+		}else {
+			res = pjsua.call_dial_dtmf(callId, pjKeyPressed);
+			if(res != pjsua.PJ_SUCCESS) {
+				res = sendPjMediaDialTone(callId, keyPressed);
+			}
 		}
 		return res;
 	}

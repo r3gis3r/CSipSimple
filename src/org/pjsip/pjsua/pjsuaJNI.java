@@ -882,6 +882,7 @@ public class pjsuaJNI {
   public final static native int codecs_get_nbr();
   public final static native long codecs_get_id(int jarg1);
   public final static native int test_audio_dev(long jarg1, long jarg2);
+  public final static native int send_dtmf_info(int jarg1, long jarg2, pj_str_t jarg2_);
   public final static native long call_dump__SWIG_1(int jarg1, int jarg2, String jarg3);
   public final static native int can_use_tls();
   public final static native int can_use_srtp();

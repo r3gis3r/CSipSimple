@@ -85,7 +85,7 @@
 			android:key="use_ipv6" android:defaultValue="false"></CheckBoxPreference>
 		<CheckBoxPreference android:title="@string/enable_dns_srv"
 			android:summary="@string/enable_dns_srv_desc"
-			android:key="enable_dns_srv" android:defaultValue="true"></CheckBoxPreference>
+			android:key="enable_dns_srv" android:defaultValue="false"></CheckBoxPreference>
 		<EditTextPreference android:key="override_nameserver"
 			android:title="@string/override_nameserver"
 			android:summary="@string/override_nameserver_desc"

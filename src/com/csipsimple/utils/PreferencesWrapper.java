@@ -53,6 +53,9 @@ public class PreferencesWrapper {
 	public final static String SND_MIC_LEVEL = "snd_mic_level";
 	public final static String SND_SPEAKER_LEVEL = "snd_speaker_level";
 	
+	public final static String ENABLE_STUN = "enable_stun";
+	public final static String STUN_SERVER = "stun_server";
+	
 	public PreferencesWrapper(Context aContext) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
 		connectivityManager = (ConnectivityManager) aContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -283,7 +286,7 @@ public class PreferencesWrapper {
 	
 
 	public boolean enableDNSSRV() {
-		return prefs.getBoolean("enable_dns_srv", true);
+		return prefs.getBoolean("enable_dns_srv", false);
 	}
 	
 	public pj_str_t[] getNameservers() {
@@ -422,7 +425,7 @@ public class PreferencesWrapper {
 	 * @return host:port or blank if not set
 	 */
 	public String getStunServer() {
-		return prefs.getString("stun_server", "");
+		return prefs.getString(STUN_SERVER, "");
 	}
 	
 	
@@ -431,7 +434,7 @@ public class PreferencesWrapper {
 	 * @return 1 if enabled (pjstyle)
 	 */ 
 	public int getStunEnabled() {
-		return prefs.getBoolean("enable_stun", false)?1:0;
+		return prefs.getBoolean(ENABLE_STUN, false)?1:0;
 	}
 	
 	/**
@@ -501,6 +504,10 @@ public class PreferencesWrapper {
 		return 30;
 	}
 
+
+	public boolean useSipInfoDtmf() {
+		return prefs.getBoolean("sip_info_dtmf", false);
+	}
 
 	// ---- 
 	// UI related
@@ -617,6 +624,8 @@ public class PreferencesWrapper {
 		}
 		return null;
 	}
+
+
 
 
 

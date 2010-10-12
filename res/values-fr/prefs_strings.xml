@@ -39,6 +39,12 @@
   <string name="network_tls_transport_port_desc">Numéro du port sur lequel écouter localement</string>
   <string name="network_rtp_port">Port RTP</string>
   <string name="network_rtp_port_desc">Port pour le début de la fourchette de port RTP</string>
+  <string name="use_ipv6">Utiliser l\'IPv6</string>
+  <string name="use_ipv6_desc">Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)</string>
+  <string name="enable_dns_srv">Résoudre les DNS SRV</string>
+  <string name="enable_dns_srv_desc">Utiliser les DNS dans CSipSimple pour résoudre les noms de domaine</string>
+  <string name="override_nameserver">DNS personnalisé</string>
+  <string name="override_nameserver_desc">Laisser vide pour récupérer les DNS d\'Android</string>
   <string name="audio_quality">Qualité audio</string>
   <string name="codecs">Codecs</string>
   <string name="ice_turn">ICE/TURN</string>
@@ -73,10 +79,12 @@
   <string name="stun_server">Serveur STUN</string>
   <string name="stun_server_desc">Server STUN (hôte:port)</string>
   <string name="codecs_desc">Priorité (0 = désactivé)</string>
+  <string name="use_srtp">Mode SRTP</string>
+  <string name="use_srtp_desc">Mode pour le RTP sécurisé</string>
   <string name="general_ui">Interface utilisateur générale</string>
   <string name="native_dialer_integration">Intégration au numéroteur Android</string>
   <string name="advanced_ui">Modifications avancées</string>
-  <string name="integrate_with_native_dialer">Activer lintégration</string>
+  <string name="integrate_with_native_dialer">Activer l\'intégration</string>
   <string name="integrate_with_native_dialer_desc">Quand un appel est initié partout dans Android il vous sera demandé si vous voulez utiliser le GSM ou le SIP</string>
   <string name="integrate_with_native_calllogs">Intégrations au journal d\'appel</string>
   <string name="integrate_with_native_calllogs_desc">Les appels SIP seront rajoutés (si possible) aux journaux d\'appels d\'Android</string>

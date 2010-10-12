@@ -1,6 +1,6 @@
-# Translation for CSipSimple
+# Translation for csipsimple
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
-# This file is distributed under the same license as the CSipSimple package.
+# This file is distributed under the same license as the csipsimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
 #, fuzzy

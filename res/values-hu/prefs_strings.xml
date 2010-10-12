@@ -39,6 +39,12 @@
   <string name="network_tls_transport_port_desc">Helyi port</string>
   <string name="network_rtp_port">RTP port</string>
   <string name="network_rtp_port_desc">Alsó RTP port</string>
+  <string name="use_ipv6">Használjon IPv6-ot</string>
+  <string name="use_ipv6_desc">Átáll IPv6 módba (a telefonnak és a szolgáltatónak támogatnia kell)</string>
+  <string name="enable_dns_srv">DNS feloldó</string>
+  <string name="enable_dns_srv_desc">A CSipSimple névfeloldóját használja</string>
+  <string name="override_nameserver">Használjon egyéni DNS-t</string>
+  <string name="override_nameserver_desc">Szabadon hagyva az alap Android DNS-t használja</string>
   <string name="audio_quality">Hangminőség</string>
   <string name="codecs">Kodekek</string>
   <string name="ice_turn">ICE/TURN/STUN</string>
@@ -73,6 +79,8 @@
   <string name="stun_server">STUN szerver</string>
   <string name="stun_server_desc">STUN szerver megadása (HOST:PORT)</string>
   <string name="codecs_desc">Elsőbbség (kikapcsolva: 0)</string>
+  <string name="use_srtp">SRTP mód</string>
+  <string name="use_srtp_desc">Biztonságos RTP mód</string>
   <string name="general_ui">Általános felhasználói felület</string>
   <string name="native_dialer_integration">Bépülés az alap tárcsázóba</string>
   <string name="advanced_ui">Finomhangolás</string>

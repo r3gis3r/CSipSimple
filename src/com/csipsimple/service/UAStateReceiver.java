@@ -43,6 +43,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -91,6 +93,9 @@ public class UAStateReceiver extends Callback {
 				SipService.mediaManager.stopAnnoucing();
 				SipService.mediaManager.resetSettings();
 			}
+			if(incomingCallLock != null && incomingCallLock.isHeld()) {
+				incomingCallLock.release();
+			}
 			// Call is now ended
 			service.stopDialtoneGenerator();
 		}
@@ -118,6 +123,9 @@ public class UAStateReceiver extends Callback {
 	public void on_call_media_state(int callId) {
 		if(SipService.mediaManager != null) {
 			SipService.mediaManager.stopRing();
+		}
+		if(incomingCallLock != null && incomingCallLock.isHeld()) {
+			incomingCallLock.release();
 		}
 		
 		pjsua_call_info info = new pjsua_call_info();
@@ -167,8 +175,8 @@ public class UAStateReceiver extends Callback {
 
 	private WorkerHandler msgHandler;
 	private HandlerThread handlerThread;
-
 	private Notification inCallNotification;
+	private WakeLock incomingCallLock;
 
 	private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
@@ -267,6 +275,18 @@ public class UAStateReceiver extends Callback {
 	
 	private void treatIncomingCall(int accountId, CallInfo callInfo) {
 		int callId = callInfo.getCallId();
+		
+		//Get lock while ringing to be sure notification is well done !
+		PowerManager pman = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
+		if (incomingCallLock == null) {
+			incomingCallLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.incomingCallLock");
+			incomingCallLock.setReferenceCounted(false);
+		}
+		//Extra check if set reference counted is false ???
+		if(!incomingCallLock.isHeld()) {
+			incomingCallLock.acquire();
+		}
+		service.getSystemService(Context.POWER_SERVICE);
 		
 		String remContact = callInfo.getRemoteContact();
 		callInfo.setIncoming(true);

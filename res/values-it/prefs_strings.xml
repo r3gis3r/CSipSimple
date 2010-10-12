@@ -39,6 +39,12 @@
   <string name="network_tls_transport_port_desc">Numero di porta da impegnare in locale</string>
   <string name="network_rtp_port">Porta RTP</string>
   <string name="network_rtp_port_desc">Porta RTP di partenza per l\'intervallo</string>
+  <string name="use_ipv6">Usa IPv6</string>
+  <string name="use_ipv6_desc">Passa alla modalità IPv6 (la rete e il telefono devono supportarlo)</string>
+  <string name="enable_dns_srv">Risolvi DNS SRV</string>
+  <string name="enable_dns_srv_desc">Usa CSipSimple per risolvere i nomi</string>
+  <string name="override_nameserver">Usa un DNS personalizzato</string>
+  <string name="override_nameserver_desc">Lasciare in bianco per recuperare DNS da Android</string>
   <string name="audio_quality">Qualità audio</string>
   <string name="codecs">Codec</string>
   <string name="ice_turn">ICE/TURN/STUN</string>
@@ -73,6 +79,8 @@
   <string name="stun_server">STUN server</string>
   <string name="stun_server_desc">STUN server (HOST:PORT)</string>
   <string name="codecs_desc">Priorità (0 disabilita)</string>
+  <string name="use_srtp">Modalità SRTP</string>
+  <string name="use_srtp_desc">Modalità per RTP Sicuro</string>
   <string name="general_ui">Interfaccia utente generale</string>
   <string name="native_dialer_integration">Integrazione con il dialer nativo</string>
   <string name="advanced_ui">Tweaks avanzati</string>

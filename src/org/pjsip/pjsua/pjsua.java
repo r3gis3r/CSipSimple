@@ -609,6 +609,10 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.test_audio_dev(clock_rate, ptime);
   }
 
+  public static int send_dtmf_info(int current_call, pj_str_t digits) {
+    return pjsuaJNI.send_dtmf_info(current_call, pj_str_t.getCPtr(digits), digits);
+  }
+
   public static pj_str_t call_dump(int call_id, int with_media, String indent) {
     return new pj_str_t(pjsuaJNI.call_dump__SWIG_1(call_id, with_media, indent), true);
   }

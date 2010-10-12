@@ -19,10 +19,13 @@ package com.csipsimple.wizards.impl;
 
 import java.util.Locale;
 
+import android.content.Context;
 import android.preference.EditTextPreference;
 import android.text.InputType;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.SimplePrefsWizard;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
@@ -76,5 +79,12 @@ public class Ippi extends SimplePrefsWizard {
 	
 	protected void buildAccount() {
 		super.buildAccount();
+		// Add stun server
+		PreferencesWrapper prefs = new PreferencesWrapper((Context) this);
+		if( ! (prefs.getStunEnabled()==1) || TextUtils.isEmpty(prefs.getStunServer())) {
+			prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
+			prefs.setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, "stun.ippi.fr");
+		}
+		
 	}
 }

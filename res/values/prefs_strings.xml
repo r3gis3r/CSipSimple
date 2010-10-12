@@ -90,6 +90,8 @@
 <string name="codecs_desc">Priority (0 is disabled)</string>
 <string name="use_srtp">SRTP mode</string>
 <string name="use_srtp_desc">Mode for Secure RTP</string>
+<string name="sip_info_dtmf">DTMF SIP INFO</string>
+<string name="sip_info_dtmf_desc">Use SIP INFO to send DTMF</string>
 
 
 <!-- UI -->
