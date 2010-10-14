@@ -83,6 +83,7 @@
 		<activity android:name=".wizards.impl.Pbxes" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.MagicJack" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.PlanetPhone" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name=".wizards.impl.Sipgate" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 
 		<!-- Call management -->
 		<receiver android:name=".service.OutgoingCall">

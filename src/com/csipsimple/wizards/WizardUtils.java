@@ -59,7 +59,8 @@ public class WizardUtils {
 		"Ippi",
 		"Pbxes",
 		"MagicJack",
-		"PlanetPhone"
+		"PlanetPhone",
+		"Sipgate"
 	};
 	
 	private static boolean init_done = false;

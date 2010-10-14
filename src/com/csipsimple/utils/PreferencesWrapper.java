@@ -425,7 +425,7 @@ public class PreferencesWrapper {
 	 * @return host:port or blank if not set
 	 */
 	public String getStunServer() {
-		return prefs.getString(STUN_SERVER, "");
+		return prefs.getString(STUN_SERVER, "stun.counterpath.com");
 	}
 	
 	
@@ -434,7 +434,7 @@ public class PreferencesWrapper {
 	 * @return 1 if enabled (pjstyle)
 	 */ 
 	public int getStunEnabled() {
-		return prefs.getBoolean(ENABLE_STUN, false)?1:0;
+		return prefs.getBoolean(ENABLE_STUN, true)?1:0;
 	}
 	
 	/**

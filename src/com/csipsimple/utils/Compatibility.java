@@ -138,7 +138,8 @@ public class Compatibility {
 		//N1 PSP mode hack
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, 
 				( android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/ || 
-				   android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/ )?true:false);
+				   android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/ ||
+				   android.os.Build.DEVICE.equalsIgnoreCase("supersonic") /*HTC EVO*/)?true:false);
 		
 		//Galaxy S default settings
 		if( android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000") ) {

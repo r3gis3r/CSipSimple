@@ -74,12 +74,12 @@
 			
 			<CheckBoxPreference android:summary="@string/enable_stun_desc"
 				android:title="@string/enable_stun" android:key="enable_stun"
-				android:defaultValue="false"></CheckBoxPreference>
+				android:defaultValue="true"></CheckBoxPreference>
 			<EditTextPreference android:key="stun_server"
 				android:title="@string/stun_server"
 				android:summary="@string/stun_server_desc"
 				android:dependency="enable_stun"
-				android:defaultValue=""></EditTextPreference>	
+				android:defaultValue="stun.counterpath.com"></EditTextPreference>	
 				
 			
 			<CheckBoxPreference android:summary="@string/enable_turn_desc"

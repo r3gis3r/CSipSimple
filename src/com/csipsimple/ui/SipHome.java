@@ -132,7 +132,7 @@ public class SipHome extends TabActivity {
     
     private void addTab(String tag, String label, int icon, int ficon, Intent content) {
     	TabHost tabHost = getTabHost();
-    	
+    	Log.d(THIS_FILE, "Add tab !");
 		TabSpec tabspecDialer = tabHost.newTabSpec(tag).setContent(content);
 		
 		boolean fails = true;
@@ -149,8 +149,18 @@ public class SipHome extends TabActivity {
 		 	
 		}
 		if(fails){
+			/*
 			// Fallback to old style icons
-		    tabspecDialer.setIndicator(label, getResources().getDrawable(icon));
+			DisplayMetrics metrics = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			Log.d(THIS_FILE, "Density is "+metrics.density);
+			if(metrics.heightPixels >= 480) {
+			*/
+				tabspecDialer.setIndicator(label, getResources().getDrawable(icon));
+				/*
+			}else {
+				tabspecDialer.setIndicator(label);
+			}*/
 		}
 		
 		tabHost.addTab(tabspecDialer);
