@@ -179,6 +179,15 @@ public class pjsua_callback {
     return (cPtr == 0) ? null : new SWIGTYPE_p_f_int__void(cPtr, false);
   }
 
+  public void setOn_buddy_evsub_state(SWIGTYPE_p_f_int_p_pjsip_evsub_p_pjsip_event__void value) {
+    pjsuaJNI.pjsua_callback_on_buddy_evsub_state_set(swigCPtr, this, SWIGTYPE_p_f_int_p_pjsip_evsub_p_pjsip_event__void.getCPtr(value));
+  }
+
+  public SWIGTYPE_p_f_int_p_pjsip_evsub_p_pjsip_event__void getOn_buddy_evsub_state() {
+    long cPtr = pjsuaJNI.pjsua_callback_on_buddy_evsub_state_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_p_pjsip_evsub_p_pjsip_event__void(cPtr, false);
+  }
+
   public void setOn_pager(SWIGTYPE_p_f_int_p_q_const__pj_str_t_p_q_const__pj_str_t_p_q_const__pj_str_t_p_q_const__pj_str_t_p_q_const__pj_str_t__void value) {
     pjsuaJNI.pjsua_callback_on_pager_set(swigCPtr, this, SWIGTYPE_p_f_int_p_q_const__pj_str_t_p_q_const__pj_str_t_p_q_const__pj_str_t_p_q_const__pj_str_t_p_q_const__pj_str_t__void.getCPtr(value));
   }

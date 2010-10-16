@@ -325,6 +325,8 @@ public class pjsuaJNI {
   public final static native long pjsua_callback_on_srv_subscribe_state_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_buddy_state_set(long jarg1, pjsua_callback jarg1_, long jarg2);
   public final static native long pjsua_callback_on_buddy_state_get(long jarg1, pjsua_callback jarg1_);
+  public final static native void pjsua_callback_on_buddy_evsub_state_set(long jarg1, pjsua_callback jarg1_, long jarg2);
+  public final static native long pjsua_callback_on_buddy_evsub_state_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_pager_set(long jarg1, pjsua_callback jarg1_, long jarg2);
   public final static native long pjsua_callback_on_pager_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_pager2_set(long jarg1, pjsua_callback jarg1_, long jarg2);

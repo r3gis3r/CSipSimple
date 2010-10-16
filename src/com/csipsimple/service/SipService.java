@@ -321,17 +321,24 @@ public class SipService extends Service {
 		@Override
 		public long addOrUpdateAccount(IAccount acc) throws RemoteException {
 			Log.d(THIS_FILE, ">>> addOrUpdateAccount from service");
-			Account account = new Account(acc);
 			long final_id = -1;
-			synchronized(db){
-				db.open();
-				if(account.id == null) {
-					final_id = db.insertAccount(account);
-				}else {
-					db.updateAccount(account);
-					final_id = account.id;
+			if(!hasSipStack) {
+				Log.d(THIS_FILE, "TRY TO LOAD SIP STACK");
+				tryToLoadStack();
+			}
+			
+			if(hasSipStack) {
+				Account account = new Account(acc);
+				synchronized(db){
+					db.open();
+					if(account.id == null) {
+						final_id = db.insertAccount(account);
+					}else {
+						db.updateAccount(account);
+						final_id = account.id;
+					}
+					db.close();
 				}
-				db.close();
 			}
 			return final_id;
 		}
@@ -339,14 +346,22 @@ public class SipService extends Service {
 		@Override
 		public IAccount getAccount(long accId) throws RemoteException {
 			IAccount result = null;
-			Account account;
-			synchronized(db){
-				db.open();
-				account = db.getAccount(accId);
-				db.close();
+			
+			if(!hasSipStack) {
+				Log.d(THIS_FILE, "TRY TO LOAD SIP STACK");
+				tryToLoadStack();
 			}
-			if(account !=null) {
-				result = account.getIAccount();
+			
+			if(hasSipStack) {
+				Account account;
+				synchronized(db){
+					db.open();
+					account = db.getAccount(accId);
+					db.close();
+				}
+				if(account !=null) {
+					result = account.getIAccount();
+				}
 			}
 			return result;
 		}
