@@ -43,18 +43,18 @@ public class PreferencesWrapper {
 	private SharedPreferences prefs;
 	private ConnectivityManager connectivityManager;
 
-	public final static String HAS_ALREADY_SETUP = "has_already_setup";
-	public final static String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
-	public final static String SND_CLOCK_RATE = "snd_clock_rate";
-	public final static String ECHO_CANCELLATION = "echo_cancellation";
-	public final static String ENABLE_VAD = "enable_vad";
-	public final static String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
-	
-	public final static String SND_MIC_LEVEL = "snd_mic_level";
-	public final static String SND_SPEAKER_LEVEL = "snd_speaker_level";
-	
-	public final static String ENABLE_STUN = "enable_stun";
-	public final static String STUN_SERVER = "stun_server";
+	public static final String HAS_ALREADY_SETUP = "has_already_setup";
+	public static final String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
+	public static final String SND_CLOCK_RATE = "snd_clock_rate";
+	public static final String ECHO_CANCELLATION = "echo_cancellation";
+	public static final String ENABLE_VAD = "enable_vad";
+	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
+	public static final String SND_MIC_LEVEL = "snd_mic_level";
+	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
+	public static final String ENABLE_STUN = "enable_stun";
+	public static final String STUN_SERVER = "stun_server";
+
+	public static final String DEFAULT_STUN_SERVER = "stun.counterpath.com";
 	
 	public PreferencesWrapper(Context aContext) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
@@ -425,7 +425,7 @@ public class PreferencesWrapper {
 	 * @return host:port or blank if not set
 	 */
 	public String getStunServer() {
-		return prefs.getString(STUN_SERVER, "stun.counterpath.com");
+		return prefs.getString(STUN_SERVER, DEFAULT_STUN_SERVER);
 	}
 	
 	

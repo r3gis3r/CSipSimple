@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.text.TextUtils;
 
 public class Compatibility {
 	
@@ -33,22 +34,22 @@ public class Compatibility {
 	private static int currentApi = 0;
 
 	public static int getApiLevel() {
-		
-		if(currentApi>0) {
+
+		if (currentApi > 0) {
 			return currentApi;
 		}
-		
-		if(android.os.Build.VERSION.SDK.equalsIgnoreCase("3")) {
+
+		if (android.os.Build.VERSION.SDK.equalsIgnoreCase("3")) {
 			currentApi = 3;
-		}else {
+		} else {
 			try {
 				Field f = android.os.Build.VERSION.class.getDeclaredField("SDK_INT");
 				currentApi = (Integer) f.get(null);
 			} catch (Exception e) {
 				return 0;
-			} 
+			}
 		}
-		
+
 		return currentApi;
 	}
 	
@@ -65,7 +66,7 @@ public class Compatibility {
 	 * @return
 	 */
 	public static int getInCallStream() {
-		if(android.os.Build.BRAND.equalsIgnoreCase("archos")) {
+		if (android.os.Build.BRAND.equalsIgnoreCase("archos")) {
 			//Since archos has no voice call capabilities, voice call stream is not implemented
 			//So we have to choose the good stream tag, which is by default falled back to music
 			return AudioManager.STREAM_MUSIC;
@@ -74,10 +75,10 @@ public class Compatibility {
 	}
 	
 	public static boolean useRoutingApi() {
-		Log.d(THIS_FILE, "Current device "+android.os.Build.BRAND+" - "+android.os.Build.DEVICE);
-		if(!isCompatible(5)) {
+		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
+		if (!isCompatible(5)) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 		/*
@@ -92,20 +93,19 @@ public class Compatibility {
 
 
 	public static int getInCallMode() {
-		if(android.os.Build.BRAND.equalsIgnoreCase("sdg")) {
+		if (android.os.Build.BRAND.equalsIgnoreCase("sdg")) {
 			return 3;
 		}
-		
-		if(android.os.Build.BRAND.equalsIgnoreCase("htc") && 
-				!isCompatible(4)) {
+
+		if (android.os.Build.BRAND.equalsIgnoreCase("htc") && !isCompatible(4)) {
 			return AudioManager.MODE_IN_CALL;
 		}
-		
+
 		return AudioManager.MODE_NORMAL;
 	}
 	
 	public static String getCpuAbi() {
-		if(isCompatible(4)) {
+		if (isCompatible(4)) {
 			Field field;
 			try {
 				field = android.os.Build.class.getField("CPU_ABI");
@@ -113,7 +113,7 @@ public class Compatibility {
 			} catch (Exception e) {
 				Log.w(THIS_FILE, "Announce to be android 1.6 but no CPU ABI field", e);
 			}
-			
+
 		}
 		return "armeabi";
 	}
@@ -121,7 +121,7 @@ public class Compatibility {
 	public static void setFirstRunParameters(PreferencesWrapper preferencesWrapper) {
 		//Disable iLBC if not armv7
 		preferencesWrapper.setCodecPriority("iLBC/8000/1", 
-				getCpuAbi().equalsIgnoreCase("armeabi-v7a")?"189":"0");
+				getCpuAbi().equalsIgnoreCase("armeabi-v7a") ? "189" : "0");
 		
 		//Values get from wince pjsip app
 		preferencesWrapper.setCodecPriority("PCMU/8000/1", "240");
@@ -131,31 +131,31 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("speex/32000/1", "0");
 		preferencesWrapper.setCodecPriority("GSM/8000/1", "100");
 		preferencesWrapper.setCodecPriority("G722/16000/1", "0");
-		
-		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_AUTO_CLOSE_TIME, isCompatible(4)?"1":"5");
-		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_CLOCK_RATE, isCompatible(4)?"16000":"8000");
-		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, isCompatible(4)?true:false);
+
+		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_AUTO_CLOSE_TIME, isCompatible(4) ? "1" : "5");
+		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_CLOCK_RATE, isCompatible(4) ? "16000" : "8000");
+		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, isCompatible(4) ? true : false);
 		//N1 PSP mode hack
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, 
-				( android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/ || 
-				   android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/ ||
-				   android.os.Build.DEVICE.equalsIgnoreCase("supersonic") /*HTC EVO*/)?true:false);
+				(android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/
+						|| android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/
+						|| android.os.Build.DEVICE.equalsIgnoreCase("supersonic") /*HTC EVO*/
+				) ? true : false);
 		
-		//Galaxy S default settings
-		if( android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000") ) {
-			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float)0.4);
-			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float)0.2);
+		// Galaxy S default settings
+		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
+			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.4);
+			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 0.2);
 		}
 		
 	}
-	
+
 	public static boolean useFlipAnimation() {
-		if(android.os.Build.BRAND.equalsIgnoreCase("archos")) {
+		if (android.os.Build.BRAND.equalsIgnoreCase("archos")) {
 			return false;
 		}
 		return true;
 	}
-	
 	
 	public static boolean canResolveIntent(Context context, final Intent intent) {
 		 final PackageManager packageManager = context.getPackageManager();
@@ -167,12 +167,37 @@ public class Compatibility {
 	private static Boolean canMakeGSMCall = null;
 	
 	public static boolean canMakeGSMCall(Context context) {
-		if(canMakeGSMCall == null) {
+		if (canMakeGSMCall == null) {
 			Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
 			intentMakePstnCall.setData(Uri.fromParts("tel", "1", null));
 			canMakeGSMCall = canResolveIntent(context, intentMakePstnCall);
 		}
 		return canMakeGSMCall;
+	}
+
+
+	public static void updateVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {
+		if (lastSeenVersion < 14) {
+			//N1 PSP mode hack
+			//N1 PSP mode hack
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, 
+					(android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/
+							|| android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/
+							|| android.os.Build.DEVICE.equalsIgnoreCase("supersonic") /*HTC EVO*/
+					) ? true : false);
+			
+			// Galaxy S default settings
+			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
+				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.4);
+				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 0.2);
+			}
+			
+			if (prefWrapper.getStunEnabled() == 0
+					|| TextUtils.isEmpty(prefWrapper.getStunServer())) {
+				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
+				prefWrapper.setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, PreferencesWrapper.DEFAULT_STUN_SERVER);
+			}
+		}
 	}
 }
 
