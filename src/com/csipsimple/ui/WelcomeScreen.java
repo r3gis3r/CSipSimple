@@ -320,7 +320,12 @@ public class WelcomeScreen extends Activity {
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}
-					unbindService(connection);
+					try {
+						unbindService(connection);
+					} catch (Exception e) {
+						//Nothing to do
+						Log.d(THIS_FILE, "Unable to unbind ", e);
+					}
 					bound = false;
 				}
 				
