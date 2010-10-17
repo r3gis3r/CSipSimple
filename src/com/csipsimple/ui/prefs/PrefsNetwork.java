@@ -20,24 +20,54 @@ package com.csipsimple.ui.prefs;
 import android.telephony.TelephonyManager;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.PreferencesWrapper;
 
 
 public class PrefsNetwork extends GenericPrefs {
 	
+
 	@Override
 	protected int getXmlPreferences() {
-		TelephonyManager TM = (TelephonyManager) getApplicationContext().getSystemService(TELEPHONY_SERVICE);
-		if (TM.getPhoneType() == TelephonyManager.PHONE_TYPE_CDMA) {
-			return R.xml.prefs_network_cdma;
-		} else {
-			return R.xml.prefs_network;
+		return R.xml.prefs_network;
+		
+	}
+	
+	@Override
+	protected void afterBuildPrefs() {
+		super.afterBuildPrefs();
+		TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(TELEPHONY_SERVICE);
+		
+		if (telephonyManager.getPhoneType() == TelephonyManager.PHONE_TYPE_CDMA) {
+			hidePreference("for_incoming", "use_gprs_in");
+			hidePreference("for_outgoing", "use_gprs_out");
+			hidePreference("for_incoming", "use_edge_in");
+			hidePreference("for_outgoing", "use_edge_out");
+		}
+		PreferencesWrapper pfw = new PreferencesWrapper(this);
+		if(!pfw.isAdvancedUser()) {
+			hidePreference(null, "perfs");
+			
+			hidePreference("nat_traversal", "enable_turn");
+			hidePreference("nat_traversal", "turn_server");
+			
+			hidePreference("transport", "enable_tcp");
+			hidePreference("transport", "enable_udp");
+			hidePreference("transport", "network_tcp_transport_port");
+			hidePreference("transport", "network_udp_transport_port");
+			hidePreference("transport", "network_rtp_port");
+			hidePreference("transport", "use_ipv6");
+			hidePreference("transport", "override_nameserver");
+			
+			hidePreference(null, "secure_transport");
+			
+			
+			
 		}
 	}
 
 	@Override
 	protected void updateDescriptions() {
-		// TODO Auto-generated method stub
-		
+		setStringFieldSummary("stun_server");
 	}
 	
 }

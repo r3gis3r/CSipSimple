@@ -72,55 +72,55 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		/**
 		 * When user clics on clear call
 		 */
-		public static final int CLEAR_CALL = 1;
+		int CLEAR_CALL = 1;
 		/**
 		 * When user clics on take call
 		 */
-		public static final int TAKE_CALL = CLEAR_CALL + 1;
+		int TAKE_CALL = CLEAR_CALL + 1;
 		/**
 		 * When user clics on take call
 		 */
-		public static final int DECLINE_CALL = TAKE_CALL + 1;
+		int DECLINE_CALL = TAKE_CALL + 1;
 		/**
 		 * When user clics on dialpad
 		 */
-		public static final int DIALPAD_ON = DECLINE_CALL + 1;
+		int DIALPAD_ON = DECLINE_CALL + 1;
 		/**
 		 * When user clics on dialpad
 		 */
-		public static final int DIALPAD_OFF = DIALPAD_ON + 1;
+		int DIALPAD_OFF = DIALPAD_ON + 1;
 		/**
 		 * When mute is set on
 		 */
-		public static final int MUTE_ON = DIALPAD_OFF + 1;
+		int MUTE_ON = DIALPAD_OFF + 1;
 		/**
 		 * When mute is set off
 		 */
-		public static final int MUTE_OFF = MUTE_ON + 1;
+		int MUTE_OFF = MUTE_ON + 1;
 		/**
 		 * When bluetooth is set on
 		 */
-		public static final int BLUETOOTH_ON = MUTE_OFF + 1;
+		int BLUETOOTH_ON = MUTE_OFF + 1;
 		/**
 		 * When bluetooth is set off
 		 */
-		public static final int BLUETOOTH_OFF = BLUETOOTH_ON + 1;
+		int BLUETOOTH_OFF = BLUETOOTH_ON + 1;
 		/**
 		 * When speaker is set on
 		 */
-		public static final int SPEAKER_ON = BLUETOOTH_OFF + 1;
+		int SPEAKER_ON = BLUETOOTH_OFF + 1;
 		/**
 		 * When speaker is set off
 		 */
-		public static final int SPEAKER_OFF = SPEAKER_ON + 1;
+		int SPEAKER_OFF = SPEAKER_ON + 1;
 		/**
 		 * When detailed display is asked
 		 */
-		public static final int DETAILED_DISPLAY = SPEAKER_OFF + 1;
+		int DETAILED_DISPLAY = SPEAKER_OFF + 1;
 		/**
 		 * When hold / reinvite is asked
 		 */
-		public static final int TOGGLE_HOLD = DETAILED_DISPLAY + 1;
+		int TOGGLE_HOLD = DETAILED_DISPLAY + 1;
 
 		/**
 		 * Called when the user make an action
@@ -186,25 +186,25 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	}
 
 	public void setEnabledMediaButtons(boolean isInCall) {
-		if(lastMediaState == null) {
+		if (lastMediaState == null) {
 			speakerButton.setEnabled(isInCall);
 			muteButton.setEnabled(isInCall);
 			bluetoothButton.setEnabled(isInCall);
-			
-		}else {
+
+		} else {
 			speakerButton.setEnabled(lastMediaState.canSpeakerphoneOn && isInCall);
 			muteButton.setEnabled(lastMediaState.canMicrophoneMute && isInCall);
 			bluetoothButton.setEnabled(lastMediaState.canBluetoothSco && isInCall);
 		}
-		
+
 		dialButton.setEnabled(isInCall);
 	}
 	
 	
 	private void setCallLockerVisibility(int visibility) {
-		if(useSlider) {
+		if (useSlider) {
 			slidingTabWidget.setVisibility(visibility);
-		}else {
+		} else {
 			alternateLockerWidget.setVisibility(visibility);
 		}
 	}
@@ -252,12 +252,12 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			break;
 		case PJSIP_INV_STATE_EARLY:
 		default:
-			if(callInfo.isIncoming()) {
+			if (callInfo.isIncoming()) {
 				controlMode = MODE_LOCKER;
 				inCallButtons.setVisibility(GONE);
 				setCallLockerVisibility(VISIBLE);
 				inCallButtons.setVisibility(GONE);
-			}else {
+			} else {
 				controlMode = MODE_CONTROL;
 				setCallLockerVisibility(GONE);
 				inCallButtons.setVisibility(VISIBLE);
@@ -303,8 +303,9 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	@Override
 	public void onTrigger(View v, int whichHandle) {
 		Log.d(THIS_FILE, "Call controls receive info from slider " + whichHandle);
-		if(controlMode != MODE_LOCKER) {
-			//Oups we are not in locker mode and we get a trigger from locker...
+		if (controlMode != MODE_LOCKER) {
+			// Oups we are not in locker mode and we get a trigger from
+			// locker...
 			// Should not happen... but... to be sure
 			return;
 		}
@@ -331,8 +332,8 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			dispatchTriggerEvent(OnTriggerListener.CLEAR_CALL);
 			break;
 		case R.id.dialpadButton:
-			dispatchTriggerEvent(isDialpadOn?OnTriggerListener.DIALPAD_OFF:OnTriggerListener.DIALPAD_ON);
-			isDialpadOn = ! isDialpadOn;
+			dispatchTriggerEvent(isDialpadOn ? OnTriggerListener.DIALPAD_OFF : OnTriggerListener.DIALPAD_ON);
+			isDialpadOn = !isDialpadOn;
 			break;
 		case R.id.bluetoothButton:
 			if (((ToggleButton) v).isChecked()) {
@@ -368,30 +369,31 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		case R.id.holdButton:
 			dispatchTriggerEvent(OnTriggerListener.TOGGLE_HOLD);
 			break;
+		default:
+			break;
 		}
 	}
 	
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Log.d(THIS_FILE, "Hey you hit the key : "+keyCode);
+		Log.d(THIS_FILE, "Hey you hit the key : " + keyCode);
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_CALL:
-			if(controlMode == MODE_LOCKER) {
+			if (controlMode == MODE_LOCKER) {
 				dispatchTriggerEvent(OnTriggerListener.TAKE_CALL);
 				return true;
 			}
 			break;
 		case KeyEvent.KEYCODE_ENDCALL:
-			if(controlMode == MODE_LOCKER) {
+			if (controlMode == MODE_LOCKER) {
 				dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
 				return true;
-			}else if (controlMode == MODE_CONTROL) {
+			} else if (controlMode == MODE_CONTROL) {
 				dispatchTriggerEvent(OnTriggerListener.CLEAR_CALL);
 				return true;
 			}
 		default:
-			
 			break;
 		}
 		

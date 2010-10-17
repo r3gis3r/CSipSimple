@@ -41,9 +41,10 @@ public class AccountInfo implements Parcelable, Serializable{
 	private int addedStatus;
 	private int expires;
 	private String displayName;
+	private int priority;
 	
-	
-	
+
+
 	public AccountInfo(Parcel in) {
 		readFromParcel(in);
 	}
@@ -56,6 +57,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		wizard = account.wizard;
 		active = account.active;
 		displayName = account.display_name;
+		priority = account.cfg.getPriority();
 		
 		//Set default values
 		addedStatus = -1;
@@ -95,6 +97,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		addedStatus = in.readInt();
 		expires = in.readInt();
 		displayName = in.readString();
+		priority = in.readInt();
 	}
 
 	@Override
@@ -109,6 +112,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		out.writeInt(addedStatus);
 		out.writeInt(expires);
 		out.writeString(displayName);
+		out.writeInt(priority);
 	}
 	
 
@@ -245,4 +249,11 @@ public class AccountInfo implements Parcelable, Serializable{
 	}
 
 	
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
 }

@@ -31,6 +31,7 @@
 <string name="w_expert_proxy">Proxy URI</string>
 <string name="w_expert_proxy_desc">Format : &quot;sip:proxy.net&quot;[:port]</string>
 <string name="w_expert_use_tcp">Use TCP (not UDP)</string>
+<string name="w_expert_prevent_tcp">Prevent TCP (only try UDP)</string>
 <string name="w_expert_publish_enabled">Publish enabled</string>
 <string name="w_expert_reg_timeout">Register timeout (sec)</string>
 <string name="w_expert_ka_interval">Keep-alive interval (sec)</string>

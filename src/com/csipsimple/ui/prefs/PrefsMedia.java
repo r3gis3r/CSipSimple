@@ -18,6 +18,7 @@
 package com.csipsimple.ui.prefs;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.PreferencesWrapper;
 
 
 public class PrefsMedia extends GenericPrefs {
@@ -26,6 +27,23 @@ public class PrefsMedia extends GenericPrefs {
 	@Override
 	protected int getXmlPreferences() {
 		return R.xml.prefs_media;
+	}
+	
+	@Override
+	protected void afterBuildPrefs() {
+		super.afterBuildPrefs();
+		PreferencesWrapper pfw = new PreferencesWrapper(this);
+		if(!pfw.isAdvancedUser()) {
+			
+			
+			hidePreference("audio_quality", "snd_auto_close_time");
+			hidePreference("audio_quality", "snd_mic_level");
+			hidePreference("audio_quality", "snd_speaker_level");
+			hidePreference("audio_quality", "snd_stream_level");
+			hidePreference("audio_quality", "snd_media_quality");
+			hidePreference("audio_quality", "snd_ptime");
+			hidePreference("audio_quality", "echo_cancellation_tail");
+		}
 	}
 
 	@Override

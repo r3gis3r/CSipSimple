@@ -65,6 +65,7 @@ public class Expert extends BasePrefsWizard {
 	private EditTextPreference accountForceContact;
 	private EditTextPreference accountProxy;
 	private ListPreference accountUseSrtp;
+	private CheckBoxPreference accountPreventTcp;
 
 	protected void fillLayout() {
 		accountDisplayName = (EditTextPreference) findPreference("display_name");
@@ -76,6 +77,7 @@ public class Expert extends BasePrefsWizard {
 		accountDataType = (ListPreference) findPreference("data_type");
 		accountScheme = (ListPreference) findPreference("scheme");
 		accountUseTcp = (CheckBoxPreference) findPreference("use_tcp");
+		accountPreventTcp = (CheckBoxPreference) findPreference("prevent_tcp");
 		accountUseSrtp = (ListPreference) findPreference("use_srtp");
 		accountPublishEnabled = (CheckBoxPreference) findPreference("publish_enabled");
 		accountRegTimeout = (EditTextPreference) findPreference("reg_timeout");
@@ -117,6 +119,7 @@ public class Expert extends BasePrefsWizard {
 		}
 
 		accountUseTcp.setChecked((account.use_tcp));
+		accountPreventTcp.setChecked((account.prevent_tcp));
 		accountPublishEnabled.setChecked((account.cfg.getPublish_enabled() == 1));
 		accountRegTimeout.setText(Long.toString(account.cfg.getReg_timeout()));
 		accountKaInterval.setText(Long.toString(account.cfg.getKa_interval()));
@@ -152,6 +155,7 @@ public class Expert extends BasePrefsWizard {
 	protected void buildAccount() {
 		account.display_name = accountDisplayName.getText();
 		account.use_tcp = accountUseTcp.isChecked();
+		account.prevent_tcp = accountPreventTcp.isChecked();
 		account.cfg.setId(getPjText(accountAccId));
 		account.cfg.setReg_uri(getPjText(accountRegUri));
 		try {

@@ -29,6 +29,10 @@
 			android:defaultValue="true"></CheckBoxPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/general_ui">
+		
+		<RingtonePreference android:key="ringtone" 
+			android:title="@string/ringtone"
+			android:summary="@string/ringtone_desc"></RingtonePreference>
 		<CheckBoxPreference android:title="@string/dial_press_tone"
 			android:defaultValue="false"
 			android:summary="@string/dial_press_tone_desc"
@@ -45,8 +49,14 @@
 			android:defaultValue="false"
 			android:summary="@string/use_alternate_unlocker_desc"
 			android:key="use_alternate_unlocker"></CheckBoxPreference>
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/advanced_ui">
+	
+</PreferenceCategory>
+	<PreferenceCategory android:title="@string/advanced_ui" android:key="advanced_ui">
+		<CheckBoxPreference android:title="@string/integrate_with_native_music"
+			android:summary="@string/integrate_with_native_music_desc"
+			android:key="integrate_with_native_music"
+			android:defaultValue="true"></CheckBoxPreference>
+			
 		<CheckBoxPreference android:title="@string/integrate_with_native_music"
 			android:summary="@string/integrate_with_native_music_desc"
 			android:key="integrate_with_native_music"

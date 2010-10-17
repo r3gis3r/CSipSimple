@@ -22,9 +22,11 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Log;
 
 public abstract class GenericPrefs extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	
@@ -36,6 +38,7 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		super.onCreate(savedInstanceState);
 		beforeBuildPrefs();
 		addPreferencesFromResource(getXmlPreferences());
+		afterBuildPrefs();
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		updateDescriptions();
 	}
@@ -48,6 +51,7 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 
 	protected abstract void updateDescriptions();
 	protected void beforeBuildPrefs() {};
+	protected void afterBuildPrefs() {};
 	
 	//Utilities for update Descriptions
 	
@@ -69,32 +73,49 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		return val;
 	}
 	
-	protected void setStringFieldSummary(String field_name){
+	protected void setStringFieldSummary(String fieldName){
 		PreferenceScreen pfs = getPreferenceScreen();
 		SharedPreferences sp = pfs.getSharedPreferences();
-		Preference pref = pfs.findPreference(field_name);
+		Preference pref = pfs.findPreference(fieldName);
 		
-		String val = sp.getString(field_name, "");
+		String val = sp.getString(fieldName, "");
 		if(val.equals("")){
-			val = getDefaultFieldSummary(field_name);
+			val = getDefaultFieldSummary(fieldName);
 		}
 		pref.setSummary(val);
 		
 	}
 	
-	protected void setPasswordFieldSummary(String field_name){
+	protected void setPasswordFieldSummary(String fieldName){
 		PreferenceScreen pfs = getPreferenceScreen();
 		SharedPreferences sp = pfs.getSharedPreferences();
-		Preference pref = pfs.findPreference(field_name);
+		Preference pref = pfs.findPreference(fieldName);
 		
-		String val = sp.getString(field_name, "");
+		String val = sp.getString(fieldName, "");
 		
 		if(val.equals("")){
-			val = getDefaultFieldSummary(field_name);
+			val = getDefaultFieldSummary(fieldName);
 		}else{
 			val = val.replaceAll(".", "*");
 		}
 		pref.setSummary(val);
+	}
+	
+	protected void hidePreference(String parent, String fieldName) {
+		PreferenceScreen pfs = getPreferenceScreen();
+		PreferenceGroup parentPref = pfs; 
+		if (parent != null) {
+			parentPref = (PreferenceGroup) pfs.findPreference(parent);
+		}
+
+		Preference toRemovePref = pfs.findPreference(fieldName);
+		
+		if (toRemovePref != null && parentPref != null) {
+			boolean rem = parentPref.removePreference(toRemovePref);
+			Log.d("Generic prefs", "Has removed it : " + rem);
+		} else {
+			Log.d("Generic prefs", "Not able to find" + parent + " " + fieldName);
+		}
 	}
 
 

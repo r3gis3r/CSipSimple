@@ -18,18 +18,26 @@
 	
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-		<PreferenceCategory android:title="@string/audio_quality">
+		<PreferenceCategory android:title="@string/audio_quality" android:key="audio_quality">
 			<CheckBoxPreference android:summary="@string/echo_cancellation_desc"
 				android:title="@string/echo_cancellation" android:key="echo_cancellation"
 				android:defaultValue="false"></CheckBoxPreference>
+			<EditTextPreference android:title="@string/echo_cancellation_tail" android:key="echo_cancellation_tail"
+				android:summary="@string/echo_cancellation_tail_desc"
+				android:defaultValue="200"
+				android:numeric="signed"></EditTextPreference>
+				
 			<CheckBoxPreference android:summary="@string/enable_vad_desc"
 				android:title="@string/enable_vad" android:key="enable_vad"
 				android:defaultValue="false"></CheckBoxPreference>
+				
 			<EditTextPreference android:key="snd_auto_close_time"
 				android:title="@string/snd_auto_close_time"
 				android:numeric="signed"
 				android:summary="@string/snd_auto_close_time_desc"
 				android:defaultValue="1"></EditTextPreference>
+				
+				
 			<com.csipsimple.widgets.SeekBarPreference android:key="snd_mic_level"
 				android:title="@string/snd_mic_level"
 				android:summary="@string/snd_mic_level_desc" 
@@ -44,6 +52,7 @@
 				android:summary="@string/snd_stream_level_desc" 
 				android:defaultValue="8.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
 			
+			
 			<EditTextPreference android:key="snd_media_quality"
 				android:title="@string/snd_media_quality"
 				android:numeric="signed"
@@ -53,48 +62,19 @@
 				android:summary="@string/snd_clock_rate_desc"
 				android:defaultValue="8000"
 				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
+				
+				
 			<EditTextPreference android:title="@string/snd_ptime" android:key="snd_ptime"
 				android:summary="@string/snd_ptime_desc"
 				android:defaultValue="20"
 				android:numeric="signed"></EditTextPreference>
-			<EditTextPreference android:title="@string/echo_cancellation_tail" android:key="echo_cancellation_tail"
-				android:summary="@string/echo_cancellation_tail_desc"
-				android:defaultValue="200"
-				android:numeric="signed"></EditTextPreference>
+
 		</PreferenceCategory>
 		<PreferenceScreen android:title="@string/codecs" android:summary="@string/codecs_availability_text">
 			<intent android:action="android.intent.action.MAIN"
                    android:targetPackage="com.csipsimple"
                    android:targetClass="com.csipsimple.ui.prefs.Codecs" ></intent>
 		</PreferenceScreen>
-		<PreferenceCategory android:title="@string/ice_turn">
-			<CheckBoxPreference android:summary="@string/enable_ice_desc"
-				android:title="@string/enable_ice" android:key="enable_ice"
-				android:defaultValue="false"></CheckBoxPreference>
-			
-			<CheckBoxPreference android:summary="@string/enable_stun_desc"
-				android:title="@string/enable_stun" android:key="enable_stun"
-				android:defaultValue="true"></CheckBoxPreference>
-			<EditTextPreference android:key="stun_server"
-				android:title="@string/stun_server"
-				android:summary="@string/stun_server_desc"
-				android:dependency="enable_stun"
-				android:defaultValue="stun.counterpath.com"></EditTextPreference>	
-				
-			
-			<CheckBoxPreference android:summary="@string/enable_turn_desc"
-				android:title="@string/enable_turn" android:key="enable_turn"
-				android:defaultValue="false"></CheckBoxPreference>
-			<EditTextPreference android:key="turn_server"
-				android:title="@string/turn_server"
-				android:summary="@string/turn_server_desc"
-				android:dependency="enable_turn"
-				android:defaultValue=""></EditTextPreference>
-		</PreferenceCategory>
-		<ListPreference android:title="@string/use_srtp" android:key="use_srtp"
-			android:summary="@string/use_srtp_desc"
-			android:defaultValue="0"
-			android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"></ListPreference>
 		
 		<CheckBoxPreference android:title="@string/sip_info_dtmf" android:key="sip_info_dtmf"
 			android:summary="@string/sip_info_dtmf_desc"

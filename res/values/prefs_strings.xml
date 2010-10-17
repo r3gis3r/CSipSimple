@@ -48,14 +48,28 @@
 <string name="use_ipv6">Use IPv6</string>
 <string name="use_ipv6_desc">Switch to IPv6 mode (your network and phone must support it)</string>
 <string name="enable_dns_srv">Resolve DNS SRV</string>
-<string name="enable_dns_srv_desc">Use CSipSimple nameserver resolver resolve names</string>
+<string name="enable_dns_srv_desc">Use the application resolver to resolve DNS names</string>
 <string name="override_nameserver">Use a custom DNS</string>
 <string name="override_nameserver_desc">Left blank to retrieve DNS from Android</string>
+<string name="secure_transport">Secure transport</string>
+<string name="use_srtp">SRTP mode</string>
+<string name="use_srtp_desc">Mode for Secure RTP</string>
+<string name="nat_traversal">NAT traversal</string>
+<string name="enable_ice">Enable ICE</string>
+<string name="enable_ice_desc">Turn on ICE feature</string>
+<string name="enable_turn">Enable TURN</string>
+<string name="enable_turn_desc">Turn on TURN feature</string>
+<string name="turn_server">Turn server</string>
+<string name="turn_server_desc">TURN server (HOST:PORT)</string>
+<string name="enable_stun">Enable STUN</string>
+<string name="enable_stun_desc">Turn on STUN feature</string>
+<string name="stun_server">STUN server</string>
+<string name="stun_server_desc">STUN server (HOST:PORT)</string>
+
 <!-- Media -->
 
 <string name="audio_quality">Audio quality</string>
 <string name="codecs">Codecs</string>
-<string name="ice_turn">ICE/TURN/STUN</string>
 
 <string name="echo_cancellation">Echo cancellation</string>
 <string name="echo_cancellation_desc">Activate echo cancellation</string>
@@ -77,19 +91,7 @@
 <string name="snd_ptime_desc">Specifying lower ptime will normally reduce the latency</string>
 <string name="echo_cancellation_tail">Echo cancellation tail</string>
 <string name="echo_cancellation_tail_desc">Tail length of echo cancellation</string>
-<string name="enable_ice">Enable ICE</string>
-<string name="enable_ice_desc">Turn on ICE feature</string>
-<string name="enable_turn">Enable TURN</string>
-<string name="enable_turn_desc">Turn on TURN feature</string>
-<string name="turn_server">Turn server</string>
-<string name="turn_server_desc">TURN server (HOST:PORT)</string>
-<string name="enable_stun">Enable STUN</string>
-<string name="enable_stun_desc">Turn on STUN feature</string>
-<string name="stun_server">STUN server</string>
-<string name="stun_server_desc">STUN server (HOST:PORT)</string>
 <string name="codecs_desc">Priority (0 is disabled)</string>
-<string name="use_srtp">SRTP mode</string>
-<string name="use_srtp_desc">Mode for Secure RTP</string>
 <string name="sip_info_dtmf">DTMF SIP INFO</string>
 <string name="sip_info_dtmf_desc">Use SIP INFO to send DTMF</string>
 
@@ -103,8 +105,6 @@
 <string name="integrate_with_native_dialer_desc">When dialing with native dialer you\'ll be asked if you want to use SIP or mobile</string>
 <string name="integrate_with_native_calllogs">Call logs integration</string>
 <string name="integrate_with_native_calllogs_desc">SIP calls will be merged (if possible) into native call logs</string>
-<string name="exclude_for_outgoing_call">Exclude patterns</string>
-<string name="exclude_for_outgoing_call_desc">Exclude patterns for outgoing calls</string>
 <string name="dial_press_tone">Dialing tone feedback</string>
 <string name="dial_press_tone_desc">Play touch tones when dialing</string>
 <string name="dial_press_vibrate">Dialing vibrate feedback</string>
@@ -116,11 +116,13 @@
 <string name="keep_awake_incall">Keep awake while on call</string>
 <string name="keep_awake_incall_desc">Fixes if you get choppy sound when screen turn off while in WIFI call</string>
 <string name="use_partial_wake_lock">Use partial wake lock</string>
-<string name="use_partial_wake_lock_desc">Ensure CPU is always running for CSipSimple (drain battery)</string>
+<string name="use_partial_wake_lock_desc">Ensure CPU is always running for the application (drain battery)</string>
 <string name="log_level">Log level</string>
 <string name="log_level_desc">Log level for debug between 0 (none) and 5 (verbose)</string>
 <string name="integrate_with_native_music">Integrate with Music application</string>
 <string name="integrate_with_native_music_desc">Disable it if you use another music application than the official one</string>
+<string name="ringtone">Ringtone</string>
+<string name="ringtone_desc">Default ringtone for SIP calls</string>
 
 
 <!-- Fast settings -->
@@ -138,4 +140,7 @@
 <string name="tg_allowed_desc">Your carrier allows VoIP over your mobile data connection</string>
 
 <string name="codecs_availability_text">Only available if sip is currently registered</string>
+
+<string name="expert_preferences">Expert mode</string>
+<string name="advanced_preferences">Advanced mode</string>
 </resources>

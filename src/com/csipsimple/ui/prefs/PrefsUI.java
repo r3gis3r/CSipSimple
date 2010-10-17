@@ -18,6 +18,7 @@
 package com.csipsimple.ui.prefs;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.PreferencesWrapper;
 
 
 public class PrefsUI extends GenericPrefs {
@@ -28,6 +29,16 @@ public class PrefsUI extends GenericPrefs {
 		return R.xml.prefs_ui;
 	}
 
+	@Override
+	protected void afterBuildPrefs() {
+		super.afterBuildPrefs();
+		PreferencesWrapper pfw = new PreferencesWrapper(this);
+		if(!pfw.isAdvancedUser()) {
+			hidePreference(null, "advanced_ui");
+		}
+	}
+	
+	
 	@Override
 	protected void updateDescriptions() {
 		// TODO Auto-generated method stub

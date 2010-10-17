@@ -114,7 +114,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		add_row.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivityForResult(new Intent(AccountsList.this, WizardChooser.class), CHOOSE_WIZARD);
+				clickAddAccount();
 			}
 		});
 		
@@ -251,7 +251,9 @@ public class AccountsList extends Activity implements OnItemClickListener {
     }
     
     
-    
+    private void clickAddAccount() {
+    	startActivityForResult(new Intent(AccountsList.this, WizardChooser.class), CHOOSE_WIZARD);
+    }
 	
 
 	@Override
@@ -512,6 +514,28 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			}
 			return false;
 		}
+	}
+	public static final int ADD_MENU = Menu.FIRST + 1;
+	public static final int REORDER_MENU = Menu.FIRST + 2;
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, ADD_MENU, Menu.NONE, R.string.add_account).setIcon(android.R.drawable.ic_menu_add);
+		menu.add(Menu.NONE, REORDER_MENU, Menu.NONE, R.string.reorder).setIcon(android.R.drawable.ic_menu_sort_by_size);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case ADD_MENU:
+			clickAddAccount();
+			return true;
+		case REORDER_MENU:
+			startActivityForResult(new Intent(this, ReorderAccountsList.class), REQUEST_MODIFY);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

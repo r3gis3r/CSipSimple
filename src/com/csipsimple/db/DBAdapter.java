@@ -203,8 +203,17 @@ public class DBAdapter {
 	 * @return true if succeed
 	 */
 	public boolean updateAccount(Account account) {
+		
 		return db.update(ACCOUNTS_TABLE_NAME, account.getDbContentValues(),
 				Account.FIELD_ID + "=" + account.id, null) > 0;
+	}
+	
+
+	public boolean updateAccountPriority(long accId, int currentPriority) {
+		ContentValues args = new ContentValues();
+		args.put(Account.FIELD_PRIORITY, currentPriority);
+		return db.update(ACCOUNTS_TABLE_NAME, args,
+				Account.FIELD_ID + "=" + accId, null) > 0;
 	}
 	
 	/**
@@ -241,7 +250,7 @@ public class DBAdapter {
 			
 			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
 					whereClause, whereArgs, null, null, Account.FIELD_PRIORITY
-							+ " ASC");
+							+ " DESC");
 			int numRows = c.getCount();
 			c.moveToFirst();
 			for (int i = 0; i < numRows; ++i) {
@@ -513,6 +522,7 @@ public class DBAdapter {
 	public long insertFilter(Filter filter){
 		return db.insert(FILTERS_TABLE_NAME, null, filter.getDbContentValues());
 	}
+
 
 	
 	

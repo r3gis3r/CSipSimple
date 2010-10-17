@@ -468,6 +468,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         case KeyEvent.KEYCODE_CALL:
 		case KeyEvent.KEYCODE_ENDCALL:
         	return inCallControls.onKeyDown(keyCode, event);
+		case KeyEvent.KEYCODE_SEARCH:
+			//Prevent search
+			return true;
+        default:
+        	//Nothing to do	
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -480,7 +485,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		case KeyEvent.KEYCODE_VOLUME_UP:
 		case KeyEvent.KEYCODE_CALL:
 		case KeyEvent.KEYCODE_ENDCALL:
-
+		case KeyEvent.KEYCODE_SEARCH:
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);

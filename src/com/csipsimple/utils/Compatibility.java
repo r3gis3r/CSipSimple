@@ -192,11 +192,12 @@ public class Compatibility {
 				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 0.2);
 			}
 			
-			if (prefWrapper.getStunEnabled() == 0
-					|| TextUtils.isEmpty(prefWrapper.getStunServer())) {
-				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
+			if (TextUtils.isEmpty(prefWrapper.getStunServer())) {
 				prefWrapper.setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, PreferencesWrapper.DEFAULT_STUN_SERVER);
 			}
+		}
+		if (lastSeenVersion < 15) {
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, false);
 		}
 	}
 }

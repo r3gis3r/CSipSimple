@@ -22,6 +22,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +88,7 @@ public class SipService extends Service {
 
 	static boolean created = false;
 	// static boolean creating = false;
-	static String THIS_FILE = "SIP SRV";
+	private static final String THIS_FILE = "SIP SRV";
 
 	// -------
 	// Static constants
@@ -470,7 +472,7 @@ public class SipService extends Service {
 				mediaManager.stopRing();
 			}
 
-			if (state != TelephonyManager.CALL_STATE_IDLE) {
+			if (state != TelephonyManager.CALL_STATE_IDLE && userAgentReceiver != null) {
 				CallInfo currentActiveCall = userAgentReceiver.getActiveCallInProgress();
 				if (currentActiveCall != null && state != TelephonyManager.CALL_STATE_RINGING) {
 					hasBeenHoldByGSM = currentActiveCall.getCallId();
@@ -481,7 +483,7 @@ public class SipService extends Service {
 					am.setMode(AudioManager.MODE_IN_CALL);
 				}
 			} else {
-				if (hasBeenHoldByGSM != null) {
+				if (hasBeenHoldByGSM != null && created) {
 					pjsua.set_snd_dev(0, 0);
 					SipService.this.callReinvite(hasBeenHoldByGSM, true);
 					hasBeenHoldByGSM = null;
@@ -529,6 +531,7 @@ public class SipService extends Service {
 			// Python style usage of try ;) : nothing to do here since it could
 			// be a standard case
 			// And in this case nothing has to be done
+			Log.d(THIS_FILE, "Has not to unregister telephony receiver");
 		}
 		if (phoneConnectivityReceiver != null) {
 			Log.d(THIS_FILE, "Unregister telephony receiver");
@@ -573,11 +576,13 @@ public class SipService extends Service {
 			if (deviceStateReceiver == null) {
 				IntentFilter intentfilter = new IntentFilter();
 				intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-				registerReceiver(deviceStateReceiver = new ServiceDeviceStateReceiver(), intentfilter);
+				deviceStateReceiver = new ServiceDeviceStateReceiver();
+				registerReceiver(deviceStateReceiver, intentfilter);
 			}
 			if (phoneConnectivityReceiver == null) {
 				Log.d(THIS_FILE, "Listen for phone state ");
-				telephonyManager.listen(phoneConnectivityReceiver = new ServicePhoneStateReceiver(), PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
+				phoneConnectivityReceiver = new ServicePhoneStateReceiver();
+				telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
 						| PhoneStateListener.LISTEN_CALL_STATE);
 			}
 
@@ -659,8 +664,8 @@ public class SipService extends Service {
 				// General config
 				{
 					pjsua_config cfg = new pjsua_config();
-					pjsua_logging_config log_cfg = new pjsua_logging_config();
-					pjsua_media_config media_cfg = new pjsua_media_config();
+					pjsua_logging_config logCfg = new pjsua_logging_config();
+					pjsua_media_config mediaCfg = new pjsua_media_config();
 
 					// GLOBAL CONFIG
 					pjsua.config_default(cfg);
@@ -698,9 +703,9 @@ public class SipService extends Service {
 					int isStunEnabled = prefsWrapper.getStunEnabled();
 					if (isStunEnabled == 1) {
 						cfg.setStun_srv_cnt(1);
-						pj_str_t[] stun_servers = cfg.getStun_srv();
-						stun_servers[0] = pjsua.pj_str_copy(prefsWrapper.getStunServer());
-						cfg.setStun_srv(stun_servers);
+						pj_str_t[] stunServers = cfg.getStun_srv();
+						stunServers[0] = pjsua.pj_str_copy(prefsWrapper.getStunServer());
+						cfg.setStun_srv(stunServers);
 					}
 
 					// IGNORE NOTIFY -- TODO : for now that's something we want
@@ -708,35 +713,35 @@ public class SipService extends Service {
 					cfg.setEnable_unsolicited_mwi(pjsuaConstants.PJ_FALSE);
 
 					// LOGGING CONFIG
-					pjsua.logging_config_default(log_cfg);
-					log_cfg.setConsole_level(prefsWrapper.getLogLevel());
-					log_cfg.setLevel(prefsWrapper.getLogLevel());
-					log_cfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
+					pjsua.logging_config_default(logCfg);
+					logCfg.setConsole_level(prefsWrapper.getLogLevel());
+					logCfg.setLevel(prefsWrapper.getLogLevel());
+					logCfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
 
 					// MEDIA CONFIG
-					pjsua.media_config_default(media_cfg);
+					pjsua.media_config_default(mediaCfg);
 
 					// For now only this cfg is supported
-					media_cfg.setChannel_count(1);
-					media_cfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
+					mediaCfg.setChannel_count(1);
+					mediaCfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
 					// Echo cancellation
-					media_cfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
-					media_cfg.setNo_vad(prefsWrapper.getNoVad());
-					media_cfg.setQuality(prefsWrapper.getMediaQuality());
-					media_cfg.setClock_rate(prefsWrapper.getClockRate());
-					media_cfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
+					mediaCfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
+					mediaCfg.setNo_vad(prefsWrapper.getNoVad());
+					mediaCfg.setQuality(prefsWrapper.getMediaQuality());
+					mediaCfg.setClock_rate(prefsWrapper.getClockRate());
+					mediaCfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
 
 					// ICE
-					media_cfg.setEnable_ice(prefsWrapper.getIceEnabled());
+					mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());
 					// TURN
 					int isTurnEnabled = prefsWrapper.getTurnEnabled();
 					if (isTurnEnabled == 1) {
-						media_cfg.setEnable_turn(isTurnEnabled);
-						media_cfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
+						mediaCfg.setEnable_turn(isTurnEnabled);
+						mediaCfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
 					}
 
 					// INITIALIZE
-					status = pjsua.csipsimple_init(cfg, log_cfg, media_cfg);
+					status = pjsua.csipsimple_init(cfg, logCfg, mediaCfg);
 					if (status != pjsuaConstants.PJ_SUCCESS) {
 						Log.e(THIS_FILE, "Fail to init pjsua with failure code " + status);
 						pjsua.csipsimple_destroy();
@@ -850,6 +855,13 @@ public class SipService extends Service {
 	 * Stop sip service
 	 */
 	synchronized void sipStop() {
+		if(created && userAgentReceiver != null) {
+			if (userAgentReceiver.getActiveCallInProgress() != null) {
+				return;
+			}
+		}
+		
+		
 		if (notificationManager != null) {
 			notificationManager.cancel(REGISTER_NOTIF_ID);
 		}
@@ -888,17 +900,17 @@ public class SipService extends Service {
 	 */
 	private Integer createTransport(pjsip_transport_type_e type, int port) {
 		pjsua_transport_config cfg = new pjsua_transport_config();
-		int[] t_id = new int[1];
+		int[] tId = new int[1];
 		int status;
 		pjsua.transport_config_default(cfg);
 		cfg.setPort(port);
 
-		status = pjsua.transport_create(type, cfg, t_id);
+		status = pjsua.transport_create(type, cfg, tId);
 		if (status != pjsuaConstants.PJ_SUCCESS) {
 			Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
 			return null;
 		}
-		return t_id[0];
+		return tId[0];
 	}
 
 	/**
@@ -965,12 +977,12 @@ public class SipService extends Service {
 					status = pjsua.acc_set_registration(currentAccountId, 1);
 				}
 			} else {
-				int[] acc_id = new int[1];
-				status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, acc_id);
+				int[] accId = new int[1];
+				status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
 				synchronized (activeAccountsLock) {
 					accountsAddingStatus.put(account.id, status);
 					if (status == pjsuaConstants.PJ_SUCCESS) {
-						activeAccounts.put(account.id, acc_id[0]);
+						activeAccounts.put(account.id, accId[0]);
 					}
 				}
 			}
@@ -988,18 +1000,18 @@ public class SipService extends Service {
 				return status;
 			}
 			if (activeAccounts.containsKey(account.id)) {
-				int c_acc_id = activeAccounts.get(account.id);
+				int cAccId = activeAccounts.get(account.id);
 				synchronized (activeAccountsLock) {
 					activeAccounts.remove(account.id);
 					accountsAddingStatus.remove(account.id);
 				}
 
 				if (renew == 1) {
-					status = pjsua.acc_set_registration(c_acc_id, renew);
+					status = pjsua.acc_set_registration(cAccId, renew);
 				} else {
 					// if(status == pjsuaConstants.PJ_SUCCESS && renew == 0) {
 					Log.d(THIS_FILE, "Delete account !!");
-					status = pjsua.acc_del(c_acc_id);
+					status = pjsua.acc_del(cAccId);
 				}
 			} else {
 				if (renew == 1) {
@@ -1098,18 +1110,18 @@ public class SipService extends Service {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Account getAccountForPjsipId(int acc_id) {
+	protected Account getAccountForPjsipId(int accId) {
 		Set<Entry<Integer, Integer>> activeAccountsClone;
 		synchronized (activeAccountsLock) {
 			activeAccountsClone = ((HashMap<Integer, Integer>) activeAccounts.clone()).entrySet();
 			// Quick quit
-			if (!activeAccounts.containsValue(acc_id)) {
+			if (!activeAccounts.containsValue(accId)) {
 				return null;
 			}
 		}
 
 		for (Entry<Integer, Integer> entry : activeAccountsClone) {
-			if (entry.getValue().equals(acc_id)) {
+			if (entry.getValue().equals(accId)) {
 				synchronized (db) {
 					db.open();
 					Account account = db.getAccount(entry.getKey());
@@ -1137,6 +1149,7 @@ public class SipService extends Service {
 				activeAccountsInfos.add(info);
 			}
 		}
+		Collections.sort(activeAccountsInfos, accountInfoComparator);
 
 		// Handle status bar notification
 		if (activeAccountsInfos.size() > 0) {
@@ -1172,6 +1185,27 @@ public class SipService extends Service {
 			releaseResources();
 		}
 	}
+	
+	 
+	private Comparator<AccountInfo> accountInfoComparator = new Comparator<AccountInfo>() {
+		@Override
+		public int compare(AccountInfo infos1,AccountInfo infos2) {
+			if (infos1 != null && infos2 != null) {
+				
+				int c1 = infos1.getPriority();
+				int c2 = infos2.getPriority();
+				
+				if (c1 > c2) {
+					return -1;
+				}
+				if (c1 < c2) {
+					return 1;
+				}
+			}
+
+			return 0;
+		}
+	};
 
 	/**
 	 * Get the currently instanciated prefsWrapper (to be used by
@@ -1274,6 +1308,9 @@ public class SipService extends Service {
 		if (!created) {
 			return -1;
 		}
+		//We have to ensure service is properly started and not just binded
+		startService(new Intent(this, SipService.class));
+		
 		int pjsipAccountId = -1;
 
 		// If this is an invalid account id
@@ -1338,9 +1375,9 @@ public class SipService extends Service {
 			}
 
 			// Nothing to do with this values
-			byte[] user_data = new byte[1];
-			int[] call_id = new int[1];
-			return pjsua.call_make_call(pjsipAccountId, uri, 0, user_data, null, call_id);
+			byte[] userData = new byte[1];
+			int[] callId = new int[1];
+			return pjsua.call_make_call(pjsipAccountId, uri, 0, userData, null, callId);
 		} else {
 			Log.e(THIS_FILE, "Asked for a bad uri " + callee);
 			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.invalid_sip_uri, 0));
@@ -1398,7 +1435,7 @@ public class SipService extends Service {
 	// Dialtone generator
 	// ------
 
-	private final static Map<String, short[]> digitMap = new HashMap<String, short[]>() {
+	private static final Map<String, short[]> digitMap = new HashMap<String, short[]>() {
 		private static final long serialVersionUID = -6656807954448449227L;
 
 		{
@@ -1429,14 +1466,14 @@ public class SipService extends Service {
 
 			dialtonePool = pjsua.pjsua_pool_create("mycall", 512, 512);
 			pj_str_t name = pjsua.pj_str_copy("dialtoneGen");
-			long clock_rate = 8000;
-			long channel_count = 1;
-			long samples_per_frame = 160;
-			long bits_per_sample = 16;
+			long clockRate = 8000;
+			long channelCount = 1;
+			long samplesPerFrame = 160;
+			long bitsPerSample = 16;
 			long options = 0;
 			int[] dialtoneSlotPtr = new int[1];
 			dialtoneGen = new pjmedia_port();
-			status = pjsua.pjmedia_tonegen_create2(dialtonePool, name, clock_rate, channel_count, samples_per_frame, bits_per_sample, options, dialtoneGen);
+			status = pjsua.pjmedia_tonegen_create2(dialtonePool, name, clockRate, channelCount, samplesPerFrame, bitsPerSample, options, dialtoneGen);
 			if (status != pjsua.PJ_SUCCESS) {
 				stopDialtoneGenerator();
 				return status;
@@ -1512,34 +1549,34 @@ public class SipService extends Service {
 	 */
 	public static File getStackLibFile(Context context) {
 		// Standard case
-		File standard_out = getGuessedStackLibFile(context);
-		if (standard_out.exists()) {
-			return standard_out;
+		File standardOut = getGuessedStackLibFile(context);
+		if (standardOut.exists()) {
+			return standardOut;
 		}
 
 		// One target build
 		// TODO : find a clean way to access the libPath for one shot builds
-		File target_for_build = new File(context.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
-		Log.d(THIS_FILE, "Search for " + target_for_build.getAbsolutePath());
-		if (target_for_build.exists()) {
-			return target_for_build;
+		File targetForBuild = new File(context.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
+		Log.d(THIS_FILE, "Search for " + targetForBuild.getAbsolutePath());
+		if (targetForBuild.exists()) {
+			return targetForBuild;
 		}
 
 		return null;
 	}
 
 	public static boolean isBundleStack(Context ctx) {
-		File target_for_build = new File(ctx.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
-		Log.d(THIS_FILE, "Search for " + target_for_build.getAbsolutePath());
-		return target_for_build.exists();
+		File targetForBuild = new File(ctx.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
+		Log.d(THIS_FILE, "Search for " + targetForBuild.getAbsolutePath());
+		return targetForBuild.exists();
 	}
 
 	public static boolean hasStackLibFile(Context ctx) {
-		File guessed_file = getStackLibFile(ctx);
-		if (guessed_file == null) {
+		File guessedFile = getStackLibFile(ctx);
+		if (guessedFile == null) {
 			return false;
 		}
-		return guessed_file.exists();
+		return guessedFile.exists();
 	}
 
 	public static File getGuessedStackLibFile(Context ctx) {
@@ -1550,10 +1587,10 @@ public class SipService extends Service {
 
 	private void initCodecs() {
 		if (codecs == null) {
-			int nbr_codecs = pjsua.codecs_get_nbr();
-			Log.d(THIS_FILE, "Codec nbr : " + nbr_codecs);
+			int nbrCodecs = pjsua.codecs_get_nbr();
+			Log.d(THIS_FILE, "Codec nbr : " + nbrCodecs);
 			codecs = new ArrayList<String>();
-			for (int i = 0; i < nbr_codecs; i++) {
+			for (int i = 0; i < nbrCodecs; i++) {
 				String codecId = pjsua.codecs_get_id(i).getPtr();
 				codecs.add(codecId);
 				Log.d(THIS_FILE, "Added codec " + codecId);

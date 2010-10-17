@@ -18,7 +18,7 @@
 	
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="@string/for_incomings">
+	<PreferenceCategory android:title="@string/for_incomings" android:key="for_incoming">
 		<CheckBoxPreference android:title="@string/use_wifi"
 			android:defaultValue="true" android:summary="@string/use_wifi_in_desc"
 			android:key="use_wifi_in"></CheckBoxPreference>
@@ -36,7 +36,7 @@
 			android:key="use_other_in"></CheckBoxPreference>
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/for_outgoings">
+	<PreferenceCategory android:title="@string/for_outgoings" android:key="for_outgoing">
 		<CheckBoxPreference android:summary="@string/use_wifi_out_desc"
 			android:key="use_wifi_out" android:title="@string/use_wifi"
 			android:defaultValue="true"></CheckBoxPreference>
@@ -53,12 +53,13 @@
 			android:defaultValue="true" android:summary="@string/use_other_out_desc"
 			android:key="use_other_out"></CheckBoxPreference>
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/perfs">
+	<PreferenceCategory android:title="@string/perfs" android:key="perfs">
 		<CheckBoxPreference android:summary="@string/lock_wifi_desc"
 			android:key="lock_wifi" android:title="@string/lock_wifi"
 			android:defaultValue="true"></CheckBoxPreference>
+			
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/transport">
+	<PreferenceCategory android:title="@string/transport" android:key="transport">
 		<CheckBoxPreference android:title="@string/enable_udp"
 			android:summary="@string/enable_udp_desc"
 			android:key="enable_udp" android:defaultValue="true"></CheckBoxPreference>
@@ -68,8 +69,6 @@
 			android:summary="@string/network_udp_transport_port_desc"
 			android:defaultValue="5060"></EditTextPreference>
 			
-			
-	
 		<CheckBoxPreference android:title="@string/enable_tcp"
 			android:summary="@string/enable_tcp_desc"
 			android:key="enable_tcp" android:defaultValue="true"></CheckBoxPreference>
@@ -78,15 +77,6 @@
 			android:numeric="integer"
 			android:summary="@string/network_tcp_transport_port_desc"
 			android:defaultValue="5060"></EditTextPreference>
-		
-		<CheckBoxPreference android:title="@string/enable_tls"
-			android:summary="@string/enable_tls_desc"
-			android:key="enable_tls" android:defaultValue="false"></CheckBoxPreference>
-		<EditTextPreference android:key="network_tls_transport_port"
-			android:title="@string/network_tls_transport_port"
-			android:numeric="integer"
-			android:summary="@string/network_tls_transport_port_desc"
-			android:defaultValue="5061"></EditTextPreference>
 			
 		<EditTextPreference android:key="network_rtp_port"
 			android:title="@string/network_rtp_port"
@@ -107,4 +97,43 @@
 			android:defaultValue=""></EditTextPreference>
 		
 	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/nat_traversal" android:key="nat_traversal">
+			<CheckBoxPreference android:summary="@string/enable_ice_desc"
+				android:title="@string/enable_ice" android:key="enable_ice"
+				android:defaultValue="false"></CheckBoxPreference>
+			
+			<CheckBoxPreference android:summary="@string/enable_stun_desc"
+				android:title="@string/enable_stun" android:key="enable_stun"
+				android:defaultValue="false"></CheckBoxPreference>
+			<EditTextPreference android:key="stun_server"
+				android:title="@string/stun_server"
+				android:summary="@string/stun_server_desc"
+				android:dependency="enable_stun"
+				android:defaultValue="stun.counterpath.com"></EditTextPreference>	
+			
+			<CheckBoxPreference android:summary="@string/enable_turn_desc"
+				android:title="@string/enable_turn" android:key="enable_turn"
+				android:defaultValue="false"></CheckBoxPreference>
+			<EditTextPreference android:key="turn_server"
+				android:title="@string/turn_server"
+				android:summary="@string/turn_server_desc"
+				android:dependency="enable_turn"
+				android:defaultValue=""></EditTextPreference>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/secure_transport" android:key="secure_transport">
+		<CheckBoxPreference android:title="@string/enable_tls"
+			android:summary="@string/enable_tls_desc"
+			android:key="enable_tls" android:defaultValue="false"></CheckBoxPreference>
+		<EditTextPreference android:key="network_tls_transport_port"
+			android:title="@string/network_tls_transport_port"
+			android:numeric="integer"
+			android:summary="@string/network_tls_transport_port_desc"
+			android:defaultValue="5061"></EditTextPreference>
+			
+		<ListPreference android:title="@string/use_srtp" android:key="use_srtp"
+				android:summary="@string/use_srtp_desc"
+				android:defaultValue="0"
+				android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"></ListPreference>
+	</PreferenceCategory>
+	
 </PreferenceScreen>

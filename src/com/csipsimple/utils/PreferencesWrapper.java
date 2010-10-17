@@ -26,6 +26,7 @@ import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsua;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -42,6 +43,7 @@ public class PreferencesWrapper {
 	private static final String THIS_FILE = "PreferencesWrapper";
 	private SharedPreferences prefs;
 	private ConnectivityManager connectivityManager;
+	private ContentResolver resolver;
 
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 	public static final String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
@@ -53,12 +55,14 @@ public class PreferencesWrapper {
 	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
 	public static final String ENABLE_STUN = "enable_stun";
 	public static final String STUN_SERVER = "stun_server";
+	public static final String IS_ADVANCED_USER = "is_advanced_user";
 
 	public static final String DEFAULT_STUN_SERVER = "stun.counterpath.com";
 	
 	public PreferencesWrapper(Context aContext) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
 		connectivityManager = (ConnectivityManager) aContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+		resolver = aContext.getContentResolver();
 	}
 	
 
@@ -434,7 +438,7 @@ public class PreferencesWrapper {
 	 * @return 1 if enabled (pjstyle)
 	 */ 
 	public int getStunEnabled() {
-		return prefs.getBoolean(ENABLE_STUN, true)?1:0;
+		return prefs.getBoolean(ENABLE_STUN, false)?1:0;
 	}
 	
 	/**
@@ -482,7 +486,12 @@ public class PreferencesWrapper {
 	 * @return string uri
 	 */
 	public String getRingtone() {
-		return prefs.getString("ringtone", Settings.System.DEFAULT_RINGTONE_URI.toString());
+		String ringtone = prefs.getString("ringtone", Settings.System.DEFAULT_RINGTONE_URI.toString());
+		
+		if(ringtone == null || TextUtils.isEmpty(ringtone)) {
+			ringtone = Settings.System.DEFAULT_RINGTONE_URI.toString();
+		}
+		return ringtone;
 	}
 
 
@@ -513,11 +522,19 @@ public class PreferencesWrapper {
 	// UI related
 	// ----
 	public boolean getDialPressTone() {
-		return prefs.getBoolean("dial_press_tone", false);
+		if(prefs.getBoolean("dial_press_tone", false)) {
+			return Settings.System.getInt(resolver,
+	                Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1;
+		}
+		return false;
 	}
 
 	public boolean getDialPressVibrate() {
-		return prefs.getBoolean("dial_press_vibrate", true);
+		if(prefs.getBoolean("dial_press_tone", false)) {
+			return Settings.System.getInt(resolver,
+	                Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1;
+		}
+		return false;
 	}
 
 	public boolean startIsDigit() {
@@ -626,9 +643,14 @@ public class PreferencesWrapper {
 	}
 
 
+	public boolean isAdvancedUser() {
+		return prefs.getBoolean(IS_ADVANCED_USER, false);
+	}
 
 
-
+	public void toogleExpertMode() {
+		setPreferenceBooleanValue(IS_ADVANCED_USER, !isAdvancedUser());
+	}
 
 	
 }

@@ -45,6 +45,8 @@
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Connection">
 		<CheckBoxPreference android:key="use_tcp" android:title="@string/w_expert_use_tcp"></CheckBoxPreference>
+		<CheckBoxPreference android:key="prevent_tcp" android:title="@string/w_expert_prevent_tcp"></CheckBoxPreference>
+		
 		<CheckBoxPreference android:key="publish_enabled" android:title="@string/w_expert_publish_enabled"></CheckBoxPreference>
 		<EditTextPreference android:key="reg_timeout" android:title="@string/w_expert_reg_timeout"></EditTextPreference>
 		<EditTextPreference android:key="ka_interval" android:title="@string/w_expert_ka_interval"></EditTextPreference>

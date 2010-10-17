@@ -312,6 +312,7 @@ public class WelcomeScreen extends Activity {
 					Log.d(THIS_FILE, "Remote exception ", e);
 				} catch (NameNotFoundException e) {
 					//Will never happen
+					Log.e(THIS_FILE, "Can't find itself ", e);
 				}
 				
 				if (service != null && bound) {

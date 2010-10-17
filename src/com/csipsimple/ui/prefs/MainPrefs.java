@@ -44,6 +44,7 @@ import com.csipsimple.R;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class MainPrefs extends ListActivity {
 	
@@ -60,10 +61,13 @@ public class MainPrefs extends ListActivity {
 			sipService = ISipService.Stub.asInterface(aService);
 		}
 	};
+	private PreferencesWrapper prefsWrapper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		prefsWrapper = new PreferencesWrapper(this);
 		
 		List<PrefGroup> prefs_list = new ArrayList<PrefGroup>();
 		prefs_list.add(new PrefGroup(R.string.prefs_fast, R.string.prefs_fast_desc, 
@@ -175,12 +179,26 @@ public class MainPrefs extends ListActivity {
 	public static final int MENU_EXPERT_VIEW = Menu.FIRST + 1;
 	public static final int MENU_TEST_AUDIO = MENU_EXPERT_VIEW + 1;
 	
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+
+		menu.findItem(MENU_EXPERT_VIEW).setTitle(getToogleExpertTitle());
+		return super.onPrepareOptionsMenu(menu);
+	}
+	
+	private int getToogleExpertTitle() {
+		return prefsWrapper.isAdvancedUser()? R.string.advanced_preferences: R.string.expert_preferences;
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_EXPERT_VIEW, Menu.NONE, "Expert preferences").setIcon(
-				R.drawable.ic_wizard_expert);
+		menu.add(Menu.NONE, MENU_EXPERT_VIEW, Menu.NONE, getToogleExpertTitle()).setIcon(
+						R.drawable.ic_wizard_expert);
+		/*
 		menu.add(Menu.NONE, MENU_TEST_AUDIO, Menu.NONE, "Test audio").setIcon(
 				R.drawable.ic_prefs_media);
+				*/
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -204,6 +222,12 @@ public class MainPrefs extends ListActivity {
 				
 				t.start();
 				return true;
+			case MENU_EXPERT_VIEW:
+				prefsWrapper.toogleExpertMode();
+				
+				return true;
+			default:
+				break;
 			}
 			return super.onOptionsItemSelected(item);
 		}
