@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CSipSimple 0.01\n"
+"Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-09 23:52+0200\n"
+"POT-Creation-Date: 2010-10-19 13:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,7 +186,7 @@ msgid "Resolve DNS SRV"
 msgstr ""
 
 msgctxt "enable_dns_srv_desc"
-msgid "Use CSipSimple nameserver resolver resolve names"
+msgid "Use the application resolver to resolve DNS names"
 msgstr ""
 
 msgctxt "override_nameserver"
@@ -197,16 +197,68 @@ msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
 msgstr ""
 
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr ""
+
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr ""
+
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr ""
+
+msgctxt "nat_traversal"
+msgid "NAT traversal"
+msgstr ""
+
+msgctxt "enable_ice"
+msgid "Enable ICE"
+msgstr ""
+
+msgctxt "enable_ice_desc"
+msgid "Turn on ICE feature"
+msgstr ""
+
+msgctxt "enable_turn"
+msgid "Enable TURN"
+msgstr ""
+
+msgctxt "enable_turn_desc"
+msgid "Turn on TURN feature"
+msgstr ""
+
+msgctxt "turn_server"
+msgid "Turn server"
+msgstr ""
+
+msgctxt "turn_server_desc"
+msgid "TURN server (HOST:PORT)"
+msgstr ""
+
+msgctxt "enable_stun"
+msgid "Enable STUN"
+msgstr ""
+
+msgctxt "enable_stun_desc"
+msgid "Turn on STUN feature"
+msgstr ""
+
+msgctxt "stun_server"
+msgid "STUN server"
+msgstr ""
+
+msgctxt "stun_server_desc"
+msgid "STUN server (HOST:PORT)"
+msgstr ""
+
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr ""
 
 msgctxt "codecs"
 msgid "Codecs"
-msgstr ""
-
-msgctxt "ice_turn"
-msgid "ICE/TURN/STUN"
 msgstr ""
 
 msgctxt "echo_cancellation"
@@ -289,56 +341,16 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr ""
 
-msgctxt "enable_ice"
-msgid "Enable ICE"
-msgstr ""
-
-msgctxt "enable_ice_desc"
-msgid "Turn on ICE feature"
-msgstr ""
-
-msgctxt "enable_turn"
-msgid "Enable TURN"
-msgstr ""
-
-msgctxt "enable_turn_desc"
-msgid "Turn on TURN feature"
-msgstr ""
-
-msgctxt "turn_server"
-msgid "Turn server"
-msgstr ""
-
-msgctxt "turn_server_desc"
-msgid "TURN server (HOST:PORT)"
-msgstr ""
-
-msgctxt "enable_stun"
-msgid "Enable STUN"
-msgstr ""
-
-msgctxt "enable_stun_desc"
-msgid "Turn on STUN feature"
-msgstr ""
-
-msgctxt "stun_server"
-msgid "STUN server"
-msgstr ""
-
-msgctxt "stun_server_desc"
-msgid "STUN server (HOST:PORT)"
-msgstr ""
-
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr ""
 
-msgctxt "use_srtp"
-msgid "SRTP mode"
+msgctxt "sip_info_dtmf"
+msgid "DTMF SIP INFO"
 msgstr ""
 
-msgctxt "use_srtp_desc"
-msgid "Mode for Secure RTP"
+msgctxt "sip_info_dtmf_desc"
+msgid "Use SIP INFO to send DTMF"
 msgstr ""
 
 msgctxt "general_ui"
@@ -369,14 +381,6 @@ msgstr ""
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
-msgstr ""
-
-msgctxt "exclude_for_outgoing_call"
-msgid "Exclude patterns"
-msgstr ""
-
-msgctxt "exclude_for_outgoing_call_desc"
-msgid "Exclude patterns for outgoing calls"
 msgstr ""
 
 msgctxt "dial_press_tone"
@@ -424,7 +428,7 @@ msgid "Use partial wake lock"
 msgstr ""
 
 msgctxt "use_partial_wake_lock_desc"
-msgid "Ensure CPU is always running for CSipSimple (drain battery)"
+msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
 
 msgctxt "log_level"
@@ -441,6 +445,14 @@ msgstr ""
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
+msgstr ""
+
+msgctxt "ringtone"
+msgid "Ringtone"
+msgstr ""
+
+msgctxt "ringtone_desc"
+msgid "Default ringtone for SIP calls"
 msgstr ""
 
 msgctxt "android_integration"
@@ -493,5 +505,13 @@ msgstr ""
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
+msgstr ""
+
+msgctxt "expert_preferences"
+msgid "Expert mode"
+msgstr ""
+
+msgctxt "advanced_preferences"
+msgid "Advanced mode"
 msgstr ""
 
