@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.CallLog;
 
 import com.csipsimple.R;
 import com.csipsimple.models.AccountInfo;
@@ -36,6 +38,7 @@ public class SipNotifications {
 	private RegistrationNotification contentView;
 	private Notification inCallNotification;
 	private Context context;
+	private Notification missedCallNotification;
 
 	public static final int REGISTER_NOTIF_ID = 1;
 	public static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
@@ -90,7 +93,7 @@ public class SipNotifications {
 		}
 
 		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALL_UI);
-		notificationIntent.putExtra("call_info", currentCallInfo2);
+		notificationIntent.putExtra(SipService.EXTRA_CALL_INFO, currentCallInfo2);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -101,12 +104,22 @@ public class SipNotifications {
 		notificationManager.notify(CALL_NOTIF_ID, inCallNotification);
 	}
 	
-	public void showNotificationForMissedCall() {
+	public void showNotificationForMissedCall(ContentValues callLog) {
 		int icon = android.R.drawable.stat_notify_missed_call;
 		CharSequence tickerText =  context.getText(R.string.missed_call);
 		long when = System.currentTimeMillis();
 		
+		if(missedCallNotification == null) {
+			missedCallNotification = new Notification(icon, tickerText, when);
+			missedCallNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS;
+		}
 		
+		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALLLOG);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		missedCallNotification.setLatestEventInfo(context, context.getText(R.string.missed_call) /*+" / "+currentCallInfo2.getCallId()*/, 
+				callLog.getAsString(CallLog.Calls.NUMBER), contentIntent);
 	}
 	
 	// Cancels

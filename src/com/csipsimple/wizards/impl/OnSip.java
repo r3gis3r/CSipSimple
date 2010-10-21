@@ -17,6 +17,9 @@
  */
 package com.csipsimple.wizards.impl;
 
+import com.csipsimple.models.Account;
+import com.csipsimple.utils.PreferencesWrapper;
+
 
 public class OnSip extends AuthorizationImplementation {
 
@@ -24,11 +27,16 @@ public class OnSip extends AuthorizationImplementation {
 	protected String getDefaultName() {
 		return "OnSIP";
 	}
+	
 
-//	-Display Name: Whatever the user wants
-//	-Account ID :  Would it be possible to rename this 'username'
-//	-Auth Username : I noticed that you simply call this Username, which might lead to some confusion for our customers
-//	-Registration URI : We simply call this 'domain'
-//	-SIP password:
+	public Account buildAccount(Account account) {
+		account = super.buildAccount(account);
+		// Enable dns srv
+		PreferencesWrapper prefs = new PreferencesWrapper(parent);
+		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);
+		
+		return account;
+		
+	}
 	
 }

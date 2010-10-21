@@ -84,14 +84,18 @@ public class SipService extends Service {
 	// -------
 	// Static constants
 	// -------
-
+	// ACTIONS
 	public static final String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
 	public static final String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
 	public static final String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
 	public static final String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
 	public static final String ACTION_SIP_DIALER = "com.csipsimple.phone.action.DIALER";
+	public static final String ACTION_SIP_CALLLOG = "com.csipsimple.phone.action.CALLLOG";
+	// EXTRAS
+	public static final String EXTRA_CALL_INFO = "call_info";
+	
 
-
+	
 
 	public static final String STACK_FILE_NAME = "libpjsipjni.so";
 

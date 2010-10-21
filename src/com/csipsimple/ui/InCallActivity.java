@@ -122,7 +122,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			callInfo = (CallInfo) extras.get("call_info");
+			callInfo = (CallInfo) extras.get(SipService.EXTRA_CALL_INFO);
 		}
 
 		if (callInfo == null) {
@@ -502,7 +502,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				Bundle extras = intent.getExtras();
 				CallInfo notif_call = null;
 				if (extras != null) {
-					notif_call = (CallInfo) extras.get("call_info");
+					notif_call = (CallInfo) extras.get(SipService.EXTRA_CALL_INFO);
 				}
 	
 				if (notif_call != null && callInfo.equals(notif_call)) {

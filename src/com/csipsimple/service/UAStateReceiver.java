@@ -393,7 +393,7 @@ public class UAStateReceiver extends Callback {
 	private void onBroadcastCallState(final CallInfo callInfo) {
 		//Internal event
 		Intent callStateChangedIntent = new Intent(SipService.ACTION_SIP_CALL_CHANGED);
-		callStateChangedIntent.putExtra("call_info", callInfo);
+		callStateChangedIntent.putExtra(SipService.EXTRA_CALL_INFO, callInfo);
 		service.sendBroadcast(callStateChangedIntent);
 		
 		
@@ -419,7 +419,7 @@ public class UAStateReceiver extends Callback {
 		
 		// Launch activity to choose what to do with this call
 		Intent callHandlerIntent = new Intent(SipService.ACTION_SIP_CALL_UI); //new Intent(service, getInCallClass());
-		callHandlerIntent.putExtra("call_info", currentCallInfo2);
+		callHandlerIntent.putExtra(SipService.EXTRA_CALL_INFO, currentCallInfo2);
 		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		Log.d(THIS_FILE, "Anounce call activity");
