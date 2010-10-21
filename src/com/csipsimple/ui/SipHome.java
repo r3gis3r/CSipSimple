@@ -55,6 +55,9 @@ public class SipHome extends TabActivity {
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 
 	private static final String THIS_FILE = "SIP HOME";
+	
+	private static final String TAB_DIALER = "tab1";
+	private static final String TAB_CALLLOG = "tab2";
 
 	private Intent serviceIntent;
 
@@ -69,7 +72,7 @@ public class SipHome extends TabActivity {
 		Log.d(THIS_FILE, "On Create SIPHOME");
 
 		super.onCreate(savedInstanceState);
-
+		
 		prefWrapper = new PreferencesWrapper(this);
 
 		// Check sip stack
@@ -110,16 +113,20 @@ public class SipHome extends TabActivity {
 				Log.e(THIS_FILE, "Not possible to find self name", e);
 			}
 		}
+		
+		
 
 		setContentView(R.layout.home);
 
 		dialerIntent = new Intent(this, Dialer.class);
 		calllogsIntent = new Intent(this, CallLogsList.class);
 
-		addTab("tab1", getString(R.string.dial_tab_name_text), R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
-		addTab("tab2", getString(R.string.calllog_tab_name_text), R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
+		addTab(TAB_DIALER, getString(R.string.dial_tab_name_text), R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
+		addTab(TAB_CALLLOG, getString(R.string.calllog_tab_name_text), R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
 
 		has_tried_once_to_activate_account = false;
+		
+		
 	}
 
 	private void startSipService() {
@@ -207,7 +214,24 @@ public class SipHome extends TabActivity {
 			}
 			has_tried_once_to_activate_account = true;
 		}
+		
+		
+		
 	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		if(intent != null) {
+			String callAction = intent.getAction();
+			if(SipService.ACTION_SIP_CALLLOG.equalsIgnoreCase(callAction)) {
+				getTabHost().setCurrentTab(1);
+			}else if(SipService.ACTION_SIP_DIALER.equalsIgnoreCase(callAction)) {
+				getTabHost().setCurrentTab(0);
+			}
+		}
+	}
+
 
 	@Override
 	protected void onDestroy() {

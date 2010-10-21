@@ -513,7 +513,7 @@ public class Account {
 		
 		Pattern p = Pattern.compile("^sip(s)?:([^@]*)$", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(regUri);
-		Log.d(THIS_FILE, "Try to find into "+regUri);
+		Log.v(THIS_FILE, "Try to find into "+regUri);
 		if(!m.matches()) {
 			Log.e(THIS_FILE, "Default domain can't be guessed from regUri of this account");
 			return null;

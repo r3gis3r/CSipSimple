@@ -42,6 +42,8 @@ public class SipNotifications {
 
 	public static final int REGISTER_NOTIF_ID = 1;
 	public static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
+	public static final int CALLLOG_NOTIF_ID = REGISTER_NOTIF_ID + 2;
+	
 	
 	public SipNotifications(Context aContext) {
 		context = aContext;
@@ -111,7 +113,7 @@ public class SipNotifications {
 		
 		if(missedCallNotification == null) {
 			missedCallNotification = new Notification(icon, tickerText, when);
-			missedCallNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS;
+			missedCallNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 		}
 		
 		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALLLOG);
@@ -120,6 +122,8 @@ public class SipNotifications {
 
 		missedCallNotification.setLatestEventInfo(context, context.getText(R.string.missed_call) /*+" / "+currentCallInfo2.getCallId()*/, 
 				callLog.getAsString(CallLog.Calls.NUMBER), contentIntent);
+		
+		notificationManager.notify(CALLLOG_NOTIF_ID, missedCallNotification);
 	}
 	
 	// Cancels
@@ -129,6 +133,10 @@ public class SipNotifications {
 	
 	public void cancelCalls() {
 		notificationManager.cancel(CALL_NOTIF_ID);
+	}
+	
+	public void cancelMissedCalls() {
+		notificationManager.cancel(CALLLOG_NOTIF_ID);
 	}
 	
 	public void cancelAll() {

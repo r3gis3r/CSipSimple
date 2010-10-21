@@ -225,6 +225,7 @@ public class UAStateReceiver extends Callback {
 					database.open();
 					database.insertCallLog(cv);
 					database.close();
+					notificationManager.showNotificationForMissedCall(cv);
 					
 					//If needed fill native database
 					if(service.prefsWrapper.useIntegrateCallLogs()) {
