@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+	
+	This file is part of CSipSimple.
+
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<EditTextPreference android:key="display_name"
+		android:singleLine="true" android:title="@string/w_common_display_name"></EditTextPreference>
+
+	<EditTextPreference android:key="phone_number"
+		android:singleLine="true" android:title="@string/w_authorization_phone_number"></EditTextPreference>
+	<EditTextPreference android:key="auth_name"
+		android:singleLine="true" android:title="@string/w_authorization_auth_name"></EditTextPreference>
+	<com.csipsimple.widgets.PasswordPreference android:key="password"
+		android:singleLine="true"
+		android:password="true" android:title="@string/w_common_password"></com.csipsimple.widgets.PasswordPreference>
+	<EditTextPreference android:key="server"
+		android:singleLine="true" android:title="@string/w_common_server"></EditTextPreference>
+
+
+</PreferenceScreen>

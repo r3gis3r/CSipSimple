@@ -17,16 +17,9 @@
  */
 package com.csipsimple.wizards;
 
-import java.util.regex.Pattern;
-
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsua;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,8 +31,10 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.ui.AccountFilters;
 import com.csipsimple.ui.prefs.GenericPrefs;
+import com.csipsimple.utils.Log;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public abstract class BasePrefsWizard extends GenericPrefs{
+public class BasePrefsWizard extends GenericPrefs{
     public static final int SAVE_MENU = Menu.FIRST + 1;
 	public static final int TRANSFORM_MENU = Menu.FIRST + 2;
 	public static final int FILTERS_MENU = Menu.FIRST + 3;
@@ -47,17 +42,25 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 	
 	public static final int CHOOSE_WIZARD = 0;
 	public static final int MODIFY_FILTERS = 1;
+	private static final String THIS_FILE = "Base Prefs wizard";
 	
 	private long accountId = -1;
 	protected Account account = null;
 	private Button saveButton;
 	private DBAdapter database;
+	private String wizardId = "";
+	private WizardInfo wizardInfo = null;
+	private WizardIface wizard = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Get back the concerned account and if any set the current (if not a new account is created)
 		Intent intent = getIntent();
         accountId = intent.getIntExtra(Intent.EXTRA_UID, -1);
+        
+        //TODO : ensure this is not null...
+        setWizardId(intent.getStringExtra(Intent.EXTRA_REMOTE_INTENT_TOKEN));
+        
         
         database = new DBAdapter(this);
 		database.open();
@@ -88,14 +91,48 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 				finish();
 			}
 		});
-		fillLayout();
+		wizard.fillLayout(account);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		updateDescriptions();
-		saveButton.setEnabled(canSave());
+		saveButton.setEnabled(wizard.canSave());
+	}
+	
+	private boolean setWizardId(String wId) {
+		if(wizardId == null) {
+        	return setWizardId("EXPERT");
+        }
+        
+        wizardInfo = WizardUtils.getWizardClass(wId);
+        if(wizardInfo == null) {
+        	if(!wizardId.equals("EXPERT")) {
+        		return setWizardId("EXPERT");
+        	}
+        	return false;
+        }
+        
+        try {
+			wizard = (WizardIface) wizardInfo.classObject.newInstance();
+		} catch (IllegalAccessException e) {
+			Log.e(THIS_FILE, "Can't access wizard class", e);
+			if(!wizardId.equals("EXPERT")) {
+        		return setWizardId("EXPERT");
+        	}
+        	return false;
+		} catch (InstantiationException e) {
+			Log.e(THIS_FILE, "Can't access wizard class", e);
+			if(!wizardId.equals("EXPERT")) {
+        		return setWizardId("EXPERT");
+        	}
+        	return false;
+		}
+		wizardId = wId;
+        wizard.setParent(this);
+        
+        return true;
 	}
 	
 	@Override
@@ -109,7 +146,7 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 			String key) {
 
 		updateDescriptions();
-		saveButton.setEnabled(canSave());
+		saveButton.setEnabled(wizard.canSave());
 	}
 	
 	
@@ -180,34 +217,13 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 	}
 	
 	
-	//Utilities functions
-	protected boolean isEmpty(EditTextPreference edt){
-		if(edt.getText() == null){
-			return true;
-		}
-		if(edt.getText().equals("")){
-			return true;
-		}
-		return false;
-	}
-	
-	protected boolean isMatching(EditTextPreference edt, String regex) {
-		if(edt.getText() == null){
-			return false;
-		}
-		return Pattern.matches(regex, edt.getText());
-	}
-
-	protected pj_str_t getPjText(EditTextPreference edt){
-		return pjsua.pj_str_copy(edt.getText());
-	}
 	
 	protected void saveAccount() {
-		saveAccount(getWizardId());
+		saveAccount(wizardId);
 	}
 	
 	protected void saveAccount(String wizardId){
-		buildAccount();
+		account = wizard.buildAccount(account);
 		account.wizard = wizardId;
 		database.open();
 		if(account.id == null || account.id.equals(-1)){
@@ -218,57 +234,19 @@ public abstract class BasePrefsWizard extends GenericPrefs{
 		database.close();
 		
 	}
-	
 
 	@Override
-	protected String getDefaultFieldSummary(String field_name){
-		String val = "";
-		try {
-			String keyid = R.string.class.getField("w_"+getXmlPrefix()+"_"+field_name+"_desc").get(null).toString();
-			val = getString( Integer.parseInt(keyid) );
-		} catch (SecurityException e) {
-			//Nothing to do : desc is null
-		} catch (NoSuchFieldException e) {
-			//Nothing to do : desc is null
-		} catch (IllegalArgumentException e) {
-			//Nothing to do : desc is null
-		} catch (IllegalAccessException e) {
-			//Nothing to do : desc is null
-		}
-		return val;
-	}
-	
-	private void markFieldInvalid(Preference field) {
-		field.setLayoutResource(R.layout.invalid_preference_row);
-	}
-	
-	private void markFieldValid(Preference field) {
-		field.setLayoutResource(R.layout.valid_preference_row);
-	}
-	
-	/**
-	 * Check the validity of a field and if invalid mark it as invalid
-	 * @param field field to check
-	 * @param isNotValid if true this field is considered as invalid
-	 * @return if the field is valid (!isNotValid)
-	 * This is convenient for &= from a true variable over multiple fields
-	 */
-	protected boolean checkField(Preference field, boolean isNotValid) {
-		if(isNotValid) {
-			markFieldInvalid(field);
-		}else {
-			markFieldValid(field);
-		}
-		return !isNotValid;
+	protected int getXmlPreferences() {
+		return wizard.getBasePreferenceResource();
 	}
 
-	protected abstract void fillLayout();
-	protected abstract void updateDescriptions();
-	protected abstract boolean canSave();
-	protected abstract void buildAccount();
-	protected abstract int getXmlPreferences();
-	protected abstract String getXmlPrefix();
-	protected abstract String getWizardId();
+	@Override
+	protected void updateDescriptions() {
+		wizard.updateDescriptions();
+	}
 	
+	protected String getDefaultFieldSummary(String fieldName){
+		return wizard.getDefaultFieldSummary(fieldName);
+	}
 	
 }

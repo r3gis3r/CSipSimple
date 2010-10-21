@@ -17,7 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
+import java.util.HashMap;
 
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
@@ -30,24 +30,12 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 
 import com.csipsimple.R;
+import com.csipsimple.models.Account;
 import com.csipsimple.utils.Log;
-import com.csipsimple.wizards.BasePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public class Expert extends BasePrefsWizard {
+public class Expert extends BaseImplementation {
 
 	private static final String THIS_FILE = "Expert";
-
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id = "EXPERT";
-		result.label = "Expert";
-		result.icon = R.drawable.ic_wizard_expert;
-		result.priority = -1;
-		result.countries = new Locale[] {};
-		result.isGeneric = true;
-		return result;
-	}
 
 
 	private EditTextPreference accountDisplayName;
@@ -66,24 +54,28 @@ public class Expert extends BasePrefsWizard {
 	private EditTextPreference accountProxy;
 	private ListPreference accountUseSrtp;
 	private CheckBoxPreference accountPreventTcp;
+	
+	private void bindFields() {
+		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
+		accountAccId = (EditTextPreference) parent.findPreference("acc_id");
+		accountRegUri = (EditTextPreference) parent.findPreference("reg_uri");
+		accountRealm = (EditTextPreference) parent.findPreference("realm");
+		accountUserName = (EditTextPreference) parent.findPreference("username");
+		accountData = (EditTextPreference) parent.findPreference("data");
+		accountDataType = (ListPreference) parent.findPreference("data_type");
+		accountScheme = (ListPreference) parent.findPreference("scheme");
+		accountUseTcp = (CheckBoxPreference) parent.findPreference("use_tcp");
+		accountPreventTcp = (CheckBoxPreference) parent.findPreference("prevent_tcp");
+		accountUseSrtp = (ListPreference) parent.findPreference("use_srtp");
+		accountPublishEnabled = (CheckBoxPreference) parent.findPreference("publish_enabled");
+		accountRegTimeout = (EditTextPreference) parent.findPreference("reg_timeout");
+		accountKaInterval = (EditTextPreference) parent.findPreference("ka_interval");
+		accountForceContact = (EditTextPreference) parent.findPreference("force_contact");
+		accountProxy = (EditTextPreference) parent.findPreference("proxy");
+	}
 
-	protected void fillLayout() {
-		accountDisplayName = (EditTextPreference) findPreference("display_name");
-		accountAccId = (EditTextPreference) findPreference("acc_id");
-		accountRegUri = (EditTextPreference) findPreference("reg_uri");
-		accountRealm = (EditTextPreference) findPreference("realm");
-		accountUserName = (EditTextPreference) findPreference("username");
-		accountData = (EditTextPreference) findPreference("data");
-		accountDataType = (ListPreference) findPreference("data_type");
-		accountScheme = (ListPreference) findPreference("scheme");
-		accountUseTcp = (CheckBoxPreference) findPreference("use_tcp");
-		accountPreventTcp = (CheckBoxPreference) findPreference("prevent_tcp");
-		accountUseSrtp = (ListPreference) findPreference("use_srtp");
-		accountPublishEnabled = (CheckBoxPreference) findPreference("publish_enabled");
-		accountRegTimeout = (EditTextPreference) findPreference("reg_timeout");
-		accountKaInterval = (EditTextPreference) findPreference("ka_interval");
-		accountForceContact = (EditTextPreference) findPreference("force_contact");
-		accountProxy = (EditTextPreference) findPreference("proxy");
+	public void fillLayout(Account account) {
+		bindFields();
 
 		pjsip_cred_info ci = account.cfg.getCred_info();
 
@@ -131,7 +123,7 @@ public class Expert extends BasePrefsWizard {
 	}
 	
 
-	protected void updateDescriptions() {
+	public void updateDescriptions() {
 		setStringFieldSummary("display_name");
 		setStringFieldSummary("acc_id");
 		setStringFieldSummary("reg_uri");
@@ -140,8 +132,32 @@ public class Expert extends BasePrefsWizard {
 		setStringFieldSummary("proxy");
 		setPasswordFieldSummary("data");
 	}
+	
+	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = -5469900404720631144L;
 
-	protected boolean canSave() {
+	{
+		put("display_name", R.string.w_common_display_name_desc);
+		put("acc_id", R.string.w_expert_acc_id_desc);
+		put("reg_uri", R.string.w_expert_reg_uri_desc);
+		put("realm", R.string.w_expert_realm_desc);
+		put("username", R.string.w_expert_username_desc);
+		put("proxy", R.string.w_expert_proxy_desc);
+		put("data", R.string.w_expert_data_desc);
+	}};
+
+	@Override
+	public String getDefaultFieldSummary(String fieldName) {
+		Integer res = SUMMARIES.get(fieldName);
+		if(res != null) {
+			return parent.getString( res );
+		}
+		return "";
+	}
+
+	public boolean canSave() {
 		boolean isValid = true;
 
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
@@ -152,7 +168,7 @@ public class Expert extends BasePrefsWizard {
 		return isValid;
 	}
 
-	protected void buildAccount() {
+	public Account buildAccount(Account account) {
 		account.display_name = accountDisplayName.getText();
 		account.use_tcp = accountUseTcp.isChecked();
 		account.prevent_tcp = accountPreventTcp.isChecked();
@@ -217,21 +233,13 @@ public class Expert extends BasePrefsWizard {
 		} else {
 			account.cfg.setProxy_cnt(0);
 		}
-
+		
+		return account;
 	}
 
-	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
-	}
 
 	@Override
-	protected int getXmlPreferences() {
+	public int getBasePreferenceResource() {
 		return R.xml.w_expert_preferences;
-	}
-
-	@Override
-	protected String getXmlPrefix() {
-		return "expert";
 	}
 }

@@ -17,7 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,26 +28,14 @@ import org.pjsip.pjsua.pjsua;
 
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
-import com.csipsimple.utils.Log;
 
 import com.csipsimple.R;
-import com.csipsimple.wizards.BasePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
+import com.csipsimple.models.Account;
+import com.csipsimple.utils.Log;
 
-public class Advanced extends BasePrefsWizard {
+public class Advanced extends BaseImplementation {
 	protected static final String THIS_FILE = "Advanced W";
 	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id = "ADVANCED";
-		result.label = "Advanced";
-		result.icon = R.drawable.ic_wizard_advanced;
-		result.priority = 2;
-		result.countries = new Locale[] {};
-		result.isGeneric = true;
-		return result;
-	}
-
 	private EditTextPreference accountDisplayName;
 	private EditTextPreference accountUserName;
 	private EditTextPreference accountServer;
@@ -55,15 +43,19 @@ public class Advanced extends BasePrefsWizard {
 	private EditTextPreference accountCallerId;
 	private CheckBoxPreference accountUseTcp;
 	private EditTextPreference accountProxy;
+	
+	private void bindFields() {
+		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
+		accountCallerId = (EditTextPreference) parent.findPreference("caller_id");
+		accountServer = (EditTextPreference) parent.findPreference("server");
+		accountUserName = (EditTextPreference) parent.findPreference("username");
+		accountPassword = (EditTextPreference) parent.findPreference("password");
+		accountUseTcp = (CheckBoxPreference) parent.findPreference("use_tcp");
+		accountProxy = (EditTextPreference) parent.findPreference("proxy");
+	}
 
-	protected void fillLayout() {
-		accountDisplayName = (EditTextPreference) findPreference("display_name");
-		accountCallerId = (EditTextPreference) findPreference("caller_id");
-		accountServer = (EditTextPreference) findPreference("server");
-		accountUserName = (EditTextPreference) findPreference("username");
-		accountPassword = (EditTextPreference) findPreference("password");
-		accountUseTcp = (CheckBoxPreference) findPreference("use_tcp");
-		accountProxy = (EditTextPreference) findPreference("proxy");
+	public void fillLayout(Account account) {
+		bindFields();
 		
 		accountDisplayName.setText(account.display_name);
 		
@@ -99,7 +91,7 @@ public class Advanced extends BasePrefsWizard {
 
 	}
 
-	protected void updateDescriptions() {
+	public void updateDescriptions() {
 		setStringFieldSummary("display_name");
 		setStringFieldSummary("caller_id");
 		setStringFieldSummary("server");
@@ -107,8 +99,31 @@ public class Advanced extends BasePrefsWizard {
 		setPasswordFieldSummary("password");
 		setStringFieldSummary("proxy");
 	}
+	
+	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3055562364235868653L;
 
-	protected boolean canSave() {
+	{
+		put("display_name", R.string.w_common_display_name_desc);
+		put("caller_id", R.string.w_advanced_caller_id_desc);
+		put("server", R.string.w_common_server_desc);
+		put("username", R.string.w_advanced_username_desc);
+		put("password", R.string.w_advanced_password_desc);
+		put("proxy", R.string.w_advanced_proxy_desc);
+	}};
+
+	@Override
+	public String getDefaultFieldSummary(String fieldName) {
+		Integer res = SUMMARIES.get(fieldName);
+		if(res != null) {
+			return parent.getString( res );
+		}
+		return "";
+	}
+
+	public boolean canSave() {
 		boolean isValid = true;
 		
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
@@ -120,7 +135,7 @@ public class Advanced extends BasePrefsWizard {
 		return isValid;
 	}
 
-	protected void buildAccount() {
+	public Account buildAccount(Account account) {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
 		account.cfg.setId(pjsua.pj_str_copy(accountCallerId.getText().trim() + " <sip:"
@@ -148,20 +163,13 @@ public class Advanced extends BasePrefsWizard {
 		} else {
 			account.cfg.setProxy_cnt(0);
 		}
+		return account;
 	}
 
 	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
-	}
-
-	@Override
-	protected int getXmlPreferences() {
+	public int getBasePreferenceResource() {
 		return R.xml.w_advanced_preferences;
 	}
+	
 
-	@Override
-	protected String getXmlPrefix() {
-		return "advanced";
-	}
 }

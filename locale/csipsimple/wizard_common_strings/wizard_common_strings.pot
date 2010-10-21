@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-19 13:49+0200\n"
+"POT-Creation-Date: 2010-10-21 23:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,5 +47,13 @@ msgstr ""
 
 msgctxt "w_common_password_desc"
 msgid "Password for your account"
+msgstr ""
+
+msgctxt "w_common_server"
+msgid "Server"
+msgstr ""
+
+msgctxt "w_common_server_desc"
+msgid "SIP server domain/IP[:port]"
 msgstr ""
 

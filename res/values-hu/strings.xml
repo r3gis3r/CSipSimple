@@ -16,6 +16,7 @@
   <string name="use">Fiók:</string>
   <string name="use_pstn">GSM hivás</string>
   <string name="ongoing_call">Hívás folyamatban</string>
+  <string name="missed_call">Elmulasztott hívás</string>
   <string name="recentCalls_empty">Nincs hívás lista</string>
   <string name="filters">Szűrők</string>
   <string name="add_filter">Szűrő létrehozás / átírás</string>
@@ -32,4 +33,5 @@
   <string name="menu_quit_text">Kilép</string>
   <string name="service_ticker_registered_text">SIP Regisztrálva</string>
   <string name="outgoing_call_chooser_call_text">Hívás</string>
+  <string name="reorder">Újrahívás</string>
 </resources>

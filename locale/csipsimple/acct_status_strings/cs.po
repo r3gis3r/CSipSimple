@@ -1,0 +1,49 @@
+# Czech translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# Regis Montoya <http://www.r3gis.fr>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: csipsimple 0.01\n"
+"Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
+"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"PO-Revision-Date: 2010-10-21 23:27+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: cs <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "acct_inactive"
+msgid "Inactive"
+msgstr "Neaktivní"
+
+msgctxt "acct_unregistered"
+msgid "Not Registered"
+msgstr "Neregistrováno"
+
+msgctxt "acct_expired"
+msgid "Registration Expired"
+msgstr "Registrace vypršela"
+
+msgctxt "acct_registering"
+msgid "Registering..."
+msgstr "Registruji..."
+
+msgctxt "acct_registered"
+msgid "Registered"
+msgstr "Registrováno"
+
+msgctxt "acct_regerror"
+msgid "Error while registering"
+msgstr "Chyba registrace"
+
+msgctxt "acct_regfailed"
+msgid "Register Failed - Check your Configuration"
+msgstr "registrace selhala - zkontrolujte nastavení"
+

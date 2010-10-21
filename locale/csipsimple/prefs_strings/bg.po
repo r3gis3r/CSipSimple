@@ -5,17 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: csipsimple\n"
+"Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-25 18:18+0200\n"
+"POT-Creation-Date: 2010-10-21 23:27+0200\n"
 "PO-Revision-Date: 2010-09-30 08:04+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-01 09:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"Generated-By: Babel 1.0dev\n"
 
 msgctxt "prefs"
 msgid "Settings"
@@ -81,6 +81,18 @@ msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
 msgstr "Използване на WiFi за изходящи повиквания"
 
+msgctxt "use_other"
+msgid "Use other networks"
+msgstr ""
+
+msgctxt "use_other_in_desc"
+msgid "For example WiMax for incoming calls"
+msgstr ""
+
+msgctxt "use_other_out_desc"
+msgid "For example WiMax for outgoing calls"
+msgstr ""
+
 msgctxt "use_3g"
 msgid "Use 3G"
 msgstr "Използване на 3G"
@@ -113,6 +125,14 @@ msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
 msgstr "Разрешаване на TCP пренос"
 
+msgctxt "enable_tls"
+msgid "TLS"
+msgstr ""
+
+msgctxt "enable_tls_desc"
+msgid "Enable TLS transport"
+msgstr ""
+
 msgctxt "enable_udp"
 msgid "UDP"
 msgstr "UDP"
@@ -137,6 +157,14 @@ msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Номер на порт, който ще се ползва локално"
 
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr ""
+
+msgctxt "network_tls_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr ""
+
 msgctxt "network_rtp_port"
 msgid "RTP port"
 msgstr "RTP порт"
@@ -145,6 +173,87 @@ msgctxt "network_rtp_port_desc"
 msgid "Port for RTP ports range start"
 msgstr "Начален RTP порт"
 
+msgctxt "use_ipv6"
+msgid "Use IPv6"
+msgstr ""
+
+msgctxt "use_ipv6_desc"
+msgid "Switch to IPv6 mode (your network and phone must support it)"
+msgstr ""
+
+msgctxt "enable_dns_srv"
+msgid "Resolve DNS SRV"
+msgstr ""
+
+msgctxt "enable_dns_srv_desc"
+msgid "Use the application resolver to resolve DNS names"
+msgstr ""
+
+msgctxt "override_nameserver"
+msgid "Use a custom DNS"
+msgstr ""
+
+msgctxt "override_nameserver_desc"
+msgid "Left blank to retrieve DNS from Android"
+msgstr ""
+
+#, fuzzy
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr "Транспорт"
+
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr ""
+
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr ""
+
+msgctxt "nat_traversal"
+msgid "NAT traversal"
+msgstr ""
+
+msgctxt "enable_ice"
+msgid "Enable ICE"
+msgstr "Активиране на ICE"
+
+msgctxt "enable_ice_desc"
+msgid "Turn on ICE feature"
+msgstr "Включване на ICE функция"
+
+msgctxt "enable_turn"
+msgid "Enable TURN"
+msgstr "Активиране на TURN"
+
+msgctxt "enable_turn_desc"
+msgid "Turn on TURN feature"
+msgstr "Включване на TURN функцията"
+
+msgctxt "turn_server"
+msgid "Turn server"
+msgstr "Turn сървър"
+
+msgctxt "turn_server_desc"
+msgid "TURN server (HOST:PORT)"
+msgstr "TURN сървър (ХОСТ:ПОРТ)"
+
+msgctxt "enable_stun"
+msgid "Enable STUN"
+msgstr "Активиране на STUN"
+
+msgctxt "enable_stun_desc"
+msgid "Turn on STUN feature"
+msgstr "Включване на STUN функция"
+
+msgctxt "stun_server"
+msgid "STUN server"
+msgstr "STUN сървър"
+
+msgctxt "stun_server_desc"
+msgid "STUN server (HOST:PORT)"
+msgstr "STUN сървър (ХОСТ:ПОРТ)"
+
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Качество на звука"
@@ -152,10 +261,6 @@ msgstr "Качество на звука"
 msgctxt "codecs"
 msgid "Codecs"
 msgstr "Кодировки"
-
-msgctxt "ice_turn"
-msgid "ICE/TURN/STUN"
-msgstr "ICE/TURN/STUN"
 
 msgctxt "echo_cancellation"
 msgid "Echo cancellation"
@@ -210,8 +315,7 @@ msgid "Media quality"
 msgstr "Качество на връзката"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Качество на връзката (променяй само ако знаеш какво правиш)"
 
 msgctxt "snd_clock_rate"
@@ -228,8 +332,7 @@ msgstr "Рамка на п-време (ptime)"
 
 msgctxt "snd_ptime_desc"
 msgid "Specifying lower ptime will normally reduce the latency"
-msgstr ""
-"Използването на по-ниско п-време (ptime) обикновено намалява латентността"
+msgstr "Използването на по-ниско п-време (ptime) обикновено намалява латентността"
 
 msgctxt "echo_cancellation_tail"
 msgid "Echo cancellation tail"
@@ -239,49 +342,17 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "Големина на буфера за намаляване на ехо"
 
-msgctxt "enable_ice"
-msgid "Enable ICE"
-msgstr "Активиране на ICE"
-
-msgctxt "enable_ice_desc"
-msgid "Turn on ICE feature"
-msgstr "Включване на ICE функция"
-
-msgctxt "enable_turn"
-msgid "Enable TURN"
-msgstr "Активиране на TURN"
-
-msgctxt "enable_turn_desc"
-msgid "Turn on TURN feature"
-msgstr "Включване на TURN функцията"
-
-msgctxt "turn_server"
-msgid "Turn server"
-msgstr "Turn сървър"
-
-msgctxt "turn_server_desc"
-msgid "TURN server (HOST:PORT)"
-msgstr "TURN сървър (ХОСТ:ПОРТ)"
-
-msgctxt "enable_stun"
-msgid "Enable STUN"
-msgstr "Активиране на STUN"
-
-msgctxt "enable_stun_desc"
-msgid "Turn on STUN feature"
-msgstr "Включване на STUN функция"
-
-msgctxt "stun_server"
-msgid "STUN server"
-msgstr "STUN сървър"
-
-msgctxt "stun_server_desc"
-msgid "STUN server (HOST:PORT)"
-msgstr "STUN сървър (ХОСТ:ПОРТ)"
-
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Приоритет (0 е изключено)"
+
+msgctxt "sip_info_dtmf"
+msgid "DTMF SIP INFO"
+msgstr ""
+
+msgctxt "sip_info_dtmf_desc"
+msgid "Use SIP INFO to send DTMF"
+msgstr ""
 
 msgctxt "general_ui"
 msgid "General user interface"
@@ -301,8 +372,8 @@ msgstr "Интегриране с програмата за избиране н�
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
 "Преди всяко набиране с програмата за обаждания ще бъдете питани кой "
 "доставчик предпочитате да използвате: SIP или GSM доставчик"
@@ -314,15 +385,8 @@ msgstr "Интеграция с история на повикванията"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"SIP повикванията ще бъдат обединени (ако е възможно) в история на обажданията"
-
-msgctxt "exclude_for_outgoing_call"
-msgid "Exclude patterns"
-msgstr "Изключи модели"
-
-msgctxt "exclude_for_outgoing_call_desc"
-msgid "Exclude patterns for outgoing calls"
-msgstr "Изключи модели за изходящи повиквания"
+"SIP повикванията ще бъдат обединени (ако е възможно) в история на "
+"обажданията"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -371,8 +435,9 @@ msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Използване на частично заключване"
 
+#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
-msgid "Ensure CPU is always running for CSipSimple (drain battery)"
+msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr "Осигурява винаги работещ процесор за cSIPsimple (изтощава батерията)"
 
 msgctxt "log_level"
@@ -392,8 +457,16 @@ msgstr "Интегрирай с приложение Музика"
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
-"Изключете го, ако използвате друго музикално приложение, различно от това по "
-"подразбиране"
+"Изключете го, ако използвате друго музикално приложение, различно от това"
+" по подразбиране"
+
+msgctxt "ringtone"
+msgid "Ringtone"
+msgstr ""
+
+msgctxt "ringtone_desc"
+msgid "Default ringtone for SIP calls"
+msgstr ""
 
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -450,3 +523,13 @@ msgstr ""
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
 msgstr "Предлага се само, ако в момента SIP е регистриран"
+
+msgctxt "expert_preferences"
+msgid "Expert mode"
+msgstr ""
+
+#, fuzzy
+msgctxt "advanced_preferences"
+msgid "Advanced mode"
+msgstr "Допълнителна оптимизация"
+

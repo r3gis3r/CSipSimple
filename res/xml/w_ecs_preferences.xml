@@ -38,7 +38,7 @@
 			android:singleLine="true" android:title="@string/w_ecs_server_domain"></EditTextPreference>
 
 		<EditTextPreference android:key="server_ip"
-			android:singleLine="true" android:title="@string/w_ecs_server_ip"></EditTextPreference>
+			android:singleLine="true" android:title="@string/w_common_server"></EditTextPreference>
 	</PreferenceCategory>
 
 </PreferenceScreen>

@@ -16,6 +16,7 @@
   <string name="w_expert_proxy">Прокси-сервер URI</string>
   <string name="w_expert_proxy_desc">Формат: sip:proxy.net[:port]</string>
   <string name="w_expert_use_tcp">Использовать TCP (не UDP)</string>
+  <string name="w_expert_prevent_tcp">Запретить TCP (использовать только UDP)</string>
   <string name="w_expert_publish_enabled">Публикация включена</string>
   <string name="w_expert_reg_timeout">Время регистрации (сек.)</string>
   <string name="w_expert_ka_interval">Интервал обновления (сек.)</string>

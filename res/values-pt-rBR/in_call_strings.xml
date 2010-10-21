@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="take_call">Atender</string>
+  <string name="decline_call">Ignorar</string>
+  <string name="clear_call">Terminar</string>
+  <string name="dialpad">Teclado</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Viva-Voz</string>
+  <string name="mute">Mudo</string>
+  <string name="add_call">Adicionar chamada</string>
+  <string name="call_state_calling">Chamando...</string>
+</resources>

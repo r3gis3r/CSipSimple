@@ -1,11 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="w_basic_display_name">Nom du compte</string>
-  <string name="w_basic_display_name_desc">Nom utilisé pour l\'affichage de ce compte</string>
   <string name="w_basic_username">Utilisateur</string>
   <string name="w_basic_username_desc">Login (nom d\'utilisateur)</string>
-  <string name="w_basic_server">Serveur</string>
-  <string name="w_basic_server_desc">Serveur / Domaine SIP</string>
   <string name="w_basic_password">Mot de passe</string>
   <string name="w_basic_password_desc">Mot de passe de votre compte</string>
 </resources>

@@ -6,6 +6,5 @@
   <string name="w_magicjack_username_desc">Ilyesminek kell lennije: EXXXXXXXXXX01</string>
   <string name="w_magicjack_password">Jelszó</string>
   <string name="w_magicjack_password_desc">Jelszó a SIP szerveren</string>
-  <string name="w_magicjack_server">Szerver</string>
   <string name="w_magicjack_server_desc">Ilyesminek kell lennie: proxy01.yourcity.talk4free.com</string>
 </resources>

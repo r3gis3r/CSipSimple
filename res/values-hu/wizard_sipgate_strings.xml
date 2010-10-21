@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_sipgate_display_name">Fiók neve</string>
+  <string name="w_sipgate_display_name_desc">Megjelenítendő név a fiók használatakor</string>
+  <string name="w_sipgate_username">SIP-ID</string>
+  <string name="w_sipgate_username_desc">Különbözik a sipgate felhasználónévtől! A sipgate weboldalán a SIP-ID elérhető</string>
+  <string name="w_sipgate_password">SIP jelszó</string>
+  <string name="w_sipgate_password_desc">Különbözik a sipgate jelszótól! A sipgate weboldalán a SIP jelszó elérhető</string>
+  <string name="w_sipgate_server_desc">Valami ilyesmi: sipgate.co.uk</string>
+</resources>

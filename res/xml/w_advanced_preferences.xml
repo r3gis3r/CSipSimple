@@ -30,7 +30,7 @@
 
 		<EditTextPreference android:key="server"
 			android:singleLine="true"
-			android:title="@string/w_advanced_server"></EditTextPreference>
+			android:title="@string/w_common_server"></EditTextPreference>
 			
 		<EditTextPreference android:key="username"
 			android:singleLine="true"
@@ -39,7 +39,7 @@
 		<com.csipsimple.widgets.PasswordPreference android:key="password"
 			android:singleLine="true"
 			android:password="true"
-			android:title="@string/w_advanced_password"></com.csipsimple.widgets.PasswordPreference>
+			android:title="@string/w_common_password"></com.csipsimple.widgets.PasswordPreference>
 
 		<CheckBoxPreference android:key="use_tcp" 
 			android:title="@string/w_advanced_use_tcp"></CheckBoxPreference>

@@ -16,6 +16,7 @@
   <string name="use">Utiliser :</string>
   <string name="use_pstn">Passer par le GSM</string>
   <string name="ongoing_call">Appel en cours</string>
+  <string name="missed_call">Appel en absence</string>
   <string name="recentCalls_empty">Journal d\'appel vide</string>
   <string name="filters">Filtres</string>
   <string name="add_filter">Ajouter une règle (filtre/réécriture)</string>
@@ -32,4 +33,5 @@
   <string name="menu_quit_text">Quitter</string>
   <string name="service_ticker_registered_text">SIP enregistré</string>
   <string name="outgoing_call_chooser_call_text">Appeler</string>
+  <string name="reorder">Réorganiser</string>
 </resources>

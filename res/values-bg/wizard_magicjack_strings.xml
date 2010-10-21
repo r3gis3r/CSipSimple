@@ -6,6 +6,5 @@
   <string name="w_magicjack_username_desc">Например EXXXXXXXXXX01</string>
   <string name="w_magicjack_password">Парола</string>
   <string name="w_magicjack_password_desc">Парола за удостоверяване на SIP сървъра</string>
-  <string name="w_magicjack_server">Сървър</string>
   <string name="w_magicjack_server_desc">Например: sip.planetphone.net</string>
 </resources>

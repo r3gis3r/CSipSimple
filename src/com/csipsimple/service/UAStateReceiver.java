@@ -33,9 +33,6 @@ import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_call_media_status;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -66,7 +63,7 @@ public class UAStateReceiver extends Callback {
 	
 	private boolean autoAcceptCurrent = false;
 
-	private NotificationManager notificationManager;
+	private SipNotifications notificationManager;
 	private SipService service;
 //	private ComponentName remoteControlResponder;
 
@@ -175,7 +172,6 @@ public class UAStateReceiver extends Callback {
 
 	private WorkerHandler msgHandler;
 	private HandlerThread handlerThread;
-	private Notification inCallNotification;
 	private WakeLock incomingCallLock;
 
 	private static final int ON_INCOMING_CALL = 1;
@@ -208,7 +204,7 @@ public class UAStateReceiver extends Callback {
 				
 				if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || 
 						callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
-					showNotificationForCall(callInfo);
+					notificationManager.showNotificationForCall(callInfo);
 					launchCallHandler(callInfo);
 					broadCastAndroidCallState("RINGING", callInfo.getRemoteContact());
 				} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
@@ -217,7 +213,8 @@ public class UAStateReceiver extends Callback {
 					broadCastAndroidCallState("OFFHOOK", callInfo.getRemoteContact());
 					callInfo.callStart = System.currentTimeMillis();
 				}else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
-					notificationManager.cancel(SipService.CALL_NOTIF_ID);
+					//TODO : should manage multiple calls
+					notificationManager.cancelCalls();
 					Log.d(THIS_FILE, "Finish call2");
 					
 					//CallLog
@@ -240,12 +237,16 @@ public class UAStateReceiver extends Callback {
 							String phoneNumber =  m.group(2);
 							if(!TextUtils.isEmpty(phoneNumber)) {
 								cv.put(Calls.NUMBER, phoneNumber);
+								// For log in call logs => don't add as new calls... we manage it ourselves.
+								cv.put(Calls.NEW, false);
 								CallLogHelper.addCallLog(service.getContentResolver(), cv);
 							}
 						}
 					}
 					callInfo.setIncoming(false);
 					callInfo.callStart = 0;
+					
+					
 					broadCastAndroidCallState("IDLE", callInfo.getRemoteContact());
 				}
 				onBroadcastCallState(callInfo);
@@ -290,7 +291,7 @@ public class UAStateReceiver extends Callback {
 		
 		String remContact = callInfo.getRemoteContact();
 		callInfo.setIncoming(true);
-		showNotificationForCall(callInfo);
+		notificationManager.showNotificationForCall(callInfo);
 
 		//Auto answer feature
 		boolean shouldAutoAnswer = false;
@@ -339,7 +340,7 @@ public class UAStateReceiver extends Callback {
 	public void initService(SipService srv) {
 		service = srv;
 
-		notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager = new SipNotifications(srv);
 		
 		if(handlerThread == null) {
 			handlerThread = new HandlerThread("UAStateAsyncWorker");
@@ -408,37 +409,6 @@ public class UAStateReceiver extends Callback {
 		intent.putExtra(service.getString(R.string.app_name), true);
 		service.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
 	}
-	
-	
-	private void showNotificationForCall(CallInfo currentCallInfo2) {
-		// This is the pending call notification
-		int icon = R.drawable.ic_incall_ongoing;
-		CharSequence tickerText =  service.getText(R.string.ongoing_call);
-		long when = System.currentTimeMillis();
-		
-		if(inCallNotification == null) {
-			inCallNotification = new Notification(icon, tickerText, when);
-			inCallNotification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-			// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
-		}
-		Context context = service.getApplicationContext();
-
-		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALL_UI);
-		Log.d(THIS_FILE, "Show notification for "+currentCallInfo2.getCallId());
-		notificationIntent.putExtra("call_info", currentCallInfo2);
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		PendingIntent contentIntent = PendingIntent.getActivity(service, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-		
-		inCallNotification.setLatestEventInfo(context, service.getText(R.string.ongoing_call) /*+" / "+currentCallInfo2.getCallId()*/, 
-				currentCallInfo2.getRemoteContact(), contentIntent);
-
-		notificationManager.notify(SipService.CALL_NOTIF_ID, inCallNotification);
-		
-	}
-	
-	
-
 	
 	/**
 	 * 

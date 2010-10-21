@@ -73,7 +73,7 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		return val;
 	}
 	
-	protected void setStringFieldSummary(String fieldName){
+	public void setStringFieldSummary(String fieldName){
 		PreferenceScreen pfs = getPreferenceScreen();
 		SharedPreferences sp = pfs.getSharedPreferences();
 		Preference pref = pfs.findPreference(fieldName);
@@ -86,7 +86,7 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		
 	}
 	
-	protected void setPasswordFieldSummary(String fieldName){
+	public void setPasswordFieldSummary(String fieldName){
 		PreferenceScreen pfs = getPreferenceScreen();
 		SharedPreferences sp = pfs.getSharedPreferences();
 		Preference pref = pfs.findPreference(fieldName);

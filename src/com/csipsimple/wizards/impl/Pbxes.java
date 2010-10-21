@@ -17,27 +17,10 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
+import com.csipsimple.models.Account;
 
-import android.preference.EditTextPreference;
-import android.text.InputType;
-
-import com.csipsimple.R;
-import com.csipsimple.wizards.SimplePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
-
-public class Pbxes extends SimplePrefsWizard {
+public class Pbxes extends SimpleImplementation {
 	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "PBXES";
-		result.label = "Pbxes.org";
-		result.icon = R.drawable.ic_wizard_pbxes;
-		result.priority = 20;
-		result.countries = new Locale[]{};
-		result.isWorld = true;
-		return result;
-	}
 
 	@Override
 	protected String getDomain() {
@@ -46,29 +29,24 @@ public class Pbxes extends SimplePrefsWizard {
 	
 	@Override
 	protected String getDefaultName() {
-		return getWizardInfo().label;
+		return "Pbxes.org";
 	}
 
-	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
-	}
-	
 	//Customization
-	protected void fillLayout() {
-		super.fillLayout();
-		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
-		phoneNumber.setTitle(R.string.w_common_username);
-		phoneNumber.setDialogTitle(R.string.w_common_username);
-		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
+	@Override
+	public void fillLayout(Account account) {
+		super.fillLayout(account);
+	}
+	
+
+	@Override
+	public Account buildAccount(Account account) {
+		account = super.buildAccount(account);
+		return account;
 	}
 	
 	@Override
-	protected String getDefaultFieldSummary(String field_name){
-		if(field_name.equalsIgnoreCase("phone_number")) {
-			return getString(R.string.w_common_username_desc);
-		}else {
-			return super.getDefaultFieldSummary(field_name);
-		}
+	protected boolean canTcp() {
+		return true;
 	}
 }

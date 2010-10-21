@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">CSipSimple</string>
+  <string name="unable_to_download_file">Nelze stáhnout soubor</string>
+  <string name="connection_not_valid">Vyprané síťové připojení není k dispozici (aktivujte WiFi nebo změňte v nastavení pravidla použití 3G sítí)</string>
+  <string name="invalid_sip_uri">SIP URI je pro volání neplatné</string>
+  <string name="accounts">Účty</string>
+  <string name="save">Uložit</string>
+  <string name="cancel">Zrušit</string>
+  <string name="activate_account">Aktivovat účet</string>
+  <string name="deactivate_account">Deaktivovat účet</string>
+  <string name="delete_account">Smazat účet</string>
+  <string name="modify_account">Změnit nastavení účtu</string>
+  <string name="add_account">Přidat účet</string>
+  <string name="choose_wizard">Vybrat průvodce</string>
+  <string name="use">Použít:</string>
+  <string name="use_pstn">Použít mobilní telefon</string>
+  <string name="ongoing_call">Probíhá hovor</string>
+  <string name="recentCalls_empty">Žádné záznamy o hovorech</string>
+  <string name="filters">Filtry</string>
+  <string name="add_filter">Přidat filtr / přepsat pravidlo</string>
+  <string name="delete_filter">Smazat filtr</string>
+  <string name="callLog_delete_entry">Smazat tento hovor</string>
+  <string name="callLog_delete_all">Smazat všechny hovory</string>
+  <string name="callLog_delDialog_title">Smazat záznamy o hovorech</string>
+  <string name="callLog_delDialog_message">Jste si jisti, že chce smazat všechny záznamy o hovorech?</string>
+  <string name="callLog_delDialog_yes">Ano</string>
+  <string name="callLog_delDialog_no">Ne</string>
+  <string name="gsm">Mobilní telefon</string>
+  <string name="dial_tab_name_text">Číselník</string>
+  <string name="calllog_tab_name_text">Záznamy o hovorech</string>
+  <string name="menu_quit_text">Ukončit</string>
+  <string name="service_ticker_registered_text">SIP registrován</string>
+  <string name="outgoing_call_chooser_call_text">Hovor</string>
+</resources>

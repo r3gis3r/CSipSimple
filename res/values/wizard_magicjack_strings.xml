@@ -27,7 +27,6 @@
 <string name="w_magicjack_password">Password</string>
 <string name="w_magicjack_password_desc">Password for SIP server authentication</string>
 
-<string name="w_magicjack_server">Server</string>
 <string name="w_magicjack_server_desc">Something like that : proxy01.yourcity.talk4free.com</string>
 
 

@@ -17,7 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,21 +30,16 @@ import android.preference.EditTextPreference;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
-import com.csipsimple.wizards.BasePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
+import com.csipsimple.models.Account;
 
-public class Ecs extends BasePrefsWizard {
+public class Ecs extends BaseImplementation {
 	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "ECS";
-		result.label = "Alcatel-Lucent OmniPCX Office";
-		result.icon = R.drawable.ic_wizard_ale;
-		result.priority = 20;
-		result.countries = new Locale[]{};
-		result.isWorld = true;
-		return result;
-	}
+	protected static String DISPLAY_NAME = "display_name";
+	protected static String PHONE_NUMBER = "phone_number";
+	protected static String USER_NAME = "user_name";
+	protected static String SERVER =  "server_ip";
+	protected static String DOMAIN = "server_domain";
+	protected static String PASSWORD = "password";
 
 	private EditTextPreference accountDisplayName;
 	private EditTextPreference accountPhoneNumber;
@@ -52,14 +47,20 @@ public class Ecs extends BasePrefsWizard {
 	private EditTextPreference accountPassword;
 	private EditTextPreference accountServerDomain;
 	private EditTextPreference accountServerIp;
+	
+	private void bindFields() {
+		accountDisplayName = (EditTextPreference) parent.findPreference(DISPLAY_NAME);
+		accountPhoneNumber = (EditTextPreference) parent.findPreference(PHONE_NUMBER);
+		accountUsername = (EditTextPreference) parent.findPreference(USER_NAME);
+		accountPassword = (EditTextPreference) parent.findPreference(PASSWORD);
+		accountServerDomain = (EditTextPreference) parent.findPreference(DOMAIN);
+		accountServerIp = (EditTextPreference) parent.findPreference(SERVER);
+		
+	}
 
-	protected void fillLayout() {
-		accountDisplayName = (EditTextPreference) findPreference("display_name");
-		accountPhoneNumber = (EditTextPreference) findPreference("phone_number");
-		accountUsername = (EditTextPreference) findPreference("user_name");
-		accountPassword = (EditTextPreference) findPreference("password");
-		accountServerDomain = (EditTextPreference) findPreference("server_domain");
-		accountServerIp = (EditTextPreference) findPreference("server_ip");
+	@Override
+	public void fillLayout(Account account) {
+		bindFields();
 
 		pjsip_cred_info ci = account.cfg.getCred_info();
 
@@ -99,17 +100,42 @@ public class Ecs extends BasePrefsWizard {
 		accountUsername.setText(ci.getUsername().getPtr());
 		accountPassword.setText(ci.getData().getPtr());
 	}
+	
+	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3055562364235868653L;
 
-	protected void updateDescriptions() {
-		setStringFieldSummary("display_name");
-		setStringFieldSummary("phone_number");
-		setStringFieldSummary("user_name");
-		setStringFieldSummary("server_ip");
-		setStringFieldSummary("server_domain");
-		setPasswordFieldSummary("password");
+	{
+		put(DISPLAY_NAME, R.string.w_common_display_name_desc);
+		put(PHONE_NUMBER, R.string.w_ecs_phone_number_desc);
+		put(USER_NAME, R.string.w_ecs_user_name_desc);
+		put(SERVER, R.string.w_ecs_server_ip_desc);
+		put(DOMAIN, R.string.w_ecs_server_domain_desc);
+		put(PASSWORD, R.string.w_ecs_password_desc);
+	}};
+
+	@Override
+	public String getDefaultFieldSummary(String fieldName) {
+		Integer res = SUMMARIES.get(fieldName);
+		if(res != null) {
+			return parent.getString( res );
+		}
+		return "";
 	}
 
-	protected boolean canSave() {
+
+	@Override
+	public void updateDescriptions() {
+		setStringFieldSummary(DISPLAY_NAME);
+		setStringFieldSummary(PHONE_NUMBER);
+		setStringFieldSummary(USER_NAME);
+		setStringFieldSummary(SERVER);
+		setStringFieldSummary(DOMAIN);
+		setPasswordFieldSummary(PASSWORD);
+	}
+
+	public boolean canSave() {
 		boolean isValid = true;
 		
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
@@ -121,8 +147,8 @@ public class Ecs extends BasePrefsWizard {
 		return isValid;
 	}
 
-	protected void buildAccount() {
-
+	public Account buildAccount(Account account) {
+		
 		account.display_name = accountDisplayName.getText();
 
 		// TODO add an user display name
@@ -146,22 +172,17 @@ public class Ecs extends BasePrefsWizard {
 		ci.setData(getPjText(accountPassword));
 		ci.setScheme(pjsua.pj_str_copy("Digest"));
 		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
+		
+		return account;
 	}
 
 	
-	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
-	}
 
 	@Override
-	protected int getXmlPreferences() {
+	public int getBasePreferenceResource() {
 		return R.xml.w_ecs_preferences;
 	}
 
-	@Override
-	protected String getXmlPrefix() {
-		return "ecs";
-	}
+
 
 }

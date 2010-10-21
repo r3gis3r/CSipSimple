@@ -30,7 +30,6 @@
 <string name="w_ecs_server_domain">SIP domain</string>
 <string name="w_ecs_server_domain_desc">Domain name for SIP accounts</string>
 
-<string name="w_ecs_server_ip">Server</string>
 <string name="w_ecs_server_ip_desc">Domain name or IP to access the ECS (leave blank if same as SIP domain)</string>
 
 </resources>

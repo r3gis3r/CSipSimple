@@ -17,30 +17,14 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
-
-import android.preference.EditTextPreference;
 import android.text.InputType;
 
 import com.csipsimple.R;
+import com.csipsimple.models.Account;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.wizards.SimplePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public class PlanetPhone extends SimplePrefsWizard {
+public class PlanetPhone extends SimpleImplementation {
 	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "PLANETPHONE";
-		result.label = "PlanetPhone";
-		result.icon = R.drawable.ic_wizard_planetphone;
-		result.priority = 10;
-		result.countries = new Locale[]{
-			new Locale("BG", "bg"),
-		};
-		return result;
-	}
-
 	@Override
 	protected String getDomain() {
 		return "sip.planetphone.net";
@@ -48,29 +32,25 @@ public class PlanetPhone extends SimplePrefsWizard {
 	
 	@Override
 	protected String getDefaultName() {
-		return getWizardInfo().label;
+		return "PlanetPhone";
 	}
 
-	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
-	}
-	
 	//Customization
-	protected void fillLayout() {
-		super.fillLayout();
-		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
-		phoneNumber.setTitle(R.string.w_common_username);
-		phoneNumber.setDialogTitle(R.string.w_common_username);
-		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+	@Override
+	public void fillLayout(Account account) {
+		super.fillLayout(account);
+		accountUsername.setTitle(R.string.w_common_username);
+		accountUsername.setDialogTitle(R.string.w_common_username);
+		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 	
-	protected void buildAccount() {
-		super.buildAccount();
+	public Account buildAccount(Account account) {
+		account = super.buildAccount(account);
 		if(account.id == null || account.id < 0) {
 			//First run, we should set settings !
-			PreferencesWrapper p = new PreferencesWrapper(this);
+			PreferencesWrapper p = new PreferencesWrapper(parent);
 			p.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_VAD, true);
 		}
+		return account;
 	}
 }

@@ -35,6 +35,7 @@
 	<string name="use">Use :</string>
 	<string name="use_pstn">Use mobile</string>
 	<string name="ongoing_call">Call in Progress</string>
+	<string name="missed_call">Missed call</string>
 	<string name="recentCalls_empty">No Call Logs</string>
 	<string name="filters">Filters</string>
 	<string name="add_filter">Add filter / rewrite rule</string>

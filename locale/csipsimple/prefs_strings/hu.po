@@ -5,17 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: csipsimple\n"
+"Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-10-09 23:52+0200\n"
+"POT-Creation-Date: 2010-10-21 23:27+0200\n"
 "PO-Revision-Date: 2010-10-11 10:14+0000\n"
 "Last-Translator: B. Zoli <tec@webpress.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-12 05:06+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"Generated-By: Babel 1.0dev\n"
 
 msgctxt "prefs"
 msgid "Settings"
@@ -185,8 +185,9 @@ msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
 msgstr "DNS feloldó"
 
+#, fuzzy
 msgctxt "enable_dns_srv_desc"
-msgid "Use CSipSimple nameserver resolver resolve names"
+msgid "Use the application resolver to resolve DNS names"
 msgstr "A CSipSimple névfeloldóját használja"
 
 msgctxt "override_nameserver"
@@ -197,6 +198,63 @@ msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
 msgstr "Szabadon hagyva az alap Android DNS-t használja"
 
+#, fuzzy
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr "Átvitel"
+
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr "SRTP mód"
+
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr "Biztonságos RTP mód"
+
+msgctxt "nat_traversal"
+msgid "NAT traversal"
+msgstr ""
+
+msgctxt "enable_ice"
+msgid "Enable ICE"
+msgstr "ICE engedélyezése"
+
+msgctxt "enable_ice_desc"
+msgid "Turn on ICE feature"
+msgstr "ICE funkció bekapcsolása"
+
+msgctxt "enable_turn"
+msgid "Enable TURN"
+msgstr "TURN engedélyezése"
+
+msgctxt "enable_turn_desc"
+msgid "Turn on TURN feature"
+msgstr "TURN funkció bekapcsolása"
+
+msgctxt "turn_server"
+msgid "Turn server"
+msgstr "TURN szerver"
+
+msgctxt "turn_server_desc"
+msgid "TURN server (HOST:PORT)"
+msgstr "TURN szerver megadása (HOST:PORT)"
+
+msgctxt "enable_stun"
+msgid "Enable STUN"
+msgstr "STUN engedélyezése"
+
+msgctxt "enable_stun_desc"
+msgid "Turn on STUN feature"
+msgstr "STUN funkció bekapcsolása"
+
+msgctxt "stun_server"
+msgid "STUN server"
+msgstr "STUN szerver"
+
+msgctxt "stun_server_desc"
+msgid "STUN server (HOST:PORT)"
+msgstr "STUN szerver megadása (HOST:PORT)"
+
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Hangminőség"
@@ -204,10 +262,6 @@ msgstr "Hangminőség"
 msgctxt "codecs"
 msgid "Codecs"
 msgstr "Kodekek"
-
-msgctxt "ice_turn"
-msgid "ICE/TURN/STUN"
-msgstr "ICE/TURN/STUN"
 
 msgctxt "echo_cancellation"
 msgid "Echo cancellation"
@@ -262,8 +316,7 @@ msgid "Media quality"
 msgstr "Média minőség"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "A médiafolyam minősége (csak hozzáértő módosítsa)"
 
 msgctxt "snd_clock_rate"
@@ -290,57 +343,17 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "A visszhang csillapító szakasz mérete"
 
-msgctxt "enable_ice"
-msgid "Enable ICE"
-msgstr "ICE engedélyezése"
-
-msgctxt "enable_ice_desc"
-msgid "Turn on ICE feature"
-msgstr "ICE funkció bekapcsolása"
-
-msgctxt "enable_turn"
-msgid "Enable TURN"
-msgstr "TURN engedélyezése"
-
-msgctxt "enable_turn_desc"
-msgid "Turn on TURN feature"
-msgstr "TURN funkció bekapcsolása"
-
-msgctxt "turn_server"
-msgid "Turn server"
-msgstr "TURN szerver"
-
-msgctxt "turn_server_desc"
-msgid "TURN server (HOST:PORT)"
-msgstr "TURN szerver megadása (HOST:PORT)"
-
-msgctxt "enable_stun"
-msgid "Enable STUN"
-msgstr "STUN engedélyezése"
-
-msgctxt "enable_stun_desc"
-msgid "Turn on STUN feature"
-msgstr "STUN funkció bekapcsolása"
-
-msgctxt "stun_server"
-msgid "STUN server"
-msgstr "STUN szerver"
-
-msgctxt "stun_server_desc"
-msgid "STUN server (HOST:PORT)"
-msgstr "STUN szerver megadása (HOST:PORT)"
-
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Elsőbbség (kikapcsolva: 0)"
 
-msgctxt "use_srtp"
-msgid "SRTP mode"
-msgstr "SRTP mód"
+msgctxt "sip_info_dtmf"
+msgid "DTMF SIP INFO"
+msgstr ""
 
-msgctxt "use_srtp_desc"
-msgid "Mode for Secure RTP"
-msgstr "Biztonságos RTP mód"
+msgctxt "sip_info_dtmf_desc"
+msgid "Use SIP INFO to send DTMF"
+msgstr ""
 
 msgctxt "general_ui"
 msgid "General user interface"
@@ -360,8 +373,8 @@ msgstr "Tárcsázó beépítése"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr "Beépülve felajánlja hogy híváskor SIP vagy GSM legyen e használva"
 
 msgctxt "integrate_with_native_calllogs"
@@ -371,14 +384,6 @@ msgstr "Hívástörténet beépülése"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr "A SIP hívások az alap híváslistába kerülnek"
-
-msgctxt "exclude_for_outgoing_call"
-msgid "Exclude patterns"
-msgstr "E mintát kihagyja"
-
-msgctxt "exclude_for_outgoing_call_desc"
-msgid "Exclude patterns for outgoing calls"
-msgstr "Kimenő hívásoknál ezt a mintát nem veszi figyelembe"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -424,8 +429,9 @@ msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Részleges alvó állapot"
 
+#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
-msgid "Ensure CPU is always running for CSipSimple (drain battery)"
+msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
 "Folyamatosan futtatja a CSipSimple a CPU-t, hogy állandóan fogadhasson "
 "hívást (meríti a telepet)"
@@ -436,8 +442,7 @@ msgstr "Naplózási szint:"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr ""
-"Hibakeresési naplózás szintje 0 (semmi) és 5 (legrészletesebb) között"
+msgstr "Hibakeresési naplózás szintje 0 (semmi) és 5 (legrészletesebb) között"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
@@ -446,7 +451,16 @@ msgstr "Használja a Music alkalmazást"
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
-"Kapcsolja ki ha más alkalmazást szeretne használni a bejövő hívás jelzésére"
+"Kapcsolja ki ha más alkalmazást szeretne használni a bejövő hívás "
+"jelzésére"
+
+msgctxt "ringtone"
+msgid "Ringtone"
+msgstr ""
+
+msgctxt "ringtone_desc"
+msgid "Default ringtone for SIP calls"
+msgstr ""
 
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -499,3 +513,13 @@ msgstr "A szolgáltató nem tiltja a VoIP kapcsolatot"
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
 msgstr "Csak regisztrált SIP esetén elérhető"
+
+msgctxt "expert_preferences"
+msgid "Expert mode"
+msgstr ""
+
+#, fuzzy
+msgctxt "advanced_preferences"
+msgid "Advanced mode"
+msgstr "Finomhangolás"
+

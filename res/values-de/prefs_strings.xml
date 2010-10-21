@@ -39,9 +39,22 @@
   <string name="network_tls_transport_port_desc">Lokale TLS Portnummer</string>
   <string name="network_rtp_port">RTP port</string>
   <string name="network_rtp_port_desc">Port an dem die RTP Ports beginnen</string>
+  <string name="use_ipv6">IPv6 benutzen</string>
+  <string name="use_ipv6_desc">Zum IPv6-Modus wechseln (Ihr Netzwerk und Mobiltelefon müssen es unterstützen)</string>
+  <string name="enable_dns_srv">DNS SRV auflösen</string>
+  <string name="override_nameserver">Einen eigenen DNS-Server benutzen</string>
+  <string name="enable_ice">Aktiviert ICE</string>
+  <string name="enable_ice_desc">Aktiviert die ICE Funktionalität</string>
+  <string name="enable_turn">Aktiviert TURN</string>
+  <string name="enable_turn_desc">Aktiviert die TURN Funktionalität</string>
+  <string name="turn_server">TURN Server</string>
+  <string name="turn_server_desc">TURN Server (HOST:PORT)</string>
+  <string name="enable_stun">Aktiviert STUN</string>
+  <string name="enable_stun_desc">Aktiviert die STUN Funktionalität</string>
+  <string name="stun_server">STUN Server</string>
+  <string name="stun_server_desc">STUN Server (HOST:PORT)</string>
   <string name="audio_quality">Audioqualität</string>
   <string name="codecs">Codecs</string>
-  <string name="ice_turn">ICE/TURN/STUN</string>
   <string name="echo_cancellation">Echounterdrückung</string>
   <string name="echo_cancellation_desc">Aktiviert die Echounterdrückung</string>
   <string name="enable_vad">Sprachaktivitätserkennung</string>
@@ -62,16 +75,6 @@
   <string name="snd_ptime_desc">Eine kleinere ptime reduziert normaler Weise die Latenz</string>
   <string name="echo_cancellation_tail">Echounterdrückungslänge</string>
   <string name="echo_cancellation_tail_desc">Länge des Echos das unterdrückt werden kann</string>
-  <string name="enable_ice">Aktiviert ICE</string>
-  <string name="enable_ice_desc">Aktiviert die ICE Funktionalität</string>
-  <string name="enable_turn">Aktiviert TURN</string>
-  <string name="enable_turn_desc">Aktiviert die TURN Funktionalität</string>
-  <string name="turn_server">TURN Server</string>
-  <string name="turn_server_desc">TURN Server (HOST:PORT)</string>
-  <string name="enable_stun">Aktiviert STUN</string>
-  <string name="enable_stun_desc">Aktiviert die STUN Funktionalität</string>
-  <string name="stun_server">STUN Server</string>
-  <string name="stun_server_desc">STUN Server (HOST:PORT)</string>
   <string name="codecs_desc">Priorität (0=deaktiviert)</string>
   <string name="general_ui">Standard-Benutzeroberfläche</string>
   <string name="native_dialer_integration">Native dialer integration</string>
@@ -80,8 +83,6 @@
   <string name="integrate_with_native_dialer_desc">Beim Wählen einer Nummer mit der Standardanwendung werden sie gefragt, ob sie SIP oder GSM verwenden wollen</string>
   <string name="integrate_with_native_calllogs">Anrufliste einbinden</string>
   <string name="integrate_with_native_calllogs_desc">SIP Anrufe werden (wenn möglich) in die Standardanwendung eingeplegt</string>
-  <string name="exclude_for_outgoing_call">Ausschlussmuster</string>
-  <string name="exclude_for_outgoing_call_desc">Ausschlussmuster für ausgehende Anrufe</string>
   <string name="dial_press_tone">Wählton beim Wählen</string>
   <string name="dial_press_tone_desc">Es werden Wähltöne beim Wählen abgespielt</string>
   <string name="dial_press_vibrate">Feedback durch Vibrator</string>
@@ -93,7 +94,6 @@
   <string name="keep_awake_incall">Einschlafen verhindern</string>
   <string name="keep_awake_incall_desc">Beim Telefonieren das Einschlafen verhindern. (Behebt Probleme mit abgehacktem Audio)</string>
   <string name="use_partial_wake_lock">Blockiere Einschlafen</string>
-  <string name="use_partial_wake_lock_desc">Stellt sicher das CSipSimple immer ausgeführt wird (Belastet die Batterie)</string>
   <string name="log_level">Protokollierungsstufe</string>
   <string name="log_level_desc">Protokollierungsstufe beim Debuggen (0=none, 5=verbose)</string>
   <string name="integrate_with_native_music">Musikanwendungsintegration</string>

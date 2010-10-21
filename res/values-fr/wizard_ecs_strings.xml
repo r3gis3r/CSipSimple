@@ -10,6 +10,5 @@
   <string name="w_ecs_password_desc">Mot de passe de votre compte</string>
   <string name="w_ecs_server_domain">Domaine SIP</string>
   <string name="w_ecs_server_domain_desc">Nom de domaine pour vos comptes sip</string>
-  <string name="w_ecs_server_ip">Serveur</string>
   <string name="w_ecs_server_ip_desc">Nom de domaine ou IP pour accéder à l\'ECS (laisser vide si identique au domaine SIP)</string>
 </resources>

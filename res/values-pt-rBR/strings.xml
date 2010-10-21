@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">CSipSimple</string>
+  <string name="unable_to_download_file">Não foi possível baixar o arquivo</string>
+  <string name="connection_not_valid">Rede selecionada não está disponível (ative o WiFi ou altera as preferências para utilizar a rede 3G)</string>
+  <string name="invalid_sip_uri">O endereço SIP é inválido</string>
+  <string name="accounts">Contas</string>
+  <string name="save">Salvar</string>
+  <string name="cancel">Cancelar</string>
+  <string name="activate_account">Ativar conta</string>
+  <string name="deactivate_account">Desativar conta</string>
+  <string name="delete_account">Excluir conta</string>
+  <string name="modify_account">Modificar a conta</string>
+  <string name="add_account">Adicionar conta</string>
+  <string name="choose_wizard">Escolher assistente</string>
+  <string name="use">Utilizar:</string>
+  <string name="use_pstn">Utilizar celular</string>
+  <string name="ongoing_call">Chamada em andamento</string>
+  <string name="recentCalls_empty">Sem registro de chamadas</string>
+  <string name="filters">Filtros</string>
+  <string name="add_filter">Adicionar filtro / Reescrever regra</string>
+  <string name="delete_filter">Excluir filtro</string>
+  <string name="callLog_delete_entry">Excluir esta chamada</string>
+  <string name="callLog_delete_all">Excluir todas as chamadas</string>
+  <string name="callLog_delDialog_title">Excluir registros de chamada</string>
+  <string name="callLog_delDialog_message">Tem certeza que deseja excluir todos os registros de chamada?</string>
+  <string name="callLog_delDialog_yes">Sim</string>
+  <string name="callLog_delDialog_no">Não</string>
+  <string name="gsm">Celular</string>
+  <string name="dial_tab_name_text">Discar</string>
+  <string name="calllog_tab_name_text">Registro de Chamadas</string>
+  <string name="menu_quit_text">Sair</string>
+  <string name="service_ticker_registered_text">SIP Registrado</string>
+  <string name="outgoing_call_chooser_call_text">Chamar</string>
+</resources>

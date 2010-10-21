@@ -22,7 +22,7 @@
 
 		<EditTextPreference android:key="display_name"
 			android:singleLine="true"
-			android:title="@string/w_basic_display_name"></EditTextPreference>
+			android:title="@string/w_common_display_name"></EditTextPreference>
 
 		<EditTextPreference android:key="username"
 			android:singleLine="true"
@@ -30,7 +30,7 @@
 			
 		<EditTextPreference android:key="server"
 			android:singleLine="true"
-			android:title="@string/w_basic_server"></EditTextPreference>
+			android:title="@string/w_common_server"></EditTextPreference>
 			
 		<com.csipsimple.widgets.PasswordPreference android:key="password"
 			android:singleLine="true"

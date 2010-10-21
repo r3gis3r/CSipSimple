@@ -27,29 +27,21 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_pool_t;
 import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjmedia_port;
-import org.pjsip.pjsua.pjmedia_tone_desc;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsip_transport_type_e;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_info;
-import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
 import org.pjsip.pjsua.pjsua_media_config;
 import org.pjsip.pjsua.pjsua_transport_config;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -82,7 +74,6 @@ import com.csipsimple.models.IAccount;
 import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.widgets.RegistrationNotification;
 
 public class SipService extends Service {
 
@@ -100,10 +91,7 @@ public class SipService extends Service {
 	public static final String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
 	public static final String ACTION_SIP_DIALER = "com.csipsimple.phone.action.DIALER";
 
-	public static final int REGISTER_NOTIF_ID = 1;
-	public static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
 
-	private NotificationManager notificationManager;
 
 	public static final String STACK_FILE_NAME = "libpjsipjni.so";
 
@@ -115,8 +103,8 @@ public class SipService extends Service {
 
 	// Map active account id (id for sql settings database) with acc_id (id for
 	// pjsip)
-	private HashMap<Integer, Integer> activeAccounts = new HashMap<Integer, Integer>();
-	private HashMap<Integer, Integer> accountsAddingStatus = new HashMap<Integer, Integer>();
+	private static HashMap<Integer, Integer> activeAccounts = new HashMap<Integer, Integer>();
+	private static HashMap<Integer, Integer> accountsAddingStatus = new HashMap<Integer, Integer>();
 
 	// Implement public interface for the service
 	private final ISipService.Stub binder = new ISipService.Stub() {
@@ -402,18 +390,15 @@ public class SipService extends Service {
 	public static boolean hasSipStack = false;
 	private boolean sipStackIsCorrupted = false;
 	private ServiceDeviceStateReceiver deviceStateReceiver;
+	private StreamDialtoneGenerator dialtoneGenerator;
 	public PreferencesWrapper prefsWrapper;
-	private pj_pool_t dialtonePool;
-	private pjmedia_port dialtoneGen;
-	private int dialtoneSlot = -1;
-	private Object dialtoneMutext = new Object();
-	private RegistrationNotification contentView;
 	private ServicePhoneStateReceiver phoneConnectivityReceiver;
 	private TelephonyManager telephonyManager;
 	private ConnectivityManager connectivityManager;
 	private Integer udpTranportId, tcpTranportId, tlsTransportId;
 
 	private Integer hasBeenHoldByGSM = null;
+	private SipNotifications notificationManager;
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
@@ -501,9 +486,9 @@ public class SipService extends Service {
 		Log.i(THIS_FILE, "Create SIP Service");
 		db = new DBAdapter(this);
 		prefsWrapper = new PreferencesWrapper(this);
-		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		notificationManager = new SipNotifications(this);
 
 		// Check connectivity, else just finish itself
 		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
@@ -861,9 +846,8 @@ public class SipService extends Service {
 			}
 		}
 		
-		
 		if (notificationManager != null) {
-			notificationManager.cancel(REGISTER_NOTIF_ID);
+			notificationManager.cancelRegisters();
 		}
 		synchronized (creatingSipStack) {
 			if (created) {
@@ -940,7 +924,7 @@ public class SipService extends Service {
 		} else {
 			releaseResources();
 			if (notificationManager != null) {
-				notificationManager.cancel(REGISTER_NOTIF_ID);
+				notificationManager.cancelRegisters();
 			}
 		}
 	}
@@ -1057,7 +1041,7 @@ public class SipService extends Service {
 		}
 
 		if (notificationManager != null && cancelNotification) {
-			notificationManager.cancel(REGISTER_NOTIF_ID);
+			notificationManager.cancelRegisters();
 		}
 	}
 
@@ -1153,35 +1137,10 @@ public class SipService extends Service {
 
 		// Handle status bar notification
 		if (activeAccountsInfos.size() > 0) {
-
-			int icon = R.drawable.sipok;
-			CharSequence tickerText = getString(R.string.service_ticker_registered_text);
-			long when = System.currentTimeMillis();
-
-			Notification notification = new Notification(icon, tickerText, when);
-
-			Intent notificationIntent = new Intent(ACTION_SIP_DIALER);
-			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-			if (contentView == null) {
-				contentView = new RegistrationNotification(getPackageName());
-			}
-			contentView.clearRegistrations();
-			contentView.addAccountInfos(this, activeAccountsInfos);
-
-			// notification.setLatestEventInfo(context, contentTitle,
-			// contentText, contentIntent);
-			notification.contentIntent = contentIntent;
-			notification.contentView = contentView;
-			notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-			// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
-
-			notificationManager.notify(REGISTER_NOTIF_ID, notification);
+			notificationManager.notifyRegisteredAccounts(activeAccountsInfos);
 			acquireResources();
 		} else {
-
-			notificationManager.cancel(REGISTER_NOTIF_ID);
+			notificationManager.cancelRegisters();
 			releaseResources();
 		}
 	}
@@ -1411,7 +1370,10 @@ public class SipService extends Service {
 		} else {
 			res = pjsua.call_dial_dtmf(callId, pjKeyPressed);
 			if (res != pjsua.PJ_SUCCESS) {
-				res = sendPjMediaDialTone(callId, keyPressed);
+				if(dialtoneGenerator == null) {
+					dialtoneGenerator = new StreamDialtoneGenerator();
+				}
+				res = dialtoneGenerator.sendPjMediaDialTone(callId, keyPressed);
 			}
 		}
 		return res;
@@ -1431,112 +1393,15 @@ public class SipService extends Service {
 		return -1;
 	}
 
-	// ------
-	// Dialtone generator
-	// ------
-
-	private static final Map<String, short[]> digitMap = new HashMap<String, short[]>() {
-		private static final long serialVersionUID = -6656807954448449227L;
-
-		{
-			put("0", new short[] { 941, 1336 });
-			put("1", new short[] { 697, 1209 });
-			put("2", new short[] { 697, 1336 });
-			put("3", new short[] { 697, 1477 });
-			put("4", new short[] { 770, 1209 });
-			put("5", new short[] { 770, 1336 });
-			put("6", new short[] { 770, 1477 });
-			put("7", new short[] { 852, 1209 });
-			put("8", new short[] { 852, 1336 });
-			put("9", new short[] { 852, 1477 });
-			put("a", new short[] { 697, 1633 });
-			put("b", new short[] { 770, 1633 });
-			put("c", new short[] { 852, 1633 });
-			put("d", new short[] { 941, 1633 });
-			put("*", new short[] { 941, 1209 });
-			put("#", new short[] { 941, 1477 });
-		}
-	};
-
-	private int startDialtoneGenerator(int callId) {
-		synchronized (dialtoneMutext) {
-			pjsua_call_info info = new pjsua_call_info();
-			pjsua.call_get_info(callId, info);
-			int status;
-
-			dialtonePool = pjsua.pjsua_pool_create("mycall", 512, 512);
-			pj_str_t name = pjsua.pj_str_copy("dialtoneGen");
-			long clockRate = 8000;
-			long channelCount = 1;
-			long samplesPerFrame = 160;
-			long bitsPerSample = 16;
-			long options = 0;
-			int[] dialtoneSlotPtr = new int[1];
-			dialtoneGen = new pjmedia_port();
-			status = pjsua.pjmedia_tonegen_create2(dialtonePool, name, clockRate, channelCount, samplesPerFrame, bitsPerSample, options, dialtoneGen);
-			if (status != pjsua.PJ_SUCCESS) {
-				stopDialtoneGenerator();
-				return status;
-			}
-			status = pjsua.conf_add_port(dialtonePool, dialtoneGen, dialtoneSlotPtr);
-			if (status != pjsua.PJ_SUCCESS) {
-				stopDialtoneGenerator();
-				return status;
-			}
-			dialtoneSlot = dialtoneSlotPtr[0];
-			status = pjsua.conf_connect(dialtoneSlot, info.getConf_slot());
-			if (status != pjsua.PJ_SUCCESS) {
-				dialtoneSlot = -1;
-				stopDialtoneGenerator();
-				return status;
-			}
-			return pjsua.PJ_SUCCESS;
-		}
-	}
 
 	public void stopDialtoneGenerator() {
-		synchronized (dialtoneMutext) {
-			// Destroy the port
-			if (dialtoneSlot != -1) {
-				pjsua.conf_remove_port(dialtoneSlot);
-				dialtoneSlot = -1;
-			}
-
-			dialtoneGen = null;
-			// pjsua.port_destroy(dialtoneGen);
-
-			if (dialtonePool != null) {
-				pjsua.pj_pool_release(dialtonePool);
-				dialtonePool = null;
-			}
+		if(dialtoneGenerator != null) {
+			dialtoneGenerator.stopDialtoneGenerator();
+			dialtoneGenerator = null;
 		}
-
 	}
+	
 
-	private int sendPjMediaDialTone(int callId, String character) {
-		if (!digitMap.containsKey(character)) {
-			return -1;
-		}
-		if (dialtoneGen == null) {
-			int status = startDialtoneGenerator(callId);
-			if (status != pjsua.PJ_SUCCESS) {
-				return -1;
-			}
-		}
-
-		short freq1 = digitMap.get(character)[0];
-		short freq2 = digitMap.get(character)[1];
-
-		// Play the tone
-		pjmedia_tone_desc[] d = new pjmedia_tone_desc[1];
-		d[0] = new pjmedia_tone_desc();
-		d[0].setVolume((short) 0);
-		d[0].setOn_msec((short) 100);
-		d[0].setOff_msec((short) 200);
-		d[0].setFreq1(freq1);
-		d[0].setFreq2(freq2);
-		return pjsua.pjmedia_tonegen_play(dialtoneGen, 1, d, 0);
-	}
 
 	/**
 	 * Get the native library file First search in local files of the app
@@ -1771,5 +1636,6 @@ public class SipService extends Service {
 	public int getGSMCallState() {
 		return telephonyManager.getCallState();
 	}
+
 
 }

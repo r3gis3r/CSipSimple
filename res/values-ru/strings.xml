@@ -16,6 +16,7 @@
   <string name="use">Использовать :</string>
   <string name="use_pstn">Мобильный</string>
   <string name="ongoing_call">Набор номера</string>
+  <string name="missed_call">Пропущенные звонки</string>
   <string name="recentCalls_empty">Нет вызовов</string>
   <string name="filters">Фильтры</string>
   <string name="add_filter">Добавить фильтр / изменить правило</string>
@@ -32,4 +33,5 @@
   <string name="menu_quit_text">Выход</string>
   <string name="service_ticker_registered_text">SIP зарегистрирован</string>
   <string name="outgoing_call_chooser_call_text">Вызов</string>
+  <string name="reorder">Изменить порядок</string>
 </resources>

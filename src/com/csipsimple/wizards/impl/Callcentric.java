@@ -17,48 +17,42 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
+import com.csipsimple.R;
+import com.csipsimple.models.Account;
 
-import android.preference.EditTextPreference;
 import android.text.InputType;
 
-import com.csipsimple.R;
-import com.csipsimple.wizards.SimplePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
-
-public class Callcentric extends SimplePrefsWizard {
+public class Callcentric extends SimpleImplementation {
 	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "CALLCENTRIC";
-		result.label = "Callcentric";
-		result.icon = R.drawable.ic_wizard_callcentric;
-		result.priority = 10;
-		result.countries = new Locale[]{
-			Locale.US
-		};
-		return result;
-	}
-
 	@Override
 	protected String getDomain() {
 		return "callcentric.com";
 	}
 	
 	@Override
-	protected String getDefaultName() {
-		return getWizardInfo().label;
+	public void fillLayout(Account account) {
+		super.fillLayout(account);
+		
+		accountUsername.setTitle(R.string.w_callcentric_phone_number);
+		accountUsername.setDialogTitle(R.string.w_callcentric_phone_number);
+		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		
+		accountPassword.setTitle(R.string.w_callcentric_password);
+		accountPassword.setDialogTitle(R.string.w_callcentric_password);
 	}
 
 	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
+	public String getDefaultFieldSummary(String fieldName) {
+		if(fieldName.equals(USER_NAME)) {
+			return parent.getString(R.string.w_callcentric_phone_number_desc);
+		}else if(fieldName.equals(PASSWORD)) {
+			return parent.getString(R.string.w_callcentric_password_desc);
+		}
+		return super.getDefaultFieldSummary(fieldName);
 	}
-	
-	//Customization
-	protected void fillLayout() {
-		super.fillLayout();
-		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
-		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+
+	@Override
+	protected String getDefaultName() {
+		return "Callcentric";
 	}
 }

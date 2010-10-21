@@ -16,6 +16,7 @@
   <string name="use">Usa :</string>
   <string name="use_pstn">Usa GSM</string>
   <string name="ongoing_call">Chiamate in uscita</string>
+  <string name="missed_call">Chiamata persa</string>
   <string name="recentCalls_empty">Nessun log delle chiamate</string>
   <string name="filters">Filtri</string>
   <string name="add_filter">Aggiungi filtro / riscrivi regola</string>
@@ -32,4 +33,5 @@
   <string name="menu_quit_text">Esci</string>
   <string name="service_ticker_registered_text">SIP Registrato</string>
   <string name="outgoing_call_chooser_call_text">Chiama</string>
+  <string name="reorder">Riordina</string>
 </resources>

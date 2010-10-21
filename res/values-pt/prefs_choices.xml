@@ -1,2 +1,22 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string-array name="scheme_choices">
+    <item>Resumo</item>
+    <item>PGP</item>
+  </string-array>
+  <string-array name="data_type_choices">
+    <item>Senha</item>
+    <item>Resumo de Dados</item>
+  </string-array>
+  <string-array name="clock_rate_choices">
+    <item>8KHz</item>
+    <item>16KHz</item>
+    <item>32KHz</item>
+    <item>44KHz</item>
+  </string-array>
+  <string-array name="use_srtp_choices">
+    <item>Desativado</item>
+    <item>Opcional</item>
+    <item>Mandatório</item>
+  </string-array>
+</resources>

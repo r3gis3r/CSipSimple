@@ -17,30 +17,14 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
-
-import android.content.Context;
-import android.preference.EditTextPreference;
 import android.text.InputType;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
+import com.csipsimple.models.Account;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.wizards.SimplePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public class Ekiga extends SimplePrefsWizard {
-	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "EKIGA";
-		result.label = "Ekiga";
-		result.icon = R.drawable.ic_wizard_ekiga;
-		result.priority = 10;
-		result.countries = new Locale[]{};
-		result.isWorld = true;
-		return result;
-	}
+public class Ekiga extends SimpleImplementation {
 	
 	@Override
 	protected String getDomain() {
@@ -49,42 +33,30 @@ public class Ekiga extends SimplePrefsWizard {
 
 	@Override
 	protected String getDefaultName() {
-		return getWizardInfo().label;
-	}
-	
-	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
+		return "Ekiga";
 	}
 	
 	
 	//Customization
-	protected void fillLayout() {
-		super.fillLayout();
-		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
-		phoneNumber.setTitle(R.string.w_common_username);
-		phoneNumber.setDialogTitle(R.string.w_common_username);
-		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
+	@Override
+	public void fillLayout(Account account) {
+		super.fillLayout(account);
+		
+		accountUsername.setTitle(R.string.w_common_username);
+		accountUsername.setDialogTitle(R.string.w_common_username);
+		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
 	}
 	
 	@Override
-	protected String getDefaultFieldSummary(String field_name){
-		if(field_name.equalsIgnoreCase("phone_number")) {
-			return getString(R.string.w_common_username_desc);
-		}else {
-			return super.getDefaultFieldSummary(field_name);
-		}
-	}
-	
-	@Override
-	protected void buildAccount() {
-		super.buildAccount();
+	public Account buildAccount(Account account) {
+		account = super.buildAccount(account);
 		// Add stun server
-		PreferencesWrapper prefs = new PreferencesWrapper((Context) this);
+		PreferencesWrapper prefs = new PreferencesWrapper(parent);
 		if( ! (prefs.getStunEnabled()==1) || TextUtils.isEmpty(prefs.getStunServer())) {
 			prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
 			prefs.setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, "stun.counterpath.com");
 		}
+		return account;
 	}
 
 	

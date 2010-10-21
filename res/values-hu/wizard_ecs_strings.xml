@@ -10,6 +10,5 @@
   <string name="w_ecs_password_desc">Jelszó a fiókhoz</string>
   <string name="w_ecs_server_domain">SIP domain</string>
   <string name="w_ecs_server_domain_desc">A SIP fiók domain neve</string>
-  <string name="w_ecs_server_ip">Szerver</string>
   <string name="w_ecs_server_ip_desc">ECS domain neve vayg IP címe (nem szükséges ha megegyezik a SIP domainnel)</string>
 </resources>

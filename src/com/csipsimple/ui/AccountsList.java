@@ -61,6 +61,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
+import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardChooser;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
@@ -204,14 +205,10 @@ public class AccountsList extends Activity implements OnItemClickListener {
                 return true;
             }
             case MENU_ITEM_MODIFY : {
-            	WizardInfo wizard = WizardUtils.getWizardClass(account.wizard);
-        		if(wizard != null){
-        			
-        			Intent it = new Intent(this, wizard.implementation);
+        			Intent it = new Intent(this, BasePrefsWizard.class);
         			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
-        			
+        			it.putExtra(Intent.EXTRA_REMOTE_INTENT_TOKEN, account.wizard);
         			startActivityForResult(it, REQUEST_MODIFY);
-        		}
         		return true;
             }
             case MENU_ITEM_ACTIVATE: {
@@ -259,14 +256,11 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		Account account = adapter.getItem(position);
-		WizardInfo wizard = WizardUtils.getWizardClass(account.wizard);
-		if(wizard != null){
-			
-			Intent intent = new Intent(this, wizard.implementation);
-			intent.putExtra(Intent.EXTRA_UID,  (int) account.id);
-			
-			startActivityForResult(intent, REQUEST_MODIFY);
-		}
+		Intent intent = new Intent(this, BasePrefsWizard.class);
+		intent.putExtra(Intent.EXTRA_UID,  (int) account.id);
+		intent.putExtra(Intent.EXTRA_REMOTE_INTENT_TOKEN, account.wizard);
+		
+		startActivityForResult(intent, REQUEST_MODIFY);
 		
 	}
 
@@ -281,10 +275,11 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		case CHOOSE_WIZARD:
 			if(resultCode == RESULT_OK) {
 				if(data != null && data.getExtras() != null) {
-					String wizard_id = data.getExtras().getString(WizardUtils.ID);
-					if(wizard_id != null) {
-						WizardInfo wizard = WizardUtils.getWizardClass(wizard_id);
-						startActivityForResult(new Intent(this, wizard.implementation), REQUEST_MODIFY);
+					String wizardId = data.getExtras().getString(WizardUtils.ID);
+					if(wizardId != null) {
+						Intent intent = new Intent(this, BasePrefsWizard.class);
+						intent.putExtra(Intent.EXTRA_REMOTE_INTENT_TOKEN, wizardId);
+						startActivityForResult(intent, REQUEST_MODIFY);
 					}
 				}
 			}
@@ -425,8 +420,9 @@ public class AccountsList extends Activity implements OnItemClickListener {
             
             //Update account image
             final WizardInfo wizardInfos = WizardUtils.getWizardClass(account.wizard);
-            tagView.activeCheckbox.setBackgroundResource(wizardInfos.icon);
-	        
+            if(wizardInfos != null) {
+            	tagView.activeCheckbox.setBackgroundResource(wizardInfos.icon);
+            }
 		}
 
 

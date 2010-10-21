@@ -7,15 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-09 23:52+0200\n"
+"POT-Creation-Date: 2010-10-21 23:27+0200\n"
 "PO-Revision-Date: 2010-10-10 11:42+0000\n"
 "Last-Translator: Gianluca <Unknown>\n"
 "Language-Team: it <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-11 05:00+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: Babel 1.0dev\n"
 
 msgctxt "prefs"
@@ -186,8 +185,9 @@ msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
 msgstr "Risolvi DNS SRV"
 
+#, fuzzy
 msgctxt "enable_dns_srv_desc"
-msgid "Use CSipSimple nameserver resolver resolve names"
+msgid "Use the application resolver to resolve DNS names"
 msgstr "Usa CSipSimple per risolvere i nomi"
 
 msgctxt "override_nameserver"
@@ -198,6 +198,63 @@ msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
 msgstr "Lasciare in bianco per recuperare DNS da Android"
 
+#, fuzzy
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr "Trasporto"
+
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr "Modalità SRTP"
+
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr "Modalità per RTP Sicuro"
+
+msgctxt "nat_traversal"
+msgid "NAT traversal"
+msgstr ""
+
+msgctxt "enable_ice"
+msgid "Enable ICE"
+msgstr "Abilita ICE"
+
+msgctxt "enable_ice_desc"
+msgid "Turn on ICE feature"
+msgstr "Attiva ICE"
+
+msgctxt "enable_turn"
+msgid "Enable TURN"
+msgstr "Attiva TURN"
+
+msgctxt "enable_turn_desc"
+msgid "Turn on TURN feature"
+msgstr "Attiva TURN"
+
+msgctxt "turn_server"
+msgid "Turn server"
+msgstr "Turn server"
+
+msgctxt "turn_server_desc"
+msgid "TURN server (HOST:PORT)"
+msgstr "Turn server (HOST:PORT)"
+
+msgctxt "enable_stun"
+msgid "Enable STUN"
+msgstr "Abilita STUN"
+
+msgctxt "enable_stun_desc"
+msgid "Turn on STUN feature"
+msgstr "Attiva funzionalità STUN"
+
+msgctxt "stun_server"
+msgid "STUN server"
+msgstr "STUN server"
+
+msgctxt "stun_server_desc"
+msgid "STUN server (HOST:PORT)"
+msgstr "STUN server (HOST:PORT)"
+
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Qualità audio"
@@ -205,10 +262,6 @@ msgstr "Qualità audio"
 msgctxt "codecs"
 msgid "Codecs"
 msgstr "Codec"
-
-msgctxt "ice_turn"
-msgid "ICE/TURN/STUN"
-msgstr "ICE/TURN/STUN"
 
 msgctxt "echo_cancellation"
 msgid "Echo cancellation"
@@ -263,8 +316,7 @@ msgid "Media quality"
 msgstr "Qualità audio"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Qualità dell'audio (modifica solo se sai cosa stai facendo)"
 
 msgctxt "snd_clock_rate"
@@ -291,57 +343,17 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "Lunghezza della coda di cancellazione dell'eco"
 
-msgctxt "enable_ice"
-msgid "Enable ICE"
-msgstr "Abilita ICE"
-
-msgctxt "enable_ice_desc"
-msgid "Turn on ICE feature"
-msgstr "Attiva ICE"
-
-msgctxt "enable_turn"
-msgid "Enable TURN"
-msgstr "Attiva TURN"
-
-msgctxt "enable_turn_desc"
-msgid "Turn on TURN feature"
-msgstr "Attiva TURN"
-
-msgctxt "turn_server"
-msgid "Turn server"
-msgstr "Turn server"
-
-msgctxt "turn_server_desc"
-msgid "TURN server (HOST:PORT)"
-msgstr "Turn server (HOST:PORT)"
-
-msgctxt "enable_stun"
-msgid "Enable STUN"
-msgstr "Abilita STUN"
-
-msgctxt "enable_stun_desc"
-msgid "Turn on STUN feature"
-msgstr "Attiva funzionalità STUN"
-
-msgctxt "stun_server"
-msgid "STUN server"
-msgstr "STUN server"
-
-msgctxt "stun_server_desc"
-msgid "STUN server (HOST:PORT)"
-msgstr "STUN server (HOST:PORT)"
-
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Priorità (0 disabilita)"
 
-msgctxt "use_srtp"
-msgid "SRTP mode"
-msgstr "Modalità SRTP"
+msgctxt "sip_info_dtmf"
+msgid "DTMF SIP INFO"
+msgstr ""
 
-msgctxt "use_srtp_desc"
-msgid "Mode for Secure RTP"
-msgstr "Modalità per RTP Sicuro"
+msgctxt "sip_info_dtmf_desc"
+msgid "Use SIP INFO to send DTMF"
+msgstr ""
 
 msgctxt "general_ui"
 msgid "General user interface"
@@ -361,11 +373,11 @@ msgstr "Integrazione dialer"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
-"Quando componi il numero con il dialer nativo ti verrà chiesto se vuoi usare "
-"SIP o GSM"
+"Quando componi il numero con il dialer nativo ti verrà chiesto se vuoi "
+"usare SIP o GSM"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -376,14 +388,6 @@ msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
 "Le chiamate SIP verranno inserite (se possibile) nel log nativo delle "
 "chiamate"
-
-msgctxt "exclude_for_outgoing_call"
-msgid "Exclude patterns"
-msgstr "Escludi patterns"
-
-msgctxt "exclude_for_outgoing_call_desc"
-msgid "Exclude patterns for outgoing calls"
-msgstr "Escludi patterns per chiamate in uscita"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -415,8 +419,7 @@ msgstr "Non usare sblocco scorrevole"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr ""
-"Usa i bottoni invece dello slide per accettare le chiamate in ingresso"
+msgstr "Usa i bottoni invece dello slide per accettare le chiamate in ingresso"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
@@ -425,15 +428,16 @@ msgstr "Resta attivo durante una chiamata"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corregge se si ottiene suono disturbato quando lo schermo si spegne durante "
-"una chiamata WIFI"
+"Corregge se si ottiene suono disturbato quando lo schermo si spegne "
+"durante una chiamata WIFI"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Usa partial wake lock"
 
+#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
-msgid "Ensure CPU is always running for CSipSimple (drain battery)"
+msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
 "Assicura che la CPU sia sempre in esecuzione per CSipSimple (scarica la "
 "batteria)"
@@ -456,6 +460,14 @@ msgstr ""
 "Disabilitare se si usa un'altra applicazione musicale diversa da quella "
 "ufficiale"
 
+msgctxt "ringtone"
+msgid "Ringtone"
+msgstr ""
+
+msgctxt "ringtone_desc"
+msgid "Default ringtone for SIP calls"
+msgstr ""
+
 msgctxt "android_integration"
 msgid "Integrate with Android"
 msgstr "Integrazione con Android"
@@ -474,8 +486,7 @@ msgstr "Sempre disponbile"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr ""
-"Utilizzerà la batteria ma le chiamate in ingresso sono sempre ricevibili"
+msgstr "Utilizzerà la batteria ma le chiamate in ingresso sono sempre ricevibili"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
@@ -504,9 +515,19 @@ msgstr "Mi è consentito usare la connessione dati mobile"
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
 msgstr ""
-"Il tuo operatore telefonico permette l'uso della connessione dati mobile per "
-"il VoIP"
+"Il tuo operatore telefonico permette l'uso della connessione dati mobile "
+"per il VoIP"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
 msgstr "Disponibile solo se sip è registrato"
+
+msgctxt "expert_preferences"
+msgid "Expert mode"
+msgstr ""
+
+#, fuzzy
+msgctxt "advanced_preferences"
+msgid "Advanced mode"
+msgstr "Tweaks avanzati"
+

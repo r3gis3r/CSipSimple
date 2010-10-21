@@ -5,17 +5,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: csipsimple\n"
+"Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 13:24+0200\n"
+"POT-Creation-Date: 2010-10-21 23:27+0200\n"
 "PO-Revision-Date: 2010-10-05 18:28+0000\n"
 "Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-08 04:59+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"Generated-By: Babel 1.0dev\n"
 
 msgctxt "prefs"
 msgid "Settings"
@@ -173,99 +174,46 @@ msgctxt "network_rtp_port_desc"
 msgid "Port for RTP ports range start"
 msgstr "Начало диапазона для RTP портов"
 
-msgctxt "audio_quality"
-msgid "Audio quality"
-msgstr "Качество аудио"
-
-msgctxt "codecs"
-msgid "Codecs"
-msgstr "Аудиокодеки"
-
-msgctxt "ice_turn"
-msgid "ICE/TURN/STUN"
-msgstr "ICE/TURN/STUN"
-
-msgctxt "echo_cancellation"
-msgid "Echo cancellation"
-msgstr "Подавление эха"
-
-msgctxt "echo_cancellation_desc"
-msgid "Activate echo cancellation"
-msgstr "Активировать подавление эха"
-
-msgctxt "enable_vad"
-msgid "Voice audio detection"
-msgstr "Активировать VAD"
-
-msgctxt "enable_vad_desc"
-msgid "Activate voice audio detection"
+msgctxt "use_ipv6"
+msgid "Use IPv6"
 msgstr ""
-"Определять голосовую активность в микрофоне для отделения от фонового шума"
 
-msgctxt "snd_mic_level"
-msgid "Micro amplification"
-msgstr "Настройка микрофона"
+msgctxt "use_ipv6_desc"
+msgid "Switch to IPv6 mode (your network and phone must support it)"
+msgstr ""
 
-msgctxt "snd_mic_level_desc"
-msgid "Adjust the micro signal level (1 do nothing)"
-msgstr "Настройка уровня сигнала в микрофоне (1 - не менять)"
+msgctxt "enable_dns_srv"
+msgid "Resolve DNS SRV"
+msgstr ""
 
-msgctxt "snd_speaker_level"
-msgid "Speaker amplification"
-msgstr "Настройка спикера"
+msgctxt "enable_dns_srv_desc"
+msgid "Use the application resolver to resolve DNS names"
+msgstr ""
 
-msgctxt "snd_speaker_level_desc"
-msgid "Adjust the speaker signal level (1 do nothing)"
-msgstr "Настройка уровня сигнала в спикере (1 - не менять)"
+msgctxt "override_nameserver"
+msgid "Use a custom DNS"
+msgstr ""
 
-msgctxt "snd_stream_level"
-msgid "Initial stream level"
-msgstr "Начальный уровень потока"
+msgctxt "override_nameserver_desc"
+msgid "Left blank to retrieve DNS from Android"
+msgstr ""
 
-msgctxt "snd_stream_level_desc"
-msgid "Set the initial level for audio stream (Android stream)"
-msgstr "Установить начальный уровень аудио-потока (поток Андроид)"
+#, fuzzy
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr "Передача данных"
 
-msgctxt "snd_auto_close_time"
-msgid "Auto close time"
-msgstr "Время автозавершения"
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr ""
 
-msgctxt "snd_auto_close_time_desc"
-msgid "Time to wait for close audio channel"
-msgstr "Время ожидания до закрытия аудио канала"
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr ""
 
-msgctxt "snd_media_quality"
-msgid "Media quality"
-msgstr "Качество медиа"
-
-msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
-msgstr "Качество медиа потока (только для опытных пользователей)"
-
-msgctxt "snd_clock_rate"
-msgid "Clock rate"
-msgstr "Частота"
-
-msgctxt "snd_clock_rate_desc"
-msgid "Audio channel frequency"
-msgstr "Частота аудиоканала"
-
-msgctxt "snd_ptime"
-msgid "Frame ptime"
-msgstr "Фрейм ptime"
-
-msgctxt "snd_ptime_desc"
-msgid "Specifying lower ptime will normally reduce the latency"
-msgstr "Указание нижнего уровня ptime обычно снижает латентность"
-
-msgctxt "echo_cancellation_tail"
-msgid "Echo cancellation tail"
-msgstr "Шлейф подавления эха"
-
-msgctxt "echo_cancellation_tail_desc"
-msgid "Tail length of echo cancellation"
-msgstr "Длина шлейфа подавления эха"
+msgctxt "nat_traversal"
+msgid "NAT traversal"
+msgstr ""
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
@@ -307,9 +255,105 @@ msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "STUN сервер (HOST:PORT)"
 
+msgctxt "audio_quality"
+msgid "Audio quality"
+msgstr "Качество аудио"
+
+msgctxt "codecs"
+msgid "Codecs"
+msgstr "Аудиокодеки"
+
+msgctxt "echo_cancellation"
+msgid "Echo cancellation"
+msgstr "Подавление эха"
+
+msgctxt "echo_cancellation_desc"
+msgid "Activate echo cancellation"
+msgstr "Активировать подавление эха"
+
+msgctxt "enable_vad"
+msgid "Voice audio detection"
+msgstr "Активировать VAD"
+
+msgctxt "enable_vad_desc"
+msgid "Activate voice audio detection"
+msgstr "Определять голосовую активность в микрофоне для отделения от фонового шума"
+
+msgctxt "snd_mic_level"
+msgid "Micro amplification"
+msgstr "Настройка микрофона"
+
+msgctxt "snd_mic_level_desc"
+msgid "Adjust the micro signal level (1 do nothing)"
+msgstr "Настройка уровня сигнала в микрофоне (1 - не менять)"
+
+msgctxt "snd_speaker_level"
+msgid "Speaker amplification"
+msgstr "Настройка спикера"
+
+msgctxt "snd_speaker_level_desc"
+msgid "Adjust the speaker signal level (1 do nothing)"
+msgstr "Настройка уровня сигнала в спикере (1 - не менять)"
+
+msgctxt "snd_stream_level"
+msgid "Initial stream level"
+msgstr "Начальный уровень потока"
+
+msgctxt "snd_stream_level_desc"
+msgid "Set the initial level for audio stream (Android stream)"
+msgstr "Установить начальный уровень аудио-потока (поток Андроид)"
+
+msgctxt "snd_auto_close_time"
+msgid "Auto close time"
+msgstr "Время автозавершения"
+
+msgctxt "snd_auto_close_time_desc"
+msgid "Time to wait for close audio channel"
+msgstr "Время ожидания до закрытия аудио канала"
+
+msgctxt "snd_media_quality"
+msgid "Media quality"
+msgstr "Качество медиа"
+
+msgctxt "snd_media_quality_desc"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgstr "Качество медиа потока (только для опытных пользователей)"
+
+msgctxt "snd_clock_rate"
+msgid "Clock rate"
+msgstr "Частота"
+
+msgctxt "snd_clock_rate_desc"
+msgid "Audio channel frequency"
+msgstr "Частота аудиоканала"
+
+msgctxt "snd_ptime"
+msgid "Frame ptime"
+msgstr "Фрейм ptime"
+
+msgctxt "snd_ptime_desc"
+msgid "Specifying lower ptime will normally reduce the latency"
+msgstr "Указание нижнего уровня ptime обычно снижает латентность"
+
+msgctxt "echo_cancellation_tail"
+msgid "Echo cancellation tail"
+msgstr "Шлейф подавления эха"
+
+msgctxt "echo_cancellation_tail_desc"
+msgid "Tail length of echo cancellation"
+msgstr "Длина шлейфа подавления эха"
+
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Приоритет (0 - отключено)"
+
+msgctxt "sip_info_dtmf"
+msgid "DTMF SIP INFO"
+msgstr ""
+
+msgctxt "sip_info_dtmf_desc"
+msgid "Use SIP INFO to send DTMF"
+msgstr ""
 
 msgctxt "general_ui"
 msgid "General user interface"
@@ -329,8 +373,8 @@ msgstr "Номеронабиратель"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr "Предлагать использовать SIP или мобильную связь при вызовах"
 
 msgctxt "integrate_with_native_calllogs"
@@ -340,14 +384,6 @@ msgstr "Список вызовов"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr "Показывать SIP вызовы в общем списке вызовов (если возможно)"
-
-msgctxt "exclude_for_outgoing_call"
-msgid "Exclude patterns"
-msgstr "Исключения"
-
-msgctxt "exclude_for_outgoing_call_desc"
-msgid "Exclude patterns for outgoing calls"
-msgstr "Исключения для исходящих вызовов"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -393,10 +429,10 @@ msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Частичная блокировка"
 
+#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
-msgid "Ensure CPU is always running for CSipSimple (drain battery)"
-msgstr ""
-"Не отключать процессор при работе CSipSimple (быстрее разряжается батарея)"
+msgid "Ensure CPU is always running for the application (drain battery)"
+msgstr "Не отключать процессор при работе CSipSimple (быстрее разряжается батарея)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -404,8 +440,7 @@ msgstr "Отчёт об ошибках"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr ""
-"Уровень отчёта об ошибках для отладки программы (0 - нет, 5 - подробный)"
+msgstr "Уровень отчёта об ошибках для отладки программы (0 - нет, 5 - подробный)"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
@@ -416,6 +451,14 @@ msgid "Disable it if you use another music application than the official one"
 msgstr ""
 "Не используйте интеграцию с музыкальным плеером, если используется "
 "нестандартное приложение"
+
+msgctxt "ringtone"
+msgid "Ringtone"
+msgstr ""
+
+msgctxt "ringtone_desc"
+msgid "Default ringtone for SIP calls"
+msgstr ""
 
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -467,5 +510,14 @@ msgstr "Передача VoIP пакетов должна быть разреш�
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
+msgstr "Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети"
+
+msgctxt "expert_preferences"
+msgid "Expert mode"
 msgstr ""
-"Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети"
+
+#, fuzzy
+msgctxt "advanced_preferences"
+msgid "Advanced mode"
+msgstr "Дополнительные настройки"
+

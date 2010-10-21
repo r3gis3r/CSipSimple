@@ -15,8 +15,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.wizards;
+package com.csipsimple.wizards.impl;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,23 +26,34 @@ import org.pjsip.pjsua.pjsip_cred_data_type;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
+import com.csipsimple.models.Account;
 
-public abstract class SimplePrefsWizard extends BasePrefsWizard {
-
+public abstract class SimpleImplementation extends BaseImplementation {
 	//private static final String THIS_FILE = "SimplePrefsWizard";
-	private EditTextPreference accountDisplayName;
-	private EditTextPreference accountPhoneNumber;
-	private EditTextPreference accountPassword;
-
+	protected EditTextPreference accountDisplayName;
+	protected EditTextPreference accountUsername;
+	protected EditTextPreference accountPassword;
+	protected CheckBoxPreference accountUseTcp;
 	
-	protected void fillLayout() {
-		accountDisplayName = (EditTextPreference) findPreference("display_name");
-		accountPhoneNumber = (EditTextPreference) findPreference("phone_number");
-		accountPassword = (EditTextPreference) findPreference("password");
+	protected static String DISPLAY_NAME = "display_name";
+	protected static String USER_NAME = "username";
+	protected static String PASSWORD = "password";
+	protected static String USE_TCP = "use_tcp";
 
+	protected void bindFields() {
+		accountDisplayName = (EditTextPreference) parent.findPreference(DISPLAY_NAME);
+		accountUsername = (EditTextPreference) parent.findPreference(USER_NAME);
+		accountPassword = (EditTextPreference) parent.findPreference(PASSWORD);
+		accountUseTcp = (CheckBoxPreference) parent.findPreference(USE_TCP);
+	}
+	
+	public void fillLayout(Account account) {
+		bindFields();
+		
 		String display_name = account.display_name;
 		if(display_name.equalsIgnoreCase("")) {
 			display_name = getDefaultName();
@@ -58,33 +70,59 @@ public abstract class SimplePrefsWizard extends BasePrefsWizard {
 			account_cfgid = m.group(1);
 		}
 
-		accountPhoneNumber.setText(account_cfgid);
+		accountUsername.setText(account_cfgid);
 		
 		pjsip_cred_info ci = account.cfg.getCred_info();
 		accountPassword.setText(ci.getData().getPtr());
+		
+		if(canTcp()) {
+			accountUseTcp.setChecked((account.use_tcp));
+		}else {
+			hidePreference(null, USE_TCP);
+		}
 	}
 
-	protected void updateDescriptions() {
-		setStringFieldSummary("display_name");
-		setStringFieldSummary("phone_number");
-		setPasswordFieldSummary("password");
+	public void updateDescriptions() {
+		setStringFieldSummary(DISPLAY_NAME);
+		setStringFieldSummary(USER_NAME);
+		setPasswordFieldSummary(PASSWORD);
+	}
+	
+	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = -5743705263738203615L;
+
+	{
+		put(DISPLAY_NAME, R.string.w_common_display_name_desc);
+		put(USER_NAME, R.string.w_common_username_desc);
+		put(PASSWORD, R.string.w_common_password_desc);
+	}};
+	
+	@Override
+	public String getDefaultFieldSummary(String fieldName) {
+		Integer res = SUMMARIES.get(fieldName);
+		if(res != null) {
+			return parent.getString( res );
+		}
+		return "";
 	}
 
-	protected boolean canSave() {
+	public boolean canSave() {
 		boolean isValid = true;
 		
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
 		isValid &= checkField(accountPassword, isEmpty(accountPassword));
-		isValid &= checkField(accountPhoneNumber, isEmpty(accountPhoneNumber));
+		isValid &= checkField(accountUsername, isEmpty(accountUsername));
 
 		return isValid;
 	}
 
-	protected void buildAccount() {
+	public Account buildAccount(Account account) {
 		account.display_name = accountDisplayName.getText();
 		// TODO add an user display name
 		account.cfg.setId(pjsua.pj_str_copy("<sip:"
-				+ accountPhoneNumber.getText() + "@"+getDomain()+">"));
+				+ accountUsername.getText() + "@"+getDomain()+">"));
 		
 		pj_str_t regUri = pjsua.pj_str_copy("sip:"+getDomain());
 		account.cfg.setReg_uri(regUri);
@@ -97,27 +135,32 @@ public abstract class SimplePrefsWizard extends BasePrefsWizard {
 
 		account.cfg.setCred_count(1);
 		credentials.setRealm(pjsua.pj_str_copy("*"));
-		credentials.setUsername(getPjText(accountPhoneNumber));
+		credentials.setUsername(getPjText(accountUsername));
 		credentials.setData(getPjText(accountPassword));
 		credentials.setScheme(pjsua.pj_str_copy("Digest"));
 		credentials.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
 				.swigValue());
 
 		account.cfg.setReg_timeout(1800);
+		
+		if(canTcp()) {
+			account.use_tcp = accountUseTcp.isChecked();
+		}
+		
+		return account;
 	}
 
 	protected abstract String getDomain();
 	protected abstract String getDefaultName();
+	
+	protected boolean canTcp() {
+		return false;
+	}
 
 	@Override
-	protected int getXmlPreferences() {
+	public int getBasePreferenceResource() {
 		return R.xml.w_simple_preferences;
 	}
 
-	
-	@Override
-	protected String getXmlPrefix() {
-		return "common";
-	}
 
 }

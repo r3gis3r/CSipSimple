@@ -71,7 +71,9 @@
 		
 
 		<!-- Wizards -->
-		<activity android:name=".wizards.impl.Advanced" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<!--  TODO : should be refactored to get only one entry point !! -->
+		<activity android:name=".wizards.BasePrefsWizard" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<!-- 
 		<activity android:name=".wizards.impl.Basic" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.Freephonie" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.Expert" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
@@ -85,7 +87,10 @@
 		<activity android:name=".wizards.impl.MagicJack" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.PlanetPhone" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".wizards.impl.Sipgate" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-
+		<activity android:name=".wizards.impl.Phonzo" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name=".wizards.impl.Pennytel" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+ 		-->
+ 
 		<!-- Call management -->
 		<receiver android:name=".service.OutgoingCall">
 			<intent-filter android:priority="-1">

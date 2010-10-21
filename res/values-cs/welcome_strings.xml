@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="detecting_text">Detekce příslušné knihovny pro zařízení</string>
+  <string name="intializing_text">Inicializace</string>
+  <string name="downloading_text">Stahování</string>
+  <string name="installing_library_text">Instalace knihovny...</string>
+  <string name="welcome_caption_text">Děkujeme, že používáte aplikaci CSipSimple</string>
+</resources>

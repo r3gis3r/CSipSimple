@@ -17,7 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,39 +27,28 @@ import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 
 import android.preference.EditTextPreference;
-import com.csipsimple.utils.Log;
 
 import com.csipsimple.R;
-import com.csipsimple.wizards.BasePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
+import com.csipsimple.models.Account;
+import com.csipsimple.utils.Log;
 
-public class Basic extends BasePrefsWizard {
+public class Basic extends BaseImplementation {
 	protected static final String THIS_FILE = "Basic W";
-	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "BASIC";
-		result.label = "Basic";
-		result.icon = R.drawable.ic_wizard_basic;
-		result.priority = 3;
-		result.countries = new Locale[]{};
-		result.isGeneric = true;
-		return result;
-	}
 
 	private EditTextPreference accountDisplayName;
 	private EditTextPreference accountUserName;
 	private EditTextPreference accountServer;
 	private EditTextPreference accountPassword;
 
+	private void bindFields() {
+		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
+		accountUserName = (EditTextPreference) parent.findPreference("username");
+		accountServer = (EditTextPreference) parent.findPreference("server");
+		accountPassword = (EditTextPreference) parent.findPreference("password");
+	}
 	
-	protected void fillLayout() {
-		accountDisplayName = (EditTextPreference) findPreference("display_name");
-		accountUserName = (EditTextPreference) findPreference("username");
-		accountServer = (EditTextPreference) findPreference("server");
-		accountPassword = (EditTextPreference) findPreference("password");
-
-		
+	public void fillLayout(Account account) {
+		bindFields();
 		
 		accountDisplayName.setText(account.display_name);
 		String server = "";
@@ -83,14 +72,35 @@ public class Basic extends BasePrefsWizard {
 		accountPassword.setText(ci.getData().getPtr());
 	}
 
-	protected void updateDescriptions() {
+	public void updateDescriptions() {
 		setStringFieldSummary("display_name");
 		setStringFieldSummary("username");
 		setStringFieldSummary("server");
 		setPasswordFieldSummary("password");
 	}
+	
+	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = -5743705263738203615L;
 
-	protected boolean canSave() {
+	{
+		put("display_name", R.string.w_common_display_name_desc);
+		put("username", R.string.w_basic_username_desc);
+		put("server", R.string.w_common_server_desc);
+		put("password", R.string.w_basic_password_desc);
+	}};
+	
+	@Override
+	public String getDefaultFieldSummary(String fieldName) {
+		Integer res = SUMMARIES.get(fieldName);
+		if(res != null) {
+			return parent.getString( res );
+		}
+		return "";
+	}
+
+	public boolean canSave() {
 		boolean isValid = true;
 		
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
@@ -101,7 +111,7 @@ public class Basic extends BasePrefsWizard {
 		return isValid;
 	}
 
-	protected void buildAccount() {
+	public Account buildAccount(Account account) {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
 		// TODO add an user display name
@@ -127,21 +137,12 @@ public class Basic extends BasePrefsWizard {
 		//By default force use tcp
 		account.use_tcp = false;
 		account.prevent_tcp = true;
-
+		return account;
 	}
 
 	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
-	}
-
-	@Override
-	protected int getXmlPreferences() {
+	public int getBasePreferenceResource() {
 		return R.xml.w_basic_preferences;
 	}
 
-	@Override
-	protected String getXmlPrefix() {
-		return "basic";
-	}
 }

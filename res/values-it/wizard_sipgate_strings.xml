@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_sipgate_display_name">Nome account</string>
+  <string name="w_sipgate_display_name_desc">Nome visualizzato per questo account</string>
+  <string name="w_sipgate_username">SIP-ID</string>
+  <string name="w_sipgate_username_desc">Diverso dal login Sipgate! Controlla sul sito Sipgate il tuo SIP-ID</string>
+  <string name="w_sipgate_password">SIP Password</string>
+  <string name="w_sipgate_password_desc">Diverso dalla tua password Sipgate! Controlla sul sito Sipgate la tua password SIP</string>
+  <string name="w_sipgate_server_desc">Qualcosa : sipgate.co.uk</string>
+</resources>

@@ -17,31 +17,16 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
-
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsua;
 
-import android.preference.EditTextPreference;
 import android.text.InputType;
 
 import com.csipsimple.R;
-import com.csipsimple.wizards.SimplePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
+import com.csipsimple.models.Account;
 
-public class Sip2Sip extends SimplePrefsWizard {
+public class Sip2Sip extends SimpleImplementation {
 	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "SIP2SIP";
-		result.label = "Sip2Sip";
-		result.icon = R.drawable.ic_wizard_sip2sip;
-		result.priority = 10;
-		result.countries = new Locale[]{};
-		result.isWorld = true;
-		return result;
-	}
-
 	@Override
 	protected String getDomain() {
 		return "sip2sip.info";
@@ -49,28 +34,24 @@ public class Sip2Sip extends SimplePrefsWizard {
 	
 	@Override
 	protected String getDefaultName() {
-		return getWizardInfo().label;
-	}
-
-	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
+		return "Sip2Sip";
 	}
 	
 	//Customization
-	protected void fillLayout() {
-		super.fillLayout();
-		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
-		phoneNumber.setTitle(R.string.w_common_username);
-		phoneNumber.setDialogTitle(R.string.w_common_username);
-		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
+	@Override
+	public void fillLayout(Account account) {
+		super.fillLayout(account);
+		accountUsername.setTitle(R.string.w_common_username);
+		accountUsername.setDialogTitle(R.string.w_common_username);
+		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 	
-	protected void buildAccount() {
-		super.buildAccount();
+	public Account buildAccount(Account account) {
+		account = super.buildAccount(account);
 		account.cfg.setProxy_cnt(1);
 		pj_str_t[] proxies = account.cfg.getProxy();
 		proxies[0] = pjsua.pj_str_copy("sip:proxy.sipthor.net");
 		account.cfg.setProxy(proxies);
+		return account;
 	}
 }

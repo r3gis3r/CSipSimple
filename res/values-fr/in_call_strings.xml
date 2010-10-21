@@ -8,7 +8,7 @@
   <string name="bluetooth">Bluetooth</string>
   <string name="speaker">Ht. parleur</string>
   <string name="mute">Muet</string>
-  <string name="add_call">Ajout Appel</string>
+  <string name="add_call">Aj. Appel</string>
   <string name="call_state_calling">Appel...</string>
   <string name="call_state_confirmed">En conversation</string>
   <string name="call_state_connecting">Connexion...</string>

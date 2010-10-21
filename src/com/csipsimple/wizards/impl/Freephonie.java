@@ -17,31 +17,15 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
-
 import org.pjsip.pjsua.pj_str_t;
 
-import android.preference.EditTextPreference;
 import android.text.InputType;
 
 import com.csipsimple.R;
-import com.csipsimple.wizards.SimplePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
+import com.csipsimple.models.Account;
 
-public class Freephonie extends SimplePrefsWizard {
+public class Freephonie extends SimpleImplementation {
 	
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "FREEPHONIE";
-		result.label = "Freephonie";
-		result.icon = R.drawable.ic_wizard_freephonie;
-		result.priority = 10;
-		result.countries = new Locale[]{
-			Locale.FRANCE
-		};
-		return result;
-	}
-
 	@Override
 	protected String getDomain() {
 		return "freephonie.net";
@@ -49,28 +33,37 @@ public class Freephonie extends SimplePrefsWizard {
 	
 	@Override
 	protected String getDefaultName() {
-		return getWizardInfo().label;
+		return "Freephonie";
 	}
 
-	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
-	}
 	
 	//Customization
-	protected void fillLayout() {
-		super.fillLayout();
-		EditTextPreference phoneNumber = ((EditTextPreference) findPreference("phone_number"));
-		phoneNumber.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+	@Override
+	public void fillLayout(Account account) {
+		super.fillLayout(account);
+		
+		accountUsername.setTitle(R.string.w_common_phone_number);
+		accountUsername.setDialogTitle(R.string.w_common_phone_number);
+		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		
+	}
+	@Override
+	public String getDefaultFieldSummary(String fieldName) {
+		if(fieldName.equals(USER_NAME)) {
+			return parent.getString(R.string.w_common_phone_number_desc);
+		}
+		return super.getDefaultFieldSummary(fieldName);
 	}
 	
-	protected void buildAccount() {
-		super.buildAccount();
+	
+	public Account buildAccount(Account account) {
+		account = super.buildAccount(account);
 		//Ensure registration timeout value
 		account.cfg.setReg_timeout(1800);
 		account.cfg.setProxy_cnt(0);
 		pj_str_t[] proxies = account.cfg.getProxy();
 		account.cfg.setProxy(proxies);
 		account.prevent_tcp = true;
+		return account;
 	}
 }

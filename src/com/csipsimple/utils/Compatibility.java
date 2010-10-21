@@ -71,7 +71,8 @@ public class Compatibility {
 			//So we have to choose the good stream tag, which is by default falled back to music
 			return AudioManager.STREAM_MUSIC;
 		}
-		return AudioManager.STREAM_VOICE_CALL;
+		return AudioManager.STREAM_MUSIC;
+		//return AudioManager.STREAM_VOICE_CALL;
 	}
 	
 	public static boolean useRoutingApi() {
@@ -97,7 +98,7 @@ public class Compatibility {
 			return 3;
 		}
 
-		if (android.os.Build.BRAND.equalsIgnoreCase("htc") && !isCompatible(4)) {
+		if (/*(android.os.Build.BRAND.equalsIgnoreCase("htc") || android.os.Build.BRAND.equalsIgnoreCase("tmobile")) &&*/ !isCompatible(5)) {
 			return AudioManager.MODE_IN_CALL;
 		}
 

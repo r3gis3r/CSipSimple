@@ -16,6 +16,7 @@
   <string name="w_expert_proxy">Proxy URI</string>
   <string name="w_expert_proxy_desc">Alak : sip:proxy.net[:port]</string>
   <string name="w_expert_use_tcp">Használjon TCP-t (ne UDP-t)</string>
+  <string name="w_expert_prevent_tcp">TCP mellőzése (csak UDP)</string>
   <string name="w_expert_publish_enabled">Közzététel engedélyezése</string>
   <string name="w_expert_reg_timeout">Bejelentkezési időtúllépés (másodperc)</string>
   <string name="w_expert_ka_interval">Újrapróbálkozás X másodpercenként</string>

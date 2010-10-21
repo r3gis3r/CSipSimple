@@ -16,6 +16,7 @@
   <string name="w_expert_proxy">Proxy URI</string>
   <string name="w_expert_proxy_desc">Formato : sip:proxy.net[:porta]</string>
   <string name="w_expert_use_tcp">Usa TCP (no UDP)</string>
+  <string name="w_expert_prevent_tcp">Previeni TCP (usa solo UDP)</string>
   <string name="w_expert_publish_enabled">Publish abilitato</string>
   <string name="w_expert_reg_timeout">Register timeout (sec)</string>
   <string name="w_expert_ka_interval">Keep-alive interval (sec)</string>

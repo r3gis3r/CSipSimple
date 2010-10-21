@@ -27,7 +27,6 @@
 <string name="w_sipgate_password">SIP Password</string>
 <string name="w_sipgate_password_desc">Different from your password! Check on sipgate website your SIP Password</string>
 
-<string name="w_sipgate_server">Server</string>
 <string name="w_sipgate_server_desc">Something like that : sipgate.co.uk</string>
 
 

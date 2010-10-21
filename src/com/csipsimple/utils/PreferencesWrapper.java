@@ -56,6 +56,7 @@ public class PreferencesWrapper {
 	public static final String ENABLE_STUN = "enable_stun";
 	public static final String STUN_SERVER = "stun_server";
 	public static final String IS_ADVANCED_USER = "is_advanced_user";
+	public static final String ENABLE_DNS_SRV = "enable_dns_srv";
 
 	public static final String DEFAULT_STUN_SERVER = "stun.counterpath.com";
 	
@@ -290,7 +291,7 @@ public class PreferencesWrapper {
 	
 
 	public boolean enableDNSSRV() {
-		return prefs.getBoolean("enable_dns_srv", false);
+		return prefs.getBoolean(ENABLE_DNS_SRV, false);
 	}
 	
 	public pj_str_t[] getNameservers() {

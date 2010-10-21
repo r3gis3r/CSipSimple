@@ -4,8 +4,6 @@
   <string name="w_advanced_display_name_desc">Отображаемое название аккаунта</string>
   <string name="w_advanced_caller_id">Идентификатор звонящего</string>
   <string name="w_advanced_caller_id_desc">Идентификатор звонящего при исходящих вызовах Caller ID</string>
-  <string name="w_advanced_server">Сервер</string>
-  <string name="w_advanced_server_desc">SIP сервер домен/IP[:порт]</string>
   <string name="w_advanced_username">Имя пользователя</string>
   <string name="w_advanced_username_desc">Имя пользователя для аутентификации на SIP сервере</string>
   <string name="w_advanced_password">Пароль</string>

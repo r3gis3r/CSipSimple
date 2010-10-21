@@ -4,8 +4,6 @@
   <string name="w_advanced_display_name_desc">Megjelenítendő név a fiók használatakor</string>
   <string name="w_advanced_caller_id">Hívó neve</string>
   <string name="w_advanced_caller_id_desc">Hívottnál megjelenő név</string>
-  <string name="w_advanced_server">Szerver</string>
-  <string name="w_advanced_server_desc">SIP szerver domain/IP[:port]</string>
   <string name="w_advanced_username">Felhasználónév</string>
   <string name="w_advanced_username_desc">Felhasználói azonosító név a SIP szerveren</string>
   <string name="w_advanced_password">Jelszó</string>

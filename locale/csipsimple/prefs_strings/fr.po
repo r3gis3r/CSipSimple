@@ -7,15 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-09 23:52+0200\n"
+"POT-Creation-Date: 2010-10-21 23:27+0200\n"
 "PO-Revision-Date: 2010-10-10 08:22+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-11 05:00+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: Babel 1.0dev\n"
 
 msgctxt "prefs"
@@ -180,16 +179,15 @@ msgstr "Utiliser l'IPv6"
 
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
-msgstr ""
-"Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
+msgstr "Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
 msgstr "Résoudre les DNS SRV"
 
 msgctxt "enable_dns_srv_desc"
-msgid "Use CSipSimple nameserver resolver resolve names"
-msgstr "Utiliser les DNS dans CSipSimple pour résoudre les noms de domaine"
+msgid "Use the application resolver to resolve DNS names"
+msgstr "Utiliser les DNS dans l'application pour résoudre les noms de domaine"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
@@ -199,103 +197,22 @@ msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
 msgstr "Laisser vide pour récupérer les DNS d'Android"
 
-msgctxt "audio_quality"
-msgid "Audio quality"
-msgstr "Qualité audio"
+#, fuzzy
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr "Transport"
 
-msgctxt "codecs"
-msgid "Codecs"
-msgstr "Codecs"
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr "Mode SRTP"
 
-msgctxt "ice_turn"
-msgid "ICE/TURN/STUN"
-msgstr "ICE/TURN"
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr "Mode pour le RTP sécurisé"
 
-msgctxt "echo_cancellation"
-msgid "Echo cancellation"
-msgstr "Annulation de l'echo"
-
-msgctxt "echo_cancellation_desc"
-msgid "Activate echo cancellation"
-msgstr "Activer l'annulation d'echo"
-
-msgctxt "enable_vad"
-msgid "Voice audio detection"
-msgstr "Détection de silence"
-
-msgctxt "enable_vad_desc"
-msgid "Activate voice audio detection"
+msgctxt "nat_traversal"
+msgid "NAT traversal"
 msgstr ""
-"Activer la détection active de voix (réduit la bande passante utilisée)"
-
-msgctxt "snd_mic_level"
-msgid "Micro amplification"
-msgstr "Amplification du micro"
-
-msgctxt "snd_mic_level_desc"
-msgid "Adjust the micro signal level (1 do nothing)"
-msgstr "Ajuster le gain du signal du micro (1 n'a pas d'effet)"
-
-msgctxt "snd_speaker_level"
-msgid "Speaker amplification"
-msgstr "Amplification de l'écoute"
-
-msgctxt "snd_speaker_level_desc"
-msgid "Adjust the speaker signal level (1 do nothing)"
-msgstr "Ajuster le gain du signal de l'écouteur (1 n'a pas d'effet)"
-
-msgctxt "snd_stream_level"
-msgid "Initial stream level"
-msgstr "Niveau sonore initial"
-
-msgctxt "snd_stream_level_desc"
-msgid "Set the initial level for audio stream (Android stream)"
-msgstr "Choix du niveau initial du flux sonore Android"
-
-msgctxt "snd_auto_close_time"
-msgid "Auto close time"
-msgstr "Fermeture automatique du canal audio"
-
-msgctxt "snd_auto_close_time_desc"
-msgid "Time to wait for close audio channel"
-msgstr ""
-"Temps avant fermture du canal audio (peut dans certain cas régler le "
-"problème de fermeture du canal audio sur android 1.5)"
-
-msgctxt "snd_media_quality"
-msgid "Media quality"
-msgstr "Qualité du média"
-
-msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
-msgstr ""
-"Qualité du flux média (à ne modifier que si vous savez exactement ce que "
-"vous faites)"
-
-msgctxt "snd_clock_rate"
-msgid "Clock rate"
-msgstr "Fréquence"
-
-msgctxt "snd_clock_rate_desc"
-msgid "Audio channel frequency"
-msgstr "Fréquence du canal audio"
-
-msgctxt "snd_ptime"
-msgid "Frame ptime"
-msgstr "Ptime de la frame"
-
-msgctxt "snd_ptime_desc"
-msgid "Specifying lower ptime will normally reduce the latency"
-msgstr "Un ptime plus petit réduit la latence"
-
-msgctxt "echo_cancellation_tail"
-msgid "Echo cancellation tail"
-msgstr "Longueur d'annulation de l'echo"
-
-msgctxt "echo_cancellation_tail_desc"
-msgid "Tail length of echo cancellation"
-msgstr "Longueur de la trainée sur laquelle appliquer l'annulation d'écho"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
@@ -337,17 +254,109 @@ msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "Server STUN (hôte:port)"
 
+msgctxt "audio_quality"
+msgid "Audio quality"
+msgstr "Qualité audio"
+
+msgctxt "codecs"
+msgid "Codecs"
+msgstr "Codecs"
+
+msgctxt "echo_cancellation"
+msgid "Echo cancellation"
+msgstr "Annulation de l'echo"
+
+msgctxt "echo_cancellation_desc"
+msgid "Activate echo cancellation"
+msgstr "Activer l'annulation d'echo"
+
+msgctxt "enable_vad"
+msgid "Voice audio detection"
+msgstr "Détection de silence"
+
+msgctxt "enable_vad_desc"
+msgid "Activate voice audio detection"
+msgstr "Activer la détection active de voix (réduit la bande passante utilisée)"
+
+msgctxt "snd_mic_level"
+msgid "Micro amplification"
+msgstr "Amplification du micro"
+
+msgctxt "snd_mic_level_desc"
+msgid "Adjust the micro signal level (1 do nothing)"
+msgstr "Ajuster le gain du signal du micro (1 n'a pas d'effet)"
+
+msgctxt "snd_speaker_level"
+msgid "Speaker amplification"
+msgstr "Amplification de l'écoute"
+
+msgctxt "snd_speaker_level_desc"
+msgid "Adjust the speaker signal level (1 do nothing)"
+msgstr "Ajuster le gain du signal de l'écouteur (1 n'a pas d'effet)"
+
+msgctxt "snd_stream_level"
+msgid "Initial stream level"
+msgstr "Niveau sonore initial"
+
+msgctxt "snd_stream_level_desc"
+msgid "Set the initial level for audio stream (Android stream)"
+msgstr "Choix du niveau initial du flux sonore Android"
+
+msgctxt "snd_auto_close_time"
+msgid "Auto close time"
+msgstr "Fermeture automatique du canal audio"
+
+msgctxt "snd_auto_close_time_desc"
+msgid "Time to wait for close audio channel"
+msgstr ""
+"Temps avant fermture du canal audio (peut dans certain cas régler le "
+"problème de fermeture du canal audio sur android 1.5)"
+
+msgctxt "snd_media_quality"
+msgid "Media quality"
+msgstr "Qualité du média"
+
+msgctxt "snd_media_quality_desc"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgstr ""
+"Qualité du flux média (à ne modifier que si vous savez exactement ce que "
+"vous faites)"
+
+msgctxt "snd_clock_rate"
+msgid "Clock rate"
+msgstr "Fréquence"
+
+msgctxt "snd_clock_rate_desc"
+msgid "Audio channel frequency"
+msgstr "Fréquence du canal audio"
+
+msgctxt "snd_ptime"
+msgid "Frame ptime"
+msgstr "Ptime de la frame"
+
+msgctxt "snd_ptime_desc"
+msgid "Specifying lower ptime will normally reduce the latency"
+msgstr "Un ptime plus petit réduit la latence"
+
+msgctxt "echo_cancellation_tail"
+msgid "Echo cancellation tail"
+msgstr "Longueur d'annulation de l'echo"
+
+msgctxt "echo_cancellation_tail_desc"
+msgid "Tail length of echo cancellation"
+msgstr "Longueur de la trainée sur laquelle appliquer l'annulation d'écho"
+
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Priorité (0 = désactivé)"
 
-msgctxt "use_srtp"
-msgid "SRTP mode"
-msgstr "Mode SRTP"
+msgctxt "sip_info_dtmf"
+msgid "DTMF SIP INFO"
+msgstr ""
 
-msgctxt "use_srtp_desc"
-msgid "Mode for Secure RTP"
-msgstr "Mode pour le RTP sécurisé"
+msgctxt "sip_info_dtmf_desc"
+msgid "Use SIP INFO to send DTMF"
+msgstr ""
 
 msgctxt "general_ui"
 msgid "General user interface"
@@ -367,11 +376,11 @@ msgstr "Activer l'intégration"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
-"Quand un appel est initié partout dans Android il vous sera demandé si vous "
-"voulez utiliser le GSM ou le SIP"
+"Quand un appel est initié partout dans Android il vous sera demandé si "
+"vous voulez utiliser le GSM ou le SIP"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -380,15 +389,8 @@ msgstr "Intégrations au journal d'appel"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"Les appels SIP seront rajoutés (si possible) aux journaux d'appels d'Android"
-
-msgctxt "exclude_for_outgoing_call"
-msgid "Exclude patterns"
-msgstr "Motifs à exclures"
-
-msgctxt "exclude_for_outgoing_call_desc"
-msgid "Exclude patterns for outgoing calls"
-msgstr "Motifs (regexp) pour les appels sortant à ne pas traiter en SIP"
+"Les appels SIP seront rajoutés (si possible) aux journaux d'appels "
+"d'Android"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -429,17 +431,19 @@ msgstr "Rester allumer lorsqu'en cours d'appel"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corrige le son haché lorsque le téléphone est en WIFI (par exemple pour le "
-"Nexus One)"
+"Corrige le son haché lorsque le téléphone est en WIFI (par exemple pour "
+"le Nexus One)"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Utiliser le verouillage CPU"
 
+#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
-msgid "Ensure CPU is always running for CSipSimple (drain battery)"
+msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"S'assure que le CPU est toujours actif pour CSipSimple (use de la batterie)"
+"S'assure que le CPU est toujours actif pour CSipSimple (use de la "
+"batterie)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -458,6 +462,14 @@ msgid "Disable it if you use another music application than the official one"
 msgstr ""
 "A désactiver si vous utilisez un autre application que l'application "
 "officielle"
+
+msgctxt "ringtone"
+msgid "Ringtone"
+msgstr ""
+
+msgctxt "ringtone_desc"
+msgid "Default ringtone for SIP calls"
+msgstr ""
 
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -512,3 +524,13 @@ msgstr ""
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
 msgstr "Disponible seulement si le SIP est actuellement enregistré"
+
+msgctxt "expert_preferences"
+msgid "Expert mode"
+msgstr ""
+
+#, fuzzy
+msgctxt "advanced_preferences"
+msgid "Advanced mode"
+msgstr "Modifications avancées"
+

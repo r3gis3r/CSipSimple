@@ -6,6 +6,5 @@
   <string name="w_magicjack_username_desc">Формат вида EXXXXXXXXXX01</string>
   <string name="w_magicjack_password">Пароль</string>
   <string name="w_magicjack_password_desc">Пароль аутентификации на SIP сервере</string>
-  <string name="w_magicjack_server">Сервер</string>
   <string name="w_magicjack_server_desc">Формат вида: proxy01.yourcity.talk4free.com</string>
 </resources>

@@ -6,6 +6,5 @@
   <string name="w_magicjack_username_desc">z.B. EXXXXXXXXXX01</string>
   <string name="w_magicjack_password">Passwort</string>
   <string name="w_magicjack_password_desc">Passwort für SIP Server Authentifikation</string>
-  <string name="w_magicjack_server">Server</string>
   <string name="w_magicjack_server_desc">z.B. proxy01.yourcity.talk4free.com</string>
 </resources>

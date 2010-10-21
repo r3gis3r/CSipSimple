@@ -17,25 +17,8 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.Locale;
 
-import com.csipsimple.R;
-import com.csipsimple.wizards.SimplePrefsWizard;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
-
-public class Eutelia extends SimplePrefsWizard {
-	public static WizardInfo getWizardInfo() {
-		WizardInfo result = new WizardInfo();
-		result.id =  "EUTELIA";
-		result.label = "Eutelia";
-		result.icon = R.drawable.ic_wizard_eutelia;
-		result.priority = 10;
-		result.countries = new Locale[]{
-				Locale.ITALY
-		};
-		return result;
-	}
-	
+public class Eutelia extends SimpleImplementation {
 
 	@Override
 	protected String getDomain() {
@@ -43,10 +26,6 @@ public class Eutelia extends SimplePrefsWizard {
 	}
 	@Override
 	protected String getDefaultName() {
-		return getWizardInfo().label;
-	}
-	@Override
-	protected String getWizardId() {
-		return getWizardInfo().id;
+		return "Eutelia";
 	}
 }
