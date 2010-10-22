@@ -42,6 +42,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -225,10 +226,16 @@ public class UAStateReceiver extends Callback {
 					database.open();
 					database.insertCallLog(cv);
 					database.close();
-					notificationManager.showNotificationForMissedCall(cv);
+					Integer isNew = cv.getAsInteger(CallLog.Calls.NEW);
+					if(isNew != null && isNew == 1) {
+						notificationManager.showNotificationForMissedCall(cv);
+					}
 					
 					//If needed fill native database
 					if(service.prefsWrapper.useIntegrateCallLogs()) {
+						//Don't add with new flag
+						cv.put(CallLog.Calls.NEW, false);
+						
 						//Reformat number for callogs
 						Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
 						Matcher m = p.matcher(cv.getAsString(Calls.NUMBER));

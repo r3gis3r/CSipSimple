@@ -74,6 +74,9 @@ import com.csipsimple.utils.MD5;
 
 public class DownloadLibService extends Service {
 
+	public static final String CURRENT_STACK_URI = "current_stack_uri";
+	public static final String CURRENT_STACK_VERSION = "current_stack_version";
+	public static final String CURRENT_STACK_ID = "current_stack_id";
 	private static final String THIS_FILE = "DownloadLibService";
 	private static final int BUFFER = 2048;
 	private WifiLock wifiLock;
@@ -289,7 +292,11 @@ public class DownloadLibService extends Service {
 							HttpEntity temp = md5response.getEntity();
 							InputStreamReader isr = new InputStreamReader(temp.getContent());
 							BufferedReader br = new BufferedReader(isr);
-							downloadedMD5 = br.readLine().split("  ")[0];
+							try {
+								downloadedMD5 = br.readLine().split("  ")[0];
+							} catch (NullPointerException e) {
+								md5Available = false;
+							}
 							br.close();
 							isr.close();
 
@@ -582,9 +589,9 @@ public class DownloadLibService extends Service {
 			tmp_gz.delete();
 			//Update preferences fields with current stack values
 			Editor editor = prefs.edit();
-			editor.putString("current_stack_id", lib.getId());
-			editor.putString("current_stack_version", lib.getVersion());
-			editor.putString("current_stack_uri", lib.getDownloadUri().toString());
+			editor.putString(CURRENT_STACK_ID, lib.getId());
+			editor.putString(CURRENT_STACK_VERSION, lib.getVersion());
+			editor.putString(CURRENT_STACK_URI, lib.getDownloadUri().toString());
 			editor.commit();
 			return true;
 		} catch (IOException e) {

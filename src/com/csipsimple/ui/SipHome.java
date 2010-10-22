@@ -77,6 +77,7 @@ public class SipHome extends TabActivity {
 
 		// Check sip stack
 		if (!SipService.hasStackLibFile(this)) {
+			//If not -> Just launch stack getter
 			Log.d(THIS_FILE, "Has no sip stack....");
 			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
 			welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

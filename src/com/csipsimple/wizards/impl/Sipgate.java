@@ -27,7 +27,7 @@ public class Sipgate extends AlternateServerImplementation {
 	
 	@Override
 	public void fillLayout(Account account) {
-
+		super.fillLayout(account);
 		//Override titles
 		accountDisplayName.setTitle(R.string.w_sipgate_display_name);
 		accountDisplayName.setDialogTitle(R.string.w_sipgate_display_name);
@@ -39,7 +39,6 @@ public class Sipgate extends AlternateServerImplementation {
 		accountPassword.setDialogTitle(R.string.w_sipgate_password);
 	}
 	
-
 	
 
 	public Account buildAccount(Account account) {

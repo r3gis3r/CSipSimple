@@ -27,8 +27,8 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pj_str_t;
@@ -47,6 +47,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -58,8 +61,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
+import android.os.RemoteException;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyCharacterMap;
@@ -70,8 +73,8 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
-import com.csipsimple.models.IAccount;
 import com.csipsimple.models.CallInfo.UnavailableException;
+import com.csipsimple.models.IAccount;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -1419,7 +1422,8 @@ public class SipService extends Service {
 	public static File getStackLibFile(Context context) {
 		// Standard case
 		File standardOut = getGuessedStackLibFile(context);
-		if (standardOut.exists()) {
+		
+		if (standardOut.exists() && !isDebuggableApp(context)) {
 			return standardOut;
 		}
 
@@ -1431,7 +1435,13 @@ public class SipService extends Service {
 			return targetForBuild;
 		}
 
+		//Oups none exists.... reset version history
+		PreferencesWrapper prefs = new PreferencesWrapper(context);
+		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_VERSION, "0.00-00");
+		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_ID, "");
+		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_URI, "");
 		return null;
+		
 	}
 
 	public static boolean isBundleStack(Context ctx) {
@@ -1450,6 +1460,17 @@ public class SipService extends Service {
 
 	public static File getGuessedStackLibFile(Context ctx) {
 		return ctx.getFileStreamPath(SipService.STACK_FILE_NAME);
+	}
+	
+	public static boolean isDebuggableApp(Context ctx) {
+		try {
+			PackageInfo pinfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
+			return ( (pinfo.applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0);
+		} catch (NameNotFoundException e) {
+			// Should not happen....or something is wrong with android...
+			Log.e(THIS_FILE, "Not possible to find self name", e);
+		}
+		return false;
 	}
 
 	public static ArrayList<String> codecs;

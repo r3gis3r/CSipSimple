@@ -228,7 +228,7 @@ public class WelcomeScreen extends Activity {
 						
 						if(currentDownload != null) {
 							Log.d(THIS_FILE, "We have a library for you : "+currentDownload.getDownloadUri().toString());
-							String old_stack_version = prefs.getString("current_stack_version", "0.00-00");
+							String old_stack_version = prefs.getString(DownloadLibService.CURRENT_STACK_VERSION, "0.00-00");
 							
 							Log.d(THIS_FILE, "Compare old : "+old_stack_version+ " et "+currentDownload.getVersion());
 							if(currentDownload.isMoreUpToDateThan(old_stack_version)) {
