@@ -63,6 +63,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	private int controlMode;
 	private MediaState lastMediaState;
 	private ImageButton holdButton;
+//	private ImageButton settingsButton;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -121,6 +122,11 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		 * When hold / reinvite is asked
 		 */
 		int TOGGLE_HOLD = DETAILED_DISPLAY + 1;
+		/**
+		 * When media settings is asked
+		 */
+		int MEDIA_SETTINGS = TOGGLE_HOLD + 1;
+		
 
 		/**
 		 * Called when the user make an action
@@ -160,7 +166,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		declineCallButton = (Button) findViewById(R.id.declineCallButton);
 		detailsButton = (ImageButton) findViewById(R.id.detailsButton);
 		holdButton = (ImageButton) findViewById(R.id.holdButton);
-		
+	//	settingsButton = (ImageButton) findViewById(R.id.settingsButton);
 		
 		// Finalize object style
 		slidingTabWidget.setLeftHintText(R.string.take_call);
@@ -183,7 +189,22 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		declineCallButton.setOnClickListener(this);
 		detailsButton.setOnClickListener(this);
 		holdButton.setOnClickListener(this);
+	//	settingsButton.setOnClickListener(this);
 	}
+	
+	
+	@Override
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		super.onLayout(changed, l, t, r, b);
+		
+		final int parentWidth = r - l;
+		final int parentHeight = b - t;
+		final int top = parentHeight * 3/4 - slidingTabWidget.getHeight()/2;
+		final int bottom = parentHeight * 3/4 + slidingTabWidget.getHeight() / 2;
+		slidingTabWidget.layout(0, top, parentWidth, bottom);
+		
+	}
+	
 
 	public void setEnabledMediaButtons(boolean isInCall) {
 		if (lastMediaState == null) {
@@ -220,6 +241,13 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 
 
 	public void setCallState(CallInfo callInfo) {
+		if(callInfo == null) {
+			controlMode = MODE_NO_ACTION;
+			inCallButtons.setVisibility(GONE);
+			setCallLockerVisibility(GONE);
+			return;
+		}
+		
 		pjsip_inv_state state = callInfo.getCallState();
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
@@ -321,7 +349,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		default:
 			break;
 		}
-
+		slidingTabWidget.resetView();
 	}
 
 	@Override
@@ -369,6 +397,8 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		case R.id.holdButton:
 			dispatchTriggerEvent(OnTriggerListener.TOGGLE_HOLD);
 			break;
+	//	case R.id.settingsButton:
+	//		dispatchTriggerEvent(OnTriggerListener.MEDIA_SETTINGS);
 		default:
 			break;
 		}

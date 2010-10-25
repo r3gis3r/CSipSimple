@@ -46,9 +46,11 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.os.RemoteException;
 import android.os.PowerManager.WakeLock;
+import android.os.RemoteException;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -57,24 +59,26 @@ import android.widget.LinearLayout;
 import com.csipsimple.R;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.ISipService;
-import com.csipsimple.service.SipService;
 import com.csipsimple.service.MediaManager.MediaState;
+import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.Dialpad;
+import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.InCallControls;
+import com.csipsimple.widgets.InCallControls.OnTriggerListener;
 import com.csipsimple.widgets.InCallInfo;
 import com.csipsimple.widgets.ScreenLocker;
-import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
-import com.csipsimple.widgets.InCallControls.OnTriggerListener;
 
 
 public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener, SensorEventListener, com.csipsimple.widgets.SlidingTab.OnTriggerListener {
 	private static String THIS_FILE = "SIP CALL HANDLER";
 
-	private CallInfo callInfo = null;
+	private CallInfo[] callsInfo = null;
+	private int callId = -1;
+	private pjsip_inv_state callState = null;
 	private FrameLayout mainFrame;
 	private InCallControls inCallControls;
 	private InCallInfo inCallInfo;
@@ -120,6 +124,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 		setContentView(R.layout.in_call_main);
 
+		/*
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			callInfo = (CallInfo) extras.get(SipService.EXTRA_CALL_INFO);
@@ -130,13 +135,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			finish();
 			return;
 		}
+		*/
 		
-		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
+	//	Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
 		/*
 		inTest = extras.getBoolean("in_test", false);
 		if(!inTest) {
 		*/
-			Log.d(THIS_FILE, "Creating call handler.....");
+		//	Log.d(THIS_FILE, "Creating call handler for call " + callInfo.getCallId() );
 			serviceBound = bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 			/*
 		}
@@ -144,7 +150,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			
 		prefsWrapper = new PreferencesWrapper(this);
 
-		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
+//		Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
         powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
 		
@@ -274,17 +280,121 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 	}
 	
+
+	@Override
+	protected void onDestroy() {
+		if (serviceBound) {
+			unbindService(connection);
+			serviceBound = false;
+		}
+		
+		if (wakeLock != null && wakeLock.isHeld()) {
+            wakeLock.release();
+        }
+		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
+			proximityWakeLock.release();
+		}
+		try {
+			unregisterReceiver(callStateReceiver);
+		}catch (IllegalArgumentException e) {
+			//That's the case if not registered (early quit)
+		}
+		super.onDestroy();
+	}
+
+	public static final int AUDIO_SETTINGS_MENU = Menu.FIRST + 1;
+	public static final int RECORD_MENU = Menu.FIRST + 2;
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		if(service != null) {
+			try {
+				MenuItem recItem = menu.findItem(RECORD_MENU);
+				boolean isRecording = (service.getRecordedCall() == -1);
+				recItem.setTitle(isRecording?R.string.record:R.string.stop_recording);
+				recItem.setIcon(isRecording ? R.drawable.record : R.drawable.stop);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, AUDIO_SETTINGS_MENU, Menu.NONE, R.string.prefs_media).setIcon(R.drawable.ic_menu_media);
+		menu.add(Menu.NONE, RECORD_MENU, Menu.NONE, R.string.record).setIcon(R.drawable.record);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case AUDIO_SETTINGS_MENU:
+			startActivity(new Intent(this, InCallMediaControl.class));
+			return true;
+		case RECORD_MENU:
+			try {
+				service.startRecording(callId);
+			} catch (RemoteException e) {
+				//TODO : toaster 
+			}
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	
+	private CallInfo getCurrentCallInfo() {
+		CallInfo currentCallInfo = null;
+		if(callsInfo == null) {
+			return null;
+		}
+		for(CallInfo callInfo : callsInfo) {
+			pjsip_inv_state state = callInfo.getCallState();
+			switch (state) {
+				case PJSIP_INV_STATE_NULL:
+				case PJSIP_INV_STATE_DISCONNECTED:
+					break;
+				default:
+					currentCallInfo = callInfo;
+					break;
+			}
+			if(currentCallInfo != null) {
+				break;
+			}
+		}
+		if(currentCallInfo != null) {
+			callId = currentCallInfo.getCallId();
+			callState = currentCallInfo.getCallState();
+		}else {
+			callId = -1;
+		}
+		return currentCallInfo;
+	}
 	
 	private synchronized void updateUIFromCall() {
-
-		Log.d(THIS_FILE, "Update ui from call " + callInfo.getCallId() + " state " + callInfo.getStringCallState(this));
+		if(!serviceConnected) {
+			return;
+		}
+		CallInfo currentCallInfo = getCurrentCallInfo();
 		
-		pjsip_inv_state state = callInfo.getCallState();
-
 
 		//Update in call actions
-		inCallInfo.setCallState(callInfo);
-		inCallControls.setCallState(callInfo);
+		inCallInfo.setCallState(currentCallInfo);
+		inCallControls.setCallState(currentCallInfo);
+		
+		//If not any active call active
+		if(currentCallInfo == null && serviceConnected) {
+			delayedQuit();
+			return;
+		}
+
+		Log.d(THIS_FILE, "Update ui from call " + currentCallInfo.getCallId() + " state " + currentCallInfo.getStringCallState(this));
+		pjsip_inv_state state = currentCallInfo.getCallState();
+
+
 		
 		
 		int backgroundResId = R.drawable.bg_in_call_gradient_unidentified;
@@ -329,14 +439,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		case PJSIP_INV_STATE_NULL:
 			Log.i(THIS_FILE, "WTF?");
 		case PJSIP_INV_STATE_DISCONNECTED:
-			if (wakeLock != null && wakeLock.isHeld()) {
-				Log.d(THIS_FILE, "Releasing wake up lock");
-                wakeLock.release();
-            }
-			if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
-				proximityWakeLock.release();
-			}
-			
 			//Set background to red and delay quit
 			delayedQuit();
 			return;
@@ -345,7 +447,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			break;
 		}
 		
-		pjsua_call_media_status mediaStatus = callInfo.getMediaStatus();
+		pjsua_call_media_status mediaStatus = currentCallInfo.getMediaStatus();
 		switch (mediaStatus) {
 		case PJSUA_CALL_MEDIA_ACTIVE:
 			break;
@@ -364,17 +466,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		
 		
 		mainFrame.setBackgroundResource(backgroundResId);
-		
-		
 		Log.d(THIS_FILE, "we leave the update ui function");
 	}
 	
 	
 	private synchronized void updateUIFromMedia() {
-		if(SipService.mediaManager != null) {
+		if(SipService.mediaManager != null && serviceConnected) {
 			MediaState mediaState = SipService.mediaManager.getMediaState();
 			Log.d(THIS_FILE, "Media update ....");
 			if(!mediaState.equals(lastMediaState)) {
+				CallInfo callInfo = getCurrentCallInfo();
 				lastMediaState = mediaState;
 				
 				if(callInfo != null) {
@@ -393,10 +494,20 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	}
 	
 	private void delayedQuit() {
+		
+		if (wakeLock != null && wakeLock.isHeld()) {
+			Log.d(THIS_FILE, "Releasing wake up lock");
+            wakeLock.release();
+        }
+		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
+			proximityWakeLock.release();
+		}
+		
 		//Update ui
 		lockOverlay.hide();
 		setDialpadVisibility(View.GONE);
 		callInfoPanel.setVisibility(View.VISIBLE);
+		inCallControls.setVisibility(View.GONE);
 		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
 		
 		
@@ -425,26 +536,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	
 	
-	@Override
-	protected void onDestroy() {
-		if (serviceBound) {
-			unbindService(connection);
-			serviceBound = false;
-		}
-		
-		if (wakeLock != null && wakeLock.isHeld()) {
-            wakeLock.release();
-        }
-		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
-			proximityWakeLock.release();
-		}
-		try {
-			unregisterReceiver(callStateReceiver);
-		}catch (IllegalArgumentException e) {
-			//That's the case if not registered (early quit)
-		}
-		super.onDestroy();
-	}
 	
 	
 	
@@ -461,8 +552,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         	if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
         		action = AudioManager.ADJUST_LOWER;
         	}
-        	if(SipService.mediaManager != null) {
-        		SipService.mediaManager.adjustStreamVolume(Compatibility.getInCallStream(), action, AudioManager.FLAG_SHOW_UI);
+        	if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME)) {
+        		Intent adjustVolumeIntent = new Intent(this, InCallMediaControl.class);
+        		adjustVolumeIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyCode);
+        		startActivity(adjustVolumeIntent);
+        	}else {
+	        	if(SipService.mediaManager != null) {
+	        		SipService.mediaManager.adjustStreamVolume(Compatibility.getInCallStream(), action, AudioManager.FLAG_SHOW_UI);
+	        	}
         	}
         	return true;
         case KeyEvent.KEYCODE_CALL:
@@ -499,16 +596,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			String action = intent.getAction();
 			
 			if(action.equals(SipService.ACTION_SIP_CALL_CHANGED)){
-				Bundle extras = intent.getExtras();
-				CallInfo notif_call = null;
-				if (extras != null) {
-					notif_call = (CallInfo) extras.get(SipService.EXTRA_CALL_INFO);
+				if(service != null) {
+					try {
+						callsInfo = service.getCalls();
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Not able to retrieve calls");
+					}
 				}
-	
-				if (notif_call != null && callInfo.equals(notif_call)) {
-					callInfo = notif_call;
-					updateUIFromCall();
-				}
+				updateUIFromCall();
 			}else if(action.equals(SipService.ACTION_SIP_MEDIA_CHANGED)) {
 				updateUIFromMedia();
 			}
@@ -520,36 +615,28 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	 * Service binding
 	 */
 	private boolean serviceBound = false;
+	private boolean serviceConnected = false;
 	private ISipService service;
 	private ServiceConnection connection = new ServiceConnection() {
 
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
-			//Check if currently in use call is not already invalid (could be the case for example if we are not authorized to make the call)
-			//There is a time between when the call change notification that starts the InCallActivity and
-			//when this view registers the on ua call state changed
-			CallInfo realCallInfo;
 			try {
-				Log.d(THIS_FILE, "Service started get real call info "+callInfo.getCallId());
-				realCallInfo = service.getCallInfo(callInfo.getCallId());
-				callInfo = realCallInfo;
-				if(callInfo == null) {
-					finish();
-				}else {
-					Log.d(THIS_FILE, "Real call info "+callInfo.getCallId());
-					updateUIFromCall();
-					updateUIFromMedia();
-				}
+				//Log.d(THIS_FILE, "Service started get real call info "+callInfo.getCallId());
+				callsInfo = service.getCalls();
+				serviceConnected = true;
+				updateUIFromCall();
+				updateUIFromMedia();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(THIS_FILE, "Can't get back the call", e);
 			}
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
-			
+			serviceConnected = false;
+			callsInfo = null;
 		}
 	};
 
@@ -561,7 +648,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	@Override
 	public void onTrigger(int whichAction) {
 		Log.d(THIS_FILE, "In Call Activity is triggered");
-		Log.d(THIS_FILE, "We have a call info : "+callInfo);
+		Log.d(THIS_FILE, "We have a current call : " + callId);
 		Log.d(THIS_FILE, "And a service : "+service);
 		if(proximitySensor == null && proximityWakeLock == null) {
 			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
@@ -569,23 +656,23 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		try {
 			switch(whichAction) {
 				case TAKE_CALL:{
-					if (callInfo != null && service != null) {
-						service.answer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
+					if (callId != -1 && service != null) {
+						service.answer(callId, pjsip_status_code.PJSIP_SC_OK.swigValue());
 					}
 					break;
 				}
 				case DECLINE_CALL: 
 				case CLEAR_CALL:
 				{
-					if (callInfo != null && service != null) {
-						service.hangup(callInfo.getCallId(), 0);
+					if (callId != -1 && service != null) {
+						service.hangup(callId, 0);
 					}
 					break;
 				}
 				case MUTE_ON:
 				case MUTE_OFF:
 				{
-					if (callInfo != null && service != null) {
+					if (callId != -1 && service != null) {
 						service.setMicrophoneMute((whichAction == MUTE_ON)?true:false);
 					}
 					break;
@@ -593,14 +680,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				case SPEAKER_ON :
 				case SPEAKER_OFF :
 				{
-					if (callInfo != null && service != null) {
+					if (callId != -1 && service != null) {
 						service.setSpeakerphoneOn((whichAction == SPEAKER_ON)?true:false);
 					}
 					break;
 				}
 				case BLUETOOTH_ON:
 				case BLUETOOTH_OFF: {
-					if (callInfo != null && service != null) {
+					if (callId != -1 && service != null) {
 						service.setBluetoothOn((whichAction == BLUETOOTH_ON)?true:false);
 					}
 					break;
@@ -617,8 +704,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 					break;
 				}
 				case TOGGLE_HOLD:{
-					if (callInfo != null && service != null) {
-						Log.d(THIS_FILE, "Current state is : "+callInfo.getCallState().name()+" / "+callInfo.getMediaStatus().name());
+					CallInfo callInfo = getCurrentCallInfo();
+					if (callId != -1 && service != null && callInfo != null) {
+						//Log.d(THIS_FILE, "Current state is : "+callInfo.getCallState().name()+" / "+callInfo.getMediaStatus().name());
 						if(callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_LOCAL_HOLD) ||
 								callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_NONE)) {
 							service.reinvite(callInfo.getCallId(), true);
@@ -626,6 +714,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 							service.hold(callInfo.getCallId());
 						}
 					}
+					break;
+				}
+				case MEDIA_SETTINGS:{
+					startActivity(new Intent(this, InCallMediaControl.class));
+					break;
 				}
 			}
 		} catch (RemoteException e) {
@@ -639,9 +732,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if(proximitySensor == null && proximityWakeLock == null) {
 			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
 		}
-		if (callInfo != null && service != null) {
+		if (callId != -1 && service != null) {
 			try {
-				service.sendDtmf(callInfo.getCallId(), keyCode);
+				service.sendDtmf(callId, keyCode);
 				dialFeedback.giveFeedback(dialTone);
 				KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
 				char nbr = event.getNumber();
@@ -662,15 +755,17 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		//Log.d(THIS_FILE, "Tracked : "+proximitySensorTracked);
-		if(proximitySensorTracked && !isFirstRun && callInfo != null) {
-			pjsip_inv_state state = callInfo.getCallState();
+		if(proximitySensorTracked && !isFirstRun && callState != null) {
 			float distance = event.values[0];
 			boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
 			Log.d(THIS_FILE, "Distance is now "+distance);
-			boolean isValidCallState = state.equals( pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED) || 
-										state.equals(pjsip_inv_state.PJSIP_INV_STATE_CONNECTING)|| 
-										state.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)|| 
-										state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY);
+			boolean isValidCallState = false;
+			if(callState !=null) {
+				isValidCallState = callState.equals( pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED) || 
+					callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONNECTING)|| 
+					callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)|| 
+					callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY);
+			}
 			if( isValidCallState && active) {
 				lockOverlay.show();
 			}else {
@@ -701,7 +796,4 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 		
 	}
-	
-
-	
 }

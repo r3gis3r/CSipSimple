@@ -516,8 +516,8 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.player_destroy(id);
   }
 
-  public synchronized static int recorder_create(pj_str_t filename, long enc_type, byte[] enc_param, SWIGTYPE_p_pj_ssize_t max_size, long options, SWIGTYPE_p_int p_id) {
-    return pjsuaJNI.recorder_create(pj_str_t.getCPtr(filename), filename, enc_type, enc_param, SWIGTYPE_p_pj_ssize_t.getCPtr(max_size), options, SWIGTYPE_p_int.getCPtr(p_id));
+  public synchronized static int recorder_create(pj_str_t filename, long enc_type, byte[] enc_param, int max_size, long options, int[] p_id) {
+    return pjsuaJNI.recorder_create(pj_str_t.getCPtr(filename), filename, enc_type, enc_param, max_size, options, p_id);
   }
 
   public synchronized static int recorder_get_conf_port(int id) {

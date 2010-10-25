@@ -44,9 +44,18 @@ interface ISipService{
 	int hold(int callId);
 	int reinvite(int callId, boolean unhold);
 	CallInfo getCallInfo(int callId);
+	CallInfo[] getCalls();
 	
 	//Media control
 	void setMicrophoneMute(boolean on);
 	void setSpeakerphoneOn(boolean on);
 	void setBluetoothOn(boolean on);
+	void confAdjustTxLevel(int port, float value);
+	void confAdjustRxLevel(int port, float value);
+	void setEchoCancellation(boolean on);
+	
+	//Record calls
+	void startRecording(int callId);
+	void stopRecording();
+	int getRecordedCall();
 }

@@ -71,13 +71,13 @@ public class Compatibility {
 			//So we have to choose the good stream tag, which is by default falled back to music
 			return AudioManager.STREAM_MUSIC;
 		}
-		return AudioManager.STREAM_MUSIC;
-		//return AudioManager.STREAM_VOICE_CALL;
+		//return AudioManager.STREAM_MUSIC;
+		return AudioManager.STREAM_VOICE_CALL;
 	}
 	
 	public static boolean useRoutingApi() {
 		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
-		if (!isCompatible(5)) {
+		if (!isCompatible(4)) {
 			return true;
 		} else {
 			return false;
@@ -147,6 +147,7 @@ public class Compatibility {
 		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
 			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.4);
 			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 0.2);
+			preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
 		}
 		
 	}
@@ -194,11 +195,17 @@ public class Compatibility {
 			}
 			
 			if (TextUtils.isEmpty(prefWrapper.getStunServer())) {
-				prefWrapper.setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, PreferencesWrapper.DEFAULT_STUN_SERVER);
+				prefWrapper.setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, "stun.counterpath.com");
 			}
 		}
 		if (lastSeenVersion < 15) {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, false);
+		}
+		if (lastSeenVersion < 16) {
+			// Galaxy S default settings
+			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
+				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
+			}
 		}
 	}
 }

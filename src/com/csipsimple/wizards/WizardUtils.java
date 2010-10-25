@@ -39,6 +39,7 @@ import com.csipsimple.wizards.impl.Ekiga;
 import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.Freephonie;
+import com.csipsimple.wizards.impl.IiNet;
 import com.csipsimple.wizards.impl.Ippi;
 import com.csipsimple.wizards.impl.MagicJack;
 import com.csipsimple.wizards.impl.OnSip;
@@ -75,30 +76,6 @@ public class WizardUtils {
 		}
 	};
 	
-	//I didn't manage to introspect since in dalvik package aren't directly visible
-	//from ClassLoader resources
-	/*
-	private static String[] wizards_classes_names = new String[]{
-		"Advanced",
-		"Basic",
-		"Callcentric",
-		"Ecs",
-		"Ekiga",
-		"Eutelia",
-		"Expert",
-		"Freephonie",
-		"Sip2Sip",
-		"Ippi",
-		"Pbxes",
-		"MagicJack",
-		"PlanetPhone",
-		"Sipgate",
-		"Phonzo",
-		"Pennytel",
-		"OnSip"
-	};
-	*/
-	
 	private static boolean initDone = false;
 	
 	
@@ -128,7 +105,6 @@ public class WizardUtils {
 					return 1;
 				}
 			}
-
 			return 0;
 		}
     }
@@ -224,6 +200,11 @@ public class WizardUtils {
 				R.drawable.ic_wizard_onsip, 15, 
 				new Locale[]{ Locale.US}, false, false, 
 				OnSip.class));
+		WIZARDS_DICT.put("IINET", new WizardInfo("IINET", "iinet", 
+				R.drawable.ic_wizard_iinet, 5, 
+				new Locale[]{new Locale("AU")}, false, false, 
+				IiNet.class));
+
 		
 		initDone = true;
 	}

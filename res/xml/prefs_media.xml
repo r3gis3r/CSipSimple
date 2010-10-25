@@ -31,13 +31,34 @@
 				android:title="@string/enable_vad" android:key="enable_vad"
 				android:defaultValue="false"></CheckBoxPreference>
 				
-			<EditTextPreference android:key="snd_auto_close_time"
-				android:title="@string/snd_auto_close_time"
+			<EditTextPreference android:key="snd_media_quality"
+				android:title="@string/snd_media_quality"
 				android:numeric="signed"
-				android:summary="@string/snd_auto_close_time_desc"
-				android:defaultValue="1"></EditTextPreference>
+				android:summary="@string/snd_media_quality_desc"
+				android:defaultValue="3"></EditTextPreference>
+				
+			<ListPreference android:title="@string/snd_clock_rate" android:key="snd_clock_rate"
+				android:summary="@string/snd_clock_rate_desc"
+				android:defaultValue="8000"
+				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
+				
+			<EditTextPreference android:title="@string/snd_ptime" android:key="snd_ptime"
+				android:summary="@string/snd_ptime_desc"
+				android:defaultValue="20"
+				android:numeric="signed"></EditTextPreference>
 				
 				
+
+		</PreferenceCategory>
+		
+		<PreferenceScreen android:title="@string/codecs" android:summary="@string/codecs_availability_text">
+			<intent android:action="android.intent.action.MAIN"
+                   android:targetPackage="com.csipsimple"
+                   android:targetClass="com.csipsimple.ui.prefs.Codecs" ></intent>
+		</PreferenceScreen>
+		
+		<PreferenceCategory android:key="audio_volume" android:title="@string/audio_volume">
+			
 			<com.csipsimple.widgets.SeekBarPreference android:key="snd_mic_level"
 				android:title="@string/snd_mic_level"
 				android:summary="@string/snd_mic_level_desc" 
@@ -51,32 +72,28 @@
 				android:title="@string/snd_stream_level"
 				android:summary="@string/snd_stream_level_desc" 
 				android:defaultValue="8.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
-			
-			
-			<EditTextPreference android:key="snd_media_quality"
-				android:title="@string/snd_media_quality"
-				android:numeric="signed"
-				android:summary="@string/snd_media_quality_desc"
-				android:defaultValue="3"></EditTextPreference>
-			<ListPreference android:title="@string/snd_clock_rate" android:key="snd_clock_rate"
-				android:summary="@string/snd_clock_rate_desc"
-				android:defaultValue="8000"
-				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
-				
-				
-			<EditTextPreference android:title="@string/snd_ptime" android:key="snd_ptime"
-				android:summary="@string/snd_ptime_desc"
-				android:defaultValue="20"
-				android:numeric="signed"></EditTextPreference>
-
+			<CheckBoxPreference android:title="@string/use_soft_volume" android:key="use_soft_volume"
+				android:summary="@string/use_soft_volume_desc"
+				android:defaultValue="false"></CheckBoxPreference>
 		</PreferenceCategory>
-		<PreferenceScreen android:title="@string/codecs" android:summary="@string/codecs_availability_text">
-			<intent android:action="android.intent.action.MAIN"
-                   android:targetPackage="com.csipsimple"
-                   android:targetClass="com.csipsimple.ui.prefs.Codecs" ></intent>
-		</PreferenceScreen>
 		
-		<CheckBoxPreference android:title="@string/sip_info_dtmf" android:key="sip_info_dtmf"
-			android:summary="@string/sip_info_dtmf_desc"
-			android:defaultValue="false"></CheckBoxPreference>
+		
+		<PreferenceCategory android:title="@string/perfs" android:key="perfs">
+			<EditTextPreference android:title="Thread count" android:key="thread_count"
+				android:summary="Number of thread allocated for the native stack"
+				android:defaultValue="1"
+				android:numeric="signed"></EditTextPreference>
+				
+		</PreferenceCategory>
+		<PreferenceCategory android:title="@string/misc" android:key="misc">
+			<CheckBoxPreference android:title="@string/sip_info_dtmf" android:key="sip_info_dtmf"
+				android:summary="@string/sip_info_dtmf_desc"
+				android:defaultValue="false"></CheckBoxPreference>
+				
+			<EditTextPreference android:key="snd_auto_close_time"
+				android:title="@string/snd_auto_close_time"
+				android:numeric="signed"
+				android:summary="@string/snd_auto_close_time_desc"
+				android:defaultValue="1"></EditTextPreference>
+		</PreferenceCategory>
 </PreferenceScreen>

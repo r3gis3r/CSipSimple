@@ -21,24 +21,26 @@ package com.csipsimple.ui;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
-import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
+import com.csipsimple.ui.help.Faq;
 import com.csipsimple.ui.prefs.MainPrefs;
 import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
@@ -50,6 +52,7 @@ public class SipHome extends TabActivity {
 	public static final int ACCOUNTS_MENU = Menu.FIRST + 1;
 	public static final int PARAMS_MENU = Menu.FIRST + 2;
 	public static final int CLOSE_MENU = Menu.FIRST + 3;
+	public static final int HELP_MENU = Menu.FIRST + 4;
 
 	public static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
@@ -239,19 +242,43 @@ public class SipHome extends TabActivity {
 		super.onDestroy();
 		Log.d(THIS_FILE, "---DESTROY SIP HOME END---");
 	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0 && !Compatibility.isCompatible(5)) {
+	    	onBackPressed();
+	    	ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
+	    	return (networks.size() == 0);
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if(prefWrapper != null) {
+			Log.d(THIS_FILE, "On back pressed ! ");
+    		ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
+			if (networks.size() == 0) {
+				disconnectAndQuit();
+			}
+    	}
+	}
+
 
 	private void populateMenu(Menu menu) {
 		menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE, R.string.accounts).setIcon(R.drawable.ic_menu_accounts);
 		menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, R.string.prefs).setIcon(android.R.drawable.ic_menu_preferences);
-		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, R.string.menu_quit_text).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.add(Menu.NONE, HELP_MENU, Menu.NONE, R.string.faq).setIcon(android.R.drawable.ic_menu_help);
+		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, R.string.menu_quit_text).setIcon(R.drawable.ic_lock_power_off);
 
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 
-		PreferencesWrapper prefsWrapper = new PreferencesWrapper(this);
-		menu.findItem(CLOSE_MENU).setVisible(!prefsWrapper.isValidConnectionForIncoming());
+	//	PreferencesWrapper prefsWrapper = new PreferencesWrapper(this);
+	//	menu.findItem(CLOSE_MENU).setVisible(!prefsWrapper.isValidConnectionForIncoming());
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -272,25 +299,41 @@ public class SipHome extends TabActivity {
 			return true;
 		case CLOSE_MENU:
 			Log.d(THIS_FILE, "CLOSE");
-			if (serviceIntent != null) {
-				stopService(serviceIntent);
-			}
-			serviceIntent = null;
-			PreferencesWrapper prefsWrapper = new PreferencesWrapper(this);
-			ArrayList<String> networks = prefsWrapper.getAllIncomingNetworks();
+			ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
 			if (networks.size() > 0) {
-				// TODO: translate %s style
-				String msg = "Will automatically restart when : ";
-				msg += TextUtils.join(", ", networks);
-				msg += " will become available (change settings if you don't want)";
-				Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+				//Alert user that we will disable for all incoming calls as he want to quit
+				new AlertDialog.Builder(this)
+					.setTitle(R.string.warning)
+					.setMessage(getString(R.string.disconnect_and_incoming_explaination))
+					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							prefWrapper.disableAllForIncoming();
+
+							disconnectAndQuit();
+						}
+					})
+					.setNegativeButton(R.string.cancel, null)
+					.show();
+
+			}else {
+
+				disconnectAndQuit();
 			}
-
-			this.finish();
-
+			return true;
+		case HELP_MENU:
+			startActivity(new Intent(this, Faq.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void disconnectAndQuit() {
+		Log.d(THIS_FILE, "True disconnection...");
+		if (serviceIntent != null) {
+			stopService(serviceIntent);
+		}
+		serviceIntent = null;
+		finish();
+	}
+	
 }

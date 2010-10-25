@@ -18,41 +18,7 @@
 	
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="@string/for_incomings" android:key="for_incoming">
-		<CheckBoxPreference android:title="@string/use_wifi"
-			android:defaultValue="true" android:summary="@string/use_wifi_in_desc"
-			android:key="use_wifi_in"></CheckBoxPreference>
-		<CheckBoxPreference android:title="@string/use_3g" 
-			android:summary="@string/use_3g_disclamer"
-			android:defaultValue="false" android:key="use_3g_in"></CheckBoxPreference>
-		<CheckBoxPreference android:summary="@string/use_3g_disclamer" 
-			android:defaultValue="false" android:title="@string/use_gprs" 
-			android:key="use_gprs_in"></CheckBoxPreference>
-		<CheckBoxPreference android:summary="@string/use_3g_disclamer" 
-			android:defaultValue="false" android:title="@string/use_edge" 
-			android:key="use_edge_in"></CheckBoxPreference>
-		<CheckBoxPreference android:title="@string/use_other"
-			android:defaultValue="true" android:summary="@string/use_other_in_desc"
-			android:key="use_other_in"></CheckBoxPreference>
-	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/for_outgoings" android:key="for_outgoing">
-		<CheckBoxPreference android:summary="@string/use_wifi_out_desc"
-			android:key="use_wifi_out" android:title="@string/use_wifi"
-			android:defaultValue="true"></CheckBoxPreference>
-		<CheckBoxPreference android:title="@string/use_3g"
-			android:summary="@string/use_3g_disclamer"
-			android:key="use_3g_out" android:defaultValue="false"></CheckBoxPreference>
-		<CheckBoxPreference android:summary="@string/use_3g_disclamer"
-			android:defaultValue="false" android:title="@string/use_gprs" 
-			android:key="use_gprs_out"></CheckBoxPreference>
-		<CheckBoxPreference android:summary="@string/use_3g_disclamer"
-			android:defaultValue="false" android:title="@string/use_edge" 
-			android:key="use_edge_out"></CheckBoxPreference>
-		<CheckBoxPreference android:title="@string/use_other"
-			android:defaultValue="true" android:summary="@string/use_other_out_desc"
-			android:key="use_other_out"></CheckBoxPreference>
-	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/perfs" android:key="perfs">
 		<CheckBoxPreference android:summary="@string/lock_wifi_desc"
 			android:key="lock_wifi" android:title="@string/lock_wifi"
@@ -120,6 +86,43 @@
 				android:dependency="enable_turn"
 				android:defaultValue=""></EditTextPreference>
 	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/for_incomings" android:key="for_incoming">
+		<CheckBoxPreference android:title="@string/use_wifi"
+			android:defaultValue="true" android:summary="@string/use_wifi_in_desc"
+			android:key="use_wifi_in"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/use_3g" 
+			android:summary="@string/use_3g_disclamer"
+			android:defaultValue="false" android:key="use_3g_in"></CheckBoxPreference>
+		<CheckBoxPreference android:summary="@string/use_3g_disclamer" 
+			android:defaultValue="false" android:title="@string/use_gprs" 
+			android:key="use_gprs_in"></CheckBoxPreference>
+		<CheckBoxPreference android:summary="@string/use_3g_disclamer" 
+			android:defaultValue="false" android:title="@string/use_edge" 
+			android:key="use_edge_in"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/use_other"
+			android:defaultValue="true" android:summary="@string/use_other_in_desc"
+			android:key="use_other_in"></CheckBoxPreference>
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/for_outgoings" android:key="for_outgoing">
+		<CheckBoxPreference android:summary="@string/use_wifi_out_desc"
+			android:key="use_wifi_out" android:title="@string/use_wifi"
+			android:defaultValue="true"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/use_3g"
+			android:summary="@string/use_3g_disclamer"
+			android:key="use_3g_out" android:defaultValue="false"></CheckBoxPreference>
+		<CheckBoxPreference android:summary="@string/use_3g_disclamer"
+			android:defaultValue="false" android:title="@string/use_gprs" 
+			android:key="use_gprs_out"></CheckBoxPreference>
+		<CheckBoxPreference android:summary="@string/use_3g_disclamer"
+			android:defaultValue="false" android:title="@string/use_edge" 
+			android:key="use_edge_out"></CheckBoxPreference>
+		<CheckBoxPreference android:title="@string/use_other"
+			android:defaultValue="true" android:summary="@string/use_other_out_desc"
+			android:key="use_other_out"></CheckBoxPreference>
+	</PreferenceCategory>
+
 	<PreferenceCategory android:title="@string/secure_transport" android:key="secure_transport">
 		<CheckBoxPreference android:title="@string/enable_tls"
 			android:summary="@string/enable_tls_desc"

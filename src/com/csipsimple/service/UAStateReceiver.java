@@ -17,8 +17,11 @@
  */
 package com.csipsimple.service;
 
+import java.io.File;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,16 +29,19 @@ import org.pjsip.pjsua.Callback;
 import org.pjsip.pjsua.SWIGTYPE_p_p_pjmedia_port;
 import org.pjsip.pjsua.SWIGTYPE_p_pjmedia_session;
 import org.pjsip.pjsua.SWIGTYPE_p_pjsip_rx_data;
+import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_event;
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_call_media_status;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -46,6 +52,7 @@ import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
@@ -96,6 +103,8 @@ public class UAStateReceiver extends Callback {
 			}
 			// Call is now ended
 			service.stopDialtoneGenerator();
+			//TODO : should be stopped only if it's the current call.
+			stopRecording();
 		}
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
 		Log.d(THIS_FILE, "Call state >>");
@@ -135,6 +144,7 @@ public class UAStateReceiver extends Callback {
 			pjsua.conf_adjust_tx_level(0, service.prefsWrapper.getSpeakerLevel());
 			pjsua.conf_adjust_rx_level(0, service.prefsWrapper.getMicLevel());
 			
+			
 		}
 		
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
@@ -169,7 +179,22 @@ public class UAStateReceiver extends Callback {
 		
 		return callInfo;
 	}
+	
+	public CallInfo[] getCalls() {
+		if(callsList != null ) {
+			
+			CallInfo[] callsInfos = new CallInfo[callsList.size()];
+			int i = 0;
+			for( Entry<Integer, CallInfo> entry : callsList.entrySet()) {
+				callsInfos[i] = entry.getValue();
+				i++;
+			}
+			return callsInfos;
+		}
+		return null;
+	}
 
+	
 
 	private WorkerHandler msgHandler;
 	private HandlerThread handlerThread;
@@ -215,11 +240,13 @@ public class UAStateReceiver extends Callback {
 					callInfo.callStart = System.currentTimeMillis();
 				}else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
 					//TODO : should manage multiple calls
-					notificationManager.cancelCalls();
+					if(getActiveCallInProgress() == null) {
+						notificationManager.cancelCalls();
+					}
 					Log.d(THIS_FILE, "Finish call2");
 					
 					//CallLog
-					ContentValues cv = CallLogHelper.logValuesForCall(callInfo, callInfo.callStart);
+					ContentValues cv = CallLogHelper.logValuesForCall(service, callInfo, callInfo.callStart);
 					
 					//Fill our own database
 					DBAdapter database = new DBAdapter(service);
@@ -247,7 +274,7 @@ public class UAStateReceiver extends Callback {
 								cv.put(Calls.NUMBER, phoneNumber);
 								// For log in call logs => don't add as new calls... we manage it ourselves.
 								cv.put(Calls.NEW, false);
-								CallLogHelper.addCallLog(service.getContentResolver(), cv);
+								CallLogHelper.addCallLog(service, cv);
 							}
 						}
 					}
@@ -500,5 +527,73 @@ public class UAStateReceiver extends Callback {
 		return false;
 	}
 	
+	// Recorder
+	private static int INVALID_RECORD = -1; 
+	private int recordedCall = INVALID_RECORD;
+	private int recPort = -1;
+	private int recorderId = -1;
+	private int recordedConfPort = -1;
+	public void startRecording(int callId) {
+		// Ensure nothing is recording actually
+		if (recordedCall == INVALID_RECORD) {
+			CallInfo callInfo = getCallInfo(callId);
+			if(callInfo == null) {
+				return;
+			}
+			
+		    File mp3File = getRecordFile(callInfo.getRemoteContact());
+		    if (mp3File != null){
+				int[] recId = new int[1];
+				pj_str_t filename = pjsua.pj_str_copy(mp3File.getAbsolutePath());
+				int status = pjsua.recorder_create(filename, 0, (byte[]) null, 0, 0, recId);
+				if(status == pjsuaConstants.PJ_SUCCESS) {
+					recorderId = recId[0];
+					Log.d(THIS_FILE, "Record started : " + recorderId);
+					recordedConfPort = callInfo.getConfPort();
+					recPort = pjsua.recorder_get_conf_port(recorderId);
+					pjsua.conf_connect(recordedConfPort, recPort);
+					pjsua.conf_connect(0, recPort);
+					recordedCall = callId;
+				}
+		    }else {
+		    	//TODO: toaster
+		    	Log.w(THIS_FILE, "Impossible to write file");
+		    }
+		}
+	}
 	
+	public void stopRecording() {
+		Log.d(THIS_FILE, "Stop recording " + recordedCall+" et "+ recorderId);
+		if (recorderId != -1) {
+			pjsua.recorder_destroy(recorderId);
+			recorderId = -1;
+		}
+		recordedCall = INVALID_RECORD;
+	}
+	
+	public int getRecordedCall() {
+		return recordedCall; 
+	}
+	
+	private File getRecordFile(String remoteContact) {
+		File root = Environment.getExternalStorageDirectory();
+	    if (root.canWrite()){
+			File dir = new File(root.getAbsolutePath() + File.separator + "CSipSimple");
+			dir.mkdirs();
+			Log.d(THIS_FILE, "Create directory " + dir.getAbsolutePath());
+			Date d = new Date();
+			
+			File file = new File(dir.getAbsoluteFile() + File.separator + sanitizeForFile(remoteContact)+ "_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".wav");
+			Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
+			return file;
+	    }
+	    return null;
+	}
+
+
+	private String sanitizeForFile(String remoteContact) {
+		String fileName = remoteContact;
+		fileName = fileName.replaceAll("[\\.\\\\<>:; \"\']", "_");
+		return fileName;
+	}
 }

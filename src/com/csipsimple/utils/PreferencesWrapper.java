@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
@@ -40,11 +41,18 @@ import android.text.TextUtils;
 
 public class PreferencesWrapper {
 	
-	private static final String THIS_FILE = "PreferencesWrapper";
-	private SharedPreferences prefs;
-	private ConnectivityManager connectivityManager;
-	private ContentResolver resolver;
-
+	
+	private static final String TURN_SERVER = "turn_server";
+	private static final String ENABLE_TURN = "enable_turn";
+	private static final String ENABLE_ICE = "enable_ice";
+	private static final String SND_MEDIA_QUALITY = "snd_media_quality";
+	private static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
+	private static final String USER_AGENT = "user_agent";
+	private static final String RTP_PORT = "network_rtp_port";
+	private static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
+	private static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
+	private static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
+	public static final String IS_ADVANCED_USER = "is_advanced_user";
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 	public static final String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
 	public static final String SND_CLOCK_RATE = "snd_clock_rate";
@@ -53,12 +61,87 @@ public class PreferencesWrapper {
 	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
 	public static final String SND_MIC_LEVEL = "snd_mic_level";
 	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
+	public static final String USE_SOFT_VOLUME = "use_soft_volume";
+	
+	//NETWORK
 	public static final String ENABLE_STUN = "enable_stun";
 	public static final String STUN_SERVER = "stun_server";
-	public static final String IS_ADVANCED_USER = "is_advanced_user";
+	public static final String USE_SRTP = "use_srtp";
+	public static final String USE_IPV6 = "use_ipv6";
+	public static final String ENABLE_TLS = "enable_tls";
+	public static final String ENABLE_UDP = "enable_udp";
+	public static final String ENABLE_TCP = "enable_tcp";
+	public static final String LOCK_WIFI = "lock_wifi";
 	public static final String ENABLE_DNS_SRV = "enable_dns_srv";
+	
+	
+	
+	private static final String THIS_FILE = "PreferencesWrapper";
+	private SharedPreferences prefs;
+	private ConnectivityManager connectivityManager;
+	private ContentResolver resolver;
 
-	public static final String DEFAULT_STUN_SERVER = "stun.counterpath.com";
+	
+	
+	private final static HashMap<String, String> STRING_PREFS = new HashMap<String, String>(){
+		private static final long serialVersionUID = 1L;
+	{
+		
+		put(USER_AGENT, "CSipSimple");
+		
+		put(USE_SRTP, "0");
+		put(UDP_TRANSPORT_PORT, "5060");
+		put(TCP_TRANSPORT_PORT, "5060");
+		put(TLS_TRANSPORT_PORT, "5061");
+		put(RTP_PORT, "4000");
+		put(SND_AUTO_CLOSE_TIME, "1");
+		put(ECHO_CANCELLATION_TAIL, "200");
+		put(SND_MEDIA_QUALITY, "4");
+		put(SND_CLOCK_RATE, "16000");
+		
+		put(STUN_SERVER, "stun.counterpath.com");
+		put(TURN_SERVER, "");
+	}};
+	
+	
+	private final static HashMap<String, Boolean> BOOLEAN_PREFS = new HashMap<String, Boolean>(){
+		private static final long serialVersionUID = 1L;
+	{
+		put(LOCK_WIFI, true);
+		put(ENABLE_TCP, true);
+		put(ENABLE_UDP, true);
+		put(ENABLE_TLS, false);
+		put(USE_IPV6, false);
+		put(ENABLE_DNS_SRV, false);
+		put(ENABLE_ICE, false);
+		put(ENABLE_TURN, false);
+		put(ENABLE_STUN, false);
+		
+		put(ECHO_CANCELLATION, true);
+		put(ENABLE_VAD, false);
+		put(USE_SOFT_VOLUME, false);
+		
+		//Network
+		put("use_wifi_in", true);
+		put("use_wifi_out", true);
+		put("use_other_in", true);
+		put("use_other_out", true);
+		
+		put("use_3g_in", false);
+		put("use_3g_out", false);
+		put("use_gprs_in", false);
+		put("use_gprs_out", false);
+		put("use_edge_in", false);
+		put("use_edge_out", false);
+	}};
+	
+	private final static HashMap<String, Float> FLOAT_PREFS = new HashMap<String, Float>(){
+		private static final long serialVersionUID = 1L;
+	{
+		put(SND_MIC_LEVEL, (float)1.0);
+		put(SND_SPEAKER_LEVEL, (float)1.0);
+	}};
+	
 	
 	public PreferencesWrapper(Context aContext) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
@@ -67,13 +150,14 @@ public class PreferencesWrapper {
 	}
 	
 
+	//Public setters
 	public void setPreferenceStringValue(String key, String value) {
+		//TODO : authorized values
 		Editor editor = prefs.edit();
 		editor.putString(key, value);
 		editor.commit();
 	}
 	
-
 	public void setPreferenceBooleanValue(String key, boolean value) {
 		Editor editor = prefs.edit();
 		editor.putBoolean(key, value);
@@ -86,12 +170,47 @@ public class PreferencesWrapper {
 		editor.commit();
 	}
 	
+	//Private static getters
+	private static String gPrefStringValue(SharedPreferences aPrefs, String key) {
+		if(STRING_PREFS.containsKey(key)) {
+			return aPrefs.getString(key, STRING_PREFS.get(key));
+		}
+		return null;
+	}
+	
+	private static Boolean gPrefBooleanValue(SharedPreferences aPrefs, String key) {
+		if(BOOLEAN_PREFS.containsKey(key)) {
+			return aPrefs.getBoolean(key, BOOLEAN_PREFS.get(key));
+		}
+		return null;
+	}
+	
+	private static Float gPrefFloatValue(SharedPreferences aPrefs, String key) {
+		if(FLOAT_PREFS.containsKey(key)) {
+			return aPrefs.getFloat(key, FLOAT_PREFS.get(key));
+		}
+		return null;
+	}
+	
+	//Public getters
+	public String getPreferenceStringValue(String key) {
+		return gPrefStringValue(prefs, key);
+	}
+	
+	public Boolean getPreferenceBooleanValue(String key) {
+		return gPrefBooleanValue(prefs, key);
+	}
+	
+	public Float getPreferenceFloatValue(String key) {
+		return gPrefFloatValue(prefs, key);
+	}
+	
 	// Network part
 	
 	// Check for wifi
 	static public boolean isValidWifiConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
 		
-		boolean valid_for_wifi = aPrefs.getBoolean("use_wifi_" + suffix, true);
+		boolean valid_for_wifi = gPrefBooleanValue(aPrefs, "use_wifi_" + suffix);
 		if (valid_for_wifi && 
 			ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
 			
@@ -108,9 +227,9 @@ public class PreferencesWrapper {
 	// Check for acceptable mobile data network connection
 	static public boolean isValidMobileConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
 
-		boolean valid_for_3g = aPrefs.getBoolean("use_3g_" + suffix, false);
-		boolean valid_for_edge = aPrefs.getBoolean("use_edge_" + suffix, false);
-		boolean valid_for_gprs = aPrefs.getBoolean("use_gprs_" + suffix, false);
+		boolean valid_for_3g = gPrefBooleanValue(aPrefs, "use_3g_" + suffix);
+		boolean valid_for_edge = gPrefBooleanValue(aPrefs, "use_edge_" + suffix);
+		boolean valid_for_gprs = gPrefBooleanValue(aPrefs, "use_gprs_" + suffix);
 		
 		if ((valid_for_3g || valid_for_edge || valid_for_gprs) &&
 			 ni != null && ni.getType() == ConnectivityManager.TYPE_MOBILE) {
@@ -136,8 +255,6 @@ public class PreferencesWrapper {
 					subType == TelephonyManager.NETWORK_TYPE_EDGE) {
 					return true;
 				}
-				
-				
 			}
 		}
 		return false;
@@ -146,7 +263,7 @@ public class PreferencesWrapper {
 	// Check for other (wimax for example)
 	static public boolean isValidOtherConnectionFor(NetworkInfo ni, SharedPreferences aPrefs, String suffix) {
 		
-		boolean valid_for_other = aPrefs.getBoolean("use_other_" + suffix, true);
+		boolean valid_for_other = gPrefBooleanValue(aPrefs, "use_other_" + suffix);
 		//boolean valid_for_other = true;
 		if (valid_for_other && 
 			ni != null && 
@@ -198,7 +315,7 @@ public class PreferencesWrapper {
 		ArrayList<String> incomingNetworks = new ArrayList<String>();
 		String[] availableNetworks = {"3g", "edge", "gprs", "wifi", "other"};
 		for(String network:availableNetworks) {
-			if(prefs.getBoolean("use_"+network+"_in", network.equals("wifi")?true:false)) {
+			if(getPreferenceBooleanValue("use_"+network+"_in")) {
 				incomingNetworks.add(network);
 			}
 		}
@@ -206,14 +323,21 @@ public class PreferencesWrapper {
 		return incomingNetworks;
 	}
 	
-	public boolean getLockWifi() {
-		return prefs.getBoolean("lock_wifi", true);
+
+	public void disableAllForIncoming() {
+		String[] availableNetworks = {"3g", "edge", "gprs", "wifi", "other"};
+		for(String network:availableNetworks) {
+			setPreferenceBooleanValue("use_"+network+"_in", false);
+		}
 	}
 	
-
+	public boolean getLockWifi() {
+		return getPreferenceBooleanValue(LOCK_WIFI);
+	}
+	
 	public pjmedia_srtp_use getUseSrtp() {
 		try {
-			int use_srtp = Integer.parseInt(prefs.getString("use_srtp", "0"));
+			int use_srtp = Integer.parseInt(getPreferenceStringValue(USE_SRTP));
 			pjmedia_srtp_use.swigToEnum(use_srtp);
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport port not well formated");
@@ -221,77 +345,52 @@ public class PreferencesWrapper {
 		return pjmedia_srtp_use.PJMEDIA_SRTP_DISABLED;
 	}
 	
-	
-	
 	public boolean isTCPEnabled() {
-		return prefs.getBoolean("enable_tcp", true);
+		return getPreferenceBooleanValue(ENABLE_TCP);
 	}
 	
 	public boolean isUDPEnabled() {
-		return prefs.getBoolean("enable_udp", true);
+		return getPreferenceBooleanValue(ENABLE_UDP);
 	}
 
 	public boolean isTLSEnabled() {
-		return prefs.getBoolean("enable_tls", false);
+		return getPreferenceBooleanValue(ENABLE_TLS);
 	}
 	
 	public boolean useIPv6() {
-		return prefs.getBoolean("use_ipv6", false);
+		return getPreferenceBooleanValue(USE_IPV6);
 	}
 	
-	
-	
-	public int getUDPTransportPort() {
+	private int getPrefPort(String key) {
 		try {
-			int port = Integer.parseInt(prefs.getString("network_udp_transport_port", "5060"));
+			int port = Integer.parseInt(getPreferenceStringValue(key));
 			if(isValidPort(port)) {
 				return port;
 			}
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport port not well formated");
 		}
-		return 5060;
+		return Integer.parseInt(STRING_PREFS.get(key));
+	}
+	
+	public int getUDPTransportPort() {
+		return getPrefPort(UDP_TRANSPORT_PORT);
 	}
 	
 	public int getTCPTransportPort() {
-		try {
-			int port =  Integer.parseInt(prefs.getString("network_tcp_transport_port", "5060"));
-			if(isValidPort(port)) {
-				return port;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return 5060;
+		return getPrefPort(TCP_TRANSPORT_PORT);
 	}
 	
 	public int getTLSTransportPort() {
-		try {
-			int port =  Integer.parseInt(prefs.getString("network_tls_transport_port", "5061"));
-			if(isValidPort(port)) {
-				return port;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return 5061;
+		return getPrefPort(TLS_TRANSPORT_PORT);
 	}
 	
 	public int getRTPPort() {
-		try {
-			int port = Integer.parseInt(prefs.getString("network_rtp_port", "4000"));
-			if(isValidPort(port)) {
-				return port;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return 4000;
+		return getPrefPort(RTP_PORT);
 	}
 	
-
 	public boolean enableDNSSRV() {
-		return prefs.getBoolean(ENABLE_DNS_SRV, false);
+		return getPreferenceBooleanValue(ENABLE_DNS_SRV);
 	}
 	
 	public pj_str_t[] getNameservers() {
@@ -321,7 +420,10 @@ public class PreferencesWrapper {
 		return nameservers;
 	}
 	
-	
+
+	public String getUserAgent() {
+		return getPreferenceStringValue(USER_AGENT);
+	}
 	
 	
 	//Media part
@@ -332,7 +434,7 @@ public class PreferencesWrapper {
 	 * even sometimes crash
 	 */
 	public int getAutoCloseTime() {
-		String autoCloseTime = prefs.getString(SND_AUTO_CLOSE_TIME, "1");
+		String autoCloseTime = getPreferenceStringValue(SND_AUTO_CLOSE_TIME);
 		try {
 			return Integer.parseInt(autoCloseTime);
 		}catch(NumberFormatException e) {
@@ -341,16 +443,13 @@ public class PreferencesWrapper {
 		return 1;
 	}
 	
-	public String getUserAgent() {
-		return prefs.getString("user_agent","CSipSimple");
-	}
 	
 	/**
 	 * Whether echo cancellation is enabled
 	 * @return true if enabled
 	 */
 	public boolean hasEchoCancellation() {
-		return prefs.getBoolean(ECHO_CANCELLATION, true);
+		return getPreferenceBooleanValue(ECHO_CANCELLATION);
 	}
 	
 
@@ -358,7 +457,7 @@ public class PreferencesWrapper {
 		if(!hasEchoCancellation()) {
 			return 0;
 		}
-		String tailLength = prefs.getString("echo_cancellation_tail", "200");
+		String tailLength = getPreferenceStringValue(ECHO_CANCELLATION_TAIL);
 		try {
 			return Integer.parseInt(tailLength);
 		}catch(NumberFormatException e) {
@@ -372,7 +471,7 @@ public class PreferencesWrapper {
 	 * @return 1 if Voice audio detection is disabled
 	 */
 	public int getNoVad() {
-		return prefs.getBoolean(ENABLE_VAD, false)?0:1;
+		return getPreferenceBooleanValue(ENABLE_VAD) ?0:1;
 	}
 
 	
@@ -381,18 +480,18 @@ public class PreferencesWrapper {
 	 * @return the audio quality
 	 */
 	public long getMediaQuality() {
-		int defaultValue = 4;
-		int prefsValue = 4;
-		String mediaQuality = prefs.getString("snd_media_quality", String.valueOf(defaultValue));
+		String mediaQuality = getPreferenceStringValue(SND_MEDIA_QUALITY);
+		//prefs.getString(SND_MEDIA_QUALITY, String.valueOf(defaultValue));
 		try {
-			prefsValue = Integer.parseInt(mediaQuality);
+			int prefsValue = Integer.parseInt(mediaQuality);
+			if(prefsValue <= 10 && prefsValue >= 0) {
+				return prefsValue;
+			}
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Audio quality "+mediaQuality+" not well formated");
 		}
-		if(prefsValue <= 10 && prefsValue >= 0) {
-			return prefsValue;
-		}
-		return defaultValue;
+		
+		return 4;
 	}
 	
 	/**
@@ -400,13 +499,13 @@ public class PreferencesWrapper {
 	 * @return clock rate in Hz
 	 */
 	public long getClockRate() {
-		String clockRate = prefs.getString(SND_CLOCK_RATE, "16000");
+		String clockRate = getPreferenceStringValue(SND_CLOCK_RATE);
 		try {
 			return Integer.parseInt(clockRate);
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Clock rate "+clockRate+" not well formated");
 		}
-		return 8000;
+		return 16000;
 	}
 	
 	/**
@@ -414,7 +513,7 @@ public class PreferencesWrapper {
 	 * @return 1 if enabled (pjstyle)
 	 */
 	public int getIceEnabled() {
-		return prefs.getBoolean("enable_ice", false)?1:0;
+		return getPreferenceBooleanValue(ENABLE_ICE)?1:0;
 	}
 
 	/**
@@ -422,15 +521,15 @@ public class PreferencesWrapper {
 	 * @return 1 if enabled (pjstyle)
 	 */ 
 	public int getTurnEnabled() {
-		return prefs.getBoolean("enable_turn", false)?1:0;
+		return getPreferenceBooleanValue(ENABLE_TURN)?1:0;
 	}
 	
 	/**
-	 * Get turn server
+	 * Get stun server
 	 * @return host:port or blank if not set
 	 */
 	public String getStunServer() {
-		return prefs.getString(STUN_SERVER, DEFAULT_STUN_SERVER);
+		return getPreferenceStringValue(STUN_SERVER);
 	}
 	
 	
@@ -439,7 +538,7 @@ public class PreferencesWrapper {
 	 * @return 1 if enabled (pjstyle)
 	 */ 
 	public int getStunEnabled() {
-		return prefs.getBoolean(ENABLE_STUN, false)?1:0;
+		return getPreferenceBooleanValue(ENABLE_STUN)?1:0;
 	}
 	
 	/**
@@ -447,7 +546,7 @@ public class PreferencesWrapper {
 	 * @return host:port or blank if not set
 	 */
 	public String getTurnServer() {
-		return prefs.getString("turn_server", "");
+		return getPreferenceStringValue(TURN_SERVER);
 	}
 	
 	/**
@@ -497,11 +596,11 @@ public class PreferencesWrapper {
 
 
 	public float getMicLevel() {
-		return prefs.getFloat(SND_MIC_LEVEL, (float) 1.0);
+		return getPreferenceFloatValue(SND_MIC_LEVEL);
 	}
 	
 	public float getSpeakerLevel() {
-		return prefs.getFloat(SND_SPEAKER_LEVEL, (float) 1.0);
+		return getPreferenceFloatValue(SND_SPEAKER_LEVEL);
 	}
 	
 	public int getAudioFramePtime() {
@@ -509,7 +608,7 @@ public class PreferencesWrapper {
 			int value = Integer.parseInt(prefs.getString("snd_ptime", "20"));
 			return value;
 		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
+			Log.e(THIS_FILE, "snd_ptime not well formated");
 		}
 		return 30;
 	}
@@ -517,6 +616,19 @@ public class PreferencesWrapper {
 
 	public boolean useSipInfoDtmf() {
 		return prefs.getBoolean("sip_info_dtmf", false);
+	}
+	
+
+	public long getThreadCount() {
+		try {
+			int value = Integer.parseInt(prefs.getString("thread_count", "1"));
+			if(value < 10) {
+				return value;
+			}
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Thread count not well formatted");
+		}
+		return 1;
 	}
 
 	// ---- 
@@ -652,6 +764,10 @@ public class PreferencesWrapper {
 	public void toogleExpertMode() {
 		setPreferenceBooleanValue(IS_ADVANCED_USER, !isAdvancedUser());
 	}
+
+
+
+
 
 	
 }

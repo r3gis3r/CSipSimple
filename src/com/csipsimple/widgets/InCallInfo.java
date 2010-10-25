@@ -101,6 +101,10 @@ public class InCallInfo extends FrameLayout {
 
 
 	private void updateRemoteName() {
+		if(callInfo == null) {
+			return;
+		}
+		
 		final String aRemoteUri = callInfo.getRemoteContact();
 		//If not already set with the same value, just ignore it
 		if(aRemoteUri != null && !aRemoteUri.equalsIgnoreCase(remoteUri)) {
@@ -135,6 +139,12 @@ public class InCallInfo extends FrameLayout {
 	
 
 	private void updateElapsedTimer() {
+		if(callInfo == null) {
+			elapsedTime.stop();
+			elapsedTime.setVisibility(VISIBLE);
+			elapsedTime.setTextColor(colorEnd);
+			return;
+		}
 		pjsip_inv_state state = callInfo.getCallState();
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
@@ -162,7 +172,9 @@ public class InCallInfo extends FrameLayout {
 	}
 	
 	private void updateTitle() {
-		title.setText(callInfo.getStringCallState(context));
+		if(callInfo != null) {
+			title.setText(callInfo.getStringCallState(context));
+		}
 		
 	}
 	

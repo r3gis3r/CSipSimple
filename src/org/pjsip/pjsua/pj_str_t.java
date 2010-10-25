@@ -57,12 +57,12 @@ public class pj_str_t {
     return pjsuaJNI.pj_str_t_ptr_get(swigCPtr, this);
   }
 
-  public void setSlen(SWIGTYPE_p_pj_ssize_t value) {
-    pjsuaJNI.pj_str_t_slen_set(swigCPtr, this, SWIGTYPE_p_pj_ssize_t.getCPtr(value));
+  public void setSlen(int value) {
+    pjsuaJNI.pj_str_t_slen_set(swigCPtr, this, value);
   }
 
-  public SWIGTYPE_p_pj_ssize_t getSlen() {
-    return new SWIGTYPE_p_pj_ssize_t(pjsuaJNI.pj_str_t_slen_get(swigCPtr, this), true);
+  public int getSlen() {
+    return pjsuaJNI.pj_str_t_slen_get(swigCPtr, this);
   }
 
   public pj_str_t() {

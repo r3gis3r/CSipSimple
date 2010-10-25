@@ -304,6 +304,14 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 		return super.onKeyUp(keyCode, event);
 	}
+	@Override
+	public void onBackPressed() {
+		if(contextToBindTo != null) {
+			contextToBindTo.onBackPressed();
+		}else {
+			finish();
+		}
+	}
 
 	private static final int USE_GSM = -2;
 
@@ -416,7 +424,9 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		}
 
 		case R.id.digitsText: {
-			digits.setCursorVisible(false);
+			if (digits.length() != 0) {
+				digits.setCursorVisible(true);
+			}
 			break;
 		}
 		}
@@ -449,6 +459,9 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		dialButton.setEnabled(notEmpty);
 		deleteButton.setEnabled(notEmpty);
 		
+		if(!notEmpty) {
+			digits.setCursorVisible(false);
+		}
 		//Change state of text dialer
 		updateDialTextHelper();
 	}

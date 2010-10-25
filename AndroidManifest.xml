@@ -38,28 +38,30 @@
 		</receiver>
 		
 		<!--  Main ui -->
-		<activity android:name=".ui.Dialer" android:launchMode="singleTask"></activity>
-		<activity android:name=".ui.CallLogsList" android:launchMode="singleTask"></activity>
-		<activity android:name=".ui.CallLog" android:launchMode="singleTask" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name=".ui.Dialer"></activity>
+		<activity android:name=".ui.CallLogsList"></activity>
+		<activity android:name=".ui.CallLog" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		
 		<!-- First setup -->
 		<activity android:name=".ui.WelcomeScreen" android:screenOrientation="nosensor"
 			android:theme="@style/CupcakeDialog" android:launchMode="singleTask" android:label="@string/welcome_caption_text"></activity>
 		<service android:name=".service.DownloadLibService"></service>
 		
-		
+		<!-- Help -->
+		<activity android:name=".ui.help.Help" android:theme="@style/CupcakeDialog" android:label="@string/help"></activity>
+		<activity android:name=".ui.help.Faq" android:theme="@style/CupcakeDialog" android:label="@string/faq"></activity>
 		
 		<!-- Accounts -->
-		<activity android:name=".ui.AccountsList" android:launchMode="singleTask" android:label="@string/accounts"></activity>
-		<activity android:name=".ui.ReorderAccountsList" android:launchMode="singleTask" android:label="@string/accounts"></activity>
-		<activity android:name=".ui.AccountFilters" android:launchMode="singleTask" android:label="@string/filters"></activity>
-		<activity android:name=".ui.EditFilter" android:launchMode="singleTask" android:label="@string/filters" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name=".ui.AccountsList" android:label="@string/accounts"></activity>
+		<activity android:name=".ui.ReorderAccountsList" android:label="@string/accounts"></activity>
+		<activity android:name=".ui.AccountFilters" android:label="@string/filters"></activity>
+		<activity android:name=".ui.EditFilter" android:label="@string/filters" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		
 
 		<activity android:name=".wizards.WizardChooser" android:theme="@android:style/Theme.Dialog"
 			android:label="@string/choose_wizard"></activity>
 
-		<activity android:launchMode="singleTask" android:name=".ui.BuddyList"></activity>
+		<activity android:name=".ui.BuddyList"></activity>
 
 		<!-- Preferences -->
 		<activity android:name=".ui.prefs.MainPrefs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
@@ -67,7 +69,7 @@
 		<activity android:name=".ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name=".ui.prefs.PrefsFast" android:label="@string/prefs_fast" 
-			android:theme="@style/CupcakeDialog" android:screenOrientation="portrait" android:excludeFromRecents="true" android:launchMode="singleInstance">
+			android:theme="@style/CupcakeDialog" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="com.csipsimple.ui.prefs.PrefsFast" />
                  <category android:name="android.intent.category.DEFAULT" />
@@ -77,25 +79,7 @@
 		
 
 		<!-- Wizards -->
-		<!--  TODO : should be refactored to get only one entry point !! -->
 		<activity android:name=".wizards.BasePrefsWizard" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<!-- 
-		<activity android:name=".wizards.impl.Basic" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Freephonie" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Expert" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Ecs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Ekiga" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Eutelia" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Callcentric" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Sip2Sip" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Ippi" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Pbxes" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.MagicJack" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.PlanetPhone" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Sipgate" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Phonzo" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".wizards.impl.Pennytel" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
- 		-->
  
 		<!-- Call management -->
 		<receiver android:name=".service.OutgoingCall">
@@ -125,15 +109,17 @@
 		</activity>
 		
 		
-		<activity android:name=".ui.InCallActivity" android:label="Incoming call"
-			android:screenOrientation="portrait" android:excludeFromRecents="true" android:launchMode="singleInstance"
-			android:theme="@android:style/Theme.NoTitleBar" android:clearTaskOnLaunch="true">
+		<activity android:name=".ui.InCallActivity" android:label="Incoming call" android:launchMode="singleTask"
+			android:screenOrientation="portrait" android:excludeFromRecents="true"
+			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter android:priority="10">
                  <action android:name="com.csipsimple.phone.action.INCALL" />
                  <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 		</activity>
         
+        <activity android:name=".ui.InCallMediaControl" android:label="@string/prefs_media" 
+			android:theme="@style/CupcakeDialog"></activity>
         
         <receiver android:name=".service.HeadsetButtonReceiver"></receiver>
 		
@@ -156,6 +142,7 @@
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
 	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 	<uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+	<uses-permission android:name="android.permission.READ_LOGS" />
 	 <!-- Not taken into account? -->
 	<uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY"></uses-permission>
 	

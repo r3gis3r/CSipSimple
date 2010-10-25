@@ -36,13 +36,19 @@ public class PrefsMedia extends GenericPrefs {
 		if(!pfw.isAdvancedUser()) {
 			
 			
-			hidePreference("audio_quality", "snd_auto_close_time");
-			hidePreference("audio_quality", "snd_mic_level");
-			hidePreference("audio_quality", "snd_speaker_level");
-			hidePreference("audio_quality", "snd_stream_level");
 			hidePreference("audio_quality", "snd_media_quality");
-			hidePreference("audio_quality", "snd_ptime");
 			hidePreference("audio_quality", "echo_cancellation_tail");
+			hidePreference("audio_quality", "snd_ptime");
+			
+			hidePreference("audio_volume", "snd_mic_level");
+			hidePreference("audio_volume", "snd_speaker_level");
+			hidePreference("audio_volume", "use_soft_volume");
+		//	hidePreference("audio_volume", "snd_stream_level");
+			
+			hidePreference("perfs", "thread_count");
+			hidePreference(null, "perfs");
+			
+			hidePreference("misc", "snd_auto_close_time");
 		}
 	}
 

@@ -32,4 +32,6 @@
 	<string name="call_state_incoming">Incoming call...</string>
 	<string name="call_state_null">ERROR</string>
 	<string name="unlock">Unlock</string>
+	<string name="record">Record</string>
+	<string name="stop_recording">Stop recording</string>
 </resources>

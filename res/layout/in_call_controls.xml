@@ -46,14 +46,19 @@
 				android:gravity="center" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:background="@drawable/incall_round_button"
 				android:src="@drawable/ic_in_call_touch_round_details" />
-			<TextView android:id="@+id/detailsButtonLabel"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textSize="14sp" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_marginLeft="5dip"
-				android:layout_marginRight="5dip" />
 		</LinearLayout>
-		
-		
+		<!-- 
+		<LinearLayout android:id="@+id/SettingsContainer"
+			android:orientation="horizontal" android:gravity="center_vertical"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+			android:layout_marginTop="110dip" android:layout_marginLeft="10dip">
+			<ImageButton android:id="@+id/settingsButton"
+				android:gravity="center" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:background="@drawable/incall_round_button"
+				android:src="@drawable/ic_prefs_media" />
+		</LinearLayout>
+		 -->
 
 
 		<LinearLayout android:id="@+id/bottomButtonsContainer"
@@ -102,12 +107,12 @@
 	
 	<com.csipsimple.widgets.SlidingTab
 		android:id="@+id/takeCallUnlocker" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:visibility="gone"
-		android:layout_alignParentTop="true" android:layout_marginTop="286dip" />
+		android:layout_height="fill_parent" android:visibility="gone"
+		android:layout_alignParentTop="true" />
 		
 	<LinearLayout android:id="@+id/takeCallUnlockerAlternate" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:visibility="gone"
-		android:layout_alignParentTop="true" android:layout_marginTop="286dip" android:orientation="horizontal">
+		android:layout_alignParentBottom="true" android:layout_marginBottom="20dip" android:orientation="horizontal">
 		<Button android:id="@+id/takeCallButton" style="@style/CallButton"
 					android:layout_width="1dip" android:layout_weight="1"
 					android:layout_height="wrap_content" android:text="@string/take_call"

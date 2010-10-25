@@ -56,11 +56,6 @@
 			android:summary="@string/integrate_with_native_music_desc"
 			android:key="integrate_with_native_music"
 			android:defaultValue="true"></CheckBoxPreference>
-			
-		<CheckBoxPreference android:title="@string/integrate_with_native_music"
-			android:summary="@string/integrate_with_native_music_desc"
-			android:key="integrate_with_native_music"
-			android:defaultValue="true"></CheckBoxPreference>
 	
 		<CheckBoxPreference android:title="@string/keep_awake_incall"
 			android:defaultValue="true"

@@ -35,6 +35,7 @@ public class CallInfo implements Parcelable {
 	private pjsip_inv_state callState;
 	private String remoteContact;
 	private boolean isIncoming;
+	private int confPort = -1;
 	
 	public long callStart = 0;
 	private pjsua_call_media_status mediaStatus;
@@ -79,7 +80,7 @@ public class CallInfo implements Parcelable {
 		callState = pjCallInfo.getState();
 		mediaStatus = pjCallInfo.getMedia_status();
 		remoteContact = pjCallInfo.getRemote_info().getPtr();
-		
+		confPort = pjCallInfo.getConf_slot();
 	}
 	
 	public void updateFromPj() throws UnavailableException {
@@ -105,6 +106,7 @@ public class CallInfo implements Parcelable {
 		dest.writeInt(mediaStatus.swigValue());
 		dest.writeString(remoteContact);
 		dest.writeInt(isIncoming()?1:0);
+		dest.writeInt(confPort);
 	}
 
 	public void readFromParcel(Parcel in) {
@@ -114,6 +116,7 @@ public class CallInfo implements Parcelable {
 		mediaStatus = pjsua_call_media_status.swigToEnum(in.readInt());
 		remoteContact = in.readString();
 		setIncoming((in.readInt() == 1));
+		confPort = in.readInt();
 	}
 
 	// Getters / Setters
@@ -236,5 +239,9 @@ public class CallInfo implements Parcelable {
 
 	public void setMediaState(pjsua_call_media_status mediaStatus2) {
 		mediaStatus = mediaStatus2;
+	}
+	
+	public int getConfPort() {
+		return confPort;
 	}
 }

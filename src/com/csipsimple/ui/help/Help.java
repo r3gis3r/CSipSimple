@@ -15,21 +15,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
-import com.csipsimple.models.IAccount;
+package com.csipsimple.ui.help;
 
-interface ISipConfiguration {
-	//Account management
-	long addOrUpdateAccount(in IAccount acc);
-	IAccount getAccount(long acc_id);
+import android.app.Activity;
+import android.os.Bundle;
+
+import com.csipsimple.R;
+
+public class Help extends Activity {
 	
-	//Prefs
-	void setPreferenceString(in String key, in String value);
-	void setPreferenceBoolean(in String key, boolean value);
-	void setPreferenceFloat(in String key, float value);
 	
-	String getPreferenceString(in String key);
-	boolean getPreferenceBoolean(in String key);
-	float getPreferenceFloat(in String key);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.help);
+		
+	}
 	
 }

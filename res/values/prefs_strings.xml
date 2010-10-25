@@ -69,6 +69,7 @@
 <!-- Media -->
 
 <string name="audio_quality">Audio quality</string>
+<string name="audio_volume">Volume</string>
 <string name="codecs">Codecs</string>
 
 <string name="echo_cancellation">Echo cancellation</string>
@@ -94,6 +95,9 @@
 <string name="codecs_desc">Priority (0 is disabled)</string>
 <string name="sip_info_dtmf">DTMF SIP INFO</string>
 <string name="sip_info_dtmf_desc">Use SIP INFO to send DTMF</string>
+<string name="use_soft_volume">Use software volume</string>
+<string name="use_soft_volume_desc">Use software volume instead of android volume</string>
+
 
 
 <!-- UI -->

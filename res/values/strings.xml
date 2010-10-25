@@ -53,4 +53,10 @@
 	<string name="service_ticker_registered_text">SIP Registered</string>
 	<string name="outgoing_call_chooser_call_text">Call</string>
 	<string name="reorder">Reorder</string>
+	<string name="faq">FAQ</string>
+	<string name="help">Help</string>
+	<string name="ok">OK</string>
+	<string name="misc">Misc</string>
+	<string name="warning">WARNING</string>
+	<string name="disconnect_and_incoming_explaination">If you disconnect, you\'ll not receive SIP calls anymore.\nTo be able to receive calls again, you\'ll have to go in Settings &gt; Easy configuration and choose \"Always available\" or \"Available for wifi\" again</string>
 </resources>

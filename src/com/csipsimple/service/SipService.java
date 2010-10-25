@@ -80,6 +80,8 @@ import com.csipsimple.utils.PreferencesWrapper;
 
 public class SipService extends Service {
 
+	public static final String INTENT_SIP_CONFIGURATION = "com.csipsimple.service.SipConfiguration";
+	public static final String INTENT_SIP_SERVICE = "com.csipsimple.service.SipService";
 	static boolean created = false;
 	// static boolean creating = false;
 	private static final String THIS_FILE = "SIP SRV";
@@ -262,7 +264,7 @@ public class SipService extends Service {
 		@Override
 		public CallInfo getCallInfo(int callId) throws RemoteException {
 			synchronized (creatingSipStack) {
-				if (created/* && !creating */) {
+				if (created/* && !creating */ && userAgentReceiver != null) {
 					CallInfo callInfo = userAgentReceiver.getCallInfo(callId);
 					if (callInfo == null) {
 						return null;
@@ -316,6 +318,63 @@ public class SipService extends Service {
 			synchronized (callActionLock) {
 				return SipService.this.callReinvite(callId, unhold);
 			}
+		}
+
+		@Override
+		public CallInfo[] getCalls() throws RemoteException {
+			synchronized (creatingSipStack) {
+				if (created && userAgentReceiver != null) {
+					CallInfo[] callsInfo = userAgentReceiver.getCalls();
+					return callsInfo;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public void confAdjustTxLevel(int port, float value) throws RemoteException {
+			if (created && userAgentReceiver != null) {
+				pjsua.conf_adjust_tx_level(port, value);
+			}
+			
+		}
+
+		@Override
+		public void confAdjustRxLevel(int port, float value) throws RemoteException {
+			if (created && userAgentReceiver != null) {
+				pjsua.conf_adjust_rx_level(port, value);
+			}
+		}
+
+		@Override
+		public void setEchoCancellation(boolean on) throws RemoteException {
+			if (created && userAgentReceiver != null) {
+				Log.d(THIS_FILE, "set echo cancelation " + on);
+				pjsua.set_ec(on ? prefsWrapper.getEchoCancellationTail() : 0, 0);
+			}
+		}
+
+		@Override
+		public void startRecording(int callId) throws RemoteException {
+			if (created && userAgentReceiver != null) {
+				userAgentReceiver.startRecording(callId);
+				//TODO : broadcast it
+			}
+		}
+
+		@Override
+		public void stopRecording() throws RemoteException {
+			if (created && userAgentReceiver != null) {
+				userAgentReceiver.stopRecording();
+			}
+		}
+
+		@Override
+		public int getRecordedCall() throws RemoteException {
+			if (created && userAgentReceiver != null) {
+				return userAgentReceiver.getRecordedCall();
+			}
+			return -1;
 		}
 
 	};
@@ -385,6 +444,23 @@ public class SipService extends Service {
 		public void setPreferenceString(String key, String value) throws RemoteException {
 			prefsWrapper.setPreferenceStringValue(key, value);
 
+		}
+
+		@Override
+		public String getPreferenceString(String key) throws RemoteException {
+			return prefsWrapper.getPreferenceStringValue(key);
+			
+		}
+
+		@Override
+		public boolean getPreferenceBoolean(String key) throws RemoteException {
+			return prefsWrapper.getPreferenceBooleanValue(key);
+			
+		}
+
+		@Override
+		public float getPreferenceFloat(String key) throws RemoteException {
+			return prefsWrapper.getPreferenceFloatValue(key);
 		}
 
 	};
@@ -616,10 +692,10 @@ public class SipService extends Service {
 
 		String serviceName = intent.getAction();
 		Log.d(THIS_FILE, "Action is " + serviceName);
-		if (serviceName == null || serviceName.equalsIgnoreCase("com.csipsimple.service.SipService")) {
+		if (serviceName == null || serviceName.equalsIgnoreCase(INTENT_SIP_SERVICE)) {
 			Log.d(THIS_FILE, "Service returned");
 			return binder;
-		} else if (serviceName.equalsIgnoreCase("com.csipsimple.service.SipConfiguration")) {
+		} else if (serviceName.equalsIgnoreCase(INTENT_SIP_CONFIGURATION)) {
 			Log.d(THIS_FILE, "Conf returned");
 			return binderConfiguration;
 		}
@@ -676,7 +752,7 @@ public class SipService extends Service {
 					// MAIN CONFIG
 
 					cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent()));
-					// cfg.setThread_cnt(4); // one thread seems to be enough
+					cfg.setThread_cnt(prefsWrapper.getThreadCount()); // one thread seems to be enough
 					// for now
 					cfg.setUse_srtp(prefsWrapper.getUseSrtp());
 					cfg.setSrtp_secure_signaling(0);
@@ -722,6 +798,7 @@ public class SipService extends Service {
 					mediaCfg.setQuality(prefsWrapper.getMediaQuality());
 					mediaCfg.setClock_rate(prefsWrapper.getClockRate());
 					mediaCfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
+					mediaCfg.setHas_ioqueue(1);
 
 					// ICE
 					mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());
@@ -758,9 +835,9 @@ public class SipService extends Service {
 							created = false;
 							return;
 						}
-						// int[] p_acc_id = new int[1];
-						// pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE,
-						// p_acc_id);
+//						 int[] p_acc_id = new int[1];
+//						 pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE,
+//						 p_acc_id);
 						// Log.d(THIS_FILE, "Udp account "+p_acc_id);
 
 					}

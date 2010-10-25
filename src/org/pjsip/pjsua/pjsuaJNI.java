@@ -59,8 +59,8 @@ public class pjsuaJNI {
   public final static native int PJ_FALSE_get();
   public final static native void pj_str_t_ptr_set(long jarg1, pj_str_t jarg1_, String jarg2);
   public final static native String pj_str_t_ptr_get(long jarg1, pj_str_t jarg1_);
-  public final static native void pj_str_t_slen_set(long jarg1, pj_str_t jarg1_, long jarg2);
-  public final static native long pj_str_t_slen_get(long jarg1, pj_str_t jarg1_);
+  public final static native void pj_str_t_slen_set(long jarg1, pj_str_t jarg1_, int jarg2);
+  public final static native int pj_str_t_slen_get(long jarg1, pj_str_t jarg1_);
   public final static native long new_pj_str_t();
   public final static native void delete_pj_str_t(long jarg1);
   public final static native void pjmedia_port_info_set(long jarg1, pjmedia_port jarg1_, long jarg2, pjmedia_port_info jarg2_);
@@ -861,7 +861,7 @@ public class pjsuaJNI {
   public final static native int player_get_port(int jarg1, long jarg2);
   public final static native int player_set_pos(int jarg1, long jarg2);
   public final static native int player_destroy(int jarg1);
-  public final static native int recorder_create(long jarg1, pj_str_t jarg1_, long jarg2, byte[] jarg3, long jarg4, long jarg5, long jarg6);
+  public final static native int recorder_create(long jarg1, pj_str_t jarg1_, long jarg2, byte[] jarg3, int jarg4, long jarg5, int[] jarg6);
   public final static native int recorder_get_conf_port(int jarg1);
   public final static native int recorder_get_port(int jarg1, long jarg2);
   public final static native int recorder_destroy(int jarg1);

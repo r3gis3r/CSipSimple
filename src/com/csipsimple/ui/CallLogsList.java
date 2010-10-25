@@ -116,6 +116,7 @@ public class CallLogsList extends ListActivity {
 		public void bindView(View view, Context context, Cursor cursor) {
 			final RecentCallsListItemViews tagView = (RecentCallsListItemViews) view.getTag();
 			String number = cursor.getString(DBAdapter.NUMBER_COLUMN_INDEX);
+			String cachedName = cursor.getString(DBAdapter.CALLER_NAME_COLUMN_INDEX);
 
 			String remoteContact = number;
 			String phoneNumber = number;
@@ -124,18 +125,20 @@ public class CallLogsList extends ListActivity {
 			// the call icon
 			tagView.callView.setTag(number);
 
-			// TODO : use cached infos if present
-
-			// Reformat number
-			Pattern sipUriSpliter = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
-			Matcher m = sipUriSpliter.matcher(number);
-			if (m.matches()) {
-				if (!TextUtils.isEmpty(m.group(1))) {
-					remoteContact = m.group(1);
-				}
-				if (!TextUtils.isEmpty(m.group(2))) {
-					phoneNumber = m.group(2);
-				}
+			if(TextUtils.isEmpty(cachedName)) {
+				// Reformat number
+				Pattern sipUriSpliter = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
+				Matcher m = sipUriSpliter.matcher(number);
+				if (m.matches()) {
+					if (!TextUtils.isEmpty(m.group(1))) {
+						remoteContact = m.group(1);
+					}
+					if (!TextUtils.isEmpty(m.group(2))) {
+						phoneNumber = m.group(2);
+					}
+				} 
+			} else {
+				remoteContact = cachedName;
 			}
 
 			tagView.line1View.setText(remoteContact);

@@ -18,22 +18,27 @@
 package com.csipsimple.utils;
 
 import com.csipsimple.models.CallInfo;
+import com.csipsimple.models.CallerInfo;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.provider.CallLog;
 
 public class CallLogHelper {
 
-	public static void addCallLog(ContentResolver contentResolver, ContentValues values) {
+
+	public static void addCallLog(Context context, ContentValues values) {
+		ContentResolver contentResolver = context.getContentResolver();
 		contentResolver.insert(CallLog.Calls.CONTENT_URI, values);
 	}
 	
 	
-	public static ContentValues logValuesForCall(CallInfo call, long callStart) {
+	public static ContentValues logValuesForCall(Context context, CallInfo call, long callStart) {
 		ContentValues cv = new ContentValues();
+		String remoteContact = call.getRemoteContact();
 		
-		cv.put(CallLog.Calls.NUMBER, call.getRemoteContact());
+		cv.put(CallLog.Calls.NUMBER, remoteContact);
 		
 		cv.put(CallLog.Calls.NEW, (callStart > 0)?1:0);
 		cv.put(CallLog.Calls.DATE, (callStart>0 )?callStart:System.currentTimeMillis());
@@ -51,6 +56,12 @@ public class CallLogHelper {
 		cv.put(CallLog.Calls.NEW, nonAcknowledge);
 		cv.put(CallLog.Calls.DURATION, (callStart>0)?(System.currentTimeMillis()-callStart)/1000:0);
 		
+		CallerInfo callerInfo = CallerInfo.getCallerInfoFromSipUri(context, remoteContact);
+		if(callerInfo != null) {
+			cv.put(CallLog.Calls.CACHED_NAME, callerInfo.name);
+			cv.put(CallLog.Calls.CACHED_NUMBER_LABEL, callerInfo.numberLabel);
+			cv.put(CallLog.Calls.CACHED_NUMBER_TYPE, callerInfo.numberType);
+		}
 		
 		return cv;
 	}
