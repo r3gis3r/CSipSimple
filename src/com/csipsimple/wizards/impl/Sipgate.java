@@ -59,6 +59,10 @@ public class Sipgate extends AlternateServerImplementation {
 	protected String getDefaultName() {
 		return "Sipgate";
 	}
-
+	
+	@Override
+	public boolean needRestart() {
+		return true;
+	}
 	
 }

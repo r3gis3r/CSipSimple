@@ -1,2 +1,42 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="prefs">Configurações</string>
+  <string name="prefs_fast">Configurações Simples</string>
+  <string name="prefs_fast_desc">Opções simples para usar caso você nao saiba como SIP funciona</string>
+  <string name="prefs_network">Rede</string>
+  <string name="prefs_network_desc">Como SIP se conecta a rede</string>
+  <string name="prefs_media">Mídia</string>
+  <string name="prefs_media_desc">Codecs e comportamento de audio em ligações</string>
+  <string name="prefs_ui">Interface de usuário</string>
+  <string name="prefs_ui_desc">Ajustar a interface de usuário</string>
+  <string name="for_incomings">Para ligações de entrada</string>
+  <string name="for_outgoings">Para ligações de saida</string>
+  <string name="perfs">Desempenho</string>
+  <string name="transport">Transporte</string>
+  <string name="use_wifi">Usar WiFi</string>
+  <string name="use_wifi_in_desc">Usar WiFi em ligações de entrada</string>
+  <string name="use_wifi_out_desc">Usar WiFi em ligações de saida</string>
+  <string name="use_other">Usar outras redes</string>
+  <string name="use_other_in_desc">Por exemplo WiMax para ligaçoes de entrada</string>
+  <string name="use_other_out_desc">Por exemplo WiMax para ligações de saida</string>
+  <string name="use_3g">Usar 3G</string>
+  <string name="use_3g_disclamer">Sua operadora TEM quer permitir o uso desta opção</string>
+  <string name="use_edge">Usar EDGE</string>
+  <string name="use_gprs">Usar GPRS</string>
+  <string name="lock_wifi">Reter WiFi</string>
+  <string name="lock_wifi_desc">Previnir que WiFi fique ocioso quando conectado ao SIP</string>
+  <string name="enable_tcp">TCP</string>
+  <string name="enable_tcp_desc">Ativar transporte TCP</string>
+  <string name="enable_tls">TLS</string>
+  <string name="enable_tls_desc">Ativar transporte TLS</string>
+  <string name="enable_udp">UDP</string>
+  <string name="enable_udp_desc">Ativar transporte UDP</string>
+  <string name="network_udp_transport_port">Porta UDP</string>
+  <string name="network_udp_transport_port_desc">Número da porta para vinculação local</string>
+  <string name="network_tcp_transport_port">Porta TCP</string>
+  <string name="network_tcp_transport_port_desc">Número da porta para vinculação local</string>
+  <string name="network_tls_transport_port">Porta TLS</string>
+  <string name="network_tls_transport_port_desc">Número da porta para vinculação local</string>
+  <string name="network_rtp_port">Porta RTP</string>
+  <string name="use_ipv6">Usar IPv6</string>
+</resources>

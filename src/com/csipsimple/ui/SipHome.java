@@ -26,16 +26,19 @@ import android.app.TabActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.widget.Toast;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
@@ -73,11 +76,9 @@ public class SipHome extends TabActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(THIS_FILE, "On Create SIPHOME");
-
+		prefWrapper = new PreferencesWrapper(this);
 		super.onCreate(savedInstanceState);
 		
-		prefWrapper = new PreferencesWrapper(this);
-
 		// Check sip stack
 		if (!SipService.hasStackLibFile(this)) {
 			//If not -> Just launch stack getter
@@ -130,6 +131,10 @@ public class SipHome extends TabActivity {
 
 		has_tried_once_to_activate_account = false;
 		
+
+		if(!prefWrapper.getPreferenceBooleanValue(PreferencesWrapper.PREVENT_SCREEN_ROTATION)) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+		}
 		
 	}
 
@@ -218,9 +223,6 @@ public class SipHome extends TabActivity {
 			}
 			has_tried_once_to_activate_account = true;
 		}
-		
-		
-		
 	}
 	
 	@Override
@@ -298,10 +300,8 @@ public class SipHome extends TabActivity {
 			return true;
 		case CLOSE_MENU:
 			Log.d(THIS_FILE, "CLOSE");
-			//TODO : if available on Wifi and not 3G
 			
-			ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
-			if (networks.size() > 0) {
+			if(prefWrapper.isValidConnectionForIncoming()) {
 				//Alert user that we will disable for all incoming calls as he want to quit
 				new AlertDialog.Builder(this)
 					.setTitle(R.string.warning)
@@ -315,9 +315,12 @@ public class SipHome extends TabActivity {
 					})
 					.setNegativeButton(R.string.cancel, null)
 					.show();
-
 			}else {
-
+				ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
+				if (networks.size() > 0) {
+					String msg = getString(R.string.disconnect_and_will_restart, TextUtils.join(", ", networks));
+					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+				}
 				disconnectAndQuit();
 			}
 			return true;

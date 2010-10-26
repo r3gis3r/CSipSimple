@@ -33,5 +33,6 @@ public interface WizardIface {
 	// Save
 	Account buildAccount(Account account);
 	boolean canSave();
-
+	boolean needRestart();
+	
 }

@@ -183,6 +183,9 @@ public class Ecs extends BaseImplementation {
 		return R.xml.w_ecs_preferences;
 	}
 
-
+	@Override
+	public boolean needRestart() {
+		return false;
+	}
 
 }

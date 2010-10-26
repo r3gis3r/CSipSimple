@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -258,6 +258,10 @@ msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr ""
 
+msgctxt "audio_volume"
+msgid "Volume"
+msgstr ""
+
 msgctxt "codecs"
 msgid "Codecs"
 msgstr ""
@@ -352,6 +356,14 @@ msgstr ""
 
 msgctxt "sip_info_dtmf_desc"
 msgid "Use SIP INFO to send DTMF"
+msgstr ""
+
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr ""
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
 msgstr ""
 
 msgctxt "general_ui"
@@ -454,6 +466,14 @@ msgstr ""
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
+msgstr ""
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr ""
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "android_integration"

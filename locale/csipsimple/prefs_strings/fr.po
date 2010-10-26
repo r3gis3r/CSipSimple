@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-10 08:22+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -197,10 +197,9 @@ msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
 msgstr "Laisser vide pour récupérer les DNS d'Android"
 
-#, fuzzy
 msgctxt "secure_transport"
 msgid "Secure transport"
-msgstr "Transport"
+msgstr "Transport sécurisé"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -212,7 +211,7 @@ msgstr "Mode pour le RTP sécurisé"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
-msgstr ""
+msgstr "Traversée du NAT"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
@@ -244,7 +243,7 @@ msgstr "Activer STUN"
 
 msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
-msgstr "Activer la foncionnalité STUN"
+msgstr "Activer la fonctionnalité STUN"
 
 msgctxt "stun_server"
 msgid "STUN server"
@@ -257,6 +256,10 @@ msgstr "Server STUN (hôte:port)"
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Qualité audio"
+
+msgctxt "audio_volume"
+msgid "Volume"
+msgstr ""
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -352,10 +355,18 @@ msgstr "Priorité (0 = désactivé)"
 
 msgctxt "sip_info_dtmf"
 msgid "DTMF SIP INFO"
-msgstr ""
+msgstr "SIP INFO DTMF"
 
 msgctxt "sip_info_dtmf_desc"
 msgid "Use SIP INFO to send DTMF"
+msgstr "Utiliser SIP INFO pour envoyer du DTMF"
+
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr ""
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
 msgstr ""
 
 msgctxt "general_ui"
@@ -438,11 +449,10 @@ msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Utiliser le verouillage CPU"
 
-#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"S'assure que le CPU est toujours actif pour CSipSimple (use de la "
+"S'assurer que le CPU tourne toujours pour l'application (utilise la "
 "batterie)"
 
 msgctxt "log_level"
@@ -455,7 +465,7 @@ msgstr "Niveau des traces produites entre 0 (aucune) et 5 (verbeux)"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
-msgstr "S'intégrer à l'application musique"
+msgstr "S'intégrer à Musique"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
@@ -465,10 +475,18 @@ msgstr ""
 
 msgctxt "ringtone"
 msgid "Ringtone"
-msgstr ""
+msgstr "Sonnerie"
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
+msgstr "Sonnerie à défaut pour les appels SIP"
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr ""
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "android_integration"
@@ -489,7 +507,7 @@ msgstr "Toujours disponible"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr "Utilisera de la batterie mais vous recevrai vos appels"
+msgstr "Utilisera de la batterie mais vous recevrez vos appels"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
@@ -497,7 +515,7 @@ msgstr "Disponible en même temps que le WIFI"
 
 msgctxt "wifi_available_desc"
 msgid "Availability of incoming calls based on WiFi profile"
-msgstr "Votre disponibilité est basée la connexion Wifi"
+msgstr "Votre disponibilité est basée sur la connection Wifi"
 
 msgctxt "never_available"
 msgid "Only for outgoing"
@@ -527,10 +545,9 @@ msgstr "Disponible seulement si le SIP est actuellement enregistré"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
-msgstr ""
+msgstr "Mode expert"
 
-#, fuzzy
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
-msgstr "Modifications avancées"
+msgstr "Mode avancé"
 

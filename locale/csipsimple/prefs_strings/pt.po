@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt <LL@li.org>\n"
@@ -20,155 +20,155 @@ msgstr ""
 
 msgctxt "prefs"
 msgid "Settings"
-msgstr ""
+msgstr "Configurações"
 
 msgctxt "prefs_fast"
 msgid "Easy configuration"
-msgstr ""
+msgstr "Configurações Simples"
 
 msgctxt "prefs_fast_desc"
 msgid "Quick options to use if you don't know how SIP works"
-msgstr ""
+msgstr "Opções simples para usar caso você nao saiba como SIP funciona"
 
 msgctxt "prefs_network"
 msgid "Network"
-msgstr ""
+msgstr "Rede"
 
 msgctxt "prefs_network_desc"
 msgid "How SIP can be connected to the network"
-msgstr ""
+msgstr "Como SIP se conecta a rede"
 
 msgctxt "prefs_media"
 msgid "Media"
-msgstr ""
+msgstr "Mídia"
 
 msgctxt "prefs_media_desc"
 msgid "Codecs and in-call sound behavior"
-msgstr ""
+msgstr "Codecs e comportamento de audio em ligações"
 
 msgctxt "prefs_ui"
 msgid "User interface"
-msgstr ""
+msgstr "Interface de usuário"
 
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
-msgstr ""
+msgstr "Ajustar a interface de usuário"
 
 msgctxt "for_incomings"
 msgid "For incoming calls"
-msgstr ""
+msgstr "Para ligações de entrada"
 
 msgctxt "for_outgoings"
 msgid "For outgoing calls"
-msgstr ""
+msgstr "Para ligações de saida"
 
 msgctxt "perfs"
 msgid "Performances"
-msgstr ""
+msgstr "Desempenho"
 
 msgctxt "transport"
 msgid "Transport"
-msgstr ""
+msgstr "Transporte"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
-msgstr ""
+msgstr "Usar WiFi"
 
 msgctxt "use_wifi_in_desc"
 msgid "Use WiFi for incoming calls"
-msgstr ""
+msgstr "Usar WiFi em ligações de entrada"
 
 msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
-msgstr ""
+msgstr "Usar WiFi em ligações de saida"
 
 msgctxt "use_other"
 msgid "Use other networks"
-msgstr ""
+msgstr "Usar outras redes"
 
 msgctxt "use_other_in_desc"
 msgid "For example WiMax for incoming calls"
-msgstr ""
+msgstr "Por exemplo WiMax para ligaçoes de entrada"
 
 msgctxt "use_other_out_desc"
 msgid "For example WiMax for outgoing calls"
-msgstr ""
+msgstr "Por exemplo WiMax para ligações de saida"
 
 msgctxt "use_3g"
 msgid "Use 3G"
-msgstr ""
+msgstr "Usar 3G"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr ""
+msgstr "Sua operadora TEM quer permitir o uso desta opção"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
-msgstr ""
+msgstr "Usar EDGE"
 
 msgctxt "use_gprs"
 msgid "Use GPRS"
-msgstr ""
+msgstr "Usar GPRS"
 
 msgctxt "lock_wifi"
 msgid "Lock WiFi"
-msgstr ""
+msgstr "Reter WiFi"
 
 msgctxt "lock_wifi_desc"
 msgid "Prevent WiFi idle when SIP is connected"
-msgstr ""
+msgstr "Previnir que WiFi fique ocioso quando conectado ao SIP"
 
 msgctxt "enable_tcp"
 msgid "TCP"
-msgstr ""
+msgstr "TCP"
 
 msgctxt "enable_tcp_desc"
 msgid "Enable TCP transport"
-msgstr ""
+msgstr "Ativar transporte TCP"
 
 msgctxt "enable_tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "enable_tls_desc"
 msgid "Enable TLS transport"
-msgstr ""
+msgstr "Ativar transporte TLS"
 
 msgctxt "enable_udp"
 msgid "UDP"
-msgstr ""
+msgstr "UDP"
 
 msgctxt "enable_udp_desc"
 msgid "Enable UDP transport"
-msgstr ""
+msgstr "Ativar transporte UDP"
 
 msgctxt "network_udp_transport_port"
 msgid "UDP Port"
-msgstr ""
+msgstr "Porta UDP"
 
 msgctxt "network_udp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Número da porta para vinculação local"
 
 msgctxt "network_tcp_transport_port"
 msgid "TCP Port"
-msgstr ""
+msgstr "Porta TCP"
 
 msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Número da porta para vinculação local"
 
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
-msgstr ""
+msgstr "Porta TLS"
 
 msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Número da porta para vinculação local"
 
 msgctxt "network_rtp_port"
 msgid "RTP port"
-msgstr ""
+msgstr "Porta RTP"
 
 msgctxt "network_rtp_port_desc"
 msgid "Port for RTP ports range start"
@@ -176,7 +176,7 @@ msgstr ""
 
 msgctxt "use_ipv6"
 msgid "Use IPv6"
-msgstr ""
+msgstr "Usar IPv6"
 
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
@@ -256,6 +256,10 @@ msgstr ""
 
 msgctxt "audio_quality"
 msgid "Audio quality"
+msgstr ""
+
+msgctxt "audio_volume"
+msgid "Volume"
 msgstr ""
 
 msgctxt "codecs"
@@ -352,6 +356,14 @@ msgstr ""
 
 msgctxt "sip_info_dtmf_desc"
 msgid "Use SIP INFO to send DTMF"
+msgstr ""
+
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr ""
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
 msgstr ""
 
 msgctxt "general_ui"
@@ -454,6 +466,14 @@ msgstr ""
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
+msgstr ""
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr ""
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "android_integration"

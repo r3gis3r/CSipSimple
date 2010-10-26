@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-05 18:28+0000\n"
 "Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -176,44 +176,45 @@ msgstr "Начало диапазона для RTP портов"
 
 msgctxt "use_ipv6"
 msgid "Use IPv6"
-msgstr ""
+msgstr "Использовать IPv6"
 
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
 msgstr ""
+"Переключиться в режим IPv6 (сеть и телефон должны уметь поддерживать этот"
+" режим)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
-msgstr ""
+msgstr "Определять DNS-сервер"
 
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
-msgstr ""
+msgstr "Автоопределение DNS-сервера"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
-msgstr ""
+msgstr "Указать DNS самостоятельно"
 
 msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
-msgstr ""
+msgstr "Оставьте пустым, чтобы получить адрес DNS-сервера из Андроид"
 
-#, fuzzy
 msgctxt "secure_transport"
 msgid "Secure transport"
-msgstr "Передача данных"
+msgstr "Безопасный протокол"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
-msgstr ""
+msgstr "SRTP режим"
 
 msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
-msgstr ""
+msgstr "Режим безопасного RTP"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
-msgstr ""
+msgstr "Прохождение NAT"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
@@ -259,6 +260,10 @@ msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Качество аудио"
 
+msgctxt "audio_volume"
+msgid "Volume"
+msgstr ""
+
 msgctxt "codecs"
 msgid "Codecs"
 msgstr "Аудиокодеки"
@@ -301,7 +306,7 @@ msgstr "Начальный уровень потока"
 
 msgctxt "snd_stream_level_desc"
 msgid "Set the initial level for audio stream (Android stream)"
-msgstr "Установить начальный уровень аудио-потока (поток Андроид)"
+msgstr "Установить начальный уровень аудиопотока (поток Андроид)"
 
 msgctxt "snd_auto_close_time"
 msgid "Auto close time"
@@ -309,7 +314,7 @@ msgstr "Время автозавершения"
 
 msgctxt "snd_auto_close_time_desc"
 msgid "Time to wait for close audio channel"
-msgstr "Время ожидания до закрытия аудио канала"
+msgstr "Время ожидания до закрытия аудиоканала"
 
 msgctxt "snd_media_quality"
 msgid "Media quality"
@@ -349,10 +354,18 @@ msgstr "Приоритет (0 - отключено)"
 
 msgctxt "sip_info_dtmf"
 msgid "DTMF SIP INFO"
-msgstr ""
+msgstr "DTMF SIP INFO"
 
 msgctxt "sip_info_dtmf_desc"
 msgid "Use SIP INFO to send DTMF"
+msgstr "Использовать SIP INFO для передачи DTMF-сигналов"
+
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr ""
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
 msgstr ""
 
 msgctxt "general_ui"
@@ -399,7 +412,7 @@ msgstr "Виброотклик"
 
 msgctxt "dial_press_vibrate_desc"
 msgid "Haptic (vibrate) feedback when dialing"
-msgstr "Включить виброотклик при касании экрана"
+msgstr "Включить виброотклик при нажатии клавиш"
 
 msgctxt "start_with_text_dialer"
 msgid "Text dialer"
@@ -429,10 +442,9 @@ msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Частичная блокировка"
 
-#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
-msgstr "Не отключать процессор при работе CSipSimple (быстрее разряжается батарея)"
+msgstr "Процессор всегда включен (быстрее разряжается батарея)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -449,15 +461,23 @@ msgstr "Интеграция с плеером"
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
-"Не используйте интеграцию с музыкальным плеером, если используется "
-"нестандартное приложение"
+"Интегрировать с музыкальным плеером, если используется стандартное "
+"приложение"
 
 msgctxt "ringtone"
 msgid "Ringtone"
-msgstr ""
+msgstr "Мелодия вызова"
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
+msgstr "Рингтон для SIP вызовов по умолчанию"
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr ""
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "android_integration"
@@ -514,10 +534,9 @@ msgstr "Выбор кодеков возможен только, если SIP с
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
-msgstr ""
+msgstr "Экспертный режим"
 
-#, fuzzy
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
-msgstr "Дополнительные настройки"
+msgstr "Расширенный режим"
 

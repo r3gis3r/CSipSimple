@@ -36,4 +36,7 @@
   <string name="use_ipv6">Používat IPv6</string>
   <string name="use_ipv6_desc">Přepnout na IPv6 (síť i telefon musí IPv6 podporovat)</string>
   <string name="override_nameserver">Použít vlastní DNS</string>
+  <string name="audio_quality">Kvalita zvuku</string>
+  <string name="codecs">Kodeky</string>
+  <string name="echo_cancellation_desc">Aktivuje funkce pro potlačení echa</string>
 </resources>

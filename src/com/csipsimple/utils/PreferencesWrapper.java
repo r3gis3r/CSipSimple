@@ -42,16 +42,16 @@ import android.text.TextUtils;
 public class PreferencesWrapper {
 	
 	
-	private static final String TURN_SERVER = "turn_server";
-	private static final String ENABLE_TURN = "enable_turn";
-	private static final String ENABLE_ICE = "enable_ice";
-	private static final String SND_MEDIA_QUALITY = "snd_media_quality";
-	private static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
-	private static final String USER_AGENT = "user_agent";
-	private static final String RTP_PORT = "network_rtp_port";
-	private static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
-	private static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
-	private static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
+	public static final String TURN_SERVER = "turn_server";
+	public static final String ENABLE_TURN = "enable_turn";
+	public static final String ENABLE_ICE = "enable_ice";
+	public static final String SND_MEDIA_QUALITY = "snd_media_quality";
+	public static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
+	public static final String USER_AGENT = "user_agent";
+	public static final String RTP_PORT = "network_rtp_port";
+	public static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
+	public static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
+	public static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
 	public static final String IS_ADVANCED_USER = "is_advanced_user";
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 	public static final String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
@@ -62,6 +62,7 @@ public class PreferencesWrapper {
 	public static final String SND_MIC_LEVEL = "snd_mic_level";
 	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
+	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
 	
 	//NETWORK
 	public static final String ENABLE_STUN = "enable_stun";
@@ -120,6 +121,8 @@ public class PreferencesWrapper {
 		put(ECHO_CANCELLATION, true);
 		put(ENABLE_VAD, false);
 		put(USE_SOFT_VOLUME, false);
+		
+		put(PREVENT_SCREEN_ROTATION, true);
 		
 		//Network
 		put("use_wifi_in", true);

@@ -166,5 +166,9 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 		return R.xml.w_authorization_preferences;
 	}
 
+	@Override
+	public boolean needRestart() {
+		return false;
+	}
 
 }

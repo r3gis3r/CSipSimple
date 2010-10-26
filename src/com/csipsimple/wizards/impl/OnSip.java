@@ -39,4 +39,9 @@ public class OnSip extends AuthorizationImplementation {
 		
 	}
 	
+	@Override
+	public boolean needRestart() {
+		return true;
+	}
+	
 }

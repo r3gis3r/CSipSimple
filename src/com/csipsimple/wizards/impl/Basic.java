@@ -145,4 +145,8 @@ public class Basic extends BaseImplementation {
 		return R.xml.w_basic_preferences;
 	}
 
+	@Override
+	public boolean needRestart() {
+		return false;
+	}
 }

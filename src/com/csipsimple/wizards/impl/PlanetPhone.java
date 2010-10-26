@@ -53,4 +53,9 @@ public class PlanetPhone extends SimpleImplementation {
 		}
 		return account;
 	}
+	
+	@Override
+	public boolean needRestart() {
+		return true;
+	}
 }

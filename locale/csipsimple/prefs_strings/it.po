@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-10 11:42+0000\n"
 "Last-Translator: Gianluca <Unknown>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -185,10 +185,9 @@ msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
 msgstr "Risolvi DNS SRV"
 
-#, fuzzy
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
-msgstr "Usa CSipSimple per risolvere i nomi"
+msgstr "Usa il risolutore dell'applicazione per risolvere i nomi DNS"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
@@ -198,10 +197,9 @@ msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
 msgstr "Lasciare in bianco per recuperare DNS da Android"
 
-#, fuzzy
 msgctxt "secure_transport"
 msgid "Secure transport"
-msgstr "Trasporto"
+msgstr "Trasporto sicuro"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -213,7 +211,7 @@ msgstr "Modalità per RTP Sicuro"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
-msgstr ""
+msgstr "NAT traversal"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
@@ -258,6 +256,10 @@ msgstr "STUN server (HOST:PORT)"
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Qualità audio"
+
+msgctxt "audio_volume"
+msgid "Volume"
+msgstr ""
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -349,10 +351,18 @@ msgstr "Priorità (0 disabilita)"
 
 msgctxt "sip_info_dtmf"
 msgid "DTMF SIP INFO"
-msgstr ""
+msgstr "DTMF SIP INFO"
 
 msgctxt "sip_info_dtmf_desc"
 msgid "Use SIP INFO to send DTMF"
+msgstr "Usa SIP INFO per inviare DTMF"
+
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr ""
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
 msgstr ""
 
 msgctxt "general_ui"
@@ -435,12 +445,11 @@ msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Usa partial wake lock"
 
-#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"Assicura che la CPU sia sempre in esecuzione per CSipSimple (scarica la "
-"batteria)"
+"Assicura che la CPU è sempre in esecuzione per l'applicazione (scarica la"
+" batteria)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -462,10 +471,18 @@ msgstr ""
 
 msgctxt "ringtone"
 msgid "Ringtone"
-msgstr ""
+msgstr "Suoneria"
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
+msgstr "Suoneria di default per le chiamate SIP"
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr ""
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "android_integration"
@@ -524,10 +541,9 @@ msgstr "Disponibile solo se sip è registrato"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
-msgstr ""
+msgstr "Modalità esperto"
 
-#, fuzzy
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
-msgstr "Tweaks avanzati"
+msgstr "Modalità avanzata"
 

@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the csipsimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-21 23:27+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt_BR <LL@li.org>\n"
@@ -64,7 +63,7 @@ msgstr ""
 
 msgctxt "call_state_connecting"
 msgid "Connecting..."
-msgstr ""
+msgstr "Conectando..."
 
 msgctxt "call_state_disconnected"
 msgid "Hung up"
@@ -80,9 +79,17 @@ msgstr ""
 
 msgctxt "call_state_null"
 msgid "ERROR"
-msgstr ""
+msgstr "ERRO"
 
 msgctxt "unlock"
 msgid "Unlock"
+msgstr "Desbloquear"
+
+msgctxt "record"
+msgid "Record"
+msgstr ""
+
+msgctxt "stop_recording"
+msgid "Stop recording"
 msgstr ""
 

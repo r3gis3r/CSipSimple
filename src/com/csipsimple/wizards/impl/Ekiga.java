@@ -58,6 +58,10 @@ public class Ekiga extends SimpleImplementation {
 		}
 		return account;
 	}
-
+	
+	@Override
+	public boolean needRestart() {
+		return true;
+	}
 	
 }

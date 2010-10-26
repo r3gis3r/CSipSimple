@@ -89,4 +89,8 @@ public class IiNet extends SimpleImplementation {
 		return "iinet";
 	}
 
+	@Override
+	public boolean needRestart() {
+		return true;
+	}
 }

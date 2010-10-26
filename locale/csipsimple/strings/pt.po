@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt <LL@li.org>\n"
@@ -28,8 +28,8 @@ msgstr ""
 
 msgctxt "connection_not_valid"
 msgid ""
-"Selected network route not available (activate WiFi or change preferences to "
-"use 3G)"
+"Selected network route not available (activate WiFi or change preferences"
+" to use 3G)"
 msgstr ""
 
 msgctxt "invalid_sip_uri"
@@ -154,5 +154,41 @@ msgstr ""
 
 msgctxt "reorder"
 msgid "Reorder"
+msgstr ""
+
+msgctxt "faq"
+msgid "FAQ"
+msgstr ""
+
+msgctxt "help"
+msgid "Help"
+msgstr ""
+
+msgctxt "ok"
+msgid "OK"
+msgstr ""
+
+msgctxt "misc"
+msgid "Misc"
+msgstr ""
+
+msgctxt "warning"
+msgid "WARNING"
+msgstr ""
+
+msgctxt "disconnect_and_incoming_explaination"
+msgid ""
+"If you disconnect, you'll not receive SIP calls anymore.\n"
+"To be able to receive calls again, you'll have to go in Settings &gt; "
+"Easy configuration and choose \"Always available\" or \"Available for "
+"wifi\" again"
+msgstr ""
+
+#, python-format
+msgctxt "disconnect_and_will_restart"
+msgid ""
+"Will automatically restart when : <xliff:g id=\"networks\" "
+"example=\"3G\">%s</xliff:g> will become available (change settings if you"
+" don't want)"
 msgstr ""
 

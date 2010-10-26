@@ -242,4 +242,9 @@ public class Expert extends BaseImplementation {
 	public int getBasePreferenceResource() {
 		return R.xml.w_expert_preferences;
 	}
+	
+	@Override
+	public boolean needRestart() {
+		return false;
+	}
 }

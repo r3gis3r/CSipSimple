@@ -61,4 +61,9 @@ public class Ippi extends SimpleImplementation {
 	protected boolean canTcp() {
 		return true;
 	}
+	
+	@Override
+	public boolean needRestart() {
+		return true;
+	}
 }

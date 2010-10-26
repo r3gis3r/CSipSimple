@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-09-30 08:04+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -85,13 +85,15 @@ msgctxt "use_other"
 msgid "Use other networks"
 msgstr ""
 
+#, fuzzy
 msgctxt "use_other_in_desc"
 msgid "For example WiMax for incoming calls"
-msgstr ""
+msgstr "Използване на WiFi за входящи повиквания"
 
+#, fuzzy
 msgctxt "use_other_out_desc"
 msgid "For example WiMax for outgoing calls"
-msgstr ""
+msgstr "Използване на WiFi за изходящи повиквания"
 
 msgctxt "use_3g"
 msgid "Use 3G"
@@ -129,9 +131,10 @@ msgctxt "enable_tls"
 msgid "TLS"
 msgstr ""
 
+#, fuzzy
 msgctxt "enable_tls_desc"
 msgid "Enable TLS transport"
-msgstr ""
+msgstr "Разрешаване на UDP пренос"
 
 msgctxt "enable_udp"
 msgid "UDP"
@@ -157,13 +160,15 @@ msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Номер на порт, който ще се ползва локално"
 
+#, fuzzy
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
-msgstr ""
+msgstr "RTP порт"
 
+#, fuzzy
 msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Номер на порт, който ще се ползва локално"
 
 msgctxt "network_rtp_port"
 msgid "RTP port"
@@ -257,6 +262,10 @@ msgstr "STUN сървър (ХОСТ:ПОРТ)"
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Качество на звука"
+
+msgctxt "audio_volume"
+msgid "Volume"
+msgstr ""
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -354,6 +363,14 @@ msgctxt "sip_info_dtmf_desc"
 msgid "Use SIP INFO to send DTMF"
 msgstr ""
 
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr ""
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
+msgstr ""
+
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr "Общ потребителски интерфейс"
@@ -418,8 +435,7 @@ msgstr "Да не се използва плъзгащо отключване"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr ""
-"Използвай бутоните вместо плъзгането за приемане на входящи повиквания"
+msgstr "Използвай бутоните вместо плъзгането за приемане на входящи повиквания"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
@@ -435,7 +451,6 @@ msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Използване на частично заключване"
 
-#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr "Осигурява винаги работещ процесор за cSIPsimple (изтощава батерията)"
@@ -466,6 +481,14 @@ msgstr ""
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
+msgstr ""
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr ""
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "android_integration"
@@ -517,8 +540,8 @@ msgstr "Позволено ми е да използвам мобилния"
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
 msgstr ""
-"Вашият мобилен оператор позволява използването на VoIP през мобилната връзка "
-"за данни"
+"Вашият мобилен оператор позволява използването на VoIP през мобилната "
+"връзка за данни"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
@@ -532,4 +555,16 @@ msgstr ""
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Допълнителна оптимизация"
+
+#~ msgctxt "ice_turn"
+#~ msgid "ICE/TURN/STUN"
+#~ msgstr "ICE/TURN/STUN"
+
+#~ msgctxt "exclude_for_outgoing_call"
+#~ msgid "Exclude patterns"
+#~ msgstr "Изключи модели"
+
+#~ msgctxt "exclude_for_outgoing_call_desc"
+#~ msgid "Exclude patterns for outgoing calls"
+#~ msgstr "Изключи модели за изходящи повиквания"
 

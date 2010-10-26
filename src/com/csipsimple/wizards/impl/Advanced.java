@@ -171,5 +171,9 @@ public class Advanced extends BaseImplementation {
 		return R.xml.w_advanced_preferences;
 	}
 	
+	@Override
+	public boolean needRestart() {
+		return false;
+	}
 
 }

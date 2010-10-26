@@ -39,6 +39,16 @@
   <string name="network_tls_transport_port_desc">Номер порта для локальной привязки</string>
   <string name="network_rtp_port">RTP порт</string>
   <string name="network_rtp_port_desc">Начало диапазона для RTP портов</string>
+  <string name="use_ipv6">Использовать IPv6</string>
+  <string name="use_ipv6_desc">Переключиться в режим IPv6 (сеть и телефон должны уметь поддерживать этот режим)</string>
+  <string name="enable_dns_srv">Определять DNS-сервер</string>
+  <string name="enable_dns_srv_desc">Автоопределение DNS-сервера</string>
+  <string name="override_nameserver">Указать DNS самостоятельно</string>
+  <string name="override_nameserver_desc">Оставьте пустым, чтобы получить адрес DNS-сервера из Андроид</string>
+  <string name="secure_transport">Безопасный протокол</string>
+  <string name="use_srtp">SRTP режим</string>
+  <string name="use_srtp_desc">Режим безопасного RTP</string>
+  <string name="nat_traversal">Прохождение NAT</string>
   <string name="enable_ice">ICE</string>
   <string name="enable_ice_desc">Поддерживать возможности ICE</string>
   <string name="enable_turn">TURN</string>
@@ -60,9 +70,9 @@
   <string name="snd_speaker_level">Настройка спикера</string>
   <string name="snd_speaker_level_desc">Настройка уровня сигнала в спикере (1 - не менять)</string>
   <string name="snd_stream_level">Начальный уровень потока</string>
-  <string name="snd_stream_level_desc">Установить начальный уровень аудио-потока (поток Андроид)</string>
+  <string name="snd_stream_level_desc">Установить начальный уровень аудиопотока (поток Андроид)</string>
   <string name="snd_auto_close_time">Время автозавершения</string>
-  <string name="snd_auto_close_time_desc">Время ожидания до закрытия аудио канала</string>
+  <string name="snd_auto_close_time_desc">Время ожидания до закрытия аудиоканала</string>
   <string name="snd_media_quality">Качество медиа</string>
   <string name="snd_media_quality_desc">Качество медиа потока (только для опытных пользователей)</string>
   <string name="snd_clock_rate">Частота</string>
@@ -72,6 +82,8 @@
   <string name="echo_cancellation_tail">Шлейф подавления эха</string>
   <string name="echo_cancellation_tail_desc">Длина шлейфа подавления эха</string>
   <string name="codecs_desc">Приоритет (0 - отключено)</string>
+  <string name="sip_info_dtmf">DTMF SIP INFO</string>
+  <string name="sip_info_dtmf_desc">Использовать SIP INFO для передачи DTMF-сигналов</string>
   <string name="general_ui">Общие настройки интерфейса</string>
   <string name="native_dialer_integration">Интеграция с телефонной частью</string>
   <string name="advanced_ui">Дополнительные настройки</string>
@@ -82,7 +94,7 @@
   <string name="dial_press_tone">Звук клавиш</string>
   <string name="dial_press_tone_desc">Воспроизводить тональные сигналы при нажатии клавиш</string>
   <string name="dial_press_vibrate">Виброотклик</string>
-  <string name="dial_press_vibrate_desc">Включить виброотклик при касании экрана</string>
+  <string name="dial_press_vibrate_desc">Включить виброотклик при нажатии клавиш</string>
   <string name="start_with_text_dialer">Текстовый номеронабиратель</string>
   <string name="start_with_text_dialer_desc">Использовать изначально текстовый номеронабиратель</string>
   <string name="use_alternate_unlocker">Не использовать слайдер</string>
@@ -90,10 +102,13 @@
   <string name="keep_awake_incall">Не выключать экран</string>
   <string name="keep_awake_incall_desc">Воспроизводить звук при входящем вызове, когда экран выключен</string>
   <string name="use_partial_wake_lock">Частичная блокировка</string>
+  <string name="use_partial_wake_lock_desc">Процессор всегда включен (быстрее разряжается батарея)</string>
   <string name="log_level">Отчёт об ошибках</string>
   <string name="log_level_desc">Уровень отчёта об ошибках для отладки программы (0 - нет, 5 - подробный)</string>
   <string name="integrate_with_native_music">Интеграция с плеером</string>
-  <string name="integrate_with_native_music_desc">Не используйте интеграцию с музыкальным плеером, если используется нестандартное приложение</string>
+  <string name="integrate_with_native_music_desc">Интегрировать с музыкальным плеером, если используется стандартное приложение</string>
+  <string name="ringtone">Мелодия вызова</string>
+  <string name="ringtone_desc">Рингтон для SIP вызовов по умолчанию</string>
   <string name="android_integration">Интегрировать с Андроид</string>
   <string name="android_integration_desc">Интеграция со стандарными номеронабирателем и списком вызовов</string>
   <string name="availability_profile">Профиль доступности</string>
@@ -107,4 +122,6 @@
   <string name="tg_allowed">Я могу использовать сотовую связь для SIP</string>
   <string name="tg_allowed_desc">Передача VoIP пакетов должна быть разрешена сотовым оператором</string>
   <string name="codecs_availability_text">Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети</string>
+  <string name="expert_preferences">Экспертный режим</string>
+  <string name="advanced_preferences">Расширенный режим</string>
 </resources>

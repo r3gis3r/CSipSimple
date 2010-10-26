@@ -17,7 +17,7 @@
 	
 -->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
 	<string name="app_name">CSipSimple</string>
 	<string name="unable_to_download_file">Unable to download file</string>
@@ -59,4 +59,6 @@
 	<string name="misc">Misc</string>
 	<string name="warning">WARNING</string>
 	<string name="disconnect_and_incoming_explaination">If you disconnect, you\'ll not receive SIP calls anymore.\nTo be able to receive calls again, you\'ll have to go in Settings &gt; Easy configuration and choose \"Always available\" or \"Available for wifi\" again</string>
+	<string name="disconnect_and_will_restart">Will automatically restart when : <xliff:g id="networks" example="3G">%s</xliff:g> will become available (change settings if you don\'t want)</string>
+	
 </resources>

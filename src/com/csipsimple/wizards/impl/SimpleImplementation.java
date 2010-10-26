@@ -162,5 +162,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		return R.xml.w_simple_preferences;
 	}
 
-
+	public boolean needRestart() {
+		return false;
+	}
 }

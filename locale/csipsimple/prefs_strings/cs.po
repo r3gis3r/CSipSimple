@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-21 23:27+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -257,11 +257,15 @@ msgstr ""
 
 msgctxt "audio_quality"
 msgid "Audio quality"
+msgstr "Kvalita zvuku"
+
+msgctxt "audio_volume"
+msgid "Volume"
 msgstr ""
 
 msgctxt "codecs"
 msgid "Codecs"
-msgstr ""
+msgstr "Kodeky"
 
 msgctxt "echo_cancellation"
 msgid "Echo cancellation"
@@ -269,7 +273,7 @@ msgstr ""
 
 msgctxt "echo_cancellation_desc"
 msgid "Activate echo cancellation"
-msgstr ""
+msgstr "Aktivuje funkce pro potlačení echa"
 
 msgctxt "enable_vad"
 msgid "Voice audio detection"
@@ -353,6 +357,14 @@ msgstr ""
 
 msgctxt "sip_info_dtmf_desc"
 msgid "Use SIP INFO to send DTMF"
+msgstr ""
+
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr ""
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
 msgstr ""
 
 msgctxt "general_ui"
@@ -455,6 +467,14 @@ msgstr ""
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
+msgstr ""
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr ""
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "android_integration"

@@ -65,6 +65,11 @@
 			android:defaultValue="false"
 			android:summary="@string/use_partial_wake_lock_desc"
 			android:key="use_partial_wake_lock"></CheckBoxPreference>
+			
+		<CheckBoxPreference android:title="@string/prevent_screen_rotation"
+			android:defaultValue="true"
+			android:summary="@string/prevent_screen_rotation_desc"
+			android:key="prevent_screen_rotation"></CheckBoxPreference>
 		
 		<EditTextPreference android:key="log_level"
 				android:title="@string/log_level"

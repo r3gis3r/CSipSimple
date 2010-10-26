@@ -51,6 +51,7 @@ public class BasePrefsWizard extends GenericPrefs{
 	private String wizardId = "";
 	private WizardInfo wizardInfo = null;
 	private WizardIface wizard = null;
+	private boolean needRestart = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,6 @@ public class BasePrefsWizard extends GenericPrefs{
 		bt.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				//TODO : clean prefs
 				setResult(RESULT_CANCELED, getIntent());
 				finish();
 			}
@@ -85,10 +85,7 @@ public class BasePrefsWizard extends GenericPrefs{
 		saveButton.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				//TODO: clean prefs
-				saveAccount();
-				setResult(RESULT_OK, getIntent());
-				finish();
+				saveAndFinish();
 			}
 		});
 		wizard.fillLayout(account);
@@ -170,9 +167,7 @@ public class BasePrefsWizard extends GenericPrefs{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case SAVE_MENU:
-			saveAccount();
-			setResult(RESULT_OK, getIntent());
-			finish();
+			saveAndFinish();
 			return true;
 		case TRANSFORM_MENU:
 			startActivityForResult(new Intent(this, WizardChooser.class), CHOOSE_WIZARD);
@@ -216,18 +211,28 @@ public class BasePrefsWizard extends GenericPrefs{
 		}
 	}
 	
-	
+	private void saveAndFinish() {
+		saveAccount();
+		Intent intent = getIntent();
+		intent.putExtra("need_restart", needRestart);
+		setResult(RESULT_OK, intent);
+		finish();
+	}
 	
 	protected void saveAccount() {
 		saveAccount(wizardId);
 	}
 	
 	protected void saveAccount(String wizardId){
+		needRestart = false;
 		account = wizard.buildAccount(account);
 		account.wizard = wizardId;
 		database.open();
 		if(account.id == null || account.id.equals(-1)){
 			account.id = (int) database.insertAccount(account);
+			if(wizard.needRestart()) {
+				needRestart = true;
+			}
 		}else{
 			database.updateAccount(account);
 		}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-21 23:27+0200\n"
+"POT-Creation-Date: 2010-10-27 00:26+0200\n"
 "PO-Revision-Date: 2010-10-06 13:32+0000\n"
 "Last-Translator: Jan Tschirschwitz <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -205,11 +205,11 @@ msgstr ""
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
-msgstr ""
+msgstr "SRTP-Modus"
 
 msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
-msgstr ""
+msgstr "Modus für Secure RTP"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
@@ -258,6 +258,10 @@ msgstr "STUN Server (HOST:PORT)"
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Audioqualität"
+
+msgctxt "audio_volume"
+msgid "Volume"
+msgstr ""
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -357,6 +361,14 @@ msgctxt "sip_info_dtmf_desc"
 msgid "Use SIP INFO to send DTMF"
 msgstr ""
 
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr ""
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
+msgstr ""
+
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr "Standard-Benutzeroberfläche"
@@ -435,10 +447,9 @@ msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
 msgstr "Blockiere Einschlafen"
 
-#, fuzzy
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
-msgstr "Stellt sicher das CSipSimple immer ausgeführt wird (Belastet die Batterie)"
+msgstr ""
 
 msgctxt "log_level"
 msgid "Log level"
@@ -464,6 +475,14 @@ msgstr ""
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
+msgstr ""
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr ""
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "android_integration"
@@ -524,8 +543,7 @@ msgctxt "expert_preferences"
 msgid "Expert mode"
 msgstr ""
 
-#, fuzzy
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
-msgstr "Advanced tweaks"
+msgstr ""
 

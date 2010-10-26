@@ -286,7 +286,14 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			break;
 		case REQUEST_MODIFY:
 			if(resultCode == RESULT_OK){
-				reloadAsyncAccounts(null, 1);
+				if(data != null) {
+					if(data.getBooleanExtra("need_restart", false)) {
+						restartAsync();
+					}else {
+						reloadAsyncAccounts(null, 1);
+					}
+				}
+				
 			}
 			break;
 		}
@@ -313,6 +320,38 @@ public class AccountsList extends Activity implements OnItemClickListener {
 						}
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Impossible to reload accounts", e);
+					}finally {
+						Log.d(THIS_FILE, "> Need to update list !");
+						handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
+					}
+				}
+			}
+		};
+		
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				Log.d(THIS_FILE, "Would like to reload all accounts");
+				if(service != null) {
+					onServiceConnect.serviceConnected();
+					onServiceConnect = null;
+				}
+			};
+		};
+		t.start();
+	}
+	
+	private void restartAsync() {
+		onServiceConnect = new OnServiceConnect() {
+			@Override
+			protected void serviceConnected() {
+				if (service != null) {
+					Log.d(THIS_FILE, "Will reload the stack !");
+					try {
+						service.sipStop();
+						service.sipStart();
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Impossible to reload stack", e);
 					}finally {
 						Log.d(THIS_FILE, "> Need to update list !");
 						handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
@@ -461,8 +500,13 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
 			if(onServiceConnect != null) {
-				onServiceConnect.serviceConnected();
-				onServiceConnect = null;
+				Thread t = new Thread() {
+					public void run() {
+						onServiceConnect.serviceConnected();
+						onServiceConnect = null;
+					};
+				};
+				t.start();
 			}
 			handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
 		}

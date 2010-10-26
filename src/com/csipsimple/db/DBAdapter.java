@@ -293,6 +293,7 @@ public class DBAdapter {
 				return account;
 				
 			}
+			c.close();
 		} catch (SQLException e) {
 			Log.e("Exception on query", e.toString());
 		}
