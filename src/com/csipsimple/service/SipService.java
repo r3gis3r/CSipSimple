@@ -377,6 +377,14 @@ public class SipService extends Service {
 			return -1;
 		}
 
+		@Override
+		public boolean canRecord(int callId) throws RemoteException {
+			if (created && userAgentReceiver != null) {
+				return userAgentReceiver.canRecord(callId);
+			}
+			return false;
+		}
+
 	};
 
 	private final ISipConfiguration.Stub binderConfiguration = new ISipConfiguration.Stub() {

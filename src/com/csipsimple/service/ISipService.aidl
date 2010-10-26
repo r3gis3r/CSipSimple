@@ -58,4 +58,5 @@ interface ISipService{
 	void startRecording(int callId);
 	void stopRecording();
 	int getRecordedCall();
+	boolean canRecord(int callId);
 }

@@ -537,7 +537,7 @@ public class UAStateReceiver extends Callback {
 		// Ensure nothing is recording actually
 		if (recordedCall == INVALID_RECORD) {
 			CallInfo callInfo = getCallInfo(callId);
-			if(callInfo == null) {
+			if(callInfo == null || !callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE)) {
 				return;
 			}
 			
@@ -571,6 +571,17 @@ public class UAStateReceiver extends Callback {
 		recordedCall = INVALID_RECORD;
 	}
 	
+	public boolean canRecord(int callId) {
+		if (recordedCall == INVALID_RECORD) {
+			CallInfo callInfo = getCallInfo(callId);
+			if(callInfo == null || !callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE)) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	public int getRecordedCall() {
 		return recordedCall; 
 	}
@@ -593,7 +604,7 @@ public class UAStateReceiver extends Callback {
 
 	private String sanitizeForFile(String remoteContact) {
 		String fileName = remoteContact;
-		fileName = fileName.replaceAll("[\\.\\\\<>:; \"\']", "_");
+		fileName = fileName.replaceAll("[\\.\\\\<>:; \"\'\\*]", "_");
 		return fileName;
 	}
 }

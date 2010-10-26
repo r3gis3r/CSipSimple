@@ -26,7 +26,6 @@
 
 		<EditTextPreference android:key="username"
 			android:singleLine="true"
-			android:numeric="integer"
 			android:title="@string/w_common_username"></EditTextPreference>
 		<com.csipsimple.widgets.PasswordPreference android:key="password"
 			android:singleLine="true"

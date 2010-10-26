@@ -254,7 +254,6 @@ public class SipHome extends TabActivity {
 	    return super.onKeyDown(keyCode, event);
 	}
 	
-	@Override
 	public void onBackPressed() {
 		if(prefWrapper != null) {
 			Log.d(THIS_FILE, "On back pressed ! ");
@@ -299,6 +298,8 @@ public class SipHome extends TabActivity {
 			return true;
 		case CLOSE_MENU:
 			Log.d(THIS_FILE, "CLOSE");
+			//TODO : if available on Wifi and not 3G
+			
 			ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
 			if (networks.size() > 0) {
 				//Alert user that we will disable for all incoming calls as he want to quit

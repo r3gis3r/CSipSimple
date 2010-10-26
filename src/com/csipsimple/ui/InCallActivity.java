@@ -307,16 +307,32 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+
+		MenuItem recItem = menu.findItem(RECORD_MENU);
+		boolean valueOk = false;
+		
 		if(service != null) {
 			try {
-				MenuItem recItem = menu.findItem(RECORD_MENU);
-				boolean isRecording = (service.getRecordedCall() == -1);
-				recItem.setTitle(isRecording?R.string.record:R.string.stop_recording);
-				recItem.setIcon(isRecording ? R.drawable.record : R.drawable.stop);
+				boolean isRecording = (service.getRecordedCall() != -1);
+				if(isRecording) {
+					recItem.setTitle(R.string.stop_recording);
+					recItem.setIcon(R.drawable.stop);
+					recItem.setEnabled(true);
+					valueOk = true;
+				}else {
+					if(service.canRecord(callId)) {
+						recItem.setTitle(R.string.record);
+						recItem.setIcon(R.drawable.record);
+						recItem.setEnabled(true);
+						valueOk = true;
+					}
+				}
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(THIS_FILE, "Can't call services methods", e);
 			}
+		}
+		if(!valueOk) {
+			recItem.setEnabled(false);
 		}
 		return super.onPrepareOptionsMenu(menu);
 	}

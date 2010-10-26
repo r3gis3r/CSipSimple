@@ -304,10 +304,10 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 		return super.onKeyUp(keyCode, event);
 	}
-	@Override
+
 	public void onBackPressed() {
 		if(contextToBindTo != null) {
-			contextToBindTo.onBackPressed();
+			((SipHome) contextToBindTo).onBackPressed();
 		}else {
 			finish();
 		}
