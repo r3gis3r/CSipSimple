@@ -5,6 +5,7 @@
   android:layout_height="fill_parent"
   android:orientation="vertical">
   
+ 	<include layout="@layout/white_title"></include>
   <WebView android:id="@+id/webview"
   	android:layout_width="wrap_content" android:layout_height="wrap_content"></WebView>
   <LinearLayout android:id="@+id/loading_indicator"

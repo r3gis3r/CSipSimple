@@ -54,7 +54,10 @@
 	<string name="outgoing_call_chooser_call_text">Call</string>
 	<string name="reorder">Reorder</string>
 	<string name="faq">FAQ</string>
-	<string name="help">Help</string>
+	<string name="help">Help</string>	
+	<string name="record_logs">Record logs to send it to dev team and report a bug</string>
+	<string name="send_logs">Stop recording logs (OPTIONALY send it)</string>
+	<string name="view_existing_issues">Consult existing issues</string>
 	<string name="ok">OK</string>
 	<string name="misc">Misc</string>
 	<string name="warning">WARNING</string>

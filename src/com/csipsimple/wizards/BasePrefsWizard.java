@@ -156,7 +156,7 @@ public class BasePrefsWizard extends GenericPrefs{
 			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.choose_wizard).setIcon(
 					android.R.drawable.ic_menu_edit);
 			menu.add(Menu.NONE, FILTERS_MENU, Menu.NONE, R.string.filters).setIcon(
-					android.R.drawable.ic_menu_manage);
+					R.drawable.ic_menu_filter);
 			menu.add(Menu.NONE, DELETE_MENU, Menu.NONE, R.string.delete_account).setIcon(
 					android.R.drawable.ic_menu_delete);
 		}

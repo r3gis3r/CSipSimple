@@ -135,9 +135,13 @@ public class CollectLogs {
         StringBuilder log = new StringBuilder();
         log.append(userComment);
         log.append(LINE_SEPARATOR);
+        log.append(LINE_SEPARATOR);
         log.append(getDeviceInfo());
         log.append(LINE_SEPARATOR);
         log.append(getLogs());
+        log.append(LINE_SEPARATOR);
+        log.append(LINE_SEPARATOR);
+        log.append(userComment);
         
         sendIntent.putExtra(Intent.EXTRA_TEXT, log.toString());
         

@@ -104,6 +104,7 @@ public class Account {
 		prevent_tcp = false;
 		active = true;
 		
+		
 		cfg = new pjsua_acc_config();
 		pjsua.acc_config_default(cfg);
 		// Change the default ka interval to 40s

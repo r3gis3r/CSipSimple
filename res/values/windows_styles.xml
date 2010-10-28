@@ -29,6 +29,7 @@
 	</style>
 	<style name="CupcakeDialog" parent="android:Theme.Dialog">
 		<item name="android:windowAnimationStyle">@null</item>
+		<item name="android:windowBackground">@drawable/panel_background</item>
 	</style>
 	
 </resources>

@@ -30,6 +30,7 @@ import android.provider.CallLog;
 
 import com.csipsimple.models.Account;
 import com.csipsimple.models.Filter;
+import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 
 public class DBAdapter {
@@ -240,6 +241,10 @@ public class DBAdapter {
 	 */
 	public List<Account> getListAccounts(boolean activesOnly) {
 		ArrayList<Account> ret = new ArrayList<Account>();
+
+		if (SipService.creating) {
+			return ret;
+		}
 		try {
 			String whereClause = null;
 			String[] whereArgs = null;

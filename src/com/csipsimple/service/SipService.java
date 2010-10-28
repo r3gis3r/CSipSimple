@@ -490,6 +490,7 @@ public class SipService extends Service {
 
 	private Integer hasBeenHoldByGSM = null;
 	private SipNotifications notificationManager;
+	public static boolean creating = false;
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
@@ -730,7 +731,7 @@ public class SipService extends Service {
 		synchronized (creatingSipStack) {
 			// Ensure the stack is not already created or is being created
 			if (!created/* && !creating */) {
-				// creating = true;
+				creating  = true;
 				udpTranportId = null;
 				tcpTranportId = null;
 
@@ -823,7 +824,7 @@ public class SipService extends Service {
 						Log.e(THIS_FILE, "Fail to init pjsua with failure code " + status);
 						pjsua.csipsimple_destroy();
 						created = false;
-						// creating = false;
+						creating = false;
 						return;
 					}
 				}
@@ -839,7 +840,7 @@ public class SipService extends Service {
 						udpTranportId = createTransport(t, prefsWrapper.getUDPTransportPort());
 						if (udpTranportId == null) {
 							pjsua.csipsimple_destroy();
-							// creating = false;
+							creating = false;
 							created = false;
 							return;
 						}
@@ -858,7 +859,7 @@ public class SipService extends Service {
 						tcpTranportId = createTransport(t, prefsWrapper.getTCPTransportPort());
 						if (tcpTranportId == null) {
 							pjsua.csipsimple_destroy();
-							// creating = false;
+							creating = false;
 							created = false;
 							return;
 						}
@@ -874,7 +875,7 @@ public class SipService extends Service {
 
 						if (tlsTransportId == null) {
 							pjsua.csipsimple_destroy();
-							// creating = false;
+							creating = false;
 							created = false;
 							return;
 						}
@@ -897,7 +898,7 @@ public class SipService extends Service {
 						if (status != pjsuaConstants.PJ_SUCCESS) {
 							Log.e(THIS_FILE, "Fail to add media transport with failure code " + status);
 							pjsua.csipsimple_destroy();
-							// creating = false;
+							creating = false;
 							created = false;
 							return;
 						}
@@ -910,7 +911,7 @@ public class SipService extends Service {
 				if (status != pjsua.PJ_SUCCESS) {
 					Log.e(THIS_FILE, "Fail to start pjsip " + status);
 					pjsua.csipsimple_destroy();
-					// creating = false;
+					creating = false;
 					created = false;
 					return;
 				}
@@ -922,8 +923,8 @@ public class SipService extends Service {
 				created = true;
 
 				// Add accounts
+				creating = false;
 				addAllAccounts();
-				// creating = false;
 			}
 		}
 	}

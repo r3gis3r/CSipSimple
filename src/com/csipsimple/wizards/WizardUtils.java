@@ -49,6 +49,7 @@ import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.Sipgate;
+import com.csipsimple.wizards.impl.VPhone;
 
 
 public class WizardUtils {
@@ -190,7 +191,7 @@ public class WizardUtils {
 				Sipgate.class));
 		WIZARDS_DICT.put("PENNYTEL", new WizardInfo("PENNYTEL", "Pennytel", 
 				R.drawable.ic_wizard_pennytel, 10, 
-				new Locale[]{new Locale("AU")}, false, false, 
+				new Locale[]{new Locale("EN", "au")}, false, false, 
 				Pennytel.class));
 		WIZARDS_DICT.put("MAGICJACK", new WizardInfo("MAGICJACK", "MagicJack", 
 				R.drawable.ic_wizard_magicjack, 20, 
@@ -202,9 +203,12 @@ public class WizardUtils {
 				OnSip.class));
 		WIZARDS_DICT.put("IINET", new WizardInfo("IINET", "iinet", 
 				R.drawable.ic_wizard_iinet, 5, 
-				new Locale[]{new Locale("AU")}, false, false, 
+				new Locale[]{new Locale("EN", "au")}, false, false, 
 				IiNet.class));
-
+		WIZARDS_DICT.put("VPHONE", new WizardInfo("VPHONE", "VTel", 
+				R.drawable.ic_wizard_vphone, 5, 
+				new Locale[]{new Locale("EN", "au")}, false, false, 
+				VPhone.class));
 		
 		initDone = true;
 	}

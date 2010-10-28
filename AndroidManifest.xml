@@ -48,8 +48,8 @@
 		<service android:name=".service.DownloadLibService"></service>
 		
 		<!-- Help -->
-		<activity android:name=".ui.help.Help" android:theme="@style/CupcakeDialog" android:label="@string/help"></activity>
-		<activity android:name=".ui.help.Faq" android:theme="@style/CupcakeDialog" android:label="@string/faq"></activity>
+		<activity android:name=".ui.help.Help" android:theme="@style/CupcakeDialog"></activity>
+		<activity android:name=".ui.help.Faq" android:theme="@style/CupcakeDialog"></activity>
 		
 		<!-- Accounts -->
 		<activity android:name=".ui.AccountsList" android:label="@string/accounts"></activity>

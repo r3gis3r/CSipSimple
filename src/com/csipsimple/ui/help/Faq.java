@@ -22,9 +22,13 @@ import com.csipsimple.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class Faq extends Activity {
 	private final static String FAQ_URL = "http://code.google.com/p/csipsimple/wiki/FAQ#Summary";
@@ -33,7 +37,18 @@ public class Faq extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.help);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.faq);
+		
+
+		//Set window size
+		LayoutParams params = getWindow().getAttributes();
+		params.width = LayoutParams.FILL_PARENT;
+		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+		
+		//Set title
+		((TextView) findViewById(R.id.my_title)).setText(R.string.faq);
+		((ImageView) findViewById(R.id.my_icon)).setImageResource(android.R.drawable.ic_menu_info_details);
 		
 	    WebView webView = (WebView) findViewById(R.id.webview);
 	    webView.getSettings().setJavaScriptEnabled(true);

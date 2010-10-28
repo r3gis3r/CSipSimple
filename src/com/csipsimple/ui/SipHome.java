@@ -43,7 +43,7 @@ import android.widget.Toast;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
-import com.csipsimple.ui.help.Faq;
+import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.prefs.MainPrefs;
 import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
@@ -270,7 +270,7 @@ public class SipHome extends TabActivity {
 	private void populateMenu(Menu menu) {
 		menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE, R.string.accounts).setIcon(R.drawable.ic_menu_accounts);
 		menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, R.string.prefs).setIcon(android.R.drawable.ic_menu_preferences);
-		menu.add(Menu.NONE, HELP_MENU, Menu.NONE, R.string.faq).setIcon(android.R.drawable.ic_menu_help);
+		menu.add(Menu.NONE, HELP_MENU, Menu.NONE, R.string.help).setIcon(android.R.drawable.ic_menu_help);
 		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, R.string.menu_quit_text).setIcon(R.drawable.ic_lock_power_off);
 
 	}
@@ -325,7 +325,7 @@ public class SipHome extends TabActivity {
 			}
 			return true;
 		case HELP_MENU:
-			startActivity(new Intent(this, Faq.class));
+			startActivity(new Intent(this, Help.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

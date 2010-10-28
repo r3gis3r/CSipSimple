@@ -63,6 +63,7 @@ public class PreferencesWrapper {
 	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
 	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
+	public static final String LOG_LEVEL = "log_level";
 	
 	//NETWORK
 	public static final String ENABLE_STUN = "enable_stun";
@@ -89,6 +90,7 @@ public class PreferencesWrapper {
 	{
 		
 		put(USER_AGENT, "CSipSimple");
+		put(LOG_LEVEL, "1");
 		
 		put(USE_SRTP, "0");
 		put(UDP_TRANSPORT_PORT, "5060");
@@ -687,9 +689,8 @@ public class PreferencesWrapper {
 	}
 	
 	public int getLogLevel() {
-		int defaultValue = 1;
 		int prefsValue = 1;
-		String logLevel = prefs.getString("log_level", String.valueOf(defaultValue));
+		String logLevel = getPreferenceStringValue(LOG_LEVEL);
 		try {
 			prefsValue = Integer.parseInt(logLevel);
 		}catch(NumberFormatException e) {
@@ -698,7 +699,7 @@ public class PreferencesWrapper {
 		if(prefsValue <= 5 && prefsValue >= 1) {
 			return prefsValue;
 		}
-		return defaultValue;
+		return 1;
 	}
 
 	public final static int HEADSET_ACTION_CLEAR_CALL = 0;

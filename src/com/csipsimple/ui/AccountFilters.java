@@ -143,13 +143,13 @@ public class AccountFilters extends ListActivity {
 			ImageView icon = (ImageView) view.findViewById(R.id.action_icon);
 			switch (filter.action) {
 			case Filter.ACTION_CAN_CALL:
-				icon.setImageResource(R.drawable.ic_menu_stop);
+				icon.setImageResource(R.drawable.ic_menu_goto);
 				break;
 			case Filter.ACTION_CANT_CALL:
-				icon.setImageResource(R.drawable.ic_menu_prevent);
+				icon.setImageResource(R.drawable.ic_menu_blocked_user);
 				break;
 			case Filter.ACTION_REPLACE:
-				icon.setImageResource(R.drawable.ic_menu_rewrite);
+				icon.setImageResource(android.R.drawable.ic_menu_edit);
 				break;
 			case Filter.ACTION_DIRECTLY_CALL:
 				icon.setImageResource(R.drawable.ic_menu_answer_call);
