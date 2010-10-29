@@ -76,6 +76,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name=".ui.prefs.PrefsSecurity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		
 
 		<!-- Wizards -->

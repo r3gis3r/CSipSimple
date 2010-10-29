@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+	
+	
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+		<PreferenceCategory android:title="@string/tls" android:key="tls">
+			<CheckBoxPreference android:title="@string/enable_tls"
+				android:summary="@string/enable_tls_desc"
+				android:key="enable_tls" android:defaultValue="false"></CheckBoxPreference>
+			<EditTextPreference android:key="network_tls_transport_port"
+				android:title="@string/network_tls_transport_port"
+				android:numeric="integer"
+				android:summary="@string/network_tls_transport_port_desc"
+				android:defaultValue="5061" android:dependency="enable_tls"></EditTextPreference>
+			<EditTextPreference android:key="network_tls_server_name"
+				android:title="@string/network_tls_server_name"
+				android:summary="@string/network_tls_server_name_desc"
+				android:defaultValue="" android:dependency="enable_tls"></EditTextPreference>
+			<EditTextPreference android:key="ca_list_file"
+				android:title="@string/ca_list_file"
+				android:summary="@string/ca_list_file_desc"
+				android:defaultValue="" android:dependency="enable_tls"></EditTextPreference>
+			<EditTextPreference android:key="cert_file"
+				android:title="@string/cert_file"
+				android:summary="@string/cert_file_desc"
+				android:defaultValue="" android:dependency="enable_tls"></EditTextPreference>
+			<EditTextPreference android:key="privkey_file"
+				android:title="@string/privkey_file"
+				android:summary="@string/privkey_file_desc"
+				android:defaultValue="" android:dependency="enable_tls"></EditTextPreference>
+			<EditTextPreference android:key="tls_password"
+				android:title="@string/tls_password"
+				android:summary="@string/tls_password_desc"
+				android:defaultValue="" android:dependency="enable_tls"></EditTextPreference>
+			
+			<CheckBoxPreference android:title="@string/verify_server"
+				android:summary="@string/verify_server_desc"
+				android:key="tls_verify_server" android:defaultValue="false"></CheckBoxPreference>
+			<CheckBoxPreference android:title="@string/verify_client"
+				android:summary="@string/verify_client_desc"
+				android:key="tls_verify_client" android:defaultValue="false"></CheckBoxPreference>
+				
+		</PreferenceCategory>
+		<PreferenceCategory android:title="@string/secure_media" android:key="secure_media">
+			<ListPreference android:title="@string/use_srtp" android:key="use_srtp"
+					android:summary="@string/use_srtp_desc"
+					android:defaultValue="0"
+					android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"></ListPreference>
+		</PreferenceCategory>
+</PreferenceScreen>

@@ -248,10 +248,11 @@ public class SipHome extends TabActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
-	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0 && !Compatibility.isCompatible(5)) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK 
+	    		&& event.getRepeatCount() == 0
+	    		&& !Compatibility.isCompatible(5)) {
 	    	onBackPressed();
-	    	ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
-	    	return (networks.size() == 0);
+	    	
 	    }
 	    return super.onKeyDown(keyCode, event);
 	}

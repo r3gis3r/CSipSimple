@@ -123,20 +123,14 @@
 			android:key="use_other_out"></CheckBoxPreference>
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/secure_transport" android:key="secure_transport">
-		<CheckBoxPreference android:title="@string/enable_tls"
-			android:summary="@string/enable_tls_desc"
-			android:key="enable_tls" android:defaultValue="false"></CheckBoxPreference>
-		<EditTextPreference android:key="network_tls_transport_port"
-			android:title="@string/network_tls_transport_port"
-			android:numeric="integer"
-			android:summary="@string/network_tls_transport_port_desc"
-			android:defaultValue="5061"></EditTextPreference>
-			
-		<ListPreference android:title="@string/use_srtp" android:key="use_srtp"
-				android:summary="@string/use_srtp_desc"
-				android:defaultValue="0"
-				android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"></ListPreference>
+	<PreferenceCategory android:title="@string/secure_transport" >
+		
 	</PreferenceCategory>
+	
+	<PreferenceScreen android:title="@string/secure_transport" android:summary="@string/secure_transport_desc" android:key="secure_transport">
+			<intent android:action="android.intent.action.MAIN"
+                   android:targetPackage="com.csipsimple"
+                   android:targetClass="com.csipsimple.ui.prefs.PrefsSecurity" ></intent>
+		</PreferenceScreen>
 	
 </PreferenceScreen>

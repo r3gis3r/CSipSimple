@@ -18,9 +18,13 @@
 package com.csipsimple.ui.help;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -30,6 +34,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.service.ISipService;
+import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CollectLogs;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -39,6 +45,18 @@ public class Help extends Activity implements OnClickListener {
 	
 	private static final String THIS_FILE = "Help";
 	private PreferencesWrapper prefsWrapper;
+	
+	private ISipService sipService = null;
+	
+	private ServiceConnection restartServiceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceDisconnected(ComponentName name) {}
+		
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder aService) {
+			sipService = ISipService.Stub.asInterface(aService);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +78,14 @@ public class Help extends Activity implements OnClickListener {
 		((ImageView) findViewById(R.id.my_icon)).setImageResource(android.R.drawable.ic_menu_help);
 		
 		bindView();
-
+		
+		//Attach to the service
+		Intent serviceIntent =  new Intent(this, SipService.class);
+		try {
+			bindService(serviceIntent, restartServiceConnection, 0);
+		}catch(Exception e) {
+			
+		}
 	}
 	
 	private void bindView() {
@@ -84,6 +109,20 @@ public class Help extends Activity implements OnClickListener {
 		}
 	}
 	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		
+		sipService = null;
+		if(restartServiceConnection != null) {
+			try {
+				unbindService(restartServiceConnection);
+			}catch(Exception e) {
+				//Nothing to do service was just not binded
+			}
+		}
+	}
+	
 	private boolean isRecording() {
 		return (prefsWrapper.getLogLevel() >= 3);
 	}
@@ -98,8 +137,13 @@ public class Help extends Activity implements OnClickListener {
 			if (!isRecording()) {
 				prefsWrapper.setPreferenceStringValue(PreferencesWrapper.LOG_LEVEL, "4");
 				Log.setLogLevel(4);
-				//TODO : set log level of native stack....
-				//TODO : toaster that explain user that he should now try to reproduce the bug...
+				if(sipService !=null ) {
+					try {
+						sipService.askThreadedRestart();
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Impossible to restart sip", e);
+					}
+				}
 			} else {
 				prefsWrapper.setPreferenceStringValue(PreferencesWrapper.LOG_LEVEL, "1");
 				try {

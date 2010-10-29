@@ -305,6 +305,19 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		return super.onKeyUp(keyCode, event);
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK : {
+			onBackPressed();
+			//return true;
+			break;
+		}
+		}
+
+		return super.onKeyUp(keyCode, event);
+	}
+	
 	public void onBackPressed() {
 		if(contextToBindTo != null) {
 			((SipHome) contextToBindTo).onBackPressed();

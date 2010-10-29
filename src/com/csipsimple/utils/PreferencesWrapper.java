@@ -49,7 +49,6 @@ public class PreferencesWrapper {
 	public static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
 	public static final String USER_AGENT = "user_agent";
 	public static final String RTP_PORT = "network_rtp_port";
-	public static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
 	public static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
 	public static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
 	public static final String IS_ADVANCED_USER = "is_advanced_user";
@@ -65,17 +64,29 @@ public class PreferencesWrapper {
 	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
 	public static final String LOG_LEVEL = "log_level";
 	
-	//NETWORK
+	// NETWORK
 	public static final String ENABLE_STUN = "enable_stun";
 	public static final String STUN_SERVER = "stun_server";
-	public static final String USE_SRTP = "use_srtp";
 	public static final String USE_IPV6 = "use_ipv6";
-	public static final String ENABLE_TLS = "enable_tls";
 	public static final String ENABLE_UDP = "enable_udp";
 	public static final String ENABLE_TCP = "enable_tcp";
 	public static final String LOCK_WIFI = "lock_wifi";
 	public static final String ENABLE_DNS_SRV = "enable_dns_srv";
 	
+	// SECURE
+	public static final String ENABLE_TLS = "enable_tls";
+	public static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
+	public static final String TLS_SERVER_NAME = "network_tls_server_name";
+	public static final String CA_LIST_FILE = "ca_list_file";
+	public static final String CERT_FILE = "cert_file";
+	public static final String PRIVKEY_FILE = "privkey_file";
+	public static final String TLS_PASSWORD = "tls_password";
+	public static final String TLS_VERIFY_SERVER = "tls_verify_server";
+	public static final String TLS_VERIFY_CLIENT = "tls_verify_client";
+	
+	
+	
+	public static final String USE_SRTP = "use_srtp";
 	
 	
 	private static final String THIS_FILE = "PreferencesWrapper";
@@ -104,6 +115,12 @@ public class PreferencesWrapper {
 		
 		put(STUN_SERVER, "stun.counterpath.com");
 		put(TURN_SERVER, "");
+		put(TLS_SERVER_NAME, "");
+		put(CA_LIST_FILE, "");
+		put(CERT_FILE, "");
+		put(PRIVKEY_FILE, "");
+		put(TLS_PASSWORD, "");
+		
 	}};
 	
 	
@@ -125,6 +142,9 @@ public class PreferencesWrapper {
 		put(USE_SOFT_VOLUME, false);
 		
 		put(PREVENT_SCREEN_ROTATION, true);
+		
+		put(TLS_VERIFY_SERVER, false);
+		put(TLS_VERIFY_CLIENT, false);
 		
 		//Network
 		put("use_wifi_in", true);

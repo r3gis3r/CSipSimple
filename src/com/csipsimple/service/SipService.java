@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_status_code;
+import org.pjsip.pjsua.pjsip_tls_setting;
 import org.pjsip.pjsua.pjsip_transport_type_e;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
@@ -65,6 +66,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.KeyCharacterMap;
 import android.widget.Toast;
 
@@ -981,6 +983,36 @@ public class SipService extends Service {
 		int status;
 		pjsua.transport_config_default(cfg);
 		cfg.setPort(port);
+		if(type.equals(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS)) {
+			pjsip_tls_setting tlsSetting = cfg.getTls_setting();
+			
+			String serverName = prefsWrapper.getPreferenceStringValue(PreferencesWrapper.TLS_SERVER_NAME);
+			if (!TextUtils.isEmpty(serverName)) {
+				tlsSetting.setServer_name(pjsua.pj_str_copy(serverName));
+			}
+			String caListFile = prefsWrapper.getPreferenceStringValue(PreferencesWrapper.CA_LIST_FILE);
+			if (!TextUtils.isEmpty(caListFile)) {
+				tlsSetting.setCa_list_file(pjsua.pj_str_copy(caListFile));
+			}
+			String certFile = prefsWrapper.getPreferenceStringValue(PreferencesWrapper.CERT_FILE);
+			if (!TextUtils.isEmpty(certFile)) {
+				tlsSetting.setCert_file(pjsua.pj_str_copy(certFile));
+			}
+			String privKey = prefsWrapper.getPreferenceStringValue(PreferencesWrapper.PRIVKEY_FILE);
+			if (!TextUtils.isEmpty(privKey)) {
+				tlsSetting.setPrivkey_file(pjsua.pj_str_copy(privKey));
+			}
+			String tlsPwd = prefsWrapper.getPreferenceStringValue(PreferencesWrapper.TLS_PASSWORD);
+			if (!TextUtils.isEmpty(tlsPwd)) {
+				tlsSetting.setPassword(pjsua.pj_str_copy(tlsPwd));
+			}
+			boolean checkServer = prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.TLS_VERIFY_SERVER);
+			tlsSetting.setVerify_server(checkServer ? 1 : 0);
+			boolean checkClient = prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.TLS_VERIFY_CLIENT);
+			tlsSetting.setVerify_client(checkClient ? 1 : 0);
+			
+			
+		}
 
 		status = pjsua.transport_create(type, cfg, tId);
 		if (status != pjsuaConstants.PJ_SUCCESS) {

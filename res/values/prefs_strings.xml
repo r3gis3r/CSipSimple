@@ -41,8 +41,6 @@
 <string name="network_udp_transport_port_desc">Port number to bind locally</string>
 <string name="network_tcp_transport_port">TCP Port</string>
 <string name="network_tcp_transport_port_desc">Port number to bind locally</string>
-<string name="network_tls_transport_port">TLS Port</string>
-<string name="network_tls_transport_port_desc">Port number to bind locally</string>
 <string name="network_rtp_port">RTP port</string>
 <string name="network_rtp_port_desc">Port for RTP ports range start</string>
 <string name="use_ipv6">Use IPv6</string>
@@ -51,9 +49,6 @@
 <string name="enable_dns_srv_desc">Use the application resolver to resolve DNS names</string>
 <string name="override_nameserver">Use a custom DNS</string>
 <string name="override_nameserver_desc">Left blank to retrieve DNS from Android</string>
-<string name="secure_transport">Secure transport</string>
-<string name="use_srtp">SRTP mode</string>
-<string name="use_srtp_desc">Mode for Secure RTP</string>
 <string name="nat_traversal">NAT traversal</string>
 <string name="enable_ice">Enable ICE</string>
 <string name="enable_ice_desc">Turn on ICE feature</string>
@@ -65,6 +60,32 @@
 <string name="enable_stun_desc">Turn on STUN feature</string>
 <string name="stun_server">STUN server</string>
 <string name="stun_server_desc">STUN server (HOST:PORT)</string>
+
+<!-- Security -->
+<string name="tls">TLS</string>
+<string name="secure_transport">Secure transport</string>
+<string name="secure_transport_desc">Security mechanism for SIP and RTP</string>
+<string name="secure_media">Secure media</string>
+
+<string name="network_tls_transport_port">TLS Port</string>
+<string name="network_tls_transport_port_desc">Port number to bind locally</string>
+<string name="network_tls_server_name">TLS server name</string>
+<string name="network_tls_server_name_desc">For multi-hosting server (optional)</string>
+<string name="ca_list_file">TLS CA file</string>
+<string name="ca_list_file_desc">For example /sdcard/CSipSimple/myAuthority.ca</string>
+<string name="cert_file">TLS certificate file</string>
+<string name="cert_file_desc">For example /sdcard/CSipSimple/myCert.crt</string>
+<string name="privkey_file">TLS private key file</string>
+<string name="privkey_file_desc">For example /sdcard/CSipSimple/myKey.key</string>
+<string name="tls_password">TLS password</string>
+<string name="tls_password_desc">TLS password to private key file</string>
+<string name="verify_server">Check server</string>
+<string name="verify_server_desc">Verify server\'s certificate</string>
+<string name="verify_client">Check client</string>
+<string name="verify_client_desc">Verify client\'s certificate</string>
+
+<string name="use_srtp">SRTP mode</string>
+<string name="use_srtp_desc">Mode for Secure RTP</string>
 
 <!-- Media -->
 
