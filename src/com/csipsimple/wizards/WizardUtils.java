@@ -40,6 +40,7 @@ import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.IiNet;
+import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
 import com.csipsimple.wizards.impl.MagicJack;
 import com.csipsimple.wizards.impl.OnSip;
@@ -141,6 +142,10 @@ public class WizardUtils {
 				R.drawable.ic_wizard_sip2sip, 10, 
 				new Locale[]{}, false, true, 
 				Sip2Sip.class));
+		WIZARDS_DICT.put("IPTEL", new WizardInfo("IPTEL", "IpTel", 
+				R.drawable.ic_wizard_iptel, 30, 
+				new Locale[]{}, false, true, 
+				IpTel.class));
 		WIZARDS_DICT.put("PBXES", new WizardInfo("PBXES", "Pbxes.org", 
 				R.drawable.ic_wizard_pbxes, 20, 
 				new Locale[]{}, false, true, 
@@ -172,7 +177,6 @@ public class WizardUtils {
 					new Locale("FR", "ch"),
 					Locale.CANADA,
 					Locale.US,
-					//TODO : probably not fr... but no so important since only country is taken into account later
 					new Locale("FR", "ma"),
 					new Locale("FR", "dz"),
 					new Locale("FR", "tn"),

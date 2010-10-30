@@ -30,6 +30,7 @@ import android.net.wifi.WifiManager.WifiLock;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
+import android.view.accessibility.AccessibilityManager;
 
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
@@ -76,6 +77,9 @@ public class MediaManager {
 
 	private AudioFocusWrapper audioFocusWrapper;
 
+
+	private AccessibilityManager accessibilityManager;
+
 	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
 
@@ -93,6 +97,7 @@ public class MediaManager {
 	public MediaManager(SipService aService) {
 		service = aService;
 		audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
+		accessibilityManager = (AccessibilityManager) service.getSystemService(Context.ACCESSIBILITY_SERVICE);
 		ringer = new Ringer(service);
 		
 		mediaStateChangedIntent = new Intent(SipService.ACTION_SIP_MEDIA_CHANGED);
@@ -152,10 +157,12 @@ public class MediaManager {
 		
 		//Set stream solo/volume/focus
 		int inCallStream = Compatibility.getInCallStream();
-		audioManager.setStreamSolo(inCallStream, true);
-		setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
+		if(!accessibilityManager.isEnabled()) {
+			audioManager.setStreamSolo(inCallStream, true);
+		}
 		audioFocusWrapper.focus();
 		
+		setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
 		
 		
 		//LOCKS
@@ -261,8 +268,9 @@ public class MediaManager {
 		audioManager.setMicrophoneMute(false);
 
 		int inCallStream = Compatibility.getInCallStream();
-		audioManager.setStreamSolo(inCallStream, false);
 		setStreamVolume(inCallStream, savedVolume, 0);
+		
+		audioManager.setStreamSolo(inCallStream, false);
 		audioManager.setMode(savedMode);
 		
 		if(wifiLock != null && wifiLock.isHeld()) {

@@ -54,6 +54,7 @@ public class AudioFocus8 {
 
 	
 	public void focus() {
+		Log.d(THIS_FILE, "Focus again "+isFocused);
 		if(!isFocused) {
 			HeadsetButtonReceiver.setService(SipService.getUAStateReceiver());
 			audioManager.registerMediaButtonEventReceiver(headsetButtonReceiverName);
@@ -67,8 +68,8 @@ public class AudioFocus8 {
 		if(isFocused) {
 			HeadsetButtonReceiver.setService(null);
 			audioManager.unregisterMediaButtonEventReceiver(headsetButtonReceiverName);
-		//	int status = audioManager.abandonAudioFocus(focusChangedListener);
-		//	Log.d(THIS_FILE, "Status is "+status);
+			//TODO : when switch to speaker -> failure to re-gain focus then cause music player will wait before reasking focus
+			audioManager.abandonAudioFocus(focusChangedListener);
 			isFocused = false;
 		}
 	}
