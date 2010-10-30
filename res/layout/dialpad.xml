@@ -23,23 +23,48 @@
 	android:orientation="vertical" >
 
 	<LinearLayout style="@style/DialPadRow">
-		<ImageButton android:id="@+id/button1" android:src="@drawable/dial_num_1_no_vm" style="@style/DialPadButton"  />
-		<ImageButton android:id="@+id/button2" android:src="@drawable/dial_num_2" style="@style/DialPadButton" />
-		<ImageButton android:id="@+id/button3" android:src="@drawable/dial_num_3" style="@style/DialPadButton"  />
+		<ImageButton android:id="@+id/button1" android:src="@drawable/dial_num_1_no_vm" style="@style/DialPadButton" 
+            android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_one"
+		 />
+		<ImageButton android:id="@+id/button2" android:src="@drawable/dial_num_2" style="@style/DialPadButton" 
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_two"/>
+		<ImageButton android:id="@+id/button3" android:src="@drawable/dial_num_3" style="@style/DialPadButton"  
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_three"/>
 	</LinearLayout>
 	<LinearLayout style="@style/DialPadRow">
-		<ImageButton android:id="@+id/button4" android:src="@drawable/dial_num_4" style="@style/DialPadButton" />
-		<ImageButton android:id="@+id/button5" android:src="@drawable/dial_num_5" style="@style/DialPadButton" />
-		<ImageButton android:id="@+id/button6" android:src="@drawable/dial_num_6" style="@style/DialPadButton" />
+		<ImageButton android:id="@+id/button4" android:src="@drawable/dial_num_4" style="@style/DialPadButton" 
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_four"/>
+		<ImageButton android:id="@+id/button5" android:src="@drawable/dial_num_5" style="@style/DialPadButton" 
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_five"/>
+		<ImageButton android:id="@+id/button6" android:src="@drawable/dial_num_6" style="@style/DialPadButton" 
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_six"/>
 	</LinearLayout>
 	<LinearLayout style="@style/DialPadRow">
-		<ImageButton android:id="@+id/button7"  android:src="@drawable/dial_num_7" style="@style/DialPadButton"/>
-		<ImageButton android:id="@+id/button8" android:src="@drawable/dial_num_8" style="@style/DialPadButton" />
-		<ImageButton android:id="@+id/button9" android:src="@drawable/dial_num_9" style="@style/DialPadButton" />
+		<ImageButton android:id="@+id/button7"  android:src="@drawable/dial_num_7" style="@style/DialPadButton"
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_seven"/>
+		<ImageButton android:id="@+id/button8" android:src="@drawable/dial_num_8" style="@style/DialPadButton" 
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_eight"/>
+		<ImageButton android:id="@+id/button9" android:src="@drawable/dial_num_9" style="@style/DialPadButton" 
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_nine"/>
 	</LinearLayout>
 	<LinearLayout style="@style/DialPadRow">
-		<ImageButton android:id="@+id/buttonstar" android:src="@drawable/dial_num_star" style="@style/DialPadButton" />
-		<ImageButton android:id="@+id/button0" android:src="@drawable/dial_num_0" style="@style/DialPadButton" />
-		<ImageButton android:id="@+id/buttonpound" android:src="@drawable/dial_num_pound" style="@style/DialPadButton"/>
+		<ImageButton android:id="@+id/buttonstar" android:src="@drawable/dial_num_star" style="@style/DialPadButton" 
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_star"/>
+		<ImageButton android:id="@+id/button0" android:src="@drawable/dial_num_0" style="@style/DialPadButton" 
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_zero"/>
+		<ImageButton android:id="@+id/buttonpound" android:src="@drawable/dial_num_pound" style="@style/DialPadButton"
+			android:soundEffectsEnabled="false"
+            android:contentDescription="@string/description_image_button_pound"/>
 	</LinearLayout>
 </LinearLayout>

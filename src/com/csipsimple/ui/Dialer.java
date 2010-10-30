@@ -346,7 +346,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			if (TextUtils.isEmpty(userName)) {
 				return;
 			}
-			
+			userName = userName.replaceAll("[ \t]", "");
 			Account acc = accountChooserButton.getSelectedAccount();
 			if (acc != null) {
 				accountToUse = acc.id;

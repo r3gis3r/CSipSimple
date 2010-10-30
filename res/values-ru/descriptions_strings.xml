@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <string name="description_image_button_one" msgid="1740638037139856139">"один"</string>
+    <string name="description_image_button_two" msgid="5882638439003731308">"два"</string>
+    <string name="description_image_button_three" msgid="8709731759376015180">"три"</string>
+    <string name="description_image_button_four" msgid="3530239685642246130">"четыре"</string>
+    <string name="description_image_button_five" msgid="1182465427501188413">"пять"</string>
+    <string name="description_image_button_six" msgid="2093656269261415475">"шесть"</string>
+    <string name="description_image_button_seven" msgid="2450357020447676481">"семь"</string>
+    <string name="description_image_button_eight" msgid="6969435115163287801">"восемь"</string>
+    <string name="description_image_button_nine" msgid="7857248695662558323">"девять"</string>
+    <string name="description_image_button_star" msgid="3365919907520767866">"пометить"</string>
+    <string name="description_image_button_zero" msgid="4133108949401820710">"нуль"</string>
+    <string name="description_image_button_pound" msgid="3039765597595889230">"решетка"</string>
+    <string name="description_dial_button" msgid="1274091017188142646">"набор номера"</string>
+    <string name="description_delete_button" msgid="6263102114033407382">"удаление последнего символа"</string>
+    <string name="description_digits_edittext" msgid="8760207516497016437">"набираемый номер"</string>
+</resources>

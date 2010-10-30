@@ -30,6 +30,7 @@
 			android:layout_weight="1" android:maxLines="1" android:scrollHorizontally="true"
 			android:textSize="28sp" android:freezesText="true" android:background="@android:color/transparent"
 			android:layout_margin="0dip"
+			android:contentDescription="@string/description_digits_edittext"
 			android:focusableInTouchMode="true" android:editable="true" android:cursorVisible="false" />
 		<com.csipsimple.widgets.AccountChooserButton android:layout_width="wrap_content"
 			android:layout_weight="0" android:id="@+id/accountChooserButton"
@@ -57,11 +58,13 @@
 			android:background="@drawable/btn_dial_domain" android:src="@drawable/ic_tab_selected_dialer" />
 
 		<ImageButton android:layout_height="fill_parent" android:layout_gravity="center"
+			android:contentDescription="@string/description_dial_button"
 			android:layout_weight="1" android:state_enabled="false" android:background="@drawable/btn_dial_action"
 			android:src="@drawable/ic_dial_action_call" android:layout_width="fill_parent" android:scaleType="center"
 			android:id="@+id/dialButton" />
 
 		<ImageButton android:id="@+id/deleteButton" android:layout_width="87dip"
+			android:contentDescription="@string/description_delete_button"
 			android:layout_height="fill_parent" android:layout_gravity="center" android:state_enabled="false"
 			android:src="@drawable/ic_dial_action_delete" android:background="@drawable/btn_dial_delete" />
 	</LinearLayout>
