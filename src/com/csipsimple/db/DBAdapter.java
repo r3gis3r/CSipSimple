@@ -22,7 +22,9 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -242,9 +244,6 @@ public class DBAdapter {
 	public List<Account> getListAccounts(boolean activesOnly) {
 		ArrayList<Account> ret = new ArrayList<Account>();
 
-		if (SipService.creating) {
-			return ret;
-		}
 		try {
 			String whereClause = null;
 			String[] whereArgs = null;
@@ -288,11 +287,13 @@ public class DBAdapter {
 		try {
 			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
 					Account.FIELD_ID + "=" + accountId, null, null, null, null);
+			
+			
 			int numRows = c.getCount();
 			if(numRows > 0){
 				c.moveToFirst();
-				
-				Account account = new Account();
+				Account account = null;
+				account = new Account();
 				account.createFromDb(c);
 				c.close();
 				return account;
@@ -305,6 +306,49 @@ public class DBAdapter {
 		
 		return null;
 	}
+	
+	public ContentValues getAccountValues(long accountId){
+		if(accountId <0){
+			return null;
+		}
+		try {
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
+					Account.FIELD_ID + "=" + accountId, null, null, null, null);
+			
+			
+			int numRows = c.getCount();
+			if(numRows > 0){
+				c.moveToFirst();
+				ContentValues args = new ContentValues();
+				DatabaseUtils.cursorRowToContentValues(c, args);
+				c.close();
+				return args;
+				
+			}
+			c.close();
+		} catch (SQLException e) {
+			Log.e("Exception on query", e.toString());
+		}
+		
+		return null;
+	}
+	
+	
+	public boolean setAccountActive(long accountId, boolean active) {
+		ContentValues cv = new ContentValues();
+		cv.put(Account.FIELD_ACTIVE, active?1:0);
+		boolean result = db.update(ACCOUNTS_TABLE_NAME, cv,
+				Account.FIELD_ID + "=" + accountId, null) > 0;
+		
+		if(result) {
+			Intent publishIntent = new Intent(SipService.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
+			publishIntent.putExtra(SipService.EXTRA_ACCOUNT_ID, accountId);
+			publishIntent.putExtra(SipService.EXTRA_ACTIVATE, active);
+			context.sendBroadcast(publishIntent);
+		}
+		return result;
+	}
+	
 	
 	public int getNbrOfAccount() {
 		return getNbrOfAccount(false);

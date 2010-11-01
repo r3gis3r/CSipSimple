@@ -142,7 +142,11 @@ public class UAStateReceiver extends Callback {
 			pjsua.conf_connect(info.getConf_slot(), 0);
 			pjsua.conf_connect(0, info.getConf_slot());
 			pjsua.conf_adjust_tx_level(0, service.prefsWrapper.getSpeakerLevel());
-			pjsua.conf_adjust_rx_level(0, service.prefsWrapper.getMicLevel());
+			float micLevel = service.prefsWrapper.getMicLevel();
+			if(SipService.mediaManager != null && SipService.mediaManager.isUserWantMicrophoneMute()) {
+				micLevel = 0;
+			}
+			pjsua.conf_adjust_rx_level(0, micLevel);
 			
 			
 		}

@@ -304,7 +304,8 @@ public class OutgoingCallChooser extends ListActivity {
 				accountInfo = null;
 			}
 			if (accountInfo != null && accountInfo.isActive()) {
-				if (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+				if ( (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) ||
+						accountInfo.getWizard().equalsIgnoreCase("LOCAL") ) {
 					try {
 						String phoneNumber = number;
 						String toCall = account.rewritePhoneNumber(phoneNumber, database);
@@ -337,7 +338,8 @@ public class OutgoingCallChooser extends ListActivity {
 				accountInfo = null;
 			}
 			if (accountInfo != null && accountInfo.isActive()) {
-				if (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+				if ( (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) ||
+						accountInfo.getWizard().equalsIgnoreCase("LOCAL") ) {
 					try {
 						String phoneNumber = number;
 						String toCall = account.rewritePhoneNumber(phoneNumber, database);

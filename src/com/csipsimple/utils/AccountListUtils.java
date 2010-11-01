@@ -60,8 +60,14 @@ public class AccountListUtils {
 					accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 					accountDisplay.statusColor = resources.getColor(R.color.account_unregistered);
 					accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
-
-					if (accountInfo.getPjsuaId() >= 0) {
+					
+					if(accountInfo.getWizard().equalsIgnoreCase("LOCAL")) {
+						// Green
+						accountDisplay.statusColor = resources.getColor(R.color.account_valid);
+						accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_on;
+						accountDisplay.statusLabel = context.getString(R.string.acct_registered);
+						accountDisplay.availableForCalls = true;
+					}else if (accountInfo.getPjsuaId() >= 0) {
 						String pjStat = accountInfo.getStatusText();	// Used only on error status message
 						pjsip_status_code statusCode = accountInfo.getStatusCode();
 						if (statusCode == pjsip_status_code.PJSIP_SC_OK) {

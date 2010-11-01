@@ -474,14 +474,15 @@ public class AccountsList extends Activity implements OnItemClickListener {
 				return;
 			}
 			tagView.activeCheckbox.toggle();
+			
+			
 			boolean isActive = tagView.activeCheckbox.isChecked();
 			
 			//Update database and reload accounts
 			database.open();
-			account.active = isActive;
-			database.updateAccount(account);
+			database.setAccountActive(account.id, isActive);
 			database.close();
-			reloadAsyncAccounts(account.id, account.active?1:0);
+		//	reloadAsyncAccounts(account.id, account.active?1:0);
 			
 			//Update visual
 			tagView.barOnOff.setImageResource(account.active?R.drawable.ic_indicator_on : R.drawable.ic_indicator_off);

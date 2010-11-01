@@ -84,6 +84,8 @@ public class SipService extends Service {
 
 	public static final String INTENT_SIP_CONFIGURATION = "com.csipsimple.service.SipConfiguration";
 	public static final String INTENT_SIP_SERVICE = "com.csipsimple.service.SipService";
+	public static final String INTENT_SIP_ACCOUNT_ACTIVATE = "com.csipsimple.accounts.activate";
+	
 	static boolean created = false;
 	// static boolean creating = false;
 	private static final String THIS_FILE = "SIP SRV";
@@ -98,10 +100,11 @@ public class SipService extends Service {
 	public static final String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
 	public static final String ACTION_SIP_DIALER = "com.csipsimple.phone.action.DIALER";
 	public static final String ACTION_SIP_CALLLOG = "com.csipsimple.phone.action.CALLLOG";
+	public static final String ACTION_SIP_ACCOUNT_ACTIVE_CHANGED = "com.csipsimple.service.ACCOUNT_ACTIVE_CHANGED";
 	// EXTRAS
 	public static final String EXTRA_CALL_INFO = "call_info";
-	
-
+	public static final String EXTRA_ACCOUNT_ID = "acc_id";
+	public static final String EXTRA_ACTIVATE = "activate";
 	
 
 	public static final String STACK_FILE_NAME = "libpjsipjni.so";
@@ -510,7 +513,12 @@ public class SipService extends Service {
 			// which are not detected by the Connectivity changed broadcast.
 			//
 			Log.d(THIS_FILE, "ServiceDeviceStateReceiver");
-			if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+			String action = intent.getAction();
+			if(action == null) {
+				return;
+			}
+			
+			if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 				 //|| intent.getAction( ).equals(ACTION_DATA_STATE_CHANGED)
 				Log.d(THIS_FILE, "Connectivity or data state has changed");
 				// Thread it to be sure to not block the device if registration
@@ -524,6 +532,21 @@ public class SipService extends Service {
 					}
 				};
 				t.start();
+			}else if(action.equals(ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
+				final long accountId = intent.getLongExtra(EXTRA_ACCOUNT_ID, -1);
+				final boolean active = intent.getBooleanExtra(EXTRA_ACTIVATE, false);
+				//Should that be threaded?
+				if(accountId != -1) {
+					Account account;
+					synchronized (db) {
+						db.open();
+						account = db.getAccount(accountId);
+						db.close();
+					}
+					if(account != null) {
+						setAccountRegistration(account, active?1:0);
+					}
+				}
 			}
 		}
 	}
@@ -630,6 +653,8 @@ public class SipService extends Service {
 		// Autostart the stack
 		loadAndConnectStack();
 		if (hasSipStack) {
+		//	final long accountToRenew = intent.getLongExtra(SipService.EXTRA_ACCOUNT_ID, -1);
+			
 			Thread t = new Thread() {
 				public void run() {
 					Log.d(THIS_FILE, "Start sip stack because start asked");
@@ -641,7 +666,10 @@ public class SipService extends Service {
 				}
 			};
 			t.start();
+			
 		}
+		
+		
 	}
 
 	private void loadAndConnectStack() {
@@ -655,6 +683,7 @@ public class SipService extends Service {
 			if (deviceStateReceiver == null) {
 				IntentFilter intentfilter = new IntentFilter();
 				intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+				intentfilter.addAction(ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
 				deviceStateReceiver = new ServiceDeviceStateReceiver();
 				registerReceiver(deviceStateReceiver, intentfilter);
 			}
@@ -927,6 +956,8 @@ public class SipService extends Service {
 				// Add accounts
 				creating = false;
 				addAllAccounts();
+				
+				updateRegistrationsState();
 			}
 		}
 	}
@@ -1087,7 +1118,13 @@ public class SipService extends Service {
 				}
 			} else {
 				int[] accId = new int[1];
-				status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
+				if(account.cfg.getReg_uri().getPtr().equals("localhost")) {
+					account.cfg.setReg_uri(pjsua.pj_str_copy(""));
+					account.cfg.setProxy_cnt(0);
+					status = pjsua.acc_add_local(udpTranportId, pjsuaConstants.PJ_FALSE, accId);
+				}else {
+					status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
+				}
 				synchronized (activeAccountsLock) {
 					accountsAddingStatus.put(account.id, status);
 					if (status == pjsuaConstants.PJ_SUCCESS) {
@@ -1254,8 +1291,12 @@ public class SipService extends Service {
 		ArrayList<AccountInfo> activeAccountsInfos = new ArrayList<AccountInfo>();
 		for (int accountDbId : activeAccountsClone) {
 			info = getAccountInfo(accountDbId);
-			if (info != null && info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+			if(info.getWizard().equalsIgnoreCase("LOCAL")) {
 				activeAccountsInfos.add(info);
+			}else {
+				if (info != null && info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+					activeAccountsInfos.add(info);
+				}
 			}
 		}
 		Collections.sort(activeAccountsInfos, accountInfoComparator);

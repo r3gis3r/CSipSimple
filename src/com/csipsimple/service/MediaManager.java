@@ -429,4 +429,9 @@ public class MediaManager {
 		broadcastVolumeWillBeUpdated(streamType, EXTRA_VALUE_UNKNOWN);
         audioManager.adjustStreamVolume(streamType, direction, flags);
 	}
+	
+	// Public accessor
+	public boolean isUserWantMicrophoneMute() {
+		return userWantMicrophoneMute;
+	}
 }

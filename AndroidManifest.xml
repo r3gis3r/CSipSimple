@@ -34,6 +34,7 @@
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
 				<action android:name="android.intent.action.ANY_DATA_STATE"></action>
 				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
+				<action android:name="com.csipsimple.accounts.activate"></action>
 			</intent-filter>
 		</receiver>
 		
@@ -123,6 +124,21 @@
 			android:theme="@style/CupcakeDialog"></activity>
         
         <receiver android:name=".service.HeadsetButtonReceiver"></receiver>
+		
+		<!-- Widget -->
+		<receiver android:name=".widgets.AccountWidgetProvider" android:label="@string/gadget_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.csipsimple.service.REGISTRATION_CHANGED" />
+                <action android:name="com.csipsimple.service.ACCOUNT_ACTIVE_CHANGED" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info" />
+        </receiver>
+        <activity android:name=".widgets.AccountWidgetConfigure">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+		    </intent-filter>
+		</activity>
 		
 	</application>
 	<uses-sdk android:minSdkVersion="3" />

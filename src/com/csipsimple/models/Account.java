@@ -30,11 +30,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 
-import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class Account {
 	// Fields for table accounts
@@ -106,7 +105,9 @@ public class Account {
 		
 		
 		cfg = new pjsua_acc_config();
-		pjsua.acc_config_default(cfg);
+		if (!SipService.creating) {
+			pjsua.acc_config_default(cfg);
+		}
 		// Change the default ka interval to 40s
 		cfg.setKa_interval(40);
 	}
@@ -523,15 +524,9 @@ public class Account {
 	}
 
 	public int getIconResource() {
-		// Update account image
-		WizardInfo wizard_infos = WizardUtils.getWizardClass(wizard);
-		if (wizard_infos != null) {
-			if(!wizard_infos.isGeneric) {
-				return wizard_infos.icon;
-			}
-		}
-		return R.drawable.ic_launcher_phone;
+		return WizardUtils.getWizardIconRes(wizard);
 	}
+	
 	
 	
 	@Override

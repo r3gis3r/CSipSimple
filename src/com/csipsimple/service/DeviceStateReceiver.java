@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 
+import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -62,6 +63,23 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			}
 			Log.d(THIS_FILE, "<<< Data device change detected");
 			
+		}else if(intentAction.equals(SipService.INTENT_SIP_ACCOUNT_ACTIVATE)) {
+			long accId = intent.getLongExtra(SipService.EXTRA_ACCOUNT_ID, -1);
+			if(accId != -1) {
+	    		DBAdapter database = new DBAdapter(context);
+				database.open();
+				boolean active = intent.getBooleanExtra(SipService.EXTRA_ACTIVATE, true);
+				boolean done = database.setAccountActive(accId, active);
+				Log.d(THIS_FILE, "Set account active : " + active);
+				database.close();
+				if(done) {
+				//	if (prefWrapper.isValidConnectionForIncoming()) {
+						Intent sip_service_intent = new Intent(context, SipService.class);
+						context.startService(sip_service_intent);
+						//	}
+				}
+			}
 		}
 	}
+	
 }

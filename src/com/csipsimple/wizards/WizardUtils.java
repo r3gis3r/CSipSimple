@@ -42,6 +42,7 @@ import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.IiNet;
 import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
+import com.csipsimple.wizards.impl.Local;
 import com.csipsimple.wizards.impl.MagicJack;
 import com.csipsimple.wizards.impl.OnSip;
 import com.csipsimple.wizards.impl.Pbxes;
@@ -49,6 +50,7 @@ import com.csipsimple.wizards.impl.Pennytel;
 import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Sip2Sip;
+import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.Sipgate;
 import com.csipsimple.wizards.impl.VPhone;
 
@@ -132,6 +134,10 @@ public class WizardUtils {
 				R.drawable.ic_wizard_expert, 1, 
 				new Locale[] {}, true, false, 
 				Expert.class));
+		WIZARDS_DICT.put("LOCAL", new WizardInfo("LOCAL", "Local", 
+				R.drawable.ic_wizard_expert, 1, 
+				new Locale[] {}, true, false, 
+				Local.class));
 		
 		//World wide
 		WIZARDS_DICT.put("EKIGA", new WizardInfo("EKIGA", "Ekiga", 
@@ -146,6 +152,10 @@ public class WizardUtils {
 				R.drawable.ic_wizard_iptel, 30, 
 				new Locale[]{}, false, true, 
 				IpTel.class));
+		WIZARDS_DICT.put("SIPSORCERY", new WizardInfo("SIPSORCERY", "SIPSorcery", 
+				R.drawable.ic_wizard_sipsorcery, 35, 
+				new Locale[]{}, false, true, 
+				SipSorcery.class));
 		WIZARDS_DICT.put("PBXES", new WizardInfo("PBXES", "Pbxes.org", 
 				R.drawable.ic_wizard_pbxes, 20, 
 				new Locale[]{}, false, true, 
@@ -255,6 +265,17 @@ public class WizardUtils {
 			initWizards();
 		}
 		return WIZARDS_DICT.get(wizardId);
+	}
+	
+	public static int getWizardIconRes(String wizardId) {
+		// Update account image
+		WizardInfo wizard_infos = WizardUtils.getWizardClass(wizardId);
+		if (wizard_infos != null) {
+			if(!wizard_infos.isGeneric) {
+				return wizard_infos.icon;
+			}
+		}
+		return R.drawable.ic_launcher_phone;
 	}
 
 
