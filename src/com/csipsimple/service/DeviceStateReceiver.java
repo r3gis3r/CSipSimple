@@ -73,10 +73,10 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 				Log.d(THIS_FILE, "Set account active : " + active);
 				database.close();
 				if(done) {
-				//	if (prefWrapper.isValidConnectionForIncoming()) {
+					if (prefWrapper.isValidConnectionForIncoming()) {
 						Intent sip_service_intent = new Intent(context, SipService.class);
 						context.startService(sip_service_intent);
-						//	}
+					}
 				}
 			}
 		}

@@ -263,8 +263,10 @@ public class SipHome extends TabActivity {
     		ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
 			if (networks.size() == 0) {
 				disconnectAndQuit();
+				return;
 			}
     	}
+		finish();
 	}
 
 

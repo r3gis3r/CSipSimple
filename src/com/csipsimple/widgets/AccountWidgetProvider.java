@@ -100,14 +100,13 @@ public class AccountWidgetProvider extends AppWidgetProvider {
 			if (acc != null) {
 				views.setImageViewResource(R.id.img_account, WizardUtils.getWizardIconRes(acc.getAsString(Account.FIELD_WIZARD)));
 				boolean active = (acc.getAsInteger(Account.FIELD_ACTIVE) == 1);
-				Log.d(THIS_FILE, "----> Active ? "+active);
 				if(active) {
 				//	accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
 					views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_on);
 				}else {
 					views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_off);
 				}
-				
+				views.setTextViewText(R.id.txt_account, acc.getAsString(Account.FIELD_DISPLAY_NAME));
 				views.setOnClickPendingIntent(R.id.btn_account, getLaunchPendingIntent(context, accId, !active));
 			}
 			
