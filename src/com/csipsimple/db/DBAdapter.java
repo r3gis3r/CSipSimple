@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.CallLog;
 
@@ -146,19 +147,36 @@ public class DBAdapter {
 				db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS_TABLE_NAME);
 			}
 			if(oldVersion < 5) {
-				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_KA_INTERVAL+" INTEGER");
+				try {
+					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_KA_INTERVAL+" INTEGER");
+				}catch(SQLiteException e) {
+					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+				}
 			}
 			if(oldVersion < 6) {
 				db.execSQL("DROP TABLE IF EXISTS "+FILTERS_TABLE_NAME);
 			}
 			if(oldVersion < 7) {
-				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_TCP+" BOOLEAN");
+				try {
+					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_TCP+" BOOLEAN");
+				}catch(SQLiteException e) {
+					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+				}
 			}
 			if(oldVersion < 8) {
-				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_PREVENT_TCP+" BOOLEAN");
+				try {
+					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_PREVENT_TCP+" BOOLEAN");
+				}catch(SQLiteException e) {
+					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+				}
+				
 			}
 			if(oldVersion < 9) {
-				db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_SRTP+" INTEGER");
+				try {
+					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_SRTP+" INTEGER");
+				}catch(SQLiteException e) {
+					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+				}
 			}
 			onCreate(db);
 		}
