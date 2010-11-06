@@ -62,6 +62,13 @@
 			android:summary="@string/override_nameserver_desc"
 			android:defaultValue=""></EditTextPreference>
 		
+		<CheckBoxPreference android:title="@string/enable_qos"
+			android:summary="@string/enable_qos_desc"
+			android:key="enable_qos" android:defaultValue="true"></CheckBoxPreference>
+		<EditTextPreference android:key="dscp_val"
+			android:title="@string/dscp_val"
+			android:summary="@string/dscp_val_desc"
+			android:defaultValue="24"></EditTextPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/nat_traversal" android:key="nat_traversal">
 			<CheckBoxPreference android:summary="@string/enable_ice_desc"
@@ -123,9 +130,6 @@
 			android:key="use_other_out"></CheckBoxPreference>
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/secure_transport" >
-		
-	</PreferenceCategory>
 	
 	<PreferenceScreen android:title="@string/secure_transport" android:summary="@string/secure_transport_desc" android:key="secure_transport">
 			<intent android:action="android.intent.action.MAIN"

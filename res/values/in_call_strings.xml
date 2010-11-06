@@ -34,4 +34,5 @@
 	<string name="unlock">Unlock</string>
 	<string name="record">Record</string>
 	<string name="stop_recording">Stop recording</string>
+	<string name="xfer">Transfer</string>
 </resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+  
+	<EditText android:id="@+id/sip_uri" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/search_contacts"
+		android:clickable="true" android:focusable="true" android:orientation="horizontal"
+		android:background="@android:drawable/list_selector_background">
+		<ImageView  android:duplicateParentState="true" android:gravity="center"
+			android:scaleType="center" android:src="@drawable/ic_button_contacts" style="@style/list_left_column" />
+	
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_gravity="center_vertical"
+			android:textAppearance="?android:attr/textAppearanceLarge" 
+			android:textColor="@android:color/white" android:text="@string/search_in_contacts" />
+	</LinearLayout>
+	<LinearLayout
+		android:orientation="horizontal" style="@android:style/ButtonBar"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_weight="0">
+		<Button android:layout_height="wrap_content" android:text="@string/ok"
+			android:layout_weight="0.5"
+			android:layout_width="fill_parent" android:id="@+id/ok"></Button>
+		<Button android:layout_height="wrap_content" android:text="@string/cancel"
+			android:layout_weight="0.5"
+			android:layout_width="fill_parent" android:id="@+id/cancel"></Button>
+	</LinearLayout>
+	
+</LinearLayout>

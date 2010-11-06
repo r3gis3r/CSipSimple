@@ -141,6 +141,8 @@ public class Compatibility {
 				(android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/
 						|| android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/
 						|| android.os.Build.DEVICE.equalsIgnoreCase("supersonic") /*HTC EVO*/
+						|| android.os.Build.DEVICE.equalsIgnoreCase("ace") /*HTC DESIRE HD*/
+						|| android.os.Build.DEVICE.equalsIgnoreCase("vision") /*HTC DESIRE Z*/
 				) ? true : false);
 		
 		// Galaxy S default settings
@@ -206,7 +208,12 @@ public class Compatibility {
 			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
 			}
+			if(android.os.Build.DEVICE.equalsIgnoreCase("ace") || android.os.Build.DEVICE.equalsIgnoreCase("vision")) {
+				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, true);
+			}
 		}
+		
+		 
 	}
 }
 

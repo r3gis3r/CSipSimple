@@ -107,16 +107,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	private SensorManager sensorManager;
 	private Sensor proximitySensor;
-
 	private DialingFeedback dialFeedback;
-
 	private boolean proximitySensorTracked = false;
-
 	private PowerManager powerManager;
-
 	private WakeLock proximityWakeLock;
-
 	private PreferencesWrapper prefsWrapper;
+	
+	private final static int PICKUP_SIP_URI = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -301,9 +298,31 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 		super.onDestroy();
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case PICKUP_SIP_URI:
+			if(resultCode == RESULT_OK) {
+				String callee = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
+				try {
+					if(service != null) {
+						service.xfer(callId, callee);
+					}
+				} catch (RemoteException e) {
+					//TODO : toaster 
+				}
+			}
+			return;
+		default:
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 
 	public static final int AUDIO_SETTINGS_MENU = Menu.FIRST + 1;
 	public static final int RECORD_MENU = Menu.FIRST + 2;
+	public static final int XFER_MENU = Menu.FIRST + 3;
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -341,6 +360,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, AUDIO_SETTINGS_MENU, Menu.NONE, R.string.prefs_media).setIcon(R.drawable.ic_menu_media);
 		menu.add(Menu.NONE, RECORD_MENU, Menu.NONE, R.string.record).setIcon(R.drawable.record);
+		menu.add(Menu.NONE, XFER_MENU, Menu.NONE, R.string.xfer).setIcon(android.R.drawable.ic_menu_share);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -352,10 +372,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			return true;
 		case RECORD_MENU:
 			try {
-				service.startRecording(callId);
+				if(service != null) {
+					service.startRecording(callId);
+				}
 			} catch (RemoteException e) {
 				//TODO : toaster 
 			}
+			return true;
+		case XFER_MENU:
+			Intent pickupIntent = new Intent(this, PickupSipUri.class);
+			startActivityForResult(pickupIntent, PICKUP_SIP_URI);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -549,9 +575,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		holdContainer.setVisibility(antiVisibility);
 		callInfoPanel.setVisibility(antiVisibility);
 	}
-	
-	
-	
 	
 	
 	

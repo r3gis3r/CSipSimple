@@ -8,18 +8,18 @@
 
 package org.pjsip.pjsua;
 
-public class SWIGTYPE_p_pj_qos_params {
+public class SWIGTYPE_p_pj_qos_wmm_prio {
   private long swigCPtr;
 
-  protected SWIGTYPE_p_pj_qos_params(long cPtr, boolean futureUse) {
+  protected SWIGTYPE_p_pj_qos_wmm_prio(long cPtr, boolean futureUse) {
     swigCPtr = cPtr;
   }
 
-  protected SWIGTYPE_p_pj_qos_params() {
+  protected SWIGTYPE_p_pj_qos_wmm_prio() {
     swigCPtr = 0;
   }
 
-  protected static long getCPtr(SWIGTYPE_p_pj_qos_params obj) {
+  protected static long getCPtr(SWIGTYPE_p_pj_qos_wmm_prio obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 }

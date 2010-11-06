@@ -89,14 +89,14 @@ public class AccountWidgetProvider extends AppWidgetProvider {
         
         
         long accId = AccountWidgetConfigure.getAccountForWidget(context, appWidgetId);
-		Log.d(THIS_FILE, "Updating wiget for account " + accId);
+		Log.d(THIS_FILE, "Updating wiget " + appWidgetId + " for account " + accId);
 		if(accId != -1) {
 			
 			
 			DBAdapter db = new DBAdapter(context);
 			db.open();
 			ContentValues acc = db.getAccountValues(accId);
-			Log.d(THIS_FILE, "Found for " + accId + " : " + acc);
+		//	Log.d(THIS_FILE, "Found for " + accId + " : " + acc);
 			if (acc != null) {
 				views.setImageViewResource(R.id.img_account, WizardUtils.getWizardIconRes(acc.getAsString(Account.FIELD_WIZARD)));
 				boolean active = (acc.getAsInteger(Account.FIELD_ACTIVE) == 1);
@@ -129,7 +129,7 @@ public class AccountWidgetProvider extends AppWidgetProvider {
         launchIntent.putExtra(SipService.EXTRA_ACCOUNT_ID, accId);
         launchIntent.putExtra(SipService.EXTRA_ACTIVATE, activate);
         Log.d(THIS_FILE, "Create intent "+activate);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0 /* no requestCode */,
+        PendingIntent pi = PendingIntent.getBroadcast(context, (int)accId,
                 launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pi;
     }

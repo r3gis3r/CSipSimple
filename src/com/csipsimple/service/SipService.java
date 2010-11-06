@@ -31,6 +31,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pj_qos_params;
+import org.pjsip.pjsua.pj_qos_type;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsip_tls_setting;
@@ -258,6 +260,23 @@ public class SipService extends Service {
 				return SipService.this.callHangup(callId, status);
 			}
 		}
+		
+
+		@Override
+		public int xfer(int callId, String callee) throws RemoteException {
+			Log.d(THIS_FILE, "XFER");
+			synchronized (callActionLock) {
+				return SipService.this.callXfer(callId, callee);
+			}
+		}
+
+		@Override
+		public int xferReplace(int callId, int otherCallId, int options) throws RemoteException {
+			Log.d(THIS_FILE, "XFER-replace");
+			synchronized (callActionLock) {
+				return SipService.this.callXferReplace(callId, otherCallId, options);
+			}
+		}
 
 		@Override
 		public int sendDtmf(int callId, int keyCode) throws RemoteException {
@@ -389,6 +408,7 @@ public class SipService extends Service {
 			}
 			return false;
 		}
+
 
 	};
 
@@ -920,6 +940,10 @@ public class SipService extends Service {
 						pjsua_transport_config cfg = new pjsua_transport_config();
 						pjsua.transport_config_default(cfg);
 						cfg.setPort(prefsWrapper.getRTPPort());
+						if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.ENABLE_QOS)) {
+							Log.d(THIS_FILE, "Activate qos for voice packets");
+							cfg.setQos_type(pj_qos_type.PJ_QOS_TYPE_VOICE);
+						}
 
 						if (prefsWrapper.useIPv6()) {
 							status = pjsua.media_transports_create_ipv6(cfg);
@@ -1042,8 +1066,16 @@ public class SipService extends Service {
 			boolean checkClient = prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.TLS_VERIFY_CLIENT);
 			tlsSetting.setVerify_client(checkClient ? 1 : 0);
 			
-			
 		}
+		//else?
+		if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.ENABLE_QOS)) {
+			Log.d(THIS_FILE, "Activate qos for this transport");
+			pj_qos_params qosParam = cfg.getQos_params();
+			qosParam.setDscp_val((short) prefsWrapper.getDSCPVal());
+			qosParam.setFlags((short) 1); //DSCP
+			cfg.setQos_params(qosParam);
+		}
+		
 
 		status = pjsua.transport_create(type, cfg, tId);
 		if (status != pjsuaConstants.PJ_SUCCESS) {
@@ -1237,6 +1269,7 @@ public class SipService extends Service {
 		if (account == null) {
 			return null;
 		}
+		
 		accountInfo = new AccountInfo(account);
 		if (activeAccountStatus != null) {
 			accountInfo.setAddedStatus(activeAccountStatus);
@@ -1291,11 +1324,13 @@ public class SipService extends Service {
 		ArrayList<AccountInfo> activeAccountsInfos = new ArrayList<AccountInfo>();
 		for (int accountDbId : activeAccountsClone) {
 			info = getAccountInfo(accountDbId);
-			if(info.getWizard().equalsIgnoreCase("LOCAL")) {
-				activeAccountsInfos.add(info);
-			}else {
-				if (info != null && info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+			if( info != null ) {
+				if(info.getWizard().equalsIgnoreCase("LOCAL")) {
 					activeAccountsInfos.add(info);
+				}else {
+					if (info.getExpires() > 0 && info.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) {
+						activeAccountsInfos.add(info);
+					}
 				}
 			}
 		}
@@ -1418,6 +1453,20 @@ public class SipService extends Service {
 	public int callHangup(int callId, int code) {
 		if (created) {
 			return pjsua.call_hangup(callId, code, null, null);
+		}
+		return -1;
+	}
+	
+	public int callXfer(int callId, String callee) {
+		if (created) {
+			return pjsua.call_xfer(callId, pjsua.pj_str_copy(callee), null);
+		}
+		return -1;
+	}
+	
+	public int callXferReplace(int callId, int otherCallId, int options) {
+		if (created) {
+			return pjsua.call_xfer_replaces(callId, otherCallId, options, null);
 		}
 		return -1;
 	}

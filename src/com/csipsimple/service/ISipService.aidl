@@ -43,6 +43,8 @@ interface ISipService{
 	int sendDtmf(int callId, int keyCode);
 	int hold(int callId);
 	int reinvite(int callId, boolean unhold);
+	int xfer(int callId, in String callee);
+	int xferReplace(int callId, int otherCallId, int options);
 	CallInfo getCallInfo(int callId);
 	CallInfo[] getCalls();
 	

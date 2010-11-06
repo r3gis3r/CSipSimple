@@ -174,6 +174,8 @@ public class InCallInfo extends FrameLayout {
 	private void updateTitle() {
 		if(callInfo != null) {
 			title.setText(callInfo.getStringCallState(context));
+		}else {
+			title.setText(R.string.call_state_disconnected);
 		}
 		
 	}

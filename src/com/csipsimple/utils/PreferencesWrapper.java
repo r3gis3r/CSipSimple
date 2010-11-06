@@ -72,6 +72,8 @@ public class PreferencesWrapper {
 	public static final String ENABLE_TCP = "enable_tcp";
 	public static final String LOCK_WIFI = "lock_wifi";
 	public static final String ENABLE_DNS_SRV = "enable_dns_srv";
+	public static final String ENABLE_QOS = "enable_qos";
+	public static final String DSCP_VAL = "dscp_val";
 	
 	// SECURE
 	public static final String ENABLE_TLS = "enable_tls";
@@ -120,6 +122,7 @@ public class PreferencesWrapper {
 		put(CERT_FILE, "");
 		put(PRIVKEY_FILE, "");
 		put(TLS_PASSWORD, "");
+		put(DSCP_VAL, "24");
 		
 	}};
 	
@@ -145,6 +148,8 @@ public class PreferencesWrapper {
 		
 		put(TLS_VERIFY_SERVER, false);
 		put(TLS_VERIFY_CLIENT, false);
+		
+		put(ENABLE_QOS, true);
 		
 		//Network
 		put("use_wifi_in", true);
@@ -443,6 +448,15 @@ public class PreferencesWrapper {
 			}
 		}
 		return nameservers;
+	}
+	
+	public int getDSCPVal() {
+		try {
+			return Integer.parseInt(getPreferenceStringValue(DSCP_VAL));
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "DSCP_VAL not well formated");
+		}
+		return Integer.parseInt(STRING_PREFS.get(DSCP_VAL));
 	}
 	
 

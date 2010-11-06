@@ -70,20 +70,21 @@ public class pjsua_transport_config {
     return (cPtr == 0) ? null : new pjsip_tls_setting(cPtr, false);
   }
 
-  public void setQos_type(SWIGTYPE_p_pj_qos_type value) {
-    pjsuaJNI.pjsua_transport_config_qos_type_set(swigCPtr, this, SWIGTYPE_p_pj_qos_type.getCPtr(value));
+  public void setQos_type(pj_qos_type value) {
+    pjsuaJNI.pjsua_transport_config_qos_type_set(swigCPtr, this, value.swigValue());
   }
 
-  public SWIGTYPE_p_pj_qos_type getQos_type() {
-    return new SWIGTYPE_p_pj_qos_type(pjsuaJNI.pjsua_transport_config_qos_type_get(swigCPtr, this), true);
+  public pj_qos_type getQos_type() {
+    return pj_qos_type.swigToEnum(pjsuaJNI.pjsua_transport_config_qos_type_get(swigCPtr, this));
   }
 
-  public void setQos_params(SWIGTYPE_p_pj_qos_params value) {
-    pjsuaJNI.pjsua_transport_config_qos_params_set(swigCPtr, this, SWIGTYPE_p_pj_qos_params.getCPtr(value));
+  public void setQos_params(pj_qos_params value) {
+    pjsuaJNI.pjsua_transport_config_qos_params_set(swigCPtr, this, pj_qos_params.getCPtr(value), value);
   }
 
-  public SWIGTYPE_p_pj_qos_params getQos_params() {
-    return new SWIGTYPE_p_pj_qos_params(pjsuaJNI.pjsua_transport_config_qos_params_get(swigCPtr, this), true);
+  public pj_qos_params getQos_params() {
+    long cPtr = pjsuaJNI.pjsua_transport_config_qos_params_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new pj_qos_params(cPtr, false);
   }
 
   public pjsua_transport_config() {

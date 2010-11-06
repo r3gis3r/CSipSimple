@@ -129,20 +129,21 @@ public class pjsip_tls_setting {
     return new SWIGTYPE_p_pj_time_val(pjsuaJNI.pjsip_tls_setting_timeout_get(swigCPtr, this), true);
   }
 
-  public void setQos_type(SWIGTYPE_p_pj_qos_type value) {
-    pjsuaJNI.pjsip_tls_setting_qos_type_set(swigCPtr, this, SWIGTYPE_p_pj_qos_type.getCPtr(value));
+  public void setQos_type(pj_qos_type value) {
+    pjsuaJNI.pjsip_tls_setting_qos_type_set(swigCPtr, this, value.swigValue());
   }
 
-  public SWIGTYPE_p_pj_qos_type getQos_type() {
-    return new SWIGTYPE_p_pj_qos_type(pjsuaJNI.pjsip_tls_setting_qos_type_get(swigCPtr, this), true);
+  public pj_qos_type getQos_type() {
+    return pj_qos_type.swigToEnum(pjsuaJNI.pjsip_tls_setting_qos_type_get(swigCPtr, this));
   }
 
-  public void setQos_params(SWIGTYPE_p_pj_qos_params value) {
-    pjsuaJNI.pjsip_tls_setting_qos_params_set(swigCPtr, this, SWIGTYPE_p_pj_qos_params.getCPtr(value));
+  public void setQos_params(pj_qos_params value) {
+    pjsuaJNI.pjsip_tls_setting_qos_params_set(swigCPtr, this, pj_qos_params.getCPtr(value), value);
   }
 
-  public SWIGTYPE_p_pj_qos_params getQos_params() {
-    return new SWIGTYPE_p_pj_qos_params(pjsuaJNI.pjsip_tls_setting_qos_params_get(swigCPtr, this), true);
+  public pj_qos_params getQos_params() {
+    long cPtr = pjsuaJNI.pjsip_tls_setting_qos_params_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new pj_qos_params(cPtr, false);
   }
 
   public void setQos_ignore_error(int value) {

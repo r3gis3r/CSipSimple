@@ -111,7 +111,7 @@
 		</activity>
 		
 		
-		<activity android:name=".ui.InCallActivity" android:label="Incoming call" android:launchMode="singleTask"
+		<activity android:name=".ui.InCallActivity" android:launchMode="singleTask"
 			android:screenOrientation="portrait" android:excludeFromRecents="true"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter android:priority="10">
@@ -119,6 +119,9 @@
                  <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 		</activity>
+		
+		<activity android:name=".ui.PickupSipUri" android:label="@string/pickup_sip_uri" 
+			android:theme="@style/CupcakeDialog"></activity>
         
         <activity android:name=".ui.InCallMediaControl" android:label="@string/prefs_media" 
 			android:theme="@style/CupcakeDialog"></activity>
