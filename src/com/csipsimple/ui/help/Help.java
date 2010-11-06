@@ -107,6 +107,10 @@ public class Help extends Activity implements OnClickListener {
 			recordImage.setImageResource(android.R.drawable.ic_menu_save);
 			recordText.setText(R.string.record_logs);
 		}
+		
+		// Revision
+		TextView rev = (TextView) findViewById(R.id.revision);
+		rev.setText(CollectLogs.getApplicationInfo(this));
 	}
 	
 	@Override
@@ -147,7 +151,7 @@ public class Help extends Activity implements OnClickListener {
 			} else {
 				prefsWrapper.setPreferenceStringValue(PreferencesWrapper.LOG_LEVEL, "1");
 				try {
-					startActivity(CollectLogs.getLogReportIntent("<<<PLEASE ADD THE BUG DESCRIPTION HERE>>>"));
+					startActivity(CollectLogs.getLogReportIntent("<<<PLEASE ADD THE BUG DESCRIPTION HERE>>>", this));
 				}catch(Exception e) {
 					Log.e(THIS_FILE, "Impossible to send logs...", e);
 				}

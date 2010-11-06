@@ -22,12 +22,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 public class CollectLogs {
 
 	private static final Object LINE_SEPARATOR = "\n";
 	private static final String THIS_FILE = "Collect Logs";
+	
+	public static final String REVISION = "$Rev$";
 
 	/*Usage: logcat [options] [filterspecs]
     options include:
@@ -126,7 +131,22 @@ public class CollectLogs {
 		return log;
 	}
 	
-	public static Intent getLogReportIntent(String userComment) {
+	public final static String getApplicationInfo(Context ctx) {
+		String result = "";
+		result += "Application version : ";
+		
+		PackageInfo pinfo;
+		try {
+			pinfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
+			result += pinfo.versionName;
+		} catch (NameNotFoundException e) {
+			Log.e(THIS_FILE, "Impossible to find version of current package !!");
+		}
+		result += " " + REVISION;
+		return result;
+	}
+	
+	public static Intent getLogReportIntent(String userComment, Context ctx) {
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, "CSipSimple Error-Log report");
         sendIntent.setType("text/plain");//$NON-NLS-1$
@@ -135,6 +155,8 @@ public class CollectLogs {
         StringBuilder log = new StringBuilder();
         log.append(userComment);
         log.append(LINE_SEPARATOR);
+        log.append(LINE_SEPARATOR);
+        log.append(getApplicationInfo(ctx));
         log.append(LINE_SEPARATOR);
         log.append(getDeviceInfo());
         log.append(LINE_SEPARATOR);

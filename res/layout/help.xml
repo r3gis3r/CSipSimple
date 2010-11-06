@@ -3,6 +3,7 @@
 	android:layout_width="fill_parent" android:orientation="vertical" 
 	android:layout_height="wrap_content">
  	<include layout="@layout/white_title"></include>
+ 	<TextView android:id="@+id/revision" android:layout_width="fill_parent" android:layout_height="wrap_content"/>
 	<LinearLayout android:id="@+id/faq_line" 
 		android:background="@android:drawable/list_selector_background"
 		android:clickable="true" android:focusable="true" android:orientation="horizontal"

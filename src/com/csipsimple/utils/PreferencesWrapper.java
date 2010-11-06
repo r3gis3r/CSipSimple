@@ -122,7 +122,7 @@ public class PreferencesWrapper {
 		put(CERT_FILE, "");
 		put(PRIVKEY_FILE, "");
 		put(TLS_PASSWORD, "");
-		put(DSCP_VAL, "24");
+		put(DSCP_VAL, "26");
 		
 	}};
 	
