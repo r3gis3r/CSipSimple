@@ -63,6 +63,7 @@ public class PreferencesWrapper {
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
 	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
 	public static final String LOG_LEVEL = "log_level";
+	public static final String DTMF_MODE = "dtmf_mode";
 	
 	// NETWORK
 	public static final String ENABLE_STUN = "enable_stun";
@@ -123,6 +124,7 @@ public class PreferencesWrapper {
 		put(PRIVKEY_FILE, "");
 		put(TLS_PASSWORD, "");
 		put(DSCP_VAL, "26");
+		put(DTMF_MODE, "0");
 		
 	}};
 	
@@ -654,9 +656,17 @@ public class PreferencesWrapper {
 
 
 	public boolean useSipInfoDtmf() {
-		return prefs.getBoolean("sip_info_dtmf", false);
+		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase("3");
 	}
 	
+	public boolean forceDtmfInBand() {
+		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase("2");
+	}
+
+	public boolean forceDtmfRTP() {
+		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase("1");
+	}
+
 
 	public long getThreadCount() {
 		try {

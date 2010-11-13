@@ -58,7 +58,6 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
-import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -871,6 +870,7 @@ public class SipService extends Service {
 					mediaCfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
 					// Echo cancellation
 					mediaCfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
+					mediaCfg.setEc_options(2); // ECHO SIMPLE
 					mediaCfg.setNo_vad(prefsWrapper.getNoVad());
 					mediaCfg.setQuality(prefsWrapper.getMediaQuality());
 					mediaCfg.setClock_rate(prefsWrapper.getClockRate());
@@ -1540,14 +1540,21 @@ public class SipService extends Service {
 		int res = -1;
 		if (prefsWrapper.useSipInfoDtmf()) {
 			res = pjsua.send_dtmf_info(callId, pjKeyPressed);
-			Log.d(THIS_FILE, "Has been sent DTMF : " + res);
+			Log.d(THIS_FILE, "Has been sent DTMF INFO : " + res);
 		} else {
-			res = pjsua.call_dial_dtmf(callId, pjKeyPressed);
-			if (res != pjsua.PJ_SUCCESS) {
+			if (!prefsWrapper.forceDtmfInBand()) {
+				//Generate using RTP
+				res = pjsua.call_dial_dtmf(callId, pjKeyPressed);
+				Log.d(THIS_FILE, "Has been sent in RTP DTMF : " + res);
+			}
+			
+			if (res != pjsua.PJ_SUCCESS && !prefsWrapper.forceDtmfRTP()) {
+				//Generate using analogic inband
 				if(dialtoneGenerator == null) {
 					dialtoneGenerator = new StreamDialtoneGenerator();
 				}
 				res = dialtoneGenerator.sendPjMediaDialTone(callId, keyPressed);
+				Log.d(THIS_FILE, "Has been sent DTMF analogic : " + res);
 			}
 		}
 		return res;
@@ -1955,7 +1962,8 @@ public class SipService extends Service {
 			if (p.matcher(callee).matches()) {
 				callee = "<"+callee + "@" + defaultDomain+">";
 			} else {
-				callee = "<sip:" + Uri.encode(callee) + "@" + defaultDomain+">";
+				//Should it be encoded?
+				callee = "<sip:" + /*Uri.encode(*/callee/*)*/ + "@" + defaultDomain+">";
 			}
 		}else {
 			callee = "<" + m.group(1) + ":" + m.group(2) + ">";

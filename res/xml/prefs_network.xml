@@ -68,7 +68,7 @@
 		<EditTextPreference android:key="dscp_val"
 			android:title="@string/dscp_val"
 			android:summary="@string/dscp_val_desc"
-			android:defaultValue="24"></EditTextPreference>
+			android:defaultValue="26"></EditTextPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/nat_traversal" android:key="nat_traversal">
 			<CheckBoxPreference android:summary="@string/enable_ice_desc"

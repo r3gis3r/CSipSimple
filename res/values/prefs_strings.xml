@@ -118,8 +118,8 @@
 <string name="echo_cancellation_tail">Echo cancellation tail</string>
 <string name="echo_cancellation_tail_desc">Tail length of echo cancellation</string>
 <string name="codecs_desc">Priority (0 is disabled)</string>
-<string name="sip_info_dtmf">DTMF SIP INFO</string>
-<string name="sip_info_dtmf_desc">Use SIP INFO to send DTMF</string>
+<string name="sip_dtmf">DTMF mode</string>
+<string name="sip_dtmf_desc">How to send DTMF</string>
 <string name="use_soft_volume">Use software volume</string>
 <string name="use_soft_volume_desc">Use software volume instead of android volume</string>
 

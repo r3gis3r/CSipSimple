@@ -22,4 +22,12 @@
 		<item>1</item>
 		<item>2</item>
 	</string-array>
+	
+	<string-array name="dtmf_mode_values">
+		<item>0</item> <!-- Auto -->
+		<item>1</item> <!-- RTP -->
+		<item>2</item> <!-- In band emulation -->
+		<item>3</item> <!-- SIP INFO -->
+	</string-array>
+	
 </resources>

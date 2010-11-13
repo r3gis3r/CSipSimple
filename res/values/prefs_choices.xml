@@ -44,4 +44,11 @@
 		<item>Optional</item>
 		<item>Mandatory</item>
 	</string-array>
+	
+	<string-array name="dtmf_mode_choices">
+		<item>Auto</item> <!-- Auto -->
+		<item>RTP</item> <!-- RTP -->
+		<item>In band generation</item> <!-- In band emulation -->
+		<item>SIP INFO</item> <!-- SIP INFO -->
+	</string-array>
 </resources>
