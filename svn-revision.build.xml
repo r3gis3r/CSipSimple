@@ -1,0 +1,19 @@
+<project default="svn-revision">
+	<target name="svn-revision">
+		<property name="revision" value="HEAD" />
+
+		<exec executable="svn" output="svn-info.properties">
+			<arg line="info" />
+			<env key="LANG" value="C"/>
+		</exec>
+		<property prefix="svn" file="svn-info.properties" />
+		<echo>Revision: ${svn.Revision}</echo>
+
+		<!-- Write the revision number into the Manifest as the last segment of the VersionName property -->
+		<replaceregexp file="AndroidManifest.xml" match='android:versionCode="([0-9]*)"'
+			replace='android:versionCode="${svn.Revision}"' />
+
+		<!-- Clean up -->
+		<delete file="svn-info.properties" />
+	</target>
+</project>

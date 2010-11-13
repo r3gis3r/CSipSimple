@@ -140,7 +140,7 @@
 <string name="dial_press_vibrate_desc">Haptic (vibrate) feedback when dialing</string>
 <string name="start_with_text_dialer">Text dialer</string>
 <string name="start_with_text_dialer_desc">Start with text dialer</string>
-<string name="use_alternate_unlocker">Don\'t use slide unlocker</string>
+<string name="use_alternate_unlocker">Don\'t use slide answer</string>
 <string name="use_alternate_unlocker_desc">Use buttons instead of slide to take incoming calls</string>
 <string name="keep_awake_incall">Keep awake while on call</string>
 <string name="keep_awake_incall_desc">Fixes if you get choppy sound when screen turn off while in WIFI call</string>

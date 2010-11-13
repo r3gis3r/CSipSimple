@@ -32,7 +32,6 @@ public class CollectLogs {
 	private static final Object LINE_SEPARATOR = "\n";
 	private static final String THIS_FILE = "Collect Logs";
 	
-	public static final String REVISION = "$Rev$";
 
 	/*Usage: logcat [options] [filterspecs]
     options include:
@@ -138,11 +137,10 @@ public class CollectLogs {
 		PackageInfo pinfo;
 		try {
 			pinfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
-			result += pinfo.versionName;
+			result += pinfo.versionName + " r" + pinfo.versionCode;
 		} catch (NameNotFoundException e) {
 			Log.e(THIS_FILE, "Impossible to find version of current package !!");
 		}
-		result += " " + REVISION;
 		return result;
 	}
 	

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Copyright (C) 2010 Chris McCormick (aka mccormix - chris@mccormick.cx) 
+
+	This file is part of CSipSimple.
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/sms_reader" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	
+	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/scrllvwNo1" android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+			
+			<TextView android:layout_height="wrap_content" android:layout_marginLeft="5px"
+				android:textStyle="bold" android:layout_width="wrap_content"
+				android:text="" android:id="@+id/sms_read_number" />
+			
+			<AbsoluteLayout android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:layout_marginLeft="5px">
+				
+				<TextView android:layout_height="wrap_content" android:layout_marginLeft="5px"
+					android:textStyle="bold" android:layout_width="wrap_content"
+					android:text="Message:" />
+			
+			</AbsoluteLayout>
+			
+			<TextView android:layout_height="wrap_content" android:layout_marginLeft="5px"
+				android:gravity="top" android:id="@+id/sms_read_message" android:lines="10"
+				android:layout_width="fill_parent" android:layout_marginRight="5px"/>
+			
+			<LinearLayout android:layout_width="wrap_content"
+				android:layout_marginTop="10px" android:layout_height="50px"
+				android:layout_gravity="right">
+				
+				<Button android:layout_gravity="right" android:textStyle="bold"
+				android:layout_height="50px" android:layout_width="100px"
+				android:id="@+id/reply_sms" android:text="Reply" />
+				
+				<Button android:layout_gravity="right" android:textStyle="bold"
+				android:layout_height="50px" android:layout_width="100px"
+				android:id="@+id/ok_sms" android:text="Ok" />
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</RelativeLayout>

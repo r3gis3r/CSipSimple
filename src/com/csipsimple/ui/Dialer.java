@@ -350,10 +350,11 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			Account acc = accountChooserButton.getSelectedAccount();
 			if (acc != null) {
 				accountToUse = acc.id;
+				//TODO : escape + and special char in username
 				if(Pattern.matches(".*@.*", userName)) {
-					toCall = "sip:" + userName ;
+					toCall = "sip:" + userName +"";
 				}else {
-					toCall = "sip:" + userName + "@"+acc.getDefaultDomain();
+					toCall = "sip:" + userName + "@" + acc.getDefaultDomain();
 				}
 			}else {
 				toCall = userName;
@@ -375,7 +376,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			}
 		} else {
 			OutgoingCall.ignoreNext = toCall;
-			Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+toCall));
+			Intent intent = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", toCall, null));
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 		}

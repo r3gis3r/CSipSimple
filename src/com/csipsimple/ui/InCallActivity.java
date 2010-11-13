@@ -591,15 +591,34 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         	if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
         		action = AudioManager.ADJUST_LOWER;
         	}
-        	if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME)) {
-        		Intent adjustVolumeIntent = new Intent(this, InCallMediaControl.class);
-        		adjustVolumeIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyCode);
-        		startActivity(adjustVolumeIntent);
-        	}else {
-	        	if(SipService.mediaManager != null) {
-	        		SipService.mediaManager.adjustStreamVolume(Compatibility.getInCallStream(), action, AudioManager.FLAG_SHOW_UI);
+
+        	// Detect if ringing
+    		CallInfo currentCallInfo = getCurrentCallInfo();
+    		//If not any active call active
+    		if(currentCallInfo == null && serviceConnected) {
+    			break;
+    		}
+    		pjsip_inv_state state = currentCallInfo.getCallState();
+    		boolean ringing = state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) ||
+    			state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY);
+    		
+        	// Mode ringing
+    		if(ringing) {
+    			if(SipService.mediaManager != null) {
+	        		SipService.mediaManager.adjustStreamVolume(AudioManager.STREAM_RING, action, AudioManager.FLAG_SHOW_UI);
 	        	}
-        	}
+    		}else {
+	        	// Mode in call
+	        	if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME)) {
+	        		Intent adjustVolumeIntent = new Intent(this, InCallMediaControl.class);
+	        		adjustVolumeIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyCode);
+	        		startActivity(adjustVolumeIntent);
+	        	}else {
+		        	if(SipService.mediaManager != null) {
+		        		SipService.mediaManager.adjustStreamVolume(Compatibility.getInCallStream(), action, AudioManager.FLAG_SHOW_UI);
+		        	}
+	        	}
+    		}
         	return true;
         case KeyEvent.KEYCODE_CALL:
 		case KeyEvent.KEYCODE_ENDCALL:

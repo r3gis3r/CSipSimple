@@ -1,5 +1,6 @@
 /**
  * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2010 Chris McCormick (aka mccormix - chris@mccormick.cx) 
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -111,6 +112,60 @@ public class UAStateReceiver extends Callback {
 	}
 
 	@Override
+	public void on_buddy_state(int buddy_id)
+	{
+		Log.d(THIS_FILE, "On buddy state");
+		// buddy_info = pjsua.buddy_get_info(buddy_id, new pjsua_buddy_info());
+	}
+
+	@Override
+	public void on_pager(int call_id, pj_str_t from, pj_str_t to, pj_str_t contact, pj_str_t mime_type, pj_str_t body)
+	{
+		//String phone = StringUtilits.deleteBrackets(from.getPtr());
+		//smsDAO.addNewSMS(phone, body.getPtr(), 1, service.getDb());
+		String msg = "on_pager NEW MESSAGE FROM: "
+				+ from.getPtr() + " "
+				+ "TEXT: " + body.getPtr();
+		//msgHandler.sendMessage(msgHandler.obtainMessage(ON_PAGER, msg));
+		notificationManager.showNotificationForMessage(from.getPtr(), body.getPtr());
+		Log.d(THIS_FILE, msg);
+	}
+
+	/*@Override
+	public void on_pager2(int call_id, pj_str_t from, pj_str_t to, pj_str_t contact, pj_str_t mime_type, pj_str_t body, SWIGTYPE_p_pjsip_rx_data rdata)
+	{
+		String msg = "on_pager2 NEW MESSAGE FROM: "
+				+ from.getPtr() + " "
+				+ "TEXT: " + body.getPtr();
+		Log.e(THIS_FILE, msg);
+		//String msg = "new message";
+		//msgHandler.sendMessage(msgHandler.obtainMessage(ON_PAGER2, msg));
+	}*/
+
+	@Override
+	public void on_pager_status(int call_id, pj_str_t to, pj_str_t body, pjsip_status_code status, pj_str_t reason)
+	{
+		/* 
+			Notification about the delivery status of previously sent
+			instant message.
+			
+			Keyword arguments:
+			to_uri  -- the destination URI of the message
+			body    -- the message body
+			im_id   -- message ID
+			code    -- SIP status code
+			reason  -- SIP reason phrase
+		*/
+		Log.d(THIS_FILE, "Message in on pager status");
+	}
+	
+	/*@Override
+	public void on_pager_status2(int call_id, pj_str_t to, pj_str_t body, pjsip_status_code status, pj_str_t reason, SWIGTYPE_p_pjsip_tx_data tdata, SWIGTYPE_p_pjsip_rx_data rdata)
+	{
+		Log.e(THIS_FILE, "Message in on pager status2");
+	}*/
+
+	@Override
 	public void on_reg_state(int accountId) {
 		Log.d(THIS_FILE, "New reg state for : " + accountId);
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
@@ -208,6 +263,7 @@ public class UAStateReceiver extends Callback {
 	private static final int ON_CALL_STATE = 2;
 	private static final int ON_MEDIA_STATE = 3;
 	private static final int ON_REGISTRATION_STATE = 4;
+	private static final int ON_PAGER = 5;
 
 
 
@@ -308,6 +364,14 @@ public class UAStateReceiver extends Callback {
 				service.sendBroadcast(regStateChangedIntent);
 				break;
 			}
+			case ON_PAGER: {
+				//startSMSRing();
+				//String message = (String) msg.obj;
+				//service.showMessage(message);
+				Log.e(THIS_FILE, "yana you in CASE ON_PAGER");
+				//stopRing();
+				break;
+			}
 			}
 		}
 	};
@@ -337,7 +401,7 @@ public class UAStateReceiver extends Callback {
 		//In account
 		Account acc = service.getAccountForPjsipId(accountId);
 		if(acc != null) {
-			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*@[^>]*)(?:>)?");
+			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*@[^>]*)(?:>)?", Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(remContact);
 			String number = remContact;
 			if (m.matches()) {

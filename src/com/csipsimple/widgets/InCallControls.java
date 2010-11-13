@@ -28,6 +28,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -143,8 +144,13 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.in_call_controls, this, true);
 		PreferencesWrapper prefs = new PreferencesWrapper(context);
-		useSlider = !prefs.getUseAlternateUnlocker();
-
+		
+		AccessibilityManager accessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+		if(accessibilityManager.isEnabled()) {
+			useSlider = false;
+		}else {
+			useSlider = !prefs.getUseAlternateUnlocker();
+		}
 	}
 
 	@Override

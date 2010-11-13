@@ -82,14 +82,6 @@ public class Compatibility {
 		} else {
 			return false;
 		}
-		/*
-		if( (android.os.Build.BRAND.equalsIgnoreCase("htc")) ||
-				android.os.Build.BRAND.equalsIgnoreCase("google") ||
-				android.os.Build.DEVICE.equals("GT-I9000")) {
-			return false;
-		}
-		return true;
-		*/
 	}
 
 
@@ -119,6 +111,25 @@ public class Compatibility {
 		return "armeabi";
 	}
 	
+	private static boolean needPspWorkaround(PreferencesWrapper preferencesWrapper) {
+		//Nexus one is impacted
+		if(android.os.Build.DEVICE.equalsIgnoreCase("passion")){
+			return true;
+		}
+		//All htc except....
+		if(android.os.Build.BRAND.equalsIgnoreCase("htc")) {
+			if(android.os.Build.DEVICE.equalsIgnoreCase("hero") /* HTC HERO */ 
+					|| android.os.Build.DEVICE.equalsIgnoreCase("magic") /* Magic */
+					|| android.os.Build.DEVICE.equalsIgnoreCase("tatoo") /* Tatoo */
+					|| android.os.Build.DEVICE.equalsIgnoreCase("dream") /* Dream */
+					) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	public static void setFirstRunParameters(PreferencesWrapper preferencesWrapper) {
 		//Disable iLBC if not armv7
 		preferencesWrapper.setCodecPriority("iLBC/8000/1", 
@@ -136,14 +147,8 @@ public class Compatibility {
 		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_AUTO_CLOSE_TIME, isCompatible(4) ? "1" : "5");
 		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_CLOCK_RATE, isCompatible(4) ? "16000" : "8000");
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, isCompatible(4) ? true : false);
-		//N1 PSP mode hack
-		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, 
-				(android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/
-						|| android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/
-						|| android.os.Build.DEVICE.equalsIgnoreCase("supersonic") /*HTC EVO*/
-						|| android.os.Build.DEVICE.equalsIgnoreCase("ace") /*HTC DESIRE HD*/
-						|| android.os.Build.DEVICE.equalsIgnoreCase("vision") /*HTC DESIRE Z*/
-				) ? true : false);
+		//HTC PSP mode hack
+		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, needPspWorkaround(preferencesWrapper));
 		
 		// Galaxy S default settings
 		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
@@ -182,8 +187,7 @@ public class Compatibility {
 
 	public static void updateVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {
 		if (lastSeenVersion < 14) {
-			//N1 PSP mode hack
-			//N1 PSP mode hack
+			//HTC PSP mode hack
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, 
 					(android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/
 							|| android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/
@@ -203,12 +207,13 @@ public class Compatibility {
 		if (lastSeenVersion < 15) {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, false);
 		}
-		if (lastSeenVersion < 16) {
+		//Now we use svn revisions
+		if (lastSeenVersion < 338) {
 			// Galaxy S default settings
 			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
 			}
-			if(android.os.Build.DEVICE.equalsIgnoreCase("ace") || android.os.Build.DEVICE.equalsIgnoreCase("vision")) {
+			if(needPspWorkaround(prefWrapper)) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, true);
 			}
 		}

@@ -23,19 +23,26 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Contacts;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
@@ -64,6 +71,8 @@ public class SipHome extends TabActivity {
 	
 	private static final String TAB_DIALER = "tab1";
 	private static final String TAB_CALLLOG = "tab2";
+	
+	protected static final int PICKUP_PHONE = 0;
 
 	private Intent serviceIntent;
 
@@ -72,6 +81,7 @@ public class SipHome extends TabActivity {
 	private PreferencesWrapper prefWrapper;
 
 	private boolean has_tried_once_to_activate_account = false;
+	private ImageButton pickupContact;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +89,11 @@ public class SipHome extends TabActivity {
 		prefWrapper = new PreferencesWrapper(this);
 		super.onCreate(savedInstanceState);
 		
+		
+		
 		// Check sip stack
 		if (!SipService.hasStackLibFile(this)) {
-			//If not -> Just launch stack getter
+			//If not -> FIRST RUN : Just launch stack getter
 			Log.d(THIS_FILE, "Has no sip stack....");
 			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
 			welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -117,6 +129,25 @@ public class SipHome extends TabActivity {
 				// Should not happen....or something is wrong with android...
 				Log.e(THIS_FILE, "Not possible to find self name", e);
 			}
+		}else {
+			// DEV MODE -- still upgrade settings
+			try {
+				PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+				int runningVersion = pinfo.versionCode;
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+				int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
+
+				Log.d(THIS_FILE, "Last known version is " + lastSeenVersion + " and currently we are running " + runningVersion);
+				if (lastSeenVersion != runningVersion) {
+					Compatibility.updateVersion(prefWrapper, lastSeenVersion, runningVersion);
+					Editor editor = prefs.edit();
+    				editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, runningVersion);
+    				editor.commit();
+				}
+			} catch (NameNotFoundException e) {
+				// Should not happen....or something is wrong with android...
+				Log.e(THIS_FILE, "Not possible to find self name", e);
+			}
 		}
 		
 		
@@ -128,7 +159,18 @@ public class SipHome extends TabActivity {
 
 		addTab(TAB_DIALER, getString(R.string.dial_tab_name_text), R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
 		addTab(TAB_CALLLOG, getString(R.string.calllog_tab_name_text), R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
-
+		
+		pickupContact = (ImageButton) findViewById(R.id.pickup_contacts);
+		pickupContact.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setAction(Intent.ACTION_GET_CONTENT);
+				intent.setType("vnd.android.cursor.item/phone");
+				startActivityForResult(intent, PICKUP_PHONE);
+			}
+		});
+		
 		has_tried_once_to_activate_account = false;
 		
 
@@ -341,6 +383,29 @@ public class SipHome extends TabActivity {
 		}
 		serviceIntent = null;
 		finish();
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case PICKUP_PHONE:
+			if(resultCode == RESULT_OK) {
+				Uri uri = data.getData();
+				ContentResolver cr = getContentResolver();
+				Cursor cursor= cr.query(uri, null, null, null, null);
+				cursor.moveToFirst();
+				int index = cursor.getColumnIndex(Contacts.PhonesColumns.NUMBER);
+				String number = cursor.getString(index); 
+				
+				startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", number, null)));
+			}
+			break;
+
+		default:
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
 }

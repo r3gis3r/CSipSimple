@@ -45,7 +45,7 @@ public class IndicatorTab extends LinearLayout {
 		context = aContext;
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.home_tab, this, true);
-		setFocusable(true);
+	//	setFocusable(true);
 
 
 		icon = (ImageView) findViewById(R.id.photo);

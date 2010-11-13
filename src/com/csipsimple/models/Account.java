@@ -96,6 +96,8 @@ public class Account {
 	public boolean use_tcp;
 	public boolean prevent_tcp;
 	
+	public final static int INVALID_ID = -1;
+	
 	public Account() {
 		display_name = "";
 		wizard = "EXPERT";
@@ -113,7 +115,7 @@ public class Account {
 	}
 	
 	public Account(IAccount parcelable) {
-		if(parcelable.id != -1) {
+		if(parcelable.id != INVALID_ID) {
 			id = parcelable.id;
 		}
 		display_name = parcelable.display_name;
@@ -513,14 +515,14 @@ public class Account {
 			return null;
 		}
 		
-		Pattern p = Pattern.compile("^sip(s)?:([^@]*)$", Pattern.CASE_INSENSITIVE);
+		Pattern p = Pattern.compile("^(<)?sip(s)?:([^@]*)(>)?$", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(regUri);
 		Log.v(THIS_FILE, "Try to find into "+regUri);
 		if(!m.matches()) {
 			Log.e(THIS_FILE, "Default domain can't be guessed from regUri of this account");
 			return null;
 		}
-		return m.group(2);
+		return m.group(3);
 	}
 
 	public int getIconResource() {

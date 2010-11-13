@@ -19,7 +19,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="wrap_content" android:padding="10px"
 	android:background="@drawable/minitab_indicator"
-	android:focusable="true"
 	android:duplicateParentState="true"
 	android:gravity="center">
 	<ImageView android:layout_width="18px" android:layout_marginRight="10dip"
