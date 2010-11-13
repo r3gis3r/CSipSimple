@@ -367,6 +367,15 @@ public class DBAdapter {
 		return result;
 	}
 	
+
+	public boolean setAccountWizard(int accountId, String wizardId) {
+		ContentValues cv = new ContentValues();
+		cv.put(Account.FIELD_WIZARD, wizardId);
+		boolean result = db.update(ACCOUNTS_TABLE_NAME, cv,
+				Account.FIELD_ID + "=" + accountId, null) > 0;
+		return result;
+	}
+	
 	
 	public int getNbrOfAccount() {
 		return getNbrOfAccount(false);
@@ -590,6 +599,7 @@ public class DBAdapter {
 	public long insertFilter(Filter filter){
 		return db.insert(FILTERS_TABLE_NAME, null, filter.getDbContentValues());
 	}
+
 
 
 	

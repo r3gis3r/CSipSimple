@@ -88,7 +88,7 @@ public class WizardChooser extends ExpandableListActivity {
 		Map<String, Object> data = childDatas.get(groupPosition).get(childPosition);
 		String wizard_id = (String) data.get(WizardUtils.ID);
 		
-		Intent result = new Intent();
+		Intent result = getIntent();
 		result.putExtra(WizardUtils.ID, wizard_id);
 		
 		setResult(RESULT_OK, result);

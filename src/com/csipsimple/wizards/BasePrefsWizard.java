@@ -199,7 +199,7 @@ public class BasePrefsWizard extends GenericPrefs{
 		case CHOOSE_WIZARD:
 			if(resultCode == RESULT_OK) {
 				if(data != null && data.getExtras() != null) {
-					String wizardId = data.getExtras().getString(WizardUtils.ID);
+					String wizardId = data.getStringExtra(WizardUtils.ID);
 					if(wizardId != null) {
 						saveAccount(wizardId);
 						setResult(RESULT_OK, getIntent());

@@ -80,11 +80,13 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	public static final int MENU_ITEM_ACTIVATE = Menu.FIRST;
 	public static final int MENU_ITEM_MODIFY = Menu.FIRST+1;
 	public static final int MENU_ITEM_DELETE = Menu.FIRST+2;
+	public static final int MENU_ITEM_WIZARD = Menu.FIRST+3;
 	
 
 	
 	private static final int CHOOSE_WIZARD = 0;
-	private static final int REQUEST_MODIFY = CHOOSE_WIZARD+1;
+	private static final int REQUEST_MODIFY = CHOOSE_WIZARD + 1;
+	private static final int CHANGE_WIZARD =  REQUEST_MODIFY + 1;
 	
 	private static final int NEED_LIST_UPDATE = 1;
 	private static final int UPDATE_LINE = 2;
@@ -184,6 +186,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
         menu.add(0, MENU_ITEM_ACTIVATE, 0, account.active?R.string.deactivate_account:R.string.activate_account);
         menu.add(0, MENU_ITEM_MODIFY, 0, R.string.modify_account);
         menu.add(0, MENU_ITEM_DELETE, 0, R.string.delete_account);
+        menu.add(0, MENU_ITEM_WIZARD, 0, R.string.choose_wizard);
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -218,6 +221,12 @@ public class AccountsList extends Activity implements OnItemClickListener {
             	database.close();
 				reloadAsyncAccounts(account.id, account.active?1:0);
 				return true;
+            }
+            case MENU_ITEM_WIZARD:{
+            	Intent it = new Intent(this, WizardChooser.class);
+            	it.putExtra(Intent.EXTRA_UID, (int) account.id);
+            	startActivityForResult(it, CHANGE_WIZARD);
+            	return true;
             }
         }
         return false;
@@ -274,8 +283,8 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		switch(requestCode){
 		case CHOOSE_WIZARD:
 			if(resultCode == RESULT_OK) {
-				if(data != null && data.getExtras() != null) {
-					String wizardId = data.getExtras().getString(WizardUtils.ID);
+				if(data != null) {
+					String wizardId = data.getStringExtra(WizardUtils.ID);
 					if(wizardId != null) {
 						Intent intent = new Intent(this, BasePrefsWizard.class);
 						intent.putExtra(Intent.EXTRA_REMOTE_INTENT_TOKEN, wizardId);
@@ -294,6 +303,20 @@ public class AccountsList extends Activity implements OnItemClickListener {
 					}
 				}
 				
+			}
+			break;
+		case CHANGE_WIZARD:
+			if(resultCode == RESULT_OK) {
+				if(data != null && data.getExtras() != null) {
+					String wizardId = data.getStringExtra(WizardUtils.ID);
+					int accountId = data.getIntExtra(Intent.EXTRA_UID, Account.INVALID_ID);
+					if(wizardId != null && accountId != Account.INVALID_ID) {
+						database.open();
+						database.setAccountWizard(accountId, wizardId);
+						database.close();
+						handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
+					}
+				}
 			}
 			break;
 		}
