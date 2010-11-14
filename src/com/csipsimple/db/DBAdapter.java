@@ -40,7 +40,7 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 9;
+	private static final int DATABASE_VERSION = 10;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
@@ -72,6 +72,8 @@ public class DBAdapter {
 			+ Account.FIELD_KA_INTERVAL 		+ " INTEGER," 
 			+ Account.FIELD_PIDF_TUPLE_ID 		+ " TEXT,"
 			+ Account.FIELD_FORCE_CONTACT 		+ " TEXT,"
+			+ Account.FIELD_ALLOW_CONTACT_REWRITE + " INTEGER,"
+			+ Account.FIELD_CONTACT_REWRITE_METHOD + " INTEGER,"
 			+ Account.FIELD_CONTACT_PARAMS 		+ " TEXT,"
 			+ Account.FIELD_CONTACT_URI_PARAMS	+ " TEXT,"
 			+ Account.FIELD_USE_SRTP	 		+ " INTEGER," 
@@ -178,6 +180,17 @@ public class DBAdapter {
 					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
 				}
 			}
+			if(oldVersion < 10) {
+				try {
+					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+
+							Account.FIELD_ALLOW_CONTACT_REWRITE + " INTEGER");
+					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+
+							Account.FIELD_CONTACT_REWRITE_METHOD + " INTEGER");
+				}catch(SQLiteException e) {
+					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+				}
+			}
+			
 			onCreate(db);
 		}
 	}

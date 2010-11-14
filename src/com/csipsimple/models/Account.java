@@ -24,6 +24,7 @@ import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_config;
 
 import android.content.ContentValues;
@@ -53,6 +54,10 @@ public class Account {
 	public static final String FIELD_KA_INTERVAL = "ka_interval";
 	public static final String FIELD_PIDF_TUPLE_ID = "pidf_tuple_id";
 	public static final String FIELD_FORCE_CONTACT = "force_contact";
+	
+	public static final String FIELD_ALLOW_CONTACT_REWRITE = "allow_contact_rewrite";
+	public static final String FIELD_CONTACT_REWRITE_METHOD = "contact_rewrite_method";
+	
 	public static final String FIELD_CONTACT_PARAMS = "contact_params";
 	public static final String FIELD_CONTACT_URI_PARAMS = "contact_uri_params";
 	public static final String FIELD_USE_SRTP = "use_srtp";
@@ -74,7 +79,8 @@ public class Account {
 		FIELD_PRIORITY, FIELD_ACC_ID, FIELD_REG_URI, 
 		FIELD_USE_TCP, FIELD_PREVENT_TCP,
 		FIELD_MWI_ENABLED, FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_KA_INTERVAL, FIELD_PIDF_TUPLE_ID,
-		FIELD_FORCE_CONTACT, FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
+		FIELD_FORCE_CONTACT, FIELD_ALLOW_CONTACT_REWRITE, FIELD_CONTACT_REWRITE_METHOD, 
+		FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
 		FIELD_USE_SRTP,
 
 		// Proxy infos
@@ -150,6 +156,11 @@ public class Account {
 		if(parcelable.force_contact != null) {
 			cfg.setForce_contact(pjsua.pj_str_copy(parcelable.force_contact));
 		}
+		
+		cfg.setAllow_contact_rewrite(parcelable.allow_contact_rewrite ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+		cfg.setContact_rewrite_method(parcelable.contact_rewrite_method);
+		
+		
 		if(parcelable.use_srtp != -1) {
 			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(parcelable.use_srtp));
 			cfg.setSrtp_secure_signaling(0);
@@ -199,6 +210,8 @@ public class Account {
 		parcelable.ka_interval = (int) cfg.getKa_interval();
 		parcelable.pidf_tuple_id = cfg.getPidf_tuple_id().getPtr();
 		parcelable.force_contact = cfg.getForce_contact().getPtr();
+		parcelable.allow_contact_rewrite = cfg.getAllow_contact_rewrite()==pjsuaConstants.PJ_TRUE;
+		parcelable.contact_rewrite_method = cfg.getContact_rewrite_method();
 		parcelable.proxy = (cfg.getProxy_cnt()>0)? cfg.getProxy()[0].getPtr():null;
 		parcelable.use_srtp = cfg.getUse_srtp().swigValue();
 		
@@ -290,6 +303,15 @@ public class Account {
 		if (tmp_s != null) {
 			cfg.setForce_contact(pjsua.pj_str_copy(tmp_s));
 		}
+		tmp_i = args.getAsInteger(FIELD_ALLOW_CONTACT_REWRITE);
+		if (tmp_i != null) {
+			cfg.setAllow_contact_rewrite(tmp_i);
+		}
+		tmp_i = args.getAsInteger(FIELD_CONTACT_REWRITE_METHOD);
+		if (tmp_i != null) {
+			cfg.setContact_rewrite_method(tmp_i);
+		}
+		
 		tmp_i = args.getAsInteger(FIELD_USE_SRTP);
 		if (tmp_i != null) {
 			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(tmp_i));
@@ -355,6 +377,8 @@ public class Account {
 		args.put(FIELD_KA_INTERVAL, cfg.getKa_interval());
 		args.put(FIELD_PIDF_TUPLE_ID, cfg.getPidf_tuple_id().getPtr());
 		args.put(FIELD_FORCE_CONTACT, cfg.getForce_contact().getPtr());
+		args.put(FIELD_ALLOW_CONTACT_REWRITE, cfg.getAllow_contact_rewrite());
+		args.put(FIELD_CONTACT_REWRITE_METHOD, cfg.getContact_rewrite_method());
 		args.put(FIELD_USE_SRTP, cfg.getUse_srtp().swigValue());
 
 		// CONTACT_PARAM and CONTACT_PARAM_URI not yet in JNI

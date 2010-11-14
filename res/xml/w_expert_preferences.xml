@@ -44,13 +44,18 @@
 
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Connection">
-		<CheckBoxPreference android:key="use_tcp" android:title="@string/w_expert_use_tcp"></CheckBoxPreference>
-		<CheckBoxPreference android:key="prevent_tcp" android:title="@string/w_expert_prevent_tcp"></CheckBoxPreference>
+		<CheckBoxPreference android:key="use_tcp" android:title="@string/w_expert_use_tcp"/>
+		<CheckBoxPreference android:key="prevent_tcp" android:title="@string/w_expert_prevent_tcp"/>
 		
-		<CheckBoxPreference android:key="publish_enabled" android:title="@string/w_expert_publish_enabled"></CheckBoxPreference>
-		<EditTextPreference android:key="reg_timeout" android:title="@string/w_expert_reg_timeout"></EditTextPreference>
-		<EditTextPreference android:key="ka_interval" android:title="@string/w_expert_ka_interval"></EditTextPreference>
-		<EditTextPreference android:key="force_contact" android:title="@string/w_expert_force_contact"></EditTextPreference>
+		<CheckBoxPreference android:key="publish_enabled" android:title="@string/w_expert_publish_enabled"/>
+		<EditTextPreference android:key="reg_timeout" android:title="@string/w_expert_reg_timeout"/>
+		<EditTextPreference android:key="ka_interval" android:title="@string/w_expert_ka_interval"/>
+		<EditTextPreference android:key="force_contact" android:title="@string/w_expert_force_contact"/>
+		<CheckBoxPreference android:key="allow_contact_rewrite" android:title="@string/w_expert_allow_contact_rewrite"/>
+		<ListPreference android:key="contact_rewrite_method" android:title="@string/w_expert_contact_rewrite_method"
+			android:defaultValue="2"
+			android:entryValues="@array/contact_rewrite_method_values" android:entries="@array/contact_rewrite_method_choices"
+			/>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/w_expert_t_proxy">
 		<EditTextPreference android:key="proxy" android:title="@string/w_expert_proxy"

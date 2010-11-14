@@ -191,6 +191,13 @@ public class OutgoingCallChooser extends ListActivity {
 		Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
 		intentMakePstnCall.setData(Uri.fromParts("tel", phoneNumber, null));
 		startActivity(intentMakePstnCall);
+		if(service != null) {
+			try {
+				service.forceStopService();
+			} catch (RemoteException e) {
+				Log.e(THIS_FILE, "Unable to stop service", e);
+			}
+		}
 		finish();
 	}
 	
@@ -344,7 +351,7 @@ public class OutgoingCallChooser extends ListActivity {
 						String phoneNumber = number;
 						String toCall = account.rewritePhoneNumber(phoneNumber, database);
 						
-						service.makeCall("sip:"+toCall, account.id);
+						service.makeCall(Uri.fromParts("sip", toCall, null).toString(), account.id);
 						finish();
 						return true;
 					} catch (RemoteException e) {

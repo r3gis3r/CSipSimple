@@ -38,6 +38,8 @@ public class IAccount implements Parcelable {
 	public int ka_interval = -1;
 	public String pidf_tuple_id = null;
 	public String force_contact = null;
+	public boolean allow_contact_rewrite = true;
+	public int contact_rewrite_method = 2;
 	public String proxy = null;
 	public String realm = null;
 	public String username = null;
@@ -102,6 +104,8 @@ public class IAccount implements Parcelable {
 		dest.writeInt(datatype);
 		dest.writeString(getWriteParcelableString(data));
 		dest.writeInt(use_srtp);
+		dest.writeInt(allow_contact_rewrite?1:0);
+		dest.writeInt(contact_rewrite_method);
 	}
 
 	public void readFromParcel(Parcel in) {
@@ -126,5 +130,7 @@ public class IAccount implements Parcelable {
 		datatype = in.readInt();
 		data = getReadParcelableString(in.readString());
 		use_srtp = in.readInt();
+		allow_contact_rewrite = (in.readInt()!=0);
+		contact_rewrite_method = in.readInt();
 	}
 }

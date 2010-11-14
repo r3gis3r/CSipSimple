@@ -330,7 +330,8 @@ public class UAStateReceiver extends Callback {
 							
 						//	remoteContact = m.group(1);
 							String phoneNumber =  m.group(2);
-							if(!TextUtils.isEmpty(phoneNumber)) {
+							//Only log numbers that can be called by GSM too.
+							if(!TextUtils.isEmpty(phoneNumber) && Pattern.matches("[0-9#\\-+*]*", phoneNumber)) {
 								cv.put(Calls.NUMBER, phoneNumber);
 								// For log in call logs => don't add as new calls... we manage it ourselves.
 								cv.put(Calls.NEW, false);

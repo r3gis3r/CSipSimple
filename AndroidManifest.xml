@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.00-15" android:versionCode="356">
+	android:versionName="0.00-15" android:versionCode="358">
 	<supports-screens android:smallScreens="true" 
 		android:normalScreens="true"
 		android:largeScreens="true"
@@ -120,9 +120,8 @@
 		</activity>
 		
 		
-		<activity android:name=".ui.InCallActivity" android:launchMode="singleTask"
-			android:screenOrientation="portrait" android:excludeFromRecents="true"
-			android:theme="@android:style/Theme.NoTitleBar">
+		<activity android:name=".ui.InCallActivity" android:screenOrientation="portrait" android:excludeFromRecents="true"
+			android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleTop">
 			<intent-filter android:priority="10">
                  <action android:name="com.csipsimple.phone.action.INCALL" />
                  <category android:name="android.intent.category.DEFAULT" />

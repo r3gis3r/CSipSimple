@@ -51,4 +51,10 @@
 		<item>In band generation</item> <!-- In band emulation -->
 		<item>SIP INFO</item> <!-- SIP INFO -->
 	</string-array>
+	
+	<string-array name="contact_rewrite_method_choices">
+		<item>Legacy</item>
+		<item>Normal</item>
+	</string-array>
+	
 </resources>

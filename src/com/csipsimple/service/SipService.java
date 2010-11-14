@@ -1305,8 +1305,12 @@ public class SipService extends Service {
 		return accountInfo;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected Account getAccountForPjsipId(int accId) {
+		return getAccountForPjsipId(accId, db);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Account getAccountForPjsipId(int accId, DBAdapter database) {
 		Set<Entry<Integer, Integer>> activeAccountsClone;
 		synchronized (activeAccountsLock) {
 			activeAccountsClone = ((HashMap<Integer, Integer>) activeAccounts.clone()).entrySet();
@@ -1318,10 +1322,10 @@ public class SipService extends Service {
 
 		for (Entry<Integer, Integer> entry : activeAccountsClone) {
 			if (entry.getValue().equals(accId)) {
-				synchronized (db) {
-					db.open();
-					Account account = db.getAccount(entry.getKey());
-					db.close();
+				synchronized (database) {
+					database.open();
+					Account account = database.getAccount(entry.getKey());
+					database.close();
 					return account;
 				}
 			}
