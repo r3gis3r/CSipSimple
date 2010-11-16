@@ -68,8 +68,17 @@
 		<EditTextPreference android:key="dscp_val"
 			android:title="@string/dscp_val"
 			android:summary="@string/dscp_val_desc"
-			android:defaultValue="26"></EditTextPreference>
+			android:defaultValue="26"></EditTextPreference>*
+			
+		
 	</PreferenceCategory>
+	
+	<PreferenceScreen android:title="@string/secure_transport" android:summary="@string/secure_transport_desc" android:key="secure_transport">
+		<intent android:action="android.intent.action.MAIN"
+                  android:targetPackage="com.csipsimple"
+                  android:targetClass="com.csipsimple.ui.prefs.PrefsSecurity" ></intent>
+	</PreferenceScreen>
+	
 	<PreferenceCategory android:title="@string/nat_traversal" android:key="nat_traversal">
 			<CheckBoxPreference android:summary="@string/enable_ice_desc"
 				android:title="@string/enable_ice" android:key="enable_ice"
@@ -131,10 +140,6 @@
 	</PreferenceCategory>
 
 	
-	<PreferenceScreen android:title="@string/secure_transport" android:summary="@string/secure_transport_desc" android:key="secure_transport">
-			<intent android:action="android.intent.action.MAIN"
-                   android:targetPackage="com.csipsimple"
-                   android:targetClass="com.csipsimple.ui.prefs.PrefsSecurity" ></intent>
-		</PreferenceScreen>
+
 	
 </PreferenceScreen>

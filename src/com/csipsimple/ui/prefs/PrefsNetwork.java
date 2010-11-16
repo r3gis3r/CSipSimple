@@ -17,14 +17,20 @@
  */
 package com.csipsimple.ui.prefs;
 
+import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
+
 import android.telephony.TelephonyManager;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
 public class PrefsNetwork extends GenericPrefs {
 	
+
+	private static final String THIS_FILE = "Prefs Network";
 
 	@Override
 	protected int getXmlPreferences() {
@@ -58,10 +64,20 @@ public class PrefsNetwork extends GenericPrefs {
 			hidePreference("transport", "use_ipv6");
 			hidePreference("transport", "override_nameserver");
 			
+			hidePreference("transport", "enable_qos");
+			hidePreference("transport", "dscp_val");
+			
+			
+			
+		}
+		boolean canUseTLS = false;
+		try{
+			canUseTLS = (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE);
+		}catch (Exception e) {
+			Log.e(THIS_FILE, "Unable to get pjsua tls state");
+		}
+		if(!canUseTLS) {
 			hidePreference(null, "secure_transport");
-			
-			
-			
 		}
 	}
 
