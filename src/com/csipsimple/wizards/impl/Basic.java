@@ -135,8 +135,7 @@ public class Basic extends BaseImplementation {
 		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
 				.swigValue());
 		//By default force use tcp
-		account.use_tcp = false;
-		account.prevent_tcp = true;
+		account.transport = Account.TRANSPORT_UDP;
 		return account;
 	}
 

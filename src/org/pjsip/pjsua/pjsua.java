@@ -118,8 +118,8 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.verify_url(url);
   }
 
-  public synchronized static int schedule_timer(SWIGTYPE_p_pj_timer_entry entry, SWIGTYPE_p_pj_time_val delay) {
-    return pjsuaJNI.schedule_timer(SWIGTYPE_p_pj_timer_entry.getCPtr(entry), SWIGTYPE_p_pj_time_val.getCPtr(delay));
+  public synchronized static int schedule_timer(SWIGTYPE_p_pj_timer_entry entry, pj_time_val delay) {
+    return pjsuaJNI.schedule_timer(SWIGTYPE_p_pj_timer_entry.getCPtr(entry), pj_time_val.getCPtr(delay), delay);
   }
 
   public synchronized static void cancel_timer(SWIGTYPE_p_pj_timer_entry entry) {
@@ -623,6 +623,10 @@ public class pjsua implements pjsuaConstants {
 
   public static int can_use_srtp() {
     return pjsuaJNI.can_use_srtp();
+  }
+
+  public static int is_call_secure(int call_id) {
+    return pjsuaJNI.is_call_secure(call_id);
   }
 
   public static int media_transports_create_ipv6(pjsua_transport_config rtp_cfg) {

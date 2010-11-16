@@ -816,7 +816,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if(proximitySensorTracked && !isFirstRun && callState != null) {
 			float distance = event.values[0];
 			boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
-			Log.d(THIS_FILE, "Distance is now "+distance);
+			Log.d(THIS_FILE, "Distance is now " + distance);
 			boolean isValidCallState = false;
 			if(callState !=null) {
 				isValidCallState = callState.equals( pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED) || 

@@ -55,9 +55,13 @@
 			<RelativeLayout android:layout_width="fill_parent"
 				android:layout_height="172dp">
 
-				<ImageView android:id="@+id/photo" android:layout_width="172dp"
-					android:layout_height="166dp" android:layout_centerHorizontal="true"
-					android:src="@drawable/picture_unknown" android:background="@drawable/incall_photo_border_lg" />
+				<ImageView android:id="@+id/photo" android:layout_width="172dp" android:layout_height="166dp"
+					android:layout_centerHorizontal="true" android:src="@drawable/picture_unknown" android:background="@drawable/incall_photo_border_lg" />
+				<ImageView android:id="@+id/secureIndicator" android:layout_width="wrap_content"
+					android:visibility="gone"
+					android:layout_height="wrap_content" android:layout_toRightOf="@id/photo" android:src="@drawable/ic_menu_security_setting"
+					android:layout_alignParentBottom="true" android:layout_marginBottom="0dip"
+					android:layout_marginLeft="-45dip" />
 
 				<!-- Elapsed time indication for a call in progress. -->
 				<Chronometer android:id="@+id/elapsedTime"
@@ -67,6 +71,7 @@
 					android:layout_height="wrap_content" android:layout_toRightOf="@id/photo"
 					android:layout_alignParentBottom="true"
 					android:layout_marginBottom="19dip" android:layout_marginLeft="-14dip" />
+				
 			</RelativeLayout>
 			<TextView android:id="@+id/name" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:gravity="center_horizontal"

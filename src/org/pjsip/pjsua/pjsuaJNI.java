@@ -250,7 +250,7 @@ public class pjsuaJNI {
   public final static native int pjsip_tls_setting_verify_client_get(long jarg1, pjsip_tls_setting jarg1_);
   public final static native void pjsip_tls_setting_require_client_cert_set(long jarg1, pjsip_tls_setting jarg1_, int jarg2);
   public final static native int pjsip_tls_setting_require_client_cert_get(long jarg1, pjsip_tls_setting jarg1_);
-  public final static native void pjsip_tls_setting_timeout_set(long jarg1, pjsip_tls_setting jarg1_, long jarg2);
+  public final static native void pjsip_tls_setting_timeout_set(long jarg1, pjsip_tls_setting jarg1_, long jarg2, pj_time_val jarg2_);
   public final static native long pjsip_tls_setting_timeout_get(long jarg1, pjsip_tls_setting jarg1_);
   public final static native void pjsip_tls_setting_qos_type_set(long jarg1, pjsip_tls_setting jarg1_, int jarg2);
   public final static native int pjsip_tls_setting_qos_type_get(long jarg1, pjsip_tls_setting jarg1_);
@@ -270,6 +270,12 @@ public class pjsuaJNI {
   public final static native long pj_qos_params_wmm_prio_get(long jarg1, pj_qos_params jarg1_);
   public final static native long new_pj_qos_params();
   public final static native void delete_pj_qos_params(long jarg1);
+  public final static native void pj_time_val_sec_set(long jarg1, pj_time_val jarg1_, int jarg2);
+  public final static native int pj_time_val_sec_get(long jarg1, pj_time_val jarg1_);
+  public final static native void pj_time_val_msec_set(long jarg1, pj_time_val jarg1_, int jarg2);
+  public final static native int pj_time_val_msec_get(long jarg1, pj_time_val jarg1_);
+  public final static native long new_pj_time_val();
+  public final static native void delete_pj_time_val(long jarg1);
   public final static native int PJSUA_INVALID_ID_get();
   public final static native int PJSUA_ACC_MAX_PROXIES_get();
   public final static native int PJSUA_DEFAULT_SRTP_SECURE_SIGNALING_get();
@@ -452,7 +458,7 @@ public class pjsuaJNI {
   public final static native int cancel_stun_resolution(byte[] jarg1, int jarg2);
   public final static native int verify_sip_url(String jarg1);
   public final static native int verify_url(String jarg1);
-  public final static native int schedule_timer(long jarg1, long jarg2);
+  public final static native int schedule_timer(long jarg1, long jarg2, pj_time_val jarg2_);
   public final static native void cancel_timer(long jarg1);
   public final static native void perror(String jarg1, String jarg2, int jarg3);
   public final static native void dump(int jarg1);
@@ -661,9 +667,9 @@ public class pjsuaJNI {
   public final static native int pjsua_call_info_media_dir_get(long jarg1, pjsua_call_info jarg1_);
   public final static native void pjsua_call_info_conf_slot_set(long jarg1, pjsua_call_info jarg1_, int jarg2);
   public final static native int pjsua_call_info_conf_slot_get(long jarg1, pjsua_call_info jarg1_);
-  public final static native void pjsua_call_info_connect_duration_set(long jarg1, pjsua_call_info jarg1_, long jarg2);
+  public final static native void pjsua_call_info_connect_duration_set(long jarg1, pjsua_call_info jarg1_, long jarg2, pj_time_val jarg2_);
   public final static native long pjsua_call_info_connect_duration_get(long jarg1, pjsua_call_info jarg1_);
-  public final static native void pjsua_call_info_total_duration_set(long jarg1, pjsua_call_info jarg1_, long jarg2);
+  public final static native void pjsua_call_info_total_duration_set(long jarg1, pjsua_call_info jarg1_, long jarg2, pj_time_val jarg2_);
   public final static native long pjsua_call_info_total_duration_get(long jarg1, pjsua_call_info jarg1_);
   public final static native long new_pjsua_call_info();
   public final static native void delete_pjsua_call_info(long jarg1);
@@ -898,6 +904,7 @@ public class pjsuaJNI {
   public final static native long call_dump__SWIG_1(int jarg1, int jarg2, String jarg3);
   public final static native int can_use_tls();
   public final static native int can_use_srtp();
+  public final static native int is_call_secure(int jarg1);
   public final static native int media_transports_create_ipv6(long jarg1, pjsua_transport_config jarg1_);
   public final static native int csipsimple_init(long jarg1, pjsua_config jarg1_, long jarg2, pjsua_logging_config jarg2_, long jarg3, pjsua_media_config jarg3_);
   public final static native int csipsimple_destroy();

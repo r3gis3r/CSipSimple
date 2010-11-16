@@ -162,20 +162,22 @@ public class pjsua_call_info {
     return pjsuaJNI.pjsua_call_info_conf_slot_get(swigCPtr, this);
   }
 
-  public void setConnect_duration(SWIGTYPE_p_pj_time_val value) {
-    pjsuaJNI.pjsua_call_info_connect_duration_set(swigCPtr, this, SWIGTYPE_p_pj_time_val.getCPtr(value));
+  public void setConnect_duration(pj_time_val value) {
+    pjsuaJNI.pjsua_call_info_connect_duration_set(swigCPtr, this, pj_time_val.getCPtr(value), value);
   }
 
-  public SWIGTYPE_p_pj_time_val getConnect_duration() {
-    return new SWIGTYPE_p_pj_time_val(pjsuaJNI.pjsua_call_info_connect_duration_get(swigCPtr, this), true);
+  public pj_time_val getConnect_duration() {
+    long cPtr = pjsuaJNI.pjsua_call_info_connect_duration_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new pj_time_val(cPtr, false);
   }
 
-  public void setTotal_duration(SWIGTYPE_p_pj_time_val value) {
-    pjsuaJNI.pjsua_call_info_total_duration_set(swigCPtr, this, SWIGTYPE_p_pj_time_val.getCPtr(value));
+  public void setTotal_duration(pj_time_val value) {
+    pjsuaJNI.pjsua_call_info_total_duration_set(swigCPtr, this, pj_time_val.getCPtr(value), value);
   }
 
-  public SWIGTYPE_p_pj_time_val getTotal_duration() {
-    return new SWIGTYPE_p_pj_time_val(pjsuaJNI.pjsua_call_info_total_duration_get(swigCPtr, this), true);
+  public pj_time_val getTotal_duration() {
+    long cPtr = pjsuaJNI.pjsua_call_info_total_duration_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new pj_time_val(cPtr, false);
   }
 
   public pjsua_call_info() {

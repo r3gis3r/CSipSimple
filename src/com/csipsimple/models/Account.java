@@ -30,6 +30,7 @@ import org.pjsip.pjsua.pjsua_acc_config;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.text.TextUtils;
 
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
@@ -46,8 +47,6 @@ public class Account {
 	public static final String FIELD_PRIORITY = "priority";
 	public static final String FIELD_ACC_ID = "acc_id";
 	public static final String FIELD_REG_URI = "reg_uri";
-	public static final String FIELD_USE_TCP = "use_tcp";
-	public static final String FIELD_PREVENT_TCP = "prevent_tcp";
 	public static final String FIELD_MWI_ENABLED = "mwi_enabled";
 	public static final String FIELD_PUBLISH_ENABLED = "publish_enabled";
 	public static final String FIELD_REG_TIMEOUT = "reg_timeout";
@@ -60,7 +59,9 @@ public class Account {
 	
 	public static final String FIELD_CONTACT_PARAMS = "contact_params";
 	public static final String FIELD_CONTACT_URI_PARAMS = "contact_uri_params";
+	public static final String FIELD_TRANSPORT = "transport";
 	public static final String FIELD_USE_SRTP = "use_srtp";
+	
 	// For now, assume unique proxy
 	public static final String FIELD_PROXY = "proxy";
 	// For now, assume unique credential
@@ -77,11 +78,10 @@ public class Account {
 
 		// Here comes pjsua_acc_config fields
 		FIELD_PRIORITY, FIELD_ACC_ID, FIELD_REG_URI, 
-		FIELD_USE_TCP, FIELD_PREVENT_TCP,
 		FIELD_MWI_ENABLED, FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_KA_INTERVAL, FIELD_PIDF_TUPLE_ID,
 		FIELD_FORCE_CONTACT, FIELD_ALLOW_CONTACT_REWRITE, FIELD_CONTACT_REWRITE_METHOD, 
 		FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
-		FIELD_USE_SRTP,
+		FIELD_TRANSPORT, FIELD_USE_SRTP,
 
 		// Proxy infos
 		FIELD_PROXY,
@@ -99,16 +99,28 @@ public class Account {
 	public boolean active;
 	public pjsua_acc_config cfg;
 	public Integer id;
-	public boolean use_tcp;
-	public boolean prevent_tcp;
+	/**
+	 * transport : transport to force for this account
+	 * 0 : automatic
+	 * 1 : udp
+	 * 2 : tcp
+	 * 3 : tls
+	 */
+	public Integer transport = 0;
+	
+	
 	
 	public final static int INVALID_ID = -1;
+	
+	public final static int TRANSPORT_AUTO = 0;
+	public final static int TRANSPORT_UDP = 1;
+	public final static int TRANSPORT_TCP = 2;
+	public final static int TRANSPORT_TLS = 3;
+	
 	
 	public Account() {
 		display_name = "";
 		wizard = "EXPERT";
-		use_tcp = false;
-		prevent_tcp = false;
 		active = true;
 		
 		
@@ -126,10 +138,9 @@ public class Account {
 		}
 		display_name = parcelable.display_name;
 		wizard = parcelable.wizard;
-		use_tcp = parcelable.use_tcp;
-		prevent_tcp = parcelable.prevent_tcp;
+		transport = parcelable.transport;
 		active = parcelable.active;
-		
+		transport = parcelable.transport;
 
 		cfg = new pjsua_acc_config();
 		pjsua.acc_config_default(cfg);
@@ -198,8 +209,7 @@ public class Account {
 		}
 		parcelable.display_name = display_name;
 		parcelable.wizard = wizard ;
-		parcelable.use_tcp = use_tcp;
-		parcelable.prevent_tcp = prevent_tcp;
+		parcelable.transport = transport;
 		parcelable.active = active ;
 		
 		parcelable.priority = cfg.getPriority();
@@ -248,18 +258,11 @@ public class Account {
 		if (tmp_s != null) {
 			wizard = tmp_s;
 		}
-		tmp_i = args.getAsInteger(FIELD_USE_TCP);
+		tmp_i = args.getAsInteger(FIELD_TRANSPORT);
 		if (tmp_i != null) {
-			use_tcp =(tmp_i != 0);
-		} else {
-			use_tcp = false;
+			transport = tmp_i;
 		}
-		tmp_i = args.getAsInteger(FIELD_PREVENT_TCP);
-		if (tmp_i != null) {
-			prevent_tcp =(tmp_i != 0);
-		} else {
-			prevent_tcp = false;
-		}
+		
 		tmp_i = args.getAsInteger(FIELD_ACTIVE);
 		if (tmp_i != null) {
 			active = (tmp_i != 0);
@@ -363,8 +366,7 @@ public class Account {
 		args.put(FIELD_ACTIVE, active?"1":"0");
 		args.put(FIELD_WIZARD, wizard);
 		args.put(FIELD_DISPLAY_NAME, display_name);
-		args.put(FIELD_USE_TCP, use_tcp);
-		args.put(FIELD_PREVENT_TCP, prevent_tcp);
+		args.put(FIELD_TRANSPORT, transport);
 		
 		args.put(FIELD_PRIORITY, cfg.getPriority());
 		args.put(FIELD_ACC_ID, cfg.getId().getPtr());
@@ -511,24 +513,37 @@ public class Account {
 
 	public void applyExtraParams() {
 		
-		//TODO : should NOT be done here !!! 
-		
 		String reg_uri = "";
-		if (use_tcp) {
+		String argument = "";
+		switch (transport) {
+		case TRANSPORT_UDP:
+			argument = ";transport=udp";
+			break;
+		case TRANSPORT_TCP:
+			argument = ";transport=tcp";
+			break;
+		case TRANSPORT_TLS:
+			//TODO : differentiate ssl/tls ?
+			argument = ";transport=tls";
+			break;
+		default:
+			break;
+		}
+		
+		if (!TextUtils.isEmpty(argument)) {
 			reg_uri = cfg.getReg_uri().getPtr();
 			pj_str_t[] proxies = cfg.getProxy();
 			
-			String proposed_server = reg_uri + ";transport=tcp";
+			String proposed_server = reg_uri + argument;
 			cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
 			
 			if (cfg.getProxy_cnt() == 0 || proxies[0].getPtr() == null || proxies[0].getPtr() == "") {
 				proxies[0] = pjsua.pj_str_copy(proposed_server);
 				cfg.setProxy(proxies);
 			} else {
-				proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + ";transport=tcp");
+				proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + argument);
 				cfg.setProxy(proxies);
 			}
-			Log.w(THIS_FILE, "We are using TCP !!!");
 		}
 		
 	}

@@ -121,12 +121,13 @@ public class pjsip_tls_setting {
     return pjsuaJNI.pjsip_tls_setting_require_client_cert_get(swigCPtr, this);
   }
 
-  public void setTimeout(SWIGTYPE_p_pj_time_val value) {
-    pjsuaJNI.pjsip_tls_setting_timeout_set(swigCPtr, this, SWIGTYPE_p_pj_time_val.getCPtr(value));
+  public void setTimeout(pj_time_val value) {
+    pjsuaJNI.pjsip_tls_setting_timeout_set(swigCPtr, this, pj_time_val.getCPtr(value), value);
   }
 
-  public SWIGTYPE_p_pj_time_val getTimeout() {
-    return new SWIGTYPE_p_pj_time_val(pjsuaJNI.pjsip_tls_setting_timeout_get(swigCPtr, this), true);
+  public pj_time_val getTimeout() {
+    long cPtr = pjsuaJNI.pjsip_tls_setting_timeout_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new pj_time_val(cPtr, false);
   }
 
   public void setQos_type(pj_qos_type value) {

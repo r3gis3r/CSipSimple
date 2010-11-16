@@ -81,7 +81,7 @@ public class Advanced extends BaseImplementation {
 		pjsip_cred_info ci = account.cfg.getCred_info();
 		accountPassword.setText(ci.getData().getPtr());
 
-		accountUseTcp.setChecked((account.use_tcp));
+		accountUseTcp.setChecked(account.transport == Account.TRANSPORT_TCP);
 		String account_cfPrx = account.cfg.getProxy()[0].getPtr();
 		if(account_cfPrx == null) {
 			accountProxy.setText("");
@@ -152,8 +152,7 @@ public class Advanced extends BaseImplementation {
 		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
 				.swigValue());
 
-		account.use_tcp = accountUseTcp.isChecked();
-		account.prevent_tcp = false;
+		account.transport = accountUseTcp.isChecked() ? Account.TRANSPORT_TCP : Account.TRANSPORT_AUTO;
 		
 		if (!isEmpty(accountProxy)) {
 			account.cfg.setProxy_cnt(1);

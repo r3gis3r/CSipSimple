@@ -47,7 +47,7 @@ public class Expert extends BaseImplementation {
 	private ListPreference accountDataType;
 	private EditTextPreference accountRealm;
 	private ListPreference accountScheme;
-	private CheckBoxPreference accountUseTcp;
+	private ListPreference accountTransport;
 	private CheckBoxPreference accountPublishEnabled;
 	private EditTextPreference accountRegTimeout;
 	private EditTextPreference accountKaInterval;
@@ -56,7 +56,6 @@ public class Expert extends BaseImplementation {
 	private ListPreference accountContactRewriteMethod;
 	private EditTextPreference accountProxy;
 	private ListPreference accountUseSrtp;
-	private CheckBoxPreference accountPreventTcp;
 	
 	private void bindFields() {
 		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
@@ -67,8 +66,7 @@ public class Expert extends BaseImplementation {
 		accountData = (EditTextPreference) parent.findPreference("data");
 		accountDataType = (ListPreference) parent.findPreference("data_type");
 		accountScheme = (ListPreference) parent.findPreference("scheme");
-		accountUseTcp = (CheckBoxPreference) parent.findPreference("use_tcp");
-		accountPreventTcp = (CheckBoxPreference) parent.findPreference("prevent_tcp");
+		accountTransport = (ListPreference) parent.findPreference("transport");
 		accountUseSrtp = (ListPreference) parent.findPreference("use_srtp");
 		accountPublishEnabled = (CheckBoxPreference) parent.findPreference("publish_enabled");
 		accountRegTimeout = (EditTextPreference) parent.findPreference("reg_timeout");
@@ -115,8 +113,7 @@ public class Expert extends BaseImplementation {
 			}
 		}
 
-		accountUseTcp.setChecked((account.use_tcp));
-		accountPreventTcp.setChecked((account.prevent_tcp));
+		accountTransport.setValue(account.transport.toString());
 		accountPublishEnabled.setChecked((account.cfg.getPublish_enabled() == 1));
 		accountRegTimeout.setText(Long.toString(account.cfg.getReg_timeout()));
 		accountKaInterval.setText(Long.toString(account.cfg.getKa_interval()));
@@ -177,8 +174,11 @@ public class Expert extends BaseImplementation {
 
 	public Account buildAccount(Account account) {
 		account.display_name = accountDisplayName.getText();
-		account.use_tcp = accountUseTcp.isChecked();
-		account.prevent_tcp = accountPreventTcp.isChecked();
+		try {
+			account.transport = Integer.parseInt(accountTransport.getValue());
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport is not a number");
+		}
 		account.cfg.setId(getPjText(accountAccId));
 		account.cfg.setReg_uri(getPjText(accountRegUri));
 		try {

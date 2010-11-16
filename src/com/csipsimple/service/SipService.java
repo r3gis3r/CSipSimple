@@ -69,7 +69,6 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.view.KeyCharacterMap;
 import android.widget.Toast;
 
@@ -1055,9 +1054,10 @@ public class SipService extends Service {
 		int status;
 		pjsua.transport_config_default(cfg);
 		cfg.setPort(port);
+		
 		if(type.equals(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS)) {
 			pjsip_tls_setting tlsSetting = cfg.getTls_setting();
-			
+			/*
 			String serverName = prefsWrapper.getPreferenceStringValue(PreferencesWrapper.TLS_SERVER_NAME);
 			if (!TextUtils.isEmpty(serverName)) {
 				tlsSetting.setServer_name(pjsua.pj_str_copy(serverName));
@@ -1078,12 +1078,18 @@ public class SipService extends Service {
 			if (!TextUtils.isEmpty(tlsPwd)) {
 				tlsSetting.setPassword(pjsua.pj_str_copy(tlsPwd));
 			}
-			boolean checkServer = prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.TLS_VERIFY_SERVER);
-			tlsSetting.setVerify_server(checkServer ? 1 : 0);
 			boolean checkClient = prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.TLS_VERIFY_CLIENT);
 			tlsSetting.setVerify_client(checkClient ? 1 : 0);
 			
+			*/
+		
+			tlsSetting.setMethod(prefsWrapper.getTLSMethod());
+			boolean checkServer = prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.TLS_VERIFY_SERVER);
+			tlsSetting.setVerify_server(checkServer ? 1 : 0);
+			
+			cfg.setTls_setting(tlsSetting);
 		}
+		
 		//else?
 		if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.ENABLE_QOS)) {
 			Log.d(THIS_FILE, "Activate qos for this transport");
@@ -1149,14 +1155,27 @@ public class SipService extends Service {
 			}
 
 			// Force the use of a transport
-			if (account.use_tcp && tcpTranportId != null) {
-				// Log.d(THIS_FILE,
-				// "Attach account to transport : "+tcpTranportId);
-				// account.cfg.setTransport_id(tcpTranportId);
-			} else if (account.prevent_tcp && udpTranportId != null) {
-				account.cfg.setTransport_id(udpTranportId);
+			switch (account.transport) {
+			case Account.TRANSPORT_UDP:
+				if(udpTranportId != null) {
+					account.cfg.setTransport_id(udpTranportId);
+				}
+				break;
+			case Account.TRANSPORT_TCP:
+				if(tcpTranportId != null) {
+				//	account.cfg.setTransport_id(tcpTranportId);
+				}
+				break;
+			case Account.TRANSPORT_TLS:
+				if(tlsTransportId != null) {
+				//	account.cfg.setTransport_id(tlsTransportId);
+				}
+				break;
+			default:
+				break;
 			}
-
+			
+			
 			if (currentAccountId != null) {
 				status = pjsua.acc_modify(currentAccountId, account.cfg);
 				synchronized (activeAccountsLock) {

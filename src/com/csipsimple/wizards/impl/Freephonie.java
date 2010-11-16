@@ -63,7 +63,7 @@ public class Freephonie extends SimpleImplementation {
 		account.cfg.setProxy_cnt(0);
 		pj_str_t[] proxies = account.cfg.getProxy();
 		account.cfg.setProxy(proxies);
-		account.prevent_tcp = true;
+		account.transport = 1;
 		return account;
 	}
 }

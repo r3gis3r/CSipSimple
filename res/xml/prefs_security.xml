@@ -27,6 +27,12 @@
 				android:numeric="integer"
 				android:summary="@string/network_tls_transport_port_desc"
 				android:defaultValue="5061" android:dependency="enable_tls"></EditTextPreference>
+			<ListPreference android:title="@string/tls_method" android:key="tls_method"
+				android:summary="@string/tls_method_desc"
+				android:defaultValue="0"
+				android:entryValues="@array/tls_method_values" android:entries="@array/tls_method_choices"></ListPreference>
+			
+				<!-- 
 			<EditTextPreference android:key="network_tls_server_name"
 				android:title="@string/network_tls_server_name"
 				android:summary="@string/network_tls_server_name_desc"
@@ -47,14 +53,15 @@
 				android:title="@string/tls_password"
 				android:summary="@string/tls_password_desc"
 				android:defaultValue="" android:dependency="enable_tls"></EditTextPreference>
-			
+			 -->
 			<CheckBoxPreference android:title="@string/verify_server"
 				android:summary="@string/verify_server_desc"
 				android:key="tls_verify_server" android:defaultValue="false"></CheckBoxPreference>
+				<!-- 
 			<CheckBoxPreference android:title="@string/verify_client"
 				android:summary="@string/verify_client_desc"
 				android:key="tls_verify_client" android:defaultValue="false"></CheckBoxPreference>
-				
+				 -->
 		</PreferenceCategory>
 		<PreferenceCategory android:title="@string/secure_media" android:key="secure_media">
 			<ListPreference android:title="@string/use_srtp" android:key="use_srtp"

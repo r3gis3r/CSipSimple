@@ -27,8 +27,7 @@ public class IAccount implements Parcelable {
 	public int id = -1;
 	public String display_name = "";
 	public String wizard = "EXPERT";
-	public boolean use_tcp = false;
-	public boolean prevent_tcp = false;
+	public Integer transport = 0;
 	public boolean active = true;
 	public int priority = 100;
 	public String acc_id = null;
@@ -87,8 +86,7 @@ public class IAccount implements Parcelable {
 		dest.writeInt(id);
 		dest.writeString(display_name);
 		dest.writeString(wizard);
-		dest.writeInt(use_tcp?1:0);
-		dest.writeInt(prevent_tcp?1:0);
+		dest.writeInt(transport);
 		dest.writeInt(active?1:0);
 		dest.writeInt(priority);
 		dest.writeString(getWriteParcelableString(acc_id));
@@ -113,8 +111,7 @@ public class IAccount implements Parcelable {
 		id = in.readInt();
 		display_name = in.readString();
 		wizard = in.readString();
-		use_tcp = (in.readInt()!=0)?true:false;
-		prevent_tcp = (in.readInt()!=0)?true:false;
+		transport = in.readInt();
 		active = (in.readInt()!=0)?true:false;
 		priority = in.readInt();
 		acc_id = getReadParcelableString(in.readString());

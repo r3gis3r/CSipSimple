@@ -17,14 +17,17 @@
  */
 package com.csipsimple.models;
 
+import org.pjsip.pjsua.pj_time_val;
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_call_info;
 import org.pjsip.pjsua.pjsua_call_media_status;
 
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemClock;
 
 import com.csipsimple.R;
 
@@ -40,6 +43,8 @@ public class CallInfo implements Parcelable {
 	
 	public long callStart = 0;
 	private pjsua_call_media_status mediaStatus;
+	private boolean mediaSecure = false;
+	private long connectStart = 0;
 	
 	@SuppressWarnings("serial")
 	public class UnavailableException extends Exception {
@@ -83,6 +88,9 @@ public class CallInfo implements Parcelable {
 		remoteContact = pjCallInfo.getRemote_info().getPtr();
 		confPort = pjCallInfo.getConf_slot();
 		accId = pjCallInfo.getAcc_id();
+		pj_time_val duration = pjCallInfo.getConnect_duration();
+		connectStart  = SystemClock.elapsedRealtime () - duration.getSec() * 1000 - duration.getMsec(); 
+		
 	}
 	
 	public void updateFromPj() throws UnavailableException {
@@ -93,6 +101,7 @@ public class CallInfo implements Parcelable {
 			throw new UnavailableException();
 		}
 		fillFromPj(pj_info);
+		mediaSecure = (pjsua.is_call_secure(callId) == pjsuaConstants.PJ_TRUE);
 	}
 
 	@Override
@@ -208,13 +217,13 @@ public class CallInfo implements Parcelable {
 	}
 	
 
-	//TODO : implement this (could be usefull to get from the native stack instead of managing it in java
-//	public long getDuration() {
-//		pjsua_call_info pjInfo = new pjsua_call_info();
-//		pjsua.call_get_info(callId, pjInfo);
-//		SWIGTYPE_p_pj_time_val pjDuration = pjInfo.getConnect_duration();
-//		return ;
-//	}
+	/**
+	 * Get duration of the call right now
+	 * @return duration in seconds
+	 */
+	public long getConnectStart() {
+		return connectStart;
+	}
 	
 	
 	public String dumpCallInfo() {
@@ -251,5 +260,9 @@ public class CallInfo implements Parcelable {
 	
 	public int getAccId() {
 		return accId;
+	}
+	
+	public boolean isSecure() {
+		return mediaSecure;
 	}
 }

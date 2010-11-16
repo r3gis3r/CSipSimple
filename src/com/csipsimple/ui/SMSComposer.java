@@ -15,6 +15,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.csipsimple.R;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.OutgoingCall;
@@ -56,8 +59,20 @@ public class SMSComposer extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		
 		accid = getIntent().getIntExtra("com.ui.SMSComposer.accid", -1);
-		number = getIntent().getStringExtra("com.ui.SMSComposer.number");
 		
+		Pattern p = Pattern.compile("([^<]*)<sip:([^@]*)@([^>]*)>");
+		Matcher m = p.matcher(getIntent().getStringExtra("com.ui.SMSComposer.number"));
+		
+		if (m.matches()) {
+			String caller_id = m.group(1);
+			String account_cfgid = m.group(2);
+			String server = m.group(3);
+			number = "sip:" + account_cfgid + "@" + server;
+		} else {
+			number = getIntent().getStringExtra("com.ui.SMSComposer.number");
+		}
+		
+		// account id or phone number is invalid
 		if (accid == -1 || number.equals("")) {
 			finish();
 		}
@@ -67,7 +82,7 @@ public class SMSComposer extends Activity implements OnClickListener
 			contextToBindTo = getParent();
 		}
 
-		setContentView(R.layout.sms_activity);
+		setContentView(R.layout.sms_composer);
 	//	smsView = (View) findViewById(R.id.sms_composer);
 		
 		message = (EditText) findViewById(R.id.message);

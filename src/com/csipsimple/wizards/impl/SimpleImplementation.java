@@ -76,7 +76,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		accountPassword.setText(ci.getData().getPtr());
 		
 		if(canTcp()) {
-			accountUseTcp.setChecked((account.use_tcp));
+			accountUseTcp.setChecked(account.transport == Account.TRANSPORT_TCP);
 		}else {
 			hidePreference(null, USE_TCP);
 		}
@@ -144,7 +144,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		account.cfg.setReg_timeout(1800);
 		
 		if(canTcp()) {
-			account.use_tcp = accountUseTcp.isChecked();
+			account.transport = accountUseTcp.isChecked() ? Account.TRANSPORT_TCP : Account.TRANSPORT_AUTO;
 		}
 		
 		return account;
@@ -153,6 +153,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 	protected abstract String getDomain();
 	protected abstract String getDefaultName();
 	
+	//This method may be overriden by a implementation
 	protected boolean canTcp() {
 		return false;
 	}

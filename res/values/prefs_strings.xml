@@ -16,6 +16,7 @@
 <string name="for_outgoings">For outgoing calls</string>
 <string name="perfs">Performances</string>
 <string name="transport">Transport</string>
+<string name="transport_desc">Force the use of a transport for this account</string>
 
 <string name="use_wifi">Use WiFi</string>
 <string name="use_wifi_in_desc">Use WiFi for incoming calls</string>
@@ -87,7 +88,8 @@
 <string name="verify_server_desc">Verify server\'s certificate</string>
 <string name="verify_client">Check client</string>
 <string name="verify_client_desc">Verify client\'s certificate</string>
-
+<string name="tls_method">TLS Method</string>
+<string name="tls_method_desc">Method for TLS transport</string>
 <string name="use_srtp">SRTP mode</string>
 <string name="use_srtp_desc">Mode for Secure RTP</string>
 

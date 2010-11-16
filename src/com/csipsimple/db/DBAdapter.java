@@ -40,7 +40,7 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 10;
+	private static final int DATABASE_VERSION = 13;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
@@ -59,8 +59,6 @@ public class DBAdapter {
 			+ Account.FIELD_ACTIVE				+ " INTEGER,"
 			+ Account.FIELD_WIZARD				+ " TEXT,"
 			+ Account.FIELD_DISPLAY_NAME		+ " TEXT,"
-			+ Account.FIELD_USE_TCP				+ " BOOLEAN,"
-			+ Account.FIELD_PREVENT_TCP			+ " BOOLEAN,"
 
 			// Here comes pjsua_acc_config fields
 			+ Account.FIELD_PRIORITY 			+ " INTEGER," 
@@ -76,6 +74,7 @@ public class DBAdapter {
 			+ Account.FIELD_CONTACT_REWRITE_METHOD + " INTEGER,"
 			+ Account.FIELD_CONTACT_PARAMS 		+ " TEXT,"
 			+ Account.FIELD_CONTACT_URI_PARAMS	+ " TEXT,"
+			+ Account.FIELD_TRANSPORT	 		+ " INTEGER," 
 			+ Account.FIELD_USE_SRTP	 		+ " INTEGER," 
 
 			// Proxy infos
@@ -158,28 +157,6 @@ public class DBAdapter {
 			if(oldVersion < 6) {
 				db.execSQL("DROP TABLE IF EXISTS "+FILTERS_TABLE_NAME);
 			}
-			if(oldVersion < 7) {
-				try {
-					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_TCP+" BOOLEAN");
-				}catch(SQLiteException e) {
-					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
-				}
-			}
-			if(oldVersion < 8) {
-				try {
-					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_PREVENT_TCP+" BOOLEAN");
-				}catch(SQLiteException e) {
-					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
-				}
-				
-			}
-			if(oldVersion < 9) {
-				try {
-					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_USE_SRTP+" INTEGER");
-				}catch(SQLiteException e) {
-					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
-				}
-			}
 			if(oldVersion < 10) {
 				try {
 					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+
@@ -189,6 +166,17 @@ public class DBAdapter {
 				}catch(SQLiteException e) {
 					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
 				}
+			}
+			if(oldVersion < 13) {
+				try {
+					db.execSQL("ALTER TABLE " + ACCOUNTS_TABLE_NAME + " ADD " + Account.FIELD_TRANSPORT + " INTEGER");
+					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + Account.FIELD_TRANSPORT + "=" + Account.TRANSPORT_UDP + " WHERE prevent_tcp=1");
+					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + Account.FIELD_TRANSPORT + "=" + Account.TRANSPORT_TCP + " WHERE use_tcp=1");
+					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + Account.FIELD_TRANSPORT + "=" + Account.TRANSPORT_AUTO + " WHERE use_tcp=0 AND prevent_tcp=0");
+				}catch(SQLiteException e) {
+					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+				}
+				
 			}
 			
 			onCreate(db);

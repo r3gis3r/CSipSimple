@@ -130,13 +130,12 @@ public class CallLogsList extends ListActivity {
 				Pattern sipUriSpliter = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
 				Matcher m = sipUriSpliter.matcher(number);
 				if (m.matches()) {
-					if (!TextUtils.isEmpty(m.group(1))) {
+					if (!TextUtils.isEmpty(m.group(2))) {
+						remoteContact = m.group(2);
+					} else if (!TextUtils.isEmpty(m.group(1))) {
 						remoteContact = m.group(1);
 					}
-					if (!TextUtils.isEmpty(m.group(2))) {
-						phoneNumber = m.group(2);
-					}
-				} 
+				}
 			} else {
 				remoteContact = cachedName;
 			}

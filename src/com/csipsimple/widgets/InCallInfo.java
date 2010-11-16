@@ -27,6 +27,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -60,6 +61,7 @@ public class InCallInfo extends FrameLayout {
 	private TextView remotePhoneNumber;
 	private DBAdapter db;
 	private TextView label;
+	private ImageView secure;
 	
 	public InCallInfo(Context aContext, AttributeSet attrs) {
 		super(aContext, attrs);
@@ -80,6 +82,7 @@ public class InCallInfo extends FrameLayout {
 		elapsedTime = (Chronometer) findViewById(R.id.elapsedTime);
 		remotePhoneNumber = (TextView) findViewById(R.id.phoneNumber);
 		label = (TextView) findViewById(R.id.label);
+		secure = (ImageView) findViewById(R.id.secureIndicator);
 		
 		currentInfo = (LinearLayout) findViewById(R.id.currentCallInfo);
 		currentDetailedInfo = (LinearLayout) findViewById(R.id.currentCallDetailedInfo);
@@ -89,7 +92,7 @@ public class InCallInfo extends FrameLayout {
 		colorConnected = Color.parseColor("#99CE3F");
 		colorEnd = Color.parseColor("#FF6072");
 		
-		
+		secure.bringToFront();
 	}
 
 	public void setCallState(CallInfo aCallInfo) {
@@ -159,6 +162,9 @@ public class InCallInfo extends FrameLayout {
 			elapsedTime.setTextColor(colorEnd);
 			return;
 		}
+		elapsedTime.setBase(callInfo.getConnectStart());
+		secure.setVisibility(callInfo.isSecure()?View.VISIBLE:View.GONE);
+		
 		pjsip_inv_state state = callInfo.getCallState();
 		switch (state) {
 		case PJSIP_INV_STATE_INCOMING:
