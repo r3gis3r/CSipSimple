@@ -16,6 +16,10 @@
     <item>benutzerdefiniert RegExp</item>
   </string-array>
   <string-array name="replace_type">
+        <item>Prefix by</item>
+        <item>Suffix with</item>
+        <item>Replace match by</item>
+        <item>Replace all by</item>
     <item>benutzerdefiniert RegExp</item>
   </string-array>
 </resources>

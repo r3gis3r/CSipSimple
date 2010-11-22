@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string-array name="filters_action">
         <item>Can\'t call</item>
         <item>Rewrite</item>
@@ -8,7 +7,6 @@
         <item>Directly call</item>
         <item>Auto answer</item>
     </string-array>
-    
     <string-array name="filters_type">
         <item>Starts with</item>
         <item>Ends with</item>
@@ -17,7 +15,6 @@
         <item>Is exactly</item>
         <item>Custom RegExp</item>
     </string-array>
-    
     <string-array name="replace_type">
         <item>Prefix by</item>
         <item>Suffix with</item>
