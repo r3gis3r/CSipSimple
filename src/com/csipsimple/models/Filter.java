@@ -192,6 +192,8 @@ public class Filter {
 				return matcher.replaceAll(replace); 
 			}catch(PatternSyntaxException e) {
 				Log.e(THIS_FILE, "Invalid pattern ", e);
+			}catch(ArrayIndexOutOfBoundsException e) {
+				Log.e(THIS_FILE, "Invalid pattern ", e);
 			}
 		}
 		return number;

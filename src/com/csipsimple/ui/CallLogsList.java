@@ -21,6 +21,7 @@ package com.csipsimple.ui;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
@@ -34,6 +35,7 @@ import android.provider.CallLog.Calls;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,6 +60,8 @@ public class CallLogsList extends ListActivity {
 	private Drawable drawableOutgoing;
 	private Drawable drawableMissed;
 
+	private Activity contextToBindTo = this;
+
 	private static final String THIS_FILE = "Call log list";
 	
 	public static final int MENU_ITEM_DELETE_CALL = Menu.FIRST;
@@ -77,6 +81,11 @@ public class CallLogsList extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// Bind to the service
+		if (getParent() != null) {
+			contextToBindTo  = getParent();
+		}
+		
 		setContentView(R.layout.recent_calls);
 		registerForContextMenu(getListView());
 
@@ -312,5 +321,27 @@ public class CallLogsList extends ListActivity {
 		return sipUriSpliter.matcher(number);
 	}
 	
+	
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK : {
+			onBackPressed();
+			//return true;
+			break;
+		}
+		}
+
+		return super.onKeyUp(keyCode, event);
+	}
+	
+	public void onBackPressed() {
+		if(contextToBindTo != null && contextToBindTo instanceof SipHome) {
+			((SipHome) contextToBindTo).onBackPressed();
+		}else {
+			finish();
+		}
+	}
 	
 }

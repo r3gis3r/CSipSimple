@@ -39,10 +39,11 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.models.CallerInfo.ParsedSipUriInfos;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.SipUri;
+import com.csipsimple.utils.SipUri.ParsedSipUriInfos;
 
 
 public class InCallInfo extends FrameLayout {
@@ -111,7 +112,7 @@ public class InCallInfo extends FrameLayout {
 	
 
 
-	private void updateRemoteName() {
+	private synchronized void updateRemoteName() {
 		if(callInfo == null) {
 			return;
 		}
@@ -123,7 +124,7 @@ public class InCallInfo extends FrameLayout {
 			remoteUri = aRemoteUri;
 			String remoteContact = aRemoteUri;
 			
-			ParsedSipUriInfos uriInfos = CallerInfo.parseSipUri(remoteUri);
+			ParsedSipUriInfos uriInfos = SipUri.parseSipUri(remoteUri);
 			
 			if(!TextUtils.isEmpty(uriInfos.displayName)) {
 				remoteContact = uriInfos.displayName;

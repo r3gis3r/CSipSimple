@@ -20,6 +20,8 @@ package com.csipsimple.db;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pjsip.pjsua.pjsip_status_code;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +35,7 @@ import android.provider.CallLog;
 
 import com.csipsimple.models.Account;
 import com.csipsimple.models.Filter;
+import com.csipsimple.models.SipMessage;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 
@@ -40,10 +43,11 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 13;
+	private static final int DATABASE_VERSION = 16;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
+	private static final String MESSAGES_TABLE_NAME = "messages";
 	
 
 	
@@ -90,8 +94,8 @@ public class DBAdapter {
 		+ ");";
 	
 	private final static String TABLE_CALLLOGS_CREATE = "CREATE TABLE IF NOT EXISTS "
-			+ CALLLOGS_TABLE_NAME
-			+ " ("
+		+ CALLLOGS_TABLE_NAME
+		+ " ("
 			+ CallLog.Calls._ID					+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
 			+ CallLog.Calls.CACHED_NAME			+ " TEXT,"
 			+ CallLog.Calls.CACHED_NUMBER_LABEL	+ " TEXT,"
@@ -101,22 +105,35 @@ public class DBAdapter {
 			+ CallLog.Calls.NEW					+ " INTEGER,"
 			+ CallLog.Calls.NUMBER				+ " TEXT,"
 			+ CallLog.Calls.TYPE				+ " INTEGER"
-			+");";
+		+");";
 	
 	private static final String TABLE_FILTERS_CREATE =  "CREATE TABLE IF NOT EXISTS "
 		+ FILTERS_TABLE_NAME
 		+ " ("
 			+ Filter._ID						+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
 			+ Filter.FIELD_PRIORITY 			+ " INTEGER," 
-	
 			// Foreign key to account
 			+ Filter.FIELD_ACCOUNT				+ " INTEGER,"
 			// Match/replace
 			+ Filter.FIELD_MATCHES				+ " TEXT,"
 			+ Filter.FIELD_REPLACE				+ " TEXT,"
-	
 			+ Filter.FIELD_ACTION 				+ " INTEGER" 
 		+ ");";
+	
+	private final static String TABLE_MESSAGES_CREATE = "CREATE TABLE IF NOT EXISTS "
+		+ MESSAGES_TABLE_NAME
+		+ " ("
+			+ SipMessage.FIELD_ID					+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
+			+ SipMessage.FIELD_FROM				+ " TEXT,"
+			+ SipMessage.FIELD_TO					+ " TEXT,"
+			+ SipMessage.FIELD_CONTACT				+ " TEXT,"
+			+ SipMessage.FIELD_BODY				+ " TEXT,"
+			+ SipMessage.FIELD_MIME_TYPE			+ " TEXT,"
+			+ SipMessage.FIELD_TYPE				+ " INTEGER,"
+			+ SipMessage.FIELD_DATE				+ " INTEGER,"
+			+ SipMessage.FIELD_STATUS			+ " INTEGER,"
+			+ SipMessage.FIELD_READ				+ " BOOLEAN"
+		+");";
 	
 
 	private final Context context;
@@ -131,6 +148,7 @@ public class DBAdapter {
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
 		}
 
 		@Override
@@ -138,6 +156,7 @@ public class DBAdapter {
 			db.execSQL(TABLE_ACCOUNT_CREATE);
 			db.execSQL(TABLE_CALLLOGS_CREATE);
 			db.execSQL(TABLE_FILTERS_CREATE);
+			db.execSQL(TABLE_MESSAGES_CREATE);
 		}
 
 		@Override
@@ -178,7 +197,7 @@ public class DBAdapter {
 				}
 				
 			}
-			
+
 			onCreate(db);
 		}
 	}
@@ -505,13 +524,12 @@ public class DBAdapter {
 	
 	/**
 	 * Insert a new filter into the database
-	 * @param values filter values
+	 * @param Filter Filter to add into the database
 	 * @return the id of inserted row into database
 	 */
-	public long insertFilter(ContentValues args){
-		return db.insert(FILTERS_TABLE_NAME, null, args);
+	public long insertFilter(Filter filter){
+		return db.insert(FILTERS_TABLE_NAME, null, filter.getDbContentValues());
 	}
-	
 	
 	public Cursor getFiltersForAccount(int account_id) {
 		Log.d(THIS_FILE, "Get filters for account "+account_id);
@@ -521,7 +539,8 @@ public class DBAdapter {
 	}
 	
 	public int getCountFiltersForAccount(int account_id) {
-		Cursor c = db.rawQuery("SELECT COUNT("+Filter.FIELD_ACCOUNT+") FROM "+FILTERS_TABLE_NAME+" WHERE "+Filter.FIELD_ACCOUNT+"=?;", 
+		Cursor c = db.rawQuery("SELECT COUNT(" + Filter.FIELD_ACCOUNT + ") FROM " + 
+									FILTERS_TABLE_NAME + " WHERE " + Filter.FIELD_ACCOUNT + "=?;",
 				new String[]{Integer.toString(account_id)});
 		int numRows = 0;
 		if(c.getCount() > 0){
@@ -592,17 +611,81 @@ public class DBAdapter {
 				Filter._ID + "=" + filterId, null) > 0;
 	}
 	
+
+	// --------
+	// MESSAGES
+	// --------
+
 	/**
-	 * Insert a new account into the database
-	 * @param account account to add into the database
+	 * Insert a new message into the database
+	 * @param message SipMessage to add into the database
 	 * @return the id of inserted row into database
 	 */
-	public long insertFilter(Filter filter){
-		return db.insert(FILTERS_TABLE_NAME, null, filter.getDbContentValues());
+	public long insertMessage(SipMessage message){
+		return db.insert(MESSAGES_TABLE_NAME, null, message.getContentValues());
 	}
 
-
-
+	public Cursor getAllConversations() {
+		return db.query(MESSAGES_TABLE_NAME, 
+				new String[]{
+					"ROWID AS _id",
+					SipMessage.FIELD_FROM, 
+					SipMessage.FIELD_BODY, 
+					"MAX(" + SipMessage.FIELD_DATE + ") AS " + SipMessage.FIELD_DATE,
+					"MIN(" + SipMessage.FIELD_READ + ") AS " + SipMessage.FIELD_READ,
+					//SipMessage.FIELD_READ,
+					"COUNT(" + SipMessage.FIELD_DATE + ") AS counter"
+				}, 
+				SipMessage.FIELD_TYPE+"="+SipMessage.MESSAGE_TYPE_INBOX, null, 
+				SipMessage.FIELD_FROM, null, 
+				SipMessage.FIELD_DATE+" DESC");
+	}
 	
+	public Cursor getConversation(String remoteFrom) {
+		return db.query(MESSAGES_TABLE_NAME, 
+				new String[]{
+					"ROWID AS _id",
+					SipMessage.FIELD_FROM, 
+					SipMessage.FIELD_BODY, 
+					SipMessage.FIELD_DATE, 
+					SipMessage.FIELD_MIME_TYPE,
+					SipMessage.FIELD_TYPE,
+					SipMessage.FIELD_STATUS
+				}, SipMessage.THREAD_SELECTION,
+				new String[] {
+					remoteFrom,
+					remoteFrom
+				}, 
+				null, null, 
+				SipMessage.FIELD_DATE+" ASC");
+	}
+	
+	public boolean deleteConversation(String remoteFrom) {
+		return db.delete(MESSAGES_TABLE_NAME, SipMessage.THREAD_SELECTION, new String[] {
+					remoteFrom,
+					remoteFrom
+				}) > 0;
+	}
+	
+	public boolean markConversationAsRead(String remoteFrom) {
+		ContentValues args = new ContentValues();
+		args.put(SipMessage.FIELD_READ, true);
+		return db.update(MESSAGES_TABLE_NAME, args,
+				SipMessage.FIELD_FROM + "=?", new String[] {remoteFrom}) > 0;
+	}
+
+	public boolean updateMessageStatus(String sTo, String body, int messageType, int status, String reason) {
+		ContentValues args = new ContentValues();
+		args.put(SipMessage.FIELD_TYPE, messageType);
+		args.put(SipMessage.FIELD_STATUS, status);
+		if(status != pjsip_status_code.PJSIP_SC_OK.swigValue()) {
+			args.put(SipMessage.FIELD_BODY, body + " // " + reason);
+		}
+		return db.update(MESSAGES_TABLE_NAME, args,
+				SipMessage.FIELD_TO + "=? AND "+
+				SipMessage.FIELD_BODY+ "=? AND "+
+				SipMessage.FIELD_TYPE+ "="+SipMessage.MESSAGE_TYPE_QUEUED, 
+				new String[] {sTo, body}) > 0;
+	}
 	
 }

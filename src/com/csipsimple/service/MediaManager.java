@@ -131,9 +131,9 @@ public class MediaManager {
 		saveAudioState();
 		
 		//Set the rest of the phone in a better state to not interferate with current call
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_ON);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
-		audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+		audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
 		
 		
 		

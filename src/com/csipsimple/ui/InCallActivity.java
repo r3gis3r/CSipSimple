@@ -44,7 +44,9 @@ import android.media.AudioManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
@@ -118,29 +120,15 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		Log.d(THIS_FILE, "Create in call");
 		setContentView(R.layout.in_call_main);
-
-		/*
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			callInfo = (CallInfo) extras.get(SipService.EXTRA_CALL_INFO);
-		}
-
-		if (callInfo == null) {
-			Log.e(THIS_FILE, "You provide an empty call info....");
-			finish();
-			return;
-		}
-		*/
 		
-	//	Log.d(THIS_FILE, "Creating call handler for " + callInfo.getCallId()+" state "+callInfo.getRemoteContact());
 		/*
 		inTest = extras.getBoolean("in_test", false);
 		if(!inTest) {
 		*/
 		//	Log.d(THIS_FILE, "Creating call handler for call " + callInfo.getCallId() );
-			serviceBound = bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
+			bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 			/*
 		}
 		*/
@@ -172,7 +160,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
 		lockOverlay.setActivity(this, this);
 		
-		
+		//Listen to media & sip events to update the UI
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
 		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_MEDIA_CHANGED));
 		
@@ -187,6 +175,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	@Override
 	protected void onStart() {
+		Log.d(THIS_FILE, "Start in call");
 		super.onStart();
         if (keyguardManager == null) {
             keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
@@ -245,14 +234,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			
 		}
         dialFeedback.resume();
-        
-        updateUIFromCall();
+        handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
 	}
 	
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
+		Log.d(THIS_FILE, "Stop in call");
 		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
 			proximityWakeLock.release();
 		}
@@ -280,11 +268,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	@Override
 	protected void onDestroy() {
-		if (serviceBound) {
+		Log.d(THIS_FILE, "Destroy in call");
+		try {
 			unbindService(connection);
-			serviceBound = false;
+		}catch(Exception e) {
+			//Just ignore that
 		}
-		
+		service = null;
 		if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
@@ -298,6 +288,33 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 		super.onDestroy();
 	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		//TODO : update UI
+		Log.d(THIS_FILE, "New intent is launched");
+	}
+	
+
+	private static final int UPDATE_FROM_CALL = 1;
+	private static final int UPDATE_FROM_MEDIA = 2;
+	// Ui handler
+	private Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case UPDATE_FROM_CALL:
+				updateUIFromCall();
+				break;
+			case UPDATE_FROM_MEDIA:
+				updateUIFromMedia();
+				break;
+			default:
+				super.handleMessage(msg);
+			}
+		}
+	};
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -535,7 +552,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		}
 	}
 	
-	private void delayedQuit() {
+	private synchronized void delayedQuit() {
 		
 		if (wakeLock != null && wakeLock.isHeld()) {
 			Log.d(THIS_FILE, "Releasing wake up lock");
@@ -552,7 +569,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		inCallControls.setVisibility(View.GONE);
 		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
 		
-		
+		Log.d(THIS_FILE, "Start quit timer");
 		if(quitTimer != null) {
 			quitTimer.schedule(new QuitTimerTask(), 3000);
 		}else {
@@ -563,6 +580,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private class QuitTimerTask extends TimerTask{
 		@Override
 		public void run() {
+			Log.d(THIS_FILE, "Run quit timer");
 			finish();
 		}
 	};
@@ -661,9 +679,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 						Log.e(THIS_FILE, "Not able to retrieve calls");
 					}
 				}
-				updateUIFromCall();
+
+				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
 			}else if(action.equals(SipService.ACTION_SIP_MEDIA_CHANGED)) {
-				updateUIFromMedia();
+				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_MEDIA));
 			}
 		}
 	};
@@ -672,7 +691,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	/**
 	 * Service binding
 	 */
-	private boolean serviceBound = false;
 	private boolean serviceConnected = false;
 	private ISipService service;
 	private ServiceConnection connection = new ServiceConnection() {
@@ -684,8 +702,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				//Log.d(THIS_FILE, "Service started get real call info "+callInfo.getCallId());
 				callsInfo = service.getCalls();
 				serviceConnected = true;
-				updateUIFromCall();
-				updateUIFromMedia();
+				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
+				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_MEDIA));
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Can't get back the call", e);
 			}

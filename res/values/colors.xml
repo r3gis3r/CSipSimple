@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!--
 		Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+		Copyright (C) 2007-2008 Esmertec AG.
+	 	Copyright (C) 2007-2008 The Android Open Source Project
 	
 		This file is part of CSipSimple. CSipSimple is free software: you can
 		redistribute it and/or modify it under the terms of the GNU General
@@ -14,9 +16,18 @@
 		copy of the GNU General Public License along with CSipSimple. If not,
 		see <http://www.gnu.org/licenses/>.
 	-->
+	<!--
+	Parts of this file are extract from the android project distributed under Apache license relicensed in GPLv3
+	-->
 <resources> 
 	 <color name="account_inactive">#FF646464</color>
 	 <color name="account_unregistered">#FFFFC200</color>
 	 <color name="account_valid">#FF84E300</color>
 	 <color name="account_error">#FFFF0F00</color>
+	 
+	 
+    <!-- the background color used for unread conversation -->
+    <color name="unread_bgcolor">#ffffffff</color>
+    <color name="read_bgcolor">#ffeeeeee</color>
+    <drawable name="light_blue_background">#ffecfbff</drawable>
 </resources>

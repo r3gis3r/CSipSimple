@@ -20,8 +20,6 @@
 package com.csipsimple.models;
 
 import java.lang.reflect.Field;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -32,6 +30,8 @@ import android.text.TextUtils;
 
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.SipUri;
+import com.csipsimple.utils.SipUri.ParsedSipUriInfos;
 
 /**
  * Looks up caller information for the given phone number.
@@ -210,18 +210,13 @@ public class CallerInfo {
     	}
     	
     	CallerInfo callerInfo = null;
-    	
-		String digitNumberPatter = "^[0-9\\-#\\+\\*\\(\\)]+$";
-		
-		ParsedSipUriInfos uriInfos = parseSipUri(sipUri);
-		
-		
-    	if (!TextUtils.isEmpty(uriInfos.userName) && Pattern.matches(digitNumberPatter, uriInfos.userName)) {
+		ParsedSipUriInfos uriInfos = SipUri.parseSipUri(sipUri);
+    	if (SipUri.isPhoneNumber(uriInfos.userName)) {
     		Log.d(THIS_FILE, "Number looks usable, try People lookup");
     		callerInfo = CallerInfo.getCallerInfo(context, uriInfos.userName);
     	}
-    	//If contact uid doesn't match; we can try with contact display nam 
-    	if(callerInfo == null && !TextUtils.isEmpty(uriInfos.displayName) && Pattern.matches(digitNumberPatter, uriInfos.displayName)) {
+    	//If contact uid doesn't match; we can try with contact display nam e
+    	if(callerInfo == null && SipUri.isPhoneNumber(uriInfos.displayName)) {
     		Log.d(THIS_FILE, "Display name looks usable, try People lookup");
     		callerInfo = CallerInfo.getCallerInfo(context, uriInfos.displayName);
     	}
@@ -229,27 +224,7 @@ public class CallerInfo {
     	return callerInfo;
     }
     
-    public static ParsedSipUriInfos parseSipUri(String sipUri) {
-    	ParsedSipUriInfos parsedInfos = new ParsedSipUriInfos();
-    	
-    	if(!TextUtils.isEmpty(sipUri)) {
-	    	Log.d(THIS_FILE, "Parsing " + sipUri);
-			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
-			Matcher m = p.matcher(sipUri);
-			if (m.matches()) {
-				parsedInfos.displayName = m.group(1).trim();
-				parsedInfos.userName =  m.group(2);
-				Log.d(THIS_FILE, "Found contact login =" + parsedInfos.displayName+" display name = "+parsedInfos.userName);
-			}
-    	}
-    	
-    	return parsedInfos;
-    }
-    
-    public static class ParsedSipUriInfos {
-    	public String displayName;
-    	public String userName;
-    }
+   
 
     private static String normalize(String s) {
         if (s == null || s.length() > 0) {

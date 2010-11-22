@@ -79,8 +79,10 @@ import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.models.IAccount;
+import com.csipsimple.models.SipMessage;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.SipUri;
 
 public class SipService extends Service {
 
@@ -96,14 +98,20 @@ public class SipService extends Service {
 	// Static constants
 	// -------
 	// ACTIONS
-	public static final String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
-	public static final String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
-	public static final String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
 	public static final String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
 	public static final String ACTION_SIP_DIALER = "com.csipsimple.phone.action.DIALER";
 	public static final String ACTION_SIP_CALLLOG = "com.csipsimple.phone.action.CALLLOG";
+	public static final String ACTION_SIP_MESSAGES = "com.csipsimple.phone.action.MESSAGES";
+	
+	// SERVICE BROADCASTS
+	public static final String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
+	public static final String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
+	public static final String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
 	public static final String ACTION_SIP_ACCOUNT_ACTIVE_CHANGED = "com.csipsimple.service.ACCOUNT_ACTIVE_CHANGED";
-	public static final String ACTION_SIP_SMS = "com.csipsimple.phone.action.SMS_RECEIVED";
+	public static final String ACTION_SIP_MESSAGE_RECEIVED = "com.csipsimple.service.MESSAGE_RECEIVED";
+	//TODO : message sent?
+	public static final String ACTION_SIP_MESSAGE_STATUS = "com.csipsimple.service.MESSAGE_STATUS";
+	
 	
 	// EXTRAS
 	public static final String EXTRA_CALL_INFO = "call_info";
@@ -145,8 +153,8 @@ public class SipService extends Service {
 		 * Send SMS using
 		 */
 		@Override
-		public void sendSMS(String msg,String to,int accountId)throws RemoteException { 
-			SipService.this.sendSMS(msg, to, accountId);
+		public void sendMessage(String msg,String to,int accountId)throws RemoteException { 
+			SipService.this.sendMessage(msg, to, accountId);
 		}
 	
 		/**
@@ -314,12 +322,6 @@ public class SipService extends Service {
 				}
 			}
 			return null;
-		}
-
-		@Override
-		public void onPager(String callInfo, String text) throws RemoteException
-		{
-			Log.e(THIS_FILE, "Pager:" + callInfo + " " + text);
 		}
 
 		@Override
@@ -604,22 +606,31 @@ public class SipService extends Service {
 		public void onCallStateChanged(int state, String incomingNumber) {
 			Log.d(THIS_FILE, "Call state has changed !" + state + " : " + incomingNumber);
 
-			// Avoid ringing while not idle
+			// Avoid ringing if new GSM state is not idle
 			if (state != TelephonyManager.CALL_STATE_IDLE && mediaManager != null) {
 				mediaManager.stopRing();
 			}
 
+			// If new call state is not idle
 			if (state != TelephonyManager.CALL_STATE_IDLE && userAgentReceiver != null) {
 				CallInfo currentActiveCall = userAgentReceiver.getActiveCallInProgress();
-				if (currentActiveCall != null && state != TelephonyManager.CALL_STATE_RINGING) {
-					hasBeenHoldByGSM = currentActiveCall.getCallId();
-					SipService.this.callHold(hasBeenHoldByGSM);
-					pjsua.set_no_snd_dev();
-
-					AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
-					am.setMode(AudioManager.MODE_IN_CALL);
+				
+				if (currentActiveCall != null) {
+				
+					if(state != TelephonyManager.CALL_STATE_RINGING) {
+						//New state is not ringing nor idle... so off hook, hold current sip call
+						hasBeenHoldByGSM = currentActiveCall.getCallId();
+						SipService.this.callHold(hasBeenHoldByGSM);
+						pjsua.set_no_snd_dev();
+	
+						AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+						am.setMode(AudioManager.MODE_IN_CALL);
+					}else {
+						//We have a ringing incoming call.
+					}
 				}
 			} else {
+				//GSM is now back to an IDLE state, resume previously stopped SIP calls 
 				if (hasBeenHoldByGSM != null && created) {
 					pjsua.set_snd_dev(0, 0);
 					SipService.this.callReinvite(hasBeenHoldByGSM, true);
@@ -827,7 +838,7 @@ public class SipService extends Service {
 					// MAIN CONFIG
 
 					cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent()));
-					cfg.setThread_cnt(prefsWrapper.getThreadCount()); // one thread seems to be enough
+				//	cfg.setThread_cnt(prefsWrapper.getThreadCount()); // one thread seems to be enough
 					// for now
 					cfg.setUse_srtp(prefsWrapper.getUseSrtp());
 					cfg.setSrtp_secure_signaling(0);
@@ -853,7 +864,7 @@ public class SipService extends Service {
 
 					// IGNORE NOTIFY -- TODO : for now that's something we want
 					// since it pollute battery life
-					cfg.setEnable_unsolicited_mwi(pjsuaConstants.PJ_FALSE);
+			//		cfg.setEnable_unsolicited_mwi(pjsuaConstants.PJ_FALSE);
 
 					// LOGGING CONFIG
 					pjsua.logging_config_default(logCfg);
@@ -1737,9 +1748,9 @@ public class SipService extends Service {
 	}
 	
 	/**
-	 * Send sms using SIP server
+	 * Send sms/message using SIP server
 	 */
-	public int sendSMS(String message, String callee, int accountId) {
+	public int sendMessage(String message, String callee, int accountId) {
 		if (!created) {
 			return -1;
 		}
@@ -1762,9 +1773,19 @@ public class SipService extends Service {
 			// Nothing to do with this values
 			byte[] userData = new byte[1];
 			
-			Log.e("Sent", callee + " " + message + " " + toCall.getPjsipAccountId());
-			//return pjsua.call_make_call(pjsipAccountId, uri, 0, userData, null, callId);
+			Log.d("Sent", callee + " " + message + " " + toCall.getPjsipAccountId());
+			SipMessage msg = new SipMessage(SipMessage.SELF, 
+					SipUri.getCanonicalSipUri(toCall.getCallee()), SipUri.getCanonicalSipUri(toCall.getCallee()), 
+					message, "text/plain", System.currentTimeMillis(), 
+					SipMessage.MESSAGE_TYPE_QUEUED);
+			msg.setRead(true);
+			db.open();
+			db.insertMessage(msg);
+			db.close();
+			Log.d(THIS_FILE, "Inserted "+msg.getTo());
 			return pjsua.im_send(toCall.getPjsipAccountId(), uri, null, text, (org.pjsip.pjsua.SWIGTYPE_p_pjsua_msg_data)null, userData);
+			
+			
 		}else {
 			Log.e(THIS_FILE, "Asked for a bad uri " + callee);
 			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.invalid_sip_uri, 0));
@@ -1966,7 +1987,7 @@ public class SipService extends Service {
 
 		
 		// Check integrity of callee field
-		Pattern p = Pattern.compile("^.*(?:<)?(sip(?:s)?):([^@]*@[^@]*)(?:>)?$", Pattern.CASE_INSENSITIVE);
+		Pattern p = Pattern.compile("^.*(?:<)?(sip(?:s)?):([^@]*@[^>]*)(?:>)?$", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(callee);
 		
 		if (!m.matches()) {
@@ -2003,5 +2024,7 @@ public class SipService extends Service {
 		
 		return null;
 	}
+	
+	
 
 }

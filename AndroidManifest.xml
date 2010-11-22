@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.00-15" android:versionCode="360">
+	android:versionName="0.00-15" android:versionCode="363">
 	<supports-screens android:smallScreens="true" 
 		android:normalScreens="true"
 		android:largeScreens="true"
@@ -23,7 +23,7 @@
                  <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter android:priority="10">
-				<action android:name="com.csipsimple.phone.action.SMS_RECEIVED" />
+				<action android:name="com.csipsimple.phone.action.MESSAGES" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
             
@@ -49,8 +49,6 @@
 		<activity android:name=".ui.Dialer"></activity>
 		<activity android:name=".ui.CallLogsList"></activity>
 		<activity android:name=".ui.CallLog" android:theme="@android:style/Theme.NoTitleBar"></activity>
-		<activity android:name=".ui.SMSComposer" android:theme="@android:style/Theme.Dialog"></activity>
-		<activity android:name=".ui.SMSReader" android:theme="@android:style/Theme.Dialog"></activity>
 		
 		<!-- First setup -->
 		<activity android:name=".ui.WelcomeScreen" android:screenOrientation="nosensor"
@@ -150,6 +148,14 @@
 		        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
 		    </intent-filter>
 		</activity>
+		
+		
+		<!-- Messages -->
+		<activity android:name=".ui.messages.ConversationList" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".ui.messages.ComposeMessageActivity" android:theme="@android:style/Theme.NoTitleBar"
+                  android:windowSoftInputMode="stateHidden"
+                  android:launchMode="singleTop" />
+		
 		
 	</application>
 	<uses-sdk android:minSdkVersion="3" />

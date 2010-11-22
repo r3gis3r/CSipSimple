@@ -319,7 +319,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	}
 	
 	public void onBackPressed() {
-		if(contextToBindTo != null) {
+		if(contextToBindTo != null && contextToBindTo instanceof SipHome) {
 			((SipHome) contextToBindTo).onBackPressed();
 		}else {
 			finish();

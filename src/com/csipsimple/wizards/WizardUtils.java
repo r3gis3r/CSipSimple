@@ -42,6 +42,7 @@ import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.IiNet;
 import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
+import com.csipsimple.wizards.impl.Keyyo;
 import com.csipsimple.wizards.impl.Local;
 import com.csipsimple.wizards.impl.MagicJack;
 import com.csipsimple.wizards.impl.OnSip;
@@ -191,6 +192,10 @@ public class WizardUtils {
 					new Locale("FR", "dz"),
 					new Locale("FR", "tn"),
 				}, false, false, Ippi.class));
+		WIZARDS_DICT.put("KEYYO", new WizardInfo("KEYYO", "Keyyo", 
+				R.drawable.ic_wizard_keyyo, 9, 
+				new Locale[]{Locale.FRANCE}, false, false, 
+				Keyyo.class));
 		WIZARDS_DICT.put("PHONZO", new WizardInfo("PHONZO", "Phonzo", 
 				R.drawable.ic_wizard_phonzo, 10, 
 				new Locale[]{new Locale("SE")}, false, false, 

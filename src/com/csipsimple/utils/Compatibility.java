@@ -178,7 +178,7 @@ public class Compatibility {
 	public static boolean canMakeGSMCall(Context context) {
 		if (canMakeGSMCall == null) {
 			Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
-			intentMakePstnCall.setData(Uri.fromParts("tel", "1", null));
+			intentMakePstnCall.setData(Uri.fromParts("tel", "12345", null));
 			canMakeGSMCall = canResolveIntent(context, intentMakePstnCall);
 		}
 		return canMakeGSMCall;

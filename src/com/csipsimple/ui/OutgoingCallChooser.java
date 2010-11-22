@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.telephony.PhoneNumberUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -50,6 +51,7 @@ import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class OutgoingCallChooser extends ListActivity {
 	
@@ -191,13 +193,7 @@ public class OutgoingCallChooser extends ListActivity {
 		Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
 		intentMakePstnCall.setData(Uri.fromParts("tel", phoneNumber, null));
 		startActivity(intentMakePstnCall);
-		if(service != null) {
-			try {
-				service.forceStopService();
-			} catch (RemoteException e) {
-				Log.e(THIS_FILE, "Unable to stop service", e);
-			}
-		}
+		finishServiceIfNeeded();
 		finish();
 	}
 	
@@ -363,6 +359,35 @@ public class OutgoingCallChooser extends ListActivity {
 		return false;
 	}
 	
-
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+	    if (keyCode == KeyEvent.KEYCODE_BACK 
+	    		&& event.getRepeatCount() == 0
+	    		&& !Compatibility.isCompatible(5)) {
+	    	onBackPressed();
+	    	
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
+	public void onBackPressed() {
+		finishServiceIfNeeded();
+		finish();
+	}
+	
+	private void finishServiceIfNeeded() {
+		if(service != null) {
+			PreferencesWrapper prefsWrapper = new PreferencesWrapper(this);
+		
+			if( ! prefsWrapper.isValidConnectionForIncoming()) {
+				try {
+					service.forceStopService();
+				} catch (RemoteException e) {
+					Log.e(THIS_FILE, "Unable to stop service", e);
+				}
+			}
+		}
+	}
 
 }

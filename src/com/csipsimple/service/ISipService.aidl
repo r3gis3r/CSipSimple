@@ -63,6 +63,5 @@ interface ISipService{
 	boolean canRecord(int callId);
 	
 	//SMS
-	void sendSMS(String msg, String toNumber, int accountId);
-	void onPager(String callInfo, String text);
+	void sendMessage(String msg, String toNumber, int accountId);
 }

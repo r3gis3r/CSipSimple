@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * Copyright (C) 2007-2008 Esmertec AG.
+ * Copyright (C) 2007-2008 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc. -->
+    <string name="app_label">Messaging</string>
+
+    <!-- Command name to open a Compose screen; displays in conversation list -->
+    <string name="new_message">New message</string>
+    <!-- Summary text under "New Message" command; displays in conversation list -->
+    <string name="create_new_message">Compose new message</string>
+    <!-- Context menu item on an individual message for dialing the sender's phone number -->
+    <string name="menu_call_back">Call <xliff:g id="name">%s</xliff:g></string>
+    <!-- Context menu item on an individual message for emailing the sender -->
+    <string name="menu_send_email">Send email to <xliff:g id="name">%s</xliff:g></string>
+
+    <!-- Menu item for starting a new conversation -->
+    <string name="menu_compose_new">Compose</string>
+    <!-- Menu item for accessing application settings -->
+    <string name="menu_preferences">Settings</string>
+    <string name="menu_add_address_to_contacts">Add <xliff:g id="name">%s</xliff:g> to Contacts</string>
+    <!-- Menu item to call the recipient of the conversation on the phone (imperative verb) -->
+    <string name="menu_call">Call</string>
+    <!-- Menu item for deleting all conversations -->
+    <string name="menu_delete_all">Delete threads</string>
+    <!-- Context menu item on an individual conversation for deleting that conversation -->
+    <string name="menu_delete">Delete thread</string>
+    <!-- This string is no longer used. It used to be the menu item for viewing all messages that
+         were unable to be delivered, i.e. send failed -->
+    <string name="menu_undelivered_messages">Undelivered messages</string>
+    <!-- Context menu item on an individual conversation for viewing that conversation -->
+    <string name="menu_view">View thread</string>
+    <!-- Message that appears on screen while SIM card messages are retrieved -->
+    <string name="refreshing">Refreshing\u2026</string>
+
+    <!-- Tag appearing on conversations in the conversation list that contain a draft message -->
+    <string name="has_draft">Draft</string>
+
+    <!-- Appearance of message sender in multi-recipient messages, e.g. "me to Megan" -->
+    <string name="broadcast_from_to"><xliff:g id="sender" example="me">%1$s</xliff:g> to <xliff:g id="recipient" example="Megan">%2$s</xliff:g></string>
+    <!-- Name to use when we have an unspecified sender -->
+    <string name="anonymous_recipient">Anonymous</string>
+    <!-- Subject to display in the conversation list if there is no subject -->
+    <string name="no_subject_view">(No subject)</string>
+
+    <!-- Name of the local user when displaying sender of an outgoing message (personal pronoun) -->
+    <string name="messagelist_sender_self">Me</string>
+    <!-- Context menu item on an individual message for viewing an attached picture -->
+    <string name="view_picture">View picture</string>
+    <!-- Context menu item on an individual message for viewing an attached slideshow -->
+    <string name="view_slideshow">View slideshow</string>
+    <!-- Context menu item on an individual message for viewing message details such as time and date -->
+    <string name="view_message_details">View message details</string>
+    <!-- Context menu item on an individual message for viewing a delivery report -->
+    <string name="view_delivery_report">View report</string>
+    <!-- Context menu item on an individual message for deleting only that message -->
+    <string name="delete_message">Delete message</string>
+    <!-- Time and date a message was sent -->
+    <string name="sent_on">"Sent: <xliff:g id="date">%s</xliff:g>"</string>
+    <!-- Time and date a message is due to expire -->
+    <string name="expire_on">"Expires: <xliff:g id="date">%s</xliff:g>"</string>
+    <!-- Abbreviation for "kilobyte" -->
+    <string name="kilobyte">KB</string>
+
+    <!-- Dialog box title brought up when warning the user that a message could not be delivered -->
+    <string name="undelivered_msg_dialog_title">Undelivered message</string>
+    <!-- Dialog box message indicating that a message could not be delivered, including the time of last attempt -->
+    <string name="undelivered_msg_dialog_body">Unable to send this message.\nAttempt made: <xliff:g id="message">%s</xliff:g>.</string>
+    <!-- Dialog box message indicating that a message could not be delivered -->
+    <string name="undelivered_sms_dialog_body">Unable to send this message.</string>
+    <!-- Menu item for deleting the entire conversation currently being viewed -->
+    <string name="delete_thread">Delete thread</string>
+    <!-- Context menu item on an individual message for forwarding it to another recipient -->
+    <string name="menu_forward">Forward</string>
+    <!-- Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
+         to be downloaded (imperative verb) -->
+    <string name="download">Download</string>
+    <!-- Message displayed in place of the "download message" button once it has been pressed,
+         indicating that the download is in progress -->
+    <string name="downloading">Downloading</string>
+    <!-- Formatting for prepending MMS message text with sender's name. -->
+    <string name="name_colon"><b><xliff:g id="name" example="Me">%s</xliff:g></b>": "</string>
+    <!-- Formatting for subject displayed inline, prepended to MMS message text -->
+    <string name="inline_subject">"&lt;Subject: <xliff:g id="subject">%s</xliff:g>&gt;"</string>
+    <!-- Text to display when the actual text is inaccessible due to DRM protection -->
+    <string name="drm_protected_text">"* DRM protected text *"</string>
+    <!-- Error message to display when DRM rights are insufficient to access some data -->
+    <string name="insufficient_drm_rights">Insufficient DRM rights detected.</string>
+    <!-- Individual message context menu item -->
+    <string name="copy_message_text">Copy message text</string>
+    <!-- Header for context menu on an individual message -->
+    <string name="message_options">Message options</string>
+
+    <!-- Button text on edit slide screen indicating the user wants to finish editing that slide -->
+    <string name="done">Done</string>
+
+    <!-- Menu item in slideshow edit screen for moving the selected slide up in the order -->
+    <string name="move_up">Move up</string>
+    <!-- Menu item in slideshow edit screen for moving the selected slide down in the order -->
+    <string name="move_down">Move down</string>
+    <!-- Menu item in slideshow edit screen for removing the selected slide from the slideshow -->
+    <string name="remove_slide">Remove slide</string>
+    <!-- Menu item in slideshow edit screen for adding a new slide to the slideshow -->
+    <string name="add_slide">Add slide</string>
+    <!-- Text displayed below "Add slide" item in slideshow edit screen -->
+    <string name="add_slide_hint">Select to create new slide.</string>
+    <!-- Menu item in slideshow edit screen for discarding the entire slideshow -->
+    <string name="discard_slideshow">Discard slideshow</string>
+    <!-- Header of slideshow showing which slide is being displayed -->
+    <string name="slide_show_part">Part <xliff:g id="part">%1$s</xliff:g>/<xliff:g id="total">%2$s</xliff:g></string>
+
+
+    <!-- Menu item in slide edit screen for removing the text from the slide being edited -->
+    <string name="remove_text">Remove text</string>
+    <!-- Menu item in slide edit screen for adding a picture to the slide being edited -->
+    <string name="add_picture">Add picture</string>
+    <!-- Menu item in slide edit screen for removing the picture from the slide being edited -->
+    <string name="remove_picture">Remove picture</string>
+    <!-- Menu item in slide edit screen for adding music to the slide being edited -->
+    <string name="add_music">Add music</string>
+    <!-- Menu item in slide edit screen for removing the music from the slide being edited -->
+    <string name="remove_music">Remove music</string>
+    <!-- Menu item in slide edit screen for adding a video to the slide being edited -->
+    <string name="add_video">Add video</string>
+    <!-- Menu item in slide edit screen for removing the video from the slide being edited -->
+    <string name="remove_video">Remove video</string>
+
+    <!-- Title bar displayed in compose message activity before a recipient has been selected -->
+    <string name="compose_title">Compose</string>
+    <!-- Hint displayed in message recipient text box when starting a new conversation -->
+    <string name="to_hint">To</string>
+    <!-- Hint displayed in subject edit text box when adding a subject -->
+    <string name="subject_hint">Subject</string>
+
+    <!-- Menu item in conversation screen for attaching something to the message being composed -->
+    <string name="add_attachment">Attach</string>
+    <!-- Menu item in conversation screen for adding a subject to the message being composed -->
+    <string name="add_subject">Add subject</string>
+    <!-- Menu item in conversation screen for discarding the message currently being composed -->
+    <string name="discard">Discard</string>
+
+    <!-- Button next to an attachment during message composition to view the attachment (imperative verb) -->
+    <string name="view">View</string>
+    <!-- Button next to an attachment during message composition to replace the attachment (imperative verb) -->
+    <string name="replace">Replace</string>
+    <!-- Button next to an attachment during message composition to remove the attachment (imperative verb) -->
+    <string name="remove">Remove</string>
+
+    <!-- Button in conversation screen for sending the SMS message currently being composed (imperative verb) -->
+    <string name="send">Send</string>
+    <!-- Text to appear directly below the "Send" text on the SMS/MMS send button. The "MMS" text is on a second line in a smaller font. This is similar to saying "Send (mms)". -->
+    <string name="mms">MMS</string>
+
+    <!-- Menu item in conversation screen for returning to the conversation list -->
+    <string name="all_threads">All threads</string>
+
+    <!-- Hint text in message body field when keyboard is exposed -->
+    <string name="type_to_compose_text_enter_to_send">Type to compose</string>
+    <!-- Hint text in message body field when keyboard is hidden -->
+    <string name="open_keyboard_to_compose_message">Open keyboard to compose message</string>
+
+    <!-- Dialog title for warning the user that the picture they are trying to attach is too large -->
+    <string name="image_too_large">Picture too large</string>
+    <!-- Dialog message text asking the user if he wants to resize the picture being attached -->
+    <string name="ask_for_automatically_resize">Automatically resize picture before sending?</string>
+
+    <!-- Toast message while an image is being resized -->
+    <string name="compressing">Picture too large. Compressing\u2026</string>
+
+    <!-- Error message indicating the format for the specified media type (e.g. "picture") is unsupported -->
+    <string name="unsupported_media_format">Unsupported <xliff:g id="name">%1$s</xliff:g> format</string>
+    <!-- Message prompting the user to select a different item; item string as type-appropriate (e.g. "picture") -->
+    <string name="select_different_media">Please select a different <xliff:g id="name">%1$s</xliff:g>.</string>
+    <!-- Message indicating that the message size limit has been reached -->
+    <string name="exceed_message_size_limitation">Message size limit reached.</string>
+    <!-- Message indicating that the message is too big and there is no space to attach a video -->
+    <string name="message_too_big_for_video">The message is too big to attach a video.</string>
+    <!-- Error message indicating that the item trying to be attached could not be added -->
+    <string name="failed_to_add_media">Sorry, you cannot add this <xliff:g id="name">%1$s</xliff:g> to your message.</string>
+    <!-- Error message indicating that the picture being attached and resized could not be resized -->
+    <string name="failed_to_resize_image">Picture not resized.</string>
+    <!-- Error message indicating that an image being attached is still too large to send even after resize -->
+    <string name="resize_image_error_information">Sorry, even when resized this picture is too large to send.</string>
+    <!-- String prepended to forwarded messages to indicate they were forwarded -->
+    <string name="forward_prefix">Fwd:\u0020</string>
+    <!-- Dialog box title that appears when a draft message will not be saved due to invalid recipients -->
+    <string name="discard_message">Discard</string>
+    <!-- Dialog message text explaining that a draft message will not be saved due to invalid recipients -->
+    <string name="discard_message_reason">Your message will be discarded because it has no valid recipients.</string>
+    <!-- Dialog box title indicating which recipients are invalid when the user tries to send a message with invalid recipients -->
+    <string name="has_invalid_recipient">Invalid recipient(s): &lt;<xliff:g id="name">%1$s</xliff:g>&gt;</string>
+    <!-- While sending a message, if it has invalid recipient, display this message. -->
+    <string name="invalid_destination">You have entered an invalid address.</string>
+    <!-- Dialog message text when the user tries to send a message with invalid recipients -->
+    <string name="invalid_recipient_message">Please correct the recipient(s) or they will not receive the message.</string>
+    <!-- Dialog box title indicating the message cannot be sent because there are no valid recipients -->
+    <string name="cannot_send_message">Cannot send this message</string>
+    <!-- Dialog message text indicating the message cannot be sent because there are no valid recipients -->
+    <string name="cannot_send_message_reason">Your message has no valid recipients.</string>
+    <!-- Error message displayed when the user attempts to forward a message with DRM-locked contents -->
+    <string name="cannot_forward_drm_obj">The DRM object included in the message cannot be forwarded.</string>
+
+    <!-- Brief message that appears when converting a message from SMS to MMS. -->
+    <string name="converting_to_picture_message">Converting to multimedia message\u2026</string>
+    <!-- Brief message that appears when converting a message from MMS to SMS. -->
+    <string name="converting_to_text_message">Converting to text message\u2026</string>
+    <!-- Brief message that appears when the maximum number of slides has been reached -->
+    <string name="cannot_add_slide_anymore">Cannot add more slides.</string>
+    <!-- Brief message that appears when user tries to add picture to a slide which already has a video. -->
+    <string name="cannot_add_picture_and_video">Cannot add video and picture to one slide.</string>
+    <!-- Brief message that appears when the message cannot be saved -->
+    <string name="cannot_save_message">Cannot save message.</string>
+    <string name="cannot_load_message">Cannot load message.</string>
+    <!-- Brief message that appears when a message has automatically been saved as a draft -->
+    <string name="message_saved_as_draft">Message saved as draft.</string>
+    <!-- Brief message that appears when an attempt is made to delete a locked message -->
+    <string name="locked_message_cannot_be_deleted">Locked message cannot be deleted.</string>
+    <!-- Brief message that appears when too many recipients have been added -->
+    <string name="too_many_recipients">This message has too many recipients (<xliff:g id="currentCount">%1$s</xliff:g>). There is a limit of <xliff:g id="maxLimit">%2$s</xliff:g> recipients.</string>
+    <!-- Brief message that appears when too many videos/pictures are imported -->
+    <string name="too_many_attachments">There is a limit of <xliff:g id="maxLimit">%1$s</xliff:g> attachments. Only the first <xliff:g id="currentCount">%2$s</xliff:g> will be added.</string>
+    <!-- Alert dialog title when adding attachments is taking a while -->
+    <string name="adding_attachments_title">Adding attachments</string>
+    <!-- Alert dialog when adding attachments is taking a while -->
+    <string name="adding_attachments">Please wait while the items are added to the slideshow.</string>
+
+    <!-- Titlebar string when there are more than one recipients -->
+    <string name="multiple_recipients"><xliff:g id="recipientCount">%1$s</xliff:g> recipients</string>
+
+    <!-- Error message indicating that an audio attachment cannot be played -->
+    <string name="cannot_play_audio">Cannot play audio.</string>
+
+    <!-- Button in the slide editor screen used to preview the slide (imperative verb) -->
+    <string name="preview">Preview</string>
+    <!-- Menu item in the slide editor screen used to preview the entire slideshow (imperative verb) -->
+    <string name="preview_slideshow">Preview</string>
+    <!-- Button in the slide editor screen used to replace the attached picture -->
+    <string name="replace_image">Replace picture</string>
+    <!-- String for slide duration in seconds -->
+    <string name="duration_sec">Duration (<xliff:g id="duration">%s</xliff:g> sec)</string>
+    <!-- Dialog box title for duration selector -->
+    <string name="duration_selector_title">"Duration for slide "</string>
+    <!-- Dialog box title for slide layout selector -->
+    <string name="layout_selector_title">"Slideshow layout "</string>
+    <!-- Slide layout option for layout at the top -->
+    <string name="layout_top">Layout (top)</string>
+    <!-- Slide layout option for layout at the bottom -->
+    <string name="layout_bottom">Layout (bottom)</string>
+    <!-- Hint in slide text field before text is typed -->
+    <string name="type_to_compose_text_or_leave_blank">Type to compose text, or leave blank</string>
+    <!-- Toast when the user enters a non-numeric value for the duration of a slide -->
+    <string name="duration_not_a_number">Duration must be a number</string>
+    <!-- Toast when the user enters a zero value for the duration of a slide -->
+    <string name="duration_zero">Duration must be greater than zero seconds</string>
+
+    <!-- In duration selection dialog box, short version of "seconds" -->
+    <string name="secs">secs</string>
+    <!-- Options for slide duration in duration selection dialog box -->
+    <string-array name="select_dialog_items">
+         <item>1 second</item>
+         <item>2 seconds</item>
+         <item>3 seconds</item>
+         <item>4 seconds</item>
+         <item>5 seconds</item>
+         <item>6 seconds</item>
+         <item>7 seconds</item>
+         <item>8 seconds</item>
+         <item>9 seconds</item>
+         <item>10 seconds</item>
+         <item>Other\u2026</item>
+    </string-array>
+
+    <!-- Context menu item on a message recipient for viewing their contact info -->
+    <string name="menu_view_contact">View contact</string>
+    <!-- Context menu item on a message recipient for adding them to the user's
+         contacts (used if the recipient is not already in the address book) -->
+    <string name="menu_add_to_contacts">Add to Contacts</string>
+
+    <!-- Sender to be used if the sender address has been hidden -->
+    <string name="hidden_sender_address">Hidden sender address</string>
+
+    <!-- Text to be used for affirmative response button in dialog boxes -->
+    <string name="yes">OK</string>
+    <!-- Text to be used for negative response button in dialog boxes -->
+    <string name="no">Cancel</string>
+    <!-- Text to be used for affirmative response button in setting SMS limits dialog box -->
+    <string name="set">Set</string>
+
+    <!-- Button text used for playing an attachment or slideshow (imperative verb) -->
+    <string name="play">Play</string>
+    <!-- Button text used for editing a slideshow (imperative verb) -->
+    <string name="edit">Edit</string>
+    <!-- Button for resizing an image used in "image too large" dialog box (imperative verb) -->
+    <string name="resize">Resize</string>
+    <!-- Button used for trying to send a message that has some valid recipients and some
+         invalid recipients, in spite of the warning presented to the user -->
+    <string name="try_to_send">Try to send</string>
+
+    <!-- Title of Settings screen -->
+    <string name="preferences_title">"Settings"</string>
+    <!-- Settings screen menu item for restoring all settings to default -->
+    <string name="restore_default">"Restore default settings"</string>
+
+    <!-- Settings screen, section heading for notifications -->
+    <string name="pref_notification_settings_title">Notification settings</string>
+    <!-- Settings screen, section heading for MMS-specific settings -->
+    <string name="pref_mms_settings_title">"Multimedia message (MMS) settings"</string>
+    <!-- Settings screen, section heading for SMS-specific settings -->
+    <string name="pref_sms_settings_title">"Text message (SMS) settings"</string>
+    <!-- Settings screen, section heading for storage-specific settings -->
+    <string name="pref_sms_storage_title">Storage settings</string>
+
+    <!-- Settings item description for entering SIM card message screen -->
+    <string name="pref_summary_manage_sim_messages">Manage messages stored on your SIM card</string>
+    <!-- Settings item description for boolean MMS delivery report setting -->
+    <string name="pref_summary_mms_delivery_reports">Request a delivery report for each message you send</string>
+    <!-- Settings item description for boolean MMS read report setting -->
+    <string name="pref_summary_mms_read_reports">Request a read report for each message you send</string>
+    <!-- Settings item description for boolean SMS delivery report setting -->
+    <string name="pref_summary_sms_delivery_reports">Request a delivery report for each message you send</string>
+    <!-- Settings item description for boolean auto-delete messages setting -->
+    <string name="pref_summary_auto_delete">Delete old messages as limits are reached</string>
+    <!-- Settings item description for integer auto-delete sms message limit -->
+    <string name="pref_summary_delete_limit"><xliff:g id="count">%1$s</xliff:g> messages per conversation</string>
+    <!-- Settings item for entering SIM card message screen -->
+    <string name="pref_title_manage_sim_messages">Manage SIM card messages</string>
+    <!-- Settings item for boolean option to enable/disable MMS delivery reports -->
+    <string name="pref_title_mms_delivery_reports">Delivery reports</string>
+    <!-- Settings item for boolean option to enable/disable MMS read reports -->
+    <string name="pref_title_mms_read_reports">Read reports</string>
+    <!-- Settings item for boolean option to enable/disable SMS delivery reports -->
+    <string name="pref_title_sms_delivery_reports">Delivery reports</string>
+    <!-- Settings item for boolean option to enable/disable auto-deletion of messages -->
+    <string name="pref_title_auto_delete">Delete old messages</string>
+    <!-- Settings item for integer option to set SMS delete limit -->
+    <string name="pref_title_sms_delete">Text message limit</string>
+    <!-- Settings item for integer option to set MMS delete limit -->
+    <string name="pref_title_mms_delete">Multimedia message limit</string>
+    <!-- Settings item for boolean option to display message notifications -->
+    <string name="pref_title_notification_enabled">Notifications</string>
+    <!-- Settings item description for boolean message notification option -->
+    <string name="pref_summary_notification_enabled">Display message notifications in status bar</string>
+    <!-- Settings item for boolean option to vibrate during message notification -->
+    <string name="pref_title_notification_vibrateWhen">Vibrate</string>
+    <!-- Settings item description for boolean vibrate option -->
+    <string name="pref_summary_notification_vibrateWhen">Also vibrate when notified</string>
+    <!-- Settings item for entering ringtone selection screen -->
+    <string name="pref_title_notification_ringtone">Select ringtone</string>
+    <!-- Settings item for setting the number of message to save for each conversation -->
+    <string name="pref_messages_to_save">Set number of messages to save</string>
+
+    <!-- The vibrate notification modes -->
+    <string-array name="prefEntries_vibrateWhen">
+        <!-- Always -->
+        <item>Always</item>
+        <!-- Only when the phone is in Silent mode -->
+        <item>Only when silent</item>
+        <!-- Never -->
+        <item>Never</item>
+    </string-array>
+
+    <!-- The default vibrateWhen value, when none is set -->
+    <string translatable="false" name="prefDefault_vibrateWhen">never</string>
+    <!-- The value to use when migrating from old versions for a true vibrate setting -->
+    <string translatable="false" name="prefDefault_vibrate_true">always</string>
+    <!-- The value to use when migrating from old versions for a false vibrate setting -->
+    <string translatable="false" name="prefDefault_vibrate_false">never</string>
+
+    <!-- The vibrateWhen values -->
+    <string-array translatable="false" name="prefValues_vibrateWhen">
+        <item>always</item>
+        <item>silent</item>
+        <item>never</item>
+    </string-array>
+
+    <!-- Dialog title for the Vibrate dialog -->
+    <string name="prefDialogTitle_vibrateWhen">Vibrate</string>
+
+    <!-- Settings item for boolean option to auto-retrieve incoming MMS messages -->
+    <string name="pref_title_mms_auto_retrieval">Auto-retrieve</string>
+    <!-- Settings item description for boolean MMS auto-retrieve option -->
+    <string name="pref_summary_mms_auto_retrieval">Automatically retrieve messages</string>
+    <!-- Settings item for boolean option to auto-retrieve incoming MMS messages while roaming -->
+    <string name="pref_title_mms_retrieval_during_roaming">Roaming auto-retrieve</string>
+    <!-- Settings item description for boolean MMS auto-retrieve while roaming option -->
+    <string name="pref_summary_mms_retrieval_during_roaming">Automatically retrieve messages while roaming</string>
+
+    <!-- Label prepended to recipient's name in Undelivered Messages screen -->
+    <string name="to_label">"To "</string>
+
+    <!-- Confirm Delete -->
+    <!-- Delete confirmation dialog title -->
+    <string name="confirm_dialog_title">Delete</string>
+    <!-- Delete confirmation dialog title for locked messages -->
+    <string name="confirm_dialog_locked_title">Delete locked message?</string>
+    <!-- Delete entire thread confirmation dialog message -->
+    <string name="confirm_delete_conversation">The entire thread will be deleted.</string>
+    <!-- Delete all threads confirmation dialog message -->
+    <string name="confirm_delete_all_conversations">All threads will be deleted.</string>
+    <!-- Delete message confirmation dialog message -->
+    <string name="confirm_delete_message">The message will be deleted.</string>
+    <!-- Delete message confirmation dialog message for a locked message -->
+    <string name="confirm_delete_locked_message">Are you sure you want to delete this locked message?</string>
+    <!-- Delete entire thread confirmation dialog message -->
+    <string name="confirm_delete_all_messages">The entire thread will be deleted.</string>
+    <!-- Delete all the messages on the SIM dialog message -->
+    <string name="confirm_delete_all_SIM_messages">All messages on the SIM will be deleted.</string>
+    <!-- Delete the selected message on the SIM dialog message -->
+    <string name="confirm_delete_SIM_message">This message on the SIM will be deleted.</string>
+    <!-- Delete unlocked checkbox title -->
+    <string name="delete_unlocked">Delete locked messages</string>
+    <!-- Delete button title -->
+    <string name="delete">Delete</string>
+
+    <!-- When the user tries to view message details and some error occurs while
+         retrieving those details, this message will be shown. -->
+    <string name="cannot_get_details">Cannot get details</string>
+    <!-- Title of "Message details" dialog -->
+    <string name="message_details_title">Message details</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="message_type_label">Type:\u0020</string>
+    <!-- "Type" value in "Message details" dialog -->
+    <string name="text_message">Text message</string>
+    <!-- "Type" value in "Message details" dialog -->
+    <string name="multimedia_message">Multimedia message</string>
+    <!-- "Type" value in "Message details" dialog -->
+    <string name="multimedia_notification">Multimedia message notification</string>
+    <!-- Label in "Message details" dialog showing who sent the message. -->
+    <string name="from_label">From:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="to_address_label">To:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="bcc_label">Bcc:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="sent_label">Sent:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="received_label">Received:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="saved_label">Saved:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="subject_label">Subject:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="message_size_label">Message size:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="priority_label">Priority:\u0020</string>
+    <!-- "Priority" value in "Message details" dialog -->
+    <string name="priority_high">High</string>
+    <!-- "Priority" value in "Message details" dialog -->
+    <string name="priority_normal">Normal</string>
+    <!-- "Priority" value in "Message details" dialog -->
+    <string name="priority_low">Low</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="message_class_label">Message class:\u0020</string>
+    <!-- Label in "Message details" dialog -->
+    <string name="error_code_label">Error code:\u0020</string>
+
+   <!-- Menu title for editing a message -->
+   <string name="menu_edit">Edit</string>
+   <!-- Menu title the user can use for trying to resend a message. -->
+   <string name="menu_retry_sending">Retry sending</string>
+   <!-- Menu title the user can use for trying to resend all the messages. -->
+   <string name="menu_retry_sending_all">Retry sending all</string>
+   <!-- Menu title for deleting undelivered messages or messages on
+        the SIM card. -->
+   <string name="menu_delete_messages">Delete messages</string>
+   <!-- Dialog text displayed when trying to resend an unsent message. -->
+   <string name="retrying_dialog_body">This message <xliff:g id="message">%s</xliff:g> was not sent due to a connection problem.\r\nRetrying to send\u2026</string>
+   <!-- Menu title for locking a message -->
+   <string name="menu_lock">Lock message</string>
+   <!-- Menu title for unlocking a message -->
+   <string name="menu_unlock">Unlock message</string>
+
+
+    <!-- Delivery Header View -->
+    <!-- Title of "Report" window -->
+    <string name="delivery_header_title">Report</string>
+
+    <!-- Delivery Report Activity -->
+    <!-- Status in "Report" window -->
+    <string name="status_none">(None)</string>
+    <!-- Status in "Report" window -->
+    <string name="status_pending">Pending</string>
+    <!-- Status in "Report" window -->
+    <string name="status_read">Read</string>
+    <!-- Status in "Report" window -->
+    <string name="status_received">Received</string>
+    <!-- Status in "Report" window -->
+    <string name="status_failed">Unsuccessful</string>
+    <!-- Status in "Report" window -->
+    <string name="status_unread">Unread</string>
+    <!-- Status in "Report" window -->
+    <string name="status_rejected">Rejected</string>
+    <!-- Label in "Report" window -->
+    <string name="recipient_label">Recipient:\u0020</string>
+    <!-- Label in "Report" window -->
+    <string name="status_label">Status:\u0020</string>
+
+
+    <!-- Attachment Type Selector Adapter. This string is an option in the "Attach" dialog, "Add music" dialog -->
+    <string name="attach_image">Pictures</string>
+    <!-- Attachment Type Selector Adapter. This string is an option in the "Attach" dialog, "Add music" dialog -->
+    <string name="attach_take_photo">Capture picture</string>
+    <!-- Attachment Type Selector Adapter. This string is an option in the "Attach" dialog, "Add music" dialog -->
+    <string name="attach_video">Videos</string>
+    <!-- Attachment Type Selector Adapter. This string is an option in the "Attach" dialog, "Add music" dialog -->
+    <string name="attach_record_video">Capture video</string>
+    <!-- Attachment Type Selector Adapter. This string is an option in the "Attach" dialog, "Add music" dialog -->
+    <string name="attach_sound">Audio</string>
+    <!-- Attachment Type Selector Adapter. This string is an option in the "Attach" dialog, "Add music" dialog -->
+    <string name="attach_record_sound">Record audio</string>
+    <!-- Attachment Type Selector Adapter. This string is an option in the "Attach" dialog, "Add music" dialog -->
+    <string name="attach_slideshow">Slideshow</string>
+
+    <!-- Layout Selector Adapter. Slideshow layout dialog option for aligning an icon. -->
+    <string name="select_bottom_text">Text on bottom</string>
+    <!-- Layout Selector Adapter. Slideshow layout dialog option for aligning an icon. -->
+    <string name="select_top_text">Text on top</string>
+
+    <!-- Delivery Report Toast dialog content -->
+    <string name="delivery_toast_body">Message received by %s</string>
+
+    <!-- Delivery Report Notification dialog title. -->
+    <string name="notification_multiple"><xliff:g id="count">%s</xliff:g> unread messages.</string>
+    <!-- Delivery Report Notification dialog title. -->
+    <string name="notification_multiple_title">New messages</string>
+
+    <!-- Failed to send/download Notification dialog title. -->
+    <string name="notification_failed_multiple"><xliff:g id="count">%s</xliff:g> messages could not be sent.</string>
+    <!-- Failed to send/download Notification dialog title. -->
+    <string name="notification_failed_multiple_title">Messages not sent</string>
+
+    <!-- Sim Full Notification dialog title. -->
+    <string name="sim_full_title">SIM card full</string>
+    <!-- Sim Full Notification dialog text. -->
+    <string name="sim_full_body">Delete some messages to make room for more.</string>
+
+    <!-- Device Full Notification dialog title. -->
+    <string name="sms_full_title">Text message memory full</string>
+    <!-- Device Full Notification dialog text. -->
+    <string name="sms_full_body">Incoming message rejected due to full memory. Please delete old messages.</string>
+
+    <!-- Sms's Being Rejected Notification dialog title. -->
+    <string name="sms_rejected_title">Text message rejected</string>
+    <!-- Sms's Being Rejected Notification dialog text. -->
+    <string name="sms_rejected_body">Incoming message rejected due to unknown reason.</string>
+
+    <!-- Dialog title for the Read Report dialog. -->
+    <string name="confirm">Confirm</string>
+    <!-- Dialog text for the Read Report dialog. -->
+    <string name="message_send_read_report">A read report will be sent.</string>
+
+
+    <!-- Menu item -->
+    <string name="menu_insert_smiley">Insert smiley</string>
+
+    <!-- This is the dialog title for the "Select link" dialog, shown when the user clicks on a
+    chat in the chat history view if there are links in the chat message. The dialog displays the
+    links if there are any -->
+    <string name="select_link_title">Select action</string>
+
+
+    <!-- Search hint -->
+    <string name="search_hint">Search Messaging</string>
+
+    <!-- Search activity name -->
+    <string name="search">Messaging</string>
+    <!-- Search setting description -->
+    <string name="search_setting_description">Text in your messages</string>
+
+    <!--  Search empty results -->
+    <string name="search_empty">No matches</string>
+
+    <!--  Search results title -->
+    <plurals name="search_results_title">
+        <!-- Case of 1 result. -->
+        <item quantity="one"><xliff:g id="number" example="1">%1$s</xliff:g> result for \"<xliff:g id="search" example="???">%2$s</xliff:g>\"</item>
+        <!-- Case of 0 or 2 or more results. -->
+        <item quantity="other"><xliff:g id="number" example="15">%1$s</xliff:g> results for \"<xliff:g id="search" example="???">%2$s</xliff:g>\"</item>
+    </plurals>
+
+    <!--- String saved in history searches. -->
+    <string name="search_history"><xliff:g id="count">%1$s</xliff:g> results for \"<xliff:g id="search">%2$s</xliff:g>\"</string>
+
+    <!-- Button title in Messaging preferences. -->
+    <string name="confirm_clear_search_title">Clear</string>
+    <!-- Text for the preferences button. -->
+    <string name="confirm_clear_search_text">Search history will be cleared.</string>
+    <!--- Button title in preferences to clear the search history. It's a verb action that takes place
+          immediately when clicked. -->
+    <string name="pref_mms_clear_search_history_title">Clear search history</string>
+    <!--- Button description in preferences to clear the search history. -->
+    <string name="pref_mms_clear_search_history_summary">Clear previous Messaging searches from showing up in the Search box</string>
+
+
+    <!-- Dialog title for dialog that informs user about new storage settings. -->
+    <string name="storage_limits_title">Limit messages</string>
+
+    <!-- Dialog message for dialog that informs user about new storage settings. -->
+    <string name="storage_limits_message">Do you want to limit the number of messages you save per conversation?</string>
+
+    <!-- Button title for dialog that informs user about new storage settings. -->
+    <string name="storage_limits_setting">Set limits</string>
+
+    <!-- Button title to dismiss dialog that informs user about new storage settings. -->
+    <string name="storage_limits_setting_dismiss">No limits</string>
+
+    <!-- Toast message when a user tries to send a Mms message when there are already too many
+         outstanding unsent message. -->
+    <string name="too_many_unsent_mms">Can\'t send message right now. There are too many unsent multimedia messages.</string>
+
+    <!-- Label for the "Me" number of this phone. -->
+    <string name="me">Me</string>
+
+    <!-- Brief small label shown to right of message when it is being sent. -->
+    <string name="sending_message">Sending\u2026</string>
+
+</resources>

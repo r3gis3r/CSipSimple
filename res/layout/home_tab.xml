@@ -23,7 +23,6 @@
 	android:gravity="center">
 	<ImageView android:layout_width="18px" android:layout_marginRight="10dip"
 		android:layout_height="18px" android:id="@+id/photo"></ImageView>
-	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:duplicateParentState="true"
-		android:id="@+id/name" style="@style/homeTabIndicatorText" />
+	<TextView android:layout_width="wrap_content" android:duplicateParentState="true" 
+		android:id="@+id/name" style="@style/homeTabIndicatorText" android:layout_height="fill_parent" android:ellipsize="end"/>
 </LinearLayout>

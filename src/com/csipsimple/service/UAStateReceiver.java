@@ -52,7 +52,6 @@ import android.os.PowerManager.WakeLock;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 
 import com.csipsimple.R;
@@ -60,10 +59,13 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Account;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
+import com.csipsimple.models.SipMessage;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.SipUri;
+import com.csipsimple.utils.SipUri.ParsedSipUriInfos;
 
 public class UAStateReceiver extends Callback {
 	static String THIS_FILE = "SIP UA Receiver";
@@ -119,51 +121,47 @@ public class UAStateReceiver extends Callback {
 	}
 
 	@Override
-	public void on_pager(int call_id, pj_str_t from, pj_str_t to, pj_str_t contact, pj_str_t mime_type, pj_str_t body)
-	{
-		//String phone = StringUtilits.deleteBrackets(from.getPtr());
-		//smsDAO.addNewSMS(phone, body.getPtr(), 1, service.getDb());
-		String msg = "on_pager NEW MESSAGE FROM: "
-				+ from.getPtr() + " "
-				+ "TEXT: " + body.getPtr();
-		//msgHandler.sendMessage(msgHandler.obtainMessage(ON_PAGER, msg));
-		notificationManager.showNotificationForMessage(from.getPtr(), body.getPtr());
-		Log.d(THIS_FILE, msg);
+	public void on_pager(int call_id, pj_str_t from, pj_str_t to, pj_str_t contact, pj_str_t mime_type, pj_str_t body) {
+		long date = System.currentTimeMillis();
+		String sFrom = SipUri.getCanonicalSipUri(from.getPtr());
+		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contact.getPtr(), body.getPtr(), mime_type.getPtr(),  date, SipMessage.MESSAGE_TYPE_INBOX);
+		
+		//Insert the message to the DB 
+		DBAdapter database = new DBAdapter(service);
+		database.open();
+		database.insertMessage(msg);
+		database.close();
+		
+		//Broadcast the message
+		Intent intent = new Intent(SipService.ACTION_SIP_MESSAGE_RECEIVED);
+		//TODO : could be parcelable !
+		intent.putExtra(SipMessage.FIELD_FROM, msg.getFrom());
+		intent.putExtra(SipMessage.FIELD_BODY, msg.getBody());
+		service.sendBroadcast(intent);
+		
+		//Notify android os of the new message
+		notificationManager.showNotificationForMessage(msg);
 	}
-
-	/*@Override
-	public void on_pager2(int call_id, pj_str_t from, pj_str_t to, pj_str_t contact, pj_str_t mime_type, pj_str_t body, SWIGTYPE_p_pjsip_rx_data rdata)
-	{
-		String msg = "on_pager2 NEW MESSAGE FROM: "
-				+ from.getPtr() + " "
-				+ "TEXT: " + body.getPtr();
-		Log.e(THIS_FILE, msg);
-		//String msg = "new message";
-		//msgHandler.sendMessage(msgHandler.obtainMessage(ON_PAGER2, msg));
-	}*/
 
 	@Override
-	public void on_pager_status(int call_id, pj_str_t to, pj_str_t body, pjsip_status_code status, pj_str_t reason)
-	{
-		/* 
-			Notification about the delivery status of previously sent
-			instant message.
-			
-			Keyword arguments:
-			to_uri  -- the destination URI of the message
-			body    -- the message body
-			im_id   -- message ID
-			code    -- SIP status code
-			reason  -- SIP reason phrase
-		*/
-		Log.d(THIS_FILE, "Message in on pager status");
+	public void on_pager_status(int call_id, pj_str_t to, pj_str_t body, pjsip_status_code status, pj_str_t reason) {
+		//TODO : treat error / acknowledge of messages
+		int messageType = status.equals(pjsip_status_code.PJSIP_SC_OK) ? SipMessage.MESSAGE_TYPE_SENT : SipMessage.MESSAGE_TYPE_FAILED;
+		String sTo = SipUri.getCanonicalSipUri(to.getPtr());
+
+		Log.d(THIS_FILE, "SipMessage in on pager status "+status.toString()+" / "+reason.toString());
+		
+		//Update the db
+		DBAdapter database = new DBAdapter(service);
+		database.open();
+		database.updateMessageStatus(sTo, body.getPtr(), messageType, status.swigValue(), reason.getPtr());
+		database.close();
+		
+		//Broadcast the information
+		Intent intent = new Intent(SipService.ACTION_SIP_MESSAGE_RECEIVED);
+		intent.putExtra(SipMessage.FIELD_FROM, sTo);
+		service.sendBroadcast(intent);
 	}
-	
-	/*@Override
-	public void on_pager_status2(int call_id, pj_str_t to, pj_str_t body, pjsip_status_code status, pj_str_t reason, SWIGTYPE_p_pjsip_tx_data tdata, SWIGTYPE_p_pjsip_rx_data rdata)
-	{
-		Log.e(THIS_FILE, "Message in on pager status2");
-	}*/
 
 	@Override
 	public void on_reg_state(int accountId) {
@@ -324,14 +322,17 @@ public class UAStateReceiver extends Callback {
 						cv.put(CallLog.Calls.NEW, false);
 						
 						//Reformat number for callogs
-						Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*)@[^>]*(?:>)?");
-						Matcher m = p.matcher(cv.getAsString(Calls.NUMBER));
-						if (m.matches()) {
+						ParsedSipUriInfos callerInfos = SipUri.parseSipUri(cv.getAsString(Calls.NUMBER));
+						if (callerInfos != null) {
+							String phoneNumber = null;
+							if(SipUri.isPhoneNumber(callerInfos.displayName)) {
+								phoneNumber = callerInfos.displayName;
+							}else if(SipUri.isPhoneNumber(callerInfos.userName)) {
+								phoneNumber = callerInfos.userName;
+							}
 							
-						//	remoteContact = m.group(1);
-							String phoneNumber =  m.group(2);
 							//Only log numbers that can be called by GSM too.
-							if(!TextUtils.isEmpty(phoneNumber) && Pattern.matches("[0-9#\\-+*]*", phoneNumber)) {
+							if(phoneNumber != null) {
 								cv.put(Calls.NUMBER, phoneNumber);
 								// For log in call logs => don't add as new calls... we manage it ourselves.
 								cv.put(Calls.NEW, false);
@@ -519,13 +520,13 @@ public class UAStateReceiver extends Callback {
 	 * @param currentCallInfo2 
 	 * @param callInfo
 	 */
-	private void launchCallHandler(CallInfo currentCallInfo2) {
+	private synchronized void launchCallHandler(CallInfo currentCallInfo2) {
 		
 		// Launch activity to choose what to do with this call
 		Intent callHandlerIntent = new Intent(SipService.ACTION_SIP_CALL_UI); //new Intent(service, getInCallClass());
 		callHandlerIntent.putExtra(SipService.EXTRA_CALL_INFO, currentCallInfo2);
-		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+		
 		Log.d(THIS_FILE, "Anounce call activity");
 		service.startActivity(callHandlerIntent);
 

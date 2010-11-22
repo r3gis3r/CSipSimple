@@ -49,6 +49,7 @@
 	<string name="gsm">Mobile</string>
 	<string name="dial_tab_name_text">Dial</string>
 	<string name="calllog_tab_name_text">CallLogs</string>
+	<string name="messages_tab_name_text">Messages</string>
 	<string name="menu_quit_text">Quit</string>
 	<string name="service_ticker_registered_text">SIP Registered</string>
 	<string name="outgoing_call_chooser_call_text">Call</string>

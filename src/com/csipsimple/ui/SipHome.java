@@ -51,6 +51,7 @@ import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.help.Help;
+import com.csipsimple.ui.messages.ConversationList;
 import com.csipsimple.ui.prefs.MainPrefs;
 import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
@@ -69,15 +70,15 @@ public class SipHome extends TabActivity {
 
 	private static final String THIS_FILE = "SIP HOME";
 	
-	private static final String TAB_DIALER = "tab1";
-	private static final String TAB_CALLLOG = "tab2";
+	private static final String TAB_DIALER = "dialer";
+	private static final String TAB_CALLLOG = "calllog";
+	private static final String TAB_MESSAGES = "messages";
 	
 	protected static final int PICKUP_PHONE = 0;
 
 	private Intent serviceIntent;
 
-	private Intent dialerIntent;
-	private Intent calllogsIntent;
+	private Intent dialerIntent,calllogsIntent, messagesIntent;
 	private PreferencesWrapper prefWrapper;
 
 	private boolean has_tried_once_to_activate_account = false;
@@ -156,9 +157,11 @@ public class SipHome extends TabActivity {
 
 		dialerIntent = new Intent(this, Dialer.class);
 		calllogsIntent = new Intent(this, CallLogsList.class);
+		messagesIntent = new Intent(this, ConversationList.class);
 
 		addTab(TAB_DIALER, getString(R.string.dial_tab_name_text), R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
 		addTab(TAB_CALLLOG, getString(R.string.calllog_tab_name_text), R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
+		addTab(TAB_MESSAGES, getString(R.string.messages_tab_name_text), R.drawable.ic_tab_selected_messages, R.drawable.ic_tab_unselected_messages, messagesIntent);
 		
 		pickupContact = (ImageButton) findViewById(R.id.pickup_contacts);
 		pickupContact.setOnClickListener(new OnClickListener() {
@@ -195,7 +198,6 @@ public class SipHome extends TabActivity {
 
 	private void addTab(String tag, String label, int icon, int ficon, Intent content) {
 		TabHost tabHost = getTabHost();
-		Log.d(THIS_FILE, "Add tab !");
 		TabSpec tabspecDialer = tabHost.newTabSpec(tag).setContent(content);
 
 		boolean fails = true;
@@ -276,6 +278,8 @@ public class SipHome extends TabActivity {
 				getTabHost().setCurrentTab(1);
 			}else if(SipService.ACTION_SIP_DIALER.equalsIgnoreCase(callAction)) {
 				getTabHost().setCurrentTab(0);
+			}else if(SipService.ACTION_SIP_MESSAGES.equalsIgnoreCase(callAction)) {
+				getTabHost().setCurrentTab(2);
 			}
 		}
 	}
@@ -398,7 +402,7 @@ public class SipHome extends TabActivity {
 				int index = cursor.getColumnIndex(Contacts.PhonesColumns.NUMBER);
 				String number = cursor.getString(index); 
 				
-				startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", number, null)));
+				startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
 			}
 			break;
 
