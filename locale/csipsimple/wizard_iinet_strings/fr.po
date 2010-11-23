@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the csipsimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
@@ -20,25 +19,25 @@ msgstr ""
 
 msgctxt "w_iinet_state"
 msgid "State"
-msgstr ""
+msgstr "Etat"
 
 msgctxt "w_iinet_state_desc"
 msgid "The relevant state from the following list"
-msgstr ""
+msgstr "L'état qui vous correspond dans la liste suivante"
 
 msgctxt "w_iinet_username"
 msgid "VoIP phone number"
-msgstr ""
+msgstr "Numéro de téléphone VoIP"
 
 msgctxt "w_iinet_username_desc"
 msgid "Remove any formatting such as spaces and dashes"
-msgstr ""
+msgstr "Supprimez tous les caractères spéciaux"
 
 msgctxt "w_iinet_password"
 msgid "Special VoIP password"
-msgstr ""
+msgstr "Mot de passe spécial pour la VoIP"
 
 msgctxt "w_iinet_password_desc"
 msgid "Not the same as connection password"
-msgstr ""
+msgstr "Pas le même mot de passe que celui de la connexion"
 

@@ -17,4 +17,6 @@
   <string name="call_state_incoming">Bejövő hívás..</string>
   <string name="call_state_null">HIBA</string>
   <string name="unlock">Felold</string>
+  <string name="record">Felvétel</string>
+  <string name="stop_recording">Felvétel megállítás</string>
 </resources>

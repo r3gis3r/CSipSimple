@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the csipsimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
@@ -31,7 +30,8 @@ msgid "SIP-ID"
 msgstr "SIP-ID"
 
 msgctxt "w_sipgate_username_desc"
-msgid "Different from your sipgate login! Check on sipgate website your SIP-ID"
+msgid ""
+"Different from your sipgate login! Check on sipgate website your SIP-ID"
 msgstr "Diverso dal login Sipgate! Controlla sul sito Sipgate il tuo SIP-ID"
 
 msgctxt "w_sipgate_password"
@@ -39,7 +39,8 @@ msgid "SIP Password"
 msgstr "SIP Password"
 
 msgctxt "w_sipgate_password_desc"
-msgid "Different from your password! Check on sipgate website your SIP Password"
+msgid ""
+"Different from your password! Check on sipgate website your SIP Password"
 msgstr ""
 "Diverso dalla tua password Sipgate! Controlla sul sito Sipgate la tua "
 "password SIP"

@@ -35,8 +35,6 @@
   <string name="network_udp_transport_port_desc">Número da porta local</string>
   <string name="network_tcp_transport_port">Porta TCP</string>
   <string name="network_tcp_transport_port_desc">Número da porta local</string>
-  <string name="network_tls_transport_port">Porta TLS</string>
-  <string name="network_tls_transport_port_desc">Número da porta local</string>
   <string name="network_rtp_port">Porta RTP</string>
   <string name="network_rtp_port_desc">Porta RTP inicial</string>
   <string name="use_ipv6">Utilizar IPv6</string>
@@ -44,8 +42,6 @@
   <string name="enable_dns_srv">Habilitar DNS SRV</string>
   <string name="override_nameserver">Utilizar DNS personalizado</string>
   <string name="override_nameserver_desc">Deixe em branco para utilizar o DNS do Android</string>
-  <string name="use_srtp">Modo SRTP</string>
-  <string name="use_srtp_desc">Modo RTP seguro</string>
   <string name="enable_ice">Habilitar ICE</string>
   <string name="enable_turn">Habilitar TURN</string>
   <string name="enable_turn_desc">Habilita o TURN</string>
@@ -55,6 +51,10 @@
   <string name="enable_stun_desc">Habilita o STUN</string>
   <string name="stun_server">Servidor STUN</string>
   <string name="stun_server_desc">Servidor STUN (SERVIDOR:PORTA)</string>
+  <string name="network_tls_transport_port">Porta TLS</string>
+  <string name="network_tls_transport_port_desc">Número da porta local</string>
+  <string name="use_srtp">Modo SRTP</string>
+  <string name="use_srtp_desc">Modo RTP seguro</string>
   <string name="audio_quality">Qualidade de áudio</string>
   <string name="codecs">Codecs</string>
   <string name="echo_cancellation">Cancelamento de eco</string>
@@ -81,7 +81,6 @@
   <string name="dial_press_vibrate_desc">Vibrar ao discar</string>
   <string name="start_with_text_dialer">Discagem por texto</string>
   <string name="start_with_text_dialer_desc">Iniciar com a discagem por texto</string>
-  <string name="use_alternate_unlocker">Não utilizar desbloqueio deslizante</string>
   <string name="use_alternate_unlocker_desc">Utilizar botões ao invés do desbloqueio deslizante nas chamadas de entrada</string>
   <string name="keep_awake_incall">Manter ligado durante as chamadas</string>
   <string name="keep_awake_incall_desc">Corrige som picotado quando a tela é desligada durante uma chamada WiFi</string>

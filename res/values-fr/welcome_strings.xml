@@ -6,5 +6,4 @@
   <string name="intializing_text">Initialisation</string>
   <string name="downloading_text">Téléchargement</string>
   <string name="installing_library_text">Installation de la librarie...</string>
-  <string name="welcome_caption_text">Merci d\'utiliser CSipSimple</string>
 </resources>

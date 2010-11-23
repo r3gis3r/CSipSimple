@@ -17,4 +17,6 @@
   <string name="call_state_incoming">Recebendo Ligação...</string>
   <string name="call_state_null">ERRO</string>
   <string name="unlock">Desbloquear</string>
+  <string name="record">Gravar</string>
+  <string name="stop_recording">Parar gravação</string>
 </resources>

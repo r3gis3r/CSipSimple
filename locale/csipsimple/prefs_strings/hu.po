@@ -358,7 +358,7 @@ msgstr "Hangminőség"
 
 msgctxt "audio_volume"
 msgid "Volume"
-msgstr ""
+msgstr "Hangerő"
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -459,11 +459,11 @@ msgstr ""
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
-msgstr ""
+msgstr "Szoftveres hangerő"
 
 msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
-msgstr ""
+msgstr "Szoftveres hangerő-szabályzás az androidos helyett"
 
 msgctxt "general_ui"
 msgid "General user interface"
@@ -483,8 +483,8 @@ msgstr "Tárcsázó beépítése"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr "Beépülve felajánlja hogy híváskor SIP vagy GSM legyen e használva"
 
 msgctxt "integrate_with_native_calllogs"
@@ -572,11 +572,11 @@ msgstr "Alapértelmezett SIP csengőhang"
 
 msgctxt "prevent_screen_rotation"
 msgid "Prevent screen rotation"
-msgstr ""
+msgstr "Képforgatás tiltása"
 
 msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
-msgstr ""
+msgstr "Nem engedi a képernyő forgatását és álló módban tartja"
 
 msgctxt "android_integration"
 msgid "Integrate with Android"

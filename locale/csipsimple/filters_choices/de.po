@@ -63,19 +63,19 @@ msgstr "benutzerdefiniert RegExp"
 
 msgctxt "replace_type:0"
 msgid "Prefix by"
-msgstr ""
+msgstr "Präfix von"
 
 msgctxt "replace_type:1"
 msgid "Suffix with"
-msgstr ""
+msgstr "Suffix mit"
 
 msgctxt "replace_type:2"
 msgid "Replace match by"
-msgstr ""
+msgstr "Ersetze passende durch"
 
 msgctxt "replace_type:3"
 msgid "Replace all by"
-msgstr ""
+msgstr "Ersetze alle durch"
 
 msgctxt "replace_type:4"
 msgid "Custom RegExp"

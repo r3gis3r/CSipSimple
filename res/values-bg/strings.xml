@@ -29,7 +29,6 @@
   <string name="gsm">Мобилен</string>
   <string name="dial_tab_name_text">Набиране</string>
   <string name="calllog_tab_name_text">Дневник</string>
-  <string name="menu_quit_text">Изход</string>
   <string name="service_ticker_registered_text">успешна SIP регистрация</string>
   <string name="outgoing_call_chooser_call_text">Повикване</string>
 </resources>

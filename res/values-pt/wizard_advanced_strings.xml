@@ -1,2 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_advanced_display_name">Nome da conta</string>
+  <string name="w_advanced_display_name_desc">Nome a ser mostrado para esta conta</string>
+  <string name="w_advanced_caller_id">Identificação de Chamada</string>
+  <string name="w_advanced_caller_id_desc">Enviar o meu número na chamada</string>
+  <string name="w_advanced_username">Usuário</string>
+  <string name="w_advanced_username_desc">Usuário para autenticação no servidor SIP</string>
+  <string name="w_advanced_password">Senha</string>
+  <string name="w_advanced_password_desc">Senha para autenticação no servidor SIP</string>
+  <string name="w_advanced_use_tcp">Usar TCP (não UDP)</string>
+  <string name="w_advanced_proxy">Proxy</string>
+  <string name="w_advanced_proxy_desc">Domínio Proxy/IP[:porta] (opcional, nem sempre necessário)</string>
+</resources>

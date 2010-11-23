@@ -7,5 +7,5 @@
   <string name="callBack">Позвонить</string>
   <string name="callAgain">Перезвонить</string>
   <string name="returnCall">Обратный вызов</string>
-  <string name="callDetailsDurationFormat"><xliff:g id="минуты" example="42">%s</xliff:g>" mins "<xliff:g id="секунды" example="28">%s</xliff:g>" secs"</string>
+  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" mins "<xliff:g id="seconds" example="28">%s</xliff:g>" secs"</string>
 </resources>

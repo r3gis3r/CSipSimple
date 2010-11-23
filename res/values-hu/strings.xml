@@ -30,8 +30,12 @@
   <string name="gsm">Mobil</string>
   <string name="dial_tab_name_text">Hívás</string>
   <string name="calllog_tab_name_text">Híváslista</string>
-  <string name="menu_quit_text">Kilép</string>
   <string name="service_ticker_registered_text">SIP Regisztrálva</string>
   <string name="outgoing_call_chooser_call_text">Hívás</string>
   <string name="reorder">Újrahívás</string>
+  <string name="faq">GYIK</string>
+  <string name="help">Segítség</string>
+  <string name="ok">Rendben</string>
+  <string name="misc">Egyéb</string>
+  <string name="warning">FIGYELEM</string>
 </resources>

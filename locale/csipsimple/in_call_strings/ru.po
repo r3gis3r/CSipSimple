@@ -88,11 +88,11 @@ msgstr "Разблокировать"
 
 msgctxt "record"
 msgid "Record"
-msgstr ""
+msgstr "Запись"
 
 msgctxt "stop_recording"
 msgid "Stop recording"
-msgstr ""
+msgstr "Стоп"
 
 msgctxt "xfer"
 msgid "Transfer"

@@ -83,7 +83,7 @@ msgstr "Verwende TCP (nicht UDP)"
 
 msgctxt "w_expert_prevent_tcp"
 msgid "Prevent TCP (only try UDP)"
-msgstr ""
+msgstr "Verhindere TCP (verwende nur UDP)"
 
 msgctxt "w_expert_publish_enabled"
 msgid "Publish enabled"

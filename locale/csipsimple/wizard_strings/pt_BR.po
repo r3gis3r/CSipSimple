@@ -20,11 +20,11 @@ msgstr ""
 
 msgctxt "other_country_providers_text"
 msgid "Other country providers"
-msgstr ""
+msgstr "Outras Operadoras"
 
 msgctxt "world_wide_providers_text"
 msgid "World wide providers"
-msgstr ""
+msgstr "Operadoras Mundiais"
 
 msgctxt "generic_wizards_text"
 msgid "Generic wizards"

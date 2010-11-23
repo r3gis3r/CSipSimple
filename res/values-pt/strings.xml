@@ -1,2 +1,41 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="app_name">CSipSimple</string>
+  <string name="unable_to_download_file">Não foi possivel baixar o arquivo</string>
+  <string name="connection_not_valid">Selecione rota de rede não disponível (Ative WiFi ou mude preferências para usar 3G)</string>
+  <string name="invalid_sip_uri">uri do Sip e inválido para ligar</string>
+  <string name="accounts">Contas</string>
+  <string name="save">Salvar</string>
+  <string name="cancel">Cancelar</string>
+  <string name="activate_account">Ativar conta</string>
+  <string name="deactivate_account">Desaivar conta</string>
+  <string name="delete_account">Deletar conta</string>
+  <string name="modify_account">Modificar conta</string>
+  <string name="add_account">Adicionar conta</string>
+  <string name="choose_wizard">Selecionar Wizard</string>
+  <string name="use">Usar</string>
+  <string name="use_pstn">Usar operadora</string>
+  <string name="ongoing_call">Chamada em progresso</string>
+  <string name="missed_call">Chamada não atendida</string>
+  <string name="recentCalls_empty">Lista de chamadas vazia</string>
+  <string name="filters">Filtros</string>
+  <string name="add_filter">Adicionar filtro / regravar regra</string>
+  <string name="delete_filter">Deletar Filtro</string>
+  <string name="callLog_delete_entry">Deletar esta chamada</string>
+  <string name="callLog_delete_all">Deletar todas chamadas</string>
+  <string name="callLog_delDialog_title">Deletar listas de chamadas</string>
+  <string name="callLog_delDialog_message">Você tem certeza que deseja deletar todas chamadas da lista?</string>
+  <string name="callLog_delDialog_yes">Sim</string>
+  <string name="callLog_delDialog_no">Não</string>
+  <string name="gsm">Móvel</string>
+  <string name="dial_tab_name_text">Discar</string>
+  <string name="calllog_tab_name_text">Lista de chamadas</string>
+  <string name="service_ticker_registered_text">SIP Registrado</string>
+  <string name="outgoing_call_chooser_call_text">Chamar</string>
+  <string name="reorder">Reorganizar</string>
+  <string name="faq">FAQ</string>
+  <string name="help">Ajuda</string>
+  <string name="ok">OK</string>
+  <string name="misc">Variados</string>
+  <string name="warning">AVISO</string>
+</resources>

@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Страна</string>
+  <string name="w_iinet_state_desc">Выберите страну из списка</string>
+  <string name="w_iinet_username">VoIP номер</string>
+  <string name="w_iinet_username_desc">Указывайте номер без пробелов и прочерков</string>
+  <string name="w_iinet_password">Специальный VoIP пароль</string>
+  <string name="w_iinet_password_desc">Отличается от пароля для соединения</string>
+</resources>

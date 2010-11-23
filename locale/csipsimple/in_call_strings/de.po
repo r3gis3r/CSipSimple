@@ -87,11 +87,11 @@ msgstr "Entsperre"
 
 msgctxt "record"
 msgid "Record"
-msgstr ""
+msgstr "Aufnahme"
 
 msgctxt "stop_recording"
 msgid "Stop recording"
-msgstr ""
+msgstr "Aufnahme stoppen"
 
 msgctxt "xfer"
 msgid "Transfer"

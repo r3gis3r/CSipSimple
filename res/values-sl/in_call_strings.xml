@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="take_call">Odgovori</string>
+  <string name="decline_call">Prezri</string>
+  <string name="clear_call">Zaključi</string>
+  <string name="touch_lock">Dvodotik za odklep</string>
+  <string name="dialpad">Številčnica</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Zvočnik</string>
+  <string name="mute">Nemo</string>
+  <string name="add_call">Dodaj klic</string>
+  <string name="call_state_calling">Klicanje ...</string>
+  <string name="call_state_confirmed">Pogovarjanje</string>
+  <string name="call_state_connecting">Povezovanje ...</string>
+  <string name="call_state_disconnected">Prekini</string>
+  <string name="call_state_early">Zvonjenje ...</string>
+  <string name="call_state_incoming">Dohodni klic ...</string>
+  <string name="call_state_null">NAPAKA</string>
+  <string name="unlock">Odkleni</string>
+  <string name="record">Snemaj</string>
+  <string name="stop_recording">Ustavi snemanje</string>
+</resources>

@@ -30,8 +30,12 @@
   <string name="gsm">Мобильный</string>
   <string name="dial_tab_name_text">Кнопки</string>
   <string name="calllog_tab_name_text">Вызовы</string>
-  <string name="menu_quit_text">Выход</string>
   <string name="service_ticker_registered_text">SIP зарегистрирован</string>
   <string name="outgoing_call_chooser_call_text">Вызов</string>
   <string name="reorder">Изменить порядок</string>
+  <string name="faq">FAQ</string>
+  <string name="help">Помощь</string>
+  <string name="ok">Далее</string>
+  <string name="misc">Прочее</string>
+  <string name="warning">ПРЕДУПРЕЖДЕНИЕ</string>
 </resources>

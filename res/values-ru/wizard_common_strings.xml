@@ -8,4 +8,6 @@
   <string name="w_common_phone_number_desc">Номер SIP телефона, выданный провайдером</string>
   <string name="w_common_password">Пароль</string>
   <string name="w_common_password_desc">Пароль к Вашему аккаунту</string>
+  <string name="w_common_server">Сервер</string>
+  <string name="w_common_server_desc">SIP сервер домен/IP[:порт]</string>
 </resources>

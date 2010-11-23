@@ -17,4 +17,6 @@
   <string name="call_state_incoming">Входящий вызов...</string>
   <string name="call_state_null">Ошибка</string>
   <string name="unlock">Разблокировать</string>
+  <string name="record">Запись</string>
+  <string name="stop_recording">Стоп</string>
 </resources>

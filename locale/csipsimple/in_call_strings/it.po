@@ -87,11 +87,11 @@ msgstr "Sblocca"
 
 msgctxt "record"
 msgid "Record"
-msgstr ""
+msgstr "Registra"
 
 msgctxt "stop_recording"
 msgid "Stop recording"
-msgstr ""
+msgstr "Interrompi registrazione"
 
 msgctxt "xfer"
 msgid "Transfer"

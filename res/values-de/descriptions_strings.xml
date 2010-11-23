@@ -1,18 +1,2 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="description_image_button_one" msgid="1740638037139856139">"eins"</string>
-    <string name="description_image_button_two" msgid="5882638439003731308">"zwei"</string>
-    <string name="description_image_button_three" msgid="8709731759376015180">"drei"</string>
-    <string name="description_image_button_four" msgid="3530239685642246130">"vier"</string>
-    <string name="description_image_button_five" msgid="1182465427501188413">"fünf"</string>
-    <string name="description_image_button_six" msgid="2093656269261415475">"sechs"</string>
-    <string name="description_image_button_seven" msgid="2450357020447676481">"sieben"</string>
-    <string name="description_image_button_eight" msgid="6969435115163287801">"acht"</string>
-    <string name="description_image_button_nine" msgid="7857248695662558323">"neun"</string>
-    <string name="description_image_button_star" msgid="3365919907520767866">"Markierung"</string>
-    <string name="description_image_button_zero" msgid="4133108949401820710">"null"</string>
-    <string name="description_image_button_pound" msgid="3039765597595889230">"Pfund"</string>
-    <string name="description_dial_button" msgid="1274091017188142646">"wählen"</string>
-    <string name="description_delete_button" msgid="6263102114033407382">"Rücktaste"</string>
-    <string name="description_digits_edittext" msgid="8760207516497016437">"Zu wählende Nummer"</string>
-</resources>
+<?xml version='1.0' encoding='utf-8'?>
+<resources/>

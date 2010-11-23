@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_authorization_auth_name">Nom d\'authentification</string>
+  <string name="w_authorization_auth_name_desc">Authentification SIP</string>
+  <string name="w_authorization_phone_number">Utilisateur</string>
+  <string name="w_authorization_phone_number_desc">Compte utilisateur SIP</string>
+</resources>

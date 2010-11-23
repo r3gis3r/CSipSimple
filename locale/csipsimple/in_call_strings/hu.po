@@ -87,11 +87,11 @@ msgstr "Felold"
 
 msgctxt "record"
 msgid "Record"
-msgstr ""
+msgstr "Felvétel"
 
 msgctxt "stop_recording"
 msgid "Stop recording"
-msgstr ""
+msgstr "Felvétel megállítás"
 
 msgctxt "xfer"
 msgid "Transfer"

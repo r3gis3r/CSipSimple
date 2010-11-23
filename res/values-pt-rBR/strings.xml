@@ -29,7 +29,6 @@
   <string name="gsm">Celular</string>
   <string name="dial_tab_name_text">Discar</string>
   <string name="calllog_tab_name_text">Registro de Chamadas</string>
-  <string name="menu_quit_text">Sair</string>
   <string name="service_ticker_registered_text">SIP Registrado</string>
   <string name="outgoing_call_chooser_call_text">Chamar</string>
 </resources>

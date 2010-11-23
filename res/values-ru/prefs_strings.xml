@@ -35,8 +35,6 @@
   <string name="network_udp_transport_port_desc">Номер порта для локальной привязки</string>
   <string name="network_tcp_transport_port">TCP порт</string>
   <string name="network_tcp_transport_port_desc">Номер порта для локальной привязки</string>
-  <string name="network_tls_transport_port">Порт TLS</string>
-  <string name="network_tls_transport_port_desc">Номер порта для локальной привязки</string>
   <string name="network_rtp_port">RTP порт</string>
   <string name="network_rtp_port_desc">Начало диапазона для RTP портов</string>
   <string name="use_ipv6">Использовать IPv6</string>
@@ -45,9 +43,6 @@
   <string name="enable_dns_srv_desc">Автоопределение DNS-сервера</string>
   <string name="override_nameserver">Указать DNS самостоятельно</string>
   <string name="override_nameserver_desc">Оставьте пустым, чтобы получить адрес DNS-сервера из Андроид</string>
-  <string name="secure_transport">Безопасный протокол</string>
-  <string name="use_srtp">SRTP режим</string>
-  <string name="use_srtp_desc">Режим безопасного RTP</string>
   <string name="nat_traversal">Прохождение NAT</string>
   <string name="enable_ice">ICE</string>
   <string name="enable_ice_desc">Поддерживать возможности ICE</string>
@@ -59,7 +54,13 @@
   <string name="enable_stun_desc">Настроить STUN-сервер</string>
   <string name="stun_server">STUN-сервер</string>
   <string name="stun_server_desc">STUN сервер (HOST:PORT)</string>
+  <string name="secure_transport">Безопасный протокол</string>
+  <string name="network_tls_transport_port">Порт TLS</string>
+  <string name="network_tls_transport_port_desc">Номер порта для локальной привязки</string>
+  <string name="use_srtp">SRTP режим</string>
+  <string name="use_srtp_desc">Режим безопасного RTP</string>
   <string name="audio_quality">Качество аудио</string>
+  <string name="audio_volume">Громкость</string>
   <string name="codecs">Аудиокодеки</string>
   <string name="echo_cancellation">Подавление эха</string>
   <string name="echo_cancellation_desc">Активировать подавление эха</string>
@@ -82,8 +83,8 @@
   <string name="echo_cancellation_tail">Шлейф подавления эха</string>
   <string name="echo_cancellation_tail_desc">Длина шлейфа подавления эха</string>
   <string name="codecs_desc">Приоритет (0 - отключено)</string>
-  <string name="sip_info_dtmf">DTMF SIP INFO</string>
-  <string name="sip_info_dtmf_desc">Использовать SIP INFO для передачи DTMF-сигналов</string>
+  <string name="use_soft_volume">Программная регулировка</string>
+  <string name="use_soft_volume_desc">Регулировать громкость из программы CSipSimple и не использовать настройки Андроид</string>
   <string name="general_ui">Общие настройки интерфейса</string>
   <string name="native_dialer_integration">Интеграция с телефонной частью</string>
   <string name="advanced_ui">Дополнительные настройки</string>
@@ -97,7 +98,6 @@
   <string name="dial_press_vibrate_desc">Включить виброотклик при нажатии клавиш</string>
   <string name="start_with_text_dialer">Текстовый номеронабиратель</string>
   <string name="start_with_text_dialer_desc">Использовать изначально текстовый номеронабиратель</string>
-  <string name="use_alternate_unlocker">Не использовать слайдер</string>
   <string name="use_alternate_unlocker_desc">Использовать клавиши вместо слайдера при ответе на вызов</string>
   <string name="keep_awake_incall">Не выключать экран</string>
   <string name="keep_awake_incall_desc">Воспроизводить звук при входящем вызове, когда экран выключен</string>
@@ -109,6 +109,8 @@
   <string name="integrate_with_native_music_desc">Интегрировать с музыкальным плеером, если используется стандартное приложение</string>
   <string name="ringtone">Мелодия вызова</string>
   <string name="ringtone_desc">Рингтон для SIP вызовов по умолчанию</string>
+  <string name="prevent_screen_rotation">Не поворачивать экран</string>
+  <string name="prevent_screen_rotation_desc">Не поворачивать экран автоматически и всегда использовать портретный вид</string>
   <string name="android_integration">Интегрировать с Андроид</string>
   <string name="android_integration_desc">Интеграция со стандарными номеронабирателем и списком вызовов</string>
   <string name="availability_profile">Профиль доступности</string>

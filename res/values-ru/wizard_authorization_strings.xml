@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_authorization_auth_name">Имя для аутентификации</string>
+  <string name="w_authorization_auth_name_desc">Имя для аутентификации в сети SIP</string>
+  <string name="w_authorization_phone_number">Имя пользователя</string>
+  <string name="w_authorization_phone_number_desc">Ваш SIP номер</string>
+</resources>

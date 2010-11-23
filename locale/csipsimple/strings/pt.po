@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the CSipSimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
@@ -20,25 +19,27 @@ msgstr ""
 
 msgctxt "app_name"
 msgid "CSipSimple"
-msgstr ""
+msgstr "CSipSimple"
 
 msgctxt "unable_to_download_file"
 msgid "Unable to download file"
-msgstr ""
+msgstr "Não foi possivel baixar o arquivo"
 
 msgctxt "connection_not_valid"
 msgid ""
-"Selected network route not available (activate WiFi or change preferences"
-" to use 3G)"
+"Selected network route not available (activate WiFi or change preferences to "
+"use 3G)"
 msgstr ""
+"Selecione rota de rede não disponível (Ative WiFi ou mude preferências para "
+"usar 3G)"
 
 msgctxt "invalid_sip_uri"
 msgid "Sip uri is invalid for call"
-msgstr ""
+msgstr "uri do Sip e inválido para ligar"
 
 msgctxt "accounts"
 msgid "Accounts"
-msgstr ""
+msgstr "Contas"
 
 msgctxt "other_accounts"
 msgid "Other accounts"
@@ -46,103 +47,103 @@ msgstr ""
 
 msgctxt "save"
 msgid "Save"
-msgstr ""
+msgstr "Salvar"
 
 msgctxt "cancel"
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 msgctxt "activate_account"
 msgid "Activate account"
-msgstr ""
+msgstr "Ativar conta"
 
 msgctxt "deactivate_account"
 msgid "Deactivate account"
-msgstr ""
+msgstr "Desaivar conta"
 
 msgctxt "delete_account"
 msgid "Delete account"
-msgstr ""
+msgstr "Deletar conta"
 
 msgctxt "modify_account"
 msgid "Modify account"
-msgstr ""
+msgstr "Modificar conta"
 
 msgctxt "add_account"
 msgid "Add account"
-msgstr ""
+msgstr "Adicionar conta"
 
 msgctxt "choose_wizard"
 msgid "Choose wizard"
-msgstr ""
+msgstr "Selecionar Wizard"
 
 msgctxt "use"
 msgid "Use :"
-msgstr ""
+msgstr "Usar"
 
 msgctxt "use_pstn"
 msgid "Use mobile"
-msgstr ""
+msgstr "Usar operadora"
 
 msgctxt "ongoing_call"
 msgid "Call in Progress"
-msgstr ""
+msgstr "Chamada em progresso"
 
 msgctxt "missed_call"
 msgid "Missed call"
-msgstr ""
+msgstr "Chamada não atendida"
 
 msgctxt "recentCalls_empty"
 msgid "No Call Logs"
-msgstr ""
+msgstr "Lista de chamadas vazia"
 
 msgctxt "filters"
 msgid "Filters"
-msgstr ""
+msgstr "Filtros"
 
 msgctxt "add_filter"
 msgid "Add filter / rewrite rule"
-msgstr ""
+msgstr "Adicionar filtro / regravar regra"
 
 msgctxt "delete_filter"
 msgid "Delete filter"
-msgstr ""
+msgstr "Deletar Filtro"
 
 msgctxt "callLog_delete_entry"
 msgid "Delete this call"
-msgstr ""
+msgstr "Deletar esta chamada"
 
 msgctxt "callLog_delete_all"
 msgid "Delete all calls"
-msgstr ""
+msgstr "Deletar todas chamadas"
 
 msgctxt "callLog_delDialog_title"
 msgid "Delete Call Logs"
-msgstr ""
+msgstr "Deletar listas de chamadas"
 
 msgctxt "callLog_delDialog_message"
 msgid "Are you sure you want to delete all calls from the log?"
-msgstr ""
+msgstr "Você tem certeza que deseja deletar todas chamadas da lista?"
 
 msgctxt "callLog_delDialog_yes"
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 msgctxt "callLog_delDialog_no"
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 msgctxt "gsm"
 msgid "Mobile"
-msgstr ""
+msgstr "Móvel"
 
 msgctxt "dial_tab_name_text"
 msgid "Dial"
-msgstr ""
+msgstr "Discar"
 
 msgctxt "calllog_tab_name_text"
 msgid "CallLogs"
-msgstr ""
+msgstr "Lista de chamadas"
 
 msgctxt "messages_tab_name_text"
 msgid "Messages"
@@ -154,23 +155,23 @@ msgstr ""
 
 msgctxt "service_ticker_registered_text"
 msgid "SIP Registered"
-msgstr ""
+msgstr "SIP Registrado"
 
 msgctxt "outgoing_call_chooser_call_text"
 msgid "Call"
-msgstr ""
+msgstr "Chamar"
 
 msgctxt "reorder"
 msgid "Reorder"
-msgstr ""
+msgstr "Reorganizar"
 
 msgctxt "faq"
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 msgctxt "help"
 msgid "Help"
-msgstr ""
+msgstr "Ajuda"
 
 msgctxt "record_logs"
 msgid "Record logs to send it to dev team and report a bug"
@@ -186,15 +187,15 @@ msgstr ""
 
 msgctxt "ok"
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgctxt "misc"
 msgid "Misc"
-msgstr ""
+msgstr "Variados"
 
 msgctxt "warning"
 msgid "WARNING"
-msgstr ""
+msgstr "AVISO"
 
 msgctxt "disconnect_and_incoming_explaination"
 msgid ""

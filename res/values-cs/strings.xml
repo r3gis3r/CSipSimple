@@ -29,7 +29,6 @@
   <string name="gsm">Mobilní telefon</string>
   <string name="dial_tab_name_text">Číselník</string>
   <string name="calllog_tab_name_text">Záznamy o hovorech</string>
-  <string name="menu_quit_text">Ukončit</string>
   <string name="service_ticker_registered_text">SIP registrován</string>
   <string name="outgoing_call_chooser_call_text">Hovor</string>
 </resources>

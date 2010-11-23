@@ -17,4 +17,6 @@
   <string name="call_state_incoming">Eingehender Anruf...</string>
   <string name="call_state_null">Fehler</string>
   <string name="unlock">Entsperre</string>
+  <string name="record">Aufnahme</string>
+  <string name="stop_recording">Aufnahme stoppen</string>
 </resources>

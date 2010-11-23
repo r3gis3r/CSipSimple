@@ -59,7 +59,7 @@ msgstr "É exatamente"
 
 msgctxt "filters_type:5"
 msgid "Custom RegExp"
-msgstr ""
+msgstr "RegExp personalizada"
 
 msgctxt "replace_type:0"
 msgid "Prefix by"
@@ -71,7 +71,7 @@ msgstr "Fufixo com"
 
 msgctxt "replace_type:2"
 msgid "Replace match by"
-msgstr ""
+msgstr "Substituir correspondência por"
 
 msgctxt "replace_type:3"
 msgid "Replace all by"
@@ -79,5 +79,5 @@ msgstr "Regravar todos por"
 
 msgctxt "replace_type:4"
 msgid "Custom RegExp"
-msgstr ""
+msgstr "RegExp personalizada"
 

@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the CSipSimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
@@ -20,25 +19,25 @@ msgstr ""
 
 msgctxt "w_callcentric_display_name"
 msgid "Account name"
-msgstr ""
+msgstr "Nome de conta"
 
 msgctxt "w_callcentric_display_name_desc"
 msgid "Display name for this account"
-msgstr ""
+msgstr "Mostrar nome para esta conta"
 
 msgctxt "w_callcentric_phone_number"
 msgid "SIP Phone Number"
-msgstr ""
+msgstr "Número de telefone SIP"
 
 msgctxt "w_callcentric_phone_number_desc"
 msgid "Callcentric SIP phone number (1777xxxxxxx)"
-msgstr ""
+msgstr "Número de telefone do Callcentric SIP (1777xxxxxxx)"
 
 msgctxt "w_callcentric_password"
 msgid "Password"
-msgstr ""
+msgstr "Palavra-passe"
 
 msgctxt "w_callcentric_password_desc"
 msgid "Password for your Callcentric account"
-msgstr ""
+msgstr "Palavra-passe para a sua conta Callcentric"
 

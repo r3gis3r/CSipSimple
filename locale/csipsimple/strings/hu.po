@@ -168,11 +168,11 @@ msgstr "Újrahívás"
 
 msgctxt "faq"
 msgid "FAQ"
-msgstr ""
+msgstr "GYIK"
 
 msgctxt "help"
 msgid "Help"
-msgstr ""
+msgstr "Segítség"
 
 msgctxt "record_logs"
 msgid "Record logs to send it to dev team and report a bug"
@@ -188,15 +188,15 @@ msgstr ""
 
 msgctxt "ok"
 msgid "OK"
-msgstr ""
+msgstr "Rendben"
 
 msgctxt "misc"
 msgid "Misc"
-msgstr ""
+msgstr "Egyéb"
 
 msgctxt "warning"
 msgid "WARNING"
-msgstr ""
+msgstr "FIGYELEM"
 
 msgctxt "disconnect_and_incoming_explaination"
 msgid ""

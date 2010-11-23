@@ -35,8 +35,6 @@
   <string name="network_udp_transport_port_desc">Numéro du port sur lequel écouter localement</string>
   <string name="network_tcp_transport_port">Port TCP</string>
   <string name="network_tcp_transport_port_desc">Numéro du port sur lequel écouter localement</string>
-  <string name="network_tls_transport_port">Port TLS</string>
-  <string name="network_tls_transport_port_desc">Numéro du port sur lequel écouter localement</string>
   <string name="network_rtp_port">Port RTP</string>
   <string name="network_rtp_port_desc">Port pour le début de la fourchette de port RTP</string>
   <string name="use_ipv6">Utiliser l\'IPv6</string>
@@ -45,9 +43,6 @@
   <string name="enable_dns_srv_desc">Utiliser les DNS dans l\'application pour résoudre les noms de domaine</string>
   <string name="override_nameserver">DNS personnalisé</string>
   <string name="override_nameserver_desc">Laisser vide pour récupérer les DNS d\'Android</string>
-  <string name="secure_transport">Transport sécurisé</string>
-  <string name="use_srtp">Mode SRTP</string>
-  <string name="use_srtp_desc">Mode pour le RTP sécurisé</string>
   <string name="nat_traversal">Traversée du NAT</string>
   <string name="enable_ice">Activer ICE</string>
   <string name="enable_ice_desc">Activer la fonctionnalité ICE</string>
@@ -59,6 +54,11 @@
   <string name="enable_stun_desc">Activer la fonctionnalité STUN</string>
   <string name="stun_server">Serveur STUN</string>
   <string name="stun_server_desc">Server STUN (hôte:port)</string>
+  <string name="secure_transport">Transport sécurisé</string>
+  <string name="network_tls_transport_port">Port TLS</string>
+  <string name="network_tls_transport_port_desc">Numéro du port sur lequel écouter localement</string>
+  <string name="use_srtp">Mode SRTP</string>
+  <string name="use_srtp_desc">Mode pour le RTP sécurisé</string>
   <string name="audio_quality">Qualité audio</string>
   <string name="codecs">Codecs</string>
   <string name="echo_cancellation">Annulation de l\'echo</string>
@@ -82,8 +82,6 @@
   <string name="echo_cancellation_tail">Longueur d\'annulation de l\'echo</string>
   <string name="echo_cancellation_tail_desc">Longueur de la trainée sur laquelle appliquer l\'annulation d\'écho</string>
   <string name="codecs_desc">Priorité (0 = désactivé)</string>
-  <string name="sip_info_dtmf">SIP INFO DTMF</string>
-  <string name="sip_info_dtmf_desc">Utiliser SIP INFO pour envoyer du DTMF</string>
   <string name="general_ui">Interface utilisateur générale</string>
   <string name="native_dialer_integration">Intégration au numéroteur Android</string>
   <string name="advanced_ui">Modifications avancées</string>
@@ -97,7 +95,6 @@
   <string name="dial_press_vibrate_desc">Vibrer lors de l\'appui sur un numéro</string>
   <string name="start_with_text_dialer">Numérotation texte</string>
   <string name="start_with_text_dialer_desc">Démarrer avec le numéroteur de type texte</string>
-  <string name="use_alternate_unlocker">Dévérouillage bouttons</string>
   <string name="use_alternate_unlocker_desc">Ne pas utiliser le dévérouillage glissant pour prendre les appels</string>
   <string name="keep_awake_incall">Rester allumer lorsqu\'en cours d\'appel</string>
   <string name="keep_awake_incall_desc">Corrige le son haché lorsque le téléphone est en WIFI (par exemple pour le Nexus One)</string>
@@ -109,6 +106,8 @@
   <string name="integrate_with_native_music_desc">A désactiver si vous utilisez un autre application que l\'application officielle</string>
   <string name="ringtone">Sonnerie</string>
   <string name="ringtone_desc">Sonnerie à défaut pour les appels SIP</string>
+  <string name="prevent_screen_rotation">Empêcher la rotation d\'écran</string>
+  <string name="prevent_screen_rotation_desc">Eviter la rotation de l\'écran et rester en mode portrait</string>
   <string name="android_integration">S\'intégrer à Android</string>
   <string name="android_integration_desc">S\'intégrer à la numérotation et aux journaux d\'appel d\'Android</string>
   <string name="availability_profile">Profil de disponibilité</string>

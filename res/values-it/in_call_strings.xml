@@ -17,4 +17,6 @@
   <string name="call_state_incoming">Chiamata in arrivo...</string>
   <string name="call_state_null">Errore</string>
   <string name="unlock">Sblocca</string>
+  <string name="record">Registra</string>
+  <string name="stop_recording">Interrompi registrazione</string>
 </resources>

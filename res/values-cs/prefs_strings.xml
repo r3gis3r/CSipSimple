@@ -31,11 +31,11 @@
   <string name="enable_udp_desc">Použít UDP transport</string>
   <string name="network_udp_transport_port">UDP Port</string>
   <string name="network_tcp_transport_port">TCP port</string>
-  <string name="network_tls_transport_port">TLS Port</string>
   <string name="network_rtp_port">RTP port</string>
   <string name="use_ipv6">Používat IPv6</string>
   <string name="use_ipv6_desc">Přepnout na IPv6 (síť i telefon musí IPv6 podporovat)</string>
   <string name="override_nameserver">Použít vlastní DNS</string>
+  <string name="network_tls_transport_port">TLS Port</string>
   <string name="audio_quality">Kvalita zvuku</string>
   <string name="codecs">Kodeky</string>
   <string name="echo_cancellation_desc">Aktivuje funkce pro potlačení echa</string>

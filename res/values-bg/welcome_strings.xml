@@ -6,5 +6,4 @@
   <string name="intializing_text">Инициализиране</string>
   <string name="downloading_text">Изтегляне</string>
   <string name="installing_library_text">Инсталиране на библиотека ...</string>
-  <string name="welcome_caption_text">Благодаря Ви, че използвате CSipSimple</string>
 </resources>

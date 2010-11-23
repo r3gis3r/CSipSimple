@@ -28,11 +28,11 @@ msgstr "Невозможно загрузить файл"
 
 msgctxt "connection_not_valid"
 msgid ""
-"Selected network route not available (activate WiFi or change preferences"
-" to use 3G)"
+"Selected network route not available (activate WiFi or change preferences to "
+"use 3G)"
 msgstr ""
-"Выбранная сеть недоступна (активируйте WiFi или измените настройки, чтобы"
-" использовать 3G)"
+"Выбранная сеть недоступна (активируйте WiFi или измените настройки, чтобы "
+"использовать 3G)"
 
 msgctxt "invalid_sip_uri"
 msgid "Sip uri is invalid for call"
@@ -169,11 +169,11 @@ msgstr "Изменить порядок"
 
 msgctxt "faq"
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 msgctxt "help"
 msgid "Help"
-msgstr ""
+msgstr "Помощь"
 
 msgctxt "record_logs"
 msgid "Record logs to send it to dev team and report a bug"
@@ -189,15 +189,15 @@ msgstr ""
 
 msgctxt "ok"
 msgid "OK"
-msgstr ""
+msgstr "Далее"
 
 msgctxt "misc"
 msgid "Misc"
-msgstr ""
+msgstr "Прочее"
 
 msgctxt "warning"
 msgid "WARNING"
-msgstr ""
+msgstr "ПРЕДУПРЕЖДЕНИЕ"
 
 msgctxt "disconnect_and_incoming_explaination"
 msgid ""

@@ -1,2 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_expert_display_name">Nome de conta</string>
+  <string name="w_expert_display_name_desc">Mostrar nome para esta conta</string>
+  <string name="w_expert_acc_id">ID de conta</string>
+  <string name="w_expert_acc_id_desc">Formato: DisplayName &lt;sip:login\@registrar&gt;</string>
+  <string name="w_expert_reg_uri">Registo URI</string>
+  <string name="w_expert_reg_uri_desc">Formato: sip:registrar.net[:port]</string>
+  <string name="w_expert_realm">Domínio</string>
+  <string name="w_expert_realm_desc">Domínio de autenticação (se não o sabe use \'*\')</string>
+  <string name="w_expert_username">Nome de utilizador</string>
+  <string name="w_expert_username_desc">Nome de utilizador para autenticação</string>
+  <string name="w_expert_data">Palavra-passe</string>
+  <string name="w_expert_data_desc">Palavra-passe (ou outros dados) para autenticação</string>
+  <string name="w_expert_t_proxy">Proxy</string>
+  <string name="w_expert_proxy">Proxy URI</string>
+  <string name="w_expert_proxy_desc">Formato : sip:proxy.net[:port]</string>
+  <string name="w_expert_use_tcp">Use TCP (não UDP)</string>
+  <string name="w_expert_prevent_tcp">Prevenir TCP (apenas tentar UDP)</string>
+  <string name="w_expert_publish_enabled">Publicar activado</string>
+  <string name="w_expert_reg_timeout">Tempo de espera do registo (s)</string>
+  <string name="w_expert_ka_interval">Intervalo de Keep-Alive (s)</string>
+  <string name="w_expert_force_contact">Forçar contacto</string>
+</resources>

@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the csipsimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
@@ -21,17 +20,16 @@ msgstr ""
 
 msgctxt "w_authorization_auth_name"
 msgid "Authentication name"
-msgstr ""
+msgstr "Имя для аутентификации"
 
 msgctxt "w_authorization_auth_name_desc"
 msgid "Sip authentication"
-msgstr ""
+msgstr "Имя для аутентификации в сети SIP"
 
 msgctxt "w_authorization_phone_number"
 msgid "User name"
-msgstr ""
+msgstr "Имя пользователя"
 
 msgctxt "w_authorization_phone_number_desc"
 msgid "Sip user account"
-msgstr ""
-
+msgstr "Ваш SIP номер"

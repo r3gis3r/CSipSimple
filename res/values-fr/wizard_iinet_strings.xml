@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Etat</string>
+  <string name="w_iinet_state_desc">L\'état qui vous correspond dans la liste suivante</string>
+  <string name="w_iinet_username">Numéro de téléphone VoIP</string>
+  <string name="w_iinet_username_desc">Supprimez tous les caractères spéciaux</string>
+  <string name="w_iinet_password">Mot de passe spécial pour la VoIP</string>
+  <string name="w_iinet_password_desc">Pas le même mot de passe que celui de la connexion</string>
+</resources>

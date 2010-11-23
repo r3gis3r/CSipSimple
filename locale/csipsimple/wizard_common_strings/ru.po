@@ -52,9 +52,9 @@ msgstr "Пароль к Вашему аккаунту"
 
 msgctxt "w_common_server"
 msgid "Server"
-msgstr ""
+msgstr "Сервер"
 
 msgctxt "w_common_server_desc"
 msgid "SIP server domain/IP[:port]"
-msgstr ""
+msgstr "SIP сервер домен/IP[:порт]"
 

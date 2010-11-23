@@ -1,18 +1,2 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-   <string name="description_image_button_one" msgid="1740638037139856139">"uno"</string>
-    <string name="description_image_button_two" msgid="5882638439003731308">"due"</string>
-    <string name="description_image_button_three" msgid="8709731759376015180">"tre"</string>
-    <string name="description_image_button_four" msgid="3530239685642246130">"quattro"</string>
-    <string name="description_image_button_five" msgid="1182465427501188413">"cinque"</string>
-    <string name="description_image_button_six" msgid="2093656269261415475">"sei"</string>
-    <string name="description_image_button_seven" msgid="2450357020447676481">"sette"</string>
-    <string name="description_image_button_eight" msgid="6969435115163287801">"otto"</string>
-    <string name="description_image_button_nine" msgid="7857248695662558323">"nove"</string>
-    <string name="description_image_button_star" msgid="3365919907520767866">"stella"</string>
-    <string name="description_image_button_zero" msgid="4133108949401820710">"zero"</string>
-    <string name="description_image_button_pound" msgid="3039765597595889230">"sterlina"</string>
-    <string name="description_dial_button" msgid="1274091017188142646">"componi"</string>
-    <string name="description_delete_button" msgid="6263102114033407382">"backspace"</string>
-    <string name="description_digits_edittext" msgid="8760207516497016437">"numero da comporre"</string>
-</resources>
+<?xml version='1.0' encoding='utf-8'?>
+<resources/>

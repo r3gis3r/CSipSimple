@@ -168,11 +168,11 @@ msgstr "Réorganiser"
 
 msgctxt "faq"
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 msgctxt "help"
 msgid "Help"
-msgstr ""
+msgstr "Aide"
 
 msgctxt "record_logs"
 msgid "Record logs to send it to dev team and report a bug"
@@ -188,15 +188,15 @@ msgstr ""
 
 msgctxt "ok"
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgctxt "misc"
 msgid "Misc"
-msgstr ""
+msgstr "Divers"
 
 msgctxt "warning"
 msgid "WARNING"
-msgstr ""
+msgstr "ATTENTION"
 
 msgctxt "disconnect_and_incoming_explaination"
 msgid ""

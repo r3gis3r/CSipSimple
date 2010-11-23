@@ -17,4 +17,6 @@
   <string name="call_state_incoming">Appel entrant...</string>
   <string name="call_state_null">ERREUR</string>
   <string name="unlock">Déverrouiller</string>
+  <string name="record">Enregistrer</string>
+  <string name="stop_recording">Arrêter l\'enregistrement</string>
 </resources>

@@ -16,6 +16,7 @@
   <string name="use">Verwende :</string>
   <string name="use_pstn">Verwende GSM</string>
   <string name="ongoing_call">aktiver Anruf</string>
+  <string name="missed_call">Verpasster Anruf</string>
   <string name="recentCalls_empty">Anrufliste leer</string>
   <string name="filters">Filter</string>
   <string name="add_filter">Filter hinzufügen / Regel bearbeiten</string>
@@ -29,7 +30,12 @@
   <string name="gsm">GSM</string>
   <string name="dial_tab_name_text">Telefon</string>
   <string name="calllog_tab_name_text">Anrufliste</string>
-  <string name="menu_quit_text">Beenden</string>
   <string name="service_ticker_registered_text">SIP registriert</string>
   <string name="outgoing_call_chooser_call_text">Wähle</string>
+  <string name="reorder">Sortieren</string>
+  <string name="faq">FAQ</string>
+  <string name="help">Hilfe</string>
+  <string name="ok">OK</string>
+  <string name="misc">Sonstiges</string>
+  <string name="warning">ACHTUNG</string>
 </resources>

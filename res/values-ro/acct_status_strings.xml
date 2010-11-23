@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="acct_inactive">Inactivă</string>
+  <string name="acct_unregistered">Neinregistrat</string>
+  <string name="acct_expired">Inregistrare expirata</string>
+  <string name="acct_registering">Inregistrare in curs...</string>
+  <string name="acct_registered">Înregistrat</string>
+  <string name="acct_regerror">Eroare in timpul inregistrarii</string>
+  <string name="acct_regfailed">Inregistrare esuata</string>
+</resources>

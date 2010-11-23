@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Ország</string>
+  <string name="w_iinet_state_desc">Ország kiválasztása a listából</string>
+  <string name="w_iinet_username">VoIP telefonszám</string>
+  <string name="w_iinet_username_desc">Formázások levétele, mint pl. szóközök és írásjelek</string>
+  <string name="w_iinet_password">Speciális VoiP jelszó</string>
+  <string name="w_iinet_password_desc">Nem azonos a csatlakozási jelszóval</string>
+</resources>

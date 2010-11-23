@@ -43,5 +43,6 @@ msgstr "Грешка при регистрацията"
 
 msgctxt "acct_regfailed"
 msgid "Register Failed - Check your Configuration"
-msgstr "Регистрацията е неуспешна! Моля, проверете отново въведените параметри."
+msgstr ""
+"Регистрацията е неуспешна! Моля, проверете отново въведените параметри."
 

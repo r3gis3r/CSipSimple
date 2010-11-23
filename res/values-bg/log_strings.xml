@@ -7,5 +7,5 @@
   <string name="callBack">Връщане на обаждането</string>
   <string name="callAgain">Позвъни отново</string>
   <string name="returnCall">Върнато повикване</string>
-  <string name="callDetailsDurationFormat"><xliff:g id="минути" пример="42">%s</xliff:g>" мин. "<xliff:g id="секунди" пример="28">%s</xliff:g>" сек."</string>
+  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" мин. "<xliff:g id="seconds" example="28">%s</xliff:g>" сек."</string>
 </resources>

@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the CSipSimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
@@ -20,31 +19,31 @@ msgstr ""
 
 msgctxt "unknown"
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 msgctxt "type_incoming"
 msgid "Incoming"
-msgstr ""
+msgstr "Entrada"
 
 msgctxt "type_outgoing"
 msgid "Outgoing"
-msgstr ""
+msgstr "Saída"
 
 msgctxt "type_missed"
 msgid "Missed"
-msgstr ""
+msgstr "Perdidas"
 
 msgctxt "callBack"
 msgid "Call back"
-msgstr ""
+msgstr "Ligar de volta"
 
 msgctxt "callAgain"
 msgid "Call again"
-msgstr ""
+msgstr "Ligar novamente"
 
 msgctxt "returnCall"
 msgid "Return call"
-msgstr ""
+msgstr "Devolver a chamada"
 
 #, python-format
 msgctxt "callDetailsDurationFormat"
@@ -52,4 +51,6 @@ msgid ""
 "<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
 "id=\"seconds\" example=\"28\">%s</xliff:g> secs"
 msgstr ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> segs"
 

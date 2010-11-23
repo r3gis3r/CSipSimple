@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Estado</string>
+  <string name="w_iinet_state_desc">O estado relevante da seguinte lista</string>
+  <string name="w_iinet_username">Número de telefone VoiP</string>
+  <string name="w_iinet_username_desc">Remova qualquer formatação tais como espaços e traços</string>
+  <string name="w_iinet_password">Palavra-passe especial VoiP</string>
+  <string name="w_iinet_password_desc">Não é a mesma que a Palavra-passe de conexão</string>
+</resources>

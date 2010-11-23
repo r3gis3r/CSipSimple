@@ -35,8 +35,6 @@
   <string name="network_udp_transport_port_desc">Helyi port</string>
   <string name="network_tcp_transport_port">TCP Port</string>
   <string name="network_tcp_transport_port_desc">Helyi port</string>
-  <string name="network_tls_transport_port">TLS Port</string>
-  <string name="network_tls_transport_port_desc">Helyi port</string>
   <string name="network_rtp_port">RTP port</string>
   <string name="network_rtp_port_desc">Alsó RTP port</string>
   <string name="use_ipv6">Használjon IPv6-ot</string>
@@ -45,9 +43,6 @@
   <string name="enable_dns_srv_desc">Saját DNS címfeloldó használata</string>
   <string name="override_nameserver">Használjon egyéni DNS-t</string>
   <string name="override_nameserver_desc">Szabadon hagyva az alap Android DNS-t használja</string>
-  <string name="secure_transport">Titkosított átvitel</string>
-  <string name="use_srtp">SRTP mód</string>
-  <string name="use_srtp_desc">Biztonságos RTP mód</string>
   <string name="nat_traversal">NAT címfordító</string>
   <string name="enable_ice">ICE engedélyezése</string>
   <string name="enable_ice_desc">ICE funkció bekapcsolása</string>
@@ -59,7 +54,13 @@
   <string name="enable_stun_desc">STUN funkció bekapcsolása</string>
   <string name="stun_server">STUN szerver</string>
   <string name="stun_server_desc">STUN szerver megadása (HOST:PORT)</string>
+  <string name="secure_transport">Titkosított átvitel</string>
+  <string name="network_tls_transport_port">TLS Port</string>
+  <string name="network_tls_transport_port_desc">Helyi port</string>
+  <string name="use_srtp">SRTP mód</string>
+  <string name="use_srtp_desc">Biztonságos RTP mód</string>
   <string name="audio_quality">Hangminőség</string>
+  <string name="audio_volume">Hangerő</string>
   <string name="codecs">Kodekek</string>
   <string name="echo_cancellation">Visszhang csillapítás</string>
   <string name="echo_cancellation_desc">Visszhang mcsillapítás bekapcsolása</string>
@@ -82,8 +83,8 @@
   <string name="echo_cancellation_tail">Visszhang csillapító szakasz</string>
   <string name="echo_cancellation_tail_desc">A visszhang csillapító szakasz mérete</string>
   <string name="codecs_desc">Elsőbbség (kikapcsolva: 0)</string>
-  <string name="sip_info_dtmf">DTMF SIP INFO</string>
-  <string name="sip_info_dtmf_desc">SIP INFO használata DTMF küldéshez</string>
+  <string name="use_soft_volume">Szoftveres hangerő</string>
+  <string name="use_soft_volume_desc">Szoftveres hangerő-szabályzás az androidos helyett</string>
   <string name="general_ui">Általános felhasználói felület</string>
   <string name="native_dialer_integration">Bépülés az alap tárcsázóba</string>
   <string name="advanced_ui">Finomhangolás</string>
@@ -97,7 +98,6 @@
   <string name="dial_press_vibrate_desc">Legyen vibrantás gombnyomáskor</string>
   <string name="start_with_text_dialer">Szöveges tárcsázó</string>
   <string name="start_with_text_dialer_desc">Szöveges tárcsázó induljon a számos helyett</string>
-  <string name="use_alternate_unlocker">Ne legyen csúszka</string>
   <string name="use_alternate_unlocker_desc">Gombokat használjon csúszka helyett bejövő híváskor</string>
   <string name="keep_awake_incall">Előtérben beszélgetéskor</string>
   <string name="keep_awake_incall_desc">Ha WiFi-s hívás közben érdes a hang, ez javítja</string>
@@ -109,6 +109,8 @@
   <string name="integrate_with_native_music_desc">Kapcsolja ki ha más alkalmazást szeretne használni a bejövő hívás jelzésére</string>
   <string name="ringtone">Csengőhang</string>
   <string name="ringtone_desc">Alapértelmezett SIP csengőhang</string>
+  <string name="prevent_screen_rotation">Képforgatás tiltása</string>
+  <string name="prevent_screen_rotation_desc">Nem engedi a képernyő forgatását és álló módban tartja</string>
   <string name="android_integration">Beépülés az Androidba</string>
   <string name="android_integration_desc">Beépül az alap tárcsázóba és híváslistába</string>
   <string name="availability_profile">Elérhetőségi profil</string>

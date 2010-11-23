@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="unknown">Necunoscut</string>
+  <string name="type_incoming">Primite</string>
+  <string name="type_outgoing">Iesiri</string>
+  <string name="type_missed">Pierdute</string>
+  <string name="callBack">Apeleaza inapoi</string>
+  <string name="callAgain">Apeleaza inca odata</string>
+</resources>

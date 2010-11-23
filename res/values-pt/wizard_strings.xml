@@ -1,2 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="other_country_providers_text">Fornecedores de outros países</string>
+  <string name="world_wide_providers_text">Fornecedores de todo o mundo</string>
+  <string name="generic_wizards_text">Assistentes genéricos</string>
+</resources>

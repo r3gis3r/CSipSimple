@@ -19,13 +19,13 @@ msgstr ""
 
 msgctxt "other_country_providers_text"
 msgid "Other country providers"
-msgstr ""
+msgstr "Fornecedores de outros países"
 
 msgctxt "world_wide_providers_text"
 msgid "World wide providers"
-msgstr ""
+msgstr "Fornecedores de todo o mundo"
 
 msgctxt "generic_wizards_text"
 msgid "Generic wizards"
-msgstr ""
+msgstr "Assistentes genéricos"
 
