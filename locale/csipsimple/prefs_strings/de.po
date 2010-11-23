@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-27 00:26+0200\n"
+"POT-Creation-Date: 2010-11-23 23:40+0100\n"
 "PO-Revision-Date: 2010-10-06 13:32+0000\n"
 "Last-Translator: Jan Tschirschwitz <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -68,6 +68,10 @@ msgstr "Performanz"
 msgctxt "transport"
 msgid "Transport"
 msgstr "Protokoll"
+
+msgctxt "transport_desc"
+msgid "Force the use of a transport for this account"
+msgstr ""
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -157,14 +161,6 @@ msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Lokale TCP Portnummer"
 
-msgctxt "network_tls_transport_port"
-msgid "TLS Port"
-msgstr "TLS Port"
-
-msgctxt "network_tls_transport_port_desc"
-msgid "Port number to bind locally"
-msgstr "Lokale TLS Portnummer"
-
 msgctxt "network_rtp_port"
 msgid "RTP port"
 msgstr "RTP port"
@@ -198,18 +194,6 @@ msgstr "Einen eigenen DNS-Server benutzen"
 msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
 msgstr ""
-
-msgctxt "secure_transport"
-msgid "Secure transport"
-msgstr ""
-
-msgctxt "use_srtp"
-msgid "SRTP mode"
-msgstr "SRTP-Modus"
-
-msgctxt "use_srtp_desc"
-msgid "Mode for Secure RTP"
-msgstr "Modus für Secure RTP"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
@@ -254,6 +238,120 @@ msgstr "STUN Server"
 msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "STUN Server (HOST:PORT)"
+
+#, fuzzy
+msgctxt "enable_qos"
+msgid "Enable QoS"
+msgstr "Aktiviert ICE"
+
+msgctxt "enable_qos_desc"
+msgid "Enable QoS on packets"
+msgstr ""
+
+msgctxt "dscp_val"
+msgid "DSCP value"
+msgstr ""
+
+msgctxt "dscp_val_desc"
+msgid "DSCP value for SIP traffic"
+msgstr ""
+
+msgctxt "tls"
+msgid "TLS"
+msgstr ""
+
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr ""
+
+msgctxt "secure_transport_desc"
+msgid "Security mechanism for SIP and RTP"
+msgstr ""
+
+msgctxt "secure_media"
+msgid "Secure media"
+msgstr ""
+
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr "TLS Port"
+
+msgctxt "network_tls_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "Lokale TLS Portnummer"
+
+msgctxt "network_tls_server_name"
+msgid "TLS server name"
+msgstr ""
+
+msgctxt "network_tls_server_name_desc"
+msgid "For multi-hosting server (optional)"
+msgstr ""
+
+msgctxt "ca_list_file"
+msgid "TLS CA file"
+msgstr ""
+
+msgctxt "ca_list_file_desc"
+msgid "For example /sdcard/CSipSimple/myAuthority.ca"
+msgstr ""
+
+msgctxt "cert_file"
+msgid "TLS certificate file"
+msgstr ""
+
+msgctxt "cert_file_desc"
+msgid "For example /sdcard/CSipSimple/myCert.crt"
+msgstr ""
+
+msgctxt "privkey_file"
+msgid "TLS private key file"
+msgstr ""
+
+msgctxt "privkey_file_desc"
+msgid "For example /sdcard/CSipSimple/myKey.key"
+msgstr ""
+
+msgctxt "tls_password"
+msgid "TLS password"
+msgstr ""
+
+msgctxt "tls_password_desc"
+msgid "TLS password to private key file"
+msgstr ""
+
+#, fuzzy
+msgctxt "verify_server"
+msgid "Check server"
+msgstr "TURN Server"
+
+msgctxt "verify_server_desc"
+msgid "Verify server's certificate"
+msgstr ""
+
+msgctxt "verify_client"
+msgid "Check client"
+msgstr ""
+
+msgctxt "verify_client_desc"
+msgid "Verify client's certificate"
+msgstr ""
+
+msgctxt "tls_method"
+msgid "TLS Method"
+msgstr ""
+
+msgctxt "tls_method_desc"
+msgid "Method for TLS transport"
+msgstr ""
+
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr "SRTP-Modus"
+
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr "Modus für Secure RTP"
 
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -353,12 +451,12 @@ msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Priorität (0=deaktiviert)"
 
-msgctxt "sip_info_dtmf"
-msgid "DTMF SIP INFO"
+msgctxt "sip_dtmf"
+msgid "DTMF mode"
 msgstr ""
 
-msgctxt "sip_info_dtmf_desc"
-msgid "Use SIP INFO to send DTMF"
+msgctxt "sip_dtmf_desc"
+msgid "How to send DTMF"
 msgstr ""
 
 msgctxt "use_soft_volume"
@@ -425,8 +523,9 @@ msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
 msgstr "Startet mit Textwähler"
 
+#, fuzzy
 msgctxt "use_alternate_unlocker"
-msgid "Don't use slide unlocker"
+msgid "Don't use slide answer"
 msgstr "Rufannahme durch Schieben verhindern"
 
 msgctxt "use_alternate_unlocker_desc"
@@ -546,4 +645,12 @@ msgstr ""
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr ""
+
+#~ msgctxt "sip_info_dtmf"
+#~ msgid "DTMF SIP INFO"
+#~ msgstr ""
+
+#~ msgctxt "sip_info_dtmf_desc"
+#~ msgid "Use SIP INFO to send DTMF"
+#~ msgstr ""
 

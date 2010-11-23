@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-10-27 00:26+0200\n"
+"POT-Creation-Date: 2010-11-23 23:40+0100\n"
 "PO-Revision-Date: 2010-10-11 10:14+0000\n"
 "Last-Translator: B. Zoli <tec@webpress.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -68,6 +68,10 @@ msgstr "Használat"
 msgctxt "transport"
 msgid "Transport"
 msgstr "Átvitel"
+
+msgctxt "transport_desc"
+msgid "Force the use of a transport for this account"
+msgstr ""
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -157,14 +161,6 @@ msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
 msgstr "Helyi port"
 
-msgctxt "network_tls_transport_port"
-msgid "TLS Port"
-msgstr "TLS Port"
-
-msgctxt "network_tls_transport_port_desc"
-msgid "Port number to bind locally"
-msgstr "Helyi port"
-
 msgctxt "network_rtp_port"
 msgid "RTP port"
 msgstr "RTP port"
@@ -196,18 +192,6 @@ msgstr "Használjon egyéni DNS-t"
 msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
 msgstr "Szabadon hagyva az alap Android DNS-t használja"
-
-msgctxt "secure_transport"
-msgid "Secure transport"
-msgstr "Titkosított átvitel"
-
-msgctxt "use_srtp"
-msgid "SRTP mode"
-msgstr "SRTP mód"
-
-msgctxt "use_srtp_desc"
-msgid "Mode for Secure RTP"
-msgstr "Biztonságos RTP mód"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
@@ -252,6 +236,121 @@ msgstr "STUN szerver"
 msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "STUN szerver megadása (HOST:PORT)"
+
+#, fuzzy
+msgctxt "enable_qos"
+msgid "Enable QoS"
+msgstr "ICE engedélyezése"
+
+msgctxt "enable_qos_desc"
+msgid "Enable QoS on packets"
+msgstr ""
+
+msgctxt "dscp_val"
+msgid "DSCP value"
+msgstr ""
+
+msgctxt "dscp_val_desc"
+msgid "DSCP value for SIP traffic"
+msgstr ""
+
+msgctxt "tls"
+msgid "TLS"
+msgstr ""
+
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr "Titkosított átvitel"
+
+msgctxt "secure_transport_desc"
+msgid "Security mechanism for SIP and RTP"
+msgstr ""
+
+msgctxt "secure_media"
+msgid "Secure media"
+msgstr ""
+
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr "TLS Port"
+
+msgctxt "network_tls_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "Helyi port"
+
+msgctxt "network_tls_server_name"
+msgid "TLS server name"
+msgstr ""
+
+msgctxt "network_tls_server_name_desc"
+msgid "For multi-hosting server (optional)"
+msgstr ""
+
+msgctxt "ca_list_file"
+msgid "TLS CA file"
+msgstr ""
+
+msgctxt "ca_list_file_desc"
+msgid "For example /sdcard/CSipSimple/myAuthority.ca"
+msgstr ""
+
+msgctxt "cert_file"
+msgid "TLS certificate file"
+msgstr ""
+
+msgctxt "cert_file_desc"
+msgid "For example /sdcard/CSipSimple/myCert.crt"
+msgstr ""
+
+msgctxt "privkey_file"
+msgid "TLS private key file"
+msgstr ""
+
+msgctxt "privkey_file_desc"
+msgid "For example /sdcard/CSipSimple/myKey.key"
+msgstr ""
+
+msgctxt "tls_password"
+msgid "TLS password"
+msgstr ""
+
+msgctxt "tls_password_desc"
+msgid "TLS password to private key file"
+msgstr ""
+
+#, fuzzy
+msgctxt "verify_server"
+msgid "Check server"
+msgstr "TURN szerver"
+
+msgctxt "verify_server_desc"
+msgid "Verify server's certificate"
+msgstr ""
+
+msgctxt "verify_client"
+msgid "Check client"
+msgstr ""
+
+msgctxt "verify_client_desc"
+msgid "Verify client's certificate"
+msgstr ""
+
+msgctxt "tls_method"
+msgid "TLS Method"
+msgstr ""
+
+#, fuzzy
+msgctxt "tls_method_desc"
+msgid "Method for TLS transport"
+msgstr "Titkosított átvitel"
+
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr "SRTP mód"
+
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr "Biztonságos RTP mód"
 
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -349,13 +448,14 @@ msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Elsőbbség (kikapcsolva: 0)"
 
-msgctxt "sip_info_dtmf"
-msgid "DTMF SIP INFO"
-msgstr "DTMF SIP INFO"
+#, fuzzy
+msgctxt "sip_dtmf"
+msgid "DTMF mode"
+msgstr "Szakértő mód"
 
-msgctxt "sip_info_dtmf_desc"
-msgid "Use SIP INFO to send DTMF"
-msgstr "SIP INFO használata DTMF küldéshez"
+msgctxt "sip_dtmf_desc"
+msgid "How to send DTMF"
+msgstr ""
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
@@ -419,8 +519,9 @@ msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
 msgstr "Szöveges tárcsázó induljon a számos helyett"
 
+#, fuzzy
 msgctxt "use_alternate_unlocker"
-msgid "Don't use slide unlocker"
+msgid "Don't use slide answer"
 msgstr "Ne legyen csúszka"
 
 msgctxt "use_alternate_unlocker_desc"
@@ -536,4 +637,12 @@ msgstr "Szakértő mód"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Hozzáértő mód"
+
+#~ msgctxt "sip_info_dtmf"
+#~ msgid "DTMF SIP INFO"
+#~ msgstr "DTMF SIP INFO"
+
+#~ msgctxt "sip_info_dtmf_desc"
+#~ msgid "Use SIP INFO to send DTMF"
+#~ msgstr "SIP INFO használata DTMF küldéshez"
 

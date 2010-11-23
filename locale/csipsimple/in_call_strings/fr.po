@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-27 00:26+0200\n"
+"POT-Creation-Date: 2010-11-23 23:40+0100\n"
 "PO-Revision-Date: 2010-09-27 08:19+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -91,5 +91,9 @@ msgstr ""
 
 msgctxt "stop_recording"
 msgid "Stop recording"
+msgstr ""
+
+msgctxt "xfer"
+msgid "Transfer"
 msgstr ""
 

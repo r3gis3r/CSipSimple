@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-10-27 00:26+0200\n"
+"POT-Creation-Date: 2010-11-23 23:40+0100\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -60,5 +60,65 @@ msgstr ""
 
 msgctxt "use_srtp_choices:2"
 msgid "Mandatory"
+msgstr ""
+
+msgctxt "dtmf_mode_choices:0"
+msgid "Auto"
+msgstr ""
+
+msgctxt "dtmf_mode_choices:1"
+msgid "RTP"
+msgstr ""
+
+msgctxt "dtmf_mode_choices:2"
+msgid "In band generation"
+msgstr ""
+
+msgctxt "dtmf_mode_choices:3"
+msgid "SIP INFO"
+msgstr ""
+
+msgctxt "contact_rewrite_method_choices:0"
+msgid "Legacy"
+msgstr ""
+
+msgctxt "contact_rewrite_method_choices:1"
+msgid "Normal"
+msgstr ""
+
+msgctxt "transport_choices:0"
+msgid "Auto"
+msgstr ""
+
+msgctxt "transport_choices:1"
+msgid "UDP"
+msgstr ""
+
+msgctxt "transport_choices:2"
+msgid "TCP"
+msgstr ""
+
+msgctxt "transport_choices:3"
+msgid "TLS"
+msgstr ""
+
+msgctxt "tls_method_choices:0"
+msgid "Auto"
+msgstr ""
+
+msgctxt "tls_method_choices:1"
+msgid "TLSv1"
+msgstr ""
+
+msgctxt "tls_method_choices:2"
+msgid "SSLv2"
+msgstr ""
+
+msgctxt "tls_method_choices:3"
+msgid "SSL3"
+msgstr ""
+
+msgctxt "tls_method_choices:4"
+msgid "SSL23"
 msgstr ""
 
