@@ -132,7 +132,7 @@ public class CollectLogs {
 	
 	public final static String getApplicationInfo(Context ctx) {
 		String result = "";
-		result += "Application version : ";
+		result += "Based on the GPL CSipSimple version : ";
 		
 		PackageInfo pinfo;
 		try {
@@ -148,7 +148,7 @@ public class CollectLogs {
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, "CSipSimple Error-Log report");
         sendIntent.setType("text/plain");//$NON-NLS-1$
-        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "developers@csipsimple.com" });
+        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { CustomDistribution.getSupportEmail() });
         
         StringBuilder log = new StringBuilder();
         log.append(userComment);

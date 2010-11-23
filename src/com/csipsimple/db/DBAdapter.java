@@ -345,6 +345,36 @@ public class DBAdapter {
 		return null;
 	}
 	
+
+
+	public Account getAccountForWizard(String wizardId) {
+		if(wizardId  == null){
+			return new Account();
+		}
+		try {
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
+					Account.FIELD_WIZARD + "=?", new String[] {wizardId}, null, null, null);
+			
+			
+			int numRows = c.getCount();
+			if(numRows > 0){
+				c.moveToFirst();
+				Account account = null;
+				account = new Account();
+				account.createFromDb(c);
+				c.close();
+				return account;
+				
+			}
+			c.close();
+		} catch (SQLException e) {
+			Log.e("Exception on query", e.toString());
+		}
+		Account acc = new Account();
+		acc.wizard = wizardId;
+		return acc;
+	}
+	
 	public ContentValues getAccountValues(long accountId){
 		if(accountId <0){
 			return null;

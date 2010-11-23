@@ -210,7 +210,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
             case MENU_ITEM_MODIFY : {
         			Intent it = new Intent(this, BasePrefsWizard.class);
         			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
-        			it.putExtra(Intent.EXTRA_REMOTE_INTENT_TOKEN, account.wizard);
+        			it.putExtra(Account.FIELD_WIZARD, account.wizard);
         			startActivityForResult(it, REQUEST_MODIFY);
         		return true;
             }
@@ -266,8 +266,10 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		Account account = adapter.getItem(position);
 		Intent intent = new Intent(this, BasePrefsWizard.class);
-		intent.putExtra(Intent.EXTRA_UID,  (int) account.id);
-		intent.putExtra(Intent.EXTRA_REMOTE_INTENT_TOKEN, account.wizard);
+		if(account.id != null) {
+			intent.putExtra(Intent.EXTRA_UID,  (int) account.id);
+		}
+		intent.putExtra(Account.FIELD_WIZARD, account.wizard);
 		
 		startActivityForResult(intent, REQUEST_MODIFY);
 		
@@ -287,7 +289,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 					String wizardId = data.getStringExtra(WizardUtils.ID);
 					if(wizardId != null) {
 						Intent intent = new Intent(this, BasePrefsWizard.class);
-						intent.putExtra(Intent.EXTRA_REMOTE_INTENT_TOKEN, wizardId);
+						intent.putExtra(Account.FIELD_WIZARD, wizardId);
 						startActivityForResult(intent, REQUEST_MODIFY);
 					}
 				}
@@ -295,14 +297,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			break;
 		case REQUEST_MODIFY:
 			if(resultCode == RESULT_OK){
-				if(data != null) {
-					if(data.getBooleanExtra("need_restart", false)) {
-						restartAsync();
-					}else {
-						reloadAsyncAccounts(null, 1);
-					}
-				}
-				
+				handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
 			}
 			break;
 		case CHANGE_WIZARD:
@@ -343,38 +338,6 @@ public class AccountsList extends Activity implements OnItemClickListener {
 						}
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Impossible to reload accounts", e);
-					}finally {
-						Log.d(THIS_FILE, "> Need to update list !");
-						handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
-					}
-				}
-			}
-		};
-		
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				Log.d(THIS_FILE, "Would like to reload all accounts");
-				if(service != null) {
-					onServiceConnect.serviceConnected();
-					onServiceConnect = null;
-				}
-			};
-		};
-		t.start();
-	}
-	
-	private void restartAsync() {
-		onServiceConnect = new OnServiceConnect() {
-			@Override
-			protected void serviceConnected() {
-				if (service != null) {
-					Log.d(THIS_FILE, "Will reload the stack !");
-					try {
-						service.sipStop();
-						service.sipStart();
-					} catch (RemoteException e) {
-						Log.e(THIS_FILE, "Impossible to reload stack", e);
 					}finally {
 						Log.d(THIS_FILE, "> Need to update list !");
 						handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));

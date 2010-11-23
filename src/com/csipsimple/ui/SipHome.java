@@ -49,21 +49,28 @@ import android.widget.Toast;
 
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.models.Account;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.messages.ConversationList;
 import com.csipsimple.ui.prefs.MainPrefs;
 import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.IndicatorTab;
+import com.csipsimple.wizards.BasePrefsWizard;
+import com.csipsimple.wizards.WizardUtils;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class SipHome extends TabActivity {
 	public static final int ACCOUNTS_MENU = Menu.FIRST + 1;
 	public static final int PARAMS_MENU = Menu.FIRST + 2;
 	public static final int CLOSE_MENU = Menu.FIRST + 3;
 	public static final int HELP_MENU = Menu.FIRST + 4;
+	public static final int DISTRIB_ACCOUNT_MENU = Menu.FIRST + 5;
+	
 
 	public static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
@@ -75,6 +82,7 @@ public class SipHome extends TabActivity {
 	private static final String TAB_MESSAGES = "messages";
 	
 	protected static final int PICKUP_PHONE = 0;
+	private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = PICKUP_PHONE+1;
 
 	private Intent serviceIntent;
 
@@ -214,17 +222,7 @@ public class SipHome extends TabActivity {
 
 		}
 		if (fails) {
-			/*
-			 * // Fallback to old style icons DisplayMetrics metrics = new
-			 * DisplayMetrics();
-			 * getWindowManager().getDefaultDisplay().getMetrics(metrics);
-			 * Log.d(THIS_FILE, "Density is "+metrics.density);
-			 * if(metrics.heightPixels >= 480) {
-			 */
 			tabspecDialer.setIndicator(label, getResources().getDrawable(icon));
-			/*
-			 * }else { tabspecDialer.setIndicator(label); }
-			 */
 		}
 
 		tabHost.addTab(tabspecDialer);
@@ -240,6 +238,7 @@ public class SipHome extends TabActivity {
 	protected void onResume() {
 		Log.d(THIS_FILE, "On Resume SIPHOME");
 		super.onResume();
+		prefWrapper.setQuit(false);
 
 		Log.d(THIS_FILE, "WE CAN NOW start SIP service");
 		startSipService();
@@ -254,12 +253,29 @@ public class SipHome extends TabActivity {
 
 		// If we have no account yet, open account panel,
 		if (!has_tried_once_to_activate_account) {
+			Account account = null;
 			DBAdapter db = new DBAdapter(this);
 			db.open();
 			int nbrOfAccount = db.getNbrOfAccount();
-			db.close();
+			
 			if (nbrOfAccount == 0) {
+				WizardInfo distribWizard = CustomDistribution.getCustomDistributionWizard();
+				if(distribWizard != null) {
+					account = db.getAccountForWizard(distribWizard.id);
+				}
+			}
+			
+			db.close();
+			
+			if(nbrOfAccount == 0) {
 				Intent accountIntent = new Intent(this, AccountsList.class);
+				if(account != null) {
+					if(account.id == null || account.id == Account.INVALID_ID) {
+						accountIntent = new Intent(this, BasePrefsWizard.class);
+						accountIntent.putExtra(Account.FIELD_WIZARD, account.wizard);
+					}
+				}
+				
 				accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(accountIntent);
 				has_tried_once_to_activate_account = true;
@@ -317,10 +333,16 @@ public class SipHome extends TabActivity {
 
 
 	private void populateMenu(Menu menu) {
-		menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE, R.string.accounts).setIcon(R.drawable.ic_menu_accounts);
+		WizardInfo distribWizard = CustomDistribution.getCustomDistributionWizard();
+		if(distribWizard != null) {
+			menu.add(Menu.NONE, DISTRIB_ACCOUNT_MENU, Menu.NONE, "My " + distribWizard.label).setIcon(distribWizard.icon);
+		}
+		if(CustomDistribution.distributionWantsOtherAccounts()) {
+			menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE, (distribWizard == null)?R.string.accounts:R.string.other_accounts).setIcon(R.drawable.ic_menu_accounts);
+		}
 		menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, R.string.prefs).setIcon(android.R.drawable.ic_menu_preferences);
 		menu.add(Menu.NONE, HELP_MENU, Menu.NONE, R.string.help).setIcon(android.R.drawable.ic_menu_help);
-		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, R.string.menu_quit_text).setIcon(R.drawable.ic_lock_power_off);
+		menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, R.string.menu_disconnect).setIcon(R.drawable.ic_lock_power_off);
 
 	}
 
@@ -340,6 +362,7 @@ public class SipHome extends TabActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Account account;
 		switch (item.getItemId()) {
 		case ACCOUNTS_MENU:
 			startActivity(new Intent(this, AccountsList.class));
@@ -349,7 +372,6 @@ public class SipHome extends TabActivity {
 			return true;
 		case CLOSE_MENU:
 			Log.d(THIS_FILE, "CLOSE");
-			
 			if(prefWrapper.isValidConnectionForIncoming()) {
 				//Alert user that we will disable for all incoming calls as he want to quit
 				new AlertDialog.Builder(this)
@@ -357,8 +379,8 @@ public class SipHome extends TabActivity {
 					.setMessage(getString(R.string.disconnect_and_incoming_explaination))
 					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							prefWrapper.disableAllForIncoming();
-
+							//prefWrapper.disableAllForIncoming();
+							prefWrapper.setQuit(true);
 							disconnectAndQuit();
 						}
 					})
@@ -375,6 +397,21 @@ public class SipHome extends TabActivity {
 			return true;
 		case HELP_MENU:
 			startActivity(new Intent(this, Help.class));
+			return true;
+		case DISTRIB_ACCOUNT_MENU:
+			WizardInfo distribWizard = CustomDistribution.getCustomDistributionWizard();
+			DBAdapter db = new DBAdapter(this);
+			db.open();
+			account = db.getAccountForWizard(distribWizard.id);
+			db.close();
+			
+			Intent it = new Intent(this, BasePrefsWizard.class);
+			if(account.id != null) {
+				it.putExtra(Intent.EXTRA_UID,  (int) account.id);
+			}
+			it.putExtra(Account.FIELD_WIZARD, account.wizard);
+			startActivityForResult(it, REQUEST_EDIT_DISTRIBUTION_ACCOUNT);
+			
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

@@ -98,7 +98,7 @@ public class Account {
 	public String wizard;
 	public boolean active;
 	public pjsua_acc_config cfg;
-	public Integer id;
+	public Integer id; // = INVALID_ID ?
 	/**
 	 * transport : transport to force for this account
 	 * 0 : automatic

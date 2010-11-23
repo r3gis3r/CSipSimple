@@ -87,9 +87,10 @@ public class PreferencesWrapper {
 	public static final String TLS_VERIFY_SERVER = "tls_verify_server";
 //	public static final String TLS_VERIFY_CLIENT = "tls_verify_client";
 	public static final String TLS_METHOD = "tls_method";
-	
-	
 	public static final String USE_SRTP = "use_srtp";
+	
+	//Internal use
+	public static final String HAS_BEEN_QUIT = "has_been_quit"; 
 	
 	
 	private static final String THIS_FILE = "PreferencesWrapper";
@@ -103,7 +104,7 @@ public class PreferencesWrapper {
 		private static final long serialVersionUID = 1L;
 	{
 		
-		put(USER_AGENT, "CSipSimple");
+		put(USER_AGENT, CustomDistribution.getUserAgent());
 		put(LOG_LEVEL, "1");
 		
 		put(USE_SRTP, "0");
@@ -824,10 +825,16 @@ public class PreferencesWrapper {
 	public void toogleExpertMode() {
 		setPreferenceBooleanValue(IS_ADVANCED_USER, !isAdvancedUser());
 	}
-
-
-
-
-
 	
+	public boolean hasBeenQuit() {
+		return prefs.getBoolean(HAS_BEEN_QUIT, false);
+	}
+
+	public void setQuit(boolean quit) {
+		setPreferenceBooleanValue(HAS_BEEN_QUIT, quit);
+	}
+
+
+
+
 }

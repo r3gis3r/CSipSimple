@@ -56,7 +56,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			Log.d(THIS_FILE, ">>> Data device change detected" + intentAction);
 			
 			
-			if (prefWrapper.isValidConnectionForIncoming()) {
+			if (prefWrapper.isValidConnectionForIncoming() && !prefWrapper.hasBeenQuit()) {
 				Log.d(THIS_FILE, "Try to start service if not already started");
 				Intent sip_service_intent = new Intent(context, SipService.class);
 				context.startService(sip_service_intent);

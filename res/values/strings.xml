@@ -24,6 +24,7 @@
 	<string name="connection_not_valid">Selected network route not available (activate WiFi or change preferences to use 3G)</string>
 	<string name="invalid_sip_uri">Sip uri is invalid for call</string>
 	<string name="accounts">Accounts</string>
+	<string name="other_accounts">Other accounts</string>
 	<string name="save">Save</string>
 	<string name="cancel">Cancel</string>
 	<string name="activate_account">Activate account</string>
@@ -50,7 +51,7 @@
 	<string name="dial_tab_name_text">Dial</string>
 	<string name="calllog_tab_name_text">CallLogs</string>
 	<string name="messages_tab_name_text">Messages</string>
-	<string name="menu_quit_text">Quit</string>
+	<string name="menu_disconnect">Disconnect</string>
 	<string name="service_ticker_registered_text">SIP Registered</string>
 	<string name="outgoing_call_chooser_call_text">Call</string>
 	<string name="reorder">Reorder</string>
@@ -62,7 +63,7 @@
 	<string name="ok">OK</string>
 	<string name="misc">Misc</string>
 	<string name="warning">WARNING</string>
-	<string name="disconnect_and_incoming_explaination">If you disconnect, you\'ll not receive SIP calls anymore.\nTo be able to receive calls again, you\'ll have to go in Settings &gt; Easy configuration and choose \"Always available\" or \"Available for wifi\" again</string>
+	<string name="disconnect_and_incoming_explaination">You are configured to be available for this network !!! By clicking OK here you confirm that you don\'t want to be available until next start of the application</string>
 	<string name="disconnect_and_will_restart">Will automatically restart when : <xliff:g id="networks" example="3G">%s</xliff:g> will become available (change settings if you don\'t want)</string>
 	<string name="gadget_title">SIP Account switcher</string>
 	<string name="search_in_contacts">Search in contacts</string>
