@@ -53,6 +53,7 @@ import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.Sipgate;
+import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
 
 
@@ -228,6 +229,10 @@ public class WizardUtils {
 				R.drawable.ic_wizard_vphone, 5, 
 				new Locale[]{new Locale("EN", "au")}, false, false, 
 				VPhone.class));
+		WIZARDS_DICT.put("UKRTEL", new WizardInfo("UKRTEL", "UkrTelecom", 
+				R.drawable.ic_wizard_ukrtelecom, 10, 
+				new Locale[]{new Locale("UK", "ua")}, false, false, 
+				UkrTelecom.class));
 		
 		initDone = true;
 	}
