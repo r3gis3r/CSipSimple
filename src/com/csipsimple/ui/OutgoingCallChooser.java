@@ -347,7 +347,7 @@ public class OutgoingCallChooser extends ListActivity {
 						String phoneNumber = number;
 						String toCall = account.rewritePhoneNumber(phoneNumber, database);
 						
-						service.makeCall(Uri.fromParts("sip", toCall, null).toString(), account.id);
+						service.makeCall("sip:"+toCall, account.id);
 						finish();
 						return true;
 					} catch (RemoteException e) {

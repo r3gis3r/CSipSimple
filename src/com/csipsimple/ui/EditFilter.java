@@ -178,11 +178,13 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		if(TextUtils.isEmpty(matchesView.getText().toString()) && Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) != Filter.ACTION_REPLACE) {
 			isValid = false;
 		}
+		/*
 		if(Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) == Filter.ACTION_REPLACE) {
 			if(TextUtils.isEmpty(replaceView.getText().toString())) {
 				isValid = false;
 			}
 		}
+		*/
 		
 		saveButton.setEnabled(isValid);
 	}
