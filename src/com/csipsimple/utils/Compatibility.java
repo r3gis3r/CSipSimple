@@ -117,7 +117,7 @@ public class Compatibility {
 			return true;
 		}
 		//All htc except....
-		if(android.os.Build.BRAND.equalsIgnoreCase("htc")) {
+		if(android.os.Build.BRAND.toLowerCase().startsWith("htc")) {
 			if(android.os.Build.DEVICE.equalsIgnoreCase("hero") /* HTC HERO */ 
 					|| android.os.Build.DEVICE.equalsIgnoreCase("magic") /* Magic */
 					|| android.os.Build.DEVICE.equalsIgnoreCase("tatoo") /* Tatoo */
@@ -208,7 +208,7 @@ public class Compatibility {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, false);
 		}
 		//Now we use svn revisions
-		if (lastSeenVersion < 338) {
+		if (lastSeenVersion < 369) {
 			// Galaxy S default settings
 			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);

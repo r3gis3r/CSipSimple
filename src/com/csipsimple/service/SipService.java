@@ -899,7 +899,9 @@ public class SipService extends Service {
 					// INITIALIZE
 					status = pjsua.csipsimple_init(cfg, logCfg, mediaCfg);
 					if (status != pjsuaConstants.PJ_SUCCESS) {
-						Log.e(THIS_FILE, "Fail to init pjsua with failure code " + status);
+						String msg = "Fail to init pjsua with failure code " + status;
+						Log.e(THIS_FILE, msg);
+						ToastHandler.sendMessage(ToastHandler.obtainMessage(0, msg));
 						pjsua.csipsimple_destroy();
 						created = false;
 						creating = false;
@@ -1113,7 +1115,13 @@ public class SipService extends Service {
 
 		status = pjsua.transport_create(type, cfg, tId);
 		if (status != pjsuaConstants.PJ_SUCCESS) {
-			Log.e(THIS_FILE, "Fail to add transport with failure code " + status);
+			
+			String msg = "Fail to add transport with failure code " + status;
+			Log.e(THIS_FILE, msg);
+			if(status == 120098) { /* Already binded */
+				msg = getString(R.string.another_application_use_sip_port);
+			}
+			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, msg));
 			return null;
 		}
 		return tId[0];
