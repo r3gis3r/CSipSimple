@@ -76,6 +76,10 @@
 				android:numeric="signed"
 				android:summary="@string/log_level_desc"
 				android:defaultValue="1"></EditTextPreference>
+		<CheckBoxPreference android:defaultValue="true" 
+			android:key="icon_in_status_bar" 
+			android:title="@string/display_icon_in_status_bar" 
+			android:summary="@string/display_icon_in_status_bar_desc"/>
 	</PreferenceCategory>
 	
 </PreferenceScreen>

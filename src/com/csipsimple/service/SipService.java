@@ -1388,7 +1388,7 @@ public class SipService extends Service {
 		Collections.sort(activeAccountsInfos, accountInfoComparator);
 
 		// Handle status bar notification
-		if (activeAccountsInfos.size() > 0) {
+		if (activeAccountsInfos.size() > 0 && prefsWrapper.showIconInStatusBar()) {
 			notificationManager.notifyRegisteredAccounts(activeAccountsInfos);
 			acquireResources();
 		} else {

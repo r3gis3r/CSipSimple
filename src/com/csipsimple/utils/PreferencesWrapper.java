@@ -65,6 +65,8 @@ public class PreferencesWrapper {
 	public static final String LOG_LEVEL = "log_level";
 	public static final String DTMF_MODE = "dtmf_mode";
 	
+	public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
+	
 	// NETWORK
 	public static final String ENABLE_STUN = "enable_stun";
 	public static final String STUN_SERVER = "stun_server";
@@ -151,6 +153,7 @@ public class PreferencesWrapper {
 		put(USE_SOFT_VOLUME, false);
 		
 		put(PREVENT_SCREEN_ROTATION, true);
+		put(ICON_IN_STATUS_BAR, true);
 		
 		put(TLS_VERIFY_SERVER, false);
 //		put(TLS_VERIFY_CLIENT, false);
@@ -665,6 +668,10 @@ public class PreferencesWrapper {
 			Log.e(THIS_FILE, "snd_ptime not well formated");
 		}
 		return 30;
+	}
+	
+	public boolean showIconInStatusBar() {
+		return getPreferenceBooleanValue(ICON_IN_STATUS_BAR);
 	}
 
 

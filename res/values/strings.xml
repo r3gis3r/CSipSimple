@@ -68,4 +68,7 @@
 	<string name="gadget_title">SIP Account switcher</string>
 	<string name="search_in_contacts">Search in contacts</string>
 	<string name="pickup_sip_uri">Pickup SIP contact</string>
+	<string name="display_icon_in_status_bar_desc">Should the application display an icon in the status bar when registered</string>
+    <string name="display_icon_in_status_bar">Display icon in status bar</string>
+	
 </resources>
