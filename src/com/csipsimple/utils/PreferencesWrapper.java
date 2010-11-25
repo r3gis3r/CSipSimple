@@ -121,7 +121,7 @@ public class PreferencesWrapper {
 		put(ECHO_CANCELLATION_TAIL, "200");
 		put(SND_MEDIA_QUALITY, "4");
 		put(SND_CLOCK_RATE, "16000");
-		put(SIP_AUDIO_MODE, "2");
+		put(SIP_AUDIO_MODE, "0");
 		
 		put(STUN_SERVER, "stun.counterpath.com");
 		put(TURN_SERVER, "");
@@ -568,7 +568,7 @@ public class PreferencesWrapper {
 			Log.e(THIS_FILE, "In call mode "+mode+" not well formated");
 		}
 		
-		return AudioManager.MODE_IN_CALL;
+		return AudioManager.MODE_NORMAL;
 	}
 	
 	/**

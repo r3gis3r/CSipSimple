@@ -227,10 +227,9 @@ public class Compatibility {
 			}
 		}
 		
-		if(lastSeenVersion < 372) {
+		if(lastSeenVersion < 377) {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
-			
-			prefWrapper.setPreferenceStringValue(PreferencesWrapper.USE_ROUTING_API, guessInCallMode());
+			prefWrapper.setPreferenceStringValue(PreferencesWrapper.SIP_AUDIO_MODE, guessInCallMode());
 		}
 		
 		 

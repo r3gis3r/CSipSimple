@@ -65,6 +65,8 @@
 <string name="enable_qos_desc">Enable QoS on packets</string>
 <string name="dscp_val">DSCP value</string>
 <string name="dscp_val_desc">DSCP value for SIP traffic</string>
+<string name="sip_audio_mode">Audio mode for SIP calls</string>
+<string name="sip_audio_mode_desc">Change only if developers advise you to</string>
 
 <!-- Security -->
 <string name="tls">TLS</string>

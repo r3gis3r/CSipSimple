@@ -51,4 +51,17 @@
 		<item>23</item> <!-- SSL23 -->
 	</string-array>
 	
+	<string-array name="sip_audio_mode_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+	<string-array name="sip_audio_mode_choices">
+		<item>NORMAL</item>
+		<item>RINGTONE</item>
+		<item>IN_CALL</item>
+		<item>MANUFACTURER_EXTRA</item>
+	</string-array>
+	
 </resources>
