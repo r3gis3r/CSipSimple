@@ -124,7 +124,8 @@
 <string name="sip_dtmf_desc">How to send DTMF</string>
 <string name="use_soft_volume">Use software volume</string>
 <string name="use_soft_volume_desc">Use software volume instead of android volume</string>
-
+<string name="use_routing_api">Use routing API</string>
+<string name="use_routing_api_desc">Try to enable that if audio is routing to speaker instead of earpiece</string>
 
 
 <!-- UI -->

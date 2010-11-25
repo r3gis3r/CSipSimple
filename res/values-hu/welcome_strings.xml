@@ -6,4 +6,5 @@
   <string name="intializing_text">Inicializálás</string>
   <string name="downloading_text">Letöltés</string>
   <string name="installing_library_text">Könyvtár telepítés..</string>
+  <string name="welcome_caption_text">Üdvözlet!</string>
 </resources>

@@ -3,153 +3,255 @@
 # This file is distributed under the same license as the csipsimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-23 23:41+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
+"PO-Revision-Date: 2010-11-24 03:49+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: pt_BR <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:0"
 msgid ":-)"
-msgstr ""
+msgstr ":-)"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:1"
 msgid ":-("
-msgstr ""
+msgstr ":-("
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:2"
 msgid ";-)"
-msgstr ""
+msgstr ";-)"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:3"
 msgid ":-P"
-msgstr ""
+msgstr ":-P"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:4"
 msgid "=-O"
-msgstr ""
+msgstr "=-O"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:5"
 msgid ":-*"
-msgstr ""
+msgstr ":-*"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:6"
 msgid ":O"
-msgstr ""
+msgstr ":O"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:7"
 msgid "B-)"
-msgstr ""
+msgstr "B-)"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:8"
 msgid ":-$"
-msgstr ""
+msgstr ":-$"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:9"
 msgid ":-!"
-msgstr ""
+msgstr ":-!"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:10"
 msgid ":-["
-msgstr ""
+msgstr ":-["
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:11"
 msgid "O:-)"
-msgstr ""
+msgstr "O:-)"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:12"
 msgid ":-\\"
-msgstr ""
+msgstr ":-\\"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:13"
 msgid ":'("
-msgstr ""
+msgstr ":'("
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:14"
 msgid ":-X"
-msgstr ""
+msgstr ":-X"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:15"
 msgid ":-D"
-msgstr ""
+msgstr ":-D"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_names          below.
 msgctxt "default_smiley_texts:16"
 msgid "o_O"
-msgstr ""
+msgstr "o_O"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:0"
 msgid "Happy"
-msgstr ""
+msgstr "Feliz"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:1"
 msgid "Sad"
-msgstr ""
+msgstr "Triste"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:2"
 msgid "Winking"
-msgstr ""
+msgstr "Piscando"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:3"
 msgid "Tongue sticking out"
-msgstr ""
+msgstr "Mostrando a língua"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:4"
 msgid "Surprised"
-msgstr ""
+msgstr "Surpreso"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:5"
 msgid "Kissing"
-msgstr ""
+msgstr "Beijando"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:6"
 msgid "Yelling"
-msgstr ""
+msgstr "Gritando"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:7"
 msgid "Cool"
-msgstr ""
+msgstr "Tranquilo"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:8"
 msgid "Money mouth"
-msgstr ""
+msgstr "Louco por dinheiro"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:9"
 msgid "Foot in mouth"
-msgstr ""
+msgstr "Falei besteira"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:10"
 msgid "Embarrassed"
-msgstr ""
+msgstr "Envergonhado"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:11"
 msgid "Angel"
-msgstr ""
+msgstr "Anjo"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:12"
 msgid "Undecided"
-msgstr ""
+msgstr "Indeciso"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:13"
 msgid "Crying"
-msgstr ""
+msgstr "Chorando"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:14"
 msgid "Lips are sealed"
-msgstr ""
+msgstr "Boca fechada"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:15"
 msgid "Laughing"
-msgstr ""
+msgstr "Rindo"
 
+#. NOTE: if you change anything about this array, you must make the
+#. corresponding change          to the array DEFAULT_SMILEY_RES_IDS in
+#. MessageListItem.java and to default_smiley_texts          above.
 msgctxt "default_smiley_names:16"
 msgid "Confused"
-msgstr ""
+msgstr "Confuso"
 

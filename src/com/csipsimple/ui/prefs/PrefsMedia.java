@@ -49,6 +49,7 @@ public class PrefsMedia extends GenericPrefs {
 			hidePreference(null, "perfs");
 			
 			hidePreference("misc", "snd_auto_close_time");
+			hidePreference("misc", "use_routing_api");
 		}
 	}
 

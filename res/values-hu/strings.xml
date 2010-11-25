@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
   <string name="unable_to_download_file">Nem lehet letölteni a fájlt</string>
   <string name="connection_not_valid">A kiválasztott hálózaton a forgalmazás nem lehetséges (kapcsolja be a WiFi-t vagy a beállításoknál a 3G használatot)</string>
   <string name="invalid_sip_uri">Helytelen Sip uri hívás</string>
   <string name="accounts">Fiókok</string>
+  <string name="other_accounts">Egyéb fiókok</string>
   <string name="save">Ment</string>
   <string name="cancel">Mégsem</string>
   <string name="activate_account">Fiók aktíválása</string>
@@ -30,12 +31,22 @@
   <string name="gsm">Mobil</string>
   <string name="dial_tab_name_text">Hívás</string>
   <string name="calllog_tab_name_text">Híváslista</string>
+  <string name="messages_tab_name_text">Üzenetek</string>
+  <string name="menu_disconnect">Szétkapcsolás</string>
   <string name="service_ticker_registered_text">SIP Regisztrálva</string>
   <string name="outgoing_call_chooser_call_text">Hívás</string>
   <string name="reorder">Újrahívás</string>
   <string name="faq">GYIK</string>
   <string name="help">Segítség</string>
+  <string name="record_logs">Összegyűjtött rendszerüzenetek elküldése a fejlesztő csapatnak</string>
+  <string name="send_logs">Rendszerüzenetek gyűjtésének megállítása (elküldhető marad)</string>
+  <string name="view_existing_issues">Mutas a meglévő problémákat</string>
   <string name="ok">Rendben</string>
   <string name="misc">Egyéb</string>
   <string name="warning">FIGYELEM</string>
+  <string name="disconnect_and_incoming_explaination">A beállítások szerint elérhető ezen a hálózaton !!! Jóváhagyással a program újraindításáig nem elérhető ezen a hálózaton</string>
+  <string name="disconnect_and_will_restart">"Automatikusan újraindul ha : "<xliff:g id="networks" example="3G">%s</xliff:g>" elérhető (átállítható ha nem kell)"</string>
+  <string name="gadget_title">SIP Fiókváltó</string>
+  <string name="search_in_contacts">Kapcsolat keresése</string>
+  <string name="pickup_sip_uri">SIP kapcsolat használata</string>
 </resources>

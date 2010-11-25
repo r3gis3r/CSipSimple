@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="description_image_button_one">uno</string>
+  <string name="description_image_button_two">due</string>
+  <string name="description_image_button_three">tre</string>
+  <string name="description_image_button_four">quattro</string>
+  <string name="description_image_button_five">cinque</string>
+  <string name="description_image_button_six">sei</string>
+  <string name="description_image_button_seven">sette</string>
+  <string name="description_image_button_eight">otto</string>
+  <string name="description_image_button_nine">nove</string>
+  <string name="description_image_button_star">asterisco</string>
+  <string name="description_image_button_zero">zero</string>
+  <string name="description_image_button_pound">cancelletto</string>
+  <string name="description_dial_button">chiama</string>
+  <string name="description_delete_button">backspace</string>
+  <string name="description_digits_edittext">numero da comporre</string>
+</resources>

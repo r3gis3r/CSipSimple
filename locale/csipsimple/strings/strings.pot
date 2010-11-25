@@ -1,14 +1,14 @@
-# Translation for csipsimple
-# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
-# This file is distributed under the same license as the csipsimple package.
-# Regis Montoya <http://www.r3gis.fr>, 2010.
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: csipsimple 0.01\n"
-"Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,7 +202,7 @@ msgid ""
 "the application"
 msgstr ""
 
-#, python-format
+#, c-format
 msgctxt "disconnect_and_will_restart"
 msgid ""
 "Will automatically restart when : <xliff:g id=\"networks\" "
@@ -220,5 +220,17 @@ msgstr ""
 
 msgctxt "pickup_sip_uri"
 msgid "Pickup SIP contact"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_desc"
+msgid "Should the application display an icon in the status bar when registered"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar"
+msgid "Display icon in status bar"
+msgstr ""
+
+msgctxt "another_application_use_sip_port"
+msgid "Another application is currently using SIP port! Can't start !!!"
 msgstr ""
 

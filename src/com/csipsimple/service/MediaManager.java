@@ -106,7 +106,7 @@ public class MediaManager {
 			bluetoothWrapper = new BluetoothWrapper(service, this);
 		}
 		audioFocusWrapper = new AudioFocusWrapper(service, audioManager);
-		MODE_SIP_IN_CALL = Compatibility.getInCallMode();
+		MODE_SIP_IN_CALL = service.prefsWrapper.getInCallMode();
 		
 	}
 	
@@ -144,10 +144,10 @@ public class MediaManager {
 		
 		audioManager.setMode(MODE_SIP_IN_CALL);
 		//Routing
-		if(Compatibility.useRoutingApi()) {
+		if(service.prefsWrapper.getUseRoutingApi()) {
 			audioManager.setRouting(MODE_SIP_IN_CALL, userWantSpeaker?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 		}else {
-			audioManager.setSpeakerphoneOn(userWantSpeaker?true:false);
+			audioManager.setSpeakerphoneOn(userWantSpeaker ? true : false);
 		}
 		audioManager.setMicrophoneMute(false);
 		if(bluetoothClassAvailable && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
@@ -224,7 +224,9 @@ public class MediaManager {
 		savedWifiPolicy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
 		savedVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
 		
-		savedSpeakerPhone = audioManager.isSpeakerphoneOn();
+		if(!service.prefsWrapper.getUseRoutingApi()) {
+			savedSpeakerPhone = audioManager.isSpeakerphoneOn();
+		}
 		savedMode = audioManager.getMode();
 		savedRoute = audioManager.getRouting(MODE_SIP_IN_CALL);
 		
@@ -252,7 +254,7 @@ public class MediaManager {
 		
 		
 		
-		if(Compatibility.useRoutingApi()) {
+		if(service.prefsWrapper.getUseRoutingApi()) {
 			audioManager.setRouting(MODE_SIP_IN_CALL, savedRoute, AudioManager.ROUTE_ALL);
 		}else {
 			audioManager.setSpeakerphoneOn(savedSpeakerPhone);

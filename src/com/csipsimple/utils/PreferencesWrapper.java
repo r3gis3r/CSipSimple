@@ -31,6 +31,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
@@ -64,6 +65,8 @@ public class PreferencesWrapper {
 	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
 	public static final String LOG_LEVEL = "log_level";
 	public static final String DTMF_MODE = "dtmf_mode";
+	public static final String USE_ROUTING_API = "use_routing_api";
+	public static final String SIP_AUDIO_MODE = "sip_audio_mode";
 	
 	public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
 	
@@ -118,6 +121,7 @@ public class PreferencesWrapper {
 		put(ECHO_CANCELLATION_TAIL, "200");
 		put(SND_MEDIA_QUALITY, "4");
 		put(SND_CLOCK_RATE, "16000");
+		put(SIP_AUDIO_MODE, "2");
 		
 		put(STUN_SERVER, "stun.counterpath.com");
 		put(TURN_SERVER, "");
@@ -151,6 +155,7 @@ public class PreferencesWrapper {
 		put(ECHO_CANCELLATION, true);
 		put(ENABLE_VAD, false);
 		put(USE_SOFT_VOLUME, false);
+		put(USE_ROUTING_API, false);
 		
 		put(PREVENT_SCREEN_ROTATION, true);
 		put(ICON_IN_STATUS_BAR, true);
@@ -552,6 +557,21 @@ public class PreferencesWrapper {
 	}
 	
 	/**
+	 * Get the audio codec quality setting
+	 * @return the audio quality
+	 */
+	public int getInCallMode() {
+		String mode = getPreferenceStringValue(SIP_AUDIO_MODE);
+		try {
+			return Integer.parseInt(mode);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "In call mode "+mode+" not well formated");
+		}
+		
+		return AudioManager.MODE_IN_CALL;
+	}
+	
+	/**
 	 * Get current clock rate
 	 * @return clock rate in Hz
 	 */
@@ -563,6 +583,11 @@ public class PreferencesWrapper {
 			Log.e(THIS_FILE, "Clock rate "+clockRate+" not well formated");
 		}
 		return 16000;
+	}
+	
+	
+	public boolean getUseRoutingApi() {
+		return getPreferenceBooleanValue(USE_ROUTING_API);
 	}
 	
 	/**

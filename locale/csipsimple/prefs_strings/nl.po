@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -54,6 +54,7 @@ msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr ""
 
+#. Network
 msgctxt "for_incomings"
 msgid "For incoming calls"
 msgstr ""
@@ -254,6 +255,7 @@ msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
 msgstr ""
 
+#. Security
 msgctxt "tls"
 msgid "TLS"
 msgstr ""
@@ -350,6 +352,7 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr ""
 
+#. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr ""
@@ -462,6 +465,15 @@ msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
 msgstr ""
 
+msgctxt "use_routing_api"
+msgid "Use routing API"
+msgstr ""
+
+msgctxt "use_routing_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+#. UI
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr ""
@@ -572,6 +584,7 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
+#. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
 msgstr ""
@@ -631,16 +644,4 @@ msgstr ""
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr ""
-
-#~ msgctxt "sip_info_dtmf"
-#~ msgid "DTMF SIP INFO"
-#~ msgstr ""
-
-#~ msgctxt "sip_info_dtmf_desc"
-#~ msgid "Use SIP INFO to send DTMF"
-#~ msgstr ""
-
-#~ msgctxt "use_alternate_unlocker"
-#~ msgid "Don't use slide unlocker"
-#~ msgstr ""
 

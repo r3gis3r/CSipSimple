@@ -21,4 +21,6 @@
   <string name="w_expert_reg_timeout">Bejelentkezési időtúllépés (másodperc)</string>
   <string name="w_expert_ka_interval">Újrapróbálkozás X másodpercenként</string>
   <string name="w_expert_force_contact">Kapcsolat kényszerítése</string>
+  <string name="w_expert_allow_contact_rewrite">A kapcsolat felülírható</string>
+  <string name="w_expert_contact_rewrite_method">Felülírási mód</string>
 </resources>

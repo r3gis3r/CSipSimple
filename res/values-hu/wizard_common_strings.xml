@@ -8,4 +8,6 @@
   <string name="w_common_phone_number_desc">SIP szolgáltatótól kapott telefonszám</string>
   <string name="w_common_password">Jelszó</string>
   <string name="w_common_password_desc">Jelszó a fiókhoz</string>
+  <string name="w_common_server">Szerver</string>
+  <string name="w_common_server_desc">SIP szerver domain/IP[:port]</string>
 </resources>

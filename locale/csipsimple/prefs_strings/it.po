@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: 2010-10-10 11:42+0000\n"
 "Last-Translator: Gianluca <Unknown>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -53,6 +53,7 @@ msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr "Tweak interfaccia utente"
 
+#. Network
 msgctxt "for_incomings"
 msgid "For incoming calls"
 msgstr "Per chiamate in ingresso"
@@ -71,7 +72,7 @@ msgstr "Trasporto"
 
 msgctxt "transport_desc"
 msgid "Force the use of a transport for this account"
-msgstr ""
+msgstr "Forza l'uso di un trasporto per questo account"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -237,26 +238,26 @@ msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "STUN server (HOST:PORT)"
 
-#, fuzzy
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr "Abilita ICE"
+msgstr "Abilita QoS"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
-msgstr ""
+msgstr "Abilita QoS sui pacchetti"
 
 msgctxt "dscp_val"
 msgid "DSCP value"
-msgstr ""
+msgstr "Valore DSCP"
 
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
-msgstr ""
+msgstr "Valore DSCP per il traffico SIP"
 
+#. Security
 msgctxt "tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "secure_transport"
 msgid "Secure transport"
@@ -264,11 +265,11 @@ msgstr "Trasporto sicuro"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
-msgstr ""
+msgstr "Meccanismo di sicurezza per SIP e RTP"
 
 msgctxt "secure_media"
 msgid "Secure media"
-msgstr ""
+msgstr "Rendi sicuro il mezzo"
 
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
@@ -280,69 +281,67 @@ msgstr "Numero di porta da impegnare in locale"
 
 msgctxt "network_tls_server_name"
 msgid "TLS server name"
-msgstr ""
+msgstr "Nome server TLS"
 
 msgctxt "network_tls_server_name_desc"
 msgid "For multi-hosting server (optional)"
-msgstr ""
+msgstr "Per il multi-hosting server (opzionale)"
 
 msgctxt "ca_list_file"
 msgid "TLS CA file"
-msgstr ""
+msgstr "TLS CA file"
 
 msgctxt "ca_list_file_desc"
 msgid "For example /sdcard/CSipSimple/myAuthority.ca"
-msgstr ""
+msgstr "Per esempio /sdcard/CSipSimple/myAuthority.ca"
 
 msgctxt "cert_file"
 msgid "TLS certificate file"
-msgstr ""
+msgstr "File del certificato TLS"
 
 msgctxt "cert_file_desc"
 msgid "For example /sdcard/CSipSimple/myCert.crt"
-msgstr ""
+msgstr "Per esempio /sdcard/CSipSimple/myCert.crt"
 
 msgctxt "privkey_file"
 msgid "TLS private key file"
-msgstr ""
+msgstr "File della chiave privata TLS"
 
 msgctxt "privkey_file_desc"
 msgid "For example /sdcard/CSipSimple/myKey.key"
-msgstr ""
+msgstr "Per esempio /sdcard/CSipSimple/myKey.key"
 
 msgctxt "tls_password"
 msgid "TLS password"
-msgstr ""
+msgstr "TLS password"
 
 msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
-msgstr ""
+msgstr "TLS password per il file della chiave privata"
 
-#, fuzzy
 msgctxt "verify_server"
 msgid "Check server"
-msgstr "Turn server"
+msgstr "Controlla server"
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
-msgstr ""
+msgstr "Verificail certificato del server"
 
 msgctxt "verify_client"
 msgid "Check client"
-msgstr ""
+msgstr "Controlla client"
 
 msgctxt "verify_client_desc"
 msgid "Verify client's certificate"
-msgstr ""
+msgstr "Verifica il certificato del client"
 
 msgctxt "tls_method"
 msgid "TLS Method"
-msgstr ""
+msgstr "Metodo TLS"
 
-#, fuzzy
 msgctxt "tls_method_desc"
 msgid "Method for TLS transport"
-msgstr "Trasporto sicuro"
+msgstr "Metodo per il trasporto TLS"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -352,6 +351,7 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Modalità per RTP Sicuro"
 
+#. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Qualità audio"
@@ -417,7 +417,8 @@ msgid "Media quality"
 msgstr "Qualità audio"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Qualità dell'audio (modifica solo se sai cosa stai facendo)"
 
 msgctxt "snd_clock_rate"
@@ -448,14 +449,13 @@ msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Priorità (0 disabilita)"
 
-#, fuzzy
 msgctxt "sip_dtmf"
 msgid "DTMF mode"
-msgstr "Modalità esperto"
+msgstr "Modalità DTMF"
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
-msgstr ""
+msgstr "Come inviare DTMF"
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
@@ -465,6 +465,15 @@ msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
 msgstr "Usa il volume software invece di quello Android"
 
+msgctxt "use_routing_api"
+msgid "Use routing API"
+msgstr ""
+
+msgctxt "use_routing_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+#. UI
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr "Interfaccia utente generale"
@@ -523,14 +532,14 @@ msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
 msgstr "Inizia con il dialer testuale"
 
-#, fuzzy
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr "Non usare sblocco scorrevole"
+msgstr "Non usare risposta con scorrimento"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr "Usa i bottoni invece dello slide per accettare le chiamate in ingresso"
+msgstr ""
+"Usa i bottoni invece dello slide per accettare le chiamate in ingresso"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
@@ -586,6 +595,7 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Evita la rotazione dello schermo e mantieni la modalità verticale"
 
+#. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
 msgstr "Integrazione con Android"
@@ -648,12 +658,4 @@ msgstr "Modalità esperto"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Modalità avanzata"
-
-#~ msgctxt "sip_info_dtmf"
-#~ msgid "DTMF SIP INFO"
-#~ msgstr "DTMF SIP INFO"
-
-#~ msgctxt "sip_info_dtmf_desc"
-#~ msgid "Use SIP INFO to send DTMF"
-#~ msgstr "Usa SIP INFO per inviare DTMF"
 

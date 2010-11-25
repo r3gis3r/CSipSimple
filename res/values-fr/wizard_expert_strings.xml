@@ -8,7 +8,7 @@
   <string name="w_expert_reg_uri_desc">Format : sip:registrar.net[:port]</string>
   <string name="w_expert_realm">Realm</string>
   <string name="w_expert_realm_desc">Domaine d\'authentification (si vous ne savez pas utilisez *)</string>
-  <string name="w_expert_username">Nom utilisateur</string>
+  <string name="w_expert_username">Nom d\'utilisateur</string>
   <string name="w_expert_username_desc">Login pour l\'authentification</string>
   <string name="w_expert_data">Mot de passe</string>
   <string name="w_expert_data_desc">Mot de passe pour l\'authentification</string>
@@ -21,4 +21,6 @@
   <string name="w_expert_reg_timeout">Timeout du register (sec)</string>
   <string name="w_expert_ka_interval">Intervalle Keep-alive (sec)</string>
   <string name="w_expert_force_contact">Forcer le champ contact</string>
+  <string name="w_expert_allow_contact_rewrite">Réecriture du champ contact</string>
+  <string name="w_expert_contact_rewrite_method">Méthode de récritture du champ contact</string>
 </resources>

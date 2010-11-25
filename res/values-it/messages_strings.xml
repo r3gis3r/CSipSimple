@@ -1,2 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="menu_compose_new">Componi</string>
+  <string name="menu_add_address_to_contacts">"Aggiungi "<xliff:g id="name">%s</xliff:g>" ai contatti"</string>
+  <string name="menu_call">Chiama</string>
+  <string name="menu_delete_all">Cancella discussioni</string>
+  <string name="menu_delete">Cancella discussione</string>
+  <string name="menu_view">Visualizza discussione</string>
+  <string name="delete_message">Cancella messaggio</string>
+  <string name="kilobyte">KB</string>
+  <string name="undelivered_msg_dialog_title">Messaggio non inviato</string>
+  <string name="undelivered_sms_dialog_body">Impossibile inviare il messaggio.</string>
+  <string name="delete_thread">Cancella discussione</string>
+  <string name="download">Download</string>
+  <string name="downloading">Download in corso</string>
+  <string name="copy_message_text">Copia il testo del messaggio</string>
+  <string name="message_options">Opzioni messaggio</string>
+  <string name="done">Completato</string>
+  <string name="view">Visualizza</string>
+  <string name="send">Invia</string>
+  <string name="all_threads">Tutte le discussioni</string>
+  <string name="type_to_compose_text_enter_to_send">Digita per comporre</string>
+  <string name="open_keyboard_to_compose_message">Apri la tastiera per comporre il messaggio</string>
+  <string name="image_too_large">Foto troppo grande</string>
+  <string name="ask_for_automatically_resize">Ridimensiona foto prima di inviare?</string>
+  <string name="compressing">Foto troppo grande. Compressione\\u2026</string>
+</resources>

@@ -1,2 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">Üzenetküldés</string>
+  <string name="new_message">Új üzenet</string>
+  <string name="create_new_message">Új üzenet szerkesztése</string>
+  <string name="menu_compose_new">Szerkesztés</string>
+  <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g>" hozzáadása az ismerősökhöz"</string>
+  <string name="menu_call">Hívás</string>
+  <string name="menu_delete_all">Mind törlése</string>
+  <string name="anonymous_recipient">Ismeretlen címzett</string>
+  <string name="delete_message">Az üzenet törlése</string>
+  <string name="kilobyte">KB</string>
+  <string name="download">Letöltés</string>
+</resources>

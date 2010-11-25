@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt <LL@li.org>\n"
@@ -54,6 +54,7 @@ msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr "Ajustar a interface de usuário"
 
+#. Network
 msgctxt "for_incomings"
 msgid "For incoming calls"
 msgstr "Para ligações de entrada"
@@ -254,13 +255,14 @@ msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
 msgstr ""
 
+#. Security
 msgctxt "tls"
 msgid "TLS"
 msgstr ""
 
 msgctxt "secure_transport"
 msgid "Secure transport"
-msgstr ""
+msgstr "Transporte seguro"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
@@ -344,12 +346,13 @@ msgstr ""
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
-msgstr ""
+msgstr "modo SRTP"
 
 msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
-msgstr ""
+msgstr "modo para RTP Seguro"
 
+#. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Qualidade de Áudio"
@@ -465,6 +468,15 @@ msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
 msgstr "Usar volume de software em vez do volume do Android"
 
+msgctxt "use_routing_api"
+msgid "Use routing API"
+msgstr ""
+
+msgctxt "use_routing_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+#. UI
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr "Interface geral de utilizador"
@@ -537,8 +549,8 @@ msgstr "Manter acordado durante a chamada"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corrige se obtiver som instável quando o ecrã se desliga durante uma chamada "
-"WiFi"
+"Corrige se obtiver som instável quando o ecrã se desliga durante uma "
+"chamada WiFi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -582,6 +594,7 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Evitar rotação do ecrã e manter em modo de retrato"
 
+#. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
 msgstr "Integrar com Android"
@@ -641,16 +654,4 @@ msgstr "Modo perito"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Modo avançado"
-
-#~ msgctxt "sip_info_dtmf"
-#~ msgid "DTMF SIP INFO"
-#~ msgstr ""
-
-#~ msgctxt "sip_info_dtmf_desc"
-#~ msgid "Use SIP INFO to send DTMF"
-#~ msgstr ""
-
-#~ msgctxt "use_alternate_unlocker"
-#~ msgid "Don't use slide unlocker"
-#~ msgstr ""
 

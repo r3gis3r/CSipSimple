@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
   <string name="unable_to_download_file">Невозможно загрузить файл</string>
   <string name="connection_not_valid">Выбранная сеть недоступна (активируйте WiFi или измените настройки, чтобы использовать 3G)</string>
   <string name="invalid_sip_uri">SIP URI является недопустимой для вызова</string>
   <string name="accounts">Аккаунты</string>
+  <string name="other_accounts">Другие аккаунты</string>
   <string name="save">Сохранить</string>
   <string name="cancel">Отмена</string>
   <string name="activate_account">Активировать</string>
@@ -30,12 +31,22 @@
   <string name="gsm">Мобильный</string>
   <string name="dial_tab_name_text">Кнопки</string>
   <string name="calllog_tab_name_text">Вызовы</string>
+  <string name="messages_tab_name_text">Сообщения</string>
+  <string name="menu_disconnect">Отключение соединения</string>
   <string name="service_ticker_registered_text">SIP зарегистрирован</string>
   <string name="outgoing_call_chooser_call_text">Вызов</string>
   <string name="reorder">Изменить порядок</string>
   <string name="faq">FAQ</string>
   <string name="help">Помощь</string>
+  <string name="record_logs">Записать лог и отчет об ошибке для отправки разработчику</string>
+  <string name="send_logs">Остановить запись лога (опционально отправить)</string>
+  <string name="view_existing_issues">Просмотреть обсуждения ошибок на сайте разработчика</string>
   <string name="ok">Далее</string>
   <string name="misc">Прочее</string>
   <string name="warning">ПРЕДУПРЕЖДЕНИЕ</string>
+  <string name="disconnect_and_incoming_explaination">Приложение настроено так, чтобы быть доступным для этой сети! После нажатия кнопки ОК Вы не будете доступны до следующего запуска приложения</string>
+  <string name="disconnect_and_will_restart">"Автоматически перезапустится, когда: "<xliff:g id="networks" example="3G">%s</xliff:g>" будет доступно (измените настройки, если не хотите)"</string>
+  <string name="gadget_title">Переключатель аккаунтов</string>
+  <string name="search_in_contacts">Поиск в контактах</string>
+  <string name="pickup_sip_uri">Принять SIP контакт</string>
 </resources>

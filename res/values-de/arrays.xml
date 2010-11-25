@@ -1,2 +1,41 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string-array name="default_smiley_texts">
+    <item>:-)</item>
+    <item>:-(</item>
+    <item>:-[</item>
+    <item>O:-)</item>
+    <item>:-\\</item>
+    <item>:\'(</item>
+    <item>:-X</item>
+    <item>:-D</item>
+    <item>o_O</item>
+    <item>;-)</item>
+    <item>:-P</item>
+    <item>=-O</item>
+    <item>:-*</item>
+    <item>:O</item>
+    <item>B-)</item>
+    <item>:-$</item>
+    <item>:-!</item>
+  </string-array>
+  <string-array name="default_smiley_names">
+    <item>Glücklich</item>
+    <item>Traurig</item>
+    <item>Peinlich berührt</item>
+    <item>Engel</item>
+    <item>Unentschlossen</item>
+    <item>Weinen</item>
+    <item>Versiegelte Lippen</item>
+    <item>Lachen</item>
+    <item>Verwirrt</item>
+    <item>Zwinkern</item>
+    <item>Zunge rausstrecken</item>
+    <item>Überrascht</item>
+    <item>Kuss</item>
+    <item>Ausruf</item>
+    <item>Cool</item>
+    <item>Lass Taten sprechen</item>
+    <item>Fettnäpfchen</item>
+  </string-array>
+</resources>

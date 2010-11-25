@@ -75,9 +75,13 @@ public class Compatibility {
 		return AudioManager.STREAM_VOICE_CALL;
 	}
 	
-	public static boolean useRoutingApi() {
+	public static boolean shouldUseRoutingApi() {
 		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
+		if(android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
+			return true;
+		}
 		if (!isCompatible(4)) {
+			//If android 1.5, force routing api use 
 			return true;
 		} else {
 			return false;
@@ -85,16 +89,19 @@ public class Compatibility {
 	}
 
 
-	public static int getInCallMode() {
+	public static String guessInCallMode() {
 		if (android.os.Build.BRAND.equalsIgnoreCase("sdg")) {
-			return 3;
+			return "3";
+		}
+		if(android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
+			return Integer.toString(AudioManager.MODE_IN_CALL);
 		}
 
-		if (/*(android.os.Build.BRAND.equalsIgnoreCase("htc") || android.os.Build.BRAND.equalsIgnoreCase("tmobile")) &&*/ !isCompatible(5)) {
-			return AudioManager.MODE_IN_CALL;
+		if (!isCompatible(5)) {
+			return Integer.toString(AudioManager.MODE_IN_CALL);
 		}
 
-		return AudioManager.MODE_NORMAL;
+		return Integer.toString(AudioManager.MODE_NORMAL);
 	}
 	
 	public static String getCpuAbi() {
@@ -157,6 +164,8 @@ public class Compatibility {
 			preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
 		}
 		
+		//Use routing API?
+		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
 	}
 
 	public static boolean useFlipAnimation() {
@@ -216,6 +225,12 @@ public class Compatibility {
 			if(needPspWorkaround(prefWrapper)) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, true);
 			}
+		}
+		
+		if(lastSeenVersion < 372) {
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
+			
+			prefWrapper.setPreferenceStringValue(PreferencesWrapper.USE_ROUTING_API, guessInCallMode());
 		}
 		
 		 

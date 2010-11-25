@@ -8,4 +8,6 @@
   <string name="w_common_phone_number_desc">SIP Telefonnummer für dieses Konto</string>
   <string name="w_common_password">Passwort</string>
   <string name="w_common_password_desc">Passwort für dieses Konto</string>
+  <string name="w_common_server">SIP Server</string>
+  <string name="w_common_server_desc">SIP Server Domainname IP[:Port]</string>
 </resources>

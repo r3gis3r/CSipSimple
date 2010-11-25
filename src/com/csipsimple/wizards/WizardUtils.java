@@ -40,6 +40,7 @@ import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.IiNet;
+import com.csipsimple.wizards.impl.Ip2Mobile;
 import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
 import com.csipsimple.wizards.impl.Keyyo;
@@ -233,6 +234,10 @@ public class WizardUtils {
 				R.drawable.ic_wizard_ukrtelecom, 10, 
 				new Locale[]{new Locale("UK", "ua")}, false, false, 
 				UkrTelecom.class));
+		WIZARDS_DICT.put("IP2MOBILE", new WizardInfo("IP2MOBILE", "ip2Mobile", 
+				R.drawable.ic_wizard_ip2mobile, 10, 
+				new Locale[]{new Locale("DK", "dk")}, false, false, 
+				Ip2Mobile.class));
 		
 		initDone = true;
 	}

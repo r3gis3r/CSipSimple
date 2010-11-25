@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: 2010-10-11 10:14+0000\n"
 "Last-Translator: B. Zoli <tec@webpress.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -53,6 +53,7 @@ msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr "Testreszabás"
 
+#. Network
 msgctxt "for_incomings"
 msgid "For incoming calls"
 msgstr "Bejövő hívások"
@@ -71,7 +72,7 @@ msgstr "Átvitel"
 
 msgctxt "transport_desc"
 msgid "Force the use of a transport for this account"
-msgstr ""
+msgstr "Ennél a fióknál kizárolag ez az átvitel engedélyezett"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -237,26 +238,26 @@ msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "STUN szerver megadása (HOST:PORT)"
 
-#, fuzzy
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr "ICE engedélyezése"
+msgstr "QoS engedélyezve"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
-msgstr ""
+msgstr "QoS engedélyezve csomag szinten"
 
 msgctxt "dscp_val"
 msgid "DSCP value"
-msgstr ""
+msgstr "DSCP érték"
 
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
-msgstr ""
+msgstr "SIP forgalom DSCP értéke"
 
+#. Security
 msgctxt "tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "secure_transport"
 msgid "Secure transport"
@@ -264,11 +265,11 @@ msgstr "Titkosított átvitel"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
-msgstr ""
+msgstr "SIP és RTP biztonsági eljárása"
 
 msgctxt "secure_media"
 msgid "Secure media"
-msgstr ""
+msgstr "Biztonságos adathordozó"
 
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
@@ -280,23 +281,23 @@ msgstr "Helyi port"
 
 msgctxt "network_tls_server_name"
 msgid "TLS server name"
-msgstr ""
+msgstr "TLS kiszolgáló neve"
 
 msgctxt "network_tls_server_name_desc"
 msgid "For multi-hosting server (optional)"
-msgstr ""
+msgstr "Többcímes kiszolgáló esetén (opcionális)"
 
 msgctxt "ca_list_file"
 msgid "TLS CA file"
-msgstr ""
+msgstr "TLS CA fájl"
 
 msgctxt "ca_list_file_desc"
 msgid "For example /sdcard/CSipSimple/myAuthority.ca"
-msgstr ""
+msgstr "Például /sdcard/CSipSimple/AzEnCafajlom.ca"
 
 msgctxt "cert_file"
 msgid "TLS certificate file"
-msgstr ""
+msgstr "TLS tanusítvány fálj"
 
 msgctxt "cert_file_desc"
 msgid "For example /sdcard/CSipSimple/myCert.crt"
@@ -318,10 +319,9 @@ msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
 msgstr ""
 
-#, fuzzy
 msgctxt "verify_server"
 msgid "Check server"
-msgstr "TURN szerver"
+msgstr ""
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
@@ -339,10 +339,9 @@ msgctxt "tls_method"
 msgid "TLS Method"
 msgstr ""
 
-#, fuzzy
 msgctxt "tls_method_desc"
 msgid "Method for TLS transport"
-msgstr "Titkosított átvitel"
+msgstr ""
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -352,6 +351,7 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Biztonságos RTP mód"
 
+#. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Hangminőség"
@@ -417,7 +417,8 @@ msgid "Media quality"
 msgstr "Média minőség"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "A médiafolyam minősége (csak hozzáértő módosítsa)"
 
 msgctxt "snd_clock_rate"
@@ -448,10 +449,9 @@ msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Elsőbbség (kikapcsolva: 0)"
 
-#, fuzzy
 msgctxt "sip_dtmf"
 msgid "DTMF mode"
-msgstr "Szakértő mód"
+msgstr ""
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
@@ -465,6 +465,15 @@ msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
 msgstr "Szoftveres hangerő-szabályzás az androidos helyett"
 
+msgctxt "use_routing_api"
+msgid "Use routing API"
+msgstr ""
+
+msgctxt "use_routing_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+#. UI
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr "Általános felhasználói felület"
@@ -519,10 +528,9 @@ msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
 msgstr "Szöveges tárcsázó induljon a számos helyett"
 
-#, fuzzy
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr "Ne legyen csúszka"
+msgstr ""
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
@@ -550,7 +558,8 @@ msgstr "Naplózási szint:"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr "Hibakeresési naplózás szintje 0 (semmi) és 5 (legrészletesebb) között"
+msgstr ""
+"Hibakeresési naplózás szintje 0 (semmi) és 5 (legrészletesebb) között"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
@@ -559,8 +568,7 @@ msgstr "Használja a Music alkalmazást"
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
-"Kapcsolja ki ha más alkalmazást szeretne használni a bejövő hívás "
-"jelzésére"
+"Kapcsolja ki ha más alkalmazást szeretne használni a bejövő hívás jelzésére"
 
 msgctxt "ringtone"
 msgid "Ringtone"
@@ -578,6 +586,7 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Nem engedi a képernyő forgatását és álló módban tartja"
 
+#. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
 msgstr "Beépülés az Androidba"
@@ -637,12 +646,4 @@ msgstr "Szakértő mód"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Hozzáértő mód"
-
-#~ msgctxt "sip_info_dtmf"
-#~ msgid "DTMF SIP INFO"
-#~ msgstr "DTMF SIP INFO"
-
-#~ msgctxt "sip_info_dtmf_desc"
-#~ msgid "Use SIP INFO to send DTMF"
-#~ msgstr "SIP INFO használata DTMF küldéshez"
 

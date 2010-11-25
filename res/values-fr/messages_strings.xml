@@ -1,2 +1,62 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">Messagerie</string>
+  <string name="new_message">Nouveau Message</string>
+  <string name="create_new_message">Ecrire un message</string>
+  <string name="menu_compose_new">Ecrire</string>
+  <string name="menu_add_address_to_contacts">"Ajouter "<xliff:g id="name">%s</xliff:g>" aux contacts"</string>
+  <string name="menu_call">Appeler</string>
+  <string name="menu_delete_all">Supprimer les sujets</string>
+  <string name="menu_delete">Supprimer un fil de discussion</string>
+  <string name="menu_view">Voir le sujet</string>
+  <string name="anonymous_recipient">Anonyme</string>
+  <string name="messagelist_sender_self">Moi</string>
+  <string name="delete_message">Supprimer le message</string>
+  <string name="sent_on">"Envoyé: "<xliff:g id="date">%s</xliff:g></string>
+  <string name="kilobyte">Ko</string>
+  <string name="undelivered_msg_dialog_title">Messages non délivré</string>
+  <string name="undelivered_sms_dialog_body">Ce message n\'a pu être envoyé</string>
+  <string name="delete_thread">Supprimer le fil de discussion</string>
+  <string name="download">Télécharger</string>
+  <string name="downloading">En téléchargement</string>
+  <string name="name_colon"><b><xliff:g id="name" example="Moi">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">Copier le message</string>
+  <string name="message_options">Options du message</string>
+  <string name="done">Terminé</string>
+  <string name="compose_title">Ecrire</string>
+  <string name="add_attachment">Joindre</string>
+  <string name="view">Voir</string>
+  <string name="send">Envoyer</string>
+  <string name="all_threads">Tous les sujets</string>
+  <string name="type_to_compose_text_enter_to_send">Ecrire</string>
+  <string name="open_keyboard_to_compose_message">Ouvrir le clavier pour écrire</string>
+  <string name="image_too_large">Image trop grande</string>
+  <string name="ask_for_automatically_resize">Redimensionner les images avant envoi ?</string>
+  <string name="compressing">Image trop grande, compression ...</string>
+  <string name="unsupported_media_format">"Format "<xliff:g id="name">%1$s</xliff:g>" non supporté"</string>
+  <string name="menu_view_contact">Voir le contact</string>
+  <string name="menu_add_to_contacts">Ajouter aux contacts</string>
+  <string name="hidden_sender_address">Masque le message initial</string>
+  <string name="yes">OK</string>
+  <string name="no">Annuler</string>
+  <string name="edit">Editer</string>
+  <string name="restore_default">Restaurer les paramètres par défaut</string>
+  <string name="confirm_dialog_title">Supprimer</string>
+  <string name="confirm_delete_conversation">Le sujet complet sera supprimé</string>
+  <string name="confirm_delete_all_conversations">Tous les sujets seront supprimés</string>
+  <string name="confirm_delete_message">Le message complet sera supprimé</string>
+  <string name="confirm_delete_locked_message">Voulez vous vraiment supprimer ce message verrouillé ?</string>
+  <string name="confirm_delete_all_messages">le sujet complet sera effacé</string>
+  <string name="delete">Supprimer</string>
+  <string name="status_none">(Aucun)</string>
+  <string name="status_pending">En attente</string>
+  <string name="status_received">Reçu</string>
+  <string name="status_failed">Echec</string>
+  <string name="status_unread">Non lu</string>
+  <string name="status_rejected">Rejeté</string>
+  <string name="recipient_label">Destinataires:</string>
+  <string name="status_label">Statut:</string>
+  <string name="menu_insert_smiley">Insérer une frimousse</string>
+  <string name="me">Moi</string>
+  <string name="sending_message">Envoi ...</string>
+</resources>

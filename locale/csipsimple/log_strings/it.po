@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: 2010-09-27 08:21+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgctxt "returnCall"
 msgid "Return call"
 msgstr "Chiamata di ritorno"
 
-#, python-format
+#, c-format
 msgctxt "callDetailsDurationFormat"
 msgid ""
 "<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "

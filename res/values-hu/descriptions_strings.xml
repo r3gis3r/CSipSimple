@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="description_image_button_one">egy</string>
+  <string name="description_image_button_two">kettő</string>
+  <string name="description_image_button_three">három</string>
+  <string name="description_image_button_four">négy</string>
+  <string name="description_image_button_five">öt</string>
+  <string name="description_image_button_six">hat</string>
+  <string name="description_image_button_seven">hét</string>
+  <string name="description_image_button_eight">nyolc</string>
+  <string name="description_image_button_nine">kilenc</string>
+  <string name="description_image_button_star">csillag</string>
+  <string name="description_image_button_zero">nulla</string>
+  <string name="description_image_button_pound">font</string>
+  <string name="description_dial_button">tárcsázás</string>
+  <string name="description_delete_button">visszatörlés</string>
+  <string name="description_digits_edittext">hívandó szám</string>
+</resources>

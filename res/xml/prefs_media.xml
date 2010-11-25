@@ -97,5 +97,10 @@
 				android:numeric="signed"
 				android:summary="@string/snd_auto_close_time_desc"
 				android:defaultValue="1"></EditTextPreference>
+				
+				
+			<CheckBoxPreference android:summary="@string/use_routing_api_desc"
+				android:title="@string/use_routing_api" android:key="use_routing_api"
+				android:defaultValue="false"></CheckBoxPreference>
 		</PreferenceCategory>
 </PreferenceScreen>

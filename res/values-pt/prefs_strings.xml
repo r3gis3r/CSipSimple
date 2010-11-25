@@ -54,8 +54,11 @@
   <string name="enable_stun_desc">Ativar característica STUN</string>
   <string name="stun_server">Servidor STUN</string>
   <string name="stun_server_desc">Servidor STUN (HOST:PORTA)</string>
+  <string name="secure_transport">Transporte seguro</string>
   <string name="network_tls_transport_port">Porta TLS</string>
   <string name="network_tls_transport_port_desc">Número da porta para vinculação local</string>
+  <string name="use_srtp">modo SRTP</string>
+  <string name="use_srtp_desc">modo para RTP Seguro</string>
   <string name="audio_quality">Qualidade de Áudio</string>
   <string name="audio_volume">Volume</string>
   <string name="codecs">Codecs</string>

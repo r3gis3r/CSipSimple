@@ -7,10 +7,10 @@
 --ignore-fuzzy
 
 #Declaration for header
---project csipsimple
---header_template ./.android2po_header
---language_team csipsimple-dev@googlegroups.com
---last_translator android2po
---msgid_bugs_address csipsimple-dev@googlegroups.com
---version 0.01
+#--project csipsimple
+#--header_template ./.android2po_header
+#--language_team csipsimple-dev@googlegroups.com
+#--last_translator android2po
+#--msgid_bugs_address csipsimple-dev@googlegroups.com
+#--version 0.01
 

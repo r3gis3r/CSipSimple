@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: 2010-10-10 08:22+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -53,6 +53,7 @@ msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr "Modifier lapparence et les comportement de lapplication"
 
+#. Network
 msgctxt "for_incomings"
 msgid "For incoming calls"
 msgstr "Pour les appels entrants"
@@ -71,7 +72,7 @@ msgstr "Transport"
 
 msgctxt "transport_desc"
 msgid "Force the use of a transport for this account"
-msgstr ""
+msgstr "Forcer le protocole de communication"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -237,26 +238,26 @@ msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "Server STUN (hôte:port)"
 
-#, fuzzy
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr "Activer ICE"
+msgstr "Activer la QoS"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
-msgstr ""
+msgstr "Activer la QoS sur les paquets"
 
 msgctxt "dscp_val"
 msgid "DSCP value"
-msgstr ""
+msgstr "Valeur DSCP"
 
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
-msgstr ""
+msgstr "Valeur DSCP pour le trafic SIP"
 
+#. Security
 msgctxt "tls"
 msgid "TLS"
-msgstr ""
+msgstr "Chiffrement TLS"
 
 msgctxt "secure_transport"
 msgid "Secure transport"
@@ -264,11 +265,11 @@ msgstr "Transport sécurisé"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
-msgstr ""
+msgstr "Mécanismes de sécurité pour le SIP et RTP"
 
 msgctxt "secure_media"
 msgid "Secure media"
-msgstr ""
+msgstr "Média sécurisé"
 
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
@@ -280,69 +281,67 @@ msgstr "Numéro du port sur lequel écouter localement"
 
 msgctxt "network_tls_server_name"
 msgid "TLS server name"
-msgstr ""
+msgstr "Nom du serveur TLS"
 
 msgctxt "network_tls_server_name_desc"
 msgid "For multi-hosting server (optional)"
-msgstr ""
+msgstr "Pour des serveurs mutualisés (optionnel)"
 
 msgctxt "ca_list_file"
 msgid "TLS CA file"
-msgstr ""
+msgstr "Fichier TLS CA (certificat)"
 
 msgctxt "ca_list_file_desc"
 msgid "For example /sdcard/CSipSimple/myAuthority.ca"
-msgstr ""
+msgstr "Par exemple /sdcard/CSipSimple/myAuthority.ca"
 
 msgctxt "cert_file"
 msgid "TLS certificate file"
-msgstr ""
+msgstr "Certificat TLS"
 
 msgctxt "cert_file_desc"
 msgid "For example /sdcard/CSipSimple/myCert.crt"
-msgstr ""
+msgstr "Par exemple /sdcard/CSipSimple/myCert.crt"
 
 msgctxt "privkey_file"
 msgid "TLS private key file"
-msgstr ""
+msgstr "Fichier de clef privée TLS"
 
 msgctxt "privkey_file_desc"
 msgid "For example /sdcard/CSipSimple/myKey.key"
-msgstr ""
+msgstr "Par exemple /sdcard/CSipSimple/myKey.key"
 
 msgctxt "tls_password"
 msgid "TLS password"
-msgstr ""
+msgstr "Mot de passe TLS"
 
 msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
-msgstr ""
+msgstr "Mot de passe de la clef privée TLS"
 
-#, fuzzy
 msgctxt "verify_server"
 msgid "Check server"
-msgstr "Serveur TURN"
+msgstr "Vérifier le serveur"
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
-msgstr ""
+msgstr "Vérifier le certificat du serveur"
 
 msgctxt "verify_client"
 msgid "Check client"
-msgstr ""
+msgstr "Vérifier le client"
 
 msgctxt "verify_client_desc"
 msgid "Verify client's certificate"
-msgstr ""
+msgstr "vérifier le certificat du client"
 
 msgctxt "tls_method"
 msgid "TLS Method"
-msgstr ""
+msgstr "Méthode TLS"
 
-#, fuzzy
 msgctxt "tls_method_desc"
 msgid "Method for TLS transport"
-msgstr "Transport sécurisé"
+msgstr "Méthode de transport TLS"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -352,13 +351,14 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Mode pour le RTP sécurisé"
 
+#. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Qualité audio"
 
 msgctxt "audio_volume"
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -378,7 +378,8 @@ msgstr "Détection de silence"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr "Activer la détection active de voix (réduit la bande passante utilisée)"
+msgstr ""
+"Activer la détection active de voix (réduit la bande passante utilisée)"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
@@ -419,7 +420,8 @@ msgid "Media quality"
 msgstr "Qualité du média"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualité du flux média (à ne modifier que si vous savez exactement ce que "
 "vous faites)"
@@ -452,23 +454,31 @@ msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Priorité (0 = désactivé)"
 
-#, fuzzy
 msgctxt "sip_dtmf"
 msgid "DTMF mode"
-msgstr "Mode expert"
+msgstr "Modes DTMF"
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
-msgstr ""
+msgstr "Manière d'envoyer les signaux DTMF"
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
-msgstr ""
+msgstr "Utiliser le volume logiciel"
 
 msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
+msgstr "Utiliser le volume logiciel au lieu du volume Android"
+
+msgctxt "use_routing_api"
+msgid "Use routing API"
 msgstr ""
 
+msgctxt "use_routing_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+#. UI
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr "Interface utilisateur générale"
@@ -487,11 +497,11 @@ msgstr "Activer l'intégration"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Quand un appel est initié partout dans Android il vous sera demandé si "
-"vous voulez utiliser le GSM ou le SIP"
+"Quand un appel est initié partout dans Android il vous sera demandé si vous "
+"voulez utiliser le GSM ou le SIP"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -500,8 +510,7 @@ msgstr "Intégrations au journal d'appel"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"Les appels SIP seront rajoutés (si possible) aux journaux d'appels "
-"d'Android"
+"Les appels SIP seront rajoutés (si possible) aux journaux d'appels d'Android"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -527,10 +536,9 @@ msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
 msgstr "Démarrer avec le numéroteur de type texte"
 
-#, fuzzy
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr "Dévérouillage bouttons"
+msgstr "Ne pas utiliser le Slide pour répondre"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
@@ -589,6 +597,7 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Eviter la rotation de l'écran et rester en mode portrait"
 
+#. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
 msgstr "S'intégrer à Android"
@@ -650,12 +659,4 @@ msgstr "Mode expert"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Mode avancé"
-
-#~ msgctxt "sip_info_dtmf"
-#~ msgid "DTMF SIP INFO"
-#~ msgstr "SIP INFO DTMF"
-
-#~ msgctxt "sip_info_dtmf_desc"
-#~ msgid "Use SIP INFO to send DTMF"
-#~ msgstr "Utiliser SIP INFO pour envoyer du DTMF"
 

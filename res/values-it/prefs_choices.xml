@@ -19,4 +19,27 @@
     <item>Opzionale</item>
     <item>Obbligatorio</item>
   </string-array>
+  <string-array name="dtmf_mode_choices">
+    <item>Automatico</item>
+    <item>RTP</item>
+    <item>In band generation</item>
+    <item>SIP INFO</item>
+  </string-array>
+  <string-array name="contact_rewrite_method_choices">
+    <item>legacy</item>
+    <item>Normale</item>
+  </string-array>
+  <string-array name="transport_choices">
+    <item>Automatico</item>
+    <item>UDP</item>
+    <item>TCP</item>
+    <item>TLS</item>
+  </string-array>
+  <string-array name="tls_method_choices">
+    <item>Automatico</item>
+    <item>TLSv1</item>
+    <item>SSLv2</item>
+    <item>SSL3</item>
+    <item>SSL23</item>
+  </string-array>
 </resources>

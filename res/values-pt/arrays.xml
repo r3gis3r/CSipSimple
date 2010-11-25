@@ -1,2 +1,41 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string-array name="default_smiley_texts">
+    <item>:-)</item>
+    <item>:-(</item>
+    <item>:-[</item>
+    <item>O:-)</item>
+    <item>:-\\</item>
+    <item>:\'(</item>
+    <item>:-X</item>
+    <item>:-D</item>
+    <item>o_O</item>
+    <item>;-)</item>
+    <item>:-P</item>
+    <item>=-O</item>
+    <item>:-*</item>
+    <item>:O</item>
+    <item>B-)</item>
+    <item>:-$</item>
+    <item>:-!</item>
+  </string-array>
+  <string-array name="default_smiley_names">
+    <item>Feliz</item>
+    <item>Triste</item>
+    <item>Envergonhado</item>
+    <item>Anjo</item>
+    <item>Indeciso</item>
+    <item>Chorão</item>
+    <item>Boca fechada</item>
+    <item>Risonho</item>
+    <item>Confuso</item>
+    <item>A piscar o olho</item>
+    <item>Língua de fora</item>
+    <item>Surpreendido</item>
+    <item>Beijoqueiro</item>
+    <item>A gritar</item>
+    <item>Fixe</item>
+    <item>Interesseiro</item>
+    <item>Arrependido</item>
+  </string-array>
+</resources>

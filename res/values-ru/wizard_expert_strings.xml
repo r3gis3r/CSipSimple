@@ -20,4 +20,6 @@
   <string name="w_expert_publish_enabled">Публикация включена</string>
   <string name="w_expert_reg_timeout">Время регистрации (сек.)</string>
   <string name="w_expert_ka_interval">Интервал обновления (сек.)</string>
+  <string name="w_expert_allow_contact_rewrite">Позволять перезапись контакта</string>
+  <string name="w_expert_contact_rewrite_method">Метод перезаписи контакта</string>
 </resources>

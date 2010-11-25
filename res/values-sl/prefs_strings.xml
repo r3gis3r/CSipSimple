@@ -53,6 +53,11 @@
   <string name="enable_stun_desc">Enostavno prečkanje UDP preko NAT</string>
   <string name="stun_server">Strežnik STUN</string>
   <string name="stun_server_desc">(strežnik:vrata)</string>
+  <string name="secure_transport">Varen prenos</string>
+  <string name="network_tls_transport_port">Vrata TLS</string>
+  <string name="network_tls_transport_port_desc">Številka lokalnih vrat</string>
+  <string name="use_srtp">Način SRTP</string>
+  <string name="use_srtp_desc">Način za varen RTP</string>
   <string name="audio_quality">Kvaliteta zvoka</string>
   <string name="audio_volume">Glasnost</string>
   <string name="codecs">Kodeki</string>
@@ -92,7 +97,6 @@
   <string name="dial_press_vibrate_desc">Vibracija ob klicnem izbiranju</string>
   <string name="start_with_text_dialer">Tekstovni izbirnik</string>
   <string name="start_with_text_dialer_desc">Začni s tekstovnim izbirnikom</string>
-  <string name="use_alternate_unlocker">Ne uporabi drsnega sprejema klica</string>
   <string name="use_alternate_unlocker_desc">Uporabi gumbe za sprejem dohodnih klicev</string>
   <string name="keep_awake_incall">Ostani buden med klicem</string>
   <string name="keep_awake_incall_desc">Omogočite v primeru slabega zvoka med klicem na WiFi, ko zaslon zaspi</string>

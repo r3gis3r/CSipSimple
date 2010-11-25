@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: 2010-10-05 18:28+0000\n"
 "Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -54,6 +54,7 @@ msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr "Настройки интерфейса"
 
+#. Network
 msgctxt "for_incomings"
 msgid "For incoming calls"
 msgstr "Входящие вызовы"
@@ -240,10 +241,9 @@ msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "STUN сервер (HOST:PORT)"
 
-#, fuzzy
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr "ICE"
+msgstr ""
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
@@ -257,6 +257,7 @@ msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
 msgstr ""
 
+#. Security
 msgctxt "tls"
 msgid "TLS"
 msgstr ""
@@ -321,10 +322,9 @@ msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
 msgstr ""
 
-#, fuzzy
 msgctxt "verify_server"
 msgid "Check server"
-msgstr "TURN-сервер"
+msgstr ""
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
@@ -342,10 +342,9 @@ msgctxt "tls_method"
 msgid "TLS Method"
 msgstr ""
 
-#, fuzzy
 msgctxt "tls_method_desc"
 msgid "Method for TLS transport"
-msgstr "Безопасный протокол"
+msgstr ""
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -355,6 +354,7 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Режим безопасного RTP"
 
+#. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Качество аудио"
@@ -453,10 +453,9 @@ msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Приоритет (0 - отключено)"
 
-#, fuzzy
 msgctxt "sip_dtmf"
 msgid "DTMF mode"
-msgstr "Экспертный режим"
+msgstr ""
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
@@ -472,6 +471,15 @@ msgstr ""
 "Регулировать громкость из программы CSipSimple и не использовать настройки "
 "Андроид"
 
+msgctxt "use_routing_api"
+msgid "Use routing API"
+msgstr ""
+
+msgctxt "use_routing_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+#. UI
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr "Общие настройки интерфейса"
@@ -526,10 +534,9 @@ msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
 msgstr "Использовать изначально текстовый номеронабиратель"
 
-#, fuzzy
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr "Не использовать слайдер"
+msgstr ""
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
@@ -586,6 +593,7 @@ msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 "Не поворачивать экран автоматически и всегда использовать портретный вид"
 
+#. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
 msgstr "Интегрировать с Андроид"
@@ -646,12 +654,4 @@ msgstr "Экспертный режим"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Расширенный режим"
-
-#~ msgctxt "sip_info_dtmf"
-#~ msgid "DTMF SIP INFO"
-#~ msgstr "DTMF SIP INFO"
-
-#~ msgctxt "sip_info_dtmf_desc"
-#~ msgid "Use SIP INFO to send DTMF"
-#~ msgstr "Использовать SIP INFO для передачи DTMF-сигналов"
 

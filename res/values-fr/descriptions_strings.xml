@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="description_image_button_one">un</string>
+  <string name="description_image_button_two">deux</string>
+  <string name="description_image_button_three">trois</string>
+  <string name="description_image_button_four">quatre</string>
+  <string name="description_image_button_five">cinq</string>
+  <string name="description_image_button_six">six</string>
+  <string name="description_image_button_seven">sept</string>
+  <string name="description_image_button_eight">huit</string>
+  <string name="description_image_button_nine">neuf</string>
+  <string name="description_image_button_star">étoile</string>
+  <string name="description_image_button_zero">zéro</string>
+  <string name="description_image_button_pound">dièse</string>
+  <string name="description_dial_button">composer</string>
+  <string name="description_delete_button">retour</string>
+  <string name="description_digits_edittext">Numéro à appeler</string>
+</resources>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-23 23:40+0100\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
 "PO-Revision-Date: 2010-10-06 13:32+0000\n"
 "Last-Translator: Jan Tschirschwitz <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -53,6 +53,7 @@ msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr "Anpassen der Benutzeroberfläche"
 
+#. Network
 msgctxt "for_incomings"
 msgid "For incoming calls"
 msgstr "Für eingehende Anrufe"
@@ -185,19 +186,19 @@ msgstr "DNS SRV auflösen"
 
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
-msgstr ""
+msgstr "Verwendet eigenen DNS um IP-Adressen aufzulösen"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
-msgstr "Einen eigenen DNS-Server benutzen"
+msgstr "Benutzerdefinierte DNS Server verwenden"
 
 msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
-msgstr ""
+msgstr "Leer lassen um den DNS von Android zu verwenden"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
-msgstr ""
+msgstr "NAT Traversal"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
@@ -239,10 +240,9 @@ msgctxt "stun_server_desc"
 msgid "STUN server (HOST:PORT)"
 msgstr "STUN Server (HOST:PORT)"
 
-#, fuzzy
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr "Aktiviert ICE"
+msgstr ""
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
@@ -256,6 +256,7 @@ msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
 msgstr ""
 
+#. Security
 msgctxt "tls"
 msgid "TLS"
 msgstr ""
@@ -353,13 +354,14 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Modus für Secure RTP"
 
+#. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
 msgstr "Audioqualität"
 
 msgctxt "audio_volume"
 msgid "Volume"
-msgstr ""
+msgstr "Lautstärke"
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -418,7 +420,8 @@ msgid "Media quality"
 msgstr "Audioqualität"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualität der Audiodaten (Verändere diesen Wert nur, wenn du weißt was du "
 "tust)"
@@ -461,12 +464,21 @@ msgstr ""
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
-msgstr ""
+msgstr "Verwende eigene Lautstärke"
 
 msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
+msgstr "Verwendet eigene Lautstärke anstatt der Android-Lautstärke"
+
+msgctxt "use_routing_api"
+msgid "Use routing API"
 msgstr ""
 
+msgctxt "use_routing_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+#. UI
 msgctxt "general_ui"
 msgid "General user interface"
 msgstr "Standard-Benutzeroberfläche"
@@ -485,11 +497,11 @@ msgstr "Nachfragen beim Wählen"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Beim Wählen einer Nummer mit der Standardanwendung werden sie gefragt, ob"
-" sie SIP oder GSM verwenden wollen"
+"Beim Wählen einer Nummer mit der Standardanwendung werden sie gefragt, ob "
+"sie SIP oder GSM verwenden wollen"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -509,7 +521,7 @@ msgstr "Es werden Wähltöne beim Wählen abgespielt"
 
 msgctxt "dial_press_vibrate"
 msgid "Dialing vibrate feedback"
-msgstr "Feedback durch Vibrator"
+msgstr "Feedback duch Vibration"
 
 msgctxt "dial_press_vibrate_desc"
 msgid "Haptic (vibrate) feedback when dialing"
@@ -549,6 +561,7 @@ msgstr "Blockiere Einschlafen"
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
+"Stelle sicher das die CPU die Applikation bevorzugt (erhöhter Akku-Verbrauch)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -570,20 +583,21 @@ msgstr ""
 
 msgctxt "ringtone"
 msgid "Ringtone"
-msgstr ""
+msgstr "Klingelton"
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
-msgstr ""
+msgstr "Standard-Klingelton für SIP Anrufe"
 
 msgctxt "prevent_screen_rotation"
 msgid "Prevent screen rotation"
-msgstr ""
+msgstr "Verhindere Displayroation"
 
 msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
-msgstr ""
+msgstr "Verhindert die Rotation des Displays und hält es im Portraitformat"
 
+#. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
 msgstr "Integration mit Android"
@@ -640,17 +654,9 @@ msgstr "Nur verfügbar, wenn SIP registriert ist"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
-msgstr ""
+msgstr "Experten Modus"
 
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
-msgstr ""
-
-#~ msgctxt "sip_info_dtmf"
-#~ msgid "DTMF SIP INFO"
-#~ msgstr ""
-
-#~ msgctxt "sip_info_dtmf_desc"
-#~ msgid "Use SIP INFO to send DTMF"
-#~ msgstr ""
+msgstr "Erweiterter Modus"
 

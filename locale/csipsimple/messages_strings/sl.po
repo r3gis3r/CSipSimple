@@ -1,14 +1,14 @@
-# Translation for csipsimple
-# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
-# This file is distributed under the same license as the csipsimple package.
-# Regis Montoya <http://www.r3gis.fr>, 2010.
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: csipsimple 0.01\n"
-"Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-23 23:45+0100\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-11-25 22:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,1087 +17,317 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev\n"
 
+#. The name of the SMS/MMS app as it appears to the user in the Home screen,
+#. task switcher, etc.
 msgctxt "app_label"
 msgid "Messaging"
 msgstr ""
 
+#. Command name to open a Compose screen; displays in conversation list
 msgctxt "new_message"
 msgid "New message"
 msgstr ""
 
+#. Summary text under "New Message" command; displays in conversation list
 msgctxt "create_new_message"
 msgid "Compose new message"
 msgstr ""
 
-#, python-format
-msgctxt "menu_call_back"
-msgid "Call <xliff:g id=\"name\">%s</xliff:g>"
-msgstr ""
-
-#, python-format
-msgctxt "menu_send_email"
-msgid "Send email to <xliff:g id=\"name\">%s</xliff:g>"
-msgstr ""
-
+#. Menu item for starting a new conversation
 msgctxt "menu_compose_new"
 msgid "Compose"
 msgstr ""
 
-msgctxt "menu_preferences"
-msgid "Settings"
-msgstr ""
-
-#, python-format
+#, c-format
 msgctxt "menu_add_address_to_contacts"
 msgid "Add <xliff:g id=\"name\">%s</xliff:g> to Contacts"
 msgstr ""
 
+#. Menu item to call the recipient of the conversation on the phone
+#. (imperative verb)
 msgctxt "menu_call"
 msgid "Call"
 msgstr ""
 
+#. Menu item for deleting all conversations
 msgctxt "menu_delete_all"
 msgid "Delete threads"
 msgstr ""
 
+#. Context menu item on an individual conversation for deleting that
+#. conversation
 msgctxt "menu_delete"
 msgid "Delete thread"
 msgstr ""
 
-msgctxt "menu_undelivered_messages"
-msgid "Undelivered messages"
-msgstr ""
-
+#. Context menu item on an individual conversation for viewing that
+#. conversation
 msgctxt "menu_view"
 msgid "View thread"
 msgstr ""
 
-msgctxt "refreshing"
-msgid "Refreshing\\u2026"
-msgstr ""
-
-msgctxt "has_draft"
-msgid "Draft"
-msgstr ""
-
-msgctxt "broadcast_from_to"
-msgid ""
-"<xliff:g id=\"sender\" example=\"me\">%1$s</xliff:g> to <xliff:g "
-"id=\"recipient\" example=\"Megan\">%2$s</xliff:g>"
-msgstr ""
-
+#. Name to use when we have an unspecified sender
 msgctxt "anonymous_recipient"
 msgid "Anonymous"
 msgstr ""
 
-msgctxt "no_subject_view"
-msgid "(No subject)"
-msgstr ""
-
+#. Name of the local user when displaying sender of an outgoing message
+#. (personal pronoun)
 msgctxt "messagelist_sender_self"
 msgid "Me"
-msgstr ""
-
-msgctxt "view_picture"
-msgid "View picture"
-msgstr ""
-
-msgctxt "view_slideshow"
-msgid "View slideshow"
-msgstr ""
-
-msgctxt "view_message_details"
-msgid "View message details"
-msgstr ""
-
-msgctxt "view_delivery_report"
-msgid "View report"
 msgstr ""
 
 msgctxt "delete_message"
 msgid "Delete message"
 msgstr ""
 
-#, python-format
+#. Time and date a message was sent
+#, c-format
 msgctxt "sent_on"
 msgid "Sent: <xliff:g id=\"date\">%s</xliff:g>"
 msgstr ""
 
-#, python-format
-msgctxt "expire_on"
-msgid "Expires: <xliff:g id=\"date\">%s</xliff:g>"
-msgstr ""
-
+#. Abbreviation for "kilobyte"
 msgctxt "kilobyte"
 msgid "KB"
 msgstr ""
 
+#. Dialog box title brought up when warning the user that a message could not
+#. be delivered
 msgctxt "undelivered_msg_dialog_title"
 msgid "Undelivered message"
 msgstr ""
 
-#, python-format
-msgctxt "undelivered_msg_dialog_body"
-msgid ""
-"Unable to send this message.\n"
-"Attempt made: <xliff:g id=\"message\">%s</xliff:g>."
-msgstr ""
-
+#. Dialog box message indicating that a message could not be delivered
 msgctxt "undelivered_sms_dialog_body"
 msgid "Unable to send this message."
 msgstr ""
 
+#. Menu item for deleting the entire conversation currently being viewed
 msgctxt "delete_thread"
 msgid "Delete thread"
 msgstr ""
 
-msgctxt "menu_forward"
-msgid "Forward"
-msgstr ""
-
+#. Text of a button appearing for MMS messages that have not yet been
+#. downloaded, causing the message          to be downloaded (imperative verb)
 msgctxt "download"
 msgid "Download"
 msgstr ""
 
+#. Message displayed in place of the "download message" button once it has
+#. been pressed,          indicating that the download is in progress
 msgctxt "downloading"
 msgid "Downloading"
 msgstr ""
 
-#, python-format
+#. Formatting for prepending MMS message text with sender's name.
+#, c-format
 msgctxt "name_colon"
 msgid "<b><xliff:g id=\"name\" example=\"Me\">%s</xliff:g></b>: "
 msgstr ""
 
-#, python-format
-msgctxt "inline_subject"
-msgid "&lt;Subject: <xliff:g id=\"subject\">%s</xliff:g>&gt;"
-msgstr ""
-
-msgctxt "drm_protected_text"
-msgid "* DRM protected text *"
-msgstr ""
-
-msgctxt "insufficient_drm_rights"
-msgid "Insufficient DRM rights detected."
-msgstr ""
-
+#. Individual message context menu item
 msgctxt "copy_message_text"
 msgid "Copy message text"
 msgstr ""
 
+#. Header for context menu on an individual message
 msgctxt "message_options"
 msgid "Message options"
 msgstr ""
 
+#. Button text on edit slide screen indicating the user wants to finish
+#. editing that slide
 msgctxt "done"
 msgid "Done"
 msgstr ""
 
-msgctxt "move_up"
-msgid "Move up"
-msgstr ""
-
-msgctxt "move_down"
-msgid "Move down"
-msgstr ""
-
-msgctxt "remove_slide"
-msgid "Remove slide"
-msgstr ""
-
-msgctxt "add_slide"
-msgid "Add slide"
-msgstr ""
-
-msgctxt "add_slide_hint"
-msgid "Select to create new slide."
-msgstr ""
-
-msgctxt "discard_slideshow"
-msgid "Discard slideshow"
-msgstr ""
-
-msgctxt "slide_show_part"
-msgid ""
-"Part <xliff:g id=\"part\">%1$s</xliff:g>/<xliff:g "
-"id=\"total\">%2$s</xliff:g>"
-msgstr ""
-
-msgctxt "remove_text"
-msgid "Remove text"
-msgstr ""
-
-msgctxt "add_picture"
-msgid "Add picture"
-msgstr ""
-
-msgctxt "remove_picture"
-msgid "Remove picture"
-msgstr ""
-
-msgctxt "add_music"
-msgid "Add music"
-msgstr ""
-
-msgctxt "remove_music"
-msgid "Remove music"
-msgstr ""
-
-msgctxt "add_video"
-msgid "Add video"
-msgstr ""
-
-msgctxt "remove_video"
-msgid "Remove video"
-msgstr ""
-
+#. Title bar displayed in compose message activity before a recipient has been
+#. selected
 msgctxt "compose_title"
 msgid "Compose"
 msgstr ""
 
-msgctxt "to_hint"
-msgid "To"
-msgstr ""
-
-msgctxt "subject_hint"
-msgid "Subject"
-msgstr ""
-
+#. Menu item in conversation screen for attaching something to the message
+#. being composed
 msgctxt "add_attachment"
 msgid "Attach"
 msgstr ""
 
-msgctxt "add_subject"
-msgid "Add subject"
-msgstr ""
-
-msgctxt "discard"
-msgid "Discard"
-msgstr ""
-
+#. Button next to an attachment during message composition to view the
+#. attachment (imperative verb)
 msgctxt "view"
 msgid "View"
 msgstr ""
 
-msgctxt "replace"
-msgid "Replace"
-msgstr ""
-
-msgctxt "remove"
-msgid "Remove"
-msgstr ""
-
+#. Button in conversation screen for sending the SMS message currently being
+#. composed (imperative verb)
 msgctxt "send"
 msgid "Send"
 msgstr ""
 
-msgctxt "mms"
-msgid "MMS"
-msgstr ""
-
+#. Menu item in conversation screen for returning to the conversation list
 msgctxt "all_threads"
 msgid "All threads"
 msgstr ""
 
+#. Hint text in message body field when keyboard is exposed
 msgctxt "type_to_compose_text_enter_to_send"
 msgid "Type to compose"
 msgstr ""
 
+#. Hint text in message body field when keyboard is hidden
 msgctxt "open_keyboard_to_compose_message"
 msgid "Open keyboard to compose message"
 msgstr ""
 
+#. Dialog title for warning the user that the picture they are trying to
+#. attach is too large
 msgctxt "image_too_large"
 msgid "Picture too large"
 msgstr ""
 
+#. Dialog message text asking the user if he wants to resize the picture being
+#. attached
 msgctxt "ask_for_automatically_resize"
 msgid "Automatically resize picture before sending?"
 msgstr ""
 
+#. Toast message while an image is being resized
 msgctxt "compressing"
 msgid "Picture too large. Compressing\\u2026"
 msgstr ""
 
+#. Error message indicating the format for the specified media type (e.g.
+#. "picture") is unsupported
+#, c-format
 msgctxt "unsupported_media_format"
 msgid "Unsupported <xliff:g id=\"name\">%1$s</xliff:g> format"
 msgstr ""
 
-msgctxt "select_different_media"
-msgid "Please select a different <xliff:g id=\"name\">%1$s</xliff:g>."
-msgstr ""
-
-msgctxt "exceed_message_size_limitation"
-msgid "Message size limit reached."
-msgstr ""
-
-msgctxt "message_too_big_for_video"
-msgid "The message is too big to attach a video."
-msgstr ""
-
-msgctxt "failed_to_add_media"
-msgid ""
-"Sorry, you cannot add this <xliff:g id=\"name\">%1$s</xliff:g> to your "
-"message."
-msgstr ""
-
-msgctxt "failed_to_resize_image"
-msgid "Picture not resized."
-msgstr ""
-
-msgctxt "resize_image_error_information"
-msgid "Sorry, even when resized this picture is too large to send."
-msgstr ""
-
-msgctxt "forward_prefix"
-msgid "Fwd:\\u0020"
-msgstr ""
-
-msgctxt "discard_message"
-msgid "Discard"
-msgstr ""
-
-msgctxt "discard_message_reason"
-msgid "Your message will be discarded because it has no valid recipients."
-msgstr ""
-
-msgctxt "has_invalid_recipient"
-msgid "Invalid recipient(s): &lt;<xliff:g id=\"name\">%1$s</xliff:g>&gt;"
-msgstr ""
-
-msgctxt "invalid_destination"
-msgid "You have entered an invalid address."
-msgstr ""
-
-msgctxt "invalid_recipient_message"
-msgid "Please correct the recipient(s) or they will not receive the message."
-msgstr ""
-
-msgctxt "cannot_send_message"
-msgid "Cannot send this message"
-msgstr ""
-
-msgctxt "cannot_send_message_reason"
-msgid "Your message has no valid recipients."
-msgstr ""
-
-msgctxt "cannot_forward_drm_obj"
-msgid "The DRM object included in the message cannot be forwarded."
-msgstr ""
-
-msgctxt "converting_to_picture_message"
-msgid "Converting to multimedia message\\u2026"
-msgstr ""
-
-msgctxt "converting_to_text_message"
-msgid "Converting to text message\\u2026"
-msgstr ""
-
-msgctxt "cannot_add_slide_anymore"
-msgid "Cannot add more slides."
-msgstr ""
-
-msgctxt "cannot_add_picture_and_video"
-msgid "Cannot add video and picture to one slide."
-msgstr ""
-
-msgctxt "cannot_save_message"
-msgid "Cannot save message."
-msgstr ""
-
-msgctxt "cannot_load_message"
-msgid "Cannot load message."
-msgstr ""
-
-msgctxt "message_saved_as_draft"
-msgid "Message saved as draft."
-msgstr ""
-
-msgctxt "locked_message_cannot_be_deleted"
-msgid "Locked message cannot be deleted."
-msgstr ""
-
-msgctxt "too_many_recipients"
-msgid ""
-"This message has too many recipients (<xliff:g "
-"id=\"currentCount\">%1$s</xliff:g>). There is a limit of <xliff:g "
-"id=\"maxLimit\">%2$s</xliff:g> recipients."
-msgstr ""
-
-msgctxt "too_many_attachments"
-msgid ""
-"There is a limit of <xliff:g id=\"maxLimit\">%1$s</xliff:g> attachments. "
-"Only the first <xliff:g id=\"currentCount\">%2$s</xliff:g> will be added."
-msgstr ""
-
-msgctxt "adding_attachments_title"
-msgid "Adding attachments"
-msgstr ""
-
-msgctxt "adding_attachments"
-msgid "Please wait while the items are added to the slideshow."
-msgstr ""
-
-msgctxt "multiple_recipients"
-msgid "<xliff:g id=\"recipientCount\">%1$s</xliff:g> recipients"
-msgstr ""
-
-msgctxt "cannot_play_audio"
-msgid "Cannot play audio."
-msgstr ""
-
-msgctxt "preview"
-msgid "Preview"
-msgstr ""
-
-msgctxt "preview_slideshow"
-msgid "Preview"
-msgstr ""
-
-msgctxt "replace_image"
-msgid "Replace picture"
-msgstr ""
-
-#, python-format
-msgctxt "duration_sec"
-msgid "Duration (<xliff:g id=\"duration\">%s</xliff:g> sec)"
-msgstr ""
-
-msgctxt "duration_selector_title"
-msgid "Duration for slide "
-msgstr ""
-
-msgctxt "layout_selector_title"
-msgid "Slideshow layout "
-msgstr ""
-
-msgctxt "layout_top"
-msgid "Layout (top)"
-msgstr ""
-
-msgctxt "layout_bottom"
-msgid "Layout (bottom)"
-msgstr ""
-
-msgctxt "type_to_compose_text_or_leave_blank"
-msgid "Type to compose text, or leave blank"
-msgstr ""
-
-msgctxt "duration_not_a_number"
-msgid "Duration must be a number"
-msgstr ""
-
-msgctxt "duration_zero"
-msgid "Duration must be greater than zero seconds"
-msgstr ""
-
-msgctxt "secs"
-msgid "secs"
-msgstr ""
-
-msgctxt "select_dialog_items:0"
-msgid "1 second"
-msgstr ""
-
-msgctxt "select_dialog_items:1"
-msgid "2 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:2"
-msgid "3 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:3"
-msgid "4 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:4"
-msgid "5 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:5"
-msgid "6 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:6"
-msgid "7 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:7"
-msgid "8 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:8"
-msgid "9 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:9"
-msgid "10 seconds"
-msgstr ""
-
-msgctxt "select_dialog_items:10"
-msgid "Other\\u2026"
-msgstr ""
-
+#. Context menu item on a message recipient for viewing their contact info
 msgctxt "menu_view_contact"
 msgid "View contact"
 msgstr ""
 
+#. Context menu item on a message recipient for adding them to the user's
+#. contacts (used if the recipient is not already in the address book)
 msgctxt "menu_add_to_contacts"
 msgid "Add to Contacts"
 msgstr ""
 
+#. Sender to be used if the sender address has been hidden
 msgctxt "hidden_sender_address"
 msgid "Hidden sender address"
 msgstr ""
 
+#. Text to be used for affirmative response button in dialog boxes
 msgctxt "yes"
 msgid "OK"
 msgstr ""
 
+#. Text to be used for negative response button in dialog boxes
 msgctxt "no"
 msgid "Cancel"
 msgstr ""
 
-msgctxt "set"
-msgid "Set"
-msgstr ""
-
-msgctxt "play"
-msgid "Play"
-msgstr ""
-
+#. Button text used for editing a slideshow (imperative verb)
 msgctxt "edit"
 msgid "Edit"
 msgstr ""
 
-msgctxt "resize"
-msgid "Resize"
-msgstr ""
-
-msgctxt "try_to_send"
-msgid "Try to send"
-msgstr ""
-
-msgctxt "preferences_title"
-msgid "Settings"
-msgstr ""
-
+#. Settings screen menu item for restoring all settings to default
 msgctxt "restore_default"
 msgid "Restore default settings"
 msgstr ""
 
-msgctxt "pref_notification_settings_title"
-msgid "Notification settings"
-msgstr ""
-
-msgctxt "pref_mms_settings_title"
-msgid "Multimedia message (MMS) settings"
-msgstr ""
-
-msgctxt "pref_sms_settings_title"
-msgid "Text message (SMS) settings"
-msgstr ""
-
-msgctxt "pref_sms_storage_title"
-msgid "Storage settings"
-msgstr ""
-
-msgctxt "pref_summary_manage_sim_messages"
-msgid "Manage messages stored on your SIM card"
-msgstr ""
-
-msgctxt "pref_summary_mms_delivery_reports"
-msgid "Request a delivery report for each message you send"
-msgstr ""
-
-msgctxt "pref_summary_mms_read_reports"
-msgid "Request a read report for each message you send"
-msgstr ""
-
-msgctxt "pref_summary_sms_delivery_reports"
-msgid "Request a delivery report for each message you send"
-msgstr ""
-
-msgctxt "pref_summary_auto_delete"
-msgid "Delete old messages as limits are reached"
-msgstr ""
-
-msgctxt "pref_summary_delete_limit"
-msgid "<xliff:g id=\"count\">%1$s</xliff:g> messages per conversation"
-msgstr ""
-
-msgctxt "pref_title_manage_sim_messages"
-msgid "Manage SIM card messages"
-msgstr ""
-
-msgctxt "pref_title_mms_delivery_reports"
-msgid "Delivery reports"
-msgstr ""
-
-msgctxt "pref_title_mms_read_reports"
-msgid "Read reports"
-msgstr ""
-
-msgctxt "pref_title_sms_delivery_reports"
-msgid "Delivery reports"
-msgstr ""
-
-msgctxt "pref_title_auto_delete"
-msgid "Delete old messages"
-msgstr ""
-
-msgctxt "pref_title_sms_delete"
-msgid "Text message limit"
-msgstr ""
-
-msgctxt "pref_title_mms_delete"
-msgid "Multimedia message limit"
-msgstr ""
-
-msgctxt "pref_title_notification_enabled"
-msgid "Notifications"
-msgstr ""
-
-msgctxt "pref_summary_notification_enabled"
-msgid "Display message notifications in status bar"
-msgstr ""
-
-msgctxt "pref_title_notification_vibrateWhen"
-msgid "Vibrate"
-msgstr ""
-
-msgctxt "pref_summary_notification_vibrateWhen"
-msgid "Also vibrate when notified"
-msgstr ""
-
-msgctxt "pref_title_notification_ringtone"
-msgid "Select ringtone"
-msgstr ""
-
-msgctxt "pref_messages_to_save"
-msgid "Set number of messages to save"
-msgstr ""
-
-msgctxt "prefEntries_vibrateWhen:0"
-msgid "Always"
-msgstr ""
-
-msgctxt "prefEntries_vibrateWhen:1"
-msgid "Only when silent"
-msgstr ""
-
-msgctxt "prefEntries_vibrateWhen:2"
-msgid "Never"
-msgstr ""
-
-msgctxt "prefDefault_vibrateWhen"
-msgid "never"
-msgstr ""
-
-msgctxt "prefDefault_vibrate_true"
-msgid "always"
-msgstr ""
-
-msgctxt "prefDefault_vibrate_false"
-msgid "never"
-msgstr ""
-
-msgctxt "prefValues_vibrateWhen:0"
-msgid "always"
-msgstr ""
-
-msgctxt "prefValues_vibrateWhen:1"
-msgid "silent"
-msgstr ""
-
-msgctxt "prefValues_vibrateWhen:2"
-msgid "never"
-msgstr ""
-
-msgctxt "prefDialogTitle_vibrateWhen"
-msgid "Vibrate"
-msgstr ""
-
-msgctxt "pref_title_mms_auto_retrieval"
-msgid "Auto-retrieve"
-msgstr ""
-
-msgctxt "pref_summary_mms_auto_retrieval"
-msgid "Automatically retrieve messages"
-msgstr ""
-
-msgctxt "pref_title_mms_retrieval_during_roaming"
-msgid "Roaming auto-retrieve"
-msgstr ""
-
-msgctxt "pref_summary_mms_retrieval_during_roaming"
-msgid "Automatically retrieve messages while roaming"
-msgstr ""
-
-msgctxt "to_label"
-msgid "To "
-msgstr ""
-
+#. Confirm Delete
+#. Delete confirmation dialog title
 msgctxt "confirm_dialog_title"
 msgid "Delete"
 msgstr ""
 
-msgctxt "confirm_dialog_locked_title"
-msgid "Delete locked message?"
-msgstr ""
-
+#. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_conversation"
 msgid "The entire thread will be deleted."
 msgstr ""
 
+#. Delete all threads confirmation dialog message
 msgctxt "confirm_delete_all_conversations"
 msgid "All threads will be deleted."
 msgstr ""
 
+#. Delete message confirmation dialog message
 msgctxt "confirm_delete_message"
 msgid "The message will be deleted."
 msgstr ""
 
+#. Delete message confirmation dialog message for a locked message
 msgctxt "confirm_delete_locked_message"
 msgid "Are you sure you want to delete this locked message?"
 msgstr ""
 
+#. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_all_messages"
 msgid "The entire thread will be deleted."
 msgstr ""
 
-msgctxt "confirm_delete_all_SIM_messages"
-msgid "All messages on the SIM will be deleted."
-msgstr ""
-
-msgctxt "confirm_delete_SIM_message"
-msgid "This message on the SIM will be deleted."
-msgstr ""
-
-msgctxt "delete_unlocked"
-msgid "Delete locked messages"
-msgstr ""
-
+#. Delete button title
 msgctxt "delete"
 msgid "Delete"
 msgstr ""
 
-msgctxt "cannot_get_details"
-msgid "Cannot get details"
-msgstr ""
-
-msgctxt "message_details_title"
-msgid "Message details"
-msgstr ""
-
-msgctxt "message_type_label"
-msgid "Type:\\u0020"
-msgstr ""
-
-msgctxt "text_message"
-msgid "Text message"
-msgstr ""
-
-msgctxt "multimedia_message"
-msgid "Multimedia message"
-msgstr ""
-
-msgctxt "multimedia_notification"
-msgid "Multimedia message notification"
-msgstr ""
-
-msgctxt "from_label"
-msgid "From:\\u0020"
-msgstr ""
-
-msgctxt "to_address_label"
-msgid "To:\\u0020"
-msgstr ""
-
-msgctxt "bcc_label"
-msgid "Bcc:\\u0020"
-msgstr ""
-
-msgctxt "sent_label"
-msgid "Sent:\\u0020"
-msgstr ""
-
-msgctxt "received_label"
-msgid "Received:\\u0020"
-msgstr ""
-
-msgctxt "saved_label"
-msgid "Saved:\\u0020"
-msgstr ""
-
-msgctxt "subject_label"
-msgid "Subject:\\u0020"
-msgstr ""
-
-msgctxt "message_size_label"
-msgid "Message size:\\u0020"
-msgstr ""
-
-msgctxt "priority_label"
-msgid "Priority:\\u0020"
-msgstr ""
-
-msgctxt "priority_high"
-msgid "High"
-msgstr ""
-
-msgctxt "priority_normal"
-msgid "Normal"
-msgstr ""
-
-msgctxt "priority_low"
-msgid "Low"
-msgstr ""
-
-msgctxt "message_class_label"
-msgid "Message class:\\u0020"
-msgstr ""
-
-msgctxt "error_code_label"
-msgid "Error code:\\u0020"
-msgstr ""
-
-msgctxt "menu_edit"
-msgid "Edit"
-msgstr ""
-
-msgctxt "menu_retry_sending"
-msgid "Retry sending"
-msgstr ""
-
-msgctxt "menu_retry_sending_all"
-msgid "Retry sending all"
-msgstr ""
-
-msgctxt "menu_delete_messages"
-msgid "Delete messages"
-msgstr ""
-
-#, python-format
-msgctxt "retrying_dialog_body"
-msgid ""
-"This message <xliff:g id=\"message\">%s</xliff:g> was not sent due to a "
-"connection problem.\\r\n"
-"Retrying to send\\u2026"
-msgstr ""
-
-msgctxt "menu_lock"
-msgid "Lock message"
-msgstr ""
-
-msgctxt "menu_unlock"
-msgid "Unlock message"
-msgstr ""
-
-msgctxt "delivery_header_title"
-msgid "Report"
-msgstr ""
-
+#. Status in "Report" window
 msgctxt "status_none"
 msgid "(None)"
 msgstr ""
 
+#. Status in "Report" window
 msgctxt "status_pending"
 msgid "Pending"
 msgstr ""
 
-msgctxt "status_read"
-msgid "Read"
-msgstr ""
-
+#. Status in "Report" window
 msgctxt "status_received"
 msgid "Received"
 msgstr ""
 
+#. Status in "Report" window
 msgctxt "status_failed"
 msgid "Unsuccessful"
 msgstr ""
 
+#. Status in "Report" window
 msgctxt "status_unread"
 msgid "Unread"
 msgstr ""
 
+#. Status in "Report" window
 msgctxt "status_rejected"
 msgid "Rejected"
 msgstr ""
 
+#. Label in "Report" window
 msgctxt "recipient_label"
 msgid "Recipient:\\u0020"
 msgstr ""
 
+#. Label in "Report" window
 msgctxt "status_label"
 msgid "Status:\\u0020"
 msgstr ""
 
-msgctxt "attach_image"
-msgid "Pictures"
-msgstr ""
-
-msgctxt "attach_take_photo"
-msgid "Capture picture"
-msgstr ""
-
-msgctxt "attach_video"
-msgid "Videos"
-msgstr ""
-
-msgctxt "attach_record_video"
-msgid "Capture video"
-msgstr ""
-
-msgctxt "attach_sound"
-msgid "Audio"
-msgstr ""
-
-msgctxt "attach_record_sound"
-msgid "Record audio"
-msgstr ""
-
-msgctxt "attach_slideshow"
-msgid "Slideshow"
-msgstr ""
-
-msgctxt "select_bottom_text"
-msgid "Text on bottom"
-msgstr ""
-
-msgctxt "select_top_text"
-msgid "Text on top"
-msgstr ""
-
-#, python-format
-msgctxt "delivery_toast_body"
-msgid "Message received by %s"
-msgstr ""
-
-#, python-format
-msgctxt "notification_multiple"
-msgid "<xliff:g id=\"count\">%s</xliff:g> unread messages."
-msgstr ""
-
-msgctxt "notification_multiple_title"
-msgid "New messages"
-msgstr ""
-
-#, python-format
-msgctxt "notification_failed_multiple"
-msgid "<xliff:g id=\"count\">%s</xliff:g> messages could not be sent."
-msgstr ""
-
-msgctxt "notification_failed_multiple_title"
-msgid "Messages not sent"
-msgstr ""
-
-msgctxt "sim_full_title"
-msgid "SIM card full"
-msgstr ""
-
-msgctxt "sim_full_body"
-msgid "Delete some messages to make room for more."
-msgstr ""
-
-msgctxt "sms_full_title"
-msgid "Text message memory full"
-msgstr ""
-
-msgctxt "sms_full_body"
-msgid "Incoming message rejected due to full memory. Please delete old messages."
-msgstr ""
-
-msgctxt "sms_rejected_title"
-msgid "Text message rejected"
-msgstr ""
-
-msgctxt "sms_rejected_body"
-msgid "Incoming message rejected due to unknown reason."
-msgstr ""
-
-msgctxt "confirm"
-msgid "Confirm"
-msgstr ""
-
-msgctxt "message_send_read_report"
-msgid "A read report will be sent."
-msgstr ""
-
+#. Menu item
 msgctxt "menu_insert_smiley"
 msgid "Insert smiley"
 msgstr ""
 
-msgctxt "select_link_title"
-msgid "Select action"
-msgstr ""
-
-msgctxt "search_hint"
-msgid "Search Messaging"
-msgstr ""
-
-msgctxt "search"
-msgid "Messaging"
-msgstr ""
-
-msgctxt "search_setting_description"
-msgid "Text in your messages"
-msgstr ""
-
-msgctxt "search_empty"
-msgid "No matches"
-msgstr ""
-
-msgctxt "search_history"
-msgid ""
-"<xliff:g id=\"count\">%1$s</xliff:g> results for \"<xliff:g "
-"id=\"search\">%2$s</xliff:g>\""
-msgstr ""
-
-msgctxt "confirm_clear_search_title"
-msgid "Clear"
-msgstr ""
-
-msgctxt "confirm_clear_search_text"
-msgid "Search history will be cleared."
-msgstr ""
-
-msgctxt "pref_mms_clear_search_history_title"
-msgid "Clear search history"
-msgstr ""
-
-msgctxt "pref_mms_clear_search_history_summary"
-msgid "Clear previous Messaging searches from showing up in the Search box"
-msgstr ""
-
-msgctxt "storage_limits_title"
-msgid "Limit messages"
-msgstr ""
-
-msgctxt "storage_limits_message"
-msgid "Do you want to limit the number of messages you save per conversation?"
-msgstr ""
-
-msgctxt "storage_limits_setting"
-msgid "Set limits"
-msgstr ""
-
-msgctxt "storage_limits_setting_dismiss"
-msgid "No limits"
-msgstr ""
-
-msgctxt "too_many_unsent_mms"
-msgid ""
-"Can't send message right now. There are too many unsent multimedia "
-"messages."
-msgstr ""
-
+#. Label for the "Me" number of this phone.
 msgctxt "me"
 msgid "Me"
 msgstr ""
 
+#. Brief small label shown to right of message when it is being sent.
 msgctxt "sending_message"
 msgid "Sending\\u2026"
 msgstr ""

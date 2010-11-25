@@ -6,4 +6,5 @@
   <string name="intializing_text">Инициализация</string>
   <string name="downloading_text">Загрузка</string>
   <string name="installing_library_text">Установка библиотеки...</string>
+  <string name="welcome_caption_text">Приветствие</string>
 </resources>

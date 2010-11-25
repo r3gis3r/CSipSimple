@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="description_image_button_one">один</string>
+  <string name="description_image_button_two">два</string>
+  <string name="description_image_button_three">три</string>
+  <string name="description_image_button_four">четыре</string>
+  <string name="description_image_button_five">пять</string>
+  <string name="description_image_button_six">шесть</string>
+  <string name="description_image_button_seven">семь</string>
+  <string name="description_image_button_eight">восемь</string>
+  <string name="description_image_button_nine">девять</string>
+  <string name="description_image_button_star">звёздочка</string>
+  <string name="description_image_button_zero">ноль</string>
+  <string name="description_image_button_pound">фунт</string>
+  <string name="description_dial_button">набор</string>
+  <string name="description_delete_button">возврат</string>
+  <string name="description_digits_edittext">номер</string>
+</resources>

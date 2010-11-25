@@ -19,4 +19,5 @@
   <string name="unlock">Sblocca</string>
   <string name="record">Registra</string>
   <string name="stop_recording">Interrompi registrazione</string>
+  <string name="xfer">Trasferisci</string>
 </resources>
