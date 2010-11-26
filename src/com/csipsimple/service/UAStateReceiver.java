@@ -525,7 +525,7 @@ public class UAStateReceiver extends Callback {
 		// Launch activity to choose what to do with this call
 		Intent callHandlerIntent = new Intent(SipService.ACTION_SIP_CALL_UI); //new Intent(service, getInCallClass());
 		callHandlerIntent.putExtra(SipService.EXTRA_CALL_INFO, currentCallInfo2);
-		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP  );
 		
 		Log.d(THIS_FILE, "Anounce call activity");
 		service.startActivity(callHandlerIntent);

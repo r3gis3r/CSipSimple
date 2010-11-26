@@ -102,7 +102,7 @@ public class SipNotifications {
 
 		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALL_UI);
 		notificationIntent.putExtra(SipService.EXTRA_CALL_INFO, currentCallInfo2);
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		

@@ -103,6 +103,10 @@
 				android:title="@string/use_routing_api" android:key="use_routing_api"
 				android:defaultValue="false"></CheckBoxPreference>
 				
+			<CheckBoxPreference android:summary="@string/use_mode_api_desc"
+				android:title="@string/use_mode_api" android:key="use_mode_api"
+				android:defaultValue="false"></CheckBoxPreference>
+				
 			<ListPreference android:title="@string/sip_audio_mode" android:key="sip_audio_mode"
 				android:summary="@string/sip_audio_mode_desc"
 				android:defaultValue="0"

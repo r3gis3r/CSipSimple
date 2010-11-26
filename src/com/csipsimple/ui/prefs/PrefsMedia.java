@@ -50,6 +50,7 @@ public class PrefsMedia extends GenericPrefs {
 			
 			hidePreference("misc", "snd_auto_close_time");
 			hidePreference("misc", "use_routing_api");
+			hidePreference("misc", "use_mode_api");
 			hidePreference("misc", "sip_audio_mode");
 		}
 	}

@@ -80,6 +80,7 @@ import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.models.IAccount;
 import com.csipsimple.models.SipMessage;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.SipUri;
@@ -792,7 +793,7 @@ public class SipService extends Service {
 	// Start the sip stack according to current settings
 	synchronized void sipStart() {
 		Log.setLogLevel(prefsWrapper.getLogLevel());
-
+		
 		if (!hasSipStack) {
 			Log.e(THIS_FILE, "We have no sip stack, we can't start");
 			return;
@@ -831,6 +832,8 @@ public class SipService extends Service {
 					if (mediaManager == null) {
 						mediaManager = new MediaManager(SipService.this);
 					}
+					mediaManager.startService();
+					
 					pjsua.setCallbackObject(userAgentReceiver);
 
 					Log.d(THIS_FILE, "Attach is done to callback");
@@ -1047,7 +1050,6 @@ public class SipService extends Service {
 
 				if (mediaManager != null) {
 					mediaManager.stopService();
-					mediaManager = null;
 				}
 			}
 		}

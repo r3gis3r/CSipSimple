@@ -291,10 +291,12 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
 		setIntent(intent);
 		//TODO : update UI
 		Log.d(THIS_FILE, "New intent is launched");
+		
+		
+		super.onNewIntent(intent);
 	}
 	
 

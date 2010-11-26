@@ -77,15 +77,21 @@ public class Compatibility {
 	
 	public static boolean shouldUseRoutingApi() {
 		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
-		if(android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
-			return true;
-		}
+		
 		if (!isCompatible(4)) {
 			//If android 1.5, force routing api use 
 			return true;
 		} else {
 			return false;
 		}
+	}
+	
+	public static boolean shouldUseModeApi() {
+		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
+		if(android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
+			return true;
+		}
+		return false;
 	}
 
 
@@ -227,8 +233,9 @@ public class Compatibility {
 			}
 		}
 		
-		if(lastSeenVersion < 377) {
+		if(lastSeenVersion < 378) {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.SIP_AUDIO_MODE, guessInCallMode());
 		}
 		

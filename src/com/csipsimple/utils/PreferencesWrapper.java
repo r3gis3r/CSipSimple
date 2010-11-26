@@ -66,6 +66,7 @@ public class PreferencesWrapper {
 	public static final String LOG_LEVEL = "log_level";
 	public static final String DTMF_MODE = "dtmf_mode";
 	public static final String USE_ROUTING_API = "use_routing_api";
+	public static final String USE_MODE_API = "use_mode_api";
 	public static final String SIP_AUDIO_MODE = "sip_audio_mode";
 	
 	public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
@@ -156,6 +157,7 @@ public class PreferencesWrapper {
 		put(ENABLE_VAD, false);
 		put(USE_SOFT_VOLUME, false);
 		put(USE_ROUTING_API, false);
+		put(USE_MODE_API, false);
 		
 		put(PREVENT_SCREEN_ROTATION, true);
 		put(ICON_IN_STATUS_BAR, true);
@@ -191,6 +193,7 @@ public class PreferencesWrapper {
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
 		connectivityManager = (ConnectivityManager) aContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		resolver = aContext.getContentResolver();
+		
 	}
 	
 
@@ -588,6 +591,10 @@ public class PreferencesWrapper {
 	
 	public boolean getUseRoutingApi() {
 		return getPreferenceBooleanValue(USE_ROUTING_API);
+	}
+	
+	public boolean getUseModeApi() {
+		return getPreferenceBooleanValue(USE_MODE_API);
 	}
 	
 	/**

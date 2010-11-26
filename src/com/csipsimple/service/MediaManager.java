@@ -102,20 +102,34 @@ public class MediaManager {
 		
 		mediaStateChangedIntent = new Intent(SipService.ACTION_SIP_MEDIA_CHANGED);
 		
-		if(bluetoothClassAvailable) {
-			bluetoothWrapper = new BluetoothWrapper(service, this);
-		}
-		audioFocusWrapper = new AudioFocusWrapper(service, audioManager);
 		MODE_SIP_IN_CALL = service.prefsWrapper.getInCallMode();
 		
+	}
+	
+	public void startService() {
+		if(bluetoothWrapper == null) {
+			if(bluetoothClassAvailable) {
+				bluetoothWrapper = new BluetoothWrapper(service, this);
+			}
+		}
+		if(audioFocusWrapper == null) {
+			audioFocusWrapper = new AudioFocusWrapper(service, audioManager);
+		}
 	}
 	
 	public void stopService() {
 		Log.i(THIS_FILE, "Remove media manager....");
 		if(bluetoothWrapper != null) {
-			bluetoothWrapper.destroy();
-			bluetoothWrapper = null;
+			bluetoothWrapper.unregister();
 		}
+	}
+	
+	private int getAudioTargetMode() {
+		int targetMode = MODE_SIP_IN_CALL;
+		if(service.prefsWrapper.getUseModeApi()) {
+			return userWantSpeaker ? AudioManager.MODE_NORMAL : AudioManager.MODE_IN_CALL;
+		}
+		return targetMode;
 	}
 	
 	/**
@@ -136,16 +150,18 @@ public class MediaManager {
 		audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
 		
 		
-		
+		int targetMode = getAudioTargetMode();
 		Log.d(THIS_FILE, "Set mode audio in call");
 		//Set mode
-		//For galaxy S we need to set in call mode before to reset stack
-		audioManager.setMode(AudioManager.MODE_IN_CALL);
+		if(targetMode != AudioManager.MODE_IN_CALL) {
+			//For galaxy S we need to set in call mode before to reset stack
+			audioManager.setMode(AudioManager.MODE_IN_CALL);
+		}
 		
-		audioManager.setMode(MODE_SIP_IN_CALL);
+		audioManager.setMode(targetMode);
 		//Routing
 		if(service.prefsWrapper.getUseRoutingApi()) {
-			audioManager.setRouting(MODE_SIP_IN_CALL, userWantSpeaker?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
+			audioManager.setRouting(targetMode, userWantSpeaker?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 		}else {
 			audioManager.setSpeakerphoneOn(userWantSpeaker ? true : false);
 		}
@@ -228,7 +244,7 @@ public class MediaManager {
 			savedSpeakerPhone = audioManager.isSpeakerphoneOn();
 		}
 		savedMode = audioManager.getMode();
-		savedRoute = audioManager.getRouting(MODE_SIP_IN_CALL);
+		savedRoute = audioManager.getRouting(getAudioTargetMode());
 		
 		isSavedAudioState = true;
 		
@@ -252,10 +268,10 @@ public class MediaManager {
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
 		audioManager.setRingerMode(savedRingerMode);
 		
-		
+		int targetMode = getAudioTargetMode();
 		
 		if(service.prefsWrapper.getUseRoutingApi()) {
-			audioManager.setRouting(MODE_SIP_IN_CALL, savedRoute, AudioManager.ROUTE_ALL);
+			audioManager.setRouting(targetMode, savedRoute, AudioManager.ROUTE_ALL);
 		}else {
 			audioManager.setSpeakerphoneOn(savedSpeakerPhone);
 		}

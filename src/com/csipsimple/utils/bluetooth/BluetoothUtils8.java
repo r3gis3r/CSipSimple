@@ -66,7 +66,7 @@ public class BluetoothUtils8 {
 		context = aContext;
 		manager = aManager;
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		context.registerReceiver(mediaStateReceiver , new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
+		register();
 	}
 	
 	public boolean canBluetooth() {
@@ -125,8 +125,12 @@ public class BluetoothUtils8 {
 	public boolean isBluetoothOn() {
 		return isBluetoothConnected;
 	}
+	
+	public void register() {
+		context.registerReceiver(mediaStateReceiver , new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
+	}
 
-	public void destroy() {
+	public void unregister() {
 		try {
 			context.unregisterReceiver(mediaStateReceiver);
 		}catch(Exception e) {

@@ -76,9 +76,16 @@ public class BluetoothWrapper {
 		return false;
 	}
 
-	public void destroy() {
+	public void register() {
 		if(butils8 != null) {
-			butils8.destroy();
+			butils8.register();
+		}
+	}
+	
+	
+	public void unregister() {
+		if(butils8 != null) {
+			butils8.unregister();
 		}
 	}
 }

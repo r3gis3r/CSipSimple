@@ -65,8 +65,6 @@
 <string name="enable_qos_desc">Enable QoS on packets</string>
 <string name="dscp_val">DSCP value</string>
 <string name="dscp_val_desc">DSCP value for SIP traffic</string>
-<string name="sip_audio_mode">Audio mode for SIP calls</string>
-<string name="sip_audio_mode_desc">Change only if developers advise you to</string>
 
 <!-- Security -->
 <string name="tls">TLS</string>
@@ -128,6 +126,10 @@
 <string name="use_soft_volume_desc">Use software volume instead of android volume</string>
 <string name="use_routing_api">Use routing API</string>
 <string name="use_routing_api_desc">Try to enable that if audio is routing to speaker instead of earpiece</string>
+<string name="use_mode_api">Use Mode audio API</string>
+<string name="use_mode_api_desc">Try to enable that if audio is routing to speaker instead of earpiece</string>
+<string name="sip_audio_mode">Audio mode for SIP calls</string>
+<string name="sip_audio_mode_desc">Change only if developers advise you to</string>
 
 
 <!-- UI -->
