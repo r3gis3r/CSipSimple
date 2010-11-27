@@ -76,7 +76,7 @@
   <string name="tls_password">TLS password</string>
   <string name="tls_password_desc">TLS password per il file della chiave privata</string>
   <string name="verify_server">Controlla server</string>
-  <string name="verify_server_desc">Verificail certificato del server</string>
+  <string name="verify_server_desc">Verifica il certificato del server</string>
   <string name="verify_client">Controlla client</string>
   <string name="verify_client_desc">Verifica il certificato del client</string>
   <string name="tls_method">Metodo TLS</string>
@@ -111,6 +111,8 @@
   <string name="sip_dtmf_desc">Come inviare DTMF</string>
   <string name="use_soft_volume">Usa volume software</string>
   <string name="use_soft_volume_desc">Usa il volume software invece di quello Android</string>
+  <string name="use_routing_api">Usa le API di routing</string>
+  <string name="use_routing_api_desc">Prova ad abilitare se l\'audio è indirizzato allo speaker, invece dell\'auricolare</string>
   <string name="general_ui">Interfaccia utente generale</string>
   <string name="native_dialer_integration">Integrazione con il dialer nativo</string>
   <string name="advanced_ui">Tweaks avanzati</string>

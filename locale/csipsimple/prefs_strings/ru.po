@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-25 22:40+0100\n"
-"PO-Revision-Date: 2010-10-05 18:28+0000\n"
+"PO-Revision-Date: 2010-11-25 15:35+0000\n"
 "Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
@@ -69,11 +69,11 @@ msgstr "Производительность"
 
 msgctxt "transport"
 msgid "Transport"
-msgstr "Передача данных"
+msgstr "Протокол"
 
 msgctxt "transport_desc"
 msgid "Force the use of a transport for this account"
-msgstr ""
+msgstr "Принудительно использовать протокол шифрования для данного аккаунта"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -145,7 +145,7 @@ msgstr "UDP"
 
 msgctxt "enable_udp_desc"
 msgid "Enable UDP transport"
-msgstr "Поддерживать UDP протокол"
+msgstr "Включить UDP протокол"
 
 msgctxt "network_udp_transport_port"
 msgid "UDP Port"
@@ -243,24 +243,24 @@ msgstr "STUN сервер (HOST:PORT)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr ""
+msgstr "Включить QoS"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
-msgstr ""
+msgstr "Система поддержки качества и класса передачи данных"
 
 msgctxt "dscp_val"
 msgid "DSCP value"
-msgstr ""
+msgstr "Значение DSCP"
 
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
-msgstr ""
+msgstr "Значение DSCP для SIP трафика"
 
 #. Security
 msgctxt "tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "secure_transport"
 msgid "Secure transport"
@@ -268,11 +268,11 @@ msgstr "Безопасный протокол"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
-msgstr ""
+msgstr "Механизм безопасности для SIP и RTP"
 
 msgctxt "secure_media"
 msgid "Secure media"
-msgstr ""
+msgstr "Безопасность мультимедиа"
 
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
@@ -284,67 +284,67 @@ msgstr "Номер порта для локальной привязки"
 
 msgctxt "network_tls_server_name"
 msgid "TLS server name"
-msgstr ""
+msgstr "Имя TSL-сервера"
 
 msgctxt "network_tls_server_name_desc"
 msgid "For multi-hosting server (optional)"
-msgstr ""
+msgstr "Для мультихостинговых серверов (опционально)"
 
 msgctxt "ca_list_file"
 msgid "TLS CA file"
-msgstr ""
+msgstr "TLS CA файл"
 
 msgctxt "ca_list_file_desc"
 msgid "For example /sdcard/CSipSimple/myAuthority.ca"
-msgstr ""
+msgstr "Например: /sdcard/CSipSimple/myAuthority.ca"
 
 msgctxt "cert_file"
 msgid "TLS certificate file"
-msgstr ""
+msgstr "Файл сертификата TLS"
 
 msgctxt "cert_file_desc"
 msgid "For example /sdcard/CSipSimple/myCert.crt"
-msgstr ""
+msgstr "Например: /sdcard/CSipSimple/myCert.crt"
 
 msgctxt "privkey_file"
 msgid "TLS private key file"
-msgstr ""
+msgstr "Файл с личным ключом TLS"
 
 msgctxt "privkey_file_desc"
 msgid "For example /sdcard/CSipSimple/myKey.key"
-msgstr ""
+msgstr "Например: /sdcard/CSipSimple/myKey.key"
 
 msgctxt "tls_password"
 msgid "TLS password"
-msgstr ""
+msgstr "TLS пароль"
 
 msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
-msgstr ""
+msgstr "TSL пароль к файлу с личным ключом"
 
 msgctxt "verify_server"
 msgid "Check server"
-msgstr ""
+msgstr "Проверить сервер"
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
-msgstr ""
+msgstr "Определить сертификат сервера"
 
 msgctxt "verify_client"
 msgid "Check client"
-msgstr ""
+msgstr "Проверять клиента"
 
 msgctxt "verify_client_desc"
 msgid "Verify client's certificate"
-msgstr ""
+msgstr "Определять сертификат клиента"
 
 msgctxt "tls_method"
 msgid "TLS Method"
-msgstr ""
+msgstr "TLS метод"
 
 msgctxt "tls_method_desc"
 msgid "Method for TLS transport"
-msgstr ""
+msgstr "Метод TLS протокола"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -455,11 +455,11 @@ msgstr "Приоритет (0 - отключено)"
 
 msgctxt "sip_dtmf"
 msgid "DTMF mode"
-msgstr ""
+msgstr "DTMF режим"
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
-msgstr ""
+msgstr "Каким образом отправлять DTMF"
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
@@ -536,7 +536,7 @@ msgstr "Использовать изначально текстовый ном�
 
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr ""
+msgstr "Не использовать слайдер"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"

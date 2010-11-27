@@ -59,5 +59,6 @@ msgstr "Proxy"
 
 msgctxt "w_advanced_proxy_desc"
 msgid "Proxy domain/IP[:port] (optional, not always needed)"
-msgstr "Proxy domain/IP[:port] (opcionális, nem minden SIP fiókhoz szükséges)"
+msgstr ""
+"Proxy domain/IP[:port] (opcionális, nem minden SIP fiókhoz szükséges)"
 

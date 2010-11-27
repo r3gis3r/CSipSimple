@@ -8,6 +8,7 @@
   <string name="menu_call">Hívás</string>
   <string name="menu_delete_all">Mind törlése</string>
   <string name="anonymous_recipient">Ismeretlen címzett</string>
+  <string name="messagelist_sender_self">Magam</string>
   <string name="delete_message">Az üzenet törlése</string>
   <string name="kilobyte">KB</string>
   <string name="download">Letöltés</string>

@@ -111,6 +111,8 @@
   <string name="sip_dtmf_desc">Manière d\'envoyer les signaux DTMF</string>
   <string name="use_soft_volume">Utiliser le volume logiciel</string>
   <string name="use_soft_volume_desc">Utiliser le volume logiciel au lieu du volume Android</string>
+  <string name="use_routing_api">Utiliser l\'API de routing</string>
+  <string name="use_routing_api_desc">Essayer d\'activer cela si le son est sur le haut parleur au lieu de l\'écouteur</string>
   <string name="general_ui">Interface utilisateur générale</string>
   <string name="native_dialer_integration">Intégration au numéroteur Android</string>
   <string name="advanced_ui">Modifications avancées</string>

@@ -325,7 +325,7 @@ msgstr "Controlla server"
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
-msgstr "Verificail certificato del server"
+msgstr "Verifica il certificato del server"
 
 msgctxt "verify_client"
 msgid "Check client"
@@ -467,11 +467,13 @@ msgstr "Usa il volume software invece di quello Android"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
-msgstr ""
+msgstr "Usa le API di routing"
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
+"Prova ad abilitare se l'audio è indirizzato allo speaker, invece "
+"dell'auricolare"
 
 #. UI
 msgctxt "general_ui"

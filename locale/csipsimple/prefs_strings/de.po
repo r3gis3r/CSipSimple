@@ -263,7 +263,7 @@ msgstr ""
 
 msgctxt "secure_transport"
 msgid "Secure transport"
-msgstr ""
+msgstr "Gesicherte Übertragung"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
@@ -321,10 +321,9 @@ msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
 msgstr ""
 
-#, fuzzy
 msgctxt "verify_server"
 msgid "Check server"
-msgstr "TURN Server"
+msgstr ""
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
@@ -535,10 +534,9 @@ msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
 msgstr "Startet mit Textwähler"
 
-#, fuzzy
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr "Rufannahme durch Schieben verhindern"
+msgstr ""
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"

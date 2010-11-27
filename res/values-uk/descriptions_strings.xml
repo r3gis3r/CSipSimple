@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="description_image_button_one">один</string>
+  <string name="description_image_button_two">два</string>
+  <string name="description_image_button_three">три</string>
+  <string name="description_image_button_four">чотири</string>
+  <string name="description_image_button_five">п\'ять</string>
+  <string name="description_image_button_six">шість</string>
+  <string name="description_image_button_seven">сім</string>
+  <string name="description_image_button_eight">вісім</string>
+  <string name="description_image_button_nine">дев\'ять</string>
+  <string name="description_image_button_star">зірка</string>
+  <string name="description_image_button_zero">нуль</string>
+  <string name="description_image_button_pound">натисніть</string>
+  <string name="description_dial_button">набір</string>
+  <string name="description_delete_button">backspace</string>
+  <string name="description_digits_edittext">номер для додзвону</string>
+</resources>

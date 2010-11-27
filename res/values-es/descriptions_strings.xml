@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="description_image_button_one">uno</string>
+  <string name="description_image_button_two">dos</string>
+  <string name="description_image_button_three">tres</string>
+  <string name="description_image_button_four">cuatro</string>
+  <string name="description_image_button_five">cinco</string>
+  <string name="description_image_button_six">seis</string>
+  <string name="description_image_button_seven">siete</string>
+  <string name="description_image_button_eight">ocho</string>
+  <string name="description_image_button_nine">nueve</string>
+  <string name="description_image_button_star">asterisco</string>
+  <string name="description_image_button_zero">cero</string>
+  <string name="description_image_button_pound">almohadilla</string>
+  <string name="description_dial_button">marcar</string>
+  <string name="description_delete_button">borrar</string>
+  <string name="description_digits_edittext">número a marcar</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_sipgate_display_name">Назва облікового запису</string>
+  <string name="w_sipgate_display_name_desc">Ім\'я акаунту</string>
+  <string name="w_sipgate_username">SIP-ID</string>
+  <string name="w_sipgate_username_desc">Логін інший! Перевірте на сайті Sipgate ваш SIP-ID</string>
+  <string name="w_sipgate_password">SIP пароль</string>
+  <string name="w_sipgate_password_desc">Інший від Вашого пароля! Перевірте на сайті ваш SIP пароль</string>
+  <string name="w_sipgate_server_desc">Щось на зразок: sipgate.co.uk</string>
+</resources>

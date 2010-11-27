@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_iinet_state">Область</string>
+  <string name="w_iinet_state_desc">Відповідного держави з наступного списку</string>
+  <string name="w_iinet_username">VoIP телефон</string>
+  <string name="w_iinet_username_desc">Видаліть все форматування, таке як пробіли і тире</string>
+  <string name="w_iinet_password">VoIP пароль</string>
+  <string name="w_iinet_password_desc">Не такий як пароль конекту</string>
+</resources>

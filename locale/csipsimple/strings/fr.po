@@ -231,14 +231,19 @@ msgid "Pickup SIP contact"
 msgstr "Recherche d'URI SIP"
 
 msgctxt "display_icon_in_status_bar_desc"
-msgid "Should the application display an icon in the status bar when registered"
+msgid ""
+"Should the application display an icon in the status bar when registered"
 msgstr ""
+"L'application doit-elle afficher une icone dans la barre de notification "
+"lorsque enregistrée"
 
 msgctxt "display_icon_in_status_bar"
 msgid "Display icon in status bar"
-msgstr ""
+msgstr "Afficher une icône dans la barre de notification"
 
 msgctxt "another_application_use_sip_port"
 msgid "Another application is currently using SIP port! Can't start !!!"
 msgstr ""
+"Une autre application utilise actuellement le port SIP! Impossible de "
+"démarrer !!!"
 

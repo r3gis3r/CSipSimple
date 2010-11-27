@@ -51,9 +51,9 @@ msgstr "Password per il tuo account"
 
 msgctxt "w_common_server"
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 msgctxt "w_common_server_desc"
 msgid "SIP server domain/IP[:port]"
-msgstr ""
+msgstr "SIP server dominio/IP[:porta]"
 

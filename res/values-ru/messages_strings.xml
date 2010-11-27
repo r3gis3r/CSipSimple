@@ -1,2 +1,37 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">Сообщения</string>
+  <string name="new_message">Новое сообщение</string>
+  <string name="create_new_message">Написать новое сообщение</string>
+  <string name="menu_compose_new">Новое сообщение</string>
+  <string name="menu_add_address_to_contacts">"Добавить "<xliff:g id="name">%s</xliff:g>" в контакты"</string>
+  <string name="menu_call">Вызов</string>
+  <string name="menu_delete_all">Удалить цепочку</string>
+  <string name="menu_delete">Удалить цепочку</string>
+  <string name="menu_view">Просмотреть цепочку</string>
+  <string name="anonymous_recipient">Анонимный</string>
+  <string name="messagelist_sender_self">Я</string>
+  <string name="delete_message">Удалить сообщение</string>
+  <string name="sent_on">"Отправлено: "<xliff:g id="date">%s</xliff:g></string>
+  <string name="kilobyte">Кб</string>
+  <string name="undelivered_msg_dialog_title">Недоставленное сообщение</string>
+  <string name="undelivered_sms_dialog_body">Невозможно доставить сообщение.</string>
+  <string name="delete_thread">Удалить цепочку</string>
+  <string name="download">Загрузить</string>
+  <string name="downloading">Идёт загрузка</string>
+  <string name="name_colon"><b><xliff:g id="name" example="Я">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">Копировать текст</string>
+  <string name="message_options">Параметры сообщения</string>
+  <string name="done">Выполнено</string>
+  <string name="compose_title">Создать</string>
+  <string name="add_attachment">Прикрепить</string>
+  <string name="view">Вид</string>
+  <string name="send">Отправить</string>
+  <string name="all_threads">Все цепочки</string>
+  <string name="type_to_compose_text_enter_to_send">Написать текст</string>
+  <string name="open_keyboard_to_compose_message">Открыть клавиатуру</string>
+  <string name="image_too_large">Картинка слишком большая</string>
+  <string name="ask_for_automatically_resize">Автоматически изменять размер картинки перед отправкой?</string>
+  <string name="compressing">Картинка лишком большая. Сжатие\\u2026</string>
+  <string name="unsupported_media_format">"Неподдерживаемый "<xliff:g id="name">%1$s</xliff:g>" формат"</string>
+</resources>

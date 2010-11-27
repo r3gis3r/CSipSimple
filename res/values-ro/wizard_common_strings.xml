@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_common_display_name">Nume cont</string>
+  <string name="w_common_username">Nume utilizator</string>
+  <string name="w_common_password">Parolă</string>
+  <string name="w_common_server">Server</string>
+</resources>

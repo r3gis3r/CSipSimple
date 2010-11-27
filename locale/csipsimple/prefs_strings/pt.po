@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the CSipSimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
@@ -549,8 +548,8 @@ msgstr "Manter acordado durante a chamada"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corrige se obtiver som instável quando o ecrã se desliga durante uma "
-"chamada WiFi"
+"Corrige se obtiver som instável quando o ecrã se desliga durante uma chamada "
+"WiFi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"

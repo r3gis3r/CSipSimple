@@ -54,6 +54,7 @@
   <string name="enable_stun_desc">Aktiviert die STUN Funktionalität</string>
   <string name="stun_server">STUN Server</string>
   <string name="stun_server_desc">STUN Server (HOST:PORT)</string>
+  <string name="secure_transport">Gesicherte Übertragung</string>
   <string name="network_tls_transport_port">TLS Port</string>
   <string name="network_tls_transport_port_desc">Lokale TLS Portnummer</string>
   <string name="use_srtp">SRTP-Modus</string>

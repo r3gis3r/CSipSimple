@@ -27,11 +27,11 @@
 	<FrameLayout android:id="@+id/FrameLayout01" android:layout_width="fill_parent"
 		android:layout_weight="0" android:layout_height="wrap_content">
 		<Button android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:text="Next" android:id="@+id/next_button" android:visibility="gone"></Button>
+			android:text="@string/next" android:id="@+id/next_button" android:visibility="gone"></Button>
 		<ProgressBar android:indeterminate="true" style="?android:attr/progressBarStyleHorizontal"
 			android:layout_width="fill_parent" android:layout_height="20dip" android:id="@+id/dl_progressbar"></ProgressBar>
 		<TextView android:layout_height="fill_parent" android:layout_width="fill_parent"
-			android:gravity="center" android:id="@+id/dl_text" android:text="Init..."
+			android:gravity="center" android:id="@+id/dl_text" android:text="@string/init"
 			android:textAppearance="?android:attr/textAppearanceSmall"></TextView>
 	</FrameLayout>
 

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">Назва облікового запису</string>
+  <string name="w_expert_display_name_desc">Ім\'я акаунту</string>
+  <string name="w_expert_acc_id">ІД акаунта</string>
+  <string name="w_expert_acc_id_desc">Формат: Імя Прізвище &lt;sip:login\@registrar&gt;</string>
+  <string name="w_expert_reg_uri">URI реєстрації</string>
+  <string name="w_expert_reg_uri_desc">Формат: sip:registrar.net[:порт]</string>
+  <string name="w_expert_realm">Сфера</string>
+  <string name="w_expert_realm_desc">Домен аутентифікації (якщо незнаєте, використейте \'*\')</string>
+  <string name="w_expert_username">Ім\'я користувача</string>
+  <string name="w_expert_username_desc">Ім\'я користувача для аутентифікації</string>
+  <string name="w_expert_data">Пароль</string>
+  <string name="w_expert_data_desc">Пароль (чи інші дані) для аутентифікації</string>
+  <string name="w_expert_t_proxy">Проксі-сервер</string>
+  <string name="w_expert_proxy">Проксі URI</string>
+  <string name="w_expert_proxy_desc">Формат: sip:proxy.net[:порт]</string>
+  <string name="w_expert_use_tcp">Використовувати TCP (не UDP)</string>
+  <string name="w_expert_prevent_tcp">Не використовувати TCP (використовувати тільки UDP)</string>
+  <string name="w_expert_publish_enabled">Публікація включена</string>
+  <string name="w_expert_reg_timeout">Тайм-аут реєстрації (сек)</string>
+  <string name="w_expert_ka_interval">Keep-alive інтервал (сек)</string>
+  <string name="w_expert_force_contact">Переписати контакт</string>
+  <string name="w_expert_allow_contact_rewrite">Дозволити контакт переписати</string>
+  <string name="w_expert_contact_rewrite_method">Метод перепису контакта</string>
+</resources>

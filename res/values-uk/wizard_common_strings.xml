@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_common_display_name">Назва облікового запису</string>
+  <string name="w_common_display_name_desc">Ім\'я акаунту</string>
+  <string name="w_common_username">Ім\'я користувача</string>
+  <string name="w_common_username_desc">Логін SIP акаунта</string>
+  <string name="w_common_phone_number">Номер телефону</string>
+  <string name="w_common_phone_number_desc">Номер телефону наданий Вашим провайдером</string>
+  <string name="w_common_password">Пароль</string>
+  <string name="w_common_password_desc">Пароль для вашого акаунта</string>
+  <string name="w_common_server">Сервер</string>
+  <string name="w_common_server_desc">Домен SIP сервера/IP[:порт]</string>
+</resources>

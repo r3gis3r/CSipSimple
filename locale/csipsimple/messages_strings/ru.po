@@ -3,207 +3,208 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-25 22:42+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: csipsimple 0.01\n"
+"Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
+"PO-Revision-Date: 2010-11-25 16:15+0000\n"
+"Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-11-26 05:14+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: Babel 1.0dev\n"
 
 #. The name of the SMS/MMS app as it appears to the user in the Home screen,
 #. task switcher, etc.
 msgctxt "app_label"
 msgid "Messaging"
-msgstr ""
+msgstr "Сообщения"
 
 #. Command name to open a Compose screen; displays in conversation list
 msgctxt "new_message"
 msgid "New message"
-msgstr ""
+msgstr "Новое сообщение"
 
 #. Summary text under "New Message" command; displays in conversation list
 msgctxt "create_new_message"
 msgid "Compose new message"
-msgstr ""
+msgstr "Написать новое сообщение"
 
 #. Menu item for starting a new conversation
 msgctxt "menu_compose_new"
 msgid "Compose"
-msgstr ""
+msgstr "Новое сообщение"
 
 #, c-format
 msgctxt "menu_add_address_to_contacts"
 msgid "Add <xliff:g id=\"name\">%s</xliff:g> to Contacts"
-msgstr ""
+msgstr "Добавить <xliff:g id=\"name\">%s</xliff:g> в контакты"
 
 #. Menu item to call the recipient of the conversation on the phone
 #. (imperative verb)
 msgctxt "menu_call"
 msgid "Call"
-msgstr ""
+msgstr "Вызов"
 
 #. Menu item for deleting all conversations
 msgctxt "menu_delete_all"
 msgid "Delete threads"
-msgstr ""
+msgstr "Удалить цепочку"
 
 #. Context menu item on an individual conversation for deleting that
 #. conversation
 msgctxt "menu_delete"
 msgid "Delete thread"
-msgstr ""
+msgstr "Удалить цепочку"
 
 #. Context menu item on an individual conversation for viewing that
 #. conversation
 msgctxt "menu_view"
 msgid "View thread"
-msgstr ""
+msgstr "Просмотреть цепочку"
 
 #. Name to use when we have an unspecified sender
 msgctxt "anonymous_recipient"
 msgid "Anonymous"
-msgstr ""
+msgstr "Анонимный"
 
 #. Name of the local user when displaying sender of an outgoing message
 #. (personal pronoun)
 msgctxt "messagelist_sender_self"
 msgid "Me"
-msgstr ""
+msgstr "Я"
 
 msgctxt "delete_message"
 msgid "Delete message"
-msgstr ""
+msgstr "Удалить сообщение"
 
 #. Time and date a message was sent
 #, c-format
 msgctxt "sent_on"
 msgid "Sent: <xliff:g id=\"date\">%s</xliff:g>"
-msgstr ""
+msgstr "Отправлено: <xliff:g id=\"date\">%s</xliff:g>"
 
 #. Abbreviation for "kilobyte"
 msgctxt "kilobyte"
 msgid "KB"
-msgstr ""
+msgstr "Кб"
 
 #. Dialog box title brought up when warning the user that a message could not
 #. be delivered
 msgctxt "undelivered_msg_dialog_title"
 msgid "Undelivered message"
-msgstr ""
+msgstr "Недоставленное сообщение"
 
 #. Dialog box message indicating that a message could not be delivered
 msgctxt "undelivered_sms_dialog_body"
 msgid "Unable to send this message."
-msgstr ""
+msgstr "Невозможно доставить сообщение."
 
 #. Menu item for deleting the entire conversation currently being viewed
 msgctxt "delete_thread"
 msgid "Delete thread"
-msgstr ""
+msgstr "Удалить цепочку"
 
 #. Text of a button appearing for MMS messages that have not yet been
 #. downloaded, causing the message          to be downloaded (imperative verb)
 msgctxt "download"
 msgid "Download"
-msgstr ""
+msgstr "Загрузить"
 
 #. Message displayed in place of the "download message" button once it has
 #. been pressed,          indicating that the download is in progress
 msgctxt "downloading"
 msgid "Downloading"
-msgstr ""
+msgstr "Идёт загрузка"
 
 #. Formatting for prepending MMS message text with sender's name.
 #, c-format
 msgctxt "name_colon"
 msgid "<b><xliff:g id=\"name\" example=\"Me\">%s</xliff:g></b>: "
-msgstr ""
+msgstr "<b><xliff:g id=\"name\" example=\"Я\">%s</xliff:g></b>: "
 
 #. Individual message context menu item
 msgctxt "copy_message_text"
 msgid "Copy message text"
-msgstr ""
+msgstr "Копировать текст"
 
 #. Header for context menu on an individual message
 msgctxt "message_options"
 msgid "Message options"
-msgstr ""
+msgstr "Параметры сообщения"
 
 #. Button text on edit slide screen indicating the user wants to finish
 #. editing that slide
 msgctxt "done"
 msgid "Done"
-msgstr ""
+msgstr "Выполнено"
 
 #. Title bar displayed in compose message activity before a recipient has been
 #. selected
 msgctxt "compose_title"
 msgid "Compose"
-msgstr ""
+msgstr "Создать"
 
 #. Menu item in conversation screen for attaching something to the message
 #. being composed
 msgctxt "add_attachment"
 msgid "Attach"
-msgstr ""
+msgstr "Прикрепить"
 
 #. Button next to an attachment during message composition to view the
 #. attachment (imperative verb)
 msgctxt "view"
 msgid "View"
-msgstr ""
+msgstr "Вид"
 
 #. Button in conversation screen for sending the SMS message currently being
 #. composed (imperative verb)
 msgctxt "send"
 msgid "Send"
-msgstr ""
+msgstr "Отправить"
 
 #. Menu item in conversation screen for returning to the conversation list
 msgctxt "all_threads"
 msgid "All threads"
-msgstr ""
+msgstr "Все цепочки"
 
 #. Hint text in message body field when keyboard is exposed
 msgctxt "type_to_compose_text_enter_to_send"
 msgid "Type to compose"
-msgstr ""
+msgstr "Написать текст"
 
 #. Hint text in message body field when keyboard is hidden
 msgctxt "open_keyboard_to_compose_message"
 msgid "Open keyboard to compose message"
-msgstr ""
+msgstr "Открыть клавиатуру"
 
 #. Dialog title for warning the user that the picture they are trying to
 #. attach is too large
 msgctxt "image_too_large"
 msgid "Picture too large"
-msgstr ""
+msgstr "Картинка слишком большая"
 
 #. Dialog message text asking the user if he wants to resize the picture being
 #. attached
 msgctxt "ask_for_automatically_resize"
 msgid "Automatically resize picture before sending?"
-msgstr ""
+msgstr "Автоматически изменять размер картинки перед отправкой?"
 
 #. Toast message while an image is being resized
 msgctxt "compressing"
 msgid "Picture too large. Compressing\\u2026"
-msgstr ""
+msgstr "Картинка лишком большая. Сжатие\\u2026"
 
 #. Error message indicating the format for the specified media type (e.g.
 #. "picture") is unsupported
 #, c-format
 msgctxt "unsupported_media_format"
 msgid "Unsupported <xliff:g id=\"name\">%1$s</xliff:g> format"
-msgstr ""
+msgstr "Неподдерживаемый <xliff:g id=\"name\">%1$s</xliff:g> формат"
 
 #. Context menu item on a message recipient for viewing their contact info
 msgctxt "menu_view_contact"

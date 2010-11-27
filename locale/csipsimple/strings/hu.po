@@ -229,7 +229,8 @@ msgid "Pickup SIP contact"
 msgstr "SIP kapcsolat használata"
 
 msgctxt "display_icon_in_status_bar_desc"
-msgid "Should the application display an icon in the status bar when registered"
+msgid ""
+"Should the application display an icon in the status bar when registered"
 msgstr ""
 
 msgctxt "display_icon_in_status_bar"

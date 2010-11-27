@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="acct_inactive">Desactivado</string>
+  <string name="acct_unregistered">No registrado</string>
+  <string name="acct_expired">Registro caducado</string>
+  <string name="acct_registering">Registrando...</string>
+  <string name="acct_registered">Registrado</string>
+  <string name="acct_regerror">Error al registrar</string>
+  <string name="acct_regfailed">Registro fallido - Compruebe su configuración</string>
+</resources>

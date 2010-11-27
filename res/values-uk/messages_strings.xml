@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">Обмін повідомленнями</string>
+  <string name="new_message">Нове повідомлення</string>
+  <string name="create_new_message">Створити нове повідомлення</string>
+  <string name="menu_compose_new">Скласти</string>
+  <string name="menu_add_address_to_contacts">"Додати "<xliff:g id="name">%s</xliff:g>" до контактів"</string>
+  <string name="menu_call">Дзвінок</string>
+  <string name="menu_delete_all">Видалити теми</string>
+  <string name="menu_delete">Видалити тему</string>
+  <string name="menu_view">Переглянути тему</string>
+  <string name="anonymous_recipient">Анонімний</string>
+  <string name="messagelist_sender_self">Я</string>
+  <string name="delete_message">Видалити повідомлення</string>
+  <string name="sent_on">"Відіслано: "<xliff:g id="date">%s</xliff:g></string>
+  <string name="kilobyte">КБ</string>
+  <string name="undelivered_msg_dialog_title">Недоставлене повідомлення</string>
+  <string name="undelivered_sms_dialog_body">Неможливо відправити це повідомлення</string>
+  <string name="delete_thread">Видалити тему</string>
+  <string name="download">Скачати</string>
+  <string name="downloading">Завантажується</string>
+  <string name="name_colon"><b><xliff:g id="name" example="Я">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">Скопіювати текст повідомлення</string>
+  <string name="message_options">Опції повідомлення</string>
+  <string name="done">Виконано</string>
+  <string name="compose_title">Написати</string>
+  <string name="add_attachment">Долучити</string>
+  <string name="view">Перегляд</string>
+  <string name="send">Відіслати</string>
+  <string name="all_threads">Всі теми</string>
+  <string name="type_to_compose_text_enter_to_send">Натисніть щоб створити</string>
+  <string name="open_keyboard_to_compose_message">Відкрити клавіатуру для набору тексту</string>
+  <string name="image_too_large">Зображення занадто велике</string>
+  <string name="ask_for_automatically_resize">Автоматична зміна розміру фотографії перед відправкою?</string>
+  <string name="compressing">Фото занадто велике. Стиснення\\u2026</string>
+  <string name="unsupported_media_format">"Непідтримуваний "<xliff:g id="name">%1$s</xliff:g>" формат"</string>
+  <string name="menu_view_contact">Переглянути контакт</string>
+  <string name="menu_add_to_contacts">Додати до контактів</string>
+  <string name="hidden_sender_address">Прихована адреса відправника</string>
+  <string name="yes">Гаразд</string>
+  <string name="no">Скасувати</string>
+  <string name="edit">Редагувати</string>
+  <string name="restore_default">Відновлення параметрів за замовчуванням</string>
+  <string name="confirm_dialog_title">Видалити</string>
+  <string name="confirm_delete_conversation">Весь потік буде видалено.</string>
+  <string name="confirm_delete_all_conversations">Всі потоки буде видалено.</string>
+  <string name="confirm_delete_message">Повідомлення буде видалено.</string>
+  <string name="confirm_delete_locked_message">Ви впевнені, що хочете видалити це повідомлення?</string>
+  <string name="confirm_delete_all_messages">Весь потік буде видалено.</string>
+  <string name="delete">Видалити</string>
+  <string name="status_none">(відсутні)</string>
+  <string name="status_pending">Очікування</string>
+  <string name="status_received">Отримані</string>
+  <string name="status_failed">Невдалий</string>
+  <string name="status_unread">Непрочитане</string>
+  <string name="status_rejected">Відхилено</string>
+  <string name="recipient_label">Отримувач:\\u0020</string>
+  <string name="status_label">Статус:\\u0020</string>
+  <string name="menu_insert_smiley">Вставити посмішку</string>
+  <string name="me">Я</string>
+  <string name="sending_message">Відсилання\\u2026</string>
+</resources>

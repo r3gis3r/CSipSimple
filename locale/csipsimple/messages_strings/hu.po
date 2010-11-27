@@ -74,7 +74,7 @@ msgstr "Ismeretlen címzett"
 #. (personal pronoun)
 msgctxt "messagelist_sender_self"
 msgid "Me"
-msgstr ""
+msgstr "Magam"
 
 msgctxt "delete_message"
 msgid "Delete message"

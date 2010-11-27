@@ -176,7 +176,8 @@ msgstr "Utiliser l'IPv6"
 
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
-msgstr "Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
+msgstr ""
+"Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
@@ -184,7 +185,8 @@ msgstr "Résoudre les DNS SRV"
 
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
-msgstr "Utiliser les DNS dans l'application pour résoudre les noms de domaine"
+msgstr ""
+"Utiliser les DNS dans l'application pour résoudre les noms de domaine"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
@@ -472,11 +474,13 @@ msgstr "Utiliser le volume logiciel au lieu du volume Android"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
-msgstr ""
+msgstr "Utiliser l'API de routing"
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
+"Essayer d'activer cela si le son est sur le haut parleur au lieu de "
+"l'écouteur"
 
 #. UI
 msgctxt "general_ui"

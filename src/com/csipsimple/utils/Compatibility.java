@@ -140,6 +140,12 @@ public class Compatibility {
 			}
 			return true;
 		}
+		//Dell streak is impacted
+		if(android.os.Build.BRAND.toLowerCase().equalsIgnoreCase("dell") &&
+				android.os.Build.DEVICE.equalsIgnoreCase("streak")) {
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -202,12 +208,6 @@ public class Compatibility {
 
 	public static void updateVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {
 		if (lastSeenVersion < 14) {
-			//HTC PSP mode hack
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, 
-					(android.os.Build.DEVICE.equalsIgnoreCase("passion") /*NEXUS ONE*/
-							|| android.os.Build.DEVICE.equalsIgnoreCase("bravo") /*HTC DESIRE*/
-							|| android.os.Build.DEVICE.equalsIgnoreCase("supersonic") /*HTC EVO*/
-					) ? true : false);
 			
 			// Galaxy S default settings
 			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
@@ -228,15 +228,18 @@ public class Compatibility {
 			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
 			}
-			if(needPspWorkaround(prefWrapper)) {
-				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, true);
-			}
+			
 		}
 		
 		if(lastSeenVersion < 378) {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.SIP_AUDIO_MODE, guessInCallMode());
+		}
+		if(lastSeenVersion < 380) {
+			if(needPspWorkaround(prefWrapper)) {
+				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, true);
+			}
 		}
 		
 		 

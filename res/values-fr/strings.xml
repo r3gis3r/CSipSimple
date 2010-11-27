@@ -49,4 +49,7 @@
   <string name="gadget_title">Interupteur de compte SIP</string>
   <string name="search_in_contacts">Chercher dans les contacts</string>
   <string name="pickup_sip_uri">Recherche d\'URI SIP</string>
+  <string name="display_icon_in_status_bar_desc">L\'application doit-elle afficher une icone dans la barre de notification lorsque enregistrée</string>
+  <string name="display_icon_in_status_bar">Afficher une icône dans la barre de notification</string>
+  <string name="another_application_use_sip_port">Une autre application utilise actuellement le port SIP! Impossible de démarrer !!!</string>
 </resources>
