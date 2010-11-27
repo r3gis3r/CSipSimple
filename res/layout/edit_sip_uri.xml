@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr) 
+
+	This file is part of CSipSimple.
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+ 
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:gravity="center_horizontal">
+	<LinearLayout 
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:id="@+id/topFieldText"
+		android:background="@drawable/btn_dial_textfield"
+		android:layout_marginBottom="10dip" android:orientation="horizontal" android:padding="0dip" >
+		<TextView android:text="sip:" android:id="@+id/protocolChooser"
+			android:gravity="left|center_vertical"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:paddingRight="10dip"></TextView>
+		<EditText android:layout_height="fill_parent"
+			android:layout_width="fill_parent" android:id="@+id/dialtxt_user"
+			android:gravity="left|center_vertical"
+			android:layout_weight="1" android:background="@android:color/transparent"
+			android:textColor="#FFF" android:lines="1" android:inputType="textFilter"></EditText>
+		<com.csipsimple.widgets.AccountChooserButton android:layout_width="wrap_content"
+			android:layout_weight="0" android:id="@+id/accountChooserButtonText"
+			android:layout_height="fill_parent" />
+	</LinearLayout>
+	<TextView android:id="@+id/dialtxt_domain_helper"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" 
+		android:gravity="right|center_vertical" android:paddingRight="10dip"/>
+	
+</LinearLayout>

@@ -26,8 +26,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.provider.Contacts;
 import android.text.TextUtils;
 
+@SuppressWarnings("deprecation")
 public class Compatibility {
 	
 	private static final String THIS_FILE = "Compat";
@@ -140,9 +142,14 @@ public class Compatibility {
 			}
 			return true;
 		}
-		//Dell streak is impacted
+		//Dell streak
 		if(android.os.Build.BRAND.toLowerCase().equalsIgnoreCase("dell") &&
 				android.os.Build.DEVICE.equalsIgnoreCase("streak")) {
+			return true;
+		}
+		//Incredible branded by verizon
+		if(android.os.Build.BRAND.toLowerCase().equalsIgnoreCase("verizon_wwe") &&
+				android.os.Build.DEVICE.equalsIgnoreCase("inc")) {
 			return true;
 		}
 		
@@ -205,6 +212,23 @@ public class Compatibility {
 		return canMakeGSMCall;
 	}
 
+	public static Intent getContactPhoneIntent() {
+    	Intent intent = new Intent(Intent.ACTION_PICK);
+    	/*
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		intent.setType(Contacts.Phones.CONTENT_ITEM_TYPE);
+		*/
+    	if (!isCompatible(5)) {
+    		intent.setData(Contacts.People.CONTENT_URI);
+    	}else {
+    		intent.setData(Uri.parse("content://com.android.contacts/contacts"));
+    	}
+    	
+
+		return intent;
+		
+    }
+
 
 	public static void updateVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {
 		if (lastSeenVersion < 14) {
@@ -236,7 +260,7 @@ public class Compatibility {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.SIP_AUDIO_MODE, guessInCallMode());
 		}
-		if(lastSeenVersion < 380) {
+		if(lastSeenVersion < 383) {
 			if(needPspWorkaround(prefWrapper)) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, true);
 			}

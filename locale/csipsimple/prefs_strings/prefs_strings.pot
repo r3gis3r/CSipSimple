@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-25 22:40+0100\n"
+"POT-Creation-Date: 2010-11-27 23:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -470,6 +470,22 @@ msgstr ""
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+msgctxt "use_mode_api"
+msgid "Use Mode audio API"
+msgstr ""
+
+msgctxt "use_mode_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr ""
+
+msgctxt "sip_audio_mode"
+msgid "Audio mode for SIP calls"
+msgstr ""
+
+msgctxt "sip_audio_mode_desc"
+msgid "Change only if developers advise you to"
 msgstr ""
 
 #. UI

@@ -34,7 +34,7 @@ import android.media.AudioManager;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.utils.Log;
 
-public class BluetoothUtils8 {
+public class BluetoothUtils8 extends BluetoothWrapper {
 
 	private static final String THIS_FILE = "BT8";
 	private AudioManager audioManager;
@@ -62,7 +62,7 @@ public class BluetoothUtils8 {
 	private Context context;
 	private MediaManager manager;
 
-	public BluetoothUtils8(Context aContext, MediaManager aManager) {
+	public void init(Context aContext, MediaManager aManager) {
 		context = aContext;
 		manager = aManager;
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -137,5 +137,6 @@ public class BluetoothUtils8 {
 			Log.w(THIS_FILE, "Failed to unregister media state receiver",e);
 		}
 	}
+
 
 }

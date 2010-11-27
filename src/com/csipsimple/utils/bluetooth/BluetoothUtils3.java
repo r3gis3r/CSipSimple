@@ -21,24 +21,34 @@ import android.content.Context;
 
 import com.csipsimple.service.MediaManager;
 
-public class BluetoothUtils7 {
+public class BluetoothUtils3 extends BluetoothWrapper {
 
-	//private AudioManager audioManager;
-
-	public BluetoothUtils7(Context context, MediaManager manager) {
-		//audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-	}
 
 	public boolean canBluetooth() {
 		return false;
 	}
 
 	public void setBluetoothOn(boolean on) {
-		// TODO Auto-generated method stub
+		// Do nothing
 		
 	}
 
 	public boolean isBluetoothOn() {
 		return false;
+	}
+
+	@Override
+	public void init(Context context, MediaManager manager) {
+		// Do nothing
+	}
+
+	@Override
+	public void register() {
+		//Do nothing
+	}
+
+	@Override
+	public void unregister() {
+		// Do nothing
 	}
 }

@@ -20,7 +20,6 @@ package com.csipsimple.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import android.text.TextUtils;
 
 public class SipUri {
@@ -93,4 +92,5 @@ public class SipUri {
 		}
 		return result;
     }
+    
 }

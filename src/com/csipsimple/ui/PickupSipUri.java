@@ -17,52 +17,96 @@
  */
 package com.csipsimple.ui;
 
-import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsuaConstants;
-
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.csipsimple.R;
-import com.csipsimple.utils.Log;
+import com.csipsimple.models.Account;
+import com.csipsimple.service.ISipService;
+import com.csipsimple.service.SipService;
+import com.csipsimple.widgets.EditSipUri;
+import com.csipsimple.widgets.EditSipUri.ToCall;
 
-public class PickupSipUri extends Activity implements OnClickListener, TextWatcher {
+public class PickupSipUri extends Activity implements OnClickListener {
 
 	private static final String THIS_FILE = "PickupUri";
-	private EditText sipUri;
+	private EditSipUri sipUri;
 	private Button okBtn;
+	private BroadcastReceiver registrationReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pickup_uri);
 		
-		sipUri = (EditText) findViewById(R.id.sip_uri);
-		sipUri.addTextChangedListener(this);
+		sipUri = (EditSipUri) findViewById(R.id.sip_uri);
 		
 		okBtn = (Button) findViewById(R.id.ok);
 		okBtn.setOnClickListener(this);
 		Button btn = (Button) findViewById(R.id.cancel);
 		btn.setOnClickListener(this);
 		
-		updateValidation();
+		
+		registrationReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				updateRegistrations();
+			}
+		};
+		
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// Bind service
+		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
+		registerReceiver(registrationReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+		// Unbind service
+		try {
+			unbindService(connection);
+		}catch (Exception e) {
+			//Just ignore that -- TODO : should be more clean
+		}
+
+		try {
+			unregisterReceiver(registrationReceiver);
+		} catch (Exception e) {
+			// Nothing to do here -- TODO : should be more clean
+		}
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.ok:
 			 Intent resultValue = new Intent();
-	         resultValue.putExtra(Intent.EXTRA_PHONE_NUMBER,
-	                            sipUri.getText().toString());
-			setResult(RESULT_OK, resultValue);
+			 ToCall result = sipUri.getValue();
+			 if(result != null) {
+				 resultValue.putExtra(Intent.EXTRA_PHONE_NUMBER,
+							result.getCallee());
+				 resultValue.putExtra(Account.FIELD_ACC_ID,
+							result.getAccountId());
+				 setResult(RESULT_OK, resultValue);
+			 }else {
+				setResult(RESULT_CANCELED);
+			 }
 			finish();
 			break;
 		case R.id.cancel:
@@ -72,35 +116,25 @@ public class PickupSipUri extends Activity implements OnClickListener, TextWatch
 		}
 	}
 	
-	void updateValidation(){
-		boolean valid = false;
-		String callee = sipUri.getText().toString();
-		//Log.d(THIS_FILE, "Update validation with "+callee);
-		try {
-		//	Log.d(THIS_FILE, "Is valid ? : "+pjsua.verify_sip_url(callee));
-			valid = (pjsua.verify_sip_url(callee) == pjsuaConstants.PJ_SUCCESS);
-		}catch (Exception e) {
-			Log.w(THIS_FILE, "Can't check validity");
+	private ISipService service;
+	private ServiceConnection connection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
+			service = ISipService.Stub.asInterface(arg1);
+			sipUri.updateService(service);
+			updateRegistrations();
 		}
-		
-		okBtn.setEnabled(valid);
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			service = null;
+		}
+
+	};
+	
+	private void updateRegistrations(){
+		sipUri.updateRegistration();
 	}
 	
-	
-	
-
-	@Override
-	public void afterTextChanged(Editable s) {
-		updateValidation();
-	}
-
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-		// Nothing to do;
-	}
-
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		updateValidation();
-	}
 }

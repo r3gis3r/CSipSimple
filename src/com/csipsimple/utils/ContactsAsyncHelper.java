@@ -18,25 +18,19 @@
  */
 package com.csipsimple.utils;
 
-import java.io.InputStream;
-import java.lang.reflect.*;
-
-import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.provider.Contacts.People;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.csipsimple.models.CallerInfo;
+import com.csipsimple.utils.contacts.ContactsWrapper;
 
-@SuppressWarnings("deprecation")
 public class ContactsAsyncHelper extends Handler {
     private static final String THIS_FILE = "ContactsAsyncHelper";
 	/**
@@ -54,6 +48,7 @@ public class ContactsAsyncHelper extends Handler {
     // constants
     private static final int EVENT_LOAD_IMAGE = 1;
     private static final int DEFAULT_TOKEN = -1;
+    private static ContactsWrapper contactsWrapper;
     
     // static objects
     private static Handler sThreadHandler;
@@ -86,34 +81,7 @@ public class ContactsAsyncHelper extends Handler {
             switch (msg.arg1) {
                 case EVENT_LOAD_IMAGE:
                 	Log.d(THIS_FILE, "get : "+args.uri.toString());
-                	Bitmap img = null;
-
-                    if(Compatibility.isCompatible(5) ) {
-                    	Log.d(THIS_FILE, "Trying Api 5 for loading photo");
-                    	try {
-                    		Class<?>[] paramTypes = new Class<?>[] {ContentResolver.class, Uri.class } ;
-                    		Object[] params = new Object[] { args.context.getContentResolver(), args.uri } ;
-                    		
-                    		Class<?> c = Class.forName("android.provider.ContactsContract$Contacts");
-                    		Method m = c.getDeclaredMethod("openContactPhotoInputStream", paramTypes);
-                    		InputStream s = (InputStream) m.invoke(null, params);	// Static method
-                    		img = BitmapFactory.decodeStream(s);
-                    		if (img != null) {
-                    			Log.d(THIS_FILE, "Success! Photo Bitmap ready to load");
-                    		}
-	                	} catch(IllegalArgumentException e) {
-	                		Log.w(THIS_FILE, "Failed to find contact photo");
-                    	} catch (Exception e) {
-                    		Log.e(THIS_FILE, "Failed to late-bind get photo Bitmap: ", e);
-                    	}
-                    }
-                    if (img == null) {
-	                	try {
-	                		img = People.loadContactPhoto(args.context, args.uri, args.defaultResource, null);
-	                	} catch(IllegalArgumentException e) {
-	                		Log.w(THIS_FILE, "Failed to find contact photo");
-	                	}
-                    }
+                	Bitmap img = contactsWrapper.getContactPhoto(args.context, args.uri, args.defaultResource);
                     if (img != null) {
                         args.result = img;
 
@@ -145,6 +113,7 @@ public class ContactsAsyncHelper extends Handler {
         HandlerThread thread = new HandlerThread("ContactsAsyncWorker");
         thread.start();
         sThreadHandler = new WorkerHandler(thread.getLooper());
+        contactsWrapper = ContactsWrapper.getInstance();
     }
     
     /**

@@ -44,6 +44,10 @@ public class CustomDistribution {
 		return null; 
 	}
 	
+	public static String getRootPackage() {
+		return "com.csipsimple";
+	}
+	
 	
 	//Ippi distribution
 	/*

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.00-15" android:versionCode="381">
+	android:versionName="0.00-15" android:versionCode="384">
 	<supports-screens android:smallScreens="true" 
 		android:normalScreens="true"
 		android:largeScreens="true"
 		/>
 	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="true">
 		<activity android:label="@string/app_name" android:name=".ui.SipHome" android:launchMode="singleTask"
-			android:screenOrientation="portrait"
+			android:screenOrientation="portrait" android:configChanges="orientation"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -56,26 +56,26 @@
 		<service android:name=".service.DownloadLibService"></service>
 		
 		<!-- Help -->
-		<activity android:name=".ui.help.Help" android:theme="@style/CupcakeDialog"></activity>
-		<activity android:name=".ui.help.Faq" android:theme="@style/CupcakeDialog"></activity>
+		<activity android:name=".ui.help.Help" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
+		<activity android:name=".ui.help.Faq" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
 		
 		<!-- Accounts -->
-		<activity android:name=".ui.AccountsList" android:label="@string/accounts"></activity>
-		<activity android:name=".ui.ReorderAccountsList" android:label="@string/accounts"></activity>
-		<activity android:name=".ui.AccountFilters" android:label="@string/filters"></activity>
-		<activity android:name=".ui.EditFilter" android:label="@string/filters" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name=".ui.AccountsList" android:label="@string/accounts" android:configChanges="orientation"/>
+		<activity android:name=".ui.ReorderAccountsList" android:label="@string/accounts" android:configChanges="orientation"/>
+		<activity android:name=".ui.AccountFilters" android:label="@string/filters" android:configChanges="orientation"/>
+		<activity android:name=".ui.EditFilter" android:label="@string/filters" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
 		
 
-		<activity android:name=".wizards.WizardChooser" android:theme="@android:style/Theme.Dialog"
+		<activity android:name=".wizards.WizardChooser" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation"
 			android:label="@string/choose_wizard"></activity>
 
 		<activity android:name=".ui.BuddyList"></activity>
 
 		<!-- Preferences -->
-		<activity android:name=".ui.prefs.MainPrefs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".ui.prefs.PrefsNetwork" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name=".ui.prefs.MainPrefs" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
+		<activity android:name=".ui.prefs.PrefsNetwork" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
+		<activity android:name=".ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
+		<activity android:name=".ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
 		<activity android:name=".ui.prefs.PrefsFast" android:label="@string/prefs_fast" 
 			android:theme="@style/CupcakeDialog" android:screenOrientation="portrait">
 			<intent-filter>
@@ -88,7 +88,7 @@
 		
 
 		<!-- Wizards -->
-		<activity android:name=".wizards.BasePrefsWizard" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name=".wizards.BasePrefsWizard" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
  
 		<!-- Call management -->
 		<receiver android:name=".service.OutgoingCall">
@@ -97,6 +97,7 @@
 			</intent-filter>
 		</receiver>
 		<activity android:name=".ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog"
+			android:configChanges="orientation"
 			android:launchMode="singleInstance">
 			
 			<intent-filter>
@@ -128,9 +129,11 @@
 		</activity>
 		
 		<activity android:name=".ui.PickupSipUri" android:label="@string/pickup_sip_uri" 
+			android:configChanges="orientation"
 			android:theme="@style/CupcakeDialog"></activity>
         
         <activity android:name=".ui.InCallMediaControl" android:label="@string/prefs_media" 
+        	android:configChanges="orientation"
 			android:theme="@style/CupcakeDialog"></activity>
         
         <receiver android:name=".service.HeadsetButtonReceiver"></receiver>
@@ -152,9 +155,9 @@
 		
 		
 		<!-- Messages -->
-		<activity android:name=".ui.messages.ConversationList" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".ui.messages.ConversationList" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
 		<activity android:name=".ui.messages.ComposeMessageActivity" android:theme="@android:style/Theme.NoTitleBar"
-                  android:windowSoftInputMode="stateHidden"
+                  android:windowSoftInputMode="stateHidden" android:configChanges="orientation"
                   android:launchMode="singleTop" />
 		
 		

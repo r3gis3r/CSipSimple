@@ -73,4 +73,5 @@
 	<string name="display_icon_in_status_bar_desc">Should the application display an icon in the status bar when registered</string>
     <string name="display_icon_in_status_bar">Display icon in status bar</string>
 	<string name="another_application_use_sip_port">Another application is currently using SIP port! Can\'t start !!!</string>
+	<string name="no_phone_found">No phone found for this contact</string>
 </resources>

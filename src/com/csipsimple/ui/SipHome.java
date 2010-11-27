@@ -20,10 +20,10 @@ package com.csipsimple.ui;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.TabActivity;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,17 +31,16 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Contacts;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -59,9 +58,10 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.contacts.ContactsWrapper;
+import com.csipsimple.utils.contacts.ContactsWrapper.Phone;
 import com.csipsimple.widgets.IndicatorTab;
 import com.csipsimple.wizards.BasePrefsWizard;
-import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class SipHome extends TabActivity {
@@ -91,6 +91,7 @@ public class SipHome extends TabActivity {
 
 	private boolean has_tried_once_to_activate_account = false;
 	private ImageButton pickupContact;
+	private ArrayAdapter<String> phoneChoiceAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -175,10 +176,8 @@ public class SipHome extends TabActivity {
 		pickupContact.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_GET_CONTENT);
-				intent.setType("vnd.android.cursor.item/phone");
-				startActivityForResult(intent, PICKUP_PHONE);
+				
+				startActivityForResult(Compatibility.getContactPhoneIntent(), PICKUP_PHONE);
 			}
 		});
 		
@@ -426,20 +425,55 @@ public class SipHome extends TabActivity {
 		finish();
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 		case PICKUP_PHONE:
 			if(resultCode == RESULT_OK) {
-				Uri uri = data.getData();
-				ContentResolver cr = getContentResolver();
-				Cursor cursor= cr.query(uri, null, null, null, null);
-				cursor.moveToFirst();
-				int index = cursor.getColumnIndex(Contacts.PhonesColumns.NUMBER);
-				String number = cursor.getString(index); 
-				
-				startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
+
+		    	Uri contactUri = data.getData();
+		        List<String> list = contactUri.getPathSegments();
+		        String contactId = list.get(list.size() - 1);
+		        ArrayList<Phone> phones = ContactsWrapper.getInstance().getPhoneNumbers(this, contactId);
+		        
+		        if(phones.size() == 0) {
+			        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		        	builder.setPositiveButton(R.string.ok, null);
+		        	builder.setMessage(R.string.no_phone_found);
+		        	AlertDialog dialog = builder.create();
+		        	dialog.show();
+		        }else if(phones.size() == 1) {
+		        	startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", phones.get(0).getNumber(), null)));
+		        }else {
+			        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					
+					ArrayList<String> entries = new ArrayList<String>();
+					for (Phone phone : phones) {
+						entries.add(phone.getNumber());
+					}
+					
+					phoneChoiceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, entries );
+					
+					builder.setTitle(R.string.pickup_sip_uri);
+			        builder.setAdapter(phoneChoiceAdapter, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Log.d(THIS_FILE, "Clicked "+which);
+							String number = phoneChoiceAdapter.getItem(which);
+							startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
+						}
+					});
+			        builder.setCancelable(true);
+			        builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// Nothing to do
+							dialog.dismiss();
+						}
+					});
+			        AlertDialog dialog = builder.create();
+			        dialog.show();
+		        }
 			}
 			break;
 
@@ -448,5 +482,7 @@ public class SipHome extends TabActivity {
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+
+	
 	
 }

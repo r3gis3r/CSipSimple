@@ -63,7 +63,7 @@ public class Keyyo extends SimpleImplementation {
 		account.cfg.setKa_interval(15);
 		account.cfg.setPublish_enabled(1);
 		account.transport = 1;
-		
+		account.cfg.setContact_rewrite_method(1);
 		// Add stun server
 		PreferencesWrapper prefs = new PreferencesWrapper(parent);
 		if( ! (prefs.getStunEnabled()==1) || TextUtils.isEmpty(prefs.getStunServer())) {

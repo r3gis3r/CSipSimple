@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-25 22:40+0100\n"
+"POT-Creation-Date: 2010-11-27 23:52+0100\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -20,6 +20,14 @@ msgstr ""
 
 msgctxt "app_name"
 msgid "CSipSimple"
+msgstr ""
+
+msgctxt "next"
+msgid "Next"
+msgstr ""
+
+msgctxt "init"
+msgid "Init..."
 msgstr ""
 
 msgctxt "unable_to_download_file"
@@ -233,5 +241,9 @@ msgstr ""
 
 msgctxt "another_application_use_sip_port"
 msgid "Another application is currently using SIP port! Can't start !!!"
+msgstr ""
+
+msgctxt "no_phone_found"
+msgid "No phone found for this contact"
 msgstr ""
 

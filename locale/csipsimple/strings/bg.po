@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-25 22:40+0100\n"
+"POT-Creation-Date: 2010-11-27 23:52+0100\n"
 "PO-Revision-Date: 2010-09-30 12:57+0000\n"
 "Last-Translator: Lubomir Christov <Unknown>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -20,6 +20,14 @@ msgstr ""
 msgctxt "app_name"
 msgid "CSipSimple"
 msgstr "cSIPsimple"
+
+msgctxt "next"
+msgid "Next"
+msgstr ""
+
+msgctxt "init"
+msgid "Init..."
+msgstr ""
 
 msgctxt "unable_to_download_file"
 msgid "Unable to download file"
@@ -234,5 +242,9 @@ msgstr ""
 
 msgctxt "another_application_use_sip_port"
 msgid "Another application is currently using SIP port! Can't start !!!"
+msgstr ""
+
+msgctxt "no_phone_found"
+msgid "No phone found for this contact"
 msgstr ""
 

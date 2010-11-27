@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# Italian translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -7,15 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-25 22:40+0100\n"
+"POT-Creation-Date: 2010-11-27 23:52+0100\n"
 "PO-Revision-Date: 2010-11-26 06:04+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: it <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-27 05:16+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: Babel 1.0dev\n"
 
 #. The name of the SMS/MMS app as it appears to the user in the Home screen,
@@ -332,3 +331,4 @@ msgstr "Me"
 msgctxt "sending_message"
 msgid "Sending\\u2026"
 msgstr "Invio\\u2026"
+

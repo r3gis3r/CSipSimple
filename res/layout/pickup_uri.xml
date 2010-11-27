@@ -5,7 +5,10 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content">
   
-	<EditText android:id="@+id/sip_uri" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+	<com.csipsimple.widgets.EditSipUri
+		android:id="@+id/sip_uri" 
+		android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1"
+		android:gravity="center_horizontal" />
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:id="@+id/search_contacts"
 		android:clickable="true" android:focusable="true" android:orientation="horizontal"

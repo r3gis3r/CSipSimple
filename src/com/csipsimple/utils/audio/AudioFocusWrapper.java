@@ -21,48 +21,37 @@ import android.media.AudioManager;
 
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.CustomDistribution;
 
 
-public class AudioFocusWrapper {
-	private AudioFocus3 audio3;
-	private AudioFocus8 audio8;
-
-	/* class initialization fails when this throws an exception */
-	static {
-		try {
-			Class.forName("com.csipsimple.utils.audio.AudioFocus8");
-		} catch (Exception ex) {
-			try {
-				Class.forName("com.csipsimple.utils.audio.AudioFocus3");
-			}catch (Exception ex2) {
-				throw new RuntimeException(ex);
+public abstract class AudioFocusWrapper {
+private static AudioFocusWrapper instance;
+	
+	public static AudioFocusWrapper getInstance() {
+		if(instance == null) {
+			String className = CustomDistribution.getRootPackage() + ".utils.audio.AudioFocus";
+			if(Compatibility.isCompatible(8)) {
+				className += "8";
+			}else {
+				className += "3";
 			}
+			try {
+                Class<? extends AudioFocusWrapper> wrappedClass = Class.forName(className).asSubclass(AudioFocusWrapper.class);
+                instance = wrappedClass.newInstance();
+	        } catch (Exception e) {
+	        	throw new IllegalStateException(e);
+	        }
 		}
+		
+		return instance;
 	}
 	
-	public AudioFocusWrapper(SipService service, AudioManager manager) {
-		if(Compatibility.isCompatible(8)) {
-			audio8 = new AudioFocus8(service, manager);
-		}else {
-			audio3 = new AudioFocus3(service, manager);
-		}
-	}
+	protected AudioFocusWrapper() {}
 	
-	public void focus() {
-		if(audio8 != null) {
-			audio8.focus();
-		}else if(audio3 != null) {
-			audio3.focus();
-		}
-	}
 	
-	public void unFocus() {
-		if(audio8 != null) {
-			audio8.unFocus();
-		}else if(audio3 != null) {
-			audio3.unFocus();
-		}
-	}
+	public abstract void init(SipService service, AudioManager manager);
+	public abstract void focus();
+	public abstract void unFocus();
 	
 	
 	

@@ -21,71 +21,38 @@ import android.content.Context;
 
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.CustomDistribution;
 
-public class BluetoothWrapper {
-	private BluetoothUtils8 butils8;
-	private BluetoothUtils7 butils7;
-
-	/* class initialization fails when this throws an exception */
-	static {
-		try {
-			Class.forName("com.csipsimple.utils.bluetooth.BluetoothUtils8");
-		} catch (Exception ex) {
-			try {
-				Class.forName("com.csipsimple.utils.bluetooth.BluetoothUtils7");
-			}catch (Exception ex2) {
-				throw new RuntimeException(ex);
+public abstract class BluetoothWrapper {
+	
+	private static BluetoothWrapper instance;
+	
+	public static BluetoothWrapper getInstance() {
+		if(instance == null) {
+			String className = CustomDistribution.getRootPackage() + ".utils.bluetooth.BluetoothUtils";
+			if(Compatibility.isCompatible(8)) {
+				className += "8";
+			}else {
+				className += "3";
 			}
+			try {
+                Class<? extends BluetoothWrapper> wrappedClass = Class.forName(className).asSubclass(BluetoothWrapper.class);
+                instance = wrappedClass.newInstance();
+	        } catch (Exception e) {
+	        	throw new IllegalStateException(e);
+	        }
 		}
+		
+		return instance;
 	}
 	
-	public BluetoothWrapper(Context context, MediaManager manager) {
-		if(Compatibility.isCompatible(8)) {
-			butils8 = new BluetoothUtils8(context, manager);
-		}else if(Compatibility.isCompatible(7)) {
-			butils7 = new BluetoothUtils7(context, manager);
-		}
-	}
+	protected BluetoothWrapper() {}
 
-	/* calling here forces class initialization */
-	public static void checkAvailable() {}
-
-	public boolean canBluetooth() {
-		if(butils8 != null) {
-			return butils8.canBluetooth();
-		}else if(butils7 != null) {
-			return butils7.canBluetooth();
-		}
-		return false;
-	}
-
-	public void setBluetoothOn(boolean on) {
-		if(butils8 != null) {
-			butils8.setBluetoothOn(on);
-		}else if(butils7 != null) {
-			butils7.setBluetoothOn(on);
-		}
-	}
 	
-	public boolean isBluetoothOn() {
-		if(butils8 != null) {
-			return butils8.isBluetoothOn();
-		}else if(butils7 != null) {
-			return butils7.isBluetoothOn();
-		}
-		return false;
-	}
-
-	public void register() {
-		if(butils8 != null) {
-			butils8.register();
-		}
-	}
-	
-	
-	public void unregister() {
-		if(butils8 != null) {
-			butils8.unregister();
-		}
-	}
+	public abstract void init(Context context, MediaManager manager);
+	public abstract boolean canBluetooth();
+	public abstract void setBluetoothOn(boolean on);
+	public abstract boolean isBluetoothOn();
+	public abstract void register();
+	public abstract void unregister();
 }

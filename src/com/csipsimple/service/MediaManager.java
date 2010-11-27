@@ -72,7 +72,6 @@ public class MediaManager {
 	private Intent mediaStateChangedIntent;
 	
 	//Bluetooth related
-	private static boolean bluetoothClassAvailable;
 	private BluetoothWrapper bluetoothWrapper;
 
 	private AudioFocusWrapper audioFocusWrapper;
@@ -83,15 +82,6 @@ public class MediaManager {
 	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
 
-	/* establish whether the "new" class is available to us */
-	static {
-		try {
-			BluetoothWrapper.checkAvailable();
-			bluetoothClassAvailable = true;
-		} catch (Throwable t) {
-			bluetoothClassAvailable = false;
-		}
-	}
 
 	
 	public MediaManager(SipService aService) {
@@ -108,12 +98,12 @@ public class MediaManager {
 	
 	public void startService() {
 		if(bluetoothWrapper == null) {
-			if(bluetoothClassAvailable) {
-				bluetoothWrapper = new BluetoothWrapper(service, this);
-			}
+			bluetoothWrapper = BluetoothWrapper.getInstance();
+			bluetoothWrapper.init(service, this);
 		}
 		if(audioFocusWrapper == null) {
-			audioFocusWrapper = new AudioFocusWrapper(service, audioManager);
+			audioFocusWrapper = AudioFocusWrapper.getInstance();
+			audioFocusWrapper.init(service, audioManager);
 		}
 	}
 	
@@ -166,7 +156,7 @@ public class MediaManager {
 			audioManager.setSpeakerphoneOn(userWantSpeaker ? true : false);
 		}
 		audioManager.setMicrophoneMute(false);
-		if(bluetoothClassAvailable && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
+		if(bluetoothWrapper != null && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
 			Log.d(THIS_FILE, "Try to enable bluetooth");
 			bluetoothWrapper.setBluetoothOn(true);
 		}
@@ -276,7 +266,7 @@ public class MediaManager {
 			audioManager.setSpeakerphoneOn(savedSpeakerPhone);
 		}
 		
-		if(bluetoothClassAvailable) {
+		if(bluetoothWrapper != null) {
 			//This fixes the BT activation but... but... seems to introduce a lot of other issues
 			//bluetoothWrapper.setBluetoothOn(true);
 			Log.d(THIS_FILE, "Unset bt");
@@ -408,7 +398,7 @@ public class MediaManager {
 		
 		//Bluetooth
 		
-		if(bluetoothClassAvailable) {
+		if(bluetoothWrapper != null) {
 			mediaState.isBluetoothScoOn = bluetoothWrapper.isBluetoothOn();
 			mediaState.canBluetoothSco = bluetoothWrapper.canBluetooth();
 		}else {

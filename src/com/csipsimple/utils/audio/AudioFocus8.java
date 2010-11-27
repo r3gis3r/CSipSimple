@@ -27,7 +27,7 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 
 
-public class AudioFocus8 {
+public class AudioFocus8 extends AudioFocusWrapper{
 	
 	
 	protected static final String THIS_FILE = "AudioFocus 8";
@@ -45,7 +45,7 @@ public class AudioFocus8 {
 		}
 	};
 	
-	public AudioFocus8(SipService aService, AudioManager manager) {
+	public void init(SipService aService, AudioManager manager) {
 		service = aService;
 		audioManager = manager;
 		headsetButtonReceiverName = new ComponentName(service.getPackageName(), 

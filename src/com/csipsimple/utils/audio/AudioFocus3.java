@@ -25,7 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 
-public class AudioFocus3 {
+public class AudioFocus3 extends AudioFocusWrapper {
 	
 
 	final static String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
@@ -39,7 +39,7 @@ public class AudioFocus3 {
 	private boolean isFocused = false;
 	private HeadsetButtonReceiver headsetButtonReceiver;
 	
-	public AudioFocus3(SipService aService, AudioManager manager) {
+	public void init(SipService aService, AudioManager manager) {
 		service = aService;
 		audioManager = manager;
 	}
