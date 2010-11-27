@@ -1,0 +1,254 @@
+# Ukrainian translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
+"PO-Revision-Date: 2010-11-26 13:43+0000\n"
+"Last-Translator: Yura Rodchyn <Unknown>\n"
+"Language-Team: Ukrainian <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-11-27 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+msgctxt "app_name"
+msgid "CSipSimple"
+msgstr "CSipSimple"
+
+msgctxt "next"
+msgid "Next"
+msgstr ""
+
+msgctxt "init"
+msgid "Init..."
+msgstr ""
+
+msgctxt "unable_to_download_file"
+msgid "Unable to download file"
+msgstr "Не вдається завантажити файл"
+
+msgctxt "connection_not_valid"
+msgid ""
+"Selected network route not available (activate WiFi or change preferences to "
+"use 3G)"
+msgstr ""
+"Обрана маршрутна мережа не доступна (активувати WiFi або змінити "
+"налаштування, щоб використовувати 3G)"
+
+msgctxt "invalid_sip_uri"
+msgid "Sip uri is invalid for call"
+msgstr "SIP URI є неприпустимою для виклику"
+
+msgctxt "accounts"
+msgid "Accounts"
+msgstr "Облікові записи"
+
+msgctxt "other_accounts"
+msgid "Other accounts"
+msgstr "Інші облікові записи"
+
+msgctxt "save"
+msgid "Save"
+msgstr "Зберегти"
+
+msgctxt "cancel"
+msgid "Cancel"
+msgstr "Скасувати"
+
+msgctxt "activate_account"
+msgid "Activate account"
+msgstr "Активувати акаунт"
+
+msgctxt "deactivate_account"
+msgid "Deactivate account"
+msgstr "Деактивувати акаунт"
+
+msgctxt "delete_account"
+msgid "Delete account"
+msgstr "Видалити акаунт"
+
+msgctxt "modify_account"
+msgid "Modify account"
+msgstr "Модифікувати акаунт"
+
+msgctxt "add_account"
+msgid "Add account"
+msgstr "Додати обліковий запис"
+
+msgctxt "choose_wizard"
+msgid "Choose wizard"
+msgstr "Вибрати майстра"
+
+msgctxt "use"
+msgid "Use :"
+msgstr "Використовувати:"
+
+msgctxt "use_pstn"
+msgid "Use mobile"
+msgstr "Використовувати мобільний"
+
+msgctxt "ongoing_call"
+msgid "Call in Progress"
+msgstr "Дзвінок в процесі"
+
+msgctxt "missed_call"
+msgid "Missed call"
+msgstr "Пропущений виклик"
+
+msgctxt "recentCalls_empty"
+msgid "No Call Logs"
+msgstr "Немає викликів"
+
+msgctxt "filters"
+msgid "Filters"
+msgstr "Фільтри"
+
+msgctxt "add_filter"
+msgid "Add filter / rewrite rule"
+msgstr "Додати фільтр / правила перезапису"
+
+msgctxt "delete_filter"
+msgid "Delete filter"
+msgstr "Видалити фільтр"
+
+msgctxt "callLog_delete_entry"
+msgid "Delete this call"
+msgstr "Видалити цей дзвінок"
+
+msgctxt "callLog_delete_all"
+msgid "Delete all calls"
+msgstr "Видалити всі дзвінки"
+
+msgctxt "callLog_delDialog_title"
+msgid "Delete Call Logs"
+msgstr "Видалити всі дзвінки"
+
+msgctxt "callLog_delDialog_message"
+msgid "Are you sure you want to delete all calls from the log?"
+msgstr "Ви впевнені, що хочете видалити усі дзвінки з журналу?"
+
+msgctxt "callLog_delDialog_yes"
+msgid "Yes"
+msgstr "Гаразд"
+
+msgctxt "callLog_delDialog_no"
+msgid "No"
+msgstr "Ні"
+
+msgctxt "gsm"
+msgid "Mobile"
+msgstr "Мобільний"
+
+msgctxt "dial_tab_name_text"
+msgid "Dial"
+msgstr "Дзвонити"
+
+msgctxt "calllog_tab_name_text"
+msgid "CallLogs"
+msgstr "CallLogs"
+
+msgctxt "messages_tab_name_text"
+msgid "Messages"
+msgstr "Повідомлення"
+
+msgctxt "menu_disconnect"
+msgid "Disconnect"
+msgstr "Від'єднатися"
+
+msgctxt "service_ticker_registered_text"
+msgid "SIP Registered"
+msgstr "SIP Зареєстровано"
+
+msgctxt "outgoing_call_chooser_call_text"
+msgid "Call"
+msgstr "Дзвінок"
+
+msgctxt "reorder"
+msgid "Reorder"
+msgstr "Упорядкувати"
+
+msgctxt "faq"
+msgid "FAQ"
+msgstr "FAQ"
+
+msgctxt "help"
+msgid "Help"
+msgstr "Довідка"
+
+msgctxt "record_logs"
+msgid "Record logs to send it to dev team and report a bug"
+msgstr ""
+"Запис журналів, щоб відправити його команді розробників і повідомити про "
+"помилку"
+
+msgctxt "send_logs"
+msgid "Stop recording logs (OPTIONALY send it)"
+msgstr "Зупинити запис журналів (опціонально відправити його)"
+
+msgctxt "view_existing_issues"
+msgid "Consult existing issues"
+msgstr "Зверніться щодо існуючих проблем"
+
+msgctxt "ok"
+msgid "OK"
+msgstr "Гаразд"
+
+msgctxt "misc"
+msgid "Misc"
+msgstr "Інше"
+
+msgctxt "warning"
+msgid "WARNING"
+msgstr "ПОПЕРЕДЖЕННЯ"
+
+msgctxt "disconnect_and_incoming_explaination"
+msgid ""
+"You are configured to be available for this network !!! By clicking OK here "
+"you confirm that you don't want to be available until next start of the "
+"application"
+msgstr ""
+"Ви налаштовані бути доступними для цієї мережі! Натиснувши кнопку ОК тут ви "
+"підтвердите, що ви не хочете бути доступні до наступного включення програми"
+
+#, c-format
+msgctxt "disconnect_and_will_restart"
+msgid ""
+"Will automatically restart when : <xliff:g id=\"networks\" "
+"example=\"3G\">%s</xliff:g> will become available (change settings if you "
+"don't want)"
+msgstr ""
+"Автоматично стане доступним після: <xliff:g id=\"networks\" "
+"example=\"3G\">%s</xliff:g>  (змінити налаштування, якщо ви не хочете)"
+
+msgctxt "gadget_title"
+msgid "SIP Account switcher"
+msgstr "Вибір акаунта SIP"
+
+msgctxt "search_in_contacts"
+msgid "Search in contacts"
+msgstr "Пошук в контактах"
+
+msgctxt "pickup_sip_uri"
+msgid "Pickup SIP contact"
+msgstr "Вибрати SIP контакт"
+
+msgctxt "display_icon_in_status_bar_desc"
+msgid ""
+"Should the application display an icon in the status bar when registered"
+msgstr "Чи відображати значок в рядку стану при реєстрації"
+
+msgctxt "display_icon_in_status_bar"
+msgid "Display icon in status bar"
+msgstr "Показати іконку в рядку стану"
+
+msgctxt "another_application_use_sip_port"
+msgid "Another application is currently using SIP port! Can't start !!!"
+msgstr ""
+"Інше застосування в даний час використовує SIP порт! Не вдається запустити!"
+

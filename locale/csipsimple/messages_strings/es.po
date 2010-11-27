@@ -1,0 +1,333 @@
+# Spanish translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-11-25 22:40+0100\n"
+"PO-Revision-Date: 2010-11-25 16:50+0000\n"
+"Last-Translator: Juan Ramiro Meyer <Unknown>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-11-26 05:14+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. The name of the SMS/MMS app as it appears to the user in the Home screen,
+#. task switcher, etc.
+msgctxt "app_label"
+msgid "Messaging"
+msgstr "Mensajería"
+
+#. Command name to open a Compose screen; displays in conversation list
+msgctxt "new_message"
+msgid "New message"
+msgstr "Nuevo mensaje"
+
+#. Summary text under "New Message" command; displays in conversation list
+msgctxt "create_new_message"
+msgid "Compose new message"
+msgstr "Escribir nuevo mensaje"
+
+#. Menu item for starting a new conversation
+msgctxt "menu_compose_new"
+msgid "Compose"
+msgstr "Redactar"
+
+#, c-format
+msgctxt "menu_add_address_to_contacts"
+msgid "Add <xliff:g id=\"name\">%s</xliff:g> to Contacts"
+msgstr "Añadir a <xliff:g id=\"name\">%s</xliff:g> a Contactos"
+
+#. Menu item to call the recipient of the conversation on the phone
+#. (imperative verb)
+msgctxt "menu_call"
+msgid "Call"
+msgstr "Llamar"
+
+#. Menu item for deleting all conversations
+msgctxt "menu_delete_all"
+msgid "Delete threads"
+msgstr "Eliminar conversaciones"
+
+#. Context menu item on an individual conversation for deleting that
+#. conversation
+msgctxt "menu_delete"
+msgid "Delete thread"
+msgstr "Eliminar conversación"
+
+#. Context menu item on an individual conversation for viewing that
+#. conversation
+msgctxt "menu_view"
+msgid "View thread"
+msgstr "Ver conversación"
+
+#. Name to use when we have an unspecified sender
+msgctxt "anonymous_recipient"
+msgid "Anonymous"
+msgstr "Anónimo"
+
+#. Name of the local user when displaying sender of an outgoing message
+#. (personal pronoun)
+msgctxt "messagelist_sender_self"
+msgid "Me"
+msgstr "Yo"
+
+msgctxt "delete_message"
+msgid "Delete message"
+msgstr "Eliminar mensaje"
+
+#. Time and date a message was sent
+#, c-format
+msgctxt "sent_on"
+msgid "Sent: <xliff:g id=\"date\">%s</xliff:g>"
+msgstr "Enviado: <xliff:g id=\"date\">%s</xliff:g>"
+
+#. Abbreviation for "kilobyte"
+msgctxt "kilobyte"
+msgid "KB"
+msgstr "KB"
+
+#. Dialog box title brought up when warning the user that a message could not
+#. be delivered
+msgctxt "undelivered_msg_dialog_title"
+msgid "Undelivered message"
+msgstr "Mensaje sin entregar"
+
+#. Dialog box message indicating that a message could not be delivered
+msgctxt "undelivered_sms_dialog_body"
+msgid "Unable to send this message."
+msgstr "No se ha podido enviar este mensaje"
+
+#. Menu item for deleting the entire conversation currently being viewed
+msgctxt "delete_thread"
+msgid "Delete thread"
+msgstr "Eliminar conversación"
+
+#. Text of a button appearing for MMS messages that have not yet been
+#. downloaded, causing the message          to be downloaded (imperative verb)
+msgctxt "download"
+msgid "Download"
+msgstr "Descargar"
+
+#. Message displayed in place of the "download message" button once it has
+#. been pressed,          indicating that the download is in progress
+msgctxt "downloading"
+msgid "Downloading"
+msgstr "Descargando"
+
+#. Formatting for prepending MMS message text with sender's name.
+#, c-format
+msgctxt "name_colon"
+msgid "<b><xliff:g id=\"name\" example=\"Me\">%s</xliff:g></b>: "
+msgstr "<b><xliff:g id=\"name\" example=\"Me\">%s</xliff:g></b>: "
+
+#. Individual message context menu item
+msgctxt "copy_message_text"
+msgid "Copy message text"
+msgstr ""
+
+#. Header for context menu on an individual message
+msgctxt "message_options"
+msgid "Message options"
+msgstr "Opciones de mensaje"
+
+#. Button text on edit slide screen indicating the user wants to finish
+#. editing that slide
+msgctxt "done"
+msgid "Done"
+msgstr "Realizado"
+
+#. Title bar displayed in compose message activity before a recipient has been
+#. selected
+msgctxt "compose_title"
+msgid "Compose"
+msgstr "Redactar"
+
+#. Menu item in conversation screen for attaching something to the message
+#. being composed
+msgctxt "add_attachment"
+msgid "Attach"
+msgstr "Adjuntar"
+
+#. Button next to an attachment during message composition to view the
+#. attachment (imperative verb)
+msgctxt "view"
+msgid "View"
+msgstr "Mostrar"
+
+#. Button in conversation screen for sending the SMS message currently being
+#. composed (imperative verb)
+msgctxt "send"
+msgid "Send"
+msgstr ""
+
+#. Menu item in conversation screen for returning to the conversation list
+msgctxt "all_threads"
+msgid "All threads"
+msgstr "Todas las conversaciones"
+
+#. Hint text in message body field when keyboard is exposed
+msgctxt "type_to_compose_text_enter_to_send"
+msgid "Type to compose"
+msgstr "Escribir"
+
+#. Hint text in message body field when keyboard is hidden
+msgctxt "open_keyboard_to_compose_message"
+msgid "Open keyboard to compose message"
+msgstr "Abrir teclado para escribir mensaje"
+
+#. Dialog title for warning the user that the picture they are trying to
+#. attach is too large
+msgctxt "image_too_large"
+msgid "Picture too large"
+msgstr "Imágen demasiado grande"
+
+#. Dialog message text asking the user if he wants to resize the picture being
+#. attached
+msgctxt "ask_for_automatically_resize"
+msgid "Automatically resize picture before sending?"
+msgstr "¿Redimensionar la imágen automáticamente antes de enviar?"
+
+#. Toast message while an image is being resized
+msgctxt "compressing"
+msgid "Picture too large. Compressing\\u2026"
+msgstr ""
+
+#. Error message indicating the format for the specified media type (e.g.
+#. "picture") is unsupported
+#, c-format
+msgctxt "unsupported_media_format"
+msgid "Unsupported <xliff:g id=\"name\">%1$s</xliff:g> format"
+msgstr "Formato <xliff:g id=\"name\">%1$s</xliff:g> no soportado"
+
+#. Context menu item on a message recipient for viewing their contact info
+msgctxt "menu_view_contact"
+msgid "View contact"
+msgstr "Ver contacto"
+
+#. Context menu item on a message recipient for adding them to the user's
+#. contacts (used if the recipient is not already in the address book)
+msgctxt "menu_add_to_contacts"
+msgid "Add to Contacts"
+msgstr ""
+
+#. Sender to be used if the sender address has been hidden
+msgctxt "hidden_sender_address"
+msgid "Hidden sender address"
+msgstr "Ocultar dirección del remitente"
+
+#. Text to be used for affirmative response button in dialog boxes
+msgctxt "yes"
+msgid "OK"
+msgstr "Aceptar"
+
+#. Text to be used for negative response button in dialog boxes
+msgctxt "no"
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. Button text used for editing a slideshow (imperative verb)
+msgctxt "edit"
+msgid "Edit"
+msgstr "Editar"
+
+#. Settings screen menu item for restoring all settings to default
+msgctxt "restore_default"
+msgid "Restore default settings"
+msgstr "Reestablecer configuración por defecto"
+
+#. Confirm Delete
+#. Delete confirmation dialog title
+msgctxt "confirm_dialog_title"
+msgid "Delete"
+msgstr "Eliminar"
+
+#. Delete entire thread confirmation dialog message
+msgctxt "confirm_delete_conversation"
+msgid "The entire thread will be deleted."
+msgstr "Se eliminará toda la conversación."
+
+#. Delete all threads confirmation dialog message
+msgctxt "confirm_delete_all_conversations"
+msgid "All threads will be deleted."
+msgstr "Se eliminarán todas las conversaciones."
+
+#. Delete message confirmation dialog message
+msgctxt "confirm_delete_message"
+msgid "The message will be deleted."
+msgstr "El mensaje será eliminado."
+
+#. Delete message confirmation dialog message for a locked message
+msgctxt "confirm_delete_locked_message"
+msgid "Are you sure you want to delete this locked message?"
+msgstr "¿Está seguro de que desea eliminar este mensaje bloqueado?"
+
+#. Delete entire thread confirmation dialog message
+msgctxt "confirm_delete_all_messages"
+msgid "The entire thread will be deleted."
+msgstr "Toda la conversación será eliminada."
+
+#. Delete button title
+msgctxt "delete"
+msgid "Delete"
+msgstr "Eliminar"
+
+#. Status in "Report" window
+msgctxt "status_none"
+msgid "(None)"
+msgstr "(Ninguno)"
+
+#. Status in "Report" window
+msgctxt "status_pending"
+msgid "Pending"
+msgstr "Pendiente"
+
+#. Status in "Report" window
+msgctxt "status_received"
+msgid "Received"
+msgstr "Recibido"
+
+#. Status in "Report" window
+msgctxt "status_failed"
+msgid "Unsuccessful"
+msgstr "Fallido"
+
+#. Status in "Report" window
+msgctxt "status_unread"
+msgid "Unread"
+msgstr "No leído"
+
+#. Status in "Report" window
+msgctxt "status_rejected"
+msgid "Rejected"
+msgstr "Rechazado"
+
+#. Label in "Report" window
+msgctxt "recipient_label"
+msgid "Recipient:\\u0020"
+msgstr "Destinatario:"
+
+#. Label in "Report" window
+msgctxt "status_label"
+msgid "Status:\\u0020"
+msgstr "Estado:"
+
+#. Menu item
+msgctxt "menu_insert_smiley"
+msgid "Insert smiley"
+msgstr "Insertar emoticono"
+
+#. Label for the "Me" number of this phone.
+msgctxt "me"
+msgid "Me"
+msgstr "Yo"
+
+#. Brief small label shown to right of message when it is being sent.
+msgctxt "sending_message"
+msgid "Sending\\u2026"
+msgstr "Enviando..."
