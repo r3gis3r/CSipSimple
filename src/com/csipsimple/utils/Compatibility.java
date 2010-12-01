@@ -90,7 +90,12 @@ public class Compatibility {
 	
 	public static boolean shouldUseModeApi() {
 		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
+		//ZTE blade
 		if(android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
+			return true;
+		}
+		//Samsung GT-I5500
+		if(android.os.Build.DEVICE.equalsIgnoreCase("GT-I5500")) {
 			return true;
 		}
 		return false;
@@ -255,15 +260,13 @@ public class Compatibility {
 			
 		}
 		
-		if(lastSeenVersion < 378) {
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
-			prefWrapper.setPreferenceStringValue(PreferencesWrapper.SIP_AUDIO_MODE, guessInCallMode());
-		}
-		if(lastSeenVersion < 383) {
+		if(lastSeenVersion < 385) {
 			if(needPspWorkaround(prefWrapper)) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, true);
 			}
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
+			prefWrapper.setPreferenceStringValue(PreferencesWrapper.SIP_AUDIO_MODE, guessInCallMode());
 		}
 		
 		 

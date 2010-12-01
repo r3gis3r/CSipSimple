@@ -4,7 +4,7 @@
   android:orientation="vertical"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content">
-  
+  <include layout="@layout/white_title"></include>
 	<com.csipsimple.widgets.EditSipUri
 		android:id="@+id/sip_uri" 
 		android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1"

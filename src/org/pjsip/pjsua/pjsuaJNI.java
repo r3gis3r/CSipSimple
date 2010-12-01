@@ -566,6 +566,12 @@ public class pjsuaJNI {
   public final static native int pjsua_acc_config_allow_contact_rewrite_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_contact_rewrite_method_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
   public final static native int pjsua_acc_config_contact_rewrite_method_get(long jarg1, pjsua_acc_config jarg1_);
+  public final static native void pjsua_acc_config_use_rfc5626_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
+  public final static native long pjsua_acc_config_use_rfc5626_get(long jarg1, pjsua_acc_config jarg1_);
+  public final static native void pjsua_acc_config_rfc5626_instance_id_set(long jarg1, pjsua_acc_config jarg1_, long jarg2, pj_str_t jarg2_);
+  public final static native long pjsua_acc_config_rfc5626_instance_id_get(long jarg1, pjsua_acc_config jarg1_);
+  public final static native void pjsua_acc_config_rfc5626_reg_id_set(long jarg1, pjsua_acc_config jarg1_, long jarg2, pj_str_t jarg2_);
+  public final static native long pjsua_acc_config_rfc5626_reg_id_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_ka_interval_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
   public final static native long pjsua_acc_config_ka_interval_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_ka_data_set(long jarg1, pjsua_acc_config jarg1_, long jarg2, pj_str_t jarg2_);
@@ -906,6 +912,7 @@ public class pjsuaJNI {
   public final static native int can_use_srtp();
   public final static native int is_call_secure(int jarg1);
   public final static native int media_transports_create_ipv6(long jarg1, pjsua_transport_config jarg1_);
+  public final static native long get_error_message(int jarg1);
   public final static native int csipsimple_init(long jarg1, pjsua_config jarg1_, long jarg2, pjsua_logging_config jarg2_, long jarg3, pjsua_media_config jarg3_);
   public final static native int csipsimple_destroy();
 

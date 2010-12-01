@@ -535,7 +535,7 @@ public class Account {
 			pj_str_t[] proxies = cfg.getProxy();
 			
 			String proposed_server = reg_uri + argument;
-			cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
+	//		cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
 			
 			if (cfg.getProxy_cnt() == 0 || proxies[0].getPtr() == null || proxies[0].getPtr() == "") {
 				proxies[0] = pjsua.pj_str_copy(proposed_server);
@@ -544,6 +544,7 @@ public class Account {
 				proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + argument);
 				cfg.setProxy(proxies);
 			}
+			
 		}
 		
 	}

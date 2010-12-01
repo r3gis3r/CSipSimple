@@ -61,6 +61,9 @@ public class PreferencesWrapper {
 	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
 	public static final String SND_MIC_LEVEL = "snd_mic_level";
 	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
+	public static final String HAS_IO_QUEUE = "has_io_queue";
+	public static final String BITS_PER_SAMPLE = "bits_per_sample";
+	
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
 	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
 	public static final String LOG_LEVEL = "log_level";
@@ -122,6 +125,7 @@ public class PreferencesWrapper {
 		put(ECHO_CANCELLATION_TAIL, "200");
 		put(SND_MEDIA_QUALITY, "4");
 		put(SND_CLOCK_RATE, "16000");
+		put(BITS_PER_SAMPLE, "16");
 		put(SIP_AUDIO_MODE, "0");
 		
 		put(STUN_SERVER, "stun.counterpath.com");
@@ -158,6 +162,7 @@ public class PreferencesWrapper {
 		put(USE_SOFT_VOLUME, false);
 		put(USE_ROUTING_API, false);
 		put(USE_MODE_API, false);
+		put(HAS_IO_QUEUE, false);
 		
 		put(PREVENT_SCREEN_ROTATION, true);
 		put(ICON_IN_STATUS_BAR, true);
@@ -485,6 +490,23 @@ public class PreferencesWrapper {
 		return Integer.parseInt(STRING_PREFS.get(TLS_METHOD));
 	}
 	
+	private boolean hasStunServer(String string) {
+		String[] servers = getPreferenceStringValue(PreferencesWrapper.STUN_SERVER).split(",");
+		for(String server : servers) {
+			if(server.equalsIgnoreCase(string)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void addStunServer(String server) {
+		if(!hasStunServer(server)) {
+			setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, getPreferenceStringValue(PreferencesWrapper.STUN_SERVER)+","+server);
+		}
+		
+	}
 
 	public String getUserAgent() {
 		return getPreferenceStringValue(USER_AGENT);
@@ -557,6 +579,15 @@ public class PreferencesWrapper {
 		}
 		
 		return 4;
+	}
+	
+	public int getBitsPerSample() {
+		try {
+			return Integer.parseInt(getPreferenceStringValue(BITS_PER_SAMPLE));
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Bits per sample not well formated");
+		}
+		return Integer.parseInt(STRING_PREFS.get(BITS_PER_SAMPLE));
 	}
 	
 	/**
@@ -702,10 +733,11 @@ public class PreferencesWrapper {
 		return 30;
 	}
 	
-	public boolean showIconInStatusBar() {
-		return getPreferenceBooleanValue(ICON_IN_STATUS_BAR);
+	public int getHasIOQueue() {
+		return getPreferenceBooleanValue(HAS_IO_QUEUE)?1:0;
 	}
-
+	
+	
 
 	public boolean useSipInfoDtmf() {
 		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase("3");
@@ -797,6 +829,11 @@ public class PreferencesWrapper {
 		}
 		return 1;
 	}
+	
+	public boolean showIconInStatusBar() {
+		return getPreferenceBooleanValue(ICON_IN_STATUS_BAR);
+	}
+
 
 	public final static int HEADSET_ACTION_CLEAR_CALL = 0;
 	public final static int HEADSET_ACTION_MUTE = 1;
@@ -872,6 +909,11 @@ public class PreferencesWrapper {
 	public void setQuit(boolean quit) {
 		setPreferenceBooleanValue(HAS_BEEN_QUIT, quit);
 	}
+
+
+
+
+	
 
 
 

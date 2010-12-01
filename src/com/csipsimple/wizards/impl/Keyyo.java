@@ -17,8 +17,9 @@
  */
 package com.csipsimple.wizards.impl;
 
+import org.pjsip.pjsua.pjsuaConstants;
+
 import android.text.InputType;
-import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.models.Account;
@@ -62,20 +63,22 @@ public class Keyyo extends SimpleImplementation {
 		account.cfg.setReg_timeout(900);
 		account.cfg.setKa_interval(15);
 		account.cfg.setPublish_enabled(1);
-		account.transport = 1;
+		account.transport = Account.TRANSPORT_AUTO;
+		account.cfg.setAllow_contact_rewrite(pjsuaConstants.PJ_FALSE);
 		account.cfg.setContact_rewrite_method(1);
-		// Add stun server
-		PreferencesWrapper prefs = new PreferencesWrapper(parent);
-		if( ! (prefs.getStunEnabled()==1) || TextUtils.isEmpty(prefs.getStunServer())) {
-			prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
-		}
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, true);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_VAD, true);
-		
 		return account;
 	}
 	
+
+	
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
+		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, false);
+		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);
+		prefs.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, true);
+		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_VAD, true);
+	}
 
 	@Override
 	public boolean needRestart() {

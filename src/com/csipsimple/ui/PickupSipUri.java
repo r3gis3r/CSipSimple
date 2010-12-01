@@ -27,13 +27,22 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.Log;
+import com.csipsimple.utils.contacts.ContactsWrapper;
+import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.EditSipUri;
 import com.csipsimple.widgets.EditSipUri.ToCall;
 
@@ -43,11 +52,25 @@ public class PickupSipUri extends Activity implements OnClickListener {
 	private EditSipUri sipUri;
 	private Button okBtn;
 	private BroadcastReceiver registrationReceiver;
+	private LinearLayout searchInContactRow;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.pickup_uri);
+		
+		
+		//Set window size
+		LayoutParams params = getWindow().getAttributes();
+		params.width = LayoutParams.FILL_PARENT;
+		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+		
+		//Set title
+		((TextView) findViewById(R.id.my_title)).setText(R.string.pickup_sip_uri);
+		((ImageView) findViewById(R.id.my_icon)).setImageResource(android.R.drawable.ic_menu_call);
+		
 		
 		sipUri = (EditSipUri) findViewById(R.id.sip_uri);
 		
@@ -56,6 +79,8 @@ public class PickupSipUri extends Activity implements OnClickListener {
 		Button btn = (Button) findViewById(R.id.cancel);
 		btn.setOnClickListener(this);
 		
+		searchInContactRow = (LinearLayout) findViewById(R.id.search_contacts);
+		searchInContactRow.setOnClickListener(this);
 		
 		registrationReceiver = new BroadcastReceiver() {
 			@Override
@@ -70,6 +95,7 @@ public class PickupSipUri extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Log.d(THIS_FILE, "Resume pickup URI");
 		// Bind service
 		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(registrationReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
@@ -113,8 +139,36 @@ public class PickupSipUri extends Activity implements OnClickListener {
 			setResult(RESULT_CANCELED);
 			finish();
 			break;
+		case R.id.search_contacts:
+			startActivityForResult(Compatibility.getContactPhoneIntent(), PICKUP_PHONE);
+			break;
 		}
 	}
+
+	protected static final int PICKUP_PHONE = 0;
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(THIS_FILE, "On activity result");
+		switch (requestCode) {
+		case PICKUP_PHONE:
+			if(resultCode == RESULT_OK) {
+				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
+					@Override
+					public void onTrigger(String number) {
+			        	sipUri.setTextValue(number);
+					}
+				});
+				return;
+			}
+			break;
+
+		default:
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
 	
 	private ISipService service;
 	private ServiceConnection connection = new ServiceConnection() {

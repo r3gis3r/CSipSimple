@@ -7,7 +7,7 @@
 		android:largeScreens="true"
 		/>
 	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="true">
-		<activity android:label="@string/app_name" android:name=".ui.SipHome" android:launchMode="singleTask"
+		<activity android:label="@string/app_name" android:name="com.csipsimple.ui.SipHome" android:launchMode="singleTask"
 			android:screenOrientation="portrait" android:configChanges="orientation"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
@@ -30,13 +30,13 @@
 		</activity>
 		
 		<!-- Main service -->
-		<service android:name=".service.SipService" android:exported="true">
+		<service android:name="com.csipsimple.service.SipService" android:exported="true">
 			<intent-filter>
 				<action android:name="com.csipsimple.service.SipService" />
 				<action android:name="com.csipsimple.service.SipConfiguration" />
 			</intent-filter>
 		</service>
-		<receiver android:name=".service.DeviceStateReceiver">
+		<receiver android:name="com.csipsimple.service.DeviceStateReceiver">
 			<intent-filter>
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
 				<action android:name="android.intent.action.ANY_DATA_STATE"></action>
@@ -46,57 +46,57 @@
 		</receiver>
 		
 		<!--  Main ui -->
-		<activity android:name=".ui.Dialer"></activity>
-		<activity android:name=".ui.CallLogsList"></activity>
-		<activity android:name=".ui.CallLog" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name="com.csipsimple.ui.Dialer"></activity>
+		<activity android:name="com.csipsimple.ui.CallLogsList"></activity>
+		<activity android:name="com.csipsimple.ui.CallLog" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		
 		<!-- First setup -->
-		<activity android:name=".ui.WelcomeScreen" android:screenOrientation="nosensor"
+		<activity android:name="com.csipsimple.ui.WelcomeScreen" android:screenOrientation="nosensor"
 			android:theme="@style/CupcakeDialog" android:launchMode="singleTask" android:label="@string/welcome_caption_text"></activity>
-		<service android:name=".service.DownloadLibService"></service>
+		<service android:name="com.csipsimple.service.DownloadLibService"></service>
 		
 		<!-- Help -->
-		<activity android:name=".ui.help.Help" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
-		<activity android:name=".ui.help.Faq" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.help.Help" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.help.Faq" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
 		
 		<!-- Accounts -->
-		<activity android:name=".ui.AccountsList" android:label="@string/accounts" android:configChanges="orientation"/>
-		<activity android:name=".ui.ReorderAccountsList" android:label="@string/accounts" android:configChanges="orientation"/>
-		<activity android:name=".ui.AccountFilters" android:label="@string/filters" android:configChanges="orientation"/>
-		<activity android:name=".ui.EditFilter" android:label="@string/filters" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.AccountsList" android:label="@string/accounts" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.ReorderAccountsList" android:label="@string/accounts" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.AccountFilters" android:label="@string/filters" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.EditFilter" android:label="@string/filters" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
 		
 
-		<activity android:name=".wizards.WizardChooser" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation"
+		<activity android:name="com.csipsimple.wizards.WizardChooser" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation"
 			android:label="@string/choose_wizard"></activity>
 
-		<activity android:name=".ui.BuddyList"></activity>
+		<activity android:name="com.csipsimple.ui.BuddyList"></activity>
 
 		<!-- Preferences -->
-		<activity android:name=".ui.prefs.MainPrefs" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
-		<activity android:name=".ui.prefs.PrefsNetwork" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
-		<activity android:name=".ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
-		<activity android:name=".ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
-		<activity android:name=".ui.prefs.PrefsFast" android:label="@string/prefs_fast" 
+		<activity android:name="com.csipsimple.ui.prefs.MainPrefs" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
+		<activity android:name="com.csipsimple.ui.prefs.PrefsNetwork" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
+		<activity android:name="com.csipsimple.ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
+		<activity android:name="com.csipsimple.ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
+		<activity android:name="com.csipsimple.ui.prefs.PrefsFast" android:label="@string/prefs_fast" 
 			android:theme="@style/CupcakeDialog" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="com.csipsimple.ui.prefs.PrefsFast" />
                  <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
-		<activity android:name=".ui.prefs.PrefsSecurity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name="com.csipsimple.ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name="com.csipsimple.ui.prefs.PrefsSecurity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		
 
 		<!-- Wizards -->
-		<activity android:name=".wizards.BasePrefsWizard" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
+		<activity android:name="com.csipsimple.wizards.BasePrefsWizard" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
  
 		<!-- Call management -->
-		<receiver android:name=".service.OutgoingCall">
+		<receiver android:name="com.csipsimple.service.OutgoingCall">
 			<intent-filter android:priority="-1">
 				<action android:name="android.intent.action.NEW_OUTGOING_CALL"></action>
 			</intent-filter>
 		</receiver>
-		<activity android:name=".ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog"
+		<activity android:name="com.csipsimple.ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog"
 			android:configChanges="orientation"
 			android:launchMode="singleInstance">
 			
@@ -119,7 +119,7 @@
 		</activity>
 		
 		
-		<activity android:name=".ui.InCallActivity" android:screenOrientation="portrait" android:excludeFromRecents="true"
+		<activity android:name="com.csipsimple.ui.InCallActivity" android:screenOrientation="portrait" android:excludeFromRecents="true"
 			android:noHistory="true" android:allowTaskReparenting="false"
 			android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleInstance">
 			<intent-filter android:priority="10">
@@ -128,18 +128,18 @@
             </intent-filter>
 		</activity>
 		
-		<activity android:name=".ui.PickupSipUri" android:label="@string/pickup_sip_uri" 
+		<activity android:name="com.csipsimple.ui.PickupSipUri" android:label="@string/pickup_sip_uri" 
 			android:configChanges="orientation"
 			android:theme="@style/CupcakeDialog"></activity>
         
-        <activity android:name=".ui.InCallMediaControl" android:label="@string/prefs_media" 
+        <activity android:name="com.csipsimple.ui.InCallMediaControl" android:label="@string/prefs_media" 
         	android:configChanges="orientation"
 			android:theme="@style/CupcakeDialog"></activity>
         
-        <receiver android:name=".service.HeadsetButtonReceiver"></receiver>
+        <receiver android:name="com.csipsimple.service.HeadsetButtonReceiver"></receiver>
 		
 		<!-- Widget -->
-		<receiver android:name=".widgets.AccountWidgetProvider" android:label="@string/gadget_title">
+		<receiver android:name="com.csipsimple.widgets.AccountWidgetProvider" android:label="@string/gadget_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.csipsimple.service.REGISTRATION_CHANGED" />
@@ -147,7 +147,7 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info" />
         </receiver>
-        <activity android:name=".widgets.AccountWidgetConfigure">
+        <activity android:name="com.csipsimple.widgets.AccountWidgetConfigure">
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
 		    </intent-filter>
@@ -155,8 +155,8 @@
 		
 		
 		<!-- Messages -->
-		<activity android:name=".ui.messages.ConversationList" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		<activity android:name=".ui.messages.ComposeMessageActivity" android:theme="@android:style/Theme.NoTitleBar"
+		<activity android:name="com.csipsimple.ui.messages.ConversationList" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.messages.ComposeMessageActivity" android:theme="@android:style/Theme.NoTitleBar"
                   android:windowSoftInputMode="stateHidden" android:configChanges="orientation"
                   android:launchMode="singleTop" />
 		

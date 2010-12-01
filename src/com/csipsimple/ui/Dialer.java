@@ -200,14 +200,13 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		} catch (Exception e) {
 			// Nothing to do here -- TODO : should be more clean
 		}
-
 		Log.d(THIS_FILE, "--- DIALER DESTROYED ---");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		Log.d(THIS_FILE, "Resuming dialer");
 		// Bind service
 		contextToBindTo.bindService(new Intent(contextToBindTo, SipService.class), connection, Context.BIND_AUTO_CREATE);
 
@@ -217,16 +216,18 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	@Override
 	protected void onPause() {
 		super.onPause();
-
+		Log.d(THIS_FILE, "Pausing dialer");
 		// Unbind service
 		try {
-			unbindService(connection);
+			contextToBindTo.unbindService(connection);
 		}catch (Exception e) {
 			//Just ignore that -- TODO : should be more clean
+			Log.w(THIS_FILE, "Unable to un bind", e);
 		}
 
 		dialFeedback.pause();
 	}
+	
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {

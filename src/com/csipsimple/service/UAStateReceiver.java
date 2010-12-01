@@ -146,10 +146,11 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_pager_status(int call_id, pj_str_t to, pj_str_t body, pjsip_status_code status, pj_str_t reason) {
 		//TODO : treat error / acknowledge of messages
-		int messageType = status.equals(pjsip_status_code.PJSIP_SC_OK) ? SipMessage.MESSAGE_TYPE_SENT : SipMessage.MESSAGE_TYPE_FAILED;
+		int messageType = (status.equals(pjsip_status_code.PJSIP_SC_OK) 
+				|| status.equals(pjsip_status_code.PJSIP_SC_ACCEPTED))? SipMessage.MESSAGE_TYPE_SENT : SipMessage.MESSAGE_TYPE_FAILED;
 		String sTo = SipUri.getCanonicalSipUri(to.getPtr());
 
-		Log.d(THIS_FILE, "SipMessage in on pager status "+status.toString()+" / "+reason.toString());
+		Log.d(THIS_FILE, "SipMessage in on pager status "+status.toString()+" / "+reason.getPtr());
 		
 		//Update the db
 		DBAdapter database = new DBAdapter(service);

@@ -29,6 +29,7 @@ import android.preference.PreferenceScreen;
 
 import com.csipsimple.R;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardIface;
 
@@ -116,4 +117,6 @@ public abstract class BaseImplementation implements WizardIface {
 		}
 		return !isNotValid;
 	}
+	
+	public void setDefaultParams(PreferencesWrapper prefs) {}
 }

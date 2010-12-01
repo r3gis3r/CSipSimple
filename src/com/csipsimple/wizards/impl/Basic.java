@@ -134,8 +134,8 @@ public class Basic extends BaseImplementation {
 		ci.setScheme(pjsua.pj_str_copy("Digest"));
 		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
 				.swigValue());
-		//By default force use tcp
-		account.transport = Account.TRANSPORT_UDP;
+		//By default auto transport
+		account.transport = Account.TRANSPORT_AUTO;
 		return account;
 	}
 

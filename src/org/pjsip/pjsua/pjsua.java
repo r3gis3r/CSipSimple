@@ -633,6 +633,10 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.media_transports_create_ipv6(pjsua_transport_config.getCPtr(rtp_cfg), rtp_cfg);
   }
 
+  public static pj_str_t get_error_message(int status) {
+    return new pj_str_t(pjsuaJNI.get_error_message(status), true);
+  }
+
   public static int csipsimple_init(pjsua_config ua_cfg, pjsua_logging_config log_cfg, pjsua_media_config media_cfg) {
     return pjsuaJNI.csipsimple_init(pjsua_config.getCPtr(ua_cfg), ua_cfg, pjsua_logging_config.getCPtr(log_cfg), log_cfg, pjsua_media_config.getCPtr(media_cfg), media_cfg);
   }

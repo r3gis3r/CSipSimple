@@ -202,6 +202,7 @@ public class DBAdapter {
 		}
 	}
 
+	private boolean opened = false;
 	/**
 	 * Open database
 	 * 
@@ -210,6 +211,7 @@ public class DBAdapter {
 	 */
 	public DBAdapter open() throws SQLException {
 		db = databaseHelper.getWritableDatabase();
+		opened = true;
 		return this;
 	}
 
@@ -218,9 +220,12 @@ public class DBAdapter {
 	 */
 	public void close() {
 		databaseHelper.close();
+		opened = false;
 	}
 	
-	
+	public boolean isOpen() {
+		return opened;
+	}
 	// --------
 	// Accounts
 	// --------
@@ -697,6 +702,10 @@ public class DBAdapter {
 				}) > 0;
 	}
 	
+	public boolean deleteAllConversation() {
+		return db.delete(MESSAGES_TABLE_NAME, null, null) > 0;
+	}
+	
 	public boolean markConversationAsRead(String remoteFrom) {
 		ContentValues args = new ContentValues();
 		args.put(SipMessage.FIELD_READ, true);
@@ -708,7 +717,8 @@ public class DBAdapter {
 		ContentValues args = new ContentValues();
 		args.put(SipMessage.FIELD_TYPE, messageType);
 		args.put(SipMessage.FIELD_STATUS, status);
-		if(status != pjsip_status_code.PJSIP_SC_OK.swigValue()) {
+		if(status != pjsip_status_code.PJSIP_SC_OK.swigValue() 
+				&& status != pjsip_status_code.PJSIP_SC_ACCEPTED.swigValue()) {
 			args.put(SipMessage.FIELD_BODY, body + " // " + reason);
 		}
 		return db.update(MESSAGES_TABLE_NAME, args,

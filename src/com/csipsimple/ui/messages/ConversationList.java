@@ -18,9 +18,12 @@
 package com.csipsimple.ui.messages;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -49,6 +52,7 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.SipMessage;
+import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
@@ -107,6 +111,14 @@ public class ConversationList extends ListActivity {
 		registerReceiver(registrationReceiver, new IntentFilter(SipService.ACTION_SIP_MESSAGE_RECEIVED));
         
     }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+    	SipNotifications nManager = new SipNotifications(this);
+    	nManager.cancelMessages();
+    }
 
     private void initListAdapter() {
 		// Db
@@ -120,10 +132,14 @@ public class ConversationList extends ListActivity {
 
 		setListAdapter(cad);
 		updateAdapter();
+		
+		getListView().setOnCreateContextMenuListener(this);
     }
     
     private void updateAdapter() {
-
+    	if(!database.isOpen()) {
+    		database.open();
+    	}
 		Cursor cursor = database.getAllConversations();
 		startManagingCursor(cursor);
 		
@@ -137,11 +153,6 @@ public class ConversationList extends ListActivity {
 		database.close();
 	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		
-	}
 	
 
 	@Override
@@ -180,12 +191,16 @@ public class ConversationList extends ListActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case MENU_COMPOSE_NEW:
                 createNewMessage();
                 break;
+            case MENU_DELETE_ALL:
+            	confirmDeleteThread(null);
+            	break;
             default:
                 return true;
         }
@@ -210,10 +225,35 @@ public class ConversationList extends ListActivity {
     private void openThread(String from) {
         startActivity(ComposeMessageActivity.createIntent(this, from));
     }
-
+    
+    private void confirmDeleteThread(final String from) {
+    	
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.confirm_dialog_title)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+        .setCancelable(true)
+        .setPositiveButton(R.string.delete, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(from == null) {
+					database.deleteAllConversation();
+				}else {
+					database.deleteConversation(from);
+				}
+				//TODO : should be raised by db layer instead of direct call from the UI
+				updateAdapter();
+			}
+		})
+        .setNegativeButton(R.string.no, null)
+        .setMessage(from == null
+                ? R.string.confirm_delete_all_conversations
+                        : R.string.confirm_delete_conversation)
+        .show();
+    }
 
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
+    	Log.d(THIS_FILE, "Create context menu");
         Cursor cursor = ((CursorAdapter) getListAdapter()).getCursor();
         if (cursor == null || cursor.getPosition() < 0) {
             return;
@@ -226,6 +266,43 @@ public class ConversationList extends ListActivity {
             menu.add(0, MENU_DELETE, 0, R.string.menu_delete);
         }
     }
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Cursor cursor = ((CursorAdapter) getListAdapter()).getCursor();
+        if (cursor != null && cursor.getPosition() >= 0) {
+        	String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
+        	
+            switch (item.getItemId()) {
+            case MENU_DELETE: {
+                confirmDeleteThread(number);
+                break;
+            }
+            case MENU_VIEW: {
+                openThread(number);
+                break;
+            }
+            /*
+            case MENU_VIEW_CONTACT: {
+                Contact contact = conv.getRecipients().get(0);
+                Intent intent = new Intent(Intent.ACTION_VIEW, contact.getUri());
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                startActivity(intent);
+                break;
+            }
+            case MENU_ADD_TO_CONTACTS: {
+                String address = conv.getRecipients().get(0).getNumber();
+                startActivity(createAddContactIntent(address));
+                break;
+            }
+            */
+            default:
+                break;
+            }
+        }
+        return super.onContextItemSelected(item);
+    }
+    
     
     
 
@@ -266,7 +343,7 @@ public class ConversationList extends ListActivity {
 	        // Subject
 	        tagView.subjectView.setText(subject);
 //	        LayoutParams subjectLayout = (LayoutParams)tagView.subjectView.getLayoutParams();
-	        // We have to make the subject left of whatever optional items are shown on the right.
+	        // We have to make t)he subject left of whatever optional items are shown on the right.
 //	        subjectLayout.addRule(RelativeLayout.LEFT_OF, R.id.date);
 			
 			//From

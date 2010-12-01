@@ -44,15 +44,13 @@ public class PlanetPhone extends SimpleImplementation {
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 	
-	public Account buildAccount(Account account) {
-		account = super.buildAccount(account);
-		if(account.id == null || account.id < 0) {
-			//First run, we should set settings !
-			PreferencesWrapper p = new PreferencesWrapper(parent);
-			p.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_VAD, true);
-		}
-		return account;
+	
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
+		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_VAD, true);
 	}
+	
 	
 	@Override
 	public boolean needRestart() {

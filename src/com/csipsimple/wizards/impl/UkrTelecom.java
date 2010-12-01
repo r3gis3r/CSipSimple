@@ -61,7 +61,7 @@ public class UkrTelecom extends SimpleImplementation {
 		account.cfg.setProxy_cnt(0);
 		pj_str_t[] proxies = account.cfg.getProxy();
 		account.cfg.setProxy(proxies);
-		account.transport = 1;
+		account.transport = Account.TRANSPORT_UDP;
 		return account;
 	}
 }

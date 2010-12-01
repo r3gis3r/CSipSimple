@@ -17,8 +17,6 @@
  */
 package com.csipsimple.wizards.impl;
 
-import android.text.TextUtils;
-
 import com.csipsimple.R;
 import com.csipsimple.models.Account;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -41,19 +39,14 @@ public class Sipgate extends AlternateServerImplementation {
 	
 	
 
-	public Account buildAccount(Account account) {
-		account = super.buildAccount(account);
-
-		
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
 		// Add stun server
-		PreferencesWrapper prefs = new PreferencesWrapper(parent);
-		if( ! (prefs.getStunEnabled()==1) || TextUtils.isEmpty(prefs.getStunServer())) {
-			prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
-			prefs.setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, "stun.sipgate.net:10000");
-		}
-		return account;
+		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
+		prefs.addStunServer("stun.sipgate.net:10000");
 	}
-
+	
 
 	@Override
 	protected String getDefaultName() {

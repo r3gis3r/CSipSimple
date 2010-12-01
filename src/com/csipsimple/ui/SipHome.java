@@ -20,7 +20,6 @@ package com.csipsimple.ui;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.TabActivity;
@@ -40,7 +39,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -59,7 +57,7 @@ import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.contacts.ContactsWrapper;
-import com.csipsimple.utils.contacts.ContactsWrapper.Phone;
+import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.IndicatorTab;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
@@ -91,7 +89,6 @@ public class SipHome extends TabActivity {
 
 	private boolean has_tried_once_to_activate_account = false;
 	private ImageButton pickupContact;
-	private ArrayAdapter<String> phoneChoiceAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +184,8 @@ public class SipHome extends TabActivity {
 		if(!prefWrapper.getPreferenceBooleanValue(PreferencesWrapper.PREVENT_SCREEN_ROTATION)) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 		}
+		
+		selectTabWithAction(getIntent());
 		
 	}
 
@@ -287,6 +286,10 @@ public class SipHome extends TabActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		selectTabWithAction(intent);
+	}
+
+	private void selectTabWithAction(Intent intent) {
 		if(intent != null) {
 			String callAction = intent.getAction();
 			if(SipService.ACTION_SIP_CALLLOG.equalsIgnoreCase(callAction)) {
@@ -298,7 +301,6 @@ public class SipHome extends TabActivity {
 			}
 		}
 	}
-
 
 	@Override
 	protected void onDestroy() {
@@ -430,50 +432,13 @@ public class SipHome extends TabActivity {
 		switch (requestCode) {
 		case PICKUP_PHONE:
 			if(resultCode == RESULT_OK) {
-
-		    	Uri contactUri = data.getData();
-		        List<String> list = contactUri.getPathSegments();
-		        String contactId = list.get(list.size() - 1);
-		        ArrayList<Phone> phones = ContactsWrapper.getInstance().getPhoneNumbers(this, contactId);
-		        
-		        if(phones.size() == 0) {
-			        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		        	builder.setPositiveButton(R.string.ok, null);
-		        	builder.setMessage(R.string.no_phone_found);
-		        	AlertDialog dialog = builder.create();
-		        	dialog.show();
-		        }else if(phones.size() == 1) {
-		        	startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", phones.get(0).getNumber(), null)));
-		        }else {
-			        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-					
-					ArrayList<String> entries = new ArrayList<String>();
-					for (Phone phone : phones) {
-						entries.add(phone.getNumber());
+				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
+					@Override
+					public void onTrigger(String number) {
+						startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
 					}
-					
-					phoneChoiceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, entries );
-					
-					builder.setTitle(R.string.pickup_sip_uri);
-			        builder.setAdapter(phoneChoiceAdapter, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							Log.d(THIS_FILE, "Clicked "+which);
-							String number = phoneChoiceAdapter.getItem(which);
-							startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
-						}
-					});
-			        builder.setCancelable(true);
-			        builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// Nothing to do
-							dialog.dismiss();
-						}
-					});
-			        AlertDialog dialog = builder.create();
-			        dialog.show();
-		        }
+				});
+				return;
 			}
 			break;
 

@@ -18,6 +18,7 @@
 package com.csipsimple.wizards;
 
 import com.csipsimple.models.Account;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public interface WizardIface {
 	void setParent(BasePrefsWizard parent);
@@ -32,6 +33,7 @@ public interface WizardIface {
 
 	// Save
 	Account buildAccount(Account account);
+	void setDefaultParams(PreferencesWrapper prefs);
 	boolean canSave();
 	boolean needRestart();
 	

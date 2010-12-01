@@ -147,7 +147,7 @@ public class CollectLogs {
 	public static Intent getLogReportIntent(String userComment, Context ctx) {
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, "CSipSimple Error-Log report");
-        sendIntent.setType("text/plain");//$NON-NLS-1$
+        sendIntent.setType("text/plain");
         sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { CustomDistribution.getSupportEmail() });
         
         StringBuilder log = new StringBuilder();

@@ -47,7 +47,9 @@
 				android:defaultValue="20"
 				android:numeric="signed"></EditTextPreference>
 				
-				
+			<CheckBoxPreference android:summary="@string/has_io_queue_desc"
+				android:title="@string/has_io_queue" android:key="has_io_queue"
+				android:defaultValue="false"></CheckBoxPreference>
 
 		</PreferenceCategory>
 		

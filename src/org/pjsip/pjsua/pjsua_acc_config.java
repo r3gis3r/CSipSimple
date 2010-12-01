@@ -250,6 +250,32 @@ public class pjsua_acc_config {
     return pjsuaJNI.pjsua_acc_config_contact_rewrite_method_get(swigCPtr, this);
   }
 
+  public void setUse_rfc5626(long value) {
+    pjsuaJNI.pjsua_acc_config_use_rfc5626_set(swigCPtr, this, value);
+  }
+
+  public long getUse_rfc5626() {
+    return pjsuaJNI.pjsua_acc_config_use_rfc5626_get(swigCPtr, this);
+  }
+
+  public void setRfc5626_instance_id(pj_str_t value) {
+    pjsuaJNI.pjsua_acc_config_rfc5626_instance_id_set(swigCPtr, this, pj_str_t.getCPtr(value), value);
+  }
+
+  public pj_str_t getRfc5626_instance_id() {
+    long cPtr = pjsuaJNI.pjsua_acc_config_rfc5626_instance_id_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
+  }
+
+  public void setRfc5626_reg_id(pj_str_t value) {
+    pjsuaJNI.pjsua_acc_config_rfc5626_reg_id_set(swigCPtr, this, pj_str_t.getCPtr(value), value);
+  }
+
+  public pj_str_t getRfc5626_reg_id() {
+    long cPtr = pjsuaJNI.pjsua_acc_config_rfc5626_reg_id_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
+  }
+
   public void setKa_interval(long value) {
     pjsuaJNI.pjsua_acc_config_ka_interval_set(swigCPtr, this, value);
   }

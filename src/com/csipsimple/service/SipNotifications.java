@@ -36,6 +36,7 @@ import com.csipsimple.R;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.SipMessage;
+import com.csipsimple.utils.SipUri;
 import com.csipsimple.widgets.RegistrationNotification;
 
 public class SipNotifications {
@@ -45,6 +46,7 @@ public class SipNotifications {
 	private Notification inCallNotification;
 	private Context context;
 	private Notification missedCallNotification;
+	private Notification messageNotification;
 
 	public static final int REGISTER_NOTIF_ID = 1;
 	public static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
@@ -120,6 +122,8 @@ public class SipNotifications {
 		if(missedCallNotification == null) {
 			missedCallNotification = new Notification(icon, tickerText, when);
 			missedCallNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+			missedCallNotification.defaults |= Notification.DEFAULT_LIGHTS;
+			missedCallNotification.defaults |= Notification.DEFAULT_SOUND;
 		}
 		
 		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALLLOG);
@@ -135,10 +139,16 @@ public class SipNotifications {
 	public void showNotificationForMessage(SipMessage msg) {
 		//CharSequence tickerText = context.getText(R.string.instance_message);
 		if(!msg.getFrom().equalsIgnoreCase(viewingRemoteFrom)) {
-			CharSequence tickerText = buildTickerMessage(context, msg.getFrom(), msg.getBody());
+			String from = SipUri.getDisplayedSimpleUri(msg.getFrom());
+			CharSequence tickerText = buildTickerMessage(context, from, msg.getBody());
 			
-			Notification notification = new Notification(R.drawable.stat_notify_sms, tickerText, System.currentTimeMillis());
-			notification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+			if(messageNotification == null) {
+				messageNotification = new Notification(SipUri.isPhoneNumber(from)?R.drawable.stat_notify_sms: android.R.drawable.stat_notify_chat, tickerText, System.currentTimeMillis());
+				messageNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+				messageNotification.defaults |= Notification.DEFAULT_SOUND;
+				messageNotification.defaults |= Notification.DEFAULT_LIGHTS;
+			}
+			
 			
 			Intent notificationIntent = new Intent(SipService.ACTION_SIP_MESSAGES);
 			notificationIntent.putExtra(SipMessage.FIELD_FROM, msg.getFrom());
@@ -146,9 +156,8 @@ public class SipNotifications {
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 			
-			notification.defaults |= Notification.DEFAULT_SOUND;
-			notification.setLatestEventInfo(context, msg.getFrom(), msg.getBody(), contentIntent);
-			notificationManager.notify(MESSAGE_NOTIF_ID, notification);
+			messageNotification.setLatestEventInfo(context, from, msg.getBody(), contentIntent);
+			notificationManager.notify(MESSAGE_NOTIF_ID, messageNotification);
 		}
 	}
 	

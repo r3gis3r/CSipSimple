@@ -17,7 +17,6 @@
  */
 package com.csipsimple.wizards.impl;
 
-import com.csipsimple.models.Account;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
@@ -29,14 +28,10 @@ public class OnSip extends AuthorizationImplementation {
 	}
 	
 
-	public Account buildAccount(Account account) {
-		account = super.buildAccount(account);
-		// Enable dns srv
-		PreferencesWrapper prefs = new PreferencesWrapper(parent);
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
 		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);
-		
-		return account;
-		
 	}
 	
 	@Override

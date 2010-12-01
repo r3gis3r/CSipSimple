@@ -80,7 +80,6 @@ import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.models.IAccount;
 import com.csipsimple.models.SipMessage;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.SipUri;
@@ -835,6 +834,7 @@ public class SipService extends Service {
 					mediaManager.startService();
 					
 					pjsua.setCallbackObject(userAgentReceiver);
+					
 
 					Log.d(THIS_FILE, "Attach is done to callback");
 
@@ -859,9 +859,15 @@ public class SipService extends Service {
 					// STUN
 					int isStunEnabled = prefsWrapper.getStunEnabled();
 					if (isStunEnabled == 1) {
-						cfg.setStun_srv_cnt(1);
+						String[] servers = prefsWrapper.getStunServer().split(",");
+						cfg.setStun_srv_cnt(servers.length);
 						pj_str_t[] stunServers = cfg.getStun_srv();
-						stunServers[0] = pjsua.pj_str_copy(prefsWrapper.getStunServer());
+						int i = 0;
+						for(String server : servers) {
+							Log.d(THIS_FILE, "add server "+server.trim() );
+							stunServers[i] = pjsua.pj_str_copy(server.trim());
+							i++;
+						}
 						cfg.setStun_srv(stunServers);
 					}
 
@@ -883,12 +889,12 @@ public class SipService extends Service {
 					mediaCfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
 					// Echo cancellation
 					mediaCfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
-					mediaCfg.setEc_options(2); // ECHO SIMPLE
+					mediaCfg.setEc_options(2); // ECHO SIMPLE : TODO -> setting that
 					mediaCfg.setNo_vad(prefsWrapper.getNoVad());
 					mediaCfg.setQuality(prefsWrapper.getMediaQuality());
 					mediaCfg.setClock_rate(prefsWrapper.getClockRate());
 					mediaCfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
-					mediaCfg.setHas_ioqueue(1);
+					mediaCfg.setHas_ioqueue(prefsWrapper.getHasIOQueue());
 
 					// ICE
 					mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());
@@ -902,7 +908,7 @@ public class SipService extends Service {
 					// INITIALIZE
 					status = pjsua.csipsimple_init(cfg, logCfg, mediaCfg);
 					if (status != pjsuaConstants.PJ_SUCCESS) {
-						String msg = "Fail to init pjsua with failure code " + status;
+						String msg = "Fail to init pjsua "+ pjsua.get_error_message(status).getPtr();
 						Log.e(THIS_FILE, msg);
 						ToastHandler.sendMessage(ToastHandler.obtainMessage(0, msg));
 						pjsua.csipsimple_destroy();
@@ -910,6 +916,7 @@ public class SipService extends Service {
 						creating = false;
 						return;
 					}
+					
 				}
 
 				// Add transports
@@ -927,9 +934,10 @@ public class SipService extends Service {
 							created = false;
 							return;
 						}
-//						 int[] p_acc_id = new int[1];
-//						 pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE,
-//						 p_acc_id);
+			/*			 int[] p_acc_id = new int[1];
+						 pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE,
+						 p_acc_id);
+			*/
 						// Log.d(THIS_FILE, "Udp account "+p_acc_id);
 
 					}
@@ -946,9 +954,11 @@ public class SipService extends Service {
 							created = false;
 							return;
 						}
-						// int[] p_acc_id = new int[1];
-						// pjsua.acc_add_local(tcpTranportId, pjsua.PJ_FALSE,
-						// p_acc_id);
+			/*
+						int[] p_acc_id = new int[1];
+						pjsua.acc_add_local(tcpTranportId, pjsua.PJ_FALSE,
+						p_acc_id);
+			*/
 
 					}
 
@@ -983,7 +993,10 @@ public class SipService extends Service {
 							status = pjsua.media_transports_create(cfg);
 						}
 						if (status != pjsuaConstants.PJ_SUCCESS) {
-							Log.e(THIS_FILE, "Fail to add media transport with failure code " + status);
+							String msg = "Fail to add media transport "+ pjsua.get_error_message(status).getPtr();
+							Log.e(THIS_FILE, msg);
+							
+							ToastHandler.sendMessage(ToastHandler.obtainMessage(0, msg));
 							pjsua.csipsimple_destroy();
 							creating = false;
 							created = false;
@@ -996,7 +1009,9 @@ public class SipService extends Service {
 				status = pjsua.start();
 
 				if (status != pjsua.PJ_SUCCESS) {
-					Log.e(THIS_FILE, "Fail to start pjsip " + status);
+					String msg = "Fail to start pjsip  "+ pjsua.get_error_message(status).getPtr();
+					Log.e(THIS_FILE, msg);
+					ToastHandler.sendMessage(ToastHandler.obtainMessage(0, msg));
 					pjsua.csipsimple_destroy();
 					creating = false;
 					created = false;
@@ -1117,8 +1132,8 @@ public class SipService extends Service {
 
 		status = pjsua.transport_create(type, cfg, tId);
 		if (status != pjsuaConstants.PJ_SUCCESS) {
-			
-			String msg = "Fail to add transport with failure code " + status;
+
+			String msg = "Fail to create transport "+ pjsua.get_error_message(status).getPtr();
 			Log.e(THIS_FILE, msg);
 			if(status == 120098) { /* Already binded */
 				msg = getString(R.string.another_application_use_sip_port);
@@ -1179,12 +1194,12 @@ public class SipService extends Service {
 			switch (account.transport) {
 			case Account.TRANSPORT_UDP:
 				if(udpTranportId != null) {
-					account.cfg.setTransport_id(udpTranportId);
+			//		account.cfg.setTransport_id(udpTranportId);
 				}
 				break;
 			case Account.TRANSPORT_TCP:
 				if(tcpTranportId != null) {
-				//	account.cfg.setTransport_id(tcpTranportId);
+			//		account.cfg.setTransport_id(tcpTranportId);
 				}
 				break;
 			case Account.TRANSPORT_TLS:
@@ -1204,6 +1219,9 @@ public class SipService extends Service {
 				}
 				if (status == pjsuaConstants.PJ_SUCCESS) {
 					status = pjsua.acc_set_registration(currentAccountId, 1);
+					if(status == pjsuaConstants.PJ_SUCCESS) {
+						pjsua.acc_set_online_status(currentAccountId, 1);
+					}
 				}
 			} else {
 				int[] accId = new int[1];
@@ -1213,11 +1231,13 @@ public class SipService extends Service {
 					status = pjsua.acc_add_local(udpTranportId, pjsuaConstants.PJ_FALSE, accId);
 				}else {
 					status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
+					
 				}
 				synchronized (activeAccountsLock) {
 					accountsAddingStatus.put(account.id, status);
 					if (status == pjsuaConstants.PJ_SUCCESS) {
 						activeAccounts.put(account.id, accId[0]);
+						pjsua.acc_set_online_status(accId[0], 1);
 					}
 				}
 			}
@@ -1242,6 +1262,7 @@ public class SipService extends Service {
 				}
 
 				if (renew == 1) {
+					pjsua.acc_set_online_status(cAccId, 1);
 					status = pjsua.acc_set_registration(cAccId, renew);
 				} else {
 					// if(status == pjsuaConstants.PJ_SUCCESS && renew == 0) {

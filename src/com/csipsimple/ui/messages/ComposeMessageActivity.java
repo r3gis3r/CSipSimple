@@ -125,12 +125,30 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 		registerReceiver(registrationReceiver, new IntentFilter(SipService.ACTION_SIP_MESSAGE_RECEIVED));
 		registerReceiver(registrationReceiver, new IntentFilter(SipService.ACTION_SIP_MESSAGE_STATUS));
 
+		
+
+        bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
+        setFromField(getIntent().getStringExtra(SipMessage.FIELD_FROM));
+        if(remoteFrom == null) {
+			chooseSipUri();
+		}
+        loadMessageContent();
 	}
 	
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		
+
+    	try {
+			unbindService(connection);
+		}catch(Exception e) {
+			//Just ignore that
+		}
+		service = null;
+		
+		
 		database.close();
 		try {
 			unregisterReceiver(registrationReceiver);
@@ -138,33 +156,10 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 			// Nothing to do here
 		}
 	}
-	
-    @Override
-    protected void onStart() {
-        super.onStart();
-        bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
-        setFromField(getIntent().getStringExtra(SipMessage.FIELD_FROM));
-        if(remoteFrom == null) {
-			chooseSipUri();
-		}
-        loadMessageContent();
-        
-    }
-    
-    @Override
-    protected void onStop() {
-    	super.onStop();
-    	try {
-			unbindService(connection);
-		}catch(Exception e) {
-			//Just ignore that
-		}
-		service = null;
-    	
-    }
     
     @Override
     protected void onResume() {
+    	Log.d(THIS_FILE, "Resume compose message act");
     	super.onResume();
     	notifications.setViewingMessageFrom(remoteFrom);
     }
@@ -189,6 +184,7 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(THIS_FILE, "On activity result");
 		switch (requestCode) {
 		case PICKUP_SIP_URI:
 			if(resultCode == RESULT_OK) {
@@ -301,7 +297,9 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 	        	tagView.deliveredIndicator.setVisibility(View.GONE);
 	        }
 	        
-	        if(status == SipMessage.STATUS_NONE || status == pjsip_status_code.PJSIP_SC_OK.swigValue()) {
+	        if(status == SipMessage.STATUS_NONE 
+	        		|| status == pjsip_status_code.PJSIP_SC_OK.swigValue()
+	        		|| status == pjsip_status_code.PJSIP_SC_ACCEPTED.swigValue()) {
 	        	tagView.errorView.setVisibility(View.GONE);
 	        }else {
 	        	

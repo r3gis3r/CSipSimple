@@ -39,6 +39,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.ui.AccountFilters;
 import com.csipsimple.ui.prefs.GenericPrefs;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class BasePrefsWizard extends GenericPrefs{
@@ -269,13 +270,18 @@ public class BasePrefsWizard extends GenericPrefs{
 	
 	protected void saveAccount(String wizardId){
 		boolean needRestart = false;
+
+		PreferencesWrapper prefs = new PreferencesWrapper(this);
 		account = wizard.buildAccount(account);
 		account.wizard = wizardId;
 		database.open();
 		if(account.id == null || account.id.equals(-1)){
+			wizard.setDefaultParams(prefs);
 			account.id = (int) database.insertAccount(account);
 			needRestart = wizard.needRestart();
 		}else{
+			//TODO : should not be done there but if not we should add an option to re-apply default params
+			wizard.setDefaultParams(prefs);
 			database.updateAccount(account);
 		}
 		database.close();

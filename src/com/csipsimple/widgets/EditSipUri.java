@@ -151,5 +151,10 @@ public class EditSipUri extends LinearLayout implements TextWatcher {
 		dialUser.getText().clear();
 	}
 
+	public void setTextValue(String number) {
+		clear();
+		dialUser.getText().append(number);
+	}
+
 	
 }
