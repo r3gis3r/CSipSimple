@@ -7,14 +7,6 @@
     <item>Прямой вызов</item>
     <item>Автоответ</item>
   </string-array>
-  <string-array name="filters_type">
-    <item>Начинается с</item>
-    <item>Заканчивается на</item>
-    <item>Имеет ровно N цифр</item>
-    <item>Имеет более N цифр</item>
-    <item>Ровно</item>
-    <item>Пользовательский RegExp</item>
-  </string-array>
   <string-array name="replace_type">
     <item>Префикс</item>
     <item>Суффикс</item>

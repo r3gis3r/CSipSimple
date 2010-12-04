@@ -7,14 +7,7 @@
     <item>Apeleaza direct</item>
     <item>Raspuns automat</item>
   </string-array>
-  <string-array name="filters_type">
-    <item>Incepe cu</item>
-    <item>Se termina cu</item>
-    <item>Are exact N caractere</item>
-    <item>Are mai multe de N caractere</item>
-    <item>Este exact</item>
-    <item>Expresie regulata personalizata</item>
-  </string-array>
+  
   <string-array name="replace_type">
     <item>Prefix by</item>
     <item>Suffix with</item>

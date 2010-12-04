@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-27 23:52+0100\n"
+"POT-Creation-Date: 2010-12-04 18:58+0100\n"
 "PO-Revision-Date: 2010-10-10 18:09+0000\n"
 "Last-Translator: Daniel Borene <Unknown>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
@@ -46,18 +46,26 @@ msgid "Ends with"
 msgstr "Termina com"
 
 msgctxt "filters_type:2"
+msgid "All"
+msgstr ""
+
+#, fuzzy
+msgctxt "filters_type:3"
 msgid "Has exactly N digit"
 msgstr "Tem exatamente N digito"
 
-msgctxt "filters_type:3"
+#, fuzzy
+msgctxt "filters_type:4"
 msgid "Has more than N digit"
 msgstr "Tem mais que N digito"
 
-msgctxt "filters_type:4"
+#, fuzzy
+msgctxt "filters_type:5"
 msgid "Is exactly"
 msgstr "É exatamente"
 
-msgctxt "filters_type:5"
+#, fuzzy
+msgctxt "filters_type:6"
 msgid "Custom RegExp"
 msgstr "RegExp personalizada"
 
@@ -80,4 +88,8 @@ msgstr "Regravar todos por"
 msgctxt "replace_type:4"
 msgid "Custom RegExp"
 msgstr "RegExp personalizada"
+
+#~ msgctxt "filters_type:5"
+#~ msgid "Custom RegExp"
+#~ msgstr "RegExp personalizada"
 

@@ -3,6 +3,7 @@
   <string-array name="filters_type">
     <item>Empieza por</item>
     <item>Termina con</item>
+    <item>Todos</item>
     <item>Tiene exactamente N dígitos</item>
     <item>Tiene más de N dígitos</item>
     <item>Es exactamente</item>

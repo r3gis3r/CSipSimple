@@ -7,14 +7,6 @@
     <item>Direkter Anruf</item>
     <item>Automatische Anrufbeantwortung</item>
   </string-array>
-  <string-array name="filters_type">
-    <item>Startet mit</item>
-    <item>Endet mit</item>
-    <item>Hat genau N Stellen</item>
-    <item>Hat mehr als N Stellen</item>
-    <item>Ist genau</item>
-    <item>benutzerdefiniert RegExp</item>
-  </string-array>
   <string-array name="replace_type">
     <item>Präfix von</item>
     <item>Suffix mit</item>

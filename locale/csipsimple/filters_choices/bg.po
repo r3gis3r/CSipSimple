@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-27 23:52+0100\n"
+"POT-Creation-Date: 2010-12-04 18:58+0100\n"
 "PO-Revision-Date: 2010-09-30 08:07+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -46,18 +46,26 @@ msgid "Ends with"
 msgstr "Завършва с"
 
 msgctxt "filters_type:2"
+msgid "All"
+msgstr ""
+
+#, fuzzy
+msgctxt "filters_type:3"
 msgid "Has exactly N digit"
 msgstr "Има точно N цифри"
 
-msgctxt "filters_type:3"
+#, fuzzy
+msgctxt "filters_type:4"
 msgid "Has more than N digit"
 msgstr "Има повече от N цифри"
 
-msgctxt "filters_type:4"
+#, fuzzy
+msgctxt "filters_type:5"
 msgid "Is exactly"
 msgstr "Е точно"
 
-msgctxt "filters_type:5"
+#, fuzzy
+msgctxt "filters_type:6"
 msgid "Custom RegExp"
 msgstr "Регулярен израз по избор"
 
@@ -80,4 +88,8 @@ msgstr "Замяна на всички с"
 msgctxt "replace_type:4"
 msgid "Custom RegExp"
 msgstr "Регулярен израз по избор"
+
+#~ msgctxt "filters_type:5"
+#~ msgid "Custom RegExp"
+#~ msgstr "Регулярен израз по избор"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-11-27 23:52+0100\n"
+"POT-Creation-Date: 2010-12-04 18:58+0100\n"
 "PO-Revision-Date: 2010-10-10 11:42+0000\n"
 "Last-Translator: Gianluca <Unknown>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -491,6 +491,14 @@ msgstr ""
 
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
+msgstr ""
+
+msgctxt "has_io_queue"
+msgid "IO Queue"
+msgstr ""
+
+msgctxt "has_io_queue_desc"
+msgid "Activate Queue for input/output"
 msgstr ""
 
 #. UI

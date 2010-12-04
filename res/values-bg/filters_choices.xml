@@ -7,14 +7,6 @@
     <item>Директно повикване</item>
     <item>Автоматичен отговор</item>
   </string-array>
-  <string-array name="filters_type">
-    <item>Започва с</item>
-    <item>Завършва с</item>
-    <item>Има точно N цифри</item>
-    <item>Има повече от N цифри</item>
-    <item>Е точно</item>
-    <item>Регулярен израз по избор</item>
-  </string-array>
   <string-array name="replace_type">
     <item>Префикс от</item>
     <item>Суфикс с</item>

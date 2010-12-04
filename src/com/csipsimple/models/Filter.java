@@ -53,6 +53,7 @@ public class Filter {
 	public static final int MATCHER_IS_EXACTLY = 3;
 	public static final int MATCHER_REGEXP = 4;
 	public static final int MATCHER_ENDS = 5;
+	public static final int MATCHER_ALL = 6;
 	
 	public static final int REPLACE_PREFIX = 0;
 	public static final int REPLACE_MATCH_TO = 1;
@@ -253,10 +254,11 @@ public class Filter {
 	private static HashMap<Integer, Integer> matcherTypePositions = new HashMap<Integer, Integer>() {{
 		put(0, MATCHER_START);
 		put(1, MATCHER_ENDS);
-		put(2, MATCHER_HAS_N_DIGIT);
-		put(3, MATCHER_HAS_MORE_N_DIGIT);
-		put(4, MATCHER_IS_EXACTLY);
-		put(5, MATCHER_REGEXP);
+		put(2, MATCHER_ALL);
+		put(3, MATCHER_HAS_N_DIGIT);
+		put(4, MATCHER_HAS_MORE_N_DIGIT);
+		put(5, MATCHER_IS_EXACTLY);
+		put(6, MATCHER_REGEXP);
 	}};
 	
 	public static int getMatcherForPosition(Integer selectedItemPosition) {
@@ -307,6 +309,9 @@ public class Filter {
 		case MATCHER_ENDS:
 			matches = "^(.*)"+Pattern.quote(representation.fieldContent)+"$";
 			break;
+		case MATCHER_ALL:
+			matches = "^(.*)$";
+			break;
 		case MATCHER_HAS_N_DIGIT:
 			//TODO: is dot the best char?
 			//TODO ... we should probably test the fieldContent type to ensure it's well digits...
@@ -335,10 +340,15 @@ public class Filter {
 		RegExpRepresentation repr = new RegExpRepresentation();
 		repr.type = MATCHER_REGEXP;
 		if(matches == null) {
+			repr.type = MATCHER_START;
 			repr.fieldContent = "";
 			return repr;
 		}else {
 			repr.fieldContent = matches;
+			if( TextUtils.isEmpty(repr.fieldContent) ) {
+				repr.type = MATCHER_START;
+				return repr;
+			}
 		}
 		
 		Matcher matcher = null;
@@ -354,6 +364,13 @@ public class Filter {
 		if(matcher.matches()) {
 			repr.type = MATCHER_ENDS;
 			repr.fieldContent = matcher.group(1);
+			return repr;
+		}
+		
+		matcher = Pattern.compile("^\\^\\(\\.\\*\\)\\$$").matcher(matches);
+		if(matcher.matches()) {
+			repr.type = MATCHER_ALL;
+			repr.fieldContent = "";
 			return repr;
 		}
 		
@@ -408,10 +425,15 @@ public class Filter {
 		RegExpRepresentation repr = new RegExpRepresentation();
 		repr.type = REPLACE_REGEXP;
 		if(replace == null) {
+			repr.type = REPLACE_MATCH_TO;
 			repr.fieldContent = "";
 			return repr;
 		}else {
 			repr.fieldContent = replace;
+			if( TextUtils.isEmpty(repr.fieldContent) ) {
+				repr.type = REPLACE_MATCH_TO;
+				return repr;
+			}
 		}
 		
 		Matcher matcher = null;

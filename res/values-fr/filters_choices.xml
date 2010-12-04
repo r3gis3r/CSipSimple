@@ -10,6 +10,7 @@
   <string-array name="filters_type">
     <item>Commence avec</item>
     <item>Fini avec</item>
+    <item>Tous</item>
     <item>A exactement N digit</item>
     <item>A plus de N digit</item>
     <item>Est exactement</item>

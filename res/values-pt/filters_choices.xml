@@ -7,14 +7,7 @@
     <item>Ligar Diretamente</item>
     <item>Atendimento Automatico</item>
   </string-array>
-  <string-array name="filters_type">
-    <item>Começa com</item>
-    <item>Termina com</item>
-    <item>Tem exatamente N digito</item>
-    <item>Tem mais que N digito</item>
-    <item>É exatamente</item>
-    <item>RegExp personalizada</item>
-  </string-array>
+  
   <string-array name="replace_type">
     <item>Prefixo pro</item>
     <item>Fufixo com</item>
