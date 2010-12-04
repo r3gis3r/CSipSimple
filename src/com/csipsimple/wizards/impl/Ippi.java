@@ -49,6 +49,7 @@ public class Ippi extends SimpleImplementation {
 		super.setDefaultParams(prefs);
 		// Add stun server
 		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
+		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_ICE, true);
 		prefs.addStunServer("stun.ippi.fr");
 	}
 	

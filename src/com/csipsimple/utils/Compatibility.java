@@ -165,6 +165,7 @@ public class Compatibility {
 		//Disable iLBC if not armv7
 		preferencesWrapper.setCodecPriority("iLBC/8000/1", 
 				getCpuAbi().equalsIgnoreCase("armeabi-v7a") ? "189" : "0");
+		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_MEDIA_QUALITY, getCpuAbi().equalsIgnoreCase("armeabi-v7a") ? "4" : "3");
 		
 		//Values get from wince pjsip app
 		preferencesWrapper.setCodecPriority("PCMU/8000/1", "240");
@@ -174,6 +175,7 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("speex/32000/1", "0");
 		preferencesWrapper.setCodecPriority("GSM/8000/1", "100");
 		preferencesWrapper.setCodecPriority("G722/16000/1", "0");
+		preferencesWrapper.setCodecPriority("G729/8000/1", "0");
 
 		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_AUTO_CLOSE_TIME, isCompatible(4) ? "1" : "5");
 		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_CLOCK_RATE, isCompatible(4) ? "16000" : "8000");
@@ -268,6 +270,7 @@ public class Compatibility {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.SIP_AUDIO_MODE, guessInCallMode());
 		}
+		
 		
 		 
 	}

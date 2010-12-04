@@ -78,6 +78,19 @@ public class Keyyo extends SimpleImplementation {
 		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);
 		prefs.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, true);
 		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_VAD, true);
+		
+		
+		
+		//Only G711a/u
+		prefs.setCodecPriority("PCMU/8000/1", "240");
+		prefs.setCodecPriority("PCMA/8000/1", "230");
+		prefs.setCodecPriority("G722/16000/1", "0");
+		prefs.setCodecPriority("iLBC/8000/1", "0");
+		prefs.setCodecPriority("speex/8000/1", "0");
+		prefs.setCodecPriority("speex/16000/1", "0");
+		prefs.setCodecPriority("speex/32000/1", "0");
+		prefs.setCodecPriority("GSM/8000/1", "0");
+		
 	}
 
 	@Override

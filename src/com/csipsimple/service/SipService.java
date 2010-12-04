@@ -841,7 +841,7 @@ public class SipService extends Service {
 					// MAIN CONFIG
 
 					cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent()));
-				//	cfg.setThread_cnt(prefsWrapper.getThreadCount()); // one thread seems to be enough
+					cfg.setThread_cnt(prefsWrapper.getThreadCount()); // one thread seems to be enough
 					// for now
 					cfg.setUse_srtp(prefsWrapper.getUseSrtp());
 					cfg.setSrtp_secure_signaling(0);
@@ -874,6 +874,7 @@ public class SipService extends Service {
 					// IGNORE NOTIFY -- TODO : for now that's something we want
 					// since it pollute battery life
 			//		cfg.setEnable_unsolicited_mwi(pjsuaConstants.PJ_FALSE);
+					
 
 					// LOGGING CONFIG
 					pjsua.logging_config_default(logCfg);

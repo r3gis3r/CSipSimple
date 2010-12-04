@@ -82,6 +82,17 @@ public class UAStateReceiver extends Callback {
 	
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
+		//Check if we have not already an ongoing call
+		CallInfo existingOngoingCall = getActiveCallInProgress();
+		if(existingOngoingCall != null) {
+			if(existingOngoingCall.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
+				Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
+				//If there is an ongoing call... For now decline TODO : should here manage multiple calls
+				pjsua.call_hangup(callId, 0, null, null);
+				return;
+			}
+		}
+		
 		CallInfo callInfo = getCallInfo(callId);
 		Log.d(THIS_FILE, "Incoming call <<");
 		treatIncomingCall(acc_id, callInfo);
@@ -382,6 +393,8 @@ public class UAStateReceiver extends Callback {
 	
 	private void treatIncomingCall(int accountId, CallInfo callInfo) {
 		int callId = callInfo.getCallId();
+		
+
 		
 		//Get lock while ringing to be sure notification is well done !
 		PowerManager pman = (PowerManager) service.getSystemService(Context.POWER_SERVICE);

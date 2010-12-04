@@ -47,6 +47,6 @@ public class Pbxes extends SimpleImplementation {
 	
 	@Override
 	protected boolean canTcp() {
-		return true;
+		return false; // Cause there is something really wrong on the pbxes.org server
 	}
 }
