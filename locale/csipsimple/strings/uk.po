@@ -24,11 +24,11 @@ msgstr "CSipSimple"
 
 msgctxt "next"
 msgid "Next"
-msgstr ""
+msgstr "Далі"
 
 msgctxt "init"
 msgid "Init..."
-msgstr ""
+msgstr "Старт..."
 
 msgctxt "unable_to_download_file"
 msgid "Unable to download file"
@@ -36,8 +36,8 @@ msgstr "Не вдається завантажити файл"
 
 msgctxt "connection_not_valid"
 msgid ""
-"Selected network route not available (activate WiFi or change preferences"
-" to use 3G)"
+"Selected network route not available (activate WiFi or change preferences to "
+"use 3G)"
 msgstr ""
 "Обрана маршрутна мережа не доступна (активувати WiFi або змінити "
 "налаштування, щоб використовувати 3G)"
@@ -260,5 +260,5 @@ msgstr ""
 
 msgctxt "no_phone_found"
 msgid "No phone found for this contact"
-msgstr ""
+msgstr "Не знайдено телефон для цього контакту"
 

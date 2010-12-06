@@ -7,7 +7,6 @@
     <item>Ligar Diretamente</item>
     <item>Atendimento Automatico</item>
   </string-array>
-  
   <string-array name="replace_type">
     <item>Prefixo pro</item>
     <item>Fufixo com</item>

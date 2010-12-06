@@ -35,6 +35,8 @@ public class PrefsUI extends GenericPrefs {
 		PreferencesWrapper pfw = new PreferencesWrapper(this);
 		if(!pfw.isAdvancedUser()) {
 			hidePreference(null, "advanced_ui");
+			hidePreference("android_integration", "gsm_integration_type");
+			
 		}
 	}
 	

@@ -476,9 +476,8 @@ msgstr ""
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
-msgstr ""
+msgstr "Utilizza modalità per le API audio"
 
-#, fuzzy
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
@@ -487,11 +486,11 @@ msgstr ""
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
-msgstr ""
+msgstr "Modalità audio per le chiamate SIP"
 
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
-msgstr ""
+msgstr "Cambia solo su suggerimento degli sviluppatori"
 
 msgctxt "has_io_queue"
 msgid "IO Queue"

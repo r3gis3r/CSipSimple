@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
+  <string name="next">Suivant</string>
+  <string name="init">Initialisation...</string>
   <string name="unable_to_download_file">Impossible de télécharger le fichier</string>
-  <string name="connection_not_valid">Votre connection n\'est actuellement pas valide pour faire du SIP (activez le WIFI ou changez vos préférences pour pouvoir utiliser la 3G)</string>
+  <string name="connection_not_valid">Votre connexion n\'est actuellement pas suffisante pour les appels SIP (activez le WIFI ou changez vos préférences pour utiliser la 3G)</string>
   <string name="invalid_sip_uri">L\'URI SIP n\'est pas valide pour effectuer un appel</string>
   <string name="accounts">Comptes</string>
   <string name="other_accounts">Autres comptes</string>
@@ -52,4 +54,6 @@
   <string name="display_icon_in_status_bar_desc">L\'application doit-elle afficher une icone dans la barre de notification lorsque enregistrée</string>
   <string name="display_icon_in_status_bar">Afficher une icône dans la barre de notification</string>
   <string name="another_application_use_sip_port">Une autre application utilise actuellement le port SIP! Impossible de démarrer !!!</string>
+  <string name="choose_phone">Choisir le numéro de téléphone</string>
+  <string name="no_phone_found">Ce contact n\'a pas de numéro de téléphone</string>
 </resources>

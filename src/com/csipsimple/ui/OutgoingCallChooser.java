@@ -101,21 +101,8 @@ public class OutgoingCallChooser extends ListActivity {
 
 			// Inform the list we provide context menus for items
 			//	getListView().setOnCreateContextMenuListener(this);
+			OutgoingCallChooser.this.bindAddedRows();
 
-			LinearLayout add_row = (LinearLayout) findViewById(R.id.use_pstn_row);
-			add_row.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Log.d(THIS_FILE, "Choosen : pstn");
-					placePstnCall();
-				}
-			});
-			
-			
-			if(!Compatibility.canMakeGSMCall(OutgoingCallChooser.this)) {
-				add_row.setVisibility(View.GONE);
-			}
-			
 		}
 		
 		@Override
@@ -171,6 +158,7 @@ public class OutgoingCallChooser extends ListActivity {
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
 		
+
 		
 	}
 	
@@ -184,6 +172,35 @@ public class OutgoingCallChooser extends ListActivity {
 		}
 	}
 
+	private void bindAddedRows() {
+		//GSM ROW
+		LinearLayout gsmRow = (LinearLayout) findViewById(R.id.use_pstn_row);
+		gsmRow.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.d(THIS_FILE, "Choosen : pstn");
+				placePstnCall();
+			}
+		});
+		if(Compatibility.canMakeGSMCall(this)) {
+			gsmRow.setVisibility(View.VISIBLE);
+		}
+		
+		//Skype row
+		LinearLayout skypeRow = (LinearLayout) findViewById(R.id.use_skype_row);
+		skypeRow.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.d(THIS_FILE, "Choosen : skype");
+				placeSkypeCall();
+			}
+		});
+		if(Compatibility.canMakeSkypeCall(this)) {
+	//		skypeRow.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	
 	/**
 	 * Place a PSTN call
 	 */
@@ -196,6 +213,22 @@ public class OutgoingCallChooser extends ListActivity {
 		finishServiceIfNeeded();
 		finish();
 	}
+	
+	/**
+	 * Place a Skype call
+	 */
+	private void placeSkypeCall() {
+		/* --- OK Skype doesn't support skype: intent.... well ... still something to find here
+		String phoneNumber = number;
+		OutgoingCall.ignoreNext = phoneNumber;
+		Intent intentMakeSkypeCall = new Intent(Intent.ACTION_CALL);
+		intentMakeSkypeCall.setData(Uri.fromParts("skype", phoneNumber, null));
+		startActivity(intentMakeSkypeCall);
+		finishServiceIfNeeded();
+		finish();
+		*/
+	}
+	
 	
 	private void checkNumberWithSipStarted() {
 		database.open();

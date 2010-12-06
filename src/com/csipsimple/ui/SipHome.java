@@ -108,7 +108,7 @@ public class SipHome extends TabActivity {
 			startActivity(welcomeIntent);
 			finish();
 			return;
-		} else if (!SipService.isBundleStack(this)) {
+		} else if (!SipService.hasBundleStack(this)) {
 			// We have to check and save current version
 			try {
 				PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);

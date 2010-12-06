@@ -1,0 +1,48 @@
+# Chinese (Simplified) translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-11-27 23:52+0100\n"
+"PO-Revision-Date: 2010-11-29 06:52+0000\n"
+"Last-Translator: Larry Li <Unknown>\n"
+"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-11-30 05:15+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+msgctxt "w_sipgate_display_name"
+msgid "Account name"
+msgstr "账号名称"
+
+msgctxt "w_sipgate_display_name_desc"
+msgid "Display name for this account"
+msgstr "账号的显示名称"
+
+msgctxt "w_sipgate_username"
+msgid "SIP-ID"
+msgstr "SIP-ID"
+
+msgctxt "w_sipgate_username_desc"
+msgid ""
+"Different from your sipgate login! Check on sipgate website your SIP-ID"
+msgstr ""
+
+msgctxt "w_sipgate_password"
+msgid "SIP Password"
+msgstr "SIP 密码"
+
+msgctxt "w_sipgate_password_desc"
+msgid ""
+"Different from your password! Check on sipgate website your SIP Password"
+msgstr ""
+
+msgctxt "w_sipgate_server_desc"
+msgid "Something like that : sipgate.co.uk"
+msgstr ""

@@ -197,7 +197,6 @@ public class BasePrefsWizard extends GenericPrefs{
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, SAVE_MENU, Menu.NONE, R.string.save).setIcon(
 				android.R.drawable.ic_menu_save);
-
 		if(account.id != null && !account.id.equals(-1)){
 			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.choose_wizard).setIcon(
 					android.R.drawable.ic_menu_edit);
@@ -207,6 +206,13 @@ public class BasePrefsWizard extends GenericPrefs{
 					android.R.drawable.ic_menu_delete);
 		}
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(SAVE_MENU).setVisible(wizard.canSave());
+	
+		return super.onPrepareOptionsMenu(menu);
 	}
 	
 	 @Override

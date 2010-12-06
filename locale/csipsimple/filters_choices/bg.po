@@ -39,35 +39,31 @@ msgstr "Автоматичен отговор"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
-msgstr "Започва с"
+msgstr ""
 
 msgctxt "filters_type:1"
 msgid "Ends with"
-msgstr "Завършва с"
+msgstr ""
 
 msgctxt "filters_type:2"
 msgid "All"
 msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:3"
 msgid "Has exactly N digit"
-msgstr "Има точно N цифри"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:4"
 msgid "Has more than N digit"
-msgstr "Има повече от N цифри"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:5"
 msgid "Is exactly"
-msgstr "Е точно"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:6"
 msgid "Custom RegExp"
-msgstr "Регулярен израз по избор"
+msgstr ""
 
 msgctxt "replace_type:0"
 msgid "Prefix by"

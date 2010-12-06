@@ -80,45 +80,45 @@ msgstr ""
 
 msgctxt "contact_rewrite_method_choices:0"
 msgid "Legacy"
-msgstr ""
+msgstr "Staro"
 
 msgctxt "contact_rewrite_method_choices:1"
 msgid "Normal"
-msgstr ""
+msgstr "Običajno"
 
 msgctxt "transport_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Samodejno"
 
 msgctxt "transport_choices:1"
 msgid "UDP"
-msgstr ""
+msgstr "UDP"
 
 msgctxt "transport_choices:2"
 msgid "TCP"
-msgstr ""
+msgstr "TCP"
 
 msgctxt "transport_choices:3"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "tls_method_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Samodejno"
 
 msgctxt "tls_method_choices:1"
 msgid "TLSv1"
-msgstr ""
+msgstr "TLSv1"
 
 msgctxt "tls_method_choices:2"
 msgid "SSLv2"
-msgstr ""
+msgstr "SSLv2"
 
 msgctxt "tls_method_choices:3"
 msgid "SSL3"
-msgstr ""
+msgstr "SSL3"
 
 msgctxt "tls_method_choices:4"
 msgid "SSL23"
-msgstr ""
+msgstr "SSL23"
 

@@ -22,9 +22,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +62,15 @@ public class Codecs extends ListActivity {
 	ArrayList<HashMap<String, Object>> codecs;
 
 	private PreferencesWrapper prefsWrapper;
+	
+	private static final HashMap<String, String> nonFreeCodecs = new HashMap<String, String>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+	{
+		put("G729/8000/1", "http://www.synapseglobal.com/g729_codec_license.html");
+	}};
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -231,17 +245,47 @@ public class Codecs extends ListActivity {
 		case MENU_ITEM_ACTIVATE: {
 			boolean isDisabled = ((Short) codec.get(CODEC_PRIORITY) == 0);
 			
-			short newPrio = isDisabled ? (short) 1 : (short) 0;
-			codec.put(CODEC_PRIORITY, newPrio);
-			prefsWrapper.setCodecPriority((String) codec.get(CODEC_ID), Short.toString(newPrio));
+			final short newPrio = isDisabled ? (short) 1 : (short) 0;
 			
-			Collections.sort(codecs, codecsComparator);
+			if(nonFreeCodecs.containsKey(codec.get(CODEC_ID)) && isDisabled) {
+				final HashMap<String, Object> fCodec = codec;
 
-			((SimpleAdapter) adapter).notifyDataSetChanged();
+				final TextView message = new TextView(this);
+				final SpannableString s = new SpannableString(getString(R.string.this_codec_is_not_free) + nonFreeCodecs.get(codec.get(CODEC_ID)));
+				Linkify.addLinks(s, Linkify.WEB_URLS);
+				message.setText(s);
+				message.setMovementMethod(LinkMovementMethod.getInstance());
+				message.setPadding(10, 10, 10, 10);
+				  
+				
+				//Alert user that we will disable for all incoming calls as he want to quit
+				new AlertDialog.Builder(this)
+					.setTitle(R.string.warning)
+					.setView(message)
+					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							setCodecActivated(fCodec, newPrio);
+						}
+					})
+					.setNegativeButton(R.string.cancel, null)
+					.show();
+			}else {
+				setCodecActivated(codec, newPrio);
+			}
+			
 			return true;
 		}
 		}
         return false;
     }
+	
+	private void setCodecActivated(HashMap<String, Object> codec, short newPrio) {
+		codec.put(CODEC_PRIORITY, newPrio);
+		prefsWrapper.setCodecPriority((String) codec.get(CODEC_ID), Short.toString(newPrio));
+		
+		Collections.sort(codecs, codecsComparator);
+
+		((SimpleAdapter) adapter).notifyDataSetChanged();
+	}
 	
 }

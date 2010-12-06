@@ -64,4 +64,10 @@
 		<item>MANUFACTURER_EXTRA</item>
 	</string-array>
 	
+	<string-array name="gsm_integration_type_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	
 </resources>

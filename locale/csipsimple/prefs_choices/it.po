@@ -79,7 +79,7 @@ msgstr "SIP INFO"
 
 msgctxt "contact_rewrite_method_choices:0"
 msgid "Legacy"
-msgstr "legacy"
+msgstr "Legacy"
 
 msgctxt "contact_rewrite_method_choices:1"
 msgid "Normal"

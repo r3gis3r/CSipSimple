@@ -23,11 +23,11 @@ msgstr "CSipSimple"
 
 msgctxt "next"
 msgid "Next"
-msgstr ""
+msgstr "Avanti"
 
 msgctxt "init"
 msgid "Init..."
-msgstr ""
+msgstr "Inizializzazione ..."
 
 msgctxt "unable_to_download_file"
 msgid "Unable to download file"
@@ -91,7 +91,7 @@ msgstr "Usa :"
 
 msgctxt "use_pstn"
 msgid "Use mobile"
-msgstr "Usa GSM"
+msgstr "Usa rete mobile"
 
 msgctxt "ongoing_call"
 msgid "Call in Progress"
@@ -151,7 +151,7 @@ msgstr "Componi"
 
 msgctxt "calllog_tab_name_text"
 msgid "CallLogs"
-msgstr "Chiamate"
+msgstr "Registro chiamate"
 
 msgctxt "messages_tab_name_text"
 msgid "Messages"
@@ -199,7 +199,7 @@ msgstr "OK"
 
 msgctxt "misc"
 msgid "Misc"
-msgstr "MIsc"
+msgstr "Misc"
 
 msgctxt "warning"
 msgid "WARNING"
@@ -239,16 +239,21 @@ msgid "Pickup SIP contact"
 msgstr "Prendi il contatto SIP"
 
 msgctxt "display_icon_in_status_bar_desc"
-msgid "Should the application display an icon in the status bar when registered"
+msgid ""
+"Should the application display an icon in the status bar when registered"
 msgstr ""
+"L'applicazione dovrebbe visualizzare un'icona nello status bar quando "
+"registrata"
 
 msgctxt "display_icon_in_status_bar"
 msgid "Display icon in status bar"
-msgstr ""
+msgstr "Visualizza l'icona nella barra di stato"
 
 msgctxt "another_application_use_sip_port"
 msgid "Another application is currently using SIP port! Can't start !!!"
 msgstr ""
+"Un'altra applicazione sta attualmente utilizzando la porta SIP! Non può "
+"avviarsi!"
 
 msgctxt "choose_phone"
 msgid "Choose phone"
@@ -256,5 +261,4 @@ msgstr ""
 
 msgctxt "no_phone_found"
 msgid "No phone found for this contact"
-msgstr ""
-
+msgstr "Nessun telefono trovato per questo contatto"

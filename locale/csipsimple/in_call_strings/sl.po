@@ -96,5 +96,5 @@ msgstr "Ustavi snemanje"
 
 msgctxt "xfer"
 msgid "Transfer"
-msgstr ""
+msgstr "Preveži"
 

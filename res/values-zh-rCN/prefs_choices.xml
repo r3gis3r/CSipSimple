@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="scheme_choices">
+    <item>摘要</item>
+    <item>PGP</item>
+  </string-array>
+  <string-array name="data_type_choices">
+    <item>显示密码</item>
+    <item>数据摘要</item>
+  </string-array>
+  <string-array name="clock_rate_choices">
+    <item>8KHz</item>
+    <item>16KHz</item>
+    <item>32KHz</item>
+    <item>44.1KHz</item>
+  </string-array>
+  <string-array name="use_srtp_choices">
+    <item>已禁用</item>
+    <item>可选的</item>
+    <item>必填</item>
+  </string-array>
+  <string-array name="contact_rewrite_method_choices">
+    <item>继承</item>
+    <item>常规</item>
+  </string-array>
+  <string-array name="transport_choices">
+    <item>自动</item>
+    <item>UDP</item>
+    <item>TCP</item>
+    <item>TLS</item>
+  </string-array>
+  <string-array name="tls_method_choices">
+    <item>自动</item>
+    <item>TLSv1</item>
+    <item>SSLv2</item>
+    <item>SSL3</item>
+    <item>SSL23</item>
+  </string-array>
+</resources>

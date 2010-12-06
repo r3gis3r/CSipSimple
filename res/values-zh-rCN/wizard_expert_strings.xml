@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">账号名称</string>
+  <string name="w_expert_display_name_desc">账号的显示名称</string>
+  <string name="w_expert_acc_id">账号 ID</string>
+  <string name="w_expert_reg_uri">注册 URI</string>
+  <string name="w_expert_username">账号</string>
+  <string name="w_expert_username_desc">认证账号</string>
+  <string name="w_expert_data">密码</string>
+  <string name="w_expert_t_proxy">代理服务器</string>
+  <string name="w_expert_use_tcp">使用 TCP (非 UDP)</string>
+</resources>

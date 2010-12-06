@@ -7,7 +7,6 @@
     <item>Apeleaza direct</item>
     <item>Raspuns automat</item>
   </string-array>
-  
   <string-array name="replace_type">
     <item>Prefix by</item>
     <item>Suffix with</item>

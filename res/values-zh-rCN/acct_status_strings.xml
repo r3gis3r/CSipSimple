@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="acct_inactive">未活动的</string>
+  <string name="acct_unregistered">未注册</string>
+  <string name="acct_expired">注册过期</string>
+  <string name="acct_registering">正在注册……</string>
+  <string name="acct_registered">已注册</string>
+  <string name="acct_regerror">注册时发生错误</string>
+  <string name="acct_regfailed">注册失败 - 请检查您的配置</string>
+</resources>

@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
+  <string name="next">Далі</string>
+  <string name="init">Старт...</string>
   <string name="unable_to_download_file">Не вдається завантажити файл</string>
   <string name="connection_not_valid">Обрана маршрутна мережа не доступна (активувати WiFi або змінити налаштування, щоб використовувати 3G)</string>
   <string name="invalid_sip_uri">SIP URI є неприпустимою для виклику</string>
@@ -52,4 +54,5 @@
   <string name="display_icon_in_status_bar_desc">Чи відображати значок в рядку стану при реєстрації</string>
   <string name="display_icon_in_status_bar">Показати іконку в рядку стану</string>
   <string name="another_application_use_sip_port">Інше застосування в даний час використовує SIP порт! Не вдається запустити!</string>
+  <string name="no_phone_found">Не знайдено телефон для цього контакту</string>
 </resources>

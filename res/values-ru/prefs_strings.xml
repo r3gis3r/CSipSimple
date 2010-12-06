@@ -111,6 +111,7 @@
   <string name="sip_dtmf_desc">Каким образом отправлять DTMF</string>
   <string name="use_soft_volume">Программная регулировка</string>
   <string name="use_soft_volume_desc">Регулировать громкость из программы CSipSimple и не использовать настройки Андроид</string>
+  <string name="sip_audio_mode">Аудио режим для SIP вызовов</string>
   <string name="general_ui">Общие настройки интерфейса</string>
   <string name="native_dialer_integration">Интеграция с телефонной частью</string>
   <string name="advanced_ui">Дополнительные настройки</string>

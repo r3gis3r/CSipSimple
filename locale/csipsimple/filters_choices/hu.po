@@ -39,35 +39,31 @@ msgstr "Automatikus válasz"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
-msgstr "Eleje ez:"
+msgstr ""
 
 msgctxt "filters_type:1"
 msgid "Ends with"
-msgstr "Vége ez:"
+msgstr ""
 
 msgctxt "filters_type:2"
 msgid "All"
 msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:3"
 msgid "Has exactly N digit"
-msgstr "Pontosan N jegyű"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:4"
 msgid "Has more than N digit"
-msgstr "Több mint N jegyű"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:5"
 msgid "Is exactly"
-msgstr "Pontosan ez:"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:6"
 msgid "Custom RegExp"
-msgstr "Saját RegExp"
+msgstr ""
 
 msgctxt "replace_type:0"
 msgid "Prefix by"

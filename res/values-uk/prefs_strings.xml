@@ -113,6 +113,10 @@
   <string name="use_soft_volume_desc">Використання програмного забезпечення програми, а не Android</string>
   <string name="use_routing_api">Використовувати API маршрутизації</string>
   <string name="use_routing_api_desc">Спробуйте включити, що якщо звук маршрутизації оратор замість навушників</string>
+  <string name="use_mode_api">Використовувати режим аудіо API</string>
+  <string name="use_mode_api_desc">Спробуйте включити, що якщо звук маршрутизації оратор замість навушників</string>
+  <string name="sip_audio_mode">Аудіо режим SIP дзвінків</string>
+  <string name="sip_audio_mode_desc">Зміна тільки тоді, коли розробники радять вам</string>
   <string name="general_ui">Користувальницький інтерфейс</string>
   <string name="native_dialer_integration">Тісна інтеграція дозвону</string>
   <string name="advanced_ui">Додаткові налаштуваннях</string>

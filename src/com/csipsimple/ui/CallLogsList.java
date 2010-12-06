@@ -283,36 +283,6 @@ public class CallLogsList extends ListActivity {
 			}else {
 				Log.e(THIS_FILE, "Failed to place call"+number);
 			}
-			/*
-			
-			if (!TextUtils.isEmpty(m.group(2))) {
-				String phoneNumber = m.group(2);
-				Pattern p = Pattern.compile("^[0-9]+$");
-				Matcher matchDigits = p.matcher(phoneNumber);
-				if (matchDigits.matches() || false) {
-					//Disabled since if we do that
-					try {
-						Intent intent = new Intent(Intent.ACTION_CALL);
-						intent.setData(Uri.fromParts("tel", phoneNumber, null));
-						startActivity(intent);
-						return;
-					} catch (Exception e) {
-						Log.e(THIS_FILE, "Failed to place call", e);
-					}
-				} else {
-					if (!TextUtils.isEmpty(m.group(2))) {
-						try {
-							Intent intent = new Intent(Intent.ACTION_CALL);
-							intent.setData(Uri.fromParts("sip" ,m.group(2) + "@" + m.group(3), null));
-							startActivity(intent);
-							return;
-						} catch (Exception e) {
-							Log.e(THIS_FILE, "Failed to place call", e);
-						}
-					}
-				}
-			}
-			*/
 		}
 	}
 	

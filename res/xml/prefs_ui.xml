@@ -18,15 +18,20 @@
 	-->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<PreferenceCategory android:title="@string/native_dialer_integration">
+	<PreferenceCategory android:title="@string/native_dialer_integration"  android:key="android_integration">
 		<CheckBoxPreference android:title="@string/integrate_with_native_dialer"
 			android:summary="@string/integrate_with_native_dialer_desc"
 			android:key="integrate_with_native_dialer"
-			android:defaultValue="true"></CheckBoxPreference>
+			android:defaultValue="true"/>
 		<CheckBoxPreference android:title="@string/integrate_with_native_calllogs"
 			android:summary="@string/integrate_with_native_calllogs_desc"
 			android:key="integrate_with_native_calllogs"
-			android:defaultValue="true"></CheckBoxPreference>
+			android:defaultValue="true"/>
+			
+		<ListPreference android:title="@string/gsm_integration_type" android:key="gsm_integration_type"
+					android:summary="@string/gsm_integration_type_desc"
+					android:defaultValue="0"
+					android:entryValues="@array/gsm_integration_type_values" android:entries="@array/gsm_integration_type_choices"/>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/general_ui">
 		
@@ -70,16 +75,17 @@
 			android:defaultValue="true"
 			android:summary="@string/prevent_screen_rotation_desc"
 			android:key="prevent_screen_rotation"></CheckBoxPreference>
+			
+		<CheckBoxPreference android:defaultValue="true" 
+			android:key="icon_in_status_bar" 
+			android:title="@string/display_icon_in_status_bar" 
+			android:summary="@string/display_icon_in_status_bar_desc"/>
 		
 		<EditTextPreference android:key="log_level"
 				android:title="@string/log_level"
 				android:numeric="signed"
 				android:summary="@string/log_level_desc"
 				android:defaultValue="1"></EditTextPreference>
-		<CheckBoxPreference android:defaultValue="true" 
-			android:key="icon_in_status_bar" 
-			android:title="@string/display_icon_in_status_bar" 
-			android:summary="@string/display_icon_in_status_bar_desc"/>
 	</PreferenceCategory>
 	
 </PreferenceScreen>

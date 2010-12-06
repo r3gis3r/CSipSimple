@@ -6,8 +6,7 @@
     <item>Todos</item>
     <item>Tiene exactamente N dígitos</item>
     <item>Tiene más de N dígitos</item>
-    <item>Es exactamente</item>
-    <item>RegExp personalizada</item>
+    <item>Es exactamente\"</item>
   </string-array>
   <string-array name="replace_type">
     <item>Con prefijo</item>

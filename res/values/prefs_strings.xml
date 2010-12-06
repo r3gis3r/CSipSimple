@@ -162,6 +162,8 @@
 <string name="ringtone_desc">Default ringtone for SIP calls</string>
 <string name="prevent_screen_rotation">Prevent screen rotation</string>
 <string name="prevent_screen_rotation_desc">Avoid rotation of the screen and keep in portrait mode</string>
+<string name="gsm_integration_type">Integration type with GSM</string>
+<string name="gsm_integration_type_desc">How CSipSimple use GSM (or not)</string>
 
 <!-- Fast settings -->
 <string name="android_integration">Integrate with Android</string>

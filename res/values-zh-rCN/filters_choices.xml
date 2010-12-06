@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="filters_action">
+    <item>不能呼叫</item>
+    <item>重写</item>
+    <item>停止处理</item>
+    <item>直接呼叫</item>
+    <item>自动回应</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>前缀</item>
+    <item>后缀</item>
+    <item>替换</item>
+    <item>替换所有</item>
+    <item>自定义正则表达式</item>
+  </string-array>
+</resources>

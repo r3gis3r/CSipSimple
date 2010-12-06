@@ -39,35 +39,31 @@ msgstr "Atendimento Automatico"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
-msgstr "Começa com"
+msgstr ""
 
 msgctxt "filters_type:1"
 msgid "Ends with"
-msgstr "Termina com"
+msgstr ""
 
 msgctxt "filters_type:2"
 msgid "All"
 msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:3"
 msgid "Has exactly N digit"
-msgstr "Tem exatamente N digito"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:4"
 msgid "Has more than N digit"
-msgstr "Tem mais que N digito"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:5"
 msgid "Is exactly"
-msgstr "É exatamente"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:6"
 msgid "Custom RegExp"
-msgstr "RegExp personalizada"
+msgstr ""
 
 msgctxt "replace_type:0"
 msgid "Prefix by"

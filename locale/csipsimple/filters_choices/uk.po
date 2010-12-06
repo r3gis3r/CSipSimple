@@ -40,35 +40,31 @@ msgstr "Авто відповідь"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
-msgstr "Починається з"
+msgstr ""
 
 msgctxt "filters_type:1"
 msgid "Ends with"
-msgstr "Закінчується на"
+msgstr ""
 
 msgctxt "filters_type:2"
 msgid "All"
 msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:3"
 msgid "Has exactly N digit"
-msgstr "Має точно N цифр"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:4"
 msgid "Has more than N digit"
-msgstr "Має більше ніж N цифр"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:5"
 msgid "Is exactly"
-msgstr "Точно"
+msgstr ""
 
-#, fuzzy
 msgctxt "filters_type:6"
 msgid "Custom RegExp"
-msgstr "Користувацький RegExp"
+msgstr ""
 
 msgctxt "replace_type:0"
 msgid "Prefix by"

@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
+  <string name="next">Следующий</string>
+  <string name="init">Инициализация...</string>
   <string name="unable_to_download_file">Невозможно загрузить файл</string>
   <string name="connection_not_valid">Выбранная сеть недоступна (активируйте WiFi или измените настройки, чтобы использовать 3G)</string>
   <string name="invalid_sip_uri">SIP URI является недопустимой для вызова</string>
@@ -48,5 +50,9 @@
   <string name="disconnect_and_will_restart">"Автоматически перезапустится, когда: "<xliff:g id="networks" example="3G">%s</xliff:g>" будет доступно (измените настройки, если не хотите)"</string>
   <string name="gadget_title">Переключатель аккаунтов</string>
   <string name="search_in_contacts">Поиск в контактах</string>
-  <string name="pickup_sip_uri">Принять SIP контакт</string>
+  <string name="pickup_sip_uri">Выберите SIP контакт</string>
+  <string name="display_icon_in_status_bar_desc">В панеле уведомлений будет показана иконка при регистрации в сети</string>
+  <string name="display_icon_in_status_bar">Показывать иконку</string>
+  <string name="another_application_use_sip_port">SIP порт занят другим приложением. Невозможно запустить!</string>
+  <string name="no_phone_found">Для данного контакта не найден номер телефона</string>
 </resources>

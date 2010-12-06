@@ -113,6 +113,10 @@
   <string name="use_soft_volume_desc">Usa il volume software invece di quello Android</string>
   <string name="use_routing_api">Usa le API di routing</string>
   <string name="use_routing_api_desc">Prova ad abilitare se l\'audio è indirizzato allo speaker, invece dell\'auricolare</string>
+  <string name="use_mode_api">Utilizza modalità per le API audio</string>
+  <string name="use_mode_api_desc">Prova ad abilitare se l\'audio è indirizzato allo speaker, invece dell\'auricolare</string>
+  <string name="sip_audio_mode">Modalità audio per le chiamate SIP</string>
+  <string name="sip_audio_mode_desc">Cambia solo su suggerimento degli sviluppatori</string>
   <string name="general_ui">Interfaccia utente generale</string>
   <string name="native_dialer_integration">Integrazione con il dialer nativo</string>
   <string name="advanced_ui">Tweaks avanzati</string>

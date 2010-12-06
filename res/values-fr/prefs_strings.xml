@@ -113,6 +113,10 @@
   <string name="use_soft_volume_desc">Utiliser le volume logiciel au lieu du volume Android</string>
   <string name="use_routing_api">Utiliser l\'API de routing</string>
   <string name="use_routing_api_desc">Essayer d\'activer cela si le son est sur le haut parleur au lieu de l\'écouteur</string>
+  <string name="use_mode_api">Utiliser le Mode Audio API</string>
+  <string name="use_mode_api_desc">Essayez ce mode si le flux audio passe par le haut parleur en mode mains libres</string>
+  <string name="sip_audio_mode">Mode audio des appels SIP</string>
+  <string name="sip_audio_mode_desc">Ne changer ceci que si les développeurs vous le conseillent</string>
   <string name="general_ui">Interface utilisateur générale</string>
   <string name="native_dialer_integration">Intégration au numéroteur Android</string>
   <string name="advanced_ui">Modifications avancées</string>

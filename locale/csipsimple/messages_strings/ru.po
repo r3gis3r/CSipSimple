@@ -53,7 +53,7 @@ msgstr "Вызов"
 #. Menu item for deleting all conversations
 msgctxt "menu_delete_all"
 msgid "Delete threads"
-msgstr "Удалить цепочку"
+msgstr "Удалить цепочки"
 
 #. Context menu item on an individual conversation for deleting that
 #. conversation
@@ -209,127 +209,127 @@ msgstr "Неподдерживаемый <xliff:g id=\"name\">%1$s</xliff:g> ф�
 #. Context menu item on a message recipient for viewing their contact info
 msgctxt "menu_view_contact"
 msgid "View contact"
-msgstr ""
+msgstr "Просмотреть контакт"
 
 #. Context menu item on a message recipient for adding them to the user's
 #. contacts (used if the recipient is not already in the address book)
 msgctxt "menu_add_to_contacts"
 msgid "Add to Contacts"
-msgstr ""
+msgstr "Добавить в контакты"
 
 #. Sender to be used if the sender address has been hidden
 msgctxt "hidden_sender_address"
 msgid "Hidden sender address"
-msgstr ""
+msgstr "Скрытый адрес отправителя"
 
 #. Text to be used for affirmative response button in dialog boxes
 msgctxt "yes"
 msgid "OK"
-msgstr ""
+msgstr "Готово"
 
 #. Text to be used for negative response button in dialog boxes
 msgctxt "no"
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #. Button text used for editing a slideshow (imperative verb)
 msgctxt "edit"
 msgid "Edit"
-msgstr ""
+msgstr "Изменить"
 
 #. Settings screen menu item for restoring all settings to default
 msgctxt "restore_default"
 msgid "Restore default settings"
-msgstr ""
+msgstr "Восстановить настройки"
 
 #. Confirm Delete
 #. Delete confirmation dialog title
 msgctxt "confirm_dialog_title"
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
 
 #. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_conversation"
 msgid "The entire thread will be deleted."
-msgstr ""
+msgstr "Вся цепочка будет удалена"
 
 #. Delete all threads confirmation dialog message
 msgctxt "confirm_delete_all_conversations"
 msgid "All threads will be deleted."
-msgstr ""
+msgstr "Все цепочки будут уделены"
 
 #. Delete message confirmation dialog message
 msgctxt "confirm_delete_message"
 msgid "The message will be deleted."
-msgstr ""
+msgstr "Сообщение будет удалено."
 
 #. Delete message confirmation dialog message for a locked message
 msgctxt "confirm_delete_locked_message"
 msgid "Are you sure you want to delete this locked message?"
-msgstr ""
+msgstr "Вы уверены, что хотите удалить защищенное сообщение?"
 
 #. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_all_messages"
 msgid "The entire thread will be deleted."
-msgstr ""
+msgstr "Вся цепочка будет удалена."
 
 #. Delete button title
 msgctxt "delete"
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
 
 #. Status in "Report" window
 msgctxt "status_none"
 msgid "(None)"
-msgstr ""
+msgstr "(Нет)"
 
 #. Status in "Report" window
 msgctxt "status_pending"
 msgid "Pending"
-msgstr ""
+msgstr "В ожидании"
 
 #. Status in "Report" window
 msgctxt "status_received"
 msgid "Received"
-msgstr ""
+msgstr "Получено"
 
 #. Status in "Report" window
 msgctxt "status_failed"
 msgid "Unsuccessful"
-msgstr ""
+msgstr "Неудачно"
 
 #. Status in "Report" window
 msgctxt "status_unread"
 msgid "Unread"
-msgstr ""
+msgstr "Не прочитано"
 
 #. Status in "Report" window
 msgctxt "status_rejected"
 msgid "Rejected"
-msgstr ""
+msgstr "Отклонено"
 
 #. Label in "Report" window
 msgctxt "recipient_label"
 msgid "Recipient:\\u0020"
-msgstr ""
+msgstr "Получатель:\\u0020"
 
 #. Label in "Report" window
 msgctxt "status_label"
 msgid "Status:\\u0020"
-msgstr ""
+msgstr "Статус:\\u0020"
 
 #. Menu item
 msgctxt "menu_insert_smiley"
 msgid "Insert smiley"
-msgstr ""
+msgstr "Вставить смайлик"
 
 #. Label for the "Me" number of this phone.
 msgctxt "me"
 msgid "Me"
-msgstr ""
+msgstr "Я"
 
 #. Brief small label shown to right of message when it is being sent.
 msgctxt "sending_message"
 msgid "Sending\\u2026"
-msgstr ""
+msgstr "Отправка\\u2026"
 

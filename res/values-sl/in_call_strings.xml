@@ -19,4 +19,5 @@
   <string name="unlock">Odkleni</string>
   <string name="record">Snemaj</string>
   <string name="stop_recording">Ustavi snemanje</string>
+  <string name="xfer">Preveži</string>
 </resources>

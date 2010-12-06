@@ -32,6 +32,10 @@ public class CustomDistribution {
 		return true;
 	}
 	
+	public static boolean distributionWantsOtherProviders() {
+		return true;
+	}
+	
 	public static String getSupportEmail() {
 		return "developers@csipsimple.com";
 	}
@@ -54,7 +58,11 @@ public class CustomDistribution {
 	public static boolean distributionWantsOtherAccounts() {
 		return true;
 	}
-	
+
+	public static boolean distributionWantsOtherProviders() {
+		return false;
+	}
+
 	public static String getSupportEmail() {
 		return "support@ippi.fr";
 	}
@@ -86,6 +94,10 @@ public class CustomDistribution {
 	/*
 	public static boolean distributionWantsOtherAccounts() {
 		return true;
+	}
+	
+	public static boolean distributionWantsOtherProviders() {
+		return false;
 	}
 	
 	public static String getSupportEmail() {

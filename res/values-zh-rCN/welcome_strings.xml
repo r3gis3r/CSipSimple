@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="intializing_text">初始化</string>
+  <string name="downloading_text">正在下载</string>
+  <string name="installing_library_text">安装文件库……</string>
+  <string name="welcome_caption_text">欢迎使用</string>
+</resources>

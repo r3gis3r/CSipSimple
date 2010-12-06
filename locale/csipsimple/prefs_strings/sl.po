@@ -24,7 +24,7 @@ msgstr "Nastavitve"
 
 msgctxt "prefs_fast"
 msgid "Easy configuration"
-msgstr "Enostavna nastavitev"
+msgstr "Hitra nastavitev"
 
 msgctxt "prefs_fast_desc"
 msgid "Quick options to use if you don't know how SIP works"
@@ -241,7 +241,7 @@ msgstr "(strežnik:vrata)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr ""
+msgstr "Omogoči QoS"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
@@ -258,7 +258,7 @@ msgstr ""
 #. Security
 msgctxt "tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "secure_transport"
 msgid "Secure transport"
@@ -266,11 +266,11 @@ msgstr "Varen prenos"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
-msgstr ""
+msgstr "Varnostni mehanizem za SIP in RTP"
 
 msgctxt "secure_media"
 msgid "Secure media"
-msgstr ""
+msgstr "Varen medij"
 
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
@@ -282,7 +282,7 @@ msgstr "Številka lokalnih vrat"
 
 msgctxt "network_tls_server_name"
 msgid "TLS server name"
-msgstr ""
+msgstr "Ime strežnika TLS"
 
 msgctxt "network_tls_server_name_desc"
 msgid "For multi-hosting server (optional)"
@@ -418,7 +418,8 @@ msgid "Media quality"
 msgstr "Kvaliteta medija"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Kvaliteta toka medija (samo, če ste prepričani)"
 
 msgctxt "snd_clock_rate"
@@ -516,8 +517,8 @@ msgstr "Integracija klicalnika"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
 "Možnost izbire klica SIP ali mobilnega klica ob uporabi sistemskega "
 "klicalnika"
@@ -568,7 +569,8 @@ msgstr "Ostani buden med klicem"
 
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
-msgstr "Omogočite v primeru slabega zvoka med klicem na WiFi, ko zaslon zaspi"
+msgstr ""
+"Omogočite v primeru slabega zvoka med klicem na WiFi, ko zaslon zaspi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -617,7 +619,7 @@ msgstr "Integracija s sistemom"
 
 msgctxt "android_integration_desc"
 msgid "Integration with native dialer and call logs"
-msgstr "Interacija s sistemskim klicalnikom in dnevniki klicev"
+msgstr "Integracija s sistemskim klicalnikom in dnevniki klicev"
 
 msgctxt "availability_profile"
 msgid "Availability profile"
@@ -633,7 +635,7 @@ msgstr "Večja poraba baterije, a so klici vedno prejeti"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
-msgstr "Na voljo na WiFi"
+msgstr "Samo, ko je WiFi"
 
 msgctxt "wifi_available_desc"
 msgid "Availability of incoming calls based on WiFi profile"
@@ -645,7 +647,7 @@ msgstr "Samo za odhodne"
 
 msgctxt "never_available_desc"
 msgid "Activate the SIP client automatically when necessary"
-msgstr "Vključi SIP samodejno po potrebi"
+msgstr "Samodejno vključi SIP po potrebi"
 
 msgctxt "availability_tg"
 msgid "Mobile data availability"

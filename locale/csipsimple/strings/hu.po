@@ -23,7 +23,7 @@ msgstr "CSipSimple"
 
 msgctxt "next"
 msgid "Next"
-msgstr ""
+msgstr "Következő"
 
 msgctxt "init"
 msgid "Init..."

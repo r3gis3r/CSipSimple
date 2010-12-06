@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="unknown">Neznan</string>
+  <string name="type_incoming">Dohodni</string>
+  <string name="type_outgoing">Odhodni</string>
+  <string name="type_missed">Zgrešen</string>
+  <string name="callBack">Povratni klic</string>
+  <string name="callAgain">Ponovni klic</string>
+  <string name="returnCall">Vrnjen klic</string>
+</resources>

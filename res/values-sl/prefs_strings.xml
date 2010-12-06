@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="prefs">Nastavitve</string>
-  <string name="prefs_fast">Enostavna nastavitev</string>
+  <string name="prefs_fast">Hitra nastavitev</string>
   <string name="prefs_fast_desc">Hitra nastavitev, če ne poznate SIP</string>
   <string name="prefs_network">Omrežje</string>
   <string name="prefs_network_desc">Kako se SIP poveže z omrežjem</string>
@@ -53,9 +53,14 @@
   <string name="enable_stun_desc">Enostavno prečkanje UDP preko NAT</string>
   <string name="stun_server">Strežnik STUN</string>
   <string name="stun_server_desc">(strežnik:vrata)</string>
+  <string name="enable_qos">Omogoči QoS</string>
+  <string name="tls">TLS</string>
   <string name="secure_transport">Varen prenos</string>
+  <string name="secure_transport_desc">Varnostni mehanizem za SIP in RTP</string>
+  <string name="secure_media">Varen medij</string>
   <string name="network_tls_transport_port">Vrata TLS</string>
   <string name="network_tls_transport_port_desc">Številka lokalnih vrat</string>
+  <string name="network_tls_server_name">Ime strežnika TLS</string>
   <string name="use_srtp">Način SRTP</string>
   <string name="use_srtp_desc">Način za varen RTP</string>
   <string name="audio_quality">Kvaliteta zvoka</string>
@@ -111,14 +116,14 @@
   <string name="prevent_screen_rotation">Prepreči vrtenje zaslona</string>
   <string name="prevent_screen_rotation_desc">Onemogoči vrtenje zaslona in zadrži v pokončem prikazu</string>
   <string name="android_integration">Integracija s sistemom</string>
-  <string name="android_integration_desc">Interacija s sistemskim klicalnikom in dnevniki klicev</string>
+  <string name="android_integration_desc">Integracija s sistemskim klicalnikom in dnevniki klicev</string>
   <string name="availability_profile">Profil razpoložljivosti</string>
   <string name="always_available">Vedno na voljo</string>
   <string name="always_available_desc">Večja poraba baterije, a so klici vedno prejeti</string>
-  <string name="wifi_available">Na voljo na WiFi</string>
+  <string name="wifi_available">Samo, ko je WiFi</string>
   <string name="wifi_available_desc">Razpoložljivost prejetih klicev glede na profil WiFi</string>
   <string name="never_available">Samo za odhodne</string>
-  <string name="never_available_desc">Vključi SIP samodejno po potrebi</string>
+  <string name="never_available_desc">Samodejno vključi SIP po potrebi</string>
   <string name="availability_tg">Razpoložljivost mobilnega prenosa podatkov</string>
   <string name="tg_allowed">Lahko uporabljam mobilni prenos podatkov</string>
   <string name="tg_allowed_desc">Operater dovoli VoIP preko mobilnega prenosa podatkov</string>

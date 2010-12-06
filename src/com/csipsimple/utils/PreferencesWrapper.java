@@ -42,13 +42,9 @@ import android.text.TextUtils;
 
 public class PreferencesWrapper {
 	
-	
-	public static final String TURN_SERVER = "turn_server";
-	public static final String ENABLE_TURN = "enable_turn";
-	public static final String ENABLE_ICE = "enable_ice";
+	//Media
 	public static final String SND_MEDIA_QUALITY = "snd_media_quality";
 	public static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
-	public static final String USER_AGENT = "user_agent";
 	public static final String RTP_PORT = "network_rtp_port";
 	public static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
 	public static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
@@ -58,12 +54,13 @@ public class PreferencesWrapper {
 	public static final String SND_CLOCK_RATE = "snd_clock_rate";
 	public static final String ECHO_CANCELLATION = "echo_cancellation";
 	public static final String ENABLE_VAD = "enable_vad";
-	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
 	public static final String SND_MIC_LEVEL = "snd_mic_level";
 	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
 	public static final String HAS_IO_QUEUE = "has_io_queue";
 	public static final String BITS_PER_SAMPLE = "bits_per_sample";
 	
+	
+	//UI
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
 	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
 	public static final String LOG_LEVEL = "log_level";
@@ -71,10 +68,14 @@ public class PreferencesWrapper {
 	public static final String USE_ROUTING_API = "use_routing_api";
 	public static final String USE_MODE_API = "use_mode_api";
 	public static final String SIP_AUDIO_MODE = "sip_audio_mode";
-	
 	public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
+	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
+	public static final String GSM_INTEGRATION_TYPE = "gsm_integration_type";
 	
 	// NETWORK
+	public static final String TURN_SERVER = "turn_server";
+	public static final String ENABLE_TURN = "enable_turn";
+	public static final String ENABLE_ICE = "enable_ice";
 	public static final String ENABLE_STUN = "enable_stun";
 	public static final String STUN_SERVER = "stun_server";
 	public static final String USE_IPV6 = "use_ipv6";
@@ -99,7 +100,8 @@ public class PreferencesWrapper {
 	public static final String USE_SRTP = "use_srtp";
 	
 	//Internal use
-	public static final String HAS_BEEN_QUIT = "has_been_quit"; 
+	public static final String HAS_BEEN_QUIT = "has_been_quit";
+	public static final String USER_AGENT = "user_agent"; 
 	
 	
 	private static final String THIS_FILE = "PreferencesWrapper";
@@ -139,6 +141,9 @@ public class PreferencesWrapper {
 		
 		put(DSCP_VAL, "26");
 		put(DTMF_MODE, "0");
+		
+
+		put(GSM_INTEGRATION_TYPE, "0");
 		
 		
 	}};
@@ -828,6 +833,22 @@ public class PreferencesWrapper {
 			return prefsValue;
 		}
 		return 1;
+	}
+	
+	
+	public final static int GSM_TYPE_AUTO = 0;
+	public final static int GSM_TYPE_FORCE = 1;
+	public final static int GSM_TYPE_PREVENT = 2;
+	
+	public int getGsmIntegrationType() {
+		int prefsValue = 1;
+		String gsmType = getPreferenceStringValue(GSM_INTEGRATION_TYPE);
+		try {
+			prefsValue = Integer.parseInt(gsmType);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Gsm type "+gsmType+" not well formated");
+		}
+		return prefsValue;
 	}
 	
 	public boolean showIconInStatusBar() {

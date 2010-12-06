@@ -1,0 +1,123 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-12-04 19:01+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "scheme_choices:0"
+msgid "Digest"
+msgstr "摘要"
+
+msgctxt "scheme_choices:1"
+msgid "PGP"
+msgstr "PGP"
+
+msgctxt "data_type_choices:0"
+msgid "Plain password"
+msgstr "显示密码"
+
+msgctxt "data_type_choices:1"
+msgid "Data digest"
+msgstr "数据摘要"
+
+msgctxt "clock_rate_choices:0"
+msgid "8KHz"
+msgstr "8KHz"
+
+msgctxt "clock_rate_choices:1"
+msgid "16KHz"
+msgstr "16KHz"
+
+msgctxt "clock_rate_choices:2"
+msgid "32KHz"
+msgstr "32KHz"
+
+msgctxt "clock_rate_choices:3"
+msgid "44.1KHz"
+msgstr "44.1KHz"
+
+msgctxt "use_srtp_choices:0"
+msgid "Disabled"
+msgstr "已禁用"
+
+msgctxt "use_srtp_choices:1"
+msgid "Optional"
+msgstr "可选的"
+
+msgctxt "use_srtp_choices:2"
+msgid "Mandatory"
+msgstr "必填"
+
+msgctxt "dtmf_mode_choices:0"
+msgid "Auto"
+msgstr ""
+
+msgctxt "dtmf_mode_choices:1"
+msgid "RTP"
+msgstr ""
+
+msgctxt "dtmf_mode_choices:2"
+msgid "In band generation"
+msgstr ""
+
+msgctxt "dtmf_mode_choices:3"
+msgid "SIP INFO"
+msgstr ""
+
+msgctxt "contact_rewrite_method_choices:0"
+msgid "Legacy"
+msgstr "继承"
+
+msgctxt "contact_rewrite_method_choices:1"
+msgid "Normal"
+msgstr "常规"
+
+msgctxt "transport_choices:0"
+msgid "Auto"
+msgstr "自动"
+
+msgctxt "transport_choices:1"
+msgid "UDP"
+msgstr "UDP"
+
+msgctxt "transport_choices:2"
+msgid "TCP"
+msgstr "TCP"
+
+msgctxt "transport_choices:3"
+msgid "TLS"
+msgstr "TLS"
+
+msgctxt "tls_method_choices:0"
+msgid "Auto"
+msgstr "自动"
+
+msgctxt "tls_method_choices:1"
+msgid "TLSv1"
+msgstr "TLSv1"
+
+msgctxt "tls_method_choices:2"
+msgid "SSLv2"
+msgstr "SSLv2"
+
+msgctxt "tls_method_choices:3"
+msgid "SSL3"
+msgstr "SSL3"
+
+msgctxt "tls_method_choices:4"
+msgid "SSL23"
+msgstr "SSL23"
+

@@ -1,0 +1,99 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-12-04 19:01+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "take_call"
+msgid "Answer"
+msgstr ""
+
+msgctxt "decline_call"
+msgid "Ignore"
+msgstr ""
+
+msgctxt "clear_call"
+msgid "End"
+msgstr ""
+
+msgctxt "touch_lock"
+msgid "Double tap to unlock"
+msgstr ""
+
+msgctxt "dialpad"
+msgid "Dialpad"
+msgstr ""
+
+msgctxt "bluetooth"
+msgid "Bluetooth"
+msgstr ""
+
+msgctxt "speaker"
+msgid "Speaker"
+msgstr ""
+
+msgctxt "mute"
+msgid "Mute"
+msgstr ""
+
+msgctxt "add_call"
+msgid "Add call"
+msgstr ""
+
+msgctxt "call_state_calling"
+msgid "Calling..."
+msgstr ""
+
+msgctxt "call_state_confirmed"
+msgid "Talking"
+msgstr ""
+
+msgctxt "call_state_connecting"
+msgid "Connecting..."
+msgstr ""
+
+msgctxt "call_state_disconnected"
+msgid "Hung up"
+msgstr ""
+
+msgctxt "call_state_early"
+msgid "Ringing..."
+msgstr ""
+
+msgctxt "call_state_incoming"
+msgid "Incoming call..."
+msgstr ""
+
+msgctxt "call_state_null"
+msgid "ERROR"
+msgstr ""
+
+msgctxt "unlock"
+msgid "Unlock"
+msgstr ""
+
+msgctxt "record"
+msgid "Record"
+msgstr ""
+
+msgctxt "stop_recording"
+msgid "Stop recording"
+msgstr ""
+
+msgctxt "xfer"
+msgid "Transfer"
+msgstr ""
+
