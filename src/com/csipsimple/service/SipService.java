@@ -1195,7 +1195,7 @@ public class SipService extends Service {
 			switch (account.transport) {
 			case Account.TRANSPORT_UDP:
 				if(udpTranportId != null) {
-			//		account.cfg.setTransport_id(udpTranportId);
+					account.cfg.setTransport_id(udpTranportId);
 				}
 				break;
 			case Account.TRANSPORT_TCP:
