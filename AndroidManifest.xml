@@ -184,4 +184,10 @@
 	 <!-- Not taken into account? -->
 	<uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY"></uses-permission>
 	
+	
+	<uses-feature android:name="android.hardware.wifi" android:required="false"></uses-feature>
+	<uses-feature android:name="android.hardware.telephony" android:required="false"></uses-feature>
+	<uses-feature android:name="android.hardware.microphone" android:required="true"></uses-feature>
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false"></uses-feature>
+	
 </manifest> 
