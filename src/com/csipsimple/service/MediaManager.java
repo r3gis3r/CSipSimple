@@ -30,11 +30,11 @@ import android.net.wifi.WifiManager.WifiLock;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
-import android.view.accessibility.AccessibilityManager;
 
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
+import com.csipsimple.utils.accessibility.AccessibilityWrapper;
 import com.csipsimple.utils.audio.AudioFocusWrapper;
 import com.csipsimple.utils.bluetooth.BluetoothWrapper;
 
@@ -77,7 +77,9 @@ public class MediaManager {
 	private AudioFocusWrapper audioFocusWrapper;
 
 
-	private AccessibilityManager accessibilityManager;
+	private AccessibilityWrapper accessibilityManager;
+
+
 
 	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
@@ -87,7 +89,10 @@ public class MediaManager {
 	public MediaManager(SipService aService) {
 		service = aService;
 		audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
-		accessibilityManager = (AccessibilityManager) service.getSystemService(Context.ACCESSIBILITY_SERVICE);
+		accessibilityManager = AccessibilityWrapper.getInstance();
+		accessibilityManager.init(service, this);
+		
+		
 		ringer = new Ringer(service);
 		
 		mediaStateChangedIntent = new Intent(SipService.ACTION_SIP_MEDIA_CHANGED);
