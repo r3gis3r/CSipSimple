@@ -17,6 +17,7 @@
  */
 package com.csipsimple.widgets;
 
+import com.csipsimple.R;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 
@@ -46,7 +47,7 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 		Log.d(THIS_FILE, "Create me....");
 		
 		showPwdCheckbox = new CheckBox(context);
-		showPwdCheckbox.setText("Show password");
+		showPwdCheckbox.setText(R.string.show_password);
 		showPwdCheckbox.setOnClickListener(this);
 	}
 	

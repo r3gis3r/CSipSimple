@@ -76,6 +76,6 @@
 	<string name="another_application_use_sip_port">Another application is currently using SIP port! Can\'t start !!!</string>
 	<string name="choose_phone">Choose phone</string>
 	<string name="no_phone_found">No phone found for this contact</string>
-	
+	<string name="show_password">Show password</string>
 	<string name="this_codec_is_not_free">**This codec is not free !!!**\nPlease ensure that somebody (your SIP provider or yourself) have purchased a license that allow you to use this codec! We (as application distributors) are not responsible for an illegal use of this codec.\nIt\'s up to you to be sure that you are authorized to use this codec.\nPurchase link : </string>
 </resources>
