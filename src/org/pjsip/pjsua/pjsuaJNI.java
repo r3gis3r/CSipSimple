@@ -276,6 +276,8 @@ public class pjsuaJNI {
   public final static native int pj_time_val_msec_get(long jarg1, pj_time_val jarg1_);
   public final static native long new_pj_time_val();
   public final static native void delete_pj_time_val(long jarg1);
+  public final static native int PJMEDIA_NO_ZRTP_get();
+  public final static native int PJMEDIA_CREATE_ZRTP_get();
   public final static native int PJSUA_INVALID_ID_get();
   public final static native int PJSUA_ACC_MAX_PROXIES_get();
   public final static native int PJSUA_DEFAULT_SRTP_SECURE_SIGNALING_get();
@@ -365,6 +367,8 @@ public class pjsuaJNI {
   public final static native long pjsua_callback_on_transport_state_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_ice_transport_error_set(long jarg1, pjsua_callback jarg1_, long jarg2);
   public final static native long pjsua_callback_on_ice_transport_error_get(long jarg1, pjsua_callback jarg1_);
+  public final static native void pjsua_callback_on_zrtp_transport_created_set(long jarg1, pjsua_callback jarg1_, long jarg2);
+  public final static native long pjsua_callback_on_zrtp_transport_created_get(long jarg1, pjsua_callback jarg1_);
   public final static native long new_pjsua_callback();
   public final static native void delete_pjsua_callback(long jarg1);
   public final static native void pjsua_config_max_calls_set(long jarg1, pjsua_config jarg1_, long jarg2);
@@ -582,6 +586,8 @@ public class pjsuaJNI {
   public final static native int pjsua_acc_config_srtp_secure_signaling_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_srtp_optional_dup_offer_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
   public final static native int pjsua_acc_config_srtp_optional_dup_offer_get(long jarg1, pjsua_acc_config jarg1_);
+  public final static native void pjsua_acc_config_use_zrtp_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
+  public final static native int pjsua_acc_config_use_zrtp_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_reg_retry_interval_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
   public final static native long pjsua_acc_config_reg_retry_interval_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_drop_calls_on_reg_fail_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);

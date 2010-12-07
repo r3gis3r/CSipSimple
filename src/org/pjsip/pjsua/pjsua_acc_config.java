@@ -317,6 +317,14 @@ public class pjsua_acc_config {
     return pjsuaJNI.pjsua_acc_config_srtp_optional_dup_offer_get(swigCPtr, this);
   }
 
+  public void setUse_zrtp(pjmedia_zrtp_use value) {
+    pjsuaJNI.pjsua_acc_config_use_zrtp_set(swigCPtr, this, value.swigValue());
+  }
+
+  public pjmedia_zrtp_use getUse_zrtp() {
+    return pjmedia_zrtp_use.swigToEnum(pjsuaJNI.pjsua_acc_config_use_zrtp_get(swigCPtr, this));
+  }
+
   public void setReg_retry_interval(long value) {
     pjsuaJNI.pjsua_acc_config_reg_retry_interval_set(swigCPtr, this, value);
   }

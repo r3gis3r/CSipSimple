@@ -286,6 +286,15 @@ public class pjsua_callback {
     return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_pj_ice_strans_op_int_p_void__void(cPtr, false);
   }
 
+  public void setOn_zrtp_transport_created(SWIGTYPE_p_f_p_pjmedia_transport_int__int value) {
+    pjsuaJNI.pjsua_callback_on_zrtp_transport_created_set(swigCPtr, this, SWIGTYPE_p_f_p_pjmedia_transport_int__int.getCPtr(value));
+  }
+
+  public SWIGTYPE_p_f_p_pjmedia_transport_int__int getOn_zrtp_transport_created() {
+    long cPtr = pjsuaJNI.pjsua_callback_on_zrtp_transport_created_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new SWIGTYPE_p_f_p_pjmedia_transport_int__int(cPtr, false);
+  }
+
   public pjsua_callback() {
     this(pjsuaJNI.new_pjsua_callback(), true);
   }
