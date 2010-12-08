@@ -28,7 +28,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -41,6 +40,7 @@ import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.MediaManager.MediaState;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.accessibility.AccessibilityWrapper;
 import com.csipsimple.widgets.SlidingTab.OnTriggerListener;
 
 public class InCallControls extends FrameLayout implements OnTriggerListener, OnClickListener {
@@ -145,7 +145,8 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		inflater.inflate(R.layout.in_call_controls, this, true);
 		PreferencesWrapper prefs = new PreferencesWrapper(context);
 		
-		AccessibilityManager accessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+		AccessibilityWrapper accessibilityManager = AccessibilityWrapper.getInstance();
+		accessibilityManager.init(getContext());
 		if(accessibilityManager.isEnabled()) {
 			useSlider = false;
 		}else {

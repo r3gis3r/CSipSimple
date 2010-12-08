@@ -19,13 +19,11 @@ package com.csipsimple.utils.accessibility;
 
 import android.content.Context;
 
-import com.csipsimple.service.MediaManager;
-
 public class Accessibility3 extends AccessibilityWrapper {
 
 	
 	@Override
-	public void init(Context context, MediaManager manager) {
+	public void init(Context context) {
 	}
 
 	@Override

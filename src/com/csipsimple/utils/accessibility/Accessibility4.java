@@ -20,16 +20,15 @@ package com.csipsimple.utils.accessibility;
 import android.content.Context;
 import android.view.accessibility.AccessibilityManager;
 
-import com.csipsimple.service.MediaManager;
-
 public class Accessibility4 extends AccessibilityWrapper {
 
-	private AccessibilityManager accessibilityManager;
+	private AccessibilityManager accessibilityManager = null;
 	
 	@Override
-	public void init(Context context, MediaManager manager) {
-
-		accessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+	public void init(Context context) {
+		if(accessibilityManager == null) {
+			accessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+		}
 	}
 
 	@Override

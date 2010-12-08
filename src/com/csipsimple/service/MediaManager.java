@@ -90,7 +90,7 @@ public class MediaManager {
 		service = aService;
 		audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		accessibilityManager = AccessibilityWrapper.getInstance();
-		accessibilityManager.init(service, this);
+		accessibilityManager.init(service);
 		
 		
 		ringer = new Ringer(service);

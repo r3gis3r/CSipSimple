@@ -34,7 +34,7 @@ public class Keyyo extends SimpleImplementation {
 	
 	@Override
 	protected String getDefaultName() {
-		return "Keyyo";
+		return "Keyyo VoIP";
 	}
 
 	

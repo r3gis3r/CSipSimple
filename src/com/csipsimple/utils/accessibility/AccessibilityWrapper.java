@@ -19,7 +19,6 @@ package com.csipsimple.utils.accessibility;
 
 import android.content.Context;
 
-import com.csipsimple.service.MediaManager;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 
@@ -49,7 +48,7 @@ public abstract class AccessibilityWrapper {
 	protected AccessibilityWrapper() {}
 
 	
-	public abstract void init(Context context, MediaManager manager);
+	public abstract void init(Context context);
 	public abstract boolean isEnabled();
 
 }
