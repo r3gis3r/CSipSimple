@@ -119,9 +119,11 @@
 		</activity>
 		
 		
-		<activity android:name="com.csipsimple.ui.InCallActivity" android:screenOrientation="portrait" android:excludeFromRecents="true"
-			android:noHistory="true" android:allowTaskReparenting="false"
-			android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleInstance">
+		<activity android:name="com.csipsimple.ui.InCallActivity" android:screenOrientation="portrait" 
+			
+			android:allowTaskReparenting="true"
+			android:taskAffinity=""
+			android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleTask">
 			<intent-filter android:priority="10">
                  <action android:name="com.csipsimple.phone.action.INCALL" />
                  <category android:name="android.intent.category.DEFAULT" />

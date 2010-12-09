@@ -18,6 +18,7 @@
 package com.csipsimple.ui.help;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.CustomDistribution;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Faq extends Activity {
-	private final static String FAQ_URL = "http://code.google.com/p/csipsimple/wiki/FAQ#Summary";
+	private final static String FAQ_URL = CustomDistribution.getFaqLink();
 	
 	
 	@Override

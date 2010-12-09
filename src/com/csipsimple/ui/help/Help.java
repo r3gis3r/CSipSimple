@@ -37,6 +37,7 @@ import com.csipsimple.R;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CollectLogs;
+import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -94,8 +95,14 @@ public class Help extends Activity implements OnClickListener {
 		line.setOnClickListener(this);
 		line = (LinearLayout) findViewById(R.id.record_logs_line);
 		line.setOnClickListener(this);
+		if(CustomDistribution.getSupportEmail() == null) {
+			line.setVisibility(View.GONE);
+		}
 		line = (LinearLayout) findViewById(R.id.issues_line);
 		line.setOnClickListener(this);
+		if(!CustomDistribution.showIssueList()) {
+			line.setVisibility(View.GONE);
+		}
 		
 		//Recording logs
 		ImageView recordImage = (ImageView) findViewById(R.id.record_logs_image);

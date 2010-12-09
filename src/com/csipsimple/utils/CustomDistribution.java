@@ -17,12 +17,7 @@
  */
 package com.csipsimple.utils;
 
-import java.util.Locale;
-
-import com.csipsimple.R;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
-import com.csipsimple.wizards.impl.Ippi;
-import com.csipsimple.wizards.impl.Keyyo;
 
 public class CustomDistribution {
 
@@ -52,6 +47,17 @@ public class CustomDistribution {
 		return "com.csipsimple";
 	}
 	
+	public static boolean showIssueList() {
+		return true;
+	}
+	
+	public static String getFaqLink() {
+		return "http://code.google.com/p/csipsimple/wiki/FAQ#Summary";
+	}
+	
+	public static boolean showFirstSettingScreen() {
+		return true;
+	}
 	
 	//Ippi distribution
 	/*

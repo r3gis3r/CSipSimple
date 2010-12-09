@@ -139,9 +139,9 @@ public class Compatibility {
 			return true;
 		}
 		//All htc except....
-		if(android.os.Build.BRAND.toLowerCase().startsWith("htc") 
-				|| android.os.Build.BRAND.toLowerCase().startsWith("telstra_wwe") /*First cause : bravo (desire)*/
-				|| android.os.Build.BRAND.toLowerCase().equalsIgnoreCase("verizon_wwe") /* First cause inc (incredible)*/ ) {
+		if(android.os.Build.PRODUCT.toLowerCase().startsWith("htc") 
+				|| android.os.Build.BRAND.toLowerCase().startsWith("htc") 
+				|| android.os.Build.PRODUCT.toLowerCase().equalsIgnoreCase("inc") /* For Incredible */ ) {
 			if(android.os.Build.DEVICE.equalsIgnoreCase("hero") /* HTC HERO */ 
 					|| android.os.Build.DEVICE.equalsIgnoreCase("magic") /* Magic Aka Dev G2 */
 					|| android.os.Build.DEVICE.equalsIgnoreCase("tatoo") /* Tatoo */
