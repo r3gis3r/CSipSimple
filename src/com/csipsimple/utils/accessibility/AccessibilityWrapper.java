@@ -20,7 +20,6 @@ package com.csipsimple.utils.accessibility;
 import android.content.Context;
 
 import com.csipsimple.utils.Compatibility;
-import com.csipsimple.utils.CustomDistribution;
 
 public abstract class AccessibilityWrapper {
 	
@@ -28,7 +27,7 @@ public abstract class AccessibilityWrapper {
 	
 	public static AccessibilityWrapper getInstance() {
 		if(instance == null) {
-			String className = CustomDistribution.getRootPackage() + ".utils.accessibility.Accessibility";
+			String className =  "com.csipsimple.utils.accessibility.Accessibility";
 			if(Compatibility.isCompatible(4)) {
 				className += "4";
 			}else {

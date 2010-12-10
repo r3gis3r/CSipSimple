@@ -80,7 +80,7 @@ public class SipHome extends TabActivity {
 	private static final String TAB_MESSAGES = "messages";
 	
 	protected static final int PICKUP_PHONE = 0;
-	private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = PICKUP_PHONE+1;
+	private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = PICKUP_PHONE + 1;
 
 	private Intent serviceIntent;
 
@@ -196,12 +196,62 @@ public class SipHome extends TabActivity {
 		Thread t = new Thread() {
 			public void run() {
 				startService(serviceIntent);
+				postStartSipService();
 			};
 		};
 		t.start();
 
 	}
+	
+	private void postStartSipService() {
+		// If we have never set fast settings
+		if (!prefWrapper.hasAlreadySetup()) {
+			Intent prefsIntent = new Intent(this, PrefsFast.class);
+			prefsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(prefsIntent);
+			return;
+		}
 
+		// If we have no account yet, open account panel,
+		if (!has_tried_once_to_activate_account) {
+			Account account = null;
+			DBAdapter db = new DBAdapter(this);
+			db.open();
+			int nbrOfAccount = db.getNbrOfAccount();
+			
+			if (nbrOfAccount == 0) {
+				WizardInfo distribWizard = CustomDistribution.getCustomDistributionWizard();
+				if(distribWizard != null) {
+					account = db.getAccountForWizard(distribWizard.id);
+				}
+			}
+			
+			db.close();
+			
+			if(nbrOfAccount == 0) {
+				Intent accountIntent = null;
+				if(account != null) {
+					if(account.id == null || account.id == Account.INVALID_ID) {
+						accountIntent = new Intent(this, BasePrefsWizard.class);
+						accountIntent.putExtra(Account.FIELD_WIZARD, account.wizard);
+						startActivity(new Intent(this, AccountsList.class));
+					}
+				}else {
+					accountIntent = new Intent(this, AccountsList.class);
+				}
+				
+				if(accountIntent != null) {
+					accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(accountIntent);
+					has_tried_once_to_activate_account = true;
+					return;
+				}
+			}
+			has_tried_once_to_activate_account = true;
+		}
+	}
+	
+	
 	private void addTab(String tag, String label, int icon, int ficon, Intent content) {
 		TabHost tabHost = getTabHost();
 		TabSpec tabspecDialer = tabHost.newTabSpec(tag).setContent(content);
@@ -241,46 +291,7 @@ public class SipHome extends TabActivity {
 		Log.d(THIS_FILE, "WE CAN NOW start SIP service");
 		startSipService();
 
-		// If we have never set fast settings
-		if (!prefWrapper.hasAlreadySetup()) {
-			Intent prefsIntent = new Intent(this, PrefsFast.class);
-			prefsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(prefsIntent);
-			return;
-		}
-
-		// If we have no account yet, open account panel,
-		if (!has_tried_once_to_activate_account) {
-			Account account = null;
-			DBAdapter db = new DBAdapter(this);
-			db.open();
-			int nbrOfAccount = db.getNbrOfAccount();
-			
-			if (nbrOfAccount == 0) {
-				WizardInfo distribWizard = CustomDistribution.getCustomDistributionWizard();
-				if(distribWizard != null) {
-					account = db.getAccountForWizard(distribWizard.id);
-				}
-			}
-			
-			db.close();
-			
-			if(nbrOfAccount == 0) {
-				Intent accountIntent = new Intent(this, AccountsList.class);
-				if(account != null) {
-					if(account.id == null || account.id == Account.INVALID_ID) {
-						accountIntent = new Intent(this, BasePrefsWizard.class);
-						accountIntent.putExtra(Account.FIELD_WIZARD, account.wizard);
-					}
-				}
-				
-				accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(accountIntent);
-				has_tried_once_to_activate_account = true;
-				return;
-			}
-			has_tried_once_to_activate_account = true;
-		}
+		
 	}
 	
 	@Override
@@ -441,7 +452,6 @@ public class SipHome extends TabActivity {
 				return;
 			}
 			break;
-
 		default:
 			break;
 		}

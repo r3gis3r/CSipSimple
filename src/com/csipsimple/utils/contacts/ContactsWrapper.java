@@ -30,14 +30,13 @@ import android.widget.ArrayAdapter;
 
 import com.csipsimple.R;
 import com.csipsimple.utils.Compatibility;
-import com.csipsimple.utils.CustomDistribution;
 
 public abstract class ContactsWrapper {
 	private static ContactsWrapper instance;
 	
 	public static ContactsWrapper getInstance() {
 		if(instance == null) {
-			String className = CustomDistribution.getRootPackage() + ".utils.contacts.ContactsUtils";
+			String className = "com.csipsimple.utils.contacts.ContactsUtils";
 			if(Compatibility.isCompatible(5)) {
 				className += "5";
 			}else {

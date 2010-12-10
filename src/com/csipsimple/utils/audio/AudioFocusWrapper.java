@@ -21,7 +21,6 @@ import android.media.AudioManager;
 
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
-import com.csipsimple.utils.CustomDistribution;
 
 
 public abstract class AudioFocusWrapper {
@@ -29,7 +28,7 @@ private static AudioFocusWrapper instance;
 	
 	public static AudioFocusWrapper getInstance() {
 		if(instance == null) {
-			String className = CustomDistribution.getRootPackage() + ".utils.audio.AudioFocus";
+			String className = "com.csipsimple.utils.audio.AudioFocus";
 			if(Compatibility.isCompatible(8)) {
 				className += "8";
 			}else {

@@ -21,7 +21,6 @@ import android.content.Context;
 
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.utils.Compatibility;
-import com.csipsimple.utils.CustomDistribution;
 
 public abstract class BluetoothWrapper {
 	
@@ -29,7 +28,7 @@ public abstract class BluetoothWrapper {
 	
 	public static BluetoothWrapper getInstance() {
 		if(instance == null) {
-			String className = CustomDistribution.getRootPackage() + ".utils.bluetooth.BluetoothUtils";
+			String className = "com.csipsimple.utils.bluetooth.BluetoothUtils";
 			if(Compatibility.isCompatible(8)) {
 				className += "8";
 			}else {

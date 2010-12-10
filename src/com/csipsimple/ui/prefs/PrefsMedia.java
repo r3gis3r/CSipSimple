@@ -17,6 +17,10 @@
  */
 package com.csipsimple.ui.prefs;
 
+import android.content.Intent;
+import android.preference.Preference;
+import android.preference.PreferenceScreen;
+
 import com.csipsimple.R;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -55,6 +59,11 @@ public class PrefsMedia extends GenericPrefs {
 			hidePreference("misc", "use_mode_api");
 			hidePreference("misc", "sip_audio_mode");
 		}
+		
+		PreferenceScreen pfs = getPreferenceScreen();
+		Preference codecsPrefs = pfs.findPreference("codecs_list");
+		codecsPrefs.setIntent(new Intent(this, Codecs.class));
+		
 	}
 
 	@Override

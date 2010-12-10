@@ -40,24 +40,20 @@
 			<ListPreference android:title="@string/snd_clock_rate" android:key="snd_clock_rate"
 				android:summary="@string/snd_clock_rate_desc"
 				android:defaultValue="8000"
-				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"></ListPreference>
+				android:entryValues="@array/clock_rate_values" android:entries="@array/clock_rate_choices"/>
 				
 			<EditTextPreference android:title="@string/snd_ptime" android:key="snd_ptime"
 				android:summary="@string/snd_ptime_desc"
 				android:defaultValue="20"
-				android:numeric="signed"></EditTextPreference>
+				android:numeric="signed"/>
 				
 			<CheckBoxPreference android:summary="@string/has_io_queue_desc"
 				android:title="@string/has_io_queue" android:key="has_io_queue"
-				android:defaultValue="false"></CheckBoxPreference>
+				android:defaultValue="false"/>
 
 		</PreferenceCategory>
 		
-		<PreferenceScreen android:title="@string/codecs" android:summary="@string/codecs_availability_text">
-			<intent android:action="android.intent.action.MAIN"
-                   android:targetPackage="com.csipsimple"
-                   android:targetClass="com.csipsimple.ui.prefs.Codecs" ></intent>
-		</PreferenceScreen>
+		<PreferenceScreen android:title="@string/codecs" android:summary="@string/codecs_availability_text" android:key="codecs_list"/>
 		
 		<PreferenceCategory android:key="audio_volume" android:title="@string/audio_volume">
 			
