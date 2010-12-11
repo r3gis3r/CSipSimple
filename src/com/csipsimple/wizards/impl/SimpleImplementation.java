@@ -21,16 +21,11 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsip_cred_data_type;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 
 public abstract class SimpleImplementation extends BaseImplementation {
 	//private static final String THIS_FILE = "SimplePrefsWizard";
@@ -51,7 +46,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		accountUseTcp = (CheckBoxPreference) parent.findPreference(USE_TCP);
 	}
 	
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		bindFields();
 		
 		String display_name = account.display_name;
@@ -59,7 +54,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 			display_name = getDefaultName();
 		}
 		accountDisplayName.setText(display_name);
-		String account_cfgid = account.cfg.getId().getPtr();
+		String account_cfgid = account.acc_id;
 		if(account_cfgid == null) {
 			account_cfgid = "";
 		}
@@ -71,12 +66,10 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		}
 
 		accountUsername.setText(account_cfgid);
-		
-		pjsip_cred_info ci = account.cfg.getCred_info();
-		accountPassword.setText(ci.getData().getPtr());
+		accountPassword.setText(account.data);
 		
 		if(canTcp()) {
-			accountUseTcp.setChecked(account.transport == Account.TRANSPORT_TCP);
+			accountUseTcp.setChecked(account.transport == SipProfile.TRANSPORT_TCP);
 		}else {
 			hidePreference(null, USE_TCP);
 		}
@@ -118,33 +111,29 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		return isValid;
 	}
 
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		account.display_name = accountDisplayName.getText();
 		// TODO add an user display name
-		account.cfg.setId(pjsua.pj_str_copy("<sip:"
-				+ accountUsername.getText() + "@"+getDomain()+">"));
+		account.acc_id = "<sip:"
+				+ accountUsername.getText() + "@"+getDomain()+">";
 		
-		pj_str_t regUri = pjsua.pj_str_copy("sip:"+getDomain());
-		account.cfg.setReg_uri(regUri);
-		account.cfg.setProxy_cnt(1);
-		pj_str_t[] proxies = account.cfg.getProxy();
-		proxies[0] = regUri;
-		account.cfg.setProxy(proxies);
+		String regUri = "sip:"+getDomain();
+		account.reg_uri = regUri;
+		account.proxies = new String[] { regUri } ;
 
-		pjsip_cred_info credentials = account.cfg.getCred_info();
+		
+		account.realm = "*";
+		account.username = getText(accountUsername);
+		account.data = getText(accountPassword);
+		account.scheme = "Digest";
+		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 
-		account.cfg.setCred_count(1);
-		credentials.setRealm(pjsua.pj_str_copy("*"));
-		credentials.setUsername(getPjText(accountUsername));
-		credentials.setData(getPjText(accountPassword));
-		credentials.setScheme(pjsua.pj_str_copy("Digest"));
-		credentials.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
-				.swigValue());
-
-		account.cfg.setReg_timeout(1800);
+		account.reg_timeout = 1800;
 		
 		if(canTcp()) {
-			account.transport = accountUseTcp.isChecked() ? Account.TRANSPORT_TCP : Account.TRANSPORT_AUTO;
+			account.transport = accountUseTcp.isChecked() ? SipProfile.TRANSPORT_TCP : SipProfile.TRANSPORT_UDP;
+		}else {
+			account.transport = SipProfile.TRANSPORT_UDP;
 		}
 		
 		return account;

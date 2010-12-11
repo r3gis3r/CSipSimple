@@ -17,12 +17,10 @@
  */
 package com.csipsimple.wizards.impl;
 
-import org.pjsip.pjsua.pjsuaConstants;
-
 import android.text.InputType;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class Keyyo extends SimpleImplementation {
@@ -40,7 +38,7 @@ public class Keyyo extends SimpleImplementation {
 	
 	//Customization
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
 		accountUsername.setTitle(R.string.w_common_phone_number);
@@ -57,15 +55,15 @@ public class Keyyo extends SimpleImplementation {
 	}
 	
 	
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		//Ensure registration timeout value
-		account.cfg.setReg_timeout(900);
-		account.cfg.setKa_interval(15);
-		account.cfg.setPublish_enabled(1);
-		account.transport = Account.TRANSPORT_AUTO;
-		account.cfg.setAllow_contact_rewrite(pjsuaConstants.PJ_FALSE);
-		account.cfg.setContact_rewrite_method(1);
+		account.reg_timeout = 900;
+		account.ka_interval = 15;
+		account.publish_enabled = 1;
+		account.transport = SipProfile.TRANSPORT_AUTO;
+		account.allow_contact_rewrite = false;
+		account.contact_rewrite_method = 1;
 		return account;
 	}
 	

@@ -17,7 +17,7 @@
  */
 package com.csipsimple.wizards;
 
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public interface WizardIface {
@@ -26,13 +26,13 @@ public interface WizardIface {
 	
 	// Layout stuff
 	int getBasePreferenceResource();
-	void fillLayout(Account account);
+	void fillLayout(SipProfile account);
 	void updateDescriptions();
 	
 	String getDefaultFieldSummary(String fieldName);
 
 	// Save
-	Account buildAccount(Account account);
+	SipProfile buildAccount(SipProfile account);
 	void setDefaultParams(PreferencesWrapper prefs);
 	boolean canSave();
 	boolean needRestart();

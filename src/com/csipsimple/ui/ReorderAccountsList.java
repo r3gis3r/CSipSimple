@@ -29,12 +29,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.SimpleAdapter.ViewBinder;
+import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.DragnDropListView;
 import com.csipsimple.widgets.DragnDropListView.DropListener;
@@ -129,15 +129,15 @@ public class ReorderAccountsList extends ListActivity {
     	}
 		
     	database.open();
-		List<Account> accList = database.getListAccounts();
+		List<SipProfile> accList = database.getListAccounts();
 		database.close();
 		
 		
-		for(Account acc : accList) {
+		for(SipProfile acc : accList) {
 			HashMap<String, Object> accInfo = new HashMap<String, Object>();
 			accInfo.put(ACCOUNT_ID, acc.id);
 			accInfo.put(ACCOUNT_NAME, acc.display_name);
-			accInfo.put(ACCOUNT_PRIORITY, acc.cfg.getPriority());
+			accInfo.put(ACCOUNT_PRIORITY, acc.priority);
 			accountsList.add(accInfo);
 		}
 		

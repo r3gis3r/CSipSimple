@@ -21,15 +21,10 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsip_cred_data_type;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
 
 public class Basic extends BaseImplementation {
@@ -47,12 +42,12 @@ public class Basic extends BaseImplementation {
 		accountPassword = (EditTextPreference) parent.findPreference("password");
 	}
 	
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		bindFields();
 		
 		accountDisplayName.setText(account.display_name);
 		String server = "";
-		String account_cfgid = account.cfg.getId().getPtr();
+		String account_cfgid = account.acc_id;
 		if(account_cfgid == null) {
 			account_cfgid = "";
 		}
@@ -68,8 +63,7 @@ public class Basic extends BaseImplementation {
 		accountUserName.setText(account_cfgid);
 		accountServer.setText(server);
 		
-		pjsip_cred_info ci = account.cfg.getCred_info();
-		accountPassword.setText(ci.getData().getPtr());
+		accountPassword.setText(account.data);
 	}
 
 	public void updateDescriptions() {
@@ -111,31 +105,24 @@ public class Basic extends BaseImplementation {
 		return isValid;
 	}
 
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
 		// TODO add an user display name
-		account.cfg.setId(pjsua.pj_str_copy("<sip:"
-				+ accountUserName.getText() + "@"+accountServer.getText()+">"));
+		account.acc_id = "<sip:" + accountUserName.getText() + "@"+accountServer.getText()+">";
 		
-		pj_str_t regUri = pjsua.pj_str_copy("sip:"+accountServer.getText());
-		account.cfg.setReg_uri(regUri);
-		account.cfg.setProxy_cnt(1);
-		pj_str_t[] proxies = account.cfg.getProxy();
-		proxies[0] = regUri;
-		account.cfg.setProxy(proxies);
+		String regUri = "sip:" + accountServer.getText();
+		account.reg_uri = regUri;
+		account.proxies = new String[] { regUri } ;
 
-		pjsip_cred_info ci = account.cfg.getCred_info();
 
-		account.cfg.setCred_count(1);
-		ci.setRealm(pjsua.pj_str_copy("*"));
-		ci.setUsername(getPjText(accountUserName));
-		ci.setData(getPjText(accountPassword));
-		ci.setScheme(pjsua.pj_str_copy("Digest"));
-		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
-				.swigValue());
+		account.realm = "*";
+		account.username = getText(accountUserName);
+		account.data = getText(accountPassword);
+		account.scheme = "Digest";
+		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 		//By default auto transport
-		account.transport = Account.TRANSPORT_AUTO;
+		account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
 	}
 

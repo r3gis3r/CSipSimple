@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.widgets.AccountChooserButton.OnAccountChangeListener;
 
@@ -54,7 +54,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher {
 		//Map events
 		accountChooserButtonText.setOnAccountChangeListener(new OnAccountChangeListener() {
 			@Override
-			public void onChooseAccount(Account account) {
+			public void onChooseAccount(SipProfile account) {
 				updateDialTextHelper();
 			}
 		});
@@ -96,7 +96,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher {
 	private void updateDialTextHelper() {
 
 		String dialUserValue = dialUser.getText().toString();
-		Account acc = accountChooserButtonText.getSelectedAccount();
+		SipProfile acc = accountChooserButtonText.getSelectedAccount();
 		if(!Pattern.matches(".*@.*", dialUserValue) && acc != null) {
 			domainTextHelper.setText("@"+acc.getDefaultDomain());
 		}else {
@@ -113,7 +113,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher {
 			return null;
 		}
 		userName = userName.replaceAll("[ \t]", "");
-		Account acc = accountChooserButtonText.getSelectedAccount();
+		SipProfile acc = accountChooserButtonText.getSelectedAccount();
 		if (acc != null) {
 			accountToUse = acc.id;
 			//TODO : escape + and special char in username

@@ -16,12 +16,12 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.csipsimple.service;
-import com.csipsimple.models.IAccount;
+import com.csipsimple.api.SipProfile;
 
 interface ISipConfiguration {
 	//Account management
-	long addOrUpdateAccount(in IAccount acc);
-	IAccount getAccount(long acc_id);
+	long addOrUpdateAccount(in SipProfile acc);
+	SipProfile getAccount(long acc_id);
 	
 	//Prefs
 	void setPreferenceString(in String key, in String value);

@@ -49,8 +49,8 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipNotifications;
@@ -387,8 +387,8 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 
 	private void sendMessage() {
 		if(service != null) {
-			Account acc = accountChooserButton.getSelectedAccount();
-			if(acc != null && acc.id != Account.INVALID_ID) {
+			SipProfile acc = accountChooserButton.getSelectedAccount();
+			if(acc != null && acc.id != SipProfile.INVALID_ID) {
 				try {
 					service.sendMessage(bodyInput.getText().toString(), remoteFrom, acc.id);
 					bodyInput.getText().clear();

@@ -19,9 +19,6 @@ package com.csipsimple.wizards.impl;
 
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
@@ -60,8 +57,8 @@ public abstract class BaseImplementation implements WizardIface {
 		return Pattern.matches(regex, edt.getText());
 	}
 
-	protected pj_str_t getPjText(EditTextPreference edt){
-		return pjsua.pj_str_copy(edt.getText());
+	protected String getText(EditTextPreference edt){
+		return edt.getText();
 	}
 	
 	

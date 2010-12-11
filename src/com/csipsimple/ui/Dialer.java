@@ -55,7 +55,7 @@ import android.widget.LinearLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.animation.Flip3dAnimation;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.service.SipService;
@@ -318,7 +318,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 		if (isDigit) {
 			toCall = PhoneNumberUtils.stripSeparators(digits.getText().toString());
-			Account acc = accountChooserButton.getSelectedAccount();
+			SipProfile acc = accountChooserButton.getSelectedAccount();
 			if (acc != null) {
 				accountToUse = acc.id;
 			}

@@ -73,12 +73,12 @@ import android.view.KeyCharacterMap;
 import android.widget.Toast;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
-import com.csipsimple.models.IAccount;
+import com.csipsimple.models.PjSipAccount;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -206,7 +206,7 @@ public class SipService extends Service {
 
 		@Override
 		public void setAccountRegistration(int accountId, int renew) throws RemoteException {
-			Account account;
+			SipProfile account;
 			synchronized (db) {
 				db.open();
 				account = db.getAccount(accountId);
@@ -432,7 +432,7 @@ public class SipService extends Service {
 	private final ISipConfiguration.Stub binderConfiguration = new ISipConfiguration.Stub() {
 
 		@Override
-		public long addOrUpdateAccount(IAccount acc) throws RemoteException {
+		public long addOrUpdateAccount(SipProfile acc) throws RemoteException {
 			Log.d(THIS_FILE, ">>> addOrUpdateAccount from service");
 			long finalId = -1;
 			if (!hasSipStack) {
@@ -441,14 +441,13 @@ public class SipService extends Service {
 			}
 
 			if (hasSipStack) {
-				Account account = new Account(acc);
 				synchronized (db) {
 					db.open();
-					if (account.id == null) {
-						finalId = db.insertAccount(account);
+					if (acc.id == SipProfile.INVALID_ID) {
+						finalId = db.insertAccount(acc);
 					} else {
-						db.updateAccount(account);
-						finalId = account.id;
+						db.updateAccount(acc);
+						finalId = acc.id;
 					}
 					db.close();
 				}
@@ -457,8 +456,8 @@ public class SipService extends Service {
 		}
 
 		@Override
-		public IAccount getAccount(long accId) throws RemoteException {
-			IAccount result = null;
+		public SipProfile getAccount(long accId) throws RemoteException {
+			SipProfile result = null;
 
 			if (!hasSipStack) {
 				Log.d(THIS_FILE, "TRY TO LOAD SIP STACK");
@@ -466,14 +465,10 @@ public class SipService extends Service {
 			}
 
 			if (hasSipStack) {
-				Account account;
 				synchronized (db) {
 					db.open();
-					account = db.getAccount(accId);
+					result = db.getAccount(accId);
 					db.close();
-				}
-				if (account != null) {
-					result = account.getIAccount();
 				}
 			}
 			return result;
@@ -574,7 +569,7 @@ public class SipService extends Service {
 				final boolean active = intent.getBooleanExtra(EXTRA_ACTIVATE, false);
 				//Should that be threaded?
 				if(accountId != -1) {
-					Account account;
+					SipProfile account;
 					synchronized (db) {
 						db.open();
 						account = db.getAccount(accountId);
@@ -1152,14 +1147,14 @@ public class SipService extends Service {
 		Log.d(THIS_FILE, "We are adding all accounts right now....");
 
 		boolean hasSomeSuccess = false;
-		List<Account> accountList;
+		List<SipProfile> accountList;
 		synchronized (db) {
 			db.open();
 			accountList = db.getListAccounts();
 			db.close();
 		}
 
-		for (Account account : accountList) {
+		for (SipProfile account : accountList) {
 			if (account.active) {
 				if (addAccount(account) == pjsuaConstants.PJ_SUCCESS) {
 					hasSomeSuccess = true;
@@ -1177,13 +1172,15 @@ public class SipService extends Service {
 		}
 	}
 
-	private int addAccount(Account account) {
+	private int addAccount(SipProfile profile) {
 		int status = pjsuaConstants.PJ_FALSE;
 		synchronized (pjAccountsCreationLock) {
 			if (!created) {
 				Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
 				return status;
 			}
+			PjSipAccount account = new PjSipAccount(profile);
+			
 			account.applyExtraParams();
 
 			Integer currentAccountId = null;
@@ -1193,17 +1190,17 @@ public class SipService extends Service {
 
 			// Force the use of a transport
 			switch (account.transport) {
-			case Account.TRANSPORT_UDP:
+			case SipProfile.TRANSPORT_UDP:
 				if(udpTranportId != null) {
 					account.cfg.setTransport_id(udpTranportId);
 				}
 				break;
-			case Account.TRANSPORT_TCP:
+			case SipProfile.TRANSPORT_TCP:
 				if(tcpTranportId != null) {
 			//		account.cfg.setTransport_id(tcpTranportId);
 				}
 				break;
-			case Account.TRANSPORT_TLS:
+			case SipProfile.TRANSPORT_TLS:
 				if(tlsTransportId != null) {
 				//	account.cfg.setTransport_id(tlsTransportId);
 				}
@@ -1248,7 +1245,7 @@ public class SipService extends Service {
 		return status;
 	}
 
-	private int setAccountRegistration(Account account, int renew) {
+	private int setAccountRegistration(SipProfile account, int renew) {
 		int status = pjsuaConstants.PJ_FALSE;
 		synchronized (pjAccountsCreationLock) {
 			if (!created || account == null) {
@@ -1300,14 +1297,14 @@ public class SipService extends Service {
 
 		synchronized (pjAccountsCreationLock) {
 			Log.d(THIS_FILE, "Remove all accounts");
-			List<Account> accountList;
+			List<SipProfile> accountList;
 			synchronized (db) {
 				db.open();
 				accountList = db.getListAccounts();
 				db.close();
 			}
 
-			for (Account account : accountList) {
+			for (SipProfile account : accountList) {
 				setAccountRegistration(account, 0);
 			}
 
@@ -1338,7 +1335,7 @@ public class SipService extends Service {
 				activeAccountPjsuaId = activeAccounts.get(accountDbId);
 			}
 		}
-		Account account;
+		SipProfile account;
 		synchronized (db) {
 			db.open();
 			account = db.getAccount(accountDbId);
@@ -1367,12 +1364,12 @@ public class SipService extends Service {
 		return accountInfo;
 	}
 
-	protected Account getAccountForPjsipId(int accId) {
+	protected SipProfile getAccountForPjsipId(int accId) {
 		return getAccountForPjsipId(accId, db);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Account getAccountForPjsipId(int accId, DBAdapter database) {
+	public static SipProfile getAccountForPjsipId(int accId, DBAdapter database) {
 		Set<Entry<Integer, Integer>> activeAccountsClone;
 		synchronized (activeAccountsLock) {
 			activeAccountsClone = ((HashMap<Integer, Integer>) activeAccounts.clone()).entrySet();
@@ -1386,7 +1383,7 @@ public class SipService extends Service {
 			if (entry.getValue().equals(accId)) {
 				synchronized (database) {
 					database.open();
-					Account account = database.getAccount(entry.getKey());
+					SipProfile account = database.getAccount(entry.getKey());
 					database.close();
 					return account;
 				}
@@ -1982,10 +1979,10 @@ public class SipService extends Service {
 	private ToCall sanitizeSipUri(String callee, int accountId) {
 		//accountId is the id in term of csipsimple database
 		//pjsipAccountId is the account id in term of pjsip adding
-		int pjsipAccountId = Account.INVALID_ID;
+		int pjsipAccountId = SipProfile.INVALID_ID;
 
 		// If this is an invalid account id
-		if (accountId == Account.INVALID_ID || !activeAccounts.containsKey(accountId)) {
+		if (accountId == SipProfile.INVALID_ID || !activeAccounts.containsKey(accountId)) {
 			int defaultPjsipAccount = pjsua.acc_get_default();
 
 			// If default account is not active
@@ -2013,7 +2010,7 @@ public class SipService extends Service {
 			pjsipAccountId = activeAccounts.get(accountId);
 		}
 
-		if (pjsipAccountId == Account.INVALID_ID) {
+		if (pjsipAccountId == SipProfile.INVALID_ID) {
 			Log.e(THIS_FILE, "Unable to find a valid account for this call");
 			return null;
 		}
@@ -2026,7 +2023,7 @@ public class SipService extends Service {
 		if (!m.matches()) {
 			// Assume this is a direct call using digit dialer
 			Log.d(THIS_FILE, "default acc : " + accountId);
-			Account account;
+			SipProfile account;
 			synchronized (db) {
 				db.open();
 				account = db.getAccount(accountId);
@@ -2049,7 +2046,7 @@ public class SipService extends Service {
 		Log.d(THIS_FILE, "will call " + callee);
 		if (pjsua.verify_sip_url(callee) == 0) {
 			//In worse worse case, find back the account id for uri.. but probably useless case
-			if(pjsipAccountId == Account.INVALID_ID) {
+			if(pjsipAccountId == SipProfile.INVALID_ID) {
 				pjsipAccountId = pjsua.acc_find_for_outgoing(pjsua.pj_str_copy(callee));
 			}
 			return new ToCall(pjsipAccountId, callee);

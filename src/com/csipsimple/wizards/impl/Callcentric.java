@@ -17,10 +17,10 @@
  */
 package com.csipsimple.wizards.impl;
 
-import com.csipsimple.R;
-import com.csipsimple.models.Account;
-
 import android.text.InputType;
+
+import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 
 public class Callcentric extends SimpleImplementation {
 	
@@ -30,7 +30,7 @@ public class Callcentric extends SimpleImplementation {
 	}
 	
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
 		accountUsername.setTitle(R.string.w_callcentric_phone_number);

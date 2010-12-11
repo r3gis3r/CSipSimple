@@ -30,13 +30,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.utils.AccountListUtils;
+import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 
 public class AccountChooserButton extends LinearLayout implements OnClickListener {
 
@@ -45,7 +45,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 	private TextView textView;
 	private ImageView imageView;
 	private QuickActionWindow quickAction;
-	private Account account = null;
+	private SipProfile account = null;
 
 	private DBAdapter database;
 
@@ -55,7 +55,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
 	/**
 	 * Interface definition for a callback to be invoked when 
-	 * Account is choosen
+	 * PjSipAccount is choosen
 	 */
 	public interface OnAccountChangeListener {
 		
@@ -65,7 +65,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 		 * @param keyCode keyCode pressed
 		 * @param dialTone corresponding dialtone
 		 */
-		void onChooseAccount(Account account);
+		void onChooseAccount(SipProfile account);
 	}
 
 	public AccountChooserButton(Context context, AttributeSet attrs) {
@@ -107,10 +107,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 		
 		if(service != null) {
 			database.open();
-			List<Account> accountsList = database.getListAccounts(true);
+			List<SipProfile> accountsList = database.getListAccounts(true);
 			database.close();
 	
-			for (final Account account : accountsList) {
+			for (final SipProfile account : accountsList) {
 				AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(getContext(), service, account.id);
 				if(accountStatusDisplay.availableForCalls) {
 					quickAction.addItem(getResources().getDrawable(account.getIconResource()), account.display_name, new OnClickListener() {
@@ -134,7 +134,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 		quickAction.show();
 	}
 
-	public void setAccount(Account aAccount) {
+	public void setAccount(SipProfile aAccount) {
 		account = aAccount;
 
 		if (account == null) {
@@ -153,14 +153,14 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 	public void updateRegistration(boolean canChangeIfValid) {
 		if(service != null) {
 			database.open();
-			List<Account> accountsList = database.getListAccounts(true);
+			List<SipProfile> accountsList = database.getListAccounts(true);
 			database.close();
 			if(accountsList.contains(account) && !canChangeIfValid) {
 				return;
 			}
 			
 			if(service != null) {
-				for(Account account: accountsList) {
+				for(SipProfile account: accountsList) {
 					AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(getContext(), service, account.id);
 					if(accountStatusDisplay.availableForCalls) {
 						setAccount(account);
@@ -175,7 +175,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 		
 	}
 
-	public Account getSelectedAccount() {
+	public SipProfile getSelectedAccount() {
 		return account;
 	}
 	

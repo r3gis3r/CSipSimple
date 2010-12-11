@@ -17,13 +17,13 @@
  */
 package com.csipsimple.wizards.impl;
 
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 
 public class Phonzo extends AuthorizationImplementation {
 	
 
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		hidePreference(null, SERVER);
 	}

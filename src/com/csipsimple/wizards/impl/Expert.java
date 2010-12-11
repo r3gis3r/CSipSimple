@@ -19,19 +19,13 @@ package com.csipsimple.wizards.impl;
 
 import java.util.HashMap;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjmedia_srtp_use;
-import org.pjsip.pjsua.pjsip_cred_data_type;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
 
 public class Expert extends BaseImplementation {
@@ -77,36 +71,35 @@ public class Expert extends BaseImplementation {
 		accountProxy = (EditTextPreference) parent.findPreference("proxy");
 	}
 
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		bindFields();
 
-		pjsip_cred_info ci = account.cfg.getCred_info();
 
 		accountDisplayName.setText(account.display_name);
-		accountAccId.setText(account.cfg.getId().getPtr());
-		accountRegUri.setText(account.cfg.getReg_uri().getPtr());
-		accountRealm.setText(ci.getRealm().getPtr());
-		accountUserName.setText(ci.getUsername().getPtr());
-		accountData.setText(ci.getData().getPtr());
+		accountAccId.setText(account.acc_id);
+		accountRegUri.setText(account.reg_uri);
+		accountRealm.setText(account.realm);
+		accountUserName.setText(account.username);
+		accountData.setText(account.data);
 
 		{
-			String scheme = ci.getScheme().getPtr();
+			String scheme = account.scheme;
 			if (scheme != null && !scheme.equals("")) {
-				accountScheme.setValue(ci.getScheme().getPtr());
+				accountScheme.setValue(scheme);
 			} else {
 				accountScheme.setValue("Digest");
 			}
 		}
 		{
-			int ctype = ci.getData_type();
-			if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue()) {
+			int ctype = account.datatype;
+			if (ctype == SipProfile.CRED_DATA_PLAIN_PASSWD) {
 				accountDataType.setValueIndex(0);
-			} else if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_DIGEST.swigValue()) {
+			} else if (ctype == SipProfile.CRED_DATA_DIGEST) {
 				accountDataType.setValueIndex(1);
 			}
 			//DISABLED SINCE NOT SUPPORTED YET
 			/*
-			else if (ctype == pjsip_cred_data_type.PJSIP_CRED_DATA_EXT_AKA.swigValue()) {
+			else if (ctype ==SipProfile.CRED_CRED_DATA_EXT_AKA) {
 				accountDataType.setValueIndex(2);
 			} */else {
 				accountDataType.setValueIndex(0);
@@ -114,16 +107,16 @@ public class Expert extends BaseImplementation {
 		}
 
 		accountTransport.setValue(account.transport.toString());
-		accountPublishEnabled.setChecked((account.cfg.getPublish_enabled() == 1));
-		accountRegTimeout.setText(Long.toString(account.cfg.getReg_timeout()));
-		accountKaInterval.setText(Long.toString(account.cfg.getKa_interval()));
+		accountPublishEnabled.setChecked((account.publish_enabled == 1));
+		accountRegTimeout.setText(Long.toString(account.reg_timeout));
+		accountKaInterval.setText(Long.toString(account.ka_interval));
 		
-		accountForceContact.setText(account.cfg.getForce_contact().getPtr());
-		accountAllowContactRewrite.setChecked(account.cfg.getAllow_contact_rewrite() == 1);
-		accountContactRewriteMethod.setValue(Integer.toString(account.cfg.getContact_rewrite_method()));
-		accountProxy.setText(account.cfg.getProxy()[0].getPtr());
+		accountForceContact.setText(account.force_contact);
+		accountAllowContactRewrite.setChecked(account.allow_contact_rewrite);
+		accountContactRewriteMethod.setValue(Integer.toString(account.contact_rewrite_method));
+		accountProxy.setText(TextUtils.join(SipProfile.PROXIES_SEPARATOR, account.proxies));
 		
-		accountUseSrtp.setValueIndex(account.cfg.getUse_srtp().swigValue());
+		accountUseSrtp.setValueIndex(account.use_srtp);
 	}
 	
 
@@ -172,80 +165,74 @@ public class Expert extends BaseImplementation {
 		return isValid;
 	}
 
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		account.display_name = accountDisplayName.getText();
 		try {
 			account.transport = Integer.parseInt(accountTransport.getValue());
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport is not a number");
 		}
-		account.cfg.setId(getPjText(accountAccId));
-		account.cfg.setReg_uri(getPjText(accountRegUri));
+		account.acc_id = getText(accountAccId);
+		account.reg_uri = getText(accountRegUri);
 		try {
-			account.cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(Integer.parseInt(accountUseSrtp.getValue())));
+			account.use_srtp = Integer.parseInt(accountUseSrtp.getValue());
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Use srtp is not a number");
 		}
-		pjsip_cred_info ci = account.cfg.getCred_info();
 
 		if (!isEmpty(accountUserName)) {
-			account.cfg.setCred_count(1);
-			ci.setRealm(getPjText(accountRealm));
-			ci.setUsername(getPjText(accountUserName));
-			ci.setData(getPjText(accountData));
-			ci.setScheme(pjsua.pj_str_copy(accountScheme.getValue()));
+			account.realm = getText(accountRealm);
+			account.username = getText(accountUserName);
+			account.data = getText(accountData);
+			account.scheme = accountScheme.getValue();
 			
 			
 			String dataType = accountDataType.getValue();
 			if(dataType.equalsIgnoreCase("0")) {
-				ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
+				account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 			}else if(dataType.equalsIgnoreCase("1")){
-				ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_DIGEST.swigValue());
+				account.datatype = SipProfile.CRED_DATA_DIGEST;
 			}
 			//DISABLED SINCE NOT SUPPORTED YET
 			/*else if(dataType.equalsIgnoreCase("16")){
-				ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_EXT_AKA.swigValue());
+				ci.setData_type(SipProfile.CRED_DATA_EXT_AKA);
 			} */else {
-				ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
+				account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 			}
 		} else {
-			account.cfg.setCred_count(0);
-			ci.setRealm(pjsua.pj_str_copy(""));
-			ci.setUsername(pjsua.pj_str_copy(""));
-			ci.setData(pjsua.pj_str_copy(""));
-			ci.setScheme(pjsua.pj_str_copy("Digest"));
-			ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
+			account.realm = "";
+			account.username = "";
+			account.data = "";
+			account.scheme = "Digest";
+			account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 		}
 
-		account.cfg.setPublish_enabled((accountPublishEnabled.isChecked()) ? 1 : 0);
+		account.publish_enabled = accountPublishEnabled.isChecked() ? 1 : 0;
 		try {
-			account.cfg.setReg_timeout(Integer.parseInt(accountRegTimeout.getText()));
+			account.reg_timeout = Integer.parseInt(accountRegTimeout.getText());
 		} catch (NumberFormatException e) {
-			account.cfg.setReg_timeout(0);
+			account.reg_timeout = 0;
 		}
 		try {
-			account.cfg.setKa_interval(Integer.parseInt(accountKaInterval.getText()));
+			account.ka_interval = Integer.parseInt(accountKaInterval.getText());
 		} catch (NumberFormatException e) {
-			account.cfg.setKa_interval(0);
+			account.ka_interval = 0;
 		}
 		try {
-			account.cfg.setContact_rewrite_method(Integer.parseInt(accountContactRewriteMethod.getValue()));
+			account.contact_rewrite_method = Integer.parseInt(accountContactRewriteMethod.getValue());
 		} catch (NumberFormatException e) {
 			//DO nothing
 		}
-		account.cfg.setAllow_contact_rewrite(accountAllowContactRewrite.isChecked()?1:0);
+		account.allow_contact_rewrite = accountAllowContactRewrite.isChecked();
 		String forceContact = accountForceContact.getText();
 		if(!TextUtils.isEmpty(forceContact)) {
-			account.cfg.setForce_contact(getPjText(accountForceContact));
+			account.force_contact = getText(accountForceContact);
 		}
 		
 		if (!isEmpty(accountProxy)) {
-			account.cfg.setProxy_cnt(1);
-			pj_str_t[] proxies = account.cfg.getProxy();
-			proxies[0] = getPjText(accountProxy);
-			account.cfg.setProxy(proxies);
+			account.proxies = new String[] { accountProxy.getText() };
 		} else {
-			account.cfg.setProxy_cnt(0);
+			account.proxies = null;
 		}
 		
 		return account;

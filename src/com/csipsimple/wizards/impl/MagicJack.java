@@ -17,34 +17,27 @@
  */
 package com.csipsimple.wizards.impl;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
-
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 
 public class MagicJack extends AlternateServerImplementation {
 	
 
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		String port = "5070";
 		
-		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:"+getDomain()+":"+port));
+		account.reg_uri = "sip:"+getDomain()+":"+port;
 
-		pjsip_cred_info ci = account.cfg.getCred_info();
 
-		account.cfg.setCred_count(1);
-		ci.setRealm(pjsua.pj_str_copy("*"));
-		ci.setUsername(getPjText(accountUsername));
-		ci.setData(getPjText(accountPassword));
-		ci.setScheme(pjsua.pj_str_copy("Digest"));
-		ci.setData_type(8); // 8 is MJ digest auth
+		account.realm = "*";
+		account.username = getText(accountUsername);
+		account.data = getText(accountPassword);
+		account.scheme = "Digest";
+		account.datatype = 8;
+		
 
-		account.cfg.setProxy_cnt(1);
-		pj_str_t[] proxies = account.cfg.getProxy();
-		proxies[0] = pjsua.pj_str_copy("sip:"+getDomain()+":"+port);
-		account.cfg.setProxy(proxies);
+		account.proxies = new String[] { "sip:" + getDomain() + ":" + port };
+		
 		return account;
 	}
 

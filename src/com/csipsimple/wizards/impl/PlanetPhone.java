@@ -20,7 +20,7 @@ package com.csipsimple.wizards.impl;
 import android.text.InputType;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class PlanetPhone extends SimpleImplementation {
@@ -37,7 +37,7 @@ public class PlanetPhone extends SimpleImplementation {
 
 	//Customization
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		accountUsername.setTitle(R.string.w_common_username);
 		accountUsername.setDialogTitle(R.string.w_common_username);

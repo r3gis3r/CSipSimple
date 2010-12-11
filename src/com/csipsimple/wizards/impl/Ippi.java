@@ -25,14 +25,13 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.pjsip.pjsua.pjsip_cred_info;
 
 import android.os.Handler;
 import android.os.Message;
 import android.text.InputType;
 import android.text.format.DateFormat;
 
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.MD5;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -57,15 +56,12 @@ public class Ippi extends SimpleImplementation {
 	
 	//Customization
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
 
-		if (account.id != null && account.id != Account.INVALID_ID) {
-			final pjsip_cred_info ci = account.cfg.getCred_info();
-			
-			
+		if (account.id != SipProfile.INVALID_ID) {
 			Thread t = new Thread() {
 
 				public void run() {
@@ -73,8 +69,8 @@ public class Ippi extends SimpleImplementation {
 						HttpClient httpClient = new DefaultHttpClient();
 						
 						String requestURL = "https://soap.ippi.fr/credit/check_credit.php?"
-							+ "login=" + ci.getUsername().getPtr()
-							+ "&code=" + MD5.MD5Hash(ci.getData().getPtr() + DateFormat.format("yyyyMMdd", new Date()));
+							+ "login=" + account.username
+							+ "&code=" + MD5.MD5Hash(account.data + DateFormat.format("yyyyMMdd", new Date()));
 						HttpGet httpGet = new HttpGet(requestURL);
 
 						// Create a response handler

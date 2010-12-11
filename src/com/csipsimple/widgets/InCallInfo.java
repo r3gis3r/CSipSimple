@@ -35,8 +35,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.service.SipService;
@@ -135,7 +135,7 @@ public class InCallInfo extends FrameLayout {
 			remoteName.setText(remoteContact);
 			remotePhoneNumber.setText(uriInfos.userName);
 			
-			Account acc = SipService.getAccountForPjsipId(callInfo.getAccId(), db);
+			SipProfile acc = SipService.getAccountForPjsipId(callInfo.getAccId(), db);
 			if(acc != null && acc.display_name != null) {
 				label.setText("SIP/"+acc.display_name+" :");
 			}

@@ -21,16 +21,12 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsip_cred_data_type;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
 
 public class Advanced extends BaseImplementation {
@@ -54,14 +50,14 @@ public class Advanced extends BaseImplementation {
 		accountProxy = (EditTextPreference) parent.findPreference("proxy");
 	}
 
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		bindFields();
 		
 		accountDisplayName.setText(account.display_name);
 		
 		String server = "";
 		String caller_id = "";
-		String account_cfgid = account.cfg.getId().getPtr();
+		String account_cfgid = account.acc_id;
 		if(account_cfgid == null) {
 			account_cfgid = "";
 		}
@@ -78,11 +74,10 @@ public class Advanced extends BaseImplementation {
 		accountCallerId.setText(caller_id);
 		accountUserName.setText(account_cfgid);
 		
-		pjsip_cred_info ci = account.cfg.getCred_info();
-		accountPassword.setText(ci.getData().getPtr());
+		accountPassword.setText(account.data);
 
-		accountUseTcp.setChecked(account.transport == Account.TRANSPORT_TCP);
-		String account_cfPrx = account.cfg.getProxy()[0].getPtr();
+		accountUseTcp.setChecked(account.transport == SipProfile.TRANSPORT_TCP);
+		String account_cfPrx = TextUtils.join(SipProfile.PROXIES_SEPARATOR, account.proxies);
 		if(account_cfPrx == null) {
 			accountProxy.setText("");
 		} else {
@@ -135,32 +130,26 @@ public class Advanced extends BaseImplementation {
 		return isValid;
 	}
 
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
-		account.cfg.setId(pjsua.pj_str_copy(accountCallerId.getText().trim() + " <sip:"
-				+ accountUserName.getText() + "@"+accountServer.getText()+">"));
-		account.cfg.setReg_uri(pjsua.pj_str_copy("sip:"+accountServer.getText()));
+		account.acc_id = accountCallerId.getText().trim() + " <sip:"
+				+ accountUserName.getText() + "@"+accountServer.getText()+">";
+		
+		account.reg_uri = "sip:" + accountServer.getText();
 
-		pjsip_cred_info ci = account.cfg.getCred_info();
+		account.realm = "*";
+		account.username = getText(accountUserName);
+		account.data = getText(accountPassword);
+		account.scheme = "Digest";
+		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 
-		account.cfg.setCred_count(1);
-		ci.setRealm(pjsua.pj_str_copy("*"));
-		ci.setUsername(getPjText(accountUserName));
-		ci.setData(getPjText(accountPassword));
-		ci.setScheme(pjsua.pj_str_copy("Digest"));
-		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD
-				.swigValue());
-
-		account.transport = accountUseTcp.isChecked() ? Account.TRANSPORT_TCP : Account.TRANSPORT_AUTO;
+		account.transport = accountUseTcp.isChecked() ? SipProfile.TRANSPORT_TCP : SipProfile.TRANSPORT_AUTO;
 		
 		if (!isEmpty(accountProxy)) {
-			account.cfg.setProxy_cnt(1);
-			pj_str_t[] proxies = account.cfg.getProxy();
-			proxies[0] = pjsua.pj_str_copy("sip:"+accountProxy.getText());
-			account.cfg.setProxy(proxies);
+			account.proxies = new String[] { "sip:"+accountProxy.getText() };
 		} else {
-			account.cfg.setProxy_cnt(0);
+			account.proxies = null;
 		}
 		return account;
 	}

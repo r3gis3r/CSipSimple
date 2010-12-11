@@ -15,29 +15,45 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.models;
+package com.csipsimple.api;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjmedia_srtp_use;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsuaConstants;
-import org.pjsip.pjsua.pjsua_acc_config;
+import com.csipsimple.db.DBAdapter;
+import com.csipsimple.models.Filter;
+import com.csipsimple.utils.Log;
+import com.csipsimple.wizards.WizardUtils;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
-import com.csipsimple.db.DBAdapter;
-import com.csipsimple.service.SipService;
-import com.csipsimple.utils.Log;
-import com.csipsimple.wizards.WizardUtils;
-
-public class Account {
+public class SipProfile implements Parcelable {
+	
+	//Constants
+	public final static int INVALID_ID = -1;
+	
+	//Transport choices
+	public final static int TRANSPORT_AUTO = 0;
+	public final static int TRANSPORT_UDP = 1;
+	public final static int TRANSPORT_TCP = 2;
+	public final static int TRANSPORT_TLS = 3;
+	
+	//Stack choices
+	public static final int PJSIP_STACK = 0;
+	public static final int GOOGLE_STACK = 1;
+	
+	//Password type choices
+	public static final int CRED_DATA_PLAIN_PASSWD = 0;
+	public static final int CRED_DATA_DIGEST = 1;
+	public static final int CRED_CRED_DATA_EXT_AKA = 2;
+	
+	public static final String PROXIES_SEPARATOR = "|";
+	
 	// Fields for table accounts
 	public static final String FIELD_ID = "id";
 	public static final String FIELD_ACTIVE = "active";
@@ -90,150 +106,121 @@ public class Account {
 		// In future release a credential table should be created
 		FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
 		FIELD_DATA };
-	private static final String THIS_FILE = "AccountModel";
 	
 	
-	//For now everything is public, easiest to manage
-	public String display_name;
-	public String wizard;
-	public boolean active;
-	public pjsua_acc_config cfg;
-	public Integer id; // = INVALID_ID ?
-	/**
-	 * transport : transport to force for this account
-	 * 0 : automatic
-	 * 1 : udp
-	 * 2 : tcp
-	 * 3 : tls
-	 */
+	//Properties
+	public int PrimaryKey = -1;
+	public int id = INVALID_ID;
+	public String display_name = "";
+	public String wizard = "EXPERT";
 	public Integer transport = 0;
+	public boolean active = true;
+	public int priority = 100;
+	public String acc_id = null;
+	public String reg_uri = null;
+	public int publish_enabled = -1;
+	public int reg_timeout = -1;
+	public int ka_interval = -1;
+	public String pidf_tuple_id = null;
+	public String force_contact = null;
+	public boolean allow_contact_rewrite = true;
+	public int contact_rewrite_method = 2;
+	public String[] proxies = null;
+	public String realm = null;
+	public String username = null;
+	public String scheme = null;
+	public int datatype = 0;
+	public String data = null;
+	public int use_srtp = -1;
+	public int sip_stack = PJSIP_STACK;
 	
 	
-	
-	public final static int INVALID_ID = -1;
-	
-	public final static int TRANSPORT_AUTO = 0;
-	public final static int TRANSPORT_UDP = 1;
-	public final static int TRANSPORT_TCP = 2;
-	public final static int TRANSPORT_TLS = 3;
-	
-	
-	public Account() {
+	public SipProfile() {
 		display_name = "";
 		wizard = "EXPERT";
 		active = true;
-		
-		
-		cfg = new pjsua_acc_config();
-		if (!SipService.creating) {
-			pjsua.acc_config_default(cfg);
-		}
-		// Change the default ka interval to 40s
-		cfg.setKa_interval(40);
 	}
 	
-	public Account(IAccount parcelable) {
-		if(parcelable.id != INVALID_ID) {
-			id = parcelable.id;
-		}
-		display_name = parcelable.display_name;
-		wizard = parcelable.wizard;
-		transport = parcelable.transport;
-		active = parcelable.active;
-		transport = parcelable.transport;
+	public SipProfile(Parcel in) {
+		PrimaryKey = in.readInt();
+		id = in.readInt();
+		display_name = in.readString();
+		wizard = in.readString();
+		transport = in.readInt();
+		active = (in.readInt()!=0)?true:false;
+		priority = in.readInt();
+		acc_id = getReadParcelableString(in.readString());
+		reg_uri = getReadParcelableString(in.readString());
+		publish_enabled = in.readInt();
+		reg_timeout = in.readInt();
+		ka_interval = in.readInt();
+		pidf_tuple_id = getReadParcelableString(in.readString());
+		force_contact = getReadParcelableString(in.readString());
+		proxies = getReadParcelableString(in.readString()).split(PROXIES_SEPARATOR);
+		realm = getReadParcelableString(in.readString());
+		username = getReadParcelableString(in.readString());
+		datatype = in.readInt();
+		data = getReadParcelableString(in.readString());
+		use_srtp = in.readInt();
+		allow_contact_rewrite = (in.readInt()!=0);
+		contact_rewrite_method = in.readInt();
+		sip_stack = in.readInt();
+	}
 
-		cfg = new pjsua_acc_config();
-		pjsua.acc_config_default(cfg);
-		
-		cfg.setPriority(parcelable.priority);
-		if(parcelable.acc_id != null) {
-			cfg.setId(pjsua.pj_str_copy(parcelable.acc_id));
-		}
-		if(parcelable.reg_uri != null) {
-			cfg.setReg_uri(pjsua.pj_str_copy(parcelable.reg_uri));
-		}
-		if(parcelable.published_enabled != -1) {
-			cfg.setPublish_enabled(parcelable.published_enabled);
-		}
-		if(parcelable.reg_timeout != -1) {
-			cfg.setReg_timeout(parcelable.reg_timeout);
-		}
-		if(parcelable.ka_interval != -1) {
-			cfg.setKa_interval(parcelable.ka_interval);
-		}
-		if(parcelable.pidf_tuple_id != null) {
-			cfg.setPidf_tuple_id(pjsua.pj_str_copy(parcelable.pidf_tuple_id));
-		}
-		if(parcelable.force_contact != null) {
-			cfg.setForce_contact(pjsua.pj_str_copy(parcelable.force_contact));
-		}
-		
-		cfg.setAllow_contact_rewrite(parcelable.allow_contact_rewrite ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
-		cfg.setContact_rewrite_method(parcelable.contact_rewrite_method);
-		
-		
-		if(parcelable.use_srtp != -1) {
-			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(parcelable.use_srtp));
-			cfg.setSrtp_secure_signaling(0);
-		}
-		
-		if(parcelable.proxy != null) {
-			cfg.setProxy_cnt(1);
-			pj_str_t[] proxies = cfg.getProxy();
-			proxies[0] = pjsua.pj_str_copy(parcelable.proxy);
-			cfg.setProxy(proxies);
+	public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
+		public SipProfile createFromParcel(Parcel in) {
+			return new SipProfile(in);
 		}
 
-		cfg.setCred_count(1);
-		pjsip_cred_info cred_info = cfg.getCred_info();
-		
-		if(parcelable.realm != null) {
-			cred_info.setRealm(pjsua.pj_str_copy(parcelable.realm));
+		public SipProfile[] newArray(int size) {
+			return new SipProfile[size];
 		}
-		if(parcelable.username != null) {
-			cred_info.setUsername(pjsua.pj_str_copy(parcelable.username));
-		}
-		if(parcelable.datatype != -1) {
-			cred_info.setData_type(parcelable.datatype);
-		}
-		if(parcelable.data != null) {
-			cred_info.setData(pjsua.pj_str_copy(parcelable.data));
-		}
+	};
+
+	private static final String THIS_FILE = "SipProfile";
+
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(PrimaryKey);
+		dest.writeInt(id);
+		dest.writeString(display_name);
+		dest.writeString(wizard);
+		dest.writeInt(transport);
+		dest.writeInt(active?1:0);
+		dest.writeInt(priority);
+		dest.writeString(getWriteParcelableString(acc_id));
+		dest.writeString(getWriteParcelableString(reg_uri));
+		dest.writeInt(publish_enabled);
+		dest.writeInt(reg_timeout);
+		dest.writeInt(ka_interval);
+		dest.writeString(getWriteParcelableString(pidf_tuple_id));
+		dest.writeString(getWriteParcelableString(force_contact));
+		dest.writeString(getWriteParcelableString(TextUtils.join(PROXIES_SEPARATOR, proxies)));
+		dest.writeString(getWriteParcelableString(realm));
+		dest.writeString(getWriteParcelableString(username));
+		dest.writeInt(datatype);
+		dest.writeString(getWriteParcelableString(data));
+		dest.writeInt(use_srtp);
+		dest.writeInt(allow_contact_rewrite?1:0);
+		dest.writeInt(contact_rewrite_method);
+		dest.writeInt(sip_stack);
 	}
 	
-	
-	public IAccount getIAccount() {
-		IAccount parcelable = new IAccount();
-		if(id != null) {
-			parcelable.id = id;
-		}
-		parcelable.display_name = display_name;
-		parcelable.wizard = wizard ;
-		parcelable.transport = transport;
-		parcelable.active = active ;
-		
-		parcelable.priority = cfg.getPriority();
-		parcelable.acc_id = cfg.getId().getPtr();
-		parcelable.reg_uri = cfg.getReg_uri().getPtr();
-		parcelable.published_enabled = cfg.getPublish_enabled();
-		parcelable.reg_timeout = (int) cfg.getReg_timeout();
-		parcelable.ka_interval = (int) cfg.getKa_interval();
-		parcelable.pidf_tuple_id = cfg.getPidf_tuple_id().getPtr();
-		parcelable.force_contact = cfg.getForce_contact().getPtr();
-		parcelable.allow_contact_rewrite = cfg.getAllow_contact_rewrite()==pjsuaConstants.PJ_TRUE;
-		parcelable.contact_rewrite_method = cfg.getContact_rewrite_method();
-		parcelable.proxy = (cfg.getProxy_cnt()>0)? cfg.getProxy()[0].getPtr():null;
-		parcelable.use_srtp = cfg.getUse_srtp().swigValue();
-		
-		pjsip_cred_info cred_info = cfg.getCred_info();
-		if(cfg.getCred_count()>0) {
-			parcelable.realm = cred_info.getRealm().getPtr();
-			parcelable.username = cred_info.getUsername().getPtr();
-			parcelable.datatype = cred_info.getData_type();
-			parcelable.data = cred_info.getData().getPtr();
-		}
-		return parcelable;
+	private String getWriteParcelableString(String str) {
+		return (str == null)?"null":str;
 	}
+	
+	private String getReadParcelableString(String str) {
+		return str.equalsIgnoreCase("null")?null:str;
+	}
+	
 	
 	/** 
 	 * Fill account object from cursor
@@ -269,139 +256,130 @@ public class Account {
 		} else {
 			active = true;
 		}
-
-		// Credentials
-		cfg.setCred_count(1);
-
+		
 		// General account settings
 		tmp_i = args.getAsInteger(FIELD_PRIORITY);
 		if (tmp_i != null) {
-			cfg.setPriority((int) tmp_i);
+			priority = tmp_i;
 		}
 		tmp_s = args.getAsString(FIELD_ACC_ID);
 		if (tmp_s != null) {
-			cfg.setId(pjsua.pj_str_copy(tmp_s));
+			acc_id = tmp_s;
 		}
 		tmp_s = args.getAsString(FIELD_REG_URI);
 		if (tmp_s != null) {
-			cfg.setReg_uri(pjsua.pj_str_copy(tmp_s));
+			reg_uri = tmp_s;
 		}
 		tmp_i = args.getAsInteger(FIELD_PUBLISH_ENABLED);
 		if (tmp_i != null) {
-			cfg.setPublish_enabled(tmp_i);
+			publish_enabled = tmp_i;
 		}
 		tmp_i = args.getAsInteger(FIELD_REG_TIMEOUT);
 		if (tmp_i != null) {
-			cfg.setReg_timeout(tmp_i);
+			reg_timeout = tmp_i;
 		}
 		tmp_i = args.getAsInteger(FIELD_KA_INTERVAL);
 		if (tmp_i != null) {
-			cfg.setKa_interval(tmp_i);
+			ka_interval = tmp_i;
 		}
 		tmp_s = args.getAsString(FIELD_PIDF_TUPLE_ID);
 		if (tmp_s != null) {
-			cfg.setPidf_tuple_id(pjsua.pj_str_copy(tmp_s));
+			pidf_tuple_id = tmp_s;
 		}
 		tmp_s = args.getAsString(FIELD_FORCE_CONTACT);
 		if (tmp_s != null) {
-			cfg.setForce_contact(pjsua.pj_str_copy(tmp_s));
+			force_contact = tmp_s;
 		}
 		tmp_i = args.getAsInteger(FIELD_ALLOW_CONTACT_REWRITE);
 		if (tmp_i != null) {
-			cfg.setAllow_contact_rewrite(tmp_i);
+			allow_contact_rewrite = (tmp_i == 1);
 		}
 		tmp_i = args.getAsInteger(FIELD_CONTACT_REWRITE_METHOD);
 		if (tmp_i != null) {
-			cfg.setContact_rewrite_method(tmp_i);
+			contact_rewrite_method = tmp_i;
 		}
 		
 		tmp_i = args.getAsInteger(FIELD_USE_SRTP);
 		if (tmp_i != null) {
-			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(tmp_i));
-			cfg.setSrtp_secure_signaling(0);
+			use_srtp = tmp_i;
 		}
 		
 		// Proxy
 		tmp_s = args.getAsString(FIELD_PROXY);
 		if (tmp_s != null) {
-			cfg.setProxy_cnt(1);
-			pj_str_t[] proxies = cfg.getProxy();
-			proxies[0] = pjsua.pj_str_copy(tmp_s);
-			cfg.setProxy(proxies);
+			proxies = tmp_s.split(PROXIES_SEPARATOR);
 		}
-
-		pjsip_cred_info cred_info = cfg.getCred_info();
-
+		
 		tmp_s = args.getAsString(FIELD_REALM);
 		if (tmp_s != null) {
-			cred_info.setRealm(pjsua.pj_str_copy(tmp_s));
+			realm = tmp_s;
 		}
 		tmp_s = args.getAsString(FIELD_SCHEME);
 		if (tmp_s != null) {
-			cred_info.setScheme(pjsua.pj_str_copy(tmp_s));
+			scheme = tmp_s;
 		}
 		tmp_s = args.getAsString(FIELD_USERNAME);
 		if (tmp_s != null) {
-			cred_info.setUsername(pjsua.pj_str_copy(tmp_s));
+			username = tmp_s;
 		}
 		tmp_i = args.getAsInteger(FIELD_DATATYPE);
 		if (tmp_i != null) {
-			cred_info.setData_type(tmp_i);
+			datatype = tmp_i;
 		}
 		tmp_s = args.getAsString(FIELD_DATA);
 		if (tmp_s != null) {
-			cred_info.setData(pjsua.pj_str_copy(tmp_s));
+			data = tmp_s;
 		}
 	}
 	
+	
+
 	/**
 	 * Transform pjsua_acc_config into ContentValues that can be insert into database
 	 */
 	public ContentValues getDbContentValues() {
 		ContentValues args = new ContentValues();
 		
-		if(id != null){
+		if(id != INVALID_ID){
 			args.put(FIELD_ID, id);
 		}
+		//TODO : ensure of non nullity of some params
+		
 		args.put(FIELD_ACTIVE, active?"1":"0");
 		args.put(FIELD_WIZARD, wizard);
 		args.put(FIELD_DISPLAY_NAME, display_name);
 		args.put(FIELD_TRANSPORT, transport);
 		
-		args.put(FIELD_PRIORITY, cfg.getPriority());
-		args.put(FIELD_ACC_ID, cfg.getId().getPtr());
-		args.put(FIELD_REG_URI, cfg.getReg_uri().getPtr());
+		args.put(FIELD_PRIORITY, priority);
+		args.put(FIELD_ACC_ID, acc_id);
+		args.put(FIELD_REG_URI, reg_uri);
 
 		// MWI not yet in JNI
 
-		args.put(FIELD_PUBLISH_ENABLED, cfg.getPublish_enabled());
-		args.put(FIELD_REG_TIMEOUT, cfg.getReg_timeout());
-		args.put(FIELD_KA_INTERVAL, cfg.getKa_interval());
-		args.put(FIELD_PIDF_TUPLE_ID, cfg.getPidf_tuple_id().getPtr());
-		args.put(FIELD_FORCE_CONTACT, cfg.getForce_contact().getPtr());
-		args.put(FIELD_ALLOW_CONTACT_REWRITE, cfg.getAllow_contact_rewrite());
-		args.put(FIELD_CONTACT_REWRITE_METHOD, cfg.getContact_rewrite_method());
-		args.put(FIELD_USE_SRTP, cfg.getUse_srtp().swigValue());
+		args.put(FIELD_PUBLISH_ENABLED, publish_enabled);
+		args.put(FIELD_REG_TIMEOUT, reg_timeout);
+		args.put(FIELD_KA_INTERVAL, ka_interval);
+		args.put(FIELD_PIDF_TUPLE_ID, pidf_tuple_id);
+		args.put(FIELD_FORCE_CONTACT, force_contact);
+		args.put(FIELD_ALLOW_CONTACT_REWRITE, allow_contact_rewrite);
+		args.put(FIELD_CONTACT_REWRITE_METHOD, contact_rewrite_method);
+		args.put(FIELD_USE_SRTP, use_srtp);
 
 		// CONTACT_PARAM and CONTACT_PARAM_URI not yet in JNI
 
-		// Assume we have an unique proxy
-		if (cfg.getProxy_cnt() > 0) {
-			args.put(FIELD_PROXY, cfg.getProxy()[0].getPtr());
-		}else {
-			args.put(FIELD_PROXY, (String) null);
-		}
+		args.put(FIELD_PROXY, TextUtils.join(PROXIES_SEPARATOR, proxies));
 		
 		// Assume we have an unique credential
-		pjsip_cred_info cred_info = cfg.getCred_info();
-		args.put(FIELD_REALM, cred_info.getRealm().getPtr());
-		args.put(FIELD_SCHEME, cred_info.getScheme().getPtr());
-		args.put(FIELD_USERNAME, cred_info.getUsername().getPtr());
-		args.put(FIELD_DATATYPE, cred_info.getData_type());
-		args.put(FIELD_DATA, cred_info.getData().getPtr());
+		args.put(FIELD_REALM, realm);
+		args.put(FIELD_SCHEME, scheme);
+		args.put(FIELD_USERNAME, username);
+		args.put(FIELD_DATATYPE, datatype);
+		args.put(FIELD_DATA, data);
 
 		return args;
 	}
+	
+	
 
 	public boolean isCallableNumber(String number, DBAdapter db) {
 		boolean canCall = true;
@@ -510,47 +488,10 @@ public class Account {
 		db.close();
 		return false;
 	}
-
-	public void applyExtraParams() {
-		
-		String regUri = "";
-		String argument = "";
-		switch (transport) {
-		case TRANSPORT_UDP:
-			argument = ";transport=udp";
-			break;
-		case TRANSPORT_TCP:
-			argument = ";transport=tcp";
-			break;
-		case TRANSPORT_TLS:
-			//TODO : differentiate ssl/tls ?
-			argument = ";transport=tls";
-			break;
-		default:
-			break;
-		}
-		
-		if (!TextUtils.isEmpty(argument)) {
-			regUri = cfg.getReg_uri().getPtr();
-			pj_str_t[] proxies = cfg.getProxy();
-			
-			String proposedServer = regUri + argument;
-	//		cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
-			
-			if (cfg.getProxy_cnt() == 0 || proxies[0].getPtr() == null || proxies[0].getPtr() == "") {
-				proxies[0] = pjsua.pj_str_copy(proposedServer);
-				cfg.setProxy(proxies);
-			} else {
-				proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + argument);
-				cfg.setProxy(proxies);
-			}
-			
-		}
-		
-	}
+	
 	
 	public String getDefaultDomain() {
-		String regUri = cfg.getReg_uri().getPtr();
+		String regUri = reg_uri;
 		if(regUri == null) {
 			return null;
 		}
@@ -564,19 +505,10 @@ public class Account {
 		}
 		return m.group(3);
 	}
+	
 
 	public int getIconResource() {
 		return WizardUtils.getWizardIconRes(wizard);
 	}
 	
-	
-	
-	@Override
-	public boolean equals(Object o) {
-		if(o != null && o.getClass() == Account.class) {
-			Account oAccount = (Account) o;
-			return oAccount.id == id;
-		}
-		return super.equals(o);
-	}
 }

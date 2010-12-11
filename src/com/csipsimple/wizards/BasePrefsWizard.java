@@ -32,8 +32,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.AccountFilters;
@@ -53,7 +53,7 @@ public class BasePrefsWizard extends GenericPrefs{
 	private static final String THIS_FILE = "Base Prefs wizard";
 	
 	private long accountId = -1;
-	protected Account account = null;
+	protected SipProfile account = null;
 	private Button saveButton;
 	private DBAdapter database;
 	private String wizardId = "";
@@ -64,10 +64,10 @@ public class BasePrefsWizard extends GenericPrefs{
 	protected void onCreate(Bundle savedInstanceState) {
 		//Get back the concerned account and if any set the current (if not a new account is created)
 		Intent intent = getIntent();
-        accountId = intent.getIntExtra(Intent.EXTRA_UID, -1);
+        accountId = intent.getIntExtra(Intent.EXTRA_UID, SipProfile.INVALID_ID);
         
         //TODO : ensure this is not null...
-        setWizardId(intent.getStringExtra(Account.FIELD_WIZARD));
+        setWizardId(intent.getStringExtra(SipProfile.FIELD_WIZARD));
         
         
         database = new DBAdapter(this);
@@ -197,7 +197,7 @@ public class BasePrefsWizard extends GenericPrefs{
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, SAVE_MENU, Menu.NONE, R.string.save).setIcon(
 				android.R.drawable.ic_menu_save);
-		if(account.id != null && !account.id.equals(-1)){
+		if(account.id != SipProfile.INVALID_ID){
 			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.choose_wizard).setIcon(
 					android.R.drawable.ic_menu_edit);
 			menu.add(Menu.NONE, FILTERS_MENU, Menu.NONE, R.string.filters).setIcon(
@@ -225,7 +225,7 @@ public class BasePrefsWizard extends GenericPrefs{
 			startActivityForResult(new Intent(this, WizardChooser.class), CHOOSE_WIZARD);
 			return true;
 		case DELETE_MENU:
-			if(account.id != null && !account.id.equals(-1)){
+			if(account.id != SipProfile.INVALID_ID){
 				database.open();
 				database.deleteAccount(account);
 				database.close();
@@ -234,7 +234,7 @@ public class BasePrefsWizard extends GenericPrefs{
 			}
 			return true;
 		case FILTERS_MENU:
-			if(account.id != null && !account.id.equals(-1)){
+			if(account.id != SipProfile.INVALID_ID){
 				Intent it = new Intent(this, AccountFilters.class);
     			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
     			startActivityForResult(it, MODIFY_FILTERS);
@@ -281,7 +281,7 @@ public class BasePrefsWizard extends GenericPrefs{
 		account = wizard.buildAccount(account);
 		account.wizard = wizardId;
 		database.open();
-		if(account.id == null || account.id.equals(-1)){
+		if(account.id == SipProfile.INVALID_ID){
 			wizard.setDefaultParams(prefs);
 			account.id = (int) database.insertAccount(account);
 			needRestart = wizard.needRestart();

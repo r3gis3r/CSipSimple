@@ -17,13 +17,10 @@
  */
 package com.csipsimple.wizards.impl;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.ListPreference;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class IiNet extends SimpleImplementation {
@@ -31,7 +28,7 @@ public class IiNet extends SimpleImplementation {
 	ListPreference accountState;
 	
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
 		CharSequence[] states = new CharSequence[] {"act", "nsw", "nt", "qld", "sa", "tas", "vic", "wa"};
@@ -53,15 +50,14 @@ public class IiNet extends SimpleImplementation {
 	}
 
 	@Override
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		
-		pj_str_t regUri = pjsua.pj_str_copy("sip:sip."+accountState.getValue()+".iinet.net.au");
-		account.cfg.setReg_uri(regUri);
-		account.cfg.setProxy_cnt(1);
-		pj_str_t[] proxies = account.cfg.getProxy();
-		proxies[0] = regUri;
-		account.cfg.setProxy(proxies);
+		String regUri = "sip:sip."+accountState.getValue()+".iinet.net.au";
+		
+		account.reg_uri = regUri;
+		account.proxies = new String[] { regUri } ;
+		
 		// Enable dns srv
 		PreferencesWrapper prefs = new PreferencesWrapper(parent);
 		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);

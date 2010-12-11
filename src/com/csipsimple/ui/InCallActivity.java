@@ -619,6 +619,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     			break;
     		}
     		pjsip_inv_state state = currentCallInfo.getCallState();
+    		if(state == null) {
+    			break;
+    		}
     		boolean ringing = state.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) ||
     			state.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY);
     		

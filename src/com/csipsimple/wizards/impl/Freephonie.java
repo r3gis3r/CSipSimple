@@ -17,12 +17,10 @@
  */
 package com.csipsimple.wizards.impl;
 
-import org.pjsip.pjsua.pj_str_t;
-
 import android.text.InputType;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 
 public class Freephonie extends SimpleImplementation {
 	
@@ -39,7 +37,7 @@ public class Freephonie extends SimpleImplementation {
 	
 	//Customization
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
 		accountUsername.setTitle(R.string.w_common_phone_number);
@@ -56,14 +54,12 @@ public class Freephonie extends SimpleImplementation {
 	}
 	
 	
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		//Ensure registration timeout value
-		account.cfg.setReg_timeout(1800);
-		account.cfg.setProxy_cnt(0);
-		pj_str_t[] proxies = account.cfg.getProxy();
-		account.cfg.setProxy(proxies);
-		account.transport = 1;
+		account.reg_timeout = 1800;
+		account.proxies = null;
+		account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
 	}
 }

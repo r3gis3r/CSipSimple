@@ -44,9 +44,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
@@ -69,7 +69,7 @@ public class CallLog extends ListActivity {
 
 	private DBAdapter database;
 
-	private List<Account> accountsList;
+	private List<SipProfile> accountsList;
 
 	private AccountAdapter adapter;
 	
@@ -238,7 +238,7 @@ public class CallLog extends ListActivity {
         		}
         	}else {
         		adapter.clear();
-        		for(Account acc : accountsList){
+        		for(SipProfile acc : accountsList){
         			adapter.add(acc);
         		}
         		adapter.notifyDataSetChanged();
@@ -264,7 +264,7 @@ public class CallLog extends ListActivity {
     	super.onListItemClick(l, v, position, id);
 		Log.d(THIS_FILE, "Click at index " + position + " id " + id);
 
-		Account account = adapter.getItem(position);
+		SipProfile account = adapter.getItem(position);
 		if (service != null) {
 			AccountInfo accountInfo;
 			try {

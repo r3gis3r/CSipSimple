@@ -55,8 +55,8 @@ import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.models.SipMessage;
@@ -415,7 +415,7 @@ public class UAStateReceiver extends Callback {
 		//Auto answer feature
 		boolean shouldAutoAnswer = false;
 		//In account
-		Account acc = service.getAccountForPjsipId(accountId);
+		SipProfile acc = service.getAccountForPjsipId(accountId);
 		if(acc != null) {
 			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*@[^>]*)(?:>)?", Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(remContact);

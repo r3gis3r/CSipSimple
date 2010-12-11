@@ -15,26 +15,5 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.wizards.impl;
-
-import com.csipsimple.api.SipProfile;
-
-public class SipSorcery extends SimpleImplementation {
-	
-	@Override
-	protected String getDomain() {
-		return "sipsorcery.com";
-	}
-	
-	@Override
-	protected String getDefaultName() {
-		return "SIPSorcery";
-	}
-
-	public SipProfile buildAccount(SipProfile account) {
-		account = super.buildAccount(account);
-		//Ensure registration timeout value
-		account.reg_timeout = 600;
-		return account;
-	}
-}
+package com.csipsimple.api;
+parcelable SipProfile;

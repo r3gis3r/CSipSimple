@@ -45,8 +45,8 @@ import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.messages.ConversationList;
@@ -214,7 +214,7 @@ public class SipHome extends TabActivity {
 
 		// If we have no account yet, open account panel,
 		if (!has_tried_once_to_activate_account) {
-			Account account = null;
+			SipProfile account = null;
 			DBAdapter db = new DBAdapter(this);
 			db.open();
 			int nbrOfAccount = db.getNbrOfAccount();
@@ -231,9 +231,9 @@ public class SipHome extends TabActivity {
 			if(nbrOfAccount == 0) {
 				Intent accountIntent = null;
 				if(account != null) {
-					if(account.id == null || account.id == Account.INVALID_ID) {
+					if(account.id == SipProfile.INVALID_ID) {
 						accountIntent = new Intent(this, BasePrefsWizard.class);
-						accountIntent.putExtra(Account.FIELD_WIZARD, account.wizard);
+						accountIntent.putExtra(SipProfile.FIELD_WIZARD, account.wizard);
 						startActivity(new Intent(this, AccountsList.class));
 					}
 				}else {
@@ -374,7 +374,7 @@ public class SipHome extends TabActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Account account;
+		SipProfile account;
 		switch (item.getItemId()) {
 		case ACCOUNTS_MENU:
 			startActivity(new Intent(this, AccountsList.class));
@@ -418,10 +418,10 @@ public class SipHome extends TabActivity {
 			db.close();
 			
 			Intent it = new Intent(this, BasePrefsWizard.class);
-			if(account.id != null) {
+			if(account.id != SipProfile.INVALID_ID) {
 				it.putExtra(Intent.EXTRA_UID,  (int) account.id);
 			}
-			it.putExtra(Account.FIELD_WIZARD, account.wizard);
+			it.putExtra(SipProfile.FIELD_WIZARD, account.wizard);
 			startActivityForResult(it, REQUEST_EDIT_DISTRIBUTION_ACCOUNT);
 			
 			return true;

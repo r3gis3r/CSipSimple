@@ -33,7 +33,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.CallLog;
 
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.service.SipService;
@@ -57,40 +57,40 @@ public class DBAdapter {
 	private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
 		+ ACCOUNTS_TABLE_NAME
 		+ " ("
-			+ Account.FIELD_ID+ 				" INTEGER PRIMARY KEY AUTOINCREMENT,"
+			+ SipProfile.FIELD_ID+ 				" INTEGER PRIMARY KEY AUTOINCREMENT,"
 
 			// Application relative fields
-			+ Account.FIELD_ACTIVE				+ " INTEGER,"
-			+ Account.FIELD_WIZARD				+ " TEXT,"
-			+ Account.FIELD_DISPLAY_NAME		+ " TEXT,"
+			+ SipProfile.FIELD_ACTIVE				+ " INTEGER,"
+			+ SipProfile.FIELD_WIZARD				+ " TEXT,"
+			+ SipProfile.FIELD_DISPLAY_NAME		+ " TEXT,"
 
 			// Here comes pjsua_acc_config fields
-			+ Account.FIELD_PRIORITY 			+ " INTEGER," 
-			+ Account.FIELD_ACC_ID 				+ " TEXT NOT NULL,"
-			+ Account.FIELD_REG_URI				+ " TEXT," 
-			+ Account.FIELD_MWI_ENABLED 		+ " BOOLEAN,"
-			+ Account.FIELD_PUBLISH_ENABLED 	+ " INTEGER," 
-			+ Account.FIELD_REG_TIMEOUT 		+ " INTEGER," 
-			+ Account.FIELD_KA_INTERVAL 		+ " INTEGER," 
-			+ Account.FIELD_PIDF_TUPLE_ID 		+ " TEXT,"
-			+ Account.FIELD_FORCE_CONTACT 		+ " TEXT,"
-			+ Account.FIELD_ALLOW_CONTACT_REWRITE + " INTEGER,"
-			+ Account.FIELD_CONTACT_REWRITE_METHOD + " INTEGER,"
-			+ Account.FIELD_CONTACT_PARAMS 		+ " TEXT,"
-			+ Account.FIELD_CONTACT_URI_PARAMS	+ " TEXT,"
-			+ Account.FIELD_TRANSPORT	 		+ " INTEGER," 
-			+ Account.FIELD_USE_SRTP	 		+ " INTEGER," 
+			+ SipProfile.FIELD_PRIORITY 			+ " INTEGER," 
+			+ SipProfile.FIELD_ACC_ID 				+ " TEXT NOT NULL,"
+			+ SipProfile.FIELD_REG_URI				+ " TEXT," 
+			+ SipProfile.FIELD_MWI_ENABLED 		+ " BOOLEAN,"
+			+ SipProfile.FIELD_PUBLISH_ENABLED 	+ " INTEGER," 
+			+ SipProfile.FIELD_REG_TIMEOUT 		+ " INTEGER," 
+			+ SipProfile.FIELD_KA_INTERVAL 		+ " INTEGER," 
+			+ SipProfile.FIELD_PIDF_TUPLE_ID 		+ " TEXT,"
+			+ SipProfile.FIELD_FORCE_CONTACT 		+ " TEXT,"
+			+ SipProfile.FIELD_ALLOW_CONTACT_REWRITE + " INTEGER,"
+			+ SipProfile.FIELD_CONTACT_REWRITE_METHOD + " INTEGER,"
+			+ SipProfile.FIELD_CONTACT_PARAMS 		+ " TEXT,"
+			+ SipProfile.FIELD_CONTACT_URI_PARAMS	+ " TEXT,"
+			+ SipProfile.FIELD_TRANSPORT	 		+ " INTEGER," 
+			+ SipProfile.FIELD_USE_SRTP	 		+ " INTEGER," 
 
 			// Proxy infos
-			+ Account.FIELD_PROXY				+ " TEXT,"
+			+ SipProfile.FIELD_PROXY				+ " TEXT,"
 
 			// And now cred_info since for now only one cred info can be managed
 			// In future release a credential table should be created
-			+ Account.FIELD_REALM 				+ " TEXT," 
-			+ Account.FIELD_SCHEME 				+ " TEXT," 
-			+ Account.FIELD_USERNAME			+ " TEXT," 
-			+ Account.FIELD_DATATYPE 			+ " INTEGER," 
-			+ Account.FIELD_DATA 				+ " TEXT"
+			+ SipProfile.FIELD_REALM 				+ " TEXT," 
+			+ SipProfile.FIELD_SCHEME 				+ " TEXT," 
+			+ SipProfile.FIELD_USERNAME			+ " TEXT," 
+			+ SipProfile.FIELD_DATATYPE 			+ " INTEGER," 
+			+ SipProfile.FIELD_DATA 				+ " TEXT"
 		+ ");";
 	
 	private final static String TABLE_CALLLOGS_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -168,7 +168,7 @@ public class DBAdapter {
 			}
 			if(oldVersion < 5) {
 				try {
-					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+Account.FIELD_KA_INTERVAL+" INTEGER");
+					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+SipProfile.FIELD_KA_INTERVAL+" INTEGER");
 				}catch(SQLiteException e) {
 					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
 				}
@@ -179,19 +179,19 @@ public class DBAdapter {
 			if(oldVersion < 10) {
 				try {
 					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+
-							Account.FIELD_ALLOW_CONTACT_REWRITE + " INTEGER");
+							SipProfile.FIELD_ALLOW_CONTACT_REWRITE + " INTEGER");
 					db.execSQL("ALTER TABLE "+ACCOUNTS_TABLE_NAME+" ADD "+
-							Account.FIELD_CONTACT_REWRITE_METHOD + " INTEGER");
+							SipProfile.FIELD_CONTACT_REWRITE_METHOD + " INTEGER");
 				}catch(SQLiteException e) {
 					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
 				}
 			}
 			if(oldVersion < 13) {
 				try {
-					db.execSQL("ALTER TABLE " + ACCOUNTS_TABLE_NAME + " ADD " + Account.FIELD_TRANSPORT + " INTEGER");
-					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + Account.FIELD_TRANSPORT + "=" + Account.TRANSPORT_UDP + " WHERE prevent_tcp=1");
-					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + Account.FIELD_TRANSPORT + "=" + Account.TRANSPORT_TCP + " WHERE use_tcp=1");
-					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + Account.FIELD_TRANSPORT + "=" + Account.TRANSPORT_AUTO + " WHERE use_tcp=0 AND prevent_tcp=0");
+					db.execSQL("ALTER TABLE " + ACCOUNTS_TABLE_NAME + " ADD " + SipProfile.FIELD_TRANSPORT + " INTEGER");
+					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TRANSPORT + "=" + SipProfile.TRANSPORT_UDP + " WHERE prevent_tcp=1");
+					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TRANSPORT + "=" + SipProfile.TRANSPORT_TCP + " WHERE use_tcp=1");
+					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TRANSPORT + "=" + SipProfile.TRANSPORT_AUTO + " WHERE use_tcp=0 AND prevent_tcp=0");
 				}catch(SQLiteException e) {
 					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
 				}
@@ -237,8 +237,8 @@ public class DBAdapter {
 	 * You have to be sure this account exists before deleting it
 	 * @return true if succeed
 	 */
-	public boolean deleteAccount(Account account) {
-		return db.delete(ACCOUNTS_TABLE_NAME, Account.FIELD_ID + "=" + account.id, null) > 0;
+	public boolean deleteAccount(SipProfile account) {
+		return db.delete(ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ID + "=" + account.id, null) > 0;
 	}
 
 	/**
@@ -248,18 +248,18 @@ public class DBAdapter {
 	 * You have to be sure this account exists before update it 
 	 * @return true if succeed
 	 */
-	public boolean updateAccount(Account account) {
+	public boolean updateAccount(SipProfile account) {
 		
 		return db.update(ACCOUNTS_TABLE_NAME, account.getDbContentValues(),
-				Account.FIELD_ID + "=" + account.id, null) > 0;
+				SipProfile.FIELD_ID + "=" + account.id, null) > 0;
 	}
 	
 
 	public boolean updateAccountPriority(long accId, int currentPriority) {
 		ContentValues args = new ContentValues();
-		args.put(Account.FIELD_PRIORITY, currentPriority);
+		args.put(SipProfile.FIELD_PRIORITY, currentPriority);
 		return db.update(ACCOUNTS_TABLE_NAME, args,
-				Account.FIELD_ID + "=" + accId, null) > 0;
+				SipProfile.FIELD_ID + "=" + accId, null) > 0;
 	}
 	
 	/**
@@ -267,7 +267,7 @@ public class DBAdapter {
 	 * @param account account to add into the database
 	 * @return the id of inserted row into database
 	 */
-	public long insertAccount(Account account){
+	public long insertAccount(SipProfile account){
 		return db.insert(ACCOUNTS_TABLE_NAME, null, account.getDbContentValues());
 	}
 
@@ -275,7 +275,7 @@ public class DBAdapter {
 	 * Get the list of all saved account
 	 * @return the list of accounts
 	 */
-	public List<Account> getListAccounts() {
+	public List<SipProfile> getListAccounts() {
 		return getListAccounts(false/*, null*/);
 	}
 	
@@ -284,24 +284,24 @@ public class DBAdapter {
 	 * @param includeUnusable true if list should contain accounts that can NOT presently be used for calls
 	 * @return the list of accounts
 	 */
-	public List<Account> getListAccounts(boolean activesOnly) {
-		ArrayList<Account> ret = new ArrayList<Account>();
+	public List<SipProfile> getListAccounts(boolean activesOnly) {
+		ArrayList<SipProfile> ret = new ArrayList<SipProfile>();
 
 		try {
 			String whereClause = null;
 			String[] whereArgs = null;
 			if (activesOnly) {
-				whereClause = Account.FIELD_ACTIVE+"=?";
+				whereClause = SipProfile.FIELD_ACTIVE+"=?";
 				whereArgs = new String[] {"1"};
 			}
 			
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
-					whereClause, whereArgs, null, null, Account.FIELD_PRIORITY
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.common_projection,
+					whereClause, whereArgs, null, null, SipProfile.FIELD_PRIORITY
 							+ " DESC");
 			int numRows = c.getCount();
 			c.moveToFirst();
 			for (int i = 0; i < numRows; ++i) {
-				Account acc = new Account();
+				SipProfile acc = new SipProfile();
 				acc.createFromDb(c);
 				ret.add(acc);
 				c.moveToNext();
@@ -322,21 +322,20 @@ public class DBAdapter {
 	 * @param accountId id of the account in the sqlite database
 	 * @return The corresponding account
 	 */
-	public Account getAccount(long accountId){
+	public SipProfile getAccount(long accountId){
 		
 		if(accountId <0){
-			return new Account();
+			return new SipProfile();
 		}
 		try {
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
-					Account.FIELD_ID + "=" + accountId, null, null, null, null);
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.common_projection,
+					SipProfile.FIELD_ID + "=" + accountId, null, null, null, null);
 			
 			
 			int numRows = c.getCount();
 			if(numRows > 0){
 				c.moveToFirst();
-				Account account = null;
-				account = new Account();
+				SipProfile account = new SipProfile();
 				account.createFromDb(c);
 				c.close();
 				return account;
@@ -352,20 +351,19 @@ public class DBAdapter {
 	
 
 
-	public Account getAccountForWizard(String wizardId) {
+	public SipProfile getAccountForWizard(String wizardId) {
 		if(wizardId  == null){
-			return new Account();
+			return new SipProfile();
 		}
 		try {
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
-					Account.FIELD_WIZARD + "=?", new String[] {wizardId}, null, null, null);
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.common_projection,
+					SipProfile.FIELD_WIZARD + "=?", new String[] {wizardId}, null, null, null);
 			
 			
 			int numRows = c.getCount();
 			if(numRows > 0){
 				c.moveToFirst();
-				Account account = null;
-				account = new Account();
+				SipProfile account = new SipProfile();
 				account.createFromDb(c);
 				c.close();
 				return account;
@@ -375,7 +373,7 @@ public class DBAdapter {
 		} catch (SQLException e) {
 			Log.e("Exception on query", e.toString());
 		}
-		Account acc = new Account();
+		SipProfile acc = new SipProfile();
 		acc.wizard = wizardId;
 		return acc;
 	}
@@ -385,8 +383,8 @@ public class DBAdapter {
 			return null;
 		}
 		try {
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, Account.common_projection,
-					Account.FIELD_ID + "=" + accountId, null, null, null, null);
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.common_projection,
+					SipProfile.FIELD_ID + "=" + accountId, null, null, null, null);
 			
 			
 			int numRows = c.getCount();
@@ -409,9 +407,9 @@ public class DBAdapter {
 	
 	public boolean setAccountActive(long accountId, boolean active) {
 		ContentValues cv = new ContentValues();
-		cv.put(Account.FIELD_ACTIVE, active?1:0);
+		cv.put(SipProfile.FIELD_ACTIVE, active?1:0);
 		boolean result = db.update(ACCOUNTS_TABLE_NAME, cv,
-				Account.FIELD_ID + "=" + accountId, null) > 0;
+				SipProfile.FIELD_ID + "=" + accountId, null) > 0;
 		
 		if(result) {
 			Intent publishIntent = new Intent(SipService.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
@@ -425,9 +423,9 @@ public class DBAdapter {
 
 	public boolean setAccountWizard(int accountId, String wizardId) {
 		ContentValues cv = new ContentValues();
-		cv.put(Account.FIELD_WIZARD, wizardId);
+		cv.put(SipProfile.FIELD_WIZARD, wizardId);
 		boolean result = db.update(ACCOUNTS_TABLE_NAME, cv,
-				Account.FIELD_ID + "=" + accountId, null) > 0;
+				SipProfile.FIELD_ID + "=" + accountId, null) > 0;
 		return result;
 	}
 	
@@ -444,11 +442,11 @@ public class DBAdapter {
 		String whereClause = null;
 		String[] whereArgs = null;
 		if (!activesOnly) {
-			whereClause = Account.FIELD_ACTIVE+"=?";
+			whereClause = SipProfile.FIELD_ACTIVE+"=?";
 			whereArgs = new String[] {"1"};
 		}
 		Cursor c = db.query(ACCOUNTS_TABLE_NAME, new String[] {
-			Account.FIELD_ID	
+				SipProfile.FIELD_ID	
 		}, whereClause, whereArgs, null, null, null);
 		int numRows = c.getCount();
 		c.close();

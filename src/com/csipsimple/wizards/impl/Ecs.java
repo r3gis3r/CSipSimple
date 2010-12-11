@@ -21,16 +21,11 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsip_cred_data_type;
-import org.pjsip.pjsua.pjsip_cred_info;
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.EditTextPreference;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 
 public class Ecs extends BaseImplementation {
 	
@@ -59,16 +54,13 @@ public class Ecs extends BaseImplementation {
 	}
 
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		bindFields();
 
-		pjsip_cred_info ci = account.cfg.getCred_info();
-
-		
 		accountDisplayName.setText(account.display_name);
 
 		String domain_name = "";
-		String account_cfgid = account.cfg.getId().getPtr();
+		String account_cfgid = account.acc_id;
 
 		if (account_cfgid == null) {
 			account_cfgid = "";
@@ -80,7 +72,7 @@ public class Ecs extends BaseImplementation {
 			domain_name = m.group(2);
 		}
 
-		String server_ip = account.cfg.getReg_uri().getPtr();
+		String server_ip = account.reg_uri;
 		if (server_ip == null) {
 			server_ip = "";
 		}
@@ -97,8 +89,8 @@ public class Ecs extends BaseImplementation {
 		accountPhoneNumber.setText(account_cfgid);
 		accountServerDomain.setText(domain_name);
 
-		accountUsername.setText(ci.getUsername().getPtr());
-		accountPassword.setText(ci.getData().getPtr());
+		accountUsername.setText(account.username);
+		accountPassword.setText(account.data);
 	}
 	
 	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
@@ -147,31 +139,27 @@ public class Ecs extends BaseImplementation {
 		return isValid;
 	}
 
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		
 		account.display_name = accountDisplayName.getText();
 
 		// TODO add an user display name
-		account.cfg.setId(pjsua.pj_str_copy("<sip:" + accountPhoneNumber.getText() + "@" + accountServerDomain.getText() + ">"));
+		account.acc_id = "<sip:" + accountPhoneNumber.getText() + "@" + accountServerDomain.getText() + ">";
 
 		String server_ip = accountServerIp.getText();
 		if (TextUtils.isEmpty(server_ip)) {
 			server_ip = accountServerDomain.getText();
 		}
-		pj_str_t regUri = pjsua.pj_str_copy("sip:" + server_ip);
-		account.cfg.setReg_uri(regUri);
-		account.cfg.setProxy_cnt(1);
-		pj_str_t[] proxies = account.cfg.getProxy();
-		proxies[0] = regUri;
-		account.cfg.setProxy(proxies);
+		String regUri = "sip:" + server_ip;
+		account.reg_uri = regUri;
+		account.proxies = new String[] { regUri } ;
 		
-		pjsip_cred_info ci = account.cfg.getCred_info();
-		account.cfg.setCred_count(1);
-		ci.setRealm(pjsua.pj_str_copy("*"));
-		ci.setUsername(getPjText(accountUsername));
-		ci.setData(getPjText(accountPassword));
-		ci.setScheme(pjsua.pj_str_copy("Digest"));
-		ci.setData_type(pjsip_cred_data_type.PJSIP_CRED_DATA_PLAIN_PASSWD.swigValue());
+		
+		account.realm = "*";
+		account.username = getText(accountUsername);
+		account.data = getText(accountPassword);
+		account.scheme = "Digest";
+		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 		
 		return account;
 	}

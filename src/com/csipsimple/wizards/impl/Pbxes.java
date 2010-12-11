@@ -17,7 +17,6 @@
  */
 package com.csipsimple.wizards.impl;
 
-import com.csipsimple.models.Account;
 
 public class Pbxes extends SimpleImplementation {
 	
@@ -32,18 +31,6 @@ public class Pbxes extends SimpleImplementation {
 		return "Pbxes.org";
 	}
 
-	//Customization
-	@Override
-	public void fillLayout(Account account) {
-		super.fillLayout(account);
-	}
-	
-
-	@Override
-	public Account buildAccount(Account account) {
-		account = super.buildAccount(account);
-		return account;
-	}
 	
 	@Override
 	protected boolean canTcp() {

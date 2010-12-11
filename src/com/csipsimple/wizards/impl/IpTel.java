@@ -17,10 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsua;
-
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 
 public class IpTel extends SimpleImplementation {
 	
@@ -34,21 +31,12 @@ public class IpTel extends SimpleImplementation {
 	protected String getDefaultName() {
 		return "IpTel";
 	}
-
-	//Customization
-	@Override
-	public void fillLayout(Account account) {
-		super.fillLayout(account);
-	}
 	
 
 	@Override
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
-		account.cfg.setProxy_cnt(1);
-		pj_str_t[] proxies = account.cfg.getProxy();
-		proxies[0] = pjsua.pj_str_copy("sip:sip.iptel.org");
-		account.cfg.setProxy(proxies);
+		account.proxies = new String[] { "sip:sip.iptel.org" } ;
 		return account;
 	}
 	

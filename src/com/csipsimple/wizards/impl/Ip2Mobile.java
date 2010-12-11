@@ -19,7 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
 
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class Ip2Mobile extends SimpleImplementation {
@@ -38,7 +38,7 @@ public class Ip2Mobile extends SimpleImplementation {
 	
 	//Customization
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);

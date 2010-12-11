@@ -38,19 +38,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class AccountWidgetConfigure extends Activity implements OnItemClickListener {
 
+	private static final String WIDGET_PREFS = "widget_prefs";
 	private static final String THIS_FILE = "Widget config";
 	private DBAdapter database;
 	private AccountAdapter adapter;
 	
-	private List<Account> accountsList;
+	private List<SipProfile> accountsList;
 	private ListView accountsListView;
 	private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 	
@@ -111,7 +112,7 @@ public class AccountWidgetConfigure extends Activity implements OnItemClickListe
     		adapter.setNotifyOnChange(false);
     	}else {
     		adapter.clear();
-    		for(Account acc : accountsList){
+    		for(SipProfile acc : accountsList){
     			adapter.add(acc);
     		}
     		adapter.notifyDataSetChanged();
@@ -123,10 +124,10 @@ public class AccountWidgetConfigure extends Activity implements OnItemClickListe
 		ImageView icon;
 	}
 	
-	class AccountAdapter extends ArrayAdapter<Account> {
+	class AccountAdapter extends ArrayAdapter<SipProfile> {
 		Activity context;
 		
-		AccountAdapter(Activity context, List<Account> list) {
+		AccountAdapter(Activity context, List<SipProfile> list) {
 			super(context, R.layout.accounts_widget_list_item, list);
 			this.context = context;
 		}
@@ -161,7 +162,7 @@ public class AccountWidgetConfigure extends Activity implements OnItemClickListe
 			
 			
 			// Get the view object and account object for the row
-	        final Account account = getItem(position);
+	        final SipProfile account = getItem(position);
 	        if (account == null){
 	        	return;
 	        }
@@ -179,10 +180,10 @@ public class AccountWidgetConfigure extends Activity implements OnItemClickListe
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		
 		if(appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-			Account account = adapter.getItem(position);
-			SharedPreferences prefs = getSharedPreferences("widget_prefs", 0);
+			SipProfile account = adapter.getItem(position);
+			SharedPreferences prefs = getSharedPreferences(WIDGET_PREFS, 0);
             SharedPreferences.Editor edit = prefs.edit();
-            edit.putLong("widget" + appWidgetId + "_account", account.id);
+            edit.putLong(getPrefsKey(appWidgetId), account.id);
             edit.commit();
 			
             
@@ -199,10 +200,21 @@ public class AccountWidgetConfigure extends Activity implements OnItemClickListe
 		}
 	}
 	
+	private static String getPrefsKey(int widgetId) {
+		return "widget" + widgetId + "_account";
+	}
+	
 	public static long getAccountForWidget(Context ctx, int widgetId) {
-		SharedPreferences prefs = ctx.getSharedPreferences("widget_prefs", 0);
-        return prefs.getLong("widget" + widgetId + "_account", -1);
+		SharedPreferences prefs = ctx.getSharedPreferences(WIDGET_PREFS, 0);
+        return prefs.getLong(getPrefsKey(widgetId), SipProfile.INVALID_ID);
         
+	}
+	
+	public static void deleteWidget(Context ctx, int widgetId) {
+		SharedPreferences prefs = ctx.getSharedPreferences(WIDGET_PREFS, 0);
+        SharedPreferences.Editor edit = prefs.edit();
+		edit.remove(getPrefsKey(widgetId));
+		edit.commit();
 	}
 	
 }

@@ -17,13 +17,10 @@
  */
 package com.csipsimple.wizards.impl;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjsua;
-
 import android.text.InputType;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 
 public class Sip2Sip extends SimpleImplementation {
 	
@@ -39,19 +36,16 @@ public class Sip2Sip extends SimpleImplementation {
 	
 	//Customization
 	@Override
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		accountUsername.setTitle(R.string.w_common_username);
 		accountUsername.setDialogTitle(R.string.w_common_username);
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 	
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
-		account.cfg.setProxy_cnt(1);
-		pj_str_t[] proxies = account.cfg.getProxy();
-		proxies[0] = pjsua.pj_str_copy("sip:proxy.sipthor.net");
-		account.cfg.setProxy(proxies);
+		account.proxies = new String[] { "sip:proxy.sipthor.net" };
 		return account;
 	}
 }

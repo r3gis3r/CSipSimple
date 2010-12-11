@@ -22,6 +22,8 @@ import java.io.Serializable;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua_acc_info;
 
+import com.csipsimple.api.SipProfile;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -50,14 +52,12 @@ public class AccountInfo implements Parcelable, Serializable{
 	}
 	
 	
-	public AccountInfo(Account account) {
-		if(account.id != null) {
-			databaseId = account.id;
-		}
+	public AccountInfo(SipProfile account) {
+		databaseId = account.id;
 		wizard = account.wizard;
 		active = account.active;
 		displayName = account.display_name;
-		priority = account.cfg.getPriority();
+		priority = account.priority;
 		
 		//Set default values
 		addedStatus = -1;

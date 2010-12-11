@@ -27,8 +27,8 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
@@ -51,6 +51,13 @@ public class AccountWidgetProvider extends AppWidgetProvider {
         }
 	}
 	
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds) {
+		for (int widgetId : appWidgetIds) {
+			AccountWidgetConfigure.deleteWidget(context, widgetId);
+		}
+		super.onDeleted(context, appWidgetIds);
+	}
 	
 	 /**
      * Receives and processes a button pressed intent or state change.
@@ -60,11 +67,18 @@ public class AccountWidgetProvider extends AppWidgetProvider {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
-        if(SipService.ACTION_SIP_REGISTRATION_CHANGED.equals(intent.getAction()) ||
-        		SipService.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED.equals(intent.getAction())	) {
-        	updateWidget(context);
-        }
+        
+		if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(intent.getAction())) {
+			final int appWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+			if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+				this.onDeleted(context, new int[] { appWidgetId });
+			}
+		} else {
+			if (SipService.ACTION_SIP_REGISTRATION_CHANGED.equals(intent.getAction()) || SipService.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED.equals(intent.getAction())) {
+				updateWidget(context);
+			}
+			super.onReceive(context, intent);
+		}
     }
 
     /**
@@ -98,15 +112,15 @@ public class AccountWidgetProvider extends AppWidgetProvider {
 			ContentValues acc = db.getAccountValues(accId);
 		//	Log.d(THIS_FILE, "Found for " + accId + " : " + acc);
 			if (acc != null) {
-				views.setImageViewResource(R.id.img_account, WizardUtils.getWizardIconRes(acc.getAsString(Account.FIELD_WIZARD)));
-				boolean active = (acc.getAsInteger(Account.FIELD_ACTIVE) == 1);
+				views.setImageViewResource(R.id.img_account, WizardUtils.getWizardIconRes(acc.getAsString(SipProfile.FIELD_WIZARD)));
+				boolean active = (acc.getAsInteger(SipProfile.FIELD_ACTIVE) == 1);
 				if(active) {
 				//	accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
 					views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_on);
 				}else {
 					views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_off);
 				}
-				views.setTextViewText(R.id.txt_account, acc.getAsString(Account.FIELD_DISPLAY_NAME));
+				views.setTextViewText(R.id.txt_account, acc.getAsString(SipProfile.FIELD_DISPLAY_NAME));
 				views.setOnClickPendingIntent(R.id.btn_account, getLaunchPendingIntent(context, accId, !active));
 			}
 			

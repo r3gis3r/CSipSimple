@@ -36,15 +36,15 @@ import android.os.RemoteException;
 import android.telephony.PhoneNumberUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.OutgoingCall;
@@ -62,7 +62,7 @@ public class OutgoingCallChooser extends ListActivity {
 	Window w;
 	
 	public final static int AUTO_CHOOSE_TIME = 8000;
-	private List<Account> accountsList;
+	private List<SipProfile> accountsList;
 
 	private static final String THIS_FILE = "SIP OUTChoose";
 	
@@ -232,13 +232,13 @@ public class OutgoingCallChooser extends ListActivity {
 	
 	private void checkNumberWithSipStarted() {
 		database.open();
-		List<Account> accounts = database.getListAccounts(true);
+		List<SipProfile> accounts = database.getListAccounts(true);
 		database.close();
 		
 		if (isCallableNumber(number, accounts, database)) {
 			Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
 
-			Account mustCallAccount = isMustCallableNumber(number, accounts, database);
+			SipProfile mustCallAccount = isMustCallableNumber(number, accounts, database);
 			if(mustCallAccount != null) {
 				accountToCallTo = mustCallAccount.id;
 				checkIfMustAccountNotValid();
@@ -255,10 +255,10 @@ public class OutgoingCallChooser extends ListActivity {
 	 * @param accounts 
 	 * @return true if we should handle this number using SIP
 	 */
-	private boolean isCallableNumber(String number, List<Account> accounts, DBAdapter db  ) {
+	private boolean isCallableNumber(String number, List<SipProfile> accounts, DBAdapter db  ) {
 		boolean canCall = false;
 		
-		for(Account account : accounts) {
+		for(SipProfile account : accounts) {
 			Log.d(THIS_FILE, "Checking if number valid for account "+account.display_name);
 			if(account.isCallableNumber(number, db)) {
 				Log.d(THIS_FILE, ">> Response is YES");
@@ -268,8 +268,8 @@ public class OutgoingCallChooser extends ListActivity {
 		return canCall;
 	}
 	
-	private Account isMustCallableNumber(String number, List<Account> accounts, DBAdapter db ) {
-		for(Account account : accounts) {
+	private SipProfile isMustCallableNumber(String number, List<SipProfile> accounts, DBAdapter db ) {
+		for(SipProfile account : accounts) {
 			Log.d(THIS_FILE, "Checking if number must be call for account "+account.display_name);
 			if(account.isMustCallNumber(number, db)) {
 				Log.d(THIS_FILE, ">> Response is YES");
@@ -299,14 +299,14 @@ public class OutgoingCallChooser extends ListActivity {
 		database.close();
 		
 		//Exclude filtered accounts - TODO : move to db?
-		List<Account> excludedAccounts = new ArrayList<Account>();
+		List<SipProfile> excludedAccounts = new ArrayList<SipProfile>();
 		String phoneNumber = number;
-		for(Account acc : accountsList) {
+		for(SipProfile acc : accountsList) {
 			if(! acc.isCallableNumber(phoneNumber, database) ) {
 				excludedAccounts.add(acc);
 			}
 		}
-		for(Account acc : excludedAccounts) {
+		for(SipProfile acc : excludedAccounts) {
 			accountsList.remove(acc);
 		}
 		
@@ -319,7 +319,7 @@ public class OutgoingCallChooser extends ListActivity {
     		}
     	}else {
     		adapter.clear();
-    		for(Account acc : accountsList) {
+    		for(SipProfile acc : accountsList) {
     			adapter.add(acc);
     		}
     		adapter.notifyDataSetChanged();
@@ -331,7 +331,7 @@ public class OutgoingCallChooser extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 		Log.d(THIS_FILE, "Click at index " + position + " id " + id);
 
-		Account account = adapter.getItem(position);
+		SipProfile account = adapter.getItem(position);
 		if (service != null) {
 			AccountInfo accountInfo;
 			try {
@@ -362,7 +362,7 @@ public class OutgoingCallChooser extends ListActivity {
 		if (service != null && accountToCallTo != null) {
 
 	    	database.open();
-			Account account = database.getAccount(accountToCallTo);
+	    	SipProfile account = database.getAccount(accountToCallTo);
 			database.close();
 			if(account == null) {
 				return false;

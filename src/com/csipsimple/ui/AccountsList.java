@@ -33,34 +33,34 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Account;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.AccountListUtils;
-import com.csipsimple.utils.Log;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
+import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardChooser;
 import com.csipsimple.wizards.WizardUtils;
@@ -71,7 +71,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	private DBAdapter database;
 	private AccountAdapter adapter;
 	
-	private List<Account> accountsList;
+	private List<SipProfile> accountsList;
 	private ListView accountsListView;
 	private GestureDetector gestureDetector;
 	
@@ -170,7 +170,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
             return;
         }
 
-        Account account = (Account) adapter.getItem(info.position);
+        SipProfile account = (SipProfile) adapter.getItem(info.position);
         if (account == null) {
             // For some reason the requested item isn't available, do nothing
             return;
@@ -197,7 +197,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
             Log.e(THIS_FILE, "bad menuInfo", e);
             return false;
         }
-        Account account = (Account) adapter.getItem(info.position);
+        SipProfile account = (SipProfile) adapter.getItem(info.position);
         
         switch (item.getItemId()) {
             case MENU_ITEM_DELETE: {
@@ -210,7 +210,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
             case MENU_ITEM_MODIFY : {
         			Intent it = new Intent(this, BasePrefsWizard.class);
         			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
-        			it.putExtra(Account.FIELD_WIZARD, account.wizard);
+        			it.putExtra(SipProfile.FIELD_WIZARD, account.wizard);
         			startActivityForResult(it, REQUEST_MODIFY);
         		return true;
             }
@@ -249,7 +249,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
     		adapter.setNotifyOnChange(false);
     	}else {
     		adapter.clear();
-    		for(Account acc : accountsList){
+    		for(SipProfile acc : accountsList){
     			adapter.add(acc);
     		}
     		adapter.notifyDataSetChanged();
@@ -264,12 +264,12 @@ public class AccountsList extends Activity implements OnItemClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		Account account = adapter.getItem(position);
+		SipProfile account = adapter.getItem(position);
 		Intent intent = new Intent(this, BasePrefsWizard.class);
-		if(account.id != null) {
+		if(account.id != SipProfile.INVALID_ID) {
 			intent.putExtra(Intent.EXTRA_UID,  (int) account.id);
 		}
-		intent.putExtra(Account.FIELD_WIZARD, account.wizard);
+		intent.putExtra(SipProfile.FIELD_WIZARD, account.wizard);
 		
 		startActivityForResult(intent, REQUEST_MODIFY);
 		
@@ -289,7 +289,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 					String wizardId = data.getStringExtra(WizardUtils.ID);
 					if(wizardId != null) {
 						Intent intent = new Intent(this, BasePrefsWizard.class);
-						intent.putExtra(Account.FIELD_WIZARD, wizardId);
+						intent.putExtra(SipProfile.FIELD_WIZARD, wizardId);
 						startActivityForResult(intent, REQUEST_MODIFY);
 					}
 				}
@@ -304,8 +304,8 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			if(resultCode == RESULT_OK) {
 				if(data != null && data.getExtras() != null) {
 					String wizardId = data.getStringExtra(WizardUtils.ID);
-					int accountId = data.getIntExtra(Intent.EXTRA_UID, Account.INVALID_ID);
-					if(wizardId != null && accountId != Account.INVALID_ID) {
+					int accountId = data.getIntExtra(Intent.EXTRA_UID, SipProfile.INVALID_ID);
+					if(wizardId != null && accountId != SipProfile.INVALID_ID) {
 						database.open();
 						database.setAccountWizard(accountId, wizardId);
 						database.close();
@@ -369,11 +369,11 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	}
 	
 	
-	class AccountAdapter extends ArrayAdapter<Account> implements OnClickListener {
+	class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickListener {
 		Activity context;
 		private HashMap<Integer, AccountStatusDisplay> cacheStatusDisplay;
 		
-		AccountAdapter(Activity context, List<Account> list) {
+		AccountAdapter(Activity context, List<SipProfile> list) {
 			super(context, R.layout.accounts_list_item, list);
 			this.context = context;
 			cacheStatusDisplay = new HashMap<Integer, AccountStatusDisplay>();
@@ -421,7 +421,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			
 			
 			// Get the view object and account object for the row
-	        final Account account = getItem(position);
+	        final SipProfile account = getItem(position);
 	        if (account == null){
 	        	return;
 	        }
@@ -455,7 +455,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		public void onClick(View view) {
 			AccountListItemViews tagView = (AccountListItemViews) ((View)view.getTag()).getTag();
 			
-			final Account account = getItem(tagView.accountPosition);
+			final SipProfile account = getItem(tagView.accountPosition);
 			if(account == null) {
 				return;
 			}

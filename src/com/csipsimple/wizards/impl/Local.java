@@ -19,12 +19,10 @@ package com.csipsimple.wizards.impl;
 
 import java.util.HashMap;
 
-import org.pjsip.pjsua.pjsua;
-
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
-import com.csipsimple.models.Account;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
 
 public class Local extends BaseImplementation {
@@ -42,7 +40,7 @@ public class Local extends BaseImplementation {
 		hidePreference(null, "proxy");
 	}
 
-	public void fillLayout(Account account) {
+	public void fillLayout(final SipProfile account) {
 		bindFields();
 		
 		accountDisplayName.setText(account.display_name);
@@ -79,12 +77,12 @@ public class Local extends BaseImplementation {
 		return isValid;
 	}
 
-	public Account buildAccount(Account account) {
+	public SipProfile buildAccount(SipProfile account) {
 		Log.d(THIS_FILE, "begin of save ....");
 		
 		account.display_name = accountDisplayName.getText();
-		account.cfg.setReg_uri(pjsua.pj_str_copy("localhost"));
-		account.cfg.setId(pjsua.pj_str_copy(""));
+		account.reg_uri = "localhost";
+		account.acc_id = "";
 		return account;
 	}
 
