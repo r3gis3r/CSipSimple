@@ -27,7 +27,7 @@ import org.pjsip.pjsua.pjsua_acc_config;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Log;
 
 public class PjSipAccount {
 	
@@ -48,9 +48,8 @@ public class PjSipAccount {
 	
 	public PjSipAccount() {
 		cfg = new pjsua_acc_config();
-		if (!SipService.creating) {
-			pjsua.acc_config_default(cfg);
-		}
+		
+		pjsua.acc_config_default(cfg);
 		// Change the default ka interval to 40s
 		cfg.setKa_interval(40);
 	}
@@ -101,10 +100,14 @@ public class PjSipAccount {
 		}
 		
 		if(profile.proxies != null) {
+			Log.d("PjSipAccount", "Create proxy "+profile.proxies.length);
 			cfg.setProxy_cnt(profile.proxies.length);
 			pj_str_t[] proxies = cfg.getProxy();
+			int i = 0;
 			for(String proxy : profile.proxies) {
-				proxies[0] = pjsua.pj_str_copy(proxy);
+				Log.d("PjSipAccount", "Add proxy "+proxy);
+				proxies[i] = pjsua.pj_str_copy(proxy);
+				i += 1;
 			}
 			cfg.setProxy(proxies);
 		}else {
@@ -141,14 +144,14 @@ public class PjSipAccount {
 		String argument = "";
 		switch (transport) {
 		case SipProfile.TRANSPORT_UDP:
-			argument = ";transport=udp";
+			argument = ";transport=UDP";
 			break;
 		case SipProfile.TRANSPORT_TCP:
-			argument = ";transport=tcp";
+			argument = ";transport=TCP";
 			break;
 		case SipProfile.TRANSPORT_TLS:
 			//TODO : differentiate ssl/tls ?
-			argument = ";transport=tls";
+			argument = ";transport=TLS";
 			break;
 		default:
 			break;
@@ -156,19 +159,25 @@ public class PjSipAccount {
 		
 		if (!TextUtils.isEmpty(argument)) {
 			regUri = cfg.getReg_uri().getPtr();
-			pj_str_t[] proxies = cfg.getProxy();
-			
-			String proposedServer = regUri + argument;
-	//		cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
-			
-			if (cfg.getProxy_cnt() == 0 || proxies[0].getPtr() == null || proxies[0].getPtr() == "") {
-				proxies[0] = pjsua.pj_str_copy(proposedServer);
-				cfg.setProxy(proxies);
-			} else {
-				proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + argument);
-				cfg.setProxy(proxies);
+			if(!TextUtils.isEmpty(regUri)) {
+				long initialProxyCnt = cfg.getProxy_cnt();
+				pj_str_t[] proxies = cfg.getProxy();
+				
+				
+		//		cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
+				
+				if (initialProxyCnt == 0 || TextUtils.isEmpty(proxies[0].getPtr())) {
+					cfg.setReg_uri(pjsua.pj_str_copy(regUri + argument));
+					cfg.setProxy_cnt(0);
+				} else {
+					proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + argument);
+					cfg.setProxy(proxies);
+				}
+//				} else {
+//					proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + argument);
+//					cfg.setProxy(proxies);
+//				}
 			}
-			
 		}
 		
 	}

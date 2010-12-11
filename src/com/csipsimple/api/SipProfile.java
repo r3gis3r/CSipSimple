@@ -156,7 +156,7 @@ public class SipProfile implements Parcelable {
 		ka_interval = in.readInt();
 		pidf_tuple_id = getReadParcelableString(in.readString());
 		force_contact = getReadParcelableString(in.readString());
-		proxies = getReadParcelableString(in.readString()).split(PROXIES_SEPARATOR);
+		proxies = TextUtils.split(getReadParcelableString(in.readString()),  Pattern.quote(PROXIES_SEPARATOR) );
 		realm = getReadParcelableString(in.readString());
 		username = getReadParcelableString(in.readString());
 		datatype = in.readInt();
@@ -307,7 +307,7 @@ public class SipProfile implements Parcelable {
 		// Proxy
 		tmp_s = args.getAsString(FIELD_PROXY);
 		if (tmp_s != null) {
-			proxies = tmp_s.split(PROXIES_SEPARATOR);
+			proxies = TextUtils.split(tmp_s,  Pattern.quote(PROXIES_SEPARATOR) );
 		}
 		
 		tmp_s = args.getAsString(FIELD_REALM);
