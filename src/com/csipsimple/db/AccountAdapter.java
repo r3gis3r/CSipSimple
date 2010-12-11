@@ -34,9 +34,11 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.models.Filter;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
+import com.csipsimple.wizards.WizardUtils;
 
 public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickListener {
 
@@ -117,14 +119,14 @@ public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickL
 			if(!accountStatusDisplay.availableForCalls || forNumber == null || db == null) {
 				tagView.statusView.setText(accountStatusDisplay.statusLabel);
 			}else {
-				tagView.statusView.setText(context.getString(R.string.outgoing_call_chooser_call_text)+" : "+account.rewritePhoneNumber(forNumber, db));
+				tagView.statusView.setText(context.getString(R.string.outgoing_call_chooser_call_text)+" : "+Filter.rewritePhoneNumber(account, forNumber, db));
 			}
 			tagView.labelView.setTextColor(accountStatusDisplay.statusColor);
 			v.setClickable(!accountStatusDisplay.availableForCalls);
 			tagView.refreshView.setVisibility(accountStatusDisplay.availableForCalls?View.GONE:View.VISIBLE);
 
 			// Update account image
-			tagView.iconImage.setImageResource(account.getIconResource());
+			tagView.iconImage.setImageResource(WizardUtils.getWizardIconRes(account));
 			tagView.refreshView.setTag(account.id);
 		}
 	}

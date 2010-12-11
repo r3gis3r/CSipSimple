@@ -31,6 +31,7 @@ import java.util.Set;
 import android.content.Context;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.Basic;
@@ -297,6 +298,11 @@ public class WizardUtils {
 		}
 		return R.drawable.ic_launcher_phone;
 	}
+	
+
+	public static int getWizardIconRes(SipProfile account) {
+		return WizardUtils.getWizardIconRes(account.wizard);
+	}
 
 
 	public static ArrayList<HashMap<String, String>> getWizardsGroups(Context context) {
@@ -375,6 +381,7 @@ public class WizardUtils {
 		result.add(others_list);
 		return result;
 	}
+
 	
 	
 	

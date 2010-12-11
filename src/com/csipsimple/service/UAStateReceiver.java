@@ -59,6 +59,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
+import com.csipsimple.models.Filter;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
@@ -424,7 +425,7 @@ public class UAStateReceiver extends Callback {
 				number = m.group(2);
 			}
 			Log.w(THIS_FILE, "Search if should auto answer : "+number);
-			shouldAutoAnswer = acc.isAutoAnswerNumber(number, service.db);
+			shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, service.db);
 		}
 		//Or by api
 		if (autoAcceptCurrent || shouldAutoAnswer) {

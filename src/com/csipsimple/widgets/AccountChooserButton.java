@@ -37,6 +37,7 @@ import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+import com.csipsimple.wizards.WizardUtils;
 
 public class AccountChooserButton extends LinearLayout implements OnClickListener {
 
@@ -113,7 +114,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 			for (final SipProfile account : accountsList) {
 				AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(getContext(), service, account.id);
 				if(accountStatusDisplay.availableForCalls) {
-					quickAction.addItem(getResources().getDrawable(account.getIconResource()), account.display_name, new OnClickListener() {
+					quickAction.addItem(getResources().getDrawable(WizardUtils.getWizardIconRes(account)), account.display_name, new OnClickListener() {
 						public void onClick(View v) {
 							setAccount(account);
 							quickAction.dismiss();
@@ -142,7 +143,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 			imageView.setImageResource(R.drawable.ic_wizard_gsm);
 		} else {
 			textView.setText(account.display_name);
-			imageView.setImageResource(account.getIconResource());
+			imageView.setImageResource(WizardUtils.getWizardIconRes(account));
 		}
 		if(onAccountChange != null) {
 			onAccountChange.onChooseAccount(account);

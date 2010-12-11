@@ -20,17 +20,14 @@ package com.csipsimple.api;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Filter;
-import com.csipsimple.utils.Log;
-import com.csipsimple.wizards.WizardUtils;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+
+import com.csipsimple.utils.Log;
 
 public class SipProfile implements Parcelable {
 	
@@ -382,117 +379,6 @@ public class SipProfile implements Parcelable {
 		return args;
 	}
 	
-	
-
-	public boolean isCallableNumber(String number, DBAdapter db) {
-		boolean canCall = true;
-		db.open();
-		Cursor c = db.getFiltersForAccount(id);
-		int numRows = c.getCount();
-		Log.d(THIS_FILE, "F > This account has "+numRows+" filters");
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
-			Log.d(THIS_FILE, "Test filter "+f.matches);
-			canCall &= f.canCall(number);
-			
-			//Stop processing & rewrite
-			if(f.stopProcessing(number)) {
-				c.close();
-				db.close();
-				return canCall;
-			}
-			number = f.rewrite(number);
-			//Move to next
-			c.moveToNext();
-		}
-		c.close();
-		db.close();
-		return canCall;
-	}
-	
-
-	public boolean isMustCallNumber(String number, DBAdapter db) {
-		db.open();
-		Cursor c = db.getFiltersForAccount(id);
-		int numRows = c.getCount();
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
-			Log.d(THIS_FILE, "Test filter "+f.matches);
-			if(f.mustCall(number)) {
-				c.close();
-				db.close();
-				return true;
-			}
-			//Stop processing & rewrite
-			if(f.stopProcessing(number)) {
-				c.close();
-				db.close();
-				return false;
-			}
-			number = f.rewrite(number);
-			//Move to next
-			c.moveToNext();
-		}
-		c.close();
-		db.close();
-		return false;
-	}
-	
-	
-	public String rewritePhoneNumber(String number, DBAdapter db) {
-		db.open();
-		Cursor c = db.getFiltersForAccount(id);
-		int numRows = c.getCount();
-		//Log.d(THIS_FILE, "RW > This account has "+numRows+" filters");
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
-			//Log.d(THIS_FILE, "RW > Test filter "+f.matches);
-			number = f.rewrite(number);
-			if(f.stopProcessing(number)) {
-				c.close();
-				db.close();
-				return number;
-			}
-			c.moveToNext();
-		}
-		c.close();
-		db.close();
-		return number;
-	}
-	
-	public boolean isAutoAnswerNumber(String number, DBAdapter db) {
-		db.open();
-		Cursor c = db.getFiltersForAccount(id);
-		int numRows = c.getCount();
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
-			if( f.autoAnswer(number) ) {
-				return true;
-			}
-			//Stop processing & rewrite
-			if(f.stopProcessing(number)) {
-				c.close();
-				db.close();
-				return false;
-			}
-			number = f.rewrite(number);
-			//Move to next
-			c.moveToNext();
-		}
-		c.close();
-		db.close();
-		return false;
-	}
-	
-	
 	public String getDefaultDomain() {
 		String regUri = reg_uri;
 		if(regUri == null) {
@@ -510,8 +396,4 @@ public class SipProfile implements Parcelable {
 	}
 	
 
-	public int getIconResource() {
-		return WizardUtils.getWizardIconRes(wizard);
-	}
-	
 }

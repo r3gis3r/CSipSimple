@@ -30,6 +30,8 @@ import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
 
 @SuppressWarnings("serial")
@@ -470,6 +472,116 @@ public class Filter {
 		return repr;
 	}
 
+	
+	//Static utility method
 
+	public static boolean isCallableNumber(SipProfile account, String number, DBAdapter db) {
+		boolean canCall = true;
+		db.open();
+		Cursor c = db.getFiltersForAccount(account.id);
+		int numRows = c.getCount();
+		Log.d(THIS_FILE, "F > This account has "+numRows+" filters");
+		c.moveToFirst();
+		for (int i = 0; i < numRows; ++i) {
+			Filter f = new Filter();
+			f.createFromDb(c);
+			Log.d(THIS_FILE, "Test filter "+f.matches);
+			canCall &= f.canCall(number);
+			
+			//Stop processing & rewrite
+			if(f.stopProcessing(number)) {
+				c.close();
+				db.close();
+				return canCall;
+			}
+			number = f.rewrite(number);
+			//Move to next
+			c.moveToNext();
+		}
+		c.close();
+		db.close();
+		return canCall;
+	}
+	
 
+	public static boolean isMustCallNumber(SipProfile account, String number, DBAdapter db) {
+		db.open();
+		Cursor c = db.getFiltersForAccount(account.id);
+		int numRows = c.getCount();
+		c.moveToFirst();
+		for (int i = 0; i < numRows; ++i) {
+			Filter f = new Filter();
+			f.createFromDb(c);
+			Log.d(THIS_FILE, "Test filter "+f.matches);
+			if(f.mustCall(number)) {
+				c.close();
+				db.close();
+				return true;
+			}
+			//Stop processing & rewrite
+			if(f.stopProcessing(number)) {
+				c.close();
+				db.close();
+				return false;
+			}
+			number = f.rewrite(number);
+			//Move to next
+			c.moveToNext();
+		}
+		c.close();
+		db.close();
+		return false;
+	}
+	
+	
+	public static String rewritePhoneNumber(SipProfile account, String number, DBAdapter db) {
+		db.open();
+		Cursor c = db.getFiltersForAccount(account.id);
+		int numRows = c.getCount();
+		//Log.d(THIS_FILE, "RW > This account has "+numRows+" filters");
+		c.moveToFirst();
+		for (int i = 0; i < numRows; ++i) {
+			Filter f = new Filter();
+			f.createFromDb(c);
+			//Log.d(THIS_FILE, "RW > Test filter "+f.matches);
+			number = f.rewrite(number);
+			if(f.stopProcessing(number)) {
+				c.close();
+				db.close();
+				return number;
+			}
+			c.moveToNext();
+		}
+		c.close();
+		db.close();
+		return number;
+	}
+	
+	public static boolean isAutoAnswerNumber(SipProfile account, String number, DBAdapter db) {
+		db.open();
+		Cursor c = db.getFiltersForAccount(account.id);
+		int numRows = c.getCount();
+		c.moveToFirst();
+		for (int i = 0; i < numRows; ++i) {
+			Filter f = new Filter();
+			f.createFromDb(c);
+			if( f.autoAnswer(number) ) {
+				return true;
+			}
+			//Stop processing & rewrite
+			if(f.stopProcessing(number)) {
+				c.close();
+				db.close();
+				return false;
+			}
+			number = f.rewrite(number);
+			//Move to next
+			c.moveToNext();
+		}
+		c.close();
+		db.close();
+		return false;
+	}
+	
+	
 }

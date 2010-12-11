@@ -46,6 +46,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.AccountInfo;
+import com.csipsimple.models.Filter;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.service.SipService;
@@ -260,7 +261,7 @@ public class OutgoingCallChooser extends ListActivity {
 		
 		for(SipProfile account : accounts) {
 			Log.d(THIS_FILE, "Checking if number valid for account "+account.display_name);
-			if(account.isCallableNumber(number, db)) {
+			if(Filter.isCallableNumber(account, number, db)) {
 				Log.d(THIS_FILE, ">> Response is YES");
 				return true;
 			}
@@ -271,7 +272,7 @@ public class OutgoingCallChooser extends ListActivity {
 	private SipProfile isMustCallableNumber(String number, List<SipProfile> accounts, DBAdapter db ) {
 		for(SipProfile account : accounts) {
 			Log.d(THIS_FILE, "Checking if number must be call for account "+account.display_name);
-			if(account.isMustCallNumber(number, db)) {
+			if(Filter.isMustCallNumber(account, number, db)) {
 				Log.d(THIS_FILE, ">> Response is YES");
 				return account;
 			}
@@ -302,7 +303,7 @@ public class OutgoingCallChooser extends ListActivity {
 		List<SipProfile> excludedAccounts = new ArrayList<SipProfile>();
 		String phoneNumber = number;
 		for(SipProfile acc : accountsList) {
-			if(! acc.isCallableNumber(phoneNumber, database) ) {
+			if(! Filter.isCallableNumber(acc, phoneNumber, database) ) {
 				excludedAccounts.add(acc);
 			}
 		}
@@ -344,7 +345,7 @@ public class OutgoingCallChooser extends ListActivity {
 						accountInfo.getWizard().equalsIgnoreCase("LOCAL") ) {
 					try {
 						String phoneNumber = number;
-						String toCall = account.rewritePhoneNumber(phoneNumber, database);
+						String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
 						
 						service.makeCall("sip:"+toCall, account.id);
 						finish();
@@ -378,7 +379,7 @@ public class OutgoingCallChooser extends ListActivity {
 						accountInfo.getWizard().equalsIgnoreCase("LOCAL") ) {
 					try {
 						String phoneNumber = number;
-						String toCall = account.rewritePhoneNumber(phoneNumber, database);
+						String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
 						
 						service.makeCall("sip:"+toCall, account.id);
 						finish();
