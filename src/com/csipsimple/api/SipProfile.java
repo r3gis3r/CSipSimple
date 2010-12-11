@@ -367,8 +367,11 @@ public class SipProfile implements Parcelable {
 
 		// CONTACT_PARAM and CONTACT_PARAM_URI not yet in JNI
 
-		args.put(FIELD_PROXY, TextUtils.join(PROXIES_SEPARATOR, proxies));
-		
+		if(proxies != null) {
+			args.put(FIELD_PROXY, TextUtils.join(PROXIES_SEPARATOR, proxies));
+		}else {
+			args.put(FIELD_PROXY, "");
+		}
 		// Assume we have an unique credential
 		args.put(FIELD_REALM, realm);
 		args.put(FIELD_SCHEME, scheme);
