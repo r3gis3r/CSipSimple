@@ -28,7 +28,7 @@
 		<TextView android:text="sip:" android:id="@+id/protocolChooser"
 			android:gravity="left|center_vertical"
 			android:layout_width="wrap_content" android:layout_height="fill_parent"
-			android:paddingRight="10dip"></TextView>
+			android:paddingRight="10dip" android:paddingLeft="5dip"></TextView>
 		<EditText android:layout_height="fill_parent"
 			android:layout_width="fill_parent" android:id="@+id/dialtxt_user"
 			android:gravity="left|center_vertical"
