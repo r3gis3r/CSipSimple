@@ -47,7 +47,6 @@ import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
 import com.csipsimple.wizards.impl.Keyyo;
 import com.csipsimple.wizards.impl.Local;
-import com.csipsimple.wizards.impl.MagicJack;
 import com.csipsimple.wizards.impl.OnSip;
 import com.csipsimple.wizards.impl.Pbxes;
 import com.csipsimple.wizards.impl.Pennytel;
@@ -217,10 +216,12 @@ public class WizardUtils {
 					R.drawable.ic_wizard_pennytel, 10, 
 					new Locale[]{new Locale("EN", "au")}, false, false, 
 					Pennytel.class));
+			/*
 			WIZARDS_DICT.put("MAGICJACK", new WizardInfo("MAGICJACK", "MagicJack", 
 					R.drawable.ic_wizard_magicjack, 20, 
 					new Locale[]{ Locale.US, Locale.CANADA}, false, false, 
 					MagicJack.class));
+					*/
 			WIZARDS_DICT.put("ONSIP", new WizardInfo("ONSIP", "OnSIP", 
 					R.drawable.ic_wizard_onsip, 15, 
 					new Locale[]{ Locale.US}, false, false, 

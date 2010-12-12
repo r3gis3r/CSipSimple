@@ -225,7 +225,6 @@ public class CallInfo implements Parcelable {
 		return connectStart;
 	}
 	
-	
 	public String dumpCallInfo() {
 		return pjsua.call_dump(callId, pjsua.PJ_TRUE, " ").getPtr();
 	}

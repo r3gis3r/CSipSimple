@@ -826,6 +826,7 @@ public class SipService extends Service {
 					if (mediaManager == null) {
 						mediaManager = new MediaManager(SipService.this);
 					}
+					
 					mediaManager.startService();
 					
 					pjsua.setCallbackObject(userAgentReceiver);
@@ -859,7 +860,7 @@ public class SipService extends Service {
 						pj_str_t[] stunServers = cfg.getStun_srv();
 						int i = 0;
 						for(String server : servers) {
-							Log.d(THIS_FILE, "add server "+server.trim() );
+							Log.d(THIS_FILE, "add server " + server.trim());
 							stunServers[i] = pjsua.pj_str_copy(server.trim());
 							i++;
 						}
@@ -1128,8 +1129,8 @@ public class SipService extends Service {
 
 		status = pjsua.transport_create(type, cfg, tId);
 		if (status != pjsuaConstants.PJ_SUCCESS) {
-
-			String msg = "Fail to create transport "+ pjsua.get_error_message(status).getPtr();
+			String errorMsg = pjsua.get_error_message(status).getPtr();
+			String msg = "Fail to create transport " + errorMsg +" ("+status+")";
 			Log.e(THIS_FILE, msg);
 			if(status == 120098) { /* Already binded */
 				msg = getString(R.string.another_application_use_sip_port);

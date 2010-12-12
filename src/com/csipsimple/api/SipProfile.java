@@ -84,7 +84,7 @@ public class SipProfile implements Parcelable {
 	public static final String FIELD_DATATYPE = "datatype";
 	public static final String FIELD_DATA = "data";
 	
-	public final static String[] common_projection = {
+	public final static String[] full_projection = {
 		FIELD_ID,
 		// Application relative fields
 		FIELD_ACTIVE, FIELD_WIZARD, FIELD_DISPLAY_NAME,
@@ -103,7 +103,22 @@ public class SipProfile implements Parcelable {
 		// In future release a credential table should be created
 		FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
 		FIELD_DATA };
-	
+	public final static Class<?>[] full_projection_types = {
+		Integer.class,
+		
+		Integer.class, String.class, String.class,
+		
+		Integer.class, String.class, String.class,
+		Boolean.class, Integer.class, Integer.class, Integer.class, String.class,
+		String.class, Integer.class, Integer.class,
+		String.class, String.class,
+		Integer.class, Integer.class,
+		
+		String.class,
+		
+		String.class, String.class, String.class, Integer.class,
+		String.class
+	};
 	
 	//Properties
 	public int PrimaryKey = -1;
@@ -115,9 +130,9 @@ public class SipProfile implements Parcelable {
 	public int priority = 100;
 	public String acc_id = null;
 	public String reg_uri = null;
-	public int publish_enabled = -1;
-	public int reg_timeout = -1;
-	public int ka_interval = -1;
+	public int publish_enabled = 0;
+	public int reg_timeout = 300;
+	public int ka_interval = 40;
 	public String pidf_tuple_id = null;
 	public String force_contact = null;
 	public boolean allow_contact_rewrite = true;
@@ -128,7 +143,7 @@ public class SipProfile implements Parcelable {
 	public String scheme = null;
 	public int datatype = 0;
 	public String data = null;
-	public int use_srtp = -1;
+	public int use_srtp = 0;
 	public int sip_stack = PJSIP_STACK;
 	
 	
@@ -272,11 +287,11 @@ public class SipProfile implements Parcelable {
 			publish_enabled = tmp_i;
 		}
 		tmp_i = args.getAsInteger(FIELD_REG_TIMEOUT);
-		if (tmp_i != null) {
+		if (tmp_i != null && tmp_i >=0 ) {
 			reg_timeout = tmp_i;
 		}
 		tmp_i = args.getAsInteger(FIELD_KA_INTERVAL);
-		if (tmp_i != null) {
+		if (tmp_i != null && tmp_i >=0 ) {
 			ka_interval = tmp_i;
 		}
 		tmp_s = args.getAsString(FIELD_PIDF_TUPLE_ID);
@@ -297,7 +312,7 @@ public class SipProfile implements Parcelable {
 		}
 		
 		tmp_i = args.getAsInteger(FIELD_USE_SRTP);
-		if (tmp_i != null) {
+		if (tmp_i != null && tmp_i >=0 ) {
 			use_srtp = tmp_i;
 		}
 		
@@ -342,7 +357,7 @@ public class SipProfile implements Parcelable {
 		}
 		//TODO : ensure of non nullity of some params
 		
-		args.put(FIELD_ACTIVE, active?"1":"0");
+		args.put(FIELD_ACTIVE, active? 1 : 0);
 		args.put(FIELD_WIZARD, wizard);
 		args.put(FIELD_DISPLAY_NAME, display_name);
 		args.put(FIELD_TRANSPORT, transport);
@@ -358,7 +373,7 @@ public class SipProfile implements Parcelable {
 		args.put(FIELD_KA_INTERVAL, ka_interval);
 		args.put(FIELD_PIDF_TUPLE_ID, pidf_tuple_id);
 		args.put(FIELD_FORCE_CONTACT, force_contact);
-		args.put(FIELD_ALLOW_CONTACT_REWRITE, allow_contact_rewrite);
+		args.put(FIELD_ALLOW_CONTACT_REWRITE, allow_contact_rewrite ? 1 : 0);
 		args.put(FIELD_CONTACT_REWRITE_METHOD, contact_rewrite_method);
 		args.put(FIELD_USE_SRTP, use_srtp);
 

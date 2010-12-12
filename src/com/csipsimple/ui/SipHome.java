@@ -21,6 +21,9 @@ package com.csipsimple.ui;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
@@ -56,6 +59,7 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.SipProfileJson;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.IndicatorTab;
@@ -187,6 +191,16 @@ public class SipHome extends TabActivity {
 		
 		selectTabWithAction(getIntent());
 		
+		/*
+		Log.w(THIS_FILE, ">>> Will serialize <<<");
+		JSONArray profs = SipProfileJson.serializeSipProfiles(this);
+		try {
+			Log.d(THIS_FILE," Ser : "+ profs.toString(4));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 	}
 
 	private void startSipService() {

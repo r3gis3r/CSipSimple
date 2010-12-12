@@ -132,6 +132,8 @@
 <string name="sip_audio_mode_desc">Change only if developers advise you to</string>
 <string name="has_io_queue">IO Queue</string>
 <string name="has_io_queue_desc">Activate Queue for input/output</string>
+<string name="set_audio_generate_tone">Tone hack</string>
+<string name="set_audio_generate_tone_desc">Generate a tone before making calls</string>
 
 <!-- UI -->
 <string name="general_ui">General user interface</string>

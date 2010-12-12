@@ -295,7 +295,7 @@ public class DBAdapter {
 				whereArgs = new String[] {"1"};
 			}
 			
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.common_projection,
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.full_projection,
 					whereClause, whereArgs, null, null, SipProfile.FIELD_PRIORITY
 							+ " DESC");
 			int numRows = c.getCount();
@@ -328,7 +328,7 @@ public class DBAdapter {
 			return new SipProfile();
 		}
 		try {
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.common_projection,
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.full_projection,
 					SipProfile.FIELD_ID + "=" + accountId, null, null, null, null);
 			
 			
@@ -356,7 +356,7 @@ public class DBAdapter {
 			return new SipProfile();
 		}
 		try {
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.common_projection,
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.full_projection,
 					SipProfile.FIELD_WIZARD + "=?", new String[] {wizardId}, null, null, null);
 			
 			
@@ -383,7 +383,7 @@ public class DBAdapter {
 			return null;
 		}
 		try {
-			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.common_projection,
+			Cursor c = db.query(ACCOUNTS_TABLE_NAME, SipProfile.full_projection,
 					SipProfile.FIELD_ID + "=" + accountId, null, null, null, null);
 			
 			
@@ -566,7 +566,7 @@ public class DBAdapter {
 	
 	public Cursor getFiltersForAccount(int account_id) {
 		Log.d(THIS_FILE, "Get filters for account "+account_id);
-		return db.query(FILTERS_TABLE_NAME, Filter.common_projection, 
+		return db.query(FILTERS_TABLE_NAME, Filter.full_projection, 
 				Filter.FIELD_ACCOUNT+"=?", new String[]{Integer.toString(account_id)}, 
 				null, null, Filter.DEFAULT_ORDER);
 	}
@@ -593,7 +593,7 @@ public class DBAdapter {
 			return new Filter();
 		}
 		try {
-			Cursor c = db.query(FILTERS_TABLE_NAME, Filter.common_projection,
+			Cursor c = db.query(FILTERS_TABLE_NAME, Filter.full_projection,
 					CallLog.Calls._ID + "=" + filterId, null, null, null, null);
 			int numRows = c.getCount();
 			if(numRows > 0){

@@ -42,6 +42,7 @@ import android.text.TextUtils;
 
 public class PreferencesWrapper {
 	
+	public static final String THREAD_COUNT = "thread_count";
 	//Media
 	public static final String SND_MEDIA_QUALITY = "snd_media_quality";
 	public static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
@@ -58,7 +59,7 @@ public class PreferencesWrapper {
 	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
 	public static final String HAS_IO_QUEUE = "has_io_queue";
 	public static final String BITS_PER_SAMPLE = "bits_per_sample";
-	
+	public static final String SET_AUDIO_GENERATE_TONE = "set_audio_generate_tone";
 	
 	//UI
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
@@ -129,6 +130,7 @@ public class PreferencesWrapper {
 		put(SND_CLOCK_RATE, "16000");
 		put(BITS_PER_SAMPLE, "16");
 		put(SIP_AUDIO_MODE, "0");
+		put(THREAD_COUNT, "3");
 		
 		put(STUN_SERVER, "stun.counterpath.com");
 		put(TURN_SERVER, "");
@@ -168,6 +170,7 @@ public class PreferencesWrapper {
 		put(USE_ROUTING_API, false);
 		put(USE_MODE_API, false);
 		put(HAS_IO_QUEUE, false);
+		put(SET_AUDIO_GENERATE_TONE, true);
 		
 		put(PREVENT_SCREEN_ROTATION, true);
 		put(ICON_IN_STATUS_BAR, true);
@@ -735,14 +738,16 @@ public class PreferencesWrapper {
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "snd_ptime not well formated");
 		}
-		return 30;
+		return 20;
 	}
 	
 	public int getHasIOQueue() {
 		return getPreferenceBooleanValue(HAS_IO_QUEUE)?1:0;
 	}
 	
-	
+	public boolean generateForSetCall() {
+		return getPreferenceBooleanValue(SET_AUDIO_GENERATE_TONE);
+	}
 
 	public boolean useSipInfoDtmf() {
 		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase("3");
@@ -759,14 +764,14 @@ public class PreferencesWrapper {
 
 	public long getThreadCount() {
 		try {
-			int value = Integer.parseInt(prefs.getString("thread_count", "1"));
+			int value = Integer.parseInt(getPreferenceStringValue(THREAD_COUNT));
 			if(value < 10) {
 				return value;
 			}
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Thread count not well formatted");
 		}
-		return 1;
+		return Integer.parseInt(STRING_PREFS.get(THREAD_COUNT));
 	}
 
 	// ---- 
@@ -930,6 +935,9 @@ public class PreferencesWrapper {
 	public void setQuit(boolean quit) {
 		setPreferenceBooleanValue(HAS_BEEN_QUIT, quit);
 	}
+
+
+	
 
 
 

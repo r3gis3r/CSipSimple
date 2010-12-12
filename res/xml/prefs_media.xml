@@ -79,7 +79,7 @@
 		<PreferenceCategory android:title="@string/perfs" android:key="perfs">
 			<EditTextPreference android:title="Thread count" android:key="thread_count"
 				android:summary="Number of thread allocated for the native stack"
-				android:defaultValue="1"
+				android:defaultValue="3"
 				android:numeric="signed"></EditTextPreference>
 				
 		</PreferenceCategory>
@@ -104,6 +104,11 @@
 			<CheckBoxPreference android:summary="@string/use_mode_api_desc"
 				android:title="@string/use_mode_api" android:key="use_mode_api"
 				android:defaultValue="false"></CheckBoxPreference>
+			
+			<CheckBoxPreference android:summary="@string/set_audio_generate_tone_desc"
+				android:title="@string/set_audio_generate_tone" android:key="set_audio_generate_tone"
+				android:defaultValue="false"></CheckBoxPreference>	
+				
 				
 			<ListPreference android:title="@string/sip_audio_mode" android:key="sip_audio_mode"
 				android:summary="@string/sip_audio_mode_desc"

@@ -64,13 +64,22 @@ public class Filter {
 	public static final int REPLACE_SUFIX = 4;
 	
 	
-	public static final String[] common_projection = {
+	public static final String[] full_projection = {
 		_ID,
 		FIELD_PRIORITY,
 		FIELD_MATCHES,
 		FIELD_REPLACE,
 		FIELD_ACTION
 	};
+	
+	public static final Class<?>[]  full_projection_types = {
+		Integer.class,
+		Integer.class,
+		String.class,
+		String.class,
+		Integer.class
+	};
+	
 	
 	public static final String DEFAULT_ORDER = FIELD_PRIORITY+" asc"; //TODO : should be a os constant... just find it
 	private static final String THIS_FILE = "Filter";

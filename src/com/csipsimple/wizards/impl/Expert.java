@@ -115,7 +115,7 @@ public class Expert extends BaseImplementation {
 		accountAllowContactRewrite.setChecked(account.allow_contact_rewrite);
 		accountContactRewriteMethod.setValue(Integer.toString(account.contact_rewrite_method));
 		accountProxy.setText(TextUtils.join(SipProfile.PROXIES_SEPARATOR, account.proxies));
-		
+		Log.d(THIS_FILE, "use srtp : "+account.use_srtp);
 		accountUseSrtp.setValueIndex(account.use_srtp);
 	}
 	
