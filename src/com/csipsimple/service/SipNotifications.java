@@ -33,6 +33,7 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.SipMessage;
@@ -68,7 +69,7 @@ public class SipNotifications {
 
 		Notification notification = new Notification(icon, tickerText, when);
 
-		Intent notificationIntent = new Intent(SipService.ACTION_SIP_DIALER);
+		Intent notificationIntent = new Intent(SipManager.ACTION_SIP_DIALER);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -102,8 +103,8 @@ public class SipNotifications {
 			// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
 		}
 
-		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALL_UI);
-		notificationIntent.putExtra(SipService.EXTRA_CALL_INFO, currentCallInfo2);
+		Intent notificationIntent = new Intent(SipManager.ACTION_SIP_CALL_UI);
+		notificationIntent.putExtra(SipManager.EXTRA_CALL_INFO, currentCallInfo2);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -126,7 +127,7 @@ public class SipNotifications {
 			missedCallNotification.defaults |= Notification.DEFAULT_SOUND;
 		}
 		
-		Intent notificationIntent = new Intent(SipService.ACTION_SIP_CALLLOG);
+		Intent notificationIntent = new Intent(SipManager.ACTION_SIP_CALLLOG);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -150,7 +151,7 @@ public class SipNotifications {
 			}
 			
 			
-			Intent notificationIntent = new Intent(SipService.ACTION_SIP_MESSAGES);
+			Intent notificationIntent = new Intent(SipManager.ACTION_SIP_MESSAGES);
 			notificationIntent.putExtra(SipMessage.FIELD_FROM, msg.getFrom());
 			notificationIntent.putExtra(SipMessage.FIELD_BODY, msg.getBody());
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -54,6 +54,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.ISipService;
@@ -139,7 +140,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		//Bind to sip service
 		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 		//And register to ua state events
-		registerReceiver(registrationStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
+		registerReceiver(registrationStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
 		
 	}
 	

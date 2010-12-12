@@ -32,6 +32,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 
+import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
@@ -96,7 +97,7 @@ public class MediaManager {
 		
 		ringer = new Ringer(service);
 		
-		mediaStateChangedIntent = new Intent(SipService.ACTION_SIP_MEDIA_CHANGED);
+		mediaStateChangedIntent = new Intent(SipManager.ACTION_SIP_MEDIA_CHANGED);
 		
 	}
 	

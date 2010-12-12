@@ -39,16 +39,16 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.service.ISipConfiguration;
 import com.csipsimple.service.ISipService;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -115,7 +115,7 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 			isAutoClose = false;
 		}
 		
-		registerReceiver(callStateReceiver, new IntentFilter(SipService.ACTION_SIP_CALL_CHANGED));
+		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
 		
 	}
 	
@@ -155,7 +155,7 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			
-			if(action.equals(SipService.ACTION_SIP_CALL_CHANGED)){
+			if(action.equals(SipManager.ACTION_SIP_CALL_CHANGED)){
 				if(sipService != null) {
 					try {
 						CallInfo[] callsInfo = sipService.getCalls();

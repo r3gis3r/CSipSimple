@@ -73,6 +73,7 @@ import android.view.KeyCharacterMap;
 import android.widget.Toast;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.AccountInfo;
@@ -97,27 +98,6 @@ public class SipService extends Service {
 	// -------
 	// Static constants
 	// -------
-	// ACTIONS
-	public static final String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";
-	public static final String ACTION_SIP_DIALER = "com.csipsimple.phone.action.DIALER";
-	public static final String ACTION_SIP_CALLLOG = "com.csipsimple.phone.action.CALLLOG";
-	public static final String ACTION_SIP_MESSAGES = "com.csipsimple.phone.action.MESSAGES";
-	
-	// SERVICE BROADCASTS
-	public static final String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
-	public static final String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
-	public static final String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
-	public static final String ACTION_SIP_ACCOUNT_ACTIVE_CHANGED = "com.csipsimple.service.ACCOUNT_ACTIVE_CHANGED";
-	public static final String ACTION_SIP_MESSAGE_RECEIVED = "com.csipsimple.service.MESSAGE_RECEIVED";
-	//TODO : message sent?
-	public static final String ACTION_SIP_MESSAGE_STATUS = "com.csipsimple.service.MESSAGE_STATUS";
-	
-	
-	// EXTRAS
-	public static final String EXTRA_CALL_INFO = "call_info";
-	public static final String EXTRA_ACCOUNT_ID = "acc_id";
-	public static final String EXTRA_ACTIVATE = "activate";
-
 	public static final String STACK_FILE_NAME = "libpjsipjni.so";
 
 	private static Object pjAccountsCreationLock = new Object();
@@ -564,9 +544,9 @@ public class SipService extends Service {
 					}
 				};
 				t.start();
-			}else if(action.equals(ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
-				final long accountId = intent.getLongExtra(EXTRA_ACCOUNT_ID, -1);
-				final boolean active = intent.getBooleanExtra(EXTRA_ACTIVATE, false);
+			}else if(action.equals(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
+				final long accountId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1);
+				final boolean active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, false);
 				//Should that be threaded?
 				if(accountId != -1) {
 					SipProfile account;
@@ -724,7 +704,7 @@ public class SipService extends Service {
 			if (deviceStateReceiver == null) {
 				IntentFilter intentfilter = new IntentFilter();
 				intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-				intentfilter.addAction(ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
+				intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
 				deviceStateReceiver = new ServiceDeviceStateReceiver();
 				registerReceiver(deviceStateReceiver, intentfilter);
 			}
@@ -1279,7 +1259,7 @@ public class SipService extends Service {
 		}
 		// Send a broadcast message that for an account
 		// registration state has changed
-		Intent regStateChangedIntent = new Intent(ACTION_SIP_REGISTRATION_CHANGED);
+		Intent regStateChangedIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
 		sendBroadcast(regStateChangedIntent);
 
 		updateRegistrationsState();

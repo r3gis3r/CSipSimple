@@ -21,9 +21,6 @@ package com.csipsimple.ui;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
@@ -48,6 +45,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
@@ -59,7 +57,6 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.utils.SipProfileJson;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.IndicatorTab;
@@ -317,11 +314,11 @@ public class SipHome extends TabActivity {
 	private void selectTabWithAction(Intent intent) {
 		if(intent != null) {
 			String callAction = intent.getAction();
-			if(SipService.ACTION_SIP_CALLLOG.equalsIgnoreCase(callAction)) {
+			if(SipManager.ACTION_SIP_CALLLOG.equalsIgnoreCase(callAction)) {
 				getTabHost().setCurrentTab(1);
-			}else if(SipService.ACTION_SIP_DIALER.equalsIgnoreCase(callAction)) {
+			}else if(SipManager.ACTION_SIP_DIALER.equalsIgnoreCase(callAction)) {
 				getTabHost().setCurrentTab(0);
-			}else if(SipService.ACTION_SIP_MESSAGES.equalsIgnoreCase(callAction)) {
+			}else if(SipManager.ACTION_SIP_MESSAGES.equalsIgnoreCase(callAction)) {
 				getTabHost().setCurrentTab(2);
 			}
 		}

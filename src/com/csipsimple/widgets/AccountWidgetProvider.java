@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.service.SipService;
@@ -74,7 +75,7 @@ public class AccountWidgetProvider extends AppWidgetProvider {
 				this.onDeleted(context, new int[] { appWidgetId });
 			}
 		} else {
-			if (SipService.ACTION_SIP_REGISTRATION_CHANGED.equals(intent.getAction()) || SipService.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED.equals(intent.getAction())) {
+			if (SipManager.ACTION_SIP_REGISTRATION_CHANGED.equals(intent.getAction()) || SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED.equals(intent.getAction())) {
 				updateWidget(context);
 			}
 			super.onReceive(context, intent);
@@ -140,8 +141,8 @@ public class AccountWidgetProvider extends AppWidgetProvider {
      */
     private static PendingIntent getLaunchPendingIntent(Context context, long accId, boolean activate ) {
         Intent launchIntent = new Intent(SipService.INTENT_SIP_ACCOUNT_ACTIVATE);
-        launchIntent.putExtra(SipService.EXTRA_ACCOUNT_ID, accId);
-        launchIntent.putExtra(SipService.EXTRA_ACTIVATE, activate);
+        launchIntent.putExtra(SipManager.EXTRA_ACCOUNT_ID, accId);
+        launchIntent.putExtra(SipManager.EXTRA_ACTIVATE, activate);
         Log.d(THIS_FILE, "Create intent "+activate);
         PendingIntent pi = PendingIntent.getBroadcast(context, (int)accId,
                 launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);

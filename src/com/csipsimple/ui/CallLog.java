@@ -44,6 +44,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBAdapter;
@@ -123,7 +124,7 @@ public class CallLog extends ListActivity {
 		//Start service and bind it
 		startService(sipService);
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
-		registerReceiver(regStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
+		registerReceiver(regStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
     }
 
     @Override

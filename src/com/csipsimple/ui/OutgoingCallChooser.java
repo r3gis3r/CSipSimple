@@ -42,6 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBAdapter;
@@ -157,7 +158,7 @@ public class OutgoingCallChooser extends ListActivity {
 		Intent sipService = new Intent(this, SipService.class);
 		startService(sipService);
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
-		registerReceiver(regStateReceiver, new IntentFilter(SipService.ACTION_SIP_REGISTRATION_CHANGED));
+		registerReceiver(regStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
 		
 
 		

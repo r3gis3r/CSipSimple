@@ -33,10 +33,10 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.CallLog;
 
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
 import com.csipsimple.models.SipMessage;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 
 public class DBAdapter {
@@ -412,9 +412,9 @@ public class DBAdapter {
 				SipProfile.FIELD_ID + "=" + accountId, null) > 0;
 		
 		if(result) {
-			Intent publishIntent = new Intent(SipService.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
-			publishIntent.putExtra(SipService.EXTRA_ACCOUNT_ID, accountId);
-			publishIntent.putExtra(SipService.EXTRA_ACTIVATE, active);
+			Intent publishIntent = new Intent(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
+			publishIntent.putExtra(SipManager.EXTRA_ACCOUNT_ID, accountId);
+			publishIntent.putExtra(SipManager.EXTRA_ACTIVATE, active);
 			context.sendBroadcast(publishIntent);
 		}
 		return result;
