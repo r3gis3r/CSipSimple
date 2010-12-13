@@ -41,6 +41,7 @@ import com.csipsimple.wizards.impl.Ekiga;
 import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.Freephonie;
+import com.csipsimple.wizards.impl.Gizmo5;
 import com.csipsimple.wizards.impl.IiNet;
 import com.csipsimple.wizards.impl.Ip2Mobile;
 import com.csipsimple.wizards.impl.IpTel;
@@ -223,9 +224,14 @@ public class WizardUtils {
 					MagicJack.class));
 					*/
 			WIZARDS_DICT.put("ONSIP", new WizardInfo("ONSIP", "OnSIP", 
-					R.drawable.ic_wizard_onsip, 15, 
+					R.drawable.ic_wizard_onsip, 30, 
 					new Locale[]{ Locale.US}, false, false, 
 					OnSip.class));
+			WIZARDS_DICT.put("GIZMO5", new WizardInfo("GIZMO5", "Gizmo5", 
+					R.drawable.ic_wizard_gizmo5, 15, 
+					new Locale[]{ Locale.US}, false, false, 
+					Gizmo5.class));
+			
 			WIZARDS_DICT.put("IINET", new WizardInfo("IINET", "iinet", 
 					R.drawable.ic_wizard_iinet, 5, 
 					new Locale[]{new Locale("EN", "au")}, false, false, 
