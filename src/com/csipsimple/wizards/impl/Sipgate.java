@@ -37,7 +37,13 @@ public class Sipgate extends AlternateServerImplementation {
 		accountPassword.setDialogTitle(R.string.w_sipgate_password);
 	}
 	
+
 	
+	public SipProfile buildAccount(SipProfile account) {
+		account = super.buildAccount(account);
+		account.transport = SipProfile.TRANSPORT_UDP;
+		return account;
+	}
 
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
