@@ -56,6 +56,7 @@ import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.Sipgate;
+import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
 
@@ -248,6 +249,11 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ip2mobile, 10, 
 					new Locale[]{new Locale("DK", "dk")}, false, false, 
 					Ip2Mobile.class));
+			WIZARDS_DICT.put("SPEAKEZI", new WizardInfo("SPEAKEZI", "Speakezi Telecoms", 
+					R.drawable.ic_wizard_speakezi, 30, 
+					new Locale[] {new Locale("EN", "za"), new Locale("AF", "za")}, false, false, 
+					Speakezi.class));
+			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
