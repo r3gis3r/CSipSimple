@@ -48,6 +48,7 @@ import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
 import com.csipsimple.wizards.impl.Keyyo;
 import com.csipsimple.wizards.impl.Local;
+import com.csipsimple.wizards.impl.NexGenTel;
 import com.csipsimple.wizards.impl.OnSip;
 import com.csipsimple.wizards.impl.Pbxes;
 import com.csipsimple.wizards.impl.Pennytel;
@@ -232,7 +233,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_gizmo5, 15, 
 					new Locale[]{ Locale.US}, false, false, 
 					Gizmo5.class));
-			
+			WIZARDS_DICT.put("NEXGENTEL", new WizardInfo("NEXGENTEL", "NGeen", 
+					R.drawable.ic_wizard_ngeen, 20, 
+					new Locale[]{ Locale.US}, false, false, 
+					NexGenTel.class));
 			WIZARDS_DICT.put("IINET", new WizardInfo("IINET", "iinet", 
 					R.drawable.ic_wizard_iinet, 5, 
 					new Locale[]{new Locale("EN", "au")}, false, false, 
