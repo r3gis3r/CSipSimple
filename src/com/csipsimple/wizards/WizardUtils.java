@@ -54,6 +54,7 @@ import com.csipsimple.wizards.impl.Pbxes;
 import com.csipsimple.wizards.impl.Pennytel;
 import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
+import com.csipsimple.wizards.impl.Pozitel;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.Sipgate;
@@ -257,6 +258,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_speakezi, 30, 
 					new Locale[] {new Locale("EN", "za"), new Locale("AF", "za")}, false, false, 
 					Speakezi.class));
+			WIZARDS_DICT.put("POZITEL", new WizardInfo("POZITEL", "Pozitel", 
+					R.drawable.ic_wizard_pozitel, 30, 
+					new Locale[] {new Locale("TR", "tr")}, false, false, 
+					Pozitel.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

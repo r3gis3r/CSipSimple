@@ -102,12 +102,8 @@ public class CustomDistribution {
 		return true;
 	}
 	
-	public static boolean distributionWantsOtherProviders() {
-		return false;
-	}
-	
 	public static String getSupportEmail() {
-		return "support@keyyo.net";
+		return null;
 	}
 	
 	public static String getUserAgent() {
