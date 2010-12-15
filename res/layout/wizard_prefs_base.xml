@@ -20,7 +20,24 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
 	
-	<LinearLayout android:layout_weight="1" android:layout_height="fill_parent" android:layout_width="fill_parent">
+	<LinearLayout android:layout_weight="1"
+		android:orientation="vertical" 
+		android:layout_height="fill_parent" android:layout_width="fill_parent">
+		<LinearLayout android:layout_height="?android:attr/listPreferredItemHeight"
+			android:layout_width="fill_parent"
+			android:id="@+id/custom_wizard_row"
+			android:background="@android:drawable/list_selector_background"
+			android:orientation="vertical"
+			android:visibility="gone">
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/custom_wizard_text"
+				android:textAppearance="?android:attr/textAppearanceLarge" 
+				android:textColor="@android:color/white" android:paddingLeft="12dip" android:paddingRight="12dip" android:gravity="center" android:layout_weight="1"/>
+			<ImageView android:layout_width="fill_parent"
+				android:background="@android:drawable/divider_horizontal_dark"
+				android:layout_height="1px"/>
+		</LinearLayout>
 		<ListView android:id="@android:id/list" 
 			android:layoutAnimation="@anim/layout_slide_right"
 			android:persistentDrawingCache="animation|scrolling"
