@@ -344,17 +344,19 @@ public class WizardUtils {
 		m.put(LANG_DISPLAY, context.getString(R.string.generic_wizards_text));
 		result.add(m);
 		
-		//World
-		m = new HashMap<String, String>();
-	//	m.put("lang", "world");
-		m.put(LANG_DISPLAY, context.getString(R.string.world_wide_providers_text));
-		result.add(m);
-		
-		//Others
-		m = new HashMap<String, String>();
-	//	m.put("lang", "others");
-		m.put(LANG_DISPLAY, context.getString(R.string.other_country_providers_text));
-		result.add(m);
+		if(CustomDistribution.distributionWantsOtherProviders()) {
+			//World
+			m = new HashMap<String, String>();
+		//	m.put("lang", "world");
+			m.put(LANG_DISPLAY, context.getString(R.string.world_wide_providers_text));
+			result.add(m);
+			
+			//Others
+			m = new HashMap<String, String>();
+		//	m.put("lang", "others");
+			m.put(LANG_DISPLAY, context.getString(R.string.other_country_providers_text));
+			result.add(m);
+		}
 		
 		return result;
 	}
