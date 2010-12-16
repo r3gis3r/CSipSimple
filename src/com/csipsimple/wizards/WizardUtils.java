@@ -48,6 +48,7 @@ import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
 import com.csipsimple.wizards.impl.Keyyo;
 import com.csipsimple.wizards.impl.Local;
+import com.csipsimple.wizards.impl.Mondotalk;
 import com.csipsimple.wizards.impl.NexGenTel;
 import com.csipsimple.wizards.impl.OnSip;
 import com.csipsimple.wizards.impl.Pbxes;
@@ -262,7 +263,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_pozitel, 30, 
 					new Locale[] {new Locale("TR", "tr")}, false, false, 
 					Pozitel.class));
-			
+			WIZARDS_DICT.put("MONDOTALK", new WizardInfo("MONDOTALK", "Mondotalk", 
+					R.drawable.ic_wizard_mondotalk, 20, 
+					new Locale[] {new Locale("EN", "au"), new Locale("EN", "us"), new Locale("EN", "nz")}, false, false, 
+					Mondotalk.class));
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
