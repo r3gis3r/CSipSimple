@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-04 18:58+0100\n"
+"POT-Creation-Date: 2010-12-17 22:41+0100\n"
 "PO-Revision-Date: 2010-10-02 19:23+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -120,4 +120,17 @@ msgstr "SSL3"
 msgctxt "tls_method_choices:4"
 msgid "SSL23"
 msgstr "SSL23"
+
+#, fuzzy
+msgctxt "gsm_integration_type_choices:0"
+msgid "Auto"
+msgstr "Automatique"
+
+msgctxt "gsm_integration_type_choices:1"
+msgid "Force"
+msgstr ""
+
+msgctxt "gsm_integration_type_choices:2"
+msgid "Prevent"
+msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-04 18:58+0100\n"
+"POT-Creation-Date: 2010-12-17 22:41+0100\n"
 "PO-Revision-Date: 2010-11-25 15:35+0000\n"
 "Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -53,6 +53,14 @@ msgstr "Интерфейс"
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr "Настройки интерфейса"
+
+msgctxt "prefs_calls"
+msgid "Calls options"
+msgstr ""
+
+msgctxt "prefs_calls_desc"
+msgid "Options related to calls"
+msgstr ""
 
 #. Network
 msgctxt "for_incomings"
@@ -381,8 +389,7 @@ msgstr "Активировать VAD"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr ""
-"Определять голосовую активность в микрофоне для отделения от фонового шума"
+msgstr "Определять голосовую активность в микрофоне для отделения от фонового шума"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
@@ -421,8 +428,7 @@ msgid "Media quality"
 msgstr "Качество медиа"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Качество медиа потока (только для опытных пользователей)"
 
 msgctxt "snd_clock_rate"
@@ -468,8 +474,8 @@ msgstr "Программная регулировка"
 msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
 msgstr ""
-"Регулировать громкость из программы CSipSimple и не использовать настройки "
-"Андроид"
+"Регулировать громкость из программы CSipSimple и не использовать "
+"настройки Андроид"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
@@ -503,6 +509,14 @@ msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
 msgstr ""
 
+msgctxt "set_audio_generate_tone"
+msgid "Tone hack"
+msgstr ""
+
+msgctxt "set_audio_generate_tone_desc"
+msgid "Generate a tone before making calls"
+msgstr ""
+
 #. UI
 msgctxt "general_ui"
 msgid "General user interface"
@@ -522,8 +536,8 @@ msgstr "Номеронабиратель"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr "Предлагать использовать SIP или мобильную связь при вызовах"
 
 msgctxt "integrate_with_native_calllogs"
@@ -588,8 +602,7 @@ msgstr "Отчёт об ошибках"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr ""
-"Уровень отчёта об ошибках для отладки программы (0 - нет, 5 - подробный)"
+msgstr "Уровень отчёта об ошибках для отладки программы (0 - нет, 5 - подробный)"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
@@ -598,7 +611,8 @@ msgstr "Интеграция с плеером"
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
-"Интегрировать с музыкальным плеером, если используется стандартное приложение"
+"Интегрировать с музыкальным плеером, если используется стандартное "
+"приложение"
 
 msgctxt "ringtone"
 msgid "Ringtone"
@@ -614,8 +628,15 @@ msgstr "Не поворачивать экран"
 
 msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
+msgstr "Не поворачивать экран автоматически и всегда использовать портретный вид"
+
+msgctxt "gsm_integration_type"
+msgid "Integration type with GSM"
 msgstr ""
-"Не поворачивать экран автоматически и всегда использовать портретный вид"
+
+msgctxt "gsm_integration_type_desc"
+msgid "How the application use GSM (or not)"
+msgstr ""
 
 #. Fast settings
 msgctxt "android_integration"
@@ -668,8 +689,16 @@ msgstr "Передача VoIP пакетов должна быть разреш�
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
+msgstr "Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети"
+
+#. Calls settings
+msgctxt "auto_record_calls"
+msgid "Auto record calls"
 msgstr ""
-"Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети"
+
+msgctxt "auto_record_calls_desc"
+msgid "Record calls as soon as connected"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
@@ -678,4 +707,8 @@ msgstr "Экспертный режим"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Расширенный режим"
+
+#~ msgctxt "gsm_integration_type_desc"
+#~ msgid "How CSipSimple use GSM (or not)"
+#~ msgstr ""
 

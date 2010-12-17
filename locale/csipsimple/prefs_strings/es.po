@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-04 18:58+0100\n"
+"POT-Creation-Date: 2010-12-17 22:41+0100\n"
 "PO-Revision-Date: 2010-11-27 23:52+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: es <LL@li.org>\n"
@@ -52,6 +52,14 @@ msgstr ""
 
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
+msgstr ""
+
+msgctxt "prefs_calls"
+msgid "Calls options"
+msgstr ""
+
+msgctxt "prefs_calls_desc"
+msgid "Options related to calls"
 msgstr ""
 
 #. Network
@@ -497,6 +505,14 @@ msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
 msgstr ""
 
+msgctxt "set_audio_generate_tone"
+msgid "Tone hack"
+msgstr ""
+
+msgctxt "set_audio_generate_tone_desc"
+msgid "Generate a tone before making calls"
+msgstr ""
+
 #. UI
 msgctxt "general_ui"
 msgid "General user interface"
@@ -608,6 +624,14 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
+msgctxt "gsm_integration_type"
+msgid "Integration type with GSM"
+msgstr ""
+
+msgctxt "gsm_integration_type_desc"
+msgid "How the application use GSM (or not)"
+msgstr ""
+
 #. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -661,6 +685,15 @@ msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
 msgstr ""
 
+#. Calls settings
+msgctxt "auto_record_calls"
+msgid "Auto record calls"
+msgstr ""
+
+msgctxt "auto_record_calls_desc"
+msgid "Record calls as soon as connected"
+msgstr ""
+
 msgctxt "expert_preferences"
 msgid "Expert mode"
 msgstr ""
@@ -668,4 +701,8 @@ msgstr ""
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr ""
+
+#~ msgctxt "gsm_integration_type_desc"
+#~ msgid "How CSipSimple use GSM (or not)"
+#~ msgstr ""
 

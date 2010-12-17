@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-04 18:58+0100\n"
+"POT-Creation-Date: 2010-12-17 22:41+0100\n"
 "PO-Revision-Date: 2010-10-06 13:32+0000\n"
 "Last-Translator: Jan Tschirschwitz <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -52,6 +52,14 @@ msgstr "Benutzeroberfläche"
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
 msgstr "Anpassen der Benutzeroberfläche"
+
+msgctxt "prefs_calls"
+msgid "Calls options"
+msgstr ""
+
+msgctxt "prefs_calls_desc"
+msgid "Options related to calls"
+msgstr ""
 
 #. Network
 msgctxt "for_incomings"
@@ -104,8 +112,7 @@ msgstr "Verwende UMTS"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr ""
-"Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
+msgstr "Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
@@ -420,8 +427,7 @@ msgid "Media quality"
 msgstr "Audioqualität"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualität der Audiodaten (Verändere diesen Wert nur, wenn du weißt was du "
 "tust)"
@@ -500,6 +506,14 @@ msgstr ""
 
 msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
+msgstr ""
+
+msgctxt "set_audio_generate_tone"
+msgid "Tone hack"
+msgstr ""
+
+msgctxt "set_audio_generate_tone_desc"
+msgid "Generate a tone before making calls"
 msgstr ""
 
 #. UI
@@ -621,6 +635,14 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Verhindert die Rotation des Displays und hält es im Portraitformat"
 
+msgctxt "gsm_integration_type"
+msgid "Integration type with GSM"
+msgstr ""
+
+msgctxt "gsm_integration_type_desc"
+msgid "How the application use GSM (or not)"
+msgstr ""
+
 #. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -676,6 +698,15 @@ msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
 msgstr "Nur verfügbar, wenn SIP registriert ist"
 
+#. Calls settings
+msgctxt "auto_record_calls"
+msgid "Auto record calls"
+msgstr ""
+
+msgctxt "auto_record_calls_desc"
+msgid "Record calls as soon as connected"
+msgstr ""
+
 msgctxt "expert_preferences"
 msgid "Expert mode"
 msgstr "Experten Modus"
@@ -683,4 +714,8 @@ msgstr "Experten Modus"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Erweiterter Modus"
+
+#~ msgctxt "gsm_integration_type_desc"
+#~ msgid "How CSipSimple use GSM (or not)"
+#~ msgstr ""
 

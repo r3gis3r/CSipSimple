@@ -8,7 +8,7 @@
   <string name="prefs_media">Média</string>
   <string name="prefs_media_desc">Comportement des codecs et du son en communication</string>
   <string name="prefs_ui">Apparence et comportement</string>
-  <string name="prefs_ui_desc">Modifier lapparence et les comportement de lapplication</string>
+  <string name="prefs_ui_desc">Modifier l\'apparence et les comportement de l\'application</string>
   <string name="for_incomings">Pour les appels entrants</string>
   <string name="for_outgoings">Pour les appels sortants</string>
   <string name="perfs">Performances</string>
@@ -21,7 +21,7 @@
   <string name="use_other_in_desc">Par example le WiMax pour les appels entrants</string>
   <string name="use_other_out_desc">Par example le WiMax pour les appels sortant</string>
   <string name="use_3g">Utiliser la 3G</string>
-  <string name="use_3g_disclamer">Votre opérateur DOIT vous lautoriser pour activer cette option</string>
+  <string name="use_3g_disclamer">Votre opérateur DOIT vous autoriser l\'utilisation cette option</string>
   <string name="use_edge">Utiliser le EDGE</string>
   <string name="use_gprs">Utiliser le GPRS</string>
   <string name="lock_wifi">Verouiller le WIFI</string>
@@ -152,7 +152,7 @@
   <string name="wifi_available">Disponible en même temps que le WIFI</string>
   <string name="wifi_available_desc">Votre disponibilité est basée sur la connection Wifi</string>
   <string name="never_available">Seulement pour les appels sortant</string>
-  <string name="never_available_desc">N\'activer CSipSimple que lorsque j\'initie un appel.</string>
+  <string name="never_available_desc">N\'activer l\'application que lorsque j\'initie un appel.</string>
   <string name="availability_tg">Disponibilité du canal donnée mobile</string>
   <string name="tg_allowed">Je suis autorisé à faire de la VoIP sur le canal donnée du mobile</string>
   <string name="tg_allowed_desc">Votre opérateur vous autorise à faire de la VoIP sur la canal data de sa connection</string>

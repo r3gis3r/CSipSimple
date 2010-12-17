@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-04 18:58+0100\n"
+"POT-Creation-Date: 2010-12-17 22:41+0100\n"
 "PO-Revision-Date: 2010-10-10 08:22+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -51,7 +51,15 @@ msgstr "Apparence et comportement"
 
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
-msgstr "Modifier lapparence et les comportement de lapplication"
+msgstr "Modifier l'apparence et les comportement de l'application"
+
+msgctxt "prefs_calls"
+msgid "Calls options"
+msgstr ""
+
+msgctxt "prefs_calls_desc"
+msgid "Options related to calls"
+msgstr ""
 
 #. Network
 msgctxt "for_incomings"
@@ -104,7 +112,7 @@ msgstr "Utiliser la 3G"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr "Votre opérateur DOIT vous lautoriser pour activer cette option"
+msgstr "Votre opérateur DOIT vous autoriser l'utilisation cette option"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
@@ -504,6 +512,14 @@ msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
 msgstr ""
 
+msgctxt "set_audio_generate_tone"
+msgid "Tone hack"
+msgstr ""
+
+msgctxt "set_audio_generate_tone_desc"
+msgid "Generate a tone before making calls"
+msgstr ""
+
 #. UI
 msgctxt "general_ui"
 msgid "General user interface"
@@ -625,6 +641,14 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Eviter la rotation de l'écran et rester en mode portrait"
 
+msgctxt "gsm_integration_type"
+msgid "Integration type with GSM"
+msgstr ""
+
+msgctxt "gsm_integration_type_desc"
+msgid "How the application use GSM (or not)"
+msgstr ""
+
 #. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -660,7 +684,7 @@ msgstr "Seulement pour les appels sortant"
 
 msgctxt "never_available_desc"
 msgid "Activate the SIP client automatically when necessary"
-msgstr "N'activer CSipSimple que lorsque j'initie un appel."
+msgstr "N'activer l'application que lorsque j'initie un appel."
 
 msgctxt "availability_tg"
 msgid "Mobile data availability"
@@ -679,6 +703,15 @@ msgstr ""
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
 msgstr "Disponible seulement si le SIP est actuellement enregistré"
+
+#. Calls settings
+msgctxt "auto_record_calls"
+msgid "Auto record calls"
+msgstr ""
+
+msgctxt "auto_record_calls_desc"
+msgid "Record calls as soon as connected"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
