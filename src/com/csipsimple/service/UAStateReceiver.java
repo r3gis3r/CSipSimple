@@ -42,7 +42,6 @@ import org.pjsip.pjsua.pjsua_call_media_status;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -215,6 +214,12 @@ public class UAStateReceiver extends Callback {
 			}
 			pjsua.conf_adjust_rx_level(0, micLevel);
 			
+			
+			// Auto record
+			if (recordedCall == INVALID_RECORD && 
+					service.prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.AUTO_RECORD_CALLS)) {
+				startRecording(callId);
+			}
 			
 		}
 		
@@ -623,7 +628,7 @@ public class UAStateReceiver extends Callback {
 		// Ensure nothing is recording actually
 		if (recordedCall == INVALID_RECORD) {
 			CallInfo callInfo = getCallInfo(callId);
-			if(callInfo == null || !callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE)) {
+			if(callInfo == null || ! callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE)) {
 				return;
 			}
 			
@@ -673,13 +678,9 @@ public class UAStateReceiver extends Callback {
 	}
 	
 	private File getRecordFile(String remoteContact) {
-		File root = Environment.getExternalStorageDirectory();
-	    if (root.canWrite()){
-			File dir = new File(root.getAbsolutePath() + File.separator + "CSipSimple");
-			dir.mkdirs();
-			Log.d(THIS_FILE, "Create directory " + dir.getAbsolutePath());
+		File dir = PreferencesWrapper.getRecordsFolder();
+	    if (dir != null){
 			Date d = new Date();
-			
 			File file = new File(dir.getAbsoluteFile() + File.separator + sanitizeForFile(remoteContact)+ "_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".wav");
 			Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
 			return file;

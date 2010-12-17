@@ -19,6 +19,10 @@
 
 package com.csipsimple.utils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -28,6 +32,7 @@ import org.json.JSONObject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.format.DateFormat;
 
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
@@ -101,5 +106,39 @@ public class SipProfileJson {
 		db.close();
 		
 		return jsonSipProfiles;
+	}
+	
+	private static String KEY_ACCOUNTS = "accounts";
+	
+	
+	public static boolean saveSipConfiguration(Context ctxt) {
+		File dir = PreferencesWrapper.getConfigFolder();
+		if( dir != null) {
+			Date d = new Date();
+			File file = new File(dir.getAbsoluteFile() + File.separator + "backup_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".json");
+			Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
+			
+			
+			JSONObject configChain = new JSONObject();
+			try {
+				configChain.put(KEY_ACCOUNTS, serializeSipProfiles(ctxt) );
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Impossible to add profiles", e);
+			}
+			
+			try {
+				// Create file
+				FileWriter fstream = new FileWriter(file.getAbsoluteFile());
+				BufferedWriter out = new BufferedWriter(fstream);
+				out.write(configChain.toString(2));
+				// Close the output stream
+				out.close();
+				return true;
+			} catch (Exception e) {// Catch exception if any
+				Log.e(THIS_FILE, "Impossible to save config to disk", e);
+				return false;
+			}
+		}
+		return false;
 	}
 }

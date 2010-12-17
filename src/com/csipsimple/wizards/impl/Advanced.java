@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
-import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
@@ -77,13 +76,12 @@ public class Advanced extends BaseImplementation {
 		accountPassword.setText(account.data);
 
 		accountUseTcp.setChecked(account.transport == SipProfile.TRANSPORT_TCP);
-		String account_cfPrx = TextUtils.join(SipProfile.PROXIES_SEPARATOR, account.proxies);
-		if(account_cfPrx == null) {
+		
+		if(account.proxies != null && account.proxies.length > 0) {
+			accountProxy.setText(account.proxies[0].replaceFirst("sip:", ""));
+		}else {
 			accountProxy.setText("");
-		} else {
-			accountProxy.setText(account_cfPrx.replaceFirst("sip:", ""));
 		}
-
 	}
 
 	public void updateDescriptions() {

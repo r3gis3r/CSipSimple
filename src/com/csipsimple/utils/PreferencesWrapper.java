@@ -18,6 +18,7 @@
 package com.csipsimple.utils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -99,6 +101,9 @@ public class PreferencesWrapper {
 //	public static final String TLS_VERIFY_CLIENT = "tls_verify_client";
 	public static final String TLS_METHOD = "tls_method";
 	public static final String USE_SRTP = "use_srtp";
+	
+	// CALLS
+	public static final String AUTO_RECORD_CALLS = "auto_record_calls";
 	
 	//Internal use
 	public static final String HAS_BEEN_QUIT = "has_been_quit";
@@ -192,6 +197,9 @@ public class PreferencesWrapper {
 		put("use_gprs_out", false);
 		put("use_edge_in", false);
 		put("use_edge_out", false);
+		
+		//Calls
+		put(AUTO_RECORD_CALLS, false);
 	}};
 	
 	private final static HashMap<String, Float> FLOAT_PREFS = new HashMap<String, Float>(){
@@ -918,6 +926,38 @@ public class PreferencesWrapper {
 		return null;
 	}
 
+	private static String CONFIG_FOLDER = "configs";
+	private static String RECORDS_FOLDER = "records";
+	
+	private static File getStorageFolder() {
+		File root = Environment.getExternalStorageDirectory();
+	    if (root.canWrite()){
+			File dir = new File(root.getAbsolutePath() + File.separator + "CSipSimple");
+			dir.mkdirs();
+			Log.d(THIS_FILE, "Create directory " + dir.getAbsolutePath());
+			return dir;
+	    }
+	    return null;
+	}
+	
+	
+	private static File getSubFolder(String subFolder) {
+		File root = getStorageFolder();
+		if(root != null) {
+			File dir = new File(root.getAbsoluteFile() + File.separator + subFolder);
+			dir.mkdirs();
+			return dir;
+		}
+		return null;
+	}
+	
+	public static File getConfigFolder() {
+		return getSubFolder(CONFIG_FOLDER);
+	}
+	
+	public static File getRecordsFolder() {
+		return getSubFolder(RECORDS_FOLDER);
+	}
 
 	public boolean isAdvancedUser() {
 		return prefs.getBoolean(IS_ADVANCED_USER, false);

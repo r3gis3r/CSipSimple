@@ -10,6 +10,9 @@
 <string name="prefs_media_desc">Codecs and in-call sound behavior</string>
 <string name="prefs_ui">User interface</string>
 <string name="prefs_ui_desc">Tweak the user interface</string>
+<string name="prefs_calls">Calls options</string>
+<string name="prefs_calls_desc">Options related to calls</string>
+
 
 <!-- Network -->
 <string name="for_incomings">For incoming calls</string>
@@ -182,6 +185,11 @@
 <string name="tg_allowed_desc">Your carrier allows VoIP over your mobile data connection</string>
 
 <string name="codecs_availability_text">Only available if sip is currently registered</string>
+
+
+<!-- Calls settings -->
+<string name="auto_record_calls">Auto record calls</string>
+<string name="auto_record_calls_desc">Record calls as soon as connected</string>
 
 <string name="expert_preferences">Expert mode</string>
 <string name="advanced_preferences">Advanced mode</string>

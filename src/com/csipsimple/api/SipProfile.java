@@ -214,7 +214,11 @@ public class SipProfile implements Parcelable {
 		dest.writeInt(ka_interval);
 		dest.writeString(getWriteParcelableString(pidf_tuple_id));
 		dest.writeString(getWriteParcelableString(force_contact));
-		dest.writeString(getWriteParcelableString(TextUtils.join(PROXIES_SEPARATOR, proxies)));
+		if(proxies != null) {
+			dest.writeString(getWriteParcelableString(TextUtils.join(PROXIES_SEPARATOR, proxies)));
+		}else {
+			dest.writeString("");
+		}
 		dest.writeString(getWriteParcelableString(realm));
 		dest.writeString(getWriteParcelableString(username));
 		dest.writeInt(datatype);

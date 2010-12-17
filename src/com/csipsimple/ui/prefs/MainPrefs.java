@@ -78,7 +78,8 @@ public class MainPrefs extends ListActivity {
 				R.drawable.ic_prefs_media, new Intent(this, PrefsMedia.class)));		
 		prefs_list.add(new PrefGroup(R.string.prefs_ui, R.string.prefs_ui_desc, 
 				R.drawable.ic_prefs_ui, new Intent(this, PrefsUI.class)));
-		
+		prefs_list.add(new PrefGroup(R.string.prefs_calls, R.string.prefs_calls_desc, 
+				R.drawable.ic_menu_answer_call, new Intent(this, PrefsCalls.class)));
 		
 		adapter = new PrefGroupAdapter(this, prefs_list);
 		setListAdapter(adapter);

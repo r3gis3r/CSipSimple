@@ -62,6 +62,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.SipProfileJson;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardChooser;
 import com.csipsimple.wizards.WizardUtils;
@@ -545,11 +546,13 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	}
 	public static final int ADD_MENU = Menu.FIRST + 1;
 	public static final int REORDER_MENU = Menu.FIRST + 2;
+	public static final int BACKUP_MENU = Menu.FIRST + 3;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, ADD_MENU, Menu.NONE, R.string.add_account).setIcon(android.R.drawable.ic_menu_add);
 		menu.add(Menu.NONE, REORDER_MENU, Menu.NONE, R.string.reorder).setIcon(android.R.drawable.ic_menu_sort_by_size);
+		menu.add(Menu.NONE, BACKUP_MENU, Menu.NONE, R.string.backup).setIcon(android.R.drawable.ic_menu_save);
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -561,6 +564,9 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			return true;
 		case REORDER_MENU:
 			startActivityForResult(new Intent(this, ReorderAccountsList.class), REQUEST_MODIFY);
+			return true;
+		case BACKUP_MENU:
+			SipProfileJson.saveSipConfiguration(this);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
