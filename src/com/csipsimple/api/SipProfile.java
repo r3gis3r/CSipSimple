@@ -28,8 +28,10 @@ import android.text.TextUtils;
 
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.api.SipUri.ParsedSipUriInfos;
+import com.csipsimple.utils.Log;
 
 public class SipProfile implements Parcelable {
+	private static final String THIS_FILE = "SipProfile";
 	
 	//Constants
 	public final static int INVALID_ID = -1;
@@ -189,7 +191,6 @@ public class SipProfile implements Parcelable {
 		}
 	};
 
-	private static final String THIS_FILE = "SipProfile";
 
 
 	@Override
@@ -409,6 +410,9 @@ public class SipProfile implements Parcelable {
 			if(parsedInfo.port != 5060) {
 				dom += Integer.toString(parsedInfo.port);
 			}
+			return dom;
+		}else {
+			Log.d(THIS_FILE, "Domain not found in "+regUri);
 		}
 		return null;
 	}

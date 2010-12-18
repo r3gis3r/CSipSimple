@@ -117,7 +117,7 @@ public class SipUri {
     	public int port = 5060;
     }
     
-    private static Pattern sipUriSpliter = Pattern.compile("^(sip(?:s)?):([^:]*)(?::(\\d))?$", Pattern.CASE_INSENSITIVE);
+    private static Pattern sipUriSpliter = Pattern.compile("^(sip(?:s)?):([^:]*)(?::([0-9]*))?$", Pattern.CASE_INSENSITIVE);
 	
     /**
      * Parse an uri
@@ -128,7 +128,7 @@ public class SipUri {
 		ParsedSipUriInfos parsedInfos = new ParsedSipUriInfos();
 
 		if (!TextUtils.isEmpty(sipUri)) {
-			Log.d(THIS_FILE, "Parsing " + sipUri);
+			Log.d(THIS_FILE, "Parsing uri " + sipUri+ " with "+sipUriSpliter.toString());
 			Matcher m = sipUriSpliter.matcher(sipUri);
 			if (m.matches()) {
 				parsedInfos.scheme = m.group(1);

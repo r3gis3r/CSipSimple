@@ -376,7 +376,6 @@ public class SipService extends Service {
 		public void startRecording(int callId) throws RemoteException {
 			if (created && userAgentReceiver != null) {
 				userAgentReceiver.startRecording(callId);
-				//TODO : broadcast it
 			}
 		}
 
@@ -870,7 +869,7 @@ public class SipService extends Service {
 					mediaCfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
 					// Echo cancellation
 					mediaCfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
-					mediaCfg.setEc_options(prefsWrapper.getEchoMode()); // ECHO SIMPLE : TODO -> setting that
+					mediaCfg.setEc_options(prefsWrapper.getEchoMode());
 					mediaCfg.setNo_vad(prefsWrapper.getNoVad());
 					mediaCfg.setQuality(prefsWrapper.getMediaQuality());
 					mediaCfg.setClock_rate(prefsWrapper.getClockRate());
