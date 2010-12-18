@@ -60,6 +60,8 @@ public class PreferencesWrapper {
 	public static final String BITS_PER_SAMPLE = "bits_per_sample";
 	public static final String SET_AUDIO_GENERATE_TONE = "set_audio_generate_tone";
 	public static final String THREAD_COUNT = "thread_count";
+	public static final String ECHO_MODE = "echo_mode";
+	public static final String SND_PTIME = "snd_ptime";
 	
 	//UI
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
@@ -133,8 +135,10 @@ public class PreferencesWrapper {
 		put(RTP_PORT, "4000");
 		put(SND_AUTO_CLOSE_TIME, "1");
 		put(ECHO_CANCELLATION_TAIL, "200");
+		put(ECHO_MODE, "2");
 		put(SND_MEDIA_QUALITY, "4");
 		put(SND_CLOCK_RATE, "16000");
+		put(SND_PTIME, "20");
 		put(BITS_PER_SAMPLE, "16");
 		put(SIP_AUDIO_MODE, "0");
 		put(THREAD_COUNT, "3");
@@ -306,6 +310,20 @@ public class PreferencesWrapper {
 	 */
 	public Float getPreferenceFloatValue(String key) {
 		return gPrefFloatValue(prefs, key);
+	}
+	
+	/**
+	 * Get integer preference value
+	 * @param key the key preference to retrieve
+	 * @return the value
+	 */
+	public int getPreferenceIntegerValue(String key) {
+		try {
+			return Integer.parseInt(getPreferenceStringValue(key));
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Invalid "+key+" format : expect a int");
+		}
+		return Integer.parseInt(STRING_PREFS.get(key));
 	}
 	
 	/**
@@ -483,13 +501,9 @@ public class PreferencesWrapper {
 	}
 	
 	private int getPrefPort(String key) {
-		try {
-			int port = Integer.parseInt(getPreferenceStringValue(key));
-			if(isValidPort(port)) {
-				return port;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
+		int port = getPreferenceIntegerValue(key);
+		if(isValidPort(port)) {
+			return port;
 		}
 		return Integer.parseInt(STRING_PREFS.get(key));
 	}
@@ -542,21 +556,11 @@ public class PreferencesWrapper {
 	}
 	
 	public int getDSCPVal() {
-		try {
-			return Integer.parseInt(getPreferenceStringValue(DSCP_VAL));
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "DSCP_VAL not well formated");
-		}
-		return Integer.parseInt(STRING_PREFS.get(DSCP_VAL));
+		return getPreferenceIntegerValue(DSCP_VAL);
 	}
 	
 	public int getTLSMethod() {
-		try {
-			return Integer.parseInt(getPreferenceStringValue(TLS_METHOD));
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "TLS not well formated");
-		}
-		return Integer.parseInt(STRING_PREFS.get(TLS_METHOD));
+		return getPreferenceIntegerValue(TLS_METHOD);
 	}
 	
 	private boolean hasStunServer(String string) {
@@ -590,13 +594,7 @@ public class PreferencesWrapper {
 	 * even sometimes crash
 	 */
 	public int getAutoCloseTime() {
-		String autoCloseTime = getPreferenceStringValue(SND_AUTO_CLOSE_TIME);
-		try {
-			return Integer.parseInt(autoCloseTime);
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Auto close time "+autoCloseTime+" not well formated");
-		}
-		return 1;
+		return getPreferenceIntegerValue(SND_AUTO_CLOSE_TIME);
 	}
 	
 	
@@ -613,13 +611,12 @@ public class PreferencesWrapper {
 		if(!hasEchoCancellation()) {
 			return 0;
 		}
-		String tailLength = getPreferenceStringValue(ECHO_CANCELLATION_TAIL);
-		try {
-			return Integer.parseInt(tailLength);
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Tail length "+tailLength+" not well formated");
-		}
-		return 0;
+		return getPreferenceIntegerValue(ECHO_CANCELLATION_TAIL);
+	}
+	
+	public int getEchoMode() {
+		return getPreferenceIntegerValue(ECHO_MODE);
+		
 	}
 
 	/**
@@ -793,13 +790,7 @@ public class PreferencesWrapper {
 	}
 	
 	public int getAudioFramePtime() {
-		try {
-			int value = Integer.parseInt(prefs.getString("snd_ptime", "20"));
-			return value;
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "snd_ptime not well formated");
-		}
-		return 20;
+		return getPreferenceIntegerValue(SND_PTIME);
 	}
 	
 	public int getHasIOQueue() {
@@ -824,13 +815,9 @@ public class PreferencesWrapper {
 
 
 	public long getThreadCount() {
-		try {
-			int value = Integer.parseInt(getPreferenceStringValue(THREAD_COUNT));
-			if(value < 10) {
-				return value;
-			}
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Thread count not well formatted");
+		int value = getPreferenceIntegerValue(THREAD_COUNT);
+		if(value < 10) {
+			return value;
 		}
 		return Integer.parseInt(STRING_PREFS.get(THREAD_COUNT));
 	}

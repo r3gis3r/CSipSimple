@@ -43,10 +43,10 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.models.DownloadProgress;
 import com.csipsimple.models.RemoteLibInfo;
+import com.csipsimple.pjsip.NativeLibManager;
 import com.csipsimple.service.DownloadLibService;
 import com.csipsimple.service.IDownloadLibService;
 import com.csipsimple.service.IDownloadLibServiceCallback;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 
 public class WelcomeScreen extends Activity {
@@ -231,10 +231,11 @@ public class WelcomeScreen extends Activity {
 							String old_stack_version = prefs.getString(DownloadLibService.CURRENT_STACK_VERSION, "0.00-00");
 							
 							Log.d(THIS_FILE, "Compare old : "+old_stack_version+ " et "+currentDownload.getVersion());
-							if(currentDownload.isMoreUpToDateThan(old_stack_version)) {
+							// Always upgrade
+							//if(currentDownload.isMoreUpToDateThan(old_stack_version)) {
 								handler.sendMessage(handler.obtainMessage(DOWNLOAD_STARTED));
-								currentDownload.setFileName( SipService.STACK_FILE_NAME );
-								currentDownload.setFilePath( SipService.getGuessedStackLibFile(WelcomeScreen.this).getParentFile() );
+								currentDownload.setFileName( NativeLibManager.STACK_FILE_NAME );
+								currentDownload.setFilePath( NativeLibManager.getGuessedStackLibFile(WelcomeScreen.this).getParentFile() );
 								
 								if (service.isDownloadRunning()) {
 									//TODO : check whether it's a sip path.
@@ -242,10 +243,10 @@ public class WelcomeScreen extends Activity {
 								} else {
 									service.startDownload(currentDownload);
 								}
-							}else {
-								Log.d(THIS_FILE, "Nothing to update...");
-								handler.sendMessage(handler.obtainMessage(INSTALLED));
-							}
+							//}else {
+							//	Log.d(THIS_FILE, "Nothing to update...");
+							//	handler.sendMessage(handler.obtainMessage(INSTALLED));
+							//}
 							
 						}else {
 							

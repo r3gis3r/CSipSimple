@@ -78,4 +78,10 @@
 		<item>Prevent</item>
 	</string-array>
 	
+		<string-array name="echo_mode_choices">
+		<item>Auto</item>
+		<item>Speex</item>
+		<item>Simple</item>
+	</string-array>
+	
 </resources>

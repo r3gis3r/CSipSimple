@@ -51,9 +51,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -82,6 +79,7 @@ import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.models.PjSipAccount;
 import com.csipsimple.models.SipMessage;
+import com.csipsimple.pjsip.NativeLibManager;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -98,7 +96,6 @@ public class SipService extends Service {
 	// -------
 	// Static constants
 	// -------
-	public static final String STACK_FILE_NAME = "libpjsipjni.so";
 
 	private static Object pjAccountsCreationLock = new Object();
 	private static Object activeAccountsLock = new Object();
@@ -726,7 +723,7 @@ public class SipService extends Service {
 	}
 
 	private void tryToLoadStack() {
-		File stackFile = getStackLibFile(this);
+		File stackFile = NativeLibManager.getStackLibFile(this);
 		if (stackFile != null && !sipStackIsCorrupted) {
 			try {
 				// Try to load the stack
@@ -873,7 +870,7 @@ public class SipService extends Service {
 					mediaCfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
 					// Echo cancellation
 					mediaCfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
-					mediaCfg.setEc_options(2); // ECHO SIMPLE : TODO -> setting that
+					mediaCfg.setEc_options(prefsWrapper.getEchoMode()); // ECHO SIMPLE : TODO -> setting that
 					mediaCfg.setNo_vad(prefsWrapper.getNoVad());
 					mediaCfg.setQuality(prefsWrapper.getMediaQuality());
 					mediaCfg.setClock_rate(prefsWrapper.getClockRate());
@@ -1634,70 +1631,6 @@ public class SipService extends Service {
 	}
 	
 
-
-	/**
-	 * Get the native library file First search in local files of the app
-	 * (previously downloaded from the network) Then search in lib (bundlized
-	 * method)
-	 * 
-	 * @param context
-	 *            the context of the app that what to get it back
-	 * @return the file if any, null else
-	 */
-	public static File getStackLibFile(Context context) {
-		// Standard case
-		File standardOut = getGuessedStackLibFile(context);
-		//If production .so file exists and app is not in debuggable mode 
-		//if debuggable we have to get the file from bundle dir
-		if (standardOut.exists() && !isDebuggableApp(context)) {
-			return standardOut;
-		}
-
-		// Have a look if it's not a dev build
-		// TODO : find a clean way to access the libPath for one shot builds
-		File targetForBuild = new File(context.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
-		Log.d(THIS_FILE, "Search for " + targetForBuild.getAbsolutePath());
-		if (targetForBuild.exists()) {
-			return targetForBuild;
-		}
-
-		//Oups none exists.... reset version history
-		PreferencesWrapper prefs = new PreferencesWrapper(context);
-		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_VERSION, "0.00-00");
-		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_ID, "");
-		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_URI, "");
-		return null;
-		
-	}
-
-	public static boolean hasBundleStack(Context ctx) {
-		File targetForBuild = new File(ctx.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
-		Log.d(THIS_FILE, "Search for " + targetForBuild.getAbsolutePath());
-		return targetForBuild.exists();
-	}
-
-	public static boolean hasStackLibFile(Context ctx) {
-		File guessedFile = getStackLibFile(ctx);
-		if (guessedFile == null) {
-			return false;
-		}
-		return guessedFile.exists();
-	}
-
-	public static File getGuessedStackLibFile(Context ctx) {
-		return ctx.getFileStreamPath(SipService.STACK_FILE_NAME);
-	}
-	
-	public static boolean isDebuggableApp(Context ctx) {
-		try {
-			PackageInfo pinfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
-			return ( (pinfo.applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0);
-		} catch (NameNotFoundException e) {
-			// Should not happen....or something is wrong with android...
-			Log.e(THIS_FILE, "Not possible to find self name", e);
-		}
-		return false;
-	}
 
 	public static ArrayList<String> codecs;
 

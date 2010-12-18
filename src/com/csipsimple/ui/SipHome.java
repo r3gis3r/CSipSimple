@@ -48,6 +48,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.pjsip.NativeLibManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.messages.ConversationList;
@@ -100,7 +101,7 @@ public class SipHome extends TabActivity {
 		
 		
 		// Check sip stack
-		if (!SipService.hasStackLibFile(this)) {
+		if (!NativeLibManager.hasStackLibFile(this)) {
 			//If not -> FIRST RUN : Just launch stack getter
 			Log.d(THIS_FILE, "Has no sip stack....");
 			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
@@ -109,15 +110,13 @@ public class SipHome extends TabActivity {
 			startActivity(welcomeIntent);
 			finish();
 			return;
-		} else if (!SipService.hasBundleStack(this)) {
+		} else if (!NativeLibManager.hasBundleStack(this)) {
+			// It's not the first setup and there is debug stack
 			// We have to check and save current version
 			Integer runningVersion = needUpgrade();
 			if(runningVersion != null) {
-				// We have to delete existing and outdate version of the lib
-				//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!! TODO
-				//FIXME
-				//TODO THAT
-				//
+				// Just to be sure delete the current stack and anyway upgrade it.
+				NativeLibManager.cleanStack(this);
 				
 				// We have to launch WelcomeScreen again
 				Log.d(THIS_FILE, "Sip stack may have changed");

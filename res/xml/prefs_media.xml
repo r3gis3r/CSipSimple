@@ -26,7 +26,12 @@
 				android:summary="@string/echo_cancellation_tail_desc"
 				android:defaultValue="200"
 				android:numeric="signed"></EditTextPreference>
-				
+			<ListPreference android:title="@string/echo_mode" android:key="echo_mode"
+				android:summary="@string/echo_mode_desc"
+				android:defaultValue="2"
+				android:entryValues="@array/echo_mode_values" android:entries="@array/echo_mode_choices"/>
+			
+			
 			<CheckBoxPreference android:summary="@string/enable_vad_desc"
 				android:title="@string/enable_vad" android:key="enable_vad"
 				android:defaultValue="false"></CheckBoxPreference>
