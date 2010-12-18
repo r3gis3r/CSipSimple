@@ -315,6 +315,11 @@ public class Compatibility {
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.THREAD_COUNT, "3");
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
 		}
+		if(lastSeenVersion < 466) {
+			if(lastSeenVersion > 0) {
+				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP_SERVICE, true);
+			}
+		}
 	}
 
 

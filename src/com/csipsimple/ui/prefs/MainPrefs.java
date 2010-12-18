@@ -178,7 +178,8 @@ public class MainPrefs extends ListActivity {
 	
 	//Menu
 	public static final int MENU_EXPERT_VIEW = Menu.FIRST + 1;
-	public static final int MENU_TEST_AUDIO = MENU_EXPERT_VIEW + 1;
+	public static final int MENU_RESET_VIEW = Menu.FIRST + 2;
+	public static final int MENU_TEST_AUDIO = Menu.FIRST + 3;
 	
 	
 	@Override
@@ -196,6 +197,9 @@ public class MainPrefs extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_EXPERT_VIEW, Menu.NONE, getToogleExpertTitle()).setIcon(
 						R.drawable.ic_wizard_expert);
+		menu.add(Menu.NONE, MENU_RESET_VIEW, Menu.NONE, R.string.restore_default).setIcon(
+				android.R.drawable.ic_menu_revert);
+		
 		/*
 		menu.add(Menu.NONE, MENU_TEST_AUDIO, Menu.NONE, "Test audio").setIcon(
 				R.drawable.ic_prefs_media);
@@ -222,6 +226,9 @@ public class MainPrefs extends ListActivity {
 				};
 				
 				t.start();
+				return true;
+			case MENU_RESET_VIEW:
+				prefsWrapper.resetAllDefaultValues();
 				return true;
 			case MENU_EXPERT_VIEW:
 				prefsWrapper.toogleExpertMode();

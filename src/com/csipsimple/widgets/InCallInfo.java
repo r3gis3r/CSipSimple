@@ -24,7 +24,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,14 +35,14 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.SipUri;
-import com.csipsimple.utils.SipUri.ParsedSipUriInfos;
 
 
 public class InCallInfo extends FrameLayout {
@@ -122,17 +121,9 @@ public class InCallInfo extends FrameLayout {
 		//If not already set with the same value, just ignore it
 		if(aRemoteUri != null && !aRemoteUri.equalsIgnoreCase(remoteUri)) {
 			remoteUri = aRemoteUri;
-			String remoteContact = aRemoteUri;
-			
-			ParsedSipUriInfos uriInfos = SipUri.parseSipUri(remoteUri);
-			
-			if(!TextUtils.isEmpty(uriInfos.displayName)) {
-				remoteContact = uriInfos.displayName;
-			}else if(!TextUtils.isEmpty(uriInfos.userName)) {
-				remoteContact = uriInfos.userName;
-			}
-			
-			remoteName.setText(remoteContact);
+			ParsedSipContactInfos uriInfos = SipUri.parseSipContact(remoteUri);
+
+			remoteName.setText(SipUri.getDisplayedSimpleContact(aRemoteUri));
 			remotePhoneNumber.setText(uriInfos.userName);
 			
 			SipProfile acc = SipService.getAccountForPjsipId(callInfo.getAccId(), db);

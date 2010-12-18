@@ -20,6 +20,7 @@ package com.csipsimple.wizards.impl;
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 
 public abstract class AlternateServerImplementation extends SimpleImplementation {
 	
@@ -33,6 +34,11 @@ public abstract class AlternateServerImplementation extends SimpleImplementation
 		accountServer = (EditTextPreference) parent.findPreference(SERVER);
 	}
 	
+	@Override
+	public void fillLayout(SipProfile account) {
+		super.fillLayout(account);
+		accountServer.setText(account.getSipDomain());
+	}
 	
 	@Override
 	protected String getDomain() {

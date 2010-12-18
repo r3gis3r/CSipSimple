@@ -51,12 +51,12 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.SipUri;
 
 /**
  * This activity provides a list view of existing conversations.
@@ -374,7 +374,7 @@ public class ConversationList extends ListActivity {
 		
 		private CharSequence formatMessage(Cursor cursor) {
 			String remoteContact = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
-	        SpannableStringBuilder buf = new SpannableStringBuilder(SipUri.getDisplayedSimpleUri(remoteContact));
+	        SpannableStringBuilder buf = new SpannableStringBuilder(SipUri.getDisplayedSimpleContact(remoteContact));
 
 	        
 	        int counter = cursor.getInt(cursor.getColumnIndex("counter"));

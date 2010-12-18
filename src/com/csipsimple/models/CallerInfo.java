@@ -28,10 +28,10 @@ import android.net.Uri;
 import android.provider.Contacts;
 import android.text.TextUtils;
 
+import com.csipsimple.api.SipUri;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.SipUri;
-import com.csipsimple.utils.SipUri.ParsedSipUriInfos;
 
 /**
  * Looks up caller information for the given phone number.
@@ -210,7 +210,7 @@ public class CallerInfo {
     	}
     	
     	CallerInfo callerInfo = null;
-		ParsedSipUriInfos uriInfos = SipUri.parseSipUri(sipUri);
+		ParsedSipContactInfos uriInfos = SipUri.parseSipContact(sipUri);
     	if (SipUri.isPhoneNumber(uriInfos.userName)) {
     		Log.d(THIS_FILE, "Number looks usable, try People lookup");
     		callerInfo = CallerInfo.getCallerInfo(context, uriInfos.userName);

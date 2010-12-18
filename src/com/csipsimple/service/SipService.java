@@ -75,6 +75,7 @@ import android.widget.Toast;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
@@ -83,7 +84,6 @@ import com.csipsimple.models.PjSipAccount;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.utils.SipUri;
 
 public class SipService extends Service {
 
@@ -627,6 +627,13 @@ public class SipService extends Service {
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		notificationManager = new SipNotifications(this);
+		
+		
+		
+		if(!prefsWrapper.hasAlreadySetupService()) {
+			prefsWrapper.resetAllDefaultValues();
+			prefsWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP_SERVICE, true);
+		}
 
 		// Check connectivity, else just finish itself
 		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
@@ -1786,7 +1793,7 @@ public class SipService extends Service {
 			
 			Log.d("Sent", callee + " " + message + " " + toCall.getPjsipAccountId());
 			SipMessage msg = new SipMessage(SipMessage.SELF, 
-					SipUri.getCanonicalSipUri(toCall.getCallee()), SipUri.getCanonicalSipUri(toCall.getCallee()), 
+					SipUri.getCanonicalSipContact(toCall.getCallee()), SipUri.getCanonicalSipContact(toCall.getCallee()), 
 					message, "text/plain", System.currentTimeMillis(), 
 					SipMessage.MESSAGE_TYPE_QUEUED);
 			msg.setRead(true);

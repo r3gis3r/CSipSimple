@@ -29,7 +29,6 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 
 import com.csipsimple.R;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class PrefsFast extends Activity implements OnClickListener {
@@ -147,7 +146,6 @@ public class PrefsFast extends Activity implements OnClickListener {
 		}else if (id == R.id.save_bt) {
 			if(!prefsWrapper.hasAlreadySetup()) {
 				prefsWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, true);
-				Compatibility.setFirstRunParameters(prefsWrapper);
 			}
 			finish();
 		}

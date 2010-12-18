@@ -56,6 +56,8 @@ import android.text.format.DateFormat;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallInfo.UnavailableException;
@@ -65,8 +67,6 @@ import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.utils.SipUri;
-import com.csipsimple.utils.SipUri.ParsedSipUriInfos;
 
 public class UAStateReceiver extends Callback {
 	static String THIS_FILE = "SIP UA Receiver";
@@ -135,7 +135,7 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_pager(int call_id, pj_str_t from, pj_str_t to, pj_str_t contact, pj_str_t mime_type, pj_str_t body) {
 		long date = System.currentTimeMillis();
-		String sFrom = SipUri.getCanonicalSipUri(from.getPtr());
+		String sFrom = SipUri.getCanonicalSipContact(from.getPtr());
 		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contact.getPtr(), body.getPtr(), mime_type.getPtr(),  date, SipMessage.MESSAGE_TYPE_INBOX);
 		
 		//Insert the message to the DB 
@@ -160,7 +160,7 @@ public class UAStateReceiver extends Callback {
 		//TODO : treat error / acknowledge of messages
 		int messageType = (status.equals(pjsip_status_code.PJSIP_SC_OK) 
 				|| status.equals(pjsip_status_code.PJSIP_SC_ACCEPTED))? SipMessage.MESSAGE_TYPE_SENT : SipMessage.MESSAGE_TYPE_FAILED;
-		String sTo = SipUri.getCanonicalSipUri(to.getPtr());
+		String sTo = SipUri.getCanonicalSipContact(to.getPtr());
 
 		Log.d(THIS_FILE, "SipMessage in on pager status "+status.toString()+" / "+reason.getPtr());
 		
@@ -341,7 +341,7 @@ public class UAStateReceiver extends Callback {
 						cv.put(CallLog.Calls.NEW, false);
 						
 						//Reformat number for callogs
-						ParsedSipUriInfos callerInfos = SipUri.parseSipUri(cv.getAsString(Calls.NUMBER));
+						ParsedSipContactInfos callerInfos = SipUri.parseSipContact(cv.getAsString(Calls.NUMBER));
 						if (callerInfos != null) {
 							String phoneNumber = null;
 							if(SipUri.isPhoneNumber(callerInfos.displayName)) {

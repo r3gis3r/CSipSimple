@@ -51,6 +51,7 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.service.ISipService;
@@ -58,7 +59,6 @@ import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.PickupSipUri;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.SipUri;
 import com.csipsimple.utils.SmileyParser;
 import com.csipsimple.widgets.AccountChooserButton;
 
@@ -347,7 +347,7 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 			if(contact.equalsIgnoreCase(SipMessage.SELF)) {
 				formatedContact = getString(R.string.messagelist_sender_self);
 			}else {
-				formatedContact = SipUri.getDisplayedSimpleUri(contact);
+				formatedContact = SipUri.getDisplayedSimpleContact(contact);
 			}
 			SpannableStringBuilder buf = new SpannableStringBuilder(TextUtils.replace(template, 
 					new String[] { "%s" }, 

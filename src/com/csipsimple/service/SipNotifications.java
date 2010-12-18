@@ -34,10 +34,10 @@ import android.text.style.StyleSpan;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.SipMessage;
-import com.csipsimple.utils.SipUri;
 import com.csipsimple.widgets.RegistrationNotification;
 
 public class SipNotifications {
@@ -140,7 +140,7 @@ public class SipNotifications {
 	public void showNotificationForMessage(SipMessage msg) {
 		//CharSequence tickerText = context.getText(R.string.instance_message);
 		if(!msg.getFrom().equalsIgnoreCase(viewingRemoteFrom)) {
-			String from = SipUri.getDisplayedSimpleUri(msg.getFrom());
+			String from = SipUri.getDisplayedSimpleContact(msg.getFrom());
 			CharSequence tickerText = buildTickerMessage(context, from, msg.getBody());
 			
 			if(messageNotification == null) {

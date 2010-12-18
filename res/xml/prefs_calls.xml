@@ -19,8 +19,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 	
+	<EditTextPreference android:title="@string/w_advanced_caller_id"
+		android:key="default_caller_id"
+		android:defaultValue=""/>
 	<CheckBoxPreference android:title="@string/auto_record_calls"
 		android:summary="@string/auto_record_calls_desc"
 		android:key="auto_record_calls"
 		android:defaultValue="false"/>
+		
 </PreferenceScreen>

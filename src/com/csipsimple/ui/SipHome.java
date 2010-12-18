@@ -111,50 +111,31 @@ public class SipHome extends TabActivity {
 			return;
 		} else if (!SipService.hasBundleStack(this)) {
 			// We have to check and save current version
-			try {
-				PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-				int runningVersion = pinfo.versionCode;
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-				int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
-
-				Log.d(THIS_FILE, "Last known version is " + lastSeenVersion + " and currently we are running " + runningVersion);
-				if (lastSeenVersion != runningVersion) {
-					// TODO : check if greater version
-					// (should be most of the case...but if not we should maybe
-					// popup the user that
-					// if n+1 version doesn't work for him he could fill a bug
-					// on bug tracker)
-					Compatibility.updateVersion(prefWrapper, lastSeenVersion, runningVersion);
-					Log.d(THIS_FILE, "Sip stack may have changed");
-					Intent changelogIntent = new Intent(this, WelcomeScreen.class);
-					changelogIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					changelogIntent.putExtra(WelcomeScreen.KEY_MODE, WelcomeScreen.MODE_CHANGELOG);
-					startActivity(changelogIntent);
-					finish();
-					return;
-				}
-			} catch (NameNotFoundException e) {
-				// Should not happen....or something is wrong with android...
-				Log.e(THIS_FILE, "Not possible to find self name", e);
+			Integer runningVersion = needUpgrade();
+			if(runningVersion != null) {
+				// We have to delete existing and outdate version of the lib
+				//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!! TODO
+				//FIXME
+				//TODO THAT
+				//
+				
+				// We have to launch WelcomeScreen again
+				Log.d(THIS_FILE, "Sip stack may have changed");
+				Intent changelogIntent = new Intent(this, WelcomeScreen.class);
+				changelogIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				changelogIntent.putExtra(WelcomeScreen.KEY_MODE, WelcomeScreen.MODE_CHANGELOG);
+				startActivity(changelogIntent);
+				finish();
+				return;
 			}
 		}else {
 			// DEV MODE -- still upgrade settings
-			try {
-				PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-				int runningVersion = pinfo.versionCode;
+			Integer runningVersion = needUpgrade();
+			if(runningVersion != null) {
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-				int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
-
-				Log.d(THIS_FILE, "Last known version is " + lastSeenVersion + " and currently we are running " + runningVersion);
-				if (lastSeenVersion != runningVersion) {
-					Compatibility.updateVersion(prefWrapper, lastSeenVersion, runningVersion);
-					Editor editor = prefs.edit();
-    				editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, runningVersion);
-    				editor.commit();
-				}
-			} catch (NameNotFoundException e) {
-				// Should not happen....or something is wrong with android...
-				Log.e(THIS_FILE, "Not possible to find self name", e);
+				Editor editor = prefs.edit();
+				editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, runningVersion);
+				editor.commit();
 			}
 		}
 		
@@ -174,7 +155,6 @@ public class SipHome extends TabActivity {
 		pickupContact.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
 				startActivityForResult(Compatibility.getContactPhoneIntent(), PICKUP_PHONE);
 			}
 		});
@@ -187,17 +167,30 @@ public class SipHome extends TabActivity {
 		}
 		
 		selectTabWithAction(getIntent());
-		
-		/*
-		Log.w(THIS_FILE, ">>> Will serialize <<<");
-		JSONArray profs = SipProfileJson.serializeSipProfiles(this);
+	}
+	
+	/**
+	 * Check wether an upgrade is needed
+	 * @return null if not needed, else the new version to upgrade to
+	 */
+	private Integer needUpgrade() {
 		try {
-			Log.d(THIS_FILE," Ser : "+ profs.toString(4));
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			int runningVersion = pinfo.versionCode;
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
+	
+			Log.d(THIS_FILE, "Last known version is " + lastSeenVersion + " and currently we are running " + runningVersion);
+			if (lastSeenVersion != runningVersion) {
+				Compatibility.updateVersion(prefWrapper, lastSeenVersion, runningVersion);
+				return runningVersion;
+			}
+			return null;
+		} catch (NameNotFoundException e) {
+			// Should not happen....or something is wrong with android...
+			Log.e(THIS_FILE, "Not possible to find self name", e);
 		}
-		*/
+		return null;
 	}
 
 	private void startSipService() {

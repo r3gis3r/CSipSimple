@@ -44,15 +44,12 @@ import android.text.TextUtils;
 
 public class PreferencesWrapper {
 	
-	public static final String THREAD_COUNT = "thread_count";
 	//Media
 	public static final String SND_MEDIA_QUALITY = "snd_media_quality";
 	public static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
 	public static final String RTP_PORT = "network_rtp_port";
 	public static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
 	public static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
-	public static final String IS_ADVANCED_USER = "is_advanced_user";
-	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 	public static final String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
 	public static final String SND_CLOCK_RATE = "snd_clock_rate";
 	public static final String ECHO_CANCELLATION = "echo_cancellation";
@@ -62,6 +59,7 @@ public class PreferencesWrapper {
 	public static final String HAS_IO_QUEUE = "has_io_queue";
 	public static final String BITS_PER_SAMPLE = "bits_per_sample";
 	public static final String SET_AUDIO_GENERATE_TONE = "set_audio_generate_tone";
+	public static final String THREAD_COUNT = "thread_count";
 	
 	//UI
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
@@ -104,10 +102,14 @@ public class PreferencesWrapper {
 	
 	// CALLS
 	public static final String AUTO_RECORD_CALLS = "auto_record_calls";
+	public static final String DEFAULT_CALLER_ID = "default_caller_id";
 	
 	//Internal use
 	public static final String HAS_BEEN_QUIT = "has_been_quit";
 	public static final String USER_AGENT = "user_agent"; 
+	public static final String IS_ADVANCED_USER = "is_advanced_user";
+	public static final String HAS_ALREADY_SETUP = "has_already_setup";
+	public static final String HAS_ALREADY_SETUP_SERVICE = "has_already_setup_service";
 	
 	
 	private static final String THIS_FILE = "PreferencesWrapper";
@@ -151,6 +153,7 @@ public class PreferencesWrapper {
 		
 
 		put(GSM_INTEGRATION_TYPE, "0");
+		put(DEFAULT_CALLER_ID, "");
 		
 		
 	}};
@@ -219,6 +222,11 @@ public class PreferencesWrapper {
 	
 
 	//Public setters
+	/**
+	 * Set a preference string value
+	 * @param key the preference key to set
+	 * @param value the value for this key
+	 */
 	public void setPreferenceStringValue(String key, String value) {
 		//TODO : authorized values
 		Editor editor = prefs.edit();
@@ -226,12 +234,22 @@ public class PreferencesWrapper {
 		editor.commit();
 	}
 	
+	/**
+	 * Set a preference boolean value
+	 * @param key the preference key to set
+	 * @param value the value for this key
+	 */
 	public void setPreferenceBooleanValue(String key, boolean value) {
 		Editor editor = prefs.edit();
 		editor.putBoolean(key, value);
 		editor.commit();
 	}
 	
+	/**
+	 * Set a preference float value
+	 * @param key the preference key to set
+	 * @param value the value for this key
+	 */
 	public void setPreferenceFloatValue(String key, float value) {
 		Editor editor = prefs.edit();
 		editor.putFloat(key, value);
@@ -239,6 +257,7 @@ public class PreferencesWrapper {
 	}
 	
 	//Private static getters
+	// For string
 	private static String gPrefStringValue(SharedPreferences aPrefs, String key) {
 		if(STRING_PREFS.containsKey(key)) {
 			return aPrefs.getString(key, STRING_PREFS.get(key));
@@ -246,6 +265,7 @@ public class PreferencesWrapper {
 		return null;
 	}
 	
+	// For boolean
 	private static Boolean gPrefBooleanValue(SharedPreferences aPrefs, String key) {
 		if(BOOLEAN_PREFS.containsKey(key)) {
 			return aPrefs.getBoolean(key, BOOLEAN_PREFS.get(key));
@@ -253,6 +273,7 @@ public class PreferencesWrapper {
 		return null;
 	}
 	
+	// For float
 	private static Float gPrefFloatValue(SharedPreferences aPrefs, String key) {
 		if(FLOAT_PREFS.containsKey(key)) {
 			return aPrefs.getFloat(key, FLOAT_PREFS.get(key));
@@ -260,18 +281,50 @@ public class PreferencesWrapper {
 		return null;
 	}
 	
-	//Public getters
+	/**
+	 * Get string preference value
+	 * @param key the key preference to retrieve
+	 * @return the value
+	 */
 	public String getPreferenceStringValue(String key) {
 		return gPrefStringValue(prefs, key);
 	}
 	
+	/**
+	 * Get boolean preference value
+	 * @param key the key preference to retrieve
+	 * @return the value
+	 */
 	public Boolean getPreferenceBooleanValue(String key) {
 		return gPrefBooleanValue(prefs, key);
 	}
 	
+	/**
+	 * Get float preference value
+	 * @param key the key preference to retrieve
+	 * @return the value
+	 */
 	public Float getPreferenceFloatValue(String key) {
 		return gPrefFloatValue(prefs, key);
 	}
+	
+	/**
+	 * Set all values to default
+	 */
+	public void resetAllDefaultValues() {
+		for(String key : STRING_PREFS.keySet() ) {
+			setPreferenceStringValue(key, STRING_PREFS.get(key));
+		}
+		for(String key : BOOLEAN_PREFS.keySet() ) {
+			setPreferenceBooleanValue(key, BOOLEAN_PREFS.get(key));
+		}
+		for(String key : FLOAT_PREFS.keySet() ) {
+			setPreferenceFloatValue(key, FLOAT_PREFS.get(key));
+		}
+		Compatibility.setFirstRunParameters(this);
+	}
+	
+	
 	
 	// Network part
 	
@@ -892,6 +945,10 @@ public class PreferencesWrapper {
 	 */
 	public boolean hasAlreadySetup() {
 		return prefs.getBoolean(HAS_ALREADY_SETUP, false);
+	}
+	
+	public boolean hasAlreadySetupService() {
+		return prefs.getBoolean(HAS_ALREADY_SETUP_SERVICE, false);
 	}
 
 	//Utils

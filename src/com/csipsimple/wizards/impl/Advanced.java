@@ -18,14 +18,14 @@
 package com.csipsimple.wizards.impl;
 
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.utils.Log;
 
 public class Advanced extends BaseImplementation {
@@ -54,24 +54,12 @@ public class Advanced extends BaseImplementation {
 		
 		accountDisplayName.setText(account.display_name);
 		
-		String server = "";
-		String caller_id = "";
-		String account_cfgid = account.acc_id;
-		if(account_cfgid == null) {
-			account_cfgid = "";
-		}
-		Pattern p = Pattern.compile("([^<]*)<sip:([^@]*)@([^>]*)>");
-		Matcher m = p.matcher(account_cfgid);
-
-		if (m.matches()) {
-			caller_id = m.group(1);
-			account_cfgid = m.group(2);
-			server = m.group(3);
-		}
 		
-		accountServer.setText(server);
-		accountCallerId.setText(caller_id);
-		accountUserName.setText(account_cfgid);
+		ParsedSipContactInfos parsedInfo = SipUri.parseSipContact(account.acc_id);
+		
+		accountServer.setText(parsedInfo.domain);
+		accountCallerId.setText(parsedInfo.displayName);
+		accountUserName.setText(parsedInfo.userName);
 		
 		accountPassword.setText(account.data);
 
@@ -131,8 +119,8 @@ public class Advanced extends BaseImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
-		account.acc_id = accountCallerId.getText().trim() + " <sip:"
-				+ accountUserName.getText() + "@"+accountServer.getText()+">";
+		account.acc_id = accountCallerId.getText().trim() + 
+			" <sip:" + accountUserName.getText() + "@" + accountServer.getText() + ">";
 		
 		account.reg_uri = "sip:" + accountServer.getText();
 
