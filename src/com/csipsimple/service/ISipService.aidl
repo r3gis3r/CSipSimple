@@ -17,7 +17,7 @@
  */
 package com.csipsimple.service;
 import com.csipsimple.models.AccountInfo;
-import com.csipsimple.models.CallInfo;
+import com.csipsimple.api.SipCallSession;
 
 interface ISipService{
 	//Stack control
@@ -45,8 +45,8 @@ interface ISipService{
 	int reinvite(int callId, boolean unhold);
 	int xfer(int callId, in String callee);
 	int xferReplace(int callId, int otherCallId, int options);
-	CallInfo getCallInfo(int callId);
-	CallInfo[] getCalls();
+	SipCallSession getCallInfo(int callId);
+	SipCallSession[] getCalls();
 	
 	//Media control
 	void setMicrophoneMute(boolean on);

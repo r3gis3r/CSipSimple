@@ -20,8 +20,6 @@ package com.csipsimple.ui;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.pjsip.pjsua.pjsip_inv_state;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -46,7 +44,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
-import com.csipsimple.models.CallInfo;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.service.ISipConfiguration;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.utils.Log;
@@ -158,14 +156,14 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 			if(action.equals(SipManager.ACTION_SIP_CALL_CHANGED)){
 				if(sipService != null) {
 					try {
-						CallInfo[] callsInfo = sipService.getCalls();
-						CallInfo currentCallInfo = null;
+						SipCallSession[] callsInfo = sipService.getCalls();
+						SipCallSession currentCallInfo = null;
 						if(callsInfo != null) {
-							for(CallInfo callInfo : callsInfo) {
-								pjsip_inv_state state = callInfo.getCallState();
+							for(SipCallSession callInfo : callsInfo) {
+								int state = callInfo.getCallState();
 								switch (state) {
-									case PJSIP_INV_STATE_NULL:
-									case PJSIP_INV_STATE_DISCONNECTED:
+									case SipCallSession.InvState.NULL:
+									case SipCallSession.InvState.DISCONNECTED:
 										break;
 									default:
 										currentCallInfo = callInfo;

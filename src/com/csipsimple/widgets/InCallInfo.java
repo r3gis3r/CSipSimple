@@ -18,8 +18,6 @@
 package com.csipsimple.widgets;
 
 
-import org.pjsip.pjsua.pjsip_inv_state;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
@@ -35,12 +33,14 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.CallerInfo;
+import com.csipsimple.models.PjSipCalls;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 
@@ -48,7 +48,7 @@ import com.csipsimple.utils.Log;
 public class InCallInfo extends FrameLayout {
 	
 	private static final String THIS_FILE = "InCallInfo";
-	CallInfo callInfo;
+	SipCallSession callInfo;
 	String remoteUri = "";
 	private ImageView photo;
 	private TextView remoteName, title;
@@ -95,7 +95,7 @@ public class InCallInfo extends FrameLayout {
 		secure.bringToFront();
 	}
 
-	public void setCallState(CallInfo aCallInfo) {
+	public void setCallState(SipCallSession aCallInfo) {
 		callInfo = aCallInfo;
 		//TODO: see if should be threaded now could improve loading speed of this view on old devices
 //		Thread t = new Thread() {
@@ -157,16 +157,16 @@ public class InCallInfo extends FrameLayout {
 		elapsedTime.setBase(callInfo.getConnectStart());
 		secure.setVisibility(callInfo.isSecure()?View.VISIBLE:View.GONE);
 		
-		pjsip_inv_state state = callInfo.getCallState();
+		int state = callInfo.getCallState();
 		switch (state) {
-		case PJSIP_INV_STATE_INCOMING:
-		case PJSIP_INV_STATE_CALLING:
-		case PJSIP_INV_STATE_EARLY:
-		case PJSIP_INV_STATE_CONNECTING:
+		case SipCallSession.InvState.INCOMING:
+		case SipCallSession.InvState.CALLING:
+		case SipCallSession.InvState.EARLY:
+		case SipCallSession.InvState.CONNECTING:
 			elapsedTime.setVisibility(GONE);
 			elapsedTime.start();
 			break;
-		case PJSIP_INV_STATE_CONFIRMED:
+		case SipCallSession.InvState.CONFIRMED:
 			Log.d(THIS_FILE, "we start the timer now ");
 			
 			elapsedTime.start();
@@ -174,8 +174,8 @@ public class InCallInfo extends FrameLayout {
 			elapsedTime.setTextColor(colorConnected);
 			
 			break;
-		case PJSIP_INV_STATE_NULL:
-		case PJSIP_INV_STATE_DISCONNECTED:
+		case SipCallSession.InvState.NULL:
+		case SipCallSession.InvState.DISCONNECTED:
 			elapsedTime.stop();
 			elapsedTime.setVisibility(VISIBLE);
 			elapsedTime.setTextColor(colorEnd);
@@ -185,7 +185,7 @@ public class InCallInfo extends FrameLayout {
 	
 	private void updateTitle() {
 		if(callInfo != null) {
-			title.setText(callInfo.getStringCallState(context));
+			title.setText(CallsUtils.getStringCallState(callInfo, context));
 		}else {
 			title.setText(R.string.call_state_disconnected);
 		}
@@ -197,7 +197,7 @@ public class InCallInfo extends FrameLayout {
 		currentInfo.setVisibility(showDetails?GONE:VISIBLE);
 		currentDetailedInfo.setVisibility(showDetails?VISIBLE:GONE);
 		if(showDetails && callInfo != null) {
-			String infos = callInfo.dumpCallInfo();
+			String infos = PjSipCalls.dumpCallInfo(callInfo.getCallId());
 			TextView detailText = (TextView) findViewById(R.id.detailsText);
 			detailText.setText(infos);
 		}

@@ -72,11 +72,10 @@ import android.widget.Toast;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.AccountInfo;
-import com.csipsimple.models.CallInfo;
-import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.models.PjSipAccount;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.pjsip.NativeLibManager;
@@ -280,21 +279,10 @@ public class SipService extends Service {
 		}
 
 		@Override
-		public CallInfo getCallInfo(int callId) throws RemoteException {
+		public SipCallSession getCallInfo(int callId) throws RemoteException {
 			synchronized (creatingSipStack) {
 				if (created/* && !creating */ && userAgentReceiver != null) {
-					CallInfo callInfo = userAgentReceiver.getCallInfo(callId);
-					if (callInfo == null) {
-						return null;
-					}
-					if (callId != callInfo.getCallId()) {
-						Log.w(THIS_FILE, "we try to get an info for a call that is not the current one :  " + callId);
-						try {
-							callInfo = new CallInfo(callId);
-						} catch (UnavailableException e) {
-							throw new RemoteException();
-						}
-					}
+					SipCallSession callInfo = userAgentReceiver.getCallInfo(callId);
 					return callInfo;
 				}
 			}
@@ -339,10 +327,10 @@ public class SipService extends Service {
 		}
 
 		@Override
-		public CallInfo[] getCalls() throws RemoteException {
+		public SipCallSession[] getCalls() throws RemoteException {
 			synchronized (creatingSipStack) {
 				if (created && userAgentReceiver != null) {
-					CallInfo[] callsInfo = userAgentReceiver.getCalls();
+					SipCallSession[] callsInfo = userAgentReceiver.getCalls();
 					return callsInfo;
 				}
 			}
@@ -571,7 +559,7 @@ public class SipService extends Service {
 
 			// If new call state is not idle
 			if (state != TelephonyManager.CALL_STATE_IDLE && userAgentReceiver != null) {
-				CallInfo currentActiveCall = userAgentReceiver.getActiveCallInProgress();
+				SipCallSession currentActiveCall = userAgentReceiver.getActiveCallInProgress();
 				
 				if (currentActiveCall != null) {
 				

@@ -22,11 +22,8 @@ import java.util.regex.Pattern;
 
 import android.text.TextUtils;
 
-import com.csipsimple.utils.Log;
 
 public class SipUri {
-
-	private static final String THIS_FILE = "SipUri";
 	
 	private static String digitNumberPatter = "^[0-9\\-#\\+\\*\\(\\)]+$";
 	
@@ -61,7 +58,6 @@ public class SipUri {
     	ParsedSipContactInfos parsedInfos = new ParsedSipContactInfos();
     	
     	if(!TextUtils.isEmpty(sipUri)) {
-	    	Log.d(THIS_FILE, "Parsing " + sipUri);
 			Matcher m = ParsedSipContactInfos.sipContactSpliter.matcher(sipUri);
 			if (m.matches()) {
 				parsedInfos.displayName = m.group(1).trim();
@@ -139,7 +135,6 @@ public class SipUri {
 		ParsedSipUriInfos parsedInfos = new ParsedSipUriInfos();
 
 		if (!TextUtils.isEmpty(sipUri)) {
-			Log.d(THIS_FILE, "Parsing uri " + sipUri+ " with "+sipUriSpliter.toString());
 			Matcher m = sipUriSpliter.matcher(sipUri);
 			if (m.matches()) {
 				parsedInfos.scheme = m.group(1);
@@ -148,7 +143,7 @@ public class SipUri {
 					try{
 						parsedInfos.port = Integer.parseInt(m.group(3));
 					}catch(NumberFormatException e) {
-						Log.e(THIS_FILE, "Unable to parse port number");
+						//Log.e(THIS_FILE, "Unable to parse port number");
 					}
 				}
 			}

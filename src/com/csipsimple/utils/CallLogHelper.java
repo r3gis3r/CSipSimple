@@ -17,13 +17,13 @@
  */
 package com.csipsimple.utils;
 
-import com.csipsimple.models.CallInfo;
-import com.csipsimple.models.CallerInfo;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.provider.CallLog;
+
+import com.csipsimple.api.SipCallSession;
+import com.csipsimple.models.CallerInfo;
 
 public class CallLogHelper {
 
@@ -34,7 +34,7 @@ public class CallLogHelper {
 	}
 	
 	
-	public static ContentValues logValuesForCall(Context context, CallInfo call, long callStart) {
+	public static ContentValues logValuesForCall(Context context, SipCallSession call, long callStart) {
 		ContentValues cv = new ContentValues();
 		String remoteContact = call.getRemoteContact();
 		

@@ -19,9 +19,6 @@
  */
 package com.csipsimple.widgets;
 
-import org.pjsip.pjsua.pjsip_inv_state;
-import org.pjsip.pjsua.pjsua_call_media_status;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -36,7 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.csipsimple.R;
-import com.csipsimple.models.CallInfo;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.service.MediaManager.MediaState;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -247,7 +244,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	}
 
 
-	public void setCallState(CallInfo callInfo) {
+	public void setCallState(SipCallSession callInfo) {
 		if(callInfo == null) {
 			controlMode = MODE_NO_ACTION;
 			inCallButtons.setVisibility(GONE);
@@ -255,23 +252,23 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			return;
 		}
 		
-		pjsip_inv_state state = callInfo.getCallState();
+		int state = callInfo.getCallState();
 		switch (state) {
-		case PJSIP_INV_STATE_INCOMING:
+		case SipCallSession.InvState.INCOMING:
 			controlMode = MODE_LOCKER;
 			inCallButtons.setVisibility(GONE);
 			setCallLockerVisibility(VISIBLE);
 			inCallButtons.setVisibility(GONE);
 			break;
-		case PJSIP_INV_STATE_CALLING:
-		case PJSIP_INV_STATE_CONNECTING:
+		case SipCallSession.InvState.CALLING:
+		case SipCallSession.InvState.CONNECTING:
 			controlMode = MODE_CONTROL;
 			setCallLockerVisibility(GONE);
 			inCallButtons.setVisibility(VISIBLE);
 			clearCallButton.setEnabled(true);
 			setEnabledMediaButtons(true);
 			break;
-		case PJSIP_INV_STATE_CONFIRMED:
+		case SipCallSession.InvState.CONFIRMED:
 			controlMode = MODE_CONTROL;
 			setCallLockerVisibility(GONE);
 			inCallButtons.setVisibility(VISIBLE);
@@ -279,13 +276,13 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			clearCallButton.setEnabled(true);
 			setEnabledMediaButtons(true);
 			break;
-		case PJSIP_INV_STATE_NULL:
-		case PJSIP_INV_STATE_DISCONNECTED:
+		case SipCallSession.InvState.NULL:
+		case SipCallSession.InvState.DISCONNECTED:
 			controlMode = MODE_NO_ACTION;
 			inCallButtons.setVisibility(GONE);
 			setCallLockerVisibility(GONE);
 			break;
-		case PJSIP_INV_STATE_EARLY:
+		case SipCallSession.InvState.EARLY:
 		default:
 			if (callInfo.isIncoming()) {
 				controlMode = MODE_LOCKER;
@@ -302,17 +299,17 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			break;
 		}
 		
-		pjsua_call_media_status mediaStatus = callInfo.getMediaStatus();
+		int mediaStatus = callInfo.getMediaStatus();
 		switch (mediaStatus) {
-		case PJSUA_CALL_MEDIA_ACTIVE:
-		case PJSUA_CALL_MEDIA_REMOTE_HOLD:
+		case SipCallSession.MediaState.ACTIVE:
+		case SipCallSession.MediaState.REMOTE_HOLD:
 			holdButton.setImageResource(R.drawable.ic_in_call_touch_round_hold);
 			break;
-		case PJSUA_CALL_MEDIA_LOCAL_HOLD:
-		case PJSUA_CALL_MEDIA_NONE:
+		case SipCallSession.MediaState.LOCAL_HOLD:
+		case SipCallSession.MediaState.NONE:
 			holdButton.setImageResource(R.drawable.ic_in_call_touch_round_unhold);
 			break;
-		case PJSUA_CALL_MEDIA_ERROR:
+		case SipCallSession.MediaState.ERROR:
 		default:
 			break;
 		}

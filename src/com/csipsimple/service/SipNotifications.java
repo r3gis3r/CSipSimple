@@ -34,9 +34,9 @@ import android.text.style.StyleSpan;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.AccountInfo;
-import com.csipsimple.models.CallInfo;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.widgets.RegistrationNotification;
 
@@ -90,7 +90,7 @@ public class SipNotifications {
 	}
 
 	// Calls
-	public void showNotificationForCall(CallInfo currentCallInfo2) {
+	public void showNotificationForCall(SipCallSession currentCallInfo2) {
 		// This is the pending call notification
 		//int icon = R.drawable.ic_incall_ongoing;
 		int icon = android.R.drawable.stat_sys_phone_call;

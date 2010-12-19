@@ -17,7 +17,7 @@
  */
 package com.csipsimple.api;
 
-public class SipManager {
+public final class SipManager {
 	// -------
 	// Static constants
 	// -------

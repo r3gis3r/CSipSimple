@@ -32,12 +32,9 @@ import org.pjsip.pjsua.SWIGTYPE_p_pjmedia_session;
 import org.pjsip.pjsua.SWIGTYPE_p_pjsip_rx_data;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsip_event;
-import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
-import org.pjsip.pjsua.pjsua_call_info;
-import org.pjsip.pjsua.pjsua_call_media_status;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -56,12 +53,13 @@ import android.text.format.DateFormat;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.CallInfo;
-import com.csipsimple.models.CallInfo.UnavailableException;
 import com.csipsimple.models.Filter;
+import com.csipsimple.models.PjSipCalls;
+import com.csipsimple.models.PjSipCalls.UnavailableException;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
@@ -84,9 +82,9 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 		//Check if we have not already an ongoing call
-		CallInfo existingOngoingCall = getActiveCallInProgress();
+		SipCallSession existingOngoingCall = getActiveCallInProgress();
 		if(existingOngoingCall != null) {
-			if(existingOngoingCall.getCallState().equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
+			if(existingOngoingCall.getCallState() == SipCallSession.InvState.CONFIRMED) {
 				Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
 				//If there is an ongoing call... For now decline TODO : should here manage multiple calls
 				pjsua.call_hangup(callId, 0, null, null);
@@ -94,7 +92,7 @@ public class UAStateReceiver extends Callback {
 			}
 		}
 		
-		CallInfo callInfo = getCallInfo(callId);
+		SipCallSession callInfo = getCallInfo(callId);
 		Log.d(THIS_FILE, "Incoming call <<");
 		treatIncomingCall(acc_id, callInfo);
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
@@ -106,9 +104,9 @@ public class UAStateReceiver extends Callback {
 	public void on_call_state(int callId, pjsip_event e) {
 		Log.d(THIS_FILE, "Call state <<");
 		//Get current infos
-		CallInfo callInfo = getCallInfo(callId);
-		pjsip_inv_state callState = callInfo.getCallState();
-		if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+		SipCallSession callInfo = getCallInfo(callId);
+		int callState = callInfo.getCallState();
+		if (callState == SipCallSession.InvState.DISCONNECTED) {
 			if(SipService.mediaManager != null) {
 				SipService.mediaManager.stopAnnoucing();
 				SipService.mediaManager.resetSettings();
@@ -201,12 +199,11 @@ public class UAStateReceiver extends Callback {
 			incomingCallLock.release();
 		}
 		
-		pjsua_call_info info = new pjsua_call_info();
-		pjsua.call_get_info(callId, info);
-		CallInfo callInfo = new CallInfo(info);
-		if (callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE)) {
-			pjsua.conf_connect(info.getConf_slot(), 0);
-			pjsua.conf_connect(0, info.getConf_slot());
+		SipCallSession callInfo = getCallInfo(callId);
+		
+		if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
+			pjsua.conf_connect(callInfo.getConfPort(), 0);
+			pjsua.conf_connect(0, callInfo.getConfPort());
 			pjsua.conf_adjust_tx_level(0, service.prefsWrapper.getSpeakerLevel());
 			float micLevel = service.prefsWrapper.getMicLevel();
 			if(SipService.mediaManager != null && SipService.mediaManager.isUserWantMicrophoneMute()) {
@@ -231,23 +228,19 @@ public class UAStateReceiver extends Callback {
 	// -------
 	// Current call management -- assume for now one unique call is managed
 	// -------
-	private HashMap<Integer, CallInfo> callsList = new HashMap<Integer, CallInfo>();
+	private HashMap<Integer, SipCallSession> callsList = new HashMap<Integer, SipCallSession>();
 	//private long currentCallStart = 0;
 	
-	public CallInfo getCallInfo(Integer callId) {
+	public SipCallSession getCallInfo(Integer callId) {
 		Log.d(THIS_FILE, "Get call info");
-		CallInfo callInfo = callsList.get(callId);
+		SipCallSession callInfo = callsList.get(callId);
 		if(callInfo == null) {
-			try {
-				callInfo = new CallInfo(callId);
-				callsList.put(callId, callInfo);
-			} catch (UnavailableException e) {
-				//TODO : treat error
-			}
+			callInfo = PjSipCalls.getCallInfo(callId);
+			callsList.put(callId, callInfo);
 		} else {
 			//Update from pjsip
 			try {
-				callInfo.updateFromPj();
+				PjSipCalls.updateSessionFromPj(callInfo);
 			} catch (UnavailableException e) {
 				//TODO : treat error
 			}
@@ -256,12 +249,12 @@ public class UAStateReceiver extends Callback {
 		return callInfo;
 	}
 	
-	public CallInfo[] getCalls() {
+	public SipCallSession[] getCalls() {
 		if(callsList != null ) {
 			
-			CallInfo[] callsInfos = new CallInfo[callsList.size()];
+			SipCallSession[] callsInfos = new SipCallSession[callsList.size()];
 			int i = 0;
-			for( Entry<Integer, CallInfo> entry : callsList.entrySet()) {
+			for( Entry<Integer, SipCallSession> entry : callsList.entrySet()) {
 				callsInfos[i] = entry.getValue();
 				i++;
 			}
@@ -302,20 +295,23 @@ public class UAStateReceiver extends Callback {
 			}
 			
 			case ON_CALL_STATE:{
-				CallInfo callInfo = (CallInfo) msg.obj;
-				pjsip_inv_state callState = callInfo.getCallState();
-				
-				if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_INCOMING) || 
-						callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CALLING)) {
+				SipCallSession callInfo = (SipCallSession) msg.obj;
+				int callState = callInfo.getCallState();
+				switch (callState) {
+				case SipCallSession.InvState.INCOMING:
+				case SipCallSession.InvState.CALLING:
 					notificationManager.showNotificationForCall(callInfo);
 					launchCallHandler(callInfo);
 					broadCastAndroidCallState("RINGING", callInfo.getRemoteContact());
-				} else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
+					break;
+				case SipCallSession.InvState.EARLY:
 					broadCastAndroidCallState("OFFHOOK", callInfo.getRemoteContact());
-				} else if(callState.equals(pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED)) {
+					break;
+				case SipCallSession.InvState.CONFIRMED:
 					broadCastAndroidCallState("OFFHOOK", callInfo.getRemoteContact());
 					callInfo.callStart = System.currentTimeMillis();
-				}else if (callState.equals(pjsip_inv_state.PJSIP_INV_STATE_DISCONNECTED)) {
+					break;
+				case SipCallSession.InvState.DISCONNECTED:
 					//TODO : should manage multiple calls
 					if(getActiveCallInProgress() == null) {
 						notificationManager.cancelCalls();
@@ -364,14 +360,17 @@ public class UAStateReceiver extends Callback {
 					
 					
 					broadCastAndroidCallState("IDLE", callInfo.getRemoteContact());
+					break;
+				default:
+					break;
 				}
 				onBroadcastCallState(callInfo);
 				break;
 			}
 			case ON_MEDIA_STATE:{
-				CallInfo mediaCallInfo = (CallInfo) msg.obj;
-				CallInfo callInfo = callsList.get(mediaCallInfo.getCallId());
-				callInfo.setMediaState(mediaCallInfo.getMediaStatus());
+				SipCallSession mediaCallInfo = (SipCallSession) msg.obj;
+				SipCallSession callInfo = callsList.get(mediaCallInfo.getCallId());
+				callInfo.setMediaStatus(mediaCallInfo.getMediaStatus());
 				onBroadcastCallState(callInfo);
 				break;
 			}
@@ -398,7 +397,7 @@ public class UAStateReceiver extends Callback {
 	};
 	
 	
-	private void treatIncomingCall(int accountId, CallInfo callInfo) {
+	private void treatIncomingCall(int accountId, SipCallSession callInfo) {
 		int callId = callInfo.getCallId();
 		
 
@@ -516,7 +515,7 @@ public class UAStateReceiver extends Callback {
 	// --------
 	
 
-	private void onBroadcastCallState(final CallInfo callInfo) {
+	private void onBroadcastCallState(final SipCallSession callInfo) {
 		//Internal event
 		Intent callStateChangedIntent = new Intent(SipManager.ACTION_SIP_CALL_CHANGED);
 		callStateChangedIntent.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
@@ -541,7 +540,7 @@ public class UAStateReceiver extends Callback {
 	 * @param currentCallInfo2 
 	 * @param callInfo
 	 */
-	private synchronized void launchCallHandler(CallInfo currentCallInfo2) {
+	private synchronized void launchCallHandler(SipCallSession currentCallInfo2) {
 		
 		// Launch activity to choose what to do with this call
 		Intent callHandlerIntent = new Intent(SipManager.ACTION_SIP_CALL_UI); //new Intent(service, getInCallClass());
@@ -558,7 +557,7 @@ public class UAStateReceiver extends Callback {
 	 * Check if any of call infos indicate there is an active
 	 * call in progress.
 	 */
-	public CallInfo getActiveCallInProgress() {
+	public SipCallSession getActiveCallInProgress() {
 		//Log.d(THIS_FILE, "isActiveCallInProgress(), number of calls: " + callsList.keySet().size());
 		
 		//
@@ -566,7 +565,7 @@ public class UAStateReceiver extends Callback {
 		// any call is in an active state.
 		//
 		for (Integer i : callsList.keySet()) { 
-			CallInfo callInfo = getCallInfo(i);
+			SipCallSession callInfo = getCallInfo(i);
 			if (callInfo.isActive()) {
 				return callInfo;
 			}
@@ -580,23 +579,23 @@ public class UAStateReceiver extends Callback {
 	 * there is any call in progress.
 	 */
 	public boolean handleHeadsetButton() {
-		CallInfo callInfo = getActiveCallInProgress();
+		SipCallSession callInfo = getActiveCallInProgress();
 		if (callInfo != null) {
 			// Headset button has been pressed by user. If there is an
 			// incoming call ringing the button will be used to answer the
 			// call. If there is an ongoing call in progress the button will
 			// be used to hangup the call or mute the microphone.
-    		pjsip_inv_state state = callInfo.getCallState();
+    		int state = callInfo.getCallState();
     		if (callInfo.isIncoming() && 
-    				(state == pjsip_inv_state.PJSIP_INV_STATE_INCOMING || 
-    				state == pjsip_inv_state.PJSIP_INV_STATE_EARLY)) {
+    				(state == SipCallSession.InvState.INCOMING || 
+    				state == SipCallSession.InvState.EARLY)) {
     			service.callAnswer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
     			return true;
-    		}else if(state == pjsip_inv_state.PJSIP_INV_STATE_INCOMING || 
-    				state == pjsip_inv_state.PJSIP_INV_STATE_EARLY ||
-    				state == pjsip_inv_state.PJSIP_INV_STATE_CALLING ||
-    				state == pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED ||
-    				state == pjsip_inv_state.PJSIP_INV_STATE_CONNECTING){
+    		}else if(state == SipCallSession.InvState.INCOMING || 
+    				state == SipCallSession.InvState.EARLY ||
+    				state == SipCallSession.InvState.CALLING ||
+    				state == SipCallSession.InvState.CONFIRMED ||
+    				state == SipCallSession.InvState.CONNECTING){
     			//
 				// In the Android phone app using the media button during
 				// a call mutes the microphone instead of terminating the call.
@@ -627,8 +626,8 @@ public class UAStateReceiver extends Callback {
 	public void startRecording(int callId) {
 		// Ensure nothing is recording actually
 		if (recordedCall == INVALID_RECORD) {
-			CallInfo callInfo = getCallInfo(callId);
-			if(callInfo == null || ! callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE)) {
+			SipCallSession callInfo = getCallInfo(callId);
+			if(callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
 				return;
 			}
 			
@@ -664,8 +663,8 @@ public class UAStateReceiver extends Callback {
 	
 	public boolean canRecord(int callId) {
 		if (recordedCall == INVALID_RECORD) {
-			CallInfo callInfo = getCallInfo(callId);
-			if(callInfo == null || !callInfo.getMediaStatus().equals(pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE)) {
+			SipCallSession callInfo = getCallInfo(callId);
+			if(callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
 				return false;
 			}
 			return true;
