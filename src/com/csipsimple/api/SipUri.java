@@ -34,13 +34,24 @@ public class SipUri {
 	//Contact related
 
     public static class ParsedSipContactInfos {
+    	private static Pattern sipContactSpliter = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?(sip(?:s)?):([^@]*)@([^>]*)(?:>)?");
+    	
+    	
     	public String displayName = "";
     	public String userName = "";
     	public String domain = "";
     	public String scheme = "sip";
+    	
+    	@Override
+    	public String toString() {
+    		String buildString = "<"+scheme+":"+userName+"@"+domain+">";
+    		if(!TextUtils.isEmpty(userName)) {
+    			buildString = displayName + " "+buildString;
+    		}
+    		return buildString;
+    	}
     }
-    private static Pattern sipContactSpliter = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?(sip(?:s)?):([^@]*)@([^>]*)(?:>)?");
-	
+    
 	/**
 	 * Parse a sip contact
 	 * @param sipUri string sip contact
@@ -51,7 +62,7 @@ public class SipUri {
     	
     	if(!TextUtils.isEmpty(sipUri)) {
 	    	Log.d(THIS_FILE, "Parsing " + sipUri);
-			Matcher m = sipContactSpliter.matcher(sipUri);
+			Matcher m = ParsedSipContactInfos.sipContactSpliter.matcher(sipUri);
 			if (m.matches()) {
 				parsedInfos.displayName = m.group(1).trim();
 				parsedInfos.domain = m.group(4);
@@ -102,7 +113,7 @@ public class SipUri {
      */
     public static String getCanonicalSipContact(String sipContact) {
     	String result = sipContact;
-    	Matcher m = sipContactSpliter.matcher(sipContact);
+    	Matcher m = ParsedSipContactInfos.sipContactSpliter.matcher(sipContact);
 		if (m.matches()) {
 			result = m.group(2)+":"+m.group(3)+"@"+m.group(4);
 		}

@@ -875,14 +875,8 @@ public class PreferencesWrapper {
 	}
 	
 	public int getLogLevel() {
-		int prefsValue = 1;
-		String logLevel = getPreferenceStringValue(LOG_LEVEL);
-		try {
-			prefsValue = Integer.parseInt(logLevel);
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Audio quality "+logLevel+" not well formated");
-		}
-		if(prefsValue <= 5 && prefsValue >= 1) {
+		int prefsValue = getPreferenceIntegerValue(LOG_LEVEL);
+		if(prefsValue <= 6 && prefsValue >= 1) {
 			return prefsValue;
 		}
 		return 1;
@@ -1019,16 +1013,5 @@ public class PreferencesWrapper {
 	public void setQuit(boolean quit) {
 		setPreferenceBooleanValue(HAS_BEEN_QUIT, quit);
 	}
-
-
-	
-
-
-
-
-	
-
-
-
 
 }

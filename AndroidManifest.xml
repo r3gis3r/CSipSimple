@@ -77,6 +77,7 @@
 		<activity android:name="com.csipsimple.ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
 		<activity android:name="com.csipsimple.ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
 		<activity android:name="com.csipsimple.ui.prefs.PrefsCalls" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.prefs.PrefsFilters" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
 		<activity android:name="com.csipsimple.ui.prefs.PrefsFast" android:label="@string/prefs_fast" 
 			android:theme="@style/CupcakeDialog" android:screenOrientation="portrait">
 			<intent-filter>

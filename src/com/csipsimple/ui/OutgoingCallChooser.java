@@ -156,11 +156,8 @@ public class OutgoingCallChooser extends ListActivity {
 
 		// Start service and bind it. Finish selector in onServiceConnected
 		Intent sipService = new Intent(this, SipService.class);
-		startService(sipService);
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
-		
-
 		
 	}
 	
@@ -168,10 +165,13 @@ public class OutgoingCallChooser extends ListActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if (service != null) {
+		try {
 			unbindService(connection);
+		}catch(Exception e) {}
+		
+		try {
 			unregisterReceiver(regStateReceiver);
-		}
+		}catch(Exception e) {}
 	}
 
 	private void bindAddedRows() {
@@ -278,6 +278,12 @@ public class OutgoingCallChooser extends ListActivity {
 				return account;
 			}
 		}
+		// Check GSM account
+		SipProfile gsmProfile = new SipProfile();
+		gsmProfile.id = SipProfile.GSM_ACCOUNT_ID;
+		if(Filter.isMustCallNumber(gsmProfile, number, db)) {
+			return gsmProfile;
+		}
 		return null;
 	}
 
@@ -300,7 +306,7 @@ public class OutgoingCallChooser extends ListActivity {
 		accountsList = database.getListAccounts(true/*, service*/);
 		database.close();
 		
-		//Exclude filtered accounts - TODO : move to db?
+		//Exclude filtered accounts
 		List<SipProfile> excludedAccounts = new ArrayList<SipProfile>();
 		String phoneNumber = number;
 		for(SipProfile acc : accountsList) {
@@ -310,6 +316,17 @@ public class OutgoingCallChooser extends ListActivity {
 		}
 		for(SipProfile acc : excludedAccounts) {
 			accountsList.remove(acc);
+		}
+		//Exclude GSM
+		SipProfile gsmProfile = new SipProfile();
+		gsmProfile.id = SipProfile.GSM_ACCOUNT_ID;
+		LinearLayout gsmRow = (LinearLayout) findViewById(R.id.use_pstn_row);
+		if(gsmRow != null) {
+			if(! Filter.isCallableNumber(gsmProfile, number, database)) {
+				gsmRow.setVisibility(View.GONE);
+			}else {
+				gsmRow.setVisibility(View.VISIBLE);
+			}
 		}
 		
     	if(adapter == null) {
@@ -362,7 +379,11 @@ public class OutgoingCallChooser extends ListActivity {
 	private boolean checkIfMustAccountNotValid() {
 		
 		if (service != null && accountToCallTo != null) {
-
+			if(accountToCallTo == SipProfile.GSM_ACCOUNT_ID) {
+				placePstnCall();
+				return true;
+			}
+			
 	    	database.open();
 	    	SipProfile account = database.getAccount(accountToCallTo);
 			database.close();

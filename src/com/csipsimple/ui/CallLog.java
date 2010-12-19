@@ -121,8 +121,7 @@ public class CallLog extends ListActivity {
 
         
 		Intent sipService = new Intent(this, SipService.class);
-		//Start service and bind it
-		startService(sipService);
+		//Bind the service
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
     }
@@ -136,8 +135,12 @@ public class CallLog extends ListActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unbindService(connection);
-		unregisterReceiver(regStateReceiver);
+		try {
+			unbindService(connection);
+		}catch(Exception e) {}
+		try {
+			unregisterReceiver(regStateReceiver);
+		}catch(Exception e) {}
 	}
 
     @Override

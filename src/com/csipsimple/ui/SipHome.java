@@ -283,6 +283,7 @@ public class SipHome extends TabActivity {
 	protected void onPause() {
 		Log.d(THIS_FILE, "On Pause SIPHOME");
 		super.onPause();
+		
 	}
 
 	@Override

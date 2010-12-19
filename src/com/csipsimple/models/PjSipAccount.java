@@ -24,14 +24,18 @@ import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_config;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class PjSipAccount {
 	
-//	private static final String THIS_FILE = "AccountModel";
+	//private static final String THIS_FILE = "PjSipAcc";
 	
 	
 	//For now everything is public, easiest to manage
@@ -138,20 +142,21 @@ public class PjSipAccount {
 	
 
 
-	public void applyExtraParams() {
+	public void applyExtraParams(Context ctxt) {
 		
+		// Transport
 		String regUri = "";
 		String argument = "";
 		switch (transport) {
 		case SipProfile.TRANSPORT_UDP:
-			argument = ";transport=UDP";
+			argument = ";lr;transport=UDP";
 			break;
 		case SipProfile.TRANSPORT_TCP:
-			argument = ";transport=TCP";
+			argument = ";lr;transport=TCP";
 			break;
 		case SipProfile.TRANSPORT_TLS:
 			//TODO : differentiate ssl/tls ?
-			argument = ";transport=TLS";
+			argument = ";lr;transport=TLS";
 			break;
 		default:
 			break;
@@ -180,6 +185,21 @@ public class PjSipAccount {
 			}
 		}
 		
+		//Caller id
+		PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
+		String defaultCallerid = prefs.getPreferenceStringValue(PreferencesWrapper.DEFAULT_CALLER_ID);
+		
+		
+		// If one default caller is set 
+		if (!TextUtils.isEmpty(defaultCallerid)) {
+			String accId = cfg.getId().getPtr();
+			ParsedSipContactInfos parsedInfos = SipUri.parseSipContact(accId);
+			if (TextUtils.isEmpty(parsedInfos.displayName)) {
+				// Apply new display name
+				parsedInfos.displayName = defaultCallerid;
+				cfg.setId(pjsua.pj_str_copy(parsedInfos.toString()));
+			}
+		}
 	}
 	
 	

@@ -544,7 +544,7 @@ public class SipService extends Service {
 				final long accountId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1);
 				final boolean active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, false);
 				//Should that be threaded?
-				if(accountId != -1) {
+				if(accountId != SipProfile.INVALID_ID) {
 					SipProfile account;
 					synchronized (db) {
 						db.open();
@@ -776,11 +776,27 @@ public class SipService extends Service {
 			return;
 		}
 
+		//The connection is valid?
 		if (!prefsWrapper.isValidConnectionForIncoming() && !prefsWrapper.isValidConnectionForOutgoing()) {
 			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.connection_not_valid, 0));
 			Log.e(THIS_FILE, "Not able to start sip stack");
 			return;
 		}
+		
+		//There is some active accounts?
+		/*
+		List<SipProfile> accs;
+		synchronized (db) {
+			db.open();
+			accs = db.getListAccounts(true);
+			db.close();
+		}
+		
+		if(accs == null || accs.size() <= 0) {
+			Log.w(THIS_FILE, "Useless to start since no account");
+			return;
+		}
+		*/
 
 		Log.i(THIS_FILE, "Will start sip : " + (!created /* && !creating */));
 		synchronized (creatingSipStack) {
@@ -1162,10 +1178,11 @@ public class SipService extends Service {
 			if (!created) {
 				Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
 				return status;
+				
 			}
 			PjSipAccount account = new PjSipAccount(profile);
 			
-			account.applyExtraParams();
+			account.applyExtraParams(this);
 
 			Integer currentAccountId = null;
 			synchronized (activeAccountsLock) {
@@ -1266,6 +1283,8 @@ public class SipService extends Service {
 		sendBroadcast(regStateChangedIntent);
 
 		updateRegistrationsState();
+		
+		
 		return status;
 	}
 
@@ -1408,6 +1427,8 @@ public class SipService extends Service {
 			notificationManager.cancelRegisters();
 			releaseResources();
 		}
+		
+		
 	}
 	
 	 

@@ -42,6 +42,7 @@
 	<string name="missed_call">Missed call</string>
 	<string name="recentCalls_empty">No Call Logs</string>
 	<string name="filters">Filters</string>
+	<string name="filters_desc">To apply when integration to Android is used</string>
 	<string name="add_filter">Add filter / rewrite rule</string>
 	<string name="delete_filter">Delete filter</string>
 	<string name="callLog_delete_entry">Delete this call</string>

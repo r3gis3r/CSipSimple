@@ -35,6 +35,7 @@ public class SipProfile implements Parcelable {
 	
 	//Constants
 	public final static int INVALID_ID = -1;
+	public final static int GSM_ACCOUNT_ID = -2;
 	
 	//Transport choices
 	public final static int TRANSPORT_AUTO = 0;

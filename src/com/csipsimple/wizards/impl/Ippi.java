@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.Log;
 import com.csipsimple.utils.MD5;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -79,8 +80,15 @@ public class Ippi extends SimpleImplementation {
 			case DID_SUCCEED: {
 				//Here we get the credit info, now add a row in the interface
 				String response = (String) message.obj;
-				customWizardText.setText("Credit : " + response + " €");
-				customWizard.setVisibility(View.VISIBLE);
+				try{
+					int value = Integer.parseInt(response);
+					if(value >= 0) {
+						customWizardText.setText("Credit : " + response + " €");
+						customWizard.setVisibility(View.VISIBLE);
+					}
+				}catch(NumberFormatException e) {
+					Log.e(THIS_FILE, "Impossible to parse result");
+				}
 				
 				break;
 			}

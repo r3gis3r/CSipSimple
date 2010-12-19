@@ -79,7 +79,9 @@ public class MainPrefs extends ListActivity {
 		prefs_list.add(new PrefGroup(R.string.prefs_ui, R.string.prefs_ui_desc, 
 				R.drawable.ic_prefs_ui, new Intent(this, PrefsUI.class)));
 		prefs_list.add(new PrefGroup(R.string.prefs_calls, R.string.prefs_calls_desc, 
-				R.drawable.ic_menu_answer_call, new Intent(this, PrefsCalls.class)));
+				R.drawable.ic_prefs_calls, new Intent(this, PrefsCalls.class)));
+		prefs_list.add(new PrefGroup(R.string.filters, R.string.filters_desc, 
+				R.drawable.ic_prefs_filter, new Intent(this, PrefsFilters.class)));
 		
 		adapter = new PrefGroupAdapter(this, prefs_list);
 		setListAdapter(adapter);
@@ -91,9 +93,7 @@ public class MainPrefs extends ListActivity {
 		try {
 			bindService(serviceIntent, restartServiceConnection, 0);
 			startService(serviceIntent);
-		}catch(Exception e) {
-			
-		}
+		}catch(Exception e) {}
 	}
 	
 	@Override

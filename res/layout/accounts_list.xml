@@ -18,6 +18,7 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical" android:background="@android:color/black">
 
+	<!-- Add account row -->
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:id="@+id/add_account"
 		android:clickable="true" android:focusable="true" android:orientation="horizontal"
@@ -30,13 +31,37 @@
 			android:textAppearance="?android:attr/textAppearanceLarge" 
 			android:textColor="@android:color/white" android:text="@string/add_account" />
 	</LinearLayout>
+	
 	<ImageView android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:scaleType="fitXY"
 		android:gravity="fill_horizontal" android:src="@drawable/divider_horizontal_dark" />
-
+	
+	
 
 	<ListView android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:id="@+id/account_list"
 		android:layout_weight="1" />
+	<!-- GSM row -->
 	
+	<ImageView android:layout_width="fill_parent"
+		android:background="@android:drawable/divider_horizontal_dark"
+		android:layout_height="1px"></ImageView>
+	<LinearLayout android:layout_width="fill_parent"
+		android:minHeight="?android:attr/listPreferredItemHeight"
+		android:orientation="horizontal" android:gravity="center_vertical"
+		android:clickable="true" android:focusable="true"
+		android:visibility="gone"
+		android:background="@android:drawable/menuitem_background"
+		android:layout_height="?android:attr/listPreferredItemHeight"
+		android:id="@+id/pstn_row">
+		<ImageView android:id="@+id/favicon" android:focusable="false"
+			android:layout_height="48px" android:layout_width="48px"
+			android:layout_margin="6dip" android:layout_gravity="center_vertical"
+			android:src="@drawable/ic_launcher_pstn_phone" android:scaleType="fitXY" />
+		<TextView android:id="@+id/title" android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textStyle="bold" android:layout_height="wrap_content"
+			android:layout_marginBottom="2dip" android:layout_gravity="center_vertical"
+			android:layout_width="fill_parent" android:layout_weight="1"
+			android:text="@string/gsm" />
+	</LinearLayout>
 </LinearLayout>
