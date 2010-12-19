@@ -38,14 +38,18 @@
 		<RingtonePreference android:key="ringtone" 
 			android:title="@string/ringtone"
 			android:summary="@string/ringtone_desc"></RingtonePreference>
-		<CheckBoxPreference android:title="@string/dial_press_tone"
-			android:defaultValue="false"
+			
+		<ListPreference android:title="@string/dial_press_tone" android:key="dial_press_tone_mode"
 			android:summary="@string/dial_press_tone_desc"
-			android:key="dial_press_tone"></CheckBoxPreference>
-		<CheckBoxPreference android:title="@string/dial_press_vibrate"
-			android:defaultValue="true"
+			android:defaultValue="0"
+			android:entryValues="@array/dial_press_mode_values" android:entries="@array/dial_press_mode_choices"/>
+		
+		<ListPreference android:title="@string/dial_press_vibrate" android:key="dial_press_vibrate_mode"
 			android:summary="@string/dial_press_vibrate_desc"
-			android:key="dial_press_vibrate"></CheckBoxPreference>
+			android:defaultValue="0"
+			android:entryValues="@array/dial_press_mode_values" android:entries="@array/dial_press_mode_choices"/>
+		
+		
 		<CheckBoxPreference android:title="@string/start_with_text_dialer"
 			android:defaultValue="false"
 			android:summary="@string/start_with_text_dialer_desc"

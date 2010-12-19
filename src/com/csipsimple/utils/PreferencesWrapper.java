@@ -74,6 +74,9 @@ public class PreferencesWrapper {
 	public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
 	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
 	public static final String GSM_INTEGRATION_TYPE = "gsm_integration_type";
+	public static final String DIAL_PRESS_TONE_MODE = "dial_press_tone_mode";
+	public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";
+	
 	
 	// NETWORK
 	public static final String TURN_SERVER = "turn_server";
@@ -157,6 +160,9 @@ public class PreferencesWrapper {
 		
 
 		put(GSM_INTEGRATION_TYPE, "0");
+		put(DIAL_PRESS_TONE_MODE, "0");
+		put(DIAL_PRESS_VIBRATE_MODE, "0");
+		
 		put(DEFAULT_CALLER_ID, "");
 		
 		
@@ -826,17 +832,33 @@ public class PreferencesWrapper {
 	// UI related
 	// ----
 	public boolean getDialPressTone() {
-		if(prefs.getBoolean("dial_press_tone", false)) {
+		int mode = getPreferenceIntegerValue(DIAL_PRESS_TONE_MODE);
+		switch (mode) {
+		case 0:
 			return Settings.System.getInt(resolver,
 	                Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1;
+		case 1:
+			return true;
+		case 2:
+			return false;
+		default:
+			break;
 		}
 		return false;
 	}
 
 	public boolean getDialPressVibrate() {
-		if(prefs.getBoolean("dial_press_tone", false)) {
+		int mode = getPreferenceIntegerValue(DIAL_PRESS_VIBRATE_MODE);
+		switch (mode) {
+		case 0:
 			return Settings.System.getInt(resolver,
 	                Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1;
+		case 1:
+			return true;
+		case 2:
+			return false;
+		default:
+			break;
 		}
 		return false;
 	}
