@@ -196,7 +196,7 @@ public class PreferencesWrapper {
 		put(TLS_VERIFY_SERVER, false);
 //		put(TLS_VERIFY_CLIENT, false);
 		
-		put(ENABLE_QOS, true);
+		put(ENABLE_QOS, false);
 		
 		//Network
 		put("use_wifi_in", true);

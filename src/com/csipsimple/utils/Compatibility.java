@@ -320,6 +320,9 @@ public class Compatibility {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP_SERVICE, true);
 			}
 		}
+		if(lastSeenVersion < 471) {
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_QOS, false);
+		}
 	}
 
 
