@@ -69,6 +69,7 @@ public class Gizmo5 extends SimpleImplementation {
 		// Add stun server
 		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
 		prefs.addStunServer("stun01.sipphone.com");
+		prefs.setPreferenceStringValue(PreferencesWrapper.DTMF_MODE, PreferencesWrapper.DTMF_MODE_INBAND);
 	}
 	
 

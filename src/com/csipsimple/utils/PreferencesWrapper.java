@@ -807,16 +807,23 @@ public class PreferencesWrapper {
 		return getPreferenceBooleanValue(SET_AUDIO_GENERATE_TONE);
 	}
 
+	
+	public static final String DTMF_MODE_AUTO = "0";
+	public static final String DTMF_MODE_RTP = "1";
+	public static final String DTMF_MODE_INBAND = "2";
+	public static final String DTMF_MODE_INFO = "3";
+	
+	
 	public boolean useSipInfoDtmf() {
-		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase("3");
+		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase(DTMF_MODE_INFO);
 	}
 	
 	public boolean forceDtmfInBand() {
-		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase("2");
+		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase(DTMF_MODE_INBAND);
 	}
 
 	public boolean forceDtmfRTP() {
-		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase("1");
+		return getPreferenceStringValue(DTMF_MODE).equalsIgnoreCase(DTMF_MODE_RTP);
 	}
 
 
