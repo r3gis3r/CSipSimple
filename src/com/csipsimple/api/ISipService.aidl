@@ -15,8 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
-import com.csipsimple.models.AccountInfo;
+package com.csipsimple.api;
+import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipCallSession;
 
 interface ISipService{
@@ -31,7 +31,7 @@ interface ISipService{
 	void removeAllAccounts();
 	void reAddAllAccounts();
 	void setAccountRegistration(int accountId, int renew);
-	AccountInfo getAccountInfo(int accountId);
+	SipProfileState getSipProfileState(int accountId);
 	
 	//Call configuration control
 	void switchToAutoAnswer();
@@ -55,6 +55,7 @@ interface ISipService{
 	void confAdjustTxLevel(int port, float value);
 	void confAdjustRxLevel(int port, float value);
 	void setEchoCancellation(boolean on);
+	void adjustVolume(in SipCallSession callInfo, int direction, int flags);
 	
 	//Record calls
 	void startRecording(int callId);

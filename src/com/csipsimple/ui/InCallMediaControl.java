@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -101,8 +102,8 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		bindService(sipServiceIntent , sipConnection, BIND_AUTO_CREATE);
 		
 		
-		int keyEvent = getIntent().getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
-		if(keyEvent == KeyEvent.KEYCODE_VOLUME_DOWN || keyEvent == KeyEvent.KEYCODE_VOLUME_UP) {
+		int direction = getIntent().getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
+		if(direction == AudioManager.ADJUST_LOWER  || direction == AudioManager.ADJUST_RAISE) {
 			isAutoClose = true;
 			LinearLayout l = (LinearLayout) findViewById(R.id.ok_bar);
 			if(l != null) {

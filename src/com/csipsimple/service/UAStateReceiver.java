@@ -74,7 +74,7 @@ public class UAStateReceiver extends Callback {
 	private boolean autoAcceptCurrent = false;
 
 	private SipNotifications notificationManager;
-	private SipService service;
+	private PjSipService pjService;
 //	private ComponentName remoteControlResponder;
 
 
@@ -107,15 +107,15 @@ public class UAStateReceiver extends Callback {
 		SipCallSession callInfo = getCallInfo(callId);
 		int callState = callInfo.getCallState();
 		if (callState == SipCallSession.InvState.DISCONNECTED) {
-			if(SipService.mediaManager != null) {
-				SipService.mediaManager.stopAnnoucing();
-				SipService.mediaManager.resetSettings();
+			if(pjService.mediaManager != null) {
+				pjService.mediaManager.stopAnnoucing();
+				pjService.mediaManager.resetSettings();
 			}
 			if(incomingCallLock != null && incomingCallLock.isHeld()) {
 				incomingCallLock.release();
 			}
 			// Call is now ended
-			service.stopDialtoneGenerator();
+			pjService.stopDialtoneGenerator();
 			//TODO : should be stopped only if it's the current call.
 			stopRecording();
 		}
@@ -137,7 +137,7 @@ public class UAStateReceiver extends Callback {
 		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contact.getPtr(), body.getPtr(), mime_type.getPtr(),  date, SipMessage.MESSAGE_TYPE_INBOX);
 		
 		//Insert the message to the DB 
-		DBAdapter database = new DBAdapter(service);
+		DBAdapter database = new DBAdapter(pjService.service);
 		database.open();
 		database.insertMessage(msg);
 		database.close();
@@ -147,7 +147,7 @@ public class UAStateReceiver extends Callback {
 		//TODO : could be parcelable !
 		intent.putExtra(SipMessage.FIELD_FROM, msg.getFrom());
 		intent.putExtra(SipMessage.FIELD_BODY, msg.getBody());
-		service.sendBroadcast(intent);
+		pjService.service.sendBroadcast(intent);
 		
 		//Notify android os of the new message
 		notificationManager.showNotificationForMessage(msg);
@@ -163,7 +163,7 @@ public class UAStateReceiver extends Callback {
 		Log.d(THIS_FILE, "SipMessage in on pager status "+status.toString()+" / "+reason.getPtr());
 		
 		//Update the db
-		DBAdapter database = new DBAdapter(service);
+		DBAdapter database = new DBAdapter(pjService.service);
 		database.open();
 		database.updateMessageStatus(sTo, body.getPtr(), messageType, status.swigValue(), reason.getPtr());
 		database.close();
@@ -171,7 +171,7 @@ public class UAStateReceiver extends Callback {
 		//Broadcast the information
 		Intent intent = new Intent(SipManager.ACTION_SIP_MESSAGE_RECEIVED);
 		intent.putExtra(SipMessage.FIELD_FROM, sTo);
-		service.sendBroadcast(intent);
+		pjService.service.sendBroadcast(intent);
 	}
 
 	@Override
@@ -192,8 +192,8 @@ public class UAStateReceiver extends Callback {
 
 	@Override
 	public void on_call_media_state(int callId) {
-		if(SipService.mediaManager != null) {
-			SipService.mediaManager.stopRing();
+		if(pjService.mediaManager != null) {
+			pjService.mediaManager.stopRing();
 		}
 		if(incomingCallLock != null && incomingCallLock.isHeld()) {
 			incomingCallLock.release();
@@ -204,9 +204,9 @@ public class UAStateReceiver extends Callback {
 		if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
 			pjsua.conf_connect(callInfo.getConfPort(), 0);
 			pjsua.conf_connect(0, callInfo.getConfPort());
-			pjsua.conf_adjust_tx_level(0, service.prefsWrapper.getSpeakerLevel());
-			float micLevel = service.prefsWrapper.getMicLevel();
-			if(SipService.mediaManager != null && SipService.mediaManager.isUserWantMicrophoneMute()) {
+			pjsua.conf_adjust_tx_level(0, pjService.prefsWrapper.getSpeakerLevel());
+			float micLevel = pjService.prefsWrapper.getMicLevel();
+			if(pjService.mediaManager != null && pjService.mediaManager.isUserWantMicrophoneMute()) {
 				micLevel = 0;
 			}
 			pjsua.conf_adjust_rx_level(0, micLevel);
@@ -214,7 +214,7 @@ public class UAStateReceiver extends Callback {
 			
 			// Auto record
 			if (recordedCall == INVALID_RECORD && 
-					service.prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.AUTO_RECORD_CALLS)) {
+					pjService.prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.AUTO_RECORD_CALLS)) {
 				startRecording(callId);
 			}
 			
@@ -235,12 +235,12 @@ public class UAStateReceiver extends Callback {
 		Log.d(THIS_FILE, "Get call info");
 		SipCallSession callInfo = callsList.get(callId);
 		if(callInfo == null) {
-			callInfo = PjSipCalls.getCallInfo(callId);
+			callInfo = PjSipCalls.getCallInfo(callId, pjService);
 			callsList.put(callId, callInfo);
 		} else {
 			//Update from pjsip
 			try {
-				PjSipCalls.updateSessionFromPj(callInfo);
+				PjSipCalls.updateSessionFromPj(callInfo, pjService);
 			} catch (UnavailableException e) {
 				//TODO : treat error
 			}
@@ -319,10 +319,11 @@ public class UAStateReceiver extends Callback {
 					Log.d(THIS_FILE, "Finish call2");
 					
 					//CallLog
-					ContentValues cv = CallLogHelper.logValuesForCall(service, callInfo, callInfo.callStart);
+					ContentValues cv = CallLogHelper.logValuesForCall(pjService.service, callInfo, callInfo.callStart);
 					
 					//Fill our own database
-					DBAdapter database = new DBAdapter(service);
+					//TODO : raise in DB
+					DBAdapter database = new DBAdapter(pjService.service);
 					database.open();
 					database.insertCallLog(cv);
 					database.close();
@@ -332,7 +333,7 @@ public class UAStateReceiver extends Callback {
 					}
 					
 					//If needed fill native database
-					if(service.prefsWrapper.useIntegrateCallLogs()) {
+					if(pjService.prefsWrapper.useIntegrateCallLogs()) {
 						//Don't add with new flag
 						cv.put(CallLog.Calls.NEW, false);
 						
@@ -351,7 +352,7 @@ public class UAStateReceiver extends Callback {
 								cv.put(Calls.NUMBER, phoneNumber);
 								// For log in call logs => don't add as new calls... we manage it ourselves.
 								cv.put(Calls.NEW, false);
-								CallLogHelper.addCallLog(service, cv);
+								CallLogHelper.addCallLog(pjService.service, cv);
 							}
 						}
 					}
@@ -376,18 +377,18 @@ public class UAStateReceiver extends Callback {
 			}
 			case ON_REGISTRATION_STATE:{
 				Log.d(THIS_FILE, "In reg state");
-				// Update sip service (for notifications
-				((SipService) service).updateRegistrationsState();
+				// Update sip pjService (for notifications
+				((SipService) pjService.service).updateRegistrationsState();
 				// Send a broadcast message that for an account
 				// registration state has changed
 				Intent regStateChangedIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
-				service.sendBroadcast(regStateChangedIntent);
+				pjService.service.sendBroadcast(regStateChangedIntent);
 				break;
 			}
 			case ON_PAGER: {
 				//startSMSRing();
 				//String message = (String) msg.obj;
-				//service.showMessage(message);
+				//pjService.showMessage(message);
 				Log.e(THIS_FILE, "yana you in CASE ON_PAGER");
 				//stopRing();
 				break;
@@ -403,7 +404,7 @@ public class UAStateReceiver extends Callback {
 
 		
 		//Get lock while ringing to be sure notification is well done !
-		PowerManager pman = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
+		PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
 		if (incomingCallLock == null) {
 			incomingCallLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.incomingCallLock");
 			incomingCallLock.setReferenceCounted(false);
@@ -412,7 +413,7 @@ public class UAStateReceiver extends Callback {
 		if(!incomingCallLock.isHeld()) {
 			incomingCallLock.acquire();
 		}
-		service.getSystemService(Context.POWER_SERVICE);
+		pjService.service.getSystemService(Context.POWER_SERVICE);
 		
 		String remContact = callInfo.getRemoteContact();
 		callInfo.setIncoming(true);
@@ -421,7 +422,7 @@ public class UAStateReceiver extends Callback {
 		//Auto answer feature
 		boolean shouldAutoAnswer = false;
 		//In account
-		SipProfile acc = service.getAccountForPjsipId(accountId);
+		SipProfile acc = pjService.getAccountForPjsipId(accountId);
 		if(acc != null) {
 			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*@[^>]*)(?:>)?", Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(remContact);
@@ -430,21 +431,21 @@ public class UAStateReceiver extends Callback {
 				number = m.group(2);
 			}
 			Log.w(THIS_FILE, "Search if should auto answer : "+number);
-			shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, service.db);
+			shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, pjService.service.db);
 		}
 		//Or by api
 		if (autoAcceptCurrent || shouldAutoAnswer) {
 			// Automatically answer incoming calls with 200/OK
-			service.callAnswer(callId, 200);
+			pjService.callAnswer(callId, 200);
 			autoAcceptCurrent = false;
 		} else {
 
 			// Automatically answer incoming calls with 180/RINGING
-			service.callAnswer(callId, 180);
+			pjService.callAnswer(callId, 180);
 			
-			if(service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
-				if(SipService.mediaManager != null) {
-					SipService.mediaManager.startRing(remContact);
+			if(pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
+				if(pjService.mediaManager != null) {
+					pjService.mediaManager.startRing(remContact);
 				}
 				broadCastAndroidCallState("RINGING", remContact);
 			}
@@ -462,10 +463,10 @@ public class UAStateReceiver extends Callback {
 	}
 	
 
-	public void initService(SipService srv) {
-		service = srv;
+	public void initService(PjSipService srv) {
+		pjService = srv;
 
-		notificationManager = new SipNotifications(srv);
+		notificationManager = new SipNotifications(pjService.service);
 		
 		if(handlerThread == null) {
 			handlerThread = new HandlerThread("UAStateAsyncWorker");
@@ -519,7 +520,7 @@ public class UAStateReceiver extends Callback {
 		//Internal event
 		Intent callStateChangedIntent = new Intent(SipManager.ACTION_SIP_CALL_CHANGED);
 		callStateChangedIntent.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
-		service.sendBroadcast(callStateChangedIntent);
+		pjService.service.sendBroadcast(callStateChangedIntent);
 		
 		
 	}
@@ -531,8 +532,8 @@ public class UAStateReceiver extends Callback {
 		if (number != null) {
 			intent.putExtra(TelephonyManager.EXTRA_INCOMING_NUMBER, number);
 		}
-		intent.putExtra(service.getString(R.string.app_name), true);
-		service.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
+		intent.putExtra(pjService.service.getString(R.string.app_name), true);
+		pjService.service.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
 	}
 	
 	/**
@@ -543,12 +544,12 @@ public class UAStateReceiver extends Callback {
 	private synchronized void launchCallHandler(SipCallSession currentCallInfo2) {
 		
 		// Launch activity to choose what to do with this call
-		Intent callHandlerIntent = new Intent(SipManager.ACTION_SIP_CALL_UI); //new Intent(service, getInCallClass());
+		Intent callHandlerIntent = new Intent(SipManager.ACTION_SIP_CALL_UI); //new Intent(pjService, getInCallClass());
 		callHandlerIntent.putExtra(SipManager.EXTRA_CALL_INFO, currentCallInfo2);
 		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP  );
 		
 		Log.d(THIS_FILE, "Anounce call activity");
-		service.startActivity(callHandlerIntent);
+		pjService.service.startActivity(callHandlerIntent);
 
 	}
 
@@ -589,7 +590,7 @@ public class UAStateReceiver extends Callback {
     		if (callInfo.isIncoming() && 
     				(state == SipCallSession.InvState.INCOMING || 
     				state == SipCallSession.InvState.EARLY)) {
-    			service.callAnswer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
+    			pjService.callAnswer(callInfo.getCallId(), pjsip_status_code.PJSIP_SC_OK.swigValue());
     			return true;
     		}else if(state == SipCallSession.InvState.INCOMING || 
     				state == SipCallSession.InvState.EARLY ||
@@ -602,13 +603,13 @@ public class UAStateReceiver extends Callback {
 				// We check here if this should be the behavior here or if
 				// the call should be cleared.
 				//
-				switch(service.prefsWrapper.getHeadsetAction()) {
+				switch(pjService.prefsWrapper.getHeadsetAction()) {
 				//TODO : add hold -
 				case PreferencesWrapper.HEADSET_ACTION_CLEAR_CALL:
-					service.callHangup(callInfo.getCallId(), 0);
+					pjService.callHangup(callInfo.getCallId(), 0);
 					break;
 				case PreferencesWrapper.HEADSET_ACTION_MUTE:
-					SipService.mediaManager.toggleMute();
+					pjService.mediaManager.toggleMute();
 					break;
 				}
 				return true;

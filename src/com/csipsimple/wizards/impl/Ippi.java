@@ -88,6 +88,8 @@ public class Ippi extends SimpleImplementation {
 					}
 				}catch(NumberFormatException e) {
 					Log.e(THIS_FILE, "Impossible to parse result");
+				}catch (NullPointerException e) {
+					Log.e(THIS_FILE, "Null result");
 				}
 				
 				break;

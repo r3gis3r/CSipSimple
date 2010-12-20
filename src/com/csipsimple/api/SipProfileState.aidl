@@ -15,21 +15,5 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
-import com.csipsimple.api.SipProfile;
-
-interface ISipConfiguration {
-	//Account management
-	long addOrUpdateAccount(in SipProfile acc);
-	SipProfile getAccount(long acc_id);
-	
-	//Prefs
-	void setPreferenceString(in String key, in String value);
-	void setPreferenceBoolean(in String key, boolean value);
-	void setPreferenceFloat(in String key, float value);
-	
-	String getPreferenceString(in String key);
-	boolean getPreferenceBoolean(in String key);
-	float getPreferenceFloat(in String key);
-	
-}
+package com.csipsimple.api;
+parcelable SipProfileState;

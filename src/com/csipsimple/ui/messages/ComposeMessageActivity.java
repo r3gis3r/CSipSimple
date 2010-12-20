@@ -17,7 +17,6 @@
  */
 package com.csipsimple.ui.messages;
 
-import org.pjsip.pjsua.pjsip_status_code;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -49,6 +48,7 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
@@ -299,8 +299,8 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 	        }
 	        
 	        if(status == SipMessage.STATUS_NONE 
-	        		|| status == pjsip_status_code.PJSIP_SC_OK.swigValue()
-	        		|| status == pjsip_status_code.PJSIP_SC_ACCEPTED.swigValue()) {
+	        		|| status == SipCallSession.StatusCode.OK
+	        		|| status == SipCallSession.StatusCode.ACCEPTED) {
 	        	tagView.errorView.setVisibility(View.GONE);
 	        }else {
 	        	

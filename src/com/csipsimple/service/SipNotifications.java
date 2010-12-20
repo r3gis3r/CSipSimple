@@ -33,10 +33,10 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipUri;
-import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.widgets.RegistrationNotification;
 
@@ -62,7 +62,7 @@ public class SipNotifications {
 	//Announces
 
 	//Register
-	public void notifyRegisteredAccounts(ArrayList<AccountInfo> activeAccountsInfos) {
+	public void notifyRegisteredAccounts(ArrayList<SipProfileState> activeAccountsInfos) {
 		int icon = R.drawable.sipok;
 		CharSequence tickerText = context.getString(R.string.service_ticker_registered_text);
 		long when = System.currentTimeMillis();

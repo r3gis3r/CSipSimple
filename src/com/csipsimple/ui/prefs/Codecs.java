@@ -158,13 +158,13 @@ public class Codecs extends ListActivity {
 	private void initDatas() {
 		codecs = new ArrayList<HashMap<String, Object>>();
 		
-		if(SipService.codecs == null) {
+		if(SipService.pjService.codecs == null) {
 			Log.w(THIS_FILE, "Codecs not initialized in service !!! ");
 			return;
 		}
 		
 		int current_prio = 130;
-		for(String codecName : SipService.codecs) {
+		for(String codecName : SipService.pjService.codecs) {
 			Log.d(THIS_FILE, "Fill codec "+codecName);
 			String[] codecParts = codecName.split("/");
 			if(codecParts.length >=2 ) {

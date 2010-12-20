@@ -20,8 +20,6 @@ package com.csipsimple.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pjsip.pjsua.pjsip_status_code;
-
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -42,11 +40,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfileState;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.AccountInfo;
 import com.csipsimple.models.Filter;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.OutgoingCall;
@@ -352,24 +351,21 @@ public class OutgoingCallChooser extends ListActivity {
 
 		SipProfile account = adapter.getItem(position);
 		if (service != null) {
-			AccountInfo accountInfo;
+			SipProfileState accountInfo;
 			try {
-				accountInfo = service.getAccountInfo(account.id);
+				accountInfo = service.getSipProfileState(account.id);
 			} catch (RemoteException e) {
 				accountInfo = null;
 			}
-			if (accountInfo != null && accountInfo.isActive()) {
-				if ( (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) ||
-						accountInfo.getWizard().equalsIgnoreCase("LOCAL") ) {
-					try {
-						String phoneNumber = number;
-						String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
-						
-						service.makeCall("sip:"+toCall, account.id);
-						finish();
-					} catch (RemoteException e) {
-						Log.e(THIS_FILE, "Unable to make the call", e);
-					}
+			if (accountInfo != null && accountInfo.isValidForCall()) {
+				try {
+					String phoneNumber = number;
+					String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
+					
+					service.makeCall("sip:"+toCall, account.id);
+					finish();
+				} catch (RemoteException e) {
+					Log.e(THIS_FILE, "Unable to make the call", e);
 				}
 			}
 			//TODO : toast for elses
@@ -390,14 +386,14 @@ public class OutgoingCallChooser extends ListActivity {
 			if(account == null) {
 				return false;
 			}
-			AccountInfo accountInfo;
+			SipProfileState accountInfo;
 			try {
-				accountInfo = service.getAccountInfo(account.id);
+				accountInfo = service.getSipProfileState(account.id);
 			} catch (RemoteException e) {
 				accountInfo = null;
 			}
 			if (accountInfo != null && accountInfo.isActive()) {
-				if ( (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == pjsip_status_code.PJSIP_SC_OK) ||
+				if ( (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == SipCallSession.StatusCode.OK) ||
 						accountInfo.getWizard().equalsIgnoreCase("LOCAL") ) {
 					try {
 						String phoneNumber = number;

@@ -126,7 +126,7 @@ public class InCallInfo extends FrameLayout {
 			remoteName.setText(SipUri.getDisplayedSimpleContact(aRemoteUri));
 			remotePhoneNumber.setText(uriInfos.userName);
 			
-			SipProfile acc = SipService.getAccountForPjsipId(callInfo.getAccId(), db);
+			SipProfile acc = SipService.getAccount(callInfo.getAccId(), db);
 			if(acc != null && acc.display_name != null) {
 				label.setText("SIP/"+acc.display_name+" :");
 			}

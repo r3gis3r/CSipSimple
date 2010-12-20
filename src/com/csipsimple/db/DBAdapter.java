@@ -20,8 +20,6 @@ package com.csipsimple.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pjsip.pjsua.pjsip_status_code;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +31,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.CallLog;
 
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
@@ -715,8 +714,8 @@ public class DBAdapter {
 		ContentValues args = new ContentValues();
 		args.put(SipMessage.FIELD_TYPE, messageType);
 		args.put(SipMessage.FIELD_STATUS, status);
-		if(status != pjsip_status_code.PJSIP_SC_OK.swigValue() 
-				&& status != pjsip_status_code.PJSIP_SC_ACCEPTED.swigValue()) {
+		if(status != SipCallSession.StatusCode.OK 
+			&& status != SipCallSession.StatusCode.ACCEPTED ) {
 			args.put(SipMessage.FIELD_BODY, body + " // " + reason);
 		}
 		return db.update(MESSAGES_TABLE_NAME, args,

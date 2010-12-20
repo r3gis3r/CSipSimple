@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.pjsip.pjsua.pjsip_status_code;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -57,13 +56,12 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.csipsimple.R;
-import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.service.ISipService;
 import com.csipsimple.service.MediaManager.MediaState;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallsUtils;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -527,8 +525,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	
 	
 	private synchronized void updateUIFromMedia() {
-		if(SipService.mediaManager != null && serviceConnected) {
-			MediaState mediaState = SipService.mediaManager.getMediaState();
+		if(SipService.pjService.mediaManager != null && serviceConnected) {
+			MediaState mediaState = SipService.pjService.mediaManager.getMediaState();
 			Log.d(THIS_FILE, "Media update ....");
 			if(!mediaState.equals(lastMediaState)) {
 				SipCallSession callInfo = getCurrentCallInfo();
@@ -613,28 +611,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     		if(currentCallInfo == null && serviceConnected) {
     			break;
     		}
-    		int state = currentCallInfo.getCallState();
     		
-    		boolean ringing = ( (state == SipCallSession.InvState.INCOMING) ||
-    							(state == SipCallSession.InvState.EARLY) );
+    		if(service != null) {
+        		try {
+					service.adjustVolume(currentCallInfo, action, AudioManager.FLAG_SHOW_UI);
+				} catch (RemoteException e) {
+					Log.e(THIS_FILE, "Can't adjust volume", e);
+				}
+        	}
     		
-        	// Mode ringing
-    		if(ringing) {
-    			if(SipService.mediaManager != null) {
-	        		SipService.mediaManager.adjustStreamVolume(AudioManager.STREAM_RING, action, AudioManager.FLAG_SHOW_UI);
-	        	}
-    		}else {
-	        	// Mode in call
-	        	if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME)) {
-	        		Intent adjustVolumeIntent = new Intent(this, InCallMediaControl.class);
-	        		adjustVolumeIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyCode);
-	        		startActivity(adjustVolumeIntent);
-	        	}else {
-		        	if(SipService.mediaManager != null) {
-		        		SipService.mediaManager.adjustStreamVolume(Compatibility.getInCallStream(), action, AudioManager.FLAG_SHOW_UI);
-		        	}
-	        	}
-    		}
+    		
         	return true;
         case KeyEvent.KEYCODE_CALL:
 		case KeyEvent.KEYCODE_ENDCALL:
@@ -731,7 +717,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			switch(whichAction) {
 				case TAKE_CALL:{
 					if (callId != -1 && service != null) {
-						service.answer(callId, pjsip_status_code.PJSIP_SC_OK.swigValue());
+						service.answer(callId, SipCallSession.StatusCode.OK);
 					}
 					break;
 				}

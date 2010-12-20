@@ -15,19 +15,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.models;
+package com.csipsimple.api;
 
 import java.io.Serializable;
-
-import org.pjsip.pjsua.pjsip_status_code;
-import org.pjsip.pjsua.pjsua_acc_info;
-
-import com.csipsimple.api.SipProfile;
+import java.util.Comparator;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class AccountInfo implements Parcelable, Serializable{
+public class SipProfileState implements Parcelable, Serializable{
 
 	/**
 	 * 
@@ -38,7 +34,7 @@ public class AccountInfo implements Parcelable, Serializable{
 	private int pjsuaId;
 	private String wizard;
 	private boolean active;
-	private pjsip_status_code statusCode;
+	private int statusCode;
 	private String statusText;
 	private int addedStatus;
 	private int expires;
@@ -47,12 +43,12 @@ public class AccountInfo implements Parcelable, Serializable{
 	
 
 
-	public AccountInfo(Parcel in) {
+	public SipProfileState(Parcel in) {
 		readFromParcel(in);
 	}
 	
 	
-	public AccountInfo(SipProfile account) {
+	public SipProfileState(SipProfile account) {
 		databaseId = account.id;
 		wizard = account.wizard;
 		active = account.active;
@@ -62,23 +58,12 @@ public class AccountInfo implements Parcelable, Serializable{
 		//Set default values
 		addedStatus = -1;
 		pjsuaId = -1;
-		statusCode = pjsip_status_code.PJSIP_SC_NOT_FOUND;
+		statusCode = SipCallSession.StatusCode.NOT_FOUND;
 		statusText = "";
 		expires = 0;
 		
 	}
 	
-	
-	public void fillWithPjInfo(pjsua_acc_info pjInfo) {
-		try {
-			statusCode = pjInfo.getStatus();
-		}catch (IllegalArgumentException e) {
-			//TODO : find a better default?
-			statusCode = pjsip_status_code.PJSIP_SC_INTERNAL_SERVER_ERROR;
-		}
-		statusText = pjInfo.getStatus_text().getPtr();
-		expires = pjInfo.getExpires();
-	}
 
 	@Override
 	public int describeContents() {
@@ -92,7 +77,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		pjsuaId = in.readInt();
 		wizard = in.readString();
 		active = (in.readInt() == 1);
-		statusCode = pjsip_status_code.swigToEnum(in.readInt());
+		statusCode = in.readInt();
 		statusText = in.readString();
 		addedStatus = in.readInt();
 		expires = in.readInt();
@@ -107,7 +92,7 @@ public class AccountInfo implements Parcelable, Serializable{
 		out.writeInt(pjsuaId);
 		out.writeString(wizard);
 		out.writeInt( (active?1:0) );
-		out.writeInt(statusCode.swigValue());
+		out.writeInt(statusCode);
 		out.writeString(statusText);
 		out.writeInt(addedStatus);
 		out.writeInt(expires);
@@ -116,13 +101,13 @@ public class AccountInfo implements Parcelable, Serializable{
 	}
 	
 
-	public static final Parcelable.Creator<AccountInfo> CREATOR = new Parcelable.Creator<AccountInfo>() {
-		public AccountInfo createFromParcel(Parcel in) {
-			return new AccountInfo(in);
+	public static final Parcelable.Creator<SipProfileState> CREATOR = new Parcelable.Creator<SipProfileState>() {
+		public SipProfileState createFromParcel(Parcel in) {
+			return new SipProfileState(in);
 		}
 
-		public AccountInfo[] newArray(int size) {
-			return new AccountInfo[size];
+		public SipProfileState[] newArray(int size) {
+			return new SipProfileState[size];
 		}
 	};
 
@@ -186,14 +171,14 @@ public class AccountInfo implements Parcelable, Serializable{
 	/**
 	 * @param statusCode the statusCode to set
 	 */
-	public void setStatusCode(pjsip_status_code statusCode) {
+	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
 
 	/**
 	 * @return the statusCode
 	 */
-	public pjsip_status_code getStatusCode() {
+	public int getStatusCode() {
 		return statusCode;
 	}
 
@@ -256,4 +241,38 @@ public class AccountInfo implements Parcelable, Serializable{
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
+	
+	public boolean isValidForCall() {
+		if(active) {
+			if(wizard.equalsIgnoreCase("LOCAL")) {
+				return true;
+			}
+			return (getPjsuaId() >= 0 && getStatusCode() == SipCallSession.StatusCode.OK );
+		}
+		return false;
+	}
+	
+	public final static Comparator<SipProfileState> getComparator(){
+		return accountInfoComparator;
+	}
+
+	private static final Comparator<SipProfileState> accountInfoComparator = new Comparator<SipProfileState>() {
+		@Override
+		public int compare(SipProfileState infos1,SipProfileState infos2) {
+			if (infos1 != null && infos2 != null) {
+				
+				int c1 = infos1.getPriority();
+				int c2 = infos2.getPriority();
+				
+				if (c1 > c2) {
+					return -1;
+				}
+				if (c1 < c2) {
+					return 1;
+				}
+			}
+
+			return 0;
+		}
+	};
 }

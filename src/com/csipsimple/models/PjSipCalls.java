@@ -25,6 +25,8 @@ import org.pjsip.pjsua.pjsua_call_info;
 import android.os.SystemClock;
 
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.service.PjSipService;
 import com.csipsimple.utils.Log;
 
 public final class PjSipCalls {
@@ -40,12 +42,12 @@ public final class PjSipCalls {
 	private static final String THIS_FILE = "PjSipCalls";
 	
 	
-	public static SipCallSession getCallInfo(int callId) {
+	public static SipCallSession getCallInfo(int callId, PjSipService service) {
 		SipCallSession session = new SipCallSession();
 		session.setCallId(callId);
 		
 		try {
-			session = updateSessionFromPj(session);
+			session = updateSessionFromPj(session, service);
 		} catch (UnavailableException e) {
 			session.setCallState(SipCallSession.InvState.NULL);
 			Log.e(THIS_FILE, "This account is not available anymore");
@@ -56,7 +58,7 @@ public final class PjSipCalls {
 	
 	
 	
-	public static SipCallSession updateSession(SipCallSession session, pjsua_call_info pjCallInfo) {
+	private static SipCallSession updateSession(SipCallSession session, pjsua_call_info pjCallInfo, PjSipService service) {
 		session.setCallId(pjCallInfo.getId());
 		//Hey lucky man we have nothing to think about here cause we have a bijection between int / state
 		session.setCallState( pjCallInfo.getState().swigValue() );
@@ -64,14 +66,17 @@ public final class PjSipCalls {
 		session.setRemoteContact( pjCallInfo.getRemote_info().getPtr() );
 		session.setConfPort( pjCallInfo.getConf_slot() );
 		
-		session.setAccId( pjCallInfo.getAcc_id() );
+		SipProfile account = service.getAccountForPjsipId(pjCallInfo.getAcc_id());
+		if(account != null) {
+			session.setAccId( account.id );
+		}
 		pj_time_val duration = pjCallInfo.getConnect_duration();
 		session.setConnectStart( SystemClock.elapsedRealtime () - duration.getSec() * 1000 - duration.getMsec() ); 
 		
 		return session;
 	}
 	
-	public static SipCallSession updateSessionFromPj(SipCallSession session) throws UnavailableException {
+	public static SipCallSession updateSessionFromPj(SipCallSession session, PjSipService service) throws UnavailableException {
 
 		pjsua_call_info pj_info = new pjsua_call_info();
 		int status = pjsua.call_get_info(session.getCallId(), pj_info);
@@ -80,7 +85,7 @@ public final class PjSipCalls {
 			throw new UnavailableException();
 		}
 		
-		session = updateSession(session, pj_info);
+		session = updateSession(session, pj_info, service);
 		session.setMediaSecure(pjsua.is_call_secure(session.getCallId()) == pjsuaConstants.PJ_TRUE);
 		
 		return session;

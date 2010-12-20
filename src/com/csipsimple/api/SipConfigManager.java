@@ -15,5 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.models;
-parcelable AccountInfo;
+package com.csipsimple.api;
+
+public class SipConfigManager {
+
+}

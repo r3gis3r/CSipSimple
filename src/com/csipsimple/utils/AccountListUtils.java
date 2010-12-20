@@ -17,7 +17,6 @@
  */
 package com.csipsimple.utils;
 
-import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsuaConstants;
 
 import android.content.Context;
@@ -25,7 +24,8 @@ import android.content.res.Resources;
 import android.os.RemoteException;
 
 import com.csipsimple.R;
-import com.csipsimple.models.AccountInfo;
+import com.csipsimple.api.SipProfileState;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.service.ISipService;
 
 
@@ -48,9 +48,9 @@ public class AccountListUtils {
 		accountDisplay.availableForCalls = false;
 		
 		if (service != null) {
-			AccountInfo accountInfo;
+			SipProfileState accountInfo;
 			try {
-				accountInfo = service.getAccountInfo(accountId);
+				accountInfo = service.getSipProfileState(accountId);
 			} catch (RemoteException e) {
 				accountInfo = null;
 			}
@@ -69,8 +69,8 @@ public class AccountListUtils {
 						accountDisplay.availableForCalls = true;
 					}else if (accountInfo.getPjsuaId() >= 0) {
 						String pjStat = accountInfo.getStatusText();	// Used only on error status message
-						pjsip_status_code statusCode = accountInfo.getStatusCode();
-						if (statusCode == pjsip_status_code.PJSIP_SC_OK) {
+						int statusCode = accountInfo.getStatusCode();
+						if (statusCode == SipCallSession.StatusCode.OK) {
 							// Log.d(THIS_FILE,
 							// "Now account "+account.display_name+" has expires "+accountInfo.getExpires());
 							if (accountInfo.getExpires() > 0) {
@@ -86,7 +86,7 @@ public class AccountListUtils {
 								accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 							}
 						} else {
-							if (statusCode == pjsip_status_code.PJSIP_SC_PROGRESS || statusCode == pjsip_status_code.PJSIP_SC_TRYING) {
+							if (statusCode == SipCallSession.StatusCode.PROGRESS || statusCode == SipCallSession.StatusCode.TRYING) {
 								// Yellow progressing ...
 								accountDisplay.statusColor = resources.getColor(R.color.account_unregistered);
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
