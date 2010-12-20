@@ -35,7 +35,7 @@
 			android:orientation="vertical"
 			android:layout_width="fill_parent" 
 			android:layout_height="fill_parent"
-			android:paddingBottom="170dip"
+			android:paddingBottom="155dip"
 			
 			android:visibility="gone" >
 				<EditText android:id="@+id/digitsText" 
@@ -52,7 +52,7 @@
 					android:layout_height="fill_parent"
 					android:paddingLeft="6dip"
 					android:paddingRight="6dip"
-					android:layout_marginBottom="6dip" />
+					android:layout_marginBottom="2dip" />
 		</LinearLayout>
 	</FrameLayout>
 

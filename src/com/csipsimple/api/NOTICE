@@ -1,5 +1,6 @@
 This package is released under Apache License.
-It only applies to the directory containing this file : com/csipsimple/api/
+It only applies to the directory containing the current file 
+( in folder tree of the project src/com/csipsimple/api/ )
 See main project license for more information about the rest of the project files.
 
                                Apache License
