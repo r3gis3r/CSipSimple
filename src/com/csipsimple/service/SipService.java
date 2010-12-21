@@ -25,6 +25,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -60,7 +62,10 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.models.Filter;
 import com.csipsimple.models.SipMessage;
+import com.csipsimple.pjsip.PjSipService;
+import com.csipsimple.pjsip.UAStateReceiver;
 import com.csipsimple.ui.InCallMediaControl;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
@@ -77,11 +82,12 @@ public class SipService extends Service {
 
 	
 	private SipWakeLock sipWakeLock;
+	private boolean autoAcceptCurrent = false;
 
 	// Implement public interface for the service
 	private final ISipService.Stub binder = new ISipService.Stub() {
 		/**
-		 * Start the sip stack according to current settings (create pjsua)
+		 * Start the sip stack according to current settings (create the stack)
 		 */
 		@Override
 		public void sipStart() throws RemoteException {
@@ -89,7 +95,7 @@ public class SipService extends Service {
 		}
 
 		/**
-		 * Stop the sip stack (destroy pjsua)
+		 * Stop the sip stack (destroy the stack)
 		 */
 		@Override
 		public void sipStop() throws RemoteException {
@@ -171,9 +177,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void switchToAutoAnswer() throws RemoteException {
-			if (pjService.userAgentReceiver != null) {
-				pjService.userAgentReceiver.setAutoAnswerNext(true);
-			}
+			setAutoAnswerNext(true);
 		}
 
 		/**
@@ -443,7 +447,7 @@ public class SipService extends Service {
 	private TelephonyManager telephonyManager;
 	private ConnectivityManager connectivityManager;
 
-	SipNotifications notificationManager;
+	public SipNotifications notificationManager;
 	private MyExecutor mExecutor;
 	public static PjSipService pjService;
 
@@ -1092,10 +1096,6 @@ public class SipService extends Service {
 				t.start();
 			} else if (ipHasChanged) {
 				// Check if IP has changed between
-				/*
-				 * Log.i(THIS_FILE, "Ip changed remove/re - add all accounts");
-				 * reRegisterAllAccounts(); if(created) { pjsua.med }
-				 */
 				if (pjService.getActiveCallInProgress() == null) {
 					Thread t = new Thread() {
 						public void run() {
@@ -1172,6 +1172,34 @@ public class SipService extends Service {
 		return account;
 	}
 	
+
+    // Auto answer feature
+
+	public void setAutoAnswerNext(boolean auto_response) {
+		autoAcceptCurrent = auto_response;
+	}
+	
+	public boolean shouldAutoAnswer(String remContact, SipProfile acc) {
+		
+		boolean shouldAutoAnswer = false;
+		
+		if(autoAcceptCurrent) {
+			autoAcceptCurrent = false;
+			return true;
+		}
+		
+		if(acc != null) {
+			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*@[^>]*)(?:>)?", Pattern.CASE_INSENSITIVE);
+			Matcher m = p.matcher(remContact);
+			String number = remContact;
+			if (m.matches()) {
+				number = m.group(2);
+			}
+			Log.w(THIS_FILE, "Search if should auto answer : "+number);
+			shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, pjService.service.db);
+		}
+		return shouldAutoAnswer;
+	}
 	
 
     private static Looper createLooper() {
@@ -1212,6 +1240,7 @@ public class SipService extends Service {
         }
     }
 	
+    
 	
 
 }

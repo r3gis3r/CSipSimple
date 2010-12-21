@@ -214,7 +214,11 @@ public class ConversationList extends ListActivity {
             createNewMessage();
         } else {
             ConversationListItemViews tag = (ConversationListItemViews) v.getTag();
-            openThread(tag.from);
+            if (tag.from.equals("SELF")) {
+                openThread(tag.to);
+            } else {
+                openThread(tag.from);
+            }
         }
     }
 
@@ -271,8 +275,12 @@ public class ConversationList extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
         Cursor cursor = ((CursorAdapter) getListAdapter()).getCursor();
         if (cursor != null && cursor.getPosition() >= 0) {
-        	String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
-        	
+            String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
+            
+            if (number.equals("SELF")) {
+                number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
+            }
+                    	
             switch (item.getItemId()) {
             case MENU_DELETE: {
                 confirmDeleteThread(number);
@@ -311,6 +319,7 @@ public class ConversationList extends ListActivity {
 		TextView dateView;
 		TextView subjectView;
 		String from;
+		String to;
 	}
     
 
@@ -329,6 +338,7 @@ public class ConversationList extends ListActivity {
 		public void bindView(View view, Context context, Cursor cursor) {
 			final ConversationListItemViews tagView = (ConversationListItemViews) view.getTag();
 			String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
+			String to_number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
 			int read = cursor.getInt(cursor.getColumnIndex(SipMessage.FIELD_READ));
 			long date = cursor.getLong(cursor.getColumnIndex(SipMessage.FIELD_DATE));
 			String subject = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_BODY));
@@ -348,6 +358,7 @@ public class ConversationList extends ListActivity {
 			
 			//From
 			tagView.from = number;
+			tagView.to = to_number;
 			tagView.fromView.setText(formatMessage(cursor));
 
 			//Date
@@ -374,8 +385,12 @@ public class ConversationList extends ListActivity {
 		
 		private CharSequence formatMessage(Cursor cursor) {
 			String remoteContact = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
-	        SpannableStringBuilder buf = new SpannableStringBuilder(SipUri.getDisplayedSimpleContact(remoteContact));
-
+	        SpannableStringBuilder buf = new SpannableStringBuilder();
+			if (remoteContact.equals("SELF")) {
+				remoteContact = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
+				buf.append("To: ");
+			}
+                buf.append(SipUri.getDisplayedSimpleContact(remoteContact));
 	        
 	        int counter = cursor.getInt(cursor.getColumnIndex("counter"));
 	        if (counter > 1) {

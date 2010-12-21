@@ -662,14 +662,16 @@ public class DBAdapter {
 				new String[]{
 					"ROWID AS _id",
 					SipMessage.FIELD_FROM, 
+					SipMessage.FIELD_TO, 
+					"CASE WHEN "+SipMessage.FIELD_FROM+"='SELF' THEN "+SipMessage.FIELD_TO+" WHEN "+SipMessage.FIELD_FROM+"!='SELF' THEN "+SipMessage.FIELD_FROM+" END AS message_ordering",
 					SipMessage.FIELD_BODY, 
 					"MAX(" + SipMessage.FIELD_DATE + ") AS " + SipMessage.FIELD_DATE,
 					"MIN(" + SipMessage.FIELD_READ + ") AS " + SipMessage.FIELD_READ,
 					//SipMessage.FIELD_READ,
 					"COUNT(" + SipMessage.FIELD_DATE + ") AS counter"
 				}, 
-				SipMessage.FIELD_TYPE+"="+SipMessage.MESSAGE_TYPE_INBOX, null, 
-				SipMessage.FIELD_FROM, null, 
+				SipMessage.FIELD_TYPE+" in ("+SipMessage.MESSAGE_TYPE_INBOX+","+SipMessage.MESSAGE_TYPE_SENT+")", null, 
+				"message_ordering", null, 
 				SipMessage.FIELD_DATE+" DESC");
 	}
 	

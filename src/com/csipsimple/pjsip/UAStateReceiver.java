@@ -16,15 +16,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
+package com.csipsimple.pjsip;
 
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.Callback;
 import org.pjsip.pjsua.SWIGTYPE_p_p_pjmedia_port;
@@ -51,16 +49,17 @@ import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Filter;
 import com.csipsimple.models.PjSipCalls;
 import com.csipsimple.models.PjSipCalls.UnavailableException;
 import com.csipsimple.models.SipMessage;
+import com.csipsimple.service.SipNotifications;
+import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
@@ -71,7 +70,6 @@ public class UAStateReceiver extends Callback {
 
 	final static String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 	
-	private boolean autoAcceptCurrent = false;
 
 	private SipNotifications notificationManager;
 	private PjSipService pjService;
@@ -420,24 +418,14 @@ public class UAStateReceiver extends Callback {
 		notificationManager.showNotificationForCall(callInfo);
 
 		//Auto answer feature
-		boolean shouldAutoAnswer = false;
-		//In account
 		SipProfile acc = pjService.getAccountForPjsipId(accountId);
-		if(acc != null) {
-			Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*@[^>]*)(?:>)?", Pattern.CASE_INSENSITIVE);
-			Matcher m = p.matcher(remContact);
-			String number = remContact;
-			if (m.matches()) {
-				number = m.group(2);
-			}
-			Log.w(THIS_FILE, "Search if should auto answer : "+number);
-			shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, pjService.service.db);
-		}
+		boolean shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc);
+		
+		
 		//Or by api
-		if (autoAcceptCurrent || shouldAutoAnswer) {
+		if (shouldAutoAnswer) {
 			// Automatically answer incoming calls with 200/OK
 			pjService.callAnswer(callId, 200);
-			autoAcceptCurrent = false;
 		} else {
 
 			// Automatically answer incoming calls with 180/RINGING
@@ -458,15 +446,11 @@ public class UAStateReceiver extends Callback {
 	// -------
 	// Public configuration for receiver
 	// -------
-	public void setAutoAnswerNext(boolean auto_response) {
-		autoAcceptCurrent = auto_response;
-	}
 	
 
 	public void initService(PjSipService srv) {
 		pjService = srv;
-
-		notificationManager = new SipNotifications(pjService.service);
+		notificationManager = pjService.service.notificationManager;
 		
 		if(handlerThread == null) {
 			handlerThread = new HandlerThread("UAStateAsyncWorker");

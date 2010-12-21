@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
+package com.csipsimple.pjsip;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ import org.pjsip.pjsua.pjmedia_tone_desc;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_call_info;
 
-public class StreamDialtoneGenerator {
+public class PjStreamDialtoneGenerator {
 
 	private pj_pool_t dialtonePool;
 	private pjmedia_port dialtoneGen;

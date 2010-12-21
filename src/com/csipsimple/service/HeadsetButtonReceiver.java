@@ -17,6 +17,7 @@
  */
 package com.csipsimple.service;
 
+import com.csipsimple.pjsip.UAStateReceiver;
 import com.csipsimple.utils.Log;
 
 import android.content.BroadcastReceiver;

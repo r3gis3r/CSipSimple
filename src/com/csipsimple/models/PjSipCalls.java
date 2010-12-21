@@ -26,7 +26,7 @@ import android.os.SystemClock;
 
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.service.PjSipService;
+import com.csipsimple.pjsip.PjSipService;
 import com.csipsimple.utils.Log;
 
 public final class PjSipCalls {

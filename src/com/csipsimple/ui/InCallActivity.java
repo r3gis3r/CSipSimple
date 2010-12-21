@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -168,6 +169,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		Log.d(THIS_FILE, "Proximty sensor : "+proximitySensor);
 		
 		dialFeedback = new DialingFeedback(this, true);
+		
+
+		if(!prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.PREVENT_SCREEN_ROTATION)) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+		}
 	}
 	
 	

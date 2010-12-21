@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.service;
+package com.csipsimple.pjsip;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,7 +49,8 @@ import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.PjSipAccount;
-import com.csipsimple.pjsip.NativeLibManager;
+import com.csipsimple.service.MediaManager;
+import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.ToCall;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -57,7 +58,7 @@ import com.csipsimple.utils.PreferencesWrapper;
 
 public class PjSipService {
 	private static final String THIS_FILE = "PjService";
-	SipService service;
+	public SipService service;
 	
 
 	private boolean created = false;
@@ -66,8 +67,8 @@ public class PjSipService {
 	private boolean sipStackIsCorrupted = false;
 	public static boolean creating = false;
 	private Integer udpTranportId, tcpTranportId, tlsTransportId;
-	PreferencesWrapper prefsWrapper;
-	private StreamDialtoneGenerator dialtoneGenerator;
+	public PreferencesWrapper prefsWrapper;
+	private PjStreamDialtoneGenerator dialtoneGenerator;
 	
 
 	private static Object creatingSipStack = new Object();
@@ -138,7 +139,7 @@ public class PjSipService {
 	
 	
 	// Start the sip stack according to current settings
-	synchronized boolean sipStart() {
+	public synchronized boolean sipStart() {
 		Log.setLogLevel(service.prefsWrapper.getLogLevel());
 		
 		if (!hasSipStack) {
@@ -405,7 +406,7 @@ public class PjSipService {
 	/**
 	 * Stop sip service
 	 */
-	synchronized void sipStop() {
+	public synchronized void sipStop() {
 		if (getActiveCallInProgress() != null) {
 			Log.w(THIS_FILE, "We have a call in progress... DO NOT STOP !!!");
 			//TODO : queue quit on end call;
@@ -785,7 +786,7 @@ public class PjSipService {
 	 *            the keyCode to send (android style)
 	 * @return
 	 */
-	protected int sendDtmf(int callId, int keyCode) {
+	public int sendDtmf(int callId, int keyCode) {
 		if (!created) {
 			return -1;
 		}
@@ -809,7 +810,7 @@ public class PjSipService {
 				if (res != pjsua.PJ_SUCCESS && !prefsWrapper.forceDtmfRTP()) {
 					//Generate using analogic inband
 					if(dialtoneGenerator == null) {
-						dialtoneGenerator = new StreamDialtoneGenerator();
+						dialtoneGenerator = new PjStreamDialtoneGenerator();
 					}
 					res = dialtoneGenerator.sendPjMediaDialTone(callId, keyPressed);
 					Log.d(THIS_FILE, "Has been sent DTMF analogic : " + res);
@@ -856,7 +857,7 @@ public class PjSipService {
 		}
 	}
 
-	protected int callHold(int callId) {
+	public int callHold(int callId) {
 		if (created) {
 			synchronized (callActionLock) {
 				return pjsua.call_set_hold(callId, null);
@@ -865,7 +866,7 @@ public class PjSipService {
 		return -1;
 	}
 
-	protected int callReinvite(int callId, boolean unhold) {
+	public int callReinvite(int callId, boolean unhold) {
 		if (created) {
 			synchronized (callActionLock) {
 				return pjsua.call_reinvite(callId, unhold ? 1 : 0, null);

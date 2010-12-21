@@ -121,8 +121,9 @@
 		</activity>
 		
 		
-		<activity android:name="com.csipsimple.ui.InCallActivity" android:screenOrientation="portrait" 
-			
+		<activity android:name="com.csipsimple.ui.InCallActivity" 
+			android:screenOrientation="portrait" 
+			android:configChanges="orientation"
 			android:allowTaskReparenting="true"
 			android:taskAffinity=""
 			android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleTask">
