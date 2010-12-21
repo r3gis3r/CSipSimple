@@ -33,6 +33,7 @@ import android.content.Context;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.CustomDistribution;
+import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Callcentric;
@@ -267,6 +268,11 @@ public class WizardUtils {
 					R.drawable.ic_wizard_mondotalk, 20, 
 					new Locale[] {new Locale("EN", "au"), new Locale("EN", "us"), new Locale("EN", "nz")}, false, false, 
 					Mondotalk.class));
+			WIZARDS_DICT.put("A1", new WizardInfo("A1", "A1", 
+					R.drawable.ic_wizard_a1, 20, 
+					new Locale[] {new Locale("DE", "at")}, false, false, 
+					A1.class));
+			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
