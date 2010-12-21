@@ -54,7 +54,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.SipMessage;
-import com.csipsimple.service.ISipService;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.PickupSipUri;

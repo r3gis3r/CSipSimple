@@ -41,7 +41,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.service.ISipService;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;

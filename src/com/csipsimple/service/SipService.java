@@ -52,6 +52,8 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.csipsimple.R;
+import com.csipsimple.api.ISipConfiguration;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;

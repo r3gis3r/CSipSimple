@@ -46,8 +46,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipCallSession;
-import com.csipsimple.service.ISipConfiguration;
-import com.csipsimple.service.ISipService;
+import com.csipsimple.api.ISipConfiguration;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 

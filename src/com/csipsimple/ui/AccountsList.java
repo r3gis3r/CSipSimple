@@ -57,7 +57,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.service.ISipService;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;

@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.service.ISipService;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.widgets.AccountChooserButton.OnAccountChangeListener;
 
 public class EditSipUri extends LinearLayout implements TextWatcher {

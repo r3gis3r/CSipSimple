@@ -26,7 +26,7 @@ import android.os.RemoteException;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipCallSession;
-import com.csipsimple.service.ISipService;
+import com.csipsimple.api.ISipService;
 
 
 public class AccountListUtils {

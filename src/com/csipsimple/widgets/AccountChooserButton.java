@@ -32,7 +32,7 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.service.ISipService;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.Compatibility;
