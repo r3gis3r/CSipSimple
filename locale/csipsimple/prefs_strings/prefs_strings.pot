@@ -624,11 +624,11 @@ msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
 msgctxt "gsm_integration_type"
-msgid "Integration type with GSM"
+msgid "Mobile phone integration"
 msgstr ""
 
 msgctxt "gsm_integration_type_desc"
-msgid "How the application use GSM (or not)"
+msgid "How CSipSimple uses your mobile phone (or not)"
 msgstr ""
 
 #. Fast settings

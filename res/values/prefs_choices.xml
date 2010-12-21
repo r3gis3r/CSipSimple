@@ -85,7 +85,7 @@
 	</string-array>
 	
 	<string-array name="dial_press_mode_choices">
-		<item>Use android setting</item>
+		<item>Use Android setting</item>
 		<item>Force</item>
 		<item>Prevent</item>
 	</string-array>
