@@ -230,6 +230,7 @@ public class MediaManager {
 			audioManager.setMode(AudioManager.MODE_IN_CALL);
 		}
 		
+		
 		audioManager.setMode(targetMode);
 		
 		//Routing

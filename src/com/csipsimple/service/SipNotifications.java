@@ -26,6 +26,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.provider.CallLog;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -33,6 +34,7 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipCallSession;
@@ -48,11 +50,13 @@ public class SipNotifications {
 	private Context context;
 	private Notification missedCallNotification;
 	private Notification messageNotification;
+	private Notification messageVoicemail;
 
 	public static final int REGISTER_NOTIF_ID = 1;
 	public static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
 	public static final int CALLLOG_NOTIF_ID = REGISTER_NOTIF_ID + 2;
 	public static final int MESSAGE_NOTIF_ID = REGISTER_NOTIF_ID + 3;
+	public static final int VOICEMAIL_NOTIF_ID = REGISTER_NOTIF_ID + 4;
 	
 	public SipNotifications(Context aContext) {
 		context = aContext;
@@ -162,6 +166,28 @@ public class SipNotifications {
 		}
 	}
 	
+	
+
+	public void showNotificationForVoiceMail(SipProfile acc, int numberOfMessages, String voiceMailNumber) {
+		if(messageVoicemail == null) {
+			messageVoicemail = new Notification(android.R.drawable.stat_notify_voicemail, context.getString(R.string.voice_mail), System.currentTimeMillis());
+			messageVoicemail.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+			messageVoicemail.defaults |= Notification.DEFAULT_SOUND;
+			messageVoicemail.defaults |= Notification.DEFAULT_LIGHTS;
+		}
+		
+		Intent notificationIntent = new Intent(Intent.ACTION_CALL);
+		notificationIntent.setData(Uri.parse(voiceMailNumber));
+		notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		
+		messageVoicemail.setLatestEventInfo(context, context.getString(R.string.voice_mail), 
+				acc.getProfileName()+" : "+Integer.toString(numberOfMessages), contentIntent);
+		notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail);
+	}
+	
 	private static String viewingRemoteFrom = null;
 	public void setViewingMessageFrom(String remoteFrom) {
 		viewingRemoteFrom = remoteFrom;
@@ -210,7 +236,13 @@ public class SipNotifications {
 		notificationManager.cancel(MESSAGE_NOTIF_ID);
 	}
 	
+	public void cancelVoicemails() {
+		notificationManager.cancel(VOICEMAIL_NOTIF_ID);
+	}
+	
+	
 	public void cancelAll() {
 		notificationManager.cancelAll();
 	}
+
 }

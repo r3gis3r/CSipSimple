@@ -464,7 +464,7 @@ public class Filter {
 			return repr;
 		}
 		
-		matcher = Pattern.compile("^(.+)\\$1$").matcher(replace);
+		matcher = Pattern.compile("^(.*)\\$1$").matcher(replace);
 		if(matcher.matches()) {
 			repr.type = REPLACE_MATCH_TO;
 			repr.fieldContent = matcher.group(1);

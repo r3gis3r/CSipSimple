@@ -49,6 +49,8 @@ public class pjsuaJNI {
   public final static native void Callback_on_typingSwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_, long jarg5, pj_str_t jarg5_, int jarg6);
   public final static native void Callback_on_nat_detect(long jarg1, Callback jarg1_, long jarg2);
   public final static native void Callback_on_nat_detectSwigExplicitCallback(long jarg1, Callback jarg1_, long jarg2);
+  public final static native void Callback_on_mwi_info(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_);
+  public final static native void Callback_on_mwi_infoSwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_);
   public final static native long new_Callback();
   public final static native void Callback_director_connect(Callback obj, long cptr, boolean mem_own, boolean weak_global);
   public final static native void Callback_change_ownership(Callback obj, long cptr, boolean take_or_release);
@@ -978,6 +980,9 @@ public class pjsuaJNI {
   }
   public static void SwigDirector_Callback_on_nat_detect(Callback self, long res) {
     self.on_nat_detect((res == 0) ? null : new SWIGTYPE_p_pj_stun_nat_detect_result(res, false));
+  }
+  public static void SwigDirector_Callback_on_mwi_info(Callback self, int acc_id, long mime_type, long body) {
+    self.on_mwi_info(acc_id, (mime_type == 0) ? null : new pj_str_t(mime_type, false), (body == 0) ? null : new pj_str_t(body, false));
   }
 
   private final static native void swig_module_init();

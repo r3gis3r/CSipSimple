@@ -153,4 +153,11 @@ public class Ippi extends SimpleImplementation {
 	public boolean needRestart() {
 		return true;
 	}
+	
+	public SipProfile buildAccount(SipProfile account) {
+		account = super.buildAccount(account);
+		//Proxy useless....?????
+		//account.proxies = null;
+		return account;
+	}
 }

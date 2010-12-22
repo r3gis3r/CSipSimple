@@ -113,9 +113,10 @@ public final class SipCallSession implements Parcelable {
 		*/
 	}
 	
+	public static final int INVALID_CALL_ID = -1;
 	
 	public int PrimaryKey = -1;
-	private int callId;
+	private int callId = INVALID_CALL_ID;
 	private int callState = InvState.INVALID;
 	private String remoteContact;
 	private boolean isIncoming;

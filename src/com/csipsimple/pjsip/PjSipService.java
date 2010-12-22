@@ -879,7 +879,7 @@ public class PjSipService {
 
 		synchronized (creatingSipStack) {
 			if (created/* && !creating */ && userAgentReceiver != null) {
-				SipCallSession callInfo = userAgentReceiver.getCallInfo(callId);
+				SipCallSession callInfo = userAgentReceiver.getCallInfo(callId, false);
 				return callInfo;
 			}
 		}

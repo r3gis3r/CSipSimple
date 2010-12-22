@@ -129,6 +129,11 @@ public class OutgoingCallChooser extends ListActivity {
 		if(number == null && getIntent().getAction().equalsIgnoreCase(Intent.ACTION_CALL)) {
 			number = getIntent().getData().getSchemeSpecificPart();
 		}
+		int shouldCallId = getIntent().getIntExtra(SipProfile.FIELD_ACC_ID, SipProfile.INVALID_ID);
+		if(shouldCallId != SipProfile.INVALID_ID) {
+			accountToCallTo = shouldCallId;
+		}
+		
 		/*else {
 			Log.e(THIS_FILE, "This action : "+getIntent().getAction()+" is not supported by this view");
 			return;
@@ -236,9 +241,13 @@ public class OutgoingCallChooser extends ListActivity {
 		List<SipProfile> accounts = database.getListAccounts(true);
 		database.close();
 		
+		if(accountToCallTo != null) {
+			checkIfMustAccountNotValid();
+		}
+		
 		if (isCallableNumber(number, accounts, database)) {
 			Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
-
+			
 			SipProfile mustCallAccount = isMustCallableNumber(number, accounts, database);
 			if(mustCallAccount != null) {
 				accountToCallTo = mustCallAccount.id;
@@ -247,6 +256,8 @@ public class OutgoingCallChooser extends ListActivity {
 		}else {
 			placePstnCall();
 		}
+		
+		
 	}
 
 	/**
@@ -377,6 +388,7 @@ public class OutgoingCallChooser extends ListActivity {
 		if (service != null && accountToCallTo != null) {
 			if(accountToCallTo == SipProfile.GSM_ACCOUNT_ID) {
 				placePstnCall();
+				accountToCallTo = null;
 				return true;
 			}
 			
@@ -400,6 +412,7 @@ public class OutgoingCallChooser extends ListActivity {
 						String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
 						
 						service.makeCall("sip:"+toCall, account.id);
+						accountToCallTo = null;
 						finish();
 						return true;
 					} catch (RemoteException e) {

@@ -61,6 +61,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 	private int controlMode;
 	private MediaState lastMediaState;
 	private ImageButton holdButton;
+	private SipCallSession currentCall;
 //	private ImageButton settingsButton;
 
 	/**
@@ -132,7 +133,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 		 * @param whichAction
 		 *            what action has been done
 		 */
-		void onTrigger(int whichAction);
+		void onTrigger(int whichAction, SipCallSession call);
 	}
 
 	public InCallControls(Context context, AttributeSet attrs) {
@@ -245,14 +246,16 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 
 
 	public void setCallState(SipCallSession callInfo) {
-		if(callInfo == null) {
+		currentCall = callInfo;
+		
+		if(currentCall == null) {
 			controlMode = MODE_NO_ACTION;
 			inCallButtons.setVisibility(GONE);
 			setCallLockerVisibility(GONE);
 			return;
 		}
 		
-		int state = callInfo.getCallState();
+		int state = currentCall.getCallState();
 		switch (state) {
 		case SipCallSession.InvState.INCOMING:
 			controlMode = MODE_LOCKER;
@@ -284,7 +287,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 			break;
 		case SipCallSession.InvState.EARLY:
 		default:
-			if (callInfo.isIncoming()) {
+			if (currentCall.isIncoming()) {
 				controlMode = MODE_LOCKER;
 				inCallButtons.setVisibility(GONE);
 				setCallLockerVisibility(VISIBLE);
@@ -327,7 +330,7 @@ public class InCallControls extends FrameLayout implements OnTriggerListener, On
 
 	private void dispatchTriggerEvent(int whichHandle) {
 		if (onTriggerListener != null) {
-			onTriggerListener.onTrigger(whichHandle);
+			onTriggerListener.onTrigger(whichHandle, currentCall);
 		}
 	}
 	

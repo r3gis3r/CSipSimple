@@ -78,8 +78,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private static String THIS_FILE = "SIP CALL HANDLER";
 
 	private SipCallSession[] callsInfo = null;
-	private int callId = -1;
-	private int callState = SipCallSession.InvState.NULL;
 	private FrameLayout mainFrame;
 	private InCallControls inCallControls;
 	private InCallInfo inCallInfo;
@@ -330,7 +328,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				String callee = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 				try {
 					if(service != null) {
-						service.xfer(callId, callee);
+
+						SipCallSession currentCall = getCurrentCallInfo();
+						if(currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
+							service.xfer(currentCall.getCallId(), callee);
+						}
 					}
 				} catch (RemoteException e) {
 					//TODO : toaster 
@@ -362,11 +364,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 					recItem.setEnabled(true);
 					valueOk = true;
 				}else {
-					if(service.canRecord(callId)) {
-						recItem.setTitle(R.string.record);
-						recItem.setIcon(R.drawable.record);
-						recItem.setEnabled(true);
-						valueOk = true;
+					SipCallSession currentCall = getCurrentCallInfo();
+					if(currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
+						if(service.canRecord(currentCall.getCallId())) {
+							recItem.setTitle(R.string.record);
+							recItem.setIcon(R.drawable.record);
+							recItem.setEnabled(true);
+							valueOk = true;
+						}
 					}
 				}
 			} catch (RemoteException e) {
@@ -396,7 +401,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		case RECORD_MENU:
 			try {
 				if(service != null) {
-					service.startRecording(callId);
+					SipCallSession currentCall = getCurrentCallInfo();
+					if(currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
+						service.startRecording(currentCall.getCallId());
+					}
 				}
 			} catch (RemoteException e) {
 				//TODO : toaster 
@@ -429,12 +437,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			if(currentCallInfo != null) {
 				break;
 			}
-		}
-		if(currentCallInfo != null) {
-			callId = currentCallInfo.getCallId();
-			callState = currentCallInfo.getCallState();
-		}else {
-			callId = -1;
 		}
 		return currentCallInfo;
 	}
@@ -712,33 +714,41 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 	private boolean isFirstRun = true;
 
 	@Override
-	public void onTrigger(int whichAction) {
+	public void onTrigger(int whichAction, SipCallSession call) {
 		Log.d(THIS_FILE, "In Call Activity is triggered");
-		Log.d(THIS_FILE, "We have a current call : " + callId);
-		Log.d(THIS_FILE, "And a service : "+service);
+		Log.d(THIS_FILE, "We have a current call : " + call);
+		if(call == null) {
+			Log.e(THIS_FILE, "Try to do an action on a null call !!!");
+		}
+		if(call.getCallId() == SipCallSession.INVALID_CALL_ID) {
+			Log.e(THIS_FILE, "Try to do an action on an invalid call !!!");
+		}
+		
+		//Reset proximity sensor timer
 		if(proximitySensor == null && proximityWakeLock == null) {
 			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
 		}
+		
 		try {
 			switch(whichAction) {
 				case TAKE_CALL:{
-					if (callId != -1 && service != null) {
-						service.answer(callId, SipCallSession.StatusCode.OK);
+					if (service != null) {
+						service.answer(call.getCallId(), SipCallSession.StatusCode.OK);
 					}
 					break;
 				}
 				case DECLINE_CALL: 
 				case CLEAR_CALL:
 				{
-					if (callId != -1 && service != null) {
-						service.hangup(callId, 0);
+					if (service != null) {
+						service.hangup(call.getCallId(), 0);
 					}
 					break;
 				}
 				case MUTE_ON:
 				case MUTE_OFF:
 				{
-					if (callId != -1 && service != null) {
+					if ( service != null) {
 						service.setMicrophoneMute((whichAction == MUTE_ON)?true:false);
 					}
 					break;
@@ -746,21 +756,20 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				case SPEAKER_ON :
 				case SPEAKER_OFF :
 				{
-					if (callId != -1 && service != null) {
+					if (service != null) {
 						service.setSpeakerphoneOn((whichAction == SPEAKER_ON)?true:false);
 					}
 					break;
 				}
 				case BLUETOOTH_ON:
 				case BLUETOOTH_OFF: {
-					if (callId != -1 && service != null) {
+					if (service != null) {
 						service.setBluetoothOn((whichAction == BLUETOOTH_ON)?true:false);
 					}
 					break;
 				}
 				case DIALPAD_ON:
-				case DIALPAD_OFF:
-				{
+				case DIALPAD_OFF: {
 					setDialpadVisibility((whichAction == DIALPAD_ON)?View.VISIBLE:View.GONE);
 					break;
 				}
@@ -770,14 +779,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 					break;
 				}
 				case TOGGLE_HOLD:{
-					SipCallSession callInfo = getCurrentCallInfo();
-					if (callId != -1 && service != null && callInfo != null) {
+					if (service != null) {
 						//Log.d(THIS_FILE, "Current state is : "+callInfo.getCallState().name()+" / "+callInfo.getMediaStatus().name());
-						if(callInfo.getMediaStatus() == SipCallSession.MediaState.LOCAL_HOLD ||
-								callInfo.getMediaStatus() == SipCallSession.MediaState.NONE ) {
-							service.reinvite(callInfo.getCallId(), true);
+						if(call.getMediaStatus() == SipCallSession.MediaState.LOCAL_HOLD ||
+								call.getMediaStatus() == SipCallSession.MediaState.NONE ) {
+							service.reinvite(call.getCallId(), true);
 						}else {
-							service.hold(callInfo.getCallId());
+							service.hold(call.getCallId());
 						}
 					}
 					break;
@@ -798,15 +806,19 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		if(proximitySensor == null && proximityWakeLock == null) {
 			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
 		}
-		if (callId != -1 && service != null) {
-			try {
-				service.sendDtmf(callId, keyCode);
-				dialFeedback.giveFeedback(dialTone);
-				KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
-				char nbr = event.getNumber();
-				dialPadTextView.getText().append(nbr);
-			} catch (RemoteException e) {
-				Log.e(THIS_FILE, "Was not able to send dtmf tone", e);
+		
+		if (service != null) {
+			SipCallSession currentCall = getCurrentCallInfo();
+			if(currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
+				try {
+					service.sendDtmf(currentCall.getCallId(), keyCode);
+					dialFeedback.giveFeedback(dialTone);
+					KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+					char nbr = event.getNumber();
+					dialPadTextView.getText().append(nbr);
+				} catch (RemoteException e) {
+					Log.e(THIS_FILE, "Was not able to send dtmf tone", e);
+				}
 			}
 		}
 		
@@ -826,12 +838,15 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
 			Log.d(THIS_FILE, "Distance is now " + distance);
 			boolean isValidCallState = false;
-			isValidCallState = ( 
-				(callState == SipCallSession.InvState.CONFIRMED ) || 
-				(callState == SipCallSession.InvState.CONNECTING )|| 
-				(callState == SipCallSession.InvState.CALLING )|| 
-				(callState == SipCallSession.InvState.EARLY )
-			);
+			for(SipCallSession callInfo : callsInfo) {
+				int state = callInfo.getCallState();
+				isValidCallState |= ( 
+					(state == SipCallSession.InvState.CONFIRMED ) || 
+					(state == SipCallSession.InvState.CONNECTING )|| 
+					(state == SipCallSession.InvState.CALLING )|| 
+					(state == SipCallSession.InvState.EARLY )
+				);
+			}
 			
 			if( isValidCallState && active) {
 				lockOverlay.show();
@@ -856,7 +871,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			break;
 		case RIGHT_HANDLE:
 			Log.d(THIS_FILE, "We clear the call");
-			onTrigger(OnTriggerListener.CLEAR_CALL);
+			onTrigger(OnTriggerListener.CLEAR_CALL, getCurrentCallInfo());
 			lockOverlay.reset();
 		default:
 			break;

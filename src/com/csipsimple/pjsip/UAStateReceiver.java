@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.Callback;
 import org.pjsip.pjsua.SWIGTYPE_p_p_pjmedia_port;
@@ -90,7 +92,7 @@ public class UAStateReceiver extends Callback {
 			}
 		}
 		
-		SipCallSession callInfo = getCallInfo(callId);
+		SipCallSession callInfo = getCallInfo(callId, true);
 		Log.d(THIS_FILE, "Incoming call <<");
 		treatIncomingCall(acc_id, callInfo);
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
@@ -102,7 +104,7 @@ public class UAStateReceiver extends Callback {
 	public void on_call_state(int callId, pjsip_event e) {
 		Log.d(THIS_FILE, "Call state <<");
 		//Get current infos
-		SipCallSession callInfo = getCallInfo(callId);
+		SipCallSession callInfo = getCallInfo(callId, true);
 		int callState = callInfo.getCallState();
 		if (callState == SipCallSession.InvState.DISCONNECTED) {
 			if(pjService.mediaManager != null) {
@@ -197,7 +199,7 @@ public class UAStateReceiver extends Callback {
 			incomingCallLock.release();
 		}
 		
-		SipCallSession callInfo = getCallInfo(callId);
+		SipCallSession callInfo = getCallInfo(callId, true);
 		
 		if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
 			pjsua.conf_connect(callInfo.getConfPort(), 0);
@@ -221,6 +223,64 @@ public class UAStateReceiver extends Callback {
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
 	}
 	
+	@Override
+	public void on_mwi_info(int acc_id, pj_str_t mime_type, pj_str_t body) {
+		//Treat incoming voice mail notification.
+		
+		String msg = body.getPtr();
+		//Log.d(THIS_FILE, "We have a message :: " + acc_id + " | " + mime_type.getPtr() + " | " + body.getPtr());
+		
+		boolean hasMessage = false;
+		int numberOfMessages = 0;
+		String voiceMailNumber = "";
+		
+		String lines[] = msg.split("\\r?\\n");
+		// Decapsulate the application/simple-message-summary
+		// TODO : should we check mime-type?
+		// rfc3842
+		Pattern messWaitingPattern = Pattern.compile(".*Messages-Waiting[ \t]?:[ \t]?(yes|no).*", Pattern.CASE_INSENSITIVE); 
+		Pattern messAccountPattern = Pattern.compile(".*Message-Account[ \t]?:[ \t]?(.*)", Pattern.CASE_INSENSITIVE); 
+		Pattern messVoiceNbrPattern = Pattern.compile(".*Voice-Message[ \t]?:[ \t]?([0-9]*)/[0-9]*.*", Pattern.CASE_INSENSITIVE); 
+		
+		
+		for(String line : lines) {
+			Matcher m;
+			m = messWaitingPattern.matcher(line);
+			if(m.matches()) {
+				Log.w(THIS_FILE, "Matches : "+m.group(1));
+				if("yes".equalsIgnoreCase(m.group(1))) {
+					Log.d(THIS_FILE, "Hey there is messages !!! ");
+					hasMessage = true;
+					
+				}
+				continue;
+			}
+			m = messAccountPattern.matcher(line);
+			if(m.matches()) {
+				voiceMailNumber = m.group(1);
+				Log.d(THIS_FILE, "VM acc : " + voiceMailNumber);
+				continue;
+			}
+			m = messVoiceNbrPattern.matcher(line);
+			if(m.matches()) {
+				try {
+					numberOfMessages = Integer.parseInt(m.group(1));
+				}catch(NumberFormatException e) {
+					Log.w(THIS_FILE, "Not well formated number "+m.group(1));
+				}
+				Log.d(THIS_FILE, "Nbr : "+numberOfMessages);
+				continue;
+			}
+		}
+		
+		if(hasMessage && numberOfMessages > 0) {
+			SipProfile acc = pjService.getAccountForPjsipId(acc_id);
+			if(acc != null) {
+				Log.d(THIS_FILE, acc_id+" -> Has found account "+acc.getDefaultDomain()+" "+ acc.id + " >> "+acc.getProfileName());
+				notificationManager.showNotificationForVoiceMail(acc, numberOfMessages, voiceMailNumber);
+			}
+		}
+	}
 	
 	
 	// -------
@@ -229,21 +289,31 @@ public class UAStateReceiver extends Callback {
 	private HashMap<Integer, SipCallSession> callsList = new HashMap<Integer, SipCallSession>();
 	//private long currentCallStart = 0;
 	
-	public SipCallSession getCallInfo(Integer callId) {
+	public void updateCallInfoFromStack(SipCallSession call) {
+		//Update from pjsip
+		try {
+			PjSipCalls.updateSessionFromPj(call, pjService);
+		} catch (UnavailableException e) {
+			//TODO : treat error
+			Log.e(THIS_FILE, "Call does not exist anymore "+call.getCallId());
+		}
+	}
+	
+	public SipCallSession getCallInfo(Integer callId, boolean update) {
 		Log.d(THIS_FILE, "Get call info");
-		SipCallSession callInfo = callsList.get(callId);
-		if(callInfo == null) {
-			callInfo = PjSipCalls.getCallInfo(callId, pjService);
-			callsList.put(callId, callInfo);
-		} else {
-			//Update from pjsip
-			try {
-				PjSipCalls.updateSessionFromPj(callInfo, pjService);
-			} catch (UnavailableException e) {
-				//TODO : treat error
+		SipCallSession callInfo;
+		synchronized (callsList) {
+			callInfo = callsList.get(callId);
+			if(callInfo == null) {
+				callInfo = PjSipCalls.getCallInfo(callId, pjService);
+				callsList.put(callId, callInfo);
+			} else {
+				if(update) {
+					Log.d(THIS_FILE, "UPDATE CALL INFOS !!!");
+					updateCallInfoFromStack(callInfo);
+				}
 			}
 		}
-		
 		return callInfo;
 	}
 	
@@ -550,7 +620,7 @@ public class UAStateReceiver extends Callback {
 		// any call is in an active state.
 		//
 		for (Integer i : callsList.keySet()) { 
-			SipCallSession callInfo = getCallInfo(i);
+			SipCallSession callInfo = getCallInfo(i, false);
 			if (callInfo.isActive()) {
 				return callInfo;
 			}
@@ -611,7 +681,7 @@ public class UAStateReceiver extends Callback {
 	public void startRecording(int callId) {
 		// Ensure nothing is recording actually
 		if (recordedCall == INVALID_RECORD) {
-			SipCallSession callInfo = getCallInfo(callId);
+			SipCallSession callInfo = getCallInfo(callId, false);
 			if(callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
 				return;
 			}
@@ -648,7 +718,7 @@ public class UAStateReceiver extends Callback {
 	
 	public boolean canRecord(int callId) {
 		if (recordedCall == INVALID_RECORD) {
-			SipCallSession callInfo = getCallInfo(callId);
+			SipCallSession callInfo = getCallInfo(callId, false);
 			if(callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
 				return false;
 			}
