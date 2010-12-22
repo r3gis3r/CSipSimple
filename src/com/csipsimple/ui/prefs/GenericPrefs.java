@@ -82,7 +82,9 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		if(val.equals("")){
 			val = getDefaultFieldSummary(fieldName);
 		}
-		pref.setSummary(val);
+		if(pref != null) {
+			pref.setSummary(val);
+		}
 		
 	}
 	
@@ -98,7 +100,9 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		}else{
 			val = val.replaceAll(".", "*");
 		}
-		pref.setSummary(val);
+		if(pref != null) {
+			pref.setSummary(val);
+		}
 	}
 	
 	protected void hidePreference(String parent, String fieldName) {
