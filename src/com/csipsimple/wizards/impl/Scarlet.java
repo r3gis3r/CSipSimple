@@ -42,6 +42,9 @@ public class Scarlet extends AuthorizationImplementation {
 		
 		accountAuthorization.setTitle(R.string.w_common_username);
 		accountAuthorization.setDialogTitle(R.string.w_common_username);
+		
+
+		hidePreference(null, SERVER);
 	}
 	
 
@@ -63,4 +66,8 @@ public class Scarlet extends AuthorizationImplementation {
 		return account;
 	}
 	
+
+	protected String getDomain() {
+		return "voip.scarlet.be";
+	}
 }
