@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.00-16" android:versionCode="458">
+	android:versionName="0.00-16" android:versionCode="489">
 	<supports-screens android:smallScreens="true" 
 		android:normalScreens="true"
 		android:largeScreens="true"
@@ -125,7 +125,6 @@
 			android:screenOrientation="portrait" 
 			android:configChanges="orientation"
 			android:allowTaskReparenting="true"
-			android:taskAffinity=""
 			android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleTask">
 			<intent-filter android:priority="10">
                  <action android:name="com.csipsimple.phone.action.INCALL" />
@@ -139,6 +138,7 @@
         
         <activity android:name="com.csipsimple.ui.InCallMediaControl" android:label="@string/prefs_media" 
         	android:configChanges="orientation"
+        	android:taskAffinity="com.csipsimple.ui.InCallActivity"
 			android:theme="@style/CupcakeDialog"></activity>
         
         <receiver android:name="com.csipsimple.service.HeadsetButtonReceiver"></receiver>

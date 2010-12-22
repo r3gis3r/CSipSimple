@@ -335,6 +335,7 @@ public class SipService extends Service {
 	        	if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME)) {
 	        		Intent adjustVolumeIntent = new Intent(SipService.this, InCallMediaControl.class);
 	        		adjustVolumeIntent.putExtra(Intent.EXTRA_KEY_EVENT, direction);
+	        		adjustVolumeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK   );
 	        		startActivity(adjustVolumeIntent);
 	        	}else {
 	        		pjService.adjustStreamVolume(Compatibility.getInCallStream(), direction, flags);
