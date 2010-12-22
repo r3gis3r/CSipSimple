@@ -18,8 +18,6 @@
 package com.csipsimple.wizards.impl;
 
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.preference.EditTextPreference;
 
@@ -52,27 +50,10 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 	public void fillLayout(final SipProfile account) {
 		bindFields();
 		
+		accountDisplayName.setText(account.getDisplayName());
 		
-
-		String display_name = account.display_name;
-		if(display_name.equalsIgnoreCase("")) {
-			display_name = getDefaultName();
-		}
-		accountDisplayName.setText(display_name);
-		
-		
-		String account_cfgid = account.acc_id;
-		if(account_cfgid == null) {
-			account_cfgid = "";
-		}
-		Pattern p = Pattern.compile("<sip:([^@]*)@([^>]*)>");
-		Matcher m = p.matcher(account_cfgid);
-
-		if (m.matches()) {
-			account_cfgid = m.group(1);
-		}
-		
-		accountUsername.setText(account_cfgid);
+		accountUsername.setText(account.getUserName());
+		accountServer.setText(account.getSipDomain());
 		
 		accountPassword.setText(account.data);
 		accountAuthorization.setText(account.username);
@@ -82,8 +63,9 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 		setStringFieldSummary(DISPLAY_NAME);
 		setStringFieldSummary(USER_NAME);
 		setPasswordFieldSummary(PASSWORD);
-		setPasswordFieldSummary(AUTH_NAME);
-		setPasswordFieldSummary(SERVER);
+		setStringFieldSummary(AUTH_NAME);
+		setStringFieldSummary(SERVER);
+		
 	}
 	
 	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**

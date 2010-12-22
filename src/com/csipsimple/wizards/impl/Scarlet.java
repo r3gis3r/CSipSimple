@@ -66,6 +66,17 @@ public class Scarlet extends AuthorizationImplementation {
 		return account;
 	}
 	
+	public boolean canSave() {
+		boolean isValid = true;
+		
+		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
+		isValid &= checkField(accountUsername, isEmpty(accountUsername));
+		isValid &= checkField(accountAuthorization, isEmpty(accountAuthorization));
+		isValid &= checkField(accountPassword, isEmpty(accountPassword));
+	//	isValid &= checkField(accountServer, isEmpty(accountServer));
+
+		return isValid;
+	}
 
 	protected String getDomain() {
 		return "voip.scarlet.be";
