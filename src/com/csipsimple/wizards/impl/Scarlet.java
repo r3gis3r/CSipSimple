@@ -44,12 +44,23 @@ public class Scarlet extends AuthorizationImplementation {
 		accountAuthorization.setDialogTitle(R.string.w_common_username);
 	}
 	
+
+	@Override
+	public String getDefaultFieldSummary(String fieldName) {
+		if(fieldName.equals(USER_NAME)) {
+			return parent.getString(R.string.w_common_phone_number_desc);
+		}
+		return super.getDefaultFieldSummary(fieldName);
+	}
+	
 	
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
+		//Ensure registration timeout value
 		account.reg_timeout = 1800;
+		account.proxies = null;
+		account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
 	}
-
 	
 }
