@@ -43,6 +43,7 @@ import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.Gizmo5;
+import com.csipsimple.wizards.impl.ITTelenet;
 import com.csipsimple.wizards.impl.IiNet;
 import com.csipsimple.wizards.impl.Ip2Mobile;
 import com.csipsimple.wizards.impl.IpTel;
@@ -175,7 +176,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ale, 5, 
 					new Locale[]{}, false, true, 
 					Ecs.class));
-			
+			WIZARDS_DICT.put("ITTELENET", new WizardInfo("ITTELENET", "ITTelenet", 
+					R.drawable.ic_wizard_ittelenet, 10, 
+					new Locale[]{}, false, true, 
+					ITTelenet.class));
 			
 			//Locales
 			WIZARDS_DICT.put("CALLCENTRIC", new WizardInfo("CALLCENTRIC", "Callcentric", 
