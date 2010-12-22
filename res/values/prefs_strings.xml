@@ -170,7 +170,7 @@
 <string name="prevent_screen_rotation">Prevent screen rotation</string>
 <string name="prevent_screen_rotation_desc">Avoid rotation of the screen and keep in portrait mode</string>
 <string name="gsm_integration_type">Mobile phone integration</string>
-<string name="gsm_integration_type_desc">How CSipSimple uses your mobile phone (or not)</string>
+<string name="gsm_integration_type_desc">How the application uses your mobile phone (or not)</string>
 
 <!-- Fast settings -->
 <string name="android_integration">Integrate with Android</string>

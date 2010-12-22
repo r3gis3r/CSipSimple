@@ -628,7 +628,7 @@ msgid "Mobile phone integration"
 msgstr ""
 
 msgctxt "gsm_integration_type_desc"
-msgid "How CSipSimple uses your mobile phone (or not)"
+msgid "How the application uses your mobile phone (or not)"
 msgstr ""
 
 #. Fast settings
