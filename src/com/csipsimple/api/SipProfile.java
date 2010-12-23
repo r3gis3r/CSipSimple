@@ -411,7 +411,7 @@ public class SipProfile implements Parcelable {
 		if(parsedInfo.domain != null ) {
 			String dom = parsedInfo.domain;
 			if(parsedInfo.port != 5060) {
-				dom += Integer.toString(parsedInfo.port);
+				dom += ":"+Integer.toString(parsedInfo.port);
 			}
 			return dom;
 		}else {

@@ -317,6 +317,8 @@ public class OutgoingCallChooser extends ListActivity {
 	}
 	
 	private void checkNumberWithSipStarted() {
+		
+		
 		database.open();
 		List<SipProfile> accounts = database.getListAccounts(true);
 		database.close();
@@ -325,6 +327,7 @@ public class OutgoingCallChooser extends ListActivity {
 			checkIfMustAccountNotValid();
 		}
 		
+		//DB SIP
 		if (isCallableNumber(number, accounts, database)) {
 			Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
 			
@@ -333,25 +336,25 @@ public class OutgoingCallChooser extends ListActivity {
 				accountToCallTo = mustCallAccount.id;
 				checkIfMustAccountNotValid();
 			}
-		}else {
-			List<ResolveInfo> callers = Compatibility.getIntentsForCall(this);
-			SipProfile mustAcc = null;
-			ResolveInfo resInfo = null;
-			int index = 1;
-			for(ResolveInfo caller : callers) {
-				SipProfile acc = new SipProfile();
-				acc.id = SipProfile.INVALID_ID - index;
-				if(Filter.isMustCallNumber(acc, number, database)) {
-					resInfo = caller;
-					mustAcc = acc;
-					break;
-				}
-				index ++;
+		}
+		//Internal intents
+		List<ResolveInfo> callers = Compatibility.getIntentsForCall(this);
+		SipProfile mustAcc = null;
+		ResolveInfo resInfo = null;
+		int index = 1;
+		for(ResolveInfo caller : callers) {
+			SipProfile acc = new SipProfile();
+			acc.id = SipProfile.INVALID_ID - index;
+			if(Filter.isMustCallNumber(acc, number, database)) {
+				resInfo = caller;
+				mustAcc = acc;
+				break;
 			}
-			
-			if(mustAcc != null && resInfo != null) {
-				placeInternalCall(mustAcc, resInfo);
-			}
+			index ++;
+		}
+		
+		if(mustAcc != null && resInfo != null) {
+			placeInternalCall(mustAcc, resInfo);
 		}
 		
 		
@@ -384,12 +387,6 @@ public class OutgoingCallChooser extends ListActivity {
 				Log.d(THIS_FILE, ">> Response is YES");
 				return account;
 			}
-		}
-		// Check GSM account
-		SipProfile gsmProfile = new SipProfile();
-		gsmProfile.id = SipProfile.GSM_ACCOUNT_ID;
-		if(Filter.isMustCallNumber(gsmProfile, number, db)) {
-			return gsmProfile;
 		}
 		return null;
 	}
