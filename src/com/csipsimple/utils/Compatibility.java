@@ -81,6 +81,11 @@ public class Compatibility {
 	
 	public static boolean shouldUseRoutingApi() {
 		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
+
+		//HTC evo 4G
+		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
+			return true;
+		}
 		
 		if (!isCompatible(4)) {
 			//If android 1.5, force routing api use 
@@ -98,6 +103,10 @@ public class Compatibility {
 		}
 		//Samsung GT-I5500
 		if(android.os.Build.DEVICE.equalsIgnoreCase("GT-I5500")) {
+			return true;
+		}
+		//HTC evo 4G
+		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
 			return true;
 		}
 		return false;
@@ -197,6 +206,12 @@ public class Compatibility {
 			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.4);
 			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 0.2);
 			preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
+		}
+		//HTC evo 4G
+		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
+			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.5);
+			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 1.5);
+			
 		}
 		
 		//Use routing API?
@@ -311,18 +326,23 @@ public class Compatibility {
 		if(lastSeenVersion < 400) {
 			prefWrapper.setCodecPriority("G729/8000/1", "0");
 		}
-		if(lastSeenVersion < 420) {
+		if(lastSeenVersion < 497) {
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.THREAD_COUNT, "3");
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
-		}
-		if(lastSeenVersion < 466) {
+
 			if(lastSeenVersion > 0) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP_SERVICE, true);
 			}
-		}
-		if(lastSeenVersion < 471) {
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_QOS, false);
+			//HTC evo 4G
+			if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
+				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.5);
+				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 1.5);
+				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, true);
+				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, true);
+			}
 		}
+		
 	}
 
 
