@@ -46,7 +46,7 @@ public class OutgoingCall extends BroadcastReceiver {
 		if (number == null) return;
 		
 		//Log.d(THIS_FILE, "We are trying to call " + full_number);
-		if (!prefsWrapper.useIntegrateDialer() || ignoreNext.equalsIgnoreCase(number)) {
+		if (!prefsWrapper.useIntegrateDialer() || ignoreNext.equalsIgnoreCase(number) || action == null) {
 			Log.d(THIS_FILE, "Our selector disabled, or Mobile chosen in our selector, send to tel");
 			//Log.d(THIS_FILE, "we will force it ");
 			ignoreNext = "";
@@ -69,11 +69,15 @@ public class OutgoingCall extends BroadcastReceiver {
 				return;
 			}
 			
-			Log.d(THIS_FILE, "Can't use SIP, pass number along");
-			// Pass the call to pstn handle
-			setResultData(number);
-			return;
+			
 		}
+		
+		
+		
+		Log.d(THIS_FILE, "Can't use SIP, pass number along");
+		// Pass the call to pstn handle
+		setResultData(number);
+		return;
 	}
 
 

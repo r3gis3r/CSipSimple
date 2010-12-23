@@ -24,7 +24,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.ui.AccountFilters;
 import com.csipsimple.ui.AccountsChooserListActivity;
@@ -40,9 +39,6 @@ public class PrefsFilters  extends AccountsChooserListActivity implements OnItem
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		View pstnRow = findViewById(R.id.pstn_row);
-		pstnRow.setVisibility(View.VISIBLE);
-		pstnRow.setOnClickListener(this);
 		
 	}
 	@Override
@@ -55,22 +51,21 @@ public class PrefsFilters  extends AccountsChooserListActivity implements OnItem
 			startActivity(it);
 		}
 	}
+	
 	@Override
 	public void onClick(View v) {
-		int id = v.getId();
-		switch (id) {
-		case R.id.pstn_row:
+		Integer acc_id = (Integer) v.getTag();
+		if(acc_id != null) {
 			Intent it = new Intent(this, AccountFilters.class);
-			it.putExtra(Intent.EXTRA_UID,  -2);
+			it.putExtra(Intent.EXTRA_UID,  acc_id);
 			startActivity(it);
-			break;
-		default:
-			//Mmmm no reason to be here...
-			Log.w(THIS_FILE, "Clicked on something that doesn't exists");
-			break;
+		}else {
+			Log.w(THIS_FILE, "Hey something is wrong here...");
 		}
-		
 	}
 	
-	
+	@Override
+	protected boolean showInternalAccounts() {
+		return true;
+	}
 }

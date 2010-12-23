@@ -18,56 +18,11 @@
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:orientation="vertical">
+	android:orientation="vertical" android:id="@+id/acc_list_chooser_wrapper">
 
 	<ListView android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:id="@android:id/list"></ListView>
 
-<!-- GSM -->
-	<ImageView android:layout_width="fill_parent"
-		android:background="@android:drawable/divider_horizontal_dark"
-		android:layout_height="1px"></ImageView>
-	<LinearLayout android:layout_width="fill_parent"
-		android:minHeight="?android:attr/listPreferredItemHeight"
-		android:orientation="horizontal" android:gravity="center_vertical"
-		android:clickable="true" android:focusable="true"
-		android:visibility="gone"
-		android:background="@android:drawable/menuitem_background"
-		android:layout_height="?android:attr/listPreferredItemHeight"
-		android:id="@+id/use_pstn_row">
-		<ImageView android:id="@+id/favicon" android:focusable="false"
-			android:layout_height="48px" android:layout_width="48px"
-			android:layout_margin="6dip" android:layout_gravity="center_vertical"
-			android:src="@drawable/ic_launcher_pstn_phone" android:scaleType="fitXY" />
-		<TextView android:id="@+id/title" android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textStyle="bold" android:layout_height="wrap_content"
-			android:layout_marginBottom="2dip" android:layout_gravity="center_vertical"
-			android:layout_width="fill_parent" android:layout_weight="1"
-			android:text="@string/use_pstn" />
-	</LinearLayout>
-	
-<!-- SKYPE -->
-	<ImageView android:layout_width="fill_parent"
-		android:background="@android:drawable/divider_horizontal_dark"
-		android:layout_height="1px"></ImageView>
-	<LinearLayout android:layout_width="fill_parent"
-		android:minHeight="?android:attr/listPreferredItemHeight"
-		android:orientation="horizontal" android:gravity="center_vertical"
-		android:clickable="true" android:focusable="true"
-		android:visibility="gone"
-		android:background="@android:drawable/menuitem_background"
-		android:layout_height="?android:attr/listPreferredItemHeight"
-		android:id="@+id/use_skype_row">
-		<ImageView android:id="@+id/favicon" android:focusable="false"
-			android:layout_height="48px" android:layout_width="48px"
-			android:layout_margin="6dip" android:layout_gravity="center_vertical"
-			android:src="@drawable/ic_launcher_skype_phone" android:scaleType="fitXY" />
-		<TextView android:id="@+id/title" android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textStyle="bold" android:layout_height="wrap_content"
-			android:layout_marginBottom="2dip" android:layout_gravity="center_vertical"
-			android:layout_width="fill_parent" android:layout_weight="1"
-			android:text="@string/use_skype" />
-	</LinearLayout>
 	
 
 </LinearLayout>

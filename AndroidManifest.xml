@@ -109,17 +109,38 @@
                 <data android:scheme="sips" />
             </intent-filter>
             
-            <!-- 
+            
             <intent-filter>
                 <action android:name="android.intent.action.SENDTO" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="sip" />
+                <data android:scheme="sips" />
+                <data android:scheme="imto" />
 			 </intent-filter>
-			  -->
+			
 		</activity>
-		
+		<!-- 
+		 <activity-alias android:name="PrivilegedOutgoingCallBroadcaster"
+	               android:targetActivity="com.csipsimple.ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog"
+				android:configChanges="orientation"
+				android:launchMode="singleInstance"
+                 android:permission="android.permission.CALL_PRIVILEGED">
+             <intent-filter>
+                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
+                 <category android:name="android.intent.category.DEFAULT" />
+                 <data android:scheme="tel" />
+             </intent-filter>
+             <intent-filter>
+                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
+                 <category android:name="android.intent.category.DEFAULT" />
+                 <data android:mimeType="vnd.android.cursor.item/phone" />
+                 <data android:mimeType="vnd.android.cursor.item/phone_v2" />
+                 <data android:mimeType="vnd.android.cursor.item/person" />
+             </intent-filter>
+         </activity-alias>
+		 -->
 		
 		<activity android:name="com.csipsimple.ui.InCallActivity" 
 			android:screenOrientation="portrait" 
@@ -168,7 +189,10 @@
 		
 	</application>
 	<uses-sdk android:minSdkVersion="3" />
-
+	<!-- 
+	<uses-permission android:name="android.permission.CALL_PRIVILEGED" />
+ 	-->
+ 	
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
 	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>

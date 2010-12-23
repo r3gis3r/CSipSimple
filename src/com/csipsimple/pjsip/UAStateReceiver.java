@@ -19,7 +19,6 @@
 package com.csipsimple.pjsip;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -63,9 +62,9 @@ import com.csipsimple.models.SipMessage;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallLogHelper;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.Threading;
 
 public class UAStateReceiver extends Callback {
 	static String THIS_FILE = "SIP UA Receiver";
@@ -533,34 +532,9 @@ public class UAStateReceiver extends Callback {
 	
 
 	public void stopService() {
-		if(handlerThread != null) {
-			boolean fails = true;
-			
-			if(Compatibility.isCompatible(5)) {
-				try {
-					Method method = handlerThread.getClass().getDeclaredMethod("quit");
-					method.invoke(handlerThread);
-					fails = false;
-				} catch (Exception e) {
-					Log.d(THIS_FILE, "Something is wrong with api level declared use fallback method");
-				}
-			}
-			if (fails && handlerThread.isAlive()) {
-				try {
-					//This is needed for android 4 and lower
-					handlerThread.join(500);
-					/*
-					if (handlerThread.isAlive()) {
-						handlerThread.
-					}
-					*/
-				} catch (Exception e) {
-					Log.e(THIS_FILE, "Can t finish handler thread....", e);
-				}
-			}
-			handlerThread = null;
-		}
-		
+
+		Threading.stopHandlerThread(handlerThread);
+		handlerThread = null;
 		msgHandler = null;
 		
 	}

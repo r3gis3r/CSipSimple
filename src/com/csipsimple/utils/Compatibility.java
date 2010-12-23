@@ -28,6 +28,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.net.Uri.Builder;
 import android.provider.Contacts;
 import android.text.TextUtils;
 
@@ -224,6 +225,29 @@ public class Compatibility {
 			return false;
 		}
 		return true;
+	}
+	
+	public static List<ResolveInfo> getPossibleActivities(Context ctxt, Intent i){
+		PackageManager pm = ctxt.getPackageManager();
+		return pm.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY | PackageManager.GET_RESOLVED_FILTER);
+		
+	}
+	
+
+	public static Intent getPriviledgedIntent(String number) {
+		Intent i = new Intent("android.intent.action.CALL_PRIVILEGED");
+		Builder b = new Uri.Builder(); 
+		b.scheme("tel").appendPath(number);
+		i.setData( b.build() );
+		return i;
+	}
+	
+	private static List<ResolveInfo> callIntents = null;
+	public final static List<ResolveInfo> getIntentsForCall(Context ctxt){
+		if(callIntents == null) {
+			return getPossibleActivities(ctxt, getPriviledgedIntent("123"));
+		}
+		return callIntents;
 	}
 	
 	public static boolean canResolveIntent(Context context, final Intent intent) {

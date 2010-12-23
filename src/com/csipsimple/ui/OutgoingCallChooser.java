@@ -20,6 +20,7 @@ package com.csipsimple.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -27,27 +28,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.TypedArray;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.telephony.PhoneNumberUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.api.SipProfileState;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipProfileState;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
-import com.csipsimple.api.ISipService;
 import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
@@ -90,8 +101,6 @@ public class OutgoingCallChooser extends ListActivity {
 			
 			checkNumberWithSipStarted();
 
-			// Need full selector, finish layout
-			setContentView(R.layout.outgoing_account_list);
 			
 			//This need to be done after setContentView call
 			w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
@@ -102,7 +111,7 @@ public class OutgoingCallChooser extends ListActivity {
 
 			// Inform the list we provide context menus for items
 			//	getListView().setOnCreateContextMenuListener(this);
-			OutgoingCallChooser.this.bindAddedRows();
+			
 
 		}
 		
@@ -126,8 +135,25 @@ public class OutgoingCallChooser extends ListActivity {
 		
 		number = PhoneNumberUtils.getNumberFromIntent(getIntent(), this);
 		
-		if(number == null && getIntent().getAction().equalsIgnoreCase(Intent.ACTION_CALL)) {
-			number = getIntent().getData().getSchemeSpecificPart();
+		if(number == null) {
+			String action = getIntent().getAction();
+			if( action != null) {
+				if( action.equalsIgnoreCase(Intent.ACTION_CALL)) {
+					number = getIntent().getData().getSchemeSpecificPart();
+				}
+				if( action.equalsIgnoreCase(Intent.ACTION_SENDTO)){
+					Uri data =  getIntent().getData();
+					if(data.getScheme().equalsIgnoreCase("imto")) {
+						String auth = data.getAuthority();
+						if( "skype".equalsIgnoreCase(auth) ) {
+							String sipUser = data.getLastPathSegment();
+							Log.d(THIS_FILE, ">> Found skype account "+sipUser);
+							number = "sip:"+sipUser;
+						}
+					}
+					//TODO : scheme sip
+				}
+			}
 		}
 		int shouldCallId = getIntent().getIntExtra(SipProfile.FIELD_ACC_ID, SipProfile.INVALID_ID);
 		if(shouldCallId != SipProfile.INVALID_ID) {
@@ -157,12 +183,21 @@ public class OutgoingCallChooser extends ListActivity {
 
 		
 		super.onCreate(savedInstanceState);
+		
+	    //	Log.d(THIS_FILE, "We are updating the list");
+    	if(database == null) {
+    		database = new DBAdapter(this);
+    	}
+		// Need full selector, finish layout
+		setContentView(R.layout.outgoing_account_list);
 
 		// Start service and bind it. Finish selector in onServiceConnected
 		Intent sipService = new Intent(this, SipService.class);
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
 		
+		
+		bindAddedRows();
 	}
 	
 	 
@@ -178,63 +213,108 @@ public class OutgoingCallChooser extends ListActivity {
 		}catch(Exception e) {}
 	}
 
+	private void addRow(CharSequence label, Drawable dr, OnClickListener l) {
+		Log.d(THIS_FILE, "Append ROW "+label+ " et ");
+		// Get attr
+		
+		TypedArray a = obtainStyledAttributes(android.R.style.Theme, new int[]{android.R.attr.listPreferredItemHeight});
+		int sListItemHeight = a.getDimensionPixelSize(0, 0);
+		a.recycle();
+		
+		// Add line
+		LinearLayout root = (LinearLayout) findViewById(R.id.acc_list_chooser_wrapper);
+		
+		ImageView separator = new ImageView(this);
+		separator.setImageResource(R.drawable.divider_horizontal_dark);
+		separator.setScaleType(ScaleType.FIT_XY);
+		root.addView(separator, new LayoutParams(LayoutParams.FILL_PARENT, 1));
+		
+		LinearLayout line = new LinearLayout(this);
+		line.setFocusable(true);
+		line.setClickable(true);
+		line.setOrientation(LinearLayout.HORIZONTAL);
+		line.setGravity(Gravity.CENTER_VERTICAL);
+		line.setBackgroundResource(android.R.drawable.menuitem_background);
+		
+		ImageView icon = new ImageView(this);
+		icon.setImageDrawable(dr);
+		icon.setScaleType(ScaleType.FIT_XY);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(48, 48);
+		lp.setMargins(6, 6, 6, 6);
+		line.addView(icon, lp);
+		
+		TextView tv = new TextView(this);
+		tv.setText(label);
+		tv.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+		tv.setTypeface(Typeface.DEFAULT_BOLD);
+		line.addView(tv, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+		
+		line.setOnClickListener(l);
+		
+		root.addView(line, new LayoutParams(LayoutParams.FILL_PARENT,  sListItemHeight));
+		
+		
+	}
+	
+	
+	
 	private void bindAddedRows() {
-		//GSM ROW
-		LinearLayout gsmRow = (LinearLayout) findViewById(R.id.use_pstn_row);
-		gsmRow.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(THIS_FILE, "Choosen : pstn");
-				placePstnCall();
+		PackageManager pm = getPackageManager();
+		List<ResolveInfo> callers = Compatibility.getIntentsForCall(this);
+		
+		int index = 1; 
+		for(final ResolveInfo caller : callers) {
+			// Add row if possible
+			// Exclude GSM
+			SipProfile gsmProfile = new SipProfile();
+			gsmProfile.id = SipProfile.INVALID_ID - index;
+			
+			if(Filter.isCallableNumber(gsmProfile, number, database)) {
+				Log.d(THIS_FILE, caller.resolvePackageName+" : "+caller.activityInfo.name);
+				final SipProfile acc = gsmProfile;
+				addRow(caller.loadLabel(pm), caller.loadIcon(pm), new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						placeInternalCall(acc, caller);
+					}
+				});
 			}
-		});
-		if(Compatibility.canMakeGSMCall(this)) {
-			gsmRow.setVisibility(View.VISIBLE);
+			index ++;
+		}
+	}
+	
+	
+	private void placeInternalCall(SipProfile acc, ResolveInfo caller) {
+		
+		Intent i = null;
+		String phoneNumber = Filter.rewritePhoneNumber(acc, number, database);
+		//Case default dialer
+		if(caller.activityInfo.packageName.startsWith("com.android")) {
+			i = new Intent(Intent.ACTION_CALL);
+			i.setData(Uri.fromParts("tel", phoneNumber, null));
+			
+			//This will call again the outdial
+			OutgoingCall.ignoreNext = number;
+		}else if(caller.activityInfo.packageName.startsWith("com.skype")) {
+			i = new Intent();
+			i.setComponent(new ComponentName(caller.activityInfo.packageName, "com.skype.raider.contactsync.ContactSkypeOutCallStartActivity"));
+			i.setData(Uri.fromParts("tel", phoneNumber, null));
 		}
 		
-		//Skype row
-		LinearLayout skypeRow = (LinearLayout) findViewById(R.id.use_skype_row);
-		skypeRow.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(THIS_FILE, "Choosen : skype");
-				placeSkypeCall();
-			}
-		});
-		if(Compatibility.canMakeSkypeCall(this)) {
-	//		skypeRow.setVisibility(View.VISIBLE);
+		if(i != null) {
+			startActivity(i);
+			finishServiceIfNeeded();
+			finish();
+		}else {
+
+	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        builder.setTitle(R.string.warning)
+	            .setIcon(android.R.drawable.ic_dialog_alert)
+	        .setNeutralButton(R.string.ok, null)
+	        .setMessage("This application is not yet supported ("+caller.activityInfo.packageName+") :\nIt is possible that this application doesn't provide a way for other applications to do it! If so CRY on the project website")
+	        .show();
 		}
 	}
-	
-	
-	/**
-	 * Place a PSTN call
-	 */
-	private void placePstnCall() {
-		String phoneNumber = number;
-		OutgoingCall.ignoreNext = phoneNumber;
-		Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
-		intentMakePstnCall.setData(Uri.fromParts("tel", phoneNumber, null));
-		startActivity(intentMakePstnCall);
-		finishServiceIfNeeded();
-		finish();
-	}
-	
-	/**
-	 * Place a Skype call
-	 */
-	private void placeSkypeCall() {
-		/* --- OK Skype doesn't support skype: intent.... well ... still something to find here
-		String phoneNumber = number;
-		OutgoingCall.ignoreNext = phoneNumber;
-		Intent intentMakeSkypeCall = new Intent(Intent.ACTION_CALL);
-		intentMakeSkypeCall.setData(Uri.fromParts("skype", phoneNumber, null));
-		startActivity(intentMakeSkypeCall);
-		finishServiceIfNeeded();
-		finish();
-		*/
-	}
-	
 	
 	private void checkNumberWithSipStarted() {
 		database.open();
@@ -254,7 +334,24 @@ public class OutgoingCallChooser extends ListActivity {
 				checkIfMustAccountNotValid();
 			}
 		}else {
-			placePstnCall();
+			List<ResolveInfo> callers = Compatibility.getIntentsForCall(this);
+			SipProfile mustAcc = null;
+			ResolveInfo resInfo = null;
+			int index = 1;
+			for(ResolveInfo caller : callers) {
+				SipProfile acc = new SipProfile();
+				acc.id = SipProfile.INVALID_ID - index;
+				if(Filter.isMustCallNumber(acc, number, database)) {
+					resInfo = caller;
+					mustAcc = acc;
+					break;
+				}
+				index ++;
+			}
+			
+			if(mustAcc != null && resInfo != null) {
+				placeInternalCall(mustAcc, resInfo);
+			}
 		}
 		
 		
@@ -302,10 +399,7 @@ public class OutgoingCallChooser extends ListActivity {
 	 * Flush and re-populate static list of account (static because should not exceed 3 or 4 accounts)
 	 */
     private synchronized void updateList() {
-    //	Log.d(THIS_FILE, "We are updating the list");
-    	if(database == null) {
-    		database = new DBAdapter(this);
-    	}
+
     	
     	if(checkIfMustAccountNotValid()) {
     		//We need to do nothing else
@@ -327,17 +421,7 @@ public class OutgoingCallChooser extends ListActivity {
 		for(SipProfile acc : excludedAccounts) {
 			accountsList.remove(acc);
 		}
-		//Exclude GSM
-		SipProfile gsmProfile = new SipProfile();
-		gsmProfile.id = SipProfile.GSM_ACCOUNT_ID;
-		LinearLayout gsmRow = (LinearLayout) findViewById(R.id.use_pstn_row);
-		if(gsmRow != null) {
-			if(! Filter.isCallableNumber(gsmProfile, number, database)) {
-				gsmRow.setVisibility(View.GONE);
-			}else {
-				gsmRow.setVisibility(View.VISIBLE);
-			}
-		}
+		
 		
     	if(adapter == null) {
     		adapter = new AccountAdapter(this, accountsList, phoneNumber, database);
@@ -386,11 +470,7 @@ public class OutgoingCallChooser extends ListActivity {
 	private boolean checkIfMustAccountNotValid() {
 		
 		if (service != null && accountToCallTo != null) {
-			if(accountToCallTo == SipProfile.GSM_ACCOUNT_ID) {
-				placePstnCall();
-				accountToCallTo = null;
-				return true;
-			}
+			
 			
 	    	database.open();
 	    	SipProfile account = database.getAccount(accountToCallTo);

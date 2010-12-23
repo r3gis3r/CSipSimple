@@ -21,14 +21,23 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.TypedArray;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,10 +45,11 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public abstract class AccountsChooserListActivity extends Activity implements OnItemClickListener {
+public abstract class AccountsChooserListActivity extends Activity implements OnItemClickListener, OnClickListener {
 
 	private DBAdapter database;
 	private AccountAdapter adapter;
@@ -56,9 +66,15 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.accounts_list);
 		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
-		
+
+	    //	Log.d(THIS_FILE, "We are updating the list");
+    	if(database == null) {
+    		database = new DBAdapter(this);
+    	}
+    	
 		// Fill accounts with currently avalaible accounts
 		updateList();
+		bindAddedRows();
 		
 		accountsListView = (ListView) findViewById(R.id.account_list);
 		
@@ -73,13 +89,75 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 		
 	}
 	
+	protected boolean showInternalAccounts() {
+		return false;
+	}
+	
+
+	private void addRow(CharSequence label, Drawable dr, SipProfile acc) {
+		// Get attr
+		
+		TypedArray a = obtainStyledAttributes(android.R.style.Theme, new int[]{android.R.attr.listPreferredItemHeight});
+		int sListItemHeight = a.getDimensionPixelSize(0, 0);
+		a.recycle();
+		
+		// Add line
+		LinearLayout root = (LinearLayout) findViewById(R.id.acc_list_chooser_wrapper);
+		
+		ImageView separator = new ImageView(this);
+		separator.setImageResource(R.drawable.divider_horizontal_dark);
+		separator.setScaleType(ScaleType.FIT_XY);
+		root.addView(separator, new LayoutParams(LayoutParams.FILL_PARENT, 1));
+		
+		LinearLayout line = new LinearLayout(this);
+		line.setFocusable(true);
+		line.setClickable(true);
+		line.setOrientation(LinearLayout.HORIZONTAL);
+		line.setGravity(Gravity.CENTER_VERTICAL);
+		line.setBackgroundResource(android.R.drawable.menuitem_background);
+		
+		ImageView icon = new ImageView(this);
+		icon.setImageDrawable(dr);
+		icon.setScaleType(ScaleType.FIT_XY);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(48, 48);
+		lp.setMargins(6, 6, 6, 6);
+		line.addView(icon, lp);
+		
+		TextView tv = new TextView(this);
+		tv.setText(label);
+		tv.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+		tv.setTypeface(Typeface.DEFAULT_BOLD);
+		line.addView(tv, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+		
+		line.setTag(acc.id);
+		line.setOnClickListener(this);
+		
+		root.addView(line, new LayoutParams(LayoutParams.FILL_PARENT,  sListItemHeight));
+		
+		
+	}
+	
+
+	private void bindAddedRows() {
+		PackageManager pm = getPackageManager();
+		List<ResolveInfo> callers = Compatibility.getIntentsForCall(this);
+		
+		int index = 1; 
+		for(final ResolveInfo caller : callers) {
+			// Add row if possible
+			// Exclude GSM
+			SipProfile gsmProfile = new SipProfile();
+			gsmProfile.id = SipProfile.INVALID_ID - index;
+		
+			final SipProfile acc = gsmProfile;
+			addRow(caller.loadLabel(pm), caller.loadIcon(pm), acc);
+			
+			index ++;
+		}
+	}
 
     private synchronized void updateList() {
     	
-    //	Log.d(THIS_FILE, "We are updating the list");
-    	if(database == null) {
-    		database = new DBAdapter(this);
-    	}
     	
     	database.open();
 		accountsList = database.getListAccounts();
@@ -165,6 +243,12 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 
 	protected AccountAdapter getAdapter() {
 		return adapter;
+	}
+	
+
+	@Override
+	public void onClick(View v) {
+		// Nothing to do
 	}
 	
 }

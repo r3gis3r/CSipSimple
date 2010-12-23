@@ -70,6 +70,7 @@ import com.csipsimple.ui.InCallMediaControl;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.Threading;
 
 public class SipService extends Service {
 
@@ -451,203 +452,178 @@ public class SipService extends Service {
 	public SipNotifications notificationManager;
 	private MyExecutor mExecutor;
 	public static PjSipService pjService;
+	private static HandlerThread executorThread;
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
-		 private Timer mTimer = new Timer();
-	        private MyTimerTask mTask;
+		private Timer mTimer = new Timer();
+		private MyTimerTask mTask;
 
-	        @Override
-	        public void onReceive(final Context context, final Intent intent) {
-	            // Run the handler in MyExecutor to be protected by wake lock
-	            getExecutor().execute(new Runnable() {
-	                public void run() {
-	                    onReceiveInternal(context, intent);
-	                }
-	            });
-	        }
+		@Override
+		public void onReceive(final Context context, final Intent intent) {
+			// Run the handler in MyExecutor to be protected by wake lock
+			getExecutor().execute(new Runnable() {
+				public void run() {
+					onReceiveInternal(context, intent);
+				}
+			});
+		}
+		
+		public void stop() {
+			mTimer.purge();
+			mTimer.cancel();
+		}
 
-	        private void onReceiveInternal(Context context, Intent intent) {
-	            String action = intent.getAction();
-	            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-	                Bundle b = intent.getExtras();
-	                if (b != null) {
-	                    NetworkInfo netInfo = (NetworkInfo)
-	                            b.get(ConnectivityManager.EXTRA_NETWORK_INFO);
-	                    String type = netInfo.getTypeName();
-	                    NetworkInfo.State state = netInfo.getState();
+		private void onReceiveInternal(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+				Bundle b = intent.getExtras();
+				if (b != null) {
+					NetworkInfo netInfo = (NetworkInfo) b.get(ConnectivityManager.EXTRA_NETWORK_INFO);
+					String type = netInfo.getTypeName();
+					NetworkInfo.State state = netInfo.getState();
 
-	                    NetworkInfo activeNetInfo = getActiveNetworkInfo();
-	                        if (activeNetInfo != null) {
-                            Log.d(THIS_FILE, "active network: "
-                                    + activeNetInfo.getTypeName()
-                                    + ((activeNetInfo.getState() == NetworkInfo.State.CONNECTED)
-                                            ? " CONNECTED" : " DISCONNECTED"));
-                        } else {
-                            Log.d(THIS_FILE, "active network: null");
-                        }
-	                    if ((state == NetworkInfo.State.CONNECTED)
-	                            && (activeNetInfo != null)
-	                            && (activeNetInfo.getType() != netInfo.getType())) {
-	                        Log.d(THIS_FILE, "ignore connect event: " + type
-	                                + ", active: " + activeNetInfo.getTypeName());
-	                        return;
-	                    }
+					NetworkInfo activeNetInfo = getActiveNetworkInfo();
+					if (activeNetInfo != null) {
+						Log.d(THIS_FILE, "active network: " + activeNetInfo.getTypeName()
+								+ ((activeNetInfo.getState() == NetworkInfo.State.CONNECTED) ? " CONNECTED" : " DISCONNECTED"));
+					} else {
+						Log.d(THIS_FILE, "active network: null");
+					}
+					if ((state == NetworkInfo.State.CONNECTED) && (activeNetInfo != null) && (activeNetInfo.getType() != netInfo.getType())) {
+						Log.d(THIS_FILE, "ignore connect event: " + type + ", active: " + activeNetInfo.getTypeName());
+						return;
+					}
 
-	                    if (state == NetworkInfo.State.CONNECTED) {
-	                        Log.d(THIS_FILE, "Connectivity alert: CONNECTED " + type);
-	                        onChanged(type, true);
-	                    } else if (state == NetworkInfo.State.DISCONNECTED) {
-	                        Log.d(THIS_FILE, "Connectivity alert: DISCONNECTED " + type);
-	                        onChanged(type, false);
-	                    } else {
-	                        Log.d(THIS_FILE, "Connectivity alert not processed: "
-	                                + state + " " + type);
-	                    }
-	                }
-	            }else if(action.equals(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
-					final long accountId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1);
-					final boolean active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, false);
-					//Should that be threaded?
-					if(accountId != SipProfile.INVALID_ID) {
-						SipProfile account;
-						synchronized (db) {
-							db.open();
-							account = db.getAccount(accountId);
-							db.close();
-						}
-						if(account != null) {
-							setAccountRegistration(account, active?1:0);
-						}
+					if (state == NetworkInfo.State.CONNECTED) {
+						Log.d(THIS_FILE, "Connectivity alert: CONNECTED " + type);
+						onChanged(type, true);
+					} else if (state == NetworkInfo.State.DISCONNECTED) {
+						Log.d(THIS_FILE, "Connectivity alert: DISCONNECTED " + type);
+						onChanged(type, false);
+					} else {
+						Log.d(THIS_FILE, "Connectivity alert not processed: " + state + " " + type);
 					}
 				}
-	        }
-
-	        private NetworkInfo getActiveNetworkInfo() {
-	            ConnectivityManager cm = (ConnectivityManager)
-	                    SipService.this.getSystemService(Context.CONNECTIVITY_SERVICE);
-	            return cm.getActiveNetworkInfo();
-	        }
-
-	        private void onChanged(String type, boolean connected) {
-	            synchronized (SipService.this) {
-	                // When turning on WIFI, it needs some time for network
-	                // connectivity to get stabile so we defer good news (because
-	                // we want to skip the interim ones) but deliver bad news
-	                // immediately
-	                if (connected) {
-	                    if (mTask != null) {
-	                    	mTask.cancel();
-	                    }
-	                    mTask = new MyTimerTask(type, connected);
-	                    mTimer.schedule(mTask, 2 * 1000L);
-	                    // hold wakup lock so that we can finish changes before the
-	                    // device goes to sleep
-	                    sipWakeLock.acquire(mTask);
-	                } else {
-	                    if ((mTask != null) && mTask.mNetworkType.equals(type)) {
-	                        mTask.cancel();
-	                        sipWakeLock.release(mTask);
-	                    }
-	                 //   onConnectivityChanged(type, false);
-	                    dataConnectionChanged();
-	                }
-	            }
-	        }
-
-	        private class MyTimerTask extends TimerTask {
-	            private boolean mConnected;
-	            private String mNetworkType;
-
-	            public MyTimerTask(String type, boolean connected) {
-	                mNetworkType = type;
-	                mConnected = connected;
-	            }
-
-	            // timeout handler
-	            @Override
-	            public void run() {
-	                // delegate to mExecutor
-	                getExecutor().execute(new Runnable() {
-	                    public void run() {
-	                        realRun();
-	                    }
-	                });
-	            }
-
-	            private void realRun() {
-	                synchronized (SipService.this) {
-	                    if (mTask != this) {
-	                        Log.w(THIS_FILE, "  unexpected task: " + mNetworkType
-	                                + (mConnected ? " CONNECTED" : "DISCONNECTED"));
-	                        return;
-	                    }
-	                    mTask = null;
-	                    Log.d(THIS_FILE, " deliver change for " + mNetworkType
-	                            + (mConnected ? " CONNECTED" : "DISCONNECTED"));
-	                  //  onConnectivityChanged(mNetworkType, mConnected);
-	                    dataConnectionChanged();
-	                    sipWakeLock.release(this);
-	                }
-	            }
-	        }
-		
-		
-		
-		/*
-		
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			//
-			// ACTION_CONNECTIVITY_CHANGED
-			// Connectivity change is used to detect changes in the overall
-			// data network status as well as a switch between wifi and mobile
-			// networks.
-			//
-			// ACTION_DATA_STATE_CHANGED
-			// Data state change is used to detect changes in the mobile
-			// network such as a switch of network type (GPRS, EDGE, 3G)
-			// which are not detected by the Connectivity changed broadcast.
-			//
-			Log.d(THIS_FILE, "ServiceDeviceStateReceiver");
-			String action = intent.getAction();
-			if(action == null) {
-				return;
-			}
-			
-			if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-				 //|| intent.getAction( ).equals(ACTION_DATA_STATE_CHANGED)
-				Log.d(THIS_FILE, "Connectivity or data state has changed");
-				// Thread it to be sure to not block the device if registration
-				// take time
-				Thread t = new Thread() {
-					@Override
-					public void run() {
-
-						dataConnectionChanged();
-
-					}
-				};
-				t.start();
-			}else if(action.equals(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
+			} else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
 				final long accountId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1);
 				final boolean active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, false);
-				//Should that be threaded?
-				if(accountId != SipProfile.INVALID_ID) {
+				// Should that be threaded?
+				if (accountId != SipProfile.INVALID_ID) {
 					SipProfile account;
 					synchronized (db) {
 						db.open();
 						account = db.getAccount(accountId);
 						db.close();
 					}
-					if(account != null) {
-						setAccountRegistration(account, active?1:0);
+					if (account != null) {
+						setAccountRegistration(account, active ? 1 : 0);
 					}
 				}
 			}
-			
-			
-		}*/
+		}
+
+		private NetworkInfo getActiveNetworkInfo() {
+			ConnectivityManager cm = (ConnectivityManager) SipService.this.getSystemService(Context.CONNECTIVITY_SERVICE);
+			return cm.getActiveNetworkInfo();
+		}
+
+		private void onChanged(String type, boolean connected) {
+			synchronized (SipService.this) {
+				// When turning on WIFI, it needs some time for network
+				// connectivity to get stabile so we defer good news (because
+				// we want to skip the interim ones) but deliver bad news
+				// immediately
+				if (connected) {
+					if (mTask != null) {
+						mTask.cancel();
+					}
+					mTask = new MyTimerTask(type, connected);
+					mTimer.schedule(mTask, 2 * 1000L);
+					// hold wakup lock so that we can finish changes before the
+					// device goes to sleep
+					sipWakeLock.acquire(mTask);
+				} else {
+					if ((mTask != null) && mTask.mNetworkType.equals(type)) {
+						mTask.cancel();
+						sipWakeLock.release(mTask);
+					}
+					// onConnectivityChanged(type, false);
+					dataConnectionChanged();
+				}
+			}
+		}
+
+		private class MyTimerTask extends TimerTask {
+			private boolean mConnected;
+			private String mNetworkType;
+
+			public MyTimerTask(String type, boolean connected) {
+				mNetworkType = type;
+				mConnected = connected;
+			}
+
+			// timeout handler
+			@Override
+			public void run() {
+				// delegate to mExecutor
+				getExecutor().execute(new Runnable() {
+					public void run() {
+						realRun();
+					}
+				});
+			}
+
+			private void realRun() {
+				synchronized (SipService.this) {
+					if (mTask != this) {
+						Log.w(THIS_FILE, "  unexpected task: " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
+						return;
+					}
+					mTask = null;
+					Log.d(THIS_FILE, " deliver change for " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
+					// onConnectivityChanged(mNetworkType, mConnected);
+					dataConnectionChanged();
+					sipWakeLock.release(this);
+				}
+			}
+		}
+
+		/*
+		 * 
+		 * @Override public void onReceive(Context context, Intent intent) { //
+		 * // ACTION_CONNECTIVITY_CHANGED // Connectivity change is used to
+		 * detect changes in the overall // data network status as well as a
+		 * switch between wifi and mobile // networks. // //
+		 * ACTION_DATA_STATE_CHANGED // Data state change is used to detect
+		 * changes in the mobile // network such as a switch of network type
+		 * (GPRS, EDGE, 3G) // which are not detected by the Connectivity
+		 * changed broadcast. // Log.d(THIS_FILE, "ServiceDeviceStateReceiver");
+		 * String action = intent.getAction(); if(action == null) { return; }
+		 * 
+		 * if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) { //||
+		 * intent.getAction( ).equals(ACTION_DATA_STATE_CHANGED)
+		 * Log.d(THIS_FILE, "Connectivity or data state has changed"); // Thread
+		 * it to be sure to not block the device if registration // take time
+		 * Thread t = new Thread() {
+		 * 
+		 * @Override public void run() {
+		 * 
+		 * dataConnectionChanged();
+		 * 
+		 * } }; t.start(); }else
+		 * if(action.equals(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
+		 * final long accountId =
+		 * intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1); final boolean
+		 * active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, false);
+		 * //Should that be threaded? if(accountId != SipProfile.INVALID_ID) {
+		 * SipProfile account; synchronized (db) { db.open(); account =
+		 * db.getAccount(accountId); db.close(); } if(account != null) {
+		 * setAccountRegistration(account, active?1:0); } } }
+		 * 
+		 * 
+		 * }
+		 */
 	}
 	
 	
@@ -716,7 +692,7 @@ public class SipService extends Service {
 		
 		Log.setLogLevel(prefsWrapper.getLogLevel());
 
-		// Do not thread since must ensure stack is loaded
+		// Do not executorThread since must ensure stack is loaded
 		loadAndConnectStack();
 	}
 
@@ -727,6 +703,7 @@ public class SipService extends Service {
 		try {
 			Log.d(THIS_FILE, "Unregister telephony receiver");
 			unregisterReceiver(deviceStateReceiver);
+			deviceStateReceiver.stop();
 			deviceStateReceiver = null;
 		} catch (IllegalArgumentException e) {
 			// This is the case if already unregistered itself
@@ -740,6 +717,12 @@ public class SipService extends Service {
 			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_NONE);
 			phoneConnectivityReceiver = null;
 		}
+		
+
+		Threading.stopHandlerThread(executorThread);
+		executorThread = null;
+		mExecutor = null;
+		
 		pjService.sipStop();
 		notificationManager.cancelAll();
 		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
@@ -1204,12 +1187,14 @@ public class SipService extends Service {
 	
 
     private static Looper createLooper() {
-        HandlerThread thread = new HandlerThread("SipService.Executor");
-        thread.start();
-        return thread.getLooper();
+    	if(executorThread == null) {
+	        executorThread = new HandlerThread("SipService.Executor");
+	        executorThread.start();
+    	}
+        return executorThread.getLooper();
     }
 
-    // Executes immediate tasks in a single thread.
+    // Executes immediate tasks in a single executorThread.
     // Hold/release wake lock for running tasks
     private class MyExecutor extends Handler {
         MyExecutor() {
