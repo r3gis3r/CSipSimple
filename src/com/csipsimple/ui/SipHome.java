@@ -33,6 +33,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -450,6 +451,9 @@ public class SipHome extends TabActivity {
 				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
 					@Override
 					public void onTrigger(String number) {
+                        //NOTE: See comments in PickupSipUri.java!
+                        number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
+                        number = PhoneNumberUtils.stripSeparators(number);
 						startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
 					}
 				});
