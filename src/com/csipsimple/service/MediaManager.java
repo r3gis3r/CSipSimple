@@ -183,7 +183,9 @@ public class MediaManager {
 		//Acquire wifi lock
 		WifiManager wman = (WifiManager) service.getSystemService(Context.WIFI_SERVICE);
 		if(wifiLock == null) {
-			wifiLock = wman.createWifiLock("com.csipsimple.InCallLock");
+			wifiLock = wman.createWifiLock( 
+							(Compatibility.isCompatible(9)) ? 3 : WifiManager.WIFI_MODE_FULL, 
+							"com.csipsimple.InCallLock");
 			wifiLock.setReferenceCounted(false);
 		}
 		WifiInfo winfo = wman.getConnectionInfo();

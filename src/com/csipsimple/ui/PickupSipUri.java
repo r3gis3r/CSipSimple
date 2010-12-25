@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -157,6 +158,13 @@ public class PickupSipUri extends Activity implements OnClickListener {
 				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
 					@Override
 					public void onTrigger(String number) {
+						//Code from android source : com/android/phone/OutgoingCallBroadcaster.java 
+						// so that we match exactly the same case that an outgoing call from android
+						// TODO : filters... how to find a fancy way to integrate it back here 
+						// * auto once selected according to currently selected account?
+						// * keep in mind initial call number and rewrite number each time account is changed in selection (maybe the best way but must be handled properly)
+						number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
+			            number = PhoneNumberUtils.stripSeparators(number);
 			        	sipUri.setTextValue(number);
 					}
 				});
