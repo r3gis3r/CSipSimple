@@ -1093,6 +1093,11 @@ public class PjSipService {
 		
 		if (!m.matches()) {
 			// Assume this is a direct call using digit dialer
+		    // Remove spaces in callee. May be coming from phonebook which has
+		    // E.164/international format numbers (+cc aaa nnn nnnn).
+		    if (callee.matches("^(sip:)??\\+?[ 0-9]+$"))
+		        callee = callee.replaceAll(" +", "");
+		    
 			Log.d(THIS_FILE, "default acc : " + accountId);
 			SipProfile account = service.getAccount(accountId);
 			String defaultDomain = account.getDefaultDomain();
