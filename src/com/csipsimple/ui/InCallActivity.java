@@ -857,8 +857,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 					(state == SipCallSession.InvState.CONFIRMED ) || 
 					(state == SipCallSession.InvState.CONNECTING )|| 
 					(state == SipCallSession.InvState.CALLING )|| 
-					(state == SipCallSession.InvState.EARLY )
+					(state == SipCallSession.InvState.EARLY && !callInfo.isIncoming() )
 				);
+				
+				
 			}
 			
 			if( isValidCallState && active) {
