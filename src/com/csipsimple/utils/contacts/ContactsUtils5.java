@@ -58,6 +58,24 @@ public class ContactsUtils5 extends ContactsWrapper {
  
  		} 
  		pCur.close();
+
+ 		// Add any custom IM named 'sip' and set its type to 'sip'
+        pCur = ctxt.getContentResolver().query(
+                ContactsContract.Data.CONTENT_URI, 
+                null, 
+                ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?",
+                new String[]{id, ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE}, null);
+        while (pCur.moveToNext()) {
+            // Could also use some other IM type but may be confusing. Are there phones with no 'custom' IM type?
+            if (pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Im.PROTOCOL)) == ContactsContract.CommonDataKinds.Im.PROTOCOL_CUSTOM) {
+                if (pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL)).equalsIgnoreCase("sip")) {
+                    phones.add(new Phone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Im.DATA)), "sip"));
+                }
+            }
+                
+        } 
+        pCur.close();
+
  		return(phones);
  	}
 	

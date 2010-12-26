@@ -99,14 +99,14 @@ public abstract class ContactsWrapper {
         	dialog.show();
         }else if(phones.size() == 1) {
         	if(l != null) {
-        		l.onTrigger(phones.get(0).getNumber());
+        		l.onTrigger(formatNumber(phones.get(0).getNumber(), phones.get(0).getType()));
         	}
         }else {
 	        final AlertDialog.Builder builder = new AlertDialog.Builder(ctxt);
 			
 			ArrayList<String> entries = new ArrayList<String>();
 			for (Phone phone : phones) {
-				entries.add(phone.getNumber());
+				entries.add(formatNumber(phone.getNumber(), phone.getType()));
 			}
 			
 			final ArrayAdapter<String> phoneChoiceAdapter = new ArrayAdapter<String>(ctxt, android.R.layout.simple_dropdown_item_1line, entries );
@@ -131,6 +131,15 @@ public abstract class ContactsWrapper {
 	        AlertDialog dialog = builder.create();
 	        dialog.show();
         }
+	}
+	
+	private String formatNumber(String number, String type)
+	{
+	    if (type.equals("sip")) {
+	        return "sip:" + number;
+	    } else {
+	        return number;
+	    }
 	}
 	
 	public interface OnPhoneNumberSelected {

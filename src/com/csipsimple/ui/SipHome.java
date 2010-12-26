@@ -451,10 +451,17 @@ public class SipHome extends TabActivity {
 				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
 					@Override
 					public void onTrigger(String number) {
-                        //NOTE: See comments in PickupSipUri.java!
-                        number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
-                        number = PhoneNumberUtils.stripSeparators(number);
-						startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
+                        // TODO : filters... how to find a fancy way to integrate it back here 
+ 					    // TODO : Code similar to that in PickupSipUri.onActivityResult() - Refactor
+					    if (number.startsWith("sip:")) {
+					        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(number)));
+					    } else {
+	                        //Code from android source : com/android/phone/OutgoingCallBroadcaster.java 
+                            // so that we match exactly the same case that an outgoing call from android
+					        number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
+                            number = PhoneNumberUtils.stripSeparators(number);
+                            startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
+					    }
 					}
 				});
 				return;

@@ -158,14 +158,19 @@ public class PickupSipUri extends Activity implements OnClickListener {
 				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
 					@Override
 					public void onTrigger(String number) {
-						//Code from android source : com/android/phone/OutgoingCallBroadcaster.java 
-						// so that we match exactly the same case that an outgoing call from android
 						// TODO : filters... how to find a fancy way to integrate it back here 
 						// * auto once selected according to currently selected account?
 						// * keep in mind initial call number and rewrite number each time account is changed in selection (maybe the best way but must be handled properly)
-						number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
-			            number = PhoneNumberUtils.stripSeparators(number);
-			        	sipUri.setTextValue(number);
+                        // TODO : Code similar to that in SipHome.onActivityResult() - Refactor
+					    if (number.startsWith("sip:")) {
+					        sipUri.setTextValue(number);
+					    } else {
+	                        //Code from android source : com/android/phone/OutgoingCallBroadcaster.java 
+	                        // so that we match exactly the same case that an outgoing call from android
+    						number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
+    			            number = PhoneNumberUtils.stripSeparators(number);
+    			        	sipUri.setTextValue(number);
+					    }
 					}
 				});
 				return;

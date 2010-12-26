@@ -56,6 +56,7 @@ public class Filter {
 	public static final int MATCHER_REGEXP = 4;
 	public static final int MATCHER_ENDS = 5;
 	public static final int MATCHER_ALL = 6;
+	public static final int MATCHER_CONTAINS = 7;
 	
 	public static final int REPLACE_PREFIX = 0;
 	public static final int REPLACE_MATCH_TO = 1;
@@ -265,11 +266,12 @@ public class Filter {
 	private static HashMap<Integer, Integer> matcherTypePositions = new HashMap<Integer, Integer>() {{
 		put(0, MATCHER_START);
 		put(1, MATCHER_ENDS);
-		put(2, MATCHER_ALL);
-		put(3, MATCHER_HAS_N_DIGIT);
-		put(4, MATCHER_HAS_MORE_N_DIGIT);
-		put(5, MATCHER_IS_EXACTLY);
-		put(6, MATCHER_REGEXP);
+        put(2, MATCHER_CONTAINS);
+		put(3, MATCHER_ALL);
+		put(4, MATCHER_HAS_N_DIGIT);
+		put(5, MATCHER_HAS_MORE_N_DIGIT);
+		put(6, MATCHER_IS_EXACTLY);
+		put(7, MATCHER_REGEXP);
 	}};
 	
 	public static int getMatcherForPosition(Integer selectedItemPosition) {
@@ -320,17 +322,19 @@ public class Filter {
 		case MATCHER_ENDS:
 			matches = "^(.*)"+Pattern.quote(representation.fieldContent)+"$";
 			break;
+        case MATCHER_CONTAINS:
+            matches = "^(.*)"+Pattern.quote(representation.fieldContent)+"(.*)$";
+            break;
 		case MATCHER_ALL:
 			matches = "^(.*)$";
 			break;
 		case MATCHER_HAS_N_DIGIT:
-			//TODO: is dot the best char?
 			//TODO ... we should probably test the fieldContent type to ensure it's well digits...
-			matches = "^(.{"+representation.fieldContent+"})$";
+			matches = "^(\\d{"+representation.fieldContent+"})$";
 			break;
 		case MATCHER_HAS_MORE_N_DIGIT:
 			//TODO ... we should probably test the fieldContent type to ensure it's well digits...
-			matches = "^(.{"+representation.fieldContent+",})$";
+			matches = "^(\\d{"+representation.fieldContent+",})$";
 			break;
 		case MATCHER_IS_EXACTLY:
 			matches = "^("+Pattern.quote(representation.fieldContent)+")$";
@@ -377,6 +381,12 @@ public class Filter {
 			repr.fieldContent = matcher.group(1);
 			return repr;
 		}
+        matcher = Pattern.compile("^\\^\\(\\.\\*\\)\\\\Q(.+)\\\\E\\(\\.\\*\\)\\$$").matcher(matches);
+        if(matcher.matches()) {
+            repr.type = MATCHER_CONTAINS;
+            repr.fieldContent = matcher.group(1);
+            return repr;
+        }
 		
 		matcher = Pattern.compile("^\\^\\(\\.\\*\\)\\$$").matcher(matches);
 		if(matcher.matches()) {
@@ -385,13 +395,13 @@ public class Filter {
 			return repr;
 		}
 		
-		matcher = Pattern.compile("^\\^\\(\\.\\{([0-9]+)\\}\\)\\$$").matcher(matches);
+		matcher = Pattern.compile("^\\^\\(\\\\d\\{([0-9]+)\\}\\)\\$$").matcher(matches);
 		if(matcher.matches()) {
 			repr.type = MATCHER_HAS_N_DIGIT;
 			repr.fieldContent = matcher.group(1);
 			return repr;
 		}
-		matcher = Pattern.compile("^\\^\\(\\.\\{([0-9]+),\\}\\)\\$$").matcher(matches);
+		matcher = Pattern.compile("^\\^\\(\\\\d\\{([0-9]+),\\}\\)\\$$").matcher(matches);
 		if(matcher.matches()) {
 			repr.type = MATCHER_HAS_MORE_N_DIGIT;
 			repr.fieldContent = matcher.group(1);
