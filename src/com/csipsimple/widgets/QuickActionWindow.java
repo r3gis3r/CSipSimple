@@ -264,12 +264,10 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -279,7 +277,6 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 
 	public void show(int requestedX) {
 		if(mAnchor == null) {
-			//TODO : could choose a default anchor (tr, lr? for example... )
 			Log.e(THIS_FILE, "Anchor not defined ! > Impossible to show the window");
 			return;
 		}
@@ -324,7 +321,6 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 
 	@Override
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

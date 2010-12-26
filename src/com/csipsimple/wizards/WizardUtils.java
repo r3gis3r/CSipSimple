@@ -66,6 +66,7 @@ import com.csipsimple.wizards.impl.Sipgate;
 import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
+import com.csipsimple.wizards.impl.Vono;
 
 
 public class WizardUtils {
@@ -290,7 +291,10 @@ public class WizardUtils {
 						new Locale("NL", "be"),
 						new Locale("NL", "nl"),
 					}, false, false, Scarlet.class));
-			
+			WIZARDS_DICT.put("VONO", new WizardInfo("VONO", "vono", 
+					R.drawable.ic_wizard_vono, 10, 
+					new Locale[] {new Locale("PT", "br")}, false, false, 
+					Vono.class));
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
