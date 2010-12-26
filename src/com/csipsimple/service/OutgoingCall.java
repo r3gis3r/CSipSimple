@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.telephony.PhoneNumberUtils;
 
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -57,8 +58,11 @@ public class OutgoingCall extends BroadcastReceiver {
 		// If this is an outgoing call with a valid number
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
 			if(prefsWrapper.isValidConnectionForOutgoing()) {
-				// Filter should assure this!
-				//Log.d(THIS_FILE, "This is a work for super outgoing call handler....");
+				// Just to be sure of what is incoming : sanitize phone number (in case of it was not properly done by dialer
+				// Or by a third party app
+				number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
+	            number = PhoneNumberUtils.stripSeparators(number);
+				
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
 				outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
