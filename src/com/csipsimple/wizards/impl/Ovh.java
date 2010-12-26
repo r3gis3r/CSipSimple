@@ -48,7 +48,7 @@ public class Ovh extends SimpleImplementation {
 	@Override
 	public String getDefaultFieldSummary(String fieldName) {
 		if(fieldName.equals(USER_NAME)) {
-			return parent.getString(R.string.w_common_phone_number_desc);
+			return parent.getString(R.string.w_ovh_phone_number_desc);
 		}
 		return super.getDefaultFieldSummary(fieldName);
 	}

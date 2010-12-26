@@ -183,10 +183,6 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ittelenet, 10, 
 					new Locale[]{}, false, true, 
 					ITTelenet.class));
-			WIZARDS_DICT.put("OVH", new WizardInfo("OVH", "Ovh", 
-					R.drawable.ic_wizard_ovh, 30, 
-					new Locale[]{}, false, true, 
-					Ovh.class));
 			
 			
 			//Locales
@@ -295,6 +291,16 @@ public class WizardUtils {
 					R.drawable.ic_wizard_vono, 10, 
 					new Locale[] {new Locale("PT", "br")}, false, false, 
 					Vono.class));
+			
+			WIZARDS_DICT.put("OVH", new WizardInfo("OVH", "Ovh", 
+					R.drawable.ic_wizard_ovh, 10, 
+					new Locale[]{
+						Locale.FRANCE,	
+						new Locale("FR", "be"),
+						Locale.GERMANY,
+						Locale.UK
+					}, false, false, 
+					Ovh.class));
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
