@@ -217,6 +217,7 @@ public class Compatibility {
 		
 		//Use routing API?
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
+		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.SET_AUDIO_GENERATE_TONE, needToneWorkaround(preferencesWrapper));
 	}
 
@@ -350,7 +351,7 @@ public class Compatibility {
 		if(lastSeenVersion < 400) {
 			prefWrapper.setCodecPriority("G729/8000/1", "0");
 		}
-		if(lastSeenVersion < 497) {
+		if(lastSeenVersion < 509) {
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.THREAD_COUNT, "3");
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
 
@@ -363,8 +364,8 @@ public class Compatibility {
 				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.5);
 				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 1.5);
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, true);
-				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, true);
 			}
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
 		}
 		
 	}
