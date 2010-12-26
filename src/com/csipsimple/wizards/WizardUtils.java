@@ -53,6 +53,7 @@ import com.csipsimple.wizards.impl.Local;
 import com.csipsimple.wizards.impl.Mondotalk;
 import com.csipsimple.wizards.impl.NexGenTel;
 import com.csipsimple.wizards.impl.OnSip;
+import com.csipsimple.wizards.impl.Ovh;
 import com.csipsimple.wizards.impl.Pbxes;
 import com.csipsimple.wizards.impl.Pennytel;
 import com.csipsimple.wizards.impl.Phonzo;
@@ -181,6 +182,11 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ittelenet, 10, 
 					new Locale[]{}, false, true, 
 					ITTelenet.class));
+			WIZARDS_DICT.put("OVH", new WizardInfo("OVH", "Ovh", 
+					R.drawable.ic_wizard_ovh, 30, 
+					new Locale[]{}, false, true, 
+					Ovh.class));
+			
 			
 			//Locales
 			WIZARDS_DICT.put("CALLCENTRIC", new WizardInfo("CALLCENTRIC", "Callcentric", 
