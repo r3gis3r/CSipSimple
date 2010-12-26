@@ -474,10 +474,23 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				wakeLock.acquire();
 			}
 			if(proximitySensor == null && proximityWakeLock == null) {
-				lockOverlay.hide();
+				if(currentCallInfo.isIncoming()) {
+					lockOverlay.hide();
+				}else {
+					lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
+				}
 			}
-			if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
-				proximityWakeLock.release();
+			
+			if(proximityWakeLock != null) {
+				if(currentCallInfo.isIncoming()) {
+					if(proximityWakeLock.isHeld()) {
+						proximityWakeLock.release();
+					}
+				}else {
+					if(!proximityWakeLock.isHeld()) {
+						proximityWakeLock.acquire();
+					}
+				}
 			}
 			break;
 		case SipCallSession.InvState.CONFIRMED:
