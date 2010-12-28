@@ -21,7 +21,6 @@ import android.text.InputType;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.utils.PreferencesWrapper;
 
 public class Callcentric extends SimpleImplementation {
 	
@@ -30,12 +29,7 @@ public class Callcentric extends SimpleImplementation {
 		return "callcentric.com";
 	}
 	
-    @Override
-    protected String getDefaultName() {
-        return "Callcentric";
-    }
-
-    @Override
+	@Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
@@ -57,12 +51,8 @@ public class Callcentric extends SimpleImplementation {
 		return super.getDefaultFieldSummary(fieldName);
 	}
 
-    @Override
-    public void setDefaultParams(PreferencesWrapper prefs) {
-        super.setDefaultParams(prefs);
-        // Add stun server
-        prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
-        prefs.addStunServer("stun.counterpath.com");
-    }
-
+	@Override
+	protected String getDefaultName() {
+		return "Callcentric";
+	}
 }
