@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
 import com.csipsimple.utils.Log;
@@ -71,7 +73,21 @@ public class AccountFilters extends ListActivity {
 			finish();
 		}
 		
+        database = new DBAdapter(this);
+        database.open();
+
+        // Custom title listing the account name for filters
+        final boolean customTitleOk = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.filters_list);
+		if(customTitleOk) {
+		    getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.account_filters_title);
+		    final TextView titleText = (TextView) findViewById(R.id.account_filters_title);
+		    if (titleText != null) {
+		        SipProfile acct = database.getAccount(accountId);
+		        titleText.setText(R.string.filters_for);
+		        titleText.append(" " + acct.display_name);
+		    }
+		}
 		
 		//Add add row
 		LinearLayout add_row = (LinearLayout) findViewById(R.id.add_filter);
@@ -82,9 +98,6 @@ public class AccountFilters extends ListActivity {
 			}
 		});
 		
-		
-		database = new DBAdapter(this);
-		database.open();
 		cursor = database.getFiltersForAccount(accountId);
 		startManagingCursor(cursor);
 		CursorAdapter adapter = new FiltersCursorAdapter(this, cursor);

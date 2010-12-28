@@ -145,7 +145,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 			repr.type = Filter.getReplaceForPosition(replaceSpinner.getSelectedItemPosition());
 			filter.setReplaceRepresentation(repr);
 		}else {
-			filter.replace = "";
+			filter.replace_pattern = "";
 		}
 		
 		//Save

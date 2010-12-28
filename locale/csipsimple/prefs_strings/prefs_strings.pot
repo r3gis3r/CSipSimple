@@ -239,11 +239,11 @@ msgid "Turn on STUN feature"
 msgstr ""
 
 msgctxt "stun_server"
-msgid "STUN server"
+msgid "STUN servers"
 msgstr ""
 
 msgctxt "stun_server_desc"
-msgid "STUN server (HOST:PORT)"
+msgid "STUN servers (HOST[:PORT], ...)"
 msgstr ""
 
 msgctxt "enable_qos"

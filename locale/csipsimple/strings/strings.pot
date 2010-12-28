@@ -111,6 +111,10 @@ msgctxt "filters"
 msgid "Filters"
 msgstr ""
 
+msgctxt "filters_for"
+msgid "Filters for"
+msgstr ""
+
 msgctxt "add_filter"
 msgid "Add filter / rewrite rule"
 msgstr ""

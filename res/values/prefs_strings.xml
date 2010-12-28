@@ -62,8 +62,8 @@
 <string name="turn_server_desc">TURN server (HOST:PORT)</string>
 <string name="enable_stun">Enable STUN</string>
 <string name="enable_stun_desc">Turn on STUN feature</string>
-<string name="stun_server">STUN server</string>
-<string name="stun_server_desc">STUN server (HOST:PORT)</string>
+<string name="stun_server">STUN servers</string>
+<string name="stun_server_desc">STUN servers (HOST[:PORT], ...)</string>
 <string name="enable_qos">Enable QoS</string>
 <string name="enable_qos_desc">Enable QoS on packets</string>
 <string name="dscp_val">DSCP value</string>
