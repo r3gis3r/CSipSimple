@@ -18,6 +18,7 @@
 package com.csipsimple.utils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -238,8 +239,11 @@ public class Compatibility {
 	
 	public static List<ResolveInfo> getPossibleActivities(Context ctxt, Intent i){
 		PackageManager pm = ctxt.getPackageManager();
-		return pm.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY | PackageManager.GET_RESOLVED_FILTER);
-		
+		try {
+			return pm.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY | PackageManager.GET_RESOLVED_FILTER);
+		}catch(NullPointerException e) {
+			return new ArrayList<ResolveInfo>();
+		}
 	}
 	
 
@@ -254,7 +258,7 @@ public class Compatibility {
 	private static List<ResolveInfo> callIntents = null;
 	public final static List<ResolveInfo> getIntentsForCall(Context ctxt){
 		if(callIntents == null) {
-			return getPossibleActivities(ctxt, getPriviledgedIntent("123"));
+			callIntents = getPossibleActivities(ctxt, getPriviledgedIntent("123"));
 		}
 		return callIntents;
 	}

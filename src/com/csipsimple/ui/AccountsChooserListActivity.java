@@ -141,7 +141,9 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 	private void bindAddedRows() {
 		PackageManager pm = getPackageManager();
 		List<ResolveInfo> callers = Compatibility.getIntentsForCall(this);
-		
+		if(callers == null) {
+			return;
+		}
 		int index = 1; 
 		for(final ResolveInfo caller : callers) {
 			// Add row if possible

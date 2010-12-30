@@ -260,7 +260,9 @@ public class OutgoingCallChooser extends ListActivity {
 	private void bindAddedRows() {
 		PackageManager pm = getPackageManager();
 		List<ResolveInfo> callers = Compatibility.getIntentsForCall(this);
-		
+		if(callers == null) {
+			return;
+		}
 		int index = 1; 
 		for(final ResolveInfo caller : callers) {
 			// Add row if possible
@@ -340,17 +342,18 @@ public class OutgoingCallChooser extends ListActivity {
 		SipProfile mustAcc = null;
 		ResolveInfo resInfo = null;
 		int index = 1;
-		for(ResolveInfo caller : callers) {
-			SipProfile acc = new SipProfile();
-			acc.id = SipProfile.INVALID_ID - index;
-			if(Filter.isMustCallNumber(acc, number, database)) {
-				resInfo = caller;
-				mustAcc = acc;
-				break;
+		if(callers != null) {
+			for(ResolveInfo caller : callers) {
+				SipProfile acc = new SipProfile();
+				acc.id = SipProfile.INVALID_ID - index;
+				if(Filter.isMustCallNumber(acc, number, database)) {
+					resInfo = caller;
+					mustAcc = acc;
+					break;
+				}
+				index ++;
 			}
-			index ++;
 		}
-		
 		if(mustAcc != null && resInfo != null) {
 			placeInternalCall(mustAcc, resInfo);
 		}
