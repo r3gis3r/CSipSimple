@@ -269,7 +269,6 @@ public class OutgoingCallChooser extends ListActivity {
 			gsmProfile.id = SipProfile.INVALID_ID - index;
 			
 			if(Filter.isCallableNumber(gsmProfile, number, database)) {
-				Log.d(THIS_FILE, caller.resolvePackageName+" : "+caller.activityInfo.name);
 				final SipProfile acc = gsmProfile;
 				addRow(caller.loadLabel(pm), caller.loadIcon(pm), new OnClickListener() {
 					@Override

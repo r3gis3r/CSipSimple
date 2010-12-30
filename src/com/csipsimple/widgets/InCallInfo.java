@@ -39,7 +39,8 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.models.PjSipCalls;
+//TODO : we should add a service here to avoid direct access to pj
+import com.csipsimple.pjsip.PjSipCalls;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.ContactsAsyncHelper;

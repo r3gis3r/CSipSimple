@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.models;
+package com.csipsimple.pjsip;
 
 import org.pjsip.pjsua.pj_time_val;
 import org.pjsip.pjsua.pjsua;
@@ -26,7 +26,6 @@ import android.os.SystemClock;
 
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.pjsip.PjSipService;
 import com.csipsimple.utils.Log;
 
 public final class PjSipCalls {

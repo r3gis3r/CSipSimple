@@ -48,7 +48,6 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.models.PjSipAccount;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.ToCall;

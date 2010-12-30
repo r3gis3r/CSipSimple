@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.models;
+package com.csipsimple.pjsip;
 
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
