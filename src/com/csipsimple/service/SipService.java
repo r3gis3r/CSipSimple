@@ -733,6 +733,8 @@ public class SipService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 
+		
+		
 		// Autostart the stack
 		if (loadAndConnectStack()) {
 			Thread t = new Thread() {
@@ -746,7 +748,11 @@ public class SipService extends Service {
 	}
 
 	private boolean loadAndConnectStack() {
-
+		//Ensure pjService exists
+		if(pjService == null) {
+			pjService = new PjSipService(this);
+		}
+		
 		if (pjService.tryToLoadStack()) {
 			// Register own broadcast receiver
 			if (deviceStateReceiver == null) {

@@ -110,6 +110,10 @@ public class Compatibility {
 		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
 			return true;
 		}
+		if(android.os.Build.DEVICE.equalsIgnoreCase("LG-P500")) {
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -355,7 +359,7 @@ public class Compatibility {
 		if(lastSeenVersion < 400) {
 			prefWrapper.setCodecPriority("G729/8000/1", "0");
 		}
-		if(lastSeenVersion < 509) {
+		if(lastSeenVersion < 552) {
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.THREAD_COUNT, "3");
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
 
