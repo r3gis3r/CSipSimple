@@ -67,7 +67,7 @@ public class AccountWidgetProvider extends AppWidgetProvider {
      * @param intent  Indicates the pressed button.
      */
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         
 		if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(intent.getAction())) {
 			final int appWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -76,7 +76,12 @@ public class AccountWidgetProvider extends AppWidgetProvider {
 			}
 		} else {
 			if (SipManager.ACTION_SIP_REGISTRATION_CHANGED.equals(intent.getAction()) || SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED.equals(intent.getAction())) {
-				updateWidget(context);
+				Thread t = new Thread() {
+					public void run() {
+						updateWidget(context);
+					};
+				};
+				t.start();
 			}
 			super.onReceive(context, intent);
 		}

@@ -233,10 +233,6 @@ public class PjSipService {
 							}
 							cfg.setStun_srv(stunServers);
 						}
-	
-						// IGNORE NOTIFY -- TODO : for now that's something we want
-						// since it pollute battery life
-				//		cfg.setEnable_unsolicited_mwi(pjsuaConstants.PJ_FALSE);
 						
 	
 						// LOGGING CONFIG

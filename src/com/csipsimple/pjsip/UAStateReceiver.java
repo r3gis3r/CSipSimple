@@ -76,10 +76,22 @@ public class UAStateReceiver extends Callback {
 	private PjSipService pjService;
 //	private ComponentName remoteControlResponder;
 
+	public void lockCpu(){
+		if(eventLock != null) {
+			eventLock.acquire();
+		}
+	}
+	public void unlockCpu() {
+		if(eventLock != null && eventLock.isHeld()) {
+			eventLock.release();
+		}
+	}
 
 	
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
+		lockCpu();
+		
 		//Check if we have not already an ongoing call
 		SipCallSession existingOngoingCall = getActiveCallInProgress();
 		if(existingOngoingCall != null) {
@@ -87,6 +99,7 @@ public class UAStateReceiver extends Callback {
 				Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
 				//If there is an ongoing call... For now decline TODO : should here manage multiple calls
 				pjsua.call_hangup(callId, 0, null, null);
+				unlockCpu();
 				return;
 			}
 		}
@@ -96,11 +109,13 @@ public class UAStateReceiver extends Callback {
 		treatIncomingCall(acc_id, callInfo);
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
 		Log.d(THIS_FILE, "Incoming call >>");
+		unlockCpu();
 	}
 	
 	
 	@Override
 	public void on_call_state(int callId, pjsip_event e) {
+		lockCpu();
 		Log.d(THIS_FILE, "Call state <<");
 		//Get current infos
 		SipCallSession callInfo = getCallInfo(callId, true);
@@ -120,17 +135,22 @@ public class UAStateReceiver extends Callback {
 		}
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
 		Log.d(THIS_FILE, "Call state >>");
+		unlockCpu();
 	}
 
 	@Override
-	public void on_buddy_state(int buddy_id)
-	{
+	public void on_buddy_state(int buddy_id) {
+		lockCpu();
 		Log.d(THIS_FILE, "On buddy state");
 		// buddy_info = pjsua.buddy_get_info(buddy_id, new pjsua_buddy_info());
+		
+		unlockCpu();
 	}
 
 	@Override
 	public void on_pager(int call_id, pj_str_t from, pj_str_t to, pj_str_t contact, pj_str_t mime_type, pj_str_t body) {
+		lockCpu();
+		
 		long date = System.currentTimeMillis();
 		String sFrom = SipUri.getCanonicalSipContact(from.getPtr());
 		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contact.getPtr(), body.getPtr(), mime_type.getPtr(),  date, SipMessage.MESSAGE_TYPE_INBOX);
@@ -150,10 +170,12 @@ public class UAStateReceiver extends Callback {
 		
 		//Notify android os of the new message
 		notificationManager.showNotificationForMessage(msg);
+		unlockCpu();
 	}
 
 	@Override
 	public void on_pager_status(int call_id, pj_str_t to, pj_str_t body, pjsip_status_code status, pj_str_t reason) {
+		lockCpu();
 		//TODO : treat error / acknowledge of messages
 		int messageType = (status.equals(pjsip_status_code.PJSIP_SC_OK) 
 				|| status.equals(pjsip_status_code.PJSIP_SC_ACCEPTED))? SipMessage.MESSAGE_TYPE_SENT : SipMessage.MESSAGE_TYPE_FAILED;
@@ -171,26 +193,34 @@ public class UAStateReceiver extends Callback {
 		Intent intent = new Intent(SipManager.ACTION_SIP_MESSAGE_RECEIVED);
 		intent.putExtra(SipMessage.FIELD_FROM, sTo);
 		pjService.service.sendBroadcast(intent);
+		unlockCpu();
 	}
 
 	@Override
 	public void on_reg_state(int accountId) {
+		lockCpu();
 		Log.d(THIS_FILE, "New reg state for : " + accountId);
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
+		unlockCpu();
 	}
 
 	@Override
 	public void on_stream_created(int call_id, SWIGTYPE_p_pjmedia_session sess, long stream_idx, SWIGTYPE_p_p_pjmedia_port p_port) {
+		lockCpu();
 		Log.d(THIS_FILE, "Stream created");
+		unlockCpu();
 	}
 	
 	@Override
 	public void on_stream_destroyed(int callId, SWIGTYPE_p_pjmedia_session sess, long streamIdx) {
+		lockCpu();
 		Log.d(THIS_FILE, "Stream destroyed");
+		unlockCpu();
 	}
 
 	@Override
 	public void on_call_media_state(int callId) {
+		lockCpu();
 		if(pjService.mediaManager != null) {
 			pjService.mediaManager.stopRing();
 		}
@@ -220,10 +250,12 @@ public class UAStateReceiver extends Callback {
 		}
 		
 		msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
+		unlockCpu();
 	}
 	
 	@Override
 	public void on_mwi_info(int acc_id, pj_str_t mime_type, pj_str_t body) {
+		lockCpu();
 		//Treat incoming voice mail notification.
 		
 		String msg = body.getPtr();
@@ -279,6 +311,7 @@ public class UAStateReceiver extends Callback {
 				notificationManager.showNotificationForVoiceMail(acc, numberOfMessages, voiceMailNumber);
 			}
 		}
+		unlockCpu();
 	}
 	
 	
@@ -335,6 +368,8 @@ public class UAStateReceiver extends Callback {
 	private WorkerHandler msgHandler;
 	private HandlerThread handlerThread;
 	private WakeLock incomingCallLock;
+
+	private WakeLock eventLock;
 
 	private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
@@ -471,8 +506,8 @@ public class UAStateReceiver extends Callback {
 
 		
 		//Get lock while ringing to be sure notification is well done !
-		PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
 		if (incomingCallLock == null) {
+			PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
 			incomingCallLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.incomingCallLock");
 			incomingCallLock.setReferenceCounted(false);
 		}
@@ -528,6 +563,12 @@ public class UAStateReceiver extends Callback {
 		if(msgHandler == null) {
 			msgHandler = new WorkerHandler(handlerThread.getLooper());
 		}
+		
+		if (eventLock == null) {
+			PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
+			eventLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.inEventLock");
+			eventLock.setReferenceCounted(true);
+		}
 	}
 	
 
@@ -537,6 +578,12 @@ public class UAStateReceiver extends Callback {
 		handlerThread = null;
 		msgHandler = null;
 		
+		//Ensure lock is released since this lock is a ref counted one.
+		if( eventLock != null ) {
+			while (eventLock.isHeld()) {
+				eventLock.release();
+			}
+		}
 	}
 
 	// --------
