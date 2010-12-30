@@ -132,6 +132,8 @@ public class OutgoingCallChooser extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(THIS_FILE, "Starting ");
+
+		super.onCreate(savedInstanceState);
 		
 		number = PhoneNumberUtils.getNumberFromIntent(getIntent(), this);
 		
@@ -145,13 +147,13 @@ public class OutgoingCallChooser extends ListActivity {
 					Uri data =  getIntent().getData();
 					if(data.getScheme().equalsIgnoreCase("imto")) {
 						String auth = data.getAuthority();
-						if( "skype".equalsIgnoreCase(auth) ) {
+						if( "skype".equalsIgnoreCase(auth) ||
+							"sip".equalsIgnoreCase(auth) ) {
 							String sipUser = data.getLastPathSegment();
 							Log.d(THIS_FILE, ">> Found skype account "+sipUser);
 							number = "sip:"+sipUser;
 						}
 					}
-					//TODO : scheme sip
 				}
 			}
 		}
@@ -168,7 +170,6 @@ public class OutgoingCallChooser extends ListActivity {
 		
 		if(number == null) {
 			Log.e(THIS_FILE, "No number detected for : "+getIntent().getAction());
-			super.onCreate(savedInstanceState);
 			finish();
 			return;
 		}
@@ -181,8 +182,6 @@ public class OutgoingCallChooser extends ListActivity {
 		w = getWindow();
 		w.requestFeature(Window.FEATURE_LEFT_ICON);
 
-		
-		super.onCreate(savedInstanceState);
 		
 	    //	Log.d(THIS_FILE, "We are updating the list");
     	if(database == null) {

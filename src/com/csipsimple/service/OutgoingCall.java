@@ -67,6 +67,7 @@ public class OutgoingCall extends BroadcastReceiver {
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
 				outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
 				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				Log.d(THIS_FILE, "Start outgoing call chooser for CSipSimple");
 				context.startActivity(outgoingCallChooserIntent);
 				// We will treat this by ourselves
 				setResultData(null);

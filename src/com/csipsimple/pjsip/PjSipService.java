@@ -140,7 +140,8 @@ public class PjSipService {
 	
 	// Start the sip stack according to current settings
 	public synchronized boolean sipStart() {
-		Log.setLogLevel(service.prefsWrapper.getLogLevel());
+		Log.e(THIS_FILE, "Set log level to "+prefsWrapper.getLogLevel());
+		Log.setLogLevel(prefsWrapper.getLogLevel());
 		
 		if (!hasSipStack) {
 			Log.e(THIS_FILE, "We have no sip stack, we can't start");

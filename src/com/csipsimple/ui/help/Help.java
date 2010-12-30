@@ -145,6 +145,7 @@ public class Help extends Activity implements OnClickListener {
 			startActivity(new Intent(this, Faq.class));
 			break;
 		case R.id.record_logs_line:
+			Log.e(THIS_FILE, "Clicked on record logs line while isRecording is : " + isRecording());
 			if (!isRecording()) {
 				prefsWrapper.setPreferenceStringValue(PreferencesWrapper.LOG_LEVEL, "4");
 				Log.setLogLevel(4);
@@ -162,6 +163,7 @@ public class Help extends Activity implements OnClickListener {
 				}catch(Exception e) {
 					Log.e(THIS_FILE, "Impossible to send logs...", e);
 				}
+				Log.setLogLevel(1);
 			}
 			finish();
 			break;

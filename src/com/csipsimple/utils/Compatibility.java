@@ -168,6 +168,10 @@ public class Compatibility {
 				android.os.Build.DEVICE.equalsIgnoreCase("streak")) {
 			return true;
 		}
+		//Motorola milestone 2
+		if(android.os.Build.DEVICE.toLowerCase().contains("milestone2")) {
+			return true;
+		}
 		
 		return false;
 	}
@@ -366,6 +370,7 @@ public class Compatibility {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, true);
 			}
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
 		}
 		
 	}
