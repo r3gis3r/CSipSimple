@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-17 22:41+0100\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
 "PO-Revision-Date: 2010-09-25 18:55+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -111,6 +111,15 @@ msgstr "Journal d'appel vide"
 
 msgctxt "filters"
 msgid "Filters"
+msgstr "Filtres"
+
+msgctxt "filters_desc"
+msgid "To apply when integration to Android is used"
+msgstr ""
+
+#, fuzzy
+msgctxt "filters_for"
+msgid "Filters for"
 msgstr "Filtres"
 
 msgctxt "add_filter"
@@ -282,5 +291,9 @@ msgid ""
 "distributors) are not responsible for an illegal use of this codec.\n"
 "It's up to you to be sure that you are authorized to use this codec.\n"
 "Purchase link :"
+msgstr ""
+
+msgctxt "voice_mail"
+msgid "Voice mail"
 msgstr ""
 

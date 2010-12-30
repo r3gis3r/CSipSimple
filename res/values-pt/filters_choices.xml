@@ -1,17 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="filters_action">
-    <item>Impossivel Ligar</item>
-    <item>Regravar</item>
-    <item>Parar Processo</item>
-    <item>Ligar Diretamente</item>
-    <item>Atendimento Automatico</item>
-  </string-array>
-  <string-array name="replace_type">
-    <item>Prefixo pro</item>
-    <item>Fufixo com</item>
-    <item>Substituir correspondência por</item>
-    <item>Regravar todos por</item>
-    <item>RegExp personalizada</item>
-  </string-array>
+
 </resources>

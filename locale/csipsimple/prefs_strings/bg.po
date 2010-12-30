@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-17 22:41+0100\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
 "PO-Revision-Date: 2010-09-30 08:04+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -238,13 +238,14 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "Включване на STUN функция"
 
+#, fuzzy
 msgctxt "stun_server"
-msgid "STUN server"
-msgstr "STUN сървър"
+msgid "STUN servers"
+msgstr "Turn сървър"
 
 msgctxt "stun_server_desc"
-msgid "STUN server (HOST:PORT)"
-msgstr "STUN сървър (ХОСТ:ПОРТ)"
+msgid "STUN servers (HOST[:PORT], ...)"
+msgstr ""
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
@@ -452,6 +453,14 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "Големина на буфера за намаляване на ехо"
 
+msgctxt "echo_mode"
+msgid "Echo mode"
+msgstr ""
+
+msgctxt "echo_mode_desc"
+msgid "Algorithm for echo"
+msgstr ""
+
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Приоритет (0 е изключено)"
@@ -633,12 +642,13 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
+#, fuzzy
 msgctxt "gsm_integration_type"
-msgid "Integration type with GSM"
-msgstr ""
+msgid "Mobile phone integration"
+msgstr "Интегриране с програмата за избиране на телефона"
 
 msgctxt "gsm_integration_type_desc"
-msgid "How the application use GSM (or not)"
+msgid "How the application uses your mobile phone (or not)"
 msgstr ""
 
 #. Fast settings
@@ -715,7 +725,19 @@ msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr ""
 
+#~ msgctxt "stun_server"
+#~ msgid "STUN server"
+#~ msgstr "STUN сървър"
+
+#~ msgctxt "stun_server_desc"
+#~ msgid "STUN server (HOST:PORT)"
+#~ msgstr "STUN сървър (ХОСТ:ПОРТ)"
+
+#~ msgctxt "gsm_integration_type"
+#~ msgid "Integration type with GSM"
+#~ msgstr ""
+
 #~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How CSipSimple use GSM (or not)"
+#~ msgid "How the application use GSM (or not)"
 #~ msgstr ""
 

@@ -1,17 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="filters_action">
-    <item>Неможливо подзвонити</item>
-    <item>Переписування</item>
-    <item>Стоп</item>
-    <item>Прямий дзвінок</item>
-    <item>Авто відповідь</item>
-  </string-array>
-  <string-array name="replace_type">
-    <item>Префікс</item>
-    <item>Суффікс</item>
-    <item>Замінити співпадіння на</item>
-    <item>Замінити все на</item>
-    <item>Користувацький RegExp</item>
-  </string-array>
+
 </resources>

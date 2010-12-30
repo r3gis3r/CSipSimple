@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-17 22:41+0100\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
 "PO-Revision-Date: 2010-11-26 13:43+0000\n"
 "Last-Translator: Yura Rodchyn <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -112,6 +112,15 @@ msgstr "Немає викликів"
 
 msgctxt "filters"
 msgid "Filters"
+msgstr "Фільтри"
+
+msgctxt "filters_desc"
+msgid "To apply when integration to Android is used"
+msgstr ""
+
+#, fuzzy
+msgctxt "filters_for"
+msgid "Filters for"
 msgstr "Фільтри"
 
 msgctxt "add_filter"
@@ -282,5 +291,9 @@ msgid ""
 "distributors) are not responsible for an illegal use of this codec.\n"
 "It's up to you to be sure that you are authorized to use this codec.\n"
 "Purchase link :"
+msgstr ""
+
+msgctxt "voice_mail"
+msgid "Voice mail"
 msgstr ""
 

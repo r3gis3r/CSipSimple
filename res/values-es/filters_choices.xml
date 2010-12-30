@@ -1,18 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="filters_type">
-    <item>Empieza por</item>
-    <item>Termina con</item>
-    <item>Todos</item>
-    <item>Tiene exactamente N dígitos</item>
-    <item>Tiene más de N dígitos</item>
-    <item>Es exactamente\"</item>
-  </string-array>
-  <string-array name="replace_type">
-    <item>Con prefijo</item>
-    <item>Con sufijo</item>
-    <item>Sustituir coincidencias por</item>
-    <item>Sustituir todo por</item>
-    <item>RegExp personalizada</item>
-  </string-array>
+
 </resources>

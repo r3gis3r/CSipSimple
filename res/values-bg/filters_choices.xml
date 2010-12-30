@@ -1,17 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="filters_action">
-    <item>Обаждането е невъзможно</item>
-    <item>Пренаписване</item>
-    <item>Спиране на обработката</item>
-    <item>Директно повикване</item>
-    <item>Автоматичен отговор</item>
-  </string-array>
-  <string-array name="replace_type">
-    <item>Префикс от</item>
-    <item>Суфикс с</item>
-    <item>Замяна при съвпадение с</item>
-    <item>Замяна на всички с</item>
-    <item>Регулярен израз по избор</item>
-  </string-array>
+
 </resources>

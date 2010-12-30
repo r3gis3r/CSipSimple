@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-17 22:41+0100\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
 "PO-Revision-Date: 2010-12-17 22:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: zh_CN <LL@li.org>\n"
@@ -132,6 +132,31 @@ msgid "Force"
 msgstr ""
 
 msgctxt "gsm_integration_type_choices:2"
+msgid "Prevent"
+msgstr ""
+
+#, fuzzy
+msgctxt "echo_mode_choices:0"
+msgid "Auto"
+msgstr "自动"
+
+msgctxt "echo_mode_choices:1"
+msgid "Speex"
+msgstr ""
+
+msgctxt "echo_mode_choices:2"
+msgid "Simple"
+msgstr ""
+
+msgctxt "dial_press_mode_choices:0"
+msgid "Use Android setting"
+msgstr ""
+
+msgctxt "dial_press_mode_choices:1"
+msgid "Force"
+msgstr ""
+
+msgctxt "dial_press_mode_choices:2"
 msgid "Prevent"
 msgstr ""
 

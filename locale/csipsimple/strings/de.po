@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-17 22:41+0100\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
 "PO-Revision-Date: 2010-09-30 13:22+0000\n"
 "Last-Translator: Yavor Hristov <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -111,6 +111,15 @@ msgstr "Anrufliste leer"
 
 msgctxt "filters"
 msgid "Filters"
+msgstr "Filter"
+
+msgctxt "filters_desc"
+msgid "To apply when integration to Android is used"
+msgstr ""
+
+#, fuzzy
+msgctxt "filters_for"
+msgid "Filters for"
 msgstr "Filter"
 
 msgctxt "add_filter"
@@ -275,5 +284,9 @@ msgid ""
 "distributors) are not responsible for an illegal use of this codec.\n"
 "It's up to you to be sure that you are authorized to use this codec.\n"
 "Purchase link :"
+msgstr ""
+
+msgctxt "voice_mail"
+msgid "Voice mail"
 msgstr ""
 

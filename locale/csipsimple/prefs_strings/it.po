@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-17 22:41+0100\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
 "PO-Revision-Date: 2010-10-10 11:42+0000\n"
 "Last-Translator: Gianluca <Unknown>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -238,13 +238,14 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "Attiva funzionalità STUN"
 
+#, fuzzy
 msgctxt "stun_server"
-msgid "STUN server"
-msgstr "STUN server"
+msgid "STUN servers"
+msgstr "Turn server"
 
 msgctxt "stun_server_desc"
-msgid "STUN server (HOST:PORT)"
-msgstr "STUN server (HOST:PORT)"
+msgid "STUN servers (HOST[:PORT], ...)"
+msgstr ""
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
@@ -452,6 +453,15 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "Lunghezza della coda di cancellazione dell'eco"
 
+#, fuzzy
+msgctxt "echo_mode"
+msgid "Echo mode"
+msgstr "Modalità esperto"
+
+msgctxt "echo_mode_desc"
+msgid "Algorithm for echo"
+msgstr ""
+
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Priorità (0 disabilita)"
@@ -637,12 +647,13 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Evita la rotazione dello schermo e mantieni la modalità verticale"
 
+#, fuzzy
 msgctxt "gsm_integration_type"
-msgid "Integration type with GSM"
-msgstr ""
+msgid "Mobile phone integration"
+msgstr "Integrazione dialer"
 
 msgctxt "gsm_integration_type_desc"
-msgid "How the application use GSM (or not)"
+msgid "How the application uses your mobile phone (or not)"
 msgstr ""
 
 #. Fast settings
@@ -717,7 +728,19 @@ msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Modalità avanzata"
 
+#~ msgctxt "stun_server"
+#~ msgid "STUN server"
+#~ msgstr "STUN server"
+
+#~ msgctxt "stun_server_desc"
+#~ msgid "STUN server (HOST:PORT)"
+#~ msgstr "STUN server (HOST:PORT)"
+
+#~ msgctxt "gsm_integration_type"
+#~ msgid "Integration type with GSM"
+#~ msgstr ""
+
 #~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How CSipSimple use GSM (or not)"
+#~ msgid "How the application use GSM (or not)"
 #~ msgstr ""
 

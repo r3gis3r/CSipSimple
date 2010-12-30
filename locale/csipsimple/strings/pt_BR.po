@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-17 22:41+0100\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
 "PO-Revision-Date: 2010-10-21 23:27+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt_BR <LL@li.org>\n"
@@ -112,6 +112,15 @@ msgstr "Sem registro de chamadas"
 
 msgctxt "filters"
 msgid "Filters"
+msgstr "Filtros"
+
+msgctxt "filters_desc"
+msgid "To apply when integration to Android is used"
+msgstr ""
+
+#, fuzzy
+msgctxt "filters_for"
+msgid "Filters for"
 msgstr "Filtros"
 
 msgctxt "add_filter"
@@ -273,5 +282,9 @@ msgid ""
 "distributors) are not responsible for an illegal use of this codec.\n"
 "It's up to you to be sure that you are authorized to use this codec.\n"
 "Purchase link :"
+msgstr ""
+
+msgctxt "voice_mail"
+msgid "Voice mail"
 msgstr ""
 

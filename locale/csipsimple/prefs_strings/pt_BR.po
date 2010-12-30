@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-17 22:41+0100\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
 "PO-Revision-Date: 2010-10-21 23:27+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt_BR <LL@li.org>\n"
@@ -239,13 +239,14 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "Habilita o STUN"
 
+#, fuzzy
 msgctxt "stun_server"
-msgid "STUN server"
-msgstr "Servidor STUN"
+msgid "STUN servers"
+msgstr "Servidor TURN"
 
 msgctxt "stun_server_desc"
-msgid "STUN server (HOST:PORT)"
-msgstr "Servidor STUN (SERVIDOR:PORTA)"
+msgid "STUN servers (HOST[:PORT], ...)"
+msgstr ""
 
 #, fuzzy
 msgctxt "enable_qos"
@@ -455,6 +456,14 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr ""
 
+msgctxt "echo_mode"
+msgid "Echo mode"
+msgstr ""
+
+msgctxt "echo_mode_desc"
+msgid "Algorithm for echo"
+msgstr ""
+
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
 msgstr "Prioridade (0 para desabilitar)"
@@ -629,12 +638,13 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr ""
 
+#, fuzzy
 msgctxt "gsm_integration_type"
-msgid "Integration type with GSM"
-msgstr ""
+msgid "Mobile phone integration"
+msgstr "Integração com o discador"
 
 msgctxt "gsm_integration_type_desc"
-msgid "How the application use GSM (or not)"
+msgid "How the application uses your mobile phone (or not)"
 msgstr ""
 
 #. Fast settings
@@ -707,7 +717,19 @@ msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr ""
 
+#~ msgctxt "stun_server"
+#~ msgid "STUN server"
+#~ msgstr "Servidor STUN"
+
+#~ msgctxt "stun_server_desc"
+#~ msgid "STUN server (HOST:PORT)"
+#~ msgstr "Servidor STUN (SERVIDOR:PORTA)"
+
+#~ msgctxt "gsm_integration_type"
+#~ msgid "Integration type with GSM"
+#~ msgstr ""
+
 #~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How CSipSimple use GSM (or not)"
+#~ msgid "How the application use GSM (or not)"
 #~ msgstr ""
 
