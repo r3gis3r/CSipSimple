@@ -55,4 +55,11 @@ public class Callcentric extends SimpleImplementation {
 	protected String getDefaultName() {
 		return "Callcentric";
 	}
+	
+
+	public SipProfile buildAccount(SipProfile account) {
+		account = super.buildAccount(account);
+		account.contact_rewrite_method = 1;
+		return account;
+	}
 }
