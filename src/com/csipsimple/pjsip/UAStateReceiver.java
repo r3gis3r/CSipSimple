@@ -540,10 +540,9 @@ public class UAStateReceiver extends Callback {
 				}
 				broadCastAndroidCallState("RINGING", remContact);
 			}
-			
-			
-			launchCallHandler(callInfo);
 		}
+		
+		launchCallHandler(callInfo);
 	}
 	
 	// -------
