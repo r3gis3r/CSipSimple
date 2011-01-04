@@ -83,7 +83,7 @@ public class Ippi extends SimpleImplementation {
 				try{
 					int value = Integer.parseInt(response);
 					if(value >= 0) {
-						customWizardText.setText("Credit : " + response + " €");
+						customWizardText.setText("Credit : " + response + " euros");
 						customWizard.setVisibility(View.VISIBLE);
 					}
 				}catch(NumberFormatException e) {
