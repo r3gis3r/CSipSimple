@@ -851,16 +851,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor.getMaximumRange());
 			Log.d(THIS_FILE, "Distance is now " + distance);
 			boolean isValidCallState = false;
-			for(SipCallSession callInfo : callsInfo) {
-				int state = callInfo.getCallState();
-				isValidCallState |= ( 
-					(state == SipCallSession.InvState.CONFIRMED ) || 
-					(state == SipCallSession.InvState.CONNECTING )|| 
-					(state == SipCallSession.InvState.CALLING )|| 
-					(state == SipCallSession.InvState.EARLY && !callInfo.isIncoming() )
-				);
-				
-				
+			if(callsInfo != null) {
+				for(SipCallSession callInfo : callsInfo) {
+					int state = callInfo.getCallState();
+					isValidCallState |= ( 
+						(state == SipCallSession.InvState.CONFIRMED ) || 
+						(state == SipCallSession.InvState.CONNECTING )|| 
+						(state == SipCallSession.InvState.CALLING )|| 
+						(state == SipCallSession.InvState.EARLY && !callInfo.isIncoming() )
+					);
+				}
 			}
 			
 			if( isValidCallState && active) {
