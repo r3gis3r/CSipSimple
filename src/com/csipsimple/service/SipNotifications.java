@@ -242,7 +242,12 @@ public class SipNotifications {
 	
 	
 	public void cancelAll() {
-		notificationManager.cancelAll();
+		//notificationManager.cancelAll();
+		//Do not cancel calls notification since it's possible that there is still an ongoing call.
+		cancelMessages();
+		cancelMissedCalls();
+		cancelRegisters();
+		cancelVoicemails();
 	}
 
 }
