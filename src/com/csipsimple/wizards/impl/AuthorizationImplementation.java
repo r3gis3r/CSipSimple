@@ -20,6 +20,7 @@ package com.csipsimple.wizards.impl;
 import java.util.HashMap;
 
 import android.preference.EditTextPreference;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
@@ -49,8 +50,11 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 	
 	public void fillLayout(final SipProfile account) {
 		bindFields();
-		
-		accountDisplayName.setText(account.getDisplayName());
+		if(!TextUtils.isEmpty(account.getDisplayName())) {
+			accountDisplayName.setText(account.getDisplayName());
+		}else {
+			accountDisplayName.setText(getDefaultName());
+		}
 		
 		accountUsername.setText(account.getUserName());
 		accountServer.setText(account.getSipDomain());
@@ -117,7 +121,7 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 		account.scheme = "Digest";
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 		account.reg_timeout = 1800;
-		
+		account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
 	}
 

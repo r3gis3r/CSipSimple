@@ -17,26 +17,46 @@
  */
 package com.csipsimple.wizards.impl;
 
+import android.text.InputType;
+
+import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesWrapper;
 
-public class Phonzo extends AuthorizationImplementation {
+
+public class DeltaThree extends AuthorizationImplementation {
+
+	@Override
+	protected String getDefaultName() {
+		return "deltathree";
+	}
 	
-
+	//Customization
 	@Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
+		
+		accountUsername.setTitle(R.string.w_common_phone_number);
+		accountUsername.setDialogTitle(R.string.w_common_phone_number);
+		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		
+//		
+//		accountAuthorization.setTitle(R.string.w_common_username);
+//		accountAuthorization.setDialogTitle(R.string.w_common_username);
+		
+
 		hidePreference(null, SERVER);
 	}
 	
+
 	@Override
-	public void updateDescriptions() {
-		setStringFieldSummary(DISPLAY_NAME);
-		setStringFieldSummary(USER_NAME);
-		setPasswordFieldSummary(PASSWORD);
-		setPasswordFieldSummary(AUTH_NAME);
+	public String getDefaultFieldSummary(String fieldName) {
+		if(fieldName.equals(USER_NAME)) {
+			return parent.getString(R.string.w_common_phone_number_desc);
+		}
+		return super.getDefaultFieldSummary(fieldName);
 	}
 	
-	@Override
 	public boolean canSave() {
 		boolean isValid = true;
 		
@@ -44,18 +64,34 @@ public class Phonzo extends AuthorizationImplementation {
 		isValid &= checkField(accountUsername, isEmpty(accountUsername));
 		isValid &= checkField(accountAuthorization, isEmpty(accountAuthorization));
 		isValid &= checkField(accountPassword, isEmpty(accountPassword));
+	//	isValid &= checkField(accountServer, isEmpty(accountServer));
 
 		return isValid;
 	}
-
+	
 	@Override
-	protected String getDefaultName() {
-		return "Phonzo";
+	public SipProfile buildAccount(SipProfile account) {
+		account =  super.buildAccount(account);
+		account.proxies = null;
+		account.transport = SipProfile.TRANSPORT_UDP;
+		return account;
 	}
 
-	@Override
 	protected String getDomain() {
-		return "sip.phonzo.com";
+		return "sipauth.deltathree.com";
 	}
 	
+
+	@Override
+	public boolean needRestart() {
+		return true;
+	}
+	
+	
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
+
+		prefs.setCodecPriority("g729/8000/1", "240");
+	}
 }

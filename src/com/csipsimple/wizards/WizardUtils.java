@@ -37,6 +37,7 @@ import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Callcentric;
+import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.Ecs;
 import com.csipsimple.wizards.impl.Ekiga;
 import com.csipsimple.wizards.impl.Eutelia;
@@ -184,6 +185,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ittelenet, 10, 
 					new Locale[]{}, false, true, 
 					ITTelenet.class));
+			WIZARDS_DICT.put("DELTATHREE", new WizardInfo("DELTATHREE", "deltathree", 
+					R.drawable.ic_wizard_deltathree, 35, 
+					new Locale[]{ }, false, true, 
+					DeltaThree.class));
 			
 			
 			//Locales
@@ -308,6 +313,7 @@ public class WizardUtils {
 						new Locale("CS", "cz"),
 					}, false, false, 
 					Fayn.class));
+			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
