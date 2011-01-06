@@ -41,6 +41,7 @@ import com.csipsimple.wizards.impl.Ecs;
 import com.csipsimple.wizards.impl.Ekiga;
 import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
+import com.csipsimple.wizards.impl.Fayn;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.Gizmo5;
 import com.csipsimple.wizards.impl.ITTelenet;
@@ -301,6 +302,12 @@ public class WizardUtils {
 						Locale.UK
 					}, false, false, 
 					Ovh.class));
+			WIZARDS_DICT.put("FAYN", new WizardInfo("FAYN", "Fayn", 
+					R.drawable.ic_wizard_fayn, 30, 
+					new Locale[]{
+						new Locale("CS", "cz"),
+					}, false, false, 
+					Fayn.class));
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
