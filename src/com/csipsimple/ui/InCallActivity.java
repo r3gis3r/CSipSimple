@@ -732,9 +732,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		Log.d(THIS_FILE, "We have a current call : " + call);
 		if(call == null) {
 			Log.e(THIS_FILE, "Try to do an action on a null call !!!");
+			return;
 		}
 		if(call.getCallId() == SipCallSession.INVALID_CALL_ID) {
 			Log.e(THIS_FILE, "Try to do an action on an invalid call !!!");
+			return;
 		}
 		
 		//Reset proximity sensor timer
