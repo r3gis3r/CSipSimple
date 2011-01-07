@@ -27,7 +27,7 @@ public class Gizmo5 extends SimpleImplementation {
 	
 	@Override
 	protected String getDomain() {
-		return "gizmo5.com";
+		return "proxy01.sipphone.com";
 	}
 	
 	@Override
