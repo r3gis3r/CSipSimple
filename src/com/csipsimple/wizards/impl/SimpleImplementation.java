@@ -19,6 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import java.util.HashMap;
 
+import android.net.Uri;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 
@@ -106,7 +107,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		account.display_name = accountDisplayName.getText();
 		// TODO add an user display name
 		account.acc_id = "<sip:"
-				+ accountUsername.getText() + "@"+getDomain()+">";
+				+ Uri.encode(accountUsername.getText()) + "@"+getDomain()+">";
 		
 		String regUri = "sip:"+getDomain();
 		account.reg_uri = regUri;

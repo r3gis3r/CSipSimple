@@ -18,13 +18,14 @@
 package com.csipsimple.wizards.impl;
 
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import android.net.Uri;
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.utils.Log;
 
 public class Basic extends BaseImplementation {
@@ -46,23 +47,10 @@ public class Basic extends BaseImplementation {
 		bindFields();
 		
 		accountDisplayName.setText(account.display_name);
-		String server = "";
-		String account_cfgid = account.acc_id;
-		if(account_cfgid == null) {
-			account_cfgid = "";
-		}
-		Pattern p = Pattern.compile("[^<]*<sip:([^@]*)@([^>]*)>");
-		Matcher m = p.matcher(account_cfgid);
-
-		if (m.matches()) {
-			account_cfgid = m.group(1);
-			server = m.group(2);
-		}
 		
-
-		accountUserName.setText(account_cfgid);
-		accountServer.setText(server);
-		
+		ParsedSipContactInfos parsedInfo = SipUri.parseSipContact(account.acc_id);		
+		accountUserName.setText(parsedInfo.userName);
+		accountServer.setText(parsedInfo.domain);
 		accountPassword.setText(account.data);
 	}
 
@@ -109,7 +97,7 @@ public class Basic extends BaseImplementation {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
 		// TODO add an user display name
-		account.acc_id = "<sip:" + accountUserName.getText() + "@"+accountServer.getText()+">";
+		account.acc_id = "<sip:" + Uri.encode(accountUserName.getText()) + "@"+accountServer.getText()+">";
 		
 		String regUri = "sip:" + accountServer.getText();
 		account.reg_uri = regUri;

@@ -19,6 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import java.util.HashMap;
 
+import android.net.Uri;
 import android.preference.EditTextPreference;
 import android.text.TextUtils;
 
@@ -108,8 +109,7 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 
 	public SipProfile buildAccount(SipProfile account) {
 		account.display_name = accountDisplayName.getText();
-		// TODO add an user display name
-		account.acc_id = "<sip:" + accountUsername.getText() + "@" + getDomain() + ">";
+		account.acc_id = "<sip:" + Uri.encode(accountUsername.getText()) + "@" + getDomain() + ">";
 		
 		String regUri = "sip:" + getDomain();
 		account.reg_uri = regUri;

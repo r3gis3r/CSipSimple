@@ -22,6 +22,7 @@ package com.csipsimple.api;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
 
@@ -64,7 +65,7 @@ public class SipUri {
 			if (m.matches()) {
 				parsedInfos.displayName = m.group(1).trim();
 				parsedInfos.domain = m.group(4);
-				parsedInfos.userName =  m.group(3);
+				parsedInfos.userName =  Uri.decode(m.group(3));
 				parsedInfos.scheme = m.group(2);
 			}
     	}

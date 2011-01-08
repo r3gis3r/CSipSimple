@@ -19,6 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import java.util.HashMap;
 
+import android.net.Uri;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 
@@ -120,7 +121,7 @@ public class Advanced extends BaseImplementation {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
 		account.acc_id = accountCallerId.getText().trim() + 
-			" <sip:" + accountUserName.getText() + "@" + accountServer.getText() + ">";
+			" <sip:" + Uri.encode(accountUserName.getText()) + "@" + accountServer.getText() + ">";
 		
 		account.reg_uri = "sip:" + accountServer.getText();
 
