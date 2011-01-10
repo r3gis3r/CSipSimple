@@ -76,6 +76,7 @@ public class PreferencesWrapper {
 	public static final String GSM_INTEGRATION_TYPE = "gsm_integration_type";
 	public static final String DIAL_PRESS_TONE_MODE = "dial_press_tone_mode";
 	public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";
+	public static final String INVERT_PROXIMITY_SENSOR = "invert_proximity_sensor";
 	
 	
 	// NETWORK
@@ -172,6 +173,7 @@ public class PreferencesWrapper {
 	private final static HashMap<String, Boolean> BOOLEAN_PREFS = new HashMap<String, Boolean>(){
 		private static final long serialVersionUID = 1L;
 	{
+		//Network
 		put(LOCK_WIFI, true);
 		put(ENABLE_TCP, true);
 		put(ENABLE_UDP, true);
@@ -181,7 +183,20 @@ public class PreferencesWrapper {
 		put(ENABLE_ICE, false);
 		put(ENABLE_TURN, false);
 		put(ENABLE_STUN, false);
+		put(ENABLE_QOS, false);
+		put(TLS_VERIFY_SERVER, false);
+		put("use_wifi_in", true);
+		put("use_wifi_out", true);
+		put("use_other_in", true);
+		put("use_other_out", true);
+		put("use_3g_in", false);
+		put("use_3g_out", false);
+		put("use_gprs_in", false);
+		put("use_gprs_out", false);
+		put("use_edge_in", false);
+		put("use_edge_out", false);
 		
+		//Media
 		put(ECHO_CANCELLATION, true);
 		put(ENABLE_VAD, false);
 		put(USE_SOFT_VOLUME, false);
@@ -190,26 +205,11 @@ public class PreferencesWrapper {
 		put(HAS_IO_QUEUE, false);
 		put(SET_AUDIO_GENERATE_TONE, true);
 		
+		//UI
 		put(PREVENT_SCREEN_ROTATION, true);
+		put(KEEP_AWAKE_IN_CALL, false);
+		put(INVERT_PROXIMITY_SENSOR, false);
 		put(ICON_IN_STATUS_BAR, true);
-		
-		put(TLS_VERIFY_SERVER, false);
-//		put(TLS_VERIFY_CLIENT, false);
-		
-		put(ENABLE_QOS, false);
-		
-		//Network
-		put("use_wifi_in", true);
-		put("use_wifi_out", true);
-		put("use_other_in", true);
-		put("use_other_out", true);
-		
-		put("use_3g_in", false);
-		put("use_3g_out", false);
-		put("use_gprs_in", false);
-		put("use_gprs_out", false);
-		put("use_edge_in", false);
-		put("use_edge_out", false);
 		
 		//Calls
 		put(AUTO_RECORD_CALLS, false);
@@ -887,7 +887,11 @@ public class PreferencesWrapper {
 
 
 	public boolean keepAwakeInCall() {
-		return prefs.getBoolean(KEEP_AWAKE_IN_CALL, false);
+		return getPreferenceBooleanValue(KEEP_AWAKE_IN_CALL);
+	}
+	
+	public boolean invertProximitySensor() {
+		return getPreferenceBooleanValue(INVERT_PROXIMITY_SENSOR);
 	}
 
 	public float getInitialVolumeLevel() {
@@ -1042,5 +1046,6 @@ public class PreferencesWrapper {
 	public void setQuit(boolean quit) {
 		setPreferenceBooleanValue(HAS_BEEN_QUIT, quit);
 	}
+
 
 }
