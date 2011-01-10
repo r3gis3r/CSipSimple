@@ -111,7 +111,13 @@ public class Compatibility {
 		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
 			return true;
 		}
+		//LG P500
 		if(android.os.Build.DEVICE.equalsIgnoreCase("LG-P500")) {
+			return true;
+		}
+		//Huawei
+		if(android.os.Build.DEVICE.equalsIgnoreCase("U8150") ||
+				android.os.Build.DEVICE.equalsIgnoreCase("U8110") ) {
 			return true;
 		}
 		
@@ -183,7 +189,8 @@ public class Compatibility {
 	
 
 	private static boolean needToneWorkaround(PreferencesWrapper prefWrapper) {
-		if(android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i5800") ) {
+		if(android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i5800") ||
+				android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i5801") ) {
 			return true;
 		}
 		return false;
@@ -210,6 +217,11 @@ public class Compatibility {
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, isCompatible(4) ? true : false);
 		//HTC PSP mode hack
 		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, needPspWorkaround(preferencesWrapper));
+		
+		//Proximity sensor inverted
+		if( android.os.Build.PRODUCT.equalsIgnoreCase("SPH-M900") /*Sgs moment*/) {
+			preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.INVERT_PROXIMITY_SENSOR, true);
+		}
 		
 		// Galaxy S default settings
 		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
@@ -363,7 +375,7 @@ public class Compatibility {
 		if(lastSeenVersion < 400) {
 			prefWrapper.setCodecPriority("G729/8000/1", "0");
 		}
-		if(lastSeenVersion < 552) {
+		if(lastSeenVersion < 574) {
 			prefWrapper.setPreferenceStringValue(PreferencesWrapper.THREAD_COUNT, "3");
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
 
@@ -379,6 +391,10 @@ public class Compatibility {
 			}
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
+			//Proximity sensor inverted
+			if( android.os.Build.PRODUCT.equalsIgnoreCase("SPH-M900") /*Sgs moment*/) {
+				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.INVERT_PROXIMITY_SENSOR, true);
+			}
 		}
 		
 	}
