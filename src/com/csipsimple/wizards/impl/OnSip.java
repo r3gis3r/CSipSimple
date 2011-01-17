@@ -30,7 +30,7 @@ public class OnSip extends AuthorizationImplementation {
 	
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
-		account.proxies = new String[]{"sip.onsip.com"};
+		account.proxies = new String[]{"sip:sip.onsip.com"};
 		return account;
 	}
 
