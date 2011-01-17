@@ -532,7 +532,7 @@ public class SipProfile implements Parcelable {
 	 *  Gets the username when acc_id is username@domain.
 	 *  WARNING : this is different from username of SipProfile which is the authentication name cause of pjsip naming
 	 */
-	public String getUserName() {
+	public String getSipUserName() {
 		ParsedSipContactInfos parsed = SipUri.parseSipContact(acc_id);
 		if(parsed.userName != null) {
 			return parsed.userName;

@@ -17,7 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.api.SipProfile;
 
 
 public class OnSip extends AuthorizationImplementation {
@@ -27,16 +27,12 @@ public class OnSip extends AuthorizationImplementation {
 		return "OnSIP";
 	}
 	
-
-	@Override
-	public void setDefaultParams(PreferencesWrapper prefs) {
-		super.setDefaultParams(prefs);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);
-	}
 	
-	@Override
-	public boolean needRestart() {
-		return true;
+	public SipProfile buildAccount(SipProfile account) {
+		account = super.buildAccount(account);
+		account.proxies = new String[]{"sip.onsip.com"};
+		return account;
 	}
+
 	
 }
