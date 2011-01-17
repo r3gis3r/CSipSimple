@@ -511,7 +511,7 @@ public class SipProfile implements Parcelable {
 	}
 	
 	/**
-	 * Gets the SIP domain.
+	 * Gets the SIP domain when acc_id is username@domain.
 	 * @return the sip domain for this account
 	 */
 	public String getSipDomain() {
@@ -529,9 +529,14 @@ public class SipProfile implements Parcelable {
 	}
 	
 	/**
-	 *  Gets the username.
+	 *  Gets the username when acc_id is username@domain.
+	 *  WARNING : this is different from username of SipProfile which is the authentication name cause of pjsip naming
 	 */
 	public String getUserName() {
-		return username;
+		ParsedSipContactInfos parsed = SipUri.parseSipContact(acc_id);
+		if(parsed.userName != null) {
+			return parsed.userName;
+		}
+		return "";
 	}
 }
