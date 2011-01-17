@@ -57,7 +57,7 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 			accountDisplayName.setText(getDefaultName());
 		}
 		
-		accountUsername.setText(account.getUserName());
+		accountUsername.setText(account.getSipUserName());
 		accountServer.setText(account.getSipDomain());
 		
 		accountPassword.setText(account.data);
