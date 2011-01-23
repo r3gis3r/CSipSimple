@@ -20,6 +20,7 @@ package com.csipsimple.wizards.impl;
 import android.text.InputType;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -51,7 +52,7 @@ public class Ekiga extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		// Add stun server
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
 		prefs.addStunServer("stun.counterpath.com");
 	}
 	

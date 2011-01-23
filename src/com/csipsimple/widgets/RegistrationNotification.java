@@ -64,8 +64,10 @@ public class RegistrationNotification extends RemoteViews {
 			if(i<cells.length) {
 				setViewVisibility(cells[i], View.VISIBLE);
 				WizardInfo wizardInfos = WizardUtils.getWizardClass(accountInfo.getWizard());
-				setImageViewResource(icons[i], wizardInfos.icon);
-				setTextViewText(texts[i], accountInfo.getDisplayName());
+				if(wizardInfos != null) {
+					setImageViewResource(icons[i], wizardInfos.icon);
+					setTextViewText(texts[i], accountInfo.getDisplayName());
+				}
 				i++;
 			}
 		}

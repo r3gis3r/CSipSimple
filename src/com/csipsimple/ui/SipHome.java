@@ -46,6 +46,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
@@ -149,8 +150,9 @@ public class SipHome extends TabActivity {
 
 		addTab(TAB_DIALER, getString(R.string.dial_tab_name_text), R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
 		addTab(TAB_CALLLOG, getString(R.string.calllog_tab_name_text), R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
-		addTab(TAB_MESSAGES, getString(R.string.messages_tab_name_text), R.drawable.ic_tab_selected_messages, R.drawable.ic_tab_unselected_messages, messagesIntent);
-		
+		if(CustomDistribution.supportMessaging()) {
+			addTab(TAB_MESSAGES, getString(R.string.messages_tab_name_text), R.drawable.ic_tab_selected_messages, R.drawable.ic_tab_unselected_messages, messagesIntent);
+		}
 		pickupContact = (ImageButton) findViewById(R.id.pickup_contacts);
 		pickupContact.setOnClickListener(new OnClickListener() {
 			@Override
@@ -162,7 +164,7 @@ public class SipHome extends TabActivity {
 		has_tried_once_to_activate_account = false;
 		
 
-		if(!prefWrapper.getPreferenceBooleanValue(PreferencesWrapper.PREVENT_SCREEN_ROTATION)) {
+		if(!prefWrapper.getPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION)) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 		}
 		
@@ -313,7 +315,9 @@ public class SipHome extends TabActivity {
 			}else if(SipManager.ACTION_SIP_DIALER.equalsIgnoreCase(callAction)) {
 				getTabHost().setCurrentTab(0);
 			}else if(SipManager.ACTION_SIP_MESSAGES.equalsIgnoreCase(callAction)) {
-				getTabHost().setCurrentTab(2);
+				if(CustomDistribution.supportMessaging()) {
+					getTabHost().setCurrentTab(2);
+				}
 			}
 		}
 	}

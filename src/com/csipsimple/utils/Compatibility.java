@@ -21,6 +21,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.csipsimple.api.SipConfigManager;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -196,50 +198,87 @@ public class Compatibility {
 		return false;
 	}
 	
-	public static void setFirstRunParameters(PreferencesWrapper preferencesWrapper) {
+	
+	private static void resetCodecsSettings(PreferencesWrapper preferencesWrapper) {
 		//Disable iLBC if not armv7
-		preferencesWrapper.setCodecPriority("iLBC/8000/1", 
-				getCpuAbi().equalsIgnoreCase("armeabi-v7a") ? "189" : "0");
-		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_MEDIA_QUALITY, getCpuAbi().equalsIgnoreCase("armeabi-v7a") ? "4" : "3");
+		boolean supportFloating = getCpuAbi().equalsIgnoreCase("armeabi-v7a");
 		
-		//Values get from wince pjsip app
-		preferencesWrapper.setCodecPriority("PCMU/8000/1", "240");
-		preferencesWrapper.setCodecPriority("PCMA/8000/1", "230");
-		preferencesWrapper.setCodecPriority("speex/8000/1", "190");
-		preferencesWrapper.setCodecPriority("speex/16000/1", "180");
-		preferencesWrapper.setCodecPriority("speex/32000/1", "0");
-		preferencesWrapper.setCodecPriority("GSM/8000/1", "100");
-		preferencesWrapper.setCodecPriority("G722/16000/1", "0");
-		preferencesWrapper.setCodecPriority("G729/8000/1", "0");
-
-		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_AUTO_CLOSE_TIME, isCompatible(4) ? "1" : "5");
-		preferencesWrapper.setPreferenceStringValue(PreferencesWrapper.SND_CLOCK_RATE, isCompatible(4) ? "16000" : "8000");
-		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, isCompatible(4) ? true : false);
+		
+		//For Narrow band
+		preferencesWrapper.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB, "60");
+		preferencesWrapper.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB, "50");
+		preferencesWrapper.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB, "220");
+		preferencesWrapper.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "230");
+		preferencesWrapper.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB, supportFloating ? "240" : "0");
+		preferencesWrapper.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_NB, "235");
+		preferencesWrapper.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_NB, "237");
+		
+		
+		//For Wide band
+		preferencesWrapper.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB, "60");
+		preferencesWrapper.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB, "50");
+		preferencesWrapper.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB, "219");
+		preferencesWrapper.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB, "220");
+		preferencesWrapper.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB, "235");
+		preferencesWrapper.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB, supportFloating ? "100" : "0");
+		preferencesWrapper.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, "230");
+		preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB, "240");
+		preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_WB, "0");
+		
+		
+		// Bands repartition
+		preferencesWrapper.setPreferenceStringValue("band_for_wifi",  SipConfigManager.CODEC_WB);
+		preferencesWrapper.setPreferenceStringValue("band_for_other",  SipConfigManager.CODEC_WB);
+		preferencesWrapper.setPreferenceStringValue("band_for_3g",  SipConfigManager.CODEC_NB);
+		preferencesWrapper.setPreferenceStringValue("band_for_gprs", SipConfigManager.CODEC_NB);
+		preferencesWrapper.setPreferenceStringValue("band_for_edge", SipConfigManager.CODEC_NB);
+		
+	}
+	
+	public static void setFirstRunParameters(PreferencesWrapper preferencesWrapper) {
+		resetCodecsSettings(preferencesWrapper);
+		
+		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_MEDIA_QUALITY, getCpuAbi().equalsIgnoreCase("armeabi-v7a") ? "4" : "3");
+		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_AUTO_CLOSE_TIME, isCompatible(4) ? "1" : "5");
+		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE, isCompatible(4) ? "16000" : "8000");
+		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, isCompatible(4) ? true : false);
 		//HTC PSP mode hack
-		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, needPspWorkaround(preferencesWrapper));
+		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround(preferencesWrapper));
 		
 		//Proximity sensor inverted
 		if( android.os.Build.PRODUCT.equalsIgnoreCase("SPH-M900") /*Sgs moment*/) {
-			preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.INVERT_PROXIMITY_SENSOR, true);
+			preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INVERT_PROXIMITY_SENSOR, true);
 		}
 		
 		// Galaxy S default settings
 		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
-			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.4);
-			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 0.2);
-			preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
+			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 0.4);
+			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 0.2);
+			preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME, true);
 		}
 		//HTC evo 4G
 		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
-			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.5);
-			preferencesWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 1.5);
+			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 0.5);
+			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 1.5);
 			
 		}
 		
 		//Use routing API?
-		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
-		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
-		preferencesWrapper.setPreferenceBooleanValue(PreferencesWrapper.SET_AUDIO_GENERATE_TONE, needToneWorkaround(preferencesWrapper));
+		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
+		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround(preferencesWrapper));
 	}
 
 	public static boolean useFlipAnimation() {
@@ -339,62 +378,62 @@ public class Compatibility {
 			
 			// Galaxy S default settings
 			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
-				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.4);
-				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 0.2);
+				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 0.4);
+				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 0.2);
 			}
 			
 			if (TextUtils.isEmpty(prefWrapper.getStunServer())) {
-				prefWrapper.setPreferenceStringValue(PreferencesWrapper.STUN_SERVER, "stun.counterpath.com");
+				prefWrapper.setPreferenceStringValue(SipConfigManager.STUN_SERVER, "stun.counterpath.com");
 			}
 		}
 		if (lastSeenVersion < 15) {
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, false);
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, false);
 		}
 		//Now we use svn revisions
 		if (lastSeenVersion < 369) {
 			// Galaxy S default settings
 			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
-				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_SOFT_VOLUME, true);
+				prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME, true);
 			}
 			
 		}
 		
 		if(lastSeenVersion < 385) {
 			if(needPspWorkaround(prefWrapper)) {
-				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, true);
+				prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, true);
 			}
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, shouldUseRoutingApi());
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
-			prefWrapper.setPreferenceStringValue(PreferencesWrapper.SIP_AUDIO_MODE, guessInCallMode());
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
 		}
 		
 		if(lastSeenVersion < 394) {
 			//HTC PSP mode hack
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
 		}
-		if(lastSeenVersion < 400) {
-			prefWrapper.setCodecPriority("G729/8000/1", "0");
-		}
-		if(lastSeenVersion < 574) {
-			prefWrapper.setPreferenceStringValue(PreferencesWrapper.THREAD_COUNT, "3");
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
+		if(lastSeenVersion < 575) {
+			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "3");
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
 
 			if(lastSeenVersion > 0) {
 				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP_SERVICE, true);
 			}
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_QOS, false);
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.ENABLE_QOS, false);
 			//HTC evo 4G
 			if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
-				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_MIC_LEVEL, (float) 0.5);
-				prefWrapper.setPreferenceFloatValue(PreferencesWrapper.SND_SPEAKER_LEVEL, (float) 1.5);
-				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_ROUTING_API, true);
+				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 0.5);
+				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 1.5);
+				prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, true);
 			}
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.USE_MODE_API, shouldUseModeApi());
-			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
 			//Proximity sensor inverted
 			if( android.os.Build.PRODUCT.equalsIgnoreCase("SPH-M900") /*Sgs moment*/) {
-				prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.INVERT_PROXIMITY_SENSOR, true);
+				prefWrapper.setPreferenceBooleanValue(SipConfigManager.INVERT_PROXIMITY_SENSOR, true);
 			}
+		}
+		if(lastSeenVersion < 584) {
+			resetCodecsSettings(prefWrapper);
 		}
 		
 	}

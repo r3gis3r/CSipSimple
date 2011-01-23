@@ -69,6 +69,7 @@ import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
 import com.csipsimple.wizards.impl.Vono;
+import com.csipsimple.wizards.impl.WiMobile;
 
 
 public class WizardUtils {
@@ -200,6 +201,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_eutelia, 30, 
 					new Locale[]{Locale.ITALY}, false, false, 
 					Eutelia.class));
+			WIZARDS_DICT.put("WIMOBILE", new WizardInfo("WIMOBILE", "WiMobile", 
+					R.drawable.ic_wizard_wimobile, 20, 
+					new Locale[]{Locale.ITALY}, false, false, 
+					WiMobile.class));
 			WIZARDS_DICT.put("FREEPHONIE", new WizardInfo("FREEPHONIE", "Freephonie", 
 					R.drawable.ic_wizard_freephonie, 30, 
 					new Locale[]{Locale.FRANCE}, false, false, 

@@ -47,6 +47,8 @@ public class PrefsMedia extends GenericPrefs {
 			hidePreference("audio_quality", "has_io_queue");
 			
 			
+			hidePreference(null, "band_types");
+			
 			hidePreference("audio_volume", "snd_mic_level");
 			hidePreference("audio_volume", "snd_speaker_level");
 			hidePreference("audio_volume", "use_soft_volume");

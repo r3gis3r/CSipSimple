@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CollectLogs;
 import com.csipsimple.utils.CustomDistribution;
@@ -46,6 +47,7 @@ public class Help extends Activity implements OnClickListener {
 	
 	private static final String THIS_FILE = "Help";
 	private PreferencesWrapper prefsWrapper;
+	private static final int REQUEST_SEND_LOGS = 0;
 	
 	private ISipService sipService = null;
 	
@@ -147,7 +149,7 @@ public class Help extends Activity implements OnClickListener {
 		case R.id.record_logs_line:
 			Log.e(THIS_FILE, "Clicked on record logs line while isRecording is : " + isRecording());
 			if (!isRecording()) {
-				prefsWrapper.setPreferenceStringValue(PreferencesWrapper.LOG_LEVEL, "4");
+				prefsWrapper.setPreferenceStringValue(SipConfigManager.LOG_LEVEL, "4");
 				Log.setLogLevel(4);
 				if(sipService !=null ) {
 					try {
@@ -156,16 +158,17 @@ public class Help extends Activity implements OnClickListener {
 						Log.e(THIS_FILE, "Impossible to restart sip", e);
 					}
 				}
+
+				finish();
 			} else {
-				prefsWrapper.setPreferenceStringValue(PreferencesWrapper.LOG_LEVEL, "1");
+				prefsWrapper.setPreferenceStringValue(SipConfigManager.LOG_LEVEL, "1");
 				try {
-					startActivity(CollectLogs.getLogReportIntent("<<<PLEASE ADD THE BUG DESCRIPTION HERE>>>", this));
+					startActivityForResult(CollectLogs.getLogReportIntent("<<<PLEASE ADD THE BUG DESCRIPTION HERE>>>", this), REQUEST_SEND_LOGS);
 				}catch(Exception e) {
 					Log.e(THIS_FILE, "Impossible to send logs...", e);
 				}
 				Log.setLogLevel(1);
 			}
-			finish();
 			break;
 		case R.id.issues_line:
 			Intent it = new Intent(Intent.ACTION_VIEW);
@@ -179,4 +182,12 @@ public class Help extends Activity implements OnClickListener {
 		
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(requestCode == REQUEST_SEND_LOGS) {
+			PreferencesWrapper.cleanLogsFiles();
+			finish();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 }

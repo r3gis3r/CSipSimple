@@ -17,7 +17,9 @@
  */
 package com.csipsimple.wizards.impl;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class NexGenTel extends SimpleImplementation {
 	
@@ -36,5 +38,18 @@ public class NexGenTel extends SimpleImplementation {
 		account = super.buildAccount(account);
 		account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
+	}
+	
+
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
+		prefs.setPreferenceStringValue(SipConfigManager.OVERRIDE_NAMESERVER, "92.55.132.13");
+	}
+
+	@Override
+	public boolean needRestart() {
+		return true;
 	}
 }

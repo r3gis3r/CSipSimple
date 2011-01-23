@@ -20,6 +20,7 @@ package com.csipsimple.wizards.impl;
 import android.preference.ListPreference;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -58,10 +59,6 @@ public class IiNet extends SimpleImplementation {
 		account.reg_uri = regUri;
 		account.proxies = new String[] { regUri } ;
 		
-		// Enable dns srv
-		PreferencesWrapper prefs = new PreferencesWrapper(parent);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);
-		
 		return account;
 	}
 	
@@ -85,6 +82,15 @@ public class IiNet extends SimpleImplementation {
 		return "iinet";
 	}
 
+	
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
+		// Add stun server
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
+	}
+	
 	@Override
 	public boolean needRestart() {
 		return true;

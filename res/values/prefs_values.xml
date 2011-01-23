@@ -82,4 +82,8 @@
 		<item>2</item> <!-- Prevent -->
 	</string-array>
 	
+	<string-array name="band_types">
+		<item>nb</item>
+		<item>wb</item>
+	</string-array>
 </resources>

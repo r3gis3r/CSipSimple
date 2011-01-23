@@ -35,20 +35,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.SimpleAdapter.ViewBinder;
+import android.widget.ToggleButton;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.DragnDropListView;
 import com.csipsimple.widgets.DragnDropListView.DropListener;
 
-public class Codecs extends ListActivity {
+public class Codecs extends ListActivity implements OnClickListener {
 
 	protected static final String THIS_FILE = "Codecs";
 	
@@ -58,10 +61,15 @@ public class Codecs extends ListActivity {
 	
 	public static final int MENU_ITEM_ACTIVATE = Menu.FIRST;
 	
+	private String bandtype = SipConfigManager.CODEC_WB; 
+	
 	private SimpleAdapter adapter;
 	ArrayList<HashMap<String, Object>> codecs;
 
 	private PreferencesWrapper prefsWrapper;
+
+	private ToggleButton nbToggle;
+	private ToggleButton wbToggle;
 	
 	private static final HashMap<String, String> nonFreeCodecs = new HashMap<String, String>(){/**
 		 * 
@@ -80,6 +88,12 @@ public class Codecs extends ListActivity {
 		setContentView(R.layout.codecs_list);
 		
 		prefsWrapper = new PreferencesWrapper(this);
+		
+		nbToggle = (ToggleButton) findViewById(R.id.tg_narrow_band);
+		wbToggle = (ToggleButton) findViewById(R.id.tg_wide_band);
+		
+		nbToggle.setOnClickListener(this);
+		wbToggle.setOnClickListener(this);
 		initDatas();
 		
 		
@@ -94,7 +108,7 @@ public class Codecs extends ListActivity {
 			@Override
 			public boolean setViewValue(View view, Object data, String textRepresentation) {
 				if(view.getId() == R.id.entiere_line) {
-					Log.d(THIS_FILE, "Entiere line is binded");
+					Log.d(THIS_FILE, "Entiere line is binded ");
 					TextView tv = (TextView) view.findViewById(R.id.line1);
 					ImageView grabber = (ImageView) view.findViewById(R.id.icon);
 					if((Short) data == 0) {
@@ -136,7 +150,7 @@ public class Codecs extends ListActivity {
 				for(HashMap<String, Object> codec : codecs) {
 					if((Short) codec.get(CODEC_PRIORITY) > 0) {
 						if(currentPriority != (Short) codec.get(CODEC_PRIORITY)) {
-							prefsWrapper.setCodecPriority((String)codec.get(CODEC_ID), Short.toString(currentPriority));
+							prefsWrapper.setCodecPriority((String)codec.get(CODEC_ID), bandtype, Short.toString(currentPriority));
 							codec.put(CODEC_PRIORITY, currentPriority);
 						}
 						//Log.d(THIS_FILE, "Reorder : "+codec.toString());
@@ -156,8 +170,11 @@ public class Codecs extends ListActivity {
 	
 	
 	private void initDatas() {
-		codecs = new ArrayList<HashMap<String, Object>>();
-		
+		if(codecs == null) {
+			codecs = new ArrayList<HashMap<String, Object>>();
+		}else {
+			codecs.clear();
+		}
 		if(SipService.pjService.codecs == null) {
 			Log.w(THIS_FILE, "Codecs not initialized in service !!! ");
 			return;
@@ -165,16 +182,18 @@ public class Codecs extends ListActivity {
 		
 		int current_prio = 130;
 		for(String codecName : SipService.pjService.codecs) {
-			Log.d(THIS_FILE, "Fill codec "+codecName);
+			Log.d(THIS_FILE, "Fill codec "+codecName+" for "+bandtype);
 			String[] codecParts = codecName.split("/");
 			if(codecParts.length >=2 ) {
 				HashMap<String, Object> codecInfo = new HashMap<String, Object>();
 				codecInfo.put(CODEC_ID, codecName);
 				codecInfo.put(CODEC_NAME, codecParts[0]+" "+codecParts[1].substring(0, codecParts[1].length()-3)+" kHz");
-				codecInfo.put(CODEC_PRIORITY, prefsWrapper.getCodecPriority(codecName, Integer.toString(current_prio)));
+				codecInfo.put(CODEC_PRIORITY, prefsWrapper.getCodecPriority(codecName, bandtype, Integer.toString(current_prio)));
 				codecs.add(codecInfo);
 				current_prio --;
+				Log.d(THIS_FILE, "Found priority is "+codecInfo.get(CODEC_PRIORITY));
 			}
+			
 		}
 		
 		Collections.sort(codecs, codecsComparator);
@@ -281,10 +300,30 @@ public class Codecs extends ListActivity {
 	
 	private void setCodecActivated(HashMap<String, Object> codec, short newPrio) {
 		codec.put(CODEC_PRIORITY, newPrio);
-		prefsWrapper.setCodecPriority((String) codec.get(CODEC_ID), Short.toString(newPrio));
+		prefsWrapper.setCodecPriority((String) codec.get(CODEC_ID), bandtype, Short.toString(newPrio));
 		
 		Collections.sort(codecs, codecsComparator);
 
+		((SimpleAdapter) adapter).notifyDataSetChanged();
+	}
+
+
+	@Override
+	public void onClick(View v) {
+		
+		
+		if (v.getId() == R.id.tg_narrow_band) {
+			wbToggle.setChecked(!nbToggle.isChecked());
+			bandtype = wbToggle.isChecked() ? SipConfigManager.CODEC_WB : SipConfigManager.CODEC_NB;
+		}
+
+		// If we are clicking on wide band, set nbToggle check to correct value
+		if (v.getId() == R.id.tg_wide_band) {
+			nbToggle.setChecked(!wbToggle.isChecked());
+			bandtype = nbToggle.isChecked() ? SipConfigManager.CODEC_NB : SipConfigManager.CODEC_WB;
+		}
+		Log.d(THIS_FILE, "We are now setting at codecs for "+bandtype);
+		initDatas();
 		((SimpleAdapter) adapter).notifyDataSetChanged();
 	}
 	

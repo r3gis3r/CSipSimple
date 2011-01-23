@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+		android:id="@+id/container" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:orientation="vertical">
+		
+		
+		<LinearLayout android:id="@+id/badge" android:background="@drawable/badge_head"
+			android:layout_weight="0"
+			
+			android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center">
+			<FrameLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center">
+				<ImageView android:id="@+id/card_img" android:scaleType="fitStart"
+					android:adjustViewBounds="true"
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/picture_unknown" android:layout_gravity="center"/>
+				<Chronometer android:id="@+id/elapsedTime"
+					android:layout_height="wrap_content"
+					android:layout_gravity="bottom|right"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:padding="3dip" android:background="@drawable/rounded_transparent_tl" android:layout_width="fill_parent"/>
+			</FrameLayout>
+			<com.csipsimple.widgets.MarqueeTextView
+				android:id="@+id/card_label" android:textColor="#333333" android:singleLine="true"
+				
+				android:layout_width="fill_parent" android:layout_height="wrap_content" 
+				android:textAppearance="?android:attr/textAppearanceMedium" android:ellipsize="marquee"
+				android:marqueeRepeatLimit="marquee_forever" android:gravity="center"/>
+			<com.csipsimple.widgets.MarqueeTextView
+				android:id="@+id/card_status" android:textColor="#777777" android:singleLine="true"
+
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:marqueeRepeatLimit="marquee_forever" android:ellipsize="marquee" />
+
+	</LinearLayout>
+		<ScrollView android:background="@drawable/badge_content"
+			android:layout_weight="1"
+			android:fadingEdgeLength="0dip" 
+			android:paddingRight="10dip" android:paddingLeft="10dip" 
+			android:visibility="gone" android:id="@+id/content"
+			android:layout_height="wrap_content" android:persistentDrawingCache="animation|scrolling"
+			 android:layout_width="fill_parent" android:scrollbars="none">
+			<LinearLayout android:layout_width="fill_parent" 
+				android:paddingTop="4dip" android:paddingBottom="4dip"
+				android:paddingLeft="10dip" android:paddingRight="10dip"
+				android:background="@drawable/extensible_card_slider_background"
+				android:orientation="vertical" android:id="@+id/quickactions" android:layout_height="wrap_content">
+				<ImageView android:scaleType="fitXY" android:id="@+id/ImageView01"
+					android:src="@drawable/quickaction_slider_grip_top" android:layout_height="wrap_content"
+					android:layout_width="fill_parent"></ImageView>
+				<ImageView android:scaleType="fitXY" android:id="@+id/ImageView02"
+					android:src="@drawable/quickaction_slider_grip_bottom" android:layout_height="wrap_content"
+					android:layout_width="fill_parent"></ImageView>
+			</LinearLayout>
+		</ScrollView>
+
+		<View android:id="@+id/handle" android:background="@drawable/badge_handle" android:layout_width="fill_parent"
+			android:layout_weight="0"
+			android:layout_height="35dip" />
+
+	</LinearLayout>

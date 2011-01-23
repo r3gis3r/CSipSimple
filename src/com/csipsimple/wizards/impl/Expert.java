@@ -44,7 +44,7 @@ public class Expert extends BaseImplementation {
 	private ListPreference accountTransport;
 	private CheckBoxPreference accountPublishEnabled;
 	private EditTextPreference accountRegTimeout;
-	private EditTextPreference accountKaInterval;
+//	private EditTextPreference accountKaInterval;
 	private EditTextPreference accountForceContact;
 	private CheckBoxPreference accountAllowContactRewrite;
 	private ListPreference accountContactRewriteMethod;
@@ -64,7 +64,6 @@ public class Expert extends BaseImplementation {
 		accountUseSrtp = (ListPreference) parent.findPreference("use_srtp");
 		accountPublishEnabled = (CheckBoxPreference) parent.findPreference("publish_enabled");
 		accountRegTimeout = (EditTextPreference) parent.findPreference("reg_timeout");
-		accountKaInterval = (EditTextPreference) parent.findPreference("ka_interval");
 		accountForceContact = (EditTextPreference) parent.findPreference("force_contact");
 		accountAllowContactRewrite = (CheckBoxPreference) parent.findPreference("allow_contact_rewrite");
 		accountContactRewriteMethod = (ListPreference) parent.findPreference("contact_rewrite_method");
@@ -109,7 +108,6 @@ public class Expert extends BaseImplementation {
 		accountTransport.setValue(account.transport.toString());
 		accountPublishEnabled.setChecked((account.publish_enabled == 1));
 		accountRegTimeout.setText(Long.toString(account.reg_timeout));
-		accountKaInterval.setText(Long.toString(account.ka_interval));
 		
 		accountForceContact.setText(account.force_contact);
 		accountAllowContactRewrite.setChecked(account.allow_contact_rewrite);
@@ -216,11 +214,6 @@ public class Expert extends BaseImplementation {
 			account.reg_timeout = Integer.parseInt(accountRegTimeout.getText());
 		} catch (NumberFormatException e) {
 			account.reg_timeout = 0;
-		}
-		try {
-			account.ka_interval = Integer.parseInt(accountKaInterval.getText());
-		} catch (NumberFormatException e) {
-			account.ka_interval = 0;
 		}
 		try {
 			account.contact_rewrite_method = Integer.parseInt(accountContactRewriteMethod.getValue());

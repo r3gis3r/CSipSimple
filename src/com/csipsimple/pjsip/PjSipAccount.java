@@ -27,6 +27,7 @@ import org.pjsip.pjsua.pjsua_acc_config;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
@@ -54,8 +55,8 @@ public class PjSipAccount {
 		cfg = new pjsua_acc_config();
 		
 		pjsua.acc_config_default(cfg);
-		// Change the default ka interval to 40s
-		cfg.setKa_interval(40);
+		// By default keep alive interval is now 0 since it's managed globally at android level
+		cfg.setKa_interval(0);
 	}
 	
 	public PjSipAccount(SipProfile profile) {
@@ -168,7 +169,7 @@ public class PjSipAccount {
 				long initialProxyCnt = cfg.getProxy_cnt();
 				pj_str_t[] proxies = cfg.getProxy();
 				
-				
+				//TODO : remove lr and transport from uri
 		//		cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
 				
 				if (initialProxyCnt == 0 || TextUtils.isEmpty(proxies[0].getPtr())) {
@@ -187,7 +188,7 @@ public class PjSipAccount {
 		
 		//Caller id
 		PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
-		String defaultCallerid = prefs.getPreferenceStringValue(PreferencesWrapper.DEFAULT_CALLER_ID);
+		String defaultCallerid = prefs.getPreferenceStringValue(SipConfigManager.DEFAULT_CALLER_ID);
 		
 		
 		// If one default caller is set 

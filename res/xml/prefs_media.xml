@@ -60,6 +60,14 @@
 		
 		<PreferenceScreen android:title="@string/codecs" android:summary="@string/codecs_availability_text" android:key="codecs_list"/>
 		
+		<PreferenceScreen android:key="band_types" android:title="@string/codecs_band_types">
+			<ListPreference android:title="@string/band_for_wifi" android:entries="@array/band_types_name" android:entryValues="@array/band_types" android:key="band_for_wifi"/>
+			<ListPreference android:title="@string/band_for_3g" android:entries="@array/band_types_name" android:entryValues="@array/band_types" android:key="band_for_3g"/>
+			<ListPreference android:title="@string/band_for_gprs" android:entries="@array/band_types_name" android:entryValues="@array/band_types" android:key="band_for_gprs"/>
+			<ListPreference android:title="@string/band_for_edge" android:entries="@array/band_types_name" android:entryValues="@array/band_types" android:key="band_for_edge"/>
+			<ListPreference android:title="@string/band_for_other" android:entries="@array/band_types_name" android:entryValues="@array/band_types" android:key="band_for_other"/>
+		</PreferenceScreen>
+		
 		<PreferenceCategory android:key="audio_volume" android:title="@string/audio_volume">
 			
 			<com.csipsimple.widgets.SeekBarPreference android:key="snd_mic_level"

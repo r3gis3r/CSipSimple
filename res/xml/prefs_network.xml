@@ -43,7 +43,19 @@
 			android:numeric="integer"
 			android:summary="@string/network_tcp_transport_port_desc"
 			android:defaultValue="5060"></EditTextPreference>
-			
+		
+		<EditTextPreference android:key="keep_alive_interval_wifi"
+			android:title="@string/keep_alive_interval_wifi"
+			android:summary="@string/keep_alive_interval_desc"
+			android:numeric="signed"
+			android:defaultValue="100"></EditTextPreference>
+		<EditTextPreference android:key="keep_alive_interval_mobile"
+			android:title="@string/keep_alive_interval_mobile"
+			android:summary="@string/keep_alive_interval_desc"
+			android:numeric="signed"
+			android:defaultValue="40"></EditTextPreference>
+		
+		
 		<EditTextPreference android:key="network_rtp_port"
 			android:title="@string/network_rtp_port"
 			android:numeric="integer"
@@ -68,7 +80,8 @@
 		<EditTextPreference android:key="dscp_val"
 			android:title="@string/dscp_val"
 			android:summary="@string/dscp_val_desc"
-			android:defaultValue="26"></EditTextPreference>*
+				android:numeric="signed"
+			android:defaultValue="26"></EditTextPreference>
 			
 		
 	</PreferenceCategory>

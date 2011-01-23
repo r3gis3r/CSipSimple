@@ -17,6 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class Speakezi extends SimpleImplementation {
@@ -42,10 +43,15 @@ public class Speakezi extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 
-		prefs.setCodecPriority("speex/8000/1", "240");
-		prefs.setCodecPriority("GSM/8000/1", "239");
-		prefs.setCodecPriority("PCMA/8000/1", "238");
-		prefs.setCodecPriority("PCMU/8000/1", "237");
+		prefs.setCodecPriority("speex/8000/1",SipConfigManager.CODEC_NB, "245");
+		prefs.setCodecPriority("GSM/8000/1",SipConfigManager.CODEC_NB, "244");
+		prefs.setCodecPriority("PCMA/8000/1",SipConfigManager.CODEC_NB, "243");
+		prefs.setCodecPriority("PCMU/8000/1",SipConfigManager.CODEC_NB, "242");
+		
+		prefs.setCodecPriority("speex/16000/1",SipConfigManager.CODEC_WB, "245");
+		prefs.setCodecPriority("PCMA/8000/1",SipConfigManager.CODEC_WB, "243");
+		prefs.setCodecPriority("PCMU/8000/1",SipConfigManager.CODEC_WB, "242");
+		prefs.setCodecPriority("GSM/8000/1",SipConfigManager.CODEC_WB, "241");
 	}
 
 }

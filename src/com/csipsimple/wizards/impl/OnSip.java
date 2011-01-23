@@ -20,6 +20,7 @@ package com.csipsimple.wizards.impl;
 import java.util.HashMap;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -35,11 +36,13 @@ public class OnSip extends AuthorizationImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		//TODO : when codec per network feature will be there set that for wifi
-		prefs.setCodecPriority("G722/16000/1", "240");
-		prefs.setCodecPriority("PCMU/8000/1", "239");
-		prefs.setCodecPriority("GSM/8000/1", "238");
+		prefs.setCodecPriority("G722/16000/1",SipConfigManager.CODEC_WB, "245");
+		prefs.setCodecPriority("PCMU/8000/1",SipConfigManager.CODEC_WB, "244");
+		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "243");
 		
-		
+		prefs.setCodecPriority("G722/16000/1",SipConfigManager.CODEC_NB, "234");
+		prefs.setCodecPriority("PCMU/8000/1",SipConfigManager.CODEC_NB, "244");
+		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "245");
 	}
 	
 	@Override

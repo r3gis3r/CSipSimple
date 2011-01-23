@@ -69,7 +69,13 @@
 		<CheckBoxPreference android:title="@string/keep_awake_incall"
 			android:defaultValue="true"
 			android:summary="@string/keep_awake_incall_desc"
-			android:key="keep_awake_incall"></CheckBoxPreference>
+			android:key="keep_awake_incall"/>
+		
+		<CheckBoxPreference android:title="@string/invert_proximity_sensor"
+			android:defaultValue="false"
+			android:summary="@string/invert_proximity_sensor_desc"
+			android:key="invert_proximity_sensor"/>
+			
 		<CheckBoxPreference android:title="@string/use_partial_wake_lock"
 			android:defaultValue="false"
 			android:summary="@string/use_partial_wake_lock_desc"

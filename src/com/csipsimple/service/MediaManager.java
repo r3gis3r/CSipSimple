@@ -484,6 +484,11 @@ public class MediaManager {
 	public void adjustStreamVolume(int streamType, int direction, int flags) {
 		broadcastVolumeWillBeUpdated(streamType, EXTRA_VALUE_UNKNOWN);
         audioManager.adjustStreamVolume(streamType, direction, flags);
+        
+        if(streamType == AudioManager.STREAM_RING) {
+        	// Update ringer 
+        	ringer.updateRingerMode();
+        }
 	}
 	
 	// Public accessor

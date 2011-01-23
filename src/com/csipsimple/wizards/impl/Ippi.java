@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.MD5;
@@ -107,8 +108,8 @@ public class Ippi extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		// Add stun server
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, true);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_ICE, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_ICE, true);
 		prefs.addStunServer("stun.ippi.fr");
 	}
 	

@@ -20,6 +20,7 @@ package com.csipsimple.wizards.impl;
 import android.text.InputType;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -92,6 +93,7 @@ public class DeltaThree extends AuthorizationImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 
-		prefs.setCodecPriority("g729/8000/1", "240");
+		prefs.setCodecPriority("g729/8000/1", SipConfigManager.CODEC_NB, "240");
+		prefs.setCodecPriority("g729/8000/1", SipConfigManager.CODEC_WB, "240");
 	}
 }

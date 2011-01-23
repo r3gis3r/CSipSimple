@@ -307,5 +307,29 @@ public final class SipCallSession implements Parcelable {
 		mediaSecure = mediaSecure2;
 	}
 
+	public boolean isLocalHeld(){
+		return mediaStatus == SipCallSession.MediaState.LOCAL_HOLD;
+	}
 
+	public boolean isBeforeConfirmed() {
+		switch(callState) {
+		case InvState.CALLING :
+		case InvState.INCOMING:
+		case InvState.EARLY:
+			return true;
+		default : 
+			return false;
+		}
+	}
+	
+	public boolean isAfterEnded() {
+		switch(callState) {
+		case InvState.DISCONNECTED: 
+		case InvState.INVALID: 
+		case InvState.NULL:
+			return true;
+		default : 
+			return false;
+		}
+	}
 }

@@ -44,12 +44,12 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.csipsimple.R;
-import com.csipsimple.api.SipManager;
-import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.ISipConfiguration;
 import com.csipsimple.api.ISipService;
+import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
 
 public class InCallMediaControl extends Activity implements OnSeekBarChangeListener, OnCheckedChangeListener, OnClickListener {
 	protected static final String THIS_FILE = "inCallMediaCtrl";
@@ -284,12 +284,12 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 	private void updateUIFromMedia() {
 		if(sipService != null && configurationService != null) {
 			try {
-				Float speakerLevel = configurationService.getPreferenceFloat(PreferencesWrapper.SND_SPEAKER_LEVEL) * 10;
+				Float speakerLevel = configurationService.getPreferenceFloat(SipConfigManager.SND_SPEAKER_LEVEL) * 10;
 				speakerAmplification.setProgress(speakerLevel.intValue());
-				Float microLevel = configurationService.getPreferenceFloat(PreferencesWrapper.SND_MIC_LEVEL) * 10;
+				Float microLevel = configurationService.getPreferenceFloat(SipConfigManager.SND_MIC_LEVEL) * 10;
 				microAmplification.setProgress(microLevel.intValue());
 				
-				echoCancellation.setChecked(configurationService.getPreferenceBoolean(PreferencesWrapper.ECHO_CANCELLATION));
+				echoCancellation.setChecked(configurationService.getPreferenceBoolean(SipConfigManager.ECHO_CANCELLATION));
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Impossible to get mic/speaker level", e);
 			}
@@ -310,11 +310,11 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 				switch(arg0.getId()) {
 				case R.id.speaker_level:
 					sipService.confAdjustTxLevel(0, newValue);
-					configurationService.setPreferenceFloat(PreferencesWrapper.SND_SPEAKER_LEVEL, newValue);
+					configurationService.setPreferenceFloat(SipConfigManager.SND_SPEAKER_LEVEL, newValue);
 					break;
 				case R.id.micro_level:
 					sipService.confAdjustRxLevel(0, newValue);
-					configurationService.setPreferenceFloat(PreferencesWrapper.SND_MIC_LEVEL, newValue);
+					configurationService.setPreferenceFloat(SipConfigManager.SND_MIC_LEVEL, newValue);
 					break;
 				}
 			} catch (RemoteException e) {
@@ -349,7 +349,7 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 				switch(arg0.getId()) {
 				case R.id.echo_cancellation:
 					sipService.setEchoCancellation(value);
-					configurationService.setPreferenceBoolean(PreferencesWrapper.ECHO_CANCELLATION, value);
+					configurationService.setPreferenceBoolean(SipConfigManager.ECHO_CANCELLATION, value);
 					break;
 				}
 				//Update quit timer

@@ -90,4 +90,8 @@
 		<item>Prevent</item>
 	</string-array>
 	
+	<string-array name="band_types_name">
+		<item>Narrow band</item>
+		<item>Wide band</item>
+	</string-array>
 </resources>

@@ -20,6 +20,7 @@ package com.csipsimple.wizards.impl;
 import android.text.InputType;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -59,7 +60,6 @@ public class Keyyo extends SimpleImplementation {
 		account = super.buildAccount(account);
 		//Ensure registration timeout value
 		account.reg_timeout = 900;
-		account.ka_interval = 15;
 		account.publish_enabled = 1;
 		account.transport = SipProfile.TRANSPORT_AUTO;
 		account.allow_contact_rewrite = false;
@@ -72,23 +72,32 @@ public class Keyyo extends SimpleImplementation {
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_STUN, false);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_DNS_SRV, true);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ECHO_CANCELLATION, true);
-		prefs.setPreferenceBooleanValue(PreferencesWrapper.ENABLE_VAD, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, false);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_VAD, true);
 		
 		
 		
-		//Only G711a/u
-		prefs.setCodecPriority("PCMU/8000/1", "240");
-		prefs.setCodecPriority("PCMA/8000/1", "230");
-		prefs.setCodecPriority("G722/16000/1", "0");
-		prefs.setCodecPriority("iLBC/8000/1", "0");
-		prefs.setCodecPriority("speex/8000/1", "0");
-		prefs.setCodecPriority("speex/16000/1", "0");
-		prefs.setCodecPriority("speex/32000/1", "0");
-		prefs.setCodecPriority("GSM/8000/1", "0");
+		//Only G711a/u and g722 on WB
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"244");
+		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"243");
+		prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"245");
+		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"0");
+		prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
+		prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"0");
+		prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
+		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
 		
+		//On NB set for gsm high priority
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"244");
+		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"243");
+		prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"0");
+		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"0");
+		prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
+		prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
+		prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
+		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "245");
 	}
 
 	@Override

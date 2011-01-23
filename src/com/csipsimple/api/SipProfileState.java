@@ -249,7 +249,7 @@ public class SipProfileState implements Parcelable, Serializable{
 			if(wizard.equalsIgnoreCase("LOCAL")) {
 				return true;
 			}
-			return (getPjsuaId() >= 0 && getStatusCode() == SipCallSession.StatusCode.OK );
+			return (getPjsuaId() >= 0 && getStatusCode() == SipCallSession.StatusCode.OK && getExpires() > 0);
 		}
 		return false;
 	}

@@ -30,4 +30,10 @@
     <color name="unread_bgcolor">#ffffffff</color>
     <color name="read_bgcolor">#ffeeeeee</color>
     <drawable name="light_blue_background">#ffecfbff</drawable>
+    
+    <!-- toggle buttons -->
+    <color name="tg_top_normal">#c9cccf</color>
+    <color name="tg_bottom_normal">#a9adb4</color>
+    <color name="tg_top_on">#4f8df1</color>
+    <color name="tg_bottom_on">#175cce</color>
 </resources>

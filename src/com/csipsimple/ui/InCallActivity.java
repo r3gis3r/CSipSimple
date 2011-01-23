@@ -58,6 +58,7 @@ import android.widget.LinearLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.service.MediaManager.MediaState;
@@ -169,7 +170,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		dialFeedback = new DialingFeedback(this, true);
 		
 
-		if(!prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.PREVENT_SCREEN_ROTATION)) {
+		if(!prefsWrapper.getPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION)) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 		}
 	}

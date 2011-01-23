@@ -645,4 +645,8 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.csipsimple_destroy();
   }
 
+  public static int send_keep_alive(int acc_id) {
+    return pjsuaJNI.send_keep_alive(acc_id);
+  }
+
 }

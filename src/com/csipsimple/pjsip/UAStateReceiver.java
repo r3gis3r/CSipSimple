@@ -51,6 +51,7 @@ import android.text.format.DateFormat;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
@@ -75,23 +76,24 @@ public class UAStateReceiver extends Callback {
 	private PjSipService pjService;
 //	private ComponentName remoteControlResponder;
 
-	public void lockCpu(){
+	private void lockCpu(){
 		if(eventLock != null) {
 			eventLock.acquire();
 		}
 	}
-	public void unlockCpu() {
+	private void unlockCpu() {
 		if(eventLock != null && eventLock.isHeld()) {
 			eventLock.release();
 		}
 	}
-
+	
 	
 	@Override
 	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 		lockCpu();
 		
 		//Check if we have not already an ongoing call
+		/*
 		SipCallSession existingOngoingCall = getActiveCallInProgress();
 		if(existingOngoingCall != null) {
 			if(existingOngoingCall.getCallState() == SipCallSession.InvState.CONFIRMED) {
@@ -102,6 +104,7 @@ public class UAStateReceiver extends Callback {
 				return;
 			}
 		}
+		*/
 		
 		SipCallSession callInfo = getCallInfo(callId, true);
 		Log.d(THIS_FILE, "Incoming call <<");
@@ -242,7 +245,7 @@ public class UAStateReceiver extends Callback {
 			
 			// Auto record
 			if (recordedCall == INVALID_RECORD && 
-					pjService.prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.AUTO_RECORD_CALLS)) {
+					pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_RECORD_CALLS)) {
 				startRecording(callId);
 			}
 			

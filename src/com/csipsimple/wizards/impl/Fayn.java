@@ -17,6 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
@@ -43,9 +44,13 @@ public class Fayn extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 
-		prefs.setCodecPriority("PCMA/8000/1", "240");
-		prefs.setCodecPriority("PCMU/8000/1", "239");
-		prefs.setCodecPriority("g729/8000/1", "238");
+		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB, "245");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"244");
+		prefs.setCodecPriority("g729/8000/1", SipConfigManager.CODEC_NB, "243");
+		
+		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB, "243");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"244");
+		prefs.setCodecPriority("g729/8000/1", SipConfigManager.CODEC_NB, "245");
 	}
 	
 }
