@@ -204,7 +204,7 @@ public class Compatibility {
 		boolean supportFloating = getCpuAbi().equalsIgnoreCase("armeabi-v7a");
 		
 		
-		//For Narrow band
+		//For Narrowband
 		preferencesWrapper.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB, "60");
 		preferencesWrapper.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB, "50");
 		preferencesWrapper.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB, "220");
@@ -221,7 +221,7 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_NB, "237");
 		
 		
-		//For Wide band
+		//For Wideband
 		preferencesWrapper.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB, "60");
 		preferencesWrapper.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB, "50");
 		preferencesWrapper.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB, "0");

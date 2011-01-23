@@ -142,8 +142,8 @@
 <string name="has_io_queue_desc">Activate Queue for input/output</string>
 <string name="set_audio_generate_tone">Tone hack</string>
 <string name="set_audio_generate_tone_desc">Generate a tone before making calls</string>
-<string name="narrow_band">Narrow band</string>
-<string name="wide_band">Wide band</string>
+<string name="narrow_band">Narrowband</string>
+<string name="wide_band">Wideband</string>
 <string name="band_for_wifi">Band type for wifi</string>
 <string name="band_for_3g">Band type for 3G</string>
 <string name="band_for_gprs">Band type for GPRS</string>
