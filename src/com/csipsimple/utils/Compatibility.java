@@ -224,7 +224,7 @@ public class Compatibility {
 		//For Wideband
 		preferencesWrapper.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB, "60");
 		preferencesWrapper.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB, "50");
-		preferencesWrapper.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB, "70"); /*This is for addressing asterisk bug */
 		preferencesWrapper.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB, "219");
 		preferencesWrapper.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB, "220");
 		preferencesWrapper.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
@@ -432,7 +432,7 @@ public class Compatibility {
 				prefWrapper.setPreferenceBooleanValue(SipConfigManager.INVERT_PROXIMITY_SENSOR, true);
 			}
 		}
-		if(lastSeenVersion < 584) {
+		if(lastSeenVersion < 591) {
 			resetCodecsSettings(prefWrapper);
 		}
 		
