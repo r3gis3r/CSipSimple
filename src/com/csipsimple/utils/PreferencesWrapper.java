@@ -729,9 +729,13 @@ public class PreferencesWrapper {
 	
 	
 	public boolean hasCodecPriority(String codecName) {
+		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 		String[] codecParts = codecName.split("/");
 		if(codecParts.length >=2 ) {
-			return prefs.contains("codec_"+codecParts[0].toLowerCase()+"_"+codecParts[1]);
+			String currentBandType = prefs.getString(SipConfigManager.getBandTypeKey(ni.getType(), ni.getSubtype()), 
+					SipConfigManager.CODEC_WB);
+			String key = SipConfigManager.getCodecKey(codecName, currentBandType); 
+			return prefs.contains(key);
 		}
 		return false;
 	}
