@@ -241,7 +241,7 @@ public class UAStateReceiver extends Callback {
 				micLevel = 0;
 			}
 			pjsua.conf_adjust_rx_level(0, micLevel);
-			
+			pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
 			
 			// Auto record
 			if (recordedCall == INVALID_RECORD && 
