@@ -114,7 +114,7 @@ public class Compatibility {
 			return true;
 		}
 		//LG P500
-		if(android.os.Build.DEVICE.equalsIgnoreCase("LG-P500")) {
+		if(android.os.Build.PRODUCT.equalsIgnoreCase("thunderg")) {
 			return true;
 		}
 		//Huawei
@@ -425,7 +425,7 @@ public class Compatibility {
 				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 1.5);
 				prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, true);
 			}
-			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+			
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
 			//Proximity sensor inverted
 			if( android.os.Build.PRODUCT.equalsIgnoreCase("SPH-M900") /*Sgs moment*/) {
@@ -434,6 +434,9 @@ public class Compatibility {
 		}
 		if(lastSeenVersion < 591) {
 			resetCodecsSettings(prefWrapper);
+		}
+		if(lastSeenVersion < 596) {
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 		}
 		
 	}
