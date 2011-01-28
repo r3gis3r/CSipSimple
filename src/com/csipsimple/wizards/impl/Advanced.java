@@ -58,7 +58,13 @@ public class Advanced extends BaseImplementation {
 		
 		ParsedSipContactInfos parsedInfo = SipUri.parseSipContact(account.acc_id);
 		
-		accountServer.setText(parsedInfo.domain);
+		String serverFull = account.reg_uri;
+		if (serverFull == null) {
+			serverFull = "";
+		}else {
+			serverFull = serverFull.replaceFirst("sip:", "");
+		}
+		accountServer.setText(serverFull);
 		accountCallerId.setText(parsedInfo.displayName);
 		accountUserName.setText(parsedInfo.userName);
 		
@@ -120,8 +126,9 @@ public class Advanced extends BaseImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
+		String[] serverParts = accountServer.getText().split(":");
 		account.acc_id = accountCallerId.getText().trim() + 
-			" <sip:" + Uri.encode(accountUserName.getText()) + "@" + accountServer.getText() + ">";
+			" <sip:" + Uri.encode(accountUserName.getText()) + "@" + serverParts[0] + ">";
 		
 		account.reg_uri = "sip:" + accountServer.getText();
 

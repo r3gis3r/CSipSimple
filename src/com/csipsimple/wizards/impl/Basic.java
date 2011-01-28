@@ -48,9 +48,17 @@ public class Basic extends BaseImplementation {
 		
 		accountDisplayName.setText(account.display_name);
 		
+
+		String serverFull = account.reg_uri;
+		if (serverFull == null) {
+			serverFull = "";
+		}else {
+			serverFull = serverFull.replaceFirst("sip:", "");
+		}
+		
 		ParsedSipContactInfos parsedInfo = SipUri.parseSipContact(account.acc_id);		
 		accountUserName.setText(parsedInfo.userName);
-		accountServer.setText(parsedInfo.domain);
+		accountServer.setText(serverFull);
 		accountPassword.setText(account.data);
 	}
 
@@ -96,8 +104,9 @@ public class Basic extends BaseImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		Log.d(THIS_FILE, "begin of save ....");
 		account.display_name = accountDisplayName.getText();
-		// TODO add an user display name
-		account.acc_id = "<sip:" + Uri.encode(accountUserName.getText()) + "@"+accountServer.getText()+">";
+		
+		String[] serverParts = accountServer.getText().split(":");
+		account.acc_id = "<sip:" + Uri.encode(accountUserName.getText()) + "@"+serverParts[0]+">";
 		
 		String regUri = "sip:" + accountServer.getText();
 		account.reg_uri = regUri;

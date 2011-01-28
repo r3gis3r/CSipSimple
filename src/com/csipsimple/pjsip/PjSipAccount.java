@@ -150,14 +150,14 @@ public class PjSipAccount {
 		String argument = "";
 		switch (transport) {
 		case SipProfile.TRANSPORT_UDP:
-			argument = ";lr;transport=UDP";
+			argument = ";transport=udp;lr";
 			break;
 		case SipProfile.TRANSPORT_TCP:
-			argument = ";lr;transport=TCP";
+			argument = ";transport=tcp;lr";
 			break;
 		case SipProfile.TRANSPORT_TLS:
 			//TODO : differentiate ssl/tls ?
-			argument = ";lr;transport=TLS";
+			argument = ";transport=tls;lr";
 			break;
 		default:
 			break;

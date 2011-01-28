@@ -19,9 +19,13 @@
 
 package com.csipsimple.utils;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +36,7 @@ import org.json.JSONObject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 
 import com.csipsimple.api.SipProfile;
@@ -47,7 +52,6 @@ public class SipProfileJson {
 		
 		ContentValues cv = profile.getDbContentValues();
 		Columns cols = new Columns(SipProfile.full_projection, SipProfile.full_projection_types);
-		
 		return cols.contentValueToJSON(cv);
 	}
 	
@@ -56,9 +60,10 @@ public class SipProfileJson {
 		
 		ContentValues cv = filter.getDbContentValues();
 		Columns cols = new Columns(Filter.full_projection, Filter.full_projection_types);
-		
 		return cols.contentValueToJSON(cv);
 	}
+	
+	
 	
 	public static JSONObject serializeSipProfile(SipProfile profile, DBAdapter db) {
 		JSONObject jsonProfile = serializeBaseSipProfile(profile);
@@ -110,7 +115,11 @@ public class SipProfileJson {
 	
 	private static String KEY_ACCOUNTS = "accounts";
 	
-	
+	/**
+	 * Save current sip configuration
+	 * @param ctxt
+	 * @return
+	 */
 	public static boolean saveSipConfiguration(Context ctxt) {
 		File dir = PreferencesWrapper.getConfigFolder();
 		if( dir != null) {
@@ -139,6 +148,62 @@ public class SipProfileJson {
 				return false;
 			}
 		}
+		return false;
+	}
+	
+	
+	private static boolean restoreSipProfile(Context ctxt, JSONObject jsonObj) {
+		try {
+			Log.d(THIS_FILE, "Restoring "+jsonObj.toString(2));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	
+	/**
+	 * Restore a sip configuration
+	 * @param ctxt
+	 * @param fileToRestore
+	 * @return
+	 */
+	public static boolean restoreSipConfiguration(Context ctxt, File fileToRestore) {
+		if(fileToRestore != null && fileToRestore.isFile()) {
+			
+			String content = "";
+			
+			try {
+				BufferedReader buf;
+				String line;
+				buf = new BufferedReader(new FileReader(fileToRestore));
+				while( (line = buf.readLine()) != null ) {
+					content += line;
+				}
+			} catch (FileNotFoundException e) {
+				Log.e(THIS_FILE, "Error while restoring", e);
+			} catch (IOException e) {
+	            Log.e(THIS_FILE, "Error while restoring", e);
+	        }
+
+			if(!TextUtils.isEmpty(content)) {
+				try {
+					JSONObject mainJSONObject = new JSONObject(content);
+					JSONArray accounts = mainJSONObject.getJSONArray(KEY_ACCOUNTS);
+					for(int i=0; i<accounts.length(); i++) {
+						JSONObject account = accounts.getJSONObject(i);
+						restoreSipProfile(ctxt, account);
+					}
+					
+					return true;
+				} catch (JSONException e) {
+					Log.e(THIS_FILE, "Error while parsing saved file", e);
+				}
+			}
+		}
+		
 		return false;
 	}
 }

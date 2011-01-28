@@ -17,13 +17,17 @@
  */
 package com.csipsimple.ui;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -62,6 +66,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.SipProfileJson;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardChooser;
@@ -552,7 +557,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, ADD_MENU, Menu.NONE, R.string.add_account).setIcon(android.R.drawable.ic_menu_add);
 		menu.add(Menu.NONE, REORDER_MENU, Menu.NONE, R.string.reorder).setIcon(android.R.drawable.ic_menu_sort_by_size);
-		menu.add(Menu.NONE, BACKUP_MENU, Menu.NONE, R.string.backup).setIcon(android.R.drawable.ic_menu_save);
+		menu.add(Menu.NONE, BACKUP_MENU, Menu.NONE, R.string.backup_restore).setIcon(android.R.drawable.ic_menu_save);
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -566,7 +571,34 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			startActivityForResult(new Intent(this, ReorderAccountsList.class), REQUEST_MODIFY);
 			return true;
 		case BACKUP_MENU:
-			SipProfileJson.saveSipConfiguration(this);
+			
+			//Populate choice list
+			List<String> items = new ArrayList<String>();
+			items.add(getResources().getString(R.string.backup));
+			final File backupDir = PreferencesWrapper.getConfigFolder();
+			if(backupDir != null) {
+				String[] filesNames = backupDir.list();
+				for(String fileName : filesNames) {
+					items.add(fileName);
+				}
+			}
+			
+			final String[] fItems = (String[]) items.toArray(new String[0]);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.backup_restore);
+			builder.setItems(fItems, new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog, int item) {
+			    	if(item == 0) {
+			    		SipProfileJson.saveSipConfiguration(AccountsList.this);
+			    	}else {
+						File fileToRestore = new File(backupDir + File.separator + fItems[item]);
+			    		SipProfileJson.restoreSipConfiguration(AccountsList.this, fileToRestore);
+			    	}
+			    }
+			});
+			builder.setCancelable(true);
+			AlertDialog backupDialog = builder.create();
+			backupDialog.show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

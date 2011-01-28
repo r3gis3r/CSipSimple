@@ -139,7 +139,7 @@ public class PreferencesWrapper {
 		put("use_edge_out", false);
 		
 		//Media
-		put(SipConfigManager.ECHO_CANCELLATION, true);
+		put(SipConfigManager.ECHO_CANCELLATION, false);
 		put(SipConfigManager.ENABLE_VAD, false);
 		put(SipConfigManager.USE_SOFT_VOLUME, false);
 		put(SipConfigManager.USE_ROUTING_API, false);

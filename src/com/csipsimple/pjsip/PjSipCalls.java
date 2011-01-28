@@ -59,6 +59,15 @@ public final class PjSipCalls {
 	
 	private static SipCallSession updateSession(SipCallSession session, pjsua_call_info pjCallInfo, PjSipService service) {
 		session.setCallId(pjCallInfo.getId());
+		
+		try {
+			int status_code = pjCallInfo.getLast_status().swigValue();
+			session.setLastStatusCode(status_code);
+			Log.d(THIS_FILE, "Last status code is "+status_code);
+			//String status_text = pjCallInfo.getLast_status_text().getPtr();
+		}catch(IllegalArgumentException e) {
+			//The status code does not exist in enum ignore it
+		}
 		//Hey lucky man we have nothing to think about here cause we have a bijection between int / state
 		session.setCallState( pjCallInfo.getState().swigValue() );
 		session.setMediaStatus( pjCallInfo.getMedia_status().swigValue() );
