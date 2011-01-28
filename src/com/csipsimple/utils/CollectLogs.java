@@ -18,7 +18,10 @@
 package com.csipsimple.utils;
 
 import java.io.BufferedReader;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -75,6 +78,9 @@ public class CollectLogs {
     If not specified with -v, format is set from ANDROID_PRINTF_LOG
     or defaults to "brief"*/
 	public final static Pair<StringBuilder, File> getLogs() {
+		//Clear old files
+		PreferencesWrapper.cleanLogsFiles();
+		
         final StringBuilder log = new StringBuilder();
         File outFile = null;
         try{
@@ -168,11 +174,8 @@ public class CollectLogs {
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, "CSipSimple Error-Log report");
         sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { CustomDistribution.getSupportEmail() });
-        sendIntent.setType("text/plain");
         
-        if(logs.second != null) {
-        	sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(logs.second));
-        }
+        
         
         StringBuilder log = new StringBuilder();
         log.append(userComment);
@@ -183,12 +186,38 @@ public class CollectLogs {
         log.append(getDeviceInfo());
         log.append(LINE_SEPARATOR);
         log.append(logs.first);
+        
+
+        if(logs.second != null) {
+        	sendIntent.putExtra( Intent.EXTRA_STREAM, Uri.fromFile(logs.second) );
+        	/*
+        	BufferedReader buf;
+			String line;
+			try {
+				buf = new BufferedReader(new FileReader(logs.second));
+			
+				while( (line = buf.readLine()) != null ) {
+					 log.append(line);
+				}
+			
+			} catch (FileNotFoundException e) {
+				Log.e(THIS_FILE, "Impossible to open log file", e);
+			} catch (IOException e) {
+				Log.e(THIS_FILE, "Impossible to read log file", e);
+			}
+			*/
+        }
+        
+
         log.append(LINE_SEPARATOR);
         log.append(LINE_SEPARATOR);
         log.append(userComment);
+        
+        sendIntent.setType("text/plain");
         
         sendIntent.putExtra(Intent.EXTRA_TEXT, log.toString());
         
         return sendIntent;
 	}
+	
 }

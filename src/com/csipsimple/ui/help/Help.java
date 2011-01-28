@@ -185,7 +185,8 @@ public class Help extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == REQUEST_SEND_LOGS) {
-			PreferencesWrapper.cleanLogsFiles();
+			//Do not that here !!! if so mailer will be lost..
+			//PreferencesWrapper.cleanLogsFiles();
 			finish();
 		}
 		super.onActivityResult(requestCode, resultCode, data);
