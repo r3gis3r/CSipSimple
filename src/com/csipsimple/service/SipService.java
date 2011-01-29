@@ -724,13 +724,14 @@ public class SipService extends Service {
 			phoneConnectivityReceiver = null;
 		}
 		
+		
 
 		Threading.stopHandlerThread(executorThread);
 		executorThread = null;
 		mExecutor = null;
-		if(pjService != null) {
-			pjService.sipStop();
-		}
+		
+		stopSipStack();
+		
 		notificationManager.cancelAll();
 		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
 
@@ -818,7 +819,9 @@ public class SipService extends Service {
 	}
 	
 	public void stopSipStack() {
-		pjService.sipStop();
+		if(pjService != null) {
+			pjService.sipStop();
+		}
 		releaseResources();
 	}
 	
