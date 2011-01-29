@@ -235,7 +235,7 @@ public class WelcomeScreen extends Activity {
 							//if(currentDownload.isMoreUpToDateThan(old_stack_version)) {
 								handler.sendMessage(handler.obtainMessage(DOWNLOAD_STARTED));
 								currentDownload.setFileName( NativeLibManager.STACK_FILE_NAME );
-								currentDownload.setFilePath( NativeLibManager.getGuessedStackLibFile(WelcomeScreen.this).getParentFile() );
+								currentDownload.setFilePath( NativeLibManager.getDownloadableStackLibFile(WelcomeScreen.this).getParentFile() );
 								
 								if (service.isDownloadRunning()) {
 									//TODO : check whether it's a sip path.

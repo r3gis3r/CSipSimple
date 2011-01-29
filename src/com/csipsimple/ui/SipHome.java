@@ -100,10 +100,10 @@ public class SipHome extends TabActivity {
 		prefWrapper = new PreferencesWrapper(this);
 		super.onCreate(savedInstanceState);
 		
-		
+		boolean useBundle = NativeLibManager.USE_BUNDLE;
 		
 		// Check sip stack
-		if (!NativeLibManager.hasStackLibFile(this)) {
+		if (!useBundle && !NativeLibManager.hasStackLibFile(this)) {
 			//If not -> FIRST RUN : Just launch stack getter
 			Log.d(THIS_FILE, "Has no sip stack....");
 			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
@@ -112,7 +112,7 @@ public class SipHome extends TabActivity {
 			startActivity(welcomeIntent);
 			finish();
 			return;
-		} else if (!NativeLibManager.hasBundleStack(this)) {
+		} else if (!useBundle && !NativeLibManager.hasBundleStack(this)) {
 			// It's not the first setup and there is debug stack
 			// We have to check and save current version
 			Integer runningVersion = needUpgrade();
@@ -130,9 +130,12 @@ public class SipHome extends TabActivity {
 				return;
 			}
 		}else {
-			// DEV MODE -- still upgrade settings
+			// DEV MODE OR BUNDLE MODE -- still upgrade settings
 			Integer runningVersion = needUpgrade();
 			if(runningVersion != null) {
+				//Clean current native file downloaded if any cause useless right now
+				NativeLibManager.cleanStack(this);
+				
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 				Editor editor = prefs.edit();
 				editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, runningVersion);
