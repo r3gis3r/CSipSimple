@@ -103,10 +103,10 @@ public class Basic extends BaseImplementation {
 
 	public SipProfile buildAccount(SipProfile account) {
 		Log.d(THIS_FILE, "begin of save ....");
-		account.display_name = accountDisplayName.getText();
+		account.display_name = accountDisplayName.getText().trim();
 		
 		String[] serverParts = accountServer.getText().split(":");
-		account.acc_id = "<sip:" + Uri.encode(accountUserName.getText()) + "@"+serverParts[0]+">";
+		account.acc_id = "<sip:" + Uri.encode(accountUserName.getText()).trim() + "@"+serverParts[0].trim()+">";
 		
 		String regUri = "sip:" + accountServer.getText();
 		account.reg_uri = regUri;
@@ -114,7 +114,7 @@ public class Basic extends BaseImplementation {
 
 
 		account.realm = "*";
-		account.username = getText(accountUserName);
+		account.username = getText(accountUserName).trim();
 		account.data = getText(accountPassword);
 		account.scheme = "Digest";
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;

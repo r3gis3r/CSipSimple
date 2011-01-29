@@ -104,10 +104,10 @@ public abstract class SimpleImplementation extends BaseImplementation {
 	}
 
 	public SipProfile buildAccount(SipProfile account) {
-		account.display_name = accountDisplayName.getText();
+		account.display_name = accountDisplayName.getText().trim();
 		// TODO add an user display name
 		account.acc_id = "<sip:"
-				+ Uri.encode(accountUsername.getText()) + "@"+getDomain()+">";
+				+ Uri.encode(accountUsername.getText().trim()) + "@"+getDomain()+">";
 		
 		String regUri = "sip:"+getDomain();
 		account.reg_uri = regUri;
@@ -115,7 +115,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 
 		
 		account.realm = "*";
-		account.username = getText(accountUsername);
+		account.username = getText(accountUsername).trim();
 		account.data = getText(accountPassword);
 		account.scheme = "Digest";
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;

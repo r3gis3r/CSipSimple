@@ -125,15 +125,15 @@ public class Advanced extends BaseImplementation {
 
 	public SipProfile buildAccount(SipProfile account) {
 		Log.d(THIS_FILE, "begin of save ....");
-		account.display_name = accountDisplayName.getText();
+		account.display_name = accountDisplayName.getText().trim();
 		String[] serverParts = accountServer.getText().split(":");
 		account.acc_id = accountCallerId.getText().trim() + 
-			" <sip:" + Uri.encode(accountUserName.getText()) + "@" + serverParts[0] + ">";
+			" <sip:" + Uri.encode(accountUserName.getText().trim()) + "@" + serverParts[0].trim() + ">";
 		
 		account.reg_uri = "sip:" + accountServer.getText();
 
 		account.realm = "*";
-		account.username = getText(accountUserName);
+		account.username = getText(accountUserName).trim();
 		account.data = getText(accountPassword);
 		account.scheme = "Digest";
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
@@ -141,7 +141,7 @@ public class Advanced extends BaseImplementation {
 		account.transport = accountUseTcp.isChecked() ? SipProfile.TRANSPORT_TCP : SipProfile.TRANSPORT_AUTO;
 		
 		if (!isEmpty(accountProxy)) {
-			account.proxies = new String[] { "sip:"+accountProxy.getText() };
+			account.proxies = new String[] { "sip:"+accountProxy.getText().trim() };
 		} else {
 			account.proxies = null;
 		}

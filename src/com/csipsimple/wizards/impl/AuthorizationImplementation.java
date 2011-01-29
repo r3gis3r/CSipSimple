@@ -109,14 +109,14 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 
 	public SipProfile buildAccount(SipProfile account) {
 		account.display_name = accountDisplayName.getText();
-		account.acc_id = "<sip:" + Uri.encode(accountUsername.getText()) + "@" + getDomain() + ">";
+		account.acc_id = "<sip:" + Uri.encode(accountUsername.getText().trim()) + "@" + getDomain() + ">";
 		
 		String regUri = "sip:" + getDomain();
 		account.reg_uri = regUri;
 		account.proxies = new String[] { regUri } ;
 
 		account.realm = "*";
-		account.username = getText(accountAuthorization);
+		account.username = getText(accountAuthorization).trim();
 		account.data = getText(accountPassword);
 		account.scheme = "Digest";
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
