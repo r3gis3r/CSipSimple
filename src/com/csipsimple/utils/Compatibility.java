@@ -181,8 +181,9 @@ public class Compatibility {
 				android.os.Build.DEVICE.equalsIgnoreCase("streak")) {
 			return true;
 		}
-		//Motorola milestone 2
-		if(android.os.Build.DEVICE.toLowerCase().contains("milestone2")) {
+		//Motorola milestone 2 & motorola droid
+		if(android.os.Build.DEVICE.toLowerCase().contains("milestone2") ||
+				android.os.Build.BOARD.toLowerCase().contains("sholes") ) {
 			return true;
 		}
 		
