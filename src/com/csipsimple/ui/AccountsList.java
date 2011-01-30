@@ -557,7 +557,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, ADD_MENU, Menu.NONE, R.string.add_account).setIcon(android.R.drawable.ic_menu_add);
 		menu.add(Menu.NONE, REORDER_MENU, Menu.NONE, R.string.reorder).setIcon(android.R.drawable.ic_menu_sort_by_size);
-//		menu.add(Menu.NONE, BACKUP_MENU, Menu.NONE, R.string.backup_restore).setIcon(android.R.drawable.ic_menu_save);
+		menu.add(Menu.NONE, BACKUP_MENU, Menu.NONE, R.string.backup_restore).setIcon(android.R.drawable.ic_menu_save);
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -593,6 +593,8 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			    	}else {
 						File fileToRestore = new File(backupDir + File.separator + fItems[item]);
 			    		SipProfileJson.restoreSipConfiguration(AccountsList.this, fileToRestore);
+			    		reloadAsyncAccounts(null, null);
+			    		handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
 			    	}
 			    }
 			});

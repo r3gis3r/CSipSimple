@@ -58,6 +58,8 @@ public class ReorderAccountsList extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.codecs_list);
+		
+		findViewById(R.id.codec_band_type).setVisibility(View.GONE);
 		initDatas();
 		
 		adapter = new SimpleAdapter(this, accountsList, R.layout.codecs_list_item, new String []{

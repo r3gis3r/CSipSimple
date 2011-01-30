@@ -249,6 +249,10 @@ public class SipProfile implements Parcelable {
 	public void createFromDb(Cursor c) {
 		ContentValues args = new ContentValues();
 		DatabaseUtils.cursorRowToContentValues(c, args);
+		createFromContentValue(args);
+	}
+	
+	public void createFromContentValue(ContentValues args) {
 		Integer tmp_i;
 		String tmp_s;
 
@@ -352,7 +356,6 @@ public class SipProfile implements Parcelable {
 		}
 	}
 	
-	
 
 	/**
 	 * Transform pjsua_acc_config into ContentValues that can be insert into database
@@ -402,6 +405,10 @@ public class SipProfile implements Parcelable {
 		return args;
 	}
 	
+	/**
+	 * Get the default domain for this account
+	 * @return the default domain for this account
+	 */
 	public String getDefaultDomain() {
 		String regUri = reg_uri;
 		if(regUri == null) {

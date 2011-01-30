@@ -27,7 +27,7 @@ public class Columns {
 	private String[] names;
 
 	private enum Type {
-		STRING, INT, LONG, FLOAT, DOUBLE
+		STRING, INT, LONG, FLOAT, DOUBLE, BOOLEAN
 	}
 
 	private Type[] types;
@@ -47,6 +47,8 @@ public class Columns {
 				types[i] = Type.FLOAT;
 			} else if (classes[i] == Double.TYPE || classes[i] == Double.class) {
 				types[i] = Type.DOUBLE;
+			} else if (classes[i] == Boolean.TYPE || classes[i] == Boolean.class) {
+				types[i] = Type.BOOLEAN;
 			}
 		}
 	}
@@ -81,6 +83,9 @@ public class Columns {
 				case DOUBLE:
 					json.put(names[i], cv.getAsDouble(names[i]));
 					break;
+				case BOOLEAN:
+					json.put(names[i], cv.getAsBoolean(names[i]));
+					break;
 				}
 			}
 		} catch (JSONException e) {
@@ -109,6 +114,8 @@ public class Columns {
 			case DOUBLE:
 				j2cvDouble(j, cv, names[i]);
 				break;
+			case BOOLEAN:
+				j2cvBoolean(j, cv, names[i]);
 			}
 		}
 
@@ -155,4 +162,11 @@ public class Columns {
 		}
 	}
 
+	private static void j2cvBoolean(JSONObject j, ContentValues cv, String key) {
+		try {
+			boolean v = j.getBoolean(key);
+			cv.put(key, v);
+		} catch (JSONException e) {
+		}
+	}
 }

@@ -143,7 +143,8 @@ public class SipProfileJson {
 				// Close the output stream
 				out.close();
 				return true;
-			} catch (Exception e) {// Catch exception if any
+			} catch (Exception e) {
+				// Catch exception if any
 				Log.e(THIS_FILE, "Impossible to save config to disk", e);
 				return false;
 			}
@@ -152,12 +153,33 @@ public class SipProfileJson {
 	}
 	
 	
-	private static boolean restoreSipProfile(Context ctxt, JSONObject jsonObj) {
+	private static boolean restoreSipProfile(Context ctxt, JSONObject jsonObj, DBAdapter db) {
+		//Restore accounts
+		Columns cols;
+		ContentValues cv;
+		
+		
+		cols = new Columns(SipProfile.full_projection, SipProfile.full_projection_types);
+		cv = cols.jsonToContentValues(jsonObj);
+		SipProfile profile = new SipProfile();
+		profile.createFromContentValue(cv);
+		db.insertAccount(profile);
+		
+		//Restore filters
+		cols = new Columns(Filter.full_projection, Filter.full_projection_types);
 		try {
-			Log.d(THIS_FILE, "Restoring "+jsonObj.toString(2));
+			JSONArray filtersObj = jsonObj.getJSONArray(FILTER_KEY);
+			for(int i = 0; i < filtersObj.length(); i++) {
+				JSONObject filterObj = filtersObj.getJSONObject(i);
+				//Log.d(THIS_FILE, "restoring "+filterObj.toString(4));
+				cv = cols.jsonToContentValues(filterObj);
+				cv.put(Filter.FIELD_ACCOUNT, profile.id);
+				Filter filter = new Filter();
+				filter.createFromContentValue(cv);
+				db.insertFilter(filter);
+			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(THIS_FILE, "Error while restoring filters", e);
 		}
 		
 		return false;
@@ -189,18 +211,25 @@ public class SipProfileJson {
 	        }
 
 			if(!TextUtils.isEmpty(content)) {
+				DBAdapter db = new DBAdapter(ctxt);
+				db.open();
 				try {
 					JSONObject mainJSONObject = new JSONObject(content);
 					JSONArray accounts = mainJSONObject.getJSONArray(KEY_ACCOUNTS);
+					if( accounts.length() > 0 ) {
+						db.removeAllAccounts();
+					}
 					for(int i=0; i<accounts.length(); i++) {
 						JSONObject account = accounts.getJSONObject(i);
-						restoreSipProfile(ctxt, account);
+						restoreSipProfile(ctxt, account, db);
 					}
-					
+
+					db.close();
 					return true;
 				} catch (JSONException e) {
 					Log.e(THIS_FILE, "Error while parsing saved file", e);
 				}
+				db.close();
 			}
 		}
 		

@@ -459,9 +459,11 @@ public class DBAdapter {
 		return numRows;
 	}
 	
-	public int countAvailableAccountsForNumber(String number) {
+
+	public void removeAllAccounts() {
+		db.delete(FILTERS_TABLE_NAME, "1", null);
+		db.delete(ACCOUNTS_TABLE_NAME, "1", null);
 		
-		return 0;
 	}
 	
 	
@@ -733,5 +735,5 @@ public class DBAdapter {
 				SipMessage.FIELD_TYPE+ "="+SipMessage.MESSAGE_TYPE_QUEUED, 
 				new String[] {sTo, body}) > 0;
 	}
-	
+
 }
