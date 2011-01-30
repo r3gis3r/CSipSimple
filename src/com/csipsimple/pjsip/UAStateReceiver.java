@@ -93,18 +93,19 @@ public class UAStateReceiver extends Callback {
 		lockCpu();
 		
 		//Check if we have not already an ongoing call
-		/*
+		
 		SipCallSession existingOngoingCall = getActiveCallInProgress();
 		if(existingOngoingCall != null) {
 			if(existingOngoingCall.getCallState() == SipCallSession.InvState.CONFIRMED) {
 				Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
 				//If there is an ongoing call... For now decline TODO : should here manage multiple calls
-				pjsua.call_hangup(callId, 0, null, null);
+				//Send busy here
+				pjsua.call_hangup(callId, 486, null, null);
 				unlockCpu();
 				return;
 			}
 		}
-		*/
+		
 		
 		SipCallSession callInfo = getCallInfo(callId, true);
 		Log.d(THIS_FILE, "Incoming call <<");
