@@ -187,6 +187,9 @@ public class OutgoingCallChooser extends ListActivity {
     	if(database == null) {
     		database = new DBAdapter(this);
     	}
+    	
+    	
+    	
 		// Need full selector, finish layout
 		setContentView(R.layout.outgoing_account_list);
 
@@ -326,38 +329,55 @@ public class OutgoingCallChooser extends ListActivity {
 		if(accountToCallTo != null) {
 			checkIfMustAccountNotValid();
 		}
-		
+		boolean hasSip = false;
 		//DB SIP
 		if (isCallableNumber(number, accounts, database)) {
 			Log.d(THIS_FILE, "Number OK for SIP, have live connection, show the call selector");
-			
+			hasSip = true;
 			SipProfile mustCallAccount = isMustCallableNumber(number, accounts, database);
 			if(mustCallAccount != null) {
 				accountToCallTo = mustCallAccount.id;
 				checkIfMustAccountNotValid();
 			}
 		}
+		
+		
 		//Internal intents
 		List<ResolveInfo> callers = Compatibility.getIntentsForCall(this);
 		SipProfile mustAcc = null;
 		ResolveInfo resInfo = null;
 		int index = 1;
+		int internalAvailableAccounts = 0;
+		SipProfile internalAccount = null;
+		ResolveInfo internalResolved = null;
+		
+		
 		if(callers != null) {
 			for(ResolveInfo caller : callers) {
 				SipProfile acc = new SipProfile();
 				acc.id = SipProfile.INVALID_ID - index;
-				if(Filter.isMustCallNumber(acc, number, database)) {
-					resInfo = caller;
-					mustAcc = acc;
-					break;
+				
+				
+				if(Filter.isCallableNumber(acc, number, database)) {
+					if(Filter.isMustCallNumber(acc, number, database)) {
+						resInfo = caller;
+						mustAcc = acc;
+						break;
+					}
+					internalAvailableAccounts ++;
+					internalAccount = acc;
+					internalResolved = caller;
 				}
+				
 				index ++;
 			}
 		}
 		if(mustAcc != null && resInfo != null) {
 			placeInternalCall(mustAcc, resInfo);
 		}
-		
+		if(!hasSip && internalAvailableAccounts == 1) {
+			placeInternalCall(internalAccount, internalResolved);
+		}
 		
 	}
 
