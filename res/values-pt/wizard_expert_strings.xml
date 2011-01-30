@@ -21,4 +21,6 @@
   <string name="w_expert_reg_timeout">Tempo de espera do registo (s)</string>
   <string name="w_expert_ka_interval">Intervalo de Keep-Alive (s)</string>
   <string name="w_expert_force_contact">Forçar contacto</string>
+  <string name="w_expert_allow_contact_rewrite">Permitir reescrita do contacto</string>
+  <string name="w_expert_contact_rewrite_method">Método de reescrita do contacto</string>
 </resources>

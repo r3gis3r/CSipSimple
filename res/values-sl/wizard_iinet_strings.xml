@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Stanje</string>
+  <string name="w_iinet_state_desc">Stanje iz naslednjega seznama</string>
+  <string name="w_iinet_username">VoIP telefonska številka</string>
+  <string name="w_iinet_username_desc">Odstrani oblikovanje, kot so presledki in poševnice</string>
+  <string name="w_iinet_password">Posebno VoIP geslo</string>
+  <string name="w_iinet_password_desc">Ni enako, kot geslo povezave</string>
+</resources>

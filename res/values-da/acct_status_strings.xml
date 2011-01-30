@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="acct_inactive">Inaktiv</string>
+  <string name="acct_unregistered">Ikke registreret</string>
+  <string name="acct_expired">Registrering Udløbet</string>
+  <string name="acct_registering">Registrering...</string>
+  <string name="acct_registered">Registreret</string>
+  <string name="acct_regerror">Fejl under registering</string>
+  <string name="acct_regfailed">Registrering Mislykket - Tjek din Konfiguration</string>
+</resources>

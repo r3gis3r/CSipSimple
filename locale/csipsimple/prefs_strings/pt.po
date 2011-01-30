@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 
 msgctxt "prefs"
 msgid "Settings"
-msgstr "Configurações"
+msgstr "Preferências"
 
 msgctxt "prefs_fast"
 msgid "Easy configuration"
-msgstr "Configurações Simples"
+msgstr "Configuração simples"
 
 msgctxt "prefs_fast_desc"
 msgid "Quick options to use if you don't know how SIP works"
-msgstr "Opções simples para usar caso você nao saiba como SIP funciona"
+msgstr "Opções simples para usar caso você não saiba como SIP funciona"
 
 msgctxt "prefs_network"
 msgid "Network"
@@ -55,11 +55,11 @@ msgstr "Ajustar a interface de usuário"
 
 msgctxt "prefs_calls"
 msgid "Calls options"
-msgstr ""
+msgstr "Opções das chamadas"
 
 msgctxt "prefs_calls_desc"
 msgid "Options related to calls"
-msgstr ""
+msgstr "Opções relacionadas com chamadas"
 
 #. Network
 msgctxt "for_incomings"
@@ -80,7 +80,7 @@ msgstr "Transporte"
 
 msgctxt "transport_desc"
 msgid "Force the use of a transport for this account"
-msgstr ""
+msgstr "Força o uso de um transporte para essa conta"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -238,35 +238,46 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "Ativar característica STUN"
 
-#, fuzzy
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr "Servidor Turn"
+msgstr "Servidores STUN"
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
-msgstr ""
+msgstr "Servidores STUN (HOST[:PORT], ...)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr ""
+msgstr "Ativar QoS"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
-msgstr ""
+msgstr "Ativar QoS nos pacotes"
 
 msgctxt "dscp_val"
 msgid "DSCP value"
-msgstr ""
+msgstr "Valor DSCP"
 
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
+msgstr "Valor DSCP para trafico do SIP"
+
+msgctxt "keep_alive_interval_wifi"
+msgid "Wifi keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_mobile"
+msgid "Mobile keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_desc"
+msgid "Interval (sec) for KA packets"
 msgstr ""
 
 #. Security
 msgctxt "tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "secure_transport"
 msgid "Secure transport"
@@ -274,11 +285,11 @@ msgstr "Transporte seguro"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
-msgstr ""
+msgstr "Mecanismo de segurança para SIP e RTP"
 
 msgctxt "secure_media"
 msgid "Secure media"
-msgstr ""
+msgstr "Mídia Segura"
 
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
@@ -290,67 +301,67 @@ msgstr "Número da porta para vinculação local"
 
 msgctxt "network_tls_server_name"
 msgid "TLS server name"
-msgstr ""
+msgstr "Nome do Servidor TLS"
 
 msgctxt "network_tls_server_name_desc"
 msgid "For multi-hosting server (optional)"
-msgstr ""
+msgstr "Para servidor multi-hosting (opcional)"
 
 msgctxt "ca_list_file"
 msgid "TLS CA file"
-msgstr ""
+msgstr "Arquivo CA TLS"
 
 msgctxt "ca_list_file_desc"
 msgid "For example /sdcard/CSipSimple/myAuthority.ca"
-msgstr ""
+msgstr "Por exemplo /sdcard/CSipSimple/myAuthority.ca"
 
 msgctxt "cert_file"
 msgid "TLS certificate file"
-msgstr ""
+msgstr "Arquivo de certificado TLS"
 
 msgctxt "cert_file_desc"
 msgid "For example /sdcard/CSipSimple/myCert.crt"
-msgstr ""
+msgstr "Por exemplo /sdcard/CSipSimple/myCert.crt"
 
 msgctxt "privkey_file"
 msgid "TLS private key file"
-msgstr ""
+msgstr "Arquivo de chave privada TLS"
 
 msgctxt "privkey_file_desc"
 msgid "For example /sdcard/CSipSimple/myKey.key"
-msgstr ""
+msgstr "Por exemplo /sdcard/CSipSimple/myKey.key"
 
 msgctxt "tls_password"
 msgid "TLS password"
-msgstr ""
+msgstr "Senha TLS"
 
 msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
-msgstr ""
+msgstr "Senha TSL para arquivo de chave privada"
 
 msgctxt "verify_server"
 msgid "Check server"
-msgstr ""
+msgstr "Checar Servidor"
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
-msgstr ""
+msgstr "Verificar certificado do Servidor"
 
 msgctxt "verify_client"
 msgid "Check client"
-msgstr ""
+msgstr "Checar cliente"
 
 msgctxt "verify_client_desc"
 msgid "Verify client's certificate"
-msgstr ""
+msgstr "Verificar certificado do cliente"
 
 msgctxt "tls_method"
 msgid "TLS Method"
-msgstr ""
+msgstr "Método TLS"
 
 msgctxt "tls_method_desc"
 msgid "Method for TLS transport"
-msgstr ""
+msgstr "Método para transporte TLS"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -426,7 +437,8 @@ msgid "Media quality"
 msgstr "Qualidade multimédia"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualidade do stream multimédia (modifique apenas se souber o que está a "
 "fazer)"
@@ -441,7 +453,7 @@ msgstr "Frequência do canal de áudio"
 
 msgctxt "snd_ptime"
 msgid "Frame ptime"
-msgstr ""
+msgstr "Quadro ptime"
 
 msgctxt "snd_ptime_desc"
 msgid "Specifying lower ptime will normally reduce the latency"
@@ -455,14 +467,13 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "Comprimento do atraso de cancelamento de eco"
 
-#, fuzzy
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr "Modo perito"
+msgstr "Modo Eco"
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
-msgstr ""
+msgstr "Algoritmo para Eco"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
@@ -470,11 +481,11 @@ msgstr "Prioridade (desactivado é 0)"
 
 msgctxt "sip_dtmf"
 msgid "DTMF mode"
-msgstr ""
+msgstr "Modo DTMF"
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
-msgstr ""
+msgstr "Como enviar DTMF"
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
@@ -486,35 +497,39 @@ msgstr "Usar volume de software em vez do volume do Android"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
-msgstr ""
+msgstr "Usar API de roteamento"
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
+"Tente ativar isto se o audio estiver sendo enviado para o viva-voz ao invéz "
+"do fone"
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
-msgstr ""
+msgstr "Usar modo API de audio"
 
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
+"Tente ativar isto se o audio estiver sendo enviado para o viva-voz ao invéz "
+"do fone"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
-msgstr ""
+msgstr "Modo de audio para chamadas SIP"
 
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
-msgstr ""
+msgstr "Altere somente se o desenvolvedor o aconselhar."
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
-msgstr ""
+msgstr "Fila de espera IO"
 
 msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
-msgstr ""
+msgstr "Ativar fila de espera para entrada/saida"
 
 msgctxt "set_audio_generate_tone"
 msgid "Tone hack"
@@ -522,6 +537,38 @@ msgstr ""
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
+msgstr "Gerar um tom antes de efectuar chamadas"
+
+msgctxt "narrow_band"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "wide_band"
+msgid "Wideband"
+msgstr ""
+
+msgctxt "band_for_wifi"
+msgid "Band type for wifi"
+msgstr ""
+
+msgctxt "band_for_3g"
+msgid "Band type for 3G"
+msgstr ""
+
+msgctxt "band_for_gprs"
+msgid "Band type for GPRS"
+msgstr ""
+
+msgctxt "band_for_edge"
+msgid "Band type for EDGE"
+msgstr ""
+
+msgctxt "band_for_other"
+msgid "Band type for other"
+msgstr ""
+
+msgctxt "codecs_band_types"
+msgid "Connections bandwidth types for codecs"
 msgstr ""
 
 #. UI
@@ -543,11 +590,11 @@ msgstr "Integração do marcador"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Quando marcando com o marcador nativo será questionado se quer usar SIP "
-"ou móvel"
+"Quando marcando com o marcador nativo será questionado se quer usar SIP ou "
+"móvel"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -556,8 +603,7 @@ msgstr "Integração do registo de chamadas"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"As chamadas SIP serão (se possível) fundidas com o registo nativo de "
-"chamadas"
+"As chamadas SIP serão (se possível) fundidas com o registo nativo de chamadas"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -585,7 +631,7 @@ msgstr "Iniciar com marcador de texto"
 
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr ""
+msgstr "Não usar deslize para antender"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
@@ -598,8 +644,8 @@ msgstr "Manter acordado durante a chamada"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corrige se obtiver som instável quando o ecrã se desliga durante uma "
-"chamada WiFi"
+"Corrige se obtiver som instável quando o ecrã se desliga durante uma chamada "
+"WiFi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -643,13 +689,20 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Evitar rotação do ecrã e manter em modo de retrato"
 
-#, fuzzy
 msgctxt "gsm_integration_type"
 msgid "Mobile phone integration"
-msgstr "Integração do marcador"
+msgstr "Integração de telefone móvel"
 
 msgctxt "gsm_integration_type_desc"
 msgid "How the application uses your mobile phone (or not)"
+msgstr "Como a aplicação usa o seu telefone móvel (ou não)"
+
+msgctxt "invert_proximity_sensor"
+msgid "Invert proximity sensor"
+msgstr ""
+
+msgctxt "invert_proximity_sensor_desc"
+msgid "May help on some devices when manufacturer inverted near and far"
 msgstr ""
 
 #. Fast settings
@@ -708,11 +761,11 @@ msgstr "Só disponível se SIP estiver actualmente registado"
 #. Calls settings
 msgctxt "auto_record_calls"
 msgid "Auto record calls"
-msgstr ""
+msgstr "Gravação automática de chamadas"
 
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
-msgstr ""
+msgstr "Gravar chamadas assim que conectado"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
@@ -721,20 +774,4 @@ msgstr "Modo perito"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Modo avançado"
-
-#~ msgctxt "stun_server"
-#~ msgid "STUN server"
-#~ msgstr "Servidor STUN"
-
-#~ msgctxt "stun_server_desc"
-#~ msgid "STUN server (HOST:PORT)"
-#~ msgstr "Servidor STUN (HOST:PORTA)"
-
-#~ msgctxt "gsm_integration_type"
-#~ msgid "Integration type with GSM"
-#~ msgstr ""
-
-#~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How the application use GSM (or not)"
-#~ msgstr ""
 

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_callcentric_display_name">Hesap adı</string>
+  <string name="w_callcentric_display_name_desc">Bu hesap için görünen ad</string>
+  <string name="w_callcentric_phone_number">SIP Telefon Numarası</string>
+  <string name="w_callcentric_password">Parola</string>
+</resources>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-11 10:14+0000\n"
 "Last-Translator: B. Zoli <tec@webpress.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -238,10 +238,9 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "STUN funkció bekapcsolása"
 
-#, fuzzy
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr "TURN szerver"
+msgstr ""
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
@@ -262,6 +261,18 @@ msgstr "DSCP érték"
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
 msgstr "SIP forgalom DSCP értéke"
+
+msgctxt "keep_alive_interval_wifi"
+msgid "Wifi keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_mobile"
+msgid "Mobile keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_desc"
+msgid "Interval (sec) for KA packets"
+msgstr ""
 
 #. Security
 msgctxt "tls"
@@ -453,10 +464,9 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "A visszhang csillapító szakasz mérete"
 
-#, fuzzy
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr "Szakértő mód"
+msgstr ""
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
@@ -520,6 +530,38 @@ msgstr ""
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
+msgstr ""
+
+msgctxt "narrow_band"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "wide_band"
+msgid "Wideband"
+msgstr ""
+
+msgctxt "band_for_wifi"
+msgid "Band type for wifi"
+msgstr ""
+
+msgctxt "band_for_3g"
+msgid "Band type for 3G"
+msgstr ""
+
+msgctxt "band_for_gprs"
+msgid "Band type for GPRS"
+msgstr ""
+
+msgctxt "band_for_edge"
+msgid "Band type for EDGE"
+msgstr ""
+
+msgctxt "band_for_other"
+msgid "Band type for other"
+msgstr ""
+
+msgctxt "codecs_band_types"
+msgid "Connections bandwidth types for codecs"
 msgstr ""
 
 #. UI
@@ -635,13 +677,20 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Nem engedi a képernyő forgatását és álló módban tartja"
 
-#, fuzzy
 msgctxt "gsm_integration_type"
 msgid "Mobile phone integration"
-msgstr "Tárcsázó beépítése"
+msgstr ""
 
 msgctxt "gsm_integration_type_desc"
 msgid "How the application uses your mobile phone (or not)"
+msgstr ""
+
+msgctxt "invert_proximity_sensor"
+msgid "Invert proximity sensor"
+msgstr ""
+
+msgctxt "invert_proximity_sensor_desc"
+msgid "May help on some devices when manufacturer inverted near and far"
 msgstr ""
 
 #. Fast settings
@@ -713,20 +762,4 @@ msgstr "Szakértő mód"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Hozzáértő mód"
-
-#~ msgctxt "stun_server"
-#~ msgid "STUN server"
-#~ msgstr "STUN szerver"
-
-#~ msgctxt "stun_server_desc"
-#~ msgid "STUN server (HOST:PORT)"
-#~ msgstr "STUN szerver megadása (HOST:PORT)"
-
-#~ msgctxt "gsm_integration_type"
-#~ msgid "Integration type with GSM"
-#~ msgstr ""
-
-#~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How the application use GSM (or not)"
-#~ msgstr ""
 

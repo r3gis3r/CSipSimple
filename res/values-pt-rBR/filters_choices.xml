@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string-array name="filters_action">
+    <item>Impossivel chamar</item>
+    <item>Regravar</item>
+    <item>Parar processamento</item>
+    <item>Chamar diretamente</item>
+    <item>Atendimento automático</item>
+  </string-array>
+</resources>

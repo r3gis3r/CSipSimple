@@ -1,4 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-
+  <string-array name="filters_action">
+    <item>Невозможно позвонить</item>
+    <item>Переписать</item>
+    <item>Остановить обработку</item>
+    <item>Прямой вызов</item>
+    <item>Автоответ</item>
+  </string-array>
+  <string-array name="filters_type">
+    <item>Начинается с</item>
+    <item>Заканчивается на</item>
+    <item>Содержит</item>
+    <item>Все</item>
+    <item>Имеет точно N цифр</item>
+    <item>Имеет больше N цифр</item>
+    <item>Точно</item>
+    <item>Свое регулярное выражение</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>Префикс</item>
+    <item>Суффикс</item>
+    <item>Заменить на</item>
+    <item>Заменить всё на</item>
+    <item>Пользовательский RegExp</item>
+  </string-array>
 </resources>

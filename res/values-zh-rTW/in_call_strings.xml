@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="take_call">接聽</string>
+  <string name="decline_call">略過</string>
+  <string name="clear_call">結束</string>
+  <string name="touch_lock">雙擊解鎖</string>
+  <string name="dialpad">撥號盤</string>
+  <string name="bluetooth">藍芽</string>
+  <string name="speaker">揚聲器</string>
+  <string name="mute">靜音</string>
+  <string name="add_call">加入呼叫</string>
+  <string name="call_state_calling">呼叫中...</string>
+  <string name="call_state_confirmed">說話中</string>
+  <string name="call_state_connecting">連線中...</string>
+  <string name="call_state_disconnected">掛斷</string>
+  <string name="call_state_early">響鈴中...</string>
+  <string name="call_state_incoming">電話撥入...</string>
+  <string name="call_state_null">錯誤</string>
+  <string name="unlock">解鎖</string>
+  <string name="record">錄音</string>
+  <string name="stop_recording">停止錄音</string>
+  <string name="xfer">轉移</string>
+</resources>

@@ -18,10 +18,13 @@
   <string name="choose_wizard">Choisissez l\'assistant</string>
   <string name="use">Utiliser :</string>
   <string name="use_pstn">Passer par le GSM</string>
+  <string name="use_skype">Utiliser Skype</string>
   <string name="ongoing_call">Appel en cours</string>
   <string name="missed_call">Appel en absence</string>
   <string name="recentCalls_empty">Journal d\'appel vide</string>
   <string name="filters">Filtres</string>
+  <string name="filters_desc">A appliquer lorsque l\'intégration à Android est utilisée</string>
+  <string name="filters_for">Filtres pour</string>
   <string name="add_filter">Ajouter une règle (filtre/réécriture)</string>
   <string name="delete_filter">Supprimer le filtre</string>
   <string name="callLog_delete_entry">Supprimer cet appel</string>
@@ -38,6 +41,8 @@
   <string name="service_ticker_registered_text">SIP enregistré</string>
   <string name="outgoing_call_chooser_call_text">Appeler</string>
   <string name="reorder">Réorganiser</string>
+  <string name="backup_restore">Sauvegarde / Restauration</string>
+  <string name="backup">Sauvegarde</string>
   <string name="faq">FAQ</string>
   <string name="help">Aide</string>
   <string name="record_logs">Enregistrer les logs système et envoyer au support pour bug</string>
@@ -56,4 +61,7 @@
   <string name="another_application_use_sip_port">Une autre application utilise actuellement le port SIP! Impossible de démarrer !!!</string>
   <string name="choose_phone">Choisir le numéro de téléphone</string>
   <string name="no_phone_found">Ce contact n\'a pas de numéro de téléphone</string>
+  <string name="show_password">Montrer le mot de passe</string>
+  <string name="this_codec_is_not_free">**Ce codec n\'est pas gratuit !!!**\nAssurez vous que quelqu\'un (vous ou votre fournisseur SIP) a acheté une license qui vous permet d\'utiliser ce codec! Nous (en tant que distributeur de l\'application) ne sommes pas responsable d\'une utilisation illégale de ce codec.\nIl est de votre ressort de vous assurer d\'être autorisé à utiliser ce codec.\nLien pour acheter une license du codec :</string>
+  <string name="voice_mail">Messagerie vocale</string>
 </resources>

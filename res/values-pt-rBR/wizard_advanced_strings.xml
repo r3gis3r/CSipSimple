@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_advanced_display_name">Nome da conta</string>
+  <string name="w_advanced_display_name_desc">Mostrar nome para esta conta</string>
+  <string name="w_advanced_username">Nome de usuário</string>
+  <string name="w_advanced_password">Senha</string>
+  <string name="w_advanced_use_tcp">Use TCP (não UDP)</string>
+  <string name="w_advanced_proxy">Proxy</string>
+</resources>

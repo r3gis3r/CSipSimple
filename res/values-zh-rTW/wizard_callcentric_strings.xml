@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_callcentric_display_name">帳戶名</string>
+  <string name="w_callcentric_display_name_desc">此帳戶之顯示名稱</string>
+  <string name="w_callcentric_phone_number">SIP 電話號碼</string>
+  <string name="w_callcentric_phone_number_desc">話務中心 SIP 電話號碼 (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">密碼</string>
+  <string name="w_callcentric_password_desc">話務中心帳戶密碼</string>
+</resources>

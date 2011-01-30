@@ -52,10 +52,9 @@
   <string name="turn_server_desc">TURN 服务器 (域名:端口)</string>
   <string name="enable_stun">开启 STUN</string>
   <string name="enable_stun_desc">打开 STUN 特性</string>
-  <string name="stun_server">STUN 服务器</string>
-  <string name="stun_server_desc">STUN 服务器 (域名:端口)</string>
   <string name="enable_qos">开启 QoS</string>
   <string name="enable_qos_desc">开启数据包 QoS</string>
+  <string name="dscp_val">DSCP 值</string>
   <string name="dscp_val_desc">SIP 传输的 DSCP 值</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">安全传输</string>
@@ -97,6 +96,7 @@
   <string name="start_with_text_dialer">文本框拨号盘</string>
   <string name="start_with_text_dialer_desc">启动时使用文本框拨号盘</string>
   <string name="log_level">日志级别</string>
+  <string name="log_level_desc">调试日志等级，介于 0 (关闭) 和 5 (详尽) 之间。</string>
   <string name="expert_preferences">专家模式</string>
   <string name="advanced_preferences">高级模式</string>
 </resources>

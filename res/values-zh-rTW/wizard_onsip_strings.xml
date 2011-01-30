@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_onsip_authentication_name">認證名</string>
+  <string name="w_onsip_authentication_name_desc">SIP 認證名</string>
+</resources>

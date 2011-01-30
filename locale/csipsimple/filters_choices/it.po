@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-09-26 08:23+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -39,33 +39,32 @@ msgstr "Rispondere automaticamente"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
-msgstr ""
+msgstr "Inizia con"
 
 msgctxt "filters_type:1"
 msgid "Ends with"
-msgstr ""
+msgstr "Finisce con"
 
 msgctxt "filters_type:2"
 msgid "Contains"
-msgstr ""
+msgstr "Contiene"
 
 msgctxt "filters_type:3"
 msgid "All"
-msgstr ""
+msgstr "Tutto"
 
 msgctxt "filters_type:4"
 msgid "Has exactly N digit"
-msgstr ""
+msgstr "Ha esattamente N cifre"
 
 msgctxt "filters_type:5"
 msgid "Has more than N digit"
-msgstr ""
+msgstr "Ha più di N cifre"
 
 msgctxt "filters_type:6"
 msgid "Is exactly"
-msgstr ""
+msgstr "E' esattamente"
 
-#, fuzzy
 msgctxt "filters_type:7"
 msgid "Custom RegExp"
 msgstr "RegExp personalizzata"
@@ -89,24 +88,4 @@ msgstr "Rimpiazza tutto con"
 msgctxt "replace_type:4"
 msgid "Custom RegExp"
 msgstr "RegExp personalizzata"
-
-#~ msgctxt "filters_type:2"
-#~ msgid "All"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:3"
-#~ msgid "Has exactly N digit"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:4"
-#~ msgid "Has more than N digit"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:5"
-#~ msgid "Is exactly"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:6"
-#~ msgid "Custom RegExp"
-#~ msgstr ""
 

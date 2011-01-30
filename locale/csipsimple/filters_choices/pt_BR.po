@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-21 23:27+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt_BR <LL@li.org>\n"
@@ -20,23 +20,23 @@ msgstr ""
 
 msgctxt "filters_action:0"
 msgid "Can't call"
-msgstr ""
+msgstr "Impossivel chamar"
 
 msgctxt "filters_action:1"
 msgid "Rewrite"
-msgstr ""
+msgstr "Regravar"
 
 msgctxt "filters_action:2"
 msgid "Stop processing"
-msgstr ""
+msgstr "Parar processamento"
 
 msgctxt "filters_action:3"
 msgid "Directly call"
-msgstr ""
+msgstr "Chamar diretamente"
 
 msgctxt "filters_action:4"
 msgid "Auto answer"
-msgstr ""
+msgstr "Atendimento automático"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
@@ -89,24 +89,4 @@ msgstr ""
 msgctxt "replace_type:4"
 msgid "Custom RegExp"
 msgstr ""
-
-#~ msgctxt "filters_type:2"
-#~ msgid "All"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:3"
-#~ msgid "Has exactly N digit"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:4"
-#~ msgid "Has more than N digit"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:5"
-#~ msgid "Is exactly"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:6"
-#~ msgid "Custom RegExp"
-#~ msgstr ""
 

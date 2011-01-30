@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_magicjack_display_name">Hesap adı</string>
+  <string name="w_magicjack_display_name_desc">Bu hesap için görünen ad</string>
+  <string name="w_magicjack_username">Kullanıcı Adı</string>
+  <string name="w_magicjack_username_desc">EXXXXXXXXXX01 gibi</string>
+  <string name="w_magicjack_password">Parola</string>
+  <string name="w_magicjack_password_desc">SIP sunucu kimlik doğrulaması için parola</string>
+  <string name="w_magicjack_server_desc">Bunun gibi bir şey:: proxy01.yourcity.talk4free.com</string>
+</resources>

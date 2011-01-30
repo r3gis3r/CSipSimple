@@ -3,35 +3,33 @@
 # This file is distributed under the same license as the csipsimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
 "POT-Creation-Date: 2010-12-30 15:22+0100\n"
-"PO-Revision-Date: 2010-10-21 23:27+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-01-28 12:07+0000\n"
+"Last-Translator: Libor Tesař <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-01-29 05:34+0000\n"
+"X-Generator: Launchpad (build 12177)\n"
 "Generated-By: Babel 1.0dev\n"
 
 msgctxt "w_basic_username"
 msgid "User"
-msgstr ""
+msgstr "Uživatel"
 
 msgctxt "w_basic_username_desc"
 msgid "Account name / Login"
-msgstr ""
+msgstr "Jméno účtu / přihlašovací jméno"
 
 msgctxt "w_basic_password"
 msgid "Password"
-msgstr ""
+msgstr "Heslo"
 
 msgctxt "w_basic_password_desc"
 msgid "Password to access your account"
-msgstr ""
-
+msgstr "Heslo pro přístup do účtu"

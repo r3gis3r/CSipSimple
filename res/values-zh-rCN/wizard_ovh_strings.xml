@@ -1,3 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="w_ovh_phone_number_desc">电话号码格式如 0033xxxxxx</string>
 </resources>

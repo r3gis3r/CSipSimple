@@ -20,18 +20,22 @@
   <string name="download">Descargar</string>
   <string name="downloading">Descargando</string>
   <string name="name_colon"><b><xliff:g id="name" example="Me">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">Copiar texto del mensaje</string>
   <string name="message_options">Opciones de mensaje</string>
   <string name="done">Realizado</string>
   <string name="compose_title">Redactar</string>
   <string name="add_attachment">Adjuntar</string>
   <string name="view">Mostrar</string>
+  <string name="send">Enviar</string>
   <string name="all_threads">Todas las conversaciones</string>
   <string name="type_to_compose_text_enter_to_send">Escribir</string>
   <string name="open_keyboard_to_compose_message">Abrir teclado para escribir mensaje</string>
   <string name="image_too_large">Imágen demasiado grande</string>
   <string name="ask_for_automatically_resize">¿Redimensionar la imágen automáticamente antes de enviar?</string>
+  <string name="compressing">Imágen demasiado grande. Comprimiendo...</string>
   <string name="unsupported_media_format">"Formato "<xliff:g id="name">%1$s</xliff:g>" no soportado"</string>
   <string name="menu_view_contact">Ver contacto</string>
+  <string name="menu_add_to_contacts">Añadir a Contactos</string>
   <string name="hidden_sender_address">Ocultar dirección del remitente</string>
   <string name="yes">Aceptar</string>
   <string name="no">Cancelar</string>

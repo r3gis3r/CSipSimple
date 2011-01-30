@@ -3,21 +3,21 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-12-30 15:22+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-01-17 13:27+0000\n"
+"Last-Translator: M66B <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-01-18 05:51+0000\n"
+"X-Generator: Launchpad (build 12177)\n"
 "Generated-By: Babel 1.0dev\n"
 
 msgctxt "w_ovh_phone_number_desc"
 msgid "Phone number should be formated as 0033xxxxxx"
-msgstr ""
-
+msgstr "Telefoonnummer moet opgemaakt worden als 0033xxxxxx"

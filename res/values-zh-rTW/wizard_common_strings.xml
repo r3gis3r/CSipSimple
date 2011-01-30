@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_common_display_name">帳戶名</string>
+  <string name="w_common_display_name_desc">此帳戶之顯示名稱</string>
+  <string name="w_common_username">用戶名稱</string>
+  <string name="w_common_username_desc">SIP 帳戶登入</string>
+  <string name="w_common_phone_number">電話號碼</string>
+  <string name="w_common_phone_number_desc">電信商提供的 SIP 電話號碼</string>
+  <string name="w_common_password">密碼</string>
+  <string name="w_common_password_desc">帳戶密碼</string>
+  <string name="w_common_server">伺服器</string>
+  <string name="w_common_server_desc">SIP 服務器域/IP[:port]</string>
+</resources>

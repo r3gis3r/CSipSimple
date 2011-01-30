@@ -3,32 +3,32 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-12-30 15:22+0100\n"
-"PO-Revision-Date: 2010-11-27 23:52+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-01-03 04:00+0000\n"
+"Last-Translator: Fitoschido <Unknown>\n"
 "Language-Team: es <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-01-04 14:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: Babel 1.0dev\n"
 
 msgctxt "w_advanced_display_name"
 msgid "Account name"
-msgstr ""
+msgstr "Nombre de cuenta"
 
 msgctxt "w_advanced_display_name_desc"
 msgid "Display name for this account"
-msgstr ""
+msgstr "Mostrar el nombre de esta cuenta"
 
 msgctxt "w_advanced_caller_id"
 msgid "Caller ID"
-msgstr ""
+msgstr "ID de llamada"
 
 msgctxt "w_advanced_caller_id_desc"
 msgid "Caller ID to send with calls"
@@ -36,7 +36,7 @@ msgstr ""
 
 msgctxt "w_advanced_username"
 msgid "Username"
-msgstr ""
+msgstr "Nombre de usuario"
 
 msgctxt "w_advanced_username_desc"
 msgid "Username for SIP server authentication"
@@ -44,21 +44,20 @@ msgstr ""
 
 msgctxt "w_advanced_password"
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
 
 msgctxt "w_advanced_password_desc"
 msgid "Password for SIP server authentication"
-msgstr ""
+msgstr "Contraseña para la autenticación del servidor SIP"
 
 msgctxt "w_advanced_use_tcp"
 msgid "Use TCP (not UDP)"
-msgstr ""
+msgstr "Usar TCP (no UDP)"
 
 msgctxt "w_advanced_proxy"
 msgid "Proxy"
-msgstr ""
+msgstr "Proxy"
 
 msgctxt "w_advanced_proxy_desc"
 msgid "Proxy domain/IP[:port] (optional, not always needed)"
-msgstr ""
-
+msgstr "Dominio de proxy/IP[:puerto] (opcional, no se necesita siempre)"

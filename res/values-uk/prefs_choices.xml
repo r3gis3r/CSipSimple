@@ -42,4 +42,9 @@
     <item>SSL3</item>
     <item>SSL23</item>
   </string-array>
+  <string-array name="gsm_integration_type_choices">
+    <item>Авто</item>
+    <item>Примусово встановити</item>
+    <item>Запобігати</item>
+  </string-array>
 </resources>

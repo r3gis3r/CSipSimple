@@ -1,2 +1,62 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">Posílání zpráv</string>
+  <string name="new_message">Nová zpráva</string>
+  <string name="create_new_message">napsat novou zprávu</string>
+  <string name="menu_compose_new">Napsat</string>
+  <string name="menu_add_address_to_contacts">"přidat "<xliff:g id="name">%s</xliff:g>" do kontaktů"</string>
+  <string name="menu_call">volat</string>
+  <string name="menu_delete_all">smaž konverzace</string>
+  <string name="menu_delete">smaž konverzaci</string>
+  <string name="menu_view">zobrazit konverzaci</string>
+  <string name="anonymous_recipient">Anonymni</string>
+  <string name="messagelist_sender_self">Já</string>
+  <string name="delete_message">smaž zprávu</string>
+  <string name="sent_on">"poslat: "<xliff:g id="date">%s</xliff:g></string>
+  <string name="kilobyte">kB</string>
+  <string name="undelivered_msg_dialog_title">nedoručitelná zpráva</string>
+  <string name="undelivered_sms_dialog_body">nelze odeslat zprávu</string>
+  <string name="delete_thread">smaž konverzaci</string>
+  <string name="download">Stáhnout</string>
+  <string name="downloading">Stahování</string>
+  <string name="name_colon"><b><xliff:g id="name" example="Me">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">Kopírovat text zprávy</string>
+  <string name="message_options">nastavení zprávy</string>
+  <string name="done">Dokončeno</string>
+  <string name="compose_title">Napsat</string>
+  <string name="add_attachment">Přiložit</string>
+  <string name="view">Zobrazit</string>
+  <string name="send">Odeslat</string>
+  <string name="all_threads">všechny konverzace</string>
+  <string name="type_to_compose_text_enter_to_send">typ psaní zprávy</string>
+  <string name="open_keyboard_to_compose_message">otevřít klavesnici pro psaní zprávy</string>
+  <string name="image_too_large">obrázek je příliš velký</string>
+  <string name="ask_for_automatically_resize">Automaticky změnit velikost obrázku před odsláním ?</string>
+  <string name="compressing">Obrázek je příliš velký. Komprese\\u2026</string>
+  <string name="unsupported_media_format">"Nepodporovaný "<xliff:g id="name">%1$s</xliff:g>" formát"</string>
+  <string name="menu_view_contact">zobrazit kontakt</string>
+  <string name="menu_add_to_contacts">přidat kontakty</string>
+  <string name="hidden_sender_address">skrýt adresu odesílatele</string>
+  <string name="yes">OK</string>
+  <string name="no">Zrušit</string>
+  <string name="edit">Upravit</string>
+  <string name="restore_default">Obnovit výchozí nastavení</string>
+  <string name="confirm_dialog_title">Odstranit</string>
+  <string name="confirm_delete_conversation">konverzace bude smazána</string>
+  <string name="confirm_delete_all_conversations">všechny konverzace budou smazány</string>
+  <string name="confirm_delete_message">zpráva bude smazána</string>
+  <string name="confirm_delete_locked_message">Jste si jistí že chcete smazat zamčené zprávy ?</string>
+  <string name="confirm_delete_all_messages">konverzace bude smazána</string>
+  <string name="delete">Odstranit</string>
+  <string name="status_none">(Žádný)</string>
+  <string name="status_pending">Čeká se</string>
+  <string name="status_received">Přijaté</string>
+  <string name="status_failed">nedokončené</string>
+  <string name="status_unread">Nepřečtené</string>
+  <string name="status_rejected">Odmítnuto</string>
+  <string name="recipient_label">příjemce:\\u0020</string>
+  <string name="status_label">status:\\u0020</string>
+  <string name="menu_insert_smiley">Vložit smajlík</string>
+  <string name="me">Já</string>
+  <string name="sending_message">Odesílání\\u2026</string>
+</resources>

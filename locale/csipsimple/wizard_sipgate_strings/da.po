@@ -1,0 +1,48 @@
+# Danish translations for PROJECT.
+# Copyright (C) 2011 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"PO-Revision-Date: 2011-01-30 00:15+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: da <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "w_sipgate_display_name"
+msgid "Account name"
+msgstr ""
+
+msgctxt "w_sipgate_display_name_desc"
+msgid "Display name for this account"
+msgstr ""
+
+msgctxt "w_sipgate_username"
+msgid "SIP-ID"
+msgstr ""
+
+msgctxt "w_sipgate_username_desc"
+msgid "Different from your sipgate login! Check on sipgate website your SIP-ID"
+msgstr ""
+
+msgctxt "w_sipgate_password"
+msgid "SIP Password"
+msgstr ""
+
+msgctxt "w_sipgate_password_desc"
+msgid "Different from your password! Check on sipgate website your SIP Password"
+msgstr ""
+
+msgctxt "w_sipgate_server_desc"
+msgid "Something like that : sipgate.co.uk"
+msgstr ""
+

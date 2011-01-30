@@ -1,2 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_ecs_display_name">Account-naam</string>
+  <string name="w_ecs_display_name_desc">Weergavenaam voor dit account</string>
+  <string name="w_ecs_phone_number">Telefoonnummer</string>
+  <string name="w_ecs_phone_number_desc">Account SIP-telefoonnummer</string>
+  <string name="w_ecs_user_name">Login gebruiker</string>
+  <string name="w_ecs_user_name_desc">Uw virtual desk login</string>
+  <string name="w_ecs_password">Wachtwoord gebruiker</string>
+  <string name="w_ecs_password_desc">Wachtwoord voor uw account</string>
+  <string name="w_ecs_server_domain">SIP-domein</string>
+  <string name="w_ecs_server_domain_desc">Domeinnaam voor SIP-accounts</string>
+  <string name="w_ecs_server_ip_desc">Domeinnaam of IP-adres voor toegang tot de ECS (leeglaten wanneer hetzelfde als SIP-domein)</string>
+</resources>

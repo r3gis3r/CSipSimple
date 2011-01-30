@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_basic_username">Usuario</string>
+  <string name="w_basic_username_desc">Nombre de cuenta/acceder</string>
+  <string name="w_basic_password">Contraseña</string>
+  <string name="w_basic_password_desc">Contraseña para acceder a su cuenta</string>
+</resources>

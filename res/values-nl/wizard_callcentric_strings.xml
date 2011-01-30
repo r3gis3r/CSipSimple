@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_callcentric_display_name">Account-naam</string>
+  <string name="w_callcentric_display_name_desc">Weergavenaam voor dit account</string>
+  <string name="w_callcentric_phone_number">SIP-telefoonnummer</string>
+  <string name="w_callcentric_phone_number_desc">Callcentric SIP-telefoonnummer (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">Wachtwoord</string>
+  <string name="w_callcentric_password_desc">Wachtwoord voor uw Callcentric-account</string>
+</resources>

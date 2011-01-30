@@ -1,2 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_common_display_name">Nome da conta</string>
+  <string name="w_common_display_name_desc">Mostrar nome para esta conta</string>
+  <string name="w_common_username">Nome de usuário</string>
+  <string name="w_common_phone_number">Número de telefone</string>
+  <string name="w_common_password">Senha</string>
+  <string name="w_common_password_desc">Senha para a sua conta</string>
+  <string name="w_common_server">Servidor</string>
+  <string name="w_common_server_desc">Servidor SIP domínio/IP[:porta]</string>
+</resources>

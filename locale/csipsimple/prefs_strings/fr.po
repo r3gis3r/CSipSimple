@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-10 08:22+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -43,23 +43,23 @@ msgstr "Média"
 
 msgctxt "prefs_media_desc"
 msgid "Codecs and in-call sound behavior"
-msgstr "Comportement des codecs et du son en communication"
+msgstr "Règles média pendant les appels (Codecs, Silences, ...)"
 
 msgctxt "prefs_ui"
 msgid "User interface"
-msgstr "Apparence et comportement"
+msgstr "Interface et intégration"
 
 msgctxt "prefs_ui_desc"
 msgid "Tweak the user interface"
-msgstr "Modifier l'apparence et les comportement de l'application"
+msgstr "Adaptez le comportement à votre usage"
 
 msgctxt "prefs_calls"
 msgid "Calls options"
-msgstr ""
+msgstr "Options d'appel"
 
 msgctxt "prefs_calls_desc"
 msgid "Options related to calls"
-msgstr ""
+msgstr "Options relatives aux appels"
 
 #. Network
 msgctxt "for_incomings"
@@ -184,7 +184,8 @@ msgstr "Utiliser l'IPv6"
 
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
-msgstr "Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
+msgstr ""
+"Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
@@ -192,7 +193,8 @@ msgstr "Résoudre les DNS SRV"
 
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
-msgstr "Utiliser les DNS dans l'application pour résoudre les noms de domaine"
+msgstr ""
+"Utiliser les DNS dans l'application pour résoudre les noms de domaine"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
@@ -238,14 +240,13 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "Activer la fonctionnalité STUN"
 
-#, fuzzy
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr "Serveur TURN"
+msgstr "Serveur STUN"
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
-msgstr ""
+msgstr "Serveur STUN (hôte[:port],...)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
@@ -262,6 +263,18 @@ msgstr "Valeur DSCP"
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
 msgstr "Valeur DSCP pour le trafic SIP"
+
+msgctxt "keep_alive_interval_wifi"
+msgid "Wifi keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_mobile"
+msgid "Mobile keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_desc"
+msgid "Interval (sec) for KA packets"
+msgstr ""
 
 #. Security
 msgctxt "tls"
@@ -387,7 +400,8 @@ msgstr "Détection de silence"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr "Activer la détection active de voix (réduit la bande passante utilisée)"
+msgstr ""
+"Activer la détection active de voix (réduit la bande passante utilisée)"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
@@ -428,7 +442,8 @@ msgid "Media quality"
 msgstr "Qualité du média"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualité du flux média (à ne modifier que si vous savez exactement ce que "
 "vous faites)"
@@ -451,20 +466,19 @@ msgstr "Un ptime plus petit réduit la latence"
 
 msgctxt "echo_cancellation_tail"
 msgid "Echo cancellation tail"
-msgstr "Longueur d'annulation de l'echo"
+msgstr "Longueur d'annulation de l'écho"
 
 msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "Longueur de la trainée sur laquelle appliquer l'annulation d'écho"
 
-#, fuzzy
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr "Mode expert"
+msgstr "Mode de l'écho"
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
-msgstr ""
+msgstr "Algorithme pour réduire l'écho"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
@@ -516,18 +530,50 @@ msgstr "Ne changer ceci que si les développeurs vous le conseillent"
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
-msgstr ""
+msgstr "File d'entrée / sortie"
 
 msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
-msgstr ""
+msgstr "Activer la file entrée / sortie"
 
 msgctxt "set_audio_generate_tone"
 msgid "Tone hack"
-msgstr ""
+msgstr "Hack de la tonalité"
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
+msgstr "Générer une tonalité avant d'effectuer un appel"
+
+msgctxt "narrow_band"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "wide_band"
+msgid "Wideband"
+msgstr ""
+
+msgctxt "band_for_wifi"
+msgid "Band type for wifi"
+msgstr ""
+
+msgctxt "band_for_3g"
+msgid "Band type for 3G"
+msgstr ""
+
+msgctxt "band_for_gprs"
+msgid "Band type for GPRS"
+msgstr ""
+
+msgctxt "band_for_edge"
+msgid "Band type for EDGE"
+msgstr ""
+
+msgctxt "band_for_other"
+msgid "Band type for other"
+msgstr ""
+
+msgctxt "codecs_band_types"
+msgid "Connections bandwidth types for codecs"
 msgstr ""
 
 #. UI
@@ -549,11 +595,11 @@ msgstr "Activer l'intégration"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Quand un appel est initié partout dans Android il vous sera demandé si "
-"vous voulez utiliser le GSM ou le SIP"
+"Quand un appel est initié partout dans Android il vous sera demandé si vous "
+"voulez utiliser le GSM ou le SIP"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -562,8 +608,7 @@ msgstr "Intégrations au journal d'appel"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"Les appels SIP seront rajoutés (si possible) aux journaux d'appels "
-"d'Android"
+"Les appels SIP seront rajoutés (si possible) aux journaux d'appels d'Android"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -614,8 +659,7 @@ msgstr "Utiliser le verouillage CPU"
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"S'assurer que le CPU tourne toujours pour l'application (utilise la "
-"batterie)"
+"S'assurer que le CPU tourne toujours pour l'application (utilise la batterie)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -651,13 +695,20 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Eviter la rotation de l'écran et rester en mode portrait"
 
-#, fuzzy
 msgctxt "gsm_integration_type"
 msgid "Mobile phone integration"
-msgstr "Activer l'intégration"
+msgstr "Intégration au mobile"
 
 msgctxt "gsm_integration_type_desc"
 msgid "How the application uses your mobile phone (or not)"
+msgstr "Comment l'application utilise votre ligne mobile (ou pas)"
+
+msgctxt "invert_proximity_sensor"
+msgid "Invert proximity sensor"
+msgstr ""
+
+msgctxt "invert_proximity_sensor_desc"
+msgid "May help on some devices when manufacturer inverted near and far"
 msgstr ""
 
 #. Fast settings
@@ -718,11 +769,11 @@ msgstr "Disponible seulement si le SIP est actuellement enregistré"
 #. Calls settings
 msgctxt "auto_record_calls"
 msgid "Auto record calls"
-msgstr ""
+msgstr "Enregistrer automatiquement les appels"
 
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
-msgstr ""
+msgstr "Enregistrer dès que l'appel est connecté"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
@@ -731,20 +782,4 @@ msgstr "Mode expert"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Mode avancé"
-
-#~ msgctxt "stun_server"
-#~ msgid "STUN server"
-#~ msgstr "Serveur STUN"
-
-#~ msgctxt "stun_server_desc"
-#~ msgid "STUN server (HOST:PORT)"
-#~ msgstr "Server STUN (hôte:port)"
-
-#~ msgctxt "gsm_integration_type"
-#~ msgid "Integration type with GSM"
-#~ msgstr ""
-
-#~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How the application use GSM (or not)"
-#~ msgstr ""
 

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="description_image_button_one">bir</string>
+  <string name="description_image_button_two">iki</string>
+  <string name="description_image_button_three">üç</string>
+  <string name="description_image_button_four">dört</string>
+  <string name="description_image_button_five">beş</string>
+  <string name="description_image_button_six">altı</string>
+  <string name="description_image_button_seven">yedi</string>
+  <string name="description_image_button_eight">sekiz</string>
+  <string name="description_image_button_nine">dokuz</string>
+  <string name="description_image_button_star">yıldız</string>
+  <string name="description_image_button_zero">sıfır</string>
+  <string name="description_image_button_pound">pound</string>
+  <string name="description_dial_button">çevir</string>
+  <string name="description_delete_button">geri tuşu</string>
+</resources>

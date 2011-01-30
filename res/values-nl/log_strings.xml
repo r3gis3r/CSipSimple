@@ -1,9 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="unknown">Onbekend</string>
   <string name="type_incoming">Inkomend</string>
   <string name="type_outgoing">Uitgaand</string>
   <string name="type_missed">Gemist</string>
   <string name="callBack">Terugbellen</string>
   <string name="callAgain">Opnieuw bellen</string>
+  <string name="returnCall">Gesprek teruggeven</string>
+  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" min "<xliff:g id="seconds" example="28">%s</xliff:g>" sec"</string>
 </resources>

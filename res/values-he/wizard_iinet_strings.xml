@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_iinet_state">מדינה</string>
+  <string name="w_iinet_state_desc">המדינה הרלוונטית מתוך הרשימה הבאה</string>
+  <string name="w_iinet_username">מספר טלפון VOIP</string>
+  <string name="w_iinet_username_desc">הסר כל עיצוב כגון רווחים ומקפים</string>
+  <string name="w_iinet_password">סיסמה מיוחדת VoIP</string>
+  <string name="w_iinet_password_desc">לא אותו דבר כמו סיסמת החיבור</string>
+</resources>

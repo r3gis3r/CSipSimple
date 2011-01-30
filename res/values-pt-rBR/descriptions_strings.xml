@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="description_image_button_one">um</string>
+  <string name="description_image_button_two">dois</string>
+  <string name="description_image_button_three">três</string>
+  <string name="description_image_button_four">quatro</string>
+  <string name="description_image_button_five">cinco</string>
+  <string name="description_image_button_six">seis</string>
+  <string name="description_image_button_seven">sete</string>
+  <string name="description_image_button_eight">oito</string>
+  <string name="description_image_button_nine">nove</string>
+  <string name="description_image_button_star">asterisco</string>
+  <string name="description_image_button_zero">zero</string>
+  <string name="description_image_button_pound">Sustenido</string>
+  <string name="description_dial_button">discar</string>
+  <string name="description_delete_button">Apagar</string>
+  <string name="description_digits_edittext">Número a discar</string>
+</resources>

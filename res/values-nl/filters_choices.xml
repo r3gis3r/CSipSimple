@@ -1,2 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string-array name="filters_action">
+    <item>Kan niet bellen</item>
+    <item>Herschrijf</item>
+    <item>Stop verwerking</item>
+    <item>Directe oproep</item>
+    <item>Auto antwoord</item>
+  </string-array>
+  <string-array name="filters_type">
+    <item>Begint met</item>
+    <item>Eindigt met</item>
+    <item>Bevat</item>
+    <item>Alle</item>
+    <item>Heeft precies N cijfers</item>
+    <item>Heeft meer dan N cijfers</item>
+    <item>Is precies</item>
+    <item>Maatwerk RegExp</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>Prefix met</item>
+    <item>Suffix met</item>
+    <item>Vervang gevonden door</item>
+    <item>Vervang alles door</item>
+    <item>Maatwerk reguliere expressie</item>
+  </string-array>
+</resources>

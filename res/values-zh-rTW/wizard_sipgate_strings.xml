@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_sipgate_display_name">帳戶名</string>
+  <string name="w_sipgate_display_name_desc">此帳戶之顯示名稱</string>
+  <string name="w_sipgate_username">SIP-ID</string>
+  <string name="w_sipgate_username_desc">"不同於您的 sipgate 登入名!  請上 sipgate 網站確認您的 SIP-ID."</string>
+  <string name="w_sipgate_password">SIP 密碼</string>
+  <string name="w_sipgate_password_desc">"不同於您的密碼!  請上 sipgate 網站確認您的 SIP 密碼."</string>
+  <string name="w_sipgate_server_desc">有如這樣 : sipgate.co.uk</string>
+</resources>

@@ -1,4 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-
+  <string-array name="filters_action">
+    <item>Ne pas appeler</item>
+    <item>Réécrire</item>
+    <item>Arrêter de traiter</item>
+    <item>Appel directement</item>
+    <item>Répondre automatiquement</item>
+  </string-array>
+  <string-array name="filters_type">
+    <item>Commence avec</item>
+    <item>Fini avec</item>
+    <item>Contient</item>
+    <item>Tous</item>
+    <item>A exactement N chiffre(s)</item>
+    <item>A plus de N chiffre(s)</item>
+    <item>Est exactement</item>
+    <item>RegExp personnalisée</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>Préfixé avec</item>
+    <item>Suffixer avec</item>
+    <item>Remplacer la correspondance par</item>
+    <item>Tout remplacer par</item>
+    <item>Expression rationnelle personalisée</item>
+  </string-array>
 </resources>

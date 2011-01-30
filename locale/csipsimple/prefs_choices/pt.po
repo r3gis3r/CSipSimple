@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the CSipSimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt <LL@li.org>\n"
@@ -64,97 +63,105 @@ msgstr "Mandatório"
 
 msgctxt "dtmf_mode_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automático"
 
 msgctxt "dtmf_mode_choices:1"
 msgid "RTP"
-msgstr ""
+msgstr "RTP"
 
 msgctxt "dtmf_mode_choices:2"
 msgid "In band generation"
-msgstr ""
+msgstr "Geração em banda"
 
 msgctxt "dtmf_mode_choices:3"
 msgid "SIP INFO"
-msgstr ""
+msgstr "SIP INFO"
 
 msgctxt "contact_rewrite_method_choices:0"
 msgid "Legacy"
-msgstr ""
+msgstr "Legado"
 
 msgctxt "contact_rewrite_method_choices:1"
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgctxt "transport_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automático"
 
 msgctxt "transport_choices:1"
 msgid "UDP"
-msgstr ""
+msgstr "UDP"
 
 msgctxt "transport_choices:2"
 msgid "TCP"
-msgstr ""
+msgstr "TCP"
 
 msgctxt "transport_choices:3"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "tls_method_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automático"
 
 msgctxt "tls_method_choices:1"
 msgid "TLSv1"
-msgstr ""
+msgstr "TLSv1"
 
 msgctxt "tls_method_choices:2"
 msgid "SSLv2"
-msgstr ""
+msgstr "SSLv2"
 
 msgctxt "tls_method_choices:3"
 msgid "SSL3"
-msgstr ""
+msgstr "SSL#"
 
 msgctxt "tls_method_choices:4"
 msgid "SSL23"
-msgstr ""
+msgstr "SSL23"
 
 msgctxt "gsm_integration_type_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automático"
 
 msgctxt "gsm_integration_type_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Forçar"
 
 msgctxt "gsm_integration_type_choices:2"
 msgid "Prevent"
-msgstr ""
+msgstr "Prevenir"
 
 msgctxt "echo_mode_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automático"
 
 msgctxt "echo_mode_choices:1"
 msgid "Speex"
-msgstr ""
+msgstr "Speex"
 
 msgctxt "echo_mode_choices:2"
 msgid "Simple"
-msgstr ""
+msgstr "Simples"
 
 msgctxt "dial_press_mode_choices:0"
 msgid "Use Android setting"
-msgstr ""
+msgstr "Usar configurações do Android"
 
 msgctxt "dial_press_mode_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Forçar"
 
 msgctxt "dial_press_mode_choices:2"
 msgid "Prevent"
+msgstr "Prevenir"
+
+msgctxt "band_types_name:0"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "band_types_name:1"
+msgid "Wideband"
 msgstr ""
 

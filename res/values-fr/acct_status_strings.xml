@@ -4,7 +4,7 @@
   <string name="acct_unregistered">Non enregistré</string>
   <string name="acct_expired">Enregistrement expiré</string>
   <string name="acct_registering">Enregistrement...</string>
-  <string name="acct_registered">Enregistré</string>
+  <string name="acct_registered">Enregistré</string>
   <string name="acct_regerror">Erreur lors de l\'enregistrement</string>
   <string name="acct_regfailed">Echec d\'enregistrement - Vérifiez votre configuration</string>
 </resources>

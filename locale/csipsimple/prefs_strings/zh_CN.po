@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-11-30 02:23+0000\n"
 "Last-Translator: Larry Li <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
@@ -238,10 +238,9 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "打开 STUN 特性"
 
-#, fuzzy
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr "TRUN 服务器"
+msgstr ""
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
@@ -255,7 +254,6 @@ msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
 msgstr "开启数据包 QoS"
 
-#, fuzzy
 msgctxt "dscp_val"
 msgid "DSCP value"
 msgstr "DSCP 值"
@@ -263,6 +261,18 @@ msgstr "DSCP 值"
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
 msgstr "SIP 传输的 DSCP 值"
+
+msgctxt "keep_alive_interval_wifi"
+msgid "Wifi keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_mobile"
+msgid "Mobile keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_desc"
+msgid "Interval (sec) for KA packets"
+msgstr ""
 
 #. Security
 msgctxt "tls"
@@ -427,7 +437,8 @@ msgid "Media quality"
 msgstr "媒体品质"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 
 msgctxt "snd_clock_rate"
@@ -454,10 +465,9 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr ""
 
-#, fuzzy
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr "专家模式"
+msgstr ""
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
@@ -523,6 +533,38 @@ msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
 msgstr ""
 
+msgctxt "narrow_band"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "wide_band"
+msgid "Wideband"
+msgstr ""
+
+msgctxt "band_for_wifi"
+msgid "Band type for wifi"
+msgstr ""
+
+msgctxt "band_for_3g"
+msgid "Band type for 3G"
+msgstr ""
+
+msgctxt "band_for_gprs"
+msgid "Band type for GPRS"
+msgstr ""
+
+msgctxt "band_for_edge"
+msgid "Band type for EDGE"
+msgstr ""
+
+msgctxt "band_for_other"
+msgid "Band type for other"
+msgstr ""
+
+msgctxt "codecs_band_types"
+msgid "Connections bandwidth types for codecs"
+msgstr ""
+
 #. UI
 msgctxt "general_ui"
 msgid "General user interface"
@@ -542,8 +584,8 @@ msgstr ""
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
 
 msgctxt "integrate_with_native_calllogs"
@@ -608,7 +650,7 @@ msgstr "日志级别"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr ""
+msgstr "调试日志等级，介于 0 (关闭) 和 5 (详尽) 之间。"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
@@ -640,6 +682,14 @@ msgstr ""
 
 msgctxt "gsm_integration_type_desc"
 msgid "How the application uses your mobile phone (or not)"
+msgstr ""
+
+msgctxt "invert_proximity_sensor"
+msgid "Invert proximity sensor"
+msgstr ""
+
+msgctxt "invert_proximity_sensor_desc"
+msgid "May help on some devices when manufacturer inverted near and far"
 msgstr ""
 
 #. Fast settings
@@ -711,20 +761,4 @@ msgstr "专家模式"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "高级模式"
-
-#~ msgctxt "stun_server"
-#~ msgid "STUN server"
-#~ msgstr "STUN 服务器"
-
-#~ msgctxt "stun_server_desc"
-#~ msgid "STUN server (HOST:PORT)"
-#~ msgstr "STUN 服务器 (域名:端口)"
-
-#~ msgctxt "gsm_integration_type"
-#~ msgid "Integration type with GSM"
-#~ msgstr ""
-
-#~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How the application use GSM (or not)"
-#~ msgstr ""
 

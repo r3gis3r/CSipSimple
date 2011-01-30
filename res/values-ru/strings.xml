@@ -18,10 +18,13 @@
   <string name="choose_wizard">Выбрать мастера настроек</string>
   <string name="use">Использовать :</string>
   <string name="use_pstn">Мобильный</string>
+  <string name="use_skype">Использовать Skype</string>
   <string name="ongoing_call">Набор номера</string>
   <string name="missed_call">Пропущенные звонки</string>
   <string name="recentCalls_empty">Нет вызовов</string>
   <string name="filters">Фильтры</string>
+  <string name="filters_desc">"Для применения при использовании интеграции с  Android"</string>
+  <string name="filters_for">Фильтры для</string>
   <string name="add_filter">Добавить фильтр / изменить правило</string>
   <string name="delete_filter">Удалить фильтр</string>
   <string name="callLog_delete_entry">Удалить из списка вызовов</string>
@@ -38,6 +41,8 @@
   <string name="service_ticker_registered_text">SIP зарегистрирован</string>
   <string name="outgoing_call_chooser_call_text">Вызов</string>
   <string name="reorder">Изменить порядок</string>
+  <string name="backup_restore">Сохранить/Восстановить</string>
+  <string name="backup">Сохранить</string>
   <string name="faq">FAQ</string>
   <string name="help">Помощь</string>
   <string name="record_logs">Записать лог и отчет об ошибке для отправки разработчику</string>
@@ -54,5 +59,8 @@
   <string name="display_icon_in_status_bar_desc">В панеле уведомлений будет показана иконка при регистрации в сети</string>
   <string name="display_icon_in_status_bar">Показывать иконку</string>
   <string name="another_application_use_sip_port">SIP порт занят другим приложением. Невозможно запустить!</string>
+  <string name="choose_phone">Выберите</string>
   <string name="no_phone_found">Для данного контакта не найден номер телефона</string>
+  <string name="show_password">Показать пароль</string>
+  <string name="this_codec_is_not_free">**Этот кодек не бесплатен!!!**\nПожалуйста, убедитесь, что кто-то (ваш SIP провайдера или вы сами) приобрели лицензию, которая позволяет использовать этот кодек! Мы (как дистрибьюторы приложения) не несём ответственности за незаконное использование данного кодека.\nОставляем на ваше усмотрение, что вы имеете право использовать этот кодек.\nСсылка для приобретения:</string>
 </resources>

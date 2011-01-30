@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-10 11:42+0000\n"
 "Last-Translator: Gianluca <Unknown>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -238,14 +238,13 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "Attiva funzionalità STUN"
 
-#, fuzzy
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr "Turn server"
+msgstr "STUN servers"
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
-msgstr ""
+msgstr "STUN servers (HOST[:PORT], ...)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
@@ -262,6 +261,18 @@ msgstr "Valore DSCP"
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
 msgstr "Valore DSCP per il traffico SIP"
+
+msgctxt "keep_alive_interval_wifi"
+msgid "Wifi keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_mobile"
+msgid "Mobile keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_desc"
+msgid "Interval (sec) for KA packets"
+msgstr ""
 
 #. Security
 msgctxt "tls"
@@ -426,7 +437,8 @@ msgid "Media quality"
 msgstr "Qualità audio"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Qualità dell'audio (modifica solo se sai cosa stai facendo)"
 
 msgctxt "snd_clock_rate"
@@ -453,14 +465,13 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "Lunghezza della coda di cancellazione dell'eco"
 
-#, fuzzy
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr "Modalità esperto"
+msgstr "Modalità eco"
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
-msgstr ""
+msgstr "Algoritmo per l'eco"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
@@ -512,18 +523,50 @@ msgstr "Cambia solo su suggerimento degli sviluppatori"
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
-msgstr ""
+msgstr "Coda IO"
 
 msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
-msgstr ""
+msgstr "Attiva Coda per input/output"
 
 msgctxt "set_audio_generate_tone"
 msgid "Tone hack"
-msgstr ""
+msgstr "Tone hack"
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
+msgstr "Genera un tono prima di fare le chiamate"
+
+msgctxt "narrow_band"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "wide_band"
+msgid "Wideband"
+msgstr ""
+
+msgctxt "band_for_wifi"
+msgid "Band type for wifi"
+msgstr ""
+
+msgctxt "band_for_3g"
+msgid "Band type for 3G"
+msgstr ""
+
+msgctxt "band_for_gprs"
+msgid "Band type for GPRS"
+msgstr ""
+
+msgctxt "band_for_edge"
+msgid "Band type for EDGE"
+msgstr ""
+
+msgctxt "band_for_other"
+msgid "Band type for other"
+msgstr ""
+
+msgctxt "codecs_band_types"
+msgid "Connections bandwidth types for codecs"
 msgstr ""
 
 #. UI
@@ -545,11 +588,11 @@ msgstr "Integrazione dialer"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Quando componi il numero con il dialer nativo ti verrà chiesto se vuoi "
-"usare SIP o GSM"
+"Quando componi il numero con il dialer nativo ti verrà chiesto se vuoi usare "
+"SIP o GSM"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -591,7 +634,8 @@ msgstr "Non usare risposta con scorrimento"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr "Usa i bottoni invece dello slide per accettare le chiamate in ingresso"
+msgstr ""
+"Usa i bottoni invece dello slide per accettare le chiamate in ingresso"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
@@ -600,8 +644,8 @@ msgstr "Resta attivo durante una chiamata"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corregge se si ottiene suono disturbato quando lo schermo si spegne "
-"durante una chiamata WIFI"
+"Corregge se si ottiene suono disturbato quando lo schermo si spegne durante "
+"una chiamata WIFI"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -610,8 +654,8 @@ msgstr "Usa partial wake lock"
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"Assicura che la CPU è sempre in esecuzione per l'applicazione (scarica la"
-" batteria)"
+"Assicura che la CPU è sempre in esecuzione per l'applicazione (scarica la "
+"batteria)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -647,13 +691,20 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Evita la rotazione dello schermo e mantieni la modalità verticale"
 
-#, fuzzy
 msgctxt "gsm_integration_type"
 msgid "Mobile phone integration"
-msgstr "Integrazione dialer"
+msgstr "Integrazione con il cellulare"
 
 msgctxt "gsm_integration_type_desc"
 msgid "How the application uses your mobile phone (or not)"
+msgstr "Come l'applicazione usa il tuo cellulare (o no)"
+
+msgctxt "invert_proximity_sensor"
+msgid "Invert proximity sensor"
+msgstr ""
+
+msgctxt "invert_proximity_sensor_desc"
+msgid "May help on some devices when manufacturer inverted near and far"
 msgstr ""
 
 #. Fast settings
@@ -675,7 +726,8 @@ msgstr "Sempre disponbile"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr "Utilizzerà la batteria ma le chiamate in ingresso sono sempre ricevibili"
+msgstr ""
+"Utilizzerà la batteria ma le chiamate in ingresso sono sempre ricevibili"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
@@ -704,8 +756,8 @@ msgstr "Mi è consentito usare la connessione dati mobile"
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
 msgstr ""
-"Il tuo operatore telefonico permette l'uso della connessione dati mobile "
-"per il VoIP"
+"Il tuo operatore telefonico permette l'uso della connessione dati mobile per "
+"il VoIP"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
@@ -714,11 +766,11 @@ msgstr "Disponibile solo se sip è registrato"
 #. Calls settings
 msgctxt "auto_record_calls"
 msgid "Auto record calls"
-msgstr ""
+msgstr "Registra automaticamente le chiamate"
 
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
-msgstr ""
+msgstr "Registra le chiamate appena connesso"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
@@ -727,20 +779,4 @@ msgstr "Modalità esperto"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Modalità avanzata"
-
-#~ msgctxt "stun_server"
-#~ msgid "STUN server"
-#~ msgstr "STUN server"
-
-#~ msgctxt "stun_server_desc"
-#~ msgid "STUN server (HOST:PORT)"
-#~ msgstr "STUN server (HOST:PORT)"
-
-#~ msgctxt "gsm_integration_type"
-#~ msgid "Integration type with GSM"
-#~ msgstr ""
-
-#~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How the application use GSM (or not)"
-#~ msgstr ""
 

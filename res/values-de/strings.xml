@@ -30,6 +30,8 @@
   <string name="gsm">GSM</string>
   <string name="dial_tab_name_text">Telefon</string>
   <string name="calllog_tab_name_text">Anrufliste</string>
+  <string name="messages_tab_name_text">Nachrichten</string>
+  <string name="menu_disconnect">Abmelden</string>
   <string name="service_ticker_registered_text">SIP registriert</string>
   <string name="outgoing_call_chooser_call_text">Wähle</string>
   <string name="reorder">Sortieren</string>
@@ -39,4 +41,8 @@
   <string name="misc">Sonstiges</string>
   <string name="warning">ACHTUNG</string>
   <string name="disconnect_and_will_restart">"Startet automatisch erneut sobald "<xliff:g id="networks" example="3G">%s</xliff:g>" zur Verfügung steht (Einstellungen ändern falls nicht gewünscht)"</string>
+  <string name="search_in_contacts">Kontakte suchen</string>
+  <string name="display_icon_in_status_bar_desc">Icon in der Statuszeile anzeigen, wenn ein SIP-Account registriert ist</string>
+  <string name="display_icon_in_status_bar">Platziere ein Icon in der Statuszeile</string>
+  <string name="another_application_use_sip_port">Eine andere Anwendung belegt den SIP-Port. Kann deshalb nicht starten!</string>
 </resources>

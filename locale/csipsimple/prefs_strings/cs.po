@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
 "POT-Creation-Date: 2010-12-30 15:22+0100\n"
-"PO-Revision-Date: 2010-10-21 23:27+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-01-28 11:32+0000\n"
+"Last-Translator: Libor Tesař <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
@@ -36,7 +36,7 @@ msgstr "Síť"
 
 msgctxt "prefs_network_desc"
 msgid "How SIP can be connected to the network"
-msgstr ""
+msgstr "Jak může být SIP připojen k síti"
 
 msgctxt "prefs_media"
 msgid "Media"
@@ -56,11 +56,11 @@ msgstr "Nastavte podrobnosti uživatelského rozhraní"
 
 msgctxt "prefs_calls"
 msgid "Calls options"
-msgstr ""
+msgstr "Nastavení volání"
 
 msgctxt "prefs_calls_desc"
 msgid "Options related to calls"
-msgstr ""
+msgstr "Možnosti vztahující se k volání"
 
 #. Network
 msgctxt "for_incomings"
@@ -77,11 +77,11 @@ msgstr "Výkon"
 
 msgctxt "transport"
 msgid "Transport"
-msgstr ""
+msgstr "Přenos"
 
 msgctxt "transport_desc"
 msgid "Force the use of a transport for this account"
-msgstr ""
+msgstr "Vynucení použití přenosu pro tento účet"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -161,7 +161,7 @@ msgstr "UDP Port"
 
 msgctxt "network_udp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Číslo portu vázat místně"
 
 msgctxt "network_tcp_transport_port"
 msgid "TCP Port"
@@ -169,7 +169,7 @@ msgstr "TCP port"
 
 msgctxt "network_tcp_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Číslo portu vázat místně"
 
 msgctxt "network_rtp_port"
 msgid "RTP port"
@@ -177,7 +177,7 @@ msgstr "RTP port"
 
 msgctxt "network_rtp_port_desc"
 msgid "Port for RTP ports range start"
-msgstr ""
+msgstr "počátečni port RTP"
 
 msgctxt "use_ipv6"
 msgid "Use IPv6"
@@ -189,11 +189,11 @@ msgstr "Přepnout na IPv6 (síť i telefon musí IPv6 podporovat)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
-msgstr ""
+msgstr "Zapnutí DNS serveru"
 
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
-msgstr ""
+msgstr "Použít aplikaci resolver k překladu DNS"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
@@ -201,84 +201,96 @@ msgstr "Použít vlastní DNS"
 
 msgctxt "override_nameserver_desc"
 msgid "Left blank to retrieve DNS from Android"
-msgstr ""
+msgstr "získat DNS z Android"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
-msgstr ""
+msgstr "průchod NAR"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
-msgstr ""
+msgstr "Zapnout ICE"
 
 msgctxt "enable_ice_desc"
 msgid "Turn on ICE feature"
-msgstr ""
+msgstr "Zapnout ICE funkce"
 
 msgctxt "enable_turn"
 msgid "Enable TURN"
-msgstr ""
+msgstr "Zapnutí TURN"
 
 msgctxt "enable_turn_desc"
 msgid "Turn on TURN feature"
-msgstr ""
+msgstr "Zapnutí funkcí TURN"
 
 msgctxt "turn_server"
 msgid "Turn server"
-msgstr ""
+msgstr "Turn server"
 
 msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
-msgstr ""
+msgstr "TURN server (HOST:PORT)"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
-msgstr ""
+msgstr "Zapnout STUN"
 
 msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
-msgstr ""
+msgstr "Zapnout STUN funkce"
 
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr ""
+msgstr "STUN servery"
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
-msgstr ""
+msgstr "STUN servery (HOST[:PORT], ...)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr ""
+msgstr "Zapnout Qos"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
-msgstr ""
+msgstr "Zapnout Qos paketů"
 
 msgctxt "dscp_val"
 msgid "DSCP value"
-msgstr ""
+msgstr "hodnota DSCP"
 
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
+msgstr "DSCP hodnota pro Sip komunikaci"
+
+msgctxt "keep_alive_interval_wifi"
+msgid "Wifi keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_mobile"
+msgid "Mobile keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_desc"
+msgid "Interval (sec) for KA packets"
 msgstr ""
 
 #. Security
 msgctxt "tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "secure_transport"
 msgid "Secure transport"
-msgstr ""
+msgstr "zabezpečit transport"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
-msgstr ""
+msgstr "zabezpečovací mechanismus pro sip a rtp"
 
 msgctxt "secure_media"
 msgid "Secure media"
-msgstr ""
+msgstr "zabezpečení média"
 
 msgctxt "network_tls_transport_port"
 msgid "TLS Port"
@@ -286,79 +298,79 @@ msgstr "TLS Port"
 
 msgctxt "network_tls_transport_port_desc"
 msgid "Port number to bind locally"
-msgstr ""
+msgstr "Číslo portu vázat místně"
 
 msgctxt "network_tls_server_name"
 msgid "TLS server name"
-msgstr ""
+msgstr "Název serveru TLS"
 
 msgctxt "network_tls_server_name_desc"
 msgid "For multi-hosting server (optional)"
-msgstr ""
+msgstr "Pro multi hostingové servery"
 
 msgctxt "ca_list_file"
 msgid "TLS CA file"
-msgstr ""
+msgstr "TLS CA soubor"
 
 msgctxt "ca_list_file_desc"
 msgid "For example /sdcard/CSipSimple/myAuthority.ca"
-msgstr ""
+msgstr "Například /sdcard/CSipSimple/myAuthority.ca"
 
 msgctxt "cert_file"
 msgid "TLS certificate file"
-msgstr ""
+msgstr "TLS certifikační soubor"
 
 msgctxt "cert_file_desc"
 msgid "For example /sdcard/CSipSimple/myCert.crt"
-msgstr ""
+msgstr "Například /sdcard/CSipSimple/myCert.crt"
 
 msgctxt "privkey_file"
 msgid "TLS private key file"
-msgstr ""
+msgstr "TLS soubor privátních klíčů"
 
 msgctxt "privkey_file_desc"
 msgid "For example /sdcard/CSipSimple/myKey.key"
-msgstr ""
+msgstr "Například /sdcard/CSipSimple/myKey.key"
 
 msgctxt "tls_password"
 msgid "TLS password"
-msgstr ""
+msgstr "TLS Heslo"
 
 msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
-msgstr ""
+msgstr "TLS heslo pro soubor privátních klíčů"
 
 msgctxt "verify_server"
 msgid "Check server"
-msgstr ""
+msgstr "zkontrolovat server"
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
-msgstr ""
+msgstr "Zkontrolovat certifikát serveru"
 
 msgctxt "verify_client"
 msgid "Check client"
-msgstr ""
+msgstr "Zkontroluj klienta"
 
 msgctxt "verify_client_desc"
 msgid "Verify client's certificate"
-msgstr ""
+msgstr "Zkontroluj klientský certifikát"
 
 msgctxt "tls_method"
 msgid "TLS Method"
-msgstr ""
+msgstr "Metoda TLS"
 
 msgctxt "tls_method_desc"
 msgid "Method for TLS transport"
-msgstr ""
+msgstr "Metoda pro TLS přenos"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
-msgstr ""
+msgstr "SRTP mod"
 
 msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
-msgstr ""
+msgstr "Mód pro zabezpečený RTP"
 
 #. Media
 msgctxt "audio_quality"
@@ -367,7 +379,7 @@ msgstr "Kvalita zvuku"
 
 msgctxt "audio_volume"
 msgid "Volume"
-msgstr ""
+msgstr "Hlasitost"
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -375,7 +387,7 @@ msgstr "Kodeky"
 
 msgctxt "echo_cancellation"
 msgid "Echo cancellation"
-msgstr ""
+msgstr "Potlačení echa"
 
 msgctxt "echo_cancellation_desc"
 msgid "Activate echo cancellation"
@@ -383,346 +395,374 @@ msgstr "Aktivuje funkce pro potlačení echa"
 
 msgctxt "enable_vad"
 msgid "Voice audio detection"
-msgstr ""
+msgstr "detekce hlasu"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr ""
+msgstr "aktivace hlasové detekc"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
-msgstr ""
+msgstr "zesílení mikrofonu"
 
 msgctxt "snd_mic_level_desc"
 msgid "Adjust the micro signal level (1 do nothing)"
-msgstr ""
+msgstr "nastavení úrovně signálu mikrofonu"
 
 msgctxt "snd_speaker_level"
 msgid "Speaker amplification"
-msgstr ""
+msgstr "zesíleni reproduktoru"
 
 msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
-msgstr ""
+msgstr "nastavení úrovně signálu reproduktoru"
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
-msgstr ""
+msgstr "počáteční úroveň proudu"
 
 msgctxt "snd_stream_level_desc"
 msgid "Set the initial level for audio stream (Android stream)"
-msgstr ""
+msgstr "nastavení počáteční úrovně  pro audio proud"
 
 msgctxt "snd_auto_close_time"
 msgid "Auto close time"
-msgstr ""
+msgstr "automatický čas zavření"
 
 msgctxt "snd_auto_close_time_desc"
 msgid "Time to wait for close audio channel"
-msgstr ""
+msgstr "Čas k čekáni na zavření audio kanálu"
 
 msgctxt "snd_media_quality"
 msgid "Media quality"
-msgstr ""
+msgstr "Kvalita média"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
-msgstr ""
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
+msgstr "Kvalita proudu média"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
-msgstr ""
+msgstr "taktovací frekvence"
 
 msgctxt "snd_clock_rate_desc"
 msgid "Audio channel frequency"
-msgstr ""
+msgstr "Audio frekvence kanálu"
 
 msgctxt "snd_ptime"
 msgid "Frame ptime"
-msgstr ""
+msgstr "Počet rámců za sekundu"
 
 msgctxt "snd_ptime_desc"
 msgid "Specifying lower ptime will normally reduce the latency"
-msgstr ""
+msgstr "Zadání nižšího času , bude normálně redukována latence"
 
 msgctxt "echo_cancellation_tail"
 msgid "Echo cancellation tail"
-msgstr ""
+msgstr "Zamezení dozvuku echa"
 
 msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
-msgstr ""
+msgstr "délka dozvuku v zamezení echa"
 
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr ""
+msgstr "Echo mód"
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
-msgstr ""
+msgstr "Algoritmus pro echo"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
-msgstr ""
+msgstr "Priorita"
 
 msgctxt "sip_dtmf"
 msgid "DTMF mode"
-msgstr ""
+msgstr "DTMF mód"
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
-msgstr ""
+msgstr "Jak poslat DTMF"
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
-msgstr ""
+msgstr "Použít softwarovou hlasitost"
 
 msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
-msgstr ""
+msgstr "Použít softwarovou hlasitost místo hlasitosti androidu"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
-msgstr ""
+msgstr "Použít routování API"
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr ""
+msgstr "zkusit zapnout zvuk z reproduktoru do sluchátek"
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
-msgstr ""
+msgstr "Použít mód zvuku API"
 
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr ""
+msgstr "zkusit zapnout zvuk z reproduktoru do sluchátek"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
-msgstr ""
+msgstr "Audio mód pro Sip volání"
 
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
-msgstr ""
+msgstr "Změnit pouze tehdy, pokud vývojáři poradí."
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
-msgstr ""
+msgstr "vstupní/výstupní fronta"
 
 msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
-msgstr ""
+msgstr "Aktivovat frontu pro vstup/výstup"
 
 msgctxt "set_audio_generate_tone"
 msgid "Tone hack"
-msgstr ""
+msgstr "Zaseknutí tónu"
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
+msgstr "Generovat tón před vytvořením hovoru"
+
+msgctxt "narrow_band"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "wide_band"
+msgid "Wideband"
+msgstr ""
+
+msgctxt "band_for_wifi"
+msgid "Band type for wifi"
+msgstr ""
+
+msgctxt "band_for_3g"
+msgid "Band type for 3G"
+msgstr ""
+
+msgctxt "band_for_gprs"
+msgid "Band type for GPRS"
+msgstr ""
+
+msgctxt "band_for_edge"
+msgid "Band type for EDGE"
+msgstr ""
+
+msgctxt "band_for_other"
+msgid "Band type for other"
+msgstr ""
+
+msgctxt "codecs_band_types"
+msgid "Connections bandwidth types for codecs"
 msgstr ""
 
 #. UI
 msgctxt "general_ui"
 msgid "General user interface"
-msgstr ""
+msgstr "Obecné uživatelské rozhraní"
 
 msgctxt "native_dialer_integration"
 msgid "Native dialer integration"
-msgstr ""
+msgstr "Nativní integrace vytáčení"
 
 msgctxt "advanced_ui"
 msgid "Advanced tweaks"
-msgstr ""
+msgstr "Pokročilé vychztávky"
 
 msgctxt "integrate_with_native_dialer"
 msgid "Dialer integration"
-msgstr ""
+msgstr "Integrace vytáčení"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
+"Při vytáčení z telefonu se dotázat zda chcete použít sip nebo mobilní telefon"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
-msgstr ""
+msgstr "Integrování protokolu volání"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
-msgstr ""
+msgstr "Sip volání bude sloučeno do záznamu volání v telefonu"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
-msgstr ""
+msgstr "tóny při vytáčení"
 
 msgctxt "dial_press_tone_desc"
 msgid "Play touch tones when dialing"
-msgstr ""
+msgstr "přehrát zvuk u vytáčení"
 
 msgctxt "dial_press_vibrate"
 msgid "Dialing vibrate feedback"
-msgstr ""
+msgstr "vibrace při vytáčení"
 
 msgctxt "dial_press_vibrate_desc"
 msgid "Haptic (vibrate) feedback when dialing"
-msgstr ""
+msgstr "Hmatové odezvy při vytáčení"
 
 msgctxt "start_with_text_dialer"
 msgid "Text dialer"
-msgstr ""
+msgstr "textové vytáčení"
 
 msgctxt "start_with_text_dialer_desc"
 msgid "Start with text dialer"
-msgstr ""
+msgstr "zapnout s textovým vytáčením"
 
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr ""
+msgstr "nepoužívat zvedání hovoru tažením"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr ""
+msgstr "Použít tlačítka místo tažení pro příchozí hovory"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
-msgstr ""
+msgstr "Při hovoru je telefon připraven"
 
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
+"Opravy, pokud se dostaví trhaný zvuk, když vypnete displej, při hovoru na "
+"wifi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
-msgstr ""
+msgstr "Použít částečné probuzení"
 
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
-msgstr ""
+msgstr "využití Procesoru pro aplikaci (náročnost na baterii)"
 
 msgctxt "log_level"
 msgid "Log level"
-msgstr ""
+msgstr "úroveň přihlášení"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr ""
+msgstr "Přihlaste se úroveň pro ladění mezi 0 (žádná) a 5 (mluvících)"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
-msgstr ""
+msgstr "Integrovat s hudební aplikací"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
-msgstr ""
+msgstr "Zakázat, pokud používáte jinou hudební aplikace než  oficiální"
 
 msgctxt "ringtone"
 msgid "Ringtone"
-msgstr ""
+msgstr "Vyzváněcí tón"
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
-msgstr ""
+msgstr "Defaultní vyzváněcí tón pro sip hovory"
 
 msgctxt "prevent_screen_rotation"
 msgid "Prevent screen rotation"
-msgstr ""
+msgstr "Zabránit otočení obrazovky"
 
 msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
-msgstr ""
+msgstr "Vyhněte se rotace displeje a udržet v režimu na výšku"
 
 msgctxt "gsm_integration_type"
 msgid "Mobile phone integration"
-msgstr ""
+msgstr "integrace do mobilního telefonu"
 
 msgctxt "gsm_integration_type_desc"
 msgid "How the application uses your mobile phone (or not)"
+msgstr "Jak se aplikace používá mobilní telefon (nebo ne)"
+
+msgctxt "invert_proximity_sensor"
+msgid "Invert proximity sensor"
+msgstr ""
+
+msgctxt "invert_proximity_sensor_desc"
+msgid "May help on some devices when manufacturer inverted near and far"
 msgstr ""
 
 #. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
-msgstr ""
+msgstr "Integrovat s androidem"
 
 msgctxt "android_integration_desc"
 msgid "Integration with native dialer and call logs"
-msgstr ""
+msgstr "Integrovat s vytáčením telefonu a seznamem hovorů"
 
 msgctxt "availability_profile"
 msgid "Availability profile"
-msgstr ""
+msgstr "Dostupnost profilu"
 
 msgctxt "always_available"
 msgid "Always available"
-msgstr ""
+msgstr "Pokaždé dostupný"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr ""
+msgstr "Bude využívat baterii, ale příchozí hovory jsou vždy obdrží"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
-msgstr ""
+msgstr "Dostupnost wifi"
 
 msgctxt "wifi_available_desc"
 msgid "Availability of incoming calls based on WiFi profile"
-msgstr ""
+msgstr "Dostupnost příchozích hovorů založené na WiFi profilu"
 
 msgctxt "never_available"
 msgid "Only for outgoing"
-msgstr ""
+msgstr "Pouze pro odchozí"
 
 msgctxt "never_available_desc"
 msgid "Activate the SIP client automatically when necessary"
-msgstr ""
+msgstr "Aktivuje SIP klienta automaticky v případě potřeby"
 
 msgctxt "availability_tg"
 msgid "Mobile data availability"
-msgstr ""
+msgstr "Dostupnost mobilních dat"
 
 msgctxt "tg_allowed"
 msgid "I'm allowed to use mobile"
-msgstr ""
+msgstr "Povolil jsem používat mobil"
 
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
-msgstr ""
+msgstr "Váš operátor umožňuje VoIP přes mobilní datové připojení"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
-msgstr ""
+msgstr "Dostupná pouze v případě když SIP je zaregistrován"
 
 #. Calls settings
 msgctxt "auto_record_calls"
 msgid "Auto record calls"
-msgstr ""
+msgstr "Automatické nahrávání hovorů"
 
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
-msgstr ""
+msgstr "Nahrávání hovorů ihned po spojení"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"
-msgstr ""
+msgstr "Režim pro experty"
 
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
-msgstr ""
-
-#~ msgctxt "stun_server"
-#~ msgid "STUN server"
-#~ msgstr ""
-
-#~ msgctxt "stun_server_desc"
-#~ msgid "STUN server (HOST:PORT)"
-#~ msgstr ""
-
-#~ msgctxt "gsm_integration_type"
-#~ msgid "Integration type with GSM"
-#~ msgstr ""
-
-#~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How the application use GSM (or not)"
-#~ msgstr ""
+msgstr "Pokročilý mód"
 

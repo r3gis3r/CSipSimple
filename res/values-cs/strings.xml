@@ -1,10 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
+  <string name="next">Další</string>
+  <string name="init">Inicializace...</string>
   <string name="unable_to_download_file">Nelze stáhnout soubor</string>
   <string name="connection_not_valid">Vyprané síťové připojení není k dispozici (aktivujte WiFi nebo změňte v nastavení pravidla použití 3G sítí)</string>
   <string name="invalid_sip_uri">SIP URI je pro volání neplatné</string>
   <string name="accounts">Účty</string>
+  <string name="other_accounts">Další účty</string>
   <string name="save">Uložit</string>
   <string name="cancel">Zrušit</string>
   <string name="activate_account">Aktivovat účet</string>
@@ -15,9 +18,13 @@
   <string name="choose_wizard">Vybrat průvodce</string>
   <string name="use">Použít:</string>
   <string name="use_pstn">Použít mobilní telefon</string>
+  <string name="use_skype">POužít Skype</string>
   <string name="ongoing_call">Probíhá hovor</string>
+  <string name="missed_call">Zmeškaný hovor</string>
   <string name="recentCalls_empty">Žádné záznamy o hovorech</string>
   <string name="filters">Filtry</string>
+  <string name="filters_desc">Chcete-li použít použit integraci do Androidu</string>
+  <string name="filters_for">Filtry pro</string>
   <string name="add_filter">Přidat filtr / přepsat pravidlo</string>
   <string name="delete_filter">Smazat filtr</string>
   <string name="callLog_delete_entry">Smazat tento hovor</string>
@@ -29,6 +36,32 @@
   <string name="gsm">Mobilní telefon</string>
   <string name="dial_tab_name_text">Číselník</string>
   <string name="calllog_tab_name_text">Záznamy o hovorech</string>
+  <string name="messages_tab_name_text">Zprávy</string>
+  <string name="menu_disconnect">Odpojit</string>
   <string name="service_ticker_registered_text">SIP registrován</string>
   <string name="outgoing_call_chooser_call_text">Hovor</string>
+  <string name="reorder">Změna pořadí</string>
+  <string name="backup_restore">Záloha / Obnova</string>
+  <string name="backup">Záloha</string>
+  <string name="faq">Často kladené otázky</string>
+  <string name="help">Nápověda</string>
+  <string name="record_logs">Zaslat hlášení o chybách</string>
+  <string name="send_logs">Zastavit hlášení chyb</string>
+  <string name="view_existing_issues">Již existující problémy</string>
+  <string name="ok">OK</string>
+  <string name="misc">Různé</string>
+  <string name="warning">UPOZORNĚNÍ</string>
+  <string name="disconnect_and_incoming_explaination">konfigurace kompletní jestli chcete být k dispozici pro tuto síť! Klikněte na tlačítko OK</string>
+  <string name="disconnect_and_will_restart">"Automaticky restartovat když : "<xliff:g id="networks" example="3G">%s</xliff:g>" bude aktivní (změňte nastavení jestli nechcete )"</string>
+  <string name="gadget_title">přepínač sip účtů</string>
+  <string name="search_in_contacts">hledat v kontaktech</string>
+  <string name="pickup_sip_uri">vyzvednout sip kontakty</string>
+  <string name="display_icon_in_status_bar_desc">Zobrazení ikony na liště v případě že jste registrováni.</string>
+  <string name="display_icon_in_status_bar">Zobrazit ikonu v liště telefonu</string>
+  <string name="another_application_use_sip_port">Jiná aplikace používá port sip.</string>
+  <string name="choose_phone">Vyberte telefon</string>
+  <string name="no_phone_found">Nenalezen žádný telefon pro tento kontakt</string>
+  <string name="show_password">Zobrazit heslo</string>
+  <string name="this_codec_is_not_free">"** Tento kodek není zadarmo !!!**\nUjistěte se, že  (vaše SIP poskytovatele nebo sami) si zakoupili licenci, která vám umožní používat tento kodek! My (jako aplikace distributoři) nejsme zodpovědní za nelegální používání tohoto kodeku.\nJe jen na vás, abyste se ujistili, že jste oprávněni používat tento kodek.\nNákup odkaz:"</string>
+  <string name="voice_mail">Hlasová pošta</string>
 </resources>

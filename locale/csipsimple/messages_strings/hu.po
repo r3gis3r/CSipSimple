@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-11-27 23:52+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: hu <LL@li.org>\n"
@@ -58,13 +58,13 @@ msgstr "Mind törlése"
 #. conversation
 msgctxt "menu_delete"
 msgid "Delete thread"
-msgstr ""
+msgstr "Üzenetszál törlése"
 
 #. Context menu item on an individual conversation for viewing that
 #. conversation
 msgctxt "menu_view"
 msgid "View thread"
-msgstr ""
+msgstr "Üzenetszál Mutatása"
 
 #. Name to use when we have an unspecified sender
 msgctxt "anonymous_recipient"
@@ -85,7 +85,7 @@ msgstr "Az üzenet törlése"
 #, c-format
 msgctxt "sent_on"
 msgid "Sent: <xliff:g id=\"date\">%s</xliff:g>"
-msgstr ""
+msgstr "Elküldve: <xliff:g id=\"date\">%s</xliff:g>"
 
 #. Abbreviation for "kilobyte"
 msgctxt "kilobyte"
@@ -96,17 +96,17 @@ msgstr "KB"
 #. be delivered
 msgctxt "undelivered_msg_dialog_title"
 msgid "Undelivered message"
-msgstr ""
+msgstr "Elküldetlen üzenet"
 
 #. Dialog box message indicating that a message could not be delivered
 msgctxt "undelivered_sms_dialog_body"
 msgid "Unable to send this message."
-msgstr ""
+msgstr "Nem lehet elküldeni ezt az üzenetet."
 
 #. Menu item for deleting the entire conversation currently being viewed
 msgctxt "delete_thread"
 msgid "Delete thread"
-msgstr ""
+msgstr "Üzenetszál törlése"
 
 #. Text of a button appearing for MMS messages that have not yet been
 #. downloaded, causing the message          to be downloaded (imperative verb)
@@ -118,199 +118,199 @@ msgstr "Letöltés"
 #. been pressed,          indicating that the download is in progress
 msgctxt "downloading"
 msgid "Downloading"
-msgstr ""
+msgstr "Letöltés"
 
 #. Formatting for prepending MMS message text with sender's name.
 #, c-format
 msgctxt "name_colon"
 msgid "<b><xliff:g id=\"name\" example=\"Me\">%s</xliff:g></b>: "
-msgstr ""
+msgstr "<b><xliff:g id=\"name\" example=\"Példa\">%s</xliff:g></b>: "
 
 #. Individual message context menu item
 msgctxt "copy_message_text"
 msgid "Copy message text"
-msgstr ""
+msgstr "Üzenet másolása"
 
 #. Header for context menu on an individual message
 msgctxt "message_options"
 msgid "Message options"
-msgstr ""
+msgstr "Üzenet beállítások"
 
 #. Button text on edit slide screen indicating the user wants to finish
 #. editing that slide
 msgctxt "done"
 msgid "Done"
-msgstr ""
+msgstr "Kész"
 
 #. Title bar displayed in compose message activity before a recipient has been
 #. selected
 msgctxt "compose_title"
 msgid "Compose"
-msgstr ""
+msgstr "Szerkesztés"
 
 #. Menu item in conversation screen for attaching something to the message
 #. being composed
 msgctxt "add_attachment"
 msgid "Attach"
-msgstr ""
+msgstr "Csatol"
 
 #. Button next to an attachment during message composition to view the
 #. attachment (imperative verb)
 msgctxt "view"
 msgid "View"
-msgstr ""
+msgstr "Megnéz"
 
 #. Button in conversation screen for sending the SMS message currently being
 #. composed (imperative verb)
 msgctxt "send"
 msgid "Send"
-msgstr ""
+msgstr "Küldés"
 
 #. Menu item in conversation screen for returning to the conversation list
 msgctxt "all_threads"
 msgid "All threads"
-msgstr ""
+msgstr "Minden üzenetszál"
 
 #. Hint text in message body field when keyboard is exposed
 msgctxt "type_to_compose_text_enter_to_send"
 msgid "Type to compose"
-msgstr ""
+msgstr "Pötty ide a szerkesztéshez"
 
 #. Hint text in message body field when keyboard is hidden
 msgctxt "open_keyboard_to_compose_message"
 msgid "Open keyboard to compose message"
-msgstr ""
+msgstr "Szerkesztéshez ki kell nyitni a gombsort"
 
 #. Dialog title for warning the user that the picture they are trying to
 #. attach is too large
 msgctxt "image_too_large"
 msgid "Picture too large"
-msgstr ""
+msgstr "A kép túl nagy"
 
 #. Dialog message text asking the user if he wants to resize the picture being
 #. attached
 msgctxt "ask_for_automatically_resize"
 msgid "Automatically resize picture before sending?"
-msgstr ""
+msgstr "Küldés előtt átméreteződjon a kép?"
 
 #. Toast message while an image is being resized
 msgctxt "compressing"
 msgid "Picture too large. Compressing\\u2026"
-msgstr ""
+msgstr "A kép túl nagy. Tömörítés\\u2026"
 
 #. Error message indicating the format for the specified media type (e.g.
 #. "picture") is unsupported
 #, c-format
 msgctxt "unsupported_media_format"
 msgid "Unsupported <xliff:g id=\"name\">%1$s</xliff:g> format"
-msgstr ""
+msgstr "Nem támogatott formátum (<xliff:g id=\"name\">%1$s</xliff:g>)"
 
 #. Context menu item on a message recipient for viewing their contact info
 msgctxt "menu_view_contact"
 msgid "View contact"
-msgstr ""
+msgstr "Kapcsolat mutatása"
 
 #. Context menu item on a message recipient for adding them to the user's
 #. contacts (used if the recipient is not already in the address book)
 msgctxt "menu_add_to_contacts"
 msgid "Add to Contacts"
-msgstr ""
+msgstr "Kapcsolatokhoz hozáad"
 
 #. Sender to be used if the sender address has been hidden
 msgctxt "hidden_sender_address"
 msgid "Hidden sender address"
-msgstr ""
+msgstr "Küldő címének elrejtése"
 
 #. Text to be used for affirmative response button in dialog boxes
 msgctxt "yes"
 msgid "OK"
-msgstr ""
+msgstr "Rendben"
 
 #. Text to be used for negative response button in dialog boxes
 msgctxt "no"
 msgid "Cancel"
-msgstr ""
+msgstr "Mégsem"
 
 #. Button text used for editing a slideshow (imperative verb)
 msgctxt "edit"
 msgid "Edit"
-msgstr ""
+msgstr "Szerkeszt"
 
 #. Settings screen menu item for restoring all settings to default
 msgctxt "restore_default"
 msgid "Restore default settings"
-msgstr ""
+msgstr "Alap beállítások visszaállítása"
 
 #. Confirm Delete
 #. Delete confirmation dialog title
 msgctxt "confirm_dialog_title"
 msgid "Delete"
-msgstr ""
+msgstr "Töröl"
 
 #. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_conversation"
 msgid "The entire thread will be deleted."
-msgstr ""
+msgstr "Ezen üzenetszál törlődni fog."
 
 #. Delete all threads confirmation dialog message
 msgctxt "confirm_delete_all_conversations"
 msgid "All threads will be deleted."
-msgstr ""
+msgstr "Minden üzenetszál törlődni fog."
 
 #. Delete message confirmation dialog message
 msgctxt "confirm_delete_message"
 msgid "The message will be deleted."
-msgstr ""
+msgstr "Az üzenet törlődni fog."
 
 #. Delete message confirmation dialog message for a locked message
 msgctxt "confirm_delete_locked_message"
 msgid "Are you sure you want to delete this locked message?"
-msgstr ""
+msgstr "Valóban törlődjön ez a zárolt üzenet?"
 
 #. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_all_messages"
 msgid "The entire thread will be deleted."
-msgstr ""
+msgstr "Ezen üzenetszál törlődni fog."
 
 #. Delete button title
 msgctxt "delete"
 msgid "Delete"
-msgstr ""
+msgstr "Töröl"
 
 #. Status in "Report" window
 msgctxt "status_none"
 msgid "(None)"
-msgstr ""
+msgstr "(Nincs)"
 
 #. Status in "Report" window
 msgctxt "status_pending"
 msgid "Pending"
-msgstr ""
+msgstr "Folyamatban"
 
 #. Status in "Report" window
 msgctxt "status_received"
 msgid "Received"
-msgstr ""
+msgstr "Fogadott"
 
 #. Status in "Report" window
 msgctxt "status_failed"
 msgid "Unsuccessful"
-msgstr ""
+msgstr "Sikertelen"
 
 #. Status in "Report" window
 msgctxt "status_unread"
 msgid "Unread"
-msgstr ""
+msgstr "Olvasatlan"
 
 #. Status in "Report" window
 msgctxt "status_rejected"
 msgid "Rejected"
-msgstr ""
+msgstr "Elutasított"
 
 #. Label in "Report" window
 msgctxt "recipient_label"
 msgid "Recipient:\\u0020"
-msgstr ""
+msgstr "Címzett:\\u0020"
 
 #. Label in "Report" window
 msgctxt "status_label"

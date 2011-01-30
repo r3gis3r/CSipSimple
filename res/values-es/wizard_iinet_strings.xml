@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Estado</string>
+  <string name="w_iinet_username">Número de teléfono VoIP</string>
+  <string name="w_iinet_username_desc">Elimine cualquier formateado como espacios y guines</string>
+  <string name="w_iinet_password">Contraseña especial de VoIP</string>
+</resources>

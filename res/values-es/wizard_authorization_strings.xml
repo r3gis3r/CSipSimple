@@ -1,2 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_authorization_auth_name">Nombre de autenticación</string>
+  <string name="w_authorization_phone_number">Nombre de usuario</string>
+</resources>

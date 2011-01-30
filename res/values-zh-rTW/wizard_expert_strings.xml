@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">帳戶名</string>
+  <string name="w_expert_display_name_desc">此帳戶之顯示名稱</string>
+  <string name="w_expert_acc_id">帳戶 ID</string>
+  <string name="w_expert_acc_id_desc">格式 : 顯示名稱 &lt;sip:login\@registrar&gt;</string>
+  <string name="w_expert_reg_uri">註冊 URI</string>
+  <string name="w_expert_reg_uri_desc">格式 : sip:registrar.net[:port]</string>
+  <string name="w_expert_realm">域</string>
+  <string name="w_expert_realm_desc">認證域 (如不知, 請用 \'*\')</string>
+  <string name="w_expert_username">用戶名</string>
+  <string name="w_expert_username_desc">認證用戶名</string>
+  <string name="w_expert_data">密碼</string>
+  <string name="w_expert_data_desc">密碼 (或其他訊息) 用於認證</string>
+  <string name="w_expert_t_proxy">代理伺服器</string>
+  <string name="w_expert_proxy">代理器 URI</string>
+  <string name="w_expert_proxy_desc">格式 : sip:proxy.net[:port]</string>
+  <string name="w_expert_use_tcp">使用 TCP (非 UDP)</string>
+  <string name="w_expert_prevent_tcp">禁用 TCP (只試 UDP)</string>
+  <string name="w_expert_publish_enabled">公開</string>
+  <string name="w_expert_reg_timeout">註冊逾時 (秒)</string>
+  <string name="w_expert_ka_interval">保持連通週期 (秒)</string>
+  <string name="w_expert_force_contact">強制加入聯絡人</string>
+  <string name="w_expert_allow_contact_rewrite">允許覆寫聯絡人</string>
+  <string name="w_expert_contact_rewrite_method">覆寫聯絡人方式</string>
+</resources>

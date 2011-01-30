@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Stát</string>
+  <string name="w_iinet_state_desc">stát z následujícího seznamu</string>
+  <string name="w_iinet_username">Číslo voip telefonu</string>
+  <string name="w_iinet_username_desc">Odstraňte všechny formátování, jako jsou mezery a pomlčky</string>
+  <string name="w_iinet_password">Speciální Voip Heslo</string>
+  <string name="w_iinet_password_desc">Není totéž jako připojovací heslo</string>
+</resources>

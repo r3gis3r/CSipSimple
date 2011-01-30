@@ -1,0 +1,71 @@
+# Hebrew translations for PROJECT.
+# Copyright (C) 2011 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"PO-Revision-Date: 2011-01-30 00:15+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: he <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "first_launch_text"
+msgid ""
+"&lt;h2&gt;You are about to run this application for the first "
+"time.&lt;/h2&gt;&lt;br/&gt;&lt;b&gt;Please pay attention to the following"
+" instructions :&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;1 .&lt;/b&gt; "
+"Wait for the downloading below ends &lt;br/&gt;&lt;i&gt;(it is "
+"downloading a part of the software which is dependant on your Android "
+"device)&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;2 .&lt;/b&gt;Then you'll "
+"be asked to fill your SIP account configuration.&lt;br "
+"/&gt;&lt;br/&gt;&lt;b&gt;3 . &lt;/b&gt;Finally you'll have to choose how "
+"do you want to use your SIP accounts on your "
+"handset&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;h2&gt;This is an OpenSource "
+"software&lt;/h2&gt;&lt;br/&gt;...and YOU can contribute to it (Reporting "
+"bugs, translations, documentations are valuable "
+"contributions).&lt;br/&gt;You can consult the community website at &lt;a "
+"href=http://www.csipsimple.com&gt;www.csipsimple.com&lt;/a&gt;&lt;br/&gt;This"
+" software is distribute under the terms of the GPLv3 licence (more "
+"details on our website).&lt;br/&gt;For some features (such as voIP over "
+"Mobile), you must be sure that your contract with you carrier allow you "
+"this feature before activating it in the application. &lt;i&gt;(If not, "
+"change of carrier or make pressures on him to ensure network neutrality "
+"on your contract).&lt;/i&gt;"
+msgstr ""
+
+msgctxt "changelog_text"
+msgid ""
+"&lt;h2&gt;What's new in this version?&lt;/h2&gt;Application is still in "
+"an alpha phase. You can follow the changelogs on the blog of the "
+"application"
+msgstr ""
+
+msgctxt "detecting_text"
+msgid "Detecting correct library for your device"
+msgstr ""
+
+msgctxt "intializing_text"
+msgid "Initialize"
+msgstr ""
+
+msgctxt "downloading_text"
+msgid "Downloading"
+msgstr ""
+
+msgctxt "installing_library_text"
+msgid "Installing library..."
+msgstr ""
+
+msgctxt "welcome_caption_text"
+msgid "Welcome"
+msgstr ""
+

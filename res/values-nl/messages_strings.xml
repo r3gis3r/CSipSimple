@@ -1,2 +1,62 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">Berichten</string>
+  <string name="new_message">Nieuw bericht</string>
+  <string name="create_new_message">Stel nieuw bericht samen</string>
+  <string name="menu_compose_new">Samenstellen</string>
+  <string name="menu_add_address_to_contacts">"Voeg "<xliff:g id="name">%s</xliff:g>" toe aan contacten"</string>
+  <string name="menu_call">Oproepen</string>
+  <string name="menu_delete_all">Verwijder discussies</string>
+  <string name="menu_delete">Verwijder discussie</string>
+  <string name="menu_view">Toon discussie</string>
+  <string name="anonymous_recipient">Anoniem</string>
+  <string name="messagelist_sender_self">Ik</string>
+  <string name="delete_message">Verwijder bericht</string>
+  <string name="sent_on">"Gestuurd: "<xliff:g id="date">%s</xliff:g></string>
+  <string name="kilobyte">KByte</string>
+  <string name="undelivered_msg_dialog_title">Bericht niet afgeleverd</string>
+  <string name="undelivered_sms_dialog_body">Kon dit bericht niet verzenden</string>
+  <string name="delete_thread">Verwijder discussie</string>
+  <string name="download">Download</string>
+  <string name="downloading">Bezig met downloaden</string>
+  <string name="name_colon"><b><xliff:g id="name" example="Ik">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">Kopieer berichttekst</string>
+  <string name="message_options">Bericht-opties</string>
+  <string name="done">Gereed</string>
+  <string name="compose_title">Samenstellen</string>
+  <string name="add_attachment">Bijvoegen</string>
+  <string name="view">Toon</string>
+  <string name="send">Verzenden</string>
+  <string name="all_threads">Alle conversaties</string>
+  <string name="type_to_compose_text_enter_to_send">Type om samen te stellen</string>
+  <string name="open_keyboard_to_compose_message">Open toetsenbord om bericht samen te stellen</string>
+  <string name="image_too_large">Afbeelding te groot</string>
+  <string name="ask_for_automatically_resize">Afbeelding automatisch schalen voor verzending?</string>
+  <string name="compressing">Afbeelding te groot. Comprimeren\\u2026</string>
+  <string name="unsupported_media_format">"Formaat "<xliff:g id="name">%1$s</xliff:g>" niet ondersteund"</string>
+  <string name="menu_view_contact">Toon contact</string>
+  <string name="menu_add_to_contacts">Toevoegen aan contacten</string>
+  <string name="hidden_sender_address">Verborgen afzenderadres</string>
+  <string name="yes">Bevestigen</string>
+  <string name="no">Annuleren</string>
+  <string name="edit">Bewerken</string>
+  <string name="restore_default">Standaardwaarden herstellen</string>
+  <string name="confirm_dialog_title">Verwijderen</string>
+  <string name="confirm_delete_conversation">De hele discussie zal worden verwijderd</string>
+  <string name="confirm_delete_all_conversations">Alle discussies zullen worden verwijderd</string>
+  <string name="confirm_delete_message">Het bericht zal worden verwijderd</string>
+  <string name="confirm_delete_locked_message">Weet u het zeker dat u dit vergrendelde bericht wilt verwijderen?</string>
+  <string name="confirm_delete_all_messages">De hele discussie zal worden verwijderd</string>
+  <string name="delete">Verwijderen</string>
+  <string name="status_none">(Geen)</string>
+  <string name="status_pending">In behandeling</string>
+  <string name="status_received">Ontvangen</string>
+  <string name="status_failed">Niet succesvol</string>
+  <string name="status_unread">Ongelezen</string>
+  <string name="status_rejected">Afgewezen</string>
+  <string name="recipient_label">Ontvanger:\\u0020</string>
+  <string name="status_label">Status:\\u0020</string>
+  <string name="menu_insert_smiley">Voeg smiley in</string>
+  <string name="me">Ik</string>
+  <string name="sending_message">Versturen\\u2026</string>
+</resources>

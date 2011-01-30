@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-11-25 16:50+0000\n"
 "Last-Translator: Juan Ramiro Meyer <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -129,7 +129,7 @@ msgstr "<b><xliff:g id=\"name\" example=\"Me\">%s</xliff:g></b>: "
 #. Individual message context menu item
 msgctxt "copy_message_text"
 msgid "Copy message text"
-msgstr ""
+msgstr "Copiar texto del mensaje"
 
 #. Header for context menu on an individual message
 msgctxt "message_options"
@@ -164,7 +164,7 @@ msgstr "Mostrar"
 #. composed (imperative verb)
 msgctxt "send"
 msgid "Send"
-msgstr ""
+msgstr "Enviar"
 
 #. Menu item in conversation screen for returning to the conversation list
 msgctxt "all_threads"
@@ -196,7 +196,7 @@ msgstr "¿Redimensionar la imágen automáticamente antes de enviar?"
 #. Toast message while an image is being resized
 msgctxt "compressing"
 msgid "Picture too large. Compressing\\u2026"
-msgstr ""
+msgstr "Imágen demasiado grande. Comprimiendo..."
 
 #. Error message indicating the format for the specified media type (e.g.
 #. "picture") is unsupported
@@ -214,7 +214,7 @@ msgstr "Ver contacto"
 #. contacts (used if the recipient is not already in the address book)
 msgctxt "menu_add_to_contacts"
 msgid "Add to Contacts"
-msgstr ""
+msgstr "Añadir a Contactos"
 
 #. Sender to be used if the sender address has been hidden
 msgctxt "hidden_sender_address"

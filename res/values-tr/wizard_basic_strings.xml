@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_basic_username">Kullanıcı</string>
+  <string name="w_basic_username_desc">Hesap adı / Giriş</string>
+  <string name="w_basic_password">Parola</string>
+  <string name="w_basic_password_desc">Hesabınıza erişmek için parola</string>
+</resources>

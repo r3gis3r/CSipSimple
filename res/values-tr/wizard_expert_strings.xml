@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">Hesap adı</string>
+  <string name="w_expert_display_name_desc">Bu hesap için görünen ad</string>
+  <string name="w_expert_acc_id">Hesap kimliği</string>
+  <string name="w_expert_realm">Memleket</string>
+  <string name="w_expert_username">Kullanıcı adı</string>
+  <string name="w_expert_username_desc">Yetkilendirme için kullanıcı adı</string>
+  <string name="w_expert_data">Parola</string>
+  <string name="w_expert_t_proxy">Vekil Sunucu (proxy)</string>
+  <string name="w_expert_proxy_desc">Biçim : sip:proxy.net[:port]</string>
+  <string name="w_expert_use_tcp">TCP kullan (UDP Değil)</string>
+  <string name="w_expert_reg_timeout">Kayıt zaman aşımı (san)</string>
+  <string name="w_expert_ka_interval">Canlı tutma aralığı (san)</string>
+</resources>

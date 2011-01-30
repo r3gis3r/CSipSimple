@@ -53,8 +53,6 @@
   <string name="turn_server_desc">TURN szerver megadása (HOST:PORT)</string>
   <string name="enable_stun">STUN engedélyezése</string>
   <string name="enable_stun_desc">STUN funkció bekapcsolása</string>
-  <string name="stun_server">STUN szerver</string>
-  <string name="stun_server_desc">STUN szerver megadása (HOST:PORT)</string>
   <string name="enable_qos">QoS engedélyezve</string>
   <string name="enable_qos_desc">QoS engedélyezve csomag szinten</string>
   <string name="dscp_val">DSCP érték</string>

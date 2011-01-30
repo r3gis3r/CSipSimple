@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_magicjack_display_name">Nome da conta</string>
+  <string name="w_magicjack_display_name_desc">Mostrar nome para esta conta</string>
+  <string name="w_magicjack_username">Nome de usuário</string>
+  <string name="w_magicjack_username_desc">Algo como EXXXXXXXXXX01</string>
+  <string name="w_magicjack_password">Senha</string>
+  <string name="w_magicjack_password_desc">Senha para autenticação no servidor SIP</string>
+  <string name="w_magicjack_server_desc">Algo como isso: proxy01.suacidade.talk4free.com</string>
+</resources>

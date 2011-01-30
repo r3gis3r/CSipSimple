@@ -18,10 +18,13 @@
   <string name="choose_wizard">Wizard di scelta</string>
   <string name="use">Usa :</string>
   <string name="use_pstn">Usa rete mobile</string>
+  <string name="use_skype">Usa Skype</string>
   <string name="ongoing_call">Chiamate in uscita</string>
   <string name="missed_call">Chiamata persa</string>
   <string name="recentCalls_empty">Nessun log delle chiamate</string>
   <string name="filters">Filtri</string>
+  <string name="filters_desc">Da applicare quando l\'integrazione con Android è utilizzata</string>
+  <string name="filters_for">Filtri per</string>
   <string name="add_filter">Aggiungi filtro / riscrivi regola</string>
   <string name="delete_filter">Cancella filtro</string>
   <string name="callLog_delete_entry">Elimina questa chiamata</string>
@@ -38,6 +41,8 @@
   <string name="service_ticker_registered_text">SIP Registrato</string>
   <string name="outgoing_call_chooser_call_text">Chiama</string>
   <string name="reorder">Riordina</string>
+  <string name="backup_restore">Backup / Restore</string>
+  <string name="backup">Backup</string>
   <string name="faq">FAQ</string>
   <string name="help">Aiuto</string>
   <string name="record_logs">Registra i log da inviare al team di sviluppo e segnalare un bug</string>
@@ -54,5 +59,8 @@
   <string name="display_icon_in_status_bar_desc">L\'applicazione dovrebbe visualizzare un\'icona nello status bar quando registrata</string>
   <string name="display_icon_in_status_bar">Visualizza l\'icona nella barra di stato</string>
   <string name="another_application_use_sip_port">Un\'altra applicazione sta attualmente utilizzando la porta SIP! Non può avviarsi!</string>
+  <string name="choose_phone">Scegli il telefono</string>
   <string name="no_phone_found">Nessun telefono trovato per questo contatto</string>
+  <string name="show_password">Mostra password</string>
+  <string name="this_codec_is_not_free">**Questo codec non è gratuito!!!**\nSi prega di assicurarsi che qualcuno (il tuo provider SIP o te stesso) abbia acquistato una licenza che ti permetta di usare il codec! Noi (come distributori dell\'applicazione) non siamo responsabili di un uso illegale di questo codec.\nE\' tua responsabilità assicurarti che sei autorizzato ad usare questo codec.\nLink per l\'acquisto:</string>
 </resources>

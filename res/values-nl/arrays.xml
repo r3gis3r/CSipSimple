@@ -21,19 +21,19 @@
   </string-array>
   <string-array name="default_smiley_names">
     <item>Blij</item>
-    <item>Bedroefd</item>
+    <item>Verdrietig</item>
     <item>Beschaamd</item>
     <item>Engel</item>
-    <item>Twijfelend</item>
-    <item>Huilend</item>
+    <item>Aan het twijfelen</item>
+    <item>Aan het huilen</item>
     <item>Lippen op elkaar</item>
-    <item>Lachend</item>
+    <item>Aan het lachen</item>
     <item>Verward</item>
-    <item>Knipoog</item>
+    <item>Aan het knipogen</item>
     <item>Tong uitsteken</item>
-    <item>Verrast</item>
-    <item>Kussend</item>
-    <item>Schreeuwend</item>
+    <item>Verbaasd</item>
+    <item>Aan het kussen</item>
+    <item>Aan het schreeuwen</item>
     <item>Gaaf</item>
     <item>Geldzoeker</item>
     <item>Mond vol tanden</item>

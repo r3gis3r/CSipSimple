@@ -50,4 +50,5 @@
   <string name="gadget_title">SIP Fiókváltó</string>
   <string name="search_in_contacts">Kapcsolat keresése</string>
   <string name="pickup_sip_uri">SIP kapcsolat használata</string>
+  <string name="display_icon_in_status_bar">Kirakja az ikont az állapotsávba</string>
 </resources>

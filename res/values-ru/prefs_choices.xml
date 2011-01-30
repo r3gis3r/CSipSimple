@@ -42,4 +42,19 @@
     <item>SSL3</item>
     <item>SSL23</item>
   </string-array>
+  <string-array name="gsm_integration_type_choices">
+    <item>Авто</item>
+    <item>Принудительно</item>
+    <item>Предотвращать</item>
+  </string-array>
+  <string-array name="echo_mode_choices">
+    <item>Авто</item>
+    <item>Speex</item>
+    <item>Обычный</item>
+  </string-array>
+  <string-array name="dial_press_mode_choices">
+    <item>Использовать настройки Android</item>
+    <item>Принудительно</item>
+    <item>Предотвращать</item>
+  </string-array>
 </resources>

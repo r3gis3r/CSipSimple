@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: nl <LL@li.org>\n"
@@ -20,141 +19,149 @@ msgstr ""
 
 msgctxt "scheme_choices:0"
 msgid "Digest"
-msgstr ""
+msgstr "Digest"
 
 msgctxt "scheme_choices:1"
 msgid "PGP"
-msgstr ""
+msgstr "PGP"
 
 msgctxt "data_type_choices:0"
 msgid "Plain password"
-msgstr ""
+msgstr "Eenvoudig wachtwoord"
 
 msgctxt "data_type_choices:1"
 msgid "Data digest"
-msgstr ""
+msgstr "Digest-data"
 
 msgctxt "clock_rate_choices:0"
 msgid "8KHz"
-msgstr ""
+msgstr "8KHz"
 
 msgctxt "clock_rate_choices:1"
 msgid "16KHz"
-msgstr ""
+msgstr "16KHz"
 
 msgctxt "clock_rate_choices:2"
 msgid "32KHz"
-msgstr ""
+msgstr "32KHz"
 
 msgctxt "clock_rate_choices:3"
 msgid "44.1KHz"
-msgstr ""
+msgstr "44.1KHz"
 
 msgctxt "use_srtp_choices:0"
 msgid "Disabled"
-msgstr ""
+msgstr "Uitgeschakeld"
 
 msgctxt "use_srtp_choices:1"
 msgid "Optional"
-msgstr ""
+msgstr "Optioneel"
 
 msgctxt "use_srtp_choices:2"
 msgid "Mandatory"
-msgstr ""
+msgstr "Vereist"
 
 msgctxt "dtmf_mode_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgctxt "dtmf_mode_choices:1"
 msgid "RTP"
-msgstr ""
+msgstr "RTP"
 
 msgctxt "dtmf_mode_choices:2"
 msgid "In band generation"
-msgstr ""
+msgstr "In-band generatie"
 
 msgctxt "dtmf_mode_choices:3"
 msgid "SIP INFO"
-msgstr ""
+msgstr "SIP INFO"
 
 msgctxt "contact_rewrite_method_choices:0"
 msgid "Legacy"
-msgstr ""
+msgstr "Erfenis"
 
 msgctxt "contact_rewrite_method_choices:1"
 msgid "Normal"
-msgstr ""
+msgstr "Normaal"
 
 msgctxt "transport_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgctxt "transport_choices:1"
 msgid "UDP"
-msgstr ""
+msgstr "UDP"
 
 msgctxt "transport_choices:2"
 msgid "TCP"
-msgstr ""
+msgstr "TCP"
 
 msgctxt "transport_choices:3"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "tls_method_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgctxt "tls_method_choices:1"
 msgid "TLSv1"
-msgstr ""
+msgstr "TLSv1"
 
 msgctxt "tls_method_choices:2"
 msgid "SSLv2"
-msgstr ""
+msgstr "SSLv2"
 
 msgctxt "tls_method_choices:3"
 msgid "SSL3"
-msgstr ""
+msgstr "SSL3"
 
 msgctxt "tls_method_choices:4"
 msgid "SSL23"
-msgstr ""
+msgstr "SSL23"
 
 msgctxt "gsm_integration_type_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgctxt "gsm_integration_type_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Afdwingen"
 
 msgctxt "gsm_integration_type_choices:2"
 msgid "Prevent"
-msgstr ""
+msgstr "Voorkomen"
 
 msgctxt "echo_mode_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgctxt "echo_mode_choices:1"
 msgid "Speex"
-msgstr ""
+msgstr "Speex"
 
 msgctxt "echo_mode_choices:2"
 msgid "Simple"
-msgstr ""
+msgstr "Eenvoudig"
 
 msgctxt "dial_press_mode_choices:0"
 msgid "Use Android setting"
-msgstr ""
+msgstr "Gebruik Android-instellingen"
 
 msgctxt "dial_press_mode_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Afdwingen"
 
 msgctxt "dial_press_mode_choices:2"
 msgid "Prevent"
+msgstr "Voorkomen"
+
+msgctxt "band_types_name:0"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "band_types_name:1"
+msgid "Wideband"
 msgstr ""
 

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="unknown">Bilinmeyen</string>
+  <string name="type_incoming">Gelen</string>
+  <string name="type_outgoing">Giden</string>
+  <string name="type_missed">Cevapsız</string>
+  <string name="callBack">Geri Arama</string>
+</resources>

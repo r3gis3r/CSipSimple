@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="description_image_button_one">een</string>
+  <string name="description_image_button_two">twee</string>
+  <string name="description_image_button_three">drie</string>
+  <string name="description_image_button_four">vier</string>
+  <string name="description_image_button_five">vijf</string>
+  <string name="description_image_button_six">zes</string>
+  <string name="description_image_button_seven">zeven</string>
+  <string name="description_image_button_eight">acht</string>
+  <string name="description_image_button_nine">negen</string>
+  <string name="description_image_button_star">ster</string>
+  <string name="description_image_button_zero">nul</string>
+  <string name="description_image_button_pound">pond</string>
+  <string name="description_dial_button">bel</string>
+  <string name="description_delete_button">backspace</string>
+  <string name="description_digits_edittext">te bellen nummer</string>
+</resources>

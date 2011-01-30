@@ -4,6 +4,8 @@
   <string name="type_incoming">Entrante</string>
   <string name="type_outgoing">Saliente</string>
   <string name="type_missed">Perdidas</string>
+  <string name="callBack">Devolver llamada</string>
   <string name="callAgain">Rellamar</string>
+  <string name="returnCall">Devolver llamada</string>
   <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" min "<xliff:g id="seconds" example="28">%s</xliff:g>" seg"</string>
 </resources>

@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Toestand</string>
+  <string name="w_iinet_state_desc">De relevante toestand uit de volgende lijst</string>
+  <string name="w_iinet_username">VoIP-telefoonnummer</string>
+  <string name="w_iinet_username_desc">Verwijder alle opmaak zoals spaties en streepjes</string>
+  <string name="w_iinet_password">Speciaal VoIP-wachtwoord</string>
+  <string name="w_iinet_password_desc">Niet hetzelfde als het wachtwoord voor verbinden</string>
+</resources>

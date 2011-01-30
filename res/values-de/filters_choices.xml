@@ -1,4 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-
+  <string-array name="filters_action">
+    <item>Dieser Anruf ist nicht möglich</item>
+    <item>umschreiben</item>
+    <item>Bearbeitung abbrechen</item>
+    <item>Direkter Anruf</item>
+    <item>Automatische Anrufbeantwortung</item>
+  </string-array>
+  <string-array name="filters_type">
+    <item>Startet mit</item>
+    <item>Endet mit</item>
+    <item>enthält</item>
+    <item>Alle</item>
+    <item>Hat genau N Stellen</item>
+    <item>Hat mehr als N Stellen</item>
+    <item>Ist genau</item>
+    <item>Benutzerdefinierter Regulärer Ausdruck</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>Präfix von</item>
+    <item>Suffix mit</item>
+    <item>Ersetze passende durch</item>
+    <item>Ersetze alle durch</item>
+    <item>benutzerdefiniert RegExp</item>
+  </string-array>
 </resources>

@@ -40,8 +40,6 @@
   <string name="turn_server_desc">TURN сървър (ХОСТ:ПОРТ)</string>
   <string name="enable_stun">Активиране на STUN</string>
   <string name="enable_stun_desc">Включване на STUN функция</string>
-  <string name="stun_server">STUN сървър</string>
-  <string name="stun_server_desc">STUN сървър (ХОСТ:ПОРТ)</string>
   <string name="audio_quality">Качество на звука</string>
   <string name="codecs">Кодировки</string>
   <string name="echo_cancellation">Намаляване на ехо</string>

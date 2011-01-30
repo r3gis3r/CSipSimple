@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_common_display_name">Hesap adı</string>
+  <string name="w_common_display_name_desc">Bu hesap için görünen ad</string>
+  <string name="w_common_username">Kullanıcı adı</string>
+  <string name="w_common_username_desc">Sip hesaba giriş</string>
+  <string name="w_common_phone_number">Telefon numarası</string>
+  <string name="w_common_phone_number_desc">Servis saglayici tarafindan verilen Sip telefon numarası</string>
+  <string name="w_common_password">Parola</string>
+  <string name="w_common_password_desc">Hesabınız için parola</string>
+  <string name="w_common_server">Sunucu</string>
+  <string name="w_common_server_desc">SIP sunucu alanı/IP[:port]</string>
+</resources>

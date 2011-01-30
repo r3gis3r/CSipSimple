@@ -7,9 +7,52 @@
   <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g>" hozzáadása az ismerősökhöz"</string>
   <string name="menu_call">Hívás</string>
   <string name="menu_delete_all">Mind törlése</string>
+  <string name="menu_delete">Üzenetszál törlése</string>
+  <string name="menu_view">Üzenetszál Mutatása</string>
   <string name="anonymous_recipient">Ismeretlen címzett</string>
   <string name="messagelist_sender_self">Magam</string>
   <string name="delete_message">Az üzenet törlése</string>
+  <string name="sent_on">"Elküldve: "<xliff:g id="date">%s</xliff:g></string>
   <string name="kilobyte">KB</string>
+  <string name="undelivered_msg_dialog_title">Elküldetlen üzenet</string>
+  <string name="undelivered_sms_dialog_body">Nem lehet elküldeni ezt az üzenetet.</string>
+  <string name="delete_thread">Üzenetszál törlése</string>
   <string name="download">Letöltés</string>
+  <string name="downloading">Letöltés</string>
+  <string name="name_colon"><b><xliff:g id="name" example="Példa">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">Üzenet másolása</string>
+  <string name="message_options">Üzenet beállítások</string>
+  <string name="done">Kész</string>
+  <string name="compose_title">Szerkesztés</string>
+  <string name="add_attachment">Csatol</string>
+  <string name="view">Megnéz</string>
+  <string name="send">Küldés</string>
+  <string name="all_threads">Minden üzenetszál</string>
+  <string name="type_to_compose_text_enter_to_send">Pötty ide a szerkesztéshez</string>
+  <string name="open_keyboard_to_compose_message">Szerkesztéshez ki kell nyitni a gombsort</string>
+  <string name="image_too_large">A kép túl nagy</string>
+  <string name="ask_for_automatically_resize">Küldés előtt átméreteződjon a kép?</string>
+  <string name="compressing">A kép túl nagy. Tömörítés\\u2026</string>
+  <string name="unsupported_media_format">Nem támogatott formátum (<xliff:g id="name">%1$s</xliff:g>)</string>
+  <string name="menu_view_contact">Kapcsolat mutatása</string>
+  <string name="menu_add_to_contacts">Kapcsolatokhoz hozáad</string>
+  <string name="hidden_sender_address">Küldő címének elrejtése</string>
+  <string name="yes">Rendben</string>
+  <string name="no">Mégsem</string>
+  <string name="edit">Szerkeszt</string>
+  <string name="restore_default">Alap beállítások visszaállítása</string>
+  <string name="confirm_dialog_title">Töröl</string>
+  <string name="confirm_delete_conversation">Ezen üzenetszál törlődni fog.</string>
+  <string name="confirm_delete_all_conversations">Minden üzenetszál törlődni fog.</string>
+  <string name="confirm_delete_message">Az üzenet törlődni fog.</string>
+  <string name="confirm_delete_locked_message">Valóban törlődjön ez a zárolt üzenet?</string>
+  <string name="confirm_delete_all_messages">Ezen üzenetszál törlődni fog.</string>
+  <string name="delete">Töröl</string>
+  <string name="status_none">(Nincs)</string>
+  <string name="status_pending">Folyamatban</string>
+  <string name="status_received">Fogadott</string>
+  <string name="status_failed">Sikertelen</string>
+  <string name="status_unread">Olvasatlan</string>
+  <string name="status_rejected">Elutasított</string>
+  <string name="recipient_label">Címzett:\\u0020</string>
 </resources>

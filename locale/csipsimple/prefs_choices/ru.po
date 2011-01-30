@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-05 17:58+0000\n"
 "Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -122,41 +122,47 @@ msgctxt "tls_method_choices:4"
 msgid "SSL23"
 msgstr "SSL23"
 
-#, fuzzy
 msgctxt "gsm_integration_type_choices:0"
 msgid "Auto"
-msgstr "Автоматический"
+msgstr "Авто"
 
 msgctxt "gsm_integration_type_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Принудительно"
 
 msgctxt "gsm_integration_type_choices:2"
 msgid "Prevent"
-msgstr ""
+msgstr "Предотвращать"
 
-#, fuzzy
 msgctxt "echo_mode_choices:0"
 msgid "Auto"
-msgstr "Автоматический"
+msgstr "Авто"
 
 msgctxt "echo_mode_choices:1"
 msgid "Speex"
-msgstr ""
+msgstr "Speex"
 
 msgctxt "echo_mode_choices:2"
 msgid "Simple"
-msgstr ""
+msgstr "Обычный"
 
 msgctxt "dial_press_mode_choices:0"
 msgid "Use Android setting"
-msgstr ""
+msgstr "Использовать настройки Android"
 
 msgctxt "dial_press_mode_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Принудительно"
 
 msgctxt "dial_press_mode_choices:2"
 msgid "Prevent"
+msgstr "Предотвращать"
+
+msgctxt "band_types_name:0"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "band_types_name:1"
+msgid "Wideband"
 msgstr ""
 

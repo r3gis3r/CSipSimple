@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-04 21:18+0000\n"
 "Last-Translator: Gianluca <Unknown>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -121,41 +121,47 @@ msgctxt "tls_method_choices:4"
 msgid "SSL23"
 msgstr "SSL23"
 
-#, fuzzy
 msgctxt "gsm_integration_type_choices:0"
 msgid "Auto"
 msgstr "Automatico"
 
 msgctxt "gsm_integration_type_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Forza"
 
 msgctxt "gsm_integration_type_choices:2"
 msgid "Prevent"
-msgstr ""
+msgstr "Previeni"
 
-#, fuzzy
 msgctxt "echo_mode_choices:0"
 msgid "Auto"
-msgstr "Automatico"
+msgstr "Auto"
 
 msgctxt "echo_mode_choices:1"
 msgid "Speex"
-msgstr ""
+msgstr "Speex"
 
 msgctxt "echo_mode_choices:2"
 msgid "Simple"
-msgstr ""
+msgstr "Semplice"
 
 msgctxt "dial_press_mode_choices:0"
 msgid "Use Android setting"
-msgstr ""
+msgstr "Usa le impostazioni di android"
 
 msgctxt "dial_press_mode_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Forza"
 
 msgctxt "dial_press_mode_choices:2"
 msgid "Prevent"
+msgstr "Previeni"
+
+msgctxt "band_types_name:0"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "band_types_name:1"
+msgid "Wideband"
 msgstr ""
 

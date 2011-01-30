@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-06 13:32+0000\n"
 "Last-Translator: Jan Tschirschwitz <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -112,7 +112,8 @@ msgstr "Verwende UMTS"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr "Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
+msgstr ""
+"Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
@@ -240,10 +241,9 @@ msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
 msgstr "Aktiviert die STUN Funktionalität"
 
-#, fuzzy
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr "TURN Server"
+msgstr ""
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
@@ -251,7 +251,7 @@ msgstr ""
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
-msgstr ""
+msgstr "Aktiviere QoS"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
@@ -259,16 +259,28 @@ msgstr ""
 
 msgctxt "dscp_val"
 msgid "DSCP value"
-msgstr ""
+msgstr "DSCP-Wert"
 
 msgctxt "dscp_val_desc"
 msgid "DSCP value for SIP traffic"
+msgstr "DSCP-Wert für SIP-Daten"
+
+msgctxt "keep_alive_interval_wifi"
+msgid "Wifi keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_mobile"
+msgid "Mobile keep alive"
+msgstr ""
+
+msgctxt "keep_alive_interval_desc"
+msgid "Interval (sec) for KA packets"
 msgstr ""
 
 #. Security
 msgctxt "tls"
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 msgctxt "secure_transport"
 msgid "Secure transport"
@@ -276,7 +288,7 @@ msgstr "Gesicherte Übertragung"
 
 msgctxt "secure_transport_desc"
 msgid "Security mechanism for SIP and RTP"
-msgstr ""
+msgstr "Sicherheitseinstellungen für SIP und RTP"
 
 msgctxt "secure_media"
 msgid "Secure media"
@@ -300,59 +312,59 @@ msgstr ""
 
 msgctxt "ca_list_file"
 msgid "TLS CA file"
-msgstr ""
+msgstr "TLS CA Zertifikat"
 
 msgctxt "ca_list_file_desc"
 msgid "For example /sdcard/CSipSimple/myAuthority.ca"
-msgstr ""
+msgstr "Z.B. /sdcard/CSipSimple/myAuthority.ca"
 
 msgctxt "cert_file"
 msgid "TLS certificate file"
-msgstr ""
+msgstr "TLS Klient Zertifikat"
 
 msgctxt "cert_file_desc"
 msgid "For example /sdcard/CSipSimple/myCert.crt"
-msgstr ""
+msgstr "z.B. /sdcard/CSipSimple/myCert.crt"
 
 msgctxt "privkey_file"
 msgid "TLS private key file"
-msgstr ""
+msgstr "TLS Geheimer Schlüssel"
 
 msgctxt "privkey_file_desc"
 msgid "For example /sdcard/CSipSimple/myKey.key"
-msgstr ""
+msgstr "z.B. /sdcard/CSipSimple/myKey.key"
 
 msgctxt "tls_password"
 msgid "TLS password"
-msgstr ""
+msgstr "TLS Passwort"
 
 msgctxt "tls_password_desc"
 msgid "TLS password to private key file"
-msgstr ""
+msgstr "TLS Passwort des geheimen Schlüssels"
 
 msgctxt "verify_server"
 msgid "Check server"
-msgstr ""
+msgstr "Überprüfe den Server"
 
 msgctxt "verify_server_desc"
 msgid "Verify server's certificate"
-msgstr ""
+msgstr "Überprüfe das Zertifikat des Servers"
 
 msgctxt "verify_client"
 msgid "Check client"
-msgstr ""
+msgstr "Client-Überprüfung"
 
 msgctxt "verify_client_desc"
 msgid "Verify client's certificate"
-msgstr ""
+msgstr "Überprüfe das Zertifikat eines Clients"
 
 msgctxt "tls_method"
 msgid "TLS Method"
-msgstr ""
+msgstr "TLS-Typ"
 
 msgctxt "tls_method_desc"
 msgid "Method for TLS transport"
-msgstr ""
+msgstr "Art der TLS-Verbindung"
 
 msgctxt "use_srtp"
 msgid "SRTP mode"
@@ -457,10 +469,9 @@ msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
 msgstr "Länge des Echos das unterdrückt werden kann"
 
-#, fuzzy
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr "Experten Modus"
+msgstr ""
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
@@ -476,7 +487,7 @@ msgstr ""
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
-msgstr ""
+msgstr "Wie sollen DTMF-Eingaben übertragen werden"
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
@@ -524,6 +535,38 @@ msgstr ""
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
+msgstr ""
+
+msgctxt "narrow_band"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "wide_band"
+msgid "Wideband"
+msgstr ""
+
+msgctxt "band_for_wifi"
+msgid "Band type for wifi"
+msgstr ""
+
+msgctxt "band_for_3g"
+msgid "Band type for 3G"
+msgstr ""
+
+msgctxt "band_for_gprs"
+msgid "Band type for GPRS"
+msgstr ""
+
+msgctxt "band_for_edge"
+msgid "Band type for EDGE"
+msgstr ""
+
+msgctxt "band_for_other"
+msgid "Band type for other"
+msgstr ""
+
+msgctxt "codecs_band_types"
+msgid "Connections bandwidth types for codecs"
 msgstr ""
 
 #. UI
@@ -645,13 +688,20 @@ msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
 msgstr "Verhindert die Rotation des Displays und hält es im Portraitformat"
 
-#, fuzzy
 msgctxt "gsm_integration_type"
 msgid "Mobile phone integration"
-msgstr "Nachfragen beim Wählen"
+msgstr ""
 
 msgctxt "gsm_integration_type_desc"
 msgid "How the application uses your mobile phone (or not)"
+msgstr ""
+
+msgctxt "invert_proximity_sensor"
+msgid "Invert proximity sensor"
+msgstr ""
+
+msgctxt "invert_proximity_sensor_desc"
+msgid "May help on some devices when manufacturer inverted near and far"
 msgstr ""
 
 #. Fast settings
@@ -725,20 +775,4 @@ msgstr "Experten Modus"
 msgctxt "advanced_preferences"
 msgid "Advanced mode"
 msgstr "Erweiterter Modus"
-
-#~ msgctxt "stun_server"
-#~ msgid "STUN server"
-#~ msgstr "STUN Server"
-
-#~ msgctxt "stun_server_desc"
-#~ msgid "STUN server (HOST:PORT)"
-#~ msgstr "STUN Server (HOST:PORT)"
-
-#~ msgctxt "gsm_integration_type"
-#~ msgid "Integration type with GSM"
-#~ msgstr ""
-
-#~ msgctxt "gsm_integration_type_desc"
-#~ msgid "How the application use GSM (or not)"
-#~ msgstr ""
 

@@ -51,8 +51,6 @@
   <string name="turn_server_desc">(strežnik:vrata)</string>
   <string name="enable_stun">Omogoči STUN</string>
   <string name="enable_stun_desc">Enostavno prečkanje UDP preko NAT</string>
-  <string name="stun_server">Strežnik STUN</string>
-  <string name="stun_server_desc">(strežnik:vrata)</string>
   <string name="enable_qos">Omogoči QoS</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">Varen prenos</string>

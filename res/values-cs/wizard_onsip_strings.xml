@@ -1,2 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_onsip_authentication_name">Ověřovací jméno</string>
+  <string name="w_onsip_authentication_name_desc">Jméno pro autorizaci SIP</string>
+</resources>

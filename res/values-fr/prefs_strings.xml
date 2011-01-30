@@ -6,9 +6,11 @@
   <string name="prefs_network">Réseau</string>
   <string name="prefs_network_desc">La façon dont le SIP se connecte au réseau</string>
   <string name="prefs_media">Média</string>
-  <string name="prefs_media_desc">Comportement des codecs et du son en communication</string>
-  <string name="prefs_ui">Apparence et comportement</string>
-  <string name="prefs_ui_desc">Modifier l\'apparence et les comportement de l\'application</string>
+  <string name="prefs_media_desc">Règles média pendant les appels (Codecs, Silences, ...)</string>
+  <string name="prefs_ui">Interface et intégration</string>
+  <string name="prefs_ui_desc">Adaptez le comportement à votre usage</string>
+  <string name="prefs_calls">Options d\'appel</string>
+  <string name="prefs_calls_desc">Options relatives aux appels</string>
   <string name="for_incomings">Pour les appels entrants</string>
   <string name="for_outgoings">Pour les appels sortants</string>
   <string name="perfs">Performances</string>
@@ -54,7 +56,7 @@
   <string name="enable_stun">Activer STUN</string>
   <string name="enable_stun_desc">Activer la fonctionnalité STUN</string>
   <string name="stun_server">Serveur STUN</string>
-  <string name="stun_server_desc">Server STUN (hôte:port)</string>
+  <string name="stun_server_desc">Serveur STUN (hôte[:port],...)</string>
   <string name="enable_qos">Activer la QoS</string>
   <string name="enable_qos_desc">Activer la QoS sur les paquets</string>
   <string name="dscp_val">Valeur DSCP</string>
@@ -104,8 +106,10 @@
   <string name="snd_clock_rate_desc">Fréquence du canal audio</string>
   <string name="snd_ptime">Ptime de la frame</string>
   <string name="snd_ptime_desc">Un ptime plus petit réduit la latence</string>
-  <string name="echo_cancellation_tail">Longueur d\'annulation de l\'echo</string>
+  <string name="echo_cancellation_tail">Longueur d\'annulation de l\'écho</string>
   <string name="echo_cancellation_tail_desc">Longueur de la trainée sur laquelle appliquer l\'annulation d\'écho</string>
+  <string name="echo_mode">Mode de l\'écho</string>
+  <string name="echo_mode_desc">Algorithme pour réduire l\'écho</string>
   <string name="codecs_desc">Priorité (0 = désactivé)</string>
   <string name="sip_dtmf">Modes DTMF</string>
   <string name="sip_dtmf_desc">Manière d\'envoyer les signaux DTMF</string>
@@ -117,6 +121,10 @@
   <string name="use_mode_api_desc">Essayez ce mode si le flux audio passe par le haut parleur en mode mains libres</string>
   <string name="sip_audio_mode">Mode audio des appels SIP</string>
   <string name="sip_audio_mode_desc">Ne changer ceci que si les développeurs vous le conseillent</string>
+  <string name="has_io_queue">File d\'entrée / sortie</string>
+  <string name="has_io_queue_desc">Activer la file entrée / sortie</string>
+  <string name="set_audio_generate_tone">Hack de la tonalité</string>
+  <string name="set_audio_generate_tone_desc">Générer une tonalité avant d\'effectuer un appel</string>
   <string name="general_ui">Interface utilisateur générale</string>
   <string name="native_dialer_integration">Intégration au numéroteur Android</string>
   <string name="advanced_ui">Modifications avancées</string>
@@ -144,6 +152,8 @@
   <string name="ringtone_desc">Sonnerie à défaut pour les appels SIP</string>
   <string name="prevent_screen_rotation">Empêcher la rotation d\'écran</string>
   <string name="prevent_screen_rotation_desc">Eviter la rotation de l\'écran et rester en mode portrait</string>
+  <string name="gsm_integration_type">Intégration au mobile</string>
+  <string name="gsm_integration_type_desc">Comment l\'application utilise votre ligne mobile (ou pas)</string>
   <string name="android_integration">S\'intégrer à Android</string>
   <string name="android_integration_desc">S\'intégrer à la numérotation et aux journaux d\'appel d\'Android</string>
   <string name="availability_profile">Profil de disponibilité</string>
@@ -157,6 +167,8 @@
   <string name="tg_allowed">Je suis autorisé à faire de la VoIP sur le canal donnée du mobile</string>
   <string name="tg_allowed_desc">Votre opérateur vous autorise à faire de la VoIP sur la canal data de sa connection</string>
   <string name="codecs_availability_text">Disponible seulement si le SIP est actuellement enregistré</string>
+  <string name="auto_record_calls">Enregistrer automatiquement les appels</string>
+  <string name="auto_record_calls_desc">Enregistrer dès que l\'appel est connecté</string>
   <string name="expert_preferences">Mode expert</string>
   <string name="advanced_preferences">Mode avancé</string>
 </resources>

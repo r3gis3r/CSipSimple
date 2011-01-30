@@ -19,4 +19,23 @@
     <item>:-$</item>
     <item>:-!</item>
   </string-array>
+  <string-array name="default_smiley_names">
+    <item>Contento</item>
+    <item>Triste</item>
+    <item>Avergonzado</item>
+    <item>Ángel</item>
+    <item>Indeciso</item>
+    <item>Llorando</item>
+    <item>Labios sellados</item>
+    <item>Riendo</item>
+    <item>Confundido</item>
+    <item>Guiño</item>
+    <item>Con la lengua fuera</item>
+    <item>Sorprendido</item>
+    <item>Besando</item>
+    <item>Gritando</item>
+    <item>Divertido</item>
+    <item>Boca de dinero</item>
+    <item>Pies en boca</item>
+  </string-array>
 </resources>

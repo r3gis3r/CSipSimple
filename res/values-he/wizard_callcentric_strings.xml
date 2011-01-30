@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_callcentric_display_name">שם החשבון</string>
+  <string name="w_callcentric_display_name_desc">הצגת שם עבור חשבון זה</string>
+  <string name="w_callcentric_phone_number">מספר טלפון סיפ</string>
+  <string name="w_callcentric_phone_number_desc">מספר טלפון סיפ ממוקד (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">סיסמה</string>
+  <string name="w_callcentric_password_desc">הסיסמה עבור חשבון שיחה ממוקדת שלך</string>
+</resources>

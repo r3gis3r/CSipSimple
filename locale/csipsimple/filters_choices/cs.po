@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the csipsimple package.
 # Regis Montoya <http://www.r3gis.fr>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
-"PO-Revision-Date: 2010-10-21 23:27+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"PO-Revision-Date: 2011-01-28 08:27+0000\n"
+"Last-Translator: Libor Tesař <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
@@ -21,93 +20,73 @@ msgstr ""
 
 msgctxt "filters_action:0"
 msgid "Can't call"
-msgstr ""
+msgstr "nemůžu volat"
 
 msgctxt "filters_action:1"
 msgid "Rewrite"
-msgstr ""
+msgstr "přepsat"
 
 msgctxt "filters_action:2"
 msgid "Stop processing"
-msgstr ""
+msgstr "zastavit procs"
 
 msgctxt "filters_action:3"
 msgid "Directly call"
-msgstr ""
+msgstr "volat přímo"
 
 msgctxt "filters_action:4"
 msgid "Auto answer"
-msgstr ""
+msgstr "automatické zvednutí"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
-msgstr ""
+msgstr "začít s"
 
 msgctxt "filters_type:1"
 msgid "Ends with"
-msgstr ""
+msgstr "ukončit s"
 
 msgctxt "filters_type:2"
 msgid "Contains"
-msgstr ""
+msgstr "Obsahuje"
 
 msgctxt "filters_type:3"
 msgid "All"
-msgstr ""
+msgstr "Vše"
 
 msgctxt "filters_type:4"
 msgid "Has exactly N digit"
-msgstr ""
+msgstr "má n-tý počet čísel"
 
 msgctxt "filters_type:5"
 msgid "Has more than N digit"
-msgstr ""
+msgstr "má větší než n-tý počet číslic"
 
 msgctxt "filters_type:6"
 msgid "Is exactly"
-msgstr ""
+msgstr "je přesně"
 
 msgctxt "filters_type:7"
 msgid "Custom RegExp"
-msgstr ""
+msgstr "vlastní nastavení vypršení registrace"
 
 msgctxt "replace_type:0"
 msgid "Prefix by"
-msgstr ""
+msgstr "předvolba"
 
 msgctxt "replace_type:1"
 msgid "Suffix with"
-msgstr ""
+msgstr "připona s"
 
 msgctxt "replace_type:2"
 msgid "Replace match by"
-msgstr ""
+msgstr "Nahradit shodu"
 
 msgctxt "replace_type:3"
 msgid "Replace all by"
-msgstr ""
+msgstr "nahradit vše"
 
 msgctxt "replace_type:4"
 msgid "Custom RegExp"
-msgstr ""
-
-#~ msgctxt "filters_type:2"
-#~ msgid "All"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:3"
-#~ msgid "Has exactly N digit"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:4"
-#~ msgid "Has more than N digit"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:5"
-#~ msgid "Is exactly"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:6"
-#~ msgid "Custom RegExp"
-#~ msgstr ""
+msgstr "vlastní nastavení vypršení registrace"
 

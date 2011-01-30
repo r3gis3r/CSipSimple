@@ -1,4 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-
+  <string-array name="filters_action">
+    <item>Nu pot apela</item>
+    <item>Rescriere</item>
+    <item>Opreste procesarea</item>
+    <item>Apeleaza direct</item>
+    <item>Raspuns automat</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>Prefix by</item>
+    <item>Suffix with</item>
+    <item>Inlocuieste cu</item>
+    <item>Inlocuieste tot cu</item>
+    <item>Expresie regulata personalizata</item>
+  </string-array>
 </resources>

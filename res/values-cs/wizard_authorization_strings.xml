@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_authorization_auth_name">Ověřovací jméno</string>
+  <string name="w_authorization_auth_name_desc">Ověření sip</string>
+  <string name="w_authorization_phone_number">Uživatelské jméno</string>
+  <string name="w_authorization_phone_number_desc">Uživatelský účet sip</string>
+</resources>

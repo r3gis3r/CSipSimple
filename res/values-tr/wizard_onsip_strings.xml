@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_onsip_authentication_name">Kimlik doğrulama ismi</string>
+  <string name="w_onsip_authentication_name_desc">SIP Kimlik doğrulama adı</string>
+</resources>

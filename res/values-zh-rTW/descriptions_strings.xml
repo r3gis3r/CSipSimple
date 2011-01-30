@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="description_image_button_one">一</string>
+  <string name="description_image_button_two">二</string>
+  <string name="description_image_button_three">三</string>
+  <string name="description_image_button_four">四</string>
+  <string name="description_image_button_five">五</string>
+  <string name="description_image_button_six">六</string>
+  <string name="description_image_button_seven">七</string>
+  <string name="description_image_button_eight">八</string>
+  <string name="description_image_button_nine">九</string>
+  <string name="description_image_button_star">星號</string>
+  <string name="description_image_button_zero">零</string>
+  <string name="description_image_button_pound">井號</string>
+  <string name="description_dial_button">撥號</string>
+  <string name="description_delete_button">倒退</string>
+  <string name="description_digits_edittext">撥出號碼</string>
+</resources>

@@ -19,4 +19,42 @@
     <item>Opcional</item>
     <item>Mandatório</item>
   </string-array>
+  <string-array name="dtmf_mode_choices">
+    <item>Automático</item>
+    <item>RTP</item>
+    <item>Geração em banda</item>
+    <item>SIP INFO</item>
+  </string-array>
+  <string-array name="contact_rewrite_method_choices">
+    <item>Legado</item>
+    <item>Normal</item>
+  </string-array>
+  <string-array name="transport_choices">
+    <item>Automático</item>
+    <item>UDP</item>
+    <item>TCP</item>
+    <item>TLS</item>
+  </string-array>
+  <string-array name="tls_method_choices">
+    <item>Automático</item>
+    <item>TLSv1</item>
+    <item>SSLv2</item>
+    <item>SSL#</item>
+    <item>SSL23</item>
+  </string-array>
+  <string-array name="gsm_integration_type_choices">
+    <item>Automático</item>
+    <item>Forçar</item>
+    <item>Prevenir</item>
+  </string-array>
+  <string-array name="echo_mode_choices">
+    <item>Automático</item>
+    <item>Speex</item>
+    <item>Simples</item>
+  </string-array>
+  <string-array name="dial_press_mode_choices">
+    <item>Usar configurações do Android</item>
+    <item>Forçar</item>
+    <item>Prevenir</item>
+  </string-array>
 </resources>

@@ -1,0 +1,58 @@
+# Turkish translation for csipsimple
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"PO-Revision-Date: 2010-12-21 11:08+0000\n"
+"Last-Translator: zeugma <Unknown>\n"
+"Language-Team: Turkish <tr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-12-31 06:02+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+msgctxt "w_common_display_name"
+msgid "Account name"
+msgstr "Hesap adı"
+
+msgctxt "w_common_display_name_desc"
+msgid "Display name for this account"
+msgstr "Bu hesap için görünen ad"
+
+msgctxt "w_common_username"
+msgid "User name"
+msgstr "Kullanıcı adı"
+
+msgctxt "w_common_username_desc"
+msgid "Sip account login"
+msgstr "Sip hesaba giriş"
+
+msgctxt "w_common_phone_number"
+msgid "Phone number"
+msgstr "Telefon numarası"
+
+msgctxt "w_common_phone_number_desc"
+msgid "Sip phone number given by your provider"
+msgstr "Servis saglayici tarafindan verilen Sip telefon numarası"
+
+msgctxt "w_common_password"
+msgid "Password"
+msgstr "Parola"
+
+msgctxt "w_common_password_desc"
+msgid "Password for your account"
+msgstr "Hesabınız için parola"
+
+msgctxt "w_common_server"
+msgid "Server"
+msgstr "Sunucu"
+
+msgctxt "w_common_server_desc"
+msgid "SIP server domain/IP[:port]"
+msgstr "SIP sunucu alanı/IP[:port]"

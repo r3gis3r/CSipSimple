@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_label">Mesajlaşma</string>
+  <string name="new_message">Yeni Mesaj</string>
+  <string name="create_new_message">Yeni mesaj oluşturma</string>
+  <string name="menu_call">Çağrı</string>
+  <string name="menu_delete_all">Konuları sil</string>
+  <string name="menu_delete">Konu sil</string>
+  <string name="anonymous_recipient">Anonim</string>
+  <string name="messagelist_sender_self">Ben</string>
+  <string name="delete_message">Mesajı sil</string>
+  <string name="kilobyte">KB</string>
+  <string name="undelivered_msg_dialog_title">Teslim edilmemiş mesaj</string>
+  <string name="download">İndirme</string>
+  <string name="downloading">İndiriliyor</string>
+  <string name="message_options">Mesaj seçenekleri</string>
+  <string name="done">Bitti</string>
+  <string name="add_attachment">Ekle</string>
+  <string name="view">Göster</string>
+  <string name="send">Gönder</string>
+  <string name="all_threads">Bütün konular</string>
+  <string name="open_keyboard_to_compose_message">Mesaj oluşturmak için klavye aç</string>
+  <string name="image_too_large">Resim çok büyük</string>
+  <string name="yes">TAMAM</string>
+  <string name="no">İptal</string>
+  <string name="edit">Düzenle</string>
+  <string name="confirm_dialog_title">Sil</string>
+  <string name="delete">Sil</string>
+  <string name="status_none">(Hiçbiri)</string>
+  <string name="status_pending">Beklemede</string>
+  <string name="status_received">Alındı</string>
+  <string name="status_failed">Başarısız</string>
+  <string name="status_unread">Okunmadı</string>
+  <string name="status_rejected">Reddedildi</string>
+</resources>

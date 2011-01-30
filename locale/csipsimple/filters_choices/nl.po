@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-12-30 15:22+0100\n"
-"PO-Revision-Date: 2010-10-19 13:49+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-01-17 13:11+0000\n"
+"Last-Translator: M66B <Unknown>\n"
 "Language-Team: nl <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
@@ -20,93 +19,73 @@ msgstr ""
 
 msgctxt "filters_action:0"
 msgid "Can't call"
-msgstr ""
+msgstr "Kan niet bellen"
 
 msgctxt "filters_action:1"
 msgid "Rewrite"
-msgstr ""
+msgstr "Herschrijf"
 
 msgctxt "filters_action:2"
 msgid "Stop processing"
-msgstr ""
+msgstr "Stop verwerking"
 
 msgctxt "filters_action:3"
 msgid "Directly call"
-msgstr ""
+msgstr "Directe oproep"
 
 msgctxt "filters_action:4"
 msgid "Auto answer"
-msgstr ""
+msgstr "Auto antwoord"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
-msgstr ""
+msgstr "Begint met"
 
 msgctxt "filters_type:1"
 msgid "Ends with"
-msgstr ""
+msgstr "Eindigt met"
 
 msgctxt "filters_type:2"
 msgid "Contains"
-msgstr ""
+msgstr "Bevat"
 
 msgctxt "filters_type:3"
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 msgctxt "filters_type:4"
 msgid "Has exactly N digit"
-msgstr ""
+msgstr "Heeft precies N cijfers"
 
 msgctxt "filters_type:5"
 msgid "Has more than N digit"
-msgstr ""
+msgstr "Heeft meer dan N cijfers"
 
 msgctxt "filters_type:6"
 msgid "Is exactly"
-msgstr ""
+msgstr "Is precies"
 
 msgctxt "filters_type:7"
 msgid "Custom RegExp"
-msgstr ""
+msgstr "Maatwerk RegExp"
 
 msgctxt "replace_type:0"
 msgid "Prefix by"
-msgstr ""
+msgstr "Prefix met"
 
 msgctxt "replace_type:1"
 msgid "Suffix with"
-msgstr ""
+msgstr "Suffix met"
 
 msgctxt "replace_type:2"
 msgid "Replace match by"
-msgstr ""
+msgstr "Vervang gevonden door"
 
 msgctxt "replace_type:3"
 msgid "Replace all by"
-msgstr ""
+msgstr "Vervang alles door"
 
 msgctxt "replace_type:4"
 msgid "Custom RegExp"
-msgstr ""
-
-#~ msgctxt "filters_type:2"
-#~ msgid "All"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:3"
-#~ msgid "Has exactly N digit"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:4"
-#~ msgid "Has more than N digit"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:5"
-#~ msgid "Is exactly"
-#~ msgstr ""
-
-#~ msgctxt "filters_type:6"
-#~ msgid "Custom RegExp"
-#~ msgstr ""
+msgstr "Maatwerk reguliere expressie"
 

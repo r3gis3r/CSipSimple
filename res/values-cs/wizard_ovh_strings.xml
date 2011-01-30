@@ -1,3 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="w_ovh_phone_number_desc">4íslo telefonu ve formátu 00420xxxxxxxxx</string>
 </resources>

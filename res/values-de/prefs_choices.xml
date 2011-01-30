@@ -19,4 +19,21 @@
     <item>Optional</item>
     <item>Aktiviert</item>
   </string-array>
+  <string-array name="contact_rewrite_method_choices">
+    <item>Alte Methode (bei Problemen probieren)</item>
+    <item>Normal</item>
+  </string-array>
+  <string-array name="transport_choices">
+    <item>Auto</item>
+    <item>UDP</item>
+    <item>TCP</item>
+    <item>TLS</item>
+  </string-array>
+  <string-array name="tls_method_choices">
+    <item>Auto</item>
+    <item>TLSv1</item>
+    <item>SSLv2</item>
+    <item>SSL3</item>
+    <item>SSL23</item>
+  </string-array>
 </resources>

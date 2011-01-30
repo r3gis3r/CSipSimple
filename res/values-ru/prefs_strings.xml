@@ -9,6 +9,8 @@
   <string name="prefs_media_desc">Аудиокодеки и звук</string>
   <string name="prefs_ui">Интерфейс</string>
   <string name="prefs_ui_desc">Настройки интерфейса</string>
+  <string name="prefs_calls">Параметры звонков</string>
+  <string name="prefs_calls_desc">Параметры, связанные со звонками</string>
   <string name="for_incomings">Входящие вызовы</string>
   <string name="for_outgoings">Исходящие вызовы</string>
   <string name="perfs">Производительность</string>
@@ -53,8 +55,8 @@
   <string name="turn_server_desc">TURN сервер (HOST:PORT)</string>
   <string name="enable_stun">STUN</string>
   <string name="enable_stun_desc">Настроить STUN-сервер</string>
-  <string name="stun_server">STUN-сервер</string>
-  <string name="stun_server_desc">STUN сервер (HOST:PORT)</string>
+  <string name="stun_server">STUN серверы</string>
+  <string name="stun_server_desc">STUN серверы (ХОСТ[:ПОРТ], ...)</string>
   <string name="enable_qos">Включить QoS</string>
   <string name="enable_qos_desc">Система поддержки качества и класса передачи данных</string>
   <string name="dscp_val">Значение DSCP</string>
@@ -106,12 +108,18 @@
   <string name="snd_ptime_desc">Указание нижнего уровня ptime обычно снижает латентность</string>
   <string name="echo_cancellation_tail">Шлейф подавления эха</string>
   <string name="echo_cancellation_tail_desc">Длина шлейфа подавления эха</string>
+  <string name="echo_mode_desc">Алгоритм эха</string>
   <string name="codecs_desc">Приоритет (0 - отключено)</string>
   <string name="sip_dtmf">DTMF режим</string>
   <string name="sip_dtmf_desc">Каким образом отправлять DTMF</string>
   <string name="use_soft_volume">Программная регулировка</string>
   <string name="use_soft_volume_desc">Регулировать громкость из программы CSipSimple и не использовать настройки Андроид</string>
+  <string name="use_routing_api">Использовать API маршрутизации</string>
   <string name="sip_audio_mode">Аудио режим для SIP вызовов</string>
+  <string name="sip_audio_mode_desc">Изменяйте только если разработчик вам посоветует</string>
+  <string name="has_io_queue">Очередь В/В</string>
+  <string name="has_io_queue_desc">Активировать очередь ввода/вывода</string>
+  <string name="set_audio_generate_tone_desc">Генерировать тональный сигнал перед совершением звонка</string>
   <string name="general_ui">Общие настройки интерфейса</string>
   <string name="native_dialer_integration">Интеграция с телефонной частью</string>
   <string name="advanced_ui">Дополнительные настройки</string>
@@ -139,6 +147,8 @@
   <string name="ringtone_desc">Рингтон для SIP вызовов по умолчанию</string>
   <string name="prevent_screen_rotation">Не поворачивать экран</string>
   <string name="prevent_screen_rotation_desc">Не поворачивать экран автоматически и всегда использовать портретный вид</string>
+  <string name="gsm_integration_type">Интеграция с мобильным телефоном</string>
+  <string name="gsm_integration_type_desc">Как приложение использует ваш мобильный телефон (или нет)</string>
   <string name="android_integration">Интегрировать с Андроид</string>
   <string name="android_integration_desc">Интеграция со стандарными номеронабирателем и списком вызовов</string>
   <string name="availability_profile">Профиль доступности</string>
@@ -152,6 +162,8 @@
   <string name="tg_allowed">Я могу использовать сотовую связь для SIP</string>
   <string name="tg_allowed_desc">Передача VoIP пакетов должна быть разрешена сотовым оператором</string>
   <string name="codecs_availability_text">Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети</string>
+  <string name="auto_record_calls">Автозапись звонков</string>
+  <string name="auto_record_calls_desc">Запись звонков по мере соединения</string>
   <string name="expert_preferences">Экспертный режим</string>
   <string name="advanced_preferences">Расширенный режим</string>
 </resources>

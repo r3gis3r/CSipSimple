@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_callcentric_display_name">Nombre de cuenta</string>
+  <string name="w_callcentric_display_name_desc">Mostrar el nombre de esta cuenta</string>
+  <string name="w_callcentric_phone_number">Número telefónico SIP</string>
+  <string name="w_callcentric_password">Contraseña</string>
+</resources>

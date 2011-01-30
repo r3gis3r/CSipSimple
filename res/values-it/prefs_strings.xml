@@ -53,8 +53,8 @@
   <string name="turn_server_desc">Turn server (HOST:PORT)</string>
   <string name="enable_stun">Abilita STUN</string>
   <string name="enable_stun_desc">Attiva funzionalità STUN</string>
-  <string name="stun_server">STUN server</string>
-  <string name="stun_server_desc">STUN server (HOST:PORT)</string>
+  <string name="stun_server">STUN servers</string>
+  <string name="stun_server_desc">STUN servers (HOST[:PORT], ...)</string>
   <string name="enable_qos">Abilita QoS</string>
   <string name="enable_qos_desc">Abilita QoS sui pacchetti</string>
   <string name="dscp_val">Valore DSCP</string>
@@ -106,6 +106,8 @@
   <string name="snd_ptime_desc">Specificare un ptime più basso normalmente riduce la latenza</string>
   <string name="echo_cancellation_tail">Coda di cancellazione dell\'eco</string>
   <string name="echo_cancellation_tail_desc">Lunghezza della coda di cancellazione dell\'eco</string>
+  <string name="echo_mode">Modalità eco</string>
+  <string name="echo_mode_desc">Algoritmo per l\'eco</string>
   <string name="codecs_desc">Priorità (0 disabilita)</string>
   <string name="sip_dtmf">Modalità DTMF</string>
   <string name="sip_dtmf_desc">Come inviare DTMF</string>
@@ -117,6 +119,10 @@
   <string name="use_mode_api_desc">Prova ad abilitare se l\'audio è indirizzato allo speaker, invece dell\'auricolare</string>
   <string name="sip_audio_mode">Modalità audio per le chiamate SIP</string>
   <string name="sip_audio_mode_desc">Cambia solo su suggerimento degli sviluppatori</string>
+  <string name="has_io_queue">Coda IO</string>
+  <string name="has_io_queue_desc">Attiva Coda per input/output</string>
+  <string name="set_audio_generate_tone">Tone hack</string>
+  <string name="set_audio_generate_tone_desc">Genera un tono prima di fare le chiamate</string>
   <string name="general_ui">Interfaccia utente generale</string>
   <string name="native_dialer_integration">Integrazione con il dialer nativo</string>
   <string name="advanced_ui">Tweaks avanzati</string>
@@ -144,6 +150,8 @@
   <string name="ringtone_desc">Suoneria di default per le chiamate SIP</string>
   <string name="prevent_screen_rotation">Previene rotazione dello schermo</string>
   <string name="prevent_screen_rotation_desc">Evita la rotazione dello schermo e mantieni la modalità verticale</string>
+  <string name="gsm_integration_type">Integrazione con il cellulare</string>
+  <string name="gsm_integration_type_desc">Come l\'applicazione usa il tuo cellulare (o no)</string>
   <string name="android_integration">Integrazione con Android</string>
   <string name="android_integration_desc">Integrazione con il dialer nativo e log delle chiamate</string>
   <string name="availability_profile">Profilo di disponibilità</string>
@@ -157,6 +165,8 @@
   <string name="tg_allowed">Mi è consentito usare la connessione dati mobile</string>
   <string name="tg_allowed_desc">Il tuo operatore telefonico permette l\'uso della connessione dati mobile per il VoIP</string>
   <string name="codecs_availability_text">Disponibile solo se sip è registrato</string>
+  <string name="auto_record_calls">Registra automaticamente le chiamate</string>
+  <string name="auto_record_calls_desc">Registra le chiamate appena connesso</string>
   <string name="expert_preferences">Modalità esperto</string>
   <string name="advanced_preferences">Modalità avanzata</string>
 </resources>

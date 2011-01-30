@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="unknown">未知</string>
+  <string name="type_incoming">已接</string>
+  <string name="type_outgoing">已拨</string>
+  <string name="type_missed">未接</string>
+  <string name="callBack">回电</string>
+  <string name="callAgain">重拨</string>
+  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" 分 "<xliff:g id="seconds" example="28">%s</xliff:g>" 秒"</string>
+</resources>

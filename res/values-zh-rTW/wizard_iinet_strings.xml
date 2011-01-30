@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_iinet_state">狀態</string>
+  <string name="w_iinet_state_desc">以下列表之相關狀態</string>
+  <string name="w_iinet_username">VoIP 電話號碼</string>
+  <string name="w_iinet_username_desc">移掉任何格式字元, 如空白或橫槓</string>
+  <string name="w_iinet_password">特殊 VoIP 密碼</string>
+  <string name="w_iinet_password_desc">與連線密碼不同</string>
+</resources>

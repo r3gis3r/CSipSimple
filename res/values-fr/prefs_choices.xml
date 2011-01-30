@@ -42,4 +42,19 @@
     <item>SSL3</item>
     <item>SSL23</item>
   </string-array>
+  <string-array name="gsm_integration_type_choices">
+    <item>Auto</item>
+    <item>Forcer</item>
+    <item>Empêcher</item>
+  </string-array>
+  <string-array name="echo_mode_choices">
+    <item>Auto</item>
+    <item>Speex</item>
+    <item>Basique</item>
+  </string-array>
+  <string-array name="dial_press_mode_choices">
+    <item>Utiliser la configuration Android</item>
+    <item>Forcer</item>
+    <item>Empêcher</item>
+  </string-array>
 </resources>

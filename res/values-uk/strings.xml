@@ -18,6 +18,7 @@
   <string name="choose_wizard">Вибрати майстра</string>
   <string name="use">Використовувати:</string>
   <string name="use_pstn">Використовувати мобільний</string>
+  <string name="use_skype">Використовувати скайп</string>
   <string name="ongoing_call">Дзвінок в процесі</string>
   <string name="missed_call">Пропущений виклик</string>
   <string name="recentCalls_empty">Немає викликів</string>
@@ -38,6 +39,8 @@
   <string name="service_ticker_registered_text">SIP Зареєстровано</string>
   <string name="outgoing_call_chooser_call_text">Дзвінок</string>
   <string name="reorder">Упорядкувати</string>
+  <string name="backup_restore">Збереження / Відновлення</string>
+  <string name="backup">Збереження</string>
   <string name="faq">FAQ</string>
   <string name="help">Довідка</string>
   <string name="record_logs">Запис журналів, щоб відправити його команді розробників і повідомити про помилку</string>
@@ -54,5 +57,8 @@
   <string name="display_icon_in_status_bar_desc">Чи відображати значок в рядку стану при реєстрації</string>
   <string name="display_icon_in_status_bar">Показати іконку в рядку стану</string>
   <string name="another_application_use_sip_port">Інше застосування в даний час використовує SIP порт! Не вдається запустити!</string>
+  <string name="choose_phone">Виберіть телефон</string>
   <string name="no_phone_found">Не знайдено телефон для цього контакту</string>
+  <string name="show_password">Показати пароль</string>
+  <string name="this_codec_is_not_free">**Цей кодек не є безкоштовним !!!**\nБудь-ласка впевніться що (Ваш SIP провайдер чи Ви самі) купили ліцензію на цей кодек! Ми (як розповсюджувач додатка) не відповідаємо за неправомірне використання кодека.\nВідповідальність за використання цього кодека лежить на вас.\nПосилання для придбання ліцензії:</string>
 </resources>

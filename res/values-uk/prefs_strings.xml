@@ -53,8 +53,6 @@
   <string name="turn_server_desc">TURN сервер (ХОСТ:ПОРТ)</string>
   <string name="enable_stun">Включити STUN</string>
   <string name="enable_stun_desc">Увімкнути функцію STUN</string>
-  <string name="stun_server">STUN сервер</string>
-  <string name="stun_server_desc">STUN сервер (ХОСТ:ПОРТ)</string>
   <string name="enable_qos">Включити QoS</string>
   <string name="enable_qos_desc">Увімкнути QoS на пакетах</string>
   <string name="dscp_val">DSCP значення</string>
@@ -117,6 +115,10 @@
   <string name="use_mode_api_desc">Спробуйте включити, що якщо звук маршрутизації оратор замість навушників</string>
   <string name="sip_audio_mode">Аудіо режим SIP дзвінків</string>
   <string name="sip_audio_mode_desc">Зміна тільки тоді, коли розробники радять вам</string>
+  <string name="has_io_queue">IO черга</string>
+  <string name="has_io_queue_desc">Активувати чергу для вводу/виводу</string>
+  <string name="set_audio_generate_tone">Хак тону</string>
+  <string name="set_audio_generate_tone_desc">Згенерувати тон перед дзвінком</string>
   <string name="general_ui">Користувальницький інтерфейс</string>
   <string name="native_dialer_integration">Тісна інтеграція дозвону</string>
   <string name="advanced_ui">Додаткові налаштуваннях</string>
@@ -144,6 +146,8 @@
   <string name="ringtone_desc">Рингтон по замовчуванню для SIP дзвінків</string>
   <string name="prevent_screen_rotation">Заборонити повертання екрану</string>
   <string name="prevent_screen_rotation_desc">Уникнути обертання екрану і зберегти в портретному режимі</string>
+  <string name="gsm_integration_type">Інтеграція з мобільним телефоном</string>
+  <string name="gsm_integration_type_desc">Чи інтегруватиметься з рідним мобільним телефоном</string>
   <string name="android_integration">Інтеграція з Android</string>
   <string name="android_integration_desc">Інтеграція з рідним номеронабирачем і журналом викликів</string>
   <string name="availability_profile">Наявність профілю</string>
@@ -157,6 +161,8 @@
   <string name="tg_allowed">Мені дозволено користуватися мобільними</string>
   <string name="tg_allowed_desc">Ваш оператор дозволяє VoIP</string>
   <string name="codecs_availability_text">Доступно тільки якщо SIP в даний час зареєстровано</string>
+  <string name="auto_record_calls">Автоматично записувати дзвінки</string>
+  <string name="auto_record_calls_desc">Записувати дзвінки при зєднанні</string>
   <string name="expert_preferences">Режим експерта</string>
   <string name="advanced_preferences">Розширений режим</string>
 </resources>

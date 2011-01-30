@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_callcentric_display_name">Název účtu</string>
+  <string name="w_callcentric_display_name_desc">Zobrazí název účtu</string>
+  <string name="w_callcentric_phone_number">SIP číslo</string>
+  <string name="w_callcentric_phone_number_desc">Centricky volat sip telefonní číslo</string>
+  <string name="w_callcentric_password">Heslo</string>
+  <string name="w_callcentric_password_desc">Heslo k Vašemu Callcentric účtu</string>
+</resources>

@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_expert_display_name">Nome da conta</string>
+  <string name="w_expert_display_name_desc">Mostrar nome para esta conta</string>
+  <string name="w_expert_username">Nome de usuário</string>
+  <string name="w_expert_username_desc">Usuário para autenticação</string>
+  <string name="w_expert_data">Senha</string>
+  <string name="w_expert_t_proxy">Proxy</string>
+  <string name="w_expert_use_tcp">Use TCP (não UDP)</string>
+</resources>

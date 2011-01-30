@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-01-30 00:15+0100\n"
 "PO-Revision-Date: 2010-10-07 13:18+0000\n"
 "Last-Translator: Dennis van Jeveren <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 msgctxt "w_advanced_display_name"
 msgid "Account name"
-msgstr "Accountnaam"
+msgstr "Account-naam"
 
 msgctxt "w_advanced_display_name_desc"
 msgid "Display name for this account"
@@ -31,7 +31,7 @@ msgstr "Nummerweergave"
 
 msgctxt "w_advanced_caller_id_desc"
 msgid "Caller ID to send with calls"
-msgstr "Nummerweergave dat moet worden verzonden tijdens gesprek"
+msgstr "Weer te geven nummer bij oproep"
 
 msgctxt "w_advanced_username"
 msgid "Username"
@@ -39,7 +39,7 @@ msgstr "Gebruikersnaam"
 
 msgctxt "w_advanced_username_desc"
 msgid "Username for SIP server authentication"
-msgstr "Gebruikersnaam voor SIP server authenticatie"
+msgstr "Gebruikersnaam voor SIP-server authenticatie"
 
 msgctxt "w_advanced_password"
 msgid "Password"
@@ -47,17 +47,17 @@ msgstr "Wachtwoord"
 
 msgctxt "w_advanced_password_desc"
 msgid "Password for SIP server authentication"
-msgstr "Wachtwoord voor SIP server authenticatie"
+msgstr "Wachtwoord voor SIP-server authenticatie"
 
 msgctxt "w_advanced_use_tcp"
 msgid "Use TCP (not UDP)"
-msgstr ""
+msgstr "Gebruik TCP (geen UDP)"
 
 msgctxt "w_advanced_proxy"
 msgid "Proxy"
-msgstr ""
+msgstr "Proxy"
 
 msgctxt "w_advanced_proxy_desc"
 msgid "Proxy domain/IP[:port] (optional, not always needed)"
-msgstr ""
+msgstr "Proxy domein/IP[:poort] (optioneel, niet altijd nodig)"
 

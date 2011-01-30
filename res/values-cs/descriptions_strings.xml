@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="description_image_button_one">jedna</string>
+  <string name="description_image_button_two">dva</string>
+  <string name="description_image_button_three">tři</string>
+  <string name="description_image_button_four">čtyři</string>
+  <string name="description_image_button_five">pět</string>
+  <string name="description_image_button_six">šest</string>
+  <string name="description_image_button_seven">sedm</string>
+  <string name="description_image_button_eight">osm</string>
+  <string name="description_image_button_nine">devět</string>
+  <string name="description_image_button_star">hvězdička</string>
+  <string name="description_image_button_zero">nula</string>
+  <string name="description_image_button_pound">mřížka</string>
+  <string name="description_dial_button">vytáčení</string>
+  <string name="description_delete_button">smaž</string>
+  <string name="description_digits_edittext">číslo k vytočení</string>
+</resources>

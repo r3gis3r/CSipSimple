@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_callcentric_display_name">Kontonavn</string>
+  <string name="w_callcentric_display_name_desc">Visningsnavn for denne konto</string>
+  <string name="w_callcentric_phone_number">SIP Telefonnummer</string>
+  <string name="w_callcentric_phone_number_desc">Callcentric SIP telefonnummer (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">Adgangskode</string>
+  <string name="w_callcentric_password_desc">Adgangskode til din Callcentric konto</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_basic_username">משתמש/ת</string>
+  <string name="w_basic_username_desc">שם החשבון / התחברות</string>
+  <string name="w_basic_password">סיסמה</string>
+  <string name="w_basic_password_desc">סיסמה לגישה לחשבון שלך</string>
+</resources>

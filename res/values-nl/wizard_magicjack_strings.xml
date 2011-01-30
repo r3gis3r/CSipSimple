@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_magicjack_display_name">Account-naam</string>
+  <string name="w_magicjack_display_name_desc">Weergavenaam voor dit account</string>
+  <string name="w_magicjack_username">Gebruikersnaam</string>
+  <string name="w_magicjack_username_desc">Zoiets als: EXXXXXXXXXX01</string>
+  <string name="w_magicjack_password">Wachtwoord</string>
+  <string name="w_magicjack_password_desc">Wachtwoord voor SIP-server authenticatie</string>
+  <string name="w_magicjack_server_desc">Zoiets als: proxy01.yourcity.talk4free.com</string>
+</resources>
