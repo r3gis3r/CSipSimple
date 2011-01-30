@@ -37,6 +37,7 @@ import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Callcentric;
+import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.Ecs;
 import com.csipsimple.wizards.impl.Ekiga;
@@ -190,6 +191,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_deltathree, 35, 
 					new Locale[]{ }, false, true, 
 					DeltaThree.class));
+			WIZARDS_DICT.put("CAMUNDANET", new WizardInfo("CAMUNDANET", "CamundaNet", 
+					R.drawable.ic_wizard_camundanet, 15, 
+					new Locale[]{}, false, true, 
+					CamundaNet.class));
 			
 			
 			//Locales
