@@ -1311,7 +1311,7 @@ public class SipService extends Service {
 				throw new RuntimeException("pendingIntent is not null!");
 			}
 			
-			long firstTime = SystemClock.elapsedRealtime() + interval * 1000;
+			long firstTime = SystemClock.elapsedRealtime() + /*interval * */10;
 
 			Intent intent = new Intent(KA_ACTION);
 			pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
