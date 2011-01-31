@@ -310,7 +310,10 @@ public class SipService extends Service {
 
 		@Override
 		public SipCallSession[] getCalls() throws RemoteException {
-			return pjService.getCalls();
+			if(pjService != null) {
+				return pjService.getCalls();
+			}
+			return new SipCallSession[0];
 		}
 
 		@Override
