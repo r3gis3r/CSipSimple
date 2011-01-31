@@ -732,10 +732,15 @@ public class PreferencesWrapper {
 		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 		String[] codecParts = codecName.split("/");
 		if(codecParts.length >=2 ) {
-			String currentBandType = prefs.getString(SipConfigManager.getBandTypeKey(ni.getType(), ni.getSubtype()), 
-					SipConfigManager.CODEC_WB);
-			String key = SipConfigManager.getCodecKey(codecName, currentBandType); 
-			return prefs.contains(key);
+			if(ni != null) {
+				String currentBandType = prefs.getString(SipConfigManager.getBandTypeKey(ni.getType(), ni.getSubtype()), 
+						SipConfigManager.CODEC_WB);
+				String key = SipConfigManager.getCodecKey(codecName, currentBandType); 
+				return prefs.contains(key);
+			}else {
+				String key = SipConfigManager.getCodecKey(codecName, SipConfigManager.CODEC_WB); 
+				return prefs.contains(key);
+			}
 		}
 		return false;
 	}
