@@ -926,7 +926,10 @@ public class SipService extends Service {
 			account = db.getAccount(accountDbId);
 			db.close();
 		}
-		return pjService.getAccountInfo(account);
+		if(pjService != null) {
+			return pjService.getAccountInfo(account);
+		}
+		return null;
 	}
 
 	public void updateRegistrationsState() {
