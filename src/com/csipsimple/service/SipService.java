@@ -1321,9 +1321,13 @@ public class SipService extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.d(THIS_FILE, "KA alarm receive something "+intent.getAction());
-			if(KA_ACTION.equalsIgnoreCase(intent.getAction()) && pjService != null) {
-				Log.d(THIS_FILE, "Send a keep alive packet");
-				pjService.sendKeepAlivePackets();
+			if(KA_ACTION.equalsIgnoreCase(intent.getAction()) ) {
+				if(pjService != null) {
+					Log.d(THIS_FILE, "Send a keep alive packet");
+					pjService.sendKeepAlivePackets();
+				}else {
+					destroy();
+				}
 			}
 		}
 		
