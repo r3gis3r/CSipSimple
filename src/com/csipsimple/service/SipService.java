@@ -463,7 +463,7 @@ public class SipService extends Service {
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
-		private Timer mTimer = new Timer();
+		private Timer mTimer = null;
 		private MyTimerTask mTask;
 
 		@Override
@@ -477,8 +477,11 @@ public class SipService extends Service {
 		}
 		
 		public void stop() {
-			mTimer.purge();
-			mTimer.cancel();
+			if(mTimer != null) {
+				mTimer.purge();
+				mTimer.cancel();
+			}
+			mTimer = null;
 		}
 
 		private void onReceiveInternal(Context context, Intent intent) {
@@ -546,6 +549,9 @@ public class SipService extends Service {
 						mTask.cancel();
 					}
 					mTask = new MyTimerTask(type, connected);
+					if(mTimer == null) {
+						mTimer = new Timer();
+					}
 					mTimer.schedule(mTask, 2 * 1000L);
 					// hold wakup lock so that we can finish changes before the
 					// device goes to sleep
