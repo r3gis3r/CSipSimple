@@ -741,15 +741,22 @@ public class PjSipService {
 			return -1;
 		}
 		
-		ToCall toCall = sanitizeSipUri(callee, accountId);
+		final ToCall toCall = sanitizeSipUri(callee, accountId);
 		if(toCall != null) {
-		
-			pj_str_t uri = pjsua.pj_str_copy(toCall.getCallee());
-			
-			// Nothing to do with this values
-			byte[] userData = new byte[1];
-			int[] callId = new int[1];
-			return pjsua.call_make_call(toCall.getPjsipAccountId(), uri, 0, userData, null, callId);
+			Thread t = new Thread() {
+				public void run() {
+
+					pj_str_t uri = pjsua.pj_str_copy(toCall.getCallee());
+					
+					// Nothing to do with this values
+					byte[] userData = new byte[1];
+					int[] callId = new int[1];
+					pjsua.call_make_call(toCall.getPjsipAccountId(), uri, 0, userData, null, callId);
+				};
+			};
+			t.start();
+			//Mmmm ...
+			return 0;
 		}else {
 			service.notifyUserOfMessage(service.getString(R.string.invalid_sip_uri)+ " : "+callee);
 		}

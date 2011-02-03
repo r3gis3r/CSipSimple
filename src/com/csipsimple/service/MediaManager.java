@@ -52,6 +52,7 @@ public class MediaManager {
 	//Locks
 	private WifiLock wifiLock;
 	private WakeLock screenLock;
+	private WakeLock cpuLock;
 	
 	// Media settings to save / resore
 	private int savedVibrateRing, savedVibradeNotif, savedWifiPolicy, savedRingerMode;
@@ -202,7 +203,7 @@ public class MediaManager {
 			if(service.prefsWrapper.keepAwakeInCall()) {
 				if(screenLock == null) {
 					PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
-		            screenLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall");
+		            screenLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "com.csipsimple.onIncomingCall.SCREEN");
 		            screenLock.setReferenceCounted(false);
 				}
 				//Ensure single lock
@@ -212,6 +213,15 @@ public class MediaManager {
 				}
 				
 			}
+		}
+		
+		if(cpuLock == null) {
+			PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
+			cpuLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.onIncomingCall.CPU");
+			cpuLock.setReferenceCounted(false);
+		}
+		if(!cpuLock.isHeld()) {
+			cpuLock.acquire();
 		}
 		
 		
@@ -335,6 +345,9 @@ public class MediaManager {
 		if(screenLock != null && screenLock.isHeld()) {
 			Log.d(THIS_FILE, "Release screen lock");
 			screenLock.release();
+		}
+		if(cpuLock != null && cpuLock.isHeld()) {
+			cpuLock.release();
 		}
 		
 		audioFocusWrapper.unFocus();
