@@ -26,11 +26,14 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -82,13 +85,13 @@ public class Ippi extends SimpleImplementation {
 				//Here we get the credit info, now add a row in the interface
 				String response = (String) message.obj;
 				try{
-					int value = Integer.parseInt(response);
+					float value = Float.parseFloat(response.trim());
 					if(value >= 0) {
-						customWizardText.setText("Credit : " + response + " euros");
+						customWizardText.setText("Credit : " + Math.round(value * 100.0)/100.0 + " euros");
 						customWizard.setVisibility(View.VISIBLE);
 					}
 				}catch(NumberFormatException e) {
-					Log.e(THIS_FILE, "Impossible to parse result");
+					Log.e(THIS_FILE, "Impossible to parse result", e);
 				}catch (NullPointerException e) {
 					Log.e(THIS_FILE, "Null result");
 				}
@@ -115,6 +118,7 @@ public class Ippi extends SimpleImplementation {
 	
 	private void updateAccountInfos(final SipProfile acc) {
 		if (acc != null && acc.id != SipProfile.INVALID_ID) {
+			customWizard.setVisibility(View.GONE);
 			Thread t = new Thread() {
 
 				public void run() {
@@ -124,6 +128,7 @@ public class Ippi extends SimpleImplementation {
 						String requestURL = "https://soap.ippi.fr/credit/check_credit.php?"
 							+ "login=" + acc.username
 							+ "&code=" + MD5.MD5Hash(acc.data + DateFormat.format("yyyyMMdd", new Date()));
+						
 						HttpGet httpGet = new HttpGet(requestURL);
 
 						// Create a response handler
@@ -131,7 +136,8 @@ public class Ippi extends SimpleImplementation {
 						if(httpResponse.getStatusLine().getStatusCode() == 200) {
 							InputStreamReader isr = new InputStreamReader(httpResponse.getEntity().getContent());
 							BufferedReader br = new BufferedReader(isr);
-							creditHandler.sendMessage(creditHandler.obtainMessage(DID_SUCCEED, br.readLine()));
+							String line = br.readLine();
+							creditHandler.sendMessage(creditHandler.obtainMessage(DID_SUCCEED, line));
 						}else {
 							creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
 						}
@@ -141,6 +147,19 @@ public class Ippi extends SimpleImplementation {
 				}
 			};
 			t.start();
+		} else {
+			// add a row to link 
+			customWizardText.setText("Create account");
+			customWizard.setVisibility(View.VISIBLE);
+			customWizard.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(Intent.ACTION_VIEW);
+					it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					it.setData(Uri.parse("https://m.ippi.fr/subscribe/android.php"));
+					parent.startActivity(it);
+				}
+			});
 		}
 	}
 	

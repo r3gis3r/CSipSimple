@@ -54,6 +54,7 @@ import com.csipsimple.wizards.impl.Ippi;
 import com.csipsimple.wizards.impl.Keyyo;
 import com.csipsimple.wizards.impl.Local;
 import com.csipsimple.wizards.impl.Mondotalk;
+import com.csipsimple.wizards.impl.NeufTalk;
 import com.csipsimple.wizards.impl.NexGenTel;
 import com.csipsimple.wizards.impl.OnSip;
 import com.csipsimple.wizards.impl.Ovh;
@@ -214,6 +215,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_freephonie, 30, 
 					new Locale[]{Locale.FRANCE}, false, false, 
 					Freephonie.class));
+			WIZARDS_DICT.put("NEUFTALK", new WizardInfo("NEUFTALK", "NeufTalk", 
+					R.drawable.ic_wizard_neuftalk, 2, 
+					new Locale[]{Locale.FRANCE}, false, false, 
+					NeufTalk.class));
 			WIZARDS_DICT.put("IPPI", new WizardInfo("IPPI", "ippi", 
 					R.drawable.ic_wizard_ippi, 10, 
 					new Locale[]{

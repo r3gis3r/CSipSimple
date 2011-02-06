@@ -214,11 +214,16 @@ public class SipHome extends TabActivity {
 	
 	private void postStartSipService() {
 		// If we have never set fast settings
-		if (!prefWrapper.hasAlreadySetup()) {
-			Intent prefsIntent = new Intent(this, PrefsFast.class);
-			prefsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(prefsIntent);
-			return;
+		if(CustomDistribution.showFirstSettingScreen()) {
+			if (!prefWrapper.hasAlreadySetup()) {
+				Intent prefsIntent = new Intent(this, PrefsFast.class);
+				prefsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(prefsIntent);
+				return;
+			}
+		}else {
+			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, true);
+			Compatibility.setFirstRunParameters(prefWrapper);
 		}
 
 		// If we have no account yet, open account panel,
