@@ -220,7 +220,9 @@ public class Ringer {
             } catch (InterruptedException ex) {
         		Log.d(THIS_FILE, "Ringer thread interrupt");
             } finally {
-            	ringtone.stop();
+            	if(ringtone != null) {
+            		ringtone.stop();
+            	}
             }
     		Log.d(THIS_FILE, "Ringer thread exiting");
     	}

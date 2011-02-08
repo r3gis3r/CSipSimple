@@ -330,10 +330,8 @@ public class SipService extends Service {
 		@Override
 		public void adjustVolume(SipCallSession callInfo, int direction, int flags) throws RemoteException {
 			
-			int state = callInfo.getCallState();
-    		
-    		boolean ringing = ( (state == SipCallSession.InvState.INCOMING) ||
-    							(state == SipCallSession.InvState.EARLY) );
+			
+    		boolean ringing = callInfo.isIncoming() && callInfo.isBeforeConfirmed();
     		
         	// Mode ringing
     		if(ringing) {
@@ -343,7 +341,7 @@ public class SipService extends Service {
 	        	if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME)) {
 	        		Intent adjustVolumeIntent = new Intent(SipService.this, InCallMediaControl.class);
 	        		adjustVolumeIntent.putExtra(Intent.EXTRA_KEY_EVENT, direction);
-	        		adjustVolumeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK   );
+	        		adjustVolumeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	        		startActivity(adjustVolumeIntent);
 	        	}else {
 	        		pjService.adjustStreamVolume(Compatibility.getInCallStream(), direction, flags);

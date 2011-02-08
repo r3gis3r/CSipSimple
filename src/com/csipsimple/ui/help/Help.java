@@ -95,6 +95,9 @@ public class Help extends Activity implements OnClickListener {
 		LinearLayout line;
 		line = (LinearLayout) findViewById(R.id.faq_line);
 		line.setOnClickListener(this);
+		if(CustomDistribution.getFaqLink() == null) {
+			line.setVisibility(View.GONE);
+		}
 		line = (LinearLayout) findViewById(R.id.record_logs_line);
 		line.setOnClickListener(this);
 		if(CustomDistribution.getSupportEmail() == null) {
