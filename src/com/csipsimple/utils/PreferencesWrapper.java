@@ -91,6 +91,8 @@ public class PreferencesWrapper {
 		
 		put(SipConfigManager.STUN_SERVER, "stun.counterpath.com");
 		put(SipConfigManager.TURN_SERVER, "");
+		put(SipConfigManager.TURN_USERNAME, "");
+		put(SipConfigManager.TURN_PASSWORD, "");
 //		put(TLS_SERVER_NAME, "");
 //		put(CA_LIST_FILE, "");
 //		put(CERT_FILE, "");

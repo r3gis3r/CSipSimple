@@ -118,6 +118,7 @@ public class PjSipAccount {
 		}else {
 			cfg.setProxy_cnt(0);
 		}
+		cfg.setReg_use_proxy(profile.reg_use_proxy);
 
 		if(profile.username != null || profile.data != null) {
 			cfg.setCred_count(1);

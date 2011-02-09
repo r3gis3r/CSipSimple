@@ -114,6 +114,16 @@
 				android:summary="@string/turn_server_desc"
 				android:dependency="enable_turn"
 				android:defaultValue=""></EditTextPreference>
+			<EditTextPreference android:key="turn_username"
+				android:title="@string/turn_username"
+				android:summary="@string/turn_username_desc"
+				android:dependency="enable_turn"
+				android:defaultValue=""></EditTextPreference>
+			<EditTextPreference android:key="turn_password"
+				android:title="@string/turn_password"
+				android:summary="@string/turn_password_desc"
+				android:dependency="enable_turn"
+				android:defaultValue=""></EditTextPreference>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/for_incomings" android:key="for_incoming">

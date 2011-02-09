@@ -63,6 +63,8 @@ public class SipConfigManager {
 	// NETWORK
 	public static final String TURN_SERVER = "turn_server";
 	public static final String ENABLE_TURN = "enable_turn";
+	public static final String TURN_USERNAME = "turn_username";
+	public static final String TURN_PASSWORD = "turn_password";
 	public static final String ENABLE_ICE = "enable_ice";
 	public static final String ENABLE_STUN = "enable_stun";
 	public static final String STUN_SERVER = "stun_server";

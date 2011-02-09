@@ -649,4 +649,8 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.send_keep_alive(acc_id);
   }
 
+  public static int set_turn_cfg(pjsua_media_config media_cfg, pj_str_t username, pj_str_t data) {
+    return pjsuaJNI.set_turn_cfg(pjsua_media_config.getCPtr(media_cfg), media_cfg, pj_str_t.getCPtr(username), username, pj_str_t.getCPtr(data), data);
+  }
+
 }

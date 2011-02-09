@@ -924,6 +924,7 @@ public class pjsuaJNI {
   public final static native int csipsimple_init(long jarg1, pjsua_config jarg1_, long jarg2, pjsua_logging_config jarg2_, long jarg3, pjsua_media_config jarg3_);
   public final static native int csipsimple_destroy();
   public final static native int send_keep_alive(int jarg1);
+  public final static native int set_turn_cfg(long jarg1, pjsua_media_config jarg1_, long jarg2, pj_str_t jarg2_, long jarg3, pj_str_t jarg3_);
 
   public static void SwigDirector_Callback_on_call_state(Callback self, int call_id, long e) {
     self.on_call_state(call_id, (e == 0) ? null : new pjsip_event(e, false));

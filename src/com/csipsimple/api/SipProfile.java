@@ -82,12 +82,16 @@ public class SipProfile implements Parcelable {
 	
 	// For now, assume unique proxy
 	public static final String FIELD_PROXY = "proxy";
+	public static final String FIELD_REG_USE_PROXY = "reg_use_proxy";
+	
 	// For now, assume unique credential
 	public static final String FIELD_REALM = "realm";
 	public static final String FIELD_SCHEME = "scheme";
 	public static final String FIELD_USERNAME = "username";
 	public static final String FIELD_DATATYPE = "datatype";
 	public static final String FIELD_DATA = "data";
+	
+	public static final String FIELD_SIP_STACK = "sip_stack";
 	
 	public final static String[] full_projection = {
 		FIELD_ID,
@@ -102,12 +106,14 @@ public class SipProfile implements Parcelable {
 		FIELD_TRANSPORT, FIELD_USE_SRTP,
 
 		// Proxy infos
-		FIELD_PROXY,
+		FIELD_PROXY, FIELD_REG_USE_PROXY,
 
 		// And now cred_info since for now only one cred info can be managed
 		// In future release a credential table should be created
 		FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
-		FIELD_DATA };
+		FIELD_DATA, 
+		
+		FIELD_SIP_STACK };
 	public final static Class<?>[] full_projection_types = {
 		Integer.class,
 		
@@ -119,10 +125,12 @@ public class SipProfile implements Parcelable {
 		String.class, String.class,
 		Integer.class, Integer.class,
 		
-		String.class,
+		String.class, Integer.class,
 		
 		String.class, String.class, String.class, Integer.class,
-		String.class
+		String.class,
+		
+		Integer.class
 	};
 	
 	//Properties
@@ -149,8 +157,8 @@ public class SipProfile implements Parcelable {
 	public int datatype = 0;
 	public String data = null;
 	public int use_srtp = 0;
+	public int reg_use_proxy = 3;
 	public int sip_stack = PJSIP_STACK;
-	
 	
 	public SipProfile() {
 		display_name = "";
@@ -182,6 +190,7 @@ public class SipProfile implements Parcelable {
 		allow_contact_rewrite = (in.readInt()!=0);
 		contact_rewrite_method = in.readInt();
 		sip_stack = in.readInt();
+		reg_use_proxy = in.readInt();
 	}
 
 	public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
@@ -231,6 +240,7 @@ public class SipProfile implements Parcelable {
 		dest.writeInt(allow_contact_rewrite?1:0);
 		dest.writeInt(contact_rewrite_method);
 		dest.writeInt(sip_stack);
+		dest.writeInt(reg_use_proxy);
 	}
 	
 	private String getWriteParcelableString(String str) {
@@ -333,7 +343,12 @@ public class SipProfile implements Parcelable {
 		if (tmp_s != null) {
 			proxies = TextUtils.split(tmp_s,  Pattern.quote(PROXIES_SEPARATOR) );
 		}
+		tmp_i = args.getAsInteger(FIELD_REG_USE_PROXY);
+		if (tmp_i != null && tmp_i >=0 ) {
+			reg_use_proxy = tmp_i;
+		}
 		
+		// Auth
 		tmp_s = args.getAsString(FIELD_REALM);
 		if (tmp_s != null) {
 			realm = tmp_s;
@@ -353,6 +368,12 @@ public class SipProfile implements Parcelable {
 		tmp_s = args.getAsString(FIELD_DATA);
 		if (tmp_s != null) {
 			data = tmp_s;
+		}
+		
+
+		tmp_i = args.getAsInteger(FIELD_SIP_STACK);
+		if (tmp_i != null && tmp_i >=0 ) {
+			sip_stack = tmp_i;
 		}
 	}
 	
@@ -395,12 +416,16 @@ public class SipProfile implements Parcelable {
 		}else {
 			args.put(FIELD_PROXY, "");
 		}
+		args.put(FIELD_REG_USE_PROXY, reg_use_proxy);
+		
 		// Assume we have an unique credential
 		args.put(FIELD_REALM, realm);
 		args.put(FIELD_SCHEME, scheme);
 		args.put(FIELD_USERNAME, username);
 		args.put(FIELD_DATATYPE, datatype);
 		args.put(FIELD_DATA, data);
+		
+		args.put(FIELD_SIP_STACK, sip_stack);
 
 		return args;
 	}

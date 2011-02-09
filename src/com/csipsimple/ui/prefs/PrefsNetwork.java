@@ -56,6 +56,8 @@ public class PrefsNetwork extends GenericPrefs {
 			
 			hidePreference("nat_traversal", SipConfigManager.ENABLE_TURN);
 			hidePreference("nat_traversal", SipConfigManager.TURN_SERVER);
+			hidePreference("nat_traversal", SipConfigManager.TURN_USERNAME);
+			hidePreference("nat_traversal", SipConfigManager.TURN_PASSWORD);
 			
 			hidePreference("transport", SipConfigManager.ENABLE_TCP);
 			hidePreference("transport", SipConfigManager.ENABLE_UDP);

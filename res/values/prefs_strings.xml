@@ -60,6 +60,10 @@
 <string name="enable_turn_desc">Turn on TURN feature</string>
 <string name="turn_server">Turn server</string>
 <string name="turn_server_desc">TURN server (HOST:PORT)</string>
+<string name="turn_username">TURN user</string>
+<string name="turn_username_desc">Username for TURN authentication</string>
+<string name="turn_password">TURN password</string>
+<string name="turn_password_desc">Password for TURN authentication</string>
 <string name="enable_stun">Enable STUN</string>
 <string name="enable_stun_desc">Turn on STUN feature</string>
 <string name="stun_server">STUN servers</string>
@@ -77,7 +81,6 @@
 <string name="secure_transport">Secure transport</string>
 <string name="secure_transport_desc">Security mechanism for SIP and RTP</string>
 <string name="secure_media">Secure media</string>
-
 <string name="network_tls_transport_port">TLS Port</string>
 <string name="network_tls_transport_port_desc">Port number to bind locally</string>
 <string name="network_tls_server_name">TLS server name</string>

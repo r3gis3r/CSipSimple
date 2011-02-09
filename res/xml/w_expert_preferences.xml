@@ -64,6 +64,12 @@
 		<EditTextPreference android:key="proxy" android:title="@string/w_expert_proxy"
 			android:dialogMessage="@string/w_expert_proxy_desc"></EditTextPreference>
 	</PreferenceCategory>
+	<!-- 
+	<ListPreference android:key="reg_use_proxy" android:title="@string/w_expert_reg_use_proxy"
+			android:defaultValue="3"
+			android:entryValues="@array/reg_use_proxy_values" android:entries="@array/reg_use_proxy_choices"
+			/>
+	 -->
 	<ListPreference android:title="@string/use_srtp" android:key="use_srtp"
 		android:summary="@string/use_srtp_desc"
 		android:defaultValue="0"

@@ -45,10 +45,10 @@ import android.telephony.TelephonyManager;
 import android.view.KeyCharacterMap;
 
 import com.csipsimple.R;
-import com.csipsimple.api.SipConfigManager;
-import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipProfileState;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.ToCall;
@@ -250,6 +250,10 @@ public class PjSipService {
 						if (isTurnEnabled == 1) {
 							mediaCfg.setEnable_turn(isTurnEnabled);
 							mediaCfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
+							pjsua.set_turn_cfg(mediaCfg, 
+									pjsua.pj_str_copy(prefsWrapper.getPreferenceStringValue(SipConfigManager.TURN_USERNAME)), 
+									pjsua.pj_str_copy(prefsWrapper.getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)));
+						
 						}
 	
 						// INITIALIZE
