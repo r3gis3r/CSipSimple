@@ -130,6 +130,18 @@ public class Callback {
     if (getClass() == Callback.class) pjsuaJNI.Callback_on_mwi_info(swigCPtr, this, acc_id, pj_str_t.getCPtr(mime_type), mime_type, pj_str_t.getCPtr(body), body); else pjsuaJNI.Callback_on_mwi_infoSwigExplicitCallback(swigCPtr, this, acc_id, pj_str_t.getCPtr(mime_type), mime_type, pj_str_t.getCPtr(body), body);
   }
 
+  public void on_zrtp_show_sas(pj_str_t sas, int verified) {
+    if (getClass() == Callback.class) pjsuaJNI.Callback_on_zrtp_show_sas(swigCPtr, this, pj_str_t.getCPtr(sas), sas, verified); else pjsuaJNI.Callback_on_zrtp_show_sasSwigExplicitCallback(swigCPtr, this, pj_str_t.getCPtr(sas), sas, verified);
+  }
+
+  public void on_zrtp_secure_on(pj_str_t cipher) {
+    if (getClass() == Callback.class) pjsuaJNI.Callback_on_zrtp_secure_on(swigCPtr, this, pj_str_t.getCPtr(cipher), cipher); else pjsuaJNI.Callback_on_zrtp_secure_onSwigExplicitCallback(swigCPtr, this, pj_str_t.getCPtr(cipher), cipher);
+  }
+
+  public void on_zrtp_secure_off() {
+    if (getClass() == Callback.class) pjsuaJNI.Callback_on_zrtp_secure_off(swigCPtr, this); else pjsuaJNI.Callback_on_zrtp_secure_offSwigExplicitCallback(swigCPtr, this);
+  }
+
   public Callback() {
     this(pjsuaJNI.new_Callback(), true);
     pjsuaJNI.Callback_director_connect(this, swigCPtr, swigCMemOwn, false);

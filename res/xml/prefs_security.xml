@@ -65,8 +65,13 @@
 		</PreferenceCategory>
 		<PreferenceCategory android:title="@string/secure_media" android:key="secure_media">
 			<ListPreference android:title="@string/use_srtp" android:key="use_srtp"
-					android:summary="@string/use_srtp_desc"
-					android:defaultValue="0"
-					android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"/>
+				android:summary="@string/use_srtp_desc"
+				android:defaultValue="0"
+				android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"/>
+					
+			<ListPreference android:title="@string/use_zrtp" android:key="use_zrtp"
+				android:summary="@string/use_zrtp_desc"
+				android:defaultValue="1"
+				android:entryValues="@array/use_zrtp_values" android:entries="@array/use_zrtp_choices"/>
 		</PreferenceCategory>
 </PreferenceScreen>

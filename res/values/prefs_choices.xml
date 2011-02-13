@@ -101,4 +101,9 @@
 		<item>Accounts proxies</item>
 		<item>All</item>
 	</string-array>
+	
+	<string-array name="use_zrtp_choices">
+		<item>No ZRTP</item>
+		<item>Create ZRTP</item>
+	</string-array>
 </resources>

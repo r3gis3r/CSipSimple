@@ -19,6 +19,7 @@ package com.csipsimple.pjsip;
 
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
+import org.pjsip.pjsua.pjmedia_zrtp_use;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
@@ -47,7 +48,7 @@ public class PjSipAccount {
 	public Integer id;
 	public Integer transport = 0;
 	
-	
+	private boolean hasZrtpValue = false;
 
 	
 	
@@ -102,6 +103,10 @@ public class PjSipAccount {
 		if(profile.use_srtp != -1) {
 			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(profile.use_srtp));
 			cfg.setSrtp_secure_signaling(0);
+		}
+		if(profile.use_zrtp != -1 && profile.use_zrtp > 0) {
+			cfg.setUse_zrtp(pjmedia_zrtp_use.swigToEnum(profile.use_zrtp));
+			hasZrtpValue = true;
 		}
 		
 		if(profile.proxies != null) {
@@ -202,6 +207,15 @@ public class PjSipAccount {
 				cfg.setId(pjsua.pj_str_copy(parsedInfos.toString()));
 			}
 		}
+		
+		if(!hasZrtpValue) {
+			int useZrtp = prefs.getPreferenceIntegerValue(SipConfigManager.USE_ZRTP);
+			if(useZrtp == 1 || useZrtp == 2) {
+				cfg.setUse_zrtp(pjmedia_zrtp_use.swigToEnum(useZrtp));
+			}
+			Log.d("Pj profile", "--> added zrtp "+ useZrtp);
+		}
+		
 	}
 	
 	

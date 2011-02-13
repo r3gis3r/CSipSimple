@@ -101,6 +101,8 @@
 <string name="tls_method_desc">Method for TLS transport</string>
 <string name="use_srtp">SRTP mode</string>
 <string name="use_srtp_desc">Mode for Secure RTP</string>
+<string name="use_zrtp">ZRTP mode</string>
+<string name="use_zrtp_desc">Mode for Secured ZRTP</string>
 
 <!-- Media -->
 

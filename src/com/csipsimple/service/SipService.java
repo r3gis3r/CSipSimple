@@ -374,6 +374,11 @@ public class SipService extends Service {
 			return pjService.canRecord(callId);
 		}
 
+		@Override
+		public void zrtpSASVerified() throws RemoteException {
+			pjService.zrtpSASVerified();
+		}
+
 
 	};
 

@@ -91,6 +91,7 @@ public class SipConfigManager {
 //	public static final String TLS_VERIFY_CLIENT = "tls_verify_client";
 	public static final String TLS_METHOD = "tls_method";
 	public static final String USE_SRTP = "use_srtp";
+	public static final String USE_ZRTP = "use_zrtp";
 	
 	// CALLS
 	public static final String AUTO_RECORD_CALLS = "auto_record_calls";

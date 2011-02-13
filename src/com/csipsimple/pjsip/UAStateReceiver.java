@@ -317,6 +317,15 @@ public class UAStateReceiver extends Callback {
 		unlockCpu();
 	}
 	
+	@Override
+	public void on_zrtp_show_sas(pj_str_t sas, int verified) {
+		String sasString = sas.getPtr();
+		Log.d(THIS_FILE, "Hey hoy hay, we get the show SAS " + sasString);
+		Intent zrtpIntent = new Intent("com.cipsimple.tmp.zrtp.showSAS");
+		zrtpIntent.putExtra(Intent.EXTRA_SUBJECT, sasString);
+		pjService.service.sendBroadcast(zrtpIntent);
+		
+	}
 	
 	// -------
 	// Current call management -- assume for now one unique call is managed

@@ -79,6 +79,7 @@ public class SipProfile implements Parcelable {
 	public static final String FIELD_CONTACT_URI_PARAMS = "contact_uri_params";
 	public static final String FIELD_TRANSPORT = "transport";
 	public static final String FIELD_USE_SRTP = "use_srtp";
+	public static final String FIELD_USE_ZRTP = "use_zrtp";
 	
 	// For now, assume unique proxy
 	public static final String FIELD_PROXY = "proxy";
@@ -103,7 +104,7 @@ public class SipProfile implements Parcelable {
 		FIELD_MWI_ENABLED, FIELD_PUBLISH_ENABLED, FIELD_REG_TIMEOUT, FIELD_KA_INTERVAL, FIELD_PIDF_TUPLE_ID,
 		FIELD_FORCE_CONTACT, FIELD_ALLOW_CONTACT_REWRITE, FIELD_CONTACT_REWRITE_METHOD, 
 		FIELD_CONTACT_PARAMS, FIELD_CONTACT_URI_PARAMS,
-		FIELD_TRANSPORT, FIELD_USE_SRTP,
+		FIELD_TRANSPORT, FIELD_USE_SRTP, FIELD_USE_ZRTP,
 
 		// Proxy infos
 		FIELD_PROXY, FIELD_REG_USE_PROXY,
@@ -123,7 +124,7 @@ public class SipProfile implements Parcelable {
 		Boolean.class, Integer.class, Integer.class, Integer.class, String.class,
 		String.class, Integer.class, Integer.class,
 		String.class, String.class,
-		Integer.class, Integer.class,
+		Integer.class, Integer.class, Integer.class,
 		
 		String.class, Integer.class,
 		
@@ -157,6 +158,7 @@ public class SipProfile implements Parcelable {
 	public int datatype = 0;
 	public String data = null;
 	public int use_srtp = 0;
+	public int use_zrtp = 0;
 	public int reg_use_proxy = 3;
 	public int sip_stack = PJSIP_STACK;
 	
@@ -191,6 +193,7 @@ public class SipProfile implements Parcelable {
 		contact_rewrite_method = in.readInt();
 		sip_stack = in.readInt();
 		reg_use_proxy = in.readInt();
+		use_zrtp = in.readInt();
 	}
 
 	public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
@@ -241,6 +244,7 @@ public class SipProfile implements Parcelable {
 		dest.writeInt(contact_rewrite_method);
 		dest.writeInt(sip_stack);
 		dest.writeInt(reg_use_proxy);
+		dest.writeInt(use_zrtp);
 	}
 	
 	private String getWriteParcelableString(String str) {
@@ -337,6 +341,10 @@ public class SipProfile implements Parcelable {
 		if (tmp_i != null && tmp_i >=0 ) {
 			use_srtp = tmp_i;
 		}
+		tmp_i = args.getAsInteger(FIELD_USE_ZRTP);
+		if (tmp_i != null && tmp_i >=0 ) {
+			use_zrtp = tmp_i;
+		}
 		
 		// Proxy
 		tmp_s = args.getAsString(FIELD_PROXY);
@@ -408,6 +416,7 @@ public class SipProfile implements Parcelable {
 		args.put(FIELD_ALLOW_CONTACT_REWRITE, allow_contact_rewrite ? 1 : 0);
 		args.put(FIELD_CONTACT_REWRITE_METHOD, contact_rewrite_method);
 		args.put(FIELD_USE_SRTP, use_srtp);
+		args.put(FIELD_USE_SRTP, use_zrtp);
 
 		// CONTACT_PARAM and CONTACT_PARAM_URI not yet in JNI
 

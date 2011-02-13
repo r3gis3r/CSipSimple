@@ -42,7 +42,7 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 22;
+	private static final int DATABASE_VERSION = 23;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
@@ -79,6 +79,7 @@ public class DBAdapter {
 			+ SipProfile.FIELD_CONTACT_URI_PARAMS	+ " TEXT,"
 			+ SipProfile.FIELD_TRANSPORT	 		+ " INTEGER," 
 			+ SipProfile.FIELD_USE_SRTP	 			+ " INTEGER," 
+			+ SipProfile.FIELD_USE_ZRTP	 			+ " INTEGER," 
 
 			// Proxy infos
 			+ SipProfile.FIELD_PROXY				+ " TEXT,"
@@ -225,6 +226,17 @@ public class DBAdapter {
 					db.execSQL("ALTER TABLE " + ACCOUNTS_TABLE_NAME + " ADD "+
 							SipProfile.FIELD_SIP_STACK + " INTEGER");
 					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_SIP_STACK + "=0");
+					Log.d(THIS_FILE, "Upgrade done");
+				}catch(SQLiteException e) {
+					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+				}
+			}
+			if(oldVersion < 23) {
+				try {
+					//Add use zrtp row
+					db.execSQL("ALTER TABLE " + ACCOUNTS_TABLE_NAME + " ADD "+
+							SipProfile.FIELD_USE_ZRTP + " INTEGER");
+					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_USE_ZRTP + "=0");
 					Log.d(THIS_FILE, "Upgrade done");
 				}catch(SQLiteException e) {
 					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);

@@ -151,6 +151,7 @@ public class PjSipService {
 			Log.e(THIS_FILE, "We have no sip stack, we can't start");
 			return false;
 		}
+		
 
 		try {
 			Log.i(THIS_FILE, "Will start sip : " + (!created /* && !creating */));
@@ -163,28 +164,32 @@ public class PjSipService {
 	
 					int status;
 					status = pjsua.create();
+
 					Log.i(THIS_FILE, "Created " + status);
 					// General config
 					{
 						pjsua_config cfg = new pjsua_config();
 						pjsua_logging_config logCfg = new pjsua_logging_config();
 						pjsua_media_config mediaCfg = new pjsua_media_config();
-	
+
 						// GLOBAL CONFIG
 						pjsua.config_default(cfg);
+						Log.d(THIS_FILE, "default cb");
 						cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
+						
 						if (userAgentReceiver == null) {
+							Log.d(THIS_FILE, "create receiver....");
 							userAgentReceiver = new UAStateReceiver();
 							userAgentReceiver.initService(this);
 						}
 						if (mediaManager == null) {
 							mediaManager = new MediaManager(service);
 						}
-						
+
 						mediaManager.startService();
 						
 						pjsua.setCallbackObject(userAgentReceiver);
-						
+		
 	
 						Log.d(THIS_FILE, "Attach is done to callback");
 	
@@ -1151,6 +1156,10 @@ public class PjSipService {
 		for(SipProfileState acc : accounts) {
 			pjsua.send_keep_alive(acc.getPjsuaId());
 		}
+	}
+
+	public void zrtpSASVerified() {
+		pjsua.jzrtp_SASVerified();
 	}
 
 	

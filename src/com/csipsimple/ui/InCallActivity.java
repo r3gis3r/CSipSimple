@@ -26,13 +26,16 @@ import java.util.TimerTask;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -161,6 +164,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 		//Listen to media & sip events to update the UI
 		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
 		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_MEDIA_CHANGED));
+		registerReceiver(callStateReceiver, new IntentFilter("com.cipsimple.tmp.zrtp.showSAS"));
 		
 		// Sensor management
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -313,6 +317,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
 	private static final int UPDATE_FROM_CALL = 1;
 	private static final int UPDATE_FROM_MEDIA = 2;
+	private static final int SHOW_SAS = 3;
+	
 	// Ui handler
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -323,6 +329,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			case UPDATE_FROM_MEDIA:
 				updateUIFromMedia();
 				break;
+			case SHOW_SAS:
+				showZRTPInfo((String) msg.obj);
 			default:
 				super.handleMessage(msg);
 			}
@@ -697,6 +705,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
 			}else if(action.equals(SipManager.ACTION_SIP_MEDIA_CHANGED)) {
 				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_MEDIA));
+			}else if(action.equals("com.cipsimple.tmp.zrtp.showSAS")) {
+				handler.sendMessage(handler.obtainMessage(SHOW_SAS, intent.getStringExtra(Intent.EXTRA_SUBJECT)));
 			}
 		}
 	};
@@ -903,5 +913,36 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 			break;
 		}
 		
+	}
+	
+	
+	private void showZRTPInfo(String sasString) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("ZRTP supported by remote party");
+		builder.setMessage("Do you confirm the SAS : "+sasString);
+		builder.setPositiveButton("Yes", new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Log.d(THIS_FILE, "ZRTP confirmed");
+
+				if (service != null) {
+					try {
+						service.zrtpSASVerified();
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Error while calling service", e);
+					}
+					dialog.dismiss();
+				}
+			}
+		});
+		builder.setNegativeButton("No", new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		
+		AlertDialog backupDialog = builder.create();
+		backupDialog.show();
 	}
 }
