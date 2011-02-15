@@ -179,7 +179,9 @@ public class Betamax extends AuthorizationImplementation {
 	public String getDefaultFieldSummary(String fieldName) {
 		Integer res = SUMMARIES.get(fieldName);
 		if(fieldName == PROVIDER) {
-			return providerListPref.getValue();
+			if(providerListPref != null) {
+				return providerListPref.getValue();
+			}
 		}
 		if(res != null) {
 			return parent.getString( res );
