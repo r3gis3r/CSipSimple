@@ -64,7 +64,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			}
 			Log.d(THIS_FILE, "<<< Data device change detected");
 			
-		}else if(intentAction.equals(SipService.INTENT_SIP_ACCOUNT_ACTIVATE)) {
+		}else if(intentAction.equals(SipManager.INTENT_SIP_ACCOUNT_ACTIVATE)) {
 			long accId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1);
 			if(accId != -1) {
 	    		DBAdapter database = new DBAdapter(context);

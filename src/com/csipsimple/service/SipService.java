@@ -78,9 +78,6 @@ import com.csipsimple.utils.Threading;
 
 public class SipService extends Service {
 
-	public static final String INTENT_SIP_CONFIGURATION = "com.csipsimple.service.SipConfiguration";
-	public static final String INTENT_SIP_SERVICE = "com.csipsimple.service.SipService";
-	public static final String INTENT_SIP_ACCOUNT_ACTIVATE = "com.csipsimple.accounts.activate";
 	
 	// static boolean creating = false;
 	private static final String THIS_FILE = "SIP SRV";
@@ -96,6 +93,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void sipStart() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			startSipStack();
 		}
 
@@ -104,6 +102,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void sipStop() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.sipStop();
 		}
 
@@ -113,6 +112,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void forceStopService() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "Try to force service stop");
 			stopSelf();
 		}
@@ -122,6 +122,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void askThreadedRestart() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Thread t = new Thread() {
 				public void run() {
 					pjService.sipStop();
@@ -136,6 +137,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void addAllAccounts() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			SipService.this.addAllAccounts();
 		}
 
@@ -144,6 +146,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void removeAllAccounts() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			SipService.this.unregisterAllAccounts(true);
 		}
 
@@ -152,11 +155,13 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void reAddAllAccounts() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			SipService.this.reAddAllAccounts();
 		}
 
 		@Override
 		public void setAccountRegistration(int accountId, int renew) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			SipProfile account;
 			synchronized (db) {
 				db.open();
@@ -174,6 +179,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public SipProfileState getSipProfileState(int accountId) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return SipService.this.getSipProfileState(accountId);
 		}
 
@@ -182,6 +188,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void switchToAutoAnswer() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			setAutoAnswerNext(true);
 		}
 
@@ -194,6 +201,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void makeCall(String callee, int accountId) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
 			pjService.makeCall(callee, accountId);
@@ -205,6 +213,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public void sendMessage(String message, String callee,int accountId)throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
 			
@@ -239,6 +248,7 @@ public class SipService extends Service {
 		 */
 		@Override
 		public int answer(int callId, int status) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.callAnswer(callId, status);
 		}
 
@@ -252,35 +262,41 @@ public class SipService extends Service {
 		 */
 		@Override
 		public int hangup(int callId, int status) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.callHangup(callId, status);
 		}
 		
 
 		@Override
 		public int xfer(int callId, String callee) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "XFER");
 			return pjService.callXfer(callId, callee);
 		}
 
 		@Override
 		public int xferReplace(int callId, int otherCallId, int options) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "XFER-replace");
 			return pjService.callXferReplace(callId, otherCallId, options);
 		}
 
 		@Override
 		public int sendDtmf(int callId, int keyCode) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.sendDtmf(callId, keyCode);
 		}
 
 		@Override
 		public int hold(int callId) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "HOLDING");
 			return pjService.callHold(callId);
 		}
 
 		@Override
 		public int reinvite(int callId, boolean unhold) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "REINVITING");
 			return pjService.callReinvite(callId, unhold);
 		}
@@ -288,28 +304,33 @@ public class SipService extends Service {
 
 		@Override
 		public SipCallSession getCallInfo(int callId) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.getCallInfo(callId);
 		}
 
 		@Override
 		public void setBluetoothOn(boolean on) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.setBluetoothOn(on);
 			
 		}
 
 		@Override
 		public void setMicrophoneMute(boolean on) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.setMicrophoneMute(on);
 		}
 
 		@Override
 		public void setSpeakerphoneOn(boolean on) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.setSpeakerphoneOn(on);
 		}
 
 
 		@Override
 		public SipCallSession[] getCalls() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			if(pjService != null) {
 				return pjService.getCalls();
 			}
@@ -318,18 +339,21 @@ public class SipService extends Service {
 
 		@Override
 		public void confAdjustTxLevel(int port, float value) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.confAdjustTxLevel(port, value);
 		}
 
 		@Override
 		public void confAdjustRxLevel(int port, float value) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.confAdjustRxLevel(port, value);
 			
 		}
 		
 		@Override
 		public void adjustVolume(SipCallSession callInfo, int direction, int flags) throws RemoteException {
-			
+
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			
     		boolean ringing = callInfo.isIncoming() && callInfo.isBeforeConfirmed();
     		
@@ -351,31 +375,37 @@ public class SipService extends Service {
 
 		@Override
 		public void setEchoCancellation(boolean on) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.setEchoCancellation(on);
 		}
 
 		@Override
 		public void startRecording(int callId) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.startRecording(callId);
 		}
 
 		@Override
 		public void stopRecording() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.stopRecording();
 		}
 
 		@Override
 		public int getRecordedCall() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.getRecordedCall();
 		}
 
 		@Override
 		public boolean canRecord(int callId) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.canRecord(callId);
 		}
 
 		@Override
 		public void zrtpSASVerified() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.zrtpSASVerified();
 		}
 
@@ -386,6 +416,7 @@ public class SipService extends Service {
 
 		@Override
 		public long addOrUpdateAccount(SipProfile acc) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			Log.d(THIS_FILE, ">>> addOrUpdateAccount from service");
 			long finalId = SipProfile.INVALID_ID;
 			
@@ -404,6 +435,7 @@ public class SipService extends Service {
 
 		@Override
 		public SipProfile getAccount(long accId) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			SipProfile result = null;
 
 			synchronized (db) {
@@ -416,35 +448,41 @@ public class SipService extends Service {
 
 		@Override
 		public void setPreferenceBoolean(String key, boolean value) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			prefsWrapper.setPreferenceBooleanValue(key, value);
 		}
 
 		@Override
 		public void setPreferenceFloat(String key, float value) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			prefsWrapper.setPreferenceFloatValue(key, value);
 
 		}
 
 		@Override
 		public void setPreferenceString(String key, String value) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			prefsWrapper.setPreferenceStringValue(key, value);
 
 		}
 
 		@Override
 		public String getPreferenceString(String key) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			return prefsWrapper.getPreferenceStringValue(key);
 			
 		}
 
 		@Override
 		public boolean getPreferenceBoolean(String key) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			return prefsWrapper.getPreferenceBooleanValue(key);
 			
 		}
 
 		@Override
 		public float getPreferenceFloat(String key) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			return prefsWrapper.getPreferenceFloatValue(key);
 		}
 
@@ -800,10 +838,10 @@ public class SipService extends Service {
 
 		String serviceName = intent.getAction();
 		Log.d(THIS_FILE, "Action is " + serviceName);
-		if (serviceName == null || serviceName.equalsIgnoreCase(INTENT_SIP_SERVICE)) {
+		if (serviceName == null || serviceName.equalsIgnoreCase(SipManager.INTENT_SIP_SERVICE)) {
 			Log.d(THIS_FILE, "Service returned");
 			return binder;
-		} else if (serviceName.equalsIgnoreCase(INTENT_SIP_CONFIGURATION)) {
+		} else if (serviceName.equalsIgnoreCase(SipManager.INTENT_SIP_CONFIGURATION)) {
 			Log.d(THIS_FILE, "Conf returned");
 			return binderConfiguration;
 		}

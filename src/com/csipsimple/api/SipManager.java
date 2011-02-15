@@ -22,6 +22,16 @@ package com.csipsimple.api;
 public final class SipManager {
 	// -------
 	// Static constants
+	// PERMISSION
+	public static final String PERMISSION_USE_SIP = "android.permission.USE_SIP";
+	public static final String PERMISSION_CONFIGURE_SIP = "android.permission.CONFIGURE_SIP";
+	
+	// SERVICE intents
+
+	public static final String INTENT_SIP_CONFIGURATION = "com.csipsimple.service.SipConfiguration";
+	public static final String INTENT_SIP_SERVICE = "com.csipsimple.service.SipService";
+	public static final String INTENT_SIP_ACCOUNT_ACTIVATE = "com.csipsimple.accounts.activate";
+	
 	// -------
 	// ACTIONS
 	public static final String ACTION_SIP_CALL_UI = "com.csipsimple.phone.action.INCALL";

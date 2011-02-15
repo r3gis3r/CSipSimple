@@ -30,7 +30,6 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
 
@@ -145,7 +144,7 @@ public class AccountWidgetProvider extends AppWidgetProvider {
      * @return
      */
     private static PendingIntent getLaunchPendingIntent(Context context, long accId, boolean activate ) {
-        Intent launchIntent = new Intent(SipService.INTENT_SIP_ACCOUNT_ACTIVATE);
+        Intent launchIntent = new Intent(SipManager.INTENT_SIP_ACCOUNT_ACTIVATE);
         launchIntent.putExtra(SipManager.EXTRA_ACCOUNT_ID, accId);
         launchIntent.putExtra(SipManager.EXTRA_ACTIVATE, activate);
         Log.d(THIS_FILE, "Create intent "+activate);

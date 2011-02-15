@@ -27,10 +27,10 @@ import android.database.DatabaseUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.api.SipUri.ParsedSipUriInfos;
-import com.csipsimple.utils.Log;
 
 public class SipProfile implements Parcelable {
 	private static final String THIS_FILE = "SipProfile";
