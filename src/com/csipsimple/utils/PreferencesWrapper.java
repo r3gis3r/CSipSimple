@@ -536,7 +536,15 @@ public class PreferencesWrapper {
 	
 	public void addStunServer(String server) {
 		if(!hasStunServer(server)) {
-			setPreferenceStringValue(SipConfigManager.STUN_SERVER, getPreferenceStringValue(SipConfigManager.STUN_SERVER)+","+server);
+			String oldStuns = getPreferenceStringValue(SipConfigManager.STUN_SERVER);
+			Log.d(THIS_FILE, "Old stun > "+oldStuns+" vs "+STRING_PREFS.get(SipConfigManager.STUN_SERVER));
+			if(oldStuns.equalsIgnoreCase(STRING_PREFS.get(SipConfigManager.STUN_SERVER))) {
+				oldStuns = "";
+			}else {
+				oldStuns += ",";
+			}
+			
+			setPreferenceStringValue(SipConfigManager.STUN_SERVER, oldStuns + server);
 		}
 		
 	}

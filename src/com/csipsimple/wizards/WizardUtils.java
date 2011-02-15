@@ -36,6 +36,7 @@ import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.Basic;
+import com.csipsimple.wizards.impl.Betamax;
 import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.DeltaThree;
@@ -196,6 +197,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_camundanet, 15, 
 					new Locale[]{}, false, true, 
 					CamundaNet.class));
+			WIZARDS_DICT.put("BETAMAX", new WizardInfo("BETAMAX", "Betamax clone", 
+					R.drawable.ic_wizard_basic, 21, 
+					new Locale[]{}, false, true, 
+					Betamax.class));
 			
 			
 			//Locales
