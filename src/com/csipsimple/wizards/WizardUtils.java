@@ -71,6 +71,7 @@ import com.csipsimple.wizards.impl.Sipgate;
 import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
+import com.csipsimple.wizards.impl.Viva;
 import com.csipsimple.wizards.impl.Vono;
 import com.csipsimple.wizards.impl.WiMobile;
 
@@ -317,7 +318,6 @@ public class WizardUtils {
 					R.drawable.ic_wizard_vono, 10, 
 					new Locale[] {new Locale("PT", "br")}, false, false, 
 					Vono.class));
-			
 			WIZARDS_DICT.put("OVH", new WizardInfo("OVH", "Ovh", 
 					R.drawable.ic_wizard_ovh, 10, 
 					new Locale[]{
@@ -333,6 +333,12 @@ public class WizardUtils {
 						new Locale("CS", "cz"),
 					}, false, false, 
 					Fayn.class));
+			WIZARDS_DICT.put("VIVA", new WizardInfo("VIVA", "Viva VoIP", 
+					R.drawable.ic_wizard_viva, 30, 
+					new Locale[]{
+						new Locale("EL", "gr"),
+					}, false, false, 
+					Viva.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
