@@ -71,25 +71,25 @@ public class PjSipService {
 	private PjStreamDialtoneGenerator dialtoneGenerator;
 	
 
-	private static Object creatingSipStack = new Object();
 	private Integer hasBeenHoldByGSM = null;
 
 	public UAStateReceiver userAgentReceiver;
 	public MediaManager mediaManager;
 
 	// -------
-	// Static constants
+	// Locks
 	// -------
 
-	private static Object pjAccountsCreationLock = new Object();
-	private static Object activeAccountsLock = new Object();
-	private static Object callActionLock = new Object();
+	private  Object creatingSipStack = new Object();
+	private  Object pjAccountsCreationLock = new Object();
+	private  Object activeAccountsLock = new Object();
+	private  Object callActionLock = new Object();
 
 
 	// Map active account id (id for sql settings database) with acc_id (id for
 	// pjsip)
-	private static HashMap<Integer, Integer> activeAccounts = new HashMap<Integer, Integer>();
-	private static HashMap<Integer, Integer> accountsAddingStatus = new HashMap<Integer, Integer>();
+	private  HashMap<Integer, Integer> activeAccounts = new HashMap<Integer, Integer>();
+	private  HashMap<Integer, Integer> accountsAddingStatus = new HashMap<Integer, Integer>();
 	
 	public PjSipService() {
 		

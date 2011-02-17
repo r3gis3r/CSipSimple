@@ -783,8 +783,9 @@ public class SipService extends Service {
 		stopSipStack();
 		
 		notificationManager.cancelAll();
+		notificationManager.cancelCalls();
 		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
-
+		System.gc();
 	}
 
 	@Override
@@ -871,6 +872,7 @@ public class SipService extends Service {
 	public void stopSipStack() {
 		if(pjService != null) {
 			pjService.sipStop();
+			pjService = null;
 		}
 		releaseResources();
 	}
@@ -1070,7 +1072,6 @@ public class SipService extends Service {
 		}
 		if(kaAlarm != null && kaAlarm.isStarted()) {
 			kaAlarm.stop();
-			kaAlarm.destroy();
 			kaAlarm = null;
 		}
 		hold_resources = false;
@@ -1338,7 +1339,7 @@ public class SipService extends Service {
 		
 		private static final String KA_ACTION = "com.csipsimple.ACTION_KA";
 		
-		private int interval = 40;
+		private int interval = 1000;
     	
 		public KeepAliveTimer(Context aContext) {
 			context = aContext;
@@ -1350,7 +1351,14 @@ public class SipService extends Service {
 		
 		public void stop() {
 			Log.d(THIS_FILE, "KA -> stopping");
-			alarmManager.cancel(pendingIntent);
+			try {
+				context.unregisterReceiver(this);
+			} catch (IllegalArgumentException e) {
+				Log.e(THIS_FILE, "Impossible to destroy KA timer", e);
+			}
+			if(pendingIntent != null) {
+				alarmManager.cancel(pendingIntent);
+			}
 			pendingIntent = null;
 		}
 		
@@ -1363,13 +1371,20 @@ public class SipService extends Service {
 			if (pendingIntent != null) {
 				throw new RuntimeException("pendingIntent is not null!");
 			}
-			
-			long firstTime = SystemClock.elapsedRealtime() + /*interval * */10;
 
 			Intent intent = new Intent(KA_ACTION);
 			pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, interval * 1000, pendingIntent);
+			
+			scheduleNext();
 		}
+		
+		private void scheduleNext() {
+            if ( !isStarted() ) {
+            	return;
+            }
+			long firstTime = SystemClock.elapsedRealtime() + interval * 1000;
+			alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, pendingIntent);
+        }
 		
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -1378,19 +1393,13 @@ public class SipService extends Service {
 				if(pjService != null) {
 					Log.d(THIS_FILE, "Send a keep alive packet");
 					pjService.sendKeepAlivePackets();
+					scheduleNext();
 				}else {
-					destroy();
+					stop();
 				}
 			}
 		}
 		
-		public void destroy() {
-			try {
-				context.unregisterReceiver(this);
-			} catch (IllegalArgumentException e) {
-				//Nothing to do
-			}
-		}
     	
     }
 

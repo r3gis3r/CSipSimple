@@ -181,7 +181,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 				updateRegistrations();
 			}
 		};
-		registerReceiver(registrationReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
+		
 
 	}
 
@@ -196,11 +196,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		try {
-			unregisterReceiver(registrationReceiver);
-		} catch (Exception e) {
-			// Nothing to do here -- TODO : should be more clean
-		}
 		Log.d(THIS_FILE, "--- DIALER DESTROYED ---");
 	}
 
@@ -209,6 +204,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		super.onResume();
 		Log.d(THIS_FILE, "Resuming dialer");
 		// Bind service
+		registerReceiver(registrationReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
 		contextToBindTo.bindService(new Intent(contextToBindTo, SipService.class), connection, Context.BIND_AUTO_CREATE);
 
 		dialFeedback.resume();
@@ -219,6 +215,13 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		super.onPause();
 		Log.d(THIS_FILE, "Pausing dialer");
 		// Unbind service
+
+		try {
+			unregisterReceiver(registrationReceiver);
+		} catch (Exception e) {
+			Log.e(THIS_FILE, "Not possible to unregister ", e);
+		}
+		
 		try {
 			contextToBindTo.unbindService(connection);
 		}catch (Exception e) {
