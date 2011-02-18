@@ -18,14 +18,12 @@
 package com.csipsimple.utils;
 
 import java.io.BufferedReader;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
+
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,13 +31,21 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.text.format.DateFormat;
-import android.util.Pair;
 
 public class CollectLogs {
 
 	private static final Object LINE_SEPARATOR = "\n";
 	private static final String THIS_FILE = "Collect Logs";
 	
+	private static class LogResult {
+		public StringBuilder head;
+		public File file;
+		
+		public LogResult(StringBuilder aHead, File aFile) {
+			head = aHead;
+			file = aFile;
+		}
+	};
 
 	/*Usage: logcat [options] [filterspecs]
     options include:
@@ -77,7 +83,7 @@ public class CollectLogs {
 
     If not specified with -v, format is set from ANDROID_PRINTF_LOG
     or defaults to "brief"*/
-	public final static Pair<StringBuilder, File> getLogs() {
+	public final static LogResult getLogs() {
 		//Clear old files
 		PreferencesWrapper.cleanLogsFiles();
 		
@@ -115,7 +121,8 @@ public class CollectLogs {
             Log.e(THIS_FILE, "Collect logs failed : ", e);//$NON-NLS-1$
             log.append("Unable to get logs : " + e.toString());
         }
-        return new Pair<StringBuilder, File>(log, outFile);
+
+        return new LogResult(log, outFile);
 	}
 	
 	public final static StringBuilder getDeviceInfo() {
@@ -143,12 +150,6 @@ public class CollectLogs {
         log.append(LINE_SEPARATOR); 
 		log.append("android.os.Build.VERSION.SDK : " + android.os.Build.VERSION.SDK );
         log.append(LINE_SEPARATOR); 
-		try {
-			log.append("android.os.Build.VERSION.SDK_INT : " + android.os.Build.VERSION.SDK_INT);
-	        log.append(LINE_SEPARATOR); 
-		}catch(Exception e) {
-			//android 1.5
-		}
 		
 		return log;
 	}
@@ -168,7 +169,7 @@ public class CollectLogs {
 	}
 	
 	public static Intent getLogReportIntent(String userComment, Context ctx) {
-		Pair<StringBuilder, File> logs = getLogs();
+		LogResult logs = getLogs();
 		
 		
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
@@ -185,11 +186,11 @@ public class CollectLogs {
         log.append(LINE_SEPARATOR);
         log.append(getDeviceInfo());
         log.append(LINE_SEPARATOR);
-        log.append(logs.first);
+        log.append(logs.head);
         
 
-        if(logs.second != null) {
-        	sendIntent.putExtra( Intent.EXTRA_STREAM, Uri.fromFile(logs.second) );
+        if(logs.file != null) {
+        	sendIntent.putExtra( Intent.EXTRA_STREAM, Uri.fromFile(logs.file) );
         	/*
         	BufferedReader buf;
 			String line;
