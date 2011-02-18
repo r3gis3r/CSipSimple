@@ -103,7 +103,9 @@ public class SipService extends Service {
 		@Override
 		public void sipStop() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.sipStop();
+			if(pjService != null) {
+				pjService.sipStop();
+			}
 		}
 
 	
@@ -125,7 +127,9 @@ public class SipService extends Service {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Thread t = new Thread() {
 				public void run() {
-					pjService.sipStop();
+					if(pjService != null) {
+						pjService.sipStop();
+					}
 					startSipStack();
 				}
 			};
@@ -739,13 +743,6 @@ public class SipService extends Service {
 			return;
 		}
 		
-
-		if(pjService == null) {
-			pjService = new PjSipService();
-		}
-		
-		pjService.setService(this);
-		
 		Log.setLogLevel(prefsWrapper.getLogLevel());
 
 		// Do not executorThread since must ensure stack is loaded
@@ -1271,7 +1268,7 @@ public class SipService extends Service {
 				number = m.group(2);
 			}
 			Log.w(THIS_FILE, "Search if should auto answer : "+number);
-			shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, pjService.service.db);
+			shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, db);
 		}
 		return shouldAutoAnswer;
 	}
