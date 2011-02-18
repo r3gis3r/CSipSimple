@@ -83,7 +83,7 @@ public class PjSipService {
 	private  Object creatingSipStack = new Object();
 	private  Object pjAccountsCreationLock = new Object();
 	private  Object activeAccountsLock = new Object();
-	private  Object callActionLock = new Object();
+	public  Object callActionLock = new Object();
 
 
 	// Map active account id (id for sql settings database) with acc_id (id for
@@ -1021,6 +1021,8 @@ public class PjSipService {
 	public void setAudioInCall() {
 		if (mediaManager != null) {
 			mediaManager.setAudioInCall();
+		}else {
+			Log.e(THIS_FILE, "WARNING !!! WE HAVE NO MEDIA MANAGER AT THIS POINT");
 		}
 	}
 	

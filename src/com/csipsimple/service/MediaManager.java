@@ -139,6 +139,7 @@ public class MediaManager {
 	public void setAudioInCall() {
 	//	Thread t = new Thread() {
 	//		public void run() {
+		Log.d(THIS_FILE, "> We do it");
 				actualSetAudioInCall();
 	//		};
 	//	};
@@ -159,14 +160,14 @@ public class MediaManager {
 	 * Set the audio mode as in call
 	 */
 	private synchronized void actualSetAudioInCall() {
-		
+		Log.d(THIS_FILE, "> > We do it");
 		//Ensure not already set
 		if(isSetAudioMode) {
 			return;
 		}
 		stopRing();
 		saveAudioState();
-		
+		Log.d(THIS_FILE, ">>> We do it");
 		//Set the rest of the phone in a better state to not interferate with current call
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_ON);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);

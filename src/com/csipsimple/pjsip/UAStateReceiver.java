@@ -327,6 +327,22 @@ public class UAStateReceiver extends Callback {
 		
 	}
 	
+	
+	@Override
+	public void on_setup_audio() {
+		if(pjService != null) {
+			pjService.setAudioInCall();
+		}
+	}
+	
+
+	@Override
+	public void on_teardown_audio() {
+		if(pjService != null) {
+			pjService.unsetAudioInCall();
+		}
+	}
+	
 	// -------
 	// Current call management -- assume for now one unique call is managed
 	// -------

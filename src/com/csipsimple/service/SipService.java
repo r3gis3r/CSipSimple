@@ -852,11 +852,17 @@ public class SipService extends Service {
 
 	private int pendingStarts = 0;
 	private KeepAliveTimer kaAlarm;
+	
 	public void startSipStack() {
 		if(!needToStartSip()) {
 			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.connection_not_valid, 0));
 			Log.e(THIS_FILE, "Not able to start sip stack");
 			return;
+		}
+		if(pjService == null) {
+			if(!loadAndConnectStack()) {
+				return;
+			}
 		}
 		if(pendingStarts <= 1) {
 			pendingStarts ++;
@@ -1092,24 +1098,6 @@ public class SipService extends Service {
 			}
 		}
 	};
-
-	/**
-	 * Method called by the native sip stack to set the audio mode to a valid
-	 * state for a call
-	 */
-	public static void setAudioInCall() {
-		Log.i(THIS_FILE, "Audio driver ask to set in call");
-		pjService.setAudioInCall();
-	}
-
-	/**
-	 * Method called by the native sip stack to unset audio mode when track and
-	 * recorder are stopped
-	 */
-	public static void unsetAudioInCall() {
-		Log.i(THIS_FILE, "Audio driver ask to unset in call");
-		pjService.unsetAudioInCall();
-	}
 	
 	
 	
@@ -1171,7 +1159,7 @@ public class SipService extends Service {
 		}
 
 		if (prefsWrapper.isValidConnectionForOutgoing() || prefsWrapper.isValidConnectionForIncoming()) {
-			if (!pjService.isCreated()) {
+			if (pjService == null || !pjService.isCreated()) {
 				// we was not yet started, so start now
 				Thread t = new Thread() {
 					public void run() {
@@ -1181,7 +1169,7 @@ public class SipService extends Service {
 				t.start();
 			} else if (ipHasChanged) {
 				// Check if IP has changed between
-				if (pjService.getActiveCallInProgress() == null) {
+				if (pjService != null && pjService.getActiveCallInProgress() == null) {
 					Thread t = new Thread() {
 						public void run() {
 							stopSipStack();
@@ -1200,7 +1188,7 @@ public class SipService extends Service {
 			}
 
 		} else {
-			if (pjService.getActiveCallInProgress() != null) {
+			if (pjService != null && pjService.getActiveCallInProgress() != null) {
 				Log.w(THIS_FILE, "There is an ongoing call ! don't stop !! and wait for network to be back...");
 				return;
 			}

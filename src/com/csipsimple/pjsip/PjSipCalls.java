@@ -87,7 +87,10 @@ public final class PjSipCalls {
 	public static SipCallSession updateSessionFromPj(SipCallSession session, PjSipService service) throws UnavailableException {
 		Log.d(THIS_FILE, "Update call "+session.getCallId());
 		pjsua_call_info pj_info = new pjsua_call_info();
-		int status = pjsua.call_get_info(session.getCallId(), pj_info);
+		int status = pjsua.PJ_FALSE;
+		synchronized (service.callActionLock) {
+			status = pjsua.call_get_info(session.getCallId(), pj_info);
+		}
 		
 		if(status != pjsua.PJ_SUCCESS) {
 			//Log.e(THIS_FILE, "Error while getting Call info from stack");
