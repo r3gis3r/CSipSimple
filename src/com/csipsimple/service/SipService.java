@@ -707,9 +707,9 @@ public class SipService extends Service {
 		@Override
 		public void onCallStateChanged(int state, String incomingNumber) {
 			Log.d(THIS_FILE, "Call state has changed !" + state + " : " + incomingNumber);
-
-			pjService.onGSMStateChanged(state, incomingNumber);
-
+			if(pjService != null) {
+				pjService.onGSMStateChanged(state, incomingNumber);
+			}
 			super.onCallStateChanged(state, incomingNumber);
 		}
 	}
