@@ -1195,8 +1195,10 @@ public class SipService extends Service {
 			Log.d(THIS_FILE, "Will stop SERVICE");
 			Thread t = new Thread() {
 				public void run() {
-					Log.i(THIS_FILE, "Stop SERVICE");
-					pjService.sipStop();
+					if(pjService != null) {
+						Log.i(THIS_FILE, "Stop SERVICE");
+						pjService.sipStop();
+					}
 					// OK, this will be done only if the last bind is released
 					stopSelf();
 				}
