@@ -19,4 +19,5 @@
  -->
 <resources>
 <string name="w_ovh_phone_number_desc">Phone number should be formated as 0033xxxxxx</string>
+<string name="w_sapo_phone_number_desc">Phone number should be formated as +35130xxxxxx</string>
 </resources>

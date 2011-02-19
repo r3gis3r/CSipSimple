@@ -64,6 +64,7 @@ import com.csipsimple.wizards.impl.Pennytel;
 import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Pozitel;
+import com.csipsimple.wizards.impl.Sapo;
 import com.csipsimple.wizards.impl.Scarlet;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.SipSorcery;
@@ -339,6 +340,10 @@ public class WizardUtils {
 						new Locale("EL", "gr"),
 					}, false, false, 
 					Viva.class));
+			WIZARDS_DICT.put("SAPO", new WizardInfo("SAPO", "Sapo", 
+					R.drawable.ic_wizard_sapo, 20, 
+					new Locale[] {new Locale("PT", "pt")}, false, false, 
+					Sapo.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
