@@ -96,6 +96,7 @@ public class UAStateReceiver extends Callback {
 				
 				
 				//Check if we have not already an ongoing call
+				/*
 				SipCallSession existingOngoingCall = getActiveCallInProgress();
 				if(existingOngoingCall != null) {
 					if(existingOngoingCall.getCallState() == SipCallSession.InvState.CONFIRMED) {
@@ -107,6 +108,7 @@ public class UAStateReceiver extends Callback {
 						return;
 					}
 				}
+				*/
 				
 				
 				SipCallSession callInfo = getCallInfo(callId, true);
