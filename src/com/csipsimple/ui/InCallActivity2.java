@@ -51,15 +51,19 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.csipsimple.R;
@@ -121,6 +125,16 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	private PowerManager powerManager;
 	private WakeLock proximityWakeLock;
 	private PreferencesWrapper prefsWrapper;
+	
+	// Dnd views
+	private ImageView endCallTarget;
+	private Rect endCallTargetRect;
+	private ImageView holdTarget;
+	private Rect holdTargetRect;
+	private ImageView answerTarget;
+	private Rect answerTargetRect;
+	
+	
 
 	private static DisplayMetrics METRICS;
 	
@@ -159,6 +173,13 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		
 		lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
 		lockOverlay.setActivity(this, this);
+		
+		endCallTarget = (ImageView) findViewById(R.id.dropHangup);
+		endCallTarget.getBackground().setDither(true);
+		holdTarget = (ImageView) findViewById(R.id.dropHold);
+		holdTarget.getBackground().setDither(true);
+		answerTarget = (ImageView) findViewById(R.id.dropAnswer);
+		answerTarget.getBackground().setDither(true);
 		
 		//Listen to media & sip events to update the UI
 		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
@@ -308,9 +329,16 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		super.onNewIntent(intent);
 	}
 	
+	@Override
+	protected void onResume() {
+		endCallTargetRect = null;
+		super.onResume();
+	}
 
+	
 	private static final int UPDATE_FROM_CALL = 1;
 	private static final int UPDATE_FROM_MEDIA = 2;
+	private static final int UPDATE_DRAGGING = 3;
 	// Ui handler
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -320,6 +348,17 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				break;
 			case UPDATE_FROM_MEDIA:
 				updateUIFromMedia();
+				break;
+			case UPDATE_DRAGGING :
+				DraggingInfo di = (DraggingInfo) msg.obj;
+				inCallControls.setVisibility(di.isDragging? View.GONE: View.VISIBLE);
+				endCallTarget.setVisibility(di.isDragging ? View.VISIBLE : View.GONE);
+				holdTarget.setVisibility(
+						(di.isDragging && di.call.isActive() && ! di.call.isBeforeConfirmed())? 
+						View.VISIBLE : View.GONE);
+				answerTarget.setVisibility(( di.call.isActive() && di.call.isBeforeConfirmed() && di.call.isIncoming() && di.isDragging) ? 
+						View.VISIBLE : View.GONE);
+				
 				break;
 			default:
 				super.handleMessage(msg);
@@ -593,6 +632,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			
 			//Update in call actions
 			inCallControls.setCallState(currentCallInfo);
+			inCallControls.setVisibility(View.VISIBLE);
 		}
 		
 		if(activeCallInfo != null) {
@@ -624,7 +664,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 						if(proximityWakeLock.isHeld()) {
 							proximityWakeLock.release();
 						}
-					}else {
+					} else {
 						if(!proximityWakeLock.isHeld()) {
 							proximityWakeLock.acquire();
 						}
@@ -762,13 +802,14 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		
 		badge.forceLayout();
 		badge.setOnTriggerListener(this);
+		badge.setOnTouchListener(new OnBadgeTouchListener(badge, call));
 		badges.put(call.getCallId(), badge);
 	}
 	
-
+	//Use the deprecated way cause wants to remain compatible with older android versions
 	@SuppressWarnings("deprecation")
 	private void layoutBadge(Rect wrap, InCallInfo2 mainBadge) {
-		Log.d(THIS_FILE, "Layout badge for "+wrap.width()+" x "+wrap.height()+ " +"+wrap.top+" + "+wrap.left);
+		//Log.d(THIS_FILE, "Layout badge for "+wrap.width()+" x "+wrap.height()+ " +"+wrap.top+" + "+wrap.left);
 		//Set badge size
 		Rect r = mainBadge.setSize(wrap.width(), wrap.height());
 		//Reposition badge at the correct place
@@ -1097,5 +1138,157 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			break;
 		}
 		
+	}
+	
+	
+	//Drag and drop feature
+	private Timer draggingTimer;
+	
+	public class OnBadgeTouchListener implements OnTouchListener {
+		private SipCallSession call;
+		private InCallInfo2 badge;
+		private boolean isDragging = false;
+		private SetDraggingTimerTask draggingDelayTask;
+		Vibrator vibrator;
+		int beginX = 0;
+		int beginY = 0;
+
+		private class SetDraggingTimerTask extends TimerTask {
+			@Override
+			public void run() {
+				vibrator.vibrate(50);
+	        	setDragging(true);
+				Log.d(THIS_FILE, "Begin dragging");
+			}
+		};
+		
+		
+		public OnBadgeTouchListener(InCallInfo2 aBadge, SipCallSession aCall) {
+			call = aCall;
+			badge = aBadge;
+			vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+			//TODO : move somewhere else
+			if(draggingTimer == null) {
+				draggingTimer = new Timer();
+			}
+		}
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+	        int action = event.getAction();
+	        int X = (int)event.getRawX();
+	        int Y = (int)event.getRawY();
+	        
+	        switch ( action ) {
+	        case MotionEvent.ACTION_DOWN:
+	        	if(draggingDelayTask != null) {
+	        		draggingDelayTask.cancel();
+	        	}
+	        	draggingDelayTask = new SetDraggingTimerTask();
+	        	beginX = X;
+	        	beginY = Y;
+	        	draggingTimer.schedule(draggingDelayTask, 500);
+	        case MotionEvent.ACTION_MOVE:
+	        	if(isDragging) {
+	        		float size = Math.max(75.0f, event.getSize() + 50.0f);
+	        		
+	        		
+	        		Rect wrap = new Rect(
+							(int) (X - (size) ), 
+							(int) (Y - (size) ),
+							(int) (X + (size/2.0f) ), 
+							(int) (Y + (size/2.0f) ) );
+					layoutBadge(wrap, badge);
+		        	//Log.d(THIS_FILE, "Is moving to "+X+", "+Y);
+	        		return true;
+	        	}else {
+	        		if(Math.abs(X-beginX) > 50 || Math.abs(Y-beginY) > 50) {
+		        		Log.d(THIS_FILE, "Stop dragging");
+			        	stopDragging();
+			        	return true;
+	        		}
+	        		return false;
+	        	}
+
+	        case MotionEvent.ACTION_UP:
+	        	onDropBadge(X, Y, badge, call);
+	        	stopDragging();
+	        	return true;
+	        	//Yes we continue cause this is a stop action
+	        case MotionEvent.ACTION_CANCEL:
+	        case MotionEvent.ACTION_OUTSIDE:
+	        	Log.d(THIS_FILE, "Stop dragging");
+	        	stopDragging();
+	        	return false;
+	        }
+			return false;
+		}
+		
+		
+		
+		private void stopDragging() {
+        	//TODO : thread save it
+        	draggingDelayTask.cancel();
+        	setDragging(false);
+		}
+		
+		private void setDragging(boolean dragging) {
+			isDragging = dragging;
+			handler.sendMessage(handler.obtainMessage(UPDATE_DRAGGING, new DraggingInfo(isDragging, badge, call)));
+		}
+		public void setCallState(SipCallSession callInfo) {
+			Log.d(THIS_FILE, "Updated call infos : "+call.getCallState()+" and "+ call.getMediaStatus()+" et "+call.isLocalHeld());
+			call = callInfo;
+		}
+	}
+	
+	private void onDropBadge(int X, int Y, InCallInfo2 badge, SipCallSession call) {
+		Log.d(THIS_FILE, "Dropping !!! in "+X+", "+Y);
+		
+		//Rectangle init if not already done
+		if(endCallTargetRect == null && endCallTarget.getVisibility() == View.VISIBLE) {
+			endCallTargetRect = new Rect(endCallTarget.getLeft(), endCallTarget.getTop(), endCallTarget.getRight(), endCallTarget.getBottom());
+		}
+		if(holdTargetRect == null && holdTarget.getVisibility() == View.VISIBLE) {
+			holdTargetRect = new Rect(holdTarget.getLeft(), holdTarget.getTop(), holdTarget.getRight(), holdTarget.getBottom());
+		}
+		if(answerTargetRect == null && answerTarget.getVisibility() == View.VISIBLE) {
+			answerTargetRect = new Rect(answerTarget.getLeft(), answerTarget.getTop(), answerTarget.getRight(), answerTarget.getBottom());
+		}
+
+		//Rectangle matching
+		
+		if (endCallTargetRect != null && endCallTargetRect.contains(X, Y)) {
+			//Drop in end call zone
+			onTrigger(call.isIncoming() && call.isBeforeConfirmed() ? DECLINE_CALL : CLEAR_CALL, call);
+		}else if (holdTargetRect != null && holdTargetRect.contains(X, Y)) {
+			//Drop in hold zone
+			if (!call.isLocalHeld()) {
+				onTrigger(TOGGLE_HOLD, call);
+			}
+		} else if(answerTargetRect != null && answerTargetRect.contains(X, Y)){
+			if(call.isIncoming() && call.isBeforeConfirmed()) {
+				onTrigger(TAKE_CALL, call);
+			}
+		}else {
+			Log.d(THIS_FILE, "Drop is done somewhere else " + call.getMediaStatus());
+			//Drop somewhere else
+			if(call.isLocalHeld()) {
+				Log.d(THIS_FILE, "Try to unhold");
+				onTrigger(TOGGLE_HOLD, call);
+			}
+		}
+		updateUIFromCall();
+	}
+	
+	private class DraggingInfo {
+		public boolean isDragging = false;
+		public InCallInfo2 badge;
+		public SipCallSession call;
+		
+		public DraggingInfo(boolean aIsDragging, InCallInfo2 aBadge, SipCallSession aCall) {
+			isDragging = aIsDragging;
+			badge = aBadge;
+			call = aCall;
+		}
 	}
 }

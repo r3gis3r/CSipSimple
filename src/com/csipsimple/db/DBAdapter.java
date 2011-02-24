@@ -294,7 +294,7 @@ public class DBAdapter {
 	 * @return true if succeed
 	 */
 	public boolean updateAccount(SipProfile account) {
-		
+		Log.d(THIS_FILE, ">>" + account.getDbContentValues());
 		return db.update(ACCOUNTS_TABLE_NAME, account.getDbContentValues(),
 				SipProfile.FIELD_ID + "=" + account.id, null) > 0;
 	}

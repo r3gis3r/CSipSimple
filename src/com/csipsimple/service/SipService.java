@@ -193,6 +193,7 @@ public class SipService extends Service {
 		@Override
 		public void switchToAutoAnswer() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			Log.d(THIS_FILE, "Switch to auto answer");
 			setAutoAnswerNext(true);
 		}
 
@@ -928,7 +929,6 @@ public class SipService extends Service {
 
 	private boolean setAccountRegistration(SipProfile account, int renew) {
 		boolean status = pjService.setAccountRegistration(account, renew);
-		
 		// Send a broadcast message that for an account
 		// registration state has changed
 		Intent regStateChangedIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
@@ -1256,6 +1256,7 @@ public class SipService extends Service {
 		boolean shouldAutoAnswer = false;
 		
 		if(autoAcceptCurrent) {
+			Log.d(THIS_FILE, "I should auto answer this one !!! ");
 			autoAcceptCurrent = false;
 			return true;
 		}

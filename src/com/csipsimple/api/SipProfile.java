@@ -416,7 +416,7 @@ public class SipProfile implements Parcelable {
 		args.put(FIELD_ALLOW_CONTACT_REWRITE, allow_contact_rewrite ? 1 : 0);
 		args.put(FIELD_CONTACT_REWRITE_METHOD, contact_rewrite_method);
 		args.put(FIELD_USE_SRTP, use_srtp);
-		args.put(FIELD_USE_SRTP, use_zrtp);
+		args.put(FIELD_USE_ZRTP, use_zrtp);
 
 		// CONTACT_PARAM and CONTACT_PARAM_URI not yet in JNI
 

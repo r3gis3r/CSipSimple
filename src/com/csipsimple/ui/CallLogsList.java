@@ -126,7 +126,10 @@ public class CallLogsList extends ListActivity {
 			final RecentCallsListItemViews tagView = (RecentCallsListItemViews) view.getTag();
 			String number = cursor.getString(DBAdapter.NUMBER_COLUMN_INDEX);
 			String cachedName = cursor.getString(DBAdapter.CALLER_NAME_COLUMN_INDEX);
-
+			
+			if(number == null) {
+				number = "";
+			}
 			String remoteContact = number;
 			String phoneNumber = number;
 

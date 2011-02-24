@@ -970,8 +970,10 @@ public class PjSipService {
 				return false;
 			}
 			if (activeAccounts.containsKey(account.id)) {
+				//The account is already there in accounts list
 				int cAccId = activeAccounts.get(account.id);
 				synchronized (activeAccountsLock) {
+					Log.d(THIS_FILE, "Removing this account from the list");
 					activeAccounts.remove(account.id);
 					accountsAddingStatus.remove(account.id);
 				}
@@ -985,6 +987,7 @@ public class PjSipService {
 					status = pjsua.acc_del(cAccId);
 				}
 			} else {
+				
 				if (renew == 1) {
 					addAccount(account);
 				} else {

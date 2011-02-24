@@ -311,7 +311,8 @@ public final class SipCallSession implements Parcelable {
 	}
 
 	public boolean isLocalHeld(){
-		return mediaStatus == SipCallSession.MediaState.LOCAL_HOLD;
+		return mediaStatus == SipCallSession.MediaState.LOCAL_HOLD || 
+			(mediaStatus == SipCallSession.MediaState.NONE && isActive() && !isBeforeConfirmed());
 	}
 
 	public boolean isBeforeConfirmed() {

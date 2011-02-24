@@ -38,6 +38,7 @@ import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.service.SipService;
+import com.csipsimple.ui.InCallActivity2.OnBadgeTouchListener;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.InCallControls2.OnTriggerListener;
@@ -112,6 +113,8 @@ public class InCallInfo2 extends ExtensibleBadge {
 		
 		cachedInvState = callInfo.getCallState();
 		cachedMediaState = callInfo.getMediaStatus();
+		
+		dragListener.setCallState(callInfo);
 	}
 	
 
@@ -131,13 +134,15 @@ public class InCallInfo2 extends ExtensibleBadge {
 		//Take/decline items
 		if(callInfo.isBeforeConfirmed()) {
 			//Answer
-			addItem(R.drawable.ic_in_call_touch_answer, getContext().getString(R.string.take_call), new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					dispatchTriggerEvent(OnTriggerListener.TAKE_CALL);
-					collapse();
-				}
-			});
+			if(callInfo.isIncoming()) {
+				addItem(R.drawable.ic_in_call_touch_answer, getContext().getString(R.string.take_call), new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dispatchTriggerEvent(OnTriggerListener.TAKE_CALL);
+						collapse();
+					}
+				});
+			}
 			//Decline
 			addItem(R.drawable.ic_in_call_touch_end, getContext().getString(R.string.decline_call), new OnClickListener() {
 				@Override
@@ -307,6 +312,7 @@ public class InCallInfo2 extends ExtensibleBadge {
 	};
 	
 	private OnTriggerListener onTriggerListener;
+	private OnBadgeTouchListener dragListener;
 
 
 	/*
@@ -342,6 +348,12 @@ public class InCallInfo2 extends ExtensibleBadge {
 	
 	public SipCallSession getCallInfo() {
 		return callInfo;
+	}
+	
+	
+	public void setOnTouchListener(OnBadgeTouchListener l) {
+		dragListener = l;
+		super.setOnTouchListener(l);
 	}
 
 }

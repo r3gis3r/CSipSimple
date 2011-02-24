@@ -58,7 +58,6 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.SipMessage;
-import com.csipsimple.pjsip.PjSipCalls.UnavailableException;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallLogHelper;
@@ -89,56 +88,68 @@ public class UAStateReceiver extends Callback {
 	
 	
 	@Override
-	public void on_incoming_call(int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
+	public void on_incoming_call(final int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
+
 		lockCpu();
-		
-		//Check if we have not already an ongoing call
-		
-		SipCallSession existingOngoingCall = getActiveCallInProgress();
-		if(existingOngoingCall != null) {
-			if(existingOngoingCall.getCallState() == SipCallSession.InvState.CONFIRMED) {
-				Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
-				//If there is an ongoing call... For now decline TODO : should here manage multiple calls
-				//Send busy here
-				pjsua.call_hangup(callId, 486, null, null);
+		Thread t = new Thread() {
+			public void run() {
+				
+				
+				//Check if we have not already an ongoing call
+				SipCallSession existingOngoingCall = getActiveCallInProgress();
+				if(existingOngoingCall != null) {
+					if(existingOngoingCall.getCallState() == SipCallSession.InvState.CONFIRMED) {
+						Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
+						//If there is an ongoing call... For now decline TODO : should here manage multiple calls
+						//Send busy here
+						pjsua.call_hangup(callId, 486, null, null);
+						unlockCpu();
+						return;
+					}
+				}
+				
+				
+				SipCallSession callInfo = getCallInfo(callId, true);
+				Log.d(THIS_FILE, "Incoming call <<");
+				treatIncomingCall(acc_id, callInfo);
+				msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
+				Log.d(THIS_FILE, "Incoming call >>");
 				unlockCpu();
-				return;
-			}
-		}
+			};
+		};
+		t.start();
 		
-		
-		SipCallSession callInfo = getCallInfo(callId, true);
-		Log.d(THIS_FILE, "Incoming call <<");
-		treatIncomingCall(acc_id, callInfo);
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, callInfo));
-		Log.d(THIS_FILE, "Incoming call >>");
-		unlockCpu();
 	}
 	
 	
 	@Override
-	public void on_call_state(int callId, pjsip_event e) {
+	public void on_call_state(final int callId, pjsip_event e) {
 		lockCpu();
-		Log.d(THIS_FILE, "Call state <<");
-		//Get current infos
-		SipCallSession callInfo = getCallInfo(callId, true);
-		int callState = callInfo.getCallState();
-		if (callState == SipCallSession.InvState.DISCONNECTED) {
-			if(pjService.mediaManager != null) {
-				pjService.mediaManager.stopAnnoucing();
-				pjService.mediaManager.resetSettings();
+		Thread t = new Thread() {
+			public void run() {
+				Log.d(THIS_FILE, "Call state <<");
+				//Get current infos
+				SipCallSession callInfo = getCallInfo(callId, true);
+				int callState = callInfo.getCallState();
+				if (callState == SipCallSession.InvState.DISCONNECTED) {
+					if(pjService.mediaManager != null) {
+						pjService.mediaManager.stopAnnoucing();
+						pjService.mediaManager.resetSettings();
+					}
+					if(incomingCallLock != null && incomingCallLock.isHeld()) {
+						incomingCallLock.release();
+					}
+					// Call is now ended
+					pjService.stopDialtoneGenerator();
+					//TODO : should be stopped only if it's the current call.
+					stopRecording();
+				}
+				msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
+				Log.d(THIS_FILE, "Call state >>");
+				unlockCpu();
 			}
-			if(incomingCallLock != null && incomingCallLock.isHeld()) {
-				incomingCallLock.release();
-			}
-			// Call is now ended
-			pjService.stopDialtoneGenerator();
-			//TODO : should be stopped only if it's the current call.
-			stopRecording();
-		}
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
-		Log.d(THIS_FILE, "Call state >>");
-		unlockCpu();
+		};
+		t.start();
 	}
 
 	@Override
@@ -200,11 +211,16 @@ public class UAStateReceiver extends Callback {
 	}
 
 	@Override
-	public void on_reg_state(int accountId) {
+	public void on_reg_state(final int accountId) {
 		lockCpu();
-		Log.d(THIS_FILE, "New reg state for : " + accountId);
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
-		unlockCpu();
+		Thread t = new Thread() {
+			public void run() {
+				Log.d(THIS_FILE, "New reg state for : " + accountId);
+				msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
+				unlockCpu();
+			}
+		};
+		t.start();
 	}
 
 	@Override
@@ -222,38 +238,43 @@ public class UAStateReceiver extends Callback {
 	}
 
 	@Override
-	public void on_call_media_state(int callId) {
+	public void on_call_media_state(final int callId) {
 		lockCpu();
-		if(pjService.mediaManager != null) {
-			pjService.mediaManager.stopRing();
-		}
-		if(incomingCallLock != null && incomingCallLock.isHeld()) {
-			incomingCallLock.release();
-		}
-		
-		SipCallSession callInfo = getCallInfo(callId, true);
-		
-		if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
-			pjsua.conf_connect(callInfo.getConfPort(), 0);
-			pjsua.conf_connect(0, callInfo.getConfPort());
-			pjsua.conf_adjust_tx_level(0, pjService.prefsWrapper.getSpeakerLevel());
-			float micLevel = pjService.prefsWrapper.getMicLevel();
-			if(pjService.mediaManager != null && pjService.mediaManager.isUserWantMicrophoneMute()) {
-				micLevel = 0;
+		Thread t = new Thread() {
+			public void run() {
+				if(pjService.mediaManager != null) {
+					pjService.mediaManager.stopRing();
+				}
+				if(incomingCallLock != null && incomingCallLock.isHeld()) {
+					incomingCallLock.release();
+				}
+				
+				SipCallSession callInfo = getCallInfo(callId, true);
+				
+				if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
+					pjsua.conf_connect(callInfo.getConfPort(), 0);
+					pjsua.conf_connect(0, callInfo.getConfPort());
+					pjsua.conf_adjust_tx_level(0, pjService.prefsWrapper.getSpeakerLevel());
+					float micLevel = pjService.prefsWrapper.getMicLevel();
+					if(pjService.mediaManager != null && pjService.mediaManager.isUserWantMicrophoneMute()) {
+						micLevel = 0;
+					}
+					pjsua.conf_adjust_rx_level(0, micLevel);
+					pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
+					
+					// Auto record
+					if (recordedCall == INVALID_RECORD && 
+							pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_RECORD_CALLS)) {
+						startRecording(callId);
+					}
+					
+				}
+				
+				msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
+				unlockCpu();
 			}
-			pjsua.conf_adjust_rx_level(0, micLevel);
-			pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
-			
-			// Auto record
-			if (recordedCall == INVALID_RECORD && 
-					pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_RECORD_CALLS)) {
-				startRecording(callId);
-			}
-			
-		}
-		
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
-		unlockCpu();
+		};
+		t.start();
 	}
 	
 	@Override
@@ -349,15 +370,6 @@ public class UAStateReceiver extends Callback {
 	private HashMap<Integer, SipCallSession> callsList = new HashMap<Integer, SipCallSession>();
 	//private long currentCallStart = 0;
 	
-	public void updateCallInfoFromStack(SipCallSession call) {
-		//Update from pjsip
-		try {
-			PjSipCalls.updateSessionFromPj(call, pjService);
-		} catch (UnavailableException e) {
-			//TODO : treat error
-			Log.e(THIS_FILE, "Call does not exist anymore "+call.getCallId());
-		}
-	}
 	
 	public SipCallSession getCallInfo(Integer callId, boolean update) {
 		Log.d(THIS_FILE, "Get call info");
@@ -370,7 +382,7 @@ public class UAStateReceiver extends Callback {
 			} else {
 				if(update) {
 					Log.d(THIS_FILE, "UPDATE CALL INFOS !!!");
-					updateCallInfoFromStack(callInfo);
+					PjSipCalls.updateSessionFromPj(callInfo, pjService);
 				}
 			}
 		}
@@ -427,6 +439,9 @@ public class UAStateReceiver extends Callback {
 			case ON_CALL_STATE:{
 				SipCallSession callInfo = (SipCallSession) msg.obj;
 				int callState = callInfo.getCallState();
+				
+				
+				
 				switch (callState) {
 				case SipCallSession.InvState.INCOMING:
 				case SipCallSession.InvState.CALLING:
@@ -442,10 +457,7 @@ public class UAStateReceiver extends Callback {
 					callInfo.callStart = System.currentTimeMillis();
 					break;
 				case SipCallSession.InvState.DISCONNECTED:
-					//TODO : should manage multiple calls
-					if(getActiveCallInProgress() == null) {
-						notificationManager.cancelCalls();
-					}
+					
 					Log.d(THIS_FILE, "Finish call2");
 					
 					//CallLog
@@ -491,6 +503,19 @@ public class UAStateReceiver extends Callback {
 					
 					
 					broadCastAndroidCallState("IDLE", callInfo.getRemoteContact());
+					
+					
+					//If no remaining calls, cancel the notification
+					if(getActiveCallInProgress() == null) {
+						notificationManager.cancelCalls();
+						// We should now ask parent to stop if needed
+						if(pjService != null && pjService.service != null) {
+							if( ! pjService.prefsWrapper.isValidConnectionForIncoming()) {
+								pjService.service.stopSelf();
+							}
+						}
+					}
+					
 					break;
 				default:
 					break;
@@ -552,7 +577,7 @@ public class UAStateReceiver extends Callback {
 		//Auto answer feature
 		SipProfile acc = pjService.getAccountForPjsipId(accountId);
 		boolean shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc);
-		
+		Log.d(THIS_FILE, "Should I anto answer????"+shouldAutoAnswer);
 		
 		//Or by api
 		if (shouldAutoAnswer) {

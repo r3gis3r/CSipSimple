@@ -127,7 +127,7 @@ public class ExtensibleBadge extends LinearLayout implements OnClickListener, On
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
             super.onLayout(changed, l, t, r, b);
             if(content != null) {
-	    		Log.d("Badge", "Layouting to "+content.getHeight());
+	    	//	Log.d("Badge", "Layouting to "+content.getHeight());
 	            contentHeight = content.getHeight();
             }
     }

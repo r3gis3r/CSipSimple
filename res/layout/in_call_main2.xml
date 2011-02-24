@@ -55,11 +55,45 @@
 		android:id="@+id/inCallControls" android:layout_width="fill_parent" android:layout_height="fill_parent" />
 	
 	
+	<ImageView android:id="@+id/dropHangup"
+		android:background="@drawable/grey_bottom_gradient"
+		android:scaleType="center"
+		android:src="@drawable/ic_in_call_touch_end"
+
+		android:visibility="gone" 
+		android:layout_marginBottom="0dip"
+		android:layout_gravity="center_horizontal|bottom"
+		
+		android:layout_width="fill_parent" android:layout_height="100dip" />
+		
+	<ImageView android:id="@+id/dropAnswer"
+		android:background="@drawable/grey_top_gradient"
+		android:scaleType="center"
+		android:src="@drawable/ic_in_call_touch_answer"
+
+		android:visibility="gone" 
+		android:layout_marginTop="0dip"
+		android:layout_gravity="center_horizontal|top"
+		
+		android:layout_width="fill_parent" android:layout_height="100dip" />
+		
+	<ImageView android:id="@+id/dropHold" 
+		android:src="@drawable/ic_in_call_touch_hold" 
+		android:background="@drawable/grey_right_gradient"
+		android:scaleType="center"
+
+		android:visibility="gone" 
+		android:layout_marginRight="0dip"
+		android:layout_gravity="right|center_vertical"
+		
+		android:layout_width="75dip" android:layout_height="fill_parent" />
+		
 	
 	<AbsoluteLayout android:id="@+id/callInfoPanel"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-
 	</AbsoluteLayout>
+	
+		
 	
 	<com.csipsimple.widgets.ScreenLocker android:id="@+id/lockerOverlay"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
