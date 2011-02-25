@@ -538,6 +538,8 @@ public class pjsuaJNI {
   public final static native long pjsua_acc_config_reg_uri_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_reg_hdr_list_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
   public final static native long pjsua_acc_config_reg_hdr_list_get(long jarg1, pjsua_acc_config jarg1_);
+  public final static native void pjsua_acc_config_sub_hdr_list_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
+  public final static native long pjsua_acc_config_sub_hdr_list_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_mwi_enabled_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
   public final static native int pjsua_acc_config_mwi_enabled_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_publish_enabled_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);

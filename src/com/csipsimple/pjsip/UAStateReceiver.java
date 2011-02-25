@@ -218,7 +218,9 @@ public class UAStateReceiver extends Callback {
 		Thread t = new Thread() {
 			public void run() {
 				Log.d(THIS_FILE, "New reg state for : " + accountId);
-				msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
+				if(msgHandler != null) {
+					msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
+				}
 				unlockCpu();
 			}
 		};

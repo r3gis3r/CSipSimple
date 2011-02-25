@@ -77,6 +77,14 @@ public class pjsua_acc_config {
     return new SWIGTYPE_p_pjsip_hdr(pjsuaJNI.pjsua_acc_config_reg_hdr_list_get(swigCPtr, this), true);
   }
 
+  public void setSub_hdr_list(SWIGTYPE_p_pjsip_hdr value) {
+    pjsuaJNI.pjsua_acc_config_sub_hdr_list_set(swigCPtr, this, SWIGTYPE_p_pjsip_hdr.getCPtr(value));
+  }
+
+  public SWIGTYPE_p_pjsip_hdr getSub_hdr_list() {
+    return new SWIGTYPE_p_pjsip_hdr(pjsuaJNI.pjsua_acc_config_sub_hdr_list_get(swigCPtr, this), true);
+  }
+
   public void setMwi_enabled(int value) {
     pjsuaJNI.pjsua_acc_config_mwi_enabled_set(swigCPtr, this, value);
   }

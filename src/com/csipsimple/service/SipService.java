@@ -28,6 +28,8 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pjsuaConstants;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -726,6 +728,8 @@ public class SipService extends Service {
 		Log.i(THIS_FILE, "Create SIP Service");
 		db = new DBAdapter(this);
 		prefsWrapper = new PreferencesWrapper(this);
+		Log.setLogLevel(prefsWrapper.getLogLevel());
+		
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		notificationManager = new SipNotifications(this);
@@ -744,8 +748,6 @@ public class SipService extends Service {
 			return;
 		}
 		
-		Log.setLogLevel(prefsWrapper.getLogLevel());
-
 		// Do not executorThread since must ensure stack is loaded
 		loadAndConnectStack();
 	}
@@ -928,14 +930,16 @@ public class SipService extends Service {
 	
 
 	private boolean setAccountRegistration(SipProfile account, int renew) {
-		boolean status = pjService.setAccountRegistration(account, renew);
-		// Send a broadcast message that for an account
-		// registration state has changed
-		Intent regStateChangedIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
-		sendBroadcast(regStateChangedIntent);
-
-		updateRegistrationsState();
-		
+		boolean status = false;
+		if(pjService != null) {
+			 pjService.setAccountRegistration(account, renew);
+			// Send a broadcast message that for an account
+			// registration state has changed
+			Intent regStateChangedIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
+			sendBroadcast(regStateChangedIntent);
+	
+			updateRegistrationsState();
+		}		
 		
 		return status;
 	}
