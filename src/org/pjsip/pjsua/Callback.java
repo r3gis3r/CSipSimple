@@ -130,8 +130,8 @@ public class Callback {
     if (getClass() == Callback.class) pjsuaJNI.Callback_on_mwi_info(swigCPtr, this, acc_id, pj_str_t.getCPtr(mime_type), mime_type, pj_str_t.getCPtr(body), body); else pjsuaJNI.Callback_on_mwi_infoSwigExplicitCallback(swigCPtr, this, acc_id, pj_str_t.getCPtr(mime_type), mime_type, pj_str_t.getCPtr(body), body);
   }
 
-  public void on_setup_audio() {
-    if (getClass() == Callback.class) pjsuaJNI.Callback_on_setup_audio(swigCPtr, this); else pjsuaJNI.Callback_on_setup_audioSwigExplicitCallback(swigCPtr, this);
+  public int on_setup_audio(int clock_rate) {
+    return (getClass() == Callback.class) ? pjsuaJNI.Callback_on_setup_audio(swigCPtr, this, clock_rate) : pjsuaJNI.Callback_on_setup_audioSwigExplicitCallback(swigCPtr, this, clock_rate);
   }
 
   public void on_teardown_audio() {

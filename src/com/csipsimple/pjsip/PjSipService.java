@@ -1021,12 +1021,13 @@ public class PjSipService {
 		return null;
 	}
 
-	public void setAudioInCall() {
+	public int setAudioInCall(int clockRate) {
 		if (mediaManager != null) {
-			mediaManager.setAudioInCall();
+			return mediaManager.setAudioInCall(clockRate);
 		}else {
 			Log.e(THIS_FILE, "WARNING !!! WE HAVE NO MEDIA MANAGER AT THIS POINT");
 		}
+		return -1;
 	}
 	
 	public void unsetAudioInCall() {

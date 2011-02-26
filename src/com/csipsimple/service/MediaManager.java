@@ -68,7 +68,7 @@ public class MediaManager {
 	//By default we assume user want bluetooth.
 	//If bluetooth is not available connection will never be done and then
 	//UI will not show bluetooth is activated
-	private boolean userWantBluetooth = false;
+	private boolean userWantBluetooth = true;
 	private boolean userWantSpeaker = false;
 	private boolean userWantMicrophoneMute = false;
 
@@ -94,7 +94,6 @@ public class MediaManager {
 		audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 		accessibilityManager = AccessibilityWrapper.getInstance();
 		accessibilityManager.init(service);
-		
 		
 		ringer = new Ringer(service);
 		
@@ -136,14 +135,17 @@ public class MediaManager {
 	}
 	
 	
-	public void setAudioInCall() {
-	//	Thread t = new Thread() {
-	//		public void run() {
+	public int setAudioInCall(int clockRate) {
+		if(bluetoothWrapper != null && clockRate != 8000) {
+			if(userWantBluetooth && bluetoothWrapper.canBluetooth()) {
+				return -1;
+			}
+		}
+		
 		Log.d(THIS_FILE, "> We do it");
-				actualSetAudioInCall();
-	//		};
-	//	};
-	//	t.start();
+		actualSetAudioInCall();
+		
+		return 0;
 	}
 	
 	public void unsetAudioInCall() {
