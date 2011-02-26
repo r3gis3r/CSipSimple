@@ -68,11 +68,11 @@ import android.widget.LinearLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
+import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.pjsip.PjSipCalls;
-import com.csipsimple.service.MediaManager.MediaState;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.DialingFeedback;
@@ -216,64 +216,75 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         keyguardLock.disableKeyguard();
         //}
         
+
+        if(proximitySensor != null && powerManager != null) {
+	        WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			WifiInfo winfo = wman.getConnectionInfo();
+			if(winfo == null || !prefsWrapper.keepAwakeInCall()) {
+				// Try to use powermanager proximity sensor
+				try {
+					Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
+					int supportedFlags = (Integer) method.invoke(powerManager);
+					Log.d(THIS_FILE, ">>> Flags supported : "+supportedFlags);
+					Field f = PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK");
+					int proximityScreenOffWakeLock = (Integer) f.get(null);
+					if( (supportedFlags & proximityScreenOffWakeLock) != 0x0 ) {
+						Log.d(THIS_FILE, ">>> We can use native screen locker !!");
+						proximityWakeLock = powerManager.newWakeLock(proximityScreenOffWakeLock, "com.csipsimple.CallProximity");
+						proximityWakeLock.setReferenceCounted(false);
+					}
+					
+				} catch (Exception e) {
+					Log.d(THIS_FILE, "Impossible to get power manager supported wake lock flags");
+				} 
+				/*
+				if ((powerManager.getSupportedWakeLockFlags()  & PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) != 0x0) {
+					mProximityWakeLock = pm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, THIS_FILE);
+				}
+				*/
+			}
+        }
+	}
+	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		endCallTargetRect = null;
+		holdTargetRect = null;
+		answerTargetRect = null;
+		
+
         if(quitTimer == null) {
     		quitTimer = new Timer();
         }
         
-        if(proximitySensor != null) {
-			WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-			WifiInfo winfo = wman.getConnectionInfo();
-			if(winfo == null || !prefsWrapper.keepAwakeInCall()) {
-				// Try to use powermanager proximity sensor
-				if(powerManager != null) {
-					try {
-						Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
-						int supportedFlags = (Integer) method.invoke(powerManager);
-						Log.d(THIS_FILE, ">>> Flags supported : "+supportedFlags);
-						Field f = PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK");
-						int proximityScreenOffWakeLock = (Integer) f.get(null);
-						if( (supportedFlags & proximityScreenOffWakeLock) != 0x0 ) {
-							Log.d(THIS_FILE, ">>> We can use native screen locker !!");
-							proximityWakeLock = powerManager.newWakeLock(proximityScreenOffWakeLock, "com.csipsimple.CallProximity");
-							proximityWakeLock.setReferenceCounted(false);
-						}
-						
-					} catch (Exception e) {
-						Log.d(THIS_FILE, "Impossible to get power manager supported wake lock flags");
-					} 
-					/*
-					if ((powerManager.getSupportedWakeLockFlags()  & PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) != 0x0) {
-						mProximityWakeLock = pm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, THIS_FILE);
-					}
-					*/
-				}
-			}
-			
-			if(proximityWakeLock == null) {
-				//Fall back to manual mode
-				isFirstRun = true;
-				sensorManager.registerListener(this, 
-		                proximitySensor,
-		                SensorManager.SENSOR_DELAY_NORMAL);
-				proximitySensorTracked  = true;
-			}
-			
+        //If we should manage it ourselves
+        if(proximitySensor != null && proximityWakeLock == null) {
+			//Fall back to manual mode
+			isFirstRun = true;
+			sensorManager.registerListener(this, 
+	                proximitySensor,
+	                SensorManager.SENSOR_DELAY_NORMAL);
+			proximitySensorTracked  = true;
 		}
         dialFeedback.resume();
         handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
+		
 	}
 	
+	
 	@Override
-	protected void onStop() {
-		super.onStop();
-		Log.d(THIS_FILE, "Stop in call");
-		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
-			proximityWakeLock.release();
-		}
+	protected void onPause() {
+		super.onPause();
+		
 		
 		if(proximitySensor != null) {
 			proximitySensorTracked = false;
-			sensorManager.unregisterListener(this);
+			sensorManager.unregisterListener(this, 
+	                proximitySensor);
+			Log.d(THIS_FILE, "Unregister to sensor is done !!!");
 		}
 		
 		dialFeedback.pause();
@@ -285,7 +296,16 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		}
 		
 		lockOverlay.tearDown();
-		
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d(THIS_FILE, "Stop in call");
+
+		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
+			proximityWakeLock.release();
+		}
 		if(manageKeyguard) {
 			keyguardLock.reenableKeyguard();
 		}
@@ -329,11 +349,6 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		super.onNewIntent(intent);
 	}
 	
-	@Override
-	protected void onResume() {
-		endCallTargetRect = null;
-		super.onResume();
-	}
 
 	
 	private static final int UPDATE_FROM_CALL = 1;

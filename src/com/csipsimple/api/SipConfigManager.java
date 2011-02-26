@@ -36,6 +36,8 @@ public class SipConfigManager {
 	public static final String ENABLE_VAD = "enable_vad";
 	public static final String SND_MIC_LEVEL = "snd_mic_level";
 	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
+	public static final String SND_BT_MIC_LEVEL = "snd_bt_mic_level";
+	public static final String SND_BT_SPEAKER_LEVEL = "snd_bt_speaker_level";
 	public static final String HAS_IO_QUEUE = "has_io_queue";
 	public static final String BITS_PER_SAMPLE = "bits_per_sample";
 	public static final String SET_AUDIO_GENERATE_TONE = "set_audio_generate_tone";

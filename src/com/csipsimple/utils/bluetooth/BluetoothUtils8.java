@@ -55,6 +55,7 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 				}else if(status == AudioManager.SCO_AUDIO_STATE_DISCONNECTED) {
 					isBluetoothConnected = false;
 				}
+				manager.setSoftwareVolume();
 				manager.broadcastMediaChanged();
 			}
 		}

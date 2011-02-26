@@ -963,7 +963,7 @@ public class PjSipService {
 	}
 
 	public boolean setAccountRegistration(SipProfile account, int renew) {
-		int status = pjsuaConstants.PJ_FALSE;
+		int status = -1;
 		synchronized (pjAccountsCreationLock) {
 			if (!created || account == null) {
 				Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
@@ -996,7 +996,8 @@ public class PjSipService {
 
 			}
 		}
-		return status == pjsuaConstants.PJ_SUCCESS;
+		// PJ_SUCCESS = 0
+		return status == 0;
 	}
 	
 	

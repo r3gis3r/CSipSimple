@@ -284,9 +284,13 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 	private void updateUIFromMedia() {
 		if(sipService != null && configurationService != null) {
 			try {
-				Float speakerLevel = configurationService.getPreferenceFloat(SipConfigManager.SND_SPEAKER_LEVEL) * 10;
+				boolean useBT = sipService.getCurrentMediaState().isBluetoothScoOn;
+				
+				Float speakerLevel = configurationService.getPreferenceFloat(useBT ? 
+						SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL) * 10;
 				speakerAmplification.setProgress(speakerLevel.intValue());
-				Float microLevel = configurationService.getPreferenceFloat(SipConfigManager.SND_MIC_LEVEL) * 10;
+				Float microLevel = configurationService.getPreferenceFloat(useBT ?
+						SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL) * 10;
 				microAmplification.setProgress(microLevel.intValue());
 				
 				echoCancellation.setChecked(configurationService.getPreferenceBoolean(SipConfigManager.ECHO_CANCELLATION));
@@ -306,15 +310,18 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		if(sipService != null && configurationService != null) {
 			try {
 				Float newValue = (float) ( value / 10.0 );
-				
+				String key;
+				boolean useBT = sipService.getCurrentMediaState().isBluetoothScoOn;
 				switch(arg0.getId()) {
 				case R.id.speaker_level:
 					sipService.confAdjustTxLevel(0, newValue);
-					configurationService.setPreferenceFloat(SipConfigManager.SND_SPEAKER_LEVEL, newValue);
+					key =  useBT ? SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL;
+					configurationService.setPreferenceFloat(key, newValue);
 					break;
 				case R.id.micro_level:
 					sipService.confAdjustRxLevel(0, newValue);
-					configurationService.setPreferenceFloat(SipConfigManager.SND_MIC_LEVEL, newValue);
+					key =  useBT ? SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL;
+					configurationService.setPreferenceFloat(key, newValue);
 					break;
 				}
 			} catch (RemoteException e) {

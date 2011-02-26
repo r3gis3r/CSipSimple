@@ -20,6 +20,7 @@
 package com.csipsimple.api;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.MediaState;
 
 interface ISipService{
 	//Stack control
@@ -58,6 +59,7 @@ interface ISipService{
 	void confAdjustRxLevel(int port, float value);
 	void setEchoCancellation(boolean on);
 	void adjustVolume(in SipCallSession callInfo, int direction, int flags);
+	MediaState getCurrentMediaState();
 	
 	//Record calls
 	void startRecording(int callId);

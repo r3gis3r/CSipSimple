@@ -32,6 +32,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 
+import com.csipsimple.api.MediaState;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
@@ -398,8 +400,8 @@ public class MediaManager {
 	
 	public synchronized void setMicrophoneMute(boolean on) {
 		if(on != userWantMicrophoneMute ) {
-			pjsua.conf_adjust_rx_level(0, on ? 0 : service.prefsWrapper.getMicLevel() );
 			userWantMicrophoneMute = on;
+			setSoftwareVolume();
 			broadcastMediaChanged();
 		}
 	}
@@ -419,34 +421,7 @@ public class MediaManager {
 		broadcastMediaChanged();
 	}
 	
-	public class MediaState {
-		public boolean isMicrophoneMute = false;
-		public boolean isSpeakerphoneOn = false;
-		public boolean isBluetoothScoOn = false;
-		public boolean canMicrophoneMute = true;
-		public boolean canSpeakerphoneOn = true;
-		public boolean canBluetoothSco = false;
-		
-		@Override
-		public boolean equals(Object o) {
-			
-			if(o != null && o.getClass() == MediaState.class) {
-				MediaState oState = (MediaState) o;
-				if(oState.isBluetoothScoOn == isBluetoothScoOn &&
-						oState.isMicrophoneMute == isMicrophoneMute &&
-						oState.isSpeakerphoneOn == isSpeakerphoneOn &&
-						oState.canBluetoothSco == canBluetoothSco &&
-						oState.canSpeakerphoneOn == canSpeakerphoneOn &&
-						oState.canMicrophoneMute == canMicrophoneMute) {
-					return true;
-				}else {
-					return false;
-				}
-				
-			}
-			return super.equals(o);
-		}
-	}
+
 	
 
 	public MediaState getMediaState() {
@@ -472,6 +447,28 @@ public class MediaManager {
 		
 		return mediaState;
 	}
+	
+	/**
+	 * Change the audio volume amplification according to the fact we are using bluetooth
+	 * @param useBluetooth
+	 */
+	public void setSoftwareVolume() {
+		
+		if(service != null && SipService.pjService != null) {
+			boolean useBT = (bluetoothWrapper != null && bluetoothWrapper.isBluetoothOn());
+			
+			String speaker_key = useBT ? SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL;
+			String mic_key = useBT ? SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL;
+			
+			float speakVolume = service.prefsWrapper.getPreferenceFloatValue(speaker_key);
+			float micVolume = userWantMicrophoneMute? 0 : service.prefsWrapper.getPreferenceFloatValue(mic_key);
+			
+			SipService.pjService.confAdjustTxLevel(0, speakVolume);
+			SipService.pjService.confAdjustRxLevel(0, micVolume);
+		}
+	}
+	
+	
 	
 	public void broadcastMediaChanged() {
 		service.sendBroadcast(mediaStateChangedIntent);

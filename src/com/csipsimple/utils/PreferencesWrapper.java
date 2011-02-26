@@ -166,6 +166,8 @@ public class PreferencesWrapper {
 	{
 		put(SipConfigManager.SND_MIC_LEVEL, (float)1.0);
 		put(SipConfigManager.SND_SPEAKER_LEVEL, (float)1.0);
+		put(SipConfigManager.SND_BT_MIC_LEVEL, (float)1.0);
+		put(SipConfigManager.SND_BT_SPEAKER_LEVEL, (float)1.0);
 	}};
 	
 	
@@ -770,14 +772,6 @@ public class PreferencesWrapper {
 		return ringtone;
 	}
 
-
-	public float getMicLevel() {
-		return getPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL);
-	}
-	
-	public float getSpeakerLevel() {
-		return getPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL);
-	}
 	
 	public int getAudioFramePtime() {
 		return getPreferenceIntegerValue(SipConfigManager.SND_PTIME);

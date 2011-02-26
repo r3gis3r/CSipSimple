@@ -258,12 +258,12 @@ public class UAStateReceiver extends Callback {
 				if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
 					pjsua.conf_connect(callInfo.getConfPort(), 0);
 					pjsua.conf_connect(0, callInfo.getConfPort());
-					pjsua.conf_adjust_tx_level(0, pjService.prefsWrapper.getSpeakerLevel());
-					float micLevel = pjService.prefsWrapper.getMicLevel();
-					if(pjService.mediaManager != null && pjService.mediaManager.isUserWantMicrophoneMute()) {
-						micLevel = 0;
+					
+					// Adjust software volume
+					if(pjService.mediaManager != null) {
+						pjService.mediaManager.setSoftwareVolume();
 					}
-					pjsua.conf_adjust_rx_level(0, micLevel);
+					
 					pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
 					
 					// Auto record

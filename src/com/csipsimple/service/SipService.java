@@ -28,8 +28,6 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pjsuaConstants;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -61,6 +59,7 @@ import android.widget.Toast;
 import com.csipsimple.R;
 import com.csipsimple.api.ISipConfiguration;
 import com.csipsimple.api.ISipService;
+import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
@@ -414,6 +413,16 @@ public class SipService extends Service {
 		public void zrtpSASVerified() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			pjService.zrtpSASVerified();
+		}
+
+		@Override
+		public MediaState getCurrentMediaState() throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			MediaState ms = new MediaState();
+			if(pjService != null && pjService.mediaManager != null) {
+				ms = pjService.mediaManager.getMediaState();
+			}
+			return ms;
 		}
 
 

@@ -78,6 +78,15 @@
 				android:title="@string/snd_speaker_level"
 				android:summary="@string/snd_speaker_level_desc" 
 				android:defaultValue="1.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
+				
+			<com.csipsimple.widgets.SeekBarPreference android:key="snd_bt_mic_level"
+				android:title="@string/snd_bt_mic_level"
+				android:summary="@string/snd_mic_level_desc" 
+				android:defaultValue="1.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
+			<com.csipsimple.widgets.SeekBarPreference android:key="snd_bt_speaker_level"
+				android:title="@string/snd_bt_speaker_level"
+				android:summary="@string/snd_speaker_level_desc" 
+				android:defaultValue="1.0" android:max="10"></com.csipsimple.widgets.SeekBarPreference>
 			
 			<com.csipsimple.widgets.SeekBarPreference android:key="snd_stream_level"
 				android:title="@string/snd_stream_level"

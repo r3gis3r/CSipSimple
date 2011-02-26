@@ -118,6 +118,8 @@
 <string name="snd_mic_level_desc">Adjust the micro signal level (1 do nothing)</string>
 <string name="snd_speaker_level">Speaker amplification</string>
 <string name="snd_speaker_level_desc">Adjust the speaker signal level (1 do nothing)</string>
+<string name="snd_bt_mic_level">Bluetooth micro amplification</string>
+<string name="snd_bt_speaker_level">Bluetooth listening amplification</string>
 <string name="snd_stream_level">Initial stream level</string>
 <string name="snd_stream_level_desc">Set the initial level for audio stream (Android stream)</string>
 <string name="snd_auto_close_time">Auto close time</string>

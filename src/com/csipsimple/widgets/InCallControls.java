@@ -34,7 +34,7 @@ import android.widget.ToggleButton;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
-import com.csipsimple.service.MediaManager.MediaState;
+import com.csipsimple.api.MediaState;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.accessibility.AccessibilityWrapper;
