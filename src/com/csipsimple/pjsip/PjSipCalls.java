@@ -68,9 +68,12 @@ public final class PjSipCalls {
 		session.setRemoteContact( pjCallInfo.getRemote_info().getPtr() );
 		session.setConfPort( pjCallInfo.getConf_slot() );
 		
-		SipProfile account = service.getAccountForPjsipId(pjCallInfo.getAcc_id());
+		int pjAccId = pjCallInfo.getAcc_id();
+		SipProfile account = service.getAccountForPjsipId(pjAccId);
 		if(account != null) {
 			session.setAccId( account.id );
+		}else {
+			session.setAccId(SipProfile.INVALID_ID);
 		}
 		pj_time_val duration = pjCallInfo.getConnect_duration();
 		session.setConnectStart( SystemClock.elapsedRealtime () - duration.getSec() * 1000 - duration.getMsec() ); 

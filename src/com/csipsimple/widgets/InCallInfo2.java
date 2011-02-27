@@ -214,11 +214,15 @@ public class InCallInfo2 extends ExtensibleBadge {
 			
 			
 			remoteName.setText( text );
-			
-			SipProfile acc = SipService.getAccount(callInfo.getAccId(), db);
-			if(acc != null && acc.display_name != null) {
-				statusText  += "SIP/"+acc.display_name + " : " ;
+			if(callInfo.getAccId() != SipProfile.INVALID_ID) {
+				SipProfile acc = SipService.getAccount(callInfo.getAccId(), db);
+				if(acc != null && acc.display_name != null) {
+					statusText  += "SIP/"+acc.display_name + " : " ;
+				}
+			}else {
+				statusText  += "SIP : " ;
 			}
+			
 			statusText += uriInfos.userName;
 			status.setText(statusText);
 			

@@ -290,10 +290,11 @@ public class PjSipService {
 								created = false;
 								return false;
 							}
-				/*			 int[] p_acc_id = new int[1];
-							 pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE,
-							 p_acc_id);
-				*/
+							
+							//We need a local account to not have the application lost when direct call to the IP
+							int[] p_acc_id = new int[1];
+							pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE, p_acc_id);
+				
 							// Log.d(THIS_FILE, "Udp account "+p_acc_id);
 	
 						}
@@ -310,11 +311,10 @@ public class PjSipService {
 								created = false;
 								return false;
 							}
-				/*
+							
+							//We need a local account to not have the application lost when direct call to the IP
 							int[] p_acc_id = new int[1];
-							pjsua.acc_add_local(tcpTranportId, pjsua.PJ_FALSE,
-							p_acc_id);
-				*/
+							pjsua.acc_add_local(tcpTranportId, pjsua.PJ_FALSE, p_acc_id);
 	
 						}
 	
@@ -328,9 +328,9 @@ public class PjSipService {
 								created = false;
 								return false;
 							}
-							// int[] p_acc_id = new int[1];
-							// pjsua.acc_add_local(tlsTransportId, pjsua.PJ_FALSE,
-							// p_acc_id);
+							//We need a local account to not have the application lost when direct call to the IP
+							int[] p_acc_id = new int[1];
+							pjsua.acc_add_local(tlsTransportId, pjsua.PJ_FALSE, p_acc_id);
 						}
 	
 						// RTP transport
