@@ -196,6 +196,11 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		if(!prefsWrapper.getPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION)) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 		}
+		
+
+        if(quitTimer == null) {
+    		quitTimer = new Timer("Quit-timer");
+        }
 	}
 	
 	
@@ -244,6 +249,8 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				*/
 			}
         }
+        
+
 	}
 	
 
@@ -256,9 +263,6 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		answerTargetRect = null;
 		
 
-        if(quitTimer == null) {
-    		quitTimer = new Timer();
-        }
         
         //If we should manage it ourselves
         if(proximitySensor != null && proximityWakeLock == null) {
@@ -282,18 +286,12 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		
 		if(proximitySensor != null) {
 			proximitySensorTracked = false;
-			sensorManager.unregisterListener(this, 
-	                proximitySensor);
+			sensorManager.unregisterListener(this);
 			Log.d(THIS_FILE, "Unregister to sensor is done !!!");
 		}
 		
 		dialFeedback.pause();
 		
-		if(quitTimer != null) {
-			quitTimer.cancel();
-			quitTimer.purge();
-			quitTimer = null;
-		}
 		
 		lockOverlay.tearDown();
 	}
@@ -314,7 +312,21 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
 	@Override
 	protected void onDestroy() {
-		Log.d(THIS_FILE, "Destroy in call");
+		Log.d(THIS_FILE, ">>> DESTROY CALL <<<");
+		
+
+		if(quitTimer != null) {
+			quitTimer.cancel();
+			quitTimer.purge();
+			quitTimer = null;
+		}
+		
+		if(draggingTimer != null) {
+			draggingTimer.cancel();
+			draggingTimer.purge();
+			draggingTimer = null;
+		}
+		
 		try {
 			unbindService(connection);
 		}catch(Exception e) {
@@ -1184,9 +1196,10 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 			//TODO : move somewhere else
 			if(draggingTimer == null) {
-				draggingTimer = new Timer();
+				draggingTimer = new Timer("Dragging-timer");
 			}
 		}
+		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 	        int action = event.getAction();

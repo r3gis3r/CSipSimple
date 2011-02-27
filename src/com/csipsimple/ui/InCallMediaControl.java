@@ -201,7 +201,7 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 			quitTimer = null;
 		}
 		
-		quitTimer = new Timer();
+		quitTimer = new Timer("Quit-timer-media");
 		
 		quitTimer.schedule(new LockTimerTask(), time);
 	}

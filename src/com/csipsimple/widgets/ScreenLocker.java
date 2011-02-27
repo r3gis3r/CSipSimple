@@ -107,7 +107,7 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 			lockTimer = null;
 		}
 		
-		lockTimer = new Timer();
+		lockTimer = new Timer("ScreenLock-timer");
 		
 		lockTimer.schedule(new LockTimerTask(), time);
 	}

@@ -73,7 +73,7 @@ public class DialingFeedback {
 			//Create dialtone just for user feedback
 			synchronized (toneGeneratorLock) {
 				if(toneTimer == null) {
-					toneTimer = new Timer();
+					toneTimer = new Timer("Dialtone-timer");
 				}
 				if (toneGenerator == null) {
 					try {
