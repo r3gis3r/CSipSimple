@@ -37,6 +37,7 @@ import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Betamax;
+import com.csipsimple.wizards.impl.BroadVoice;
 import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.DeltaThree;
@@ -203,7 +204,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_basic, 21, 
 					new Locale[]{}, false, true, 
 					Betamax.class));
-			
+			WIZARDS_DICT.put("BROADVOICE", new WizardInfo("BROADVOICE", "BroadVoice", 
+					R.drawable.ic_wizard_broadvoice, 19, 
+					new Locale[]{}, false, true, 
+					BroadVoice.class));
 			
 			//Locales
 			WIZARDS_DICT.put("CALLCENTRIC", new WizardInfo("CALLCENTRIC", "Callcentric", 

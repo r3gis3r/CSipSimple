@@ -338,6 +338,9 @@ public class AccountsList extends Activity implements OnItemClickListener {
 				if (service != null) {
 					Log.d(THIS_FILE, "Will reload all accounts !");
 					try {
+						//Ensure sip service is started
+						service.sipStart();
+						
 						if(accountId == null) {
 							service.reAddAllAccounts();
 						}else {
