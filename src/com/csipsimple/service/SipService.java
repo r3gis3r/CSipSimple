@@ -765,17 +765,19 @@ public class SipService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.i(THIS_FILE, "Destroying SIP Service");
-		try {
-			Log.d(THIS_FILE, "Unregister telephony receiver");
-			unregisterReceiver(deviceStateReceiver);
-			deviceStateReceiver.stop();
-			deviceStateReceiver = null;
-		} catch (IllegalArgumentException e) {
-			// This is the case if already unregistered itself
-			// Python style usage of try ;) : nothing to do here since it could
-			// be a standard case
-			// And in this case nothing has to be done
-			Log.d(THIS_FILE, "Has not to unregister telephony receiver");
+		if(deviceStateReceiver != null) {
+			try {
+				Log.d(THIS_FILE, "Unregister telephony receiver");
+				unregisterReceiver(deviceStateReceiver);
+				deviceStateReceiver.stop();
+				deviceStateReceiver = null;
+			} catch (IllegalArgumentException e) {
+				// This is the case if already unregistered itself
+				// Python style usage of try ;) : nothing to do here since it could
+				// be a standard case
+				// And in this case nothing has to be done
+				Log.d(THIS_FILE, "Has not to unregister telephony receiver");
+			}
 		}
 		if (phoneConnectivityReceiver != null) {
 			Log.d(THIS_FILE, "Unregister telephony receiver");
@@ -823,20 +825,7 @@ public class SipService extends Service {
 		pjService.setService(this);
 		
 		if (pjService.tryToLoadStack()) {
-			// Register own broadcast receiver
-			if (deviceStateReceiver == null) {
-				IntentFilter intentfilter = new IntentFilter();
-				intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-				intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
-				deviceStateReceiver = new ServiceDeviceStateReceiver();
-				registerReceiver(deviceStateReceiver, intentfilter);
-			}
-			if (phoneConnectivityReceiver == null) {
-				Log.d(THIS_FILE, "Listen for phone state ");
-				phoneConnectivityReceiver = new ServicePhoneStateReceiver();
-				telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-						| PhoneStateListener.LISTEN_CALL_STATE);
-			}
+			serviceHandler.sendMessage(serviceHandler.obtainMessage(LOAD_MESSAGE));
 			return true;
 		}
 		return false;
@@ -864,7 +853,7 @@ public class SipService extends Service {
 	
 	public void startSipStack() {
 		if(!needToStartSip()) {
-			ToastHandler.sendMessage(ToastHandler.obtainMessage(0, R.string.connection_not_valid, 0));
+			serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
 			Log.e(THIS_FILE, "Not able to start sip stack");
 			return;
 		}
@@ -901,7 +890,7 @@ public class SipService extends Service {
 
 	
 	public void notifyUserOfMessage(String msg) {
-		ToastHandler.sendMessage(ToastHandler.obtainMessage(0, msg));
+		serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, msg));
 	}
 	
 	/**
@@ -1096,16 +1085,40 @@ public class SipService extends Service {
 
 	
 
+	private static final int TOAST_MESSAGE = 0;
+	private static final int LOAD_MESSAGE = 1;
 
-
-	private Handler ToastHandler = new Handler() {
+	private Handler serviceHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			if (msg.arg1 != 0) {
-				Toast.makeText(SipService.this, msg.arg1, Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(SipService.this, (String) msg.obj, Toast.LENGTH_LONG).show();
+			
+			switch(msg.what) {
+			case TOAST_MESSAGE:
+				if (msg.arg1 != 0) {
+					Toast.makeText(SipService.this, msg.arg1, Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(SipService.this, (String) msg.obj, Toast.LENGTH_LONG).show();
+				}
+				break;
+			case LOAD_MESSAGE:
+				// Register own broadcast receiver
+				if (deviceStateReceiver == null) {
+					IntentFilter intentfilter = new IntentFilter();
+					intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+					intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
+					deviceStateReceiver = new ServiceDeviceStateReceiver();
+					registerReceiver(deviceStateReceiver, intentfilter);
+				}
+				if (phoneConnectivityReceiver == null) {
+					Log.d(THIS_FILE, "Listen for phone state ");
+					phoneConnectivityReceiver = new ServicePhoneStateReceiver();
+					telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
+							| PhoneStateListener.LISTEN_CALL_STATE);
+				}
+				break;
+				
 			}
+			
 		}
 	};
 	
@@ -1190,7 +1203,7 @@ public class SipService extends Service {
 					// Log.e(THIS_FILE, "We should restart the stack ! ");
 				} else {
 					// TODO : else refine things => STUN, registration etc...
-					ToastHandler.sendMessage(ToastHandler.obtainMessage(0, 0, 0,
+					serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, 0, 0,
 							"Connection have been lost... you may have lost your communication. Hand over is not yet supported"));
 				}
 			} else {
