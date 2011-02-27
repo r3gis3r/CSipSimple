@@ -305,12 +305,14 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		case REQUEST_MODIFY:
 			if(resultCode == RESULT_OK){
 				handler.sendMessage(handler.obtainMessage(NEED_LIST_UPDATE));
+				/*
 				int accId = data.getIntExtra(Intent.EXTRA_UID, -1);
 				if(accId != -1) {
 					reloadAsyncAccounts(accId, 1);
 				}else {
 					reloadAsyncAccounts(null, 1);
 				}
+				*/
 			}
 			break;
 		case CHANGE_WIZARD:

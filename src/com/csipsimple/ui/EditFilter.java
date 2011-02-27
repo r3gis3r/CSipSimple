@@ -176,16 +176,15 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 	private void checkFormValidity() {
 		boolean isValid = true;
 		
-		if(TextUtils.isEmpty(matchesView.getText().toString()) && Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) != Filter.ACTION_REPLACE) {
+		if(TextUtils.isEmpty(matchesView.getText().toString()) && 
+				Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_ALL ){
 			isValid = false;
 		}
 		/*
-		if(Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) == Filter.ACTION_REPLACE) {
-			if(TextUtils.isEmpty(replaceView.getText().toString())) {
-				isValid = false;
-			}
-		}
-		*/
+				&&
+				Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) != Filter.ACTION_REPLACE) {
+			isValid = false;
+		} */
 		
 		saveButton.setEnabled(isValid);
 	}
@@ -216,6 +215,8 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 			}
 			break;
 		}
+		boolean showMatcherView = Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_ALL ;
+		matchesView.setVisibility(showMatcherView ? View.VISIBLE : View.GONE);
 		checkFormValidity();
 	}
 	

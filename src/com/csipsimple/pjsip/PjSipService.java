@@ -144,7 +144,7 @@ public class PjSipService {
 	
 	// Start the sip stack according to current settings
 	public synchronized boolean sipStart() {
-		Log.e(THIS_FILE, "Set log level to "+prefsWrapper.getLogLevel());
+		Log.d(THIS_FILE, ">> SIP START <<");
 		Log.setLogLevel(prefsWrapper.getLogLevel());
 		
 		if (!hasSipStack) {
@@ -400,6 +400,8 @@ public class PjSipService {
 	 * Stop sip service
 	 */
 	public synchronized void sipStop() {
+		Log.d(THIS_FILE, ">> SIP STOP <<");
+		
 		if (getActiveCallInProgress() != null) {
 			Log.w(THIS_FILE, "We have a call in progress... DO NOT STOP !!!");
 			//TODO : queue quit on end call;

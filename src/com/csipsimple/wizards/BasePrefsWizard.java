@@ -301,22 +301,13 @@ public class BasePrefsWizard extends GenericPrefs{
 	}
 	
 	private void restartAsync() {
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				Log.d(THIS_FILE, "Would like to restart stack");
-				if (service != null) {
-					Log.d(THIS_FILE, "Will reload the stack !");
-					try {
-						service.sipStop();
-						service.sipStart();
-					} catch (RemoteException e) {
-						Log.e(THIS_FILE, "Impossible to reload stack", e);
-					}
-				}
-			};
-		};
-		t.start();
+		if (service != null) {
+			try {
+				service.askThreadedRestart();
+			} catch (RemoteException e) {
+				Log.e(THIS_FILE, "Unable to restart sip stack", e);
+			}
+		}
 	}
 	
 	private void reloadAccountsAsync() {
