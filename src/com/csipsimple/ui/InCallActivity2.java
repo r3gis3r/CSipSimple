@@ -265,9 +265,10 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
         
         //If we should manage it ourselves
-        if(proximitySensor != null && proximityWakeLock == null) {
+        if(proximitySensor != null && proximityWakeLock == null && !proximitySensorTracked) {
 			//Fall back to manual mode
 			isFirstRun = true;
+			Log.d(THIS_FILE, "Register sensor");
 			sensorManager.registerListener(this, 
 	                proximitySensor,
 	                SensorManager.SENSOR_DELAY_NORMAL);
@@ -284,7 +285,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		super.onPause();
 		
 		
-		if(proximitySensor != null) {
+		if(proximitySensor != null && proximitySensorTracked) {
 			proximitySensorTracked = false;
 			sensorManager.unregisterListener(this);
 			Log.d(THIS_FILE, "Unregister to sensor is done !!!");
@@ -299,7 +300,6 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.d(THIS_FILE, "Stop in call");
 
 		if(proximityWakeLock != null && proximityWakeLock.isHeld()) {
 			proximityWakeLock.release();
@@ -312,9 +312,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
 	@Override
 	protected void onDestroy() {
-		Log.d(THIS_FILE, ">>> DESTROY CALL <<<");
 		
-
 		if(quitTimer != null) {
 			quitTimer.cancel();
 			quitTimer.purge();

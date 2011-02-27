@@ -920,7 +920,7 @@ public class SipService extends Service {
 
 		for (SipProfile account : accountList) {
 			if (account.active) {
-				if (pjService.addAccount(account) ) {
+				if (pjService != null && pjService.addAccount(account) ) {
 					hasSomeSuccess = true;
 				}
 			}
