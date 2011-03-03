@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
@@ -1043,5 +1044,18 @@ public class PreferencesWrapper {
 		setPreferenceBooleanValue(HAS_BEEN_QUIT, quit);
 	}
 
+	
+	// Codec list management -- only internal use set at each start of the sip stack
+	private static final String CODECS_SEPARATOR = "|";
+	private static final String CODECS_LIST = "codecs_list";
+	public void setCodecList(ArrayList<String> codecs) {
+		if(codecs != null) {
+			setPreferenceStringValue(CODECS_LIST, TextUtils.join(CODECS_SEPARATOR, codecs));
+		}
+	}
+
+	public String[] getCodecList() {
+		return TextUtils.split(prefs.getString(CODECS_LIST, ""),  Pattern.quote(CODECS_SEPARATOR) );
+	}
 
 }

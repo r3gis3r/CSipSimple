@@ -77,11 +77,13 @@ public class UAStateReceiver extends Callback {
 
 	private void lockCpu(){
 		if(eventLock != null) {
+			Log.d(THIS_FILE, "< LOCK CPU");
 			eventLock.acquire();
 		}
 	}
 	private void unlockCpu() {
 		if(eventLock != null && eventLock.isHeld()) {
+			Log.d(THIS_FILE, "> UNLOCK CPU");
 			eventLock.release();
 		}
 	}
@@ -90,10 +92,10 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_incoming_call(final int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 
-		lockCpu();
+		
 		Thread t = new Thread() {
 			public void run() {
-				
+				lockCpu();
 				
 				//Check if we have not already an ongoing call
 				/*
@@ -126,9 +128,10 @@ public class UAStateReceiver extends Callback {
 	
 	@Override
 	public void on_call_state(final int callId, pjsip_event e) {
-		lockCpu();
+		
 		Thread t = new Thread() {
 			public void run() {
+				lockCpu();
 				Log.d(THIS_FILE, "Call state <<");
 				//Get current infos
 				SipCallSession callInfo = getCallInfo(callId, true);
@@ -214,9 +217,10 @@ public class UAStateReceiver extends Callback {
 
 	@Override
 	public void on_reg_state(final int accountId) {
-		lockCpu();
+		
 		Thread t = new Thread() {
 			public void run() {
+				lockCpu();
 				Log.d(THIS_FILE, "New reg state for : " + accountId);
 				if(msgHandler != null) {
 					msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
@@ -243,9 +247,10 @@ public class UAStateReceiver extends Callback {
 
 	@Override
 	public void on_call_media_state(final int callId) {
-		lockCpu();
+		
 		Thread t = new Thread() {
 			public void run() {
+				lockCpu();
 				if(pjService.mediaManager != null) {
 					pjService.mediaManager.stopRing();
 				}
@@ -624,7 +629,8 @@ public class UAStateReceiver extends Callback {
 		if (eventLock == null) {
 			PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
 			eventLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.inEventLock");
-			eventLock.setReferenceCounted(true);
+			eventLock.setReferenceCounted(false);
+
 		}
 	}
 	

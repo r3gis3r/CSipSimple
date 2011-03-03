@@ -104,9 +104,7 @@ public class SipService extends Service {
 		@Override
 		public void sipStop() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			if(pjService != null) {
-				pjService.sipStop();
-			}
+			stopSipStack();
 		}
 
 	
@@ -128,9 +126,7 @@ public class SipService extends Service {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Thread t = new Thread() {
 				public void run() {
-					if(pjService != null) {
-						pjService.sipStop();
-					}
+					stopSipStack();
 					startSipStack();
 				}
 			};
@@ -515,7 +511,7 @@ public class SipService extends Service {
 
 	public SipNotifications notificationManager;
 	private MyExecutor mExecutor;
-	public static PjSipService pjService;
+	private PjSipService pjService;
 	private static HandlerThread executorThread;
 
 	// Broadcast receiver for the service
@@ -803,17 +799,17 @@ public class SipService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 
-		
-		
 		// Autostart the stack
-		if (loadAndConnectStack()) {
-			Thread t = new Thread() {
-				public void run() {
-					Log.d(THIS_FILE, "Start sip stack because start asked");
-					startSipStack();
-				}
-			};
-			t.start();
+		if(pjService == null) {
+			if (loadAndConnectStack()) {
+				Thread t = new Thread() {
+					public void run() {
+						Log.d(THIS_FILE, "Start sip stack because start asked");
+						startSipStack();
+					}
+				};
+				t.start();
+			}
 		}
 	}
 
@@ -864,10 +860,9 @@ public class SipService extends Service {
 		}
 		if(pendingStarts <= 1) {
 			pendingStarts ++;
+			//-> should we lock CPU
 			if(pjService.sipStart()) {
 				addAllAccounts();
-			//TODO : is that really un necessary ?
-			//	updateRegistrationsState();
 			}
 			pendingStarts --;
 		}
@@ -1012,6 +1007,26 @@ public class SipService extends Service {
 		// Is never null when call so ok, just not check...
 		return prefsWrapper;
 	}
+	
+	//Binders for media manager to sip stack
+	/**
+	 * Adjust tx software sound level
+	 * @param speakVolume volume 0.0 - 1.0
+	 */
+	public void confAdjustTxLevel(float speakVolume) {
+		if(pjService != null) {
+			pjService.confAdjustTxLevel(0, speakVolume);
+		}
+	}
+	/**
+	 * Adjust rx software sound level
+	 * @param speakVolume volume 0.0 - 1.0
+	 */
+	public void confAdjustRxLevel(float speakVolume) {
+		if(pjService != null) {
+			pjService.confAdjustRxLevel(0, speakVolume);
+		}
+	}
 
 	
 	private boolean hold_resources = false;
@@ -1124,7 +1139,7 @@ public class SipService extends Service {
 	
 	
 	
-	public static UAStateReceiver getUAStateReceiver() {
+	public UAStateReceiver getUAStateReceiver() {
 		return pjService.userAgentReceiver;
 	}
 
@@ -1218,10 +1233,7 @@ public class SipService extends Service {
 			Log.d(THIS_FILE, "Will stop SERVICE");
 			Thread t = new Thread() {
 				public void run() {
-					if(pjService != null) {
-						Log.i(THIS_FILE, "Stop SERVICE");
-						pjService.sipStop();
-					}
+					stopSipStack();
 					// OK, this will be done only if the last bind is released
 					stopSelf();
 				}
@@ -1413,8 +1425,8 @@ public class SipService extends Service {
 				}
 			}
 		}
-		
-    	
     }
 
+	
+	
 }

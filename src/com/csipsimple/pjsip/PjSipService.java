@@ -144,7 +144,7 @@ public class PjSipService {
 	
 	// Start the sip stack according to current settings
 	public synchronized boolean sipStart() {
-		Log.d(THIS_FILE, ">> SIP START <<");
+		
 		Log.setLogLevel(prefsWrapper.getLogLevel());
 		
 		if (!hasSipStack) {
@@ -154,10 +154,10 @@ public class PjSipService {
 		
 
 		try {
-			Log.i(THIS_FILE, "Will start sip : " + (!created /* && !creating */));
 			synchronized (creatingSipStack) {
 				// Ensure the stack is not already created or is being created
 				if (!created/* && !creating */) {
+					Log.d(THIS_FILE, "Starting sip stack");
 					creating  = true;
 					udpTranportId = null;
 					tcpTranportId = null;
@@ -649,7 +649,7 @@ public class PjSipService {
 	
 	
 
-	public ArrayList<String> codecs;
+	private ArrayList<String> codecs;
 
 	private void initCodecs() {
 		if (codecs == null) {
@@ -661,7 +661,10 @@ public class PjSipService {
 				codecs.add(codecId);
 				Log.d(THIS_FILE, "Added codec " + codecId);
 			}
+			//Set it in prefs if not already set correctly
+			prefsWrapper.setCodecList(codecs);
 		}
+		
 	}
 
 	private void setCodecsPriorities() {

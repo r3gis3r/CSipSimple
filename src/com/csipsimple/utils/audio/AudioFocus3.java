@@ -80,7 +80,7 @@ public class AudioFocus3 extends AudioFocusWrapper {
 		intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY +100 );
 		if(headsetButtonReceiver == null) {
 			headsetButtonReceiver = new HeadsetButtonReceiver();
-			HeadsetButtonReceiver.setService(SipService.getUAStateReceiver());
+			HeadsetButtonReceiver.setService(service.getUAStateReceiver());
 		}
 		service.registerReceiver(headsetButtonReceiver, intentFilter);
 	}

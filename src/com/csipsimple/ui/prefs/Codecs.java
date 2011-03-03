@@ -31,21 +31,20 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.SimpleAdapter.ViewBinder;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.DragnDropListView;
@@ -175,13 +174,11 @@ public class Codecs extends ListActivity implements OnClickListener {
 		}else {
 			codecs.clear();
 		}
-		if(SipService.pjService.codecs == null) {
-			Log.w(THIS_FILE, "Codecs not initialized in service !!! ");
-			return;
-		}
+		
+		String[] codecNames = prefsWrapper.getCodecList();
 		
 		int current_prio = 130;
-		for(String codecName : SipService.pjService.codecs) {
+		for(String codecName : codecNames) {
 			Log.d(THIS_FILE, "Fill codec "+codecName+" for "+bandtype);
 			String[] codecParts = codecName.split("/");
 			if(codecParts.length >=2 ) {

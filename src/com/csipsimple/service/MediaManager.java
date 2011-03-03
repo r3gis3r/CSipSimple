@@ -451,7 +451,7 @@ public class MediaManager {
 	 */
 	public void setSoftwareVolume() {
 		
-		if(service != null && SipService.pjService != null) {
+		if(service != null) {
 			boolean useBT = (bluetoothWrapper != null && bluetoothWrapper.isBluetoothOn());
 			
 			String speaker_key = useBT ? SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL;
@@ -459,9 +459,9 @@ public class MediaManager {
 			
 			float speakVolume = service.prefsWrapper.getPreferenceFloatValue(speaker_key);
 			float micVolume = userWantMicrophoneMute? 0 : service.prefsWrapper.getPreferenceFloatValue(mic_key);
-			
-			SipService.pjService.confAdjustTxLevel(0, speakVolume);
-			SipService.pjService.confAdjustRxLevel(0, micVolume);
+
+			service.confAdjustTxLevel(speakVolume);
+			service.confAdjustRxLevel(micVolume);
 		}
 	}
 	

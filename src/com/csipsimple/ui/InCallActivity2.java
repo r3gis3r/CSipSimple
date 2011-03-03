@@ -750,24 +750,29 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	
 	
 	private synchronized void updateUIFromMedia() {
-		if(SipService.pjService.mediaManager != null && serviceConnected) {
-			MediaState mediaState = SipService.pjService.mediaManager.getMediaState();
-			Log.d(THIS_FILE, "Media update ....");
-			if(!mediaState.equals(lastMediaState)) {
-				SipCallSession callInfo = getActiveCallInfo(true);
-				lastMediaState = mediaState;
-				
-				if(callInfo != null) {
-					int state = callInfo.getCallState();
+		if(service != null) {
+			MediaState mediaState;
+			try {
+				mediaState = service.getCurrentMediaState();
+				Log.d(THIS_FILE, "Media update ....");
+				if(!mediaState.equals(lastMediaState)) {
+					SipCallSession callInfo = getActiveCallInfo(true);
+					lastMediaState = mediaState;
 					
-					// Background
-					if(state == SipCallSession.InvState.CONFIRMED) {
-						mainFrame.setBackgroundResource(lastMediaState.isBluetoothScoOn?R.drawable.bg_in_call_gradient_bluetooth:R.drawable.bg_in_call_gradient_connected);
+					if(callInfo != null) {
+						int state = callInfo.getCallState();
+						
+						// Background
+						if(state == SipCallSession.InvState.CONFIRMED) {
+							mainFrame.setBackgroundResource(lastMediaState.isBluetoothScoOn?R.drawable.bg_in_call_gradient_bluetooth:R.drawable.bg_in_call_gradient_connected);
+						}
 					}
+					
+					// Actions
+					inCallControls.setMediaState(lastMediaState);
 				}
-				
-				// Actions
-				inCallControls.setMediaState(lastMediaState);
+			} catch (RemoteException e) {
+				Log.e(THIS_FILE, "Can't get the media state ", e);
 			}
 		}
 	}

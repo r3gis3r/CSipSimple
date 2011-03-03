@@ -128,11 +128,13 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 	}
 	
 	public void register() {
+		Log.d(THIS_FILE, "Register BT media receiver");
 		context.registerReceiver(mediaStateReceiver , new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
 	}
 
 	public void unregister() {
 		try {
+			Log.d(THIS_FILE, "Unregister BT media receiver");
 			context.unregisterReceiver(mediaStateReceiver);
 		}catch(Exception e) {
 			Log.w(THIS_FILE, "Failed to unregister media state receiver",e);
