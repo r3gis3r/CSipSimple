@@ -86,6 +86,8 @@ public class SipService extends Service {
 	
 	private SipWakeLock sipWakeLock;
 	private boolean autoAcceptCurrent = false;
+	
+	private Object sipStarterLock = new Object();
 
 	// Implement public interface for the service
 	private final ISipService.Stub binder = new ISipService.Stub() {
@@ -124,13 +126,14 @@ public class SipService extends Service {
 		@Override
 		public void askThreadedRestart() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			Thread t = new Thread() {
+			getExecutor().execute(new Runnable() {
 				public void run() {
-					stopSipStack();
-					startSipStack();
+					synchronized (sipStarterLock) {
+						stopSipStack();
+						startSipStack();
+					}
 				}
-			};
-			t.start();
+			});
 		};
 
 		/**
@@ -755,6 +758,21 @@ public class SipService extends Service {
 		
 		// Do not executorThread since must ensure stack is loaded
 		loadAndConnectStack();
+		
+		// Register own broadcast receiver
+		if (deviceStateReceiver == null) {
+			IntentFilter intentfilter = new IntentFilter();
+			intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
+			deviceStateReceiver = new ServiceDeviceStateReceiver();
+			registerReceiver(deviceStateReceiver, intentfilter);
+		}
+		if (phoneConnectivityReceiver == null) {
+			Log.d(THIS_FILE, "Listen for phone state ");
+			phoneConnectivityReceiver = new ServicePhoneStateReceiver();
+			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
+					| PhoneStateListener.LISTEN_CALL_STATE);
+		}
 	}
 
 	@Override
@@ -787,6 +805,7 @@ public class SipService extends Service {
 		executorThread = null;
 		mExecutor = null;
 		
+		Log.d(THIS_FILE, "Destroy sip stack");
 		stopSipStack();
 		
 		notificationManager.cancelAll();
@@ -802,13 +821,12 @@ public class SipService extends Service {
 		// Autostart the stack
 		if(pjService == null) {
 			if (loadAndConnectStack()) {
-				Thread t = new Thread() {
+				getExecutor().execute(new Runnable() {
 					public void run() {
 						Log.d(THIS_FILE, "Start sip stack because start asked");
 						startSipStack();
 					}
-				};
-				t.start();
+				});
 			}
 		}
 	}
@@ -821,7 +839,6 @@ public class SipService extends Service {
 		pjService.setService(this);
 		
 		if (pjService.tryToLoadStack()) {
-			serviceHandler.sendMessage(serviceHandler.obtainMessage(LOAD_MESSAGE));
 			return true;
 		}
 		return false;
@@ -848,32 +865,37 @@ public class SipService extends Service {
 	private KeepAliveTimer kaAlarm;
 	
 	public void startSipStack() {
-		if(!needToStartSip()) {
-			serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
-			Log.e(THIS_FILE, "Not able to start sip stack");
-			return;
-		}
-		if(pjService == null) {
-			if(!loadAndConnectStack()) {
+
+		synchronized (sipStarterLock) {
+			if(!needToStartSip()) {
+				serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
+				Log.e(THIS_FILE, "Not able to start sip stack");
 				return;
 			}
-		}
-		if(pendingStarts <= 1) {
-			pendingStarts ++;
-			//-> should we lock CPU
-			if(pjService.sipStart()) {
-				addAllAccounts();
+			if(pjService == null) {
+				if(!loadAndConnectStack()) {
+					return;
+				}
 			}
-			pendingStarts --;
+			if(pendingStarts <= 1) {
+				pendingStarts ++;
+				//-> should we lock CPU
+				if(pjService.sipStart()) {
+					addAllAccounts();
+				}
+				pendingStarts --;
+			}
 		}
 	}
 	
 	public void stopSipStack() {
-		if(pjService != null) {
-			pjService.sipStop();
-			pjService = null;
+		synchronized (sipStarterLock) {
+			if(pjService != null) {
+				pjService.sipStop();
+				pjService = null;
+			}
+			releaseResources();
 		}
-		releaseResources();
 	}
 	
 	
@@ -1101,7 +1123,6 @@ public class SipService extends Service {
 	
 
 	private static final int TOAST_MESSAGE = 0;
-	private static final int LOAD_MESSAGE = 1;
 
 	private Handler serviceHandler = new Handler() {
 		@Override
@@ -1115,23 +1136,6 @@ public class SipService extends Service {
 					Toast.makeText(SipService.this, (String) msg.obj, Toast.LENGTH_LONG).show();
 				}
 				break;
-			case LOAD_MESSAGE:
-				// Register own broadcast receiver
-				if (deviceStateReceiver == null) {
-					IntentFilter intentfilter = new IntentFilter();
-					intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-					intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
-					deviceStateReceiver = new ServiceDeviceStateReceiver();
-					registerReceiver(deviceStateReceiver, intentfilter);
-				}
-				if (phoneConnectivityReceiver == null) {
-					Log.d(THIS_FILE, "Listen for phone state ");
-					phoneConnectivityReceiver = new ServicePhoneStateReceiver();
-					telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-							| PhoneStateListener.LISTEN_CALL_STATE);
-				}
-				break;
-				
 			}
 			
 		}
@@ -1199,22 +1203,20 @@ public class SipService extends Service {
 		if (prefsWrapper.isValidConnectionForOutgoing() || prefsWrapper.isValidConnectionForIncoming()) {
 			if (pjService == null || !pjService.isCreated()) {
 				// we was not yet started, so start now
-				Thread t = new Thread() {
+				getExecutor().execute(new Runnable() {
 					public void run() {
 						startSipStack();
 					}
-				};
-				t.start();
+				});
 			} else if (ipHasChanged) {
 				// Check if IP has changed between
 				if (pjService != null && pjService.getActiveCallInProgress() == null) {
-					Thread t = new Thread() {
+					getExecutor().execute(new Runnable() {
 						public void run() {
 							stopSipStack();
 							startSipStack();
 						}
-					};
-					t.start();
+					});
 					// Log.e(THIS_FILE, "We should restart the stack ! ");
 				} else {
 					// TODO : else refine things => STUN, registration etc...
@@ -1231,14 +1233,13 @@ public class SipService extends Service {
 				return;
 			}
 			Log.d(THIS_FILE, "Will stop SERVICE");
-			Thread t = new Thread() {
+			getExecutor().execute(new Runnable() {
 				public void run() {
 					stopSipStack();
 					// OK, this will be done only if the last bind is released
 					stopSelf();
 				}
-			};
-			t.start();
+			});
 
 		}
 	}
