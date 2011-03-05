@@ -204,10 +204,6 @@ public class WizardUtils {
 					R.drawable.ic_wizard_basic, 21, 
 					new Locale[]{}, false, true, 
 					Betamax.class));
-			WIZARDS_DICT.put("BROADVOICE", new WizardInfo("BROADVOICE", "BroadVoice", 
-					R.drawable.ic_wizard_broadvoice, 19, 
-					new Locale[]{}, false, true, 
-					BroadVoice.class));
 			
 			//Locales
 			WIZARDS_DICT.put("CALLCENTRIC", new WizardInfo("CALLCENTRIC", "Callcentric", 
@@ -348,6 +344,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_sapo, 20, 
 					new Locale[] {new Locale("PT", "pt")}, false, false, 
 					Sapo.class));
+			WIZARDS_DICT.put("BROADVOICE", new WizardInfo("BROADVOICE", "BroadVoice", 
+					R.drawable.ic_wizard_broadvoice, 19, 
+					new Locale[]{Locale.US}, false, false, 
+					BroadVoice.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
