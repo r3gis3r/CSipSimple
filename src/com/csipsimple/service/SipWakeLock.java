@@ -17,9 +17,10 @@
 package com.csipsimple.service;
 
 import android.os.PowerManager;
-import android.util.Log;
 
 import java.util.HashSet;
+
+import com.csipsimple.utils.Log;
 
 class SipWakeLock {
     private static final String THIS_FILE = "SipWakeLock";
@@ -35,7 +36,10 @@ class SipWakeLock {
     synchronized void reset() {
         mHolders.clear();
         release(null);
-        Log.v(THIS_FILE, "~~~ hard reset wakelock");
+        while(mWakeLock.isHeld()) {
+        	mWakeLock.release();
+        }
+        Log.v(THIS_FILE, "~~~ hard reset wakelock :: still held : " + mWakeLock.isHeld());
     }
 
     synchronized void acquire(long timeout) {
@@ -65,6 +69,6 @@ class SipWakeLock {
             mWakeLock.release();
         }
         Log.v(THIS_FILE, "release wakelock: holder count="
-                + mHolders.size());
+                + mHolders.size()+" is held : "+mWakeLock.isHeld());
     }
 }

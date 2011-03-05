@@ -594,7 +594,7 @@ public class SipService extends Service {
 			return cm.getActiveNetworkInfo();
 		}
 
-		private void onChanged(String type, boolean connected) {
+		protected void onChanged(String type, boolean connected) {
 			synchronized (SipService.this) {
 				// When turning on WIFI, it needs some time for network
 				// connectivity to get stabile so we defer good news (because
@@ -756,8 +756,6 @@ public class SipService extends Service {
 			return;
 		}
 		
-		// Do not executorThread since must ensure stack is loaded
-		loadAndConnectStack();
 		
 		// Register own broadcast receiver
 		if (deviceStateReceiver == null) {
@@ -773,6 +771,8 @@ public class SipService extends Service {
 			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
 					| PhoneStateListener.LISTEN_CALL_STATE);
 		}
+		
+
 	}
 
 	@Override
@@ -781,7 +781,7 @@ public class SipService extends Service {
 		Log.i(THIS_FILE, "Destroying SIP Service");
 		if(deviceStateReceiver != null) {
 			try {
-				Log.d(THIS_FILE, "Unregister telephony receiver");
+				Log.d(THIS_FILE, "Unregister device receiver");
 				unregisterReceiver(deviceStateReceiver);
 				deviceStateReceiver.stop();
 				deviceStateReceiver = null;
@@ -808,30 +808,45 @@ public class SipService extends Service {
 		Log.d(THIS_FILE, "Destroy sip stack");
 		stopSipStack();
 		
+		
+		sipWakeLock.reset();
+		
 		notificationManager.cancelAll();
 		notificationManager.cancelCalls();
 		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
 		System.gc();
 	}
 
+	private static final String EXTRA_DIRECT_CONNECT = "direct_connect";
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-
+		boolean directConnect = intent.getBooleanExtra(EXTRA_DIRECT_CONNECT, true);
 		// Autostart the stack
 		if(pjService == null) {
-			if (loadAndConnectStack()) {
-				getExecutor().execute(new Runnable() {
-					public void run() {
-						Log.d(THIS_FILE, "Start sip stack because start asked");
-						startSipStack();
+			if (loadStack()) {
+				if(directConnect) {
+					getExecutor().execute(new Runnable() {
+						public void run() {
+							Log.d(THIS_FILE, "Start sip stack because start asked");
+							startSipStack();
+						}
+					});
+				}else {
+					NetworkInfo netInfo = (NetworkInfo) connectivityManager.getActiveNetworkInfo();
+					String type = netInfo.getTypeName();
+					NetworkInfo.State state = netInfo.getState();
+					if(state == NetworkInfo.State.CONNECTED) {
+						deviceStateReceiver.onChanged(type, true);
+					}else if(state == NetworkInfo.State.DISCONNECTED) {
+						deviceStateReceiver.onChanged(type, false);
 					}
-				});
+				}
 			}
 		}
 	}
 
-	private boolean loadAndConnectStack() {
+	private boolean loadStack() {
 		//Ensure pjService exists
 		if(pjService == null) {
 			pjService = new PjSipService();
@@ -865,7 +880,7 @@ public class SipService extends Service {
 	private KeepAliveTimer kaAlarm;
 	
 	public void startSipStack() {
-
+		sipWakeLock.acquire(this);
 		synchronized (sipStarterLock) {
 			if(!needToStartSip()) {
 				serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
@@ -873,7 +888,7 @@ public class SipService extends Service {
 				return;
 			}
 			if(pjService == null) {
-				if(!loadAndConnectStack()) {
+				if(!loadStack()) {
 					return;
 				}
 			}
@@ -886,9 +901,11 @@ public class SipService extends Service {
 				pendingStarts --;
 			}
 		}
+		sipWakeLock.release(this);
 	}
 	
 	public void stopSipStack() {
+		sipWakeLock.acquire(this);
 		synchronized (sipStarterLock) {
 			if(pjService != null) {
 				pjService.sipStop();
@@ -896,6 +913,7 @@ public class SipService extends Service {
 			}
 			releaseResources();
 		}
+		sipWakeLock.release(this);
 	}
 	
 	
