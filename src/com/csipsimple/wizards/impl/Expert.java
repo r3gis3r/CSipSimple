@@ -213,7 +213,9 @@ public class Expert extends BaseImplementation {
 		try {
 			account.reg_timeout = Integer.parseInt(accountRegTimeout.getText());
 		} catch (NumberFormatException e) {
-			account.reg_timeout = 0;
+			//Leave default
+			//account.reg_timeout = 900;
+			
 		}
 		try {
 			account.contact_rewrite_method = Integer.parseInt(accountContactRewriteMethod.getValue());

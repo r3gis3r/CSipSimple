@@ -768,8 +768,9 @@ public class SipService extends Service {
 		if (phoneConnectivityReceiver == null) {
 			Log.d(THIS_FILE, "Listen for phone state ");
 			phoneConnectivityReceiver = new ServicePhoneStateReceiver();
+			
 			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-					| PhoneStateListener.LISTEN_CALL_STATE);
+					| PhoneStateListener.LISTEN_CALL_STATE );
 		}
 		
 
@@ -817,12 +818,13 @@ public class SipService extends Service {
 		System.gc();
 	}
 
-	private static final String EXTRA_DIRECT_CONNECT = "direct_connect";
+	public static final String EXTRA_DIRECT_CONNECT = "direct_connect";
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		boolean directConnect = intent.getBooleanExtra(EXTRA_DIRECT_CONNECT, true);
 		// Autostart the stack
+		// NOTE : the stack may also be autostarted cause of phoneConnectivityReceiver
 		if(pjService == null) {
 			if (loadStack()) {
 				if(directConnect) {

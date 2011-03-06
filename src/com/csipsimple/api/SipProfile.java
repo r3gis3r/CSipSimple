@@ -145,7 +145,7 @@ public class SipProfile implements Parcelable {
 	public String acc_id = null;
 	public String reg_uri = null;
 	public int publish_enabled = 0;
-	public int reg_timeout = 300;
+	public int reg_timeout = 900; // 300 (5 minutes) was very low, now that ka is reliable we can consider increase this value 
 	public int ka_interval = 0;
 	public String pidf_tuple_id = null;
 	public String force_contact = null;
