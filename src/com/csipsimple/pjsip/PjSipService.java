@@ -164,10 +164,13 @@ public class PjSipService {
 	
 					int status;
 					status = pjsua.create();
+					
 
 					Log.i(THIS_FILE, "Created " + status);
 					// General config
 					{
+						pj_str_t[] stunServers = null;
+						int stunServersCount = 0;
 						pjsua_config cfg = new pjsua_config();
 						pjsua_logging_config logCfg = new pjsua_logging_config();
 						pjsua_media_config mediaCfg = new pjsua_media_config();
@@ -216,12 +219,11 @@ public class PjSipService {
 						if (isStunEnabled == 1) {
 							String[] servers = prefsWrapper.getStunServer().split(",");
 							cfg.setStun_srv_cnt(servers.length);
-							pj_str_t[] stunServers = cfg.getStun_srv();
-							int i = 0;
+							stunServers = cfg.getStun_srv();
 							for(String server : servers) {
 								Log.d(THIS_FILE, "add server " + server.trim());
-								stunServers[i] = pjsua.pj_str_copy(server.trim());
-								i++;
+								stunServers[stunServersCount] = pjsua.pj_str_copy(server.trim());
+								stunServersCount++;
 							}
 							cfg.setStun_srv(stunServers);
 						}
@@ -267,12 +269,16 @@ public class PjSipService {
 							String msg = "Fail to init pjsua "+ pjsua.get_error_message(status).getPtr();
 							Log.e(THIS_FILE, msg);
 							service.notifyUserOfMessage(msg);
-							pjsua.csipsimple_destroy();
-							created = false;
-							creating = false;
+							cleanPjsua();
 							return false;
 						}
-						
+
+						/*
+						if (stunServersCount > 0) {
+							int s = pjsua.detect_nat_type();
+							Log.d(THIS_FILE, ">>> NAT TYPE is "+s);
+						}
+						*/
 					}
 	
 					// Add transports
@@ -285,9 +291,7 @@ public class PjSipService {
 							}
 							udpTranportId = createTransport(t, prefsWrapper.getUDPTransportPort());
 							if (udpTranportId == null) {
-								pjsua.csipsimple_destroy();
-								creating = false;
-								created = false;
+								cleanPjsua();
 								return false;
 							}
 							
@@ -306,9 +310,7 @@ public class PjSipService {
 							}
 							tcpTranportId = createTransport(t, prefsWrapper.getTCPTransportPort());
 							if (tcpTranportId == null) {
-								pjsua.csipsimple_destroy();
-								creating = false;
-								created = false;
+								cleanPjsua();
 								return false;
 							}
 							
@@ -323,9 +325,7 @@ public class PjSipService {
 							tlsTransportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, prefsWrapper.getTLSTransportPort());
 	
 							if (tlsTransportId == null) {
-								pjsua.csipsimple_destroy();
-								creating = false;
-								created = false;
+								cleanPjsua();
 								return false;
 							}
 							//We need a local account to not have the application lost when direct call to the IP
@@ -353,9 +353,7 @@ public class PjSipService {
 								Log.e(THIS_FILE, msg);
 								
 								service.notifyUserOfMessage(msg);
-								pjsua.csipsimple_destroy();
-								creating = false;
-								created = false;
+								cleanPjsua();
 								return false;
 							}
 						}
@@ -368,9 +366,7 @@ public class PjSipService {
 						String msg = "Fail to start pjsip  "+ pjsua.get_error_message(status).getPtr();
 						Log.e(THIS_FILE, msg);
 						service.notifyUserOfMessage(msg);
-						pjsua.csipsimple_destroy();
-						creating = false;
-						created = false;
+						cleanPjsua();
 						return false;
 					}
 	
@@ -413,28 +409,33 @@ public class PjSipService {
 		}
 		synchronized (creatingSipStack) {
 			if (created) {
-				Log.d(THIS_FILE, "Detroying...");
-				// This will destroy all accounts so synchronize with accounts
-				// management lock
-				synchronized (pjAccountsCreationLock) {
-					pjsua.csipsimple_destroy();
-					synchronized (activeAccountsLock) {
-						accountsAddingStatus.clear();
-						activeAccounts.clear();
-					}
-				}
-				if (userAgentReceiver != null) {
-					userAgentReceiver.stopService();
-					userAgentReceiver = null;
-				}
-
-				if (mediaManager != null) {
-					mediaManager.stopService();
-					mediaManager = null;
-				}
+				cleanPjsua();
 			}
 		}
 		Log.i(THIS_FILE, ">> Media m " + mediaManager);
+	}
+	
+	private void cleanPjsua() {
+		Log.d(THIS_FILE, "Detroying...");
+		// This will destroy all accounts so synchronize with accounts
+		// management lock
+		synchronized (pjAccountsCreationLock) {
+			pjsua.csipsimple_destroy();
+			synchronized (activeAccountsLock) {
+				accountsAddingStatus.clear();
+				activeAccounts.clear();
+			}
+		}
+		if (userAgentReceiver != null) {
+			userAgentReceiver.stopService();
+			userAgentReceiver = null;
+		}
+
+		if (mediaManager != null) {
+			mediaManager.stopService();
+			mediaManager = null;
+		}
+		creating = false;
 		created = false;
 	}
 	

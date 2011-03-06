@@ -87,6 +87,7 @@
 		</activity>
 		<activity android:name="com.csipsimple.ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
 		<activity android:name="com.csipsimple.ui.prefs.PrefsSecurity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+		<activity android:name="com.csipsimple.ui.prefs.AudioTester" android:theme="@style/CupcakeDialog" android:screenOrientation="portrait"></activity>
 		
 
 		<!-- Wizards -->
