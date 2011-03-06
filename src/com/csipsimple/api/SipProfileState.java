@@ -24,6 +24,7 @@ import java.util.Comparator;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 public class SipProfileState implements Parcelable, Serializable{
 
@@ -42,7 +43,7 @@ public class SipProfileState implements Parcelable, Serializable{
 	private int expires;
 	private String displayName;
 	private int priority;
-	
+	private String regUri = "";
 
 
 	public SipProfileState(Parcel in) {
@@ -56,6 +57,7 @@ public class SipProfileState implements Parcelable, Serializable{
 		active = account.active;
 		displayName = account.display_name;
 		priority = account.priority;
+		regUri = account.reg_uri;
 		
 		//Set default values
 		addedStatus = -1;
@@ -85,6 +87,7 @@ public class SipProfileState implements Parcelable, Serializable{
 		expires = in.readInt();
 		displayName = in.readString();
 		priority = in.readInt();
+		regUri = in.readString();
 	}
 
 	@Override
@@ -100,6 +103,7 @@ public class SipProfileState implements Parcelable, Serializable{
 		out.writeInt(expires);
 		out.writeString(displayName);
 		out.writeInt(priority);
+		out.writeString(regUri);
 	}
 	
 
@@ -244,9 +248,28 @@ public class SipProfileState implements Parcelable, Serializable{
 		this.priority = priority;
 	}
 	
+
+	/**
+	 * @param regUri the regUri to set
+	 */
+	public void setRegUri(String regUri) {
+		this.regUri = regUri;
+	}
+
+
+	/**
+	 * @return the regUri
+	 */
+	public String getRegUri() {
+		return regUri;
+	}
+
+	
+	
+	
 	public boolean isValidForCall() {
 		if(active) {
-			if(wizard.equalsIgnoreCase("LOCAL")) {
+			if(TextUtils.isEmpty(getRegUri())) {
 				return true;
 			}
 			return (getPjsuaId() >= 0 && getStatusCode() == SipCallSession.StatusCode.OK && getExpires() > 0);
@@ -257,6 +280,7 @@ public class SipProfileState implements Parcelable, Serializable{
 	public final static Comparator<SipProfileState> getComparator(){
 		return accountInfoComparator;
 	}
+
 
 	private static final Comparator<SipProfileState> accountInfoComparator = new Comparator<SipProfileState>() {
 		@Override

@@ -22,6 +22,7 @@ import org.pjsip.pjsua.pjsuaConstants;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.RemoteException;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfileState;
@@ -60,8 +61,8 @@ public class AccountListUtils {
 					accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 					accountDisplay.statusColor = resources.getColor(R.color.account_unregistered);
 					accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
-					
-					if(accountInfo.getWizard().equalsIgnoreCase("LOCAL")) {
+					Log.d("Acc list", ">>>>> "+accountInfo.getRegUri());
+					if( TextUtils.isEmpty( accountInfo.getRegUri()) ) {
 						// Green
 						accountDisplay.statusColor = resources.getColor(R.color.account_valid);
 						accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_on;

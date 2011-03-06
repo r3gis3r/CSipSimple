@@ -448,7 +448,18 @@ public class SipProfile implements Parcelable {
 		if(regUri == null) {
 			return null;
 		}
-		ParsedSipUriInfos parsedInfo = SipUri.parseSipUri(regUri);
+		ParsedSipUriInfos parsedInfo = null;
+		if(!TextUtils.isEmpty(regUri)) {
+			parsedInfo = SipUri.parseSipUri(regUri);
+		}else if(proxies.length > 0) {
+			parsedInfo = SipUri.parseSipUri(proxies[0]);
+		}
+		
+		if(parsedInfo == null) {
+			return null;
+		}
+		
+		
 		if(parsedInfo.domain != null ) {
 			String dom = parsedInfo.domain;
 			if(parsedInfo.port != 5060) {

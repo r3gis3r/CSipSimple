@@ -81,7 +81,7 @@ public class Local extends BaseImplementation {
 		Log.d(THIS_FILE, "begin of save ....");
 		
 		account.display_name = accountDisplayName.getText();
-		account.reg_uri = "localhost";
+		account.reg_uri = "";
 		account.acc_id = "";
 		return account;
 	}

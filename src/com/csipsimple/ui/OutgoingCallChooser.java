@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.telephony.PhoneNumberUtils;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -504,7 +505,7 @@ public class OutgoingCallChooser extends ListActivity {
 			}
 			if (accountInfo != null && accountInfo.isActive()) {
 				if ( (accountInfo.getPjsuaId() >= 0 && accountInfo.getStatusCode() == SipCallSession.StatusCode.OK) ||
-						accountInfo.getWizard().equalsIgnoreCase("LOCAL") ) {
+						TextUtils.isEmpty( accountInfo.getRegUri() ) ) {
 					try {
 						String phoneNumber = number;
 						String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
