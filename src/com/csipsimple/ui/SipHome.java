@@ -200,7 +200,7 @@ public class SipHome extends TabActivity {
 
 	private void startSipService() {
 		if (serviceIntent == null) {
-			serviceIntent = new Intent(SipHome.this, SipService.class);
+			serviceIntent = new Intent(this, SipService.class);
 		}
 		Thread t = new Thread() {
 			public void run() {

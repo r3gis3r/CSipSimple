@@ -828,6 +828,7 @@ public class SipService extends Service {
 		if(pjService == null) {
 			if (loadStack()) {
 				if(directConnect) {
+					Log.d(THIS_FILE, "Direct sip start");
 					getExecutor().execute(new Runnable() {
 						public void run() {
 							Log.d(THIS_FILE, "Start sip stack because start asked");
@@ -835,12 +836,15 @@ public class SipService extends Service {
 						}
 					});
 				}else {
+					Log.d(THIS_FILE, "Defered SIP start !!");
 					NetworkInfo netInfo = (NetworkInfo) connectivityManager.getActiveNetworkInfo();
 					String type = netInfo.getTypeName();
 					NetworkInfo.State state = netInfo.getState();
 					if(state == NetworkInfo.State.CONNECTED) {
+						Log.d(THIS_FILE, ">> on changed connected");
 						deviceStateReceiver.onChanged(type, true);
 					}else if(state == NetworkInfo.State.DISCONNECTED) {
+						Log.d(THIS_FILE, ">> on changed disconnected");
 						deviceStateReceiver.onChanged(type, false);
 					}
 				}
@@ -1031,7 +1035,16 @@ public class SipService extends Service {
 
 		// Handle status bar notification
 		if (activeAccountsInfos.size() > 0 && prefsWrapper.showIconInStatusBar()) {
-			notificationManager.notifyRegisteredAccounts(activeAccountsInfos);
+		// Testing memory / CPU leak as per issue 676
+		//	for(int i=0; i < 200; i++) {
+				notificationManager.notifyRegisteredAccounts(activeAccountsInfos);
+		//		try {
+		//			Thread.sleep(1000);
+		//		} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+		//	}
 			acquireResources();
 		} else {
 			notificationManager.cancelRegisters();

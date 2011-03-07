@@ -46,7 +46,6 @@ import com.csipsimple.widgets.RegistrationNotification;
 public class SipNotifications {
 
 	private NotificationManager notificationManager;
-	private RegistrationNotification contentView;
 	private Notification inCallNotification;
 	private Context context;
 	private Notification missedCallNotification;
@@ -67,7 +66,7 @@ public class SipNotifications {
 	//Announces
 
 	//Register
-	public void notifyRegisteredAccounts(ArrayList<SipProfileState> activeAccountsInfos) {
+	public synchronized void notifyRegisteredAccounts(ArrayList<SipProfileState> activeAccountsInfos) {
 		int icon = R.drawable.sipok;
 		CharSequence tickerText = context.getString(R.string.service_ticker_registered_text);
 		long when = System.currentTimeMillis();
@@ -78,9 +77,8 @@ public class SipNotifications {
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		if (contentView == null) {
-			contentView = new RegistrationNotification(context.getPackageName());
-		}
+		
+		RegistrationNotification contentView = new RegistrationNotification(context.getPackageName());
 		contentView.clearRegistrations();
 		contentView.addAccountInfos(context, activeAccountsInfos);
 
