@@ -602,7 +602,9 @@ public class SipService extends Service {
 				// immediately
 				if (connected) {
 					if (mTask != null) {
+						Log.d(THIS_FILE, "We already have a current task in stack");
 						mTask.cancel();
+						sipWakeLock.release(mTask);
 					}
 					mTask = new MyTimerTask(type, connected);
 					if(mTimer == null) {
