@@ -822,32 +822,42 @@ public class SipService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
+		
+		// Check connectivity, else just finish itself
+		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
+			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
+			stopSelf();
+			return;
+		}
+		
 		boolean directConnect = intent.getBooleanExtra(EXTRA_DIRECT_CONNECT, true);
 		// Autostart the stack
 		// NOTE : the stack may also be autostarted cause of phoneConnectivityReceiver
 		if(pjService == null) {
-			if (loadStack()) {
-				if(directConnect) {
-					Log.d(THIS_FILE, "Direct sip start");
-					getExecutor().execute(new Runnable() {
-						public void run() {
-							Log.d(THIS_FILE, "Start sip stack because start asked");
-							startSipStack();
-						}
-					});
-				}else {
-					Log.d(THIS_FILE, "Defered SIP start !!");
-					NetworkInfo netInfo = (NetworkInfo) connectivityManager.getActiveNetworkInfo();
-					String type = netInfo.getTypeName();
-					NetworkInfo.State state = netInfo.getState();
-					if(state == NetworkInfo.State.CONNECTED) {
-						Log.d(THIS_FILE, ">> on changed connected");
-						deviceStateReceiver.onChanged(type, true);
-					}else if(state == NetworkInfo.State.DISCONNECTED) {
-						Log.d(THIS_FILE, ">> on changed disconnected");
-						deviceStateReceiver.onChanged(type, false);
-					}
+			if (!loadStack()) {
+				return;
+			}
+		}
+		
+		if(directConnect) {
+			Log.d(THIS_FILE, "Direct sip start");
+			getExecutor().execute(new Runnable() {
+				public void run() {
+					Log.d(THIS_FILE, "Start sip stack because start asked");
+					startSipStack();
 				}
+			});
+		}else {
+			Log.d(THIS_FILE, "Defered SIP start !!");
+			NetworkInfo netInfo = (NetworkInfo) connectivityManager.getActiveNetworkInfo();
+			String type = netInfo.getTypeName();
+			NetworkInfo.State state = netInfo.getState();
+			if(state == NetworkInfo.State.CONNECTED) {
+				Log.d(THIS_FILE, ">> on changed connected");
+				deviceStateReceiver.onChanged(type, true);
+			}else if(state == NetworkInfo.State.DISCONNECTED) {
+				Log.d(THIS_FILE, ">> on changed disconnected");
+				deviceStateReceiver.onChanged(type, false);
 			}
 		}
 	}
