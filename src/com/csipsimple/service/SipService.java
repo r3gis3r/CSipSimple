@@ -757,6 +757,35 @@ public class SipService extends Service {
 		}
 		
 		
+		registerBroadcasts();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.i(THIS_FILE, "Destroying SIP Service");
+		unregisterBroadcasts();
+		
+		
+
+		Threading.stopHandlerThread(executorThread);
+		executorThread = null;
+		mExecutor = null;
+		
+		Log.d(THIS_FILE, "Destroy sip stack");
+		stopSipStack();
+		
+		
+		sipWakeLock.reset();
+		
+		notificationManager.cancelAll();
+		notificationManager.cancelCalls();
+		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
+		System.gc();
+	}
+	
+	
+	private void registerBroadcasts() {
 		// Register own broadcast receiver
 		if (deviceStateReceiver == null) {
 			IntentFilter intentfilter = new IntentFilter();
@@ -772,14 +801,9 @@ public class SipService extends Service {
 			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
 					| PhoneStateListener.LISTEN_CALL_STATE );
 		}
-		
-
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		Log.i(THIS_FILE, "Destroying SIP Service");
+	private void unregisterBroadcasts() {
 		if(deviceStateReceiver != null) {
 			try {
 				Log.d(THIS_FILE, "Unregister device receiver");
@@ -799,25 +823,9 @@ public class SipService extends Service {
 			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_NONE);
 			phoneConnectivityReceiver = null;
 		}
-		
-		
-
-		Threading.stopHandlerThread(executorThread);
-		executorThread = null;
-		mExecutor = null;
-		
-		Log.d(THIS_FILE, "Destroy sip stack");
-		stopSipStack();
-		
-		
-		sipWakeLock.reset();
-		
-		notificationManager.cancelAll();
-		notificationManager.cancelCalls();
-		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
-		System.gc();
 	}
-
+	
+	
 	public static final String EXTRA_DIRECT_CONNECT = "direct_connect";
 	@Override
 	public void onStart(Intent intent, int startId) {
@@ -870,6 +878,7 @@ public class SipService extends Service {
 		pjService.setService(this);
 		
 		if (pjService.tryToLoadStack()) {
+			registerBroadcasts();
 			return true;
 		}
 		return false;

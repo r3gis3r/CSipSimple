@@ -39,7 +39,7 @@ class SipWakeLock {
         while(mWakeLock.isHeld()) {
         	mWakeLock.release();
         }
-        Log.v(THIS_FILE, "~~~ hard reset wakelock :: still held : " + mWakeLock.isHeld());
+        Log.d(THIS_FILE, "~~~ hard reset wakelock :: still held : " + mWakeLock.isHeld());
     }
 
     synchronized void acquire(long timeout) {
@@ -58,7 +58,7 @@ class SipWakeLock {
                     PowerManager.PARTIAL_WAKE_LOCK, "SipWakeLock");
         }
         if (!mWakeLock.isHeld()) mWakeLock.acquire();
-        Log.v(THIS_FILE, "acquire wakelock: holder count="
+        Log.d(THIS_FILE, "acquire wakelock: holder count="
                 + mHolders.size());
     }
 
@@ -68,7 +68,7 @@ class SipWakeLock {
                 && mWakeLock.isHeld()) {
             mWakeLock.release();
         }
-        Log.v(THIS_FILE, "release wakelock: holder count="
+        Log.d(THIS_FILE, "release wakelock: holder count="
                 + mHolders.size()+" is held : "+mWakeLock.isHeld());
     }
 }
