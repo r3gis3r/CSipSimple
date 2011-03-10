@@ -171,15 +171,17 @@ public class UAStateReceiver extends Callback {
 		lockCpu();
 		
 		long date = System.currentTimeMillis();
-		Log.d(THIS_FILE, "> Get from");
 		String sFrom = SipUri.getCanonicalSipContact(from.getPtr());
-		//TODO : remove this traces
-		Log.d(THIS_FILE, "> Get to : " + to.getPtr());
-		Log.d(THIS_FILE, "> Get contact : " + contact.getPtr());
-		Log.d(THIS_FILE, "> Get body : " + body.getPtr());
-		Log.d(THIS_FILE, "> Get mime-type : " + mime_type.getPtr());
 		
-		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contact.getPtr(), body.getPtr(), mime_type.getPtr(), date, SipMessage.MESSAGE_TYPE_INBOX);
+		String contactString = "";
+		if(contact != null && contact.getSlen() > 0) {
+			Log.d(THIS_FILE, "Contact is present");
+			contactString = contact.getPtr();
+		}else {
+			Log.d(THIS_FILE, "EMPTY CONTACT !!!");
+		}
+		
+		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contactString, body.getPtr(), mime_type.getPtr(), date, SipMessage.MESSAGE_TYPE_INBOX);
 		
 		//Insert the message to the DB 
 		DBAdapter database = new DBAdapter(pjService.service);
