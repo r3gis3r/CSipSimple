@@ -248,6 +248,7 @@ public class PjSipService {
 						mediaCfg.setClock_rate(prefsWrapper.getClockRate());
 						mediaCfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
 						mediaCfg.setHas_ioqueue(prefsWrapper.getHasIOQueue());
+						
 
 						// ICE
 						mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());

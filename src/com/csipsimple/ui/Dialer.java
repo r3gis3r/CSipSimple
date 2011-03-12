@@ -86,9 +86,10 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 	private DialingFeedback dialFeedback;
 
-	private int[] buttonsToAttach = new int[] { R.id.button0, R.id.dialButton, R.id.deleteButton, R.id.domainButton,
+	private int[] buttonsToAttach = new int[] { R.id.button0, R.id.dialButton, R.id.deleteButton, R.id.vmButton,
 	// Text dialer
-			R.id.dialTextButton, R.id.deleteTextButton, R.id.domainTextButton };
+			R.id.dialTextButton, R.id.deleteTextButton, R.id.domainTextButton,
+			R.id.switchTextView };
 
 	private Activity contextToBindTo = this;
 	private ISipService service;
@@ -149,7 +150,9 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		// dialDomain = (EditText) findViewById(R.id.dialtext_domain);
 		rootView = (View) findViewById(R.id.toplevel);
 		accountChooserButton = (AccountChooserButton) findViewById(R.id.accountChooserButton);
-
+		
+		
+		
 		isDigit = prefsWrapper.startIsDigit();
 		digitDialer.setVisibility(isDigit ? View.VISIBLE : View.GONE);
 		textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
@@ -401,7 +404,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			placeCall();
 			break;
 		}
-		case R.id.domainButton: {
+		case R.id.switchTextView: {
 			// b.playSoundEffect(SoundEffectConstants.CLICK);
 			flipView(true);
 			break;
@@ -417,6 +420,10 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 				digits.setCursorVisible(true);
 			}
 			break;
+		}
+		case R.id.vmButton : {
+			//TODO ....
+			
 		}
 		}
 	}
@@ -444,7 +451,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		//Change state of digit dialer
 		final boolean notEmpty = digits.length() != 0;
 		digitsWrapper.setBackgroundDrawable(notEmpty ? digitsBackground : digitsEmptyBackground);
-		digitsWrapper.setPadding(15, 0, 0, 2);
+		digitsWrapper.setPadding(0, 0, 0, 0);
 		dialButton.setEnabled(notEmpty);
 		deleteButton.setEnabled(notEmpty);
 		

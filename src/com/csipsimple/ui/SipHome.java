@@ -30,17 +30,13 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
@@ -60,8 +56,6 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.utils.contacts.ContactsWrapper;
-import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.IndicatorTab;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
@@ -83,8 +77,8 @@ public class SipHome extends TabActivity {
 	private static final String TAB_CALLLOG = "calllog";
 	private static final String TAB_MESSAGES = "messages";
 	
-	protected static final int PICKUP_PHONE = 0;
-	private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = PICKUP_PHONE + 1;
+//	protected static final int PICKUP_PHONE = 0;
+	private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = 0; //PICKUP_PHONE + 1;
 
 	private Intent serviceIntent;
 
@@ -92,7 +86,7 @@ public class SipHome extends TabActivity {
 	private PreferencesWrapper prefWrapper;
 
 	private boolean has_tried_once_to_activate_account = false;
-	private ImageButton pickupContact;
+//	private ImageButton pickupContact;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +150,8 @@ public class SipHome extends TabActivity {
 		if(CustomDistribution.supportMessaging()) {
 			addTab(TAB_MESSAGES, getString(R.string.messages_tab_name_text), R.drawable.ic_tab_selected_messages, R.drawable.ic_tab_unselected_messages, messagesIntent);
 		}
+		
+		/*
 		pickupContact = (ImageButton) findViewById(R.id.pickup_contacts);
 		pickupContact.setOnClickListener(new OnClickListener() {
 			@Override
@@ -163,6 +159,7 @@ public class SipHome extends TabActivity {
 				startActivityForResult(Compatibility.getContactPhoneIntent(), PICKUP_PHONE);
 			}
 		});
+		*/
 		
 		has_tried_once_to_activate_account = false;
 		
@@ -455,6 +452,7 @@ public class SipHome extends TabActivity {
 		finish();
 	}
 	
+	/*
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
@@ -484,7 +482,7 @@ public class SipHome extends TabActivity {
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-
+	*/
 	
 	
 }

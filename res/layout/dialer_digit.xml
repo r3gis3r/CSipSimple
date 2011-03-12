@@ -21,15 +21,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/top_digit_dialer" android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
+		
 	<LinearLayout android:id="@+id/topField" android:layout_weight="2.5"
 		android:layout_width="fill_parent" android:layout_height="fill_parent" 
 		android:background="@drawable/btn_dial_textfield"
-		android:layout_marginBottom="10dip" android:orientation="horizontal" >
+		android:padding="0dip"
+		android:layout_marginBottom="10dip" 
+		android:orientation="horizontal">
+		<ImageButton android:id="@+id/switchTextView" 
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:background="@drawable/btn_dial_textbadge" 
+			android:src="@drawable/ic_tab_unselected_contacts" />
 		<EditText android:id="@+id/digitsText" android:layout_width="fill_parent"
 			android:layout_height="fill_parent"
 			android:layout_weight="1" android:maxLines="1" android:scrollHorizontally="true"
 			android:textSize="28sp" android:freezesText="true" android:background="@android:color/transparent"
-			android:layout_margin="0dip"
+			android:layout_marginTop="0dip" android:layout_marginBottom="0dip"
+			android:layout_marginRight="5dip" android:layout_marginLeft="5dip"
 			android:contentDescription="@string/description_digits_edittext"
 			android:focusableInTouchMode="true" android:editable="true" android:cursorVisible="false" />
 		<com.csipsimple.widgets.AccountChooserButton android:layout_width="wrap_content"
@@ -53,9 +61,9 @@
 		android:orientation="horizontal" android:gravity="center"
 		android:padding="10dp">
 
-		<ImageButton android:id="@+id/domainButton" android:layout_width="87dip"
+		<ImageButton android:id="@+id/vmButton" android:layout_width="87dip"
 			android:layout_height="fill_parent" android:layout_gravity="center" android:state_enabled="false"
-			android:background="@drawable/btn_dial_domain" android:src="@drawable/ic_tab_selected_dialer" />
+			android:background="@drawable/btn_dial_domain" android:src="@drawable/ic_dial_action_voice_mail" />
 
 		<ImageButton android:layout_height="fill_parent" android:layout_gravity="center"
 			android:contentDescription="@string/description_dial_button"

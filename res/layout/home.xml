@@ -13,15 +13,19 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:padding="1dip">
+		<!-- 
 		<LinearLayout android:orientation="horizontal" android:layout_weight="0" 
 			android:layout_width="fill_parent" android:layout_height="wrap_content">
-			<TabWidget android:id="@android:id/tabs" android:layout_width="fill_parent" android:layout_weight="1"
+			 -->
+			<TabWidget android:id="@android:id/tabs" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
+				<!--  android:layout_weight="1" />
 			<ImageButton android:src="@drawable/ic_contacts_details" android:id="@+id/pickup_contacts"
 				android:layout_width="45dip" android:layout_height="fill_parent" android:focusable="true"
 				android:contentDescription="Pickup contact"
 				android:background="@drawable/minitab_indicator"/>
-		</LinearLayout>
+				
+		</LinearLayout> -->
 		<FrameLayout android:id="@android:id/tabcontent" android:layout_width="fill_parent"
 			android:layout_height="0dip" android:layout_weight="1" />
 	</LinearLayout>
