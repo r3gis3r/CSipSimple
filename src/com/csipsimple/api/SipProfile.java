@@ -444,10 +444,9 @@ public class SipProfile implements Parcelable {
 	 * @return the default domain for this account
 	 */
 	public String getDefaultDomain() {
-		String regUri = reg_uri;
 		ParsedSipUriInfos parsedInfo = null;
-		if(regUri != null && !TextUtils.isEmpty(regUri)) {
-			parsedInfo = SipUri.parseSipUri(regUri);
+		if(!TextUtils.isEmpty(reg_uri)) {
+			parsedInfo = SipUri.parseSipUri(reg_uri);
 		}else if(proxies.length > 0) {
 			parsedInfo = SipUri.parseSipUri(proxies[0]);
 		}
@@ -464,7 +463,7 @@ public class SipProfile implements Parcelable {
 			}
 			return dom;
 		}else {
-			Log.d(THIS_FILE, "Domain not found in "+regUri);
+			Log.d(THIS_FILE, "Domain not found for this account");
 		}
 		return null;
 	}
