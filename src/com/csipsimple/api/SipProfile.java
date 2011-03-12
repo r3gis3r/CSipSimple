@@ -445,11 +445,8 @@ public class SipProfile implements Parcelable {
 	 */
 	public String getDefaultDomain() {
 		String regUri = reg_uri;
-		if(regUri == null) {
-			return null;
-		}
 		ParsedSipUriInfos parsedInfo = null;
-		if(!TextUtils.isEmpty(regUri)) {
+		if(regUri != null && !TextUtils.isEmpty(regUri)) {
 			parsedInfo = SipUri.parseSipUri(regUri);
 		}else if(proxies.length > 0) {
 			parsedInfo = SipUri.parseSipUri(proxies[0]);
