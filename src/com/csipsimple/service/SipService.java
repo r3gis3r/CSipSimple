@@ -1362,7 +1362,9 @@ public class SipService extends Service {
 				number = m.group(2);
 			}
 			Log.w(THIS_FILE, "Search if should auto answer : "+number);
-			shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, db);
+			synchronized (db) {
+				shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, db);
+			}
 		}
 		return shouldAutoAnswer;
 	}
