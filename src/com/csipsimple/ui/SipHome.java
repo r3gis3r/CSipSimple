@@ -145,10 +145,10 @@ public class SipHome extends TabActivity {
 		calllogsIntent = new Intent(this, CallLogsList.class);
 		messagesIntent = new Intent(this, ConversationList.class);
 
-		addTab(TAB_DIALER, getString(R.string.dial_tab_name_text), R.drawable.ic_tab_selected_dialer, R.drawable.ic_tab_unselected_dialer, dialerIntent);
-		addTab(TAB_CALLLOG, getString(R.string.calllog_tab_name_text), R.drawable.ic_tab_selected_recent, R.drawable.ic_tab_unselected_recent, calllogsIntent);
+		addTab(TAB_DIALER, getString(R.string.dial_tab_name_text), R.drawable.ic_tab_unselected_dialer, R.drawable.ic_tab_selected_dialer, dialerIntent);
+		addTab(TAB_CALLLOG, getString(R.string.calllog_tab_name_text), R.drawable.ic_tab_unselected_recent, R.drawable.ic_tab_selected_recent, calllogsIntent);
 		if(CustomDistribution.supportMessaging()) {
-			addTab(TAB_MESSAGES, getString(R.string.messages_tab_name_text), R.drawable.ic_tab_selected_messages, R.drawable.ic_tab_unselected_messages, messagesIntent);
+			addTab(TAB_MESSAGES, getString(R.string.messages_tab_name_text), R.drawable.ic_tab_unselected_messages, R.drawable.ic_tab_selected_messages, messagesIntent);
 		}
 		
 		/*

@@ -16,9 +16,9 @@
 		<ImageView  android:duplicateParentState="true" android:gravity="center"
 			android:scaleType="center" android:src="@drawable/ic_button_contacts" style="@style/list_left_column" />
 	
-		<TextView android:layout_height="wrap_content"
+		<com.csipsimple.widgets.FitTextView android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:layout_gravity="center_vertical"
-			android:textAppearance="?android:attr/textAppearanceLarge" 
+			android:textAppearance="?android:attr/textAppearanceMedium" 
 			android:textColor="@android:color/white" android:text="@string/search_in_contacts" />
 	</LinearLayout>
 	<LinearLayout

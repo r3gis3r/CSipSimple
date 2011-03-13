@@ -160,6 +160,8 @@
 <string name="band_for_edge">Band type for EDGE</string>
 <string name="band_for_other">Band type for other</string>
 <string name="codecs_band_types">Connections bandwidth types for codecs</string>
+<string name="use_sgs_call_hack">Use Samsung Galaxy Hack</string>
+<string name="use_sgs_call_hack_desc">Pre set call mode to solve routing</string>
 
 <!-- UI -->
 <string name="general_ui">General user interface</string>

@@ -26,7 +26,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -37,9 +36,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.api.ISipService;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
@@ -74,16 +73,15 @@ public class PickupSipUri extends Activity implements OnClickListener {
 		((ImageView) findViewById(R.id.my_icon)).setImageResource(android.R.drawable.ic_menu_call);
 		
 		
-		sipUri = (EditSipUri) findViewById(R.id.sip_uri);
-		
 		okBtn = (Button) findViewById(R.id.ok);
 		okBtn.setOnClickListener(this);
 		Button btn = (Button) findViewById(R.id.cancel);
 		btn.setOnClickListener(this);
+
 		
+		sipUri = (EditSipUri) findViewById(R.id.sip_uri);
 		searchInContactRow = (LinearLayout) findViewById(R.id.search_contacts);
 		searchInContactRow.setOnClickListener(this);
-		
 		registrationReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -161,16 +159,7 @@ public class PickupSipUri extends Activity implements OnClickListener {
 						// TODO : filters... how to find a fancy way to integrate it back here 
 						// * auto once selected according to currently selected account?
 						// * keep in mind initial call number and rewrite number each time account is changed in selection (maybe the best way but must be handled properly)
-                        // TODO : Code similar to that in SipHome.onActivityResult() - Refactor
-					    if (number.startsWith("sip:")) {
-					        sipUri.setTextValue(number);
-					    } else {
-	                        //Code from android source : com/android/phone/OutgoingCallBroadcaster.java 
-	                        // so that we match exactly the same case that an outgoing call from android
-    						number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
-    			            number = PhoneNumberUtils.stripSeparators(number);
-    			        	sipUri.setTextValue(number);
-					    }
+					    sipUri.setTextValue(number);
 					}
 				});
 				return;

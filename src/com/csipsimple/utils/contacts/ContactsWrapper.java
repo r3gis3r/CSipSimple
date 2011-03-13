@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.telephony.PhoneNumberUtils;
 import android.widget.ArrayAdapter;
 
 import com.csipsimple.R;
@@ -138,6 +139,12 @@ public abstract class ContactsWrapper {
 	    if (type.equals("sip")) {
 	        return "sip:" + number;
 	    } else {
+	    	if (!number.startsWith("sip:")) {
+	    		//Code from android source : com/android/phone/OutgoingCallBroadcaster.java 
+                // so that we match exactly the same case that an outgoing call from android
+				number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
+	            number = PhoneNumberUtils.stripSeparators(number);
+	    	}
 	        return number;
 	    }
 	}

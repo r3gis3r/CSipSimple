@@ -86,6 +86,10 @@ public class Compatibility {
 	public static boolean shouldUseRoutingApi() {
 		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
 
+		if(isCompatible(9)) {
+			return false;
+		}
+		
 		//HTC evo 4G
 		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
 			return true;
@@ -101,6 +105,12 @@ public class Compatibility {
 	
 	public static boolean shouldUseModeApi() {
 		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
+		
+
+		if(isCompatible(9)) {
+			return false;
+		}
+		
 		//ZTE blade
 		if(android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
 			return true;
@@ -128,7 +138,7 @@ public class Compatibility {
 
 
 	public static String guessInCallMode() {
-		if (android.os.Build.BRAND.equalsIgnoreCase("sdg")) {
+		if (android.os.Build.BRAND.equalsIgnoreCase("sdg") || isCompatible(9)) {
 			return "3";
 		}
 		if(android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
@@ -157,6 +167,10 @@ public class Compatibility {
 	}
 	
 	private static boolean needPspWorkaround(PreferencesWrapper preferencesWrapper) {
+		if(isCompatible(9)) {
+			return false;
+		}
+		
 		//Nexus one is impacted
 		if(android.os.Build.DEVICE.equalsIgnoreCase("passion")){
 			return true;
@@ -199,7 +213,13 @@ public class Compatibility {
 		}
 		return false;
 	}
-	
+
+	private static boolean needSGSWorkaround(PreferencesWrapper preferencesWrapper) {
+		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
+			return true;
+		}
+		return false;
+	}
 	
 	private static void resetCodecsSettings(PreferencesWrapper preferencesWrapper) {
 		//Disable iLBC if not armv7
@@ -277,11 +297,16 @@ public class Compatibility {
 			
 		}
 		
-		//Use routing API?
+		//Api to use for routing
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround(preferencesWrapper));
+		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(preferencesWrapper));
+		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
+		
 	}
+
+
 
 	public static boolean useFlipAnimation() {
 		if (android.os.Build.BRAND.equalsIgnoreCase("archos")) {
@@ -443,8 +468,13 @@ public class Compatibility {
 		if(lastSeenVersion < 613) {
 			resetCodecsSettings(prefWrapper);
 		}
+		if(lastSeenVersion < 704) {
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(prefWrapper));
+		}
 	}
 
-
+	public static void updateApiVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {
+		//TODO
+	}
 }
 

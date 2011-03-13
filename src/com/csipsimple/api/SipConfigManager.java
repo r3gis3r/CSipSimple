@@ -44,6 +44,7 @@ public class SipConfigManager {
 	public static final String THREAD_COUNT = "thread_count";
 	public static final String ECHO_MODE = "echo_mode";
 	public static final String SND_PTIME = "snd_ptime";
+	public static final String USE_SGS_CALL_HACK = "use_sgs_call_hack";
 	
 	//UI
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";

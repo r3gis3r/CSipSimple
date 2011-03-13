@@ -127,6 +127,11 @@
 				android:title="@string/use_mode_api" android:key="use_mode_api"
 				android:defaultValue="false"></CheckBoxPreference>
 			
+			<CheckBoxPreference android:summary="@string/use_sgs_call_hack_desc"
+				android:title="@string/use_sgs_call_hack" android:key="use_sgs_call_hack"
+				android:defaultValue="false"></CheckBoxPreference>
+			
+			
 			<CheckBoxPreference android:summary="@string/set_audio_generate_tone_desc"
 				android:title="@string/set_audio_generate_tone" android:key="set_audio_generate_tone"
 				android:defaultValue="false"></CheckBoxPreference>	

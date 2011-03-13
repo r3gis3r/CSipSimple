@@ -62,6 +62,8 @@ public class PrefsMedia extends GenericPrefs {
 			hidePreference("misc", "use_mode_api");
 			hidePreference("misc", "set_audio_generate_tone");
 			hidePreference("misc", "sip_audio_mode");
+			hidePreference("misc", "use_sgs_call_hack");
+			
 		}
 		
 		PreferenceScreen pfs = getPreferenceScreen();

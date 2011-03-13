@@ -80,12 +80,10 @@ public class MediaManager {
 	private BluetoothWrapper bluetoothWrapper;
 
 	private AudioFocusWrapper audioFocusWrapper;
-
-
 	private AccessibilityWrapper accessibilityManager;
-
-
-
+	
+	
+	private boolean USE_SGS_WRK_AROUND = false;
 	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
 
@@ -114,6 +112,7 @@ public class MediaManager {
 			audioFocusWrapper.init(service, audioManager);
 		}
 		MODE_SIP_IN_CALL = service.prefsWrapper.getInCallMode();
+		USE_SGS_WRK_AROUND = service.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK);
 	}
 	
 	public void stopService() {
@@ -239,7 +238,7 @@ public class MediaManager {
 		}
 		
 		//Set mode
-		if(targetMode != AudioManager.MODE_IN_CALL) {
+		if(targetMode != AudioManager.MODE_IN_CALL && USE_SGS_WRK_AROUND) {
 			//For galaxy S we need to set in call mode before to reset stack
 			audioManager.setMode(AudioManager.MODE_IN_CALL);
 		}

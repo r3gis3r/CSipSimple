@@ -50,6 +50,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -70,6 +71,8 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.contacts.ContactsWrapper;
+import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.AccountChooserButton;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
@@ -79,6 +82,8 @@ import com.csipsimple.widgets.EditSipUri.ToCall;
 public class Dialer extends Activity implements OnClickListener, OnLongClickListener, OnDialKeyListener, TextWatcher {
 
 	private static final String THIS_FILE = "Dialer";
+	
+	protected static final int PICKUP_PHONE = 0;
 
 	private Drawable digitsBackground, digitsEmptyBackground;
 	private EditText digits;
@@ -95,7 +100,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	private int[] buttonsToAttach = new int[] { R.id.button0, R.id.dialButton, R.id.deleteButton,
 			R.id.vmButton,
 	// Text dialer
-			R.id.dialTextButton, R.id.deleteTextButton, R.id.domainTextButton,
+			R.id.dialTextButton, R.id.deleteTextButton, R.id.vmButton2,
 			R.id.switchTextView };
 
 	private Activity contextToBindTo = this;
@@ -142,6 +147,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 	private AlertDialog missingVoicemailDialog;
 
+	private LinearLayout searchInContactRow;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -173,6 +180,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		// dialDomain = (EditText) findViewById(R.id.dialtext_domain);
 		rootView = (View) findViewById(R.id.toplevel);
 		accountChooserButton = (AccountChooserButton) findViewById(R.id.accountChooserButton);
+		searchInContactRow = (LinearLayout) findViewById(R.id.search_contacts);
 		
 		
 		
@@ -181,6 +189,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
 
 		dialPad.setOnDialKeyListener(this);
+		searchInContactRow.setOnClickListener(this);
 		initButtons();
 
 		// Add gesture detector
@@ -208,7 +217,19 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			}
 		};
 		
-
+		//Dynamically add the switcher from text dialer to digit dialer cause we use the widget that handle sip uris
+		ImageButton backFlip = new ImageButton(this);
+		backFlip.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
+		backFlip.setBackgroundResource(R.drawable.btn_dial_textbadge);
+		backFlip.setImageResource(R.drawable.ic_tab_unselected_dialer);
+		backFlip.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				flipView(false);
+			}
+		});
+		LinearLayout topField = (LinearLayout) sipTextUri.findViewById(R.id.topFieldText);
+		topField.addView(backFlip, 0);
 	}
 
 	protected void updateRegistrations() {
@@ -548,11 +569,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			flipView(true);
 			break;
 		}
-		case R.id.domainTextButton: {
-			// b.playSoundEffect(SoundEffectConstants.CLICK);
-			flipView(false);
-			break;
-		}
 
 		case R.id.digitsText: {
 			if (digits.length() != 0) {
@@ -560,8 +576,14 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			}
 			break;
 		}
-		case R.id.vmButton : {
+		case R.id.vmButton :
+		case R.id.vmButton2 : {
 			placeVMCall();
+			break;
+		}
+		case R.id.search_contacts : {
+			startActivityForResult(Compatibility.getContactPhoneIntent(), PICKUP_PHONE);
+			break;
 		}
 		}
 	}
@@ -671,6 +693,32 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		afterTextChanged(digits.getText());
 
+	}
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case PICKUP_PHONE:
+			if(resultCode == RESULT_OK) {
+				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
+					@Override
+					public void onTrigger(String number) {
+                        // TODO : filters... how to find a fancy way to integrate it back here 
+					    if (number.startsWith("sip:")) {
+					        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(number)));
+					    } else {
+                            startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
+					    }
+					}
+				});
+				return;
+			}
+			break;
+		default:
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 }
