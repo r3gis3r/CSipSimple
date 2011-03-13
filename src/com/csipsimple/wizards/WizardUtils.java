@@ -70,6 +70,7 @@ import com.csipsimple.wizards.impl.Scarlet;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.Sipgate;
+import com.csipsimple.wizards.impl.SiptelPt;
 import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
@@ -348,7 +349,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_broadvoice, 19, 
 					new Locale[]{Locale.US}, false, false, 
 					BroadVoice.class));
-			
+			WIZARDS_DICT.put("SIPTEL", new WizardInfo("SIPTEL", "Siptel", 
+					R.drawable.ic_wizard_siptel, 10, 
+					new Locale[] {new Locale("PT", "pt")}, false, false, 
+					SiptelPt.class));
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
