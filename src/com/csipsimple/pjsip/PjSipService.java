@@ -192,15 +192,9 @@ public class PjSipService {
 						Log.d(THIS_FILE, "Attach is done to callback");
 
 						// MAIN CONFIG
-
+						pjsua.set_use_compact_form(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM) ? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
 						cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent()));
-						cfg.setThread_cnt(prefsWrapper.getThreadCount()); // one
-																			// thread
-																			// seems
-																			// to
-																			// be
-																			// enough
-						// for now
+						cfg.setThread_cnt(prefsWrapper.getThreadCount());
 						cfg.setUse_srtp(prefsWrapper.getUseSrtp());
 						cfg.setSrtp_secure_signaling(0);
 

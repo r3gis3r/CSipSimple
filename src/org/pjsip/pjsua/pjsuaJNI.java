@@ -935,6 +935,7 @@ public class pjsuaJNI {
   public final static native int csipsimple_destroy();
   public final static native int send_keep_alive(int jarg1);
   public final static native int set_turn_cfg(long jarg1, pjsua_media_config jarg1_, long jarg2, pj_str_t jarg2_, long jarg3, pj_str_t jarg3_);
+  public final static native void set_use_compact_form(int jarg1);
   public final static native int PJMEDIA_NO_ZRTP_get();
   public final static native int PJMEDIA_CREATE_ZRTP_get();
   public final static native void jzrtp_SASVerified();

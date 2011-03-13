@@ -653,6 +653,10 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.set_turn_cfg(pjsua_media_config.getCPtr(media_cfg), media_cfg, pj_str_t.getCPtr(username), username, pj_str_t.getCPtr(data), data);
   }
 
+  public static void set_use_compact_form(int use_compact_form) {
+    pjsuaJNI.set_use_compact_form(use_compact_form);
+  }
+
   public static void jzrtp_SASVerified() {
     pjsuaJNI.jzrtp_SASVerified();
   }

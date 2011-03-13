@@ -82,7 +82,10 @@
 			android:summary="@string/dscp_val_desc"
 				android:numeric="signed"
 			android:defaultValue="26"></EditTextPreference>
-			
+	
+		<CheckBoxPreference android:title="@string/use_compact_form"
+			android:summary="@string/use_compact_form_desc"
+			android:key="use_compact_form" android:defaultValue="false"></CheckBoxPreference>	
 		
 	</PreferenceCategory>
 	
