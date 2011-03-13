@@ -129,6 +129,10 @@ public class EditSipUri extends LinearLayout implements TextWatcher {
 		return new ToCall(accountToUse, toCall);
 	}
 	
+	public SipProfile getSelectedAccount() {
+		return accountChooserButtonText.getSelectedAccount();
+	}
+	
 	
 	@Override
 	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {

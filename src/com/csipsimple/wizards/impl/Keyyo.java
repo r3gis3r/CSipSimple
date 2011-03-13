@@ -64,6 +64,7 @@ public class Keyyo extends SimpleImplementation {
 		account.transport = SipProfile.TRANSPORT_AUTO;
 		account.allow_contact_rewrite = false;
 		account.contact_rewrite_method = 1;
+		account.vm_nbr = "123";
 		return account;
 	}
 	

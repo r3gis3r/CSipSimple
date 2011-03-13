@@ -93,6 +93,7 @@ public class SipProfile implements Parcelable {
 	public static final String FIELD_DATA = "data";
 	
 	public static final String FIELD_SIP_STACK = "sip_stack";
+	public static final String FIELD_VOICE_MAIL_NBR = "vm_nbr";
 	
 	public final static String[] full_projection = {
 		FIELD_ID,
@@ -114,7 +115,7 @@ public class SipProfile implements Parcelable {
 		FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
 		FIELD_DATA, 
 		
-		FIELD_SIP_STACK };
+		FIELD_SIP_STACK, FIELD_VOICE_MAIL_NBR };
 	public final static Class<?>[] full_projection_types = {
 		Integer.class,
 		
@@ -131,7 +132,7 @@ public class SipProfile implements Parcelable {
 		String.class, String.class, String.class, Integer.class,
 		String.class,
 		
-		Integer.class
+		Integer.class, String.class
 	};
 	
 	//Properties
@@ -161,6 +162,7 @@ public class SipProfile implements Parcelable {
 	public int use_zrtp = 0;
 	public int reg_use_proxy = 3;
 	public int sip_stack = PJSIP_STACK;
+	public String vm_nbr = null;
 	
 	public SipProfile() {
 		display_name = "";
@@ -194,6 +196,7 @@ public class SipProfile implements Parcelable {
 		sip_stack = in.readInt();
 		reg_use_proxy = in.readInt();
 		use_zrtp = in.readInt();
+		vm_nbr = getReadParcelableString(in.readString());
 	}
 
 	public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
@@ -245,8 +248,12 @@ public class SipProfile implements Parcelable {
 		dest.writeInt(sip_stack);
 		dest.writeInt(reg_use_proxy);
 		dest.writeInt(use_zrtp);
+		dest.writeString(getWriteParcelableString(vm_nbr));
 	}
 	
+	
+	// Yes yes that's not clean but well as for now not problem with that.
+	// and we send null.
 	private String getWriteParcelableString(String str) {
 		return (str == null)?"null":str;
 	}
@@ -383,6 +390,11 @@ public class SipProfile implements Parcelable {
 		if (tmp_i != null && tmp_i >=0 ) {
 			sip_stack = tmp_i;
 		}
+		tmp_s = args.getAsString(FIELD_VOICE_MAIL_NBR);
+		if (tmp_s != null) {
+			vm_nbr = tmp_s;
+		}
+		
 	}
 	
 
@@ -435,6 +447,7 @@ public class SipProfile implements Parcelable {
 		args.put(FIELD_DATA, data);
 		
 		args.put(FIELD_SIP_STACK, sip_stack);
+		args.put(FIELD_VOICE_MAIL_NBR, vm_nbr);
 
 		return args;
 	}

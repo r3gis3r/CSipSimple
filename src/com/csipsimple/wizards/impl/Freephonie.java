@@ -60,6 +60,7 @@ public class Freephonie extends SimpleImplementation {
 		account.reg_timeout = 1800;
 		account.proxies = null;
 		account.transport = SipProfile.TRANSPORT_UDP;
+		account.vm_nbr = "**1";
 		return account;
 	}
 }

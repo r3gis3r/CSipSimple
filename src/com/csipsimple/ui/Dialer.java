@@ -20,9 +20,11 @@
 package com.csipsimple.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -35,31 +37,35 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.DialerKeyListener;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.animation.Flip3dAnimation;
+import com.csipsimple.api.ISipConfiguration;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.api.ISipService;
 import com.csipsimple.service.OutgoingCall;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
@@ -108,7 +114,21 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		public void onServiceDisconnected(ComponentName arg0) {
 			service = null;
 		}
-
+	};
+	
+	
+	private ISipConfiguration configurationService;
+	private ServiceConnection configurationConnection = new ServiceConnection() {
+		
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			configurationService = null;
+		}
+		
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder arg1) {
+			configurationService = ISipConfiguration.Stub.asInterface(arg1);
+		}
 	};
 
 	private GestureDetector gestureDetector;
@@ -119,6 +139,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	//private TextView domainTextHelper;
 
 	private EditSipUri sipTextUri;
+
+	private AlertDialog missingVoicemailDialog;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -209,7 +231,9 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		Log.d(THIS_FILE, "Resuming dialer");
 		// Bind service
 		registerReceiver(registrationReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
-		contextToBindTo.bindService(new Intent(contextToBindTo, SipService.class), connection, Context.BIND_AUTO_CREATE);
+		
+		contextToBindTo.bindService(new Intent(SipManager.INTENT_SIP_SERVICE), connection, Context.BIND_AUTO_CREATE);
+		contextToBindTo.bindService(new Intent(SipManager.INTENT_SIP_CONFIGURATION), configurationConnection, Context.BIND_AUTO_CREATE);
 
 		dialFeedback.resume();
 	}
@@ -232,7 +256,13 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			//Just ignore that -- TODO : should be more clean
 			Log.w(THIS_FILE, "Unable to un bind", e);
 		}
-
+		try {
+			contextToBindTo.unbindService(configurationConnection);
+		}catch (Exception e) {
+			//Just ignore that -- TODO : should be more clean
+			Log.w(THIS_FILE, "Unable to un bind", e);
+		}
+		
 		dialFeedback.pause();
 	}
 	
@@ -360,9 +390,117 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 		}
-
 	}
+	
+	// VM stuff
+	private void placeVMCall() {
+		Integer accountToUse = USE_GSM;
+		SipProfile acc = null;
+		if (isDigit) {
+			acc = accountChooserButton.getSelectedAccount();
+			if (acc != null) {
+				accountToUse = acc.id;
+			}
+		} else {
+			acc = sipTextUri.getSelectedAccount();
+			if(acc != null) {
+				accountToUse = acc.id;
+			}
+		}
+		
+		
+		if(accountToUse == USE_GSM) {
+			//Case gsm voice mail
+			TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+			String vmNumber = tm.getVoiceMailNumber();
+			if(!TextUtils.isEmpty(vmNumber)) {
+				OutgoingCall.ignoreNext = vmNumber;
+				Intent intent = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", vmNumber, null));
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+			}else {
 
+		        missingVoicemailDialog = new AlertDialog.Builder(this)
+		        		//TODO : l18n
+		                .setTitle(R.string.gsm)
+		                .setMessage("No VoiceMail configured")
+		                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+	                        public void onClick(DialogInterface dialog, int which) {
+	                        	if(missingVoicemailDialog != null) {
+	                        		missingVoicemailDialog.hide();
+	                        	}
+	                        }})
+		                .create();
+
+		        // When the dialog is up, completely hide the in-call UI
+		        // underneath (which is in a partially-constructed state).
+		        missingVoicemailDialog.getWindow().addFlags(
+		                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+		        missingVoicemailDialog.show();
+			}
+		} else {
+			if(acc != null) {
+				if(!TextUtils.isEmpty(acc.vm_nbr)) {
+					try {
+						service.makeCall(acc.vm_nbr, acc.id);
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Service can't be called to make the call");
+					}
+				}else {
+					final SipProfile edited_acc = acc;
+					LayoutInflater factory = LayoutInflater.from(this);
+		            final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
+					
+					missingVoicemailDialog = new AlertDialog.Builder(this)
+	        		//TODO : l18n
+	                .setTitle(acc.display_name)
+	                .setView(textEntryView)
+	                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        	
+                        	if(missingVoicemailDialog != null) {
+                        		TextView tf = (TextView) missingVoicemailDialog.findViewById(R.id.vmfield);
+                        		if(tf != null) {
+                        			String vmNumber = tf.getText().toString();
+                        			if( ! TextUtils.isEmpty(vmNumber) ) {
+                        				edited_acc.vm_nbr =vmNumber;
+                        				if(configurationService != null) {
+                        					try {
+												configurationService.addOrUpdateAccount(edited_acc);
+											} catch (RemoteException e) {
+												Log.e(THIS_FILE, "Error while trying to update account");
+											}
+                        				}else {
+                        					Log.d(THIS_FILE, "Oups conf service is not there anymore");
+                        				}
+                        			}
+                        		}
+                        		missingVoicemailDialog.hide();
+                        	}
+                        }})
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+                        	if(missingVoicemailDialog != null) {
+                        		missingVoicemailDialog.hide();
+                        	}
+						}
+					})
+	                .create();
+		
+			        // When the dialog is up, completely hide the in-call UI
+			        // underneath (which is in a partially-constructed state).
+			        missingVoicemailDialog.getWindow().addFlags(
+			                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+		
+			        missingVoicemailDialog.show();
+				}
+			}
+		}
+		
+	}
+	
 	public void onClick(View view) {
 		// ImageButton b = null;
 		int view_id = view.getId();
@@ -423,8 +561,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			break;
 		}
 		case R.id.vmButton : {
-			//TODO ....
-			
+			placeVMCall();
 		}
 		}
 	}

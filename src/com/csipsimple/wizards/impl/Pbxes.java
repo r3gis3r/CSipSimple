@@ -17,6 +17,8 @@
  */
 package com.csipsimple.wizards.impl;
 
+import com.csipsimple.api.SipProfile;
+
 
 public class Pbxes extends SimpleImplementation {
 	
@@ -31,6 +33,12 @@ public class Pbxes extends SimpleImplementation {
 		return "Pbxes.org";
 	}
 
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+		SipProfile acc = super.buildAccount(account);
+		acc.vm_nbr = "*43";
+		return acc;
+	}
 	
 	@Override
 	protected boolean canTcp() {
