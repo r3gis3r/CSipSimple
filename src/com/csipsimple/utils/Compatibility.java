@@ -485,10 +485,11 @@ public class Compatibility {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(prefWrapper));
 			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
-
-			prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 1.0);
-			prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 1.0);
-			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME, false);
+			if(isCompatible(9)) {
+				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 1.0);
+				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 1.0);
+				prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME, false);
+			}
 			
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
 
