@@ -69,6 +69,7 @@ public class SipHome extends TabActivity {
 	
 
 	public static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
+	public static final String LAST_KNOWN_ANDROID_VERSION_PREF = "last_known_aos_version";
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 
 	private static final String THIS_FILE = "SIP HOME";
@@ -176,23 +177,37 @@ public class SipHome extends TabActivity {
 	 * @return null if not needed, else the new version to upgrade to
 	 */
 	private Integer needUpgrade() {
+		Integer runningVersion = null;
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		// Application upgrade
 		try {
 			PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-			int runningVersion = pinfo.versionCode;
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			runningVersion = pinfo.versionCode;
 			int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
 	
 			Log.d(THIS_FILE, "Last known version is " + lastSeenVersion + " and currently we are running " + runningVersion);
 			if (lastSeenVersion != runningVersion) {
 				Compatibility.updateVersion(prefWrapper, lastSeenVersion, runningVersion);
-				return runningVersion;
+			}else {
+				runningVersion = null;
 			}
-			return null;
 		} catch (NameNotFoundException e) {
 			// Should not happen....or something is wrong with android...
 			Log.e(THIS_FILE, "Not possible to find self name", e);
 		}
-		return null;
+		
+		// Android upgrade
+		{
+			int lastSeenVersion = prefs.getInt(LAST_KNOWN_ANDROID_VERSION_PREF, 0);
+			Log.d(THIS_FILE, "Last known android version "+lastSeenVersion);
+			if(lastSeenVersion != Compatibility.getApiLevel()) {
+				Compatibility.updateApiVersion(prefWrapper, lastSeenVersion, Compatibility.getApiLevel());
+				Editor editor = prefs.edit();
+				editor.putInt(SipHome.LAST_KNOWN_ANDROID_VERSION_PREF, Compatibility.getApiLevel());
+				editor.commit();
+			}
+		}
+		return runningVersion;
 	}
 
 	private void startSipService() {

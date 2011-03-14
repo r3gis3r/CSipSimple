@@ -106,7 +106,7 @@ public class Compatibility {
 	public static boolean shouldUseModeApi() {
 		Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - " + android.os.Build.DEVICE);
 		
-
+		// Horray api level 9 thanks to the stock sip app seems to be consistant :D
 		if(isCompatible(9)) {
 			return false;
 		}
@@ -215,6 +215,9 @@ public class Compatibility {
 	}
 
 	private static boolean needSGSWorkaround(PreferencesWrapper preferencesWrapper) {
+		if(isCompatible(9)) {
+			return false;
+		}
 		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
 			return true;
 		}
@@ -285,13 +288,13 @@ public class Compatibility {
 		}
 		
 		// Galaxy S default settings
-		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
+		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000") && !isCompatible(9)) {
 			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 0.4);
 			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 0.2);
 			preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME, true);
 		}
 		//HTC evo 4G
-		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
+		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic") && !isCompatible(9)) {
 			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 0.5);
 			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 1.5);
 			
@@ -404,7 +407,7 @@ public class Compatibility {
 		if (lastSeenVersion < 14) {
 			
 			// Galaxy S default settings
-			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
+			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000") && !isCompatible(9)) {
 				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 0.4);
 				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 0.2);
 			}
@@ -419,7 +422,7 @@ public class Compatibility {
 		//Now we use svn revisions
 		if (lastSeenVersion < 369) {
 			// Galaxy S default settings
-			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
+			if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000") && !isCompatible(9)) {
 				prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME, true);
 			}
 			
@@ -474,7 +477,22 @@ public class Compatibility {
 	}
 
 	public static void updateApiVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {
-		//TODO
+		// Always do for downgrade cases
+		//	if(isCompatible(9)) {
+			//Reset media settings since now interface is clean and works (should work...)
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(prefWrapper));
+			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
+
+			prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 1.0);
+			prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 1.0);
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME, false);
+			
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
+
+	//	}
 	}
 }
 
