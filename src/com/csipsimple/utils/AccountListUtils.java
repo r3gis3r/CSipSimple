@@ -61,7 +61,6 @@ public class AccountListUtils {
 					accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 					accountDisplay.statusColor = resources.getColor(R.color.account_unregistered);
 					accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
-					Log.d("Acc list", ">>>>> "+accountInfo.getRegUri());
 					if( TextUtils.isEmpty( accountInfo.getRegUri()) ) {
 						// Green
 						accountDisplay.statusColor = resources.getColor(R.color.account_valid);

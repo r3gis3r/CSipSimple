@@ -984,10 +984,13 @@ public class PreferencesWrapper {
 	
 	private static File getStorageFolder() {
 		File root = Environment.getExternalStorageDirectory();
+		
 	    if (root.canWrite()){
 			File dir = new File(root.getAbsolutePath() + File.separator + "CSipSimple");
-			dir.mkdirs();
-			Log.d(THIS_FILE, "Create directory " + dir.getAbsolutePath());
+			if(!dir.exists()) {
+				dir.mkdirs();
+				Log.d(THIS_FILE, "Create directory " + dir.getAbsolutePath());
+			}
 			return dir;
 	    }
 	    return null;

@@ -122,8 +122,8 @@ public class Callback {
     if (getClass() == Callback.class) pjsuaJNI.Callback_on_typing(swigCPtr, this, call_id, pj_str_t.getCPtr(from), from, pj_str_t.getCPtr(to), to, pj_str_t.getCPtr(contact), contact, is_typing); else pjsuaJNI.Callback_on_typingSwigExplicitCallback(swigCPtr, this, call_id, pj_str_t.getCPtr(from), from, pj_str_t.getCPtr(to), to, pj_str_t.getCPtr(contact), contact, is_typing);
   }
 
-  public void on_nat_detect(SWIGTYPE_p_pj_stun_nat_detect_result res) {
-    if (getClass() == Callback.class) pjsuaJNI.Callback_on_nat_detect(swigCPtr, this, SWIGTYPE_p_pj_stun_nat_detect_result.getCPtr(res)); else pjsuaJNI.Callback_on_nat_detectSwigExplicitCallback(swigCPtr, this, SWIGTYPE_p_pj_stun_nat_detect_result.getCPtr(res));
+  public void on_nat_detect(pj_stun_nat_detect_result res) {
+    if (getClass() == Callback.class) pjsuaJNI.Callback_on_nat_detect(swigCPtr, this, pj_stun_nat_detect_result.getCPtr(res), res); else pjsuaJNI.Callback_on_nat_detectSwigExplicitCallback(swigCPtr, this, pj_stun_nat_detect_result.getCPtr(res), res);
   }
 
   public void on_mwi_info(int acc_id, pj_str_t mime_type, pj_str_t body) {

@@ -30,6 +30,7 @@ import org.pjsip.pjsua.SWIGTYPE_p_p_pjmedia_port;
 import org.pjsip.pjsua.SWIGTYPE_p_pjmedia_session;
 import org.pjsip.pjsua.SWIGTYPE_p_pjsip_rx_data;
 import org.pjsip.pjsua.pj_str_t;
+import org.pjsip.pjsua.pj_stun_nat_detect_result;
 import org.pjsip.pjsua.pjsip_event;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
@@ -382,6 +383,14 @@ public class UAStateReceiver extends Callback {
 			pjService.unsetAudioInCall();
 		}
 	}
+	
+	
+	@Override
+	public void on_nat_detect(pj_stun_nat_detect_result res) {
+		//TODO : IMPLEMENT THIS FEATURE 
+		Log.d(THIS_FILE, "NAT TYPE DETECTED !!!" + res.getNat_type_name()+ " et "+res.getStatus());
+	}
+	
 	
 	// -------
 	// Current call management -- assume for now one unique call is managed

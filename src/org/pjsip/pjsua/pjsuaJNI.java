@@ -47,8 +47,8 @@ public class pjsuaJNI {
   public final static native void Callback_on_pager_status2SwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_, int jarg5, long jarg6, pj_str_t jarg6_, long jarg7, long jarg8);
   public final static native void Callback_on_typing(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_, long jarg5, pj_str_t jarg5_, int jarg6);
   public final static native void Callback_on_typingSwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_, long jarg5, pj_str_t jarg5_, int jarg6);
-  public final static native void Callback_on_nat_detect(long jarg1, Callback jarg1_, long jarg2);
-  public final static native void Callback_on_nat_detectSwigExplicitCallback(long jarg1, Callback jarg1_, long jarg2);
+  public final static native void Callback_on_nat_detect(long jarg1, Callback jarg1_, long jarg2, pj_stun_nat_detect_result jarg2_);
+  public final static native void Callback_on_nat_detectSwigExplicitCallback(long jarg1, Callback jarg1_, long jarg2, pj_stun_nat_detect_result jarg2_);
   public final static native void Callback_on_mwi_info(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_);
   public final static native void Callback_on_mwi_infoSwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_);
   public final static native int Callback_on_setup_audio(long jarg1, Callback jarg1_, int jarg2);
@@ -288,6 +288,16 @@ public class pjsuaJNI {
   public final static native int pj_time_val_msec_get(long jarg1, pj_time_val jarg1_);
   public final static native long new_pj_time_val();
   public final static native void delete_pj_time_val(long jarg1);
+  public final static native void pj_stun_nat_detect_result_status_set(long jarg1, pj_stun_nat_detect_result jarg1_, int jarg2);
+  public final static native int pj_stun_nat_detect_result_status_get(long jarg1, pj_stun_nat_detect_result jarg1_);
+  public final static native void pj_stun_nat_detect_result_status_text_set(long jarg1, pj_stun_nat_detect_result jarg1_, String jarg2);
+  public final static native String pj_stun_nat_detect_result_status_text_get(long jarg1, pj_stun_nat_detect_result jarg1_);
+  public final static native void pj_stun_nat_detect_result_nat_type_set(long jarg1, pj_stun_nat_detect_result jarg1_, long jarg2);
+  public final static native long pj_stun_nat_detect_result_nat_type_get(long jarg1, pj_stun_nat_detect_result jarg1_);
+  public final static native void pj_stun_nat_detect_result_nat_type_name_set(long jarg1, pj_stun_nat_detect_result jarg1_, String jarg2);
+  public final static native String pj_stun_nat_detect_result_nat_type_name_get(long jarg1, pj_stun_nat_detect_result jarg1_);
+  public final static native long new_pj_stun_nat_detect_result();
+  public final static native void delete_pj_stun_nat_detect_result(long jarg1);
   public final static native int PJSUA_INVALID_ID_get();
   public final static native int PJSUA_ACC_MAX_PROXIES_get();
   public final static native int PJSUA_DEFAULT_SRTP_SECURE_SIGNALING_get();
@@ -995,7 +1005,7 @@ public class pjsuaJNI {
     self.on_typing(call_id, (from == 0) ? null : new pj_str_t(from, false), (to == 0) ? null : new pj_str_t(to, false), (contact == 0) ? null : new pj_str_t(contact, false), is_typing);
   }
   public static void SwigDirector_Callback_on_nat_detect(Callback self, long res) {
-    self.on_nat_detect((res == 0) ? null : new SWIGTYPE_p_pj_stun_nat_detect_result(res, false));
+    self.on_nat_detect((res == 0) ? null : new pj_stun_nat_detect_result(res, false));
   }
   public static void SwigDirector_Callback_on_mwi_info(Callback self, int acc_id, long mime_type, long body) {
     self.on_mwi_info(acc_id, (mime_type == 0) ? null : new pj_str_t(mime_type, false), (body == 0) ? null : new pj_str_t(body, false));
