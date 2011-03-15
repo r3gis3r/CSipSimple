@@ -74,7 +74,8 @@ public class OutgoingCall extends BroadcastReceiver {
 				
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
-				outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
+				// Add csipsimple protocol :)
+				outgoingCallChooserIntent.setData(Uri.fromParts("csip", number, null));
 				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				Log.d(THIS_FILE, "Start outgoing call chooser for CSipSimple");
 				context.startActivity(outgoingCallChooserIntent);

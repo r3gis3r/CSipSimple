@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:orientation="vertical">
+    <com.csipsimple.widgets.FitTextView android:layout_width="fill_parent" android:layout_height="wrap_content" 
+		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:textColor="#000000" android:layout_marginBottom="10dip"
+		android:text="@string/problem_with_integration" android:gravity="center"/>
+ 				
+ 	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" 
+ 		android:textAppearance="?android:attr/textAppearanceMedium" android:textColor="#882222" 
+ 		android:padding="5dip" android:text="@string/conflict_detected"/>
+ 		
+ 	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" 
+ 		android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="#555555" 
+ 		android:padding="2dip" android:text="@string/action_required"/>
+ 	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" 
+ 		android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="#555555" 
+ 		android:padding="2dip" android:text="@string/if_you_do_nothing"/>
+ 		
+ 	<LinearLayout android:id="@+id/nothing_set"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content" android:orientation="vertical">
+	 	<TextView android:layout_width="fill_parent" android:textAppearance="?android:attr/textAppearanceMedium" android:textColor="#333333" 
+	 		android:padding="5dip" android:text="@string/fix_multiple_choice1" android:layout_height="match_parent"/>
+	 	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" 
+	 		android:textAppearance="?android:attr/textAppearanceMedium" android:textColor="#333333" 
+	 		android:padding="5dip" android:text="@string/fix_multiple_choice2"/>
+	 	<ImageView android:layout_width="fill_parent"
+	 		android:scaleType="centerInside"  android:adjustViewBounds="true"
+	 		android:src="@drawable/conflict_screenshot" android:layout_height="match_parent"/>
+	 		
+	 	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" 
+	 		android:textAppearance="?android:attr/textAppearanceMedium" android:textColor="#333333" 
+	 		android:padding="5dip" android:text="@string/fix_multiple_choice3"/>
+	 	
+	 	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" 
+	 		android:gravity="center"
+	 		android:textAppearance="?android:attr/textAppearanceLarge" android:textStyle="bold" android:textColor="#333333" 
+	 		android:padding="5dip" android:text="@string/app_name"/>
+ 	
+ 	</LinearLayout>
+ 	
+</LinearLayout>

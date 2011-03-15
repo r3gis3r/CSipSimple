@@ -101,7 +101,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			R.id.vmButton,
 	// Text dialer
 			R.id.dialTextButton, R.id.deleteTextButton, R.id.vmButton2,
-			R.id.switchTextView };
+			R.id.switchTextView};
 
 	private Activity contextToBindTo = this;
 	private ISipService service;
@@ -148,6 +148,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	private AlertDialog missingVoicemailDialog;
 
 	private LinearLayout searchInContactRow;
+
+
 
 	/** Called when the activity is first created. */
 	@Override
@@ -204,7 +206,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		};
 		digitDialer.setOnTouchListener(touchTransmiter);
 		textDialer.setOnTouchListener(touchTransmiter);
-		
 		
 		
 

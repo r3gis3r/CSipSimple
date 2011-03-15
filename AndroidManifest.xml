@@ -107,6 +107,7 @@
 			<intent-filter>
                 <action android:name="android.intent.action.CALL" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
             </intent-filter>
@@ -114,6 +115,7 @@
 			<intent-filter android:priority="-1">
 				<action android:name="android.phone.extra.NEW_CALL_INTENT"></action>
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
 			</intent-filter>
@@ -123,6 +125,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
                 <data android:scheme="imto" />

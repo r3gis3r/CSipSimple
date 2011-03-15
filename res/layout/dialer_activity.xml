@@ -22,4 +22,26 @@
 
   <include android:id="@+id/dialer_digit" layout="@layout/dialer_digit" />
   <include android:id="@+id/dialer_text" layout="@layout/dialer_text" />
+  
+  <com.csipsimple.widgets.SlidingPanel android:visibility="gone"
+  	android:id="@+id/warningPanel" android:orientation="horizontal"
+  	android:handle="@+id/handle" android:content="@+id/content"
+  	android:gravity="bottom"
+  	android:layout_height="fill_parent" android:layout_width="fill_parent" 	>
+	<ImageButton android:id="@id/handle" android:layout_height="wrap_content" android:layout_width="wrap_content" 
+		
+		android:layout_gravity="bottom|right"
+		android:padding="0dip" android:layout_marginBottom="11dp"
+		android:background="@android:color/transparent" 
+		android:src="@drawable/snipet_warning" />
+	
+	<ScrollView android:id="@id/content"
+ 			android:layout_height="fill_parent"
+ 			android:layout_width="fill_parent"
+ 			android:background="#EEFFFFFF"
+ 			android:padding="10dip" android:clickable="true" >
+ 			<include layout="@layout/gingerbread_int_conflict"/>
+ 	</ScrollView>
+  </com.csipsimple.widgets.SlidingPanel>
+  	
 </RelativeLayout>

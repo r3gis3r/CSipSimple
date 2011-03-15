@@ -170,6 +170,19 @@ public class SipHome extends TabActivity {
 		}
 		
 		selectTabWithAction(getIntent());
+		
+		// Check for gingerbread warnings
+		/*
+		Thread t = new Thread() {
+			public void run() {
+				if(Compatibility.isCompatible(9)) {
+					// We check now if something is wrong with the gingerbread dialer integration
+					Compatibility.getDialerIntegrationState(SipHome.this);
+				}
+			};
+		};
+		t.start();
+		*/
 	}
 	
 	/**

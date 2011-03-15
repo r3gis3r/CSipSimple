@@ -475,8 +475,8 @@ public class OutgoingCallChooser extends ListActivity {
 				try {
 					String phoneNumber = number;
 					String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
-					
-					service.makeCall("sip:"+toCall, account.id);
+
+					service.makeCall("sip:" + toCall, account.id);
 					finish();
 				} catch (RemoteException e) {
 					Log.e(THIS_FILE, "Unable to make the call", e);
@@ -510,7 +510,7 @@ public class OutgoingCallChooser extends ListActivity {
 						String phoneNumber = number;
 						String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
 						
-						service.makeCall("sip:"+toCall, account.id);
+						service.makeCall("sip:" + toCall, account.id);
 						accountToCallTo = null;
 						finish();
 						return true;

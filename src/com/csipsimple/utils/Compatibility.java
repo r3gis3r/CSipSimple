@@ -384,6 +384,9 @@ public class Compatibility {
 		return canMakeSkypeCall;
 	}
 	
+	
+	
+	
 
 	public static Intent getContactPhoneIntent() {
     	Intent intent = new Intent(Intent.ACTION_PICK);
