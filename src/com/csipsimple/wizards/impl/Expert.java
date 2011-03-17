@@ -226,6 +226,8 @@ public class Expert extends BaseImplementation {
 		String forceContact = accountForceContact.getText();
 		if(!TextUtils.isEmpty(forceContact)) {
 			account.force_contact = getText(accountForceContact);
+		}else {
+			account.force_contact = "";
 		}
 		
 		if (!isEmpty(accountProxy)) {
