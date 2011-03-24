@@ -48,6 +48,7 @@ import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.Fayn;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.Gizmo5;
+import com.csipsimple.wizards.impl.IPshka;
 import com.csipsimple.wizards.impl.ITTelenet;
 import com.csipsimple.wizards.impl.IiNet;
 import com.csipsimple.wizards.impl.Ip2Mobile;
@@ -353,6 +354,11 @@ public class WizardUtils {
 					R.drawable.ic_wizard_siptel, 10, 
 					new Locale[] {new Locale("PT", "pt")}, false, false, 
 					SiptelPt.class));
+			WIZARDS_DICT.put("IPSHKA", new WizardInfo("IPSHKA", "IPshka", 
+					R.drawable.ic_wizard_ipshka, 10, 
+					new Locale[]{new Locale("UK", "ua")}, false, false, 
+					IPshka.class));
+			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
 			WIZARDS_DICT.put(info.id, info);
