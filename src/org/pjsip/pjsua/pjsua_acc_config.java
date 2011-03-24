@@ -209,6 +209,14 @@ public class pjsua_acc_config {
     return pjsuaJNI.pjsua_acc_config_reg_timeout_get(swigCPtr, this);
   }
 
+  public void setReg_delay_before_refresh(long value) {
+    pjsuaJNI.pjsua_acc_config_reg_delay_before_refresh_set(swigCPtr, this, value);
+  }
+
+  public long getReg_delay_before_refresh() {
+    return pjsuaJNI.pjsua_acc_config_reg_delay_before_refresh_get(swigCPtr, this);
+  }
+
   public void setUnreg_timeout(long value) {
     pjsuaJNI.pjsua_acc_config_unreg_timeout_set(swigCPtr, this, value);
   }

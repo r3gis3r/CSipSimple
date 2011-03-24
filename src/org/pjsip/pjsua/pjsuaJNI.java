@@ -580,6 +580,8 @@ public class pjsuaJNI {
   public final static native long[] pjsua_acc_config_proxy_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_reg_timeout_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
   public final static native long pjsua_acc_config_reg_timeout_get(long jarg1, pjsua_acc_config jarg1_);
+  public final static native void pjsua_acc_config_reg_delay_before_refresh_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
+  public final static native long pjsua_acc_config_reg_delay_before_refresh_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_unreg_timeout_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
   public final static native long pjsua_acc_config_unreg_timeout_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_cred_count_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
