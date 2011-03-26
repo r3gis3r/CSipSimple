@@ -34,6 +34,7 @@ import org.pjsip.pjsua.pjsip_transport_type_e;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_info;
+import org.pjsip.pjsua.pjsua_call_flag;
 import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
 import org.pjsip.pjsua.pjsua_media_config;
@@ -329,6 +330,7 @@ public class PjSipService {
 						}
 
 						// RTP transport
+						
 						{
 							pjsua_transport_config cfg = new pjsua_transport_config();
 							pjsua.transport_config_default(cfg);
@@ -352,6 +354,7 @@ public class PjSipService {
 								return false;
 							}
 						}
+						
 					}
 
 					// Initialization is done, now start pjsua
@@ -865,7 +868,7 @@ public class PjSipService {
 	public int callReinvite(int callId, boolean unhold) {
 		if (created) {
 			synchronized (callActionLock) {
-				return pjsua.call_reinvite(callId, unhold ? 1 : 0, null);
+				return pjsua.call_reinvite(callId, unhold ? pjsua_call_flag.PJSUA_CALL_UNHOLD.swigValue() : 0, null);
 			}
 		}
 		return -1;

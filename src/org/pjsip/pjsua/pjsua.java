@@ -336,8 +336,8 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.call_set_hold(call_id, SWIGTYPE_p_pjsua_msg_data.getCPtr(msg_data));
   }
 
-  public synchronized static int call_reinvite(int call_id, int unhold, SWIGTYPE_p_pjsua_msg_data msg_data) {
-    return pjsuaJNI.call_reinvite(call_id, unhold, SWIGTYPE_p_pjsua_msg_data.getCPtr(msg_data));
+  public synchronized static int call_reinvite(int call_id, long options, SWIGTYPE_p_pjsua_msg_data msg_data) {
+    return pjsuaJNI.call_reinvite(call_id, options, SWIGTYPE_p_pjsua_msg_data.getCPtr(msg_data));
   }
 
   public synchronized static int call_update(int call_id, long options, SWIGTYPE_p_pjsua_msg_data msg_data) {

@@ -709,6 +709,8 @@ public class pjsuaJNI {
   public final static native long pjsua_call_info_total_duration_get(long jarg1, pjsua_call_info jarg1_);
   public final static native long new_pjsua_call_info();
   public final static native void delete_pjsua_call_info(long jarg1);
+  public final static native int PJSUA_CALL_UNHOLD_get();
+  public final static native int PJSUA_CALL_UPDATE_CONTACT_get();
   public final static native long call_get_max_count();
   public final static native long call_get_count();
   public final static native int enum_calls(int[] jarg1, long[] jarg2);
@@ -727,7 +729,7 @@ public class pjsuaJNI {
   public final static native int call_hangup(int jarg1, long jarg2, long jarg3, pj_str_t jarg3_, long jarg4);
   public final static native int call_process_redirect(int jarg1, long jarg2);
   public final static native int call_set_hold(int jarg1, long jarg2);
-  public final static native int call_reinvite(int jarg1, int jarg2, long jarg3);
+  public final static native int call_reinvite(int jarg1, long jarg2, long jarg3);
   public final static native int call_update(int jarg1, long jarg2, long jarg3);
   public final static native int call_xfer(int jarg1, long jarg2, pj_str_t jarg2_, long jarg3);
   public final static native int PJSUA_XFER_NO_REQUIRE_REPLACES_get();
