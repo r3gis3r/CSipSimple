@@ -43,6 +43,7 @@ public class Sipgate extends AlternateServerImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.transport = SipProfile.TRANSPORT_UDP;
+		account.allow_contact_rewrite = false;
 		return account;
 	}
 
