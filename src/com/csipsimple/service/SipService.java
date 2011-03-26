@@ -35,7 +35,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
@@ -126,15 +125,7 @@ public class SipService extends Service {
 		@Override
 		public void askThreadedRestart() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			getExecutor().execute(new Runnable() {
-				public void run() {
-					synchronized (sipStarterLock) {
-						if(stopSipStack()) {
-							startSipStack();
-						}
-					}
-				}
-			});
+			getExecutor().execute(new RestartRunnable());
 		};
 
 		/**
@@ -365,7 +356,9 @@ public class SipService extends Service {
     		
         	// Mode ringing
     		if(ringing) {
-	        	pjService.adjustStreamVolume(AudioManager.STREAM_RING, direction, AudioManager.FLAG_SHOW_UI);
+	        	// What is expected here is to silence ringer
+    			//pjService.adjustStreamVolume(AudioManager.STREAM_RING, direction, AudioManager.FLAG_SHOW_UI);
+    			pjService.silenceRinger();
     		}else {
 	        	// Mode in call
 	        	if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_SOFT_VOLUME)) {
@@ -1273,12 +1266,7 @@ public class SipService extends Service {
 			} else if (ipHasChanged) {
 				// Check if IP has changed between
 				if (pjService != null && pjService.getActiveCallInProgress() == null) {
-					getExecutor().execute(new Runnable() {
-						public void run() {
-							stopSipStack();
-							startSipStack();
-						}
-					});
+					getExecutor().execute(new RestartRunnable());
 					// Log.e(THIS_FILE, "We should restart the stack ! ");
 				} else {
 					// TODO : else refine things => STUN, registration etc...
@@ -1493,5 +1481,18 @@ public class SipService extends Service {
     }
 
 	
-	
+	class RestartRunnable implements Runnable {
+		public void run() {
+			synchronized (sipStarterLock) {
+				if(stopSipStack()) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						Log.e(THIS_FILE, "Unable to defer restart", e);
+					}
+					startSipStack();
+				}
+			}
+		}
+	} 
 }

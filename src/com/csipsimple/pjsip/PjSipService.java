@@ -330,7 +330,6 @@ public class PjSipService {
 						}
 
 						// RTP transport
-						
 						{
 							pjsua_transport_config cfg = new pjsua_transport_config();
 							pjsua.transport_config_default(cfg);
@@ -354,7 +353,6 @@ public class PjSipService {
 								return false;
 							}
 						}
-						
 					}
 
 					// Initialization is done, now start pjsua
@@ -937,6 +935,13 @@ public class PjSipService {
 			mediaManager.adjustStreamVolume(stream, direction, AudioManager.FLAG_SHOW_UI);
 		}
 	}
+	
+
+	public void silenceRinger() {
+		if(mediaManager != null) {
+			mediaManager.stopRing();
+		}
+	}
 
 	public void startRecording(int callId) {
 		if (created && userAgentReceiver != null) {
@@ -1168,5 +1173,6 @@ public class PjSipService {
 	public void zrtpSASVerified() {
 		pjsua.jzrtp_SASVerified();
 	}
+
 
 }
