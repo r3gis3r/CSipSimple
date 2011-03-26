@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -66,8 +67,16 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			Log.d(THIS_FILE, "<<< Data device change detected");
 			
 		}else if(intentAction.equals(SipManager.INTENT_SIP_ACCOUNT_ACTIVATE)) {
-			long accId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1);
-			if(accId != -1) {
+			long accId;
+			accId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, SipProfile.INVALID_ID);
+			
+			if(accId == SipProfile.INVALID_ID) {
+				// allow remote side to send us integers.
+				// previous call will warn, but that's fine, no worries
+				accId = intent.getIntExtra(SipManager.EXTRA_ACCOUNT_ID, SipProfile.INVALID_ID);
+			}
+			
+			if(accId != SipProfile.INVALID_ID) {
 	    		DBAdapter database = new DBAdapter(context);
 				database.open();
 				boolean active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, true);
