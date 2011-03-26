@@ -76,16 +76,20 @@ public class UAStateReceiver extends Callback {
 	private PjSipService pjService;
 //	private ComponentName remoteControlResponder;
 
+	
+	int eventLockCount = 0;
 	private void lockCpu(){
 		if(eventLock != null) {
 			Log.d(THIS_FILE, "< LOCK CPU");
 			eventLock.acquire();
+			eventLockCount ++;
 		}
 	}
 	private void unlockCpu() {
 		if(eventLock != null && eventLock.isHeld()) {
-			Log.d(THIS_FILE, "> UNLOCK CPU");
 			eventLock.release();
+			eventLockCount --;
+			Log.d(THIS_FILE, "> UNLOCK CPU " + eventLockCount);
 		}
 	}
 	
@@ -647,7 +651,7 @@ public class UAStateReceiver extends Callback {
 		if (eventLock == null) {
 			PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
 			eventLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.inEventLock");
-			eventLock.setReferenceCounted(false);
+			eventLock.setReferenceCounted(true);
 
 		}
 	}

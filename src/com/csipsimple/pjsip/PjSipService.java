@@ -387,14 +387,15 @@ public class PjSipService {
 
 	/**
 	 * Stop sip service
+	 * @return true if stop has been performed
 	 */
-	public synchronized void sipStop() {
+	public synchronized boolean sipStop() {
 		Log.d(THIS_FILE, ">> SIP STOP <<");
 
 		if (getActiveCallInProgress() != null) {
 			Log.w(THIS_FILE, "We have a call in progress... DO NOT STOP !!!");
 			// TODO : queue quit on end call;
-			return;
+			return false;
 		}
 
 		if (service.notificationManager != null) {
@@ -406,6 +407,7 @@ public class PjSipService {
 			}
 		}
 		Log.i(THIS_FILE, ">> Media m " + mediaManager);
+		return true;
 	}
 
 	private void cleanPjsua() {

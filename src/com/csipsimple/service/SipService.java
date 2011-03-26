@@ -129,8 +129,9 @@ public class SipService extends Service {
 			getExecutor().execute(new Runnable() {
 				public void run() {
 					synchronized (sipStarterLock) {
-						stopSipStack();
-						startSipStack();
+						if(stopSipStack()) {
+							startSipStack();
+						}
 					}
 				}
 			});
@@ -765,23 +766,23 @@ public class SipService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		
+		
 		Log.i(THIS_FILE, "Destroying SIP Service");
 		unregisterBroadcasts();
 		
-		
-
 		Threading.stopHandlerThread(executorThread);
 		executorThread = null;
 		mExecutor = null;
 		
 		Log.d(THIS_FILE, "Destroy sip stack");
-		stopSipStack();
-		
 		
 		sipWakeLock.reset();
 		
-		notificationManager.cancelAll();
-		notificationManager.cancelCalls();
+		if(stopSipStack()) {
+			notificationManager.cancelAll();
+			notificationManager.cancelCalls();
+		}
 		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
 		System.gc();
 	}
@@ -836,6 +837,7 @@ public class SipService extends Service {
 		// Check connectivity, else just finish itself
 		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
 			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
+			
 			stopSelf();
 			return;
 		}
@@ -931,16 +933,22 @@ public class SipService extends Service {
 		sipWakeLock.release(this);
 	}
 	
-	public void stopSipStack() {
+	public boolean stopSipStack() {
 		sipWakeLock.acquire(this);
+		boolean canStop = true;
 		synchronized (sipStarterLock) {
 			if(pjService != null) {
-				pjService.sipStop();
-				pjService = null;
+				canStop &= pjService.sipStop();
+				if(canStop) {
+					pjService = null;
+				}
 			}
-			releaseResources();
+			if(canStop) {
+				releaseResources();
+			}
 		}
 		sipWakeLock.release(this);
+		return canStop;
 	}
 	
 	
