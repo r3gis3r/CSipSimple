@@ -477,6 +477,9 @@ public class Compatibility {
 		if(lastSeenVersion < 704) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(prefWrapper));
 		}
+		if(lastSeenVersion < 755) {
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
+		}
 	}
 
 	public static void updateApiVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {

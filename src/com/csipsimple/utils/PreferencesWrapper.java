@@ -35,6 +35,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -131,7 +132,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.ENABLE_STUN, false);
 		put(SipConfigManager.ENABLE_QOS, false);
 		put(SipConfigManager.TLS_VERIFY_SERVER, false);
-		put(SipConfigManager.USE_COMPACT_FORM, false);
+		put(SipConfigManager.USE_COMPACT_FORM, true);
 		put("use_wifi_in", true);
 		put("use_wifi_out", true);
 		put("use_other_in", true);
@@ -554,8 +555,13 @@ public class PreferencesWrapper {
 		
 	}
 
-	public String getUserAgent() {
-		return getPreferenceStringValue(USER_AGENT);
+	public String getUserAgent(Context ctx) {
+		String userAgent = getPreferenceStringValue(USER_AGENT);
+		PackageInfo pinfo = CollectLogs.getCurrentRevision(ctx);
+		if(pinfo != null) {
+			userAgent +=  " r" + pinfo.versionCode+" / "+android.os.Build.DEVICE+"-"+Compatibility.getApiLevel();
+		}
+		return userAgent;
 	}
 	
 	

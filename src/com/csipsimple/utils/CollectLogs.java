@@ -158,14 +158,21 @@ public class CollectLogs {
 		String result = "";
 		result += "Based on the GPL CSipSimple version : ";
 		
-		PackageInfo pinfo;
+		PackageInfo pinfo = getCurrentRevision(ctx);
+		if(pinfo != null) {
+			result += pinfo.versionName + " r" + pinfo.versionCode;
+		}
+		return result;
+	}
+	
+	public final static PackageInfo getCurrentRevision(Context ctx) {
+		PackageInfo pinfo = null;
 		try {
 			pinfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
-			result += pinfo.versionName + " r" + pinfo.versionCode;
 		} catch (NameNotFoundException e) {
 			Log.e(THIS_FILE, "Impossible to find version of current package !!");
 		}
-		return result;
+		return pinfo;
 	}
 	
 	public static Intent getLogReportIntent(String userComment, Context ctx) {
