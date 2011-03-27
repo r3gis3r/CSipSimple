@@ -1486,7 +1486,7 @@ public class SipService extends Service {
 			synchronized (sipStarterLock) {
 				if(stopSipStack()) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(200);
 					} catch (InterruptedException e) {
 						Log.e(THIS_FILE, "Unable to defer restart", e);
 					}

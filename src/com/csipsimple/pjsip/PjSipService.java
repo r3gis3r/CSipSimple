@@ -1138,7 +1138,7 @@ public class PjSipService {
 			SipCallSession currentActiveCall = userAgentReceiver.getActiveCallInProgress();
 
 			if (currentActiveCall != null) {
-
+				AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 				if (state != TelephonyManager.CALL_STATE_RINGING) {
 					// New state is not ringing nor idle... so off hook, hold
 					// current sip call
@@ -1146,10 +1146,11 @@ public class PjSipService {
 					callHold(hasBeenHoldByGSM);
 					pjsua.set_no_snd_dev();
 
-					AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
 					am.setMode(AudioManager.MODE_IN_CALL);
 				} else {
 					// We have a ringing incoming call.
+					// Avoid vibration
+					am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 				}
 			}
 		} else {
