@@ -126,6 +126,10 @@ public class Callback {
     if (getClass() == Callback.class) pjsuaJNI.Callback_on_nat_detect(swigCPtr, this, pj_stun_nat_detect_result.getCPtr(res), res); else pjsuaJNI.Callback_on_nat_detectSwigExplicitCallback(swigCPtr, this, pj_stun_nat_detect_result.getCPtr(res), res);
   }
 
+  public pjsip_redirect_op on_call_redirected(int call_id, pj_str_t target) {
+    return pjsip_redirect_op.swigToEnum((getClass() == Callback.class) ? pjsuaJNI.Callback_on_call_redirected(swigCPtr, this, call_id, pj_str_t.getCPtr(target), target) : pjsuaJNI.Callback_on_call_redirectedSwigExplicitCallback(swigCPtr, this, call_id, pj_str_t.getCPtr(target), target));
+  }
+
   public void on_mwi_info(int acc_id, pj_str_t mime_type, pj_str_t body) {
     if (getClass() == Callback.class) pjsuaJNI.Callback_on_mwi_info(swigCPtr, this, acc_id, pj_str_t.getCPtr(mime_type), mime_type, pj_str_t.getCPtr(body), body); else pjsuaJNI.Callback_on_mwi_infoSwigExplicitCallback(swigCPtr, this, acc_id, pj_str_t.getCPtr(mime_type), mime_type, pj_str_t.getCPtr(body), body);
   }

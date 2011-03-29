@@ -32,6 +32,7 @@ import org.pjsip.pjsua.SWIGTYPE_p_pjsip_rx_data;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pj_stun_nat_detect_result;
 import org.pjsip.pjsua.pjsip_event;
+import org.pjsip.pjsua.pjsip_redirect_op;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
@@ -388,6 +389,11 @@ public class UAStateReceiver extends Callback {
 		}
 	}
 	
+	@Override
+	public pjsip_redirect_op on_call_redirected(int call_id, pj_str_t target) {
+		Log.w(THIS_FILE, "Ask for redirection, not yet implemented, for now allow all "+target.getPtr());
+		return pjsip_redirect_op.PJSIP_REDIRECT_ACCEPT;
+	}
 	
 	@Override
 	public void on_nat_detect(pj_stun_nat_detect_result res) {

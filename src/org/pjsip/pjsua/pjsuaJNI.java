@@ -49,6 +49,8 @@ public class pjsuaJNI {
   public final static native void Callback_on_typingSwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_, long jarg5, pj_str_t jarg5_, int jarg6);
   public final static native void Callback_on_nat_detect(long jarg1, Callback jarg1_, long jarg2, pj_stun_nat_detect_result jarg2_);
   public final static native void Callback_on_nat_detectSwigExplicitCallback(long jarg1, Callback jarg1_, long jarg2, pj_stun_nat_detect_result jarg2_);
+  public final static native int Callback_on_call_redirected(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_);
+  public final static native int Callback_on_call_redirectedSwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_);
   public final static native void Callback_on_mwi_info(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_);
   public final static native void Callback_on_mwi_infoSwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2, long jarg3, pj_str_t jarg3_, long jarg4, pj_str_t jarg4_);
   public final static native int Callback_on_setup_audio(long jarg1, Callback jarg1_, int jarg2);
@@ -727,7 +729,7 @@ public class pjsuaJNI {
   public final static native int call_get_rem_nat_type(int jarg1, long jarg2);
   public final static native int call_answer(int jarg1, long jarg2, long jarg3, pj_str_t jarg3_, long jarg4);
   public final static native int call_hangup(int jarg1, long jarg2, long jarg3, pj_str_t jarg3_, long jarg4);
-  public final static native int call_process_redirect(int jarg1, long jarg2);
+  public final static native int call_process_redirect(int jarg1, int jarg2);
   public final static native int call_set_hold(int jarg1, long jarg2);
   public final static native int call_reinvite(int jarg1, long jarg2, long jarg3);
   public final static native int call_update(int jarg1, long jarg2, long jarg3);
@@ -1010,6 +1012,9 @@ public class pjsuaJNI {
   }
   public static void SwigDirector_Callback_on_nat_detect(Callback self, long res) {
     self.on_nat_detect((res == 0) ? null : new pj_stun_nat_detect_result(res, false));
+  }
+  public static int SwigDirector_Callback_on_call_redirected(Callback self, int call_id, long target) {
+    return (self.on_call_redirected(call_id, (target == 0) ? null : new pj_str_t(target, false))).swigValue();
   }
   public static void SwigDirector_Callback_on_mwi_info(Callback self, int acc_id, long mime_type, long body) {
     self.on_mwi_info(acc_id, (mime_type == 0) ? null : new pj_str_t(mime_type, false), (body == 0) ? null : new pj_str_t(body, false));

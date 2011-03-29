@@ -36,10 +36,12 @@ class SipWakeLock {
     synchronized void reset() {
         mHolders.clear();
         release(null);
-        while(mWakeLock.isHeld()) {
-        	mWakeLock.release();
+        if( mWakeLock != null ) {
+	        while(mWakeLock.isHeld()) {
+	        	mWakeLock.release();
+	        }
+	        Log.d(THIS_FILE, "~~~ hard reset wakelock :: still held : " + mWakeLock.isHeld());
         }
-        Log.d(THIS_FILE, "~~~ hard reset wakelock :: still held : " + mWakeLock.isHeld());
     }
 
     synchronized void acquire(long timeout) {
@@ -68,7 +70,8 @@ class SipWakeLock {
                 && mWakeLock.isHeld()) {
             mWakeLock.release();
         }
+        
         Log.d(THIS_FILE, "release wakelock: holder count="
-                + mHolders.size()+" is held : "+mWakeLock.isHeld());
+                + mHolders.size());
     }
 }

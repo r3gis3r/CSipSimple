@@ -328,8 +328,8 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.call_hangup(call_id, code, pj_str_t.getCPtr(reason), reason, SWIGTYPE_p_pjsua_msg_data.getCPtr(msg_data));
   }
 
-  public synchronized static int call_process_redirect(int call_id, SWIGTYPE_p_pjsip_redirect_op cmd) {
-    return pjsuaJNI.call_process_redirect(call_id, SWIGTYPE_p_pjsip_redirect_op.getCPtr(cmd));
+  public synchronized static int call_process_redirect(int call_id, pjsip_redirect_op cmd) {
+    return pjsuaJNI.call_process_redirect(call_id, cmd.swigValue());
   }
 
   public synchronized static int call_set_hold(int call_id, SWIGTYPE_p_pjsua_msg_data msg_data) {
