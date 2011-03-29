@@ -215,19 +215,19 @@ public class ConversationList extends ListActivity {
         } else {
             ConversationListItemViews tag = (ConversationListItemViews) v.getTag();
             if (tag.from.equals("SELF")) {
-                openThread(tag.to);
+                openThread(tag.to, tag.fromFull);
             } else {
-                openThread(tag.from);
+                openThread(tag.from, tag.fromFull);
             }
         }
     }
 
     private void createNewMessage() {
-        startActivity(ComposeMessageActivity.createIntent(this, null));
+        startActivity(ComposeMessageActivity.createIntent(this, null, null));
     }
 
-    private void openThread(String from) {
-        startActivity(ComposeMessageActivity.createIntent(this, from));
+    private void openThread(String from, String fromFull) {
+        startActivity(ComposeMessageActivity.createIntent(this, from, fromFull));
     }
     
     private void confirmDeleteThread(final String from) {
@@ -276,6 +276,7 @@ public class ConversationList extends ListActivity {
         Cursor cursor = ((CursorAdapter) getListAdapter()).getCursor();
         if (cursor != null && cursor.getPosition() >= 0) {
             String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
+            String fromFull = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
             
             if (number.equals("SELF")) {
                 number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
@@ -287,7 +288,7 @@ public class ConversationList extends ListActivity {
                 break;
             }
             case MENU_VIEW: {
-                openThread(number);
+                openThread(number, fromFull);
                 break;
             }
             /*
@@ -319,6 +320,7 @@ public class ConversationList extends ListActivity {
 		TextView dateView;
 		TextView subjectView;
 		String from;
+		String fromFull;
 		String to;
 	}
     
@@ -338,6 +340,7 @@ public class ConversationList extends ListActivity {
 		public void bindView(View view, Context context, Cursor cursor) {
 			final ConversationListItemViews tagView = (ConversationListItemViews) view.getTag();
 			String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
+			String fromFull = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
 			String to_number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
 			int read = cursor.getInt(cursor.getColumnIndex(SipMessage.FIELD_READ));
 			long date = cursor.getLong(cursor.getColumnIndex(SipMessage.FIELD_DATE));
@@ -358,6 +361,7 @@ public class ConversationList extends ListActivity {
 			
 			//From
 			tagView.from = number;
+			tagView.fromFull = fromFull;
 			tagView.to = to_number;
 			tagView.fromView.setText(formatMessage(cursor));
 
@@ -390,7 +394,8 @@ public class ConversationList extends ListActivity {
 				remoteContact = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
 				buf.append("To: ");
 			}
-                buf.append(SipUri.getDisplayedSimpleContact(remoteContact));
+			String remoteContactFull = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
+            buf.append(SipUri.getDisplayedSimpleContact(remoteContactFull));
 	        
 	        int counter = cursor.getInt(cursor.getColumnIndex("counter"));
 	        if (counter > 1) {

@@ -209,7 +209,7 @@ public class SipService extends Service {
 		 * Send SMS using
 		 */
 		@Override
-		public void sendMessage(String message, String callee,int accountId)throws RemoteException {
+		public void sendMessage(String message, String callee, int accountId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
@@ -222,7 +222,7 @@ public class SipService extends Service {
 				SipMessage msg = new SipMessage(SipMessage.SELF, 
 						SipUri.getCanonicalSipContact(callee), SipUri.getCanonicalSipContact(called.getCallee()), 
 						message, "text/plain", System.currentTimeMillis(), 
-						SipMessage.MESSAGE_TYPE_QUEUED);
+						SipMessage.MESSAGE_TYPE_QUEUED, called.getCallee());
 				msg.setRead(true);
 				synchronized (db) {
 					db.open();

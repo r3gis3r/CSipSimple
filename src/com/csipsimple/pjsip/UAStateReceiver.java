@@ -187,7 +187,8 @@ public class UAStateReceiver extends Callback {
 			Log.d(THIS_FILE, "EMPTY CONTACT !!!");
 		}
 		
-		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contactString, body.getPtr(), mime_type.getPtr(), date, SipMessage.MESSAGE_TYPE_INBOX);
+		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contactString, body.getPtr(), mime_type.getPtr(), 
+				date, SipMessage.MESSAGE_TYPE_INBOX, from.getPtr());
 		
 		//Insert the message to the DB 
 		DBAdapter database = new DBAdapter(pjService.service);

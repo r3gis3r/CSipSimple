@@ -68,6 +68,7 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 	private String remoteFrom;
 	private ListView messageList;
 	private TextView fromText;
+	private TextView fullFromText;
 	private EditText bodyInput;
 	private AccountChooserButton accountChooserButton;
 	private Button sendButton;
@@ -86,7 +87,8 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
         Log.d(THIS_FILE, "Creating compose message");
         
         messageList = (ListView) findViewById(R.id.history);
-        fromText = (TextView) findViewById(R.id.subject);
+        fullFromText = (TextView) findViewById(R.id.subject);
+        fromText = (TextView) findViewById(R.id.subjectLabel);
         bodyInput = (EditText) findViewById(R.id.embedded_text_editor);
         accountChooserButton = (AccountChooserButton) findViewById(R.id.accountChooserButton);
         sendButton = (Button) findViewById(R.id.send_button);
@@ -129,7 +131,15 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 		
 
         bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
-        setFromField(getIntent().getStringExtra(SipMessage.FIELD_FROM));
+        
+        Intent intent = getIntent();
+        String from = intent.getStringExtra(SipMessage.FIELD_FROM);
+		String fullForm = intent.getStringExtra(SipMessage.FIELD_FROM_FULL);
+		if(fullForm == null) {
+			fullForm = from;
+		}
+		setFromField(from, fullForm);
+		
         if(remoteFrom == null) {
 			chooseSipUri();
 		}
@@ -177,7 +187,12 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		setIntent(intent);
-		setFromField(intent.getStringExtra(SipMessage.FIELD_FROM));
+		String from = intent.getStringExtra(SipMessage.FIELD_FROM);
+		String fullForm = intent.getStringExtra(SipMessage.FIELD_FROM_FULL);
+		if(fullForm == null) {
+			fullForm = from;
+		}
+		setFromField(from, fullForm);
 		if(remoteFrom == null) {
 			chooseSipUri();
 		}
@@ -189,7 +204,8 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 		switch (requestCode) {
 		case PICKUP_SIP_URI:
 			if(resultCode == RESULT_OK) {
-				setFromField(data.getStringExtra(Intent.EXTRA_PHONE_NUMBER));
+				String from = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
+				setFromField(from, from);
 			}
 			if(remoteFrom == null) {
 				finish();
@@ -236,21 +252,23 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 		accountChooserButton.updateRegistration(canChangeIfValid);
 	}
 	
-    public static Intent createIntent(Context context, String from) {
+    public static Intent createIntent(Context context, String from, String fromFull) {
         Intent intent = new Intent(context, ComposeMessageActivity.class);
 
         if (from != null) {
             intent.putExtra(SipMessage.FIELD_FROM, from);
+            intent.putExtra(SipMessage.FIELD_FROM_FULL, fromFull);
         }
 
         return intent;
    }
     
-    private void setFromField(String from) {
+    private void setFromField(String from, String fullFrom) {
     	if(from != null) {
     		if(remoteFrom != from) {
     			remoteFrom = from;
     			fromText.setText(remoteFrom);
+    			fullFromText.setText(SipUri.getDisplayedSimpleContact(fullFrom));
     			loadMessageContent();
     			notifications.setViewingMessageFrom(remoteFrom);
     		}
@@ -275,6 +293,9 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 		public void bindView(View view, Context context, Cursor cursor) {
 			final MessageListItemViews tagView = (MessageListItemViews) view.getTag();
 			String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
+			if(! number.equalsIgnoreCase(SipMessage.SELF)) {
+				number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
+			}
 			long date = cursor.getLong(cursor.getColumnIndex(SipMessage.FIELD_DATE));
 			String subject = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_BODY));
 			String mimeType = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_MIME_TYPE));

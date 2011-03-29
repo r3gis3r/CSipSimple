@@ -1051,7 +1051,12 @@ public class PjSipService {
 	}
 
 	// TO call utils
-
+	/**
+	 * Transform a string callee into a valid sip uri in the context of an account
+	 * @param callee the callee string to call
+	 * @param accountId the context account
+	 * @return ToCall object representing what to call and using which account
+	 */
 	private ToCall sanitizeSipUri(String callee, int accountId) {
 		// accountId is the id in term of csipsimple database
 		// pjsipAccountId is the account id in term of pjsip adding

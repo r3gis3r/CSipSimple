@@ -17,6 +17,8 @@
  */
 package com.csipsimple.models;
 
+import com.csipsimple.api.SipUri;
+
 import android.content.ContentValues;
 
 public class SipMessage {
@@ -31,6 +33,7 @@ public class SipMessage {
 	public static String FIELD_DATE = "date";
 	public static String FIELD_STATUS = "status";
 	public static String FIELD_READ = "read";
+	public static String FIELD_FROM_FULL = "full_sender";
 	
 	
     public static final int MESSAGE_TYPE_INBOX  = 1;
@@ -54,6 +57,7 @@ public class SipMessage {
 	+") )";
 	
 	private String from;
+	private String full_from;
 	private String to;
 	private String contact;
 	private String body;
@@ -63,7 +67,7 @@ public class SipMessage {
 	private int status = STATUS_NONE;
 	private boolean read = false;
 	
-	public SipMessage(String aForm, String aTo, String aContact, String aBody, String aMimeType, long aDate, int aType) {
+	public SipMessage(String aForm, String aTo, String aContact, String aBody, String aMimeType, long aDate, int aType, String aFullFrom) {
 		from = aForm;
 		to = aTo;
 		contact = aContact;
@@ -71,6 +75,7 @@ public class SipMessage {
 		mime_type = aMimeType;
 		date = aDate;
 		type = aType;
+		full_from = aFullFrom;
 	}
 	
 	public SipMessage(ContentValues cv) {
@@ -83,6 +88,7 @@ public class SipMessage {
 		type = cv.getAsInteger(FIELD_TYPE);
 		status = cv.getAsInteger(FIELD_STATUS);
 		read = cv.getAsBoolean(FIELD_READ);
+		full_from = cv.getAsString(FIELD_FROM_FULL);
 	}
 	
 	
@@ -97,6 +103,7 @@ public class SipMessage {
 		cv.put(FIELD_DATE, date);
 		cv.put(FIELD_STATUS, status);
 		cv.put(FIELD_READ, read);
+		cv.put(FIELD_FROM_FULL, full_from);
 		return cv;
 	}
 
@@ -117,5 +124,8 @@ public class SipMessage {
 		
 	}
 	
+	public String getDisplayName() {
+		return SipUri.getDisplayedSimpleContact(full_from);
+	}
 	
 }
