@@ -52,6 +52,7 @@ public class Ip2Mobile extends SimpleImplementation {
 		// Add stun server
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
 		prefs.addStunServer("stun.sip2mobile.dk");
+		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
 	}
 	
 	@Override

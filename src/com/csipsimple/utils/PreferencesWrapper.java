@@ -132,7 +132,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.ENABLE_STUN, false);
 		put(SipConfigManager.ENABLE_QOS, false);
 		put(SipConfigManager.TLS_VERIFY_SERVER, false);
-		put(SipConfigManager.USE_COMPACT_FORM, true);
+		put(SipConfigManager.USE_COMPACT_FORM, false);
 		put("use_wifi_in", true);
 		put("use_wifi_out", true);
 		put("use_other_in", true);

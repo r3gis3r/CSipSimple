@@ -113,6 +113,7 @@ public class Ippi extends SimpleImplementation {
 		// Add stun server
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_ICE, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
 		prefs.addStunServer("stun.ippi.fr");
 	}
 	

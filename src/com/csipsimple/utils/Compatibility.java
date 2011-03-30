@@ -218,7 +218,8 @@ public class Compatibility {
 		if(isCompatible(9)) {
 			return false;
 		}
-		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000")) {
+		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000") ||
+				android.os.Build.DEVICE.toUpperCase().startsWith("GT-P1000") ) {
 			return true;
 		}
 		return false;
@@ -476,9 +477,6 @@ public class Compatibility {
 		}
 		if(lastSeenVersion < 704) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(prefWrapper));
-		}
-		if(lastSeenVersion < 755) {
-			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
 		}
 	}
 
