@@ -58,6 +58,7 @@
 		<!-- Help -->
 		<activity android:name="com.csipsimple.ui.help.Help" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
 		<activity android:name="com.csipsimple.ui.help.Faq" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
+		<activity android:name="com.csipsimple.ui.help.Legal" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
 		
 		<!-- Accounts -->
 		<activity android:name="com.csipsimple.ui.AccountsList" android:label="@string/accounts" android:configChanges="orientation"/>

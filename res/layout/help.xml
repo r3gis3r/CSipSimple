@@ -55,5 +55,22 @@
 			android:layout_gravity="center"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/record_logs_text"></TextView>
 	</LinearLayout>
-	
+	<ImageView android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:scaleType="fitXY"
+		android:gravity="fill_horizontal" android:src="@drawable/divider_horizontal_dark" />
+	<LinearLayout android:id="@+id/legal_line" 
+		android:background="@android:drawable/list_selector_background"
+		android:clickable="true" android:focusable="true" android:orientation="horizontal"
+	    android:layout_height="?android:attr/listPreferredItemHeight" 
+	    android:layout_width="fill_parent">
+		<ImageView 
+			android:src="@android:drawable/ic_menu_gallery"
+			android:layout_gravity="center"
+			android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
+		<TextView android:text="@string/legal_information" 
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:layout_gravity="center"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	</LinearLayout>
 </LinearLayout>
