@@ -18,6 +18,9 @@
 package com.csipsimple.ui.messages;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -281,6 +284,9 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 		TextView errorView;
 		ImageView deliveredIndicator;
 	}
+	
+	private static SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm:ss");
+
     
 	class MessagesCursorAdapter extends ResourceCursorAdapter {
 
@@ -302,10 +308,15 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 			int type = cursor.getInt(cursor.getColumnIndex(SipMessage.FIELD_TYPE));
 			int status = cursor.getInt(cursor.getColumnIndex(SipMessage.FIELD_STATUS));
 			
-			int flags = DateUtils.FORMAT_ABBREV_RELATIVE;
-			String timestamp = (String) DateUtils.getRelativeTimeSpanString(date, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS, flags);
-			
-			
+			String timestamp = "";
+			if( System.currentTimeMillis() - date > 1000 * 60 * 60 * 24 ) {
+				// If it was recieved one day ago or more display relative timestamp - SMS like behavior
+				int flags = DateUtils.FORMAT_ABBREV_RELATIVE;
+				timestamp = (String) DateUtils.getRelativeTimeSpanString(date, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS, flags);
+			}else {
+				// If it has been recieved recently show time of reception - IM like behavior
+				timestamp = dateFormatter.format(new Date(date));
+			}
 	        
 			
 	        //Delivery state
@@ -370,7 +381,10 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 			}else {
 				formatedContact = SipUri.getDisplayedSimpleContact(contact);
 			}
-			SpannableStringBuilder buf = new SpannableStringBuilder(TextUtils.replace(template, 
+			SpannableStringBuilder buf = new SpannableStringBuilder();
+			
+			
+			buf.append(TextUtils.replace(template, 
 					new String[] { "%s" }, 
 					new CharSequence[] { formatedContact }));
 

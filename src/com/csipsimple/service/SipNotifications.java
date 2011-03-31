@@ -146,11 +146,11 @@ public class SipNotifications {
 		}
 		//CharSequence tickerText = context.getText(R.string.instance_message);
 		if(!msg.getFrom().equalsIgnoreCase(viewingRemoteFrom)) {
-			String from = SipUri.getDisplayedSimpleContact(msg.getFrom());
+			String from = msg.getDisplayName();
 			CharSequence tickerText = buildTickerMessage(context, from, msg.getBody());
 			
 			if(messageNotification == null) {
-				messageNotification = new Notification(SipUri.isPhoneNumber(from)?R.drawable.stat_notify_sms: android.R.drawable.stat_notify_chat, tickerText, System.currentTimeMillis());
+				messageNotification = new Notification(SipUri.isPhoneNumber(from) ? R.drawable.stat_notify_sms: android.R.drawable.stat_notify_chat, tickerText, System.currentTimeMillis());
 				messageNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 				messageNotification.defaults |= Notification.DEFAULT_SOUND;
 				messageNotification.defaults |= Notification.DEFAULT_LIGHTS;
