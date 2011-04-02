@@ -460,7 +460,7 @@ public class SipProfile implements Parcelable {
 		ParsedSipUriInfos parsedInfo = null;
 		if(!TextUtils.isEmpty(reg_uri)) {
 			parsedInfo = SipUri.parseSipUri(reg_uri);
-		}else if(proxies.length > 0) {
+		}else if(proxies != null && proxies.length > 0) {
 			parsedInfo = SipUri.parseSipUri(proxies[0]);
 		}
 		
