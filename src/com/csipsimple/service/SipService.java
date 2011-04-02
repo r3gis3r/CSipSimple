@@ -1341,7 +1341,8 @@ public class SipService extends Service {
 	}
 	
 	public boolean shouldAutoAnswer(String remContact, SipProfile acc) {
-		
+
+		Log.d(THIS_FILE, "Search if should I auto answer for " + remContact);
 		boolean shouldAutoAnswer = false;
 		
 		if(autoAcceptCurrent) {
@@ -1357,10 +1358,13 @@ public class SipService extends Service {
 			if (m.matches()) {
 				number = m.group(2);
 			}
-			Log.w(THIS_FILE, "Search if should auto answer : "+number);
+			Log.w(THIS_FILE, "Search if should auto answer : " + number);
 			synchronized (db) {
 				shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, db);
 			}
+		}else {
+			Log.d(THIS_FILE, "Oupps... that come from an unknown account...");
+			//TODO : add an option to auto hangup if unknown account
 		}
 		return shouldAutoAnswer;
 	}
@@ -1462,6 +1466,7 @@ public class SipService extends Service {
             	return;
             }
 			long firstTime = SystemClock.elapsedRealtime() + interval * 1000;
+			Log.d(THIS_FILE, "KA -> next in "+ firstTime + " vs "+SystemClock.elapsedRealtime());
 			alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, pendingIntent);
         }
 		

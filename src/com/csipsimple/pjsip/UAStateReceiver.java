@@ -489,13 +489,37 @@ public class UAStateReceiver extends Callback {
 					broadCastAndroidCallState("RINGING", callInfo.getRemoteContact());
 					break;
 				case SipCallSession.InvState.EARLY:
-					broadCastAndroidCallState("OFFHOOK", callInfo.getRemoteContact());
-					break;
+				case SipCallSession.InvState.CONNECTING :
 				case SipCallSession.InvState.CONFIRMED:
+					// As per issue #857 we should re-ensure notification + callHandler at each state
+					// cause we can miss some states due to the fact treatment of call state is threaded
+					// Anyway if we miss the call early + confirmed we do not need to show the UI.
+					notificationManager.showNotificationForCall(callInfo);
+					launchCallHandler(callInfo);
 					broadCastAndroidCallState("OFFHOOK", callInfo.getRemoteContact());
-					callInfo.callStart = System.currentTimeMillis();
+					
+					
+					if(pjService.mediaManager != null) {
+						pjService.mediaManager.stopRing();
+					}
+					if(incomingCallLock != null && incomingCallLock.isHeld()) {
+						incomingCallLock.release();
+					}
+					
+					// If state is confirmed and not already intialized
+					if(callState == SipCallSession.InvState.CONFIRMED && callInfo.callStart == 0) {
+						callInfo.callStart = System.currentTimeMillis();
+					}
 					break;
 				case SipCallSession.InvState.DISCONNECTED:
+					
+
+					if(pjService.mediaManager != null) {
+						pjService.mediaManager.stopRing();
+					}
+					if(incomingCallLock != null && incomingCallLock.isHeld()) {
+						incomingCallLock.release();
+					}
 					
 					Log.d(THIS_FILE, "Finish call2");
 					
