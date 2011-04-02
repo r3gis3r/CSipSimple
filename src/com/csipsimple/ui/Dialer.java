@@ -64,6 +64,7 @@ import com.csipsimple.R;
 import com.csipsimple.animation.Flip3dAnimation;
 import com.csipsimple.api.ISipConfiguration;
 import com.csipsimple.api.ISipService;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.OutgoingCall;
@@ -71,6 +72,7 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.Theme;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.AccountChooserButton;
@@ -231,7 +233,41 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		});
 		LinearLayout topField = (LinearLayout) sipTextUri.findViewById(R.id.topFieldText);
 		topField.addView(backFlip, 0);
+		Log.d(THIS_FILE, "create dialer");
+		
+		
+		applyTheme();
 	}
+
+
+	private void applyTheme() {
+		String theme = prefsWrapper.getPreferenceStringValue(SipConfigManager.THEME);
+		if(! TextUtils.isEmpty(theme)) {
+			new Theme(this, theme, new Theme.onLoadListener() {
+				@Override
+				public void onLoad(Theme t) {
+					
+					dialPad.applyTheme(t);
+					t.applyBackgroundDrawable(deleteButton, "btn_dial_delete");
+					t.applyBackgroundDrawable(dialButton, "btn_dial_action");
+					t.applyBackgroundDrawable(findViewById(R.id.vmButton), "btn_dial_action_left_normal");
+					
+					//Bg ... to be done
+					t.applyBackgroundDrawable(digitDialer, "dialpad_bg");
+					
+					
+					Drawable dAct = t.getDrawableResource("btn_dial_textfield_active");
+					Drawable dEmpt = t.getDrawableResource("btn_dial_textfield_normal");
+					if(dAct != null && dEmpt != null) {
+						digitsBackground = dAct;
+						digitsEmptyBackground = dEmpt;
+						afterTextChanged(digits.getText());
+					}
+				}
+			});
+		}
+	}
+
 
 	protected void updateRegistrations() {
 		Log.d(THIS_FILE, "Update chooser choice");
@@ -721,5 +757,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+	
+
 
 }

@@ -17,8 +17,15 @@
  */
 package com.csipsimple.ui.prefs;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import android.preference.ListPreference;
+
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.Theme;
 
 
 public class PrefsUI extends GenericPrefs {
@@ -35,15 +42,30 @@ public class PrefsUI extends GenericPrefs {
 		PreferencesWrapper pfw = new PreferencesWrapper(this);
 		if(!pfw.isAdvancedUser()) {
 			hidePreference(null, "advanced_ui");
-			hidePreference("android_integration", "gsm_integration_type");
+			hidePreference("android_integration", SipConfigManager.GSM_INTEGRATION_TYPE);
 			
 		}
+		
+		ListPreference lp = (ListPreference) findPreference(SipConfigManager.THEME);
+		HashMap<String, String> themes = Theme.getAvailableThemes(this);
+		
+		CharSequence[] entries = new CharSequence[themes.size()];
+		CharSequence[] values = new CharSequence[themes.size()];
+		int i = 0;
+		for( Entry<String, String> theme : themes.entrySet() ) {
+			entries[i] = theme.getKey();
+			values[i] = theme.getValue();
+			i++;
+		}
+		
+		lp.setEntries(entries);
+		lp.setEntryValues(values);
 	}
 	
 	
 	@Override
 	protected void updateDescriptions() {
-		// TODO Auto-generated method stub
+		// Nothing to do for now
 		
 	}
 

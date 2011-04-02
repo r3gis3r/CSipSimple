@@ -48,6 +48,7 @@ public final class SipManager {
 	//TODO : message sent?
 	public static final String ACTION_SIP_MESSAGE_STATUS = "com.csipsimple.service.MESSAGE_STATUS";
 	
+	public static final String ACTION_GET_DRAWABLES = "com.csipsimple.themes.GET_DRAWABLES";
 	
 	// EXTRAS
 	public static final String EXTRA_CALL_INFO = "call_info";

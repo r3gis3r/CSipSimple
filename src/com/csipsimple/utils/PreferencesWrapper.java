@@ -112,7 +112,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.DIAL_PRESS_VIBRATE_MODE, "0");
 		
 		put(SipConfigManager.DEFAULT_CALLER_ID, "");
-		
+		put(SipConfigManager.THEME, "");
 		
 	}};
 	

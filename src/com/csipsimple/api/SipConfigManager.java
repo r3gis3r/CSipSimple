@@ -45,15 +45,17 @@ public class SipConfigManager {
 	public static final String ECHO_MODE = "echo_mode";
 	public static final String SND_PTIME = "snd_ptime";
 	public static final String USE_SGS_CALL_HACK = "use_sgs_call_hack";
+	public static final String DTMF_MODE = "dtmf_mode";
+	public static final String USE_ROUTING_API = "use_routing_api";
+	public static final String USE_MODE_API = "use_mode_api";
+	public static final String SIP_AUDIO_MODE = "sip_audio_mode";
+	
 	
 	//UI
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
 	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
 	public static final String LOG_LEVEL = "log_level";
-	public static final String DTMF_MODE = "dtmf_mode";
-	public static final String USE_ROUTING_API = "use_routing_api";
-	public static final String USE_MODE_API = "use_mode_api";
-	public static final String SIP_AUDIO_MODE = "sip_audio_mode";
+	public static final String THEME = "selected_theme";
 	public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
 	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
 	public static final String GSM_INTEGRATION_TYPE = "gsm_integration_type";

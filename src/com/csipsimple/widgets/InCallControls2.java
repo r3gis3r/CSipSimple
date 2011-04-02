@@ -249,6 +249,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		}
 		
 		int state = currentCall.getCallState();
+		Log.d(THIS_FILE, "Mode is : "+state);
 		switch (state) {
 		case SipCallSession.InvState.INCOMING:
 			controlMode = MODE_LOCKER;

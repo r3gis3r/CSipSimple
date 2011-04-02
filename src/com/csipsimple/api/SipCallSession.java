@@ -320,6 +320,7 @@ public final class SipCallSession implements Parcelable {
 		case InvState.CALLING :
 		case InvState.INCOMING:
 		case InvState.EARLY:
+		case InvState.CONNECTING:
 			return true;
 		default : 
 			return false;

@@ -27,7 +27,7 @@
             android:soundEffectsEnabled="false"
             android:contentDescription="@string/description_image_button_one"
 		 />
-		<ImageButton android:id="@+id/button2" android:src="@drawable/dial_num_2" style="@style/DialPadButton" 
+		<ImageButton android:id="@+id/button2" android:src="@drawable/dial_num_2" style="@style/DialPadButton"
 			android:soundEffectsEnabled="false"
             android:contentDescription="@string/description_image_button_two"/>
 		<ImageButton android:id="@+id/button3" android:src="@drawable/dial_num_3" style="@style/DialPadButton"  

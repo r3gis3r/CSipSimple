@@ -196,6 +196,8 @@
 <string name="gsm_integration_type_desc">How the application uses your mobile phone (or not)</string>
 <string name="invert_proximity_sensor">Invert proximity sensor</string>
 <string name="invert_proximity_sensor_desc">May help on some devices when manufacturer inverted near and far</string>
+<string name="theme">Theme</string>
+<string name="theme_desc">Theme for the application</string>
 
 <!-- Fast settings -->
 <string name="android_integration">Integrate with Android</string>

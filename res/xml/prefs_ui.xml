@@ -32,6 +32,10 @@
 					android:summary="@string/gsm_integration_type_desc"
 					android:defaultValue="0"
 					android:entryValues="@array/gsm_integration_type_values" android:entries="@array/gsm_integration_type_choices"/>
+					
+		<ListPreference android:key="selected_theme"
+			android:title="@string/theme" android:summary="@string/theme_desc" 
+			android:defaultValue="" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/general_ui">
 		

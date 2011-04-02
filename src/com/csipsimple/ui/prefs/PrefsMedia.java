@@ -51,6 +51,10 @@ public class PrefsMedia extends GenericPrefs {
 			
 			hidePreference("audio_volume", "snd_mic_level");
 			hidePreference("audio_volume", "snd_speaker_level");
+			
+			hidePreference("audio_volume", "snd_bt_mic_level");
+			hidePreference("audio_volume", "snd_bt_speaker_level");
+			
 			hidePreference("audio_volume", "use_soft_volume");
 		//	hidePreference("audio_volume", "snd_stream_level");
 			

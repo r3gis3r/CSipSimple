@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.media.ToneGenerator;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -32,6 +34,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Log;
+import com.csipsimple.utils.Theme;
 
 public class Dialpad extends LinearLayout implements OnClickListener {
 
@@ -112,6 +116,27 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 	public void onClick(View v) {
 		int view_id = v.getId();
 		dispatchDialKeyEvent(view_id);
+		
+	}
+	
+
+	public void applyTheme(Theme t) {
+		Log.d("theme", "Theming in progress");
+		
+		for(int buttonId : digitsButtons.keySet()) {
+			Drawable pressed = t.getDrawableResource("btn_dial_pressed");
+			Drawable focused = t.getDrawableResource("btn_dial_selected");
+			Drawable normal = t.getDrawableResource("btn_dial_normal");
+			
+			if(pressed != null && focused != null && normal != null) {
+				StateListDrawable std = new StateListDrawable();
+				std.addState(new int[] {android.R.attr.state_pressed}, pressed);
+				std.addState(new int[] {android.R.attr.state_focused}, focused);
+				std.addState(new int[] {}, normal);
+				ImageButton b = (ImageButton) findViewById(buttonId);
+				b.setBackgroundDrawable(std);
+			}
+		}
 		
 	}
 
