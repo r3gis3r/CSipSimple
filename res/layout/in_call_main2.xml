@@ -89,9 +89,8 @@
 		android:layout_width="75dip" android:layout_height="fill_parent" />
 		
 	
-	<AbsoluteLayout android:id="@+id/callInfoPanel"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-	</AbsoluteLayout>
+	<FrameLayout android:id="@+id/callInfoPanel"
+		android:layout_width="fill_parent" android:layout_height="fill_parent" />
 	
 		
 	

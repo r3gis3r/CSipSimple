@@ -500,7 +500,9 @@ public class UAStateReceiver extends Callback {
 					
 					
 					if(pjService.mediaManager != null) {
-						pjService.mediaManager.stopRing();
+						if(callState == SipCallSession.InvState.CONFIRMED) {
+							pjService.mediaManager.stopRing();
+						}
 					}
 					if(incomingCallLock != null && incomingCallLock.isHeld()) {
 						incomingCallLock.release();

@@ -28,6 +28,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -52,7 +54,11 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.os.Vibrator;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.TextAppearanceSpan;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,7 +66,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -88,6 +93,7 @@ import com.csipsimple.widgets.ScreenLocker;
 
 public class InCallActivity2 extends Activity implements OnTriggerListener, OnDialKeyListener, SensorEventListener, com.csipsimple.widgets.SlidingTab.OnTriggerListener {
 	private static String THIS_FILE = "SIP CALL HANDLER";
+	private static final int DRAGGING_DELAY = 150;
 
 	private SipCallSession[] callsInfo = null;
 	private FrameLayout mainFrame;
@@ -559,37 +565,52 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			return;
 		}
 		
-		//Active call is the one that is currently the active call even if hold call
-		SipCallSession activeCallInfo = getActiveCallInfo(false);
 		//Current call is the call emphasis by the UI.
-		SipCallSession currentCallInfo = getActiveCallInfo(true);
+		SipCallSession mainCallInfo = null;
 		
-		boolean hasHoldCalls = false;
+		int mainsCalls = 0;
+		int heldsCalls = 0;
+		int heldIndex = 0;
+		int mainIndex = 0;
+		
 		//Add badges if necessary
 		for(SipCallSession  callInfo : callsInfo) {
 			Log.d(THIS_FILE, "We have a call "+callInfo.getCallId()+" / "+callInfo.getCallState());
-			if (!callInfo.isAfterEnded()) {
-				Log.d(THIS_FILE, "Check if not already a badge for that");
-				if(!hasBadgeForCall(callInfo)) {
-					Log.d(THIS_FILE, "Has to add badge for "+callInfo.getCallId());
-					addBadgeForCall(callInfo);
+			
+			if ( !callInfo.isAfterEnded() && !hasBadgeForCall(callInfo) ) {
+				Log.d(THIS_FILE, "Has to add badge for "+callInfo.getCallId());
+				addBadgeForCall(callInfo);
+			}
+			
+			if(callInfo.isLocalHeld()) {
+				heldsCalls ++;
+				if(mainCallInfo == null) {
+					mainCallInfo = callInfo;
 				}
-				if(callInfo.isLocalHeld()) {
-					hasHoldCalls = true;
-					Log.d(THIS_FILE, "Has one held call " + callInfo.getCallId());
+			}else {
+
+				if(mainCallInfo == null) {
+					mainCallInfo = callInfo;
+				}else if( mainCallInfo.isAfterEnded() ){
+					//Prefer current if mainCallInfo is ended
+					mainCallInfo = callInfo;
+				}
+				
+				if( ! callInfo.isAfterEnded()) {
+					mainsCalls ++;
 				}
 			}
 		}
 		
-		int heldIndex = 0;
-		int mainIndex = 0;
-
+		
 		int mainWidth = METRICS.widthPixels;
-		if(hasHoldCalls) {
+		if(heldsCalls > 0) {
 			//In this case available width for MAIN part is 2/3 of the view
 			mainWidth -= METRICS.widthPixels/3;
 		}
+		//this is not the good way to do that -- FIXME 
 		int mainHeight = METRICS.heightPixels * 7/15;
+		
 		
 		//Update each badges
 		ArrayList<InCallInfo2> badgesToRemove = new ArrayList<InCallInfo2>();
@@ -598,40 +619,54 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			InCallInfo2 badge = badgeSet.getValue();
 			if(callInfo != null) {
 				//Main call position / size should be done at the end
-				if(activeCallInfo == null || callInfo.getCallId() != activeCallInfo.getCallId() ) {
-					if (callInfo.isAfterEnded()) {
-						//The badge should be removed
-						badgesToRemove.add(badge);
-						
-					} else if (callInfo.isLocalHeld()) {
-						// The call is held
-						int y = MAIN_PADDING + heldIndex * (mainHeight/3 + MAIN_PADDING);
-						Rect wrap = new Rect(
-								mainWidth + HOLD_PADDING, 
-								y,
-								METRICS.widthPixels - HOLD_PADDING, 
-								y + mainHeight/3);
-						layoutBadge(wrap, badge);
-						heldIndex ++;
-						
-					} else {
+				if (callInfo.isAfterEnded() && mainsCalls > 0) {
+					//The badge should be removed
+					badgesToRemove.add(badge);
+					
+				} else if (callInfo.isLocalHeld()) {
+					// The call is held
+					int y = MAIN_PADDING + heldIndex * (mainHeight/3 + MAIN_PADDING);
+					Rect wrap = new Rect(
+							mainWidth + HOLD_PADDING, 
+							y,
+							METRICS.widthPixels - HOLD_PADDING, 
+							y + mainHeight/3);
+					layoutBadge(wrap, badge);
+					heldIndex ++;
+					
+				} else {
 
-						// The call is normal
-						int y = MAIN_PADDING + mainIndex * (mainHeight/3 + MAIN_PADDING);
-						Rect wrap = new Rect(
-								MAIN_PADDING, 
-								y,
-								mainWidth - MAIN_PADDING, 
-								y + mainHeight/3);
-						layoutBadge(wrap, badge);
-						mainIndex ++;
+					// The call is normal
+					int x = MAIN_PADDING;
+					int y = MAIN_PADDING;
+					int end_x = mainWidth - MAIN_PADDING;
+					int end_y = mainHeight - MAIN_PADDING;
+					if(mainsCalls > 1) {
+						// we split view in 4
+						if( (mainIndex % 2) == 0) {
+							//First column
+							end_x = mainWidth/2 - MAIN_PADDING;
+						}else {
+							//Second column
+							x = mainWidth/2 + MAIN_PADDING;
+						}
+						if( mainIndex < 2 ) {
+							end_y = mainHeight/2 - MAIN_PADDING;
+						}else {
+							y = mainHeight /2 + MAIN_PADDING;
+						}
 					}
+					Rect wrap = new Rect(
+							x, 
+							y,
+							end_x, 
+							end_y);
+					layoutBadge(wrap, badge);
+					mainIndex ++;
 				}
-				//Update badge state
-				badge.setCallState(callInfo);
-			}else {
-				//TO be done ? 
 			}
+			//Update badge state
+			badge.setCallState(callInfo);
 		}
 		
 		//Remove useless badges
@@ -643,27 +678,20 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			}
 		}
 		
-		if(currentCallInfo!= null) {
-			Log.d(THIS_FILE, "Current call is " + currentCallInfo.getCallId());
-			InCallInfo2 mainBadge = badges.get(currentCallInfo.getCallId());
-			if(mainBadge != null) {
-				Rect wrap = new Rect(
-						MAIN_PADDING, 
-						MAIN_PADDING + mainIndex * (mainHeight/3 + MAIN_PADDING),
-						mainWidth - MAIN_PADDING, 
-						mainHeight - MAIN_PADDING);
-				layoutBadge(wrap, mainBadge);
-			}
+		if(mainsCalls == 1) {
+			Log.d(THIS_FILE, "Current call is " + mainCallInfo.getCallId());
 			
 			//Update in call actions
-			inCallControls.setCallState(currentCallInfo);
+			inCallControls.setCallState(mainCallInfo);
 			inCallControls.setVisibility(View.VISIBLE);
+		}else {
+			inCallControls.setVisibility(View.GONE);
 		}
 		
-		if(activeCallInfo != null) {
-			Log.d(THIS_FILE, "Active call is "+activeCallInfo.getCallId());
-			Log.d(THIS_FILE, "Update ui from call " + activeCallInfo.getCallId() + " state " + CallsUtils.getStringCallState(activeCallInfo, this));
-			int state = activeCallInfo.getCallState();
+		if(mainCallInfo != null) {
+			Log.d(THIS_FILE, "Active call is "+mainCallInfo.getCallId());
+			Log.d(THIS_FILE, "Update ui from call " + mainCallInfo.getCallId() + " state " + CallsUtils.getStringCallState(mainCallInfo, this));
+			int state = mainCallInfo.getCallState();
 			
 			int backgroundResId = R.drawable.bg_in_call_gradient_unidentified;
 			
@@ -672,12 +700,16 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			case SipCallSession.InvState.INCOMING:
 			case SipCallSession.InvState.EARLY:
 			case SipCallSession.InvState.CALLING:
+			case SipCallSession.InvState.CONNECTING:
+				
 				Log.d(THIS_FILE, "Acquire wake up lock");
 				if(wakeLock != null && !wakeLock.isHeld()) {
 					wakeLock.acquire();
 				}
+				
+				
 				if(proximitySensor == null && proximityWakeLock == null) {
-					if(activeCallInfo.isIncoming()) {
+					if(mainCallInfo.isIncoming()) {
 						lockOverlay.hide();
 					}else {
 						lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
@@ -685,11 +717,13 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				}
 				
 				if(proximityWakeLock != null) {
-					if(activeCallInfo.isIncoming()) {
+					if(mainCallInfo.isIncoming()) {
+						// If call is incoming we do not use proximity sensor to allow to take call
 						if(proximityWakeLock.isHeld()) {
 							proximityWakeLock.release();
 						}
 					} else {
+						// Else we acquire wake lock
 						if(!proximityWakeLock.isHeld()) {
 							proximityWakeLock.acquire();
 						}
@@ -715,17 +749,15 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				
 				break;
 			case SipCallSession.InvState.NULL:
-				Log.i(THIS_FILE, "WTF?");
 			case SipCallSession.InvState.DISCONNECTED:
 				Log.d(THIS_FILE, "Active call session is disconnected or null wait for quit...");
+				// This will release locks
 				delayedQuit();
 				return;
-			case SipCallSession.InvState.CONNECTING:
 				
-				break;
 			}
 			
-			int mediaStatus = activeCallInfo.getMediaStatus();
+			int mediaStatus = mainCallInfo.getMediaStatus();
 			switch (mediaStatus) {
 			case SipCallSession.MediaState.ACTIVE:
 				break;
@@ -836,16 +868,18 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		badges.put(call.getCallId(), badge);
 	}
 	
-	//Use the deprecated way cause wants to remain compatible with older android versions
-	@SuppressWarnings("deprecation")
 	private void layoutBadge(Rect wrap, InCallInfo2 mainBadge) {
 		//Log.d(THIS_FILE, "Layout badge for "+wrap.width()+" x "+wrap.height()+ " +"+wrap.top+" + "+wrap.left);
 		//Set badge size
 		Rect r = mainBadge.setSize(wrap.width(), wrap.height());
 		//Reposition badge at the correct place
-		AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(
-				AbsoluteLayout.LayoutParams.WRAP_CONTENT,AbsoluteLayout.LayoutParams.WRAP_CONTENT,
-				Math.round( wrap.centerX() - 0.5f * r.width() ), Math.round(wrap.centerY() - 0.5f * r.height()));
+		FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+		lp.topMargin = Math.round(wrap.centerY() - 0.5f * r.height());
+		lp.leftMargin = Math.round(wrap.centerX() - 0.5f * r.width());
+		lp.gravity = Gravity.TOP | Gravity.LEFT;
+		Log.d(THIS_FILE, "Set margins : " + lp.topMargin + " , " + lp.leftMargin);
+		//		Math.round( wrap.centerX() - 0.5f * r.width() ), Math.round(wrap.centerY() - 0.5f * r.height()));
 		mainBadge.setLayoutParams(lp);
 	}
 	
@@ -965,7 +999,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	};
 
 
-	private boolean showDetails = true;
+	//private boolean showDetails = true;
 
 	private boolean isFirstRun = true;
 
@@ -1058,8 +1092,18 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				case DETAILED_DISPLAY:{
 					String infos = PjSipCalls.dumpCallInfo(call.getCallId());
 					Log.d(THIS_FILE, infos);
-			//		inCallInfo.switchDetailedInfo( showDetails );
-					showDetails = !showDetails;
+					SpannableStringBuilder buf = new SpannableStringBuilder();
+					Builder builder = new AlertDialog.Builder(this);
+					
+					buf.append(infos);
+					TextAppearanceSpan textSmallSpan = new TextAppearanceSpan(this, android.R.style.TextAppearance_Small);
+					buf.setSpan(textSmallSpan, 0, buf.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					
+					AlertDialog dialog = builder.setIcon(android.R.drawable.ic_dialog_info)
+						.setMessage(buf)
+						.setNeutralButton(R.string.ok, null)
+						.create();
+					dialog.show();
 					break;
 				}
 				case TOGGLE_HOLD:{
@@ -1217,7 +1261,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	        	draggingDelayTask = new SetDraggingTimerTask();
 	        	beginX = X;
 	        	beginY = Y;
-	        	draggingTimer.schedule(draggingDelayTask, 500);
+	        	draggingTimer.schedule(draggingDelayTask, DRAGGING_DELAY);
 	        case MotionEvent.ACTION_MOVE:
 	        	if(isDragging) {
 	        		float size = Math.max(75.0f, event.getSize() + 50.0f);
