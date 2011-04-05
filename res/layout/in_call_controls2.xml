@@ -33,7 +33,6 @@
 				android:layout_height="wrap_content" android:orientation="horizontal">
 				<Button android:id="@+id/addCallButton" style="@style/CallButton"
 					android:layout_width="1dip" android:layout_weight="1"
-					android:enabled="false"
 					android:layout_height="wrap_content" android:text="@string/add_call"
 					android:drawableTop="@drawable/ic_in_call_touch_add_call" />
 				<Button android:id="@+id/clearCallButton" style="@style/CallButton"

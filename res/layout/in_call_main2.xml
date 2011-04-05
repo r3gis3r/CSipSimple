@@ -88,10 +88,28 @@
 		
 		android:layout_width="75dip" android:layout_height="fill_parent" />
 		
+	<ImageView android:id="@+id/dropXfer" 
+		android:src="@drawable/ic_tab_selected_contacts" 
+		android:background="@drawable/grey_left_gradient"
+		android:scaleType="center"
+		android:visibility="gone" 
+		android:layout_marginRight="0dip"
+		android:layout_gravity="left|center_vertical"
+		
+		android:layout_width="75dip" android:layout_height="fill_parent" />
+		
+	<Button android:layout_height="wrap_content" android:layout_width="wrap_content" 
+		android:layout_gravity="center"
+		android:id="@+id/add_call_button" android:text="@string/add_call"
+		android:visibility="gone"
+		style="@style/CallButton"
+		android:layout_marginBottom="170dip" android:layout_marginRight="50dip"
+		android:drawableTop="@drawable/ic_in_call_touch_round_add_call"/>
+	
 	
 	<FrameLayout android:id="@+id/callInfoPanel"
 		android:layout_width="fill_parent" android:layout_height="fill_parent" />
-	
+
 		
 	
 	<com.csipsimple.widgets.ScreenLocker android:id="@+id/lockerOverlay"

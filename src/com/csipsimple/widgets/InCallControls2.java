@@ -44,7 +44,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	private static final String THIS_FILE = "InCallControls";
 	OnTriggerListener onTriggerListener;
 	private SlidingTab slidingTabWidget;
-	private Button clearCallButton, dialButton;
+	private Button clearCallButton, dialButton, addCallButton;
 	private ToggleButton bluetoothButton, speakerButton, muteButton;
 	private RelativeLayout inCallButtons;
 	private boolean isDialpadOn = false;
@@ -59,7 +59,6 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	private int controlMode;
 	private MediaState lastMediaState;
 	private SipCallSession currentCall;
-//	private ImageButton settingsButton;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -122,7 +121,14 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		 * When media settings is asked
 		 */
 		int MEDIA_SETTINGS = TOGGLE_HOLD + 1;
-		
+		/**
+		 * When add call is asked
+		 */
+		int ADD_CALL = MEDIA_SETTINGS + 1;
+		/**
+		 * When xfer to a number is asked
+		 */
+		int XFER_CALL = ADD_CALL + 1;
 
 		/**
 		 * Called when the user make an action
@@ -157,6 +163,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		alternateLockerWidget = (LinearLayout) findViewById(R.id.takeCallUnlockerAlternate);
 		inCallButtons = (RelativeLayout) findViewById(R.id.inCallButtons);
 
+		addCallButton = (Button) findViewById(R.id.addCallButton);
 		clearCallButton = (Button) findViewById(R.id.clearCallButton);
 		dialButton = (Button) findViewById(R.id.dialpadButton);
 		bluetoothButton = (ToggleButton) findViewById(R.id.bluetoothButton);
@@ -187,6 +194,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		muteButton.setOnClickListener(this);
 		takeCallButton.setOnClickListener(this);
 		declineCallButton.setOnClickListener(this);
+		addCallButton.setOnClickListener(this);
 	//	settingsButton.setOnClickListener(this);
 	}
 	
@@ -383,6 +391,9 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 			break;
 		case R.id.holdButton:
 			dispatchTriggerEvent(OnTriggerListener.TOGGLE_HOLD);
+			break;
+		case R.id.addCallButton:
+			dispatchTriggerEvent(OnTriggerListener.ADD_CALL);
 			break;
 	//	case R.id.settingsButton:
 	//		dispatchTriggerEvent(OnTriggerListener.MEDIA_SETTINGS);

@@ -52,7 +52,7 @@ public class InCallInfo2 extends ExtensibleBadge {
 	String cachedRemoteUri = "";
 	int cachedInvState = SipCallSession.InvState.INVALID;
 	int cachedMediaState = SipCallSession.MediaState.ERROR;
-	private ImageView photo;
+	private ImageView photo, callIcon;
 	private TextView remoteName, status ;//, title;
 	private Chronometer elapsedTime;
 	private int colorConnected, colorEnd;
@@ -83,6 +83,7 @@ public class InCallInfo2 extends ExtensibleBadge {
 //		title = (TextView) findViewById(R.id.title);
 		elapsedTime = (Chronometer) findViewById(R.id.elapsedTime);
 		status = (TextView) findViewById(R.id.card_status);
+		callIcon = (ImageView) findViewById(R.id.callStatusIcon);
 		
 		//secure = (ImageView) findViewById(R.id.secureIndicator);
 		
@@ -110,6 +111,9 @@ public class InCallInfo2 extends ExtensibleBadge {
 		updateTitle();
 		updateQuickActions();
 		updateElapsedTimer();
+		
+		
+		
 		
 		cachedInvState = callInfo.getCallState();
 		cachedMediaState = callInfo.getMediaStatus();
@@ -190,7 +194,26 @@ public class InCallInfo2 extends ExtensibleBadge {
 
 	
 	private synchronized void updateTitle() {
-	
+		//Useless to process that
+		if(cachedInvState == callInfo.getCallState() && 
+			cachedMediaState == callInfo.getMediaStatus()) {
+			return;
+		}
+		
+		int stateIcon = R.drawable.ic_incall_ongoing;
+		if(callInfo.isAfterEnded()) {
+			stateIcon = R.drawable.ic_incall_end;
+		}else if(callInfo.isLocalHeld() || callInfo.isRemoteHeld()) {
+			stateIcon = R.drawable.ic_incall_onhold;
+		}else if(callInfo.isBeforeConfirmed()) {
+			if(callInfo.isIncoming()) {
+			stateIcon = R.drawable.ic_call_log_header_incoming_call;
+			}else {
+				stateIcon = R.drawable.ic_call_log_header_outgoing_call;
+			}
+		}
+		callIcon.setImageResource(stateIcon);
+		
 		/*if(callInfo != null) {
 			title.setText(CallsUtils.getStringCallState(callInfo, context));
 		}else {

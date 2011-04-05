@@ -64,8 +64,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -77,6 +79,7 @@ import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.pjsip.PjSipCalls;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallsUtils;
@@ -135,16 +138,16 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	// Dnd views
 	private ImageView endCallTarget;
 	private Rect endCallTargetRect;
-	private ImageView holdTarget;
-	private Rect holdTargetRect;
-	private ImageView answerTarget;
-	private Rect answerTargetRect;
+	private ImageView holdTarget, answerTarget, xferTarget;
+	private Rect holdTargetRect, answerTargetRect, xferTargetRect;
+	private Button middleAddCall;
 	
 	
 
 	private static DisplayMetrics METRICS;
 	
-	private final static int PICKUP_SIP_URI = 0;
+	private final static int PICKUP_SIP_URI_XFER = 0;
+	private final static int PICKUP_SIP_URI_NEW_CALL = 1;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -186,6 +189,16 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		holdTarget.getBackground().setDither(true);
 		answerTarget = (ImageView) findViewById(R.id.dropAnswer);
 		answerTarget.getBackground().setDither(true);
+		xferTarget = (ImageView) findViewById(R.id.dropXfer);
+		xferTarget.getBackground().setDither(true);
+		
+		middleAddCall = (Button) findViewById(R.id.add_call_button);
+		middleAddCall.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				onTrigger(ADD_CALL, null);
+			}
+		});
 		
 		//Listen to media & sip events to update the UI
 		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
@@ -267,7 +280,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		endCallTargetRect = null;
 		holdTargetRect = null;
 		answerTargetRect = null;
-		
+		xferTargetRect = null;
 
         
         //If we should manage it ourselves
@@ -389,7 +402,8 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 						View.VISIBLE : View.GONE);
 				answerTarget.setVisibility(( di.call.isActive() && di.call.isBeforeConfirmed() && di.call.isIncoming() && di.isDragging) ? 
 						View.VISIBLE : View.GONE);
-				
+				xferTarget.setVisibility( ( !di.call.isBeforeConfirmed() && !di.call.isAfterEnded()  && di.isDragging ) ? 
+						View.VISIBLE : View.GONE); 
 				break;
 			default:
 				super.handleMessage(msg);
@@ -400,11 +414,12 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case PICKUP_SIP_URI:
+		case PICKUP_SIP_URI_XFER:
 			if(resultCode == RESULT_OK && service != null) {
 				String callee = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 				try {
-					SipCallSession currentCall = getActiveCallInfo(true);
+					// TODO : should get the call that was xfered in buffer first.
+					SipCallSession currentCall = getActiveCallInfo();
 					if(currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
 						service.xfer(currentCall.getCallId(), callee);
 					}
@@ -413,6 +428,18 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				}
 			}
 			return;
+		case PICKUP_SIP_URI_NEW_CALL:
+			if(resultCode == RESULT_OK && service != null) {
+				String callee = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
+				int accountId = data.getIntExtra(SipProfile.FIELD_ACC_ID, SipProfile.INVALID_ID);
+				if(accountId != SipProfile.INVALID_ID) {
+					try {
+						service.makeCall(callee, accountId);
+					} catch (RemoteException e) {
+						//TODO : toaster 
+					}
+				}
+			}
 		default:
 			break;
 		}
@@ -421,7 +448,6 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
 	public static final int AUDIO_SETTINGS_MENU = Menu.FIRST + 1;
 	public static final int RECORD_MENU = Menu.FIRST + 2;
-	public static final int XFER_MENU = Menu.FIRST + 3;
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -438,7 +464,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 					recItem.setEnabled(true);
 					valueOk = true;
 				}else {
-					SipCallSession currentCall = getActiveCallInfo(true);
+					SipCallSession currentCall = getActiveCallInfo();
 					if(currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
 						if(service.canRecord(currentCall.getCallId())) {
 							recItem.setTitle(R.string.record);
@@ -462,7 +488,6 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, AUDIO_SETTINGS_MENU, Menu.NONE, R.string.prefs_media).setIcon(R.drawable.ic_menu_media);
 		menu.add(Menu.NONE, RECORD_MENU, Menu.NONE, R.string.record).setIcon(R.drawable.record);
-		menu.add(Menu.NONE, XFER_MENU, Menu.NONE, R.string.xfer).setIcon(android.R.drawable.ic_menu_share);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -475,7 +500,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		case RECORD_MENU:
 			try {
 				if(service != null) {
-					SipCallSession currentCall = getActiveCallInfo(true);
+					SipCallSession currentCall = getActiveCallInfo();
 					if(currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
 						service.startRecording(currentCall.getCallId());
 					}
@@ -483,10 +508,6 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			} catch (RemoteException e) {
 				//TODO : toaster 
 			}
-			return true;
-		case XFER_MENU:
-			Intent pickupIntent = new Intent(this, PickupSipUri.class);
-			startActivityForResult(pickupIntent, PICKUP_SIP_URI);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -497,47 +518,13 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	 * @param excludeHold if true we do not return cals hold locally
 	 * @return
 	 */
-	private SipCallSession getActiveCallInfo(boolean excludeHold) {
+	private SipCallSession getActiveCallInfo() {
 		SipCallSession currentCallInfo = null;
 		if(callsInfo == null) {
 			return null;
 		}
 		for(SipCallSession callInfo : callsInfo) {
-			int state = callInfo.getCallState();
-			
-			boolean hasTopPriority = false;
-			switch (state) {
-			case SipCallSession.InvState.CALLING :
-			case SipCallSession.InvState.INCOMING:
-			case SipCallSession.InvState.EARLY:
-			//In these states call has topmost priority whatever other states
-				currentCallInfo = callInfo;
-				hasTopPriority = true;
-				break;
-			case SipCallSession.InvState.CONNECTING:
-			case SipCallSession.InvState.CONFIRMED:
-				if(!excludeHold) {
-					//If we have no current Call or if it's a lower priority call
-					if(currentCallInfo == null || currentCallInfo.isLocalHeld() || currentCallInfo.isAfterEnded() ) {
-						currentCallInfo = callInfo;
-					}
-				}else {
-					if( !callInfo.isLocalHeld() ) {
-						currentCallInfo = callInfo;
-					}
-				}
-				break;
-			default:
-				//Call is not prioritary
-				if( currentCallInfo == null ) {
-					currentCallInfo = callInfo;
-				}
-				break;
-			}
-			if(hasTopPriority) {
-				break;
-			}
-			
+			currentCallInfo = getPrioritaryCall(callInfo, currentCallInfo);
 		}
 		return currentCallInfo;
 	}
@@ -560,6 +547,29 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	private static final int HOLD_PADDING = 7;
 	
 	
+	private SipCallSession getPrioritaryCall(SipCallSession call1, SipCallSession call2) {
+		// We prefer the not null
+		if(call1 == null) {
+			return call1;
+		}else if(call2 == null) {
+			return call1;
+		}
+		// We prefer the one not terminated
+		if(call1.isAfterEnded()) {
+			return call2;
+		}else if(call2.isAfterEnded()) {
+			return call1;
+		}
+		// We prefer the one not held
+		if(call1.isLocalHeld()) {
+			return call2;
+		}else if(call2.isLocalHeld()) {
+			return call1;
+		}
+		// We prefer the most recent
+		return (call1.callStart > call2.callStart) ? call2 : call1;
+	}
+	
 	private synchronized void updateUIFromCall() {
 		if(!serviceConnected) {
 			return;
@@ -575,31 +585,22 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		
 		//Add badges if necessary
 		for(SipCallSession  callInfo : callsInfo) {
-			Log.d(THIS_FILE, "We have a call "+callInfo.getCallId()+" / "+callInfo.getCallState());
+			Log.d(THIS_FILE, "We have a call "+callInfo.getCallId()+" / "+callInfo.getCallState()+"/"+callInfo.getMediaStatus());
 			
 			if ( !callInfo.isAfterEnded() && !hasBadgeForCall(callInfo) ) {
 				Log.d(THIS_FILE, "Has to add badge for "+callInfo.getCallId());
 				addBadgeForCall(callInfo);
 			}
 			
-			if(callInfo.isLocalHeld()) {
-				heldsCalls ++;
-				if(mainCallInfo == null) {
-					mainCallInfo = callInfo;
-				}
-			}else {
-
-				if(mainCallInfo == null) {
-					mainCallInfo = callInfo;
-				}else if( mainCallInfo.isAfterEnded() ){
-					//Prefer current if mainCallInfo is ended
-					mainCallInfo = callInfo;
-				}
-				
-				if( ! callInfo.isAfterEnded()) {
+			if( ! callInfo.isAfterEnded()) {
+				if(callInfo.isLocalHeld()) {
+					heldsCalls ++;
+				}else {
 					mainsCalls ++;
 				}
 			}
+			
+			mainCallInfo = getPrioritaryCall(callInfo, mainCallInfo);
 		}
 		
 		
@@ -619,7 +620,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			InCallInfo2 badge = badgeSet.getValue();
 			if(callInfo != null) {
 				//Main call position / size should be done at the end
-				if (callInfo.isAfterEnded() && mainsCalls > 0) {
+				if (callInfo.isAfterEnded() && (mainsCalls + heldsCalls > 0) ) {
 					//The badge should be removed
 					badgesToRemove.add(badge);
 					
@@ -678,7 +679,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			}
 		}
 		
-		if(mainsCalls == 1) {
+		if( (mainsCalls == 1 || (mainsCalls == 0 && heldsCalls == 1) ) && mainCallInfo != null) {
 			Log.d(THIS_FILE, "Current call is " + mainCallInfo.getCallId());
 			
 			//Update in call actions
@@ -778,6 +779,16 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			mainFrame.setBackgroundResource(backgroundResId);
 			Log.d(THIS_FILE, "we leave the update ui function");
 		}
+		
+		if(mainsCalls == 0) {
+			middleAddCall.setVisibility(View.VISIBLE);
+		}else {
+			middleAddCall.setVisibility(View.GONE);
+		}
+		
+		if(heldsCalls + mainsCalls == 0) {
+			delayedQuit();
+		}
 	}
 	
 	
@@ -788,7 +799,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				mediaState = service.getCurrentMediaState();
 				Log.d(THIS_FILE, "Media update ....");
 				if(!mediaState.equals(lastMediaState)) {
-					SipCallSession callInfo = getActiveCallInfo(true);
+					SipCallSession callInfo = getActiveCallInfo();
 					lastMediaState = mediaState;
 					
 					if(callInfo != null) {
@@ -822,7 +833,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		//Update ui
 		lockOverlay.hide();
 		setDialpadVisibility(View.GONE);
-		
+		middleAddCall.setVisibility(View.GONE);
 		setCallBadgesVisibility(View.VISIBLE);
 		inCallControls.setVisibility(View.GONE);
 		mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
@@ -901,7 +912,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         	}
 
         	// Detect if ringing
-        	SipCallSession currentCallInfo = getActiveCallInfo(true);
+        	SipCallSession currentCallInfo = getActiveCallInfo();
     		//If not any active call active
     		if(currentCallInfo == null && serviceConnected) {
     			break;
@@ -1007,13 +1018,17 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	public void onTrigger(int whichAction, SipCallSession call) {
 		Log.d(THIS_FILE, "In Call Activity is triggered");
 		Log.d(THIS_FILE, "We have a current call : " + call);
-		if(call == null) {
-			Log.e(THIS_FILE, "Try to do an action on a null call !!!");
-			return;
-		}
-		if(call.getCallId() == SipCallSession.INVALID_CALL_ID) {
-			Log.e(THIS_FILE, "Try to do an action on an invalid call !!!");
-			return;
+		
+		if(whichAction != ADD_CALL) {
+			// We check that current call is valid for any actions
+			if(call == null) {
+				Log.e(THIS_FILE, "Try to do an action on a null call !!!");
+				return;
+			}
+			if(call.getCallId() == SipCallSession.INVALID_CALL_ID) {
+				Log.e(THIS_FILE, "Try to do an action on an invalid call !!!");
+				return;
+			}
 		}
 		
 		//Reset proximity sensor timer
@@ -1122,6 +1137,17 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 					startActivity(new Intent(this, InCallMediaControl.class));
 					break;
 				}
+				case XFER_CALL : {
+					Intent pickupIntent = new Intent(this, PickupSipUri.class);
+					startActivityForResult(pickupIntent, PICKUP_SIP_URI_XFER);
+					break;
+				}
+				
+				case ADD_CALL : {
+					Intent pickupIntent = new Intent(this, PickupSipUri.class);
+					startActivityForResult(pickupIntent, PICKUP_SIP_URI_NEW_CALL);
+					break;
+				}
 			}
 		} catch (RemoteException e) {
 			Log.e(THIS_FILE, "Was not able to call service method", e);
@@ -1136,7 +1162,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		}
 		
 		if (service != null) {
-			SipCallSession currentCall = getActiveCallInfo(true);
+			SipCallSession currentCall = getActiveCallInfo();
 			if(currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
 				try {
 					service.sendDtmf(currentCall.getCallId(), keyCode);
@@ -1206,7 +1232,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			break;
 		case RIGHT_HANDLE:
 			Log.d(THIS_FILE, "We clear the call");
-			onTrigger(OnTriggerListener.CLEAR_CALL, getActiveCallInfo(true));
+			onTrigger(OnTriggerListener.CLEAR_CALL, getActiveCallInfo());
 			lockOverlay.reset();
 		default:
 			break;
@@ -1273,6 +1299,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 							(int) (X + (size/2.0f) ), 
 							(int) (Y + (size/2.0f) ) );
 					layoutBadge(wrap, badge);
+					badge.bringToFront();
 		        	//Log.d(THIS_FILE, "Is moving to "+X+", "+Y);
 	        		return true;
 	        	}else {
@@ -1329,6 +1356,10 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		if(answerTargetRect == null && answerTarget.getVisibility() == View.VISIBLE) {
 			answerTargetRect = new Rect(answerTarget.getLeft(), answerTarget.getTop(), answerTarget.getRight(), answerTarget.getBottom());
 		}
+		if(xferTargetRect == null && xferTarget.getVisibility() == View.VISIBLE) {
+			xferTargetRect = new Rect(xferTarget.getLeft(), xferTarget.getTop(), xferTarget.getRight(), xferTarget.getBottom());
+		}
+		
 
 		//Rectangle matching
 		
@@ -1336,14 +1367,48 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			//Drop in end call zone
 			onTrigger(call.isIncoming() && call.isBeforeConfirmed() ? DECLINE_CALL : CLEAR_CALL, call);
 		}else if (holdTargetRect != null && holdTargetRect.contains(X, Y)) {
+			// check if not drop on held call
+			boolean dropOnOtherCall = false;
+			for( Entry<Integer, InCallInfo2> badgeSet : badges.entrySet()) {
+				Log.d(THIS_FILE, "On drop target searching for another badge");
+				int callId = badgeSet.getKey();
+				if(callId != call.getCallId()) {
+					Log.d(THIS_FILE, "found a different badge than self");
+					SipCallSession callInfo = getCallInfo(callId);
+					if(callInfo.isLocalHeld()) {
+						Log.d(THIS_FILE, "Other badge is hold");
+						InCallInfo2 otherBadge = badgeSet.getValue();
+						Rect r = new Rect( otherBadge.getLeft(), otherBadge.getTop(), otherBadge.getRight(), otherBadge.getBottom());
+						Log.d(THIS_FILE, "Current X, Y "+X+", "+Y+ " -- "+r.top+", "+r.left+", "+r.right+", "+r.bottom);
+						if(r.contains(X, Y)) {
+							Log.d(THIS_FILE, "Yep we've got one");
+							dropOnOtherCall = true;
+							if(service != null) {
+								try {
+									service.xferReplace(call.getCallId(), callId, 1);
+								} catch (RemoteException e) {
+									// TODO : toaster
+								}
+							}
+						}
+					}
+				}
+			}
+			
 			//Drop in hold zone
-			if (!call.isLocalHeld()) {
+			
+			if (!dropOnOtherCall && !call.isLocalHeld()) {
 				onTrigger(TOGGLE_HOLD, call);
 			}
 		} else if(answerTargetRect != null && answerTargetRect.contains(X, Y)){
 			if(call.isIncoming() && call.isBeforeConfirmed()) {
 				onTrigger(TAKE_CALL, call);
 			}
+		} else if(xferTargetRect != null && xferTargetRect.contains(X, Y)) {
+			if(!call.isBeforeConfirmed() && !call.isAfterEnded()) {
+				onTrigger(XFER_CALL, call);
+			}
+			
 		}else {
 			Log.d(THIS_FILE, "Drop is done somewhere else " + call.getMediaStatus());
 			//Drop somewhere else

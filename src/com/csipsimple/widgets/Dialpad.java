@@ -126,6 +126,9 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 		for(int buttonId : digitsButtons.keySet()) {
 			Drawable pressed = t.getDrawableResource("btn_dial_pressed");
 			Drawable focused = t.getDrawableResource("btn_dial_selected");
+			if(focused == null) {
+				focused = pressed;
+			}
 			Drawable normal = t.getDrawableResource("btn_dial_normal");
 			
 			if(pressed != null && focused != null && normal != null) {
