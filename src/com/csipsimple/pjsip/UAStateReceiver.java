@@ -45,6 +45,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
@@ -77,6 +78,10 @@ public class UAStateReceiver extends Callback {
 	private PjSipService pjService;
 //	private ComponentName remoteControlResponder;
 
+	// Time in ms during which we should not relaunch call activity again
+	final static long LAUNCH_TRIGGER_DELAY = 2000;
+	private long lastLaunchCallHandler = 0;
+	
 	
 	int eventLockCount = 0;
 	private void lockCpu(){
@@ -450,6 +455,7 @@ public class UAStateReceiver extends Callback {
 
 	private WakeLock eventLock;
 
+
 	private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
 	private static final int ON_MEDIA_STATE = 3;
@@ -735,15 +741,24 @@ public class UAStateReceiver extends Callback {
 	 * @param callInfo
 	 */
 	private synchronized void launchCallHandler(SipCallSession currentCallInfo2) {
+		long currentElapsedTime = SystemClock.elapsedRealtime();
 		
-		// Launch activity to choose what to do with this call
-		Intent callHandlerIntent = new Intent(SipManager.ACTION_SIP_CALL_UI); //new Intent(pjService, getInCallClass());
-		callHandlerIntent.putExtra(SipManager.EXTRA_CALL_INFO, currentCallInfo2);
-		callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP  );
-		
-		Log.d(THIS_FILE, "Anounce call activity");
-		pjService.service.startActivity(callHandlerIntent);
-
+		// Synchronized ensure we do not get this launched several time
+		// We also ensure that a minimum delay has been consumed so that we do not fire this too much times
+		// Specially for EARLY - CONNECTING states 
+		if(lastLaunchCallHandler + LAUNCH_TRIGGER_DELAY < currentElapsedTime) {
+			
+			// Launch activity to choose what to do with this call
+			Intent callHandlerIntent = new Intent(SipManager.ACTION_SIP_CALL_UI);
+			callHandlerIntent.putExtra(SipManager.EXTRA_CALL_INFO, currentCallInfo2);
+			callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP  );
+			
+			Log.d(THIS_FILE, "Anounce call activity");
+			pjService.service.startActivity(callHandlerIntent);
+			lastLaunchCallHandler = currentElapsedTime;
+		}else {
+			Log.d(THIS_FILE, "Ignore extra launch handler");
+		}
 	}
 
 	
