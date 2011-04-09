@@ -1279,6 +1279,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	        int X = (int)event.getRawX();
 	        int Y = (int)event.getRawY();
 	        
+	        // Reset the not proximity sensor lock overlay
+			lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
+	        
 	        switch ( action ) {
 	        case MotionEvent.ACTION_DOWN:
 	        	if(draggingDelayTask != null) {
