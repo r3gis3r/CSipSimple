@@ -66,7 +66,7 @@ public class SipNotifications {
 	//Announces
 
 	//Register
-	public synchronized void notifyRegisteredAccounts(ArrayList<SipProfileState> activeAccountsInfos) {
+	public synchronized void notifyRegisteredAccounts(ArrayList<SipProfileState> activeAccountsInfos, boolean showNumbers) {
 		int icon = R.drawable.sipok;
 		CharSequence tickerText = context.getString(R.string.service_ticker_registered_text);
 		long when = System.currentTimeMillis();
@@ -86,9 +86,11 @@ public class SipNotifications {
 		// contentText, contentIntent);
 		notification.contentIntent = contentIntent;
 		notification.contentView = contentView;
-		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-		// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
-
+		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR | Notification.FLAG_ONLY_ALERT_ONCE;
+		if(showNumbers) {
+			notification.number = activeAccountsInfos.size();
+		}
+		
 		notificationManager.notify(REGISTER_NOTIF_ID, notification);
 	}
 

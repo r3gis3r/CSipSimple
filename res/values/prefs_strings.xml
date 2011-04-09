@@ -198,7 +198,9 @@
 <string name="invert_proximity_sensor_desc">May help on some devices when manufacturer inverted near and far</string>
 <string name="theme">Theme</string>
 <string name="theme_desc">Theme for the application</string>
-
+<string name="display_icon_in_status_bar_nbr">Display number in status bar</string>
+<string name="display_icon_in_status_bar_nbr_desc">Display the number of registered accounts in status bar</string>
+    
 <!-- Fast settings -->
 <string name="android_integration">Integrate with Android</string>
 <string name="android_integration_desc">Integration with native dialer and call logs</string>

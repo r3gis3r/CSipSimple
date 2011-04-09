@@ -1425,12 +1425,12 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	
 	private class DraggingInfo {
 		public boolean isDragging = false;
-		public InCallInfo2 badge;
+//		public InCallInfo2 badge;
 		public SipCallSession call;
 		
 		public DraggingInfo(boolean aIsDragging, InCallInfo2 aBadge, SipCallSession aCall) {
 			isDragging = aIsDragging;
-			badge = aBadge;
+//			badge = aBadge;
 			call = aCall;
 		}
 	}

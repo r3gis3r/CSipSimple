@@ -160,6 +160,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.INVERT_PROXIMITY_SENSOR, false);
 		put(SipConfigManager.ICON_IN_STATUS_BAR, true);
 		put(SipConfigManager.USE_PARTIAL_WAKE_LOCK, false);
+		put(SipConfigManager.ICON_IN_STATUS_BAR_NBR, false);
 		
 		//Calls
 		put(SipConfigManager.AUTO_RECORD_CALLS, false);

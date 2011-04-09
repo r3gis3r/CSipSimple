@@ -1058,10 +1058,11 @@ public class SipService extends Service {
 		// Handle status bar notification
 		if (activeAccountsInfos.size() > 0 && prefsWrapper.showIconInStatusBar()) {
 		// Testing memory / CPU leak as per issue 676
-		//	for(int i=0; i < 200; i++) {
-				notificationManager.notifyRegisteredAccounts(activeAccountsInfos);
+		//	for(int i=0; i < 10; i++) {
+		//		Log.d(THIS_FILE, "Notify ...");
+				notificationManager.notifyRegisteredAccounts(activeAccountsInfos, prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR_NBR));
 		//		try {
-		//			Thread.sleep(1000);
+		//			Thread.sleep(6000);
 		//		} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 		//			e.printStackTrace();

@@ -94,6 +94,10 @@
 			android:key="icon_in_status_bar" 
 			android:title="@string/display_icon_in_status_bar" 
 			android:summary="@string/display_icon_in_status_bar_desc"/>
+		<CheckBoxPreference android:defaultValue="false" 
+			android:key="icon_in_status_bar_nbr" 
+			android:title="@string/display_icon_in_status_bar_nbr" 
+			android:summary="@string/display_icon_in_status_bar_nbr_desc"/>
 		
 		<EditTextPreference android:key="log_level"
 				android:title="@string/log_level"

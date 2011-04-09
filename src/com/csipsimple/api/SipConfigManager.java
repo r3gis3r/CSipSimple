@@ -57,6 +57,7 @@ public class SipConfigManager {
 	public static final String LOG_LEVEL = "log_level";
 	public static final String THEME = "selected_theme";
 	public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
+	public static final String ICON_IN_STATUS_BAR_NBR = "icon_in_status_bar_nbr";
 	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
 	public static final String GSM_INTEGRATION_TYPE = "gsm_integration_type";
 	public static final String DIAL_PRESS_TONE_MODE = "dial_press_tone_mode";
