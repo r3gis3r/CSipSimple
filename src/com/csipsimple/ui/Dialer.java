@@ -659,12 +659,17 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	
 
 	private void flipView(boolean forward) {
+		
 		if (forward && !isDigit) {
 			return;
 		}
 		if (!forward && isDigit) {
 			return;
 		}
+		
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(sipTextUri.getTextField().getWindowToken(), 0);
+
 
 		isDigit = !isDigit;
 		if(Compatibility.useFlipAnimation()) {
@@ -758,6 +763,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
+	
+
 
 
 }

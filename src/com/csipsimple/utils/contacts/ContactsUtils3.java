@@ -19,18 +19,52 @@ package com.csipsimple.utils.contacts;
 
 import java.util.ArrayList;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.database.MergeCursor;
+import android.database.MatrixCursor.RowBuilder;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.Contacts;
 import android.provider.Contacts.People;
+import android.telephony.PhoneNumberUtils;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
+import com.csipsimple.R;
 import com.csipsimple.utils.Log;
 
 @SuppressWarnings("deprecation")
 public class ContactsUtils3 extends ContactsWrapper {
+	
 
+    public static final int CONTACT_ID_INDEX = 1;
+    public static final int TYPE_INDEX       = 2;
+    public static final int NUMBER_INDEX     = 3;
+    public static final int LABEL_INDEX      = 4;
+    public static final int NAME_INDEX       = 5;
+	
+	 protected static final String PROJECTION_CONTACTS[] = {
+    	Contacts.People._ID,
+        Contacts.People.DISPLAY_NAME
+    };
+
+    private static final String[] PROJECTION_PHONE = {
+    	Contacts.Phones._ID,                  // 0
+    	Contacts.Phones.PERSON_ID,           // 1
+    	Contacts.Phones.TYPE,                 // 2
+    	Contacts.Phones.NUMBER,               // 3
+    	Contacts.Phones.LABEL,                // 4
+    	Contacts.Phones.DISPLAY_NAME,         // 5
+    };
+
+    private static final String SORT_ORDER = Contacts.Phones.DISPLAY_NAME + " ASC," + Contacts.Phones.TYPE;
+	 
 	@Override
 	public Bitmap getContactPhoto(Context ctxt, Uri uri, Integer defaultResource) {
 		Bitmap img = null;
@@ -59,5 +93,154 @@ public class ContactsUtils3 extends ContactsWrapper {
  		pCur.close();
  		return(phones);
  	}
+
+	@Override
+	public Cursor searchContact(Context ctxt, CharSequence constraint) {
+		String phone = "";
+        String cons = "";
+
+        if (constraint != null) {
+            cons = constraint.toString();
+
+            if (usefulAsDigits(cons)) {
+                phone = PhoneNumberUtils.convertKeypadLettersToDigits(cons);
+                if (phone.equals(cons)) {
+                    phone = "";
+                } else {
+                    phone = phone.trim();
+                }
+            }
+        }
+        
+        Uri uri = Uri.withAppendedPath(Contacts.Phones.CONTENT_URI, "");
+        /*
+         * if we decide to filter based on phone types use a selection
+         * like this.
+        String selection = String.format("%s=%s OR %s=%s OR %s=%s",
+                Phone.TYPE,
+                Phone.TYPE_MOBILE,
+                Phone.TYPE,
+                Phone.TYPE_WORK_MOBILE,
+                Phone.TYPE,
+                Phone.TYPE_MMS);
+         */
+        String selection = String.format("%s LIKE ? OR %s LIKE ?", Contacts.Phones.NUMBER, Contacts.Phones.DISPLAY_NAME);
+        Cursor phoneCursor =
+            ctxt.getContentResolver().query(uri,
+                    PROJECTION_PHONE,
+                    selection,
+                    new String[] {cons+"%", "%"+cons+"%"},
+                    SORT_ORDER);
+
+        if (phone.length() > 0) {
+
+            MatrixCursor translated = new MatrixCursor(PROJECTION_PHONE, 1 /*2*/);
+            
+            RowBuilder result = translated.newRow();
+            result.add(Integer.valueOf(-1));                    // ID
+            result.add(Long.valueOf(-1));                       // CONTACT_ID
+            result.add(Integer.valueOf(Contacts.Phones.TYPE_CUSTOM));     // TYPE
+            result.add(cons);                                  // NUMBER
+
+            result.add("\u00A0");                               // LABEL
+            result.add(cons);                                   // NAME
+            
+            //Rewriten as phone number
+            /*
+            result = translated.newRow();
+            result.add(Integer.valueOf(-1));                    // ID
+            result.add(Long.valueOf(-1));                       // CONTACT_ID
+            result.add(Integer.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM));     // TYPE
+            result.add(phone);                                  // NUMBER
+			*/
+            /*
+             * The "\u00A0" keeps Phone.getDisplayLabel() from deciding
+             * to display the default label ("Home") next to the transformation
+             * of the letters into numbers.
+             */
+            /*
+            result.add("\u00A0");                               // LABEL
+            result.add(cons);                                   // NAME
+			*/
+
+            return new MergeCursor(new Cursor[] { translated, phoneCursor });
+        } else {
+            return phoneCursor;
+        }
+	}
+
+	@Override
+	public CharSequence transformToSipUri(Context ctxt, Cursor cursor) {
+		String number = cursor.getString(NUMBER_INDEX);
+        if (number == null) {
+            return "";
+        }
+        number = number.trim();
+        return number;
+	}
+
+	@Override
+	public void bindAutoCompleteView(View view, Context context, Cursor cursor) {
+		TextView name = (TextView) view.findViewById(R.id.name);
+		name.setText(cursor.getString(NAME_INDEX));
+
+		TextView label = (TextView) view.findViewById(R.id.label);
+		int type = cursor.getInt(TYPE_INDEX);
+		CharSequence labelText = android.provider.Contacts.Phones.getDisplayLabel(context, type, cursor.getString(LABEL_INDEX));
+		// When there's no label, getDisplayLabel() returns a CharSequence of
+		// length==1 containing
+		// a unicode non-breaking space. Need to check for that and consider
+		// that as "no label".
+		if (labelText.length() == 0 || (labelText.length() == 1 && labelText.charAt(0) == '\u00A0')) {
+			label.setVisibility(View.GONE);
+		} else {
+			label.setText(labelText);
+			label.setVisibility(View.VISIBLE);
+		}
+
+		TextView number = (TextView) view.findViewById(R.id.number);
+		number.setText(cursor.getString(NUMBER_INDEX));
+	}
+
+	@Override
+	public SimpleCursorAdapter getAllContactsAdapter(Context ctxt, int layout, int[] holders) {
+		Uri uri = Uri.withAppendedPath(Contacts.People.CONTENT_URI, "");
+		Cursor resCursor = ctxt.getContentResolver().query(uri, PROJECTION_CONTACTS, null, null, Contacts.People.DISPLAY_NAME+ " ASC");
+		return new ContactCursorAdapter(ctxt, 
+				R.layout.contact_list_item, 
+				resCursor, 
+				new String[] { Contacts.People.DISPLAY_NAME }, 
+				new int[] {R.id.contact_name });
+	}
+	
+
+	private class ContactCursorAdapter extends SimpleCursorAdapter{
+
+		public ContactCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
+			super(context, layout, c, from, to);
+		}
+
+		@Override
+		public void bindView(View view, Context context, Cursor cursor) {
+			super.bindView(view, context, cursor);
+			Long contactId = cursor.getLong(cursor.getColumnIndex(Contacts.People._ID));
+			view.setTag(contactId);
+		    ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
+		    
+		    Uri uri = ContentUris.withAppendedId(Contacts.People.CONTENT_URI, contactId);
+		    Bitmap bitmap = getContactPhoto(context, uri, R.drawable.picture_unknown);
+		 
+		    imageView.setImageBitmap(bitmap);
+			
+		}
+
+		@Override
+		public View newView(Context context, Cursor cursor, ViewGroup parent) {
+			View v = super.newView(context, cursor, parent);
+			v.setTag(cursor.getInt(cursor.getColumnIndex(Contacts.People._ID)));
+			return v;
+		}
+		
+	}
 
 }

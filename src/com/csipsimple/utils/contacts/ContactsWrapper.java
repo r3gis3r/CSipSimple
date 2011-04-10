@@ -24,10 +24,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.telephony.PhoneNumberUtils;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.SimpleCursorAdapter;
 
 import com.csipsimple.R;
 import com.csipsimple.utils.Compatibility;
@@ -58,6 +61,10 @@ public abstract class ContactsWrapper {
 	
 	public abstract Bitmap getContactPhoto(Context ctxt, Uri uri, Integer defaultResource);
 	public abstract ArrayList<Phone> getPhoneNumbers(Context ctxt, String id);
+	public abstract Cursor searchContact(Context ctxt, CharSequence constraint);
+	public abstract CharSequence transformToSipUri(Context ctxt, Cursor cursor);
+	public abstract void bindAutoCompleteView(View view, Context context, Cursor cursor);
+	public abstract SimpleCursorAdapter getAllContactsAdapter(Context ctxt, int layout, int[] holders);
 	
 	public class Phone {
 		private String number;
@@ -89,7 +96,12 @@ public abstract class ContactsWrapper {
 		Uri contactUri = data.getData();
         List<String> list = contactUri.getPathSegments();
         String contactId = list.get(list.size() - 1);
-        ArrayList<Phone> phones = getPhoneNumbers(ctxt, contactId);
+        treatContactPickerPositiveResult(ctxt, contactId, l);
+	}
+	
+
+	public void treatContactPickerPositiveResult(final Context ctxt, final String contactId, final OnPhoneNumberSelected l) {
+		ArrayList<Phone> phones = getPhoneNumbers(ctxt, contactId);
         
         if(phones.size() == 0) {
 	        final AlertDialog.Builder builder = new AlertDialog.Builder(ctxt);
@@ -134,8 +146,7 @@ public abstract class ContactsWrapper {
         }
 	}
 	
-	private String formatNumber(String number, String type)
-	{
+	private String formatNumber(String number, String type) {
 	    if (type.equals("sip")) {
 	        return "sip:" + number;
 	    } else {
@@ -152,4 +163,52 @@ public abstract class ContactsWrapper {
 	public interface OnPhoneNumberSelected {
 		void onTrigger(String number);
 	}
+
+/*
+    public static String formatNameAndNumber(String name, String number) {
+        String formattedNumber = number;
+        if (SipUri.isPhoneNumber(number)) {
+            formattedNumber = PhoneNumberUtils.formatNumber(number);
+        }
+
+        if (!TextUtils.isEmpty(name) && !name.equals(number)) {
+            return name + " <" + formattedNumber + ">";
+        } else {
+            return formattedNumber;
+        }
+    }
+    */
+	
+	
+
+    /**
+     * Returns true if all the characters are meaningful as digits
+     * in a phone number -- letters, digits, and a few punctuation marks.
+     */
+    protected boolean usefulAsDigits(CharSequence cons) {
+        int len = cons.length();
+
+        for (int i = 0; i < len; i++) {
+            char c = cons.charAt(i);
+
+            if ((c >= '0') && (c <= '9')) {
+                continue;
+            }
+            if ((c == ' ') || (c == '-') || (c == '(') || (c == ')') || (c == '.') || (c == '+')
+                    || (c == '#') || (c == '*')) {
+                continue;
+            }
+            if ((c >= 'A') && (c <= 'Z')) {
+                continue;
+            }
+            if ((c >= 'a') && (c <= 'z')) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
 }

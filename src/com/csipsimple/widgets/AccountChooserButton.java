@@ -177,6 +177,11 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 	}
 
 	public SipProfile getSelectedAccount() {
+		if(account == null) {
+			SipProfile retAcc = new SipProfile();
+			retAcc.id = SipProfile.GSM_ACCOUNT_ID;
+			return retAcc;
+		}
 		return account;
 	}
 	

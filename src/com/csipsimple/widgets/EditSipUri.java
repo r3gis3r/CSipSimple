@@ -25,21 +25,36 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.ISipService;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.db.DBAdapter;
+import com.csipsimple.models.Filter;
+import com.csipsimple.utils.Log;
+import com.csipsimple.utils.contacts.ContactsSearchListAdapter;
+import com.csipsimple.utils.contacts.ContactsWrapper;
+import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.AccountChooserButton.OnAccountChangeListener;
 
-public class EditSipUri extends LinearLayout implements TextWatcher {
+public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClickListener {
 
 	protected static final String THIS_FILE = "EditSipUri";
-	private EditText dialUser;
+	private AutoCompleteTextView dialUser;
 	private AccountChooserButton accountChooserButtonText;
 	private TextView domainTextHelper;
+	private ListView completeList;
+	private SimpleCursorAdapter contactsAdapter;
+	private ContactsSearchListAdapter autoCompleteAdapter;
 	
 	
 	public EditSipUri(Context context, AttributeSet attrs) {
@@ -47,18 +62,33 @@ public class EditSipUri extends LinearLayout implements TextWatcher {
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.edit_sip_uri, this, true);
 		
-		dialUser = (EditText) findViewById(R.id.dialtxt_user);
+		dialUser = (AutoCompleteTextView) findViewById(R.id.dialtxt_user);
 		accountChooserButtonText = (AccountChooserButton) findViewById(R.id.accountChooserButtonText);
 		domainTextHelper = (TextView) findViewById(R.id.dialtxt_domain_helper);
+		completeList = (ListView) findViewById(R.id.autoCompleteList);
+		
+		autoCompleteAdapter = new ContactsSearchListAdapter(context);
 		
 		//Map events
 		accountChooserButtonText.setOnAccountChangeListener(new OnAccountChangeListener() {
 			@Override
 			public void onChooseAccount(SipProfile account) {
 				updateDialTextHelper();
+				int accId = SipProfile.INVALID_ID;
+				if(account != null) {
+					accId = account.id;
+				}
+				autoCompleteAdapter.setSelectedAccount(accId);
 			}
 		});
 		dialUser.addTextChangedListener(this);
+		
+		contactsAdapter =  ContactsWrapper.getInstance().getAllContactsAdapter(context, android.R.layout.two_line_list_item, new int[] {android.R.id.text1 });
+		completeList.setAdapter(contactsAdapter);
+		completeList.setOnItemClickListener(this);
+		
+		dialUser.setAdapter(autoCompleteAdapter);
+		
 	}
 	
 	public class ToCall {
@@ -143,7 +173,8 @@ public class EditSipUri extends LinearLayout implements TextWatcher {
 	@Override
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		updateDialTextHelper();
-
+		
+		//contactsAdapter.getFilter().filter(arg0);
 	}
 	
 	@Override
@@ -160,5 +191,23 @@ public class EditSipUri extends LinearLayout implements TextWatcher {
 		dialUser.getText().append(number);
 	}
 
-	
+	public EditText getTextField() {
+		return dialUser;
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> ad, View view, int position, long arg3) {
+		Long contactId = (Long) view.getTag();
+		ContactsWrapper.getInstance().treatContactPickerPositiveResult(getContext(), contactId.toString(), new OnPhoneNumberSelected() {
+			@Override
+			public void onTrigger(String number) {
+				SipProfile account = accountChooserButtonText.getSelectedAccount();
+				DBAdapter db = new DBAdapter(getContext());
+				String rewritten = Filter.rewritePhoneNumber(account, number.toString(), db);
+				setTextValue(rewritten);
+			}
+		});
+		Log.d(THIS_FILE, "Clicked contact "+contactId);
+	}
+
 }
