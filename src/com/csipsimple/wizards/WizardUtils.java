@@ -69,6 +69,7 @@ import com.csipsimple.wizards.impl.Pozitel;
 import com.csipsimple.wizards.impl.Sapo;
 import com.csipsimple.wizards.impl.Scarlet;
 import com.csipsimple.wizards.impl.Sip2Sip;
+import com.csipsimple.wizards.impl.SipCel;
 import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.Sipgate;
 import com.csipsimple.wizards.impl.SiptelPt;
@@ -203,9 +204,14 @@ public class WizardUtils {
 					new Locale[]{}, false, true, 
 					CamundaNet.class));
 			WIZARDS_DICT.put("BETAMAX", new WizardInfo("BETAMAX", "Betamax clone", 
-					R.drawable.ic_wizard_basic, 21, 
+					R.drawable.ic_wizard_basic, 30, 
 					new Locale[]{}, false, true, 
 					Betamax.class));
+			WIZARDS_DICT.put("SIPCEL", new WizardInfo("SIPCEL", "SIPCEL", 
+					R.drawable.ic_wizard_sipcel, 14, 
+					new Locale[]{}, false, true, 
+					SipCel.class));
+			
 			
 			//Locales
 			WIZARDS_DICT.put("CALLCENTRIC", new WizardInfo("CALLCENTRIC", "Callcentric", 
