@@ -19,6 +19,7 @@ package com.csipsimple.widgets;
 
 import java.util.regex.Pattern;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -83,7 +84,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 		});
 		dialUser.addTextChangedListener(this);
 		
-		contactsAdapter =  ContactsWrapper.getInstance().getAllContactsAdapter(context, android.R.layout.two_line_list_item, new int[] {android.R.id.text1 });
+		contactsAdapter =  ContactsWrapper.getInstance().getAllContactsAdapter((Activity)context, android.R.layout.two_line_list_item, new int[] {android.R.id.text1 });
 		completeList.setAdapter(contactsAdapter);
 		completeList.setOnItemClickListener(this);
 		
@@ -193,6 +194,10 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 
 	public EditText getTextField() {
 		return dialUser;
+	}
+	
+	public void setListVisibility(int visibility) {
+		completeList.setVisibility(visibility);
 	}
 
 	@Override

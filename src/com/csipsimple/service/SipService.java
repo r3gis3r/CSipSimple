@@ -835,7 +835,11 @@ public class SipService extends Service {
 			return;
 		}
 		
-		boolean directConnect = intent.getBooleanExtra(EXTRA_DIRECT_CONNECT, true);
+		
+		boolean directConnect = true;
+		if(intent != null) {
+			directConnect = intent.getBooleanExtra(EXTRA_DIRECT_CONNECT, true);
+		}
 		// Autostart the stack
 		// NOTE : the stack may also be autostarted cause of phoneConnectivityReceiver
 		if(pjService == null) {

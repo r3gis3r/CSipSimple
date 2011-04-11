@@ -44,6 +44,8 @@
 	<TextView android:id="@+id/dialtxt_domain_helper"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" 
 		android:gravity="right|center_vertical" android:paddingRight="10dip"/>
-	<ListView android:id="@+id/autoCompleteList" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+	<ListView android:id="@+id/autoCompleteList" 
+		android:fastScrollEnabled="true"
+		android:layout_width="fill_parent" android:layout_height="fill_parent" />
 	
 </LinearLayout>

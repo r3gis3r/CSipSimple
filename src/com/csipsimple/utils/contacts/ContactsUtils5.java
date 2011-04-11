@@ -20,26 +20,30 @@ package com.csipsimple.utils.contacts;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.MatrixCursor.RowBuilder;
-import android.database.MergeCursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.RawContacts;
 import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AlphabetIndexer;
 import android.widget.ImageView;
+import android.widget.SectionIndexer;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Compatibility;
 
 public class ContactsUtils5 extends ContactsWrapper {
 
@@ -57,13 +61,10 @@ public class ContactsUtils5 extends ContactsWrapper {
     	ContactsContract.CommonDataKinds.Phone.LABEL,                // 4
     	ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,         // 5
     };
-    protected static final String PROJECTION_CONTACTS[] = {
-    	Contacts._ID,
-        Contacts.DISPLAY_NAME
-    };
 
     private static final String SORT_ORDER = Contacts.TIMES_CONTACTED + " DESC,"
             + Contacts.DISPLAY_NAME + "," + ContactsContract.CommonDataKinds.Phone.TYPE;
+	private static final String GINGER_SIP_TYPE = "vnd.android.cursor.item/sip_address";
     
 
 	
@@ -116,6 +117,19 @@ public class ContactsUtils5 extends ContactsWrapper {
                 
         } 
         pCur.close();
+        
+        // Add any SIP uri if android 9
+        if(Compatibility.isCompatible(9)) {
+        	 pCur = ctxt.getContentResolver().query(
+                     ContactsContract.Data.CONTENT_URI, 
+                     null, 
+                     ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?",
+                     new String[]{id, GINGER_SIP_TYPE}, null);
+             while (pCur.moveToNext()) {
+                 // Could also use some other IM type but may be confusing. Are there phones with no 'custom' IM type?
+            	 phones.add(new Phone(pCur.getString(pCur.getColumnIndex(ContactsContract.Data.DATA1)), "sip"));
+             } 
+        }
 
  		return(phones);
  	}
@@ -140,6 +154,7 @@ public class ContactsUtils5 extends ContactsWrapper {
             }
         }
 
+        // TODO : filter more complex, see getAllContactsAdapter
         Uri uri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI, Uri.encode(cons));
         /*
          * if we decide to filter based on phone types use a selection
@@ -190,7 +205,8 @@ public class ContactsUtils5 extends ContactsWrapper {
             result.add(cons);                                   // NAME
 			*/
 
-            return new MergeCursor(new Cursor[] { translated, phoneCursor });
+            //return new MergeCursor(new Cursor[] { translated, phoneCursor });
+            return phoneCursor;
         } else {
             return phoneCursor;
         }
@@ -278,12 +294,35 @@ public class ContactsUtils5 extends ContactsWrapper {
 
 
 	@Override
-	public SimpleCursorAdapter getAllContactsAdapter(Context ctxt, int layout, int[] holders) {
+	public SimpleCursorAdapter getAllContactsAdapter(Activity ctxt, int layout, int[] holders) {
 		//TODO : throw error if holders length != correct length
 		
-		
-		Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI, "*");
-		Cursor resCursor = ctxt.getContentResolver().query(uri, PROJECTION_CONTACTS, null, null, Contacts.DISPLAY_NAME + " ASC");
+		Uri uri = Uri.withAppendedPath(ContactsContract.Data.CONTENT_URI, "");
+		Cursor resCursor = ctxt.getContentResolver().query(uri, 
+				new String[] {
+					ContactsContract.Data._ID,
+			    	RawContacts.CONTACT_ID,
+			        Contacts.DISPLAY_NAME
+			    },
+				Contacts.DISPLAY_NAME + " IS NOT NULL "
+					+" AND "
+					+ "("
+						// Has phone number
+						+ "("+ ContactsContract.Data.MIMETYPE+ "='"+ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE+"' AND "+ContactsContract.CommonDataKinds.Phone.NUMBER+" IS NOT NULL ) "
+						// Sip uri
+						+ (Compatibility.isCompatible(9)? " OR " + ContactsContract.Data.MIMETYPE+ "='"+GINGER_SIP_TYPE+"'":"")
+						//Sip IM custo
+						+ " OR ("
+							
+								+ ContactsContract.Data.MIMETYPE+ "='"+ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE+"' "
+								+" AND "+ ContactsContract.CommonDataKinds.Im.PROTOCOL + "=" + ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL
+								+" AND "+ ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL + "='sip'" 
+						+")"
+					+ ")"
+				+") GROUP BY ( "+RawContacts.CONTACT_ID
+					, 
+				null, 
+				Contacts.DISPLAY_NAME + " ASC");
 		return new ContactCursorAdapter(ctxt, 
 				R.layout.contact_list_item, 
 				resCursor, 
@@ -292,16 +331,19 @@ public class ContactsUtils5 extends ContactsWrapper {
 	}
 	
 	
-	private class ContactCursorAdapter extends SimpleCursorAdapter{
+	private class ContactCursorAdapter extends SimpleCursorAdapter implements SectionIndexer {
+
+		private AlphabetIndexer alphaIndexer;
 
 		public ContactCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
 			super(context, layout, c, from, to);
+			alphaIndexer=new AlphabetIndexer(c, c.getColumnIndex(Contacts.DISPLAY_NAME), " ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		}
 
 		@Override
 		public void bindView(View view, Context context, Cursor cursor) {
 			super.bindView(view, context, cursor);
-			Long contactId = cursor.getLong(cursor.getColumnIndex(Contacts._ID));
+			Long contactId = cursor.getLong(cursor.getColumnIndex(RawContacts.CONTACT_ID));
 			view.setTag(contactId);
 		    ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
 		    
@@ -315,8 +357,23 @@ public class ContactsUtils5 extends ContactsWrapper {
 		@Override
 		public View newView(Context context, Cursor cursor, ViewGroup parent) {
 			View v = super.newView(context, cursor, parent);
-			v.setTag(cursor.getInt(cursor.getColumnIndex(Contacts._ID)));
+			v.setTag(cursor.getInt(cursor.getColumnIndex(RawContacts.CONTACT_ID)));
 			return v;
+		}
+
+		@Override
+		public int getPositionForSection(int arg0) {
+			return alphaIndexer.getPositionForSection(arg0);
+		}
+
+		@Override
+		public int getSectionForPosition(int arg0) {
+			return alphaIndexer.getSectionForPosition(arg0);
+		}
+
+		@Override
+		public Object[] getSections() {
+			return alphaIndexer.getSections();
 		}
 		
 	}

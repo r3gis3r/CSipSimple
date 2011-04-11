@@ -187,10 +187,10 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		searchInContactRow = (LinearLayout) findViewById(R.id.search_contacts);
 		
 		
-		
 		isDigit = prefsWrapper.startIsDigit();
 		digitDialer.setVisibility(isDigit ? View.VISIBLE : View.GONE);
 		textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
+		sipTextUri.setListVisibility(isDigit ? View.GONE : View.VISIBLE);
 
 		dialPad.setOnDialKeyListener(this);
 		searchInContactRow.setOnClickListener(this);
@@ -209,8 +209,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		digitDialer.setOnTouchListener(touchTransmiter);
 		textDialer.setOnTouchListener(touchTransmiter);
 		
-		
-
 		dialFeedback = new DialingFeedback(this, false);
 
 		registrationReceiver = new BroadcastReceiver() {
@@ -234,6 +232,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		LinearLayout topField = (LinearLayout) sipTextUri.findViewById(R.id.topFieldText);
 		topField.addView(backFlip, 0);
 		Log.d(THIS_FILE, "create dialer");
+		
 		
 		
 		applyTheme();
@@ -679,6 +678,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			animation.setAnimationListener(new AnimationListener() {
 				@Override
 				public void onAnimationEnd(Animation animation) {
+					sipTextUri.setListVisibility(isDigit ? View.GONE : View.VISIBLE);
 				}
 	
 				@Override
@@ -691,9 +691,10 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			});
 	
 			rootView.startAnimation(animation);
-		}else {
-			digitDialer.setVisibility(isDigit?View.VISIBLE:View.GONE);
-			textDialer.setVisibility(isDigit?View.GONE:View.VISIBLE);
+		} else {
+			digitDialer.setVisibility(isDigit ? View.VISIBLE : View.GONE);
+			textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
+			sipTextUri.setListVisibility(isDigit ? View.GONE : View.VISIBLE);
 		}
 	}
 

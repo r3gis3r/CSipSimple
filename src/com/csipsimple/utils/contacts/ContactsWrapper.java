@@ -20,6 +20,7 @@ package com.csipsimple.utils.contacts;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -64,7 +65,7 @@ public abstract class ContactsWrapper {
 	public abstract Cursor searchContact(Context ctxt, CharSequence constraint);
 	public abstract CharSequence transformToSipUri(Context ctxt, Cursor cursor);
 	public abstract void bindAutoCompleteView(View view, Context context, Cursor cursor);
-	public abstract SimpleCursorAdapter getAllContactsAdapter(Context ctxt, int layout, int[] holders);
+	public abstract SimpleCursorAdapter getAllContactsAdapter(Activity ctxt, int layout, int[] holders);
 	
 	public class Phone {
 		private String number;
