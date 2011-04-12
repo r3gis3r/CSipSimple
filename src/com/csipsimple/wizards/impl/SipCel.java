@@ -45,7 +45,7 @@ public class SipCel extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
 		acc.reg_uri = "sip.sipcel.com:445";
-		acc.proxies = new String[] { "sip.sipcel.com:445" };
+		acc.proxies = new String[] { "sip.sipcel.com" };
 		acc.publish_enabled = 1;
 		acc.reg_timeout = 120;
 		acc.transport = SipProfile.TRANSPORT_AUTO;
