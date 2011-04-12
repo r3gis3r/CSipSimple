@@ -86,6 +86,9 @@ public class PjSipAccount {
 		if(profile.reg_timeout != -1) {
 			cfg.setReg_timeout(profile.reg_timeout);
 		}
+		if(profile.reg_delay_before_refresh != -1) {
+			cfg.setReg_delay_before_refresh(profile.reg_delay_before_refresh);
+		}
 		if(profile.ka_interval != -1) {
 			cfg.setKa_interval(profile.ka_interval);
 		}

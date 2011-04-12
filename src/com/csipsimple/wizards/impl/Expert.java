@@ -50,6 +50,7 @@ public class Expert extends BaseImplementation {
 	private ListPreference accountContactRewriteMethod;
 	private EditTextPreference accountProxy;
 	private ListPreference accountUseSrtp;
+	private EditTextPreference accountRegDelayRefresh;
 	
 	private void bindFields() {
 		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
@@ -64,6 +65,7 @@ public class Expert extends BaseImplementation {
 		accountUseSrtp = (ListPreference) parent.findPreference("use_srtp");
 		accountPublishEnabled = (CheckBoxPreference) parent.findPreference("publish_enabled");
 		accountRegTimeout = (EditTextPreference) parent.findPreference("reg_timeout");
+		accountRegDelayRefresh = (EditTextPreference) parent.findPreference("reg_delay_before_refresh");
 		accountForceContact = (EditTextPreference) parent.findPreference("force_contact");
 		accountAllowContactRewrite = (CheckBoxPreference) parent.findPreference("allow_contact_rewrite");
 		accountContactRewriteMethod = (ListPreference) parent.findPreference("contact_rewrite_method");
@@ -108,6 +110,7 @@ public class Expert extends BaseImplementation {
 		accountTransport.setValue(account.transport.toString());
 		accountPublishEnabled.setChecked((account.publish_enabled == 1));
 		accountRegTimeout.setText(Long.toString(account.reg_timeout));
+		accountRegDelayRefresh.setText(Long.toString(account.reg_delay_before_refresh));
 		
 		accountForceContact.setText(account.force_contact);
 		accountAllowContactRewrite.setChecked(account.allow_contact_rewrite);
@@ -215,8 +218,17 @@ public class Expert extends BaseImplementation {
 		} catch (NumberFormatException e) {
 			//Leave default
 			//account.reg_timeout = 900;
-			
 		}
+		try {
+			int reg_delay =  Integer.parseInt(accountRegDelayRefresh.getText());
+			if(reg_delay > 0) {
+				account.reg_delay_before_refresh = reg_delay;
+			}
+		}catch (NumberFormatException e) {
+			//Leave default
+			//account.reg_timeout = 900;
+		}
+		
 		try {
 			account.contact_rewrite_method = Integer.parseInt(accountContactRewriteMethod.getValue());
 		} catch (NumberFormatException e) {

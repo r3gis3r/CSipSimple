@@ -53,6 +53,8 @@
 		
 		<CheckBoxPreference android:key="publish_enabled" android:title="@string/w_expert_publish_enabled"/>
 		<EditTextPreference android:key="reg_timeout" android:title="@string/w_expert_reg_timeout"/>
+		<EditTextPreference android:key="reg_delay_before_refresh" android:title="@string/w_expert_reg_delay_before_refresh"/>
+		
 		<EditTextPreference android:key="force_contact" android:title="@string/w_expert_force_contact"/>
 		<CheckBoxPreference android:key="allow_contact_rewrite" android:title="@string/w_expert_allow_contact_rewrite"/>
 		<ListPreference android:key="contact_rewrite_method" android:title="@string/w_expert_contact_rewrite_method"

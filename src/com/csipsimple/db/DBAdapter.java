@@ -42,7 +42,7 @@ public class DBAdapter {
 	static String THIS_FILE = "SIP ACC_DB";
 
 	private static final String DATABASE_NAME = "com.csipsimple.db";
-	private static final int DATABASE_VERSION = 25;
+	private static final int DATABASE_VERSION = 26;
 	private static final String ACCOUNTS_TABLE_NAME = "accounts";
 	private static final String CALLLOGS_TABLE_NAME = "calllogs";
 	private static final String FILTERS_TABLE_NAME = "outgoing_filters";
@@ -95,7 +95,9 @@ public class DBAdapter {
 			
 			
 			+ SipProfile.FIELD_SIP_STACK 			+ " INTEGER," 
-			+ SipProfile.FIELD_VOICE_MAIL_NBR		+ " TEXT" 
+			+ SipProfile.FIELD_VOICE_MAIL_NBR		+ " TEXT,"
+			+ SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH	+ " INTEGER" 
+			
 		+ ");";
 	
 	private final static String TABLE_CALLLOGS_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -265,7 +267,18 @@ public class DBAdapter {
 					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
 				}
 			}
-
+			if(oldVersion < 26) {
+				try {
+					//Add reg delay before refresh row
+					db.execSQL("ALTER TABLE " + ACCOUNTS_TABLE_NAME + " ADD "+
+							SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH + " INTEGER");
+					db.execSQL("UPDATE " + ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH + "=-1");
+					Log.d(THIS_FILE, "Upgrade done");
+				}catch(SQLiteException e) {
+					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+				}
+			}
+			
 			onCreate(db);
 		}
 	}

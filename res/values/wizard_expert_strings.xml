@@ -34,6 +34,7 @@
 <string name="w_expert_prevent_tcp">Prevent TCP (only try UDP)</string>
 <string name="w_expert_publish_enabled">Publish enabled</string>
 <string name="w_expert_reg_timeout">Register timeout (sec)</string>
+<string name="w_expert_reg_delay_before_refresh">Register delay before refresh (sec)</string>
 <string name="w_expert_ka_interval">Keep-alive interval (sec)</string>
 <string name="w_expert_force_contact">Force contact</string>
 <string name="w_expert_allow_contact_rewrite">Allow contact rewrite</string>

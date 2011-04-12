@@ -68,6 +68,7 @@ public class SipProfile implements Parcelable {
 	public static final String FIELD_MWI_ENABLED = "mwi_enabled";
 	public static final String FIELD_PUBLISH_ENABLED = "publish_enabled";
 	public static final String FIELD_REG_TIMEOUT = "reg_timeout";
+	public static final String FIELD_REG_DELAY_BEFORE_REFRESH = "reg_dbr";
 	public static final String FIELD_KA_INTERVAL = "ka_interval";
 	public static final String FIELD_PIDF_TUPLE_ID = "pidf_tuple_id";
 	public static final String FIELD_FORCE_CONTACT = "force_contact";
@@ -95,6 +96,8 @@ public class SipProfile implements Parcelable {
 	public static final String FIELD_SIP_STACK = "sip_stack";
 	public static final String FIELD_VOICE_MAIL_NBR = "vm_nbr";
 	
+	
+	
 	public final static String[] full_projection = {
 		FIELD_ID,
 		// Application relative fields
@@ -115,7 +118,7 @@ public class SipProfile implements Parcelable {
 		FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
 		FIELD_DATA, 
 		
-		FIELD_SIP_STACK, FIELD_VOICE_MAIL_NBR };
+		FIELD_SIP_STACK, FIELD_VOICE_MAIL_NBR, FIELD_REG_DELAY_BEFORE_REFRESH };
 	public final static Class<?>[] full_projection_types = {
 		Integer.class,
 		
@@ -132,7 +135,7 @@ public class SipProfile implements Parcelable {
 		String.class, String.class, String.class, Integer.class,
 		String.class,
 		
-		Integer.class, String.class
+		Integer.class, String.class, Integer.class
 	};
 	
 	//Properties
@@ -163,6 +166,7 @@ public class SipProfile implements Parcelable {
 	public int reg_use_proxy = 3;
 	public int sip_stack = PJSIP_STACK;
 	public String vm_nbr = null;
+	public int reg_delay_before_refresh = -1;
 	
 	public SipProfile() {
 		display_name = "";
@@ -197,6 +201,7 @@ public class SipProfile implements Parcelable {
 		reg_use_proxy = in.readInt();
 		use_zrtp = in.readInt();
 		vm_nbr = getReadParcelableString(in.readString());
+		reg_delay_before_refresh = in.readInt();
 	}
 
 	public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
@@ -249,6 +254,7 @@ public class SipProfile implements Parcelable {
 		dest.writeInt(reg_use_proxy);
 		dest.writeInt(use_zrtp);
 		dest.writeString(getWriteParcelableString(vm_nbr));
+		dest.writeInt(reg_delay_before_refresh);
 	}
 	
 	
@@ -323,6 +329,11 @@ public class SipProfile implements Parcelable {
 		if (tmp_i != null && tmp_i >=0 ) {
 			reg_timeout = tmp_i;
 		}
+		tmp_i = args.getAsInteger(FIELD_REG_DELAY_BEFORE_REFRESH);
+		if (tmp_i != null && tmp_i >=0 ) {
+			reg_delay_before_refresh = tmp_i;
+		}
+		
 		tmp_i = args.getAsInteger(FIELD_KA_INTERVAL);
 		if (tmp_i != null && tmp_i >=0 ) {
 			ka_interval = tmp_i;
@@ -448,6 +459,7 @@ public class SipProfile implements Parcelable {
 		
 		args.put(FIELD_SIP_STACK, sip_stack);
 		args.put(FIELD_VOICE_MAIL_NBR, vm_nbr);
+		args.put(FIELD_REG_DELAY_BEFORE_REFRESH, reg_delay_before_refresh);
 
 		return args;
 	}
