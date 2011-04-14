@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjmedia_srtp_use;
-import org.pjsip.pjsua.pjsua;
 
 import com.csipsimple.api.SipConfigManager;
 
@@ -433,16 +430,6 @@ public class PreferencesWrapper {
 		return getPreferenceBooleanValue(SipConfigManager.LOCK_WIFI);
 	}
 	
-	public pjmedia_srtp_use getUseSrtp() {
-		try {
-			int use_srtp = Integer.parseInt(getPreferenceStringValue(SipConfigManager.USE_SRTP));
-			pjmedia_srtp_use.swigToEnum(use_srtp);
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Transport port not well formated");
-		}
-		return pjmedia_srtp_use.PJMEDIA_SRTP_DISABLED;
-	}
-	
 	public boolean isTCPEnabled() {
 		return getPreferenceBooleanValue(SipConfigManager.ENABLE_TCP);
 	}
@@ -495,32 +482,6 @@ public class PreferencesWrapper {
 		return getPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV);
 	}
 	
-	public pj_str_t[] getNameservers() {
-		pj_str_t[] nameservers = null;
-		
-		if(enableDNSSRV()) {
-			String prefsDNS = getPreferenceStringValue(SipConfigManager.OVERRIDE_NAMESERVER);
-			if(TextUtils.isEmpty(prefsDNS)) {
-				String dnsName1 = getSystemProp("net.dns1");
-				String dnsName2 = getSystemProp("net.dns2");
-				Log.d(THIS_FILE, "DNS server will be set to : "+dnsName1+ " / "+dnsName2);
-				
-				if(dnsName1 == null && dnsName2 == null) {
-					//TODO : WARNING : In this case....we have probably a problem !
-					nameservers = new pj_str_t[] {};
-				}else if(dnsName1 == null) {
-					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName2)};
-				}else if(dnsName2 == null) {
-					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName1)};
-				}else {
-					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName1), pjsua.pj_str_copy(dnsName2)};
-				}
-			}else {
-				nameservers = new pj_str_t[] {pjsua.pj_str_copy(prefsDNS)};
-			}
-		}
-		return nameservers;
-	}
 	
 	public int getDSCPVal() {
 		return getPreferenceIntegerValue(SipConfigManager.DSCP_VAL);
@@ -967,7 +928,7 @@ public class PreferencesWrapper {
 	 * @param prop property to get
 	 * @return the value of the property command line or null if failed
 	 */
-	private String getSystemProp(String prop) {
+	public String getSystemProp(String prop) {
 		//String re1 = "^\\d+(\\.\\d+){3}$";
 		//String re2 = "^[0-9a-f]+(:[0-9a-f]*)+:[0-9a-f]+$";
 		try {
@@ -1070,4 +1031,13 @@ public class PreferencesWrapper {
 		return TextUtils.split(prefs.getString(CODECS_LIST, ""),  Pattern.quote(CODECS_SEPARATOR) );
 	}
 
+	public static final String LIB_CAP_TLS = "cap_tls";
+	public static final String LIB_CAP_SRTP = "cap_srtp";
+	public void setLibCapability(String cap, boolean canDo) {
+		setPreferenceBooleanValue("backup_" + cap, canDo);
+	}
+	public boolean getLibCapability(String cap) {
+		return prefs.getBoolean("backup_" + cap, false);
+	}
+	
 }

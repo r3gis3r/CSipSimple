@@ -17,21 +17,17 @@
  */
 package com.csipsimple.ui.prefs;
 
-import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsuaConstants;
-
 import android.telephony.TelephonyManager;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
-import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
 public class PrefsNetwork extends GenericPrefs {
 	
 
-	private static final String THIS_FILE = "Prefs Network";
+	//private static final String THIS_FILE = "Prefs Network";
 
 	@Override
 	protected int getXmlPreferences() {
@@ -73,12 +69,7 @@ public class PrefsNetwork extends GenericPrefs {
 			
 			
 		}
-		boolean canUseTLS = false;
-		try{
-			canUseTLS = (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE);
-		}catch (Exception e) {
-			Log.e(THIS_FILE, "Unable to get pjsua tls state");
-		}
+		boolean canUseTLS = pfw.getLibCapability(PreferencesWrapper.LIB_CAP_TLS);
 		if(!canUseTLS) {
 			hidePreference(null, "secure_transport");
 		}
@@ -86,7 +77,7 @@ public class PrefsNetwork extends GenericPrefs {
 
 	@Override
 	protected void updateDescriptions() {
-		setStringFieldSummary("stun_server");
+		setStringFieldSummary(SipConfigManager.STUN_SERVER);
 	}
 	
 }

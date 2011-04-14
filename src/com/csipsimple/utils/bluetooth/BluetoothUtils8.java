@@ -62,33 +62,33 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 	};
 	private Context context;
 	private MediaManager manager;
+	private BluetoothAdapter bluetoothAdapter;
 
 	public void init(Context aContext, MediaManager aManager) {
 		context = aContext;
 		manager = aManager;
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		register();
+		try {
+			bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		}catch(RuntimeException e) {
+			Log.w(THIS_FILE, "Cant get default bluetooth adapter ", e);
+		}
 	}
 	
 	public boolean canBluetooth() {
 		// Detect if any bluetooth a device is available for call
-		BluetoothAdapter mBluetoothAdapter = null;
-		try {
-			mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		}catch(RuntimeException e) {
-			Log.w(THIS_FILE, "Cant get default bluetooth adapter ", e);
-		}
-		if (mBluetoothAdapter == null) {
+		if (bluetoothAdapter == null) {
 		    // Device does not support Bluetooth
 			return false;
 		}
 		boolean hasConnectedDevice = false;
 		//If bluetooth is on
-		if(mBluetoothAdapter.isEnabled()) {
+		if(bluetoothAdapter.isEnabled()) {
 			
 			//We get all bounded bluetooth devices
 			// bounded is not enough, should search for connected devices....
-			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+			Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 			for(BluetoothDevice device : pairedDevices) {
 				BluetoothClass bluetoothClass = device.getBluetoothClass();
                 if (bluetoothClass != null) {
@@ -104,8 +104,9 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 				}
 			}
 		}
-
-		return hasConnectedDevice && audioManager.isBluetoothScoAvailableOffCall();
+		boolean retVal = hasConnectedDevice && audioManager.isBluetoothScoAvailableOffCall();
+		Log.d(THIS_FILE, "Can I do BT ? "+retVal);
+		return retVal;
 	}
 
 	public void setBluetoothOn(boolean on) {
@@ -139,6 +140,7 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 		}catch(Exception e) {
 			Log.w(THIS_FILE, "Failed to unregister media state receiver",e);
 		}
+		bluetoothAdapter = null;
 	}
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.01-01" android:versionCode="750">
+	android:versionName="0.01-01" android:versionCode="792">
 	<supports-screens  
 		android:smallScreens="true" 
 		android:normalScreens="true"

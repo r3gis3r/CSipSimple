@@ -17,8 +17,6 @@
  */
 package com.csipsimple.service;
 
-import org.pjsip.pjsua.pjsua;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -403,17 +401,21 @@ public class MediaManager {
 	}
 	
 	public synchronized void setSpeakerphoneOn(boolean on) {
-		pjsua.set_no_snd_dev();
-		userWantSpeaker = on;
-		pjsua.set_snd_dev(0, 0);
+		if(service != null) {
+			service.setNoSnd();
+			userWantSpeaker = on;
+			service.setSnd();
+		}
 		broadcastMediaChanged();
 	}
 	
 	public synchronized void setBluetoothOn(boolean on) {
 		Log.d(THIS_FILE, "Set BT "+on);
-		pjsua.set_no_snd_dev();
-		userWantBluetooth = on;
-		pjsua.set_snd_dev(0, 0);
+		if(service != null) {
+			service.setNoSnd();
+			userWantBluetooth = on;
+			service.setSnd();
+		}
 		broadcastMediaChanged();
 	}
 	

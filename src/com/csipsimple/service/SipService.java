@@ -417,8 +417,6 @@ public class SipService extends Service {
 			}
 			return ms;
 		}
-
-
 	};
 
 	private final ISipConfiguration.Stub binderConfiguration = new ISipConfiguration.Stub() {
@@ -1374,6 +1372,18 @@ public class SipService extends Service {
 		return shouldAutoAnswer;
 	}
 	
+	// Media direct binders
+	public void setNoSnd() {
+		if (pjService != null) {
+			pjService.setNoSnd();
+		}
+	}
+	
+	public void setSnd() {
+		if (pjService != null) {
+			pjService.setSnd();
+		}
+	}
 
     private static Looper createLooper() {
     	if(executorThread == null) {

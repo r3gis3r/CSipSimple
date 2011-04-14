@@ -20,7 +20,6 @@ package com.csipsimple.ui.prefs;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pjsip.pjsua.pjsua;
 
 import android.app.ListActivity;
 import android.content.ComponentName;

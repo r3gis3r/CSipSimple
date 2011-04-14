@@ -17,14 +17,13 @@
  */
 package com.csipsimple.utils;
 
-import org.pjsip.pjsua.pjsuaConstants;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.ISipService;
@@ -56,7 +55,7 @@ public class AccountListUtils {
 				accountInfo = null;
 			}
 			if (accountInfo != null && accountInfo.isActive()) {
-				if (accountInfo.getAddedStatus() == pjsuaConstants.PJ_SUCCESS) {
+				if (accountInfo.getAddedStatus() == SipManager.SUCCESS) {
 
 					accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 					accountDisplay.statusColor = resources.getColor(R.color.account_unregistered);

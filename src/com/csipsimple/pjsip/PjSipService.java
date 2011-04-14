@@ -39,6 +39,7 @@ import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
 import org.pjsip.pjsua.pjsua_media_config;
 import org.pjsip.pjsua.pjsua_transport_config;
+import org.pjsip.pjsua.pjmedia_srtp_use;
 
 import android.content.Context;
 import android.content.Intent;
@@ -58,6 +59,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.ToCall;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+
 
 public class PjSipService {
 	private static final String THIS_FILE = "PjService";
@@ -196,12 +198,12 @@ public class PjSipService {
 						pjsua.set_use_compact_form(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM) ? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
 						cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent(service)));
 						cfg.setThread_cnt(prefsWrapper.getThreadCount());
-						cfg.setUse_srtp(prefsWrapper.getUseSrtp());
+						cfg.setUse_srtp(getUseSrtp());
 						cfg.setSrtp_secure_signaling(0);
 
 						// DNS
 						if (prefsWrapper.enableDNSSRV() && !prefsWrapper.useIPv6()) {
-							pj_str_t[] nameservers = prefsWrapper.getNameservers();
+							pj_str_t[] nameservers = getNameservers();
 							if (nameservers != null) {
 								cfg.setNameserver_count(nameservers.length);
 								cfg.setNameserver(nameservers);
@@ -664,6 +666,8 @@ public class PjSipService {
 			}
 			// Set it in prefs if not already set correctly
 			prefsWrapper.setCodecList(codecs);
+			prefsWrapper.setLibCapability(PreferencesWrapper.LIB_CAP_TLS,  (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE) );
+			prefsWrapper.setLibCapability(PreferencesWrapper.LIB_CAP_SRTP, (pjsua.can_use_srtp() == pjsuaConstants.PJ_TRUE) );
 		}
 
 	}
@@ -1180,5 +1184,50 @@ public class PjSipService {
 		pjsua.jzrtp_SASVerified();
 	}
 
+	// Config subwrapper
+	private pj_str_t[] getNameservers() {
+		pj_str_t[] nameservers = null;
+		
+		if(prefsWrapper.enableDNSSRV()) {
+			String prefsDNS = prefsWrapper.getPreferenceStringValue(SipConfigManager.OVERRIDE_NAMESERVER);
+			if(TextUtils.isEmpty(prefsDNS)) {
+				String dnsName1 = prefsWrapper.getSystemProp("net.dns1");
+				String dnsName2 = prefsWrapper.getSystemProp("net.dns2");
+				Log.d(THIS_FILE, "DNS server will be set to : "+dnsName1+ " / "+dnsName2);
+				
+				if(dnsName1 == null && dnsName2 == null) {
+					//TODO : WARNING : In this case....we have probably a problem !
+					nameservers = new pj_str_t[] {};
+				}else if(dnsName1 == null) {
+					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName2)};
+				}else if(dnsName2 == null) {
+					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName1)};
+				}else {
+					nameservers = new pj_str_t[] {pjsua.pj_str_copy(dnsName1), pjsua.pj_str_copy(dnsName2)};
+				}
+			}else {
+				nameservers = new pj_str_t[] {pjsua.pj_str_copy(prefsDNS)};
+			}
+		}
+		return nameservers;
+	}
+	
+	private pjmedia_srtp_use getUseSrtp() {
+		try {
+			int use_srtp = Integer.parseInt(prefsWrapper.getPreferenceStringValue(SipConfigManager.USE_SRTP));
+			pjmedia_srtp_use.swigToEnum(use_srtp);
+		}catch(NumberFormatException e) {
+			Log.e(THIS_FILE, "Transport port not well formated");
+		}
+		return pjmedia_srtp_use.PJMEDIA_SRTP_DISABLED;
+	}
+
+	public void setNoSnd() {
+		pjsua.set_no_snd_dev();	
+	}
+	
+	public void setSnd() {
+		pjsua.set_snd_dev(0, 0);
+	}
 
 }
