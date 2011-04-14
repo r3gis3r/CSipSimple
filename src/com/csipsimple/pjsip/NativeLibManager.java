@@ -34,7 +34,7 @@ public class NativeLibManager {
 
 	public static final String STACK_FILE_NAME = "libpjsipjni.so";
 	
-	public static final boolean USE_BUNDLE = true;
+	public static boolean USE_BUNDLE = true;
 	
 	/**
 	 * Get the guessed stack for market version

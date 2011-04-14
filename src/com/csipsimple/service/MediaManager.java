@@ -20,6 +20,8 @@ package com.csipsimple.service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.net.NetworkInfo.DetailedState;
@@ -28,6 +30,7 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 
 import com.csipsimple.api.MediaState;
@@ -55,12 +58,7 @@ public class MediaManager {
 	private WakeLock cpuLock;
 	
 	// Media settings to save / resore
-	private int savedVibrateRing, savedVibradeNotif, savedWifiPolicy, savedRingerMode;
-	private int savedVolume;
-	private boolean savedSpeakerPhone;
-	//private boolean savedMicrophoneMute;
-	private int savedRoute, savedMode;
-	private boolean isSavedAudioState = false, isSetAudioMode = false;
+	private boolean isSetAudioMode = false;
 	
 
 	
@@ -82,6 +80,9 @@ public class MediaManager {
 	
 	
 	private boolean USE_SGS_WRK_AROUND = false;
+
+
+	private SharedPreferences prefs;
 	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
 
@@ -90,13 +91,15 @@ public class MediaManager {
 	public MediaManager(SipService aService) {
 		service = aService;
 		audioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
+		prefs = PreferenceManager.getDefaultSharedPreferences(service);
 		accessibilityManager = AccessibilityWrapper.getInstance();
 		accessibilityManager.init(service);
 		
 		ringer = new Ringer(service);
-		
 		mediaStateChangedIntent = new Intent(SipManager.ACTION_SIP_MEDIA_CHANGED);
 		
+		//Try to reset if there were a crash in a call could restore previous settings
+		restoreAudioState();
 	}
 	
 	
@@ -166,13 +169,12 @@ public class MediaManager {
 		}
 		stopRing();
 		saveAudioState();
+		
 		//Set the rest of the phone in a better state to not interferate with current call
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_ON);
 		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
 		audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
 		
-		
-
 		//LOCKS
 		
 		//Wifi management if necessary
@@ -275,26 +277,62 @@ public class MediaManager {
 	/**
 	 * Save current audio mode in order to be able to restore it once done
 	 */
-	private void saveAudioState() {
-		if(isSavedAudioState) {
+	private synchronized void saveAudioState() {
+		if( prefs.getBoolean("isSavedAudioState", false) ) {
+			//If we have already set, do not set it again !!! 
 			return;
 		}
 		ContentResolver ctntResolver = service.getContentResolver();
 		
-		savedVibrateRing = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-		savedVibradeNotif = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
-		savedRingerMode = audioManager.getRingerMode();
-		savedWifiPolicy = android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-		savedVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+		Editor ed = prefs.edit();
+		ed.putInt("savedVibrateRing", audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER));
+		ed.putInt("savedVibradeNotif", audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION));
+		ed.putInt("savedRingerMode", audioManager.getRingerMode());
+		ed.putInt("savedWifiPolicy" , android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT));
 		
-		if(!service.prefsWrapper.getUseRoutingApi()) {
-			savedSpeakerPhone = audioManager.isSpeakerphoneOn();
+		int inCallStream = Compatibility.getInCallStream();
+		ed.putInt("savedVolume", audioManager.getStreamVolume(inCallStream));
+		
+		int targetMode = getAudioTargetMode();
+		if(service.prefsWrapper.getUseRoutingApi()) {
+			ed.putInt("savedRoute", audioManager.getRouting(targetMode));
+		}else {
+			ed.putBoolean("savedSpeakerPhone", audioManager.isSpeakerphoneOn());
 		}
-		savedMode = audioManager.getMode();
-		savedRoute = audioManager.getRouting(getAudioTargetMode());
+		ed.putInt("savedMode", audioManager.getMode());
 		
-		isSavedAudioState = true;
+		ed.putBoolean("isSavedAudioState", true);
+		ed.commit();
+	}
+	
+	private synchronized void restoreAudioState() {
+		if( !prefs.getBoolean("isSavedAudioState", false) ) {
+			//If we have NEVER set, do not try to reset !
+			return;
+		}
 		
+		ContentResolver ctntResolver = service.getContentResolver();
+
+		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, prefs.getInt("savedWifiPolicy", Settings.System.WIFI_SLEEP_POLICY_DEFAULT));
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, prefs.getInt("savedVibrateRing", AudioManager.VIBRATE_SETTING_ONLY_SILENT));
+		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, prefs.getInt("savedVibradeNotif", AudioManager.VIBRATE_SETTING_OFF));
+		audioManager.setRingerMode(prefs.getInt("savedRingerMode", AudioManager.RINGER_MODE_NORMAL));
+		
+		int inCallStream = Compatibility.getInCallStream();
+		setStreamVolume(inCallStream, prefs.getInt("savedVolume", (int)(audioManager.getStreamMaxVolume(inCallStream)*0.8) ), 0);
+		
+		int targetMode = getAudioTargetMode();
+		if(service.prefsWrapper.getUseRoutingApi()) {
+			audioManager.setRouting(targetMode, prefs.getInt("savedRoute", AudioManager.ROUTE_SPEAKER), AudioManager.ROUTE_ALL);
+		}else {
+			audioManager.setSpeakerphoneOn(prefs.getBoolean("savedSpeakerPhone", false));
+		}
+		audioManager.setMode(prefs.getInt("savedMode", AudioManager.MODE_NORMAL));
+		
+
+		Editor ed = prefs.edit();
+		ed.putBoolean("isSavedAudioState", false);
+		ed.commit();
 	}
 	
 	/**
@@ -302,41 +340,23 @@ public class MediaManager {
 	 */
 	private synchronized void actualUnsetAudioInCall() {
 		
-		if(!isSavedAudioState || !isSetAudioMode) {
+		if(!prefs.getBoolean("isSavedAudioState", false) || !isSetAudioMode) {
 			return;
 		}
 
 		Log.d(THIS_FILE, "Unset Audio In call");
-		
-		ContentResolver ctntResolver = service.getContentResolver();
 
-		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, savedWifiPolicy);
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, savedVibrateRing);
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, savedVibradeNotif);
-		audioManager.setRingerMode(savedRingerMode);
-		
-		int targetMode = getAudioTargetMode();
-		
-		if(service.prefsWrapper.getUseRoutingApi()) {
-			audioManager.setRouting(targetMode, savedRoute, AudioManager.ROUTE_ALL);
-		}else {
-			audioManager.setSpeakerphoneOn(savedSpeakerPhone);
-		}
-		
+		int inCallStream = Compatibility.getInCallStream();
 		if(bluetoothWrapper != null) {
 			//This fixes the BT activation but... but... seems to introduce a lot of other issues
 			//bluetoothWrapper.setBluetoothOn(true);
 			Log.d(THIS_FILE, "Unset bt");
 			bluetoothWrapper.setBluetoothOn(false);
 		}
-		
 		audioManager.setMicrophoneMute(false);
-
-		int inCallStream = Compatibility.getInCallStream();
-		setStreamVolume(inCallStream, savedVolume, 0);
-		
 		audioManager.setStreamSolo(inCallStream, false);
-		audioManager.setMode(savedMode);
+		
+		restoreAudioState();
 		
 		if(wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();
@@ -351,10 +371,7 @@ public class MediaManager {
 		
 		audioFocusWrapper.unFocus();
 		
-		
-		isSavedAudioState = false;
 		isSetAudioMode = false;
-		
 	}
 	
 	

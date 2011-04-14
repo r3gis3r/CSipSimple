@@ -298,6 +298,9 @@ public class PreferencesWrapper {
 		Compatibility.setFirstRunParameters(this);
 	}
 	
+	public SharedPreferences getDirectPrefs() {
+		return prefs;
+	}
 	
 	
 	// Network part
