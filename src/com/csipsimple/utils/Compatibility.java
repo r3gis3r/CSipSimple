@@ -30,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
+import android.media.MediaRecorder.AudioSource;
 import android.net.Uri;
 import android.net.Uri.Builder;
 import android.provider.Contacts;
@@ -152,6 +153,36 @@ public class Compatibility {
 		return Integer.toString(AudioManager.MODE_NORMAL);
 	}
 	
+	public static String getDefaultMicroSource() {
+		if(isCompatible(10)) {
+			// Note that in APIs this is only available from level 11.
+			// VOICE_COMMUNICATION
+			return Integer.toString(0x7);
+		}
+		/*
+		 * Too risky in terms of regressions
+		 else if (isCompatible(4)) {
+			// VOICE_CALL
+			return 0x4;
+		}
+		*/
+		if(android.os.Build.DEVICE.equalsIgnoreCase("olympus")) {
+			//Motorola atrix bug
+			// CAMCORDER
+			return Integer.toString(0x5);
+		}
+		
+		return Integer.toString(AudioSource.DEFAULT);
+	}
+	
+	public static String getDefaultFrequency() {
+		if(android.os.Build.DEVICE.equalsIgnoreCase("olympus")) {
+			// Atrix bug
+			return "32000";
+		}
+		return isCompatible(4) ? "16000" : "8000";
+	}
+	
 	public static String getCpuAbi() {
 		if (isCompatible(4)) {
 			Field field;
@@ -198,7 +229,8 @@ public class Compatibility {
 		//Motorola milestone 1 and 2 & motorola droid
 		if(android.os.Build.DEVICE.toLowerCase().contains("milestone2") ||
 				android.os.Build.BOARD.toLowerCase().contains("sholes") ||
-				android.os.Build.PRODUCT.toLowerCase().contains("sholes")  ) {
+				android.os.Build.PRODUCT.toLowerCase().contains("sholes") ||
+				android.os.Build.DEVICE.equalsIgnoreCase("olympus") ) {
 			return true;
 		}
 		
@@ -278,7 +310,7 @@ public class Compatibility {
 		
 		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_MEDIA_QUALITY, getCpuAbi().equalsIgnoreCase("armeabi-v7a") ? "4" : "3");
 		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_AUTO_CLOSE_TIME, isCompatible(4) ? "1" : "5");
-		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE, isCompatible(4) ? "16000" : "8000");
+		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE, getDefaultFrequency());
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, isCompatible(4) ? true : false);
 		//HTC PSP mode hack
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround(preferencesWrapper));
@@ -307,6 +339,7 @@ public class Compatibility {
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround(preferencesWrapper));
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(preferencesWrapper));
 		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
+		preferencesWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
 		
 	}
 
@@ -478,6 +511,11 @@ public class Compatibility {
 		if(lastSeenVersion < 704) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(prefWrapper));
 		}
+		if(lastSeenVersion < 794) {
+			prefWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
+			prefWrapper.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE, getDefaultFrequency());
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround(prefWrapper));
+		}
 	}
 
 	public static void updateApiVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {
@@ -489,6 +527,7 @@ public class Compatibility {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround(prefWrapper));
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround(prefWrapper));
 			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
+			prefWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
 			if(isCompatible(9)) {
 				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 1.0);
 				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 1.0);

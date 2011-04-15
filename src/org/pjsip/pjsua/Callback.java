@@ -142,6 +142,10 @@ public class Callback {
     if (getClass() == Callback.class) pjsuaJNI.Callback_on_teardown_audio(swigCPtr, this); else pjsuaJNI.Callback_on_teardown_audioSwigExplicitCallback(swigCPtr, this);
   }
 
+  public int on_set_micro_source() {
+    return (getClass() == Callback.class) ? pjsuaJNI.Callback_on_set_micro_source(swigCPtr, this) : pjsuaJNI.Callback_on_set_micro_sourceSwigExplicitCallback(swigCPtr, this);
+  }
+
   public void on_zrtp_show_sas(pj_str_t sas, int verified) {
     if (getClass() == Callback.class) pjsuaJNI.Callback_on_zrtp_show_sas(swigCPtr, this, pj_str_t.getCPtr(sas), sas, verified); else pjsuaJNI.Callback_on_zrtp_show_sasSwigExplicitCallback(swigCPtr, this, pj_str_t.getCPtr(sas), sas, verified);
   }

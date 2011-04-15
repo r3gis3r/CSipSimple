@@ -61,7 +61,26 @@
 		<item>NORMAL</item>
 		<item>RINGTONE</item>
 		<item>IN_CALL</item>
-		<item>MANUFACTURER_EXTRA</item>
+		<item>IN_COMMUNICATION</item>
+	</string-array>
+	
+	<string-array name="micro_source_values">
+		<item>1</item>
+		<item>4</item>
+		<item>7</item>
+		<item>2</item>
+		<item>3</item>
+		<item>5</item>
+		<item>6</item>
+	</string-array>
+	<string-array name="micro_source_choices">
+		<item>DEFAULT</item>
+		<item>VOICE_CALL</item>
+		<item>VOICE_COMMUNICATION</item>
+		<item>VOICE_CALL_UP</item>
+		<item>VOICE_CALL_DOWN</item>
+		<item>CAMCORDER</item>
+		<item>VOICE_RECOGNITION</item>
 	</string-array>
 	
 	<string-array name="gsm_integration_type_values">

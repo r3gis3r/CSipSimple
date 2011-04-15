@@ -57,6 +57,8 @@ public class pjsuaJNI {
   public final static native int Callback_on_setup_audioSwigExplicitCallback(long jarg1, Callback jarg1_, int jarg2);
   public final static native void Callback_on_teardown_audio(long jarg1, Callback jarg1_);
   public final static native void Callback_on_teardown_audioSwigExplicitCallback(long jarg1, Callback jarg1_);
+  public final static native int Callback_on_set_micro_source(long jarg1, Callback jarg1_);
+  public final static native int Callback_on_set_micro_sourceSwigExplicitCallback(long jarg1, Callback jarg1_);
   public final static native void Callback_on_zrtp_show_sas(long jarg1, Callback jarg1_, long jarg2, pj_str_t jarg2_, int jarg3);
   public final static native void Callback_on_zrtp_show_sasSwigExplicitCallback(long jarg1, Callback jarg1_, long jarg2, pj_str_t jarg2_, int jarg3);
   public final static native void Callback_on_zrtp_secure_on(long jarg1, Callback jarg1_, long jarg2, pj_str_t jarg2_);
@@ -1024,6 +1026,9 @@ public class pjsuaJNI {
   }
   public static void SwigDirector_Callback_on_teardown_audio(Callback self) {
     self.on_teardown_audio();
+  }
+  public static int SwigDirector_Callback_on_set_micro_source(Callback self) {
+    return self.on_set_micro_source();
   }
   public static void SwigDirector_Callback_on_zrtp_show_sas(Callback self, long sas, int verified) {
     self.on_zrtp_show_sas((sas == 0) ? null : new pj_str_t(sas, false), verified);

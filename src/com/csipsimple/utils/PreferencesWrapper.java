@@ -87,6 +87,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.SND_PTIME, "20");
 		put(SipConfigManager.BITS_PER_SAMPLE, "16");
 		put(SipConfigManager.SIP_AUDIO_MODE, "0");
+		put(SipConfigManager.MICRO_SOURCE, "1");
 		put(SipConfigManager.THREAD_COUNT, "3");
 		
 		put(SipConfigManager.STUN_SERVER, "stun.counterpath.com");

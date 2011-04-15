@@ -49,7 +49,7 @@ public class SipConfigManager {
 	public static final String USE_ROUTING_API = "use_routing_api";
 	public static final String USE_MODE_API = "use_mode_api";
 	public static final String SIP_AUDIO_MODE = "sip_audio_mode";
-	
+	public static final String MICRO_SOURCE = "micro_source";
 	
 	//UI
 	public static final String USE_SOFT_VOLUME = "use_soft_volume";
@@ -106,6 +106,7 @@ public class SipConfigManager {
 	
 	public static final String CODEC_NB = "nb";
 	public static final String CODEC_WB = "wb";
+	
 	
 	public static String getCodecKey(String codecName, String type) {
 		String[] codecParts = codecName.split("/");

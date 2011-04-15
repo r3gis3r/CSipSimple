@@ -412,6 +412,10 @@ public class UAStateReceiver extends Callback {
 		Log.d(THIS_FILE, "NAT TYPE DETECTED !!!" + res.getNat_type_name()+ " et "+res.getStatus());
 	}
 	
+	@Override
+	public int on_set_micro_source() {
+		return pjService.prefsWrapper.getPreferenceIntegerValue(SipConfigManager.MICRO_SOURCE);
+	}
 	
 	// -------
 	// Current call management -- assume for now one unique call is managed

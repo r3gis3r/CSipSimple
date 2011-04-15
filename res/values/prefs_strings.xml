@@ -148,6 +148,8 @@
 <string name="use_mode_api_desc">Try to enable that if audio is routing to speaker instead of earpiece</string>
 <string name="sip_audio_mode">Audio mode for SIP calls</string>
 <string name="sip_audio_mode_desc">Change only if developers advise you to</string>
+<string name="micro_source">Micro source</string>
+<string name="micro_source_desc">Source for micro. Choosing the appropriate value may improve echo cancellation</string>
 <string name="has_io_queue">IO Queue</string>
 <string name="has_io_queue_desc">Activate Queue for input/output</string>
 <string name="set_audio_generate_tone">Tone hack</string>

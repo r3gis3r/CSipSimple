@@ -136,6 +136,10 @@
 				android:title="@string/set_audio_generate_tone" android:key="set_audio_generate_tone"
 				android:defaultValue="false"></CheckBoxPreference>	
 				
+			<ListPreference android:title="@string/micro_source" android:key="micro_source"
+				android:summary="@string/micro_source_desc"
+				android:defaultValue="1"
+				android:entryValues="@array/micro_source_values" android:entries="@array/micro_source_choices"></ListPreference>
 				
 			<ListPreference android:title="@string/sip_audio_mode" android:key="sip_audio_mode"
 				android:summary="@string/sip_audio_mode_desc"

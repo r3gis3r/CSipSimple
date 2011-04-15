@@ -22,6 +22,7 @@ import android.preference.Preference;
 import android.preference.PreferenceScreen;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
@@ -40,33 +41,34 @@ public class PrefsMedia extends GenericPrefs {
 		if(!pfw.isAdvancedUser()) {
 			
 			
-			hidePreference("audio_quality", "snd_media_quality");
-			hidePreference("audio_quality", "echo_cancellation_tail");
-			hidePreference("audio_quality", "echo_mode");
-			hidePreference("audio_quality", "snd_ptime");
-			hidePreference("audio_quality", "has_io_queue");
+			hidePreference("audio_quality", SipConfigManager.SND_MEDIA_QUALITY);
+			hidePreference("audio_quality", SipConfigManager.ECHO_CANCELLATION_TAIL);
+			hidePreference("audio_quality", SipConfigManager.ECHO_MODE);
+			hidePreference("audio_quality", SipConfigManager.SND_PTIME);
+			hidePreference("audio_quality", SipConfigManager.HAS_IO_QUEUE);
 			
 			
 			hidePreference(null, "band_types");
 			
-			hidePreference("audio_volume", "snd_mic_level");
-			hidePreference("audio_volume", "snd_speaker_level");
+			hidePreference("audio_volume", SipConfigManager.SND_MIC_LEVEL);
+			hidePreference("audio_volume", SipConfigManager.SND_SPEAKER_LEVEL);
 			
-			hidePreference("audio_volume", "snd_bt_mic_level");
-			hidePreference("audio_volume", "snd_bt_speaker_level");
+			hidePreference("audio_volume", SipConfigManager.SND_BT_MIC_LEVEL);
+			hidePreference("audio_volume", SipConfigManager.SND_BT_SPEAKER_LEVEL);
 			
-			hidePreference("audio_volume", "use_soft_volume");
+			hidePreference("audio_volume", SipConfigManager.USE_SOFT_VOLUME);
 		//	hidePreference("audio_volume", "snd_stream_level");
 			
-			hidePreference("perfs", "thread_count");
+			hidePreference("perfs", SipConfigManager.THREAD_COUNT);
 			hidePreference(null, "perfs");
 			
-			hidePreference("misc", "snd_auto_close_time");
-			hidePreference("misc", "use_routing_api");
-			hidePreference("misc", "use_mode_api");
-			hidePreference("misc", "set_audio_generate_tone");
-			hidePreference("misc", "sip_audio_mode");
-			hidePreference("misc", "use_sgs_call_hack");
+			hidePreference("misc", SipConfigManager.SND_AUTO_CLOSE_TIME);
+			hidePreference("misc", SipConfigManager.USE_ROUTING_API);
+			hidePreference("misc", SipConfigManager.USE_MODE_API);
+			hidePreference("misc", SipConfigManager.SET_AUDIO_GENERATE_TONE);
+			hidePreference("misc", SipConfigManager.SIP_AUDIO_MODE);
+			hidePreference("misc", SipConfigManager.USE_SGS_CALL_HACK);
+			hidePreference("misc", SipConfigManager.MICRO_SOURCE);
 			
 		}
 		
