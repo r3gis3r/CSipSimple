@@ -69,7 +69,6 @@ public class BasePrefsWizard extends GenericPrefs{
         //TODO : ensure this is not null...
         setWizardId(intent.getStringExtra(SipProfile.FIELD_WIZARD));
         
-        
         database = new DBAdapter(this);
 		database.open();
 		account = database.getAccount(accountId);
@@ -185,7 +184,7 @@ public class BasePrefsWizard extends GenericPrefs{
 		updateValidation();
 	}
 	
-	private void updateValidation() {
+	public void updateValidation() {
 		if(service != null) {
 			saveButton.setEnabled(wizard.canSave());
 		}else {

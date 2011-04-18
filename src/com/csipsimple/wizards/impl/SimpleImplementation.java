@@ -22,6 +22,7 @@ import java.util.HashMap;
 import android.net.Uri;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
@@ -146,5 +147,17 @@ public abstract class SimpleImplementation extends BaseImplementation {
 
 	public boolean needRestart() {
 		return false;
+	}
+	
+	public void setUsername(String username) {
+		if(!TextUtils.isEmpty(username)) {
+			accountUsername.setText(username);
+		}
+	}
+	
+	public void setPassword(String password) {
+		if(!TextUtils.isEmpty(password)) {
+			accountPassword.setText(password);
+		}
 	}
 }
