@@ -417,6 +417,11 @@ public class SipService extends Service {
 			}
 			return ms;
 		}
+
+		@Override
+		public int getVersion() throws RemoteException {
+			return SipManager.CURRENT_API;
+		}
 	};
 
 	private final ISipConfiguration.Stub binderConfiguration = new ISipConfiguration.Stub() {
@@ -577,6 +582,14 @@ public class SipService extends Service {
 					if (account != null) {
 						setAccountRegistration(account, active ? 1 : 0);
 					}
+				}
+			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
+				if (pjService != null) {
+					if(pjService.getActiveCallInProgress() == null) {
+						stopSelf();
+					}
+				}else {
+					stopSelf();
 				}
 			}
 		}
@@ -785,6 +798,7 @@ public class SipService extends Service {
 			IntentFilter intentfilter = new IntentFilter();
 			intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
+			intentfilter.addAction(SipManager.ACTION_SIP_CAN_BE_STOPPED);
 			deviceStateReceiver = new ServiceDeviceStateReceiver();
 			registerReceiver(deviceStateReceiver, intentfilter);
 		}

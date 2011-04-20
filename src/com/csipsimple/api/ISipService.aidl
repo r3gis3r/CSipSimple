@@ -23,17 +23,55 @@ import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.MediaState;
 
 interface ISipService{
+	/**
+	* Get the current API version
+	* @return version number. 1000 x major version + minor version
+	* Each major version must be compatible with all versions of the same major version
+	*/
+	int getVersion();
+
 	//Stack control
+	/**
+	* Start the sip stack
+	*/
 	void sipStart();
+	/**
+	* Stop the sip stack
+	*/
 	void sipStop();
+	/**
+	* Force to stop the sip service (stack + everything that goes arround stack)
+	*/
 	void forceStopService();
+	/**
+	* Restart the sip stack
+	*/
 	void askThreadedRestart();
 	
 	//Account control
+	/**
+	* Add all accounts available in database and marked active to running sip stack (loaded previously using sipStart)
+	*/
 	void addAllAccounts();
+	/**
+	* Remove all accounts from running sip stack (this does nothing in database)
+	*/
 	void removeAllAccounts();
+	/**
+	* remove and add all accounts available in database and marked active
+	*/
 	void reAddAllAccounts();
+	/**
+	* Change registration for a given account/profile id (id in database)
+	* @param accountId the account for which we'd like to change the registration state
+	* @param renew 0 if we don't want to unregister, 1 to renew registration
+	*/
 	void setAccountRegistration(int accountId, int renew);
+	/**
+	* Get registration state for a given account id
+	* @param accountId the account/profile id for which we'd like to get the info (in database)
+	* @return the Profile state
+	*/ 
 	SipProfileState getSipProfileState(int accountId);
 	
 	//Call configuration control

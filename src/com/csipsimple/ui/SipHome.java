@@ -474,7 +474,10 @@ public class SipHome extends TabActivity {
 	private void disconnectAndQuit() {
 		Log.d(THIS_FILE, "True disconnection...");
 		if (serviceIntent != null) {
-			stopService(serviceIntent);
+			//stopService(serviceIntent);
+			// we don't not need anymore the currently started sip
+			Intent it = new Intent(SipManager.ACTION_SIP_CAN_BE_STOPPED);
+			sendBroadcast(it);
 		}
 		serviceIntent = null;
 		finish();
