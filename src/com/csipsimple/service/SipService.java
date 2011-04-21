@@ -584,13 +584,7 @@ public class SipService extends Service {
 					}
 				}
 			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
-				if (pjService != null) {
-					if(pjService.getActiveCallInProgress() == null) {
-						stopSelf();
-					}
-				}else {
-					stopSelf();
-				}
+				getExecutor().execute(new DestroyRunnable());
 			}
 		}
 
@@ -759,7 +753,7 @@ public class SipService extends Service {
 		// Check connectivity, else just finish itself
 		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
 			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
-			stopSelf();
+			getExecutor().execute(new DestroyRunnable());
 			return;
 		}
 		
@@ -786,6 +780,8 @@ public class SipService extends Service {
 		if(stopSipStack()) {
 			notificationManager.cancelAll();
 			notificationManager.cancelCalls();
+		}else {
+			Log.e(THIS_FILE, "Somebody has stopped the service while there is an ongoing call !!!");
 		}
 		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
 		System.gc();
@@ -842,8 +838,7 @@ public class SipService extends Service {
 		// Check connectivity, else just finish itself
 		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
 			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
-			
-			stopSelf();
+			getExecutor().execute(new DestroyRunnable());
 			return;
 		}
 		
@@ -942,6 +937,10 @@ public class SipService extends Service {
 		sipWakeLock.release(this);
 	}
 	
+	/**
+	 * Safe stop the sip stack
+	 * @return true if can be stopped, false if there is a pending call and the sip service should not be stopped
+	 */
 	public boolean stopSipStack() {
 		sipWakeLock.acquire(this);
 		boolean canStop = true;
@@ -1300,14 +1299,7 @@ public class SipService extends Service {
 				return;
 			}
 			Log.d(THIS_FILE, "Will stop SERVICE");
-			getExecutor().execute(new Runnable() {
-				public void run() {
-					stopSipStack();
-					// OK, this will be done only if the last bind is released
-					stopSelf();
-				}
-			});
-
+			getExecutor().execute(new DestroyRunnable());
 		}
 	}
 
@@ -1525,6 +1517,16 @@ public class SipService extends Service {
 						Log.e(THIS_FILE, "Unable to defer restart", e);
 					}
 					startSipStack();
+				}
+			}
+		}
+	} 
+	
+	class DestroyRunnable implements Runnable {
+		public void run() {
+			synchronized (sipStarterLock) {
+				if(stopSipStack()) {
+					stopSelf();
 				}
 			}
 		}
