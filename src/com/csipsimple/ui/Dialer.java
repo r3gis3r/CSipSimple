@@ -54,11 +54,13 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.csipsimple.R;
 import com.csipsimple.animation.Flip3dAnimation;
@@ -73,8 +75,6 @@ import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Theme;
-import com.csipsimple.utils.contacts.ContactsWrapper;
-import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.AccountChooserButton;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
@@ -149,7 +149,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 	private AlertDialog missingVoicemailDialog;
 
-	private LinearLayout searchInContactRow;
 
 
 
@@ -184,16 +183,25 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		// dialDomain = (EditText) findViewById(R.id.dialtext_domain);
 		rootView = (View) findViewById(R.id.toplevel);
 		accountChooserButton = (AccountChooserButton) findViewById(R.id.accountChooserButton);
-		searchInContactRow = (LinearLayout) findViewById(R.id.search_contacts);
 		
 		
 		isDigit = prefsWrapper.startIsDigit();
 		digitDialer.setVisibility(isDigit ? View.VISIBLE : View.GONE);
 		textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
 		sipTextUri.setListVisibility(isDigit ? View.GONE : View.VISIBLE);
+		
+		sipTextUri.getTextField().setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView tv, int action, KeyEvent arg2) {
+				if(action == EditorInfo.IME_ACTION_GO) {
+					placeCall();
+					return true;
+				}
+				return false;
+			}
+		});
 
 		dialPad.setOnDialKeyListener(this);
-		searchInContactRow.setOnClickListener(this);
 		initButtons();
 
 		// Add gesture detector
@@ -617,10 +625,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			placeVMCall();
 			break;
 		}
-		case R.id.search_contacts : {
-			startActivityForResult(Compatibility.getContactPhoneIntent(), PICKUP_PHONE);
-			break;
-		}
 		}
 	}
 
@@ -738,34 +742,4 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 	}
 	
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode) {
-		case PICKUP_PHONE:
-			if(resultCode == RESULT_OK) {
-				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
-					@Override
-					public void onTrigger(String number) {
-                        // TODO : filters... how to find a fancy way to integrate it back here 
-					    if (number.startsWith("sip:")) {
-					        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(number)));
-					    } else {
-                            startActivity(new Intent(Intent.ACTION_CALL, Uri.fromParts("sip", number, null)));
-					    }
-					}
-				});
-				return;
-			}
-			break;
-		default:
-			break;
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-	
-	
-
-
-
 }

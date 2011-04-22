@@ -24,19 +24,16 @@
 		android:id="@+id/topFieldText"
 		android:background="@drawable/btn_dial_textfield"
 		android:layout_marginBottom="10dip" android:orientation="horizontal" android:padding="0dip" >
-		<TextView android:text="sip:" android:id="@+id/protocolChooser"
-			android:visibility="gone"
-			android:gravity="left|center_vertical"
-			android:layout_width="wrap_content" android:layout_height="fill_parent"
-			android:paddingRight="10dip" android:paddingLeft="5dip"></TextView>
 		<AutoCompleteTextView android:layout_height="fill_parent"
 			android:layout_width="fill_parent" android:id="@+id/dialtxt_user"
 			android:gravity="left|center_vertical"
 			android:dropDownWidth="fill_parent"
 			android:completionThreshold="1"
+			android:hint="@string/type_sip_uri_or_autocomplete"
 			android:layout_marginLeft="5dip"
 			android:layout_weight="1" android:background="@android:color/transparent"
-			android:textColor="#FFF" android:lines="1" android:inputType="text|textAutoComplete" />
+			android:textColor="#FFF" android:lines="1" 
+			android:inputType="text|textAutoComplete" android:imeOptions="actionGo"  />
 		<com.csipsimple.widgets.AccountChooserButton android:layout_width="wrap_content"
 			android:layout_weight="0" android:id="@+id/accountChooserButtonText"
 			android:layout_height="fill_parent" />

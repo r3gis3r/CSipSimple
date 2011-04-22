@@ -26,24 +26,23 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.SipService;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.contacts.ContactsWrapper;
-import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.EditSipUri;
 import com.csipsimple.widgets.EditSipUri.ToCall;
 
@@ -53,7 +52,6 @@ public class PickupSipUri extends Activity implements OnClickListener {
 	private EditSipUri sipUri;
 	private Button okBtn;
 	private BroadcastReceiver registrationReceiver;
-	private LinearLayout searchInContactRow;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +78,17 @@ public class PickupSipUri extends Activity implements OnClickListener {
 
 		
 		sipUri = (EditSipUri) findViewById(R.id.sip_uri);
-		searchInContactRow = (LinearLayout) findViewById(R.id.search_contacts);
-		searchInContactRow.setOnClickListener(this);
+		sipUri.getTextField().setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView tv, int action, KeyEvent arg2) {
+				if(action == EditorInfo.IME_ACTION_GO) {
+					sendPositiveResult();
+					return true;
+				}
+				return false;
+			}
+		});
+		
 		registrationReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -122,56 +129,29 @@ public class PickupSipUri extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.ok:
-			 Intent resultValue = new Intent();
-			 ToCall result = sipUri.getValue();
-			 if(result != null) {
-				 resultValue.putExtra(Intent.EXTRA_PHONE_NUMBER,
-							result.getCallee());
-				 resultValue.putExtra(SipProfile.FIELD_ACC_ID,
-							result.getAccountId());
-				 setResult(RESULT_OK, resultValue);
-			 }else {
-				setResult(RESULT_CANCELED);
-			 }
-			finish();
+			sendPositiveResult();
 			break;
 		case R.id.cancel:
 			setResult(RESULT_CANCELED);
 			finish();
 			break;
-		case R.id.search_contacts:
-			startActivityForResult(Compatibility.getContactPhoneIntent(), PICKUP_PHONE);
-			break;
 		}
 	}
 
-	protected static final int PICKUP_PHONE = 0;
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(THIS_FILE, "On activity result");
-		switch (requestCode) {
-		case PICKUP_PHONE:
-			if(resultCode == RESULT_OK) {
-				ContactsWrapper.getInstance().treatContactPickerPositiveResult(this, data, new OnPhoneNumberSelected() {
-					@Override
-					public void onTrigger(String number) {
-						// TODO : filters... how to find a fancy way to integrate it back here 
-						// * auto once selected according to currently selected account?
-						// * keep in mind initial call number and rewrite number each time account is changed in selection (maybe the best way but must be handled properly)
-					    sipUri.setTextValue(number);
-					}
-				});
-				return;
-			}
-			break;
-
-		default:
-			break;
-		}
-		super.onActivityResult(requestCode, resultCode, data);
+	private void sendPositiveResult() {
+		Intent resultValue = new Intent();
+		 ToCall result = sipUri.getValue();
+		 if(result != null) {
+			 resultValue.putExtra(Intent.EXTRA_PHONE_NUMBER,
+						result.getCallee());
+			 resultValue.putExtra(SipProfile.FIELD_ACC_ID,
+						result.getAccountId());
+			 setResult(RESULT_OK, resultValue);
+		 }else {
+			setResult(RESULT_CANCELED);
+		 }
+		finish();
 	}
-
 	
 	private ISipService service;
 	private ServiceConnection connection = new ServiceConnection() {

@@ -272,9 +272,11 @@ public class ContactsUtils5 extends ContactsWrapper {
 	@Override
 	public void bindAutoCompleteView(View view, Context context, Cursor cursor) {
 		TextView name = (TextView) view.findViewById(R.id.name);
-		name.setText(cursor.getString(NAME_INDEX));
-
 		TextView label = (TextView) view.findViewById(R.id.label);
+		TextView number = (TextView) view.findViewById(R.id.number);
+		
+		name.setText(cursor.getString(NAME_INDEX));
+		
 		int type = cursor.getInt(TYPE_INDEX);
 		CharSequence labelText = android.provider.Contacts.Phones.getDisplayLabel(context, type, cursor.getString(LABEL_INDEX));
 		// When there's no label, getDisplayLabel() returns a CharSequence of
@@ -288,7 +290,6 @@ public class ContactsUtils5 extends ContactsWrapper {
 			label.setVisibility(View.VISIBLE);
 		}
 
-		TextView number = (TextView) view.findViewById(R.id.number);
 		number.setText(cursor.getString(NUMBER_INDEX));
 	}
 

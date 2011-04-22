@@ -29,8 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:textSize="18sp"
-    />
+        android:textSize="18sp"  />
 
     <LinearLayout android:id="@+id/name_and_label"
         android:layout_width="wrap_content"
@@ -43,16 +42,14 @@
             android:layout_height="wrap_content"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
-            android:singleLine="true"
-        />
+            android:singleLine="true" />
 
         <TextView android:id="@+id/number"
             style="?android:attr/dropDownItemStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:textSize="14sp"
-        />
+            android:textSize="14sp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -60,6 +60,7 @@ public class Ippi extends SimpleImplementation {
 	private TextView customWizardText;
 	private WebView webView;
 	private LinearLayout settingsContainer;
+	private LinearLayout validationBar;
 	
 	@Override
 	protected String getDomain() {
@@ -81,6 +82,8 @@ public class Ippi extends SimpleImplementation {
 		//Get wizard specific row
 		customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
 		customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
+		
+		validationBar = (LinearLayout) parent.findViewById(R.id.validation_bar);
 		
 		updateAccountInfos(account);
 		
@@ -170,6 +173,7 @@ public class Ippi extends SimpleImplementation {
 				@Override
 				public void onClick(View v) {
 					settingsContainer.setVisibility(View.GONE);
+					validationBar.setVisibility(View.GONE);
 					webView.setVisibility(View.VISIBLE);
 					webView.loadUrl(webCreationPage);
 					webView.requestFocus(View.FOCUS_DOWN);
@@ -246,6 +250,7 @@ public class Ippi extends SimpleImplementation {
 		public void finishAccountCreation(boolean success, String userName, String password) {
 			webView.setVisibility(View.GONE);
 			settingsContainer.setVisibility(View.VISIBLE);
+			validationBar.setVisibility(View.VISIBLE);
 			if(success) {
 				setUsername(userName);
 				setPassword(password);

@@ -58,11 +58,17 @@ public class SipNotifications {
 	public static final int MESSAGE_NOTIF_ID = REGISTER_NOTIF_ID + 3;
 	public static final int VOICEMAIL_NOTIF_ID = REGISTER_NOTIF_ID + 4;
 	
+	private static boolean isInit = false;
+	
 	public SipNotifications(Context aContext) {
 		context = aContext;
 		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		cancelAll();
-		cancelCalls();
+		
+		if(!isInit) {
+			cancelAll();
+			cancelCalls();
+			isInit = true;
+		}
 	}
 	
 	//Announces

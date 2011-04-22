@@ -42,7 +42,7 @@
         	android:clickable="true" android:focusable="true" android:layout_height="wrap_content" android:layout_marginTop="10dip"/>
         <TextView android:id="@+id/subjectLabel" android:textAppearance="?android:attr/textAppearanceSmall" 
         	android:layout_below="@+id/subject" 
-        	android:text="ahhh"
+        	android:text=""
         	android:ellipsize="end"
         	android:layout_height="wrap_content" 
         	android:layout_alignLeft="@+id/subject" android:layout_alignRight="@+id/subject"  android:layout_width="fill_parent"></TextView>
