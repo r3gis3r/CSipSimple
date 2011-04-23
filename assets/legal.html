@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -19,27 +20,37 @@ body, html {
 body{
 	border: 0;
 }
-	
+
+
 .component {
 	background: -webkit-gradient(linear, left top, left bottom, from(#235f83), to(#122f41));
 	color : white;
 	font-size : 14px;
 	padding : 9px;
 	text-align : center;
+	margin-top:10px;
+	border-bottom : 0px !important;
 }
 
 .license {
 	padding: 10px;
 	-webkit-box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.8);
-	border: 1px solid black;
 	margin: 0px;
-	font-size : 9px;    
+	font-size : 9px;
+	white-space: pre-wrap;
 }
 
 .copyright-holders {
 	font-size : 9px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#EBEDEE));
 	margin : 0px;
+	padding : 5px;
+	border-bottom : 0px !important;
+	border-top : 0px !important;
+}
+
+.component, .copyright-holders, .license {
+	border : 1px solid black;
 }
 
 .copyright-holders ul {
