@@ -21,16 +21,16 @@ import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
-public class NexGenTel extends SimpleImplementation {
+public class BTone extends SimpleImplementation {
 	
 	@Override
 	protected String getDomain() {
-		return "nexgentel.us";
+		return "btone.us";
 	}
 	
 	@Override
 	protected String getDefaultName() {
-		return "NGeen";
+		return "BlueTone";
 	}
 	
 	
@@ -45,7 +45,7 @@ public class NexGenTel extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
-		prefs.setPreferenceStringValue(SipConfigManager.OVERRIDE_NAMESERVER, "92.55.132.13");
+		prefs.setPreferenceStringValue(SipConfigManager.OVERRIDE_NAMESERVER, "67.214.119.234");
 	}
 
 	@Override

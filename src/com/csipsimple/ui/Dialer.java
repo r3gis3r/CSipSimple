@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.media.ToneGenerator;
@@ -42,14 +43,11 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.DialerKeyListener;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -95,7 +93,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 	private LinearLayout digitsWrapper;
 	private AccountChooserButton accountChooserButton;
-	private boolean isDigit;
+	private boolean isDigit, isTablet;
 
 	private DialingFeedback dialFeedback;
 
@@ -138,7 +136,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		}
 	};
 
-	private GestureDetector gestureDetector;
+//	private GestureDetector gestureDetector;
 	private Dialpad dialPad;
 	
 	private PreferencesWrapper prefsWrapper;
@@ -149,7 +147,9 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 	private AlertDialog missingVoicemailDialog;
 
+	private ImageButton backFlipTextDialerButton;
 
+	private ImageButton backFlipDigitDialerButton;
 
 
 	/** Called when the activity is first created. */
@@ -184,17 +184,16 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		rootView = (View) findViewById(R.id.toplevel);
 		accountChooserButton = (AccountChooserButton) findViewById(R.id.accountChooserButton);
 		
-		
 		isDigit = prefsWrapper.startIsDigit();
-		digitDialer.setVisibility(isDigit ? View.VISIBLE : View.GONE);
-		textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
-		sipTextUri.setListVisibility(isDigit ? View.GONE : View.VISIBLE);
+		isTablet = Compatibility.isTabletScreen(this);
+		Log.d(THIS_FILE, "Is tablet "+ isTablet);
+
 		
 		sipTextUri.getTextField().setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView tv, int action, KeyEvent arg2) {
 				if(action == EditorInfo.IME_ACTION_GO) {
-					placeCall();
+					placeCall(TEXT_VIEW);
 					return true;
 				}
 				return false;
@@ -204,6 +203,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		dialPad.setOnDialKeyListener(this);
 		initButtons();
 
+		/*
 		// Add gesture detector
 		gestureDetector = new GestureDetector(this, new SwitchDialerGestureDetector());
 
@@ -216,7 +216,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		};
 		digitDialer.setOnTouchListener(touchTransmiter);
 		textDialer.setOnTouchListener(touchTransmiter);
-		
+		*/
 		dialFeedback = new DialingFeedback(this, false);
 
 		registrationReceiver = new BroadcastReceiver() {
@@ -227,20 +227,21 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		};
 		
 		//Dynamically add the switcher from text dialer to digit dialer cause we use the widget that handle sip uris
-		ImageButton backFlip = new ImageButton(this);
-		backFlip.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
-		backFlip.setBackgroundResource(R.drawable.btn_dial_textbadge);
-		backFlip.setImageResource(R.drawable.ic_tab_unselected_dialer);
-		backFlip.setOnClickListener(new OnClickListener() {
+		backFlipTextDialerButton = new ImageButton(this);
+		backFlipTextDialerButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
+		backFlipTextDialerButton.setBackgroundResource(R.drawable.btn_dial_textbadge);
+		backFlipTextDialerButton.setImageResource(R.drawable.ic_tab_unselected_dialer);
+		backFlipTextDialerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				flipView(false);
 			}
 		});
 		LinearLayout topField = (LinearLayout) sipTextUri.findViewById(R.id.topFieldText);
-		topField.addView(backFlip, 0);
+		topField.addView(backFlipTextDialerButton, 0);
 		Log.d(THIS_FILE, "create dialer");
 		
+		backFlipDigitDialerButton = (ImageButton) findViewById(R.id.switchTextView);
 		
 		
 		applyTheme();
@@ -274,6 +275,30 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			});
 		}
 	}
+	
+	private static final int DIGIT_VIEW = 0;
+	private static final int TEXT_VIEW = 1;
+	
+	private boolean needDualPaneMode() {
+		int orientation = getResources().getConfiguration().orientation;
+		return (isTablet && (orientation == Configuration.ORIENTATION_LANDSCAPE) );
+	}
+	
+	private void initPaneMode() {
+		if(!needDualPaneMode()) {
+			digitDialer.setVisibility(isDigit ? View.VISIBLE : View.GONE);
+			textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
+			sipTextUri.setListVisibility(isDigit ? View.GONE : View.VISIBLE);
+			backFlipTextDialerButton.setVisibility(View.VISIBLE);
+			backFlipDigitDialerButton.setVisibility(View.VISIBLE);
+		}else {
+			digitDialer.setVisibility( View.VISIBLE );
+			textDialer.setVisibility( View.VISIBLE );
+			sipTextUri.setListVisibility( View.VISIBLE );
+			backFlipTextDialerButton.setVisibility(View.GONE);
+			backFlipDigitDialerButton.setVisibility(View.GONE);
+		}
+	}
 
 
 	protected void updateRegistrations() {
@@ -294,6 +319,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	protected void onResume() {
 		super.onResume();
 		Log.d(THIS_FILE, "Resuming dialer");
+		initPaneMode();
 		// Bind service
 		registerReceiver(registrationReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
 		
@@ -369,7 +395,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		digits.setInputType(android.text.InputType.TYPE_NULL);
 		digits.setCursorVisible(false);
 		afterTextChanged(digits.getText());
-		
 	}
 
 	private void keyPressed(int keyCode) {
@@ -381,7 +406,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_CALL: {
-			placeCall();
+			placeCall(isDigit ? DIGIT_VIEW : TEXT_VIEW);
 			return true;
 		}
 		}
@@ -412,14 +437,14 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 
 	private static final int USE_GSM = -2;
 
-	private void placeCall() {
+	private void placeCall(int view) {
 		if (service == null) {
 			return;
 		}
 		String toCall = "";
 		Integer accountToUse = USE_GSM;
 
-		if (isDigit) {
+		if (view == DIGIT_VIEW) {
 			toCall = PhoneNumberUtils.stripSeparators(digits.getText().toString());
 			SipProfile acc = accountChooserButton.getSelectedAccount();
 			if (acc != null) {
@@ -603,9 +628,12 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			sipTextUri.clear();
 			break;
 		}
-		case R.id.dialButton:
+		case R.id.dialButton:{
+			placeCall(DIGIT_VIEW);
+			break;
+		}
 		case R.id.dialTextButton: {
-			placeCall();
+			placeCall(TEXT_VIEW);
 			break;
 		}
 		case R.id.switchTextView: {
@@ -702,6 +730,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		}
 	}
 
+	/*
 	// Gesture detector
 	private class SwitchDialerGestureDetector extends GestureDetector.SimpleOnGestureListener {
 		@Override
@@ -723,6 +752,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			return false;
 		}
 	}
+	*/
 
 	@Override
 	public void onTrigger(int keyCode, int dialTone) {

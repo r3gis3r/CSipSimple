@@ -46,7 +46,7 @@
 		</receiver>
 		
 		<!--  Main ui -->
-		<activity android:name="com.csipsimple.ui.Dialer"></activity>
+		<activity android:name="com.csipsimple.ui.Dialer" android:configChanges="orientation"  />
 		<activity android:name="com.csipsimple.ui.CallLogsList"></activity>
 		<activity android:name="com.csipsimple.ui.CallLog" android:theme="@android:style/Theme.NoTitleBar"></activity>
 		
@@ -131,7 +131,14 @@
                 <data android:scheme="sips" />
                 <data android:scheme="imto" />
 			 </intent-filter>
-			
+			<!-- Required for honeycomb???
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="tel" />
+			 </intent-filter>
+			  -->
 		</activity>
 		
 		 <activity-alias android:name="PrivilegedOutgoingCallBroadcaster"
