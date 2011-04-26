@@ -37,6 +37,7 @@ import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Betamax;
+import com.csipsimple.wizards.impl.Blueface;
 import com.csipsimple.wizards.impl.BroadVoice;
 import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
@@ -364,6 +365,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ipshka, 10, 
 					new Locale[]{new Locale("UK", "ua")}, false, false, 
 					IPshka.class));
+			WIZARDS_DICT.put("BLUEFACE", new WizardInfo("BLUEFACE", "Blueface", 
+					R.drawable.ic_wizard_blueface, 19, 
+					new Locale[]{ Locale.UK, new Locale("EN", "ie") }, false, false, 
+					Blueface.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
