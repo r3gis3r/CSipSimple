@@ -1068,10 +1068,14 @@ public class SipService extends Service {
 	}
 
 	public void updateRegistrationsState() {
-		ArrayList<SipProfileState> activeAccountsInfos = pjService.getAndUpdateActiveAccounts();
+		ArrayList<SipProfileState> activeAccountsInfos = null;
+	
+		if(pjService != null) {
+			activeAccountsInfos = pjService.getAndUpdateActiveAccounts();
+		}
 
 		// Handle status bar notification
-		if (activeAccountsInfos.size() > 0 && prefsWrapper.showIconInStatusBar()) {
+		if (activeAccountsInfos != null && activeAccountsInfos.size() > 0 && prefsWrapper.showIconInStatusBar()) {
 		// Testing memory / CPU leak as per issue 676
 		//	for(int i=0; i < 10; i++) {
 		//		Log.d(THIS_FILE, "Notify ...");

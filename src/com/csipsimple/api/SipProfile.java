@@ -161,7 +161,7 @@ public class SipProfile implements Parcelable {
 	public String scheme = null;
 	public int datatype = 0;
 	public String data = null;
-	public int use_srtp = 0;
+	public int use_srtp = -1;
 	public int use_zrtp = 0;
 	public int reg_use_proxy = 3;
 	public int sip_stack = PJSIP_STACK;

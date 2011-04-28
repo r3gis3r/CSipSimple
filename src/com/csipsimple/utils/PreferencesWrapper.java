@@ -71,9 +71,9 @@ public class PreferencesWrapper {
 		
 		put(SipConfigManager.USE_SRTP, "0");
 		put(SipConfigManager.USE_ZRTP, "1"); /* 1 is no zrtp */
-		put(SipConfigManager.UDP_TRANSPORT_PORT, "5060");
-		put(SipConfigManager.TCP_TRANSPORT_PORT, "5060");
-		put(SipConfigManager.TLS_TRANSPORT_PORT, "5061");
+		put(SipConfigManager.UDP_TRANSPORT_PORT, "0");
+		put(SipConfigManager.TCP_TRANSPORT_PORT, "0");
+		put(SipConfigManager.TLS_TRANSPORT_PORT, "0");
 		put(SipConfigManager.KEEP_ALIVE_INTERVAL_WIFI, "80");
 		put(SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE, "40");
 		put(SipConfigManager.RTP_PORT, "4000");
@@ -924,7 +924,7 @@ public class PreferencesWrapper {
 	 * Check TCP/UDP validity of a network port
 	 */
 	private boolean isValidPort(int port) {
-		return (port>0 && port < 65535);
+		return (port>=0 && port < 65535);
 	}
 
 	/**

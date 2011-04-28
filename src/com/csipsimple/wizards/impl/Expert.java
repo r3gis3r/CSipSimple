@@ -121,7 +121,9 @@ public class Expert extends BaseImplementation {
 			accountProxy.setText("");
 		}
 		Log.d(THIS_FILE, "use srtp : "+account.use_srtp);
-		accountUseSrtp.setValueIndex(account.use_srtp);
+		if(account.use_srtp >= 0) {
+			accountUseSrtp.setValueIndex(account.use_srtp);
+		}
 	}
 	
 
