@@ -87,6 +87,10 @@
 			android:summary="@string/use_compact_form_desc"
 			android:key="use_compact_form" android:defaultValue="false"></CheckBoxPreference>	
 		
+		<EditTextPreference android:key="user_agent"
+			android:title="@string/user_agent"
+			android:summary="@string/user_agent_desc"
+			android:defaultValue="CSipSimple"></EditTextPreference>
 	</PreferenceCategory>
 	
 	<PreferenceScreen android:title="@string/secure_transport" android:summary="@string/secure_transport_desc" android:key="secure_transport">

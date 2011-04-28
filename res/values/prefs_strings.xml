@@ -77,6 +77,8 @@
 <string name="keep_alive_interval_desc">Interval (sec) for KA packets</string>
 <string name="use_compact_form">Use compact SIP</string>
 <string name="use_compact_form_desc">Reduce SIP packets size. May not work on old SIP servers</string>
+<string name="user_agent">User agent</string>
+<string name="user_agent_desc">Agent presented by the application (if default will add infos)</string>
 
 
 <!-- Security -->

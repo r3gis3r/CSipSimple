@@ -49,7 +49,6 @@ public class PreferencesWrapper {
 	
 	//Internal use
 	public static final String HAS_BEEN_QUIT = "has_been_quit";
-	public static final String USER_AGENT = "user_agent"; 
 	public static final String IS_ADVANCED_USER = "is_advanced_user";
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 	public static final String HAS_ALREADY_SETUP_SERVICE = "has_already_setup_service";
@@ -66,7 +65,7 @@ public class PreferencesWrapper {
 		private static final long serialVersionUID = 1L;
 	{
 		
-		put(USER_AGENT, CustomDistribution.getUserAgent());
+		put(SipConfigManager.USER_AGENT, CustomDistribution.getUserAgent());
 		put(SipConfigManager.LOG_LEVEL, "1");
 		
 		put(SipConfigManager.USE_SRTP, "0");
@@ -522,10 +521,13 @@ public class PreferencesWrapper {
 	}
 
 	public String getUserAgent(Context ctx) {
-		String userAgent = getPreferenceStringValue(USER_AGENT);
-		PackageInfo pinfo = CollectLogs.getCurrentRevision(ctx);
-		if(pinfo != null) {
-			userAgent +=  " r" + pinfo.versionCode+" / "+android.os.Build.DEVICE+"-"+Compatibility.getApiLevel();
+		String userAgent = getPreferenceStringValue(SipConfigManager.USER_AGENT);
+		if(userAgent.equalsIgnoreCase(CustomDistribution.getUserAgent())) {
+			//If that's the official -not custom- user agent, send the release, the device and the api level
+			PackageInfo pinfo = CollectLogs.getCurrentRevision(ctx);
+			if(pinfo != null) {
+				userAgent +=  " r" + pinfo.versionCode+" / "+android.os.Build.DEVICE+"-"+Compatibility.getApiLevel();
+			}
 		}
 		return userAgent;
 	}

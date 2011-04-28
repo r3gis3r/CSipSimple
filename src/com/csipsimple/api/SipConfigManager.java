@@ -85,6 +85,8 @@ public class SipConfigManager {
 	public static final String KEEP_ALIVE_INTERVAL_MOBILE = "keep_alive_interval_mobile";
 	public static final String OVERRIDE_NAMESERVER = "override_nameserver";
 	public static final String USE_COMPACT_FORM = "use_compact_form";
+	public static final String USER_AGENT = "user_agent"; 
+	
 	
 	// SECURE
 	public static final String ENABLE_TLS = "enable_tls";
