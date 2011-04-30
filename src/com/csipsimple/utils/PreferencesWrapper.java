@@ -161,6 +161,7 @@ public class PreferencesWrapper {
 		
 		//Calls
 		put(SipConfigManager.AUTO_RECORD_CALLS, false);
+		put(SipConfigManager.SUPPORT_MULTIPLE_CALLS, false);
 	}};
 	
 	private final static HashMap<String, Float> FLOAT_PREFS = new HashMap<String, Float>(){

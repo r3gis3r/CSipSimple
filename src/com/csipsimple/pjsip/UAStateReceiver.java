@@ -82,6 +82,7 @@ public class UAStateReceiver extends Callback {
 	final static long LAUNCH_TRIGGER_DELAY = 2000;
 	private long lastLaunchCallHandler = 0;
 	
+	private boolean supportMultipleCalls = false;
 	
 	int eventLockCount = 0;
 	private void lockCpu(){
@@ -107,25 +108,28 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_incoming_call(final int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 
+		//Check if we have not already an ongoing call
+		if(!supportMultipleCalls) {
+			SipCallSession[] calls = getCalls();
+			if(calls != null && calls.length > 0) {
+				for( SipCallSession existingCall : calls) {
+					if(!existingCall.isAfterEnded()) {
+						Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
+						//If there is an ongoing call... For now decline TODO : should here manage multiple calls
+						//Send busy here
+						pjsua.call_hangup(callId, 486, null, null);
+						return;
+					}
+				}
+			}
+		}
 		
 		Thread t = new Thread() {
 			public void run() {
 				lockCpu();
 				
-				//Check if we have not already an ongoing call
-				/*
-				SipCallSession existingOngoingCall = getActiveCallInProgress();
-				if(existingOngoingCall != null) {
-					if(existingOngoingCall.getCallState() == SipCallSession.InvState.CONFIRMED) {
-						Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
-						//If there is an ongoing call... For now decline TODO : should here manage multiple calls
-						//Send busy here
-						pjsua.call_hangup(callId, 486, null, null);
-						unlockCpu();
-						return;
-					}
-				}
-				*/
+
+				
 				
 				SipCallSession callInfo = getCallInfo(callId, true);
 				Log.d(THIS_FILE, "Incoming call <<");
@@ -489,8 +493,10 @@ public class UAStateReceiver extends Callback {
 				IncomingCallInfos incomingCallInfo = (IncomingCallInfos) msg.obj;
 				SipCallSession callInfo = incomingCallInfo.callInfo;
 				Integer accountId = incomingCallInfo.accId;
-				
 				int callId = callInfo.getCallId();
+				
+				
+				
 				//Get lock while ringing to be sure notification is well done !
 				if (incomingCallLock == null) {
 					PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
@@ -698,6 +704,8 @@ public class UAStateReceiver extends Callback {
 			eventLock.setReferenceCounted(true);
 
 		}
+		
+		supportMultipleCalls = pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS);
 	}
 	
 

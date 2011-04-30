@@ -167,6 +167,13 @@ public class Compatibility {
 			return 0x4;
 		}
 		*/
+		/*
+		if(android.os.Build.MODEL.equalsIgnoreCase("X10i")) {
+			// VOICE_CALL
+			return Integer.toString(0x4);
+		}
+		*/
+		
 		if(android.os.Build.DEVICE.equalsIgnoreCase("olympus")) {
 			//Motorola atrix bug
 			// CAMCORDER

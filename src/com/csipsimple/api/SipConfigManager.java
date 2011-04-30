@@ -105,6 +105,7 @@ public class SipConfigManager {
 	// CALLS
 	public static final String AUTO_RECORD_CALLS = "auto_record_calls";
 	public static final String DEFAULT_CALLER_ID = "default_caller_id";
+	public static final String SUPPORT_MULTIPLE_CALLS = "support_multiple_calls";
 	
 	public static final String CODEC_NB = "nb";
 	public static final String CODEC_WB = "wb";

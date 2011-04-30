@@ -27,5 +27,8 @@
 		android:summary="@string/auto_record_calls_desc"
 		android:key="auto_record_calls"
 		android:defaultValue="false"/>
-		
+	<CheckBoxPreference android:title="@string/support_multiple_calls"
+		android:summary="@string/support_multiple_calls_desc"
+		android:key="support_multiple_calls"
+		android:defaultValue="false"/>
 </PreferenceScreen>
