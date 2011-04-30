@@ -57,6 +57,7 @@ import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
 import com.csipsimple.wizards.impl.Keyyo;
 import com.csipsimple.wizards.impl.Local;
+import com.csipsimple.wizards.impl.Localphone;
 import com.csipsimple.wizards.impl.Mondotalk;
 import com.csipsimple.wizards.impl.NeufTalk;
 import com.csipsimple.wizards.impl.BTone;
@@ -213,6 +214,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_sipcel, 14, 
 					new Locale[]{}, false, true, 
 					SipCel.class));
+			WIZARDS_DICT.put("LOCALPHONE", new WizardInfo("LOCALPHONE", "Localphone", 
+					R.drawable.ic_wizard_localphone, 10, 
+					new Locale[]{ }, false, true, 
+					Localphone.class));
 			
 			
 			//Locales
