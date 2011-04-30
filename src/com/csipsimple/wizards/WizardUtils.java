@@ -61,6 +61,7 @@ import com.csipsimple.wizards.impl.Mondotalk;
 import com.csipsimple.wizards.impl.NeufTalk;
 import com.csipsimple.wizards.impl.BTone;
 import com.csipsimple.wizards.impl.OnSip;
+import com.csipsimple.wizards.impl.Optimus;
 import com.csipsimple.wizards.impl.Ovh;
 import com.csipsimple.wizards.impl.Pbxes;
 import com.csipsimple.wizards.impl.Pennytel;
@@ -361,6 +362,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_siptel, 10, 
 					new Locale[] {new Locale("PT", "pt")}, false, false, 
 					SiptelPt.class));
+			WIZARDS_DICT.put("OPTIMUS", new WizardInfo("OPTIMUS", "Optimus", 
+					R.drawable.ic_wizard_optimus, 9, 
+					new Locale[] {new Locale("PT", "pt")}, false, false, 
+					Optimus.class));
 			WIZARDS_DICT.put("IPSHKA", new WizardInfo("IPSHKA", "IPshka", 
 					R.drawable.ic_wizard_ipshka, 10, 
 					new Locale[]{new Locale("UK", "ua")}, false, false, 
