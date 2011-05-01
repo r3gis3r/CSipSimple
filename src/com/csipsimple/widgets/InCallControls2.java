@@ -20,6 +20,8 @@
 package com.csipsimple.widgets;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,10 +34,11 @@ import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.csipsimple.R;
-import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.MediaState;
+import com.csipsimple.api.SipCallSession;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.Theme;
 import com.csipsimple.utils.accessibility.AccessibilityWrapper;
 import com.csipsimple.widgets.SlidingTab.OnTriggerListener;
 
@@ -442,5 +445,133 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		speakerButton.setChecked(mediaState.isSpeakerphoneOn);
 		
 		
+	}
+
+	public void applyTheme(Theme t) {
+		//Apply backgrounds
+		
+		// To toggle buttons
+		StateListDrawable tStd = getToggleButtonDrawable(t);
+		if(tStd != null) {
+			speakerButton.setBackgroundDrawable(tStd);
+			// yeah we can't recycle the std drawable
+			muteButton.setBackgroundDrawable(getToggleButtonDrawable(t));
+			bluetoothButton.setBackgroundDrawable(getToggleButtonDrawable(t));
+		}
+		
+		// To buttons
+		StateListDrawable bStd = getButtonDrawable(t);
+		if(bStd != null) {
+			addCallButton.setBackgroundDrawable(bStd);
+			clearCallButton.setBackgroundDrawable(getButtonDrawable(t));
+			dialButton.setBackgroundDrawable(getButtonDrawable(t));
+		}
+		
+		// To buttons icons
+		Drawable addCallDrawable = t.getDrawableResource("ic_in_call_touch_add_call");
+		if(addCallDrawable != null) {
+			addCallButton.setCompoundDrawablesWithIntrinsicBounds(null, addCallDrawable, null, null);
+		}
+		Drawable clearCallDrawable = t.getDrawableResource("ic_in_call_touch_end");
+		if(clearCallDrawable != null) {
+			clearCallButton.setCompoundDrawablesWithIntrinsicBounds(null, clearCallDrawable, null, null);
+		}
+		Drawable dialDrawable = t.getDrawableResource("ic_in_call_touch_dialpad");
+		if(dialDrawable != null) {
+			dialButton.setCompoundDrawablesWithIntrinsicBounds(null, dialDrawable, null, null);
+		}
+		
+		// To sliding tab
+		slidingTabWidget.setLeftTabDrawables(t.getDrawableResource("ic_jog_dial_answer"), 
+				t.getDrawableResource("jog_tab_target_green"), 
+				t.getDrawableResource("jog_tab_bar_left_answer"), 
+				t.getDrawableResource("jog_tab_left_answer"));
+		
+		slidingTabWidget.setRightTabDrawables(t.getDrawableResource("ic_jog_dial_decline"), 
+				t.getDrawableResource("jog_tab_target_red"), 
+				t.getDrawableResource("jog_tab_bar_right_decline"), 
+				t.getDrawableResource("jog_tab_right_decline"));
+		
+		
+	}
+	
+	private StateListDrawable getToggleButtonDrawable(Theme t) {
+
+		Drawable toggleOnNormal = t.getDrawableResource("btn_in_call_switch_on_normal");
+		Drawable toggleOnDisabled = t.getDrawableResource("btn_in_call_switch_on_disable");
+		Drawable toggleOnPressed = t.getDrawableResource("btn_in_call_switch_on_pressed");
+		Drawable toggleOnSelected = t.getDrawableResource("btn_in_call_switch_on_selected");
+		Drawable toggleOnDisabledFocus = t.getDrawableResource("btn_in_call_switch_on_disable_focused");
+		Drawable toggleOffNormal = t.getDrawableResource("btn_in_call_switch_off_normal");
+		Drawable toggleOffDisabled = t.getDrawableResource("btn_in_call_switch_off_disable");
+		Drawable toggleOffPressed = t.getDrawableResource("btn_in_call_switch_off_pressed");
+		Drawable toggleOffSelected = t.getDrawableResource("btn_in_call_switch_off_selected");
+		Drawable toggleOffDisabledFocus = t.getDrawableResource("btn_in_call_switch_off_disable_focused");
+		
+		if(toggleOnSelected == null) {
+			toggleOnSelected = toggleOnPressed;
+		}
+		if(toggleOffSelected == null) {
+			toggleOffSelected = toggleOffPressed;
+		}
+		
+		if(toggleOnNormal != null && toggleOnDisabled != null && 
+				toggleOnPressed != null && toggleOnSelected != null &&
+				toggleOnDisabledFocus != null && toggleOffNormal != null &&
+				toggleOffDisabled != null && toggleOffPressed != null &&
+				toggleOffSelected != null && toggleOffDisabledFocus != null ){
+			
+			StateListDrawable toggleStd = new StateListDrawable();
+		//	toggleStd.addState(new int[] { - android.R.attr.state_focused, android.R.attr.state_enabled, android.R.attr.state_checked}, toggleOnNormal);
+			toggleStd.addState(new int[] { - android.R.attr.state_focused, - android.R.attr.state_enabled, android.R.attr.state_checked}, toggleOnDisabled);
+			toggleStd.addState(new int[] { android.R.attr.state_pressed, android.R.attr.state_checked}, toggleOnPressed);
+			toggleStd.addState(new int[] { android.R.attr.state_focused, android.R.attr.state_enabled, android.R.attr.state_checked}, toggleOnSelected);
+			toggleStd.addState(new int[] { android.R.attr.state_enabled, android.R.attr.state_checked}, toggleOnNormal);
+			toggleStd.addState(new int[] { android.R.attr.state_focused, android.R.attr.state_checked}, toggleOnDisabledFocus);
+			toggleStd.addState(new int[] { android.R.attr.state_checked}, toggleOnDisabled);
+			
+			// UnChecked
+		//	toggleStd.addState(new int[] { - android.R.attr.state_focused, android.R.attr.state_enabled, -android.R.attr.state_checked}, toggleOffNormal);
+			toggleStd.addState(new int[] { - android.R.attr.state_focused, - android.R.attr.state_enabled, -android.R.attr.state_checked}, toggleOffDisabled);
+			toggleStd.addState(new int[] { android.R.attr.state_pressed, -android.R.attr.state_checked}, toggleOffPressed);
+			toggleStd.addState(new int[] { android.R.attr.state_focused, android.R.attr.state_enabled, -android.R.attr.state_checked}, toggleOffSelected);
+			toggleStd.addState(new int[] { android.R.attr.state_enabled, -android.R.attr.state_checked}, toggleOffNormal);
+			toggleStd.addState(new int[] { android.R.attr.state_focused, -android.R.attr.state_checked}, toggleOffDisabledFocus);
+			toggleStd.addState(new int[] { -android.R.attr.state_checked}, toggleOffDisabled);
+			return toggleStd;
+		}
+		return null;
+	}
+	
+	
+	
+	private StateListDrawable getButtonDrawable(Theme t) {
+
+		Drawable btNormal = t.getDrawableResource("btn_in_call_main_normal");
+		Drawable btDisabled = t.getDrawableResource("btn_in_call_main_disable");
+		Drawable btPressed = t.getDrawableResource("btn_in_call_main_pressed");
+		Drawable btSelected = t.getDrawableResource("btn_in_call_main_selected");
+		Drawable btDisabledFocus = t.getDrawableResource("btn_in_call_main_disable_focused");
+		
+		if(btSelected == null) {
+			btSelected = btPressed;
+		}
+		
+		if(btNormal != null && btDisabled != null && 
+				btPressed != null && btSelected != null &&
+				btDisabledFocus != null  ){
+			
+			StateListDrawable btStd = new StateListDrawable();
+	//		btStd.addState(new int[] { -android.R.attr.state_focused, android.R.attr.state_enabled }, btNormal);
+			btStd.addState(new int[] { -android.R.attr.state_focused, -android.R.attr.state_enabled }, btDisabled);
+			btStd.addState(new int[] { android.R.attr.state_pressed }, btPressed);
+			btStd.addState(new int[] { android.R.attr.state_focused, android.R.attr.state_enabled }, btSelected);
+			btStd.addState(new int[] { android.R.attr.state_enabled }, btNormal);
+			btStd.addState(new int[] { android.R.attr.state_focused }, btDisabledFocus);
+			btStd.addState(new int[] {}, btDisabled);
+			
+			return btStd;
+		}
+		return null;
 	}
 }

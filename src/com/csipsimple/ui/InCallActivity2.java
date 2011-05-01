@@ -40,6 +40,7 @@ import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -57,6 +58,7 @@ import android.os.RemoteException;
 import android.os.Vibrator;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -87,6 +89,7 @@ import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.Theme;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.InCallControls2;
@@ -221,9 +224,12 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         if(quitTimer == null) {
     		quitTimer = new Timer("Quit-timer");
         }
+        
+        applyTheme();
 	}
 	
-	
+
+
 	@Override
 	protected void onStart() {
 		Log.d(THIS_FILE, "Start in call");
@@ -385,6 +391,21 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		updateUIFromCall();
 	}
 
+
+	
+	private void applyTheme() {
+		String theme = prefsWrapper.getPreferenceStringValue(SipConfigManager.THEME);
+		if(! TextUtils.isEmpty(theme)) {
+			new Theme(this, theme, new Theme.onLoadListener() {
+				@Override
+				public void onLoad(Theme t) {
+					dialPad.applyTheme(t);
+					inCallControls.applyTheme(t);
+				}
+			});
+		}
+	}
+	
 	
 	private static final int UPDATE_FROM_CALL = 1;
 	private static final int UPDATE_FROM_MEDIA = 2;

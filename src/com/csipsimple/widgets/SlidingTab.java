@@ -36,6 +36,7 @@ package com.csipsimple.widgets;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -179,6 +180,21 @@ public class SlidingTab extends ViewGroup {
 			tab.setBackgroundResource(tabId);
 			text.setBackgroundResource(barId);
 			target.setImageResource(targetId);
+		}
+		
+		void setDrawables(Drawable iconD, Drawable targetD, Drawable barD, Drawable tabD) {
+			if(iconD != null) {
+				tab.setImageDrawable(iconD);
+			}
+			if(tabD != null) {
+				tab.setBackgroundDrawable(tabD);
+			}
+			if(barD != null) {
+				text.setBackgroundDrawable(barD);
+			}
+			if(tabD != null) {
+				target.setImageDrawable(targetD);
+			}
 		}
 		
 
@@ -445,6 +461,10 @@ public class SlidingTab extends ViewGroup {
 	public void setLeftTabResources(int iconId, int targetId, int barId, int tabId) {
 		leftSlider.setResources(iconId, targetId, barId, tabId);
 	}
+	
+	public void setLeftTabDrawables(Drawable iconD, Drawable targetD, Drawable barD, Drawable tabD) {
+		leftSlider.setDrawables(iconD, targetD, barD, tabD);
+	}
 
 	/**
 	 * Sets the left handle hint text to a given resource string.
@@ -474,6 +494,10 @@ public class SlidingTab extends ViewGroup {
 		rightSlider.setResources(iconId, targetId, barId, tabId);
 	}
 
+	public void setRightTabDrawables(Drawable iconD, Drawable targetD, Drawable barD, Drawable tabD) {
+		rightSlider.setDrawables(iconD, targetD, barD, tabD);
+	}
+	
 	/**
 	 * Sets the left handle hint text to a given resource string.
 	 * @param resId
