@@ -158,7 +158,7 @@ public class Ecs extends BaseImplementation {
 		account.realm = "*";
 		account.username = getText(accountUsername);
 		account.data = getText(accountPassword);
-		account.scheme = "Digest";
+		account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 		
 		return account;

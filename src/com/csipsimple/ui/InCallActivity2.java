@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -378,6 +379,11 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		super.onNewIntent(intent);
 	}
 	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		updateUIFromCall();
+	}
 
 	
 	private static final int UPDATE_FROM_CALL = 1;

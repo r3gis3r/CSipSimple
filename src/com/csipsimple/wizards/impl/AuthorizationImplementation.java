@@ -118,7 +118,7 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 		account.realm = "*";
 		account.username = getText(accountAuthorization).trim();
 		account.data = getText(accountPassword);
-		account.scheme = "Digest";
+		account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 		account.reg_timeout = 1800;
 		account.transport = SipProfile.TRANSPORT_UDP;

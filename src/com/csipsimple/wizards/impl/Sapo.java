@@ -64,7 +64,7 @@ public class Sapo extends SimpleImplementation {
 		account.realm = "*";
 		account.username = getText(accountUsername).trim();
 		account.data = getText(accountPassword);
-		account.scheme = "Digest";
+		account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 
 		account.reg_timeout = 1800;

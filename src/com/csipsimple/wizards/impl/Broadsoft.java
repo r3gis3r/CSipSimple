@@ -20,69 +20,78 @@ package com.csipsimple.wizards.impl;
 import java.util.HashMap;
 
 import android.net.Uri;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.api.SipUri;
-import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 
-public abstract class SimpleImplementation extends BaseImplementation {
-	//private static final String THIS_FILE = "SimplePrefsWizard";
+public abstract class Broadsoft extends BaseImplementation {
 	protected EditTextPreference accountDisplayName;
 	protected EditTextPreference accountUsername;
+	protected EditTextPreference accountAuthorization;
 	protected EditTextPreference accountPassword;
-	protected CheckBoxPreference accountUseTcp;
+	protected EditTextPreference accountServer;
+	protected EditTextPreference accountProxy;
 	
 	protected static String DISPLAY_NAME = "display_name";
 	protected static String USER_NAME = "username";
+	protected static String AUTH_NAME = "auth_name";
 	protected static String PASSWORD = "password";
-	protected static String USE_TCP = "use_tcp";
+	protected static String SERVER = "server";
+	protected static String PROXY = "proxy";
 
-	protected void bindFields() {
+	private void bindFields() {
 		accountDisplayName = (EditTextPreference) parent.findPreference(DISPLAY_NAME);
 		accountUsername = (EditTextPreference) parent.findPreference(USER_NAME);
+		accountAuthorization = (EditTextPreference) parent.findPreference(AUTH_NAME);
 		accountPassword = (EditTextPreference) parent.findPreference(PASSWORD);
-		accountUseTcp = (CheckBoxPreference) parent.findPreference(USE_TCP);
+		accountServer = (EditTextPreference) parent.findPreference(SERVER);
+		accountProxy = (EditTextPreference) parent.findPreference(PROXY);
 	}
+	
+	
 	
 	public void fillLayout(final SipProfile account) {
 		bindFields();
-		
-		String display_name = account.display_name;
-		if(display_name.equalsIgnoreCase("")) {
-			display_name = getDefaultName();
-		}
-		accountDisplayName.setText(display_name);
-		ParsedSipContactInfos parsedInfo = SipUri.parseSipContact(account.acc_id);
-		
-		accountUsername.setText(parsedInfo.userName);
-		accountPassword.setText(account.data);
-		
-		if(canTcp()) {
-			accountUseTcp.setChecked(account.transport == SipProfile.TRANSPORT_TCP);
+		if(!TextUtils.isEmpty(account.getDisplayName())) {
+			accountDisplayName.setText(account.getDisplayName());
 		}else {
-			hidePreference(null, USE_TCP);
+			accountDisplayName.setText(getDefaultName());
 		}
+		
+		accountUsername.setText(account.getSipUserName());
+		accountServer.setText(account.getSipDomain());
+		
+		accountPassword.setText(account.data);
+		accountAuthorization.setText(account.username);
+		accountProxy.setText(account.getProxyAddress().replaceFirst("sip:", ""));
 	}
 
 	public void updateDescriptions() {
 		setStringFieldSummary(DISPLAY_NAME);
 		setStringFieldSummary(USER_NAME);
 		setPasswordFieldSummary(PASSWORD);
+		setStringFieldSummary(AUTH_NAME);
+		setStringFieldSummary(SERVER);
+		setStringFieldSummary(PROXY);
+		
 	}
 	
-	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
+	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){
+
+	/**
 		 * 
 		 */
-		private static final long serialVersionUID = -5743705263738203615L;
+		private static final long serialVersionUID = 8886964429916862979L;
 
 	{
 		put(DISPLAY_NAME, R.string.w_common_display_name_desc);
-		put(USER_NAME, R.string.w_common_username_desc);
+		put(USER_NAME, R.string.w_authorization_phone_number_desc);
+		put(AUTH_NAME, R.string.w_authorization_auth_name_desc);
 		put(PASSWORD, R.string.w_common_password_desc);
+		put(SERVER, R.string.w_common_server_desc);
+		put(PROXY, R.string.w_advanced_proxy_desc);
 	}};
 	
 	@Override
@@ -98,66 +107,48 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		boolean isValid = true;
 		
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
-		isValid &= checkField(accountPassword, isEmpty(accountPassword));
 		isValid &= checkField(accountUsername, isEmpty(accountUsername));
+		isValid &= checkField(accountAuthorization, isEmpty(accountAuthorization));
+		isValid &= checkField(accountPassword, isEmpty(accountPassword));
+		isValid &= checkField(accountServer, isEmpty(accountServer));
+		isValid &= checkField(accountProxy, isEmpty(accountProxy));
 
 		return isValid;
 	}
 
 	public SipProfile buildAccount(SipProfile account) {
-		account.display_name = accountDisplayName.getText().trim();
-		// TODO add an user display name
-		account.acc_id = "<sip:"
-				+ Uri.encode(accountUsername.getText().trim()) + "@"+getDomain()+">";
+		account.display_name = accountDisplayName.getText();
+		account.acc_id = "<sip:" + Uri.encode(accountUsername.getText().trim()) + "@" + getDomain() + ">";
 		
-		String regUri = "sip:"+getDomain();
+		String regUri = "sip:" + getDomain();
 		account.reg_uri = regUri;
-		account.proxies = new String[] { regUri } ;
+		account.proxies = new String[] { "sip:"+accountProxy.getText() } ;
 
-		
 		account.realm = "*";
-		account.username = getText(accountUsername).trim();
+		account.username = getText(accountAuthorization).trim();
 		account.data = getText(accountPassword);
 		account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
-
 		account.reg_timeout = 1800;
-		
-		if(canTcp()) {
-			account.transport = accountUseTcp.isChecked() ? SipProfile.TRANSPORT_TCP : SipProfile.TRANSPORT_UDP;
-		}else {
-			account.transport = SipProfile.TRANSPORT_UDP;
-		}
-		
+		account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
 	}
 
-	protected abstract String getDomain();
-	protected abstract String getDefaultName();
-	
-	//This method may be overriden by a implementation
-	protected boolean canTcp() {
-		return false;
+	protected String getDomain() {
+		return accountServer.getText();
 	}
+	
+	
+	protected abstract String getDefaultName();
 
 	@Override
 	public int getBasePreferenceResource() {
-		return R.xml.w_simple_preferences;
+		return R.xml.w_auth_and_proxy_preferences;
 	}
 
+	@Override
 	public boolean needRestart() {
 		return false;
 	}
-	
-	public void setUsername(String username) {
-		if(!TextUtils.isEmpty(username)) {
-			accountUsername.setText(username);
-		}
-	}
-	
-	public void setPassword(String password) {
-		if(!TextUtils.isEmpty(password)) {
-			accountPassword.setText(password);
-		}
-	}
+
 }

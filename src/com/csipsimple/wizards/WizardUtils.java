@@ -39,6 +39,7 @@ import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Betamax;
 import com.csipsimple.wizards.impl.Blueface;
 import com.csipsimple.wizards.impl.BroadVoice;
+import com.csipsimple.wizards.impl.Broadsoft;
 import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.DeltaThree;
@@ -218,6 +219,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_localphone, 10, 
 					new Locale[]{ }, false, true, 
 					Localphone.class));
+			WIZARDS_DICT.put("BROADSOFT", new WizardInfo("BROADSOFT", "Broadsoft", 
+					R.drawable.ic_wizard_broadsoft, 9, 
+					new Locale[]{ }, false, true, 
+					Broadsoft.class));
 			
 			
 			//Locales

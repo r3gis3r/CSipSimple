@@ -19,18 +19,30 @@
  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<EditTextPreference android:key="display_name"
-		android:singleLine="true" android:title="@string/w_common_display_name"/>
 
-	<EditTextPreference android:key="phone_number"
-		android:singleLine="true" android:title="@string/w_authorization_phone_number"/>
-	<EditTextPreference android:key="auth_name"
-		android:singleLine="true" android:title="@string/w_authorization_auth_name"/>
-	<com.csipsimple.widgets.PasswordPreference android:key="password"
-		android:singleLine="true"
-		android:password="true" android:title="@string/w_common_password"/>
-	<EditTextPreference android:key="server"
-		android:singleLine="true" android:title="@string/w_common_server"/>
+		<EditTextPreference android:key="display_name"
+			android:singleLine="true"
+			android:title="@string/w_advanced_display_name"></EditTextPreference>
 
+		<EditTextPreference android:key="username"
+			android:singleLine="true"
+			android:title="@string/w_advanced_username"/>
+		<EditTextPreference android:key="auth_name"
+			android:singleLine="true"
+			android:title="@string/w_authorization_auth_name"/>
+			
+		<com.csipsimple.widgets.PasswordPreference android:key="password"
+			android:singleLine="true"
+			android:password="true"
+			android:title="@string/w_common_password"/>
+
+		
+		<EditTextPreference android:key="server"
+			android:singleLine="true"
+			android:title="@string/w_common_server"/>
+
+		<EditTextPreference android:key="proxy"
+			android:singleLine="true"
+			android:title="@string/w_advanced_proxy"/>
 
 </PreferenceScreen>

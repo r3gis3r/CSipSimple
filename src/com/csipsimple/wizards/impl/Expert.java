@@ -88,7 +88,7 @@ public class Expert extends BaseImplementation {
 			if (scheme != null && !scheme.equals("")) {
 				accountScheme.setValue(scheme);
 			} else {
-				accountScheme.setValue("Digest");
+				accountScheme.setValue(SipProfile.CRED_SCHEME_DIGEST);
 			}
 		}
 		{
@@ -210,7 +210,7 @@ public class Expert extends BaseImplementation {
 			account.realm = "";
 			account.username = "";
 			account.data = "";
-			account.scheme = "Digest";
+			account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 			account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 		}
 

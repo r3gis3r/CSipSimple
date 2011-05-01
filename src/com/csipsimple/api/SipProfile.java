@@ -54,6 +54,10 @@ public class SipProfile implements Parcelable {
 	public static final int CRED_DATA_DIGEST = 1;
 	public static final int CRED_CRED_DATA_EXT_AKA = 2;
 	
+	//Scheme credentials choices
+	public static final String CRED_SCHEME_DIGEST = "Digest";
+	public static final String CRED_SCHEME_PGP = "PGP";
+	
 	public static final String PROXIES_SEPARATOR = "|";
 	
 	// Fields for table accounts

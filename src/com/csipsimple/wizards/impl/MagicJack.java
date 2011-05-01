@@ -32,7 +32,7 @@ public class MagicJack extends AlternateServerImplementation {
 		account.realm = "*";
 		account.username = getText(accountUsername);
 		account.data = getText(accountPassword);
-		account.scheme = "Digest";
+		account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 		account.datatype = 8;
 		
 

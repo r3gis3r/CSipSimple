@@ -135,7 +135,7 @@ public class Advanced extends BaseImplementation {
 		account.realm = "*";
 		account.username = getText(accountUserName).trim();
 		account.data = getText(accountPassword);
-		account.scheme = "Digest";
+		account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 
 		account.transport = accountUseTcp.isChecked() ? SipProfile.TRANSPORT_TCP : SipProfile.TRANSPORT_AUTO;
