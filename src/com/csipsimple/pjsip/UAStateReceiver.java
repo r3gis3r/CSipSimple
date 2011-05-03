@@ -616,11 +616,20 @@ public class UAStateReceiver extends Callback {
 							}
 							
 							//Only log numbers that can be called by GSM too.
+							// TODO : if android 2.3 add sip uri also
 							if(phoneNumber != null) {
 								cv.put(Calls.NUMBER, phoneNumber);
 								// For log in call logs => don't add as new calls... we manage it ourselves.
 								cv.put(Calls.NEW, false);
-								CallLogHelper.addCallLog(pjService.service, cv);
+								ContentValues extraCv = new ContentValues();
+								
+								if(callInfo.getAccId() != SipProfile.INVALID_ID) {
+									SipProfile acc = SipService.getAccount(callInfo.getAccId(), database);
+									if(acc != null && acc.display_name != null) {
+										extraCv.put(CallLogHelper.EXTRA_SIP_PROVIDER, acc.display_name);
+									}
+								}
+								CallLogHelper.addCallLog(pjService.service, cv, extraCv);
 							}
 						}
 					}

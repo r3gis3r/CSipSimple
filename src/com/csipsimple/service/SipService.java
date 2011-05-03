@@ -1339,6 +1339,12 @@ public class SipService extends Service {
 		}
 	}
 	
+	/**
+	 * Get the entire sip profile infos for a given account id
+	 * @param accountId the account id we are currently searching on
+	 * @param db a database that should be in state closed. This method will open the database and close it
+	 * @return The entire sip profile as per current database infos
+	 */
 	public static SipProfile getAccount(int accountId, DBAdapter db) {
 		db.open();
 		SipProfile account = db.getAccount(accountId);
