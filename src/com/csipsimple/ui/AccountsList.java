@@ -147,6 +147,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
 		//And register to ua state events
 		registerReceiver(registrationStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
+		registerReceiver(registrationStateReceiver, new IntentFilter(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED));
 		
 	}
 	
@@ -224,9 +225,9 @@ public class AccountsList extends Activity implements OnItemClickListener {
             case MENU_ITEM_ACTIVATE: {
             	account.active = ! account.active;
             	database.open();
-            	database.updateAccount(account);
+    			database.setAccountActive(account.id, account.active);
             	database.close();
-				reloadAsyncAccounts(account.id, account.active?1:0);
+			//	reloadAsyncAccounts(account.id, account.active?1:0);
 				return true;
             }
             case MENU_ITEM_WIZARD:{
@@ -481,17 +482,20 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			
 			
 			boolean isActive = tagView.activeCheckbox.isChecked();
+			account.active = ! account.active;
 			
+
+			//Update visual
+			/* -- Not need cause setAccount active will broadcast finally ACTION_SIP_ACCOUNT_ACTIVE_CHANGED
+			tagView.barOnOff.setImageResource(account.active ? R.drawable.ic_indicator_yellow : R.drawable.ic_indicator_off);
+			tagView.labelView.setTextColor(account.active ? getResources().getColor(R.color.account_unregistered) : getResources().getColor(R.color.account_inactive) );
+			tagView.statusView.setText(getResources().getText(R.string.acct_unregistered));
+			*/
 			//Update database and reload accounts
 			database.open();
 			database.setAccountActive(account.id, isActive);
 			database.close();
 		//	reloadAsyncAccounts(account.id, account.active?1:0);
-			
-			//Update visual
-			tagView.barOnOff.setImageResource(account.active?R.drawable.ic_indicator_on : R.drawable.ic_indicator_off);
-			
-			
 		}
 
 	}
