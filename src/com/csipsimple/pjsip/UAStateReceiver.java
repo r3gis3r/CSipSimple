@@ -381,7 +381,7 @@ public class UAStateReceiver extends Callback {
 	public void on_zrtp_show_sas(pj_str_t sas, int verified) {
 		String sasString = sas.getPtr();
 		Log.d(THIS_FILE, "Hey hoy hay, we get the show SAS " + sasString);
-		Intent zrtpIntent = new Intent("com.cipsimple.tmp.zrtp.showSAS");
+		Intent zrtpIntent = new Intent(SipManager.ACTION_ZRTP_SHOW_SAS);
 		zrtpIntent.putExtra(Intent.EXTRA_SUBJECT, sasString);
 		pjService.service.sendBroadcast(zrtpIntent);
 		

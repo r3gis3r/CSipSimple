@@ -34,11 +34,13 @@ import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -206,6 +208,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		//Listen to media & sip events to update the UI
 		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
 		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_MEDIA_CHANGED));
+		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_ZRTP_SHOW_SAS));
 		
 		// Sensor management
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -409,6 +412,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	private static final int UPDATE_FROM_CALL = 1;
 	private static final int UPDATE_FROM_MEDIA = 2;
 	private static final int UPDATE_DRAGGING = 3;
+	private static final int SHOW_SAS = 4;
 	// Ui handler
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -430,6 +434,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 						View.VISIBLE : View.GONE);
 				xferTarget.setVisibility( ( !di.call.isBeforeConfirmed() && !di.call.isAfterEnded()  && di.isDragging ) ? 
 						View.VISIBLE : View.GONE); 
+				break;
+			case SHOW_SAS:
+				showZRTPInfo((String) msg.obj);
 				break;
 			default:
 				super.handleMessage(msg);
@@ -1002,6 +1009,8 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
 			}else if(action.equals(SipManager.ACTION_SIP_MEDIA_CHANGED)) {
 				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_MEDIA));
+			}else if(action.equals(SipManager.ACTION_ZRTP_SHOW_SAS)) {
+				handler.sendMessage(handler.obtainMessage(SHOW_SAS, intent.getStringExtra(Intent.EXTRA_SUBJECT)));
 			}
 		}
 	};
@@ -1461,5 +1470,38 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 //			badge = aBadge;
 			call = aCall;
 		}
+	}
+	
+	
+	
+	private void showZRTPInfo(String sasString) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		Resources r = getResources();
+		builder.setTitle("ZRTP supported by remote party");
+		builder.setMessage("Do you confirm the SAS : "+sasString);
+		builder.setPositiveButton(r.getString(R.string.yes), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Log.d(THIS_FILE, "ZRTP confirmed");
+
+				if (service != null) {
+					try {
+						service.zrtpSASVerified();
+					} catch (RemoteException e) {
+						Log.e(THIS_FILE, "Error while calling service", e);
+					}
+					dialog.dismiss();
+				}
+			}
+		});
+		builder.setNegativeButton(r.getString(R.string.no), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		
+		AlertDialog backupDialog = builder.create();
+		backupDialog.show();
 	}
 }
