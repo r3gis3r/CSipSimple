@@ -107,7 +107,7 @@ public class PjSipAccount {
 			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(profile.use_srtp));
 			cfg.setSrtp_secure_signaling(0);
 		}
-		if(profile.use_zrtp != -1 && profile.use_zrtp > 0) {
+		if(profile.use_zrtp > 0) {
 			cfg.setUse_zrtp(pjmedia_zrtp_use.swigToEnum(profile.use_zrtp));
 			hasZrtpValue = true;
 		}

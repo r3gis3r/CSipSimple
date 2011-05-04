@@ -297,8 +297,8 @@ public class UAStateReceiver extends Callback {
 					if(pjService.mediaManager != null) {
 						pjService.mediaManager.setSoftwareVolume();
 					}
-					
-					pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
+				// Useless with Peter's patch	
+				//	pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
 					
 					// Auto record
 					if (recordedCall == INVALID_RECORD && 
