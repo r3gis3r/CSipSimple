@@ -82,7 +82,6 @@ public class UAStateReceiver extends Callback {
 	final static long LAUNCH_TRIGGER_DELAY = 2000;
 	private long lastLaunchCallHandler = 0;
 	
-	private boolean supportMultipleCalls = false;
 	
 	int eventLockCount = 0;
 	private void lockCpu(){
@@ -109,13 +108,13 @@ public class UAStateReceiver extends Callback {
 	public void on_incoming_call(final int acc_id, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 
 		//Check if we have not already an ongoing call
-		if(!supportMultipleCalls) {
+		if(pjService != null && pjService.service != null && !pjService.service.supportMultipleCalls) {
 			SipCallSession[] calls = getCalls();
 			if(calls != null && calls.length > 0) {
 				for( SipCallSession existingCall : calls) {
 					if(!existingCall.isAfterEnded()) {
 						Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
-						//If there is an ongoing call... For now decline TODO : should here manage multiple calls
+						//If there is an ongoing call and we do not support multiple calls
 						//Send busy here
 						pjsua.call_hangup(callId, 486, null, null);
 						return;
@@ -713,8 +712,6 @@ public class UAStateReceiver extends Callback {
 			eventLock.setReferenceCounted(true);
 
 		}
-		
-		supportMultipleCalls = pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS);
 	}
 	
 

@@ -36,6 +36,7 @@ import android.widget.ToggleButton;
 import com.csipsimple.R;
 import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Theme;
@@ -62,6 +63,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	private int controlMode;
 	private MediaState lastMediaState;
 	private SipCallSession currentCall;
+	private boolean supportMultipleCalls = false;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -145,9 +147,11 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	public InCallControls2(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
+		PreferencesWrapper prefs = new PreferencesWrapper(context);
+		supportMultipleCalls  = prefs.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS);
+		
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.in_call_controls2, this, true);
-		PreferencesWrapper prefs = new PreferencesWrapper(context);
 		
 		AccessibilityWrapper accessibilityManager = AccessibilityWrapper.getInstance();
 		accessibilityManager.init(getContext());
@@ -199,6 +203,9 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		declineCallButton.setOnClickListener(this);
 		addCallButton.setOnClickListener(this);
 	//	settingsButton.setOnClickListener(this);
+		
+		
+		addCallButton.setEnabled( supportMultipleCalls );
 	}
 	
 	

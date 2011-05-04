@@ -18,6 +18,8 @@
 package com.csipsimple.ui.prefs;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
@@ -35,7 +37,10 @@ public class PrefsCalls extends GenericPrefs {
 		PreferencesWrapper pfw = new PreferencesWrapper(this);
 		if(!pfw.isAdvancedUser()) {
 			
-			
+		}
+		
+		if(CustomDistribution.forceNoMultipleCalls()) {
+			hidePreference(null, SipConfigManager.SUPPORT_MULTIPLE_CALLS);
 		}
 	}
 	

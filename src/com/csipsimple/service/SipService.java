@@ -72,6 +72,7 @@ import com.csipsimple.pjsip.PjSipService;
 import com.csipsimple.pjsip.UAStateReceiver;
 import com.csipsimple.ui.InCallMediaControl;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Threading;
@@ -85,6 +86,7 @@ public class SipService extends Service {
 	
 	private SipWakeLock sipWakeLock;
 	private boolean autoAcceptCurrent = false;
+	public boolean supportMultipleCalls = false;
 	
 	private Object sipStarterLock = new Object();
 
@@ -201,6 +203,17 @@ public class SipService extends Service {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
+			
+			if(!supportMultipleCalls) {
+				// Check if there is no ongoing calls if so drop this request by alerting user
+				SipCallSession activeCall = pjService.getActiveCallInProgress();
+				if(activeCall != null) {
+					if(!CustomDistribution.forceNoMultipleCalls()) {
+						serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.not_configured_multiple_calls, 0));
+					}
+					return;
+				}
+			}
 			pjService.makeCall(callee, accountId);
 		}
 		
@@ -756,8 +769,7 @@ public class SipService extends Service {
 			getExecutor().execute(new DestroyRunnable());
 			return;
 		}
-		
-		
+
 		registerBroadcasts();
 	}
 
@@ -914,6 +926,9 @@ public class SipService extends Service {
 	
 	public void startSipStack() {
 		sipWakeLock.acquire(this);
+		//Cache some prefs
+		supportMultipleCalls = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS);
+		
 		synchronized (sipStarterLock) {
 			if(!needToStartSip()) {
 				serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
@@ -1212,7 +1227,6 @@ public class SipService extends Service {
 				}
 				break;
 			}
-			
 		}
 	};
 	

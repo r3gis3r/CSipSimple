@@ -87,6 +87,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.pjsip.PjSipCalls;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallsUtils;
+import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -204,6 +205,11 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 				onTrigger(ADD_CALL, null);
 			}
 		});
+		if(!prefsWrapper.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS)) {
+			middleAddCall.setEnabled(false);
+			middleAddCall.setText(R.string.not_configured_multiple_calls);
+		}
+		
 		
 		//Listen to media & sip events to update the UI
 		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
@@ -814,7 +820,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		}
 		
 		if(mainsCalls == 0) {
-			middleAddCall.setVisibility(View.VISIBLE);
+			if(!CustomDistribution.forceNoMultipleCalls()) {
+				middleAddCall.setVisibility(View.VISIBLE);
+			}
 		}else {
 			middleAddCall.setVisibility(View.GONE);
 		}

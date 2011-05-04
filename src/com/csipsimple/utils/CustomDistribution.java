@@ -62,5 +62,9 @@ public class CustomDistribution {
 	public static boolean supportMessaging() {
 		return true;
 	}
+
+	public static boolean forceNoMultipleCalls() {
+		return false;
+	}
 	
 }
