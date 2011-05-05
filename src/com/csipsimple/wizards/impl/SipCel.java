@@ -44,8 +44,8 @@ public class SipCel extends SimpleImplementation {
 	@Override
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
-		acc.reg_uri = "sip.sipcel.com:445";
-		acc.proxies = new String[] { "sip.sipcel.com" };
+		acc.reg_uri = "sip:sip.sipcel.com:445";
+		acc.proxies = new String[] { "sip:sip.sipcel.com" };
 		acc.publish_enabled = 1;
 		acc.reg_timeout = 120;
 		acc.transport = SipProfile.TRANSPORT_AUTO;
@@ -63,23 +63,23 @@ public class SipCel extends SimpleImplementation {
 		
 		
 		
-		//Only g729, ulaw, ilbc, gsm
+		//Only g729, gsm, ilbc, ulaw 
 		prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB,"244");
-		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"243");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"241");
 		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"0");
 		prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"0");
 		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"242");
 		prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
 		prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"0");
 		prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
-		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "241");
+		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "243");
 		
-		//On NB g729, ulaw, ilbc, gsm
-		prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB,"244");
-		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"243");
+		//On NB ulaw, ilbc, gsm,  g729
+		prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB,"242");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"244");
 		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"0");
-		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"242");
+		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"243");
 		prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
