@@ -163,7 +163,26 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		}
 
 		prefsWrapper = new PreferencesWrapper(this);
+		dialFeedback = new DialingFeedback(this, false);
 
+		registrationReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				updateRegistrations();
+			}
+		};
+		
+		initView();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		initView();
+	}
+
+	
+	private void initView() {
 		setContentView(R.layout.dialer_activity);
 
 		// Store the backgrounds objects that will be in use later
@@ -203,29 +222,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		dialPad.setOnDialKeyListener(this);
 		initButtons();
 
-		/*
-		// Add gesture detector
-		gestureDetector = new GestureDetector(this, new SwitchDialerGestureDetector());
-
-		// Add switcher gesture detector
-		OnTouchListener touchTransmiter = new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return gestureDetector.onTouchEvent(event);
-			}
-		};
-		digitDialer.setOnTouchListener(touchTransmiter);
-		textDialer.setOnTouchListener(touchTransmiter);
-		*/
-		dialFeedback = new DialingFeedback(this, false);
-
-		registrationReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				updateRegistrations();
-			}
-		};
-		
 		//Dynamically add the switcher from text dialer to digit dialer cause we use the widget that handle sip uris
 		backFlipTextDialerButton = new ImageButton(this);
 		backFlipTextDialerButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
@@ -243,11 +239,11 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		
 		backFlipDigitDialerButton = (ImageButton) findViewById(R.id.switchTextView);
 		
+		initPaneMode();
 		
 		applyTheme();
 	}
-
-
+	
 	private void applyTheme() {
 		String theme = prefsWrapper.getPreferenceStringValue(SipConfigManager.THEME);
 		if(! TextUtils.isEmpty(theme)) {
@@ -286,18 +282,22 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	
 	private void initPaneMode() {
 		if(!needDualPaneMode()) {
-			digitDialer.setVisibility(isDigit ? View.VISIBLE : View.GONE);
-			textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
-			sipTextUri.setListVisibility(isDigit ? View.GONE : View.VISIBLE);
+			showDigitPane(isDigit);
 			backFlipTextDialerButton.setVisibility(View.VISIBLE);
 			backFlipDigitDialerButton.setVisibility(View.VISIBLE);
 		}else {
-			digitDialer.setVisibility( View.VISIBLE );
-			textDialer.setVisibility( View.VISIBLE );
-			sipTextUri.setListVisibility( View.VISIBLE );
+			digitDialer.setVisibility(View.VISIBLE);
+			textDialer.setVisibility(View.VISIBLE);
+			sipTextUri.setListVisibility(View.VISIBLE);
 			backFlipTextDialerButton.setVisibility(View.GONE);
 			backFlipDigitDialerButton.setVisibility(View.GONE);
 		}
+	}
+	
+	private void showDigitPane(boolean show) {
+		digitDialer.setVisibility(show ? View.VISIBLE : View.GONE);
+		textDialer.setVisibility(show ? View.GONE : View.VISIBLE);
+		sipTextUri.setListVisibility(show ? View.GONE : View.VISIBLE);
 	}
 
 
@@ -319,7 +319,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	protected void onResume() {
 		super.onResume();
 		Log.d(THIS_FILE, "Resuming dialer");
-		initPaneMode();
 		// Bind service
 		registerReceiver(registrationReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
 		
@@ -724,9 +723,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	
 			rootView.startAnimation(animation);
 		} else {
-			digitDialer.setVisibility(isDigit ? View.VISIBLE : View.GONE);
-			textDialer.setVisibility(isDigit ? View.GONE : View.VISIBLE);
-			sipTextUri.setListVisibility(isDigit ? View.GONE : View.VISIBLE);
+			showDigitPane(isDigit);
 		}
 	}
 
