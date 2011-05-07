@@ -133,6 +133,10 @@ public class MediaManager {
 				return userWantSpeaker ? AudioManager.MODE_IN_CALL: AudioManager.MODE_NORMAL ;
 			}
 		}
+		if(userWantBluetooth) {
+			return AudioManager.MODE_NORMAL;
+		}
+		
 		return targetMode;
 	}
 	
