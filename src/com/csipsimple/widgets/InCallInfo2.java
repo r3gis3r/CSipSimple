@@ -62,7 +62,7 @@ public class InCallInfo2 extends ExtensibleBadge {
 //	private TextView remotePhoneNumber;
 	private DBAdapter db;
 	//private TextView label;
-//	private ImageView secure;
+	private ImageView secure;
 	
 
 	public InCallInfo2(Context context, AttributeSet attrs) {
@@ -84,8 +84,7 @@ public class InCallInfo2 extends ExtensibleBadge {
 		elapsedTime = (Chronometer) findViewById(R.id.elapsedTime);
 		status = (TextView) findViewById(R.id.card_status);
 		callIcon = (ImageView) findViewById(R.id.callStatusIcon);
-		
-		//secure = (ImageView) findViewById(R.id.secureIndicator);
+		secure = (ImageView) findViewById(R.id.secureIndicator);
 		
 //		currentInfo = (LinearLayout) findViewById(R.id.currentCallInfo);
 //		currentDetailedInfo = (LinearLayout) findViewById(R.id.currentCallDetailedInfo);
@@ -111,9 +110,6 @@ public class InCallInfo2 extends ExtensibleBadge {
 		updateTitle();
 		updateQuickActions();
 		updateElapsedTimer();
-		
-		
-		
 		
 		cachedInvState = callInfo.getCallState();
 		cachedMediaState = callInfo.getMediaStatus();
@@ -275,7 +271,7 @@ public class InCallInfo2 extends ExtensibleBadge {
 			return;
 		}
 		elapsedTime.setBase(callInfo.getConnectStart());
-	//	secure.setVisibility(callInfo.isSecure()?View.VISIBLE:View.GONE);
+		secure.setVisibility(callInfo.isSecure()?View.VISIBLE:View.GONE);
 		
 		int state = callInfo.getCallState();
 		switch (state) {

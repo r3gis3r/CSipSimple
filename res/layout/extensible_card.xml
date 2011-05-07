@@ -15,12 +15,14 @@
 			android:layout_gravity="center">
 			<ImageView android:id="@+id/card_img" android:scaleType="fitCenter"
 				android:adjustViewBounds="true"
-				android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/picture_unknown"/>
+				android:layout_width="wrap_content" android:layout_height="wrap_content" 
+				android:src="@drawable/picture_unknown"/>
 			<Chronometer android:id="@+id/elapsedTime"
 				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_gravity="bottom|right"
 				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:padding="3dip" android:background="@drawable/rounded_transparent_tl" android:layout_width="fill_parent"/>
+				android:padding="3dip" android:background="@drawable/rounded_transparent_tl" />
 				
 			<ImageView android:id="@+id/callStatusIcon"
 				android:layout_height="32dip"
@@ -28,7 +30,14 @@
 				android:layout_gravity="top|left"
 				android:src="@drawable/ic_incall_ongoing"
 				android:padding="3dip" android:background="@drawable/rounded_transparent_br" />
-				
+			
+			<ImageView android:id="@+id/secureIndicator" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="top|right"
+				android:visibility="gone"
+				android:src="@drawable/ic_menu_security_setting"
+				android:padding="3dip" android:background="@drawable/rounded_transparent_bl" />
 		</FrameLayout>
 		
 		<com.csipsimple.widgets.MarqueeTextView

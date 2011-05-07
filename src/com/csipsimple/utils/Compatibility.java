@@ -140,7 +140,8 @@ public class Compatibility {
 
 
 	public static String guessInCallMode() {
-		if (android.os.Build.BRAND.equalsIgnoreCase("sdg") || isCompatible(9)) {
+		if (android.os.Build.BRAND.equalsIgnoreCase("sdg") || isCompatible(10)) {
+			// Note that in APIs this is only available from level 11.
 			return "3";
 		}
 		if(android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
