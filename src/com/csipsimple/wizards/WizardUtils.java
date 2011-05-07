@@ -50,6 +50,7 @@ import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.Fayn;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.Gizmo5;
+import com.csipsimple.wizards.impl.IPComms;
 import com.csipsimple.wizards.impl.IPshka;
 import com.csipsimple.wizards.impl.ITTelenet;
 import com.csipsimple.wizards.impl.IiNet;
@@ -384,6 +385,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_blueface, 19, 
 					new Locale[]{ Locale.UK, new Locale("EN", "ie") }, false, false, 
 					Blueface.class));
+			WIZARDS_DICT.put("IPCOMMS", new WizardInfo("IPCOMMS", "IPComms", 
+					R.drawable.ic_wizard_ipcomms, 19, 
+					new Locale[]{ Locale.US, Locale.CANADA }, false, false, 
+					IPComms.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
