@@ -197,6 +197,7 @@ public class Ippi extends SimpleImplementation {
 		account = super.buildAccount(account);
 		//Proxy useless....?????
 		//account.proxies = null;
+		account.vm_nbr = "*1234";
 		return account;
 	}
 	

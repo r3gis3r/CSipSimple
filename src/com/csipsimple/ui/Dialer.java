@@ -260,7 +260,7 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 					t.applyBackgroundDrawable(digitDialer, "dialpad_bg");
 					
 					
-					Drawable dAct = t.getDrawableResource("btn_dial_textfield_active");
+					Drawable dAct = t.getDrawableResource("btn_dial_textfield_activated");
 					Drawable dEmpt = t.getDrawableResource("btn_dial_textfield_normal");
 					if(dAct != null && dEmpt != null) {
 						digitsBackground = dAct;

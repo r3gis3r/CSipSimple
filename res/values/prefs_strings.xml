@@ -202,6 +202,8 @@
 <string name="invert_proximity_sensor_desc">May help on some devices when manufacturer inverted near and far</string>
 <string name="theme">Theme</string>
 <string name="theme_desc">Theme for the application</string>
+<string name="obtain_themes">Obtain more themes</string>
+<string name="obtain_themes_desc">Get themes apps on the market</string>
 <string name="display_icon_in_status_bar_nbr">Display number in status bar</string>
 <string name="display_icon_in_status_bar_nbr_desc">Display the number of registered accounts in status bar</string>
 

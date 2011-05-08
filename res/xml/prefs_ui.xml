@@ -36,6 +36,11 @@
 		<ListPreference android:key="selected_theme"
 			android:title="@string/theme" android:summary="@string/theme_desc" 
 			android:defaultValue="" />
+		
+		<PreferenceScreen android:title="@string/obtain_themes" android:summary="@string/obtain_themes_desc" >
+			<intent android:action="android.intent.action.VIEW"
+				android:data="market://search?q=[Theme CSipSimple]"  />
+		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/general_ui">
 		
@@ -63,7 +68,7 @@
 			android:summary="@string/use_alternate_unlocker_desc"
 			android:key="use_alternate_unlocker"></CheckBoxPreference>
 	
-</PreferenceCategory>
+	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/advanced_ui" android:key="advanced_ui">
 		<CheckBoxPreference android:title="@string/integrate_with_native_music"
 			android:summary="@string/integrate_with_native_music_desc"
