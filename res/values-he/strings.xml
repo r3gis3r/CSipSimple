@@ -32,6 +32,9 @@
   <string name="callLog_delDialog_title">מחק יומן שיחות</string>
   <string name="callLog_delDialog_message">האם אתה בטוח שאתה רוצה למחוק את כל השיחות מתוך היומן?</string>
   <string name="callLog_delDialog_yes">כן</string>
+  <string name="callLog_delDialog_no">לא</string>
+  <string name="gsm">סלולרי</string>
+  <string name="dial_tab_name_text">חייג</string>
   <string name="calllog_tab_name_text">יומן שיחות</string>
   <string name="messages_tab_name_text">הודעות</string>
   <string name="menu_disconnect">נתק</string>

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="default_smiley_texts">
+    <item>:-)</item>
+    <item>:-(</item>
+    <item>:-[</item>
+    <item>O:-)</item>
+    <item>:-\\</item>
+    <item>:\'(</item>
+    <item>:-X</item>
+    <item>:-D</item>
+    <item>o_O</item>
+    <item>;-)</item>
+    <item>:-P</item>
+    <item>=-O</item>
+    <item>:-*</item>
+    <item>:O</item>
+    <item>B-)</item>
+    <item>:-$</item>
+    <item>:-!</item>
+  </string-array>
+  <string-array name="default_smiley_names">
+    <item>Gelukkig</item>
+    <item>Hartseer</item>
+    <item>Verleë</item>
+    <item>Engel</item>
+    <item>Besluitloos</item>
+    <item>Huil</item>
+    <item>Lippe is geseel</item>
+    <item>Lag</item>
+    <item>Verward</item>
+    <item>knipoog</item>
+    <item>Tong uitsteek</item>
+    <item>Verras</item>
+    <item>Soen</item>
+    <item>Skree</item>
+    <item>Cool</item>
+    <item>Geld mond</item>
+    <item>Foot in mouth</item>
+  </string-array>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="description_image_button_one">1</string>
+  <string name="description_image_button_two">2</string>
+  <string name="description_image_button_three">3</string>
+  <string name="description_image_button_four">4</string>
+  <string name="description_image_button_five">5</string>
+  <string name="description_image_button_six">6</string>
+  <string name="description_image_button_seven">7</string>
+  <string name="description_image_button_eight">8</string>
+  <string name="description_image_button_nine">9</string>
+  <string name="description_image_button_star">스타</string>
+  <string name="description_image_button_zero">0</string>
+  <string name="description_image_button_pound">파운드</string>
+  <string name="description_dial_button">다이얼</string>
+  <string name="description_delete_button">백스페이스</string>
+  <string name="description_digits_edittext">전화를 걸 번호</string>
+</resources>

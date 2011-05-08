@@ -61,6 +61,9 @@
   <string name="enable_qos_desc">QoS inschakelen voor pakketten</string>
   <string name="dscp_val">DSCP-waarde</string>
   <string name="dscp_val_desc">DSCP-waarde voor SIP-verkeer</string>
+  <string name="keep_alive_interval_wifi">Wi-Fi keep alive</string>
+  <string name="keep_alive_interval_mobile">Mobiel keep alive</string>
+  <string name="keep_alive_interval_desc">Interval (sec) voor KA packets</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">Beveiligd transport</string>
   <string name="secure_transport_desc">Beveiligingsmechanisme voor SIP en RTP</string>
@@ -125,6 +128,14 @@
   <string name="has_io_queue_desc">Activeer wachtrij voor invoer/uitvoer</string>
   <string name="set_audio_generate_tone">Tone hack</string>
   <string name="set_audio_generate_tone_desc">Genereer een toon voor het doen van een oproep</string>
+  <string name="narrow_band">Smalband</string>
+  <string name="wide_band">Breedband</string>
+  <string name="band_for_wifi">Band type voor Wi-Fi</string>
+  <string name="band_for_3g">Band type voor 3G</string>
+  <string name="band_for_gprs">Band type voor GPRS</string>
+  <string name="band_for_edge">Band type voor EDGE</string>
+  <string name="band_for_other">Band type anders</string>
+  <string name="codecs_band_types">Verbindingsbandbreedte type voor codecs</string>
   <string name="general_ui">Algemene gebruikersinterface</string>
   <string name="native_dialer_integration">Integratie met ingebouwde kiezer</string>
   <string name="advanced_ui">Geavanceerde aanpassingen</string>
@@ -154,6 +165,8 @@
   <string name="prevent_screen_rotation_desc">Vermijd schermrotatie en blijf in portretmodus</string>
   <string name="gsm_integration_type">Mobiele telefoon integratie</string>
   <string name="gsm_integration_type_desc">Hoe de toepassing uw mobiele telefoon gebruikt (of niet)</string>
+  <string name="invert_proximity_sensor">Inverteer nabijheidssensor</string>
+  <string name="invert_proximity_sensor_desc">Kan helpen op sommige apparaten als de fabrikant dichtbij en veraf verwisselde</string>
   <string name="android_integration">Integreer met Android</string>
   <string name="android_integration_desc">Integratie met ingebouwde kiezer en gesprekslijsten</string>
   <string name="availability_profile">Beschikbaarheidsprofiel</string>

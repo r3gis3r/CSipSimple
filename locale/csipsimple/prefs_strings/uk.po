@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-11-26 15:45+0000\n"
 "Last-Translator: Yura Rodchyn <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -56,11 +56,11 @@ msgstr "Настроювання користувацького інтерфей
 
 msgctxt "prefs_calls"
 msgid "Calls options"
-msgstr ""
+msgstr "Опції дзвінків"
 
 msgctxt "prefs_calls_desc"
 msgid "Options related to calls"
-msgstr ""
+msgstr "Опції відносно дзвінків"
 
 #. Network
 msgctxt "for_incomings"
@@ -231,6 +231,24 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN сервер (ХОСТ:ПОРТ)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "Turn сервер"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "TLS пароль"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr "Включити STUN"
@@ -241,11 +259,11 @@ msgstr "Увімкнути функцію STUN"
 
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr ""
+msgstr "STUN сервери"
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
-msgstr ""
+msgstr "STUN сервери (HOST[:PORT], ...)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
@@ -265,14 +283,30 @@ msgstr "DSCP значення для SIP трафіку"
 
 msgctxt "keep_alive_interval_wifi"
 msgid "Wifi keep alive"
-msgstr ""
+msgstr "Не вимикати WiFi"
 
 msgctxt "keep_alive_interval_mobile"
 msgid "Mobile keep alive"
-msgstr ""
+msgstr "Не вимикати мобільний"
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr "Інтервал (сек) для KA пакетів"
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -372,6 +406,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Режим для захищеного RTP"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "Режим експерта"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "Режим для захищеного RTP"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -417,6 +461,15 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Відрегулюйте рівень спікер сигналу (1 нічого не робити)"
 
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "Мікро посилення"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
+
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
 msgstr "Початковий рівень потоку"
@@ -438,11 +491,10 @@ msgid "Media quality"
 msgstr "Якість медіа"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
-"Якість потоку засобів масової інформації (змінити, тільки якщо ви знаєте, що "
-"робите)"
+"Якість потоку засобів масової інформації (змінити, тільки якщо ви знаєте,"
+" що робите)"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
@@ -470,11 +522,11 @@ msgstr "Хвіст завдовжки луни"
 
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr ""
+msgstr "Ехо режим"
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
-msgstr ""
+msgstr "Ехо алгоритм"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
@@ -502,8 +554,7 @@ msgstr "Використовувати API маршрутизації"
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr ""
-"Спробуйте включити, що якщо звук маршрутизації оратор замість навушників"
+msgstr "Спробуйте включити, що якщо звук маршрутизації оратор замість навушників"
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
@@ -511,8 +562,7 @@ msgstr "Використовувати режим аудіо API"
 
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr ""
-"Спробуйте включити, що якщо звук маршрутизації оратор замість навушників"
+msgstr "Спробуйте включити, що якщо звук маршрутизації оратор замість навушників"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
@@ -521,6 +571,16 @@ msgstr "Аудіо режим SIP дзвінків"
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "Зміна тільки тоді, коли розробники радять вам"
+
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
@@ -540,34 +600,42 @@ msgstr "Згенерувати тон перед дзвінком"
 
 msgctxt "narrow_band"
 msgid "Narrowband"
-msgstr ""
+msgstr "Вузькосмуговий"
 
 msgctxt "wide_band"
 msgid "Wideband"
-msgstr ""
+msgstr "Широкосмуговий"
 
 msgctxt "band_for_wifi"
 msgid "Band type for wifi"
-msgstr ""
+msgstr "Тип радіоканалу для WiFi"
 
 msgctxt "band_for_3g"
 msgid "Band type for 3G"
-msgstr ""
+msgstr "Тип каналу для 3G"
 
 msgctxt "band_for_gprs"
 msgid "Band type for GPRS"
-msgstr ""
+msgstr "Тип каналу для GPRS"
 
 msgctxt "band_for_edge"
 msgid "Band type for EDGE"
-msgstr ""
+msgstr "Тип каналу для EDGE"
 
 msgctxt "band_for_other"
 msgid "Band type for other"
-msgstr ""
+msgstr "Тип каналу для інших"
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
+msgstr "Підключення полоси пропускання для типів кодеків"
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
 msgstr ""
 
 #. UI
@@ -589,8 +657,8 @@ msgstr "Інтеграція з системним додзвоном"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
 "При наборі з системного дозвону вам буде запропоновано, що ви хочете "
 "використовувати SIP або мобільний"
@@ -601,8 +669,7 @@ msgstr "Інтеграція журналу дзвінків"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
-msgstr ""
-"SIP-дзвінки будуть об'єднані (якщо можливо) у рідному журнали викликів"
+msgstr "SIP-дзвінки будуть об'єднані (якщо можливо) у рідному журнали викликів"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -643,8 +710,8 @@ msgstr "Пильнувати у той час як за викликом"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Лагодження, якщо ви отримуєте поривчастий звук, коли екран вимкнути в той "
-"час як в WIFI мережі"
+"Лагодження, якщо ви отримуєте поривчастий звук, коли екран вимкнути в той"
+" час як в WIFI мережі"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -698,10 +765,35 @@ msgstr "Чи інтегруватиметься з рідним мобільни
 
 msgctxt "invert_proximity_sensor"
 msgid "Invert proximity sensor"
-msgstr ""
+msgstr "Звернути датчик"
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr "Може допомогти на деяких пристроях"
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "Інтеграція з музичним додатком"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
@@ -723,8 +815,7 @@ msgstr "Завжди доступний"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr ""
-"Буде використовувати батарею, але вхідні дзвінки завжди отримуватимуться"
+msgstr "Буде використовувати батарею, але вхідні дзвінки завжди отримуватимуться"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
@@ -766,6 +857,15 @@ msgstr "Автоматично записувати дзвінки"
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Записувати дзвінки при зєднанні"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "Для вихідних дзвінків"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

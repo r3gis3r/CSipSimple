@@ -1,0 +1,56 @@
+# Korean translation for csipsimple
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
+"PO-Revision-Date: 2011-05-08 09:27+0000\n"
+"Last-Translator: Moshe Raviv <Unknown>\n"
+"Language-Team: Korean <ko@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "unknown"
+msgid "Unknown"
+msgstr "알 수 없는 번호"
+
+msgctxt "type_incoming"
+msgid "Incoming"
+msgstr "수신"
+
+msgctxt "type_outgoing"
+msgid "Outgoing"
+msgstr "발신"
+
+msgctxt "type_missed"
+msgid "Missed"
+msgstr "부재중 전화"
+
+msgctxt "callBack"
+msgid "Call back"
+msgstr "부재중 번호로 전화 걸기"
+
+msgctxt "callAgain"
+msgid "Call again"
+msgstr "전화 다시 걸기"
+
+msgctxt "returnCall"
+msgid "Return call"
+msgstr "답신"
+
+#, c-format
+msgctxt "callDetailsDurationFormat"
+msgid ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> secs"
+msgstr ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> secs"
+

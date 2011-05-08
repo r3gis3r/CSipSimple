@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_data">Wagwoord</string>
+  <string name="w_expert_use_tcp">Gebruik TCP (nie UDP nie)</string>
+  <string name="w_expert_prevent_tcp">Verhoed TCP (probeer net UDP)</string>
+</resources>

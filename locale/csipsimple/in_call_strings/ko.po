@@ -1,0 +1,99 @@
+# Korean translation for csipsimple
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
+"PO-Revision-Date: 2011-05-08 09:25+0000\n"
+"Last-Translator: Moshe Raviv <Unknown>\n"
+"Language-Team: Korean <ko@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "take_call"
+msgid "Answer"
+msgstr "응답"
+
+msgctxt "decline_call"
+msgid "Ignore"
+msgstr "무시"
+
+msgctxt "clear_call"
+msgid "End"
+msgstr "종료"
+
+msgctxt "touch_lock"
+msgid "Double tap to unlock"
+msgstr "해제할 더블 탭"
+
+msgctxt "dialpad"
+msgid "Dialpad"
+msgstr "다이얼패드"
+
+msgctxt "bluetooth"
+msgid "Bluetooth"
+msgstr "블루투스"
+
+msgctxt "speaker"
+msgid "Speaker"
+msgstr "스피커"
+
+msgctxt "mute"
+msgid "Mute"
+msgstr "정숙 모드"
+
+msgctxt "add_call"
+msgid "Add call"
+msgstr "통화 추가"
+
+msgctxt "call_state_calling"
+msgid "Calling..."
+msgstr "통화 중..."
+
+msgctxt "call_state_confirmed"
+msgid "Talking"
+msgstr "대화 중…"
+
+msgctxt "call_state_connecting"
+msgid "Connecting..."
+msgstr "연결 중…"
+
+msgctxt "call_state_disconnected"
+msgid "Hung up"
+msgstr "통화 종료"
+
+msgctxt "call_state_early"
+msgid "Ringing..."
+msgstr "호출 중…"
+
+msgctxt "call_state_incoming"
+msgid "Incoming call..."
+msgstr "전화 수신…"
+
+msgctxt "call_state_null"
+msgid "ERROR"
+msgstr "에러"
+
+msgctxt "unlock"
+msgid "Unlock"
+msgstr "잠금 해제"
+
+msgctxt "record"
+msgid "Record"
+msgstr "녹음"
+
+msgctxt "stop_recording"
+msgid "Stop recording"
+msgstr "녹음 중지"
+
+msgctxt "xfer"
+msgid "Transfer"
+msgstr "전송"
+

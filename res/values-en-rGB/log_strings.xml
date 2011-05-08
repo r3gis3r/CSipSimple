@@ -1,2 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="unknown">Unknown</string>
+  <string name="type_incoming">Incoming</string>
+  <string name="type_outgoing">Outgoing</string>
+  <string name="type_missed">Missed</string>
+  <string name="callBack">Call back</string>
+  <string name="callAgain">Call again</string>
+  <string name="returnCall">Return call</string>
+  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" mins "<xliff:g id="seconds" example="28">%s</xliff:g>" secs"</string>
+</resources>

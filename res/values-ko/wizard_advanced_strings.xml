@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_advanced_display_name">계정 이름</string>
+  <string name="w_advanced_display_name_desc">계정에 사용할 닉네임</string>
+  <string name="w_advanced_caller_id">발신자 ID</string>
+  <string name="w_advanced_caller_id_desc">송신할 발신자 ID</string>
+  <string name="w_advanced_username">사용자 ID</string>
+  <string name="w_advanced_username_desc">SIP 서버 인증을 위한 사용자 이름</string>
+  <string name="w_advanced_password">비밀번호</string>
+  <string name="w_advanced_password_desc">SIP 서버 인증을 위한 비밀번호</string>
+  <string name="w_advanced_use_tcp">를 사용하는 TCP (안 UDP를)</string>
+  <string name="w_advanced_proxy">프록시</string>
+  <string name="w_advanced_proxy_desc">프록시 도메인/IP[:port] (옵션, 항상 필요하지)</string>
+</resources>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2011-01-30 00:15+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: da <LL@li.org>\n"
@@ -231,6 +231,22 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr ""
 
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr ""
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr ""
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr ""
@@ -273,6 +289,22 @@ msgstr ""
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr ""
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -372,6 +404,14 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr ""
 
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr ""
+
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr ""
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -415,6 +455,14 @@ msgstr ""
 
 msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
+msgstr ""
+
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr ""
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
 msgstr ""
 
 msgctxt "snd_stream_level"
@@ -517,6 +565,16 @@ msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr ""
 
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
+
 msgctxt "has_io_queue"
 msgid "IO Queue"
 msgstr ""
@@ -563,6 +621,14 @@ msgstr ""
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
+msgstr ""
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
 msgstr ""
 
 #. UI
@@ -692,6 +758,30 @@ msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
 msgstr ""
 
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr ""
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
+msgstr ""
+
 #. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
@@ -752,6 +842,14 @@ msgstr ""
 
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
+msgstr ""
+
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr ""
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
 msgstr ""
 
 msgctxt "expert_preferences"

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_common_phone_number">Foon nommer</string>
+  <string name="w_common_phone_number_desc">Sip foon nommer gegee deur verskaffer</string>
+  <string name="w_common_password">Wagwoord</string>
+</resources>

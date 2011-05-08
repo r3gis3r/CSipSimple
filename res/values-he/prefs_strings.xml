@@ -61,6 +61,9 @@
   <string name="enable_qos_desc">אפשר QoS במנות</string>
   <string name="dscp_val">ערך DSCP</string>
   <string name="dscp_val_desc">ערך DSCP עבור תעבורת סיפ</string>
+  <string name="keep_alive_interval_wifi">השאר Wifi דלוק</string>
+  <string name="keep_alive_interval_mobile">השאר 3G דלוק</string>
+  <string name="keep_alive_interval_desc">מרווח זמן (שניות) עבור מנות KA</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">תעבורה מאובטחת</string>
   <string name="secure_transport_desc">אבטחת מנגנון של סיפ ו-RTP</string>
@@ -125,6 +128,14 @@
   <string name="has_io_queue_desc">הפעל תור של קלט/פלט</string>
   <string name="set_audio_generate_tone">הנמך את הטון</string>
   <string name="set_audio_generate_tone_desc">צור צליל לפני ביצוע שיחות</string>
+  <string name="narrow_band">פס צר</string>
+  <string name="wide_band">פס רחב</string>
+  <string name="band_for_wifi">סוג פס עבור WiFi</string>
+  <string name="band_for_3g">סוג פס עבור 3G</string>
+  <string name="band_for_gprs">סוג פס עבור GPRS</string>
+  <string name="band_for_edge">סוג פס עבור EDGE</string>
+  <string name="band_for_other">סוג פס עבור אחר</string>
+  <string name="codecs_band_types">חיבורי רוחב פס עבור סוגי קודקים</string>
   <string name="general_ui">ממשק משתמש כללי</string>
   <string name="native_dialer_integration">שילוב שפת אם בחייגן</string>
   <string name="advanced_ui">התאמה מתקדמת</string>
@@ -154,6 +165,8 @@
   <string name="prevent_screen_rotation_desc">הימנע מסיבוב המסך ולשמור במצב דיוקן</string>
   <string name="gsm_integration_type">שילוב סלולרי בטלפון</string>
   <string name="gsm_integration_type_desc">כיצד היישום משתמש (או שלא) בטלפון הנייד שלך</string>
+  <string name="invert_proximity_sensor">הפוך קירבה חיישן</string>
+  <string name="invert_proximity_sensor_desc">עשוי לעזור על כמה מכשירים, כאשר יצרנית הפכה קרוב ורחוק</string>
   <string name="android_integration">שלב עם אנדרואיד</string>
   <string name="android_integration_desc">שלב עם החייגן ויומן השיחות המקורי</string>
   <string name="availability_profile">פרופיל זמין</string>

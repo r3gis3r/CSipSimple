@@ -63,4 +63,5 @@
   <string name="no_phone_found">Geen telefoonnummer gevonden voor dit contact</string>
   <string name="show_password">Toon wachtwoord</string>
   <string name="this_codec_is_not_free">**Deze codec is niet gratis !!!**\nControleer of iemand (uw SIP-provider of uzelf) een licentie heeft gekocht die het gebruik van deze codec toestaat! Wij (als applicatie-distributeurs) zijn niet verantwoordelijk voor illegaal gebruik van deze codec.\nHet is aan u om zeker te stellen dat u bent geautoriseerd om deze codec te gebruiken.\nLink om te kopen :</string>
+  <string name="voice_mail">Voicemail</string>
 </resources>

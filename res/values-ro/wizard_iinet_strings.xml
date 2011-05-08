@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Stare</string>
+  <string name="w_iinet_state_desc">Starea relevantă din lista următoare</string>
+  <string name="w_iinet_username">Numărul de telefon VoIP</string>
+  <string name="w_iinet_username_desc">Şterge orice formatare, cum ar fi spaţii şi cratime</string>
+  <string name="w_iinet_password">Parolă VoIP specială</string>
+  <string name="w_iinet_password_desc">Nu e aceeaşi cu parola conexiunii</string>
+</resources>

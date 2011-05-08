@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="unknown">Onbekend</string>
+  <string name="type_incoming">Inkomend</string>
+  <string name="type_outgoing">Uitgaande</string>
+  <string name="callAgain">Bel weer</string>
+</resources>

@@ -61,6 +61,9 @@
   <string name="enable_qos_desc">Zapnout Qos paketů</string>
   <string name="dscp_val">hodnota DSCP</string>
   <string name="dscp_val_desc">DSCP hodnota pro Sip komunikaci</string>
+  <string name="keep_alive_interval_wifi">udržet wifi aktivní</string>
+  <string name="keep_alive_interval_mobile">udržet mobil aktivní</string>
+  <string name="keep_alive_interval_desc">Interval (s) pro keep alive pakety</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">zabezpečit transport</string>
   <string name="secure_transport_desc">zabezpečovací mechanismus pro sip a rtp</string>
@@ -125,6 +128,14 @@
   <string name="has_io_queue_desc">Aktivovat frontu pro vstup/výstup</string>
   <string name="set_audio_generate_tone">Zaseknutí tónu</string>
   <string name="set_audio_generate_tone_desc">Generovat tón před vytvořením hovoru</string>
+  <string name="narrow_band">Úzkopásmové</string>
+  <string name="wide_band">Širokopásmové</string>
+  <string name="band_for_wifi">pásmo pro wifi</string>
+  <string name="band_for_3g">pásmo pro 3g</string>
+  <string name="band_for_gprs">pásmo pro GPRS</string>
+  <string name="band_for_edge">pásmo pro EDGE</string>
+  <string name="band_for_other">pásmo pro ostatní</string>
+  <string name="codecs_band_types">Pásma připojení podle typu Codeku</string>
   <string name="general_ui">Obecné uživatelské rozhraní</string>
   <string name="native_dialer_integration">Nativní integrace vytáčení</string>
   <string name="advanced_ui">Pokročilé vychztávky</string>
@@ -154,6 +165,8 @@
   <string name="prevent_screen_rotation_desc">Vyhněte se rotace displeje a udržet v režimu na výšku</string>
   <string name="gsm_integration_type">integrace do mobilního telefonu</string>
   <string name="gsm_integration_type_desc">Jak se aplikace používá mobilní telefon (nebo ne)</string>
+  <string name="invert_proximity_sensor">invertovat senzory</string>
+  <string name="invert_proximity_sensor_desc">"U některých typů telefonu může pomoct  invertovat blízký/vzdálený"</string>
   <string name="android_integration">Integrovat s androidem</string>
   <string name="android_integration_desc">Integrovat s vytáčením telefonu a seznamem hovorů</string>
   <string name="availability_profile">Dostupnost profilu</string>

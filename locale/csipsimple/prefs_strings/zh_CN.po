@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-11-30 02:23+0000\n"
 "Last-Translator: Larry Li <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
@@ -55,11 +55,11 @@ msgstr "调整用户界面"
 
 msgctxt "prefs_calls"
 msgid "Calls options"
-msgstr ""
+msgstr "呼叫选项"
 
 msgctxt "prefs_calls_desc"
 msgid "Options related to calls"
-msgstr ""
+msgstr "呼叫相关选项"
 
 #. Network
 msgctxt "for_incomings"
@@ -188,7 +188,7 @@ msgstr "切换到 IPv6 模式（您的网络和设备必须支持该选项）"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
-msgstr ""
+msgstr "解析 DNS SRV"
 
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
@@ -212,7 +212,7 @@ msgstr "开启 ICE"
 
 msgctxt "enable_ice_desc"
 msgid "Turn on ICE feature"
-msgstr "打开 IDC 特性"
+msgstr "开启ICE功能"
 
 msgctxt "enable_turn"
 msgid "Enable TURN"
@@ -230,6 +230,24 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN 服务器 (域名:端口)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "TRUN 服务器"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "TLS 密码"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr "开启 STUN"
@@ -240,11 +258,11 @@ msgstr "打开 STUN 特性"
 
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr ""
+msgstr "STUN服务器"
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
-msgstr ""
+msgstr "STUN服务器(主机[:端口], ...)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
@@ -264,14 +282,30 @@ msgstr "SIP 传输的 DSCP 值"
 
 msgctxt "keep_alive_interval_wifi"
 msgid "Wifi keep alive"
-msgstr ""
+msgstr "Wifi持续连接"
 
 msgctxt "keep_alive_interval_mobile"
 msgid "Mobile keep alive"
-msgstr ""
+msgstr "移动数据持续连接"
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr "保持连接数据包发送时间间隔(秒)"
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -371,6 +405,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "安全 RTP 模式"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "专家模式"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "安全 RTP 模式"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -378,7 +422,7 @@ msgstr "音频品质"
 
 msgctxt "audio_volume"
 msgid "Volume"
-msgstr ""
+msgstr "音量"
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -402,76 +446,84 @@ msgstr "开启语音音频检测"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
-msgstr ""
+msgstr "麦克风音量"
 
 msgctxt "snd_mic_level_desc"
 msgid "Adjust the micro signal level (1 do nothing)"
-msgstr ""
+msgstr "调整麦克风讯号位准(1不处理)"
 
 msgctxt "snd_speaker_level"
 msgid "Speaker amplification"
-msgstr ""
+msgstr "耳机音量"
 
 msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
+msgstr "调整耳机讯号位准(1不处理)"
+
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "麦克风音量"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
 msgstr ""
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
-msgstr ""
+msgstr "初始音量位准"
 
 msgctxt "snd_stream_level_desc"
 msgid "Set the initial level for audio stream (Android stream)"
-msgstr ""
+msgstr "设定初始音量(Android音量)"
 
 msgctxt "snd_auto_close_time"
 msgid "Auto close time"
-msgstr ""
+msgstr "自动关闭时间"
 
 msgctxt "snd_auto_close_time_desc"
 msgid "Time to wait for close audio channel"
-msgstr ""
+msgstr "关闭音频通道等待时间"
 
 msgctxt "snd_media_quality"
 msgid "Media quality"
 msgstr "媒体品质"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
-msgstr ""
+msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgstr "媒体流质量(当你知道自己在做什么的时候才更改)"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
-msgstr ""
+msgstr "时钟频率"
 
 msgctxt "snd_clock_rate_desc"
 msgid "Audio channel frequency"
-msgstr ""
+msgstr "音频通道频率"
 
 msgctxt "snd_ptime"
 msgid "Frame ptime"
-msgstr ""
+msgstr "Frame ptime"
 
 msgctxt "snd_ptime_desc"
 msgid "Specifying lower ptime will normally reduce the latency"
-msgstr ""
+msgstr "减少ptime通常可以降低延时"
 
 msgctxt "echo_cancellation_tail"
 msgid "Echo cancellation tail"
-msgstr ""
+msgstr "回声抵消tail"
 
 msgctxt "echo_cancellation_tail_desc"
 msgid "Tail length of echo cancellation"
-msgstr ""
+msgstr "回声抵消tail长度"
 
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr ""
+msgstr "回声模式"
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
-msgstr ""
+msgstr "回声算法"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
@@ -483,7 +535,7 @@ msgstr "DTMF 模式"
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
-msgstr ""
+msgstr "发送DTMF方式"
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
@@ -495,19 +547,19 @@ msgstr "使用软件自身的音量设置替代安卓系统的设置"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
-msgstr ""
+msgstr "使用routing API"
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr ""
+msgstr "尝试这个选项，如果通话是从喇叭出来而非听筒"
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
-msgstr ""
+msgstr "使用Mode audio API"
 
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr ""
+msgstr "尝试这个选项，如果通话是从喇叭出来而非听筒"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
@@ -515,54 +567,72 @@ msgstr "SIP 通话音频模式"
 
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
+msgstr "除非开发者建议，否则不要修改"
+
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
 msgstr ""
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
-msgstr ""
+msgstr "IO队列"
 
 msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
-msgstr ""
+msgstr "启用 输入/输出 队列"
 
 msgctxt "set_audio_generate_tone"
 msgid "Tone hack"
-msgstr ""
+msgstr "Tone hack"
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
-msgstr ""
+msgstr "呼叫前产生音频"
 
 msgctxt "narrow_band"
 msgid "Narrowband"
-msgstr ""
+msgstr "窄带"
 
 msgctxt "wide_band"
 msgid "Wideband"
-msgstr ""
+msgstr "宽带"
 
 msgctxt "band_for_wifi"
 msgid "Band type for wifi"
-msgstr ""
+msgstr "Wifi频宽类型"
 
 msgctxt "band_for_3g"
 msgid "Band type for 3G"
-msgstr ""
+msgstr "3G频宽类型"
 
 msgctxt "band_for_gprs"
 msgid "Band type for GPRS"
-msgstr ""
+msgstr "GPRS频宽类型"
 
 msgctxt "band_for_edge"
 msgid "Band type for EDGE"
-msgstr ""
+msgstr "EDGE频宽类型"
 
 msgctxt "band_for_other"
 msgid "Band type for other"
-msgstr ""
+msgstr "其他连线频宽类型"
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
+msgstr "依频宽类型选择编解码器"
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
 msgstr ""
 
 #. UI
@@ -572,45 +642,45 @@ msgstr "常规用户界面"
 
 msgctxt "native_dialer_integration"
 msgid "Native dialer integration"
-msgstr ""
+msgstr "整合原生拨号盘"
 
 msgctxt "advanced_ui"
 msgid "Advanced tweaks"
-msgstr ""
+msgstr "高级设置"
 
 msgctxt "integrate_with_native_dialer"
 msgid "Dialer integration"
-msgstr ""
+msgstr "拨号盘整合"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
-msgstr ""
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
+msgstr "如果整合原生拨号盘，会问您使用SIP还是电话线路"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
-msgstr ""
+msgstr "通话记录整合"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
-msgstr ""
+msgstr "如果可能SIP通话会整合进原生通话记录"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
-msgstr ""
+msgstr "拨号键音"
 
 msgctxt "dial_press_tone_desc"
 msgid "Play touch tones when dialing"
-msgstr ""
+msgstr "当拨号时，产生拨号键音"
 
 msgctxt "dial_press_vibrate"
 msgid "Dialing vibrate feedback"
-msgstr ""
+msgstr "拨号键震动"
 
 msgctxt "dial_press_vibrate_desc"
 msgid "Haptic (vibrate) feedback when dialing"
-msgstr ""
+msgstr "当拨号时产生拨号键震动"
 
 msgctxt "start_with_text_dialer"
 msgid "Text dialer"
@@ -622,27 +692,27 @@ msgstr "启动时使用文本框拨号盘"
 
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr ""
+msgstr "不适用滑动键应答"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr ""
+msgstr "使用按键应答而不适用滑动键"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
-msgstr ""
+msgstr "通话中不进入待机"
 
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
-msgstr ""
+msgstr "使用Wifi通话时，当屏幕关闭是产生断续音，可用此功能避免"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
-msgstr ""
+msgstr "启用部分清醒"
 
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
-msgstr ""
+msgstr "确保CPU一直执行此程序(耗电)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -654,104 +724,138 @@ msgstr "调试日志等级，介于 0 (关闭) 和 5 (详尽) 之间。"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
-msgstr ""
+msgstr "与音乐程序整合"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
-msgstr ""
+msgstr "如果您使用其他非官方音乐程序，请勿开启此选项"
 
 msgctxt "ringtone"
 msgid "Ringtone"
-msgstr ""
+msgstr "铃声"
 
 msgctxt "ringtone_desc"
 msgid "Default ringtone for SIP calls"
-msgstr ""
+msgstr "SIP通话默认铃声"
 
 msgctxt "prevent_screen_rotation"
 msgid "Prevent screen rotation"
-msgstr ""
+msgstr "禁止屏幕翻转"
 
 msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
-msgstr ""
+msgstr "防止屏幕翻转保持直立模式"
 
 msgctxt "gsm_integration_type"
 msgid "Mobile phone integration"
-msgstr ""
+msgstr "移动电话整合"
 
 msgctxt "gsm_integration_type_desc"
 msgid "How the application uses your mobile phone (or not)"
-msgstr ""
+msgstr "如何使用移动电话线路(或不使用)"
 
 msgctxt "invert_proximity_sensor"
 msgid "Invert proximity sensor"
-msgstr ""
+msgstr "近耳感知器反向"
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr "某些设备, 制造商把近耳及远耳弄反了, 这个设定或许可以帮上忙"
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "与音乐程序整合"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
-msgstr ""
+msgstr "Android整合"
 
 msgctxt "android_integration_desc"
 msgid "Integration with native dialer and call logs"
-msgstr ""
+msgstr "整合原生拨号盘和通话记录"
 
 msgctxt "availability_profile"
 msgid "Availability profile"
-msgstr ""
+msgstr "可用的设定"
 
 msgctxt "always_available"
 msgid "Always available"
-msgstr ""
+msgstr "总是可用"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr ""
+msgstr "会消耗电力，但总能接收来电"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
-msgstr ""
+msgstr "用于WiFi"
 
 msgctxt "wifi_available_desc"
 msgid "Availability of incoming calls based on WiFi profile"
-msgstr ""
+msgstr "使用WiFi时，来电可用"
 
 msgctxt "never_available"
 msgid "Only for outgoing"
-msgstr ""
+msgstr "只能拨出"
 
 msgctxt "never_available_desc"
 msgid "Activate the SIP client automatically when necessary"
-msgstr ""
+msgstr "当需要时自动启用SIP客户端"
 
 msgctxt "availability_tg"
 msgid "Mobile data availability"
-msgstr ""
+msgstr "移动数据可用"
 
 msgctxt "tg_allowed"
 msgid "I'm allowed to use mobile"
-msgstr ""
+msgstr "允许使用移动数据"
 
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
-msgstr ""
+msgstr "营运商允许VoIP经由移动数据连接"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
-msgstr ""
+msgstr "仅当SIP已注册时才可以使用"
 
 #. Calls settings
 msgctxt "auto_record_calls"
 msgid "Auto record calls"
-msgstr ""
+msgstr "通话自动录音"
 
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
+msgstr "连接建立后马上录音"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "呼出电话"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
 msgstr ""
 
 msgctxt "expert_preferences"

@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="changelog_text">&lt;h2&gt;此版本有何新功能?&lt;/h2&gt;本程序仍在开发阶段. 您可以去 blog 查看修订履历</string>
+  <string name="detecting_text">正在检测适合设备的库</string>
   <string name="intializing_text">初始化</string>
   <string name="downloading_text">正在下载</string>
   <string name="installing_library_text">安装文件库……</string>

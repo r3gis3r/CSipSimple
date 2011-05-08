@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-11-25 15:35+0000\n"
 "Last-Translator: Dmitry Kutsenko <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -186,8 +186,8 @@ msgstr "Использовать IPv6"
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
 msgstr ""
-"Переключиться в режим IPv6 (сеть и телефон должны уметь поддерживать этот "
-"режим)"
+"Переключиться в режим IPv6 (сеть и телефон должны уметь поддерживать этот"
+" режим)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
@@ -233,6 +233,24 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN сервер (HOST:PORT)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "TURN-сервер"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "TLS пароль"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr "STUN"
@@ -275,6 +293,22 @@ msgstr ""
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr ""
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -374,6 +408,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Режим безопасного RTP"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "Экспертный режим"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "Режим безопасного RTP"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -401,8 +445,7 @@ msgstr "Активировать VAD"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr ""
-"Определять голосовую активность в микрофоне для отделения от фонового шума"
+msgstr "Определять голосовую активность в микрофоне для отделения от фонового шума"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
@@ -419,6 +462,15 @@ msgstr "Настройка спикера"
 msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Настройка уровня сигнала в спикере (1 - не менять)"
+
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "Настройка микрофона"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
@@ -441,8 +493,7 @@ msgid "Media quality"
 msgstr "Качество медиа"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Качество медиа потока (только для опытных пользователей)"
 
 msgctxt "snd_clock_rate"
@@ -496,8 +547,8 @@ msgstr "Программная регулировка"
 msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
 msgstr ""
-"Регулировать громкость из программы CSipSimple и не использовать настройки "
-"Андроид"
+"Регулировать громкость из программы CSipSimple и не использовать "
+"настройки Андроид"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
@@ -522,6 +573,16 @@ msgstr "Аудио режим для SIP вызовов"
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "Изменяйте только если разработчик вам посоветует"
+
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
@@ -571,6 +632,14 @@ msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
 msgstr ""
 
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
+msgstr ""
+
 #. UI
 msgctxt "general_ui"
 msgid "General user interface"
@@ -590,8 +659,8 @@ msgstr "Номеронабиратель"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr "Предлагать использовать SIP или мобильную связь при вызовах"
 
 msgctxt "integrate_with_native_calllogs"
@@ -656,8 +725,7 @@ msgstr "Отчёт об ошибках"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr ""
-"Уровень отчёта об ошибках для отладки программы (0 - нет, 5 - подробный)"
+msgstr "Уровень отчёта об ошибках для отладки программы (0 - нет, 5 - подробный)"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
@@ -666,7 +734,8 @@ msgstr "Интеграция с плеером"
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
-"Интегрировать с музыкальным плеером, если используется стандартное приложение"
+"Интегрировать с музыкальным плеером, если используется стандартное "
+"приложение"
 
 msgctxt "ringtone"
 msgid "Ringtone"
@@ -682,8 +751,7 @@ msgstr "Не поворачивать экран"
 
 msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
-msgstr ""
-"Не поворачивать экран автоматически и всегда использовать портретный вид"
+msgstr "Не поворачивать экран автоматически и всегда использовать портретный вид"
 
 msgctxt "gsm_integration_type"
 msgid "Mobile phone integration"
@@ -699,6 +767,31 @@ msgstr ""
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr ""
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "Интеграция с плеером"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
@@ -752,8 +845,7 @@ msgstr "Передача VoIP пакетов должна быть разреш�
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
-msgstr ""
-"Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети"
+msgstr "Выбор кодеков возможен только, если SIP сейчас зарегистрирован в сети"
 
 #. Calls settings
 msgctxt "auto_record_calls"
@@ -763,6 +855,15 @@ msgstr "Автозапись звонков"
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Запись звонков по мере соединения"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "Исходящие вызовы"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

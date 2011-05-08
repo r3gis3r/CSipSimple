@@ -11,7 +11,8 @@
   <string name="description_image_button_nine">九</string>
   <string name="description_image_button_star">星号</string>
   <string name="description_image_button_zero">零</string>
+  <string name="description_image_button_pound">井号</string>
   <string name="description_dial_button">拨号</string>
   <string name="description_delete_button">退格</string>
-  <string name="description_digits_edittext">拨号盘</string>
+  <string name="description_digits_edittext">拨出号码</string>
 </resources>

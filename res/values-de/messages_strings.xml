@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="new_message">Neue Nachricht</string>
+  <string name="create_new_message">Nachricht verfassen</string>
+  <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g>" zu Kontakten hinzufügen"</string>
+  <string name="menu_call">Anrufen</string>
+  <string name="menu_delete_all">Unterhaltungen löschen</string>
+  <string name="menu_delete">Unterhaltung löschen</string>
+  <string name="menu_view">Unterhaltung anzeigen</string>
+</resources>

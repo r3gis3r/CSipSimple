@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-10-06 13:32+0000\n"
 "Last-Translator: Jan Tschirschwitz <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr "Einfache Konfiguration"
 
 msgctxt "prefs_fast_desc"
 msgid "Quick options to use if you don't know how SIP works"
-msgstr "Einfache Konfiguration, wenn du nicht weißt wie SIP funktioniert"
+msgstr "Schnell-Einstellungen falls du dich mit SIP nicht auskennst"
 
 msgctxt "prefs_network"
 msgid "Network"
@@ -43,7 +43,7 @@ msgstr "Audio"
 
 msgctxt "prefs_media_desc"
 msgid "Codecs and in-call sound behavior"
-msgstr "Codecs and Verhalten während eines Anrufs"
+msgstr "Codecs und Anruf-Verhalten"
 
 msgctxt "prefs_ui"
 msgid "User interface"
@@ -55,7 +55,7 @@ msgstr "Anpassen der Benutzeroberfläche"
 
 msgctxt "prefs_calls"
 msgid "Calls options"
-msgstr ""
+msgstr "Anrufeinstellungen"
 
 msgctxt "prefs_calls_desc"
 msgid "Options related to calls"
@@ -72,7 +72,7 @@ msgstr "Für ausgehende Anrufe"
 
 msgctxt "perfs"
 msgid "Performances"
-msgstr "Performanz"
+msgstr "Leistung"
 
 msgctxt "transport"
 msgid "Transport"
@@ -80,7 +80,7 @@ msgstr "Protokoll"
 
 msgctxt "transport_desc"
 msgid "Force the use of a transport for this account"
-msgstr ""
+msgstr "Protokoll für diesen Account erzwingen"
 
 msgctxt "use_wifi"
 msgid "Use WiFi"
@@ -88,11 +88,11 @@ msgstr "Verwende WLAN"
 
 msgctxt "use_wifi_in_desc"
 msgid "Use WiFi for incoming calls"
-msgstr "Verwendet WLAN für eingehende Anrufe"
+msgstr "Verwende WLAN für eingehende Anrufe"
 
 msgctxt "use_wifi_out_desc"
 msgid "Use WiFi for outgoing calls"
-msgstr "Verwendet WLAN für ausgehende Anrufe"
+msgstr "Verwende WLAN für ausgehende Anrufe"
 
 msgctxt "use_other"
 msgid "Use other networks"
@@ -112,8 +112,7 @@ msgstr "Verwende UMTS"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr ""
-"Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
+msgstr "Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
@@ -125,11 +124,11 @@ msgstr "Verwende GPRS"
 
 msgctxt "lock_wifi"
 msgid "Lock WiFi"
-msgstr "WLAN Performanz"
+msgstr "WLAN Leistung"
 
 msgctxt "lock_wifi_desc"
 msgid "Prevent WiFi idle when SIP is connected"
-msgstr "Verhindere das Einschlafen, wenn SIP über WLAN verbunden ist"
+msgstr "Verhindere WiFi-Standby wenn SIP über WLAN verbunden ist"
 
 msgctxt "enable_tcp"
 msgid "TCP"
@@ -211,7 +210,7 @@ msgstr "NAT Traversal"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
-msgstr "Aktiviert ICE"
+msgstr "Aktiviere ICE"
 
 msgctxt "enable_ice_desc"
 msgid "Turn on ICE feature"
@@ -219,7 +218,7 @@ msgstr "Aktiviert die ICE Funktionalität"
 
 msgctxt "enable_turn"
 msgid "Enable TURN"
-msgstr "Aktiviert TURN"
+msgstr "Aktiviere TURN"
 
 msgctxt "enable_turn_desc"
 msgid "Turn on TURN feature"
@@ -233,9 +232,27 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN Server (HOST:PORT)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "TURN Server"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "TLS Passwort"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
-msgstr "Aktiviert STUN"
+msgstr "Aktiviere STUN"
 
 msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
@@ -243,7 +260,7 @@ msgstr "Aktiviert die STUN Funktionalität"
 
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr ""
+msgstr "STUN Server"
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
@@ -267,14 +284,30 @@ msgstr "DSCP-Wert für SIP-Daten"
 
 msgctxt "keep_alive_interval_wifi"
 msgid "Wifi keep alive"
-msgstr ""
+msgstr "WiFi Keep-Alive"
 
 msgctxt "keep_alive_interval_mobile"
 msgid "Mobile keep alive"
-msgstr ""
+msgstr "3G Keep-Alive"
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr "Abstand von Keep-Alive Paketen (sek)"
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -316,7 +349,7 @@ msgstr "TLS CA Zertifikat"
 
 msgctxt "ca_list_file_desc"
 msgid "For example /sdcard/CSipSimple/myAuthority.ca"
-msgstr "Z.B. /sdcard/CSipSimple/myAuthority.ca"
+msgstr "z.B. /sdcard/CSipSimple/myAuthority.ca"
 
 msgctxt "cert_file"
 msgid "TLS certificate file"
@@ -374,6 +407,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Modus für Secure RTP"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "Experten Modus"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "Modus für Secure RTP"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -418,6 +461,15 @@ msgstr "Lautsprecherpegel"
 msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Stellt den Lautsprecherpegel ein (1=keine Veränderung)"
+
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "Mikrofonpegel"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
@@ -471,11 +523,11 @@ msgstr "Länge des Echos das unterdrückt werden kann"
 
 msgctxt "echo_mode"
 msgid "Echo mode"
-msgstr ""
+msgstr "Unterdrückungsalgorithmus"
 
 msgctxt "echo_mode_desc"
 msgid "Algorithm for echo"
-msgstr ""
+msgstr "Verwendeter Echunterdrückungs-Algorithmus"
 
 msgctxt "codecs_desc"
 msgid "Priority (0 is disabled)"
@@ -483,7 +535,7 @@ msgstr "Priorität (0=deaktiviert)"
 
 msgctxt "sip_dtmf"
 msgid "DTMF mode"
-msgstr ""
+msgstr "DTMF Modus"
 
 msgctxt "sip_dtmf_desc"
 msgid "How to send DTMF"
@@ -499,7 +551,7 @@ msgstr "Verwendet eigene Lautstärke anstatt der Android-Lautstärke"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
-msgstr ""
+msgstr "Verwende Routing API"
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
@@ -511,14 +563,24 @@ msgstr ""
 
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr ""
+msgstr "Aktivieren falls der Ton statt am Hörer am Lautsprecher ausgegeben wird"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
-msgstr ""
+msgstr "Audio-Modus für SIP Anrufe"
 
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
+msgstr "Nur auf Rat der Entwickler ändern"
+
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
 msgstr ""
 
 msgctxt "has_io_queue"
@@ -527,11 +589,11 @@ msgstr ""
 
 msgctxt "has_io_queue_desc"
 msgid "Activate Queue for input/output"
-msgstr ""
+msgstr "Aktiviere Queue für Input/Output"
 
 msgctxt "set_audio_generate_tone"
 msgid "Tone hack"
-msgstr ""
+msgstr "Tone Hack"
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
@@ -567,6 +629,14 @@ msgstr ""
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
+msgstr "Bandbreiten-Zuordnung"
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
 msgstr ""
 
 #. UI
@@ -580,7 +650,7 @@ msgstr "Native dialer integration"
 
 msgctxt "advanced_ui"
 msgid "Advanced tweaks"
-msgstr "Advanced tweaks"
+msgstr "Fortgeschrittene Tweaks"
 
 msgctxt "integrate_with_native_dialer"
 msgid "Dialer integration"
@@ -596,7 +666,7 @@ msgstr ""
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
-msgstr "Anrufliste einbinden"
+msgstr "In Anrufliste einbinden"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
@@ -608,7 +678,7 @@ msgstr "Wählton beim Wählen"
 
 msgctxt "dial_press_tone_desc"
 msgid "Play touch tones when dialing"
-msgstr "Es werden Wähltöne beim Wählen abgespielt"
+msgstr "Wahltöne beim Wählen abspielen"
 
 msgctxt "dial_press_vibrate"
 msgid "Dialing vibrate feedback"
@@ -628,7 +698,7 @@ msgstr "Startet mit Textwähler"
 
 msgctxt "use_alternate_unlocker"
 msgid "Don't use slide answer"
-msgstr ""
+msgstr "Alternative Rufannahme"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
@@ -642,11 +712,11 @@ msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
 "Beim Telefonieren das Einschlafen verhindern. (Behebt Probleme mit "
-"abgehacktem Audio)"
+"abgehacktem Audio.)"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
-msgstr "Blockiere Einschlafen"
+msgstr "Verhindere CPU-Standby"
 
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
@@ -669,8 +739,8 @@ msgstr "Musikanwendungsintegration"
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
-"Deaktiviere diese Funktion, wenn du eine andere als die Standard-"
-"Musikanwendung verwendest"
+"Deaktiviere diese Funktion, falls du nicht die Standard-Musikanwendung "
+"verwendest"
 
 msgctxt "ringtone"
 msgid "Ringtone"
@@ -682,7 +752,7 @@ msgstr "Standard-Klingelton für SIP Anrufe"
 
 msgctxt "prevent_screen_rotation"
 msgid "Prevent screen rotation"
-msgstr "Verhindere Displayroation"
+msgstr "Verhindere Displayrotation"
 
 msgctxt "prevent_screen_rotation_desc"
 msgid "Avoid rotation of the screen and keep in portrait mode"
@@ -698,16 +768,41 @@ msgstr ""
 
 msgctxt "invert_proximity_sensor"
 msgid "Invert proximity sensor"
-msgstr ""
+msgstr "Entfernungs-Sensor invertieren"
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr "Hilft bei Geräten mit fehlerhaftem Entfernungs-Sensor"
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "Musikanwendungsintegration"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
 msgctxt "android_integration"
 msgid "Integrate with Android"
-msgstr "Integration mit Android"
+msgstr "Mit Android integrieren"
 
 msgctxt "android_integration_desc"
 msgid "Integration with native dialer and call logs"
@@ -762,10 +857,19 @@ msgstr "Nur verfügbar, wenn SIP registriert ist"
 #. Calls settings
 msgctxt "auto_record_calls"
 msgid "Auto record calls"
-msgstr ""
+msgstr "Anrufe automatisch aufnehmen"
 
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
+msgstr "Nehme Anrufe auf sobald sie angenommen werden"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "Für ausgehende Anrufe"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
 msgstr ""
 
 msgctxt "expert_preferences"

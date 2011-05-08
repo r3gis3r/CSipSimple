@@ -47,4 +47,18 @@
     <item>Примусово встановити</item>
     <item>Запобігати</item>
   </string-array>
+  <string-array name="echo_mode_choices">
+    <item>Авто</item>
+    <item>Speex</item>
+    <item>Простий</item>
+  </string-array>
+  <string-array name="dial_press_mode_choices">
+    <item>Використовувати налаштування андроїд</item>
+    <item>Примусово</item>
+    <item>Запобігати</item>
+  </string-array>
+  <string-array name="band_types_name">
+    <item>Вузькосмуговий</item>
+    <item>Широкосмуговий</item>
+  </string-array>
 </resources>

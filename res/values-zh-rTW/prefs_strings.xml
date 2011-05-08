@@ -61,6 +61,9 @@
   <string name="enable_qos_desc">啟用封包的QoS</string>
   <string name="dscp_val">DSCP 值</string>
   <string name="dscp_val_desc">SIP 流量之 DSCP 值</string>
+  <string name="keep_alive_interval_wifi">保持 Wifi 連線</string>
+  <string name="keep_alive_interval_mobile">保持行動數據連線</string>
+  <string name="keep_alive_interval_desc">保持連線封包 (KA) 間隔</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">安全傳送</string>
   <string name="secure_transport_desc">SIP 及 RTP 的安全機制</string>
@@ -125,6 +128,14 @@
   <string name="has_io_queue_desc">啟用輸入/輸出佇列</string>
   <string name="set_audio_generate_tone">Tone hack</string>
   <string name="set_audio_generate_tone_desc">呼叫前產生音調</string>
+  <string name="narrow_band">窄頻</string>
+  <string name="wide_band">寬頻</string>
+  <string name="band_for_wifi">Wifi 頻寬類型</string>
+  <string name="band_for_3g">3G 頻寬類型</string>
+  <string name="band_for_gprs">GPRS 頻寬類型</string>
+  <string name="band_for_edge">EDGE 頻寬類型</string>
+  <string name="band_for_other">其他連線 頻寬類型</string>
+  <string name="codecs_band_types">依連線頻寬類型指定編解碼器</string>
   <string name="general_ui">一般用戶界面</string>
   <string name="native_dialer_integration">原生撥號盤整合</string>
   <string name="advanced_ui">進階界面</string>
@@ -154,6 +165,8 @@
   <string name="prevent_screen_rotation_desc">防止螢幕旋轉而保持直立模式</string>
   <string name="gsm_integration_type">行動電話整合</string>
   <string name="gsm_integration_type_desc">如何使用電話線路 (或不使用)</string>
+  <string name="invert_proximity_sensor">近耳感知器反向</string>
+  <string name="invert_proximity_sensor_desc">某些裝置, 製造商把近耳及遠耳弄反了, 這個設定或許可以幫上忙</string>
   <string name="android_integration">Android 整合</string>
   <string name="android_integration_desc">與原生的撥號盤及通話紀錄整合</string>
   <string name="availability_profile">可用的設定</string>

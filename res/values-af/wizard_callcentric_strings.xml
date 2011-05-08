@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_callcentric_phone_number">SIP Foon Nommer</string>
+  <string name="w_callcentric_phone_number_desc">Callcentric SIP foon nommer (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">Wagwoord</string>
+</resources>

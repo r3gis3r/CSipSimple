@@ -4,9 +4,9 @@
   <string name="decline_call">Abweisen</string>
   <string name="clear_call">Auflegen</string>
   <string name="touch_lock">Doppelklicken zum Entsperren</string>
-  <string name="dialpad">Wähltastatur</string>
+  <string name="dialpad">Wähltasten</string>
   <string name="bluetooth">Bluetooth</string>
-  <string name="speaker">Lautsprecher</string>
+  <string name="speaker">Lautspr.</string>
   <string name="mute">Stumm</string>
   <string name="add_call">Anruf hinzufügen</string>
   <string name="call_state_calling">Wähle...</string>

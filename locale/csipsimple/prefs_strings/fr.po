@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-10-10 08:22+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -184,8 +184,7 @@ msgstr "Utiliser l'IPv6"
 
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
-msgstr ""
-"Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
+msgstr "Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
@@ -193,8 +192,7 @@ msgstr "Résoudre les DNS SRV"
 
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
-msgstr ""
-"Utiliser les DNS dans l'application pour résoudre les noms de domaine"
+msgstr "Utiliser les DNS dans l'application pour résoudre les noms de domaine"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
@@ -232,6 +230,24 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "Serveur TURN (HOST:PORT)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "Serveur TURN"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "Mot de passe TLS"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr "Activer STUN"
@@ -266,14 +282,30 @@ msgstr "Valeur DSCP pour le trafic SIP"
 
 msgctxt "keep_alive_interval_wifi"
 msgid "Wifi keep alive"
-msgstr ""
+msgstr "Battement de coeur wifi"
 
 msgctxt "keep_alive_interval_mobile"
 msgid "Mobile keep alive"
-msgstr ""
+msgstr "Battement de coeur mobile"
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr "Intervalle (seconde) pour les paquets qui garde la connexion active"
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -373,6 +405,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Mode pour le RTP sécurisé"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "Mode expert"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "Mode pour le RTP sécurisé"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -400,8 +442,7 @@ msgstr "Détection de silence"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr ""
-"Activer la détection active de voix (réduit la bande passante utilisée)"
+msgstr "Activer la détection active de voix (réduit la bande passante utilisée)"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
@@ -418,6 +459,15 @@ msgstr "Amplification de l'écoute"
 msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Ajuster le gain du signal de l'écouteur (1 n'a pas d'effet)"
+
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "Amplification du micro"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
@@ -442,8 +492,7 @@ msgid "Media quality"
 msgstr "Qualité du média"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualité du flux média (à ne modifier que si vous savez exactement ce que "
 "vous faites)"
@@ -528,6 +577,16 @@ msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "Ne changer ceci que si les développeurs vous le conseillent"
 
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
+
 msgctxt "has_io_queue"
 msgid "IO Queue"
 msgstr "File d'entrée / sortie"
@@ -546,34 +605,42 @@ msgstr "Générer une tonalité avant d'effectuer un appel"
 
 msgctxt "narrow_band"
 msgid "Narrowband"
-msgstr ""
+msgstr "Bas débit"
 
 msgctxt "wide_band"
 msgid "Wideband"
-msgstr ""
+msgstr "Haut débit"
 
 msgctxt "band_for_wifi"
 msgid "Band type for wifi"
-msgstr ""
+msgstr "Type de débit pour le wifi"
 
 msgctxt "band_for_3g"
 msgid "Band type for 3G"
-msgstr ""
+msgstr "Type de débit pour 3G"
 
 msgctxt "band_for_gprs"
 msgid "Band type for GPRS"
-msgstr ""
+msgstr "Type de débit pour GPRS"
 
 msgctxt "band_for_edge"
 msgid "Band type for EDGE"
-msgstr ""
+msgstr "Type de débit pour EDGE"
 
 msgctxt "band_for_other"
 msgid "Band type for other"
-msgstr ""
+msgstr "Type de débit pour les autres"
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
+msgstr "Type de connections pour les codecs"
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
 msgstr ""
 
 #. UI
@@ -595,11 +662,11 @@ msgstr "Activer l'intégration"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
-"Quand un appel est initié partout dans Android il vous sera demandé si vous "
-"voulez utiliser le GSM ou le SIP"
+"Quand un appel est initié partout dans Android il vous sera demandé si "
+"vous voulez utiliser le GSM ou le SIP"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -608,7 +675,8 @@ msgstr "Intégrations au journal d'appel"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"Les appels SIP seront rajoutés (si possible) aux journaux d'appels d'Android"
+"Les appels SIP seront rajoutés (si possible) aux journaux d'appels "
+"d'Android"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -659,7 +727,8 @@ msgstr "Utiliser le verouillage CPU"
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"S'assurer que le CPU tourne toujours pour l'application (utilise la batterie)"
+"S'assurer que le CPU tourne toujours pour l'application (utilise la "
+"batterie)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -705,10 +774,37 @@ msgstr "Comment l'application utilise votre ligne mobile (ou pas)"
 
 msgctxt "invert_proximity_sensor"
 msgid "Invert proximity sensor"
-msgstr ""
+msgstr "Inverser le capteur de proximité"
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr ""
+"Peut résoudre les problèmes liés à une mauvaise implémentation du "
+"constructeur"
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "S'intégrer à Musique"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
@@ -774,6 +870,15 @@ msgstr "Enregistrer automatiquement les appels"
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Enregistrer dès que l'appel est connecté"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "Pour les appels sortants"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

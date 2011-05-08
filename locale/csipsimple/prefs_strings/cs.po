@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2011-01-28 11:32+0000\n"
 "Last-Translator: Libor Tesař <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -231,6 +231,24 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN server (HOST:PORT)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "Turn server"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "TLS Heslo"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr "Zapnout STUN"
@@ -265,14 +283,30 @@ msgstr "DSCP hodnota pro Sip komunikaci"
 
 msgctxt "keep_alive_interval_wifi"
 msgid "Wifi keep alive"
-msgstr ""
+msgstr "udržet wifi aktivní"
 
 msgctxt "keep_alive_interval_mobile"
 msgid "Mobile keep alive"
-msgstr ""
+msgstr "udržet mobil aktivní"
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr "Interval (s) pro keep alive pakety"
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -372,6 +406,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Mód pro zabezpečený RTP"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "Režim pro experty"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "Mód pro zabezpečený RTP"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -417,6 +461,15 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "nastavení úrovně signálu reproduktoru"
 
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "zesílení mikrofonu"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
+
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
 msgstr "počáteční úroveň proudu"
@@ -438,8 +491,7 @@ msgid "Media quality"
 msgstr "Kvalita média"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Kvalita proudu média"
 
 msgctxt "snd_clock_rate"
@@ -518,6 +570,16 @@ msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "Změnit pouze tehdy, pokud vývojáři poradí."
 
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
+
 msgctxt "has_io_queue"
 msgid "IO Queue"
 msgstr "vstupní/výstupní fronta"
@@ -536,34 +598,42 @@ msgstr "Generovat tón před vytvořením hovoru"
 
 msgctxt "narrow_band"
 msgid "Narrowband"
-msgstr ""
+msgstr "Úzkopásmové"
 
 msgctxt "wide_band"
 msgid "Wideband"
-msgstr ""
+msgstr "Širokopásmové"
 
 msgctxt "band_for_wifi"
 msgid "Band type for wifi"
-msgstr ""
+msgstr "pásmo pro wifi"
 
 msgctxt "band_for_3g"
 msgid "Band type for 3G"
-msgstr ""
+msgstr "pásmo pro 3g"
 
 msgctxt "band_for_gprs"
 msgid "Band type for GPRS"
-msgstr ""
+msgstr "pásmo pro GPRS"
 
 msgctxt "band_for_edge"
 msgid "Band type for EDGE"
-msgstr ""
+msgstr "pásmo pro EDGE"
 
 msgctxt "band_for_other"
 msgid "Band type for other"
-msgstr ""
+msgstr "pásmo pro ostatní"
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
+msgstr "Pásma připojení podle typu Codeku"
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
 msgstr ""
 
 #. UI
@@ -585,10 +655,11 @@ msgstr "Integrace vytáčení"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
-"Při vytáčení z telefonu se dotázat zda chcete použít sip nebo mobilní telefon"
+"Při vytáčení z telefonu se dotázat zda chcete použít sip nebo mobilní "
+"telefon"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -637,8 +708,8 @@ msgstr "Při hovoru je telefon připraven"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Opravy, pokud se dostaví trhaný zvuk, když vypnete displej, při hovoru na "
-"wifi"
+"Opravy, pokud se dostaví trhaný zvuk, když vypnete displej, při hovoru na"
+" wifi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -690,10 +761,35 @@ msgstr "Jak se aplikace používá mobilní telefon (nebo ne)"
 
 msgctxt "invert_proximity_sensor"
 msgid "Invert proximity sensor"
-msgstr ""
+msgstr "invertovat senzory"
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr "U některých typů telefonu může pomoct  invertovat blízký/vzdálený"
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "Integrovat s hudební aplikací"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
@@ -757,6 +853,15 @@ msgstr "Automatické nahrávání hovorů"
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Nahrávání hovorů ihned po spojení"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "Odchozí hovory"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

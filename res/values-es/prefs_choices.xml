@@ -4,6 +4,10 @@
     <item>Digest</item>
     <item>PGP</item>
   </string-array>
+  <string-array name="data_type_choices">
+    <item>Contraseña plana</item>
+    <item>Resumen de datos.</item>
+  </string-array>
   <string-array name="clock_rate_choices">
     <item>8KHz</item>
     <item>16KHz</item>
@@ -27,5 +31,9 @@
     <item>SSLv2</item>
     <item>SSL3</item>
     <item>SSL23</item>
+  </string-array>
+  <string-array name="band_types_name">
+    <item>Banda Estrecha</item>
+    <item>Banda Ancha</item>
   </string-array>
 </resources>

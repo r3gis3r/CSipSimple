@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="acct_inactive">인액티브 상태</string>
+  <string name="acct_unregistered">미등록 상태</string>
+  <string name="acct_expired">등록기간 종료</string>
+  <string name="acct_registering">등록 중...</string>
+  <string name="acct_registered">등록 완료</string>
+  <string name="acct_regerror">등록 중 오류 발생</string>
+  <string name="acct_regfailed">등록 실패 - 환경설정 확인 요</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="new_message">Nuwe boodskap</string>
+  <string name="menu_call">Bel</string>
+  <string name="anonymous_recipient">Anoniem</string>
+  <string name="messagelist_sender_self">Ek</string>
+  <string name="kilobyte">KB</string>
+  <string name="download">Laai af</string>
+  <string name="downloading">Besig om af te laai</string>
+  <string name="message_options">Boodskap opsies</string>
+  <string name="send">Stuur</string>
+  <string name="image_too_large">Prent te groot</string>
+  <string name="yes">Anvaar</string>
+  <string name="no">Kanselleer</string>
+  <string name="confirm_dialog_title">Skrap</string>
+  <string name="delete">Skrap</string>
+  <string name="status_none">(Geen)</string>
+  <string name="status_received">Ontvang</string>
+  <string name="status_rejected">Geweier</string>
+  <string name="me">Ek</string>
+</resources>

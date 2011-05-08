@@ -9,6 +9,8 @@
   <string name="prefs_media_desc">Codec e qualità del suono in chiamata</string>
   <string name="prefs_ui">Interfaccia utente</string>
   <string name="prefs_ui_desc">Tweak interfaccia utente</string>
+  <string name="prefs_calls">Opzioni di chiamata</string>
+  <string name="prefs_calls_desc">Opzioni relative alle chiamate</string>
   <string name="for_incomings">Per chiamate in ingresso</string>
   <string name="for_outgoings">Per chiamate in uscita</string>
   <string name="perfs">Prestazioni</string>
@@ -59,6 +61,9 @@
   <string name="enable_qos_desc">Abilita QoS sui pacchetti</string>
   <string name="dscp_val">Valore DSCP</string>
   <string name="dscp_val_desc">Valore DSCP per il traffico SIP</string>
+  <string name="keep_alive_interval_wifi">Wifi keep alive</string>
+  <string name="keep_alive_interval_mobile">Mobile keep alive</string>
+  <string name="keep_alive_interval_desc">Intervallo (sec) per pacchetti KA</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">Trasporto sicuro</string>
   <string name="secure_transport_desc">Meccanismo di sicurezza per SIP e RTP</string>
@@ -123,6 +128,14 @@
   <string name="has_io_queue_desc">Attiva Coda per input/output</string>
   <string name="set_audio_generate_tone">Tone hack</string>
   <string name="set_audio_generate_tone_desc">Genera un tono prima di fare le chiamate</string>
+  <string name="narrow_band">Narrowband</string>
+  <string name="wide_band">Wideband</string>
+  <string name="band_for_wifi">Tipo banda per wifi</string>
+  <string name="band_for_3g">Tipo banda per 3G</string>
+  <string name="band_for_gprs">Tipo banda per GPRS</string>
+  <string name="band_for_edge">Tipo banda per EDGE</string>
+  <string name="band_for_other">Tipo banda per altro</string>
+  <string name="codecs_band_types">Tipi di ampiezza di banda delle connessioni per i codec</string>
   <string name="general_ui">Interfaccia utente generale</string>
   <string name="native_dialer_integration">Integrazione con il dialer nativo</string>
   <string name="advanced_ui">Tweaks avanzati</string>
@@ -152,6 +165,8 @@
   <string name="prevent_screen_rotation_desc">Evita la rotazione dello schermo e mantieni la modalità verticale</string>
   <string name="gsm_integration_type">Integrazione con il cellulare</string>
   <string name="gsm_integration_type_desc">Come l\'applicazione usa il tuo cellulare (o no)</string>
+  <string name="invert_proximity_sensor">Inverte il sensore di prossimità</string>
+  <string name="invert_proximity_sensor_desc">Può aiutare su alcune periferiche quando il produttore ha invertito vicino e lontano</string>
   <string name="android_integration">Integrazione con Android</string>
   <string name="android_integration_desc">Integrazione con il dialer nativo e log delle chiamate</string>
   <string name="availability_profile">Profilo di disponibilità</string>

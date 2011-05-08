@@ -41,7 +41,6 @@
   <string name="service_ticker_registered_text">SIP Registrado</string>
   <string name="outgoing_call_chooser_call_text">Chamar</string>
   <string name="reorder">Reorganizar</string>
-  <string name="backup">Cópia de Segurança</string>
   <string name="faq">FAQ</string>
   <string name="help">Ajuda</string>
   <string name="record_logs">Gravar registos para enviar para a equipa de desenvolvimento e reportar um erro</string>
@@ -62,4 +61,5 @@
   <string name="no_phone_found">Telefone não encontrado para este contacto</string>
   <string name="show_password">Mostrar palavra-passe</string>
   <string name="this_codec_is_not_free">**Este codec não é gratuito !!!**\nCertifique-se que alguém (o seu provedor SIP ou você mesmo) adquiriu uma licença que lhe permita o uso deste codec! Nós (como distribuidores da aplicação) não somos responsáveis pela utilização ilegal deste codec.\nCabe-lhe a si ter a certeza de que está autorizado a usar este codec.\nLink de compra:</string>
+  <string name="voice_mail">Correio de voz</string>
 </resources>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-10-10 11:42+0000\n"
 "Last-Translator: Gianluca <Unknown>\n"
 "Language-Team: it <LL@li.org>\n"
@@ -55,11 +55,11 @@ msgstr "Tweak interfaccia utente"
 
 msgctxt "prefs_calls"
 msgid "Calls options"
-msgstr ""
+msgstr "Opzioni di chiamata"
 
 msgctxt "prefs_calls_desc"
 msgid "Options related to calls"
-msgstr ""
+msgstr "Opzioni relative alle chiamate"
 
 #. Network
 msgctxt "for_incomings"
@@ -230,6 +230,24 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "Turn server (HOST:PORT)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "Turn server"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "TLS password"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr "Abilita STUN"
@@ -264,14 +282,30 @@ msgstr "Valore DSCP per il traffico SIP"
 
 msgctxt "keep_alive_interval_wifi"
 msgid "Wifi keep alive"
-msgstr ""
+msgstr "Wifi keep alive"
 
 msgctxt "keep_alive_interval_mobile"
 msgid "Mobile keep alive"
-msgstr ""
+msgstr "Mobile keep alive"
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr "Intervallo (sec) per pacchetti KA"
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -371,6 +405,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Modalità per RTP Sicuro"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "Modalità esperto"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "Modalità per RTP Sicuro"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -416,6 +460,15 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Regola il livello di segnale dell'altoparlante  (1 non fa nulla)"
 
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "Amplificazione del microfono"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
+
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
 msgstr "Livello stream iniziale"
@@ -437,8 +490,7 @@ msgid "Media quality"
 msgstr "Qualità audio"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Qualità dell'audio (modifica solo se sai cosa stai facendo)"
 
 msgctxt "snd_clock_rate"
@@ -521,6 +573,16 @@ msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "Cambia solo su suggerimento degli sviluppatori"
 
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
+
 msgctxt "has_io_queue"
 msgid "IO Queue"
 msgstr "Coda IO"
@@ -539,34 +601,42 @@ msgstr "Genera un tono prima di fare le chiamate"
 
 msgctxt "narrow_band"
 msgid "Narrowband"
-msgstr ""
+msgstr "Narrowband"
 
 msgctxt "wide_band"
 msgid "Wideband"
-msgstr ""
+msgstr "Wideband"
 
 msgctxt "band_for_wifi"
 msgid "Band type for wifi"
-msgstr ""
+msgstr "Tipo banda per wifi"
 
 msgctxt "band_for_3g"
 msgid "Band type for 3G"
-msgstr ""
+msgstr "Tipo banda per 3G"
 
 msgctxt "band_for_gprs"
 msgid "Band type for GPRS"
-msgstr ""
+msgstr "Tipo banda per GPRS"
 
 msgctxt "band_for_edge"
 msgid "Band type for EDGE"
-msgstr ""
+msgstr "Tipo banda per EDGE"
 
 msgctxt "band_for_other"
 msgid "Band type for other"
-msgstr ""
+msgstr "Tipo banda per altro"
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
+msgstr "Tipi di ampiezza di banda delle connessioni per i codec"
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
 msgstr ""
 
 #. UI
@@ -588,11 +658,11 @@ msgstr "Integrazione dialer"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
-"Quando componi il numero con il dialer nativo ti verrà chiesto se vuoi usare "
-"SIP o GSM"
+"Quando componi il numero con il dialer nativo ti verrà chiesto se vuoi "
+"usare SIP o GSM"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -634,8 +704,7 @@ msgstr "Non usare risposta con scorrimento"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr ""
-"Usa i bottoni invece dello slide per accettare le chiamate in ingresso"
+msgstr "Usa i bottoni invece dello slide per accettare le chiamate in ingresso"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
@@ -644,8 +713,8 @@ msgstr "Resta attivo durante una chiamata"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corregge se si ottiene suono disturbato quando lo schermo si spegne durante "
-"una chiamata WIFI"
+"Corregge se si ottiene suono disturbato quando lo schermo si spegne "
+"durante una chiamata WIFI"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -654,8 +723,8 @@ msgstr "Usa partial wake lock"
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"Assicura che la CPU è sempre in esecuzione per l'applicazione (scarica la "
-"batteria)"
+"Assicura che la CPU è sempre in esecuzione per l'applicazione (scarica la"
+" batteria)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -701,10 +770,37 @@ msgstr "Come l'applicazione usa il tuo cellulare (o no)"
 
 msgctxt "invert_proximity_sensor"
 msgid "Invert proximity sensor"
-msgstr ""
+msgstr "Inverte il sensore di prossimità"
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr ""
+"Può aiutare su alcune periferiche quando il produttore ha invertito "
+"vicino e lontano"
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "Integrazione con l'applicazione Musica"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
@@ -726,8 +822,7 @@ msgstr "Sempre disponbile"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr ""
-"Utilizzerà la batteria ma le chiamate in ingresso sono sempre ricevibili"
+msgstr "Utilizzerà la batteria ma le chiamate in ingresso sono sempre ricevibili"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
@@ -756,8 +851,8 @@ msgstr "Mi è consentito usare la connessione dati mobile"
 msgctxt "tg_allowed_desc"
 msgid "Your carrier allows VoIP over your mobile data connection"
 msgstr ""
-"Il tuo operatore telefonico permette l'uso della connessione dati mobile per "
-"il VoIP"
+"Il tuo operatore telefonico permette l'uso della connessione dati mobile "
+"per il VoIP"
 
 msgctxt "codecs_availability_text"
 msgid "Only available if sip is currently registered"
@@ -771,6 +866,15 @@ msgstr "Registra automaticamente le chiamate"
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Registra le chiamate appena connesso"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "Per chiamate in uscita"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

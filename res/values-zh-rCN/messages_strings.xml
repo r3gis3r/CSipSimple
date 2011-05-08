@@ -1,2 +1,62 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">短信</string>
+  <string name="new_message">新建短息</string>
+  <string name="create_new_message">编写短信</string>
+  <string name="menu_compose_new">编写</string>
+  <string name="menu_add_address_to_contacts">"添加 "<xliff:g id="name">%s</xliff:g>" 到联系人"</string>
+  <string name="menu_call">呼叫</string>
+  <string name="menu_delete_all">删除所有会话</string>
+  <string name="menu_delete">删除会话</string>
+  <string name="menu_view">查看会话</string>
+  <string name="anonymous_recipient">匿名</string>
+  <string name="messagelist_sender_self">我</string>
+  <string name="delete_message">删除短信</string>
+  <string name="sent_on">"发送时间: "<xliff:g id="date">%s</xliff:g></string>
+  <string name="kilobyte">KB</string>
+  <string name="undelivered_msg_dialog_title">短信无法送达</string>
+  <string name="undelivered_sms_dialog_body">无法发送此短信</string>
+  <string name="delete_thread">删除会话</string>
+  <string name="download">下载</string>
+  <string name="downloading">正在下载</string>
+  <string name="name_colon"><b><xliff:g id="name" example="Me">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">复制短信文本</string>
+  <string name="message_options">短信选项</string>
+  <string name="done">完成</string>
+  <string name="compose_title">编写</string>
+  <string name="add_attachment">附加</string>
+  <string name="view">查看</string>
+  <string name="send">发送</string>
+  <string name="all_threads">所有会话</string>
+  <string name="type_to_compose_text_enter_to_send">打字编写短信</string>
+  <string name="open_keyboard_to_compose_message">打开键盘编写短信</string>
+  <string name="image_too_large">图片太大</string>
+  <string name="ask_for_automatically_resize">在发送前自动调整图片大小？</string>
+  <string name="compressing">图片太大，正在压缩\\u2026</string>
+  <string name="unsupported_media_format">不支持<xliff:g id="name">%1$s</xliff:g>格式</string>
+  <string name="menu_view_contact">查看联系人</string>
+  <string name="menu_add_to_contacts">添加到联系人</string>
+  <string name="hidden_sender_address">隐藏发送人地址</string>
+  <string name="yes">确定</string>
+  <string name="no">取消</string>
+  <string name="edit">修改</string>
+  <string name="restore_default">恢复默认设置</string>
+  <string name="confirm_dialog_title">删除</string>
+  <string name="confirm_delete_conversation">将删除整个会话</string>
+  <string name="confirm_delete_all_conversations">将删除所有会话</string>
+  <string name="confirm_delete_message">将删除短信</string>
+  <string name="confirm_delete_locked_message">确认删除已锁短信？</string>
+  <string name="confirm_delete_all_messages">将删除整个会话</string>
+  <string name="delete">删除</string>
+  <string name="status_none">(无)</string>
+  <string name="status_pending">待定中</string>
+  <string name="status_received">已接收</string>
+  <string name="status_failed">失败</string>
+  <string name="status_unread">未读</string>
+  <string name="status_rejected">已拒绝</string>
+  <string name="recipient_label">收件人:\\u0020</string>
+  <string name="status_label">状态:\\u0020</string>
+  <string name="menu_insert_smiley">插入笑脸</string>
+  <string name="me">我</string>
+  <string name="sending_message">发送中\\u2026</string>
+</resources>

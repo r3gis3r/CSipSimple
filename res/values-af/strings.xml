@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">CSipSimple</string>
+  <string name="next">Volgende</string>
+  <string name="invalid_sip_uri">Sip uri nie geldig vir oproep nie</string>
+  <string name="cancel">Kanselleer</string>
+  <string name="use">Gebruik :</string>
+  <string name="use_skype">Gebruik Skype</string>
+  <string name="recentCalls_empty">Geen Oproep Registers</string>
+  <string name="callLog_delete_entry">Skrap hierdie oproep</string>
+  <string name="callLog_delete_all">Skrap alle oproepe</string>
+  <string name="callLog_delDialog_title">Skrap Oproep Registers</string>
+  <string name="callLog_delDialog_yes">Ja</string>
+  <string name="callLog_delDialog_no">Nee</string>
+  <string name="dial_tab_name_text">Skakel</string>
+  <string name="calllog_tab_name_text">OproepRegisters</string>
+  <string name="messages_tab_name_text">Boodskappe</string>
+  <string name="service_ticker_registered_text">SIP Geregistreer</string>
+  <string name="outgoing_call_chooser_call_text">Bel</string>
+  <string name="help">Help</string>
+  <string name="ok">Anvaar</string>
+  <string name="warning">WAARSKUWING</string>
+  <string name="search_in_contacts">Soek in kontakte</string>
+  <string name="choose_phone">Selekteer foon</string>
+</resources>

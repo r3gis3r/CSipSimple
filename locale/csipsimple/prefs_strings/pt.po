@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt <LL@li.org>\n"
@@ -230,6 +230,24 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "Servidor TURN (HOST:PORTA)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "Servidor Turn"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "Senha TLS"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr "Ativar STUN"
@@ -272,6 +290,22 @@ msgstr ""
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr ""
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -371,6 +405,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "modo para RTP Seguro"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "Modo perito"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "modo para RTP Seguro"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -416,6 +460,15 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Ajustar nivel do sinal do auto-falante (1 para fazer nada)"
 
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "Micro amplificação"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
+
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
 msgstr "Nível inicial para stream"
@@ -437,8 +490,7 @@ msgid "Media quality"
 msgstr "Qualidade multimédia"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualidade do stream multimédia (modifique apenas se souber o que está a "
 "fazer)"
@@ -502,8 +554,8 @@ msgstr "Usar API de roteamento"
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
-"Tente ativar isto se o audio estiver sendo enviado para o viva-voz ao invéz "
-"do fone"
+"Tente ativar isto se o audio estiver sendo enviado para o viva-voz ao "
+"invéz do fone"
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
@@ -512,8 +564,8 @@ msgstr "Usar modo API de audio"
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
-"Tente ativar isto se o audio estiver sendo enviado para o viva-voz ao invéz "
-"do fone"
+"Tente ativar isto se o audio estiver sendo enviado para o viva-voz ao "
+"invéz do fone"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
@@ -522,6 +574,16 @@ msgstr "Modo de audio para chamadas SIP"
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "Altere somente se o desenvolvedor o aconselhar."
+
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
@@ -571,6 +633,14 @@ msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
 msgstr ""
 
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
+msgstr ""
+
 #. UI
 msgctxt "general_ui"
 msgid "General user interface"
@@ -590,11 +660,11 @@ msgstr "Integração do marcador"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
-"Quando marcando com o marcador nativo será questionado se quer usar SIP ou "
-"móvel"
+"Quando marcando com o marcador nativo será questionado se quer usar SIP "
+"ou móvel"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -603,7 +673,8 @@ msgstr "Integração do registo de chamadas"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"As chamadas SIP serão (se possível) fundidas com o registo nativo de chamadas"
+"As chamadas SIP serão (se possível) fundidas com o registo nativo de "
+"chamadas"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -644,8 +715,8 @@ msgstr "Manter acordado durante a chamada"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corrige se obtiver som instável quando o ecrã se desliga durante uma chamada "
-"WiFi"
+"Corrige se obtiver som instável quando o ecrã se desliga durante uma "
+"chamada WiFi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -703,6 +774,31 @@ msgstr ""
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr ""
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "Integrar com aplicação de música"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
@@ -766,6 +862,15 @@ msgstr "Gravação automática de chamadas"
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Gravar chamadas assim que conectado"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "Para ligações de saida"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

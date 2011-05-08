@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2011-01-30 00:15+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en_GB <LL@li.org>\n"
@@ -20,31 +19,31 @@ msgstr ""
 
 msgctxt "unknown"
 msgid "Unknown"
-msgstr ""
+msgstr "Unknown"
 
 msgctxt "type_incoming"
 msgid "Incoming"
-msgstr ""
+msgstr "Incoming"
 
 msgctxt "type_outgoing"
 msgid "Outgoing"
-msgstr ""
+msgstr "Outgoing"
 
 msgctxt "type_missed"
 msgid "Missed"
-msgstr ""
+msgstr "Missed"
 
 msgctxt "callBack"
 msgid "Call back"
-msgstr ""
+msgstr "Call back"
 
 msgctxt "callAgain"
 msgid "Call again"
-msgstr ""
+msgstr "Call again"
 
 msgctxt "returnCall"
 msgid "Return call"
-msgstr ""
+msgstr "Return call"
 
 #, c-format
 msgctxt "callDetailsDurationFormat"
@@ -52,4 +51,6 @@ msgid ""
 "<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
 "id=\"seconds\" example=\"28\">%s</xliff:g> secs"
 msgstr ""
+"<xliff:g id=\"minutes\" example=\"42\">%s</xliff:g> mins <xliff:g "
+"id=\"seconds\" example=\"28\">%s</xliff:g> secs"
 

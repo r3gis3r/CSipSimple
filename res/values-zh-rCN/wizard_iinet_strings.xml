@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">状态</string>
+  <string name="w_iinet_state_desc">下列列表中的相关状态</string>
+  <string name="w_iinet_username">VoIP 电话号码</string>
+  <string name="w_iinet_username_desc">移除掉任何格式化字符例如空格符和破折号</string>
+  <string name="w_iinet_password">特殊的 VoIP 密码</string>
+  <string name="w_iinet_password_desc">和连接密码不一样</string>
+</resources>

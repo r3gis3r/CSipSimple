@@ -1,0 +1,52 @@
+# Korean translations for PROJECT.
+# Copyright (C) 2011 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
+"PO-Revision-Date: 2011-05-08 19:31+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: ko <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "w_onsip_authentication_name"
+msgid "Auth username"
+msgstr ""
+
+msgctxt "w_onsip_authentication_name_desc"
+msgid "SIP authentication user"
+msgstr ""
+
+msgctxt "w_onsip_username"
+msgid "SIP Username"
+msgstr ""
+
+msgctxt "w_onsip_username_desc"
+msgid "Sip account username"
+msgstr ""
+
+msgctxt "w_onsip_server"
+msgid "Domain"
+msgstr ""
+
+msgctxt "w_onsip_server_desc"
+msgid "SIP domain"
+msgstr ""
+
+msgctxt "w_onsip_password"
+msgid "SIP Password"
+msgstr ""
+
+msgctxt "w_onsip_password_desc"
+msgid "SIP account password"
+msgstr ""
+

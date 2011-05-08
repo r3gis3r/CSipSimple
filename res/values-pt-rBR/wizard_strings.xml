@@ -2,4 +2,5 @@
 <resources>
   <string name="other_country_providers_text">Outras Operadoras</string>
   <string name="world_wide_providers_text">Operadoras Mundiais</string>
+  <string name="generic_wizards_text">Assistentes genéricos</string>
 </resources>

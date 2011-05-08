@@ -1,7 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="w_common_display_name">Nume cont</string>
+  <string name="w_common_display_name_desc">Numele acestui cont</string>
   <string name="w_common_username">Nume utilizator</string>
+  <string name="w_common_username_desc">Nume utilizator SIP</string>
+  <string name="w_common_phone_number">Număr de telefon</string>
+  <string name="w_common_phone_number_desc">Număr SIP alocat de operator</string>
   <string name="w_common_password">Parolă</string>
+  <string name="w_common_password_desc">Parola pentru contul dvs</string>
   <string name="w_common_server">Server</string>
+  <string name="w_common_server_desc">SIP server /IP[:port]</string>
 </resources>

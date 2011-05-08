@@ -21,4 +21,6 @@
   <string name="w_expert_reg_timeout">Register Timeout (sec)</string>
   <string name="w_expert_ka_interval">Keep-alive Interval (sec)</string>
   <string name="w_expert_force_contact">Force contact</string>
+  <string name="w_expert_allow_contact_rewrite">Erlaube Contact-Rewrite</string>
+  <string name="w_expert_contact_rewrite_method">Methode für den Contact-Rewrite</string>
 </resources>

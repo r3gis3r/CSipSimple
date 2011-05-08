@@ -1,0 +1,868 @@
+# Korean translation for csipsimple
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the csipsimple package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  csipsimple\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
+"PO-Revision-Date: 2011-05-08 14:37+0000\n"
+"Last-Translator: Moshe Raviv <Unknown>\n"
+"Language-Team: Korean <ko@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.0dev\n"
+
+msgctxt "prefs"
+msgid "Settings"
+msgstr "설정"
+
+msgctxt "prefs_fast"
+msgid "Easy configuration"
+msgstr "간편 설정"
+
+msgctxt "prefs_fast_desc"
+msgid "Quick options to use if you don't know how SIP works"
+msgstr "SIP에 대해 지식이 없는 경우 사용할 수 있는 옵션"
+
+msgctxt "prefs_network"
+msgid "Network"
+msgstr "네트워크"
+
+msgctxt "prefs_network_desc"
+msgid "How SIP can be connected to the network"
+msgstr "SIP를 네트워크에 연결하는 방법"
+
+msgctxt "prefs_media"
+msgid "Media"
+msgstr "미디어"
+
+msgctxt "prefs_media_desc"
+msgid "Codecs and in-call sound behavior"
+msgstr "코덱 및 통화 중 사운드"
+
+msgctxt "prefs_ui"
+msgid "User interface"
+msgstr "사용자 인터페이스"
+
+msgctxt "prefs_ui_desc"
+msgid "Tweak the user interface"
+msgstr "사용자 인터페이스 응용"
+
+msgctxt "prefs_calls"
+msgid "Calls options"
+msgstr "통화 옵션"
+
+msgctxt "prefs_calls_desc"
+msgid "Options related to calls"
+msgstr "통화와 관련된 기타 옵션"
+
+#. Network
+msgctxt "for_incomings"
+msgid "For incoming calls"
+msgstr "수신 전화"
+
+msgctxt "for_outgoings"
+msgid "For outgoing calls"
+msgstr "발신 전화"
+
+msgctxt "perfs"
+msgid "Performances"
+msgstr "성능"
+
+msgctxt "transport"
+msgid "Transport"
+msgstr "전송"
+
+msgctxt "transport_desc"
+msgid "Force the use of a transport for this account"
+msgstr "본 계정을 위해 강제 전송 사용"
+
+msgctxt "use_wifi"
+msgid "Use WiFi"
+msgstr "WiFi 사용"
+
+msgctxt "use_wifi_in_desc"
+msgid "Use WiFi for incoming calls"
+msgstr "수신 전화에서 WiFi 사용"
+
+msgctxt "use_wifi_out_desc"
+msgid "Use WiFi for outgoing calls"
+msgstr "발신 전화에서 WiFi 사용"
+
+msgctxt "use_other"
+msgid "Use other networks"
+msgstr "기타 네트워크 사용"
+
+msgctxt "use_other_in_desc"
+msgid "For example WiMax for incoming calls"
+msgstr "수신 전화에서의  WiMax 예"
+
+msgctxt "use_other_out_desc"
+msgid "For example WiMax for outgoing calls"
+msgstr "발신 전화에서의  WiMax 예"
+
+msgctxt "use_3g"
+msgid "Use 3G"
+msgstr "3G 사용"
+
+msgctxt "use_3g_disclamer"
+msgid "Your carrier MUST allow you to use this option"
+msgstr "이 옵션은 통신사의 승인이 필요한 기능입니다"
+
+msgctxt "use_edge"
+msgid "Use EDGE"
+msgstr "EDGE 사용"
+
+msgctxt "use_gprs"
+msgid "Use GPRS"
+msgstr "GPRS 사용"
+
+msgctxt "lock_wifi"
+msgid "Lock WiFi"
+msgstr "해당 통화 삭제"
+
+msgctxt "lock_wifi_desc"
+msgid "Prevent WiFi idle when SIP is connected"
+msgstr "SIP 이 연결되어 있는 경우 WiFi 차단"
+
+msgctxt "enable_tcp"
+msgid "TCP"
+msgstr "TCP"
+
+msgctxt "enable_tcp_desc"
+msgid "Enable TCP transport"
+msgstr "TCP 전송 기능 허용"
+
+msgctxt "enable_tls"
+msgid "TLS"
+msgstr "TLS"
+
+msgctxt "enable_tls_desc"
+msgid "Enable TLS transport"
+msgstr "TLS 전송 기능 허용"
+
+msgctxt "enable_udp"
+msgid "UDP"
+msgstr "UDP"
+
+msgctxt "enable_udp_desc"
+msgid "Enable UDP transport"
+msgstr "UDP 전송 기능 허용"
+
+msgctxt "network_udp_transport_port"
+msgid "UDP Port"
+msgstr "UDP 포트"
+
+msgctxt "network_udp_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "로컬 포트 번호"
+
+msgctxt "network_tcp_transport_port"
+msgid "TCP Port"
+msgstr "TCP 포트"
+
+msgctxt "network_tcp_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "로컬 포트 번호"
+
+msgctxt "network_rtp_port"
+msgid "RTP port"
+msgstr "RTP 포트"
+
+msgctxt "network_rtp_port_desc"
+msgid "Port for RTP ports range start"
+msgstr "RTP 포트 범위 시작"
+
+msgctxt "use_ipv6"
+msgid "Use IPv6"
+msgstr "IPv6 사용"
+
+msgctxt "use_ipv6_desc"
+msgid "Switch to IPv6 mode (your network and phone must support it)"
+msgstr "IPv6모드로 전환(IPv6 지원 네트워크 및 전화기 사용 요)"
+
+msgctxt "enable_dns_srv"
+msgid "Resolve DNS SRV"
+msgstr "DNS SRV 문제 해결"
+
+msgctxt "enable_dns_srv_desc"
+msgid "Use the application resolver to resolve DNS names"
+msgstr "DNS 문제 해결을 위한 응용 프로그램 사용"
+
+msgctxt "override_nameserver"
+msgid "Use a custom DNS"
+msgstr "백업/복구"
+
+msgctxt "override_nameserver_desc"
+msgid "Left blank to retrieve DNS from Android"
+msgstr "안드로이드로부터 자동으로 DNS 받기"
+
+msgctxt "nat_traversal"
+msgid "NAT traversal"
+msgstr "NAT 횡단 설정"
+
+msgctxt "enable_ice"
+msgid "Enable ICE"
+msgstr "ICE 기능 허용"
+
+msgctxt "enable_ice_desc"
+msgid "Turn on ICE feature"
+msgstr "ICE 기능 켜기"
+
+msgctxt "enable_turn"
+msgid "Enable TURN"
+msgstr "TURN 기능 허용"
+
+msgctxt "enable_turn_desc"
+msgid "Turn on TURN feature"
+msgstr "TURN 기능 켜기"
+
+msgctxt "turn_server"
+msgid "Turn server"
+msgstr "TURN 서버"
+
+msgctxt "turn_server_desc"
+msgid "TURN server (HOST:PORT)"
+msgstr "TURN 서버(HOST:PORT)"
+
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "TURN 서버"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "TLS 비밀번호"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
+msgctxt "enable_stun"
+msgid "Enable STUN"
+msgstr "STUN 기능 허용"
+
+msgctxt "enable_stun_desc"
+msgid "Turn on STUN feature"
+msgstr "STUN 기능 켜기"
+
+msgctxt "stun_server"
+msgid "STUN servers"
+msgstr "STUN 서버"
+
+msgctxt "stun_server_desc"
+msgid "STUN servers (HOST[:PORT], ...)"
+msgstr "STURN 서버(HOST[:PORT], ...)"
+
+msgctxt "enable_qos"
+msgid "Enable QoS"
+msgstr "QoS 기능 허용"
+
+msgctxt "enable_qos_desc"
+msgid "Enable QoS on packets"
+msgstr "패킷에 대한 QoS 기능 허용"
+
+msgctxt "dscp_val"
+msgid "DSCP value"
+msgstr "DSCP 값"
+
+msgctxt "dscp_val_desc"
+msgid "DSCP value for SIP traffic"
+msgstr "SIP 트래픽 용 DSCP 값"
+
+msgctxt "keep_alive_interval_wifi"
+msgid "Wifi keep alive"
+msgstr "Wifi  활성 유지"
+
+msgctxt "keep_alive_interval_mobile"
+msgid "Mobile keep alive"
+msgstr "Mobile 활성 유지"
+
+msgctxt "keep_alive_interval_desc"
+msgid "Interval (sec) for KA packets"
+msgstr "KA 패킷 인터벌"
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
+msgstr ""
+
+#. Security
+msgctxt "tls"
+msgid "TLS"
+msgstr "TLS"
+
+msgctxt "secure_transport"
+msgid "Secure transport"
+msgstr "보안 전송"
+
+msgctxt "secure_transport_desc"
+msgid "Security mechanism for SIP and RTP"
+msgstr "SIP와 RTP를 위한 보안 메커니즘"
+
+msgctxt "secure_media"
+msgid "Secure media"
+msgstr "보안 매체"
+
+msgctxt "network_tls_transport_port"
+msgid "TLS Port"
+msgstr "TLC 포트"
+
+msgctxt "network_tls_transport_port_desc"
+msgid "Port number to bind locally"
+msgstr "로컬 포트 번호"
+
+msgctxt "network_tls_server_name"
+msgid "TLS server name"
+msgstr "TLS 서버명"
+
+msgctxt "network_tls_server_name_desc"
+msgid "For multi-hosting server (optional)"
+msgstr "다중 호스팅 서버 용(옵션)"
+
+msgctxt "ca_list_file"
+msgid "TLS CA file"
+msgstr "TLS CA 파일"
+
+msgctxt "ca_list_file_desc"
+msgid "For example /sdcard/CSipSimple/myAuthority.ca"
+msgstr "예 /sdcard/CSipSimple/myAuthority.ca"
+
+msgctxt "cert_file"
+msgid "TLS certificate file"
+msgstr "TLS 인증 파일"
+
+msgctxt "cert_file_desc"
+msgid "For example /sdcard/CSipSimple/myCert.crt"
+msgstr "예 /sdcard/CSipSimple/myCert.crt"
+
+msgctxt "privkey_file"
+msgid "TLS private key file"
+msgstr "TLS 사설키 파일"
+
+msgctxt "privkey_file_desc"
+msgid "For example /sdcard/CSipSimple/myKey.key"
+msgstr "예 /sdcard/CSipSimple/myKey.key"
+
+msgctxt "tls_password"
+msgid "TLS password"
+msgstr "TLS 비밀번호"
+
+msgctxt "tls_password_desc"
+msgid "TLS password to private key file"
+msgstr "사설키 파일을 위한 TLS 비밀번호"
+
+msgctxt "verify_server"
+msgid "Check server"
+msgstr "서버 점검 요"
+
+msgctxt "verify_server_desc"
+msgid "Verify server's certificate"
+msgstr "서버 인증서 확인 요"
+
+msgctxt "verify_client"
+msgid "Check client"
+msgstr "클라이언트 점검 요"
+
+msgctxt "verify_client_desc"
+msgid "Verify client's certificate"
+msgstr "클라이언트 인증서 검검 요"
+
+msgctxt "tls_method"
+msgid "TLS Method"
+msgstr "TLS 메소드"
+
+msgctxt "tls_method_desc"
+msgid "Method for TLS transport"
+msgstr "TLS 전송 메소드"
+
+msgctxt "use_srtp"
+msgid "SRTP mode"
+msgstr "SRPT 모드"
+
+msgctxt "use_srtp_desc"
+msgid "Mode for Secure RTP"
+msgstr "보안 RTP 모드"
+
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "전문가 모드"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "보안 RTP 모드"
+
+#. Media
+msgctxt "audio_quality"
+msgid "Audio quality"
+msgstr "오디오 품질"
+
+msgctxt "audio_volume"
+msgid "Volume"
+msgstr "볼륨"
+
+msgctxt "codecs"
+msgid "Codecs"
+msgstr "코덱"
+
+msgctxt "echo_cancellation"
+msgid "Echo cancellation"
+msgstr "에코 취소"
+
+msgctxt "echo_cancellation_desc"
+msgid "Activate echo cancellation"
+msgstr "에코 취소 기능 활성"
+
+msgctxt "enable_vad"
+msgid "Voice audio detection"
+msgstr "음성 오디오 탐색"
+
+msgctxt "enable_vad_desc"
+msgid "Activate voice audio detection"
+msgstr "음성 오디오 탐색 기능 활성"
+
+msgctxt "snd_mic_level"
+msgid "Micro amplification"
+msgstr "미세 증폭"
+
+msgctxt "snd_mic_level_desc"
+msgid "Adjust the micro signal level (1 do nothing)"
+msgstr "미세 시그널 레벌 조정(1: 조정 없음)"
+
+msgctxt "snd_speaker_level"
+msgid "Speaker amplification"
+msgstr "스피커 증폭"
+
+msgctxt "snd_speaker_level_desc"
+msgid "Adjust the speaker signal level (1 do nothing)"
+msgstr "스피커 시그널 레벌 조정(1: 조정 없음)"
+
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "미세 증폭"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
+
+msgctxt "snd_stream_level"
+msgid "Initial stream level"
+msgstr "초기 스트림 레벨"
+
+msgctxt "snd_stream_level_desc"
+msgid "Set the initial level for audio stream (Android stream)"
+msgstr "오디오 스트림 용 초기 레벨 설정(안드로이드 스트림)"
+
+msgctxt "snd_auto_close_time"
+msgid "Auto close time"
+msgstr "자동 중지 시간"
+
+msgctxt "snd_auto_close_time_desc"
+msgid "Time to wait for close audio channel"
+msgstr "오디오 채널 중지 대기 시간"
+
+msgctxt "snd_media_quality"
+msgid "Media quality"
+msgstr "매체 품질"
+
+msgctxt "snd_media_quality_desc"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgstr "미디어 스트림 품질(필요 시에만 조정)"
+
+msgctxt "snd_clock_rate"
+msgid "Clock rate"
+msgstr "클록 속도"
+
+msgctxt "snd_clock_rate_desc"
+msgid "Audio channel frequency"
+msgstr "오디오 채널 주파수"
+
+msgctxt "snd_ptime"
+msgid "Frame ptime"
+msgstr "프레임 값(ptime)"
+
+msgctxt "snd_ptime_desc"
+msgid "Specifying lower ptime will normally reduce the latency"
+msgstr "프레임값을 낮추면 전송 지연을 줄일 수 있음"
+
+msgctxt "echo_cancellation_tail"
+msgid "Echo cancellation tail"
+msgstr "반향 신호 제거"
+
+msgctxt "echo_cancellation_tail_desc"
+msgid "Tail length of echo cancellation"
+msgstr "반향 신호 제거의 꼬리값"
+
+msgctxt "echo_mode"
+msgid "Echo mode"
+msgstr "에코 모드"
+
+msgctxt "echo_mode_desc"
+msgid "Algorithm for echo"
+msgstr "에코 알고리즘"
+
+msgctxt "codecs_desc"
+msgid "Priority (0 is disabled)"
+msgstr "우선 순위(0: 기능 정지)"
+
+msgctxt "sip_dtmf"
+msgid "DTMF mode"
+msgstr "DTMF 모드"
+
+msgctxt "sip_dtmf_desc"
+msgid "How to send DTMF"
+msgstr "DTMF 전송 방법"
+
+msgctxt "use_soft_volume"
+msgid "Use software volume"
+msgstr "소프트웨어 볼륨 사용"
+
+msgctxt "use_soft_volume_desc"
+msgid "Use software volume instead of android volume"
+msgstr "안드로이드 볼륨 대신 소프트웨어 볼륨 사용"
+
+msgctxt "use_routing_api"
+msgid "Use routing API"
+msgstr "API 라우팅 사용"
+
+msgctxt "use_routing_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr "오디오가 이어폰이 아닌 스피커로 라우팅 되는 경우 기능 허용"
+
+msgctxt "use_mode_api"
+msgid "Use Mode audio API"
+msgstr "오디오 API 사용"
+
+msgctxt "use_mode_api_desc"
+msgid "Try to enable that if audio is routing to speaker instead of earpiece"
+msgstr "오디오가 이어폰이 아닌 스피커로 라우팅 되는 경우 기능 허용"
+
+msgctxt "sip_audio_mode"
+msgid "Audio mode for SIP calls"
+msgstr "SIP 통화를 위한 오디오 모드"
+
+msgctxt "sip_audio_mode_desc"
+msgid "Change only if developers advise you to"
+msgstr "개발자의 추천이 있는 경우에만 변경"
+
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
+
+msgctxt "has_io_queue"
+msgid "IO Queue"
+msgstr "입출력(IO) 큐"
+
+msgctxt "has_io_queue_desc"
+msgid "Activate Queue for input/output"
+msgstr "입출력 큐 활성"
+
+msgctxt "set_audio_generate_tone"
+msgid "Tone hack"
+msgstr "톤 해킹"
+
+msgctxt "set_audio_generate_tone_desc"
+msgid "Generate a tone before making calls"
+msgstr "전화를하기 전에 생성 톤"
+
+msgctxt "narrow_band"
+msgid "Narrowband"
+msgstr "협대역"
+
+msgctxt "wide_band"
+msgid "Wideband"
+msgstr "광대역"
+
+msgctxt "band_for_wifi"
+msgid "Band type for wifi"
+msgstr "와이파이를 위한 대역 타입"
+
+msgctxt "band_for_3g"
+msgid "Band type for 3G"
+msgstr "3G를 위한 브랜드 타입"
+
+msgctxt "band_for_gprs"
+msgid "Band type for GPRS"
+msgstr "GPRS를 위한 브랜드 타입"
+
+msgctxt "band_for_edge"
+msgid "Band type for EDGE"
+msgstr "EDGE를 위한 브랜드 타입"
+
+msgctxt "band_for_other"
+msgid "Band type for other"
+msgstr "기타 서비스를 위한 브랜드 타입"
+
+msgctxt "codecs_band_types"
+msgid "Connections bandwidth types for codecs"
+msgstr "코덱을 위한 연결 대역 타입"
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
+msgstr ""
+
+#. UI
+msgctxt "general_ui"
+msgid "General user interface"
+msgstr "사용자 인터페이스"
+
+msgctxt "native_dialer_integration"
+msgid "Native dialer integration"
+msgstr "기본 전화 걸기 통합"
+
+msgctxt "advanced_ui"
+msgid "Advanced tweaks"
+msgstr "고급 설정"
+
+msgctxt "integrate_with_native_dialer"
+msgid "Dialer integration"
+msgstr "전화 걸기 통합"
+
+msgctxt "integrate_with_native_dialer_desc"
+msgid ""
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
+msgstr "전화 걸기 통합 로 전화를 걸때 SIP 또는 이동전화를 사용할 것인지 질문"
+
+msgctxt "integrate_with_native_calllogs"
+msgid "Call logs integration"
+msgstr "통화 기록 통합"
+
+msgctxt "integrate_with_native_calllogs_desc"
+msgid "SIP calls will be merged (if possible) into native call logs"
+msgstr "SIP 통화가 기본 통화 기록 통합됩"
+
+msgctxt "dial_press_tone"
+msgid "Dialing tone feedback"
+msgstr "다이얼톤 피드백"
+
+msgctxt "dial_press_tone_desc"
+msgid "Play touch tones when dialing"
+msgstr "다이얼 시 터치톤 플레이"
+
+msgctxt "dial_press_vibrate"
+msgid "Dialing vibrate feedback"
+msgstr "진동 피드백을 걸기"
+
+msgctxt "dial_press_vibrate_desc"
+msgid "Haptic (vibrate) feedback when dialing"
+msgstr "다이얼 시 진동 피드백"
+
+msgctxt "start_with_text_dialer"
+msgid "Text dialer"
+msgstr "문자 다이얼 기능"
+
+msgctxt "start_with_text_dialer_desc"
+msgid "Start with text dialer"
+msgstr "문자 다이얼 기능으로 시작"
+
+msgctxt "use_alternate_unlocker"
+msgid "Don't use slide answer"
+msgstr "슬라이드 답변을 사용하지 마십시오"
+
+msgctxt "use_alternate_unlocker_desc"
+msgid "Use buttons instead of slide to take incoming calls"
+msgstr "수신 전화 시 슬라이드 대신 버튼 사용"
+
+msgctxt "keep_awake_incall"
+msgid "Keep awake while on call"
+msgstr "전화에 깨어있는 동안 계속"
+
+msgctxt "keep_awake_incall_desc"
+msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
+msgstr "와이파이 통화 시 스크린이 꺼질 때 음성 끊김 교정"
+
+msgctxt "use_partial_wake_lock"
+msgid "Use partial wake lock"
+msgstr "부분 웨이크 잠금사용"
+
+msgctxt "use_partial_wake_lock_desc"
+msgid "Ensure CPU is always running for the application (drain battery)"
+msgstr "CPU가 해당 응용 프로그램을 위해 작동하고 있는지 확인"
+
+msgctxt "log_level"
+msgid "Log level"
+msgstr "기록 수준"
+
+msgctxt "log_level_desc"
+msgid "Log level for debug between 0 (none) and 5 (verbose)"
+msgstr "디버깅 기록 수준: 0~5"
+
+msgctxt "integrate_with_native_music"
+msgid "Integrate with Music application"
+msgstr "음악 응용프로그램과 통합"
+
+msgctxt "integrate_with_native_music_desc"
+msgid "Disable it if you use another music application than the official one"
+msgstr "추가적인 음악 응용프로그램 사용 시 기능 차단"
+
+msgctxt "ringtone"
+msgid "Ringtone"
+msgstr "벨소리"
+
+msgctxt "ringtone_desc"
+msgid "Default ringtone for SIP calls"
+msgstr "SIP 통화 시 기본 벨소리 사용"
+
+msgctxt "prevent_screen_rotation"
+msgid "Prevent screen rotation"
+msgstr "화면 회전 차단"
+
+msgctxt "prevent_screen_rotation_desc"
+msgid "Avoid rotation of the screen and keep in portrait mode"
+msgstr "화면 회전 차단 및 세로 모드 유지"
+
+msgctxt "gsm_integration_type"
+msgid "Mobile phone integration"
+msgstr "이동 전화 통화"
+
+msgctxt "gsm_integration_type_desc"
+msgid "How the application uses your mobile phone (or not)"
+msgstr "해당 응용프로그램의 이동 전화 활용 방법"
+
+msgctxt "invert_proximity_sensor"
+msgid "Invert proximity sensor"
+msgstr "전환 근접 센서"
+
+msgctxt "invert_proximity_sensor_desc"
+msgid "May help on some devices when manufacturer inverted near and far"
+msgstr "제조업자가 제조 업체가 근처에 거꾸로 때까지 인 경우 특정 기기에 대해 도움 제공"
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "음악 응용프로그램과 통합"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
+msgstr ""
+
+#. Fast settings
+msgctxt "android_integration"
+msgid "Integrate with Android"
+msgstr "안드로이드와 통합"
+
+msgctxt "android_integration_desc"
+msgid "Integration with native dialer and call logs"
+msgstr "기본 다이얼러 및 통화 기록과 통합"
+
+msgctxt "availability_profile"
+msgid "Availability profile"
+msgstr "이용 가능성 정보"
+
+msgctxt "always_available"
+msgid "Always available"
+msgstr "항상 이용 가능"
+
+msgctxt "always_available_desc"
+msgid "Will use battery but incoming calls are always received"
+msgstr "배터리 사용, 모든 수신 전화 연결"
+
+msgctxt "wifi_available"
+msgid "Available on WiFi"
+msgstr "WiFi에서 이용 가능"
+
+msgctxt "wifi_available_desc"
+msgid "Availability of incoming calls based on WiFi profile"
+msgstr "WiFi 프로필에 따라 수신 통화 이용 가능"
+
+msgctxt "never_available"
+msgid "Only for outgoing"
+msgstr "발신 전용"
+
+msgctxt "never_available_desc"
+msgid "Activate the SIP client automatically when necessary"
+msgstr "필요 시, SIP 클라이언트를 자동으로 활성"
+
+msgctxt "availability_tg"
+msgid "Mobile data availability"
+msgstr "이동 데이터 이용 가능"
+
+msgctxt "tg_allowed"
+msgid "I'm allowed to use mobile"
+msgstr "이동전화 사용 허용"
+
+msgctxt "tg_allowed_desc"
+msgid "Your carrier allows VoIP over your mobile data connection"
+msgstr "통신사업자가 이동전화 데이터 통신을 통해 VoIP 허용"
+
+msgctxt "codecs_availability_text"
+msgid "Only available if sip is currently registered"
+msgstr "SIP가 등록되어 있는 경우에만 사용 가능"
+
+#. Calls settings
+msgctxt "auto_record_calls"
+msgid "Auto record calls"
+msgstr "통화 자동 기록"
+
+msgctxt "auto_record_calls_desc"
+msgid "Record calls as soon as connected"
+msgstr "연결과 동시에 통화 기록"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "발신 전화"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
+msgstr ""
+
+msgctxt "expert_preferences"
+msgid "Expert mode"
+msgstr "전문가 모드"
+
+msgctxt "advanced_preferences"
+msgid "Advanced mode"
+msgstr "고급 모드"
+

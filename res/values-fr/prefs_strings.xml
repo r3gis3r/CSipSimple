@@ -61,6 +61,9 @@
   <string name="enable_qos_desc">Activer la QoS sur les paquets</string>
   <string name="dscp_val">Valeur DSCP</string>
   <string name="dscp_val_desc">Valeur DSCP pour le trafic SIP</string>
+  <string name="keep_alive_interval_wifi">Battement de coeur wifi</string>
+  <string name="keep_alive_interval_mobile">Battement de coeur mobile</string>
+  <string name="keep_alive_interval_desc">Intervalle (seconde) pour les paquets qui garde la connexion active</string>
   <string name="tls">Chiffrement TLS</string>
   <string name="secure_transport">Transport sécurisé</string>
   <string name="secure_transport_desc">Mécanismes de sécurité pour le SIP et RTP</string>
@@ -125,6 +128,14 @@
   <string name="has_io_queue_desc">Activer la file entrée / sortie</string>
   <string name="set_audio_generate_tone">Hack de la tonalité</string>
   <string name="set_audio_generate_tone_desc">Générer une tonalité avant d\'effectuer un appel</string>
+  <string name="narrow_band">Bas débit</string>
+  <string name="wide_band">Haut débit</string>
+  <string name="band_for_wifi">Type de débit pour le wifi</string>
+  <string name="band_for_3g">Type de débit pour 3G</string>
+  <string name="band_for_gprs">Type de débit pour GPRS</string>
+  <string name="band_for_edge">Type de débit pour EDGE</string>
+  <string name="band_for_other">Type de débit pour les autres</string>
+  <string name="codecs_band_types">Type de connections pour les codecs</string>
   <string name="general_ui">Interface utilisateur générale</string>
   <string name="native_dialer_integration">Intégration au numéroteur Android</string>
   <string name="advanced_ui">Modifications avancées</string>
@@ -154,6 +165,8 @@
   <string name="prevent_screen_rotation_desc">Eviter la rotation de l\'écran et rester en mode portrait</string>
   <string name="gsm_integration_type">Intégration au mobile</string>
   <string name="gsm_integration_type_desc">Comment l\'application utilise votre ligne mobile (ou pas)</string>
+  <string name="invert_proximity_sensor">Inverser le capteur de proximité</string>
+  <string name="invert_proximity_sensor_desc">Peut résoudre les problèmes liés à une mauvaise implémentation du constructeur</string>
   <string name="android_integration">S\'intégrer à Android</string>
   <string name="android_integration_desc">S\'intégrer à la numérotation et aux journaux d\'appel d\'Android</string>
   <string name="availability_profile">Profil de disponibilité</string>

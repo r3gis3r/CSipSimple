@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-11-29 06:00+0000\n"
 "Last-Translator: Larry Li <Unknown>\n"
 "Language-Team: zh_CN <LL@li.org>\n"
@@ -111,7 +111,7 @@ msgstr "零"
 #. textual representation like ImageView.
 msgctxt "description_image_button_pound"
 msgid "pound"
-msgstr ""
+msgstr "井号"
 
 #. String describing the Dial ImageButton           Used by
 #. AccessibilityService to announce the purpose of the button.
@@ -129,5 +129,5 @@ msgstr "退格"
 #. Used by AccessibilityService to announce the purpose of the view.
 msgctxt "description_digits_edittext"
 msgid "number to dial"
-msgstr "拨号盘"
+msgstr "拨出号码"
 

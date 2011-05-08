@@ -19,6 +19,12 @@
     <item>可选的</item>
     <item>必填</item>
   </string-array>
+  <string-array name="dtmf_mode_choices">
+    <item>自动</item>
+    <item>RTP</item>
+    <item>带内 generation</item>
+    <item>SIP 信息</item>
+  </string-array>
   <string-array name="contact_rewrite_method_choices">
     <item>继承</item>
     <item>常规</item>
@@ -35,5 +41,24 @@
     <item>SSLv2</item>
     <item>SSL3</item>
     <item>SSL23</item>
+  </string-array>
+  <string-array name="gsm_integration_type_choices">
+    <item>自动</item>
+    <item>强制执行</item>
+    <item>阻止</item>
+  </string-array>
+  <string-array name="echo_mode_choices">
+    <item>自动</item>
+    <item>Speex</item>
+    <item>Simple</item>
+  </string-array>
+  <string-array name="dial_press_mode_choices">
+    <item>使用Android设置</item>
+    <item>强制执行</item>
+    <item>阻止</item>
+  </string-array>
+  <string-array name="band_types_name">
+    <item>窄带</item>
+    <item>宽带</item>
   </string-array>
 </resources>

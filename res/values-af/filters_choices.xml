@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="filters_action">
+    <item>Kan nie bel nie</item>
+  </string-array>
+</resources>

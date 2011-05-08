@@ -10,7 +10,7 @@
   <string name="mute">靜音</string>
   <string name="add_call">加入呼叫</string>
   <string name="call_state_calling">呼叫中...</string>
-  <string name="call_state_confirmed">說話中</string>
+  <string name="call_state_confirmed">通話中</string>
   <string name="call_state_connecting">連線中...</string>
   <string name="call_state_disconnected">掛斷</string>
   <string name="call_state_early">響鈴中...</string>

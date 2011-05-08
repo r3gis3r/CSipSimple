@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="description_image_button_one">een</string>
+  <string name="description_image_button_two">twee</string>
+  <string name="description_image_button_three">drie</string>
+  <string name="description_image_button_four">vier</string>
+  <string name="description_image_button_five">vyf</string>
+  <string name="description_image_button_six">ses</string>
+  <string name="description_image_button_seven">sewe</string>
+  <string name="description_image_button_eight">agt</string>
+  <string name="description_image_button_nine">nege</string>
+  <string name="description_image_button_star">ster</string>
+  <string name="description_image_button_zero">nil</string>
+  <string name="description_dial_button">bel</string>
+  <string name="description_digits_edittext">nommer om te bel</string>
+</resources>

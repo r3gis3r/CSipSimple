@@ -4,4 +4,5 @@
   <string name="w_callcentric_display_name_desc">Mostrar el nombre de esta cuenta</string>
   <string name="w_callcentric_phone_number">Número telefónico SIP</string>
   <string name="w_callcentric_password">Contraseña</string>
+  <string name="w_callcentric_password_desc">Contraseña para su cuenta de Callcentric</string>
 </resources>

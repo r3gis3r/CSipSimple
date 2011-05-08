@@ -21,13 +21,12 @@
   <string name="use_skype">使用 Skype</string>
   <string name="ongoing_call">呼叫中</string>
   <string name="missed_call">未接來電</string>
-  <string name="recentCalls_empty">無通話紀錄</string>
-  <string name="filters">過濾器</string>
-  <string name="filters_desc">套用, 如設定 \"整合進Android\"</string>
+  <string name="filters">過濾條件</string>
+  <string name="filters_desc">如有設定 \"整合進Android\", 才適用</string>
   <string name="filters_for">過濾器適用於</string>
   <string name="add_filter">新增過濾器 / 重寫規則</string>
   <string name="delete_filter">刪除過濾器</string>
-  <string name="callLog_delete_entry">刪除本次通話</string>
+  <string name="callLog_delete_entry">刪除所選通話</string>
   <string name="callLog_delete_all">刪除所有通話</string>
   <string name="callLog_delDialog_title">刪除通話紀錄</string>
   <string name="callLog_delDialog_message">要刪除通話紀錄中所有的通話嗎?</string>
@@ -51,7 +50,7 @@
   <string name="ok">確定</string>
   <string name="misc">其他</string>
   <string name="warning">警告</string>
-  <string name="disconnect_and_incoming_explaination">您可以使用這個網路!!! 如果您並不想使用它, 請點選 OK</string>
+  <string name="disconnect_and_incoming_explaination">"您的設置依現在的網路狀況, CSipSimple 是可用的 !!!  如果您還是決定要結束程式, 請點選 OK"</string>
   <string name="disconnect_and_will_restart">"當 "<xliff:g id="networks" example="3G">%s</xliff:g>" 變成可用時, 會自動重新啟動 (如您不想如此, 請更改設定)"</string>
   <string name="gadget_title">SIP 帳戶切換</string>
   <string name="search_in_contacts">搜尋連絡人</string>

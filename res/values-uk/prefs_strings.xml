@@ -9,6 +9,8 @@
   <string name="prefs_media_desc">Кодеки і поведінка під час дзвінка</string>
   <string name="prefs_ui">Інтерфейс користувача</string>
   <string name="prefs_ui_desc">Настроювання користувацького інтерфейсу</string>
+  <string name="prefs_calls">Опції дзвінків</string>
+  <string name="prefs_calls_desc">Опції відносно дзвінків</string>
   <string name="for_incomings">Для вхідних дзвінків</string>
   <string name="for_outgoings">Для вихідних дзвінків</string>
   <string name="perfs">Швидкодія</string>
@@ -53,10 +55,15 @@
   <string name="turn_server_desc">TURN сервер (ХОСТ:ПОРТ)</string>
   <string name="enable_stun">Включити STUN</string>
   <string name="enable_stun_desc">Увімкнути функцію STUN</string>
+  <string name="stun_server">STUN сервери</string>
+  <string name="stun_server_desc">STUN сервери (HOST[:PORT], ...)</string>
   <string name="enable_qos">Включити QoS</string>
   <string name="enable_qos_desc">Увімкнути QoS на пакетах</string>
   <string name="dscp_val">DSCP значення</string>
   <string name="dscp_val_desc">DSCP значення для SIP трафіку</string>
+  <string name="keep_alive_interval_wifi">Не вимикати WiFi</string>
+  <string name="keep_alive_interval_mobile">Не вимикати мобільний</string>
+  <string name="keep_alive_interval_desc">Інтервал (сек) для KA пакетів</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">Захищений транспорт</string>
   <string name="secure_transport_desc">Механізм забезпечення безпеки для SIP і RTP</string>
@@ -104,6 +111,8 @@
   <string name="snd_ptime_desc">Зменшити ptime, як правило, зменшити латентність</string>
   <string name="echo_cancellation_tail">Придушення луни хвіст</string>
   <string name="echo_cancellation_tail_desc">Хвіст завдовжки луни</string>
+  <string name="echo_mode">Ехо режим</string>
+  <string name="echo_mode_desc">Ехо алгоритм</string>
   <string name="codecs_desc">Пріоритет (0 вимкнено)</string>
   <string name="sip_dtmf">DTMF режим</string>
   <string name="sip_dtmf_desc">Як відіслати DTMF</string>
@@ -119,6 +128,14 @@
   <string name="has_io_queue_desc">Активувати чергу для вводу/виводу</string>
   <string name="set_audio_generate_tone">Хак тону</string>
   <string name="set_audio_generate_tone_desc">Згенерувати тон перед дзвінком</string>
+  <string name="narrow_band">Вузькосмуговий</string>
+  <string name="wide_band">Широкосмуговий</string>
+  <string name="band_for_wifi">Тип радіоканалу для WiFi</string>
+  <string name="band_for_3g">Тип каналу для 3G</string>
+  <string name="band_for_gprs">Тип каналу для GPRS</string>
+  <string name="band_for_edge">Тип каналу для EDGE</string>
+  <string name="band_for_other">Тип каналу для інших</string>
+  <string name="codecs_band_types">Підключення полоси пропускання для типів кодеків</string>
   <string name="general_ui">Користувальницький інтерфейс</string>
   <string name="native_dialer_integration">Тісна інтеграція дозвону</string>
   <string name="advanced_ui">Додаткові налаштуваннях</string>
@@ -148,6 +165,8 @@
   <string name="prevent_screen_rotation_desc">Уникнути обертання екрану і зберегти в портретному режимі</string>
   <string name="gsm_integration_type">Інтеграція з мобільним телефоном</string>
   <string name="gsm_integration_type_desc">Чи інтегруватиметься з рідним мобільним телефоном</string>
+  <string name="invert_proximity_sensor">Звернути датчик</string>
+  <string name="invert_proximity_sensor_desc">Може допомогти на деяких пристроях</string>
   <string name="android_integration">Інтеграція з Android</string>
   <string name="android_integration_desc">Інтеграція з рідним номеронабирачем і журналом викликів</string>
   <string name="availability_profile">Наявність профілю</string>

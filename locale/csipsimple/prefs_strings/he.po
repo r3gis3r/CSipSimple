@@ -5,17 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: csipsimple\n"
+"Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-12-31 09:04+0000\n"
 "Last-Translator: sha357 <Unknown>\n"
 "Language-Team: Hebrew <he@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-01 05:42+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"Generated-By: Babel 1.0dev\n"
 
 msgctxt "prefs"
 msgid "Settings"
@@ -230,6 +230,24 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "שרת TURN (יציאה:המארח)"
 
+#, fuzzy
+msgctxt "turn_username"
+msgid "TURN user"
+msgstr "שרת Turn"
+
+msgctxt "turn_username_desc"
+msgid "Username for TURN authentication"
+msgstr ""
+
+#, fuzzy
+msgctxt "turn_password"
+msgid "TURN password"
+msgstr "סיסמת TLS"
+
+msgctxt "turn_password_desc"
+msgid "Password for TURN authentication"
+msgstr ""
+
 msgctxt "enable_stun"
 msgid "Enable STUN"
 msgstr "אפשר STUN"
@@ -264,14 +282,30 @@ msgstr "ערך DSCP עבור תעבורת סיפ"
 
 msgctxt "keep_alive_interval_wifi"
 msgid "Wifi keep alive"
-msgstr ""
+msgstr "השאר Wifi דלוק"
 
 msgctxt "keep_alive_interval_mobile"
 msgid "Mobile keep alive"
-msgstr ""
+msgstr "השאר 3G דלוק"
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
+msgstr "מרווח זמן (שניות) עבור מנות KA"
+
+msgctxt "use_compact_form"
+msgid "Use compact SIP"
+msgstr ""
+
+msgctxt "use_compact_form_desc"
+msgid "Reduce SIP packets size. May not work on old SIP servers"
+msgstr ""
+
+msgctxt "user_agent"
+msgid "User agent"
+msgstr ""
+
+msgctxt "user_agent_desc"
+msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
 #. Security
@@ -371,6 +405,16 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "מצב עבור RTP מאובטח"
 
+#, fuzzy
+msgctxt "use_zrtp"
+msgid "ZRTP mode"
+msgstr "מצב מומחה"
+
+#, fuzzy
+msgctxt "use_zrtp_desc"
+msgid "Mode for Secured ZRTP"
+msgstr "מצב עבור RTP מאובטח"
+
 #. Media
 msgctxt "audio_quality"
 msgid "Audio quality"
@@ -416,6 +460,15 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "התאם את רמת האות של הרמקול (1 לא עושה כלום)"
 
+#, fuzzy
+msgctxt "snd_bt_mic_level"
+msgid "Bluetooth micro amplification"
+msgstr "עצמת מיקרופון"
+
+msgctxt "snd_bt_speaker_level"
+msgid "Bluetooth listening amplification"
+msgstr ""
+
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
 msgstr "זרם לרמה התחלתית"
@@ -437,8 +490,7 @@ msgid "Media quality"
 msgstr "איכות המדיה"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "האיכות של תעבורת התקשורת (שנה רק אם אתה יודע מה אתה עושה)"
 
 msgctxt "snd_clock_rate"
@@ -517,6 +569,16 @@ msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "שנה רק אם המפתחים יעצו לך"
 
+msgctxt "micro_source"
+msgid "Micro source"
+msgstr ""
+
+msgctxt "micro_source_desc"
+msgid ""
+"Source for micro. Choosing the appropriate value may improve echo "
+"cancellation"
+msgstr ""
+
 msgctxt "has_io_queue"
 msgid "IO Queue"
 msgstr "תור IO"
@@ -535,34 +597,42 @@ msgstr "צור צליל לפני ביצוע שיחות"
 
 msgctxt "narrow_band"
 msgid "Narrowband"
-msgstr ""
+msgstr "פס צר"
 
 msgctxt "wide_band"
 msgid "Wideband"
-msgstr ""
+msgstr "פס רחב"
 
 msgctxt "band_for_wifi"
 msgid "Band type for wifi"
-msgstr ""
+msgstr "סוג פס עבור WiFi"
 
 msgctxt "band_for_3g"
 msgid "Band type for 3G"
-msgstr ""
+msgstr "סוג פס עבור 3G"
 
 msgctxt "band_for_gprs"
 msgid "Band type for GPRS"
-msgstr ""
+msgstr "סוג פס עבור GPRS"
 
 msgctxt "band_for_edge"
 msgid "Band type for EDGE"
-msgstr ""
+msgstr "סוג פס עבור EDGE"
 
 msgctxt "band_for_other"
 msgid "Band type for other"
-msgstr ""
+msgstr "סוג פס עבור אחר"
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
+msgstr "חיבורי רוחב פס עבור סוגי קודקים"
+
+msgctxt "use_sgs_call_hack"
+msgid "Use Samsung Galaxy Hack"
+msgstr ""
+
+msgctxt "use_sgs_call_hack_desc"
+msgid "Pre set call mode to solve routing"
 msgstr ""
 
 #. UI
@@ -584,8 +654,8 @@ msgstr "חייגן משולב"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr "כאשר מחייגים עם החייגן המקורי תישאל אם ברצונך להשתמש בסיפ או סלולרי"
 
 msgctxt "integrate_with_native_calllogs"
@@ -686,10 +756,35 @@ msgstr "כיצד היישום משתמש (או שלא) בטלפון הנייד �
 
 msgctxt "invert_proximity_sensor"
 msgid "Invert proximity sensor"
-msgstr ""
+msgstr "הפוך קירבה חיישן"
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
+msgstr "עשוי לעזור על כמה מכשירים, כאשר יצרנית הפכה קרוב ורחוק"
+
+msgctxt "theme"
+msgid "Theme"
+msgstr ""
+
+#, fuzzy
+msgctxt "theme_desc"
+msgid "Theme for the application"
+msgstr "שלב עם מוזיקת היישום"
+
+msgctxt "obtain_themes"
+msgid "Obtain more themes"
+msgstr ""
+
+msgctxt "obtain_themes_desc"
+msgid "Get themes apps on the market"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr"
+msgid "Display number in status bar"
+msgstr ""
+
+msgctxt "display_icon_in_status_bar_nbr_desc"
+msgid "Display the number of registered accounts in status bar"
 msgstr ""
 
 #. Fast settings
@@ -753,6 +848,15 @@ msgstr "הקלט שיחות אוטומטי"
 msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "הקלט שיחות מיד ברגע ההתחברות"
+
+#, fuzzy
+msgctxt "support_multiple_calls"
+msgid "Support multiple calls"
+msgstr "עבור שיחות יוצאות"
+
+msgctxt "support_multiple_calls_desc"
+msgid "Allow conference and multiple concurrent calls"
+msgstr ""
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

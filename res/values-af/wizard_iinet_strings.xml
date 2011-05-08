@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_iinet_username">VoIP foon nommer</string>
+  <string name="w_iinet_password_desc">Nie dieselfde as gekonekteerde wagwoord nie</string>
+</resources>

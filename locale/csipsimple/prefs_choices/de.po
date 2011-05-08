@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-10-06 13:40+0000\n"
 "Last-Translator: Jan Tschirschwitz <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 msgctxt "scheme_choices:0"
 msgid "Digest"
-msgstr "Kurzfassung"
+msgstr "Digest"
 
 msgctxt "scheme_choices:1"
 msgid "PGP"
@@ -27,11 +27,11 @@ msgstr "PGP"
 
 msgctxt "data_type_choices:0"
 msgid "Plain password"
-msgstr "schwache Passwort"
+msgstr "Klartext"
 
 msgctxt "data_type_choices:1"
 msgid "Data digest"
-msgstr "Einstellungsübersicht"
+msgstr "Datenauszug"
 
 msgctxt "clock_rate_choices:0"
 msgid "8KHz"
@@ -59,23 +59,23 @@ msgstr "Optional"
 
 msgctxt "use_srtp_choices:2"
 msgid "Mandatory"
-msgstr "Aktiviert"
+msgstr "Erforderlich"
 
 msgctxt "dtmf_mode_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgctxt "dtmf_mode_choices:1"
 msgid "RTP"
-msgstr ""
+msgstr "RTP"
 
 msgctxt "dtmf_mode_choices:2"
 msgid "In band generation"
-msgstr ""
+msgstr "In-Band Signal"
 
 msgctxt "dtmf_mode_choices:3"
 msgid "SIP INFO"
-msgstr ""
+msgstr "SIP INFO"
 
 msgctxt "contact_rewrite_method_choices:0"
 msgid "Legacy"
@@ -103,7 +103,7 @@ msgstr "TLS"
 
 msgctxt "tls_method_choices:0"
 msgid "Auto"
-msgstr "Auto"
+msgstr "Automatisch"
 
 msgctxt "tls_method_choices:1"
 msgid "TLSv1"
@@ -123,45 +123,69 @@ msgstr "SSL23"
 
 msgctxt "gsm_integration_type_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgctxt "gsm_integration_type_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Erzwingen"
 
 msgctxt "gsm_integration_type_choices:2"
 msgid "Prevent"
-msgstr ""
+msgstr "Verhindern"
 
 msgctxt "echo_mode_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgctxt "echo_mode_choices:1"
 msgid "Speex"
-msgstr ""
+msgstr "Speex"
 
 msgctxt "echo_mode_choices:2"
 msgid "Simple"
-msgstr ""
+msgstr "Einfach"
 
 msgctxt "dial_press_mode_choices:0"
 msgid "Use Android setting"
-msgstr ""
+msgstr "Android-Einstellung benutzen"
 
 msgctxt "dial_press_mode_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Erzwingen"
 
 msgctxt "dial_press_mode_choices:2"
 msgid "Prevent"
-msgstr ""
+msgstr "Verhindern"
 
 msgctxt "band_types_name:0"
 msgid "Narrowband"
-msgstr ""
+msgstr "Niederband"
 
 msgctxt "band_types_name:1"
 msgid "Wideband"
+msgstr "Weitband"
+
+msgctxt "reg_use_proxy_choices:0"
+msgid "No proxy"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:1"
+msgid "Outbound proxies"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:2"
+msgid "Accounts proxies"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:3"
+msgid "All"
+msgstr ""
+
+msgctxt "use_zrtp_choices:0"
+msgid "No ZRTP"
+msgstr ""
+
+msgctxt "use_zrtp_choices:1"
+msgid "Create ZRTP"
 msgstr ""
 

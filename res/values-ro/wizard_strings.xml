@@ -1,2 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="other_country_providers_text">Operatori din alte tari</string>
+  <string name="world_wide_providers_text">Operatori din toata lumea</string>
+  <string name="generic_wizards_text">Asistent de instalare generic</string>
+</resources>

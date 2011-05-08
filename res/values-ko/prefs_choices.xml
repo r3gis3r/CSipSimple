@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="scheme_choices">
+    <item>편집</item>
+    <item>PGP</item>
+  </string-array>
+  <string-array name="data_type_choices">
+    <item>간단한 비밀 번호</item>
+    <item>데이터 편집</item>
+  </string-array>
+  <string-array name="clock_rate_choices">
+    <item>8KHz</item>
+    <item>16KHz</item>
+    <item>32KHz</item>
+    <item>44.1KHz</item>
+  </string-array>
+  <string-array name="use_srtp_choices">
+    <item>기능 차단</item>
+    <item>옵션</item>
+    <item>필수</item>
+  </string-array>
+  <string-array name="dtmf_mode_choices">
+    <item>자동</item>
+    <item>RTP</item>
+    <item>In band generation</item>
+    <item>SIP 정보</item>
+  </string-array>
+  <string-array name="contact_rewrite_method_choices">
+    <item>레거시</item>
+    <item>정상</item>
+  </string-array>
+  <string-array name="transport_choices">
+    <item>Auto</item>
+    <item>UDP</item>
+    <item>TCP</item>
+    <item>TLS</item>
+  </string-array>
+  <string-array name="tls_method_choices">
+    <item>Auto</item>
+    <item>TLSv1</item>
+    <item>SSLv2</item>
+    <item>SSL3</item>
+    <item>SSL23</item>
+  </string-array>
+  <string-array name="gsm_integration_type_choices">
+    <item>Auto</item>
+    <item>강요</item>
+    <item>막음</item>
+  </string-array>
+  <string-array name="echo_mode_choices">
+    <item>Auto</item>
+    <item>Speex</item>
+    <item>단순한</item>
+  </string-array>
+  <string-array name="dial_press_mode_choices">
+    <item>안드로이드 설정 사용</item>
+    <item>강제로</item>
+    <item>예방</item>
+  </string-array>
+  <string-array name="band_types_name">
+    <item>협대역</item>
+    <item>광대역</item>
+  </string-array>
+</resources>

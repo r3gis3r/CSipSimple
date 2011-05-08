@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CSipSimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-10-19 13:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: pt <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr "PGP"
 
 msgctxt "data_type_choices:0"
 msgid "Plain password"
-msgstr "Senha"
+msgstr "Palavra-passe simples"
 
 msgctxt "data_type_choices:1"
 msgid "Data digest"
@@ -51,7 +51,7 @@ msgstr "44KHz"
 
 msgctxt "use_srtp_choices:0"
 msgid "Disabled"
-msgstr "Desativado"
+msgstr "Desactivado"
 
 msgctxt "use_srtp_choices:1"
 msgid "Optional"
@@ -59,7 +59,7 @@ msgstr "Opcional"
 
 msgctxt "use_srtp_choices:2"
 msgid "Mandatory"
-msgstr "Mandatório"
+msgstr "Obrigatório"
 
 msgctxt "dtmf_mode_choices:0"
 msgid "Auto"
@@ -79,7 +79,7 @@ msgstr "SIP INFO"
 
 msgctxt "contact_rewrite_method_choices:0"
 msgid "Legacy"
-msgstr "Legado"
+msgstr "Antigo"
 
 msgctxt "contact_rewrite_method_choices:1"
 msgid "Normal"
@@ -115,7 +115,7 @@ msgstr "SSLv2"
 
 msgctxt "tls_method_choices:3"
 msgid "SSL3"
-msgstr "SSL#"
+msgstr "SSL3"
 
 msgctxt "tls_method_choices:4"
 msgid "SSL23"
@@ -163,5 +163,29 @@ msgstr ""
 
 msgctxt "band_types_name:1"
 msgid "Wideband"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:0"
+msgid "No proxy"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:1"
+msgid "Outbound proxies"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:2"
+msgid "Accounts proxies"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:3"
+msgid "All"
+msgstr ""
+
+msgctxt "use_zrtp_choices:0"
+msgid "No ZRTP"
+msgstr ""
+
+msgctxt "use_zrtp_choices:1"
+msgid "Create ZRTP"
 msgstr ""
 

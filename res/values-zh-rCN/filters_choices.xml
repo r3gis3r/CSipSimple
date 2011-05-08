@@ -7,6 +7,16 @@
     <item>直接呼叫</item>
     <item>自动回应</item>
   </string-array>
+  <string-array name="filters_type">
+    <item>起始</item>
+    <item>结束</item>
+    <item>包含</item>
+    <item>全部</item>
+    <item>有N个数字</item>
+    <item>大于N个数字</item>
+    <item>全等于</item>
+    <item>自定义正则表达式</item>
+  </string-array>
   <string-array name="replace_type">
     <item>前缀</item>
     <item>后缀</item>

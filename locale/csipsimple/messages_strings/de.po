@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-11-27 23:52+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -27,12 +26,12 @@ msgstr ""
 #. Command name to open a Compose screen; displays in conversation list
 msgctxt "new_message"
 msgid "New message"
-msgstr ""
+msgstr "Neue Nachricht"
 
 #. Summary text under "New Message" command; displays in conversation list
 msgctxt "create_new_message"
 msgid "Compose new message"
-msgstr ""
+msgstr "Nachricht verfassen"
 
 #. Menu item for starting a new conversation
 msgctxt "menu_compose_new"
@@ -42,30 +41,30 @@ msgstr ""
 #, c-format
 msgctxt "menu_add_address_to_contacts"
 msgid "Add <xliff:g id=\"name\">%s</xliff:g> to Contacts"
-msgstr ""
+msgstr "<xliff:g id=\"name\">%s</xliff:g> zu Kontakten hinzufügen"
 
 #. Menu item to call the recipient of the conversation on the phone
 #. (imperative verb)
 msgctxt "menu_call"
 msgid "Call"
-msgstr ""
+msgstr "Anrufen"
 
 #. Menu item for deleting all conversations
 msgctxt "menu_delete_all"
 msgid "Delete threads"
-msgstr ""
+msgstr "Unterhaltungen löschen"
 
 #. Context menu item on an individual conversation for deleting that
 #. conversation
 msgctxt "menu_delete"
 msgid "Delete thread"
-msgstr ""
+msgstr "Unterhaltung löschen"
 
 #. Context menu item on an individual conversation for viewing that
 #. conversation
 msgctxt "menu_view"
 msgid "View thread"
-msgstr ""
+msgstr "Unterhaltung anzeigen"
 
 #. Name to use when we have an unspecified sender
 msgctxt "anonymous_recipient"

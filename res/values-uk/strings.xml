@@ -23,6 +23,8 @@
   <string name="missed_call">Пропущений виклик</string>
   <string name="recentCalls_empty">Немає викликів</string>
   <string name="filters">Фільтри</string>
+  <string name="filters_desc">Щоб застосувати при інтеграції в Android</string>
+  <string name="filters_for">Фільтри для</string>
   <string name="add_filter">Додати фільтр / правила перезапису</string>
   <string name="delete_filter">Видалити фільтр</string>
   <string name="callLog_delete_entry">Видалити цей дзвінок</string>
@@ -61,4 +63,5 @@
   <string name="no_phone_found">Не знайдено телефон для цього контакту</string>
   <string name="show_password">Показати пароль</string>
   <string name="this_codec_is_not_free">**Цей кодек не є безкоштовним !!!**\nБудь-ласка впевніться що (Ваш SIP провайдер чи Ви самі) купили ліцензію на цей кодек! Ми (як розповсюджувач додатка) не відповідаємо за неправомірне використання кодека.\nВідповідальність за використання цього кодека лежить на вас.\nПосилання для придбання ліцензії:</string>
+  <string name="voice_mail">Голосова пошта</string>
 </resources>

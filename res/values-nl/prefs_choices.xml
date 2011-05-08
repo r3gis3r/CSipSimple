@@ -57,4 +57,8 @@
     <item>Afdwingen</item>
     <item>Voorkomen</item>
   </string-array>
+  <string-array name="band_types_name">
+    <item>Smalband</item>
+    <item>Breedband</item>
+  </string-array>
 </resources>

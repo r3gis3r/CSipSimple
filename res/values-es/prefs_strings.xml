@@ -9,6 +9,8 @@
   <string name="prefs_media_desc">Codecs y ajustes de sonido</string>
   <string name="prefs_ui">Interfaz de usuario</string>
   <string name="prefs_ui_desc">Ajustes de la Interfaz de usuario</string>
+  <string name="prefs_calls">Opciones de Llamadas</string>
+  <string name="prefs_calls_desc">Opciones relacionadas a las llamadas</string>
   <string name="for_incomings">Llamadas entrantes</string>
   <string name="for_outgoings">Llamadas salientes</string>
   <string name="transport">Transporte</string>
@@ -61,5 +63,13 @@
   <string name="privkey_file_desc">Por ejemplo: /sdcard/CSipSimple/miClave.key</string>
   <string name="tls_password">Contraseña TLS</string>
   <string name="tls_password_desc">Contraseña del fichero de la clave privada TLS</string>
+  <string name="verify_server">Comporbar el servidor</string>
+  <string name="verify_server_desc">Verificar el certificado del servidor</string>
+  <string name="verify_client">Comprobar el cliente</string>
+  <string name="verify_client_desc">Comprobar el certificado del cliente</string>
   <string name="tls_method">Método TLS</string>
+  <string name="use_srtp">modo SRTP</string>
+  <string name="audio_quality">Calidad de audio</string>
+  <string name="echo_cancellation">Cancelar eco</string>
+  <string name="echo_cancellation_desc">Activar la cancelación del ecp</string>
 </resources>

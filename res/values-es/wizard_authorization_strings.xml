@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="w_authorization_auth_name">Nombre de autenticación</string>
+  <string name="w_authorization_auth_name_desc">Autenticación Sip</string>
   <string name="w_authorization_phone_number">Nombre de usuario</string>
+  <string name="w_authorization_phone_number_desc">Cuenta de usuario Sip</string>
 </resources>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2011-01-20 10:56+0000\n"
 "Last-Translator: XsLiDian <xslidian@gmail.com>\n"
 "Language-Team: zh_CN <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgstr "重拨"
 
 msgctxt "returnCall"
 msgid "Return call"
-msgstr ""
+msgstr "回拨"
 
 #, c-format
 msgctxt "callDetailsDurationFormat"

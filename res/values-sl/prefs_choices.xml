@@ -36,4 +36,19 @@
     <item>SSL3</item>
     <item>SSL23</item>
   </string-array>
+  <string-array name="gsm_integration_type_choices">
+    <item>Samodejno</item>
+    <item>Prisili</item>
+    <item>Prepreči</item>
+  </string-array>
+  <string-array name="echo_mode_choices">
+    <item>Samodejno</item>
+    <item>Speex</item>
+    <item>Enostavno</item>
+  </string-array>
+  <string-array name="dial_press_mode_choices">
+    <item>Uporabi Android nastavitve</item>
+    <item>Prisili</item>
+    <item>Prepreči</item>
+  </string-array>
 </resources>

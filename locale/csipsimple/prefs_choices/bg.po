@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-30 00:15+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2010-09-30 08:06+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -163,5 +163,29 @@ msgstr ""
 
 msgctxt "band_types_name:1"
 msgid "Wideband"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:0"
+msgid "No proxy"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:1"
+msgid "Outbound proxies"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:2"
+msgid "Accounts proxies"
+msgstr ""
+
+msgctxt "reg_use_proxy_choices:3"
+msgid "All"
+msgstr ""
+
+msgctxt "use_zrtp_choices:0"
+msgid "No ZRTP"
+msgstr ""
+
+msgctxt "use_zrtp_choices:1"
+msgid "Create ZRTP"
 msgstr ""
 

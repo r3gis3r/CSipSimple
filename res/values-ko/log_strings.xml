@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="unknown">알 수 없는 번호</string>
+  <string name="type_incoming">수신</string>
+  <string name="type_outgoing">발신</string>
+  <string name="type_missed">부재중 전화</string>
+  <string name="callBack">부재중 번호로 전화 걸기</string>
+  <string name="callAgain">전화 다시 걸기</string>
+  <string name="returnCall">답신</string>
+  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" mins "<xliff:g id="seconds" example="28">%s</xliff:g>" secs"</string>
+</resources>

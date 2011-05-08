@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_basic_username">Uporabnik</string>
+  <string name="w_basic_username_desc">Ime računa / Prijava</string>
+  <string name="w_basic_password">Geslo</string>
+  <string name="w_basic_password_desc">Geslo za dostop do vašega računa</string>
+</resources>

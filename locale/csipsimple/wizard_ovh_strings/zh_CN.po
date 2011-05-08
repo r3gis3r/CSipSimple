@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# Chinese (China) translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -7,17 +7,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-12-30 15:22+0100\n"
+"POT-Creation-Date: 2011-05-08 19:31+0200\n"
 "PO-Revision-Date: 2011-01-20 10:52+0000\n"
 "Last-Translator: XsLiDian <xslidian@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-21 05:17+0000\n"
-"X-Generator: Launchpad (build 12177)\n"
 "Generated-By: Babel 1.0dev\n"
 
 msgctxt "w_ovh_phone_number_desc"
 msgid "Phone number should be formated as 0033xxxxxx"
 msgstr "电话号码格式如 0033xxxxxx"
+
+#, fuzzy
+msgctxt "w_sapo_phone_number_desc"
+msgid "Phone number should be formated as +35130xxxxxx"
+msgstr "电话号码格式如 0033xxxxxx"
+
