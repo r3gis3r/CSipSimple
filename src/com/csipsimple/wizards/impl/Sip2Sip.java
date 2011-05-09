@@ -17,8 +17,6 @@
  */
 package com.csipsimple.wizards.impl;
 
-import android.text.InputType;
-
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 
@@ -40,7 +38,8 @@ public class Sip2Sip extends SimpleImplementation {
 		super.fillLayout(account);
 		accountUsername.setTitle(R.string.w_common_username);
 		accountUsername.setDialogTitle(R.string.w_common_username);
-		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		// According issue 938 accounts of sip2sip can have alpha characters
+		//accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 	
 	public SipProfile buildAccount(SipProfile account) {
