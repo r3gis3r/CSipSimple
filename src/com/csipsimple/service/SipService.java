@@ -878,14 +878,19 @@ public class SipService extends Service {
 		}else {
 			Log.d(THIS_FILE, "Defered SIP start !!");
 			NetworkInfo netInfo = (NetworkInfo) connectivityManager.getActiveNetworkInfo();
-			String type = netInfo.getTypeName();
-			NetworkInfo.State state = netInfo.getState();
-			if(state == NetworkInfo.State.CONNECTED) {
-				Log.d(THIS_FILE, ">> on changed connected");
-				deviceStateReceiver.onChanged(type, true);
-			}else if(state == NetworkInfo.State.DISCONNECTED) {
+			if(netInfo != null) {
+				String type = netInfo.getTypeName();
+				NetworkInfo.State state = netInfo.getState();
+				if(state == NetworkInfo.State.CONNECTED) {
+					Log.d(THIS_FILE, ">> on changed connected");
+					deviceStateReceiver.onChanged(type, true);
+				}else if(state == NetworkInfo.State.DISCONNECTED) {
+					Log.d(THIS_FILE, ">> on changed disconnected");
+					deviceStateReceiver.onChanged(type, false);
+				}
+			}else {
+				deviceStateReceiver.onChanged(null, false);
 				Log.d(THIS_FILE, ">> on changed disconnected");
-				deviceStateReceiver.onChanged(type, false);
 			}
 		}
 	}
