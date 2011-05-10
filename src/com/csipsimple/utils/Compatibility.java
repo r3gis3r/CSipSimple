@@ -140,6 +140,11 @@ public class Compatibility {
 
 
 	public static String guessInCallMode() {
+		// New api for 2.3.3 is not available on galaxy S II :(
+		if(!isCompatible(11) && android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9100")) {
+			return Integer.toString(AudioManager.MODE_NORMAL);
+		}
+		
 		if (android.os.Build.BRAND.equalsIgnoreCase("sdg") || isCompatible(10)) {
 			// Note that in APIs this is only available from level 11.
 			return "3";
@@ -156,6 +161,11 @@ public class Compatibility {
 	}
 	
 	public static String getDefaultMicroSource() {
+		// Except for galaxy S II :(
+		if(!isCompatible(11) && android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9100")) {
+			return Integer.toString(AudioSource.DEFAULT);
+		}
+		
 		if(isCompatible(10)) {
 			// Note that in APIs this is only available from level 11.
 			// VOICE_COMMUNICATION
@@ -530,6 +540,11 @@ public class Compatibility {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.TCP_TRANSPORT_PORT, "0");
 			prefWrapper.setPreferenceStringValue(SipConfigManager.UDP_TRANSPORT_PORT, "0");
 			prefWrapper.setPreferenceStringValue(SipConfigManager.TLS_TRANSPORT_PORT, "0");
+		}
+		if(lastSeenVersion < 842 && android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9100")) {
+			prefWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
+			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
+			
 		}
 	}
 
