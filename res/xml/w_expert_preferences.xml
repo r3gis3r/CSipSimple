@@ -77,5 +77,8 @@
 		android:defaultValue="0"
 		android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"></ListPreference>
 	
+	<PreferenceCategory android:title="@string/misc">
+		<EditTextPreference android:key="vm_number" android:title="@string/voice_mail"/>
+	</PreferenceCategory>
 	
 </PreferenceScreen>
