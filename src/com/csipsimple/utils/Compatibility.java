@@ -131,7 +131,8 @@ public class Compatibility {
 		}
 		//Huawei
 		if(android.os.Build.DEVICE.equalsIgnoreCase("U8150") ||
-				android.os.Build.DEVICE.equalsIgnoreCase("U8110") ) {
+				android.os.Build.DEVICE.equalsIgnoreCase("U8110") ||
+				android.os.Build.DEVICE.equalsIgnoreCase("U8120") ) {
 			return true;
 		}
 		
