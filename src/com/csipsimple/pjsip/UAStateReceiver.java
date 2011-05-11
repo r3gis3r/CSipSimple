@@ -370,8 +370,9 @@ public class UAStateReceiver extends Callback {
 			SipProfile acc = pjService.getAccountForPjsipId(acc_id);
 			if(acc != null) {
 				Log.d(THIS_FILE, acc_id+" -> Has found account "+acc.getDefaultDomain()+" "+ acc.id + " >> "+acc.getProfileName());
-				notificationManager.showNotificationForVoiceMail(acc, numberOfMessages, voiceMailNumber);
 			}
+			Log.d(THIS_FILE, "We can show the voice messages notification");
+			notificationManager.showNotificationForVoiceMail(acc, numberOfMessages, voiceMailNumber);
 		}
 		unlockCpu();
 	}

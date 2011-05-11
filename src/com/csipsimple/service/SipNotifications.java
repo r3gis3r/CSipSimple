@@ -190,13 +190,20 @@ public class SipNotifications {
 		
 		Intent notificationIntent = new Intent(Intent.ACTION_CALL);
 		notificationIntent.setData(Uri.parse(voiceMailNumber));
-		notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
+		if(acc != null) {
+			notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
+		}
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		
-		messageVoicemail.setLatestEventInfo(context, context.getString(R.string.voice_mail), 
-				acc.getProfileName()+" : "+Integer.toString(numberOfMessages), contentIntent);
+		String messageText = "";
+		if(acc != null) {
+			messageText += acc.getProfileName() + " : ";
+		}
+		messageText += Integer.toString(numberOfMessages);
+		
+		messageVoicemail.setLatestEventInfo(context, context.getString(R.string.voice_mail), messageText, contentIntent);
 		notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail);
 	}
 	
