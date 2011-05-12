@@ -43,6 +43,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.ui.SipHome;
 
 
 public class PreferencesWrapper {
@@ -325,6 +326,15 @@ public class PreferencesWrapper {
 				Log.e(THIS_FILE, "Not able to add preference "+key);
 			}
 		}
+		
+		
+		// And get latest known version so that restore will be able to apply necessary patches
+		int lastSeenVersion = prefs.getInt(SipHome.LAST_KNOWN_VERSION_PREF, 0);
+		try {
+			jsonSipSettings.put(SipHome.LAST_KNOWN_VERSION_PREF, lastSeenVersion);
+		} catch (JSONException e) {
+			Log.e(THIS_FILE, "Not able to add last known version pref");
+		}
 		return jsonSipSettings;
 	}
 	
@@ -360,6 +370,18 @@ public class PreferencesWrapper {
 			}
 			
 			getPreferenceFloatValue(key);
+		}
+		
+		// And get latest known version so that restore will be able to apply necessary patches
+		try {
+			Integer lastSeenVersion = jsonSipSettings.getInt(SipHome.LAST_KNOWN_VERSION_PREF);
+			if(lastSeenVersion != null) {
+				Editor editor = prefs.edit();
+				editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, lastSeenVersion);
+				editor.commit();
+			}
+		} catch (JSONException e) {
+			Log.e(THIS_FILE, "Not able to add last known version pref");
 		}
 	}
 	
