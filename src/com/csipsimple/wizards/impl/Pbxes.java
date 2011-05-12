@@ -17,46 +17,12 @@
  */
 package com.csipsimple.wizards.impl;
 
-import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 
 
-public class Pbxes extends AuthorizationImplementation {
+public class Pbxes extends SimpleImplementation {
 	
 
-	@Override
-	public void fillLayout(final SipProfile account) {
-		super.fillLayout(account);
-		
-		accountUsername.setTitle(R.string.w_pbxes_user_extension);
-		accountUsername.setDialogTitle(R.string.w_pbxes_user_extension);
-		
-		accountAuthorization.setTitle(R.string.w_common_username);
-		accountAuthorization.setDialogTitle(R.string.w_common_username);
-		
-		hidePreference(null, SERVER);
-	}
-
-	@Override
-	public void updateDescriptions() {
-		setStringFieldSummary(DISPLAY_NAME);
-		setStringFieldSummary(USER_NAME);
-		setPasswordFieldSummary(PASSWORD);
-		setPasswordFieldSummary(AUTH_NAME);
-	}
-	
-	@Override
-	public boolean canSave() {
-		boolean isValid = true;
-		
-		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
-		isValid &= checkField(accountUsername, isEmpty(accountUsername));
-		isValid &= checkField(accountAuthorization, isEmpty(accountAuthorization));
-		isValid &= checkField(accountPassword, isEmpty(accountPassword));
-
-		return isValid;
-	}
-	
 	@Override
 	protected String getDomain() {
 		return "pbxes.org";
@@ -72,5 +38,10 @@ public class Pbxes extends AuthorizationImplementation {
 		SipProfile acc = super.buildAccount(account);
 		acc.vm_nbr = "*43";
 		return acc;
+	}
+	
+	@Override
+	protected boolean canTcp() {
+		return false; // Cause there is something really wrong on the pbxes.org server
 	}
 }

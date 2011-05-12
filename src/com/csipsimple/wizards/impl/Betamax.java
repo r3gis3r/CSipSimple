@@ -21,6 +21,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -30,6 +32,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.ListPreference;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,7 +61,7 @@ public class Betamax extends AuthorizationImplementation {
 	
 	ListPreference providerListPref;
 	
-	static HashMap<String, String[]> providers = new HashMap<String, String[]>(){
+	static SortedMap<String, String[]> providers = new TreeMap<String, String[]>(){
 		private static final long serialVersionUID = 4984940975243241784L;
 	{
 		put("FreeCall", new String[] {"sip.voiparound.com", "stun.voiparound.com"});
@@ -90,6 +93,31 @@ public class Betamax extends AuthorizationImplementation {
 		put("PowerVoIP", new String[] {"sip.powervoip.com", "stun.powervoip.com"});
 		put("Voice Trading", new String[] {"sip.voicetrading.com", "stun.voicetrading.com"});
 		put("EasyVoip", new String[] {"sip.easyvoip.com", "stun.easyvoip.com"});
+		put("VoipBlast", new String[] {"sip.voipblast.com", "stun.voipblast.com"});
+		put("FreeVoipDeal", new String[] {"sip.freevoipdeal.com", "stun.freevoipdeal.com"});
+		put("VoipAlot", new String[] {"sip.voipalot.com", ""});
+		put("FastVoip", new String[] {"sip.fastvoip.com", ""});
+		put("CosmoVoip", new String[] {"sip.cosmovoip.com", "stun.cosmovoip.com"});
+		put("BudgetVoipCall", new String[] {"sip.budgetvoipcall.com", "stun.budgetvoipcall.com"});
+		put("CheapBuzzer", new String[] {"sip.cheapbuzzer.com", "stun.cheapbuzzer.com"});
+		put("CallPirates", new String[] {"sip.callpirates.com", "stun.callpirates.com"});
+		put("CheapVoipCall", new String[] {"sip.cheapvoipcall.com", "stun.cheapvoipcall.com"});
+		put("DialCheap", new String[] {"sip.dialcheap.com", "stun.dialcheap.com"});
+		put("DiscountCalling", new String[] {"sip.discountcalling.com", "stun.discountcalling.com"});
+		put("Frynga", new String[] {"sip.frynga.com", "stun.frynga.com"});
+		put("GlobalFreeCall", new String[] {"sip.globalfreecall.com", "stun.globalfreecall.com"});
+		put("HotVoip", new String[] {"sip.hotvoip.com", "stun.hotvoip.com"});
+		put("MEGAvoip", new String[] {"sip.megavoip.com", "stun.megavoip.com"});
+		put("PennyConnect", new String[] {"sip.pennyconnect.com", "stun.pennyconnect.com"});
+		put("Rebvoice", new String[] {"sip.rebvoice.com", "stun.rebvoice.com"});
+		put("StuntCalls", new String[] {"sip.stuntcalls.com", "stun.stuntcalls.com"});
+		put("VoipBlazer", new String[] {"sip.voipblazer.com", "stun.voipblazer.com"});
+		put("VoipCaptain", new String[] {"sip.voipcaptain.com", "stun.voipcaptain.com"});
+		put("VoipChief", new String[] {"sip.voipchief.com", "stun.voipchief.com"});
+		put("VoipJumper", new String[] {"sip.voipjumper.com", "stun.voipjumper.com"});
+		put("VoipMove", new String[] {"sip.voipmove.com", "stun.voipmove.com"});
+		put("VoipSmash", new String[] {"sip.voipsmash.com", "stun.voipsmash.com"});
+		
 		
 		/*
 		put("InternetCalls", new String[] {"", ""});
@@ -126,7 +154,7 @@ public class Betamax extends AuthorizationImplementation {
         providerListPref.setDialogTitle("Provider");
         providerListPref.setTitle("Provider");
         providerListPref.setSummary("Betamax clone provider");
-        providerListPref.setDefaultValue("FreeCall");
+        providerListPref.setDefaultValue("12VoIP");
         String domain = account.getDefaultDomain();
         for(Entry<String, String[]> entry : providers.entrySet()) {
         	String[] val = entry.getValue();
@@ -221,7 +249,7 @@ public class Betamax extends AuthorizationImplementation {
 		String provider = providerListPref.getValue();
 		if(provider != null) {
 			String[] set = providers.get(provider);
-			if(set[1] != null) {
+			if( !TextUtils.isEmpty(set[1]) ) {
 				prefs.addStunServer(set[1]);
 			}
 		}
