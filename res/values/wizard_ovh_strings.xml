@@ -20,4 +20,5 @@
 <resources>
 <string name="w_ovh_phone_number_desc">Phone number should be formated as 0033xxxxxx</string>
 <string name="w_sapo_phone_number_desc">Phone number should be formated as +35130xxxxxx</string>
+<string name="w_pbxes_user_extension">User extension (something like user-1)</string>
 </resources>
