@@ -35,6 +35,7 @@ import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -82,6 +83,7 @@ public class SipProfileJson {
 				Log.e(THIS_FILE, "Impossible to add fitler", e);
 				e.printStackTrace();
 			}
+			c.moveToNext();
 		}
 		c.close();
 		
@@ -94,26 +96,51 @@ public class SipProfileJson {
 		return jsonProfile;
 	}
 	
-	public static JSONArray serializeSipProfiles(Context ctxt) {
+	private static final JSONArray serializeSipProfiles(Context ctxt) {
 		JSONArray jsonSipProfiles = new JSONArray();
 		DBAdapter db = new DBAdapter(ctxt);
 		db.open();
 		List<SipProfile> accounts = db.getListAccounts();
-		for(int i = 0; i<accounts.size(); i++) {
+		int i = 0;
+		for(i = 0; i<accounts.size(); i++) {
 			JSONObject p = serializeSipProfile(accounts.get(i), db);
 			try {
-				jsonSipProfiles.put(i, p);
+				jsonSipProfiles.put(jsonSipProfiles.length(), p);
 			} catch (JSONException e) {
 				Log.e(THIS_FILE, "Impossible to add profile", e);
 			}
 		}
 		
-		db.close();
 		
+		
+		// Add negative fake accounts
+		List<ResolveInfo> callers = Compatibility.getIntentsForCall(ctxt);
+		if(callers != null) {
+			for(int index = 1; index < callers.size()+1; index++) {
+				SipProfile gsmProfile = new SipProfile();
+				gsmProfile.id = SipProfile.INVALID_ID - index;
+				JSONObject p = serializeSipProfile(gsmProfile, db);
+				try {
+					jsonSipProfiles.put( jsonSipProfiles.length(), p);
+				} catch (JSONException e) {
+					Log.e(THIS_FILE, "Impossible to add profile", e);
+				}
+			}
+		}
+		
+
+		db.close();
 		return jsonSipProfiles;
 	}
 	
+	
+	private static final JSONObject serializeSipSettings(Context ctxt) {
+		PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
+		return prefs.serializeSipSettings();
+	}
+	
 	private static String KEY_ACCOUNTS = "accounts";
+	private static String KEY_SETTINGS = "settings";
 	
 	/**
 	 * Save current sip configuration
@@ -134,6 +161,12 @@ public class SipProfileJson {
 			} catch (JSONException e) {
 				Log.e(THIS_FILE, "Impossible to add profiles", e);
 			}
+			try {
+				configChain.put(KEY_SETTINGS, serializeSipSettings(ctxt) );
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Impossible to add profiles", e);
+			}
+			
 			
 			try {
 				// Create file
@@ -153,6 +186,7 @@ public class SipProfileJson {
 	}
 	
 	
+	// --- RESTORE PART --- //
 	private static boolean restoreSipProfile(Context ctxt, JSONObject jsonObj, DBAdapter db) {
 		//Restore accounts
 		Columns cols;
@@ -161,14 +195,18 @@ public class SipProfileJson {
 		
 		cols = new Columns(SipProfile.full_projection, SipProfile.full_projection_types);
 		cv = cols.jsonToContentValues(jsonObj);
+		
 		SipProfile profile = new SipProfile();
 		profile.createFromContentValue(cv);
-		db.insertAccount(profile);
+		if(profile.id >= 0) {
+			db.insertAccount(profile);
+		}
 		
 		//Restore filters
 		cols = new Columns(Filter.full_projection, Filter.full_projection_types);
 		try {
 			JSONArray filtersObj = jsonObj.getJSONArray(FILTER_KEY);
+			Log.d(THIS_FILE, "We have filters for " + profile.id + " > "+filtersObj.length());
 			for(int i = 0; i < filtersObj.length(); i++) {
 				JSONObject filterObj = filtersObj.getJSONObject(i);
 				//Log.d(THIS_FILE, "restoring "+filterObj.toString(4));
@@ -183,6 +221,11 @@ public class SipProfileJson {
 		}
 		
 		return false;
+	}
+	
+	private static void restoreSipSettings(Context ctxt, JSONObject settingsObj) {
+		PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
+		prefs.restoreSipSettings(settingsObj);
 	}
 	
 	
@@ -215,16 +258,29 @@ public class SipProfileJson {
 				db.open();
 				try {
 					JSONObject mainJSONObject = new JSONObject(content);
+					
+					// Manage accounts
 					JSONArray accounts = mainJSONObject.getJSONArray(KEY_ACCOUNTS);
 					if( accounts.length() > 0 ) {
 						db.removeAllAccounts();
 					}
 					for(int i=0; i<accounts.length(); i++) {
-						JSONObject account = accounts.getJSONObject(i);
-						restoreSipProfile(ctxt, account, db);
+						try {
+							JSONObject account = accounts.getJSONObject(i);
+							restoreSipProfile(ctxt, account, db);
+						}catch(JSONException e) {
+							Log.e(THIS_FILE,"Unable to parse item "+i , e);
+						}
 					}
 
 					db.close();
+					
+					// Manage settings
+					JSONObject settings = mainJSONObject.getJSONObject(KEY_SETTINGS);
+					if(settings != null) {
+						restoreSipSettings(ctxt, settings);
+					}
+					
 					return true;
 				} catch (JSONException e) {
 					Log.e(THIS_FILE, "Error while parsing saved file", e);

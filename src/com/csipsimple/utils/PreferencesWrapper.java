@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-
-import com.csipsimple.api.SipConfigManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -41,6 +41,8 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
+import com.csipsimple.api.SipConfigManager;
 
 
 public class PreferencesWrapper {
@@ -298,6 +300,69 @@ public class PreferencesWrapper {
 		}
 		Compatibility.setFirstRunParameters(this);
 	}
+	
+	
+	public JSONObject serializeSipSettings() {
+		JSONObject jsonSipSettings = new JSONObject();
+		for(String key : STRING_PREFS.keySet() ) {
+			try {
+				jsonSipSettings.put(key, getPreferenceStringValue(key));
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Not able to add preference "+key);
+			}
+		}
+		for(String key : BOOLEAN_PREFS.keySet() ) {
+			try {
+				jsonSipSettings.put(key, getPreferenceBooleanValue(key));
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Not able to add preference "+key);
+			}
+		}
+		for(String key : FLOAT_PREFS.keySet() ) {
+			try {
+				jsonSipSettings.put(key, getPreferenceFloatValue(key).doubleValue());
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Not able to add preference "+key);
+			}
+		}
+		return jsonSipSettings;
+	}
+	
+	public void restoreSipSettings(JSONObject jsonSipSettings) {
+		for(String key : STRING_PREFS.keySet() ) {
+			try {
+				String val = jsonSipSettings.getString(key);
+				if(val != null) {
+					setPreferenceStringValue(key, val);
+				}
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Not able to get preference "+key);
+			}
+		}
+		for(String key : BOOLEAN_PREFS.keySet() ) {
+			try {
+				Boolean val = jsonSipSettings.getBoolean(key);
+				if(val != null) {
+					setPreferenceBooleanValue(key, val);
+				}
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Not able to get preference "+key);
+			}
+		}
+		for(String key : FLOAT_PREFS.keySet() ) {
+			try {
+				Double val = jsonSipSettings.getDouble(key);
+				if(val != null) {
+					setPreferenceFloatValue(key, val.floatValue());
+				}
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Not able to get preference "+key);
+			}
+			
+			getPreferenceFloatValue(key);
+		}
+	}
+	
 	
 	public SharedPreferences getDirectPrefs() {
 		return prefs;
