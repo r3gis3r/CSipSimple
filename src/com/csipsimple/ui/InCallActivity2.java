@@ -623,25 +623,26 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		int mainIndex = 0;
 		
 		//Add badges if necessary
-		for(SipCallSession  callInfo : callsInfo) {
-			Log.d(THIS_FILE, "We have a call "+callInfo.getCallId()+" / "+callInfo.getCallState()+"/"+callInfo.getMediaStatus());
-			
-			if ( !callInfo.isAfterEnded() && !hasBadgeForCall(callInfo) ) {
-				Log.d(THIS_FILE, "Has to add badge for "+callInfo.getCallId());
-				addBadgeForCall(callInfo);
-			}
-			
-			if( ! callInfo.isAfterEnded()) {
-				if(callInfo.isLocalHeld()) {
-					heldsCalls ++;
-				}else {
-					mainsCalls ++;
+		if(callsInfo != null) {
+			for(SipCallSession  callInfo : callsInfo) {
+				Log.d(THIS_FILE, "We have a call "+callInfo.getCallId()+" / "+callInfo.getCallState()+"/"+callInfo.getMediaStatus());
+				
+				if ( !callInfo.isAfterEnded() && !hasBadgeForCall(callInfo) ) {
+					Log.d(THIS_FILE, "Has to add badge for "+callInfo.getCallId());
+					addBadgeForCall(callInfo);
 				}
+				
+				if( ! callInfo.isAfterEnded()) {
+					if(callInfo.isLocalHeld()) {
+						heldsCalls ++;
+					}else {
+						mainsCalls ++;
+					}
+				}
+				
+				mainCallInfo = getPrioritaryCall(callInfo, mainCallInfo);
 			}
-			
-			mainCallInfo = getPrioritaryCall(callInfo, mainCallInfo);
 		}
-		
 		
 		int mainWidth = METRICS.widthPixels;
 		if(heldsCalls > 0) {

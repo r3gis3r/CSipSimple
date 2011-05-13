@@ -24,11 +24,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.text.format.DateFormat;
 
