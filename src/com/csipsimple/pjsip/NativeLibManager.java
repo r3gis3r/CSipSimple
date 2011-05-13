@@ -46,7 +46,17 @@ public class NativeLibManager {
 	}
 	
 	private static File getBundledStackLibFile(Context ctx) {
-		// TODO : find a clean way to access the libPath for one shot builds
+		// To keep backward compatibility with android 3, do not use the easy way
+		PackageInfo packageInfo = PreferencesWrapper.getCurrentPackageInfos(ctx);
+		if(packageInfo != null) {
+			ApplicationInfo appInfo = packageInfo.applicationInfo;
+			File nativeFile = new File(appInfo.nativeLibraryDir, "libpjsipjni.so");
+			if(nativeFile.exists()) {
+				Log.d(THIS_FILE, "Found native lib using clean way");
+				return nativeFile;
+			}
+		}
+		// This is the fallback method
 		return new File(ctx.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
 	}
 	

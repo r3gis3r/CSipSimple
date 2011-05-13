@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -612,7 +613,7 @@ public class PreferencesWrapper {
 		String userAgent = getPreferenceStringValue(SipConfigManager.USER_AGENT);
 		if(userAgent.equalsIgnoreCase(CustomDistribution.getUserAgent())) {
 			//If that's the official -not custom- user agent, send the release, the device and the api level
-			PackageInfo pinfo = CollectLogs.getCurrentRevision(ctx);
+			PackageInfo pinfo = getCurrentPackageInfos(ctx);
 			if(pinfo != null) {
 				userAgent +=  " r" + pinfo.versionCode+" / "+android.os.Build.DEVICE+"-"+Compatibility.getApiLevel();
 			}
@@ -620,6 +621,16 @@ public class PreferencesWrapper {
 		return userAgent;
 	}
 	
+	
+	public final static PackageInfo getCurrentPackageInfos(Context ctx) {
+		PackageInfo pinfo = null;
+		try {
+			pinfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
+		} catch (NameNotFoundException e) {
+			Log.e(THIS_FILE, "Impossible to find version of current package !!");
+		}
+		return pinfo;
+	}
 	
 	//Media part
 	

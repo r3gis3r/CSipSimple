@@ -218,6 +218,12 @@ public class Compatibility {
 	}
 	
 	private static boolean needPspWorkaround( ) {
+		// New api for 2.3 does not work on Incredible S
+		if(android.os.Build.DEVICE.equalsIgnoreCase("vivo") ) {
+			return true;
+		}
+		
+		// New API for android 2.3 should be able to manage this
 		if(isCompatible(9)) {
 			return false;
 		}
