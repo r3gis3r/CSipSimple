@@ -18,6 +18,7 @@
 package com.csipsimple.pjsip;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -25,6 +26,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.csipsimple.service.DownloadLibService;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -47,13 +49,21 @@ public class NativeLibManager {
 	
 	private static File getBundledStackLibFile(Context ctx) {
 		// To keep backward compatibility with android 3, do not use the easy way
-		PackageInfo packageInfo = PreferencesWrapper.getCurrentPackageInfos(ctx);
-		if(packageInfo != null) {
-			ApplicationInfo appInfo = packageInfo.applicationInfo;
-			File nativeFile = new File(appInfo.nativeLibraryDir, "libpjsipjni.so");
-			if(nativeFile.exists()) {
-				Log.d(THIS_FILE, "Found native lib using clean way");
-				return nativeFile;
+		if(Compatibility.isCompatible(9)) {
+			PackageInfo packageInfo = PreferencesWrapper.getCurrentPackageInfos(ctx);
+			if(packageInfo != null) {
+				
+				ApplicationInfo appInfo = packageInfo.applicationInfo;
+				try {
+					Field f = ApplicationInfo.class.getField("nativeLibraryDir");
+					File nativeFile = new File((String) f.get(appInfo), "libpjsipjni.so");
+					if(nativeFile.exists()) {
+						Log.d(THIS_FILE, "Found native lib using clean way");
+						return nativeFile;
+					}
+				} catch (Exception e) {
+					Log.e(THIS_FILE, "Cant get field for native lib dir", e);
+				}
 			}
 		}
 		// This is the fallback method
