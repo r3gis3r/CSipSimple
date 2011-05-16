@@ -69,10 +69,10 @@
 			android:orientation="vertical" android:id="@+id/quickactions" android:layout_height="wrap_content">
 			<ImageView android:scaleType="fitXY"
 				android:src="@drawable/quickaction_slider_grip_top" android:layout_height="wrap_content"
-				android:layout_width="fill_parent"></ImageView>
+				android:layout_width="fill_parent" />
 			<ImageView android:scaleType="fitXY"
 				android:src="@drawable/quickaction_slider_grip_bottom" android:layout_height="wrap_content"
-				android:layout_width="fill_parent"></ImageView>
+				android:layout_width="fill_parent" />
 		</LinearLayout>
 	</ScrollView>
 

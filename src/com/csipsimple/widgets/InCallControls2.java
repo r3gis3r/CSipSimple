@@ -395,13 +395,6 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		case R.id.declineCallButton:
 			dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
 			break;
-			
-		case R.id.detailsButton:
-			dispatchTriggerEvent(OnTriggerListener.DETAILED_DISPLAY);
-			break;
-		case R.id.holdButton:
-			dispatchTriggerEvent(OnTriggerListener.TOGGLE_HOLD);
-			break;
 		case R.id.addCallButton:
 			dispatchTriggerEvent(OnTriggerListener.ADD_CALL);
 			break;
