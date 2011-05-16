@@ -630,11 +630,15 @@ public class PjSipService {
 			accountInfo.setAddedStatus(activeAccountStatus);
 			if (activeAccountPjsuaId != null) {
 				accountInfo.setPjsuaId(activeAccountPjsuaId);
-				pjsua_acc_info pjAccountInfo = new pjsua_acc_info();
+				pjsua_acc_info pjAccountInfo = null;
 				// Log.d(THIS_FILE,
 				// "Get account info for account id "+accountDbId+" ==> (active within pjsip as) "+activeAccounts.get(accountDbId));
-				int success = pjsua.acc_get_info(activeAccountPjsuaId, pjAccountInfo);
-				if (success == pjsuaConstants.PJ_SUCCESS) {
+				int success = pjsuaConstants.PJ_FALSE;
+				synchronized (pjAccountsCreationLock) {
+					pjAccountInfo = new pjsua_acc_info();
+					success = pjsua.acc_get_info(activeAccountPjsuaId, pjAccountInfo);
+				}
+				if (success == pjsuaConstants.PJ_SUCCESS && pjAccountInfo != null) {
 
 					try {
 						// Should be fine : status code are coherent with RFC
