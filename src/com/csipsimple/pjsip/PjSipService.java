@@ -1220,7 +1220,7 @@ public class PjSipService {
 	private pjmedia_srtp_use getUseSrtp() {
 		try {
 			int use_srtp = Integer.parseInt(prefsWrapper.getPreferenceStringValue(SipConfigManager.USE_SRTP));
-			pjmedia_srtp_use.swigToEnum(use_srtp);
+			return pjmedia_srtp_use.swigToEnum(use_srtp);
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Transport port not well formated");
 		}
