@@ -18,12 +18,27 @@
 package com.csipsimple.ui.prefs;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class PrefsSecurity extends GenericPrefs {
 
 	@Override
 	protected int getXmlPreferences() {
 		return R.xml.prefs_security;
+	}
+	
+	@Override
+	protected void afterBuildPrefs() {
+		super.afterBuildPrefs();
+		
+		PreferencesWrapper pfw = new PreferencesWrapper(this);
+		boolean canUseTLS = pfw.getLibCapability(PreferencesWrapper.LIB_CAP_TLS);
+		if(!canUseTLS) {
+			hidePreference(null, "tls");
+			hidePreference("secure_media", SipConfigManager.USE_ZRTP);
+		}
+		
 	}
 
 	@Override

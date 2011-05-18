@@ -70,10 +70,6 @@ public class PrefsNetwork extends GenericPrefs {
 			
 			
 		}
-		boolean canUseTLS = pfw.getLibCapability(PreferencesWrapper.LIB_CAP_TLS);
-		if(!canUseTLS) {
-			hidePreference(null, "secure_transport");
-		}
 	}
 
 	@Override
