@@ -17,7 +17,10 @@
  */
 package com.csipsimple.wizards;
 
+import java.util.List;
+
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.models.Filter;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public interface WizardIface {
@@ -36,5 +39,6 @@ public interface WizardIface {
 	void setDefaultParams(PreferencesWrapper prefs);
 	boolean canSave();
 	boolean needRestart();
+	public List<Filter> getDefaultFilters(SipProfile acc);
 	
 }

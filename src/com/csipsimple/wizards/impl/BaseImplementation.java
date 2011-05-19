@@ -17,6 +17,7 @@
  */
 package com.csipsimple.wizards.impl;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import android.preference.EditTextPreference;
@@ -25,6 +26,8 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.models.Filter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.BasePrefsWizard;
@@ -116,4 +119,7 @@ public abstract class BaseImplementation implements WizardIface {
 	}
 	
 	public void setDefaultParams(PreferencesWrapper prefs) {}
+	public List<Filter> getDefaultFilters(SipProfile acc) {
+		return null;
+	}
 }

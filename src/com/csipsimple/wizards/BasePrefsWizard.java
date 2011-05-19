@@ -17,6 +17,8 @@
  */
 package com.csipsimple.wizards;
 
+import java.util.List;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +37,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.api.ISipService;
+import com.csipsimple.models.Filter;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.AccountFilters;
 import com.csipsimple.ui.prefs.GenericPrefs;
@@ -283,7 +286,16 @@ public class BasePrefsWizard extends GenericPrefs{
 		if(account.id == SipProfile.INVALID_ID){
 			wizard.setDefaultParams(prefs);
 			account.id = (int) database.insertAccount(account);
+			List<Filter> filters = wizard.getDefaultFilters(account);
+			if(filters != null && filters.size() > 0 ) {
+				for(Filter filter : filters) {
+					// Ensure the correct id if not done by the wizard
+					filter.account = account.id;
+					database.insertFilter(filter);
+				}
+			}
 			needRestart = wizard.needRestart();
+			
 		}else{
 			//TODO : should not be done there but if not we should add an option to re-apply default params
 			wizard.setDefaultParams(prefs);

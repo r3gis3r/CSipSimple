@@ -43,6 +43,7 @@ import com.csipsimple.wizards.impl.Broadsoft;
 import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.DeltaThree;
+import com.csipsimple.wizards.impl.DvcNg;
 import com.csipsimple.wizards.impl.Ecs;
 import com.csipsimple.wizards.impl.Ekiga;
 import com.csipsimple.wizards.impl.Eutelia;
@@ -224,6 +225,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_broadsoft, 9, 
 					new Locale[]{ }, false, true, 
 					Broadsoft.class));
+			WIZARDS_DICT.put("DVCNG", new WizardInfo("DVCNG", "DVC'NG", 
+					R.drawable.ic_wizard_dvcng, 16, 
+					new Locale[]{ }, false, true, 
+					DvcNg.class));
 			
 			
 			//Locales
