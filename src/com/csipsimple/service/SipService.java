@@ -543,11 +543,19 @@ public class SipService extends Service {
 		}
 		
 		public void stop() {
-			if(mTimer != null) {
-				mTimer.purge();
-				mTimer.cancel();
+			synchronized (SipService.this) {
+				if (mTask != null) {
+					Log.d(THIS_FILE, "Delete already pushed task in stack");
+					mTask.cancel();
+					sipWakeLock.release(mTask);
+				}
+				
+				if(mTimer != null) {
+					mTimer.purge();
+					mTimer.cancel();
+				}
+				mTimer = null;
 			}
-			mTimer = null;
 		}
 
 		private void onReceiveInternal(Context context, Intent intent) {
@@ -620,7 +628,7 @@ public class SipService extends Service {
 					}
 					mTask = new MyTimerTask(type, connected);
 					if(mTimer == null) {
-						mTimer = new Timer();
+						mTimer = new Timer("Connected-timer");
 					}
 					mTimer.schedule(mTask, 2 * 1000L);
 					// hold wakup lock so that we can finish changes before the
@@ -822,9 +830,9 @@ public class SipService extends Service {
 	private void unregisterBroadcasts() {
 		if(deviceStateReceiver != null) {
 			try {
-				Log.d(THIS_FILE, "Unregister device receiver");
-				unregisterReceiver(deviceStateReceiver);
+				Log.d(THIS_FILE, "Stop and unregister device receiver");
 				deviceStateReceiver.stop();
+				unregisterReceiver(deviceStateReceiver);
 				deviceStateReceiver = null;
 			} catch (IllegalArgumentException e) {
 				// This is the case if already unregistered itself
@@ -1473,11 +1481,13 @@ public class SipService extends Service {
 		private static final String KA_ACTION = "com.csipsimple.ACTION_KA";
 		
 		private int interval = 1000;
+		private boolean use_wake = false;
     	
 		public KeepAliveTimer(Context aContext) {
 			context = aContext;
 			alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			interval = prefsWrapper.getKeepAliveInterval();
+			use_wake = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.KEEP_ALIVE_USE_WAKE);
 			IntentFilter filter = new IntentFilter(KA_ACTION);
 			context.registerReceiver(this, filter);
 		}
@@ -1501,29 +1511,28 @@ public class SipService extends Service {
 		
 		public void start() {
 			Log.d(THIS_FILE, "KA -> starting");
-			if (pendingIntent != null) {
-				throw new RuntimeException("pendingIntent is not null!");
-			}
-
-			Intent intent = new Intent(KA_ACTION);
-			pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			
+						
 			scheduleNext();
 		}
 		
 		private void scheduleNext() {
-            if ( !isStarted() ) {
-            	return;
-            }
+            if (pendingIntent != null) {
+            	Log.e(THIS_FILE, "Ignore schedule next cause pending intent is not null");
+				return;
+			}
+			Intent intent = new Intent(KA_ACTION);
+			pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
 			long firstTime = SystemClock.elapsedRealtime() + interval * 1000;
-			Log.d(THIS_FILE, "KA -> next in "+ firstTime + " vs "+SystemClock.elapsedRealtime());
-			alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, pendingIntent);
+			Log.d(THIS_FILE, "KA@" + SystemClock.elapsedRealtime() + " :: next @"+ firstTime );
+			alarmManager.set(use_wake ? AlarmManager.ELAPSED_REALTIME_WAKEUP : AlarmManager.ELAPSED_REALTIME, firstTime, pendingIntent);
         }
 		
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Log.d(THIS_FILE, "KA alarm receive something "+intent.getAction());
 			if(KA_ACTION.equalsIgnoreCase(intent.getAction()) ) {
+				Log.d(THIS_FILE, "KA@"+SystemClock.elapsedRealtime()+" :: recieved");
+				pendingIntent = null;
 				if(pjService != null) {
 					Log.d(THIS_FILE, "Send a keep alive packet");
 					pjService.sendKeepAlivePackets();

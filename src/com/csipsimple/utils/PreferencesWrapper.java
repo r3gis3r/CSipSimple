@@ -144,6 +144,7 @@ public class PreferencesWrapper {
 		put("use_gprs_out", false);
 		put("use_edge_in", false);
 		put("use_edge_out", false);
+		put(SipConfigManager.KEEP_ALIVE_USE_WAKE, false);
 		
 		//Media
 		put(SipConfigManager.ECHO_CANCELLATION, false);

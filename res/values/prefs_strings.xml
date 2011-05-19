@@ -79,6 +79,8 @@
 <string name="use_compact_form_desc">Reduce SIP packets size. May not work on old SIP servers</string>
 <string name="user_agent">User agent</string>
 <string name="user_agent_desc">Agent presented by the application (if default will add infos)</string>
+<string name="ka_use_wake">Keep alive awake</string>
+<string name="ka_use_wake_desc">If activated keep alive will awake phone</string>
 
 
 <!-- Security -->

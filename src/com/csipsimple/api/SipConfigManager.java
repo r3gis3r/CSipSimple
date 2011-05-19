@@ -86,6 +86,7 @@ public class SipConfigManager {
 	public static final String OVERRIDE_NAMESERVER = "override_nameserver";
 	public static final String USE_COMPACT_FORM = "use_compact_form";
 	public static final String USER_AGENT = "user_agent"; 
+	public static final String KEEP_ALIVE_USE_WAKE = "ka_use_wake";
 	
 	
 	// SECURE
@@ -109,6 +110,7 @@ public class SipConfigManager {
 	
 	public static final String CODEC_NB = "nb";
 	public static final String CODEC_WB = "wb";
+	
 	
 	
 	public static String getCodecKey(String codecName, String type) {
