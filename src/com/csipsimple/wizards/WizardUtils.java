@@ -69,6 +69,7 @@ import com.csipsimple.wizards.impl.Optimus;
 import com.csipsimple.wizards.impl.Ovh;
 import com.csipsimple.wizards.impl.Pbxes;
 import com.csipsimple.wizards.impl.Pennytel;
+import com.csipsimple.wizards.impl.Pfingo;
 import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Pozitel;
@@ -229,6 +230,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_dvcng, 16, 
 					new Locale[]{ }, false, true, 
 					DvcNg.class));
+			WIZARDS_DICT.put("PFINGO", new WizardInfo("PFINGO", "Pfingo", 
+					R.drawable.ic_wizard_pfingo, 19, 
+					new Locale[]{ }, false, true, 
+					Pfingo.class));
 			
 			
 			//Locales
