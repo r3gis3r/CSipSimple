@@ -22,8 +22,10 @@ import java.util.HashMap;
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class Local extends BaseImplementation {
 	protected static final String THIS_FILE = "Advanced W";
@@ -93,7 +95,13 @@ public class Local extends BaseImplementation {
 	
 	@Override
 	public boolean needRestart() {
-		return false;
+		return true;
 	}
 
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
+		prefs.setPreferenceStringValue(SipConfigManager.UDP_TRANSPORT_PORT, "5060");
+		
+	}
 }
