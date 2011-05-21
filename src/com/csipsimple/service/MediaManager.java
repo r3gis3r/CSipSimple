@@ -125,10 +125,11 @@ public class MediaManager {
 	
 	private int getAudioTargetMode() {
 		int targetMode = MODE_SIP_IN_CALL;
-		if(userWantBluetooth) {
-			// Force normal mode for BT SCO
-			return AudioManager.MODE_NORMAL;
-		}
+//Manage that is BT connected part
+//		if(userWantBluetooth) {
+//			// Force normal mode for BT SCO
+//			return AudioManager.MODE_NORMAL;
+//		}
 		
 		if(service.prefsWrapper.getUseModeApi()) {
 			Log.d(THIS_FILE, "User want speaker now..."+userWantSpeaker);
@@ -405,7 +406,7 @@ public class MediaManager {
 	}
 	
 	public void resetSettings() {
-		userWantBluetooth = false;
+		userWantBluetooth = true;
 		userWantMicrophoneMute = false;
 		userWantSpeaker = false;
 	}
@@ -471,7 +472,6 @@ public class MediaManager {
 	
 	/**
 	 * Change the audio volume amplification according to the fact we are using bluetooth
-	 * @param useBluetooth
 	 */
 	public void setSoftwareVolume() {
 		
@@ -486,6 +486,11 @@ public class MediaManager {
 
 			service.confAdjustTxLevel(speakVolume);
 			service.confAdjustRxLevel(micVolume);
+			
+			// Force the BT mode to normal
+			if(useBT) {
+				audioManager.setMode(AudioManager.MODE_NORMAL);
+			}
 		}
 	}
 	
