@@ -1434,6 +1434,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 							dropOnOtherCall = true;
 							if(service != null) {
 								try {
+									// 1 = PJSUA_XFER_NO_REQUIRE_REPLACES
 									service.xferReplace(call.getCallId(), callId, 1);
 								} catch (RemoteException e) {
 									// TODO : toaster

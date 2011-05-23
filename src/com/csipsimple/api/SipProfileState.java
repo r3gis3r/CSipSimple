@@ -264,8 +264,9 @@ public class SipProfileState implements Parcelable, Serializable{
 		return regUri;
 	}
 
-	
-	
+	public boolean isAddedToStack() {
+		return pjsuaId != -1;
+	}
 	
 	public boolean isValidForCall() {
 		if(active) {

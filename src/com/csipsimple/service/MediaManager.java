@@ -36,6 +36,7 @@ import android.provider.Settings;
 import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
@@ -412,11 +413,11 @@ public class MediaManager {
 	}
 
 
-	public void toggleMute() {
+	public void toggleMute() throws SameThreadException {
 		setMicrophoneMute(!userWantMicrophoneMute);
 	}
 	
-	public synchronized void setMicrophoneMute(boolean on) {
+	public void setMicrophoneMute(boolean on) {
 		if(on != userWantMicrophoneMute ) {
 			userWantMicrophoneMute = on;
 			setSoftwareVolume();
@@ -424,7 +425,7 @@ public class MediaManager {
 		}
 	}
 	
-	public synchronized void setSpeakerphoneOn(boolean on) {
+	public void setSpeakerphoneOn(boolean on) throws SameThreadException {
 		if(service != null) {
 			service.setNoSnd();
 			userWantSpeaker = on;
@@ -433,7 +434,7 @@ public class MediaManager {
 		broadcastMediaChanged();
 	}
 	
-	public synchronized void setBluetoothOn(boolean on) {
+	public void setBluetoothOn(boolean on) throws SameThreadException {
 		Log.d(THIS_FILE, "Set BT "+on);
 		if(service != null) {
 			service.setNoSnd();
@@ -473,24 +474,30 @@ public class MediaManager {
 	/**
 	 * Change the audio volume amplification according to the fact we are using bluetooth
 	 */
-	public void setSoftwareVolume() {
+	public void setSoftwareVolume(){
 		
 		if(service != null) {
-			boolean useBT = (bluetoothWrapper != null && bluetoothWrapper.isBluetoothOn());
-			
-			String speaker_key = useBT ? SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL;
-			String mic_key = useBT ? SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL;
-			
-			float speakVolume = service.prefsWrapper.getPreferenceFloatValue(speaker_key);
-			float micVolume = userWantMicrophoneMute? 0 : service.prefsWrapper.getPreferenceFloatValue(mic_key);
+			service.getExecutor().execute(service.new SipRunnable() {
+				
+				@Override
+				protected void doRun() throws SameThreadException {
+					boolean useBT = (bluetoothWrapper != null && bluetoothWrapper.isBluetoothOn());
+					
+					String speaker_key = useBT ? SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL;
+					String mic_key = useBT ? SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL;
+					
+					float speakVolume = service.prefsWrapper.getPreferenceFloatValue(speaker_key);
+					float micVolume = userWantMicrophoneMute? 0 : service.prefsWrapper.getPreferenceFloatValue(mic_key);
 
-			service.confAdjustTxLevel(speakVolume);
-			service.confAdjustRxLevel(micVolume);
-			
-			// Force the BT mode to normal
-			if(useBT) {
-				audioManager.setMode(AudioManager.MODE_NORMAL);
-			}
+					service.confAdjustTxLevel(speakVolume);
+					service.confAdjustRxLevel(micVolume);
+					
+					// Force the BT mode to normal
+					if(useBT) {
+						audioManager.setMode(AudioManager.MODE_NORMAL);
+					}
+				}
+			});
 		}
 	}
 	

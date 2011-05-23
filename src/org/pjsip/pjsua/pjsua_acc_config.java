@@ -161,12 +161,12 @@ public class pjsua_acc_config {
     return (cPtr == 0) ? null : new pj_str_t(cPtr, false);
   }
 
-  public void setRequire_100rel(int value) {
-    pjsuaJNI.pjsua_acc_config_require_100rel_set(swigCPtr, this, value);
+  public void setRequire_100rel(pjsua_100rel_use value) {
+    pjsuaJNI.pjsua_acc_config_require_100rel_set(swigCPtr, this, value.swigValue());
   }
 
-  public int getRequire_100rel() {
-    return pjsuaJNI.pjsua_acc_config_require_100rel_get(swigCPtr, this);
+  public pjsua_100rel_use getRequire_100rel() {
+    return pjsua_100rel_use.swigToEnum(pjsuaJNI.pjsua_acc_config_require_100rel_get(swigCPtr, this));
   }
 
   public void setUse_timer(pjsua_sip_timer_use value) {

@@ -88,7 +88,6 @@ public class SipService extends Service {
 	private boolean autoAcceptCurrent = false;
 	public boolean supportMultipleCalls = false;
 	
-	private Object sipStarterLock = new Object();
 
 	// Implement public interface for the service
 	private final ISipService.Stub binder = new ISipService.Stub() {
@@ -98,7 +97,7 @@ public class SipService extends Service {
 		@Override
 		public void sipStart() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			startSipStack();
+			getExecutor().execute(new StartRunnable());
 		}
 
 		/**
@@ -107,7 +106,7 @@ public class SipService extends Service {
 		@Override
 		public void sipStop() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			stopSipStack();
+			getExecutor().execute(new StopRunnable());
 		}
 
 	
@@ -136,7 +135,12 @@ public class SipService extends Service {
 		@Override
 		public void addAllAccounts() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			SipService.this.addAllAccounts();
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				public void doRun() throws SameThreadException {
+					SipService.this.addAllAccounts();
+				}
+			});
 		}
 
 		/**
@@ -145,7 +149,12 @@ public class SipService extends Service {
 		@Override
 		public void removeAllAccounts() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			SipService.this.unregisterAllAccounts(true);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				public void doRun() throws SameThreadException {
+					SipService.this.unregisterAllAccounts(true);
+				}
+			});
 		}
 
 		/**
@@ -154,7 +163,13 @@ public class SipService extends Service {
 		@Override
 		public void reAddAllAccounts() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			SipService.this.reAddAllAccounts();
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				public void doRun() throws SameThreadException {
+					SipService.this.reAddAllAccounts();
+					
+				}
+			});
 		}
 
 		@Override
@@ -166,7 +181,14 @@ public class SipService extends Service {
 				account = db.getAccount(accountId);
 				db.close();
 			}
-			SipService.this.setAccountRegistration(account, renew);
+			final SipProfile acc = account;
+			final int ren = renew;
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				public void doRun() throws SameThreadException {
+					SipService.this.setAccountRegistration(acc, ren);
+				}
+			});
 		}
 
 		/**
@@ -199,7 +221,7 @@ public class SipService extends Service {
 		 *            domain name of the default account
 		 */
 		@Override
-		public void makeCall(String callee, int accountId) throws RemoteException {
+		public void makeCall(final String callee, final int accountId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
@@ -214,7 +236,13 @@ public class SipService extends Service {
 					return;
 				}
 			}
-			pjService.makeCall(callee, accountId);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.makeCall(callee, accountId);
+				}
+			});
+			
 		}
 		
 
@@ -222,30 +250,33 @@ public class SipService extends Service {
 		 * Send SMS using
 		 */
 		@Override
-		public void sendMessage(String message, String callee, int accountId) throws RemoteException {
+		public void sendMessage(final String message, final String callee, final int accountId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
 			
-
-			Log.d(THIS_FILE, "will sms " + callee);
-			
-			ToCall called = pjService.sendMessage(callee, message, accountId);
-			if(called!=null) {
-				SipMessage msg = new SipMessage(SipMessage.SELF, 
-						SipUri.getCanonicalSipContact(callee), SipUri.getCanonicalSipContact(called.getCallee()), 
-						message, "text/plain", System.currentTimeMillis(), 
-						SipMessage.MESSAGE_TYPE_QUEUED, called.getCallee());
-				msg.setRead(true);
-				synchronized (db) {
-					db.open();
-					db.insertMessage(msg);
-					db.close();	
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					Log.d(THIS_FILE, "will sms " + callee);
+					ToCall called = pjService.sendMessage(callee, message, accountId);
+					if(called!=null) {
+						SipMessage msg = new SipMessage(SipMessage.SELF, 
+								SipUri.getCanonicalSipContact(callee), SipUri.getCanonicalSipContact(called.getCallee()), 
+								message, "text/plain", System.currentTimeMillis(), 
+								SipMessage.MESSAGE_TYPE_QUEUED, called.getCallee());
+						msg.setRead(true);
+						synchronized (db) {
+							db.open();
+							db.insertMessage(msg);
+							db.close();	
+						}
+						Log.d(THIS_FILE, "Inserted "+msg.getTo());
+					}else {
+						SipService.this.notifyUserOfMessage( getString(R.string.invalid_sip_uri)+ " : "+callee );
+					}
 				}
-				Log.d(THIS_FILE, "Inserted "+msg.getTo());
-			}else {
-				SipService.this.notifyUserOfMessage( getString(R.string.invalid_sip_uri)+ " : "+callee );
-			}
+			});
 		}
 
 		/**
@@ -257,9 +288,15 @@ public class SipService extends Service {
 		 *            the status code to send
 		 */
 		@Override
-		public int answer(int callId, int status) throws RemoteException {
+		public int answer(final int callId, final int status) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			return pjService.callAnswer(callId, status);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					 pjService.callAnswer(callId, status);
+				}
+			});
+			return 0;
 		}
 
 		/**
@@ -271,70 +308,122 @@ public class SipService extends Service {
 		 *            the status code to send
 		 */
 		@Override
-		public int hangup(int callId, int status) throws RemoteException {
+		public int hangup(final int callId, final int status) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			return pjService.callHangup(callId, status);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.callHangup(callId, status);
+				}
+			});
+			return 0;
 		}
 		
 
 		@Override
-		public int xfer(int callId, String callee) throws RemoteException {
+		public int xfer(final int callId, final String callee) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "XFER");
-			return pjService.callXfer(callId, callee);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.callXfer(callId, callee);
+				}
+			});
+			return 0;
 		}
 
 		@Override
-		public int xferReplace(int callId, int otherCallId, int options) throws RemoteException {
+		public int xferReplace(final int callId, final int otherCallId, final int options) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "XFER-replace");
-			return pjService.callXferReplace(callId, otherCallId, options);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.callXferReplace(callId, otherCallId, options);
+				}
+			});
+			return 0; 
 		}
 
 		@Override
-		public int sendDtmf(int callId, int keyCode) throws RemoteException {
+		public int sendDtmf(final int callId, final int keyCode) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			return pjService.sendDtmf(callId, keyCode);
+
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.sendDtmf(callId, keyCode);
+				}
+			});
+			return 0;
 		}
 
 		@Override
-		public int hold(int callId) throws RemoteException {
+		public int hold(final int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "HOLDING");
-			return pjService.callHold(callId);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.callHold(callId);
+				}
+			});
+			return 0;
 		}
 
 		@Override
-		public int reinvite(int callId, boolean unhold) throws RemoteException {
+		public int reinvite(final int callId, final boolean unhold) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "REINVITING");
-			return pjService.callReinvite(callId, unhold);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.callReinvite(callId, unhold);
+				}
+			});
+			return 0;
 		}
 		
 
 		@Override
-		public SipCallSession getCallInfo(int callId) throws RemoteException {
+		public SipCallSession getCallInfo(final int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.getCallInfo(callId);
 		}
 
 		@Override
-		public void setBluetoothOn(boolean on) throws RemoteException {
+		public void setBluetoothOn(final boolean on) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.setBluetoothOn(on);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.setBluetoothOn(on);
+				}
+			});
 			
 		}
 
 		@Override
-		public void setMicrophoneMute(boolean on) throws RemoteException {
+		public void setMicrophoneMute(final boolean on) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.setMicrophoneMute(on);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.setMicrophoneMute(on);
+				}
+			});
 		}
 
 		@Override
-		public void setSpeakerphoneOn(boolean on) throws RemoteException {
+		public void setSpeakerphoneOn(final boolean on) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.setSpeakerphoneOn(on);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.setSpeakerphoneOn(on);
+				}
+			});
 		}
 
 
@@ -348,15 +437,25 @@ public class SipService extends Service {
 		}
 
 		@Override
-		public void confAdjustTxLevel(int port, float value) throws RemoteException {
+		public void confAdjustTxLevel(final int port, final float value) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.confAdjustTxLevel(port, value);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.confAdjustTxLevel(port, value);
+				}
+			});
 		}
 
 		@Override
-		public void confAdjustRxLevel(int port, float value) throws RemoteException {
+		public void confAdjustRxLevel(final int port, final float value) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.confAdjustRxLevel(port, value);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.confAdjustRxLevel(port, value);
+				}
+			});
 			
 		}
 		
@@ -386,9 +485,14 @@ public class SipService extends Service {
 		}
 
 		@Override
-		public void setEchoCancellation(boolean on) throws RemoteException {
+		public void setEchoCancellation(final boolean on) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.setEchoCancellation(on);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.setEchoCancellation(on);
+				}
+			});
 		}
 
 		@Override
@@ -418,7 +522,12 @@ public class SipService extends Service {
 		@Override
 		public void zrtpSASVerified() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.zrtpSASVerified();
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.zrtpSASVerified();
+				}
+			});
 		}
 
 		@Override
@@ -523,7 +632,7 @@ public class SipService extends Service {
 	private ConnectivityManager connectivityManager;
 
 	public SipNotifications notificationManager;
-	private MyExecutor mExecutor;
+	private SipServiceExecutor mExecutor;
 	private PjSipService pjService;
 	private static HandlerThread executorThread;
 
@@ -531,10 +640,11 @@ public class SipService extends Service {
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
 		private Timer mTimer = null;
 		private MyTimerTask mTask;
+		private Object createLock = new Object();
 
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			// Run the handler in MyExecutor to be protected by wake lock
+			// Run the handler in SipServiceExecutor to be protected by wake lock
 			getExecutor().execute(new Runnable() {
 				public void run() {
 					onReceiveInternal(context, intent);
@@ -543,7 +653,7 @@ public class SipService extends Service {
 		}
 		
 		public void stop() {
-			synchronized (SipService.this) {
+			synchronized (createLock) {
 				if (mTask != null) {
 					Log.d(THIS_FILE, "Delete already pushed task in stack");
 					mTask.cancel();
@@ -594,14 +704,14 @@ public class SipService extends Service {
 				final boolean active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, false);
 				// Should that be threaded?
 				if (accountId != SipProfile.INVALID_ID) {
-					SipProfile account;
-					synchronized (db) {
-						db.open();
-						account = db.getAccount(accountId);
-						db.close();
-					}
+					final SipProfile account = getAccount((int)accountId);
 					if (account != null) {
-						setAccountRegistration(account, active ? 1 : 0);
+						getExecutor().execute(new SipRunnable() {
+							@Override
+							protected void doRun() throws SameThreadException {
+								setAccountRegistration(account, active ? 1 : 0);
+							}
+						});
 					}
 				}
 			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
@@ -615,7 +725,7 @@ public class SipService extends Service {
 		}
 
 		protected void onChanged(String type, boolean connected) {
-			synchronized (SipService.this) {
+			synchronized (createLock) {
 				// When turning on WIFI, it needs some time for network
 				// connectivity to get stabile so we defer good news (because
 				// we want to skip the interim ones) but deliver bad news
@@ -680,49 +790,14 @@ public class SipService extends Service {
 			}
 		}
 
-		/*
-		 * 
-		 * @Override public void onReceive(Context context, Intent intent) { //
-		 * // ACTION_CONNECTIVITY_CHANGED // Connectivity change is used to
-		 * detect changes in the overall // data network status as well as a
-		 * switch between wifi and mobile // networks. // //
-		 * ACTION_DATA_STATE_CHANGED // Data state change is used to detect
-		 * changes in the mobile // network such as a switch of network type
-		 * (GPRS, EDGE, 3G) // which are not detected by the Connectivity
-		 * changed broadcast. // Log.d(THIS_FILE, "ServiceDeviceStateReceiver");
-		 * String action = intent.getAction(); if(action == null) { return; }
-		 * 
-		 * if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) { //||
-		 * intent.getAction( ).equals(ACTION_DATA_STATE_CHANGED)
-		 * Log.d(THIS_FILE, "Connectivity or data state has changed"); // Thread
-		 * it to be sure to not block the device if registration // take time
-		 * Thread t = new Thread() {
-		 * 
-		 * @Override public void run() {
-		 * 
-		 * dataConnectionChanged();
-		 * 
-		 * } }; t.start(); }else
-		 * if(action.equals(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
-		 * final long accountId =
-		 * intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1); final boolean
-		 * active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, false);
-		 * //Should that be threaded? if(accountId != SipProfile.INVALID_ID) {
-		 * SipProfile account; synchronized (db) { db.open(); account =
-		 * db.getAccount(accountId); db.close(); } if(account != null) {
-		 * setAccountRegistration(account, active?1:0); } } }
-		 * 
-		 * 
-		 * }
-		 */
 	}
 	
 	
 
-    private MyExecutor getExecutor() {
+    public SipServiceExecutor getExecutor() {
         // create mExecutor lazily
         if (mExecutor == null) {
-        	mExecutor = new MyExecutor();
+        	mExecutor = new SipServiceExecutor();
         }
         return mExecutor;
     }
@@ -742,11 +817,17 @@ public class SipService extends Service {
 		}
 
 		@Override
-		public void onCallStateChanged(int state, String incomingNumber) {
+		public void onCallStateChanged(final int state, final String incomingNumber) {
 			Log.d(THIS_FILE, "Call state has changed !" + state + " : " + incomingNumber);
-			if(pjService != null) {
-				pjService.onGSMStateChanged(state, incomingNumber);
-			}
+			getExecutor().execute(new SipRunnable() {
+				
+				@Override
+				protected void doRun() throws SameThreadException {
+					if(pjService != null) {
+						pjService.onGSMStateChanged(state, incomingNumber);
+					}
+				}
+			});
 			super.onCallStateChanged(state, incomingNumber);
 		}
 	}
@@ -784,27 +865,10 @@ public class SipService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		
-		
 		Log.i(THIS_FILE, "Destroying SIP Service");
 		unregisterBroadcasts();
 		
-		Threading.stopHandlerThread(executorThread);
-		executorThread = null;
-		mExecutor = null;
-		
-		Log.d(THIS_FILE, "Destroy sip stack");
-		
-		sipWakeLock.reset();
-		
-		if(stopSipStack()) {
-			notificationManager.cancelAll();
-			notificationManager.cancelCalls();
-		}else {
-			Log.e(THIS_FILE, "Somebody has stopped the service while there is an ongoing call !!!");
-		}
-		Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
-		System.gc();
+		getExecutor().execute(new FinalizeDestroyRunnable());
 	}
 	
 	
@@ -877,12 +941,7 @@ public class SipService extends Service {
 		
 		if(directConnect) {
 			Log.d(THIS_FILE, "Direct sip start");
-			getExecutor().execute(new Runnable() {
-				public void run() {
-					Log.d(THIS_FILE, "Start sip stack because start asked");
-					startSipStack();
-				}
-			});
+			getExecutor().execute(new StartRunnable());
 		}else {
 			Log.d(THIS_FILE, "Defered SIP start !!");
 			NetworkInfo netInfo = (NetworkInfo) connectivityManager.getActiveNetworkInfo();
@@ -934,54 +993,43 @@ public class SipService extends Service {
 		return binder;
 	}
 
-	private int pendingStarts = 0;
 	private KeepAliveTimer kaAlarm;
-	
-	public void startSipStack() {
-		sipWakeLock.acquire(this);
+	// This is always done in SipExecutor thread
+	private void startSipStack() throws SameThreadException {
 		//Cache some prefs
 		supportMultipleCalls = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS);
 		
-		synchronized (sipStarterLock) {
-			if(!needToStartSip()) {
-				serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
-				Log.e(THIS_FILE, "Not able to start sip stack");
+		if(!needToStartSip()) {
+			serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
+			Log.e(THIS_FILE, "Not able to start sip stack");
+			return;
+		}
+		if(pjService == null) {
+			if(!loadStack()) {
 				return;
 			}
-			if(pjService == null) {
-				if(!loadStack()) {
-					return;
-				}
-			}
-			if(pendingStarts <= 1) {
-				pendingStarts ++;
-				//-> should we lock CPU
-				if(pjService.sipStart()) {
-					addAllAccounts();
-				}
-				pendingStarts --;
-			}
 		}
-		sipWakeLock.release(this);
+		
+		if(pjService.sipStart()) {
+			addAllAccounts();
+		}
 	}
 	
 	/**
 	 * Safe stop the sip stack
 	 * @return true if can be stopped, false if there is a pending call and the sip service should not be stopped
 	 */
-	public boolean stopSipStack() {
+	private boolean stopSipStack() throws SameThreadException {
 		sipWakeLock.acquire(this);
 		boolean canStop = true;
-		synchronized (sipStarterLock) {
-			if(pjService != null) {
-				canStop &= pjService.sipStop();
-				if(canStop) {
-					pjService = null;
-				}
-			}
+		if(pjService != null) {
+			canStop &= pjService.sipStop();
 			if(canStop) {
-				releaseResources();
+				pjService = null;
 			}
+		}
+		if(canStop) {
+			releaseResources();
 		}
 		sipWakeLock.release(this);
 		return canStop;
@@ -1002,7 +1050,7 @@ public class SipService extends Service {
 	/**
 	 * Add accounts from database
 	 */
-	private void addAllAccounts() {
+	private void addAllAccounts() throws SameThreadException {
 		Log.d(THIS_FILE, "We are adding all accounts right now....");
 
 		boolean hasSomeSuccess = false;
@@ -1033,7 +1081,7 @@ public class SipService extends Service {
 
 	
 
-	private boolean setAccountRegistration(SipProfile account, int renew) {
+	private boolean setAccountRegistration(SipProfile account, int renew) throws SameThreadException {
 		boolean status = false;
 		if(pjService != null) {
 			 pjService.setAccountRegistration(account, renew);
@@ -1051,7 +1099,7 @@ public class SipService extends Service {
 	/**
 	 * Remove accounts from database
 	 */
-	private void unregisterAllAccounts(boolean cancelNotification) {
+	private void unregisterAllAccounts(boolean cancelNotification) throws SameThreadException {
 
 		releaseResources();
 		
@@ -1073,7 +1121,7 @@ public class SipService extends Service {
 		}
 	}
 
-	private void reAddAllAccounts() {
+	private void reAddAllAccounts() throws SameThreadException {
 		Log.d(THIS_FILE, "RE REGISTER ALL ACCOUNTS");
 		unregisterAllAccounts(false);
 		addAllAccounts();
@@ -1090,7 +1138,7 @@ public class SipService extends Service {
 			db.close();
 		}
 		if(pjService != null) {
-			return pjService.getAccountInfo(account);
+			return pjService.getProfileState(account);
 		}
 		return null;
 	}
@@ -1099,7 +1147,7 @@ public class SipService extends Service {
 		ArrayList<SipProfileState> activeAccountsInfos = null;
 	
 		if(pjService != null) {
-			activeAccountsInfos = pjService.getAndUpdateActiveAccounts();
+			activeAccountsInfos = pjService.getActiveProfilesState();
 		}
 
 		// Handle status bar notification
@@ -1111,7 +1159,6 @@ public class SipService extends Service {
 		//		try {
 		//			Thread.sleep(6000);
 		//		} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 		//			e.printStackTrace();
 		//		}
 		//	}
@@ -1138,7 +1185,7 @@ public class SipService extends Service {
 	 * Adjust tx software sound level
 	 * @param speakVolume volume 0.0 - 1.0
 	 */
-	public void confAdjustTxLevel(float speakVolume) {
+	public void confAdjustTxLevel(float speakVolume) throws SameThreadException {
 		if(pjService != null) {
 			pjService.confAdjustTxLevel(0, speakVolume);
 		}
@@ -1147,7 +1194,7 @@ public class SipService extends Service {
 	 * Adjust rx software sound level
 	 * @param speakVolume volume 0.0 - 1.0
 	 */
-	public void confAdjustRxLevel(float speakVolume) {
+	public void confAdjustRxLevel(float speakVolume) throws SameThreadException {
 		if(pjService != null) {
 			pjService.confAdjustRxLevel(0, speakVolume);
 		}
@@ -1202,9 +1249,7 @@ public class SipService extends Service {
 			kaAlarm = new KeepAliveTimer(this);
 		}
 		Log.d(THIS_FILE, "Starting kaAlarm object");
-		if(!kaAlarm.isStarted()) {
-			kaAlarm.start();
-		}
+		kaAlarm.start();
 		hold_resources = true;
 	}
 
@@ -1215,7 +1260,7 @@ public class SipService extends Service {
 		if (wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();
 		}
-		if(kaAlarm != null && kaAlarm.isStarted()) {
+		if(kaAlarm != null) {
 			kaAlarm.stop();
 			kaAlarm = null;
 		}
@@ -1305,11 +1350,7 @@ public class SipService extends Service {
 		if (prefsWrapper.isValidConnectionForOutgoing() || prefsWrapper.isValidConnectionForIncoming()) {
 			if (pjService == null || !pjService.isCreated()) {
 				// we was not yet started, so start now
-				getExecutor().execute(new Runnable() {
-					public void run() {
-						startSipStack();
-					}
-				});
+				getExecutor().execute(new StartRunnable());
 			} else if (ipHasChanged) {
 				// Check if IP has changed between
 				if (pjService != null && pjService.getActiveCallInProgress() == null) {
@@ -1416,13 +1457,13 @@ public class SipService extends Service {
 	}
 	
 	// Media direct binders
-	public void setNoSnd() {
+	public void setNoSnd() throws SameThreadException {
 		if (pjService != null) {
 			pjService.setNoSnd();
 		}
 	}
 	
-	public void setSnd() {
+	public void setSnd() throws SameThreadException {
 		if (pjService != null) {
 			pjService.setSnd();
 		}
@@ -1430,6 +1471,7 @@ public class SipService extends Service {
 
     private static Looper createLooper() {
     	if(executorThread == null) {
+    		Log.w(THIS_FILE, "Creating new handler thread");
 	        executorThread = new HandlerThread("SipService.Executor");
 	        executorThread.start();
     	}
@@ -1438,12 +1480,12 @@ public class SipService extends Service {
 
     // Executes immediate tasks in a single executorThread.
     // Hold/release wake lock for running tasks
-    private class MyExecutor extends Handler {
-        MyExecutor() {
+    public class SipServiceExecutor extends Handler {
+        SipServiceExecutor() {
             super(createLooper());
         }
 
-        void execute(Runnable task) {
+        public void execute(Runnable task) {
             sipWakeLock.acquire(task);
             Message.obtain(this, 0/* don't care */, task).sendToTarget();
         }
@@ -1486,10 +1528,11 @@ public class SipService extends Service {
 		public KeepAliveTimer(Context aContext) {
 			context = aContext;
 			alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-			interval = prefsWrapper.getKeepAliveInterval();
 			use_wake = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.KEEP_ALIVE_USE_WAKE);
-			IntentFilter filter = new IntentFilter(KA_ACTION);
-			context.registerReceiver(this, filter);
+			if(interval > 0) {
+				IntentFilter filter = new IntentFilter(KA_ACTION);
+				context.registerReceiver(this, filter);
+			}
 		}
 		
 		public void stop() {
@@ -1505,14 +1548,16 @@ public class SipService extends Service {
 			pendingIntent = null;
 		}
 		
-		public boolean isStarted() {
-			return (pendingIntent != null);
-		}
 		
 		public void start() {
-			Log.d(THIS_FILE, "KA -> starting");
-						
-			scheduleNext();
+			if(pendingIntent != null) {
+				Log.w(THIS_FILE, "Ignore starting request cause already started");
+			}
+			interval = prefsWrapper.getKeepAliveInterval();
+			if(interval > 0) {
+				Log.d(THIS_FILE, "KA -> starting");
+				scheduleNext();
+			}
 		}
 		
 		private void scheduleNext() {
@@ -1533,9 +1578,14 @@ public class SipService extends Service {
 			if(KA_ACTION.equalsIgnoreCase(intent.getAction()) ) {
 				Log.d(THIS_FILE, "KA@"+SystemClock.elapsedRealtime()+" :: recieved");
 				pendingIntent = null;
-				if(pjService != null) {
+				if(pjService != null && interval > 0) {
 					Log.d(THIS_FILE, "Send a keep alive packet");
-					pjService.sendKeepAlivePackets();
+					getExecutor().execute(new SipRunnable() {
+						@Override
+						protected void doRun() throws SameThreadException {
+							pjService.sendKeepAlivePackets();
+						}
+					});
 					scheduleNext();
 				}else {
 					stop();
@@ -1544,29 +1594,83 @@ public class SipService extends Service {
 		}
     }
 
+    class StartRunnable extends SipRunnable {
+		@Override
+		protected void doRun() throws SameThreadException {
+    		startSipStack();
+    	}
+    }
 	
-	class RestartRunnable implements Runnable {
-		public void run() {
-			synchronized (sipStarterLock) {
-				if(stopSipStack()) {
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e) {
-						Log.e(THIS_FILE, "Unable to defer restart", e);
-					}
-					startSipStack();
-				}
+    class StopRunnable extends SipRunnable {
+		@Override
+		protected void doRun() throws SameThreadException {
+    		stopSipStack();
+    	}
+    }
+    
+	class RestartRunnable extends SipRunnable {
+		@Override
+		protected void doRun() throws SameThreadException {
+			if(stopSipStack()) {
+				startSipStack();
 			}
 		}
 	} 
 	
-	class DestroyRunnable implements Runnable {
-		public void run() {
-			synchronized (sipStarterLock) {
-				if(stopSipStack()) {
-					stopSelf();
-				}
+	class DestroyRunnable extends SipRunnable {
+		@Override
+		protected void doRun() throws SameThreadException {
+			if(stopSipStack()) {
+				stopSelf();
 			}
 		}
-	} 
+	}
+	
+	class FinalizeDestroyRunnable extends SipRunnable {
+		@Override
+		protected void doRun() throws SameThreadException {
+
+			mExecutor = null;
+			
+			Log.d(THIS_FILE, "Destroy sip stack");
+			
+			sipWakeLock.reset();
+			
+			if(stopSipStack()) {
+				notificationManager.cancelAll();
+				notificationManager.cancelCalls();
+			}else {
+				Log.e(THIS_FILE, "Somebody has stopped the service while there is an ongoing call !!!");
+			}
+			
+			HandlerThread currentHandlerThread = executorThread;
+			executorThread = null;
+			System.gc();
+			// This is a little bit crappy, we are cutting were we sit.
+			Threading.stopHandlerThread(currentHandlerThread, false);
+			// We will not go longer
+			Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
+		}
+	}
+	
+	// Enforce same thread contract to ensure we do not call from somewhere else
+	public class SameThreadException extends Exception {
+		private static final long serialVersionUID = -905639124232613768L;
+
+		public SameThreadException() {
+			super("Should be launched from a single worker thread");
+		}
+	}
+
+	public abstract class SipRunnable  implements Runnable {
+		protected abstract void doRun() throws SameThreadException;
+		
+		public void run() {
+			try {
+				doRun();
+			}catch(SameThreadException e) {
+				Log.e(THIS_FILE, "Not done from same thread");
+			}
+		}
+	}
 }

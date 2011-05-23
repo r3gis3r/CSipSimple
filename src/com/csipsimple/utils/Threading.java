@@ -26,7 +26,7 @@ public class Threading {
 	
 	private static final String THIS_FILE = "Threading";
 
-	public final static void stopHandlerThread(HandlerThread handlerThread) {
+	public final static void stopHandlerThread(HandlerThread handlerThread, boolean wait) {
 		if(handlerThread == null) {
 			//Nothing to do if already null
 			return;
@@ -42,7 +42,7 @@ public class Threading {
 				Log.d(THIS_FILE, "Something is wrong with api level declared use fallback method");
 			}
 		}
-		if (fails && handlerThread.isAlive()) {
+		if (fails && handlerThread.isAlive() && wait) {
 			try {
 				//This is needed for android 4 and lower
 				handlerThread.join(500);
