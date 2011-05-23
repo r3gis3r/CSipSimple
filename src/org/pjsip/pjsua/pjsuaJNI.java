@@ -302,6 +302,12 @@ public class pjsuaJNI {
   public final static native String pj_stun_nat_detect_result_nat_type_name_get(long jarg1, pj_stun_nat_detect_result jarg1_);
   public final static native long new_pj_stun_nat_detect_result();
   public final static native void delete_pj_stun_nat_detect_result(long jarg1);
+  public final static native void pjsip_timer_setting_min_se_set(long jarg1, pjsip_timer_setting jarg1_, long jarg2);
+  public final static native long pjsip_timer_setting_min_se_get(long jarg1, pjsip_timer_setting jarg1_);
+  public final static native void pjsip_timer_setting_sess_expires_set(long jarg1, pjsip_timer_setting jarg1_, long jarg2);
+  public final static native long pjsip_timer_setting_sess_expires_get(long jarg1, pjsip_timer_setting jarg1_);
+  public final static native long new_pjsip_timer_setting();
+  public final static native void delete_pjsip_timer_setting(long jarg1);
   public final static native int PJSUA_INVALID_ID_get();
   public final static native int PJSUA_ACC_MAX_PROXIES_get();
   public final static native int PJSUA_DEFAULT_SRTP_SECURE_SIGNALING_get();
@@ -427,7 +433,7 @@ public class pjsuaJNI {
   public final static native int pjsua_config_use_timer_get(long jarg1, pjsua_config jarg1_);
   public final static native void pjsua_config_enable_unsolicited_mwi_set(long jarg1, pjsua_config jarg1_, int jarg2);
   public final static native int pjsua_config_enable_unsolicited_mwi_get(long jarg1, pjsua_config jarg1_);
-  public final static native void pjsua_config_timer_setting_set(long jarg1, pjsua_config jarg1_, long jarg2);
+  public final static native void pjsua_config_timer_setting_set(long jarg1, pjsua_config jarg1_, long jarg2, pjsip_timer_setting jarg2_);
   public final static native long pjsua_config_timer_setting_get(long jarg1, pjsua_config jarg1_);
   public final static native void pjsua_config_cred_count_set(long jarg1, pjsua_config jarg1_, long jarg2);
   public final static native long pjsua_config_cred_count_get(long jarg1, pjsua_config jarg1_);
@@ -576,7 +582,7 @@ public class pjsuaJNI {
   public final static native int pjsua_acc_config_require_100rel_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_use_timer_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
   public final static native int pjsua_acc_config_use_timer_get(long jarg1, pjsua_acc_config jarg1_);
-  public final static native void pjsua_acc_config_timer_setting_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
+  public final static native void pjsua_acc_config_timer_setting_set(long jarg1, pjsua_acc_config jarg1_, long jarg2, pjsip_timer_setting jarg2_);
   public final static native long pjsua_acc_config_timer_setting_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_proxy_cnt_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
   public final static native long pjsua_acc_config_proxy_cnt_get(long jarg1, pjsua_acc_config jarg1_);
