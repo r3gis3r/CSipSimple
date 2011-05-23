@@ -156,11 +156,14 @@ public class Betamax extends AuthorizationImplementation {
         providerListPref.setSummary("Betamax clone provider");
         providerListPref.setDefaultValue("12VoIP");
         String domain = account.getDefaultDomain();
-        for(Entry<String, String[]> entry : providers.entrySet()) {
-        	String[] val = entry.getValue();
-        	if(val[0] == domain) {
-        		providerListPref.setValue(entry.getKey());
-        	}
+        if( domain != null ) {
+	        for(Entry<String, String[]> entry : providers.entrySet()) {
+	        	String[] val = entry.getValue();
+	        	if( val[0].equalsIgnoreCase(domain) ) {
+	        		providerListPref.setValue(entry.getKey());
+	        		break;
+	        	}
+	        }
         }
         
         parent.getPreferenceScreen().addPreference(providerListPref);
