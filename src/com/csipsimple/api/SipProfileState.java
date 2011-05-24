@@ -62,7 +62,7 @@ public class SipProfileState implements Parcelable, Serializable{
 		//Set default values
 		addedStatus = -1;
 		pjsuaId = -1;
-		statusCode = SipCallSession.StatusCode.NOT_FOUND;
+		statusCode = -1;
 		statusText = "";
 		expires = 0;
 		

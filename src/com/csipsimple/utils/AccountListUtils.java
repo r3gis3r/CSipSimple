@@ -55,7 +55,7 @@ public class AccountListUtils {
 				accountInfo = null;
 			}
 			if (accountInfo != null && accountInfo.isActive()) {
-				if (accountInfo.getAddedStatus() == SipManager.SUCCESS) {
+				if (accountInfo.getAddedStatus() >= SipManager.SUCCESS) {
 
 					accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 					accountDisplay.statusColor = resources.getColor(R.color.account_unregistered);
@@ -84,7 +84,7 @@ public class AccountListUtils {
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
 								accountDisplay.statusLabel = context.getString(R.string.acct_unregistered);
 							}
-						} else {
+						} else if(statusCode != -1 ){
 							if (statusCode == SipCallSession.StatusCode.PROGRESS || statusCode == SipCallSession.StatusCode.TRYING) {
 								// Yellow progressing ...
 								accountDisplay.statusColor = resources.getColor(R.color.account_unregistered);
@@ -97,11 +97,23 @@ public class AccountListUtils {
 								accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_red;
 								accountDisplay.statusLabel = context.getString(R.string.acct_regerror) + " - " + pjStat;	// Why can't ' - ' be in resource?
 							}
+						}else {
+							// Account is currently registering (added to pjsua but not replies yet from pjsua registration)
+							accountDisplay.statusColor = resources.getColor(R.color.account_inactive);
+							accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
+							accountDisplay.statusLabel = context.getString(R.string.acct_registering);
 						}
 					}
 				} else {
-					accountDisplay.statusLabel = context.getString(R.string.acct_regfailed);
-					accountDisplay.statusColor = resources.getColor(R.color.account_error);
+					if(accountInfo.isAddedToStack()) {
+						accountDisplay.statusLabel = context.getString(R.string.acct_regfailed);
+						accountDisplay.statusColor = resources.getColor(R.color.account_error);
+					}else {
+						accountDisplay.statusColor = resources.getColor(R.color.account_inactive);
+						accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_yellow;
+						accountDisplay.statusLabel = context.getString(R.string.acct_registering);
+						
+					}
 				}
 			}
 		}
