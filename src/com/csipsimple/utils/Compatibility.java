@@ -303,6 +303,8 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "0");
 		preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_NB, "0");
 		preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
 		
 		
 		//For Wideband
@@ -320,6 +322,8 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, "0");
 		preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB, "0");
 		preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
 		
 		
 		// Bands repartition
@@ -552,6 +556,10 @@ public class Compatibility {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
 			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
 			
+		}
+		if(lastSeenVersion < 882) {
+			prefWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
+			prefWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
 		}
 	}
 
