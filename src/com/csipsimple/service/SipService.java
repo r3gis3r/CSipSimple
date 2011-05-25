@@ -725,6 +725,7 @@ public class SipService extends Service {
 		}
 
 		protected void onChanged(String type, boolean connected) {
+			boolean fireChanges = false;
 			synchronized (createLock) {
 				// When turning on WIFI, it needs some time for network
 				// connectivity to get stabile so we defer good news (because
@@ -749,9 +750,11 @@ public class SipService extends Service {
 						mTask.cancel();
 						sipWakeLock.release(mTask);
 					}
-					// onConnectivityChanged(type, false);
-					dataConnectionChanged();
+					fireChanges = true;
 				}
+			}
+			if(fireChanges) {
+				dataConnectionChanged();
 			}
 		}
 
@@ -776,7 +779,7 @@ public class SipService extends Service {
 			}
 
 			private void realRun() {
-				synchronized (SipService.this) {
+				synchronized (createLock) {
 					if (mTask != this) {
 						Log.w(THIS_FILE, "  unexpected task: " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
 						return;
@@ -1001,16 +1004,20 @@ public class SipService extends Service {
 		
 		if(!needToStartSip()) {
 			serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
-			Log.e(THIS_FILE, "Not able to start sip stack");
+			Log.e(THIS_FILE, "No need to start sip");
 			return;
 		}
+		Log.d(THIS_FILE, "Start was asked and we should actually start now");
 		if(pjService == null) {
+			Log.d(THIS_FILE, "Start was asked and pjService in not there");
 			if(!loadStack()) {
+				Log.e(THIS_FILE, "Unable to load SIP stack !! ");
 				return;
 			}
 		}
-		
+		Log.d(THIS_FILE, "Ask pjservice to start itself");
 		if(pjService.sipStart()) {
+			Log.d(THIS_FILE, "Add all accounts");
 			addAllAccounts();
 		}
 	}
