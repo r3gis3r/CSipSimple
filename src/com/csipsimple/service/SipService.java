@@ -634,7 +634,7 @@ public class SipService extends Service {
 	public SipNotifications notificationManager;
 	private SipServiceExecutor mExecutor;
 	private PjSipService pjService;
-	private static HandlerThread executorThread;
+	private HandlerThread executorThread;
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
@@ -1476,7 +1476,7 @@ public class SipService extends Service {
 		}
 	}
 
-    private static Looper createLooper() {
+    private Looper createLooper() {
     	if(executorThread == null) {
     		Log.w(THIS_FILE, "Creating new handler thread");
 	        executorThread = new HandlerThread("SipService.Executor");

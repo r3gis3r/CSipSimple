@@ -35,6 +35,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
+import com.csipsimple.wizards.impl.BTone;
 import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Betamax;
 import com.csipsimple.wizards.impl.Blueface;
@@ -44,7 +45,6 @@ import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.DvcNg;
-import com.csipsimple.wizards.impl.Ecs;
 import com.csipsimple.wizards.impl.Ekiga;
 import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
@@ -62,8 +62,9 @@ import com.csipsimple.wizards.impl.Keyyo;
 import com.csipsimple.wizards.impl.Local;
 import com.csipsimple.wizards.impl.Localphone;
 import com.csipsimple.wizards.impl.Mondotalk;
+import com.csipsimple.wizards.impl.Netelip;
 import com.csipsimple.wizards.impl.NeufTalk;
-import com.csipsimple.wizards.impl.BTone;
+import com.csipsimple.wizards.impl.OXO810;
 import com.csipsimple.wizards.impl.OnSip;
 import com.csipsimple.wizards.impl.Optimus;
 import com.csipsimple.wizards.impl.Ovh;
@@ -84,6 +85,7 @@ import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
 import com.csipsimple.wizards.impl.Viva;
+import com.csipsimple.wizards.impl.VoipTel;
 import com.csipsimple.wizards.impl.Vono;
 import com.csipsimple.wizards.impl.WiMobile;
 
@@ -197,7 +199,7 @@ public class WizardUtils {
 			WIZARDS_DICT.put("ECS", new WizardInfo("ECS", "Alcatel-Lucent OmniPCX Office", 
 					R.drawable.ic_wizard_ale, 5, 
 					new Locale[]{}, false, true, 
-					Ecs.class));
+					OXO810.class));
 			WIZARDS_DICT.put("ITTELENET", new WizardInfo("ITTELENET", "ITTelenet", 
 					R.drawable.ic_wizard_ittelenet, 10, 
 					new Locale[]{}, false, true, 
@@ -234,6 +236,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_pfingo, 19, 
 					new Locale[]{ }, false, true, 
 					Pfingo.class));
+			WIZARDS_DICT.put("NETELIP", new WizardInfo("NETELIP", "NETELIP", 
+					R.drawable.ic_wizard_netelip, 20, 
+					new Locale[]{  }, false, true, 
+					Netelip.class));
 			
 			
 			//Locales
@@ -399,6 +405,20 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ipcomms, 19, 
 					new Locale[]{ Locale.US, Locale.CANADA }, false, false, 
 					IPComms.class));
+			WIZARDS_DICT.put("VOIPTELIE", new WizardInfo("VOIPTELIE", "Voiptel Mobile", 
+					R.drawable.ic_wizard_voiptelie, 20, 
+					new Locale[]{ 
+						new Locale("EN", "ie"), 
+						Locale.UK, 
+						Locale.CANADA,
+						new Locale("ES", "es"),
+						Locale.US,
+						new Locale("EN", "au"),
+						new Locale("ES", "co"),
+					}, false, false, 
+					VoipTel.class));
+			
+			
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
