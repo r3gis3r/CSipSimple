@@ -365,7 +365,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			}
 		};
 		
-		Thread t = new Thread() {
+		Thread t = new Thread("ReloadAccounts") {
 			@Override
 			public void run() {
 				Log.d(THIS_FILE, "Would like to reload all accounts");
@@ -509,7 +509,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
 			if(onServiceConnect != null) {
-				Thread t = new Thread() {
+				Thread t = new Thread("Service-connected") {
 					public void run() {
 						onServiceConnect.serviceConnected();
 						onServiceConnect = null;

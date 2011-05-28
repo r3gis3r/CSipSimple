@@ -206,7 +206,7 @@ public class ContactsUtils3 extends ContactsWrapper {
 	@Override
 	public SimpleCursorAdapter getAllContactsAdapter(Activity ctxt, int layout, int[] holders) {
 		Uri uri = Uri.withAppendedPath(Contacts.People.CONTENT_URI, "");
-		Cursor resCursor = ctxt.getContentResolver().query(uri, PROJECTION_CONTACTS, null, null, Contacts.People.DISPLAY_NAME+ " ASC");
+		Cursor resCursor = ctxt.managedQuery(uri, PROJECTION_CONTACTS, null, null, Contacts.People.DISPLAY_NAME+ " ASC");
 		return new ContactCursorAdapter(ctxt, 
 				R.layout.contact_list_item, 
 				resCursor, 

@@ -220,7 +220,7 @@ public class WelcomeScreen extends Activity {
 			} catch (RemoteException e) {
 			}
 			// Start looking for latest update
-			Thread t = new Thread() {
+			Thread t = new Thread("Lookup-update") {
 				public void run() {
 					try {
 						handler.sendMessage(handler.obtainMessage(GET_LIB));

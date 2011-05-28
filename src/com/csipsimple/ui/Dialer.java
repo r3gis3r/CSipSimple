@@ -144,12 +144,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	//private TextView domainTextHelper;
 
 	private EditSipUri sipTextUri;
-
 	private AlertDialog missingVoicemailDialog;
-
-	private ImageButton backFlipTextDialerButton;
-
-	private ImageButton backFlipDigitDialerButton;
+	private ImageButton backFlipTextDialerButton, backFlipDigitDialerButton;
 
 
 	/** Called when the activity is first created. */

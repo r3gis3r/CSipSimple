@@ -128,7 +128,8 @@ public class ContactsUtils5 extends ContactsWrapper {
              while (pCur.moveToNext()) {
                  // Could also use some other IM type but may be confusing. Are there phones with no 'custom' IM type?
             	 phones.add(new Phone(pCur.getString(pCur.getColumnIndex(ContactsContract.Data.DATA1)), "sip"));
-             } 
+             }
+             pCur.close();
         }
 
  		return(phones);
@@ -299,7 +300,7 @@ public class ContactsUtils5 extends ContactsWrapper {
 		//TODO : throw error if holders length != correct length
 		
 		Uri uri = Uri.withAppendedPath(ContactsContract.Data.CONTENT_URI, "");
-		Cursor resCursor = ctxt.getContentResolver().query(uri, 
+		Cursor resCursor = ctxt.managedQuery(uri, 
 				new String[] {
 					ContactsContract.Data._ID,
 			    	RawContacts.CONTACT_ID,

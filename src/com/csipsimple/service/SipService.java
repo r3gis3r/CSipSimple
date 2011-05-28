@@ -809,7 +809,7 @@ public class SipService extends Service {
 		@Override
 		public void onDataConnectionStateChanged(int state) {
 			Log.d(THIS_FILE, "Data connection state changed : " + state);
-			Thread t = new Thread() {
+			Thread t = new Thread("DataConnectionDetach") {
 				@Override
 				public void run() {
 					dataConnectionChanged();

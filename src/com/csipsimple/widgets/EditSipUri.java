@@ -215,4 +215,14 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 		Log.d(THIS_FILE, "Clicked contact "+contactId);
 	}
 
+	/*
+	@Override
+	protected void onDetachedFromWindow() {
+		super.onDetachedFromWindow();
+		contactsAdapter.getCursor().close();
+		contactsAdapter.changeCursor(null);
+		contactsAdapter = null;
+		Log.d(THIS_FILE, "Finalise from window");
+	}
+	*/
 }
