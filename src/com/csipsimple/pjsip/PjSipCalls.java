@@ -27,6 +27,7 @@ import android.os.SystemClock;
 
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.utils.Log;
 
 public final class PjSipCalls {
@@ -42,7 +43,7 @@ public final class PjSipCalls {
 	private static final String THIS_FILE = "PjSipCalls";
 	
 	
-	public static SipCallSession getCallInfo(int callId, PjSipService service) {
+	public static SipCallSession getCallInfo(int callId, PjSipService service) throws SameThreadException {
 		SipCallSession session = new SipCallSession();
 		session.setCallId(callId);
 		session = updateSessionFromPj(session, service);
@@ -81,7 +82,7 @@ public final class PjSipCalls {
 		return session;
 	}
 	
-	public static SipCallSession updateSessionFromPj(SipCallSession session, PjSipService service) {
+	public static SipCallSession updateSessionFromPj(SipCallSession session, PjSipService service) throws SameThreadException {
 		Log.d(THIS_FILE, "Update call "+session.getCallId());
 		pjsua_call_info pj_info = new pjsua_call_info();
 		int status = pjsua.PJ_FALSE;

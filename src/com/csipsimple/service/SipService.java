@@ -601,7 +601,6 @@ public class SipService extends Service {
 
 		@Override
 		public String getPreferenceString(String key) throws RemoteException {
-			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			return prefsWrapper.getPreferenceStringValue(key);
 			
 		}
@@ -1066,12 +1065,13 @@ public class SipService extends Service {
 			accountList = db.getListAccounts();
 			db.close();
 		}
-
+		int account_limit = 10;
 		for (SipProfile account : accountList) {
-			if (account.active) {
+			if (account.active && account_limit > 0) {
 				if (pjService != null && pjService.addAccount(account) ) {
 					hasSomeSuccess = true;
 				}
+				account_limit --;
 			}
 		}
 

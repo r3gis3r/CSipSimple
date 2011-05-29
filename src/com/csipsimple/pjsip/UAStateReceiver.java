@@ -124,14 +124,18 @@ public class UAStateReceiver extends Callback {
 				}
 			}
 		}
-		
-		SipCallSession callInfo = updateCallInfoFromStack(callId);
-		Log.d(THIS_FILE, "Incoming call <<");
-		IncomingCallInfos iCInfo = new IncomingCallInfos();
-		iCInfo.accId = acc_id;
-		iCInfo.callInfo = callInfo;
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, iCInfo));
-		Log.d(THIS_FILE, "Incoming call >>");
+		pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+			@Override
+			public void doRun() throws SameThreadException {
+				SipCallSession callInfo = updateCallInfoFromStack(callId);
+				Log.d(THIS_FILE, "Incoming call <<");
+				IncomingCallInfos iCInfo = new IncomingCallInfos();
+				iCInfo.accId = acc_id;
+				iCInfo.callInfo = callInfo;
+				msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, iCInfo));
+				Log.d(THIS_FILE, "Incoming call >>");
+			}
+		});
 		unlockCpu();
 		
 		
@@ -143,27 +147,32 @@ public class UAStateReceiver extends Callback {
 		lockCpu();
 		
 		Log.d(THIS_FILE, "Call state <<");
-		//Get current infos
-		SipCallSession callInfo = updateCallInfoFromStack(callId);
-		int callState = callInfo.getCallState();
-		
-		// If disconnected immediate stop required stuffs
-		if (callState == SipCallSession.InvState.DISCONNECTED) {
-			if(pjService.mediaManager != null) {
-				pjService.mediaManager.stopAnnoucing();
-				pjService.mediaManager.resetSettings();
+		pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+			@Override
+			public void doRun() throws SameThreadException {
+				//Get current infos
+				SipCallSession callInfo = updateCallInfoFromStack(callId);
+				int callState = callInfo.getCallState();
+				
+				// If disconnected immediate stop required stuffs
+				if (callState == SipCallSession.InvState.DISCONNECTED) {
+					if(pjService.mediaManager != null) {
+						pjService.mediaManager.stopAnnoucing();
+						pjService.mediaManager.resetSettings();
+					}
+					if(incomingCallLock != null && incomingCallLock.isHeld()) {
+						incomingCallLock.release();
+					}
+					// Call is now ended
+					pjService.stopDialtoneGenerator();
+					//TODO : should be stopped only if it's the current call.
+					stopRecording();
+				}
+				
+				msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
+				Log.d(THIS_FILE, "Call state >>");
 			}
-			if(incomingCallLock != null && incomingCallLock.isHeld()) {
-				incomingCallLock.release();
-			}
-			// Call is now ended
-			pjService.stopDialtoneGenerator();
-			//TODO : should be stopped only if it's the current call.
-			stopRecording();
-		}
-		
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
-		Log.d(THIS_FILE, "Call state >>");
+		});
 		unlockCpu();
 	}
 
@@ -238,19 +247,19 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_reg_state(final int accountId) {
 		lockCpu();
-		
-		try {
-			// Update java infos
-			Log.d(THIS_FILE, "New reg state for : " + accountId);
-			pjService.updateProfileStateFromService(accountId);
-			
-			// Dispatch to UA handler thread
-			if(msgHandler != null) {
-				msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
+		pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+			@Override
+			public void doRun() throws SameThreadException {
+				// Update java infos
+				Log.d(THIS_FILE, "New reg state for : " + accountId);
+				pjService.updateProfileStateFromService(accountId);
+				
+				// Dispatch to UA handler thread
+				if(msgHandler != null) {
+					msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
+				}
 			}
-		}catch(SameThreadException e) {
-			Log.e(THIS_FILE, "Should we consider having this in done as a siprunnable ???");
-		}
+		});
 		unlockCpu();
 	}
 
@@ -279,28 +288,32 @@ public class UAStateReceiver extends Callback {
 		if(incomingCallLock != null && incomingCallLock.isHeld()) {
 			incomingCallLock.release();
 		}
-		
-		SipCallSession callInfo = updateCallInfoFromStack(callId);
-		if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
-			pjsua.conf_connect(callInfo.getConfPort(), 0);
-			pjsua.conf_connect(0, callInfo.getConfPort());
-			
-			// Adjust software volume
-			if(pjService.mediaManager != null) {
-				pjService.mediaManager.setSoftwareVolume();
+		pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+			@Override
+			public void doRun() throws SameThreadException {
+				SipCallSession callInfo = updateCallInfoFromStack(callId);
+				if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
+					pjsua.conf_connect(callInfo.getConfPort(), 0);
+					pjsua.conf_connect(0, callInfo.getConfPort());
+					
+					// Adjust software volume
+					if(pjService.mediaManager != null) {
+						pjService.mediaManager.setSoftwareVolume();
+					}
+				// Useless with Peter's patch	
+				//	pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
+					
+					// Auto record
+					if (recordedCall == INVALID_RECORD && 
+							pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_RECORD_CALLS)) {
+						startRecording(callId);
+					}
+					
+				}
+				
+				msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
 			}
-		// Useless with Peter's patch	
-		//	pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
-			
-			// Auto record
-			if (recordedCall == INVALID_RECORD && 
-					pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_RECORD_CALLS)) {
-				startRecording(callId);
-			}
-			
-		}
-		
-		msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
+		});
 		unlockCpu();
 	}
 	
@@ -416,7 +429,7 @@ public class UAStateReceiver extends Callback {
 	private HashMap<Integer, SipCallSession> callsList = new HashMap<Integer, SipCallSession>();
 	//private long currentCallStart = 0;
 	
-	private SipCallSession updateCallInfoFromStack(Integer callId) {
+	private SipCallSession updateCallInfoFromStack(Integer callId) throws SameThreadException {
 		SipCallSession callInfo;
 		synchronized (callsList) {
 			callInfo = callsList.get(callId);
