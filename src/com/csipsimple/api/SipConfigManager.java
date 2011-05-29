@@ -78,6 +78,7 @@ public class SipConfigManager {
 	public static final String ENABLE_UDP = "enable_udp";
 	public static final String ENABLE_TCP = "enable_tcp";
 	public static final String LOCK_WIFI = "lock_wifi";
+	public static final String LOCK_WIFI_PERFS = "lock_wifi_perfs";
 	public static final String ENABLE_DNS_SRV = "enable_dns_srv";
 	public static final String ENABLE_QOS = "enable_qos";
 	public static final String DSCP_VAL = "dscp_val";

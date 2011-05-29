@@ -35,6 +35,8 @@
 <string name="use_gprs">Use GPRS</string>
 <string name="lock_wifi">Lock WiFi</string>
 <string name="lock_wifi_desc">Prevent WiFi idle when SIP is connected</string>
+<string name="lock_wifi_perfs">High perfs lock</string>
+<string name="lock_wifi_perfs_desc">Wifi lock in High perfs mode (drain battery faster)</string>
 <string name="enable_tcp">TCP</string>
 <string name="enable_tcp_desc">Enable TCP transport</string>
 <string name="enable_tls">TLS</string>

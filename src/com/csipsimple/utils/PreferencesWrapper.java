@@ -123,6 +123,7 @@ public class PreferencesWrapper {
 	{
 		//Network
 		put(SipConfigManager.LOCK_WIFI, true);
+		put(SipConfigManager.LOCK_WIFI_PERFS, false);
 		put(SipConfigManager.ENABLE_TCP, true);
 		put(SipConfigManager.ENABLE_UDP, true);
 		put(SipConfigManager.ENABLE_TLS, false);
@@ -144,7 +145,7 @@ public class PreferencesWrapper {
 		put("use_gprs_out", false);
 		put("use_edge_in", false);
 		put("use_edge_out", false);
-		put(SipConfigManager.KEEP_ALIVE_USE_WAKE, false);
+		put(SipConfigManager.KEEP_ALIVE_USE_WAKE, true);
 		
 		//Media
 		put(SipConfigManager.ECHO_CANCELLATION, false);
@@ -517,10 +518,6 @@ public class PreferencesWrapper {
 		for(String network:availableNetworks) {
 			setPreferenceBooleanValue("use_"+network+"_in", false);
 		}
-	}
-	
-	public boolean getLockWifi() {
-		return getPreferenceBooleanValue(SipConfigManager.LOCK_WIFI);
 	}
 	
 	public boolean isTCPEnabled() {

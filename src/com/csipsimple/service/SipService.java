@@ -1233,10 +1233,14 @@ public class SipService extends Service {
 		// Add a lock for WIFI if necessary
 		WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if (wifiLock == null) {
-			wifiLock = wman.createWifiLock("com.csipsimple.SipService");
+			int mode = WifiManager.WIFI_MODE_FULL;
+			if(Compatibility.isCompatible(9) && prefsWrapper.getPreferenceBooleanValue(SipConfigManager.LOCK_WIFI_PERFS)) {
+				mode = 0x3; // WIFI_MODE_FULL_HIGH_PERF 
+			}
+			wifiLock = wman.createWifiLock(mode, "com.csipsimple.SipService");
 			wifiLock.setReferenceCounted(false);
 		}
-		if (prefsWrapper.getLockWifi() && !wifiLock.isHeld()) {
+		if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.LOCK_WIFI) && !wifiLock.isHeld()) {
 			WifiInfo winfo = wman.getConnectionInfo();
 			if (winfo != null) {
 				DetailedState dstate = WifiInfo.getDetailedStateOf(winfo.getSupplicantState());

@@ -21,6 +21,7 @@ import android.telephony.TelephonyManager;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
@@ -47,6 +48,12 @@ public class PrefsNetwork extends GenericPrefs {
 			hidePreference("for_outgoing", "use_edge_out");
 		}
 		PreferencesWrapper pfw = new PreferencesWrapper(this);
+		
+
+		if(!Compatibility.isCompatible(9)) {
+			hidePreference("perfs", SipConfigManager.LOCK_WIFI_PERFS);
+		}
+		
 		if(!pfw.isAdvancedUser()) {
 			hidePreference(null, "perfs");
 			
@@ -66,8 +73,6 @@ public class PrefsNetwork extends GenericPrefs {
 			hidePreference("transport", SipConfigManager.ENABLE_QOS);
 			hidePreference("transport", SipConfigManager.DSCP_VAL);
 			hidePreference("transport", SipConfigManager.USER_AGENT);
-			
-			
 			
 		}
 	}
