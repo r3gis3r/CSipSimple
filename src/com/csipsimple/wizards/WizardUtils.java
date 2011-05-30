@@ -48,6 +48,7 @@ import com.csipsimple.wizards.impl.DvcNg;
 import com.csipsimple.wizards.impl.Ekiga;
 import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
+import com.csipsimple.wizards.impl.FastVoip;
 import com.csipsimple.wizards.impl.Fayn;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.Gizmo5;
@@ -240,6 +241,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_netelip, 20, 
 					new Locale[]{  }, false, true, 
 					Netelip.class));
+			WIZARDS_DICT.put("FASTVOIP", new WizardInfo("FASTVOIP", "FastVoip", 
+					R.drawable.ic_wizard_fastvoip, 20, 
+					new Locale[]{  }, false, true, 
+					FastVoip.class));
 			
 			
 			//Locales
