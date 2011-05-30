@@ -67,9 +67,8 @@ public class PjSipService {
 
 	private boolean created = false;
 
-	public static boolean hasSipStack = false;
+	private boolean hasSipStack = false;
 	private boolean sipStackIsCorrupted = false;
-	public static boolean creating = false;
 	private Integer udpTranportId, tcpTranportId, tlsTransportId;
 	public PreferencesWrapper prefsWrapper;
 	private PjStreamDialtoneGenerator dialtoneGenerator;
@@ -153,9 +152,8 @@ public class PjSipService {
 		}
 
 		// Ensure the stack is not already created or is being created
-		if (!created/* && !creating */) {
+		if (!created) {
 			Log.d(THIS_FILE, "Starting sip stack");
-			creating = true;
 			udpTranportId = null;
 			tcpTranportId = null;
 
@@ -371,9 +369,6 @@ public class PjSipService {
 
 			created = true;
 
-			// Add accounts
-			creating = false;
-
 			return true;
 		}
 
@@ -389,7 +384,7 @@ public class PjSipService {
 		Log.d(THIS_FILE, ">> SIP STOP <<");
 
 		if (getActiveCallInProgress() != null) {
-			Log.w(THIS_FILE, "We have a call in progress... DO NOT STOP !!!");
+			Log.e(THIS_FILE, "We have a call in progress... DO NOT STOP !!!");
 			// TODO : queue quit on end call;
 			return false;
 		}
@@ -421,7 +416,7 @@ public class PjSipService {
 			mediaManager.stopService();
 			mediaManager = null;
 		}
-		creating = false;
+		
 		created = false;
 	}
 

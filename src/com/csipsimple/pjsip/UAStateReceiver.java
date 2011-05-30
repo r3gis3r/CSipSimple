@@ -659,7 +659,7 @@ public class UAStateReceiver extends Callback {
 						// We should now ask parent to stop if needed
 						if(pjService != null && pjService.service != null) {
 							if( ! pjService.prefsWrapper.isValidConnectionForIncoming()) {
-								pjService.service.stopSelf();
+								pjService.service.cleanStop();
 							}
 						}
 					}

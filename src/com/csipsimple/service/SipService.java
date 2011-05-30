@@ -116,6 +116,7 @@ public class SipService extends Service {
 		public void forceStopService() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "Try to force service stop");
+			cleanStop();
 			stopSelf();
 		}
 
@@ -713,7 +714,7 @@ public class SipService extends Service {
 					}
 				}
 			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
-				getExecutor().execute(new DestroyRunnable());
+				cleanStop();
 			}
 		}
 
@@ -856,7 +857,7 @@ public class SipService extends Service {
 		// Check connectivity, else just finish itself
 		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
 			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
-			getExecutor().execute(new DestroyRunnable());
+			cleanStop();
 			return;
 		}
 
@@ -872,6 +873,9 @@ public class SipService extends Service {
 		getExecutor().execute(new FinalizeDestroyRunnable());
 	}
 	
+	public void cleanStop () {
+		getExecutor().execute(new DestroyRunnable());
+	}
 	
 	private void registerBroadcasts() {
 		// Register own broadcast receiver
@@ -923,7 +927,7 @@ public class SipService extends Service {
 		// Check connectivity, else just finish itself
 		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
 			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
-			getExecutor().execute(new DestroyRunnable());
+			cleanStop();
 			return;
 		}
 		
