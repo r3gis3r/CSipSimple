@@ -79,11 +79,10 @@ public class MediaManager {
 	private AudioFocusWrapper audioFocusWrapper;
 	private AccessibilityWrapper accessibilityManager;
 	
-	
-	private boolean USE_SGS_WRK_AROUND = false;
-
 
 	private SharedPreferences prefs;
+	private boolean USE_SGS_WRK_AROUND = false;
+	private boolean USE_WEBRTC_IMPL = false;
 	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
 
@@ -115,6 +114,7 @@ public class MediaManager {
 		}
 		MODE_SIP_IN_CALL = service.prefsWrapper.getInCallMode();
 		USE_SGS_WRK_AROUND = service.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK);
+		USE_WEBRTC_IMPL = service.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK);
 	}
 	
 	public void stopService() {
@@ -233,39 +233,93 @@ public class MediaManager {
 			cpuLock.acquire();
 		}
 		
+		if(!USE_WEBRTC_IMPL) {
+			//Audio routing
+			int targetMode = getAudioTargetMode();
+			Log.d(THIS_FILE, "Set mode audio in call to "+targetMode);
+			
+			if(service.prefsWrapper.generateForSetCall()) {
+				ToneGenerator toneGenerator = new ToneGenerator( AudioManager.STREAM_VOICE_CALL, 1);
+				toneGenerator.startTone(ToneGenerator.TONE_CDMA_CONFIRM);
+				toneGenerator.stopTone();
+				toneGenerator.release();
+			}
+			
+			//Set mode
+			if(targetMode != AudioManager.MODE_IN_CALL && USE_SGS_WRK_AROUND) {
+				//For galaxy S we need to set in call mode before to reset stack
+				audioManager.setMode(AudioManager.MODE_IN_CALL);
+			}
+			
+			
+			audioManager.setMode(targetMode);
+			
+			//Routing
+			if(service.prefsWrapper.getUseRoutingApi()) {
+				audioManager.setRouting(targetMode, userWantSpeaker?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
+			}else {
+				audioManager.setSpeakerphoneOn(userWantSpeaker ? true : false);
+			}
+			
+			audioManager.setMicrophoneMute(false);
+			if(bluetoothWrapper != null && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
+				Log.d(THIS_FILE, "Try to enable bluetooth");
+				bluetoothWrapper.setBluetoothOn(true);
+			}
 		
-		//Audio routing
-		int targetMode = getAudioTargetMode();
-		Log.d(THIS_FILE, "Set mode audio in call to "+targetMode);
-		
-		if(service.prefsWrapper.generateForSetCall()) {
-			ToneGenerator toneGenerator = new ToneGenerator( AudioManager.STREAM_VOICE_CALL, 1);
-			toneGenerator.startTone(ToneGenerator.TONE_CDMA_CONFIRM);
-			toneGenerator.stopTone();
-			toneGenerator.release();
-		}
-		
-		//Set mode
-		if(targetMode != AudioManager.MODE_IN_CALL && USE_SGS_WRK_AROUND) {
-			//For galaxy S we need to set in call mode before to reset stack
-			audioManager.setMode(AudioManager.MODE_IN_CALL);
-		}
-		
-		
-		audioManager.setMode(targetMode);
-		
-		//Routing
-		if(service.prefsWrapper.getUseRoutingApi()) {
-			audioManager.setRouting(targetMode, userWantSpeaker?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 		}else {
-			audioManager.setSpeakerphoneOn(userWantSpeaker ? true : false);
+			//WebRTC implementation for routing
+			int apiLevel = Compatibility.getApiLevel();
+			
+			//SetAudioMode
+			// ***IMPORTANT*** When the API level for honeycomb (H) has been
+	        // decided,
+	        // the condition should be changed to include API level 8 to H-1.
+	        if ( android.os.Build.BRAND.equalsIgnoreCase("Samsung") && (8 == apiLevel)) {
+	            // Set Samsung specific VoIP mode for 2.2 devices
+	            int mode = 4;
+	            audioManager.setMode(mode);
+	            if (audioManager.getMode() != mode) {
+	                Log.e(THIS_FILE, "Could not set audio mode for Samsung device");
+	            }
+	        }
+
+			
+			
+			//SetPlayoutSpeaker
+	        if ((3 == apiLevel) || (4 == apiLevel)) {
+	            // 1.5 and 1.6 devices
+	            if (userWantSpeaker) {
+	                // route audio to back speaker
+	            	audioManager.setMode(AudioManager.MODE_NORMAL);
+	            } else {
+	                // route audio to earpiece
+	            	audioManager.setMode(AudioManager.MODE_IN_CALL);
+	            }
+	        } else {
+	            // 2.x devices
+	            if ((android.os.Build.BRAND.equalsIgnoreCase("samsung")) &&
+	                            ((5 == apiLevel) || (6 == apiLevel) ||
+	                            (7 == apiLevel))) {
+	                // Samsung 2.0, 2.0.1 and 2.1 devices
+	                if (userWantSpeaker) {
+	                    // route audio to back speaker
+	                	audioManager.setMode(AudioManager.MODE_IN_CALL);
+	                	audioManager.setSpeakerphoneOn(userWantSpeaker);
+	                } else {
+	                    // route audio to earpiece
+	                	audioManager.setSpeakerphoneOn(userWantSpeaker);
+	                	audioManager.setMode(AudioManager.MODE_NORMAL);
+	                }
+	            } else {
+	                // Non-Samsung and Samsung 2.2 and up devices
+	            	audioManager.setSpeakerphoneOn(userWantSpeaker);
+	            }
+	        }
+
+			
 		}
 		
-		audioManager.setMicrophoneMute(false);
-		if(bluetoothWrapper != null && userWantBluetooth && bluetoothWrapper.canBluetooth()) {
-			Log.d(THIS_FILE, "Try to enable bluetooth");
-			bluetoothWrapper.setBluetoothOn(true);
-		}
 		
 		//Set stream solo/volume/focus
 		int inCallStream = Compatibility.getInCallStream();

@@ -68,6 +68,7 @@ public class PrefsMedia extends GenericPrefs {
 			hidePreference("misc", SipConfigManager.SET_AUDIO_GENERATE_TONE);
 			hidePreference("misc", SipConfigManager.SIP_AUDIO_MODE);
 			hidePreference("misc", SipConfigManager.USE_SGS_CALL_HACK);
+			hidePreference("misc", SipConfigManager.USE_WEBRTC_HACK);
 			hidePreference("misc", SipConfigManager.MICRO_SOURCE);
 			
 		}
