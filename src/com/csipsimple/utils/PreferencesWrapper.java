@@ -154,9 +154,10 @@ public class PreferencesWrapper {
 		put(SipConfigManager.USE_ROUTING_API, false);
 		put(SipConfigManager.USE_MODE_API, false);
 		put(SipConfigManager.HAS_IO_QUEUE, false);
-		put(SipConfigManager.SET_AUDIO_GENERATE_TONE, true);
+		put(SipConfigManager.SET_AUDIO_GENERATE_TONE, false);
 		put(SipConfigManager.USE_SGS_CALL_HACK, false);
 		put(SipConfigManager.USE_WEBRTC_HACK, false);
+		put(SipConfigManager.DO_FOCUS_AUDIO, false);
 		
 		//UI
 		put(SipConfigManager.PREVENT_SCREEN_ROTATION, true);

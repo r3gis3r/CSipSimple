@@ -83,6 +83,7 @@ public class MediaManager {
 	private SharedPreferences prefs;
 	private boolean USE_SGS_WRK_AROUND = false;
 	private boolean USE_WEBRTC_IMPL = false;
+	private boolean DO_FOCUS_AUDIO = true;
 	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
 	
 
@@ -115,6 +116,7 @@ public class MediaManager {
 		MODE_SIP_IN_CALL = service.prefsWrapper.getInCallMode();
 		USE_SGS_WRK_AROUND = service.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK);
 		USE_WEBRTC_IMPL = service.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK);
+		DO_FOCUS_AUDIO = service.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO);
 	}
 	
 	public void stopService() {
@@ -233,6 +235,8 @@ public class MediaManager {
 			cpuLock.acquire();
 		}
 		
+
+		
 		if(!USE_WEBRTC_IMPL) {
 			//Audio routing
 			int targetMode = getAudioTargetMode();
@@ -320,14 +324,15 @@ public class MediaManager {
 			
 		}
 		
-		
 		//Set stream solo/volume/focus
+
 		int inCallStream = Compatibility.getInCallStream();
-		if(!accessibilityManager.isEnabled()) {
-			audioManager.setStreamSolo(inCallStream, true);
+		if(DO_FOCUS_AUDIO) {
+			if(!accessibilityManager.isEnabled()) {
+				audioManager.setStreamSolo(inCallStream, true);
+			}
+			audioFocusWrapper.focus();
 		}
-		audioFocusWrapper.focus();
-		
 		setStreamVolume(inCallStream,  (int) (audioManager.getStreamMaxVolume(inCallStream)*service.prefsWrapper.getInitialVolumeLevel()),  0);
 		
 		
@@ -416,8 +421,10 @@ public class MediaManager {
 			bluetoothWrapper.setBluetoothOn(false);
 		}
 		audioManager.setMicrophoneMute(false);
-		audioManager.setStreamSolo(inCallStream, false);
-		
+		if(DO_FOCUS_AUDIO) {
+			audioManager.setStreamSolo(inCallStream, false);
+			audioFocusWrapper.unFocus();
+		}
 		restoreAudioState();
 		
 		if(wifiLock != null && wifiLock.isHeld()) {
@@ -431,7 +438,6 @@ public class MediaManager {
 			cpuLock.release();
 		}
 		
-		audioFocusWrapper.unFocus();
 		
 		isSetAudioMode = false;
 	}

@@ -120,23 +120,28 @@
 			
 			<CheckBoxPreference android:summary="@string/use_webrtc_hack_desc"
 				android:title="@string/use_webrtc_hack" android:key="use_webrtc_hack"
-				android:defaultValue="false"></CheckBoxPreference>
+				android:defaultValue="false"/>
 				
 			<CheckBoxPreference android:summary="@string/use_routing_api_desc"
 				android:title="@string/use_routing_api" android:key="use_routing_api"
-				android:defaultValue="false"></CheckBoxPreference>
+				android:defaultValue="false"/>
 				
 			<CheckBoxPreference android:summary="@string/use_mode_api_desc"
 				android:title="@string/use_mode_api" android:key="use_mode_api"
-				android:defaultValue="false"></CheckBoxPreference>
+				android:defaultValue="false"/>
 			
 			<CheckBoxPreference android:summary="@string/use_sgs_call_hack_desc"
 				android:title="@string/use_sgs_call_hack" android:key="use_sgs_call_hack"
-				android:defaultValue="false"></CheckBoxPreference>
+				android:defaultValue="false"/>
 			
 			<CheckBoxPreference android:summary="@string/set_audio_generate_tone_desc"
 				android:title="@string/set_audio_generate_tone" android:key="set_audio_generate_tone"
-				android:defaultValue="false"></CheckBoxPreference>	
+				android:defaultValue="false"/>	
+			
+			<CheckBoxPreference android:summary="@string/do_focus_audio_desc"
+				android:title="@string/do_focus_audio" android:key="do_focus_audio"
+				android:defaultValue="true"/>	
+				
 				
 			<ListPreference android:title="@string/micro_source" android:key="micro_source"
 				android:summary="@string/micro_source_desc"
