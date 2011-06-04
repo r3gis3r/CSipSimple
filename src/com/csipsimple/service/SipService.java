@@ -82,6 +82,12 @@ public class SipService extends Service {
 	// static boolean creating = false;
 	private static final String THIS_FILE = "SIP SRV";
 
+	// Comes from android.net.vpn.VpnManager.java
+	// Action for broadcasting a connectivity state.
+    private static final String ACTION_VPN_CONNECTIVITY = "vpn.connectivity";
+    /** Key to the connectivity state of a connectivity broadcast event. */
+    private static final String BROADCAST_CONNECTION_STATE = "connection_state";
+    private boolean lastKnownVpnState = false;
 	
 	private SipWakeLock sipWakeLock;
 	private boolean autoAcceptCurrent = false;
@@ -96,6 +102,7 @@ public class SipService extends Service {
 		@Override
 		public void sipStart() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			Log.d(THIS_FILE, "Start required from third party app/serv");
 			getExecutor().execute(new StartRunnable());
 		}
 
@@ -126,6 +133,7 @@ public class SipService extends Service {
 		@Override
 		public void askThreadedRestart() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			Log.d(THIS_FILE, "Restart required from third part app/serv");
 			getExecutor().execute(new RestartRunnable());
 		};
 
@@ -677,12 +685,16 @@ public class SipService extends Service {
 					NetworkInfo.State state = netInfo.getState();
 
 					NetworkInfo activeNetInfo = getActiveNetworkInfo();
+					
+					/*
 					if (activeNetInfo != null) {
 						Log.d(THIS_FILE, "active network: " + activeNetInfo.getTypeName()
 								+ ((activeNetInfo.getState() == NetworkInfo.State.CONNECTED) ? " CONNECTED" : " DISCONNECTED"));
 					} else {
 						Log.d(THIS_FILE, "active network: null");
 					}
+					*/
+					
 					if ((state == NetworkInfo.State.CONNECTED) && (activeNetInfo != null) && (activeNetInfo.getType() != netInfo.getType())) {
 						Log.d(THIS_FILE, "ignore connect event: " + type + ", active: " + activeNetInfo.getTypeName());
 						return;
@@ -715,6 +727,14 @@ public class SipService extends Service {
 				}
 			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
 				cleanStop();
+			} else if(action.equals(ACTION_VPN_CONNECTIVITY)) {
+				// TODO : ensure no current call
+				String connection_state = intent.getSerializableExtra(BROADCAST_CONNECTION_STATE).toString();
+				boolean currentVpnState = connection_state.equalsIgnoreCase("CONNECTED");
+				if(lastKnownVpnState != currentVpnState) {
+					getExecutor().execute(new RestartRunnable());
+					lastKnownVpnState = currentVpnState;
+				}
 			}
 		}
 
@@ -731,6 +751,7 @@ public class SipService extends Service {
 				// we want to skip the interim ones) but deliver bad news
 				// immediately
 				if (connected) {
+					Log.d(THIS_FILE, "Push a task to connected timer");
 					if (mTask != null) {
 						Log.d(THIS_FILE, "We already have a current task in stack");
 						mTask.cancel();
@@ -753,7 +774,8 @@ public class SipService extends Service {
 				}
 			}
 			if(fireChanges) {
-				dataConnectionChanged();
+				Log.d(THIS_FILE, "Fire changes right now cause it's a deconnect info");
+				dataConnectionChanged(false);
 			}
 		}
 
@@ -769,6 +791,7 @@ public class SipService extends Service {
 			// timeout handler
 			@Override
 			public void run() {
+				Log.d(THIS_FILE, "Run connected timeout");
 				// delegate to mExecutor
 				getExecutor().execute(new Runnable() {
 					public void run() {
@@ -786,7 +809,7 @@ public class SipService extends Service {
 					mTask = null;
 					Log.d(THIS_FILE, " deliver change for " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
 					// onConnectivityChanged(mNetworkType, mConnected);
-					dataConnectionChanged();
+					dataConnectionChanged(true);
 					sipWakeLock.release(this);
 				}
 			}
@@ -805,31 +828,45 @@ public class SipService extends Service {
     }
 
 	private class ServicePhoneStateReceiver extends PhoneStateListener {
+		
+		private boolean ignoreFirstConnectionState = true;
+		private boolean ignoreFirstCallState = true;
+		
 		@Override
-		public void onDataConnectionStateChanged(int state) {
-			Log.d(THIS_FILE, "Data connection state changed : " + state);
-			Thread t = new Thread("DataConnectionDetach") {
-				@Override
-				public void run() {
-					dataConnectionChanged();
-				}
-			};
-			t.start();
+		public void onDataConnectionStateChanged(final int state) {
+			if(!ignoreFirstConnectionState) {
+				Log.d(THIS_FILE, "Data connection state changed : " + state);
+				Thread t = new Thread("DataConnectionDetach") {
+					@Override
+					public void run() {
+						if(deviceStateReceiver != null) {
+							deviceStateReceiver.onChanged("MOBILE", state == TelephonyManager.DATA_CONNECTED);
+						}
+					}
+				};
+				t.start();
+			}else {
+				ignoreFirstConnectionState = false;
+			}
 			super.onDataConnectionStateChanged(state);
 		}
 
 		@Override
 		public void onCallStateChanged(final int state, final String incomingNumber) {
-			Log.d(THIS_FILE, "Call state has changed !" + state + " : " + incomingNumber);
-			getExecutor().execute(new SipRunnable() {
-				
-				@Override
-				protected void doRun() throws SameThreadException {
-					if(pjService != null) {
-						pjService.onGSMStateChanged(state, incomingNumber);
+			if(!ignoreFirstCallState) {
+				Log.d(THIS_FILE, "Call state has changed !" + state + " : " + incomingNumber);
+				getExecutor().execute(new SipRunnable() {
+					
+					@Override
+					protected void doRun() throws SameThreadException {
+						if(pjService != null) {
+							pjService.onGSMStateChanged(state, incomingNumber);
+						}
 					}
-				}
-			});
+				});
+			}else {
+				ignoreFirstCallState = false;
+			}
 			super.onCallStateChanged(state, incomingNumber);
 		}
 	}
@@ -884,6 +921,7 @@ public class SipService extends Service {
 			intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
 			intentfilter.addAction(SipManager.ACTION_SIP_CAN_BE_STOPPED);
+			intentfilter.addAction(ACTION_VPN_CONNECTIVITY);
 			deviceStateReceiver = new ServiceDeviceStateReceiver();
 			registerReceiver(deviceStateReceiver, intentfilter);
 		}
@@ -1329,13 +1367,15 @@ public class SipService extends Service {
 	// private State oldNetworkState = null;
 	private String oldIPAddress = "0.0.0.0";
 
-	private synchronized void dataConnectionChanged() {
+	private synchronized void dataConnectionChanged(boolean connecting) {
 		// Check if it should be ignored first
 		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
 		boolean ipHasChanged = false;
+		
+		Log.d(THIS_FILE, "Fire dataConnectionChanged for a " + (connecting ? "connection" : "disconnection"));
 
-		if (ni != null) {
+		if (ni != null && connecting) {
 			// Integer currentType = ni.getType();
 			String currentIPAddress = getLocalIpAddress();
 			// State currentState = ni.getState();
@@ -1362,21 +1402,27 @@ public class SipService extends Service {
 		}
 
 		if (prefsWrapper.isValidConnectionForOutgoing() || prefsWrapper.isValidConnectionForIncoming()) {
-			if (pjService == null || !pjService.isCreated()) {
-				// we was not yet started, so start now
-				getExecutor().execute(new StartRunnable());
-			} else if (ipHasChanged) {
-				// Check if IP has changed between
-				if (pjService != null && pjService.getActiveCallInProgress() == null) {
-					getExecutor().execute(new RestartRunnable());
-					// Log.e(THIS_FILE, "We should restart the stack ! ");
+			
+			// Only care if we are actually asking for a connect action
+			// else it means we recieve a disconnect from another connection 
+			// and we should wait for the connect call that will arrive soon
+			if(connecting) {
+				if (pjService == null || !pjService.isCreated()) {
+					// we was not yet started, so start now
+					getExecutor().execute(new StartRunnable());
+				} else if (ipHasChanged) {
+					// Check if IP has changed between
+					if (pjService != null && pjService.getActiveCallInProgress() == null) {
+						getExecutor().execute(new RestartRunnable());
+						// Log.e(THIS_FILE, "We should restart the stack ! ");
+					} else {
+						// TODO : else refine things => STUN, registration etc...
+						serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, 0, 0,
+								"Connection have been lost... you may have lost your communication. Hand over is not yet supported"));
+					}
 				} else {
-					// TODO : else refine things => STUN, registration etc...
-					serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, 0, 0,
-							"Connection have been lost... you may have lost your communication. Hand over is not yet supported"));
+					Log.d(THIS_FILE, "Nothing done since already well registered");
 				}
-			} else {
-				Log.d(THIS_FILE, "Nothing done since already well registered");
 			}
 
 		} else {
