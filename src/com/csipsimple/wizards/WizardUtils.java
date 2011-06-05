@@ -29,6 +29,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
@@ -45,6 +46,7 @@ import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.DvcNg;
+import com.csipsimple.wizards.impl.EasyBell;
 import com.csipsimple.wizards.impl.Ekiga;
 import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
@@ -149,6 +151,16 @@ public class WizardUtils {
 		}
     }
     
+    private static Locale locale(String isoCode) {
+    	String[] codes = isoCode.split("_");
+    	if(codes.length == 2) {
+    		return new Locale(codes[0].toLowerCase(), codes[1].toUpperCase());
+    	}else if(codes.length == 1){
+    		return new Locale(codes[0].toLowerCase());
+    	}
+    	Log.e("WizardUtils", "Invalid locale "+isoCode);
+    	return null;
+    }
     
 	
     /**
@@ -237,10 +249,6 @@ public class WizardUtils {
 					R.drawable.ic_wizard_pfingo, 19, 
 					new Locale[]{ }, false, true, 
 					Pfingo.class));
-			WIZARDS_DICT.put("NETELIP", new WizardInfo("NETELIP", "NETELIP", 
-					R.drawable.ic_wizard_netelip, 20, 
-					new Locale[]{  }, false, true, 
-					Netelip.class));
 			WIZARDS_DICT.put("FASTVOIP", new WizardInfo("FASTVOIP", "FastVoip", 
 					R.drawable.ic_wizard_fastvoip, 20, 
 					new Locale[]{  }, false, true, 
@@ -265,21 +273,13 @@ public class WizardUtils {
 					new Locale[]{Locale.FRANCE}, false, false, 
 					Freephonie.class));
 			WIZARDS_DICT.put("NEUFTALK", new WizardInfo("NEUFTALK", "NeufTalk", 
-					R.drawable.ic_wizard_neuftalk, 2, 
+					R.drawable.ic_wizard_neuftalk, 25, 
 					new Locale[]{Locale.FRANCE}, false, false, 
 					NeufTalk.class));
 			WIZARDS_DICT.put("IPPI", new WizardInfo("IPPI", "ippi", 
-					R.drawable.ic_wizard_ippi, 10, 
-					new Locale[]{
-						Locale.FRANCE,
-						new Locale("FR", "be"),
-						new Locale("FR", "ch"),
-						Locale.CANADA,
-						Locale.US,
-						new Locale("FR", "ma"),
-						new Locale("FR", "dz"),
-						new Locale("FR", "tn"),
-					}, false, false, Ippi.class));
+					R.drawable.ic_wizard_ippi, 21, 
+					new Locale[]{ Locale.FRENCH, Locale.CANADA, Locale.US, }, false, false, 
+					Ippi.class));
 			WIZARDS_DICT.put("KEYYO", new WizardInfo("KEYYO", "Keyyo", 
 					R.drawable.ic_wizard_keyyo, 9, 
 					new Locale[]{Locale.FRANCE}, false, false, 
@@ -290,7 +290,7 @@ public class WizardUtils {
 					Phonzo.class));
 			WIZARDS_DICT.put("PLANETPHONE", new WizardInfo("PLANETPHONE", "PlanetPhone", 
 					R.drawable.ic_wizard_planetphone, 10, 
-					new Locale[]{new Locale("BG", "bg"),}, false, false, 
+					new Locale[]{ locale("bg_BG") }, false, false, 
 					PlanetPhone.class));
 			WIZARDS_DICT.put("SIPGATE", new WizardInfo("SIPGATE", "Sipgate", 
 					R.drawable.ic_wizard_sipgate, 10, 
@@ -298,7 +298,7 @@ public class WizardUtils {
 					Sipgate.class));
 			WIZARDS_DICT.put("PENNYTEL", new WizardInfo("PENNYTEL", "Pennytel", 
 					R.drawable.ic_wizard_pennytel, 10, 
-					new Locale[]{new Locale("EN", "au")}, false, false, 
+					new Locale[]{ locale("en_AU") }, false, false, 
 					Pennytel.class));
 			/*
 			WIZARDS_DICT.put("MAGICJACK", new WizardInfo("MAGICJACK", "MagicJack", 
@@ -353,19 +353,16 @@ public class WizardUtils {
 			WIZARDS_DICT.put("SCARLET", new WizardInfo("SCARLET", "scarlet.be", 
 					R.drawable.ic_wizard_scarlet, 10, 
 					new Locale[]{
-						new Locale("FR", "be"),
-						new Locale("NL", "be"),
-						new Locale("NL", "nl"),
+						locale("fr_BE"), locale("nl_BE"), locale("nl_NL")
 					}, false, false, Scarlet.class));
 			WIZARDS_DICT.put("VONO", new WizardInfo("VONO", "vono", 
 					R.drawable.ic_wizard_vono, 10, 
 					new Locale[] {new Locale("PT", "br")}, false, false, 
 					Vono.class));
 			WIZARDS_DICT.put("OVH", new WizardInfo("OVH", "Ovh", 
-					R.drawable.ic_wizard_ovh, 10, 
+					R.drawable.ic_wizard_ovh, 20, 
 					new Locale[]{
-						Locale.FRANCE,	
-						new Locale("FR", "be"),
+						Locale.FRANCE,	locale("fr_BE"),
 						Locale.GERMANY,
 						Locale.UK
 					}, false, false, 
@@ -413,17 +410,24 @@ public class WizardUtils {
 			WIZARDS_DICT.put("VOIPTELIE", new WizardInfo("VOIPTELIE", "Voiptel Mobile", 
 					R.drawable.ic_wizard_voiptelie, 20, 
 					new Locale[]{ 
-						new Locale("EN", "ie"), 
-						Locale.UK, 
-						Locale.CANADA,
-						new Locale("ES", "es"),
-						Locale.US,
-						new Locale("EN", "au"),
-						new Locale("ES", "co"),
-					}, false, false, 
+					Locale.UK, Locale.CANADA, Locale.US, locale("en_IE"), locale("en_AU"),
+					locale("es_ES"), locale("es_CO") }, false, false, 
 					VoipTel.class));
-			
-			
+			WIZARDS_DICT.put("EASYBELL", new WizardInfo("EASYBELL", "EasyBell", 
+					R.drawable.ic_wizard_easybell, 20, 
+					new Locale[]{ Locale.GERMANY }, false, false, 
+					EasyBell.class));
+			WIZARDS_DICT.put("NETELIP", new WizardInfo("NETELIP", "NETELIP", 
+					R.drawable.ic_wizard_netelip, 5, 
+					new Locale[]{ 
+					new Locale("es"), new Locale("pt"), Locale.FRENCH, Locale.GERMAN, Locale.ENGLISH,
+					locale("bg_BG"), locale("nl_NL"), Locale.ITALY, Locale.CHINA,
+					new Locale("sv"), locale("da_DA"), locale("nb_NO"), locale("nn_NO"),
+					locale("ru_RU"), locale("tr_TR"), locale("el_GR"), locale("hu_HU"),
+					locale("cs_CZ"), locale("ro_RO"), locale("hr_HR"), locale("uk_UA"),
+					locale("ja_JP") }, false, false, 
+					Netelip.class));
+
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
@@ -535,9 +539,18 @@ public class WizardUtils {
 			boolean found = false;
 			
 			for (Locale country : wizard.getValue().countries) {
-				if(country.getCountry().equals(Locale.getDefault().getCountry())) {
-					found = true;
-					locale_list.add(wizardInfoToMap(wizard.getValue()));
+				if(country != null) {
+					if(country.getCountry().equals(Locale.getDefault().getCountry())) {
+						found = true;
+						locale_list.add(wizardInfoToMap(wizard.getValue()));
+						break;
+					}else if(country.getCountry().equalsIgnoreCase("")) {
+						if(country.getLanguage().equals(Locale.getDefault().getLanguage())) {
+							found = true;
+							locale_list.add(wizardInfoToMap(wizard.getValue()));
+							break;
+						}
+					}
 				}
 			}
 			if(!found) {
