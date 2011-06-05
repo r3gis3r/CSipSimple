@@ -775,7 +775,7 @@ public class SipService extends Service {
 			}
 			if(fireChanges) {
 				Log.d(THIS_FILE, "Fire changes right now cause it's a deconnect info");
-				dataConnectionChanged(false);
+				dataConnectionChanged(type, false);
 			}
 		}
 
@@ -809,7 +809,7 @@ public class SipService extends Service {
 					mTask = null;
 					Log.d(THIS_FILE, " deliver change for " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
 					// onConnectivityChanged(mNetworkType, mConnected);
-					dataConnectionChanged(true);
+					dataConnectionChanged(mNetworkType, true);
 					sipWakeLock.release(this);
 				}
 			}
@@ -1367,16 +1367,21 @@ public class SipService extends Service {
 	// private State oldNetworkState = null;
 	private String oldIPAddress = "0.0.0.0";
 
-	private synchronized void dataConnectionChanged(boolean connecting) {
+	private synchronized void dataConnectionChanged(String type, boolean connecting) {
 		// Check if it should be ignored first
 		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
 		boolean ipHasChanged = false;
-		
 		Log.d(THIS_FILE, "Fire dataConnectionChanged for a " + (connecting ? "connection" : "disconnection"));
+		
+		if(ni != null && !(ni.getTypeName().equalsIgnoreCase(type))) {
+			// We should not stop here cause UTMS could stop while wifi continue to be active and to be the main way to transmit things
+			Log.d(THIS_FILE, "Ignore this disconnection cause does it is not relevant of current connection");
+			return;
+		}
 
 		if (ni != null && connecting) {
-			// Integer currentType = ni.getType();
+			//String currentType = ni.getTypeName();
 			String currentIPAddress = getLocalIpAddress();
 			// State currentState = ni.getState();
 			Log.d(THIS_FILE, "IP changes ?" + oldIPAddress + " vs " + currentIPAddress);
@@ -1394,7 +1399,6 @@ public class SipService extends Service {
 
 			oldIPAddress = currentIPAddress;
 			// oldNetworkState = currentState;
-			// oldNetworkType = currentType;
 		} else {
 			oldIPAddress = null;
 			// oldNetworkState = null;
