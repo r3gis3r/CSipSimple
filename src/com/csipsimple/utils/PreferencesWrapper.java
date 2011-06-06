@@ -166,6 +166,8 @@ public class PreferencesWrapper {
 		put(SipConfigManager.ICON_IN_STATUS_BAR, true);
 		put(SipConfigManager.USE_PARTIAL_WAKE_LOCK, false);
 		put(SipConfigManager.ICON_IN_STATUS_BAR_NBR, false);
+		put(SipConfigManager.INTEGRATE_WITH_CALLLOGS, true);
+		put(SipConfigManager.INTEGRATE_WITH_DIALER, true);
 		
 		//Calls
 		put(SipConfigManager.AUTO_RECORD_CALLS, false);
@@ -933,10 +935,10 @@ public class PreferencesWrapper {
 	}
 	
 	public boolean useIntegrateDialer() {
-		return prefs.getBoolean("integrate_with_native_dialer", true);
+		return getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER);
 	}
 	public boolean useIntegrateCallLogs() {
-		return prefs.getBoolean("integrate_with_native_calllogs", true);
+		return getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS);
 	}
 
 

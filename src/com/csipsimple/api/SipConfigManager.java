@@ -67,7 +67,8 @@ public class SipConfigManager {
 	public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";
 	public static final String INVERT_PROXIMITY_SENSOR = "invert_proximity_sensor";
 	public static final String USE_PARTIAL_WAKE_LOCK = "use_partial_wake_lock";
-	
+	public static final String INTEGRATE_WITH_CALLLOGS = "integrate_with_native_calllogs";
+	public static final String INTEGRATE_WITH_DIALER = "integrate_with_native_dialer";
 	
 	// NETWORK
 	public static final String TURN_SERVER = "turn_server";
