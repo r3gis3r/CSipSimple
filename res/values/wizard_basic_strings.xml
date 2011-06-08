@@ -19,7 +19,7 @@
  -->
 <resources>
 <string name="w_basic_username">User</string>
-<string name="w_basic_username_desc">Account name / Login</string>
+<string name="w_basic_username_desc">Account name / Login (do not write the @sip.server)</string>
 <string name="w_basic_password">Password</string>
 <string name="w_basic_password_desc">Password to access your account</string>
 
