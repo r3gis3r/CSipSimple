@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2011-05-08 19:31+0200\n"
+"POT-Creation-Date: 2011-06-09 10:18+0200\n"
 "PO-Revision-Date: 2011-01-28 11:32+0000\n"
 "Last-Translator: Libor Tesař <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -130,6 +130,14 @@ msgstr "Uzamknout WiFi připojení"
 msgctxt "lock_wifi_desc"
 msgid "Prevent WiFi idle when SIP is connected"
 msgstr "Zamezí vypnutí WiFi pokud je SIP připojený"
+
+msgctxt "lock_wifi_perfs"
+msgid "High perfs lock"
+msgstr ""
+
+msgctxt "lock_wifi_perfs_desc"
+msgid "Wifi lock in High perfs mode (drain battery faster)"
+msgstr ""
 
 msgctxt "enable_tcp"
 msgid "TCP"
@@ -307,6 +315,15 @@ msgstr ""
 
 msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
+msgstr ""
+
+#, fuzzy
+msgctxt "ka_use_wake"
+msgid "Keep alive awake"
+msgstr "udržet wifi aktivní"
+
+msgctxt "ka_use_wake_desc"
+msgid "If activated keep alive will awake phone"
 msgstr ""
 
 #. Security
@@ -569,6 +586,22 @@ msgstr "Audio mód pro Sip volání"
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "Změnit pouze tehdy, pokud vývojáři poradí."
+
+msgctxt "use_webrtc_hack"
+msgid "Use WebRTC implementation"
+msgstr ""
+
+msgctxt "use_webrtc_hack_desc"
+msgid "Implementation made by WebRTC team"
+msgstr ""
+
+msgctxt "do_focus_audio"
+msgid "Focus audio"
+msgstr ""
+
+msgctxt "do_focus_audio_desc"
+msgid "Disabling will result overlaps with music but may help with routing"
+msgstr ""
 
 msgctxt "micro_source"
 msgid "Micro source"

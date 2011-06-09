@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-05-08 19:31+0200\n"
+"POT-Creation-Date: 2011-06-09 10:18+0200\n"
 "PO-Revision-Date: 2011-01-30 00:15+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: da <LL@li.org>\n"
@@ -24,5 +24,9 @@ msgstr ""
 
 msgctxt "w_sapo_phone_number_desc"
 msgid "Phone number should be formated as +35130xxxxxx"
+msgstr ""
+
+msgctxt "w_pbxes_user_extension"
+msgid "User extension (something like user-1)"
 msgstr ""
 

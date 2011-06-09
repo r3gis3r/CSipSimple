@@ -82,6 +82,7 @@ import com.csipsimple.wizards.impl.Scarlet;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.SipCel;
 import com.csipsimple.wizards.impl.SipSorcery;
+import com.csipsimple.wizards.impl.SipWise;
 import com.csipsimple.wizards.impl.Sipgate;
 import com.csipsimple.wizards.impl.SiptelPt;
 import com.csipsimple.wizards.impl.Speakezi;
@@ -253,6 +254,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_fastvoip, 20, 
 					new Locale[]{  }, false, true, 
 					FastVoip.class));
+			WIZARDS_DICT.put("SIPWISE", new WizardInfo("SIPWISE", "sipwise", 
+					R.drawable.ic_wizard_sipwise, 34, 
+					new Locale[]{  }, false, true, 
+					SipWise.class));
 			
 			
 			//Locales

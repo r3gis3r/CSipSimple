@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-05-08 19:31+0200\n"
+"POT-Creation-Date: 2011-06-09 10:18+0200\n"
 "PO-Revision-Date: 2010-10-10 08:22+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -129,6 +129,14 @@ msgstr "Verouiller le WIFI"
 msgctxt "lock_wifi_desc"
 msgid "Prevent WiFi idle when SIP is connected"
 msgstr "Empêche la mise en veille du WIFI lorsque le SIP est connecté"
+
+msgctxt "lock_wifi_perfs"
+msgid "High perfs lock"
+msgstr ""
+
+msgctxt "lock_wifi_perfs_desc"
+msgid "Wifi lock in High perfs mode (drain battery faster)"
+msgstr ""
 
 msgctxt "enable_tcp"
 msgid "TCP"
@@ -306,6 +314,15 @@ msgstr ""
 
 msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
+msgstr ""
+
+#, fuzzy
+msgctxt "ka_use_wake"
+msgid "Keep alive awake"
+msgstr "Battement de coeur wifi"
+
+msgctxt "ka_use_wake_desc"
+msgid "If activated keep alive will awake phone"
 msgstr ""
 
 #. Security
@@ -576,6 +593,22 @@ msgstr "Mode audio des appels SIP"
 msgctxt "sip_audio_mode_desc"
 msgid "Change only if developers advise you to"
 msgstr "Ne changer ceci que si les développeurs vous le conseillent"
+
+msgctxt "use_webrtc_hack"
+msgid "Use WebRTC implementation"
+msgstr ""
+
+msgctxt "use_webrtc_hack_desc"
+msgid "Implementation made by WebRTC team"
+msgstr ""
+
+msgctxt "do_focus_audio"
+msgid "Focus audio"
+msgstr ""
+
+msgctxt "do_focus_audio_desc"
+msgid "Disabling will result overlaps with music but may help with routing"
+msgstr ""
 
 msgctxt "micro_source"
 msgid "Micro source"

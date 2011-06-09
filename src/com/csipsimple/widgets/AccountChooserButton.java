@@ -160,6 +160,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 				return;
 			}
 			
+			Log.d(THIS_FILE, "update acc sel button "+canChangeIfValid);
 			if(service != null) {
 				for(SipProfile account: accountsList) {
 					AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(getContext(), service, account.id);

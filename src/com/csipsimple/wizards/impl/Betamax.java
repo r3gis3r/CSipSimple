@@ -51,12 +51,6 @@ public class Betamax extends AuthorizationImplementation {
 
 	protected static final String THIS_FILE = "BetamaxW";
 	
-	private static final String URL_BALANCE = "/myaccount/getbalance.php";
-	
-	private LinearLayout customWizard;
-	private TextView customWizardText;
-	protected static final int DID_SUCCEED = 0;
-	protected static final int DID_ERROR = 1;
 	
 	
 	ListPreference providerListPref;
@@ -262,6 +256,12 @@ public class Betamax extends AuthorizationImplementation {
 	
 	// Balance consulting
 
+	private static final String URL_BALANCE = "/myaccount/getbalance.php";
+	
+	private LinearLayout customWizard;
+	private TextView customWizardText;
+	protected static final int DID_SUCCEED = 0;
+	protected static final int DID_ERROR = 1;
 	private Handler creditHandler = new Handler() {
 		public void handleMessage(Message message) {
 			switch (message.what) {

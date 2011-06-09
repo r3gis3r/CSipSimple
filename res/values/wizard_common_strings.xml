@@ -18,7 +18,7 @@
 <string name="w_common_display_name">Account name</string>
 <string name="w_common_display_name_desc">Display name for this account</string>
 <string name="w_common_username">User name</string>
-<string name="w_common_username_desc">Sip account login</string>
+<string name="w_common_username_desc">Sip account login (do not write the @sip.server)</string>
 <string name="w_common_phone_number">Phone number</string>
 <string name="w_common_phone_number_desc">Sip phone number given by your provider</string>
 <string name="w_common_password">Password</string>
