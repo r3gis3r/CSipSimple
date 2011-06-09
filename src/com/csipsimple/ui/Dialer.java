@@ -175,6 +175,8 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		initView();
+		Log.d(THIS_FILE, "Config has changed");
+		updateRegistrations();
 	}
 
 	
@@ -202,7 +204,11 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		isDigit = prefsWrapper.startIsDigit();
 		isTablet = Compatibility.isTabletScreen(this);
 		Log.d(THIS_FILE, "Is tablet "+ isTablet);
-
+		
+		if(service != null) {
+			accountChooserButton.updateService(service);
+			sipTextUri.updateService(service);
+		}
 		
 		sipTextUri.getTextField().setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
@@ -301,7 +307,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		Log.d(THIS_FILE, "Update chooser choice");
 		boolean canChangeIfValid = TextUtils.isEmpty(digits.getText().toString());
 		accountChooserButton.updateRegistration(canChangeIfValid);
-		
 		sipTextUri.updateRegistration();
 	}
 

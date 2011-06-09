@@ -62,6 +62,7 @@ public class PreferencesWrapper {
 	private SharedPreferences prefs;
 	private ConnectivityManager connectivityManager;
 	private ContentResolver resolver;
+	private Context context;
 
 	
 	
@@ -185,6 +186,7 @@ public class PreferencesWrapper {
 	
 	
 	public PreferencesWrapper(Context aContext) {
+		context = aContext;
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
 		connectivityManager = (ConnectivityManager) aContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		resolver = aContext.getContentResolver();
@@ -1145,6 +1147,11 @@ public class PreferencesWrapper {
 	}
 	public boolean getLibCapability(String cap) {
 		return prefs.getBoolean("backup_" + cap, false);
+	}
+
+
+	public Context getContext() {
+		return context;
 	}
 	
 }

@@ -350,6 +350,9 @@ public class Compatibility {
 			preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INVERT_PROXIMITY_SENSOR, true);
 		}
 		
+		// Tablet settings
+		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION, !Compatibility.isTabletScreen(preferencesWrapper.getContext()));
+		
 		// Galaxy S default settings
 		if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9000") && !isCompatible(9)) {
 			preferencesWrapper.setPreferenceFloatValue(SipConfigManager.SND_MIC_LEVEL, (float) 0.4);
@@ -560,6 +563,9 @@ public class Compatibility {
 		if(lastSeenVersion < 882) {
 			prefWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
 			prefWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
+		}
+		if(lastSeenVersion < 906) {
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION, !Compatibility.isTabletScreen(prefWrapper.getContext()));
 		}
 	}
 
