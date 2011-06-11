@@ -123,7 +123,7 @@ public class Betamax extends AuthorizationImplementation {
 	}
 	
 	
-	
+	private static final String PROVIDER_LIST_KEY = "provider_list";
 	@Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
@@ -131,8 +131,16 @@ public class Betamax extends AuthorizationImplementation {
 		accountUsername.setTitle(R.string.w_advanced_caller_id);
 		accountUsername.setDialogTitle(R.string.w_advanced_caller_id_desc);
 		
-		
-        providerListPref = new ListPreference(parent);
+		boolean recycle = true;
+		providerListPref = (ListPreference) parent.findPreference(PROVIDER_LIST_KEY);
+		if(providerListPref == null) {
+			Log.d(THIS_FILE, "Create new list pref");
+			providerListPref = new ListPreference(parent);
+			providerListPref.setKey(PROVIDER_LIST_KEY);
+			recycle = false;
+		}else {
+			Log.d(THIS_FILE, "Recycle existing list pref");
+		}
         
         CharSequence[] v = new CharSequence[providers.size()];
         int i = 0;
@@ -148,21 +156,26 @@ public class Betamax extends AuthorizationImplementation {
         providerListPref.setTitle("Provider");
         providerListPref.setSummary("Betamax clone provider");
         providerListPref.setDefaultValue("12VoIP");
+        
+
+        if(!recycle) {
+        	parent.getPreferenceScreen().addPreference(providerListPref);
+        }
+        hidePreference(null, SERVER);
+        
+        
         String domain = account.getDefaultDomain();
         if( domain != null ) {
 	        for(Entry<String, String[]> entry : providers.entrySet()) {
 	        	String[] val = entry.getValue();
 	        	if( val[0].equalsIgnoreCase(domain) ) {
+	        		Log.d(THIS_FILE, "Set provider list pref value to "+entry.getKey());
 	        		providerListPref.setValue(entry.getKey());
 	        		break;
 	        	}
 	        }
         }
-        
-        parent.getPreferenceScreen().addPreference(providerListPref);
-        
-        hidePreference(null, SERVER);
-        
+        Log.d(THIS_FILE, providerListPref.getValue());
 
 		//Get wizard specific row
 		customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);

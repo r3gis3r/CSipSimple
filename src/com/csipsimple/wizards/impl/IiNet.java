@@ -44,6 +44,17 @@ public class IiNet extends SimpleImplementation {
         accountState.setDefaultValue("act");
         parent.getPreferenceScreen().addPreference(accountState);
         
+        String domain = account.reg_uri;
+        if( domain != null ) {
+	        for(CharSequence state : states) {
+	        	String currentComp = "sip:sip."+state+".iinet.net.au";
+	        	if( currentComp.equalsIgnoreCase(domain) ) {
+	        		accountState.setValue((String) state);
+	        		break;
+	        	}
+	        }
+        }
+        
         accountUsername.setTitle(R.string.w_iinet_username);
 		accountUsername.setDialogTitle(R.string.w_iinet_username);
 		accountPassword.setTitle(R.string.w_iinet_password);

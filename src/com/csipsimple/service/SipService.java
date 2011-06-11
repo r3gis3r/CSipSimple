@@ -640,7 +640,7 @@ public class SipService extends Service {
 
 	public SipNotifications notificationManager;
 	private SipServiceExecutor mExecutor;
-	private PjSipService pjService;
+	private static PjSipService pjService;
 	private static HandlerThread executorThread;
 
 	// Broadcast receiver for the service
@@ -766,6 +766,7 @@ public class SipService extends Service {
 					// device goes to sleep
 					sipWakeLock.acquire(mTask);
 				} else {
+					// If it's about the same connection type cancel the pending connection
 					if ((mTask != null) && mTask.mNetworkType.equals(type)) {
 						mTask.cancel();
 						sipWakeLock.release(mTask);
@@ -804,6 +805,7 @@ public class SipService extends Service {
 				synchronized (createLock) {
 					if (mTask != this) {
 						Log.w(THIS_FILE, "  unexpected task: " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
+						sipWakeLock.release(this);
 						return;
 					}
 					mTask = null;
