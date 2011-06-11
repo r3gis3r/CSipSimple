@@ -164,7 +164,7 @@ public class Compatibility {
 	public static String getDefaultMicroSource() {
 		// Except for galaxy S II :(
 		if(!isCompatible(11) && android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9100")) {
-			return Integer.toString(AudioSource.DEFAULT);
+			return Integer.toString(AudioSource.MIC);
 		}
 		
 		if(isCompatible(10)) {
@@ -192,7 +192,7 @@ public class Compatibility {
 			return Integer.toString(0x5);
 		}
 		
-		return Integer.toString(AudioSource.DEFAULT);
+		return Integer.toString(AudioSource.MIC);
 	}
 	
 	public static String getDefaultFrequency() {
@@ -555,17 +555,18 @@ public class Compatibility {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.UDP_TRANSPORT_PORT, "0");
 			prefWrapper.setPreferenceStringValue(SipConfigManager.TLS_TRANSPORT_PORT, "0");
 		}
-		if(lastSeenVersion < 842 && android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9100")) {
-			prefWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
-			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
-			
-		}
+		
 		if(lastSeenVersion < 882) {
 			prefWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
 			prefWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
 		}
 		if(lastSeenVersion < 906) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION, !Compatibility.isTabletScreen(prefWrapper.getContext()));
+		}
+		if(lastSeenVersion < 911 && android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9100")) {
+			prefWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
+			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
+			
 		}
 	}
 
