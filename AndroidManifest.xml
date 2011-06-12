@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.02-02" android:versionCode="841">
+	android:versionName="0.02-02" android:versionCode="913">
 	<supports-screens  
 		android:smallScreens="true" 
 		android:normalScreens="true"
@@ -69,9 +69,9 @@
 		
 
 		<activity android:name="com.csipsimple.wizards.WizardChooser" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation"
-			android:label="@string/choose_wizard"></activity>
+			android:label="@string/choose_wizard"/>
 
-		<activity android:name="com.csipsimple.ui.BuddyList"></activity>
+		<activity android:name="com.csipsimple.ui.BuddyList"/>
 
 		<!-- Preferences -->
 		<activity android:name="com.csipsimple.ui.prefs.MainPrefs" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
