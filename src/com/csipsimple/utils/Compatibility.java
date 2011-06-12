@@ -224,18 +224,15 @@ public class Compatibility {
 		}
 		
 		// New API for android 2.3 should be able to manage this
-		if(isCompatible(9)) {
+		if(isCompatible(10)) {
 			return false;
 		}
 		
-		//Nexus one is impacted
-		if(android.os.Build.DEVICE.equalsIgnoreCase("passion")){
-			return true;
-		}
 		//All htc except....
 		if(android.os.Build.PRODUCT.toLowerCase().startsWith("htc") 
 				|| android.os.Build.BRAND.toLowerCase().startsWith("htc") 
-				|| android.os.Build.PRODUCT.toLowerCase().equalsIgnoreCase("inc") /* For Incredible */ ) {
+				|| android.os.Build.PRODUCT.toLowerCase().equalsIgnoreCase("inc") /* For Incredible */ 
+				|| android.os.Build.DEVICE.equalsIgnoreCase("passion") /* N1 */) {
 			if(android.os.Build.DEVICE.equalsIgnoreCase("hero") /* HTC HERO */ 
 					|| android.os.Build.DEVICE.equalsIgnoreCase("magic") /* Magic Aka Dev G2 */
 					|| android.os.Build.DEVICE.equalsIgnoreCase("tatoo") /* Tatoo */
@@ -245,18 +242,33 @@ public class Compatibility {
 					) {
 				return false;
 			}
-			return true;
+			
+			// Older than 2.3 has no chance to have the new full perf wifi mode working since does not exists
+			if(!isCompatible(9)) {
+				return true;
+			}else {
+				// Htc sensation
+				 if( ( android.os.Build.DEVICE.equalsIgnoreCase("pyramid") )
+						 && !isCompatible(11) /* For the future we hope that ice cream will have this working */
+				 ) {
+					 return true;
+				 }
+				 // Guess HTC did things the good way with rest of all 2.3 device 
+				 return false;
+			}
+			
 		}
 		//Dell streak
 		if(android.os.Build.BRAND.toLowerCase().startsWith("dell") &&
 				android.os.Build.DEVICE.equalsIgnoreCase("streak")) {
 			return true;
 		}
-		//Motorola milestone 1 and 2 & motorola droid
+		//Motorola milestone 1 and 2 & motorola droid & defy
 		if(android.os.Build.DEVICE.toLowerCase().contains("milestone2") ||
 				android.os.Build.BOARD.toLowerCase().contains("sholes") ||
 				android.os.Build.PRODUCT.toLowerCase().contains("sholes") ||
-				android.os.Build.DEVICE.equalsIgnoreCase("olympus") ) {
+				android.os.Build.DEVICE.equalsIgnoreCase("olympus") ||
+				android.os.Build.DEVICE.toLowerCase().contains("umts_jordan")) {
 			return true;
 		}
 		
@@ -499,17 +511,9 @@ public class Compatibility {
 		}
 		
 		if(lastSeenVersion < 385) {
-			if(needPspWorkaround()) {
-				prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, true);
-			}
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
-		}
-		
-		if(lastSeenVersion < 394) {
-			//HTC PSP mode hack
-			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround());
 		}
 		if(lastSeenVersion < 575) {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "3");
@@ -566,6 +570,12 @@ public class Compatibility {
 		if(lastSeenVersion < 911 && android.os.Build.DEVICE.toUpperCase().startsWith("GT-I9100")) {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
 			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
+			
+		}
+		if(lastSeenVersion < 913 && 
+				(android.os.Build.DEVICE.equalsIgnoreCase("pyramid")
+				||android.os.Build.DEVICE.equalsIgnoreCase("umts_jordan") ) ) {
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround());
 			
 		}
 	}
