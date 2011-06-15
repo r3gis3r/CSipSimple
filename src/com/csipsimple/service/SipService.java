@@ -75,6 +75,7 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.Threading;
 
 public class SipService extends Service {
 
@@ -1536,13 +1537,13 @@ public class SipService extends Service {
 	}
 
     private static Looper createLooper() {
-    	//synchronized (executorThread) {
+    //	synchronized (executorThread) {
 	    	if(executorThread == null) {
 	    		Log.w(THIS_FILE, "Creating new handler thread");
 		        executorThread = new HandlerThread("SipService.Executor");
 		        executorThread.start();
 	    	}
-		//}
+	//	}
         return executorThread.getLooper();
     }
 
@@ -1710,7 +1711,7 @@ public class SipService extends Service {
 			}else {
 				Log.e(THIS_FILE, "Somebody has stopped the service while there is an ongoing call !!!");
 			}
-			/*
+			
 			synchronized (executorThread) {
 				HandlerThread currentHandlerThread = executorThread;
 				executorThread = null;
@@ -1718,7 +1719,7 @@ public class SipService extends Service {
 				// This is a little bit crappy, we are cutting were we sit.
 				Threading.stopHandlerThread(currentHandlerThread, false);
 			}
-			*/
+			
 			// We will not go longer
 			Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");
 		}

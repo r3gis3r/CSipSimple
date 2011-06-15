@@ -223,7 +223,7 @@ public class Compatibility {
 			return true;
 		}
 		
-		// New API for android 2.3 should be able to manage this
+		// New API for android 2.3 should be able to manage this but do only for honeycomb cause seems not correctly supported by all yet
 		if(isCompatible(11)) {
 			return false;
 		}
@@ -247,14 +247,11 @@ public class Compatibility {
 			if(!isCompatible(9)) {
 				return true;
 			}else {
-				// Htc sensation
-				 if( ( android.os.Build.DEVICE.equalsIgnoreCase("pyramid") )
-						 && !isCompatible(11) /* For the future we hope that ice cream will have this working */
-				 ) {
-					 return true;
+				// N1 is fine with that
+				 if( android.os.Build.DEVICE.equalsIgnoreCase("passion") ) {
+					 return false;
 				 }
-				 // Guess HTC did things the good way with rest of all 2.3 device 
-				 return false;
+				 return true;
 			}
 			
 		}
@@ -572,9 +569,7 @@ public class Compatibility {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
 			
 		}
-		if(lastSeenVersion < 913 && 
-				(android.os.Build.DEVICE.equalsIgnoreCase("pyramid")
-				||android.os.Build.DEVICE.equalsIgnoreCase("umts_jordan") ) ) {
+		if(lastSeenVersion < 915) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround());
 			
 		}
