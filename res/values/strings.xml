@@ -23,7 +23,7 @@
 	<string name="next">Next</string>
 	<string name="init">Init...</string>
 	<string name="unable_to_download_file">Unable to download file</string>
-	<string name="connection_not_valid">Selected network route not available (activate WiFi or change preferences to use 3G)</string>
+	<string name="connection_not_valid">Selected network route not allowed with current settings you have setup</string>
 	<string name="invalid_sip_uri">Sip uri is invalid for call</string>
 	<string name="accounts">Accounts</string>
 	<string name="other_accounts">Other accounts</string>
