@@ -72,11 +72,11 @@ public class Compatibility {
 	/**
 	 * Get the stream id for in call track. Can differ on some devices.
 	 * Current device for which it's different :
-	 * Archos 5IT
 	 * @return
 	 */
 	public static int getInCallStream() {
-		if (android.os.Build.BRAND.equalsIgnoreCase("archos")) {
+		/* Archos 5IT */
+		if (android.os.Build.BRAND.equalsIgnoreCase("archos") && android.os.Build.DEVICE.equalsIgnoreCase("g7a")) {
 			//Since archos has no voice call capabilities, voice call stream is not implemented
 			//So we have to choose the good stream tag, which is by default falled back to music
 			return AudioManager.STREAM_MUSIC;
@@ -224,7 +224,7 @@ public class Compatibility {
 		}
 		
 		// New API for android 2.3 should be able to manage this
-		if(isCompatible(10)) {
+		if(isCompatible(11)) {
 			return false;
 		}
 		
@@ -391,7 +391,7 @@ public class Compatibility {
 
 
 	public static boolean useFlipAnimation() {
-		if (android.os.Build.BRAND.equalsIgnoreCase("archos")) {
+		if (android.os.Build.BRAND.equalsIgnoreCase("archos") && android.os.Build.DEVICE.equalsIgnoreCase("g7a")) {
 			return false;
 		}
 		return true;
