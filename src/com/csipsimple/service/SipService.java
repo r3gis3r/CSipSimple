@@ -125,7 +125,7 @@ public class SipService extends Service {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "Try to force service stop");
 			cleanStop();
-			stopSelf();
+			//stopSelf();
 		}
 
 		/**
@@ -1711,7 +1711,7 @@ public class SipService extends Service {
 			}else {
 				Log.e(THIS_FILE, "Somebody has stopped the service while there is an ongoing call !!!");
 			}
-			
+			/*
 			synchronized (executorThread) {
 				HandlerThread currentHandlerThread = executorThread;
 				executorThread = null;
@@ -1719,6 +1719,7 @@ public class SipService extends Service {
 				// This is a little bit crappy, we are cutting were we sit.
 				Threading.stopHandlerThread(currentHandlerThread, false);
 			}
+			*/
 			
 			// We will not go longer
 			Log.i(THIS_FILE, "--- SIP SERVICE DESTROYED ---");

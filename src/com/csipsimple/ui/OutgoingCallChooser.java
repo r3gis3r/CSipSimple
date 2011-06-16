@@ -196,6 +196,7 @@ public class OutgoingCallChooser extends ListActivity {
 
 		// Start service and bind it. Finish selector in onServiceConnected
 		Intent sipService = new Intent(this, SipService.class);
+		startService(sipService);
 		bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 		registerReceiver(regStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
 		
