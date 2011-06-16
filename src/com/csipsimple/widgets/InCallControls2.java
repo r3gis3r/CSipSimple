@@ -417,7 +417,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 			}
 			break;
 		case KeyEvent.KEYCODE_ENDCALL:
-		case KeyEvent.KEYCODE_POWER:
+		//case KeyEvent.KEYCODE_POWER:
 			if (controlMode == MODE_LOCKER) {
 				dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
 				return true;
