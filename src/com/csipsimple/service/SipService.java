@@ -75,7 +75,6 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.utils.Threading;
 
 public class SipService extends Service {
 
@@ -1711,7 +1710,7 @@ public class SipService extends Service {
 			}else {
 				Log.e(THIS_FILE, "Somebody has stopped the service while there is an ongoing call !!!");
 			}
-			/*
+			/* If we activate that we can get two concurrent executorThread 
 			synchronized (executorThread) {
 				HandlerThread currentHandlerThread = executorThread;
 				executorThread = null;

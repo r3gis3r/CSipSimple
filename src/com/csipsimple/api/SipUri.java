@@ -127,8 +127,9 @@ public class SipUri {
     	public int port = 5060;
     }
     
-    private static Pattern sipUriSpliter = Pattern.compile("^(sip(?:s)?):([^:]*)(?::([0-9]*))?$", Pattern.CASE_INSENSITIVE);
-	
+    private static Pattern sipUriSpliter = Pattern.compile("^(sip(?:s)?):(?:[^:]*(?::[^@]*)?@)?([^:@]*)(?::([0-9]*))?$", Pattern.CASE_INSENSITIVE);
+    
+     
     /**
      * Parse an uri
      * @param sipUri the uri to parse
