@@ -128,11 +128,6 @@ public class MediaManager {
 	
 	private int getAudioTargetMode() {
 		int targetMode = MODE_SIP_IN_CALL;
-//Manage that is BT connected part
-//		if(userWantBluetooth) {
-//			// Force normal mode for BT SCO
-//			return AudioManager.MODE_NORMAL;
-//		}
 		
 		if(service.prefsWrapper.getUseModeApi()) {
 			Log.d(THIS_FILE, "User want speaker now..."+userWantSpeaker);

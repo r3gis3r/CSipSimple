@@ -702,7 +702,10 @@ public class SipService extends Service {
 
 					if (state == NetworkInfo.State.CONNECTED) {
 						Log.d(THIS_FILE, "Connectivity alert: CONNECTED " + type);
-						onChanged(type, true);
+						// Fire the event only if valid for incoming else ignore this event
+						if(prefsWrapper.isValidConnectionForIncoming() && !prefsWrapper.hasBeenQuit()) {
+							onChanged(type, true);
+						}
 					} else if (state == NetworkInfo.State.DISCONNECTED) {
 						Log.d(THIS_FILE, "Connectivity alert: DISCONNECTED " + type);
 						onChanged(type, false);
@@ -726,6 +729,11 @@ public class SipService extends Service {
 					}
 				}
 			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
+				if(mTask != null) {
+					Log.d(THIS_FILE, "Cancel current force registration task cause stop asked");
+					mTask.cancel();
+					sipWakeLock.release(mTask);
+				}
 				cleanStop();
 			} else if(action.equals(ACTION_VPN_CONNECTIVITY)) {
 				// TODO : ensure no current call
@@ -900,7 +908,7 @@ public class SipService extends Service {
 			return;
 		}
 
-		registerBroadcasts();
+		//registerBroadcasts();
 	}
 
 	@Override
@@ -1080,6 +1088,7 @@ public class SipService extends Service {
 		if(canStop) {
 			releaseResources();
 		}
+		unregisterBroadcasts();
 		sipWakeLock.release(this);
 		return canStop;
 	}

@@ -185,12 +185,13 @@ public class Compatibility {
 			return Integer.toString(0x4);
 		}
 		*/
-		
+		/* Not relevant anymore, atrix I tested sounds fine with that
 		if(android.os.Build.DEVICE.equalsIgnoreCase("olympus")) {
 			//Motorola atrix bug
 			// CAMCORDER
 			return Integer.toString(0x5);
 		}
+		*/
 		
 		return Integer.toString(AudioSource.MIC);
 	}
@@ -571,7 +572,9 @@ public class Compatibility {
 		}
 		if(lastSeenVersion < 915) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround());
-			
+		}
+		if(lastSeenVersion < 939) {
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, true);
 		}
 	}
 
