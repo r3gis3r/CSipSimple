@@ -434,7 +434,7 @@ public class WizardUtils {
 					locale("ja_JP") }, false, false, 
 					Netelip.class));
 			WIZARDS_DICT.put("SIPCELEU", new WizardInfo("SIPCELEU", "SipCel Europe", 
-					R.drawable.ic_wizard_sipcel, 14, 
+					R.drawable.ic_wizard_sipcel, 2, 
 					new Locale[]{
 					Locale.FRANCE, Locale.UK, Locale.GERMANY, Locale.ITALY,
 					locale("es_ES"), locale("da_DA"), locale("uk_UA"), locale("ro_RO"), locale("hr_HR")
