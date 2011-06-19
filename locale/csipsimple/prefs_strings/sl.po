@@ -239,10 +239,9 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "(strežnik:vrata)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "Strežnik TURN"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
@@ -421,15 +420,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Način za varen RTP"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Način za strokovnjake"
+msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "Način za varen RTP"
+msgstr ""
 
 #. Media
 msgctxt "audio_quality"
@@ -476,10 +473,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Prilagodi nivo signala zvočnika (1 - brez sprememb)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "Ojačanje mikrofona"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -506,7 +502,8 @@ msgid "Media quality"
 msgstr "Kvaliteta medija"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Kvaliteta toka medija (samo, če ste prepričani)"
 
 msgctxt "snd_clock_rate"
@@ -686,8 +683,8 @@ msgstr "Integracija klicalnika"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
 "Možnost izbire klica SIP ali mobilnega klica ob uporabi sistemskega "
 "klicalnika"
@@ -738,7 +735,8 @@ msgstr "Ostani buden med klicem"
 
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
-msgstr "Omogočite v primeru slabega zvoka med klicem na WiFi, ko zaslon zaspi"
+msgstr ""
+"Omogočite v primeru slabega zvoka med klicem na WiFi, ko zaslon zaspi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -800,10 +798,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Integracija s predvajalnikom glasbe"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -883,10 +880,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr ""
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Za odhodne klice"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

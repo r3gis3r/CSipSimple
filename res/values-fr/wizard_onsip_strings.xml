@@ -2,4 +2,10 @@
 <resources>
   <string name="w_onsip_authentication_name">Nom d\'authentification</string>
   <string name="w_onsip_authentication_name_desc">Nom pour l\'authentification SIP</string>
+  <string name="w_onsip_username">Utilisateur SIP</string>
+  <string name="w_onsip_username_desc">Compte utilisateur SIP</string>
+  <string name="w_onsip_server">Domaine</string>
+  <string name="w_onsip_server_desc">Domaine SIP</string>
+  <string name="w_onsip_password">Mot de passe SIP</string>
+  <string name="w_onsip_password_desc">Mot de passe pour le compte SIP</string>
 </resources>

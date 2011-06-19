@@ -1,2 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_ovh_phone_number_desc">Номер телефону повинен бути відформатований як 0033xxxxxx</string>
+</resources>

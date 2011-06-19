@@ -28,6 +28,8 @@
   <string name="use_gprs">Usa GPRS</string>
   <string name="lock_wifi">Blocca wifi</string>
   <string name="lock_wifi_desc">Evita la dissattivazione del wifi quando SIP è connesso</string>
+  <string name="lock_wifi_perfs">Blocco alte prestazioni</string>
+  <string name="lock_wifi_perfs_desc">Blocco wifi in modalità alte prestazioni (consuma batteria rapidamente)</string>
   <string name="enable_tcp">TCP</string>
   <string name="enable_tcp_desc">Abilita trasporto TCP</string>
   <string name="enable_tls">TLS</string>
@@ -53,6 +55,10 @@
   <string name="enable_turn_desc">Attiva TURN</string>
   <string name="turn_server">Turn server</string>
   <string name="turn_server_desc">Turn server (HOST:PORT)</string>
+  <string name="turn_username">Utente TURN</string>
+  <string name="turn_username_desc">Username per l\'autenticazione di TURN</string>
+  <string name="turn_password">Password TURN</string>
+  <string name="turn_password_desc">Password per l\'autenticazione di TURN</string>
   <string name="enable_stun">Abilita STUN</string>
   <string name="enable_stun_desc">Attiva funzionalità STUN</string>
   <string name="stun_server">STUN servers</string>
@@ -64,6 +70,12 @@
   <string name="keep_alive_interval_wifi">Wifi keep alive</string>
   <string name="keep_alive_interval_mobile">Mobile keep alive</string>
   <string name="keep_alive_interval_desc">Intervallo (sec) per pacchetti KA</string>
+  <string name="use_compact_form">Usa SIP compatto</string>
+  <string name="use_compact_form_desc">Riduce la dimensione dei pacchetti SIP. Potrebbe non funzionare su vecchi server SIP</string>
+  <string name="user_agent">User agent</string>
+  <string name="user_agent_desc">Agent presentato dall\'applicazione (se di default aggiungerà informazioni)</string>
+  <string name="ka_use_wake">Keep alive awake</string>
+  <string name="ka_use_wake_desc">Se attivato keep alive sveglierà il telefono</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">Trasporto sicuro</string>
   <string name="secure_transport_desc">Meccanismo di sicurezza per SIP e RTP</string>
@@ -88,6 +100,8 @@
   <string name="tls_method_desc">Metodo per il trasporto TLS</string>
   <string name="use_srtp">Modalità SRTP</string>
   <string name="use_srtp_desc">Modalità per RTP Sicuro</string>
+  <string name="use_zrtp">Modo ZRTP</string>
+  <string name="use_zrtp_desc">Modo per ZRTP sicuro</string>
   <string name="audio_quality">Qualità audio</string>
   <string name="audio_volume">Volume</string>
   <string name="codecs">Codec</string>
@@ -99,6 +113,8 @@
   <string name="snd_mic_level_desc">"Regola il livello di segnale del microfono  (1 non fa nulla)"</string>
   <string name="snd_speaker_level">Amplificazione dell\'altoparlante</string>
   <string name="snd_speaker_level_desc">"Regola il livello di segnale dell\'altoparlante  (1 non fa nulla)"</string>
+  <string name="snd_bt_mic_level">amplificazione microfono Bluetooth</string>
+  <string name="snd_bt_speaker_level">Amplificazione nell\'ascolto Bluetooth</string>
   <string name="snd_stream_level">Livello stream iniziale</string>
   <string name="snd_stream_level_desc">Imposta il livello iniziale per lo stream audio (stream Android)</string>
   <string name="snd_auto_close_time">Tempo di chiusura automatica</string>
@@ -124,6 +140,12 @@
   <string name="use_mode_api_desc">Prova ad abilitare se l\'audio è indirizzato allo speaker, invece dell\'auricolare</string>
   <string name="sip_audio_mode">Modalità audio per le chiamate SIP</string>
   <string name="sip_audio_mode_desc">Cambia solo su suggerimento degli sviluppatori</string>
+  <string name="use_webrtc_hack">Usa implementazione WebRTC</string>
+  <string name="use_webrtc_hack_desc">Implementazione realizzata dal team WebRTC</string>
+  <string name="do_focus_audio">Focus audio</string>
+  <string name="do_focus_audio_desc">La disattivazione comporta sovrapposizioni con la musica, ma può aiutare con il routing</string>
+  <string name="micro_source">Sorgente microfono</string>
+  <string name="micro_source_desc">Sorgente microfono, Scegliendo il valore appropriato si può migliorare la cancellazione dell\'eco</string>
   <string name="has_io_queue">Coda IO</string>
   <string name="has_io_queue_desc">Attiva Coda per input/output</string>
   <string name="set_audio_generate_tone">Tone hack</string>
@@ -136,6 +158,8 @@
   <string name="band_for_edge">Tipo banda per EDGE</string>
   <string name="band_for_other">Tipo banda per altro</string>
   <string name="codecs_band_types">Tipi di ampiezza di banda delle connessioni per i codec</string>
+  <string name="use_sgs_call_hack">Use l\'Hack per il Samsung Galaxy</string>
+  <string name="use_sgs_call_hack_desc">Preimposta la modalità di chiamata per risolvere il routing</string>
   <string name="general_ui">Interfaccia utente generale</string>
   <string name="native_dialer_integration">Integrazione con il dialer nativo</string>
   <string name="advanced_ui">Tweaks avanzati</string>
@@ -167,6 +191,12 @@
   <string name="gsm_integration_type_desc">Come l\'applicazione usa il tuo cellulare (o no)</string>
   <string name="invert_proximity_sensor">Inverte il sensore di prossimità</string>
   <string name="invert_proximity_sensor_desc">Può aiutare su alcune periferiche quando il produttore ha invertito vicino e lontano</string>
+  <string name="theme">Tema</string>
+  <string name="theme_desc">Tema per l\'applicazione</string>
+  <string name="obtain_themes">Ottieni più temi</string>
+  <string name="obtain_themes_desc">Prendi temi dell\'applicazione dal market</string>
+  <string name="display_icon_in_status_bar_nbr">Mostra numero nella barra di stato</string>
+  <string name="display_icon_in_status_bar_nbr_desc">Mostra il numero di account registrati nella barra di stato</string>
   <string name="android_integration">Integrazione con Android</string>
   <string name="android_integration_desc">Integrazione con il dialer nativo e log delle chiamate</string>
   <string name="availability_profile">Profilo di disponibilità</string>
@@ -182,6 +212,8 @@
   <string name="codecs_availability_text">Disponibile solo se sip è registrato</string>
   <string name="auto_record_calls">Registra automaticamente le chiamate</string>
   <string name="auto_record_calls_desc">Registra le chiamate appena connesso</string>
+  <string name="support_multiple_calls">Supporto alle chiamate multiple</string>
+  <string name="support_multiple_calls_desc">Consente conferenza e chiamate multiple contemporanee</string>
   <string name="expert_preferences">Modalità esperto</string>
   <string name="advanced_preferences">Modalità avanzata</string>
 </resources>

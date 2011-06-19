@@ -246,10 +246,9 @@ msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
 msgstr ""
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "TLS parola"
+msgstr ""
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
@@ -420,10 +419,9 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Uzman modu"
+msgstr ""
 
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
@@ -503,7 +501,8 @@ msgid "Media quality"
 msgstr "Medya kalitesi"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 
 msgctxt "snd_clock_rate"
@@ -683,8 +682,8 @@ msgstr ""
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
 
 msgctxt "integrate_with_native_calllogs"
@@ -877,10 +876,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr ""
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Yapılan aramalar için"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

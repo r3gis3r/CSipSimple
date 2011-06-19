@@ -21,10 +21,9 @@ msgctxt "w_onsip_authentication_name"
 msgid "Auth username"
 msgstr ""
 
-#, fuzzy
 msgctxt "w_onsip_authentication_name_desc"
 msgid "SIP authentication user"
-msgstr "Azonosító név"
+msgstr ""
 
 msgctxt "w_onsip_username"
 msgid "SIP Username"

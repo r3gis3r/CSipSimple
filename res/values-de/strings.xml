@@ -43,6 +43,7 @@
   <string name="backup">Sichern</string>
   <string name="faq">FAQ</string>
   <string name="help">Hilfe</string>
+  <string name="record_logs">Protokoll erstellen um es an das Entwicklerteam zu senden</string>
   <string name="send_logs">Beende Protokollierung (und versende das Protokoll)</string>
   <string name="view_existing_issues">Bestehende Fehlermeldungen ansehen</string>
   <string name="ok">OK</string>
@@ -57,4 +58,6 @@
   <string name="show_password">Passwort anzeigen</string>
   <string name="this_codec_is_not_free">**Dieser Codec ist nicht kostenfrei!**\nBitte stelle sicher, dass entweder du oder dein SIP-Provider eine Lizenz für diesen Codec erworben haben. Wir, als Bereitsteller dieser Anwendung, sind nicht für eine illegale Nutzung dieses Codecs verantwortlich.\nDer Codec kann hier erworben werden:</string>
   <string name="voice_mail">Anrufbeantworter</string>
+  <string name="not_configured_multiple_calls">Einstellungen verbieten mehrere Anrufe</string>
+  <string name="legal_information">Rechtliche Informationen</string>
 </resources>

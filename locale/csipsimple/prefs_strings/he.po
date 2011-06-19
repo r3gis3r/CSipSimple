@@ -238,23 +238,21 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "שרת TURN (יציאה:המארח)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "שרת Turn"
+msgstr "משתמש TURN"
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
-msgstr ""
+msgstr "שם משתמש בשביל אימות TURN"
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "סיסמת TLS"
+msgstr "סיסמת TURN"
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
-msgstr ""
+msgstr "סיסמה בשביל אימות TURN"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
@@ -302,24 +300,23 @@ msgstr "מרווח זמן (שניות) עבור מנות KA"
 
 msgctxt "use_compact_form"
 msgid "Use compact SIP"
-msgstr ""
+msgstr "השתמש בסיפ דחוס"
 
 msgctxt "use_compact_form_desc"
 msgid "Reduce SIP packets size. May not work on old SIP servers"
-msgstr ""
+msgstr "הפחת את גודל מנות הסיפ. ייתכן שלא יעבוד על שרתי סיפ ישנים"
 
 msgctxt "user_agent"
 msgid "User agent"
-msgstr ""
+msgstr "משתמש מורשה"
 
 msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
-msgstr ""
+msgstr "מורשה שהוצג על ידי היישום (אם ברירת המחדל יוסיף מידע)"
 
-#, fuzzy
 msgctxt "ka_use_wake"
 msgid "Keep alive awake"
-msgstr "השאר Wifi דלוק"
+msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
@@ -422,15 +419,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "מצב עבור RTP מאובטח"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "מצב מומחה"
+msgstr "מצב ZRTP"
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "מצב עבור RTP מאובטח"
+msgstr "מצב ZRTP מאובטח"
 
 #. Media
 msgctxt "audio_quality"
@@ -477,14 +472,13 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "התאם את רמת האות של הרמקול (1 לא עושה כלום)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "עצמת מיקרופון"
+msgstr "בלוטות' מיקרו הגברה"
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
-msgstr ""
+msgstr "בלוטות' הגברת האזנה"
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
@@ -507,7 +501,8 @@ msgid "Media quality"
 msgstr "איכות המדיה"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "האיכות של תעבורת התקשורת (שנה רק אם אתה יודע מה אתה עושה)"
 
 msgctxt "snd_clock_rate"
@@ -604,13 +599,13 @@ msgstr ""
 
 msgctxt "micro_source"
 msgid "Micro source"
-msgstr ""
+msgstr "מיקרו המקור"
 
 msgctxt "micro_source_desc"
 msgid ""
 "Source for micro. Choosing the appropriate value may improve echo "
 "cancellation"
-msgstr ""
+msgstr "מקור עבור מיקרו. בחירת הערך המתאים עשוי לשפר את ביטול ההד"
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
@@ -662,11 +657,11 @@ msgstr "חיבורי רוחב פס עבור סוגי קודקים"
 
 msgctxt "use_sgs_call_hack"
 msgid "Use Samsung Galaxy Hack"
-msgstr ""
+msgstr "השתמש בפריצת סמסונג גלקסי"
 
 msgctxt "use_sgs_call_hack_desc"
 msgid "Pre set call mode to solve routing"
-msgstr ""
+msgstr "לפני הגדרת מצב שיחה כדי לפתור את הניתוב"
 
 #. UI
 msgctxt "general_ui"
@@ -687,8 +682,8 @@ msgstr "חייגן משולב"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr "כאשר מחייגים עם החייגן המקורי תישאל אם ברצונך להשתמש בסיפ או סלולרי"
 
 msgctxt "integrate_with_native_calllogs"
@@ -797,28 +792,27 @@ msgstr "עשוי לעזור על כמה מכשירים, כאשר יצרנית ה
 
 msgctxt "theme"
 msgid "Theme"
-msgstr ""
+msgstr "ערכת נושא"
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "שלב עם מוזיקת היישום"
+msgstr "ערכת נושא עבור היישום"
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
-msgstr ""
+msgstr "קבל ערכות נושא נוספים"
 
 msgctxt "obtain_themes_desc"
 msgid "Get themes apps on the market"
-msgstr ""
+msgstr "קבל ערכות נושא היישומים במרקט"
 
 msgctxt "display_icon_in_status_bar_nbr"
 msgid "Display number in status bar"
-msgstr ""
+msgstr "הצג מספר בשורת המצב"
 
 msgctxt "display_icon_in_status_bar_nbr_desc"
 msgid "Display the number of registered accounts in status bar"
-msgstr ""
+msgstr "הצג את מספר החשבונות הרשומים בשורת המצב"
 
 #. Fast settings
 msgctxt "android_integration"
@@ -882,14 +876,13 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "הקלט שיחות מיד ברגע ההתחברות"
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "עבור שיחות יוצאות"
+msgstr "תמיכה במספר שיחות"
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"
-msgstr ""
+msgstr "אפשר ועידה ומספר שיחות בו זמנית"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

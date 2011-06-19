@@ -193,7 +193,8 @@ msgstr "Використовувати IPv6"
 
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
-msgstr "Переключення в режим IPv6 (мережа і телефон повинен підтримувати його)"
+msgstr ""
+"Переключення в режим IPv6 (мережа і телефон повинен підтримувати його)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
@@ -239,19 +240,17 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN сервер (ХОСТ:ПОРТ)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "Turn сервер"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
 msgstr ""
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "TLS пароль"
+msgstr ""
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
@@ -317,10 +316,9 @@ msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ka_use_wake"
 msgid "Keep alive awake"
-msgstr "Не вимикати WiFi"
+msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
@@ -423,15 +421,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Режим для захищеного RTP"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Режим експерта"
+msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "Режим для захищеного RTP"
+msgstr ""
 
 #. Media
 msgctxt "audio_quality"
@@ -478,10 +474,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Відрегулюйте рівень спікер сигналу (1 нічого не робити)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "Мікро посилення"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -508,10 +503,11 @@ msgid "Media quality"
 msgstr "Якість медіа"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
-"Якість потоку засобів масової інформації (змінити, тільки якщо ви знаєте,"
-" що робите)"
+"Якість потоку засобів масової інформації (змінити, тільки якщо ви знаєте, що "
+"робите)"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
@@ -571,7 +567,8 @@ msgstr "Використовувати API маршрутизації"
 
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr "Спробуйте включити, що якщо звук маршрутизації оратор замість навушників"
+msgstr ""
+"Спробуйте включити, що якщо звук маршрутизації оратор замість навушників"
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
@@ -579,7 +576,8 @@ msgstr "Використовувати режим аудіо API"
 
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr "Спробуйте включити, що якщо звук маршрутизації оратор замість навушників"
+msgstr ""
+"Спробуйте включити, що якщо звук маршрутизації оратор замість навушників"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
@@ -690,8 +688,8 @@ msgstr "Інтеграція з системним додзвоном"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
 "При наборі з системного дозвону вам буде запропоновано, що ви хочете "
 "використовувати SIP або мобільний"
@@ -702,7 +700,8 @@ msgstr "Інтеграція журналу дзвінків"
 
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
-msgstr "SIP-дзвінки будуть об'єднані (якщо можливо) у рідному журнали викликів"
+msgstr ""
+"SIP-дзвінки будуть об'єднані (якщо можливо) у рідному журнали викликів"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -743,8 +742,8 @@ msgstr "Пильнувати у той час як за викликом"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Лагодження, якщо ви отримуєте поривчастий звук, коли екран вимкнути в той"
-" час як в WIFI мережі"
+"Лагодження, якщо ви отримуєте поривчастий звук, коли екран вимкнути в той "
+"час як в WIFI мережі"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -808,10 +807,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Інтеграція з музичним додатком"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -848,7 +846,8 @@ msgstr "Завжди доступний"
 
 msgctxt "always_available_desc"
 msgid "Will use battery but incoming calls are always received"
-msgstr "Буде використовувати батарею, але вхідні дзвінки завжди отримуватимуться"
+msgstr ""
+"Буде використовувати батарею, але вхідні дзвінки завжди отримуватимуться"
 
 msgctxt "wifi_available"
 msgid "Available on WiFi"
@@ -891,10 +890,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Записувати дзвінки при зєднанні"
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Для вихідних дзвінків"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

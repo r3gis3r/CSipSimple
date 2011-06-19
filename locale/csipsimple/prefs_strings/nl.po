@@ -238,19 +238,17 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN-server (HOST:POORT)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "TURN-server"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
 msgstr ""
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "TLS-wachtwoord"
+msgstr ""
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
@@ -316,10 +314,9 @@ msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ka_use_wake"
 msgid "Keep alive awake"
-msgstr "Wi-Fi keep alive"
+msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
@@ -422,15 +419,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Modus voor veilige RTP"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Expert-modus"
+msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "Modus voor veilige RTP"
+msgstr ""
 
 #. Media
 msgctxt "audio_quality"
@@ -477,10 +472,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Pas het signaalniveau van de luidspreker aan (1: doe niets)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "Microfoonversterking"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -507,8 +501,10 @@ msgid "Media quality"
 msgstr "Media-kwaliteit"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
-msgstr "Kwaliteit van de media-stroom (alleen aanpassen als u weet wat u doet)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
+msgstr ""
+"Kwaliteit van de media-stroom (alleen aanpassen als u weet wat u doet)"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
@@ -569,8 +565,8 @@ msgstr "Gebruik routerings-API"
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
-"Probeer dit aan te zetten als het geluid naar de luidspreker gaat in "
-"plaats van naar de hoofdtelefoon"
+"Probeer dit aan te zetten als het geluid naar de luidspreker gaat in plaats "
+"van naar de hoofdtelefoon"
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
@@ -579,8 +575,8 @@ msgstr "Gebruik geluids-API-modus"
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
-"Probeer dit aan te zetten als het geluid naar de luidspreker gaat in "
-"plaats van naar de hoofdtelefoon"
+"Probeer dit aan te zetten als het geluid naar de luidspreker gaat in plaats "
+"van naar de hoofdtelefoon"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
@@ -691,11 +687,11 @@ msgstr "Integratie met kiezer"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Wanneer u kiest met de ingebouwde kiezer zal u worden gevraagd of u via "
-"SIP of mobiel wilt bellen"
+"Wanneer u kiest met de ingebouwde kiezer zal u worden gevraagd of u via SIP "
+"of mobiel wilt bellen"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -746,8 +742,8 @@ msgstr "Blijf wakker tijdens een oproep"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Oplossing voor slecht geluid wanneer het scherm uitschakelt tijdens een "
-"Wi-Fi oproep"
+"Oplossing voor slecht geluid wanneer het scherm uitschakelt tijdens een Wi-"
+"Fi oproep"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -773,7 +769,8 @@ msgstr "Integreer met de muziekapplicatie"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
-msgstr "Zet dit uit als u een andere muziekapplicatie dan de officiële gebruikt"
+msgstr ""
+"Zet dit uit als u een andere muziekapplicatie dan de officiële gebruikt"
 
 msgctxt "ringtone"
 msgid "Ringtone"
@@ -813,10 +810,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Integreer met de muziekapplicatie"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -861,7 +857,8 @@ msgstr "Beschikbaar bij Wi-Fi"
 
 msgctxt "wifi_available_desc"
 msgid "Availability of incoming calls based on WiFi profile"
-msgstr "Inkomende oproepen worden ontvangen afhankelijk van het Wi-Fi-profiel"
+msgstr ""
+"Inkomende oproepen worden ontvangen afhankelijk van het Wi-Fi-profiel"
 
 msgctxt "never_available"
 msgid "Only for outgoing"
@@ -896,10 +893,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Neem oproepen op zo snel als verbonden"
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Voor uitgaande gesprekken"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

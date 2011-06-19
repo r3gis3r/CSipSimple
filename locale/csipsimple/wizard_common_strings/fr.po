@@ -31,7 +31,7 @@ msgstr "Nom de l'utilisateur"
 
 msgctxt "w_common_username_desc"
 msgid "Sip account login (do not write the @sip.server)"
-msgstr ""
+msgstr "Login du compte SIP (ne pas ajouter @sip.server)"
 
 msgctxt "w_common_phone_number"
 msgid "Phone number"

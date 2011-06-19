@@ -1,5 +1,2 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
-  <string name="w_onsip_authentication_name">Azonosító név</string>
-  <string name="w_onsip_authentication_name_desc">Onsip-es SIP azonosító név</string>
-</resources>
+<resources/>

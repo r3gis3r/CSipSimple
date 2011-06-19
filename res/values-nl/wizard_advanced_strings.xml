@@ -5,7 +5,6 @@
   <string name="w_advanced_caller_id">Nummerweergave</string>
   <string name="w_advanced_caller_id_desc">Weer te geven nummer bij oproep</string>
   <string name="w_advanced_username">Gebruikersnaam</string>
-  <string name="w_advanced_username_desc">Gebruikersnaam voor SIP-server authenticatie</string>
   <string name="w_advanced_password">Wachtwoord</string>
   <string name="w_advanced_password_desc">Wachtwoord voor SIP-server authenticatie</string>
   <string name="w_advanced_use_tcp">Gebruik TCP (geen UDP)</string>

@@ -3,7 +3,6 @@
   <string name="w_common_display_name">Hesap adı</string>
   <string name="w_common_display_name_desc">Bu hesap için görünen ad</string>
   <string name="w_common_username">Kullanıcı adı</string>
-  <string name="w_common_username_desc">Sip hesaba giriş</string>
   <string name="w_common_phone_number">Telefon numarası</string>
   <string name="w_common_phone_number_desc">Servis saglayici tarafindan verilen Sip telefon numarası</string>
   <string name="w_common_password">Parola</string>

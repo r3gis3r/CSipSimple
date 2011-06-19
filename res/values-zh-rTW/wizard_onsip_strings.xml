@@ -1,5 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="w_onsip_authentication_name">認證名</string>
-  <string name="w_onsip_authentication_name_desc">SIP 認證名</string>
+  <string name="w_onsip_authentication_name">認證用戶名</string>
+  <string name="w_onsip_authentication_name_desc">SIP 認證使用的用戶名</string>
+  <string name="w_onsip_username">SIP 用戶名</string>
+  <string name="w_onsip_username_desc">SIP 帳戶用戶名</string>
+  <string name="w_onsip_server">域</string>
+  <string name="w_onsip_server_desc">SIP 域</string>
+  <string name="w_onsip_password">SIP 密碼</string>
+  <string name="w_onsip_password_desc">SIP 帳戶密碼</string>
 </resources>

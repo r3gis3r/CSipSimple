@@ -132,11 +132,11 @@ msgstr "Empêche la mise en veille du WIFI lorsque le SIP est connecté"
 
 msgctxt "lock_wifi_perfs"
 msgid "High perfs lock"
-msgstr ""
+msgstr "Verrou haute performance"
 
 msgctxt "lock_wifi_perfs_desc"
 msgid "Wifi lock in High perfs mode (drain battery faster)"
-msgstr ""
+msgstr "Verrou wifi en mode haute performance (utilise plus la batterie)"
 
 msgctxt "enable_tcp"
 msgid "TCP"
@@ -192,7 +192,8 @@ msgstr "Utiliser l'IPv6"
 
 msgctxt "use_ipv6_desc"
 msgid "Switch to IPv6 mode (your network and phone must support it)"
-msgstr "Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
+msgstr ""
+"Passer en mode IPv6 (votre téléphone et votre réseau doivent le supporter)"
 
 msgctxt "enable_dns_srv"
 msgid "Resolve DNS SRV"
@@ -200,7 +201,8 @@ msgstr "Résoudre les DNS SRV"
 
 msgctxt "enable_dns_srv_desc"
 msgid "Use the application resolver to resolve DNS names"
-msgstr "Utiliser les DNS dans l'application pour résoudre les noms de domaine"
+msgstr ""
+"Utiliser les DNS dans l'application pour résoudre les noms de domaine"
 
 msgctxt "override_nameserver"
 msgid "Use a custom DNS"
@@ -238,23 +240,21 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "Serveur TURN (HOST:PORT)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "Serveur TURN"
+msgstr "Utilisateur TURN"
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
-msgstr ""
+msgstr "Nom d'utilisateur pour l'authentification TURN"
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "Mot de passe TLS"
+msgstr "Mot de passe TURN"
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
-msgstr ""
+msgstr "Mot de passe pour l'authentification TURN"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
@@ -302,28 +302,30 @@ msgstr "Intervalle (seconde) pour les paquets qui garde la connexion active"
 
 msgctxt "use_compact_form"
 msgid "Use compact SIP"
-msgstr ""
+msgstr "Utiliser le SIP compact"
 
 msgctxt "use_compact_form_desc"
 msgid "Reduce SIP packets size. May not work on old SIP servers"
 msgstr ""
+"Réduit la taille des paquets SIP. Peut ne pas être supporté par certains "
+"fournisseurs SIP"
 
 msgctxt "user_agent"
 msgid "User agent"
-msgstr ""
+msgstr "Agent utilisateur"
 
 msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
+"Agent présenté par l'application (si défaut, ajoutera des infos plateforme)"
 
-#, fuzzy
 msgctxt "ka_use_wake"
 msgid "Keep alive awake"
-msgstr "Battement de coeur wifi"
+msgstr "Reveil du battement de coeur"
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
-msgstr ""
+msgstr "Si actif, le battement de coeur réveille le téléphone"
 
 #. Security
 msgctxt "tls"
@@ -422,15 +424,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Mode pour le RTP sécurisé"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Mode expert"
+msgstr "Mode ZRTP"
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "Mode pour le RTP sécurisé"
+msgstr "Mode pour la sécurité ZRTP"
 
 #. Media
 msgctxt "audio_quality"
@@ -459,7 +459,8 @@ msgstr "Détection de silence"
 
 msgctxt "enable_vad_desc"
 msgid "Activate voice audio detection"
-msgstr "Activer la détection active de voix (réduit la bande passante utilisée)"
+msgstr ""
+"Activer la détection active de voix (réduit la bande passante utilisée)"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
@@ -477,14 +478,13 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Ajuster le gain du signal de l'écouteur (1 n'a pas d'effet)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "Amplification du micro"
+msgstr "Amplification du micro Bluetooth"
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
-msgstr ""
+msgstr "Amplification d'écoute Bluetooth"
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
@@ -509,7 +509,8 @@ msgid "Media quality"
 msgstr "Qualité du média"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualité du flux média (à ne modifier que si vous savez exactement ce que "
 "vous faites)"
@@ -596,29 +597,33 @@ msgstr "Ne changer ceci que si les développeurs vous le conseillent"
 
 msgctxt "use_webrtc_hack"
 msgid "Use WebRTC implementation"
-msgstr ""
+msgstr "Utiliser l'implémentation WebRTC"
 
 msgctxt "use_webrtc_hack_desc"
 msgid "Implementation made by WebRTC team"
-msgstr ""
+msgstr "Implémentation faite par l'équipe WebRTC"
 
 msgctxt "do_focus_audio"
 msgid "Focus audio"
-msgstr ""
+msgstr "Acquisition audio"
 
 msgctxt "do_focus_audio_desc"
 msgid "Disabling will result overlaps with music but may help with routing"
 msgstr ""
+"Désactiver conduira le son de la musique et la communication a rentrer en "
+"conflit mais peut aider le routage."
 
 msgctxt "micro_source"
 msgid "Micro source"
-msgstr ""
+msgstr "Micro source"
 
 msgctxt "micro_source_desc"
 msgid ""
 "Source for micro. Choosing the appropriate value may improve echo "
 "cancellation"
 msgstr ""
+"Source pour le micro. Choisir la source approprié peut grandement améliorer "
+"l'annulation d'écho"
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
@@ -670,11 +675,11 @@ msgstr "Type de connections pour les codecs"
 
 msgctxt "use_sgs_call_hack"
 msgid "Use Samsung Galaxy Hack"
-msgstr ""
+msgstr "Utiliser le Hack pour Samsung Galaxy"
 
 msgctxt "use_sgs_call_hack_desc"
 msgid "Pre set call mode to solve routing"
-msgstr ""
+msgstr "Pré configure le mode pour résoudre le problème de routage audio"
 
 #. UI
 msgctxt "general_ui"
@@ -695,11 +700,11 @@ msgstr "Activer l'intégration"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Quand un appel est initié partout dans Android il vous sera demandé si "
-"vous voulez utiliser le GSM ou le SIP"
+"Quand un appel est initié partout dans Android il vous sera demandé si vous "
+"voulez utiliser le GSM ou le SIP"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -708,8 +713,7 @@ msgstr "Intégrations au journal d'appel"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"Les appels SIP seront rajoutés (si possible) aux journaux d'appels "
-"d'Android"
+"Les appels SIP seront rajoutés (si possible) aux journaux d'appels d'Android"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -750,8 +754,8 @@ msgstr "Rester allumer lorsqu'en cours d'appel"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Corrige le son haché lorsque le téléphone est en WIFI (par exemple pour "
-"le Nexus One)"
+"Corrige le son haché lorsque le téléphone est en WIFI (par exemple pour le "
+"Nexus One)"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -760,8 +764,7 @@ msgstr "Utiliser le verouillage CPU"
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"S'assurer que le CPU tourne toujours pour l'application (utilise la "
-"batterie)"
+"S'assurer que le CPU tourne toujours pour l'application (utilise la batterie)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -817,28 +820,27 @@ msgstr ""
 
 msgctxt "theme"
 msgid "Theme"
-msgstr ""
+msgstr "Thème"
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "S'intégrer à Musique"
+msgstr "Thème pour l'application"
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
-msgstr ""
+msgstr "Obtenir plus de thèmes"
 
 msgctxt "obtain_themes_desc"
 msgid "Get themes apps on the market"
-msgstr ""
+msgstr "Récupérer les applications thèmes depuis le market"
 
 msgctxt "display_icon_in_status_bar_nbr"
 msgid "Display number in status bar"
-msgstr ""
+msgstr "Afficher le nombre dans la barre de status"
 
 msgctxt "display_icon_in_status_bar_nbr_desc"
 msgid "Display the number of registered accounts in status bar"
-msgstr ""
+msgstr "Nombre de comptes enregistrés dans la barre de notification"
 
 #. Fast settings
 msgctxt "android_integration"
@@ -904,14 +906,13 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Enregistrer dès que l'appel est connecté"
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Pour les appels sortants"
+msgstr "Support appels multiples"
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"
-msgstr ""
+msgstr "Conférence et plusieurs appels en même temps"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

@@ -5,7 +5,6 @@
   <string name="w_advanced_caller_id">Caller ID</string>
   <string name="w_advanced_caller_id_desc">Caller ID, щоб відправити зі дзвінками</string>
   <string name="w_advanced_username">Ім\'я користувача</string>
-  <string name="w_advanced_username_desc">Ім\'я користувача для сервера SIP</string>
   <string name="w_advanced_password">Пароль</string>
   <string name="w_advanced_password_desc">Пароль для аутентифікації</string>
   <string name="w_advanced_use_tcp">Використовувати TCP (не UDP)</string>

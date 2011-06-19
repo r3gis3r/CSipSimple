@@ -1,5 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="w_onsip_authentication_name">Ověřovací jméno</string>
-  <string name="w_onsip_authentication_name_desc">Jméno pro autorizaci SIP</string>
+  <string name="w_onsip_authentication_name">autorizační jméno</string>
+  <string name="w_onsip_authentication_name_desc">ověření uživatele</string>
+  <string name="w_onsip_username">uživatelské jméno</string>
+  <string name="w_onsip_username_desc">uživatelské jméno sip účtu</string>
+  <string name="w_onsip_server">Doména</string>
+  <string name="w_onsip_server_desc">SIP Doména</string>
+  <string name="w_onsip_password">SIP heslo</string>
+  <string name="w_onsip_password_desc">heslo sip účtu</string>
 </resources>

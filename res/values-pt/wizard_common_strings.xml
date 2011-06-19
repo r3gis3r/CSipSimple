@@ -3,7 +3,6 @@
   <string name="w_common_display_name">Nome de conta</string>
   <string name="w_common_display_name_desc">Mostrar nome para esta conta</string>
   <string name="w_common_username">nome de utilizador</string>
-  <string name="w_common_username_desc">Início de sessão da conta SIP</string>
   <string name="w_common_phone_number">Número de telefone</string>
   <string name="w_common_phone_number_desc">Número de telefone SIP atribuído pelo seu fornecedor</string>
   <string name="w_common_password">Palavra-passe</string>

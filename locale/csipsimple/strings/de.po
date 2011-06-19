@@ -203,7 +203,7 @@ msgstr "Hilfe"
 
 msgctxt "record_logs"
 msgid "Record logs to send it to dev team and report a bug"
-msgstr ""
+msgstr "Protokoll erstellen um es an das Entwicklerteam zu senden"
 
 msgctxt "send_logs"
 msgid "Stop recording logs (OPTIONALY send it)"
@@ -304,7 +304,7 @@ msgstr ""
 
 msgctxt "not_configured_multiple_calls"
 msgid "The application is not configured to allow multiple calls"
-msgstr ""
+msgstr "Einstellungen verbieten mehrere Anrufe"
 
 msgctxt "permlab_useSip"
 msgid "Use sip"
@@ -324,5 +324,5 @@ msgstr ""
 
 msgctxt "legal_information"
 msgid "Legal information"
-msgstr ""
+msgstr "Rechtliche Informationen"
 

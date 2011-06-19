@@ -1,5 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="w_onsip_authentication_name">Ім\'я аутентифікації</string>
-  <string name="w_onsip_authentication_name_desc">Назва аутентифікації SIP</string>
+  <string name="w_onsip_authentication_name">Ім\'я користувача</string>
+  <string name="w_onsip_authentication_name_desc">SIP аутентифікація користувача</string>
+  <string name="w_onsip_username">SIP ім\'я користувача</string>
+  <string name="w_onsip_username_desc">SIP ім\'я користувача</string>
+  <string name="w_onsip_server">Домен</string>
+  <string name="w_onsip_server_desc">SIP домен</string>
+  <string name="w_onsip_password">SIP пароль</string>
+  <string name="w_onsip_password_desc">SIP пароль</string>
 </resources>

@@ -19,34 +19,33 @@ msgstr ""
 
 msgctxt "w_onsip_authentication_name"
 msgid "Auth username"
-msgstr ""
+msgstr "ניתן לערוך שוב את שם המשתמש"
 
-#, fuzzy
 msgctxt "w_onsip_authentication_name_desc"
 msgid "SIP authentication user"
-msgstr "אימות שם"
+msgstr "אימות משתמש סיפ"
 
 msgctxt "w_onsip_username"
 msgid "SIP Username"
-msgstr ""
+msgstr "שם משתמש סיפ"
 
 msgctxt "w_onsip_username_desc"
 msgid "Sip account username"
-msgstr ""
+msgstr "שם המשתמש של החשבון סיפ"
 
 msgctxt "w_onsip_server"
 msgid "Domain"
-msgstr ""
+msgstr "דומיין"
 
 msgctxt "w_onsip_server_desc"
 msgid "SIP domain"
-msgstr ""
+msgstr "דומיין סיפ"
 
 msgctxt "w_onsip_password"
 msgid "SIP Password"
-msgstr ""
+msgstr "סיסמת סיפ"
 
 msgctxt "w_onsip_password_desc"
 msgid "SIP account password"
-msgstr ""
+msgstr "הסיסמה לחשבון סיפ"
 

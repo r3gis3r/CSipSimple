@@ -3,7 +3,6 @@
   <string name="w_common_display_name">Назва облікового запису</string>
   <string name="w_common_display_name_desc">Ім\'я акаунту</string>
   <string name="w_common_username">Ім\'я користувача</string>
-  <string name="w_common_username_desc">Логін SIP акаунта</string>
   <string name="w_common_phone_number">Номер телефону</string>
   <string name="w_common_phone_number_desc">Номер телефону наданий Вашим провайдером</string>
   <string name="w_common_password">Пароль</string>

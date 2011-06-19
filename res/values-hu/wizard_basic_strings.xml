@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="w_basic_username">Felhasználó</string>
-  <string name="w_basic_username_desc">Felhasználói azonosító</string>
   <string name="w_basic_password">Jelszó</string>
   <string name="w_basic_password_desc">A fiók jelszava</string>
 </resources>

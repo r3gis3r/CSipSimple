@@ -159,33 +159,33 @@ msgstr "Previeni"
 
 msgctxt "band_types_name:0"
 msgid "Narrowband"
-msgstr ""
+msgstr "Narrowband"
 
 msgctxt "band_types_name:1"
 msgid "Wideband"
-msgstr ""
+msgstr "Wideband"
 
 msgctxt "reg_use_proxy_choices:0"
 msgid "No proxy"
-msgstr ""
+msgstr "Nessun proxy"
 
 msgctxt "reg_use_proxy_choices:1"
 msgid "Outbound proxies"
-msgstr ""
+msgstr "Proxy fuori banda"
 
 msgctxt "reg_use_proxy_choices:2"
 msgid "Accounts proxies"
-msgstr ""
+msgstr "Account proxy"
 
 msgctxt "reg_use_proxy_choices:3"
 msgid "All"
-msgstr ""
+msgstr "Tutto"
 
 msgctxt "use_zrtp_choices:0"
 msgid "No ZRTP"
-msgstr ""
+msgstr "Nessuno ZRTP"
 
 msgctxt "use_zrtp_choices:1"
 msgid "Create ZRTP"
-msgstr ""
+msgstr "Crea ZRTP"
 

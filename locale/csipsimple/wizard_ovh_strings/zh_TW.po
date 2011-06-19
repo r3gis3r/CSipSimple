@@ -21,10 +21,9 @@ msgctxt "w_ovh_phone_number_desc"
 msgid "Phone number should be formated as 0033xxxxxx"
 msgstr "電話號碼應採用 0033xxxxxx 的格式"
 
-#, fuzzy
 msgctxt "w_sapo_phone_number_desc"
 msgid "Phone number should be formated as +35130xxxxxx"
-msgstr "電話號碼應採用 0033xxxxxx 的格式"
+msgstr ""
 
 msgctxt "w_pbxes_user_extension"
 msgid "User extension (something like user-1)"

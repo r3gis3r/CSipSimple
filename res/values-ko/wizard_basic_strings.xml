@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="w_basic_username">사용자</string>
-  <string name="w_basic_username_desc">계정 이름/로그인</string>
   <string name="w_basic_password">비밀번호</string>
   <string name="w_basic_password_desc">계정 접속용 비밀 번호</string>
 </resources>

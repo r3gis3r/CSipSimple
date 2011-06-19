@@ -21,7 +21,7 @@ msgstr ""
 #. task switcher, etc.
 msgctxt "app_label"
 msgid "Messaging"
-msgstr ""
+msgstr "Nachrichten"
 
 #. Command name to open a Compose screen; displays in conversation list
 msgctxt "new_message"
@@ -69,7 +69,7 @@ msgstr "Unterhaltung anzeigen"
 #. Name to use when we have an unspecified sender
 msgctxt "anonymous_recipient"
 msgid "Anonymous"
-msgstr ""
+msgstr "Unbekannt"
 
 #. Name of the local user when displaying sender of an outgoing message
 #. (personal pronoun)
@@ -79,7 +79,7 @@ msgstr ""
 
 msgctxt "delete_message"
 msgid "Delete message"
-msgstr ""
+msgstr "Nachricht löschen"
 
 #. Time and date a message was sent
 #, c-format
@@ -106,13 +106,13 @@ msgstr ""
 #. Menu item for deleting the entire conversation currently being viewed
 msgctxt "delete_thread"
 msgid "Delete thread"
-msgstr ""
+msgstr "Gespräch löschen"
 
 #. Text of a button appearing for MMS messages that have not yet been
 #. downloaded, causing the message          to be downloaded (imperative verb)
 msgctxt "download"
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 #. Message displayed in place of the "download message" button once it has
 #. been pressed,          indicating that the download is in progress
@@ -134,13 +134,13 @@ msgstr ""
 #. Header for context menu on an individual message
 msgctxt "message_options"
 msgid "Message options"
-msgstr ""
+msgstr "Nachrichtenoptionen"
 
 #. Button text on edit slide screen indicating the user wants to finish
 #. editing that slide
 msgctxt "done"
 msgid "Done"
-msgstr ""
+msgstr "Fertig"
 
 #. Title bar displayed in compose message activity before a recipient has been
 #. selected
@@ -152,19 +152,19 @@ msgstr ""
 #. being composed
 msgctxt "add_attachment"
 msgid "Attach"
-msgstr ""
+msgstr "Anhängen"
 
 #. Button next to an attachment during message composition to view the
 #. attachment (imperative verb)
 msgctxt "view"
 msgid "View"
-msgstr ""
+msgstr "Ansehen"
 
 #. Button in conversation screen for sending the SMS message currently being
 #. composed (imperative verb)
 msgctxt "send"
 msgid "Send"
-msgstr ""
+msgstr "Senden"
 
 #. Menu item in conversation screen for returning to the conversation list
 msgctxt "all_threads"
@@ -214,7 +214,7 @@ msgstr ""
 #. contacts (used if the recipient is not already in the address book)
 msgctxt "menu_add_to_contacts"
 msgid "Add to Contacts"
-msgstr ""
+msgstr "Zu Kontakten hinzufügen"
 
 #. Sender to be used if the sender address has been hidden
 msgctxt "hidden_sender_address"
@@ -229,23 +229,23 @@ msgstr ""
 #. Text to be used for negative response button in dialog boxes
 msgctxt "no"
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #. Button text used for editing a slideshow (imperative verb)
 msgctxt "edit"
 msgid "Edit"
-msgstr ""
+msgstr "Ändern"
 
 #. Settings screen menu item for restoring all settings to default
 msgctxt "restore_default"
 msgid "Restore default settings"
-msgstr ""
+msgstr "Standardwerte laden"
 
 #. Confirm Delete
 #. Delete confirmation dialog title
 msgctxt "confirm_dialog_title"
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_conversation"
@@ -260,7 +260,7 @@ msgstr ""
 #. Delete message confirmation dialog message
 msgctxt "confirm_delete_message"
 msgid "The message will be deleted."
-msgstr ""
+msgstr "Die Nachricht wird gelöscht"
 
 #. Delete message confirmation dialog message for a locked message
 msgctxt "confirm_delete_locked_message"
@@ -275,7 +275,7 @@ msgstr ""
 #. Delete button title
 msgctxt "delete"
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #. Status in "Report" window
 msgctxt "status_none"
@@ -290,7 +290,7 @@ msgstr ""
 #. Status in "Report" window
 msgctxt "status_received"
 msgid "Received"
-msgstr ""
+msgstr "Erhalten"
 
 #. Status in "Report" window
 msgctxt "status_failed"
@@ -300,7 +300,7 @@ msgstr ""
 #. Status in "Report" window
 msgctxt "status_unread"
 msgid "Unread"
-msgstr ""
+msgstr "Ungelesen"
 
 #. Status in "Report" window
 msgctxt "status_rejected"

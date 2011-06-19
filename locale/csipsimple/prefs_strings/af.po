@@ -246,10 +246,9 @@ msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
 msgstr ""
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "TLS wagwoord"
+msgstr ""
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
@@ -794,10 +793,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Integrasie met musiek applikasie"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -877,10 +875,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr ""
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Vir uitgaande oproepe"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

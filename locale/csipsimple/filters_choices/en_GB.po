@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2011-06-09 10:18+0200\n"
-"PO-Revision-Date: 2011-01-30 00:15+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-05-21 11:08+0000\n"
+"Last-Translator: bouchard renaud <Unknown>\n"
 "Language-Team: en_GB <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
@@ -20,73 +19,72 @@ msgstr ""
 
 msgctxt "filters_action:0"
 msgid "Can't call"
-msgstr ""
+msgstr "Can't call"
 
 msgctxt "filters_action:1"
 msgid "Rewrite"
-msgstr ""
+msgstr "Rewrite"
 
 msgctxt "filters_action:2"
 msgid "Stop processing"
-msgstr ""
+msgstr "Stop processing"
 
 msgctxt "filters_action:3"
 msgid "Directly call"
-msgstr ""
+msgstr "Directly call"
 
 msgctxt "filters_action:4"
 msgid "Auto answer"
-msgstr ""
+msgstr "Auto answer"
 
 msgctxt "filters_type:0"
 msgid "Starts with"
-msgstr ""
+msgstr "Starts with"
 
 msgctxt "filters_type:1"
 msgid "Ends with"
-msgstr ""
+msgstr "Ends with"
 
 msgctxt "filters_type:2"
 msgid "Contains"
-msgstr ""
+msgstr "Contains"
 
 msgctxt "filters_type:3"
 msgid "All"
-msgstr ""
+msgstr "All"
 
 msgctxt "filters_type:4"
 msgid "Has exactly N digit"
-msgstr ""
+msgstr "Has exactly N digit"
 
 msgctxt "filters_type:5"
 msgid "Has more than N digit"
-msgstr ""
+msgstr "Has more than N digit"
 
 msgctxt "filters_type:6"
 msgid "Is exactly"
-msgstr ""
+msgstr "Is exactly"
 
 msgctxt "filters_type:7"
 msgid "Custom RegExp"
-msgstr ""
+msgstr "Custom RegExp"
 
 msgctxt "replace_type:0"
 msgid "Prefix by"
-msgstr ""
+msgstr "Prefix by"
 
 msgctxt "replace_type:1"
 msgid "Suffix with"
-msgstr ""
+msgstr "Suffix with"
 
 msgctxt "replace_type:2"
 msgid "Replace match by"
-msgstr ""
+msgstr "Replace match by"
 
 msgctxt "replace_type:3"
 msgid "Replace all by"
-msgstr ""
+msgstr "Replace all by"
 
 msgctxt "replace_type:4"
 msgid "Custom RegExp"
-msgstr ""
-
+msgstr "Custom RegExp"

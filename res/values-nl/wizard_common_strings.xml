@@ -3,7 +3,6 @@
   <string name="w_common_display_name">Account-naam</string>
   <string name="w_common_display_name_desc">Weergavenaam voor dit account</string>
   <string name="w_common_username">Gebruikersnaam</string>
-  <string name="w_common_username_desc">SIP-account login</string>
   <string name="w_common_phone_number">Telefoonnummer</string>
   <string name="w_common_phone_number_desc">SIP-telefoonnummer gegeven door uw provider</string>
   <string name="w_common_password">Wachtwoord</string>

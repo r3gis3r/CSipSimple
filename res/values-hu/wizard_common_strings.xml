@@ -3,7 +3,6 @@
   <string name="w_common_display_name">Fiók neve</string>
   <string name="w_common_display_name_desc">Megjelenítendő név a fiók használatakor</string>
   <string name="w_common_username">Felhasználói név</string>
-  <string name="w_common_username_desc">SIP fiók felhasználói neve</string>
   <string name="w_common_phone_number">Telefonszám</string>
   <string name="w_common_phone_number_desc">SIP szolgáltatótól kapott telefonszám</string>
   <string name="w_common_password">Jelszó</string>

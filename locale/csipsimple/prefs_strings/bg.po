@@ -238,10 +238,9 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN сървър (ХОСТ:ПОРТ)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "Turn сървър"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
@@ -473,10 +472,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Регулиране нивото на сигнала на говорителя (1 не прави нищо)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "Усилване на микрофон"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -805,10 +803,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Интегрирай с приложение Музика"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -892,10 +889,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr ""
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "За изходящи повиквания"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

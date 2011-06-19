@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
   <string name="next">הבא</string>
   <string name="init">אתחל...</string>
@@ -52,6 +52,7 @@
   <string name="misc">שונות</string>
   <string name="warning">אזהרה</string>
   <string name="disconnect_and_incoming_explaination">אתה מוגדר להיות זמין עבור רשת זו! על ידי לחיצה כאן על אישור אתה מאשר כי אתה לא רוצה להיות זמין עד להפעלה הבאה של האפליקציה</string>
+  <string name="disconnect_and_will_restart">"יופעל מחדש באופן אוטומטי כאשר: "<xliff:g id="רשתות" example="3G">%s</xliff:g>יהיו זמינים (שנה הגדרות אם אתה לא רוצה)</string>
   <string name="gadget_title">מחליף חשבון סיפ</string>
   <string name="search_in_contacts">חפש באנשי הקשר</string>
   <string name="pickup_sip_uri">בחר איש קשר בסיפ</string>
@@ -63,4 +64,11 @@
   <string name="show_password">הצג סיסמה</string>
   <string name="this_codec_is_not_free">** קודק זה לא בחינם !!!**\n נא ודא את זה עם מישהו (ספקית הסיפ שלך או אתה) רכשת רישיון המאפשרים לך להשתמש בקודק! אנחנו (בתור מפיציי היישום) אינה אחראית לכל שימוש בלתי חוקי של רכיב זה.\n זה תלוי בך כדי להיות בטוח שאתה מורשה להשתמש בקודק.\n רכישת הקישור:</string>
   <string name="voice_mail">דואר קולי</string>
+  <string name="type_sip_uri_or_autocomplete">סיפ uri או השלמה אוטומטית</string>
+  <string name="not_configured_multiple_calls">היישום אינו מוגדר לאפשר שיחות מרובות</string>
+  <string name="permlab_useSip">השתמש בסיפ</string>
+  <string name="permdesc_useSip">בצע שיחות סיפ, שלח הודעות סיפ ושלוט על תקשורת הסיפ</string>
+  <string name="permlab_configureSip">השתמש בסיפ</string>
+  <string name="permdesc_configureSip">בצע שיחות סיפ, שלח הודעות סיפ ושלוט על תקשורת הסיפ</string>
+  <string name="legal_information">מידע משפטי</string>
 </resources>

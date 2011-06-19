@@ -167,25 +167,24 @@ msgstr "פס רחב"
 
 msgctxt "reg_use_proxy_choices:0"
 msgid "No proxy"
-msgstr ""
+msgstr "ללא פרוקסי"
 
 msgctxt "reg_use_proxy_choices:1"
 msgid "Outbound proxies"
-msgstr ""
+msgstr "שרתי Proxy יוצאים"
 
 msgctxt "reg_use_proxy_choices:2"
 msgid "Accounts proxies"
-msgstr ""
+msgstr "חשבונות שרתי Proxy"
 
 msgctxt "reg_use_proxy_choices:3"
 msgid "All"
-msgstr ""
+msgstr "הכל"
 
 msgctxt "use_zrtp_choices:0"
 msgid "No ZRTP"
-msgstr ""
+msgstr "ללא ZRTP"
 
 msgctxt "use_zrtp_choices:1"
 msgid "Create ZRTP"
-msgstr ""
-
+msgstr "צור ZRTP"

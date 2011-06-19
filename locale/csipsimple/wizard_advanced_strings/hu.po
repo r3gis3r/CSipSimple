@@ -37,10 +37,9 @@ msgctxt "w_advanced_username"
 msgid "Username"
 msgstr "Felhasználónév"
 
-#, fuzzy
 msgctxt "w_advanced_username_desc"
 msgid "Username for SIP server authentication (do no write the @sip.server)"
-msgstr "Felhasználói azonosító név a SIP szerveren"
+msgstr ""
 
 msgctxt "w_advanced_password"
 msgid "Password"

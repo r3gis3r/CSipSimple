@@ -3,7 +3,6 @@
   <string name="w_common_display_name">Název účtu</string>
   <string name="w_common_display_name_desc">Zobrazí název účtu</string>
   <string name="w_common_username">Uživatelské jméno</string>
-  <string name="w_common_username_desc">Jméno pro přihlášení k SIP účtu</string>
   <string name="w_common_phone_number">Telefonní číslo</string>
   <string name="w_common_phone_number_desc">Telefonní číslo přidělené operátorem</string>
   <string name="w_common_password">Heslo</string>

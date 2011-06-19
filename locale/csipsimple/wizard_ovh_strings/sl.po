@@ -20,7 +20,7 @@ msgstr ""
 
 msgctxt "w_ovh_phone_number_desc"
 msgid "Phone number should be formated as 0033xxxxxx"
-msgstr ""
+msgstr "Zapis telefonske številke mora biti 00386xxxxxxxx"
 
 msgctxt "w_sapo_phone_number_desc"
 msgid "Phone number should be formated as +35130xxxxxx"

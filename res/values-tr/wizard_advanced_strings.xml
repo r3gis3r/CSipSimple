@@ -4,7 +4,6 @@
   <string name="w_advanced_display_name_desc">Bu hesap için görünen ad</string>
   <string name="w_advanced_caller_id">Arayan Bilgisi</string>
   <string name="w_advanced_username">Kullanıcı Adı</string>
-  <string name="w_advanced_username_desc">SIP sunucu kimlik doğrulaması için kullanıcı adı</string>
   <string name="w_advanced_password">Parola</string>
   <string name="w_advanced_password_desc">SIP sunucu kimlik doğrulaması için parola</string>
   <string name="w_advanced_use_tcp">TCP kullan (UDP Değil)</string>

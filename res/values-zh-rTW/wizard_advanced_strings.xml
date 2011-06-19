@@ -5,7 +5,6 @@
   <string name="w_advanced_caller_id">呼叫 ID</string>
   <string name="w_advanced_caller_id_desc">通話時送出的 ID</string>
   <string name="w_advanced_username">用戶名</string>
-  <string name="w_advanced_username_desc">SIP 服務器認證用戶名</string>
   <string name="w_advanced_password">密碼</string>
   <string name="w_advanced_password_desc">SIP 服務器認證密碼</string>
   <string name="w_advanced_use_tcp">使用 TCP (非 UDP)</string>

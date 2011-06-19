@@ -23,7 +23,7 @@ msgstr "User"
 
 msgctxt "w_basic_username_desc"
 msgid "Account name / Login (do not write the @sip.server)"
-msgstr ""
+msgstr "Nome account / Login (non scrivere @sip.server)"
 
 msgctxt "w_basic_password"
 msgid "Password"

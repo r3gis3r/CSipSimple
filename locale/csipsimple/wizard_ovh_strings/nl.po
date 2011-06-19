@@ -21,10 +21,9 @@ msgctxt "w_ovh_phone_number_desc"
 msgid "Phone number should be formated as 0033xxxxxx"
 msgstr "Telefoonnummer moet opgemaakt worden als 0033xxxxxx"
 
-#, fuzzy
 msgctxt "w_sapo_phone_number_desc"
 msgid "Phone number should be formated as +35130xxxxxx"
-msgstr "Telefoonnummer moet opgemaakt worden als 0033xxxxxx"
+msgstr ""
 
 msgctxt "w_pbxes_user_extension"
 msgid "User extension (something like user-1)"

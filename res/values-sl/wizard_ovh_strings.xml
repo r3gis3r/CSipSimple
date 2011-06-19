@@ -1,2 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_ovh_phone_number_desc">Zapis telefonske številke mora biti 00386xxxxxxxx</string>
+</resources>

@@ -57,4 +57,18 @@
     <item>Forcer</item>
     <item>Empêcher</item>
   </string-array>
+  <string-array name="band_types_name">
+    <item>Bas débit</item>
+    <item>Haut débit</item>
+  </string-array>
+  <string-array name="reg_use_proxy_choices">
+    <item>Aucun proxy</item>
+    <item>Proxy outbound</item>
+    <item>Proxy des comptes</item>
+    <item>Tous</item>
+  </string-array>
+  <string-array name="use_zrtp_choices">
+    <item>Pas de ZRTP</item>
+    <item>Créer le ZRTP</item>
+  </string-array>
 </resources>

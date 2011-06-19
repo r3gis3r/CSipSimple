@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="w_basic_username">Gebruiker</string>
-  <string name="w_basic_username_desc">Accountnaam / Login</string>
   <string name="w_basic_password">Wachtwoord</string>
   <string name="w_basic_password_desc">Wachtwoord om uw account te benaderen</string>
 </resources>

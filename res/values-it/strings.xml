@@ -64,4 +64,11 @@
   <string name="show_password">Mostra password</string>
   <string name="this_codec_is_not_free">**Questo codec non è gratuito!!!**\nSi prega di assicurarsi che qualcuno (il tuo provider SIP o te stesso) abbia acquistato una licenza che ti permetta di usare il codec! Noi (come distributori dell\'applicazione) non siamo responsabili di un uso illegale di questo codec.\nE\' tua responsabilità assicurarti che sei autorizzato ad usare questo codec.\nLink per l\'acquisto:</string>
   <string name="voice_mail">Mail vocale</string>
+  <string name="type_sip_uri_or_autocomplete">Sip uri o autocompletamento</string>
+  <string name="not_configured_multiple_calls">L\'applicazione non è configurata in modo da consentire chiamate multiple</string>
+  <string name="permlab_useSip">Usa SIP</string>
+  <string name="permdesc_useSip">Effettua chiamate SIP, invia messaggi SIP e controlla le comunicazioni SIP</string>
+  <string name="permlab_configureSip">Usa SIP</string>
+  <string name="permdesc_configureSip">Effettua chiamate SIP, invia messaggi SIP e controlla le comunicazioni SIP</string>
+  <string name="legal_information">Informazioni legali</string>
 </resources>

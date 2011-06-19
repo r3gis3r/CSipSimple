@@ -56,6 +56,7 @@
   <string name="enable_stun_desc">Aktiviert die STUN Funktionalität</string>
   <string name="stun_server">STUN Server</string>
   <string name="enable_qos">Aktiviere QoS</string>
+  <string name="enable_qos_desc">Pakete mit QoS-Werten markieren</string>
   <string name="dscp_val">DSCP-Wert</string>
   <string name="dscp_val_desc">DSCP-Wert für SIP-Daten</string>
   <string name="keep_alive_interval_wifi">WiFi Keep-Alive</string>
@@ -66,6 +67,7 @@
   <string name="secure_transport_desc">Sicherheitseinstellungen für SIP und RTP</string>
   <string name="network_tls_transport_port">TLS Port</string>
   <string name="network_tls_transport_port_desc">Lokale TLS Portnummer</string>
+  <string name="network_tls_server_name">TLS Server</string>
   <string name="ca_list_file">TLS CA Zertifikat</string>
   <string name="ca_list_file_desc">z.B. /sdcard/CSipSimple/myAuthority.ca</string>
   <string name="cert_file">TLS Klient Zertifikat</string>
@@ -113,11 +115,20 @@
   <string name="use_soft_volume">Verwende eigene Lautstärke</string>
   <string name="use_soft_volume_desc">Verwendet eigene Lautstärke anstatt der Android-Lautstärke</string>
   <string name="use_routing_api">Verwende Routing API</string>
+  <string name="use_routing_api_desc">Aktivieren falls der Ton am Lautsprecher statt am Hörer ausgegeben wird</string>
   <string name="use_mode_api_desc">Aktivieren falls der Ton statt am Hörer am Lautsprecher ausgegeben wird</string>
   <string name="sip_audio_mode">Audio-Modus für SIP Anrufe</string>
   <string name="sip_audio_mode_desc">Nur auf Rat der Entwickler ändern</string>
   <string name="has_io_queue_desc">Aktiviere Queue für Input/Output</string>
   <string name="set_audio_generate_tone">Tone Hack</string>
+  <string name="set_audio_generate_tone_desc">Generiere einen Ton vor jedem Anruf</string>
+  <string name="narrow_band">Schmalband</string>
+  <string name="wide_band">Breitband</string>
+  <string name="band_for_wifi">Bandtyp für WLAN</string>
+  <string name="band_for_3g">Bandtyp für UMTS</string>
+  <string name="band_for_gprs">Bandtyp für GPRS</string>
+  <string name="band_for_edge">Bandtyp für EDGE</string>
+  <string name="band_for_other">Bandtyp für andere Netze</string>
   <string name="codecs_band_types">Bandbreiten-Zuordnung</string>
   <string name="general_ui">Standard-Benutzeroberfläche</string>
   <string name="native_dialer_integration">Native dialer integration</string>

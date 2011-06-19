@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2011-06-09 10:18+0200\n"
-"PO-Revision-Date: 2010-12-30 17:09+0000\n"
+"PO-Revision-Date: 2011-06-11 20:43+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -21,12 +21,10 @@ msgctxt "w_ovh_phone_number_desc"
 msgid "Phone number should be formated as 0033xxxxxx"
 msgstr "Numéro de téléphone sous la forme 0033xxxxxx"
 
-#, fuzzy
 msgctxt "w_sapo_phone_number_desc"
 msgid "Phone number should be formated as +35130xxxxxx"
-msgstr "Numéro de téléphone sous la forme 0033xxxxxx"
+msgstr "Numéro de téléphone doit être du format +35130xxxxxx"
 
 msgctxt "w_pbxes_user_extension"
 msgid "User extension (something like user-1)"
-msgstr ""
-
+msgstr "Extension utilisatieur (par example user-1)"

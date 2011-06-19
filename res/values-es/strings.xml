@@ -24,6 +24,7 @@
   <string name="recentCalls_empty">No hay registros de llamadas</string>
   <string name="filters">Filtros</string>
   <string name="filters_desc">A aplicar cuando se utilice la integración con Android</string>
+  <string name="filters_for">Filtros para</string>
   <string name="add_filter">Añadir filtro / sobreescribir regla</string>
   <string name="delete_filter">Eliminar filtro</string>
   <string name="callLog_delete_entry">Eliminar esta llamada</string>
@@ -44,6 +45,8 @@
   <string name="backup">Respaldar</string>
   <string name="faq">Preguntas frecuentes</string>
   <string name="help">Ayuda</string>
+  <string name="record_logs">Grabe los logs para enviarlos al equipo de desarrollo e informar del error</string>
+  <string name="send_logs">Parar las grabaciones de los logs (OPCIONALMENTE enviar)</string>
   <string name="view_existing_issues">Consultando asuntos pendientes</string>
   <string name="ok">Aceptar</string>
   <string name="misc">Varios</string>
@@ -56,4 +59,8 @@
   <string name="choose_phone">Elegir teléfono</string>
   <string name="no_phone_found">Teléfono no encontrado para este contacto</string>
   <string name="show_password">Mostrar contraseña</string>
+  <string name="voice_mail">Correo de voz</string>
+  <string name="permlab_useSip">Usar sip</string>
+  <string name="permlab_configureSip">Usar sip</string>
+  <string name="legal_information">Información legal</string>
 </resources>

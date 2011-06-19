@@ -37,10 +37,9 @@ msgctxt "w_advanced_username"
 msgid "Username"
 msgstr "Потребителско име"
 
-#, fuzzy
 msgctxt "w_advanced_username_desc"
 msgid "Username for SIP server authentication (do no write the @sip.server)"
-msgstr "Потребителско име (акаунт код) за ауторизиране към SIP сървъра"
+msgstr ""
 
 msgctxt "w_advanced_password"
 msgid "Password"

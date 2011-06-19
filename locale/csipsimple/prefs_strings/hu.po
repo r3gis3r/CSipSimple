@@ -238,10 +238,9 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN szerver megadása (HOST:PORT)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "TURN szerver"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
@@ -420,15 +419,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Biztonságos RTP mód"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Szakértő mód"
+msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "Biztonságos RTP mód"
+msgstr ""
 
 #. Media
 msgctxt "audio_quality"
@@ -475,10 +472,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Hangszóró jelszint beállítása (1 az alap)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "Mikrofon erősítés"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -505,7 +501,8 @@ msgid "Media quality"
 msgstr "Média minőség"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "A médiafolyam minősége (csak hozzáértő módosítsa)"
 
 msgctxt "snd_clock_rate"
@@ -685,8 +682,8 @@ msgstr "Tárcsázó beépítése"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr "Beépülve felajánlja hogy híváskor SIP vagy GSM legyen e használva"
 
 msgctxt "integrate_with_native_calllogs"
@@ -751,7 +748,8 @@ msgstr "Naplózási szint:"
 
 msgctxt "log_level_desc"
 msgid "Log level for debug between 0 (none) and 5 (verbose)"
-msgstr "Hibakeresési naplózás szintje 0 (semmi) és 5 (legrészletesebb) között"
+msgstr ""
+"Hibakeresési naplózás szintje 0 (semmi) és 5 (legrészletesebb) között"
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
@@ -760,8 +758,7 @@ msgstr "Használja a Music alkalmazást"
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
 msgstr ""
-"Kapcsolja ki ha más alkalmazást szeretne használni a bejövő hívás "
-"jelzésére"
+"Kapcsolja ki ha más alkalmazást szeretne használni a bejövő hívás jelzésére"
 
 msgctxt "ringtone"
 msgid "Ringtone"
@@ -799,10 +796,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Használja a Music alkalmazást"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -882,10 +878,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr ""
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Kimenő hívások"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

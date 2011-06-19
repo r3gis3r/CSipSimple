@@ -238,19 +238,17 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN 서버(HOST:PORT)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "TURN 서버"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
 msgstr ""
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "TLS 비밀번호"
+msgstr ""
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
@@ -316,10 +314,9 @@ msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ka_use_wake"
 msgid "Keep alive awake"
-msgstr "Wifi  활성 유지"
+msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
@@ -422,15 +419,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "보안 RTP 모드"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "전문가 모드"
+msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "보안 RTP 모드"
+msgstr ""
 
 #. Media
 msgctxt "audio_quality"
@@ -477,10 +472,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "스피커 시그널 레벌 조정(1: 조정 없음)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "미세 증폭"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -507,7 +501,8 @@ msgid "Media quality"
 msgstr "매체 품질"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "미디어 스트림 품질(필요 시에만 조정)"
 
 msgctxt "snd_clock_rate"
@@ -687,8 +682,8 @@ msgstr "전화 걸기 통합"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr "전화 걸기 통합 로 전화를 걸때 SIP 또는 이동전화를 사용할 것인지 질문"
 
 msgctxt "integrate_with_native_calllogs"
@@ -799,10 +794,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "음악 응용프로그램과 통합"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -882,10 +876,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "연결과 동시에 통화 기록"
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "발신 전화"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

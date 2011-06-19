@@ -310,29 +310,32 @@ msgstr "Mail vocale"
 
 msgctxt "type_sip_uri_or_autocomplete"
 msgid "Sip uri or autocomplete"
-msgstr ""
+msgstr "Sip uri o autocompletamento"
 
 msgctxt "not_configured_multiple_calls"
 msgid "The application is not configured to allow multiple calls"
 msgstr ""
+"L'applicazione non è configurata in modo da consentire chiamate multiple"
 
 msgctxt "permlab_useSip"
 msgid "Use sip"
-msgstr ""
+msgstr "Usa SIP"
 
 msgctxt "permdesc_useSip"
 msgid "Place SIP calls, send SIP messages and control SIP communications"
 msgstr ""
+"Effettua chiamate SIP, invia messaggi SIP e controlla le comunicazioni SIP"
 
 msgctxt "permlab_configureSip"
 msgid "Use sip"
-msgstr ""
+msgstr "Usa SIP"
 
 msgctxt "permdesc_configureSip"
 msgid "Place SIP calls, send SIP messages and control SIP communications"
 msgstr ""
+"Effettua chiamate SIP, invia messaggi SIP e controlla le comunicazioni SIP"
 
 msgctxt "legal_information"
 msgid "Legal information"
-msgstr ""
+msgstr "Informazioni legali"
 

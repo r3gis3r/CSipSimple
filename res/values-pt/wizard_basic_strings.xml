@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="w_basic_username">Utilizador</string>
-  <string name="w_basic_username_desc">Nome de conta / Início de sessão</string>
   <string name="w_basic_password">Palavra-passe</string>
   <string name="w_basic_password_desc">Palavra-passe para aceder à sua conta</string>
 </resources>

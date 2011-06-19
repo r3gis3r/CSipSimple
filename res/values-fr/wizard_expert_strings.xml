@@ -19,8 +19,10 @@
   <string name="w_expert_prevent_tcp">Empêcher le TCP (seulement UDP)</string>
   <string name="w_expert_publish_enabled">Publier la présence</string>
   <string name="w_expert_reg_timeout">Timeout du register (sec)</string>
+  <string name="w_expert_reg_delay_before_refresh">Délai avant le ré-enregistrement</string>
   <string name="w_expert_ka_interval">Intervalle Keep-alive (sec)</string>
   <string name="w_expert_force_contact">Forcer le champ contact</string>
   <string name="w_expert_allow_contact_rewrite">Réecriture du champ contact</string>
   <string name="w_expert_contact_rewrite_method">Méthode de récritture du champ contact</string>
+  <string name="w_expert_reg_use_proxy">Comment utiliser le proxy</string>
 </resources>

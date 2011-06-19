@@ -37,10 +37,10 @@ msgctxt "w_advanced_username"
 msgid "Username"
 msgstr "Nom utilisateur"
 
-#, fuzzy
 msgctxt "w_advanced_username_desc"
 msgid "Username for SIP server authentication (do no write the @sip.server)"
-msgstr "Nom de l'utilisateur SIP"
+msgstr ""
+"Nom d'utilisateur pour l'authentification SIP (ne pas ajouter @sip.server)"
 
 msgctxt "w_advanced_password"
 msgid "Password"

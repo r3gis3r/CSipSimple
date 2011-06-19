@@ -20,34 +20,33 @@ msgstr ""
 
 msgctxt "w_onsip_authentication_name"
 msgid "Auth username"
-msgstr ""
+msgstr "autorizační jméno"
 
-#, fuzzy
 msgctxt "w_onsip_authentication_name_desc"
 msgid "SIP authentication user"
-msgstr "Ověřovací jméno"
+msgstr "ověření uživatele"
 
 msgctxt "w_onsip_username"
 msgid "SIP Username"
-msgstr ""
+msgstr "uživatelské jméno"
 
 msgctxt "w_onsip_username_desc"
 msgid "Sip account username"
-msgstr ""
+msgstr "uživatelské jméno sip účtu"
 
 msgctxt "w_onsip_server"
 msgid "Domain"
-msgstr ""
+msgstr "Doména"
 
 msgctxt "w_onsip_server_desc"
 msgid "SIP domain"
-msgstr ""
+msgstr "SIP Doména"
 
 msgctxt "w_onsip_password"
 msgid "SIP Password"
-msgstr ""
+msgstr "SIP heslo"
 
 msgctxt "w_onsip_password_desc"
 msgid "SIP account password"
-msgstr ""
+msgstr "heslo sip účtu"
 

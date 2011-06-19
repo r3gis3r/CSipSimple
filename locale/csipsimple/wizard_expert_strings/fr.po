@@ -95,7 +95,7 @@ msgstr "Timeout du register (sec)"
 
 msgctxt "w_expert_reg_delay_before_refresh"
 msgid "Register delay before refresh (sec)"
-msgstr ""
+msgstr "Délai avant le ré-enregistrement"
 
 msgctxt "w_expert_ka_interval"
 msgid "Keep-alive interval (sec)"
@@ -115,5 +115,4 @@ msgstr "Méthode de récritture du champ contact"
 
 msgctxt "w_expert_reg_use_proxy"
 msgid "How to use proxy"
-msgstr ""
-
+msgstr "Comment utiliser le proxy"

@@ -112,7 +112,8 @@ msgstr "Verwende UMTS"
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
-msgstr "Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
+msgstr ""
+"Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben"
 
 msgctxt "use_edge"
 msgid "Use EDGE"
@@ -240,19 +241,17 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN Server (HOST:PORT)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "TURN Server"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
 msgstr ""
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "TLS Passwort"
+msgstr ""
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
@@ -280,7 +279,7 @@ msgstr "Aktiviere QoS"
 
 msgctxt "enable_qos_desc"
 msgid "Enable QoS on packets"
-msgstr ""
+msgstr "Pakete mit QoS-Werten markieren"
 
 msgctxt "dscp_val"
 msgid "DSCP value"
@@ -318,10 +317,9 @@ msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ka_use_wake"
 msgid "Keep alive awake"
-msgstr "WiFi Keep-Alive"
+msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
@@ -354,7 +352,7 @@ msgstr "Lokale TLS Portnummer"
 
 msgctxt "network_tls_server_name"
 msgid "TLS server name"
-msgstr ""
+msgstr "TLS Server"
 
 msgctxt "network_tls_server_name_desc"
 msgid "For multi-hosting server (optional)"
@@ -424,15 +422,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Modus für Secure RTP"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Experten Modus"
+msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "Modus für Secure RTP"
+msgstr ""
 
 #. Media
 msgctxt "audio_quality"
@@ -479,10 +475,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Stellt den Lautsprecherpegel ein (1=keine Veränderung)"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "Mikrofonpegel"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -509,7 +504,8 @@ msgid "Media quality"
 msgstr "Audioqualität"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 "Qualität der Audiodaten (Verändere diesen Wert nur, wenn du weißt was du "
 "tust)"
@@ -573,6 +569,7 @@ msgstr "Verwende Routing API"
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
+"Aktivieren falls der Ton am Lautsprecher statt am Hörer ausgegeben wird"
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
@@ -580,7 +577,8 @@ msgstr ""
 
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
-msgstr "Aktivieren falls der Ton statt am Hörer am Lautsprecher ausgegeben wird"
+msgstr ""
+"Aktivieren falls der Ton statt am Hörer am Lautsprecher ausgegeben wird"
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
@@ -630,35 +628,35 @@ msgstr "Tone Hack"
 
 msgctxt "set_audio_generate_tone_desc"
 msgid "Generate a tone before making calls"
-msgstr ""
+msgstr "Generiere einen Ton vor jedem Anruf"
 
 msgctxt "narrow_band"
 msgid "Narrowband"
-msgstr ""
+msgstr "Schmalband"
 
 msgctxt "wide_band"
 msgid "Wideband"
-msgstr ""
+msgstr "Breitband"
 
 msgctxt "band_for_wifi"
 msgid "Band type for wifi"
-msgstr ""
+msgstr "Bandtyp für WLAN"
 
 msgctxt "band_for_3g"
 msgid "Band type for 3G"
-msgstr ""
+msgstr "Bandtyp für UMTS"
 
 msgctxt "band_for_gprs"
 msgid "Band type for GPRS"
-msgstr ""
+msgstr "Bandtyp für GPRS"
 
 msgctxt "band_for_edge"
 msgid "Band type for EDGE"
-msgstr ""
+msgstr "Bandtyp für EDGE"
 
 msgctxt "band_for_other"
 msgid "Band type for other"
-msgstr ""
+msgstr "Bandtyp für andere Netze"
 
 msgctxt "codecs_band_types"
 msgid "Connections bandwidth types for codecs"
@@ -691,11 +689,11 @@ msgstr "Nachfragen beim Wählen"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Beim Wählen einer Nummer mit der Standardanwendung werden sie gefragt, ob"
-" sie SIP oder GSM verwenden wollen"
+"Beim Wählen einer Nummer mit der Standardanwendung werden sie gefragt, ob "
+"sie SIP oder GSM verwenden wollen"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -754,8 +752,7 @@ msgstr "Verhindere CPU-Standby"
 msgctxt "use_partial_wake_lock_desc"
 msgid "Ensure CPU is always running for the application (drain battery)"
 msgstr ""
-"Stelle sicher das die CPU die Applikation bevorzugt (erhöhter Akku-"
-"Verbrauch)"
+"Stelle sicher das die CPU die Applikation bevorzugt (erhöhter Akku-Verbrauch)"
 
 msgctxt "log_level"
 msgid "Log level"
@@ -811,10 +808,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Musikanwendungsintegration"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -896,10 +892,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Nehme Anrufe auf sobald sie angenommen werden"
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Für ausgehende Anrufe"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

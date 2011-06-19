@@ -238,19 +238,17 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "Servidor TURN (SERVIDOR:PORTA)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "Servidor TURN"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
 msgstr ""
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "Senha TLS"
+msgstr ""
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
@@ -421,15 +419,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Modo RTP seguro"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Modo especialista"
+msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "Modo RTP seguro"
+msgstr ""
 
 #. Media
 msgctxt "audio_quality"
@@ -476,10 +472,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "Ajuste o nível de amplificação do alto-falante"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "Amplificação do microfone"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -506,8 +501,10 @@ msgid "Media quality"
 msgstr "Qualidade do áudio"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
-msgstr "Qualidade do áudio (modique apenas se você souber o que está fazendo)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
+msgstr ""
+"Qualidade do áudio (modique apenas se você souber o que está fazendo)"
 
 msgctxt "snd_clock_rate"
 msgid "Clock rate"
@@ -568,8 +565,8 @@ msgstr "Usar API de roteamento"
 msgctxt "use_routing_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
-"Tentar habilitar isto se o áudio estiver sendo direcionado para o viva "
-"voz ao invés do fone."
+"Tentar habilitar isto se o áudio estiver sendo direcionado para o viva voz "
+"ao invés do fone."
 
 msgctxt "use_mode_api"
 msgid "Use Mode audio API"
@@ -578,8 +575,8 @@ msgstr "Usar modo áudio API"
 msgctxt "use_mode_api_desc"
 msgid "Try to enable that if audio is routing to speaker instead of earpiece"
 msgstr ""
-"Tentar habilitar isto se o áudio estiver sendo direcionado para o viva "
-"voz ao invés do fone."
+"Tentar habilitar isto se o áudio estiver sendo direcionado para o viva voz "
+"ao invés do fone."
 
 msgctxt "sip_audio_mode"
 msgid "Audio mode for SIP calls"
@@ -690,9 +687,10 @@ msgstr "Integração com o discador"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
-msgstr "Você deverá escolher quando usar SIP ou não ao discar pelo discador nativo"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
+msgstr ""
+"Você deverá escolher quando usar SIP ou não ao discar pelo discador nativo"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -701,8 +699,8 @@ msgstr "Integração com o registro de chamadas"
 msgctxt "integrate_with_native_calllogs_desc"
 msgid "SIP calls will be merged (if possible) into native call logs"
 msgstr ""
-"Chamadas SIP serão exibidas (se possível) juntamente com o registro "
-"nativo de chamadas"
+"Chamadas SIP serão exibidas (se possível) juntamente com o registro nativo "
+"de chamadas"
 
 msgctxt "dial_press_tone"
 msgid "Dialing tone feedback"
@@ -734,7 +732,8 @@ msgstr "Não utilizar desbloqueio deslizante para atender"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr "Utilizar botões ao invés do desbloqueio deslizante nas chamadas de entrada"
+msgstr ""
+"Utilizar botões ao invés do desbloqueio deslizante nas chamadas de entrada"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
@@ -742,7 +741,8 @@ msgstr "Manter ligado durante as chamadas"
 
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
-msgstr "Corrige som picotado quando a tela é desligada durante uma chamada WiFi"
+msgstr ""
+"Corrige som picotado quando a tela é desligada durante uma chamada WiFi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -768,7 +768,8 @@ msgstr "Integrar com a aplicação de música"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
-msgstr "Desabilitar se você utiliza outra aplicação de música que não a oficial"
+msgstr ""
+"Desabilitar se você utiliza outra aplicação de música que não a oficial"
 
 msgctxt "ringtone"
 msgid "Ringtone"
@@ -806,10 +807,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Integrar com a aplicação de música"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -889,10 +889,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr ""
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Para chamadas de saída"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

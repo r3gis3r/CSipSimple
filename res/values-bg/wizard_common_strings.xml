@@ -3,7 +3,6 @@
   <string name="w_common_display_name">Име на профила</string>
   <string name="w_common_display_name_desc">Показване на име за този профил</string>
   <string name="w_common_username">Потребителско име</string>
-  <string name="w_common_username_desc">Вход в SIP профила</string>
   <string name="w_common_phone_number">Телефонен номер</string>
   <string name="w_common_phone_number_desc">Sip телефонен номер предоставен от Вашия доставчик</string>
   <string name="w_common_password">Парола</string>

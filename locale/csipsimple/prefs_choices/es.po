@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
@@ -80,11 +79,11 @@ msgstr ""
 
 msgctxt "contact_rewrite_method_choices:0"
 msgid "Legacy"
-msgstr ""
+msgstr "Herencia"
 
 msgctxt "contact_rewrite_method_choices:1"
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgctxt "transport_choices:0"
 msgid "Auto"
@@ -124,15 +123,15 @@ msgstr "SSL23"
 
 msgctxt "gsm_integration_type_choices:0"
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 msgctxt "gsm_integration_type_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Forzar"
 
 msgctxt "gsm_integration_type_choices:2"
 msgid "Prevent"
-msgstr ""
+msgstr "Prevenir"
 
 msgctxt "echo_mode_choices:0"
 msgid "Auto"
@@ -148,15 +147,15 @@ msgstr ""
 
 msgctxt "dial_press_mode_choices:0"
 msgid "Use Android setting"
-msgstr ""
+msgstr "Usar configuración de Android"
 
 msgctxt "dial_press_mode_choices:1"
 msgid "Force"
-msgstr ""
+msgstr "Forzar"
 
 msgctxt "dial_press_mode_choices:2"
 msgid "Prevent"
-msgstr ""
+msgstr "Prevenir"
 
 msgctxt "band_types_name:0"
 msgid "Narrowband"
@@ -184,9 +183,8 @@ msgstr ""
 
 msgctxt "use_zrtp_choices:0"
 msgid "No ZRTP"
-msgstr ""
+msgstr "SIn ZRTP"
 
 msgctxt "use_zrtp_choices:1"
 msgid "Create ZRTP"
-msgstr ""
-
+msgstr "Creado ZRTP"

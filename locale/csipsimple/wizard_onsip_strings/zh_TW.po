@@ -19,34 +19,33 @@ msgstr ""
 
 msgctxt "w_onsip_authentication_name"
 msgid "Auth username"
-msgstr ""
+msgstr "認證用戶名"
 
-#, fuzzy
 msgctxt "w_onsip_authentication_name_desc"
 msgid "SIP authentication user"
-msgstr "認證名"
+msgstr "SIP 認證使用的用戶名"
 
 msgctxt "w_onsip_username"
 msgid "SIP Username"
-msgstr ""
+msgstr "SIP 用戶名"
 
 msgctxt "w_onsip_username_desc"
 msgid "Sip account username"
-msgstr ""
+msgstr "SIP 帳戶用戶名"
 
 msgctxt "w_onsip_server"
 msgid "Domain"
-msgstr ""
+msgstr "域"
 
 msgctxt "w_onsip_server_desc"
 msgid "SIP domain"
-msgstr ""
+msgstr "SIP 域"
 
 msgctxt "w_onsip_password"
 msgid "SIP Password"
-msgstr ""
+msgstr "SIP 密碼"
 
 msgctxt "w_onsip_password_desc"
 msgid "SIP account password"
-msgstr ""
+msgstr "SIP 帳戶密碼"
 

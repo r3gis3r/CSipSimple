@@ -239,19 +239,17 @@ msgctxt "turn_server_desc"
 msgid "TURN server (HOST:PORT)"
 msgstr "TURN server (HOST:PORT)"
 
-#, fuzzy
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr "Turn server"
+msgstr ""
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
 msgstr ""
 
-#, fuzzy
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr "TLS Heslo"
+msgstr ""
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
@@ -317,10 +315,9 @@ msgctxt "user_agent_desc"
 msgid "Agent presented by the application (if default will add infos)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ka_use_wake"
 msgid "Keep alive awake"
-msgstr "udržet wifi aktivní"
+msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
@@ -423,15 +420,13 @@ msgctxt "use_srtp_desc"
 msgid "Mode for Secure RTP"
 msgstr "Mód pro zabezpečený RTP"
 
-#, fuzzy
 msgctxt "use_zrtp"
 msgid "ZRTP mode"
-msgstr "Režim pro experty"
+msgstr ""
 
-#, fuzzy
 msgctxt "use_zrtp_desc"
 msgid "Mode for Secured ZRTP"
-msgstr "Mód pro zabezpečený RTP"
+msgstr ""
 
 #. Media
 msgctxt "audio_quality"
@@ -478,10 +473,9 @@ msgctxt "snd_speaker_level_desc"
 msgid "Adjust the speaker signal level (1 do nothing)"
 msgstr "nastavení úrovně signálu reproduktoru"
 
-#, fuzzy
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr "zesílení mikrofonu"
+msgstr ""
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
@@ -508,7 +502,8 @@ msgid "Media quality"
 msgstr "Kvalita média"
 
 msgctxt "snd_media_quality_desc"
-msgid "Quality of the media stream (modify only if you know what you are doing)"
+msgid ""
+"Quality of the media stream (modify only if you know what you are doing)"
 msgstr "Kvalita proudu média"
 
 msgctxt "snd_clock_rate"
@@ -688,11 +683,10 @@ msgstr "Integrace vytáčení"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or"
-" mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or "
+"mobile"
 msgstr ""
-"Při vytáčení z telefonu se dotázat zda chcete použít sip nebo mobilní "
-"telefon"
+"Při vytáčení z telefonu se dotázat zda chcete použít sip nebo mobilní telefon"
 
 msgctxt "integrate_with_native_calllogs"
 msgid "Call logs integration"
@@ -741,8 +735,8 @@ msgstr "Při hovoru je telefon připraven"
 msgctxt "keep_awake_incall_desc"
 msgid "Fixes if you get choppy sound when screen turn off while in WIFI call"
 msgstr ""
-"Opravy, pokud se dostaví trhaný zvuk, když vypnete displej, při hovoru na"
-" wifi"
+"Opravy, pokud se dostaví trhaný zvuk, když vypnete displej, při hovoru na "
+"wifi"
 
 msgctxt "use_partial_wake_lock"
 msgid "Use partial wake lock"
@@ -804,10 +798,9 @@ msgctxt "theme"
 msgid "Theme"
 msgstr ""
 
-#, fuzzy
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr "Integrovat s hudební aplikací"
+msgstr ""
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
@@ -887,10 +880,9 @@ msgctxt "auto_record_calls_desc"
 msgid "Record calls as soon as connected"
 msgstr "Nahrávání hovorů ihned po spojení"
 
-#, fuzzy
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "Odchozí hovory"
+msgstr ""
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"

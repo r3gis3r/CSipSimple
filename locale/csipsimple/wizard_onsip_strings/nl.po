@@ -19,34 +19,33 @@ msgstr ""
 
 msgctxt "w_onsip_authentication_name"
 msgid "Auth username"
-msgstr ""
+msgstr "Auth gebruikersnaam"
 
-#, fuzzy
 msgctxt "w_onsip_authentication_name_desc"
 msgid "SIP authentication user"
-msgstr "Authenticatie-naam"
+msgstr "SIP autenticatie gebruiker"
 
 msgctxt "w_onsip_username"
 msgid "SIP Username"
-msgstr ""
+msgstr "SIP gebruikersnaam"
 
 msgctxt "w_onsip_username_desc"
 msgid "Sip account username"
-msgstr ""
+msgstr "SIP account gebruikersnaam"
 
 msgctxt "w_onsip_server"
 msgid "Domain"
-msgstr ""
+msgstr "Domein"
 
 msgctxt "w_onsip_server_desc"
 msgid "SIP domain"
-msgstr ""
+msgstr "SIP-domein"
 
 msgctxt "w_onsip_password"
 msgid "SIP Password"
-msgstr ""
+msgstr "SIP-wachtwoord"
 
 msgctxt "w_onsip_password_desc"
 msgid "SIP account password"
-msgstr ""
+msgstr "SIP account wachtwoord"
 

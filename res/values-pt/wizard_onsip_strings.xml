@@ -1,5 +1,2 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
-  <string name="w_onsip_authentication_name">Nome de autenticação</string>
-  <string name="w_onsip_authentication_name_desc">Nome para autenticação SIP</string>
-</resources>
+<resources/>

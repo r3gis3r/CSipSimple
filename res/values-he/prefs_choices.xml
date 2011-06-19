@@ -61,4 +61,14 @@
     <item>פס צר</item>
     <item>פס רחב</item>
   </string-array>
+  <string-array name="reg_use_proxy_choices">
+    <item>ללא פרוקסי</item>
+    <item>שרתי Proxy יוצאים</item>
+    <item>חשבונות שרתי Proxy</item>
+    <item>הכל</item>
+  </string-array>
+  <string-array name="use_zrtp_choices">
+    <item>ללא ZRTP</item>
+    <item>צור ZRTP</item>
+  </string-array>
 </resources>

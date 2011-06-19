@@ -5,7 +5,7 @@
   <string name="w_advanced_caller_id">ID chiamante</string>
   <string name="w_advanced_caller_id_desc">ID chiamante da inviare con le chiamate</string>
   <string name="w_advanced_username">Username</string>
-  <string name="w_advanced_username_desc">Username per autenticazione su server SIP</string>
+  <string name="w_advanced_username_desc">Username per l\'autenticazione sul server SIP (non scrivere \@sip.server)</string>
   <string name="w_advanced_password">Password</string>
   <string name="w_advanced_password_desc">Password per autenticazione su server SIP</string>
   <string name="w_advanced_use_tcp">Usa TCP (no UDP)</string>

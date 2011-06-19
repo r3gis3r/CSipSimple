@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">Nachrichten</string>
   <string name="new_message">Neue Nachricht</string>
   <string name="create_new_message">Nachricht verfassen</string>
   <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g>" zu Kontakten hinzufügen"</string>
@@ -7,4 +8,22 @@
   <string name="menu_delete_all">Unterhaltungen löschen</string>
   <string name="menu_delete">Unterhaltung löschen</string>
   <string name="menu_view">Unterhaltung anzeigen</string>
+  <string name="anonymous_recipient">Unbekannt</string>
+  <string name="delete_message">Nachricht löschen</string>
+  <string name="delete_thread">Gespräch löschen</string>
+  <string name="download">Download</string>
+  <string name="message_options">Nachrichtenoptionen</string>
+  <string name="done">Fertig</string>
+  <string name="add_attachment">Anhängen</string>
+  <string name="view">Ansehen</string>
+  <string name="send">Senden</string>
+  <string name="menu_add_to_contacts">Zu Kontakten hinzufügen</string>
+  <string name="no">Abbrechen</string>
+  <string name="edit">Ändern</string>
+  <string name="restore_default">Standardwerte laden</string>
+  <string name="confirm_dialog_title">Löschen</string>
+  <string name="confirm_delete_message">Die Nachricht wird gelöscht</string>
+  <string name="delete">Löschen</string>
+  <string name="status_received">Erhalten</string>
+  <string name="status_unread">Ungelesen</string>
 </resources>

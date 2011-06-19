@@ -5,7 +5,6 @@
   <string name="w_advanced_caller_id">Идентификатор на позвъняващ</string>
   <string name="w_advanced_caller_id_desc">(Caller ID) Идентификатор на позвъняващия, използван при повикване</string>
   <string name="w_advanced_username">Потребителско име</string>
-  <string name="w_advanced_username_desc">Потребителско име (акаунт код) за ауторизиране към SIP сървъра</string>
   <string name="w_advanced_password">Парола</string>
   <string name="w_advanced_password_desc">Парола за ауторизация към SIP сървъра</string>
   <string name="w_advanced_use_tcp">Използвай TCP (не UDP)</string>

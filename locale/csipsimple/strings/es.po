@@ -119,7 +119,7 @@ msgstr "A aplicar cuando se utilice la integración con Android"
 
 msgctxt "filters_for"
 msgid "Filters for"
-msgstr ""
+msgstr "Filtros para"
 
 msgctxt "add_filter"
 msgid "Add filter / rewrite rule"
@@ -204,10 +204,11 @@ msgstr "Ayuda"
 msgctxt "record_logs"
 msgid "Record logs to send it to dev team and report a bug"
 msgstr ""
+"Grabe los logs para enviarlos al equipo de desarrollo e informar del error"
 
 msgctxt "send_logs"
 msgid "Stop recording logs (OPTIONALY send it)"
-msgstr ""
+msgstr "Parar las grabaciones de los logs (OPCIONALMENTE enviar)"
 
 msgctxt "view_existing_issues"
 msgid "Consult existing issues"
@@ -291,7 +292,7 @@ msgstr ""
 
 msgctxt "voice_mail"
 msgid "Voice mail"
-msgstr ""
+msgstr "Correo de voz"
 
 msgctxt "type_sip_uri_or_autocomplete"
 msgid "Sip uri or autocomplete"
@@ -303,7 +304,7 @@ msgstr ""
 
 msgctxt "permlab_useSip"
 msgid "Use sip"
-msgstr ""
+msgstr "Usar sip"
 
 msgctxt "permdesc_useSip"
 msgid "Place SIP calls, send SIP messages and control SIP communications"
@@ -311,7 +312,7 @@ msgstr ""
 
 msgctxt "permlab_configureSip"
 msgid "Use sip"
-msgstr ""
+msgstr "Usar sip"
 
 msgctxt "permdesc_configureSip"
 msgid "Place SIP calls, send SIP messages and control SIP communications"
@@ -319,5 +320,5 @@ msgstr ""
 
 msgctxt "legal_information"
 msgid "Legal information"
-msgstr ""
+msgstr "Información legal"
 
