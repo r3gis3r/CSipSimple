@@ -81,6 +81,7 @@ import com.csipsimple.wizards.impl.Sapo;
 import com.csipsimple.wizards.impl.Scarlet;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.SipCel;
+import com.csipsimple.wizards.impl.SipCelEu;
 import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.SipWise;
 import com.csipsimple.wizards.impl.Sipgate;
@@ -230,7 +231,7 @@ public class WizardUtils {
 					R.drawable.ic_wizard_basic, 30, 
 					new Locale[]{}, false, true, 
 					Betamax.class));
-			WIZARDS_DICT.put("SIPCEL", new WizardInfo("SIPCEL", "SIPCEL", 
+			WIZARDS_DICT.put("SIPCEL", new WizardInfo("SIPCEL", "SipCel Global", 
 					R.drawable.ic_wizard_sipcel, 14, 
 					new Locale[]{}, false, true, 
 					SipCel.class));
@@ -432,6 +433,13 @@ public class WizardUtils {
 					locale("cs_CZ"), locale("ro_RO"), locale("hr_HR"), locale("uk_UA"),
 					locale("ja_JP") }, false, false, 
 					Netelip.class));
+			WIZARDS_DICT.put("SIPCELEU", new WizardInfo("SIPCELEU", "SipCel Europe", 
+					R.drawable.ic_wizard_sipcel, 14, 
+					new Locale[]{
+					Locale.FRANCE, Locale.UK, Locale.GERMANY, Locale.ITALY,
+					locale("es_ES"), locale("da_DA"), locale("uk_UA"), locale("ro_RO"), locale("hr_HR")
+					}, false, false, 
+					SipCelEu.class));
 
 			
 		}else {

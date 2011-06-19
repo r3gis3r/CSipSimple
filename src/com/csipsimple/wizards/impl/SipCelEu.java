@@ -22,12 +22,12 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
-public class SipCel extends SimpleImplementation {
+public class SipCelEu extends SimpleImplementation {
 	
 
 	@Override
 	protected String getDomain() {
-		return "sip.sipcel.com";
+		return "sip.sipcel.eu";
 	}
 	
 	@Override
@@ -44,8 +44,8 @@ public class SipCel extends SimpleImplementation {
 	@Override
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
-		acc.reg_uri = "sip:sip.sipcel.com:445";
-		acc.proxies = new String[] { "sip:sip.sipcel.com" };
+		acc.reg_uri = "sip:sip.sipcel.eu:445";
+		acc.proxies = new String[] { "sip:sip.sipcel.eu" };
 		acc.publish_enabled = 1;
 		acc.reg_timeout = 120;
 		acc.transport = SipProfile.TRANSPORT_AUTO;
