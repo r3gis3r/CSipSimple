@@ -1378,7 +1378,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		
 		private void stopDragging() {
         	//TODO : thread save it
-        	draggingDelayTask.cancel();
+			if(draggingDelayTask != null) {
+				draggingDelayTask.cancel();
+			}
         	setDragging(false);
 		}
 		
