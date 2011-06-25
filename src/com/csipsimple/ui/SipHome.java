@@ -247,8 +247,11 @@ public class SipHome extends TabActivity {
 				return;
 			}
 		}else {
+			boolean doFirstParams = !prefWrapper.hasAlreadySetup();
 			prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, true);
-			Compatibility.setFirstRunParameters(prefWrapper);
+			if(doFirstParams) {
+				Compatibility.setFirstRunParameters(prefWrapper);
+			}
 		}
 
 		// If we have no account yet, open account panel,

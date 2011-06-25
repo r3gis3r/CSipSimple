@@ -62,26 +62,22 @@ public class Keyyo extends SimpleImplementation {
 		account.reg_timeout = 900;
 		account.publish_enabled = 1;
 		account.transport = SipProfile.TRANSPORT_AUTO;
-		account.allow_contact_rewrite = false;
+		account.allow_contact_rewrite = true;
 		account.contact_rewrite_method = 1;
 		account.vm_nbr = "123";
 		return account;
 	}
 	
-
-	
-	@Override
-	public void setDefaultParams(PreferencesWrapper prefs) {
-		super.setDefaultParams(prefs);
+	public static void setKeyyoDefaultParams(PreferencesWrapper prefs) {
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, false);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_VAD, true);
-		
+		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
 		
 		
 		//Only G711a/u and g722 on WB
-		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"244");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"0");
 		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"243");
 		prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"245");
 		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"0");
@@ -91,7 +87,7 @@ public class Keyyo extends SimpleImplementation {
 		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
 		
 		//On NB set for gsm high priority
-		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"244");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"243");
 		prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"0");
@@ -99,6 +95,12 @@ public class Keyyo extends SimpleImplementation {
 		prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "245");
+	}
+	
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		super.setDefaultParams(prefs);
+		setKeyyoDefaultParams(prefs);
 	}
 
 	@Override
