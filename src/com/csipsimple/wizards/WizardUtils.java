@@ -90,6 +90,7 @@ import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
 import com.csipsimple.wizards.impl.Viva;
+import com.csipsimple.wizards.impl.VoipMS;
 import com.csipsimple.wizards.impl.VoipTel;
 import com.csipsimple.wizards.impl.Vono;
 import com.csipsimple.wizards.impl.WiMobile;
@@ -259,6 +260,11 @@ public class WizardUtils {
 					R.drawable.ic_wizard_sipwise, 34, 
 					new Locale[]{  }, false, true, 
 					SipWise.class));
+			WIZARDS_DICT.put("VOIPMS", new WizardInfo("VOIPMS", "VoIP.ms", 
+					R.drawable.ic_wizard_voipms, 18, 
+					new Locale[]{  }, false, true, 
+					VoipMS.class));
+			
 			
 			
 			//Locales
@@ -440,7 +446,7 @@ public class WizardUtils {
 					locale("es_ES"), locale("da_DA"), locale("uk_UA"), locale("ro_RO"), locale("hr_HR")
 					}, false, false, 
 					SipCelEu.class));
-
+			
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
