@@ -434,32 +434,36 @@ public class PjSipService {
 
 		if (type.equals(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS)) {
 			pjsip_tls_setting tlsSetting = cfg.getTls_setting();
-			/*
-			 * String serverName =
-			 * prefsWrapper.getPreferenceStringValue(PreferencesWrapper
-			 * .TLS_SERVER_NAME); if (!TextUtils.isEmpty(serverName)) {
-			 * tlsSetting.setServer_name(pjsua.pj_str_copy(serverName)); }
-			 * String caListFile =
-			 * prefsWrapper.getPreferenceStringValue(PreferencesWrapper
-			 * .CA_LIST_FILE); if (!TextUtils.isEmpty(caListFile)) {
-			 * tlsSetting.setCa_list_file(pjsua.pj_str_copy(caListFile)); }
-			 * String certFile =
-			 * prefsWrapper.getPreferenceStringValue(PreferencesWrapper
-			 * .CERT_FILE); if (!TextUtils.isEmpty(certFile)) {
-			 * tlsSetting.setCert_file(pjsua.pj_str_copy(certFile)); } String
-			 * privKey =
-			 * prefsWrapper.getPreferenceStringValue(PreferencesWrapper
-			 * .PRIVKEY_FILE); if (!TextUtils.isEmpty(privKey)) {
-			 * tlsSetting.setPrivkey_file(pjsua.pj_str_copy(privKey)); } String
-			 * tlsPwd =
-			 * prefsWrapper.getPreferenceStringValue(PreferencesWrapper.
-			 * TLS_PASSWORD); if (!TextUtils.isEmpty(tlsPwd)) {
-			 * tlsSetting.setPassword(pjsua.pj_str_copy(tlsPwd)); } boolean
-			 * checkClient =
-			 * prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper
-			 * .TLS_VERIFY_CLIENT); tlsSetting.setVerify_client(checkClient ? 1
-			 * : 0);
-			 */
+			
+			
+			String serverName = prefsWrapper.getPreferenceStringValue(SipConfigManager.TLS_SERVER_NAME);
+			if (!TextUtils.isEmpty(serverName)) {
+				tlsSetting.setServer_name(pjsua.pj_str_copy(serverName)); 
+			}
+			
+			String caListFile = prefsWrapper.getPreferenceStringValue(SipConfigManager.CA_LIST_FILE); 
+			if (!TextUtils.isEmpty(caListFile)) {
+				tlsSetting.setCa_list_file(pjsua.pj_str_copy(caListFile)); 
+			}
+			
+			String certFile = prefsWrapper.getPreferenceStringValue(SipConfigManager.CERT_FILE); 
+			if (!TextUtils.isEmpty(certFile)) {
+				tlsSetting.setCert_file(pjsua.pj_str_copy(certFile)); 
+			}
+			
+			String privKey = prefsWrapper.getPreferenceStringValue(SipConfigManager.PRIVKEY_FILE); 
+			
+			if (!TextUtils.isEmpty(privKey)) {
+				tlsSetting.setPrivkey_file(pjsua.pj_str_copy(privKey)); 
+			}
+			
+			String tlsPwd = prefsWrapper.getPreferenceStringValue(SipConfigManager.TLS_PASSWORD); 
+			if (!TextUtils.isEmpty(tlsPwd)) {
+				tlsSetting.setPassword(pjsua.pj_str_copy(tlsPwd));
+			} 
+			
+			boolean checkClient = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.TLS_VERIFY_CLIENT); 
+			tlsSetting.setVerify_client(checkClient ? 1 : 0);
 
 			tlsSetting.setMethod(prefsWrapper.getTLSMethod());
 			boolean checkServer = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.TLS_VERIFY_SERVER);

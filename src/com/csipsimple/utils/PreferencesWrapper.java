@@ -98,11 +98,11 @@ public class PreferencesWrapper {
 		put(SipConfigManager.TURN_SERVER, "");
 		put(SipConfigManager.TURN_USERNAME, "");
 		put(SipConfigManager.TURN_PASSWORD, "");
-//		put(TLS_SERVER_NAME, "");
-//		put(CA_LIST_FILE, "");
-//		put(CERT_FILE, "");
-//		put(PRIVKEY_FILE, "");
-//		put(TLS_PASSWORD, "");
+		put(SipConfigManager.TLS_SERVER_NAME, "");
+		put(SipConfigManager.CA_LIST_FILE, "");
+		put(SipConfigManager.CERT_FILE, "");
+		put(SipConfigManager.PRIVKEY_FILE, "");
+		put(SipConfigManager.TLS_PASSWORD, "");
 		put(SipConfigManager.TLS_METHOD, "0");
 		
 		put(SipConfigManager.DSCP_VAL, "26");
@@ -134,7 +134,6 @@ public class PreferencesWrapper {
 		put(SipConfigManager.ENABLE_TURN, false);
 		put(SipConfigManager.ENABLE_STUN, false);
 		put(SipConfigManager.ENABLE_QOS, false);
-		put(SipConfigManager.TLS_VERIFY_SERVER, false);
 		put(SipConfigManager.USE_COMPACT_FORM, false);
 		put("use_wifi_in", true);
 		put("use_wifi_out", true);
@@ -173,6 +172,11 @@ public class PreferencesWrapper {
 		//Calls
 		put(SipConfigManager.AUTO_RECORD_CALLS, false);
 		put(SipConfigManager.SUPPORT_MULTIPLE_CALLS, false);
+		
+		//Secure
+		put(SipConfigManager.TLS_VERIFY_SERVER, false);
+		put(SipConfigManager.TLS_VERIFY_CLIENT, false);
+		
 	}};
 	
 	private final static HashMap<String, Float> FLOAT_PREFS = new HashMap<String, Float>(){

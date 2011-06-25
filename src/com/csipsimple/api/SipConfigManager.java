@@ -97,13 +97,13 @@ public class SipConfigManager {
 	// SECURE
 	public static final String ENABLE_TLS = "enable_tls";
 	public static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
-//	public static final String TLS_SERVER_NAME = "network_tls_server_name";
-//	public static final String CA_LIST_FILE = "ca_list_file";
-//	public static final String CERT_FILE = "cert_file";
-//	public static final String PRIVKEY_FILE = "privkey_file";
-//	public static final String TLS_PASSWORD = "tls_password";
+	public static final String TLS_SERVER_NAME = "network_tls_server_name";
+	public static final String CA_LIST_FILE = "ca_list_file";
+	public static final String CERT_FILE = "cert_file";
+	public static final String PRIVKEY_FILE = "privkey_file";
+	public static final String TLS_PASSWORD = "tls_password";
 	public static final String TLS_VERIFY_SERVER = "tls_verify_server";
-//	public static final String TLS_VERIFY_CLIENT = "tls_verify_client";
+	public static final String TLS_VERIFY_CLIENT = "tls_verify_client";
 	public static final String TLS_METHOD = "tls_method";
 	public static final String USE_SRTP = "use_srtp";
 	public static final String USE_ZRTP = "use_zrtp";
