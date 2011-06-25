@@ -383,6 +383,9 @@ public class Compatibility {
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK, needSGSWorkaround());
 		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
 		preferencesWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE, getDefaultMicroSource());
+		if(android.os.Build.DEVICE.toLowerCase().contains("droid2")) {
+			preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK, true);
+		}
 		
 	}
 
@@ -575,6 +578,9 @@ public class Compatibility {
 		}
 		if(lastSeenVersion < 939) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, true);
+		}
+		if(lastSeenVersion < 955 && android.os.Build.DEVICE.toLowerCase().contains("droid2")) {
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK, true);
 		}
 	}
 
