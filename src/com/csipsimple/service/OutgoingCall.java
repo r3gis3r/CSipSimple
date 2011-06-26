@@ -17,12 +17,15 @@
  */
 package com.csipsimple.service;
 
+import java.util.HashMap;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.telephony.PhoneNumberUtils;
 
+import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -33,6 +36,7 @@ public class OutgoingCall extends BroadcastReceiver {
 	private PreferencesWrapper prefsWrapper;
 	
 	public static String ignoreNext = "";
+	
 
 	@Override
 	public void onReceive(Context aContext, Intent intent) {
@@ -64,8 +68,12 @@ public class OutgoingCall extends BroadcastReceiver {
 			return;
 		}
 		
+		//Compute remote apps that could receive the outgoing call itnent through our api
+		HashMap<String, String> potentialHandlers = CallHandler.getAvailableCallHandlers(context);
+		
 		// If this is an outgoing call with a valid number
-		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
+		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) || potentialHandlers.size() > 0) {
+			
 			if(prefsWrapper.isValidConnectionForOutgoing()) {
 				// Just to be sure of what is incoming : sanitize phone number (in case of it was not properly done by dialer
 				// Or by a third party app
@@ -83,8 +91,6 @@ public class OutgoingCall extends BroadcastReceiver {
 				setResultData(null);
 				return;
 			}
-			
-			
 		}
 		
 		

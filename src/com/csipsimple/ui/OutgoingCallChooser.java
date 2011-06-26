@@ -277,7 +277,11 @@ public class OutgoingCallChooser extends ListActivity {
 			
 			if(Filter.isCallableNumber(gsmProfile, number, database)) {
 				final SipProfile acc = gsmProfile;
-				addRow(caller.loadLabel(pm), caller.loadIcon(pm), new OnClickListener() {
+				CharSequence label = caller.loadLabel(pm);
+				if(caller.activityInfo.packageName.startsWith("com.android")) {
+					label = getResources().getString(R.string.use_pstn);
+				}
+				addRow(label, caller.loadIcon(pm), new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						placeInternalCall(acc, caller);
