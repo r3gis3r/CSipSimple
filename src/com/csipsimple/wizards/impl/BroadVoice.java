@@ -17,8 +17,6 @@
  */
 package com.csipsimple.wizards.impl;
 
-import android.text.InputType;
-
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 
@@ -41,7 +39,8 @@ public class BroadVoice extends SimpleImplementation {
 		
 		accountUsername.setTitle(R.string.w_common_phone_number);
 		accountUsername.setDialogTitle(R.string.w_common_phone_number);
-		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		// Removed since some users wants to add x11 
+		//accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 
 	
