@@ -86,6 +86,7 @@ import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.SipWise;
 import com.csipsimple.wizards.impl.Sipgate;
 import com.csipsimple.wizards.impl.SiptelPt;
+import com.csipsimple.wizards.impl.Sonetel;
 import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
@@ -264,6 +265,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_voipms, 18, 
 					new Locale[]{  }, false, true, 
 					VoipMS.class));
+			WIZARDS_DICT.put("SONETEL", new WizardInfo("SONETEL", "Sonetel", 
+					R.drawable.ic_wizard_sonetel, 17, 
+					new Locale[]{  }, false, true, 
+					Sonetel.class));
 			
 			
 			
