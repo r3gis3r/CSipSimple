@@ -60,6 +60,7 @@ public final class SipManager {
 	public static final String EXTRA_ACCOUNT_ID = "acc_id";
 	public static final String EXTRA_ACTIVATE = "activate";
 	
+	
 	// Constants
 	public static final int SUCCESS = 0;
 	public static final int CURRENT_API = 1000;

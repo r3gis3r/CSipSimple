@@ -647,7 +647,7 @@ public class DBAdapter {
 	}
 	
 	public Cursor getFiltersForAccount(int account_id) {
-		Log.d(THIS_FILE, "Get filters for account "+account_id);
+		//Log.d(THIS_FILE, "Get filters for account "+account_id);
 		return db.query(FILTERS_TABLE_NAME, Filter.full_projection, 
 				Filter.FIELD_ACCOUNT+"=?", new String[]{Integer.toString(account_id)}, 
 				null, null, Filter.DEFAULT_ORDER);

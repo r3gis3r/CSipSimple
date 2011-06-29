@@ -70,11 +70,12 @@ public class OutgoingCall extends BroadcastReceiver {
 		
 		//Compute remote apps that could receive the outgoing call itnent through our api
 		HashMap<String, String> potentialHandlers = CallHandler.getAvailableCallHandlers(context);
+		Log.d(THIS_FILE, "We have "+potentialHandlers.size()+" potential handlers");
 		
 		// If this is an outgoing call with a valid number
-		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) || potentialHandlers.size() > 0) {
-			
-			if(prefsWrapper.isValidConnectionForOutgoing()) {
+		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) ) {
+			// If sip is there or there is at least 2 call handlers (if only one we assume that's the embed gsm one !
+			if(prefsWrapper.isValidConnectionForOutgoing() || potentialHandlers.size() > 1) {
 				// Just to be sure of what is incoming : sanitize phone number (in case of it was not properly done by dialer
 				// Or by a third party app
 				number = PhoneNumberUtils.convertKeypadLettersToDigits(number);

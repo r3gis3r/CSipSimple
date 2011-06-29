@@ -217,6 +217,13 @@
                   android:windowSoftInputMode="stateHidden" android:configChanges="orientation"
                   android:launchMode="singleTop" />
 		
+		<!-- Embedded plugins -->
+		<!-- Call handlers -->
+		<receiver android:name="com.csipsimple.plugins.telephony.CallHandler">
+			<intent-filter>
+				<action android:name="com.csipsimple.phone.action.HANDLE_CALL" />
+			</intent-filter>
+		</receiver>
 		
 	</application>
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="9"/>

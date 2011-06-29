@@ -17,6 +17,7 @@
  */
 package com.csipsimple.widgets;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -35,6 +36,7 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
+import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
@@ -180,7 +182,22 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 	public SipProfile getSelectedAccount() {
 		if(account == null) {
 			SipProfile retAcc = new SipProfile();
-			retAcc.id = SipProfile.GSM_ACCOUNT_ID;
+			HashMap<String, String> handlers = CallHandler.getAvailableCallHandlers(getContext());
+			for(String callHandler : handlers.values()) {
+				// Try to prefer the GSM handler
+				if(callHandler.equalsIgnoreCase("com.csipsimple/com.csipsimple.plugins.telephony.CallHandler")) {
+					Log.d(THIS_FILE, "Prefer GSM");
+					retAcc.id = CallHandler.getAccountIdForCallHandler(getContext(), callHandler);
+					return retAcc;
+				}
+			}
+			// Fast way to get first if exists
+			for(String callHandler : handlers.values()) {
+				retAcc.id = CallHandler.getAccountIdForCallHandler(getContext(), callHandler);
+				return retAcc;
+			}
+				
+			retAcc.id = SipProfile.INVALID_ID;
 			return retAcc;
 		}
 		return account;

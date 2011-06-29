@@ -1077,6 +1077,7 @@ public class SipService extends Service {
 	 * @return true if can be stopped, false if there is a pending call and the sip service should not be stopped
 	 */
 	private boolean stopSipStack() throws SameThreadException {
+		Log.d(THIS_FILE, "Stop sip stack");
 		sipWakeLock.acquire(this);
 		boolean canStop = true;
 		if(pjService != null) {
@@ -1204,7 +1205,7 @@ public class SipService extends Service {
 
 	public void updateRegistrationsState() {
 		ArrayList<SipProfileState> activeAccountsInfos = null;
-	
+		Log.d(THIS_FILE, "Update registration state");
 		if(pjService != null) {
 			activeAccountsInfos = pjService.getActiveProfilesState();
 		}
@@ -1311,7 +1312,7 @@ public class SipService extends Service {
 		if(kaAlarm == null) {
 			kaAlarm = new KeepAliveTimer(this);
 		}
-		Log.d(THIS_FILE, "Starting kaAlarm object");
+		Log.d(THIS_FILE, "KA Start");
 		kaAlarm.start();
 		hold_resources = true;
 	}
@@ -1324,6 +1325,7 @@ public class SipService extends Service {
 			wifiLock.release();
 		}
 		if(kaAlarm != null) {
+			Log.d(THIS_FILE, "KA Stop");
 			kaAlarm.stop();
 			kaAlarm = null;
 		}

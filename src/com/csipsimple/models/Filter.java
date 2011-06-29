@@ -168,7 +168,7 @@ public class Filter {
 	}
 	
 	public boolean canCall(String number) {
-		Log.d(THIS_FILE, "Check if filter is valid for "+number+" >> "+action+" and "+match_pattern);
+		//Log.d(THIS_FILE, "Check if filter is valid for "+number+" >> "+action+" and "+match_pattern);
 		if(action == ACTION_CANT_CALL) {
 			try {
 				return !Pattern.matches(match_pattern, number);
@@ -193,7 +193,7 @@ public class Filter {
 	}
 	
 	public boolean stopProcessing(String number) {
-		Log.d(THIS_FILE, "Should stop processing "+number+" ? ");
+		//Log.d(THIS_FILE, "Should stop processing "+number+" ? ");
 		if(action == ACTION_CAN_CALL || action == ACTION_DIRECTLY_CALL) {
 			try {
 				return Pattern.matches(match_pattern, number);
@@ -201,7 +201,7 @@ public class Filter {
 				Log.e(THIS_FILE, "Invalid pattern ", e);
 			}
 		}
-		Log.d(THIS_FILE, "Response : false");
+		//Log.d(THIS_FILE, "Response : false");
 		return false;
 	}
 	
@@ -539,7 +539,7 @@ public class Filter {
 		db.open();
 		Cursor c = db.getFiltersForAccount(account.id);
 		int numRows = c.getCount();
-		Log.d(THIS_FILE, "F > This account has "+numRows+" filters");
+		//Log.d(THIS_FILE, "F > This account has "+numRows+" filters");
 		c.moveToFirst();
 		for (int i = 0; i < numRows; ++i) {
 			Filter f = new Filter();
@@ -571,7 +571,7 @@ public class Filter {
 		for (int i = 0; i < numRows; ++i) {
 			Filter f = new Filter();
 			f.createFromDb(c);
-			Log.d(THIS_FILE, "Test filter "+f.match_pattern);
+			//Log.d(THIS_FILE, "Test filter "+f.match_pattern);
 			if(f.mustCall(number)) {
 				c.close();
 				db.close();

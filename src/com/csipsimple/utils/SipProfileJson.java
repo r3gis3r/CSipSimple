@@ -27,6 +27,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -35,7 +36,6 @@ import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -114,17 +114,17 @@ public class SipProfileJson {
 		
 		
 		// Add negative fake accounts
-		List<ResolveInfo> callers = Compatibility.getIntentsForCall(ctxt);
-		if(callers != null) {
-			for(int index = 1; index < callers.size()+1; index++) {
-				SipProfile gsmProfile = new SipProfile();
-				gsmProfile.id = SipProfile.INVALID_ID - index;
-				JSONObject p = serializeSipProfile(gsmProfile, db);
-				try {
-					jsonSipProfiles.put( jsonSipProfiles.length(), p);
-				} catch (JSONException e) {
-					Log.e(THIS_FILE, "Impossible to add profile", e);
-				}
+
+		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(ctxt);
+		for(String packageName : callHandlers.values()) {
+			final Integer externalAccountId = CallHandler.getAccountIdForCallHandler(ctxt, packageName);
+			SipProfile gsmProfile = new SipProfile();
+			gsmProfile.id = externalAccountId;
+			JSONObject p = serializeSipProfile(gsmProfile, db);
+			try {
+				jsonSipProfiles.put( jsonSipProfiles.length(), p);
+			} catch (JSONException e) {
+				Log.e(THIS_FILE, "Impossible to add profile", e);
 			}
 		}
 		
