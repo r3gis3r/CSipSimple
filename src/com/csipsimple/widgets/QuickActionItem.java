@@ -24,7 +24,7 @@
 /**
  * QuickActionItem
  * @author ruqqq (ruqqq.sg)
- * @desc Part of QuickActionWindow popup code. See QuickActionWindow.java for more information.
+ * @desc Part of HorizontalQuickActionWindow popup code. See HorizontalQuickActionWindow.java for more information.
  * 
  * Released under GPL License: http://www.gnu.org/licenses/gpl.html
  * Credits greatly appreciated ;)

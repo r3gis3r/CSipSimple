@@ -1,6 +1,5 @@
 /**
  * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
- * Copyright ruqqq (ruqqq.sg)
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -16,31 +15,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/**
- * FARUQ: NOT RELEVANT TO PROBLEM
- * Hence, code is left not properly commented
+/*
+ * Copyright (C) 2009 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-/**
- * QuickActionWindow
- * @author ruqqq (ruqqq.sg)
- * @desc QuickAction popup window similar to Twitter/Google IO App. XML and Graphics taken from AOSP project. Some portions of code ported from AOSP.
- *
- * Released under GPL License: http://www.gnu.org/licenses/gpl.html
- * Credits greatly appreciated ;)
- *
- * Usage:
- *
- * QuickActionWindow qa = new QuickActionWindow(this, v);
- * qa.addItem(getResources().getDrawable(android.R.drawable.ic_menu_view), "View", new OnClickListener() {
- * public void onClick(View v) {
- * // Your codes here
- * }
- * });
- * qa.show();
- *
- */
 package com.csipsimple.widgets;
 
 
@@ -68,88 +58,56 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback {
-	private static final String THIS_FILE = "QuickActionWindow";
-	private final Context mContext;
-	private final LayoutInflater mInflater;
-	private final WindowManager mWindowManager;
+public class HorizontalQuickActionWindow extends PopupWindow implements KeyEvent.Callback {
+	private static final String THIS_FILE = "HorizontalQuickActionWindow";
+	private final Resources resources;
+	private final LayoutInflater inflater;
 
 	View contentView;
 
-	private int mScreenWidth;
-	//private int mScreenHeight;
+	private int screenWidth, shadowWidth;
 
-	private int mShadowHoriz;
-//	private int mShadowVert;
-//	private int mShadowTouch;
+	private ImageView arrowUp, arrowDown;
 
-	private ImageView mArrowUp;
-	private ImageView mArrowDown;
+	private ViewGroup track;
+	private Animation trackAnim;
 
-	/*
-	 * private View mHeader; private HorizontalScrollView mTrackScroll;
-	 */
-	private ViewGroup mTrack;
-	private Animation mTrackAnim;
-
-	/*
-	 * private View mFooter; private View mFooterDisambig; private ListView
-	 * mResolveList; private CheckBox mSetPrimaryCheckBox;
-	 */
-
-	private View mPView;
-	private Rect mAnchor;
+	private View anchorView;
+	private Rect anchorRect;
 
 
-	public QuickActionWindow(Context context, View pView) {
-		super(context);
-
-		mPView = pView;
-
-		mContext = context;
-		mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-		mInflater = ((Activity) mContext).getLayoutInflater();
-
+	public HorizontalQuickActionWindow(Context aContext, View aView) {
+		super(aContext);
 		
-		setContentView(R.layout.quickaction);
 
-		mScreenWidth = mWindowManager.getDefaultDisplay().getWidth();
-	//	mScreenHeight = mWindowManager.getDefaultDisplay().getHeight();
-
+		// Window and anchor init
+		WindowManager wm = (WindowManager) aContext.getSystemService(Context.WINDOW_SERVICE);
+		screenWidth = wm.getDefaultDisplay().getWidth();
+		anchorView = aView;
+		
 		setWindowLayoutMode(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-		final Resources res = mContext.getResources();
-		mShadowHoriz = res.getDimensionPixelSize(R.dimen.quickaction_shadow_horiz);
-	//	mShadowVert = res.getDimensionPixelSize(R.dimen.quickaction_shadow_vert);
-	//	mShadowTouch = res.getDimensionPixelSize(R.dimen.quickaction_shadow_touch);
-
-		setWidth(mScreenWidth + mShadowHoriz + mShadowHoriz);
+		resources = aContext.getResources();
+		shadowWidth = resources.getDimensionPixelSize(R.dimen.quickaction_shadow_horiz);
+		setWidth(screenWidth + shadowWidth + shadowWidth);
 		setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-
+		// Set self properties
 		setBackgroundDrawable(new ColorDrawable(0));
-
-		mArrowUp = (ImageView) contentView.findViewById(R.id.arrow_up);
-		mArrowDown = (ImageView) contentView.findViewById(R.id.arrow_down);
-
-		mTrack = (ViewGroup) contentView.findViewById(R.id.quickaction);
-		/*
-		 * mTrackScroll = (HorizontalScrollView)
-		 * contentView.findViewById(R.id.scroll);
-		 * 
-		 * mFooter = contentView.findViewById(R.id.footer); mFooterDisambig =
-		 * contentView.findViewById(R.id.footer_disambig); mResolveList =
-		 * (ListView) contentView.findViewById(android.R.id.list);
-		 * mSetPrimaryCheckBox = (CheckBox)
-		 * contentView.findViewById(android.R.id.checkbox);
-		 */
-
 		setFocusable(true);
 		setTouchable(true);
 		setOutsideTouchable(true);
 
-		// Prepare track entrance animation
-		mTrackAnim = AnimationUtils.loadAnimation(mContext, R.anim.quickaction);
-		mTrackAnim.setInterpolator(new Interpolator() {
+		// Inflate
+		inflater = ((Activity) aContext).getLayoutInflater();
+		setContentView(R.layout.quickaction);
+		
+		// Init ui elements
+		arrowUp = (ImageView) contentView.findViewById(R.id.arrow_up);
+		arrowDown = (ImageView) contentView.findViewById(R.id.arrow_down);
+		track = (ViewGroup) contentView.findViewById(R.id.quickaction);
+
+		// Animation
+		trackAnim = AnimationUtils.loadAnimation(aContext, R.anim.quickaction);
+		trackAnim.setInterpolator(new Interpolator() {
 			public float getInterpolation(float t) {
 				// Pushes past the target area, then snaps back into place.
 				// Equation for graphing: 1.2-((x*1.6)-1.1)^2
@@ -160,7 +118,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	}
 
 	private void setContentView(int resId) {
-		contentView = mInflater.inflate(resId, null);
+		contentView = inflater.inflate(resId, null);
 		super.setContentView(contentView);
 	}
 
@@ -169,7 +127,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	}
 	
 	public void setAnchor(Rect rect) {
-		mAnchor = rect;
+		anchorRect = rect;
 	}
 
 	public void setTitle(CharSequence title) {
@@ -179,7 +137,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	}
 
 	public void setTitle(int resid) {
-		setTitle(mContext.getResources().getString(resid));
+		setTitle(resources.getString(resid));
 	}
 
 	public void setText(CharSequence text) {
@@ -189,7 +147,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	}
 
 	public void setText(int resid) {
-		setText(mContext.getResources().getString(resid));
+		setText(resources.getString(resid));
 	}
 
 	public void setIcon(Bitmap bm) {
@@ -205,49 +163,46 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	}
 
 	public void setIcon(int resid) {
-		setIcon(mContext.getResources().getDrawable(resid));
+		setIcon(resources.getDrawable(resid));
 	}
 
 	/**
 	 * Show the correct call-out arrow based on a {@link R.id} reference.
 	 */
 	private void showArrow(int whichArrow, int requestedX) {
-		final View showArrow = (whichArrow == R.id.arrow_up) ? mArrowUp : mArrowDown;
-		final View hideArrow = (whichArrow == R.id.arrow_up) ? mArrowDown : mArrowUp;
-
-		// Dirty hack to get width, might cause memory leak
-		final int arrowWidth = mContext.getResources().getDrawable(R.drawable.quickaction_arrow_up).getIntrinsicWidth();
-
+		final View showArrow = (whichArrow == R.id.arrow_up) ? arrowUp : arrowDown;
+		final View hideArrow = (whichArrow == R.id.arrow_up) ? arrowDown : arrowUp;
+		
+		final int arrowWidth = arrowUp.getMeasuredWidth();
+		
 		showArrow.setVisibility(View.VISIBLE);
 		ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) showArrow.getLayoutParams();
 		param.leftMargin = requestedX - arrowWidth / 2;
-		// Log.d("QuickActionWindow",
-		// "ArrowWidth: "+arrowWidth+"; LeftMargin for Arrow: "+param.leftMargin);
-
+		
 		hideArrow.setVisibility(View.INVISIBLE);
 	}
 
 	public void addItem(Drawable drawable, String text, OnClickListener l) {
-		QuickActionItem view = (QuickActionItem) mInflater.inflate(R.layout.quickaction_item, mTrack, false);
+		QuickActionItem view = (QuickActionItem) inflater.inflate(R.layout.quickaction_item, track, false);
 		view.setChecked(false);
 		view.setImageDrawable(drawable);
 		view.setText(text);
 		view.setOnClickListener(l);
 
-		final int index = mTrack.getChildCount() - 1;
-		mTrack.addView(view, index);
+		final int index = track.getChildCount() - 1;
+		track.addView(view, index);
 	}
 
 	public void addItem(int drawable, String text, OnClickListener l) {
-		addItem(mContext.getResources().getDrawable(drawable), text, l);
+		addItem(resources.getDrawable(drawable), text, l);
 	}
 
 	public void addItem(Drawable drawable, int resid, OnClickListener l) {
-		addItem(drawable, mContext.getResources().getString(resid), l);
+		addItem(drawable, resources.getString(resid), l);
 	}
 
 	public void addItem(int drawable, int resid, OnClickListener l) {
-		addItem(mContext.getResources().getDrawable(drawable), mContext.getResources().getText(resid).toString(), l);
+		addItem(resources.getDrawable(drawable), resources.getText(resid).toString(), l);
 	}
 
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -272,15 +227,19 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	}
 
 	public void show() {
-		show(mAnchor.centerX());
+		show(anchorRect.centerX());
 	}
-
+	
+    /**
+     * Start showing a dialog for the given element pointing
+     * towards the given location.
+     */
 	public void show(int requestedX) {
-		if(mAnchor == null) {
-			Log.e(THIS_FILE, "Anchor not defined ! > Impossible to show the window");
+		if(anchorRect == null) {
+			Log.e(THIS_FILE, "Anchor not defined : Impossible to show the window");
 			return;
 		}
-		super.showAtLocation(mPView, Gravity.NO_GRAVITY, 0, 0);
+		super.showAtLocation(anchorView, Gravity.NO_GRAVITY, 0, 0);
 
 		// Calculate properly to position the popup the correctly based on
 		// height of popup
@@ -289,16 +248,16 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 			this.getContentView().measure(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 			final int blockHeight = this.getContentView().getMeasuredHeight();
 
-			x = -mShadowHoriz;
+			x = -shadowWidth;
 
-			// Log.d("QuickActionWindow", "blockHeight: "+blockHeight);
+			// Log.d("HorizontalQuickActionWindow", "blockHeight: "+blockHeight);
 
-			if (mAnchor.top > blockHeight) {
+			if (anchorRect.top > blockHeight) {
 				// Show downwards callout when enough room, aligning bottom
 				// block
 				// edge with top of anchor area, and adjusting to inset arrow.
 				showArrow(R.id.arrow_down, requestedX);
-				y = mAnchor.top - blockHeight;
+				y = anchorRect.top - blockHeight;
 				windowAnimations = R.style.QuickActionAboveAnimation;
 
 			} else {
@@ -306,15 +265,15 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 				// bottom of
 				// anchor area, and adjusting to inset arrow.
 				showArrow(R.id.arrow_up, requestedX);
-				y = mAnchor.bottom;
+				y = anchorRect.bottom;
 				windowAnimations = R.style.QuickActionBelowAnimation;
 			}
 
-			// Log.d("QuickActionWindow",
-			// "X: "+x+"; Y: "+y+"; Width: "+mAnchor.width()+"; Center: "+mAnchor.centerX());
+			// Log.d("HorizontalQuickActionWindow",
+			// "X: "+x+"; Y: "+y+"; Width: "+anchorRect.width()+"; Center: "+anchorRect.centerX());
 
 			setAnimationStyle(windowAnimations);
-			mTrack.startAnimation(mTrackAnim);
+			track.startAnimation(trackAnim);
 			this.update(x, y, -1, -1);
 		}
 	}
@@ -325,6 +284,6 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	}
 
 	public void removeAllItems() {
-		mTrack.removeViews(1, mTrack.getChildCount()-2);
+		track.removeViews(1, track.getChildCount()-2);
 	}
 }

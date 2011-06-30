@@ -47,7 +47,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
 	private TextView textView;
 	private ImageView imageView;
-	private QuickActionWindow quickAction;
+	private HorizontalQuickActionWindow quickAction;
 	private SipProfile account = null;
 
 	private DBAdapter database;
@@ -102,7 +102,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 		
 		if(quickAction == null) {
 			LinearLayout root = (LinearLayout) findViewById(R.id.quickaction_button);
-			quickAction = new QuickActionWindow(getContext(), root);
+			quickAction = new HorizontalQuickActionWindow(getContext(), root);
 		}
 		
 		quickAction.setAnchor(r);
