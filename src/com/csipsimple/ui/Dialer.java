@@ -21,6 +21,7 @@ package com.csipsimple.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent.CanceledException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -68,6 +69,8 @@ import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.OutgoingCall;
+import com.csipsimple.utils.CallHandler;
+import com.csipsimple.utils.CallHandler.onLoadListener;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
@@ -220,6 +223,9 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 				return false;
 			}
 		});
+		
+		sipTextUri.setShowExternals(true);
+		accountChooserButton.setShowExternals(true);
 
 		dialPad.setOnDialKeyListener(this);
 		initButtons();
@@ -435,14 +441,13 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		}
 	}
 
-	private static final int USE_GSM = -2;
 
 	private void placeCall(int view) {
 		if (service == null) {
 			return;
 		}
 		String toCall = "";
-		Integer accountToUse = USE_GSM;
+		Integer accountToUse = SipProfile.INVALID_ID;
 
 		if (view == DIGIT_VIEW) {
 			toCall = PhoneNumberUtils.stripSeparators(digits.getText().toString());
@@ -467,24 +472,31 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		// Well we have now the fields, clear theses fields
 		digits.getText().clear();
 		sipTextUri.clear();
-		// dialDomain.getText().clear();
-		if (accountToUse != USE_GSM) {
+		
+		
+		// -- MAKE THE CALL --//
+		if (accountToUse >= 0) {
+			// It is a SIP account, try to call  service for that
 			try {
 				service.makeCall(toCall, accountToUse);
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Service can't be called to make the call");
 			}
-		} else {
-			OutgoingCall.ignoreNext = toCall;
-			Intent intent = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", toCall, null));
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(intent);
+		} else if (accountToUse != SipProfile.INVALID_ID) {
+			// It's an external account, find correct external account 
+			CallHandler ch = new CallHandler(this);
+			ch.loadFrom(accountToUse, toCall, new onLoadListener() {
+				@Override
+				public void onLoad(CallHandler ch) {
+					placePluginCall(ch);
+				}
+			});
 		}
 	}
 	
 	// VM stuff
 	private void placeVMCall() {
-		Integer accountToUse = USE_GSM;
+		Integer accountToUse = SipProfile.INVALID_ID;
 		SipProfile acc = null;
 		if (isDigit) {
 			acc = accountChooserButton.getSelectedAccount();
@@ -499,45 +511,18 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		}
 		
 		
-		if(accountToUse == USE_GSM) {
-			//Case gsm voice mail
-			TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-			String vmNumber = tm.getVoiceMailNumber();
-			if(!TextUtils.isEmpty(vmNumber)) {
-				OutgoingCall.ignoreNext = vmNumber;
-				Intent intent = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", vmNumber, null));
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
-			}else {
-
-		        missingVoicemailDialog = new AlertDialog.Builder(this)
-		        		//TODO : l18n
-		                .setTitle(R.string.gsm)
-		                .setMessage("No VoiceMail configured")
-		                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-	                        public void onClick(DialogInterface dialog, int which) {
-	                        	if(missingVoicemailDialog != null) {
-	                        		missingVoicemailDialog.hide();
-	                        	}
-	                        }})
-		                .create();
-
-		        // When the dialog is up, completely hide the in-call UI
-		        // underneath (which is in a partially-constructed state).
-		        missingVoicemailDialog.getWindow().addFlags(
-		                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
-		        missingVoicemailDialog.show();
-			}
-		} else {
+		if(accountToUse >= 0) {
 			if(acc != null) {
+				
 				if(!TextUtils.isEmpty(acc.vm_nbr)) {
+					// Account already have a VM number
 					try {
 						service.makeCall(acc.vm_nbr, acc.id);
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Service can't be called to make the call");
 					}
 				}else {
+					// Account has no VM number, propose to create one
 					final SipProfile edited_acc = acc;
 					LayoutInflater factory = LayoutInflater.from(this);
 		            final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
@@ -587,8 +572,53 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			        missingVoicemailDialog.show();
 				}
 			}
+		} else if (accountToUse == CallHandler.getAccountIdForCallHandler(this, "com.csipsimple/com.csipsimple.plugins.telephony.CallHandler")) {
+			//Case gsm voice mail
+			TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+			String vmNumber = tm.getVoiceMailNumber();
+			
+			if(!TextUtils.isEmpty(vmNumber)) {
+				OutgoingCall.ignoreNext = vmNumber;
+				Intent intent = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", vmNumber, null));
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+			}else {
+
+		        missingVoicemailDialog = new AlertDialog.Builder(this)
+		        		//TODO : l18n
+		                .setTitle(R.string.gsm)
+		                .setMessage("No VoiceMail configured")
+		                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+	                        public void onClick(DialogInterface dialog, int which) {
+	                        	if(missingVoicemailDialog != null) {
+	                        		missingVoicemailDialog.hide();
+	                        	}
+	                        }})
+		                .create();
+
+		        // When the dialog is up, completely hide the in-call UI
+		        // underneath (which is in a partially-constructed state).
+		        missingVoicemailDialog.getWindow().addFlags(
+		                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+		        missingVoicemailDialog.show();
+			}
 		}
+		// TODO : manage others ?... for now, no way to do so cause no vm stored
 		
+	}
+	
+
+	private void placePluginCall(CallHandler ch) {
+		try {
+			String nextExclude = ch.getNextExcludeTelNumber();
+			if(nextExclude != null) {
+				OutgoingCall.ignoreNext = nextExclude;
+			}
+			ch.getIntent().send();
+		} catch (CanceledException e) {
+			Log.e(THIS_FILE, "Pending intent cancelled", e);
+		}
 	}
 	
 	public void onClick(View view) {

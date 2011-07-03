@@ -47,7 +47,7 @@ public class CallHandler extends BroadcastReceiver {
 			String number = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 			// We must handle that clean way cause when call just to 
 			// get the row in account list expect this to reply correctly
-			if(number != null) {
+			if(number != null && Compatibility.canMakeGSMCall(context)) {
 				// Build pending intent
 				Intent i = new Intent(Intent.ACTION_CALL);
 				i.setData(Uri.fromParts("tel", number, null));

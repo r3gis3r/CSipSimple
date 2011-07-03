@@ -95,6 +95,7 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
         bodyInput = (EditText) findViewById(R.id.embedded_text_editor);
         accountChooserButton = (AccountChooserButton) findViewById(R.id.accountChooserButton);
         sendButton = (Button) findViewById(R.id.send_button);
+        accountChooserButton.setShowExternals(false);
         
         notifications = new SipNotifications(this);
         

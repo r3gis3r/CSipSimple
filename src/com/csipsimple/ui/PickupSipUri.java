@@ -88,6 +88,7 @@ public class PickupSipUri extends Activity implements OnClickListener {
 				return false;
 			}
 		});
+		sipUri.setShowExternals(false);
 		
 		registrationReceiver = new BroadcastReceiver() {
 			@Override

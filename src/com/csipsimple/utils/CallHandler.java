@@ -126,6 +126,7 @@ public class CallHandler {
 		return accountId;
 	}
 	
+	
 	public static HashMap<String, String> getAvailableCallHandlers(Context ctxt){
 		HashMap<String, String> result = new HashMap<String, String>();
 		
@@ -175,4 +176,14 @@ public class CallHandler {
 	public int getAccountId() {
 		return accountId;
 	}
+	
+	public SipProfile getFakeProfile() {
+		SipProfile profile = new SipProfile();
+		profile.id = accountId;
+		profile.display_name = label;
+		profile.icon = icon;
+		return profile;
+		
+	}
+	
 }

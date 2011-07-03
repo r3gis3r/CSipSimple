@@ -215,6 +215,10 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 		Log.d(THIS_FILE, "Clicked contact "+contactId);
 	}
 
+	public void setShowExternals(boolean b) {
+		accountChooserButtonText.setShowExternals(b);
+	}
+
 	/*
 	@Override
 	protected void onDetachedFromWindow() {

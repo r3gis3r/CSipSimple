@@ -22,6 +22,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +32,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.api.ISipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.CallHandler;
-import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.CallHandler.onLoadListener;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
 
@@ -51,7 +52,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 	private SipProfile account = null;
 
 	private DBAdapter database;
-
+	private boolean showExternals = true;
 	private ISipService service;
 	
 	private OnAccountChangeListener onAccountChange = null;
@@ -116,7 +117,8 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 			for (final SipProfile account : accountsList) {
 				AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(getContext(), service, account.id);
 				if(accountStatusDisplay.availableForCalls) {
-					quickAction.addItem(getResources().getDrawable(WizardUtils.getWizardIconRes(account)), account.display_name, new OnClickListener() {
+					BitmapDrawable drawable = new BitmapDrawable(WizardUtils.getWizardBitmap(getContext(), account));
+					quickAction.addItem(drawable, account.display_name, new OnClickListener() {
 						public void onClick(View v) {
 							setAccount(account);
 							quickAction.dismiss();
@@ -125,13 +127,25 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 				}
 			}
 		}
-		if(Compatibility.canMakeGSMCall(getContext())) {
-			quickAction.addItem(getResources().getDrawable(R.drawable.ic_wizard_gsm), getResources().getString(R.string.gsm), new OnClickListener() {
-				public void onClick(View v) {
-					setAccount(null);
-					quickAction.dismiss();
-				}
-			});
+		
+		if(showExternals) {
+			// Add external rows
+			HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(getContext());
+			for(String packageName : callHandlers.keySet()) {
+				CallHandler ch = new CallHandler(getContext());
+				ch.loadFrom(packageName, null, new onLoadListener() {
+					@Override
+					public void onLoad(final CallHandler ch) {
+						quickAction.addItem(ch.getIconDrawable(), ch.getLabel().toString(), new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								setAccount(ch.getFakeProfile());
+								quickAction.dismiss();
+							}
+						});
+					}
+				});
+			}
 		}
 		
 		quickAction.show();
@@ -145,7 +159,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 			imageView.setImageResource(R.drawable.ic_wizard_gsm);
 		} else {
 			textView.setText(account.display_name);
-			imageView.setImageResource(WizardUtils.getWizardIconRes(account));
+			imageView.setImageDrawable(new BitmapDrawable(WizardUtils.getWizardBitmap(getContext(), account)));
 		}
 		if(onAccountChange != null) {
 			onAccountChange.onChooseAccount(account);
@@ -205,6 +219,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 	
 	public void setOnAccountChangeListener(OnAccountChangeListener anAccountChangeListener) {
 		onAccountChange = anAccountChangeListener;
+	}
+
+	public void setShowExternals(boolean b) {
+		showExternals = b;		
 	}
 
 }

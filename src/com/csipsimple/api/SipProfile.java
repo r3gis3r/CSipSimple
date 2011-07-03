@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -170,6 +171,7 @@ public class SipProfile implements Parcelable {
 	public int sip_stack = PJSIP_STACK;
 	public String vm_nbr = null;
 	public int reg_delay_before_refresh = -1;
+	public Bitmap icon = null;
 	
 	public SipProfile() {
 		display_name = "";
@@ -205,6 +207,7 @@ public class SipProfile implements Parcelable {
 		use_zrtp = in.readInt();
 		vm_nbr = getReadParcelableString(in.readString());
 		reg_delay_before_refresh = in.readInt();
+		icon = (Bitmap) in.readParcelable(Bitmap.class.getClassLoader());
 	}
 
 	public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
@@ -258,6 +261,7 @@ public class SipProfile implements Parcelable {
 		dest.writeInt(use_zrtp);
 		dest.writeString(getWriteParcelableString(vm_nbr));
 		dest.writeInt(reg_delay_before_refresh);
+		dest.writeParcelable((Parcelable) icon, flags);
 	}
 	
 	

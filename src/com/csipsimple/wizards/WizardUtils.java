@@ -28,6 +28,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 
 import com.csipsimple.R;
@@ -511,8 +514,13 @@ public class WizardUtils {
 	}
 	
 
-	public static int getWizardIconRes(SipProfile account) {
-		return WizardUtils.getWizardIconRes(account.wizard);
+	public static Bitmap getWizardBitmap(Context ctxt, SipProfile account) {
+		if(account.icon == null) {
+			Resources r = ctxt.getResources();
+			BitmapDrawable bd = ((BitmapDrawable) r.getDrawable(WizardUtils.getWizardIconRes(account.wizard)));
+			account.icon = bd.getBitmap();
+		}
+		return account.icon;
 	}
 
 

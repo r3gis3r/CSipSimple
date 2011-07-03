@@ -126,7 +126,7 @@ public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickL
 			tagView.refreshView.setVisibility(accountStatusDisplay.availableForCalls?View.GONE:View.VISIBLE);
 
 			// Update account image
-			tagView.iconImage.setImageResource(WizardUtils.getWizardIconRes(account));
+			tagView.iconImage.setImageBitmap(WizardUtils.getWizardBitmap(context, account));
 			tagView.refreshView.setTag(account.id);
 		}
 	}

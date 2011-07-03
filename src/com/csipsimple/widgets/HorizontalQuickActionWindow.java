@@ -192,7 +192,12 @@ public class HorizontalQuickActionWindow extends PopupWindow implements KeyEvent
 		final int index = track.getChildCount() - 1;
 		track.addView(view, index);
 	}
-
+	
+	public void addItem(Bitmap drawable, String text, OnClickListener l) {
+		
+		
+	}
+	
 	public void addItem(int drawable, String text, OnClickListener l) {
 		addItem(resources.getDrawable(drawable), text, l);
 	}
