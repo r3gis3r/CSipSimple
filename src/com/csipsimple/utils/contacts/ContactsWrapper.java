@@ -148,7 +148,7 @@ public abstract class ContactsWrapper {
 	}
 	
 	private String formatNumber(String number, String type) {
-	    if (type.equals("sip")) {
+	    if (type != null && type.equals("sip")) {
 	        return "sip:" + number;
 	    } else {
 	    	if (!number.startsWith("sip:")) {

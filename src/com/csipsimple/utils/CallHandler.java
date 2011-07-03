@@ -20,6 +20,7 @@ package com.csipsimple.utils;
 import java.util.HashMap;
 import java.util.List;
 
+import android.Manifest.permission;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -69,7 +70,7 @@ public class CallHandler {
 		it.putExtra(Intent.EXTRA_PHONE_NUMBER, number);
 		it.setComponent(cn);
 		
-		context.sendOrderedBroadcast(it, null, new BroadcastReceiver() {
+		context.sendOrderedBroadcast(it, permission.PROCESS_OUTGOING_CALLS, new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				Bundle resolvedInfos = getResultExtras(true);
@@ -132,8 +133,10 @@ public class CallHandler {
 		List<ResolveInfo> availables = packageManager.queryBroadcastReceivers(it, 0);
 		for(ResolveInfo resInfo : availables) {
 			ActivityInfo actInfos = resInfo.activityInfo;
-			String packagedActivityName = actInfos.packageName + "/" + actInfos.name;
-			result.put((String) resInfo.loadLabel(packageManager), packagedActivityName);
+			if( packageManager.checkPermission(permission.PROCESS_OUTGOING_CALLS, actInfos.packageName) == PackageManager.PERMISSION_GRANTED) { 
+				String packagedActivityName = actInfos.packageName + "/" + actInfos.name;
+				result.put((String) resInfo.loadLabel(packageManager), packagedActivityName);
+			}
 		}
 		
 		return result;

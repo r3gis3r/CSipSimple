@@ -234,7 +234,7 @@ public class SipService extends Service {
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
 			
-			if(!supportMultipleCalls) {
+			if(!supportMultipleCalls && pjService != null) {
 				// Check if there is no ongoing calls if so drop this request by alerting user
 				SipCallSession activeCall = pjService.getActiveCallInProgress();
 				if(activeCall != null) {
@@ -450,6 +450,9 @@ public class SipService extends Service {
 			getExecutor().execute(new SipRunnable() {
 				@Override
 				protected void doRun() throws SameThreadException {
+					if(pjService == null) {
+		    			return;
+		    		}
 					pjService.confAdjustTxLevel(port, value);
 				}
 			});
@@ -461,6 +464,9 @@ public class SipService extends Service {
 			getExecutor().execute(new SipRunnable() {
 				@Override
 				protected void doRun() throws SameThreadException {
+					if(pjService == null) {
+		    			return;
+		    		}
 					pjService.confAdjustRxLevel(port, value);
 				}
 			});
@@ -472,8 +478,11 @@ public class SipService extends Service {
 
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			
+			if(pjService == null) {
+    			return;
+    		}
+			
     		boolean ringing = callInfo.isIncoming() && callInfo.isBeforeConfirmed();
-    		
         	// Mode ringing
     		if(ringing) {
 	        	// What is expected here is to silence ringer
@@ -518,6 +527,9 @@ public class SipService extends Service {
 		@Override
 		public int getRecordedCall() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			if(pjService == null) {
+				return -1;
+			}
 			return pjService.getRecordedCall();
 		}
 
