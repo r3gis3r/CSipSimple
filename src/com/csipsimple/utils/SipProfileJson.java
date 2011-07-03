@@ -116,7 +116,7 @@ public class SipProfileJson {
 		// Add negative fake accounts
 
 		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(ctxt);
-		for(String packageName : callHandlers.values()) {
+		for(String packageName : callHandlers.keySet()) {
 			final Integer externalAccountId = CallHandler.getAccountIdForCallHandler(ctxt, packageName);
 			SipProfile gsmProfile = new SipProfile();
 			gsmProfile.id = externalAccountId;

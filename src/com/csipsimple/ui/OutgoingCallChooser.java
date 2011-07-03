@@ -253,7 +253,7 @@ public class OutgoingCallChooser extends ListActivity {
 	private void addExternalRows() {
 
 		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
-		for(String packageName : callHandlers.values()) {
+		for(String packageName : callHandlers.keySet()) {
 			Log.d(THIS_FILE, "Treating call handler... "+packageName);
 			SipProfile externalProfile = new SipProfile();
 			externalProfile.id = CallHandler.getAccountIdForCallHandler(this, packageName);
@@ -346,7 +346,7 @@ public class OutgoingCallChooser extends ListActivity {
 		}
 		// Add CallHandlers accounts
 		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
-		for(String callHandler : callHandlers.values()) {
+		for(String callHandler : callHandlers.keySet()) {
 			SipProfile externalProfile = new SipProfile();
 			externalProfile.id = CallHandler.getAccountIdForCallHandler(this, callHandler);
 			accounts.add(externalProfile);

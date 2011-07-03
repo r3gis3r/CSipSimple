@@ -88,7 +88,7 @@ public class CallHandler {
 	
 	public void loadFrom( final Integer accountId, String number, onLoadListener l) {
 		HashMap<String, String> callHandlers = getAvailableCallHandlers(context);
-		for(String packageName : callHandlers.values()) {
+		for(String packageName : callHandlers.keySet()) {
 			if(accountId == getAccountIdForCallHandler(context, packageName)) {
 				loadFrom(packageName, number, l);
 				return;
@@ -135,9 +135,10 @@ public class CallHandler {
 		List<ResolveInfo> availables = packageManager.queryBroadcastReceivers(it, 0);
 		for(ResolveInfo resInfo : availables) {
 			ActivityInfo actInfos = resInfo.activityInfo;
+			Log.d(THIS_FILE, "Found call handler "+actInfos.packageName +" "+actInfos.name);
 			if( packageManager.checkPermission(permission.PROCESS_OUTGOING_CALLS, actInfos.packageName) == PackageManager.PERMISSION_GRANTED) { 
 				String packagedActivityName = actInfos.packageName + "/" + actInfos.name;
-				result.put((String) resInfo.loadLabel(packageManager), packagedActivityName);
+				result.put(packagedActivityName, (String) resInfo.loadLabel(packageManager));
 			}
 		}
 		

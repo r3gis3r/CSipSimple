@@ -183,7 +183,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 		if(account == null) {
 			SipProfile retAcc = new SipProfile();
 			HashMap<String, String> handlers = CallHandler.getAvailableCallHandlers(getContext());
-			for(String callHandler : handlers.values()) {
+			for(String callHandler : handlers.keySet()) {
 				// Try to prefer the GSM handler
 				if(callHandler.equalsIgnoreCase("com.csipsimple/com.csipsimple.plugins.telephony.CallHandler")) {
 					Log.d(THIS_FILE, "Prefer GSM");

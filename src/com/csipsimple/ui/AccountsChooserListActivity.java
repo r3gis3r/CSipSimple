@@ -141,7 +141,7 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 	private void addExternalRows() {
 
 		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
-		for(String packageName : callHandlers.values()) {
+		for(String packageName : callHandlers.keySet()) {
 			final Integer externalAccountId = CallHandler.getAccountIdForCallHandler(this, packageName);
 			CallHandler ch = new CallHandler(this);
 			ch.loadFrom(packageName, null, new onLoadListener() {
