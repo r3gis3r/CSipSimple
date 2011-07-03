@@ -45,6 +45,8 @@ import com.csipsimple.api.SipProfile;
 public class CallHandler {
 
 	private static final String THIS_FILE = "CallHandler";
+	public static final String EXTRA_REMOTE_INTENT_TOKEN = "android.intent.extra.remote_intent_token";
+	
 	private onLoadListener listener;
 	private PendingIntent pendingIntent = null;
 	private Bitmap icon = null;

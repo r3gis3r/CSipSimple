@@ -37,6 +37,8 @@ import com.csipsimple.utils.Compatibility;
 
 public class CallHandler extends BroadcastReceiver {
 
+	
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if(SipManager.ACTION_GET_PHONE_HANDLERS.equals(intent.getAction())) {
@@ -70,7 +72,7 @@ public class CallHandler extends BroadcastReceiver {
 			//Build the result for the row (label, icon, pending intent, and excluded phone number)
 			Bundle results = getResultExtras(true);
 			if(pendingIntent != null) {
-				results.putParcelable(Intent.EXTRA_REMOTE_INTENT_TOKEN, pendingIntent);
+				results.putParcelable(com.csipsimple.utils.CallHandler.EXTRA_REMOTE_INTENT_TOKEN, pendingIntent);
 			}
 			results.putString(Intent.EXTRA_TITLE, context.getResources().getString(R.string.use_pstn));
 			if(bmp != null) {
