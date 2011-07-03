@@ -219,7 +219,7 @@
 		
 		<!-- Embedded plugins -->
 		<!-- Call handlers -->
-		<receiver android:name="com.csipsimple.plugins.telephony.CallHandler">
+		<receiver android:name="com.csipsimple.plugins.telephony.CallHandler" android:permission="android.permission.PROCESS_OUTGOING_CALLS">
 			<intent-filter>
 				<action android:name="com.csipsimple.phone.action.HANDLE_CALL" />
 			</intent-filter>
