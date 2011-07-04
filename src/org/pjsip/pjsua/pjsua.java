@@ -657,6 +657,10 @@ public class pjsua implements pjsuaConstants {
     pjsuaJNI.set_use_compact_form(use_compact_form);
   }
 
+  public static void set_no_update(int use_no_update) {
+    pjsuaJNI.set_no_update(use_no_update);
+  }
+
   public static void jzrtp_SASVerified() {
     pjsuaJNI.jzrtp_SASVerified();
   }

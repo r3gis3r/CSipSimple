@@ -191,6 +191,7 @@ public class PjSipService {
 
 				// MAIN CONFIG
 				pjsua.set_use_compact_form(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM) ? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
+				pjsua.set_no_update(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.FORCE_NO_UPDATE)? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
 				cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent(service)));
 				cfg.setThread_cnt(prefsWrapper.getThreadCount());
 				cfg.setUse_srtp(getUseSrtp());

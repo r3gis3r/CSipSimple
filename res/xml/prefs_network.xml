@@ -93,6 +93,10 @@
 			android:summary="@string/use_compact_form_desc"
 			android:key="use_compact_form" android:defaultValue="false"/>	
 		
+		<CheckBoxPreference android:title="@string/force_no_update"
+			android:summary="@string/force_no_update_desc"
+			android:key="force_no_update" android:defaultValue="true"/>	
+			
 		<EditTextPreference android:key="user_agent"
 			android:title="@string/user_agent"
 			android:summary="@string/user_agent_desc"
@@ -106,37 +110,37 @@
 	</PreferenceScreen>
 	
 	<PreferenceCategory android:title="@string/nat_traversal" android:key="nat_traversal">
-			<CheckBoxPreference android:summary="@string/enable_ice_desc"
-				android:title="@string/enable_ice" android:key="enable_ice"
-				android:defaultValue="false"></CheckBoxPreference>
-			
-			<CheckBoxPreference android:summary="@string/enable_stun_desc"
-				android:title="@string/enable_stun" android:key="enable_stun"
-				android:defaultValue="false"></CheckBoxPreference>
-			<EditTextPreference android:key="stun_server"
-				android:title="@string/stun_server"
-				android:summary="@string/stun_server_desc"
-				android:dependency="enable_stun"
-				android:defaultValue="stun.counterpath.com"></EditTextPreference>	
-			
-			<CheckBoxPreference android:summary="@string/enable_turn_desc"
-				android:title="@string/enable_turn" android:key="enable_turn"
-				android:defaultValue="false"></CheckBoxPreference>
-			<EditTextPreference android:key="turn_server"
-				android:title="@string/turn_server"
-				android:summary="@string/turn_server_desc"
-				android:dependency="enable_turn"
-				android:defaultValue=""></EditTextPreference>
-			<EditTextPreference android:key="turn_username"
-				android:title="@string/turn_username"
-				android:summary="@string/turn_username_desc"
-				android:dependency="enable_turn"
-				android:defaultValue=""></EditTextPreference>
-			<EditTextPreference android:key="turn_password"
-				android:title="@string/turn_password"
-				android:summary="@string/turn_password_desc"
-				android:dependency="enable_turn"
-				android:defaultValue=""></EditTextPreference>
+		<CheckBoxPreference android:summary="@string/enable_ice_desc"
+			android:title="@string/enable_ice" android:key="enable_ice"
+			android:defaultValue="false"/>
+		
+		<CheckBoxPreference android:summary="@string/enable_stun_desc"
+			android:title="@string/enable_stun" android:key="enable_stun"
+			android:defaultValue="false"/>
+		<EditTextPreference android:key="stun_server"
+			android:title="@string/stun_server"
+			android:summary="@string/stun_server_desc"
+			android:dependency="enable_stun"
+			android:defaultValue="stun.counterpath.com"/>	
+		
+		<CheckBoxPreference android:summary="@string/enable_turn_desc"
+			android:title="@string/enable_turn" android:key="enable_turn"
+			android:defaultValue="false"/>
+		<EditTextPreference android:key="turn_server"
+			android:title="@string/turn_server"
+			android:summary="@string/turn_server_desc"
+			android:dependency="enable_turn"
+			android:defaultValue=""/>
+		<EditTextPreference android:key="turn_username"
+			android:title="@string/turn_username"
+			android:summary="@string/turn_username_desc"
+			android:dependency="enable_turn"
+			android:defaultValue=""></EditTextPreference>
+		<EditTextPreference android:key="turn_password"
+			android:title="@string/turn_password"
+			android:summary="@string/turn_password_desc"
+			android:dependency="enable_turn"
+			android:defaultValue=""></EditTextPreference>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/for_incomings" android:key="for_incoming">

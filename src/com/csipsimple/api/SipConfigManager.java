@@ -92,7 +92,7 @@ public class SipConfigManager {
 	public static final String USE_COMPACT_FORM = "use_compact_form";
 	public static final String USER_AGENT = "user_agent"; 
 	public static final String KEEP_ALIVE_USE_WAKE = "ka_use_wake";
-	
+	public static final String FORCE_NO_UPDATE = "force_no_update";
 	
 	// SECURE
 	public static final String ENABLE_TLS = "enable_tls";
