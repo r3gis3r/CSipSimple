@@ -69,6 +69,7 @@ public class PrefsNetwork extends GenericPrefs {
 			hidePreference("transport", SipConfigManager.RTP_PORT);
 			hidePreference("transport", SipConfigManager.USE_IPV6);
 			hidePreference("transport", SipConfigManager.OVERRIDE_NAMESERVER);
+			hidePreference("transport", SipConfigManager.FORCE_NO_UPDATE);
 			
 			hidePreference("transport", SipConfigManager.ENABLE_QOS);
 			hidePreference("transport", SipConfigManager.DSCP_VAL);
