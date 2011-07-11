@@ -97,6 +97,7 @@ import com.csipsimple.wizards.impl.VoipMS;
 import com.csipsimple.wizards.impl.VoipTel;
 import com.csipsimple.wizards.impl.Vono;
 import com.csipsimple.wizards.impl.WiMobile;
+import com.csipsimple.wizards.impl.Zadarma;
 
 
 public class WizardUtils {
@@ -418,6 +419,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ipshka, 10, 
 					new Locale[]{new Locale("UK", "ua")}, false, false, 
 					IPshka.class));
+			WIZARDS_DICT.put("ZADARMA", new WizardInfo("ZADARMA", "Zadarma", 
+					R.drawable.ic_wizard_zadarma, 10, 
+					new Locale[]{new Locale("UK", "ua"), locale("ru_RU"), locale("cs_CZ"), locale("ro_RO"), locale("hr_HR"), locale("bg_BG"),}, false, false, 
+					Zadarma.class));
 			WIZARDS_DICT.put("BLUEFACE", new WizardInfo("BLUEFACE", "Blueface", 
 					R.drawable.ic_wizard_blueface, 19, 
 					new Locale[]{ Locale.UK, new Locale("EN", "ie") }, false, false, 
