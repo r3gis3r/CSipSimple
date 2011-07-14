@@ -115,10 +115,11 @@ public class UAStateReceiver extends Callback {
 			if(calls != null && calls.length > 0) {
 				for( SipCallSession existingCall : calls) {
 					if(!existingCall.isAfterEnded()) {
-						Log.e(THIS_FILE, "For now we do not support two call at the same time !!!");
+						Log.e(THIS_FILE, "Settings to not support two call at the same time !!!");
 						//If there is an ongoing call and we do not support multiple calls
 						//Send busy here
 						pjsua.call_hangup(callId, 486, null, null);
+						unlockCpu();
 						return;
 					}
 				}
