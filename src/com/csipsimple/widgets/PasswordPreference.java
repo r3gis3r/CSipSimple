@@ -57,22 +57,26 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
 		Log.d(THIS_FILE, ">>> BINDING TO VIEW !!!");
-		CheckBox checkbox = showPwdCheckbox;
-		ViewParent oldParent = checkbox.getParent();
-		if (oldParent != view) {
-			if (oldParent != null) {
-				((ViewGroup) oldParent).removeView(checkbox);
+		try {
+			CheckBox checkbox = showPwdCheckbox;
+			ViewParent oldParent = checkbox.getParent();
+			if (oldParent != view) {
+				if (oldParent != null) {
+					((ViewGroup) oldParent).removeView(checkbox);
+				}
 			}
+			
+			ViewGroup container = (ViewGroup) view;
+			if(Compatibility.isCompatible(8)) {
+				container = (ViewGroup) container.getChildAt(0);
+			}
+			if (container != null) {
+				container.addView(checkbox, ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			}
+		}catch(Exception e) {
+			// Just do nothing in case weird ROM in use
+			Log.w(THIS_FILE, "Unsupported device for enhanced password", e);
 		}
-		
-		ViewGroup container = (ViewGroup) view;
-		if(Compatibility.isCompatible(8)) {
-			container = (ViewGroup) container.getChildAt(0);
-		}
-		if (container != null) {
-			container.addView(checkbox, ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		}
-		//
 	}
 
 	@Override
