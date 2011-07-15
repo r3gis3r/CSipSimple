@@ -128,7 +128,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 
 		String dialUserValue = dialUser.getText().toString();
 		SipProfile acc = accountChooserButtonText.getSelectedAccount();
-		if(!Pattern.matches(".*@.*", dialUserValue) && acc != null) {
+		if(!Pattern.matches(".*@.*", dialUserValue) && acc != null && acc.id > SipProfile.INVALID_ID) {
 			domainTextHelper.setText("@"+acc.getDefaultDomain());
 		}else {
 			domainTextHelper.setText("");
