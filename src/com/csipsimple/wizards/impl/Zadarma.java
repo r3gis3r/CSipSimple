@@ -19,18 +19,15 @@ package com.csipsimple.wizards.impl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import android.os.Handler;
 import android.os.Message;
 import android.text.InputType;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;

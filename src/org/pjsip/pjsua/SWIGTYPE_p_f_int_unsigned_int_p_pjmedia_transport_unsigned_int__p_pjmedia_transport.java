@@ -8,18 +8,18 @@
 
 package org.pjsip.pjsua;
 
-public class SWIGTYPE_p_pjsip_timer_setting {
+public class SWIGTYPE_p_f_int_unsigned_int_p_pjmedia_transport_unsigned_int__p_pjmedia_transport {
   private long swigCPtr;
 
-  protected SWIGTYPE_p_pjsip_timer_setting(long cPtr, boolean futureUse) {
+  protected SWIGTYPE_p_f_int_unsigned_int_p_pjmedia_transport_unsigned_int__p_pjmedia_transport(long cPtr, boolean futureUse) {
     swigCPtr = cPtr;
   }
 
-  protected SWIGTYPE_p_pjsip_timer_setting() {
+  protected SWIGTYPE_p_f_int_unsigned_int_p_pjmedia_transport_unsigned_int__p_pjmedia_transport() {
     swigCPtr = 0;
   }
 
-  protected static long getCPtr(SWIGTYPE_p_pjsip_timer_setting obj) {
+  protected static long getCPtr(SWIGTYPE_p_f_int_unsigned_int_p_pjmedia_transport_unsigned_int__p_pjmedia_transport obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 }

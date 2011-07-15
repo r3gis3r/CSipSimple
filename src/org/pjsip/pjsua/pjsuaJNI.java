@@ -341,6 +341,7 @@ public class pjsuaJNI {
   public final static native long pjsua_reg_info_cbparam_get(long jarg1, pjsua_reg_info jarg1_);
   public final static native long new_pjsua_reg_info();
   public final static native void delete_pjsua_reg_info(long jarg1);
+  public final static native int PJSUA_MED_TP_CLOSE_MEMBER_get();
   public final static native void pjsua_callback_on_call_state_set(long jarg1, pjsua_callback jarg1_, long jarg2);
   public final static native long pjsua_callback_on_call_state_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_incoming_call_set(long jarg1, pjsua_callback jarg1_, long jarg2);
@@ -363,6 +364,8 @@ public class pjsuaJNI {
   public final static native long pjsua_callback_on_call_replace_request_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_call_replaced_set(long jarg1, pjsua_callback jarg1_, long jarg2);
   public final static native long pjsua_callback_on_call_replaced_get(long jarg1, pjsua_callback jarg1_);
+  public final static native void pjsua_callback_on_reg_started_set(long jarg1, pjsua_callback jarg1_, long jarg2);
+  public final static native long pjsua_callback_on_reg_started_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_reg_state_set(long jarg1, pjsua_callback jarg1_, long jarg2);
   public final static native long pjsua_callback_on_reg_state_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_reg_state2_set(long jarg1, pjsua_callback jarg1_, long jarg2);
@@ -397,8 +400,8 @@ public class pjsuaJNI {
   public final static native long pjsua_callback_on_transport_state_get(long jarg1, pjsua_callback jarg1_);
   public final static native void pjsua_callback_on_ice_transport_error_set(long jarg1, pjsua_callback jarg1_, long jarg2);
   public final static native long pjsua_callback_on_ice_transport_error_get(long jarg1, pjsua_callback jarg1_);
-  public final static native void pjsua_callback_on_zrtp_transport_created_set(long jarg1, pjsua_callback jarg1_, long jarg2);
-  public final static native long pjsua_callback_on_zrtp_transport_created_get(long jarg1, pjsua_callback jarg1_);
+  public final static native void pjsua_callback_on_create_media_transport_set(long jarg1, pjsua_callback jarg1_, long jarg2);
+  public final static native long pjsua_callback_on_create_media_transport_get(long jarg1, pjsua_callback jarg1_);
   public final static native long new_pjsua_callback();
   public final static native void delete_pjsua_callback(long jarg1);
   public final static native void pjsua_config_max_calls_set(long jarg1, pjsua_config jarg1_, long jarg2);
@@ -620,8 +623,6 @@ public class pjsuaJNI {
   public final static native int pjsua_acc_config_srtp_secure_signaling_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_srtp_optional_dup_offer_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
   public final static native int pjsua_acc_config_srtp_optional_dup_offer_get(long jarg1, pjsua_acc_config jarg1_);
-  public final static native void pjsua_acc_config_use_zrtp_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
-  public final static native int pjsua_acc_config_use_zrtp_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_reg_retry_interval_set(long jarg1, pjsua_acc_config jarg1_, long jarg2);
   public final static native long pjsua_acc_config_reg_retry_interval_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_drop_calls_on_reg_fail_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
@@ -630,6 +631,8 @@ public class pjsuaJNI {
   public final static native long pjsua_acc_config_reg_use_proxy_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native void pjsua_acc_config_call_hold_type_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
   public final static native int pjsua_acc_config_call_hold_type_get(long jarg1, pjsua_acc_config jarg1_);
+  public final static native void pjsua_acc_config_register_on_acc_add_set(long jarg1, pjsua_acc_config jarg1_, int jarg2);
+  public final static native int pjsua_acc_config_register_on_acc_add_get(long jarg1, pjsua_acc_config jarg1_);
   public final static native long new_pjsua_acc_config();
   public final static native void delete_pjsua_acc_config(long jarg1);
   public final static native void acc_config_default(long jarg1, pjsua_acc_config jarg1_);
@@ -945,6 +948,20 @@ public class pjsuaJNI {
   public final static native int codec_get_param(long jarg1, pj_str_t jarg1_, long jarg2);
   public final static native int codec_set_param(long jarg1, pj_str_t jarg1_, long jarg2);
   public final static native int media_transports_create(long jarg1, pjsua_transport_config jarg1_);
+  public final static native void csipsimple_config_use_compact_form_sdp_set(long jarg1, csipsimple_config jarg1_, int jarg2);
+  public final static native int csipsimple_config_use_compact_form_sdp_get(long jarg1, csipsimple_config jarg1_);
+  public final static native void csipsimple_config_use_compact_form_headers_set(long jarg1, csipsimple_config jarg1_, int jarg2);
+  public final static native int csipsimple_config_use_compact_form_headers_get(long jarg1, csipsimple_config jarg1_);
+  public final static native void csipsimple_config_use_no_update_set(long jarg1, csipsimple_config jarg1_, int jarg2);
+  public final static native int csipsimple_config_use_no_update_get(long jarg1, csipsimple_config jarg1_);
+  public final static native void csipsimple_config_turn_username_set(long jarg1, csipsimple_config jarg1_, long jarg2, pj_str_t jarg2_);
+  public final static native long csipsimple_config_turn_username_get(long jarg1, csipsimple_config jarg1_);
+  public final static native void csipsimple_config_turn_password_set(long jarg1, csipsimple_config jarg1_, long jarg2, pj_str_t jarg2_);
+  public final static native long csipsimple_config_turn_password_get(long jarg1, csipsimple_config jarg1_);
+  public final static native void csipsimple_config_use_zrtp_set(long jarg1, csipsimple_config jarg1_, int jarg2);
+  public final static native int csipsimple_config_use_zrtp_get(long jarg1, csipsimple_config jarg1_);
+  public final static native long new_csipsimple_config();
+  public final static native void delete_csipsimple_config(long jarg1);
   public final static native int codecs_get_nbr();
   public final static native long codecs_get_id(int jarg1);
   public final static native int test_audio_dev(long jarg1, long jarg2);
@@ -955,14 +972,10 @@ public class pjsuaJNI {
   public final static native int is_call_secure(int jarg1);
   public final static native int media_transports_create_ipv6(long jarg1, pjsua_transport_config jarg1_);
   public final static native long get_error_message(int jarg1);
-  public final static native int csipsimple_init(long jarg1, pjsua_config jarg1_, long jarg2, pjsua_logging_config jarg2_, long jarg3, pjsua_media_config jarg3_);
+  public final static native void csipsimple_config_default(long jarg1, csipsimple_config jarg1_);
+  public final static native int csipsimple_init(long jarg1, pjsua_config jarg1_, long jarg2, pjsua_logging_config jarg2_, long jarg3, pjsua_media_config jarg3_, long jarg4, csipsimple_config jarg4_);
   public final static native int csipsimple_destroy();
   public final static native int send_keep_alive(int jarg1);
-  public final static native int set_turn_cfg(long jarg1, pjsua_media_config jarg1_, long jarg2, pj_str_t jarg2_, long jarg3, pj_str_t jarg3_);
-  public final static native void set_use_compact_form(int jarg1);
-  public final static native void set_no_update(int jarg1);
-  public final static native int PJMEDIA_NO_ZRTP_get();
-  public final static native int PJMEDIA_CREATE_ZRTP_get();
   public final static native void jzrtp_SASVerified();
 
   public static void SwigDirector_Callback_on_call_state(Callback self, int call_id, long e) {

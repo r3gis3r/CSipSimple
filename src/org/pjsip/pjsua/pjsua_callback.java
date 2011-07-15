@@ -134,6 +134,15 @@ public class pjsua_callback {
     return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_int__void(cPtr, false);
   }
 
+  public void setOn_reg_started(SWIGTYPE_p_f_int_int__void value) {
+    pjsuaJNI.pjsua_callback_on_reg_started_set(swigCPtr, this, SWIGTYPE_p_f_int_int__void.getCPtr(value));
+  }
+
+  public SWIGTYPE_p_f_int_int__void getOn_reg_started() {
+    long cPtr = pjsuaJNI.pjsua_callback_on_reg_started_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_int__void(cPtr, false);
+  }
+
   public void setOn_reg_state(SWIGTYPE_p_f_int__void value) {
     pjsuaJNI.pjsua_callback_on_reg_state_set(swigCPtr, this, SWIGTYPE_p_f_int__void.getCPtr(value));
   }
@@ -286,13 +295,13 @@ public class pjsua_callback {
     return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_pj_ice_strans_op_int_p_void__void(cPtr, false);
   }
 
-  public void setOn_zrtp_transport_created(SWIGTYPE_p_f_p_pjmedia_transport_int__int value) {
-    pjsuaJNI.pjsua_callback_on_zrtp_transport_created_set(swigCPtr, this, SWIGTYPE_p_f_p_pjmedia_transport_int__int.getCPtr(value));
+  public void setOn_create_media_transport(SWIGTYPE_p_f_int_unsigned_int_p_pjmedia_transport_unsigned_int__p_pjmedia_transport value) {
+    pjsuaJNI.pjsua_callback_on_create_media_transport_set(swigCPtr, this, SWIGTYPE_p_f_int_unsigned_int_p_pjmedia_transport_unsigned_int__p_pjmedia_transport.getCPtr(value));
   }
 
-  public SWIGTYPE_p_f_p_pjmedia_transport_int__int getOn_zrtp_transport_created() {
-    long cPtr = pjsuaJNI.pjsua_callback_on_zrtp_transport_created_get(swigCPtr, this);
-    return (cPtr == 0) ? null : new SWIGTYPE_p_f_p_pjmedia_transport_int__int(cPtr, false);
+  public SWIGTYPE_p_f_int_unsigned_int_p_pjmedia_transport_unsigned_int__p_pjmedia_transport getOn_create_media_transport() {
+    long cPtr = pjsuaJNI.pjsua_callback_on_create_media_transport_get(swigCPtr, this);
+    return (cPtr == 0) ? null : new SWIGTYPE_p_f_int_unsigned_int_p_pjmedia_transport_unsigned_int__p_pjmedia_transport(cPtr, false);
   }
 
   public pjsua_callback() {

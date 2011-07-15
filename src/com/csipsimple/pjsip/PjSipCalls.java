@@ -94,7 +94,16 @@ public final class PjSipCalls {
 		//	throw new UnavailableException();
 		}else {
 			session = updateSession(session, pj_info, service);
-			session.setMediaSecure(pjsua.is_call_secure(session.getCallId()) == pjsuaConstants.PJ_TRUE);
+			boolean secured = (pjsua.is_call_secure(session.getCallId()) == pjsuaConstants.PJ_TRUE);
+			if(secured) {
+				session.setMediaSecureInfo("SRTP");
+			}else {
+				if(service.userAgentReceiver.zrtpOn) {
+					secured = true;
+					session.setMediaSecureInfo("ZRTP : "+service.userAgentReceiver.sasString);
+				}
+			}
+			session.setMediaSecure(secured);
 		}
 		return session;
 	}

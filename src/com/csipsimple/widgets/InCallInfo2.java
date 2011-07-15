@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
@@ -61,8 +62,8 @@ public class InCallInfo2 extends ExtensibleBadge {
 	
 //	private TextView remotePhoneNumber;
 	private DBAdapter db;
-	//private TextView label;
-	private ImageView secure;
+	private TextView secureInfo;
+	private LinearLayout secure;
 	
 
 	public InCallInfo2(Context context, AttributeSet attrs) {
@@ -84,7 +85,8 @@ public class InCallInfo2 extends ExtensibleBadge {
 		elapsedTime = (Chronometer) findViewById(R.id.elapsedTime);
 		status = (TextView) findViewById(R.id.card_status);
 		callIcon = (ImageView) findViewById(R.id.callStatusIcon);
-		secure = (ImageView) findViewById(R.id.secureIndicator);
+		secure = (LinearLayout) findViewById(R.id.secureIndicator);
+		secureInfo = (TextView) findViewById(R.id.secureIndicatorString);
 		
 //		currentInfo = (LinearLayout) findViewById(R.id.currentCallInfo);
 //		currentDetailedInfo = (LinearLayout) findViewById(R.id.currentCallDetailedInfo);
@@ -272,6 +274,7 @@ public class InCallInfo2 extends ExtensibleBadge {
 		}
 		elapsedTime.setBase(callInfo.getConnectStart());
 		secure.setVisibility(callInfo.isSecure()?View.VISIBLE:View.GONE);
+		secureInfo.setText(callInfo.getMediaSecureInfo());
 		
 		int state = callInfo.getCallState();
 		switch (state) {

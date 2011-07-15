@@ -31,13 +31,23 @@
 				android:src="@drawable/ic_incall_ongoing"
 				android:padding="3dip" android:background="@drawable/rounded_transparent_br" />
 			
-			<ImageView android:id="@+id/secureIndicator" 
+			<LinearLayout  android:id="@+id/secureIndicator" 
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="top|right"
-				android:visibility="gone"
-				android:src="@drawable/ic_menu_security_setting"
-				android:padding="3dip" android:background="@drawable/rounded_transparent_bl" />
+				android:orientation="horizontal"
+				android:padding="3dip" android:background="@drawable/rounded_transparent_bl" 
+				android:visibility="gone">
+				<ImageView android:src="@drawable/ic_menu_security_setting"
+					android:layout_gravity="center_vertical"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+				<TextView android:id="@+id/secureIndicatorString"
+					android:textAppearance="?android:attr/textAppearanceSmall" 
+					android:layout_gravity="center_vertical"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+			</LinearLayout>
 		</FrameLayout>
 		
 		<com.csipsimple.widgets.MarqueeTextView

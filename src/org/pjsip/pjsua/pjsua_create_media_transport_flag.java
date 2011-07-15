@@ -8,37 +8,36 @@
 
 package org.pjsip.pjsua;
 
-public enum pjmedia_zrtp_use {
-  PJMEDIA_NO_ZRTP(pjsuaJNI.PJMEDIA_NO_ZRTP_get()),
-  PJMEDIA_CREATE_ZRTP(pjsuaJNI.PJMEDIA_CREATE_ZRTP_get());
+public enum pjsua_create_media_transport_flag {
+  PJSUA_MED_TP_CLOSE_MEMBER(pjsuaJNI.PJSUA_MED_TP_CLOSE_MEMBER_get());
 
   public final int swigValue() {
     return swigValue;
   }
 
-  public static pjmedia_zrtp_use swigToEnum(int swigValue) {
-    pjmedia_zrtp_use[] swigValues = pjmedia_zrtp_use.class.getEnumConstants();
+  public static pjsua_create_media_transport_flag swigToEnum(int swigValue) {
+    pjsua_create_media_transport_flag[] swigValues = pjsua_create_media_transport_flag.class.getEnumConstants();
     if (swigValue < swigValues.length && swigValue >= 0 && swigValues[swigValue].swigValue == swigValue)
       return swigValues[swigValue];
-    for (pjmedia_zrtp_use swigEnum : swigValues)
+    for (pjsua_create_media_transport_flag swigEnum : swigValues)
       if (swigEnum.swigValue == swigValue)
         return swigEnum;
-    throw new IllegalArgumentException("No enum " + pjmedia_zrtp_use.class + " with value " + swigValue);
+    throw new IllegalArgumentException("No enum " + pjsua_create_media_transport_flag.class + " with value " + swigValue);
   }
 
   @SuppressWarnings("unused")
-  private pjmedia_zrtp_use() {
+  private pjsua_create_media_transport_flag() {
     this.swigValue = SwigNext.next++;
   }
 
   @SuppressWarnings("unused")
-  private pjmedia_zrtp_use(int swigValue) {
+  private pjsua_create_media_transport_flag(int swigValue) {
     this.swigValue = swigValue;
     SwigNext.next = swigValue+1;
   }
 
   @SuppressWarnings("unused")
-  private pjmedia_zrtp_use(pjmedia_zrtp_use swigEnum) {
+  private pjsua_create_media_transport_flag(pjsua_create_media_transport_flag swigEnum) {
     this.swigValue = swigEnum.swigValue;
     SwigNext.next = this.swigValue+1;
   }

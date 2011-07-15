@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.csipsimple_config;
 import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_qos_type;
 import org.pjsip.pjsua.pj_str_t;
@@ -168,11 +169,10 @@ public class PjSipService {
 				pjsua_config cfg = new pjsua_config();
 				pjsua_logging_config logCfg = new pjsua_logging_config();
 				pjsua_media_config mediaCfg = new pjsua_media_config();
+				csipsimple_config cssCfg = new csipsimple_config();
+				
 
-				// GLOBAL CONFIG
-				pjsua.config_default(cfg);
-				Log.d(THIS_FILE, "default cb");
-				cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
+				// SERVICE CONFIG
 
 				if (userAgentReceiver == null) {
 					Log.d(THIS_FILE, "create receiver....");
@@ -188,10 +188,24 @@ public class PjSipService {
 				pjsua.setCallbackObject(userAgentReceiver);
 
 				Log.d(THIS_FILE, "Attach is done to callback");
-
+				int isTurnEnabled = prefsWrapper.getTurnEnabled();
+				
+				// CSS CONFIG
+				pjsua.csipsimple_config_default(cssCfg);
+				cssCfg.setUse_compact_form_headers(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM) ? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
+				cssCfg.setUse_compact_form_sdp(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM) ? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
+				cssCfg.setUse_no_update(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.FORCE_NO_UPDATE)? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
+				if (isTurnEnabled == 1) {
+					cssCfg.setTurn_username(pjsua.pj_str_copy(prefsWrapper.getPreferenceStringValue(SipConfigManager.TURN_USERNAME)));
+					cssCfg.setTurn_password(pjsua.pj_str_copy(prefsWrapper.getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)));
+				}
+				
+				// -- USE_ZRTP 1 is no_zrtp
+				cssCfg.setUse_zrtp( (prefsWrapper.getPreferenceIntegerValue(SipConfigManager.USE_ZRTP) > 1) ? pjsua.PJ_TRUE: pjsua.PJ_FALSE);
+				
 				// MAIN CONFIG
-				pjsua.set_use_compact_form(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM) ? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
-				pjsua.set_no_update(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.FORCE_NO_UPDATE)? pjsua.PJ_TRUE:pjsua.PJ_FALSE);
+				pjsua.config_default(cfg);
+				cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
 				cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent(service)));
 				cfg.setThread_cnt(prefsWrapper.getThreadCount());
 				cfg.setUse_srtp(getUseSrtp());
@@ -246,17 +260,13 @@ public class PjSipService {
 				// ICE
 				mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());
 				// TURN
-				int isTurnEnabled = prefsWrapper.getTurnEnabled();
 				if (isTurnEnabled == 1) {
 					mediaCfg.setEnable_turn(isTurnEnabled);
 					mediaCfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
-					pjsua.set_turn_cfg(mediaCfg, pjsua.pj_str_copy(prefsWrapper.getPreferenceStringValue(SipConfigManager.TURN_USERNAME)),
-							pjsua.pj_str_copy(prefsWrapper.getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)));
-
 				}
 
 				// INITIALIZE
-				status = pjsua.csipsimple_init(cfg, logCfg, mediaCfg);
+				status = pjsua.csipsimple_init(cfg, logCfg, mediaCfg, cssCfg);
 				if (status != pjsuaConstants.PJ_SUCCESS) {
 					String msg = "Fail to init pjsua " + pjsua.get_error_message(status).getPtr();
 					Log.e(THIS_FILE, msg);

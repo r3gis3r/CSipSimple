@@ -637,8 +637,12 @@ public class pjsua implements pjsuaConstants {
     return new pj_str_t(pjsuaJNI.get_error_message(status), true);
   }
 
-  public static int csipsimple_init(pjsua_config ua_cfg, pjsua_logging_config log_cfg, pjsua_media_config media_cfg) {
-    return pjsuaJNI.csipsimple_init(pjsua_config.getCPtr(ua_cfg), ua_cfg, pjsua_logging_config.getCPtr(log_cfg), log_cfg, pjsua_media_config.getCPtr(media_cfg), media_cfg);
+  public static void csipsimple_config_default(csipsimple_config css_cfg) {
+    pjsuaJNI.csipsimple_config_default(csipsimple_config.getCPtr(css_cfg), css_cfg);
+  }
+
+  public static int csipsimple_init(pjsua_config ua_cfg, pjsua_logging_config log_cfg, pjsua_media_config media_cfg, csipsimple_config css_cfg) {
+    return pjsuaJNI.csipsimple_init(pjsua_config.getCPtr(ua_cfg), ua_cfg, pjsua_logging_config.getCPtr(log_cfg), log_cfg, pjsua_media_config.getCPtr(media_cfg), media_cfg, csipsimple_config.getCPtr(css_cfg), css_cfg);
   }
 
   public static int csipsimple_destroy() {
@@ -647,18 +651,6 @@ public class pjsua implements pjsuaConstants {
 
   public static int send_keep_alive(int acc_id) {
     return pjsuaJNI.send_keep_alive(acc_id);
-  }
-
-  public static int set_turn_cfg(pjsua_media_config media_cfg, pj_str_t username, pj_str_t data) {
-    return pjsuaJNI.set_turn_cfg(pjsua_media_config.getCPtr(media_cfg), media_cfg, pj_str_t.getCPtr(username), username, pj_str_t.getCPtr(data), data);
-  }
-
-  public static void set_use_compact_form(int use_compact_form) {
-    pjsuaJNI.set_use_compact_form(use_compact_form);
-  }
-
-  public static void set_no_update(int use_no_update) {
-    pjsuaJNI.set_no_update(use_no_update);
   }
 
   public static void jzrtp_SASVerified() {
