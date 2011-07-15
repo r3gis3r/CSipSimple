@@ -147,11 +147,15 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 		SipProfile acc = accountChooserButtonText.getSelectedAccount();
 		if (acc != null) {
 			accountToUse = acc.id;
-			//TODO : escape + and special char in username
-			if(Pattern.matches(".*@.*", userName)) {
-				toCall = "sip:" + userName +"";
+			// If this is a sip account
+			if(accountToUse > SipProfile.INVALID_ID) {
+				if(Pattern.matches(".*@.*", userName)) {
+					toCall = "sip:" + userName +"";
+				}else {
+					toCall = "sip:" + userName + "@" + acc.getDefaultDomain();
+				}
 			}else {
-				toCall = "sip:" + userName + "@" + acc.getDefaultDomain();
+				toCall = userName;
 			}
 		}else {
 			toCall = userName;
