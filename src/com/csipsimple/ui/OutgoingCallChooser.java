@@ -104,7 +104,7 @@ public class OutgoingCallChooser extends ListActivity {
 		
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
-			
+			service = null;
 		}
     };
     
@@ -176,16 +176,17 @@ public class OutgoingCallChooser extends ListActivity {
     	
 		// Need full selector, finish layout
 		setContentView(R.layout.outgoing_account_list);
+		
 
+		
 		// Start service and bind it. Finish selector in onServiceConnected
 		if(prefsWrapper.isValidConnectionForOutgoing()) {
 			Intent sipService = new Intent(this, SipService.class);
 			startService(sipService);
 			bindService(sipService, connection, Context.BIND_AUTO_CREATE);
 			registerReceiver(regStateReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
-		}else {
-			checkNumberWithSipStarted();
 		}
+		
 		
 		addExternalRows();
 	}
@@ -246,6 +247,9 @@ public class OutgoingCallChooser extends ListActivity {
 		
 	}
 	
+	private int externalTotalNbrs = 0;
+	private int loadedExternals = -1; // ensure not equal to total nbrs at first time
+	private List<SipProfile> externalProfiles;
 	
 	/**
 	 * Add rows for external plugins
@@ -253,6 +257,10 @@ public class OutgoingCallChooser extends ListActivity {
 	private void addExternalRows() {
 
 		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
+		externalTotalNbrs = callHandlers.size();
+		loadedExternals = 0;
+		externalProfiles = new ArrayList<SipProfile>();
+		
 		for(String packageName : callHandlers.keySet()) {
 			Log.d(THIS_FILE, "Treating call handler... "+packageName);
 			SipProfile externalProfile = new SipProfile();
@@ -261,6 +269,7 @@ public class OutgoingCallChooser extends ListActivity {
 			if(Filter.isCallableNumber(externalProfile, number, database)) {
 				// Transform number
 				String finalNumber = Filter.rewritePhoneNumber(externalProfile, number, database);
+				final SipProfile extProfile = externalProfile;
 				Log.d(THIS_FILE, "Will loaded external " + packageName);
 				CallHandler ch = new CallHandler(this);
 				ch.loadFrom(packageName, finalNumber, new onLoadListener() {
@@ -274,46 +283,17 @@ public class OutgoingCallChooser extends ListActivity {
 									placePluginCall(ch);
 								}
 							});
+							
+							externalProfiles.add(extProfile);
 						}
+						loadedExternals ++;
+						checkNumberWithSipStarted();
 					}
 				});
 			}
 		}
 	}
 	
-	/*
-	private void placeInternalCall(SipProfile acc, ResolveInfo caller) {
-		
-		Intent i = null;
-		String phoneNumber = Filter.rewritePhoneNumber(acc, number, database);
-		//Case default dialer
-		if(caller.activityInfo.packageName.startsWith("com.android")) {
-			i = new Intent(Intent.ACTION_CALL);
-			i.setData(Uri.fromParts("tel", phoneNumber, null));
-			
-			//This will call again the outdial
-			OutgoingCall.ignoreNext = number;
-		}else if(caller.activityInfo.packageName.startsWith("com.skype")) {
-			i = new Intent();
-			i.setComponent(new ComponentName(caller.activityInfo.packageName, "com.skype.raider.contactsync.ContactSkypeOutCallStartActivity"));
-			i.setData(Uri.fromParts("tel", phoneNumber, null));
-		}
-		
-		if(i != null) {
-			startActivity(i);
-			finishServiceIfNeeded();
-			finish();
-		}else {
-
-	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	        builder.setTitle(R.string.warning)
-	            .setIcon(android.R.drawable.ic_dialog_alert)
-	        .setNeutralButton(R.string.ok, null)
-	        .setMessage("This application is not yet supported ("+caller.activityInfo.packageName+") :\nIt is possible that this application doesn't provide a way for other applications to do it! If so CRY on the project website")
-	        .show();
-		}
-	}
-	*/
 	
 	private void placePluginCall(CallHandler ch) {
 		try {
@@ -336,8 +316,20 @@ public class OutgoingCallChooser extends ListActivity {
 			checkIfMustAccountNotValid();
 		}
 		
-		List<SipProfile> accounts = new ArrayList<SipProfile>();
+		// If valid for outgoing we have to wait for service to be there
+		if(prefsWrapper.isValidConnectionForOutgoing()) {
+			if(service == null) {
+				return;
+			}
+		}
+		// We have to wait for all external profiles to be there
+		if(loadedExternals != externalTotalNbrs) {
+			return;
+		}
 		
+		
+		// Get all accounts
+		List<SipProfile> accounts = new ArrayList<SipProfile>();
 		// Get SIP accounts
 		if(prefsWrapper.isValidConnectionForOutgoing()) {
 			database.open();
@@ -345,10 +337,7 @@ public class OutgoingCallChooser extends ListActivity {
 			database.close();
 		}
 		// Add CallHandlers accounts
-		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
-		for(String callHandler : callHandlers.keySet()) {
-			SipProfile externalProfile = new SipProfile();
-			externalProfile.id = CallHandler.getAccountIdForCallHandler(this, callHandler);
+		for(SipProfile externalProfile : externalProfiles) {
 			accounts.add(externalProfile);
 		}
 		
