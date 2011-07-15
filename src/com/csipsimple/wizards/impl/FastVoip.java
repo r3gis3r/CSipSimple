@@ -35,7 +35,7 @@ public class FastVoip extends SimpleImplementation {
 	@Override
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
-		acc.proxies = new String[] {"sip:proxy.fastvoip.com"};
+		acc.proxies = new String[] {"sip:sip.fastvoip.com"};
 		acc.transport = SipProfile.TRANSPORT_UDP;
 		return acc;
 	}
