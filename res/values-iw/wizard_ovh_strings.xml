@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_ovh_phone_number_desc">מספר הטלפון צריך להיות במתכונת כמו 0785xxxxxx</string>
+  <string name="w_sapo_phone_number_desc">מספר הטלפון צריך להיות במתכונת כמו 972785xxxxxx+</string>
+</resources>

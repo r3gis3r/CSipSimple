@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string-array name="filters_action">
+    <item>לא ניתן להתקשר</item>
+    <item>לכתוב מחדש</item>
+    <item>עצור תהליך</item>
+    <item>להתקשר ישירות</item>
+    <item>מענה אוטומטי</item>
+  </string-array>
+  <string-array name="filters_type">
+    <item>מתחיל עם</item>
+    <item>מסתיים עם</item>
+    <item>מכיל</item>
+    <item>הכל</item>
+    <item>יש בדיוק n ספרות</item>
+    <item>יש יותר מ N ספרות</item>
+    <item>זה בדיוק</item>
+    <item>מותאם אישית RegExp</item>
+  </string-array>
+  <string-array name="replace_type">
+    <item>קידומת על ידי</item>
+    <item>סיומת עם</item>
+    <item>החלף התאמה על ידי</item>
+    <item>החלף הכל על ידי</item>
+    <item>מותאם אישית RegExp</item>
+  </string-array>
+</resources>

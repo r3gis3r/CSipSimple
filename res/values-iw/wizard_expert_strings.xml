@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_expert_display_name">שם החשבון</string>
+  <string name="w_expert_display_name_desc">הצג שם עבור חשבון זה</string>
+  <string name="w_expert_acc_id">מזהה החשבון</string>
+  <string name="w_expert_acc_id_desc">תבנית: תצוגת שם &lt;sip:login\@registrar&gt;</string>
+  <string name="w_expert_reg_uri">רישום URI</string>
+  <string name="w_expert_reg_uri_desc">תבנית: SIP: registrar.net [יציאה:]</string>
+  <string name="w_expert_realm">איזור</string>
+  <string name="w_expert_realm_desc">אימות דומיין (אם אתה לא יודע, השתמש ב-\"*\")</string>
+  <string name="w_expert_username">שם משתמש</string>
+  <string name="w_expert_username_desc">שם משתמש לאימות</string>
+  <string name="w_expert_data">סיסמה</string>
+  <string name="w_expert_data_desc">סיסמה (או נתונים אחרים) עבור אימות</string>
+  <string name="w_expert_t_proxy">פרוקסי</string>
+  <string name="w_expert_proxy">פרוקסי URI</string>
+  <string name="w_expert_proxy_desc">תבנית: SIP: proxy.net [: יציאה]</string>
+  <string name="w_expert_use_tcp">השתמש ב-TCP (לא ב-UDP)</string>
+  <string name="w_expert_prevent_tcp">מנע TCP (נסה רק UDP)</string>
+  <string name="w_expert_publish_enabled">פרסם מאופשר</string>
+  <string name="w_expert_reg_timeout">עבר זמן לרישום (שניות)</string>
+  <string name="w_expert_ka_interval">שמור פער פעיל (שניות)</string>
+  <string name="w_expert_force_contact">ליצור קשר בכוח</string>
+  <string name="w_expert_allow_contact_rewrite">אפשר ליצור קשר מחדש</string>
+  <string name="w_expert_contact_rewrite_method">שיטת צור קשר מחדש</string>
+</resources>

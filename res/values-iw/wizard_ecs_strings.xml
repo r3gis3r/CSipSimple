@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_ecs_display_name">שם החשבון</string>
+  <string name="w_ecs_display_name_desc">הצג שם עבור חשבון זה</string>
+  <string name="w_ecs_phone_number">מספר טלפון</string>
+  <string name="w_ecs_phone_number_desc">מספר טלפון של חשבון הסיפ</string>
+  <string name="w_ecs_user_name">כניסת משתמש</string>
+  <string name="w_ecs_user_name_desc">התחברות לשולחן הוירטואלי שלך</string>
+  <string name="w_ecs_password">סיסמת משתמש</string>
+  <string name="w_ecs_password_desc">הסיסמה עבור החשבון שלך</string>
+  <string name="w_ecs_server_domain">דומיין סיפ</string>
+  <string name="w_ecs_server_domain_desc">שם דומיין עבור חשבונות סיפ</string>
+  <string name="w_ecs_server_ip_desc">שם הדומיין או ה-IP כדי לגשת ל-ECS (השאר ריק אם הדומיין סיפ זהה)</string>
+</resources>
