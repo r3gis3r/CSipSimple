@@ -20,6 +20,7 @@ package com.csipsimple.pjsip;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -46,6 +47,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.KeyCharacterMap;
 
 import com.csipsimple.R;
@@ -926,31 +928,7 @@ public class PjSipService {
 		}
 	}
 
-	public void startRecording(int callId) {
-		if (created && userAgentReceiver != null) {
-			userAgentReceiver.startRecording(callId);
-		}
-	}
 
-	public void stopRecording() {
-		if (created && userAgentReceiver != null) {
-			userAgentReceiver.stopRecording();
-		}
-	}
-
-	public int getRecordedCall() {
-		if (created && userAgentReceiver != null) {
-			return userAgentReceiver.getRecordedCall();
-		}
-		return -1;
-	}
-
-	public boolean canRecord(int callId) {
-		if (created && userAgentReceiver != null) {
-			return userAgentReceiver.canRecord(callId);
-		}
-		return false;
-	}
 
 	public boolean setAccountRegistration(SipProfile account, int renew) throws SameThreadException {
 		int status = -1;
@@ -1216,6 +1194,129 @@ public class PjSipService {
 	
 	public void setSnd() throws SameThreadException {
 		pjsua.set_snd_dev(0, 0);
+	}
+
+	
+	
+	
+	// About recording things
+
+	// Recorder
+	public static int INVALID_RECORD = -1; 
+	public int recordedCall = INVALID_RECORD;
+	private int recPort = -1;
+	private int recorderId = -1;
+	private int recordedConfPort = -1;
+	public void startRecording(int callId) {
+		// Ensure nothing is recording actually
+		if (recordedCall == INVALID_RECORD) {
+			SipCallSession callInfo = getCallInfo(callId);
+			if(callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
+				return;
+			}
+			
+		    File mp3File = getRecordFile(callInfo.getRemoteContact());
+		    if (mp3File != null){
+				int[] recId = new int[1];
+				pj_str_t filename = pjsua.pj_str_copy(mp3File.getAbsolutePath());
+				int status = pjsua.recorder_create(filename, 0, (byte[]) null, 0, 0, recId);
+				if(status == pjsuaConstants.PJ_SUCCESS) {
+					recorderId = recId[0];
+					Log.d(THIS_FILE, "Record started : " + recorderId);
+					recordedConfPort = callInfo.getConfPort();
+					recPort = pjsua.recorder_get_conf_port(recorderId);
+					pjsua.conf_connect(recordedConfPort, recPort);
+					pjsua.conf_connect(0, recPort);
+					recordedCall = callId;
+				}
+		    }else {
+		    	//TODO: toaster
+		    	Log.w(THIS_FILE, "Impossible to write file");
+		    }
+		}
+	}
+	
+	public void stopRecording() {
+		if(!created) {
+			return;
+		}
+		Log.d(THIS_FILE, "Stop recording " + recordedCall+" et "+ recorderId);
+		if (recorderId != -1) {
+			pjsua.recorder_destroy(recorderId);
+			recorderId = -1;
+		}
+		recordedCall = INVALID_RECORD;
+	}
+	
+	public boolean canRecord(int callId) {
+		if (created && recordedCall == INVALID_RECORD) {
+			SipCallSession callInfo = getCallInfo(callId);
+			if(callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public int getRecordedCall() {
+		return recordedCall; 
+	}
+	
+	private File getRecordFile(String remoteContact) {
+		File dir = PreferencesWrapper.getRecordsFolder();
+	    if (dir != null){
+			Date d = new Date();
+			File file = new File(dir.getAbsoluteFile() + File.separator + sanitizeForFile(remoteContact)+ "_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".wav");
+			Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
+			return file;
+	    }
+	    return null;
+	}
+
+
+	private String sanitizeForFile(String remoteContact) {
+		String fileName = remoteContact;
+		fileName = fileName.replaceAll("[\\.\\\\<>:; \"\'\\*]", "_");
+		return fileName;
+	}
+
+
+	// Wave player 
+	int[] plId = null;
+	public final static int BITMASK_OUT = 1 << 0;
+	public final static int BITMASK_IN = 1 << 1;
+	public void playWaveFile(String filePath, int callId, int way) {
+		if(!created) {
+			return;
+		}
+		
+		// Create new player int holder or destroy existing one if any
+		if(plId == null) {
+			plId = new int[1];
+		}else {
+			pjsua.player_destroy(plId[0]);
+		}
+		
+		// Anyway we create a new player conf port.
+        pj_str_t filename = pjsua.pj_str_copy(filePath);
+        
+        int status = pjsua.player_create(filename, 1 /* PJMEDIA_FILE_NO_LOOP */, plId);
+        
+        if(status == pjsuaConstants.PJ_SUCCESS) {
+	        SipCallSession callInfo = getCallInfo(callId);
+	        
+	        int wavConfPort = callInfo.getConfPort();
+	        int wavPort = pjsua.player_get_conf_port(plId[0]);
+	        if( (way & BITMASK_OUT) == BITMASK_OUT) {
+	        	pjsua.conf_connect(wavPort, wavConfPort);
+	        }
+	        if( (way & BITMASK_IN) == BITMASK_IN) {
+	        	pjsua.conf_connect(wavPort, 0);
+	        }
+	        // Once connected, start to play
+	        pjsua.player_set_pos(plId[0], 0);
+        }
 	}
 
 }

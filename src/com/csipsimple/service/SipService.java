@@ -561,9 +561,20 @@ public class SipService extends Service {
 		}
 
 		@Override
+		public void playWaveFile(String filePath, int callId, int way) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			if(pjService == null) {
+				return;
+			}
+			pjService.playWaveFile(filePath, callId, way);
+		}
+		
+		@Override
 		public int getVersion() throws RemoteException {
 			return SipManager.CURRENT_API;
 		}
+
+		
 	};
 
 	private final ISipConfiguration.Stub binderConfiguration = new ISipConfiguration.Stub() {

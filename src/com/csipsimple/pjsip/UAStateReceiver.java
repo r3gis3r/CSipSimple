@@ -18,8 +18,6 @@
  */
 package com.csipsimple.pjsip;
 
-import java.io.File;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -35,7 +33,6 @@ import org.pjsip.pjsua.pjsip_event;
 import org.pjsip.pjsua.pjsip_redirect_op;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsuaConstants;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -50,7 +47,6 @@ import android.os.SystemClock;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
-import android.text.format.DateFormat;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
@@ -167,7 +163,7 @@ public class UAStateReceiver extends Callback {
 					// Call is now ended
 					pjService.stopDialtoneGenerator();
 					//TODO : should be stopped only if it's the current call.
-					stopRecording();
+					pjService.stopRecording();
 				}
 				
 				msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
@@ -305,9 +301,9 @@ public class UAStateReceiver extends Callback {
 				//	pjsua.set_ec( pjService.prefsWrapper.getEchoCancellationTail(), pjService.prefsWrapper.getEchoMode());
 					
 					// Auto record
-					if (recordedCall == INVALID_RECORD && 
+					if (pjService.recordedCall == PjSipService.INVALID_RECORD && 
 							pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_RECORD_CALLS)) {
-						startRecording(callId);
+						pjService.startRecording(callId);
 					}
 					
 				}
@@ -906,82 +902,4 @@ public class UAStateReceiver extends Callback {
 		return false;
 	}
 	
-	// Recorder
-	private static int INVALID_RECORD = -1; 
-	private int recordedCall = INVALID_RECORD;
-	private int recPort = -1;
-	private int recorderId = -1;
-	private int recordedConfPort = -1;
-	public void startRecording(int callId) {
-		// Ensure nothing is recording actually
-		if (recordedCall == INVALID_RECORD) {
-			SipCallSession callInfo = getCallInfo(callId);
-			if(callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
-				return;
-			}
-			
-		    File mp3File = getRecordFile(callInfo.getRemoteContact());
-		    if (mp3File != null){
-				int[] recId = new int[1];
-				pj_str_t filename = pjsua.pj_str_copy(mp3File.getAbsolutePath());
-				int status = pjsua.recorder_create(filename, 0, (byte[]) null, 0, 0, recId);
-				if(status == pjsuaConstants.PJ_SUCCESS) {
-					recorderId = recId[0];
-					Log.d(THIS_FILE, "Record started : " + recorderId);
-					recordedConfPort = callInfo.getConfPort();
-					recPort = pjsua.recorder_get_conf_port(recorderId);
-					pjsua.conf_connect(recordedConfPort, recPort);
-					pjsua.conf_connect(0, recPort);
-					recordedCall = callId;
-				}
-		    }else {
-		    	//TODO: toaster
-		    	Log.w(THIS_FILE, "Impossible to write file");
-		    }
-		}
-	}
-	
-	public void stopRecording() {
-		Log.d(THIS_FILE, "Stop recording " + recordedCall+" et "+ recorderId);
-		if (recorderId != -1) {
-			pjsua.recorder_destroy(recorderId);
-			recorderId = -1;
-		}
-		recordedCall = INVALID_RECORD;
-	}
-	
-	public boolean canRecord(int callId) {
-		if (recordedCall == INVALID_RECORD) {
-			SipCallSession callInfo = getCallInfo(callId);
-			if(callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
-				return false;
-			}
-			return true;
-		}
-		return false;
-	}
-	
-	public int getRecordedCall() {
-		return recordedCall; 
-	}
-	
-	private File getRecordFile(String remoteContact) {
-		File dir = PreferencesWrapper.getRecordsFolder();
-	    if (dir != null){
-			Date d = new Date();
-			File file = new File(dir.getAbsoluteFile() + File.separator + sanitizeForFile(remoteContact)+ "_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".wav");
-			Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
-			return file;
-	    }
-	    return null;
-	}
-
-
-	private String sanitizeForFile(String remoteContact) {
-		String fileName = remoteContact;
-		fileName = fileName.replaceAll("[\\.\\\\<>:; \"\'\\*]", "_");
-		return fileName;
-	}
-
-
 }

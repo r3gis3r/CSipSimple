@@ -492,12 +492,12 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.conf_get_signal_level(slot, SWIGTYPE_p_unsigned_int.getCPtr(tx_level), SWIGTYPE_p_unsigned_int.getCPtr(rx_level));
   }
 
-  public synchronized static int player_create(pj_str_t filename, long options, SWIGTYPE_p_int p_id) {
-    return pjsuaJNI.player_create(pj_str_t.getCPtr(filename), filename, options, SWIGTYPE_p_int.getCPtr(p_id));
+  public synchronized static int player_create(pj_str_t filename, long options, int[] p_id) {
+    return pjsuaJNI.player_create(pj_str_t.getCPtr(filename), filename, options, p_id);
   }
 
-  public synchronized static int playlist_create(pj_str_t[] file_names, long file_count, pj_str_t label, long options, SWIGTYPE_p_int p_id) {
-    return pjsuaJNI.playlist_create(pj_str_t.cArrayUnwrap(file_names), file_count, pj_str_t.getCPtr(label), label, options, SWIGTYPE_p_int.getCPtr(p_id));
+  public synchronized static int playlist_create(pj_str_t[] file_names, long file_count, pj_str_t label, long options, int[] p_id) {
+    return pjsuaJNI.playlist_create(pj_str_t.cArrayUnwrap(file_names), file_count, pj_str_t.getCPtr(label), label, options, p_id);
   }
 
   public synchronized static int player_get_conf_port(int id) {

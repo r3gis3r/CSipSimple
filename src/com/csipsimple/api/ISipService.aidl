@@ -99,11 +99,22 @@ interface ISipService{
 	void adjustVolume(in SipCallSession callInfo, int direction, int flags);
 	MediaState getCurrentMediaState();
 	
-	//Record calls
+	// Record calls
 	void startRecording(int callId);
 	void stopRecording();
 	int getRecordedCall();
 	boolean canRecord(int callId);
+	
+	// Play files to stream
+	/**
+	* @param String filePath the file to play in stream
+	* @param int callId the call to play to
+	* @param int way the way the file should be played 
+	*  (way & (1<<0)) => send to remote party (micro), 
+	*  (way & (1<<1) ) => send to user (speaker/earpiece)
+	* example : way = 3 : will play sound both ways
+	*/
+	void playWaveFile(String filePath, int callId, int way);
 	
 	//SMS
 	void sendMessage(String msg, String toNumber, int accountId);

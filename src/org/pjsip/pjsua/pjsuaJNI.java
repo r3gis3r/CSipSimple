@@ -922,8 +922,8 @@ public class pjsuaJNI {
   public final static native int conf_adjust_tx_level(int jarg1, float jarg2);
   public final static native int conf_adjust_rx_level(int jarg1, float jarg2);
   public final static native int conf_get_signal_level(int jarg1, long jarg2, long jarg3);
-  public final static native int player_create(long jarg1, pj_str_t jarg1_, long jarg2, long jarg3);
-  public final static native int playlist_create(long[] jarg1, long jarg2, long jarg3, pj_str_t jarg3_, long jarg4, long jarg5);
+  public final static native int player_create(long jarg1, pj_str_t jarg1_, long jarg2, int[] jarg3);
+  public final static native int playlist_create(long[] jarg1, long jarg2, long jarg3, pj_str_t jarg3_, long jarg4, int[] jarg5);
   public final static native int player_get_conf_port(int jarg1);
   public final static native int player_get_port(int jarg1, long jarg2);
   public final static native int player_set_pos(int jarg1, long jarg2);
