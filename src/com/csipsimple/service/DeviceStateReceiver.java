@@ -17,16 +17,21 @@
  */
 package com.csipsimple.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.Bundle;
 
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.wizards.WizardUtils;
 
 public class DeviceStateReceiver extends BroadcastReceiver {
 
@@ -67,6 +72,8 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			Log.d(THIS_FILE, "<<< Data device change detected");
 			
 		}else if(intentAction.equals(SipManager.INTENT_SIP_ACCOUNT_ACTIVATE)) {
+			context.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
+			
 			long accId;
 			accId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, SipProfile.INVALID_ID);
 			
@@ -90,6 +97,30 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 					}
 				}
 			}
+		}else if(intentAction.equals(SipManager.INTENT_GET_ACCOUNTS_LIST)) {
+			context.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
+			DBAdapter database = new DBAdapter(context);
+			database.open();
+			List<SipProfile> profiles = database.getListAccounts();
+			database.close();
+			
+			Bundle results = getResultExtras(true);
+			
+			ArrayList<Bundle> profilesBundles = new ArrayList<Bundle>();
+			for(SipProfile profile : profiles) {
+				Bundle b = new Bundle();
+				// Select only public things
+				b.putString(SipProfile.FIELD_ACC_ID, profile.acc_id);
+				b.putBoolean(SipProfile.FIELD_ACTIVE, profile.active);
+				b.putString(SipProfile.FIELD_DISPLAY_NAME, profile.display_name);
+				b.putString(SipProfile.FIELD_WIZARD, profile.wizard);
+				b.putParcelable(Intent.EXTRA_SHORTCUT_ICON, WizardUtils.getWizardBitmap(context, profile));
+				
+				profilesBundles.add(b);
+			}
+			
+			results.putParcelableArrayList(SipManager.EXTRA_PROFILES, profilesBundles);
+			
 		}
 	}
 	

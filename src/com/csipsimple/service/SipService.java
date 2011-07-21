@@ -700,6 +700,7 @@ public class SipService extends Service {
 
 		private void onReceiveInternal(Context context, Intent intent) {
 			String action = intent.getAction();
+			Log.d(THIS_FILE, "Internal receive "+action);
 			if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 				Bundle b = intent.getExtras();
 				if (b != null) {
@@ -841,8 +842,12 @@ public class SipService extends Service {
 					}
 					mTask = null;
 					Log.d(THIS_FILE, " deliver change for " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
-					// onConnectivityChanged(mNetworkType, mConnected);
-					dataConnectionChanged(mNetworkType, true);
+					// Check this is interesting for us now - TODO : check if not current calls else it's an interesting info
+					if(prefsWrapper.isValidConnectionForIncoming()) {
+						dataConnectionChanged(mNetworkType, true);
+					}else {
+						Log.w(THIS_FILE, "Ignore this change cause not valid for incoming");
+					}
 					sipWakeLock.release(this);
 				}
 			}
@@ -1007,13 +1012,12 @@ public class SipService extends Service {
 		if(intent != null) {
 			directConnect = intent.getBooleanExtra(EXTRA_DIRECT_CONNECT, true);
 		}
-		// Autostart the stack
+		// Autostart the stack - make sure started and that receivers are there
 		// NOTE : the stack may also be autostarted cause of phoneConnectivityReceiver
-		if(pjService == null) {
-			if (!loadStack()) {
-				return;
-			}
+		if (!loadStack()) {
+			return;
 		}
+		
 		
 		if(directConnect) {
 			Log.d(THIS_FILE, "Direct sip start");
@@ -1112,7 +1116,7 @@ public class SipService extends Service {
 		if(canStop) {
 			releaseResources();
 		}
-		unregisterBroadcasts();
+		//unregisterBroadcasts();
 		sipWakeLock.release(this);
 		return canStop;
 	}

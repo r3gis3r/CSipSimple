@@ -378,8 +378,9 @@ public class SipHome extends TabActivity {
 	public void onBackPressed() {
 		if(prefWrapper != null) {
 			Log.d(THIS_FILE, "On back pressed ! ");
-    		ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
-			if (networks.size() == 0) {
+    		//ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
+			//if (networks.size() == 0) {
+			if( ! prefWrapper.isValidConnectionForIncoming()) {
 				disconnectAndQuit();
 				return;
 			}

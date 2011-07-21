@@ -33,6 +33,7 @@ public final class SipManager {
 	public static final String INTENT_SIP_CONFIGURATION = "com.csipsimple.service.SipConfiguration";
 	public static final String INTENT_SIP_SERVICE = "com.csipsimple.service.SipService";
 	public static final String INTENT_SIP_ACCOUNT_ACTIVATE = "com.csipsimple.accounts.activate";
+	public static final Object INTENT_GET_ACCOUNTS_LIST = "com.csipsimple.accounts.list";
 	
 	// -------
 	// ACTIONS
@@ -59,6 +60,7 @@ public final class SipManager {
 	public static final String EXTRA_CALL_INFO = "call_info";
 	public static final String EXTRA_ACCOUNT_ID = "acc_id";
 	public static final String EXTRA_ACTIVATE = "activate";
+	public static final String EXTRA_PROFILES = "profiles";
 	
 	
 	// Constants
