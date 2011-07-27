@@ -29,7 +29,7 @@
 <string name="use_other_in_desc">For example WiMax for incoming calls</string>
 <string name="use_other_out_desc">For example WiMax for outgoing calls</string>
 
-<string name="use_3g">Use 3G</string>
+<string name="use_3g">Use 3G (and better)</string>
 <string name="use_3g_disclamer">Your carrier MUST allow you to use this option</string>
 <string name="use_edge">Use EDGE</string>
 <string name="use_gprs">Use GPRS</string>

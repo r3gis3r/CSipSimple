@@ -22,7 +22,7 @@
   <string name="use_other">Utiliser les autres réseaux</string>
   <string name="use_other_in_desc">Par example le WiMax pour les appels entrants</string>
   <string name="use_other_out_desc">Par example le WiMax pour les appels sortant</string>
-  <string name="use_3g">Utiliser la 3G</string>
+  <string name="use_3g">Utiliser la 3G (et mieux)</string>
   <string name="use_3g_disclamer">Votre opérateur DOIT vous autoriser l\'utilisation cette option</string>
   <string name="use_edge">Utiliser le EDGE</string>
   <string name="use_gprs">Utiliser le GPRS</string>
