@@ -51,6 +51,7 @@
     <item>Auto</item>
     <item>Speex</item>
     <item>단순한</item>
+    <item>WebRTC</item>
   </string-array>
   <string-array name="dial_press_mode_choices">
     <item>안드로이드 설정 사용</item>

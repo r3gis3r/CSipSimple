@@ -45,6 +45,7 @@
     <item>Samodejno</item>
     <item>Speex</item>
     <item>Enostavno</item>
+    <item>WebRTC</item>
   </string-array>
   <string-array name="dial_press_mode_choices">
     <item>Uporabi Android nastavitve</item>

@@ -51,6 +51,7 @@
     <item>自动</item>
     <item>Speex</item>
     <item>Simple</item>
+    <item>WebRTC</item>
   </string-array>
   <string-array name="dial_press_mode_choices">
     <item>使用Android设置</item>

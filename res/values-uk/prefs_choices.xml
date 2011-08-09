@@ -51,6 +51,7 @@
     <item>Авто</item>
     <item>Speex</item>
     <item>Простий</item>
+    <item>WebRTC</item>
   </string-array>
   <string-array name="dial_press_mode_choices">
     <item>Використовувати налаштування андроїд</item>

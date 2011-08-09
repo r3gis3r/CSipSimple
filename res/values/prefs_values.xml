@@ -95,6 +95,7 @@
 		<item>0</item> <!-- Default -->
 		<item>1</item> <!-- Speex -->
 		<item>2</item> <!-- Simple -->
+		<item>3</item> <!-- WebRTC -->
 	</string-array>
 	
 		<string-array name="dial_press_mode_values">
