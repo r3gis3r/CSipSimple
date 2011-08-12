@@ -85,7 +85,7 @@ public class PreferencesWrapper {
 		
 		put(SipConfigManager.SND_AUTO_CLOSE_TIME, "1");
 		put(SipConfigManager.ECHO_CANCELLATION_TAIL, "200");
-		put(SipConfigManager.ECHO_MODE, "2");
+		put(SipConfigManager.ECHO_MODE, "3"); /* WEBRTC */
 		put(SipConfigManager.SND_MEDIA_QUALITY, "4");
 		put(SipConfigManager.SND_CLOCK_RATE, "16000");
 		put(SipConfigManager.SND_PTIME, "20");
@@ -150,7 +150,7 @@ public class PreferencesWrapper {
 		
 		
 		//Media
-		put(SipConfigManager.ECHO_CANCELLATION, false);
+		put(SipConfigManager.ECHO_CANCELLATION, true);
 		put(SipConfigManager.ENABLE_VAD, false);
 		put(SipConfigManager.USE_SOFT_VOLUME, false);
 		put(SipConfigManager.USE_ROUTING_API, false);

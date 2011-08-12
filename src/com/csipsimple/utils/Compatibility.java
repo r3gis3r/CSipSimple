@@ -313,8 +313,10 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "0");
 		preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_NB, "0");
 		preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_NB, "0");
-		preferencesWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
-		preferencesWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_NB, "0");
+		preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_NB, "0");
 		
 		
 		//For Wideband
@@ -334,6 +336,8 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_WB, "0");
 		preferencesWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
 		preferencesWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_WB, "0");
+		preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_WB, "0");
 		
 		
 		// Bands repartition
@@ -351,7 +355,6 @@ public class Compatibility {
 		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_MEDIA_QUALITY, getCpuAbi().equalsIgnoreCase("armeabi-v7a") ? "4" : "3");
 		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_AUTO_CLOSE_TIME, isCompatible(4) ? "1" : "5");
 		preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE, getDefaultFrequency());
-		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, isCompatible(4) ? true : false);
 		//HTC PSP mode hack
 		preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL, needPspWorkaround());
 		
@@ -581,6 +584,22 @@ public class Compatibility {
 		}
 		if(lastSeenVersion < 955 && android.os.Build.DEVICE.toLowerCase().contains("droid2")) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK, true);
+		}
+		if(lastSeenVersion < 997) {
+			// New webrtc echo mode
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
+			prefWrapper.setPreferenceStringValue(SipConfigManager.ECHO_MODE, "3"); /* WEBRTC */
+
+			// By default, disable new codecs
+			prefWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_WB, "0");
+			prefWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_WB, "0");
+			prefWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_NB, "0");
+			prefWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_NB, "0");
+			
+			// Fix typo in previous versions
+			prefWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_NB, "0");
+			prefWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_NB, "0");
+			
 		}
 	}
 
