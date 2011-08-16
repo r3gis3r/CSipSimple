@@ -62,6 +62,7 @@ import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.ToCall;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.TimerWrapper;
 
 
 public class PjSipService {
@@ -160,6 +161,9 @@ public class PjSipService {
 			udpTranportId = null;
 			tcpTranportId = null;
 
+			// Pj timer
+			TimerWrapper.create(service);
+			
 			int status;
 			status = pjsua.create();
 
@@ -407,6 +411,7 @@ public class PjSipService {
 		}
 		if (created) {
 			cleanPjsua();
+			TimerWrapper.destroy();
 		}
 		Log.i(THIS_FILE, ">> Media m " + mediaManager);
 		return true;

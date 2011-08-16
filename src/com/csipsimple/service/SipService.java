@@ -1073,7 +1073,7 @@ public class SipService extends Service {
 		return binder;
 	}
 
-	private KeepAliveTimer kaAlarm;
+	//private KeepAliveTimer kaAlarm;
 	// This is always done in SipExecutor thread
 	private void startSipStack() throws SameThreadException {
 		//Cache some prefs
@@ -1334,13 +1334,14 @@ public class SipService extends Service {
 				}
 			}
 		}
-		
+		/*
 		// Add a alarm for keep alive
 		if(kaAlarm == null) {
 			kaAlarm = new KeepAliveTimer(this);
 		}
 		Log.d(THIS_FILE, "KA Start");
 		kaAlarm.start();
+		*/
 		hold_resources = true;
 	}
 
@@ -1351,11 +1352,13 @@ public class SipService extends Service {
 		if (wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();
 		}
+		/*
 		if(kaAlarm != null) {
 			Log.d(THIS_FILE, "KA Stop");
 			kaAlarm.stop();
 			kaAlarm = null;
 		}
+		*/
 		hold_resources = false;
 	}
 

@@ -653,6 +653,10 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.send_keep_alive(acc_id);
   }
 
+  public static int pj_timer_fire(int heap_id, int timer_id) {
+    return pjsuaJNI.pj_timer_fire(heap_id, timer_id);
+  }
+
   public static void jzrtp_SASVerified() {
     pjsuaJNI.jzrtp_SASVerified();
   }

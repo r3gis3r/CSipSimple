@@ -213,6 +213,8 @@ public class PjSipAccount {
 			}
 		}
 		
+		cfg.setKa_interval(prefs.getKeepAliveInterval());
+		
 		// TODO : reactivate that
 		/*
 		if(!hasZrtpValue) {

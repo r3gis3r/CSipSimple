@@ -601,6 +601,9 @@ public class Compatibility {
 			prefWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_NB, "0");
 			
 		}
+		if(lastSeenVersion < 1001) {
+			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
+		}
 	}
 
 	public static void updateApiVersion(PreferencesWrapper prefWrapper, int lastSeenVersion, int runningVersion) {
