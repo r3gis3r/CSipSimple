@@ -52,6 +52,7 @@ public class Expert extends BaseImplementation {
 	private ListPreference accountUseSrtp;
 	private EditTextPreference accountRegDelayRefresh;
 	private EditTextPreference accountVm;
+	private CheckBoxPreference tryCleanRegisters;
 	
 	private void bindFields() {
 		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
@@ -72,6 +73,7 @@ public class Expert extends BaseImplementation {
 		accountContactRewriteMethod = (ListPreference) parent.findPreference("contact_rewrite_method");
 		accountProxy = (EditTextPreference) parent.findPreference("proxy");
 		accountVm = (EditTextPreference) parent.findPreference("vm_number");
+		tryCleanRegisters = (CheckBoxPreference) parent.findPreference("try_clean_registers");
 	}
 
 	public void fillLayout(final SipProfile account) {
@@ -128,6 +130,7 @@ public class Expert extends BaseImplementation {
 		}
 		
 		accountVm.setText(account.vm_nbr);
+		tryCleanRegisters.setChecked(account.try_clean_registers != 0);
 	}
 	
 
@@ -260,6 +263,8 @@ public class Expert extends BaseImplementation {
 		}else {
 			account.vm_nbr = "";
 		}
+		
+		account.try_clean_registers = (tryCleanRegisters.isChecked())?1:0;
 		
 		return account;
 	}

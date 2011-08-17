@@ -1144,12 +1144,13 @@ public class PjSipService {
 		}
 	}
 
+	/*
 	public void sendKeepAlivePackets() throws SameThreadException {
 		ArrayList<SipProfileState> accounts = getActiveProfilesState();
 		for (SipProfileState acc : accounts) {
 			pjsua.send_keep_alive(acc.getPjsuaId());
 		}
-	}
+	}*/
 
 	public void zrtpSASVerified() throws SameThreadException {
 		pjsua.jzrtp_SASVerified();

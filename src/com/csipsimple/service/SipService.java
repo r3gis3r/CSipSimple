@@ -28,8 +28,6 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -50,7 +48,6 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
@@ -1624,6 +1621,7 @@ public class SipService extends Service {
      * Timer that can schedule keep alives to occur even when the device is in sleep.
      * Only used internally in this package.
      */
+    /*
     class KeepAliveTimer extends BroadcastReceiver {
     	private Context context;
 		private AlarmManager alarmManager;
@@ -1702,6 +1700,7 @@ public class SipService extends Service {
 			}
 		}
     }
+    */
 
     class StartRunnable extends SipRunnable {
 		@Override

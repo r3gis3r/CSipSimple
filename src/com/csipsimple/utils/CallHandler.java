@@ -100,7 +100,7 @@ public class CallHandler {
 
 	public void fillWith( String packageName, Bundle resolvedInfos) {
 		
-		pendingIntent = (PendingIntent) resolvedInfos.getParcelable(Intent.EXTRA_REMOTE_INTENT_TOKEN);
+		pendingIntent = (PendingIntent) resolvedInfos.getParcelable(EXTRA_REMOTE_INTENT_TOKEN);
 		icon = (Bitmap) resolvedInfos.getParcelable(Intent.EXTRA_SHORTCUT_ICON);
 		nextExclude = resolvedInfos.getString(Intent.EXTRA_PHONE_NUMBER);
 		label = resolvedInfos.getString(Intent.EXTRA_TITLE);

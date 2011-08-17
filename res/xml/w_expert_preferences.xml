@@ -61,6 +61,7 @@
 			android:defaultValue="2"
 			android:entryValues="@array/contact_rewrite_method_values" android:entries="@array/contact_rewrite_method_choices"
 			/>
+		<CheckBoxPreference android:key="try_clean_registers" android:title="@string/w_expert_try_clean_registers" android:summary="@string/w_expert_try_clean_registers_desc"/>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/w_expert_t_proxy">
 		<EditTextPreference android:key="proxy" android:title="@string/w_expert_proxy"

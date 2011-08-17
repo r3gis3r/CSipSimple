@@ -239,7 +239,7 @@ public class MediaManager {
 			
 			if(service.prefsWrapper.generateForSetCall()) {
 				ToneGenerator toneGenerator = new ToneGenerator( AudioManager.STREAM_VOICE_CALL, 1);
-				toneGenerator.startTone(ToneGenerator.TONE_CDMA_CONFIRM);
+				toneGenerator.startTone(41 /*ToneGenerator.TONE_CDMA_CONFIRM*/);
 				toneGenerator.stopTone();
 				toneGenerator.release();
 			}

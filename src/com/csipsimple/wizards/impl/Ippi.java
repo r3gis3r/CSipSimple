@@ -198,6 +198,7 @@ public class Ippi extends SimpleImplementation {
 		//Proxy useless....?????
 		//account.proxies = null;
 		account.vm_nbr = "*1234";
+		account.try_clean_registers = 1;
 		return account;
 	}
 	

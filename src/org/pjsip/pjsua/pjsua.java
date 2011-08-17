@@ -649,12 +649,12 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.csipsimple_destroy();
   }
 
-  public static int send_keep_alive(int acc_id) {
-    return pjsuaJNI.send_keep_alive(acc_id);
-  }
-
   public static int pj_timer_fire(int heap_id, int timer_id) {
     return pjsuaJNI.pj_timer_fire(heap_id, timer_id);
+  }
+
+  public synchronized static int acc_clean_all_registrations(int acc_id) {
+    return pjsuaJNI.acc_clean_all_registrations(acc_id);
   }
 
   public static void jzrtp_SASVerified() {

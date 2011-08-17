@@ -40,4 +40,6 @@
 <string name="w_expert_allow_contact_rewrite">Allow contact rewrite</string>
 <string name="w_expert_contact_rewrite_method">Contact rewrite method</string>
 <string name="w_expert_reg_use_proxy">How to use proxy</string>
+<string name="w_expert_try_clean_registers">Try to clean registers</string>
+<string name="w_expert_try_clean_registers_desc">Allow app to try to clean old registrations if needed</string>
 </resources>

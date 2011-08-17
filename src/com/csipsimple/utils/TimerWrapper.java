@@ -17,9 +17,10 @@
  */
 package com.csipsimple.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.pjsip.pjsua.pjsua;
 
@@ -30,8 +31,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 
 import com.csipsimple.service.SipService;
@@ -45,7 +44,7 @@ public class TimerWrapper extends BroadcastReceiver {
 	private SipService service;
 	private AlarmManager alarmManager;
 
-	private WakeLock wakeLock;
+	//private WakeLock wakeLock;
 	private static TimerWrapper singleton;
 	
 	Map<Integer, PendingIntent> pendings = new HashMap<Integer, PendingIntent>();
@@ -57,20 +56,24 @@ public class TimerWrapper extends BroadcastReceiver {
 		filter.addDataScheme(EXTRA_TIMER_SCHEME);
 		service.registerReceiver(this, filter);
 		
-		PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
-		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.wl.PJ_TIMER");
-		wakeLock.setReferenceCounted(true);
+		//PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
+		//wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.wl.PJ_TIMER");
+		//wakeLock.setReferenceCounted(true);
 	}
 	
 	
-	private void quit() {
+	synchronized private void quit() {
 		try {
 			service.unregisterReceiver(this);
 		} catch (IllegalArgumentException e) {
-			Log.e(THIS_FILE, "Impossible to destroy KA timer", e);
+			Log.e(THIS_FILE, "Impossible to destroy timer wrapper", e);
 		}
-		Set<Integer> mySet = pendings.keySet();
-		for(Integer key : mySet) {
+		
+		List<Integer> keys = new ArrayList<Integer>();
+		for(Integer key : pendings.keySet()) {
+			keys.add(key);
+		}
+		for(Integer key : keys) {
 			int heapId = (key & 0xFFF000) >> 8;
 			int timerId = key & 0x000FFF;
 			doCancel(heapId, timerId);
@@ -80,10 +83,9 @@ public class TimerWrapper extends BroadcastReceiver {
 	private PendingIntent getPendingIntentForTimer(int heapId, int timerId) {
 		Intent intent = new Intent(TIMER_ACTION);
 		String toSend = EXTRA_TIMER_SCHEME+"://"+Integer.toString(heapId)+"/"+Integer.toString(timerId);
-		Log.d(THIS_FILE, "Send timer "+toSend);
+		Log.v(THIS_FILE, "Send timer "+toSend);
 		intent.setData(Uri.parse(toSend));
 		return PendingIntent.getBroadcast(service, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		
 	}
 	
 	private int getHashPending(int heapId, int timerId) {
@@ -91,18 +93,24 @@ public class TimerWrapper extends BroadcastReceiver {
 	}
 	
 	
-	private int doSchedule(int heapId, int timerId, int intervalMs) {
+	synchronized private int doSchedule(int heapId, int timerId, int intervalMs) {
 		PendingIntent pendingIntent = getPendingIntentForTimer(heapId, timerId);
 		pendings.put(getHashPending(heapId, timerId), pendingIntent);
 		
 		long firstTime = SystemClock.elapsedRealtime() + intervalMs;
-		Log.d(THIS_FILE, "Ask to schedule @" + SystemClock.elapsedRealtime() + " :: next @"+ firstTime +" ("+intervalMs+"ms) timer : "+timerId );
-		alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, pendingIntent);
+		Log.v(THIS_FILE, "Ask to schedule @" + SystemClock.elapsedRealtime() + " :: next @"+ firstTime +" ("+intervalMs+"ms) timer : "+timerId );
+		
+		int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
+		if(intervalMs < 1000) {
+			// If less than 1 sec, do not wake up -- that's probably stun check so useless to wake up about that
+			type = AlarmManager.ELAPSED_REALTIME;
+		}
+		alarmManager.set(type, firstTime, pendingIntent);
 		
 		return 0;
 	}
 	
-	private int doCancel(int heapId, int timerId) {
+	synchronized private int doCancel(int heapId, int timerId) {
 		int hash = getHashPending(heapId, timerId);
 		PendingIntent pendingIntent = pendings.get(hash);
 		if(pendingIntent != null) {
@@ -124,8 +132,9 @@ public class TimerWrapper extends BroadcastReceiver {
 			final int heapId = Integer.parseInt(intent.getData().getAuthority());
 			final int timerId = Integer.parseInt(intent.getData().getLastPathSegment());
 			
-			Log.d(THIS_FILE, "Fire timer : "+heapId+"/" + timerId);
-
+			Log.v(THIS_FILE, "Fire timer : "+heapId+"/" + timerId);
+			
+			/*
 			if(wakeLock != null) {
 				wakeLock.acquire();
 			}
@@ -142,24 +151,21 @@ public class TimerWrapper extends BroadcastReceiver {
 				}
 			};
 			t.start();
+			*/
 			
-			/*
 			service.getExecutor().execute(new Runnable() {
 				
 				@Override
 				public void run() {
-					if(wakeLock != null) {
-						wakeLock.acquire();
-					}
 					
 					pjsua.pj_timer_fire(heapId, timerId);
-					
+					/*
 					if(wakeLock != null) {
 						wakeLock.release();
-					}
+					}*/
 				}
 			});
-			*/
+			/**/
 		}
 	}
 	

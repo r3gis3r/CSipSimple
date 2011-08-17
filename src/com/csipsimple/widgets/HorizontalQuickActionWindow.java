@@ -283,7 +283,7 @@ public class HorizontalQuickActionWindow extends PopupWindow implements KeyEvent
 		}
 	}
 
-	@Override
+	/*@Override*/ /* No tag for android 1.5 compat */
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
 		return false;
 	}

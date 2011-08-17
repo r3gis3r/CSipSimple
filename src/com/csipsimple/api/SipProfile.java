@@ -100,6 +100,8 @@ public class SipProfile implements Parcelable {
 	public static final String FIELD_SIP_STACK = "sip_stack";
 	public static final String FIELD_VOICE_MAIL_NBR = "vm_nbr";
 	
+	public static final String FIELD_TRY_CLEAN_REGISTERS = "try_clean_reg";
+	
 	
 	
 	public final static String[] full_projection = {
@@ -122,7 +124,8 @@ public class SipProfile implements Parcelable {
 		FIELD_REALM, FIELD_SCHEME, FIELD_USERNAME, FIELD_DATATYPE,
 		FIELD_DATA, 
 		
-		FIELD_SIP_STACK, FIELD_VOICE_MAIL_NBR, FIELD_REG_DELAY_BEFORE_REFRESH };
+		FIELD_SIP_STACK, FIELD_VOICE_MAIL_NBR, FIELD_REG_DELAY_BEFORE_REFRESH,
+		FIELD_TRY_CLEAN_REGISTERS };
 	public final static Class<?>[] full_projection_types = {
 		Integer.class,
 		
@@ -139,7 +142,8 @@ public class SipProfile implements Parcelable {
 		String.class, String.class, String.class, Integer.class,
 		String.class,
 		
-		Integer.class, String.class, Integer.class
+		Integer.class, String.class, Integer.class,
+		Integer.class
 	};
 	
 	//Properties
@@ -171,6 +175,7 @@ public class SipProfile implements Parcelable {
 	public int sip_stack = PJSIP_STACK;
 	public String vm_nbr = null;
 	public int reg_delay_before_refresh = -1;
+	public int try_clean_registers = 0;
 	public Bitmap icon = null;
 	
 	public SipProfile() {
@@ -208,6 +213,7 @@ public class SipProfile implements Parcelable {
 		vm_nbr = getReadParcelableString(in.readString());
 		reg_delay_before_refresh = in.readInt();
 		icon = (Bitmap) in.readParcelable(Bitmap.class.getClassLoader());
+		try_clean_registers = in.readInt();
 	}
 
 	public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
@@ -262,6 +268,7 @@ public class SipProfile implements Parcelable {
 		dest.writeString(getWriteParcelableString(vm_nbr));
 		dest.writeInt(reg_delay_before_refresh);
 		dest.writeParcelable((Parcelable) icon, flags);
+		dest.writeInt(try_clean_registers);
 	}
 	
 	
@@ -412,7 +419,10 @@ public class SipProfile implements Parcelable {
 		if (tmp_s != null) {
 			vm_nbr = tmp_s;
 		}
-		
+		tmp_i = args.getAsInteger(FIELD_TRY_CLEAN_REGISTERS);
+		if (tmp_i != null && tmp_i >=0 ) {
+			try_clean_registers = tmp_i;
+		}
 	}
 	
 
@@ -467,6 +477,7 @@ public class SipProfile implements Parcelable {
 		args.put(FIELD_SIP_STACK, sip_stack);
 		args.put(FIELD_VOICE_MAIL_NBR, vm_nbr);
 		args.put(FIELD_REG_DELAY_BEFORE_REFRESH, reg_delay_before_refresh);
+		args.put(FIELD_TRY_CLEAN_REGISTERS, try_clean_registers);
 
 		return args;
 	}

@@ -18,7 +18,9 @@
  */
 package com.csipsimple.pjsip;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +35,7 @@ import org.pjsip.pjsua.pjsip_event;
 import org.pjsip.pjsua.pjsip_redirect_op;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -53,6 +56,7 @@ import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.db.DBAdapter;
@@ -241,6 +245,9 @@ public class UAStateReceiver extends Callback {
 		unlockCpu();
 	}
 
+	
+	private List<Integer> pendingCleanup = new ArrayList<Integer>();
+	
 	@Override
 	public void on_reg_state(final int accountId) {
 		lockCpu();
@@ -254,6 +261,50 @@ public class UAStateReceiver extends Callback {
 				// Dispatch to UA handler thread
 				if(msgHandler != null) {
 					msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
+				}
+				
+				
+				//Try to recover registration many other clients (or self) also registered
+				SipProfile account = pjService.getAccountForPjsipId(accountId);
+				if(account != null && account.try_clean_registers != 0 && account.active) {
+					SipProfileState pState = pjService.getProfileState(account);
+					if(pState != null) {
+						Log.d(THIS_FILE, "We have a new status "+
+								pState.getStatusCode()+ " "+
+								pendingCleanup.contains(accountId)+" "+
+								pState.getExpires());
+						
+						// Failure on registration
+						// TODO : refine cases ? 403 only? 
+						if(pState.getStatusCode() != 200
+								&& !pendingCleanup.contains(accountId) ) {
+							Log.w(THIS_FILE, "Error while registering for "+accountId+" "+
+										pState.getStatusCode()+" "+pState.getStatusText());
+							
+							
+							int state = pjsua.acc_clean_all_registrations(accountId);
+							if(state == pjsuaConstants.PJ_SUCCESS) {
+								pendingCleanup.add(accountId);
+							}
+						// Success on clean up
+						}else if(pState.getStatusCode() == 200 && 
+								pState.getExpires() == -1 &&
+								pendingCleanup.contains(accountId)) {
+							
+							int state = pjsua.acc_set_registration(accountId, 1);
+							if(state == pjsuaConstants.PJ_SUCCESS) {
+								pendingCleanup.remove((Object) accountId);
+							}else {
+								Log.e(THIS_FILE, "Impossible to set again registration now " + state);
+							}
+							
+						// Success
+						}else if(pState.getStatusCode() == 200) {
+							pendingCleanup.remove((Object) accountId);
+						}
+						Log.d(THIS_FILE, "pending clean ups are  " + pendingCleanup);
+					}
+				
 				}
 			}
 		});

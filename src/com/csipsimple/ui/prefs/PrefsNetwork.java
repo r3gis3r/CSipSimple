@@ -41,7 +41,7 @@ public class PrefsNetwork extends GenericPrefs {
 		super.afterBuildPrefs();
 		TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(TELEPHONY_SERVICE);
 		
-		if (telephonyManager.getPhoneType() == TelephonyManager.PHONE_TYPE_CDMA) {
+		if (telephonyManager.getPhoneType() == 2 /*TelephonyManager.PHONE_TYPE_CDMA*/) {
 			hidePreference("for_incoming", "use_gprs_in");
 			hidePreference("for_outgoing", "use_gprs_out");
 			hidePreference("for_incoming", "use_edge_in");
