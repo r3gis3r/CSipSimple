@@ -90,6 +90,7 @@ import com.csipsimple.wizards.impl.Sipgate;
 import com.csipsimple.wizards.impl.SiptelPt;
 import com.csipsimple.wizards.impl.Sonetel;
 import com.csipsimple.wizards.impl.Speakezi;
+import com.csipsimple.wizards.impl.Telsome;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
 import com.csipsimple.wizards.impl.Viva;
@@ -458,7 +459,12 @@ public class WizardUtils {
 					locale("es_ES"), locale("da_DA"), locale("uk_UA"), locale("ro_RO"), locale("hr_HR")
 					}, false, false, 
 					SipCelEu.class));
-			
+			WIZARDS_DICT.put("TELSOME", new WizardInfo("TELSOME", "Telsome", 
+					R.drawable.ic_wizard_telsome, 19, 
+					new Locale[]{
+					locale("es_ES")
+					}, false, false, 
+					Telsome.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

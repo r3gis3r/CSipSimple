@@ -59,7 +59,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		
 		PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.wl.PJ_TIMER");
-		wakeLock.setReferenceCounted(false);
+		wakeLock.setReferenceCounted(true);
 	}
 	
 	
@@ -126,13 +126,13 @@ public class TimerWrapper extends BroadcastReceiver {
 			
 			Log.d(THIS_FILE, "Fire timer : "+heapId+"/" + timerId);
 
+			if(wakeLock != null) {
+				wakeLock.acquire();
+			}
 			
 			Thread t = new Thread() {
 				@Override
 				public void run() {
-					if(wakeLock != null) {
-						wakeLock.acquire();
-					}
 					
 					pjsua.pj_timer_fire(heapId, timerId);
 					
