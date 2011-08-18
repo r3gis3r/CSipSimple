@@ -31,9 +31,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.PowerManager;
 import android.os.SystemClock;
 
 import com.csipsimple.service.SipService;
+import com.csipsimple.service.SipWakeLock;
 
 public class TimerWrapper extends BroadcastReceiver {
 	
@@ -43,6 +45,7 @@ public class TimerWrapper extends BroadcastReceiver {
 	private static final String EXTRA_TIMER_SCHEME = "timer";
 	private SipService service;
 	private AlarmManager alarmManager;
+	private SipWakeLock wakeLock;
 
 	//private WakeLock wakeLock;
 	private static TimerWrapper singleton;
@@ -56,13 +59,12 @@ public class TimerWrapper extends BroadcastReceiver {
 		filter.addDataScheme(EXTRA_TIMER_SCHEME);
 		service.registerReceiver(this, filter);
 		
-		//PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
-		//wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.wl.PJ_TIMER");
-		//wakeLock.setReferenceCounted(true);
+		wakeLock = new SipWakeLock((PowerManager) ctxt.getSystemService(Context.POWER_SERVICE));
 	}
 	
 	
 	synchronized private void quit() {
+		Log.d(THIS_FILE, "Quit this wrapper");
 		try {
 			service.unregisterReceiver(this);
 		} catch (IllegalArgumentException e) {
@@ -73,17 +75,19 @@ public class TimerWrapper extends BroadcastReceiver {
 		for(Integer key : pendings.keySet()) {
 			keys.add(key);
 		}
+		Log.d(THIS_FILE, "To cancel : "+keys);
 		for(Integer key : keys) {
 			int heapId = (key & 0xFFF000) >> 8;
 			int timerId = key & 0x000FFF;
 			doCancel(heapId, timerId);
 		}
+		
+		wakeLock.reset();
 	}
 
 	private PendingIntent getPendingIntentForTimer(int heapId, int timerId) {
 		Intent intent = new Intent(TIMER_ACTION);
 		String toSend = EXTRA_TIMER_SCHEME+"://"+Integer.toString(heapId)+"/"+Integer.toString(timerId);
-		Log.v(THIS_FILE, "Send timer "+toSend);
 		intent.setData(Uri.parse(toSend));
 		return PendingIntent.getBroadcast(service, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
@@ -113,9 +117,11 @@ public class TimerWrapper extends BroadcastReceiver {
 	synchronized private int doCancel(int heapId, int timerId) {
 		int hash = getHashPending(heapId, timerId);
 		PendingIntent pendingIntent = pendings.get(hash);
+		Log.v(THIS_FILE, "Cancel timer : "+heapId+"/" + timerId);
 		if(pendingIntent != null) {
 			pendings.remove(hash);
 		}else {
+			Log.w(THIS_FILE, "Not found timer to cancel "+hash);
 			pendingIntent = getPendingIntentForTimer(heapId, timerId);
 		}
 		alarmManager.cancel(pendingIntent);
@@ -133,39 +139,9 @@ public class TimerWrapper extends BroadcastReceiver {
 			final int timerId = Integer.parseInt(intent.getData().getLastPathSegment());
 			
 			Log.v(THIS_FILE, "Fire timer : "+heapId+"/" + timerId);
-			
-			/*
-			if(wakeLock != null) {
-				wakeLock.acquire();
-			}
-			
-			Thread t = new Thread() {
-				@Override
-				public void run() {
-					
-					pjsua.pj_timer_fire(heapId, timerId);
-					
-					if(wakeLock != null) {
-						wakeLock.release();
-					}
-				}
-			};
+			TimerJob t = new TimerJob(heapId, timerId);
 			t.start();
-			*/
-			
-			service.getExecutor().execute(new Runnable() {
-				
-				@Override
-				public void run() {
-					
-					pjsua.pj_timer_fire(heapId, timerId);
-					/*
-					if(wakeLock != null) {
-						wakeLock.release();
-					}*/
-				}
-			});
-			/**/
+			// TODO : ensure a running job is not ongoing for another timer when enqueuing a new job
 		}
 	}
 	
@@ -199,6 +175,25 @@ public class TimerWrapper extends BroadcastReceiver {
 		singleton.doCancel(heapId, timerId);
 		
 		return 0;
+	}
+	
+	
+
+	private class TimerJob extends Thread {
+		private int heapId;
+		private int timerId;
+
+		public TimerJob(int aHeapId, int aTimerId) {
+			heapId = aHeapId;
+			timerId = aTimerId;
+			wakeLock.acquire(this);
+		}
+
+		@Override
+		public void run() {
+			pjsua.pj_timer_fire(heapId, timerId);
+			wakeLock.release(this);
+		}
 	}
 
 
