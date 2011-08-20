@@ -132,7 +132,8 @@ public class Compatibility {
 		//Huawei
 		if(android.os.Build.DEVICE.equalsIgnoreCase("U8150") ||
 				android.os.Build.DEVICE.equalsIgnoreCase("U8110") ||
-				android.os.Build.DEVICE.equalsIgnoreCase("U8120") ) {
+				android.os.Build.DEVICE.equalsIgnoreCase("U8120") ||
+				android.os.Build.DEVICE.equalsIgnoreCase("U8100") ) {
 			return true;
 		}
 		
@@ -603,6 +604,13 @@ public class Compatibility {
 		}
 		if(lastSeenVersion < 1001) {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
+		}
+		if(lastSeenVersion < 1006) {
+			// Add U8100 to list of device that require mode api
+			if( android.os.Build.DEVICE.equalsIgnoreCase("U8100") ) {
+				prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+			}
+			
 		}
 	}
 

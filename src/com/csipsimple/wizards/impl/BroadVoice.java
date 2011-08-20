@@ -17,11 +17,19 @@
  */
 package com.csipsimple.wizards.impl;
 
+import android.net.Uri;
+import android.preference.EditTextPreference;
+import android.text.InputType;
+import android.text.TextUtils;
+
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 
 public class BroadVoice extends SimpleImplementation {
 	
+
+	private static final String SUFFIX_KEY = "suffix";
+	private EditTextPreference accountSuffix;
 
 	@Override
 	protected String getDomain() {
@@ -39,8 +47,33 @@ public class BroadVoice extends SimpleImplementation {
 		
 		accountUsername.setTitle(R.string.w_common_phone_number);
 		accountUsername.setDialogTitle(R.string.w_common_phone_number);
-		// Removed since some users wants to add x11 
-		//accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		 
+		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		
+		// Allow to add suffix x11
+		boolean recycle = true;
+		accountSuffix = (EditTextPreference) parent.findPreference(SUFFIX_KEY);
+		if(accountSuffix == null) {
+			accountSuffix = new EditTextPreference(parent);
+			accountSuffix.setKey(SUFFIX_KEY);
+			accountSuffix.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+			accountSuffix.setTitle("Suffix for account id");
+			accountSuffix.setSummary("For multipresence usage (leave blank if not want)");
+			recycle = false;
+		}
+		
+		String uName = account.getSipUserName();
+		String[] uNames = uName.split("x");
+		
+		accountUsername.setText(uNames[0]);
+		if(uNames.length > 1) {
+			accountSuffix.setText(uNames[1]);
+		}
+
+        if(!recycle) {
+            parent.getPreferenceScreen().addPreference(accountSuffix);
+    	}
+		
 	}
 
 	
@@ -50,6 +83,17 @@ public class BroadVoice extends SimpleImplementation {
 		account.proxies = null;
 		account.reg_timeout = 3600;
 		account.contact_rewrite_method = 1;
+		
+		String finalUsername = accountUsername.getText().trim();
+		if(accountSuffix != null) {
+			String suffix = accountSuffix.getText().trim();
+			if(!TextUtils.isEmpty(suffix)) {
+				finalUsername += "x"+suffix;
+			}
+		}
+		
+		account.acc_id = "<sip:" + Uri.encode(finalUsername) + "@"+getDomain()+">";
+		
 		return account;
 	}
 	
