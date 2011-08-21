@@ -977,6 +977,7 @@ public class pjsuaJNI {
   public final static native int csipsimple_destroy();
   public final static native int pj_timer_fire(int jarg1, int jarg2);
   public final static native int acc_clean_all_registrations(int jarg1);
+  public final static native int update_transport(long jarg1, pj_str_t jarg1_);
   public final static native void jzrtp_SASVerified();
 
   public static void SwigDirector_Callback_on_call_state(Callback self, int call_id, long e) {

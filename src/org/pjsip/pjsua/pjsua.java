@@ -657,6 +657,10 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.acc_clean_all_registrations(acc_id);
   }
 
+  public static int update_transport(pj_str_t new_ip_addr) {
+    return pjsuaJNI.update_transport(pj_str_t.getCPtr(new_ip_addr), new_ip_addr);
+  }
+
   public static void jzrtp_SASVerified() {
     pjsuaJNI.jzrtp_SASVerified();
   }

@@ -839,8 +839,8 @@ public class SipService extends Service {
 					}
 					mTask = null;
 					Log.d(THIS_FILE, " deliver change for " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
-					// Check this is interesting for us now - TODO : check if not current calls else it's an interesting info
-					if(prefsWrapper.isValidConnectionForIncoming()) {
+					// Check this is interesting for us now
+					if(prefsWrapper.isValidConnectionForIncoming() || pjService.getActiveCallInProgress() != null) {
 						dataConnectionChanged(mNetworkType, true);
 					}else {
 						Log.w(THIS_FILE, "Ignore this change cause not valid for incoming");
@@ -1461,6 +1461,17 @@ public class SipService extends Service {
 						// Log.e(THIS_FILE, "We should restart the stack ! ");
 					} else {
 						// TODO : else refine things => STUN, registration etc...
+						// Old ip address is actually current ip address now
+						if(oldIPAddress != null) {
+							final String finIpAddress = oldIPAddress;
+							getExecutor().execute(new SipRunnable() {
+								@Override
+								protected void doRun() throws SameThreadException {
+									pjService.updateTransportIp(finIpAddress);
+								}
+							});
+							
+						}
 						serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, 0, 0,
 								"Connection have been lost... you may have lost your communication. Hand over is not yet supported"));
 					}
@@ -1617,91 +1628,6 @@ public class SipService extends Service {
     }
 	
     
-    /**
-     * Timer that can schedule keep alives to occur even when the device is in sleep.
-     * Only used internally in this package.
-     */
-    /*
-    class KeepAliveTimer extends BroadcastReceiver {
-    	private Context context;
-		private AlarmManager alarmManager;
-		private PendingIntent pendingIntent;
-		
-		private static final String KA_ACTION = "com.csipsimple.ACTION_KA";
-		
-		private int interval = 1000;
-		private boolean use_wake = false;
-    	
-		public KeepAliveTimer(Context aContext) {
-			context = aContext;
-			alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-			use_wake = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.KEEP_ALIVE_USE_WAKE);
-			if(interval > 0) {
-				IntentFilter filter = new IntentFilter(KA_ACTION);
-				context.registerReceiver(this, filter);
-			}
-		}
-		
-		public void stop() {
-			Log.d(THIS_FILE, "KA -> stopping");
-			try {
-				context.unregisterReceiver(this);
-			} catch (IllegalArgumentException e) {
-				Log.e(THIS_FILE, "Impossible to destroy KA timer", e);
-			}
-			if(pendingIntent != null) {
-				alarmManager.cancel(pendingIntent);
-			}
-			pendingIntent = null;
-		}
-		
-		
-		public void start() {
-			if(pendingIntent != null) {
-				Log.w(THIS_FILE, "Ignore starting request cause already started");
-			}
-			interval = prefsWrapper.getKeepAliveInterval();
-			if(interval > 0) {
-				Log.d(THIS_FILE, "KA -> starting");
-				scheduleNext();
-			}
-		}
-		
-		private void scheduleNext() {
-            if (pendingIntent != null) {
-            	Log.e(THIS_FILE, "Ignore schedule next cause pending intent is not null");
-				return;
-			}
-			Intent intent = new Intent(KA_ACTION);
-			pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			
-			long firstTime = SystemClock.elapsedRealtime() + interval * 1000;
-			Log.d(THIS_FILE, "KA@" + SystemClock.elapsedRealtime() + " :: next @"+ firstTime );
-			alarmManager.set(use_wake ? AlarmManager.ELAPSED_REALTIME_WAKEUP : AlarmManager.ELAPSED_REALTIME, firstTime, pendingIntent);
-        }
-		
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if(KA_ACTION.equalsIgnoreCase(intent.getAction()) ) {
-				Log.d(THIS_FILE, "KA@"+SystemClock.elapsedRealtime()+" :: recieved");
-				pendingIntent = null;
-				if(pjService != null && interval > 0) {
-					Log.d(THIS_FILE, "Send a keep alive packet");
-					getExecutor().execute(new SipRunnable() {
-						@Override
-						protected void doRun() throws SameThreadException {
-							pjService.sendKeepAlivePackets();
-						}
-					});
-					scheduleNext();
-				}else {
-					stop();
-				}
-			}
-		}
-    }
-    */
-
     class StartRunnable extends SipRunnable {
 		@Override
 		protected void doRun() throws SameThreadException {

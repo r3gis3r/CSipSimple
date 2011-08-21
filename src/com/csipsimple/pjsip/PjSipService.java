@@ -1325,4 +1325,9 @@ public class PjSipService {
         }
 	}
 
+	public void updateTransportIp(String oldIPAddress) throws SameThreadException {
+		Log.d(THIS_FILE, "Trying to update my address in the current call to "+oldIPAddress);
+		pjsua.update_transport(pjsua.pj_str_copy(oldIPAddress));
+	}
+
 }
