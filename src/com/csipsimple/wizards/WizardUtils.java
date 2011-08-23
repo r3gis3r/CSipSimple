@@ -50,6 +50,7 @@ import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.DvcNg;
 import com.csipsimple.wizards.impl.EasyBell;
 import com.csipsimple.wizards.impl.Ekiga;
+import com.csipsimple.wizards.impl.EuroTelefon;
 import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.FastVoip;
@@ -472,6 +473,12 @@ public class WizardUtils {
 					locale("hu_HU")
 					}, false, false, 
 					Innotel.class));
+			WIZARDS_DICT.put("EUROTELEFON", new WizardInfo("EUROTELEFON", "EuroTELEFON", 
+					R.drawable.ic_wizard_eurotelefon, 19, 
+					new Locale[]{
+					new Locale("pl")
+					}, false, false, 
+					EuroTelefon.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
