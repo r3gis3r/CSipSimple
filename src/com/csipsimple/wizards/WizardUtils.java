@@ -72,6 +72,7 @@ import com.csipsimple.wizards.impl.Mondotalk;
 import com.csipsimple.wizards.impl.Netelip;
 import com.csipsimple.wizards.impl.NeufTalk;
 import com.csipsimple.wizards.impl.OXO810;
+import com.csipsimple.wizards.impl.Odorik;
 import com.csipsimple.wizards.impl.OnSip;
 import com.csipsimple.wizards.impl.Optimus;
 import com.csipsimple.wizards.impl.Ovh;
@@ -479,6 +480,12 @@ public class WizardUtils {
 					new Locale("pl")
 					}, false, false, 
 					EuroTelefon.class));
+			WIZARDS_DICT.put("ODORICK", new WizardInfo("ODORICK", "Odorick", 
+					R.drawable.ic_wizard_odorik, 19, 
+					new Locale[]{
+					locale("cs_CZ"),new Locale("sk"), new Locale("sl"), locale("uk_UA")  
+					}, false, false, 
+					Odorik.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
