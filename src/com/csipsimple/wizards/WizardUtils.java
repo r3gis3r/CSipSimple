@@ -60,6 +60,7 @@ import com.csipsimple.wizards.impl.IPComms;
 import com.csipsimple.wizards.impl.IPshka;
 import com.csipsimple.wizards.impl.ITTelenet;
 import com.csipsimple.wizards.impl.IiNet;
+import com.csipsimple.wizards.impl.Innotel;
 import com.csipsimple.wizards.impl.Ip2Mobile;
 import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
@@ -465,6 +466,12 @@ public class WizardUtils {
 					locale("es_ES")
 					}, false, false, 
 					Telsome.class));
+			WIZARDS_DICT.put("INNOTEL", new WizardInfo("INNOTEL", "Innotel", 
+					R.drawable.ic_wizard_innotel, 19, 
+					new Locale[]{
+					locale("hu_HU")
+					}, false, false, 
+					Innotel.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
