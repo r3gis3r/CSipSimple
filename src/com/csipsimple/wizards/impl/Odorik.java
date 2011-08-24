@@ -49,7 +49,7 @@ public class Odorik extends SimpleImplementation {
 
 	@Override
 	protected String getDefaultName() {
-		return "Odorick";
+		return "Odorik.cz";
 	}
 	
 	

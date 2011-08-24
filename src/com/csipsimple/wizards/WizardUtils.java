@@ -480,7 +480,7 @@ public class WizardUtils {
 					new Locale("pl")
 					}, false, false, 
 					EuroTelefon.class));
-			WIZARDS_DICT.put("ODORICK", new WizardInfo("ODORICK", "Odorick", 
+			WIZARDS_DICT.put("ODORIK", new WizardInfo("ODORIK", "Odorik.cz", 
 					R.drawable.ic_wizard_odorik, 19, 
 					new Locale[]{
 					locale("cs_CZ"),new Locale("sk"), new Locale("sl"), locale("uk_UA")  
