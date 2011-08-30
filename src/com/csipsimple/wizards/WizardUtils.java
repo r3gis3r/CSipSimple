@@ -55,8 +55,8 @@ import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.FastVoip;
 import com.csipsimple.wizards.impl.Fayn;
+import com.csipsimple.wizards.impl.FreephoneLineCa;
 import com.csipsimple.wizards.impl.Freephonie;
-import com.csipsimple.wizards.impl.Gizmo5;
 import com.csipsimple.wizards.impl.IPComms;
 import com.csipsimple.wizards.impl.IPshka;
 import com.csipsimple.wizards.impl.ITTelenet;
@@ -488,6 +488,12 @@ public class WizardUtils {
 					locale("cs_CZ"),new Locale("sk"), new Locale("sl"), locale("uk_UA")  
 					}, false, false, 
 					Odorik.class));
+			WIZARDS_DICT.put("FREEPHONELINECA", new WizardInfo("FREEPHONELINECA", "Freephoneline.ca", 
+					R.drawable.ic_wizard_freephonelineca, 19, 
+					new Locale[]{
+					Locale.CANADA  
+					}, false, false, 
+					FreephoneLineCa.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
