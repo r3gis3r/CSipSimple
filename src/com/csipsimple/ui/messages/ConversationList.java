@@ -141,8 +141,9 @@ public class ConversationList extends ListActivity {
     		database.open();
     	}
 		Cursor cursor = database.getAllConversations();
-		startManagingCursor(cursor);
-		
+		if(cursor != null) {
+			startManagingCursor(cursor);
+		}
 		((CursorAdapter) getListAdapter()).changeCursor(cursor);
     }
 

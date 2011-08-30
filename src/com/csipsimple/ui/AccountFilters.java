@@ -99,7 +99,9 @@ public class AccountFilters extends ListActivity {
 		});
 		
 		cursor = database.getFiltersForAccount(accountId);
-		startManagingCursor(cursor);
+		if(cursor != null) {
+			startManagingCursor(cursor);
+		}
 		CursorAdapter adapter = new FiltersCursorAdapter(this, cursor);
 		setListAdapter(adapter);
 		

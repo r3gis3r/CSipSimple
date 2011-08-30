@@ -101,8 +101,9 @@ public class CallLogsList extends ListActivity {
 		database.open();
 
 		Cursor cursor = database.getAllCallLogs();
-		startManagingCursor(cursor);
-
+		if(cursor != null) {
+			startManagingCursor(cursor);
+		}
 		CallLogsCursorAdapter cad = new CallLogsCursorAdapter(this, cursor);
 
 		setListAdapter(cad);

@@ -334,10 +334,12 @@ public class WizardUtils {
 					R.drawable.ic_wizard_onsip, 30, 
 					new Locale[]{ Locale.US}, false, false, 
 					OnSip.class));
+			/*
 			WIZARDS_DICT.put("GIZMO5", new WizardInfo("GIZMO5", "Gizmo5", 
 					R.drawable.ic_wizard_gizmo5, 15, 
 					new Locale[]{ Locale.US}, false, false, 
 					Gizmo5.class));
+					*/
 			WIZARDS_DICT.put("BTONE", new WizardInfo("BTONE", "BlueTone", 
 					R.drawable.ic_wizard_btone, 20, 
 					new Locale[]{ Locale.US}, false, false, 

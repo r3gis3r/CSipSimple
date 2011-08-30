@@ -241,7 +241,9 @@ public class ComposeMessageActivity extends Activity implements OnClickListener 
 		
 		if(remoteFrom != null) {
 			Cursor cursor = database.getConversation(remoteFrom);
-			startManagingCursor(cursor);
+			if(cursor != null) {
+				startManagingCursor(cursor);
+			}
 			ad.changeCursor(cursor);
 			
 			//And now update the read state of thread
