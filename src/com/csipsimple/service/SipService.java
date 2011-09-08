@@ -840,7 +840,7 @@ public class SipService extends Service {
 					mTask = null;
 					Log.d(THIS_FILE, " deliver change for " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
 					// Check this is interesting for us now
-					if(prefsWrapper.isValidConnectionForIncoming() || pjService.getActiveCallInProgress() != null) {
+					if(prefsWrapper.isValidConnectionForIncoming() || (pjService != null && pjService.getActiveCallInProgress() != null) ) {
 						dataConnectionChanged(mNetworkType, true);
 					}else {
 						Log.w(THIS_FILE, "Ignore this change cause not valid for incoming");

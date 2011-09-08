@@ -64,18 +64,15 @@ public class TimerWrapper extends BroadcastReceiver {
 	
 	
 	synchronized private void quit() {
-		Log.d(THIS_FILE, "Quit this wrapper");
+		Log.v(THIS_FILE, "Quit this wrapper");
 		try {
 			service.unregisterReceiver(this);
 		} catch (IllegalArgumentException e) {
 			Log.e(THIS_FILE, "Impossible to destroy timer wrapper", e);
 		}
 		
-		List<Integer> keys = new ArrayList<Integer>();
-		for(Integer key : pendings.keySet()) {
-			keys.add(key);
-		}
-		Log.d(THIS_FILE, "To cancel : "+keys);
+		List<Integer> keys = getPendingsKeys();
+		//Log.v(THIS_FILE, "In buffer : "+keys);
 		for(Integer key : keys) {
 			int heapId = (key & 0xFFF000) >> 8;
 			int timerId = key & 0x000FFF;
@@ -83,6 +80,14 @@ public class TimerWrapper extends BroadcastReceiver {
 		}
 		
 		wakeLock.reset();
+	}
+	
+	private synchronized List<Integer> getPendingsKeys(){
+		ArrayList<Integer> keys = new ArrayList<Integer>();
+		for(Integer key : pendings.keySet()) {
+			keys.add(key);
+		}
+		return keys;
 	}
 
 	private PendingIntent getPendingIntentForTimer(int heapId, int timerId) {
@@ -99,10 +104,13 @@ public class TimerWrapper extends BroadcastReceiver {
 	
 	synchronized private int doSchedule(int heapId, int timerId, int intervalMs) {
 		PendingIntent pendingIntent = getPendingIntentForTimer(heapId, timerId);
+		
+		//List<Integer> keys = getPendingsKeys();
+		//Log.v(THIS_FILE, "1 In buffer : "+keys);
 		pendings.put(getHashPending(heapId, timerId), pendingIntent);
 		
 		long firstTime = SystemClock.elapsedRealtime() + intervalMs;
-		Log.v(THIS_FILE, "Ask to schedule @" + SystemClock.elapsedRealtime() + " :: next @"+ firstTime +" ("+intervalMs+"ms) timer : "+timerId );
+		Log.v(THIS_FILE, "Ask to schedule timer : "+timerId );
 		
 		int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
 		if(intervalMs < 1000) {
@@ -117,7 +125,7 @@ public class TimerWrapper extends BroadcastReceiver {
 	synchronized private int doCancel(int heapId, int timerId) {
 		int hash = getHashPending(heapId, timerId);
 		PendingIntent pendingIntent = pendings.get(hash);
-		Log.v(THIS_FILE, "Cancel timer : "+heapId+"/" + timerId);
+		Log.v(THIS_FILE, "Cancel timer : "+ timerId);
 		if(pendingIntent != null) {
 			pendings.remove(hash);
 		}else {
@@ -137,8 +145,13 @@ public class TimerWrapper extends BroadcastReceiver {
 			
 			final int heapId = Integer.parseInt(intent.getData().getAuthority());
 			final int timerId = Integer.parseInt(intent.getData().getLastPathSegment());
-			
-			Log.v(THIS_FILE, "Fire timer : "+heapId+"/" + timerId);
+			synchronized(TimerWrapper.this){
+				if(!pendings.containsKey(getHashPending(heapId, timerId))) {
+					Log.w(THIS_FILE, "Fireing a cancelled timer - abort");
+					return;
+				}
+			}
+			Log.v(THIS_FILE, "Fire timer : "+ timerId);
 			TimerJob t = new TimerJob(heapId, timerId);
 			t.start();
 			// TODO : ensure a running job is not ongoing for another timer when enqueuing a new job
@@ -182,17 +195,38 @@ public class TimerWrapper extends BroadcastReceiver {
 	private class TimerJob extends Thread {
 		private int heapId;
 		private int timerId;
+		private int hash;
 
 		public TimerJob(int aHeapId, int aTimerId) {
 			heapId = aHeapId;
 			timerId = aTimerId;
+			hash = getHashPending(heapId, timerId);
 			wakeLock.acquire(this);
 		}
 
 		@Override
 		public void run() {
-			pjsua.pj_timer_fire(heapId, timerId);
-			wakeLock.release(this);
+			synchronized(TimerWrapper.this){
+				if(!pendings.containsKey(hash)) {
+					Log.w(THIS_FILE, "Running a cancelled timer - abort");
+					wakeLock.release(this);
+					return;
+				}
+			}
+			
+			try {
+				pjsua.pj_timer_fire(heapId, timerId);
+			}catch(Exception e) {
+				Log.e(THIS_FILE, "Native error ", e);
+			}finally {
+				wakeLock.release(this);
+				
+				synchronized(TimerWrapper.this){
+					pendings.remove(hash);
+				}
+				//List<Integer> keys = getPendingsKeys();
+				//Log.v(THIS_FILE, "In buffer : "+keys);
+			}
 		}
 	}
 
