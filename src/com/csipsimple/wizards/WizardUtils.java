@@ -90,6 +90,7 @@ import com.csipsimple.wizards.impl.SipCelEu;
 import com.csipsimple.wizards.impl.SipSorcery;
 import com.csipsimple.wizards.impl.SipWise;
 import com.csipsimple.wizards.impl.Sipgate;
+import com.csipsimple.wizards.impl.Sipnet;
 import com.csipsimple.wizards.impl.SiptelPt;
 import com.csipsimple.wizards.impl.Sonetel;
 import com.csipsimple.wizards.impl.Speakezi;
@@ -494,6 +495,13 @@ public class WizardUtils {
 					Locale.CANADA  
 					}, false, false, 
 					FreephoneLineCa.class));
+			WIZARDS_DICT.put("SIPNET", new WizardInfo("SIPNET", "Sipnet", 
+					R.drawable.ic_wizard_sipnet, 10, 
+					new Locale[]{
+					new Locale("RU", "ru"), locale("ru_RU")
+					}, false, false, 
+					Sipnet.class));
+			
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
