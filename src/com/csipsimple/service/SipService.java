@@ -1106,9 +1106,11 @@ public class SipService extends Service {
 		boolean canStop = true;
 		if(pjService != null) {
 			canStop &= pjService.sipStop();
+			/*
 			if(canStop) {
 				pjService = null;
 			}
+			*/
 		}
 		if(canStop) {
 			releaseResources();
@@ -1331,14 +1333,6 @@ public class SipService extends Service {
 				}
 			}
 		}
-		/*
-		// Add a alarm for keep alive
-		if(kaAlarm == null) {
-			kaAlarm = new KeepAliveTimer(this);
-		}
-		Log.d(THIS_FILE, "KA Start");
-		kaAlarm.start();
-		*/
 		hold_resources = true;
 	}
 
@@ -1349,13 +1343,6 @@ public class SipService extends Service {
 		if (wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();
 		}
-		/*
-		if(kaAlarm != null) {
-			Log.d(THIS_FILE, "KA Stop");
-			kaAlarm.stop();
-			kaAlarm = null;
-		}
-		*/
 		hold_resources = false;
 	}
 

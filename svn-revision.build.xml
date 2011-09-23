@@ -4,7 +4,7 @@
 
 		<exec executable="svn" output="svn-info.properties">
 			<arg line="info" />
-			<env key="LANG" value="C"/>
+			<env key="LANG" value="en_US"/>
 		</exec>
 		<property prefix="svn" file="svn-info.properties" />
 		<echo>Revision: ${svn.Revision}</echo>

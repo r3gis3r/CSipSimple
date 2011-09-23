@@ -669,12 +669,11 @@ public class PjSipService {
 	private void initCodecs() throws SameThreadException {
 		if (codecs == null) {
 			int nbrCodecs = pjsua.codecs_get_nbr();
-			Log.d(THIS_FILE, "Codec nbr : " + nbrCodecs);
 			codecs = new ArrayList<String>();
 			for (int i = 0; i < nbrCodecs; i++) {
 				String codecId = pjsua.codecs_get_id(i).getPtr();
 				codecs.add(codecId);
-				Log.d(THIS_FILE, "Added codec " + codecId);
+				//Log.d(THIS_FILE, "Added codec " + codecId);
 			}
 			// Set it in prefs if not already set correctly
 			prefsWrapper.setCodecList(codecs);
@@ -686,19 +685,21 @@ public class PjSipService {
 
 	private void setCodecsPriorities() throws SameThreadException {
 		if (codecs != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Added codecs : ");
 			for (String codec : codecs) {
 				if (prefsWrapper.hasCodecPriority(codec)) {
-					Log.d(THIS_FILE, "Set codec " + codec + " : " + prefsWrapper.getCodecPriority(codec, "130"));
-					pjsua.codec_set_priority(pjsua.pj_str_copy(codec), prefsWrapper.getCodecPriority(codec, "130"));
-
-					/*
-					 * pjmedia_codec_param param = new pjmedia_codec_param();
-					 * pjsua.codec_get_param(pjsua.pj_str_copy(codec), param);
-					 * param.getSetting().setPenh(0);
-					 * pjsua.codec_set_param(pjsua.pj_str_copy(codec), param );
-					 */
+					short aPrio = prefsWrapper.getCodecPriority(codec, "130");
+					if(aPrio > 0) {
+						sb.append(codec);
+						sb.append(" (");
+						sb.append(aPrio);
+						sb.append(") - ");
+					}
+					pjsua.codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
 				}
 			}
+			Log.d(THIS_FILE, sb.toString());
 		}
 	}
 
@@ -831,11 +832,13 @@ public class PjSipService {
 
 			pj_str_t uri = pjsua.pj_str_copy(toCall.getCallee());
 			pj_str_t text = pjsua.pj_str_copy(message);
+			/*
 			Log.d(THIS_FILE, "get for outgoing");
+			int finalAccountId = accountId;
 			if (accountId == -1) {
-				accountId = pjsua.acc_find_for_outgoing(uri);
+				finalAccountId = pjsua.acc_find_for_outgoing(uri);
 			}
-
+			*/
 			// Nothing to do with this values
 			byte[] userData = new byte[1];
 
@@ -1031,6 +1034,7 @@ public class PjSipService {
 		SipProfile account = new SipProfile();
 		account.id = accountId;
 		SipProfileState profileState = getProfileState(account);
+		int finalAccountId = accountId;
 		
 		// If this is an invalid account id
 		if (accountId == SipProfile.INVALID_ID || !profileState.isAddedToStack()) {
@@ -1042,14 +1046,13 @@ public class PjSipService {
 				profileState = getProfileState(account);
 				valid = profileState.isAddedToStack();
 			}
-			
 			// If default account is not active
 			if (!valid) {
 				synchronized (profilesStatus) {
 					for (Integer accId : profilesStatus.keySet()) {
 						// Use the first account as valid account
 						if (accId != null) {
-							accountId = accId;
+							finalAccountId = accId;
 							pjsipAccountId = profilesStatus.get(accId).getPjsuaId();
 							break;
 						}
@@ -1057,7 +1060,7 @@ public class PjSipService {
 				}
 			} else {
 				// Use the default account
-				accountId = profileState.getDatabaseId();
+				finalAccountId = profileState.getDatabaseId();
 				pjsipAccountId = profileState.getPjsuaId();
 			}
 		} else {
@@ -1075,33 +1078,35 @@ public class PjSipService {
 		// Check integrity of callee field
 		Pattern p = Pattern.compile("^.*(?:<)?(sip(?:s)?):([^@]*@[^>]*)(?:>)?$", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(callee);
+		String finalCallee = callee;
 
+		
 		if (!m.matches()) {
 			// Assume this is a direct call using digit dialer
-			Log.d(THIS_FILE, "default acc : " + accountId);
-			account = service.getAccount(accountId);
+			Log.d(THIS_FILE, "default acc : " + finalAccountId);
+			account = service.getAccount(finalAccountId);
 			String defaultDomain = account.getDefaultDomain();
 
 			Log.d(THIS_FILE, "default domain : " + defaultDomain);
 			p = Pattern.compile("^sip(s)?:[^@]*$", Pattern.CASE_INSENSITIVE);
 			if (p.matcher(callee).matches()) {
-				callee = "<" + callee + "@" + defaultDomain + ">";
+				finalCallee = "<" + callee + "@" + defaultDomain + ">";
 			} else {
 				// Should it be encoded?
-				callee = "<sip:" + /* Uri.encode( */callee/* ) */+ "@" + defaultDomain + ">";
+				finalCallee = "<sip:" + /* Uri.encode( */callee/* ) */+ "@" + defaultDomain + ">";
 			}
 		} else {
-			callee = "<" + m.group(1) + ":" + m.group(2) + ">";
+			finalCallee = "<" + m.group(1) + ":" + m.group(2) + ">";
 		}
 
-		Log.d(THIS_FILE, "will call " + callee);
-		if (pjsua.verify_sip_url(callee) == 0) {
+		Log.d(THIS_FILE, "will call " + finalCallee);
+		if (pjsua.verify_sip_url(finalCallee) == 0) {
 			// In worse worse case, find back the account id for uri.. but
 			// probably useless case
 			if (pjsipAccountId == SipProfile.INVALID_ID) {
-				pjsipAccountId = pjsua.acc_find_for_outgoing(pjsua.pj_str_copy(callee));
+				pjsipAccountId = pjsua.acc_find_for_outgoing(pjsua.pj_str_copy(finalCallee));
 			}
-			return new ToCall(pjsipAccountId, callee);
+			return new ToCall(pjsipAccountId, finalCallee);
 		}
 
 		return null;
@@ -1153,6 +1158,9 @@ public class PjSipService {
 	}*/
 
 	public void zrtpSASVerified() throws SameThreadException {
+		if(!created) {
+			return;
+		}
 		pjsua.jzrtp_SASVerified();
 	}
 
@@ -1195,15 +1203,19 @@ public class PjSipService {
 	}
 
 	public void setNoSnd() throws SameThreadException {
+		if(!created) {
+			return;
+		}
 		pjsua.set_no_snd_dev();	
 	}
 	
 	public void setSnd() throws SameThreadException {
+		if(!created) {
+			return;
+		}
 		pjsua.set_snd_dev(0, 0);
 	}
 
-	
-	
 	
 	// About recording things
 
@@ -1326,6 +1338,9 @@ public class PjSipService {
 	}
 
 	public void updateTransportIp(String oldIPAddress) throws SameThreadException {
+		if(!created) {
+			return;
+		}
 		Log.d(THIS_FILE, "Trying to update my address in the current call to "+oldIPAddress);
 		pjsua.update_transport(pjsua.pj_str_copy(oldIPAddress));
 	}
