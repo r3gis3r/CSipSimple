@@ -3,6 +3,8 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
 	
+	<ScrollView android:layout_weight="1" 
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout android:layout_weight="1" android:orientation="vertical"
 		android:padding="10dp"
 		android:layout_height="fill_parent" android:layout_width="fill_parent">
@@ -38,6 +40,7 @@
 		
 		
 	</LinearLayout>
+	</ScrollView>
 	<LinearLayout
 		android:orientation="horizontal" style="@android:style/ButtonBar"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
