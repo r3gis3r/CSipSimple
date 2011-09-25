@@ -160,7 +160,8 @@ public class Callback {
 
   public Callback() {
     this(pjsuaJNI.new_Callback(), true);
-    pjsuaJNI.Callback_director_connect(this, swigCPtr, swigCMemOwn, true);
+    // False for android !
+    pjsuaJNI.Callback_director_connect(this, swigCPtr, swigCMemOwn, false);
   }
 
 }
