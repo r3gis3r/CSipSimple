@@ -117,6 +117,9 @@ public class TimerWrapper extends BroadcastReceiver {
 			// If less than 1 sec, do not wake up -- that's probably stun check so useless to wake up about that
 			type = AlarmManager.ELAPSED_REALTIME;
 		}
+		// Cancel previous reg anyway
+		alarmManager.cancel(pendingIntent);
+		// Push next
 		alarmManager.set(type, firstTime, pendingIntent);
 		
 		return 0;
