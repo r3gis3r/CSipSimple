@@ -126,7 +126,7 @@ public class Compatibility {
 			return true;
 		}
 		//LG P500, Optimus V
-		if(android.os.Build.PRODUCT.toLowerCase().startsWith("thunder")) {
+		if(android.os.Build.DEVICE.toLowerCase().startsWith("thunder")) {
 			return true;
 		}
 		
