@@ -125,10 +125,11 @@ public class Compatibility {
 		if(android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
 			return true;
 		}
-		//LG P500
-		if(android.os.Build.PRODUCT.equalsIgnoreCase("thunderg")) {
+		//LG P500, Optimus V
+		if(android.os.Build.PRODUCT.toLowerCase().startsWith("thunder")) {
 			return true;
 		}
+		
 		//Huawei
 		if(android.os.Build.DEVICE.equalsIgnoreCase("U8150") ||
 				android.os.Build.DEVICE.equalsIgnoreCase("U8110") ||
@@ -194,7 +195,7 @@ public class Compatibility {
 		}
 		*/
 		
-		return Integer.toString(AudioSource.MIC);
+		return Integer.toString(AudioSource.DEFAULT);
 	}
 	
 	public static String getDefaultFrequency() {
@@ -611,6 +612,9 @@ public class Compatibility {
 				prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 			}
 			
+		}
+		if(lastSeenVersion < 1033 &&  android.os.Build.PRODUCT.toLowerCase().startsWith("thunder")) {
+			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 		}
 	}
 

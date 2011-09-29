@@ -106,6 +106,9 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			R.id.dialTextButton, R.id.deleteTextButton, R.id.vmButton2,
 			R.id.switchTextView};
 
+	
+	//TimingLogger timings = new TimingLogger("SIP_HOME", "test");
+	
 	private Activity contextToBindTo = this;
 	private ISipService service;
 	private ServiceConnection connection = new ServiceConnection() {
@@ -116,6 +119,11 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 			accountChooserButton.updateService(service);
 			sipTextUri.updateService(service);
 			updateRegistrations();
+			/*
+			timings.addSplit("Service connected");
+			if(configurationService != null) {
+				timings.dumpToLog();
+			}*/
 		}
 
 		@Override
@@ -136,6 +144,11 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder arg1) {
 			configurationService = ISipConfiguration.Stub.asInterface(arg1);
+			/*
+			timings.addSplit("Config service connected");
+			if(service != null) {
+				timings.dumpToLog();
+			}*/
 		}
 	};
 
@@ -155,7 +168,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		// Bind to the service
 		if (getParent() != null) {
 			contextToBindTo = getParent();
@@ -170,22 +182,20 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 				updateRegistrations();
 			}
 		};
-		
 		initView();
+		
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		initView();
-		Log.d(THIS_FILE, "Config has changed");
 		updateRegistrations();
 	}
 
 	
 	private void initView() {
 		setContentView(R.layout.dialer_activity);
-
 		// Store the backgrounds objects that will be in use later
 		Resources r = getResources();
 		digitsBackground = r.getDrawable(R.drawable.btn_dial_textfield_active);
@@ -206,7 +216,6 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		
 		isDigit = prefsWrapper.startIsDigit();
 		isTablet = Compatibility.isTabletScreen(this);
-		Log.d(THIS_FILE, "Is tablet "+ isTablet);
 		
 		if(service != null) {
 			accountChooserButton.updateService(service);
@@ -243,12 +252,11 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 		});
 		LinearLayout topField = (LinearLayout) sipTextUri.findViewById(R.id.topFieldText);
 		topField.addView(backFlipTextDialerButton, 0);
-		Log.d(THIS_FILE, "create dialer");
+		
 		
 		backFlipDigitDialerButton = (ImageButton) findViewById(R.id.switchTextView);
 		
 		initPaneMode();
-		
 		applyTheme();
 	}
 	
@@ -325,13 +333,13 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.d(THIS_FILE, "Resuming dialer");
+		//timings.reset();
 		// Bind service
 		registerReceiver(registrationReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
-		
+		//timings.addSplit("Register receiver OK");
 		contextToBindTo.bindService(new Intent(SipManager.INTENT_SIP_SERVICE), connection, Context.BIND_AUTO_CREATE);
 		contextToBindTo.bindService(new Intent(SipManager.INTENT_SIP_CONFIGURATION), configurationConnection, Context.BIND_AUTO_CREATE);
-
+		//timings.addSplit("Bind asked for two");
 		dialFeedback.resume();
 	}
 

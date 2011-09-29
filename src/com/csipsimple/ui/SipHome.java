@@ -71,7 +71,7 @@ public class SipHome extends TabActivity {
 	public static final String LAST_KNOWN_ANDROID_VERSION_PREF = "last_known_aos_version";
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 
-	private static final String THIS_FILE = "SIP HOME";
+	private static final String THIS_FILE = "SIP_HOME";
 	
 	private static final String TAB_DIALER = "dialer";
 	private static final String TAB_CALLLOG = "calllog";
@@ -88,9 +88,11 @@ public class SipHome extends TabActivity {
 	private boolean has_tried_once_to_activate_account = false;
 //	private ImageButton pickupContact;
 
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d(THIS_FILE, "On Create SIPHOME");
+		
 		prefWrapper = new PreferencesWrapper(this);
 		super.onCreate(savedInstanceState);
 		
@@ -137,7 +139,6 @@ public class SipHome extends TabActivity {
 			}
 		}
 		
-		
 
 		setContentView(R.layout.home);
 
@@ -150,7 +151,6 @@ public class SipHome extends TabActivity {
 		if(CustomDistribution.supportMessaging()) {
 			addTab(TAB_MESSAGES, getString(R.string.messages_tab_name_text), R.drawable.ic_tab_unselected_messages, R.drawable.ic_tab_selected_messages, messagesIntent);
 		}
-		
 		/*
 		pickupContact = (ImageButton) findViewById(R.id.pickup_contacts);
 		pickupContact.setOnClickListener(new OnClickListener() {
@@ -162,7 +162,6 @@ public class SipHome extends TabActivity {
 		*/
 		
 		has_tried_once_to_activate_account = false;
-		
 
 		if(!prefWrapper.getPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION)) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
@@ -292,6 +291,7 @@ public class SipHome extends TabActivity {
 		}
 	}
 	
+	private Method setIndicatorMethod = null;
 	
 	private void addTab(String tag, String label, int icon, int ficon, Intent content) {
 		TabHost tabHost = getTabHost();
@@ -302,8 +302,10 @@ public class SipHome extends TabActivity {
 			IndicatorTab icTab = new IndicatorTab(this, null);
 			icTab.setResources(label, icon, ficon);
 			try {
-				Method method = tabspecDialer.getClass().getDeclaredMethod("setIndicator", View.class);
-				method.invoke(tabspecDialer, icTab);
+				if(setIndicatorMethod == null) {
+					setIndicatorMethod = tabspecDialer.getClass().getDeclaredMethod("setIndicator", View.class);
+				}
+				setIndicatorMethod.invoke(tabspecDialer, icTab);
 				fails = false;
 			} catch (Exception e) {
 				Log.d(THIS_FILE, "We are probably on 1.5 : use standard simple tabs");

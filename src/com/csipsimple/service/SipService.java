@@ -750,10 +750,13 @@ public class SipService extends Service {
 					}
 				}
 			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
-				if(mTask != null) {
-					Log.d(THIS_FILE, "Cancel current force registration task cause stop asked");
-					mTask.cancel();
-					sipWakeLock.release(mTask);
+				synchronized (createLock) {
+					if(mTask != null) {
+						Log.d(THIS_FILE, "Cancel current force registration task cause stop asked");
+						mTask.cancel();
+						sipWakeLock.release(mTask);
+						mTask = null;
+					}
 				}
 				cleanStop();
 			} else if(action.equals(ACTION_VPN_CONNECTIVITY)) {
@@ -799,6 +802,7 @@ public class SipService extends Service {
 					if ((mTask != null) && mTask.mNetworkType.equals(type)) {
 						mTask.cancel();
 						sipWakeLock.release(mTask);
+						mTask = null;
 					}
 					fireChanges = true;
 				}
@@ -835,9 +839,9 @@ public class SipService extends Service {
 					if (mTask != this) {
 						Log.w(THIS_FILE, "  unexpected task: " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
 						sipWakeLock.release(this);
+						mTask = null;
 						return;
 					}
-					mTask = null;
 					Log.d(THIS_FILE, " deliver change for " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
 					// Check this is interesting for us now
 					if(prefsWrapper.isValidConnectionForIncoming() || (pjService != null && pjService.getActiveCallInProgress() != null) ) {
@@ -846,6 +850,7 @@ public class SipService extends Service {
 						Log.w(THIS_FILE, "Ignore this change cause not valid for incoming");
 					}
 					sipWakeLock.release(this);
+					mTask = null;
 				}
 			}
 		}
@@ -1102,7 +1107,6 @@ public class SipService extends Service {
 	 */
 	private boolean stopSipStack() throws SameThreadException {
 		Log.d(THIS_FILE, "Stop sip stack");
-		sipWakeLock.acquire(this);
 		boolean canStop = true;
 		if(pjService != null) {
 			canStop &= pjService.sipStop();
@@ -1116,7 +1120,6 @@ public class SipService extends Service {
 			releaseResources();
 		}
 		//unregisterBroadcasts();
-		sipWakeLock.release(this);
 		return canStop;
 	}
 	

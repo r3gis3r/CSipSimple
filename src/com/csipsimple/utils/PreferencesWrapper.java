@@ -416,8 +416,6 @@ public class PreferencesWrapper {
 			ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
 			
 			// Wifi connected
-			//TODO : check if not CONNECTING is not good as value here
-			Log.d(THIS_FILE, "Wifi state is now "+ni.getState().name());
 			if (ni.getState() == NetworkInfo.State.CONNECTED) {
 				return true;
 			}
