@@ -1135,6 +1135,7 @@ public class SipService extends Service {
 		serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, msg));
 	}
 	
+	private boolean hasSomeActiveAccount = false;
 	/**
 	 * Add accounts from database
 	 */
@@ -1157,6 +1158,7 @@ public class SipService extends Service {
 				account_limit --;
 			}
 		}
+		hasSomeActiveAccount = hasSomeSuccess;
 
 		if (hasSomeSuccess) {
 			acquireResources();
@@ -1251,9 +1253,13 @@ public class SipService extends Service {
 		//			e.printStackTrace();
 		//		}
 		//	}
-			acquireResources();
 		} else {
 			notificationManager.cancelRegisters();
+		}
+		
+		if(hasSomeActiveAccount) {
+			acquireResources();
+		}else {
 			releaseResources();
 		}
 	}

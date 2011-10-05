@@ -31,7 +31,8 @@
 		</activity>
 		
 		<!-- Main service -->
-		<service android:name="com.csipsimple.service.SipService" android:exported="true">
+		<service android:name="com.csipsimple.service.SipService" android:exported="true"
+			android:process=":sipStack">
 			<intent-filter>
 				<action android:name="com.csipsimple.service.SipService" />
 				<action android:name="com.csipsimple.service.SipConfiguration" />
