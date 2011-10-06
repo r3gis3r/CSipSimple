@@ -88,6 +88,7 @@ interface ISipService{
 	int xferReplace(int callId, int otherCallId, int options);
 	SipCallSession getCallInfo(int callId);
 	SipCallSession[] getCalls();
+	String showCallInfosDialog(int callId);
 	
 	//Media control
 	void setMicrophoneMute(boolean on);

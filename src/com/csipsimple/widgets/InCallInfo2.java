@@ -272,6 +272,7 @@ public class InCallInfo2 extends ExtensibleBadge {
 			elapsedTime.setTextColor(colorEnd);
 			return;
 		}
+		Log.w(THIS_FILE, "Connected start " + callInfo.getConnectStart());
 		elapsedTime.setBase(callInfo.getConnectStart());
 		secure.setVisibility(callInfo.isSecure()?View.VISIBLE:View.GONE);
 		secureInfo.setText(callInfo.getMediaSecureInfo());

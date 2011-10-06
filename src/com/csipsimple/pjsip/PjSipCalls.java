@@ -54,7 +54,7 @@ public final class PjSipCalls {
 	
 	private static SipCallSession updateSession(SipCallSession session, pjsua_call_info pjCallInfo, PjSipService service) {
 		session.setCallId(pjCallInfo.getId());
-		
+
 		try {
 			int status_code = pjCallInfo.getLast_status().swigValue();
 			session.setLastStatusCode(status_code);
@@ -108,7 +108,7 @@ public final class PjSipCalls {
 		return session;
 	}
 	
-	public static String dumpCallInfo(int callId) {
+	public static String dumpCallInfo(int callId) throws SameThreadException {
 		return pjsua.call_dump(callId, pjsua.PJ_TRUE, " ").getPtr();
 	}
 	

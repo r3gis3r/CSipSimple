@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,6 +66,7 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
 import com.csipsimple.models.SipMessage;
+import com.csipsimple.pjsip.PjSipCalls;
 import com.csipsimple.pjsip.PjSipService;
 import com.csipsimple.pjsip.UAStateReceiver;
 import com.csipsimple.ui.InCallMediaControl;
@@ -295,13 +297,14 @@ public class SipService extends Service {
 		@Override
 		public int answer(final int callId, final int status) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			getExecutor().execute(new SipRunnable() {
+			ReturnRunnable action = new ReturnRunnable() {
 				@Override
-				protected void doRun() throws SameThreadException {
-					 pjService.callAnswer(callId, status);
+				protected Object runWithReturn() throws SameThreadException {
+					return (Integer) pjService.callAnswer(callId, status);
 				}
-			});
-			return 0;
+			};
+			getExecutor().execute(action);
+			return (Integer) action.getResult();
 		}
 
 		/**
@@ -315,13 +318,14 @@ public class SipService extends Service {
 		@Override
 		public int hangup(final int callId, final int status) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			getExecutor().execute(new SipRunnable() {
+			ReturnRunnable action = new ReturnRunnable() {
 				@Override
-				protected void doRun() throws SameThreadException {
-					pjService.callHangup(callId, status);
+				protected Object runWithReturn() throws SameThreadException {
+					return (Integer) pjService.callHangup(callId, status);
 				}
-			});
-			return 0;
+			};
+			getExecutor().execute(action);
+			return (Integer) action.getResult();
 		}
 		
 
@@ -329,65 +333,70 @@ public class SipService extends Service {
 		public int xfer(final int callId, final String callee) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "XFER");
-			getExecutor().execute(new SipRunnable() {
+			ReturnRunnable action = new ReturnRunnable() {
 				@Override
-				protected void doRun() throws SameThreadException {
-					pjService.callXfer(callId, callee);
+				protected Object runWithReturn() throws SameThreadException {
+					return (Integer) pjService.callXfer(callId, callee);
 				}
-			});
-			return 0;
+			};
+			getExecutor().execute(action);
+			return (Integer) action.getResult();
 		}
 
 		@Override
 		public int xferReplace(final int callId, final int otherCallId, final int options) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "XFER-replace");
-			getExecutor().execute(new SipRunnable() {
+			ReturnRunnable action = new ReturnRunnable() {
 				@Override
-				protected void doRun() throws SameThreadException {
-					pjService.callXferReplace(callId, otherCallId, options);
+				protected Object runWithReturn() throws SameThreadException {
+					return (Integer) pjService.callXferReplace(callId, otherCallId, options);
 				}
-			});
-			return 0; 
+			};
+			getExecutor().execute(action);
+			return (Integer) action.getResult();
 		}
 
 		@Override
 		public int sendDtmf(final int callId, final int keyCode) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 
-			getExecutor().execute(new SipRunnable() {
+			ReturnRunnable action = new ReturnRunnable() {
 				@Override
-				protected void doRun() throws SameThreadException {
-					pjService.sendDtmf(callId, keyCode);
+				protected Object runWithReturn() throws SameThreadException {
+					return (Integer) pjService.sendDtmf(callId, keyCode);
 				}
-			});
-			return 0;
+			};
+			getExecutor().execute(action);
+			return (Integer) action.getResult();
 		}
 
 		@Override
 		public int hold(final int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "HOLDING");
-			getExecutor().execute(new SipRunnable() {
+			ReturnRunnable action = new ReturnRunnable() {
 				@Override
-				protected void doRun() throws SameThreadException {
-					pjService.callHold(callId);
+				protected Object runWithReturn() throws SameThreadException {
+					return (Integer) pjService.callHold(callId);
 				}
-			});
-			return 0;
+			};
+			getExecutor().execute(action);
+			return (Integer) action.getResult();
 		}
 
 		@Override
 		public int reinvite(final int callId, final boolean unhold) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			Log.d(THIS_FILE, "REINVITING");
-			getExecutor().execute(new SipRunnable() {
+			ReturnRunnable action = new ReturnRunnable() {
 				@Override
-				protected void doRun() throws SameThreadException {
-					pjService.callReinvite(callId, unhold);
+				protected Object runWithReturn() throws SameThreadException {
+					return (Integer) pjService.callReinvite(callId, unhold);
 				}
-			});
-			return 0;
+			};
+			getExecutor().execute(action);
+			return (Integer) action.getResult();
 		}
 		
 
@@ -569,6 +578,21 @@ public class SipService extends Service {
 		@Override
 		public int getVersion() throws RemoteException {
 			return SipManager.CURRENT_API;
+		}
+
+		@Override
+		public String showCallInfosDialog(final int callId) throws RemoteException {
+			ReturnRunnable action = new ReturnRunnable() {
+				@Override
+				protected Object runWithReturn() throws SameThreadException {
+					String infos = PjSipCalls.dumpCallInfo(callId);
+					Log.d(THIS_FILE, infos);
+					return infos;
+				}
+			};
+			
+			getExecutor().execute(action);
+			return (String) action.getResult();
 		}
 
 		
@@ -1590,6 +1614,8 @@ public class SipService extends Service {
 	//	}
         return executorThread.getLooper();
     }
+    
+    
 
     // Executes immediate tasks in a single executorThread.
     // Hold/release wake lock for running tasks
@@ -1605,7 +1631,7 @@ public class SipService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.obj instanceof Runnable) {
+	        if (msg.obj instanceof Runnable) {
                 executeInternal((Runnable) msg.obj);
             } else {
                 Log.w(THIS_FILE, "can't handle msg: " + msg);
@@ -1707,4 +1733,36 @@ public class SipService extends Service {
 			}
 		}
 	}
+	
+
+    public abstract class ReturnRunnable extends SipRunnable {
+    	private Semaphore runSemaphore;
+    	private Object resultObject;
+    	
+    	public ReturnRunnable() {
+			super();
+			runSemaphore = new Semaphore(0);
+		}
+    	
+    	public Object getResult() {
+    		try {
+				runSemaphore.acquire();
+			} catch (InterruptedException e) {
+				Log.e(THIS_FILE, "Can't acquire run semaphore... problem...");
+			}
+    		return resultObject;
+    	}
+    	
+    	protected abstract Object runWithReturn() throws SameThreadException;
+    	
+    	@Override
+    	public void doRun() throws SameThreadException {
+    		setResult(runWithReturn());
+    	}
+    	
+    	private void setResult(Object obj) {
+    		resultObject = obj;
+    		runSemaphore.release();
+    	}
+    }
 }
