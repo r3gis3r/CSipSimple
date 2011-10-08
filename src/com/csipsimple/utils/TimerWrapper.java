@@ -308,7 +308,7 @@ public class TimerWrapper extends BroadcastReceiver {
 				}
 			}
 			semForHash.release();
-			Log.v(THIS_FILE, "FIRE end " + hash + " : " + pendingsSemaphores.keySet());
+			//Log.v(THIS_FILE, "FIRE end " + hash + " : " + pendingsSemaphores.keySet());
 		}
 	}
 	
