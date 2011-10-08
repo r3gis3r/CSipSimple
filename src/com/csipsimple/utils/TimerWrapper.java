@@ -306,9 +306,9 @@ public class TimerWrapper extends BroadcastReceiver {
 				if(pendingsSemaphores.containsKey(hash) && pendingsSemaphores.get(hash) == semForHash) {
 					pendingsSemaphores.remove(hash);
 				}
+				//Log.v(THIS_FILE, "FIRE end " + hash + " : " + pendingsSemaphores.keySet());
 			}
 			semForHash.release();
-			//Log.v(THIS_FILE, "FIRE end " + hash + " : " + pendingsSemaphores.keySet());
 		}
 	}
 	
