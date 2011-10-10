@@ -304,7 +304,8 @@ public class SipService extends Service {
 				}
 			};
 			getExecutor().execute(action);
-			return (Integer) action.getResult();
+			//return (Integer) action.getResult();
+			return 0;
 		}
 
 		/**
@@ -325,7 +326,9 @@ public class SipService extends Service {
 				}
 			};
 			getExecutor().execute(action);
-			return (Integer) action.getResult();
+			//return (Integer) action.getResult();
+			
+			return 0;
 		}
 		
 

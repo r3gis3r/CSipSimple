@@ -133,7 +133,8 @@ public class TimerWrapper extends BroadcastReceiver {
 		if(pendingsSemaphores.containsKey(hash)) {
 			Log.e(THIS_FILE, "Huston we've got a problem here - trying to add to something not terminated");
 		}
-		pendingsSemaphores.put(hash, new Semaphore(0));
+		Semaphore sem = new Semaphore(0);
+		pendingsSemaphores.put(hash, sem);
 		
 		long firstTime = SystemClock.elapsedRealtime() + intervalMs;
 		Log.v(THIS_FILE, "SCHED add " + timerId + " in " + intervalMs);
@@ -148,7 +149,9 @@ public class TimerWrapper extends BroadcastReceiver {
 		// Push next
 		alarmManager.set(type, firstTime, pendingIntent);
 		Log.v(THIS_FILE, "SCHED list " + pendingsSemaphores.keySet());
-		pendingsSemaphores.get(hash).release();
+		synchronized (sem) {
+			sem.release();
+		}
 		
 		return 0;
 	}
@@ -167,7 +170,12 @@ public class TimerWrapper extends BroadcastReceiver {
 			return 1;
 		}
 		
-		if(semForHash.tryAcquire()) {
+		boolean hasAcquired = false;
+		synchronized (semForHash) {
+			hasAcquired = semForHash.tryAcquire();
+		}
+		
+		if(hasAcquired) {
 		
 			synchronized (this) {
 				if(semForHash != pendingsSemaphores.get(hash)) {
@@ -308,7 +316,10 @@ public class TimerWrapper extends BroadcastReceiver {
 				}
 				//Log.v(THIS_FILE, "FIRE end " + hash + " : " + pendingsSemaphores.keySet());
 			}
-			semForHash.release();
+			synchronized (semForHash) {
+				semForHash.release();
+			}
+			
 		}
 	}
 	
