@@ -977,7 +977,7 @@ public class pjsuaJNI {
   public final static native void csipsimple_config_default(long jarg1, csipsimple_config jarg1_);
   public final static native int csipsimple_init(long jarg1, pjsua_config jarg1_, long jarg2, pjsua_logging_config jarg2_, long jarg3, pjsua_media_config jarg3_, long jarg4, csipsimple_config jarg4_);
   public final static native int csipsimple_destroy();
-  public final static native int pj_timer_fire(int jarg1, int jarg2);
+  public final static native int pj_timer_fire(int jarg1);
   public final static native int acc_clean_all_registrations(int jarg1);
   public final static native int update_transport(long jarg1, pj_str_t jarg1_);
   public final static native void jzrtp_SASVerified();

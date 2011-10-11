@@ -1725,7 +1725,7 @@ public class SipService extends Service {
 		}
 	}
 
-	public abstract class SipRunnable  implements Runnable {
+	public abstract static class SipRunnable  implements Runnable {
 		protected abstract void doRun() throws SameThreadException;
 		
 		public void run() {

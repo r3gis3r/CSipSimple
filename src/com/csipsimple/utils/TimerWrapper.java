@@ -17,10 +17,6 @@
  */
 package com.csipsimple.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Semaphore;
-
 import org.pjsip.pjsua.pjsua;
 
 import android.app.AlarmManager;
@@ -30,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
 
@@ -49,11 +46,8 @@ public class TimerWrapper extends BroadcastReceiver {
 	//private WakeLock wakeLock;
 	private static TimerWrapper singleton;
 	
-	//Map<String, PendingIntent> pendings = new HashMap<String, PendingIntent>();
-	Map<String, Semaphore> pendingsSemaphores = new HashMap<String, Semaphore>();
 	boolean serviceRegistered = false;
 	
-	private int hashOffset = 0;
 	
 	private TimerWrapper(SipService ctxt) {
 		setContext(ctxt);
@@ -97,8 +91,8 @@ public class TimerWrapper extends BroadcastReceiver {
 		if(wakeLock != null) {
 			wakeLock.reset();
 		}
-		hashOffset ++;
-		hashOffset = hashOffset % 10;
+//		hashOffset ++;
+//		hashOffset = hashOffset % 10;
 	}
 	
 	/*
@@ -111,33 +105,20 @@ public class TimerWrapper extends BroadcastReceiver {
 	}
 	*/
 
-	private PendingIntent getPendingIntentForTimer(int heapId, int timerId) {
+	private PendingIntent getPendingIntentForTimer(int entry, int entryId) {
 		Intent intent = new Intent(TIMER_ACTION);
-		String toSend = EXTRA_TIMER_SCHEME + "://" + Integer.toString(heapId) + "/" + Integer.toString(timerId);
+		String toSend = EXTRA_TIMER_SCHEME + "://" + Integer.toString(entryId);
 		intent.setData(Uri.parse(toSend));
-		//intent.setClass(service, TimerWrapper.class);
+		intent.putExtra(EXTRA_TIMER_ENTRY, entry);
 		return PendingIntent.getBroadcast(service, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 	
-	private String getHashPending(int heapId, int timerId) {
-		return Integer.toString(hashOffset) + ":" + Integer.toString(heapId) + ":" + Integer.toString(timerId);
-	}
 	
-	synchronized private int doSchedule(int heapId, int timerId, int intervalMs) {
-		PendingIntent pendingIntent = getPendingIntentForTimer(heapId, timerId);
-		
-		//List<Integer> keys = getPendingsKeys();
-		//Log.v(THIS_FILE, "1 In buffer : "+keys);
-		String hash = getHashPending(heapId, timerId);
-		//pendings.put(hash, pendingIntent);
-		if(pendingsSemaphores.containsKey(hash)) {
-			Log.e(THIS_FILE, "Huston we've got a problem here - trying to add to something not terminated");
-		}
-		Semaphore sem = new Semaphore(0);
-		pendingsSemaphores.put(hash, sem);
+	private int doSchedule(int entry, int entryId, int intervalMs) {
+		PendingIntent pendingIntent = getPendingIntentForTimer(entry, entryId);
 		
 		long firstTime = SystemClock.elapsedRealtime() + intervalMs;
-		Log.v(THIS_FILE, "SCHED add " + timerId + " in " + intervalMs);
+		Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
 		
 		int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
 		if(intervalMs < 1000) {
@@ -148,96 +129,38 @@ public class TimerWrapper extends BroadcastReceiver {
 		alarmManager.cancel(pendingIntent);
 		// Push next
 		alarmManager.set(type, firstTime, pendingIntent);
-		Log.v(THIS_FILE, "SCHED list " + pendingsSemaphores.keySet());
-		synchronized (sem) {
-			sem.release();
-		}
 		
-		return 0;
+		return 1;
 	}
 	
-	private int doCancel(int heapId, int timerId) {
-		Semaphore semForHash;
-		String hash;
-		synchronized (this) {
-			hash = getHashPending(heapId, timerId);
-			semForHash = pendingsSemaphores.get(hash);
-			//pendingIntent = pendings.get(hash);
-		}
-		if(semForHash == null) {
-			Log.e(THIS_FILE, "CANCEL something that does not exists !!!");
-			// For safety return 1 so that the underlying stack can remove it
-			return 1;
-		}
-		
-		boolean hasAcquired = false;
-		synchronized (semForHash) {
-			hasAcquired = semForHash.tryAcquire();
-		}
-		
-		if(hasAcquired) {
-		
-			synchronized (this) {
-				if(semForHash != pendingsSemaphores.get(hash)) {
-					Log.w(THIS_FILE, "CANCEL Pending has been removed meanwhile");
-					// For safety return 1 so that the underlying stack can remove it
-					return 1;
-				}
-			
-			
-				Log.v(THIS_FILE, "CANCEL process "+ hash);
-				
-				alarmManager.cancel(getPendingIntentForTimer(heapId, timerId));
-				//pendings.remove(hash);
-				pendingsSemaphores.remove(hash);
-			}
-			// Never release to not allow post acquire of a fire
-			//semForHash.release();
-			Log.v(THIS_FILE, "CANCEL rel SEM "+ hash);
-			return 1;
-		}else {
-			Log.v(THIS_FILE, "CANCEL failed : ongoing fire let fire do his job "+ hash);
-			return 0;
-		}
+	private int doCancel(int entry, int entryId) {
+		alarmManager.cancel(getPendingIntentForTimer(entry, entryId));
+		return 1;
 	}
 	
 	
+	public final static String EXTRA_TIMER_ENTRY = "entry";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
 		if(TIMER_ACTION.equalsIgnoreCase(intent.getAction())) {
-			
-			final int heapId = Integer.parseInt(intent.getData().getAuthority());
-			final int timerId = Integer.parseInt(intent.getData().getLastPathSegment());
+			int entry = intent.getIntExtra(EXTRA_TIMER_ENTRY, -1);
+			Log.d(THIS_FILE, "FIRE Received : " + entry);
 			if(singleton != null) {
-				singleton.treatAlarm(heapId, timerId);
+				singleton.treatAlarm(entry);
 			}else {
 				Log.w(THIS_FILE, "Not found singleton");
 			}
 		}
 	}
 	
-	public synchronized void treatAlarm(int heapId, int timerId) {
-		Semaphore semForHash;
-		String hash = getHashPending(heapId, timerId);
-		Log.v(THIS_FILE, "FIRE will proceed " + hash);
-		
-		synchronized (this) {
-			semForHash = pendingsSemaphores.get(hash);
-		}
-		
-		// From now, the timer can't be cancelled anymore
-		if(semForHash != null) {
-			TimerJob t = new TimerJob(heapId, timerId, semForHash);
-			t.start();
-		}else {
-			Log.w(THIS_FILE, "FIRE ko : cancelling meanwhile "+hash);
-		}
-		
-		
+	public void treatAlarm(int entry) {
+		TimerJob t = new TimerJob(entry);
+		t.start();
 	}
 	
+	Handler handler = new Handler();
 	
 	
 	// Public API
@@ -257,72 +180,45 @@ public class TimerWrapper extends BroadcastReceiver {
 	}
 	
 	
-	public static int schedule(int heapId, int timerId, int time) {
+	public static int schedule(int entry, int entryId, int time) {
 		if(singleton == null) {
 			Log.e(THIS_FILE, "Timer NOT initialized");
 			return -1;
 		}
-		singleton.doSchedule(heapId, timerId, time);
-			
-		
-		return 0;
+		return singleton.doSchedule(entry, entryId, time);
 	}
 	
-	public static int cancel(int heapId, int timerId) {
-		return singleton.doCancel(heapId, timerId);
+	public static int cancel(int entry, int entryId) {
+		return singleton.doCancel(entry, entryId);
 	}
 	
 	
 
 	private class TimerJob extends Thread {
-		private int heapId;
-		private int timerId;
-		private String hash;
-		private Semaphore semForHash;
+		private int entry;
 		
-		public TimerJob(int aHeapId, int aTimerId, Semaphore aSemForHash) {
-			heapId = aHeapId;
-			timerId = aTimerId;
-			hash = getHashPending(heapId, timerId);
-			semForHash = aSemForHash;
+		public TimerJob(int anEntry) {
+			super("TimerJob");
+			entry = anEntry;
 			wakeLock.acquire(this);
 		}
-
+		
 		@Override
 		public void run() {
 			// From now, the timer can't be cancelled anymore
 
-			Log.v(THIS_FILE, "FIRE start " + hash);
+			Log.d(THIS_FILE, "FIRE START "+entry);
 			
 			try {
-				if(semForHash.tryAcquire()) {
-					pjsua.pj_timer_fire(heapId, timerId);
-				}else {
-					Log.v(THIS_FILE, "FIRE aborted " + hash);
-				}
+				pjsua.pj_timer_fire(entry);
 			}catch(Exception e) {
 				Log.e(THIS_FILE, "Native error ", e);
 			}finally {
-				release();
+				wakeLock.release(this);
 			}
-			
-			wakeLock.release(this);
-		}
-
-		private void release() {
-			synchronized(TimerWrapper.this){
-				if(pendingsSemaphores.containsKey(hash) && pendingsSemaphores.get(hash) == semForHash) {
-					pendingsSemaphores.remove(hash);
-				}
-				//Log.v(THIS_FILE, "FIRE end " + hash + " : " + pendingsSemaphores.keySet());
-			}
-			synchronized (semForHash) {
-				semForHash.release();
-			}
+			Log.d(THIS_FILE, "FIRE DONE "+entry);
 			
 		}
 	}
-	
-
 
 }

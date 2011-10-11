@@ -64,6 +64,7 @@ import com.csipsimple.models.SipMessage;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
+import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -125,7 +126,7 @@ public class UAStateReceiver extends Callback {
 				}
 			}
 		}
-		pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+		pjService.service.getExecutor().execute(new SipRunnable() {
 			@Override
 			public void doRun() throws SameThreadException {
 				SipCallSession callInfo = updateCallInfoFromStack(callId);
@@ -148,7 +149,7 @@ public class UAStateReceiver extends Callback {
 		lockCpu();
 		
 		Log.d(THIS_FILE, "Call state <<");
-		pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+		pjService.service.getExecutor().execute(new SipRunnable() {
 			@Override
 			public void doRun() throws SameThreadException {
 				//Get current infos
@@ -251,7 +252,7 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_reg_state(final int accountId) {
 		lockCpu();
-		pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+		pjService.service.getExecutor().execute(new SipRunnable() {
 			@Override
 			public void doRun() throws SameThreadException {
 				// Update java infos
@@ -336,7 +337,7 @@ public class UAStateReceiver extends Callback {
 		if(incomingCallLock != null && incomingCallLock.isHeld()) {
 			incomingCallLock.release();
 		}
-		pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+		pjService.service.getExecutor().execute(new SipRunnable() {
 			@Override
 			public void doRun() throws SameThreadException {
 				SipCallSession callInfo = updateCallInfoFromStack(callId);
@@ -604,7 +605,7 @@ public class UAStateReceiver extends Callback {
 				SipProfile acc = pjService.getAccountForPjsipId(accountId);
 				final boolean shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc);
 				Log.d(THIS_FILE, "Should I anto answer????"+shouldAutoAnswer);
-				pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+				pjService.service.getExecutor().execute(new SipRunnable() {
 					@Override
 					public void doRun() throws SameThreadException {
 						if (shouldAutoAnswer) {
@@ -911,7 +912,7 @@ public class UAStateReceiver extends Callback {
     				(state == SipCallSession.InvState.INCOMING || 
     				state == SipCallSession.InvState.EARLY)) {
     			if(pjService != null && pjService.service != null ) {
-    				pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+    				pjService.service.getExecutor().execute(new SipRunnable() {
 						@Override
 						protected void doRun() throws SameThreadException {
 							
@@ -932,7 +933,7 @@ public class UAStateReceiver extends Callback {
 				// the call should be cleared.
 				//
     			if(pjService != null && pjService.service != null ) {
-    				pjService.service.getExecutor().execute(pjService.service.new SipRunnable() {
+    				pjService.service.getExecutor().execute(new SipRunnable() {
 						@Override
 						protected void doRun() throws SameThreadException {
 							switch(pjService.prefsWrapper.getHeadsetAction()) {

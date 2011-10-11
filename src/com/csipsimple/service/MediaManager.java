@@ -37,6 +37,7 @@ import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.service.SipService.SameThreadException;
+import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Ringer;
@@ -532,7 +533,7 @@ public class MediaManager {
 	public void setSoftwareVolume(){
 		
 		if(service != null) {
-			service.getExecutor().execute(service.new SipRunnable() {
+			service.getExecutor().execute(new SipRunnable() {
 				
 				@Override
 				protected void doRun() throws SameThreadException {
