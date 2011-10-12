@@ -118,7 +118,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		PendingIntent pendingIntent = getPendingIntentForTimer(entry, entryId);
 		
 		long firstTime = SystemClock.elapsedRealtime() + intervalMs;
-		Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
+		//Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
 		
 		int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
 		if(intervalMs < 1000) {
@@ -146,7 +146,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		
 		if(TIMER_ACTION.equalsIgnoreCase(intent.getAction())) {
 			int entry = intent.getIntExtra(EXTRA_TIMER_ENTRY, -1);
-			Log.d(THIS_FILE, "FIRE Received : " + entry);
+			//Log.d(THIS_FILE, "FIRE Received : " + entry);
 			if(singleton != null) {
 				singleton.treatAlarm(entry);
 			}else {
@@ -207,7 +207,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		public void run() {
 			// From now, the timer can't be cancelled anymore
 
-			Log.d(THIS_FILE, "FIRE START "+entry);
+			//Log.d(THIS_FILE, "FIRE START "+entry);
 			
 			try {
 				pjsua.pj_timer_fire(entry);
@@ -216,7 +216,7 @@ public class TimerWrapper extends BroadcastReceiver {
 			}finally {
 				wakeLock.release(this);
 			}
-			Log.d(THIS_FILE, "FIRE DONE "+entry);
+			//Log.d(THIS_FILE, "FIRE DONE "+entry);
 			
 		}
 	}
