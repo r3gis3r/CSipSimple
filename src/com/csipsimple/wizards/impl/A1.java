@@ -35,6 +35,7 @@ public class A1 extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.transport = SipProfile.TRANSPORT_UDP;
+		account.proxies = new String[] {"sip:sip.a1.net"};
 		return account;
 	}
 }

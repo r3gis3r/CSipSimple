@@ -611,7 +611,7 @@ public class Compatibility {
 		if(lastSeenVersion < 1033 &&  android.os.Build.PRODUCT.toLowerCase().startsWith("thunder")) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 		}
-		if(lastSeenVersion < 1042) {
+		if(lastSeenVersion < 1044) {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
 		}
 	}
