@@ -92,7 +92,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.BITS_PER_SAMPLE, "16");
 		put(SipConfigManager.SIP_AUDIO_MODE, "0");
 		put(SipConfigManager.MICRO_SOURCE, "1");
-		put(SipConfigManager.THREAD_COUNT, "3");
+		put(SipConfigManager.THREAD_COUNT, "0");
 		
 		put(SipConfigManager.STUN_SERVER, "stun.counterpath.com");
 		put(SipConfigManager.TURN_SERVER, "");

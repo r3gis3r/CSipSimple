@@ -157,6 +157,7 @@ public final class SipCallSession implements Parcelable {
 		dest.writeInt(lastStatusCode);
 		dest.writeString(mediaSecureInfo);
 		dest.writeLong(connectStart);
+		dest.writeInt(mediaSecure?1:0);
 	}
 
 	public void readFromParcel(Parcel in) {
@@ -171,6 +172,7 @@ public final class SipCallSession implements Parcelable {
 		lastStatusCode = in.readInt();
 		mediaSecureInfo = in.readString();
 		connectStart = in.readLong();
+		mediaSecure = (in.readInt() == 1);
 	}
 	
 

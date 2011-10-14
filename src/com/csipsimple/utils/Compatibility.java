@@ -522,7 +522,6 @@ public class Compatibility {
 			prefWrapper.setPreferenceStringValue(SipConfigManager.SIP_AUDIO_MODE, guessInCallMode());
 		}
 		if(lastSeenVersion < 575) {
-			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "3");
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround());
 
 			if(lastSeenVersion > 0) {
@@ -603,18 +602,17 @@ public class Compatibility {
 			prefWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_NB, "0");
 			
 		}
-		if(lastSeenVersion < 1001) {
-			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
-		}
 		if(lastSeenVersion < 1006) {
 			// Add U8100 to list of device that require mode api
 			if( android.os.Build.DEVICE.equalsIgnoreCase("U8100") ) {
 				prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 			}
-			
 		}
 		if(lastSeenVersion < 1033 &&  android.os.Build.PRODUCT.toLowerCase().startsWith("thunder")) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+		}
+		if(lastSeenVersion < 1042) {
+			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
 		}
 	}
 
