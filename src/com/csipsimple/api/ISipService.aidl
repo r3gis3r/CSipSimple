@@ -99,6 +99,8 @@ interface ISipService{
 	void setEchoCancellation(boolean on);
 	void adjustVolume(in SipCallSession callInfo, int direction, int flags);
 	MediaState getCurrentMediaState();
+	int startLoopbackTest();
+	int stopLoopbackTest();
 	
 	// Record calls
 	void startRecording(int callId);

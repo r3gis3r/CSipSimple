@@ -199,7 +199,7 @@ public class MainPrefs extends ListActivity {
 						R.drawable.ic_wizard_expert);
 		menu.add(Menu.NONE, MENU_RESET_VIEW, Menu.NONE, R.string.restore_default).setIcon(
 				android.R.drawable.ic_menu_revert);
-		menu.add(Menu.NONE, MENU_TEST_AUDIO, Menu.NONE, "Test audio").setIcon(R.drawable.ic_prefs_media);
+		menu.add(Menu.NONE, MENU_TEST_AUDIO, Menu.NONE, R.string.test_audio).setIcon(R.drawable.ic_prefs_media);
 		return super.onCreateOptionsMenu(menu);
 	}
 	

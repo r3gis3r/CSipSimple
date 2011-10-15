@@ -88,9 +88,9 @@
                  <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-		<activity android:name="com.csipsimple.ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
-		<activity android:name="com.csipsimple.ui.prefs.PrefsSecurity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
-		<activity android:name="com.csipsimple.ui.prefs.AudioTester" android:theme="@style/CupcakeDialog" android:screenOrientation="portrait"></activity>
+		<activity android:name="com.csipsimple.ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation" />
+		<activity android:name="com.csipsimple.ui.prefs.PrefsSecurity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation" />
+		<activity android:name="com.csipsimple.ui.prefs.AudioTester" android:theme="@style/CupcakeDialog" android:screenOrientation="portrait" android:label="@string/test_audio"/>
 		
 
 		<!-- Wizards -->

@@ -65,7 +65,9 @@ public final class SipManager {
 	
 	// Constants
 	public static final int SUCCESS = 0;
-	public static final int CURRENT_API = 1001;
+	public static final int ERROR_CURRENT_NETWORK = 10;
+	
+	public static final int CURRENT_API = 1002;
 	
 	public static boolean isApiCompatible(ISipService service) {
 		if(service != null) {

@@ -29,6 +29,8 @@ import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.pjsip.pjsua.pjsua;
+
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -305,7 +307,7 @@ public class SipService extends Service {
 			};
 			getExecutor().execute(action);
 			//return (Integer) action.getResult();
-			return 0;
+			return SipManager.SUCCESS;
 		}
 
 		/**
@@ -328,7 +330,7 @@ public class SipService extends Service {
 			getExecutor().execute(action);
 			//return (Integer) action.getResult();
 			
-			return 0;
+			return SipManager.SUCCESS;
 		}
 		
 
@@ -596,6 +598,40 @@ public class SipService extends Service {
 			
 			getExecutor().execute(action);
 			return (String) action.getResult();
+		}
+
+		@Override
+		public int startLoopbackTest() throws RemoteException {
+			if(pjService == null) {
+				return SipManager.ERROR_CURRENT_NETWORK;
+			}
+			SipRunnable action = new SipRunnable() {
+				
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjsua.conf_connect(0, 0);
+				}
+			};
+			
+			getExecutor().execute(action);
+			return SipManager.SUCCESS;
+		}
+
+		@Override
+		public int stopLoopbackTest() throws RemoteException {
+			if(pjService == null) {
+				return SipManager.ERROR_CURRENT_NETWORK;
+			}
+			SipRunnable action = new SipRunnable() {
+				
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjsua.conf_disconnect(0, 0);
+				}
+			};
+			
+			getExecutor().execute(action);
+			return SipManager.SUCCESS;
 		}
 
 		
