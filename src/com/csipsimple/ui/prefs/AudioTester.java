@@ -50,9 +50,9 @@ public class AudioTester extends Activity {
 		
 		addContentView(statusTextView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 	}
-	
+
+	private ISipService service;
 	private ServiceConnection connection = new ServiceConnection(){
-		private ISipService service;
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 			service = ISipService.Stub.asInterface(arg1);
@@ -94,6 +94,13 @@ public class AudioTester extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		if(service != null) {
+			try {
+				service.stopLoopbackTest();
+			} catch (RemoteException e) {
+				Log.e(THIS_FILE, "Error in test", e);
+			}
+		}
 		unbindService(connection);
 	}
 	
