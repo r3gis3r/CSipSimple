@@ -297,7 +297,7 @@ public class Compatibility {
 	
 	private static void resetCodecsSettings(PreferencesWrapper preferencesWrapper) {
 		//Disable iLBC if not armv7
-	//	boolean supportFloating = getCpuAbi().equalsIgnoreCase("armeabi-v7a");
+		boolean supportFloating = getCpuAbi().equalsIgnoreCase("armeabi-v7a");
 		
 		
 		//For Narrowband
@@ -328,7 +328,7 @@ public class Compatibility {
 		preferencesWrapper.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB, "219");
 		preferencesWrapper.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB, "220");
 		preferencesWrapper.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
-		preferencesWrapper.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB, "235");
+		preferencesWrapper.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB, supportFloating ? "235" : "0");
 		preferencesWrapper.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB, "0");
 		preferencesWrapper.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,  "0"); /* Disable by default */
 		preferencesWrapper.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_WB, "0");
