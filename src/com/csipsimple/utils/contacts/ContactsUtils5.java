@@ -300,29 +300,34 @@ public class ContactsUtils5 extends ContactsWrapper {
 		//TODO : throw error if holders length != correct length
 		
 		Uri uri = Uri.withAppendedPath(ContactsContract.Data.CONTENT_URI, "");
+		
+		String query = Contacts.DISPLAY_NAME + " IS NOT NULL "
+				+" AND "
+				+ "("
+					// Has phone number
+					+ "("+ ContactsContract.Data.MIMETYPE+ "='"+ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE+"' AND "+ContactsContract.CommonDataKinds.Phone.NUMBER+" IS NOT NULL ) "
+					// Sip uri
+					+ (Compatibility.isCompatible(9)? " OR " + ContactsContract.Data.MIMETYPE+ "='"+GINGER_SIP_TYPE+"'":"")
+					//Sip IM custo
+					+ " OR ("
+						
+							+ ContactsContract.Data.MIMETYPE+ "='"+ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE+"' "
+							+" AND "+ ContactsContract.CommonDataKinds.Im.PROTOCOL + "=" + ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL
+							+" AND "+ ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL + "='sip'" 
+					+")"
+				+ ")";
+		if(!Compatibility.isCompatible(14)) {
+			query += ") GROUP BY ( "+RawContacts.CONTACT_ID;
+		}else {
+			//query += ")) GROUP BY (( "+RawContacts.CONTACT_ID;
+		}
+		
 		Cursor resCursor = ctxt.managedQuery(uri, 
 				new String[] {
 					ContactsContract.Data._ID,
 			    	RawContacts.CONTACT_ID,
 			        Contacts.DISPLAY_NAME
-			    },
-				Contacts.DISPLAY_NAME + " IS NOT NULL "
-					+" AND "
-					+ "("
-						// Has phone number
-						+ "("+ ContactsContract.Data.MIMETYPE+ "='"+ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE+"' AND "+ContactsContract.CommonDataKinds.Phone.NUMBER+" IS NOT NULL ) "
-						// Sip uri
-						+ (Compatibility.isCompatible(9)? " OR " + ContactsContract.Data.MIMETYPE+ "='"+GINGER_SIP_TYPE+"'":"")
-						//Sip IM custo
-						+ " OR ("
-							
-								+ ContactsContract.Data.MIMETYPE+ "='"+ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE+"' "
-								+" AND "+ ContactsContract.CommonDataKinds.Im.PROTOCOL + "=" + ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL
-								+" AND "+ ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL + "='sip'" 
-						+")"
-					+ ")"
-				+") GROUP BY ( "+RawContacts.CONTACT_ID
-					, 
+			    }, query, 
 				null, 
 				Contacts.DISPLAY_NAME + " ASC");
 		return new ContactCursorAdapter(ctxt, 
