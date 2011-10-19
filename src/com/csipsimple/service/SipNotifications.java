@@ -17,6 +17,8 @@
  */
 package com.csipsimple.service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import android.app.Notification;
@@ -41,6 +43,7 @@ import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.SipMessage;
 import com.csipsimple.utils.CustomDistribution;
+import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.RegistrationNotification;
 
 public class SipNotifications {
@@ -64,6 +67,7 @@ public class SipNotifications {
 		context = aContext;
 		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
+	    
 		if(!isInit) {
 			cancelAll();
 			cancelCalls();
@@ -71,10 +75,112 @@ public class SipNotifications {
 		}
 	}
 	
+	
+	// Foreground api
+	
+	private static final Class<?>[] mSetForegroundSignature = new Class[] {
+	    boolean.class};
+	private static final Class<?>[] mStartForegroundSignature = new Class[] {
+	    int.class, Notification.class};
+	private static final Class<?>[] mStopForegroundSignature = new Class[] {
+	    boolean.class};
+	private static final String THIS_FILE = "Notifications";
+
+	private Method mSetForeground;
+	private Method mStartForeground;
+	private Method mStopForeground;
+	private Object[] mSetForegroundArgs = new Object[1];
+	private Object[] mStartForegroundArgs = new Object[2];
+	private Object[] mStopForegroundArgs = new Object[1];
+
+	void invokeMethod(Method method, Object[] args) {
+	    try {
+	        method.invoke(context, args);
+	    } catch (InvocationTargetException e) {
+	        // Should not happen.
+	        Log.w(THIS_FILE, "Unable to invoke method", e);
+	    } catch (IllegalAccessException e) {
+	        // Should not happen.
+	        Log.w(THIS_FILE, "Unable to invoke method", e);
+	    }
+	}
+
+	/**
+	 * This is a wrapper around the new startForeground method, using the older
+	 * APIs if it is not available.
+	 */
+	void startForegroundCompat(int id, Notification notification) {
+	    // If we have the new startForeground API, then use it.
+	    if (mStartForeground != null) {
+	        mStartForegroundArgs[0] = Integer.valueOf(id);
+	        mStartForegroundArgs[1] = notification;
+	        invokeMethod(mStartForeground, mStartForegroundArgs);
+	        return;
+	    }
+
+	    // Fall back on the old API.
+	    mSetForegroundArgs[0] = Boolean.TRUE;
+	    invokeMethod(mSetForeground, mSetForegroundArgs);
+	    notificationManager.notify(id, notification);
+	}
+
+	/**
+	 * This is a wrapper around the new stopForeground method, using the older
+	 * APIs if it is not available.
+	 */
+	void stopForegroundCompat(int id) {
+	    // If we have the new stopForeground API, then use it.
+	    if (mStopForeground != null) {
+	        mStopForegroundArgs[0] = Boolean.TRUE;
+	        invokeMethod(mStopForeground, mStopForegroundArgs);
+	        return;
+	    }
+
+	    // Fall back on the old API.  Note to cancel BEFORE changing the
+	    // foreground state, since we could be killed at that point.
+	    notificationManager.cancel(id);
+	    mSetForegroundArgs[0] = Boolean.FALSE;
+	    invokeMethod(mSetForeground, mSetForegroundArgs);
+	}
+
+	private boolean isServiceWrapper = false;
+	public void onServiceCreate() {
+		try {
+	        mStartForeground = context.getClass().getMethod("startForeground",
+	                mStartForegroundSignature);
+	        mStopForeground = context.getClass().getMethod("stopForeground",
+	                mStopForegroundSignature);
+	        isServiceWrapper = true;
+	        return;
+	    } catch (NoSuchMethodException e) {
+	        // Running on an older platform.
+	        mStartForeground = mStopForeground = null;
+	    }
+	    try {
+	        mSetForeground = context.getClass().getMethod("setForeground",
+	                mSetForegroundSignature);
+	    } catch (NoSuchMethodException e) {
+	        throw new IllegalStateException(
+	                "OS doesn't have Service.startForeground OR Service.setForeground!");
+	    }
+	    isServiceWrapper = true;
+	}
+	
+	public void onServiceDestroy() {
+	    // Make sure our notification is gone.
+		cancelAll();
+		cancelCalls();
+	}
+	
+	
 	//Announces
 
 	//Register
 	public synchronized void notifyRegisteredAccounts(ArrayList<SipProfileState> activeAccountsInfos, boolean showNumbers) {
+		if(!isServiceWrapper) {
+			Log.e(THIS_FILE, "Trying to create a service notification from outside the service");
+			return;
+		}
 		int icon = R.drawable.sipok;
 		CharSequence tickerText = context.getString(R.string.service_ticker_registered_text);
 		long when = System.currentTimeMillis();
@@ -99,7 +205,7 @@ public class SipNotifications {
 			notification.number = activeAccountsInfos.size();
 		}
 		
-		notificationManager.notify(REGISTER_NOTIF_ID, notification);
+		startForegroundCompat(REGISTER_NOTIF_ID, notification);
 	}
 
 	// Calls
@@ -240,7 +346,11 @@ public class SipNotifications {
 	
 	// Cancels
 	public void cancelRegisters() {
-		notificationManager.cancel(REGISTER_NOTIF_ID);
+		if(!isServiceWrapper) {
+			Log.e(THIS_FILE, "Trying to cancel a service notification from outside the service");
+			return;
+		}
+	    stopForegroundCompat(REGISTER_NOTIF_ID);
 	}
 	
 	public void cancelCalls() {

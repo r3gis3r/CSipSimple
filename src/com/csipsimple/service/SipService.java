@@ -986,6 +986,7 @@ public class SipService extends Service {
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		notificationManager = new SipNotifications(this);
+		notificationManager.onServiceCreate();
 		sipWakeLock = new SipWakeLock((PowerManager) getSystemService(Context.POWER_SERVICE));
 		
 		
@@ -1009,7 +1010,7 @@ public class SipService extends Service {
 		super.onDestroy();
 		Log.i(THIS_FILE, "Destroying SIP Service");
 		unregisterBroadcasts();
-		
+		notificationManager.onServiceDestroy();
 		getExecutor().execute(new FinalizeDestroyRunnable());
 	}
 	
