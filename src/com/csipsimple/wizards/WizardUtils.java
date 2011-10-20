@@ -46,6 +46,7 @@ import com.csipsimple.wizards.impl.BroadVoice;
 import com.csipsimple.wizards.impl.Broadsoft;
 import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
+import com.csipsimple.wizards.impl.Cellip;
 import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.DvcNg;
 import com.csipsimple.wizards.impl.EasyBell;
@@ -501,6 +502,12 @@ public class WizardUtils {
 					new Locale("RU", "ru"), locale("ru_RU")
 					}, false, false, 
 					Sipnet.class));
+			WIZARDS_DICT.put("CELLIP", new WizardInfo("CELLIP", "Cellip", 
+					R.drawable.ic_wizard_cellip, 10, 
+					new Locale[]{
+					new Locale("sv")
+					}, false, false, 
+					Cellip.class));
 			
 			
 		}else {
