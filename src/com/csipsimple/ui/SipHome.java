@@ -168,6 +168,7 @@ public class SipHome extends TabActivity {
 		}
 		
 		selectTabWithAction(getIntent());
+		Log.setLogLevel(prefWrapper.getLogLevel());
 		
 		// Check for gingerbread warnings
 		/*

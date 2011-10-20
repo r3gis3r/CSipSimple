@@ -40,6 +40,7 @@ import com.csipsimple.utils.Theme;
 public class Dialpad extends LinearLayout implements OnClickListener {
 
 	OnDialKeyListener onDialKeyListener;
+	private final static String THIS_FILE = "Dialpad";
 	
 	private static final Map<Integer, int[]> digitsButtons = new HashMap<Integer, int[]>(){
 		private static final long serialVersionUID = -6640726621906396734L;
@@ -57,6 +58,24 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 		put(R.id.button9, new int[] {ToneGenerator.TONE_DTMF_9, KeyEvent.KEYCODE_9});
 		put(R.id.buttonpound, new int[] {ToneGenerator.TONE_DTMF_P, KeyEvent.KEYCODE_POUND});
 		put(R.id.buttonstar, new int[] {ToneGenerator.TONE_DTMF_S, KeyEvent.KEYCODE_STAR});
+	}};
+	
+	private static final Map<Integer, String> digitsNames = new HashMap<Integer, String>(){
+		private static final long serialVersionUID = 185911971590818960L;
+
+	{
+		put(R.id.button0, "0");
+		put(R.id.button1, "1");
+		put(R.id.button2, "2");
+		put(R.id.button3, "3");
+		put(R.id.button4, "4");
+		put(R.id.button5, "5");
+		put(R.id.button6, "6");
+		put(R.id.button7, "7");
+		put(R.id.button8, "8");
+		put(R.id.button9, "9");
+		put(R.id.buttonpound, "pound");
+		put(R.id.buttonstar, "star");
 	}};
 	
 	/**
@@ -121,23 +140,33 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 	
 
 	public void applyTheme(Theme t) {
-		Log.d("theme", "Theming in progress");
-		
+		Log.d(THIS_FILE, "Theming in progress");
 		for(int buttonId : digitsButtons.keySet()) {
+			
+			ImageButton b = (ImageButton) findViewById(buttonId);
+			
+			// We have to reload for each button because std share state else
 			Drawable pressed = t.getDrawableResource("btn_dial_pressed");
 			Drawable focused = t.getDrawableResource("btn_dial_selected");
 			if(focused == null) {
 				focused = pressed;
 			}
 			Drawable normal = t.getDrawableResource("btn_dial_normal");
-			
+			StateListDrawable std = null;
 			if(pressed != null && focused != null && normal != null) {
-				StateListDrawable std = new StateListDrawable();
+				std = new StateListDrawable();
 				std.addState(new int[] {android.R.attr.state_pressed}, pressed);
 				std.addState(new int[] {android.R.attr.state_focused}, focused);
 				std.addState(new int[] {}, normal);
-				ImageButton b = (ImageButton) findViewById(buttonId);
+			}
+			
+			
+			if(std != null) {
 				b.setBackgroundDrawable(std);
+			}
+			Drawable src = t.getDrawableResource("dial_num_"+digitsNames.get(buttonId));
+			if(src != null) {
+				b.setImageDrawable(src);
 			}
 		}
 		

@@ -31,6 +31,8 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ToneGenerator;
 import android.net.Uri;
@@ -273,8 +275,14 @@ public class Dialer extends Activity implements OnClickListener, OnLongClickList
 					t.applyBackgroundDrawable(findViewById(R.id.vmButton), "btn_dial_action_left_normal");
 					
 					//Bg ... to be done
-					t.applyBackgroundDrawable(digitDialer, "dialpad_bg");
-					
+					Drawable bg = t.getDrawableResource("dialpad_bg");
+					if(bg != null) {
+						if(bg instanceof BitmapDrawable) {
+							BitmapDrawable dbg = (BitmapDrawable) bg;
+							dbg.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+						}
+						digitDialer.setBackgroundDrawable(bg);
+					}
 					
 					Drawable dAct = t.getDrawableResource("btn_dial_textfield_activated");
 					Drawable dEmpt = t.getDrawableResource("btn_dial_textfield_normal");
