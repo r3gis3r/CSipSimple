@@ -84,6 +84,7 @@ import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Pozitel;
 import com.csipsimple.wizards.impl.Sapo;
+import com.csipsimple.wizards.impl.Sbohempevnalinko;
 import com.csipsimple.wizards.impl.Scarlet;
 import com.csipsimple.wizards.impl.Sip2Sip;
 import com.csipsimple.wizards.impl.SipCel;
@@ -508,6 +509,12 @@ public class WizardUtils {
 					new Locale("sv")
 					}, false, false, 
 					Cellip.class));
+			WIZARDS_DICT.put("SBOHEMPEVNALINKO", new WizardInfo("SBOHEMPEVNALINKO", "sbohempevnalinko.cz", 
+					R.drawable.ic_wizard_sbohempevnalinko, 19, 
+					new Locale[]{
+					locale("cs_CZ")
+					}, false, false, 
+					Sbohempevnalinko.class));
 			
 			
 		}else {
