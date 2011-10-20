@@ -277,7 +277,7 @@ public class UAStateReceiver extends Callback {
 						
 						// Failure on registration
 						// TODO : refine cases ? 403 only? 
-						if(pState.getStatusCode() != 200
+						if(pState.getStatusCode() > 200
 								&& !pendingCleanup.contains(accountId) ) {
 							Log.w(THIS_FILE, "Error while registering for "+accountId+" "+
 										pState.getStatusCode()+" "+pState.getStatusText());
