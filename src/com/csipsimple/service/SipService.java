@@ -991,6 +991,7 @@ public class SipService extends Service {
 		
 		
 		if(!prefsWrapper.hasAlreadySetupService()) {
+			Log.w(THIS_FILE, "RESET SETTINGS !!!!");
 			prefsWrapper.resetAllDefaultValues();
 			prefsWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP_SERVICE, true);
 		}

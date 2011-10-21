@@ -38,7 +38,8 @@
 				<action android:name="com.csipsimple.service.SipConfiguration" />
 			</intent-filter>
 		</service>
-		<receiver android:name="com.csipsimple.service.DeviceStateReceiver">
+		<receiver android:name="com.csipsimple.service.DeviceStateReceiver"
+		    android:process=":sipStack">
 			<intent-filter>
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
 				<action android:name="android.intent.action.ANY_DATA_STATE"></action>

@@ -117,7 +117,6 @@ public class TimerWrapper extends BroadcastReceiver {
 	private int doSchedule(int entry, int entryId, int intervalMs) {
 		PendingIntent pendingIntent = getPendingIntentForTimer(entry, entryId);
 		
-		long firstTime = SystemClock.elapsedRealtime() + intervalMs;
 		//Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
 		
 		int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
@@ -127,9 +126,14 @@ public class TimerWrapper extends BroadcastReceiver {
 		}
 		// Cancel previous reg anyway
 		alarmManager.cancel(pendingIntent);
+		// Clamp min
+		if(intervalMs < 10) {
+			intervalMs = 10;
+		}
+		
+		long firstTime = SystemClock.elapsedRealtime() + intervalMs;
 		// Push next
 		alarmManager.set(type, firstTime, pendingIntent);
-		
 		return 1;
 	}
 	
