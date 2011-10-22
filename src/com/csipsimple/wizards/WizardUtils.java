@@ -58,6 +58,7 @@ import com.csipsimple.wizards.impl.FastVoip;
 import com.csipsimple.wizards.impl.Fayn;
 import com.csipsimple.wizards.impl.FreephoneLineCa;
 import com.csipsimple.wizards.impl.Freephonie;
+import com.csipsimple.wizards.impl.Gradwell;
 import com.csipsimple.wizards.impl.IPComms;
 import com.csipsimple.wizards.impl.IPshka;
 import com.csipsimple.wizards.impl.ITTelenet;
@@ -515,6 +516,12 @@ public class WizardUtils {
 					locale("cs_CZ")
 					}, false, false, 
 					Sbohempevnalinko.class));
+			WIZARDS_DICT.put("GRADWELL", new WizardInfo("GRADWELL", "Gradwell", 
+					R.drawable.ic_wizard_gradwell, 19, 
+					new Locale[]{
+					Locale.UK
+					}, false, false, 
+					Gradwell.class));
 			
 			
 		}else {
