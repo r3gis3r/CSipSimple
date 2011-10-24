@@ -75,6 +75,8 @@ public class PrefsNetwork extends GenericPrefs {
 			hidePreference("transport", SipConfigManager.DSCP_VAL);
 			hidePreference("transport", SipConfigManager.USER_AGENT);
 			
+			hidePreference("transport", SipConfigManager.TIMER_MIN_SE);
+			hidePreference("transport", SipConfigManager.TIMER_SESS_EXPIRES);
 		}
 	}
 

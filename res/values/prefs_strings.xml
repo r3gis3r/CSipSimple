@@ -85,7 +85,10 @@
 <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>
 <string name="force_no_update">Force no update</string>
 <string name="force_no_update_desc">Some buggy remote party announce to support UPDATE method while it does not, this option force the legacy way to manage UPDATE/re-INVITE</string>
-
+<string name="timer_min_se">Minimum session expiration</string>
+<string name="timer_min_se_desc">Minimum session expiration period, in seconds. Must not be lower than 90.</string>
+<string name="timer_sess_expires">Session expiration period</string>
+<string name="timer_sess_expires_desc">Session expiration period, in seconds. Must not be lower than min_se.</string>
 
 <!-- Security -->
 <string name="tls">TLS</string>

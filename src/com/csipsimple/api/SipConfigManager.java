@@ -95,8 +95,9 @@ public class SipConfigManager {
 	public static final String OVERRIDE_NAMESERVER = "override_nameserver";
 	public static final String USE_COMPACT_FORM = "use_compact_form";
 	public static final String USER_AGENT = "user_agent"; 
-	public static final String KEEP_ALIVE_USE_WAKE = "ka_use_wake";
 	public static final String FORCE_NO_UPDATE = "force_no_update";
+	public static final String TIMER_MIN_SE = "timer_min_se";
+	public static final String TIMER_SESS_EXPIRES = "timer_sess_expires";
 	
 	// SECURE
 	public static final String ENABLE_TLS = "enable_tls";

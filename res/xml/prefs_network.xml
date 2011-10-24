@@ -57,16 +57,13 @@
 			android:summary="@string/keep_alive_interval_desc"
 			android:numeric="signed"
 			android:defaultValue="40"/>
-		<CheckBoxPreference android:summary="@string/ka_use_wake_desc"
-			android:key="ka_use_wake" android:title="@string/ka_use_wake"
-			android:defaultValue="true"/>
 		
 		<!--  Media transport -->
 		<EditTextPreference android:key="network_rtp_port"
 			android:title="@string/network_rtp_port"
 			android:numeric="integer"
 			android:summary="@string/network_rtp_port_desc"
-			android:defaultValue="4000"></EditTextPreference>
+			android:defaultValue="4000" />
 	
 		
 		<CheckBoxPreference android:title="@string/use_ipv6"
@@ -101,6 +98,19 @@
 			android:title="@string/user_agent"
 			android:summary="@string/user_agent_desc"
 			android:defaultValue="CSipSimple"/>
+		
+		<!-- Timers -->
+		
+		<EditTextPreference android:key="timer_min_se"
+			android:title="@string/timer_min_se"
+			android:summary="@string/timer_min_se_desc"
+			android:numeric="signed"
+			android:defaultValue="90"/>
+		<EditTextPreference android:key="timer_sess_expires"
+			android:title="@string/timer_sess_expires"
+			android:summary="@string/timer_sess_expires_desc"
+			android:numeric="signed"
+			android:defaultValue="1800"/>
 	</PreferenceCategory>
 	
 	<PreferenceScreen android:title="@string/secure_transport" android:summary="@string/secure_transport_desc" android:key="secure_transport">

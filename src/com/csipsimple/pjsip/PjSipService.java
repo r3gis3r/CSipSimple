@@ -31,6 +31,7 @@ import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_qos_type;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
+import org.pjsip.pjsua.pjsip_timer_setting;
 import org.pjsip.pjsua.pjsip_tls_setting;
 import org.pjsip.pjsua.pjsip_transport_type_e;
 import org.pjsip.pjsua.pjsua;
@@ -220,7 +221,15 @@ public class PjSipService {
 				cfg.setThread_cnt(0);
 				cfg.setUse_srtp(getUseSrtp());
 				cfg.setSrtp_secure_signaling(0);
-
+				
+				pjsip_timer_setting timerSetting = cfg.getTimer_setting();
+				int minSe = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TIMER_MIN_SE);
+				int sessExp = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TIMER_SESS_EXPIRES);
+				if(minSe <= sessExp && minSe >= 90) {
+					timerSetting.setMin_se(minSe);
+					timerSetting.setSess_expires(sessExp);
+					cfg.setTimer_setting(timerSetting);
+				}
 				// DNS
 				if (prefsWrapper.enableDNSSRV() && !prefsWrapper.useIPv6()) {
 					pj_str_t[] nameservers = getNameservers();

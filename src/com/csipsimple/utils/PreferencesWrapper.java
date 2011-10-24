@@ -70,6 +70,8 @@ public class PreferencesWrapper {
 		put(SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE, "40");
 		put(SipConfigManager.RTP_PORT, "4000");
 		put(SipConfigManager.OVERRIDE_NAMESERVER, "");
+		put(SipConfigManager.TIMER_MIN_SE, "90");
+		put(SipConfigManager.TIMER_SESS_EXPIRES, "1800");
 		
 		put(SipConfigManager.SND_AUTO_CLOSE_TIME, "1");
 		put(SipConfigManager.ECHO_CANCELLATION_TAIL, "200");
@@ -136,7 +138,6 @@ public class PreferencesWrapper {
 		put("use_gprs_out", false);
 		put("use_edge_in", false);
 		put("use_edge_out", false);
-		put(SipConfigManager.KEEP_ALIVE_USE_WAKE, true);
 		put(SipConfigManager.FORCE_NO_UPDATE, true);
 		
 		

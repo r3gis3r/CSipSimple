@@ -371,11 +371,12 @@ public class SipNotifications {
 	
 	
 	public void cancelAll() {
-		//notificationManager.cancelAll();
 		//Do not cancel calls notification since it's possible that there is still an ongoing call.
+		if(isServiceWrapper) {
+			cancelRegisters();
+		}
 		cancelMessages();
 		cancelMissedCalls();
-		cancelRegisters();
 		cancelVoicemails();
 	}
 
