@@ -32,7 +32,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class PjSipAccount {
 	
@@ -198,7 +198,7 @@ public class PjSipAccount {
 		}
 		
 		//Caller id
-		PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
+		PreferencesProviderWrapper prefs = new PreferencesProviderWrapper(ctxt);
 		String defaultCallerid = prefs.getPreferenceStringValue(SipConfigManager.DEFAULT_CALLER_ID);
 		
 		

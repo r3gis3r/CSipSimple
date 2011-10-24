@@ -65,7 +65,7 @@ import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.CallHandler.onLoadListener;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class OutgoingCallChooser extends ListActivity {
 	
@@ -115,13 +115,15 @@ public class OutgoingCallChooser extends ListActivity {
 	};
 	
 	private Integer accountToCallTo = null;
-	private PreferencesWrapper prefsWrapper;
+	private PreferencesProviderWrapper prefsWrapper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(THIS_FILE, "Starting ");
 
 		super.onCreate(savedInstanceState);
+		
+		prefsWrapper = new PreferencesProviderWrapper(this);
 		
 		// First step is to retrieve the number that was asked to us.
 		number = PhoneNumberUtils.getNumberFromIntent(getIntent(), this);
@@ -171,7 +173,6 @@ public class OutgoingCallChooser extends ListActivity {
     	if(database == null) {
     		database = new DBAdapter(this);
     	}
-		prefsWrapper = new PreferencesWrapper(this);
     	
     	
 		// Need full selector, finish layout
@@ -519,8 +520,6 @@ public class OutgoingCallChooser extends ListActivity {
 	
 	private void finishServiceIfNeeded() {
 		if(service != null) {
-			PreferencesWrapper prefsWrapper = new PreferencesWrapper(this);
-		
 			if( ! prefsWrapper.isValidConnectionForIncoming()) {
 				try {
 					service.forceStopService();

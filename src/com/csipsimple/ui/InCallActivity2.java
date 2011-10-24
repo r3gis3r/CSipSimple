@@ -258,7 +258,8 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         if(proximitySensor != null && powerManager != null) {
 	        WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 			WifiInfo winfo = wman.getConnectionInfo();
-			if(winfo == null || !prefsWrapper.keepAwakeInCall()) {
+			if(winfo == null || 
+					!prefsWrapper.getPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL) ) {
 				// Try to use powermanager proximity sensor
 				try {
 					Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");

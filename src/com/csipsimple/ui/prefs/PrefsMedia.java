@@ -57,10 +57,9 @@ public class PrefsMedia extends GenericPrefs {
 			hidePreference("audio_volume", SipConfigManager.SND_BT_SPEAKER_LEVEL);
 			
 			hidePreference("audio_volume", SipConfigManager.USE_SOFT_VOLUME);
-		//	hidePreference("audio_volume", "snd_stream_level");
 			
-			hidePreference("perfs", SipConfigManager.THREAD_COUNT);
-			hidePreference(null, "perfs");
+			//hidePreference("perfs", SipConfigManager.THREAD_COUNT);
+			//hidePreference(null, "perfs");
 			
 			hidePreference("misc", SipConfigManager.SND_AUTO_CLOSE_TIME);
 			hidePreference("misc", SipConfigManager.USE_ROUTING_API);

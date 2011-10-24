@@ -45,6 +45,8 @@ import org.pjsip.pjsua.pjsua_transport_config;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -61,7 +63,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.ToCall;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.TimerWrapper;
 
 
@@ -74,7 +76,7 @@ public class PjSipService {
 	private boolean hasSipStack = false;
 	private boolean sipStackIsCorrupted = false;
 	private Integer udpTranportId, tcpTranportId, tlsTransportId;
-	public PreferencesWrapper prefsWrapper;
+	public PreferencesProviderWrapper prefsWrapper;
 	private PjStreamDialtoneGenerator dialtoneGenerator;
 
 	private Integer hasBeenHoldByGSM = null;
@@ -96,7 +98,7 @@ public class PjSipService {
 
 	public void setService(SipService aService) {
 		service = aService;
-		prefsWrapper = service.prefsWrapper;
+		prefsWrapper = service.getPrefs();
 	}
 
 	public boolean isCreated() {
@@ -213,7 +215,9 @@ public class PjSipService {
 				pjsua.config_default(cfg);
 				cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
 				cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent(service)));
-				cfg.setThread_cnt(prefsWrapper.getThreadCount());
+				// With new timer implementation, thread count of pjsip can be 0 
+				// it will use less CPU since now thread are launched by alarmManager
+				cfg.setThread_cnt(0);
 				cfg.setUse_srtp(getUseSrtp());
 				cfg.setSrtp_secure_signaling(0);
 
@@ -230,7 +234,7 @@ public class PjSipService {
 				// STUN
 				int isStunEnabled = prefsWrapper.getStunEnabled();
 				if (isStunEnabled == 1) {
-					String[] servers = prefsWrapper.getStunServer().split(",");
+					String[] servers = prefsWrapper.getPreferenceStringValue(SipConfigManager.STUN_SERVER).split(",");
 					cfg.setStun_srv_cnt(servers.length);
 					stunServers = cfg.getStun_srv();
 					for (String server : servers) {
@@ -255,12 +259,12 @@ public class PjSipService {
 				mediaCfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
 				// Echo cancellation
 				mediaCfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
-				mediaCfg.setEc_options(prefsWrapper.getEchoMode());
-				mediaCfg.setNo_vad(prefsWrapper.getNoVad());
+				mediaCfg.setEc_options(prefsWrapper.getPreferenceIntegerValue(SipConfigManager.ECHO_MODE));
+				mediaCfg.setNo_vad(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_VAD) ?0:1);
 				mediaCfg.setQuality(prefsWrapper.getMediaQuality());
 				mediaCfg.setClock_rate(prefsWrapper.getClockRate());
-				mediaCfg.setAudio_frame_ptime(prefsWrapper.getAudioFramePtime());
-				mediaCfg.setHas_ioqueue(prefsWrapper.getHasIOQueue());
+				mediaCfg.setAudio_frame_ptime(prefsWrapper.getPreferenceIntegerValue(SipConfigManager.SND_PTIME));
+				mediaCfg.setHas_ioqueue(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE)?1:0);
 				
 
 				// ICE
@@ -677,8 +681,8 @@ public class PjSipService {
 			}
 			// Set it in prefs if not already set correctly
 			prefsWrapper.setCodecList(codecs);
-			prefsWrapper.setLibCapability(PreferencesWrapper.LIB_CAP_TLS,  (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE) );
-			prefsWrapper.setLibCapability(PreferencesWrapper.LIB_CAP_SRTP, (pjsua.can_use_srtp() == pjsuaConstants.PJ_TRUE) );
+			prefsWrapper.setLibCapability(PreferencesProviderWrapper.LIB_CAP_TLS,  (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE) );
+			prefsWrapper.setLibCapability(PreferencesProviderWrapper.LIB_CAP_SRTP, (pjsua.can_use_srtp() == pjsuaConstants.PJ_TRUE) );
 		}
 
 	}
@@ -687,16 +691,22 @@ public class PjSipService {
 		if (codecs != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("Added codecs : ");
-			for (String codec : codecs) {
-				if (prefsWrapper.hasCodecPriority(codec)) {
-					short aPrio = prefsWrapper.getCodecPriority(codec, "130");
+			ConnectivityManager cm = ((ConnectivityManager) service.getSystemService(Context.CONNECTIVITY_SERVICE));
+			NetworkInfo ni = cm.getActiveNetworkInfo();
+			if(ni != null) {
+				String currentBandType = prefsWrapper.getPreferenceStringValue(SipConfigManager.getBandTypeKey(ni.getType(), ni.getSubtype()), 
+						SipConfigManager.CODEC_WB);
+				for (String codec : codecs) {
+					short aPrio = prefsWrapper.getCodecPriority(codec, currentBandType, "-1");
 					if(aPrio > 0) {
 						sb.append(codec);
 						sb.append(" (");
 						sb.append(aPrio);
 						sb.append(") - ");
 					}
-					pjsua.codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
+					if(aPrio >= 0) {
+						pjsua.codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
+					}
 				}
 			}
 			Log.d(THIS_FILE, sb.toString());
@@ -919,7 +929,7 @@ public class PjSipService {
 	public void setEchoCancellation(boolean on) throws SameThreadException {
 		if (created && userAgentReceiver != null) {
 			Log.d(THIS_FILE, "set echo cancelation " + on);
-			pjsua.set_ec(on ? prefsWrapper.getEchoCancellationTail() : 0, prefsWrapper.getEchoMode());
+			pjsua.set_ec(on ? prefsWrapper.getEchoCancellationTail() : 0, prefsWrapper.getPreferenceIntegerValue(SipConfigManager.ECHO_MODE));
 		}
 	}
 
@@ -1282,7 +1292,7 @@ public class PjSipService {
 	}
 	
 	private File getRecordFile(String remoteContact) {
-		File dir = PreferencesWrapper.getRecordsFolder();
+		File dir = PreferencesProviderWrapper.getRecordsFolder();
 	    if (dir != null){
 			Date d = new Date();
 			File file = new File(dir.getAbsoluteFile() + File.separator + sanitizeForFile(remoteContact)+ "_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".wav");

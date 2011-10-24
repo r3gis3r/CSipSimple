@@ -19,6 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class EuroTelefon extends SimpleImplementation {
@@ -47,7 +48,7 @@ public class EuroTelefon extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		// NO restart needed for this setting
-		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, PreferencesWrapper.DTMF_MODE_RTP);
+		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, PreferencesProviderWrapper.DTMF_MODE_RTP);
 	}
 	
 }

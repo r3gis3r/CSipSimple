@@ -67,7 +67,7 @@ import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Threading;
 
 public class UAStateReceiver extends Callback {
@@ -694,7 +694,7 @@ public class UAStateReceiver extends Callback {
 					}
 					
 					//If needed fill native database
-					if(pjService.prefsWrapper.useIntegrateCallLogs()) {
+					if(pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS)) {
 						//Don't add with new flag
 						cv.put(CallLog.Calls.NEW, false);
 						
@@ -938,10 +938,10 @@ public class UAStateReceiver extends Callback {
 						protected void doRun() throws SameThreadException {
 							switch(pjService.prefsWrapper.getHeadsetAction()) {
 							//TODO : add hold -
-							case PreferencesWrapper.HEADSET_ACTION_CLEAR_CALL:
+							case PreferencesProviderWrapper.HEADSET_ACTION_CLEAR_CALL:
 								pjService.callHangup(callInfo.getCallId(), 0);
 								break;
-							case PreferencesWrapper.HEADSET_ACTION_MUTE:
+							case PreferencesProviderWrapper.HEADSET_ACTION_MUTE:
 								pjService.mediaManager.toggleMute();
 								break;
 							}

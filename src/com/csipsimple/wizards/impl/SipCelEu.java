@@ -19,6 +19,7 @@ package com.csipsimple.wizards.impl;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
@@ -59,7 +60,7 @@ public class SipCelEu extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
-		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, PreferencesWrapper.DTMF_MODE_AUTO);
+		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, PreferencesProviderWrapper.DTMF_MODE_AUTO);
 		
 		
 		

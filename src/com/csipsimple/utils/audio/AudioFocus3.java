@@ -17,6 +17,7 @@
  */
 package com.csipsimple.utils.audio;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.service.HeadsetButtonReceiver;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
@@ -63,13 +64,15 @@ public class AudioFocus3 extends AudioFocusWrapper {
 	
 	private void pauseMusic() {
 		isMusicActive = audioManager.isMusicActive();
-		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
+		if(isMusicActive && 
+				service.getPrefs().getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_NATIVE_MUSIC)) {
 			service.sendBroadcast(new Intent(PAUSE_ACTION));
 		}
 	}
 	
 	private void restartMusic() {
-		if(isMusicActive && service.prefsWrapper.integrateWithMusicApp()) {
+		if(isMusicActive && 
+				service.getPrefs().getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_NATIVE_MUSIC)) {
 			service.sendBroadcast(new Intent(TOGGLEPAUSE_ACTION));
 		}
 	}

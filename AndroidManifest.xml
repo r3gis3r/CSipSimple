@@ -227,6 +227,10 @@
 			</intent-filter>
 		</receiver>
 		
+		    
+		<provider android:name="com.csipsimple.service.PreferenceProvider"
+                  android:authorities="com.csipsimple.prefs" />
+		    
 	</application>
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="9"/>
 	<uses-permission android:name="android.permission.INTERNET"/>

@@ -75,7 +75,7 @@ import com.csipsimple.ui.InCallMediaControl;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class SipService extends Service {
 
@@ -716,7 +716,7 @@ public class SipService extends Service {
 	private WakeLock wakeLock;
 	private WifiLock wifiLock;
 	private ServiceDeviceStateReceiver deviceStateReceiver;
-	public PreferencesWrapper prefsWrapper;
+	private PreferencesProviderWrapper prefsWrapper;
 	private ServicePhoneStateReceiver phoneConnectivityReceiver;
 	private TelephonyManager telephonyManager;
 	private ConnectivityManager connectivityManager;
@@ -787,7 +787,8 @@ public class SipService extends Service {
 					if (state == NetworkInfo.State.CONNECTED) {
 						Log.d(THIS_FILE, "Connectivity alert: CONNECTED " + type);
 						// Fire the event only if valid for incoming else ignore this event
-						if(prefsWrapper.isValidConnectionForIncoming() && !prefsWrapper.hasBeenQuit()) {
+						if(prefsWrapper.isValidConnectionForIncoming() && 
+								!prefsWrapper.getPreferenceBooleanValue(PreferencesProviderWrapper.HAS_BEEN_QUIT)) {
 							onChanged(type, true);
 						}
 					} else if (state == NetworkInfo.State.DISCONNECTED) {
@@ -980,7 +981,7 @@ public class SipService extends Service {
 
 		Log.i(THIS_FILE, "Create SIP Service");
 		db = new DBAdapter(this);
-		prefsWrapper = new PreferencesWrapper(this);
+		prefsWrapper = new PreferencesProviderWrapper(this);
 		Log.setLogLevel(prefsWrapper.getLogLevel());
 		
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -989,11 +990,12 @@ public class SipService extends Service {
 		notificationManager.onServiceCreate();
 		sipWakeLock = new SipWakeLock((PowerManager) getSystemService(Context.POWER_SERVICE));
 		
+		boolean hasSetup = prefsWrapper.getPreferenceBooleanValue(PreferencesProviderWrapper.HAS_ALREADY_SETUP_SERVICE, false);
+		Log.d(THIS_FILE, "Service has been setup ? "+ hasSetup);
 		
-		if(!prefsWrapper.hasAlreadySetupService()) {
-			Log.w(THIS_FILE, "RESET SETTINGS !!!!");
+		if(!hasSetup) {
+			Log.e(THIS_FILE, "RESET SETTINGS !!!!");
 			prefsWrapper.resetAllDefaultValues();
-			prefsWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP_SERVICE, true);
 		}
 		
 		// Check connectivity, else just finish itself
@@ -1307,7 +1309,8 @@ public class SipService extends Service {
 		}
 
 		// Handle status bar notification
-		if (activeAccountsInfos != null && activeAccountsInfos.size() > 0 && prefsWrapper.showIconInStatusBar()) {
+		if (activeAccountsInfos != null && activeAccountsInfos.size() > 0 && 
+				prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR)) {
 		// Testing memory / CPU leak as per issue 676
 		//	for(int i=0; i < 10; i++) {
 		//		Log.d(THIS_FILE, "Notify ...");
@@ -1335,7 +1338,7 @@ public class SipService extends Service {
 	 * 
 	 * @return the preferenceWrapper instanciated
 	 */
-	public PreferencesWrapper getPrefs() {
+	public PreferencesProviderWrapper getPrefs() {
 		// Is never null when call so ok, just not check...
 		return prefsWrapper;
 	}
@@ -1372,7 +1375,7 @@ public class SipService extends Service {
 		}
 		
 		// Add a wake lock for CPU if necessary
-		if (prefsWrapper.usePartialWakeLock()) {
+		if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_PARTIAL_WAKE_LOCK)) {
 			PowerManager pman = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			if (wakeLock == null) {
 				wakeLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.SipService");

@@ -148,6 +148,7 @@
 <string name="codecs_desc">Priority (0 is disabled)</string>
 <string name="sip_dtmf">DTMF mode</string>
 <string name="sip_dtmf_desc">How to send DTMF</string>
+
 <string name="use_soft_volume">Use software volume</string>
 <string name="use_soft_volume_desc">Use software volume instead of android volume</string>
 <string name="use_routing_api">Use routing API</string>
@@ -160,8 +161,6 @@
 <string name="use_webrtc_hack_desc">Implementation made by WebRTC team</string>
 <string name="do_focus_audio">Focus audio</string>
 <string name="do_focus_audio_desc">Disabling will result overlaps with music but may help with routing</string>
-
-
 
 <string name="micro_source">Micro source</string>
 <string name="micro_source_desc">Source for micro. Choosing the appropriate value may improve echo cancellation</string>

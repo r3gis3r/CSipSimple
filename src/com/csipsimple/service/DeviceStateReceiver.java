@@ -30,7 +30,7 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.wizards.WizardUtils;
 
 public class DeviceStateReceiver extends BroadcastReceiver {
@@ -41,7 +41,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
-		PreferencesWrapper prefWrapper = new PreferencesWrapper(context);
+		PreferencesProviderWrapper prefWrapper = new PreferencesProviderWrapper(context);
 		String intentAction = intent.getAction();
 		
 		//
@@ -63,7 +63,8 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			Log.d(THIS_FILE, ">>> Data device change detected" + intentAction);
 			
 			
-			if (prefWrapper.isValidConnectionForIncoming() && !prefWrapper.hasBeenQuit()) {
+			if (prefWrapper.isValidConnectionForIncoming() && 
+					!prefWrapper.getPreferenceBooleanValue(PreferencesProviderWrapper.HAS_BEEN_QUIT)) {
 				Log.d(THIS_FILE, "Try to start service if not already started");
 				Intent sip_service_intent = new Intent(context, SipService.class);
 				sip_service_intent.putExtra(SipService.EXTRA_DIRECT_CONNECT, false);

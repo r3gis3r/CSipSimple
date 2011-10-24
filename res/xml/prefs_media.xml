@@ -97,14 +97,15 @@
 				android:defaultValue="false"></CheckBoxPreference>
 		</PreferenceCategory>
 		
-		
+		<!-- 
 		<PreferenceCategory android:title="@string/perfs" android:key="perfs">
 			<EditTextPreference android:title="Thread count" android:key="thread_count"
 				android:summary="Number of thread allocated for the native stack"
-				android:defaultValue="3"
+				android:defaultValue="0"
 				android:numeric="signed"></EditTextPreference>
 				
 		</PreferenceCategory>
+		 -->
 		<PreferenceCategory android:title="@string/misc" android:key="misc">
 			<ListPreference android:title="@string/sip_dtmf" android:key="dtmf_mode"
 				android:summary="@string/sip_dtmf_desc"

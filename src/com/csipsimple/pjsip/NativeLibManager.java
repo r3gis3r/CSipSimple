@@ -28,7 +28,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import com.csipsimple.service.DownloadLibService;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class NativeLibManager {
 
@@ -50,7 +50,7 @@ public class NativeLibManager {
 	private static File getBundledStackLibFile(Context ctx) {
 		// To keep backward compatibility with android 3, do not use the easy way
 		if(Compatibility.isCompatible(9)) {
-			PackageInfo packageInfo = PreferencesWrapper.getCurrentPackageInfos(ctx);
+			PackageInfo packageInfo = PreferencesProviderWrapper.getCurrentPackageInfos(ctx);
 			if(packageInfo != null) {
 				
 				ApplicationInfo appInfo = packageInfo.applicationInfo;
@@ -103,7 +103,7 @@ public class NativeLibManager {
 		}
 
 		//Oups none exists.... reset version history
-		PreferencesWrapper prefs = new PreferencesWrapper(context);
+		PreferencesProviderWrapper prefs = new PreferencesProviderWrapper(context);
 		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_VERSION, "0.00-00");
 		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_ID, "");
 		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_URI, "");

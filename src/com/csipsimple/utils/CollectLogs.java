@@ -156,7 +156,7 @@ public class CollectLogs {
 		String result = "";
 		result += "Based on the GPL CSipSimple version : ";
 		
-		PackageInfo pinfo = PreferencesWrapper.getCurrentPackageInfos(ctx);
+		PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(ctx);
 		if(pinfo != null) {
 			result += pinfo.versionName + " r" + pinfo.versionCode;
 		}

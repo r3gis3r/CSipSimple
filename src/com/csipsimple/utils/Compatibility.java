@@ -500,7 +500,7 @@ public class Compatibility {
 				prefWrapper.setPreferenceFloatValue(SipConfigManager.SND_SPEAKER_LEVEL, (float) 0.2);
 			}
 			
-			if (TextUtils.isEmpty(prefWrapper.getStunServer())) {
+			if (TextUtils.isEmpty(prefWrapper.getPreferenceStringValue(SipConfigManager.STUN_SERVER))) {
 				prefWrapper.setPreferenceStringValue(SipConfigManager.STUN_SERVER, "stun.counterpath.com");
 			}
 		}
@@ -610,9 +610,6 @@ public class Compatibility {
 		}
 		if(lastSeenVersion < 1033 &&  android.os.Build.PRODUCT.toLowerCase().startsWith("thunder")) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
-		}
-		if(lastSeenVersion < 1044) {
-			prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
 		}
 	}
 

@@ -25,15 +25,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.telephony.PhoneNumberUtils;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class OutgoingCall extends BroadcastReceiver {
 
 	private static final String THIS_FILE = "Outgoing RCV";
 	private Context context;
-	private PreferencesWrapper prefsWrapper;
+	private PreferencesProviderWrapper prefsWrapper;
 	
 	public static String ignoreNext = "";
 	
@@ -57,11 +58,14 @@ public class OutgoingCall extends BroadcastReceiver {
 		
 		
 		context = aContext;
-		prefsWrapper = new PreferencesWrapper(context);
+		prefsWrapper = new PreferencesProviderWrapper(context);
 		
 		//Log.d(THIS_FILE, "act=" + action + " num=" + number + " fnum=" + full_number + " ignx=" + ignoreNext);	
 		
-		if (!prefsWrapper.useIntegrateDialer() || ignoreNext.equalsIgnoreCase(number) || action == null) {
+		if ( !prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, true) || 
+				ignoreNext.equalsIgnoreCase(number) || 
+				action == null) {
+			
 			Log.d(THIS_FILE, "Our selector disabled, or Mobile chosen in our selector, send to tel");
 			ignoreNext = "";
 			setResultData(number);

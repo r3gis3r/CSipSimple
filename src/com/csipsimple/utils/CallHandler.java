@@ -36,7 +36,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
@@ -110,7 +109,7 @@ public class CallHandler {
 
 	
 	public static Integer getAccountIdForCallHandler(Context ctxt, String packageName) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctxt);
+		SharedPreferences prefs = ctxt.getSharedPreferences("handlerCache", Context.MODE_PRIVATE);
 		
 		int accountId = prefs.getInt(VIRTUAL_ACC_PREFIX + packageName, SipProfile.INVALID_ID);
 		if(accountId == SipProfile.INVALID_ID) {

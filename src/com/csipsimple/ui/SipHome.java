@@ -54,6 +54,7 @@ import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.IndicatorTab;
 import com.csipsimple.wizards.BasePrefsWizard;
@@ -84,9 +85,11 @@ public class SipHome extends TabActivity {
 
 	private Intent dialerIntent,calllogsIntent, messagesIntent;
 	private PreferencesWrapper prefWrapper;
-
+	private PreferencesProviderWrapper prefProviderWrapper;
+	
 	private boolean has_tried_once_to_activate_account = false;
 //	private ImageButton pickupContact;
+
 
 	
 	
@@ -94,6 +97,7 @@ public class SipHome extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		prefWrapper = new PreferencesWrapper(this);
+		prefProviderWrapper = new PreferencesProviderWrapper(this);
 		super.onCreate(savedInstanceState);
 		
 		boolean useBundle = NativeLibManager.USE_BUNDLE;
@@ -379,11 +383,11 @@ public class SipHome extends TabActivity {
 	}
 	
 	public void onBackPressed() {
-		if(prefWrapper != null) {
+		if(prefProviderWrapper != null) {
 			Log.d(THIS_FILE, "On back pressed ! ");
     		//ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
 			//if (networks.size() == 0) {
-			if( ! prefWrapper.isValidConnectionForIncoming()) {
+			if( ! prefProviderWrapper.isValidConnectionForIncoming()) {
 				disconnectAndQuit();
 				return;
 			}
@@ -432,7 +436,7 @@ public class SipHome extends TabActivity {
 			return true;
 		case CLOSE_MENU:
 			Log.d(THIS_FILE, "CLOSE");
-			if(prefWrapper.isValidConnectionForIncoming()) {
+			if(prefProviderWrapper.isValidConnectionForIncoming()) {
 				//Alert user that we will disable for all incoming calls as he want to quit
 				new AlertDialog.Builder(this)
 					.setTitle(R.string.warning)

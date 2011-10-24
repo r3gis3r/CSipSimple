@@ -22,6 +22,7 @@ import android.text.InputType;
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class Gizmo5 extends SimpleImplementation {
@@ -70,7 +71,7 @@ public class Gizmo5 extends SimpleImplementation {
 		// Add stun server
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
 		prefs.addStunServer("stun01.sipphone.com");
-		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, PreferencesWrapper.DTMF_MODE_INBAND);
+		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, PreferencesProviderWrapper.DTMF_MODE_INBAND);
 	}
 	
 
