@@ -1,0 +1,55 @@
+Index: pjsip/sources/pjmedia/include/pjmedia-audiodev/audiodev.h
+===================================================================
+--- pjsip.orig/sources/pjmedia/include/pjmedia-audiodev/audiodev.h	2011-10-25 11:16:33.308022316 +0200
++++ pjsip/sources/pjmedia/include/pjmedia-audiodev/audiodev.h	2011-10-25 11:17:45.828381931 +0200
+@@ -412,6 +412,11 @@
+      */
+     unsigned ec_tail_ms;
+ 
++    /**
++     * Set software echo canceller algorithm. This setting is optional. default value is 0
++    */
++    unsigned ec_options;
++
+     /** 
+      * Enable/disable PLC. This setting is optional, and will only be used
+      * if PJMEDIA_AUD_DEV_CAP_PLC is set in the flags.
+Index: pjsip/sources/pjmedia/src/pjmedia/sound_port.c
+===================================================================
+--- pjsip.orig/sources/pjmedia/src/pjmedia/sound_port.c	2011-10-25 11:19:40.612951114 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/sound_port.c	2011-10-25 11:21:24.809467796 +0200
+@@ -272,12 +272,13 @@
+ 	if ((snd_port->aud_param.flags & PJMEDIA_AUD_DEV_CAP_EC_TAIL)==0) {
+ 	    snd_port->aud_param.flags |= PJMEDIA_AUD_DEV_CAP_EC_TAIL;
+ 	    snd_port->aud_param.ec_tail_ms = AEC_TAIL;
++	    snd_port->aud_param.ec_options = 0;
+ 	    PJ_LOG(4,(THIS_FILE, "AEC tail is set to default %u ms",
+ 				 snd_port->aud_param.ec_tail_ms));
+ 	}
+ 	    
+ 	status = pjmedia_snd_port_set_ec(snd_port, pool, 
+-					 snd_port->aud_param.ec_tail_ms, 0);
++					 snd_port->aud_param.ec_tail_ms, snd_port->aud_param.ec_options);
+ 	if (status != PJ_SUCCESS) {
+ 	    pjmedia_aud_stream_destroy(snd_port->aud_stream);
+ 	    snd_port->aud_stream = NULL;
+Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_media.c
+===================================================================
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_media.c	2011-10-25 11:24:33.862405257 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_media.c	2011-10-25 11:25:56.742816248 +0200
+@@ -3464,6 +3464,7 @@
+ 	param->flags |= (PJMEDIA_AUD_DEV_CAP_EC | PJMEDIA_AUD_DEV_CAP_EC_TAIL);
+ 	param->ec_enabled = PJ_TRUE;
+ 	param->ec_tail_ms = pjsua_var.media_cfg.ec_tail_len;
++	param->ec_options = pjsua_var.media_cfg.ec_options;
+     } else {
+ 	param->flags &= ~(PJMEDIA_AUD_DEV_CAP_EC|PJMEDIA_AUD_DEV_CAP_EC_TAIL);
+     }
+@@ -3903,6 +3904,7 @@
+ PJ_DEF(pj_status_t) pjsua_set_ec(unsigned tail_ms, unsigned options)
+ {
+     pjsua_var.media_cfg.ec_tail_len = tail_ms;
++	pjsua_var.media_cfg.ec_options = options;
+ 
+     if (pjsua_var.snd_port)
+ 	return pjmedia_snd_port_set_ec( pjsua_var.snd_port, pjsua_var.pool,

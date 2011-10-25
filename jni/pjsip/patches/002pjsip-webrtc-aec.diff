@@ -1,0 +1,868 @@
+Index: pjsip/sources/aconfigure
+===================================================================
+--- pjsip.orig/sources/aconfigure	2011-10-25 11:27:41.351334968 +0200
++++ pjsip/sources/aconfigure	2011-10-25 11:40:06.031027630 +0200
+@@ -710,6 +710,7 @@
+ ac_no_g7221_codec
+ ac_no_speex_codec
+ ac_no_ilbc_codec
++ac_webrtc_platform
+ ac_sdl_cflags
+ ac_sdl_ldflags
+ ac_has_ffmpeg
+@@ -1979,7 +1980,7 @@
+   program_prefix=${target_alias}-
+ ac_config_headers="$ac_config_headers pjlib/include/pj/compat/os_auto.h pjlib/include/pj/compat/m_auto.h pjmedia/include/pjmedia/config_auto.h pjmedia/include/pjmedia-codec/config_auto.h pjsip/include/pjsip/sip_autoconf.h"
+ 
+-ac_config_files="$ac_config_files build.mak build/os-auto.mak build/cc-auto.mak pjlib/build/os-auto.mak pjlib-util/build/os-auto.mak pjmedia/build/os-auto.mak pjsip/build/os-auto.mak third_party/build/os-auto.mak third_party/build/portaudio/os-auto.mak"
++ac_config_files="$ac_config_files build.mak build/os-auto.mak build/cc-auto.mak pjlib/build/os-auto.mak pjlib-util/build/os-auto.mak pjmedia/build/os-auto.mak pjsip/build/os-auto.mak third_party/build/os-auto.mak third_party/build/portaudio/os-auto.mak third_party/build/webrtc/os-auto.mak third_party/build/os-auto.mak"
+ 
+ 
+ 
+@@ -13103,7 +13104,20 @@
+ fi
+ 
+ 
+-
++case $target in
++ *darwin*)
++       ac_webrtc_platform=webrtc_darwinos
++       ;;
++ *mingw*)
++       ac_webrtc_platform=webrtc_win32
++       ;;
++ *linux*)
++       ac_webrtc_platform=webrtc_linux
++       ;;
++ *)
++       ac_webrtc_platform=null
++       ;;
++esac
+ 
+ # Check whether --enable-ssl was given.
+ if test "${enable_ssl+set}" = set; then
+@@ -14315,6 +14329,7 @@
+     "pjsip/build/os-auto.mak") CONFIG_FILES="$CONFIG_FILES pjsip/build/os-auto.mak" ;;
+     "third_party/build/os-auto.mak") CONFIG_FILES="$CONFIG_FILES third_party/build/os-auto.mak" ;;
+     "third_party/build/portaudio/os-auto.mak") CONFIG_FILES="$CONFIG_FILES third_party/build/portaudio/os-auto.mak" ;;
++	"third_party/build/webrtc/os-auto.mak" ) CONFIG_FILES="$CONFIG_FILES third_party/build/webrtc/os-auto.mak" ;;
+ 
+   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
+ echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
+@@ -14515,6 +14530,7 @@
+ for ac_last_try in false false false false false :; do
+   cat >conf$$subs.sed <<_ACEOF
+ ac_no_ilbc_codec!$ac_no_ilbc_codec$ac_delim
++ac_webrtc_platform!$ac_webrtc_platform$ac_delim
+ ac_sdl_cflags!$ac_sdl_cflags$ac_delim
+ ac_sdl_ldflags!$ac_sdl_ldflags$ac_delim
+ ac_has_ffmpeg!$ac_has_ffmpeg$ac_delim
+Index: pjsip/sources/aconfigure.ac
+===================================================================
+--- pjsip.orig/sources/aconfigure.ac	2011-10-25 11:40:13.879066547 +0200
++++ pjsip/sources/aconfigure.ac	2011-10-25 11:42:44.311812507 +0200
+@@ -19,6 +19,7 @@
+ 		 pjmedia/build/os-auto.mak
+ 		 pjsip/build/os-auto.mak
+ 		 third_party/build/os-auto.mak
++		 third_party/build/webrtc/os-auto.mak
+ 		 third_party/build/portaudio/os-auto.mak 
+ 		 ])
+ 
+@@ -680,6 +681,23 @@
+ 	       fi],
+ 	      AC_MSG_RESULT([Checking if Speex AEC is disabled...no]))
+ 
++dnl # Include WebRTC AEC
++AC_SUBST(ac_webrtc_platform)
++case $target in
++ *darwin*)
++       ac_webrtc_platform=webrtc_darwinos
++       ;;
++ *mingw*)
++       ac_webrtc_platform=webrtc_win32
++       ;;
++ *linux*)
++       ac_webrtc_platform=webrtc_linux
++       ;;
++ *)
++       ac_webrtc_platform=null
++       ;;
++esac
++
+ dnl # Include G711 codec
+ AC_SUBST(ac_no_g711_codec)
+ AC_ARG_ENABLE(g711-codec,
+Index: pjsip/sources/build/rules.mak
+===================================================================
+--- pjsip.orig/sources/build/rules.mak	2011-10-25 11:42:54.487862965 +0200
++++ pjsip/sources/build/rules.mak	2011-10-25 11:43:57.484175348 +0200
+@@ -130,6 +130,11 @@
+ 		$(CC_OUT)$(subst /,$(HOST_PSEP),$@) \
+ 		$(subst /,$(HOST_PSEP),$<) 
+ 
++$(OBJDIR)/%$(OBJEXT): $(SRCDIR)/%.cc
++	$(CC) $($(APP)_CXXFLAGS) \
++		$(CC_OUT)$(subst /,$(HOST_PSEP),$@) \
++		$(subst /,$(HOST_PSEP),$<)
++
+ $(OBJDIR)/%$(OBJEXT): $(SRCDIR)/%.cpp
+ 	$(CC) $($(APP)_CXXFLAGS) \
+ 		$(CC_OUT)$(subst /,$(HOST_PSEP),$@) \
+Index: pjsip/sources/pjmedia/build/os-auto.mak.in
+===================================================================
+--- pjsip.orig/sources/pjmedia/build/os-auto.mak.in	2011-10-25 11:50:48.350212726 +0200
++++ pjsip/sources/pjmedia/build/os-auto.mak.in	2011-10-25 11:55:37.387645986 +0200
+@@ -91,6 +91,9 @@
+ 
+ endif
+ 
++export CFLAGS += -I$(PJ_LIB)/../ext_third_party/webrtc/src
++export PJMEDIA_OBJS += echo_webrtc_aec.o
++
+ ifeq ($(AC_NO_ILBC_CODEC),1)
+ export CFLAGS += -DPJMEDIA_HAS_ILBC_CODEC=0
+ else
+Index: pjsip/sources/pjmedia/build/os-darwinos.mak
+===================================================================
+--- pjsip.orig/sources/pjmedia/build/os-darwinos.mak	2011-10-25 11:55:53.303724904 +0200
++++ pjsip/sources/pjmedia/build/os-darwinos.mak	2011-10-25 11:56:21.043862462 +0200
+@@ -59,6 +59,9 @@
+ 
+ endif
+ 
++export CFLAGS += -I$(PJ_LIB)/../ext_third_party/webrtc/src
++export PJMEDIA_OBJS += echo_webrtc_aec.o
++
+ ifeq ($(AC_NO_ILBC_CODEC),1)
+ export CFLAGS += -DPJMEDIA_HAS_ILBC_CODEC=0
+ else
+Index: pjsip/sources/pjmedia/build/os-linux.mak
+===================================================================
+--- pjsip.orig/sources/pjmedia/build/os-linux.mak	2011-10-25 11:56:36.455938882 +0200
++++ pjsip/sources/pjmedia/build/os-linux.mak	2011-10-25 11:56:48.519998713 +0200
+@@ -53,6 +53,9 @@
+ 
+ endif
+ 
++export CFLAGS += -I$(PJ_LIB)/../ext_third_party/webrtc/src
++export PJMEDIA_OBJS += echo_webrtc_aec.o
++
+ ifeq ($(AC_NO_ILBC_CODEC),1)
+ export CFLAGS += -DPJMEDIA_HAS_ILBC_CODEC=0
+ else
+Index: pjsip/sources/pjmedia/build/os-win32.mak
+===================================================================
+--- pjsip.orig/sources/pjmedia/build/os-win32.mak	2011-10-25 11:56:55.464033145 +0200
++++ pjsip/sources/pjmedia/build/os-win32.mak	2011-10-25 11:57:08.120095903 +0200
+@@ -55,6 +55,9 @@
+ 
+ endif
+ 
++export CFLAGS += -I$(PJ_LIB)/../ext_third_party/webrtc/src
++export PJMEDIA_OBJS += echo_webrtc_aec.o
++
+ ifeq ($(AC_NO_ILBC_CODEC),1)
+ export CFLAGS += -DPJMEDIA_HAS_ILBC_CODEC=0
+ else
+Index: pjsip/sources/pjmedia/include/pjmedia/echo.h
+===================================================================
+--- pjsip.orig/sources/pjmedia/include/pjmedia/echo.h	2011-10-25 11:57:41.184259854 +0200
++++ pjsip/sources/pjmedia/include/pjmedia/echo.h	2011-10-25 11:58:22.284463657 +0200
+@@ -78,6 +78,12 @@
+      */
+     PJMEDIA_ECHO_SIMPLE	= 2,
+ 
++	/**
++     * Force to use WebRTC AEC as the backend echo canceller algorithm.
++     * This setting is mutually exclusive with PJMEDIA_ECHO_SIMPLE & PJMEDIA_ECHO_SPEEX.
++     */
++    PJMEDIA_ECHO_WEBRTC = 3,
++
+     /**
+      * For internal use.
+      */
+Index: pjsip/sources/pjmedia/src/pjmedia/echo_common.c
+===================================================================
+--- pjsip.orig/sources/pjmedia/src/pjmedia/echo_common.c	2011-10-25 11:58:37.068536971 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/echo_common.c	2011-10-25 11:59:58.868942599 +0200
+@@ -118,6 +118,20 @@
+ #endif
+ 
+ /*
++ * WebRTC prototypes
++ */
++#if defined(PJMEDIA_HAS_WEBRTC_AEC) && PJMEDIA_HAS_WEBRTC_AEC!=0
++static struct ec_operations webrtc_aec_op =
++{
++    "WEBRTC AEC",
++    &webrtc_aec_create,
++    &webrtc_aec_destroy,
++    &webrtc_aec_reset,
++    &webrtc_aec_cancel_echo
++};
++#endif
++
++/*
+  * Create the echo canceller. 
+  */
+ PJ_DEF(pj_status_t) pjmedia_echo_create( pj_pool_t *pool,
+@@ -170,6 +184,13 @@
+ 	ec->op = &speex_aec_op;
+ #endif
+ 
++#if defined(PJMEDIA_HAS_WEBRTC_AEC) && PJMEDIA_HAS_WEBRTC_AEC!=0
++    } else if ((options & PJMEDIA_ECHO_ALGO_MASK) == PJMEDIA_ECHO_WEBRTC ||
++	       (options & PJMEDIA_ECHO_ALGO_MASK) == PJMEDIA_ECHO_DEFAULT)
++    {
++	ec->op = &webrtc_aec_op;
++#endif
++
+ #if defined(PJMEDIA_HAS_INTEL_IPP_AEC) && PJMEDIA_HAS_INTEL_IPP_AEC!=0
+     } else if ((options & PJMEDIA_ECHO_ALGO_MASK) == PJMEDIA_ECHO_IPP ||
+ 	       (options & PJMEDIA_ECHO_ALGO_MASK) == PJMEDIA_ECHO_DEFAULT)
+Index: pjsip/sources/pjmedia/src/pjmedia/echo_internal.h
+===================================================================
+--- pjsip.orig/sources/pjmedia/src/pjmedia/echo_internal.h	2011-10-25 12:00:22.225058406 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/echo_internal.h	2011-10-25 12:00:55.177221813 +0200
+@@ -72,6 +72,20 @@
+ 					 unsigned options,
+ 					 void *reserved );
+ 
++PJ_DECL(pj_status_t) webrtc_aec_create(pj_pool_t *pool,
++				    unsigned clock_rate,
++				    unsigned channel_count,
++				    unsigned samples_per_frame,
++				    unsigned tail_ms,
++				    unsigned options,
++				    void **p_echo );
++PJ_DECL(pj_status_t) webrtc_aec_destroy(void *state );
++PJ_DECL(void) webrtc_aec_reset(void *state );
++PJ_DECL(pj_status_t) webrtc_aec_cancel_echo(void *state,
++					 pj_int16_t *rec_frm,
++					 const pj_int16_t *play_frm,
++					 unsigned options,
++					 void *reserved );
+ 
+ PJ_END_DECL
+ 
+Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c	2011-10-25 12:57:08.121947347 +0200
+@@ -0,0 +1,325 @@
++/**
++ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
++ * This file is part of pjsip_android.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++
++#include <pjmedia/echo.h>
++#include <pjmedia/errno.h>
++#include <pj/assert.h>
++#include <pj/log.h>
++#include <pj/pool.h>
++
++
++#if defined(PJMEDIA_HAS_WEBRTC_AEC) && PJMEDIA_HAS_WEBRTC_AEC != 0
++
++#if defined(PJ_HAS_FLOATING_POINT) && PJ_HAS_FLOATING_POINT != 0
++#define WEBRTC_AEC_USE_MOBILE 0
++#else
++#define WEBRTC_AEC_USE_MOBILE 1
++#endif
++
++#ifndef PJMEDIA_WEBRTC_AEC_AGGRESSIVENESS
++    #define PJMEDIA_WEBRTC_AEC_AGGRESSIVENESS 1
++#endif
++
++#ifndef PJMEDIA_WEBRTC_NS_POLICY
++    #define PJMEDIA_WEBRTC_NS_POLICY 0
++#endif
++
++#define WEBRTC_SUBFRAME_LEN   160    // WebRTC AEC only allows max 160 samples/frame
++
++#define THIS_FILE    "echo_webrtc_aec.c"
++
++#if WEBRTC_AEC_USE_MOBILE == 1
++#include <modules/audio_processing/aecm/interface/echo_control_mobile.h>
++#else
++#include <modules/audio_processing/aec/interface/echo_cancellation.h>
++#endif
++#include <modules/audio_processing/ns/interface/noise_suppression.h>
++
++#include "echo_internal.h"
++
++typedef struct webrtc_ec
++{
++	void		*AEC_inst;
++    void        *NS_inst;
++    unsigned	samples_per_frame;
++    unsigned	echo_tail;
++    unsigned	echo_skew;
++    unsigned    clock_rate;
++    pj_int16_t	*tmp_frame;
++    pj_int16_t	*tmp_frame2;
++} webrtc_ec;
++
++
++static void print_webrtc_aec_error(const char* tag, void *AEC_inst) {
++#if WEBRTC_AEC_USE_MOBILE == 1
++	unsigned status = = WebRtcAecm_get_error_code(AEC_inst);
++#else
++    unsigned status = WebRtcAec_get_error_code(AEC_inst);
++#endif
++    PJ_LOG(4, (THIS_FILE, "WebRTC AEC ERROR (%s) %d ", tag, status));
++}
++
++/*
++ * Create the AEC.
++ */
++PJ_DEF(pj_status_t) webrtc_aec_create(pj_pool_t *pool,
++				     unsigned clock_rate,
++				     unsigned channel_count,
++				     unsigned samples_per_frame,
++				     unsigned tail_ms,
++				     unsigned options,
++				     void **p_echo )
++{
++	webrtc_ec *echo;
++    int sampling_rate;
++    int status;
++
++    *p_echo = NULL;
++	/*
++    if (clock_rate != 16000) {
++        PJ_LOG(4, (THIS_FILE, "Unsupported sample rate: %d", clock_rate));
++        return PJ_EINVAL;
++    }
++    */
++    
++    echo = PJ_POOL_ZALLOC_T(pool, webrtc_ec);
++    PJ_ASSERT_RETURN(echo != NULL, PJ_ENOMEM);
++
++    // Alloc memory
++#if WEBRTC_AEC_USE_MOBILE == 1
++    status = WebRtcAecm_Create(&echo->AEC_inst);
++#else
++    status = WebRtcAec_Create(&echo->AEC_inst);
++#endif
++    if(status){
++    	return PJ_ENOMEM;
++    }
++
++    // Init
++#if WEBRTC_AEC_USE_MOBILE == 1
++    status = WebRtcAecm_Init(echo->AEC_inst,
++    		clock_rate);
++#else
++    status = WebRtcAec_Init(echo->AEC_inst,
++    		clock_rate,
++    		clock_rate);
++#endif
++
++	if(status != 0) {
++        if (echo->AEC_inst) {
++            print_webrtc_aec_error("Init", echo->AEC_inst);
++        }
++#if WEBRTC_AEC_USE_MOBILE == 1
++    	WebRtcAecm_Free(echo->AEC_inst);
++#else
++    	WebRtcAec_Free(echo->AEC_inst);
++#endif
++    	return PJ_EBUG;
++    }
++    
++#if WEBRTC_AEC_USE_MOBILE == 1
++	// TODO 
++#else
++    AecConfig aec_config;
++    aec_config.nlpMode = PJMEDIA_WEBRTC_AEC_AGGRESSIVENESS;
++    aec_config.skewMode = kAecTrue;
++    aec_config.metricsMode = kAecFalse;
++
++    status = WebRtcAec_set_config(echo->AEC_inst, aec_config);
++    if(status != 0) {
++        print_webrtc_aec_error("Init config", echo->AEC_inst);
++        WebRtcAec_Free(echo->AEC_inst);
++    	return PJ_EBUG;
++    }
++#endif
++
++    status = WebRtcNs_Create(&echo->NS_inst);
++    if(status != 0) {
++    	return PJ_ENOMEM;
++    }
++
++    status = WebRtcNs_Init(echo->NS_inst, clock_rate);
++    if(status != 0) {
++        if (echo->NS_inst) {
++    	    WebRtcNs_Free(echo->NS_inst);
++            PJ_LOG(4, (THIS_FILE, "Could not initialize noise suppressor"));
++        }
++    	return PJ_EBUG;
++    }
++
++    status = WebRtcNs_set_policy(echo->NS_inst, PJMEDIA_WEBRTC_NS_POLICY);
++    if (status != 0) {
++        PJ_LOG(4, (THIS_FILE, "Could not set noise suppressor policy"));
++    }
++
++    echo->samples_per_frame = samples_per_frame;
++    echo->echo_tail = tail_ms;
++    echo->echo_skew = 0;
++    echo->clock_rate = clock_rate;
++
++    /* Create temporary frames for echo cancellation */
++    echo->tmp_frame = (pj_int16_t*) pj_pool_zalloc(pool, 2*samples_per_frame);
++    PJ_ASSERT_RETURN(echo->tmp_frame != NULL, PJ_ENOMEM);
++    echo->tmp_frame2 = (pj_int16_t*) pj_pool_zalloc(pool, 2*samples_per_frame);
++    PJ_ASSERT_RETURN(echo->tmp_frame2 != NULL, PJ_ENOMEM);
++
++    /* Done */
++    *p_echo = echo;
++    return PJ_SUCCESS;
++
++}
++
++
++/*
++ * Destroy AEC
++ */
++PJ_DEF(pj_status_t) webrtc_aec_destroy(void *state )
++{
++    webrtc_ec *echo = (webrtc_ec*) state;
++    PJ_ASSERT_RETURN(echo && echo->AEC_inst && echo->NS_inst, PJ_EINVAL);
++
++    if (echo->AEC_inst) {
++#if WEBRTC_AEC_USE_MOBILE == 1
++    	WebRtcAecm_Free(echo->AEC_inst);
++#else
++    	WebRtcAec_Free(echo->AEC_inst);
++#endif
++    	echo->AEC_inst = NULL;
++    }
++    if (echo->NS_inst) {
++        WebRtcNs_Free(echo->NS_inst);
++        echo->NS_inst = NULL;
++    }
++
++    return PJ_SUCCESS;
++}
++
++
++/*
++ * Reset AEC
++ */
++PJ_DEF(void) webrtc_aec_reset(void *state )
++{
++    webrtc_ec *echo = (webrtc_ec*) state;
++    pj_assert(echo != NULL);
++    int status;
++    /* re-initialize the EC */
++#if WEBRTC_AEC_USE_MOBILE == 1
++	status = WebRtcAecm_Init(echo->AEC_inst, echo->clock_rate);
++#else
++    status = WebRtcAec_Init(echo->AEC_inst, echo->clock_rate, echo->clock_rate);
++#endif
++    if(status != 0) {
++        print_webrtc_aec_error("re-Init", echo->AEC_inst);
++        return;
++    } else {
++#if WEBRTC_AEC_USE_MOBILE == 1
++		//TODO
++#else
++        AecConfig aec_config;
++        aec_config.nlpMode = PJMEDIA_WEBRTC_AEC_AGGRESSIVENESS;
++        aec_config.skewMode = kAecTrue;
++        aec_config.metricsMode = kAecFalse;
++
++        status = WebRtcAec_set_config(echo->AEC_inst, aec_config);
++        if(status != 0) {
++            print_webrtc_aec_error("re-Init config", echo->AEC_inst);
++            return;
++        }
++#endif
++    }
++    PJ_LOG(4, (THIS_FILE, "WebRTC AEC reset succeeded"));
++}
++
++
++/*
++ * Perform echo cancellation.
++ */
++PJ_DEF(pj_status_t) webrtc_aec_cancel_echo( void *state,
++					   pj_int16_t *rec_frm,
++					   const pj_int16_t *play_frm,
++					   unsigned options,
++					   void *reserved )
++{
++    webrtc_ec *echo = (webrtc_ec*) state;
++    int status;
++    unsigned i, tail_factor;
++
++    /* Sanity checks */
++    PJ_ASSERT_RETURN(echo && rec_frm && play_frm && options==0 && reserved==NULL, PJ_EINVAL);
++
++	tail_factor = echo->samples_per_frame / WEBRTC_SUBFRAME_LEN;
++    for(i=0; i < echo->samples_per_frame; i+= WEBRTC_SUBFRAME_LEN) {
++        /* Noise suppression */
++        status = WebRtcNs_Process(echo->NS_inst,
++                                  (WebRtc_Word16 *) (&rec_frm[i]),
++                                  NULL,
++                                  (WebRtc_Word16 *) (&echo->tmp_frame[i]),
++                                  NULL);
++        if (status != 0) {
++            PJ_LOG(4, (THIS_FILE, "Error suppressing noise"));
++            return PJ_EBUG;
++        }
++
++		/* Feed farend buffer */
++#if WEBRTC_AEC_USE_MOBILE == 1
++		status = WebRtcAecm_BufferFarend(echo->AEC_inst, &play_frm[i], WEBRTC_SUBFRAME_LEN);
++#else
++		status = WebRtcAec_BufferFarend(echo->AEC_inst, &play_frm[i], WEBRTC_SUBFRAME_LEN);
++#endif
++		if(status != 0) {
++			print_webrtc_error("buffer farend", echo->AEC_inst);
++			return PJ_EBUG;
++		}
++
++
++		/* Process echo cancellation */
++#if WEBRTC_AEC_USE_MOBILE == 1
++		status = WebRtcAec_Process(echo->AEC_inst,
++							(WebRtc_Word16 *) (&echo->tmp_frame[i]),
++							NULL,
++							(WebRtc_Word16 *) (&echo->tmp_frame2[i]),
++							NULL,
++							WEBRTC_SUBFRAME_LEN,
++							echo->echo_tail / tail_factor,
++							echo->echo_skew);
++#else
++		status = WebRtcAecm_Process(echo->AEC_inst,
++							(WebRtc_Word16 *) (&echo->tmp_frame[i]),
++							NULL,
++							(WebRtc_Word16 *) (&echo->tmp_frame2[i]),
++							NULL,
++							WEBRTC_SUBFRAME_LEN,
++							echo->echo_tail / tail_factor);
++#endif
++		if(status != 0){
++			print_webrtc_error("Process echo", echo->AEC_inst);
++			return;
++		}
++    }
++
++
++    /* Copy temporary buffer back to original rec_frm */
++    pjmedia_copy_samples(rec_frm, echo->tmp_frame2, echo->samples_per_frame);
++
++    return PJ_SUCCESS;
++
++}
++
++
++#endif
+\ Pas de fin de ligne à la fin du fichier.
+Index: pjsip/sources/third_party/build/os-auto.mak.in
+===================================================================
+--- pjsip.orig/sources/third_party/build/os-auto.mak.in	2011-10-25 12:59:13.706570086 +0200
++++ pjsip/sources/third_party/build/os-auto.mak.in	2011-10-25 12:59:33.274667117 +0200
+@@ -31,3 +31,4 @@
+ endif
+ endif
+ 
++DIRS += webrtc
+Index: pjsip/sources/third_party/build/os-darwinos.mak
+===================================================================
+--- pjsip.orig/sources/third_party/build/os-darwinos.mak	2011-10-25 12:59:45.158726055 +0200
++++ pjsip/sources/third_party/build/os-darwinos.mak	2011-10-25 12:59:52.398761956 +0200
+@@ -3,5 +3,5 @@
+ DIRS += speex
+ DIRS += portaudio
+ DIRS += g7221
+-
++DIRS += webrtc
+ 
+Index: pjsip/sources/third_party/build/os-linux.mak
+===================================================================
+--- pjsip.orig/sources/third_party/build/os-linux.mak	2011-10-25 12:59:56.330781443 +0200
++++ pjsip/sources/third_party/build/os-linux.mak	2011-10-25 13:00:09.982849135 +0200
+@@ -3,5 +3,5 @@
+ DIRS += speex
+ DIRS += portaudio
+ DIRS += g7221
+-
++DIRS += webrtc
+ 
+Index: pjsip/sources/third_party/build/webrtc/Makefile
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/third_party/build/webrtc/Makefile	2011-10-25 13:02:23.319510326 +0200
+@@ -0,0 +1,159 @@
++include ../../../build.mak
++include ../../../build/common.mak
++
++export LIBDIR := ../../lib
++
++RULES_MAK := $(PJDIR)/build/rules.mak
++
++export WEBRTCAEC_LIB := ../../lib/libwebrtcaec-$(TARGET_NAME)$(LIBEXT)
++
++WEBRTC_DEFS := \
++	-D__STDC_FORMAT_MACROS \
++	-DDYNAMIC_ANNOTATIONS_ENABLED=1 \
++	-D_DEBUG
++
++WEBRTC_CFLAGS := \
++	-fno-exceptions \
++	-Wall \
++	-Wno-unused-parameter \
++	-Wno-missing-field-initializers \
++	-D_FILE_OFFSET_BITS=64 \
++	-fvisibility=hidden \
++	-pipe \
++	-fno-strict-aliasing
++
++WEBRTC_CFLAGS_CC := \
++	-fno-threadsafe-statics \
++	-fvisibility-inlines-hidden \
++	-Wsign-compare
++
++WEBRTC_SRC_BASE := ../../webrtc
++
++WEBRTCAEC_INCS := \
++		   $(CC_INC)$(WEBRTC_SRC_BASE)/src \
++		   $(CC_INC)$(WEBRTC_SRC_BASE)/src/common_audio/signal_processing_library/main/interface \
++		   $(CC_INC)$(WEBRTC_SRC_BASE)/src/modules/audio_processing/aec/main/interface \
++		   $(CC_INC)$(WEBRTC_SRC_BASE)/src/modules/audio_processing/ns/main/interface \
++		   $(CC_INC)$(WEBRTC_SRC_BASE)/src/modules/audio_processing/utility \
++		   $(CC_INC)$(WEBRTC_SRC_BASE)/src/system_wrappers/source/spreadsortlib \
++		   $(CC_INC)$(WEBRTC_SRC_BASE)/src/system_wrappers/interface
++
++export _CFLAGS 	:= $(CC_CFLAGS) $(OS_CFLAGS) $(HOST_CFLAGS) $(M_CFLAGS) $(CFLAGS) \
++		   $(WEBRTC_DEFS) $(WEBRTC_CFLAGS) \
++		   $(CC_INC). \
++		   $(CC_INC)../../../pjlib/include \
++		   $(WEBRTCAEC_INCS)
++export _CXXFLAGS:= $(_CFLAGS) $(CC_CXXFLAGS) $(OS_CXXFLAGS) $(M_CXXFLAGS) $(HOST_CXXFLAGS) $(CXXFLAGS) \
++		   $(WEBRTC_DEFS) $(WEBRTC_CFLAGS_CC)
++export _LDFLAGS := $(CC_LDFLAGS) $(OS_LDFLAGS) $(M_LDFLAGS) $(HOST_LDFLAGS) \
++		   $(LDFLAGS)
++
++
++AEC_OBJS := modules/audio_processing/aec/main/source/echo_cancellation.o \
++	    modules/audio_processing/aec/main/source/aec_core.o \
++	    modules/audio_processing/aec/main/source/aec_core_sse2.o \
++	    modules/audio_processing/aec/main/source/aec_rdft.o \
++	    modules/audio_processing/aec/main/source/aec_rdft_sse2.o \
++	    modules/audio_processing/aec/main/source/resampler.o
++
++APM_OBJS := modules/audio_processing/utility/ring_buffer.o \
++	    modules/audio_processing/utility/fft4g.o
++
++SPL_OBJS := common_audio/signal_processing_library/main/source/auto_corr_to_refl_coef.o \
++	    common_audio/signal_processing_library/main/source/auto_correlation.o \
++	    common_audio/signal_processing_library/main/source/complex_fft.o \
++	    common_audio/signal_processing_library/main/source/complex_ifft.o \
++	    common_audio/signal_processing_library/main/source/complex_bit_reverse.o \
++	    common_audio/signal_processing_library/main/source/copy_set_operations.o \
++	    common_audio/signal_processing_library/main/source/cos_table.o \
++	    common_audio/signal_processing_library/main/source/cross_correlation.o \
++	    common_audio/signal_processing_library/main/source/division_operations.o \
++	    common_audio/signal_processing_library/main/source/dot_product_with_scale.o \
++	    common_audio/signal_processing_library/main/source/downsample_fast.o \
++	    common_audio/signal_processing_library/main/source/energy.o \
++	    common_audio/signal_processing_library/main/source/filter_ar.o \
++	    common_audio/signal_processing_library/main/source/filter_ar_fast_q12.o \
++	    common_audio/signal_processing_library/main/source/filter_ma_fast_q12.o \
++	    common_audio/signal_processing_library/main/source/get_hanning_window.o \
++	    common_audio/signal_processing_library/main/source/get_scaling_square.o \
++	    common_audio/signal_processing_library/main/source/hanning_table.o \
++	    common_audio/signal_processing_library/main/source/ilbc_specific_functions.o \
++	    common_audio/signal_processing_library/main/source/levinson_durbin.o \
++	    common_audio/signal_processing_library/main/source/lpc_to_refl_coef.o \
++	    common_audio/signal_processing_library/main/source/min_max_operations.o \
++	    common_audio/signal_processing_library/main/source/randn_table.o \
++	    common_audio/signal_processing_library/main/source/randomization_functions.o \
++	    common_audio/signal_processing_library/main/source/refl_coef_to_lpc.o \
++	    common_audio/signal_processing_library/main/source/resample.o \
++	    common_audio/signal_processing_library/main/source/resample_48khz.o \
++	    common_audio/signal_processing_library/main/source/resample_by_2.o \
++	    common_audio/signal_processing_library/main/source/resample_by_2_internal.o \
++	    common_audio/signal_processing_library/main/source/resample_fractional.o \
++	    common_audio/signal_processing_library/main/source/sin_table.o \
++	    common_audio/signal_processing_library/main/source/sin_table_1024.o \
++	    common_audio/signal_processing_library/main/source/spl_sqrt.o \
++	    common_audio/signal_processing_library/main/source/spl_sqrt_floor.o \
++	    common_audio/signal_processing_library/main/source/spl_version.o \
++	    common_audio/signal_processing_library/main/source/splitting_filter.o \
++	    common_audio/signal_processing_library/main/source/sqrt_of_one_minus_x_squared.o \
++	    common_audio/signal_processing_library/main/source/vector_scaling_operations.o \
++	    common_audio/signal_processing_library/main/source/webrtc_fft_t_1024_8.o \
++	    common_audio/signal_processing_library/main/source/webrtc_fft_t_rad.o
++
++SWR_OBJS := system_wrappers/source/aligned_malloc.o \
++            system_wrappers/source/atomic32.o \
++            system_wrappers/source/condition_variable.o \
++            system_wrappers/source/cpu.o \
++            system_wrappers/source/cpu_features.o \
++            system_wrappers/source/critical_section.o \
++            system_wrappers/source/event.o \
++            system_wrappers/source/file_impl.o \
++            system_wrappers/source/list_no_stl.o \
++            system_wrappers/source/map.o \
++            system_wrappers/source/rw_lock.o \
++            system_wrappers/source/sort.o \
++            system_wrappers/source/thread.o \
++            system_wrappers/source/trace_impl.o
++
++NSX_OBJS := modules/audio_processing/ns/main/source/noise_suppression.o \
++	    modules/audio_processing/ns/main/source/ns_core.o
++
++export WEBRTCAEC_SRCDIR = $(WEBRTC_SRC_BASE)/src
++export WEBRTCAEC_OBJS = $(AEC_OBJS) $(NSX_OBJS) $(APM_OBJS) $(SWR_OBJS) $(SPL_OBJS)
++export WEBRTCAEC_CFLAGS = $(_CFLAGS)
++export WEBRTCAEC_CXXFLAGS = $(_CXXFLAGS)
++
++export CC_OUT CC AR RANLIB HOST_MV HOST_RM HOST_RMDIR HOST_MKDIR OBJEXT LD LDOUT
++
++
++###############################################################################
++# Main entry
++#
++# $(TARGET) is defined in os-$(OS_NAME).mak file in current directory.
++#
++TARGETS := libwebrtcaec
++
++all: $(TARGETS)
++
++doc:
++	cd .. && doxygen docs/doxygen.cfg
++
++dep: depend
++distclean: realclean
++
++.PHONY: dep depend libwebrtcaec clean realclean distclean
++
++libwebrtcaec:
++	$(MAKE) -f $(RULES_MAK) APP=WEBRTCAEC app=libwebrtcaec $(WEBRTCAEC_LIB)
++
++clean print_lib:
++	$(MAKE) -f $(RULES_MAK) APP=WEBRTCAEC app=libwebrtcaec $@
++
++realclean:
++	$(subst @@,$(subst /,$(HOST_PSEP),.ilbc-$(TARGET_NAME).depend),$(HOST_RMR))
++	$(MAKE) -f $(RULES_MAK) APP=WEBRTCAEC app=libwebrtcaec $@
++
++depend:
++	$(MAKE) -f $(RULES_MAK) APP=WEBRTCAEC app=libwebrtcaec $@
++
++
+Index: pjsip/sources/third_party/build/webrtc/os-auto.mak.in
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/third_party/build/webrtc/os-auto.mak.in	2011-10-25 13:05:07.368323803 +0200
+@@ -0,0 +1,42 @@
++#@configure_input@
++
++AC_WEBRTC_PLATFORM=@ac_webrtc_platform@
++
++ifeq ($(AC_WEBRTC_PLATFORM),webrtc_linux)
++export CFLAGS += -DWEBRTC_TARGET_PC -DWEBRTC_LINUX -DWEBRTC_THREAD_RR
++export CFLAGS += -pthread
++
++export WEBRTCAEC_OBJS += system_wrappers/source/condition_variable_posix.o \
++            		 system_wrappers/source/critical_section_posix.o \
++            		 system_wrappers/source/event_posix.o \
++            		 system_wrappers/source/rw_lock_posix.o \
++            		 system_wrappers/source/thread_posix.o \
++            		 system_wrappers/source/trace_posix.o \
++            		 system_wrappers/source/cpu_linux.o
++endif
++
++ifeq ($(AC_WEBRTC_PLATFORM),webrtc_darwinos)
++export CFLAGS += -DWEBRTC_TARGET_MAC_INTEL -DWEBRTC_MAC_INTEL -DWEBRTC_MAC -DWEBRTC_THREAD_RR -DWEBRTC_CLOCK_TYPE_REALTIME
++export CFLAGS += -pthread
++
++export WEBRTCAEC_OBJS += system_wrappers/source/condition_variable_posix.o \
++            		 system_wrappers/source/critical_section_posix.o \
++            		 system_wrappers/source/event_posix.o \
++            		 system_wrappers/source/rw_lock_posix.o \
++            		 system_wrappers/source/thread_posix.o \
++            		 system_wrappers/source/trace_posix.o \
++            		 system_wrappers/source/cpu_mac.o
++endif
++
++ifeq ($(AC_WEBRTC_PLATFORM),webrtc_win32)
++export CFLAGS += -DWEBRTC_TARGET_PC -D_WIN32 -D_CRT_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_DEPRECATE -D__STD_C
++
++export WEBRTCAEC_OBJS += system_wrappers/source/condition_variable_windows.o \
++            		 system_wrappers/source/critical_section_windows.o \
++            		 system_wrappers/source/event_windows.o \
++            		 system_wrappers/source/rw_lock_windows.o \
++            		 system_wrappers/source/thread_windows.o \
++            		 system_wrappers/source/trace_windows.o \
++            		 system_wrappers/source/cpu_windows.o
++endif
++
+Index: pjsip/sources/third_party/build/webrtc/os-darwinos.mak
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/third_party/build/webrtc/os-darwinos.mak	2011-10-25 13:05:56.836569099 +0200
+@@ -0,0 +1,12 @@
++
++export CFLAGS += -DWEBRTC_TARGET_MAC_INTEL -DWEBRTC_MAC_INTEL -DWEBRTC_MAC -DWEBRTC_THREAD_RR -DWEBRTC_CLOCK_TYPE_REALTIME
++export CFLAGS += -pthread
++
++export WEBRTCAEC_OBJS += system_wrappers/source/condition_variable_posix.o \
++            		 system_wrappers/source/critical_section_posix.o \
++            		 system_wrappers/source/event_posix.o \
++            		 system_wrappers/source/rw_lock_posix.o \
++            		 system_wrappers/source/thread_posix.o \
++            		 system_wrappers/source/trace_posix.o \
++            		 system_wrappers/source/cpu_mac.o
++
+Index: pjsip/sources/third_party/build/webrtc/os-linux.mak
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/third_party/build/webrtc/os-linux.mak	2011-10-25 13:06:23.176699717 +0200
+@@ -0,0 +1,10 @@
++export CFLAGS += -DWEBRTC_TARGET_PC -DWEBRTC_LINUX -DWEBRTC_THREAD_RR
++export CFLAGS += -pthread
++
++export WEBRTCAEC_OBJS += system_wrappers/source/condition_variable_posix.o \
++            		 system_wrappers/source/critical_section_posix.o \
++            		 system_wrappers/source/event_posix.o \
++            		 system_wrappers/source/rw_lock_posix.o \
++            		 system_wrappers/source/thread_posix.o \
++            		 system_wrappers/source/trace_posix.o \
++            		 system_wrappers/source/cpu_linux.o
+Index: pjsip/sources/third_party/build/webrtc/os-win32.mak
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/third_party/build/webrtc/os-win32.mak	2011-10-25 13:06:40.740786807 +0200
+@@ -0,0 +1,10 @@
++export CFLAGS += -DWEBRTC_TARGET_PC -D_WIN32 -D_CRT_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_DEPRECATE -D__STD_C
++
++export WEBRTCAEC_OBJS += system_wrappers/source/condition_variable_windows.o \
++            		 system_wrappers/source/critical_section_windows.o \
++            		 system_wrappers/source/event_windows.o \
++            		 system_wrappers/source/rw_lock_windows.o \
++            		 system_wrappers/source/thread_windows.o \
++            		 system_wrappers/source/trace_windows.o \
++            		 system_wrappers/source/cpu_windows.o
++

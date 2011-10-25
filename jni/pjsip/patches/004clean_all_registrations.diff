@@ -1,0 +1,66 @@
+Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
+===================================================================
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-25 13:17:31.276012643 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-25 13:17:57.224141310 +0200
+@@ -2095,6 +2095,61 @@
+     return status;
+ }
+ 
++/*
++ * Clean registrations for all other clients
++ */
++PJ_DECL(pj_status_t) pjsua_acc_clean_all_registrations( pjsua_acc_id acc_id)
++{
++    pj_status_t status = 0;
++    pjsip_tx_data *tdata = 0;
++
++    PJ_ASSERT_RETURN(acc_id>=0 && acc_id<(int)PJ_ARRAY_SIZE(pjsua_var.acc),
++		     PJ_EINVAL);
++    PJ_ASSERT_RETURN(pjsua_var.acc[acc_id].valid, PJ_EINVALIDOP);
++
++    PJSUA_LOCK();
++
++    /* Cancel any re-registration timer */
++    pjsua_cancel_timer(&pjsua_var.acc[acc_id].auto_rereg.timer);
++
++    /* Reset pointer to registration transport */
++    pjsua_var.acc[acc_id].auto_rereg.reg_tp = NULL;
++
++	if (pjsua_var.acc[acc_id].regc == NULL) {
++
++	    status = pjsua_regc_init(acc_id);
++	    if (status != PJ_SUCCESS) {
++		pjsua_perror(THIS_FILE, "Unable to create registration",
++			     status);
++		goto on_return;
++	    }
++
++	}
++	if (!pjsua_var.acc[acc_id].regc) {
++	    status = PJ_EINVALIDOP;
++	    goto on_return;
++	}
++
++	status = pjsip_regc_unregister_all(pjsua_var.acc[acc_id].regc,
++				     &tdata);
++
++    if (status == PJ_SUCCESS) {
++	//pjsua_process_msg_data(tdata, NULL);
++	status = pjsip_regc_send( pjsua_var.acc[acc_id].regc, tdata );
++    }
++
++    if (status != PJ_SUCCESS) {
++	pjsua_perror(THIS_FILE, "Unable to create/send CLEAN REGISTER",
++		     status);
++    } else {
++	PJ_LOG(3,(THIS_FILE, "%s sent", "Clean Registrations"));
++    }
++
++on_return:
++    PJSUA_UNLOCK();
++    return status;
++}
++
+ 
+ /*
+  * Get account information.
