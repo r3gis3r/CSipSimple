@@ -524,7 +524,6 @@ static pj_status_t webrtc_recover(pjmedia_codec *codec, unsigned output_buf_len,
 		struct pjmedia_frame *output) {
 	struct webrtc_private *priv = (struct webrtc_private*) codec->codec_data;
 	unsigned state, offset;
-	PJ_ASSERT_RETURN(priv->plc_enabled, PJ_EINVALIDOP);
 	PJ_ASSERT_RETURN(output_buf_len >= priv->pacbsize, PJMEDIA_CODEC_EPCMTOOSHORT);
 
 

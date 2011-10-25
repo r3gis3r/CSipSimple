@@ -12,8 +12,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)../pjlib/include/ $(LOCAL_PATH)../pjlib-util/in
 	$(LOCAL_PATH)../third_party/srtp/include $(LOCAL_PATH)../third_party/srtp/include \
 	$(LOCAL_PATH)../third_party/srtp/crypto/include $(LOCAL_PATH)../third_party/build/srtp/ \
 	$(LOCAL_PATH)../third_party/build/speex/  $(LOCAL_PATH)../third_party/speex/include \
-	$(LOCAL_PATH)../third_party/g729/include $(LOCAL_PATH)../third_party/silk/interface/ \
-	$(LOCAL_PATH)../third_party/codec2/src \
 	$(LOCAL_PATH)../third_party/g7221/common \
 	$(LOCAL_PATH)../third_party/g7221/decode \
 	$(LOCAL_PATH)../third_party/g7221/encode
@@ -73,9 +71,6 @@ endif
 ifeq ($(MY_USE_SILK),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/silk.c 
 endif
-ifeq ($(MY_USE_AMR),1)
-	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/amr_stagefright_dyn.c 
-endif
 ifeq ($(MY_USE_CODEC2),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/codec2.c 
 endif
@@ -84,7 +79,7 @@ ifeq ($(MY_USE_G7221),1)
 endif
 
 ifeq ($(MY_USE_WEBRTC),1)
-	LOCAL_C_INCLUDES += $(LOCAL_PATH)../third_party/webrtc/
+	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../webrtc/sources/
 	
 	#AEC
 	LOCAL_SRC_FILES += $(PJLIB_SRC_DIR)/echo_webrtc_aec.c 
@@ -100,7 +95,8 @@ LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-audiodev/opensl_dev.cpp
 endif
 
 ifeq ($(MY_USE_VIDEO),1)
-LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/opengl_video_dev.c $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/android_capture_dev.c  
+LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/opengl_video_dev.c \
+	$(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/android_capture_dev.c  
 endif
 
 include $(BUILD_STATIC_LIBRARY)

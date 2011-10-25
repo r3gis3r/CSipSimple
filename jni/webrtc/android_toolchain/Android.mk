@@ -38,13 +38,13 @@ include $(CLEAR_VARS)
 	include $(WEBRTC_PATH)/common_audio/resampler/main/source/Android.mk
 	
 ### AEC ###
-ifeq ($(TARGET_ARCH_ABI),armeabi)
+#ifeq ($(TARGET_ARCH_ABI),armeabi)
 # AEC fixed 
 	include $(WEBRTC_PATH)/modules/audio_processing/aecm/Android.mk
-else
+#else
 # AEC floating
-	include $(WEBRTC_PATH)/modules/audio_processing/aec/Android.mk
-endif
+#	include $(WEBRTC_PATH)/modules/audio_processing/aec/Android.mk
+#endif
 
 ### CODECS ###
 include $(WEBRTC_PATH)/modules/audio_coding/main/source/Android.mk
