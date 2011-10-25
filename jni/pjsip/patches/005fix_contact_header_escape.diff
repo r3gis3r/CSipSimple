@@ -1,8 +1,8 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-25 13:33:01.560625668 +0200
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-25 13:35:17.757301038 +0200
-@@ -2591,6 +2591,11 @@
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-25 17:19:34.240028126 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-25 17:19:43.760075334 +0200
+@@ -2601,6 +2601,11 @@
  
  
      /* Create the contact header */
@@ -14,7 +14,7 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
      contact->ptr = (char*)pj_pool_alloc(pool, PJSIP_MAX_URL_SIZE);
      contact->slen = pj_ansi_snprintf(contact->ptr, PJSIP_MAX_URL_SIZE,
  				     "%s%.*s%s<%s:%.*s%s%s%.*s%s:%d%s%.*s%s>%.*s",
-@@ -2599,8 +2604,8 @@
+@@ -2609,8 +2614,8 @@
  				     acc->display.ptr,
  				     (acc->display.slen?"\" " : ""),
  				     (secure ? PJSUA_SECURE_SCHEME : "sip"),

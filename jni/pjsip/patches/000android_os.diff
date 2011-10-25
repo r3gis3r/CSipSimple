@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjlib/include/pj/config.h
 ===================================================================
---- pjsip.orig/sources/pjlib/include/pj/config.h	2011-10-25 10:44:30.346486867 +0200
-+++ pjsip/sources/pjlib/include/pj/config.h	2011-10-25 10:44:44.086555000 +0200
+--- pjsip.orig/sources/pjlib/include/pj/config.h	2011-10-25 17:18:58.599851402 +0200
++++ pjsip/sources/pjlib/include/pj/config.h	2011-10-25 17:19:10.971912748 +0200
 @@ -91,6 +91,14 @@
       */
  #  include <pj/compat/os_linux_kernel.h>
@@ -20,7 +20,7 @@ Index: pjsip/sources/pjlib/include/pj/config.h
 Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/compat/os_android.h	2011-10-25 11:01:23.467510667 +0200
++++ pjsip/sources/pjlib/include/pj/compat/os_android.h	2011-10-25 17:19:10.971912748 +0200
 @@ -0,0 +1,147 @@
 +/* $Id: os_android.h $ */
 +/*
@@ -172,8 +172,8 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 Index: pjsip/sources/pjlib/include/pj/config_site.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/config_site.h	2011-10-25 10:47:26.515360442 +0200
-@@ -0,0 +1,117 @@
++++ pjsip/sources/pjlib/include/pj/config_site.h	2011-10-25 17:21:25.000577364 +0200
+@@ -0,0 +1,118 @@
 +//We distribute only for android so by default activate it
 +#ifndef PJ_ANDROID
 +#   define PJ_ANDROID   1
@@ -190,6 +190,7 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 +#define PJMEDIA_RTP_PT_TELEPHONE_EVENTS_STR      "101"
 +
 +#define USE_CSIPSIMPLE_HACKS 1
++#define PJSUA_HAS_VIDEO 1
 +#define PJSIP_AUTH_HEADER_CACHING   1
 +
 +#if defined(PJ_ANDROID) && PJ_ANDROID!=0

@@ -7,10 +7,11 @@ C_TARGET_DIR=${CURDIR}/nativesrc/
 
 # To generate with SWIG
 PJSIP_DIR=${CURDIR}/../pjsip/sources/
-PJSUA_HEADERS=${PJSIP_DIR}/pjsip/include/pjsua-lib/pjsua.h \
-	${PJSIP_DIR}/jni/include/pjsua_jni_addons.h \
-	${PJSIP_DIR}/jni/include/zrtp_android.h \
-	${PJSIP_DIR}/jni/include/opengl_video_dev.h
+PJSUA_HEADERS=${PJSIP_DIR}/pjsip/include/pjsua-lib/pjsua.h 
+# For CSipSimple
+PJSUA_HEADERS+=${CURDIR}/../csipsimple-wrapper/include/pjsua_jni_addons.h \
+	${CURDIR}/../csipsimple-wrapper/include/zrtp_android.h 
+#	${PJSIP_DIR}/jni/include/opengl_video_dev.h
 LINUX_INCLUDE=-I /usr/lib/jvm/java-6-sun/include -I /usr/lib/jvm/java-6-sun/include/linux -I ${PJSIP_DIR}/pjsip/include -I ${PJSIP_DIR}/jni/include
 LINUX_LIBDIR=
 CFLAGS=-DPJMEDIA_HAS_SRTP=1 -DPJ_HAS_SSL_SOCK=1 -DPJMEDIA_HAS_ZRTP=1
