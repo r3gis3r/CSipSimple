@@ -7,8 +7,13 @@ ifeq ($(MY_USE_AMR),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_amr_stagefright_codec
 
-#CODECS
-#self
+# pj
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources/
+LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
+	$(PJ_DIR)/pjlib-util/include/ \
+	$(PJ_DIR)/pjnath/include/ \
+	$(PJ_DIR)/pjmedia/include/
+# self
 LOCAL_C_INCLUDES += ../pj_sources/
 
 

@@ -1,8 +1,8 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-25 17:18:23.939679526 +0200
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-25 17:19:34.240028126 +0200
-@@ -2105,6 +2105,61 @@
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-26 23:11:26.412935850 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2011-10-26 23:15:28.178134691 +0200
+@@ -2106,6 +2106,61 @@
      return status;
  }
  
