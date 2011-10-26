@@ -8,7 +8,7 @@ LOCAL_PATH := $(call my-dir)/../../../sources/third_party/g7221/
 include $(CLEAR_VARS)
 LOCAL_MODULE 	:= g7221
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)../../pjlib/include/ $(LOCAL_PATH)common/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)../../pjlib/include/ $(LOCAL_PATH)common/ $(LOCAL_PATH)/../
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 PJLIB_SRC_DIR := ./
