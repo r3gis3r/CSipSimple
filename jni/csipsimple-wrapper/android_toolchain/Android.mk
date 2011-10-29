@@ -7,6 +7,7 @@ LOCAL_PATH := $(call my-dir)/../
 include $(CLEAR_VARS)
 LOCAL_MODULE := pjsipjni
 
+
 PJ_ROOT_DIR := $(LOCAL_PATH)/../pjsip/sources/
 PJ_ANDROID_ROOT_DIR := $(LOCAL_PATH)/../pjsip/android_sources/
 
@@ -17,11 +18,11 @@ LOCAL_C_INCLUDES += $(PJ_ROOT_DIR)/pjsip/include $(PJ_ROOT_DIR)/pjlib-util/inclu
 #Include PJ android interfaces
 LOCAL_C_INCLUDES += $(PJ_ANDROID_ROOT_DIR)/pjmedia/include/pjmedia-audiodev
 
-# Include ZRTP interface 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/include/ 
-
 # Include WebRTC 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../webrtc/pj_sources/
+
+# Include ZRTP interface 
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/include/ 
 
 # Include self headers
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include/
@@ -34,6 +35,8 @@ JNI_SRC_DIR := src/
 LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/zrtp_android.c
 LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/audio_codecs.c
 
+# NDK fixer
+LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/ndk_stl_fixer.cpp
 
 	
 #ifeq ($(MY_ANDROID_DEV),1)
@@ -44,6 +47,13 @@ LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/audio_codecs.c
 #endif
 
 LOCAL_LDLIBS := -llog
+
+# -- debug build
+ifeq ($(APP_OPTIM),debug)
+LOCAL_CFLAGS += -g #debug
+LOCAL_LDFLAGS += -Wl,-Map,xxx.map #create map fil
+endif
+# 
 
 ifeq ($(MY_USE_TLS),1)
 LOCAL_LDLIBS += -ldl 
@@ -73,7 +83,9 @@ ifeq ($(MY_USE_G729),1)
 	LOCAL_STATIC_LIBRARIES += g729
 endif
 ifeq ($(MY_USE_SILK),1)
-	LOCAL_STATIC_LIBRARIES += silk
+	LOCAL_STATIC_LIBRARIES += pj_silk_codec
+	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../silk/pj_sources/
+
 endif
 ifeq ($(MY_USE_CODEC2),1)
 	LOCAL_STATIC_LIBRARIES += codec2
@@ -83,9 +95,11 @@ ifeq ($(MY_USE_G7221),1)
 endif
 ifeq ($(MY_USE_AMR),1)
 	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
+	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../amr-stagefright/pj_sources/
 endif
 ifeq ($(MY_USE_TLS),1)
-	LOCAL_STATIC_LIBRARIES += ssl zrtp4pj crypto 
+	LOCAL_STATIC_LIBRARIES += zrtp4pj
+	LOCAL_SHARED_LIBRARIES += libssl libcrypto
 endif
 
 ifeq ($(MY_USE_WEBRTC),1)

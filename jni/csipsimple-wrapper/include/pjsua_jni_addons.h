@@ -62,7 +62,6 @@ typedef struct csipsimple_config {
 // methods
 PJ_DECL(int) codecs_get_nbr();
 PJ_DECL(pj_str_t) codecs_get_id(int codec_id) ;
-PJ_DECL(pj_status_t) test_audio_dev(unsigned int clock_rate, unsigned int ptime);
 PJ_DECL(pj_status_t) send_dtmf_info(int current_call, pj_str_t digits);
 PJ_DECL(pj_str_t) call_dump(pjsua_call_id call_id, pj_bool_t with_media, const char *indent);
 PJ_DECL(pj_bool_t) can_use_tls();

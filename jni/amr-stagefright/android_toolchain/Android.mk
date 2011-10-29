@@ -14,7 +14,7 @@ LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
 	$(PJ_DIR)/pjnath/include/ \
 	$(PJ_DIR)/pjmedia/include/
 # self
-LOCAL_C_INCLUDES += ../pj_sources/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../pj_sources/
 
 
 LOCAL_SRC_FILES := ../pj_sources/amr_stagefright_dyn_codec.c

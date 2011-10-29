@@ -9,7 +9,7 @@ LOCAL_MODULE    := pjlib
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include/
 ifeq ($(MY_USE_TLS),1)
-LOCAL_C_INCLUDES += $(LOCAL_PATH)../third_party/openssl/include/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../openssl/sources/include/
 endif
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
@@ -59,7 +59,10 @@ LOCAL_SRC_FILES := $(PJLIB_SRC_DIR)/addr_resolv_sock.c \
 	$(PJLIB_SRC_DIR)/types.c \
 	$(PJLIB_SRC_DIR)/ioqueue_select.c
 
-LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/timer_android.cpp 
-
+ifeq ($(MY_USE_CSIPSIMPLE),1)
+LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/timer_android.c
+else
+LOCAL_SRC_FILES += $(PJLIB_SRC_DIR)/timer.c
+endif
 include $(BUILD_STATIC_LIBRARY)
 

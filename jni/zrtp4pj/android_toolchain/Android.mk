@@ -7,16 +7,18 @@ LOCAL_PATH := $(call my-dir)/../sources/zsrtp
 include $(CLEAR_VARS)
 LOCAL_MODULE    := zrtp4pj
 
+PJ_SRC_DIR := $(LOCAL_PATH)/../../../pjsip/sources/
+OPENSSL_SRC_DIR := $(LOCAL_PATH)/../../../openssl/sources/
+
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include \
 			$(LOCAL_PATH)/include/crypto/ \
 			$(LOCAL_PATH)/include/ \
-			$(LOCAL_PATH)/../../../pjlib/include \
-		    $(LOCAL_PATH)/../../../pjlib-util/include \
-		    $(LOCAL_PATH)/../../../pjmedia/include  \
-		    $(LOCAL_PATH)/../../openssl/include 
+			$(PJ_SRC_DIR)/pjlib/include \
+		    $(PJ_SRC_DIR)/pjlib-util/include \
+		    $(PJ_SRC_DIR)/pjmedia/include  \
+		    $(OPENSSL_SRC_DIR)/include 
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
-PJLIB_SRC_DIR := 
 
 # ciphersossl
 LOCAL_SRC_FILES := crypto/openssl/AesSrtp.cpp \
@@ -59,7 +61,9 @@ LOCAL_SRC_FILES += zrtp/ZrtpCallbackWrapper.cpp \
 	zrtp/ZrtpTextData.cpp \
 	zrtp/ZrtpConfigure.cpp \
 	zrtp/ZrtpCWrapper.cpp \
-	zrtp/Base32.cpp
+	zrtp/Base32.cpp \
+	zrtp/ZrtpPacketSASrelay.cpp \
+	zrtp/ZrtpPacketRelayAck.cpp
 
 
 #srtpobj 

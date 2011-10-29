@@ -44,7 +44,7 @@ LOCAL_SRC_FILES := $(PJSIP_SRC_DIR)/sip_config.c $(PJSIP_SRC_DIR)/sip_multipart.
 
 ifeq ($(MY_USE_TLS),1)
 LOCAL_SRC_FILES += $(PJSIP_SRC_DIR)/sip_transport_tls_ossl.c
-LOCAL_C_INCLUDES += $(LOCAL_PATH)../third_party/openssl/include/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../openssl/sources/include/
 endif
 
 

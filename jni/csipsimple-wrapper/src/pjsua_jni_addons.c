@@ -88,111 +88,6 @@ PJ_DECL(pj_bool_t) can_use_srtp(){
 
 
 
-#include <dlfcn.h>
-// USELESS METHOD
-PJ_DECL(pj_status_t) test_audio_dev(unsigned int clock_rate, unsigned int ptime) {
-
-	pj_status_t status = PJ_SUCCESS;
-	void * handle = dlopen("libstagefright.so", RTLD_LAZY);
-	unsigned int (* AMREncodeInit) (void**, void**, int) = dlsym(handle, "AMREncodeInit");
-	PJ_LOG(1,(THIS_FILE, "Performing test.. %x, %x", handle, AMREncodeInit));
-	if(AMREncodeInit != NULL){
-		void* encState;
-		void* sidState;
-		int test = AMREncodeInit(&encState, &sidState, 0);
-		PJ_LOG(1,(THIS_FILE, "Performing test : %d, %x", test, encState));
-
-	}
-	dlclose(handle);
-	/*
-	PJ_LOG(3,(THIS_FILE, "Performing test.."));
-	pjmedia_aud_param param;
-	pjmedia_aud_test_results result;
-
-	pjmedia_dir dir = PJMEDIA_DIR_ENCODING_DECODING;
-
-	if (dir & PJMEDIA_DIR_CAPTURE) {
-		status = pjmedia_aud_dev_default_param(0, &param);
-	} else {
-		status = pjmedia_aud_dev_default_param(0, &param);
-	}
-
-	if (status != PJ_SUCCESS) {
-		PJ_LOG(1, (THIS_FILE, "pjmedia_aud_dev_default_param() %d", status));
-		return status;
-	}
-
-	param.dir = dir;
-	param.rec_id = 0;
-	param.play_id = 0;
-	param.clock_rate = clock_rate;
-	param.channel_count = 1;
-	param.samples_per_frame = clock_rate * 1 * ptime / 1000;
-
-	// Latency settings
-	param.flags |= (PJMEDIA_AUD_DEV_CAP_INPUT_LATENCY
-			| PJMEDIA_AUD_DEV_CAP_OUTPUT_LATENCY);
-	param.input_latency_ms = PJMEDIA_SND_DEFAULT_REC_LATENCY;
-	param.output_latency_ms = PJMEDIA_SND_DEFAULT_PLAY_LATENCY;
-
-	PJ_LOG(3,(THIS_FILE, "Performing test.."));
-
-	status = pjmedia_aud_test(&param, &result);
-	if (status != PJ_SUCCESS) {
-		PJ_LOG(1, (THIS_FILE, "Test has completed with error %d", status));
-		return status;
-	}
-
-	PJ_LOG(3,(THIS_FILE, "Done. Result:"));
-
-	if (dir & PJMEDIA_DIR_CAPTURE) {
-		if (result.rec.frame_cnt == 0) {
-			PJ_LOG(1,(THIS_FILE, "Error: no frames captured!"));
-		} else {
-			PJ_LOG(3,(THIS_FILE, "  %-20s: interval (min/max/avg/dev)=%u/%u/%u/%u, burst=%u",
-							"Recording result",
-							result.rec.min_interval,
-							result.rec.max_interval,
-							result.rec.avg_interval,
-							result.rec.dev_interval,
-							result.rec.max_burst));
-		}
-	}
-
-	if (dir & PJMEDIA_DIR_PLAYBACK) {
-		if (result.play.frame_cnt == 0) {
-			PJ_LOG(1,(THIS_FILE, "Error: no playback!"));
-		} else {
-			PJ_LOG(3,(THIS_FILE, "  %-20s: interval (min/max/avg/dev)=%u/%u/%u/%u, burst=%u",
-							"Playback result",
-							result.play.min_interval,
-							result.play.max_interval,
-							result.play.avg_interval,
-							result.play.dev_interval,
-							result.play.max_burst));
-		}
-	}
-
-	if (dir == PJMEDIA_DIR_CAPTURE_PLAYBACK) {
-		if (result.rec_drift_per_sec == 0) {
-			PJ_LOG(3,(THIS_FILE, " No clock drift detected"));
-		} else {
-			const char *which = result.rec_drift_per_sec >= 0 ? "faster"
-					: "slower";
-			unsigned drift =
-					result.rec_drift_per_sec >= 0 ? result.rec_drift_per_sec
-							: -result.rec_drift_per_sec;
-
-			PJ_LOG(3,(THIS_FILE, " Clock drifts detected. Capture device "
-							"is running %d samples per second %s "
-							"than the playback device",
-							drift, which));
-		}
-	}
-	*/
-	return status;
-}
-
 /**
  * Send dtmf with info method
  */
@@ -336,36 +231,47 @@ PJ_DECL(pj_bool_t) is_call_secure(pjsua_call_id call_id){
     pjsua_call *call;
     pjsip_dialog *dlg;
     pj_status_t status;
+    unsigned i;
     pjmedia_transport_info tp_info;
     pj_bool_t result = PJ_FALSE;
 
 	PJ_ASSERT_RETURN(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls,
 		 PJ_EINVAL);
-/*
+
 
 	status = acquire_call("is_call_secure()", call_id, &call, &dlg);
 	if (status != PJ_SUCCESS) {
 		return result;
 	}
 
-    // Get and ICE SRTP status
-    pjmedia_transport_info_init(&tp_info);
-    pjmedia_transport_get_info(call->med_tp, &tp_info);
-    if (tp_info.specific_info_cnt > 0) {
-		unsigned i;
-		for (i = 0; i < tp_info.specific_info_cnt; ++i) {
-			if (tp_info.spc_info[i].type == PJMEDIA_TRANSPORT_TYPE_SRTP) {
-				pjmedia_srtp_info *srtp_info =
-						(pjmedia_srtp_info*) tp_info.spc_info[i].buffer;
-				if(srtp_info->active){
-					result = PJ_TRUE;
-				}
+    for (i=0; i<call->med_cnt; ++i) {
+		pjsua_call_media *call_med = &call->media[i];
+		if(pjsua_call_has_media(call_id)){
+
+			/* Get and ICE SRTP status */
+			if (call_med->tp) {
+			    pjmedia_transport_info tp_info;
+
+			    pjmedia_transport_info_init(&tp_info);
+			    pjmedia_transport_get_info(call_med->tp, &tp_info);
+			    if (tp_info.specific_info_cnt > 0) {
+					unsigned j;
+					for (j = 0; j < tp_info.specific_info_cnt; ++j) {
+						if (tp_info.spc_info[j].type == PJMEDIA_TRANSPORT_TYPE_SRTP){
+							pjmedia_srtp_info *srtp_info =
+									(pjmedia_srtp_info*) tp_info.spc_info[j].buffer;
+							if(srtp_info->active){
+								result = PJ_TRUE;
+							}
+						}
+					}
+			    }
 			}
 		}
     }
 
 	pjsip_dlg_dec_lock(dlg);
-	*/
+
 	return result;
 }
 

@@ -48,9 +48,11 @@ LOCAL_SRC_FILES := $(PJLIB_SRC_DIR)/alaw_ulaw.c $(PJLIB_SRC_DIR)/alaw_ulaw_table
 	$(PJMEDIADEV_VIDEO_SRC_DIR)/videodev.c $(PJMEDIADEV_VIDEO_SRC_DIR)/colorbar_dev.c $(PJMEDIADEV_VIDEO_SRC_DIR)/errno.c
 	
 
+# If not csipsimple, load default audio codecs loader from pjmedia
 ifneq ($(MY_USE_CSIPSIMPLE),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/audio_codecs.c
 endif
+
 ifeq ($(MY_USE_G729),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/g729.c
 endif
@@ -65,9 +67,6 @@ ifeq ($(MY_USE_ILBC),1)
 endif
 ifeq ($(MY_USE_GSM),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/gsm.c 
-endif
-ifeq ($(MY_USE_SILK),1)
-	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/silk.c 
 endif
 ifeq ($(MY_USE_CODEC2),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/codec2.c 

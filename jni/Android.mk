@@ -11,6 +11,21 @@ include $(JNI_PATH)/webrtc/android_toolchain/Android.mk
 # Build amr-stagefright dynamic loader glue
 include $(JNI_PATH)/amr-stagefright/android_toolchain/Android.mk
 
+# Build silk
+include $(JNI_PATH)/silk/android_toolchain/Android.mk
+
+# Build zrtp
+include $(JNI_PATH)/zrtp4pj/android_toolchain/Android.mk
+
+# Build openssl
+ifeq ($(MY_USE_TLS),1)
+NDK_PROJECT_PATH := $(JNI_PATH)/openssl/sources/
+include $(JNI_PATH)/openssl/sources/Android.mk
+NDK_PROJECT_PATH := $(JNI_PATH)
+#include $(JNI_PATH)/openssl-fake/android_toolchain/Android.mk
+endif
+
+
 # Build wrapper
 include $(JNI_PATH)/swig-glue/android_toolchain/Android.mk
 

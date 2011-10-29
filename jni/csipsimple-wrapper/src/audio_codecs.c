@@ -18,7 +18,18 @@
  */
 #include <pjmedia-codec.h>
 #include <pjmedia/g711.h>
+
+#if PJMEDIA_HAS_WEBRTC_CODEC
 #include <webrtc_codec.h>
+#endif
+
+#if PJMEDIA_HAS_SILK_CODEC
+#include <silk.h>
+#endif
+
+#if PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC
+#include <amr_stagefright_dyn_codec.h>
+#endif
 
 PJ_DEF(void) pjmedia_audio_codec_config_default(pjmedia_audio_codec_config*cfg)
 {
@@ -122,6 +133,12 @@ pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
 	return status;
 #endif /* PJMEDIA_HAS_WEBRTC_CODEC */
 
+#if PJMEDIA_HAS_SILK_CODEC
+    /* Register Silk */
+    status = pjmedia_codec_silk_init(endpt);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif /* PJMEDIA_HAS_SILK_CODEC */
 
     return PJ_SUCCESS;
 }

@@ -149,10 +149,17 @@ public:
 	virtual pj_status_t on_setup_audio (int clock_rate) {}
 	virtual void on_teardown_audio () {}
 	virtual int on_set_micro_source () {}
-	
+
+#if PJMEDIA_HAS_ZRTP
 	virtual void on_zrtp_show_sas (const pj_str_t *sas, int verified) {}
 	virtual void on_zrtp_secure_on (const pj_str_t *cipher) {}
 	virtual void on_zrtp_secure_off () {}
+#endif
+
+#if USE_CSIPSIMPLE
+	virtual int timer_schedule(int entry, int entryId, int time) {}
+	virtual int timer_cancel(int entry, int entryId) {}
+#endif
 	
 };
 
@@ -172,15 +179,6 @@ void on_incoming_call_wrapper (pjsua_acc_id acc_id, pjsua_call_id call_id,
 void on_call_tsx_state_wrapper (pjsua_call_id call_id, 
 		pjsip_transaction *tsx,
 		pjsip_event *e) {
-		
-	//Workaround for cancelling
-	/*
-	if (tsx->method.id==PJSIP_CANCEL_METHOD){
-		if (tsx->role==PJSIP_ROLE_UAS) {
-			pjsua_call_hangup(call_id,0, NULL, NULL);
-		}       
-	}
-	*/
 	registeredCallbackObject->on_call_tsx_state(call_id, tsx, e);
 }
     
@@ -350,6 +348,7 @@ int on_set_micro_source_wrapper () {
 	registeredCallbackObject->on_set_micro_source();
 }
 
+#if PJMEDIA_HAS_ZRTP
 void on_zrtp_show_sas_wrapper(void* data, char* sas, int verified){
 	pj_str_t sas_string = pj_str(sas);
 	registeredCallbackObject->on_zrtp_show_sas(&sas_string, verified);
@@ -363,6 +362,17 @@ void on_zrtp_secure_on_wrapper(void* data, char* cipher){
 void on_zrtp_secure_off_wrapper(void* data) {
 	registeredCallbackObject->on_zrtp_secure_off();
 }
+#endif
+
+#if USE_CSIPSIMPLE
+int timer_schedule_wrapper(int entry, int entryId, int time) {
+	return registeredCallbackObject->timer_schedule(entry, entryId, time);
+}
+
+int timer_cancel_wrapper(int entry, int entryId) {
+	return registeredCallbackObject->timer_cancel(entry, entryId);
+}
+#endif
 
 }
 
@@ -394,9 +404,12 @@ static struct pjsua_callback wrapper_callback_struct = {
 	&on_nat_detect_wrapper,
 	&on_call_redirected_wrapper,
 	&on_mwi_info_wrapper,
+	NULL, //on_call_media_transport_state
 	NULL, //on_transport_state
 	NULL, //on_ice_transport_error
-	NULL //on_media_transport_created
+	NULL, //on_snd_dev_operation
+	NULL, //on_call_media_event
+	NULL //on_create_media_transport
 };
 
 void setCallbackObject(Callback* callback) {
@@ -483,9 +496,17 @@ public:
 	virtual void on_teardown_audio();
 	virtual int on_set_micro_source();
 	
+#if PJMEDIA_HAS_ZRTP
 	virtual void on_zrtp_show_sas (const pj_str_t *sas, int verified);
 	virtual void on_zrtp_secure_on (const pj_str_t *cipher);
 	virtual void on_zrtp_secure_off ();
+#endif
+
+#if USE_CSIPSIMPLE
+	virtual int timer_schedule(int entry, int entryId, int time);
+	virtual int timer_cancel(int entry, int entryId);
+#endif
+
 };
 
 %constant struct pjsua_callback* WRAPPER_CALLBACK_STRUCT = &wrapper_callback_struct;

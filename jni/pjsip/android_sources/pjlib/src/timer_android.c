@@ -6,17 +6,6 @@
 #include <pj/errno.h>
 #include <pj/lock.h>
 #include <pj/log.h>
-#include <jni.h>
-extern JavaVM *android_jvm;
-
-#define ATTACH_JVM(jni_env)  \
-	JNIEnv *g_env;\
-	int env_status = android_jvm->GetEnv((void **)&g_env, JNI_VERSION_1_6); \
-	jint attachResult = android_jvm->AttachCurrentThread(&jni_env,NULL);
-
-#define DETACH_JVM(jni_env)   if( env_status == JNI_EDETACHED ){ android_jvm->DetachCurrentThread(); }
-
-
 
 #define HEAP_PARENT(X)	(X == 0 ? 0 : (((X) - 1) / 2))
 #define HEAP_LEFT(X)	(((X)+(X))+1)
@@ -29,6 +18,11 @@ extern JavaVM *android_jvm;
 
 #define MAX_HEAPS 64
 #define MAX_ENTRY_PER_HEAP 512
+
+// Forward def of wrapper
+int timer_schedule_wrapper(int entry, int entryId, int time);
+int timer_cancel_wrapper(int entry, int entryId);
+
 
 /**
  * The implementation of timer heap.
@@ -56,15 +50,12 @@ struct pj_timer_heap_t
     /** Callback to be called when a timer expires. */
     pj_timer_heap_callback *callback;
 
-    jmethodID schedule_method;
-    jmethodID cancel_method;
 };
 
 
 static pj_timer_heap_t* sHeaps[MAX_HEAPS];
 static int sCurrentHeap = 0;
 
-jclass timer_class = 0;
 
 PJ_INLINE(void) lock_timer_heap( pj_timer_heap_t *ht )
 {
@@ -104,23 +95,11 @@ static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 
 		pj_uint32_t ft = PJ_TIME_VAL_MSEC(*delay);
 
-		PJ_LOG(5, (THIS_FILE, "Scheduling timer %d in %ld ms", entry->_timer_id, ft));
-		/*
-		pj_parsed_time pt;
-		pj_time_decode(&entry->_timer_value, &pt);
-		PJ_LOG(4,(THIS_FILE,
-				  "...%04d-%02d-%02d %02d:%02d:%02d.%03d",
-				  pt.year, pt.mon, pt.day,
-				  pt.hour, pt.min, pt.sec, pt.msec));
-		 */
+		PJ_LOG(4, (THIS_FILE, "Scheduling timer %d in %ld ms", entry->_timer_id, ft));
 
-		JNIEnv *jni_env = 0;
-		ATTACH_JVM(jni_env);
+		timer_schedule_wrapper((int)entry, (int)entry, (int)ft);
 
-		jni_env->CallStaticIntMethod(timer_class, ht->schedule_method, (void*)entry, (void*)entry, ft);
-		DETACH_JVM(jni_env);
-
-		return 0;
+		return PJ_SUCCESS;
     } else{
     	return PJ_ETOOMANY;
     }
@@ -144,11 +123,7 @@ static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
 		return 0;
 	}
 
-	// Java stuff
-	JNIEnv *jni_env = 0;
-	ATTACH_JVM(jni_env);
-	int cancelCount = jni_env->CallStaticIntMethod(timer_class, ht->cancel_method, (void*)entry, (void*)entry);
-	DETACH_JVM(jni_env);
+	int cancelCount = timer_cancel_wrapper((int)entry, (int)entry);
 
 	if(cancelCount > 0){
 		// Remove from table
@@ -222,43 +197,6 @@ PJ_DEF(pj_status_t) pj_timer_heap_create( pj_pool_t *pool,
 
     pj_bzero(ht->entries, MAX_ENTRY_PER_HEAP * sizeof(pj_timer_entry*));
 
-    PJ_LOG(4, (THIS_FILE, "Will connect JVM"));
-    // Init glue to java classes
-    JNIEnv *jni_env = 0;
-    ATTACH_JVM(jni_env);
-
-	//Get pointer to the java class
-    PJ_LOG(4, (THIS_FILE, "JVM CONNECTED %x", jni_env));
-
-    if(timer_class == 0){
-    	timer_class = (jclass)/*jni_env->NewGlobalRef(*/jni_env->FindClass("com/csipsimple/utils/TimerWrapper")/*)*/;
-    }
-	PJ_LOG(4, (THIS_FILE, "Timer class..."));
-	if (timer_class == 0) {
-		PJ_LOG(1, (THIS_FILE, "Timer class not found"));
-		jni_env->ExceptionDescribe();
-		jni_env->ExceptionClear();
-		DETACH_JVM(jni_env);
-		return PJ_ENOMEM;
-	}
-
-	PJ_LOG(5, (THIS_FILE, "We have the class for process"));
-
-	//Get the set priority function
-	ht->schedule_method = jni_env->GetStaticMethodID(timer_class, "schedule", "(III)I");
-	ht->cancel_method = jni_env->GetStaticMethodID(timer_class, "cancel", "(II)I");
-	if (ht->schedule_method == 0 || ht->cancel_method == 0 ) {
-		PJ_LOG(1, (THIS_FILE, "Method for timer not found"));
-		jni_env->ExceptionClear();
-		DETACH_JVM(jni_env);
-		return PJ_ENOMEM;
-	}
-	PJ_LOG(5, (THIS_FILE, "We have the method for setThreadPriority"));
-
-
-	DETACH_JVM(jni_env);
-
-
     *p_heap = ht;
     return PJ_SUCCESS;
 }
@@ -273,6 +211,7 @@ PJ_DEF(void) pj_timer_heap_destroy( pj_timer_heap_t *ht )
 		    cancel(ht, entry, 1);
 		}
 	}
+
     unlock_timer_heap(ht);
 
     if (ht->lock && ht->auto_delete_lock) {
@@ -401,7 +340,7 @@ PJ_DEF(pj_status_t) pj_timer_fire(long entry_ptr){
 
     pj_thread_desc  a_thread_desc;
     pj_thread_t         *a_thread;
-    int j;
+    unsigned i,j;
 
     pj_timer_entry *entry = (pj_timer_entry *) entry_ptr;
 
@@ -422,7 +361,7 @@ PJ_DEF(pj_status_t) pj_timer_fire(long entry_ptr){
 		if(entry->_timer_id != -1){
 			// Check that belong to current heap
 			pj_timer_heap_t *ht = NULL;
-			for(int i=0; i < MAX_HEAPS; i++){
+			for(i=0; i < MAX_HEAPS; i++){
 				pj_timer_heap_t *tHeap = sHeaps[i];
 				if(tHeap != NULL){
 				    lock_timer_heap(tHeap);
