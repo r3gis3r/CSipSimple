@@ -17,6 +17,7 @@ void destroy_ringback_tone();
 void app_on_call_state(pjsua_call_id call_id, pjsip_event *e);
 static void pj_android_log_msg(int level, const char *data, int len);
 static pj_bool_t on_rx_request_tcp_hack(pjsip_rx_data *rdata);
+
 #ifdef __cplusplus
 }
 #endif
@@ -24,6 +25,19 @@ static pj_bool_t on_rx_request_tcp_hack(pjsip_rx_data *rdata);
 PJ_BEGIN_DECL
 
 // css config
+
+typedef struct dynamic_codec {
+	/**
+	 * Path to the shared library
+	 */
+	pj_str_t shared_lib_path;
+
+	/**
+	 * Name of the factory function to launch to init the codec
+	 */
+	pj_str_t init_factory_name;
+} dynamic_codec;
+
 typedef struct csipsimple_config {
     /**
      * Use compact form for sdp
@@ -55,9 +69,17 @@ typedef struct csipsimple_config {
 	 */
 	pj_bool_t use_zrtp;
 
+	/**
+	 * Number of dynamically loaded codecs
+	 */
+	unsigned extra_codecs_cnt;
+
+	/**
+	 * Codecs to be dynamically loaded
+	 */
+	dynamic_codec extra_codecs[64];
 
 } csipsimple_config;
-
 
 // methods
 PJ_DECL(int) codecs_get_nbr();
@@ -82,4 +104,16 @@ PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr);
 
 PJ_END_DECL
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+struct css_data {
+    pj_pool_t	    *pool;	    /**< Pool for the css app. */
+	unsigned 		extra_codecs_cnt;
+	dynamic_codec 	extra_codecs[64];
+};
+
+#ifdef __cplusplus
+}
+#endif
 #endif

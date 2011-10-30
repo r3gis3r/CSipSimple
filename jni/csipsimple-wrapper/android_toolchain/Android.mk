@@ -33,7 +33,6 @@ LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 JNI_SRC_DIR := src/
 
 LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/zrtp_android.c
-LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/audio_codecs.c
 
 # NDK fixer
 LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/ndk_stl_fixer.cpp
@@ -82,16 +81,9 @@ endif
 ifeq ($(MY_USE_G729),1)
 	LOCAL_STATIC_LIBRARIES += g729
 endif
-ifeq ($(MY_USE_SILK),1)
-	LOCAL_STATIC_LIBRARIES += pj_silk_codec
-	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../silk/pj_sources/
 
-endif
 ifeq ($(MY_USE_CODEC2),1)
 	LOCAL_STATIC_LIBRARIES += codec2
-endif
-ifeq ($(MY_USE_G7221),1)
-	LOCAL_STATIC_LIBRARIES += g7221
 endif
 ifeq ($(MY_USE_AMR),1)
 	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec

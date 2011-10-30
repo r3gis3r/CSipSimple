@@ -23,7 +23,7 @@ MY_USE_CSIPSIMPLE := 1
 MY_USE_G729 := 0
 MY_USE_ILBC := 0
 MY_USE_G722 := 1
-MY_USE_G7221 := 0
+MY_USE_G7221 := 1
 MY_USE_SPEEX := 1
 MY_USE_GSM := 1
 MY_USE_SILK := 1
@@ -39,6 +39,13 @@ MY_ANDROID_DEV := 1
 # Do not change behind this line the are flags for pj build
 # Only build pjsipjni and ignore openssl
 APP_MODULES := libpjsipjni
+ifeq ($(MY_USE_SILK),1)
+APP_MODULES += libpj_silk_codec 
+endif
+ifeq ($(MY_USE_G7221),1)
+APP_MODULES += libpj_g7221_codec
+endif
+
 APP_PLATFORM := android-9
 APP_STL := stlport_static
 

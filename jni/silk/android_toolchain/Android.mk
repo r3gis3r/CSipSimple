@@ -24,11 +24,11 @@ LOCAL_SRC_FILES += $(wildcard $(SILK_PATH)/src/*.c)
 LOCAL_C_INCLUDES += $(PJ_SILK_PATH)
 LOCAL_SRC_FILES += $(PJ_SILK_PATH)/silk.c
 
-
+LOCAL_SHARED_LIBRARIES += libpjsipjni
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
-include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 
 endif

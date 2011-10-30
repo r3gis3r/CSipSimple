@@ -1099,12 +1099,5 @@ static pj_status_t  amr_codec_recover( pjmedia_codec *codec,
 }
 #endif
 
-#if defined(_MSC_VER) && PJMEDIA_AUTO_LINK_OPENCORE_AMR_LIBS
-#  if PJMEDIA_OPENCORE_AMR_BUILT_WITH_GCC
-#   pragma comment( lib, "libopencore-amrnb.a")
-#  else
-#   error Unsupported OpenCORE AMR library, fix here
-#  endif
-#endif
 
 #endif

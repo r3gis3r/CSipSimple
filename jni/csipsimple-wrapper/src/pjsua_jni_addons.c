@@ -35,6 +35,9 @@
 
 #define USE_TCP_HACK 0
 
+// CSS config instance
+static struct css_data css_var;
+
 /**
  * Get nbr of codecs
  */
@@ -295,11 +298,7 @@ static pj_bool_t on_rx_request_tcp_hack(pjsip_rx_data *rdata) {
 static char errmsg[PJ_ERR_MSG_SIZE];
 //Get error message
 PJ_DECL(pj_str_t) get_error_message(int status) {
-
     return pj_strerror(status, errmsg, sizeof(errmsg));
-    /* pj_str(errmsg);
-    PJ_LOG(3,(THIS_FILE, "Error for %d msg %s", status, result));
-    return result;*/
 }
 
 
@@ -308,7 +307,7 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg){
 	css_cfg->use_compact_form_headers = PJ_FALSE;
 	css_cfg->use_no_update = PJ_FALSE;
 	css_cfg->use_zrtp = PJ_FALSE;
-
+	css_cfg->extra_codecs_cnt = 0;
 }
 
 //Wrap start & stop
@@ -317,6 +316,11 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				pjsua_media_config *media_cfg,
 				csipsimple_config *css_cfg){
 	pj_status_t result;
+
+
+    /* Create memory pool for application. */
+    css_var.pool = pjsua_pool_create("css", 1000, 1000);
+    PJ_ASSERT_RETURN(css_var.pool, PJ_ENOMEM);
 
 	// Finalize configuration
 	log_cfg->cb = &pj_android_log_msg;
@@ -345,6 +349,19 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	pjsip_include_allow_hdr_in_dlg = css_cfg->use_compact_form_headers ? PJ_FALSE : PJ_TRUE;
 	/* Do not include rtpmap for static payload types (<96) */
 	pjmedia_add_rtpmap_for_static_pt = css_cfg->use_compact_form_sdp ? PJ_FALSE : PJ_TRUE;
+
+
+
+	css_var.extra_codecs_cnt = css_cfg->extra_codecs_cnt;
+	unsigned i;
+	for(i=0; i < css_cfg->extra_codecs_cnt; i++){
+		dynamic_codec *css_codec = &css_var.extra_codecs[i];
+		dynamic_codec *cfg_codec = &css_cfg->extra_codecs[i];
+
+		pj_strdup_with_null(css_var.pool, &css_codec->shared_lib_path, &cfg_codec->shared_lib_path);
+		pj_strdup_with_null(css_var.pool, &css_codec->init_factory_name, &cfg_codec->init_factory_name);
+
+	}
 
 
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
@@ -377,7 +394,6 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	    result = pjsip_endpt_register_module(pjsip_ua_get_endpt(pjsip_ua_instance()), &tcp_hack_mod);
 #endif
 
-
 	}
 
 
@@ -386,6 +402,11 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 
 PJ_DECL(pj_status_t) csipsimple_destroy(void){
 	destroy_ringback_tone();
+
+    if (css_var.pool) {
+		pj_pool_release(css_var.pool);
+		css_var.pool = NULL;
+    }
 	return (pj_status_t) pjsua_destroy();
 }
 
@@ -607,5 +628,141 @@ void app_on_call_state(pjsua_call_id call_id, pjsip_event *e) {
 		}
 	}
 }
+
+
+
+// Codec loader
+
+#include <pjmedia-codec.h>
+#include <pjmedia/g711.h>
+#include <dlfcn.h>
+#include <pjsua_jni_addons.h>
+
+#if PJMEDIA_HAS_WEBRTC_CODEC
+#include <webrtc_codec.h>
+#endif
+
+#if PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC
+#include <amr_stagefright_dyn_codec.h>
+#endif
+
+
+PJ_DEF(void) pjmedia_audio_codec_config_default(pjmedia_audio_codec_config*cfg)
+{
+    pj_bzero(cfg, sizeof(*cfg));
+    cfg->speex.option = 0;
+    cfg->speex.quality = PJMEDIA_CODEC_SPEEX_DEFAULT_QUALITY;
+    cfg->speex.complexity = PJMEDIA_CODEC_SPEEX_DEFAULT_COMPLEXITY;
+    cfg->ilbc.mode = 30;
+    cfg->passthrough.setting.ilbc_mode = cfg->ilbc.mode;
+}
+
+PJ_DEF(pj_status_t)
+pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
+                                    const pjmedia_audio_codec_config *c)
+{
+    pjmedia_audio_codec_config default_cfg;
+    pj_status_t status;
+
+    PJ_ASSERT_RETURN(endpt, PJ_EINVAL);
+    if (!c) {
+	pjmedia_audio_codec_config_default(&default_cfg);
+	c = &default_cfg;
+    }
+
+    PJ_ASSERT_RETURN(c->ilbc.mode==20 || c->ilbc.mode==30, PJ_EINVAL);
+
+#if PJMEDIA_HAS_PASSTHROUGH_CODECS
+    status = pjmedia_codec_passthrough_init2(endpt, &c->passthough.ilbc);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif
+
+#if PJMEDIA_HAS_SPEEX_CODEC
+    /* Register speex. */
+    status = pjmedia_codec_speex_init(endpt, c->speex.option,
+				      c->speex.quality,
+				      c->speex.complexity);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif
+
+#if PJMEDIA_HAS_ILBC_CODEC
+    /* Register iLBC. */
+    status = pjmedia_codec_ilbc_init( endpt, c->ilbc.mode);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif /* PJMEDIA_HAS_ILBC_CODEC */
+
+#if PJMEDIA_HAS_GSM_CODEC
+    /* Register GSM */
+    status = pjmedia_codec_gsm_init(endpt);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif /* PJMEDIA_HAS_GSM_CODEC */
+
+#if PJMEDIA_HAS_G711_CODEC
+    /* Register PCMA and PCMU */
+    status = pjmedia_codec_g711_init(endpt);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif	/* PJMEDIA_HAS_G711_CODEC */
+
+#if PJMEDIA_HAS_G722_CODEC
+    status = pjmedia_codec_g722_init(endpt );
+    if (status != PJ_SUCCESS)
+	return status;
+#endif  /* PJMEDIA_HAS_G722_CODEC */
+
+#if PJMEDIA_HAS_L16_CODEC
+    /* Register L16 family codecs */
+    status = pjmedia_codec_l16_init(endpt, 0);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif	/* PJMEDIA_HAS_L16_CODEC */
+
+#if PJMEDIA_HAS_OPENCORE_AMRNB_CODEC || PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC
+    /* Register OpenCORE AMR-NB */
+    status = pjmedia_codec_opencore_amrnb_init(endpt);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif
+
+#if PJMEDIA_HAS_WEBRTC_CODEC
+    /* Register WEBRTC */
+    status = pjmedia_codec_webrtc_init(endpt);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif /* PJMEDIA_HAS_WEBRTC_CODEC */
+
+    // Dynamic loading of plugins codecs
+    unsigned i;
+
+    for(i=0; i < css_var.extra_codecs_cnt; i++){
+    	dynamic_codec *codec = &css_var.extra_codecs[i];
+    	char lib_path[512];
+    	char init_name[512];
+    	pj_ansi_snprintf(lib_path, sizeof(lib_path), "%.*s", codec->shared_lib_path.slen, codec->shared_lib_path.ptr);
+    	pj_ansi_snprintf(init_name, sizeof(init_name), "%.*s", codec->init_factory_name.slen, codec->init_factory_name.ptr);
+
+    	void* handle = dlopen(lib_path, RTLD_LAZY);
+    	if(handle != NULL){
+    		pj_status_t (*init_factory) (pjmedia_endpt *endpt) = dlsym(handle, init_name);
+    		if(init_factory != NULL){
+    			status = init_factory(endpt);
+    			if(status != PJ_SUCCESS){
+    				PJ_LOG(2, (THIS_FILE, "Error loading dynamic codec plugin %s", init_name));
+    			}
+    		}else{
+    			PJ_LOG(2, (THIS_FILE, "Invalid factory name %s", init_name));
+    		}
+    	}else{
+    		PJ_LOG(1, (THIS_FILE, "Not found lib : %s", lib_path));
+    	}
+    }
+
+    return PJ_SUCCESS;
+}
+
 
 
