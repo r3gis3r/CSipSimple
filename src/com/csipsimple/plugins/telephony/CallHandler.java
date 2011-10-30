@@ -17,27 +17,33 @@
  */
 package com.csipsimple.plugins.telephony;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.Log;
 
 public class CallHandler extends BroadcastReceiver {
 
 	
+
+	private static final String THIS_FILE = "CallHandlerTelephony";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -61,9 +67,30 @@ public class CallHandler extends BroadcastReceiver {
 				for(final ResolveInfo caller : callers) {
 					if(caller.activityInfo.packageName.startsWith("com.android")) {
 						PackageManager pm = context.getPackageManager();
-						Drawable icon = caller.loadIcon(pm);
-						BitmapDrawable bd = ((BitmapDrawable) icon);
-						bmp = bd.getBitmap();
+						
+						Resources remoteRes;
+						try {
+							ComponentName cmp = new ComponentName(caller.activityInfo.packageName, caller.activityInfo.name);
+							// To be sure, also try to resolve resovePackage for android api-4 and upper
+							if(Compatibility.isCompatible(4)) {
+								try {
+									Field f = ResolveInfo.class.getDeclaredField("resolvePackageName");
+									String resPackage = (String) f.get(caller);
+									Log.d(THIS_FILE, "Load from " + resPackage);
+									if(resPackage != null) {
+										cmp = new ComponentName(resPackage, caller.activityInfo.name);
+									}
+								} catch (Exception e) {
+									Log.e(THIS_FILE, "Impossible to use 4 api ", e);
+								}
+								
+							}
+							remoteRes = pm.getResourcesForActivity(cmp);
+							bmp = BitmapFactory.decodeResource(remoteRes, caller.getIconResource());
+						} catch (NameNotFoundException e) {
+							Log.e(THIS_FILE, "Impossible to load ", e);
+						}
+						
 					}
 				}
 			}
