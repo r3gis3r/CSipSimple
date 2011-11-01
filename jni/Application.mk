@@ -27,7 +27,7 @@ MY_USE_G7221 := 1
 MY_USE_SPEEX := 1
 MY_USE_GSM := 1
 MY_USE_SILK := 1
-MY_USE_CODEC2 := 0
+MY_USE_CODEC2 := 1
 MY_USE_TLS := 1
 MY_USE_WEBRTC := 1
 MY_USE_AMR := 1
@@ -44,6 +44,9 @@ APP_MODULES += libpj_silk_codec
 endif
 ifeq ($(MY_USE_G7221),1)
 APP_MODULES += libpj_g7221_codec
+endif
+ifeq ($(MY_USE_CODEC2),1)
+APP_MODULES += libpj_codec2_codec
 endif
 
 APP_PLATFORM := android-9

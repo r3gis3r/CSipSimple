@@ -17,6 +17,9 @@ include $(JNI_PATH)/silk/android_toolchain/Android.mk
 # Build g729
 include $(JNI_PATH)/g729/android_toolchain/Android.mk
 
+# Build codec2
+include $(JNI_PATH)/codec2/android_toolchain/Android.mk
+
 # Build zrtp
 include $(JNI_PATH)/zrtp4pj/android_toolchain/Android.mk
 

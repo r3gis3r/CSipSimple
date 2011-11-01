@@ -1,7 +1,6 @@
 LOCAL_PATH := /
 CALL_PATH := $(call my-dir)
 
-# TODO : amr build with _AMR_ folder
 G729_PATH := $(CALL_PATH)/../sources/
 PJ_G729_PATH := $(CALL_PATH)/../pj_sources/
 
@@ -17,12 +16,12 @@ LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
 	$(PJ_DIR)/pjlib-util/include/ \
 	$(PJ_DIR)/pjnath/include/ \
 	$(PJ_DIR)/pjmedia/include/
-# silk
+# g729
 LOCAL_C_INCLUDES += $(G729_PATH)/include
 LOCAL_SRC_FILES += $(wildcard $(G729_PATH)/src/*.c)
 # self
 LOCAL_C_INCLUDES += $(PJ_G729_PATH)
-LOCAL_SRC_FILES += $(PJ_G729_PATH)/g729.c
+LOCAL_SRC_FILES += $(PJ_G729_PATH)/pj_g729.c
 
 
 

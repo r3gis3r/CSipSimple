@@ -65,9 +65,6 @@ endif
 ifeq ($(MY_USE_GSM),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/gsm.c 
 endif
-ifeq ($(MY_USE_CODEC2),1)
-	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/codec2.c 
-endif
 
 ifeq ($(MY_USE_WEBRTC),1)
 	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../webrtc/sources/

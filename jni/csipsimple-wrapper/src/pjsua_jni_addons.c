@@ -648,7 +648,7 @@ void app_on_call_state(pjsua_call_id call_id, pjsip_event *e) {
 
 
 #if PJMEDIA_HAS_G729_CODEC
-#include <g729.h>
+#include <pj_g729.h>
 #endif
 
 

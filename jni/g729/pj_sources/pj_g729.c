@@ -33,6 +33,7 @@
 #if defined(PJMEDIA_HAS_G729_CODEC) && (PJMEDIA_HAS_G729_CODEC!=0)
 
 #include "typedef.h"
+#include "pj_g729.h"
 #include "g729a.h"
 
 #define THIS_FILE       "g729.c"
@@ -112,7 +113,8 @@ static pjmedia_codec_factory_op g729_factory_op =
     &g729_default_attr,
     &g729_enum_codecs,
     &g729_alloc_codec,
-    &g729_dealloc_codec
+    &g729_dealloc_codec,
+    &pjmedia_codec_g729_deinit
 };
 
 /* G729 factory private data */
