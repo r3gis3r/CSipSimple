@@ -99,11 +99,11 @@ static void zrtpNotSuppOther(void* data)
 {
     PJ_LOG(3,(THIS_FILE, "ZRTP not supported by other peer"));
 }
-static void zrtpAskEnrollment(void* data, char* info)
+static void zrtpAskEnrollment(void* data, int32_t info)
 {
     PJ_LOG(3,(THIS_FILE, "ZRTP - Ask PBX enrollment"));
 }
-static void zrtpInformEnrollment(void* data, char* info)
+static void zrtpInformEnrollment(void* data, int32_t info)
 {
     PJ_LOG(3,(THIS_FILE, "ZRTP - Inform PBX enrollement"));
 }
@@ -133,6 +133,7 @@ static zrtp_UserCallbacks wrapper_zrtp_callback_struct = {
     &checkSASSignature,
     NULL
 };
+
 
 pjmedia_transport *current_zrtp;
 

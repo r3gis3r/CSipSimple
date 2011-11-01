@@ -21,6 +21,9 @@ LOCAL_C_INCLUDES += $(PJ_ANDROID_ROOT_DIR)/pjmedia/include/pjmedia-audiodev
 # Include WebRTC 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../webrtc/pj_sources/
 
+# Include g729 
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../g729/pj_sources/
+
 # Include ZRTP interface 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/include/ 
 
@@ -79,7 +82,7 @@ ifeq ($(MY_USE_SPEEX),1)
 	LOCAL_STATIC_LIBRARIES += speex
 endif
 ifeq ($(MY_USE_G729),1)
-	LOCAL_STATIC_LIBRARIES += g729
+	LOCAL_STATIC_LIBRARIES += pj_g729_codec
 endif
 
 ifeq ($(MY_USE_CODEC2),1)

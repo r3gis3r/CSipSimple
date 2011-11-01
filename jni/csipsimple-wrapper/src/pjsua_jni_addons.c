@@ -647,6 +647,11 @@ void app_on_call_state(pjsua_call_id call_id, pjsip_event *e) {
 #endif
 
 
+#if PJMEDIA_HAS_G729_CODEC
+#include <g729.h>
+#endif
+
+
 PJ_DEF(void) pjmedia_audio_codec_config_default(pjmedia_audio_codec_config*cfg)
 {
     pj_bzero(cfg, sizeof(*cfg));
@@ -734,6 +739,13 @@ pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
     if (status != PJ_SUCCESS)
 	return status;
 #endif /* PJMEDIA_HAS_WEBRTC_CODEC */
+
+#if PJMEDIA_HAS_G729_CODEC
+    /* Register WEBRTC */
+    status = pjmedia_codec_g729_init(endpt);
+    if (status != PJ_SUCCESS)
+	return status;
+#endif /* PJMEDIA_HAS_G729_CODEC */
 
     // Dynamic loading of plugins codecs
     unsigned i;
