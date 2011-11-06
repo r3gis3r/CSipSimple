@@ -203,6 +203,11 @@ public class Compatibility {
 			// Atrix bug
 			return "32000";
 		}
+		if(android.os.Build.DEVICE.toUpperCase().equals("GT-P1010")) {
+			// Galaxy tab see issue 932
+			return "32000";
+		}
+		
 		return isCompatible(4) ? "16000" : "8000";
 	}
 	
@@ -610,6 +615,9 @@ public class Compatibility {
 		}
 		if(lastSeenVersion < 1033 &&  android.os.Build.PRODUCT.toLowerCase().startsWith("thunder")) {
 			prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+		}
+		if(lastSeenVersion < 1076 && android.os.Build.DEVICE.toUpperCase().equals("GT-P1010")) {
+			prefWrapper.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE, getDefaultFrequency());
 		}
 	}
 
