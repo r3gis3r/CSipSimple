@@ -456,15 +456,15 @@ public class UAStateReceiver extends Callback {
 	}
 	
 	private void updateZrtpInfos() {
-		// For now, just get the first one...
+		// For now, just get the first active call ...
 		if(callsList.size() > 0) {
-			for(int callId : callsList.keySet()) {
-				SipCallSession callInfo = callsList.get(callId);
-				callInfo.setMediaSecure(true);
-				callInfo.setMediaSecureInfo("ZRTP : "+sasString);
-				onBroadcastCallState(callInfo);
-				
-				break;
+			for(SipCallSession callInfo : callsList.values()) {
+				if(callInfo.isActive()) {
+					callInfo.setMediaSecure(true);
+					callInfo.setMediaSecureInfo("ZRTP : "+sasString);
+					onBroadcastCallState(callInfo);
+					break;
+				}
 			}
 		}
 	}
