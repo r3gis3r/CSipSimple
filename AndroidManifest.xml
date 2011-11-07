@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.02-03" android:versionCode="1025">
+	android:versionName="0.02-03" android:versionCode="1084">
 	<supports-screens  
 		android:smallScreens="true" 
 		android:normalScreens="true"
@@ -45,6 +45,11 @@
 				<action android:name="android.intent.action.ANY_DATA_STATE"></action>
 				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
 				<action android:name="com.csipsimple.accounts.activate"></action>
+			</intent-filter>
+			<intent-filter >
+				<action android:name="android.intent.action.PACKAGE_ADDED" />
+				<action android:name="android.intent.action.PACKAGE_REMOVED" />
+				<data android:scheme="package" />
 			</intent-filter>
 		</receiver>
 		
