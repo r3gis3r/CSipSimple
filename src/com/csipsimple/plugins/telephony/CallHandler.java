@@ -85,7 +85,8 @@ public class CallHandler extends BroadcastReceiver {
 								}
 								
 							}
-							remoteRes = pm.getResourcesForActivity(cmp);
+							remoteRes = pm.getResourcesForApplication(caller.activityInfo.applicationInfo);
+							//remoteRes = pm.getResourcesForActivity(cmp);
 							bmp = BitmapFactory.decodeResource(remoteRes, caller.getIconResource());
 						} catch (NameNotFoundException e) {
 							Log.e(THIS_FILE, "Impossible to load ", e);

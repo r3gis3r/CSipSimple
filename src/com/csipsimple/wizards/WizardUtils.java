@@ -84,6 +84,7 @@ import com.csipsimple.wizards.impl.Pfingo;
 import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Pozitel;
+import com.csipsimple.wizards.impl.Rapidvox;
 import com.csipsimple.wizards.impl.Sapo;
 import com.csipsimple.wizards.impl.Sbohempevnalinko;
 import com.csipsimple.wizards.impl.Scarlet;
@@ -279,6 +280,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_sonetel, 17, 
 					new Locale[]{  }, false, true, 
 					Sonetel.class));
+			WIZARDS_DICT.put("RAPIDVOX", new WizardInfo("RAPIDVOX", "Rapidvox", 
+					R.drawable.ic_wizard_rapidvox, 19, 
+					new Locale[]{  }, false, true, 
+					Rapidvox.class));
 			
 			
 			
