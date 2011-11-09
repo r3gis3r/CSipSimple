@@ -52,5 +52,11 @@ public class Odorik extends SimpleImplementation {
 		return "Odorik.cz";
 	}
 	
-	
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+		SipProfile acc = super.buildAccount(account);
+		acc.allow_contact_rewrite = false;
+		acc.try_clean_registers = 1;
+		return acc;
+	}
 }
