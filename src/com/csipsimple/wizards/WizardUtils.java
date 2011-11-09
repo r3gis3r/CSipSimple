@@ -38,6 +38,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
+import com.csipsimple.wizards.impl.BGTel;
 import com.csipsimple.wizards.impl.BTone;
 import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Betamax;
@@ -519,7 +520,11 @@ public class WizardUtils {
 					Locale.UK
 					}, false, false, 
 					Gradwell.class));
-			
+			WIZARDS_DICT.put("BGTEL", new WizardInfo("BGTEL", "BG-Tel", 
+					R.drawable.ic_wizard_bgtel, 10, 
+					new Locale[]{ locale("bg_BG") , Locale.CANADA,
+					new Locale("EL", "gr"), Locale.US, Locale.GERMANY}, false, false, 
+					BGTel.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
