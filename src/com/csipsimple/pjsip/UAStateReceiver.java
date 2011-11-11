@@ -192,18 +192,15 @@ public class UAStateReceiver extends Callback {
 		lockCpu();
 		
 		long date = System.currentTimeMillis();
-		String sFrom = SipUri.getCanonicalSipContact(from.getPtr());
+		String fromStr = PjSipService.pjStrToString(from);
+		String canonicFromStr = SipUri.getCanonicalSipContact(fromStr);
+		String contactStr = PjSipService.pjStrToString(contact);
+		String toStr = PjSipService.pjStrToString(to);
+		String bodyStr = PjSipService.pjStrToString(body);
+		String mimeStr = PjSipService.pjStrToString(mime_type);
 		
-		String contactString = "";
-		if(contact != null && contact.getSlen() > 0) {
-			Log.d(THIS_FILE, "Contact is present");
-			contactString = contact.getPtr();
-		}else {
-			Log.d(THIS_FILE, "EMPTY CONTACT !!!");
-		}
-		
-		SipMessage msg = new SipMessage(sFrom, to.getPtr(), contactString, body.getPtr(), mime_type.getPtr(), 
-				date, SipMessage.MESSAGE_TYPE_INBOX, from.getPtr());
+		SipMessage msg = new SipMessage(canonicFromStr, toStr, contactStr, bodyStr, mimeStr, 
+				date, SipMessage.MESSAGE_TYPE_INBOX, fromStr);
 		
 		//Insert the message to the DB 
 		DBAdapter database = new DBAdapter(pjService.service);
@@ -229,14 +226,15 @@ public class UAStateReceiver extends Callback {
 		//TODO : treat error / acknowledge of messages
 		int messageType = (status.equals(pjsip_status_code.PJSIP_SC_OK) 
 				|| status.equals(pjsip_status_code.PJSIP_SC_ACCEPTED))? SipMessage.MESSAGE_TYPE_SENT : SipMessage.MESSAGE_TYPE_FAILED;
-		String sTo = SipUri.getCanonicalSipContact(to.getPtr());
+		String sTo = SipUri.getCanonicalSipContact(PjSipService.pjStrToString(to));
 
-		Log.d(THIS_FILE, "SipMessage in on pager status "+status.toString()+" / "+reason.getPtr());
+		String reasonStr = PjSipService.pjStrToString(reason);
+		Log.d(THIS_FILE, "SipMessage in on pager status "+status.toString()+" / "+reasonStr);
 		
 		//Update the db
 		DBAdapter database = new DBAdapter(pjService.service);
 		database.open();
-		database.updateMessageStatus(sTo, body.getPtr(), messageType, status.swigValue(), reason.getPtr());
+		database.updateMessageStatus(sTo, PjSipService.pjStrToString(body), messageType, status.swigValue(), reasonStr);
 		database.close();
 		
 		//Broadcast the information
@@ -371,7 +369,7 @@ public class UAStateReceiver extends Callback {
 		lockCpu();
 		//Treat incoming voice mail notification.
 		
-		String msg = body.getPtr();
+		String msg = PjSipService.pjStrToString(body);
 		//Log.d(THIS_FILE, "We have a message :: " + acc_id + " | " + mime_type.getPtr() + " | " + body.getPtr());
 		
 		boolean hasMessage = false;
@@ -433,7 +431,7 @@ public class UAStateReceiver extends Callback {
 	
 	@Override
 	public void on_zrtp_show_sas(pj_str_t sas, int verified) {
-		sasString = sas.getPtr();
+		sasString = PjSipService.pjStrToString(sas);
 		Log.d(THIS_FILE, "Hey hoy hay, we get the show SAS " + sasString);
 		if(verified != 1) {
 			Intent zrtpIntent = new Intent(SipManager.ACTION_ZRTP_SHOW_SAS);
@@ -488,7 +486,7 @@ public class UAStateReceiver extends Callback {
 	
 	@Override
 	public pjsip_redirect_op on_call_redirected(int call_id, pj_str_t target) {
-		Log.w(THIS_FILE, "Ask for redirection, not yet implemented, for now allow all "+target.getPtr());
+		Log.w(THIS_FILE, "Ask for redirection, not yet implemented, for now allow all "+ PjSipService.pjStrToString(target));
 		return pjsip_redirect_op.PJSIP_REDIRECT_ACCEPT;
 	}
 	

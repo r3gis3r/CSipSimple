@@ -287,7 +287,7 @@ public class PjSipService {
 				// INITIALIZE
 				status = pjsua.csipsimple_init(cfg, logCfg, mediaCfg, cssCfg);
 				if (status != pjsuaConstants.PJ_SUCCESS) {
-					String msg = "Fail to init pjsua " + pjsua.get_error_message(status).getPtr();
+					String msg = "Fail to init pjsua " + pjStrToString(pjsua.get_error_message(status));
 					Log.e(THIS_FILE, msg);
 					service.notifyUserOfMessage(msg);
 					cleanPjsua();
@@ -372,7 +372,7 @@ public class PjSipService {
 						status = pjsua.media_transports_create(cfg);
 					}
 					if (status != pjsuaConstants.PJ_SUCCESS) {
-						String msg = "Fail to add media transport " + pjsua.get_error_message(status).getPtr();
+						String msg = "Fail to add media transport " + pjStrToString(pjsua.get_error_message(status));
 						Log.e(THIS_FILE, msg);
 
 						service.notifyUserOfMessage(msg);
@@ -386,7 +386,7 @@ public class PjSipService {
 			status = pjsua.start();
 
 			if (status != pjsua.PJ_SUCCESS) {
-				String msg = "Fail to start pjsip  " + pjsua.get_error_message(status).getPtr();
+				String msg = "Fail to start pjsip  " + pjStrToString(pjsua.get_error_message(status));
 				Log.e(THIS_FILE, msg);
 				service.notifyUserOfMessage(msg);
 				cleanPjsua();
@@ -514,7 +514,7 @@ public class PjSipService {
 
 		status = pjsua.transport_create(type, cfg, tId);
 		if (status != pjsuaConstants.PJ_SUCCESS) {
-			String errorMsg = pjsua.get_error_message(status).getPtr();
+			String errorMsg = pjStrToString(pjsua.get_error_message(status));
 			String msg = "Fail to create transport " + errorMsg + " (" + status + ")";
 			Log.e(THIS_FILE, msg);
 			if (status == 120098) { /* Already binded */
@@ -599,7 +599,7 @@ public class PjSipService {
 			}
 			
 			//If no registrar update state right now
-			if (TextUtils.isEmpty(account.cfg.getReg_uri().getPtr())) {
+			if (TextUtils.isEmpty( pjStrToString(account.cfg.getReg_uri()) ) ) {
 				service.updateRegistrationsState();
 				//Broadcast the information
 				Intent regStateChangedIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
@@ -652,7 +652,7 @@ public class PjSipService {
 				} catch (IllegalArgumentException e) {
 					profileState.setStatusCode(SipCallSession.StatusCode.INTERNAL_SERVER_ERROR);
 				}
-				profileState.setStatusText(pjAccountInfo.getStatus_text().getPtr());
+				profileState.setStatusText(pjStrToString(pjAccountInfo.getStatus_text()));
 				profileState.setExpires(pjAccountInfo.getExpires());
 				
 				synchronized (profilesStatus) {
@@ -684,7 +684,7 @@ public class PjSipService {
 			int nbrCodecs = pjsua.codecs_get_nbr();
 			codecs = new ArrayList<String>();
 			for (int i = 0; i < nbrCodecs; i++) {
-				String codecId = pjsua.codecs_get_id(i).getPtr();
+				String codecId = pjStrToString(pjsua.codecs_get_id(i));
 				codecs.add(codecId);
 				//Log.d(THIS_FILE, "Added codec " + codecId);
 			}
@@ -1364,4 +1364,14 @@ public class PjSipService {
 		pjsua.update_transport(pjsua.pj_str_copy(oldIPAddress));
 	}
 
+	
+	public static String pjStrToString(pj_str_t pjStr) {
+		if(pjStr != null) {
+			int len = pjStr.getSlen();
+			if(len > 0) { 
+				return pjStr.getPtr().substring(0, len);
+			}
+		}
+		return "";
+	}
 }

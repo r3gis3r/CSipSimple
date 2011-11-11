@@ -66,7 +66,7 @@ public final class PjSipCalls {
 		//Hey lucky man we have nothing to think about here cause we have a bijection between int / state
 		session.setCallState( pjCallInfo.getState().swigValue() );
 		session.setMediaStatus( pjCallInfo.getMedia_status().swigValue() );
-		session.setRemoteContact( pjCallInfo.getRemote_info().getPtr() );
+		session.setRemoteContact( PjSipService.pjStrToString(pjCallInfo.getRemote_info()) );
 		session.setConfPort( pjCallInfo.getConf_slot() );
 		
 		int pjAccId = pjCallInfo.getAcc_id();
@@ -109,7 +109,7 @@ public final class PjSipCalls {
 	}
 	
 	public static String dumpCallInfo(int callId) throws SameThreadException {
-		return pjsua.call_dump(callId, pjsua.PJ_TRUE, " ").getPtr();
+		return PjSipService.pjStrToString(pjsua.call_dump(callId, pjsua.PJ_TRUE, " "));
 	}
 	
 }

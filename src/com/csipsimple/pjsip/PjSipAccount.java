@@ -175,19 +175,19 @@ public class PjSipAccount {
 		}
 		
 		if (!TextUtils.isEmpty(argument)) {
-			regUri = cfg.getReg_uri().getPtr();
+			regUri = PjSipService.pjStrToString(cfg.getReg_uri());
 			if(!TextUtils.isEmpty(regUri)) {
 				long initialProxyCnt = cfg.getProxy_cnt();
 				pj_str_t[] proxies = cfg.getProxy();
 				
 				//TODO : remove lr and transport from uri
 		//		cfg.setReg_uri(pjsua.pj_str_copy(proposed_server));
-				
-				if (initialProxyCnt == 0 || TextUtils.isEmpty(proxies[0].getPtr())) {
+				String firstProxy = PjSipService.pjStrToString(proxies[0]);
+				if (initialProxyCnt == 0 || TextUtils.isEmpty(firstProxy)) {
 					cfg.setReg_uri(pjsua.pj_str_copy(regUri + argument));
 					cfg.setProxy_cnt(0);
 				} else {
-					proxies[0] = pjsua.pj_str_copy(proxies[0].getPtr() + argument);
+					proxies[0] = pjsua.pj_str_copy(firstProxy + argument);
 					cfg.setProxy(proxies);
 				}
 //				} else {
@@ -204,7 +204,7 @@ public class PjSipAccount {
 		
 		// If one default caller is set 
 		if (!TextUtils.isEmpty(defaultCallerid)) {
-			String accId = cfg.getId().getPtr();
+			String accId = PjSipService.pjStrToString(cfg.getId());
 			ParsedSipContactInfos parsedInfos = SipUri.parseSipContact(accId);
 			if (TextUtils.isEmpty(parsedInfos.displayName)) {
 				// Apply new display name
