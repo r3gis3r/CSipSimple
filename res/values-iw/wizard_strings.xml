@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="other_country_providers_text">ספקים בארצות אחרות</string>
+  <string name="world_wide_providers_text">ספקי אינטרנט</string>
+  <string name="generic_wizards_text">אשפים כללים</string>
+</resources>

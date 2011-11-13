@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_sipgate_display_name">שם החשבון</string>
+  <string name="w_sipgate_display_name_desc">הצגת שם עבור חשבון זה</string>
+  <string name="w_sipgate_username">זהות-סיפ</string>
+  <string name="w_sipgate_username_desc">שונה מן הכניסת sipgate שלך! בדוק באתר האינטרנט שלך sipgate SIP-ID</string>
+  <string name="w_sipgate_password">סיסמת סיפ</string>
+  <string name="w_sipgate_password_desc">שונה מן הסיסמה שלך! בדוק באתר sipgate סיסמת SIP שלך</string>
+  <string name="w_sipgate_server_desc">משהו כזה: sipgate.co.uk</string>
+</resources>

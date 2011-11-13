@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="description_image_button_one">אחד</string>
+  <string name="description_image_button_two">שתיים</string>
+  <string name="description_image_button_three">שלוש</string>
+  <string name="description_image_button_four">ארבע</string>
+  <string name="description_image_button_five">חמש</string>
+  <string name="description_image_button_six">שש</string>
+  <string name="description_image_button_seven">שבע</string>
+  <string name="description_image_button_eight">שמונה</string>
+  <string name="description_image_button_nine">תשע</string>
+  <string name="description_image_button_star">כוכב</string>
+  <string name="description_image_button_zero">אפס</string>
+  <string name="description_image_button_pound">פאונד</string>
+  <string name="description_dial_button">חייג</string>
+  <string name="description_delete_button">מחק</string>
+  <string name="description_digits_edittext">מספר לחיוג</string>
+</resources>

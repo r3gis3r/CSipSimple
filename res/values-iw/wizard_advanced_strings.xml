@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="w_advanced_display_name">שם החשבון</string>
+  <string name="w_advanced_display_name_desc">הצג שם עבור חשבון זה</string>
+  <string name="w_advanced_caller_id">שיחה מזוהה</string>
+  <string name="w_advanced_caller_id_desc">לשלוח שיחה מזוהה עם שיחות</string>
+  <string name="w_advanced_username">שם משתמש</string>
+  <string name="w_advanced_username_desc">שם משתמש עבור אימות שרת סיפ (לא לכתוב את ה-\@sip.server)</string>
+  <string name="w_advanced_password">סיסמה</string>
+  <string name="w_advanced_password_desc">סיסמה עבור אימות שרת סיפ</string>
+  <string name="w_advanced_use_tcp">השתמש ב-TCP (לא ב-UDP)</string>
+  <string name="w_advanced_proxy">פרוקסי</string>
+  <string name="w_advanced_proxy_desc">פרוקסי דומיין/אייפי [יציאה:] (אופציונלי, לא תמיד צריך)</string>
+</resources>
