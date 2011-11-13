@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string-array name="scheme_choices">
-    <item>Izvleček</item>
+    <item>Povzetek</item>
     <item>PGP</item>
   </string-array>
   <string-array name="data_type_choices">
     <item>Navadno geslo</item>
-    <item>Izvleček podatkov</item>
+    <item>Povzetek podatkov</item>
   </string-array>
   <string-array name="clock_rate_choices">
     <item>8 KHz</item>
@@ -51,5 +51,13 @@
     <item>Uporabi Android nastavitve</item>
     <item>Prisili</item>
     <item>Prepreči</item>
+  </string-array>
+  <string-array name="band_types_name">
+    <item>Ozkopasovno</item>
+    <item>Širokopasovno</item>
+  </string-array>
+  <string-array name="use_zrtp_choices">
+    <item>Ni ZRTP</item>
+    <item>Ustvari ZRTP</item>
   </string-array>
 </resources>

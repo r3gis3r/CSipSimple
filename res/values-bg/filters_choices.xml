@@ -7,11 +7,21 @@
     <item>Директно повикване</item>
     <item>Автоматичен отговор</item>
   </string-array>
+  <string-array name="filters_type">
+    <item>Започва с</item>
+    <item>Завършва с</item>
+    <item>Съдържа</item>
+    <item>Всички</item>
+    <item>Има точно N цифри</item>
+    <item>Има повече от N цифри</item>
+    <item>Е точно</item>
+    <item>Филтър</item>
+  </string-array>
   <string-array name="replace_type">
-    <item>Префикс от</item>
-    <item>Суфикс с</item>
-    <item>Замяна при съвпадение с</item>
-    <item>Замяна на всички с</item>
-    <item>Регулярен израз по избор</item>
+    <item>Префиксиран от</item>
+    <item>Последван от</item>
+    <item>Замени съвпадащите с</item>
+    <item>Замени всички с</item>
+    <item>Замени</item>
   </string-array>
 </resources>

@@ -4,7 +4,6 @@
   <string name="next">Suivant</string>
   <string name="init">Initialisation...</string>
   <string name="unable_to_download_file">Impossible de télécharger le fichier</string>
-  <string name="connection_not_valid">Votre connexion n\'est actuellement pas suffisante pour les appels SIP (activez le WIFI ou changez vos préférences pour utiliser la 3G)</string>
   <string name="invalid_sip_uri">L\'URI SIP n\'est pas valide pour effectuer un appel</string>
   <string name="accounts">Comptes</string>
   <string name="other_accounts">Autres comptes</string>

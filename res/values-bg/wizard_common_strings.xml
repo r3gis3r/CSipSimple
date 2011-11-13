@@ -3,8 +3,11 @@
   <string name="w_common_display_name">Име на профила</string>
   <string name="w_common_display_name_desc">Показване на име за този профил</string>
   <string name="w_common_username">Потребителско име</string>
+  <string name="w_common_username_desc">Sip акаунт логин (не пишете \@sip.server)</string>
   <string name="w_common_phone_number">Телефонен номер</string>
   <string name="w_common_phone_number_desc">Sip телефонен номер предоставен от Вашия доставчик</string>
   <string name="w_common_password">Парола</string>
   <string name="w_common_password_desc">Парола за Вашия профил</string>
+  <string name="w_common_server">Сървър</string>
+  <string name="w_common_server_desc">Домейн на SIP сървъра/IP[:port]</string>
 </resources>

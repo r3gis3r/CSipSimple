@@ -48,12 +48,14 @@
   <string name="confirm_delete_locked_message">Você tem certeza que deseja deletar esta mensagem travada</string>
   <string name="confirm_delete_all_messages">O tópico inteiro será deletado</string>
   <string name="delete">Deletar</string>
+  <string name="status_none">(Nenhum)</string>
   <string name="status_pending">Pendente</string>
   <string name="status_received">Recebido</string>
   <string name="status_failed">Falha</string>
   <string name="status_unread">Não lido</string>
   <string name="status_rejected">Rejeitado</string>
   <string name="recipient_label">Destinatário:\\u0020</string>
+  <string name="status_label">Status:\\u0020</string>
   <string name="menu_insert_smiley">Inserir emoticon</string>
   <string name="me">Eu</string>
   <string name="sending_message">Enviando\\u2026</string>

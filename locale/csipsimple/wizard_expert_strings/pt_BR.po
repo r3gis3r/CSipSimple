@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-12-11 19:02+0000\n"
 "Last-Translator: Júlio Cezar Santos Pires <Unknown>\n"
 "Language-Team: pt_BR <LL@li.org>\n"
@@ -27,27 +27,27 @@ msgstr "Mostrar nome para esta conta"
 
 msgctxt "w_expert_acc_id"
 msgid "Account id"
-msgstr ""
+msgstr "ID da conta"
 
 msgctxt "w_expert_acc_id_desc"
 msgid "Format : DisplayName &lt;sip:login@registrar&gt;"
-msgstr ""
+msgstr "Formato : DisplayName &lt;sip:login@registrar&gt;"
 
 msgctxt "w_expert_reg_uri"
 msgid "Registration URI"
-msgstr ""
+msgstr "URI de registro"
 
 msgctxt "w_expert_reg_uri_desc"
 msgid "Format : sip:registrar.net[:port]"
-msgstr ""
+msgstr "Formato : sip:registrar.net[:porta]"
 
 msgctxt "w_expert_realm"
 msgid "Realm"
-msgstr ""
+msgstr "Domínio"
 
 msgctxt "w_expert_realm_desc"
 msgid "Authentication domain (if you don't know, use '*')"
-msgstr ""
+msgstr "Domínio de autenticação (se não souber, use '*')"
 
 msgctxt "w_expert_username"
 msgid "Username"
@@ -63,7 +63,7 @@ msgstr "Senha"
 
 msgctxt "w_expert_data_desc"
 msgid "Password (or other data) for authentication"
-msgstr ""
+msgstr "Senha (ou outro dado) para autenticação"
 
 msgctxt "w_expert_t_proxy"
 msgid "Proxy"
@@ -71,11 +71,11 @@ msgstr "Proxy"
 
 msgctxt "w_expert_proxy"
 msgid "Proxy URI"
-msgstr ""
+msgstr "URI do Proxy"
 
 msgctxt "w_expert_proxy_desc"
 msgid "Format : sip:proxy.net[:port]"
-msgstr ""
+msgstr "Formato : sip:proxy.net[:porta]"
 
 msgctxt "w_expert_use_tcp"
 msgid "Use TCP (not UDP)"
@@ -83,37 +83,45 @@ msgstr "Use TCP (não UDP)"
 
 msgctxt "w_expert_prevent_tcp"
 msgid "Prevent TCP (only try UDP)"
-msgstr ""
+msgstr "Não usar TCP (tentar somente UDP)"
 
 msgctxt "w_expert_publish_enabled"
 msgid "Publish enabled"
-msgstr ""
+msgstr "Publicação habilitada"
 
 msgctxt "w_expert_reg_timeout"
 msgid "Register timeout (sec)"
-msgstr ""
+msgstr "Timeout de registro (s)"
 
 msgctxt "w_expert_reg_delay_before_refresh"
 msgid "Register delay before refresh (sec)"
-msgstr ""
+msgstr "Atraso de registro antes do refresh (s)"
 
 msgctxt "w_expert_ka_interval"
 msgid "Keep-alive interval (sec)"
-msgstr ""
+msgstr "Intervalo de keep-alive (s)"
 
 msgctxt "w_expert_force_contact"
 msgid "Force contact"
-msgstr ""
+msgstr "Forçar contato"
 
 msgctxt "w_expert_allow_contact_rewrite"
 msgid "Allow contact rewrite"
-msgstr ""
+msgstr "Permitir reescrita do contato"
 
 msgctxt "w_expert_contact_rewrite_method"
 msgid "Contact rewrite method"
-msgstr ""
+msgstr "Método de reescrita do contato"
 
 msgctxt "w_expert_reg_use_proxy"
 msgid "How to use proxy"
+msgstr "Como usar o proxy"
+
+msgctxt "w_expert_try_clean_registers"
+msgid "Try to clean registers"
+msgstr ""
+
+msgctxt "w_expert_try_clean_registers_desc"
+msgid "Allow app to try to clean old registrations if needed"
 msgstr ""
 

@@ -4,7 +4,6 @@
   <string name="next">Volgende</string>
   <string name="init">Initialiseren ...</string>
   <string name="unable_to_download_file">Kan bestand niet downloaden</string>
-  <string name="connection_not_valid">Geselecteerde netwerk route niet beschikbaar (activeer Wi-Fi of verander uw voorkeuren om 3G te gebruiken)</string>
   <string name="invalid_sip_uri">SIP-URI is ongeldig voor oproep</string>
   <string name="accounts">Accounts</string>
   <string name="other_accounts">Andere accounts</string>

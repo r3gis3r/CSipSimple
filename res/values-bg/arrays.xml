@@ -1,2 +1,41 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string-array name="default_smiley_texts">
+    <item>:-)</item>
+    <item>:-(</item>
+    <item>:-[</item>
+    <item>O:-)</item>
+    <item>:-\\</item>
+    <item>:\'(</item>
+    <item>:-X</item>
+    <item>:-D</item>
+    <item>o_O</item>
+    <item>;-)</item>
+    <item>:-P</item>
+    <item>=-O</item>
+    <item>:-*</item>
+    <item>:O</item>
+    <item>B-)</item>
+    <item>:-$</item>
+    <item>:-!</item>
+  </string-array>
+  <string-array name="default_smiley_names">
+    <item>Щастлив</item>
+    <item>Тъжен</item>
+    <item>Засрамен</item>
+    <item>Ангел</item>
+    <item>Нерешителен</item>
+    <item>Плачещ</item>
+    <item>Нямам думи</item>
+    <item>Смеещ се</item>
+    <item>Объркан</item>
+    <item>Премигващ</item>
+    <item>Плезещ се</item>
+    <item>Изненадан</item>
+    <item>Целувка</item>
+    <item>Крещящ</item>
+    <item>Готино</item>
+    <item>Богаташ</item>
+    <item>Ритник в устата</item>
+  </string-array>
+</resources>

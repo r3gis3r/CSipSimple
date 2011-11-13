@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="description_image_button_one">ena</string>
+  <string name="description_image_button_two">dva</string>
+  <string name="description_image_button_three">tri</string>
+  <string name="description_image_button_four">štiri</string>
+  <string name="description_image_button_five">pet</string>
+  <string name="description_image_button_six">šest</string>
+  <string name="description_image_button_seven">sedem</string>
+  <string name="description_image_button_eight">osem</string>
+  <string name="description_image_button_nine">devet</string>
+  <string name="description_image_button_star">zvezdica</string>
+  <string name="description_image_button_zero">nič</string>
+  <string name="description_image_button_pound">funt</string>
+  <string name="description_dial_button">kliči</string>
+  <string name="description_delete_button">povratna tipka</string>
+  <string name="description_digits_edittext">številka za klicanje</string>
+</resources>

@@ -10,6 +10,7 @@
   <string name="prefs_ui">Benutzeroberfläche</string>
   <string name="prefs_ui_desc">Anpassen der Benutzeroberfläche</string>
   <string name="prefs_calls">Anrufeinstellungen</string>
+  <string name="prefs_calls_desc">Einstellungen für Anrufe</string>
   <string name="for_incomings">Für eingehende Anrufe</string>
   <string name="for_outgoings">Für ausgehende Anrufe</string>
   <string name="perfs">Leistung</string>
@@ -18,7 +19,7 @@
   <string name="use_wifi">Verwende WLAN</string>
   <string name="use_wifi_in_desc">Verwende WLAN für eingehende Anrufe</string>
   <string name="use_wifi_out_desc">Verwende WLAN für ausgehende Anrufe</string>
-  <string name="use_other">Verwende andere Netwerke</string>
+  <string name="use_other">Verwende andere Netzwerke</string>
   <string name="use_other_in_desc">z.B. WiMax für eingehende Anrufe</string>
   <string name="use_other_out_desc">z.B. WiMax für ausgehende Anrufe</string>
   <string name="use_3g">Verwende UMTS</string>
@@ -28,7 +29,7 @@
   <string name="lock_wifi">WLAN Leistung</string>
   <string name="lock_wifi_desc">Verhindere WiFi-Standby wenn SIP über WLAN verbunden ist</string>
   <string name="enable_tcp">TCP</string>
-  <string name="enable_tcp_desc">Aktiviert das TCP Protokoll</string>
+  <string name="enable_tcp_desc">TCP Protokoll verwenden</string>
   <string name="enable_tls">TLS</string>
   <string name="enable_tls_desc">Aktiviert die TLS Verschlüsselung</string>
   <string name="enable_udp">UDP</string>
@@ -38,13 +39,13 @@
   <string name="network_tcp_transport_port">TCP Port</string>
   <string name="network_tcp_transport_port_desc">Lokale TCP Portnummer</string>
   <string name="network_rtp_port">RTP port</string>
-  <string name="network_rtp_port_desc">Port an dem die RTP Ports beginnen</string>
+  <string name="network_rtp_port_desc">Erster RTP Port</string>
   <string name="use_ipv6">IPv6 benutzen</string>
   <string name="use_ipv6_desc">Zum IPv6-Modus wechseln (Ihr Netzwerk und Mobiltelefon müssen es unterstützen)</string>
   <string name="enable_dns_srv">DNS SRV auflösen</string>
   <string name="enable_dns_srv_desc">Verwendet eigenen DNS um IP-Adressen aufzulösen</string>
   <string name="override_nameserver">Benutzerdefinierte DNS Server verwenden</string>
-  <string name="override_nameserver_desc">Leer lassen um den DNS von Android zu verwenden</string>
+  <string name="override_nameserver_desc">Leer lassen um Standard DNS zu verwenden</string>
   <string name="nat_traversal">NAT Traversal</string>
   <string name="enable_ice">Aktiviere ICE</string>
   <string name="enable_ice_desc">Aktiviert die ICE Funktionalität</string>
@@ -52,9 +53,14 @@
   <string name="enable_turn_desc">Aktiviert die TURN Funktionalität</string>
   <string name="turn_server">TURN Server</string>
   <string name="turn_server_desc">TURN Server (HOST:PORT)</string>
+  <string name="turn_username">TURN Benutzername</string>
+  <string name="turn_username_desc">Benutzername für TURN Authentifizierung</string>
+  <string name="turn_password">TURN Kennwort</string>
+  <string name="turn_password_desc">Kennwort für TURN Authentifizierung</string>
   <string name="enable_stun">Aktiviere STUN</string>
   <string name="enable_stun_desc">Aktiviert die STUN Funktionalität</string>
   <string name="stun_server">STUN Server</string>
+  <string name="stun_server_desc">STUN Server (HOST[:PORT], ...)</string>
   <string name="enable_qos">Aktiviere QoS</string>
   <string name="enable_qos_desc">Pakete mit QoS-Werten markieren</string>
   <string name="dscp_val">DSCP-Wert</string>
@@ -62,6 +68,8 @@
   <string name="keep_alive_interval_wifi">WiFi Keep-Alive</string>
   <string name="keep_alive_interval_mobile">3G Keep-Alive</string>
   <string name="keep_alive_interval_desc">Abstand von Keep-Alive Paketen (sek)</string>
+  <string name="use_compact_form">Benutze Kompaktes SIP</string>
+  <string name="use_compact_form_desc">Reduziere SIP Paketgröße. Wird ggf. nicht mit alten SIP Providern funktionieren</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">Gesicherte Übertragung</string>
   <string name="secure_transport_desc">Sicherheitseinstellungen für SIP und RTP</string>
@@ -95,6 +103,8 @@
   <string name="snd_mic_level_desc">Stellt den Mikrofonpegel ein (1=keine Veränderung)</string>
   <string name="snd_speaker_level">Lautsprecherpegel</string>
   <string name="snd_speaker_level_desc">Stellt den Lautsprecherpegel ein (1=keine Veränderung)</string>
+  <string name="snd_bt_mic_level">Bluetooth Mikrofonpegel</string>
+  <string name="snd_bt_speaker_level">Bluetooth Lautsprecherpegel</string>
   <string name="snd_stream_level">Audiodatenpegel</string>
   <string name="snd_stream_level_desc">Stellt den Mikrofonpegel ein</string>
   <string name="snd_auto_close_time">Audioabschaltung</string>
@@ -104,7 +114,7 @@
   <string name="snd_clock_rate">Abtastrate</string>
   <string name="snd_clock_rate_desc">Verändert die Abtastrate der Audiodaten</string>
   <string name="snd_ptime">Paket ptime</string>
-  <string name="snd_ptime_desc">Eine kleinere ptime reduziert normaler Weise die Latenz</string>
+  <string name="snd_ptime_desc">Eine kleinere ptime reduziert normalerweise die Latenz</string>
   <string name="echo_cancellation_tail">Echounterdrückungslänge</string>
   <string name="echo_cancellation_tail_desc">Länge des Echos das unterdrückt werden kann</string>
   <string name="echo_mode">Unterdrückungsalgorithmus</string>
@@ -130,8 +140,9 @@
   <string name="band_for_edge">Bandtyp für EDGE</string>
   <string name="band_for_other">Bandtyp für andere Netze</string>
   <string name="codecs_band_types">Bandbreiten-Zuordnung</string>
+  <string name="use_sgs_call_hack">Samsung Galaxy Hack</string>
   <string name="general_ui">Standard-Benutzeroberfläche</string>
-  <string name="native_dialer_integration">Native dialer integration</string>
+  <string name="native_dialer_integration">Native Telefon Integration</string>
   <string name="advanced_ui">Fortgeschrittene Tweaks</string>
   <string name="integrate_with_native_dialer">Nachfragen beim Wählen</string>
   <string name="integrate_with_native_dialer_desc">Beim Wählen einer Nummer mit der Standardanwendung werden sie gefragt, ob sie SIP oder GSM verwenden wollen</string>
@@ -145,7 +156,7 @@
   <string name="start_with_text_dialer_desc">Startet mit Textwähler</string>
   <string name="use_alternate_unlocker">Alternative Rufannahme</string>
   <string name="use_alternate_unlocker_desc">Verwende Schaltfächen zum Annehmen von eingehenden Anrufen</string>
-  <string name="keep_awake_incall">Einschlafen verhindern</string>
+  <string name="keep_awake_incall">Display während Anruf nicht ausschalten</string>
   <string name="keep_awake_incall_desc">Beim Telefonieren das Einschlafen verhindern. (Behebt Probleme mit abgehacktem Audio.)</string>
   <string name="use_partial_wake_lock">Verhindere CPU-Standby</string>
   <string name="use_partial_wake_lock_desc">Stelle sicher das die CPU die Applikation bevorzugt (erhöhter Akku-Verbrauch)</string>
@@ -157,8 +168,15 @@
   <string name="ringtone_desc">Standard-Klingelton für SIP Anrufe</string>
   <string name="prevent_screen_rotation">Verhindere Displayrotation</string>
   <string name="prevent_screen_rotation_desc">Verhindert die Rotation des Displays und hält es im Portraitformat</string>
+  <string name="gsm_integration_type">Integration ins Mobiltelefon</string>
+  <string name="gsm_integration_type_desc">Wie die Applikation das Mobiltelefon benutzt (oder nicht)</string>
   <string name="invert_proximity_sensor">Entfernungs-Sensor invertieren</string>
   <string name="invert_proximity_sensor_desc">Hilft bei Geräten mit fehlerhaftem Entfernungs-Sensor</string>
+  <string name="theme">Aussehen</string>
+  <string name="theme_desc">Aussehen der Applikation</string>
+  <string name="obtain_themes">Erhalte mehr Stile</string>
+  <string name="display_icon_in_status_bar_nbr">Zeige Rufnummer in der Statuszeile</string>
+  <string name="display_icon_in_status_bar_nbr_desc">Zeige die Rufnummer registrierter Konten in der Statuszeile</string>
   <string name="android_integration">Mit Android integrieren</string>
   <string name="android_integration_desc">Integration mit Standardwählprogramm und Anrufliste</string>
   <string name="availability_profile">Verfügbarkeitsprofil</string>
@@ -174,6 +192,8 @@
   <string name="codecs_availability_text">Nur verfügbar, wenn SIP registriert ist</string>
   <string name="auto_record_calls">Anrufe automatisch aufnehmen</string>
   <string name="auto_record_calls_desc">Nehme Anrufe auf sobald sie angenommen werden</string>
+  <string name="support_multiple_calls">Erlaube mehrere gleichzeitige Anrufe</string>
+  <string name="support_multiple_calls_desc">Erlaube Konferenzen und mehrere gleichzeige Anrufe</string>
   <string name="expert_preferences">Experten Modus</string>
   <string name="advanced_preferences">Erweiterter Modus</string>
 </resources>

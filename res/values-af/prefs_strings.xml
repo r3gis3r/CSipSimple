@@ -12,7 +12,6 @@
   <string name="use_wifi_in_desc">Gebruik WiFi vir inkomende oproepe</string>
   <string name="use_wifi_out_desc">Gebruik WiFi vir uitgaande oproepe</string>
   <string name="use_other">Gebruik ander netwerke</string>
-  <string name="use_3g">Gebruik 3G</string>
   <string name="use_3g_disclamer">jou netwerk MOET jou toelaat om hierdie opsie te gebruik</string>
   <string name="use_edge">Gebruik EDGE</string>
   <string name="use_gprs">Gebruik GPRS</string>

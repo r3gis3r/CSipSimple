@@ -1,2 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="next">Naslednja</string>
+  <string name="accounts">Računi</string>
+  <string name="other_accounts">Ostali računi</string>
+  <string name="save">Shrani</string>
+  <string name="cancel">Prekliči</string>
+</resources>

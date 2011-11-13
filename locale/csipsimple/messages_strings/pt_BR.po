@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-12-06 01:44+0000\n"
 "Last-Translator: Daniel Borene <Unknown>\n"
 "Language-Team: pt_BR <LL@li.org>\n"
@@ -280,7 +280,7 @@ msgstr "Deletar"
 #. Status in "Report" window
 msgctxt "status_none"
 msgid "(None)"
-msgstr ""
+msgstr "(Nenhum)"
 
 #. Status in "Report" window
 msgctxt "status_pending"
@@ -315,7 +315,7 @@ msgstr "Destinatário:\\u0020"
 #. Label in "Report" window
 msgctxt "status_label"
 msgid "Status:\\u0020"
-msgstr ""
+msgstr "Status:\\u0020"
 
 #. Menu item
 msgctxt "menu_insert_smiley"

@@ -4,7 +4,6 @@
   <string name="next">Next</string>
   <string name="init">Init...</string>
   <string name="unable_to_download_file">Unable to download file</string>
-  <string name="connection_not_valid">Selected network route not available (activate WiFi or change preferences to use 3G)</string>
   <string name="invalid_sip_uri">SIP URI is is invalid for call</string>
   <string name="accounts">Accounts</string>
   <string name="other_accounts">Other accounts</string>
@@ -18,10 +17,13 @@
   <string name="choose_wizard">Choose wizard</string>
   <string name="use">Use :</string>
   <string name="use_pstn">Use mobile</string>
+  <string name="use_skype">Use Skype</string>
   <string name="ongoing_call">Call in progress</string>
   <string name="missed_call">Missed call</string>
   <string name="recentCalls_empty">No Call History</string>
   <string name="filters">Filters</string>
+  <string name="filters_desc">To apply when integration to Android is used</string>
+  <string name="filters_for">Filters for</string>
   <string name="add_filter">Add filter / rewrite rule</string>
   <string name="delete_filter">Delete filter</string>
   <string name="callLog_delete_entry">Delete this call</string>
@@ -38,6 +40,8 @@
   <string name="service_ticker_registered_text">SIP Registered</string>
   <string name="outgoing_call_chooser_call_text">Call</string>
   <string name="reorder">Reorder</string>
+  <string name="backup_restore">Backup / Restore</string>
+  <string name="backup">Backup</string>
   <string name="faq">FAQ</string>
   <string name="help">Help</string>
   <string name="record_logs">Record logs to send it to dev team and report a bug</string>

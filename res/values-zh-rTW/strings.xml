@@ -4,7 +4,6 @@
   <string name="next">下一頁</string>
   <string name="init">初始化中...</string>
   <string name="unable_to_download_file">無法下載檔案</string>
-  <string name="connection_not_valid">選取的網路路徑不合用 (打開WiFi 或修改偏好設定使用3G)</string>
   <string name="invalid_sip_uri">呼叫不正確的 SIP uri</string>
   <string name="accounts">帳戶</string>
   <string name="other_accounts">其他帳戶</string>
@@ -21,6 +20,7 @@
   <string name="use_skype">使用 Skype</string>
   <string name="ongoing_call">呼叫中</string>
   <string name="missed_call">未接來電</string>
+  <string name="recentCalls_empty">無通話紀錄</string>
   <string name="filters">過濾條件</string>
   <string name="filters_desc">如有設定 \"整合進Android\", 才適用</string>
   <string name="filters_for">過濾器適用於</string>
@@ -63,4 +63,5 @@
   <string name="show_password">顯示密碼</string>
   <string name="this_codec_is_not_free">"**這個編解碼器不是免費的 !!!**\n請確認某人 (不管是你的網路電話提供商或您本人) 已購買使用許可, 您才可以使用這個編解碼器!  我們 (軟體提供者) 不對您非法使用這個編解碼器負任何責任.\n再次提醒您確認您擁有這個編解碼器的使用權.\n購買連結 :"</string>
   <string name="voice_mail">語音信箱</string>
+  <string name="type_sip_uri_or_autocomplete">SIP uri 位址或自動填入</string>
 </resources>

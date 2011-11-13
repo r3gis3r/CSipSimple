@@ -9,6 +9,8 @@
   <string name="prefs_media_desc">Kodeki in zvok</string>
   <string name="prefs_ui">Uporabniški vmesnik</string>
   <string name="prefs_ui_desc">Prilagodi uporabniški vmesnik</string>
+  <string name="prefs_calls">Klicne možnosti</string>
+  <string name="prefs_calls_desc">Možnosti v zvezi z klicanjem</string>
   <string name="for_incomings">Za dohodne klice</string>
   <string name="for_outgoings">Za odhodne klice</string>
   <string name="perfs">Delovanje</string>
@@ -51,7 +53,10 @@
   <string name="turn_server_desc">(strežnik:vrata)</string>
   <string name="enable_stun">Omogoči STUN</string>
   <string name="enable_stun_desc">Enostavno prečkanje UDP preko NAT</string>
+  <string name="stun_server">STUN strežniki</string>
+  <string name="stun_server_desc">STUN strežniki (HOST[:PORT], ...)</string>
   <string name="enable_qos">Omogoči QoS</string>
+  <string name="enable_qos_desc">Omogoči QoS</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">Varen prenos</string>
   <string name="secure_transport_desc">Varnostni mehanizem za SIP in RTP</string>
@@ -59,6 +64,7 @@
   <string name="network_tls_transport_port">Vrata TLS</string>
   <string name="network_tls_transport_port_desc">Številka lokalnih vrat</string>
   <string name="network_tls_server_name">Ime strežnika TLS</string>
+  <string name="privkey_file_desc">Na primer /sdcard/CSipSimple/myKey.key</string>
   <string name="use_srtp">Način SRTP</string>
   <string name="use_srtp_desc">Način za varen RTP</string>
   <string name="audio_quality">Kvaliteta zvoka</string>

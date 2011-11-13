@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,7 +107,7 @@ msgid "For example WiMax for outgoing calls"
 msgstr ""
 
 msgctxt "use_3g"
-msgid "Use 3G"
+msgid "Use 3G (and better)"
 msgstr ""
 
 msgctxt "use_3g_disclamer"
@@ -320,6 +320,32 @@ msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
+msgstr ""
+
+msgctxt "force_no_update"
+msgid "Force no update"
+msgstr ""
+
+msgctxt "force_no_update_desc"
+msgid ""
+"Some buggy remote party announce to support UPDATE method while it does "
+"not, this option force the legacy way to manage UPDATE/re-INVITE"
+msgstr ""
+
+msgctxt "timer_min_se"
+msgid "Minimum session expiration"
+msgstr ""
+
+msgctxt "timer_min_se_desc"
+msgid "Minimum session expiration period, in seconds. Must not be lower than 90."
+msgstr ""
+
+msgctxt "timer_sess_expires"
+msgid "Session expiration period"
+msgstr ""
+
+msgctxt "timer_sess_expires_desc"
+msgid "Session expiration period, in seconds. Must not be lower than min_se."
 msgstr ""
 
 #. Security

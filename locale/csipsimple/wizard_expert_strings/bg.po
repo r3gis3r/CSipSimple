@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-10-13 13:14+0000\n"
 "Last-Translator: Dimitar Dimitrov <bez.syanka.na.samnenie@gmail.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -83,7 +83,7 @@ msgstr "Използвай TCP (не UDP)"
 
 msgctxt "w_expert_prevent_tcp"
 msgid "Prevent TCP (only try UDP)"
-msgstr ""
+msgstr "Забрани TCP (използвай само UDP)"
 
 msgctxt "w_expert_publish_enabled"
 msgid "Publish enabled"
@@ -95,7 +95,7 @@ msgstr "Регистрирането изтече (сек)"
 
 msgctxt "w_expert_reg_delay_before_refresh"
 msgid "Register delay before refresh (sec)"
-msgstr ""
+msgstr "Време за изчакване на регистрация преди преинициализация (сек)"
 
 msgctxt "w_expert_ka_interval"
 msgid "Keep-alive interval (sec)"
@@ -107,13 +107,21 @@ msgstr "Принуди контакт"
 
 msgctxt "w_expert_allow_contact_rewrite"
 msgid "Allow contact rewrite"
-msgstr ""
+msgstr "Позволи пренаписване на контакт"
 
 msgctxt "w_expert_contact_rewrite_method"
 msgid "Contact rewrite method"
-msgstr ""
+msgstr "Метед за пренаписване на контакт"
 
 msgctxt "w_expert_reg_use_proxy"
 msgid "How to use proxy"
+msgstr "Как да използваме прокси"
+
+msgctxt "w_expert_try_clean_registers"
+msgid "Try to clean registers"
+msgstr ""
+
+msgctxt "w_expert_try_clean_registers_desc"
+msgid "Allow app to try to clean old registrations if needed"
 msgstr ""
 

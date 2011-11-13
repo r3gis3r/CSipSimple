@@ -4,7 +4,6 @@
   <string name="next">다음</string>
   <string name="init">진행 중...</string>
   <string name="unable_to_download_file">파일 다운로드 불가능</string>
-  <string name="connection_not_valid">사용할 수 없는 네트워크 루트 선택(WiFi를 활성화시키거나 3G 모드로 변경해주십시오.)</string>
   <string name="invalid_sip_uri">유효하지 않은 SIP 주소입니다</string>
   <string name="accounts">계정</string>
   <string name="other_accounts">기타 계정</string>

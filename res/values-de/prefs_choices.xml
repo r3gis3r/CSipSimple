@@ -59,7 +59,13 @@
     <item>Verhindern</item>
   </string-array>
   <string-array name="band_types_name">
-    <item>Niederband</item>
-    <item>Weitband</item>
+    <item>Schmalband</item>
+    <item>Breitband</item>
+  </string-array>
+  <string-array name="reg_use_proxy_choices">
+    <item>Kein Proxy</item>
+    <item>Ausgehende Proxies</item>
+    <item>Konto Proxies</item>
+    <item>Alle</item>
   </string-array>
 </resources>

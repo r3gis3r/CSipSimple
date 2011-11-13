@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2011-01-25 07:42+0000\n"
 "Last-Translator: Daniel Chao <Unknown>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
@@ -107,7 +107,7 @@ msgid "For example WiMax for outgoing calls"
 msgstr "例如使用 WiMax 於撥出時"
 
 msgctxt "use_3g"
-msgid "Use 3G"
+msgid "Use 3G (and better)"
 msgstr "使用 3G"
 
 msgctxt "use_3g_disclamer"
@@ -240,19 +240,19 @@ msgstr "TURN 服務器 (HOST:PORT)"
 
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr ""
+msgstr "TURN 用戶名"
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
-msgstr ""
+msgstr "TURN 認證用戶名"
 
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr ""
+msgstr "TURN 密碼"
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
-msgstr ""
+msgstr "TURN 認證密碼"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
@@ -300,11 +300,11 @@ msgstr "保持連線封包 (KA) 間隔"
 
 msgctxt "use_compact_form"
 msgid "Use compact SIP"
-msgstr ""
+msgstr "使用簡潔 SIP"
 
 msgctxt "use_compact_form_desc"
 msgid "Reduce SIP packets size. May not work on old SIP servers"
-msgstr ""
+msgstr "可減少 SIP 封包大小. 在較舊的SIP服務器上不一定適用."
 
 msgctxt "user_agent"
 msgid "User agent"
@@ -320,6 +320,32 @@ msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
+msgstr ""
+
+msgctxt "force_no_update"
+msgid "Force no update"
+msgstr ""
+
+msgctxt "force_no_update_desc"
+msgid ""
+"Some buggy remote party announce to support UPDATE method while it does "
+"not, this option force the legacy way to manage UPDATE/re-INVITE"
+msgstr ""
+
+msgctxt "timer_min_se"
+msgid "Minimum session expiration"
+msgstr ""
+
+msgctxt "timer_min_se_desc"
+msgid "Minimum session expiration period, in seconds. Must not be lower than 90."
+msgstr ""
+
+msgctxt "timer_sess_expires"
+msgid "Session expiration period"
+msgstr ""
+
+msgctxt "timer_sess_expires_desc"
+msgid "Session expiration period, in seconds. Must not be lower than min_se."
 msgstr ""
 
 #. Security
@@ -474,11 +500,11 @@ msgstr "調整耳機訊號位準 (1 不處理)"
 
 msgctxt "snd_bt_mic_level"
 msgid "Bluetooth micro amplification"
-msgstr ""
+msgstr "藍牙麥克風放大"
 
 msgctxt "snd_bt_speaker_level"
 msgid "Bluetooth listening amplification"
-msgstr ""
+msgstr "藍牙耳機放大"
 
 msgctxt "snd_stream_level"
 msgid "Initial stream level"
@@ -501,8 +527,7 @@ msgid "Media quality"
 msgstr "媒體品質"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "媒體串流的品質 (當你知道這是什麼時才修改)"
 
 msgctxt "snd_clock_rate"
@@ -682,8 +707,8 @@ msgstr "撥號盤整合"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr "如使用原生撥號盤撥號, 會問您要使用SIP還是電話線路."
 
 msgctxt "integrate_with_native_calllogs"
@@ -792,27 +817,27 @@ msgstr "某些裝置, 製造商把近耳及遠耳弄反了, 這個設定或許�
 
 msgctxt "theme"
 msgid "Theme"
-msgstr ""
+msgstr "佈景主題"
 
 msgctxt "theme_desc"
 msgid "Theme for the application"
-msgstr ""
+msgstr "應用程式的佈景"
 
 msgctxt "obtain_themes"
 msgid "Obtain more themes"
-msgstr ""
+msgstr "取得更多佈景主題"
 
 msgctxt "obtain_themes_desc"
 msgid "Get themes apps on the market"
-msgstr ""
+msgstr "從市場取得應用程式的佈景主題"
 
 msgctxt "display_icon_in_status_bar_nbr"
 msgid "Display number in status bar"
-msgstr ""
+msgstr "狀態列顯示註冊帳號數"
 
 msgctxt "display_icon_in_status_bar_nbr_desc"
 msgid "Display the number of registered accounts in status bar"
-msgstr ""
+msgstr "在狀態列顯示出已註冊帳號的數量"
 
 #. Fast settings
 msgctxt "android_integration"

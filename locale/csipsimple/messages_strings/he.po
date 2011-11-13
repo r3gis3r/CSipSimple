@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-12-24 01:47+0000\n"
 "Last-Translator: sha357 <Unknown>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -239,7 +239,7 @@ msgstr "ערוך"
 #. Settings screen menu item for restoring all settings to default
 msgctxt "restore_default"
 msgid "Restore default settings"
-msgstr "שחזור הגדרות ברירת המחדל"
+msgstr "שחזר הגדרות ברירת מחדל"
 
 #. Confirm Delete
 #. Delete confirmation dialog title
@@ -250,12 +250,12 @@ msgstr "מחק"
 #. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_conversation"
 msgid "The entire thread will be deleted."
-msgstr "כל השיחות ימחקו"
+msgstr "כל האשכול יימחק"
 
 #. Delete all threads confirmation dialog message
 msgctxt "confirm_delete_all_conversations"
 msgid "All threads will be deleted."
-msgstr "כל השיחות ימחקו"
+msgstr "כל האשכולות יימחקו."
 
 #. Delete message confirmation dialog message
 msgctxt "confirm_delete_message"
@@ -270,7 +270,7 @@ msgstr "האם אתה בטוח שאתה רוצה למחוק הודעה נעול�
 #. Delete entire thread confirmation dialog message
 msgctxt "confirm_delete_all_messages"
 msgid "The entire thread will be deleted."
-msgstr "כל השיחות ימחקו"
+msgstr "כל האשכול יימחק."
 
 #. Delete button title
 msgctxt "delete"
@@ -295,7 +295,7 @@ msgstr "התקבל"
 #. Status in "Report" window
 msgctxt "status_failed"
 msgid "Unsuccessful"
-msgstr "לא מצליח"
+msgstr "ללא הצלחה"
 
 #. Status in "Report" window
 msgctxt "status_unread"
@@ -330,5 +330,5 @@ msgstr "אני"
 #. Brief small label shown to right of message when it is being sent.
 msgctxt "sending_message"
 msgid "Sending\\u2026"
-msgstr "שליחת \\ u2026"
+msgstr "שולח \\ u2026"
 

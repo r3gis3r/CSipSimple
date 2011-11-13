@@ -4,7 +4,6 @@
   <string name="next">Seguinte</string>
   <string name="init">Inicialização</string>
   <string name="unable_to_download_file">Não foi possivel baixar o arquivo</string>
-  <string name="connection_not_valid">Selecione rota de rede não disponível (Ative WiFi ou mude preferências para usar 3G)</string>
   <string name="invalid_sip_uri">uri do Sip e inválido para ligar</string>
   <string name="accounts">Contas</string>
   <string name="other_accounts">Outras contas</string>
@@ -41,6 +40,7 @@
   <string name="service_ticker_registered_text">SIP Registrado</string>
   <string name="outgoing_call_chooser_call_text">Chamar</string>
   <string name="reorder">Reorganizar</string>
+  <string name="backup_restore">Backup/Restaurar</string>
   <string name="faq">FAQ</string>
   <string name="help">Ajuda</string>
   <string name="record_logs">Gravar registos para enviar para a equipa de desenvolvimento e reportar um erro</string>
@@ -62,4 +62,10 @@
   <string name="show_password">Mostrar palavra-passe</string>
   <string name="this_codec_is_not_free">**Este codec não é gratuito !!!**\nCertifique-se que alguém (o seu provedor SIP ou você mesmo) adquiriu uma licença que lhe permita o uso deste codec! Nós (como distribuidores da aplicação) não somos responsáveis pela utilização ilegal deste codec.\nCabe-lhe a si ter a certeza de que está autorizado a usar este codec.\nLink de compra:</string>
   <string name="voice_mail">Correio de voz</string>
+  <string name="not_configured_multiple_calls">A aplicação não está configurada para permitir multiplas chamadas</string>
+  <string name="permlab_useSip">Use SIP</string>
+  <string name="permdesc_useSip">Empregue as chamadas do SIP, envie mensagens do SIP e controle as comunicações do SIP</string>
+  <string name="permlab_configureSip">Use SIP</string>
+  <string name="permdesc_configureSip">Empregue as chamadas do SIP, envie mensagens do SIP e controle as comunicações do SIP</string>
+  <string name="legal_information">Informaçoes legais</string>
 </resources>

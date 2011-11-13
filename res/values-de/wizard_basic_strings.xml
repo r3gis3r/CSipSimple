@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="w_basic_username">Benutzername</string>
+  <string name="w_basic_username_desc">Kontoname / Login (\@sip.server nicht anfügen)</string>
   <string name="w_basic_password">Passwort</string>
   <string name="w_basic_password_desc">Passwort für dieses Konto</string>
 </resources>

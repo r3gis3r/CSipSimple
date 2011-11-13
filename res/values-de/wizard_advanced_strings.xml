@@ -5,6 +5,7 @@
   <string name="w_advanced_caller_id">Eigene Nummer senden</string>
   <string name="w_advanced_caller_id_desc">Sende die eigene Nummer bei ausgehenden Anrufen</string>
   <string name="w_advanced_username">Benutzername</string>
+  <string name="w_advanced_username_desc">Benutzername für SIP Server Authentifizierung (nicht die \@sip.server benutzen)</string>
   <string name="w_advanced_password">Passwort</string>
   <string name="w_advanced_password_desc">Passwort für SIP Server Authentifizierung</string>
   <string name="w_advanced_use_tcp">Verwende TCP (nicht UDP)</string>

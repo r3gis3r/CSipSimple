@@ -4,7 +4,6 @@
   <string name="next">Далі</string>
   <string name="init">Старт...</string>
   <string name="unable_to_download_file">Не вдається завантажити файл</string>
-  <string name="connection_not_valid">Обрана маршрутна мережа не доступна (активувати WiFi або змінити налаштування, щоб використовувати 3G)</string>
   <string name="invalid_sip_uri">SIP URI є неприпустимою для виклику</string>
   <string name="accounts">Облікові записи</string>
   <string name="other_accounts">Інші облікові записи</string>

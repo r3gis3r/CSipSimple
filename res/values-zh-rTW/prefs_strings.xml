@@ -53,6 +53,10 @@
   <string name="enable_turn_desc">開啟 TURN 功能</string>
   <string name="turn_server">TURN 服務器</string>
   <string name="turn_server_desc">TURN 服務器 (HOST:PORT)</string>
+  <string name="turn_username">TURN 用戶名</string>
+  <string name="turn_username_desc">TURN 認證用戶名</string>
+  <string name="turn_password">TURN 密碼</string>
+  <string name="turn_password_desc">TURN 認證密碼</string>
   <string name="enable_stun">啟用 STUN</string>
   <string name="enable_stun_desc">開啟 STUN 功能</string>
   <string name="stun_server">STUN 服務器</string>
@@ -64,6 +68,8 @@
   <string name="keep_alive_interval_wifi">保持 Wifi 連線</string>
   <string name="keep_alive_interval_mobile">保持行動數據連線</string>
   <string name="keep_alive_interval_desc">保持連線封包 (KA) 間隔</string>
+  <string name="use_compact_form">使用簡潔 SIP</string>
+  <string name="use_compact_form_desc">可減少 SIP 封包大小. 在較舊的SIP服務器上不一定適用.</string>
   <string name="tls">TLS</string>
   <string name="secure_transport">安全傳送</string>
   <string name="secure_transport_desc">SIP 及 RTP 的安全機制</string>
@@ -99,6 +105,8 @@
   <string name="snd_mic_level_desc">調整麥克風訊號位準 (1 不處理)</string>
   <string name="snd_speaker_level">耳機音量</string>
   <string name="snd_speaker_level_desc">調整耳機訊號位準 (1 不處理)</string>
+  <string name="snd_bt_mic_level">藍牙麥克風放大</string>
+  <string name="snd_bt_speaker_level">藍牙耳機放大</string>
   <string name="snd_stream_level">初始音量位準</string>
   <string name="snd_stream_level_desc">設定初始的音量 (Android 音量)</string>
   <string name="snd_auto_close_time">自動關閉時間</string>
@@ -167,6 +175,12 @@
   <string name="gsm_integration_type_desc">如何使用電話線路 (或不使用)</string>
   <string name="invert_proximity_sensor">近耳感知器反向</string>
   <string name="invert_proximity_sensor_desc">某些裝置, 製造商把近耳及遠耳弄反了, 這個設定或許可以幫上忙</string>
+  <string name="theme">佈景主題</string>
+  <string name="theme_desc">應用程式的佈景</string>
+  <string name="obtain_themes">取得更多佈景主題</string>
+  <string name="obtain_themes_desc">從市場取得應用程式的佈景主題</string>
+  <string name="display_icon_in_status_bar_nbr">狀態列顯示註冊帳號數</string>
+  <string name="display_icon_in_status_bar_nbr_desc">在狀態列顯示出已註冊帳號的數量</string>
   <string name="android_integration">Android 整合</string>
   <string name="android_integration_desc">與原生的撥號盤及通話紀錄整合</string>
   <string name="availability_profile">可用的設定</string>

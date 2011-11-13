@@ -1,11 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">cSIPsimple</string>
-  <string name="unable_to_download_file">Файла не може да бъде записан</string>
-  <string name="connection_not_valid">Избраната мрежа не е на разположение (активирайте WiFi или променете параметрите за използване на 3G)</string>
-  <string name="invalid_sip_uri">SIP URI е невалиден за повикване</string>
-  <string name="accounts">Профили</string>
-  <string name="save">Запазване</string>
+  <string name="next">Продължи</string>
+  <string name="init">Инициализация ...</string>
+  <string name="unable_to_download_file">Невъзможно да се свали файла</string>
+  <string name="invalid_sip_uri">SIP URI е невалиден</string>
+  <string name="accounts">Акаунти</string>
+  <string name="other_accounts">Други акаунти</string>
+  <string name="save">Запази</string>
   <string name="cancel">Отказ</string>
   <string name="activate_account">Активиране на профил</string>
   <string name="deactivate_account">Деактивиране на профил</string>
@@ -15,9 +17,13 @@
   <string name="choose_wizard">Избор на магьосник</string>
   <string name="use">Използване на:</string>
   <string name="use_pstn">Използване на мобилни услуги</string>
+  <string name="use_skype">Използвай Skype</string>
   <string name="ongoing_call">Разговор в прогрес</string>
+  <string name="missed_call">Пропуснато обаждане</string>
   <string name="recentCalls_empty">Няма записи на разговорите</string>
   <string name="filters">Филтри</string>
+  <string name="filters_desc">За потвърждаване след като е използвана интеграция с Android</string>
+  <string name="filters_for">Филтри за</string>
   <string name="add_filter">Добавяне на филтър / пренаписване на правило</string>
   <string name="delete_filter">Изтриване на филтър</string>
   <string name="callLog_delete_entry">Изтриване на този разговор</string>
@@ -29,6 +35,39 @@
   <string name="gsm">Мобилен</string>
   <string name="dial_tab_name_text">Набиране</string>
   <string name="calllog_tab_name_text">Дневник</string>
+  <string name="messages_tab_name_text">Съобщения</string>
+  <string name="menu_disconnect">Прекъсване на връзка</string>
   <string name="service_ticker_registered_text">успешна SIP регистрация</string>
-  <string name="outgoing_call_chooser_call_text">Повикване</string>
+  <string name="outgoing_call_chooser_call_text">Набиране</string>
+  <string name="reorder">Пренареждане</string>
+  <string name="backup_restore">Бекъп и Рестор</string>
+  <string name="backup">Резезрно копие</string>
+  <string name="faq">Често задавани въпроси</string>
+  <string name="help">Помощ</string>
+  <string name="record_logs">Запиши лога и го изпрати на разработчиците за да докладваш бъг</string>
+  <string name="send_logs">Спри записа на логовете (ОПЦИОНАЛНО ги изпрати)</string>
+  <string name="view_existing_issues">Консултирайте се за случаите</string>
+  <string name="ok">ОК</string>
+  <string name="misc">Разни</string>
+  <string name="warning">ПРЕДУПРЕЖДЕНИЕ</string>
+  <string name="disconnect_and_incoming_explaination">Конфигурирано е да сте в режим \"готовност\" за тази мрежа !!! При натискане на ОК тук, Вие потвърждавате, че не искате да бъдете в режим \"готовност\" при следващото пускане на приложението</string>
+  <string name="disconnect_and_will_restart">"Ще се рестартира автоматично когато : "<xliff:g id="networks" example="3G">%s</xliff:g>" стане в готовност (променете настройките, ако не желаете)"</string>
+  <string name="gadget_title">Промяна на SIP акаунт</string>
+  <string name="search_in_contacts">Търси в контактите</string>
+  <string name="pickup_sip_uri">Вземи SIP контакт</string>
+  <string name="display_icon_in_status_bar_desc">Трябва приложението да показва икона при статуса, когато е регистрирано</string>
+  <string name="display_icon_in_status_bar">Покажи икона при статуса</string>
+  <string name="another_application_use_sip_port">Друго приложение в момента използва SIP порта! Не може да се стартира!!!</string>
+  <string name="choose_phone">Изберете телефон</string>
+  <string name="no_phone_found">Няма намерен телефон за този контакт</string>
+  <string name="show_password">Показване на паролата</string>
+  <string name="this_codec_is_not_free">** Този кодек не е безплатен!!!***</string>
+  <string name="voice_mail">Гласова поща</string>
+  <string name="type_sip_uri_or_autocomplete">SIP URI или автоматично попълване</string>
+  <string name="not_configured_multiple_calls">Това приложение не е конфигурирано за използване на едновременни повиквания</string>
+  <string name="permlab_useSip">Използвайте SIP</string>
+  <string name="permdesc_useSip">Правете SIP обаждания, изпращайте SIP съобщения и контролирайте SIP комуникациите</string>
+  <string name="permlab_configureSip">Използвайте SIP</string>
+  <string name="permdesc_configureSip">Правете SIP обаждания, изпращайте SIP съобщения и контролирайте SIP комуникациите</string>
+  <string name="legal_information">Юридическа информация</string>
 </resources>

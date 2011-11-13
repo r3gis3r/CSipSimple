@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="w_basic_username">Usuario</string>
+  <string name="w_basic_username_desc">Nombre de cuenta / Inicio de sesión (no escribir la parte despues de la \@)</string>
   <string name="w_basic_password">Contraseña</string>
   <string name="w_basic_password_desc">Contraseña para acceder a su cuenta</string>
 </resources>

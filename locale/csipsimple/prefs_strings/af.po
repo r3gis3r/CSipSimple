@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2011-02-24 07:03+0000\n"
 "Last-Translator: Werner Vorstman <Unknown>\n"
 "Language-Team: Afrikaans <af@li.org>\n"
@@ -107,8 +107,8 @@ msgid "For example WiMax for outgoing calls"
 msgstr ""
 
 msgctxt "use_3g"
-msgid "Use 3G"
-msgstr "Gebruik 3G"
+msgid "Use 3G (and better)"
+msgstr ""
 
 msgctxt "use_3g_disclamer"
 msgid "Your carrier MUST allow you to use this option"
@@ -320,6 +320,32 @@ msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
+msgstr ""
+
+msgctxt "force_no_update"
+msgid "Force no update"
+msgstr ""
+
+msgctxt "force_no_update_desc"
+msgid ""
+"Some buggy remote party announce to support UPDATE method while it does "
+"not, this option force the legacy way to manage UPDATE/re-INVITE"
+msgstr ""
+
+msgctxt "timer_min_se"
+msgid "Minimum session expiration"
+msgstr ""
+
+msgctxt "timer_min_se_desc"
+msgid "Minimum session expiration period, in seconds. Must not be lower than 90."
+msgstr ""
+
+msgctxt "timer_sess_expires"
+msgid "Session expiration period"
+msgstr ""
+
+msgctxt "timer_sess_expires_desc"
+msgid "Session expiration period, in seconds. Must not be lower than min_se."
 msgstr ""
 
 #. Security

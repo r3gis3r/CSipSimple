@@ -3,6 +3,7 @@
   <string name="w_common_display_name">Nome da conta</string>
   <string name="w_common_display_name_desc">Mostrar nome para esta conta</string>
   <string name="w_common_username">Nome de usuário</string>
+  <string name="w_common_username_desc">Nome de usuário da conta SIP (não escreva o \@sip.server)</string>
   <string name="w_common_phone_number">Número de telefone</string>
   <string name="w_common_phone_number_desc">Numero de telefone Sip fornecido pelo seu provedor</string>
   <string name="w_common_password">Senha</string>

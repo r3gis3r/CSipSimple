@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-12-31 09:04+0000\n"
 "Last-Translator: sha357 <Unknown>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -107,7 +107,7 @@ msgid "For example WiMax for outgoing calls"
 msgstr "לדוגמה WiMAX עבור שיחות יוצאות"
 
 msgctxt "use_3g"
-msgid "Use 3G"
+msgid "Use 3G (and better)"
 msgstr "השתמש ב-3G"
 
 msgctxt "use_3g_disclamer"
@@ -132,11 +132,11 @@ msgstr "מנע המתנה ב-WiFi כאשר סיפ מחובר"
 
 msgctxt "lock_wifi_perfs"
 msgid "High perfs lock"
-msgstr ""
+msgstr "לנעול על ביצועים גבוהים"
 
 msgctxt "lock_wifi_perfs_desc"
 msgid "Wifi lock in High perfs mode (drain battery faster)"
-msgstr ""
+msgstr "Wifi נמצא במצב נעול על ביצועים גבוהים (הסוללה מתרוקנת מהר יותר)"
 
 msgctxt "enable_tcp"
 msgid "TCP"
@@ -212,7 +212,7 @@ msgstr "השאר ריק כדי לאחזר DNS מאנדרואיד"
 
 msgctxt "nat_traversal"
 msgid "NAT traversal"
-msgstr "NAT traversal"
+msgstr "חציית NAT"
 
 msgctxt "enable_ice"
 msgid "Enable ICE"
@@ -220,7 +220,7 @@ msgstr "אפשר ICE"
 
 msgctxt "enable_ice_desc"
 msgid "Turn on ICE feature"
-msgstr "הפעל תכונה ICE"
+msgstr "הפעל תכונת ICE"
 
 msgctxt "enable_turn"
 msgid "Enable TURN"
@@ -228,7 +228,7 @@ msgstr "אפשר TURN"
 
 msgctxt "enable_turn_desc"
 msgid "Turn on TURN feature"
-msgstr "הפעל תכונה TURN"
+msgstr "הפעל תכונת TURN"
 
 msgctxt "turn_server"
 msgid "Turn server"
@@ -260,7 +260,7 @@ msgstr "אפשר STUN"
 
 msgctxt "enable_stun_desc"
 msgid "Turn on STUN feature"
-msgstr "הפעל תכונה STUN"
+msgstr "הפעל תכונת STUN"
 
 msgctxt "stun_server"
 msgid "STUN servers"
@@ -316,10 +316,36 @@ msgstr "מורשה שהוצג על ידי היישום (אם ברירת המחד
 
 msgctxt "ka_use_wake"
 msgid "Keep alive awake"
-msgstr ""
+msgstr "שמור דלוק"
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
+msgstr "אם מופעל להשאיר דלוק הטלפון התעורר"
+
+msgctxt "force_no_update"
+msgid "Force no update"
+msgstr ""
+
+msgctxt "force_no_update_desc"
+msgid ""
+"Some buggy remote party announce to support UPDATE method while it does "
+"not, this option force the legacy way to manage UPDATE/re-INVITE"
+msgstr ""
+
+msgctxt "timer_min_se"
+msgid "Minimum session expiration"
+msgstr ""
+
+msgctxt "timer_min_se_desc"
+msgid "Minimum session expiration period, in seconds. Must not be lower than 90."
+msgstr ""
+
+msgctxt "timer_sess_expires"
+msgid "Session expiration period"
+msgstr ""
+
+msgctxt "timer_sess_expires_desc"
+msgid "Session expiration period, in seconds. Must not be lower than min_se."
 msgstr ""
 
 #. Security
@@ -434,7 +460,7 @@ msgstr "איכות השמע"
 
 msgctxt "audio_volume"
 msgid "Volume"
-msgstr "עצמת שמע"
+msgstr "עוצמת שמע"
 
 msgctxt "codecs"
 msgid "Codecs"
@@ -458,7 +484,7 @@ msgstr "הפעל זיהוי קולי"
 
 msgctxt "snd_mic_level"
 msgid "Micro amplification"
-msgstr "עצמת מיקרופון"
+msgstr "עוצמת מיקרופון"
 
 msgctxt "snd_mic_level_desc"
 msgid "Adjust the micro signal level (1 do nothing)"
@@ -501,8 +527,7 @@ msgid "Media quality"
 msgstr "איכות המדיה"
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr "האיכות של תעבורת התקשורת (שנה רק אם אתה יודע מה אתה עושה)"
 
 msgctxt "snd_clock_rate"
@@ -551,11 +576,11 @@ msgstr "כיצד לשלוח DTMF"
 
 msgctxt "use_soft_volume"
 msgid "Use software volume"
-msgstr "השתמש בעוצמת הקול של התוכנה"
+msgstr "השתמש בעוצמת השמע של התוכנה"
 
 msgctxt "use_soft_volume_desc"
 msgid "Use software volume instead of android volume"
-msgstr "השתמש בעוצמת הקול של התוכנה במקום עוצמת הקול של אנדרואיד"
+msgstr "השתמש בעוצמת השמע של התוכנה במקום עוצמת השמע של אנדרואיד"
 
 msgctxt "use_routing_api"
 msgid "Use routing API"
@@ -583,29 +608,29 @@ msgstr "שנה רק אם המפתחים יעצו לך"
 
 msgctxt "use_webrtc_hack"
 msgid "Use WebRTC implementation"
-msgstr ""
+msgstr "השתמש ביישום WebRTC"
 
 msgctxt "use_webrtc_hack_desc"
 msgid "Implementation made by WebRTC team"
-msgstr ""
+msgstr "יישום שנעשה על ידי צוות WebRTC"
 
 msgctxt "do_focus_audio"
 msgid "Focus audio"
-msgstr ""
+msgstr "מיקוד השמע"
 
 msgctxt "do_focus_audio_desc"
 msgid "Disabling will result overlaps with music but may help with routing"
-msgstr ""
+msgstr "הנטרול יגרום חפיפה עם מוזיקה, אבל עשוי לעזור עם ניתוב"
 
 msgctxt "micro_source"
 msgid "Micro source"
-msgstr "מיקרו המקור"
+msgstr "מקור המיקרופון"
 
 msgctxt "micro_source_desc"
 msgid ""
 "Source for micro. Choosing the appropriate value may improve echo "
 "cancellation"
-msgstr "מקור עבור מיקרו. בחירת הערך המתאים עשוי לשפר את ביטול ההד"
+msgstr "מקור עבור המיקרופון. בחירת הערך המתאים עשוי לשפר את ביטול ההד"
 
 msgctxt "has_io_queue"
 msgid "IO Queue"
@@ -657,7 +682,7 @@ msgstr "חיבורי רוחב פס עבור סוגי קודקים"
 
 msgctxt "use_sgs_call_hack"
 msgid "Use Samsung Galaxy Hack"
-msgstr "השתמש בפריצת סמסונג גלקסי"
+msgstr "השתמש בהנמכת סמסונג גלקסי"
 
 msgctxt "use_sgs_call_hack_desc"
 msgid "Pre set call mode to solve routing"
@@ -682,8 +707,8 @@ msgstr "חייגן משולב"
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr "כאשר מחייגים עם החייגן המקורי תישאל אם ברצונך להשתמש בסיפ או סלולרי"
 
 msgctxt "integrate_with_native_calllogs"
@@ -724,7 +749,7 @@ msgstr "אל תשתמש לענות בגלישה"
 
 msgctxt "use_alternate_unlocker_desc"
 msgid "Use buttons instead of slide to take incoming calls"
-msgstr "בלחצנים השתמש במקום בגלישה כדי לקבל שיחות נכנסות"
+msgstr "השתמש בלחצנים במקום בגלישה כדי לקבל שיחות נכנסות"
 
 msgctxt "keep_awake_incall"
 msgid "Keep awake while on call"
@@ -752,7 +777,7 @@ msgstr "שלב ההתחברות עבור debug בין 0 (לא) ו-5 (מפורט)
 
 msgctxt "integrate_with_native_music"
 msgid "Integrate with Music application"
-msgstr "שלב עם מוזיקת היישום"
+msgstr "שלב עם יישום המוזיקה"
 
 msgctxt "integrate_with_native_music_desc"
 msgid "Disable it if you use another music application than the official one"
@@ -784,7 +809,7 @@ msgstr "כיצד היישום משתמש (או שלא) בטלפון הנייד �
 
 msgctxt "invert_proximity_sensor"
 msgid "Invert proximity sensor"
-msgstr "הפוך קירבה חיישן"
+msgstr "הפוך חיישן הקירבה"
 
 msgctxt "invert_proximity_sensor_desc"
 msgid "May help on some devices when manufacturer inverted near and far"
@@ -878,11 +903,11 @@ msgstr "הקלט שיחות מיד ברגע ההתחברות"
 
 msgctxt "support_multiple_calls"
 msgid "Support multiple calls"
-msgstr "תמיכה במספר שיחות"
+msgstr "תמיכה בשיחות מרובות"
 
 msgctxt "support_multiple_calls_desc"
 msgid "Allow conference and multiple concurrent calls"
-msgstr "אפשר ועידה ומספר שיחות בו זמנית"
+msgstr "אפשר שיחות ועידה מרובות בו זמנית"
 
 msgctxt "expert_preferences"
 msgid "Expert mode"

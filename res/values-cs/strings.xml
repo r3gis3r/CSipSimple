@@ -4,7 +4,6 @@
   <string name="next">Další</string>
   <string name="init">Inicializace...</string>
   <string name="unable_to_download_file">Nelze stáhnout soubor</string>
-  <string name="connection_not_valid">Vyprané síťové připojení není k dispozici (aktivujte WiFi nebo změňte v nastavení pravidla použití 3G sítí)</string>
   <string name="invalid_sip_uri">SIP URI je pro volání neplatné</string>
   <string name="accounts">Účty</string>
   <string name="other_accounts">Další účty</string>

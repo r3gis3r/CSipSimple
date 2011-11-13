@@ -113,7 +113,7 @@
   <string name="snd_mic_level_desc">"Regola il livello di segnale del microfono  (1 non fa nulla)"</string>
   <string name="snd_speaker_level">Amplificazione dell\'altoparlante</string>
   <string name="snd_speaker_level_desc">"Regola il livello di segnale dell\'altoparlante  (1 non fa nulla)"</string>
-  <string name="snd_bt_mic_level">amplificazione microfono Bluetooth</string>
+  <string name="snd_bt_mic_level">Amplificazione microfono Bluetooth</string>
   <string name="snd_bt_speaker_level">Amplificazione nell\'ascolto Bluetooth</string>
   <string name="snd_stream_level">Livello stream iniziale</string>
   <string name="snd_stream_level_desc">Imposta il livello iniziale per lo stream audio (stream Android)</string>

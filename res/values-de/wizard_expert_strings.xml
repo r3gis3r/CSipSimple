@@ -19,8 +19,10 @@
   <string name="w_expert_prevent_tcp">Verhindere TCP (verwende nur UDP)</string>
   <string name="w_expert_publish_enabled">Publish enabled</string>
   <string name="w_expert_reg_timeout">Register Timeout (sec)</string>
+  <string name="w_expert_reg_delay_before_refresh">Regsitrierungs Verzögerung vor Wiederholung (Sek.)</string>
   <string name="w_expert_ka_interval">Keep-alive Interval (sec)</string>
   <string name="w_expert_force_contact">Force contact</string>
   <string name="w_expert_allow_contact_rewrite">Erlaube Contact-Rewrite</string>
   <string name="w_expert_contact_rewrite_method">Methode für den Contact-Rewrite</string>
+  <string name="w_expert_reg_use_proxy">Wie man einen Proxy benutzt</string>
 </resources>

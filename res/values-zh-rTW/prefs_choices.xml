@@ -62,4 +62,10 @@
     <item>窄頻</item>
     <item>寬頻</item>
   </string-array>
+  <string-array name="reg_use_proxy_choices">
+    <item>不使用代理器</item>
+    <item>撥出代理器</item>
+    <item>帳號代理器</item>
+    <item>全部</item>
+  </string-array>
 </resources>

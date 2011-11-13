@@ -4,7 +4,6 @@
   <string name="next">Следующий</string>
   <string name="init">Инициализация...</string>
   <string name="unable_to_download_file">Невозможно загрузить файл</string>
-  <string name="connection_not_valid">Выбранная сеть недоступна (активируйте WiFi или измените настройки, чтобы использовать 3G)</string>
   <string name="invalid_sip_uri">SIP URI является недопустимой для вызова</string>
   <string name="accounts">Аккаунты</string>
   <string name="other_accounts">Другие аккаунты</string>

@@ -19,6 +19,12 @@
     <item>Opcional</item>
     <item>Obligatorio</item>
   </string-array>
+  <string-array name="dtmf_mode_choices">
+    <item>Auto</item>
+    <item>RTP</item>
+    <item>en generación de banda</item>
+    <item>SIP INFO</item>
+  </string-array>
   <string-array name="contact_rewrite_method_choices">
     <item>Herencia</item>
     <item>Normal</item>
@@ -41,6 +47,12 @@
     <item>Forzar</item>
     <item>Prevenir</item>
   </string-array>
+  <string-array name="echo_mode_choices">
+    <item>Auto</item>
+    <item>Speex</item>
+    <item>Simple</item>
+    <item>WebRTC</item>
+  </string-array>
   <string-array name="dial_press_mode_choices">
     <item>Usar configuración de Android</item>
     <item>Forzar</item>
@@ -49,6 +61,12 @@
   <string-array name="band_types_name">
     <item>Banda Estrecha</item>
     <item>Banda Ancha</item>
+  </string-array>
+  <string-array name="reg_use_proxy_choices">
+    <item>Sin proxy</item>
+    <item>Proxies de salida</item>
+    <item>Cuentas proxies</item>
+    <item>Todos</item>
   </string-array>
   <string-array name="use_zrtp_choices">
     <item>SIn ZRTP</item>

@@ -3,5 +3,5 @@
   <string name="w_authorization_auth_name">אימות שם</string>
   <string name="w_authorization_auth_name_desc">אימות סיפ</string>
   <string name="w_authorization_phone_number">שם משתמש</string>
-  <string name="w_authorization_phone_number_desc">חשבון משתמש</string>
+  <string name="w_authorization_phone_number_desc">חשבון משתמש הסיפ</string>
 </resources>

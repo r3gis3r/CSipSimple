@@ -16,8 +16,13 @@
   <string name="w_expert_proxy">Прокси URI</string>
   <string name="w_expert_proxy_desc">Формат : sip:proxy.net[:порт]</string>
   <string name="w_expert_use_tcp">Използвай TCP (не UDP)</string>
+  <string name="w_expert_prevent_tcp">Забрани TCP (използвай само UDP)</string>
   <string name="w_expert_publish_enabled">Публикуването позволено</string>
   <string name="w_expert_reg_timeout">Регистрирането изтече (сек)</string>
+  <string name="w_expert_reg_delay_before_refresh">Време за изчакване на регистрация преди преинициализация (сек)</string>
   <string name="w_expert_ka_interval">Поддържане на активност интервал (сек)</string>
   <string name="w_expert_force_contact">Принуди контакт</string>
+  <string name="w_expert_allow_contact_rewrite">Позволи пренаписване на контакт</string>
+  <string name="w_expert_contact_rewrite_method">Метед за пренаписване на контакт</string>
+  <string name="w_expert_reg_use_proxy">Как да използваме прокси</string>
 </resources>

@@ -1,2 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string-array name="filters_type">
+    <item>Začne z</item>
+    <item>Konča z</item>
+    <item>Vsebuje</item>
+    <item>Vsi</item>
+    <item>Ima točno N številk</item>
+    <item>Ima več kot N številk</item>
+    <item>Je točen</item>
+    <item>RegExp po meri</item>
+  </string-array>
+</resources>

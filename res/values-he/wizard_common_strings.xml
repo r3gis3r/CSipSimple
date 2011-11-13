@@ -3,8 +3,9 @@
   <string name="w_common_display_name">שם החשבון</string>
   <string name="w_common_display_name_desc">הצג שם עבור חשבון זה</string>
   <string name="w_common_username">שם משתמש</string>
+  <string name="w_common_username_desc">כניסה לחשבון סיפ (לא לכתוב את ה-\@sip.server)</string>
   <string name="w_common_phone_number">מספר טלפון</string>
-  <string name="w_common_phone_number_desc">מספר טלפון של ספק הסיפ שלך</string>
+  <string name="w_common_phone_number_desc">מספר טלפון הסיפ שניתן על ידי הספק שלך</string>
   <string name="w_common_password">סיסמה</string>
   <string name="w_common_password_desc">הסיסמה עבור החשבון שלך</string>
   <string name="w_common_server">שרת</string>

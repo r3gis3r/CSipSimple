@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+  <string name="w_iinet_state">Състояние</string>
+  <string name="w_iinet_state_desc">Релевантното състояние от следващият списък</string>
+  <string name="w_iinet_username">VoIP телефонен номер</string>
+  <string name="w_iinet_username_desc">Премахнете всякакво форматиране като интервали и наклонени черти</string>
+  <string name="w_iinet_password">Специална VoIP парола</string>
+  <string name="w_iinet_password_desc">Не е същата като паролата за връзка</string>
+</resources>

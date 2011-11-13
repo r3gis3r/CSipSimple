@@ -27,7 +27,7 @@
   </string-array>
   <string-array name="contact_rewrite_method_choices">
     <item>ירושה</item>
-    <item>תקין</item>
+    <item>נורמלי</item>
   </string-array>
   <string-array name="transport_choices">
     <item>אוטומטי</item>
@@ -50,7 +50,8 @@
   <string-array name="echo_mode_choices">
     <item>אוטומטי</item>
     <item>ספיקס</item>
-    <item>קל</item>
+    <item>פשוט</item>
+    <item>WebRTC</item>
   </string-array>
   <string-array name="dial_press_mode_choices">
     <item>השתמש בהגדרות של אנדרואיד</item>
@@ -63,8 +64,8 @@
   </string-array>
   <string-array name="reg_use_proxy_choices">
     <item>ללא פרוקסי</item>
-    <item>שרתי Proxy יוצאים</item>
-    <item>חשבונות שרתי Proxy</item>
+    <item>שרתי פרוקסי יוצאים</item>
+    <item>חשבונות שרתי פרוקסי</item>
     <item>הכל</item>
   </string-array>
   <string-array name="use_zrtp_choices">

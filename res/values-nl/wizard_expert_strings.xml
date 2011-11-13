@@ -19,8 +19,10 @@
   <string name="w_expert_prevent_tcp">Vermijd TCP (probeer alleen UDP)</string>
   <string name="w_expert_publish_enabled">Publiceren ingeschakeld</string>
   <string name="w_expert_reg_timeout">Registratie-timeout (sec)</string>
+  <string name="w_expert_reg_delay_before_refresh">Registreer vertraging voor herladen</string>
   <string name="w_expert_ka_interval">Instandhoudingsinterval (sec)</string>
   <string name="w_expert_force_contact">Forceer contact</string>
   <string name="w_expert_allow_contact_rewrite">Sta herschrijven contact toe</string>
   <string name="w_expert_contact_rewrite_method">Contact herschrijvingsmethode</string>
+  <string name="w_expert_reg_use_proxy">Gebruik van een proxy</string>
 </resources>

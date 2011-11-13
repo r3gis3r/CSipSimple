@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-11-27 23:52+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -36,7 +36,7 @@ msgstr "Nachricht verfassen"
 #. Menu item for starting a new conversation
 msgctxt "menu_compose_new"
 msgid "Compose"
-msgstr ""
+msgstr "Verfassen"
 
 #, c-format
 msgctxt "menu_add_address_to_contacts"
@@ -75,7 +75,7 @@ msgstr "Unbekannt"
 #. (personal pronoun)
 msgctxt "messagelist_sender_self"
 msgid "Me"
-msgstr ""
+msgstr "Ich"
 
 msgctxt "delete_message"
 msgid "Delete message"
@@ -85,23 +85,23 @@ msgstr "Nachricht löschen"
 #, c-format
 msgctxt "sent_on"
 msgid "Sent: <xliff:g id=\"date\">%s</xliff:g>"
-msgstr ""
+msgstr "Gesendet: <xliff:g id=\"date\">%s</xliff:g>"
 
 #. Abbreviation for "kilobyte"
 msgctxt "kilobyte"
 msgid "KB"
-msgstr ""
+msgstr "KB"
 
 #. Dialog box title brought up when warning the user that a message could not
 #. be delivered
 msgctxt "undelivered_msg_dialog_title"
 msgid "Undelivered message"
-msgstr ""
+msgstr "Nachricht nicht zugestellt"
 
 #. Dialog box message indicating that a message could not be delivered
 msgctxt "undelivered_sms_dialog_body"
 msgid "Unable to send this message."
-msgstr ""
+msgstr "Kann diese Nachricht nicht senden"
 
 #. Menu item for deleting the entire conversation currently being viewed
 msgctxt "delete_thread"
@@ -118,7 +118,7 @@ msgstr "Download"
 #. been pressed,          indicating that the download is in progress
 msgctxt "downloading"
 msgid "Downloading"
-msgstr ""
+msgstr "Wird heruntergeladen"
 
 #. Formatting for prepending MMS message text with sender's name.
 #, c-format
@@ -129,7 +129,7 @@ msgstr ""
 #. Individual message context menu item
 msgctxt "copy_message_text"
 msgid "Copy message text"
-msgstr ""
+msgstr "Kopiere Nachrichten Text"
 
 #. Header for context menu on an individual message
 msgctxt "message_options"
@@ -146,7 +146,7 @@ msgstr "Fertig"
 #. selected
 msgctxt "compose_title"
 msgid "Compose"
-msgstr ""
+msgstr "Verfassen"
 
 #. Menu item in conversation screen for attaching something to the message
 #. being composed
@@ -174,41 +174,41 @@ msgstr ""
 #. Hint text in message body field when keyboard is exposed
 msgctxt "type_to_compose_text_enter_to_send"
 msgid "Type to compose"
-msgstr ""
+msgstr "Tippe zum Verfassen"
 
 #. Hint text in message body field when keyboard is hidden
 msgctxt "open_keyboard_to_compose_message"
 msgid "Open keyboard to compose message"
-msgstr ""
+msgstr "Öffne die Tastatur um Nachricht zu verfassen"
 
 #. Dialog title for warning the user that the picture they are trying to
 #. attach is too large
 msgctxt "image_too_large"
 msgid "Picture too large"
-msgstr ""
+msgstr "Bild zu groß"
 
 #. Dialog message text asking the user if he wants to resize the picture being
 #. attached
 msgctxt "ask_for_automatically_resize"
 msgid "Automatically resize picture before sending?"
-msgstr ""
+msgstr "Bild vor dem Senden automatisch anpassen?"
 
 #. Toast message while an image is being resized
 msgctxt "compressing"
 msgid "Picture too large. Compressing\\u2026"
-msgstr ""
+msgstr "Bild zu groß. Komprimiere\\u2026"
 
 #. Error message indicating the format for the specified media type (e.g.
 #. "picture") is unsupported
 #, c-format
 msgctxt "unsupported_media_format"
 msgid "Unsupported <xliff:g id=\"name\">%1$s</xliff:g> format"
-msgstr ""
+msgstr "Nicht untertsütztes <xliff:g id=\"name\">%1$s</xliff:g> Format"
 
 #. Context menu item on a message recipient for viewing their contact info
 msgctxt "menu_view_contact"
 msgid "View contact"
-msgstr ""
+msgstr "Kontakt ansehen"
 
 #. Context menu item on a message recipient for adding them to the user's
 #. contacts (used if the recipient is not already in the address book)
@@ -219,12 +219,12 @@ msgstr "Zu Kontakten hinzufügen"
 #. Sender to be used if the sender address has been hidden
 msgctxt "hidden_sender_address"
 msgid "Hidden sender address"
-msgstr ""
+msgstr "Verborgene Absender Adresse"
 
 #. Text to be used for affirmative response button in dialog boxes
 msgctxt "yes"
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #. Text to be used for negative response button in dialog boxes
 msgctxt "no"
@@ -280,12 +280,12 @@ msgstr "Löschen"
 #. Status in "Report" window
 msgctxt "status_none"
 msgid "(None)"
-msgstr ""
+msgstr "(Keine)"
 
 #. Status in "Report" window
 msgctxt "status_pending"
 msgid "Pending"
-msgstr ""
+msgstr "Ausstehend"
 
 #. Status in "Report" window
 msgctxt "status_received"
@@ -295,7 +295,7 @@ msgstr "Erhalten"
 #. Status in "Report" window
 msgctxt "status_failed"
 msgid "Unsuccessful"
-msgstr ""
+msgstr "Nicht erfolgreich"
 
 #. Status in "Report" window
 msgctxt "status_unread"
@@ -305,30 +305,30 @@ msgstr "Ungelesen"
 #. Status in "Report" window
 msgctxt "status_rejected"
 msgid "Rejected"
-msgstr ""
+msgstr "Abgelehnt"
 
 #. Label in "Report" window
 msgctxt "recipient_label"
 msgid "Recipient:\\u0020"
-msgstr ""
+msgstr "Empfänger:\\u0020"
 
 #. Label in "Report" window
 msgctxt "status_label"
 msgid "Status:\\u0020"
-msgstr ""
+msgstr "Status:\\u0020"
 
 #. Menu item
 msgctxt "menu_insert_smiley"
 msgid "Insert smiley"
-msgstr ""
+msgstr "Smiley einfügen"
 
 #. Label for the "Me" number of this phone.
 msgctxt "me"
 msgid "Me"
-msgstr ""
+msgstr "Ich"
 
 #. Brief small label shown to right of message when it is being sent.
 msgctxt "sending_message"
 msgid "Sending\\u2026"
-msgstr ""
+msgstr "Sende\\u2026"
 

@@ -1,2 +1,62 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">Съобщения</string>
+  <string name="new_message">Ново съобщение</string>
+  <string name="create_new_message">Напиши ново съобщение</string>
+  <string name="menu_compose_new">Напиши</string>
+  <string name="menu_add_address_to_contacts">"Въведи "<xliff:g id="name">%s</xliff:g>" в Контакти"</string>
+  <string name="menu_call">Обаждане</string>
+  <string name="menu_delete_all">Спри процесите</string>
+  <string name="menu_delete">Спри процес</string>
+  <string name="menu_view">Виж процес</string>
+  <string name="anonymous_recipient">Анонимен</string>
+  <string name="messagelist_sender_self">Аз</string>
+  <string name="delete_message">Изтрий съобщение</string>
+  <string name="sent_on">"Изпрати: "<xliff:g id="date">%s</xliff:g></string>
+  <string name="kilobyte">Килобайт</string>
+  <string name="undelivered_msg_dialog_title">Недоставено съобщение</string>
+  <string name="undelivered_sms_dialog_body">Невъзможно е да се изпрати това съобщение</string>
+  <string name="delete_thread">Спри процес</string>
+  <string name="download">Изтегляне</string>
+  <string name="downloading">Изтегляне</string>
+  <string name="name_colon"><b><xliff:g id="name" example="Me">%s</xliff:g></b>": "</string>
+  <string name="copy_message_text">Копирай текста на съобщението</string>
+  <string name="message_options">Свойства на съобщението</string>
+  <string name="done">Завършен</string>
+  <string name="compose_title">Напиши</string>
+  <string name="add_attachment">Прикачи</string>
+  <string name="view">Преглед</string>
+  <string name="send">Изпращане</string>
+  <string name="all_threads">Всички процеси</string>
+  <string name="type_to_compose_text_enter_to_send">Пиши</string>
+  <string name="open_keyboard_to_compose_message">Отвори клавиатурата за да създадеш съобщение</string>
+  <string name="image_too_large">Картинката е твърде голяма</string>
+  <string name="ask_for_automatically_resize">Автоматично оразмеряване на картинката преди изпращане?</string>
+  <string name="compressing">Картинката е прекалено голяма. Компресиране\\u2026</string>
+  <string name="unsupported_media_format">"Не се поддържа "<xliff:g id="name">%1$s</xliff:g>" формат"</string>
+  <string name="menu_view_contact">Виж контакт</string>
+  <string name="menu_add_to_contacts">Добави в контакти</string>
+  <string name="hidden_sender_address">Скрит адрес на подателя</string>
+  <string name="yes">ОК</string>
+  <string name="no">Отказ</string>
+  <string name="edit">Редактиране</string>
+  <string name="restore_default">Възстанови настройките по подразбиране</string>
+  <string name="confirm_dialog_title">Изтриване</string>
+  <string name="confirm_delete_conversation">Всичко ще бъде изтрито</string>
+  <string name="confirm_delete_all_conversations">Всички процеси ще бъдат изтрити</string>
+  <string name="confirm_delete_message">Това съобщение ще бъде изтрито</string>
+  <string name="confirm_delete_locked_message">Сигурни ли сте, че искате да изтриете това заключено съобщение?</string>
+  <string name="confirm_delete_all_messages">Всичко ще бъде изтрито</string>
+  <string name="delete">Изтриване</string>
+  <string name="status_none">(Без)</string>
+  <string name="status_pending">В изчакване</string>
+  <string name="status_received">Получено</string>
+  <string name="status_failed">Неуспешно</string>
+  <string name="status_unread">Непрочетено</string>
+  <string name="status_rejected">Отхвърлено</string>
+  <string name="recipient_label">Получател:\\u0020</string>
+  <string name="status_label">Статус:\\u0020</string>
+  <string name="menu_insert_smiley">Вмъкване на имотикона</string>
+  <string name="me">Аз</string>
+  <string name="sending_message">Изпращане\\u2026</string>
+</resources>

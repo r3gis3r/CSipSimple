@@ -4,7 +4,6 @@
   <string name="next">Avanti</string>
   <string name="init">Inizializzazione ...</string>
   <string name="unable_to_download_file">Impossibile scaricare file</string>
-  <string name="connection_not_valid">La rete selezionata non è disponibile (attivare il WIFI o modificare le preferenze per utilizzare 3G)</string>
   <string name="invalid_sip_uri">L\'uri sip non è valido per la chiamata</string>
   <string name="accounts">Account</string>
   <string name="other_accounts">Altri account</string>

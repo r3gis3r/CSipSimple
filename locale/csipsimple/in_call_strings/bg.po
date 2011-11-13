@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-10-11 11:01+0000\n"
 "Last-Translator: Lubomir Christov <Unknown>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -23,7 +23,7 @@ msgstr "Отговор"
 
 msgctxt "decline_call"
 msgid "Ignore"
-msgstr "Игнориране"
+msgstr "Пренебрегване"
 
 msgctxt "clear_call"
 msgid "End"
@@ -31,11 +31,11 @@ msgstr "Край"
 
 msgctxt "touch_lock"
 msgid "Double tap to unlock"
-msgstr "Двойно почукване за отключване"
+msgstr "Чукни два пъти за отключване"
 
 msgctxt "dialpad"
 msgid "Dialpad"
-msgstr "Панел за набиране"
+msgstr "Клавиатура"
 
 msgctxt "bluetooth"
 msgid "Bluetooth"
@@ -43,7 +43,7 @@ msgstr "Блутут"
 
 msgctxt "speaker"
 msgid "Speaker"
-msgstr "Говорител"
+msgstr "Високоговорител"
 
 msgctxt "mute"
 msgid "Mute"
@@ -51,15 +51,15 @@ msgstr "Без звук"
 
 msgctxt "add_call"
 msgid "Add call"
-msgstr "Добавяне"
+msgstr "Добавяне на обаждане"
 
 msgctxt "call_state_calling"
 msgid "Calling..."
-msgstr "Позвъняване ..."
+msgstr "Набиране ..."
 
 msgctxt "call_state_confirmed"
 msgid "Talking"
-msgstr "Разговор"
+msgstr "В разговор"
 
 msgctxt "call_state_connecting"
 msgid "Connecting..."
@@ -87,13 +87,13 @@ msgstr "Отключване"
 
 msgctxt "record"
 msgid "Record"
-msgstr ""
+msgstr "Запис"
 
 msgctxt "stop_recording"
 msgid "Stop recording"
-msgstr ""
+msgstr "Спиране на записа"
 
 msgctxt "xfer"
 msgid "Transfer"
-msgstr ""
+msgstr "Прехвърляне на обаждане"
 

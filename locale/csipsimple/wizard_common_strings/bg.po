@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-10-13 13:14+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "Потребителско име"
 
 msgctxt "w_common_username_desc"
 msgid "Sip account login (do not write the @sip.server)"
-msgstr ""
+msgstr "Sip акаунт логин (не пишете @sip.server)"
 
 msgctxt "w_common_phone_number"
 msgid "Phone number"
@@ -51,13 +51,9 @@ msgstr "Парола за Вашия профил"
 
 msgctxt "w_common_server"
 msgid "Server"
-msgstr ""
+msgstr "Сървър"
 
 msgctxt "w_common_server_desc"
 msgid "SIP server domain/IP[:port]"
-msgstr ""
-
-#~ msgctxt "w_common_username_desc"
-#~ msgid "Sip account login"
-#~ msgstr "Вход в SIP профила"
+msgstr "Домейн на SIP сървъра/IP[:port]"
 

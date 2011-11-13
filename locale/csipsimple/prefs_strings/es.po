@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-11-27 23:52+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: es <LL@li.org>\n"
@@ -72,7 +72,7 @@ msgstr "Llamadas salientes"
 
 msgctxt "perfs"
 msgid "Performances"
-msgstr ""
+msgstr "Rendimientos"
 
 msgctxt "transport"
 msgid "Transport"
@@ -107,7 +107,7 @@ msgid "For example WiMax for outgoing calls"
 msgstr "Por ejemplo, WiMax para llamadas salientes"
 
 msgctxt "use_3g"
-msgid "Use 3G"
+msgid "Use 3G (and better)"
 msgstr "Usar 3G"
 
 msgctxt "use_3g_disclamer"
@@ -132,11 +132,13 @@ msgstr "Prevenir desactivar WiFi cuando SIP está conectado"
 
 msgctxt "lock_wifi_perfs"
 msgid "High perfs lock"
-msgstr ""
+msgstr "Bloqueo en alto rendimiento"
 
 msgctxt "lock_wifi_perfs_desc"
 msgid "Wifi lock in High perfs mode (drain battery faster)"
 msgstr ""
+"La conexión Wifi se bloquea en el modo de alto rendimento (la batería se "
+"descarga rápidamente)"
 
 msgctxt "enable_tcp"
 msgid "TCP"
@@ -240,19 +242,19 @@ msgstr "Servidor TURN (SERVIDOR:PUERTO)"
 
 msgctxt "turn_username"
 msgid "TURN user"
-msgstr ""
+msgstr "Usuario TURN"
 
 msgctxt "turn_username_desc"
 msgid "Username for TURN authentication"
-msgstr ""
+msgstr "Nombre de usuario para autenticación TURN"
 
 msgctxt "turn_password"
 msgid "TURN password"
-msgstr ""
+msgstr "Clave TURN"
 
 msgctxt "turn_password_desc"
 msgid "Password for TURN authentication"
-msgstr ""
+msgstr "Clave para autenticación TURN"
 
 msgctxt "enable_stun"
 msgid "Enable STUN"
@@ -264,11 +266,11 @@ msgstr "Habilitar la funcionalidad STUN"
 
 msgctxt "stun_server"
 msgid "STUN servers"
-msgstr ""
+msgstr "Servidores STUN"
 
 msgctxt "stun_server_desc"
 msgid "STUN servers (HOST[:PORT], ...)"
-msgstr ""
+msgstr "Servidores STUN (SERVIDOR[:PUERTO], ...)"
 
 msgctxt "enable_qos"
 msgid "Enable QoS"
@@ -288,11 +290,11 @@ msgstr "Valor DSCO para el tráfico SIP"
 
 msgctxt "keep_alive_interval_wifi"
 msgid "Wifi keep alive"
-msgstr ""
+msgstr "Mantener activa la conexión Wifi"
 
 msgctxt "keep_alive_interval_mobile"
 msgid "Mobile keep alive"
-msgstr ""
+msgstr "Mantener activo el móvil"
 
 msgctxt "keep_alive_interval_desc"
 msgid "Interval (sec) for KA packets"
@@ -300,11 +302,13 @@ msgstr ""
 
 msgctxt "use_compact_form"
 msgid "Use compact SIP"
-msgstr ""
+msgstr "Utilizar SIP compacto"
 
 msgctxt "use_compact_form_desc"
 msgid "Reduce SIP packets size. May not work on old SIP servers"
 msgstr ""
+"Reduce el tamaño de paquete SIP. Puede no funcionar en servidores SIP "
+"antiguos"
 
 msgctxt "user_agent"
 msgid "User agent"
@@ -320,6 +324,32 @@ msgstr ""
 
 msgctxt "ka_use_wake_desc"
 msgid "If activated keep alive will awake phone"
+msgstr ""
+
+msgctxt "force_no_update"
+msgid "Force no update"
+msgstr ""
+
+msgctxt "force_no_update_desc"
+msgid ""
+"Some buggy remote party announce to support UPDATE method while it does "
+"not, this option force the legacy way to manage UPDATE/re-INVITE"
+msgstr ""
+
+msgctxt "timer_min_se"
+msgid "Minimum session expiration"
+msgstr ""
+
+msgctxt "timer_min_se_desc"
+msgid "Minimum session expiration period, in seconds. Must not be lower than 90."
+msgstr ""
+
+msgctxt "timer_sess_expires"
+msgid "Session expiration period"
+msgstr ""
+
+msgctxt "timer_sess_expires_desc"
+msgid "Session expiration period, in seconds. Must not be lower than min_se."
 msgstr ""
 
 #. Security
@@ -501,8 +531,7 @@ msgid "Media quality"
 msgstr ""
 
 msgctxt "snd_media_quality_desc"
-msgid ""
-"Quality of the media stream (modify only if you know what you are doing)"
+msgid "Quality of the media stream (modify only if you know what you are doing)"
 msgstr ""
 
 msgctxt "snd_clock_rate"
@@ -682,8 +711,8 @@ msgstr ""
 
 msgctxt "integrate_with_native_dialer_desc"
 msgid ""
-"When dialing with native dialer you'll be asked if you want to use SIP or "
-"mobile"
+"When dialing with native dialer you'll be asked if you want to use SIP or"
+" mobile"
 msgstr ""
 
 msgctxt "integrate_with_native_calllogs"

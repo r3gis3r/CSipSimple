@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2011-01-28 11:58+0000\n"
 "Last-Translator: Libor Tesař <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
@@ -116,5 +116,13 @@ msgstr "Metoda přepsání kontaktu"
 
 msgctxt "w_expert_reg_use_proxy"
 msgid "How to use proxy"
+msgstr ""
+
+msgctxt "w_expert_try_clean_registers"
+msgid "Try to clean registers"
+msgstr ""
+
+msgctxt "w_expert_try_clean_registers_desc"
+msgid "Allow app to try to clean old registrations if needed"
 msgstr ""
 

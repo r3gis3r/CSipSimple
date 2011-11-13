@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-06-09 10:18+0200\n"
+"POT-Creation-Date: 2011-11-13 15:22+0100\n"
 "PO-Revision-Date: 2010-11-24 04:32+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr "Register Timeout (sec)"
 
 msgctxt "w_expert_reg_delay_before_refresh"
 msgid "Register delay before refresh (sec)"
-msgstr ""
+msgstr "Regsitrierungs Verzögerung vor Wiederholung (Sek.)"
 
 msgctxt "w_expert_ka_interval"
 msgid "Keep-alive interval (sec)"
@@ -115,5 +115,13 @@ msgstr "Methode für den Contact-Rewrite"
 
 msgctxt "w_expert_reg_use_proxy"
 msgid "How to use proxy"
+msgstr "Wie man einen Proxy benutzt"
+
+msgctxt "w_expert_try_clean_registers"
+msgid "Try to clean registers"
+msgstr ""
+
+msgctxt "w_expert_try_clean_registers_desc"
+msgid "Allow app to try to clean old registrations if needed"
 msgstr ""
 

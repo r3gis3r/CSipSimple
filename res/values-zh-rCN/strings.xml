@@ -4,7 +4,6 @@
   <string name="next">下一步</string>
   <string name="init">正在初始化……</string>
   <string name="unable_to_download_file">无法下载文件</string>
-  <string name="connection_not_valid">选择的网络无法使用（请开启 WiFI 或者修改 3G 参数）</string>
   <string name="invalid_sip_uri">SIP 呼叫地址不正确</string>
   <string name="accounts">账号</string>
   <string name="other_accounts">其他账号</string>
