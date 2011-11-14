@@ -153,9 +153,9 @@ public:
 	virtual int on_set_micro_source () {}
 
 #if PJMEDIA_HAS_ZRTP
-	virtual void on_zrtp_show_sas (const pj_str_t *sas, int verified) {}
-	virtual void on_zrtp_secure_on (const pj_str_t *cipher) {}
-	virtual void on_zrtp_secure_off () {}
+	virtual void on_zrtp_show_sas (int data, const pj_str_t *sas, int verified) {}
+	virtual void on_zrtp_secure_on (int data, const pj_str_t *cipher) {}
+	virtual void on_zrtp_secure_off (int data) {}
 #endif
 
 #if USE_CSIPSIMPLE
@@ -353,16 +353,16 @@ int on_set_micro_source_wrapper () {
 #if PJMEDIA_HAS_ZRTP
 void on_zrtp_show_sas_wrapper(void* data, char* sas, int verified){
 	pj_str_t sas_string = pj_str(sas);
-	registeredCallbackObject->on_zrtp_show_sas(&sas_string, verified);
+	registeredCallbackObject->on_zrtp_show_sas((int) data, &sas_string, verified);
 }
 
 void on_zrtp_secure_on_wrapper(void* data, char* cipher){
 	pj_str_t cipher_string = pj_str(cipher);
-	registeredCallbackObject->on_zrtp_secure_on(&cipher_string);
+	registeredCallbackObject->on_zrtp_secure_on((int) data, &cipher_string);
 }
 
 void on_zrtp_secure_off_wrapper(void* data) {
-	registeredCallbackObject->on_zrtp_secure_off();
+	registeredCallbackObject->on_zrtp_secure_off((int) data);
 }
 #endif
 
@@ -499,9 +499,9 @@ public:
 	virtual int on_set_micro_source();
 	
 #if PJMEDIA_HAS_ZRTP
-	virtual void on_zrtp_show_sas (const pj_str_t *sas, int verified);
-	virtual void on_zrtp_secure_on (const pj_str_t *cipher);
-	virtual void on_zrtp_secure_off ();
+	virtual void on_zrtp_show_sas (int data, const pj_str_t *sas, int verified);
+	virtual void on_zrtp_secure_on (int data, const pj_str_t *cipher);
+	virtual void on_zrtp_secure_off (int data);
 #endif
 
 #if USE_CSIPSIMPLE

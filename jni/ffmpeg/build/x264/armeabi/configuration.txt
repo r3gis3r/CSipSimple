@@ -1,0 +1,24 @@
+platform:      ARM
+system:        LINUX
+cli:           no
+libx264:       internal
+shared:        no
+static:        yes
+asm:           yes
+interlaced:    yes
+avs:           no
+lavf:          no
+ffms:          no
+gpac:          no
+gpl:           yes
+thread:        no
+filters:       crop select_every 
+debug:         no
+gprof:         no
+strip:         no
+PIC:           yes
+visualize:     no
+bit depth:     8
+chroma format: all
+
+You can run 'make' or 'make fprofiled' now.

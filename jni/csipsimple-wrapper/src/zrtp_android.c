@@ -1,11 +1,11 @@
 #include "zrtp_android.h"
+#include "pjsua_jni_addons.h"
 
 /*
  * ZRTP stuff
  */
 
 #define THIS_FILE		"zrtp_android.c"
-
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 
 
@@ -117,25 +117,12 @@ static int32_t checkSASSignature(void* data, char* sas)
 }
 
 
+typedef struct zrtp_cb_user_data {
+	pjsua_call_id call_id;
+	pjmedia_transport *zrtp_tp;
+} zrtp_cb_user_data;
 
 
-static zrtp_UserCallbacks wrapper_zrtp_callback_struct = {
-    &on_zrtp_secure_on_wrapper,
-    &on_zrtp_secure_off_wrapper,
-    &on_zrtp_show_sas_wrapper,
-    &confirmGoClear,
-    &showMessage,
-    &zrtpNegotiationFailed,
-    &zrtpNotSuppOther,
-    &zrtpAskEnrollment,
-    &zrtpInformEnrollment,
-    &signSAS,
-    &checkSASSignature,
-    NULL
-};
-
-
-pjmedia_transport *current_zrtp;
 
 /* Initialize the ZRTP transport and the user callbacks */
 pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
@@ -150,15 +137,32 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 		status = pjmedia_transport_zrtp_create(endpt, NULL, base_tp,
 											   &zrtp_tp, flags);
 
+
+
 		if(status == PJ_SUCCESS){
 			PJ_LOG(3,(THIS_FILE, "ZRTP transport created"));
-			/*
-			* this is optional but highly recommended to enable the application
-			* to report status information to the user, such as verfication status,
-			* SAS code, etc
-			*/
-			wrapper_zrtp_callback_struct.userData = zrtp_tp;
-			pjmedia_transport_zrtp_setUserCallback(zrtp_tp, &wrapper_zrtp_callback_struct);
+
+			// Build callback data ponter
+			zrtp_cb_user_data* zrtp_cb_data = PJ_POOL_ZALLOC_T(css_var.pool, zrtp_cb_user_data);
+			zrtp_cb_data->zrtp_tp = zrtp_tp;
+			zrtp_cb_data->call_id = call_id;
+
+			// Build callback struct
+			zrtp_UserCallbacks* zrtp_cbs = PJ_POOL_ZALLOC_T(css_var.pool, zrtp_UserCallbacks);
+			zrtp_cbs->zrtp_secureOn = &on_zrtp_secure_on_wrapper;
+			zrtp_cbs->zrtp_secureOff = &on_zrtp_secure_off_wrapper;
+			zrtp_cbs->zrtp_showSAS = &on_zrtp_show_sas_wrapper;
+			zrtp_cbs->zrtp_confirmGoClear = &confirmGoClear;
+			zrtp_cbs->zrtp_showMessage = &showMessage;
+			zrtp_cbs->zrtp_zrtpNegotiationFailed = &zrtpNegotiationFailed;
+			zrtp_cbs->zrtp_zrtpNotSuppOther = &zrtpNotSuppOther;
+			zrtp_cbs->zrtp_zrtpAskEnrollment = &zrtpAskEnrollment;
+			zrtp_cbs->zrtp_zrtpInformEnrollment = &zrtpInformEnrollment;
+			zrtp_cbs->zrtp_signSAS = &signSAS;
+			zrtp_cbs->zrtp_checkSASSignature = &checkSASSignature;
+			zrtp_cbs->userData = zrtp_cb_data;
+
+			pjmedia_transport_zrtp_setUserCallback(zrtp_tp, zrtp_cbs);
 
 
 			/*
@@ -168,7 +172,6 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 			* thus the parameter is NULL.
 			*/
 			pjmedia_transport_zrtp_initialize(zrtp_tp, "/sdcard/simple.zid", PJ_TRUE);
-			current_zrtp = zrtp_tp;
 
 			return zrtp_tp;
 		} else {
@@ -179,16 +182,27 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 
 // TODO : that's not clean should be able to manage
 // several transport -- but for first implementation ...
-PJ_DECL(void) jzrtp_SASVerified() {
-	ZrtpContext* ctxt = pjmedia_transport_zrtp_getZrtpContext(current_zrtp);
+PJ_DECL(void) jzrtp_SASVerified(long zrtp_data_p) {
+	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) zrtp_data_p;
+	ZrtpContext* ctxt = pjmedia_transport_zrtp_getZrtpContext(zrtp_data->zrtp_tp);
 	zrtp_SASVerified(ctxt);
+}
+
+PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p){
+	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) zrtp_data_p;
+	return zrtp_data->call_id;
+
 }
 //pjmedia_transport_zrtp_getZrtpContext
 
 // * @see zrtp_SASVerified()
 // * @see zrtp_resetSASVerified()
 #else
-PJ_DECL(void) jzrtp_SASVerified() {
+PJ_DECL(void) jzrtp_SASVerified(long zrtp_data_p) {
 	//TODO : log
+}
+
+PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p){
+	return -1;
 }
 #endif

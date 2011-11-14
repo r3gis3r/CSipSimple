@@ -1,0 +1,92 @@
+install prefix            /home/r3gis3r/workspaceandroid2/CSipSimple/jni/ffmpeg/ffmpeg_src/../build/ffmpeg/armeabi-v7a
+source path               .
+C compiler                /home/r3gis3r/android/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-gcc
+ARCH                      arm (generic)
+big-endian                no
+runtime cpu detection     no
+ARMv5TE enabled           yes
+ARMv6 enabled             no
+ARMv6T2 enabled           no
+ARM VFP enabled           no
+IWMMXT enabled            no
+NEON enabled              no
+debug symbols             yes
+strip symbols             yes
+optimize for size         yes
+optimizations             yes
+static                    yes
+shared                    yes
+postprocessing support    yes
+new filter support        yes
+network support           yes
+threading support         pthreads
+SDL support               no
+Sun medialib support      no
+libdxva2 enabled          no
+libva enabled             no
+libvdpau enabled          no
+AVISynth enabled          no
+libcelt enabled           no
+frei0r enabled            no
+libcdio support           no
+libdc1394 support         no
+libdirac enabled          no
+libfaac enabled           no
+libaacplus enabled        no
+libgsm enabled            no
+libmodplug enabled        no
+libmp3lame enabled        no
+libnut enabled            no
+libopencore-amrnb support no
+libopencore-amrwb support no
+libopencv support         no
+libopenjpeg enabled       no
+libpulse enabled          no
+librtmp enabled           no
+libschroedinger enabled   no
+libspeex enabled          no
+libstagefright-h264 enabled    no
+libtheora enabled         no
+libutvideo enabled        no
+libvo-aacenc support      no
+libvo-amrwbenc support    no
+libvorbis enabled         no
+libvpx enabled            no
+libx264 enabled           yes
+libxavs enabled           no
+libxvid enabled           no
+openal enabled            no
+zlib enabled              no
+bzlib enabled             no
+
+Enabled decoders:
+h263			h264
+
+Enabled encoders:
+h263			libx264
+
+Enabled hwaccels:
+
+Enabled parsers:
+h263			h264
+
+Enabled demuxers:
+
+Enabled muxers:
+
+Enabled protocols:
+
+Enabled filters:
+buffer			buffersink
+
+Enabled bsfs:
+
+Enabled indevs:
+
+Enabled outdevs:
+
+License: GPL version 2 or later
+Creating config.mak and config.h...
+libavutil/avconfig.h is unchanged
+
+WARNING: /home/r3gis3r/android/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-pkg-config not found, library detection may fail.

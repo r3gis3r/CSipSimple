@@ -48,10 +48,10 @@ include $(CLEAR_VARS)
 
 ### CODECS ###
 include $(WEBRTC_PATH)/modules/audio_coding/main/source/Android.mk
-include $(WEBRTC_PATH)/modules/audio_coding/NetEQ/main/source/Android.mk
+include $(WEBRTC_PATH)/modules/audio_coding/neteq/Android.mk
 include $(WEBRTC_PATH)/modules/audio_coding/codecs/CNG/main/source/Android.mk
 include $(WEBRTC_PATH)/modules/audio_coding/codecs/G711/main/source/Android.mk
-include $(WEBRTC_PATH)/modules/audio_coding/codecs/iLBC/main/source/Android.mk
+include $(WEBRTC_PATH)/modules/audio_coding/codecs/ilbc/Android.mk
 #include $(TOP_LOCAL_PATH)/modules/audio_coding/codecs/PCM16B/main/source/Android.mk
 ifeq ($(TARGET_ARCH_ABI),armeabi)
 #Fix codecs

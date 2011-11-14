@@ -21,6 +21,7 @@
 
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 #include "zrtp_android.h"
+#include "transport_zrtp.h"
 #endif
 
 #if PJ_ANDROID_DEVICE==1
@@ -35,8 +36,9 @@
 
 #define USE_TCP_HACK 0
 
-// CSS config instance
-static struct css_data css_var;
+
+/* CSS application instance. */
+struct css_data css_var;
 
 /**
  * Get nbr of codecs
@@ -229,18 +231,18 @@ PJ_DECL(pj_status_t) media_transports_create_ipv6(pjsua_transport_config rtp_cfg
 /**
  * Is call using a secure RTP method (SRTP/ZRTP -- TODO)
  */
-PJ_DECL(pj_bool_t) is_call_secure(pjsua_call_id call_id){
+PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id){
 
     pjsua_call *call;
     pjsip_dialog *dlg;
     pj_status_t status;
     unsigned i;
     pjmedia_transport_info tp_info;
-    pj_bool_t result = PJ_FALSE;
+
+    pj_str_t result = pj_str("");
 
 	PJ_ASSERT_RETURN(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls,
-		 PJ_EINVAL);
-
+			result);
 
 	status = acquire_call("is_call_secure()", call_id, &call, &dlg);
 	if (status != PJ_SUCCESS) {
@@ -264,9 +266,17 @@ PJ_DECL(pj_bool_t) is_call_secure(pjsua_call_id call_id){
 							pjmedia_srtp_info *srtp_info =
 									(pjmedia_srtp_info*) tp_info.spc_info[j].buffer;
 							if(srtp_info->active){
-								result = PJ_TRUE;
+								result = pj_str("SRTP");
+								break;
 							}
 						}
+
+#if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
+						else if(tp_info.spc_info[j].type == PJMEDIA_TRANSPORT_TYPE_ZRTP){
+							result = pj_str("ZRTP");
+							break;
+						}
+#endif
 					}
 			    }
 			}
@@ -491,34 +501,26 @@ static void pj_android_log_msg(int level, const char *data, int len) {
 #define RINGBACK_CNT	    1	    /* 2   */
 #define RINGBACK_INTERVAL   4000    /* 2000 */
 
-static struct app_config {
-	pj_pool_t		   *pool;
-    int			    ringback_slot;
-    int			    ringback_cnt;
-    pjmedia_port	   *ringback_port;
-    pj_bool_t ringback_on;
-} app_config;
-
 void ringback_start(){
-	if (app_config.ringback_on) {
+	if (css_var.ringback_on) {
 		//Already ringing back
 		return;
 	}
-	app_config.ringback_on = PJ_TRUE;
-    if (++app_config.ringback_cnt==1 && app_config.ringback_slot!=PJSUA_INVALID_ID){
-    	pjsua_conf_connect(app_config.ringback_slot, 0);
+	css_var.ringback_on = PJ_TRUE;
+    if (++css_var.ringback_cnt==1 && css_var.ringback_slot!=PJSUA_INVALID_ID){
+    	pjsua_conf_connect(css_var.ringback_slot, 0);
     }
 }
 
 void ring_stop(pjsua_call_id call_id) {
-    if (app_config.ringback_on) {
-    	app_config.ringback_on = PJ_FALSE;
+    if (css_var.ringback_on) {
+    	css_var.ringback_on = PJ_FALSE;
 
-		pj_assert(app_config.ringback_cnt>0);
-		if (--app_config.ringback_cnt == 0 &&
-			app_config.ringback_slot!=PJSUA_INVALID_ID)  {
-			pjsua_conf_disconnect(app_config.ringback_slot, 0);
-			pjmedia_tonegen_rewind(app_config.ringback_port);
+		pj_assert(css_var.ringback_cnt>0);
+		if (--css_var.ringback_cnt == 0 &&
+				css_var.ringback_slot!=PJSUA_INVALID_ID)  {
+			pjsua_conf_disconnect(css_var.ringback_slot, 0);
+			pjmedia_tonegen_rewind(css_var.ringback_port);
 		}
     }
 }
@@ -529,19 +531,18 @@ void init_ringback_tone(){
 	pjmedia_tone_desc tone[RINGBACK_CNT];
 	unsigned i;
 
-	app_config.pool = pjsua_pool_create("pjsua-jni", 1000, 1000);
-	app_config.ringback_slot=PJSUA_INVALID_ID;
-	app_config.ringback_on = PJ_FALSE;
-	app_config.ringback_cnt = 0;
+	css_var.ringback_slot=PJSUA_INVALID_ID;
+	css_var.ringback_on = PJ_FALSE;
+	css_var.ringback_cnt = 0;
 
 	//Ringback
 	name = pj_str((char *)"ringback");
-	status = pjmedia_tonegen_create2(app_config.pool, &name,
+	status = pjmedia_tonegen_create2(css_var.pool, &name,
 					 16000,
 					 1,
 					 320,
 					 16, PJMEDIA_TONEGEN_LOOP,
-					 &app_config.ringback_port);
+					 &css_var.ringback_port);
 	if (status != PJ_SUCCESS){
 		goto on_error;
 	}
@@ -554,33 +555,28 @@ void init_ringback_tone(){
 		tone[i].off_msec = RINGBACK_OFF;
 	}
 	tone[RINGBACK_CNT-1].off_msec = RINGBACK_INTERVAL;
-	pjmedia_tonegen_play(app_config.ringback_port, RINGBACK_CNT, tone, PJMEDIA_TONEGEN_LOOP);
-	status = pjsua_conf_add_port(app_config.pool, app_config.ringback_port,
-					 &app_config.ringback_slot);
+	pjmedia_tonegen_play(css_var.ringback_port, RINGBACK_CNT, tone, PJMEDIA_TONEGEN_LOOP);
+	status = pjsua_conf_add_port(css_var.pool, css_var.ringback_port,
+					 &css_var.ringback_slot);
 	if (status != PJ_SUCCESS){
 		goto on_error;
 	}
 	return;
 
-	on_error :{
-		pj_pool_release(app_config.pool);
-	}
+	on_error :
+	return;
 }
 
 void destroy_ringback_tone(){
 	/* Close ringback port */
-	if (app_config.ringback_port &&
-	app_config.ringback_slot != PJSUA_INVALID_ID){
-		pjsua_conf_remove_port(app_config.ringback_slot);
-		app_config.ringback_slot = PJSUA_INVALID_ID;
-		pjmedia_port_destroy(app_config.ringback_port);
-		app_config.ringback_port = NULL;
+	if (css_var.ringback_port &&
+			css_var.ringback_slot != PJSUA_INVALID_ID){
+		pjsua_conf_remove_port(css_var.ringback_slot);
+		css_var.ringback_slot = PJSUA_INVALID_ID;
+		pjmedia_port_destroy(css_var.ringback_port);
+		css_var.ringback_port = NULL;
 	}
 
-    if (app_config.pool) {
-	pj_pool_release(app_config.pool);
-	app_config.pool = NULL;
-    }
 }
 
 void app_on_call_state(pjsua_call_id call_id, pjsip_event *e) {

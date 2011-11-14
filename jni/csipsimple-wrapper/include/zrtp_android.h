@@ -14,8 +14,8 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 
 PJ_BEGIN_DECL
 
-PJ_DECL(void) jzrtp_SASVerified();
-
+PJ_DECL(void) jzrtp_SASVerified(long zrtp_data_p);
+PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p);
 PJ_END_DECL
 
 

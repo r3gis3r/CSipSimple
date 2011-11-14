@@ -78,9 +78,6 @@ PJ_ANDROID_SRC_DIR := ../../android_sources/pjmedia/src/
 ifeq ($(MY_ANDROID_DEV),1)
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-audiodev/android_jni_dev.cpp
 endif
-ifeq ($(MY_ANDROID_DEV),2)
-LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-audiodev/opensl_dev.cpp
-endif
 
 ifeq ($(MY_USE_VIDEO),1)
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/opengl_video_dev.c \
@@ -110,3 +107,26 @@ LOCAL_SHARED_LIBRARIES += libpjsipjni
 
 include $(BUILD_SHARED_LIBRARY)
 endif
+
+# OpenSL-ES implementation
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := pj_opensl_dev
+
+
+LOCAL_C_INCLUDES := $(LOCAL_PATH)../pjlib/include/ $(LOCAL_PATH)../pjlib-util/include/ \
+	$(LOCAL_PATH)../pjnath/include/ $(LOCAL_PATH)include/ $(LOCAL_PATH)../ 
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-audiodev/
+
+
+LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-audiodev/opensl_dev.cpp
+
+
+LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DPJMEDIA_AUDIO_DEV_HAS_OPENSL=1
+LOCAL_SHARED_LIBRARIES += libpjsipjni
+LOCAL_LDLIBS += -lOpenSLES
+
+include $(BUILD_SHARED_LIBRARY)
+

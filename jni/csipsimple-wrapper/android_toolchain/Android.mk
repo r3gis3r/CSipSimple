@@ -61,10 +61,6 @@ ifeq ($(MY_USE_TLS),1)
 LOCAL_LDLIBS += -ldl 
 endif
 
-ifeq ($(MY_ANDROID_DEV),2)
-LOCAL_LDLIBS += -lOpenSLES
-endif
-
 ifeq ($(MY_USE_VIDEO),1)
 	LOCAL_LDLIBS += -lGLESv1_CM
 endif

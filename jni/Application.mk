@@ -38,7 +38,7 @@ MY_ANDROID_DEV := 1
 
 # Do not change behind this line the are flags for pj build
 # Only build pjsipjni and ignore openssl
-APP_MODULES := libpjsipjni
+APP_MODULES := libpjsipjni pj_opensl_dev
 ifeq ($(MY_USE_SILK),1)
 APP_MODULES += libpj_silk_codec 
 endif

@@ -20,8 +20,6 @@
 
 #include "opensl_dev.h"
 
-//TODO : should be done in config there
-#define PJMEDIA_AUDIO_DEV_HAS_OPENSL 1
 
 #if PJMEDIA_AUDIO_DEV_HAS_OPENSL
 

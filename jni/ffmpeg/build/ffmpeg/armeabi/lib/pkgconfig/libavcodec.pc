@@ -1,0 +1,14 @@
+prefix=/home/r3gis3r/workspaceandroid2/CSipSimple/jni/ffmpeg/ffmpeg_src/../build/ffmpeg/armeabi
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 53.27.0
+Requires: libavutil = 51.23.0
+Requires.private: 
+Conflicts:
+Libs: -L${libdir} -lavcodec -lx264 -lm -lz
+Libs.private: 
+Cflags: -I${includedir}

@@ -1,0 +1,14 @@
+prefix=/home/r3gis3r/workspaceandroid2/CSipSimple/jni/ffmpeg/ffmpeg_src/../build/ffmpeg/armeabi
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavdevice
+Description: FFmpeg device handling library
+Version: 53.4.0
+Requires: libavformat = 53.18.0
+Requires.private: 
+Conflicts:
+Libs: -L${libdir} -lavdevice -lx264 -lm -lz
+Libs.private: 
+Cflags: -I${includedir}
