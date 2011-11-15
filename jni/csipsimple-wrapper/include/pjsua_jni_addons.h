@@ -79,6 +79,11 @@ typedef struct csipsimple_config {
 	 */
 	dynamic_codec extra_codecs[64];
 
+	/**
+	 * Target folder for content storage
+	 */
+	pj_str_t storage_folder;
+
 } csipsimple_config;
 
 // methods
@@ -89,7 +94,6 @@ PJ_DECL(pj_str_t) call_dump(pjsua_call_id call_id, pj_bool_t with_media, const c
 PJ_DECL(pj_bool_t) can_use_tls();
 PJ_DECL(pj_bool_t) can_use_srtp();
 PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id);
-PJ_DECL(pj_status_t) media_transports_create_ipv6(pjsua_transport_config rtp_cfg);
 PJ_DECL(pj_str_t) get_error_message(int status);
 
 PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg);
@@ -119,6 +123,9 @@ struct css_data {
     int			    ringback_cnt;
     pjmedia_port	   *ringback_port;
     pj_bool_t ringback_on;
+
+    // About zrtp cfg
+    char zid_file[512];
 };
 
 extern struct css_data css_var;

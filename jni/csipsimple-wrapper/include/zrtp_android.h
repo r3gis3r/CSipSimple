@@ -19,4 +19,15 @@ PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p);
 PJ_END_DECL
 
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+pj_str_t jzrtp_getInfo(pjmedia_transport* tp);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

@@ -15,6 +15,7 @@ void on_zrtp_secure_on_wrapper(void* data, char* cipher);
 void on_zrtp_secure_off_wrapper(void* data);
 
 #include "transport_zrtp.h"
+#include "libzrtpcpp/ZrtpCWrapper.h"
 
 const char* InfoCodes[] =
 {
@@ -66,6 +67,29 @@ const char* SevereCodes[] =
 
 
 
+typedef struct zrtp_cb_user_data {
+	pjsua_call_id call_id;
+	pjmedia_transport *zrtp_tp;
+	pj_str_t sas;
+	pj_str_t cipher;
+} zrtp_cb_user_data;
+
+static void zrtpShowSas(void* data, char* sas, int verified){
+	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) data;
+	pj_strdup2_with_null(css_var.pool, &zrtp_data->sas, sas);
+	on_zrtp_show_sas_wrapper(data, sas, verified);
+}
+
+static void zrtpSecureOn(void* data, char* cipher){
+	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) data;
+	pj_strdup2_with_null(css_var.pool, &zrtp_data->cipher, cipher);
+	on_zrtp_update_transport_wrapper(data);
+}
+
+static void zrtpSecureOff(void* data){
+	on_zrtp_update_transport_wrapper(data);
+}
+
 static void confirmGoClear(void* data)
 {
     PJ_LOG(3,(THIS_FILE, "GoClear????????"));
@@ -76,6 +100,10 @@ static void showMessage(void* data, int32_t sev, int32_t subCode)
     {
     case zrtp_Info:
         PJ_LOG(3,(THIS_FILE, "ZRTP info message: %s", InfoCodes[subCode]));
+        if(subCode == zrtp_InfoSecureStateOn
+        		|| subCode == zrtp_InfoSecureStateOff){
+        	on_zrtp_update_transport_wrapper(data);
+        }
         break;
 
     case zrtp_Warning:
@@ -117,11 +145,6 @@ static int32_t checkSASSignature(void* data, char* sas)
 }
 
 
-typedef struct zrtp_cb_user_data {
-	pjsua_call_id call_id;
-	pjmedia_transport *zrtp_tp;
-} zrtp_cb_user_data;
-
 
 
 /* Initialize the ZRTP transport and the user callbacks */
@@ -135,7 +158,7 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 		pjmedia_endpt* endpt = pjsua_get_pjmedia_endpt();
 
 		status = pjmedia_transport_zrtp_create(endpt, NULL, base_tp,
-											   &zrtp_tp, flags);
+											   &zrtp_tp, (flags & PJSUA_MED_TP_CLOSE_MEMBER));
 
 
 
@@ -146,12 +169,15 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 			zrtp_cb_user_data* zrtp_cb_data = PJ_POOL_ZALLOC_T(css_var.pool, zrtp_cb_user_data);
 			zrtp_cb_data->zrtp_tp = zrtp_tp;
 			zrtp_cb_data->call_id = call_id;
+			zrtp_cb_data->cipher = pj_str("");
+			zrtp_cb_data->sas = pj_str("");
+
 
 			// Build callback struct
 			zrtp_UserCallbacks* zrtp_cbs = PJ_POOL_ZALLOC_T(css_var.pool, zrtp_UserCallbacks);
-			zrtp_cbs->zrtp_secureOn = &on_zrtp_secure_on_wrapper;
-			zrtp_cbs->zrtp_secureOff = &on_zrtp_secure_off_wrapper;
-			zrtp_cbs->zrtp_showSAS = &on_zrtp_show_sas_wrapper;
+			zrtp_cbs->zrtp_secureOn = &zrtpSecureOn;
+			zrtp_cbs->zrtp_secureOff = &zrtpSecureOff;
+			zrtp_cbs->zrtp_showSAS = &zrtpShowSas;
 			zrtp_cbs->zrtp_confirmGoClear = &confirmGoClear;
 			zrtp_cbs->zrtp_showMessage = &showMessage;
 			zrtp_cbs->zrtp_zrtpNegotiationFailed = &zrtpNegotiationFailed;
@@ -171,7 +197,7 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 			* be created an initialized. The ZRTP configuration is not yet implemented
 			* thus the parameter is NULL.
 			*/
-			pjmedia_transport_zrtp_initialize(zrtp_tp, "/sdcard/simple.zid", PJ_TRUE);
+			pjmedia_transport_zrtp_initialize(zrtp_tp, css_var.zid_file, PJ_TRUE);
 
 			return zrtp_tp;
 		} else {
@@ -180,8 +206,6 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 		}
 }
 
-// TODO : that's not clean should be able to manage
-// several transport -- but for first implementation ...
 PJ_DECL(void) jzrtp_SASVerified(long zrtp_data_p) {
 	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) zrtp_data_p;
 	ZrtpContext* ctxt = pjmedia_transport_zrtp_getZrtpContext(zrtp_data->zrtp_tp);
@@ -193,10 +217,33 @@ PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p){
 	return zrtp_data->call_id;
 
 }
-//pjmedia_transport_zrtp_getZrtpContext
 
-// * @see zrtp_SASVerified()
-// * @see zrtp_resetSASVerified()
+extern char hs80[];
+
+pj_str_t jzrtp_getInfo(pjmedia_transport* tp){
+	pj_str_t result;
+
+	char msg[512];
+
+	ZrtpContext *ctx = pjmedia_transport_zrtp_getZrtpContext(tp);
+	int32_t state = zrtp_inState(ctx, SecureState);
+
+	zrtp_cb_user_data* zrtp_cb_data = (zrtp_cb_user_data*) pjmedia_transport_zrtp_getUserData(tp);
+
+
+	pj_ansi_snprintf(msg, sizeof(msg),
+			"ZRTP - %s\n%.*s\n%.*s",
+			state ?  "OK" : "No verif.",
+			zrtp_cb_data->sas.slen, zrtp_cb_data->sas.ptr,
+			zrtp_cb_data->cipher.slen, zrtp_cb_data->cipher.ptr);
+	pj_strdup2_with_null(css_var.pool, &result, msg);
+
+
+	PJ_LOG(4, (THIS_FILE, "ZRTP getInfos : %s", msg));
+
+	return result;
+}
+
 #else
 PJ_DECL(void) jzrtp_SASVerified(long zrtp_data_p) {
 	//TODO : log

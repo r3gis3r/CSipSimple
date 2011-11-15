@@ -1,9 +1,6 @@
-LOCAL_PATH := /
-CALL_PATH := $(call my-dir)
+LOCAL_PATH := $(call my-dir)
 
-# TODO : amr build with _AMR_ folder
-SILK_PATH := $(CALL_PATH)/../sources/SILK_SDK_SRC_FIX_v1.0.8/
-PJ_SILK_PATH := $(CALL_PATH)/../pj_sources/
+
 
 ifeq ($(MY_USE_SILK),1)
 
@@ -11,18 +8,22 @@ ifeq ($(MY_USE_SILK),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_silk_codec
 
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FIX_v1.0.8/
+PJ_SILK_PATH := $(LOCAL_PATH)/../pj_sources/
+
 # pj
-PJ_DIR = $(CALL_PATH)/../../pjsip/sources/
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources/
 LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
 	$(PJ_DIR)/pjlib-util/include/ \
 	$(PJ_DIR)/pjnath/include/ \
 	$(PJ_DIR)/pjmedia/include/
 # silk
 LOCAL_C_INCLUDES += $(SILK_PATH)/interface
-LOCAL_SRC_FILES += $(wildcard $(SILK_PATH)/src/*.c)
+SILK_FILES := $(wildcard $(SILK_PATH)/src/*.c)
+LOCAL_SRC_FILES += $(SILK_FILES:$(LOCAL_PATH)/%=%)
 # self
 LOCAL_C_INCLUDES += $(PJ_SILK_PATH)
-LOCAL_SRC_FILES += $(PJ_SILK_PATH)/silk.c
+LOCAL_SRC_FILES += ../pj_sources/silk.c
 
 LOCAL_SHARED_LIBRARIES += libpjsipjni
 

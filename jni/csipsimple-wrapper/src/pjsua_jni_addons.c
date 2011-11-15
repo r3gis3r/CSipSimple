@@ -133,99 +133,6 @@ PJ_DECL(pj_status_t) send_dtmf_info(int current_call, pj_str_t digits){
 	}
 }
 
-/**
- * Create ipv6 transport
- */
-PJ_DECL(pj_status_t) media_transports_create_ipv6(pjsua_transport_config rtp_cfg) {
-	/*
-    pjsua_media_transport tp[PJSUA_MAX_CALLS];
-    pj_status_t status;
-    int port = rtp_cfg.port;
-    unsigned i;
-
-    //TODO : here should be get from config
-    for (i=0; i<PJSUA_MAX_CALLS; ++i) {
-	enum { MAX_RETRY = 10 };
-	pj_sock_t sock[2];
-	pjmedia_sock_info si;
-	unsigned j;
-
-	// Get rid of uninitialized var compiler warning with MSVC
-	status = PJ_SUCCESS;
-
-	for (j=0; j<MAX_RETRY; ++j) {
-	    unsigned k;
-
-	    for (k=0; k<2; ++k) {
-		pj_sockaddr bound_addr;
-
-		status = pj_sock_socket(pj_AF_INET6(), pj_SOCK_DGRAM(), 0, &sock[k]);
-		if (status != PJ_SUCCESS)
-		    break;
-
-		status = pj_sockaddr_init(pj_AF_INET6(), &bound_addr,
-					  &rtp_cfg.bound_addr,
-					  (unsigned short)(port+k));
-		if (status != PJ_SUCCESS)
-		    break;
-
-		status = pj_sock_bind(sock[k], &bound_addr,
-				      pj_sockaddr_get_len(&bound_addr));
-		if (status != PJ_SUCCESS)
-		    break;
-	    }
-	    if (status != PJ_SUCCESS) {
-		if (k==1)
-		    pj_sock_close(sock[0]);
-
-		if (port != 0)
-		    port += 10;
-		else
-		    break;
-
-		continue;
-	    }
-
-	    pj_bzero(&si, sizeof(si));
-	    si.rtp_sock = sock[0];
-	    si.rtcp_sock = sock[1];
-
-	    pj_sockaddr_init(pj_AF_INET6(), &si.rtp_addr_name,
-			     &rtp_cfg.public_addr,
-			     (unsigned short)(port));
-	    pj_sockaddr_init(pj_AF_INET6(), &si.rtcp_addr_name,
-			     &rtp_cfg.public_addr,
-			     (unsigned short)(port+1));
-
-	    status = pjmedia_transport_udp_attach(pjsua_get_pjmedia_endpt(),
-						  NULL,
-						  &si,
-						  0,
-						  &tp[i].transport);
-	    if (port != 0)
-		port += 10;
-	    else
-		break;
-
-	    if (status == PJ_SUCCESS)
-		break;
-	}
-
-	if (status != PJ_SUCCESS) {
-	    pjsua_perror(THIS_FILE, "Error creating IPv6 UDP media transport",
-			 status);
-	    for (j=0; j<i; ++j) {
-		pjmedia_transport_close(tp[j].transport);
-	    }
-	    return status;
-	}
-    }
-
-    return pjsua_media_transports_attach(tp, i, PJ_TRUE);
-    */
-	return PJ_SUCCESS;
-}
-
 
 
 /**
@@ -273,8 +180,13 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id){
 
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 						else if(tp_info.spc_info[j].type == PJMEDIA_TRANSPORT_TYPE_ZRTP){
-							result = pj_str("ZRTP");
-							break;
+							pjmedia_zrtp_info *zrtp_info = (pjmedia_zrtp_info*) tp_info.spc_info[j].buffer;
+
+
+						//	if(zrtp_info->active){
+								result = jzrtp_getInfo(call_med->tp);
+								break;
+						//	}
 						}
 #endif
 					}
@@ -337,11 +249,11 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	if(css_cfg->turn_username.slen){
 		media_cfg->turn_auth_cred.type = PJ_STUN_AUTH_CRED_STATIC;
 		media_cfg->turn_auth_cred.data.static_cred.realm = pj_str("*");
-		media_cfg->turn_auth_cred.data.static_cred.username = css_cfg->turn_username;
+		pj_strdup_with_null(css_var.pool, &media_cfg->turn_auth_cred.data.static_cred.username, &css_cfg->turn_username);
 
 		if (css_cfg->turn_password.slen) {
 			 media_cfg->turn_auth_cred.data.static_cred.data_type = PJ_STUN_PASSWD_PLAIN;
-			 media_cfg->turn_auth_cred.data.static_cred.data = css_cfg->turn_password;
+			 pj_strdup_with_null(css_var.pool, &media_cfg->turn_auth_cred.data.static_cred.data, &css_cfg->turn_password);
 		}
 	}
 
@@ -361,7 +273,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	pjmedia_add_rtpmap_for_static_pt = css_cfg->use_compact_form_sdp ? PJ_FALSE : PJ_TRUE;
 
 
-
+	// Codec cfg
 	css_var.extra_codecs_cnt = css_cfg->extra_codecs_cnt;
 	unsigned i;
 	for(i=0; i < css_cfg->extra_codecs_cnt; i++){
@@ -373,11 +285,13 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 
 	}
 
-
+	// ZRTP cfg
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 	if(css_cfg->use_zrtp){
 		ua_cfg->cb.on_create_media_transport = &on_zrtp_transport_created;
 	}
+
+	pj_ansi_snprintf(css_var.zid_file, sizeof(css_var.zid_file), "%.*s/simple.zid", css_cfg->storage_folder.slen, css_cfg->storage_folder.ptr);
 #endif
 	result = (pj_status_t) pjsua_init(ua_cfg, log_cfg, media_cfg);
 	if(result == PJ_SUCCESS){

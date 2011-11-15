@@ -513,8 +513,8 @@ static pj_status_t codec2_codec_encode( pjmedia_codec *codec,
   //  PJ_LOG(4, (THIS_FILE, "codec2 encode %d ", input->size));
 
     PJ_ASSERT_RETURN(in_size % (CODEC2_SAMPLES_PER_FRAME*2) == 0, PJMEDIA_CODEC_EPCMFRMINLEN);
-    PJ_ASSERT_RETURN(output_buf_len >= BYTES_PER_FRAME * in_size/(CODEC2_SAMPLES_PER_FRAME*2),
-		     PJMEDIA_CODEC_EFRMTOOSHORT);
+    //PJ_ASSERT_RETURN(output_buf_len >= BYTES_PER_FRAME * in_size/(CODEC2_SAMPLES_PER_FRAME*2),
+	//	     PJMEDIA_CODEC_EFRMTOOSHORT);
 
     /* Detect silence */
     if (codec2_data->vad_enabled) {
