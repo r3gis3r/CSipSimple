@@ -42,11 +42,14 @@
 					android:layout_gravity="center_vertical"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"/>
-				<TextView android:id="@+id/secureIndicatorString"
-					android:textAppearance="?android:attr/textAppearanceSmall" 
-					android:layout_gravity="center_vertical"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"/>
+				<TextView
+				    android:id="@+id/secureIndicatorString"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="center_vertical"
+				    android:gravity="right"
+				    android:textAppearance="?android:attr/textAppearanceSmall" />
+
 			</LinearLayout>
 		</FrameLayout>
 		

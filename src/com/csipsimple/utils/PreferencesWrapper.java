@@ -567,7 +567,8 @@ public class PreferencesWrapper {
 	private static String CONFIG_FOLDER = "configs";
 	private static String RECORDS_FOLDER = "records";
 	private static String LOGS_FOLDER = "logs";
-	
+	private static String ZRTP_FOLDER = "zrtp";
+	 
 	private static File getStorageFolder() {
 		File root = Environment.getExternalStorageDirectory();
 		
@@ -605,6 +606,9 @@ public class PreferencesWrapper {
 		return getSubFolder(LOGS_FOLDER);
 	}
 	
+	public static File getZrtpFolder() {
+		return getSubFolder(ZRTP_FOLDER);
+	}
 	
 	public static void cleanLogsFiles() {
 		File logsFolder = getLogsFolder();

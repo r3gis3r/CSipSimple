@@ -160,7 +160,7 @@ public class PreferencesProviderWrapper {
 	// Check for wifi
 	private boolean isValidWifiConnectionFor(NetworkInfo ni, String suffix) {
 		
-		boolean valid_for_wifi = getPreferenceBooleanValue("use_wifi_" + suffix);
+		boolean valid_for_wifi = getPreferenceBooleanValue("use_wifi_" + suffix, true);
 		if (valid_for_wifi && 
 			ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
 			
@@ -175,9 +175,9 @@ public class PreferencesProviderWrapper {
 	// Check for acceptable mobile data network connection
 	private boolean isValidMobileConnectionFor(NetworkInfo ni, String suffix) {
 
-		boolean valid_for_3g = getPreferenceBooleanValue("use_3g_" + suffix);
-		boolean valid_for_edge = getPreferenceBooleanValue("use_edge_" + suffix);
-		boolean valid_for_gprs = getPreferenceBooleanValue("use_gprs_" + suffix);
+		boolean valid_for_3g = getPreferenceBooleanValue("use_3g_" + suffix, false);
+		boolean valid_for_edge = getPreferenceBooleanValue("use_edge_" + suffix, false);
+		boolean valid_for_gprs = getPreferenceBooleanValue("use_gprs_" + suffix, false);
 		
 		if ((valid_for_3g || valid_for_edge || valid_for_gprs) &&
 			 ni != null && ni.getType() == ConnectivityManager.TYPE_MOBILE) {
@@ -211,7 +211,7 @@ public class PreferencesProviderWrapper {
 	// Check for other (wimax for example)
 	private boolean isValidOtherConnectionFor(NetworkInfo ni, String suffix) {
 		
-		boolean valid_for_other = getPreferenceBooleanValue("use_other_" + suffix);
+		boolean valid_for_other = getPreferenceBooleanValue("use_other_" + suffix, true);
 		//boolean valid_for_other = true;
 		if (valid_for_other && 
 			ni != null && 

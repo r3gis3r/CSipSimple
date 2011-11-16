@@ -41,6 +41,7 @@ import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.BGTel;
 import com.csipsimple.wizards.impl.BTone;
 import com.csipsimple.wizards.impl.Basic;
+import com.csipsimple.wizards.impl.BelCentrale;
 import com.csipsimple.wizards.impl.Betamax;
 import com.csipsimple.wizards.impl.Blueface;
 import com.csipsimple.wizards.impl.BroadVoice;
@@ -525,6 +526,10 @@ public class WizardUtils {
 					new Locale[]{ locale("bg_BG") , Locale.CANADA,
 					new Locale("EL", "gr"), Locale.US, Locale.GERMANY}, false, false, 
 					BGTel.class));
+			WIZARDS_DICT.put("BELCENTRALE", new WizardInfo("BELCENTRALE", "Belcentrale", 
+					R.drawable.ic_wizard_belcentrale, 20, 
+					new Locale[]{ locale("nl_BE"), locale("nl_NL") }, false, false, 
+					BelCentrale.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

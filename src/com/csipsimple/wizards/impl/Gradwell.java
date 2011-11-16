@@ -56,7 +56,7 @@ public class Gradwell extends SimpleImplementation {
 	@Override
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
-		acc.proxies = new String[] {"nat.gradwell.com:5082"};
+		acc.proxies = new String[] {"sip:nat.gradwell.com:5082"};
 		acc.allow_contact_rewrite = false;
 		return acc;
 	}

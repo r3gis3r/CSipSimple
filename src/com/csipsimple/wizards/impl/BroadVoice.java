@@ -86,9 +86,9 @@ public class BroadVoice extends SimpleImplementation {
 		
 		String finalUsername = accountUsername.getText().trim();
 		if(accountSuffix != null) {
-			String suffix = accountSuffix.getText().trim();
+			String suffix = accountSuffix.getText();
 			if(!TextUtils.isEmpty(suffix)) {
-				finalUsername += "x"+suffix;
+				finalUsername += "x"+suffix.trim();
 			}
 		}
 		

@@ -1366,11 +1366,15 @@ public class PjSipService {
 
 	
 	public static String pjStrToString(pj_str_t pjStr) {
-		if(pjStr != null) {
-			int len = pjStr.getSlen();
-			if(len > 0) { 
-				return pjStr.getPtr().substring(0, len);
+		try {
+			if(pjStr != null) {
+				int len = pjStr.getSlen();
+				if(len > 0) { 
+					return pjStr.getPtr().substring(0, len);
+				}
 			}
+		}catch(StringIndexOutOfBoundsException e) {
+			Log.e(THIS_FILE, "Impossible to retrieve string from pjsip ", e);
 		}
 		return "";
 	}
