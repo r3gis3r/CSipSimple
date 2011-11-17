@@ -41,7 +41,7 @@ public class BelCentrale extends SimpleImplementation {
 	
 	@Override
 	protected String getDefaultName() {
-		return "BelCentrale";
+		return "Belcentrale";
 	}
 	
 	@Override
