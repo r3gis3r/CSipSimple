@@ -528,7 +528,7 @@ public class WizardUtils {
 					BGTel.class));
 			WIZARDS_DICT.put("BELCENTRALE", new WizardInfo("BELCENTRALE", "Belcentrale", 
 					R.drawable.ic_wizard_belcentrale, 20, 
-					new Locale[]{ locale("nl_BE"), locale("nl_NL") }, false, false, 
+					new Locale[]{ locale("nl_BE"), locale("nl_NL"), locale("fr_BE") }, false, false, 
 					BelCentrale.class));
 			
 		}else {
