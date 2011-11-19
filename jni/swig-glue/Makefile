@@ -19,9 +19,9 @@ CFLAGS=-DPJMEDIA_HAS_SRTP=1 -DPJ_HAS_SSL_SOCK=1 -DPJMEDIA_HAS_ZRTP=1 -DUSE_CSIPS
 # Swig version to use - may be changed according to OS
 SWIG=swig2.0
 
-all : ${C_TARGET_DIR}/pjsua_wrap.cpp 
+all : ${C_TARGET_DIR}/pjsua_wrap.cpp ${JAVA_PACKAGE_DIR}
 
-${C_TARGET_DIR}/pjsua_wrap.cpp : pjsua.i
+${C_TARGET_DIR}/pjsua_wrap.cpp ${JAVA_PACKAGE_DIR}: pjsua.i
 	mkdir -p ${C_TARGET_DIR}
 	mkdir -p ${JAVA_PACKAGE_DIR}
 	${SWIG} ${CFLAGS} -Wall \
