@@ -55,6 +55,10 @@ public final class SipManager {
 	public static final String ACTION_SIP_MESSAGE_STATUS = "com.csipsimple.service.MESSAGE_STATUS";
 	public static final String ACTION_GET_DRAWABLES = "com.csipsimple.themes.GET_DRAWABLES";
 	public static final String ACTION_GET_PHONE_HANDLERS = "com.csipsimple.phone.action.HANDLE_CALL";
+	public static final String ACTION_GET_EXTRA_CODECS = "com.csipsimple.codecs.action.REGISTER_CODEC";
+	
+	public static final String META_LIB_NAME = "lib_name";
+	public static final String META_LIB_INIT_FACTORY = "init_factory";
 	
 	// EXTRAS
 	public static final String EXTRA_CALL_INFO = "call_info";
@@ -67,7 +71,7 @@ public final class SipManager {
 	public static final int SUCCESS = 0;
 	public static final int ERROR_CURRENT_NETWORK = 10;
 	
-	public static final int CURRENT_API = 1002;
+	public static final int CURRENT_API = 1003;
 	
 	public static boolean isApiCompatible(ISipService service) {
 		if(service != null) {

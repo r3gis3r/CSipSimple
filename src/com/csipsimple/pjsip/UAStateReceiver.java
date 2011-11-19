@@ -26,8 +26,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.Callback;
-import org.pjsip.pjsua.SWIGTYPE_p_p_pjmedia_port;
-import org.pjsip.pjsua.SWIGTYPE_p_pjmedia_session;
 import org.pjsip.pjsua.SWIGTYPE_p_pjsip_rx_data;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pj_stun_nat_detect_result;
@@ -69,6 +67,7 @@ import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Threading;
+import com.csipsimple.utils.TimerWrapper;
 
 public class UAStateReceiver extends Callback {
 	static String THIS_FILE = "SIP UA Receiver";
@@ -310,19 +309,6 @@ public class UAStateReceiver extends Callback {
 		unlockCpu();
 	}
 
-	@Override
-	public void on_stream_created(int call_id, SWIGTYPE_p_pjmedia_session sess, long stream_idx, SWIGTYPE_p_p_pjmedia_port p_port) {
-		lockCpu();
-		Log.d(THIS_FILE, "Stream created");
-		unlockCpu();
-	}
-	
-	@Override
-	public void on_stream_destroyed(int callId, SWIGTYPE_p_pjmedia_session sess, long streamIdx) {
-		lockCpu();
-		Log.d(THIS_FILE, "Stream destroyed");
-		unlockCpu();
-	}
 
 	@Override
 	public void on_call_media_state(final int callId) {
@@ -426,45 +412,38 @@ public class UAStateReceiver extends Callback {
 		unlockCpu();
 	}
 	
-	public String sasString = "";
-	public boolean zrtpOn = false;
+	//public String sasString = "";
+	//public boolean zrtpOn = false;
 	
 	@Override
-	public void on_zrtp_show_sas(pj_str_t sas, int verified) {
-		sasString = PjSipService.pjStrToString(sas);
-		Log.d(THIS_FILE, "Hey hoy hay, we get the show SAS " + sasString);
+	public void on_zrtp_show_sas(int dataPtr, pj_str_t sas, int verified) {
+		String sasString = PjSipService.pjStrToString(sas);
+		Log.d(THIS_FILE, "ZRTP show SAS " + sasString + " verified : " + verified);
 		if(verified != 1) {
 			Intent zrtpIntent = new Intent(SipManager.ACTION_ZRTP_SHOW_SAS);
 			zrtpIntent.putExtra(Intent.EXTRA_SUBJECT, sasString);
+			zrtpIntent.putExtra(Intent.EXTRA_UID, dataPtr);
 			pjService.service.sendBroadcast(zrtpIntent);
+		}else{
+			updateZrtpInfos(dataPtr);
 		}
-		updateZrtpInfos();
 	}
 	
 
 	@Override
-	public void on_zrtp_secure_on(pj_str_t cipher) {
-		zrtpOn = true;
-		updateZrtpInfos();
+	public void on_zrtp_update_transport(int dataPtr) {
+		updateZrtpInfos(dataPtr);
 	}
-	
-	@Override
-	public void on_zrtp_secure_off() {
-		zrtpOn = false;
-	}
-	
-	private void updateZrtpInfos() {
-		// For now, just get the first active call ...
-		if(callsList.size() > 0) {
-			for(SipCallSession callInfo : callsList.values()) {
-				if(callInfo.isActive()) {
-					callInfo.setMediaSecure(true);
-					callInfo.setMediaSecureInfo("ZRTP : "+sasString);
-					onBroadcastCallState(callInfo);
-					break;
-				}
+
+	public void updateZrtpInfos(int dataPtr) {
+		final int callId = pjsua.jzrtp_getCallId(dataPtr);
+		pjService.service.getExecutor().execute(new SipRunnable() {
+			@Override
+			public void doRun() throws SameThreadException {
+				SipCallSession callInfo = updateCallInfoFromStack(callId);
+				msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
 			}
-		}
+		});
 	}
 	
 	
@@ -499,6 +478,16 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public int on_set_micro_source() {
 		return pjService.prefsWrapper.getPreferenceIntegerValue(SipConfigManager.MICRO_SOURCE);
+	}
+	
+	@Override
+	public int timer_schedule(int entry, int entryId, int time) {
+		return TimerWrapper.schedule(entry, entryId, time);
+	}
+	
+	@Override
+	public int timer_cancel(int entry, int entryId) {
+		return TimerWrapper.cancel(entry, entryId);
 	}
 	
 	// -------

@@ -549,18 +549,21 @@ public class SipService extends Service {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.canRecord(callId);
 		}
+		
+
 
 		@Override
-		public void zrtpSASVerified() throws RemoteException {
+		public void zrtpSASVerified(final int dataPtr) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			getExecutor().execute(new SipRunnable() {
 				@Override
 				protected void doRun() throws SameThreadException {
-					pjService.zrtpSASVerified();
+					pjService.zrtpSASVerified((int) dataPtr);
+					pjService.userAgentReceiver.updateZrtpInfos(dataPtr);
 				}
 			});
 		}
-
+		
 		@Override
 		public MediaState getCurrentMediaState() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);

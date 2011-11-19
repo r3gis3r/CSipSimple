@@ -48,27 +48,42 @@ public class NativeLibManager {
 	}
 	
 	private static File getBundledStackLibFile(Context ctx) {
-		// To keep backward compatibility with android 3, do not use the easy way
-		if(Compatibility.isCompatible(9)) {
-			PackageInfo packageInfo = PreferencesProviderWrapper.getCurrentPackageInfos(ctx);
-			if(packageInfo != null) {
-				
-				ApplicationInfo appInfo = packageInfo.applicationInfo;
-				try {
-					Field f = ApplicationInfo.class.getField("nativeLibraryDir");
-					File nativeFile = new File((String) f.get(appInfo), "libpjsipjni.so");
-					if(nativeFile.exists()) {
-						Log.d(THIS_FILE, "Found native lib using clean way");
-						return nativeFile;
-					}
-				} catch (Exception e) {
-					Log.e(THIS_FILE, "Cant get field for native lib dir", e);
-				}
+		return getBundledStackLibFile(ctx, "libpjsipjni.so");
+	}
+	
+	
+	public static File getBundledStackLibFile(Context ctx, String libName) {
+		PackageInfo packageInfo = PreferencesProviderWrapper.getCurrentPackageInfos(ctx);
+		if(packageInfo != null) {
+			ApplicationInfo appInfo = packageInfo.applicationInfo;
+			File f = getLibFileFromPackage(appInfo, libName);
+			if(f != null) {
+				return f;
 			}
 		}
-		// This is the fallback method
-		return new File(ctx.getFilesDir().getParent(), "lib" + File.separator + "libpjsipjni.so");
+		
+		// This is the very last fallback method
+		return new File(ctx.getFilesDir().getParent(), "lib" + File.separator + libName);
 	}
+	
+	public static File getLibFileFromPackage(ApplicationInfo appInfo, String libName) {
+		Log.d(THIS_FILE, "Dir "+appInfo.dataDir);
+		if(Compatibility.isCompatible(9)) {
+			try {
+				Field f = ApplicationInfo.class.getField("nativeLibraryDir");
+				File nativeFile = new File((String) f.get(appInfo), libName);
+				if(nativeFile.exists()) {
+					Log.d(THIS_FILE, "Found native lib using clean way");
+					return nativeFile;
+				}
+			} catch (Exception e) {
+				Log.e(THIS_FILE, "Cant get field for native lib dir", e);
+			}
+		}
+		
+		return new File(appInfo.dataDir, "lib" + File.separator + libName);
+	}
+	
 	
 	/**
 	 * Get the native library file First search in local files of the app

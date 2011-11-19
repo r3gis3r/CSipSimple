@@ -27,8 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.csipsimple_config;
+import org.pjsip.pjsua.dynamic_codec;
 import org.pjsip.pjsua.pj_qos_params;
-import org.pjsip.pjsua.pj_qos_type;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsip_timer_setting;
@@ -63,8 +63,11 @@ import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.ToCall;
+import com.csipsimple.utils.ExtraCodecs;
+import com.csipsimple.utils.ExtraCodecs.DynCodecInfos;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
+import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.TimerWrapper;
 
 
@@ -115,6 +118,8 @@ public class PjSipService {
 		if (stackFile != null && !sipStackIsCorrupted) {
 			try {
 				// Try to load the stack
+				//System.load(NativeLibManager.getBundledStackLibFile(service, "libcrypto.so").getAbsolutePath());
+				//System.load(NativeLibManager.getBundledStackLibFile(service, "libssl.so").getAbsolutePath());
 				System.load(stackFile.getAbsolutePath());
 				hasSipStack = true;
 				return true;
@@ -211,6 +216,19 @@ public class PjSipService {
 				
 				// -- USE_ZRTP 1 is no_zrtp
 				cssCfg.setUse_zrtp( (prefsWrapper.getPreferenceIntegerValue(SipConfigManager.USE_ZRTP) > 1) ? pjsua.PJ_TRUE: pjsua.PJ_FALSE);
+				cssCfg.setStorage_folder(pjsua.pj_str_copy(PreferencesWrapper.getZrtpFolder().getAbsolutePath()));
+				
+				HashMap<String, DynCodecInfos> availableCodecs = ExtraCodecs.getDynCodecs(service);
+				dynamic_codec[] cssCodecs = cssCfg.getExtra_codecs();
+				int i = 0;
+				for(Entry<String, DynCodecInfos> availableCodec : availableCodecs.entrySet()) {
+					DynCodecInfos dyn = availableCodec.getValue();
+					if(!TextUtils.isEmpty(dyn.libraryPath)) {
+						cssCodecs[i].setShared_lib_path(pjsua.pj_str_copy(dyn.libraryPath));
+						cssCodecs[i++].setInit_factory_name(pjsua.pj_str_copy(dyn.factoryInitFunction));
+					}
+				}
+				cssCfg.setExtra_codecs_cnt(i);
 				
 				// MAIN CONFIG
 				pjsua.config_default(cfg);
@@ -357,6 +375,7 @@ public class PjSipService {
 				}
 
 				// RTP transport
+				/*
 				{
 					pjsua_transport_config cfg = new pjsua_transport_config();
 					pjsua.transport_config_default(cfg);
@@ -380,6 +399,7 @@ public class PjSipService {
 						return false;
 					}
 				}
+				*/
 			}
 
 			// Initialization is done, now start pjsua
@@ -1176,11 +1196,11 @@ public class PjSipService {
 		}
 	}*/
 
-	public void zrtpSASVerified() throws SameThreadException {
+	public void zrtpSASVerified(int dataPtr) throws SameThreadException {
 		if(!created) {
 			return;
 		}
-		pjsua.jzrtp_SASVerified();
+		pjsua.jzrtp_SASVerified(dataPtr);
 	}
 
 	// Config subwrapper

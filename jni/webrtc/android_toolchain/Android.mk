@@ -33,9 +33,9 @@ include $(CLEAR_VARS)
 ### Commons ###
 	include $(WEBRTC_PATH)/system_wrappers/source/Android.mk
 	include $(WEBRTC_PATH)/modules/audio_processing/utility/Android.mk
-	include $(WEBRTC_PATH)/common_audio/signal_processing_library/main/source/Android.mk
-	include $(WEBRTC_PATH)/common_audio/vad/main/source/Android.mk
-	include $(WEBRTC_PATH)/common_audio/resampler/main/source/Android.mk
+	include $(WEBRTC_PATH)/common_audio/signal_processing/Android.mk
+	include $(WEBRTC_PATH)/common_audio/vad/Android.mk
+	include $(WEBRTC_PATH)/common_audio/resampler/Android.mk
 	
 ### AEC ###
 #ifeq ($(TARGET_ARCH_ABI),armeabi)

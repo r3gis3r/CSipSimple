@@ -20,10 +20,10 @@ package com.csipsimple.pjsip;
 import org.pjsip.pjsua.pj_time_val;
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_call_info;
 
 import android.os.SystemClock;
+import android.text.TextUtils;
 
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipProfile;
@@ -94,16 +94,9 @@ public final class PjSipCalls {
 		//	throw new UnavailableException();
 		}else {
 			session = updateSession(session, pj_info, service);
-			boolean secured = (pjsua.is_call_secure(session.getCallId()) == pjsuaConstants.PJ_TRUE);
-			if(secured) {
-				session.setMediaSecureInfo("SRTP");
-			}else {
-				if(service.userAgentReceiver.zrtpOn) {
-					secured = true;
-					session.setMediaSecureInfo("ZRTP : "+service.userAgentReceiver.sasString);
-				}
-			}
-			session.setMediaSecure(secured);
+			String secureInfo = PjSipService.pjStrToString(pjsua.call_secure_info(session.getCallId()));
+			session.setMediaSecureInfo(secureInfo);
+			session.setMediaSecure(!TextUtils.isEmpty(secureInfo));
 		}
 		return session;
 	}

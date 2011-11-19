@@ -54,6 +54,8 @@ public class CallHandler {
 	private int accountId = SipProfile.INVALID_ID;
 	private Context context = null;
 	
+	private static HashMap<String, String> AVAILABLE_HANDLERS = null;
+	
 	private final static String VIRTUAL_ACC_MAX_ENTRIES = "maxVirtualAcc";
 	private final static String VIRTUAL_ACC_PREFIX = "vAcc_";
 	
@@ -63,9 +65,7 @@ public class CallHandler {
 
 	public void loadFrom(final String packageName, String number, onLoadListener l) {
 		listener = l;
-		
-		String[] splitPackage = packageName.split("/");
-		ComponentName cn = new ComponentName(splitPackage[0], splitPackage[1]);
+		ComponentName cn = ComponentName.unflattenFromString(packageName);
 		
 		Intent it = new Intent(SipManager.ACTION_GET_PHONE_HANDLERS);
 		it.putExtra(Intent.EXTRA_PHONE_NUMBER, number);
@@ -127,22 +127,29 @@ public class CallHandler {
 	
 	
 	public static HashMap<String, String> getAvailableCallHandlers(Context ctxt){
-		HashMap<String, String> result = new HashMap<String, String>();
 		
-		PackageManager packageManager = ctxt.getPackageManager();
-		Intent it = new Intent(SipManager.ACTION_GET_PHONE_HANDLERS);
-		
-		List<ResolveInfo> availables = packageManager.queryBroadcastReceivers(it, 0);
-		for(ResolveInfo resInfo : availables) {
-			ActivityInfo actInfos = resInfo.activityInfo;
-			Log.d(THIS_FILE, "Found call handler "+actInfos.packageName +" "+actInfos.name);
-			if( packageManager.checkPermission(permission.PROCESS_OUTGOING_CALLS, actInfos.packageName) == PackageManager.PERMISSION_GRANTED) { 
-				String packagedActivityName = actInfos.packageName + "/" + actInfos.name;
-				result.put(packagedActivityName, (String) resInfo.loadLabel(packageManager));
+		if(AVAILABLE_HANDLERS == null) {
+			AVAILABLE_HANDLERS = new HashMap<String, String>();
+			
+			PackageManager packageManager = ctxt.getPackageManager();
+			Intent it = new Intent(SipManager.ACTION_GET_PHONE_HANDLERS);
+			
+			List<ResolveInfo> availables = packageManager.queryBroadcastReceivers(it, 0);
+			for(ResolveInfo resInfo : availables) {
+				ActivityInfo actInfos = resInfo.activityInfo;
+				Log.d(THIS_FILE, "Found call handler "+actInfos.packageName +" "+actInfos.name);
+				if( packageManager.checkPermission(permission.PROCESS_OUTGOING_CALLS, actInfos.packageName) == PackageManager.PERMISSION_GRANTED) { 
+					String packagedActivityName = (new ComponentName(actInfos.packageName, actInfos.name)).flattenToString();
+					AVAILABLE_HANDLERS.put(packagedActivityName, (String) resInfo.loadLabel(packageManager));
+				}
 			}
 		}
 		
-		return result;
+		return AVAILABLE_HANDLERS;
+	}
+	
+	public static void clearAvailableCallHandlers() {
+		AVAILABLE_HANDLERS = null;
 	}
 
 	public interface onLoadListener {

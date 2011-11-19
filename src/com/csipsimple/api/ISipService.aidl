@@ -123,5 +123,5 @@ interface ISipService{
 	void sendMessage(String msg, String toNumber, int accountId);
 	
 	//Secure
-	void zrtpSASVerified();
+	void zrtpSASVerified(int dataPtr);
 }

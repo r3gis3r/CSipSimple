@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.03-00" android:versionCode="1097">
+	android:versionName="0.03-00" android:versionCode="1099">
 	<supports-screens  
 		android:smallScreens="true" 
 		android:normalScreens="true"
 		android:largeScreens="true" 
 		android:xlargeScreens="true"/>
-	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="false" android:allowBackup="false" >
+	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="true" android:allowBackup="false" >
 		<activity android:label="@string/app_name" android:name="com.csipsimple.ui.SipHome" android:launchMode="singleTask"
 			android:screenOrientation="portrait" android:configChanges="orientation"
 			android:theme="@android:style/Theme.NoTitleBar">

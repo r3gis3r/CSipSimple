@@ -18,7 +18,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/include \
 		    $(PJ_SRC_DIR)/pjmedia/include  \
 		    $(OPENSSL_SRC_DIR)/include 
 
-LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
+LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DDYNAMIC_TIMER=1
 
 # ciphersossl
 LOCAL_SRC_FILES := crypto/openssl/AesSrtp.cpp \

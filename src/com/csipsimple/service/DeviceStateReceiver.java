@@ -29,6 +29,8 @@ import android.os.Bundle;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.utils.CallHandler;
+import com.csipsimple.utils.ExtraCodecs;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.wizards.WizardUtils;
@@ -122,6 +124,10 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 			
 			results.putParcelableArrayList(SipManager.EXTRA_PROFILES, profilesBundles);
 			
+		}else if(Intent.ACTION_PACKAGE_ADDED.equalsIgnoreCase(intentAction) ||
+				Intent.ACTION_PACKAGE_REMOVED.equalsIgnoreCase(intentAction)) {
+			CallHandler.clearAvailableCallHandlers();
+			ExtraCodecs.clearDynCodecs();
 		}
 	}
 	

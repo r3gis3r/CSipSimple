@@ -442,7 +442,8 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 						View.VISIBLE : View.GONE); 
 				break;
 			case SHOW_SAS:
-				showZRTPInfo((String) msg.obj);
+				ZrtpSasInfo sasInfo = (ZrtpSasInfo) msg.obj;
+				showZRTPInfo(sasInfo.dataPtr, sasInfo.sas);
 				break;
 			default:
 				super.handleMessage(msg);
@@ -999,6 +1000,10 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 		return super.onKeyUp(keyCode, event);
 	}
 
+	private class ZrtpSasInfo {
+		public String sas;
+		public int dataPtr;
+	}
 	
 	private BroadcastReceiver callStateReceiver = new BroadcastReceiver() {
 		
@@ -1019,7 +1024,10 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 			}else if(action.equals(SipManager.ACTION_SIP_MEDIA_CHANGED)) {
 				handler.sendMessage(handler.obtainMessage(UPDATE_FROM_MEDIA));
 			}else if(action.equals(SipManager.ACTION_ZRTP_SHOW_SAS)) {
-				handler.sendMessage(handler.obtainMessage(SHOW_SAS, intent.getStringExtra(Intent.EXTRA_SUBJECT)));
+				ZrtpSasInfo sasInfo = new ZrtpSasInfo();
+				sasInfo.sas = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+				sasInfo.dataPtr = intent.getIntExtra(Intent.EXTRA_UID, 0);
+				handler.sendMessage(handler.obtainMessage(SHOW_SAS, sasInfo));
 			}
 		}
 	};
@@ -1488,7 +1496,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 	
 	
 	
-	private void showZRTPInfo(String sasString) {
+	private void showZRTPInfo(final int dataPtr, String sasString) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		Resources r = getResources();
 		builder.setTitle("ZRTP supported by remote party");
@@ -1500,7 +1508,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
 				if (service != null) {
 					try {
-						service.zrtpSASVerified();
+						service.zrtpSASVerified(dataPtr);
 					} catch (RemoteException e) {
 						Log.e(THIS_FILE, "Error while calling service", e);
 					}
