@@ -173,7 +173,7 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
 +++ pjsip/sources/pjlib/include/pj/config_site.h	2011-11-20 22:12:32.312595265 +0100
-@@ -0,0 +1,114 @@
+@@ -0,0 +1,115 @@
 +//We distribute only for android so by default activate it
 +#ifndef PJ_ANDROID
 +#   define PJ_ANDROID   1
@@ -194,6 +194,7 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 +#define PJSIP_AUTH_HEADER_CACHING   1
 +
 +#if defined(PJ_ANDROID) && PJ_ANDROID!=0
++
 +	#define PJSIP_TCP_TRANSPORT_BACKLOG 50
 +
 +//    #define PJ_LOG_USE_STACK_BUFFER             1

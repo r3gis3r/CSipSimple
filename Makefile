@@ -1,3 +1,4 @@
+pjsip_patches := $(wildcard jni/pjsip/patches/*.diff)
 
 
 all : libraries
@@ -34,10 +35,10 @@ jni/openssl/sources :
 	cd jni/openssl; \
 	git clone git://github.com/guardianproject/openssl-android.git sources
 
-pjsip_patches := $(wildcard jni/pjsip/patches/*.diff)
 jni/pjsip/.patched_sources : $(pjsip_patches)
-	cd jni/pjsip; \
-	quilt push -a; \
+	cd jni/pjsip && \
+	quilt pop -af && \
+	quilt push -a && \
 	touch .patched_sources
 
 clean :
