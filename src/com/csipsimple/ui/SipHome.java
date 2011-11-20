@@ -100,47 +100,13 @@ public class SipHome extends TabActivity {
 		prefProviderWrapper = new PreferencesProviderWrapper(this);
 		super.onCreate(savedInstanceState);
 		
-		boolean useBundle = NativeLibManager.USE_BUNDLE;
-		
-		// Check sip stack
-		if (!useBundle && !NativeLibManager.hasStackLibFile(this)) {
-			//If not -> FIRST RUN : Just launch stack getter
-			Log.d(THIS_FILE, "Has no sip stack....");
-			Intent welcomeIntent = new Intent(this, WelcomeScreen.class);
-			welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			welcomeIntent.putExtra(WelcomeScreen.KEY_MODE, WelcomeScreen.MODE_WELCOME);
-			startActivity(welcomeIntent);
-			finish();
-			return;
-		} else if (!useBundle && !NativeLibManager.hasBundleStack(this)) {
-			// It's not the first setup and there is debug stack
-			// We have to check and save current version
-			Integer runningVersion = needUpgrade();
-			if(runningVersion != null) {
-				// Just to be sure delete the current stack and anyway upgrade it.
-				NativeLibManager.cleanStack(this);
-				
-				// We have to launch WelcomeScreen again
-				Log.d(THIS_FILE, "Sip stack may have changed");
-				Intent changelogIntent = new Intent(this, WelcomeScreen.class);
-				changelogIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				changelogIntent.putExtra(WelcomeScreen.KEY_MODE, WelcomeScreen.MODE_CHANGELOG);
-				startActivity(changelogIntent);
-				finish();
-				return;
-			}
-		}else {
-			// DEV MODE OR BUNDLE MODE -- still upgrade settings
-			Integer runningVersion = needUpgrade();
-			if(runningVersion != null) {
-				//Clean current native file downloaded if any cause useless right now
-				NativeLibManager.cleanStack(this);
-				
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-				Editor editor = prefs.edit();
-				editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, runningVersion);
-				editor.commit();
-			}
+		// BUNDLE MODE -- upgrade settings
+		Integer runningVersion = needUpgrade();
+		if(runningVersion != null) {
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			Editor editor = prefs.edit();
+			editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, runningVersion);
+			editor.commit();
 		}
 		
 

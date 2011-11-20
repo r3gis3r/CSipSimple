@@ -48,7 +48,7 @@ public class ExtraCodecs {
 			
 			PackageInfo pInfos = pm.getPackageInfo(cmp.getPackageName(), PackageManager.GET_SHARED_LIBRARY_FILES);
 			// TODO : for now only api-9 compatible
-			File libFile = NativeLibManager.getLibFileFromPackage(pInfos.applicationInfo, libName);
+			File libFile = NativeLibManager.getLibFileFromPackage(pInfos.applicationInfo, libName, true);
 			if(libFile != null) {
 				libraryPath = libFile.getAbsolutePath(); 
 			}

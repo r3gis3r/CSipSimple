@@ -114,13 +114,13 @@ public class PjSipService {
 			return true;
 		}
 
-		File stackFile = NativeLibManager.getStackLibFile(service);
-		if (stackFile != null && !sipStackIsCorrupted) {
+		//File stackFile = NativeLibManager.getStackLibFile(service);
+		if (!sipStackIsCorrupted) {
 			try {
 				// Try to load the stack
 				//System.load(NativeLibManager.getBundledStackLibFile(service, "libcrypto.so").getAbsolutePath());
 				//System.load(NativeLibManager.getBundledStackLibFile(service, "libssl.so").getAbsolutePath());
-				System.load(stackFile.getAbsolutePath());
+				System.loadLibrary(NativeLibManager.STACK_NAME);
 				hasSipStack = true;
 				return true;
 			} catch (UnsatisfiedLinkError e) {

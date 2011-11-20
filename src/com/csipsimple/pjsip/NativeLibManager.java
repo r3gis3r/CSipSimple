@@ -25,48 +25,15 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
-import com.csipsimple.service.DownloadLibService;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class NativeLibManager {
-
 	private static final String THIS_FILE = "NativeLibMgr";
-
-	public static final String STACK_FILE_NAME = "libpjsipjni.so";
-	
-	public static boolean USE_BUNDLE = true;
-	
-	/**
-	 * Get the guessed stack for market version
-	 * @param ctx Context you are running in
-	 * @return File pointing to the stack file
-	 */
-	public static File getDownloadableStackLibFile(Context ctx) {
-		return ctx.getFileStreamPath(STACK_FILE_NAME);
-	}
-	
-	private static File getBundledStackLibFile(Context ctx) {
-		return getBundledStackLibFile(ctx, "libpjsipjni.so");
-	}
+	public static final String STACK_NAME = "pjsipjni";
 	
 	
-	public static File getBundledStackLibFile(Context ctx, String libName) {
-		PackageInfo packageInfo = PreferencesProviderWrapper.getCurrentPackageInfos(ctx);
-		if(packageInfo != null) {
-			ApplicationInfo appInfo = packageInfo.applicationInfo;
-			File f = getLibFileFromPackage(appInfo, libName);
-			if(f != null) {
-				return f;
-			}
-		}
-		
-		// This is the very last fallback method
-		return new File(ctx.getFilesDir().getParent(), "lib" + File.separator + libName);
-	}
-	
-	public static File getLibFileFromPackage(ApplicationInfo appInfo, String libName) {
+	public static File getLibFileFromPackage(ApplicationInfo appInfo, String libName, boolean allowFallback) {
 		Log.d(THIS_FILE, "Dir "+appInfo.dataDir);
 		if(Compatibility.isCompatible(9)) {
 			try {
@@ -80,64 +47,11 @@ public class NativeLibManager {
 				Log.e(THIS_FILE, "Cant get field for native lib dir", e);
 			}
 		}
-		
-		return new File(appInfo.dataDir, "lib" + File.separator + libName);
-	}
-	
-	
-	/**
-	 * Get the native library file First search in local files of the app
-	 * (previously downloaded from the network) Then search in lib (bundlized
-	 * method)
-	 * 
-	 * @param context
-	 *            the context of the app that what to get it back
-	 * @return the file if any, null else
-	 */
-	public static File getStackLibFile(Context context) {
-		
-		if(USE_BUNDLE) {
-			return getBundledStackLibFile(context);
+		if(allowFallback) {
+			return new File(appInfo.dataDir, "lib" + File.separator + libName);
+		}else {
+			return null;
 		}
-		
-		// For now this code is now dead code.
-		
-		// Standard case
-		File standardOut = getDownloadableStackLibFile(context);
-		//If production .so file exists and app is not in debuggable mode 
-		//if debuggable we have to get the file from bundle dir
-		if (standardOut.exists() && !isDebuggableApp(context)) {
-			return standardOut;
-		}
-
-		// Have a look if it's not a dev build
-		File targetForBuild = getBundledStackLibFile(context);
-		Log.d(THIS_FILE, "Search for " + targetForBuild.getAbsolutePath());
-		if (targetForBuild.exists()) {
-			return targetForBuild;
-		}
-
-		//Oups none exists.... reset version history
-		PreferencesProviderWrapper prefs = new PreferencesProviderWrapper(context);
-		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_VERSION, "0.00-00");
-		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_ID, "");
-		prefs.setPreferenceStringValue(DownloadLibService.CURRENT_STACK_URI, "");
-		return null;
-		
-	}
-
-	public static boolean hasBundleStack(Context ctx) {
-		File targetForBuild = getBundledStackLibFile(ctx);
-		Log.d(THIS_FILE, "Search for " + targetForBuild.getAbsolutePath());
-		return targetForBuild.exists();
-	}
-
-	public static boolean hasStackLibFile(Context ctx) {
-		File guessedFile = getStackLibFile(ctx);
-		if (guessedFile == null) {
-			return false;
-		}
-		return guessedFile.exists();
 	}
 
 	
@@ -152,12 +66,22 @@ public class NativeLibManager {
 		return false;
 	}
 	
-	
-	public static void cleanStack(Context ctx) {
-		File file = getDownloadableStackLibFile(ctx);
-		if(file.exists()) {
-			file.delete();
-		}
-	}
 
+	/**
+	 * Return the complete path to stack lib if detectable (2.3 and upper)
+	 * Return the short name of the library else (2.2 and lower)
+	 * @param ctx Context 
+	 * @return String library name to load through System.load();
+	 */
+	/*
+	public static String getStackLib(Context ctx) {
+		
+		File f = NativeLibManager.getStackLibFile(ctx);
+		if(f != null) {
+			return f.getAbsolutePath();
+		}
+		
+		return STACK_FILE_NAME;
+	}
+	 */
 }
