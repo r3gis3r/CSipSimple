@@ -120,6 +120,8 @@ public class PjSipService {
 				// Try to load the stack
 				//System.load(NativeLibManager.getBundledStackLibFile(service, "libcrypto.so").getAbsolutePath());
 				//System.load(NativeLibManager.getBundledStackLibFile(service, "libssl.so").getAbsolutePath());
+				//System.loadLibrary("crypto");
+				//System.loadLibrary("ssl");
 				System.loadLibrary(NativeLibManager.STACK_NAME);
 				hasSipStack = true;
 				return true;
@@ -215,8 +217,14 @@ public class PjSipService {
 				}
 				
 				// -- USE_ZRTP 1 is no_zrtp
-				cssCfg.setUse_zrtp( (prefsWrapper.getPreferenceIntegerValue(SipConfigManager.USE_ZRTP) > 1) ? pjsua.PJ_TRUE: pjsua.PJ_FALSE);
-				cssCfg.setStorage_folder(pjsua.pj_str_copy(PreferencesWrapper.getZrtpFolder().getAbsolutePath()));
+				
+				File zrtpFolder = PreferencesWrapper.getZrtpFolder(service);
+				if(zrtpFolder != null) {
+					cssCfg.setUse_zrtp( (prefsWrapper.getPreferenceIntegerValue(SipConfigManager.USE_ZRTP) > 1) ? pjsua.PJ_TRUE: pjsua.PJ_FALSE);
+					cssCfg.setStorage_folder(pjsua.pj_str_copy(zrtpFolder.getAbsolutePath()));
+				}else {
+					cssCfg.setUse_zrtp(pjsua.PJ_FALSE);
+				}
 				
 				HashMap<String, DynCodecInfos> availableCodecs = ExtraCodecs.getDynCodecs(service);
 				dynamic_codec[] cssCodecs = cssCfg.getExtra_codecs();
@@ -1321,7 +1329,7 @@ public class PjSipService {
 	}
 	
 	private File getRecordFile(String remoteContact) {
-		File dir = PreferencesProviderWrapper.getRecordsFolder();
+		File dir = PreferencesProviderWrapper.getRecordsFolder(service);
 	    if (dir != null){
 			Date d = new Date();
 			File file = new File(dir.getAbsoluteFile() + File.separator + sanitizeForFile(remoteContact)+ "_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".wav");

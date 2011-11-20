@@ -590,7 +590,7 @@ public class AccountsList extends Activity implements OnItemClickListener {
 			//Populate choice list
 			List<String> items = new ArrayList<String>();
 			items.add(getResources().getString(R.string.backup));
-			final File backupDir = PreferencesWrapper.getConfigFolder();
+			final File backupDir = PreferencesWrapper.getConfigFolder(this);
 			if(backupDir != null) {
 				String[] filesNames = backupDir.list();
 				for(String fileName : filesNames) {

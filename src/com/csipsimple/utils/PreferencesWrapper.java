@@ -569,8 +569,11 @@ public class PreferencesWrapper {
 	private static String LOGS_FOLDER = "logs";
 	private static String ZRTP_FOLDER = "zrtp";
 	 
-	private static File getStorageFolder() {
+	private static File getStorageFolder(Context ctxt, boolean preferCache) {
 		File root = Environment.getExternalStorageDirectory();
+		if(!root.canWrite() || preferCache) {
+			root = ctxt.getCacheDir();
+		}
 		
 	    if (root.canWrite()){
 			File dir = new File(root.getAbsolutePath() + File.separator + "CSipSimple");
@@ -584,8 +587,8 @@ public class PreferencesWrapper {
 	}
 	
 	
-	private static File getSubFolder(String subFolder) {
-		File root = getStorageFolder();
+	private static File getSubFolder(Context ctxt, String subFolder, boolean preferCache) {
+		File root = getStorageFolder(ctxt, preferCache);
 		if(root != null) {
 			File dir = new File(root.getAbsoluteFile() + File.separator + subFolder);
 			dir.mkdirs();
@@ -594,24 +597,24 @@ public class PreferencesWrapper {
 		return null;
 	}
 	
-	public static File getConfigFolder() {
-		return getSubFolder(CONFIG_FOLDER);
+	public static File getConfigFolder(Context ctxt) {
+		return getSubFolder(ctxt, CONFIG_FOLDER, false);
 	}
 	
-	public static File getRecordsFolder() {
-		return getSubFolder(RECORDS_FOLDER);
+	public static File getRecordsFolder(Context ctxt) {
+		return getSubFolder(ctxt, RECORDS_FOLDER, false);
 	}
 	
-	public static File getLogsFolder() {
-		return getSubFolder(LOGS_FOLDER);
+	public static File getLogsFolder(Context ctxt) {
+		return getSubFolder(ctxt, LOGS_FOLDER, false);
 	}
 	
-	public static File getZrtpFolder() {
-		return getSubFolder(ZRTP_FOLDER);
+	public static File getZrtpFolder(Context ctxt) {
+		return getSubFolder(ctxt, ZRTP_FOLDER, true);
 	}
 	
-	public static void cleanLogsFiles() {
-		File logsFolder = getLogsFolder();
+	public static void cleanLogsFiles(Context ctxt) {
+		File logsFolder = getLogsFolder(ctxt);
 		if(logsFolder != null) {
 			File[] files = logsFolder.listFiles();
 			for(File file: files) {

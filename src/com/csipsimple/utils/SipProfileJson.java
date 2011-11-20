@@ -148,7 +148,7 @@ public class SipProfileJson {
 	 * @return
 	 */
 	public static boolean saveSipConfiguration(Context ctxt) {
-		File dir = PreferencesWrapper.getConfigFolder();
+		File dir = PreferencesWrapper.getConfigFolder(ctxt);
 		if( dir != null) {
 			Date d = new Date();
 			File file = new File(dir.getAbsoluteFile() + File.separator + "backup_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".json");

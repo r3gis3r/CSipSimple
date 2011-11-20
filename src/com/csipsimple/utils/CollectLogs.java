@@ -81,9 +81,9 @@ public class CollectLogs {
 
     If not specified with -v, format is set from ANDROID_PRINTF_LOG
     or defaults to "brief"*/
-	public final static LogResult getLogs() {
+	public final static LogResult getLogs(Context ctxt) {
 		//Clear old files
-		PreferencesWrapper.cleanLogsFiles();
+		PreferencesWrapper.cleanLogsFiles(ctxt);
 		
         final StringBuilder log = new StringBuilder();
         File outFile = null;
@@ -92,7 +92,7 @@ public class CollectLogs {
             commandLine.add("logcat");
         	
         	
-        	File dir = PreferencesWrapper.getLogsFolder();
+        	File dir = PreferencesWrapper.getLogsFolder(ctxt);
         	if( dir != null) {
     			Date d = new Date();
     			outFile = new File(dir.getAbsoluteFile() + File.separator + "logs_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".txt");
@@ -166,7 +166,7 @@ public class CollectLogs {
 	
 	
 	public static Intent getLogReportIntent(String userComment, Context ctx) {
-		LogResult logs = getLogs();
+		LogResult logs = getLogs(ctx);
 		
 		
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);

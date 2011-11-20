@@ -645,7 +645,7 @@ public class PreferencesProviderWrapper {
 		return false;
 	}
 
-	public static File getRecordsFolder() {
-		return PreferencesWrapper.getRecordsFolder();
+	public static File getRecordsFolder(Context ctxt) {
+		return PreferencesWrapper.getRecordsFolder(ctxt);
 	}
 }
