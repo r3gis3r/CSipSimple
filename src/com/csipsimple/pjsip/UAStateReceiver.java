@@ -595,19 +595,22 @@ public class UAStateReceiver extends Callback {
 				pjService.service.getExecutor().execute(new SipRunnable() {
 					@Override
 					public void doRun() throws SameThreadException {
-						if (shouldAutoAnswer) {
-							// Automatically answer incoming calls with 200/OK
-							pjService.callAnswer(callId, 200);
-						} else {
-
-							// Automatically answer incoming calls with 180/RINGING
-							pjService.callAnswer(callId, 180);
-							
-							if(pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
-								if(pjService.mediaManager != null) {
-									pjService.mediaManager.startRing(remContact);
+						SipCallSession cInfo = getCallInfo(callId);
+						if(!cInfo.isAfterEnded()) {
+							if (shouldAutoAnswer) {
+								// Automatically answer incoming calls with 200/OK
+								pjService.callAnswer(callId, 200);
+							} else {
+	
+								// Automatically answer incoming calls with 180/RINGING
+								pjService.callAnswer(callId, 180);
+								
+								if(pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
+									if(pjService.mediaManager != null) {
+										pjService.mediaManager.startRing(remContact);
+									}
+									broadCastAndroidCallState("RINGING", remContact);
 								}
-								broadCastAndroidCallState("RINGING", remContact);
 							}
 						}
 					}
@@ -622,7 +625,7 @@ public class UAStateReceiver extends Callback {
 			
 			case ON_CALL_STATE:{
 				SipCallSession callInfo = (SipCallSession) msg.obj;
-				int callState = callInfo.getCallState();
+				final int callState = callInfo.getCallState();
 				
 				switch (callState) {
 				case SipCallSession.InvState.INCOMING:
