@@ -90,6 +90,7 @@ ifeq ($(MY_USE_AMR),1)
 endif
 ifeq ($(MY_USE_TLS),1)
 	LOCAL_STATIC_LIBRARIES += zrtp4pj
+	LOCAL_STATIC_LIBRARIES += crypto_ec_static
 	LOCAL_SHARED_LIBRARIES += libssl libcrypto
 endif
 

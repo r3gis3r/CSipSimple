@@ -27,7 +27,9 @@ include $(JNI_PATH)/zrtp4pj/android_toolchain/Android.mk
 ifeq ($(MY_USE_TLS),1)
 NDK_PROJECT_PATH := $(JNI_PATH)/openssl/sources/
 include $(JNI_PATH)/openssl/sources/Android.mk
+include $(JNI_PATH)/openssl/android_toolchain/Android.mk
 NDK_PROJECT_PATH := $(JNI_PATH)
+
 #include $(JNI_PATH)/openssl-fake/android_toolchain/Android.mk
 endif
 

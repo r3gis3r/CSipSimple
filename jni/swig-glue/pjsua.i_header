@@ -152,15 +152,15 @@ public:
 	virtual void on_teardown_audio () {}
 	virtual int on_set_micro_source () {}
 
-#if PJMEDIA_HAS_ZRTP
+//#if PJMEDIA_HAS_ZRTP
 	virtual void on_zrtp_show_sas (int data, const pj_str_t *sas, int verified) {}
 	virtual void on_zrtp_update_transport (int data) {}
-#endif
+//#endif
 
-#if USE_CSIPSIMPLE
+//#if USE_CSIPSIMPLE
 	virtual int timer_schedule(int entry, int entryId, int time) {}
 	virtual int timer_cancel(int entry, int entryId) {}
-#endif
+//#endif
 	
 };
 
@@ -349,7 +349,7 @@ int on_set_micro_source_wrapper () {
 	registeredCallbackObject->on_set_micro_source();
 }
 
-#if PJMEDIA_HAS_ZRTP
+//#if PJMEDIA_HAS_ZRTP
 void on_zrtp_show_sas_wrapper(void* data, char* sas, int verified){
 	pj_str_t sas_string = pj_str(sas);
 	registeredCallbackObject->on_zrtp_show_sas((int) data, &sas_string, verified);
@@ -359,9 +359,9 @@ void on_zrtp_update_transport_wrapper(void* data){
 	registeredCallbackObject->on_zrtp_update_transport((int) data);
 }
 
-#endif
+//#endif
 
-#if USE_CSIPSIMPLE
+//#if USE_CSIPSIMPLE
 int timer_schedule_wrapper(int entry, int entryId, int time) {
 	return registeredCallbackObject->timer_schedule(entry, entryId, time);
 }
@@ -369,7 +369,7 @@ int timer_schedule_wrapper(int entry, int entryId, int time) {
 int timer_cancel_wrapper(int entry, int entryId) {
 	return registeredCallbackObject->timer_cancel(entry, entryId);
 }
-#endif
+//#endif
 
 }
 
@@ -493,15 +493,15 @@ public:
 	virtual void on_teardown_audio();
 	virtual int on_set_micro_source();
 	
-#if PJMEDIA_HAS_ZRTP
+//#if PJMEDIA_HAS_ZRTP
 	virtual void on_zrtp_show_sas (int data, const pj_str_t *sas, int verified);
 	virtual void on_zrtp_update_transport (int data);
-#endif
+//#endif
 
-#if USE_CSIPSIMPLE
+//#if USE_CSIPSIMPLE
 	virtual int timer_schedule(int entry, int entryId, int time);
 	virtual int timer_cancel(int entry, int entryId);
-#endif
+//#endif
 
 };
 
