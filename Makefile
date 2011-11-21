@@ -37,14 +37,16 @@ jni/openssl/sources :
 
 jni/pjsip/.patched_sources : $(pjsip_patches)
 	cd jni/pjsip && \
-	quilt pop -af && \
 	quilt push -a && \
 	touch .patched_sources
 
 clean :
 	ndk-build clean
 	
+
 update :
+	if [ -f jni/pjsip/.patched_sources ]; then cd jni/pjsip && quilt pop -af; rm .patched_sources; cd -; fi;
+	svn update
 	# Update ZRTP4pj
 	cd jni/zrtp4pj/sources; \
 	git checkout 596346dc346471817db103d75af66b8ce69dca79
