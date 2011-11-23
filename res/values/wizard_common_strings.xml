@@ -25,5 +25,5 @@
 <string name="w_common_password_desc">Password for your account</string>
 <string name="w_common_server">Server</string>
 <string name="w_common_server_desc">SIP server domain/IP[:port]</string>
-
+<string name="create_account">Create account</string>
 </resources>
