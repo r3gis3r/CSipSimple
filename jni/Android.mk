@@ -14,6 +14,9 @@ include $(JNI_PATH)/amr-stagefright/android_toolchain/Android.mk
 # Build silk
 include $(JNI_PATH)/silk/android_toolchain/Android.mk
 
+# Build g726
+include $(JNI_PATH)/g726/android_toolchain/Android.mk
+
 # Build g729
 include $(JNI_PATH)/g729/android_toolchain/Android.mk
 

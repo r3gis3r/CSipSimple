@@ -21,5 +21,6 @@ move_lib() {
 move_lib "g7221" "G221"
 move_lib "codec2" "Codec2"
 move_lib "silk" "Silk"
+move_lib "g726" "G726"
 move_generic_lib "libcrypto" "CSipSimpleCrypto"
 move_generic_lib "libssl" "CSipSimpleCrypto"
