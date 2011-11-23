@@ -99,6 +99,7 @@ import com.csipsimple.wizards.impl.Sipnet;
 import com.csipsimple.wizards.impl.SiptelPt;
 import com.csipsimple.wizards.impl.Sonetel;
 import com.csipsimple.wizards.impl.Speakezi;
+import com.csipsimple.wizards.impl.Tanstagi;
 import com.csipsimple.wizards.impl.Telsome;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
@@ -286,7 +287,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_rapidvox, 19, 
 					new Locale[]{  }, false, true, 
 					Rapidvox.class));
-			
+			WIZARDS_DICT.put("TANSTAGI", new WizardInfo("TANSTAGI", "tanstagi", 
+					R.drawable.ic_wizard_tanstagi, 35, 
+					new Locale[]{  }, false, true, 
+					Tanstagi.class));
 			
 			
 			//Locales

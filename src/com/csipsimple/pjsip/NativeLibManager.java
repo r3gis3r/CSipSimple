@@ -27,11 +27,23 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class NativeLibManager {
 	private static final String THIS_FILE = "NativeLibMgr";
 	public static final String STACK_NAME = "pjsipjni";
 	
+	public static File getBundledStackLibFile(Context ctx, String libName) {
+		PackageInfo packageInfo = PreferencesProviderWrapper.getCurrentPackageInfos(ctx);
+		if(packageInfo != null) {
+			ApplicationInfo appInfo = packageInfo.applicationInfo;
+			File f = getLibFileFromPackage(appInfo, libName, true);
+			return f;
+		}
+		
+		// This is the very last fallback method
+		return new File(ctx.getFilesDir().getParent(), "lib" + File.separator + libName);
+	}
 	
 	public static File getLibFileFromPackage(ApplicationInfo appInfo, String libName, boolean allowFallback) {
 		Log.d(THIS_FILE, "Dir "+appInfo.dataDir);
