@@ -22,12 +22,7 @@ import android.net.Uri;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.csipsimple.R;
@@ -44,8 +39,8 @@ public class Tanstagi extends SimpleImplementation {
 	private LinearLayout customWizard;
 	private TextView customWizardText;
 	//private WebView webView;
-	private LinearLayout settingsContainer;
-	private LinearLayout validationBar;
+	//private LinearLayout settingsContainer;
+	//private LinearLayout validationBar;
 	
 	@Override
 	protected String getDomain() {
@@ -68,7 +63,7 @@ public class Tanstagi extends SimpleImplementation {
 		customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
 		customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
 		
-		validationBar = (LinearLayout) parent.findViewById(R.id.validation_bar);
+		//validationBar = (LinearLayout) parent.findViewById(R.id.validation_bar);
 		
 		updateAccountInfos(account);
 		
@@ -78,7 +73,7 @@ public class Tanstagi extends SimpleImplementation {
 	
 
 
-	private ProgressBar loadingProgressBar;
+//	private ProgressBar loadingProgressBar;
 	
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
