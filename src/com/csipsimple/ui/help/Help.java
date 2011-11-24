@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -40,7 +41,10 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CollectLogs;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.NightlyUpdater;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.NightlyUpdater.UpdaterPopupLauncher;
 
 public class Help extends Activity implements OnClickListener {
 	
@@ -107,6 +111,16 @@ public class Help extends Activity implements OnClickListener {
 		line.setOnClickListener(this);
 		if(!CustomDistribution.showIssueList()) {
 			line.setVisibility(View.GONE);
+		}
+		
+
+		line = (LinearLayout) findViewById(R.id.nightly_update);
+		line.setOnClickListener(this);
+		PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(this);
+		if(pinfo != null) {
+			if(pinfo.applicationInfo.icon == R.drawable.ic_launcher_nightly) {
+				line.setVisibility(View.VISIBLE);
+			}
 		}
 		
 		//Recording logs
@@ -192,6 +206,20 @@ public class Help extends Activity implements OnClickListener {
 			// Besides remember that the application is released under GPL which mean any distribution of the app
 			// must be done under GPL license terms. Else you can be sued for not respecting GPL license terms
 			startActivity(new Intent(this, Legal.class));
+			break;
+		case R.id.nightly_update:
+			// We have to check for an update
+			final NightlyUpdater nu = new NightlyUpdater(this);
+			Thread t = new Thread() {
+				public void run() {
+					UpdaterPopupLauncher ru = nu.getUpdaterPopup(false);
+					if(ru != null) {	
+						runOnUiThread(ru);
+					}
+				};
+			};
+			t.start();
+			break;
 		default:
 			break;
 		}

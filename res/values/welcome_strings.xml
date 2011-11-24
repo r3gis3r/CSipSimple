@@ -18,9 +18,6 @@
 	
 -->
 <resources>
-<string name="first_launch_text">&lt;h2&gt;You are about to run this application for the first time.&lt;/h2&gt;&lt;br/&gt;&lt;b&gt;Please pay attention to the following instructions :&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;1 .&lt;/b&gt; Wait for the downloading below ends &lt;br/&gt;&lt;i&gt;(it is downloading a part of the software which is dependant on your Android device)&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;2 .&lt;/b&gt;Then you\'ll be asked to fill your SIP account configuration.&lt;br /&gt;&lt;br/&gt;&lt;b&gt;3 . &lt;/b&gt;Finally you\'ll have to choose how do you want to use your SIP accounts on your handset&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;h2&gt;This is an OpenSource software&lt;/h2&gt;&lt;br/&gt;...and YOU can contribute to it (Reporting bugs, translations, documentations are valuable contributions).&lt;br/&gt;You can consult the community website at &lt;a href=&quot;http://www.csipsimple.com&quot;&gt;www.csipsimple.com&lt;/a&gt;&lt;br/&gt;This software is distribute under the terms of the GPLv3 licence (more details on our website).&lt;br/&gt;For some features (such as voIP over Mobile), you must be sure that your contract with you carrier allow you this feature before activating it in the application. &lt;i&gt;(If not, change of carrier or make pressures on him to ensure network neutrality on your contract).&lt;/i&gt;</string>
-<string name="changelog_text">&lt;h2&gt;What\'s new in this version?&lt;/h2&gt;Application is still in an alpha phase. You can follow the changelogs on the blog of the application</string>
-<string name="detecting_text">Detecting correct library for your device</string>
 <string name="intializing_text">Initialize</string>
 <string name="downloading_text">Downloading</string>
 <string name="installing_library_text">Installing library...</string>

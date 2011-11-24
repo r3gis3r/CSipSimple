@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
 	android:installLocation="auto"
-	android:versionName="0.04-00" android:versionCode="1114">
+	android:versionName="0.04-00" android:versionCode="1133">
 	<supports-screens  
 		android:smallScreens="true" 
 		android:normalScreens="true"
@@ -38,6 +38,7 @@
 				<action android:name="com.csipsimple.service.SipConfiguration" />
 			</intent-filter>
 		</service>
+		<service android:name="com.csipsimple.service.Downloader" />
 		<receiver android:name="com.csipsimple.service.DeviceStateReceiver"
 		    android:process=":sipStack">
 			<intent-filter>

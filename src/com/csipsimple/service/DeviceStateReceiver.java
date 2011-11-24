@@ -32,6 +32,7 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.ExtraCodecs;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.NightlyUpdater;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.wizards.WizardUtils;
 
@@ -39,6 +40,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 
 	private static final String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
 	private static final String THIS_FILE = "Device State";
+	public static final String APPLY_NIGHTLY_UPLOAD = "com.csipsimple.action.APPLY_NIGHTLY";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -128,6 +130,9 @@ public class DeviceStateReceiver extends BroadcastReceiver {
 				Intent.ACTION_PACKAGE_REMOVED.equalsIgnoreCase(intentAction)) {
 			CallHandler.clearAvailableCallHandlers();
 			ExtraCodecs.clearDynCodecs();
+		}else if(APPLY_NIGHTLY_UPLOAD.equals(intentAction)) {
+			NightlyUpdater nu = new NightlyUpdater(context);
+			nu.applyUpdate(intent);
 		}
 	}
 	

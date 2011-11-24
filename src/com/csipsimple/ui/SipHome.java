@@ -28,7 +28,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -45,7 +46,6 @@ import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
-import com.csipsimple.pjsip.NativeLibManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.messages.ConversationList;
@@ -54,6 +54,8 @@ import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.NightlyUpdater;
+import com.csipsimple.utils.NightlyUpdater.UpdaterPopupLauncher;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.IndicatorTab;
@@ -140,18 +142,14 @@ public class SipHome extends TabActivity {
 		selectTabWithAction(getIntent());
 		Log.setLogLevel(prefWrapper.getLogLevel());
 		
-		// Check for gingerbread warnings
-		/*
+		// Async check
+		
 		Thread t = new Thread() {
 			public void run() {
-				if(Compatibility.isCompatible(9)) {
-					// We check now if something is wrong with the gingerbread dialer integration
-					Compatibility.getDialerIntegrationState(SipHome.this);
-				}
+				asyncSanityCheck();
 			};
 		};
 		t.start();
-		*/
 	}
 	
 	/**
@@ -162,8 +160,8 @@ public class SipHome extends TabActivity {
 		Integer runningVersion = null;
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		// Application upgrade
-		try {
-			PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+		PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(this);
+		if(pinfo != null) {
 			runningVersion = pinfo.versionCode;
 			int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
 	
@@ -173,9 +171,6 @@ public class SipHome extends TabActivity {
 			}else {
 				runningVersion = null;
 			}
-		} catch (NameNotFoundException e) {
-			// Should not happen....or something is wrong with android...
-			Log.e(THIS_FILE, "Not possible to find self name", e);
 		}
 		
 		// Android upgrade
@@ -190,6 +185,42 @@ public class SipHome extends TabActivity {
 			}
 		}
 		return runningVersion;
+	}
+	
+	private void asyncSanityCheck() {
+//		if(Compatibility.isCompatible(9)) {
+//			// We check now if something is wrong with the gingerbread dialer integration
+//			Compatibility.getDialerIntegrationState(SipHome.this);
+//		}
+
+		PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(this);
+		if(pinfo != null) {
+			if(pinfo.applicationInfo.icon == R.drawable.ic_launcher_nightly) {
+				Log.d(THIS_FILE, "Sanity check : we have a nightly build here");
+				ConnectivityManager connectivityService = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+				NetworkInfo ni = connectivityService.getActiveNetworkInfo();
+				// Only do the process if we are on wifi
+				if(ni != null && ni.isConnected() && ni.getType() == ConnectivityManager.TYPE_WIFI) {
+					// Only do the process if we didn't dismissed previously
+					NightlyUpdater nu = new NightlyUpdater(this);
+					
+					if(!nu.ignoreCheckByUser()) {
+						long lastCheck = nu.lastCheck();
+						long current = System.currentTimeMillis();
+						long oneDay = 86400000;
+						if(current - oneDay > lastCheck) {
+							if(onForeground) {
+								// We have to check for an update
+								UpdaterPopupLauncher ru = nu.getUpdaterPopup(false);
+								if(ru != null) {	
+									runOnUiThread(ru);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void startSipService() {
@@ -289,10 +320,13 @@ public class SipHome extends TabActivity {
 
 		tabHost.addTab(tabspecDialer);
 	}
+	
+	boolean onForeground = false;
 
 	@Override
 	protected void onPause() {
 		Log.d(THIS_FILE, "On Pause SIPHOME");
+		onForeground = false;
 		super.onPause();
 		
 	}
@@ -301,6 +335,8 @@ public class SipHome extends TabActivity {
 	protected void onResume() {
 		Log.d(THIS_FILE, "On Resume SIPHOME");
 		super.onResume();
+		onForeground = true;
+		
 		prefWrapper.setQuit(false);
 
 		Log.d(THIS_FILE, "WE CAN NOW start SIP service");
