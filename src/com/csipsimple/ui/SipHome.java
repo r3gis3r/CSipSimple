@@ -207,7 +207,7 @@ public class SipHome extends TabActivity {
 					if(!nu.ignoreCheckByUser()) {
 						long lastCheck = nu.lastCheck();
 						long current = System.currentTimeMillis();
-						long oneDay = 86400000;
+						long oneDay = 43200000; // 12 hours
 						if(current - oneDay > lastCheck) {
 							if(onForeground) {
 								// We have to check for an update

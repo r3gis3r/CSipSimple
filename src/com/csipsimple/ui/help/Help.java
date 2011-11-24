@@ -212,7 +212,7 @@ public class Help extends Activity implements OnClickListener {
 			final NightlyUpdater nu = new NightlyUpdater(this);
 			Thread t = new Thread() {
 				public void run() {
-					UpdaterPopupLauncher ru = nu.getUpdaterPopup(false);
+					UpdaterPopupLauncher ru = nu.getUpdaterPopup(true);
 					if(ru != null) {	
 						runOnUiThread(ru);
 					}
