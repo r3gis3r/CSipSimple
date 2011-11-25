@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="changelog_text">&lt;h2&gt;O que há de novo nesta versão?&lt;/h2&gt;A aplicação ainda se encontra em fase alfa. Pode seguir o registo das alterações no blog da aplicação</string>
-  <string name="detecting_text">Detectando biblioteca correta para seu aparelho</string>
   <string name="intializing_text">Inicializar</string>
   <string name="downloading_text">Baixando</string>
   <string name="installing_library_text">Instalando biblioteca</string>

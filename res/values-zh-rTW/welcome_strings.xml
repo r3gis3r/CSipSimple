@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="detecting_text">偵測適合裝置的函式庫</string>
   <string name="intializing_text">初始化</string>
   <string name="downloading_text">正下載</string>
   <string name="installing_library_text">安裝函式庫...</string>

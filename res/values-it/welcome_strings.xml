@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="detecting_text">Rilevamento della libreria corretta per il dispositivo</string>
   <string name="intializing_text">Inizializza</string>
   <string name="downloading_text">Download in corso</string>
   <string name="installing_library_text">Installazione libreria in corso ...</string>

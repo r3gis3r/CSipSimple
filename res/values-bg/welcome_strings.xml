@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="detecting_text">Откриване на правилната версия за Вашето устройство</string>
   <string name="intializing_text">Инициализиране</string>
   <string name="downloading_text">Изтегляне</string>
   <string name="installing_library_text">Инсталиране на библиотека ...</string>

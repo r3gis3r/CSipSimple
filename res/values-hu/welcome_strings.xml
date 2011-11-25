@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="detecting_text">A készüléke paramétereinek a megállapítása</string>
   <string name="intializing_text">Inicializálás</string>
   <string name="downloading_text">Letöltés</string>
   <string name="installing_library_text">Könyvtár telepítés..</string>
