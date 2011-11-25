@@ -22,15 +22,19 @@
             android:textAppearance="@android:style/TextAppearance.StatusBar.EventContent.Title"
             android:textStyle="bold"
             android:layout_alignParentTop="true" />
-
+		<LinearLayout 
+            android:id="@+id/status_progress_wrapper"
+            android:layout_width="fill_parent"
+            android:layout_below="@id/status_text"
+            android:layout_height="wrap_content">
         <ProgressBar
             android:id="@+id/status_progress"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/status_text"
             android:indeterminate="false"
             android:indeterminateOnly="false" 
             style="?android:attr/progressBarStyleHorizontal" />
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

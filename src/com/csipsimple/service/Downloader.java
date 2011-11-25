@@ -99,7 +99,7 @@ public class Downloader extends IntentService {
 	        notification.contentView.setImageViewResource(R.id.status_icon, icon);
 	        notification.contentView.setTextViewText(R.id.status_text, getResources().getString(R.string.downloading_text));
 	        notification.contentView.setProgressBar(R.id.status_progress, 50, 0, false);
-	        notification.contentView.setViewVisibility(R.id.status_progress, View.VISIBLE);
+	        notification.contentView.setViewVisibility(R.id.status_progress_wrapper, View.VISIBLE);
 		}
 		
 		if(!TextUtils.isEmpty(outPath)) {
@@ -154,7 +154,7 @@ public class Downloader extends IntentService {
 						notification.contentIntent = pendingIntent;
 						notification.flags = Notification.FLAG_AUTO_CANCEL;
 						notification.icon = android.R.drawable.stat_sys_download_done;
-						notification.contentView.setViewVisibility(R.id.status_progress, View.GONE);
+						notification.contentView.setViewVisibility(R.id.status_progress_wrapper, View.GONE);
 				        notification.contentView.setTextViewText(R.id.status_text, 
 				        		getResources().getString(R.string.done)
 				        		// TODO should be a parameter of this class
