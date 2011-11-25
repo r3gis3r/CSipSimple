@@ -121,6 +121,11 @@ public class SipConfigManager {
 	public static final String CODEC_NB = "nb";
 	public static final String CODEC_WB = "wb";
 	
+	public static final int ECHO_MODE_AUTO = 0;
+	public static final int ECHO_MODE_SIMPLE = 1;
+	public static final int ECHO_MODE_SPEEX = 2;
+	public static final int ECHO_MODE_WEBRTC_M = 3;
+	
 	
 	
 	

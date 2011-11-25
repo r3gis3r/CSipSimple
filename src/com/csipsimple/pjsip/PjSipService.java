@@ -294,10 +294,17 @@ public class PjSipService {
 				mediaCfg.setSnd_auto_close_time(prefsWrapper.getAutoCloseTime());
 				// Echo cancellation
 				mediaCfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
-				mediaCfg.setEc_options(prefsWrapper.getPreferenceIntegerValue(SipConfigManager.ECHO_MODE));
+				int echoMode = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.ECHO_MODE);
+				long clockRate = prefsWrapper.getClockRate();
+				if(clockRate > 16000 && echoMode == SipConfigManager.ECHO_MODE_WEBRTC_M){
+					// WebRTC mobile does not allow higher that 16kHz for now
+					// TODO : warn user about this point
+					echoMode = SipConfigManager.ECHO_MODE_SIMPLE;
+				}
+				mediaCfg.setEc_options(echoMode);
 				mediaCfg.setNo_vad(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_VAD) ?0:1);
 				mediaCfg.setQuality(prefsWrapper.getMediaQuality());
-				mediaCfg.setClock_rate(prefsWrapper.getClockRate());
+				mediaCfg.setClock_rate(clockRate);
 				mediaCfg.setAudio_frame_ptime(prefsWrapper.getPreferenceIntegerValue(SipConfigManager.SND_PTIME));
 				mediaCfg.setHas_ioqueue(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE)?1:0);
 				
