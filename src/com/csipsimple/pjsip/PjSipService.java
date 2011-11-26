@@ -712,7 +712,14 @@ public class PjSipService {
 		return accountInfo;
 	}
 
-	private ArrayList<String> codecs;
+	private static ArrayList<String> codecs;
+	
+	public static void resetCodecs() {
+		if(codecs != null) {
+			codecs.clear();
+			codecs = null;
+		}
+	}
 
 	private void initCodecs() throws SameThreadException {
 		if (codecs == null) {

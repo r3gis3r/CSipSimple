@@ -32,6 +32,7 @@ import android.content.pm.ResolveInfo;
 
 import com.csipsimple.api.SipManager;
 import com.csipsimple.pjsip.NativeLibManager;
+import com.csipsimple.pjsip.PjSipService;
 
 public class ExtraCodecs {
 
@@ -98,5 +99,6 @@ public class ExtraCodecs {
 	
 	public static void clearDynCodecs() {
 		AVAILABLE_DYN_CODECS = null;
+		PjSipService.resetCodecs();
 	}
 }

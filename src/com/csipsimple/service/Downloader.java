@@ -37,6 +37,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -149,8 +150,17 @@ public class Downloader extends IntentService {
 					}
 					PendingIntent pendingIntent = (PendingIntent) intent.getParcelableExtra(EXTRA_PENDING_FINISH_INTENT);
 					
+
+					try {
+						Runtime.getRuntime().exec("chmod 644 " + outPath);
+					} catch (IOException e) {
+						Log.e(THIS_FILE, "Unable to make the apk file readable", e);
+					}
+					
 					Log.d(THIS_FILE, "Download finished of : " + outPath);
 					if(pendingIntent != null) {
+
+						/*
 						notification.contentIntent = pendingIntent;
 						notification.flags = Notification.FLAG_AUTO_CANCEL;
 						notification.icon = android.R.drawable.stat_sys_download_done;
@@ -160,15 +170,18 @@ public class Downloader extends IntentService {
 				        		// TODO should be a parameter of this class
 				        		+" - Click to install");
 				        notificationManager.notify(NOTIF_DOWNLOAD, notification);
+				        
+						 */
+						try {
+							pendingIntent.send();
+					        notificationManager.cancel(NOTIF_DOWNLOAD);
+						} catch (CanceledException e) {
+							Log.e(THIS_FILE, "Impossible to start pending intent for download finish");
+						}
 					}else {
 						Log.w(THIS_FILE, "Invalid pending intent for finish !!!");
 					}
 					
-					try {
-						Runtime.getRuntime().exec("chmod 644 " + outPath);
-					} catch (IOException e) {
-						Log.e(THIS_FILE, "Unable to make the apk file readable", e);
-					}
 					
 					result = Activity.RESULT_OK;
 				}

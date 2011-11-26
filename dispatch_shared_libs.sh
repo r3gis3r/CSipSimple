@@ -18,9 +18,9 @@ move_lib() {
 	move_generic_lib libpj_${1}_codec CSipSimpleCodec${2}
 }
 
-move_lib "g7221" "G221"
-move_lib "codec2" "Codec2"
-move_lib "silk" "Silk"
-move_lib "g726" "G726"
+move_lib "g7221" "Pack"
+move_lib "codec2" "Pack"
+move_lib "silk" "Pack"
+move_lib "g726" "Pack"
 move_generic_lib "libcrypto" "CSipSimpleCrypto"
 move_generic_lib "libssl" "CSipSimpleCrypto"
