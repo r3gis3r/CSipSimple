@@ -160,7 +160,7 @@ public class Downloader extends IntentService {
 					Log.d(THIS_FILE, "Download finished of : " + outPath);
 					if(pendingIntent != null) {
 
-						/*
+						
 						notification.contentIntent = pendingIntent;
 						notification.flags = Notification.FLAG_AUTO_CANCEL;
 						notification.icon = android.R.drawable.stat_sys_download_done;
@@ -171,13 +171,14 @@ public class Downloader extends IntentService {
 				        		+" - Click to install");
 				        notificationManager.notify(NOTIF_DOWNLOAD, notification);
 				        
-						 */
+						/*
 						try {
 							pendingIntent.send();
 					        notificationManager.cancel(NOTIF_DOWNLOAD);
 						} catch (CanceledException e) {
 							Log.e(THIS_FILE, "Impossible to start pending intent for download finish");
 						}
+						*/
 					}else {
 						Log.w(THIS_FILE, "Invalid pending intent for finish !!!");
 					}
