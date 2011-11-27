@@ -58,6 +58,7 @@ import com.csipsimple.wizards.impl.Eutelia;
 import com.csipsimple.wizards.impl.Expert;
 import com.csipsimple.wizards.impl.FastVoip;
 import com.csipsimple.wizards.impl.Fayn;
+import com.csipsimple.wizards.impl.Freeconet;
 import com.csipsimple.wizards.impl.FreephoneLineCa;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.Gradwell;
@@ -87,6 +88,7 @@ import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Pozitel;
 import com.csipsimple.wizards.impl.Rapidvox;
+import com.csipsimple.wizards.impl.Samarto;
 import com.csipsimple.wizards.impl.Sapo;
 import com.csipsimple.wizards.impl.Sbohempevnalinko;
 import com.csipsimple.wizards.impl.Scarlet;
@@ -101,8 +103,10 @@ import com.csipsimple.wizards.impl.Sonetel;
 import com.csipsimple.wizards.impl.Speakezi;
 import com.csipsimple.wizards.impl.Tanstagi;
 import com.csipsimple.wizards.impl.Telsome;
+import com.csipsimple.wizards.impl.Tlenofon;
 import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
+import com.csipsimple.wizards.impl.Vanbergsystems;
 import com.csipsimple.wizards.impl.Viva;
 import com.csipsimple.wizards.impl.VoipMS;
 import com.csipsimple.wizards.impl.VoipTel;
@@ -534,6 +538,31 @@ public class WizardUtils {
 					R.drawable.ic_wizard_belcentrale, 20, 
 					new Locale[]{ locale("nl_BE"), locale("nl_NL"), locale("fr_BE") }, false, false, 
 					BelCentrale.class));
+
+			WIZARDS_DICT.put("FREECONET", new WizardInfo("FREECONET", "Freeconet", 
+					R.drawable.ic_wizard_freeconet, 19, 
+					new Locale[]{
+					new Locale("pl")
+					}, false, false, 
+					Freeconet.class));
+			WIZARDS_DICT.put("TLENOFON", new WizardInfo("TLENOFON", "Tlenofon", 
+					R.drawable.ic_wizard_tlenofon, 19, 
+					new Locale[]{
+					new Locale("pl")
+					}, false, false, 
+					Tlenofon.class));
+			WIZARDS_DICT.put("VANBERGSYSTEMS", new WizardInfo("VANBERGSYSTEMS", "Vanbergsystems", 
+					R.drawable.ic_wizard_vanbergsystems, 19, 
+					new Locale[]{
+					new Locale("pl")
+					}, false, false, 
+					Vanbergsystems.class));
+			WIZARDS_DICT.put("SAMARTO", new WizardInfo("SAMARTO", "Samarto", 
+					R.drawable.ic_wizard_samarto, 19, 
+					new Locale[]{
+					new Locale("pl")
+					}, false, false, 
+					Samarto.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
