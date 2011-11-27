@@ -181,7 +181,37 @@
 <string name="codecs_band_types">Connections bandwidth types for codecs</string>
 <string name="use_sgs_call_hack">Use Samsung Galaxy Hack</string>
 <string name="use_sgs_call_hack_desc">Pre set call mode to solve routing</string>
+<string name="audio_implementation">Audio implementation</string>
+<string name="audio_implementation_desc">Backend for audio</string>
+<string name="digest">Digest</string>
+<string name="pgp">PGP</string>
+<string name="plain_password">Plain password</string>
+<string name="data_digest">Data digest</string>
+<string name="disabled">Disabled</string>
+<string name="optional">Optional</string>
+<string name="mandatory">Mandatory</string>
+<string name="auto">Auto</string>
+<string name="rtp">RTP</string>
+<string name="in_band">In band generation</string>
+<string name="sip_info">SIP INFO</string>
+<string name="legacy">Legacy</string>
+<string name="normal">Normal</string>
+<string name="force">Force</string>
+<string name="prevent">Prevent</string>
+<string name="speex">Speex</string>
+<string name="simple">Simple</string>
+<string name="webrtc">WebRTC</string>
+<string name="use_android_setting">Use Android setting</string>
+<string name="narrowband">Narrowband</string>
+<string name="wideband">Wideband</string>
+<string name="no_proxy">No proxy</string>
+<string name="outbound_proxies">Outbound proxies</string>
+<string name="accounts_proxies">Accounts proxies</string>
+<string name="all">All</string>
+<string name="no_zrtp">No ZRTP</string>
+<string name="create_zrtp">Create ZRTP</string>
 
+    
 <!-- UI -->
 <string name="general_ui">General user interface</string>
 <string name="native_dialer_integration">Native dialer integration</string>
@@ -250,4 +280,6 @@
 
 <string name="expert_preferences">Expert mode</string>
 <string name="advanced_preferences">Advanced mode</string>
+
+    
 </resources>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  csipsimple\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-13 15:22+0100\n"
+"POT-Creation-Date: 2011-11-27 23:38+0100\n"
 "PO-Revision-Date: 2010-09-30 08:04+0000\n"
 "Last-Translator: r3gis <r3gis@r3gis.fr>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -693,6 +693,126 @@ msgid "Pre set call mode to solve routing"
 msgstr ""
 "Предварително избран режим на обаждане за справяне с маршрутизационни "
 "проблеми"
+
+#, fuzzy
+msgctxt "audio_implementation"
+msgid "Audio implementation"
+msgstr "Използвай WebRTC имплементация"
+
+msgctxt "audio_implementation_desc"
+msgid "Backend for audio"
+msgstr ""
+
+msgctxt "digest"
+msgid "Digest"
+msgstr ""
+
+msgctxt "pgp"
+msgid "PGP"
+msgstr ""
+
+#, fuzzy
+msgctxt "plain_password"
+msgid "Plain password"
+msgstr "TLS парола"
+
+msgctxt "data_digest"
+msgid "Data digest"
+msgstr ""
+
+msgctxt "disabled"
+msgid "Disabled"
+msgstr ""
+
+msgctxt "optional"
+msgid "Optional"
+msgstr ""
+
+msgctxt "mandatory"
+msgid "Mandatory"
+msgstr ""
+
+msgctxt "auto"
+msgid "Auto"
+msgstr ""
+
+msgctxt "rtp"
+msgid "RTP"
+msgstr ""
+
+msgctxt "in_band"
+msgid "In band generation"
+msgstr ""
+
+msgctxt "sip_info"
+msgid "SIP INFO"
+msgstr ""
+
+msgctxt "legacy"
+msgid "Legacy"
+msgstr ""
+
+msgctxt "normal"
+msgid "Normal"
+msgstr ""
+
+msgctxt "force"
+msgid "Force"
+msgstr ""
+
+msgctxt "prevent"
+msgid "Prevent"
+msgstr ""
+
+msgctxt "speex"
+msgid "Speex"
+msgstr ""
+
+msgctxt "simple"
+msgid "Simple"
+msgstr ""
+
+msgctxt "webrtc"
+msgid "WebRTC"
+msgstr ""
+
+msgctxt "use_android_setting"
+msgid "Use Android setting"
+msgstr ""
+
+#, fuzzy
+msgctxt "narrowband"
+msgid "Narrowband"
+msgstr "нормален"
+
+#, fuzzy
+msgctxt "wideband"
+msgid "Wideband"
+msgstr "висококачествено"
+
+msgctxt "no_proxy"
+msgid "No proxy"
+msgstr ""
+
+msgctxt "outbound_proxies"
+msgid "Outbound proxies"
+msgstr ""
+
+msgctxt "accounts_proxies"
+msgid "Accounts proxies"
+msgstr ""
+
+msgctxt "all"
+msgid "All"
+msgstr ""
+
+msgctxt "no_zrtp"
+msgid "No ZRTP"
+msgstr ""
+
+msgctxt "create_zrtp"
+msgid "Create ZRTP"
+msgstr ""
 
 #. UI
 msgctxt "general_ui"

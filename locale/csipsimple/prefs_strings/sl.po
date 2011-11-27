@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: csipsimple 0.01\n"
 "Report-Msgid-Bugs-To: csipsimple-dev@googlegroups.com\n"
-"POT-Creation-Date: 2011-11-13 15:22+0100\n"
+"POT-Creation-Date: 2011-11-27 23:38+0100\n"
 "PO-Revision-Date: 2010-11-25 14:26+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: sl <LL@li.org>\n"
@@ -687,6 +687,122 @@ msgstr ""
 
 msgctxt "use_sgs_call_hack_desc"
 msgid "Pre set call mode to solve routing"
+msgstr ""
+
+msgctxt "audio_implementation"
+msgid "Audio implementation"
+msgstr ""
+
+msgctxt "audio_implementation_desc"
+msgid "Backend for audio"
+msgstr ""
+
+msgctxt "digest"
+msgid "Digest"
+msgstr ""
+
+msgctxt "pgp"
+msgid "PGP"
+msgstr ""
+
+msgctxt "plain_password"
+msgid "Plain password"
+msgstr ""
+
+msgctxt "data_digest"
+msgid "Data digest"
+msgstr ""
+
+msgctxt "disabled"
+msgid "Disabled"
+msgstr ""
+
+msgctxt "optional"
+msgid "Optional"
+msgstr ""
+
+msgctxt "mandatory"
+msgid "Mandatory"
+msgstr ""
+
+msgctxt "auto"
+msgid "Auto"
+msgstr ""
+
+msgctxt "rtp"
+msgid "RTP"
+msgstr ""
+
+msgctxt "in_band"
+msgid "In band generation"
+msgstr ""
+
+msgctxt "sip_info"
+msgid "SIP INFO"
+msgstr ""
+
+msgctxt "legacy"
+msgid "Legacy"
+msgstr ""
+
+msgctxt "normal"
+msgid "Normal"
+msgstr ""
+
+msgctxt "force"
+msgid "Force"
+msgstr ""
+
+msgctxt "prevent"
+msgid "Prevent"
+msgstr ""
+
+msgctxt "speex"
+msgid "Speex"
+msgstr ""
+
+msgctxt "simple"
+msgid "Simple"
+msgstr ""
+
+msgctxt "webrtc"
+msgid "WebRTC"
+msgstr ""
+
+msgctxt "use_android_setting"
+msgid "Use Android setting"
+msgstr ""
+
+msgctxt "narrowband"
+msgid "Narrowband"
+msgstr ""
+
+msgctxt "wideband"
+msgid "Wideband"
+msgstr ""
+
+msgctxt "no_proxy"
+msgid "No proxy"
+msgstr ""
+
+msgctxt "outbound_proxies"
+msgid "Outbound proxies"
+msgstr ""
+
+msgctxt "accounts_proxies"
+msgid "Accounts proxies"
+msgstr ""
+
+msgctxt "all"
+msgid "All"
+msgstr ""
+
+msgctxt "no_zrtp"
+msgid "No ZRTP"
+msgstr ""
+
+msgctxt "create_zrtp"
+msgid "Create ZRTP"
 msgstr ""
 
 #. UI

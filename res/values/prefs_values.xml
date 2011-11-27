@@ -4,6 +4,12 @@
 		<item>Digest</item>
 		<item>PGP</item>
 	</string-array>
+	
+	<string-array name="scheme_choices">
+		<item>@string/digest</item>
+		<item>@string/pgp</item>
+	</string-array>
+	
 	<string-array name="data_type_values">
 		<item>0</item>
 		<item>1</item>
@@ -11,16 +17,40 @@
 		<item>16</item>
 		 -->
 	</string-array>
+	    
+	<string-array name="data_type_choices">
+		<item>@string/plain_password</item>
+		<item>@string/data_digest</item>
+		<!-- 
+		<item>Ext aka</item>
+		-->
+	</string-array>
+	
 	<string-array name="clock_rate_values">
 		<item>8000</item>
 		<item>16000</item>
 		<item>32000</item>
 		<item>44100</item>
 	</string-array>
+	
+	    
+	<string-array name="clock_rate_choices">
+		<item>8KHz</item>
+		<item>16KHz</item>
+		<item>32KHz</item>
+		<item>44.1KHz</item>
+	</string-array>
+	    
 	<string-array name="use_srtp_values">
 		<item>0</item>
 		<item>1</item>
 		<item>2</item>
+	</string-array>
+	
+	<string-array name="use_srtp_choices">
+		<item>@string/disabled</item>
+		<item>@string/optional</item>
+		<item>@string/mandatory</item>
 	</string-array>
 	
 	<string-array name="dtmf_mode_values">
@@ -30,9 +60,21 @@
 		<item>3</item> <!-- SIP INFO -->
 	</string-array>
 	
+	<string-array name="dtmf_mode_choices">
+		<item>@string/auto</item>
+		<item>@string/rtp</item>
+		<item>@string/in_band</item>
+		<item>@string/sip_info</item>
+	</string-array>
+	
 	<string-array name="contact_rewrite_method_values">
 		<item>1</item>
 		<item>2</item>
+	</string-array>
+	
+	<string-array name="contact_rewrite_method_choices">
+		<item>@string/legacy</item>
+		<item>@string/normal</item>
 	</string-array>
 	
 	<string-array name="transport_values">
@@ -41,7 +83,13 @@
 		<item>2</item>
 		<item>3</item>
 	</string-array>
-	
+	    
+	<string-array name="transport_choices">
+		<item>@string/auto</item>
+		<item>UDP</item>
+		<item>TCP</item>
+		<item>TLS</item>
+	</string-array>
 	
 	<string-array name="tls_method_values">
 		<item>0</item> <!-- Auto -->
@@ -51,12 +99,28 @@
 		<item>23</item> <!-- SSL23 -->
 	</string-array>
 	
+	    
+	<string-array name="tls_method_choices">
+		<item>@string/auto</item>
+		<item>TLSv1</item>
+		<item>SSLv2</item>
+		<item>SSL3</item>
+		<item>SSL23</item>
+	</string-array>
+	
 	<string-array name="sip_audio_mode_values">
 		<item>0</item>
 		<item>1</item>
 		<item>2</item>
 		<item>3</item>
 	</string-array>
+	
+	<string-array name="gsm_integration_type_choices">
+		<item>@string/auto</item>
+		<item>@string/force</item>
+		<item>@string/prevent</item>
+	</string-array>
+	    
 	<string-array name="sip_audio_mode_choices">
 		<item>NORMAL</item>
 		<item>RINGTONE</item>
@@ -98,15 +162,34 @@
 		<item>3</item> <!-- WebRTC -->
 	</string-array>
 	
-		<string-array name="dial_press_mode_values">
+	    
+	<string-array name="echo_mode_choices">
+		<item>@string/auto</item>
+		<item>@string/speex</item>
+		<item>@string/simple</item>
+		<item>@string/webrtc</item>
+	</string-array>
+	
+	<string-array name="dial_press_mode_values">
 		<item>0</item> <!-- Auto -->
 		<item>1</item> <!-- Force -->
 		<item>2</item> <!-- Prevent -->
 	</string-array>
 	
+	<string-array name="dial_press_mode_choices">
+		<item>@string/use_android_setting</item>
+		<item>@string/force</item>
+		<item>@string/prevent</item>
+	</string-array>
+	
 	<string-array name="band_types">
 		<item>nb</item>
 		<item>wb</item>
+	</string-array>
+	
+	<string-array name="band_types_name">
+		<item>@string/narrowband</item>
+		<item>@string/wideband</item>
 	</string-array>
 	
 	<string-array name="reg_use_proxy_values">
@@ -116,9 +199,22 @@
 		<item>3</item>
 	</string-array>
 	
+	<string-array name="reg_use_proxy_choices">
+		<item>@string/no_proxy</item>
+		<item>@string/outbound_proxies</item>
+		<item>@string/accounts_proxies</item>
+		<item>@string/all</item>
+	</string-array>
 	
 	<string-array name="use_zrtp_values">
 		<item>1</item>
 		<item>2</item>
 	</string-array>
+	
+	<string-array name="use_zrtp_choices">
+		<item>@string/no_zrtp</item>
+		<item>@string/create_zrtp</item>
+	</string-array>
+	    
+	
 </resources>
