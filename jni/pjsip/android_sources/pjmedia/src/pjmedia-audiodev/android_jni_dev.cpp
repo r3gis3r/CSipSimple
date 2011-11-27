@@ -135,7 +135,7 @@ static pjmedia_aud_stream_op android_strm_op =
 #define THREAD_PRIORITY_AUDIO -16
 #define THREAD_PRIORITY_URGENT_AUDIO -19
 
-static pj_status_t set_android_thread_priority(int priority){
+pj_status_t set_android_thread_priority(int priority){
 	jclass process_class;
 	jmethodID set_prio_method;
 	jthrowable exc;

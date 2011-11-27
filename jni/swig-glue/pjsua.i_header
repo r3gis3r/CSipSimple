@@ -73,8 +73,8 @@ JAVA_ARRAYSOFCLASSES(pjmedia_tone_desc)
 %apply pjmedia_tone_desc[] {const pjmedia_tone_desc tones[]};
 JAVA_ARRAYSOFCLASSES(pj_str_t)
 %apply pj_str_t[]{pj_str_t nameserver[4]};
-JAVA_ARRAYSOFCLASSES(dynamic_codec)
-%apply dynamic_codec[]{dynamic_codec extra_codecs[64]};
+JAVA_ARRAYSOFCLASSES(dynamic_factory)
+%apply dynamic_factory[]{dynamic_factory extra_codecs[64]};
 
 %header %{
 

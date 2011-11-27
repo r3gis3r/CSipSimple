@@ -24,13 +24,8 @@
 #include "transport_zrtp.h"
 #endif
 
-#if PJ_ANDROID_DEVICE==1
 #include "android_dev.h"
-#endif
-
-#if PJ_ANDROID_DEVICE==2
-#include "opensl_dev.h"
-#endif
+#include <dlfcn.h>
 
 #define THIS_FILE		"pjsua_jni_addons.c"
 
@@ -76,21 +71,6 @@ PJ_DECL(pj_str_t) call_dump(pjsua_call_id call_id, pj_bool_t with_media, const c
 		    sizeof(some_buf), indent);
     return pj_str(some_buf);
 }
-
-/**
- * Can we use TLS ?
- */
-PJ_DECL(pj_bool_t) can_use_tls(){
-	return PJ_HAS_SSL_SOCK;
-}
-
-/**
- * Can we use SRTP ?
- */
-PJ_DECL(pj_bool_t) can_use_srtp(){
-	return PJMEDIA_HAS_SRTP;
-}
-
 
 
 /**
@@ -230,6 +210,8 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg){
 	css_cfg->use_no_update = PJ_FALSE;
 	css_cfg->use_zrtp = PJ_FALSE;
 	css_cfg->extra_codecs_cnt = 0;
+	css_cfg->audio_implementation.init_factory_name = pj_str("");
+	css_cfg->audio_implementation.shared_lib_path = pj_str("");
 }
 
 //Wrap start & stop
@@ -277,8 +259,8 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	css_var.extra_codecs_cnt = css_cfg->extra_codecs_cnt;
 	unsigned i;
 	for(i=0; i < css_cfg->extra_codecs_cnt; i++){
-		dynamic_codec *css_codec = &css_var.extra_codecs[i];
-		dynamic_codec *cfg_codec = &css_cfg->extra_codecs[i];
+		dynamic_factory *css_codec = &css_var.extra_codecs[i];
+		dynamic_factory *cfg_codec = &css_cfg->extra_codecs[i];
 
 		pj_strdup_with_null(css_var.pool, &css_codec->shared_lib_path, &cfg_codec->shared_lib_path);
 		pj_strdup_with_null(css_var.pool, &css_codec->init_factory_name, &cfg_codec->init_factory_name);
@@ -296,14 +278,37 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	result = (pj_status_t) pjsua_init(ua_cfg, log_cfg, media_cfg);
 	if(result == PJ_SUCCESS){
 		init_ringback_tone();
-#if PJMEDIA_AUDIO_DEV_HAS_ANDROID
-#if PJ_ANDROID_DEVICE==1
-		pjmedia_aud_register_factory(&pjmedia_android_factory);
-#endif
-#if PJ_ANDROID_DEVICE==2
-		pjmedia_aud_register_factory(&pjmedia_opensl_factory);
-#endif
-#endif
+
+		// Init audio device
+		pj_status_t added_audio = PJ_ENOTFOUND;
+		if(css_cfg->audio_implementation.init_factory_name.slen > 0){
+	    	dynamic_factory *audio_impl = &css_cfg->audio_implementation;
+	    	char lib_path[512];
+	    	char init_name[512];
+	    	pj_ansi_snprintf(lib_path, sizeof(lib_path), "%.*s", audio_impl->shared_lib_path.slen, audio_impl->shared_lib_path.ptr);
+	    	pj_ansi_snprintf(init_name, sizeof(init_name), "%.*s", audio_impl->init_factory_name.slen, audio_impl->init_factory_name.ptr);
+
+	    	void* handle = dlopen(lib_path, RTLD_LAZY);
+	    	if(handle != NULL){
+	    		pjmedia_aud_dev_factory* (*init_factory) (pj_pool_factory *pf) = dlsym(handle, init_name);
+	    		if(init_factory != NULL){
+	    			pjmedia_aud_register_factory(init_factory);
+	    			added_audio = PJ_SUCCESS;
+	    			PJ_LOG(4, (THIS_FILE, "Loaded audio dev : %s", init_name));
+	    		}else{
+	    			PJ_LOG(2, (THIS_FILE, "Invalid factory name %s", init_name));
+	    		}
+	    	}else{
+	    		PJ_LOG(1, (THIS_FILE, "Not found lib : %s", lib_path));
+	    	}
+		}
+
+		// Fallback to default audio dev if no one found
+		if(added_audio != PJ_SUCCESS){
+			pjmedia_aud_register_factory(&pjmedia_android_factory);
+		}
+
+
 
 #if USE_TCP_HACK==1
 	    // Registering module for tcp hack
@@ -545,8 +550,6 @@ void app_on_call_state(pjsua_call_id call_id, pjsip_event *e) {
 
 #include <pjmedia-codec.h>
 #include <pjmedia/g711.h>
-#include <dlfcn.h>
-#include <pjsua_jni_addons.h>
 
 #if PJMEDIA_HAS_WEBRTC_CODEC
 #include <webrtc_codec.h>
@@ -661,7 +664,7 @@ pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
     unsigned i;
 
     for(i=0; i < css_var.extra_codecs_cnt; i++){
-    	dynamic_codec *codec = &css_var.extra_codecs[i];
+    	dynamic_factory *codec = &css_var.extra_codecs[i];
     	char lib_path[512];
     	char init_name[512];
     	pj_ansi_snprintf(lib_path, sizeof(lib_path), "%.*s", codec->shared_lib_path.slen, codec->shared_lib_path.ptr);

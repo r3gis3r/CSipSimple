@@ -75,9 +75,8 @@ endif
 
 
 PJ_ANDROID_SRC_DIR := ../../android_sources/pjmedia/src/
-ifeq ($(MY_ANDROID_DEV),1)
+
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-audiodev/android_jni_dev.cpp
-endif
 
 ifeq ($(MY_USE_VIDEO),1)
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/opengl_video_dev.c \

@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.pjsip.pjsua.csipsimple_config;
-import org.pjsip.pjsua.dynamic_codec;
+import org.pjsip.pjsua.dynamic_factory;
 import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
@@ -170,6 +170,7 @@ public class PjSipService {
 			Log.d(THIS_FILE, "Starting sip stack");
 			udpTranportId = null;
 			tcpTranportId = null;
+			tlsTransportId = null;
 
 			// Pj timer
 			TimerWrapper.create(service);
@@ -227,7 +228,7 @@ public class PjSipService {
 				}
 				
 				HashMap<String, DynCodecInfos> availableCodecs = ExtraCodecs.getDynCodecs(service);
-				dynamic_codec[] cssCodecs = cssCfg.getExtra_codecs();
+				dynamic_factory[] cssCodecs = cssCfg.getExtra_codecs();
 				int i = 0;
 				for(Entry<String, DynCodecInfos> availableCodec : availableCodecs.entrySet()) {
 					DynCodecInfos dyn = availableCodec.getValue();
@@ -237,6 +238,14 @@ public class PjSipService {
 					}
 				}
 				cssCfg.setExtra_codecs_cnt(i);
+				
+				/*
+				dynamic_factory audImp = cssCfg.getAudio_implementation();
+				audImp.setInit_factory_name(pjsua.pj_str_copy("pjmedia_opensl_factory"));
+				File openslLib = NativeLibManager.getBundledStackLibFile(service, "libpj_opensl_dev.so");
+				audImp.setShared_lib_path(pjsua.pj_str_copy(openslLib.getAbsolutePath()));
+				cssCfg.setAudio_implementation(audImp);
+				*/
 				
 				// MAIN CONFIG
 				pjsua.config_default(cfg);
@@ -376,7 +385,7 @@ public class PjSipService {
 				}
 
 				// TLS
-				if (prefsWrapper.isTLSEnabled() && !prefsWrapper.useIPv6() && (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE)) {
+				if (prefsWrapper.isTLSEnabled() && !prefsWrapper.useIPv6()) {
 					tlsTransportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, prefsWrapper.getTLSTransportPort());
 
 					if (tlsTransportId == null) {
@@ -732,8 +741,9 @@ public class PjSipService {
 			}
 			// Set it in prefs if not already set correctly
 			prefsWrapper.setCodecList(codecs);
-			prefsWrapper.setLibCapability(PreferencesProviderWrapper.LIB_CAP_TLS,  (pjsua.can_use_tls() == pjsuaConstants.PJ_TRUE) );
-			prefsWrapper.setLibCapability(PreferencesProviderWrapper.LIB_CAP_SRTP, (pjsua.can_use_srtp() == pjsuaConstants.PJ_TRUE) );
+			// We are now always capable of tls and srtp !
+			prefsWrapper.setLibCapability(PreferencesProviderWrapper.LIB_CAP_TLS,  true);
+			prefsWrapper.setLibCapability(PreferencesProviderWrapper.LIB_CAP_SRTP, true);
 		}
 
 	}

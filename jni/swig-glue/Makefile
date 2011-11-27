@@ -23,6 +23,7 @@ all : ${C_TARGET_DIR}/pjsua_wrap.cpp ${JAVA_PACKAGE_DIR}
 
 ${C_TARGET_DIR}/pjsua_wrap.cpp ${JAVA_PACKAGE_DIR}: pjsua.i
 	mkdir -p ${C_TARGET_DIR}
+	rm -rf ${JAVA_PACKAGE_DIR}
 	mkdir -p ${JAVA_PACKAGE_DIR}
 	${SWIG} ${CFLAGS} -Wall \
 		-o ${C_TARGET_DIR}/pjsua_wrap.cpp \

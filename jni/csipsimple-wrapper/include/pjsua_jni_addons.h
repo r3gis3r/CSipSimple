@@ -26,7 +26,7 @@ PJ_BEGIN_DECL
 
 // css config
 
-typedef struct dynamic_codec {
+typedef struct dynamic_factory {
 	/**
 	 * Path to the shared library
 	 */
@@ -36,7 +36,7 @@ typedef struct dynamic_codec {
 	 * Name of the factory function to launch to init the codec
 	 */
 	pj_str_t init_factory_name;
-} dynamic_codec;
+} dynamic_factory;
 
 typedef struct csipsimple_config {
     /**
@@ -77,12 +77,17 @@ typedef struct csipsimple_config {
 	/**
 	 * Codecs to be dynamically loaded
 	 */
-	dynamic_codec extra_codecs[64];
+	dynamic_factory extra_codecs[64];
 
 	/**
 	 * Target folder for content storage
 	 */
 	pj_str_t storage_folder;
+
+	/**
+	 * Audio codec implementation if empty string fallback to default
+	 */
+	dynamic_factory audio_implementation;
 
 } csipsimple_config;
 
@@ -91,8 +96,6 @@ PJ_DECL(int) codecs_get_nbr();
 PJ_DECL(pj_str_t) codecs_get_id(int codec_id) ;
 PJ_DECL(pj_status_t) send_dtmf_info(int current_call, pj_str_t digits);
 PJ_DECL(pj_str_t) call_dump(pjsua_call_id call_id, pj_bool_t with_media, const char *indent);
-PJ_DECL(pj_bool_t) can_use_tls();
-PJ_DECL(pj_bool_t) can_use_srtp();
 PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id);
 PJ_DECL(pj_str_t) get_error_message(int status);
 
@@ -116,7 +119,7 @@ struct css_data {
 
     // About codecs
 	unsigned 		extra_codecs_cnt;
-	dynamic_codec 	extra_codecs[64];
+	dynamic_factory 	extra_codecs[64];
 
 	// About ringback
     int			    ringback_slot;
@@ -126,6 +129,7 @@ struct css_data {
 
     // About zrtp cfg
     char zid_file[512];
+
 };
 
 extern struct css_data css_var;
