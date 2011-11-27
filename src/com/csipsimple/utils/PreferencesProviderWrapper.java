@@ -119,7 +119,9 @@ public class PreferencesProviderWrapper {
 		try {
 			return Integer.parseInt(getPreferenceStringValue(key));
 		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Invalid "+key+" format : expect a int");
+			Log.e(THIS_FILE, "Invalid " + key + " format : expect a int");
+		}catch(NullPointerException e) {
+			Log.e(THIS_FILE, "Invalid " + key + " format : expect a int");
 		}
 		return Integer.parseInt(PreferencesWrapper.STRING_PREFS.get(key));
 	}

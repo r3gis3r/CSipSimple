@@ -239,13 +239,15 @@ public class PjSipService {
 				}
 				cssCfg.setExtra_codecs_cnt(i);
 				
-				/*
-				dynamic_factory audImp = cssCfg.getAudio_implementation();
-				audImp.setInit_factory_name(pjsua.pj_str_copy("pjmedia_opensl_factory"));
-				File openslLib = NativeLibManager.getBundledStackLibFile(service, "libpj_opensl_dev.so");
-				audImp.setShared_lib_path(pjsua.pj_str_copy(openslLib.getAbsolutePath()));
-				cssCfg.setAudio_implementation(audImp);
-				*/
+				int implementation = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.AUDIO_IMPLEMENTATION);
+				if(implementation == 1) {
+					dynamic_factory audImp = cssCfg.getAudio_implementation();
+					audImp.setInit_factory_name(pjsua.pj_str_copy("pjmedia_opensl_factory"));
+					File openslLib = NativeLibManager.getBundledStackLibFile(service, "libpj_opensl_dev.so");
+					audImp.setShared_lib_path(pjsua.pj_str_copy(openslLib.getAbsolutePath()));
+					cssCfg.setAudio_implementation(audImp);
+					Log.d(THIS_FILE, "Use OpenSL-ES implementation");
+				}
 				
 				// MAIN CONFIG
 				pjsua.config_default(cfg);

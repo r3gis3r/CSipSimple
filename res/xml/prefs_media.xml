@@ -153,5 +153,8 @@
 				android:summary="@string/sip_audio_mode_desc"
 				android:defaultValue="0"
 				android:entryValues="@array/sip_audio_mode_values" android:entries="@array/sip_audio_mode_choices"/>
+			<ListPreference android:title="@string/audio_implementation" android:key="audio_implementation"
+			    android:summary="@string/audio_implementation_desc" 
+			    android:defaultValue="0" />
 		</PreferenceCategory>
 </PreferenceScreen>

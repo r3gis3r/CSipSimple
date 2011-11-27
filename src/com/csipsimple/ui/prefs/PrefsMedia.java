@@ -18,11 +18,13 @@
 package com.csipsimple.ui.prefs;
 
 import android.content.Intent;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
@@ -77,6 +79,21 @@ public class PrefsMedia extends GenericPrefs {
 		Preference codecsPrefs = pfs.findPreference("codecs_list");
 		codecsPrefs.setIntent(new Intent(this, Codecs.class));
 		
+
+		ListPreference lp = (ListPreference) findPreference(SipConfigManager.AUDIO_IMPLEMENTATION);
+		boolean isGinger = Compatibility.isCompatible(9);
+		CharSequence[] entries = new CharSequence[isGinger ? 2 : 1];
+		CharSequence[] values = new CharSequence[isGinger ? 2 : 1];
+		
+		values[0] = "0";
+		entries[0] = "Java";
+		if(isGinger) {
+			values[1] = "1";
+			entries[1] = "OpenSL-ES";
+		}
+		
+		lp.setEntries(entries);
+		lp.setEntryValues(values);
 	}
 
 	@Override

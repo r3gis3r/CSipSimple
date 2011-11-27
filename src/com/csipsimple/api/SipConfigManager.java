@@ -54,6 +54,7 @@ public class SipConfigManager {
 	public static final String DO_FOCUS_AUDIO = "do_focus_audio";
 	public static final String SND_STREAM_LEVEL = "snd_stream_level";
 	public static final String HEADSET_ACTION = "headset_action";
+	public static final String AUDIO_IMPLEMENTATION = "audio_implementation";
 	
 	
 	//UI
