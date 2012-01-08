@@ -17,10 +17,12 @@
  */
 package com.csipsimple.ui.prefs;
 
+import android.view.MenuItem;
+
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
-import com.csipsimple.utils.PreferencesWrapper;
 
 
 public class PrefsCalls extends GenericPrefs {
@@ -30,14 +32,37 @@ public class PrefsCalls extends GenericPrefs {
 	protected int getXmlPreferences() {
 		return R.xml.prefs_calls;
 	}
-
+	
+	/*
+	@Override
+	protected void beforeBuildPrefs() {
+		super.beforeBuildPrefs();
+		
+		ActionBar ab = getActionBar();
+		if(ab != null) {
+			ab.setDisplayHomeAsUpEnabled(true);
+		}
+	}
+	*/
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int selId = item.getItemId();
+		if(selId == Compatibility.getHomeMenuId()) {
+			finish();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	protected void afterBuildPrefs() {
 		super.afterBuildPrefs();
+		/*
 		PreferencesWrapper pfw = new PreferencesWrapper(this);
 		if(!pfw.isAdvancedUser()) {
 			
 		}
+		*/
 		
 		if(CustomDistribution.forceNoMultipleCalls()) {
 			hidePreference(null, SipConfigManager.SUPPORT_MULTIPLE_CALLS);
@@ -47,7 +72,7 @@ public class PrefsCalls extends GenericPrefs {
 	
 	@Override
 	protected void updateDescriptions() {
-		
+		// TODO : update description here
 	}
 
 

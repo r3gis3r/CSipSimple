@@ -18,8 +18,8 @@
 package com.csipsimple.ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.ListActivity;
 import android.app.PendingIntent.CanceledException;
@@ -58,6 +58,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
 import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.service.SipService;
@@ -114,7 +115,7 @@ public class OutgoingCallChooser extends ListActivity {
 		}
 	};
 	
-	private Integer accountToCallTo = null;
+	private Long accountToCallTo = null;
 	private PreferencesProviderWrapper prefsWrapper;
 
 	@Override
@@ -149,7 +150,7 @@ public class OutgoingCallChooser extends ListActivity {
 		}
 		
 		// Then we get if we are trying to force an account to use for this call
-		int shouldCallId = getIntent().getIntExtra(SipProfile.FIELD_ACC_ID, SipProfile.INVALID_ID);
+		long shouldCallId = getIntent().getLongExtra(SipProfile.FIELD_ACC_ID, SipProfile.INVALID_ID);
 		if(shouldCallId != SipProfile.INVALID_ID) {
 			accountToCallTo = shouldCallId;
 		}
@@ -257,7 +258,7 @@ public class OutgoingCallChooser extends ListActivity {
 	 */
 	private void addExternalRows() {
 
-		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
+		Map<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
 		externalTotalNbrs = callHandlers.size();
 		loadedExternals = 0;
 		externalProfiles = new ArrayList<SipProfile>();
@@ -333,9 +334,7 @@ public class OutgoingCallChooser extends ListActivity {
 		List<SipProfile> accounts = new ArrayList<SipProfile>();
 		// Get SIP accounts
 		if(prefsWrapper.isValidConnectionForOutgoing()) {
-			database.open();
-			accounts = database.getListAccounts(true);
-			database.close();
+			accounts = SipProfile.getAllProfiles(this, true);
 		}
 		// Add CallHandlers accounts
 		for(SipProfile externalProfile : externalProfiles) {
@@ -384,9 +383,8 @@ public class OutgoingCallChooser extends ListActivity {
     		//We need to do nothing else
     		return;
     	}
-    	database.open();
-		accountsList = database.getListAccounts(true/*, service*/);
-		database.close();
+    	
+		accountsList = SipProfile.getAllProfiles(this, true);
 		
 		//Exclude filtered accounts
 		List<SipProfile> excludedAccounts = new ArrayList<SipProfile>();
@@ -426,7 +424,7 @@ public class OutgoingCallChooser extends ListActivity {
 		if (service != null) {
 			SipProfileState accountInfo;
 			try {
-				accountInfo = service.getSipProfileState(account.id);
+				accountInfo = service.getSipProfileState((int) account.id);
 			} catch (RemoteException e) {
 				accountInfo = null;
 			}
@@ -435,7 +433,7 @@ public class OutgoingCallChooser extends ListActivity {
 					String phoneNumber = number;
 					String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
 
-					service.makeCall("sip:" + toCall, account.id);
+					service.makeCall("sip:" + toCall, (int) account.id);
 					finish();
 				} catch (RemoteException e) {
 					Log.e(THIS_FILE, "Unable to make the call", e);
@@ -467,15 +465,14 @@ public class OutgoingCallChooser extends ListActivity {
 		
 		// Check for sip services accounts (>0)
 		if (service != null && accountToCallTo != null && accountToCallTo > 0) {
-	    	database.open();
-	    	SipProfile account = database.getAccount(accountToCallTo);
-			database.close();
+			
+	    	SipProfile account = SipProfile.getProfileFromDbId(this, accountToCallTo, DBProvider.ACCOUNT_FULL_PROJECTION);
 			if(account == null) {
 				return false;
 			}
 			SipProfileState accountInfo;
 			try {
-				accountInfo = service.getSipProfileState(account.id);
+				accountInfo = service.getSipProfileState( (int) account.id);
 			} catch (RemoteException e) {
 				accountInfo = null;
 			}
@@ -486,7 +483,7 @@ public class OutgoingCallChooser extends ListActivity {
 						String phoneNumber = number;
 						String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
 						
-						service.makeCall("sip:" + toCall, account.id);
+						service.makeCall("sip:" + toCall, (int) account.id);
 						accountToCallTo = null;
 						finish();
 						return true;

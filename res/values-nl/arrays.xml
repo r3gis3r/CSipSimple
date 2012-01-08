@@ -1,41 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="default_smiley_texts">
-    <item>:-)</item>
-    <item>:-(</item>
-    <item>:-[</item>
-    <item>O:-)</item>
-    <item>:-\\</item>
-    <item>:\'(</item>
-    <item>:-X</item>
-    <item>:-D</item>
-    <item>o_O</item>
-    <item>;-)</item>
-    <item>:-P</item>
-    <item>=-O</item>
-    <item>:-*</item>
-    <item>:O</item>
-    <item>B-)</item>
-    <item>:-$</item>
-    <item>:-!</item>
-  </string-array>
-  <string-array name="default_smiley_names">
-    <item>Blij</item>
-    <item>Verdrietig</item>
-    <item>Beschaamd</item>
-    <item>Engel</item>
-    <item>Aan het twijfelen</item>
-    <item>Aan het huilen</item>
-    <item>Lippen op elkaar</item>
-    <item>Aan het lachen</item>
-    <item>Verward</item>
-    <item>Aan het knipogen</item>
-    <item>Tong uitsteken</item>
-    <item>Verbaasd</item>
-    <item>Aan het kussen</item>
-    <item>Aan het schreeuwen</item>
-    <item>Gaaf</item>
-    <item>Geldzoeker</item>
-    <item>Mond vol tanden</item>
-  </string-array>
+
+    <string-array name="default_smiley_names">
+        <item>Blij</item>
+        <item>Verdrietig</item>
+        <item>Beschaamd</item>
+        <item>Engel</item>
+        <item>Aan het twijfelen</item>
+        <item>Aan het huilen</item>
+        <item>Lippen op elkaar</item>
+        <item>Aan het lachen</item>
+        <item>Verward</item>
+        <item>Aan het knipogen</item>
+        <item>Tong uitsteken</item>
+        <item>Verbaasd</item>
+        <item>Aan het kussen</item>
+        <item>Aan het schreeuwen</item>
+        <item>Gaaf</item>
+        <item>Geldzoeker</item>
+        <item>Mond vol tanden</item>
+    </string-array>
+
 </resources>

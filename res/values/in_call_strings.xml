@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
+<!--
 		Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 	
 		This file is part of CSipSimple. CSipSimple is free software: you can
@@ -13,26 +13,30 @@
 		General Public License for more details. You should have received a
 		copy of the GNU General Public License along with CSipSimple. If not,
 		see <http://www.gnu.org/licenses/>.
-	-->
+-->
 <resources>
-	<string name="take_call">Answer</string>
-	<string name="decline_call">Ignore</string>
-	<string name="clear_call">End</string>
-	<string name="touch_lock">Double tap to unlock</string>
-	<string name="dialpad">Dialpad</string>
-	<string name="bluetooth">Bluetooth</string>
-	<string name="speaker">Speaker</string>
-	<string name="mute">Mute</string>
-	<string name="add_call">Add call</string>
-	<string name="call_state_calling">Calling...</string>
-	<string name="call_state_confirmed">Talking</string>
-	<string name="call_state_connecting">Connecting...</string>
-	<string name="call_state_disconnected">Hung up</string>
-	<string name="call_state_early">Ringing...</string>
-	<string name="call_state_incoming">Incoming call...</string>
-	<string name="call_state_null">ERROR</string>
-	<string name="unlock">Unlock</string>
-	<string name="record">Record</string>
-	<string name="stop_recording">Stop recording</string>
-	<string name="xfer">Transfer</string>
+
+    <string name="take_call">Answer</string>
+    <string name="decline_call">Ignore</string>
+    <string name="clear_call">End</string>
+    <string name="touch_lock">Double tap to unlock</string>
+    <string name="dialpad">DTMF</string>
+    <string name="bluetooth">BlueTooth</string>
+    <string name="speaker">Speaker</string>
+    <string name="mute">Mute</string>
+    <string name="add_call">Add call</string>
+    <string name="call_state_calling">Calling…</string>
+    <string name="call_state_confirmed">Talking</string>
+    <string name="call_state_connecting">Connecting…</string>
+    <string name="call_state_disconnected">Hung up</string>
+    <string name="call_state_early">Ringing…</string>
+    <string name="call_state_incoming">Incoming call…</string>
+    <string name="call_state_null">ERROR</string>
+    <string name="unlock">Unlock</string>
+    <string name="record">Record</string>
+    <string name="stop_recording">Stop recording</string>
+    <string name="xfer">Transfer</string>
+    <string name="hold_call">Hold</string>
+    <string name="transfer_call">Transfer</string>
+
 </resources>

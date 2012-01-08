@@ -34,7 +34,7 @@
 #include <pj/string.h>
 #include <pj/os.h>
 #include <pj/math.h>
-
+#include <pjmedia-codec/amr_sdp_match.h>
 
 #if defined(PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC) && (PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC!=0)
 
@@ -436,6 +436,7 @@ PJ_DEF(pj_status_t) pjmedia_codec_opencore_amrnb_init( pjmedia_endpt *endpt )
 {
     pjmedia_codec_mgr *codec_mgr;
     pj_status_t status;
+    pj_str_t codec_name;
 
     if (amr_codec_factory.pool != NULL)
 	return PJ_SUCCESS;
@@ -456,7 +457,13 @@ PJ_DEF(pj_status_t) pjmedia_codec_opencore_amrnb_init( pjmedia_endpt *endpt )
 	status = PJ_EINVALIDOP;
 	goto on_error;
     }
-
+    /* Register format match callback. */
+    pj_cstr(&codec_name, "AMR");
+    status = pjmedia_sdp_neg_register_fmt_match_cb( &codec_name,
+    		&pjmedia_codec_amr_match_sdp);
+    if (status != PJ_SUCCESS){
+    	goto on_error;
+    }
     /* Register codec factory to endpoint. */
     status = pjmedia_codec_mgr_register_factory(codec_mgr,
 						&amr_codec_factory.base);

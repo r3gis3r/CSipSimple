@@ -16,8 +16,25 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.csipsimple.utils;
+
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.text.format.DateFormat;
+
+import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.db.DBAdapter;
+import com.csipsimple.db.DBProvider;
+import com.csipsimple.models.Filter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,268 +44,264 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+public final class SipProfileJson {
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
+    private final static String THIS_FILE = "SipProfileJson";
+    private final static String FILTER_KEY = "filters";
 
-import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.Filter;
+    private SipProfileJson() {
+    }
 
-public class SipProfileJson {
-	
-	private static final String THIS_FILE = "SipProfileJson";
-	private static String FILTER_KEY = "filters";
-	
-	private static JSONObject serializeBaseSipProfile(SipProfile profile) {
-		
-		ContentValues cv = profile.getDbContentValues();
-		Columns cols = new Columns(SipProfile.full_projection, SipProfile.full_projection_types);
-		return cols.contentValueToJSON(cv);
-	}
-	
-	
-	private static JSONObject serializeBaseFilter(Filter filter) {
-		
-		ContentValues cv = filter.getDbContentValues();
-		Columns cols = new Columns(Filter.full_projection, Filter.full_projection_types);
-		return cols.contentValueToJSON(cv);
-	}
-	
-	
-	
-	public static JSONObject serializeSipProfile(SipProfile profile, DBAdapter db) {
-		JSONObject jsonProfile = serializeBaseSipProfile(profile);
-		JSONArray jsonFilters = new JSONArray();
-		
-		Cursor c = db.getFiltersForAccount(profile.id);
-		int numRows = c.getCount();
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
-			
-			try {
-				jsonFilters.put(i, serializeBaseFilter(f));
-			} catch (JSONException e) {
-				Log.e(THIS_FILE, "Impossible to add fitler", e);
-				e.printStackTrace();
-			}
-			c.moveToNext();
-		}
-		c.close();
-		
-		try {
-			jsonProfile.put(FILTER_KEY, jsonFilters);
-		} catch (JSONException e) {
-			Log.e(THIS_FILE, "Impossible to add fitlers", e);
-		}
-		
-		return jsonProfile;
-	}
-	
-	private static final JSONArray serializeSipProfiles(Context ctxt) {
-		JSONArray jsonSipProfiles = new JSONArray();
-		DBAdapter db = new DBAdapter(ctxt);
-		db.open();
-		List<SipProfile> accounts = db.getListAccounts();
-		int i = 0;
-		for(i = 0; i<accounts.size(); i++) {
-			JSONObject p = serializeSipProfile(accounts.get(i), db);
-			try {
-				jsonSipProfiles.put(jsonSipProfiles.length(), p);
-			} catch (JSONException e) {
-				Log.e(THIS_FILE, "Impossible to add profile", e);
-			}
-		}
-		
-		
-		
-		// Add negative fake accounts
+    private static JSONObject serializeBaseSipProfile(SipProfile profile) {
 
-		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(ctxt);
-		for(String packageName : callHandlers.keySet()) {
-			final Integer externalAccountId = CallHandler.getAccountIdForCallHandler(ctxt, packageName);
-			SipProfile gsmProfile = new SipProfile();
-			gsmProfile.id = externalAccountId;
-			JSONObject p = serializeSipProfile(gsmProfile, db);
-			try {
-				jsonSipProfiles.put( jsonSipProfiles.length(), p);
-			} catch (JSONException e) {
-				Log.e(THIS_FILE, "Impossible to add profile", e);
-			}
-		}
-		
+        ContentValues cv = profile.getDbContentValues();
+        Columns cols = new Columns(DBProvider.ACCOUNT_FULL_PROJECTION,
+                DBProvider.ACCOUNT_FULL_PROJECTION_TYPES);
+        return cols.contentValueToJSON(cv);
+    }
 
-		db.close();
-		return jsonSipProfiles;
-	}
-	
-	
-	private static final JSONObject serializeSipSettings(Context ctxt) {
-		PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
-		return prefs.serializeSipSettings();
-	}
-	
-	private static String KEY_ACCOUNTS = "accounts";
-	private static String KEY_SETTINGS = "settings";
-	
-	/**
-	 * Save current sip configuration
-	 * @param ctxt
-	 * @return
-	 */
-	public static boolean saveSipConfiguration(Context ctxt) {
-		File dir = PreferencesWrapper.getConfigFolder(ctxt);
-		if( dir != null) {
-			Date d = new Date();
-			File file = new File(dir.getAbsoluteFile() + File.separator + "backup_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".json");
-			Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
-			
-			
-			JSONObject configChain = new JSONObject();
-			try {
-				configChain.put(KEY_ACCOUNTS, serializeSipProfiles(ctxt) );
-			} catch (JSONException e) {
-				Log.e(THIS_FILE, "Impossible to add profiles", e);
-			}
-			try {
-				configChain.put(KEY_SETTINGS, serializeSipSettings(ctxt) );
-			} catch (JSONException e) {
-				Log.e(THIS_FILE, "Impossible to add profiles", e);
-			}
-			
-			
-			try {
-				// Create file
-				FileWriter fstream = new FileWriter(file.getAbsoluteFile());
-				BufferedWriter out = new BufferedWriter(fstream);
-				out.write(configChain.toString(2));
-				// Close the output stream
-				out.close();
-				return true;
-			} catch (Exception e) {
-				// Catch exception if any
-				Log.e(THIS_FILE, "Impossible to save config to disk", e);
-				return false;
-			}
-		}
-		return false;
-	}
-	
-	
-	// --- RESTORE PART --- //
-	private static boolean restoreSipProfile(Context ctxt, JSONObject jsonObj, DBAdapter db) {
-		//Restore accounts
-		Columns cols;
-		ContentValues cv;
-		
-		
-		cols = new Columns(SipProfile.full_projection, SipProfile.full_projection_types);
-		cv = cols.jsonToContentValues(jsonObj);
-		
-		SipProfile profile = new SipProfile();
-		profile.createFromContentValue(cv);
-		if(profile.id >= 0) {
-			db.insertAccount(profile);
-		}
-		
-		//Restore filters
-		cols = new Columns(Filter.full_projection, Filter.full_projection_types);
-		try {
-			JSONArray filtersObj = jsonObj.getJSONArray(FILTER_KEY);
-			Log.d(THIS_FILE, "We have filters for " + profile.id + " > "+filtersObj.length());
-			for(int i = 0; i < filtersObj.length(); i++) {
-				JSONObject filterObj = filtersObj.getJSONObject(i);
-				//Log.d(THIS_FILE, "restoring "+filterObj.toString(4));
-				cv = cols.jsonToContentValues(filterObj);
-				cv.put(Filter.FIELD_ACCOUNT, profile.id);
-				Filter filter = new Filter();
-				filter.createFromContentValue(cv);
-				db.insertFilter(filter);
-			}
-		} catch (JSONException e) {
-			Log.e(THIS_FILE, "Error while restoring filters", e);
-		}
-		
-		return false;
-	}
-	
-	private static void restoreSipSettings(Context ctxt, JSONObject settingsObj) {
-		PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
-		prefs.restoreSipSettings(settingsObj);
-	}
-	
-	
-	/**
-	 * Restore a sip configuration
-	 * @param ctxt
-	 * @param fileToRestore
-	 * @return
-	 */
-	public static boolean restoreSipConfiguration(Context ctxt, File fileToRestore) {
-		if(fileToRestore != null && fileToRestore.isFile()) {
-			
-			String content = "";
-			
-			try {
-				BufferedReader buf;
-				String line;
-				buf = new BufferedReader(new FileReader(fileToRestore));
-				while( (line = buf.readLine()) != null ) {
-					content += line;
-				}
-			} catch (FileNotFoundException e) {
-				Log.e(THIS_FILE, "Error while restoring", e);
-			} catch (IOException e) {
-	            Log.e(THIS_FILE, "Error while restoring", e);
-	        }
+    private static JSONObject serializeBaseFilter(Filter filter) {
 
-			if(!TextUtils.isEmpty(content)) {
-				DBAdapter db = new DBAdapter(ctxt);
-				db.open();
-				try {
-					JSONObject mainJSONObject = new JSONObject(content);
-					
-					// Manage accounts
-					JSONArray accounts = mainJSONObject.getJSONArray(KEY_ACCOUNTS);
-					if( accounts.length() > 0 ) {
-						db.removeAllAccounts();
-					}
-					for(int i=0; i<accounts.length(); i++) {
-						try {
-							JSONObject account = accounts.getJSONObject(i);
-							restoreSipProfile(ctxt, account, db);
-						}catch(JSONException e) {
-							Log.e(THIS_FILE,"Unable to parse item "+i , e);
-						}
-					}
+        ContentValues cv = filter.getDbContentValues();
+        Columns cols = new Columns(Filter.FULL_PROJ, Filter.FULL_PROJ_TYPES);
+        return cols.contentValueToJSON(cv);
+    }
 
-					db.close();
-					
-					// Manage settings
-					JSONObject settings = mainJSONObject.getJSONObject(KEY_SETTINGS);
-					if(settings != null) {
-						restoreSipSettings(ctxt, settings);
-					}
-					
-					return true;
-				} catch (JSONException e) {
-					Log.e(THIS_FILE, "Error while parsing saved file", e);
-				}
-				db.close();
-			}
-		}
-		
-		return false;
-	}
+    public static JSONObject serializeSipProfile(SipProfile profile, DBAdapter db) {
+        JSONObject jsonProfile = serializeBaseSipProfile(profile);
+        JSONArray jsonFilters = new JSONArray();
+
+        Cursor c = db.getFiltersForAccount(profile.id);
+        int numRows = c.getCount();
+        c.moveToFirst();
+        for (int i = 0; i < numRows; ++i) {
+            Filter f = new Filter();
+            f.createFromDb(c);
+
+            try {
+                jsonFilters.put(i, serializeBaseFilter(f));
+            } catch (JSONException e) {
+                Log.e(THIS_FILE, "Impossible to add fitler", e);
+            }
+            c.moveToNext();
+        }
+        c.close();
+
+        try {
+            jsonProfile.put(FILTER_KEY, jsonFilters);
+        } catch (JSONException e) {
+            Log.e(THIS_FILE, "Impossible to add fitlers", e);
+        }
+
+        return jsonProfile;
+    }
+
+    private static JSONArray serializeSipProfiles(Context ctxt) {
+        DBAdapter db = new DBAdapter(ctxt);
+        db.open();
+
+        JSONArray jsonSipProfiles = new JSONArray();
+        Cursor c = ctxt.getContentResolver().query(SipProfile.ACCOUNT_URI,
+                DBProvider.ACCOUNT_FULL_PROJECTION, null, null, null);
+        if (c != null) {
+            try {
+                if (c.moveToFirst()) {
+                    do {
+                        SipProfile account = new SipProfile(c);
+                        JSONObject p = serializeSipProfile(account, db);
+                        try {
+                            jsonSipProfiles.put(jsonSipProfiles.length(), p);
+                        } catch (JSONException e) {
+                            Log.e(THIS_FILE, "Impossible to add profile", e);
+                        }
+                    } while (c.moveToNext());
+                }
+            } catch (Exception e) {
+                Log.e(THIS_FILE, "Error on looping over sip profiles", e);
+            } finally {
+                c.close();
+            }
+        }
+
+        // Add negative fake accounts
+
+        Map<String, String> callHandlers = CallHandler.getAvailableCallHandlers(ctxt);
+        for (String packageName : callHandlers.keySet()) {
+            final Long externalAccountId = CallHandler
+                    .getAccountIdForCallHandler(ctxt, packageName);
+            SipProfile gsmProfile = new SipProfile();
+            gsmProfile.id = externalAccountId;
+            JSONObject p = serializeSipProfile(gsmProfile, db);
+            try {
+                jsonSipProfiles.put(jsonSipProfiles.length(), p);
+            } catch (JSONException e) {
+                Log.e(THIS_FILE, "Impossible to add profile", e);
+            }
+        }
+
+        db.close();
+        return jsonSipProfiles;
+    }
+
+    private static JSONObject serializeSipSettings(Context ctxt) {
+        PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
+        return prefs.serializeSipSettings();
+    }
+
+    private static final String KEY_ACCOUNTS = "accounts";
+    private static final String KEY_SETTINGS = "settings";
+
+    /**
+     * Save current sip configuration
+     * 
+     * @param ctxt
+     * @return
+     */
+    public static boolean saveSipConfiguration(Context ctxt) {
+        File dir = PreferencesWrapper.getConfigFolder(ctxt);
+        if (dir != null) {
+            Date d = new Date();
+            File file = new File(dir.getAbsoluteFile() + File.separator + "backup_"
+                    + DateFormat.format("MM-dd-yy_kkmmss", d) + ".json");
+            Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
+
+            JSONObject configChain = new JSONObject();
+            try {
+                configChain.put(KEY_ACCOUNTS, serializeSipProfiles(ctxt));
+            } catch (JSONException e) {
+                Log.e(THIS_FILE, "Impossible to add profiles", e);
+            }
+            try {
+                configChain.put(KEY_SETTINGS, serializeSipSettings(ctxt));
+            } catch (JSONException e) {
+                Log.e(THIS_FILE, "Impossible to add profiles", e);
+            }
+
+            try {
+                // Create file
+                FileWriter fstream = new FileWriter(file.getAbsoluteFile());
+                BufferedWriter out = new BufferedWriter(fstream);
+                out.write(configChain.toString(2));
+                // Close the output stream
+                out.close();
+                return true;
+            } catch (Exception e) {
+                // Catch exception if any
+                Log.e(THIS_FILE, "Impossible to save config to disk", e);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    // --- RESTORE PART --- //
+    private static boolean restoreSipProfile(JSONObject jsonObj, ContentResolver cr) {
+        // Restore accounts
+        Columns cols;
+        ContentValues cv;
+
+        cols = new Columns(DBProvider.ACCOUNT_FULL_PROJECTION,
+                DBProvider.ACCOUNT_FULL_PROJECTION_TYPES);
+        cv = cols.jsonToContentValues(jsonObj);
+
+        int profileId = cv.getAsInteger(SipProfile.FIELD_ID);
+        Uri insertedUri = cr.insert(SipProfile.ACCOUNT_URI, cv);
+
+        profileId = (int) ContentUris.parseId(insertedUri);
+
+        // Restore filters
+        cols = new Columns(Filter.FULL_PROJ, Filter.FULL_PROJ_TYPES);
+        try {
+            JSONArray filtersObj = jsonObj.getJSONArray(FILTER_KEY);
+            Log.d(THIS_FILE, "We have filters for " + profileId + " > " + filtersObj.length());
+            for (int i = 0; i < filtersObj.length(); i++) {
+                JSONObject filterObj = filtersObj.getJSONObject(i);
+                // Log.d(THIS_FILE, "restoring "+filterObj.toString(4));
+                cv = cols.jsonToContentValues(filterObj);
+                cv.put(Filter.FIELD_ACCOUNT, profileId);
+                cr.insert(SipManager.FILTER_URI, cv);
+            }
+        } catch (JSONException e) {
+            Log.e(THIS_FILE, "Error while restoring filters", e);
+        }
+
+        return false;
+    }
+
+    private static void restoreSipSettings(Context ctxt, JSONObject settingsObj) {
+        PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
+        prefs.restoreSipSettings(settingsObj);
+    }
+
+    /**
+     * Restore a sip configuration
+     * 
+     * @param ctxt
+     * @param fileToRestore
+     * @return
+     */
+    public static boolean restoreSipConfiguration(Context ctxt, File fileToRestore) {
+        if (fileToRestore == null || !fileToRestore.isFile()) {
+            return false;
+        }
+
+        StringBuffer contentBuf = new StringBuffer();
+
+        try {
+            BufferedReader buf;
+            String line;
+            buf = new BufferedReader(new FileReader(fileToRestore));
+            while ((line = buf.readLine()) != null) {
+                contentBuf.append(line);
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(THIS_FILE, "Error while restoring", e);
+        } catch (IOException e) {
+            Log.e(THIS_FILE, "Error while restoring", e);
+        }
+
+        JSONArray accounts = null;
+        JSONObject settings = null;
+        // Parse json if some string here
+        if (contentBuf.length() > 0) {
+            try {
+                JSONObject mainJSONObject = new JSONObject(contentBuf.toString());
+                // Retrieve accounts
+                accounts = mainJSONObject.getJSONArray(KEY_ACCOUNTS);
+                // Retrieve settings
+                settings = mainJSONObject.getJSONObject(KEY_SETTINGS);
+
+            } catch (JSONException e) {
+                Log.e(THIS_FILE, "Error while parsing saved file", e);
+            }
+        } else {
+            return false;
+        }
+
+        if (accounts != null && accounts.length() > 0) {
+            ContentResolver cr = ctxt.getContentResolver();
+            // Clear old existing accounts
+            cr.delete(SipProfile.ACCOUNT_URI, "1", null);
+            cr.delete(SipManager.FILTER_URI, "1", null);
+
+            // Add each accounts
+            for (int i = 0; i < accounts.length(); i++) {
+                try {
+                    JSONObject account = accounts.getJSONObject(i);
+                    restoreSipProfile(account, cr);
+                } catch (JSONException e) {
+                    Log.e(THIS_FILE, "Unable to parse item " + i, e);
+                }
+            }
+        }
+
+        if (settings != null) {
+            restoreSipSettings(ctxt, settings);
+            return true;
+        }
+
+        return false;
+    }
 }

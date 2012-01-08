@@ -9,12 +9,12 @@
   <string name="speaker">Zvočnik</string>
   <string name="mute">Nemo</string>
   <string name="add_call">Dodaj klic</string>
-  <string name="call_state_calling">Klicanje ...</string>
+  <string name="call_state_calling">Klicanje …</string>
   <string name="call_state_confirmed">Pogovarjanje</string>
-  <string name="call_state_connecting">Povezovanje ...</string>
+  <string name="call_state_connecting">Povezovanje …</string>
   <string name="call_state_disconnected">Prekini</string>
-  <string name="call_state_early">Zvonjenje ...</string>
-  <string name="call_state_incoming">Dohodni klic ...</string>
+  <string name="call_state_early">Zvonjenje …</string>
+  <string name="call_state_incoming">Dohodni klic …</string>
   <string name="call_state_null">NAPAKA</string>
   <string name="unlock">Odkleni</string>
   <string name="record">Snemaj</string>

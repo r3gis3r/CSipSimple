@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-  <include layout="@layout/white_title"></include>
-	<com.csipsimple.widgets.EditSipUri
-		android:id="@+id/sip_uri" 
-		android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1"
-		android:gravity="center_horizontal" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-	<LinearLayout
-		android:orientation="horizontal" style="@android:style/ButtonBar"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:layout_weight="0">
-		<Button android:layout_height="wrap_content" android:text="@string/ok"
-			android:layout_weight="0.5"
-			android:layout_width="fill_parent" android:id="@+id/ok"></Button>
-		<Button android:layout_height="wrap_content" android:text="@string/cancel"
-			android:layout_weight="0.5"
-			android:layout_width="fill_parent" android:id="@+id/cancel"></Button>
-	</LinearLayout>
-	
+    <com.csipsimple.widgets.EditSipUri
+        android:id="@+id/sip_uri"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center_horizontal" />
+
+    <LinearLayout
+        style="@android:style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/ok"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/ok" >
+        </Button>
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/cancel" >
+        </Button>
+    </LinearLayout>
+
 </LinearLayout>

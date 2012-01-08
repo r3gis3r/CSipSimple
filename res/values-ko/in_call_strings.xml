@@ -9,7 +9,7 @@
   <string name="speaker">스피커</string>
   <string name="mute">정숙 모드</string>
   <string name="add_call">통화 추가</string>
-  <string name="call_state_calling">통화 중...</string>
+  <string name="call_state_calling">통화 중…</string>
   <string name="call_state_confirmed">대화 중…</string>
   <string name="call_state_connecting">연결 중…</string>
   <string name="call_state_disconnected">통화 종료</string>

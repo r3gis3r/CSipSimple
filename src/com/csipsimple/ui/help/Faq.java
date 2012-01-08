@@ -17,53 +17,73 @@
  */
 package com.csipsimple.ui.help;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+
 import com.csipsimple.R;
 import com.csipsimple.utils.CustomDistribution;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.view.ViewGroup.LayoutParams;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-public class Faq extends Activity {
+public class Faq extends DialogFragment {
 	private final static String FAQ_URL = CustomDistribution.getFaqLink();
-	
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.faq);
-		
 
-		//Set window size
-		LayoutParams params = getWindow().getAttributes();
-		params.width = LayoutParams.FILL_PARENT;
-		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-		
-		//Set title
-		((TextView) findViewById(R.id.my_title)).setText(R.string.faq);
-		((ImageView) findViewById(R.id.my_icon)).setImageResource(android.R.drawable.ic_menu_info_details);
-		
-	    WebView webView = (WebView) findViewById(R.id.webview);
-	    webView.getSettings().setJavaScriptEnabled(true);
-	    webView.setWebViewClient(new FaqWebViewClient());
-	    webView.loadUrl(FAQ_URL);
-	    
-	}
+	public static Faq newInstance() {
+        return new Faq();
+    }
 	
+	
+
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        return new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_menu_info_details)
+                .setTitle(R.string.faq)
+                .setNegativeButton(R.string.cancel,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dismiss();
+                        }
+                    }
+                )
+                .setView(getCustomView(getActivity().getLayoutInflater(), null, savedInstanceState))
+                .create();
+    }
+
+    public View getCustomView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	View v = inflater.inflate(R.layout.faq, container, false);
+	    WebView webView = (WebView) v.findViewById(R.id.webview);
+	    webView.getSettings().setJavaScriptEnabled(true);
+	    webView.setWebViewClient(new FaqWebViewClient(v));
+	    webView.loadUrl(FAQ_URL);
+    	return v;
+    }
+    
+    
 	private class FaqWebViewClient extends WebViewClient {
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			super.onPageFinished(view, url);
-			LinearLayout indicator = (LinearLayout) findViewById(R.id.loading_indicator);
-			indicator.setVisibility(View.GONE);
+		private View parentView;
+		
+		public FaqWebViewClient(View v) {
+			parentView = v;
 		}
+
+		@Override
+		public void onPageFinished(final WebView view, String url) {
+			super.onPageFinished(view, url);
+			LinearLayout indicator = (LinearLayout) parentView.findViewById(R.id.loading_indicator);
+			indicator.setVisibility(View.GONE);
+			// Googlecode collapse side bar
+			//view.loadUrl("javascript:$('wikisidebar').setAttribute('class', 'vt collapse');");
+		}
+		
 	}
 }

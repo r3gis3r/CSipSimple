@@ -30,29 +30,31 @@
 			android:button="@null"></CheckBox>
 		<ImageView android:id="@+id/bar_onoff" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:layout_gravity="center"
+			android:contentDescription="@string/activate_account"
 			android:paddingTop="4dip" android:src="@drawable/ic_indicator_off" />
 	</com.csipsimple.widgets.DontPressWithParentLayout>
 
 	<ImageView android:src="@drawable/divider_vertical_dark"
+	    android:contentDescription="@string/empty_description"
 		android:layout_width="1dip" android:layout_height="fill_parent"
 		android:paddingTop="4dip" android:paddingBottom="4dip"
 		android:scaleType="fitXY" />
 
 	<LinearLayout android:layout_weight="1"
-		android:layout_width="fill_parent" android:orientation="vertical"
+		android:layout_width="0dip" android:orientation="vertical"
 		android:paddingLeft="16dip" android:paddingRight="16dip"
 		android:layout_gravity="center_vertical" android:layout_height="fill_parent" 
 		android:gravity="center_vertical">
 		<TextView android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:id="@+id/AccTextView"
-			android:text="Display name" android:ellipsize="marquee"
+			android:ellipsize="marquee"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textStyle="bold"></TextView>
 
 		<TextView android:layout_width="fill_parent"
 
 			android:ellipsize="marquee" android:id="@+id/AccTextStatusView"
-			android:text="Status" android:textColor="#888888"
+			android:textColor="#888888"
 			android:layout_height="wrap_content"></TextView>
 	</LinearLayout>
 </LinearLayout>

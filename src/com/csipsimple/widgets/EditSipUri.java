@@ -37,12 +37,11 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.contacts.ContactsSearchListAdapter;
+import com.csipsimple.utils.contacts.ContactsAutocompleteAdapter;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.utils.contacts.ContactsWrapper.OnPhoneNumberSelected;
 import com.csipsimple.widgets.AccountChooserButton.OnAccountChangeListener;
@@ -55,7 +54,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 	private TextView domainTextHelper;
 	private ListView completeList;
 	private SimpleCursorAdapter contactsAdapter;
-	private ContactsSearchListAdapter autoCompleteAdapter;
+	private ContactsAutocompleteAdapter autoCompleteAdapter;
 	
 	
 	public EditSipUri(Context context, AttributeSet attrs) {
@@ -68,14 +67,14 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 		domainTextHelper = (TextView) findViewById(R.id.dialtxt_domain_helper);
 		completeList = (ListView) findViewById(R.id.autoCompleteList);
 		
-		autoCompleteAdapter = new ContactsSearchListAdapter(context);
+		autoCompleteAdapter = new ContactsAutocompleteAdapter(context);
 		
 		//Map events
 		accountChooserButtonText.setOnAccountChangeListener(new OnAccountChangeListener() {
 			@Override
 			public void onChooseAccount(SipProfile account) {
 				updateDialTextHelper();
-				int accId = SipProfile.INVALID_ID;
+				long accId = SipProfile.INVALID_ID;
 				if(account != null) {
 					accId = account.id;
 				}
@@ -93,9 +92,9 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 	}
 	
 	public class ToCall {
-		private Integer accountId;
+		private Long accountId;
 		private String callee;
-		public ToCall(Integer acc, String uri) {
+		public ToCall(Long acc, String uri) {
 			accountId = acc;
 			callee = uri;
 		}
@@ -103,7 +102,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 		/**
 		 * @return the pjsipAccountId
 		 */
-		public Integer getAccountId() {
+		public Long getAccountId() {
 			return accountId;
 		}
 		/**
@@ -114,19 +113,13 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 		}
 	};
 	
-	public void updateService(ISipService service) {
-		accountChooserButtonText.updateService(service);
-	}
-	
-	public void updateRegistration() {
-		boolean canChangeIfValid = TextUtils.isEmpty(dialUser.getText().toString());
-		accountChooserButtonText.updateRegistration(canChangeIfValid);
-	}
-	
 
 	private void updateDialTextHelper() {
 
 		String dialUserValue = dialUser.getText().toString();
+
+		accountChooserButtonText.setChangeable(TextUtils.isEmpty(dialUserValue));
+		
 		SipProfile acc = accountChooserButtonText.getSelectedAccount();
 		if(!Pattern.matches(".*@.*", dialUserValue) && acc != null && acc.id > SipProfile.INVALID_ID) {
 			domainTextHelper.setText("@"+acc.getDefaultDomain());
@@ -139,7 +132,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 	public ToCall getValue() {
 		String userName = dialUser.getText().toString();
 		String toCall = ""; 
-		Integer accountToUse = null;
+		Long accountToUse = null;
 		if (TextUtils.isEmpty(userName)) {
 			return null;
 		}
@@ -170,16 +163,11 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 	
 	
 	@Override
-	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-		// Nothing to do here
-
-	}
+	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
 
 	@Override
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		updateDialTextHelper();
-		
-		//contactsAdapter.getFilter().filter(arg0);
 	}
 	
 	@Override
@@ -222,15 +210,4 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 	public void setShowExternals(boolean b) {
 		accountChooserButtonText.setShowExternals(b);
 	}
-
-	/*
-	@Override
-	protected void onDetachedFromWindow() {
-		super.onDetachedFromWindow();
-		contactsAdapter.getCursor().close();
-		contactsAdapter.changeCursor(null);
-		contactsAdapter = null;
-		Log.d(THIS_FILE, "Finalise from window");
-	}
-	*/
 }

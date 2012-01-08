@@ -36,4 +36,8 @@
     <color name="tg_bottom_normal">#a9adb4</color>
     <color name="tg_top_on">#4f8df1</color>
     <color name="tg_bottom_on">#175cce</color>
+    
+        
+    <!-- Color of image view placeholder. -->
+    <color name="image_placeholder">#DDDDDD</color>
 </resources>

@@ -24,12 +24,17 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.utils.Log;
 
 public abstract class GenericPrefs extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	
+	/**
+	 * Get the xml preference resource for this screen
+	 * @return the resource reference
+	 */
 	protected abstract int getXmlPreferences();
 	
 	
@@ -49,17 +54,34 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		updateDescriptions();
 	}
 
+	/**
+	 * Process update of description of each preference field
+	 */
 	protected abstract void updateDescriptions();
-	protected void beforeBuildPrefs() {};
-	protected void afterBuildPrefs() {};
+	/**
+	 * Optional hook for doing stuff before preference xml is loaded
+	 */
+	protected void beforeBuildPrefs() {
+		// By default, nothing to do
+	};
+	/**
+	 * Optional hook for doing stuff just after preference xml is loaded
+	 */
+	protected void afterBuildPrefs() {
+		// By default, nothing to do
+	};
 	
 	//Utilities for update Descriptions
-	
+	/**
+	 * Get field summary if nothing set. By default it will try to add _summary
+	 * to name of the current field
+	 * @param field_name Name of the current field
+	 * @return Translated summary for this field
+	 */
 	protected String getDefaultFieldSummary(String field_name){
-		String val = "";
 		try {
 			String keyid = R.string.class.getField(field_name+"_summary").get(null).toString();
-			val = getString( Integer.parseInt(keyid) );
+			return getString( Integer.parseInt(keyid) );
 		} catch (SecurityException e) {
 			//Nothing to do : desc is null
 		} catch (NoSuchFieldException e) {
@@ -70,32 +92,43 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 			//Nothing to do : desc is null
 		}
 		
-		return val;
+		return "";
 	}
 	
+	/**
+	 * Set summary of a standard string field
+	 * If empty will display the default summary
+	 * Else it displays the preference value 
+	 * @param fieldName the preference key name
+	 */
 	public void setStringFieldSummary(String fieldName){
 		PreferenceScreen pfs = getPreferenceScreen();
 		SharedPreferences sp = pfs.getSharedPreferences();
 		Preference pref = pfs.findPreference(fieldName);
 		
-		String val = sp.getString(fieldName, "");
-		if(val.equals("")){
+		String val = sp.getString(fieldName, null);
+		if(TextUtils.isEmpty(val)){
 			val = getDefaultFieldSummary(fieldName);
 		}
 		if(pref != null) {
 			pref.setSummary(val);
 		}
-		
 	}
 	
+	/**
+	 * Set summary of a password field
+	 * If empty will display default summary
+	 * If password will display a * char for each letter of password
+	 * @param fieldName the preference key name
+	 */
 	public void setPasswordFieldSummary(String fieldName){
 		PreferenceScreen pfs = getPreferenceScreen();
 		SharedPreferences sp = pfs.getSharedPreferences();
 		Preference pref = pfs.findPreference(fieldName);
 		
-		String val = sp.getString(fieldName, "");
+		String val = sp.getString(fieldName, null);
 		
-		if(val.equals("")){
+		if(TextUtils.isEmpty(val)){
 			val = getDefaultFieldSummary(fieldName);
 		}else{
 			val = val.replaceAll(".", "*");
@@ -105,6 +138,11 @@ public abstract class GenericPrefs extends PreferenceActivity implements OnShare
 		}
 	}
 	
+	/**
+	 * Hide a preference from the screen so that user can't see and modify it
+	 * @param parent the parent group preference if any, leave null if preference is a root pref
+	 * @param fieldName the preference key name to hide
+	 */
 	protected void hidePreference(String parent, String fieldName) {
 		PreferenceScreen pfs = getPreferenceScreen();
 		PreferenceGroup parentPref = pfs; 

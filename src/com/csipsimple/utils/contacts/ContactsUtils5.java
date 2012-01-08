@@ -19,11 +19,14 @@ package com.csipsimple.utils.contacts;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.MatrixCursor;
 import android.database.MatrixCursor.RowBuilder;
 import android.graphics.Bitmap;
@@ -32,8 +35,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.RawContacts;
 import android.telephony.PhoneNumberUtils;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AlphabetIndexer;
@@ -43,7 +48,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.Log;
 
 public class ContactsUtils5 extends ContactsWrapper {
 
@@ -65,6 +72,7 @@ public class ContactsUtils5 extends ContactsWrapper {
     private static final String SORT_ORDER = Contacts.TIMES_CONTACTED + " DESC,"
             + Contacts.DISPLAY_NAME + "," + ContactsContract.CommonDataKinds.Phone.TYPE;
 	private static final String GINGER_SIP_TYPE = "vnd.android.cursor.item/sip_address";
+	private static final String THIS_FILE = "ContactsUtils5";
     
 
 	
@@ -85,7 +93,7 @@ public class ContactsUtils5 extends ContactsWrapper {
 	}
 	
 	
- 	public ArrayList<Phone> getPhoneNumbers(Context ctxt, String id) {
+ 	public List<Phone> getPhoneNumbers(Context ctxt, String id) {
  		ArrayList<Phone> phones = new ArrayList<Phone>();
  		
  		Cursor pCur = ctxt.getContentResolver().query(
@@ -279,7 +287,7 @@ public class ContactsUtils5 extends ContactsWrapper {
 		name.setText(cursor.getString(NAME_INDEX));
 		
 		int type = cursor.getInt(TYPE_INDEX);
-		CharSequence labelText = android.provider.Contacts.Phones.getDisplayLabel(context, type, cursor.getString(LABEL_INDEX));
+		CharSequence labelText = android.provider.ContactsContract.CommonDataKinds.Phone.getTypeLabel(context.getResources(), type, cursor.getString(LABEL_INDEX));
 		// When there's no label, getDisplayLabel() returns a CharSequence of
 		// length==1 containing
 		// a unicode non-breaking space. Need to check for that and consider
@@ -383,6 +391,106 @@ public class ContactsUtils5 extends ContactsWrapper {
 			return alphaIndexer.getSections();
 		}
 		
+	}
+
+
+	@Override
+	public CallerInfo findCallerInfo(Context ctxt, String number) {
+		Uri searchUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+		CallerInfo callerInfo = new CallerInfo();
+		
+		String[] projection;
+		if(Compatibility.isCompatible(11)) {
+			projection = new String[] {
+	                PhoneLookup._ID,
+	                PhoneLookup.DISPLAY_NAME,
+	                PhoneLookup.TYPE,
+	                PhoneLookup.LABEL,
+	                PhoneLookup.NUMBER,
+	                PhoneLookup.PHOTO_ID,
+	                PhoneLookup.LOOKUP_KEY,
+	                PhoneLookup.PHOTO_URI
+	        };
+		}else {
+			projection = new String[] {
+	                PhoneLookup._ID,
+	                PhoneLookup.DISPLAY_NAME,
+	                PhoneLookup.TYPE,
+	                PhoneLookup.LABEL,
+	                PhoneLookup.NUMBER,
+	                PhoneLookup.LOOKUP_KEY
+	        };
+		}
+		
+    	Cursor cursor = ctxt.getContentResolver().query(searchUri, projection, null, null, null);
+    	if(cursor != null) {
+    		try {
+    			if(cursor.getCount() > 0) {
+    				cursor.moveToFirst();
+	    			
+	    			ContentValues cv = new ContentValues();
+	    			DatabaseUtils.cursorRowToContentValues(cursor, cv);
+	    			callerInfo.contactExists = true;
+	    			if(cv.containsKey(PhoneLookup.DISPLAY_NAME) ) {
+	    				callerInfo.name = cv.getAsString(PhoneLookup.DISPLAY_NAME);
+	    			}
+	    			
+	    			callerInfo.phoneNumber = cv.getAsString(PhoneLookup.NUMBER);
+	    			
+	    			if(cv.containsKey(PhoneLookup.TYPE) && cv.containsKey(PhoneLookup.LABEL)) {
+						callerInfo.numberType = cv.getAsInteger(PhoneLookup.TYPE);
+						callerInfo.numberLabel = cv.getAsString(PhoneLookup.LABEL);
+						callerInfo.phoneLabel = (String) android.provider.ContactsContract.CommonDataKinds.Phone.getTypeLabel(ctxt.getResources(), callerInfo.numberType,
+								callerInfo.numberLabel);
+	    			}
+
+	    			if(cv.containsKey(PhoneLookup._ID) ) {
+	    				callerInfo.personId = cv.getAsLong(PhoneLookup._ID);
+
+	    				/*
+		    			if(cv.containsKey(PhoneLookup.LOOKUP_KEY) ) {
+		    				callerInfo.contactContentUri = Contacts.getLookupUri(callerInfo.personId , cv.getAsString(PhoneLookup.LOOKUP_KEY));
+		    			}
+		    			*/
+		    			
+		    			callerInfo.contactContentUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, callerInfo.personId);
+	    			}
+	    			
+	    			if(cv.containsKey(PhoneLookup.CUSTOM_RINGTONE)) {
+	    				callerInfo.contactRingtoneUri = Uri.parse(cv.getAsString(PhoneLookup.CUSTOM_RINGTONE));
+	    			}
+	
+	    			if(cv.containsKey(PhoneLookup.PHOTO_ID)) {
+	    				callerInfo.photoId = cv.getAsLong(PhoneLookup.PHOTO_ID);
+	    			}
+	    			
+	    			if(cv.containsKey(PhoneLookup.PHOTO_URI)) {
+	    				callerInfo.photoUri = Uri.parse(cv.getAsString(PhoneLookup.PHOTO_URI));
+	    			}
+	
+	    			if(callerInfo.name != null && callerInfo.name.length() == 0) {
+	    				callerInfo.name = null;
+	    			}
+	    			
+    			}
+    		}catch(Exception e) {
+    			Log.e(THIS_FILE, "Exception while retrieving cursor infos");
+    		}finally {
+    			cursor.close();
+    		}
+    		
+    		
+    	}
+    	
+
+        // if no query results were returned with a viable number,
+        // fill in the original number value we used to query with.
+        if (TextUtils.isEmpty(callerInfo.phoneNumber)) {
+        	callerInfo.phoneNumber = number;
+        }
+    	
+		return callerInfo;
 	}
 
 }

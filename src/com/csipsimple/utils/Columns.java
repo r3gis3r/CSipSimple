@@ -53,8 +53,6 @@ public class Columns {
 		}
 	}
 
-
-
 	public boolean hasField(Cursor c, String name) {
 		int i = c.getColumnIndex(name);
 		return ((i != -1) && !c.isNull(i));
@@ -62,11 +60,11 @@ public class Columns {
 
 	public JSONObject contentValueToJSON(ContentValues cv) {
 		JSONObject json = new JSONObject();
-		try {
-			for (int i = 0; i < names.length; i++) {
-				if (!cv.containsKey(names[i])) {
-					continue;
-				}
+		for (int i = 0; i < names.length; i++) {
+			if (!cv.containsKey(names[i])) {
+				continue;
+			}
+			try {
 				switch (types[i]) {
 				case STRING:
 					json.put(names[i], cv.getAsString(names[i]));
@@ -86,10 +84,12 @@ public class Columns {
 				case BOOLEAN:
 					json.put(names[i], cv.getAsBoolean(names[i]));
 					break;
+				default:
+					Log.w("Col", "Invalid type, can't unserialize " + types[i]);
 				}
+			} catch (JSONException e) {
+				Log.e("Col", "Invalid type, can't unserialize ", e);
 			}
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
 		}
 
 		return json;

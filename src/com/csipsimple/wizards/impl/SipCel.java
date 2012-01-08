@@ -159,19 +159,19 @@ public class SipCel extends SimpleImplementation {
 ArrayList<Filter> filters = new ArrayList<Filter>();
 		
 		Filter f = new Filter();
-		f.account = acc.id;
+		f.account = (int) acc.id;
 		f.action = Filter.ACTION_REPLACE;
-		f.match_pattern = "^"+Pattern.quote("+")+"(.*)$";
-		f.replace_pattern = "00$1";
-		f.match_type = Filter.MATCHER_STARTS;
+		f.matchPattern = "^"+Pattern.quote("+")+"(.*)$";
+		f.replacePattern = "00$1";
+		f.matchType = Filter.MATCHER_STARTS;
 		filters.add(f);
 		
 		f = new Filter();
-		f.account = acc.id;
+		f.account = (int) acc.id;
 		f.action = Filter.ACTION_REPLACE;
-		f.match_pattern = "^"+Pattern.quote("011")+"(.*)$";
-		f.replace_pattern = "00$1";
-		f.match_type = Filter.MATCHER_STARTS;
+		f.matchPattern = "^"+Pattern.quote("011")+"(.*)$";
+		f.replacePattern = "00$1";
+		f.matchType = Filter.MATCHER_STARTS;
 		filters.add(f);
 		
 		return filters;

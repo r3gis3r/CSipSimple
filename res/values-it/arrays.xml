@@ -1,41 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="default_smiley_texts">
-    <item>:-)</item>
-    <item>:-(</item>
-    <item>:-[</item>
-    <item>O:-)</item>
-    <item>:-\\</item>
-    <item>:\'(</item>
-    <item>:-X</item>
-    <item>:-D</item>
-    <item>o_O</item>
-    <item>;-)</item>
-    <item>:-P</item>
-    <item>=-O</item>
-    <item>:-*</item>
-    <item>:O</item>
-    <item>B-)</item>
-    <item>:-$</item>
-    <item>:-!</item>
-  </string-array>
-  <string-array name="default_smiley_names">
-    <item>Felice</item>
-    <item>Triste</item>
-    <item>Imbarazzato</item>
-    <item>Angelo</item>
-    <item>Indeciso</item>
-    <item>Piango</item>
-    <item>Labbra cucite</item>
-    <item>Risata</item>
-    <item>Confuso</item>
-    <item>Occhiolino</item>
-    <item>Linguaccia</item>
-    <item>Sorpreso</item>
-    <item>Bacio</item>
-    <item>Urlo</item>
-    <item>Fico</item>
-    <item>Fatti, non parole</item>
-    <item>Gaffe</item>
-  </string-array>
+
+    <string-array name="default_smiley_names">
+        <item>Felice</item>
+        <item>Triste</item>
+        <item>Imbarazzato</item>
+        <item>Angelo</item>
+        <item>Indeciso</item>
+        <item>Piango</item>
+        <item>Labbra cucite</item>
+        <item>Risata</item>
+        <item>Confuso</item>
+        <item>Occhiolino</item>
+        <item>Linguaccia</item>
+        <item>Sorpreso</item>
+        <item>Bacio</item>
+        <item>Urlo</item>
+        <item>Fico</item>
+        <item>Fatti, non parole</item>
+        <item>Gaffe</item>
+    </string-array>
+
 </resources>

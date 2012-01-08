@@ -87,13 +87,13 @@ public class SlidingTab extends ViewGroup {
 		 * The interface was triggered because the user grabbed the left handle
 		 * and moved it past the target zone.
 		 */
-		public static final int LEFT_HANDLE = 0;
+		int LEFT_HANDLE = 0;
 
 		/**
 		 * The interface was triggered because the user grabbed the right handle
 		 * and moved it past the target zone.
 		 */
-		public static final int RIGHT_HANDLE = 1;
+		int RIGHT_HANDLE = 1;
 
 		/**
 		 * Called when the user moves a handle beyond the target zone.
@@ -175,14 +175,14 @@ public class SlidingTab extends ViewGroup {
 			parent.addView(text);
 		}
 		
-		void setResources(int iconId, int targetId, int barId, int tabId) {
+		private void setResources(int iconId, int targetId, int barId, int tabId) {
 			tab.setImageResource(iconId);
 			tab.setBackgroundResource(tabId);
 			text.setBackgroundResource(barId);
 			target.setImageResource(targetId);
 		}
 		
-		void setDrawables(Drawable iconD, Drawable targetD, Drawable barD, Drawable tabD) {
+		private void setDrawables(Drawable iconD, Drawable targetD, Drawable barD, Drawable tabD) {
 			if(iconD != null) {
 				tab.setImageDrawable(iconD);
 			}
@@ -198,17 +198,17 @@ public class SlidingTab extends ViewGroup {
 		}
 		
 
-		void setHintText(int resId) {
+		private void setHintText(int resId) {
 			text.setText(resId);
 		}
 
-		void hide() {
+		private void hide() {
 			text.setVisibility(View.INVISIBLE);
 			tab.setVisibility(View.INVISIBLE);
 			target.setVisibility(View.INVISIBLE);
 		}
 
-		void setState(int state) {
+		private void setState(int state) {
 			text.setPressed(state == STATE_PRESSED);
 			tab.setPressed(state == STATE_PRESSED);
 			if (state == STATE_ACTIVE) {
@@ -225,11 +225,11 @@ public class SlidingTab extends ViewGroup {
 			}
 		}
 
-		void showTarget() {
+		private void showTarget() {
 			target.setVisibility(View.VISIBLE);
 		}
 
-		void reset() {
+		private void reset() {
 			setState(STATE_NORMAL);
 			text.setVisibility(View.VISIBLE);
 			text.setTextAppearance(text.getContext(), R.style.TextAppearance_SlidingTabNormal);
@@ -252,7 +252,7 @@ public class SlidingTab extends ViewGroup {
 		 * @param alignment
 		 *            which side to align the widget to
 		 */
-		void layout(int l, int t, int r, int b, int alignment) {
+		private void layout(int l, int t, int r, int b, int alignment) {
 			final int handleWidth = tab.getBackground().getIntrinsicWidth();
 			final int handleHeight = tab.getBackground().getIntrinsicHeight();
 			final int targetWidth = target.getDrawable().getIntrinsicWidth();
@@ -322,11 +322,9 @@ public class SlidingTab extends ViewGroup {
 		final int rightTabWidth = (int) (density * rightSlider.getTabWidth() + 0.5f);
 		final int leftTabHeight = (int) (density * leftSlider.getTabHeight() + 0.5f);
 		final int rightTabHeight = (int) (density * rightSlider.getTabHeight() + 0.5f);
-		final int width;
-		final int height;
+		final int width = Math.max(widthSpecSize, leftTabWidth + rightTabWidth);
+		final int height = Math.max(leftTabHeight, rightTabHeight);
 
-		width = Math.max(widthSpecSize, leftTabWidth + rightTabWidth);
-		height = Math.max(leftTabHeight, rightTabHeight);
 		Log.d(THIS_FILE, "Heights are : "+leftTabHeight+" and "+rightTabHeight+" density "+density);
 		setMeasuredDimension(width, height);
 	}
@@ -350,8 +348,7 @@ public class SlidingTab extends ViewGroup {
 			return false;
 		}
 
-		switch (action) {
-		case MotionEvent.ACTION_DOWN: {
+		if (action == MotionEvent.ACTION_DOWN) {
 			tracking = true;
 			triggered = false;
 			vibrate(VIBRATE_SHORT);
@@ -366,8 +363,6 @@ public class SlidingTab extends ViewGroup {
 			}
 			currentSlider.setState(Slider.STATE_PRESSED);
 			currentSlider.showTarget();
-			break;
-		}
 		}
 
 		return true;
@@ -386,13 +381,13 @@ public class SlidingTab extends ViewGroup {
 				moveHandle(x, y);
 				float position = x;
 				float target = targetZone * getWidth();
-				boolean targetZoneReached = (currentSlider == leftSlider ? position > target : position < target);
+				boolean targetZoneReached = (currentSlider.equals(leftSlider) ? position > target : position < target);
 
 				if (!triggered && targetZoneReached) {
 					triggered = true;
 					tracking = false;
 					currentSlider.setState(Slider.STATE_ACTIVE);
-					dispatchTriggerEvent(currentSlider == leftSlider ? OnTriggerListener.LEFT_HANDLE : OnTriggerListener.RIGHT_HANDLE);
+					dispatchTriggerEvent(currentSlider.equals(leftSlider) ? OnTriggerListener.LEFT_HANDLE : OnTriggerListener.RIGHT_HANDLE);
 				}
 
 				if (y <= handle.getBottom() && y >= handle.getTop()) {
@@ -404,6 +399,8 @@ public class SlidingTab extends ViewGroup {
 				tracking = false;
 				triggered = false;
 				resetView();
+				break;
+			default:
 				break;
 			}
 		}

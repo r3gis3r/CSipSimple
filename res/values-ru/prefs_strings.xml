@@ -57,7 +57,7 @@
     <string name="enable_stun">Включить STUN</string>
     <string name="enable_stun_desc">Настроить STUN-сервер</string>
     <string name="stun_server">STUN серверы</string>
-    <string name="stun_server_desc">STUN серверы (ХОСТ[:ПОРТ], ...)</string>
+    <string name="stun_server_desc">STUN серверы (ХОСТ[:ПОРТ], …)</string>
     <string name="enable_qos">Включить QoS</string>
     <string name="enable_qos_desc">Система поддержки качества и класса передачи данных</string>
     <string name="dscp_val">Значение DSCP</string>

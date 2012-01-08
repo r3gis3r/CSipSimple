@@ -25,11 +25,11 @@ import android.view.animation.Transformation;
 
 public class Flip3dAnimation extends Animation {
 	private Camera camera;
-	private View view1;
-	private View view2;
-	private float centerX;
-	private float centerY;
-	private boolean forward;
+	private final View view1;
+	private final View view2;
+	private final float centerX;
+	private final float centerY;
+	private final boolean forward;
 	private boolean visibilitySwapped;
 
 	/**
@@ -51,6 +51,7 @@ public class Flip3dAnimation extends Animation {
 	 */
 
 	public Flip3dAnimation(View aView1, View aView2, int aCenterX, int aCenterY, boolean aForward) {
+		super();
 		view1 = aView1;
 		view2 = aView2;
 		centerX = aCenterX;

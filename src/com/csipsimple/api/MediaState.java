@@ -24,7 +24,7 @@ import android.os.Parcelable;
 public class MediaState implements Parcelable {
 	
 	
-	public int PrimaryKey = -1;
+	public int primaryKey = -1;
 	public boolean isMicrophoneMute = false;
 	public boolean isSpeakerphoneOn = false;
 	public boolean isBluetoothScoOn = false;
@@ -53,11 +53,11 @@ public class MediaState implements Parcelable {
 	}
 	
 	public MediaState() {
-		
+		// Nothing to do in default constructor
 	}
 	
 	public MediaState(Parcel in) {
-		PrimaryKey = in.readInt();
+		primaryKey = in.readInt();
 		isMicrophoneMute = (in.readInt() == 1);
 		isSpeakerphoneOn = (in.readInt() == 1);
 		isBluetoothScoOn = (in.readInt() == 1);
@@ -86,7 +86,7 @@ public class MediaState implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(PrimaryKey);
+		dest.writeInt(primaryKey);
 		dest.writeInt(isMicrophoneMute?1:0);
 		dest.writeInt(isSpeakerphoneOn?1:0);
 		dest.writeInt(isBluetoothScoOn?1:0);

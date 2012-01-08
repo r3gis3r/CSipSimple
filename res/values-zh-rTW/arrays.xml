@@ -1,41 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="default_smiley_texts">
-    <item>:-)</item>
-    <item>:-(</item>
-    <item>:-[</item>
-    <item>O:-)</item>
-    <item>:-\\</item>
-    <item>:\'(</item>
-    <item>:-X</item>
-    <item>:-D</item>
-    <item>o_O</item>
-    <item>;-)</item>
-    <item>:-P</item>
-    <item>=-O</item>
-    <item>:-*</item>
-    <item>:O</item>
-    <item>B-)</item>
-    <item>:-$</item>
-    <item>:-!</item>
-  </string-array>
-  <string-array name="default_smiley_names">
-    <item>快樂</item>
-    <item>悲傷</item>
-    <item>害羞</item>
-    <item>天使</item>
-    <item>未決</item>
-    <item>哭</item>
-    <item>封嘴</item>
-    <item>笑</item>
-    <item>困惑</item>
-    <item>眨眼</item>
-    <item>吐舌</item>
-    <item>驚訝</item>
-    <item>親吻</item>
-    <item>大叫</item>
-    <item>酷！</item>
-    <item>Money mouth</item>
-    <item>Foot in mouth</item>
-  </string-array>
+
+    <string-array name="default_smiley_names">
+        <item>快樂</item>
+        <item>悲傷</item>
+        <item>害羞</item>
+        <item>天使</item>
+        <item>未決</item>
+        <item>哭</item>
+        <item>封嘴</item>
+        <item>笑</item>
+        <item>困惑</item>
+        <item>眨眼</item>
+        <item>吐舌</item>
+        <item>驚訝</item>
+        <item>親吻</item>
+        <item>大叫</item>
+        <item>酷！</item>
+        <item>Money mouth</item>
+        <item>Foot in mouth</item>
+    </string-array>
+
 </resources>

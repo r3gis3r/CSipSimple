@@ -57,7 +57,7 @@
     <string name="enable_stun">开启 STUN</string>
     <string name="enable_stun_desc">打开 STUN 特性</string>
     <string name="stun_server">STUN服务器</string>
-    <string name="stun_server_desc">STUN服务器(主机[:端口], ...)</string>
+    <string name="stun_server_desc">STUN服务器(主机[:端口], …)</string>
     <string name="enable_qos">开启 QoS</string>
     <string name="enable_qos_desc">开启数据包 QoS</string>
     <string name="dscp_val">DSCP 值</string>

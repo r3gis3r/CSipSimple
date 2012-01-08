@@ -299,11 +299,11 @@ public class PreferencesProviderWrapper {
 	}
 	
 	
-	public boolean getUseRoutingApi() {
+	public boolean useRoutingApi() {
 		return getPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API);
 	}
 	
-	public boolean getUseModeApi() {
+	public boolean useModeApi() {
 		return getPreferenceBooleanValue(SipConfigManager.USE_MODE_API);
 	}
 	

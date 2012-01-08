@@ -31,6 +31,8 @@
 #define THIS_FILE	"android_jni_dev.cpp"
 #define DRIVER_NAME	"ANDROID"
 
+#include "pj_loader.h"
+
 struct android_aud_factory
 {
 	pjmedia_aud_dev_factory base;
@@ -522,7 +524,6 @@ static pj_status_t android_destroy(pjmedia_aud_dev_factory *f)
 /* API: Get device count. */
 static unsigned android_get_dev_count(pjmedia_aud_dev_factory *f)
 {
-	PJ_LOG(4,(THIS_FILE, "Get dev count"));
 	int count = 1;
 	PJ_UNUSED_ARG(f);
 	return count < 0 ? 0 : count;
@@ -535,7 +536,6 @@ static pj_status_t android_get_dev_info(pjmedia_aud_dev_factory *f,
 {
 
 	PJ_UNUSED_ARG(f);
-	PJ_LOG(4,(THIS_FILE, "Get dev info"));
 
 	pj_bzero(info, sizeof(*info));
 

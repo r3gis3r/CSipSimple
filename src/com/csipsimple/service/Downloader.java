@@ -37,7 +37,6 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;

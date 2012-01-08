@@ -5,6 +5,7 @@
     android:padding="5dp" >
 
     <ImageView
+        android:contentDescription="@string/downloading"
         android:id="@+id/status_icon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"

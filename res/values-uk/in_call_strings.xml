@@ -9,12 +9,12 @@
   <string name="speaker">Гучномовець</string>
   <string name="mute">Вимкнути звук</string>
   <string name="add_call">Додати виклик</string>
-  <string name="call_state_calling">Виклик...</string>
+  <string name="call_state_calling">Виклик…</string>
   <string name="call_state_confirmed">Розмовляю</string>
   <string name="call_state_connecting">З\'єднання…</string>
   <string name="call_state_disconnected">Покласти трубку</string>
-  <string name="call_state_early">Дзвінок...</string>
-  <string name="call_state_incoming">Вхідний дзвінок...</string>
+  <string name="call_state_early">Дзвінок…</string>
+  <string name="call_state_incoming">Вхідний дзвінок…</string>
   <string name="call_state_null">ПОМИЛКА</string>
   <string name="unlock">Розблокувати</string>
   <string name="record">Записати</string>

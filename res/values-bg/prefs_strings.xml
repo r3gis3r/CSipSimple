@@ -63,7 +63,7 @@
     <string name="enable_stun">Активиране на STUN</string>
     <string name="enable_stun_desc">Включване на STUN функция</string>
     <string name="stun_server">STUN сървъри</string>
-    <string name="stun_server_desc">STUN сървъри (HOST[:PORT], ...)</string>
+    <string name="stun_server_desc">STUN сървъри (HOST[:PORT], …)</string>
     <string name="enable_qos">Включване на QoS</string>
     <string name="enable_qos_desc">Активирай QoS за пакетите</string>
     <string name="dscp_val">стойност на DSCP</string>

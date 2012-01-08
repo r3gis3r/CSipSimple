@@ -7,7 +7,7 @@
     <string name="prefs_network">Réseau</string>
     <string name="prefs_network_desc">La façon dont le SIP se connecte au réseau</string>
     <string name="prefs_media">Média</string>
-    <string name="prefs_media_desc">Règles média pendant les appels (Codecs, Silences, ...)</string>
+    <string name="prefs_media_desc">Règles média pendant les appels (Codecs, Silences, …)</string>
     <string name="prefs_ui">Interface et intégration</string>
     <string name="prefs_ui_desc">Adaptez le comportement à votre usage</string>
     <string name="prefs_calls">Options d\'appel</string>
@@ -63,7 +63,7 @@
     <string name="enable_stun">Activer STUN</string>
     <string name="enable_stun_desc">Activer la fonctionnalité STUN</string>
     <string name="stun_server">Serveur STUN</string>
-    <string name="stun_server_desc">Serveur STUN (hôte[:port],...)</string>
+    <string name="stun_server_desc">Serveur STUN (hôte[:port],…)</string>
     <string name="enable_qos">Activer la QoS</string>
     <string name="enable_qos_desc">Activer la QoS sur les paquets</string>
     <string name="dscp_val">Valeur DSCP</string>
@@ -108,6 +108,8 @@
     <string name="codecs">Codecs</string>
     <string name="echo_cancellation">Annulation de l\'echo</string>
     <string name="echo_cancellation_desc">Activer l\'annulation d\'echo</string>
+    <string name="audio_implementation">Implémentation audio</string>
+    <string name="audio_implementation_desc">Driver audio à utiliser</string>
     <string name="enable_vad">Détection de silence</string>
     <string name="enable_vad_desc">Activer la détection active de voix (réduit la bande passante utilisée)</string>
     <string name="snd_mic_level">Amplification du micro</string>

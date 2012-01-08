@@ -82,11 +82,18 @@ public class QuickActionItem extends LinearLayout implements Checkable {
     
     // Set the Icon
     public void setImageDrawable(Drawable drawable) {
-    	((ImageView)findViewById(R.id.quickaction_icon)).setImageDrawable(drawable);
+        ImageView im = ((ImageView)findViewById(R.id.quickaction_icon));
+    	im.setImageDrawable(drawable);
     }
     
-    // Set the Label
+    /**
+     * Set the label of this action item
+     * @param text the text of this item
+     */
     public void setText(String text) {
-    	((TextView)findViewById(R.id.quickaction_text)).setText(text);
+        ImageView im = ((ImageView)findViewById(R.id.quickaction_icon));
+        TextView tv = ((TextView)findViewById(R.id.quickaction_text)); 
+    	tv.setText(text);
+    	im.setContentDescription(text);
     }
 }

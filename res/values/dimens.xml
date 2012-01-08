@@ -15,11 +15,35 @@
 	see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-	<dimen name="normal_height">64dip</dimen>
-	<dimen name="expanded_height">128dip</dimen>
-	
+
+    <dimen name="normal_height">64dip</dimen>
+    <dimen name="expanded_height">128dip</dimen>
     <dimen name="quickaction_shadow_horiz">0dip</dimen>
     <dimen name="quickaction_shadow_vert">30dip</dimen>
     <dimen name="quickaction_shadow_touch">20dip</dimen>
+    <dimen name="right_panel_margin_left">0dip</dimen>
+    <dimen name="right_panel_margin_vertical">0dip</dimen>
+    <dimen name="right_panel_fading_edge">50px</dimen>
+
+    <!-- Empty message margins -->
+    <dimen name="empty_message_top_margin">48dip</dimen>
+
+    <!-- Call Log -->
+    <dimen name="call_log_icon_margin">4dip</dimen>
+    <dimen name="call_log_call_action_size">32dip</dimen>
+    <dimen name="call_log_call_action_width">52dip</dimen>
+    <dimen name="call_log_call_action_height">64dip</dimen>
+    <dimen name="call_log_inner_margin">8dip</dimen>
+    <dimen name="call_log_outer_margin">0dip</dimen>
+    <dimen name="call_log_indent_margin">24dip</dimen>
+    <dimen name="call_log_list_item_height">56dip</dimen>
+    <dimen name="call_log_list_contact_photo_size">64dip</dimen>
+    <dimen name="call_detail_contact_name_margin">24dip</dimen>
+    <dimen name="call_detail_button_spacing">2dip</dimen>
+
+    <!-- Messages -->
+    <dimen name="message_item_text_padding_left_right">8dip</dimen>
+    <dimen name="message_item_text_padding_top">5dip</dimen>
+    <dimen name="message_contact_photo_size">54dip</dimen>
 
 </resources>

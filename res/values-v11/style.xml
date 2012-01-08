@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LightTheme" parent="Theme.Sherlock.Light" />
+    <style name="LightTheme.noTopActionBar" parent="LightTheme"/>
+    
+    <style name="DarkTheme" parent="Theme.Sherlock" />
+    <style name="DarkTheme.noTopActionBar" parent="DarkTheme"/>
+
+</resources>

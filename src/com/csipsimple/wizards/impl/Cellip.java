@@ -17,8 +17,6 @@
  */
 package com.csipsimple.wizards.impl;
 
-import android.text.InputType;
-
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
@@ -44,7 +42,8 @@ public class Cellip extends SimpleImplementation {
 		
 		accountUsername.setTitle(R.string.w_common_phone_number);
 		accountUsername.setDialogTitle(R.string.w_common_phone_number);
-		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		// Some users use a letter at the end of the number - so allow numbers
+		//accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 		
 	}
 	@Override

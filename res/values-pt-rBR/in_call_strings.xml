@@ -9,9 +9,9 @@
   <string name="speaker">Viva-Voz</string>
   <string name="mute">Mudo</string>
   <string name="add_call">Adicionar chamada</string>
-  <string name="call_state_calling">Chamando...</string>
+  <string name="call_state_calling">Chamando…</string>
   <string name="call_state_confirmed">Falando</string>
-  <string name="call_state_connecting">Conectando...</string>
+  <string name="call_state_connecting">Conectando…</string>
   <string name="call_state_disconnected">Desconectado</string>
   <string name="call_state_early">Chamando</string>
   <string name="call_state_incoming">Recebendo chamada</string>

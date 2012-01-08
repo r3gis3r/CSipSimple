@@ -15,41 +15,83 @@
 	see <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_height="wrap_content" android:layout_width="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dip" >
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/prefs_media"
+            android:src="@drawable/ic_jog_dial_sound_on" >
+        </ImageView>
 
-	<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:layout_margin="15dip">
-		<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_gravity="center" android:src="@drawable/ic_jog_dial_sound_on"></ImageView>
-		<SeekBar android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:id="@+id/speaker_level" android:layout_gravity="center" android:max="100"></SeekBar>
-	</LinearLayout>
+        <SeekBar
+            android:id="@+id/speaker_level"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:max="100" >
+        </SeekBar>
+    </LinearLayout>
 
-	<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:layout_margin="15dip">
-		<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_gravity="center" android:src="@drawable/ic_jog_dial_voice_search"></ImageView>
-		<SeekBar android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:id="@+id/micro_level" android:layout_gravity="center" android:max="100"></SeekBar>
-	</LinearLayout>
-	
-	<CheckBox android:layout_height="wrap_content" android:text="@string/echo_cancellation" android:layout_gravity="center" android:ellipsize="end" android:drawablePadding="2dip" android:paddingLeft="40dip" android:layout_width="fill_parent" android:id="@+id/echo_cancellation"></CheckBox>
-	
-	<!-- 
-	<Button android:layout_height="wrap_content" android:id="@+id/record" android:text="Record" android:layout_gravity="center" android:layout_width="fill_parent"></Button>
-	 -->
-	
-	<LinearLayout android:id="@+id/ok_bar"
-		android:orientation="horizontal" style="@android:style/ButtonBar"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:layout_weight="0">
-		<Button android:layout_height="wrap_content" android:text="@string/ok"
-			android:layout_weight="1" android:layout_gravity="center"
-			android:layout_width="wrap_content" android:id="@+id/save_bt"></Button>
-			
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dip" >
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/snd_mic_level"
+            android:src="@drawable/ic_jog_dial_voice_search" >
+        </ImageView>
+
+        <SeekBar
+            android:id="@+id/micro_level"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:max="100" >
+        </SeekBar>
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/echo_cancellation"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawablePadding="2dip"
+        android:ellipsize="end"
+        android:paddingLeft="40dip"
+        android:text="@string/echo_cancellation" >
+    </CheckBox>
+
+    <!-- <Button android:layout_height="wrap_content" android:id="@+id/record" android:text="Record" android:layout_gravity="center" android:layout_width="fill_parent"></Button> -->
+
+    <LinearLayout
+        android:id="@+id/ok_bar"
+        style="@android:style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/save_bt"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="@string/ok" >
+        </Button>
+    </LinearLayout>
 
 </LinearLayout>

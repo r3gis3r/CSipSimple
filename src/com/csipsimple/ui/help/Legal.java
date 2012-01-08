@@ -17,37 +17,49 @@
  */
 package com.csipsimple.ui.help;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+
 import com.csipsimple.R;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Window;
-import android.view.ViewGroup.LayoutParams;
-import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.TextView;
+public class Legal extends DialogFragment {
 
-public class Legal extends Activity {
+	
+	public static Legal newInstance() {
+        return new Legal();
+    }
+	
 
-	private WebView webView;
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.legal_information);
-		
-		//Set window size
-		LayoutParams params = getWindow().getAttributes();
-		params.width = LayoutParams.FILL_PARENT;
-		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-		
-		//Set title
-		((TextView) findViewById(R.id.my_title)).setText(R.string.legal_information);
-		((ImageView) findViewById(R.id.my_icon)).setImageResource(android.R.drawable.ic_menu_gallery);
-		
-		webView = (WebView) findViewById(R.id.webview);
-		webView.getSettings().setJavaScriptEnabled(true);
+        return new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_menu_gallery)
+                .setTitle(R.string.legal_information)
+                .setNegativeButton(R.string.cancel,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dismiss();
+                        }
+                    }
+                )
+                .setView(getCustomView(getActivity().getLayoutInflater(), null, savedInstanceState))
+                .create();
+    }
+
+    public View getCustomView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	View v = inflater.inflate(R.layout.legal_information, container, false);
+	    WebView webView = (WebView) v.findViewById(R.id.webview);
 		webView.loadUrl("file:///android_asset/legal.html"); 
-	}
+    	return v;
+    }
+    
+	
 }

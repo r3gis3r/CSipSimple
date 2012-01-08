@@ -18,6 +18,7 @@
 package com.csipsimple.ui.prefs;
 
 import android.telephony.TelephonyManager;
+import android.view.MenuItem;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
@@ -26,14 +27,34 @@ import com.csipsimple.utils.PreferencesWrapper;
 
 
 public class PrefsNetwork extends GenericPrefs {
+	private static final String NAT_TRAVERSAL_KEY = "nat_traversal";
+	private static final String TRANSPORT_KEY = "transport";
 	
-
-	//private static final String THIS_FILE = "Prefs Network";
-
 	@Override
 	protected int getXmlPreferences() {
 		return R.xml.prefs_network;
 		
+	}
+	/*
+	@Override
+	protected void beforeBuildPrefs() {
+		super.beforeBuildPrefs();
+		
+		ActionBar ab = getActionBar();
+		if(ab != null) {
+			ab.setDisplayHomeAsUpEnabled(true);
+		}
+		
+	}
+	*/
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int selId = item.getItemId();
+		if(selId == Compatibility.getHomeMenuId()) {
+			finish();
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
@@ -57,26 +78,26 @@ public class PrefsNetwork extends GenericPrefs {
 		if(!pfw.isAdvancedUser()) {
 			hidePreference(null, "perfs");
 			
-			hidePreference("nat_traversal", SipConfigManager.ENABLE_TURN);
-			hidePreference("nat_traversal", SipConfigManager.TURN_SERVER);
-			hidePreference("nat_traversal", SipConfigManager.TURN_USERNAME);
-			hidePreference("nat_traversal", SipConfigManager.TURN_PASSWORD);
+			hidePreference(NAT_TRAVERSAL_KEY, SipConfigManager.ENABLE_TURN);
+			hidePreference(NAT_TRAVERSAL_KEY, SipConfigManager.TURN_SERVER);
+			hidePreference(NAT_TRAVERSAL_KEY, SipConfigManager.TURN_USERNAME);
+			hidePreference(NAT_TRAVERSAL_KEY, SipConfigManager.TURN_PASSWORD);
 			
-			hidePreference("transport", SipConfigManager.ENABLE_TCP);
-			hidePreference("transport", SipConfigManager.ENABLE_UDP);
-			hidePreference("transport", SipConfigManager.TCP_TRANSPORT_PORT);
-			hidePreference("transport", SipConfigManager.UDP_TRANSPORT_PORT);
-			hidePreference("transport", SipConfigManager.RTP_PORT);
-			hidePreference("transport", SipConfigManager.USE_IPV6);
-			hidePreference("transport", SipConfigManager.OVERRIDE_NAMESERVER);
-			hidePreference("transport", SipConfigManager.FORCE_NO_UPDATE);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.ENABLE_TCP);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.ENABLE_UDP);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.TCP_TRANSPORT_PORT);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.UDP_TRANSPORT_PORT);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.RTP_PORT);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.USE_IPV6);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.OVERRIDE_NAMESERVER);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.FORCE_NO_UPDATE);
 			
-			hidePreference("transport", SipConfigManager.ENABLE_QOS);
-			hidePreference("transport", SipConfigManager.DSCP_VAL);
-			hidePreference("transport", SipConfigManager.USER_AGENT);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.ENABLE_QOS);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.DSCP_VAL);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.USER_AGENT);
 			
-			hidePreference("transport", SipConfigManager.TIMER_MIN_SE);
-			hidePreference("transport", SipConfigManager.TIMER_SESS_EXPIRES);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.TIMER_MIN_SE);
+			hidePreference(TRANSPORT_KEY, SipConfigManager.TIMER_SESS_EXPIRES);
 		}
 	}
 

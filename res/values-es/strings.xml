@@ -2,7 +2,7 @@
 <resources>
   <string name="app_name">CSipSimple</string>
   <string name="next">Siguiente</string>
-  <string name="init">Inicializando...</string>
+  <string name="init">Inicializando…</string>
   <string name="unable_to_download_file">No se pudo descargar el archivo</string>
   <string name="invalid_sip_uri">SIP no válido para llamar</string>
   <string name="accounts">Cuentas</string>

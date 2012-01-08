@@ -22,7 +22,6 @@ import java.util.List;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -70,7 +69,7 @@ public class CallHandler extends BroadcastReceiver {
 						
 						Resources remoteRes;
 						try {
-							ComponentName cmp = new ComponentName(caller.activityInfo.packageName, caller.activityInfo.name);
+							//ComponentName cmp = new ComponentName(caller.activityInfo.packageName, caller.activityInfo.name);
 							// To be sure, also try to resolve resovePackage for android api-4 and upper
 							if(Compatibility.isCompatible(4)) {
 								try {
@@ -78,7 +77,7 @@ public class CallHandler extends BroadcastReceiver {
 									String resPackage = (String) f.get(caller);
 									Log.d(THIS_FILE, "Load from " + resPackage);
 									if(resPackage != null) {
-										cmp = new ComponentName(resPackage, caller.activityInfo.name);
+										//cmp = new ComponentName(resPackage, caller.activityInfo.name);
 									}
 								} catch (Exception e) {
 									Log.e(THIS_FILE, "Impossible to use 4 api ", e);

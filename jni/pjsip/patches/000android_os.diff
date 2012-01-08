@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjlib/include/pj/config.h
 ===================================================================
---- pjsip.orig/sources/pjlib/include/pj/config.h	2011-11-19 19:09:41.483320697 +0100
-+++ pjsip/sources/pjlib/include/pj/config.h	2011-11-19 19:12:08.796051187 +0100
+--- pjsip.orig/sources/pjlib/include/pj/config.h	2011-12-05 15:03:55.360258254 +0100
++++ pjsip/sources/pjlib/include/pj/config.h	2011-12-05 15:05:40.000777138 +0100
 @@ -91,6 +91,14 @@
       */
  #  include <pj/compat/os_linux_kernel.h>
@@ -172,7 +172,7 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 Index: pjsip/sources/pjlib/include/pj/config_site.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/config_site.h	2011-11-20 22:12:32.312595265 +0100
++++ pjsip/sources/pjlib/include/pj/config_site.h	2011-12-05 15:05:40.000777138 +0100
 @@ -0,0 +1,115 @@
 +//We distribute only for android so by default activate it
 +#ifndef PJ_ANDROID

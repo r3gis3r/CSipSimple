@@ -17,6 +17,7 @@ LOCAL_C_INCLUDES += $(PJ_ROOT_DIR)/pjsip/include $(PJ_ROOT_DIR)/pjlib-util/inclu
 			$(PJ_ROOT_DIR)/pjnath/include $(PJ_ROOT_DIR)/pjlib/include
 #Include PJ android interfaces
 LOCAL_C_INCLUDES += $(PJ_ANDROID_ROOT_DIR)/pjmedia/include/pjmedia-audiodev
+LOCAL_C_INCLUDES += $(PJ_ANDROID_ROOT_DIR)/pjmedia/include/pjmedia-videodev
 
 # Include WebRTC 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../webrtc/pj_sources/
@@ -26,6 +27,9 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../g729/pj_sources/
 
 # Include ZRTP interface 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/include/ 
+
+# Include swig wrapper headers
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../swig-glue/
 
 # Include self headers
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include/
@@ -61,13 +65,17 @@ ifeq ($(MY_USE_TLS),1)
 LOCAL_LDLIBS += -ldl 
 endif
 
-ifeq ($(MY_USE_VIDEO),1)
-	LOCAL_LDLIBS += -lGLESv1_CM
-endif
-
 #LOCAL_LDFLAGS := -Wl,-Map=moblox.map,--cref,--gc-section 
 
-LOCAL_STATIC_LIBRARIES := swig-glue pjsip pjmedia swig-glue pjnath pjlib-util pjlib resample srtp 
+ifeq ($(MY_USE_AMR),1)
+	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
+	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../amr-stagefright/pj_sources/
+endif
+
+
+LOCAL_STATIC_LIBRARIES += swig-glue pjsip pjmedia swig-glue pjnath pjlib-util pjlib resample srtp 
+
+
 ifeq ($(MY_USE_ILBC),1)
 	LOCAL_STATIC_LIBRARIES += ilbc
 endif
@@ -80,19 +88,16 @@ endif
 ifeq ($(MY_USE_G729),1)
 	LOCAL_STATIC_LIBRARIES += pj_g729_codec
 endif
-
 ifeq ($(MY_USE_CODEC2),1)
 	LOCAL_STATIC_LIBRARIES += codec2
 endif
-ifeq ($(MY_USE_AMR),1)
-	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
-	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../amr-stagefright/pj_sources/
-endif
+
 ifeq ($(MY_USE_TLS),1)
 	LOCAL_STATIC_LIBRARIES += zrtp4pj
 	LOCAL_STATIC_LIBRARIES += crypto_ec_static
 	LOCAL_SHARED_LIBRARIES += libssl libcrypto
 endif
+
 
 ifeq ($(MY_USE_WEBRTC),1)
 
@@ -122,6 +127,21 @@ LOCAL_STATIC_LIBRARIES += libwebrtc_aecm
 
 endif
 
+ifeq ($(MY_USE_VIDEO),1)
+# TODO : BASE_FFMPEG_BUILD_DIR :=  $(LOCAL_PATH)/../ffmpeg/build/ffmpeg/$(TARGET_ARCH_ABI)/lib/
+# TODO : could we separatly add that to pjmedia video dev things instead in order to keep lighter the base app
+	# Add FFMPEG
+	BASE_FFMPEG_BUILD_DIR :=  $(LOCAL_PATH)/../ffmpeg/build/ffmpeg/armeabi/lib/
+	LOCAL_LDLIBS += $(BASE_FFMPEG_BUILD_DIR)/libavcodec.a \
+		$(BASE_FFMPEG_BUILD_DIR)/libavformat.a \
+		$(BASE_FFMPEG_BUILD_DIR)/libswscale.a \
+		$(BASE_FFMPEG_BUILD_DIR)/libswresample.a \
+		$(BASE_FFMPEG_BUILD_DIR)/libavutil.a
+	
+	# Add X264	
+	BASE_X264_BUILD_DIR :=  $(LOCAL_PATH)/../ffmpeg/build/x264/armeabi/lib/
+	LOCAL_LDLIBS += $(BASE_X264_BUILD_DIR)/libx264.a
+endif
 
 include $(BUILD_SHARED_LIBRARY)
 

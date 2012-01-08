@@ -14,82 +14,94 @@
 	General Public License for more details. You should have received a
 	copy of the GNU General Public License along with CSipSimple. If not,
 	see <http://www.gnu.org/licenses/>.
-	
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-	<string name="app_name">CSipSimple</string>
-	<string name="next">Next</string>
-	<string name="init">Init...</string>
-	<string name="unable_to_download_file">Unable to download file</string>
-	<string name="connection_not_valid">Selected network route not allowed with current settings you have setup</string>
-	<string name="invalid_sip_uri">Sip uri is invalid for call</string>
-	<string name="accounts">Accounts</string>
-	<string name="other_accounts">Other accounts</string>
-	<string name="save">Save</string>
-	<string name="cancel">Cancel</string>
-	<string name="activate_account">Activate account</string>
-	<string name="deactivate_account">Deactivate account</string>
-	<string name="delete_account">Delete account</string>
-	<string name="modify_account">Modify account</string>
-	<string name="add_account">Add account</string>
-	<string name="choose_wizard">Choose wizard</string>
-	<string name="use">Use :</string>
-	<string name="use_pstn">Use mobile</string>
-	<string name="use_skype">Use Skype</string>
-	<string name="ongoing_call">Call in Progress</string>
-	<string name="missed_call">Missed call</string>
-	<string name="recentCalls_empty">No Call Logs</string>
-	<string name="filters">Filters</string>
-	<string name="filters_desc">To apply when integration to Android is used</string>
-	<string name="filters_for">Filters for</string>
-	<string name="add_filter">Add filter / rewrite rule</string>
-	<string name="delete_filter">Delete filter</string>
-	<string name="callLog_delete_entry">Delete this call</string>
-	<string name="callLog_delete_all">Delete all calls</string>
-	<string name="callLog_delDialog_title">Delete Call Logs</string>
-	<string name="callLog_delDialog_message">Are you sure you want to delete all calls from the log?</string>
-	<string name="callLog_delDialog_yes">Yes</string>
-	<string name="callLog_delDialog_no">No</string>
-	<string name="gsm">Mobile</string>
-	<string name="dial_tab_name_text">Dial</string>
-	<string name="calllog_tab_name_text">CallLogs</string>
-	<string name="messages_tab_name_text">Messages</string>
-	<string name="menu_disconnect">Disconnect</string>
-	<string name="service_ticker_registered_text">SIP Registered</string>
-	<string name="outgoing_call_chooser_call_text">Call</string>
-	<string name="reorder">Reorder</string>
-	<string name="backup_restore">Backup / Restore</string>
-	<string name="backup">Backup</string>
-	<string name="faq">FAQ</string>
-	<string name="help">Help</string>	
-	<string name="record_logs">Record logs to send it to dev team and report a bug</string>
-	<string name="send_logs">Stop recording logs (OPTIONALY send it)</string>
-	<string name="view_existing_issues">Consult existing issues</string>
-	<string name="ok">OK</string>
-	<string name="misc">Misc</string>
-	<string name="warning">WARNING</string>
-	<string name="disconnect_and_incoming_explaination">You are configured to be available for this network !!! By clicking OK here you confirm that you don\'t want to be available until next start of the application</string>
-	<string name="disconnect_and_will_restart">Will automatically restart when : <xliff:g id="networks" example="3G">%s</xliff:g> will become available (change settings if you don\'t want)</string>
-	<string name="gadget_title">SIP Account switcher</string>
-	<string name="search_in_contacts">Search in contacts</string>
-	<string name="pickup_sip_uri">Pickup SIP contact</string>
-	<string name="display_icon_in_status_bar_desc">Should the application display an icon in the status bar when registered</string>
+    <string name="app_name">CSipSimple</string>
+    <string name="next">Next</string>
+    <string name="init">Init…</string>
+    <string name="unable_to_download_file">Unable to download file</string>
+    <string name="connection_not_valid">Selected network route not allowed with current settings you have setup</string>
+    <string name="invalid_sip_uri">Sip uri is invalid for call</string>
+    <string name="accounts">Accounts</string>
+    <string name="other_accounts">Other accounts</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="activate_account">Activate account</string>
+    <string name="deactivate_account">Deactivate account</string>
+    <string name="delete_account">Delete account</string>
+    <string name="modify_account">Modify account</string>
+    <string name="add_account">Add account</string>
+    <string name="choose_wizard">Choose wizard</string>
+    <string name="use">Use :</string>
+    <string name="use_pstn">Use mobile</string>
+    <string name="use_skype">Use Skype</string>
+    <string name="ongoing_call">Call in Progress</string>
+    <string name="missed_call">Missed call</string>
+    <string name="recentCalls_empty">No Call Logs</string>
+    <string name="filters">Filters</string>
+    <string name="filters_desc">To apply when integration to Android is used</string>
+    <string name="filters_for">Filters for</string>
+    <string name="add_filter">Add filter / rewrite rule</string>
+    <string name="delete_filter">Delete filter</string>
+    <string name="callLog_delete_entry">Delete this call</string>
+    <string name="callLog_delete_all">Delete all calls</string>
+    <string name="callLog_delDialog_title">Delete Call Logs</string>
+    <string name="callLog_delDialog_message">Are you sure you want to delete all calls from the log?</string>
+    <string name="callLog_delDialog_yes">Yes</string>
+    <string name="callLog_delDialog_no">No</string>
+    <string name="gsm">Mobile</string>
+    <string name="dial_tab_name_text">Dial</string>
+    <string name="calllog_tab_name_text">CallLogs</string>
+    <string name="messages_tab_name_text">Messages</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="service_ticker_registered_text">SIP Registered</string>
+    <string name="outgoing_call_chooser_call_text">Call</string>
+    <string name="reorder">Reorder</string>
+    <string name="backup_restore">Backup / Restore</string>
+    <string name="backup">Backup</string>
+    <string name="faq">FAQ</string>
+    <string name="help">Help</string>
+    <string name="record_logs">Record logs to send it to dev team and report a bug</string>
+    <string name="send_logs">Stop recording logs (OPTIONALY send it)</string>
+    <string name="view_existing_issues">Consult existing issues</string>
+    <string name="ok">OK</string>
+    <string name="misc">Misc</string>
+    <string name="warning">WARNING</string>
+    <string name="disconnect_and_incoming_explaination">You are configured to be available for this network !!! By clicking OK here you confirm that you don\'t want to be available until next start of the application</string>
+    <string name="disconnect_and_will_restart">Will automatically restart when : <xliff:g id="networks" example="3G">%s</xliff:g> will become available (change settings if you don\'t want)</string>
+    <string name="gadget_title">SIP Account switcher</string>
+    <string name="search_in_contacts">Search in contacts</string>
+    <string name="pickup_sip_uri">Pickup SIP contact</string>
+    <string name="display_icon_in_status_bar_desc">Should the application display an icon in the status bar when registered</string>
     <string name="display_icon_in_status_bar">Display icon in status bar</string>
-	<string name="another_application_use_sip_port">Another application is currently using SIP port! Can\'t start !!!</string>
-	<string name="choose_phone">Choose phone</string>
-	<string name="no_phone_found">No phone found for this contact</string>
-	<string name="show_password">Show password</string>
-	<string name="this_codec_is_not_free">**This codec is not free !!!**\nPlease ensure that somebody (your SIP provider or yourself) have purchased a license that allow you to use this codec! We (as application distributors) are not responsible for an illegal use of this codec.\nIt\'s up to you to be sure that you are authorized to use this codec.\nPurchase link : </string>
-	<string name="voice_mail">Voice mail</string>
-	<string name="type_sip_uri_or_autocomplete">Sip uri or autocomplete</string>
-	<string name="not_configured_multiple_calls">The application is not configured to allow multiple calls</string>
-	
-	<string name="permlab_useSip">Use sip</string>
-	<string name="permdesc_useSip">Place SIP calls, send SIP messages and control SIP communications</string>
-	<string name="permlab_configureSip">Use sip</string>
-	<string name="permdesc_configureSip">Place SIP calls, send SIP messages and control SIP communications</string>
-	
-	<string name="legal_information">Legal information</string>
+    <string name="another_application_use_sip_port">Another application is currently using SIP port! Can\'t start !!!</string>
+    <string name="choose_phone">Choose phone</string>
+    <string name="no_phone_found">No phone found for this contact</string>
+    <string name="show_password">Show password</string>
+    <string name="this_codec_is_not_free">**This codec is not free !!!**\nPlease ensure that somebody (your SIP provider or yourself) have purchased a license that allow you to use this codec! We (as application distributors) are not responsible for an illegal use of this codec.\nIt\'s up to you to be sure that you are authorized to use this codec.\nPurchase link : </string>
+    <string name="voice_mail">Voice mail</string>
+    <string name="voice_mail_number">VM number</string>
+    <string name="type_sip_uri_or_autocomplete">Sip uri or autocomplete</string>
+    <string name="not_configured_multiple_calls">The application is not configured to allow multiple calls</string>
+    <string name="permlab_useSip">Use sip</string>
+    <string name="permdesc_useSip">Place SIP calls, send SIP messages and control SIP communications</string>
+    <string name="permlab_configureSip">Use sip</string>
+    <string name="permdesc_configureSip">Place SIP calls, send SIP messages and control SIP communications</string>
+    <string name="legal_information">Legal information</string>
+    <string name="update_nightly_build">Update nightly build</string>
+
+    <!--
+         String describing the button to call a number or contact.
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.
+    -->
+    <string name="description_call">Call <xliff:g id="name">%1$s</xliff:g></string>
+    <string name="reconnect">Reconnect</string>
+    <string name="switch_to_text">Switch to text mode</string>
+    <string name="switch_to_digit">Switch to digit mode</string>
+    <string name="no_voice_mail_configured">No voicemail configured</string>
+
 </resources>

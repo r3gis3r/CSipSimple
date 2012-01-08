@@ -18,7 +18,9 @@
 package com.csipsimple.ui;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -26,14 +28,14 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
 import com.csipsimple.models.Filter.RegExpRepresentation;
 import com.csipsimple.utils.Log;
@@ -42,10 +44,9 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 
 	private static final String THIS_FILE = "EditFilter";
 	private int filterId;
-	private DBAdapter database;
 	private Filter filter;
 	private Button saveButton;
-	private int accountId;
+	private long accountId;
 	private EditText replaceView;
 	private Spinner actionSpinner;
 	private EditText matchesView;
@@ -63,18 +64,15 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		//Get back the concerned account and if any set the current (if not a new account is created)
 		Intent intent = getIntent();
         filterId = intent.getIntExtra(Intent.EXTRA_UID, -1);
-        accountId = intent.getIntExtra(Filter.FIELD_ACCOUNT, SipProfile.INVALID_ID);
+        accountId = intent.getLongExtra(Filter.FIELD_ACCOUNT, SipProfile.INVALID_ID);
         
         if(accountId == SipProfile.INVALID_ID) {
         	Log.e(THIS_FILE, "Invalid account");
         	finish();
         }
         
-        database = new DBAdapter(this);
-		database.open();
-		filter = database.getFilter(filterId);
-		database.close();
-		
+        filter = Filter.getProfileFromDbId(this, filterId, Filter.FULL_PROJ);
+        
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.edit_filter);
@@ -130,7 +128,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 	private void saveFilter() {
 		//Update filter object
 		
-		filter.account = accountId;
+		filter.account = (int) accountId;
 		filter.action = Filter.getActionForPosition(actionSpinner.getSelectedItemPosition());
 		RegExpRepresentation repr = new RegExpRepresentation();
 		//Matcher
@@ -145,18 +143,25 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 			repr.type = Filter.getReplaceForPosition(replaceSpinner.getSelectedItemPosition());
 			filter.setReplaceRepresentation(repr);
 		}else {
-			filter.replace_pattern = "";
+			filter.replacePattern = "";
 		}
 		
 		//Save
-		database.open();
 		if(filterId < 0) {
-			filter.priority = database.getCountFiltersForAccount(filter.account);
-			database.insertFilter(filter);
+			Cursor currentCursor = getContentResolver().query(SipManager.FILTER_URI, new String[] {Filter._ID}, 
+					Filter.FIELD_ACCOUNT + "=?", 
+					new String[] {
+						filter.account.toString()
+					}, null);
+			filter.priority = 0;
+			if(currentCursor != null) {
+				filter.priority = currentCursor.getCount();
+				currentCursor.close();
+			}
+			getContentResolver().insert(SipManager.FILTER_URI, filter.getDbContentValues());
 		}else {
-			database.updateFilter(filter);
+			getContentResolver().update(ContentUris.withAppendedId(SipManager.FILTER_ID_URI_BASE, filterId), filter.getDbContentValues(), null, null);
 		}
-		database.close();
 	}
 	
 	private void fillLayout() {
@@ -192,28 +197,25 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 
 	@Override
 	public void onItemSelected(AdapterView<?> spinner, View arg1, int arg2, long arg3) {
-		switch(spinner.getId()) {
-		case R.id.filter_action:
+		int spinnerId = spinner.getId();
+		if (spinnerId == R.id.filter_action) {
 			if(Filter.getActionForPosition(actionSpinner.getSelectedItemPosition()) == Filter.ACTION_REPLACE) {
 				replaceContainer.setVisibility(View.VISIBLE);
 			}else {
 				replaceContainer.setVisibility(View.GONE);
 			}
-			break;
-		case R.id.matcher_type:
+		} else if (spinnerId == R.id.matcher_type) {
 			if(initMatcherSpinner) {
 				matchesView.setText("");
 			}else {
 				initMatcherSpinner = true;
 			}
-			break;
-		case R.id.replace_type:
+		} else if (spinnerId == R.id.replace_type) {
 			if(initReplaceSpinner) {
 				replaceView.setText("");
 			}else {
 				initReplaceSpinner = true;
 			}
-			break;
 		}
 		boolean showMatcherView = Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_ALL ;
 		matchesView.setVisibility(showMatcherView ? View.VISIBLE : View.GONE);

@@ -27,6 +27,8 @@ def type_to_signature(itype):
 		return "D"
 	if itype == "String":
 		return "Ljava/lang/String;"
+	if itype == "Object":
+		return "Ljava/lang/Object;"
 	return "Lorg/pjsip/pjsua/%s;" % itype
 
 def parse_java_file(input_stream):

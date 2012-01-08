@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
   <string name="next">Avanti</string>
-  <string name="init">Inizializzazione ...</string>
+  <string name="init">Inizializzazione …</string>
   <string name="unable_to_download_file">Impossibile scaricare file</string>
   <string name="invalid_sip_uri">L\'uri sip non è valido per la chiamata</string>
   <string name="accounts">Account</string>

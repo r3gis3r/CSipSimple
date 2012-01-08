@@ -21,9 +21,11 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import android.preference.ListPreference;
+import android.view.MenuItem;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Theme;
 
@@ -35,7 +37,29 @@ public class PrefsUI extends GenericPrefs {
 	protected int getXmlPreferences() {
 		return R.xml.prefs_ui;
 	}
-
+	
+	/*
+	@Override
+	protected void beforeBuildPrefs() {
+		super.beforeBuildPrefs();
+		
+		ActionBar ab = getActionBar();
+		if(ab != null) {
+			ab.setDisplayHomeAsUpEnabled(true);
+		}
+		
+	}
+	*/
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int selId = item.getItemId();
+		if(selId == Compatibility.getHomeMenuId()) {
+			finish();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	protected void afterBuildPrefs() {
 		super.afterBuildPrefs();

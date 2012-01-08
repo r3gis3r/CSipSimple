@@ -17,13 +17,10 @@
  */
 package com.csipsimple.ui;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.ListActivity;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -34,14 +31,15 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.DragnDropListView;
 import com.csipsimple.widgets.DragnDropListView.DropListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ReorderAccountsList extends ListActivity {
 	
-	private DBAdapter database;
 	private SimpleAdapter adapter;
 	
 	private ArrayList<HashMap<String, Object>> accountsList;
@@ -104,10 +102,12 @@ public class ReorderAccountsList extends ListActivity {
 				int currentPriority = 130;
 				for(HashMap<String, Object> acc : accountsList) {
 					if(currentPriority != (Integer) acc.get(ACCOUNT_PRIORITY)) {
-						database.open();
-						boolean done = database.updateAccountPriority((Integer) acc.get(ACCOUNT_ID), (int) currentPriority);
-						database.close();
-						Log.d(THIS_FILE, "Acc "+acc.get(ACCOUNT_NAME)+ " done "+done+" prio "+ currentPriority);
+						ContentValues cv = new ContentValues();
+						cv.put(SipProfile.FIELD_PRIORITY, (int) currentPriority);
+						int done = getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, (Integer) acc.get(ACCOUNT_ID)), 
+								cv, null, null);
+
+						Log.d(THIS_FILE, "Acc " + acc.get(ACCOUNT_NAME) + " done " + done + " prio " + currentPriority);
 						acc.put(ACCOUNT_PRIORITY, currentPriority);
 					}
 					//Log.d(THIS_FILE, "Reorder : "+codec.toString());
@@ -126,26 +126,33 @@ public class ReorderAccountsList extends ListActivity {
 		accountsList = new ArrayList<HashMap<String, Object>>();
 		
 		
-		if(database == null) {
-    		database = new DBAdapter(this);
-    	}
+		Cursor c = getContentResolver().query(SipProfile.ACCOUNT_URI, new String[] {
+				SipProfile.FIELD_ID,
+				SipProfile.FIELD_DISPLAY_NAME,
+				SipProfile.FIELD_PRIORITY
+		}, null, null, null);
 		
-    	database.open();
-		List<SipProfile> accList = database.getListAccounts();
-		database.close();
-		
-		
-		for(SipProfile acc : accList) {
-			HashMap<String, Object> accInfo = new HashMap<String, Object>();
-			accInfo.put(ACCOUNT_ID, acc.id);
-			accInfo.put(ACCOUNT_NAME, acc.display_name);
-			accInfo.put(ACCOUNT_PRIORITY, acc.priority);
-			accountsList.add(accInfo);
+		if (c != null) {
+			try {
+				c.moveToFirst();
+				do {
+					SipProfile acc = new SipProfile(c);
+					HashMap<String, Object> accInfo = new HashMap<String, Object>();
+					accInfo.put(ACCOUNT_ID, acc.id);
+					accInfo.put(ACCOUNT_NAME, acc.display_name);
+					accInfo.put(ACCOUNT_PRIORITY, acc.priority);
+					accountsList.add(accInfo);
+				} while (c.moveToNext() );
+			} catch (Exception e) {
+				Log.e(THIS_FILE, "Error on looping over sip profiles", e);
+			} finally {
+				c.close();
+			}
 		}
 		
-		Collections.sort(accountsList, accountComparator);
 	}
 	
+	/*
 	private Comparator<HashMap<String, Object>> accountComparator = new Comparator<HashMap<String, Object>>() {
 		@Override
 		public int compare(HashMap<String, Object> infos1, HashMap<String, Object> infos2) {
@@ -163,5 +170,5 @@ public class ReorderAccountsList extends ListActivity {
 			return 0;
 		}
 	};
-
+*/
 }

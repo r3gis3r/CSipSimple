@@ -15,10 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.utils;
 
-import java.util.HashMap;
-import java.util.List;
+package com.csipsimple.utils;
 
 import android.Manifest.permission;
 import android.app.Activity;
@@ -40,156 +38,232 @@ import android.os.Bundle;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CallHandler {
 
-	private static final String THIS_FILE = "CallHandler";
-	public static final String EXTRA_REMOTE_INTENT_TOKEN = "android.intent.extra.remote_intent_token";
-	
-	private onLoadListener listener;
-	private PendingIntent pendingIntent = null;
-	private Bitmap icon = null;
-	private String nextExclude = null;
-	private String label = null;
-	private int accountId = SipProfile.INVALID_ID;
-	private Context context = null;
-	
-	private static HashMap<String, String> AVAILABLE_HANDLERS = null;
-	
-	private final static String VIRTUAL_ACC_MAX_ENTRIES = "maxVirtualAcc";
-	private final static String VIRTUAL_ACC_PREFIX = "vAcc_";
-	
-	public CallHandler(Context ctxt){
-		context  = ctxt;
-	}
+    private static final String THIS_FILE = "CallHandler";
+    public static final String EXTRA_REMOTE_INTENT_TOKEN = "android.intent.extra.remote_intent_token";
 
-	public void loadFrom(final String packageName, String number, onLoadListener l) {
-		listener = l;
-		ComponentName cn = ComponentName.unflattenFromString(packageName);
-		
-		Intent it = new Intent(SipManager.ACTION_GET_PHONE_HANDLERS);
-		it.putExtra(Intent.EXTRA_PHONE_NUMBER, number);
-		it.setComponent(cn);
-		
-		context.sendOrderedBroadcast(it, permission.PROCESS_OUTGOING_CALLS, new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				Bundle resolvedInfos = getResultExtras(true);
-				fillWith(packageName, resolvedInfos);
-				if(listener != null) {
-					listener.onLoad(CallHandler.this);
-				}
-			}
-		}, null, Activity.RESULT_OK, null, null);
+    private onLoadListener listener;
+    private PendingIntent pendingIntent = null;
+    private Bitmap icon = null;
+    private String nextExclude = null;
+    private String label = null;
+    private long accountId = SipProfile.INVALID_ID;
+    private final Context context;
 
-		Log.d(THIS_FILE, "After broadcast");
-	}
-	
-	public void loadFrom( final Integer accountId, String number, onLoadListener l) {
-		HashMap<String, String> callHandlers = getAvailableCallHandlers(context);
-		for(String packageName : callHandlers.keySet()) {
-			if(accountId == getAccountIdForCallHandler(context, packageName)) {
-				loadFrom(packageName, number, l);
-				return;
-			}
-		}
-		
-	}
-	
+    private static Map<String, String> AVAILABLE_HANDLERS = null;
 
-	public void fillWith( String packageName, Bundle resolvedInfos) {
-		
-		pendingIntent = (PendingIntent) resolvedInfos.getParcelable(EXTRA_REMOTE_INTENT_TOKEN);
-		icon = (Bitmap) resolvedInfos.getParcelable(Intent.EXTRA_SHORTCUT_ICON);
-		nextExclude = resolvedInfos.getString(Intent.EXTRA_PHONE_NUMBER);
-		label = resolvedInfos.getString(Intent.EXTRA_TITLE);
-		
-		accountId = getAccountIdForCallHandler(context, packageName);
-	}
+    private final static String VIRTUAL_ACC_MAX_ENTRIES = "maxVirtualAcc";
+    private final static String VIRTUAL_ACC_PREFIX = "vAcc_";
 
-	
-	public static Integer getAccountIdForCallHandler(Context ctxt, String packageName) {
-		SharedPreferences prefs = ctxt.getSharedPreferences("handlerCache", Context.MODE_PRIVATE);
-		
-		int accountId = prefs.getInt(VIRTUAL_ACC_PREFIX + packageName, SipProfile.INVALID_ID);
-		if(accountId == SipProfile.INVALID_ID) {
-			// We never seen this one, add a new entry for account id
-			int maxAcc = prefs.getInt(VIRTUAL_ACC_MAX_ENTRIES, 0x0);
-			int currentEntry = maxAcc + 1;
-			accountId = SipProfile.INVALID_ID - currentEntry;
-			Editor edt = prefs.edit();
-			edt.putInt(VIRTUAL_ACC_PREFIX + packageName, accountId);
-			edt.putInt(VIRTUAL_ACC_MAX_ENTRIES, currentEntry);
-			edt.commit();
-		}
-		return accountId;
-	}
-	
-	
-	public static HashMap<String, String> getAvailableCallHandlers(Context ctxt){
-		
-		if(AVAILABLE_HANDLERS == null) {
-			AVAILABLE_HANDLERS = new HashMap<String, String>();
-			
-			PackageManager packageManager = ctxt.getPackageManager();
-			Intent it = new Intent(SipManager.ACTION_GET_PHONE_HANDLERS);
-			
-			List<ResolveInfo> availables = packageManager.queryBroadcastReceivers(it, 0);
-			for(ResolveInfo resInfo : availables) {
-				ActivityInfo actInfos = resInfo.activityInfo;
-				Log.d(THIS_FILE, "Found call handler "+actInfos.packageName +" "+actInfos.name);
-				if( packageManager.checkPermission(permission.PROCESS_OUTGOING_CALLS, actInfos.packageName) == PackageManager.PERMISSION_GRANTED) { 
-					String packagedActivityName = (new ComponentName(actInfos.packageName, actInfos.name)).flattenToString();
-					AVAILABLE_HANDLERS.put(packagedActivityName, (String) resInfo.loadLabel(packageManager));
-				}
-			}
-		}
-		
-		return AVAILABLE_HANDLERS;
-	}
-	
-	public static void clearAvailableCallHandlers() {
-		AVAILABLE_HANDLERS = null;
-	}
+    public CallHandler(Context ctxt) {
+        context = ctxt;
+    }
 
-	public interface onLoadListener {
-		void onLoad(CallHandler ch);
-	}
+    public void loadFrom(final String packageName, String number, onLoadListener l) {
+        listener = l;
+        ComponentName cn = ComponentName.unflattenFromString(packageName);
 
-	public CharSequence getLabel() {
-		return label;
-	}
+        Intent it = new Intent(SipManager.ACTION_GET_PHONE_HANDLERS);
+        it.putExtra(Intent.EXTRA_PHONE_NUMBER, number);
+        it.setComponent(cn);
 
-	public Bitmap getIcon() {
-		return icon;
-	}
-	
-	public Drawable getIconDrawable() {
-		if(icon != null) {
-			return new BitmapDrawable(icon);
-		}
-		return null;
-	}
+        context.sendOrderedBroadcast(it, permission.PROCESS_OUTGOING_CALLS,
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        Bundle resolvedInfos = getResultExtras(true);
+                        fillWith(packageName, resolvedInfos);
+                        if (listener != null) {
+                            listener.onLoad(CallHandler.this);
+                        }
+                    }
+                }, null, Activity.RESULT_OK, null, null);
 
-	public PendingIntent getIntent() {
-		return pendingIntent;
-	}
+        Log.d(THIS_FILE, "After broadcast");
+    }
 
-	public String getNextExcludeTelNumber() {
-		return nextExclude;
-	}
-	
-	public int getAccountId() {
-		return accountId;
-	}
-	
-	public SipProfile getFakeProfile() {
-		SipProfile profile = new SipProfile();
-		profile.id = accountId;
-		profile.display_name = label;
-		profile.icon = icon;
-		return profile;
-		
-	}
-	
+    public void loadFrom(final Long accountId, String number, onLoadListener l) {
+        Map<String, String> callHandlers = getAvailableCallHandlers(context);
+        for (String packageName : callHandlers.keySet()) {
+            if (accountId == getAccountIdForCallHandler(context, packageName)) {
+                loadFrom(packageName, number, l);
+                return;
+            }
+        }
+
+    }
+
+    public void fillWith(String packageName, Bundle resolvedInfos) {
+
+        pendingIntent = (PendingIntent) resolvedInfos.getParcelable(EXTRA_REMOTE_INTENT_TOKEN);
+        icon = (Bitmap) resolvedInfos.getParcelable(Intent.EXTRA_SHORTCUT_ICON);
+        nextExclude = resolvedInfos.getString(Intent.EXTRA_PHONE_NUMBER);
+        label = resolvedInfos.getString(Intent.EXTRA_TITLE);
+
+        accountId = getAccountIdForCallHandler(context, packageName);
+    }
+
+    /**
+     * Retrieve internal id of call handler as saved in databases It should be
+     * some negative < SipProfile.INVALID_ID number
+     * 
+     * @param ctxt Application context
+     * @param packageName name of the call handler package
+     * @return the id of this call handler in databases
+     */
+    public static Long getAccountIdForCallHandler(Context ctxt, String packageName) {
+        SharedPreferences prefs = ctxt.getSharedPreferences("handlerCache", Context.MODE_PRIVATE);
+
+        long accountId = SipProfile.INVALID_ID;
+        try {
+            prefs.getLong(VIRTUAL_ACC_PREFIX + packageName, SipProfile.INVALID_ID);
+        } catch (Exception e) {
+            Log.e(THIS_FILE, "Can't retrieve call handler cache id - reset");
+        }
+        if (accountId == SipProfile.INVALID_ID) {
+            // We never seen this one, add a new entry for account id
+            int maxAcc = prefs.getInt(VIRTUAL_ACC_MAX_ENTRIES, 0x0);
+            int currentEntry = maxAcc + 1;
+            accountId = SipProfile.INVALID_ID - (long) currentEntry;
+            Editor edt = prefs.edit();
+            edt.putLong(VIRTUAL_ACC_PREFIX + packageName, accountId);
+            edt.putInt(VIRTUAL_ACC_MAX_ENTRIES, currentEntry);
+            edt.commit();
+        }
+        return accountId;
+    }
+
+    /**
+     * Retrieve outgoing call handlers available as plugin for csipsimple Also
+     * contains stock call handler if available
+     * 
+     * @param ctxt context of application
+     * @return A map of package name => Fancy name of call handler
+     */
+    public static Map<String, String> getAvailableCallHandlers(Context ctxt) {
+
+        if (AVAILABLE_HANDLERS == null) {
+            AVAILABLE_HANDLERS = new HashMap<String, String>();
+
+            PackageManager packageManager = ctxt.getPackageManager();
+            Intent it = new Intent(SipManager.ACTION_GET_PHONE_HANDLERS);
+
+            List<ResolveInfo> availables = packageManager.queryBroadcastReceivers(it, 0);
+            for (ResolveInfo resInfo : availables) {
+                ActivityInfo actInfos = resInfo.activityInfo;
+                Log.d(THIS_FILE, "Found call handler " + actInfos.packageName + " " + actInfos.name);
+                if (packageManager.checkPermission(permission.PROCESS_OUTGOING_CALLS,
+                        actInfos.packageName) == PackageManager.PERMISSION_GRANTED) {
+                    String packagedActivityName = (new ComponentName(actInfos.packageName,
+                            actInfos.name)).flattenToString();
+                    AVAILABLE_HANDLERS.put(packagedActivityName,
+                            (String) resInfo.loadLabel(packageManager));
+                }
+            }
+        }
+
+        return AVAILABLE_HANDLERS;
+    }
+
+    /**
+     * Reset cache of outgoing call handlers
+     */
+    public static void clearAvailableCallHandlers() {
+        AVAILABLE_HANDLERS = null;
+    }
+
+    /**
+     * Interface for listener about load state of remote call handler plugin
+     */
+    public interface onLoadListener {
+        /**
+         * Fired when call handler has been loaded
+         * 
+         * @param ch the call handler object that has been loaded
+         */
+        void onLoad(CallHandler ch);
+    }
+
+    /**
+     * Get the display label name for this call handler
+     * 
+     * @return A string to display to represent this call handler
+     */
+    public CharSequence getLabel() {
+        return label;
+    }
+
+    /**
+     * Get the icon bitmap for this call handler
+     * 
+     * @return the bitmap icon representing the call handler
+     */
+    public Bitmap getIcon() {
+        return icon;
+    }
+
+    /**
+     * Get the icon drawable for this call handler
+     * 
+     * @return the drawable icon representing the call handler
+     */
+    public Drawable getIconDrawable() {
+        if (icon != null) {
+            return new BitmapDrawable(icon);
+        }
+        return null;
+    }
+
+    /**
+     * The pending intent to fire when user select this call handler This is
+     * only populated once loadFromXXX has been launched and called back
+     * 
+     * @return the intent to fire
+     */
+    public PendingIntent getIntent() {
+        return pendingIntent;
+    }
+
+    /**
+     * The number to exclude from treatment in next run of outgoing call if any.
+     * This is useful if the call handler also launch a make call intent to
+     * ignore this intent from processing This is only populated once
+     * loadFromXXX has been launched and called back
+     * 
+     * @return The phone number to ignore or null if none to ignore
+     */
+    public String getNextExcludeTelNumber() {
+        return nextExclude;
+    }
+
+    /**
+     * Get the call id as stored in db for this call handler Should be <
+     * SipProfile.INVALID_ID
+     * 
+     * @return the sip account id
+     */
+    public long getAccountId() {
+        return accountId;
+    }
+
+    /**
+     * Build a fake sip profile object for this plugin call handler It will
+     * contain id for this callhandler, display name and icon
+     * 
+     * @return the SipProfile equivalent object for this CallHandler
+     */
+    public SipProfile getFakeProfile() {
+        SipProfile profile = new SipProfile();
+        profile.id = accountId;
+        profile.display_name = label;
+        profile.icon = icon;
+        return profile;
+
+    }
+
 }

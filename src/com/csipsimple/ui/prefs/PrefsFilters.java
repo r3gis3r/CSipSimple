@@ -18,7 +18,6 @@
 package com.csipsimple.ui.prefs;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -35,29 +34,22 @@ public class PrefsFilters  extends AccountsChooserListActivity implements OnItem
 
 	private static final String THIS_FILE = "PrefsFilters";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		
-	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		SipProfile account = getAdapter().getItem(position);
-		
-		if(account.id != SipProfile.INVALID_ID){
+		if(id != SipProfile.INVALID_ID){
 			Intent it = new Intent(this, AccountFilters.class);
-			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
+			it.putExtra(SipProfile.FIELD_ID,  id);
 			startActivity(it);
 		}
 	}
 	
 	@Override
 	public void onClick(View v) {
-		Integer acc_id = (Integer) v.getTag();
-		if(acc_id != null) {
+		Long accId = (Long) v.getTag();
+		if(accId != null) {
 			Intent it = new Intent(this, AccountFilters.class);
-			it.putExtra(Intent.EXTRA_UID,  acc_id);
+			it.putExtra(SipProfile.FIELD_ID,  accId);
 			startActivity(it);
 		}else {
 			Log.w(THIS_FILE, "Hey something is wrong here...");

@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
   <string name="next">다음</string>
-  <string name="init">진행 중...</string>
+  <string name="init">진행 중…</string>
   <string name="unable_to_download_file">파일 다운로드 불가능</string>
   <string name="invalid_sip_uri">유효하지 않은 SIP 주소입니다</string>
   <string name="accounts">계정</string>

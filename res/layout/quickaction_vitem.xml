@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,32 +15,35 @@
      limitations under the License.
 -->
 
-<com.csipsimple.widgets.QuickActionItem
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<com.csipsimple.widgets.QuickActionItem xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/quickaction_vslider_btn"
+    android:clickable="true"
+    android:focusable="true"
     android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="3dip"
     android:paddingLeft="3dip"
     android:paddingRight="3dip"
-    android:paddingTop="3dip"
-    android:paddingBottom="3dip"
-    android:focusable="true"
-    android:clickable="true"
-    android:background="@drawable/quickaction_vslider_btn" >
+    android:paddingTop="3dip" >
+
     <ImageView
-    	android:id="@+id/quickaction_icon"
-    	android:layout_width="wrap_content"
-    	android:layout_height="fill_parent"
-    	android:layout_weight="1"
-    	android:antialias="true" />
+        android:id="@+id/quickaction_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:antialias="true"
+        android:contentDescription="@string/empty_description" />
+
     <TextView
-    	android:id="@+id/quickaction_text"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:layout_weight="0"
-    	android:layout_marginTop="2dp"
-    	android:layout_gravity="top|center"
-    	android:textSize="12dp"
-    	android:textColor="#ff333333"/>	
+        android:id="@+id/quickaction_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="2dp"
+        android:layout_weight="0"
+        android:textColor="#ff333333"
+        android:textSize="12dp" />
+
 </com.csipsimple.widgets.QuickActionItem>

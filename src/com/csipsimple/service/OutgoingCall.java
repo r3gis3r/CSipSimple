@@ -17,7 +17,7 @@
  */
 package com.csipsimple.service;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -73,7 +73,7 @@ public class OutgoingCall extends BroadcastReceiver {
 		}
 		
 		//Compute remote apps that could receive the outgoing call itnent through our api
-		HashMap<String, String> potentialHandlers = CallHandler.getAvailableCallHandlers(context);
+		Map<String, String> potentialHandlers = CallHandler.getAvailableCallHandlers(context);
 		Log.d(THIS_FILE, "We have "+potentialHandlers.size()+" potential handlers");
 		
 		// If this is an outgoing call with a valid number

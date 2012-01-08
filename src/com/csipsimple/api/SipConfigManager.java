@@ -74,6 +74,7 @@ public class SipConfigManager {
 	public static final String INTEGRATE_WITH_DIALER = "integrate_with_native_dialer";
 	public static final String INTEGRATE_WITH_NATIVE_MUSIC = "integrate_with_native_music";
 	public static final String RINGTONE = "ringtone";
+	public static final String USE_ALTERNATE_UNLOCKER = "use_alternate_unlocker";
 	
 	// NETWORK
 	public static final String TURN_SERVER = "turn_server";

@@ -64,12 +64,14 @@ endif
 ### NOISE SUPPR ###
 include $(WEBRTC_PATH)/modules/audio_processing/ns/Android.mk
 
-
-
-
 # WARN ABOUT DUPLICATE CODEC !
 ifeq ($(MY_USE_ILBC),1)
 $(warning MY_USE_ILBC and MY_USE_WEBRTC will both produce iLBC codec)
 endif
+
+#video modules
+	include $(WEBRTC_PATH)/common_video/libyuv/Android.mk 
+	include $(WEBRTC_PATH)/modules/video_render/main/source/Android.mk
+	include $(WEBRTC_PATH)/modules/video_capture/main/source/Android.mk
 
 endif

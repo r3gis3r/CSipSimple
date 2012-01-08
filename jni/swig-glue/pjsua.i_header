@@ -63,9 +63,9 @@
 %apply unsigned *INOUT { unsigned *count };
 %apply int *OUTPUT { int *capture_dev };
 %apply int *OUTPUT { int *playback_dev };
-%apply float *OUTPUT { float *mappingWidth };
-%apply float *OUTPUT { float *mappingHeight };
 %apply pjsua_conf_port_id *OUTPUT { pjsua_conf_port_id *p_id };
+%apply unsigned *OUTPUT { unsigned *tx_level };
+%apply unsigned *OUTPUT { unsigned *rx_level };
 //%pp_out(pjmedia_port)
 /* We need to be able to pass arrays of pjmedia_tone_desc to pjmedia */
 /* The array elements are passed by value (copied) */
@@ -76,11 +76,15 @@ JAVA_ARRAYSOFCLASSES(pj_str_t)
 JAVA_ARRAYSOFCLASSES(dynamic_factory)
 %apply dynamic_factory[]{dynamic_factory extra_codecs[64]};
 
+/* Nested struct silence -- Being aware this are not retrieved */
+%nestedworkaround pjmedia_port::port_data;
+%nestedworkaround pjsip_cred_info::ext;
+%nestedworkaround pjsip_event::body;
+
 %header %{
 
 #include <pjsua-lib/pjsua.h>
 #include "pjsua_jni_addons.h"
-#include "opengl_video_dev.h"
 #include "zrtp_android.h"
 
 // LOGGING
@@ -169,26 +173,27 @@ static Callback* registeredCallbackObject = NULL;
 
 extern "C" {
 void on_call_state_wrapper(pjsua_call_id call_id, pjsip_event *e) {
+#if USE_CSIPSIMPLE
 	app_on_call_state(call_id, e);
+#endif
 	registeredCallbackObject->on_call_state(call_id, e);
 }
-    
+
 void on_incoming_call_wrapper (pjsua_acc_id acc_id, pjsua_call_id call_id,
 	pjsip_rx_data *rdata) {
 	registeredCallbackObject->on_incoming_call(acc_id, call_id, rdata);
 }
-    
+
 void on_call_tsx_state_wrapper (pjsua_call_id call_id, 
 		pjsip_transaction *tsx,
 		pjsip_event *e) {
 	registeredCallbackObject->on_call_tsx_state(call_id, tsx, e);
 }
-    
+
 void on_call_media_state_wrapper (pjsua_call_id call_id) {
 	ring_stop(call_id);
 	registeredCallbackObject->on_call_media_state(call_id);
 }
- 
 
 void on_stream_created_wrapper (pjsua_call_id call_id, 
 		pjmedia_stream *strm,
@@ -347,7 +352,7 @@ void on_teardown_audio_wrapper () {
 }
 
 int on_set_micro_source_wrapper () {
-	registeredCallbackObject->on_set_micro_source();
+	return registeredCallbackObject->on_set_micro_source();
 }
 
 //#if PJMEDIA_HAS_ZRTP
@@ -383,9 +388,12 @@ static struct pjsua_callback wrapper_callback_struct = {
 	&on_stream_destroyed_wrapper,
 	&on_dtmf_digit_wrapper,
 	&on_call_transfer_request_wrapper,
+	NULL, //on_call_transfer_request2
 	&on_call_transfer_status_wrapper,
 	&on_call_replace_request_wrapper,
+	NULL, //on_call_replace_request2
 	&on_call_replaced_wrapper,
+	NULL, // on_call_rx_offer
 	NULL, // on_reg_started
 	&on_reg_state_wrapper,
 	NULL, //on_reg2_state
@@ -558,49 +566,17 @@ struct pj_str_t
 };
 
 
-// From pjmedia/include/pjmedia/codec.h:245
+// From pjmedia/include/pjmedia/port.h
+typedef struct pjmedia_port_info
+{
+    pj_str_t	    name;		/**< Port name.			    */
+    pj_uint32_t	    signature;		/**< Port signature.		    */
+    pjmedia_dir     dir;                /**< Port direction.                */
+    pjmedia_format  fmt;                /**< Format.		            */
+} pjmedia_port_info;
 
-//struct pjmedia_codec_param
-//{
-//    /**
-//     * The "info" part of codec param describes the capability of the codec,
-//     * and the value should NOT be changed by application.
-//     */
-//    struct {
-//       unsigned    clock_rate;          /**< Sampling rate in Hz            */
-//       unsigned    channel_cnt;         /**< Channel count.                 */
-//       pj_uint32_t avg_bps;             /**< Average bandwidth in bits/sec  */
-//       pj_uint32_t max_bps;             /**< Maximum bandwidth in bits/sec  */
-//       pj_uint16_t frm_ptime;           /**< Decoder frame ptime in msec.   */
-//       pj_uint16_t enc_ptime;           /**< Encoder ptime, or zero if it's
-//                                             equal to decoder ptime.        */
-//       pj_uint8_t  pcm_bits_per_sample; /**< Bits/sample in the PCM side    */
-//       pj_uint8_t  pt;                  /**< Payload type.                  */
-//    } info;
 
-    /**
-     * The "setting" part of codec param describes various settings to be
-     * applied to the codec. When the codec param is retrieved from the codec
-     * or codec factory, the values of these will be filled by the capability
-     * of the codec. Any features that are supported by the codec (e.g. vad
-     * or plc) will be turned on, so that application can query which
-     * capabilities are supported by the codec. Application may change the
-     * settings here before instantiating the codec/stream.
-     */
-//    struct {
-//        pj_uint8_t  frm_per_pkt;    /**< Number of frames per packet.   */
-//        unsigned    vad:1;          /**< Voice Activity Detector.       */
-//        unsigned    cng:1;          /**< Comfort Noise Generator.       */
-//        unsigned    penh:1;         /**< Perceptual Enhancement         */
-//        unsigned    plc:1;          /**< Packet loss concealment        */
-//        unsigned    reserved:1;     /**< Reserved, must be zero.        */
-//        pj_uint8_t  enc_fmtp_mode;  /**< Mode param in fmtp (def:0)     */
-//        pj_uint8_t  dec_fmtp_mode;  /**< Mode param in fmtp (def:0)     */
-//    } setting;
-//};
-
-// From pjmedia/include/pjmedia/port.h:253
-struct pjmedia_port
+typedef struct pjmedia_port
 {
     pjmedia_port_info    info;              /**< Port information.  */
 
@@ -608,9 +584,9 @@ struct pjmedia_port
      *  value to be associated with the port.
      */
     struct port_data {
-        void            *pdata;             /**< Pointer data.      */
-        long             ldata;             /**< Long data.         */
-    };
+	void		*pdata;		    /**< Pointer data.	    */
+	long		 ldata;		    /**< Long data.	    */
+    } port_data;
 
     /**
      * Sink interface.
@@ -631,7 +607,10 @@ struct pjmedia_port
      */
     pj_status_t (*on_destroy)(struct pjmedia_port *this_port);
 
-};
+} pjmedia_port;
+
+
+
 
 // From pjmedia/include/pjmedia/types.h:97
 enum pjmedia_dir
@@ -650,18 +629,6 @@ enum pjmedia_dir
 
 };
 
-// From pjmedia/include/pjmedia/port.h:205
-/**
- * Port info.
- */
-struct pjmedia_port_info
-{
-    pj_str_t	    name;		/**< Port name.			    */
-    pj_uint32_t	    signature;		/**< Port signature.		    */
-    pjmedia_dir     dir;                /**< Port direction.                */
-    pjmedia_format  fmt;                /**< Format.		            */
-};
-
 
 // From pjsip/include/pjsip/sip_auth.h:108
 struct pjsip_cred_info
@@ -676,13 +643,13 @@ struct pjsip_cred_info
                                      password or a hashed digest.           */
 
     /** Extended data */
-    union {
+    union ext {
         /** Digest AKA credential information. Note that when AKA credential
          *  is being used, the \a data field of this #pjsip_cred_info is
          *  not used, but it still must be initialized to an empty string.
          * Please see \ref PJSIP_AUTH_AKA_API for more information.
          */
-        struct {
+        struct aka {
             pj_str_t      k;    /**< Permanent subscriber key.          */
             pj_str_t      op;   /**< Operator variant key.              */
             pj_str_t      amf;  /**< Authentication Management Field    */
@@ -733,7 +700,7 @@ struct pjsip_event
      * By convention, the first member of each struct in the union must be
      * the pointer which is relevant to the event.
      */
-    union
+    union body
     {
         /** Timer event. */
         struct
@@ -1249,7 +1216,7 @@ struct pj_stun_nat_detect_result
     /**
      * The text describing the status, if the status is not PJ_SUCCESS.
      */
-    const char		*status_text;
+    /*const*/ char		*status_text;
 
     /**
      * This contains the NAT type as detected by the detection procedure.
@@ -1260,7 +1227,7 @@ struct pj_stun_nat_detect_result
     /**
      * Text describing that NAT type.
      */
-    const char		*nat_type_name;
+    /*const*/ char		*nat_type_name;
 
 } ;
 

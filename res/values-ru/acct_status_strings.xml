@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="acct_inactive">Неактивен</string>
-  <string name="acct_unregistered">Не зарегистрирован</string>
-  <string name="acct_expired">Регистрация истекла</string>
-  <string name="acct_registering">Регистрация...</string>
-  <string name="acct_registered">Зарегистрирован</string>
-  <string name="acct_regerror">Ошибка при регистрации</string>
-  <string name="acct_regfailed">Регистрация невозможна. Проверьте настройки</string>
+
+    <string name="acct_inactive">Неактивен</string>
+    <string name="acct_unregistered">Не зарегистрирован</string>
+    <string name="acct_expired">Регистрация истекла</string>
+    <string name="acct_registering">Регистрация…</string>
+    <string name="acct_registered">Зарегистрирован</string>
+    <string name="acct_regerror">Ошибка при регистрации</string>
+    <string name="acct_regfailed">Регистрация невозможна. Проверьте настройки</string>
+
 </resources>

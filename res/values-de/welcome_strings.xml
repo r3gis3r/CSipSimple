@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="intializing_text">Initialisiere</string>
-  <string name="downloading_text">Lade herunter</string>
-  <string name="installing_library_text">Installiere Library...</string>
-  <string name="welcome_caption_text">Willkommen</string>
+
+    <string name="intializing_text">Initialisiere</string>
+    <string name="downloading_text">Lade herunter</string>
+    <string name="installing_library_text">Installiere Library…</string>
+    <string name="welcome_caption_text">Willkommen</string>
+
 </resources>

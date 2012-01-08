@@ -55,7 +55,7 @@
     <string name="enable_stun">Omogoči STUN</string>
     <string name="enable_stun_desc">Enostavno prečkanje UDP preko NAT</string>
     <string name="stun_server">STUN strežniki</string>
-    <string name="stun_server_desc">STUN strežniki (HOST[:PORT], ...)</string>
+    <string name="stun_server_desc">STUN strežniki (HOST[:PORT], …)</string>
     <string name="enable_qos">Omogoči QoS</string>
     <string name="enable_qos_desc">Omogoči QoS</string>
     <string name="tls">TLS</string>

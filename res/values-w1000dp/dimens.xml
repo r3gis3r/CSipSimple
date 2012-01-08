@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="right_panel_margin_left">56dip</dimen>
+    <dimen name="right_panel_margin_vertical">45dip</dimen>
+    <dimen name="right_panel_fading_edge">100px</dimen>
+
+</resources>

@@ -22,6 +22,9 @@ package com.csipsimple.api;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -32,7 +35,7 @@ public class SipProfileState implements Parcelable, Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3630993161572726153L;
-	public int PrimaryKey = -1;
+	public int primaryKey = -1;
 	private int databaseId;
 	private int pjsuaId;
 	private String wizard;
@@ -45,29 +48,53 @@ public class SipProfileState implements Parcelable, Serializable{
 	private int priority;
 	private String regUri = "";
 
+	public final static String ACCOUNT_ID = "account_id";
+	public final static String PJSUA_ID = "pjsua_id";
+	public final static String WIZARD = "wizard";
+	public final static String ACTIVE = "active";
+	public final static String STATUS_CODE = "status_code";
+	public final static String STATUS_TEXT = "status_text";
+	public final static String ADDED_STATUS = "added_status";
+	public final static String EXPIRES = "expires";
+	public final static String DISPLAY_NAME = "display_name";
+	public final static String PRIORITY = "priority";
+	public final static String REG_URI = "reg_uri";
+	
 
+	public static final String [] FULL_PROJECTION = new String[] {
+		ACCOUNT_ID, PJSUA_ID, WIZARD, ACTIVE, STATUS_CODE, STATUS_TEXT, EXPIRES, DISPLAY_NAME, PRIORITY, REG_URI
+	};
+	
+	
 	public SipProfileState(Parcel in) {
 		readFromParcel(in);
 	}
 	
-	
-	public SipProfileState(SipProfile account) {
-		databaseId = account.id;
-		wizard = account.wizard;
-		active = account.active;
-		displayName = account.display_name;
-		priority = account.priority;
-		regUri = account.reg_uri;
-		
+	public SipProfileState() {
 		//Set default values
 		addedStatus = -1;
 		pjsuaId = -1;
 		statusCode = -1;
 		statusText = "";
 		expires = 0;
+	}
+	
+	public SipProfileState(SipProfile account) {
+		this();
+		
+		databaseId = (int) account.id;
+		wizard = account.wizard;
+		active = account.active;
+		displayName = account.display_name;
+		priority = account.priority;
+		regUri = account.reg_uri;
 		
 	}
 	
+	public SipProfileState(Cursor c) {
+		super();
+		createFromDb(c);
+	}
 
 	@Override
 	public int describeContents() {
@@ -75,8 +102,8 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 	
 
-	public void readFromParcel(Parcel in) {
-		PrimaryKey = in.readInt();
+	public final void readFromParcel(Parcel in) {
+		primaryKey = in.readInt();
 		databaseId = in.readInt();
 		pjsuaId = in.readInt();
 		wizard = in.readString();
@@ -92,7 +119,7 @@ public class SipProfileState implements Parcelable, Serializable{
 
 	@Override
 	public void writeToParcel(Parcel out, int arg1) {
-		out.writeInt(PrimaryKey);
+		out.writeInt(primaryKey);
 		out.writeInt(databaseId);
 		out.writeInt(pjsuaId);
 		out.writeString(wizard);
@@ -116,7 +143,86 @@ public class SipProfileState implements Parcelable, Serializable{
 			return new SipProfileState[size];
 		}
 	};
+	
+	
 
+	/** 
+	 * Fill account object from cursor
+	 * @param c cursor on the database 
+	 */
+	public final void createFromDb(Cursor c) {
+		ContentValues args = new ContentValues();
+		DatabaseUtils.cursorRowToContentValues(c, args);
+		createFromContentValue(args);
+	}
+	
+	public final void createFromContentValue(ContentValues args) {
+		Integer tmp_i;
+		String tmp_s;
+		Boolean tmp_b;
+		
+		tmp_i = args.getAsInteger(ACCOUNT_ID);
+		if(tmp_i != null) {
+			databaseId = tmp_i;
+		}
+		tmp_i = args.getAsInteger(PJSUA_ID);
+		if(tmp_i != null) {
+			pjsuaId = tmp_i;
+		}
+		tmp_s = args.getAsString(WIZARD);
+		if(tmp_s != null) {
+			wizard = tmp_s;
+		}
+		tmp_b = args.getAsBoolean(ACTIVE);
+		if(tmp_b != null) {
+			active = tmp_b;
+		}
+		tmp_i = args.getAsInteger(STATUS_CODE);
+		if(tmp_i != null) {
+			statusCode = tmp_i;
+		}
+		tmp_s = args.getAsString(STATUS_TEXT);
+		if(tmp_s != null) {
+			statusText = tmp_s;
+		}
+		tmp_i = args.getAsInteger(ADDED_STATUS);
+		if(tmp_i != null) {
+			addedStatus = tmp_i;
+		}
+		tmp_i = args.getAsInteger(EXPIRES);
+		if(tmp_i != null) {
+			expires = tmp_i;
+		}
+		tmp_s = args.getAsString(DISPLAY_NAME);
+		if(tmp_s != null) {
+			displayName = tmp_s;
+		}
+		tmp_s = args.getAsString(REG_URI);
+		if(tmp_s != null) {
+			regUri = tmp_s;
+		}
+		tmp_i = args.getAsInteger(PRIORITY);
+		if(tmp_i != null) {
+			priority = tmp_i;
+		}
+		
+	}
+
+	public ContentValues getAsContentValue() {
+		ContentValues cv = new ContentValues();
+		cv.put(ACCOUNT_ID, databaseId);
+		cv.put(ACTIVE, active);
+		cv.put(ADDED_STATUS, addedStatus);
+		cv.put(DISPLAY_NAME, displayName);
+		cv.put(EXPIRES, expires);
+		cv.put(PJSUA_ID, pjsuaId);
+		cv.put(PRIORITY, priority);
+		cv.put(REG_URI, regUri);
+		cv.put(STATUS_CODE, statusCode);
+		cv.put(STATUS_TEXT, statusText);
+		cv.put(WIZARD, wizard);
+		return cv;
+	}
 
 	/**
 	 * @param databaseId the databaseId to set
@@ -279,11 +385,11 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 	
 	public final static Comparator<SipProfileState> getComparator(){
-		return accountInfoComparator;
+		return ACC_INFO_COMPARATOR;
 	}
 
 
-	private static final Comparator<SipProfileState> accountInfoComparator = new Comparator<SipProfileState>() {
+	private static final Comparator<SipProfileState> ACC_INFO_COMPARATOR = new Comparator<SipProfileState>() {
 		@Override
 		public int compare(SipProfileState infos1,SipProfileState infos2) {
 			if (infos1 != null && infos2 != null) {

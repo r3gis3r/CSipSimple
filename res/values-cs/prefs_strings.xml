@@ -57,7 +57,7 @@
     <string name="enable_stun">Zapnout STUN</string>
     <string name="enable_stun_desc">Zapnout STUN funkce</string>
     <string name="stun_server">STUN servery</string>
-    <string name="stun_server_desc">STUN servery (HOST[:PORT], ...)</string>
+    <string name="stun_server_desc">STUN servery (HOST[:PORT], …)</string>
     <string name="enable_qos">Zapnout Qos</string>
     <string name="enable_qos_desc">Zapnout Qos paketů</string>
     <string name="dscp_val">hodnota DSCP</string>

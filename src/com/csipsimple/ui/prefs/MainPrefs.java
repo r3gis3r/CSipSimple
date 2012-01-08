@@ -20,15 +20,10 @@ package com.csipsimple.ui.prefs;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import android.app.ListActivity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,8 +35,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.api.ISipService;
-import com.csipsimple.service.SipService;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -49,17 +43,7 @@ public class MainPrefs extends ListActivity {
 	
 	private static final String THIS_FILE = "Main prefs";
 	private PrefGroupAdapter adapter;
-	private ISipService sipService = null;
 	
-	private ServiceConnection restartServiceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceDisconnected(ComponentName name) {}
-		
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder aService) {
-			sipService = ISipService.Stub.asInterface(aService);
-		}
-	};
 	private PreferencesWrapper prefsWrapper;
 	
 	@Override
@@ -86,35 +70,13 @@ public class MainPrefs extends ListActivity {
 		setListAdapter(adapter);
 		
 		getListView().setOnCreateContextMenuListener(this);
-		
-		//Attach to the service
-		Intent serviceIntent =  new Intent(this, SipService.class);
-		try {
-			bindService(serviceIntent, restartServiceConnection, 0);
-			startService(serviceIntent);
-		}catch(Exception e) {}
 	}
 	
 	@Override
 	public void onDestroy(){
+		Intent intent = new Intent(SipManager.ACTION_SIP_REQUEST_RESTART);
+		sendBroadcast(intent);
 		super.onDestroy();
-		
-		if(sipService !=null ) {
-			try {
-				sipService.askThreadedRestart();
-			} catch (RemoteException e) {
-				Log.e(THIS_FILE, "Impossible to restart sip", e);
-			}
-		}
-		
-		sipService = null;
-		if(restartServiceConnection != null) {
-			try {
-				unbindService(restartServiceConnection);
-			}catch(Exception e) {
-				//Nothing to do service was just not binded
-			}
-		}
 	}
 	
 	@Override

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="call_log_item_count_and_date">(<xliff:g id="count">%1$d</xliff:g>) <xliff:g id="date">%2$s</xliff:g></string>
+    <string name="empty_description"></string>
+
+    <!--
+         NOTE: if you change anything about this array, you must make the corresponding change
+         to the array DEFAULT_SMILEY_RES_IDS in MessageListItem.java and to default_smiley_names
+         below.
+    -->
+    <string-array name="default_smiley_texts">
+        <item>:-)</item> <!-- 0: Happy -->
+        <item>:-(</item> <!-- 1: Sad -->
+        <item>;-)</item> <!-- 2: Winking -->
+        <item>:-P</item> <!-- 3: Tongue sticking out -->
+        <item>=-O</item> <!-- 4: Surprised -->
+        <item>:-*</item> <!-- 5: Kissing -->
+        <item>:O</item> <!-- 6: Yelling -->
+        <item>B-)</item> <!-- 7: Cool -->
+        <item>:-$</item> <!-- 8: Money mouth -->
+        <item>:-!</item> <!-- 9: Foot in mouth -->
+        <item>:-[</item> <!-- 10: Embarrassed -->
+        <item>O:-)</item> <!-- 11: Angel -->
+        <item>:-\\</item> <!-- 12: Undecided -->
+        <item>:\'(</item> <!-- 13: Crying -->
+        <item>:-X</item> <!-- 14: Lips are sealed -->
+        <item>:-D</item> <!-- 15: Laughing -->
+        <item>o_O</item> <!-- 16: Confused -->
+    </string-array>
+
+</resources>

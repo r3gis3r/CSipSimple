@@ -34,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.SimpleCursorAdapter;
 
 import com.csipsimple.R;
+import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.Compatibility;
 
 public abstract class ContactsWrapper {
@@ -58,10 +59,12 @@ public abstract class ContactsWrapper {
 		return instance;
 	}
 	
-	protected ContactsWrapper() {}
+	protected ContactsWrapper() {
+		// By default nothing to do in constructor
+	}
 	
 	public abstract Bitmap getContactPhoto(Context ctxt, Uri uri, Integer defaultResource);
-	public abstract ArrayList<Phone> getPhoneNumbers(Context ctxt, String id);
+	public abstract List<Phone> getPhoneNumbers(Context ctxt, String id);
 	public abstract Cursor searchContact(Context ctxt, CharSequence constraint);
 	public abstract CharSequence transformToSipUri(Context ctxt, Cursor cursor);
 	public abstract void bindAutoCompleteView(View view, Context context, Cursor cursor);
@@ -102,7 +105,7 @@ public abstract class ContactsWrapper {
 	
 
 	public void treatContactPickerPositiveResult(final Context ctxt, final String contactId, final OnPhoneNumberSelected l) {
-		ArrayList<Phone> phones = getPhoneNumbers(ctxt, contactId);
+		List<Phone> phones = getPhoneNumbers(ctxt, contactId);
         
         if(phones.size() == 0) {
 	        final AlertDialog.Builder builder = new AlertDialog.Builder(ctxt);
@@ -154,8 +157,8 @@ public abstract class ContactsWrapper {
 	    	if (!number.startsWith("sip:")) {
 	    		//Code from android source : com/android/phone/OutgoingCallBroadcaster.java 
                 // so that we match exactly the same case that an outgoing call from android
-				number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
-	            number = PhoneNumberUtils.stripSeparators(number);
+				String rNumber = PhoneNumberUtils.convertKeypadLettersToDigits(number);
+	            return PhoneNumberUtils.stripSeparators(rNumber);
 	    	}
 	        return number;
 	    }
@@ -212,4 +215,5 @@ public abstract class ContactsWrapper {
         return true;
     }
 
+    public abstract CallerInfo findCallerInfo(Context ctxt, String number);
 }

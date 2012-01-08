@@ -61,7 +61,7 @@
     <string name="enable_stun">啟用 STUN</string>
     <string name="enable_stun_desc">開啟 STUN 功能</string>
     <string name="stun_server">STUN 服務器</string>
-    <string name="stun_server_desc">STUN 服務器 (HOST[:PORT], ...)</string>
+    <string name="stun_server_desc">STUN 服務器 (HOST[:PORT], …)</string>
     <string name="enable_qos">啟用 QoS</string>
     <string name="enable_qos_desc">啟用封包的QoS</string>
     <string name="dscp_val">DSCP 值</string>

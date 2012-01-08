@@ -57,7 +57,7 @@
     <string name="enable_stun">STUN inschakelen</string>
     <string name="enable_stun_desc">Zet STUN aan</string>
     <string name="stun_server">STUN servers</string>
-    <string name="stun_server_desc">STUN servers (HOST[:PORT], ...)</string>
+    <string name="stun_server_desc">STUN servers (HOST[:PORT], …)</string>
     <string name="enable_qos">Zet QoS aan</string>
     <string name="enable_qos_desc">QoS inschakelen voor pakketten</string>
     <string name="dscp_val">DSCP-waarde</string>

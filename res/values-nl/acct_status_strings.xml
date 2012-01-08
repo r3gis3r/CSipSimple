@@ -3,7 +3,7 @@
   <string name="acct_inactive">Inactief</string>
   <string name="acct_unregistered">Niet geregistreerd</string>
   <string name="acct_expired">Registratie verlopen</string>
-  <string name="acct_registering">Bezig met registreren ...</string>
+  <string name="acct_registering">Bezig met registreren …</string>
   <string name="acct_registered">Geregistreerd</string>
   <string name="acct_regerror">Fout tijdens registreren</string>
   <string name="acct_regfailed">Registratie mislukt</string>

@@ -30,7 +30,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.csipsimple.R;
@@ -50,7 +49,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	private SlidingTab slidingTabWidget;
 	private Button clearCallButton, dialButton, addCallButton;
 	private ToggleButton bluetoothButton, speakerButton, muteButton;
-	private RelativeLayout inCallButtons;
+	private View inCallButtons;
 	private boolean isDialpadOn = false;
 	private Button takeCallButton, declineCallButton;
 	private boolean useSlider;
@@ -158,7 +157,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		if(accessibilityManager.isEnabled()) {
 			useSlider = false;
 		}else {
-			useSlider = !prefs.getUseAlternateUnlocker();
+			useSlider = !prefs.useAlternateUnlocker();
 		}
 	}
 
@@ -168,7 +167,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 
 		slidingTabWidget = (SlidingTab) findViewById(R.id.takeCallUnlocker);
 		alternateLockerWidget = (LinearLayout) findViewById(R.id.takeCallUnlockerAlternate);
-		inCallButtons = (RelativeLayout) findViewById(R.id.inCallButtons);
+		inCallButtons = findViewById(R.id.bottomButtonsContainer);
 
 		addCallButton = (Button) findViewById(R.id.addCallButton);
 		clearCallButton = (Button) findViewById(R.id.clearCallButton);
@@ -360,48 +359,35 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
-		switch (id) {
-		case R.id.clearCallButton:
+		if (id == R.id.clearCallButton) {
 			dispatchTriggerEvent(OnTriggerListener.CLEAR_CALL);
-			break;
-		case R.id.dialpadButton:
+		} else if (id == R.id.dialpadButton) {
 			dispatchTriggerEvent(isDialpadOn ? OnTriggerListener.DIALPAD_OFF : OnTriggerListener.DIALPAD_ON);
 			isDialpadOn = !isDialpadOn;
-			break;
-		case R.id.bluetoothButton:
+		} else if (id == R.id.bluetoothButton) {
 			if (((ToggleButton) v).isChecked()) {
 				dispatchTriggerEvent(OnTriggerListener.BLUETOOTH_ON);
 			} else {
 				dispatchTriggerEvent(OnTriggerListener.BLUETOOTH_OFF);
 			}
-			break;
-		case R.id.speakerButton:
+		} else if (id == R.id.speakerButton) {
 			if (((ToggleButton) v).isChecked()) {
 				dispatchTriggerEvent(OnTriggerListener.SPEAKER_ON);
 			} else {
 				dispatchTriggerEvent(OnTriggerListener.SPEAKER_OFF);
 			}
-			break;
-		case R.id.muteButton:
+		} else if (id == R.id.muteButton) {
 			if (((ToggleButton) v).isChecked()) {
 				dispatchTriggerEvent(OnTriggerListener.MUTE_ON);
 			} else {
 				dispatchTriggerEvent(OnTriggerListener.MUTE_OFF);
 			}
-			break;
-		case R.id.takeCallButton:
+		} else if (id == R.id.takeCallButton) {
 			dispatchTriggerEvent(OnTriggerListener.TAKE_CALL);
-			break;
-		case R.id.declineCallButton:
+		} else if (id == R.id.declineCallButton) {
 			dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
-			break;
-		case R.id.addCallButton:
+		} else if (id == R.id.addCallButton) {
 			dispatchTriggerEvent(OnTriggerListener.ADD_CALL);
-			break;
-	//	case R.id.settingsButton:
-	//		dispatchTriggerEvent(OnTriggerListener.MEDIA_SETTINGS);
-		default:
-			break;
 		}
 	}
 	

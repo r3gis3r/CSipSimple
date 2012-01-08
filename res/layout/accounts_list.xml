@@ -16,29 +16,12 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical" android:background="@android:color/black"
+	android:orientation="vertical"
 	android:id="@+id/acc_list_chooser_wrapper">
 
-	<!-- Add account row -->
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:id="@+id/add_account"
-		android:clickable="true" android:focusable="true" android:orientation="horizontal"
-		android:background="@android:drawable/list_selector_background">
-		<ImageView  android:duplicateParentState="true" android:gravity="center"
-			android:scaleType="center" android:src="@drawable/add_account" style="@style/list_left_column" />
-
-		<TextView android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:layout_gravity="center_vertical"
-			android:textAppearance="?android:attr/textAppearanceLarge" 
-			android:textColor="@android:color/white" android:text="@string/add_account" />
-	</LinearLayout>
-	
-	<ImageView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:scaleType="fitXY"
-		android:gravity="fill_horizontal" android:src="@drawable/divider_horizontal_dark" />
 	
 	<ListView android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:id="@+id/account_list"
+		android:layout_height="0dip" android:id="@+id/account_list"
 		android:layout_weight="1" />
 
 </LinearLayout>

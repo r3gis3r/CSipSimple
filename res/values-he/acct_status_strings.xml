@@ -3,7 +3,7 @@
   <string name="acct_inactive">לא פעיל</string>
   <string name="acct_unregistered">לא רשום</string>
   <string name="acct_expired">הרישום פג תוקף</string>
-  <string name="acct_registering">ההרשמה ...</string>
+  <string name="acct_registering">ההרשמה …</string>
   <string name="acct_registered">רשום</string>
   <string name="acct_regerror">שגיאה בעת ההרשמה</string>
   <string name="acct_regfailed">ההרשמה נכשלה - בדוק את ההגדרות</string>

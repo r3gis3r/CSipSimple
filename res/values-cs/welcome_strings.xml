@@ -2,5 +2,5 @@
 <resources>
   <string name="intializing_text">Inicializace</string>
   <string name="downloading_text">Stahování</string>
-  <string name="installing_library_text">Instalace knihovny...</string>
+  <string name="installing_library_text">Instalace knihovny…</string>
 </resources>

@@ -32,7 +32,7 @@
   <string name="open_keyboard_to_compose_message">Abrir teclado para escribir mensaje</string>
   <string name="image_too_large">Imágen demasiado grande</string>
   <string name="ask_for_automatically_resize">¿Redimensionar la imágen automáticamente antes de enviar?</string>
-  <string name="compressing">Imágen demasiado grande. Comprimiendo...</string>
+  <string name="compressing">Imágen demasiado grande. Comprimiendo…</string>
   <string name="unsupported_media_format">"Formato "<xliff:g id="name">%1$s</xliff:g>" no soportado"</string>
   <string name="menu_view_contact">Ver contacto</string>
   <string name="menu_add_to_contacts">Añadir a Contactos</string>
@@ -58,5 +58,5 @@
   <string name="status_label">Estado:</string>
   <string name="menu_insert_smiley">Insertar emoticono</string>
   <string name="me">Yo</string>
-  <string name="sending_message">Enviando...</string>
+  <string name="sending_message">Enviando…</string>
 </resources>

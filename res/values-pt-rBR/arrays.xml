@@ -1,41 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="default_smiley_texts">
-    <item>:-)</item>
-    <item>:-(</item>
-    <item>:-[</item>
-    <item>O:-)</item>
-    <item>:-\\</item>
-    <item>:\'(</item>
-    <item>:-X</item>
-    <item>:-D</item>
-    <item>o_O</item>
-    <item>;-)</item>
-    <item>:-P</item>
-    <item>=-O</item>
-    <item>:-*</item>
-    <item>:O</item>
-    <item>B-)</item>
-    <item>:-$</item>
-    <item>:-!</item>
-  </string-array>
-  <string-array name="default_smiley_names">
-    <item>Feliz</item>
-    <item>Triste</item>
-    <item>Envergonhado</item>
-    <item>Anjo</item>
-    <item>Indeciso</item>
-    <item>Chorando</item>
-    <item>Boca fechada</item>
-    <item>Rindo</item>
-    <item>Confuso</item>
-    <item>Piscando</item>
-    <item>Mostrando a língua</item>
-    <item>Surpreso</item>
-    <item>Beijando</item>
-    <item>Gritando</item>
-    <item>Tranquilo</item>
-    <item>Louco por dinheiro</item>
-    <item>Falei besteira</item>
-  </string-array>
+
+    <string-array name="default_smiley_names">
+        <item>Feliz</item>
+        <item>Triste</item>
+        <item>Envergonhado</item>
+        <item>Anjo</item>
+        <item>Indeciso</item>
+        <item>Chorando</item>
+        <item>Boca fechada</item>
+        <item>Rindo</item>
+        <item>Confuso</item>
+        <item>Piscando</item>
+        <item>Mostrando a língua</item>
+        <item>Surpreso</item>
+        <item>Beijando</item>
+        <item>Gritando</item>
+        <item>Tranquilo</item>
+        <item>Louco por dinheiro</item>
+        <item>Falei besteira</item>
+    </string-array>
+
 </resources>

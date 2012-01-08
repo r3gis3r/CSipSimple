@@ -17,143 +17,191 @@
  *  
  *  This file and this file only is released under dual Apache license
  */
-package com.csipsimple.api;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package com.csipsimple.api;
 
 import android.net.Uri;
 import android.text.TextUtils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class SipUri {
-	
-	private static String digitNumberPatter = "^[0-9\\-#\\+\\*\\(\\)]+$";
-	
-	
-	//Contact related
+public final class SipUri {
 
+    private SipUri() {
+        // Singleton
+    }
+
+    private final static String DIGIT_NBR_RULE = "^[0-9\\-#\\+\\*\\(\\)]+$";
+    private final static Pattern SIP_CONTACT_PATTERN = Pattern
+            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?(sip(?:s)?):([^@]*)@([^>]*)(?:>)?");
+    private final static Pattern SIP_HOST_PATTERN = Pattern
+            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?(sip(?:s)?):([^@>]*)(?:>)?");
+
+    // Contact related
     public static class ParsedSipContactInfos {
-    	private static Pattern sipContactSpliter = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?(sip(?:s)?):([^@]*)@([^>]*)(?:>)?");
-    	
-    	
-    	public String displayName = "";
-    	public String userName = "";
-    	public String domain = "";
-    	public String scheme = "sip";
-    	
-    	@Override
-    	public String toString() {
-    		String buildString = "<"+scheme+":"+userName+"@"+domain+">";
-    		if(!TextUtils.isEmpty(userName)) {
-    			buildString = displayName + " "+buildString;
-    		}
-    		return buildString;
-    	}
+        public String displayName = "";
+        public String userName = "";
+        public String domain = "";
+        public String scheme = "sip";
+
+        @Override
+        public String toString() {
+            StringBuffer buildString = new StringBuffer();
+            buildString.append("<" + scheme + ":" + userName + "@" + domain + ">");
+            if (!TextUtils.isEmpty(userName)) {
+                // Prepend with space
+                buildString.insert(0, " ");
+                // Start with display name
+                buildString.insert(0, displayName);
+            }
+            return buildString.toString();
+        }
     }
-    
-	/**
-	 * Parse a sip contact
-	 * @param sipUri string sip contact
-	 * @return a ParsedSipContactInfos which contains uri parts. If not match return the object with blank fields
-	 */
-	 public static ParsedSipContactInfos parseSipContact(String sipUri) {
-    	ParsedSipContactInfos parsedInfos = new ParsedSipContactInfos();
-    	
-    	if(!TextUtils.isEmpty(sipUri)) {
-			Matcher m = ParsedSipContactInfos.sipContactSpliter.matcher(sipUri);
-			if (m.matches()) {
-				parsedInfos.displayName = m.group(1).trim();
-				parsedInfos.domain = m.group(4);
-				parsedInfos.userName =  Uri.decode(m.group(3));
-				parsedInfos.scheme = m.group(2);
-			}
-    	}
-    	
-    	return parsedInfos;
+
+    /**
+     * Parse a sip contact
+     * 
+     * @param sipUri string sip contact
+     * @return a ParsedSipContactInfos which contains uri parts. If not match
+     *         return the object with blank fields
+     */
+    public static ParsedSipContactInfos parseSipContact(String sipUri) {
+        ParsedSipContactInfos parsedInfos = new ParsedSipContactInfos();
+
+        if (!TextUtils.isEmpty(sipUri)) {
+            Matcher m = SIP_CONTACT_PATTERN.matcher(sipUri);
+            if (m.matches()) {
+                parsedInfos.displayName = m.group(1).trim();
+                parsedInfos.domain = m.group(4);
+                parsedInfos.userName = Uri.decode(m.group(3));
+                parsedInfos.scheme = m.group(2);
+            }
+        }
+
+        return parsedInfos;
     }
-    
-    
-	/**
-	 * Return what should be display as caller id for this sip uri
-	 * This is the merged and fancy way fallback to uri or user name if needed
-	 * @param uri the uri to display
-	 * @return the simple display
-	 */
-	public static String getDisplayedSimpleContact(String uri) {
-		// Reformat number
-		String remoteContact = uri;
-		ParsedSipContactInfos parsedInfos = parseSipContact(uri);
-		
-		if (!TextUtils.isEmpty(parsedInfos.displayName)) {
-			//If available prefer the display name
-			remoteContact = parsedInfos.displayName;
-		} else if (!TextUtils.isEmpty(parsedInfos.userName) ) {
-			//Else, if available choose the username 
-			remoteContact = parsedInfos.userName;
-		}
-		return remoteContact;
-	}
-	
-    
+
+    /**
+     * Return what should be display as caller id for this sip uri This is the
+     * merged and fancy way fallback to uri or user name if needed
+     * 
+     * @param uri the uri to display
+     * @return the simple display
+     */
+    public static String getDisplayedSimpleContact(CharSequence uri) {
+        // Reformat number
+        if (uri != null) {
+            String remoteContact = uri.toString();
+            ParsedSipContactInfos parsedInfos = parseSipContact(remoteContact);
+
+            if (!TextUtils.isEmpty(parsedInfos.displayName)) {
+                // If available prefer the display name
+                remoteContact = parsedInfos.displayName;
+            } else if (!TextUtils.isEmpty(parsedInfos.userName)) {
+                // Else, if available choose the username
+                remoteContact = parsedInfos.userName;
+            }
+            return remoteContact;
+        }
+        return "";
+    }
+
     /**
      * Check if username is an phone tel
+     * 
      * @param phone username to check
      * @return true if look like a phone number
      */
     public static boolean isPhoneNumber(String phone) {
-    	 return (!TextUtils.isEmpty(phone) && Pattern.matches(digitNumberPatter, phone));
+        return (!TextUtils.isEmpty(phone) && Pattern.matches(DIGIT_NBR_RULE, phone));
     }
-    
+
     /**
-     * Transform sip uri into something that doesn't depend on remote display name
+     * Transform sip uri into something that doesn't depend on remote display
+     * name
+     * 
      * @param sipContact full sip uri
      * @return simplified sip uri
      */
     public static String getCanonicalSipContact(String sipContact) {
-    	String result = sipContact;
-    	Matcher m = ParsedSipContactInfos.sipContactSpliter.matcher(sipContact);
-		if (m.matches()) {
-			result = m.group(2)+":"+m.group(3)+"@"+m.group(4);
-		}
-		return result;
+        return getCanonicalSipContact(sipContact, true);
     }
-    
-    
-    //Uri related
+
+    /**
+     * Transform sip uri into something that doesn't depend on remote display
+     * name
+     * 
+     * @param sipContact full sip uri
+     * @param includeScheme whether to include scheme
+     * @return
+     */
+    public static String getCanonicalSipContact(String sipContact, boolean includeScheme) {
+        StringBuilder sb = new StringBuilder();
+        if (!TextUtils.isEmpty(sipContact)) {
+            Matcher m = SIP_CONTACT_PATTERN.matcher(sipContact);
+            boolean hasUsername = false;
+
+            if (m.matches()) {
+                hasUsername = true;
+            } else {
+                m = SIP_HOST_PATTERN.matcher(sipContact);
+
+            }
+
+            if (m.matches()) {
+                if (includeScheme) {
+                    sb.append(m.group(2));
+                    sb.append(":");
+                }
+                sb.append(m.group(3));
+                if (hasUsername) {
+                    sb.append("@");
+                    sb.append(m.group(4));
+                }
+            } else {
+                sb.append(sipContact);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    // Uri related
     public static class ParsedSipUriInfos {
-    	public String domain = "";
-    	public String scheme = "sip";
-    	public int port = 5060;
+        public String domain = "";
+        public String scheme = "sip";
+        public int port = 5060;
     }
-    
-    private static Pattern sipUriSpliter = Pattern.compile("^(sip(?:s)?):(?:[^:]*(?::[^@]*)?@)?([^:@]*)(?::([0-9]*))?$", Pattern.CASE_INSENSITIVE);
-    
-     
+
+    private final static Pattern SIP_URI_PATTERN = Pattern.compile(
+            "^(sip(?:s)?):(?:[^:]*(?::[^@]*)?@)?([^:@]*)(?::([0-9]*))?$", Pattern.CASE_INSENSITIVE);
+
     /**
      * Parse an uri
+     * 
      * @param sipUri the uri to parse
      * @return parsed object
      */
-	public static ParsedSipUriInfos parseSipUri(String sipUri) {
-		ParsedSipUriInfos parsedInfos = new ParsedSipUriInfos();
+    public static ParsedSipUriInfos parseSipUri(String sipUri) {
+        ParsedSipUriInfos parsedInfos = new ParsedSipUriInfos();
 
-		if (!TextUtils.isEmpty(sipUri)) {
-			Matcher m = sipUriSpliter.matcher(sipUri);
-			if (m.matches()) {
-				parsedInfos.scheme = m.group(1);
-				parsedInfos.domain = m.group(2);
-				if(m.group(3) != null) {
-					try{
-						parsedInfos.port = Integer.parseInt(m.group(3));
-					}catch(NumberFormatException e) {
-						//Log.e(THIS_FILE, "Unable to parse port number");
-					}
-				}
-			}
-		}
+        if (!TextUtils.isEmpty(sipUri)) {
+            Matcher m = SIP_URI_PATTERN.matcher(sipUri);
+            if (m.matches()) {
+                parsedInfos.scheme = m.group(1);
+                parsedInfos.domain = m.group(2);
+                if (m.group(3) != null) {
+                    try {
+                        parsedInfos.port = Integer.parseInt(m.group(3));
+                    } catch (NumberFormatException e) {
+                        // Log.e(THIS_FILE, "Unable to parse port number");
+                    }
+                }
+            }
+        }
 
-		return parsedInfos;
-	}
-    
+        return parsedInfos;
+    }
+
 }

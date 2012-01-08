@@ -3,7 +3,7 @@
   <string name="acct_inactive">Nedejaven</string>
   <string name="acct_unregistered">Ni prijavljen</string>
   <string name="acct_expired">Prijava potekla</string>
-  <string name="acct_registering">Prijavljam ...</string>
+  <string name="acct_registering">Prijavljam …</string>
   <string name="acct_registered">Prijavljen</string>
   <string name="acct_regerror">Napaka med prijavo</string>
   <string name="acct_regfailed">Prijava ni uspela - preverite nastavitve</string>

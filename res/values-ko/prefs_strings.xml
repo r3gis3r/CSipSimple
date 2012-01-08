@@ -57,7 +57,7 @@
     <string name="enable_stun">STUN 기능 허용</string>
     <string name="enable_stun_desc">STUN 기능 켜기</string>
     <string name="stun_server">STUN 서버</string>
-    <string name="stun_server_desc">STURN 서버(HOST[:PORT], ...)</string>
+    <string name="stun_server_desc">STURN 서버(HOST[:PORT], …)</string>
     <string name="enable_qos">QoS 기능 허용</string>
     <string name="enable_qos_desc">패킷에 대한 QoS 기능 허용</string>
     <string name="dscp_val">DSCP 값</string>

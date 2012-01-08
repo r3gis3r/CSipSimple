@@ -9,11 +9,11 @@
   <string name="speaker">Luidspreker</string>
   <string name="mute">Gedempt</string>
   <string name="add_call">Oproep toevoegen</string>
-  <string name="call_state_calling">Bellen ...</string>
+  <string name="call_state_calling">Bellen …</string>
   <string name="call_state_confirmed">In gesprek</string>
   <string name="call_state_connecting">Verbinden …</string>
   <string name="call_state_disconnected">Opgehangen</string>
-  <string name="call_state_early">Bellen ...</string>
+  <string name="call_state_early">Bellen …</string>
   <string name="call_state_incoming">Inkomende oproep</string>
   <string name="call_state_null">FOUT</string>
   <string name="unlock">Ontgrendelen</string>

@@ -118,7 +118,20 @@ public abstract class BaseImplementation implements WizardIface {
 		return !isNotValid;
 	}
 	
-	public void setDefaultParams(PreferencesWrapper prefs) {}
+	/**
+	 * Set global preferences for this wizard
+	 * If some preference that need restart are modified here
+	 * Do not forget to return true in need restart
+	 */
+	public void setDefaultParams(PreferencesWrapper prefs) {
+		// By default empty implementation
+	}
+	
+	@Override
+	public boolean needRestart() {
+		return false;
+	}
+	
 	public List<Filter> getDefaultFilters(SipProfile acc) {
 		return null;
 	}

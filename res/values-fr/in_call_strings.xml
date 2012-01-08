@@ -9,12 +9,12 @@
   <string name="speaker">Ht. parleur</string>
   <string name="mute">Muet</string>
   <string name="add_call">Aj. Appel</string>
-  <string name="call_state_calling">Appel...</string>
+  <string name="call_state_calling">Appel…</string>
   <string name="call_state_confirmed">En conversation</string>
-  <string name="call_state_connecting">Connexion...</string>
+  <string name="call_state_connecting">Connexion…</string>
   <string name="call_state_disconnected">Fin d\'appel</string>
-  <string name="call_state_early">En train de sonner...</string>
-  <string name="call_state_incoming">Appel entrant...</string>
+  <string name="call_state_early">En train de sonner…</string>
+  <string name="call_state_incoming">Appel entrant…</string>
   <string name="call_state_null">ERREUR</string>
   <string name="unlock">Déverrouiller</string>
   <string name="record">Enregistrer</string>

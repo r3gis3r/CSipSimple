@@ -11,10 +11,10 @@
   <string name="add_call">Adicionar Ligação</string>
   <string name="call_state_calling">Chamando</string>
   <string name="call_state_confirmed">Conversando</string>
-  <string name="call_state_connecting">A estabelecer ligação...</string>
+  <string name="call_state_connecting">A estabelecer ligação…</string>
   <string name="call_state_disconnected">Desligado</string>
-  <string name="call_state_early">Chamando...</string>
-  <string name="call_state_incoming">Recebendo Ligação...</string>
+  <string name="call_state_early">Chamando…</string>
+  <string name="call_state_incoming">Recebendo Ligação…</string>
   <string name="call_state_null">ERRO</string>
   <string name="unlock">Desbloquear</string>
   <string name="record">Gravar</string>

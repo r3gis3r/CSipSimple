@@ -9,12 +9,12 @@
   <string name="speaker">Lautspr.</string>
   <string name="mute">Stumm</string>
   <string name="add_call">Anruf hinzufügen</string>
-  <string name="call_state_calling">Wähle...</string>
+  <string name="call_state_calling">Wähle…</string>
   <string name="call_state_confirmed">Aufgebaut</string>
-  <string name="call_state_connecting">Verbinde...</string>
+  <string name="call_state_connecting">Verbinde…</string>
   <string name="call_state_disconnected">Aufgelegt</string>
-  <string name="call_state_early">Klingelt...</string>
-  <string name="call_state_incoming">Eingehender Anruf...</string>
+  <string name="call_state_early">Klingelt…</string>
+  <string name="call_state_incoming">Eingehender Anruf…</string>
   <string name="call_state_null">Fehler</string>
   <string name="unlock">Entsperre</string>
   <string name="record">Aufnahme</string>

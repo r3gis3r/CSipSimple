@@ -81,10 +81,10 @@ public class MediaManager {
 	
 
 	private SharedPreferences prefs;
-	private boolean USE_SGS_WRK_AROUND = false;
-	private boolean USE_WEBRTC_IMPL = false;
-	private boolean DO_FOCUS_AUDIO = true;
-	private static int MODE_SIP_IN_CALL = AudioManager.MODE_NORMAL;
+	private boolean useSgsWrkAround = false;
+	private boolean useWebRTCImpl = false;
+	private boolean doFocusAudio = true;
+	private static int modeSipInCall = AudioManager.MODE_NORMAL;
 	
 
 
@@ -114,10 +114,10 @@ public class MediaManager {
 			audioFocusWrapper = AudioFocusWrapper.getInstance();
 			audioFocusWrapper.init(service, audioManager);
 		}
-		MODE_SIP_IN_CALL = service.getPrefs().getInCallMode();
-		USE_SGS_WRK_AROUND = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK);
-		USE_WEBRTC_IMPL = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK);
-		DO_FOCUS_AUDIO = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO);
+		modeSipInCall = service.getPrefs().getInCallMode();
+		useSgsWrkAround = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK);
+		useWebRTCImpl = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK);
+		doFocusAudio = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO);
 	}
 	
 	public void stopService() {
@@ -128,9 +128,9 @@ public class MediaManager {
 	}
 	
 	private int getAudioTargetMode() {
-		int targetMode = MODE_SIP_IN_CALL;
+		int targetMode = modeSipInCall;
 		
-		if(service.getPrefs().getUseModeApi()) {
+		if(service.getPrefs().useModeApi()) {
 			Log.d(THIS_FILE, "User want speaker now..."+userWantSpeaker);
 			if(!service.getPrefs().generateForSetCall()) {
 				return userWantSpeaker ? AudioManager.MODE_NORMAL : AudioManager.MODE_IN_CALL;
@@ -234,7 +234,7 @@ public class MediaManager {
 		
 
 		
-		if(!USE_WEBRTC_IMPL) {
+		if(!useWebRTCImpl) {
 			//Audio routing
 			int targetMode = getAudioTargetMode();
 			Log.d(THIS_FILE, "Set mode audio in call to "+targetMode);
@@ -247,7 +247,7 @@ public class MediaManager {
 			}
 			
 			//Set mode
-			if(targetMode != AudioManager.MODE_IN_CALL && USE_SGS_WRK_AROUND) {
+			if(targetMode != AudioManager.MODE_IN_CALL && useSgsWrkAround) {
 				//For galaxy S we need to set in call mode before to reset stack
 				audioManager.setMode(AudioManager.MODE_IN_CALL);
 			}
@@ -256,7 +256,7 @@ public class MediaManager {
 			audioManager.setMode(targetMode);
 			
 			//Routing
-			if(service.getPrefs().getUseRoutingApi()) {
+			if(service.getPrefs().useRoutingApi()) {
 				audioManager.setRouting(targetMode, userWantSpeaker?AudioManager.ROUTE_SPEAKER:AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 			}else {
 				audioManager.setSpeakerphoneOn(userWantSpeaker ? true : false);
@@ -324,7 +324,7 @@ public class MediaManager {
 		//Set stream solo/volume/focus
 
 		int inCallStream = Compatibility.getInCallStream();
-		if(DO_FOCUS_AUDIO) {
+		if(doFocusAudio) {
 			if(!accessibilityManager.isEnabled()) {
 				audioManager.setStreamSolo(inCallStream, true);
 			}
@@ -361,7 +361,7 @@ public class MediaManager {
 		ed.putInt("savedVolume", audioManager.getStreamVolume(inCallStream));
 		
 		int targetMode = getAudioTargetMode();
-		if(service.getPrefs().getUseRoutingApi()) {
+		if(service.getPrefs().useRoutingApi()) {
 			ed.putInt("savedRoute", audioManager.getRouting(targetMode));
 		}else {
 			ed.putBoolean("savedSpeakerPhone", audioManager.isSpeakerphoneOn());
@@ -372,7 +372,7 @@ public class MediaManager {
 		ed.commit();
 	}
 	
-	private synchronized void restoreAudioState() {
+	private final synchronized void restoreAudioState() {
 		if( !prefs.getBoolean("isSavedAudioState", false) ) {
 			//If we have NEVER set, do not try to reset !
 			return;
@@ -389,7 +389,7 @@ public class MediaManager {
 		setStreamVolume(inCallStream, prefs.getInt("savedVolume", (int)(audioManager.getStreamMaxVolume(inCallStream)*0.8) ), 0);
 		
 		int targetMode = getAudioTargetMode();
-		if(service.getPrefs().getUseRoutingApi()) {
+		if(service.getPrefs().useRoutingApi()) {
 			audioManager.setRouting(targetMode, prefs.getInt("savedRoute", AudioManager.ROUTE_SPEAKER), AudioManager.ROUTE_ALL);
 		}else {
 			audioManager.setSpeakerphoneOn(prefs.getBoolean("savedSpeakerPhone", false));
@@ -421,7 +421,7 @@ public class MediaManager {
 			bluetoothWrapper.setBluetoothOn(false);
 		}
 		audioManager.setMicrophoneMute(false);
-		if(DO_FOCUS_AUDIO) {
+		if(doFocusAudio) {
 			audioManager.setStreamSolo(inCallStream, false);
 			audioFocusWrapper.unFocus();
 		}

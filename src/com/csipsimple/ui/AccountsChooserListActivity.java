@@ -17,15 +17,16 @@
  */
 package com.csipsimple.ui;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,16 +35,15 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.CallHandler.onLoadListener;
 import com.csipsimple.wizards.WizardUtils;
@@ -51,11 +51,7 @@ import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public abstract class AccountsChooserListActivity extends Activity implements OnItemClickListener, OnClickListener {
 
-	private DBAdapter database;
 	private AccountAdapter adapter;
-	
-	private List<SipProfile> accountsList;
-	private ListView accountsListView;
 	
 	
 	@Override
@@ -67,25 +63,21 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 		setContentView(R.layout.accounts_list);
 		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_list_accounts);
 
-	    //	Log.d(THIS_FILE, "We are updating the list");
-    	if(database == null) {
-    		database = new DBAdapter(this);
-    	}
-    	
 		// Fill accounts with currently avalaible accounts
-		updateList();
+    	Cursor c = managedQuery(SipProfile.ACCOUNT_URI, new String[] {
+    			SipProfile.FIELD_ID + " AS " + BaseColumns._ID,
+    			SipProfile.FIELD_DISPLAY_NAME,
+    			SipProfile.FIELD_WIZARD
+    	}, null, null, null);
+    	
+    	adapter = new AccountAdapter(this, c);
+    	
 		addExternalRows();
 		
-		accountsListView = (ListView) findViewById(R.id.account_list);
+		ListView accountsListView = (ListView) findViewById(R.id.account_list);
 		
 		accountsListView.setAdapter(adapter);
 		accountsListView.setOnItemClickListener(this);
-		
-
-		//Add add row
-		LinearLayout add_row = (LinearLayout) findViewById(R.id.add_account);
-		add_row.setVisibility(View.GONE);
-		
 		
 	}
 	
@@ -140,7 +132,7 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 
 	private void addExternalRows() {
 
-		HashMap<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
+		Map<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
 		for(String packageName : callHandlers.keySet()) {
 			CallHandler ch = new CallHandler(this);
 			ch.loadFrom(packageName, null, new onLoadListener() {
@@ -153,36 +145,22 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 		
 	}
 
-    private synchronized void updateList() {
-    	
-    	
-    	database.open();
-		accountsList = database.getListAccounts();
-		database.close();
-    	
-    	if(adapter == null) {
-    		adapter = new AccountAdapter(this, accountsList);
-    		adapter.setNotifyOnChange(false);
-    	}else {
-    		adapter.clear();
-    		for(SipProfile acc : accountsList){
-    			adapter.add(acc);
-    		}
-    		adapter.notifyDataSetChanged();
-    	}
-    }
 
 	private static final class AccountListItemViews {
-		TextView labelView;
-		ImageView icon;
+		public TextView labelView;
+		public ImageView icon;
 	}
 	
-	protected class AccountAdapter extends ArrayAdapter<SipProfile> {
-		Activity context;
+	protected class AccountAdapter extends SimpleCursorAdapter {
 		
-		AccountAdapter(Activity context, List<SipProfile> list) {
-			super(context, R.layout.choose_account_row, list);
-			this.context = context;
+
+		private int wizardColIndex = -1;
+		private int nameColIndex = -1;
+		
+		AccountAdapter(Context context, Cursor c) {
+			super(context, R.layout.choose_account_row, c,
+					new String[] {},
+	                new int[] {});
 		}
 		
 		
@@ -217,20 +195,33 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 	        
 	    }
 		
-		
+		/**
+		 * Bind the view to the content datas
+		 * @param view The view to bind infos to
+		 * @param position Position of the content to bind
+		 */
 		public void bindView(View view, int position) {
 			AccountListItemViews tagView = (AccountListItemViews) view.getTag();
 			view.setTag(tagView);
 			
 			
 			// Get the view object and account object for the row
-	        final SipProfile account = getItem(position);
-	        if (account == null){
+	        final Cursor c = (Cursor) getItem(position);
+	        if (c == null){
 	        	return;
 	        }
-			tagView.labelView.setText(account.display_name);
+	        
+
+			if(nameColIndex == -1) {
+				nameColIndex = c.getColumnIndex(SipProfile.FIELD_DISPLAY_NAME);
+				wizardColIndex = c.getColumnIndex(SipProfile.FIELD_WIZARD);
+			}
+	        String wizardName = c.getString(nameColIndex);
+			
+			tagView.labelView.setText(wizardName);
+			tagView.icon.setContentDescription(wizardName);
             //Update account image
-            final WizardInfo wizardInfos = WizardUtils.getWizardClass(account.wizard);
+            final WizardInfo wizardInfos = WizardUtils.getWizardClass(c.getString(wizardColIndex));
             if(wizardInfos != null) {
             	tagView.icon.setImageResource(wizardInfos.icon);
             }

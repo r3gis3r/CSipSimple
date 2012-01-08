@@ -1,7 +1,7 @@
 
 
-#APP_OPTIM        := debug
-APP_OPTIM        := release
+APP_OPTIM        := debug
+#APP_OPTIM        := release
 
 
 ifeq ($(CSS_BUILD_TARGET),armv4t)
@@ -33,11 +33,12 @@ MY_USE_WEBRTC := 1
 MY_USE_AMR := 1
 MY_USE_G726 := 1
 
+MY_USE_VIDEO := 1
 
 
-
-# Do not change behind this line the are flags for pj build
-# Only build pjsipjni and ignore openssl
+#############################################################
+# Do not change behind this line the are flags for pj build #
+# Only build pjsipjni and ignore openssl                    #
 APP_MODULES := libpjsipjni pj_opensl_dev
 ifeq ($(MY_USE_SILK),1)
 APP_MODULES += libpj_silk_codec 
@@ -51,9 +52,12 @@ endif
 ifeq ($(MY_USE_G726),1)
 APP_MODULES += libpj_g726_codec
 endif
+ifeq ($(MY_USE_VIDEO),1)
+APP_MODULES += pj_webrtc_video_dev
+endif
 
 APP_PLATFORM := android-9
-APP_STL := stlport_static
+APP_STL := gnustl_static #stlport_static
 
 BASE_PJSIP_FLAGS := -DPJ_ANDROID=1 -DUSE_CSIPSIMPLE=$(MY_USE_CSIPSIMPLE)
 # about codecs
@@ -66,7 +70,10 @@ BASE_PJSIP_FLAGS += -DPJMEDIA_HAS_G729_CODEC=$(MY_USE_G729) -DPJMEDIA_HAS_G726_C
 
 # media
 BASE_PJSIP_FLAGS += -DPJMEDIA_HAS_WEBRTC_AEC=$(MY_USE_WEBRTC) \
-	-DPJMEDIA_HAS_VIDEO=1
+	-DPJMEDIA_HAS_VIDEO=$(MY_USE_VIDEO) \
+	-DPJMEDIA_HAS_FFMPEG=$(MY_USE_VIDEO) \
+	-DPJMEDIA_HAS_FFMPEG_CODEC_H264=$(MY_USE_VIDEO) \
+	-DPJMEDIA_VIDEO_DEV_HAS_CBAR_SRC=0
+
 # TLS ZRTP
 BASE_PJSIP_FLAGS += -DPJ_HAS_SSL_SOCK=$(MY_USE_TLS) -DPJMEDIA_HAS_ZRTP=$(MY_USE_TLS)
-	 

@@ -29,4 +29,6 @@
 	<string name="returnCall">Return call</string>
 	
 	<string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g> mins <xliff:g id="seconds" example="28">%s</xliff:g> secs</string>
+	<string name="call_number">Call <xliff:g id="number">%s</xliff:g></string>
+	<string name="call">Call</string>
 </resources>

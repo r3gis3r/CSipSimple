@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
 		Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
-		Copyright (C) 2007-2008 Esmertec AG.
 	 	Copyright (C) 2007-2008 The Android Open Source Project
 	
 		This file is part of CSipSimple. CSipSimple is free software: you can
@@ -15,52 +13,94 @@
 		General Public License for more details. You should have received a
 		copy of the GNU General Public License along with CSipSimple. If not,
 		see <http://www.gnu.org/licenses/>.
-	-->
-	<!--
-	Parts of this file are extract from the android project distributed under Apache license relicensed in GPLv3
-	-->
-
+-->
+<!-- Parts of this file are extract from the android project distributed under Apache license relicensed in GPLv3 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:background="@drawable/conversation_item_background_unread"
-    android:paddingRight="10dip" >
+    android:background="?attr/selectableItemBackground"
+    android:paddingRight="10dip"
+    android:paddingTop="@dimen/call_log_inner_margin" >
 
-    <TextView android:id="@+id/from"
+    <com.csipsimple.widgets.badge.QuickContactBadge
+        android:id="@+id/quick_contact_photo"
+        android:layout_width="@dimen/call_log_list_contact_photo_size"
+        android:layout_height="@dimen/call_log_list_contact_photo_size"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/call_log_inner_margin" />
+
+    <TextView
+        android:id="@+id/from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMediumInverse"
-        android:singleLine="true"
-        android:layout_marginTop="6dip"
-        android:layout_marginRight="5dip"
-        android:layout_marginLeft="7dip"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:ellipsize="marquee"  />
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="6dip"
+        android:layout_toRightOf="@id/quick_contact_photo"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView android:id="@+id/date"
-        android:layout_marginTop="2dip"
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="10dip"
         android:layout_marginLeft="5dip"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmallInverse"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="2dip"
         android:singleLine="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView android:id="@+id/subject"
+    <ImageView
+        android:id="@+id/error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmallInverse"
-        android:singleLine="true"
+        android:layout_alignBottom="@id/date"
+        android:layout_marginLeft="3dip"
+        android:layout_toLeftOf="@id/date"
+        android:contentDescription="@string/status_failed"
+        android:visibility="gone" />
+    <!-- android:src="@drawable/ic_list_alert_sms_failed" -->
+
+    <ImageView
+        android:id="@+id/attachment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/date"
+        android:layout_marginLeft="3dip"
+        android:layout_toLeftOf="@id/error"
+        android:visibility="gone" />
+    <!-- android:src="@drawable/ic_attachment_universal_small" -->
+
+    <TextView
+        android:id="@+id/subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_marginBottom="10dip"
-        android:layout_marginLeft="7dip"
+        android:layout_marginLeft="10dip"
+        android:layout_toLeftOf="@id/date"
+        android:layout_toRightOf="@id/quick_contact_photo"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <View
+        android:id="@+id/call_log_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_toLeftOf="@id/date"
-        android:ellipsize="end" />
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/call_log_outer_margin"
+        android:layout_marginRight="@dimen/call_log_outer_margin"
+        android:layout_marginTop="@dimen/call_log_inner_margin"
+        android:background="#55ffffff" />
 
 </RelativeLayout>

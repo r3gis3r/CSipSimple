@@ -398,6 +398,8 @@ public class Base64
         -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9         // Decimal 244 - 255 
     };
 
+	private static final String THIS_FILE = "Base64";
+
 	
 /* ********  D E T E R M I N E   W H I C H   A L H A B E T  ******** */
 
@@ -680,6 +682,7 @@ public class Base64
         catch( java.io.IOException e ) {
             // Catch it and then throw it immediately so that
             // the finally{} block is called for cleanup.
+        	Log.e(THIS_FILE, "IO Exception", e);
             throw e;
         }   // end catch
         finally {

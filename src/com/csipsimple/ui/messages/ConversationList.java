@@ -1,68 +1,60 @@
-/*
- * Copyright (C) 2008 Esmertec AG.
- * Copyright (C) 2008 The Android Open Source Project
+/**
+ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * This file is part of CSipSimple.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  CSipSimple is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *  CSipSimple is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  You should have received a copy of the GNU General Public License
+ *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.csipsimple.ui.messages;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
+import android.net.Uri.Builder;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.format.DateUtils;
-import android.text.style.StyleSpan;
+import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
+import android.support.v4.view.MenuItem.OnMenuItemClickListener;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.api.SipManager;
-import com.csipsimple.api.SipUri;
-import com.csipsimple.db.DBAdapter;
-import com.csipsimple.models.SipMessage;
+import com.csipsimple.api.SipMessage;
 import com.csipsimple.service.SipNotifications;
-import com.csipsimple.ui.SipHome;
-import com.csipsimple.utils.Log;
+import com.csipsimple.ui.messages.ConverstationAdapter.ConversationListItemViews;
+import com.csipsimple.utils.Compatibility;
 
 /**
  * This activity provides a list view of existing conversations.
  */
-public class ConversationList extends ListActivity {
-	private static final String THIS_FILE = "Conv List";
+public class ConversationList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+	//private static final String THIS_FILE = "Conv List";
 	
     // IDs of the main menu items.
     public static final int MENU_COMPOSE_NEW          = 0;
@@ -71,123 +63,203 @@ public class ConversationList extends ListActivity {
     // IDs of the context menu items for the list of conversations.
     public static final int MENU_DELETE               = 0;
     public static final int MENU_VIEW                 = 1;
+	
+    private boolean mDualPane;
 
-
-	private DBAdapter database;
-
-	private Activity contextToBindTo = this;
-
-	private BroadcastReceiver registrationReceiver;
+    private ConverstationAdapter mAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-     // Bind to the service
-		if (getParent() != null) {
-			contextToBindTo = getParent();
-		}
-		
-        setContentView(R.layout.conversation_list_screen);
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+        setHasOptionsMenu(true);
+    }
 
-        ListView listView = getListView();
-        LayoutInflater inflater = LayoutInflater.from(this);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
+        View v = inflater.inflate(R.layout.call_log_fragment, container, false);
+        
+        ListView lv = (ListView) v.findViewById(android.R.id.list);
+        // Add header
         RelativeLayout headerView = (RelativeLayout)
-                inflater.inflate(R.layout.conversation_list_item, listView, false);
+                inflater.inflate(R.layout.conversation_list_item, lv, false);
         ((TextView) headerView.findViewById(R.id.from) ).setText(R.string.new_message);
         ((TextView) headerView.findViewById(R.id.subject) ).setText(R.string.create_new_message);
-        listView.addHeaderView(headerView, null, true);
+        headerView.findViewById(R.id.quick_contact_photo).setVisibility(View.GONE);
+        lv.addHeaderView(headerView, null, true);
+        
+        TextView tv = (TextView) v.findViewById(android.R.id.empty);
+        tv.setText(R.string.status_none);
+        return v;
+    }
+    
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        // View management
+        mDualPane = getResources().getBoolean(R.bool.use_dual_panes);
+
+        // Adapter
+        mAdapter = new ConverstationAdapter(getActivity(), null);
+
+
+        // Modify list view
+        ListView lv = getListView();
+        lv.setVerticalFadingEdgeEnabled(true);
+        // lv.setCacheColorHint(android.R.color.transparent);
+        if (mDualPane) {
+            lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            lv.setItemsCanFocus(false);
+        } else {
+            lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
+            lv.setItemsCanFocus(true);
+        }
         
-        initListAdapter();
+        lv.setOnCreateContextMenuListener(this);
         
-        registrationReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				if(SipManager.ACTION_SIP_MESSAGE_RECEIVED.equalsIgnoreCase(intent.getAction()) ) {
-					updateAdapter();
-				}
-			}
-		};
-		registerReceiver(registrationReceiver, new IntentFilter(SipManager.ACTION_SIP_MESSAGE_RECEIVED));
+     // Start out with a progress indicator.
+        // setListShown(false);
+
+        setListAdapter(mAdapter);
+
+        // Start loading
+        // getLoaderManager().initLoader(0, null, this);
+
         
     }
     
     @Override
-    protected void onResume() {
-    	super.onResume();
-    	
-    	SipNotifications nManager = new SipNotifications(this);
-    	nManager.cancelMessages();
+    public void onResume() {
+        super.onResume();
+        fetchMessages();
+
+        SipNotifications nManager = new SipNotifications(getActivity());
+        nManager.cancelMessages();
     }
 
-    private void initListAdapter() {
-		// Db
-		if (database == null) {
-			database = new DBAdapter(this);
-		}
-		database.open();
-		
+    public void fetchMessages() {
+        getLoaderManager().restartLoader(0, null, this);
+    }
 
-		ConversationsCursorAdapter cad = new ConversationsCursorAdapter(this, null);
+    public void viewDetails(int position, String from, String fromFull) {
+        Bundle b = MessageFragment.getArguments(from, fromFull);
 
-		setListAdapter(cad);
-		updateAdapter();
-		
-		getListView().setOnCreateContextMenuListener(this);
+        // TODO dual screen mode
+        Intent it = new Intent(getActivity(), MessageActivity.class);
+        it.putExtras(b);
+        startActivity(it);
+    }
+
+
+    // Options
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        
+        boolean showInActionBar = Compatibility.isCompatible(14)
+                || Compatibility.isTabletScreen(getActivity());
+        int ifRoomIfSplit = showInActionBar ? MenuItem.SHOW_AS_ACTION_IF_ROOM
+                : MenuItem.SHOW_AS_ACTION_NEVER;
+        
+        
+        MenuItem writeMenu = menu.add(R.string.menu_compose_new);
+        writeMenu.setIcon(R.drawable.ic_menu_msg_compose_holo_dark).setShowAsAction(ifRoomIfSplit);
+        writeMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                viewDetails(-1, null, null);
+                return true;
+            }
+        });
+
+        if (getListAdapter().getCount() > 0) {
+
+            MenuItem deleteAllMenu = menu.add(R.string.menu_delete_all);
+            deleteAllMenu.setIcon(android.R.drawable.ic_menu_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            deleteAllMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    confirmDeleteThread(null);
+                    return true;
+                }
+            });
+        }
     }
     
-    private void updateAdapter() {
-    	if(!database.isOpen()) {
-    		database.open();
-    	}
-		Cursor cursor = database.getAllConversations();
-		if(cursor != null) {
-			startManagingCursor(cursor);
-		}
-		((CursorAdapter) getListAdapter()).changeCursor(cursor);
+    
+    
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(), SipMessage.THREAD_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.changeCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.changeCursor(null);
+    }
+
+    
+
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenuInfo menuInfo) {
+        AdapterView.AdapterContextMenuInfo info =
+            (AdapterView.AdapterContextMenuInfo) menuInfo;
+        if (info.position > 0) {
+            menu.add(0, MENU_VIEW, 0, R.string.menu_view);
+            menu.add(0, MENU_DELETE, 0, R.string.menu_delete);
+        }
+    }
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        
+        if (info.position > 0) {
+            ConversationListItemViews cri = (ConversationListItemViews) info.targetView.getTag();
+            String number = cri.from;
+            String fromFull = cri.fromFull;
+            
+            if (number.equals("SELF")) {
+                number = cri.to;
+            }
+                        
+            switch (item.getItemId()) {
+            case MENU_DELETE: {
+                confirmDeleteThread(number);
+                break;
+            }
+            case MENU_VIEW: {
+                viewDetails(info.position, number, fromFull);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        return super.onContextItemSelected(item);
+    }
+    
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        ConversationListItemViews cri = (ConversationListItemViews) v.getTag();
+        if (cri != null) {
+            viewDetails(cri.position, cri.from, cri.fromFull);
+        }
     }
 
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		database.close();
-	}
-
-	
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_BACK : {
-			onBackPressed();
-			//return true;
-			break;
-		}
-		}
-
-		return super.onKeyUp(keyCode, event);
-	}
-	
-	public void onBackPressed() {
-		if(contextToBindTo != null && contextToBindTo instanceof SipHome) {
-			((SipHome) contextToBindTo).onBackPressed();
-		}else {
-			finish();
-		}
-	}
-
+	/*
+    
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
 
-        menu.add(0, MENU_COMPOSE_NEW, 0, R.string.menu_compose_new).setIcon(
-                R.drawable.ic_menu_compose);
-
-        if (getListAdapter().getCount() > 0) {
-            menu.add(0, MENU_DELETE_ALL, 0, R.string.menu_delete_all).setIcon(
-                    android.R.drawable.ic_menu_delete);
-        }
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -222,200 +294,34 @@ public class ConversationList extends ListActivity {
             }
         }
     }
-
-    private void createNewMessage() {
-        startActivity(ComposeMessageActivity.createIntent(this, null, null));
-    }
-
-    private void openThread(String from, String fromFull) {
-        startActivity(ComposeMessageActivity.createIntent(this, from, fromFull));
-    }
+    */
     
     private void confirmDeleteThread(final String from) {
     	
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.confirm_dialog_title)
             .setIcon(android.R.drawable.ic_dialog_alert)
         .setCancelable(true)
         .setPositiveButton(R.string.delete, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				if(from == null) {
-					database.deleteAllConversation();
+				if(TextUtils.isEmpty(from)) {
+				    getActivity().getContentResolver().delete(SipMessage.MESSAGE_URI, null, null);
 				}else {
-					database.deleteConversation(from);
+				    Builder threadUriBuilder = SipMessage.THREAD_ID_URI_BASE.buildUpon();
+				    threadUriBuilder.appendEncodedPath(from);
+				    getActivity().getContentResolver().delete(threadUriBuilder.build(), null, null);
 				}
-				//TODO : should be raised by db layer instead of direct call from the UI
-				updateAdapter();
 			}
 		})
         .setNegativeButton(R.string.no, null)
-        .setMessage(from == null
+        .setMessage(TextUtils.isEmpty(from)
                 ? R.string.confirm_delete_all_conversations
                         : R.string.confirm_delete_conversation)
         .show();
     }
-
-    public void onCreateContextMenu(ContextMenu menu, View v,
-            ContextMenuInfo menuInfo) {
-    	Log.d(THIS_FILE, "Create context menu");
-        Cursor cursor = ((CursorAdapter) getListAdapter()).getCursor();
-        if (cursor == null || cursor.getPosition() < 0) {
-            return;
-        }
-        
-        AdapterView.AdapterContextMenuInfo info =
-            (AdapterView.AdapterContextMenuInfo) menuInfo;
-        if (info.position > 0) {
-            menu.add(0, MENU_VIEW, 0, R.string.menu_view);
-            menu.add(0, MENU_DELETE, 0, R.string.menu_delete);
-        }
-    }
-    
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        Cursor cursor = ((CursorAdapter) getListAdapter()).getCursor();
-        if (cursor != null && cursor.getPosition() >= 0) {
-            String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
-            String fromFull = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
-            
-            if (number.equals("SELF")) {
-                number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
-            }
-                    	
-            switch (item.getItemId()) {
-            case MENU_DELETE: {
-                confirmDeleteThread(number);
-                break;
-            }
-            case MENU_VIEW: {
-                openThread(number, fromFull);
-                break;
-            }
-            /*
-            case MENU_VIEW_CONTACT: {
-                Contact contact = conv.getRecipients().get(0);
-                Intent intent = new Intent(Intent.ACTION_VIEW, contact.getUri());
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                startActivity(intent);
-                break;
-            }
-            case MENU_ADD_TO_CONTACTS: {
-                String address = conv.getRecipients().get(0).getNumber();
-                startActivity(createAddContactIntent(address));
-                break;
-            }
-            */
-            default:
-                break;
-            }
-        }
-        return super.onContextItemSelected(item);
-    }
     
     
-    
-
-	public static final class ConversationListItemViews {
-		TextView fromView;
-		TextView dateView;
-		TextView subjectView;
-		String from;
-		String fromFull;
-		String to;
-	}
-    
-
-    private static final StyleSpan STYLE_BOLD = new StyleSpan(Typeface.BOLD);
-    
-    class ConversationsCursorAdapter extends ResourceCursorAdapter {
-
-        
-		
-
-		public ConversationsCursorAdapter(Context context, Cursor c) {
-			super(context, R.layout.conversation_list_item, c);
-		}
-
-		@Override
-		public void bindView(View view, Context context, Cursor cursor) {
-			final ConversationListItemViews tagView = (ConversationListItemViews) view.getTag();
-			String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
-			String fromFull = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
-			String to_number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
-			int read = cursor.getInt(cursor.getColumnIndex(SipMessage.FIELD_READ));
-			long date = cursor.getLong(cursor.getColumnIndex(SipMessage.FIELD_DATE));
-			String subject = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_BODY));
-			
-			Log.d(THIS_FILE, "Here read is "+read);
-			Drawable background = (read == 0)?
-	                context.getResources().getDrawable(R.drawable.conversation_item_background_unread) :
-	                context.getResources().getDrawable(R.drawable.conversation_item_background_read);
-
-	        view.setBackgroundDrawable(background);
-
-	        // Subject
-	        tagView.subjectView.setText(subject);
-//	        LayoutParams subjectLayout = (LayoutParams)tagView.subjectView.getLayoutParams();
-	        // We have to make t)he subject left of whatever optional items are shown on the right.
-//	        subjectLayout.addRule(RelativeLayout.LEFT_OF, R.id.date);
-			
-			//From
-			tagView.from = number;
-			tagView.fromFull = fromFull;
-			tagView.to = to_number;
-			tagView.fromView.setText(formatMessage(cursor));
-
-			//Date
-			// Set the date/time field by mixing relative and absolute times.
-			int flags = DateUtils.FORMAT_ABBREV_RELATIVE;
-			tagView.dateView.setText(DateUtils.getRelativeTimeSpanString(date, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS, flags));
-
-		}
-
-		@Override
-		public View newView(Context context, Cursor cursor, ViewGroup parent) {
-
-			View view = super.newView(context, cursor, parent);
-			
-			ConversationListItemViews tagView = new ConversationListItemViews();
-			tagView.fromView = (TextView) view.findViewById(R.id.from);
-			tagView.dateView = (TextView) view.findViewById(R.id.date);
-			tagView.subjectView = (TextView) view.findViewById(R.id.subject);
-
-			view.setTag(tagView);
-
-			return view;
-		}
-		
-		private CharSequence formatMessage(Cursor cursor) {
-			String remoteContact = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
-	        SpannableStringBuilder buf = new SpannableStringBuilder();
-			if (remoteContact.equals("SELF")) {
-				remoteContact = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
-				buf.append("To: ");
-			}
-			String remoteContactFull = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
-            buf.append(SipUri.getDisplayedSimpleContact(remoteContactFull));
-	        
-	        int counter = cursor.getInt(cursor.getColumnIndex("counter"));
-	        if (counter > 1) {
-	            buf.append(" (" + counter + ") ");
-	        }
-	       
-
-			int read = cursor.getInt(cursor.getColumnIndex(SipMessage.FIELD_READ));
-	        // Unread messages are shown in bold
-	        if (read == 0) {
-	            buf.setSpan(STYLE_BOLD, 0, buf.length(),
-	                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-	        }
-	        return buf;
-		}
-		
-		
-
-
-	}
+	
     
 }

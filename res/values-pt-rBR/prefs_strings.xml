@@ -63,7 +63,7 @@
     <string name="enable_stun">Habilitar STUN</string>
     <string name="enable_stun_desc">Habilitar recurso STUN</string>
     <string name="stun_server">Servidores STUN</string>
-    <string name="stun_server_desc">Servidor STUN (SERVIDOR[:PORTA], ...)</string>
+    <string name="stun_server_desc">Servidor STUN (SERVIDOR[:PORTA], …)</string>
     <string name="enable_qos">Habilitar QoS</string>
     <string name="enable_qos_desc">Habilitar QoS nos pacotes</string>
     <string name="dscp_val">Valor DSCP</string>

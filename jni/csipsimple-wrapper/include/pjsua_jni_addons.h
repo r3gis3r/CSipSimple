@@ -6,6 +6,7 @@
 #include <pjsua-lib/pjsua_internal.h>
 #include <pjmedia_audiodev.h>
 #include <android/log.h>
+#include <jni.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -85,9 +86,19 @@ typedef struct csipsimple_config {
 	pj_str_t storage_folder;
 
 	/**
-	 * Audio codec implementation if empty string fallback to default
+	 * Audio dev implementation if empty string fallback to default
 	 */
 	dynamic_factory audio_implementation;
+
+	/**
+	 * Video renderer dev implementation if empty no video feature
+	 */
+	dynamic_factory video_render_implementation;
+	/**
+	 * Video capture dev implementation if empty no video feature
+	 */
+	dynamic_factory video_capture_implementation;
+
 
 } csipsimple_config;
 
@@ -103,12 +114,13 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg);
 PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				pjsua_logging_config *log_cfg,
 				pjsua_media_config *media_cfg,
-				csipsimple_config *css_cfg);
+				csipsimple_config *css_cfg,
+				jobject context);
 PJ_DECL(pj_status_t) csipsimple_destroy(void);
 PJ_DECL(pj_status_t) pj_timer_fire(long cpj_entry);
 PJ_DECL(pj_status_t) pjsua_acc_clean_all_registrations( pjsua_acc_id acc_id);
 PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr);
-
+PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id, jobject window);
 PJ_END_DECL
 
 #ifdef __cplusplus
@@ -130,6 +142,7 @@ struct css_data {
     // About zrtp cfg
     char zid_file[512];
 
+    jobject context;
 };
 
 extern struct css_data css_var;

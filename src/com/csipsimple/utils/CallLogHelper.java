@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.provider.CallLog;
 
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.models.CallerInfo;
 
 public class CallLogHelper {
@@ -77,10 +78,14 @@ public class CallLogHelper {
 				nonAcknowledge = 0;
 			}
 		}
-		cv.put(CallLog.Calls.TYPE, type);
-		cv.put(CallLog.Calls.NEW, nonAcknowledge);
-		cv.put(CallLog.Calls.DURATION, (callStart>0)?(System.currentTimeMillis()-callStart)/1000:0);
-		
+        cv.put(CallLog.Calls.TYPE, type);
+        cv.put(CallLog.Calls.NEW, nonAcknowledge);
+        cv.put(CallLog.Calls.DURATION,
+                (callStart > 0) ? (System.currentTimeMillis() - callStart) / 1000 : 0);
+        cv.put(SipManager.CALLLOG_PROFILE_ID_FIELD, call.getAccId());
+        cv.put(SipManager.CALLLOG_STATUS_CODE_FIELD, call.getLastStatusCode());
+        cv.put(SipManager.CALLLOG_STATUS_TEXT_FIELD, call.getLastStatusComment());
+
 		CallerInfo callerInfo = CallerInfo.getCallerInfoFromSipUri(context, remoteContact);
 		if(callerInfo != null) {
 			cv.put(CallLog.Calls.CACHED_NAME, callerInfo.name);

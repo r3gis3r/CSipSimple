@@ -66,8 +66,8 @@ public class DialingFeedback {
 	
 	public void resume() {
 		
-		dialPressTone = prefsWrapper.getDialPressTone();
-		dialPressVibrate = prefsWrapper.getDialPressVibrate();
+		dialPressTone = prefsWrapper.dialPressTone();
+		dialPressVibrate = prefsWrapper.dialPressVibrate();
 		
 		if(dialPressTone ) {
 			//Create dialtone just for user feedback

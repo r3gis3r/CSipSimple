@@ -21,9 +21,6 @@ package com.csipsimple.api;
 import com.csipsimple.api.SipProfile;
 
 interface ISipConfiguration {
-	//Account management
-	long addOrUpdateAccount(in SipProfile acc);
-	SipProfile getAccount(long acc_id);
 	
 	//Prefs
 	void setPreferenceString(in String key, in String value);

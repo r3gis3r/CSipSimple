@@ -23,6 +23,7 @@ import android.text.style.ImageSpan;
 
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +44,7 @@ public class SmileyParser {
     private final Context mContext;
     private final String[] mSmileyTexts;
     private final Pattern mPattern;
-    private final HashMap<String, Integer> mSmileyToRes;
+    private final Map<String, Integer> mSmileyToRes;
 
     private SmileyParser(Context context) {
         mContext = context;
@@ -73,23 +74,23 @@ public class SmileyParser {
             R.drawable.emo_im_wtf
         };
 
-        public static int HAPPY = 0;
-        public static int SAD = 1;
-        public static int WINKING = 2;
-        public static int TONGUE_STICKING_OUT = 3;
-        public static int SURPRISED = 4;
-        public static int KISSING = 5;
-        public static int YELLING = 6;
-        public static int COOL = 7;
-        public static int MONEY_MOUTH = 8;
-        public static int FOOT_IN_MOUTH = 9;
-        public static int EMBARRASSED = 10;
-        public static int ANGEL = 11;
-        public static int UNDECIDED = 12;
-        public static int CRYING = 13;
-        public static int LIPS_ARE_SEALED = 14;
-        public static int LAUGHING = 15;
-        public static int WTF = 16;
+        public final static int HAPPY = 0;
+        public final static int SAD = 1;
+        public final static int WINKING = 2;
+        public final static int TONGUE_STICKING_OUT = 3;
+        public final static int SURPRISED = 4;
+        public final static int KISSING = 5;
+        public final static int YELLING = 6;
+        public final static int COOL = 7;
+        public final static int MONEY_MOUTH = 8;
+        public final static int FOOT_IN_MOUTH = 9;
+        public final static int EMBARRASSED = 10;
+        public final static int ANGEL = 11;
+        public final static int UNDECIDED = 12;
+        public final static int CRYING = 13;
+        public final static int LIPS_ARE_SEALED = 14;
+        public final static int LAUGHING = 15;
+        public final static int WTF = 16;
 
         public static int getSmileyResource(int which) {
             return sIconIds[which];
@@ -125,7 +126,7 @@ public class SmileyParser {
      * Builds the hashtable we use for mapping the string version
      * of a smiley (e.g. ":-)") to a resource ID for the icon version.
      */
-    private HashMap<String, Integer> buildSmileyToRes() {
+    private Map<String, Integer> buildSmileyToRes() {
         if (DEFAULT_SMILEY_RES_IDS.length != mSmileyTexts.length) {
             // Throw an exception if someone updated DEFAULT_SMILEY_RES_IDS
             // and failed to update arrays.xml

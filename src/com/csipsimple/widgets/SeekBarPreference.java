@@ -35,25 +35,26 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
-	private static final String androidns = "http://schemas.android.com/apk/res/android";
+	private static final String ANDROID_NS = "http://schemas.android.com/apk/res/android";
 
 	private static final String THIS_FILE = "SeekBarPrefs";
 
 	private SeekBar seekBar;
-	private TextView splashText, valueText;
-	private Context context;
-
-	private String dialogMessage, suffix;
-	private float value, max, defaultValue = (float) 0.0;
+	private TextView valueText;
+	private final Context context;
+	private final float defaultValue, max;
+	private final String dialogMessage, suffix;
+	
+	private float value = 0.0f;
 
 	public SeekBarPreference(Context aContext, AttributeSet attrs) {
 		super(aContext, attrs);
 		context = aContext;
 
-		dialogMessage = attrs.getAttributeValue(androidns, "dialogMessage");
-		suffix = attrs.getAttributeValue(androidns, "text");
-		defaultValue = attrs.getAttributeFloatValue(androidns, "defaultValue", (float) 0.0);
-		max = attrs.getAttributeIntValue(androidns, "max", 10);
+		dialogMessage = attrs.getAttributeValue(ANDROID_NS, "dialogMessage");
+		suffix = attrs.getAttributeValue(ANDROID_NS, "text");
+		defaultValue = attrs.getAttributeFloatValue(ANDROID_NS, "defaultValue", 0.0f);
+		max = attrs.getAttributeIntValue(ANDROID_NS, "max", 10);
 
 	}
 
@@ -64,7 +65,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		layout.setOrientation(LinearLayout.VERTICAL);
 		layout.setPadding(6, 6, 6, 6);
 
-		splashText = new TextView(context);
+		TextView splashText = new TextView(context);
 		if (dialogMessage != null) {
 			splashText.setText(dialogMessage);
 		}
@@ -125,27 +126,11 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	}
 
 	public void onStartTrackingTouch(SeekBar seek) {
+		// Interface unused implementation
 	}
 
 	public void onStopTrackingTouch(SeekBar seek) {
+		// Interface unused implementation
 	}
-
-	public void setMax(float aMax) {
-		max = aMax;
-	}
-
-	public float getMax() {
-		return max;
-	}
-
-	public void setProgress(float progress) {
-		value = progress;
-		if (seekBar != null) {
-			seekBar.setProgress( (int) (progress*10.0));
-		}
-	}
-
-	public double getProgress() {
-		return value;
-	}
+	
 }

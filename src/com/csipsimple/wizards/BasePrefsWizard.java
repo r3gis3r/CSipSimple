@@ -19,14 +19,11 @@ package com.csipsimple.wizards;
 
 import java.util.List;
 
-import android.content.ComponentName;
-import android.content.Context;
+import android.content.ContentUris;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,64 +31,61 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
-import com.csipsimple.api.ISipService;
+import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
-import com.csipsimple.service.SipService;
 import com.csipsimple.ui.AccountFilters;
 import com.csipsimple.ui.prefs.GenericPrefs;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public class BasePrefsWizard extends GenericPrefs{
-    public static final int SAVE_MENU = Menu.FIRST + 1;
+public class BasePrefsWizard extends GenericPrefs {
+
+	
+	
+	public static final int SAVE_MENU = Menu.FIRST + 1;
 	public static final int TRANSFORM_MENU = Menu.FIRST + 2;
 	public static final int FILTERS_MENU = Menu.FIRST + 3;
 	public static final int DELETE_MENU = Menu.FIRST + 4;
-	
+
 	public static final int CHOOSE_WIZARD = 0;
 	public static final int MODIFY_FILTERS = 1;
 	private static final String THIS_FILE = "Base Prefs wizard";
-	
-	private long accountId = -1;
+
 	protected SipProfile account = null;
 	private Button saveButton;
-	private DBAdapter database;
 	private String wizardId = "";
-	private WizardInfo wizardInfo = null;
 	private WizardIface wizard = null;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//Get back the concerned account and if any set the current (if not a new account is created)
+		// Get back the concerned account and if any set the current (if not a
+		// new account is created)
 		Intent intent = getIntent();
-        accountId = intent.getIntExtra(Intent.EXTRA_UID, SipProfile.INVALID_ID);
-        
-        //TODO : ensure this is not null...
-        setWizardId(intent.getStringExtra(SipProfile.FIELD_WIZARD));
-        
-        database = new DBAdapter(this);
-		database.open();
-		account = database.getAccount(accountId);
-		database.close();
+		long accountId = intent.getLongExtra(SipProfile.FIELD_ID, SipProfile.INVALID_ID);
+
+		// TODO : ensure this is not null...
+		setWizardId(intent.getStringExtra(SipProfile.FIELD_WIZARD));
+
+		account = SipProfile.getProfileFromDbId(this, accountId, DBProvider.ACCOUNT_FULL_PROJECTION);
 
 		super.onCreate(savedInstanceState);
-		
-		//Bind buttons to their actions
+
+		// Bind buttons to their actions
 		Button bt = (Button) findViewById(R.id.cancel_bt);
-		bt.setOnClickListener(new OnClickListener(){
+		bt.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setResult(RESULT_CANCELED, getIntent());
 				finish();
 			}
 		});
-		
+
 		saveButton = (Button) findViewById(R.id.save_bt);
 		saveButton.setEnabled(false);
-		saveButton.setOnClickListener(new OnClickListener(){
+		saveButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				saveAndFinish();
@@ -99,125 +93,88 @@ public class BasePrefsWizard extends GenericPrefs{
 		});
 		wizard.fillLayout(account);
 	}
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
-	}
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		Log.d(THIS_FILE, "Unbind from service");
-		try {
-			unbindService(connection);
-		}catch(Exception e) {
-			//Just ignore that
-		}
-	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		updateDescriptions();
 		updateValidation();
 	}
-	
-	
-	// Service connection
-	private ISipService service;
-	private ServiceConnection connection = new ServiceConnection(){
-		@Override
-		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-			service = ISipService.Stub.asInterface(arg1);
-			updateValidation();
-		}
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			
-		}
-    };
-	
+
 	private boolean setWizardId(String wId) {
-		if(wizardId == null) {
-        	return setWizardId("EXPERT");
-        }
-        
-        wizardInfo = WizardUtils.getWizardClass(wId);
-        if(wizardInfo == null) {
-        	if(!wizardId.equals("EXPERT")) {
-        		return setWizardId("EXPERT");
-        	}
-        	return false;
-        }
-        
-        try {
+		if (wizardId == null) {
+			return setWizardId(WizardUtils.EXPERT_WIZARD_TAG);
+		}
+
+		WizardInfo wizardInfo = WizardUtils.getWizardClass(wId);
+		if (wizardInfo == null) {
+			if (!wizardId.equals(WizardUtils.EXPERT_WIZARD_TAG)) {
+				return setWizardId(WizardUtils.EXPERT_WIZARD_TAG);
+			}
+			return false;
+		}
+
+		try {
 			wizard = (WizardIface) wizardInfo.classObject.newInstance();
 		} catch (IllegalAccessException e) {
 			Log.e(THIS_FILE, "Can't access wizard class", e);
-			if(!wizardId.equals("EXPERT")) {
-        		return setWizardId("EXPERT");
-        	}
-        	return false;
+			if (!wizardId.equals(WizardUtils.EXPERT_WIZARD_TAG)) {
+				return setWizardId(WizardUtils.EXPERT_WIZARD_TAG);
+			}
+			return false;
 		} catch (InstantiationException e) {
 			Log.e(THIS_FILE, "Can't access wizard class", e);
-			if(!wizardId.equals("EXPERT")) {
-        		return setWizardId("EXPERT");
-        	}
-        	return false;
+			if (!wizardId.equals(WizardUtils.EXPERT_WIZARD_TAG)) {
+				return setWizardId(WizardUtils.EXPERT_WIZARD_TAG);
+			}
+			return false;
 		}
 		wizardId = wId;
-        wizard.setParent(this);
-        
-        return true;
+		wizard.setParent(this);
+
+		return true;
 	}
-	
+
 	@Override
 	protected void beforeBuildPrefs() {
-		//Use our custom wizard view
+		// Use our custom wizard view
 		setContentView(R.layout.wizard_prefs_base);
 	}
-	
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
 
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		updateDescriptions();
 		updateValidation();
 	}
-	
+
+	/**
+	 * Update validation state of the current activity.
+	 * It will check if wizard can be saved and if so 
+	 * will enable button
+	 */
 	public void updateValidation() {
-		if(service != null) {
-			saveButton.setEnabled(wizard.canSave());
-		}else {
-			saveButton.setEnabled(false);
-		}
+		saveButton.setEnabled(wizard.canSave());
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, SAVE_MENU, Menu.NONE, R.string.save).setIcon(
-				android.R.drawable.ic_menu_save);
-		if(account.id != SipProfile.INVALID_ID){
-			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.choose_wizard).setIcon(
-					android.R.drawable.ic_menu_edit);
-			menu.add(Menu.NONE, FILTERS_MENU, Menu.NONE, R.string.filters).setIcon(
-					R.drawable.ic_menu_filter);
-			menu.add(Menu.NONE, DELETE_MENU, Menu.NONE, R.string.delete_account).setIcon(
-					android.R.drawable.ic_menu_delete);
+		menu.add(Menu.NONE, SAVE_MENU, Menu.NONE, R.string.save).setIcon(android.R.drawable.ic_menu_save);
+		if (account.id != SipProfile.INVALID_ID) {
+			menu.add(Menu.NONE, TRANSFORM_MENU, Menu.NONE, R.string.choose_wizard).setIcon(android.R.drawable.ic_menu_edit);
+			menu.add(Menu.NONE, FILTERS_MENU, Menu.NONE, R.string.filters).setIcon(R.drawable.ic_menu_filter);
+			menu.add(Menu.NONE, DELETE_MENU, Menu.NONE, R.string.delete_account).setIcon(android.R.drawable.ic_menu_delete);
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(SAVE_MENU).setVisible(wizard.canSave());
-	
+
 		return super.onPrepareOptionsMenu(menu);
 	}
-	
-	 @Override
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case SAVE_MENU:
@@ -227,118 +184,97 @@ public class BasePrefsWizard extends GenericPrefs{
 			startActivityForResult(new Intent(this, WizardChooser.class), CHOOSE_WIZARD);
 			return true;
 		case DELETE_MENU:
-			if(account.id != SipProfile.INVALID_ID){
-				database.open();
-				database.deleteAccount(account);
-				database.close();
+			if (account.id != SipProfile.INVALID_ID) {
+				getContentResolver().delete(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, account.id), null, null);
 				setResult(RESULT_OK, getIntent());
 				finish();
 			}
 			return true;
 		case FILTERS_MENU:
-			if(account.id != SipProfile.INVALID_ID){
+			if (account.id != SipProfile.INVALID_ID) {
 				Intent it = new Intent(this, AccountFilters.class);
-    			it.putExtra(Intent.EXTRA_UID,  (int) account.id);
-    			startActivityForResult(it, MODIFY_FILTERS);
+				it.putExtra(SipProfile.FIELD_ID, account.id);
+				startActivityForResult(it, MODIFY_FILTERS);
 				return true;
 			}
+			break;
+		default:
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	 
-	 @Override
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		switch(requestCode){
-		case CHOOSE_WIZARD:
-			if(resultCode == RESULT_OK) {
-				if(data != null && data.getExtras() != null) {
-					String wizardId = data.getStringExtra(WizardUtils.ID);
-					if(wizardId != null) {
-						saveAccount(wizardId);
-						setResult(RESULT_OK, getIntent());
-						finish();
-					}
-				}
+		if (requestCode == CHOOSE_WIZARD && resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+			String wizardId = data.getStringExtra(WizardUtils.ID);
+			if (wizardId != null) {
+				saveAccount(wizardId);
+				setResult(RESULT_OK, getIntent());
+				finish();
 			}
-			break;
 		}
 	}
-	
+
+	/**
+	 * Save account and end the activity
+	 */
 	private void saveAndFinish() {
 		saveAccount();
 		Intent intent = getIntent();
 		setResult(RESULT_OK, intent);
 		finish();
 	}
-	
-	protected void saveAccount() {
+
+	/*
+	 * Save the account with current wizard id
+	 */
+	private void saveAccount() {
 		saveAccount(wizardId);
 	}
 	
-	protected void saveAccount(String wizardId){
+	/**
+	 * Save the account with given wizard id
+	 * @param wizardId the wizard to use for account entry
+	 */
+	private void saveAccount(String wizardId) {
 		boolean needRestart = false;
 
 		PreferencesWrapper prefs = new PreferencesWrapper(this);
 		account = wizard.buildAccount(account);
 		account.wizard = wizardId;
-		database.open();
-		if(account.id == SipProfile.INVALID_ID){
+		if (account.id == SipProfile.INVALID_ID) {
+			// This account does not exists yet
 			wizard.setDefaultParams(prefs);
-			account.id = (int) database.insertAccount(account);
-			List<Filter> filters = wizard.getDefaultFilters(account);
-			if(filters != null && filters.size() > 0 ) {
-				for(Filter filter : filters) {
-					// Ensure the correct id if not done by the wizard
-					filter.account = account.id;
-					database.insertFilter(filter);
-				}
-			}
-			needRestart = wizard.needRestart();
+			Uri uri = getContentResolver().insert(SipProfile.ACCOUNT_URI, account.getDbContentValues());
 			
-		}else{
-			//TODO : should not be done there but if not we should add an option to re-apply default params
-			wizard.setDefaultParams(prefs);
-			database.updateAccount(account);
-		}
-		database.close();
-		
-		
-		if(needRestart) {
-			restartAsync();
-		}else {
-			reloadAccountsAsync();
-		}
-	}
-	
-	private void restartAsync() {
-		if (service != null) {
-			try {
-				service.askThreadedRestart();
-			} catch (RemoteException e) {
-				Log.e(THIS_FILE, "Unable to restart sip stack", e);
-			}
-		}
-	}
-	
-	private void reloadAccountsAsync() {
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				Log.d(THIS_FILE, "Would like to reload all accounts");
-				if (service != null) {
-					Log.d(THIS_FILE, "Will reload accounts !");
-					try {
-						service.reAddAllAccounts();
-					} catch (RemoteException e) {
-						Log.e(THIS_FILE, "Impossible to readd accoutns", e);
-					}
+			// After insert, add filters for this wizard 
+			account.id = ContentUris.parseId(uri);
+			List<Filter> filters = wizard.getDefaultFilters(account);
+			if (filters != null) {
+				for (Filter filter : filters) {
+					// Ensure the correct id if not done by the wizard
+					filter.account = (int) account.id;
+					getContentResolver().insert(SipManager.FILTER_URI, filter.getDbContentValues());
 				}
-			};
-		};
-		t.start();
+			}
+			// Check if we have to restart
+			needRestart = wizard.needRestart();
+
+		} else {
+			// TODO : should not be done there but if not we should add an
+			// option to re-apply default params
+			wizard.setDefaultParams(prefs);
+			getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, account.id), account.getDbContentValues(), null, null);
+		}
+
+		// Mainly if global preferences were changed, we have to restart sip stack 
+		if (needRestart) {
+			Intent intent = new Intent(SipManager.ACTION_SIP_REQUEST_RESTART);
+			sendBroadcast(intent);
+		}
 	}
-	
 
 	@Override
 	protected int getXmlPreferences() {
@@ -349,9 +285,10 @@ public class BasePrefsWizard extends GenericPrefs{
 	protected void updateDescriptions() {
 		wizard.updateDescriptions();
 	}
-	
-	protected String getDefaultFieldSummary(String fieldName){
+
+	@Override
+	protected String getDefaultFieldSummary(String fieldName) {
 		return wizard.getDefaultFieldSummary(fieldName);
 	}
-	
+
 }

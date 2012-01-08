@@ -21,6 +21,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -61,10 +62,10 @@ public class AccountWidgetConfigure extends AccountsChooserListActivity implemen
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		
 		if(appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-			SipProfile account = getAdapter().getItem(position);
+			Cursor c = (Cursor) getAdapter().getItem(position);
 			SharedPreferences prefs = getSharedPreferences(WIDGET_PREFS, 0);
             SharedPreferences.Editor edit = prefs.edit();
-            edit.putLong(getPrefsKey(appWidgetId), account.id);
+            edit.putLong(getPrefsKey(appWidgetId), c.getLong(c.getColumnIndex(SipProfile.FIELD_ID)));
             edit.commit();
 			
             

@@ -17,111 +17,132 @@
 -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
-	<FrameLayout android:id="@+id/mainFrame"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:paddingTop="10dip" android:paddingLeft="6dip"
-		android:paddingRight="6dip">
+    android:id="@+id/mainFrame"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="6dip"
+    android:paddingRight="6dip"
+    android:paddingTop="10dip" >
 
-		<LinearLayout
-			android:id="@+id/dialPadContainer"
-			android:orientation="vertical"
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent"
-			android:paddingBottom="170dip"
-			
-			android:visibility="gone" >
-				<EditText android:id="@+id/digitsText" 
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:maxLines="1" android:scrollHorizontally="true"
-					android:textSize="28sp" android:freezesText="true" android:background="@android:color/transparent"
-					android:textColor="@android:color/white" 
-					android:padding="6dip" android:gravity="center"
-					android:focusableInTouchMode="false" android:editable="false" android:cursorVisible="false"
-					/>
-				<com.csipsimple.widgets.Dialpad 
-					android:id="@+id/dialPad"
-					android:layout_width="fill_parent" 
-					android:layout_height="fill_parent"
-					android:paddingLeft="6dip"
-					android:paddingRight="6dip"
-					android:layout_marginBottom="6dip" />
-		</LinearLayout>
-	</FrameLayout>
+    <LinearLayout
+        android:id="@+id/dialPadContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingBottom="170dip"
+        android:visibility="gone" >
 
-	
+        <EditText
+            android:id="@+id/digitsText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:cursorVisible="false"
+            android:editable="false"
+            android:focusableInTouchMode="false"
+            android:freezesText="true"
+            android:gravity="center"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:padding="6dip"
+            android:scrollHorizontally="true"
+            android:textColor="@android:color/white"
+            android:textSize="28sp" />
 
-	<com.csipsimple.widgets.InCallControls2
-		android:id="@+id/inCallControls" android:layout_width="fill_parent" android:layout_height="fill_parent" />
-	
-	
-	<ImageView android:id="@+id/dropHangup"
-		android:background="@drawable/grey_bottom_gradient"
-		android:scaleType="center"
-		android:src="@drawable/ic_in_call_touch_end"
+        <com.csipsimple.widgets.Dialpad
+            android:id="@+id/dialPad"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="6dip"
+            android:paddingLeft="6dip"
+            android:paddingRight="6dip" />
+    </LinearLayout>
 
-		android:visibility="gone" 
-		android:layout_marginBottom="0dip"
-		android:layout_gravity="center_horizontal|bottom"
-		
-		android:layout_width="fill_parent" android:layout_height="100dip" />
-		
-	<ImageView android:id="@+id/dropAnswer"
-		android:background="@drawable/grey_top_gradient"
-		android:scaleType="center"
-		android:src="@drawable/ic_in_call_touch_answer"
+    <com.csipsimple.widgets.InCallControls2
+        android:id="@+id/inCallControls"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
-		android:visibility="gone" 
-		android:layout_marginTop="0dip"
-		android:layout_gravity="center_horizontal|top"
-		
-		android:layout_width="fill_parent" android:layout_height="100dip" />
-		
-	<ImageView android:id="@+id/dropHold" 
-		android:src="@drawable/ic_in_call_touch_hold" 
-		android:background="@drawable/grey_right_gradient"
-		android:scaleType="center"
+    <ImageView
+        android:id="@+id/dropHangup"
+        android:layout_width="fill_parent"
+        android:layout_height="100dip"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="0dip"
+        android:background="@drawable/grey_bottom_gradient"
+        android:contentDescription="@string/clear_call"
+        android:scaleType="center"
+        android:src="@drawable/ic_in_call_touch_end"
+        android:visibility="gone" />
 
-		android:visibility="gone" 
-		android:layout_marginRight="0dip"
-		android:layout_gravity="right|center_vertical"
-		
-		android:layout_width="75dip" android:layout_height="fill_parent" />
-		
-	<ImageView android:id="@+id/dropXfer" 
-		android:src="@drawable/ic_tab_selected_contacts" 
-		android:background="@drawable/grey_left_gradient"
-		android:scaleType="center"
-		android:visibility="gone" 
-		android:layout_marginRight="0dip"
-		android:layout_gravity="left|center_vertical"
-		
-		android:layout_width="75dip" android:layout_height="fill_parent" />
-		
-	<Button android:layout_height="wrap_content" android:layout_width="wrap_content" 
-		android:layout_gravity="center"
-		android:id="@+id/add_call_button" android:text="@string/add_call"
-		android:visibility="gone"
-		style="@style/CallButton"
-		android:layout_marginBottom="170dip" android:layout_marginRight="50dip"
-		android:drawableTop="@drawable/ic_in_call_touch_round_add_call"/>
-	
-	
-	<FrameLayout android:id="@+id/callInfoPanel"
-		android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <ImageView
+        android:id="@+id/dropAnswer"
+        android:layout_width="fill_parent"
+        android:layout_height="100dip"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="0dip"
+        android:background="@drawable/grey_top_gradient"
+        android:contentDescription="@string/take_call"
+        android:scaleType="center"
+        android:src="@drawable/ic_in_call_touch_answer"
+        android:visibility="gone" />
 
-		
-	
-	<com.csipsimple.widgets.ScreenLocker android:id="@+id/lockerOverlay"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:visibility="gone" android:background="#8000">
-		<!-- 
+    <ImageView
+        android:id="@+id/dropHold"
+        android:layout_width="75dip"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="0dip"
+        android:background="@drawable/grey_right_gradient"
+        android:contentDescription="@string/hold_call"
+        android:scaleType="center"
+        android:src="@drawable/ic_in_call_touch_hold"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/dropXfer"
+        android:layout_width="75dip"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginRight="0dip"
+        android:background="@drawable/grey_left_gradient"
+        android:contentDescription="@string/transfer_call"
+        android:scaleType="center"
+        android:src="@drawable/ic_tab_selected_contacts"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/add_call_button"
+        style="@style/CallButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="170dip"
+        android:layout_marginRight="50dip"
+        android:drawableTop="@drawable/ic_in_call_touch_round_add_call"
+        android:text="@string/add_call"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/callInfoPanel"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <com.csipsimple.widgets.ScreenLocker
+        android:id="@+id/lockerOverlay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#8000"
+        android:visibility="gone" >
+
+        <!--
 		<TextView android:id="@+id/lockerIcon"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:gravity="center" android:layout_alignParentBottom="true"
 			android:layout_centerHorizontal="true" android:layout_marginBottom="70dip"
 			android:text="@string/touch_lock" android:textAppearance="?android:attr/textAppearanceLarge"
 			android:background="@drawable/dialpad_lock" />
-			-->
-	</com.csipsimple.widgets.ScreenLocker>
+        -->
+    </com.csipsimple.widgets.ScreenLocker>
+
 </FrameLayout>

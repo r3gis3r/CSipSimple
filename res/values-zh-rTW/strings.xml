@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
   <string name="next">下一頁</string>
-  <string name="init">初始化中...</string>
+  <string name="init">初始化中…</string>
   <string name="unable_to_download_file">無法下載檔案</string>
   <string name="invalid_sip_uri">呼叫不正確的 SIP uri</string>
   <string name="accounts">帳戶</string>

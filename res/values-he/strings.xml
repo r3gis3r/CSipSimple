@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
   <string name="next">הבא</string>
-  <string name="init">אתחל...</string>
+  <string name="init">אתחל…</string>
   <string name="unable_to_download_file">לא יכול להוריד את הקובץ</string>
   <string name="invalid_sip_uri">סיפ uri אינו תקף עבור שיחה</string>
   <string name="accounts">חשבונות</string>

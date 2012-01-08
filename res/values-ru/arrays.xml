@@ -1,41 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="default_smiley_texts">
-    <item>:-)</item>
-    <item>:-(</item>
-    <item>:-[</item>
-    <item>O:-)</item>
-    <item>:-\\</item>
-    <item>:\'(</item>
-    <item>:-X</item>
-    <item>:-D</item>
-    <item>o_O</item>
-    <item>;-)</item>
-    <item>:-P</item>
-    <item>=-O</item>
-    <item>:-*</item>
-    <item>:O</item>
-    <item>B-)</item>
-    <item>:-$</item>
-    <item>:-!</item>
-  </string-array>
-  <string-array name="default_smiley_names">
-    <item>Радость</item>
-    <item>Грустный</item>
-    <item>Смущение</item>
-    <item>Ангел</item>
-    <item>Нерешительный</item>
-    <item>Плачет</item>
-    <item>Не скажу</item>
-    <item>Смех</item>
-    <item>Озадаченный</item>
-    <item>Подмигивает</item>
-    <item>Показывает язык</item>
-    <item>Удивлен</item>
-    <item>Поцелуй</item>
-    <item>Кричит</item>
-    <item>Крутой</item>
-    <item>Не болтай попусту</item>
-    <item>В замешательстве</item>
-  </string-array>
+
+    <string-array name="default_smiley_names">
+        <item>Радость</item>
+        <item>Грустный</item>
+        <item>Смущение</item>
+        <item>Ангел</item>
+        <item>Нерешительный</item>
+        <item>Плачет</item>
+        <item>Не скажу</item>
+        <item>Смех</item>
+        <item>Озадаченный</item>
+        <item>Подмигивает</item>
+        <item>Показывает язык</item>
+        <item>Удивлен</item>
+        <item>Поцелуй</item>
+        <item>Кричит</item>
+        <item>Крутой</item>
+        <item>Не болтай попусту</item>
+        <item>В замешательстве</item>
+    </string-array>
+
 </resources>

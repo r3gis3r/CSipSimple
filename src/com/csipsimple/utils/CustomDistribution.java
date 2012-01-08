@@ -19,50 +19,91 @@ package com.csipsimple.utils;
 
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-public class CustomDistribution {
-
-	// CSipSimple trunk distribution
+public final class CustomDistribution {
 	
+	private CustomDistribution() {}
+	
+	// CSipSimple trunk distribution
+	/**
+	 * Does this distribution allow to create other accounts
+	 * than the one of the distribution
+	 * @return Whether other accounts can be created
+	 */
 	public static boolean distributionWantsOtherAccounts() {
 		return true;
 	}
 	
+	/**
+	 * Does this distribution allow to list other providers in 
+	 * other accounts creation
+	 * @return Whether other provider are listed is wizard picker
+	 */
 	public static boolean distributionWantsOtherProviders() {
 		return true;
 	}
 	
+	/**
+	 * Email address for support and feedback
+	 * If none return the feedback feature is disabled
+	 * @return the email address of support
+	 */
 	public static String getSupportEmail() {
 		return "developers@csipsimple.com";
 	}
 	
+	/**
+	 * SIP User agent to send by default in SIP messages (by default device infos are added to User Agent string)
+	 * @return the default user agent
+	 */
 	public static String getUserAgent() {
 		return "CSipSimple";
 	}
 	
+	/**
+	 * The default wizard info for this distrib. If none no custom distribution wizard is shown
+	 * @return the default wizard info
+	 */
 	public static WizardInfo getCustomDistributionWizard() {
 		return null; 
 	}
 	
-	public static String getRootPackage() {
-		return "com.csipsimple";
-	}
-	
+	/**
+	 * Show or not the issue list in help
+	 * @return whether link to issue list should be displayed
+	 */
 	public static boolean showIssueList() {
 		return true;
 	}
 	
+	/**
+	 * Get the link to the FAQ. If null or empty the link to FAQ is not displayed
+	 * @return link to the FAQ
+	 */
 	public static String getFaqLink() {
-		return "http://code.google.com/p/csipsimple/wiki/FAQ#Summary";
+		return "http://code.google.com/p/csipsimple/wiki/FAQ?show=content,nav#Summary";
 	}
 	
+	/**
+	 * Whether we want to display first fast setting screen to 
+	 * allow user to quickly configure the sip client
+	 * @return true if the fast setting screen should be displayed
+	 */
 	public static boolean showFirstSettingScreen() {
 		return true;
 	}
 	
+	/**
+	 * Do we want to display messaging feature
+	 * @return true if the feature is enabled in this distribution
+	 */
 	public static boolean supportMessaging() {
 		return true;
 	}
 
+	/**
+	 * Shall we force the no mulitple call feature to be set to false
+	 * @return true if we don't want to support multiple calls at all.
+	 */
 	public static boolean forceNoMultipleCalls() {
 		return false;
 	}

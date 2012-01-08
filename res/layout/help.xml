@@ -2,94 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:orientation="vertical" 
 	android:layout_height="wrap_content">
- 	<include layout="@layout/white_title"></include>
- 	<TextView android:id="@+id/revision" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Revision" android:textColor="@android:color/white" android:padding="6dip" android:gravity="center"/>
-	<LinearLayout android:id="@+id/faq_line" 
-		android:background="@android:drawable/list_selector_background"
-		android:clickable="true" android:focusable="true" android:orientation="horizontal"
-	    android:layout_height="?android:attr/listPreferredItemHeight" 
-	    android:layout_width="fill_parent">
-		<ImageView 
-			android:src="@android:drawable/ic_menu_info_details"
-			android:layout_gravity="center"
-			android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
-		<TextView android:text="@string/faq" 
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_gravity="center"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-	<ImageView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:scaleType="fitXY"
-		android:gravity="fill_horizontal" android:src="@drawable/divider_horizontal_dark" />
-	<LinearLayout android:id="@+id/issues_line" 
-		android:background="@android:drawable/list_selector_background"
-		android:clickable="true" android:focusable="true" android:orientation="horizontal"
-	    android:layout_height="?android:attr/listPreferredItemHeight" 
-	    android:layout_width="fill_parent">
-		<ImageView 
-			android:src="@android:drawable/ic_menu_view"
-			android:layout_gravity="center"
-			android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
-		<TextView android:text="@string/view_existing_issues" 
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_gravity="center"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-	<ImageView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:scaleType="fitXY"
-		android:gravity="fill_horizontal" android:src="@drawable/divider_horizontal_dark" />
-	<LinearLayout android:id="@+id/record_logs_line" 
-		android:background="@android:drawable/list_selector_background"
-		android:clickable="true" android:focusable="true" android:orientation="horizontal"
-	    android:layout_height="?android:attr/listPreferredItemHeight" 
-	    android:layout_width="fill_parent">
-		<ImageView 
-			android:src="@android:drawable/ic_menu_save"
-			android:layout_gravity="center"
-			android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/record_logs_image"></ImageView>
-		<TextView android:text="@string/record_logs" 
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_gravity="center"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/record_logs_text"></TextView>
-	</LinearLayout>
-	<ImageView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:scaleType="fitXY"
-		android:gravity="fill_horizontal" android:src="@drawable/divider_horizontal_dark" />
-	<LinearLayout android:id="@+id/legal_line" 
-		android:background="@android:drawable/list_selector_background"
-		android:clickable="true" android:focusable="true" android:orientation="horizontal"
-	    android:layout_height="?android:attr/listPreferredItemHeight" 
-	    android:layout_width="fill_parent">
-		<ImageView 
-			android:src="@android:drawable/ic_menu_gallery"
-			android:layout_gravity="center"
-			android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
-		<TextView android:text="@string/legal_information" 
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_gravity="center"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-	<ImageView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:scaleType="fitXY"
-		android:gravity="fill_horizontal" android:src="@drawable/divider_horizontal_dark" />
-	<LinearLayout android:id="@+id/nightly_update" 
-		android:background="@android:drawable/list_selector_background"
-		android:clickable="true" android:focusable="true" android:orientation="horizontal"
-	    android:layout_height="?android:attr/listPreferredItemHeight" 
-	    android:visibility="gone"
-	    android:layout_width="fill_parent">
-		<ImageView 
-			android:src="@drawable/ic_launcher_nightly"
-			android:layout_gravity="center"
-			android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
-		<TextView android:text="Update nightly build" 
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_gravity="center"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
+
+	<TextView
+	    android:id="@android:id/text1"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:padding="6dip"
+	    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+ 	<ListView android:layout_width="fill_parent" 
+ 	    android:layout_height="fill_parent"
+ 	    android:id="@android:id/list" >
+ 	    <!-- Preview: listitem=@layout/help_list_row -->
+ 	</ListView>
 </LinearLayout>

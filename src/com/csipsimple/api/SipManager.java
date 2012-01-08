@@ -19,6 +19,7 @@
  */
 package com.csipsimple.api;
 
+import android.net.Uri;
 import android.os.RemoteException;
 
 public final class SipManager {
@@ -46,8 +47,9 @@ public final class SipManager {
 	public static final String ACTION_SIP_CALL_CHANGED = "com.csipsimple.service.CALL_CHANGED";
 	public static final String ACTION_SIP_REGISTRATION_CHANGED = "com.csipsimple.service.REGISTRATION_CHANGED";
 	public static final String ACTION_SIP_MEDIA_CHANGED = "com.csipsimple.service.MEDIA_CHANGED";
-	public static final String ACTION_SIP_ACCOUNT_ACTIVE_CHANGED = "com.csipsimple.service.ACCOUNT_ACTIVE_CHANGED";
 	public static final String ACTION_SIP_CAN_BE_STOPPED = "com.csipsimple.service.ACTION_SIP_CAN_BE_STOPPED";
+	public static final String ACTION_SIP_REQUEST_RESTART = "com.csipsimple.service.ACTION_SIP_REQUEST_RESTART";
+	
 	public static final String ACTION_ZRTP_SHOW_SAS = "com.csipsimple.service.SHOW_SAS";
 	
 	public static final String ACTION_SIP_MESSAGE_RECEIVED = "com.csipsimple.service.MESSAGE_RECEIVED";
@@ -60,10 +62,43 @@ public final class SipManager {
 	public static final String META_LIB_NAME = "lib_name";
 	public static final String META_LIB_INIT_FACTORY = "init_factory";
 	
+	// Content provider
+	public static final String AUTHORITY = "com.csipsimple.db";
+	public final static String BASE_DIR_TYPE = "vnd.android.cursor.dir/vnd.csipsimple";
+	public final static String BASE_ITEM_TYPE = "vnd.android.cursor.item/vnd.csipsimple";
+	public final static String CONTENT_SCHEME = "content://";
+	
+	// Content Provider - call logs
+	public final static String CALLLOGS_TABLE_NAME = "calllogs";
+	public final static String CALLLOG_CONTENT_TYPE = BASE_DIR_TYPE + ".calllog";
+	public final static String CALLLOG_CONTENT_ITEM_TYPE = BASE_ITEM_TYPE + ".calllog";
+	public final static Uri CALLLOG_URI =  Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + CALLLOGS_TABLE_NAME);
+	public final static Uri CALLLOG_ID_URI_BASE = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + CALLLOGS_TABLE_NAME + "/");
+	// -- Extra fields for call logs
+	/**
+	 * The account used for this call
+	 */
+	public final static String CALLLOG_PROFILE_ID_FIELD = "account_id";
+	/**
+	 * The final latest status code for this call 
+	 */
+	public final static String CALLLOG_STATUS_CODE_FIELD = "status_code";
+	/**
+     * The final latest status text for this call 
+     */
+    public final static String CALLLOG_STATUS_TEXT_FIELD = "status_text";
+	
+	
+	// Content Provider - filter
+	public static final String FILTERS_TABLE_NAME = "outgoing_filters";
+	public final static String FILTER_CONTENT_TYPE = BASE_DIR_TYPE + ".filter";
+	public final static String FILTER_CONTENT_ITEM_TYPE = BASE_ITEM_TYPE + ".filter";
+	public final static Uri FILTER_URI =  Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + FILTERS_TABLE_NAME);
+	public final static Uri FILTER_ID_URI_BASE = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + FILTERS_TABLE_NAME + "/");
+	
+	
 	// EXTRAS
 	public static final String EXTRA_CALL_INFO = "call_info";
-	public static final String EXTRA_ACCOUNT_ID = "acc_id";
-	public static final String EXTRA_ACTIVATE = "activate";
 	public static final String EXTRA_PROFILES = "profiles";
 	
 	

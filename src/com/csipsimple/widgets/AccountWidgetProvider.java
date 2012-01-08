@@ -21,15 +21,17 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.widget.RemoteViews;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
 
@@ -74,6 +76,7 @@ public class AccountWidgetProvider extends AppWidgetProvider {
 				this.onDeleted(context, new int[] { appWidgetId });
 			}
 		} else {
+			/*
 			if (SipManager.ACTION_SIP_REGISTRATION_CHANGED.equals(intent.getAction()) || SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED.equals(intent.getAction())) {
 				Thread t = new Thread() {
 					public void run() {
@@ -82,6 +85,7 @@ public class AccountWidgetProvider extends AppWidgetProvider {
 				};
 				t.start();
 			}
+			*/
 			super.onReceive(context, intent);
 		}
     }
@@ -109,27 +113,41 @@ public class AccountWidgetProvider extends AppWidgetProvider {
         
         long accId = AccountWidgetConfigure.getAccountForWidget(context, appWidgetId);
 		Log.d(THIS_FILE, "Updating wiget " + appWidgetId + " for account " + accId);
-		if(accId != -1) {
+		if(accId != SipProfile.INVALID_ID) {
+			Cursor c = context.getContentResolver().query(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, accId), 
+					new String[] {
+				SipProfile.FIELD_WIZARD,
+				SipProfile.FIELD_ACTIVE,
+				SipProfile.FIELD_ID,
+				SipProfile.FIELD_DISPLAY_NAME
+			}, null, null, null);
 			
-			
-			DBAdapter db = new DBAdapter(context);
-			db.open();
-			ContentValues acc = db.getAccountValues(accId);
-		//	Log.d(THIS_FILE, "Found for " + accId + " : " + acc);
-			if (acc != null) {
-				views.setImageViewResource(R.id.img_account, WizardUtils.getWizardIconRes(acc.getAsString(SipProfile.FIELD_WIZARD)));
-				boolean active = (acc.getAsInteger(SipProfile.FIELD_ACTIVE) == 1);
-				if(active) {
-				//	accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
-					views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_on);
-				}else {
-					views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_off);
+			if(c != null) {
+				try {
+					if(c.getCount() > 0) {
+						c.moveToFirst();
+						ContentValues acc = new ContentValues();
+						DatabaseUtils.cursorRowToContentValues(c, acc);
+						
+						views.setImageViewResource(R.id.img_account, WizardUtils.getWizardIconRes(acc.getAsString(SipProfile.FIELD_WIZARD)));
+						boolean active = (acc.getAsInteger(SipProfile.FIELD_ACTIVE) == 1);
+						if(active) {
+						//	accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
+							views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_on);
+						}else {
+							views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_off);
+						}
+						views.setTextViewText(R.id.txt_account, acc.getAsString(SipProfile.FIELD_DISPLAY_NAME));
+						views.setOnClickPendingIntent(R.id.btn_account, getLaunchPendingIntent(context, accId, !active));
+					}
+				}catch(Exception e) {
+					Log.e(THIS_FILE, "Something went wrong while retrieving the account", e);
+				} finally {
+					c.close();
 				}
-				views.setTextViewText(R.id.txt_account, acc.getAsString(SipProfile.FIELD_DISPLAY_NAME));
-				views.setOnClickPendingIntent(R.id.btn_account, getLaunchPendingIntent(context, accId, !active));
 			}
 			
-			db.close();
+			
 		}
         
         return views;
@@ -145,8 +163,8 @@ public class AccountWidgetProvider extends AppWidgetProvider {
      */
     private static PendingIntent getLaunchPendingIntent(Context context, long accId, boolean activate ) {
         Intent launchIntent = new Intent(SipManager.INTENT_SIP_ACCOUNT_ACTIVATE);
-        launchIntent.putExtra(SipManager.EXTRA_ACCOUNT_ID, accId);
-        launchIntent.putExtra(SipManager.EXTRA_ACTIVATE, activate);
+        launchIntent.putExtra(SipProfile.FIELD_ID, accId);
+        launchIntent.putExtra(SipProfile.FIELD_ACTIVE, activate);
         Log.d(THIS_FILE, "Create intent "+activate);
         PendingIntent pi = PendingIntent.getBroadcast(context, (int)accId,
                 launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);

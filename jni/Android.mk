@@ -32,9 +32,10 @@ NDK_PROJECT_PATH := $(JNI_PATH)/openssl/sources/
 include $(JNI_PATH)/openssl/sources/Android.mk
 include $(JNI_PATH)/openssl/android_toolchain/Android.mk
 NDK_PROJECT_PATH := $(JNI_PATH)
-
-#include $(JNI_PATH)/openssl-fake/android_toolchain/Android.mk
 endif
+
+# Build libyuv
+include $(JNI_PATH)/libyuv/android_toolchain/Android.mk
 
 
 # Build wrapper

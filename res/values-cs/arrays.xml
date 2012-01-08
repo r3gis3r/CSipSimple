@@ -1,41 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string-array name="default_smiley_texts">
-    <item>:-)</item>
-    <item>:-(</item>
-    <item>:-[</item>
-    <item>O:-)</item>
-    <item>:-\\</item>
-    <item>:\'(</item>
-    <item>:-X</item>
-    <item>:-D</item>
-    <item>o_O</item>
-    <item>;-)</item>
-    <item>:-P</item>
-    <item>=-O</item>
-    <item>:-*</item>
-    <item>:O</item>
-    <item>B-)</item>
-    <item>:-$</item>
-    <item>:-!</item>
-  </string-array>
-  <string-array name="default_smiley_names">
-    <item>Štěstím bez sebe</item>
-    <item>Ach jo</item>
-    <item>Rozpaky</item>
-    <item>Andílek</item>
-    <item>Ještě nevím</item>
-    <item>Bůůů, fňuk, fňuk</item>
-    <item>Ani muk</item>
-    <item>Smích</item>
-    <item>Zmatek</item>
-    <item>Mrknutí</item>
-    <item>Vypláznutý jazyk</item>
-    <item>Překvapení</item>
-    <item>Pusa</item>
-    <item>Zlobím se!</item>
-    <item>Cool</item>
-    <item>Cinkání zlaťáků</item>
-    <item>Trapas!</item>
-  </string-array>
+
+    <string-array name="default_smiley_names">
+        <item>Štěstím bez sebe</item>
+        <item>Ach jo</item>
+        <item>Rozpaky</item>
+        <item>Andílek</item>
+        <item>Ještě nevím</item>
+        <item>Bůůů, fňuk, fňuk</item>
+        <item>Ani muk</item>
+        <item>Smích</item>
+        <item>Zmatek</item>
+        <item>Mrknutí</item>
+        <item>Vypláznutý jazyk</item>
+        <item>Překvapení</item>
+        <item>Pusa</item>
+        <item>Zlobím se!</item>
+        <item>Cool</item>
+        <item>Cinkání zlaťáků</item>
+        <item>Trapas!</item>
+    </string-array>
+
 </resources>

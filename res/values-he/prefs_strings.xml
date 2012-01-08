@@ -63,7 +63,7 @@
     <string name="enable_stun">אפשר STUN</string>
     <string name="enable_stun_desc">הפעל תכונת STUN</string>
     <string name="stun_server">שרתי STUN</string>
-    <string name="stun_server_desc">שרתי STUN (מארח [יציאה:], ...)</string>
+    <string name="stun_server_desc">שרתי STUN (מארח [יציאה:], …)</string>
     <string name="enable_qos">אפשר QoS</string>
     <string name="enable_qos_desc">אפשר QoS במנות</string>
     <string name="dscp_val">ערך DSCP</string>

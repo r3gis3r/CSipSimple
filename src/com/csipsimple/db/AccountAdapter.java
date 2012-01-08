@@ -110,7 +110,7 @@ public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickL
 			AccountStatusDisplay accountStatusDisplay = null;
 			accountStatusDisplay = (AccountStatusDisplay) cacheStatusDisplay.get(position);
 			if(accountStatusDisplay == null) {
-				accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
+				accountStatusDisplay = AccountListUtils.getAccountDisplay(context, account.id);
 				cacheStatusDisplay.put(position, accountStatusDisplay);
 			}
 

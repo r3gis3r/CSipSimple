@@ -9,12 +9,12 @@
   <string name="speaker">Високоговорител</string>
   <string name="mute">Без звук</string>
   <string name="add_call">Добавяне на обаждане</string>
-  <string name="call_state_calling">Набиране ...</string>
+  <string name="call_state_calling">Набиране …</string>
   <string name="call_state_confirmed">В разговор</string>
-  <string name="call_state_connecting">Свързване ...</string>
+  <string name="call_state_connecting">Свързване …</string>
   <string name="call_state_disconnected">Затваряне</string>
-  <string name="call_state_early">Звънене ...</string>
-  <string name="call_state_incoming">Входящо позвъняване ...</string>
+  <string name="call_state_early">Звънене …</string>
+  <string name="call_state_incoming">Входящо позвъняване …</string>
   <string name="call_state_null">ГРЕШКА</string>
   <string name="unlock">Отключване</string>
   <string name="record">Запис</string>

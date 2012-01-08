@@ -39,7 +39,6 @@ import android.text.TextUtils;
 public class PreferenceProvider extends ContentProvider {
 
 	private PreferencesWrapper prefs;
-	private UriMatcher mUriMatcher;
 
 	private final static String PREFS_TABLE_NAME = "preferences";
 	private final static String RESET_TABLE_NAME = "raz";
@@ -67,13 +66,13 @@ public class PreferenceProvider extends ContentProvider {
 	public static final int COL_INDEX_NAME = 0;
 	public static final int COL_INDEX_VALUE = 1;
 	private static final String THIS_FILE = "PrefsProvider";
+	
 
-	public PreferenceProvider() {
-		// Create and initialize URI matcher.
-		mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		mUriMatcher.addURI(AUTHORITY, PREFS_TABLE_NAME, PREFS);
-		mUriMatcher.addURI(AUTHORITY, PREFS_TABLE_NAME + "/*", PREF_ID);
-		mUriMatcher.addURI(AUTHORITY, RESET_TABLE_NAME, RAZ);
+	private final static UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+	static {
+		URI_MATCHER.addURI(AUTHORITY, PREFS_TABLE_NAME, PREFS);
+		URI_MATCHER.addURI(AUTHORITY, PREFS_TABLE_NAME + "/*", PREF_ID);
+		URI_MATCHER.addURI(AUTHORITY, RESET_TABLE_NAME, RAZ);
 	}
 
 	@Override
@@ -87,8 +86,7 @@ public class PreferenceProvider extends ContentProvider {
 	 */
 	@Override
 	public String getType(Uri uri) {
-		android.util.Log.w(THIS_FILE, "Get type --- " + uri.toString());
-		switch (mUriMatcher.match(uri)) {
+		switch (URI_MATCHER.match(uri)) {
 		case PREFS:
 		case RAZ:
 			return PREF_CONTENT_TYPE;
@@ -102,11 +100,7 @@ public class PreferenceProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String order) {
 		MatrixCursor resCursor = new MatrixCursor(new String[] { FIELD_NAME, FIELD_VALUE });
-		switch (mUriMatcher.match(uri)) {
-		case PREFS:
-			// Ingore for now
-			break;
-		case PREF_ID:
+		if (URI_MATCHER.match(uri) == PREF_ID) {
 			String name = uri.getLastPathSegment();
 			Class<?> aClass = null;
 			if (TextUtils.isEmpty(selection)) {
@@ -131,7 +125,6 @@ public class PreferenceProvider extends ContentProvider {
 			} else {
 				resCursor = null;
 			}
-			break;
 		}
 		return resCursor;
 	}
@@ -139,7 +132,7 @@ public class PreferenceProvider extends ContentProvider {
 	@Override
 	public int update(Uri uri, ContentValues cv, String selection, String[] selectionArgs) {
 		int count = 0;
-		switch (mUriMatcher.match(uri)) {
+		switch (URI_MATCHER.match(uri)) {
 		case PREFS:
 			// Ignore for now
 			break;

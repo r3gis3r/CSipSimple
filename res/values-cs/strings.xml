@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">CSipSimple</string>
   <string name="next">Další</string>
-  <string name="init">Inicializace...</string>
+  <string name="init">Inicializace…</string>
   <string name="unable_to_download_file">Nelze stáhnout soubor</string>
   <string name="invalid_sip_uri">SIP URI je pro volání neplatné</string>
   <string name="accounts">Účty</string>

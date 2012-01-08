@@ -14,7 +14,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)../pjlib/include/ $(LOCAL_PATH)../pjlib-util/in
 	$(LOCAL_PATH)../third_party/build/speex/  $(LOCAL_PATH)../third_party/speex/include \
 	$(LOCAL_PATH)../third_party/
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-audiodev/
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 PJLIB_SRC_DIR := src/pjmedia
@@ -45,8 +44,8 @@ LOCAL_SRC_FILES := $(PJLIB_SRC_DIR)/alaw_ulaw.c $(PJLIB_SRC_DIR)/alaw_ulaw_table
 	$(PJLIB_SRC_DIR)/vid_stream.c $(PJLIB_SRC_DIR)/vid_tee.c \
 	$(PJLIB_SRC_DIR)/converter.c $(PJLIB_SRC_DIR)/event.c \
 	$(PJMEDIADEV_SRC_DIR)/audiodev.c $(PJMEDIADEV_SRC_DIR)/audiotest.c $(PJMEDIADEV_SRC_DIR)/errno.c \
-	$(PJMEDIADEV_VIDEO_SRC_DIR)/videodev.c $(PJMEDIADEV_VIDEO_SRC_DIR)/colorbar_dev.c $(PJMEDIADEV_VIDEO_SRC_DIR)/errno.c
-	
+	$(PJMEDIADEV_VIDEO_SRC_DIR)/videodev.c $(PJMEDIADEV_VIDEO_SRC_DIR)/colorbar_dev.c $(PJMEDIADEV_VIDEO_SRC_DIR)/errno.c \
+	$(PJMEDIACODEC_SRC_DIR)/amr_sdp_match.c 
 
 # If not csipsimple, load default audio codecs loader from pjmedia
 ifneq ($(MY_USE_CSIPSIMPLE),1)
@@ -73,15 +72,23 @@ ifeq ($(MY_USE_WEBRTC),1)
 	LOCAL_SRC_FILES += $(PJLIB_SRC_DIR)/echo_webrtc_aec.c 
 endif
 
+ifeq ($(MY_USE_VIDEO),1)
+	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/ffmpeg_codecs.c \
+		$(PJMEDIACODEC_SRC_DIR)/h263_packetizer.c \
+		$(PJMEDIACODEC_SRC_DIR)/h264_packetizer.c
+	
+	LOCAL_SRC_FILES += $(PJLIB_SRC_DIR)/ffmpeg_util.c \
+		$(PJLIB_SRC_DIR)/converter_libswscale.c
+		
+	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../ffmpeg/ffmpeg_src/
+endif
 
 PJ_ANDROID_SRC_DIR := ../../android_sources/pjmedia/src/
 
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-audiodev/ \
+	$(LOCAL_PATH)/../../../swig-glue/
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-audiodev/android_jni_dev.cpp
 
-ifeq ($(MY_USE_VIDEO),1)
-LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/opengl_video_dev.c \
-	$(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/android_capture_dev.c  
-endif
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -98,7 +105,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)../pjlib/include/ $(LOCAL_PATH)../pjlib-util/in
 	$(LOCAL_PATH)../third_party/
 
 
-LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/g7221.c
+LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/g7221.c $(PJMEDIACODEC_SRC_DIR)/g7221_sdp_match.c 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
 LOCAL_STATIC_LIBRARIES += g7221
@@ -129,3 +136,41 @@ LOCAL_LDLIBS += -lOpenSLES
 
 include $(BUILD_SHARED_LIBRARY)
 
+
+ifeq ($(MY_USE_VIDEO),1)
+# Video capture/render implementation
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := pj_webrtc_video_dev
+
+
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../webrtc/sources/modules/video_render/main/interface/ \
+	$(LOCAL_PATH)/../../../webrtc/sources/modules/video_capture/main/interface/ \
+	$(LOCAL_PATH)/../../../webrtc/sources/modules/interface/ \
+	$(LOCAL_PATH)/../../../webrtc/sources/system_wrappers/interface/ \
+	$(LOCAL_PATH)/../../../webrtc/sources/modules/ \
+	$(LOCAL_PATH)/../../../webrtc/sources/ \
+	$(LOCAL_PATH)../pjlib/include/ $(LOCAL_PATH)../pjlib-util/include/ \
+	$(LOCAL_PATH)../pjsip/include/ \
+	$(LOCAL_PATH)../pjnath/include/ $(LOCAL_PATH)include/ $(LOCAL_PATH)../ 
+
+# We depends on csipsimple at this point because we need service to be stored somewhere
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-videodev/ \
+	$(LOCAL_PATH)/../../../swig-glue/ \
+	$(LOCAL_PATH)/../../../csipsimple-wrapper/include/
+	
+
+
+# Pj implementation for renderer
+LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/webrtc_android_render_dev.cpp
+# Pj implementation for capture
+LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/webrtc_android_capture_dev.cpp
+
+LOCAL_STATIC_LIBRARIES += libwebrtc_video_render libwebrtc_video_capture libwebrtc_yuv libyuv libwebrtc_apm_utility libwebrtc_system_wrappers libwebrtc_spl 
+LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DWEBRTC_ANDROID
+LOCAL_SHARED_LIBRARIES += libpjsipjni
+LOCAL_LDLIBS += -lGLESv2 -llog
+
+include $(BUILD_SHARED_LIBRARY)
+
+endif

@@ -1,161 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.csipsimple"
-	android:installLocation="auto"
-	android:versionName="0.04-00" android:versionCode="1133">
-	<supports-screens  
-		android:smallScreens="true" 
-		android:normalScreens="true"
-		android:largeScreens="true" 
-		android:xlargeScreens="true"/>
-	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher_phone" android:debuggable="true" android:allowBackup="false" >
-		<activity android:label="@string/app_name" android:name="com.csipsimple.ui.SipHome" android:launchMode="singleTask"
-			android:screenOrientation="portrait" android:configChanges="orientation"
-			android:theme="@android:style/Theme.NoTitleBar">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-			<intent-filter android:priority="10">
-                 <action android:name="com.csipsimple.phone.action.DIALER" />
-                 <category android:name="android.intent.category.DEFAULT" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="auto"
+    package="com.csipsimple"
+    android:versionCode="1151"
+    android:versionName="0.04-00" >
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <uses-sdk
+        android:minSdkVersion="4"
+        android:targetSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PRIVILEGED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.USE_SIP" />
+    <uses-permission android:name="android.permission.CONFIGURE_SIP" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Not taken into account? -->
+    <uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY" />
+
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" >
+    </uses-feature>
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" >
+    </uses-feature>
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="true" >
+    </uses-feature>
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" >
+    </uses-feature>
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" >
+    </uses-feature>
+    <uses-feature
+        android:name="android.hardware.screen.portrait"
+        android:required="false" >
+    </uses-feature>
+
+    <permission
+        android:name="android.permission.USE_SIP"
+        android:description="@string/permdesc_useSip"
+        android:label="@string/permlab_useSip"
+        android:permissionGroup="android.permission-group.COST_MONEY"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="android.permission.CONFIGURE_SIP"
+        android:description="@string/permdesc_configureSip"
+        android:label="@string/permlab_configureSip"
+        android:permissionGroup="android.permission-group.COST_MONEY"
+        android:protectionLevel="dangerous" />
+
+    <application
+        android:allowBackup="false"
+        android:debuggable="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher_nightly"
+        android:label="@string/app_name" >
+        <activity
+            android:name="com.csipsimple.ui.SipHome"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@style/DarkTheme.noTopActionBar"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-			<intent-filter android:priority="10">
-                 <action android:name="com.csipsimple.phone.action.CALLLOG" />
-                 <category android:name="android.intent.category.DEFAULT" />
+            <intent-filter android:priority="10" >
+                <action android:name="com.csipsimple.phone.action.DIALER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <intent-filter android:priority="10">
-				<action android:name="com.csipsimple.phone.action.MESSAGES" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-            
-		</activity>
-		
-		<!-- Main service -->
-		<service android:name="com.csipsimple.service.SipService" android:exported="true"
-			android:process=":sipStack">
-			<intent-filter>
-				<action android:name="com.csipsimple.service.SipService" />
-				<action android:name="com.csipsimple.service.SipConfiguration" />
-			</intent-filter>
-		</service>
-		<service android:name="com.csipsimple.service.Downloader" />
-		<receiver android:name="com.csipsimple.service.DeviceStateReceiver"
-		    android:process=":sipStack">
-			<intent-filter>
-				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
-				<action android:name="android.intent.action.ANY_DATA_STATE"></action>
-				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
-				<action android:name="com.csipsimple.accounts.activate"></action>
-			</intent-filter>
-			<intent-filter >
-				<action android:name="android.intent.action.PACKAGE_ADDED" />
-				<action android:name="android.intent.action.PACKAGE_REMOVED" />
-				<data android:scheme="package" />
-			</intent-filter>
-		</receiver>
-		
-		<!--  Main ui -->
-		<activity android:name="com.csipsimple.ui.Dialer" android:configChanges="orientation"  />
-		<activity android:name="com.csipsimple.ui.CallLogsList"></activity>
-		<activity android:name="com.csipsimple.ui.CallLog" android:theme="@android:style/Theme.NoTitleBar"></activity>
-		
-		<!-- First setup -->
-		<activity android:name="com.csipsimple.ui.WelcomeScreen" android:screenOrientation="nosensor"
-			android:theme="@style/CupcakeDialog" android:launchMode="singleTask" android:label="@string/welcome_caption_text"></activity>
-		<service android:name="com.csipsimple.service.DownloadLibService"></service>
-		
-		<!-- Help -->
-		<activity android:name="com.csipsimple.ui.help.Help" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.help.Faq" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.help.Legal" android:theme="@style/CupcakeDialog" android:configChanges="orientation"/>
-		
-		<!-- Accounts -->
-		<activity android:name="com.csipsimple.ui.AccountsList" android:label="@string/accounts" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.ReorderAccountsList" android:label="@string/accounts" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.AccountFilters" android:label="@string/filters" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.EditFilter" android:label="@string/filters" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		
+            <intent-filter android:priority="10" >
+                <action android:name="com.csipsimple.phone.action.CALLLOG" />
 
-		<activity android:name="com.csipsimple.wizards.WizardChooser" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation"
-			android:label="@string/choose_wizard"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter android:priority="10" >
+                <action android:name="com.csipsimple.phone.action.MESSAGES" />
 
-		<activity android:name="com.csipsimple.ui.BuddyList"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
-		<!-- Preferences -->
-		<activity android:name="com.csipsimple.ui.prefs.MainPrefs" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.prefs.PrefsNetwork" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.prefs.PrefsMedia" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.prefs.PrefsUI" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.prefs.PrefsCalls" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.prefs.PrefsFilters" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.prefs.PrefsFast" android:label="@string/prefs_fast" 
-			android:theme="@style/CupcakeDialog" android:configChanges="orientation">
-			<intent-filter>
-				<action android:name="com.csipsimple.ui.prefs.PrefsFast" />
-                 <category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<activity android:name="com.csipsimple.ui.prefs.Codecs" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation" />
-		<activity android:name="com.csipsimple.ui.prefs.PrefsSecurity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation" />
-		<activity android:name="com.csipsimple.ui.prefs.AudioTester" android:theme="@style/CupcakeDialog" android:screenOrientation="portrait" android:label="@string/test_audio"/>
-		
+        <!-- Main service -->
+        <service
+            android:name="com.csipsimple.service.SipService"
+            android:exported="true"
+            android:process=":sipStack" >
+            <intent-filter>
+                <action android:name="com.csipsimple.service.SipService" />
+                <action android:name="com.csipsimple.service.SipConfiguration" />
+            </intent-filter>
+        </service>
+        <service android:name="com.csipsimple.service.Downloader" />
 
-		<!-- Wizards -->
-		<activity android:name="com.csipsimple.wizards.BasePrefsWizard" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"></activity>
- 
-		<!-- Call management -->
-		<receiver android:name="com.csipsimple.service.OutgoingCall">
-			<intent-filter android:priority="-1">
-				<action android:name="android.intent.action.NEW_OUTGOING_CALL"></action>
-			</intent-filter>
-			
-		</receiver>
-		<activity android:name="com.csipsimple.ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog"
-			android:configChanges="orientation"
-			android:launchMode="singleInstance">
-			
-			<intent-filter>
+        <receiver
+            android:name="com.csipsimple.service.DeviceStateReceiver"
+            android:process=":sipStack" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
+                </action>
+                <action android:name="android.intent.action.ANY_DATA_STATE" >
+                </action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+                <action android:name="com.csipsimple.accounts.activate" >
+                </action>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Main ui -->
+        <activity
+            android:name="com.csipsimple.ui.calllog.CallLogDetailsActivity"
+            android:theme="@style/DarkTheme" />
+
+        <!-- Accounts -->
+        <activity
+            android:name="com.csipsimple.ui.ReorderAccountsList"
+            android:configChanges="orientation"
+            android:label="@string/accounts" />
+        <activity
+            android:name="com.csipsimple.ui.AccountFilters"
+            android:configChanges="orientation"
+            android:label="@string/filters" />
+        <activity
+            android:name="com.csipsimple.ui.EditFilter"
+            android:configChanges="orientation"
+            android:label="@string/filters"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.csipsimple.wizards.WizardChooser"
+            android:configChanges="orientation"
+            android:label="@string/choose_wizard"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <!-- Preferences -->
+        <activity
+            android:name="com.csipsimple.ui.prefs.MainPrefs"
+            android:configChanges="orientation"
+            android:label="@string/prefs"
+            android:theme="@style/DarkTheme" />
+        <activity
+            android:name="com.csipsimple.ui.prefs.PrefsNetwork"
+            android:configChanges="orientation"
+            android:label="@string/prefs_network" />
+        <activity
+            android:name="com.csipsimple.ui.prefs.PrefsMedia"
+            android:configChanges="orientation"
+            android:label="@string/prefs_media" />
+        <activity
+            android:name="com.csipsimple.ui.prefs.PrefsUI"
+            android:configChanges="orientation"
+            android:label="@string/prefs_ui" />
+        <activity
+            android:name="com.csipsimple.ui.prefs.PrefsCalls"
+            android:configChanges="orientation"
+            android:label="@string/prefs_calls" />
+        <activity
+            android:name="com.csipsimple.ui.prefs.PrefsFilters"
+            android:configChanges="orientation"
+            android:label="@string/filters" />
+        <activity
+            android:name="com.csipsimple.ui.prefs.PrefsFast"
+            android:configChanges="orientation"
+            android:label="@string/prefs_fast"
+            android:theme="@style/CupcakeDialog" >
+            <intent-filter>
+                <action android:name="com.csipsimple.ui.prefs.PrefsFast" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.csipsimple.ui.prefs.Codecs"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.csipsimple.ui.prefs.PrefsSecurity"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.csipsimple.ui.prefs.AudioTester"
+            android:label="@string/test_audio"
+            android:screenOrientation="portrait"
+            android:theme="@style/CupcakeDialog" />
+
+        <!-- Wizards -->
+        <activity
+            android:name="com.csipsimple.wizards.BasePrefsWizard"
+            android:configChanges="orientation" />
+
+        <!-- Call management -->
+        <receiver android:name="com.csipsimple.service.OutgoingCall" >
+            <intent-filter android:priority="-1" >
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" >
+                </action>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.csipsimple.ui.OutgoingCallChooser"
+            android:configChanges="orientation"
+            android:launchMode="singleInstance"
+            android:theme="@style/CupcakeDialog" >
+            <intent-filter>
                 <action android:name="android.intent.action.CALL" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
             </intent-filter>
-            
-			<intent-filter android:priority="-1">
-				<action android:name="android.phone.extra.NEW_CALL_INTENT"></action>
+            <intent-filter android:priority="-1" >
+                <action android:name="android.phone.extra.NEW_CALL_INTENT" >
+                </action>
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
-			</intent-filter>
-            
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SENDTO" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
                 <data android:scheme="imto" />
-			 </intent-filter>
-			<!-- Required for honeycomb???
+            </intent-filter>
+            <!--
+            Required for honeycomb???
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="tel" />
 			 </intent-filter>
-			  -->
-		</activity>
-		
-		 <activity-alias android:name="PrivilegedOutgoingCallBroadcaster"
-	               android:targetActivity="com.csipsimple.ui.OutgoingCallChooser" android:theme="@style/CupcakeDialog"
-				android:configChanges="orientation"
-				android:launchMode="singleInstance"
-                 android:permission="android.permission.CALL_PRIVILEGED">
-                 <!--  
+            -->
+        </activity>
+
+        <activity-alias
+            android:name="PrivilegedOutgoingCallBroadcaster"
+            android:configChanges="orientation"
+            android:launchMode="singleInstance"
+            android:permission="android.permission.CALL_PRIVILEGED"
+            android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
+            android:theme="@style/CupcakeDialog" >
+
+            <!--
              <intent-filter>
                  <action android:name="android.intent.action.CALL_PRIVILEGED" />
                  <category android:name="android.intent.category.DEFAULT" />
@@ -168,119 +303,108 @@
                  <data android:mimeType="vnd.android.cursor.item/phone_v2" />
                  <data android:mimeType="vnd.android.cursor.item/person" />
              </intent-filter>
-             -->
-             <intent-filter>
-                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
-                 <category android:name="android.intent.category.DEFAULT" />
-                 <data android:scheme="sip" />
-             </intent-filter>
-         </activity-alias>
-		 
-		
-		<activity android:name="com.csipsimple.ui.InCallActivity2" 
-			android:excludeFromRecents="true"
-			android:screenOrientation="portrait" 
-			android:configChanges="orientation"
-			android:allowTaskReparenting="true"
-			android:taskAffinity=""
-			android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleTask">
-			
-			<intent-filter android:priority="10">
-                 <action android:name="com.csipsimple.phone.action.INCALL" />
-                 <category android:name="android.intent.category.DEFAULT" />
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.CALL_PRIVILEGED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="sip" />
             </intent-filter>
-            
-		</activity>
-		
-		<activity android:name="com.csipsimple.ui.PickupSipUri" android:label="@string/pickup_sip_uri" 
-			android:configChanges="orientation"
-			android:theme="@style/CupcakeDialog"></activity>
-        
-        <activity android:name="com.csipsimple.ui.InCallMediaControl" android:label="@string/prefs_media" 
-        	android:configChanges="orientation"
-        	android:taskAffinity="com.csipsimple.ui.InCallActivity"
-			android:theme="@style/CupcakeDialog"></activity>
-        
-        <receiver android:name="com.csipsimple.service.HeadsetButtonReceiver"></receiver>
-		
-		<!-- Widget -->
-		<receiver android:name="com.csipsimple.widgets.AccountWidgetProvider" android:label="@string/gadget_title">
+        </activity-alias>
+
+        <!-- To be able to do video, this has to be launched in sipStack process -->
+        <activity
+            android:name="com.csipsimple.ui.InCallActivity2"
+            android:allowTaskReparenting="true"
+            android:configChanges="orientation"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:process=":sipStack"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter android:priority="10" >
+                <action android:name="com.csipsimple.phone.action.INCALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.csipsimple.ui.PickupSipUri"
+            android:configChanges="orientation"
+            android:label="@string/pickup_sip_uri"
+            android:theme="@style/LightTheme" >
+        </activity>
+        <activity
+            android:name="com.csipsimple.ui.InCallMediaControl"
+            android:configChanges="orientation"
+            android:label="@string/prefs_media"
+            android:taskAffinity="com.csipsimple.ui.InCallActivity"
+            android:theme="@style/CupcakeDialog" >
+        </activity>
+
+        <receiver android:name="com.csipsimple.service.HeadsetButtonReceiver" >
+        </receiver>
+
+        <!-- Widget -->
+        <receiver
+            android:name="com.csipsimple.widgets.AccountWidgetProvider"
+            android:label="@string/gadget_title" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.csipsimple.service.REGISTRATION_CHANGED" />
                 <action android:name="com.csipsimple.service.ACCOUNT_ACTIVE_CHANGED" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info" />
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_info" />
         </receiver>
-        <activity android:name="com.csipsimple.widgets.AccountWidgetConfigure">
-		    <intent-filter>
-		        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-		    </intent-filter>
-		</activity>
-		
-		
-		<!-- Messages -->
-		<activity android:name="com.csipsimple.ui.messages.ConversationList" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation"/>
-		<activity android:name="com.csipsimple.ui.messages.ComposeMessageActivity" android:theme="@android:style/Theme.NoTitleBar"
-                  android:windowSoftInputMode="stateHidden" android:configChanges="orientation"
-                  android:launchMode="singleTop" />
-		
-		<!-- Embedded plugins -->
-		<!-- Call handlers -->
-		<receiver android:name="com.csipsimple.plugins.telephony.CallHandler" android:permission="android.permission.PROCESS_OUTGOING_CALLS">
-			<intent-filter>
-				<action android:name="com.csipsimple.phone.action.HANDLE_CALL" />
-			</intent-filter>
-		</receiver>
-		
-		    
-		<provider android:name="com.csipsimple.service.PreferenceProvider"
-                  android:authorities="com.csipsimple.prefs" />
-		    
-	</application>
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="9"/>
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.RECORD_AUDIO"/>
-	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-	<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
-	<uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-	<uses-permission android:name="android.permission.READ_CONTACTS"/>
-	<uses-permission android:name="android.permission.WRITE_CONTACTS"/>
-	<uses-permission android:name="android.permission.CALL_PHONE"/>
-	<uses-permission android:name="android.permission.CALL_PRIVILEGED" />
-	<uses-permission android:name="android.permission.WAKE_LOCK"/>
-	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-	<uses-permission android:name="android.permission.VIBRATE"/>
-	<uses-permission android:name="android.permission.BLUETOOTH"/>
-	<uses-permission android:name="android.permission.READ_LOGS" />
-	<uses-permission android:name="android.permission.USE_SIP" />
-	<uses-permission android:name="android.permission.CONFIGURE_SIP" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	 <!-- Not taken into account? -->
-	<uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY"/>
-	
-	
-	<uses-feature android:name="android.hardware.wifi" android:required="false"></uses-feature>
-	<uses-feature android:name="android.hardware.telephony" android:required="false"></uses-feature>
-	<uses-feature android:name="android.hardware.microphone" android:required="true"></uses-feature>
-	<uses-feature android:name="android.hardware.touchscreen" android:required="false"></uses-feature>
-	<uses-feature android:name="android.hardware.bluetooth" android:required="false"></uses-feature>
-	<uses-feature android:name="android.hardware.screen.portrait" android:required="false"></uses-feature>
-	
-	<permission android:name="android.permission.USE_SIP"
-        android:label="@string/permlab_useSip"
-        android:description="@string/permdesc_useSip"
-        android:permissionGroup="android.permission-group.COST_MONEY"
-        android:protectionLevel="dangerous" />
-        
-    <permission android:name="android.permission.CONFIGURE_SIP"
-        android:label="@string/permlab_configureSip"
-        android:description="@string/permdesc_configureSip"
-        android:permissionGroup="android.permission-group.COST_MONEY"
-        android:protectionLevel="dangerous" />
-	
-</manifest> 
+
+        <activity android:name="com.csipsimple.widgets.AccountWidgetConfigure" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <!-- Messages -->
+        <activity
+            android:name="com.csipsimple.ui.messages.ConversationList"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.csipsimple.ui.messages.MessageActivity"
+            android:configChanges="orientation"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- Embedded plugins -->
+        <!-- Call handlers -->
+        <receiver
+            android:name="com.csipsimple.plugins.telephony.CallHandler"
+            android:permission="android.permission.PROCESS_OUTGOING_CALLS" >
+            <intent-filter>
+                <action android:name="com.csipsimple.phone.action.HANDLE_CALL" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Databases providers -->
+        <provider
+            android:name="com.csipsimple.service.PreferenceProvider"
+            android:authorities="com.csipsimple.prefs" />
+        <provider
+            android:name="com.csipsimple.db.DBProvider"
+            android:authorities="com.csipsimple.db"
+            android:process=":sipStack" />
+
+        <!-- New UI -->
+        <activity
+            android:name="com.csipsimple.ui.AccountsEditList"
+            android:theme="@style/DarkTheme"
+            android:title="@string/accounts" />
+        <activity
+            android:name="com.csipsimple.ui.AccountEdit"
+            android:theme="@style/DarkTheme" />
+    </application>
+
+</manifest>

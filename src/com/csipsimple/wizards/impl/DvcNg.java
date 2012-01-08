@@ -64,11 +64,11 @@ public class DvcNg extends SimpleImplementation {
 		ArrayList<Filter> filters = new ArrayList<Filter>();
 		
 		Filter f = new Filter();
-		f.account = acc.id;
+		f.account = (int) acc.id;
 		f.action = Filter.ACTION_REPLACE;
-		f.match_pattern = "^"+Pattern.quote("+")+"(.*)$";
-		f.replace_pattern = "$1";
-		f.match_type = Filter.MATCHER_STARTS;
+		f.matchPattern = "^"+Pattern.quote("+")+"(.*)$";
+		f.replacePattern = "$1";
+		f.matchType = Filter.MATCHER_STARTS;
 		filters.add(f);
 		
 		return filters;

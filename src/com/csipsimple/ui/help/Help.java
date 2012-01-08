@@ -17,222 +17,249 @@
  */
 package com.csipsimple.ui.help;
 
-import android.app.Activity;
-import android.content.ComponentName;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.SupportActivity;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipConfigManager;
-import com.csipsimple.service.SipService;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.CollectLogs;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.NightlyUpdater;
+import com.csipsimple.utils.NightlyUpdater.UpdaterPopupLauncher;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.utils.NightlyUpdater.UpdaterPopupLauncher;
 
-public class Help extends Activity implements OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Help extends DialogFragment implements OnItemClickListener {
 	
 	
 	private static final String THIS_FILE = "Help";
 	private PreferencesWrapper prefsWrapper;
+	
+	public static Help newInstance() {
+        Help instance = new Help();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_KILL_LOADING, false);
+        instance.setArguments(args);
+        return instance;
+    }
+	
 	private static final int REQUEST_SEND_LOGS = 0;
 	
-	private ISipService sipService = null;
+	// Help choices
+	private final static int FAQ = 0, OPEN_ISSUES = 1, SEND_LOGS = 2, START_LOGS = 3, LEGALS = 4, NIGHTLY = 5;
 	
-	private ServiceConnection restartServiceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceDisconnected(ComponentName name) {}
-		
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder aService) {
-			sipService = ISipService.Stub.asInterface(aService);
-		}
-	};
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.help);
-	//	getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.white_title);
-		
-		prefsWrapper = new PreferencesWrapper(this);
-		
-		//Set window size
-		LayoutParams params = getWindow().getAttributes();
-		params.width = LayoutParams.FILL_PARENT;
-		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-		
-		//Set title
-		((TextView) findViewById(R.id.my_title)).setText(R.string.help);
-		((ImageView) findViewById(R.id.my_icon)).setImageResource(android.R.drawable.ic_menu_help);
-		
-		bindView();
-		
-		//Attach to the service
-		Intent serviceIntent =  new Intent(this, SipService.class);
-		try {
-			bindService(serviceIntent, restartServiceConnection, 0);
-		}catch(Exception e) {
-			
+	private class HelpEntry {
+		public int iconRes;
+		public int textRes;
+		public int choiceTag;
+		public HelpEntry(int icon, int text, int choice) {
+			iconRes = icon;
+			textRes = text;
+			choiceTag = choice;
 		}
 	}
-	
-	private void bindView() {
-		LinearLayout line;
-		line = (LinearLayout) findViewById(R.id.faq_line);
-		line.setOnClickListener(this);
-		if(CustomDistribution.getFaqLink() == null) {
-			line.setVisibility(View.GONE);
-		}
-		line = (LinearLayout) findViewById(R.id.record_logs_line);
-		line.setOnClickListener(this);
-		if(CustomDistribution.getSupportEmail() == null) {
-			line.setVisibility(View.GONE);
-		}
-		line = (LinearLayout) findViewById(R.id.issues_line);
-		line.setOnClickListener(this);
-		if(!CustomDistribution.showIssueList()) {
-			line.setVisibility(View.GONE);
+
+    
+    @Override
+    public void onAttach(SupportActivity activity) {
+    	super.onAttach(activity);
+    	
+    	prefsWrapper = new PreferencesWrapper(getActivity());
+    	
+        
+    }
+    
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    	
+        return new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_menu_help)
+                .setTitle(R.string.help)
+                .setNegativeButton(R.string.cancel,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dismiss();
+                        }
+                    }
+                )
+                .setView(getCustomView(getActivity().getLayoutInflater(), null, savedInstanceState))
+                .create();
+    }
+
+    
+    public View getCustomView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	View v = inflater.inflate(R.layout.help, container, false);
+        ListView lv = (ListView) v.findViewById(android.R.id.list);
+        lv.setOnItemClickListener(this);
+        
+        
+        ArrayList<HelpEntry> items = new ArrayList<HelpEntry>();
+
+        // FAQ
+		if(!TextUtils.isEmpty(CustomDistribution.getFaqLink())) {
+			items.add(new HelpEntry(android.R.drawable.ic_menu_info_details, R.string.faq, FAQ));
 		}
 		
-
-		line = (LinearLayout) findViewById(R.id.nightly_update);
-		line.setOnClickListener(this);
-		PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(this);
-		if(pinfo != null) {
-			if(pinfo.applicationInfo.icon == R.drawable.ic_launcher_nightly) {
-				line.setVisibility(View.VISIBLE);
+		// Issue list 
+		if(CustomDistribution.showIssueList()) {
+			items.add(new HelpEntry(android.R.drawable.ic_menu_view, R.string.view_existing_issues, OPEN_ISSUES));
+		}
+		
+		// Log collector
+		if(!TextUtils.isEmpty(CustomDistribution.getSupportEmail()) ) {
+			if(isRecording()) {
+		        items.add(new HelpEntry( android.R.drawable.ic_menu_send , R.string.send_logs, SEND_LOGS));
+			}else {
+		        items.add(new HelpEntry( android.R.drawable.ic_menu_save , R.string.record_logs, START_LOGS));
 			}
 		}
-		
-		//Recording logs
-		ImageView recordImage = (ImageView) findViewById(R.id.record_logs_image);
-		TextView recordText = (TextView) findViewById(R.id.record_logs_text);
-		if(isRecording()) {
-			recordImage.setImageResource(android.R.drawable.ic_menu_send);
-			recordText.setText(R.string.send_logs);
-		}else {
-			recordImage.setImageResource(android.R.drawable.ic_menu_save);
-			recordText.setText(R.string.record_logs);
-		}
-		
-		// Revision
-		TextView rev = (TextView) findViewById(R.id.revision);
-		rev.setText(CollectLogs.getApplicationInfo(this));
-		
 
-		// Do never remove this line else the distributed software may not respect some MIT license
-		// Besides remember that the application is released under GPL which mean any distribution of the app
-		// must be done under GPL license terms. Else you can be sued for not respecting GPL license terms
-		line = (LinearLayout) findViewById(R.id.legal_line);
-		line.setOnClickListener(this);
-	}
-	
-	@Override
-	public void onDestroy(){
-		super.onDestroy();
-		
-		sipService = null;
-		if(restartServiceConnection != null) {
-			try {
-				unbindService(restartServiceConnection);
-			}catch(Exception e) {
-				//Nothing to do service was just not binded
-			}
+        items.add(new HelpEntry(android.R.drawable.ic_menu_gallery, R.string.legal_information, LEGALS));
+        
+        PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(getActivity());
+		if(pinfo != null && pinfo.applicationInfo.icon == R.drawable.ic_launcher_nightly) {
+			items.add(new HelpEntry(R.drawable.ic_launcher_nightly, R.string.update_nightly_build, NIGHTLY));
 		}
-	}
-	
+		
+        lv.setAdapter(new HelpArrayAdapter(getActivity(), items));
+        
+        TextView tv = (TextView) v.findViewById(android.R.id.text1);
+        tv.setText(CollectLogs.getApplicationInfo(getActivity()));
+        
+        return v;
+    }
+    
+    private class HelpArrayAdapter extends ArrayAdapter<HelpEntry> {
+    	public HelpArrayAdapter(Context ctxt, List<HelpEntry> items) {
+			super(ctxt, R.layout.help_list_row, android.R.id.text1, items);
+		}
+    	
+    	@Override
+    	public View getView(int position, View convertView, ViewGroup parent) {
+    		View v = super.getView(position, convertView, parent);
+    		bindView(v, getItem(position));
+    		return v;
+    	}
+    	
+    	/**
+    	 * Bind the fiew to the help entry content
+    	 * @param v the view to bind info to
+    	 * @param he the help entry to display info of
+    	 */
+    	private void bindView(View v, HelpEntry he) {
+    		TextView tv = (TextView) v;
+    		tv.setText(he.textRes);
+    		tv.setCompoundDrawablesWithIntrinsicBounds(he.iconRes, 0, 0, 0);
+    	}
+    }
+    
+    
+
 	private boolean isRecording() {
 		return (prefsWrapper.getLogLevel() >= 3);
 	}
 
 	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.faq_line:
-			startActivity(new Intent(this, Faq.class));
+	public void onItemClick(AdapterView<?> av, View v, int position, long id) {
+        Log.i(THIS_FILE, "Item clicked : " + id +" " + position);
+		HelpArrayAdapter haa = (HelpArrayAdapter) av.getAdapter();
+		HelpEntry he = haa.getItem(position);
+		
+		DialogFragment newFragment;
+		switch (he.choiceTag) {
+		case FAQ:
+			newFragment = Faq.newInstance();
+	        newFragment.show(getSupportFragmentManager(), "faq");
 			break;
-		case R.id.record_logs_line:
-			Log.e(THIS_FILE, "Clicked on record logs line while isRecording is : " + isRecording());
-			if (!isRecording()) {
-				prefsWrapper.setPreferenceStringValue(SipConfigManager.LOG_LEVEL, "4");
-				Log.setLogLevel(4);
-				if(sipService !=null ) {
-					try {
-						sipService.askThreadedRestart();
-					} catch (RemoteException e) {
-						Log.e(THIS_FILE, "Impossible to restart sip", e);
-					}
-				}
-
-				finish();
-			} else {
-				prefsWrapper.setPreferenceStringValue(SipConfigManager.LOG_LEVEL, "1");
-				try {
-					startActivityForResult(CollectLogs.getLogReportIntent("<<<PLEASE ADD THE BUG DESCRIPTION HERE>>>", this), REQUEST_SEND_LOGS);
-				}catch(Exception e) {
-					Log.e(THIS_FILE, "Impossible to send logs...", e);
-				}
-				Log.setLogLevel(1);
-			}
+		case LEGALS:
+			newFragment = Legal.newInstance();
+	        newFragment.show(getSupportFragmentManager(), "issues");
 			break;
-		case R.id.issues_line:
+		case OPEN_ISSUES:
 			Intent it = new Intent(Intent.ACTION_VIEW);
 			it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			it.setData(Uri.parse("http://code.google.com/p/csipsimple/issues"));
 			startActivity(it);
 			break;
-			
-		case R.id.legal_line:
-			// Do never remove this line else the distributed software may not respect some MIT license
-			// Besides remember that the application is released under GPL which mean any distribution of the app
-			// must be done under GPL license terms. Else you can be sued for not respecting GPL license terms
-			startActivity(new Intent(this, Legal.class));
-			break;
-		case R.id.nightly_update:
+		case NIGHTLY:
 			// We have to check for an update
-			final NightlyUpdater nu = new NightlyUpdater(this);
+			final NightlyUpdater nu = new NightlyUpdater(getActivity());
 			Thread t = new Thread() {
 				public void run() {
 					UpdaterPopupLauncher ru = nu.getUpdaterPopup(true);
-					if(ru != null) {	
-						runOnUiThread(ru);
+					if (ru != null) {
+						getActivity().runOnUiThread(ru);
 					}
 				};
 			};
 			t.start();
 			break;
+		case SEND_LOGS:
+			prefsWrapper.setPreferenceStringValue(SipConfigManager.LOG_LEVEL, "1");
+			try {
+				startActivityForResult(CollectLogs.getLogReportIntent("<<<PLEASE ADD THE BUG DESCRIPTION HERE>>>", getActivity()), REQUEST_SEND_LOGS);
+			}catch(Exception e) {
+				Log.e(THIS_FILE, "Impossible to send logs...", e);
+			}
+			Log.setLogLevel(1);
+			break;
+		case START_LOGS:
+			prefsWrapper.setPreferenceStringValue(SipConfigManager.LOG_LEVEL, "4");
+			Log.setLogLevel(4);
+			Intent intent = new Intent(SipManager.ACTION_SIP_REQUEST_RESTART);
+			getActivity().sendBroadcast(intent);
+			dismiss();
+			break;
 		default:
 			break;
 		}
-		
 	}
 	
+	
+	private final static String ARG_KILL_LOADING = "kill_loading";
+
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(requestCode == REQUEST_SEND_LOGS) {
-			//Do not that here !!! if so mailer will be lost..
-			//PreferencesWrapper.cleanLogsFiles();
-			finish();
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_SEND_LOGS) {
+			try {
+				dismiss();
+			} catch (IllegalStateException ex) {
+				getArguments().putBoolean(ARG_KILL_LOADING, true);
+			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		final boolean kill = getArguments().getBoolean(ARG_KILL_LOADING, false);
+		if (kill) {
+			dismiss();
+		}
+	}
+
 }

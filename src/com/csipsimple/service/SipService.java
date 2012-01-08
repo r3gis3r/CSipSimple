@@ -21,8 +21,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
@@ -36,6 +36,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
@@ -62,12 +64,13 @@ import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipMessage;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.db.DBAdapter;
+import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
-import com.csipsimple.models.SipMessage;
 import com.csipsimple.pjsip.PjSipCalls;
 import com.csipsimple.pjsip.PjSipService;
 import com.csipsimple.pjsip.UAStateReceiver;
@@ -89,10 +92,16 @@ public class SipService extends Service {
     /** Key to the connectivity state of a connectivity broadcast event. */
     private static final String BROADCAST_CONNECTION_STATE = "connection_state";
     private boolean lastKnownVpnState = false;
+    
+
+	public static final String ACTION_SIP_ACCOUNT_CHANGED = "com.csipsimple.service.ACCOUNT_CHANGED";
 	
 	private SipWakeLock sipWakeLock;
 	private boolean autoAcceptCurrent = false;
 	public boolean supportMultipleCalls = false;
+	
+	// For video testing -- TODO : remove
+	private static SipService singleton = null;
 	
 
 	// Implement public interface for the service
@@ -184,20 +193,18 @@ public class SipService extends Service {
 		@Override
 		public void setAccountRegistration(int accountId, int renew) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			SipProfile account;
-			synchronized (db) {
-				db.open();
-				account = db.getAccount(accountId);
-				db.close();
+			
+			
+			final SipProfile acc = getAccount(accountId);
+			if(acc != null) {
+				final int ren = renew;
+				getExecutor().execute(new SipRunnable() {
+					@Override
+					public void doRun() throws SameThreadException {
+						SipService.this.setAccountRegistration(acc, ren, false);
+					}
+				});
 			}
-			final SipProfile acc = account;
-			final int ren = renew;
-			getExecutor().execute(new SipRunnable() {
-				@Override
-				public void doRun() throws SameThreadException {
-					SipService.this.setAccountRegistration(acc, ren);
-				}
-			});
 		}
 
 		/**
@@ -275,11 +282,7 @@ public class SipService extends Service {
 								message, "text/plain", System.currentTimeMillis(), 
 								SipMessage.MESSAGE_TYPE_QUEUED, called.getCallee());
 						msg.setRead(true);
-						synchronized (db) {
-							db.open();
-							db.insertMessage(msg);
-							db.close();	
-						}
+						getContentResolver().insert(SipMessage.MESSAGE_URI, msg.getContentValues());
 						Log.d(THIS_FILE, "Inserted "+msg.getTo());
 					}else {
 						SipService.this.notifyUserOfMessage( getString(R.string.invalid_sip_uri)+ " : "+callee );
@@ -643,38 +646,6 @@ public class SipService extends Service {
 	private final ISipConfiguration.Stub binderConfiguration = new ISipConfiguration.Stub() {
 
 		@Override
-		public long addOrUpdateAccount(SipProfile acc) throws RemoteException {
-			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
-			Log.d(THIS_FILE, ">>> addOrUpdateAccount from service");
-			long finalId = SipProfile.INVALID_ID;
-			
-			synchronized (db) {
-				db.open();
-				if (acc.id == SipProfile.INVALID_ID) {
-					finalId = db.insertAccount(acc);
-				} else {
-					db.updateAccount(acc);
-					finalId = acc.id;
-				}
-				db.close();
-			}
-			return finalId;
-		}
-
-		@Override
-		public SipProfile getAccount(long accId) throws RemoteException {
-			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
-			SipProfile result = null;
-
-			synchronized (db) {
-				db.open();
-				result = db.getAccount(accId);
-				db.close();
-			}
-			return result;
-		}
-
-		@Override
 		public void setPreferenceBoolean(String key, boolean value) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
 			prefsWrapper.setPreferenceBooleanValue(key, value);
@@ -763,7 +734,7 @@ public class SipService extends Service {
 
 		private void onReceiveInternal(Context context, Intent intent) {
 			String action = intent.getAction();
-			Log.d(THIS_FILE, "Internal receive "+action);
+			Log.d(THIS_FILE, "Internal receive " + action);
 			if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 				Bundle b = intent.getExtras();
 				if (b != null) {
@@ -801,17 +772,17 @@ public class SipService extends Service {
 						Log.d(THIS_FILE, "Connectivity alert not processed: " + state + " " + type);
 					}
 				}
-			} else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED)) {
-				final long accountId = intent.getLongExtra(SipManager.EXTRA_ACCOUNT_ID, -1);
-				final boolean active = intent.getBooleanExtra(SipManager.EXTRA_ACTIVATE, false);
+			} else if (action.equals(ACTION_SIP_ACCOUNT_CHANGED)) {
+				final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, -1);
 				// Should that be threaded?
 				if (accountId != SipProfile.INVALID_ID) {
-					final SipProfile account = getAccount((int)accountId);
+					final SipProfile account = getAccount(accountId);
 					if (account != null) {
+						Log.d(THIS_FILE, "Enqueue set account registration");
 						getExecutor().execute(new SipRunnable() {
 							@Override
 							protected void doRun() throws SameThreadException {
-								setAccountRegistration(account, active ? 1 : 0);
+								setAccountRegistration(account, account.active ? 1 : 0, true);
 							}
 						});
 					}
@@ -826,6 +797,8 @@ public class SipService extends Service {
 					}
 				}
 				cleanStop();
+			} else if (action.equals(SipManager.ACTION_SIP_REQUEST_RESTART)){
+				getExecutor().execute(new RestartRunnable());
 			} else if(action.equals(ACTION_VPN_CONNECTIVITY)) {
 				// TODO : ensure no current call
 				String connection_state = intent.getSerializableExtra(BROADCAST_CONNECTION_STATE).toString();
@@ -923,7 +896,20 @@ public class SipService extends Service {
 		}
 
 	}
+
+	private Handler mHandler = new Handler();
+	private AccountStatusContentObserver statusObserver = null;
 	
+	class AccountStatusContentObserver extends ContentObserver {
+		public AccountStatusContentObserver(Handler h) {
+			super(h);
+		}
+
+		public void onChange(boolean selfChange) {
+			Log.d(THIS_FILE, "Accounts status.onChange( " + selfChange + ")");
+			updateRegistrationsState();
+		}
+	}
 	
 
     public SipServiceExecutor getExecutor() {
@@ -981,6 +967,7 @@ public class SipService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		singleton = this;
 
 		Log.i(THIS_FILE, "Create SIP Service");
 		db = new DBAdapter(this);
@@ -1008,33 +995,39 @@ public class SipService extends Service {
 			return;
 		}
 
-		//registerBroadcasts();
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		Log.i(THIS_FILE, "Destroying SIP Service");
+		
 		unregisterBroadcasts();
 		notificationManager.onServiceDestroy();
 		getExecutor().execute(new FinalizeDestroyRunnable());
+		
 	}
 	
 	public void cleanStop () {
 		getExecutor().execute(new DestroyRunnable());
 	}
 	
+	
+	
+	
 	private void registerBroadcasts() {
 		// Register own broadcast receiver
 		if (deviceStateReceiver == null) {
 			IntentFilter intentfilter = new IntentFilter();
 			intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED);
+			intentfilter.addAction(ACTION_SIP_ACCOUNT_CHANGED);
 			intentfilter.addAction(SipManager.ACTION_SIP_CAN_BE_STOPPED);
+			intentfilter.addAction(SipManager.ACTION_SIP_REQUEST_RESTART);
 			intentfilter.addAction(ACTION_VPN_CONNECTIVITY);
 			deviceStateReceiver = new ServiceDeviceStateReceiver();
 			registerReceiver(deviceStateReceiver, intentfilter);
 		}
+		// Telephony
 		if (phoneConnectivityReceiver == null) {
 			Log.d(THIS_FILE, "Listen for phone state ");
 			phoneConnectivityReceiver = new ServicePhoneStateReceiver();
@@ -1042,6 +1035,10 @@ public class SipService extends Service {
 			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
 					| PhoneStateListener.LISTEN_CALL_STATE );
 		}
+		// Content observer
+    	statusObserver = new AccountStatusContentObserver(mHandler);
+		getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI, true, statusObserver);
+		
 	}
 
 	private void unregisterBroadcasts() {
@@ -1064,6 +1061,10 @@ public class SipService extends Service {
 			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_NONE);
 			phoneConnectivityReceiver = null;
 		}
+		if(statusObserver != null) {
+    		getContentResolver().unregisterContentObserver(statusObserver);
+    	}
+		
 	}
 	
 	
@@ -1112,7 +1113,10 @@ public class SipService extends Service {
 				Log.d(THIS_FILE, ">> on changed disconnected");
 			}
 		}
+		
 	}
+	
+	
 
 	private boolean loadStack() {
 		//Ensure pjService exists
@@ -1213,21 +1217,28 @@ public class SipService extends Service {
 		Log.d(THIS_FILE, "We are adding all accounts right now....");
 
 		boolean hasSomeSuccess = false;
-		List<SipProfile> accountList;
-		synchronized (db) {
-			db.open();
-			accountList = db.getListAccounts();
-			db.close();
-		}
-		int account_limit = 10;
-		for (SipProfile account : accountList) {
-			if (account.active && account_limit > 0) {
-				if (pjService != null && pjService.addAccount(account) ) {
-					hasSomeSuccess = true;
+		Cursor c = getContentResolver().query(SipProfile.ACCOUNT_URI, DBProvider.ACCOUNT_FULL_PROJECTION, 
+				SipProfile.FIELD_ACTIVE + "=?", new String[] {"1"}, null);
+		if (c != null) {
+			try {
+				int index = 0;
+				if(c.getCount() > 0) {
+    				c.moveToFirst();
+    				do {
+    					SipProfile account = new SipProfile(c);
+    					if (pjService != null && pjService.addAccount(account) ) {
+    						hasSomeSuccess = true;
+    					}
+    					index ++;
+    				} while (c.moveToNext() && index < 10);
 				}
-				account_limit --;
+			} catch (Exception e) {
+				Log.e(THIS_FILE, "Error on looping over sip profiles", e);
+			} finally {
+				c.close();
 			}
 		}
+		
 		hasSomeActiveAccount = hasSomeSuccess;
 
 		if (hasSomeSuccess) {
@@ -1242,16 +1253,10 @@ public class SipService extends Service {
 
 	
 
-	private boolean setAccountRegistration(SipProfile account, int renew) throws SameThreadException {
+	private boolean setAccountRegistration(SipProfile account, int renew, boolean forceReAdd) throws SameThreadException {
 		boolean status = false;
 		if(pjService != null) {
-			 pjService.setAccountRegistration(account, renew);
-			// Send a broadcast message that for an account
-			// registration state has changed
-			Intent regStateChangedIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
-			sendBroadcast(regStateChangedIntent);
-	
-			updateRegistrationsState();
+			status = pjService.setAccountRegistration(account, renew, forceReAdd);
 		}		
 		
 		return status;
@@ -1265,15 +1270,20 @@ public class SipService extends Service {
 		releaseResources();
 		
 		Log.d(THIS_FILE, "Remove all accounts");
-		List<SipProfile> accountList;
-		synchronized (db) {
-			db.open();
-			accountList = db.getListAccounts();
-			db.close();
-		}
-
-		for (SipProfile account : accountList) {
-			setAccountRegistration(account, 0);
+		
+		Cursor c = getContentResolver().query(SipProfile.ACCOUNT_URI, DBProvider.ACCOUNT_FULL_PROJECTION, null, null, null);
+		if (c != null) {
+			try {
+				c.moveToFirst();
+				do {
+					SipProfile account = new SipProfile(c);
+					setAccountRegistration(account, 0, false);
+				} while (c.moveToNext() );
+			} catch (Exception e) {
+				Log.e(THIS_FILE, "Error on looping over sip profiles", e);
+			} finally {
+				c.close();
+			}
 		}
 
 
@@ -1292,32 +1302,46 @@ public class SipService extends Service {
 	
 	
 	public SipProfileState getSipProfileState(int accountDbId) {
-		SipProfile account;
-		synchronized (db) {
-			db.open();
-			account = db.getAccount(accountDbId);
-			db.close();
-		}
-		if(pjService != null) {
-			return pjService.getProfileState(account);
+		final SipProfile acc = getAccount(accountDbId);
+		if(pjService != null && acc != null) {
+			return pjService.getProfileState(acc);
 		}
 		return null;
 	}
 
 	public void updateRegistrationsState() {
-		ArrayList<SipProfileState> activeAccountsInfos = null;
 		Log.d(THIS_FILE, "Update registration state");
-		if(pjService != null) {
-			activeAccountsInfos = pjService.getActiveProfilesState();
+		ArrayList<SipProfileState> activeProfilesState = new ArrayList<SipProfileState>();
+		Cursor c = getContentResolver().query(SipProfile.ACCOUNT_STATUS_URI, null, null, null, null);
+		if (c != null) {
+			try {
+				if(c.getCount() > 0) {
+					c.moveToFirst();
+					do {
+						SipProfileState ps = new SipProfileState(c);
+						if(ps.isValidForCall()) {
+							activeProfilesState.add(ps);
+						}
+					} while ( c.moveToNext() );
+				}
+			} catch (Exception e) {
+				Log.e(THIS_FILE, "Error on looping over sip profiles", e);
+			} finally {
+				c.close();
+			}
 		}
+		
+		Collections.sort(activeProfilesState, SipProfileState.getComparator());
+		
+		
 
 		// Handle status bar notification
-		if (activeAccountsInfos != null && activeAccountsInfos.size() > 0 && 
+		if (activeProfilesState.size() > 0 && 
 				prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR)) {
 		// Testing memory / CPU leak as per issue 676
 		//	for(int i=0; i < 10; i++) {
 		//		Log.d(THIS_FILE, "Notify ...");
-				notificationManager.notifyRegisteredAccounts(activeAccountsInfos, prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR_NBR));
+				notificationManager.notifyRegisteredAccounts(activeProfilesState, prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR_NBR));
 		//		try {
 		//			Thread.sleep(6000);
 		//		} catch (InterruptedException e) {
@@ -1367,13 +1391,13 @@ public class SipService extends Service {
 	}
 
 	
-	private boolean hold_resources = false;
+	private boolean holdResources = false;
 	/**
 	 * Ask to take the control of the wifi and the partial wake lock if
 	 * configured
 	 */
 	private synchronized void acquireResources() {
-		if(hold_resources) {
+		if(holdResources) {
 			return;
 		}
 		
@@ -1413,7 +1437,7 @@ public class SipService extends Service {
 				}
 			}
 		}
-		hold_resources = true;
+		holdResources = true;
 	}
 
 	private synchronized void releaseResources() {
@@ -1423,7 +1447,7 @@ public class SipService extends Service {
 		if (wifiLock != null && wifiLock.isHeld()) {
 			wifiLock.release();
 		}
-		hold_resources = false;
+		holdResources = false;
 	}
 
 
@@ -1435,14 +1459,12 @@ public class SipService extends Service {
 		@Override
 		public void handleMessage(Message msg) {
 			
-			switch(msg.what) {
-			case TOAST_MESSAGE:
+			if (msg.what == TOAST_MESSAGE) {
 				if (msg.arg1 != 0) {
 					Toast.makeText(SipService.this, msg.arg1, Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(SipService.this, (String) msg.obj, Toast.LENGTH_LONG).show();
 				}
-				break;
 			}
 		}
 	};
@@ -1583,23 +1605,9 @@ public class SipService extends Service {
 		}
 	};
 	
-	public SipProfile getAccount(int accountId) {
-		synchronized (db) {
-			return SipService.getAccount(accountId, db);
-		}
-	}
-	
-	/**
-	 * Get the entire sip profile infos for a given account id
-	 * @param accountId the account id we are currently searching on
-	 * @param db a database that should be in state closed. This method will open the database and close it
-	 * @return The entire sip profile as per current database infos
-	 */
-	public static SipProfile getAccount(int accountId, DBAdapter db) {
-		db.open();
-		SipProfile account = db.getAccount(accountId);
-		db.close();
-		return account;
+	public SipProfile getAccount(long accountId) {
+		// TODO : create cache at this point to not requery each time as far as it's a service query
+		return SipProfile.getProfileFromDbId(this, accountId, DBProvider.ACCOUNT_FULL_PROJECTION);
 	}
 	
 
@@ -1716,6 +1724,8 @@ public class SipService extends Service {
 		protected void doRun() throws SameThreadException {
 			if(stopSipStack()) {
 				startSipStack();
+			}else {
+				Log.e(THIS_FILE, "Can't stop ... so do not restart ! ");
 			}
 		}
 	} 
@@ -1811,5 +1821,22 @@ public class SipService extends Service {
     		resultObject = obj;
     		runSemaphore.release();
     	}
+    }
+    
+    
+    
+    public static void setVideoWindow(int callId, Object window) {
+        if(singleton != null) {
+            singleton.setPrivateVideoWindow(callId, window);
+        }
+    }
+
+    private void setPrivateVideoWindow(final int callId, final Object window) {
+        getExecutor().execute(new SipRunnable() {
+            @Override
+            protected void doRun() throws SameThreadException {
+                pjsua.vid_set_android_window(callId, window);
+            }
+        });
     }
 }

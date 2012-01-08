@@ -3,7 +3,7 @@
   <string name="acct_inactive">Pasif</string>
   <string name="acct_unregistered">Kayıtlı Değil</string>
   <string name="acct_expired">Kayıt süresi doldu</string>
-  <string name="acct_registering">Kaydediliyor....</string>
+  <string name="acct_registering">Kaydediliyor….</string>
   <string name="acct_registered">Kayıtlı</string>
   <string name="acct_regerror">Kayıt ederken hata</string>
 </resources>

@@ -1,18 +1,20 @@
 Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/include/pjmedia-codec/types.h	2011-11-21 08:52:39.865661432 +0100
-+++ pjsip/sources/pjmedia/include/pjmedia-codec/types.h	2011-11-22 22:23:20.174183882 +0100
-@@ -60,9 +60,17 @@
+--- pjsip.orig/sources/pjmedia/include/pjmedia-codec/types.h	2012-01-03 21:43:35.131900473 +0100
++++ pjsip/sources/pjmedia/include/pjmedia-codec/types.h	2012-01-03 21:53:13.256406524 +0100
+@@ -59,10 +59,19 @@
+ #else
      PJMEDIA_RTP_PT_START = (PJMEDIA_RTP_PT_DYNAMIC-1),
  #endif
- 
-+    PJMEDIA_RTP_PT_ILBC,			/**< iLBC (13.3/15.2Kbps)   */ // r3gis3r : changed position cause 102 in webRTC is iLBC
++    // Note : in csipsimple we start at 101 for telephone events (because of buggy sip servers)
++    PJMEDIA_RTP_PT_ILBC = 102,			/**< iLBC (13.3/15.2Kbps)   */
++    // r3gis3r : webRTC codecs position is important because of the fact its hardcoded in the lib
 +
 +#if defined(PJMEDIA_HAS_WEBRTC_CODEC) && PJMEDIA_HAS_WEBRTC_CODEC != 0
-+    PJMEDIA_RTP_PT_ISAC_WB,
-+    PJMEDIA_RTP_PT_ISAC_UWB,
++    PJMEDIA_RTP_PT_ISAC_WB = 103,
++    PJMEDIA_RTP_PT_ISAC_UWB = 104,
 +#endif
-+
+ 
      PJMEDIA_RTP_PT_SPEEX_NB,			/**< Speex narrowband/8KHz  */
      PJMEDIA_RTP_PT_SPEEX_WB,			/**< Speex wideband/16KHz   */
      PJMEDIA_RTP_PT_SPEEX_UWB,			/**< Speex 32KHz	    */
@@ -20,7 +22,7 @@ Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
      PJMEDIA_RTP_PT_L16_8KHZ_MONO,		/**< L16 @ 8KHz, mono	    */
      PJMEDIA_RTP_PT_L16_8KHZ_STEREO,		/**< L16 @ 8KHz, stereo     */
      //PJMEDIA_RTP_PT_L16_11KHZ_MONO,		/**< L16 @ 11KHz, mono	    */
-@@ -75,14 +83,26 @@
+@@ -75,14 +84,26 @@
      //PJMEDIA_RTP_PT_L16_32KHZ_STEREO,		/**< L16 @ 32KHz, stereo    */
      //PJMEDIA_RTP_PT_L16_48KHZ_MONO,		/**< L16 @ 48KHz, mono	    */
      //PJMEDIA_RTP_PT_L16_48KHZ_STEREO,		/**< L16 @ 48KHz, stereo    */
@@ -48,20 +50,23 @@ Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
      PJMEDIA_RTP_PT_G722_1_16,			/**< G722.1 (16Kbps)	    */
      PJMEDIA_RTP_PT_G722_1_24,			/**< G722.1 (24Kbps)	    */
      PJMEDIA_RTP_PT_G722_1_32,			/**< G722.1 (32Kbps)	    */
-@@ -91,7 +111,17 @@
+@@ -91,7 +112,20 @@
      PJMEDIA_RTP_PT_G7221C_48,			/**< G722.1 Annex C (48Kbps)*/
      PJMEDIA_RTP_PT_G7221_RSV1,			/**< G722.1 reserve	    */
      PJMEDIA_RTP_PT_G7221_RSV2,			/**< G722.1 reserve	    */
 +#endif
  
++    // To save space, put these additional codecs proper to csipsimple in the free space
++    // At the beggining
 +#if ( defined(PJMEDIA_HAS_SILK_CODEC) && PJMEDIA_HAS_SILK_CODEC!=0 )
-+    PJMEDIA_RTP_PT_SILK_NB,				/**< SILK @ 8KHz	*/
-+    PJMEDIA_RTP_PT_SILK_WB,				/**< SILK @ 16KHz	*/
-+    PJMEDIA_RTP_PT_SILK_UWB,			/**< SILK @ 24KHz	*/
++    PJMEDIA_RTP_PT_SILK_NB = 96,		/**< SILK @ 8KHz	*/
++    PJMEDIA_RTP_PT_SILK_MB = 97,		/**< SILK @ 12KHz	*/
++    PJMEDIA_RTP_PT_SILK_WB = 98,		/**< SILK @ 16KHz	*/
++    PJMEDIA_RTP_PT_SILK_UWB = 99,		/**< SILK @ 24KHz	*/
 +#endif
 +
 +#if ( defined(PJMEDIA_HAS_CODEC2_CODEC) && PJMEDIA_HAS_CODEC2_CODEC!=0 )
-+    PJMEDIA_RTP_PT_CODEC2,
++    PJMEDIA_RTP_PT_CODEC2 = 100,
 +#endif
      /* Caution!
       * Ensure the value of the last pt above is <= 127.

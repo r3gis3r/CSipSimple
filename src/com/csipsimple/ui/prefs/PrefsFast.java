@@ -41,7 +41,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 	private CheckBox globGsm;
 	private PreferencesWrapper prefsWrapper;
 	private SharedPreferences prefs;
-	private Button saveBtn;
+	
 	
 	enum Profile {
 		UNKOWN,
@@ -65,7 +65,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 		globProfileNever = (RadioButton) findViewById(R.id.glob_profile_never);
 		globGsm = (CheckBox) findViewById(R.id.glob_tg);
 		
-		saveBtn = (Button) findViewById(R.id.save_bt);
+		Button saveBtn = (Button) findViewById(R.id.save_bt);
 		
 		saveBtn.setOnClickListener(this);
 		globProfileAlways.setOnClickListener(this);

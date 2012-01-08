@@ -9,12 +9,12 @@
   <string name="speaker">扬声器</string>
   <string name="mute">静音</string>
   <string name="add_call">新增呼叫</string>
-  <string name="call_state_calling">正在呼叫...</string>
+  <string name="call_state_calling">正在呼叫…</string>
   <string name="call_state_confirmed">通话中</string>
-  <string name="call_state_connecting">正在连接...</string>
+  <string name="call_state_connecting">正在连接…</string>
   <string name="call_state_disconnected">挂断</string>
   <string name="call_state_early">响铃中</string>
-  <string name="call_state_incoming">来电...</string>
+  <string name="call_state_incoming">来电…</string>
   <string name="call_state_null">错误</string>
   <string name="unlock">解锁</string>
   <string name="record">录音</string>

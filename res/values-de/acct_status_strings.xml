@@ -3,7 +3,7 @@
   <string name="acct_inactive">Inaktiv</string>
   <string name="acct_unregistered">Nicht registriert</string>
   <string name="acct_expired">Registrierung abgelaufen</string>
-  <string name="acct_registering">Registriere...</string>
+  <string name="acct_registering">Registriere…</string>
   <string name="acct_registered">Registriert</string>
   <string name="acct_regerror">Fehler beim Registrieren</string>
   <string name="acct_regfailed">Registrierung fehlgeschlagen - Überprüfe die Konfiguration</string>

@@ -14,32 +14,51 @@
 	copy of the GNU General Public License along with CSipSimple. If not,
 	see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout android:orientation="vertical" android:gravity="center_vertical"
-	android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
 
-	<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:id="@+id/codec_band_type"
-		android:padding="8dip" style="@android:style/ButtonBar"
-		android:orientation="horizontal" android:gravity="center">
-		<ToggleButton android:layout_width="wrap_content" android:layout_height="fill_parent" 
-			android:id="@+id/tg_wide_band"
-			android:checked="true" android:padding="16dip"
-			android:background="@drawable/toggle_join_left"
-			android:textColor="@android:color/white"
-			android:textOff="@string/wide_band" android:textOn="@string/wide_band"/>
-		<ToggleButton android:layout_width="wrap_content" android:layout_height="fill_parent" 
-			android:id="@+id/tg_narrow_band"
-			android:padding="16dip"
-			android:background="@drawable/toggle_join_right"
-			android:textColor="@android:color/white"
-			android:textOff="@string/narrow_band" android:textOn="@string/narrow_band"/>
-	</LinearLayout>
-	
-	
-	<com.csipsimple.widgets.DragnDropListView android:id="@android:id/list"
-		android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1"
-		android:textSize="18sp" android:drawSelectorOnTop="false" android:fastScrollEnabled="true">
-	</com.csipsimple.widgets.DragnDropListView>
+    <LinearLayout
+        android:id="@+id/codec_band_type"
+        style="@android:style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dip" >
 
+        <ToggleButton
+            android:id="@+id/tg_wide_band"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/toggle_join_left"
+            android:checked="true"
+            android:padding="16dip"
+            android:textColor="@android:color/white"
+            android:textOff="@string/wide_band"
+            android:textOn="@string/wide_band" />
+
+        <ToggleButton
+            android:id="@+id/tg_narrow_band"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/toggle_join_right"
+            android:padding="16dip"
+            android:textColor="@android:color/white"
+            android:textOff="@string/narrow_band"
+            android:textOn="@string/narrow_band" />
+    </LinearLayout>
+
+    <com.csipsimple.widgets.DragnDropListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false"
+        android:fastScrollEnabled="true"
+        android:textSize="18sp" >
+    </com.csipsimple.widgets.DragnDropListView>
 
 </LinearLayout>

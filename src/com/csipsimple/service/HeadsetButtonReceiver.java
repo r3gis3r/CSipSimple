@@ -31,7 +31,7 @@ public class HeadsetButtonReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.d(THIS_FILE, "onReceive");
-		if(UAReceiver == null) {
+		if(uaReceiver == null) {
 			return;
 		}
 		//	abortBroadcast();
@@ -48,7 +48,7 @@ public class HeadsetButtonReceiver extends BroadcastReceiver {
 						event.getAction() == KeyEvent.ACTION_DOWN && 
 						event.getKeyCode() == KeyEvent.KEYCODE_HEADSETHOOK) {
 					
-		        	if (UAReceiver.handleHeadsetButton()) {
+		        	if (uaReceiver.handleHeadsetButton()) {
 			        	//
 						// After processing the event we will prevent other applications
 						// from receiving the button press since we have handled it ourself
@@ -68,9 +68,9 @@ public class HeadsetButtonReceiver extends BroadcastReceiver {
 
 	}
 	
-	private static UAStateReceiver UAReceiver = null;
+	private static UAStateReceiver uaReceiver = null;
 	public static void setService(UAStateReceiver aUAReceiver) {
-		UAReceiver = aUAReceiver;
+		uaReceiver = aUAReceiver;
 	}
 
 }

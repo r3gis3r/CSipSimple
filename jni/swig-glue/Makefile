@@ -25,7 +25,7 @@ ${C_TARGET_DIR}/pjsua_wrap.cpp ${JAVA_PACKAGE_DIR}: pjsua.i
 	mkdir -p ${C_TARGET_DIR}
 	rm -rf ${JAVA_PACKAGE_DIR}
 	mkdir -p ${JAVA_PACKAGE_DIR}
-	${SWIG} ${CFLAGS} -Wall \
+	${SWIG} ${CFLAGS} \
 		-o ${C_TARGET_DIR}/pjsua_wrap.cpp \
 		-outdir ${JAVA_PACKAGE_DIR} -java -package org.pjsip.pjsua \
 		-c++ pjsua.i 
@@ -44,11 +44,11 @@ ${C_TARGET_DIR}/pjsua_wrap.cpp ${JAVA_PACKAGE_DIR}: pjsua.i
 	rm ${C_TARGET_DIR}/pj_loader.c
 
 
-pjsua.i : ${PJSUA_HEADERS} pjsua.i_header
+pjsua.i : ${PJSUA_HEADERS} pjsua.i_header pjsua.i_footer
 	echo > pjsua.i_body
 	for f in ${PJSUA_HEADERS}; do ./clean_header_for_swig.py $$f >> pjsua.i_body; done
-	cat pjsua.i_header pjsua.i_body > pjsua.i
+	cat pjsua.i_header pjsua.i_body pjsua.i_footer > pjsua.i
 	rm pjsua.i_body || true
 	
 clean :
-	rm pjsua.i nativesrc/pjsua_wrap.cpp src/org/pjsip/pjsua/*.java pjsua_wrap.o pjsua_wrap_win.o libpjsua_jni.so || true
+	rm pjsua.i nativesrc/pjsua_wrap.cpp src/org/pjsip/pjsua/*.java || true

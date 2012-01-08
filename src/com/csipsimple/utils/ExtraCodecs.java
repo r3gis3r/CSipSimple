@@ -20,6 +20,7 @@ package com.csipsimple.utils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -70,9 +71,9 @@ public class ExtraCodecs {
 	private static final String THIS_FILE = "ExtraCodecs";
 	
 	
-	private static HashMap<String, DynCodecInfos> AVAILABLE_DYN_CODECS = null;
+	private static Map<String, DynCodecInfos> AVAILABLE_DYN_CODECS = null;
 	
-	public static HashMap<String, DynCodecInfos> getDynCodecs(Context ctxt){
+	public static Map<String, DynCodecInfos> getDynCodecs(Context ctxt){
 		if(AVAILABLE_DYN_CODECS == null) {
 			AVAILABLE_DYN_CODECS = new HashMap<String, DynCodecInfos>();
 			

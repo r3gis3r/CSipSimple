@@ -8,10 +8,10 @@
   <string name="speaker">hopârlör</string>
   <string name="mute">Sessiz</string>
   <string name="add_call">Çağrı ekle</string>
-  <string name="call_state_calling">Aranıyor...</string>
+  <string name="call_state_calling">Aranıyor…</string>
   <string name="call_state_confirmed">Konuşuyor</string>
-  <string name="call_state_connecting">Bağlanıyor...</string>
-  <string name="call_state_incoming">Gelen çağrı...</string>
+  <string name="call_state_connecting">Bağlanıyor…</string>
+  <string name="call_state_incoming">Gelen çağrı…</string>
   <string name="call_state_null">HATA</string>
   <string name="unlock">Kilidi Aç</string>
   <string name="record">Kayıt</string>

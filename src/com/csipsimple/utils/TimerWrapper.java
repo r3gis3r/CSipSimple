@@ -17,6 +17,9 @@
  */
 package com.csipsimple.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pjsip.pjsua.pjsua;
 
 import android.app.AlarmManager;
@@ -26,7 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
 
@@ -46,10 +48,13 @@ public class TimerWrapper extends BroadcastReceiver {
 	//private WakeLock wakeLock;
 	private static TimerWrapper singleton;
 	
-	boolean serviceRegistered = false;
+	private boolean serviceRegistered = false;
+	
+	private final List<Integer> scheduleEntries = new ArrayList<Integer>();
 	
 	
 	private TimerWrapper(SipService ctxt) {
+		super();
 		setContext(ctxt);
 	}
 	
@@ -91,6 +96,12 @@ public class TimerWrapper extends BroadcastReceiver {
 		if(wakeLock != null) {
 			wakeLock.reset();
 		}
+		
+		if(alarmManager != null) {
+			for(Integer entry : scheduleEntries) {
+				alarmManager.cancel(getPendingIntentForTimer(entry, entry));
+			}
+		}
 //		hashOffset ++;
 //		hashOffset = hashOffset % 10;
 	}
@@ -115,47 +126,51 @@ public class TimerWrapper extends BroadcastReceiver {
 	
 	
 	private int doSchedule(int entry, int entryId, int intervalMs) {
+		//Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
 		PendingIntent pendingIntent = getPendingIntentForTimer(entry, entryId);
 		
-		Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
+		// If less than 1 sec, do not wake up -- that's probably stun check so useless to wake up about that
+		int alarmType = (intervalMs < 1000) ? AlarmManager.ELAPSED_REALTIME : AlarmManager.ELAPSED_REALTIME_WAKEUP;
 		
-		int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
-		if(intervalMs < 1000) {
-			// If less than 1 sec, do not wake up -- that's probably stun check so useless to wake up about that
-			type = AlarmManager.ELAPSED_REALTIME;
-		}
 		// Cancel previous reg anyway
 		alarmManager.cancel(pendingIntent);
+		scheduleEntries.remove((Integer) entry);
+		
+		
+		long firstTime = SystemClock.elapsedRealtime();
 		// Clamp min
 		if(intervalMs < 10) {
-			intervalMs = 10;
+			firstTime +=  10;
+		}else {
+			firstTime += intervalMs;
 		}
 		
-		long firstTime = SystemClock.elapsedRealtime() + intervalMs;
 		// Push next
-		alarmManager.set(type, firstTime, pendingIntent);
+		alarmManager.set(alarmType, firstTime, pendingIntent);
+		scheduleEntries.add((Integer) entry);
 		return 1;
 	}
 	
 	private int doCancel(int entry, int entryId) {
 		alarmManager.cancel(getPendingIntentForTimer(entry, entryId));
+		scheduleEntries.remove((Integer) entry);
 		return 1;
 	}
 	
 	
-	public final static String EXTRA_TIMER_ENTRY = "entry";
+	private final static String EXTRA_TIMER_ENTRY = "entry";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
 		if(TIMER_ACTION.equalsIgnoreCase(intent.getAction())) {
-			int entry = intent.getIntExtra(EXTRA_TIMER_ENTRY, -1);
-			Log.d(THIS_FILE, "FIRE Received : " + entry);
-			if(singleton != null) {
-				singleton.treatAlarm(entry);
-			}else {
+			//Log.d(THIS_FILE, "FIRE Received : " + entryId);
+			if(singleton == null) {
 				Log.w(THIS_FILE, "Not found singleton");
+				return;
 			}
+			int timerEntry = intent.getIntExtra(EXTRA_TIMER_ENTRY, -1);
+			singleton.treatAlarm(timerEntry);
 		}
 	}
 	
@@ -164,7 +179,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		t.start();
 	}
 	
-	Handler handler = new Handler();
+	//private final Handler handler = new Handler();
 	
 	
 	// Public API
@@ -199,11 +214,11 @@ public class TimerWrapper extends BroadcastReceiver {
 	
 
 	private class TimerJob extends Thread {
-		private int entry;
+		private final int entryId;
 		
 		public TimerJob(int anEntry) {
 			super("TimerJob");
-			entry = anEntry;
+			entryId = anEntry;
 			wakeLock.acquire(this);
 		}
 		
@@ -211,16 +226,17 @@ public class TimerWrapper extends BroadcastReceiver {
 		public void run() {
 			// From now, the timer can't be cancelled anymore
 
-			Log.d(THIS_FILE, "FIRE START " + entry);
+			Log.d(THIS_FILE, "FIRE START " + entryId);
 			
 			try {
-				pjsua.pj_timer_fire(entry);
+				pjsua.pj_timer_fire(entryId);
 			}catch(Exception e) {
 				Log.e(THIS_FILE, "Native error ", e);
 			}finally {
 				wakeLock.release(this);
 			}
-			Log.d(THIS_FILE, "FIRE DONE " + entry);
+			scheduleEntries.remove((Integer) entryId);
+			Log.d(THIS_FILE, "FIRE DONE " + entryId);
 			
 		}
 	}

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -63,21 +65,18 @@ public class Codecs extends ListActivity implements OnClickListener {
 	private String bandtype = SipConfigManager.CODEC_WB; 
 	
 	private SimpleAdapter adapter;
-	ArrayList<HashMap<String, Object>> codecs;
+	private List<Map<String, Object>> codecsList;
 
 	private PreferencesWrapper prefsWrapper;
 
 	private ToggleButton nbToggle;
 	private ToggleButton wbToggle;
 	
-	private static final HashMap<String, String> nonFreeCodecs = new HashMap<String, String>(){/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+	private static final Map<String, String> NON_FREE_CODECS = new HashMap<String, String>();
 
-	{
-		put("G729/8000/1", "http://www.synapseglobal.com/g729_codec_license.html");
-	}};
+	static {
+		NON_FREE_CODECS.put("G729/8000/1", "http://www.synapseglobal.com/g729_codec_license.html");
+	};
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -96,7 +95,7 @@ public class Codecs extends ListActivity implements OnClickListener {
 		initDatas();
 		
 		
-		adapter = new SimpleAdapter(this, codecs, R.layout.codecs_list_item, new String []{
+		adapter = new SimpleAdapter(this, codecsList, R.layout.codecs_list_item, new String []{
 			CODEC_NAME,
 			CODEC_PRIORITY
 		}, new int[] {
@@ -136,17 +135,17 @@ public class Codecs extends ListActivity implements OnClickListener {
 				
 				Log.d(THIS_FILE, "Dropped "+item.get(CODEC_NAME)+" -> "+to);
 				
-				//Prevent disabled codecs to be reordered
+				//Prevent disabled codecsList to be reordered
 				if((Short) item.get(CODEC_PRIORITY) <= 0 ) {
 					return ;
 				}
 				
-				codecs.remove(from);
-				codecs.add(to, item);
+				codecsList.remove(from);
+				codecsList.add(to, item);
 				
 				//Update priorities
 				short currentPriority = 130;
-				for(HashMap<String, Object> codec : codecs) {
+				for(Map<String, Object> codec : codecsList) {
 					if((Short) codec.get(CODEC_PRIORITY) > 0) {
 						if(currentPriority != (Short) codec.get(CODEC_PRIORITY)) {
 							prefsWrapper.setCodecPriority((String)codec.get(CODEC_ID), bandtype, Short.toString(currentPriority));
@@ -158,7 +157,7 @@ public class Codecs extends ListActivity implements OnClickListener {
 				}
 				
 				
-				//Log.d(THIS_FILE, "Data set "+codecs.toString());
+				//Log.d(THIS_FILE, "Data set "+codecsList.toString());
 				((SimpleAdapter) adapter).notifyDataSetChanged();
 			}
 		});
@@ -169,10 +168,10 @@ public class Codecs extends ListActivity implements OnClickListener {
 	
 	
 	private void initDatas() {
-		if(codecs == null) {
-			codecs = new ArrayList<HashMap<String, Object>>();
+		if(codecsList == null) {
+			codecsList = new ArrayList<Map<String, Object>>();
 		}else {
-			codecs.clear();
+			codecsList.clear();
 		}
 		
 		String[] codecNames = prefsWrapper.getCodecList();
@@ -186,19 +185,19 @@ public class Codecs extends ListActivity implements OnClickListener {
 				codecInfo.put(CODEC_ID, codecName);
 				codecInfo.put(CODEC_NAME, codecParts[0]+" "+codecParts[1].substring(0, codecParts[1].length()-3)+" kHz");
 				codecInfo.put(CODEC_PRIORITY, prefsWrapper.getCodecPriority(codecName, bandtype, Integer.toString(current_prio)));
-				codecs.add(codecInfo);
+				codecsList.add(codecInfo);
 				current_prio --;
 				Log.d(THIS_FILE, "Found priority is "+codecInfo.get(CODEC_PRIORITY));
 			}
 			
 		}
 		
-		Collections.sort(codecs, codecsComparator);
+		Collections.sort(codecsList, codecsComparator);
 	}
 	
-	private Comparator<HashMap<String, Object>> codecsComparator = new Comparator<HashMap<String, Object>>() {
+	private final Comparator<Map<String, Object>> codecsComparator = new Comparator<Map<String, Object>>() {
 		@Override
-		public int compare(HashMap<String, Object> infos1, HashMap<String, Object> infos2) {
+		public int compare(Map<String, Object> infos1, Map<String, Object> infos2) {
 			if (infos1 != null && infos2 != null) {
 				short c1 = (Short)infos1.get(CODEC_PRIORITY);
 				short c2 = (Short)infos2.get(CODEC_PRIORITY);
@@ -256,18 +255,15 @@ public class Codecs extends ListActivity implements OnClickListener {
             // If for some reason the requested item isn't available, do nothing
             return false;
         }
-        
-        switch (item.getItemId()) {
-		case MENU_ITEM_ACTIVATE: {
+        int selId = item.getItemId();
+        if (selId == MENU_ITEM_ACTIVATE) {
 			boolean isDisabled = ((Short) codec.get(CODEC_PRIORITY) == 0);
-			
 			final short newPrio = isDisabled ? (short) 1 : (short) 0;
-			
-			if(nonFreeCodecs.containsKey(codec.get(CODEC_ID)) && isDisabled) {
+			if(NON_FREE_CODECS.containsKey(codec.get(CODEC_ID)) && isDisabled) {
 				final HashMap<String, Object> fCodec = codec;
 
 				final TextView message = new TextView(this);
-				final SpannableString s = new SpannableString(getString(R.string.this_codec_is_not_free) + nonFreeCodecs.get(codec.get(CODEC_ID)));
+				final SpannableString s = new SpannableString(getString(R.string.this_codec_is_not_free) + NON_FREE_CODECS.get(codec.get(CODEC_ID)));
 				Linkify.addLinks(s, Linkify.WEB_URLS);
 				message.setText(s);
 				message.setMovementMethod(LinkMovementMethod.getInstance());
@@ -288,18 +284,16 @@ public class Codecs extends ListActivity implements OnClickListener {
 			}else {
 				setCodecActivated(codec, newPrio);
 			}
-			
 			return true;
-		}
 		}
         return false;
     }
 	
-	private void setCodecActivated(HashMap<String, Object> codec, short newPrio) {
+	private void setCodecActivated(Map<String, Object> codec, short newPrio) {
 		codec.put(CODEC_PRIORITY, newPrio);
 		prefsWrapper.setCodecPriority((String) codec.get(CODEC_ID), bandtype, Short.toString(newPrio));
 		
-		Collections.sort(codecs, codecsComparator);
+		Collections.sort(codecsList, codecsComparator);
 
 		((SimpleAdapter) adapter).notifyDataSetChanged();
 	}
@@ -319,7 +313,7 @@ public class Codecs extends ListActivity implements OnClickListener {
 			nbToggle.setChecked(!wbToggle.isChecked());
 			bandtype = nbToggle.isChecked() ? SipConfigManager.CODEC_NB : SipConfigManager.CODEC_WB;
 		}
-		Log.d(THIS_FILE, "We are now setting at codecs for "+bandtype);
+		Log.d(THIS_FILE, "We are now setting at codecsList for "+bandtype);
 		initDatas();
 		((SimpleAdapter) adapter).notifyDataSetChanged();
 	}

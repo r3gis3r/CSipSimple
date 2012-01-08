@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
+import android.view.MenuItem;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
@@ -31,9 +32,33 @@ import com.csipsimple.utils.PreferencesWrapper;
 public class PrefsMedia extends GenericPrefs {
 
 
+	private static final String MISC_KEY = "misc";
+	private static final String AUDIO_VOLUME_KEY = "audio_volume";
+	private static final String AUDIO_QUALITY_KEY = "audio_quality";
+
 	@Override
 	protected int getXmlPreferences() {
 		return R.xml.prefs_media;
+	}
+	
+	/*
+	@Override
+	protected void beforeBuildPrefs() {
+		super.beforeBuildPrefs();
+		ActionBar ab = getActionBar();
+		if(ab != null) {
+			ab.setDisplayHomeAsUpEnabled(true);
+		}
+	}
+	*/
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int selId = item.getItemId();
+		if(selId == Compatibility.getHomeMenuId()) {
+			finish();
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
@@ -43,35 +68,35 @@ public class PrefsMedia extends GenericPrefs {
 		if(!pfw.isAdvancedUser()) {
 			
 			
-			hidePreference("audio_quality", SipConfigManager.SND_MEDIA_QUALITY);
-			hidePreference("audio_quality", SipConfigManager.ECHO_CANCELLATION_TAIL);
-			hidePreference("audio_quality", SipConfigManager.ECHO_MODE);
-			hidePreference("audio_quality", SipConfigManager.SND_PTIME);
-			hidePreference("audio_quality", SipConfigManager.HAS_IO_QUEUE);
+			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.SND_MEDIA_QUALITY);
+			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.ECHO_CANCELLATION_TAIL);
+			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.ECHO_MODE);
+			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.SND_PTIME);
+			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.HAS_IO_QUEUE);
 			
 			
 			hidePreference(null, "band_types");
 			
-			hidePreference("audio_volume", SipConfigManager.SND_MIC_LEVEL);
-			hidePreference("audio_volume", SipConfigManager.SND_SPEAKER_LEVEL);
+			hidePreference(AUDIO_VOLUME_KEY, SipConfigManager.SND_MIC_LEVEL);
+			hidePreference(AUDIO_VOLUME_KEY, SipConfigManager.SND_SPEAKER_LEVEL);
 			
-			hidePreference("audio_volume", SipConfigManager.SND_BT_MIC_LEVEL);
-			hidePreference("audio_volume", SipConfigManager.SND_BT_SPEAKER_LEVEL);
+			hidePreference(AUDIO_VOLUME_KEY, SipConfigManager.SND_BT_MIC_LEVEL);
+			hidePreference(AUDIO_VOLUME_KEY, SipConfigManager.SND_BT_SPEAKER_LEVEL);
 			
-			hidePreference("audio_volume", SipConfigManager.USE_SOFT_VOLUME);
+			hidePreference(AUDIO_VOLUME_KEY, SipConfigManager.USE_SOFT_VOLUME);
 			
 			//hidePreference("perfs", SipConfigManager.THREAD_COUNT);
 			//hidePreference(null, "perfs");
 			
-			hidePreference("misc", SipConfigManager.SND_AUTO_CLOSE_TIME);
-			hidePreference("misc", SipConfigManager.USE_ROUTING_API);
-			hidePreference("misc", SipConfigManager.USE_MODE_API);
-			hidePreference("misc", SipConfigManager.SET_AUDIO_GENERATE_TONE);
-			hidePreference("misc", SipConfigManager.SIP_AUDIO_MODE);
-			hidePreference("misc", SipConfigManager.USE_SGS_CALL_HACK);
-			hidePreference("misc", SipConfigManager.USE_WEBRTC_HACK);
-			hidePreference("misc", SipConfigManager.DO_FOCUS_AUDIO);
-			hidePreference("misc", SipConfigManager.MICRO_SOURCE);
+			hidePreference(MISC_KEY, SipConfigManager.SND_AUTO_CLOSE_TIME);
+			hidePreference(MISC_KEY, SipConfigManager.USE_ROUTING_API);
+			hidePreference(MISC_KEY, SipConfigManager.USE_MODE_API);
+			hidePreference(MISC_KEY, SipConfigManager.SET_AUDIO_GENERATE_TONE);
+			hidePreference(MISC_KEY, SipConfigManager.SIP_AUDIO_MODE);
+			hidePreference(MISC_KEY, SipConfigManager.USE_SGS_CALL_HACK);
+			hidePreference(MISC_KEY, SipConfigManager.USE_WEBRTC_HACK);
+			hidePreference(MISC_KEY, SipConfigManager.DO_FOCUS_AUDIO);
+			hidePreference(MISC_KEY, SipConfigManager.MICRO_SOURCE);
 			
 		}
 		

@@ -38,13 +38,12 @@ public class PjSipAccount {
 	
 	//private static final String THIS_FILE = "PjSipAcc";
 	
-	
-	//For now everything is public, easiest to manage
-	public String display_name;
+	private String displayName;
+	// For now everything is public, easiest to manage
 	public String wizard;
 	public boolean active;
 	public pjsua_acc_config cfg;
-	public Integer id;
+	public Long id;
 	public Integer transport = 0;
 	
 	//private boolean hasZrtpValue = false;
@@ -63,7 +62,8 @@ public class PjSipAccount {
 		if(profile.id != SipProfile.INVALID_ID) {
 			id = profile.id;
 		}
-		display_name = profile.display_name;
+		
+		displayName = profile.display_name;
 		wizard = profile.wizard;
 		transport = profile.transport;
 		active = profile.active;
@@ -215,7 +215,11 @@ public class PjSipAccount {
 		
 		cfg.setKa_interval(prefs.getKeepAliveInterval());
 		
-		// TODO : reactivate that
+		// TODO : have video option as parameters of account
+		cfg.setVid_in_auto_show(pjsuaConstants.PJ_TRUE);
+		cfg.setVid_out_auto_transmit(pjsuaConstants.PJ_TRUE);
+		
+		// For now ZRTP option is not anymore account related but global option
 		/*
 		if(!hasZrtpValue) {
 			int useZrtp = prefs.getPreferenceIntegerValue(SipConfigManager.USE_ZRTP);
@@ -228,6 +232,13 @@ public class PjSipAccount {
 	}
 	
 	
+	/**
+	 * @return the displayName
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if(o != null && o.getClass() == PjSipAccount.class) {

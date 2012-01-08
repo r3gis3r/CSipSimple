@@ -484,7 +484,7 @@ public class PreferencesWrapper {
 	// ---- 
 	// UI related
 	// ----
-	public boolean getDialPressTone() {
+	public boolean dialPressTone() {
 		int mode = getPreferenceIntegerValue(SipConfigManager.DIAL_PRESS_TONE_MODE);
 		switch (mode) {
 		case 0:
@@ -500,7 +500,7 @@ public class PreferencesWrapper {
 		return false;
 	}
 
-	public boolean getDialPressVibrate() {
+	public boolean dialPressVibrate() {
 		int mode = getPreferenceIntegerValue(SipConfigManager.DIAL_PRESS_VIBRATE_MODE);
 		switch (mode) {
 		case 0:
@@ -520,8 +520,8 @@ public class PreferencesWrapper {
 		return !prefs.getBoolean("start_with_text_dialer", false);
 	}
 
-	public boolean getUseAlternateUnlocker() {
-		return prefs.getBoolean("use_alternate_unlocker", false);
+	public boolean useAlternateUnlocker() {
+		return prefs.getBoolean(SipConfigManager.USE_ALTERNATE_UNLOCKER, false);
 	}
 	
 	public boolean invertProximitySensor() {
@@ -565,10 +565,10 @@ public class PreferencesWrapper {
 	
 
 
-	private static String CONFIG_FOLDER = "configs";
-	private static String RECORDS_FOLDER = "records";
-	private static String LOGS_FOLDER = "logs";
-	private static String ZRTP_FOLDER = "zrtp";
+	private final static String CONFIG_FOLDER = "configs";
+	private final static String RECORDS_FOLDER = "records";
+	private final static String LOGS_FOLDER = "logs";
+	private final static String ZRTP_FOLDER = "zrtp";
 	 
 	private static File getStorageFolder(Context ctxt, boolean preferCache) {
 		File root = Environment.getExternalStorageDirectory();

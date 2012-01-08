@@ -39,44 +39,41 @@ import com.csipsimple.utils.Theme;
 
 public class Dialpad extends LinearLayout implements OnClickListener {
 
-	OnDialKeyListener onDialKeyListener;
+	private OnDialKeyListener onDialKeyListener;
 	private final static String THIS_FILE = "Dialpad";
 	
-	private static final Map<Integer, int[]> digitsButtons = new HashMap<Integer, int[]>(){
-		private static final long serialVersionUID = -6640726621906396734L;
-
-	{
-		put(R.id.button0, new int[] {ToneGenerator.TONE_DTMF_0, KeyEvent.KEYCODE_0});
-		put(R.id.button1, new int[] {ToneGenerator.TONE_DTMF_1, KeyEvent.KEYCODE_1});
-		put(R.id.button2, new int[] {ToneGenerator.TONE_DTMF_2, KeyEvent.KEYCODE_2});
-		put(R.id.button3, new int[] {ToneGenerator.TONE_DTMF_3, KeyEvent.KEYCODE_3});
-		put(R.id.button4, new int[] {ToneGenerator.TONE_DTMF_4, KeyEvent.KEYCODE_4});
-		put(R.id.button5, new int[] {ToneGenerator.TONE_DTMF_5, KeyEvent.KEYCODE_5});
-		put(R.id.button6, new int[] {ToneGenerator.TONE_DTMF_6, KeyEvent.KEYCODE_6});
-		put(R.id.button7, new int[] {ToneGenerator.TONE_DTMF_7, KeyEvent.KEYCODE_7});
-		put(R.id.button8, new int[] {ToneGenerator.TONE_DTMF_8, KeyEvent.KEYCODE_8});
-		put(R.id.button9, new int[] {ToneGenerator.TONE_DTMF_9, KeyEvent.KEYCODE_9});
-		put(R.id.buttonpound, new int[] {ToneGenerator.TONE_DTMF_P, KeyEvent.KEYCODE_POUND});
-		put(R.id.buttonstar, new int[] {ToneGenerator.TONE_DTMF_S, KeyEvent.KEYCODE_STAR});
-	}};
+	private static final Map<Integer, int[]> DIGITS_BTNS = new HashMap<Integer, int[]>();
 	
-	private static final Map<Integer, String> digitsNames = new HashMap<Integer, String>(){
-		private static final long serialVersionUID = 185911971590818960L;
-
-	{
-		put(R.id.button0, "0");
-		put(R.id.button1, "1");
-		put(R.id.button2, "2");
-		put(R.id.button3, "3");
-		put(R.id.button4, "4");
-		put(R.id.button5, "5");
-		put(R.id.button6, "6");
-		put(R.id.button7, "7");
-		put(R.id.button8, "8");
-		put(R.id.button9, "9");
-		put(R.id.buttonpound, "pound");
-		put(R.id.buttonstar, "star");
-	}};
+	static {
+		DIGITS_BTNS.put(R.id.button0, new int[] {ToneGenerator.TONE_DTMF_0, KeyEvent.KEYCODE_0});
+		DIGITS_BTNS.put(R.id.button1, new int[] {ToneGenerator.TONE_DTMF_1, KeyEvent.KEYCODE_1});
+		DIGITS_BTNS.put(R.id.button2, new int[] {ToneGenerator.TONE_DTMF_2, KeyEvent.KEYCODE_2});
+		DIGITS_BTNS.put(R.id.button3, new int[] {ToneGenerator.TONE_DTMF_3, KeyEvent.KEYCODE_3});
+		DIGITS_BTNS.put(R.id.button4, new int[] {ToneGenerator.TONE_DTMF_4, KeyEvent.KEYCODE_4});
+		DIGITS_BTNS.put(R.id.button5, new int[] {ToneGenerator.TONE_DTMF_5, KeyEvent.KEYCODE_5});
+		DIGITS_BTNS.put(R.id.button6, new int[] {ToneGenerator.TONE_DTMF_6, KeyEvent.KEYCODE_6});
+		DIGITS_BTNS.put(R.id.button7, new int[] {ToneGenerator.TONE_DTMF_7, KeyEvent.KEYCODE_7});
+		DIGITS_BTNS.put(R.id.button8, new int[] {ToneGenerator.TONE_DTMF_8, KeyEvent.KEYCODE_8});
+		DIGITS_BTNS.put(R.id.button9, new int[] {ToneGenerator.TONE_DTMF_9, KeyEvent.KEYCODE_9});
+		DIGITS_BTNS.put(R.id.buttonpound, new int[] {ToneGenerator.TONE_DTMF_P, KeyEvent.KEYCODE_POUND});
+		DIGITS_BTNS.put(R.id.buttonstar, new int[] {ToneGenerator.TONE_DTMF_S, KeyEvent.KEYCODE_STAR});
+	};
+	
+	private static final Map<Integer, String> DIGITS_NAMES = new HashMap<Integer, String>();
+	static {
+		DIGITS_NAMES.put(R.id.button0, "0");
+		DIGITS_NAMES.put(R.id.button1, "1");
+		DIGITS_NAMES.put(R.id.button2, "2");
+		DIGITS_NAMES.put(R.id.button3, "3");
+		DIGITS_NAMES.put(R.id.button4, "4");
+		DIGITS_NAMES.put(R.id.button5, "5");
+		DIGITS_NAMES.put(R.id.button6, "6");
+		DIGITS_NAMES.put(R.id.button7, "7");
+		DIGITS_NAMES.put(R.id.button8, "8");
+		DIGITS_NAMES.put(R.id.button9, "9");
+		DIGITS_NAMES.put(R.id.buttonpound, "pound");
+		DIGITS_NAMES.put(R.id.buttonstar, "star");
+	};
 	
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -103,7 +100,7 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 	protected void onFinishInflate() {
 		super.onFinishInflate();
 		
-		for(int buttonId : digitsButtons.keySet()) {
+		for(int buttonId : DIGITS_BTNS.keySet()) {
 			ImageButton button = (ImageButton) findViewById(buttonId);
 			button.setOnClickListener(this);
 		}
@@ -122,12 +119,9 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 	}
 
 	private void dispatchDialKeyEvent(int buttonId) {
-		if (onDialKeyListener != null) {
-			if(digitsButtons.containsKey(buttonId)) {
-				int[] datas = digitsButtons.get(buttonId);
-				onDialKeyListener.onTrigger(datas[1], datas[0]);
-			}
-			
+		if (onDialKeyListener != null && DIGITS_BTNS.containsKey(buttonId)) {
+			int[] datas = DIGITS_BTNS.get(buttonId);
+			onDialKeyListener.onTrigger(datas[1], datas[0]);
 		}
 	}
 
@@ -141,7 +135,7 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 
 	public void applyTheme(Theme t) {
 		Log.d(THIS_FILE, "Theming in progress");
-		for(int buttonId : digitsButtons.keySet()) {
+		for(int buttonId : DIGITS_BTNS.keySet()) {
 			
 			ImageButton b = (ImageButton) findViewById(buttonId);
 			
@@ -164,7 +158,7 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 			if(std != null) {
 				b.setBackgroundDrawable(std);
 			}
-			Drawable src = t.getDrawableResource("dial_num_"+digitsNames.get(buttonId));
+			Drawable src = t.getDrawableResource("dial_num_"+DIGITS_NAMES.get(buttonId));
 			if(src != null) {
 				b.setImageDrawable(src);
 			}

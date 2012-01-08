@@ -87,7 +87,8 @@ static pj_status_t  silk_codec_recover( pjmedia_codec *codec,
 
 enum
 {
-    PARAM_NB,	/* Index for narrowband parameter.	*/
+    PARAM_NB,   /* Index for narrowband parameter.	*/
+    PARAM_MB,	/* Index for medium parameter.	*/
     PARAM_WB,	/* Index for wideband parameter.	*/
     PARAM_UWB,	/* Index for ultra-wideband parameter	*/
 };
@@ -137,7 +138,7 @@ static struct silk_factory
     pj_pool_t		       *pool;
     pj_mutex_t		       *mutex;
     pjmedia_codec	     codec_list;
-    struct silk_param	    silk_param[3];
+    struct silk_param	    silk_param[4];
 } silk_factory;
 
 
@@ -197,6 +198,13 @@ PJ_DEF(pj_status_t) pjmedia_codec_silk_init(pjmedia_endpt *endpt)
 	silk_factory.silk_param[PARAM_NB].packet_size_ms = FRAME_LENGTH_MS;
 	silk_factory.silk_param[PARAM_NB].complexity = 2;
 	silk_factory.silk_param[PARAM_NB].bitrate = 20000;
+
+	silk_factory.silk_param[PARAM_MB].enabled = 1; //((options & PJMEDIA_SILK_NO_MB) == 0);
+	silk_factory.silk_param[PARAM_MB].pt = PJMEDIA_RTP_PT_SILK_MB;
+	silk_factory.silk_param[PARAM_MB].clock_rate = 12000;
+	silk_factory.silk_param[PARAM_MB].packet_size_ms = FRAME_LENGTH_MS;
+	silk_factory.silk_param[PARAM_MB].complexity = 2;
+	silk_factory.silk_param[PARAM_MB].bitrate = 30000;
 
 	silk_factory.silk_param[PARAM_WB].enabled = 1; //((options & PJMEDIA_SILK_NO_WB) == 0);
 	silk_factory.silk_param[PARAM_WB].pt = PJMEDIA_RTP_PT_SILK_WB;
@@ -339,6 +347,11 @@ static pj_status_t silk_default_attr( pjmedia_codec_factory *factory,
 		attr->info.max_bps = 64000;//silk_factory.silk_param[PARAM_NB].max_bitrate;
 		attr->info.frm_ptime = silk_factory.silk_param[PARAM_NB].packet_size_ms;
 
+	} else if (id->clock_rate <= 12000) {
+		attr->info.clock_rate =  silk_factory.silk_param[PARAM_MB].clock_rate;
+		attr->info.avg_bps = silk_factory.silk_param[PARAM_MB].bitrate;
+		attr->info.max_bps = 64000;//silk_factory.silk_param[PARAM_MB].max_bitrate;
+		attr->info.frm_ptime = silk_factory.silk_param[PARAM_MB].packet_size_ms;
 	} else if (id->clock_rate <= 16000) {
 		attr->info.clock_rate =  silk_factory.silk_param[PARAM_WB].clock_rate;
 		attr->info.avg_bps = silk_factory.silk_param[PARAM_WB].bitrate;
@@ -442,6 +455,8 @@ static pj_status_t silk_alloc_codec(pjmedia_codec_factory *factory,
 
     if (id->clock_rate <= 8000){
     	silk->param_id = PARAM_NB;
+    }else if (id->clock_rate <= 12000){
+    	silk->param_id = PARAM_MB;
     }else if (id->clock_rate <= 16000){
     	silk->param_id = PARAM_WB;
     }else{

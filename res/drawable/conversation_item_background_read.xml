@@ -19,6 +19,6 @@
         android:drawable="@android:color/transparent" />
     <item android:state_pressed="true" android:state_selected="false"
         android:drawable="@android:color/transparent" />
-    <item android:state_selected="false"
-          android:drawable="@color/read_bgcolor" />
+    <item android:drawable="@color/read_bgcolor" android:state_selected="false"/>
+
 </selector>

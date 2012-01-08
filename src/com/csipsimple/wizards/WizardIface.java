@@ -39,6 +39,6 @@ public interface WizardIface {
 	void setDefaultParams(PreferencesWrapper prefs);
 	boolean canSave();
 	boolean needRestart();
-	public List<Filter> getDefaultFilters(SipProfile acc);
+	List<Filter> getDefaultFilters(SipProfile acc);
 	
 }

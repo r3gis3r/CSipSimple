@@ -9,12 +9,12 @@
   <string name="speaker">Speaker</string>
   <string name="mute">Muto</string>
   <string name="add_call">Aggiungi</string>
-  <string name="call_state_calling">Chiamata in corso...</string>
+  <string name="call_state_calling">Chiamata in corso…</string>
   <string name="call_state_confirmed">In conversazione</string>
-  <string name="call_state_connecting">Connessione in corso...</string>
+  <string name="call_state_connecting">Connessione in corso…</string>
   <string name="call_state_disconnected">Termina chiamata</string>
-  <string name="call_state_early">Squilla...</string>
-  <string name="call_state_incoming">Chiamata in arrivo...</string>
+  <string name="call_state_early">Squilla…</string>
+  <string name="call_state_incoming">Chiamata in arrivo…</string>
   <string name="call_state_null">Errore</string>
   <string name="unlock">Sblocca</string>
   <string name="record">Registra</string>

@@ -91,4 +91,20 @@
         <item name="android:windowEnterAnimation">@anim/quickaction_below_enter</item>
         <item name="android:windowExitAnimation">@anim/quickaction_below_exit</item>
     </style>
+    
+        
+	<style name="LightTheme" parent="Theme.Sherlock.Light">
+		<item name="abBackground">#DFDFDF</item>
+	</style>
+	<style name="LightTheme.noTopActionBar" parent="LightTheme">	    
+	 	<item name="abHeight">0dip</item> 
+	</style>
+
+	<style name="DarkTheme" parent="Theme.Sherlock">
+		<item name="abBackground">#202020</item>
+	</style>
+
+	<style name="DarkTheme.noTopActionBar" parent="DarkTheme">	    
+	   	<item name="abHeight">0dip</item>
+	</style>
 </resources>

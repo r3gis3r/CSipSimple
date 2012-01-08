@@ -88,7 +88,7 @@ import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Pozitel;
 import com.csipsimple.wizards.impl.Rapidvox;
-import com.csipsimple.wizards.impl.Samarto;
+import com.csipsimple.wizards.impl.Smarto;
 import com.csipsimple.wizards.impl.Sapo;
 import com.csipsimple.wizards.impl.Sbohempevnalinko;
 import com.csipsimple.wizards.impl.Scarlet;
@@ -148,6 +148,8 @@ public class WizardUtils {
     public static final String ID  = "ID";
     public static final String LANG_DISPLAY  = "DISPLAY";
     public static final String PRIORITY  = "PRIORITY";
+    
+    public static final String EXPERT_WIZARD_TAG = "EXPERT";
     
     
     
@@ -557,12 +559,12 @@ public class WizardUtils {
 					new Locale("pl")
 					}, false, false, 
 					Vanbergsystems.class));
-			WIZARDS_DICT.put("SAMARTO", new WizardInfo("SAMARTO", "Samarto", 
-					R.drawable.ic_wizard_samarto, 19, 
+			WIZARDS_DICT.put("SMARTO", new WizardInfo("SMARTO", "Smarto", 
+					R.drawable.ic_wizard_smarto, 19, 
 					new Locale[]{
 					new Locale("pl")
 					}, false, false, 
-					Samarto.class));
+					Smarto.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

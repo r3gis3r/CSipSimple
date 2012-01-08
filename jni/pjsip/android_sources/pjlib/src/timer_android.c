@@ -17,7 +17,7 @@
 
 
 #define MAX_HEAPS 64
-#define MAX_ENTRY_PER_HEAP 512
+#define MAX_ENTRY_PER_HEAP 128
 
 // Forward def of wrapper
 int timer_schedule_wrapper(int entry, int entryId, int time);
@@ -34,10 +34,6 @@ struct pj_timer_heap_t
 
     /** Pool from which the timer heap resize will get the storage from */
     pj_pool_t *pool;
-
-
-    /** Max timed out entries to process per poll. */
-    unsigned max_entries_per_poll;
 
     /** Lock object. */
     pj_lock_t *lock;
@@ -78,31 +74,34 @@ static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 				   const pj_time_val *future_time,
 				   const pj_time_val *delay) {
 	unsigned i = 0;
-	unsigned timer_id = -1;
-	for(i=0; i<MAX_ENTRY_PER_HEAP; i++){
-		if(ht->entries[i] == NULL){
+	unsigned timer_slot = -1;
+	// Find one empty slot in ht entries
+	for (i = 0; i < MAX_ENTRY_PER_HEAP; i++) {
+		if (ht->entries[i] == NULL) {
 			ht->entries[i] = entry;
-			timer_id = i;
+			timer_slot = i;
 			break;
 		}
 	}
 
-    if (timer_id >= 0) {
+	if (timer_slot >= 0) {
 		// Obtain the next unique sequence number.
 		// Set the entry
-		entry->_timer_id = timer_id;
+		entry->_timer_id = timer_slot;
 		entry->_timer_value = *future_time;
 
 		pj_uint32_t ft = PJ_TIME_VAL_MSEC(*delay);
 
-		PJ_LOG(4, (THIS_FILE, "Scheduling timer %d in %ld ms", entry->_timer_id, ft));
+		PJ_LOG(
+				4,
+				(THIS_FILE, "Scheduling timer %d aka %x in %ld ms", entry->_timer_id, entry, ft));
 
-		timer_schedule_wrapper((int)entry, (int)entry, (int)ft);
+		timer_schedule_wrapper((int) entry, (int) entry, (int) ft);
 
 		return PJ_SUCCESS;
-    } else{
-    	return PJ_ETOOMANY;
-    }
+	} else {
+		return PJ_ETOOMANY;
+	}
 }
 
 // Protected by timer heap lock
@@ -111,22 +110,25 @@ static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
 	PJ_CHECK_STACK();
 
 	// Check to see if the timer_id is out of range
-	if (entry->_timer_id < 0 || (pj_size_t) entry->_timer_id > MAX_ENTRY_PER_HEAP) {
-		PJ_LOG(4, (THIS_FILE, "Ask to cancel something already fired or cancelled : %d", entry->_timer_id));
+	if ( (entry->_timer_id < 0) || (entry->_timer_id > MAX_ENTRY_PER_HEAP) ) {
+		PJ_LOG(
+				4,
+				(THIS_FILE, "Ask to cancel something already fired or cancelled : %d", entry->_timer_id));
 		return 0;
 	}
-
 
 	PJ_LOG(5, (THIS_FILE, "Cancel timer %d", entry->_timer_id));
-	if(ht->entries[entry->_timer_id] == NULL){
-		PJ_LOG(1, (THIS_FILE, "Huh, pj is cancelling something already unknown... : %d", entry->_timer_id));
+	if (ht->entries[entry->_timer_id] == NULL) {
+		PJ_LOG(
+				1,
+				(THIS_FILE, "Cancelling something not linked to heap anymore: %d", entry->_timer_id));
 		return 0;
 	}
 
-	int cancelCount = timer_cancel_wrapper((int)entry, (int)entry);
+	int cancelCount = timer_cancel_wrapper((int) entry, (int) entry);
 
-	if(cancelCount > 0){
-		// Remove from table
+	if (cancelCount > 0) {
+		// Free the slot of this entry in ht
 		ht->entries[entry->_timer_id] = NULL;
 		entry->_timer_id = -1;
 	}
@@ -144,6 +146,7 @@ static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
 /*
  * Calculate memory size required to create a timer heap.
  */
+// fixme !
 PJ_DEF(pj_size_t) pj_timer_heap_mem_size(pj_size_t count)
 {
     return /* size of the timer heap itself: */
@@ -159,7 +162,7 @@ PJ_DEF(pj_size_t) pj_timer_heap_mem_size(pj_size_t count)
  */
 PJ_DEF(pj_status_t) pj_timer_heap_create( pj_pool_t *pool,
 					  pj_size_t size,
-                                          pj_timer_heap_t **p_heap)
+                      pj_timer_heap_t **p_heap)
 {
     pj_timer_heap_t *ht;
     pj_size_t i;
@@ -168,59 +171,58 @@ PJ_DEF(pj_status_t) pj_timer_heap_create( pj_pool_t *pool,
 
     *p_heap = NULL;
 
-    /* Magic? */
-    size += 2;
+    // TODO - ensure size is lower than MAX_ENTRY_PER_HEAP
 
     /* Allocate timer heap data structure from the pool */
     ht = PJ_POOL_ALLOC_T(pool, pj_timer_heap_t);
-    if (!ht)
-        return PJ_ENOMEM;
+	if (!ht)
+		return PJ_ENOMEM;
 
-    /* Initialize timer heap sizes */
-    ht->max_entries_per_poll = DEFAULT_MAX_TIMED_OUT_PER_POLL;
-    ht->pool = pool;
+	/* Initialize timer heap sizes */
+	ht->pool = pool;
 
-    /* Lock. */
-    ht->lock = NULL;
-    ht->auto_delete_lock = 0;
+	/* Lock. */
+	ht->lock = NULL;
+	ht->auto_delete_lock = 0;
 
+	// Find one free slot on static table of heaps available
+	// -- very basic implementation for now that should be sufficiant for our needs
+	for (i = sCurrentHeap; i < MAX_HEAPS; i++) {
+		if (sHeaps[i] == NULL) {
+			ht->heap_id = i;
+			sHeaps[i] = ht;
+			sCurrentHeap = i;
+			break;
+		}
+	}
 
-    for(i = sCurrentHeap; i < MAX_HEAPS; i++){
-    	if(sHeaps[i] == NULL){
-    		ht->heap_id = i;
-    		sHeaps[i] = ht;
-    		sCurrentHeap = i;
-    		break;
-    	}
-    }
+    // RAZ table of pointers to entries for this heap
+	pj_bzero(ht->entries, MAX_ENTRY_PER_HEAP * sizeof(pj_timer_entry*));
 
-
-    pj_bzero(ht->entries, MAX_ENTRY_PER_HEAP * sizeof(pj_timer_entry*));
-
-    *p_heap = ht;
-    return PJ_SUCCESS;
+	*p_heap = ht;
+	return PJ_SUCCESS;
 }
 
 PJ_DEF(void) pj_timer_heap_destroy( pj_timer_heap_t *ht )
 {
 	int i;
-    lock_timer_heap(ht);
-	for(i=0; i<MAX_ENTRY_PER_HEAP; i++){
-		if(ht->entries[i] != NULL){
+	lock_timer_heap(ht);
+	// Cancel all entries
+	for (i = 0; i < MAX_ENTRY_PER_HEAP; i++) {
+		if (ht->entries[i] != NULL) {
 			pj_timer_entry *entry = ht->entries[i];
-		    cancel(ht, entry, 1);
+			cancel(ht, entry, 1);
 		}
 	}
+	unlock_timer_heap(ht);
 
-    unlock_timer_heap(ht);
-
-    if (ht->lock && ht->auto_delete_lock) {
-        pj_lock_destroy(ht->lock);
-        ht->lock = NULL;
-    }
-    sCurrentHeap ++;
-    sCurrentHeap = sCurrentHeap % MAX_HEAPS;
-    sHeaps[ht->heap_id] = NULL;
+	if (ht->lock && ht->auto_delete_lock) {
+		pj_lock_destroy(ht->lock);
+		ht->lock = NULL;
+	}
+	sCurrentHeap++;
+	sCurrentHeap = sCurrentHeap % MAX_HEAPS;
+	sHeaps[ht->heap_id] = NULL;
 }
 
 PJ_DEF(void) pj_timer_heap_set_lock(  pj_timer_heap_t *ht,
@@ -238,9 +240,9 @@ PJ_DEF(void) pj_timer_heap_set_lock(  pj_timer_heap_t *ht,
 PJ_DEF(unsigned) pj_timer_heap_set_max_timed_out_per_poll(pj_timer_heap_t *ht,
                                                           unsigned count )
 {
-    unsigned old_count = ht->max_entries_per_poll;
-    ht->max_entries_per_poll = count;
-    return old_count;
+    /* Not applicable */
+    PJ_UNUSED_ARG(count);
+    return MAX_ENTRY_PER_HEAP;
 }
 
 PJ_DEF(pj_timer_entry*) pj_timer_entry_init( pj_timer_entry *entry,
@@ -312,14 +314,14 @@ PJ_DEF(unsigned) pj_timer_heap_poll( pj_timer_heap_t *ht,
 PJ_DEF(pj_size_t) pj_timer_heap_count( pj_timer_heap_t *ht )
 {
     PJ_ASSERT_RETURN(ht, 0);
-    unsigned count = 0;
-    unsigned i;
-    for(i=0; i<MAX_ENTRY_PER_HEAP; i++){
-		if(ht->entries[i] != NULL){
-			count ++;
+	unsigned count = 0;
+	unsigned i;
+	for (i = 0; i < MAX_ENTRY_PER_HEAP; i++) {
+		if (ht->entries[i] != NULL) {
+			count++;
 		}
 	}
-    return count;
+	return count;
 }
 
 PJ_DEF(pj_status_t) pj_timer_heap_earliest_time( pj_timer_heap_t * ht,
@@ -338,74 +340,71 @@ PJ_BEGIN_DECL
 PJ_DEF(pj_status_t) pj_timer_fire(long entry_ptr){
 
 
-    pj_thread_desc  a_thread_desc;
-    pj_thread_t         *a_thread;
-    unsigned i,j;
+    pj_thread_desc a_thread_desc;
+	pj_thread_t *a_thread;
+	unsigned i, j;
 
-    pj_timer_entry *entry = (pj_timer_entry *) entry_ptr;
+	pj_timer_entry *entry = (pj_timer_entry *) entry_ptr;
 
-	if(entry != 0x0){
+	if (entry != NULL) {
 
+		// First step is to register the thread if not already done
 		if (!pj_thread_is_registered()) {
 			char thread_name[160];
 			int len = pj_ansi_snprintf(thread_name, sizeof(thread_name),
-								 "timer_thread_%d", entry_ptr);
+					"timer_thread_%d", entry_ptr);
 			thread_name[len] = '\0';
 			pj_thread_register(thread_name, a_thread_desc, &a_thread);
 			PJ_LOG(5, (THIS_FILE, "Registered thread %s", thread_name));
 		}
 
-
-
-
-		if(entry->_timer_id != -1){
-			// Check that belong to current heap
-			pj_timer_heap_t *ht = NULL;
-			for(i=0; i < MAX_HEAPS; i++){
-				pj_timer_heap_t *tHeap = sHeaps[i];
-				if(tHeap != NULL){
-				    lock_timer_heap(tHeap);
-					for(j=0; j < MAX_ENTRY_PER_HEAP; j++){
-						if(tHeap->entries[j] == entry){
-							ht = tHeap;
-							break;
-						}
+		// Find corresponding ht
+		pj_timer_heap_t *ht = NULL;
+		for (i = 0; i < MAX_HEAPS; i++) {
+			pj_timer_heap_t *tHeap = sHeaps[i];
+			if (tHeap != NULL) {
+				lock_timer_heap(tHeap);
+				for (j = 0; j < MAX_ENTRY_PER_HEAP; j++) {
+					if (tHeap->entries[j] == entry) {
+						ht = tHeap;
+						break;
 					}
-				    unlock_timer_heap(tHeap);
 				}
-				if(ht != NULL){
-					break;
-				}
+				unlock_timer_heap(tHeap);
+			}
+			if (ht != NULL) {
+				break;
+			}
+		}
+
+		if (ht != NULL) {
+			PJ_LOG(
+					4,
+					(THIS_FILE, "FIRE timer %d@%x", entry->_timer_id, entry));
+
+			pj_timer_heap_callback* cb = NULL;
+
+			lock_timer_heap(ht);
+			// Get callback if entry still valid
+			if (entry->_timer_id >= 0) {
+				cb = entry->cb;
+			}
+			// Release slot
+			ht->entries[entry->_timer_id] = NULL;
+			entry->_timer_id = -1;
+			unlock_timer_heap(ht);
+
+			// Callback
+			if (cb) {
+				cb(ht, entry);
 			}
 
-			if(ht != NULL){
-				PJ_LOG(4, (THIS_FILE, "FIRE timer %d at %x", entry->_timer_id, entry));
+			PJ_LOG(4, (THIS_FILE, "FIRE done and released"));
 
-				pj_timer_heap_callback* cb = NULL;
-
-				lock_timer_heap(ht);
-				// Get callback if entry still valid
-				if(entry->_timer_id >= 0){
-					cb = entry->cb;
-				}
-				// Release slot
-				ht->entries[entry->_timer_id] = NULL;
-				entry->_timer_id = -1;
-				unlock_timer_heap(ht);
-
-				// Callback
-				if(cb){
-					cb(ht, entry);
-				}
-
-
-				PJ_LOG(4, (THIS_FILE, "FIRE done and released"));
-
-			}else{
-				PJ_LOG(3, (THIS_FILE, "FIRE Ignore since no heap found for this entry %x", entry));
-			}
-		}else{
-			PJ_LOG(3, (THIS_FILE, "FIRE Ignored : %d", entry->_timer_id));
+		} else {
+			PJ_LOG(
+					2,
+					(THIS_FILE, "FIRE Ignore : No heap found for this entry %x", entry));
 		}
 	}
 	return PJ_SUCCESS;

@@ -87,10 +87,10 @@ struct ogl_factory
 struct ogl_stream
 {
     pjmedia_vid_dev_stream	 base;		    /**< Base stream	    */
-    pjmedia_vid_param		 param;		    /**< Settings	    */
+    pjmedia_vid_dev_param	param;		    /**< Settings	    */
     pj_pool_t			*pool;              /**< Memory pool.       */
 
-    pjmedia_vid_cb		 vid_cb;            /**< Stream callback.   */
+    pjmedia_vid_dev_cb		 vid_cb;            /**< Stream callback.   */
     void			*user_data;         /**< Application data.  */
 
     pj_bool_t			 is_quitting;
@@ -133,16 +133,16 @@ static pj_status_t ogl_factory_get_dev_info(pjmedia_vid_dev_factory *f,
 static pj_status_t ogl_factory_default_param(pj_pool_t *pool,
                                              pjmedia_vid_dev_factory *f,
 					     unsigned index,
-					     pjmedia_vid_param *param);
+					     pjmedia_vid_dev_param *param);
 static pj_status_t ogl_factory_create_stream(
 					pjmedia_vid_dev_factory *f,
-					pjmedia_vid_param *param,
-					const pjmedia_vid_cb *cb,
+					pjmedia_vid_dev_param *param,
+					const pjmedia_vid_dev_cb *cb,
 					void *user_data,
 					pjmedia_vid_dev_stream **p_vid_strm);
 
 static pj_status_t ogl_stream_get_param(pjmedia_vid_dev_stream *strm,
-					pjmedia_vid_param *param);
+					pjmedia_vid_dev_param *param);
 static pj_status_t ogl_stream_get_cap(pjmedia_vid_dev_stream *strm,
 				      pjmedia_vid_dev_cap cap,
 				      void *value);
@@ -222,9 +222,6 @@ static pj_status_t ogl_factory_init(pjmedia_vid_dev_factory *f)
                      PJMEDIA_VID_DEV_CAP_OUTPUT_RESIZE;
 
     ddi->info.fmt_cnt = PJ_ARRAY_SIZE(ogl_fmts);
-    ddi->info.fmt = (pjmedia_format*)
- 		    pj_pool_calloc(sf->pool, ddi->info.fmt_cnt,
- 				   sizeof(pjmedia_format));
     for (i = 0; i < ddi->info.fmt_cnt; i++) {
         pjmedia_format *fmt = &ddi->info.fmt[i];
         pjmedia_format_init_video(fmt, ogl_fmts[i].fmt_id,
@@ -274,7 +271,7 @@ static pj_status_t ogl_factory_get_dev_info(pjmedia_vid_dev_factory *f,
 static pj_status_t ogl_factory_default_param(pj_pool_t *pool,
                                              pjmedia_vid_dev_factory *f,
 					     unsigned index,
-					     pjmedia_vid_param *param)
+					     pjmedia_vid_dev_param *param)
 {
     struct ogl_factory *sf = (struct ogl_factory*)f;
     struct ogl_dev_info *di = &sf->dev_info[index];
@@ -328,8 +325,8 @@ static ogl_fmt_info* get_ogl_format_info(pjmedia_format_id id)
 /* API: create stream */
 static pj_status_t ogl_factory_create_stream(
 					pjmedia_vid_dev_factory *f,
-					pjmedia_vid_param *param,
-					const pjmedia_vid_cb *cb,
+					pjmedia_vid_dev_param *param,
+					const pjmedia_vid_dev_cb *cb,
 					void *user_data,
 					pjmedia_vid_dev_stream **p_vid_strm)
 {
@@ -429,7 +426,7 @@ on_error:
 
 /* API: Get stream info. */
 static pj_status_t ogl_stream_get_param(pjmedia_vid_dev_stream *s,
-					pjmedia_vid_param *pi)
+					pjmedia_vid_dev_param *pi)
 {
     struct ogl_stream *strm = (struct ogl_stream*)s;
 
@@ -503,10 +500,10 @@ static pj_status_t ogl_stream_put_frame(pjmedia_vid_dev_stream *strm,
     	goto on_return;
     }
 #if USE_CSIPSIMPLE
-    if(!stream->has_set_render_thread_prio){
-    	set_android_thread_priority(-19);
-    	stream->has_set_render_thread_prio = PJ_TRUE;
-    }
+//    if(!stream->has_set_render_thread_prio){
+//    	set_android_thread_priority(-19);
+//    	stream->has_set_render_thread_prio = PJ_TRUE;
+//    }
 #endif
 
     // Sounds that's not really hurting to push incomplete frames so useless to protect imageData
