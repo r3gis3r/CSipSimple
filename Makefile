@@ -37,7 +37,7 @@ jni/openssl/sources :
 
 jni/pjsip/.patched_sources : $(pjsip_patches)
 	cd jni/pjsip && \
-	quilt push -a || \
+	quilt push -a && \
 	touch .patched_sources
 
 clean :
