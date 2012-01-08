@@ -74,7 +74,7 @@ public class OutgoingCall extends BroadcastReceiver {
 		
 		//Compute remote apps that could receive the outgoing call itnent through our api
 		Map<String, String> potentialHandlers = CallHandler.getAvailableCallHandlers(context);
-		Log.d(THIS_FILE, "We have "+potentialHandlers.size()+" potential handlers");
+        Log.d(THIS_FILE, "We have " + potentialHandlers.size() + " potential handlers");
 		
 		// If this is an outgoing call with a valid number
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) ) {

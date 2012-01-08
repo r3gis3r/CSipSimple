@@ -15,32 +15,34 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.ui;
+package com.csipsimple.ui.account;
+
+import com.csipsimple.api.SipProfile;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.MenuItem;
+import android.support.v4.app.Fragment;
 
-import com.csipsimple.R;
-import com.csipsimple.utils.Compatibility;
+public class AccountEditFragment extends Fragment {
 
-public class AccountsEditList extends FragmentActivity {
+	public static AccountEditFragment newInstance(long profileId) {
+		AccountEditFragment f = new AccountEditFragment();
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		// Supply index input as an argument.
+		Bundle args = new Bundle();
+		args.putLong(SipProfile.FIELD_ID, profileId);
+		f.setArguments(args);
 
-		setContentView(R.layout.accounts_view);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		return f;
 	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == Compatibility.getHomeMenuId()) {
-			finish();
-			return true;
-		}
-		return false;
+	
+	/*
+	private OnQuitListener onQuitListener;
+	public void setOnQuitListener(OnQuitListener l) {
+		onQuitListener = l;
 	}
-
+	public interface OnQuitListener {
+		public void onQuit();
+		public void onShowProfile(long profileId);
+	}
+	*/
 }

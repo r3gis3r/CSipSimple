@@ -24,8 +24,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.ui.AccountFilters;
-import com.csipsimple.ui.AccountsChooserListActivity;
+import com.csipsimple.ui.account.AccountFilters;
+import com.csipsimple.ui.account.AccountsChooserListActivity;
 import com.csipsimple.utils.Log;
 
 

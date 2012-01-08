@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.csipsimple"
-    android:versionCode="1151"
+    android:versionCode="1163"
     android:versionName="0.04-00" >
 
     <supports-screens
@@ -157,7 +157,7 @@
             android:configChanges="orientation"
             android:label="@string/accounts" />
         <activity
-            android:name="com.csipsimple.ui.AccountFilters"
+            android:name="com.csipsimple.ui.account.AccountFilters"
             android:configChanges="orientation"
             android:label="@string/filters" />
         <activity
@@ -399,11 +399,11 @@
 
         <!-- New UI -->
         <activity
-            android:name="com.csipsimple.ui.AccountsEditList"
+            android:name="com.csipsimple.ui.account.AccountsEditList"
             android:theme="@style/DarkTheme"
             android:title="@string/accounts" />
         <activity
-            android:name="com.csipsimple.ui.AccountEdit"
+            android:name="com.csipsimple.ui.account.AccountEdit"
             android:theme="@style/DarkTheme" />
     </application>
 

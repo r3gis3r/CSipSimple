@@ -16,7 +16,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.ui;
+package com.csipsimple.ui.account;
 
 import android.app.ListActivity;
 import android.content.ContentUris;
@@ -43,6 +43,7 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
+import com.csipsimple.ui.EditFilter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.DragnDropListView;
 import com.csipsimple.widgets.DragnDropListView.DropListener;

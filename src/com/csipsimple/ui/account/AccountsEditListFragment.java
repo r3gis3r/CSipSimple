@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.csipsimple.ui;
+package com.csipsimple.ui.account;
 
 
 import android.app.Activity;
@@ -36,18 +36,22 @@ import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.ui.AccountsEditListAdapter.AccountRowTag;
-import com.csipsimple.ui.AccountsEditListAdapter.OnCheckedRowListener;
+import com.csipsimple.ui.account.AccountsEditListAdapter.AccountRowTag;
+import com.csipsimple.ui.account.AccountsEditListAdapter.OnCheckedRowListener;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardChooser;
 import com.csipsimple.wizards.WizardUtils;
+import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class AccountsEditListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, /*OnQuitListener,*/ OnCheckedRowListener{
 
@@ -131,6 +135,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
     }
 
 	private static final int CHOOSE_WIZARD = 0;
+	private static final int CHANGE_WIZARD = 1;
 	
 	// Menu stuff
 	@Override
@@ -241,7 +246,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
     	long fId = l.getItemIdAtPosition(position);
-    	Log.d(THIS_FILE, "Checked "+position+" et "+id+" et "+fId);
+        Log.d(THIS_FILE, "Checked " + position + " et " + id + " et " + fId);
         
         getListView().setItemChecked(position, true);
         
@@ -276,16 +281,18 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
             ft.commit();
         } else {
         */
-        	if(profileId != SipProfile.INVALID_ID) {
-	            // Otherwise we need to launch a new activity to display
-	            // the dialog fragment with selected text.
-	            Intent intent = new Intent();
-	            //intent.setClass(getActivity(), AccountEdit.class);
-	            intent.setClass(getActivity(), BasePrefsWizard.class);
-	            intent.putExtra(SipProfile.FIELD_ID, profileId);
-	            intent.putExtra(SipProfile.FIELD_WIZARD, wizard);
-	            startActivity(intent);
-        	}
+        	
+            // Otherwise we need to launch a new activity to display
+            // the dialog fragment with selected text.
+            Intent intent = new Intent();
+            //intent.setClass(getActivity(), AccountEdit.class);
+            intent.setClass(getActivity(), BasePrefsWizard.class);
+            if(profileId != SipProfile.INVALID_ID) {
+                intent.putExtra(SipProfile.FIELD_ID, profileId);
+            }
+            intent.putExtra(SipProfile.FIELD_WIZARD, wizard);
+            startActivity(intent);
+        	
         	/*
         }
         */
@@ -351,17 +358,118 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == CHOOSE_WIZARD && resultCode == Activity.RESULT_OK && data != null) {
-			String wizardId = data.getStringExtra(WizardUtils.ID);
-			if (wizardId != null) {
-				Intent intent = new Intent();
-				intent.setClass(getActivity(), BasePrefsWizard.class);
-				intent.putExtra(SipProfile.FIELD_WIZARD, wizardId);
-				startActivity(intent);
-			}
+		if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
+		    
+		    if(requestCode == CHOOSE_WIZARD) {
+		        // Wizard has been choosen, now create an account
+    			String wizardId = data.getStringExtra(WizardUtils.ID);
+    			if (wizardId != null) {
+    			    showDetails(SipProfile.INVALID_ID, wizardId);
+    			}
+            } else if (requestCode == CHANGE_WIZARD) {
+                // Change wizard done for this account.
+                String wizardId = data.getStringExtra(WizardUtils.ID);
+                long accountId = data.getLongExtra(Intent.EXTRA_UID, SipProfile.INVALID_ID);
+                
+                if (wizardId != null && accountId != SipProfile.INVALID_ID) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(SipProfile.FIELD_WIZARD, wizardId);
+                    getActivity().getContentResolver().update(
+                            ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, accountId),
+                            cv, null, null);
+
+                }
+
+            }
 		}
 
 	}
 
 
+	// Context menu stuff
+	// Activate / deactive menu
+    public static final int MENU_ITEM_ACTIVATE = Menu.FIRST;
+    // Modify the account
+    public static final int MENU_ITEM_MODIFY = Menu.FIRST + 1;
+    // Delete the account
+    public static final int MENU_ITEM_DELETE = Menu.FIRST + 2;
+    // Change the wizard of the account
+    public static final int MENU_ITEM_WIZARD = Menu.FIRST + 3;
+
+    /**
+     * Retrieve sip account from a given context menu info pressed
+     * @param cmi The context menu info to retrieve infos from
+     * @return corresponding sip profile if everything goes well, null if not able to retrieve profile
+     */
+    private SipProfile profileFromContextMenuInfo(ContextMenuInfo cmi) {
+        AdapterView.AdapterContextMenuInfo info;
+        try {
+            info = (AdapterView.AdapterContextMenuInfo) cmi;
+        } catch (ClassCastException e) {
+            Log.e(THIS_FILE, "bad menuInfo", e);
+            return null;
+        }
+        Cursor c = (Cursor) getListAdapter().getItem(info.position);
+        if (c == null) {
+            // For some reason the requested item isn't available, do nothing
+            return null;
+        }
+        return new SipProfile(c);
+    }
+    
+	@Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        final SipProfile account = profileFromContextMenuInfo(menuInfo);
+        if(account == null) {
+            return;
+        }
+        WizardInfo wizardInfos = WizardUtils.getWizardClass(account.wizard);
+
+        // Setup the menu header
+        menu.setHeaderTitle(account.display_name);
+        menu.setHeaderIcon(wizardInfos.icon);
+
+        // Add a menu item to delete the note
+        menu.add(0, MENU_ITEM_ACTIVATE, 0, account.active ? R.string.deactivate_account
+                : R.string.activate_account);
+        menu.add(0, MENU_ITEM_MODIFY, 0, R.string.modify_account);
+        menu.add(0, MENU_ITEM_DELETE, 0, R.string.delete_account);
+        menu.add(0, MENU_ITEM_WIZARD, 0, R.string.choose_wizard);
+
+    }
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+	    final SipProfile account = profileFromContextMenuInfo(item.getMenuInfo());
+        if (account == null) {
+            // For some reason the requested item isn't available, do nothing
+            return super.onContextItemSelected(item);
+        }
+        
+        switch (item.getItemId()) {
+            case MENU_ITEM_DELETE: {
+                getActivity().getContentResolver().delete(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, account.id), null, null);
+                return true;
+            }
+            case MENU_ITEM_MODIFY : {
+                showDetails(account.id, account.wizard);
+                return true;
+            }
+            case MENU_ITEM_ACTIVATE: {
+                ContentValues cv = new ContentValues();
+                cv.put(SipProfile.FIELD_ACTIVE, ! account.active);
+                getActivity().getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, account.id), cv, null, null);
+                return true;
+            }
+            case MENU_ITEM_WIZARD:{
+                Intent it = new Intent(getActivity(), WizardChooser.class);
+                it.putExtra(Intent.EXTRA_UID, account.id);
+                startActivityForResult(it, CHANGE_WIZARD);
+                return true;
+            }
+        }
+        return super.onContextItemSelected(item);
+
+	}
 }
