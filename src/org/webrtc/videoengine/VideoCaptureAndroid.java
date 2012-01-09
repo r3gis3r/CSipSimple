@@ -16,6 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.webrtc.videoengine.CaptureCapabilityAndroid;
 import org.webrtc.videoengine.VideoCaptureDeviceInfoAndroid.AndroidVideoCaptureDevice;
+import org.webrtc.videoengine.camera.CameraUtilsWrapper;
 
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
@@ -28,6 +29,7 @@ import android.view.SurfaceHolder.Callback;
 public class VideoCaptureAndroid implements PreviewCallback, Callback {
 
     private Camera camera;
+    private CameraUtilsWrapper cameraUtils;
     private AndroidVideoCaptureDevice currentDevice = null;
     public ReentrantLock previewBufferLock = new ReentrantLock();
     private int PIXEL_FORMAT = ImageFormat.NV21;
@@ -74,6 +76,7 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
         context = in_context;
         camera = in_camera;
         currentDevice = in_device;
+        cameraUtils = CameraUtilsWrapper.getInstance();
     }
 
     public int StartCapture(int width, int height, int frameRate) {
@@ -108,23 +111,8 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
             }
 
             int bufSize = width * height * pixelFormat.bitsPerPixel / 8;
-            if (android.os.Build.VERSION.SDK_INT >= 7) {
-                // According to Doc addCallbackBuffer belongs to API level 8.
-                // But it seems like it works on Android 2.1 as well.
-                // At least SE X10 and Milestone
-                byte[] buffer = null;
-                for (int i = 0; i < numCaptureBuffers; i++) {
-                    buffer = new byte[bufSize];
-                    camera.addCallbackBuffer(buffer);
-                }
-
-                camera.setPreviewCallbackWithBuffer(this);
-                ownsBuffers = true;
-            }
-            else {
-                camera.setPreviewCallback(this);
-            }
-
+            cameraUtils.setCallback(this, numCaptureBuffers, bufSize, camera);
+            
             camera.startPreview();
             previewBufferLock.lock();
             expectedFrameSize = bufSize;
@@ -146,13 +134,8 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
             previewBufferLock.unlock();
 
             camera.stopPreview();
-
-            if (android.os.Build.VERSION.SDK_INT > 7) {
-                camera.setPreviewCallbackWithBuffer(null);
-            }
-            else {
-                camera.setPreviewCallback(null);
-            }
+            
+            cameraUtils.unsetCallback(camera);
         } catch (Exception ex) {
             Log.e("*WEBRTC*", "Failed to stop camera");
             return -1;
@@ -182,10 +165,7 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
                 if (VERBOSE) {
                     Log.v("*WEBRTC*", String.format(Locale.US, "frame delivered"));
                 }
-                if (ownsBuffers) {
-                    // Give the video buffer to the camera service again.
-                    camera.addCallbackBuffer(data);
-                }
+                cameraUtils.addCallbackBuffer(camera, data);
             }
         }
         previewBufferLock.unlock();
@@ -235,17 +215,8 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
                 // Back facing or 2.2 or previous front camera
                 resultRotation = rotation;
             }
-            if (android.os.Build.VERSION.SDK_INT > 7) {
-                camera.setDisplayOrientation(resultRotation);
-            }
-            else {
-                // Android 2.1 and previous
-                // This rotation unfortunately does not seems to work.
-                // http://code.google.com/p/android/issues/detail?id=1193
-                Camera.Parameters parameters = camera.getParameters();
-                parameters.setRotation(resultRotation);
-                camera.setParameters(parameters);
-            }
+            
+            cameraUtils.setDisplayOrientation(camera, resultRotation);
 
             if (running) {
                 StartCapture(width, height, framerate);

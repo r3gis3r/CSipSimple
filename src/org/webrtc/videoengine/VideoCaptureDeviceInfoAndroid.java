@@ -24,6 +24,8 @@ import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.util.Log;
 
+import org.webrtc.videoengine.camera.CameraUtilsWrapper;
+
 public class VideoCaptureDeviceInfoAndroid {
 
     // Context
@@ -36,7 +38,7 @@ public class VideoCaptureDeviceInfoAndroid {
 
     // Private class with info about all available cameras and the capabilities
     public class AndroidVideoCaptureDevice {
-        AndroidVideoCaptureDevice() {
+        public AndroidVideoCaptureDevice() {
             frontCameraType = FrontFacingCameraType.None;
             index = 0;
         }
@@ -63,6 +65,8 @@ public class VideoCaptureDeviceInfoAndroid {
     int id;
     List<AndroidVideoCaptureDevice> deviceList;
 
+    private CameraUtilsWrapper cameraUtils;
+
     public static VideoCaptureDeviceInfoAndroid
             CreateVideoCaptureDeviceInfoAndroid(int in_id, Context in_context) {
         if (DEBUG) {
@@ -88,64 +92,14 @@ public class VideoCaptureDeviceInfoAndroid {
         id = in_id;
         context = in_context;
         deviceList = new ArrayList<AndroidVideoCaptureDevice>();
+        cameraUtils = CameraUtilsWrapper.getInstance();
     }
 
     private int Init() {
         // Populate the deviceList with available cameras and their
         // capabilities.
-        Camera camera = null;
         try {
-            if (android.os.Build.VERSION.SDK_INT > 8) {
-                // From Android 2.3 and onwards
-                for (int i = 0; i < Camera.getNumberOfCameras(); ++i) {
-                    AndroidVideoCaptureDevice newDevice = new AndroidVideoCaptureDevice();
-
-                    Camera.CameraInfo info = new Camera.CameraInfo();
-                    Camera.getCameraInfo(i, info);
-                    newDevice.index = i;
-                    newDevice.orientation = info.orientation;
-                    if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                        newDevice.deviceUniqueName =
-                                "Camera " + i + ", Facing back, Orientation " + info.orientation;
-                    }
-                    else {
-                        newDevice.deviceUniqueName =
-                                "Camera " + i + ", Facing front, Orientation " + info.orientation;
-                        newDevice.frontCameraType = FrontFacingCameraType.Android23;
-                    }
-
-                    camera = Camera.open(i);
-                    Camera.Parameters parameters = camera.getParameters();
-                    AddDeviceInfo(newDevice, parameters);
-                    camera.release();
-                    camera = null;
-                    deviceList.add(newDevice);
-                }
-            }
-            else {
-                // Prior to Android 2.3
-                AndroidVideoCaptureDevice newDevice;
-                Camera.Parameters parameters;
-
-                newDevice = new AndroidVideoCaptureDevice();
-                camera = Camera.open();
-                parameters = camera.getParameters();
-                newDevice.deviceUniqueName = "Camera 1, Facing back";
-                newDevice.orientation = 90;
-                AddDeviceInfo(newDevice, parameters);
-
-                deviceList.add(newDevice);
-                camera.release();
-                camera = null;
-
-                newDevice = new AndroidVideoCaptureDevice();
-                newDevice.deviceUniqueName = "Camera 2, Facing front";
-                parameters = SearchOldFrontFacingCameras(newDevice);
-                if (parameters != null) {
-                    AddDeviceInfo(newDevice, parameters);
-                    deviceList.add(newDevice);
-                }
-            }
+            cameraUtils.Init(this, deviceList);
         } catch (Exception ex) {
             Log.e("*WEBRTC*", "Failed to init VideoCaptureDeviceInfo ex" +
                     ex.getLocalizedMessage());
@@ -156,7 +110,7 @@ public class VideoCaptureDeviceInfoAndroid {
     }
 
     // Adds the capture capabilities of the currently opened device
-    private void AddDeviceInfo(AndroidVideoCaptureDevice newDevice,
+    public void AddDeviceInfo(AndroidVideoCaptureDevice newDevice,
             Camera.Parameters parameters) {
 
         List<Size> sizes = parameters.getSupportedPreviewSizes();
@@ -313,11 +267,7 @@ public class VideoCaptureDeviceInfoAndroid {
                             camera = AllocateEVOFrontFacingCamera();
                             break;
                         default:
-                            // From Android 2.3 and onwards)
-                            if (android.os.Build.VERSION.SDK_INT > 8)
-                                camera = Camera.open(device.index);
-                            else
-                                camera = Camera.open(); // Default camera
+                            camera = cameraUtils.openCamera(device.index);
                     }
                 }
             }
@@ -340,7 +290,7 @@ public class VideoCaptureDeviceInfoAndroid {
     }
 
     // Searches for a front facing camera device. This is device specific code.
-    private Camera.Parameters
+    public Camera.Parameters
             SearchOldFrontFacingCameras(AndroidVideoCaptureDevice newDevice)
                     throws SecurityException, IllegalArgumentException,
                     NoSuchMethodException, ClassNotFoundException,
