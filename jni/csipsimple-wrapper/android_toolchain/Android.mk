@@ -127,21 +127,6 @@ LOCAL_STATIC_LIBRARIES += libwebrtc_aecm
 
 endif
 
-ifeq ($(MY_USE_VIDEO),1)
-# TODO : BASE_FFMPEG_BUILD_DIR :=  $(LOCAL_PATH)/../ffmpeg/build/ffmpeg/$(TARGET_ARCH_ABI)/lib/
-# TODO : could we separatly add that to pjmedia video dev things instead in order to keep lighter the base app
-	# Add FFMPEG
-	BASE_FFMPEG_BUILD_DIR :=  $(LOCAL_PATH)/../ffmpeg/build/ffmpeg/armeabi/lib/
-	LOCAL_LDLIBS += $(BASE_FFMPEG_BUILD_DIR)/libavcodec.a \
-		$(BASE_FFMPEG_BUILD_DIR)/libavformat.a \
-		$(BASE_FFMPEG_BUILD_DIR)/libswscale.a \
-		$(BASE_FFMPEG_BUILD_DIR)/libswresample.a \
-		$(BASE_FFMPEG_BUILD_DIR)/libavutil.a
-	
-	# Add X264	
-	BASE_X264_BUILD_DIR :=  $(LOCAL_PATH)/../ffmpeg/build/x264/armeabi/lib/
-	LOCAL_LDLIBS += $(BASE_X264_BUILD_DIR)/libx264.a
-endif
 
 include $(BUILD_SHARED_LIBRARY)
 

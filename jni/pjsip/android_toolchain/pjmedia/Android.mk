@@ -40,12 +40,12 @@ LOCAL_SRC_FILES := $(PJLIB_SRC_DIR)/alaw_ulaw.c $(PJLIB_SRC_DIR)/alaw_ulaw_table
 	$(PJLIB_SRC_DIR)/transport_srtp.c $(PJLIB_SRC_DIR)/transport_udp.c \
 	$(PJLIB_SRC_DIR)/wav_player.c $(PJLIB_SRC_DIR)/wav_playlist.c $(PJLIB_SRC_DIR)/wav_writer.c $(PJLIB_SRC_DIR)/wave.c \
 	$(PJLIB_SRC_DIR)/wsola.c \
-	$(PJLIB_SRC_DIR)/vid_port.c $(PJLIB_SRC_DIR)/vid_codec.c $(PJLIB_SRC_DIR)/vid_codec_util.c \
+	$(PJLIB_SRC_DIR)/vid_port.c $(PJLIB_SRC_DIR)/vid_codec.c \
 	$(PJLIB_SRC_DIR)/vid_stream.c $(PJLIB_SRC_DIR)/vid_tee.c \
 	$(PJLIB_SRC_DIR)/converter.c $(PJLIB_SRC_DIR)/event.c \
 	$(PJMEDIADEV_SRC_DIR)/audiodev.c $(PJMEDIADEV_SRC_DIR)/audiotest.c $(PJMEDIADEV_SRC_DIR)/errno.c \
 	$(PJMEDIADEV_VIDEO_SRC_DIR)/videodev.c $(PJMEDIADEV_VIDEO_SRC_DIR)/colorbar_dev.c $(PJMEDIADEV_VIDEO_SRC_DIR)/errno.c \
-	$(PJMEDIACODEC_SRC_DIR)/amr_sdp_match.c 
+	$(PJMEDIACODEC_SRC_DIR)/amr_sdp_match.c
 
 # If not csipsimple, load default audio codecs loader from pjmedia
 ifneq ($(MY_USE_CSIPSIMPLE),1)
@@ -70,17 +70,6 @@ ifeq ($(MY_USE_WEBRTC),1)
 	
 	#AEC
 	LOCAL_SRC_FILES += $(PJLIB_SRC_DIR)/echo_webrtc_aec.c 
-endif
-
-ifeq ($(MY_USE_VIDEO),1)
-	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/ffmpeg_codecs.c \
-		$(PJMEDIACODEC_SRC_DIR)/h263_packetizer.c \
-		$(PJMEDIACODEC_SRC_DIR)/h264_packetizer.c
-	
-	LOCAL_SRC_FILES += $(PJLIB_SRC_DIR)/ffmpeg_util.c \
-		$(PJLIB_SRC_DIR)/converter_libswscale.c
-		
-	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../ffmpeg/ffmpeg_src/
 endif
 
 PJ_ANDROID_SRC_DIR := ../../android_sources/pjmedia/src/
@@ -141,7 +130,7 @@ ifeq ($(MY_USE_VIDEO),1)
 # Video capture/render implementation
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := pj_webrtc_video_dev
+LOCAL_MODULE := pj_video_android
 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../webrtc/sources/modules/video_render/main/interface/ \
@@ -158,16 +147,51 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../webrtc/sources/modules/video_render/m
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-videodev/ \
 	$(LOCAL_PATH)/../../../swig-glue/ \
 	$(LOCAL_PATH)/../../../csipsimple-wrapper/include/
-	
 
+# Ffmpeg codec depend on ffmpeg
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../ffmpeg/ffmpeg_src/
 
 # Pj implementation for renderer
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/webrtc_android_render_dev.cpp
 # Pj implementation for capture
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/webrtc_android_capture_dev.cpp
 
-LOCAL_STATIC_LIBRARIES += libwebrtc_video_render libwebrtc_video_capture libwebrtc_yuv libyuv libwebrtc_apm_utility libwebrtc_system_wrappers libwebrtc_spl 
-LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DWEBRTC_ANDROID
+# Ffmpeg codec
+LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/ffmpeg_codecs.c \
+	$(PJLIB_SRC_DIR)/converter_libswscale.c \
+	$(PJLIB_SRC_DIR)/ffmpeg_util.c \
+	$(PJMEDIACODEC_SRC_DIR)/h263_packetizer.c \
+	$(PJMEDIACODEC_SRC_DIR)/h264_packetizer.c \
+	$(PJLIB_SRC_DIR)/vid_codec_util.c
+
+
+
+# For render and capture
+LOCAL_STATIC_LIBRARIES += libwebrtc_video_render libwebrtc_video_capture
+
+# Common webrtc utility
+LOCAL_STATIC_LIBRARIES += libwebrtc_yuv libyuv libwebrtc_apm_utility \
+	libwebrtc_system_wrappers libwebrtc_spl
+
+
+# Ffmpeg codec
+BASE_FFMPEG_BUILD_DIR :=  $(LOCAL_PATH)/../../../ffmpeg/build/ffmpeg/armeabi/lib/
+LOCAL_LDLIBS += $(BASE_FFMPEG_BUILD_DIR)/libavcodec.a \
+		$(BASE_FFMPEG_BUILD_DIR)/libavformat.a \
+		$(BASE_FFMPEG_BUILD_DIR)/libswscale.a \
+		$(BASE_FFMPEG_BUILD_DIR)/libavutil.a
+
+# Add X264	
+BASE_X264_BUILD_DIR :=  $(LOCAL_PATH)/../../../ffmpeg/build/x264/armeabi/lib/
+LOCAL_LDLIBS += $(BASE_X264_BUILD_DIR)/libx264.a
+ 
+# Add ffmpeg to flags for pj part build
+LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DWEBRTC_ANDROID \
+	-DPJMEDIA_HAS_FFMPEG=1 \
+	-DPJMEDIA_HAS_FFMPEG_CODEC=1 \
+	-DPJMEDIA_HAS_FFMPEG_CODEC_H264=1
+	
+	
 LOCAL_SHARED_LIBRARIES += libpjsipjni
 LOCAL_LDLIBS += -lGLESv2 -llog
 

@@ -250,7 +250,8 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->use_compact_form_headers = PJ_FALSE;
 	css_cfg->use_no_update = PJ_FALSE;
 	css_cfg->use_zrtp = PJ_FALSE;
-	css_cfg->extra_codecs_cnt = 0;
+	css_cfg->extra_aud_codecs_cnt = 0;
+	css_cfg->extra_vid_codecs_cnt = 0;
 	css_cfg->audio_implementation.init_factory_name = pj_str("");
 	css_cfg->audio_implementation.shared_lib_path = pj_str("");
 }
@@ -321,12 +322,12 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	pjmedia_add_rtpmap_for_static_pt =
 			css_cfg->use_compact_form_sdp ? PJ_FALSE : PJ_TRUE;
 
-	// Codec cfg
-	css_var.extra_codecs_cnt = css_cfg->extra_codecs_cnt;
+	// Audio codec cfg
+	css_var.extra_aud_codecs_cnt = css_cfg->extra_aud_codecs_cnt;
 	unsigned i;
-	for (i = 0; i < css_cfg->extra_codecs_cnt; i++) {
-		dynamic_factory *css_codec = &css_var.extra_codecs[i];
-		dynamic_factory *cfg_codec = &css_cfg->extra_codecs[i];
+	for (i = 0; i < css_cfg->extra_aud_codecs_cnt; i++) {
+		dynamic_factory *css_codec = &css_var.extra_aud_codecs[i];
+		dynamic_factory *cfg_codec = &css_cfg->extra_aud_codecs[i];
 
 		pj_strdup_with_null(css_var.pool, &css_codec->shared_lib_path,
 				&cfg_codec->shared_lib_path);
@@ -334,6 +335,30 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				&cfg_codec->init_factory_name);
 
 	}
+	// Video codec cfg -- For now only destroy is useful but for future
+	// hopefully vid codec mgr will behaves as audio does
+	// Also in this case destroy will become obsolete
+	css_var.extra_vid_codecs_cnt = css_cfg->extra_vid_codecs_cnt;
+	for (i = 0; i < css_cfg->extra_vid_codecs_cnt; i++) {
+		dynamic_factory *css_codec = &css_var.extra_vid_codecs[i];
+		dynamic_factory *cfg_codec = &css_cfg->extra_vid_codecs[i];
+
+		pj_strdup_with_null(css_var.pool, &css_codec->shared_lib_path,
+				&cfg_codec->shared_lib_path);
+		pj_strdup_with_null(css_var.pool, &css_codec->init_factory_name,
+				&cfg_codec->init_factory_name);
+
+
+		css_codec = &css_var.extra_vid_codecs_destroy[i];
+		cfg_codec = &css_cfg->extra_vid_codecs_destroy[i];
+
+		pj_strdup_with_null(css_var.pool, &css_codec->shared_lib_path,
+				&cfg_codec->shared_lib_path);
+		pj_strdup_with_null(css_var.pool, &css_codec->init_factory_name,
+				&cfg_codec->init_factory_name);
+
+	}
+
 
 	// ZRTP cfg
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
@@ -392,6 +417,33 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				PJ_LOG(4, (THIS_FILE, "Loaded video capture dev"));
 			}
 		}
+
+		// Load ffmpeg converter
+		pjmedia_converter_mgr* cvrt_mgr = pjmedia_converter_mgr_instance();
+		if(css_cfg->vid_converter.init_factory_name.slen > 0){
+			pj_status_t (*init_factory)(pjmedia_converter_mgr* cvrt_mgr) = get_library_factory(&css_cfg->vid_converter);
+			if(init_factory != NULL) {
+				init_factory(cvrt_mgr);
+				PJ_LOG(4, (THIS_FILE, "Loaded video converter"));
+			}
+		}
+
+
+		// Load video codecs
+		pjmedia_vid_codec_mgr* vid_mgr = pjmedia_vid_codec_mgr_instance();
+
+		for (i = 0; i < css_var.extra_vid_codecs_cnt; i++) {
+			dynamic_factory *codec = &css_var.extra_vid_codecs[i];
+			pj_status_t (*init_factory)(pjmedia_vid_codec_mgr *mgr,
+                    pj_pool_factory *pf) = get_library_factory(codec);
+			if(init_factory != NULL){
+				pj_status_t status = init_factory(vid_mgr, &pjsua_var.cp.factory);
+				if(status != PJ_SUCCESS) {
+					PJ_LOG(2, (THIS_FILE,"Error loading dynamic codec plugin"));
+				}
+	    	}
+		}
+
 #endif
 		}
 
@@ -400,6 +452,20 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 
 PJ_DECL(pj_status_t) csipsimple_destroy(void) {
 	destroy_ringback_tone();
+
+#if PJMEDIA_HAS_VIDEO
+	unsigned i;
+	for (i = 0; i < css_var.extra_vid_codecs_cnt; i++) {
+		dynamic_factory *codec = &css_var.extra_vid_codecs_destroy[i];
+		pj_status_t (*destroy_factory)() = get_library_factory(codec);
+		if(destroy_factory != NULL){
+			pj_status_t status = destroy_factory();
+			if(status != PJ_SUCCESS) {
+				PJ_LOG(2, (THIS_FILE,"Error loading dynamic codec plugin"));
+			}
+    	}
+	}
+#endif
 
 	if (css_var.pool) {
 		pj_pool_release(css_var.pool);
@@ -722,31 +788,17 @@ PJ_DEF(pj_status_t) pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
 	// Dynamic loading of plugins codecs
 	unsigned i;
 
-	for (i = 0; i < css_var.extra_codecs_cnt; i++) {
-		dynamic_factory *codec = &css_var.extra_codecs[i];
-		char lib_path[512];
-		char init_name[512];
-		pj_ansi_snprintf(lib_path, sizeof(lib_path), "%.*s",
-				codec->shared_lib_path.slen, codec->shared_lib_path.ptr);
-		pj_ansi_snprintf(init_name, sizeof(init_name), "%.*s",
-				codec->init_factory_name.slen, codec->init_factory_name.ptr);
-
-		void* handle = dlopen(lib_path, RTLD_LAZY);
-		if (handle != NULL) {
-			pj_status_t (*init_factory)(
-					pjmedia_endpt *endpt) = dlsym(handle, init_name);
-			if(init_factory != NULL) {
-				status = init_factory(endpt);
-				if(status != PJ_SUCCESS) {
-					PJ_LOG(2, (THIS_FILE,"Error loading dynamic codec plugin %s", init_name));
-    			}
-    		}else{
-    			PJ_LOG(2, (THIS_FILE, "Invalid factory name %s", init_name));
-    		}
-    	} else {
-				PJ_LOG(1, (THIS_FILE, "Not found lib : %s", lib_path));
+	for (i = 0; i < css_var.extra_aud_codecs_cnt; i++) {
+		dynamic_factory *codec = &css_var.extra_aud_codecs[i];
+		pj_status_t (*init_factory)(
+							pjmedia_endpt *endpt) = get_library_factory(codec);
+		if(init_factory != NULL){
+			status = init_factory(endpt);
+			if(status != PJ_SUCCESS) {
+				PJ_LOG(2, (THIS_FILE,"Error loading dynamic codec plugin"));
 			}
-		}
+    	}
+	}
 
 	return PJ_SUCCESS;
 }

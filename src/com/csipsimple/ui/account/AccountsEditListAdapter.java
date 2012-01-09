@@ -103,18 +103,30 @@ public class AccountsEditListAdapter extends SimpleCursorAdapter implements OnCl
         
         // Get the status of this profile
         
-        AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, account.id);
+        
 		
 		tagView.labelView.setText(account.display_name);
         
         //Update status label and color
-		tagView.statusView.setText(accountStatusDisplay.statusLabel);
-		tagView.labelView.setTextColor(accountStatusDisplay.statusColor);
-        
-        //Update checkbox selection
-		tagView.activeCheckbox.setChecked( account.active );
-		tagView.barOnOff.setImageResource( account.active ? accountStatusDisplay.checkBoxIndicator : R.drawable.ic_indicator_off );
-        
+		if(account.active) {
+		    AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, account.id);
+		    tagView.statusView.setText( accountStatusDisplay.statusLabel );
+	        tagView.labelView.setTextColor( accountStatusDisplay.statusColor );
+	        
+	        //Update checkbox selection
+	        tagView.activeCheckbox.setChecked( true );
+	        tagView.barOnOff.setImageResource( accountStatusDisplay.checkBoxIndicator );
+	            
+		} else {
+		    tagView.statusView.setText(R.string.acct_inactive);
+	        tagView.labelView.setTextColor(mContext.getResources().getColor(R.color.account_inactive));
+	        
+	        //Update checkbox selection
+	        tagView.activeCheckbox.setChecked( false );
+	        tagView.barOnOff.setImageResource( R.drawable.ic_indicator_off );
+	        
+		}
+		
         //Update account image
         final WizardInfo wizardInfos = WizardUtils.getWizardClass(account.wizard);
         if(wizardInfos != null) {

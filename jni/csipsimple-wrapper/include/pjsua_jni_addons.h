@@ -73,12 +73,26 @@ typedef struct csipsimple_config {
 	/**
 	 * Number of dynamically loaded codecs
 	 */
-	unsigned extra_codecs_cnt;
+	unsigned extra_aud_codecs_cnt;
 
 	/**
 	 * Codecs to be dynamically loaded
 	 */
-	dynamic_factory extra_codecs[64];
+	dynamic_factory extra_aud_codecs[64];
+
+	/**
+	 * Number of dynamically loaded codecs
+	 */
+	unsigned extra_vid_codecs_cnt;
+
+	/**
+	 * Codecs to be dynamically loaded
+	 */
+	dynamic_factory extra_vid_codecs[64];
+
+	dynamic_factory extra_vid_codecs_destroy[64];
+
+	dynamic_factory vid_converter;
 
 	/**
 	 * Target folder for content storage
@@ -129,9 +143,14 @@ extern "C" {
 struct css_data {
     pj_pool_t	    *pool;	    /**< Pool for the css app. */
 
-    // About codecs
-	unsigned 		extra_codecs_cnt;
-	dynamic_factory 	extra_codecs[64];
+    // Audio codecs
+	unsigned 		extra_aud_codecs_cnt;
+	dynamic_factory 	extra_aud_codecs[64];
+
+	// Video codecs
+	unsigned 		extra_vid_codecs_cnt;
+	dynamic_factory 	extra_vid_codecs[64];
+	dynamic_factory 	extra_vid_codecs_destroy[64];
 
 	// About ringback
     int			    ringback_slot;

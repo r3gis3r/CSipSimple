@@ -73,6 +73,7 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.TimerWrapper;
+import com.csipsimple.wizards.WizardUtils;
 
 public class PjSipService {
     private static final String THIS_FILE = "PjService";
@@ -237,8 +238,8 @@ public class PjSipService {
                     cssCfg.setUse_zrtp(pjsua.PJ_FALSE);
                 }
 
-                Map<String, DynCodecInfos> availableCodecs = ExtraCodecs.getDynCodecs(service);
-                dynamic_factory[] cssCodecs = cssCfg.getExtra_codecs();
+                Map<String, DynCodecInfos> availableCodecs = ExtraCodecs.getDynAudioCodecs(service);
+                dynamic_factory[] cssCodecs = cssCfg.getExtra_aud_codecs();
                 int i = 0;
                 for (Entry<String, DynCodecInfos> availableCodec : availableCodecs.entrySet()) {
                     DynCodecInfos dyn = availableCodec.getValue();
@@ -248,7 +249,7 @@ public class PjSipService {
                                 .pj_str_copy(dyn.factoryInitFunction));
                     }
                 }
-                cssCfg.setExtra_codecs_cnt(i);
+                cssCfg.setExtra_aud_codecs_cnt(i);
 
                 // Audio implementation
                 int implementation = prefsWrapper
@@ -265,13 +266,13 @@ public class PjSipService {
 
                 // Video implementation
                 if(Compatibility.isCompatible(5)){
+                    File videoLib = NativeLibManager.getBundledStackLibFile(service,
+                            "libpj_video_android.so");
                     // Render
                     {
                         dynamic_factory vidImpl = cssCfg.getVideo_render_implementation();
                         vidImpl.setInit_factory_name(pjsua
                                 .pj_str_copy("pjmedia_webrtc_vid_render_factory"));
-                        File videoLib = NativeLibManager.getBundledStackLibFile(service,
-                                "libpj_webrtc_video_dev.so");
                         vidImpl.setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
                     }
                     // Capture
@@ -279,10 +280,25 @@ public class PjSipService {
                         dynamic_factory vidImpl = cssCfg.getVideo_capture_implementation();
                         vidImpl.setInit_factory_name(pjsua
                                 .pj_str_copy("pjmedia_webrtc_vid_capture_factory"));
-                        File videoLib = NativeLibManager.getBundledStackLibFile(service,
-                                "libpj_webrtc_video_dev.so");
                         vidImpl.setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
                     }
+                    // Codecs
+                    cssCodecs = cssCfg.getExtra_vid_codecs();
+                    cssCodecs[0].setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
+                    cssCodecs[0].setInit_factory_name(pjsua
+                            .pj_str_copy("pjmedia_codec_ffmpeg_init"));
+                    cssCodecs = cssCfg.getExtra_vid_codecs_destroy();
+                    cssCodecs[0].setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
+                    cssCodecs[0].setInit_factory_name(pjsua
+                            .pj_str_copy("pjmedia_codec_ffmpeg_deinit"));
+                    cssCfg.setExtra_vid_codecs_cnt(1);
+                    
+                    // Converter
+                    dynamic_factory convertImpl = cssCfg.getVid_converter();
+                    convertImpl.setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
+                    convertImpl.setInit_factory_name(pjsua
+                            .pj_str_copy("pjmedia_libswscale_converter_init"));
+                    
                 }
 
                 // MAIN CONFIG
@@ -654,16 +670,18 @@ public class PjSipService {
                     ContentUris.withAppendedId(SipProfile.ACCOUNT_STATUS_ID_URI_BASE, profile.id),
                     cv, null, null);
 
-            // Re register
-            if (status == pjsuaConstants.PJ_SUCCESS) {
-                status = pjsua.acc_set_registration(currentAccountStatus.getPjsuaId(), 1);
+            if (!account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
+                // Re register
                 if (status == pjsuaConstants.PJ_SUCCESS) {
-                    pjsua.acc_set_online_status(currentAccountStatus.getPjsuaId(), 1);
+                    status = pjsua.acc_set_registration(currentAccountStatus.getPjsuaId(), 1);
+                    if (status == pjsuaConstants.PJ_SUCCESS) {
+                        pjsua.acc_set_online_status(currentAccountStatus.getPjsuaId(), 1);
+                    }
                 }
             }
         } else {
             int[] accId = new int[1];
-            if (account.wizard.equalsIgnoreCase("LOCAL")) {
+            if (account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
                 // We already have local account by default
                 // For now consider we are talking about UDP one
                 // In the future local account should be set per transport
@@ -1067,6 +1085,14 @@ public class PjSipService {
         }
     }
 
+    /**
+     * Change account registration / adding state
+     * @param account The account to modify registration
+     * @param renew if 0 we ask for deletion of this account; if 1 we ask for registration of this account (and add if necessary)
+     * @param forceReAdd if true, we will first remove the account and then re-add it
+     * @return true if the operation get completed without problem
+     * @throws SameThreadException
+     */
     public boolean setAccountRegistration(SipProfile account, int renew, boolean forceReAdd)
             throws SameThreadException {
         int status = -1;
@@ -1075,9 +1101,19 @@ public class PjSipService {
             return false;
         }
 
+        // If local account -- Ensure we are not deleting, because this would be invalid
+        if(account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
+            if(renew == 0) {
+                return false;
+            }
+        }
+        
         SipProfileState profileState = getProfileState(account);
-
-        if (profileState.isAddedToStack()) {
+        
+        // In case of already added, we have to act finely
+        // If it's local we can just consider that we have to re-add account 
+        // since it will actually just touch the account with a modify
+        if (profileState.isAddedToStack() && !account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
             // The account is already there in accounts list
             service.getContentResolver().delete(
                     ContentUris.withAppendedId(SipProfile.ACCOUNT_STATUS_URI, account.id), null,

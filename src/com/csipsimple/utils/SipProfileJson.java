@@ -107,17 +107,16 @@ public final class SipProfileJson {
                 DBProvider.ACCOUNT_FULL_PROJECTION, null, null, null);
         if (c != null) {
             try {
-                if (c.moveToFirst()) {
-                    do {
-                        SipProfile account = new SipProfile(c);
-                        JSONObject p = serializeSipProfile(account, db);
-                        try {
-                            jsonSipProfiles.put(jsonSipProfiles.length(), p);
-                        } catch (JSONException e) {
-                            Log.e(THIS_FILE, "Impossible to add profile", e);
-                        }
-                    } while (c.moveToNext());
+                while (c.moveToNext()) {
+                    SipProfile account = new SipProfile(c);
+                    JSONObject p = serializeSipProfile(account, db);
+                    try {
+                        jsonSipProfiles.put(jsonSipProfiles.length(), p);
+                    } catch (JSONException e) {
+                        Log.e(THIS_FILE, "Impossible to add profile", e);
+                    }
                 }
+
             } catch (Exception e) {
                 Log.e(THIS_FILE, "Error on looping over sip profiles", e);
             } finally {
@@ -206,11 +205,14 @@ public final class SipProfileJson {
                 DBProvider.ACCOUNT_FULL_PROJECTION_TYPES);
         cv = cols.jsonToContentValues(jsonObj);
 
-        int profileId = cv.getAsInteger(SipProfile.FIELD_ID);
-        Uri insertedUri = cr.insert(SipProfile.ACCOUNT_URI, cv);
-
-        profileId = (int) ContentUris.parseId(insertedUri);
-
+        long profileId = cv.getAsLong(SipProfile.FIELD_ID);
+        if(profileId >= 0) {
+            Uri insertedUri = cr.insert(SipProfile.ACCOUNT_URI, cv);
+            profileId = ContentUris.parseId(insertedUri);
+        }
+        // TODO : else restore call handler in private db
+        
+        
         // Restore filters
         cols = new Columns(Filter.FULL_PROJ, Filter.FULL_PROJ_TYPES);
         try {

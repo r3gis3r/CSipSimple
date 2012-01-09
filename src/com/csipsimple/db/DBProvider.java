@@ -106,7 +106,7 @@ public class DBProvider extends ContentProvider {
 		SipProfile.FIELD_SIP_STACK, SipProfile.FIELD_VOICE_MAIL_NBR, SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH,
 		SipProfile.FIELD_TRY_CLEAN_REGISTERS };
 	public final static Class<?>[] ACCOUNT_FULL_PROJECTION_TYPES = {
-		Integer.class,
+		Long.class,
 		
 		Integer.class, String.class, String.class,
 		
@@ -248,7 +248,7 @@ public class DBProvider extends ContentProvider {
 
         getContext().getContentResolver().notifyChange(uri, null);
 
-        if(matched == ACCOUNTS || matched == ACCOUNTS_ID) {
+        if(matched == ACCOUNTS_ID) {
         	long rowId = ContentUris.parseId(uri);
         	if(rowId >= 0) {
         		broadcastAccountChange(rowId);
@@ -322,7 +322,7 @@ public class DBProvider extends ContentProvider {
         long rowId = db.insert(matchedTable, null, values);
 
         // If the insert succeeded, the row ID exists.
-        if (rowId > 0) {
+        if (rowId >= 0) {
         	// TODO : for inserted account register it here
         	
             Uri retUri = ContentUris.withAppendedId(baseInsertedUri, rowId);

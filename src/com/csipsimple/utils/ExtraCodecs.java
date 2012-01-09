@@ -71,11 +71,11 @@ public class ExtraCodecs {
 	private static final String THIS_FILE = "ExtraCodecs";
 	
 	
-	private static Map<String, DynCodecInfos> AVAILABLE_DYN_CODECS = null;
+	private static Map<String, DynCodecInfos> AVAILABLE_DYN_AUDIO_CODECS = null;
 	
-	public static Map<String, DynCodecInfos> getDynCodecs(Context ctxt){
-		if(AVAILABLE_DYN_CODECS == null) {
-			AVAILABLE_DYN_CODECS = new HashMap<String, DynCodecInfos>();
+	public static Map<String, DynCodecInfos> getDynAudioCodecs(Context ctxt){
+		if(AVAILABLE_DYN_AUDIO_CODECS == null) {
+			AVAILABLE_DYN_AUDIO_CODECS = new HashMap<String, DynCodecInfos>();
 			
 			PackageManager packageManager = ctxt.getPackageManager();
 			Intent it = new Intent(SipManager.ACTION_GET_EXTRA_CODECS);
@@ -88,18 +88,18 @@ public class ExtraCodecs {
 					DynCodecInfos dynInfos;
 					try {
 						dynInfos = new DynCodecInfos(ctxt, cmp);
-						AVAILABLE_DYN_CODECS.put(cmp.flattenToString(), dynInfos);
+						AVAILABLE_DYN_AUDIO_CODECS.put(cmp.flattenToString(), dynInfos);
 					} catch (NameNotFoundException e) {
 						Log.e(THIS_FILE, "Error while retrieving infos from dyn codec ", e);
 					}
 				}
 			}
 		}
-		return AVAILABLE_DYN_CODECS;
+		return AVAILABLE_DYN_AUDIO_CODECS;
 	}
 	
 	public static void clearDynCodecs() {
-		AVAILABLE_DYN_CODECS = null;
+		AVAILABLE_DYN_AUDIO_CODECS = null;
 		PjSipService.resetCodecs();
 	}
 }

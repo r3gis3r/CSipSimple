@@ -366,11 +366,12 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 		nHeight = ddi->_capability[i].height;
 		nFps = ddi->_capability[i].maxFPS;
 
-		PJ_LOG(4, (THIS_FILE, "Compare : %dx%d@%d to %dx%d@%d",
+		PJ_LOG(4, (THIS_FILE, "Compare : %dx%d@%d to %dx%d@%d with target %dx%d@%d",
 				oWidth, oHeight, oFps,
-				nWidth, nHeight, nFps));
+				nWidth, nHeight, nFps,
+				tWidth, tHeight, tFps));
 
-		if( abs(nHeight - tHeight) <= abs(oHeight - tHeight) ){
+		if( abs(nHeight - tHeight) <= abs(oHeight - tHeight) /*&& !(nHeight < tHeight && oHeight >= tHeight)*/){
 			// We have better or equal height
 			if(abs(nHeight - tHeight) == abs(oHeight - tHeight)){
 				// Same height, check on width

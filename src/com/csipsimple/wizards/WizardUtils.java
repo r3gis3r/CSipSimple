@@ -150,6 +150,7 @@ public class WizardUtils {
     public static final String PRIORITY  = "PRIORITY";
     
     public static final String EXPERT_WIZARD_TAG = "EXPERT";
+    public static final String LOCAL_WIZARD_TAG = "LOCAL";
     
     
     
@@ -202,11 +203,11 @@ public class WizardUtils {
 				R.drawable.ic_wizard_advanced, 10, 
 				new Locale[] {}, true, false, 
 				Advanced.class));
-		WIZARDS_DICT.put("EXPERT", new WizardInfo("EXPERT", "Expert", 
+		WIZARDS_DICT.put(WizardUtils.EXPERT_WIZARD_TAG, new WizardInfo(WizardUtils.EXPERT_WIZARD_TAG, "Expert", 
 				R.drawable.ic_wizard_expert, 1, 
 				new Locale[] {}, true, false, 
 				Expert.class));
-		WIZARDS_DICT.put("LOCAL", new WizardInfo("LOCAL", "Local", 
+		WIZARDS_DICT.put(WizardUtils.LOCAL_WIZARD_TAG, new WizardInfo(WizardUtils.LOCAL_WIZARD_TAG, "Local", 
 				R.drawable.ic_wizard_expert, 1, 
 				new Locale[] {}, true, false, 
 				Local.class));
