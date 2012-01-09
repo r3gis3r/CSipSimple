@@ -121,7 +121,7 @@ public class CallHandler {
 
         long accountId = SipProfile.INVALID_ID;
         try {
-            prefs.getLong(VIRTUAL_ACC_PREFIX + packageName, SipProfile.INVALID_ID);
+            accountId = prefs.getLong(VIRTUAL_ACC_PREFIX + packageName, SipProfile.INVALID_ID);
         } catch (Exception e) {
             Log.e(THIS_FILE, "Can't retrieve call handler cache id - reset");
         }
