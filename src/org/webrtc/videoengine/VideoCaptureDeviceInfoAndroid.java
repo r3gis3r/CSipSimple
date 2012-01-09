@@ -115,17 +115,22 @@ public class VideoCaptureDeviceInfoAndroid {
         List<Size> sizes = parameters.getSupportedPreviewSizes();
         List<Integer> frameRates = parameters.getSupportedPreviewFrameRates();
         int maxFPS = 0;
-        if(frameRates == null || sizes == null) {
+        if(sizes == null) {
+            newDevice.captureCapabilies = new CaptureCapabilityAndroid[0];
             return;
         }
-        for (Integer frameRate : frameRates) {
-            if (VERBOSE) {
-                Log.v("*WEBRTC*",
-                        "VideoCaptureDeviceInfoAndroid:frameRate " + frameRate);
+        if(frameRates != null) {
+            for (Integer frameRate : frameRates) {
+                if (VERBOSE) {
+                    Log.v("*WEBRTC*",
+                            "VideoCaptureDeviceInfoAndroid:frameRate " + frameRate);
+                }
+                if (frameRate > maxFPS) {
+                    maxFPS = frameRate;
+                }
             }
-            if (frameRate > maxFPS) {
-                maxFPS = frameRate;
-            }
+        }else {
+            maxFPS = 15;
         }
 
         newDevice.captureCapabilies = new CaptureCapabilityAndroid[sizes.size()];

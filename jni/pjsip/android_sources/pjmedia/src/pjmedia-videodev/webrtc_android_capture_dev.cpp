@@ -188,6 +188,7 @@ static pj_status_t webrtc_cap_factory_init(pjmedia_vid_dev_factory *f) {
 		pj_log_push_indent();
 		// Capabilities as pj formats
 		unsigned nbrOfCaps = cf->_deviceInfo->NumberOfCapabilities(ddi->webrtc_id);
+		PJ_LOG(4, (THIS_FILE, "Found %2d has %d capabilities", d, nbrOfCaps));
 
 		ddi->info.fmt_cnt = 0;
 		for (i = 0; i < nbrOfCaps && ddi->info.fmt_cnt < PJMEDIA_VID_DEV_INFO_FMT_CNT; i++) {
