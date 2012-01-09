@@ -101,8 +101,7 @@ public class VideoCaptureDeviceInfoAndroid {
         try {
             cameraUtils.Init(this, deviceList);
         } catch (Exception ex) {
-            Log.e("*WEBRTC*", "Failed to init VideoCaptureDeviceInfo ex" +
-                    ex.getLocalizedMessage());
+            Log.e("*WEBRTC*", "Failed to init VideoCaptureDeviceInfo ex", ex);
             return -1;
         }
         VerifyCapabilities();
@@ -116,6 +115,9 @@ public class VideoCaptureDeviceInfoAndroid {
         List<Size> sizes = parameters.getSupportedPreviewSizes();
         List<Integer> frameRates = parameters.getSupportedPreviewFrameRates();
         int maxFPS = 0;
+        if(frameRates == null || sizes == null) {
+            return;
+        }
         for (Integer frameRate : frameRates) {
             if (VERBOSE) {
                 Log.v("*WEBRTC*",
