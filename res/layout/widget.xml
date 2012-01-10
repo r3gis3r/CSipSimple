@@ -38,16 +38,18 @@
             android:layout_height="0dip"
             android:layout_weight="1"
             android:contentDescription="@string/empty_description"
-            android:scaleType="center" />
+            android:padding="5dip"
+            android:scaleType="centerInside" />
 
         <TextView
             android:id="@+id/txt_account"
             android:layout_width="fill_parent"
-            android:layout_height="16dip"
-            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:gravity="center"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/white" >
         </TextView>
@@ -59,11 +61,5 @@
             android:contentDescription="@string/empty_description"
             android:scaleType="fitXY" />
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="1dip"
-        android:layout_height="match_parent"
-        android:background="@drawable/appwidget_settings_divider"
-        android:contentDescription="@string/empty_description" />
 
 </LinearLayout>

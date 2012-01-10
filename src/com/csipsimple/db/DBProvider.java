@@ -38,7 +38,6 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.db.DBAdapter.DatabaseHelper;
 import com.csipsimple.models.Filter;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
 
 import java.util.HashMap;
@@ -336,6 +335,9 @@ public class DBProvider extends ContentProvider {
             			"(SELECT "+CallLog.Calls._ID+" FROM "+SipManager.CALLLOGS_TABLE_NAME+" ORDER BY " + 
             				CallLog.Calls.DEFAULT_SORT_ORDER + " LIMIT -1 OFFSET 500)", null);
             }
+            if(matched == ACCOUNTS_STATUS || matched == ACCOUNTS_STATUS_ID) {
+                broadcastRegistrationChange(rowId);
+            }
             
             return retUri;
         }
@@ -556,13 +558,17 @@ public class DBProvider extends ContentProvider {
 
         getContext().getContentResolver().notifyChange(uri, null);
         
+        long rowId = ContentUris.parseId(uri);
+        if (rowId >= 0) {
 
-        if(matched == ACCOUNTS_ID) {
-        	long rowId = ContentUris.parseId(uri);
-        	if(rowId >= 0) {
-        		broadcastAccountChange(rowId);
-        	}
+            if (matched == ACCOUNTS_ID) {
+                broadcastAccountChange(rowId);
+            } else if (matched == ACCOUNTS_STATUS_ID) {
+                broadcastRegistrationChange(rowId);
+            }
         }
+        
+	
         return count;
 	}
 	
@@ -623,9 +629,24 @@ public class DBProvider extends ContentProvider {
 		return null;
     }
 	
+	/**
+	 * Broadcast the fact that account config has changed
+	 * @param accountId
+	 */
 	private void broadcastAccountChange(long accountId) {
-		Intent publishIntent = new Intent(SipService.ACTION_SIP_ACCOUNT_CHANGED);
+		Intent publishIntent = new Intent(SipManager.ACTION_SIP_ACCOUNT_CHANGED);
 		publishIntent.putExtra(SipProfile.FIELD_ID, accountId);
 		getContext().sendBroadcast(publishIntent);
+	}
+	
+	/**
+	 * Broadcast the fact that registration / adding status changed
+	 * @param accountId the id of the account
+	 */
+	private void broadcastRegistrationChange(long accountId) {
+        Intent publishIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
+        publishIntent.putExtra(SipProfile.FIELD_ID, accountId);
+        getContext().sendBroadcast(publishIntent);
+	    
 	}
 }

@@ -349,11 +349,12 @@
         <!-- Widget -->
         <receiver
             android:name="com.csipsimple.widgets.AccountWidgetProvider"
+            android:icon="@drawable/appwidget_preview"
             android:label="@string/gadget_title" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.csipsimple.service.ACCOUNT_CHANGED" />
                 <action android:name="com.csipsimple.service.REGISTRATION_CHANGED" />
-                <action android:name="com.csipsimple.service.ACCOUNT_ACTIVE_CHANGED" />
             </intent-filter>
 
             <meta-data

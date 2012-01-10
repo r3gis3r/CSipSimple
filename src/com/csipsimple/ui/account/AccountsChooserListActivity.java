@@ -66,6 +66,7 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 		// Fill accounts with currently avalaible accounts
     	Cursor c = managedQuery(SipProfile.ACCOUNT_URI, new String[] {
     			SipProfile.FIELD_ID + " AS " + BaseColumns._ID,
+    			SipProfile.FIELD_ID,
     			SipProfile.FIELD_DISPLAY_NAME,
     			SipProfile.FIELD_WIZARD
     	}, null, null, null);

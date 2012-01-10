@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,9 +16,14 @@
 -->
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="72dip"
-    android:minHeight="72dip"
-    android:configure="com.csipsimple.widgets.AccountWidgetConfigure" 
+    android:configure="com.csipsimple.widgets.AccountWidgetConfigure"
     android:initialLayout="@layout/widget"
-    >
+    android:minHeight="40dp"
+    android:minResizeHeight="40dp"
+    android:minResizeWidth="40dp"
+    android:minWidth="40dp"
+    android:previewImage="@drawable/appwidget_preview"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0" >
+
 </appwidget-provider>

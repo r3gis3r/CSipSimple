@@ -94,7 +94,6 @@ public class SipService extends Service {
     private boolean lastKnownVpnState = false;
     
 
-	public static final String ACTION_SIP_ACCOUNT_CHANGED = "com.csipsimple.service.ACCOUNT_CHANGED";
 	
 	private SipWakeLock sipWakeLock;
 	private boolean autoAcceptCurrent = false;
@@ -772,7 +771,7 @@ public class SipService extends Service {
 						Log.d(THIS_FILE, "Connectivity alert not processed: " + state + " " + type);
 					}
 				}
-			} else if (action.equals(ACTION_SIP_ACCOUNT_CHANGED)) {
+			} else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_CHANGED)) {
 				final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, -1);
 				// Should that be threaded?
 				if (accountId != SipProfile.INVALID_ID) {
@@ -1020,7 +1019,7 @@ public class SipService extends Service {
 		if (deviceStateReceiver == null) {
 			IntentFilter intentfilter = new IntentFilter();
 			intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-			intentfilter.addAction(ACTION_SIP_ACCOUNT_CHANGED);
+			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_CHANGED);
 			intentfilter.addAction(SipManager.ACTION_SIP_CAN_BE_STOPPED);
 			intentfilter.addAction(SipManager.ACTION_SIP_REQUEST_RESTART);
 			intentfilter.addAction(ACTION_VPN_CONNECTIVITY);

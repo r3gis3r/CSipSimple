@@ -69,25 +69,22 @@ public class AccountWidgetProvider extends AppWidgetProvider {
      */
     @Override
     public void onReceive(final Context context, Intent intent) {
-        
-		if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(intent.getAction())) {
+        String act = intent.getAction();
+		if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(act)) {
 			final int appWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 			if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
 				this.onDeleted(context, new int[] { appWidgetId });
 			}
-		} else {
-			/*
-			if (SipManager.ACTION_SIP_REGISTRATION_CHANGED.equals(intent.getAction()) || SipManager.ACTION_SIP_ACCOUNT_ACTIVE_CHANGED.equals(intent.getAction())) {
-				Thread t = new Thread() {
-					public void run() {
+		} else if (SipManager.ACTION_SIP_REGISTRATION_CHANGED.equals(act) || SipManager.ACTION_SIP_ACCOUNT_CHANGED.equals(act)) {
+				//Thread t = new Thread() {
+				//	public void run() {
 						updateWidget(context);
-					};
-				};
-				t.start();
-			}
-			*/
-			super.onReceive(context, intent);
+				//	};
+				//};
+				//t.start();
 		}
+		super.onReceive(context, intent);
+		
     }
 
     /**
