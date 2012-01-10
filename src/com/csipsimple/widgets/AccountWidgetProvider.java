@@ -21,18 +21,22 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.wizards.WizardUtils;
 
 public class AccountWidgetProvider extends AppWidgetProvider {
@@ -111,7 +115,8 @@ public class AccountWidgetProvider extends AppWidgetProvider {
         long accId = AccountWidgetConfigure.getAccountForWidget(context, appWidgetId);
 		Log.d(THIS_FILE, "Updating wiget " + appWidgetId + " for account " + accId);
 		if(accId != SipProfile.INVALID_ID) {
-			Cursor c = context.getContentResolver().query(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, accId), 
+		    ContentResolver cr = context.getContentResolver();
+			Cursor c = cr.query(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, accId), 
 					new String[] {
 				SipProfile.FIELD_WIZARD,
 				SipProfile.FIELD_ACTIVE,
@@ -128,14 +133,35 @@ public class AccountWidgetProvider extends AppWidgetProvider {
 						
 						views.setImageViewResource(R.id.img_account, WizardUtils.getWizardIconRes(acc.getAsString(SipProfile.FIELD_WIZARD)));
 						boolean active = (acc.getAsInteger(SipProfile.FIELD_ACTIVE) == 1);
-						if(active) {
-						//	accountStatusDisplay = AccountListUtils.getAccountDisplay(context, service, account.id);
-							views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_on);
-						}else {
-							views.setImageViewResource(R.id.ind_account, R.drawable.appwidget_settings_ind_off);
-						}
+						
+						views.setImageViewResource(R.id.ind_account, active ? R.drawable.appwidget_settings_ind_on : R.drawable.appwidget_settings_ind_off);
+						
+						
 						views.setTextViewText(R.id.txt_account, acc.getAsString(SipProfile.FIELD_DISPLAY_NAME));
 						views.setOnClickPendingIntent(R.id.btn_account, getLaunchPendingIntent(context, accId, !active));
+						
+						// In case of active account, we have to check status of the account
+                        boolean showStatus = false;
+						if(active) {
+						    AccountStatusDisplay accountStatusDisplay = AccountListUtils.getAccountDisplay(context, accId);
+						    Integer drawable = null;
+						    
+						    if(accountStatusDisplay.checkBoxIndicator == R.drawable.ic_indicator_red) {
+						        drawable = R.drawable.appwidget_settings_ind_red;
+						        showStatus = true;
+						    }else if (accountStatusDisplay.checkBoxIndicator == R.drawable.ic_indicator_yellow) {
+						        drawable = R.drawable.appwidget_settings_ind_yellow;
+						    }
+						    if(showStatus) {
+						        views.setTextViewText(R.id.txt_status, accountStatusDisplay.statusLabel);
+						    }
+						    if(drawable != null) {
+						        views.setImageViewResource(R.id.ind_account, drawable);
+						    }
+				            
+						}
+                        views.setViewVisibility(R.id.txt_status, showStatus ? View.VISIBLE : View.GONE);
+                        
 					}
 				}catch(Exception e) {
 					Log.e(THIS_FILE, "Something went wrong while retrieving the account", e);
