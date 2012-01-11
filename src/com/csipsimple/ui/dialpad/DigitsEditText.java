@@ -44,25 +44,27 @@ public class DigitsEditText extends EditText {
     }
 
     public void setIsDigit(boolean isDigit, boolean autofocus) {
-        this.isDigit = isDigit;
-        final InputMethodManager imm = ((InputMethodManager) getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE));
-
-        if (isDigit) {
-            setInputType(InputType.TYPE_NULL /*
-                                              * | InputType.
-                                              * TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                                              */);
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
-            if (imm != null && imm.isActive(this)) {
-                imm.hideSoftInputFromWindow(getApplicationWindowToken(), 0);
-            }
-        } else {
-            setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-                    | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            if (imm != null && autofocus) {
-                imm.showSoftInput(this, 0);
+        if(this.isDigit != isDigit || autofocus) {
+            this.isDigit = isDigit;
+            final InputMethodManager imm = ((InputMethodManager) getContext()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE));
+    
+            if (isDigit) {
+                setInputType(InputType.TYPE_NULL /*
+                                                  * | InputType.
+                                                  * TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                                                  */);
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                if (imm != null && imm.isActive(this)) {
+                    imm.hideSoftInputFromWindow(getApplicationWindowToken(), 0);
+                }
+            } else {
+                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                        | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                if (imm != null && autofocus) {
+                    imm.showSoftInput(this, 0);
+                }
             }
         }
 
