@@ -44,6 +44,7 @@ public class OXO810 extends AlternateServerImplementation {
 		account = super.buildAccount(account);
 		
 		account.transport = SipProfile.TRANSPORT_UDP;
+		account.contact_rewrite_method = 1;
 		return account;
 	}
 

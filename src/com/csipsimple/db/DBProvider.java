@@ -557,8 +557,11 @@ public class DBProvider extends ContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-        
-        long rowId = ContentUris.parseId(uri);
+
+        long rowId = -1;
+        if (matched == ACCOUNTS_ID || matched == ACCOUNTS_STATUS_ID) {
+            rowId = ContentUris.parseId(uri);
+        }
         if (rowId >= 0) {
 
             if (matched == ACCOUNTS_ID) {
