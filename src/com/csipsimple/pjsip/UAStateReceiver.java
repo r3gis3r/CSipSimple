@@ -97,12 +97,12 @@ public class UAStateReceiver extends Callback {
 			Log.d(THIS_FILE, "> UNLOCK CPU " + eventLockCount);
 		}
 	}
-	
+	/*
 	private class IncomingCallInfos {
 		public SipCallSession callInfo;
 		public Integer accId;
 	}
-	
+*/	
 	@Override
 	public void on_incoming_call(final int accId, final int callId, SWIGTYPE_p_pjsip_rx_data rdata) {
 		lockCpu();
@@ -126,12 +126,38 @@ public class UAStateReceiver extends Callback {
 		
 		try {
             SipCallSession callInfo = updateCallInfoFromStack(callId);
-            //callInfo.setAccId(accId);
 			Log.d(THIS_FILE, "Incoming call << for account " + accId);
-			IncomingCallInfos iCInfo = new IncomingCallInfos();
-			iCInfo.accId = accId;
-			iCInfo.callInfo = callInfo;
-			msgHandler.sendMessage(msgHandler.obtainMessage(ON_INCOMING_CALL, iCInfo));
+            
+            //Extra check if set reference counted is false ???
+            if(!incomingCallLock.isHeld()) {
+                incomingCallLock.acquire();
+            }
+            
+            final String remContact = callInfo.getRemoteContact();
+            callInfo.setIncoming(true);
+            notificationManager.showNotificationForCall(callInfo);
+
+            //Auto answer feature
+            SipProfile acc = pjService.getAccountForPjsipId(accId);
+            final boolean shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc);
+            Log.d(THIS_FILE, "Should I anto answer ? " + shouldAutoAnswer);
+            if (shouldAutoAnswer) {
+                // Automatically answer incoming calls with 200/OK
+                pjService.callAnswer(callId, 200);
+            } else {
+                // Automatically answer incoming calls with 180/RINGING
+                pjService.callAnswer(callId, 180);
+                
+                if(pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
+                    if(pjService.mediaManager != null) {
+                        pjService.mediaManager.startRing(remContact);
+                    }
+                    broadCastAndroidCallState("RINGING", remContact);
+                }
+            }
+            //Or by api
+            launchCallHandler(callInfo);
+			
 			Log.d(THIS_FILE, "Incoming call >>");
         } catch (SameThreadException e) {
             // That's fine we are in a pjsip thread
@@ -563,7 +589,7 @@ public class UAStateReceiver extends Callback {
 	private WakeLock eventLock;
 
 
-	private static final int ON_INCOMING_CALL = 1;
+	//private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
 	private static final int ON_MEDIA_STATE = 3;
 	private static final int ON_REGISTRATION_STATE = 4;
@@ -582,65 +608,13 @@ public class UAStateReceiver extends Callback {
 		public void handleMessage(Message msg) {
 			lockCpu();
 			switch (msg.what) {
+			    /*
 			case ON_INCOMING_CALL:{
-				IncomingCallInfos incomingCallInfo = (IncomingCallInfos) msg.obj;
-				SipCallSession callInfo = incomingCallInfo.callInfo;
-				Integer accountId = incomingCallInfo.accId;
-				final int callId = callInfo.getCallId();
 				
-				
-				
-				//Get lock while ringing to be sure notification is well done !
-				if (incomingCallLock == null) {
-					PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
-					incomingCallLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.incomingCallLock");
-					incomingCallLock.setReferenceCounted(false);
-				}
-				//Extra check if set reference counted is false ???
-				if(!incomingCallLock.isHeld()) {
-					incomingCallLock.acquire();
-				}
-				pjService.service.getSystemService(Context.POWER_SERVICE);
-				
-				final String remContact = callInfo.getRemoteContact();
-				callInfo.setIncoming(true);
-				notificationManager.showNotificationForCall(callInfo);
-
-				//Auto answer feature
-				SipProfile acc = pjService.getAccountForPjsipId(accountId);
-				final boolean shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc);
-				Log.d(THIS_FILE, "Should I anto answer ? " + shouldAutoAnswer);
-				pjService.service.getExecutor().execute(new SipRunnable() {
-					@Override
-					public void doRun() throws SameThreadException {
-						SipCallSession cInfo = getCallInfo(callId);
-						if(!cInfo.isAfterEnded()) {
-							if (shouldAutoAnswer) {
-								// Automatically answer incoming calls with 200/OK
-								pjService.callAnswer(callId, 200);
-							} else {
-	
-								// Automatically answer incoming calls with 180/RINGING
-								pjService.callAnswer(callId, 180);
-								
-								if(pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
-									if(pjService.mediaManager != null) {
-										pjService.mediaManager.startRing(remContact);
-									}
-									broadCastAndroidCallState("RINGING", remContact);
-								}
-							}
-						}
-					}
-				});
-				//Or by api
-				
-				
-				launchCallHandler(callInfo);
 				
 				break;
 			}
-			
+*/			
 			case ON_CALL_STATE:{
 				SipCallSession callInfo = (SipCallSession) msg.obj;
 				final int callState = callInfo.getCallState();
@@ -811,6 +785,11 @@ public class UAStateReceiver extends Callback {
 			eventLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.inEventLock");
 			eventLock.setReferenceCounted(true);
 
+		}
+		if(incomingCallLock == null) {
+            PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
+            incomingCallLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.incomingCallLock");
+            incomingCallLock.setReferenceCounted(false);
 		}
 	}
 	
