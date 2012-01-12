@@ -32,21 +32,24 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="5dip"
-        android:paddingTop="4dip" >
+        android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/iconContainer1"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:orientation="vertical" >
+            android:background="@drawable/notify_panel_notification_icon_bg_tile"
+            android:orientation="vertical"
+            android:paddingBottom="4dip"
+            android:paddingLeft="8dip"
+            android:paddingRight="8dip" >
 
             <ImageView
                 android:id="@+id/icon1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dip"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:contentDescription="@string/acct_registered" />
 
             <ImageView
@@ -54,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/acct_registered"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_indicator_on" />
         </LinearLayout>
 
@@ -64,11 +67,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iconContainer1"
-            android:ellipsize="marquee"
-            android:paddingLeft="16dip"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/tertiary_text_dark"
-            android:textStyle="bold" >
+            android:ellipsize="end"
+            android:paddingLeft="14dip"
+            android:textAppearance="@style/NotificationTitle" >
         </TextView>
     </RelativeLayout>
     <!-- Unfortunately to be compatible with 1.6 devices, we need to write it as flat file -->
@@ -80,21 +81,23 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="5dip"
-        android:paddingTop="4dip" >
+        android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/iconContainer2"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingBottom="4dip"
+            android:paddingLeft="8dip"
+            android:paddingRight="8dip" >
 
             <ImageView
                 android:id="@+id/icon2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dip"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:contentDescription="@string/acct_registered" />
 
             <ImageView
@@ -102,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/acct_registered"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_indicator_on" />
         </LinearLayout>
 
@@ -112,11 +115,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iconContainer2"
-            android:ellipsize="marquee"
-            android:paddingLeft="16dip"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/tertiary_text_dark"
-            android:textStyle="bold" >
+            android:ellipsize="end"
+            android:paddingLeft="14dip"
+            android:textAppearance="@style/NotificationTitle" >
         </TextView>
     </RelativeLayout>
     <!-- Unfortunately to be compatible with 1.6 devices, we need to write it as flat file -->
@@ -128,21 +129,23 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="5dip"
-        android:paddingTop="4dip" >
+        android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/iconContainer3"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingBottom="4dip"
+            android:paddingLeft="8dip"
+            android:paddingRight="8dip" >
 
             <ImageView
                 android:id="@+id/icon3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dip"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:contentDescription="@string/acct_registered" />
 
             <ImageView
@@ -150,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/acct_registered"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_indicator_on" />
         </LinearLayout>
 
@@ -160,11 +163,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iconContainer3"
-            android:ellipsize="marquee"
-            android:paddingLeft="16dip"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/tertiary_text_dark"
-            android:textStyle="bold" >
+            android:ellipsize="end"
+            android:paddingLeft="14dip"
+            android:textAppearance="@style/NotificationTitle" >
         </TextView>
     </RelativeLayout>
     <!-- TODO : add a more label -->

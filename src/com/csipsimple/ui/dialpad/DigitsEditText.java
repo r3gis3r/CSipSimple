@@ -34,7 +34,6 @@ import com.csipsimple.utils.Log;
 public class DigitsEditText extends EditText {
 
     private boolean isDigit = true;
-
     // private int baseInputType = InputType.TYPE_NULL;
 
     public DigitsEditText(Context context, AttributeSet attrs) {
@@ -44,7 +43,7 @@ public class DigitsEditText extends EditText {
     }
 
     public void setIsDigit(boolean isDigit, boolean autofocus) {
-        if(this.isDigit != isDigit || autofocus) {
+        if(this.isDigit != isDigit || autofocus || isDigit) {
             this.isDigit = isDigit;
             final InputMethodManager imm = ((InputMethodManager) getContext()
                     .getSystemService(Context.INPUT_METHOD_SERVICE));

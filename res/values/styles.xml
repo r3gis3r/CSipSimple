@@ -14,29 +14,29 @@
 	General Public License for more details. You should have received a
 	copy of the GNU General Public License along with CSipSimple. If not,
 	see <http://www.gnu.org/licenses/>.
-	
-	
 -->
 <resources>
-	<style name="list_left_column">
-		<item name="android:layout_width">68dip</item>
-		<item name="android:layout_height">68dip</item>
-	</style>
-	<style name="TextAppearance.SlidingTabNormal" parent="@android:attr/textAppearanceMedium">
-		<item name="android:textColor">?android:attr/textColorTertiary</item>
-		<item name="android:textSize">28sp</item>
-		<item name="android:shadowDx">0.0</item>
-		<item name="android:shadowDy">1.0</item>
-		<item name="android:shadowRadius">5.0</item>
-		<item name="android:shadowColor">@android:color/black</item>
-	</style>
-	
-	<style name="TextAppearance.SlidingTabActive" parent="@android:attr/textAppearanceMedium">
-		<item name="android:textColor">@android:color/black</item>
-		<item name="android:textSize">28sp</item>
-	</style>
-	
-	  <!-- Regular (non-toggle) buttons in the in-call onscreen touch UI. -->
+
+    <style name="list_left_column">
+        <item name="android:layout_width">68dip</item>
+        <item name="android:layout_height">68dip</item>
+    </style>
+
+    <style name="TextAppearance.SlidingTabNormal" parent="@android:attr/textAppearanceMedium">
+        <item name="android:textColor">?android:attr/textColorTertiary</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:shadowDx">0.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">5.0</item>
+        <item name="android:shadowColor">@android:color/black</item>
+    </style>
+
+    <style name="TextAppearance.SlidingTabActive" parent="@android:attr/textAppearanceMedium">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <!-- Regular (non-toggle) buttons in the in-call onscreen touch UI. -->
     <style name="CallButton">
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/incall_button</item>
@@ -60,29 +60,32 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
-	<style name="DialPadButton">
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_weight">0.33</item>
-		<item name="android:layout_margin">5dp</item>
-		<item name="android:background">@drawable/btn_dial</item>
-	</style>
-	<style name="DialPadRow">
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_weight">0.25</item>
-	</style>
-	<style name="homeTabIndicatorText">
-		<item name="android:textColor">@color/tab_cond_text</item>
-		<item name="android:textStyle">bold</item>
-	</style>
-	
-	<style name="formWhiteBlock">
-		<item name="android:background">@drawable/form_white_background</item>
-		<item name="android:padding">10dp</item>
-		<item name="android:layout_margin">5dp</item>
-	</style>
-	    <style name="QuickActionAboveAnimation">
+    <style name="DialPadButton">
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_weight">0.33</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:background">@drawable/btn_dial</item>
+    </style>
+
+    <style name="DialPadRow">
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_weight">0.25</item>
+    </style>
+
+    <style name="homeTabIndicatorText">
+        <item name="android:textColor">@color/tab_cond_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="formWhiteBlock">
+        <item name="android:background">@drawable/form_white_background</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="QuickActionAboveAnimation">
         <item name="android:windowEnterAnimation">@anim/quickaction_above_enter</item>
         <item name="android:windowExitAnimation">@anim/quickaction_above_exit</item>
     </style>
@@ -91,20 +94,31 @@
         <item name="android:windowEnterAnimation">@anim/quickaction_below_enter</item>
         <item name="android:windowExitAnimation">@anim/quickaction_below_exit</item>
     </style>
-    
-        
-	<style name="LightTheme" parent="Theme.Sherlock.Light">
-		<item name="abBackground">#DFDFDF</item>
-	</style>
-	<style name="LightTheme.noTopActionBar" parent="LightTheme">	    
-	 	<item name="abHeight">0dip</item> 
-	</style>
 
-	<style name="DarkTheme" parent="Theme.Sherlock">
-		<item name="abBackground">#202020</item>
-	</style>
+    <style name="LightTheme" parent="Theme.Sherlock.Light">
+        <item name="abBackground">#DFDFDF</item>
+    </style>
 
-	<style name="DarkTheme.noTopActionBar" parent="DarkTheme">	    
-	   	<item name="abHeight">0dip</item>
-	</style>
+    <style name="LightTheme.noTopActionBar" parent="LightTheme">
+        <item name="abHeight">0dip</item>
+    </style>
+
+    <style name="DarkTheme" parent="Theme.Sherlock">
+        <item name="abBackground">#202020</item>
+    </style>
+
+    <style name="DarkTheme.noTopActionBar" parent="DarkTheme">
+        <item name="abHeight">0dip</item>
+    </style>
+
+    <!-- Notification -->
+    <style name="NotificationText">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="NotificationTitle">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

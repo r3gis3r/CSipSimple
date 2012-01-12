@@ -886,7 +886,7 @@ public class SipService extends Service {
 					if(prefsWrapper.isValidConnectionForIncoming() || (pjService != null && pjService.getActiveCallInProgress() != null) ) {
 						dataConnectionChanged(mNetworkType, true);
 					}else {
-						Log.w(THIS_FILE, "Ignore this change cause not valid for incoming");
+						Log.d(THIS_FILE, "Ignore this change cause not valid for incoming");
 					}
 					sipWakeLock.release(this);
 					mTask = null;
@@ -1502,11 +1502,17 @@ public class SipService extends Service {
 		boolean ipHasChanged = false;
 		Log.d(THIS_FILE, "Fire dataConnectionChanged for a " + (connecting ? "connection" : "disconnection"));
 		
-		if(ni != null && !(ni.getTypeName().equalsIgnoreCase(type))) {
-			// We should not stop here cause UTMS could stop while wifi continue to be active and to be the main way to transmit things
-			Log.d(THIS_FILE, "Ignore this disconnection cause does it is not relevant of current connection");
-			return;
-		}
+        if (ni != null
+                && !(ni.getTypeName().equalsIgnoreCase(type))
+                && (prefsWrapper.isValidConnectionForIncoming() || prefsWrapper
+                        .isValidConnectionForOutgoing())) {
+            // We should not stop here cause UTMS could stop while 
+            // Another (eg wifi) connection is valid for incoming or outgoing
+            // In this case just ignore this disconnection
+            Log.d(THIS_FILE,
+                    "Ignore this disconnection cause does it is not relevant of current connection");
+            return;
+        }
 
 		if (ni != null && connecting) {
 			//String currentType = ni.getTypeName();
