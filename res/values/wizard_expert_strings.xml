@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of CSipSimple.
+<!--
+     This file is part of CSipSimple.
 
     CSipSimple is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -13,33 +14,43 @@
 
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
- -->
+-->
 <resources>
-<string name="w_expert_display_name">Account name</string>
-<string name="w_expert_display_name_desc">Display name for this account</string>
-<string name="w_expert_acc_id">Account id</string>
-<string name="w_expert_acc_id_desc">Format : &quot;DisplayName &lt;sip:login@registrar&gt;&quot;</string>
-<string name="w_expert_reg_uri">Registration URI</string>
-<string name="w_expert_reg_uri_desc">Format : &quot;sip:registrar.net&quot;[:port]</string>
-<string name="w_expert_realm">Realm</string>
-<string name="w_expert_realm_desc">Authentication domain (if you don\'t know, use \'*\')</string>
-<string name="w_expert_username">Username</string>
-<string name="w_expert_username_desc">Username for authentication</string>
-<string name="w_expert_data">Password</string>
-<string name="w_expert_data_desc">Password (or other data) for authentication</string>
-<string name="w_expert_t_proxy">Proxy</string>
-<string name="w_expert_proxy">Proxy URI</string>
-<string name="w_expert_proxy_desc">Format : &quot;sip:proxy.net&quot;[:port]</string>
-<string name="w_expert_use_tcp">Use TCP (not UDP)</string>
-<string name="w_expert_prevent_tcp">Prevent TCP (only try UDP)</string>
-<string name="w_expert_publish_enabled">Publish enabled</string>
-<string name="w_expert_reg_timeout">Register timeout (sec)</string>
-<string name="w_expert_reg_delay_before_refresh">Register delay before refresh (sec)</string>
-<string name="w_expert_ka_interval">Keep-alive interval (sec)</string>
-<string name="w_expert_force_contact">Force contact</string>
-<string name="w_expert_allow_contact_rewrite">Allow contact rewrite</string>
-<string name="w_expert_contact_rewrite_method">Contact rewrite method</string>
-<string name="w_expert_reg_use_proxy">How to use proxy</string>
-<string name="w_expert_try_clean_registers">Try to clean registers</string>
-<string name="w_expert_try_clean_registers_desc">Allow app to try to clean old registrations if needed</string>
+
+    <string name="w_expert_display_name">Account name</string>
+    <string name="w_expert_display_name_desc">Display name for this account</string>
+    <string name="w_expert_acc_id">Account id</string>
+    <string name="w_expert_acc_id_desc">Format : "DisplayName &lt;sip:login@registrar>"</string>
+    <string name="w_expert_reg_uri">Registration URI</string>
+    <string name="w_expert_reg_uri_desc">Format : "sip:registrar.net"[:port]</string>
+    <string name="w_expert_realm">Realm</string>
+    <string name="w_expert_realm_desc">Authentication domain (if you don\'t know, use \'*\')</string>
+    <string name="w_expert_username">Username</string>
+    <string name="w_expert_username_desc">Username for authentication</string>
+    <string name="w_expert_data">Data (password)</string>
+    <string name="w_expert_data_desc">Password (or other data) for authentication</string>
+    <string name="w_expert_datatype">Data type</string>
+    <string name="w_expert_datatype_desc">Type of data</string>
+    <string name="w_expert_t_proxy">Proxy</string>
+    <string name="w_expert_proxy">Proxy URI</string>
+    <string name="w_expert_proxy_desc">Format : "sip:proxy.net"[:port]</string>
+    <string name="w_expert_use_tcp">Use TCP (not UDP)</string>
+    <string name="w_expert_prevent_tcp">Prevent TCP (only try UDP)</string>
+    <string name="w_expert_publish_enabled">Publish enabled</string>
+    <string name="w_expert_reg_timeout">Register timeout (sec)</string>
+    <string name="w_expert_reg_delay_before_refresh">Register delay before refresh (sec)</string>
+    <string name="w_expert_reg_delay_before_refresh_desc">Specify the number of seconds to refresh the client registration before the registration expires.</string>
+    <string name="w_expert_ka_interval">Keep-alive interval (sec)</string>
+    <string name="w_expert_force_contact">Force contact</string>
+    <string name="w_expert_allow_contact_rewrite">Allow contact rewrite</string>
+    <string name="w_expert_contact_rewrite_method">Contact rewrite method</string>
+    <string name="w_expert_reg_use_proxy">How to use proxy</string>
+    <string name="w_expert_try_clean_registers">Try to clean registers</string>
+    <string name="w_expert_try_clean_registers_desc">Allow app to try to clean old registrations if needed</string>
+    <string name="w_expert_rtp_bound_addr">RTP bound address</string>
+    <string name="w_expert_rtp_bound_addr_desc">Optional where the socket should be bound to. To only selectively bind the socket to particular interface (instead of 0.0.0.0)</string>
+    <string name="w_expert_rtp_public_addr">RTP public address</string>
+    <string name="w_expert_rtp_public_addr_desc">Optional to advertise the address of RTP transport.</string>
+    <string name="w_expert_media_transport">Media transport</string>
+
 </resources>

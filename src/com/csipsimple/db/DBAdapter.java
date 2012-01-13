@@ -46,7 +46,7 @@ public class DBAdapter {
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		private static final String DATABASE_NAME = "com.csipsimple.db";
-		private static final int DATABASE_VERSION = 28;
+		private static final int DATABASE_VERSION = 30;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -94,7 +94,20 @@ public class DBAdapter {
 				+ SipProfile.FIELD_VOICE_MAIL_NBR		+ " TEXT,"
 				+ SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH	+ " INTEGER," 
 				
-				+ SipProfile.FIELD_TRY_CLEAN_REGISTERS	+ " INTEGER" 
+				+ SipProfile.FIELD_TRY_CLEAN_REGISTERS	+ " INTEGER,"
+				
+				+ SipProfile.FIELD_USE_RFC5626          + " INTEGER DEFAULT 1,"
+				+ SipProfile.FIELD_RFC5626_INSTANCE_ID  + " TEXT,"
+				+ SipProfile.FIELD_RFC5626_REG_ID       + " TEXT,"
+				
+                + SipProfile.FIELD_VID_IN_AUTO_SHOW          + " INTEGER DEFAULT -1,"
+                + SipProfile.FIELD_VID_OUT_AUTO_TRANSMIT     + " INTEGER DEFAULT -1,"
+                
+                + SipProfile.FIELD_RTP_PORT                  + " INTEGER DEFAULT -1,"
+                + SipProfile.FIELD_RTP_ENABLE_QOS            + " INTEGER DEFAULT -1,"
+                + SipProfile.FIELD_RTP_QOS_DSCP              + " INTEGER DEFAULT -1,"
+                + SipProfile.FIELD_RTP_BOUND_ADDR            + " TEXT,"
+                + SipProfile.FIELD_RTP_PUBLIC_ADDR           + " TEXT"
 				
 			+ ");";
 		
@@ -262,8 +275,7 @@ public class DBAdapter {
 			if(oldVersion < 26) {
 				try {
 					//Add reg delay before refresh row
-					db.execSQL("ALTER TABLE " + SipProfile.ACCOUNTS_TABLE_NAME + " ADD "+
-							SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH + " INTEGER");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH, "INTEGER DEFAULT -1");
 					db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH + "=-1");
 					Log.d(THIS_FILE, "Upgrade done");
 				}catch(SQLiteException e) {
@@ -273,8 +285,7 @@ public class DBAdapter {
 			if(oldVersion < 27) {
 				try {
 					//Add reg delay before refresh row
-					db.execSQL("ALTER TABLE " + SipProfile.ACCOUNTS_TABLE_NAME + " ADD "+
-							SipProfile.FIELD_TRY_CLEAN_REGISTERS + " INTEGER");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_TRY_CLEAN_REGISTERS, "INTEGER DEFAULT 0");
 					db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TRY_CLEAN_REGISTERS + "=0");
 					Log.d(THIS_FILE, "Upgrade done");
 				}catch(SQLiteException e) {
@@ -284,20 +295,39 @@ public class DBAdapter {
 			if(oldVersion < 28) {
                 try {
                     // Add call log profile id
-                    db.execSQL("ALTER TABLE " + SipManager.CALLLOGS_TABLE_NAME + " ADD "+
-                            SipManager.CALLLOG_PROFILE_ID_FIELD + " INTEGER");
+                    addColumn(db, SipManager.CALLLOGS_TABLE_NAME, SipManager.CALLLOG_PROFILE_ID_FIELD, "INTEGER");
                     // Add call log status code
-                    db.execSQL("ALTER TABLE " + SipManager.CALLLOGS_TABLE_NAME + " ADD "+
-                            SipManager.CALLLOG_STATUS_CODE_FIELD + " INTEGER");
+                    addColumn(db, SipManager.CALLLOGS_TABLE_NAME, SipManager.CALLLOG_STATUS_CODE_FIELD, "INTEGER");
                     db.execSQL("UPDATE " + SipManager.CALLLOGS_TABLE_NAME + " SET " + SipManager.CALLLOG_STATUS_CODE_FIELD + "=200");
                     // Add call log status text
-                    db.execSQL("ALTER TABLE " + SipManager.CALLLOGS_TABLE_NAME + " ADD "+
-                            SipManager.CALLLOG_STATUS_TEXT_FIELD + " INTEGER");
+                    addColumn(db, SipManager.CALLLOGS_TABLE_NAME, SipManager.CALLLOG_STATUS_TEXT_FIELD, "TEXT");
                     Log.d(THIS_FILE, "Upgrade done");
                 }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
                 }
             }
+			if(oldVersion < 30) {
+			    try {
+			      //Add reg delay before refresh row
+			        addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_USE_RFC5626, "INTEGER DEFAULT 1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RFC5626_INSTANCE_ID, "TEXT");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RFC5626_REG_ID, "TEXT");
+
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_VID_IN_AUTO_SHOW, "INTEGER DEFAULT -1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_VID_OUT_AUTO_TRANSMIT, "INTEGER DEFAULT -1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RTP_PORT, "INTEGER DEFAULT -1");
+                    
+
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RTP_ENABLE_QOS, "INTEGER DEFAULT -1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RTP_QOS_DSCP, "INTEGER DEFAULT -1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RTP_PUBLIC_ADDR, "TEXT");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RTP_BOUND_ADDR, "TEXT");
+			        
+                    Log.d(THIS_FILE, "Upgrade done");
+                }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
+			}
 			onCreate(db);
 		}
 	}
@@ -327,6 +357,10 @@ public class DBAdapter {
 		return opened;
 	}
 	
+	private static void addColumn(SQLiteDatabase db, String table, String field, String type) {
+	    db.execSQL("ALTER TABLE " + table + " ADD "+ field + " " + type);
+	}
+	
 	
 	// --------
 	// Filters
@@ -353,25 +387,4 @@ public class DBAdapter {
 		return numRows;
 	}
 
-	// --------
-	// MESSAGES
-	// --------
-
-/*
-
-	public boolean updateMessageStatus(String sTo, String body, int messageType, int status, String reason) {
-		ContentValues args = new ContentValues();
-		args.put(SipMessage.FIELD_TYPE, messageType);
-		args.put(SipMessage.FIELD_STATUS, status);
-		if(status != SipCallSession.StatusCode.OK 
-			&& status != SipCallSession.StatusCode.ACCEPTED ) {
-			args.put(SipMessage.FIELD_BODY, body + " // " + reason);
-		}
-		return db.update(SipManager.MESSAGES_TABLE_NAME, args,
-				SipMessage.FIELD_TO + "=? AND "+
-				SipMessage.FIELD_BODY+ "=? AND "+
-				SipMessage.FIELD_TYPE+ "="+SipMessage.MESSAGE_TYPE_QUEUED, 
-				new String[] {sTo, body}) > 0;
-	}
-	*/
 }

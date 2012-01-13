@@ -17,9 +17,6 @@
  */
 package com.csipsimple.wizards.impl;
 
-import java.util.List;
-import java.util.regex.Pattern;
-
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
@@ -28,10 +25,14 @@ import android.preference.PreferenceScreen;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
+import com.csipsimple.ui.prefs.GenericPrefs;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardIface;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 public abstract class BaseImplementation implements WizardIface {
 	protected BasePrefsWizard parent;
@@ -60,19 +61,44 @@ public abstract class BaseImplementation implements WizardIface {
 		return Pattern.matches(regex, edt.getText());
 	}
 
+    /**
+     * @see EditTextPreference#getText()
+     * @param edt
+     */
 	protected String getText(EditTextPreference edt){
 		return edt.getText();
 	}
 	
-	
-	public void setStringFieldSummary(String fieldName){
+
+    /**
+     * @see GenericPrefs#setStringFieldSummary(String)
+     * @param fieldName
+     */
+	protected void setStringFieldSummary(String fieldName){
 		parent.setStringFieldSummary(fieldName);
 	}
-	
+
+    /**
+     * @see GenericPrefs#setPasswordFieldSummary(String)
+     * @param fieldName
+     */
 	protected void setPasswordFieldSummary(String fieldName){
 		parent.setPasswordFieldSummary(fieldName);
 	}
 	
+	/**
+	 * @see GenericPrefs#setListFieldSummary(String)
+	 * @param fieldName
+	 */
+    protected void setListFieldSummary(String fieldName){
+        parent.setListFieldSummary(fieldName);
+    }
+	
+    /**
+     * Hide a preference from the preference screen.
+     * @param parentGroup key for parent group if any. If null no parent group are searched
+     * @param fieldName key for the field to remove
+     */
 	protected void hidePreference(String parentGroup, String fieldName) {
 		PreferenceScreen pfs = parent.getPreferenceScreen();
 		PreferenceGroup parentPref = pfs; 

@@ -118,8 +118,8 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 				audioManager.startBluetoothSco();
 			}else {
 				Log.d(THIS_FILE, "BT off >>>");
-				audioManager.setBluetoothScoOn(false);
 				audioManager.stopBluetoothSco();
+                audioManager.setBluetoothScoOn(false);
 			}
 		}
 	}

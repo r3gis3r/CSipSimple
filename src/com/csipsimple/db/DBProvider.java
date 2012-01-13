@@ -93,6 +93,10 @@ public class DBProvider extends ContentProvider {
 		SipProfile.FIELD_FORCE_CONTACT, SipProfile.FIELD_ALLOW_CONTACT_REWRITE, SipProfile.FIELD_CONTACT_REWRITE_METHOD, 
 		SipProfile.FIELD_CONTACT_PARAMS, SipProfile.FIELD_CONTACT_URI_PARAMS,
 		SipProfile.FIELD_TRANSPORT, SipProfile.FIELD_USE_SRTP, SipProfile.FIELD_USE_ZRTP,
+		SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH,
+		
+		// RTP config
+		
 
 		// Proxy infos
 		SipProfile.FIELD_PROXY, SipProfile.FIELD_REG_USE_PROXY,
@@ -102,8 +106,17 @@ public class DBProvider extends ContentProvider {
 		SipProfile.FIELD_REALM, SipProfile.FIELD_SCHEME, SipProfile.FIELD_USERNAME, SipProfile.FIELD_DATATYPE,
 		SipProfile.FIELD_DATA, 
 		
-		SipProfile.FIELD_SIP_STACK, SipProfile.FIELD_VOICE_MAIL_NBR, SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH,
-		SipProfile.FIELD_TRY_CLEAN_REGISTERS };
+		// CSipSimple specific
+		SipProfile.FIELD_SIP_STACK, SipProfile.FIELD_VOICE_MAIL_NBR, 
+		SipProfile.FIELD_TRY_CLEAN_REGISTERS,
+		
+		// RFC 5626
+		SipProfile.FIELD_USE_RFC5626, SipProfile.FIELD_RFC5626_INSTANCE_ID, SipProfile.FIELD_RFC5626_REG_ID, 
+		
+		// Video
+		SipProfile.FIELD_VID_IN_AUTO_SHOW, SipProfile.FIELD_VID_OUT_AUTO_TRANSMIT,
+		
+	};
 	public final static Class<?>[] ACCOUNT_FULL_PROJECTION_TYPES = {
 		Long.class,
 		
@@ -115,14 +128,24 @@ public class DBProvider extends ContentProvider {
 		String.class, Integer.class, Integer.class,
 		String.class, String.class,
 		Integer.class, Integer.class, Integer.class,
-		
+		Integer.class,
+		 
+		 // Proxy infos
 		String.class, Integer.class,
-		
+
+        // Credentials
 		String.class, String.class, String.class, Integer.class,
 		String.class,
 		
-		Integer.class, String.class, Integer.class,
-		Integer.class
+		// CSipSimple specific
+		Integer.class, String.class,
+		Integer.class,
+
+        // RFC 5626
+		Integer.class, String.class, String.class,
+		
+		// Video
+		Integer.class, Integer.class
 	};
 
 

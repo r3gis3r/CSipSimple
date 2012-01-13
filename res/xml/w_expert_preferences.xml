@@ -16,70 +16,189 @@
 
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
- -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <PreferenceCategory android:title="SIP Account" >
+        <EditTextPreference
+            android:key="display_name"
+            android:title="@string/w_expert_display_name" >
+        </EditTextPreference>
+        <EditTextPreference
+            android:dialogMessage="@string/w_expert_acc_id_desc"
+            android:key="acc_id"
+            android:title="@string/w_expert_acc_id" >
+        </EditTextPreference>
+        <EditTextPreference
+            android:dialogMessage="@string/w_expert_reg_uri_desc"
+            android:key="reg_uri"
+            android:title="@string/w_expert_reg_uri" >
+        </EditTextPreference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="SIP Authentication" >
+        <EditTextPreference
+            android:dialogMessage="@string/w_expert_realm_desc"
+            android:key="realm"
+            android:title="@string/w_expert_realm" >
+        </EditTextPreference>
+        <EditTextPreference
+            android:key="username"
+            android:title="Username (login)" />
 
-	<PreferenceCategory android:title="SIP Account">
-		<EditTextPreference android:key="display_name" android:title="@string/w_expert_display_name"></EditTextPreference>
-		<EditTextPreference android:key="acc_id" android:title="@string/w_expert_acc_id"
-			android:dialogMessage="@string/w_expert_acc_id_desc"></EditTextPreference>
-		<EditTextPreference android:key="reg_uri" android:title="@string/w_expert_reg_uri"
-			android:dialogMessage="@string/w_expert_reg_uri_desc"></EditTextPreference>
-	</PreferenceCategory>
-	<PreferenceCategory android:title="SIP Authentication">
-		<EditTextPreference android:key="realm" android:title="@string/w_expert_realm"
-			android:dialogMessage="@string/w_expert_realm_desc"></EditTextPreference>
-		<EditTextPreference android:title="Username (login)" android:key="username"></EditTextPreference>
+        <com.csipsimple.widgets.PasswordPreference
+            android:key="data"
+            android:password="true"
+            android:summary="@string/w_expert_data_desc"
+            android:title="@string/w_expert_data" />
 
+        <ListPreference
+            android:entries="@array/data_type_choices"
+            android:entryValues="@array/data_type_values"
+            android:key="datatype"
+            android:summary="@string/w_expert_datatype_desc"
+            android:title="@string/w_expert_datatype" >
+        </ListPreference>
+        <ListPreference
+            android:entries="@array/scheme_choices"
+            android:entryValues="@array/scheme_values"
+            android:key="scheme"
+            android:title="Scheme" >
+        </ListPreference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Connection" >
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/transport_choices"
+            android:entryValues="@array/transport_values"
+            android:key="transport"
+            android:summary="@string/transport_desc"
+            android:title="@string/transport" >
+        </ListPreference>
 
-		<com.csipsimple.widgets.PasswordPreference android:password="true" android:title="Data (password)"
-			android:key="data"></com.csipsimple.widgets.PasswordPreference>
+        <CheckBoxPreference
+            android:key="publish_enabled"
+            android:title="@string/w_expert_publish_enabled" />
 
+        <EditTextPreference
+            android:key="reg_timeout"
+            android:title="@string/w_expert_reg_timeout" />
+        <EditTextPreference
+            android:key="reg_delay_before_refresh"
+            android:summary="@string/w_expert_reg_delay_before_refresh_desc"
+            android:title="@string/w_expert_reg_delay_before_refresh" />
+        <EditTextPreference
+            android:key="force_contact"
+            android:title="@string/w_expert_force_contact" />
 
-		<ListPreference android:title="Data Type" android:key="data_type"
-			android:entryValues="@array/data_type_values" android:entries="@array/data_type_choices"></ListPreference>
-		<ListPreference android:title="Scheme" android:key="scheme" android:entries="@array/scheme_choices"
-			android:entryValues="@array/scheme_values"></ListPreference>
+        <CheckBoxPreference
+            android:key="allow_contact_rewrite"
+            android:title="@string/w_expert_allow_contact_rewrite" />
 
-	</PreferenceCategory>
-	<PreferenceCategory android:title="Connection">
-		
-		<ListPreference android:title="@string/transport" android:key="transport"
-			android:summary="@string/transport_desc"
-			android:defaultValue="0"
-			android:entryValues="@array/transport_values" android:entries="@array/transport_choices"></ListPreference>
-	
-		
-		<CheckBoxPreference android:key="publish_enabled" android:title="@string/w_expert_publish_enabled"/>
-		<EditTextPreference android:key="reg_timeout" android:title="@string/w_expert_reg_timeout"/>
-		<EditTextPreference android:key="reg_delay_before_refresh" android:title="@string/w_expert_reg_delay_before_refresh"/>
-		
-		<EditTextPreference android:key="force_contact" android:title="@string/w_expert_force_contact"/>
-		<CheckBoxPreference android:key="allow_contact_rewrite" android:title="@string/w_expert_allow_contact_rewrite"/>
-		<ListPreference android:key="contact_rewrite_method" android:title="@string/w_expert_contact_rewrite_method"
-			android:defaultValue="2"
-			android:entryValues="@array/contact_rewrite_method_values" android:entries="@array/contact_rewrite_method_choices"
-			/>
-		<CheckBoxPreference android:key="try_clean_registers" android:title="@string/w_expert_try_clean_registers" android:summary="@string/w_expert_try_clean_registers_desc"/>
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/w_expert_t_proxy">
-		<EditTextPreference android:key="proxy" android:title="@string/w_expert_proxy"
-			android:dialogMessage="@string/w_expert_proxy_desc"></EditTextPreference>
-	</PreferenceCategory>
-	<!-- 
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/contact_rewrite_method_choices"
+            android:entryValues="@array/contact_rewrite_method_values"
+            android:key="contact_rewrite_method"
+            android:title="@string/w_expert_contact_rewrite_method" />
+
+        <CheckBoxPreference
+            android:key="try_clean_reg"
+            android:summary="@string/w_expert_try_clean_registers_desc"
+            android:title="@string/w_expert_try_clean_registers" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/w_expert_t_proxy" >
+        <EditTextPreference
+            android:dialogMessage="@string/w_expert_proxy_desc"
+            android:key="proxy"
+            android:title="@string/w_expert_proxy" />
+    </PreferenceCategory>
+    <!--
 	<ListPreference android:key="reg_use_proxy" android:title="@string/w_expert_reg_use_proxy"
 			android:defaultValue="3"
 			android:entryValues="@array/reg_use_proxy_values" android:entries="@array/reg_use_proxy_choices"
 			/>
-	 -->
-	<ListPreference android:title="@string/use_srtp" android:key="use_srtp"
-		android:summary="@string/use_srtp_desc"
-		android:defaultValue="0"
-		android:entryValues="@array/use_srtp_values" android:entries="@array/use_srtp_choices"></ListPreference>
-	
-	<PreferenceCategory android:title="@string/misc">
-		<EditTextPreference android:key="vm_number" android:title="@string/voice_mail"/>
-	</PreferenceCategory>
-	
+    -->
+
+    <PreferenceCategory android:title="@string/w_expert_media_transport" >
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/use_srtp_choices"
+            android:entryValues="@array/use_srtp_values"
+            android:key="use_srtp"
+            android:summary="@string/use_srtp_desc"
+            android:title="@string/use_srtp" />
+
+        <EditTextPreference
+            android:defaultValue="-1"
+            android:dialogMessage="@string/leave_minus_1_default"
+            android:key="rtp_port"
+            android:numeric="signed"
+            android:summary="@string/network_rtp_port_desc"
+            android:title="@string/network_rtp_port" />
+        <EditTextPreference
+            android:dialogMessage="@string/w_expert_rtp_public_addr_desc"
+            android:key="rtp_public_addr"
+            android:summary="@string/w_expert_rtp_public_addr_desc"
+            android:title="@string/w_expert_rtp_bound_addr" />
+        <EditTextPreference
+            android:dialogMessage="@string/w_expert_rtp_bound_addr_desc"
+            android:key="rtp_bound_addr"
+            android:summary="@string/w_expert_rtp_bound_addr_desc"
+            android:title="@string/w_expert_rtp_bound_addr" />
+
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/auto_on_off_choices"
+            android:entryValues="@array/auto_on_off_values"
+            android:key="rtp_enable_qos"
+            android:summary="@string/enable_qos_desc"
+            android:title="@string/enable_qos" />
+
+        <EditTextPreference
+            android:defaultValue="-1"
+            android:dialogMessage="@string/leave_minus_1_default"
+            android:key="rtp_qos_dscp"
+            android:numeric="signed"
+            android:summary="@string/dscp_val_desc"
+            android:title="@string/dscp_val" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/misc" >
+        <EditTextPreference
+            android:key="vm_nbr"
+            android:title="@string/voice_mail" />
+
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/auto_on_off_choices"
+            android:entryValues="@array/auto_on_off_values"
+            android:key="vid_in_auto_show"
+            android:summary="@string/vid_in_auto_show_desc"
+            android:title="@string/vid_in_auto_show" />
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/auto_on_off_choices"
+            android:entryValues="@array/auto_on_off_values"
+            android:key="vid_out_auto_transmit"
+            android:summary="@string/vid_out_auto_transmit_desc"
+            android:title="@string/vid_out_auto_transmit" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Outbound proxy RFC5626" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="use_rfc5626"
+            android:summary="Control the use of SIP outbound feature. (currently only works with TCP and TLS transports)"
+            android:title="Enable RFC5626" />
+
+        <EditTextPreference
+            android:dialogMessage="Empty for auto generated, or look like &lt;urn:uuid:00000000-0000-1000-8000-AABBCCDDEEFF>"
+            android:key="rfc5626_instance_id"
+            android:summary="Specify SIP outbound (RFC 5626) instance ID to be use"
+            android:title="RFC5626 Instance id" />
+        <EditTextPreference
+            android:dialogMessage="Empty for auto generated."
+            android:key="rfc5626_reg_id"
+            android:summary="Specify SIP outbound (RFC 5626) registration ID."
+            android:title="RFC5626 Reg id" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

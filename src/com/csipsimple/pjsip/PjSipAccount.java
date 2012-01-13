@@ -17,12 +17,15 @@
  */
 package com.csipsimple.pjsip;
 
+import org.pjsip.pjsua.pj_qos_params;
+import org.pjsip.pjsua.pj_qos_type;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_config;
+import org.pjsip.pjsua.pjsua_transport_config;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -45,6 +48,10 @@ public class PjSipAccount {
 	public pjsua_acc_config cfg;
 	public Long id;
 	public Integer transport = 0;
+	private int profile_vid_auto_show = -1;
+	private int profile_vid_auto_transmit = -1;
+    private int profile_enable_qos;
+    private int profile_qos_dscp;
 	
 	//private boolean hasZrtpValue = false;
 
@@ -58,6 +65,10 @@ public class PjSipAccount {
 		cfg.setKa_interval(0);
 	}
 	
+	/**
+	 * Initialize from a SipProfile (public api) object
+	 * @param profile the sip profile to use
+	 */
 	public PjSipAccount(SipProfile profile) {
 		if(profile.id != SipProfile.INVALID_ID) {
 			id = profile.id;
@@ -149,11 +160,46 @@ public class PjSipAccount {
 		}else {
 			cfg.setCred_count(0);
 		}
+		
+		// RFC5626
+		cfg.setUse_rfc5626(profile.use_rfc5626? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+		if(!TextUtils.isEmpty(profile.rfc5626_instance_id)) {
+		    cfg.setRfc5626_instance_id(pjsua.pj_str_copy(profile.rfc5626_instance_id));
+		}
+		if(!TextUtils.isEmpty(profile.rfc5626_reg_id)) {
+            cfg.setRfc5626_reg_id(pjsua.pj_str_copy(profile.rfc5626_reg_id));
+        }
+		
+		
+		// Video
+		profile_vid_auto_show = profile.vid_in_auto_show;
+		profile_vid_auto_transmit = profile.vid_out_auto_transmit;
+		
+		
+		// Rtp cfg
+		pjsua_transport_config rtpCfg = cfg.getRtp_cfg();
+		if(profile.rtp_port >= 0) {
+		    rtpCfg.setPort(profile.rtp_port);
+		}
+		if(!TextUtils.isEmpty(profile.rtp_public_addr)) {
+		    rtpCfg.setPublic_addr(pjsua.pj_str_copy(profile.rtp_public_addr));
+		}
+        if(!TextUtils.isEmpty(profile.rtp_bound_addr)) {
+            rtpCfg.setBound_addr(pjsua.pj_str_copy(profile.rtp_bound_addr));
+        }
+        
+        profile_enable_qos = profile.rtp_enable_qos;
+        profile_qos_dscp = profile.rtp_qos_dscp;
+        
 	}
 	
 	
 
 
+	/**
+	 * Automatically apply csipsimple specific parameters to the account
+	 * @param ctxt
+	 */
 	public void applyExtraParams(Context ctxt) {
 		
 		// Transport
@@ -200,8 +246,6 @@ public class PjSipAccount {
 		//Caller id
 		PreferencesProviderWrapper prefs = new PreferencesProviderWrapper(ctxt);
 		String defaultCallerid = prefs.getPreferenceStringValue(SipConfigManager.DEFAULT_CALLER_ID);
-		
-		
 		// If one default caller is set 
 		if (!TextUtils.isEmpty(defaultCallerid)) {
 			String accId = PjSipService.pjStrToString(cfg.getId());
@@ -213,12 +257,43 @@ public class PjSipAccount {
 			}
 		}
 		
+		// Keep alive
 		cfg.setKa_interval(prefs.getKeepAliveInterval());
 		
-		// TODO : have video option as parameters of account
-		cfg.setVid_in_auto_show(pjsuaConstants.PJ_TRUE);
-		cfg.setVid_out_auto_transmit(pjsuaConstants.PJ_TRUE);
+		// Video 
+		if(profile_vid_auto_show >= 0) {
+		    cfg.setVid_in_auto_show((profile_vid_auto_show == 1) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+		}else {
+		    // TODO : add default global pref setting
+		    cfg.setVid_in_auto_show(pjsuaConstants.PJ_FALSE);
+		}
+		if(profile_vid_auto_transmit >= 0) {
+            cfg.setVid_out_auto_transmit((profile_vid_auto_transmit == 1) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+        }else {
+            // TODO : add default global pref setting
+            cfg.setVid_out_auto_transmit(pjsuaConstants.PJ_FALSE);
+        }
 		
+		
+		// RTP cfg
+		pjsua_transport_config rtpCfg = cfg.getRtp_cfg();
+		boolean hasQos = prefs.getPreferenceBooleanValue(SipConfigManager.ENABLE_QOS);
+        if(profile_enable_qos >= 0) {
+            hasQos = (profile_enable_qos == 1);
+        }
+        if(hasQos) {
+            short dscpVal = (short) prefs.getDSCPVal();
+            if(profile_qos_dscp >= 0) {
+                profile_qos_dscp = dscpVal;
+            }
+            // TODO - video?
+            rtpCfg.setQos_type(pj_qos_type.PJ_QOS_TYPE_VOICE);
+            pj_qos_params qosParam = rtpCfg.getQos_params();
+            qosParam.setDscp_val(dscpVal);
+            qosParam.setFlags((short) 1); // DSCP
+        }
+        
+        
 		// For now ZRTP option is not anymore account related but global option
 		/*
 		if(!hasZrtpValue) {

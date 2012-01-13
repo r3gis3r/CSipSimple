@@ -124,6 +124,23 @@ public class SipProfile implements Parcelable {
 
     public static final String FIELD_SIP_STACK = "sip_stack";
     public static final String FIELD_VOICE_MAIL_NBR = "vm_nbr";
+    
+    // Sip outbound
+    public static final String FIELD_USE_RFC5626 = "use_rfc5626";
+    public static final String FIELD_RFC5626_INSTANCE_ID = "rfc5626_instance_id";
+    public static final String FIELD_RFC5626_REG_ID = "rfc5626_reg_id";
+    
+    // Video config 
+    public static final String FIELD_VID_IN_AUTO_SHOW = "vid_in_auto_show";
+    public static final String FIELD_VID_OUT_AUTO_TRANSMIT = "vid_out_auto_transmit";
+    
+    // RTP config
+    public static final String FIELD_RTP_PORT = "rtp_port";
+    public static final String FIELD_RTP_PUBLIC_ADDR = "rtp_public_addr";
+    public static final String FIELD_RTP_BOUND_ADDR = "rtp_bound_addr";
+    public static final String FIELD_RTP_ENABLE_QOS = "rtp_enable_qos";
+    public static final String FIELD_RTP_QOS_DSCP = "rtp_qos_dscp";
+    
 
     public static final String FIELD_TRY_CLEAN_REGISTERS = "try_clean_reg";
 
@@ -169,7 +186,18 @@ public class SipProfile implements Parcelable {
     public int reg_delay_before_refresh = -1;
     public int try_clean_registers = 0;
     public Bitmap icon = null;
-
+    public boolean use_rfc5626 = true;
+    public String rfc5626_instance_id = "";
+    public String rfc5626_reg_id = "";
+    public int vid_in_auto_show = -1;
+    public int vid_out_auto_transmit = -1;
+    public int rtp_port = -1;
+    public String rtp_public_addr = "";
+    public String rtp_bound_addr = "";
+    public int rtp_enable_qos = -1;
+    public int rtp_qos_dscp = -1;
+    
+    
     public SipProfile() {
         display_name = "";
         wizard = "EXPERT";
@@ -212,6 +240,16 @@ public class SipProfile implements Parcelable {
         reg_delay_before_refresh = in.readInt();
         icon = (Bitmap) in.readParcelable(Bitmap.class.getClassLoader());
         try_clean_registers = in.readInt();
+        use_rfc5626 = (in.readInt() != 0);
+        rfc5626_instance_id = getReadParcelableString(in.readString());
+        rfc5626_reg_id = getReadParcelableString(in.readString());
+        vid_in_auto_show = in.readInt();
+        vid_out_auto_transmit = in.readInt();
+        rtp_port = in.readInt();
+        rtp_public_addr = getReadParcelableString(in.readString());
+        rtp_bound_addr = getReadParcelableString(in.readString());
+        rtp_enable_qos = in.readInt();
+        rtp_qos_dscp = in.readInt();
     }
 
     public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
@@ -264,6 +302,16 @@ public class SipProfile implements Parcelable {
         dest.writeInt(reg_delay_before_refresh);
         dest.writeParcelable((Parcelable) icon, flags);
         dest.writeInt(try_clean_registers);
+        dest.writeInt(use_rfc5626 ? 1 : 0);
+        dest.writeString(getWriteParcelableString(rfc5626_instance_id));
+        dest.writeString(getWriteParcelableString(rfc5626_reg_id));
+        dest.writeInt(vid_in_auto_show);
+        dest.writeInt(vid_out_auto_transmit);
+        dest.writeInt(rtp_port);
+        dest.writeString(getWriteParcelableString(rtp_public_addr));
+        dest.writeString(getWriteParcelableString(rtp_bound_addr));
+        dest.writeInt(rtp_enable_qos);
+        dest.writeInt(rtp_qos_dscp);
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -416,6 +464,53 @@ public class SipProfile implements Parcelable {
         if (tmp_i != null && tmp_i >= 0) {
             try_clean_registers = tmp_i;
         }
+        
+        // RFC 5626
+        tmp_i = args.getAsInteger(FIELD_USE_RFC5626);
+        if (tmp_i != null && tmp_i >= 0) {
+            use_rfc5626 = (tmp_i != 0);
+        }
+        tmp_s = args.getAsString(FIELD_RFC5626_INSTANCE_ID);
+        if (tmp_s != null) {
+            rfc5626_instance_id = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_RFC5626_REG_ID);
+        if (tmp_s != null) {
+            rfc5626_reg_id = tmp_s;
+        }
+        
+        // Video
+        tmp_i = args.getAsInteger(FIELD_VID_IN_AUTO_SHOW);
+        if (tmp_i != null && tmp_i >= 0) {
+            vid_in_auto_show = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_VID_OUT_AUTO_TRANSMIT);
+        if (tmp_i != null && tmp_i >= 0) {
+            vid_out_auto_transmit = tmp_i;
+        }
+        
+        // RTP cfg
+        tmp_i = args.getAsInteger(FIELD_RTP_PORT);
+        if (tmp_i != null && tmp_i >= 0) {
+            rtp_port = tmp_i;
+        }
+        tmp_s = args.getAsString(FIELD_RTP_PUBLIC_ADDR);
+        if (tmp_s != null) {
+            rtp_public_addr = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_RTP_BOUND_ADDR);
+        if (tmp_s != null) {
+            rtp_bound_addr = tmp_s;
+        }
+        tmp_i = args.getAsInteger(FIELD_RTP_ENABLE_QOS);
+        if (tmp_i != null && tmp_i >= 0) {
+            rtp_enable_qos = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_RTP_QOS_DSCP);
+        if (tmp_i != null && tmp_i >= 0) {
+            rtp_qos_dscp = tmp_i;
+        }
+        
     }
 
     /**
