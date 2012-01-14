@@ -45,6 +45,7 @@ import android.widget.ListView;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.ui.calllog.CallLogAdapter.OnCallLogAction;
 import com.csipsimple.utils.Compatibility;
@@ -255,7 +256,7 @@ public class CallLogFragment extends ListFragment implements ViewPagerVisibility
     public void placeCall(String number, Long accId) {
         if(!TextUtils.isEmpty(number)) {
             Intent it = new Intent(Intent.ACTION_CALL);
-            it.setData(Uri.parse("csip:" + number));
+            it.setData(Uri.fromParts("csip", SipUri.getCanonicalSipContact(number, false), null));
             it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if(accId != null) {
                 it.putExtra(SipProfile.FIELD_ACC_ID, accId);
