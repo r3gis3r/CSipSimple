@@ -864,7 +864,14 @@ public class PjSipService {
     public int callAnswer(int callId, int code) throws SameThreadException {
 
         if (created) {
-            return pjsua.call_answer(callId, code, null, null);
+
+            pjsua_call_setting cs = new pjsua_call_setting();
+            pjsua.call_setting_default(cs);
+            cs.setAud_cnt(1);
+            cs.setVid_cnt(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO) ? 1 : 0);
+            cs.setFlag(0);
+            return pjsua.call_answer2(callId, cs, code, null, null);
+            //return pjsua.call_answer(callId, code, null, null);
         }
         return -1;
     }
