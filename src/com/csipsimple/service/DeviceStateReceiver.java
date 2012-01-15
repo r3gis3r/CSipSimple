@@ -30,7 +30,7 @@ import android.os.Bundle;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.CallHandler;
-import com.csipsimple.utils.ExtraCodecs;
+import com.csipsimple.utils.ExtraPlugins;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.NightlyUpdater;
 import com.csipsimple.utils.PreferencesProviderWrapper;
@@ -147,7 +147,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
         } else if (Intent.ACTION_PACKAGE_ADDED.equalsIgnoreCase(intentAction) ||
                 Intent.ACTION_PACKAGE_REMOVED.equalsIgnoreCase(intentAction)) {
             CallHandler.clearAvailableCallHandlers();
-            ExtraCodecs.clearDynCodecs();
+            ExtraPlugins.clearDynPlugins();
         } else if (APPLY_NIGHTLY_UPLOAD.equals(intentAction)) {
             NightlyUpdater nu = new NightlyUpdater(context);
             nu.applyUpdate(intent);

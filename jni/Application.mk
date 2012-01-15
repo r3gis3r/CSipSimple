@@ -1,22 +1,10 @@
 
+#APP_OPTIM        := debug
+APP_OPTIM        := release
 
-APP_OPTIM        := debug
-#APP_OPTIM        := release
-
-
-ifeq ($(CSS_BUILD_TARGET),armv4t)
-APP_ABI := armv4t 
-else
-ifeq ($(CSS_BUILD_TARGET),armeabi)
-APP_ABI := armeabi 
-else
-ifeq ($(CSS_BUILD_TARGET),armeabi-v7a)
-APP_ABI := armeabi-v7a
-else
 APP_ABI := armeabi armeabi-v7a
-endif
-endif
-endif
+
+
 
 MY_USE_CSIPSIMPLE := 1
 

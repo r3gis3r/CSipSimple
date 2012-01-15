@@ -18,33 +18,6 @@
 
 package com.csipsimple.pjsip;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.pjsip.pjsua.csipsimple_config;
-import org.pjsip.pjsua.dynamic_factory;
-import org.pjsip.pjsua.pj_qos_params;
-import org.pjsip.pjsua.pj_str_t;
-import org.pjsip.pjsua.pjmedia_srtp_use;
-import org.pjsip.pjsua.pjsip_timer_setting;
-import org.pjsip.pjsua.pjsip_tls_setting;
-import org.pjsip.pjsua.pjsip_transport_type_e;
-import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsuaConstants;
-import org.pjsip.pjsua.pjsua_acc_config;
-import org.pjsip.pjsua.pjsua_acc_info;
-import org.pjsip.pjsua.pjsua_call_flag;
-import org.pjsip.pjsua.pjsua_call_setting;
-import org.pjsip.pjsua.pjsua_config;
-import org.pjsip.pjsua.pjsua_logging_config;
-import org.pjsip.pjsua.pjsua_media_config;
-import org.pjsip.pjsua.pjsua_transport_config;
-
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -66,14 +39,40 @@ import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.ToCall;
-import com.csipsimple.utils.ExtraCodecs;
-import com.csipsimple.utils.ExtraCodecs.DynCodecInfos;
-import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.ExtraPlugins;
+import com.csipsimple.utils.ExtraPlugins.DynCodecInfos;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.TimerWrapper;
 import com.csipsimple.wizards.WizardUtils;
+
+import org.pjsip.pjsua.csipsimple_config;
+import org.pjsip.pjsua.dynamic_factory;
+import org.pjsip.pjsua.pj_qos_params;
+import org.pjsip.pjsua.pj_str_t;
+import org.pjsip.pjsua.pjmedia_srtp_use;
+import org.pjsip.pjsua.pjsip_timer_setting;
+import org.pjsip.pjsua.pjsip_tls_setting;
+import org.pjsip.pjsua.pjsip_transport_type_e;
+import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
+import org.pjsip.pjsua.pjsua_acc_config;
+import org.pjsip.pjsua.pjsua_acc_info;
+import org.pjsip.pjsua.pjsua_call_flag;
+import org.pjsip.pjsua.pjsua_call_setting;
+import org.pjsip.pjsua.pjsua_config;
+import org.pjsip.pjsua.pjsua_logging_config;
+import org.pjsip.pjsua.pjsua_media_config;
+import org.pjsip.pjsua.pjsua_transport_config;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PjSipService {
     private static final String THIS_FILE = "PjService";
@@ -238,7 +237,7 @@ public class PjSipService {
                     cssCfg.setUse_zrtp(pjsua.PJ_FALSE);
                 }
 
-                Map<String, DynCodecInfos> availableCodecs = ExtraCodecs.getDynAudioCodecs(service);
+                Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynAudioCodecs(service);
                 dynamic_factory[] cssCodecs = cssCfg.getExtra_aud_codecs();
                 int i = 0;
                 for (Entry<String, DynCodecInfos> availableCodec : availableCodecs.entrySet()) {
@@ -265,40 +264,42 @@ public class PjSipService {
                 }
 
                 // Video implementation
-                if(Compatibility.isCompatible(5) && prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)){
-                    File videoLib = NativeLibManager.getBundledStackLibFile(service,
-                            "libpj_video_android.so");
-                    // Render
-                    {
-                        dynamic_factory vidImpl = cssCfg.getVideo_render_implementation();
-                        vidImpl.setInit_factory_name(pjsua
-                                .pj_str_copy("pjmedia_webrtc_vid_render_factory"));
-                        vidImpl.setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
-                    }
-                    // Capture
-                    {
-                        dynamic_factory vidImpl = cssCfg.getVideo_capture_implementation();
-                        vidImpl.setInit_factory_name(pjsua
-                                .pj_str_copy("pjmedia_webrtc_vid_capture_factory"));
-                        vidImpl.setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
-                    }
-                    // Codecs
-                    cssCodecs = cssCfg.getExtra_vid_codecs();
-                    cssCodecs[0].setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
-                    cssCodecs[0].setInit_factory_name(pjsua
-                            .pj_str_copy("pjmedia_codec_ffmpeg_init"));
-                    cssCodecs = cssCfg.getExtra_vid_codecs_destroy();
-                    cssCodecs[0].setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
-                    cssCodecs[0].setInit_factory_name(pjsua
-                            .pj_str_copy("pjmedia_codec_ffmpeg_deinit"));
-                    cssCfg.setExtra_vid_codecs_cnt(1);
+                if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)){
+                    DynCodecInfos videoPlugin = ExtraPlugins.getDynVideoLib(service);
                     
-                    // Converter
-                    dynamic_factory convertImpl = cssCfg.getVid_converter();
-                    convertImpl.setShared_lib_path(pjsua.pj_str_copy(videoLib.getAbsolutePath()));
-                    convertImpl.setInit_factory_name(pjsua
-                            .pj_str_copy("pjmedia_libswscale_converter_init"));
-                    
+                    if(videoPlugin != null) {
+                        pj_str_t pjVideoFile = pjsua.pj_str_copy(videoPlugin.libraryPath);
+                        // Render
+                        {
+                            dynamic_factory vidImpl = cssCfg.getVideo_render_implementation();
+                            vidImpl.setInit_factory_name(pjsua
+                                    .pj_str_copy("pjmedia_webrtc_vid_render_factory"));
+                            vidImpl.setShared_lib_path(pjVideoFile);
+                        }
+                        // Capture
+                        {
+                            dynamic_factory vidImpl = cssCfg.getVideo_capture_implementation();
+                            vidImpl.setInit_factory_name(pjsua
+                                    .pj_str_copy("pjmedia_webrtc_vid_capture_factory"));
+                            vidImpl.setShared_lib_path(pjVideoFile);
+                        }
+                        // Codecs
+                        cssCodecs = cssCfg.getExtra_vid_codecs();
+                        cssCodecs[0].setShared_lib_path(pjVideoFile);
+                        cssCodecs[0].setInit_factory_name(pjsua
+                                .pj_str_copy("pjmedia_codec_ffmpeg_init"));
+                        cssCodecs = cssCfg.getExtra_vid_codecs_destroy();
+                        cssCodecs[0].setShared_lib_path(pjVideoFile);
+                        cssCodecs[0].setInit_factory_name(pjsua
+                                .pj_str_copy("pjmedia_codec_ffmpeg_deinit"));
+                        cssCfg.setExtra_vid_codecs_cnt(1);
+                        
+                        // Converter
+                        dynamic_factory convertImpl = cssCfg.getVid_converter();
+                        convertImpl.setShared_lib_path(pjVideoFile);
+                        convertImpl.setInit_factory_name(pjsua
+                                .pj_str_copy("pjmedia_libswscale_converter_init"));
+                    }
                 }
 
                 // MAIN CONFIG

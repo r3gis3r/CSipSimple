@@ -35,7 +35,7 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.pjsip.NativeLibManager;
 import com.csipsimple.pjsip.PjSipService;
 
-public class ExtraCodecs {
+public class ExtraPlugins {
 
 	public static class DynCodecInfos {
 		public String libraryPath;
@@ -68,11 +68,20 @@ public class ExtraCodecs {
 	}
 
 
-	private static final String THIS_FILE = "ExtraCodecs";
+	private static final String THIS_FILE = "ExtraPlugins";
 	
 	
 	private static Map<String, DynCodecInfos> AVAILABLE_DYN_AUDIO_CODECS = null;
+	private static DynCodecInfos VIDEO_PLUGIN = null;
+	private static boolean HAS_SEARCHED_VIDEO_PLUGIN = false; 
 	
+	/**
+	 * Retrieve all dynamic audio codecs available in the platform
+	 * It will resolve @see SipManager#ACTION_GET_EXTRA_CODECS
+	 * to find codecs and fill codecs infos with metadata
+	 * @param ctxt Context of the application
+	 * @return a map containing codec infos and registrer component name as key
+	 */
 	public static Map<String, DynCodecInfos> getDynAudioCodecs(Context ctxt){
 		if(AVAILABLE_DYN_AUDIO_CODECS == null) {
 			AVAILABLE_DYN_AUDIO_CODECS = new HashMap<String, DynCodecInfos>();
@@ -98,8 +107,44 @@ public class ExtraCodecs {
 		return AVAILABLE_DYN_AUDIO_CODECS;
 	}
 	
-	public static void clearDynCodecs() {
+	/**
+	 * Reset all dynamic plugins infos
+	 */
+	public static void clearDynPlugins() {
 		AVAILABLE_DYN_AUDIO_CODECS = null;
+		HAS_SEARCHED_VIDEO_PLUGIN = false;
 		PjSipService.resetCodecs();
+	}
+	
+	/**
+	 * For now we use a codec info as placeholder for the library name
+	 * We don't really care of the init meta info
+	 * @param ctxt The context of the application
+	 * @return information containing path to the video library
+	 */
+	public static DynCodecInfos getDynVideoLib(Context ctxt) {
+	    if(HAS_SEARCHED_VIDEO_PLUGIN) {
+	        return VIDEO_PLUGIN;
+	    }
+	    
+        PackageManager packageManager = ctxt.getPackageManager();
+        Intent it = new Intent(SipManager.ACTION_GET_VIDEO_PLUGIN);
+        
+        List<ResolveInfo> availables = packageManager.queryBroadcastReceivers(it, 0);
+        Log.d(THIS_FILE, "Dyn video > "+availables.size());
+        if(availables.size() > 0) {
+            ActivityInfo actInfos = availables.get(0).activityInfo;
+            Log.d(THIS_FILE, "Dyn video > "+ actInfos.packageName);
+            if( packageManager.checkPermission(SipManager.PERMISSION_CONFIGURE_SIP, actInfos.packageName) == PackageManager.PERMISSION_GRANTED) {
+                ComponentName cmp = new ComponentName(actInfos.packageName, actInfos.name);
+                try {
+                    VIDEO_PLUGIN = new DynCodecInfos(ctxt, cmp);
+                } catch (NameNotFoundException e) {
+                    Log.e(THIS_FILE, "Error while retrieving infos from dyn codec ", e);
+                }
+            }
+        }
+        HAS_SEARCHED_VIDEO_PLUGIN = true;
+	    return VIDEO_PLUGIN;
 	}
 }

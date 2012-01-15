@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjmedia/src/pjmedia-codec/ffmpeg_codecs.c
 ===================================================================
---- pjsip.orig/sources/pjmedia/src/pjmedia-codec/ffmpeg_codecs.c	2012-01-03 21:54:50.680889628 +0100
-+++ pjsip/sources/pjmedia/src/pjmedia-codec/ffmpeg_codecs.c	2012-01-03 21:56:19.577330430 +0100
+--- pjsip.orig/sources/pjmedia/src/pjmedia-codec/ffmpeg_codecs.c	2012-01-08 16:08:36.439047748 +0100
++++ pjsip/sources/pjmedia/src/pjmedia-codec/ffmpeg_codecs.c	2012-01-08 20:51:05.995096055 +0100
 @@ -918,7 +918,8 @@
      /* Decoded format */
      pjmedia_format_init_video(&attr->dec_fmt, desc->info.dec_fmt_id[0],
@@ -12,15 +12,3 @@ Index: pjsip/sources/pjmedia/src/pjmedia-codec/ffmpeg_codecs.c
  
      /* Decoding fmtp */
      attr->dec_fmtp = desc->dec_fmtp;
-Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_vid.c
-===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_vid.c	2012-01-03 21:56:44.413453586 +0100
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_vid.c	2012-01-03 21:57:15.213606324 +0100
-@@ -594,6 +594,7 @@
- 		  "%s window id %d created for cap_dev=%d rend_dev=%d",
- 		  pjsua_vid_win_type_name(type), wid, cap_id, rend_id));
-     } else {
-+	status = pjmedia_vid_port_connect(w->vp_cap, w->tee, PJ_FALSE);
- 	PJ_LOG(4,(THIS_FILE,
- 		  "Preview window id %d created for cap_dev %d, "
- 		  "using built-in preview!",

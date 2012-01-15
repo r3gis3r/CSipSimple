@@ -115,9 +115,11 @@
         </activity>
 
         <!-- Main service -->
+        <!-- Require at least the configure permission to use -->
         <service
             android:name="com.csipsimple.service.SipService"
             android:exported="true"
+            android:permission="android.permission.CONFIGURE_SIP"
             android:process=":sipStack" >
             <intent-filter>
                 <action android:name="com.csipsimple.service.SipService" />
