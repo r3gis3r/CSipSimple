@@ -265,7 +265,7 @@ public class PjSipService {
                 }
 
                 // Video implementation
-                if(Compatibility.isCompatible(5)){
+                if(Compatibility.isCompatible(5) && prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)){
                     File videoLib = NativeLibManager.getBundledStackLibFile(service,
                             "libpj_video_android.so");
                     // Render
@@ -917,7 +917,7 @@ public class PjSipService {
             pjsua_call_setting cs = new pjsua_call_setting();
             pjsua.call_setting_default(cs);
             cs.setAud_cnt(1);
-            cs.setVid_cnt(1); // TODO -- init video later if option
+            cs.setVid_cnt(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO) ? 1 : 0);
             cs.setFlag(0);
             return pjsua
                     .call_make_call(toCall.getPjsipAccountId(), uri, cs, userData, null, callId);

@@ -85,7 +85,7 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Theme;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
@@ -147,7 +147,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
     private boolean proximitySensorTracked = false;
     private PowerManager powerManager;
     private WakeLock proximityWakeLock;
-    private PreferencesWrapper prefsWrapper;
+    private PreferencesProviderWrapper prefsWrapper;
 
     // Dnd views
     private ImageView endCallTarget;
@@ -176,8 +176,8 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         
 
         bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
-        prefsWrapper = new PreferencesWrapper(this);
-        invertProximitySensor = prefsWrapper.invertProximitySensor();
+        prefsWrapper = new PreferencesProviderWrapper(this);
+        invertProximitySensor = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INVERT_PROXIMITY_SENSOR);
 
         // Log.d(THIS_FILE, "Creating call handler for " +
         // callInfo.getCallId()+" state "+callInfo.getRemoteContact());
@@ -244,14 +244,16 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         }
         
         // Video stuff
-        if(cameraPreview == null) {
-            // TODO : make visible only if one of calls is video one
-            cameraPreview = ViERenderer.CreateLocalRenderer(this);
-            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(100, 100);
-            lp.gravity = Gravity.TOP | Gravity.LEFT;
-            cameraPreview.setVisibility(View.GONE);
-            mainFrame.addView(cameraPreview, lp);
-            
+        if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
+            if(cameraPreview == null) {
+                // TODO : make visible only if one of calls is video one
+                cameraPreview = ViERenderer.CreateLocalRenderer(this);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(100, 100);
+                lp.gravity = Gravity.TOP | Gravity.LEFT;
+                cameraPreview.setVisibility(View.GONE);
+                mainFrame.addView(cameraPreview, lp);
+                
+            }
         }
         
         applyTheme();

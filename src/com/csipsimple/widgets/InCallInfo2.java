@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
@@ -44,6 +45,7 @@ import com.csipsimple.ui.InCallActivity2.OnBadgeTouchListener;
 import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.widgets.InCallControls2.OnTriggerListener;
 
 import org.webrtc.videoengine.ViERenderer;
@@ -66,12 +68,15 @@ public class InCallInfo2 extends ExtensibleBadge {
     private SurfaceView renderView;
     private int callCardBorderWidth;
     private int callCardBorderHeight;
+    private PreferencesProviderWrapper prefs;
     
 
     public InCallInfo2(Context context, AttributeSet attrs) {
         super(context, attrs);
         initControllerView();
 
+        prefs = new PreferencesProviderWrapper(context);
+        
         // Width : only border
         callCardBorderWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
         
@@ -124,26 +129,29 @@ public class InCallInfo2 extends ExtensibleBadge {
         cachedInvState = callInfo.getCallState();
         cachedMediaState = callInfo.getMediaStatus();
 
+        
         // VIDEO STUFF -- EXPERIMENTAL
-        if (callInfo.getCallId() >= 0 && callInfo.mediaHasVideo()) {
-            if (renderView == null) {
-                renderView = ViERenderer.CreateRenderer(getContext(), true);
-                photo.setVisibility(View.GONE);
-                FrameLayout container = (FrameLayout) findViewById(R.id.card_img_container);
-                ViewGroup.LayoutParams photoLp = photo.getLayoutParams();
-                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                        photoLp.width,
-                        photoLp.height);
-                renderView.setLayoutParams(lp);
-                container.addView(renderView, 0);
-
-            }
-            
-            SipService.setVideoWindow(callInfo.getCallId(), renderView);
-        }else {
-            if(renderView != null) {
-                renderView.setVisibility(View.GONE);
-                photo.setVisibility(View.VISIBLE);
+        if(prefs.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
+            if (callInfo.getCallId() >= 0 && callInfo.mediaHasVideo()) {
+                if (renderView == null) {
+                    renderView = ViERenderer.CreateRenderer(getContext(), true);
+                    photo.setVisibility(View.GONE);
+                    FrameLayout container = (FrameLayout) findViewById(R.id.card_img_container);
+                    ViewGroup.LayoutParams photoLp = photo.getLayoutParams();
+                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                            photoLp.width,
+                            photoLp.height);
+                    renderView.setLayoutParams(lp);
+                    container.addView(renderView, 0);
+    
+                }
+                
+                SipService.setVideoWindow(callInfo.getCallId(), renderView);
+            }else {
+                if(renderView != null) {
+                    renderView.setVisibility(View.GONE);
+                    photo.setVisibility(View.VISIBLE);
+                }
             }
         }
         

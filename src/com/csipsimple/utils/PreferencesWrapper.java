@@ -170,6 +170,7 @@ public class PreferencesWrapper {
 		//Calls
 		put(SipConfigManager.AUTO_RECORD_CALLS, false);
 		put(SipConfigManager.SUPPORT_MULTIPLE_CALLS, false);
+        put(SipConfigManager.USE_VIDEO, false);
 		
 		//Secure
 		put(SipConfigManager.TLS_VERIFY_SERVER, false);
@@ -522,10 +523,6 @@ public class PreferencesWrapper {
 
 	public boolean useAlternateUnlocker() {
 		return prefs.getBoolean(SipConfigManager.USE_ALTERNATE_UNLOCKER, false);
-	}
-	
-	public boolean invertProximitySensor() {
-		return getPreferenceBooleanValue(SipConfigManager.INVERT_PROXIMITY_SENSOR);
 	}
 
 	

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
+<!--
 		Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 		
 		This file is part of CSipSimple.
@@ -15,20 +15,29 @@
 		General Public License for more details. You should have received a
 		copy of the GNU General Public License along with CSipSimple. If not,
 		see <http://www.gnu.org/licenses/>. 
-	-->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-	
-	<EditTextPreference android:title="@string/w_advanced_caller_id"
-		android:key="default_caller_id"
-		android:summary="@string/w_advanced_caller_id_desc"
-		android:defaultValue=""/>
-	<CheckBoxPreference android:title="@string/auto_record_calls"
-		android:summary="@string/auto_record_calls_desc"
-		android:key="auto_record_calls"
-		android:defaultValue="false"/>
-	<CheckBoxPreference android:title="@string/support_multiple_calls"
-		android:summary="@string/support_multiple_calls_desc"
-		android:key="support_multiple_calls"
-		android:defaultValue="false"/>
+    <EditTextPreference
+        android:defaultValue=""
+        android:key="default_caller_id"
+        android:summary="@string/w_advanced_caller_id_desc"
+        android:title="@string/w_advanced_caller_id" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="auto_record_calls"
+        android:summary="@string/auto_record_calls_desc"
+        android:title="@string/auto_record_calls" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="support_multiple_calls"
+        android:summary="@string/support_multiple_calls_desc"
+        android:title="@string/support_multiple_calls" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="use_video"
+        android:summary="@string/use_video_desc"
+        android:title="@string/use_video" />
+
 </PreferenceScreen>
