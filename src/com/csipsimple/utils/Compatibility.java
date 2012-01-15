@@ -356,6 +356,7 @@ public final class Compatibility {
     }
 
     public static void setFirstRunParameters(PreferencesWrapper preferencesWrapper) {
+        preferencesWrapper.startEditing();
         resetCodecsSettings(preferencesWrapper);
 
         preferencesWrapper.setPreferenceStringValue(SipConfigManager.SND_MEDIA_QUALITY, getCpuAbi()
@@ -412,7 +413,7 @@ public final class Compatibility {
         
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                 isTabletScreen(preferencesWrapper.getContext()));
-
+        preferencesWrapper.endEditing();
     }
 
     public static boolean useFlipAnimation() {
@@ -512,6 +513,8 @@ public final class Compatibility {
 
     public static void updateVersion(PreferencesWrapper prefWrapper, int lastSeenVersion,
             int runningVersion) {
+        
+        prefWrapper.startEditing();
         if (lastSeenVersion < 14) {
 
             // Galaxy S default settings
@@ -667,10 +670,13 @@ public final class Compatibility {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                     isTabletScreen(prefWrapper.getContext()));
         }
+        
+        prefWrapper.endEditing();
     }
 
     public static void updateApiVersion(PreferencesWrapper prefWrapper, int lastSeenVersion,
             int runningVersion) {
+        prefWrapper.startEditing();
         // Always do for downgrade cases
         // if(isCompatible(9)) {
         // Reset media settings since now interface is clean and works (should
@@ -695,6 +701,8 @@ public final class Compatibility {
                 needPspWorkaround());
 
         // }
+        
+        prefWrapper.endEditing();
     }
 
     public static boolean isTabletScreen(Context ctxt) {

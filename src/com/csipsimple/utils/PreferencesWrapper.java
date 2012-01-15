@@ -17,25 +17,24 @@
  */
 package com.csipsimple.utils;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.regex.Pattern;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipConfigManager;
-import com.csipsimple.ui.SipHome;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.regex.Pattern;
 
 
 public class PreferencesWrapper {
@@ -45,12 +44,15 @@ public class PreferencesWrapper {
 	public static final String IS_ADVANCED_USER = "is_advanced_user";
 	public static final String HAS_ALREADY_SETUP = "has_already_setup";
 	public static final String HAS_ALREADY_SETUP_SERVICE = "has_already_setup_service";
+    public static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
+    public static final String LAST_KNOWN_ANDROID_VERSION_PREF = "last_known_aos_version";
 	
 	
 	private static final String THIS_FILE = "PreferencesWrapper";
 	private SharedPreferences prefs;
 	private ContentResolver resolver;
 	private Context context;
+    private Editor sharedEditor;
 
 	
 	
@@ -194,8 +196,71 @@ public class PreferencesWrapper {
 		prefs = PreferenceManager.getDefaultSharedPreferences(aContext);
 		resolver = aContext.getContentResolver();
 		
+		// Check if we need an upgrade here
+		// BUNDLE MODE -- upgrade settings
+        Integer runningVersion = needUpgrade();
+        if (runningVersion != null) {
+            Editor editor = prefs.edit();
+            editor.putInt(LAST_KNOWN_VERSION_PREF, runningVersion);
+            editor.commit();
+        }
+	}
+
+    /**
+     * Check wether an upgrade is needed
+     * 
+     * @return null if not needed, else the new version to upgrade to
+     */
+    private Integer needUpgrade() {
+        Integer runningVersion = null;
+        // Application upgrade
+        PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(context);
+        if (pinfo != null) {
+            runningVersion = pinfo.versionCode;
+            int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
+
+            Log.d(THIS_FILE, "Last known version is " + lastSeenVersion
+                    + " and currently we are running " + runningVersion);
+            if (lastSeenVersion != runningVersion) {
+                Compatibility.updateVersion(this, lastSeenVersion, runningVersion);
+            } else {
+                runningVersion = null;
+            }
+        }
+
+        // Android upgrade
+        {
+            int lastSeenVersion = prefs.getInt(LAST_KNOWN_ANDROID_VERSION_PREF, 0);
+            Log.d(THIS_FILE, "Last known android version " + lastSeenVersion);
+            if (lastSeenVersion != Compatibility.getApiLevel()) {
+                Compatibility.updateApiVersion(this, lastSeenVersion,
+                        Compatibility.getApiLevel());
+                Editor editor = prefs.edit();
+                editor.putInt(LAST_KNOWN_ANDROID_VERSION_PREF, Compatibility.getApiLevel());
+                editor.commit();
+            }
+        }
+        return runningVersion;
+    }
+	
+	
+	/**
+	 * Enter in edit mode
+	 * To use for bulk modifications
+	 */
+	public void startEditing() {
+	    sharedEditor = prefs.edit();
 	}
 	
+	/**
+	 * Leave edit mode
+	 */
+	public void endEditing() {
+	    if(sharedEditor != null) {
+	        sharedEditor.commit();
+	        sharedEditor = null;
+	    }
+	}
 
 	//Public setters
 	/**
@@ -204,10 +269,13 @@ public class PreferencesWrapper {
 	 * @param value the value for this key
 	 */
 	public void setPreferenceStringValue(String key, String value) {
-		//TODO : authorized values
-		Editor editor = prefs.edit();
-		editor.putString(key, value);
-		editor.commit();
+	    if(sharedEditor == null) {
+    		Editor editor = prefs.edit();
+    		editor.putString(key, value);
+    		editor.commit();
+	    }else {
+	        sharedEditor.putString(key, value);
+	    }
 	}
 	
 	/**
@@ -216,9 +284,13 @@ public class PreferencesWrapper {
 	 * @param value the value for this key
 	 */
 	public void setPreferenceBooleanValue(String key, boolean value) {
-		Editor editor = prefs.edit();
-		editor.putBoolean(key, value);
-		editor.commit();
+	    if(sharedEditor == null) {
+    		Editor editor = prefs.edit();
+    		editor.putBoolean(key, value);
+    		editor.commit();
+	    }else {
+	        sharedEditor.putBoolean(key, value);
+	    }
 	}
 	
 	/**
@@ -227,10 +299,13 @@ public class PreferencesWrapper {
 	 * @param value the value for this key
 	 */
 	public void setPreferenceFloatValue(String key, float value) {
-		Editor editor = prefs.edit();
-		editor.putFloat(key, value);
-		editor.commit();
-		Log.d(THIS_FILE, "Changed value of "+key+" : "+value);
+	    if(sharedEditor == null) {
+    		Editor editor = prefs.edit();
+    		editor.putFloat(key, value);
+    		editor.commit();
+	    }else {
+	        sharedEditor.putFloat(key, value);
+	    }
 	}
 	
 	//Private static getters
@@ -247,7 +322,10 @@ public class PreferencesWrapper {
 		if(BOOLEAN_PREFS.containsKey(key)) {
 			return aPrefs.getBoolean(key, BOOLEAN_PREFS.get(key));
 		}
-		return aPrefs.getBoolean(key, (Boolean) null);
+		if(aPrefs.contains(key)) {
+		    return aPrefs.getBoolean(key, false);
+		}
+		return null;
 	}
 	
 	// For float
@@ -255,7 +333,10 @@ public class PreferencesWrapper {
 		if(FLOAT_PREFS.containsKey(key)) {
 			return aPrefs.getFloat(key, FLOAT_PREFS.get(key));
 		}
-		return aPrefs.getFloat(key, (Float) null) ;
+		if(aPrefs.contains(key)) {
+		    return aPrefs.getFloat(key, 0.0f); 
+		}
+		return null;
 	}
 	
 	public static Class<?> gPrefClass(String key) {
@@ -354,16 +435,22 @@ public class PreferencesWrapper {
 		
 		
 		// And get latest known version so that restore will be able to apply necessary patches
-		int lastSeenVersion = prefs.getInt(SipHome.LAST_KNOWN_VERSION_PREF, 0);
+		int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
 		try {
-			jsonSipSettings.put(SipHome.LAST_KNOWN_VERSION_PREF, lastSeenVersion);
+			jsonSipSettings.put(LAST_KNOWN_VERSION_PREF, lastSeenVersion);
 		} catch (JSONException e) {
 			Log.e(THIS_FILE, "Not able to add last known version pref");
 		}
 		return jsonSipSettings;
 	}
 	
+	/**
+	 * Restore settings from a json object
+	 * @param jsonSipSettings the json objet to restore from
+	 */
 	public void restoreSipSettings(JSONObject jsonSipSettings) {
+	    
+	    startEditing();
 		for(String key : STRING_PREFS.keySet() ) {
 			try {
 				String val = jsonSipSettings.getString(key);
@@ -399,43 +486,17 @@ public class PreferencesWrapper {
 		
 		// And get latest known version so that restore will be able to apply necessary patches
 		try {
-			Integer lastSeenVersion = jsonSipSettings.getInt(SipHome.LAST_KNOWN_VERSION_PREF);
+			Integer lastSeenVersion = jsonSipSettings.getInt(LAST_KNOWN_VERSION_PREF);
 			if(lastSeenVersion != null) {
-				Editor editor = prefs.edit();
-				editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, lastSeenVersion);
-				editor.commit();
+			    sharedEditor.putInt(LAST_KNOWN_VERSION_PREF, lastSeenVersion);
 			}
 		} catch (JSONException e) {
 			Log.e(THIS_FILE, "Not able to add last known version pref");
 		}
-	}
-	
-	
-	public SharedPreferences getDirectPrefs() {
-		return prefs;
-	}
-	
-	
-
-	public ArrayList<String> getAllIncomingNetworks(){
-		ArrayList<String> incomingNetworks = new ArrayList<String>();
-		String[] availableNetworks = {"3g", "edge", "gprs", "wifi", "other"};
-		for(String network:availableNetworks) {
-			if(getPreferenceBooleanValue("use_"+network+"_in")) {
-				incomingNetworks.add(network);
-			}
-		}
 		
-		return incomingNetworks;
+		endEditing();
 	}
 	
-
-	public void disableAllForIncoming() {
-		String[] availableNetworks = {"3g", "edge", "gprs", "wifi", "other"};
-		for(String network:availableNetworks) {
-			setPreferenceBooleanValue("use_"+network+"_in", false);
-		}
-	}
 	
 	
 	private boolean hasStunServer(String string) {
@@ -523,15 +584,6 @@ public class PreferencesWrapper {
 
 	public boolean useAlternateUnlocker() {
 		return prefs.getBoolean(SipConfigManager.USE_ALTERNATE_UNLOCKER, false);
-	}
-
-	
-	public int getLogLevel() {
-		int prefsValue = getPreferenceIntegerValue(SipConfigManager.LOG_LEVEL);
-		if(prefsValue <= 6 && prefsValue >= 1) {
-			return prefsValue;
-		}
-		return 1;
 	}
 	
 	

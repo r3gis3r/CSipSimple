@@ -176,8 +176,9 @@ public class NightlyUpdater {
 						}
 					});
 			}
-			
+
 			ab.create().show();
+			
 		}
 	}
 

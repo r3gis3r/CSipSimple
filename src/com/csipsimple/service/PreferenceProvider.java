@@ -118,7 +118,12 @@ public class PreferenceProvider extends ContentProvider {
 			} else if (aClass == Float.class) {
 				value = prefs.getPreferenceFloatValue(name);
 			} else if (aClass == Boolean.class) {
-				value = prefs.getPreferenceBooleanValue(name) ? 1 : 0;
+			    Boolean v = prefs.getPreferenceBooleanValue(name);
+			    if(v != null) {
+			        value = v ? 1 : 0;
+			    }else {
+			        value = -1;
+			    }
 			}
 			if (value != null) {
 				resCursor.addRow(new Object[] { name, value });

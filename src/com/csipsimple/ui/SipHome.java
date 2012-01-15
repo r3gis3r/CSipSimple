@@ -22,15 +22,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.ActionBar.Tab;
 import android.support.v4.app.DialogFragment;
@@ -78,9 +75,6 @@ public class SipHome extends FragmentActivity {
     public static final int HELP_MENU = Menu.FIRST + 4;
     public static final int DISTRIB_ACCOUNT_MENU = Menu.FIRST + 5;
 
-    public static final String LAST_KNOWN_VERSION_PREF = "last_known_version";
-    public static final String LAST_KNOWN_ANDROID_VERSION_PREF = "last_known_aos_version";
-    public static final String HAS_ALREADY_SETUP = "has_already_setup";
 
     private static final String THIS_FILE = "SIP_HOME";
 
@@ -95,7 +89,7 @@ public class SipHome extends FragmentActivity {
 
     private Intent serviceIntent;
 
-    private PreferencesWrapper prefWrapper;
+    //private PreferencesWrapper prefWrapper;
     private PreferencesProviderWrapper prefProviderWrapper;
 
     private boolean hasTriedOnceActivateAcc = false;
@@ -103,6 +97,7 @@ public class SipHome extends FragmentActivity {
     private ViewPager mViewPager;
     private TabsAdapter mTabsAdapter;
     private boolean mDualPane;
+    private Thread asyncSanityCheker;
 
     public final static boolean USE_LIGHT_THEME = false;
 
@@ -118,7 +113,7 @@ public class SipHome extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        prefWrapper = new PreferencesWrapper(this);
+        //prefWrapper = new PreferencesWrapper(this);
         prefProviderWrapper = new PreferencesProviderWrapper(this);
 
         /*
@@ -135,15 +130,6 @@ public class SipHome extends FragmentActivity {
         }
 
         super.onCreate(savedInstanceState);
-
-        // BUNDLE MODE -- upgrade settings
-        Integer runningVersion = needUpgrade();
-        if (runningVersion != null) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            Editor editor = prefs.edit();
-            editor.putInt(SipHome.LAST_KNOWN_VERSION_PREF, runningVersion);
-            editor.commit();
-        }
 
         setContentView(R.layout.sip_home);
 
@@ -187,20 +173,20 @@ public class SipHome extends FragmentActivity {
 
         hasTriedOnceActivateAcc = false;
 
-        if (!prefWrapper.getPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION)) {
+        if (!prefProviderWrapper.getPreferenceBooleanValue(SipConfigManager.PREVENT_SCREEN_ROTATION)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
 
         selectTabWithAction(getIntent());
-        Log.setLogLevel(prefWrapper.getLogLevel());
+        Log.setLogLevel(prefProviderWrapper.getLogLevel());
 
         // Async check
-        Thread t = new Thread() {
+        asyncSanityCheker = new Thread() {
             public void run() {
                 asyncSanityCheck();
             };
         };
-        t.start();
+        asyncSanityCheker.start();
     }
 
     /**
@@ -392,43 +378,6 @@ public class SipHome extends FragmentActivity {
 
     }
 
-    /**
-     * Check wether an upgrade is needed
-     * 
-     * @return null if not needed, else the new version to upgrade to
-     */
-    private Integer needUpgrade() {
-        Integer runningVersion = null;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        // Application upgrade
-        PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(this);
-        if (pinfo != null) {
-            runningVersion = pinfo.versionCode;
-            int lastSeenVersion = prefs.getInt(LAST_KNOWN_VERSION_PREF, 0);
-
-            Log.d(THIS_FILE, "Last known version is " + lastSeenVersion
-                    + " and currently we are running " + runningVersion);
-            if (lastSeenVersion != runningVersion) {
-                Compatibility.updateVersion(prefWrapper, lastSeenVersion, runningVersion);
-            } else {
-                runningVersion = null;
-            }
-        }
-
-        // Android upgrade
-        {
-            int lastSeenVersion = prefs.getInt(LAST_KNOWN_ANDROID_VERSION_PREF, 0);
-            Log.d(THIS_FILE, "Last known android version " + lastSeenVersion);
-            if (lastSeenVersion != Compatibility.getApiLevel()) {
-                Compatibility.updateApiVersion(prefWrapper, lastSeenVersion,
-                        Compatibility.getApiLevel());
-                Editor editor = prefs.edit();
-                editor.putInt(SipHome.LAST_KNOWN_ANDROID_VERSION_PREF, Compatibility.getApiLevel());
-                editor.commit();
-            }
-        }
-        return runningVersion;
-    }
 
     private void asyncSanityCheck() {
         // if(Compatibility.isCompatible(9)) {
@@ -456,7 +405,7 @@ public class SipHome extends FragmentActivity {
                             if (onForeground) {
                                 // We have to check for an update
                                 UpdaterPopupLauncher ru = nu.getUpdaterPopup(false);
-                                if (ru != null) {
+                                if (ru != null && asyncSanityCheker != null) {
                                     runOnUiThread(ru);
                                 }
                             }
@@ -485,17 +434,17 @@ public class SipHome extends FragmentActivity {
     private void postStartSipService() {
         // If we have never set fast settings
         if (CustomDistribution.showFirstSettingScreen()) {
-            if (!prefWrapper.hasAlreadySetup()) {
+            if (!prefProviderWrapper.getPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, false)) {
                 Intent prefsIntent = new Intent(this, PrefsFast.class);
                 prefsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(prefsIntent);
                 return;
             }
         } else {
-            boolean doFirstParams = !prefWrapper.hasAlreadySetup();
-            prefWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, true);
+            boolean doFirstParams = !prefProviderWrapper.getPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, false);
+            prefProviderWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, true);
             if (doFirstParams) {
-                Compatibility.setFirstRunParameters(prefWrapper);
+                prefProviderWrapper.resetAllDefaultValues();
             }
         }
 
@@ -540,6 +489,12 @@ public class SipHome extends FragmentActivity {
     protected void onPause() {
         Log.d(THIS_FILE, "On Pause SIPHOME");
         onForeground = false;
+        if(asyncSanityCheker != null) {
+            if(asyncSanityCheker.isAlive()) {
+                asyncSanityCheker.interrupt();
+                asyncSanityCheker = null;
+            }
+        }
         super.onPause();
 
     }
@@ -550,7 +505,7 @@ public class SipHome extends FragmentActivity {
         super.onResume();
         onForeground = true;
 
-        prefWrapper.setQuit(false);
+        prefProviderWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, false);
 
         Log.d(THIS_FILE, "WE CAN NOW start SIP service");
         startSipService();
@@ -673,14 +628,14 @@ public class SipHome extends FragmentActivity {
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // prefWrapper.disableAllForIncoming();
-                                    prefWrapper.setQuit(true);
+                                    prefProviderWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, true);
                                     disconnectAndQuit();
                                 }
                             })
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 } else {
-                    ArrayList<String> networks = prefWrapper.getAllIncomingNetworks();
+                    ArrayList<String> networks = prefProviderWrapper.getAllIncomingNetworks();
                     if (networks.size() > 0) {
                         String msg = getString(R.string.disconnect_and_will_restart,
                                 TextUtils.join(", ", networks));

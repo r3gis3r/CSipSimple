@@ -46,7 +46,6 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.NightlyUpdater;
 import com.csipsimple.utils.NightlyUpdater.UpdaterPopupLauncher;
 import com.csipsimple.utils.PreferencesProviderWrapper;
-import com.csipsimple.utils.PreferencesWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class Help extends DialogFragment implements OnItemClickListener {
 	
 	
 	private static final String THIS_FILE = "Help";
-	private PreferencesWrapper prefsWrapper;
+	private PreferencesProviderWrapper prefsWrapper;
 	
 	public static Help newInstance() {
         Help instance = new Help();
@@ -86,7 +85,7 @@ public class Help extends DialogFragment implements OnItemClickListener {
     public void onAttach(SupportActivity activity) {
     	super.onAttach(activity);
     	
-    	prefsWrapper = new PreferencesWrapper(getActivity());
+    	prefsWrapper = new PreferencesProviderWrapper(getActivity());
     	
         
     }

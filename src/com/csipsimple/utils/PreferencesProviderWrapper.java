@@ -72,7 +72,10 @@ public class PreferencesProviderWrapper {
 		Cursor c = resolver.query(uri, null, String.class.getName(), null, null);
 		if(c!=null) {
 			c.moveToFirst();
-			value = c.getString(PreferenceProvider.COL_INDEX_VALUE);
+			String strValue = c.getString(PreferenceProvider.COL_INDEX_VALUE);
+			if(strValue != null) {
+			    value = strValue;
+			}
 			c.close();
 		}
 		return value;
@@ -88,7 +91,10 @@ public class PreferencesProviderWrapper {
 		Cursor c = resolver.query(uri, null, Boolean.class.getName(), null, null);
 		if(c!=null) {
 			c.moveToFirst();
-			value = (c.getInt(PreferenceProvider.COL_INDEX_VALUE) == 1);
+			int intValue = c.getInt(PreferenceProvider.COL_INDEX_VALUE);
+			if(intValue >= 0) {
+			    value = (intValue == 1);
+			}
 			c.close();
 		}
 		return value;
@@ -104,7 +110,10 @@ public class PreferencesProviderWrapper {
 		Cursor c = resolver.query(uri, null, Float.class.getName(), null, null);
 		if(c!=null) {
 			c.moveToFirst();
-			value = c.getFloat(PreferenceProvider.COL_INDEX_VALUE);
+			Float fValue = c.getFloat(PreferenceProvider.COL_INDEX_VALUE);
+			if(fValue != null) {
+			    value = fValue;
+			}
 			c.close();
 		}
 		return value;
@@ -260,6 +269,19 @@ public class PreferencesProviderWrapper {
 		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 		return isValidConnectionFor(ni, "in");
 	}
+
+    public ArrayList<String> getAllIncomingNetworks(){
+        ArrayList<String> incomingNetworks = new ArrayList<String>();
+        String[] availableNetworks = {"3g", "edge", "gprs", "wifi", "other"};
+        for(String network:availableNetworks) {
+            if(getPreferenceBooleanValue("use_"+network+"_in")) {
+                incomingNetworks.add(network);
+            }
+        }
+        
+        return incomingNetworks;
+    }
+	
 
 	public int getLogLevel() {
 		int prefsValue = getPreferenceIntegerValue(SipConfigManager.LOG_LEVEL);
