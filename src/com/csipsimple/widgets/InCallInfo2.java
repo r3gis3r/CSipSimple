@@ -24,6 +24,7 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,10 +64,21 @@ public class InCallInfo2 extends ExtensibleBadge {
     // private TextView remotePhoneNumber;
     private TextView secureInfo;
     private SurfaceView renderView;
+    private int callCardBorderWidth;
+    private int callCardBorderHeight;
+    
 
     public InCallInfo2(Context context, AttributeSet attrs) {
         super(context, attrs);
         initControllerView();
+
+        // Width : only border
+        callCardBorderWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
+        
+        // Height : border + 2 text + bottom arrow
+        callCardBorderHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
+        callCardBorderHeight += (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics()) * 2;
+        callCardBorderHeight += (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 19, getResources().getDisplayMetrics());
     }
 
     private void initControllerView() {
@@ -373,17 +385,8 @@ public class InCallInfo2 extends ExtensibleBadge {
     }
 
     public Rect setSize(int i, int j) {
-        int cstW = 5;
-        int cstH = 5;
         
-        /*
-        for(View v : bottomViews) {
-            cstH += v.getHeight();
-            Log.d(THIS_FILE, "Add " + v.getHeight());
-        }
-        */
-        cstH += 53 * 2 + 29;
-        int s = Math.min(i - cstW, j - cstH);
+        int s = Math.min(i - callCardBorderWidth, j - callCardBorderHeight);
 
         // Photo LP
         ViewGroup.LayoutParams lp = photo.getLayoutParams();
@@ -397,7 +400,7 @@ public class InCallInfo2 extends ExtensibleBadge {
             lp.height = s;
         }
 
-        return new Rect(0, 0, s + cstW, s + cstH);
+        return new Rect(0, 0, s + callCardBorderWidth, s + callCardBorderHeight);
     }
 
     public SipCallSession getCallInfo() {

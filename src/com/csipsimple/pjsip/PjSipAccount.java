@@ -264,14 +264,12 @@ public class PjSipAccount {
 		if(profile_vid_auto_show >= 0) {
 		    cfg.setVid_in_auto_show((profile_vid_auto_show == 1) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
 		}else {
-		    // TODO : add default global pref setting
-		    cfg.setVid_in_auto_show(pjsuaConstants.PJ_FALSE);
+		    cfg.setVid_in_auto_show(pjsuaConstants.PJ_TRUE);
 		}
 		if(profile_vid_auto_transmit >= 0) {
             cfg.setVid_out_auto_transmit((profile_vid_auto_transmit == 1) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
         }else {
-            // TODO : add default global pref setting
-            cfg.setVid_out_auto_transmit(pjsuaConstants.PJ_FALSE);
+            cfg.setVid_out_auto_transmit(pjsuaConstants.PJ_TRUE);
         }
 		
 		

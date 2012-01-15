@@ -55,6 +55,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -107,6 +108,10 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         SensorEventListener, com.csipsimple.widgets.SlidingTab.OnTriggerListener {
     private final static String THIS_FILE = "SIP CALL HANDLER";
     private final static int DRAGGING_DELAY = 150;
+    
+
+    private int MAIN_PADDING/* = 15*/;
+    private int HOLD_PADDING/* = 7*/;
 
     private SipCallSession[] callsInfo = null;
     private FrameLayout mainFrame;
@@ -156,6 +161,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
     private final static int PICKUP_SIP_URI_XFER = 0;
     private final static int PICKUP_SIP_URI_NEW_CALL = 1;
+    
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,6 +171,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        HOLD_PADDING = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
+        MAIN_PADDING = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());;
+        
 
         bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
         prefsWrapper = new PreferencesWrapper(this);
@@ -595,8 +604,6 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         return null;
     }
 
-    private static final int MAIN_PADDING = 15;
-    private static final int HOLD_PADDING = 7;
 
     private SipCallSession getPrioritaryCall(SipCallSession call1, SipCallSession call2) {
         // We prefer the not null
@@ -700,8 +707,8 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         // Compute main height (remove all possible bottom views)
         int mainHeight = mainFrame.getHeight();
         if(hasBottomButtons) {
-            // Bottom height is 263px -- TODO with metric dpi?
-            mainHeight -= 263;
+            // Bottom height is 263px in hdpi
+            mainHeight -= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 175, getResources().getDisplayMetrics());
         }else {
             View v = findViewById(R.id.takeCallUnlocker);
             if(v != null && v.getVisibility() == View.VISIBLE) {
