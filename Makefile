@@ -49,7 +49,7 @@ update :
 	svn update --accept theirs-conflict
 	# Update ZRTP4pj
 	cd jni/zrtp4pj/sources; \
-	git checkout 596346dc346471817db103d75af66b8ce69dca79
+	git checkout 10fe242813531daa61088af158b8b64c6fbe787e
 	# Update OpenSSL
 	cd jni/openssl/sources; \
 	git checkout 1a3c5799337b90ddc56376ace7284a9e7f8cc988

@@ -10,13 +10,18 @@ LOCAL_MODULE    := zrtp4pj
 PJ_SRC_DIR := $(LOCAL_PATH)/../../../pjsip/sources/
 OPENSSL_SRC_DIR := $(LOCAL_PATH)/../../../openssl/sources/
 
+# Self includes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include \
 			$(LOCAL_PATH)/include/crypto/ \
-			$(LOCAL_PATH)/include/ \
-			$(PJ_SRC_DIR)/pjlib/include \
-		    $(PJ_SRC_DIR)/pjlib-util/include \
-		    $(PJ_SRC_DIR)/pjmedia/include  \
-		    $(OPENSSL_SRC_DIR)/include 
+			$(LOCAL_PATH)/include/ 
+
+# Pj includes
+LOCAL_C_INCLUDES += $(PJ_SRC_DIR)/pjsip/include $(PJ_SRC_DIR)/pjlib-util/include/ \
+			$(PJ_ROOT_DIR)/pjlib/include/ $(PJ_SRC_DIR)/pjmedia/include \
+			$(PJ_SRC_DIR)/pjnath/include $(PJ_SRC_DIR)/pjlib/include
+			
+#OpenSSL includes
+LOCAL_C_INCLUDES += $(OPENSSL_SRC_DIR)/include 
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DDYNAMIC_TIMER=1
 
@@ -67,7 +72,7 @@ LOCAL_SRC_FILES += zrtp/ZrtpCallbackWrapper.cpp \
 
 
 #srtpobj 
-LOCAL_SRC_FILES += srtp/ZsrtpCWrapper.cpp srtp/CryptoContext.cpp
+LOCAL_SRC_FILES += srtp/ZsrtpCWrapper.cpp srtp/CryptoContext.cpp srtp/CryptoContextCtrl.cpp
 
 #transportobj 
 LOCAL_SRC_FILES += transport_zrtp.c
