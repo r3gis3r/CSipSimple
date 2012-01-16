@@ -1035,8 +1035,10 @@ public class SipService extends Service {
 					| PhoneStateListener.LISTEN_CALL_STATE );
 		}
 		// Content observer
-    	statusObserver = new AccountStatusContentObserver(mHandler);
-		getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI, true, statusObserver);
+		if(statusObserver == null) {
+        	statusObserver = new AccountStatusContentObserver(mHandler);
+    		getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI, true, statusObserver);
+		}
 		
 	}
 
@@ -1062,6 +1064,7 @@ public class SipService extends Service {
 		}
 		if(statusObserver != null) {
     		getContentResolver().unregisterContentObserver(statusObserver);
+    		statusObserver = null;
     	}
 		
 	}

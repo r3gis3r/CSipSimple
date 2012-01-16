@@ -228,14 +228,19 @@ public class TimerWrapper extends BroadcastReceiver {
 
 			Log.d(THIS_FILE, "FIRE START " + entryId);
 			
+			
 			try {
-				pjsua.pj_timer_fire(entryId);
+			    if(scheduleEntries.contains(entryId)) {
+		            scheduleEntries.remove((Integer) entryId);
+			        pjsua.pj_timer_fire(entryId);
+			    }else {
+			        Log.w(THIS_FILE, "Fire from old run " + entryId);
+			    }
 			}catch(Exception e) {
 				Log.e(THIS_FILE, "Native error ", e);
 			}finally {
 				wakeLock.release(this);
 			}
-			scheduleEntries.remove((Integer) entryId);
 			Log.d(THIS_FILE, "FIRE DONE " + entryId);
 			
 		}
