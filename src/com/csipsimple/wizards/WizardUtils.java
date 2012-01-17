@@ -68,6 +68,7 @@ import com.csipsimple.wizards.impl.IPshka;
 import com.csipsimple.wizards.impl.ITTelenet;
 import com.csipsimple.wizards.impl.IiNet;
 import com.csipsimple.wizards.impl.Innotel;
+import com.csipsimple.wizards.impl.Interphone365;
 import com.csipsimple.wizards.impl.Ip2Mobile;
 import com.csipsimple.wizards.impl.IpTel;
 import com.csipsimple.wizards.impl.Ippi;
@@ -571,6 +572,12 @@ public class WizardUtils {
 					new Locale("pl")
 					}, false, false, 
 					Smarto.class));
+            WIZARDS_DICT.put("INTERPHONE365", new WizardInfo("INTERPHONE365", "INTERPHONE365", 
+                    R.drawable.ic_wizard_interphone365, 19, 
+                    new Locale[]{
+                    new Locale("es_AR"), new Locale("es_ES") 
+                    }, false, false, 
+                    Interphone365.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
