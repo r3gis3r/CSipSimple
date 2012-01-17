@@ -699,7 +699,12 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         }
         
         // Update call cards layouting
+        
         int fullWidth = mainFrame.getWidth();
+        if(fullWidth == 0) {
+            // Not yet rendered, fall back to screen dimension
+            fullWidth = metrics.widthPixels;
+        }
         int mainWidth = fullWidth; 
         if (heldsCalls > 0) {
             // In this case available width for MAIN part is 2/3 of the view
@@ -708,6 +713,10 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
         // Compute main height (remove all possible bottom views)
         int mainHeight = mainFrame.getHeight();
+        if(mainHeight == 0) {
+            //Not yet rendered, fall back to screen dimension
+            mainHeight = metrics.heightPixels;
+        }
         if(hasBottomButtons) {
             // Bottom height is 263px in hdpi
             mainHeight -= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 175, getResources().getDisplayMetrics());
@@ -716,10 +725,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
             if(v != null && v.getVisibility() == View.VISIBLE) {
                 // If it's the locker, the best way is just to 
                 // remove some bottom part of the screen
-                mainHeight = mainFrame.getHeight() * 7 / 15;
+                mainHeight = mainHeight * 7 / 15;
             }
         }
-        Log.d(THIS_FILE, "Button bottom : "+hasBottomButtons);
         Log.d(THIS_FILE, "Avail size is : " + mainWidth + "x" + mainHeight);
         
         // Update each badges

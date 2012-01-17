@@ -122,8 +122,8 @@
     <PreferenceCategory android:title="@string/w_expert_media_transport" >
         <ListPreference
             android:defaultValue="0"
-            android:entries="@array/use_srtp_choices"
-            android:entryValues="@array/use_srtp_values"
+            android:entries="@array/use_srtp_acc_choices"
+            android:entryValues="@array/use_srtp_acc_values"
             android:key="use_srtp"
             android:summary="@string/use_srtp_desc"
             android:title="@string/use_srtp" />

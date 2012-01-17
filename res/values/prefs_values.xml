@@ -41,6 +41,18 @@
         <item>@string/optional</item>
         <item>@string/mandatory</item>
     </string-array>
+    <string-array name="use_srtp_acc_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="use_srtp_acc_choices">
+        <item>@string/default_str</item>
+        <item>@string/disabled</item>
+        <item>@string/optional</item>
+        <item>@string/mandatory</item>
+    </string-array>
     <string-array name="dtmf_mode_values">
         <item>0</item> <!-- Auto -->
         <item>1</item> <!-- RTP -->
