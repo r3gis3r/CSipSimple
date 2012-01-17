@@ -33,6 +33,9 @@ public class SipWakeLock {
         mPowerManager = powerManager;
     }
 
+    /**
+     * Release this lock and reset all holders
+     */
     public synchronized void reset() {
         mHolders.clear();
         release(null);

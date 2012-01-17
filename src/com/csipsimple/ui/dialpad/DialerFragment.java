@@ -57,6 +57,7 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -92,7 +93,7 @@ import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 
 public class DialerFragment extends Fragment implements OnClickListener, OnLongClickListener,
-        OnDialKeyListener, TextWatcher, OnDialActionListener, ViewPagerVisibilityListener {
+        OnDialKeyListener, TextWatcher, OnDialActionListener, ViewPagerVisibilityListener, OnKeyListener {
 
     private static final String THIS_FILE = "DialerFragment";
 
@@ -233,6 +234,9 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
 
         // Apply third party theme if any
         applyTheme();
+        
+
+        v.setOnKeyListener(this);
 
         return v;
     }
@@ -287,6 +291,7 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
         }
 
         dialFeedback.resume();
+        
     }
 
     @Override
@@ -325,6 +330,8 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
         afterTextChanged(digits.getText());
     }
 
+    
+    
     private void keyPressed(int keyCode) {
         KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
         digits.onKeyDown(keyCode, event);
@@ -685,6 +692,13 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
             ft.commit();
             // }
         }
+    }
+
+    @Override
+    public boolean onKey(View arg0, int keyCode, KeyEvent arg2) {
+        KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+        
+        return digits.onKeyDown(keyCode, event);
     }
 
 }

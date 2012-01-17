@@ -59,20 +59,23 @@ public class TimerWrapper extends BroadcastReceiver {
 	}
 	
 	private synchronized void setContext(SipService ctxt) {
-		// Reset --
-		quit();
-		// Set new service
-		service = ctxt;
-		alarmManager = (AlarmManager) service.getSystemService(Context.ALARM_SERVICE);
-		IntentFilter filter = new IntentFilter(TIMER_ACTION);
-		filter.addDataScheme(EXTRA_TIMER_SCHEME);
-		service.registerReceiver(this, filter);
-		serviceRegistered = true;
-		wakeLock = new SipWakeLock((PowerManager) ctxt.getSystemService(Context.POWER_SERVICE));
+	    // If we have a new context, restart bindings
+		if(service != ctxt) {
+    	    // Reset
+    		quit();
+    		// Set new service
+    		service = ctxt;
+    		alarmManager = (AlarmManager) service.getSystemService(Context.ALARM_SERVICE);
+    		IntentFilter filter = new IntentFilter(TIMER_ACTION);
+    		filter.addDataScheme(EXTRA_TIMER_SCHEME);
+    		service.registerReceiver(this, filter);
+    		serviceRegistered = true;
+    		wakeLock = new SipWakeLock((PowerManager) ctxt.getSystemService(Context.POWER_SERVICE));
+		}
 	}
 	
 	
-	synchronized private void quit() {
+	private synchronized void quit() {
 		Log.v(THIS_FILE, "Quit this wrapper");
 		if(serviceRegistered) {
 			try {
