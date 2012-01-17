@@ -41,6 +41,7 @@ import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.BGTel;
 import com.csipsimple.wizards.impl.BTone;
 import com.csipsimple.wizards.impl.Basic;
+import com.csipsimple.wizards.impl.Beeztel;
 import com.csipsimple.wizards.impl.BelCentrale;
 import com.csipsimple.wizards.impl.Betamax;
 import com.csipsimple.wizards.impl.Blueface;
@@ -298,6 +299,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_tanstagi, 35, 
 					new Locale[]{  }, false, true, 
 					Tanstagi.class));
+            WIZARDS_DICT.put("BEEZTEL", new WizardInfo("BEEZTEL", "Beeztel", 
+                    R.drawable.ic_wizard_beeztel, 21, 
+                    new Locale[]{  }, false, true, 
+                    Beeztel.class));
 			
 			
 			//Locales

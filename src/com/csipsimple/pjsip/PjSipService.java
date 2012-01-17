@@ -1121,7 +1121,7 @@ public class PjSipService {
         // In case of already added, we have to act finely
         // If it's local we can just consider that we have to re-add account 
         // since it will actually just touch the account with a modify
-        if (profileState.isAddedToStack() && !account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
+        if (profileState != null && profileState.isAddedToStack() && !account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
             // The account is already there in accounts list
             service.getContentResolver().delete(
                     ContentUris.withAppendedId(SipProfile.ACCOUNT_STATUS_URI, account.id), null,
