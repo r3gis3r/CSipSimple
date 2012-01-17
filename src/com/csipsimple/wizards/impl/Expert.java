@@ -145,7 +145,7 @@ public class Expert extends BaseImplementation {
 			accountProxy.setText("");
 		}
         Log.d(THIS_FILE, "use srtp : " + account.use_srtp);
-		accountUseSrtp.setValueIndex(account.use_srtp);
+		accountUseSrtp.setValueIndex(account.use_srtp + 1);
 		
 		
 		accountVm.setText(account.vm_nbr);
@@ -226,7 +226,7 @@ public class Expert extends BaseImplementation {
 		account.transport = getIntValue(accountTransport, SipProfile.TRANSPORT_UDP);
 		account.acc_id = getText(accountAccId);
 		account.reg_uri = getText(accountRegUri);
-		account.use_srtp = getIntValue(accountUseSrtp, 0);
+		account.use_srtp = getIntValue(accountUseSrtp, -1);
 
 		if (!isEmpty(accountUserName)) {
 			account.realm = getText(accountRealm);
