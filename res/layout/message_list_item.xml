@@ -24,7 +24,7 @@
     android:layout_height="wrap_content"
     android:background="#333" >
 
-    <com.csipsimple.widgets.badge.QuickContactBadge
+    <com.csipsimple.widgets.contactbadge.QuickContactBadge
         android:id="@+id/quick_contact_photo"
         android:layout_width="@dimen/message_contact_photo_size"
         android:layout_height="@dimen/message_contact_photo_size"
@@ -34,9 +34,9 @@
 
     <LinearLayout
         android:id="@+id/message_block"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/quick_contact_photo"
         android:background="#000"
         android:minHeight="@dimen/message_contact_photo_size"

@@ -29,7 +29,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.csipsimple.R;
-import com.csipsimple.widgets.badge.QuickContactBadge;
+import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
 /**
  * Simple value object containing the various views within a call log entry.

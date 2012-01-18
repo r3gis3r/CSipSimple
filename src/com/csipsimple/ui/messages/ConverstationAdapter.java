@@ -40,7 +40,7 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
-import com.csipsimple.widgets.badge.QuickContactBadge;
+import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
 public class ConverstationAdapter extends SimpleCursorAdapter {
 
@@ -61,6 +61,14 @@ public class ConverstationAdapter extends SimpleCursorAdapter {
         String to;
         String from;
         String fromFull;
+        
+        String getRemoteNumber() {
+            String number = from;
+            if (SipMessage.SELF.equals(number)) {
+                number = to;
+            }
+            return number;
+        }
     }
     
     @Override
@@ -94,6 +102,7 @@ public class ConverstationAdapter extends SimpleCursorAdapter {
         tagView.from = nbr;
         tagView.position = cursor.getPosition();
         
+        
         /*
         Drawable background = (read == 0)?
                 context.getResources().getDrawable(R.drawable.conversation_item_background_unread) :
@@ -112,10 +121,6 @@ public class ConverstationAdapter extends SimpleCursorAdapter {
         CharSequence formattedNumber = SipUri.getCanonicalSipContact(number, false);
         */
         
-        // Subject
-//      LayoutParams subjectLayout = (LayoutParams)tagView.subjectView.getLayoutParams();
-        // We have to make t)he subject left of whatever optional items are shown on the right.
-//      subjectLayout.addRule(RelativeLayout.LEFT_OF, R.id.date);
         
         // Photo
         tagView.quickContactView.assignContactUri(info.contactContentUri);

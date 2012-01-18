@@ -326,4 +326,10 @@ public class ContactsUtils3 extends ContactsWrapper {
         return callerInfo;
     }
 
+    
+    @Override
+    public CallerInfo findSelfInfo(Context ctxt) {
+        CallerInfo callerInfo = new CallerInfo();
+        return callerInfo;
+    }
 }

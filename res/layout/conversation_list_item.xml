@@ -25,7 +25,7 @@
     android:paddingRight="10dip"
     android:paddingTop="@dimen/call_log_inner_margin" >
 
-    <com.csipsimple.widgets.badge.QuickContactBadge
+    <com.csipsimple.widgets.contactbadge.QuickContactBadge
         android:id="@+id/quick_contact_photo"
         android:layout_width="@dimen/call_log_list_contact_photo_size"
         android:layout_height="@dimen/call_log_list_contact_photo_size"

@@ -96,4 +96,8 @@ public class CallerInfo {
         return callerInfo;
     }
 
+    public static CallerInfo getCallerInfoForSelf(Context context) {
+        return ContactsWrapper.getInstance().findSelfInfo(context);
+    }
+
 }

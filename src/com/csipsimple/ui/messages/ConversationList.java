@@ -145,8 +145,15 @@ public class ConversationList extends ListFragment implements LoaderManager.Load
         getLoaderManager().restartLoader(0, null, this);
     }
 
-    public void viewDetails(int position, String from, String fromFull) {
-        Bundle b = MessageFragment.getArguments(from, fromFull);
+    public void viewDetails(int position, ConversationListItemViews cri) {
+        String number = null;
+        String fromFull = null;
+        if(cri != null) {
+            number = cri.getRemoteNumber();
+            fromFull = cri.fromFull;
+        }
+        
+        Bundle b = MessageFragment.getArguments(number, fromFull);
 
         // TODO dual screen mode
         Intent it = new Intent(getActivity(), MessageActivity.class);
@@ -171,7 +178,7 @@ public class ConversationList extends ListFragment implements LoaderManager.Load
         writeMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                viewDetails(-1, null, null);
+                viewDetails(-1, null);
                 return true;
             }
         });
@@ -226,24 +233,20 @@ public class ConversationList extends ListFragment implements LoaderManager.Load
         
         if (info.position > 0) {
             ConversationListItemViews cri = (ConversationListItemViews) info.targetView.getTag();
-            String number = cri.from;
-            String fromFull = cri.fromFull;
             
-            if (number.equals("SELF")) {
-                number = cri.to;
-            }
-                        
-            switch (item.getItemId()) {
-            case MENU_DELETE: {
-                confirmDeleteThread(number);
-                break;
-            }
-            case MENU_VIEW: {
-                viewDetails(info.position, number, fromFull);
-                break;
-            }
-            default:
-                break;
+            if(cri != null) {
+                switch (item.getItemId()) {
+                case MENU_DELETE: {
+                    confirmDeleteThread(cri.getRemoteNumber());
+                    break;
+                }
+                case MENU_VIEW: {
+                    viewDetails(info.position, cri);
+                    break;
+                }
+                default:
+                    break;
+                }
             }
         }
         return super.onContextItemSelected(item);
@@ -252,9 +255,7 @@ public class ConversationList extends ListFragment implements LoaderManager.Load
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         ConversationListItemViews cri = (ConversationListItemViews) v.getTag();
-        if (cri != null) {
-            viewDetails(cri.position, cri.from, cri.fromFull);
-        }
+        viewDetails(position, cri);
     }
 
 

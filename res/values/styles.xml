@@ -121,4 +121,6 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="ButtonBar" parent="@android:style/ButtonBar" />
+
 </resources>

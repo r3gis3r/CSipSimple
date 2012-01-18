@@ -497,4 +497,9 @@ public class ContactsUtils5 extends ContactsWrapper {
 		return callerInfo;
 	}
 
+    @Override
+    public CallerInfo findSelfInfo(Context ctxt) {
+        CallerInfo callerInfo = new CallerInfo();
+        return callerInfo;
+    }
 }

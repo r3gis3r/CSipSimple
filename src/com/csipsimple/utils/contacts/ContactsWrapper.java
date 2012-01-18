@@ -47,7 +47,9 @@ public abstract class ContactsWrapper {
 	public static ContactsWrapper getInstance() {
 		if(instance == null) {
 			String className = "com.csipsimple.utils.contacts.ContactsUtils";
-			if(Compatibility.isCompatible(5)) {
+			if(Compatibility.isCompatible(14)) {
+			    className += "14";
+			}else if(Compatibility.isCompatible(5)) {
 				className += "5";
 			}else {
 				className += "3";
@@ -220,4 +222,5 @@ public abstract class ContactsWrapper {
     }
 
     public abstract CallerInfo findCallerInfo(Context ctxt, String number);
+    public abstract CallerInfo findSelfInfo(Context ctxt);
 }

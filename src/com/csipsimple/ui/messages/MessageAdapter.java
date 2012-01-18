@@ -33,6 +33,9 @@ import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.csipsimple.R;
@@ -42,8 +45,8 @@ import com.csipsimple.models.CallerInfo;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.SmileyParser;
-import com.csipsimple.widgets.badge.QuickContactBadge;
-import com.csipsimple.widgets.badge.QuickContactBadge.ArrowPosition;
+import com.csipsimple.widgets.contactbadge.QuickContactBadge;
+import com.csipsimple.widgets.contactbadge.QuickContactBadge.ArrowPosition;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,12 +55,16 @@ public class MessageAdapter extends ResourceCursorAdapter {
 
     private static SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm:ss");
     TextAppearanceSpan mTextSmallSpan;
+    private CallerInfo personalInfo;
     
 
 
     public MessageAdapter(Context context, Cursor c) {
         super(context, R.layout.message_list_item, c, 0);
         mTextSmallSpan = new TextAppearanceSpan(context, android.R.style.TextAppearance_Small);
+
+        personalInfo = CallerInfo.getCallerInfoForSelf(mContext);
+        
     }
 
 
@@ -67,15 +74,19 @@ public class MessageAdapter extends ResourceCursorAdapter {
         ImageView deliveredIndicator;
         TextView dateView;
         QuickContactBadge quickContactView;
+        public LinearLayout containterBlock;
     }
     
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         final MessageListItemViews tagView = (MessageListItemViews) view.getTag();
-        String number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
-        if (!number.equalsIgnoreCase(SipMessage.SELF)) {
-            number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
+        
+        String from = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
+        String number = from;
+        if (SipMessage.SELF.equalsIgnoreCase(number)) {
+            number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
         }
+        String fullFrom = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
         long date = cursor.getLong(cursor.getColumnIndex(SipMessage.FIELD_DATE));
         String subject = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_BODY));
         String mimeType = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_MIME_TYPE));
@@ -136,17 +147,40 @@ public class MessageAdapter extends ResourceCursorAdapter {
         // Subject
         tagView.contentView.setText(formatMessage(number, subject, mimeType));
         
-        // Contact
-        CallerInfo info = CallerInfo.getCallerInfoFromSipUri(mContext, number);
+        
+        if(SipMessage.SELF.equalsIgnoreCase(from)) {
 
-        // Photo
-        tagView.quickContactView.assignContactUri(info.contactContentUri);
-        ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(mContext, 
-                tagView.quickContactView.getImageView(),
-                info,
-                SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
-                        : R.drawable.ic_contact_picture_holo_dark);
-        tagView.quickContactView.setPosition(ArrowPosition.RIGHT_UPPER);
+            LayoutParams lp = (RelativeLayout.LayoutParams) tagView.quickContactView.getLayoutParams();
+            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+            
+            lp = (RelativeLayout.LayoutParams) tagView.containterBlock.getLayoutParams();
+            lp.addRule(RelativeLayout.LEFT_OF, R.id.quick_contact_photo);
+            lp.addRule(RelativeLayout.RIGHT_OF, 0);
+
+    
+            // Photo
+            tagView.quickContactView.assignContactUri(personalInfo.contactContentUri);
+            ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(mContext, 
+                    tagView.quickContactView.getImageView(),
+                    personalInfo,
+                    SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
+                            : R.drawable.ic_contact_picture_holo_dark);
+            tagView.quickContactView.setPosition(ArrowPosition.LEFT);
+            
+        }else {
+            // Contact
+            CallerInfo info = CallerInfo.getCallerInfoFromSipUri(mContext, fullFrom);
+    
+            // Photo
+            tagView.quickContactView.assignContactUri(info.contactContentUri);
+            ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(mContext, 
+                    tagView.quickContactView.getImageView(),
+                    info,
+                    SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
+                            : R.drawable.ic_contact_picture_holo_dark);
+            tagView.quickContactView.setPosition(ArrowPosition.RIGHT);
+        }
         //TODO : in/out
 
         /*
@@ -162,6 +196,7 @@ public class MessageAdapter extends ResourceCursorAdapter {
         View view = super.newView(context, cursor, parent);
 
         MessageListItemViews tagView = new MessageListItemViews();
+        tagView.containterBlock = (LinearLayout) view.findViewById(R.id.message_block);
         tagView.contentView = (TextView) view.findViewById(R.id.text_view);
         tagView.errorView = (TextView) view.findViewById(R.id.error_view);
         tagView.dateView = (TextView) view.findViewById(R.id.date_view);

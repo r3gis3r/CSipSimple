@@ -217,6 +217,8 @@ public class DBProvider extends ContentProvider {
         String finalWhere;
         int count = 0;
         int matched = URI_MATCHER.match(uri);
+        Uri regUri = uri;
+        
         switch (matched) {
             case ACCOUNTS:
                 count = db.delete(SipProfile.ACCOUNTS_TABLE_NAME, where, whereArgs);
@@ -255,6 +257,7 @@ public class DBProvider extends ContentProvider {
                 }else {
                     count = 0;
                 }
+                regUri = SipMessage.MESSAGE_URI;
                 break;
             case ACCOUNTS_STATUS:
             	synchronized (profilesStatus) {
@@ -271,7 +274,7 @@ public class DBProvider extends ContentProvider {
                 throw new IllegalArgumentException(UNKNOWN_URI_LOG + uri);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        getContext().getContentResolver().notifyChange(regUri, null);
 
         if(matched == ACCOUNTS_ID) {
         	long rowId = ContentUris.parseId(uri);
@@ -384,6 +387,8 @@ public class DBProvider extends ContentProvider {
         String finalHaving = null;
         int type = URI_MATCHER.match(uri);
         
+        Uri regUri = uri;
+        
         int remoteUid = Binder.getCallingUid();
         int selfUid = android.os.Process.myUid();
         if(remoteUid != selfUid) {
@@ -468,6 +473,7 @@ public class DBProvider extends ContentProvider {
                 qb.appendWhere(SipMessage.FIELD_TYPE + " in (" + SipMessage.MESSAGE_TYPE_INBOX
                         + "," + SipMessage.MESSAGE_TYPE_SENT + ")");
                 finalGrouping = "message_ordering";
+                regUri = SipMessage.MESSAGE_URI;
                 break;
             case THREADS_ID:
                 qb.setTables(SipMessage.MESSAGES_TABLE_NAME);
@@ -477,6 +483,7 @@ public class DBProvider extends ContentProvider {
                 projection = new String[]{
                         "ROWID AS _id",
                         SipMessage.FIELD_FROM, 
+                        SipMessage.FIELD_TO, 
                         SipMessage.FIELD_BODY, 
                         SipMessage.FIELD_DATE, 
                         SipMessage.FIELD_MIME_TYPE,
@@ -487,6 +494,7 @@ public class DBProvider extends ContentProvider {
                 qb.appendWhere(MESSAGES_THREAD_SELECTION);
                 String from = uri.getLastPathSegment();
                 finalSelectionArgs = appendSelectionArgs(selectionArgs, new String[] { from, from });
+                regUri = SipMessage.MESSAGE_URI;
                 break;
             case ACCOUNTS_STATUS:
             	synchronized (profilesStatus) {
@@ -522,7 +530,7 @@ public class DBProvider extends ContentProvider {
         c = qb.query(db, projection, selection, finalSelectionArgs,
                 finalGrouping, finalHaving, finalSortOrder);
 
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+        c.setNotificationUri(getContext().getContentResolver(), regUri);
         return c;
 	}
 

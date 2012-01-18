@@ -114,8 +114,6 @@ public class MessageFragment extends ListFragment implements LoaderManager.Loade
         }
         
         
-        loadMessageContent();
-        
     }
     
     @Override
@@ -233,9 +231,11 @@ public class MessageFragment extends ListFragment implements LoaderManager.Loade
             SipProfile acc = accountChooserButton.getSelectedAccount();
             if (acc != null && acc.id != SipProfile.INVALID_ID) {
                 try {
-                    service.sendMessage(bodyInput.getText().toString(), remoteFrom, (int) acc.id);
-                    bodyInput.getText().clear();
-                    loadMessageContent();
+                    String textToSend = bodyInput.getText().toString();
+                    if(!TextUtils.isEmpty(textToSend)) {
+                        service.sendMessage(textToSend, remoteFrom, (int) acc.id);
+                        bodyInput.getText().clear();
+                    }
                 } catch (RemoteException e) {
                     Log.e(THIS_FILE, "Not able to send message");
                 }

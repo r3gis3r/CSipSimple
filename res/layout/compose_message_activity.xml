@@ -84,7 +84,7 @@
 
     <LinearLayout
         android:id="@+id/bottom_panel"
-        style="@android:style/ButtonBar"
+        style="@style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -95,7 +95,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:autoText="true"
-            android:background="@android:drawable/edit_text"
             android:capitalize="sentences"
             android:hint="@string/type_to_compose_text_enter_to_send"
             android:imeOptions="actionSend|flagNoEnterAction"
@@ -128,7 +127,7 @@
                 android:paddingBottom="5dip"
                 android:paddingLeft="3dip"
                 android:paddingRight="3dip"
-                android:textColor="#ffffffff"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
