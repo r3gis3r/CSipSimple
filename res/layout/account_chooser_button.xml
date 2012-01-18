@@ -1,46 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr) 
-	Copyright (C) 2009 The Android Open Source Project
+	Copyright (C) 2010-2012 Regis Montoya (aka r3gis - www.r3gis.fr)
+	This file is part of CSipSimple.
+	 
+	CSipSimple is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	If you own a pjsip commercial license you can also redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public License
+	as an android library.
 	
-	This file is part of CSipSimple. CSipSimple is free software: you can
-	redistribute it and/or modify it under the terms of the GNU General
-	Public License as published by the Free Software Foundation, either
-	version 3 of the License, or (at your option) any later version.
-
-	CSipSimple is distributed in the hope that it will be useful, but
-	WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-	General Public License for more details. You should have received a
-	copy of the GNU General Public License along with CSipSimple. If not,
-	see <http://www.gnu.org/licenses/>.
+	CSipSimple is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	 
+	You should have received a copy of the GNU General Public License
+	along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/quickaction_button"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:gravity="center"
-	android:paddingLeft="6dip"
-    android:paddingRight="6dip"
-    android:focusable="true"
+    android:background="@drawable/btn_account_chooser"
     android:clickable="true"
-    android:id="@+id/quickaction_button" 
-    android:background="@drawable/btn_account_chooser">
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="6dip"
+    android:paddingRight="6dip" >
+
     <ImageView
-    	android:id="@+id/quickaction_icon"
-    	android:layout_width="wrap_content"
-    	android:layout_height="fill_parent"
-    	android:layout_weight="1"
-    	android:scaleType="fitCenter"
-    	android:antialias="true" />
+        android:id="@+id/quickaction_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:antialias="true"
+        android:scaleType="fitCenter" />
+
     <TextView
-    	android:id="@+id/quickaction_text"
-    	android:layout_weight="0"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:layout_marginTop="2dp"
-    	android:layout_gravity="top|center"
-    	android:textSize="12dp"
-    	android:textColor="#ffeeeeee"/>	
+        android:id="@+id/quickaction_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="2dp"
+        android:layout_weight="0"
+        android:textColor="#ffeeeeee"
+        android:textSize="12dp" />
+
 </LinearLayout>

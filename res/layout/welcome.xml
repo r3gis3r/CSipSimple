@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr) 
 
 	This file is part of CSipSimple.
@@ -7,6 +7,9 @@
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+	If you own a pjsip commercial license you can also redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public License
+	as an android library.
 
     CSipSimple is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,24 +18,57 @@
 
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
- -->
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-	<ScrollView android:id="@+id/ScrollView01" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:layout_weight="1">
-		<TextView android:id="@+id/FirstLaunchText" android:padding="5dip" android:layout_height="fill_parent"
-			android:layout_width="fill_parent" android:textColor="#FFFFFF"></TextView>
-	</ScrollView>
-	<FrameLayout android:id="@+id/FrameLayout01" android:layout_width="fill_parent"
-		android:layout_weight="0" android:layout_height="wrap_content">
-		<Button android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:text="@string/next" android:id="@+id/next_button" android:visibility="gone"></Button>
-		<ProgressBar android:indeterminate="true" style="?android:attr/progressBarStyleHorizontal"
-			android:layout_width="fill_parent" android:layout_height="20dip" android:id="@+id/dl_progressbar"></ProgressBar>
-		<TextView android:layout_height="fill_parent" android:layout_width="fill_parent"
-			android:gravity="center" android:id="@+id/dl_text" android:text="@string/init"
-			android:textAppearance="?android:attr/textAppearanceSmall"></TextView>
-	</FrameLayout>
+    <ScrollView
+        android:id="@+id/ScrollView01"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            android:id="@+id/FirstLaunchText"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:padding="5dip"
+            android:textColor="#FFFFFF" >
+        </TextView>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/FrameLayout01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0" >
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            android:visibility="gone" >
+        </Button>
+
+        <ProgressBar
+            android:id="@+id/dl_progressbar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:indeterminate="true" >
+        </ProgressBar>
+
+        <TextView
+            android:id="@+id/dl_text"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="@string/init"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+    </FrameLayout>
 
 </LinearLayout>
