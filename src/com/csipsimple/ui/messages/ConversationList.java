@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri.Builder;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -45,19 +46,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.service.SipNotifications;
+import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.ui.messages.ConverstationAdapter.ConversationListItemViews;
 import com.csipsimple.utils.Compatibility;
 
 /**
  * This activity provides a list view of existing conversations.
  */
-public class ConversationList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ConversationList extends ListFragment implements ViewPagerVisibilityListener, LoaderManager.LoaderCallbacks<Cursor> {
 	//private static final String THIS_FILE = "Conv List";
 	
     // IDs of the main menu items.
@@ -84,7 +85,7 @@ public class ConversationList extends ListFragment implements LoaderManager.Load
         
         ListView lv = (ListView) v.findViewById(android.R.id.list);
         // Add header
-        RelativeLayout headerView = (RelativeLayout)
+        ViewGroup headerView = (ViewGroup)
                 inflater.inflate(R.layout.conversation_list_item, lv, false);
         ((TextView) headerView.findViewById(R.id.from) ).setText(R.string.new_message);
         ((TextView) headerView.findViewById(R.id.subject) ).setText(R.string.create_new_message);
@@ -152,13 +153,32 @@ public class ConversationList extends ListFragment implements LoaderManager.Load
             number = cri.getRemoteNumber();
             fromFull = cri.fromFull;
         }
+        viewDetails(position, number, fromFull);
+    }
+    
+    
+    public void viewDetails(int position, String number, String fromFull) {
         
         Bundle b = MessageFragment.getArguments(number, fromFull);
 
-        // TODO dual screen mode
-        Intent it = new Intent(getActivity(), MessageActivity.class);
-        it.putExtras(b);
-        startActivity(it);
+        if (mDualPane) {
+            // If we are not currently showing a fragment for the new
+            // position, we need to create and install a new one.
+            MessageFragment df = new MessageFragment();
+            df.setArguments(b);
+            // Execute a transaction, replacing any existing fragment
+            // with this one inside the frame.
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.details, df, null);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+
+            getListView().setItemChecked(position, true);
+        } else {
+            Intent it = new Intent(getActivity(), MessageActivity.class);
+            it.putExtras(b);
+            startActivity(it);
+        }
     }
 
 
@@ -326,7 +346,46 @@ public class ConversationList extends ListFragment implements LoaderManager.Load
         .show();
     }
     
-    
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        
+        if (visible && isResumed()) {
+            getLoaderManager().restartLoader(0, null, this);
+        }
+        if (visible) {
+            ListView lv = getListView();
+            if (lv != null && mAdapter != null) {
+                final int checkedPos = lv.getCheckedItemPosition();
+                if (checkedPos >= 0) {
+                    // TODO post instead
+                    Thread t = new Thread() {
+                        public void run() {
+                            // -1 because of the new message row
+                            Cursor c = (Cursor) mAdapter.getItem(checkedPos - 1);
+                            if(c != null) {
+                                String from = c.getString(c.getColumnIndex(SipMessage.FIELD_FROM));
+                                String to = c.getString(c.getColumnIndex(SipMessage.FIELD_TO));
+                                final String fromFull = c.getString(c.getColumnIndex(SipMessage.FIELD_FROM_FULL));
+                                String number = from;
+                                if (SipMessage.SELF.equals(number)) {
+                                    number = to;
+                                }
+                                final String nbr = number;
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        viewDetails(checkedPos, nbr, fromFull);
+                                    }
+                                });
+                            }
+                        };
+                    };
+                    t.start();
+                }
+            }
+        }
+    }
 	
     
 }

@@ -33,7 +33,7 @@
 
     <LinearLayout
         android:id="@+id/LinearLayout01"
-        style="@android:style/ButtonBar"
+        style="@style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"

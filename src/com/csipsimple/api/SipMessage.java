@@ -33,7 +33,7 @@ public class SipMessage {
 	public static final String FIELD_TO = "receiver";
 	public static final String FIELD_CONTACT = "contact";
 	public static final String FIELD_BODY = "body";
-	public static final String FIELD_MIME_TYPE = "mimeType";
+	public static final String FIELD_MIME_TYPE = "mime_type";
 	public static final String FIELD_TYPE = "type";
 	public static final String FIELD_DATE = "date";
 	public static final String FIELD_STATUS = "status";

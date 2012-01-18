@@ -1296,10 +1296,16 @@ public class PjSipService {
             Log.d(THIS_FILE, "default domain : " + defaultDomain);
             p = Pattern.compile("^sip(s)?:[^@]*$", Pattern.CASE_INSENSITIVE);
             if (p.matcher(callee).matches()) {
-                finalCallee = "<" + callee + "@" + defaultDomain + ">";
+                finalCallee = "<" + callee;
             } else {
                 // Should it be encoded?
-                finalCallee = "<sip:" + /* Uri.encode( */callee/* ) */+ "@" + defaultDomain + ">";
+                finalCallee = "<sip:" + /* Uri.encode( */callee/* ) */;
+            }
+            // Add domain if needed
+            if(TextUtils.isEmpty(defaultDomain)) {
+                finalCallee += ">";
+            }else {
+                finalCallee += "@"+defaultDomain+">";
             }
         } else {
             finalCallee = "<" + m.group(1) + ":" + m.group(2) + ">";

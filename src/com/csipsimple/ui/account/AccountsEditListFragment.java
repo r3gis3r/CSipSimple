@@ -138,7 +138,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
             
             updateCheckedItem();
             // Make sure our UI is in the correct state.
-            showDetails(curCheckPosition, curCheckWizard);
+            //showDetails(curCheckPosition, curCheckWizard);
         }else {
         	//getListView().setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_RIGHT);
         	getListView().setVerticalScrollBarEnabled(true);

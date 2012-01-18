@@ -49,7 +49,7 @@ public class DBAdapter {
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		private static final String DATABASE_NAME = "com.csipsimple.db";
-		private static final int DATABASE_VERSION = 30;
+		private static final int DATABASE_VERSION = 31;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -328,6 +328,15 @@ public class DBAdapter {
 			        
                     Log.d(THIS_FILE, "Upgrade done");
                 }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
+			}
+			// Nightly build bug -- restore mime type field to mime_type
+			if(oldVersion == 30) {
+			    try {
+			        addColumn(db, SipMessage.MESSAGES_TABLE_NAME, SipMessage.FIELD_MIME_TYPE, "TEXT");
+			        db.execSQL("UPDATE " + SipMessage.MESSAGES_TABLE_NAME + " SET " + SipMessage.FIELD_MIME_TYPE + "='text/plain'");
+			    }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
                 }
 			}

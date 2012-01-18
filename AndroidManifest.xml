@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.csipsimple"
-    android:versionCode="1172"
+    android:versionCode="1220"
     android:versionName="0.04-00" >
 
     <supports-screens

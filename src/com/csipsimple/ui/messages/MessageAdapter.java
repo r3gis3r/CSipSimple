@@ -149,15 +149,7 @@ public class MessageAdapter extends ResourceCursorAdapter {
         
         
         if(SipMessage.SELF.equalsIgnoreCase(from)) {
-
-            LayoutParams lp = (RelativeLayout.LayoutParams) tagView.quickContactView.getLayoutParams();
-            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
-            
-            lp = (RelativeLayout.LayoutParams) tagView.containterBlock.getLayoutParams();
-            lp.addRule(RelativeLayout.LEFT_OF, R.id.quick_contact_photo);
-            lp.addRule(RelativeLayout.RIGHT_OF, 0);
-
+            setPhotoSide(tagView, ArrowPosition.LEFT);
     
             // Photo
             tagView.quickContactView.assignContactUri(personalInfo.contactContentUri);
@@ -166,9 +158,10 @@ public class MessageAdapter extends ResourceCursorAdapter {
                     personalInfo,
                     SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
                             : R.drawable.ic_contact_picture_holo_dark);
-            tagView.quickContactView.setPosition(ArrowPosition.LEFT);
             
         }else {
+            setPhotoSide(tagView, ArrowPosition.RIGHT);
+            
             // Contact
             CallerInfo info = CallerInfo.getCallerInfoFromSipUri(mContext, fullFrom);
     
@@ -179,14 +172,23 @@ public class MessageAdapter extends ResourceCursorAdapter {
                     info,
                     SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
                             : R.drawable.ic_contact_picture_holo_dark);
-            tagView.quickContactView.setPosition(ArrowPosition.RIGHT);
         }
-        //TODO : in/out
 
-        /*
-        view.setBackgroundResource(type == SipMessage.MESSAGE_TYPE_INBOX ? R.drawable.listitem_background_lightblue
-                : R.drawable.listitem_background);
-                */
+    }
+    
+    private void setPhotoSide(MessageListItemViews tagView, ArrowPosition pos) {
+        LayoutParams lp = (RelativeLayout.LayoutParams) tagView.quickContactView.getLayoutParams();
+        lp.addRule((pos == ArrowPosition.LEFT) ? RelativeLayout.ALIGN_PARENT_RIGHT
+                : RelativeLayout.ALIGN_PARENT_LEFT);
+        lp.addRule((pos == ArrowPosition.LEFT) ? RelativeLayout.ALIGN_PARENT_LEFT
+                : RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+        
+        lp = (RelativeLayout.LayoutParams) tagView.containterBlock.getLayoutParams();
+        lp.addRule((pos == ArrowPosition.LEFT) ? RelativeLayout.LEFT_OF : RelativeLayout.RIGHT_OF,
+                R.id.quick_contact_photo);
+        lp.addRule((pos == ArrowPosition.LEFT) ? RelativeLayout.RIGHT_OF : RelativeLayout.LEFT_OF,
+                0);
+        tagView.quickContactView.setPosition(pos);
 
     }
 

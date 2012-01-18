@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 
-<com.csipsimple.ui.calllog.CallLogListItemView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.csipsimple.widgets.CheckableListItemView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
@@ -133,4 +133,4 @@
         android:layout_marginRight="@dimen/call_log_outer_margin"
         android:background="#55ffffff" />
 
-</com.csipsimple.ui.calllog.CallLogListItemView>
+</com.csipsimple.widgets.CheckableListItemView>

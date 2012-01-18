@@ -27,7 +27,7 @@
 
     <LinearLayout
         android:id="@+id/codec_band_type"
-        style="@android:style/ButtonBar"
+        style="@style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

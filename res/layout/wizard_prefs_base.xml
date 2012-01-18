@@ -70,7 +70,7 @@
 
     <LinearLayout
         android:id="@+id/validation_bar"
-        style="@android:style/ButtonBar"
+        style="@style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"

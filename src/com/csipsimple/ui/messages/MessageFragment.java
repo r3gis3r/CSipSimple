@@ -69,6 +69,18 @@ public class MessageFragment extends ListFragment implements LoaderManager.Loade
     private Button sendButton;
     private SipNotifications notifications;
     private MessageAdapter mAdapter;
+    
+
+    public interface OnQuitListener {
+        public void onQuit();
+    }
+
+    private OnQuitListener quitListener;
+
+    public void setOnQuitListener(OnQuitListener l) {
+        quitListener = l;
+    }
+    
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,9 +169,9 @@ public class MessageFragment extends ListFragment implements LoaderManager.Loade
                 setupFrom(from, from);
             }
             if (TextUtils.isEmpty(remoteFrom)) {
-                // Still nothing selected, abort
-                // TODO : it's a onQuit instead ! 
-                getActivity().finish();
+                if(quitListener != null) {
+                    quitListener.onQuit();
+                }
             }else {
                 loadMessageContent();
             }

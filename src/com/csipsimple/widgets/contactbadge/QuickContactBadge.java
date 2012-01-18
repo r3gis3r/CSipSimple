@@ -132,7 +132,7 @@ public class QuickContactBadge extends FrameLayout {
             path.close();
 
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setStrokeWidth(1.0f);
+            paint.setStrokeWidth(0);
             paint.setColor(SipHome.USE_LIGHT_THEME ? android.graphics.Color.WHITE : android.graphics.Color.BLACK);     
             paint.setStyle(Paint.Style.FILL_AND_STROKE);
             paint.setAntiAlias(true);

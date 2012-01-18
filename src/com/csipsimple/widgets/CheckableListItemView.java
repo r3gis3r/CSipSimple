@@ -23,7 +23,7 @@
  * Copyright (C) 2011, The Android Open Source Project
  */
 
-package com.csipsimple.ui.calllog;
+package com.csipsimple.widgets;
 
 import com.csipsimple.R;
 
@@ -35,12 +35,12 @@ import android.widget.LinearLayout;
 /**
  * An entry in the call log.
  */
-public class CallLogListItemView extends LinearLayout implements Checkable {
-    public CallLogListItemView(Context context) {
+public class CheckableListItemView extends LinearLayout implements Checkable {
+    public CheckableListItemView(Context context) {
         super(context);
     }
 
-    public CallLogListItemView(Context context, AttributeSet attrs) {
+    public CheckableListItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 //

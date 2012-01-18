@@ -83,7 +83,7 @@
 
     <LinearLayout
         android:id="@+id/ok_bar"
-        style="@android:style/ButtonBar"
+        style="@style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="0"
