@@ -63,13 +63,13 @@ public class Beeztel extends SimpleImplementation {
 
         // Prefer silk, g729 (not possible due to license, and keep g711 fallback)
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"0");
-        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"241");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"239");
         prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"0");
-        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"241");
         prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
-        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "240");
         prefs.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_WB, "242");
         prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_WB, "243");
         prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, "244");
@@ -77,13 +77,13 @@ public class Beeztel extends SimpleImplementation {
         
         //Prefer silk, g729 (not possible due to license, and keep g711 fallback)
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"0");
-        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"241");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"239");
         prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"0");
-        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"240");
         prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
         prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
         prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
-        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "245");
+        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "241");
         prefs.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_NB, "245");
         prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_NB, "244");
         prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "243");
