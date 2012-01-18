@@ -21,6 +21,8 @@
 
 package com.csipsimple.ui.calllog;
 
+import com.csipsimple.R;
+import com.csipsimple.ui.SipHome;
 import com.csipsimple.ui.calllog.CallLogDetailsFragment.OnQuitListener;
 import com.csipsimple.utils.Compatibility;
 
@@ -33,7 +35,10 @@ public class CallLogDetailsActivity extends FragmentActivity implements OnQuitLi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
+        if (SipHome.USE_LIGHT_THEME) {
+            setTheme(R.style.LightTheme_noTopActionBar);
+        }
 
         if (savedInstanceState == null) {
             // During initial setup, plug in the details fragment.
