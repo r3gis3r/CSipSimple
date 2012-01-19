@@ -26,11 +26,11 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-public class ContactBadge4 extends ContactBadgeContract {
+public class ContactBadge3 extends ContactBadgeContract {
 
     private OverlayedImageView imageView;
 
-    public ContactBadge4(Context context, AttributeSet attrs, int defStyle,
+    public ContactBadge3(Context context, AttributeSet attrs, int defStyle,
             QuickContactBadge topBadge) {
         super(context, attrs, defStyle, topBadge);
         imageView = new OverlayedImageView(context, attrs, defStyle, topBadge);
