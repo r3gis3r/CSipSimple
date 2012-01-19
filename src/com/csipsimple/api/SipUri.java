@@ -51,12 +51,12 @@ public final class SipUri {
         @Override
         public String toString() {
             StringBuffer buildString = new StringBuffer();
-            buildString.append("<" + scheme + ":" + userName + "@" + domain + ">");
+            buildString.append("<" + scheme + ":" + Uri.encode(userName) + "@" + domain + ">");
             if (!TextUtils.isEmpty(userName)) {
                 // Prepend with space
                 buildString.insert(0, " ");
                 // Start with display name
-                buildString.insert(0, displayName);
+                buildString.insert(0, Uri.encode(displayName));
             }
             return buildString.toString();
         }
@@ -75,7 +75,7 @@ public final class SipUri {
         if (!TextUtils.isEmpty(sipUri)) {
             Matcher m = SIP_CONTACT_PATTERN.matcher(sipUri);
             if (m.matches()) {
-                parsedInfos.displayName = m.group(1).trim();
+                parsedInfos.displayName = Uri.decode(m.group(1).trim());
                 parsedInfos.domain = m.group(4);
                 parsedInfos.userName = Uri.decode(m.group(3));
                 parsedInfos.scheme = m.group(2);
