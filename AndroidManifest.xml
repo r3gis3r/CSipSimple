@@ -337,7 +337,7 @@
             android:name="com.csipsimple.ui.PickupSipUri"
             android:configChanges="orientation"
             android:label="@string/pickup_sip_uri"
-            android:theme="@style/LightTheme" >
+            android:theme="@style/DarkTheme" >
         </activity>
         <activity
             android:name="com.csipsimple.ui.InCallMediaControl"
@@ -374,13 +374,10 @@
 
         <!-- Messages -->
         <activity
-            android:name="com.csipsimple.ui.messages.ConversationList"
-            android:configChanges="orientation"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
             android:name="com.csipsimple.ui.messages.MessageActivity"
             android:configChanges="orientation"
             android:launchMode="singleTop"
+            android:theme="@style/DarkTheme"
             android:windowSoftInputMode="stateHidden" />
 
         <!-- Embedded plugins -->
