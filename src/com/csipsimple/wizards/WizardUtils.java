@@ -304,10 +304,6 @@ public class WizardUtils {
 					R.drawable.ic_wizard_tanstagi, 35, 
 					new Locale[]{  }, false, true, 
 					Tanstagi.class));
-            WIZARDS_DICT.put("BEEZTEL", new WizardInfo("BEEZTEL", "Beeztel", 
-                    R.drawable.ic_wizard_beeztel, 21, 
-                    new Locale[]{  }, false, true, 
-                    Beeztel.class));
 			
 			
 			//Locales
@@ -582,6 +578,10 @@ public class WizardUtils {
                     new Locale("es_AR"), new Locale("es_ES") 
                     }, false, false, 
                     Interphone365.class));
+            WIZARDS_DICT.put("BEEZTEL", new WizardInfo("BEEZTEL", "Beeztel", 
+                    R.drawable.ic_wizard_beeztel, 19, 
+                    new Locale[]{ new Locale("es"), new Locale("en"), new Locale("pt"), new Locale("fr") }, false, false, 
+                    Beeztel.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
