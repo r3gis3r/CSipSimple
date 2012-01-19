@@ -278,17 +278,21 @@ public class SipService extends Service {
 				@Override
 				protected void doRun() throws SameThreadException {
 					Log.d(THIS_FILE, "will sms " + callee);
-					ToCall called = pjService.sendMessage(callee, message, accountId);
-					if(called!=null) {
-						SipMessage msg = new SipMessage(SipMessage.SELF, 
-								SipUri.getCanonicalSipContact(callee), SipUri.getCanonicalSipContact(called.getCallee()), 
-								message, "text/plain", System.currentTimeMillis(), 
-								SipMessage.MESSAGE_TYPE_QUEUED, called.getCallee());
-						msg.setRead(true);
-						getContentResolver().insert(SipMessage.MESSAGE_URI, msg.getContentValues());
-						Log.d(THIS_FILE, "Inserted "+msg.getTo());
+					if(pjService != null) {
+    					ToCall called = pjService.sendMessage(callee, message, accountId);
+    					if(called!=null) {
+    						SipMessage msg = new SipMessage(SipMessage.SELF, 
+    								SipUri.getCanonicalSipContact(callee), SipUri.getCanonicalSipContact(called.getCallee()), 
+    								message, "text/plain", System.currentTimeMillis(), 
+    								SipMessage.MESSAGE_TYPE_QUEUED, called.getCallee());
+    						msg.setRead(true);
+    						getContentResolver().insert(SipMessage.MESSAGE_URI, msg.getContentValues());
+    						Log.d(THIS_FILE, "Inserted "+msg.getTo());
+    					}else {
+    						SipService.this.notifyUserOfMessage( getString(R.string.invalid_sip_uri)+ " : "+callee );
+    					}
 					}else {
-						SipService.this.notifyUserOfMessage( getString(R.string.invalid_sip_uri)+ " : "+callee );
+					    SipService.this.notifyUserOfMessage( getString(R.string.connection_not_valid) );
 					}
 				}
 			});

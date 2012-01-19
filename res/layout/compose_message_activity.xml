@@ -92,7 +92,7 @@
         <EditText
             android:id="@+id/embedded_text_editor"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
             android:autoText="true"
             android:capitalize="sentences"
