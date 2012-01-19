@@ -215,7 +215,7 @@ public class CollectLogs {
         log.append(LINE_SEPARATOR);
         log.append(userComment);
         
-        sendIntent.setType("text/plain");
+        sendIntent.setType("message/rfc822");
         
         sendIntent.putExtra(Intent.EXTRA_TEXT, log.toString());
         
