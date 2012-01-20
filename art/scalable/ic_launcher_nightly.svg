@@ -1102,11 +1102,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.4296753"
-     inkscape:cx="-0.79973224"
-     inkscape:cy="23.287046"
+     inkscape:zoom="6.8593506"
+     inkscape:cx="26.796612"
+     inkscape:cy="28.427345"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -1345,17 +1345,18 @@
            x="335.37064"
            y="528.09302"
            style="font-size:128px;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /></flowRegion><flowPara
-         id="flowPara3878-4">IP</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot3872"
+         id="flowPara3878-4">IP</flowPara></flowRoot>    <g
+       transform="matrix(0.1150219,0,0,0.1150219,134.21839,627.97804)"
        style="font-size:128px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       transform="matrix(0.1150219,0,0,0.1150219,134.21839,627.97804)"><flowRegion
-         id="flowRegion3874"><rect
-           id="rect3876"
-           width="190.91884"
-           height="145.46198"
-           x="335.37064"
-           y="528.09302"
-           style="font-size:128px;fill:#ffffff;fill-opacity:1;stroke:none" /></flowRegion><flowPara
-         id="flowPara3878">IP</flowPara></flowRoot>  </g>
+       id="flowRoot3872">
+      <path
+         d="m 347.9375,562.36514 12.625,0 0,93.3125 -12.625,0 0,-93.3125"
+         style=""
+         id="path3202" />
+      <path
+         d="m 398.3125,572.74014 0,35.0625 15.875,0 c 5.87495,5e-5 10.41662,-1.52078 13.625,-4.5625 3.20828,-3.04161 4.81244,-7.37494 4.8125,-13 -6e-5,-5.58326 -1.60422,-9.89576 -4.8125,-12.9375 -3.20838,-3.04158 -7.75005,-4.56241 -13.625,-4.5625 l -15.875,0 m -12.625,-10.375 28.5,0 c 10.45828,10e-5 18.35411,2.37509 23.6875,7.125 5.37493,4.70842 8.06243,11.62508 8.0625,20.75 -7e-5,9.20839 -2.68757,16.16672 -8.0625,20.875 -5.33339,4.70838 -13.22922,7.06254 -23.6875,7.0625 l -15.875,0 0,37.5 -12.625,0 0,-93.3125"
+         id="path3204"
+         style="" />
+    </g>
+  </g>
 </svg>

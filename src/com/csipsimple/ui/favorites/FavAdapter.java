@@ -21,8 +21,32 @@
 
 package com.csipsimple.ui.favorites;
 
-import android.support.v4.app.ListFragment;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.support.v4.widget.ResourceCursorAdapter;
+import android.view.View;
 
-public class FavList extends ListFragment {
+import com.csipsimple.R;
+import com.csipsimple.utils.Log;
+
+public class FavAdapter extends ResourceCursorAdapter {
+
+    private static final String THIS_FILE = "FavAdapter";
+
+    public FavAdapter(Context context, Cursor c) {
+        super(context, R.layout.search_contact_list_item, c, 0);
+    }
+
+    @Override
+    public void bindView(View view, Context context, Cursor cursor) {
+
+        ContentValues cv = new ContentValues();
+
+        DatabaseUtils.cursorRowToContentValues(cursor, cv);
+
+        Log.d(THIS_FILE, "Contents = " + cv);
+    }
 
 }

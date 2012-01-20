@@ -42,9 +42,9 @@ import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
-public class ConverstationAdapter extends SimpleCursorAdapter {
+public class ConverstationsAdapter extends SimpleCursorAdapter {
 
-    public ConverstationAdapter(Context context, Cursor c) {
+    public ConverstationsAdapter(Context context, Cursor c) {
         super(context, R.layout.conversation_list_item, c, new String[] {
                 SipMessage.FIELD_BODY
         },

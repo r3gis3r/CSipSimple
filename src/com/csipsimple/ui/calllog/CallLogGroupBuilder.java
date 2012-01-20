@@ -56,7 +56,7 @@ public class CallLogGroupBuilder {
 
     /**
      * Finds all groups of adjacent entries in the call log which should be grouped together and
-     * calls {@link CallLogFragment.GroupCreator#addGroup(int, int, boolean)} on
+     * calls {@link CallLogListFragment.GroupCreator#addGroup(int, int, boolean)} on
      * {@link #mGroupCreator} for each of them.
      * <p>
      * For entries that are not grouped with others, we do not need to create a group of size one.

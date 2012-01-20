@@ -37,10 +37,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.provider.CallLog.Calls;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.RawContacts;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.View;
@@ -52,6 +56,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
@@ -59,99 +64,110 @@ import com.csipsimple.utils.Log;
 public class ContactsUtils5 extends ContactsWrapper {
 
     public static final int CONTACT_ID_INDEX = 1;
-    public static final int TYPE_INDEX       = 2;
-    public static final int NUMBER_INDEX     = 3;
-    public static final int LABEL_INDEX      = 4;
-    public static final int NAME_INDEX       = 5;
+    public static final int TYPE_INDEX = 2;
+    public static final int NUMBER_INDEX = 3;
+    public static final int LABEL_INDEX = 4;
+    public static final int NAME_INDEX = 5;
 
     private static final String[] PROJECTION_PHONE = {
-    	ContactsContract.CommonDataKinds.Phone._ID,                  // 0
-    	ContactsContract.CommonDataKinds.Phone.CONTACT_ID,           // 1
-    	ContactsContract.CommonDataKinds.Phone.TYPE,                 // 2
-    	ContactsContract.CommonDataKinds.Phone.NUMBER,               // 3
-    	ContactsContract.CommonDataKinds.Phone.LABEL,                // 4
-    	ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,         // 5
+            ContactsContract.CommonDataKinds.Phone._ID, // 0
+            ContactsContract.CommonDataKinds.Phone.CONTACT_ID, // 1
+            ContactsContract.CommonDataKinds.Phone.TYPE, // 2
+            ContactsContract.CommonDataKinds.Phone.NUMBER, // 3
+            ContactsContract.CommonDataKinds.Phone.LABEL, // 4
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, // 5
     };
 
     private static final String SORT_ORDER = Contacts.TIMES_CONTACTED + " DESC,"
             + Contacts.DISPLAY_NAME + "," + ContactsContract.CommonDataKinds.Phone.TYPE;
-	private static final String GINGER_SIP_TYPE = "vnd.android.cursor.item/sip_address";
-	private static final String THIS_FILE = "ContactsUtils5";
-    
+    private static final String GINGER_SIP_TYPE = "vnd.android.cursor.item/sip_address";
+    private static final String THIS_FILE = "ContactsUtils5";
 
-	
-	
-	public Bitmap getContactPhoto(Context ctxt, Uri uri, Integer defaultResource) {
-		Bitmap img = null;
-		
-		InputStream s = ContactsContract.Contacts.openContactPhotoInputStream(ctxt.getContentResolver(), uri);
-		img = BitmapFactory.decodeStream(s);
-		
-		if(img == null){
-			BitmapDrawable drawableBitmap = ((BitmapDrawable) ctxt.getResources().getDrawable(defaultResource));
-			if(drawableBitmap != null) {
-				img = drawableBitmap.getBitmap();
-			}
-		}
-		return img;
-	}
-	
-	
- 	public List<Phone> getPhoneNumbers(Context ctxt, String id) {
- 		ArrayList<Phone> phones = new ArrayList<Phone>();
- 		
- 		Cursor pCur = ctxt.getContentResolver().query(
- 				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
- 				null, 
- 				ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?", 
- 				new String[]{id}, null);
- 		while (pCur.moveToNext()) {
- 			phones.add(new Phone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)), 
- 					pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE))
- 			));
- 
- 		} 
- 		pCur.close();
+    public Bitmap getContactPhoto(Context ctxt, Uri uri, Integer defaultResource) {
+        Bitmap img = null;
 
- 		// Add any custom IM named 'sip' and set its type to 'sip'
-        pCur = ctxt.getContentResolver().query(
-                ContactsContract.Data.CONTENT_URI, 
-                null, 
-                ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?",
-                new String[]{id, ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE}, null);
+        InputStream s = ContactsContract.Contacts.openContactPhotoInputStream(
+                ctxt.getContentResolver(), uri);
+        img = BitmapFactory.decodeStream(s);
+
+        if (img == null) {
+            BitmapDrawable drawableBitmap = ((BitmapDrawable) ctxt.getResources().getDrawable(
+                    defaultResource));
+            if (drawableBitmap != null) {
+                img = drawableBitmap.getBitmap();
+            }
+        }
+        return img;
+    }
+
+    public List<Phone> getPhoneNumbers(Context ctxt, String id) {
+        ArrayList<Phone> phones = new ArrayList<Phone>();
+
+        Cursor pCur = ctxt.getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                new String[] {
+                    id
+                }, null);
         while (pCur.moveToNext()) {
-            // Could also use some other IM type but may be confusing. Are there phones with no 'custom' IM type?
+            phones.add(new Phone(
+                    pCur.getString(pCur
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)),
+                    pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE))
+                    ));
+
+        }
+        pCur.close();
+
+        // Add any custom IM named 'sip' and set its type to 'sip'
+        pCur = ctxt.getContentResolver().query(
+                ContactsContract.Data.CONTENT_URI,
+                null,
+                ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE
+                        + " = ?",
+                new String[] {
+                        id, ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE
+                }, null);
+        while (pCur.moveToNext()) {
+            // Could also use some other IM type but may be confusing. Are there
+            // phones with no 'custom' IM type?
             if (pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Im.PROTOCOL)) == ContactsContract.CommonDataKinds.Im.PROTOCOL_CUSTOM) {
-				if ("sip".equalsIgnoreCase(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL)))) {
-                    phones.add(new Phone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Im.DATA)), "sip"));
+                if ("sip".equalsIgnoreCase(pCur.getString(pCur
+                        .getColumnIndex(ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL)))) {
+                    phones.add(new Phone(pCur.getString(pCur
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Im.DATA)), "sip"));
                 }
             }
-                
-        } 
+
+        }
         pCur.close();
-        
+
         // Add any SIP uri if android 9
-        if(Compatibility.isCompatible(9)) {
-        	 pCur = ctxt.getContentResolver().query(
-                     ContactsContract.Data.CONTENT_URI, 
-                     null, 
-                     ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?",
-                     new String[]{id, GINGER_SIP_TYPE}, null);
-             while (pCur.moveToNext()) {
-                 // Could also use some other IM type but may be confusing. Are there phones with no 'custom' IM type?
-            	 phones.add(new Phone(pCur.getString(pCur.getColumnIndex(ContactsContract.Data.DATA1)), "sip"));
-             }
-             pCur.close();
+        if (Compatibility.isCompatible(9)) {
+            pCur = ctxt.getContentResolver().query(
+                    ContactsContract.Data.CONTENT_URI,
+                    null,
+                    ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE
+                            + " = ?",
+                    new String[] {
+                            id, GINGER_SIP_TYPE
+                    }, null);
+            while (pCur.moveToNext()) {
+                // Could also use some other IM type but may be confusing. Are
+                // there phones with no 'custom' IM type?
+                phones.add(new Phone(pCur.getString(pCur
+                        .getColumnIndex(ContactsContract.Data.DATA1)), "sip"));
+            }
+            pCur.close();
         }
 
- 		return(phones);
- 	}
- 	
- 	
- 	
- 	@Override
-	public Cursor searchContact(Context ctxt, CharSequence constraint) {
-		String phone = "";
+        return (phones);
+    }
+
+    @Override
+    public Cursor searchContact(Context ctxt, CharSequence constraint) {
+        String phone = "";
         String cons = null;
 
         if (constraint != null) {
@@ -168,338 +184,360 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
 
         // TODO : filter more complex, see getAllContactsAdapter
-        Uri uri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI, Uri.encode(cons));
+        Uri uri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI,
+                Uri.encode(cons));
         /*
-         * if we decide to filter based on phone types use a selection
-         * like this.
-        String selection = String.format("%s=%s OR %s=%s OR %s=%s",
-                Phone.TYPE,
-                Phone.TYPE_MOBILE,
-                Phone.TYPE,
-                Phone.TYPE_WORK_MOBILE,
-                Phone.TYPE,
-                Phone.TYPE_MMS);
+         * if we decide to filter based on phone types use a selection like
+         * this. String selection = String.format("%s=%s OR %s=%s OR %s=%s",
+         * Phone.TYPE, Phone.TYPE_MOBILE, Phone.TYPE, Phone.TYPE_WORK_MOBILE,
+         * Phone.TYPE, Phone.TYPE_MMS);
          */
         Cursor phoneCursor =
-            ctxt.getContentResolver().query(uri,
-                    PROJECTION_PHONE,
-                    null, //selection,
-                    null,
-                    SORT_ORDER);
+                ctxt.getContentResolver().query(uri,
+                        PROJECTION_PHONE,
+                        null, // selection,
+                        null,
+                        SORT_ORDER);
 
         if (phone.length() > 0) {
 
-            MatrixCursor translated = new MatrixCursor(PROJECTION_PHONE, 1 /*2*/);
-            
-            RowBuilder result = translated.newRow();
-            result.add(Integer.valueOf(-1));                    // ID
-            result.add(Long.valueOf(-1));                       // CONTACT_ID
-            result.add(Integer.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM));     // TYPE
-            result.add(cons);                                  // NUMBER
+            MatrixCursor translated = new MatrixCursor(PROJECTION_PHONE, 1 /* 2 */);
 
-            result.add("\u00A0");                               // LABEL
-            result.add(cons);                                   // NAME
-            
-            //Rewriten as phone number
+            RowBuilder result = translated.newRow();
+            result.add(Integer.valueOf(-1)); // ID
+            result.add(Long.valueOf(-1)); // CONTACT_ID
+            result.add(Integer.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM)); // TYPE
+            result.add(cons); // NUMBER
+
+            result.add("\u00A0"); // LABEL
+            result.add(cons); // NAME
+
+            // Rewriten as phone number
             /*
-            result = translated.newRow();
-            result.add(Integer.valueOf(-1));                    // ID
-            result.add(Long.valueOf(-1));                       // CONTACT_ID
-            result.add(Integer.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM));     // TYPE
-            result.add(phone);                                  // NUMBER
-			*/
-            /*
-             * The "\u00A0" keeps Phone.getDisplayLabel() from deciding
-             * to display the default label ("Home") next to the transformation
-             * of the letters into numbers.
+             * result = translated.newRow(); result.add(Integer.valueOf(-1)); //
+             * ID result.add(Long.valueOf(-1)); // CONTACT_ID
+             * result.add(Integer.
+             * valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM)); //
+             * TYPE result.add(phone); // NUMBER
              */
             /*
-            result.add("\u00A0");                               // LABEL
-            result.add(cons);                                   // NAME
-			*/
+             * The "\u00A0" keeps Phone.getDisplayLabel() from deciding to
+             * display the default label ("Home") next to the transformation of
+             * the letters into numbers.
+             */
+            /*
+             * result.add("\u00A0"); // LABEL result.add(cons); // NAME
+             */
 
-            //return new MergeCursor(new Cursor[] { translated, phoneCursor });
+            // return new MergeCursor(new Cursor[] { translated, phoneCursor });
             return phoneCursor;
         } else {
             return phoneCursor;
         }
-	}
+    }
 
-	@Override
-	public CharSequence transformToSipUri(Context ctxt, Cursor cursor) {
+    @Override
+    public CharSequence transformToSipUri(Context ctxt, Cursor cursor) {
         String number = cursor.getString(NUMBER_INDEX);
         if (number == null) {
             return "";
         }
         number = number.trim();
         /*
-        String name = cursor.getString(NAME_INDEX);
-        int type = cursor.getInt(TYPE_INDEX);
-
-        String label = cursor.getString(LABEL_INDEX);
-        
-        CharSequence displayLabel = android.provider.Contacts.Phones.getDisplayLabel(ctxt, type, label);
-
-        if (name == null) {
-            name = "";
-        } else {
-            // Names with commas are the bane of the recipient editor's existence.
-            // We've worked around them by using spans, but there are edge cases
-            // where the spans get deleted. Furthermore, having commas in names
-            // can be confusing to the user since commas are used as separators
-            // between recipients. The best solution is to simply remove commas
-            // from names.
-            name = name.replace(", ", " ")
-                       .replace(",", " ");  // Make sure we leave a space between parts of names.
-        }
-
-        String nameAndNumber = ContactsWrapper.formatNameAndNumber(name, number);
-
-        SpannableString out = new SpannableString(nameAndNumber);
-        int len = out.length();
-
-        if (!TextUtils.isEmpty(name)) {
-            out.setSpan(new Annotation("name", name), 0, len,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        } else {
-            out.setSpan(new Annotation("name", number), 0, len,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        String person_id = cursor.getString(CONTACT_ID_INDEX);
-        out.setSpan(new Annotation("person_id", person_id), 0, len,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        out.setSpan(new Annotation("label", displayLabel.toString()), 0, len,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        out.setSpan(new Annotation("number", number), 0, len,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+         * String name = cursor.getString(NAME_INDEX); int type =
+         * cursor.getInt(TYPE_INDEX); String label =
+         * cursor.getString(LABEL_INDEX); CharSequence displayLabel =
+         * android.provider.Contacts.Phones.getDisplayLabel(ctxt, type, label);
+         * if (name == null) { name = ""; } else { // Names with commas are the
+         * bane of the recipient editor's existence. // We've worked around them
+         * by using spans, but there are edge cases // where the spans get
+         * deleted. Furthermore, having commas in names // can be confusing to
+         * the user since commas are used as separators // between recipients.
+         * The best solution is to simply remove commas // from names. name =
+         * name.replace(", ", " ") .replace(",", " "); // Make sure we leave a
+         * space between parts of names. } String nameAndNumber =
+         * ContactsWrapper.formatNameAndNumber(name, number); SpannableString
+         * out = new SpannableString(nameAndNumber); int len = out.length(); if
+         * (!TextUtils.isEmpty(name)) { out.setSpan(new Annotation("name",
+         * name), 0, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); } else {
+         * out.setSpan(new Annotation("name", number), 0, len,
+         * Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); } String person_id =
+         * cursor.getString(CONTACT_ID_INDEX); out.setSpan(new
+         * Annotation("person_id", person_id), 0, len,
+         * Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); out.setSpan(new
+         * Annotation("label", displayLabel.toString()), 0, len,
+         * Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); out.setSpan(new
+         * Annotation("number", number), 0, len,
+         * Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
          */
         return number;
-        //return out;
+        // return out;
     }
-	
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void bindAutoCompleteView(View view, Context context, Cursor cursor) {
+        TextView name = (TextView) view.findViewById(R.id.name);
+        TextView label = (TextView) view.findViewById(R.id.label);
+        TextView number = (TextView) view.findViewById(R.id.number);
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public void bindAutoCompleteView(View view, Context context, Cursor cursor) {
-		TextView name = (TextView) view.findViewById(R.id.name);
-		TextView label = (TextView) view.findViewById(R.id.label);
-		TextView number = (TextView) view.findViewById(R.id.number);
-		
-		name.setText(cursor.getString(NAME_INDEX));
-		
-		int type = cursor.getInt(TYPE_INDEX);
-		CharSequence labelText = android.provider.ContactsContract.CommonDataKinds.Phone.getTypeLabel(context.getResources(), type, cursor.getString(LABEL_INDEX));
-		// When there's no label, getDisplayLabel() returns a CharSequence of
-		// length==1 containing
-		// a unicode non-breaking space. Need to check for that and consider
-		// that as "no label".
-		if (labelText.length() == 0 || (labelText.length() == 1 && labelText.charAt(0) == '\u00A0')) {
-			label.setVisibility(View.GONE);
-		} else {
-			label.setText(labelText);
-			label.setVisibility(View.VISIBLE);
-		}
+        name.setText(cursor.getString(NAME_INDEX));
 
-		number.setText(cursor.getString(NUMBER_INDEX));
-	}
+        int type = cursor.getInt(TYPE_INDEX);
+        CharSequence labelText = android.provider.ContactsContract.CommonDataKinds.Phone
+                .getTypeLabel(context.getResources(), type, cursor.getString(LABEL_INDEX));
+        // When there's no label, getDisplayLabel() returns a CharSequence of
+        // length==1 containing
+        // a unicode non-breaking space. Need to check for that and consider
+        // that as "no label".
+        if (labelText.length() == 0 || (labelText.length() == 1 && labelText.charAt(0) == '\u00A0')) {
+            label.setVisibility(View.GONE);
+        } else {
+            label.setText(labelText);
+            label.setVisibility(View.VISIBLE);
+        }
 
+        number.setText(cursor.getString(NUMBER_INDEX));
+    }
 
-	@Override
-	public SimpleCursorAdapter getAllContactsAdapter(Activity ctxt, int layout, int[] holders) {
-		//TODO : throw error if holders length != correct length
-		
-		Uri uri = Uri.withAppendedPath(ContactsContract.Data.CONTENT_URI, "");
-		
-		String query = Contacts.DISPLAY_NAME + " IS NOT NULL "
-				+" AND "
-				+ "("
-					// Has phone number
-					+ "("+ ContactsContract.Data.MIMETYPE+ "='"+ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE+"' AND "+ContactsContract.CommonDataKinds.Phone.NUMBER+" IS NOT NULL ) "
-					// Sip uri
-					+ (Compatibility.isCompatible(9)? " OR " + ContactsContract.Data.MIMETYPE+ "='"+GINGER_SIP_TYPE+"'":"")
-					//Sip IM custo
-					+ " OR ("
-						
-							+ ContactsContract.Data.MIMETYPE+ "='"+ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE+"' "
-							+" AND "+ ContactsContract.CommonDataKinds.Im.PROTOCOL + "=" + ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL
-							+" AND "+ ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL + "='sip'" 
-					+")"
-				+ ")";
-		if(!Compatibility.isCompatible(14)) {
-			query += ") GROUP BY ( "+RawContacts.CONTACT_ID;
-		}else {
-			//query += ")) GROUP BY (( "+RawContacts.CONTACT_ID;
-		}
-		
-		Cursor resCursor = ctxt.managedQuery(uri, 
-				new String[] {
-					ContactsContract.Data._ID,
-			    	RawContacts.CONTACT_ID,
-			        Contacts.DISPLAY_NAME
-			    }, query, 
-				null, 
-				Contacts.DISPLAY_NAME + " ASC");
-		return new ContactCursorAdapter(ctxt, 
-				R.layout.contact_list_item, 
-				resCursor, 
-				new String[] { Contacts.DISPLAY_NAME }, 
-				new int[] {R.id.contact_name });
-	}
-	
-	
-	private class ContactCursorAdapter extends SimpleCursorAdapter implements SectionIndexer {
+    @Override
+    public SimpleCursorAdapter getAllContactsAdapter(Activity ctxt, int layout, int[] holders) {
+        // TODO : throw error if holders length != correct length
 
-		private AlphabetIndexer alphaIndexer;
+        Uri uri = Uri.withAppendedPath(ContactsContract.Data.CONTENT_URI, "");
 
-		public ContactCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
-			super(context, layout, c, from, to);
-			alphaIndexer=new AlphabetIndexer(c, c.getColumnIndex(Contacts.DISPLAY_NAME), " ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		}
+        String query = Contacts.DISPLAY_NAME
+                + " IS NOT NULL "
+                + " AND "
+                + "("
+                // Has phone number
+                + "("
+                + ContactsContract.Data.MIMETYPE
+                + "='"
+                + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+                + "' AND "
+                + ContactsContract.CommonDataKinds.Phone.NUMBER
+                + " IS NOT NULL ) "
+                // Sip uri
+                + (Compatibility.isCompatible(9) ? " OR " + ContactsContract.Data.MIMETYPE + "='"
+                        + GINGER_SIP_TYPE + "'" : "")
+                // Sip IM custo
+                + " OR ("
 
-		@Override
-		public void bindView(View view, Context context, Cursor cursor) {
-			super.bindView(view, context, cursor);
-			Long contactId = cursor.getLong(cursor.getColumnIndex(RawContacts.CONTACT_ID));
-			view.setTag(contactId);
-		    ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
-		    
-		    Uri uri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
-		    Bitmap bitmap = getContactPhoto(context, uri, R.drawable.picture_unknown);
-		 
-		    imageView.setImageBitmap(bitmap);
-			
-		}
+                + ContactsContract.Data.MIMETYPE + "='"
+                + ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
+                + " AND " + ContactsContract.CommonDataKinds.Im.PROTOCOL + "="
+                + ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL
+                + " AND " + ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL + "='sip'"
+                + ")"
+                + ")";
+        if (!Compatibility.isCompatible(14)) {
+            query += ") GROUP BY ( " + RawContacts.CONTACT_ID;
+        } else {
+            // query += ")) GROUP BY (( "+RawContacts.CONTACT_ID;
+        }
 
-		@Override
-		public View newView(Context context, Cursor cursor, ViewGroup parent) {
-			View v = super.newView(context, cursor, parent);
-			v.setTag(cursor.getInt(cursor.getColumnIndex(RawContacts.CONTACT_ID)));
-			return v;
-		}
+        Cursor resCursor = ctxt.managedQuery(uri,
+                new String[] {
+                        ContactsContract.Data._ID,
+                        RawContacts.CONTACT_ID,
+                        Contacts.DISPLAY_NAME
+                }, query,
+                null,
+                Contacts.DISPLAY_NAME + " ASC");
+        return new ContactCursorAdapter(ctxt,
+                R.layout.contact_list_item,
+                resCursor,
+                new String[] {
+                    Contacts.DISPLAY_NAME
+                },
+                new int[] {
+                    R.id.contact_name
+                });
+    }
 
-		@Override
-		public int getPositionForSection(int arg0) {
-			return alphaIndexer.getPositionForSection(arg0);
-		}
+    private class ContactCursorAdapter extends SimpleCursorAdapter implements SectionIndexer {
 
-		@Override
-		public int getSectionForPosition(int arg0) {
-			return alphaIndexer.getSectionForPosition(arg0);
-		}
+        private AlphabetIndexer alphaIndexer;
 
-		@Override
-		public Object[] getSections() {
-			return alphaIndexer.getSections();
-		}
-		
-	}
+        public ContactCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
+            super(context, layout, c, from, to);
+            alphaIndexer = new AlphabetIndexer(c, c.getColumnIndex(Contacts.DISPLAY_NAME),
+                    " ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        }
 
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            super.bindView(view, context, cursor);
+            Long contactId = cursor.getLong(cursor.getColumnIndex(RawContacts.CONTACT_ID));
+            view.setTag(contactId);
+            ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
 
-	@Override
-	public CallerInfo findCallerInfo(Context ctxt, String number) {
-		Uri searchUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+            Uri uri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
+            Bitmap bitmap = getContactPhoto(context, uri, R.drawable.picture_unknown);
 
-		CallerInfo callerInfo = new CallerInfo();
-		
-		String[] projection;
-		if(Compatibility.isCompatible(11)) {
-			projection = new String[] {
-	                PhoneLookup._ID,
-	                PhoneLookup.DISPLAY_NAME,
-	                PhoneLookup.TYPE,
-	                PhoneLookup.LABEL,
-	                PhoneLookup.NUMBER,
-	                PhoneLookup.PHOTO_ID,
-	                PhoneLookup.LOOKUP_KEY,
-	                PhoneLookup.PHOTO_URI
-	        };
-		}else {
-			projection = new String[] {
-	                PhoneLookup._ID,
-	                PhoneLookup.DISPLAY_NAME,
-	                PhoneLookup.TYPE,
-	                PhoneLookup.LABEL,
-	                PhoneLookup.NUMBER,
-	                PhoneLookup.LOOKUP_KEY
-	        };
-		}
-		
-    	Cursor cursor = ctxt.getContentResolver().query(searchUri, projection, null, null, null);
-    	if(cursor != null) {
-    		try {
-    			if(cursor.getCount() > 0) {
-    				cursor.moveToFirst();
-	    			
-	    			ContentValues cv = new ContentValues();
-	    			DatabaseUtils.cursorRowToContentValues(cursor, cv);
-	    			callerInfo.contactExists = true;
-	    			if(cv.containsKey(PhoneLookup.DISPLAY_NAME) ) {
-	    				callerInfo.name = cv.getAsString(PhoneLookup.DISPLAY_NAME);
-	    			}
-	    			
-	    			callerInfo.phoneNumber = cv.getAsString(PhoneLookup.NUMBER);
-	    			
-	    			if(cv.containsKey(PhoneLookup.TYPE) && cv.containsKey(PhoneLookup.LABEL)) {
-						callerInfo.numberType = cv.getAsInteger(PhoneLookup.TYPE);
-						callerInfo.numberLabel = cv.getAsString(PhoneLookup.LABEL);
-						callerInfo.phoneLabel = (String) android.provider.ContactsContract.CommonDataKinds.Phone.getTypeLabel(ctxt.getResources(), callerInfo.numberType,
-								callerInfo.numberLabel);
-	    			}
+            imageView.setImageBitmap(bitmap);
 
-	    			if(cv.containsKey(PhoneLookup._ID) ) {
-	    				callerInfo.personId = cv.getAsLong(PhoneLookup._ID);
+        }
 
-	    				/*
-		    			if(cv.containsKey(PhoneLookup.LOOKUP_KEY) ) {
-		    				callerInfo.contactContentUri = Contacts.getLookupUri(callerInfo.personId , cv.getAsString(PhoneLookup.LOOKUP_KEY));
-		    			}
-		    			*/
-		    			
-		    			callerInfo.contactContentUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, callerInfo.personId);
-	    			}
-	    			
-	    			if(cv.containsKey(PhoneLookup.CUSTOM_RINGTONE)) {
-	    				callerInfo.contactRingtoneUri = Uri.parse(cv.getAsString(PhoneLookup.CUSTOM_RINGTONE));
-	    			}
-	
-	    			if(cv.containsKey(PhoneLookup.PHOTO_ID)) {
-	    				callerInfo.photoId = cv.getAsLong(PhoneLookup.PHOTO_ID);
-	    			}
-	    			
-	    			if(cv.containsKey(PhoneLookup.PHOTO_URI)) {
-	    				callerInfo.photoUri = Uri.parse(cv.getAsString(PhoneLookup.PHOTO_URI));
-	    			}
-	
-	    			if(callerInfo.name != null && callerInfo.name.length() == 0) {
-	    				callerInfo.name = null;
-	    			}
-	    			
-    			}
-    		}catch(Exception e) {
-    			Log.e(THIS_FILE, "Exception while retrieving cursor infos");
-    		}finally {
-    			cursor.close();
-    		}
-    		
-    		
-    	}
-    	
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            View v = super.newView(context, cursor, parent);
+            v.setTag(cursor.getInt(cursor.getColumnIndex(RawContacts.CONTACT_ID)));
+            return v;
+        }
+
+        @Override
+        public int getPositionForSection(int arg0) {
+            return alphaIndexer.getPositionForSection(arg0);
+        }
+
+        @Override
+        public int getSectionForPosition(int arg0) {
+            return alphaIndexer.getSectionForPosition(arg0);
+        }
+
+        @Override
+        public Object[] getSections() {
+            return alphaIndexer.getSections();
+        }
+
+    }
+
+    @Override
+    public CallerInfo findCallerInfo(Context ctxt, String number) {
+        Uri searchUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+        CallerInfo callerInfo = new CallerInfo();
+
+        String[] projection;
+        if (Compatibility.isCompatible(11)) {
+            projection = new String[] {
+                    PhoneLookup._ID,
+                    PhoneLookup.DISPLAY_NAME,
+                    PhoneLookup.TYPE,
+                    PhoneLookup.LABEL,
+                    PhoneLookup.NUMBER,
+                    PhoneLookup.PHOTO_ID,
+                    PhoneLookup.LOOKUP_KEY,
+                    PhoneLookup.PHOTO_URI
+            };
+        } else {
+            projection = new String[] {
+                    PhoneLookup._ID,
+                    PhoneLookup.DISPLAY_NAME,
+                    PhoneLookup.TYPE,
+                    PhoneLookup.LABEL,
+                    PhoneLookup.NUMBER,
+                    PhoneLookup.LOOKUP_KEY
+            };
+        }
+
+        Cursor cursor = ctxt.getContentResolver().query(searchUri, projection, null, null, null);
+        if (cursor != null) {
+            try {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+
+                    ContentValues cv = new ContentValues();
+                    DatabaseUtils.cursorRowToContentValues(cursor, cv);
+                    callerInfo.contactExists = true;
+                    if (cv.containsKey(PhoneLookup.DISPLAY_NAME)) {
+                        callerInfo.name = cv.getAsString(PhoneLookup.DISPLAY_NAME);
+                    }
+
+                    callerInfo.phoneNumber = cv.getAsString(PhoneLookup.NUMBER);
+
+                    if (cv.containsKey(PhoneLookup.TYPE) && cv.containsKey(PhoneLookup.LABEL)) {
+                        callerInfo.numberType = cv.getAsInteger(PhoneLookup.TYPE);
+                        callerInfo.numberLabel = cv.getAsString(PhoneLookup.LABEL);
+                        callerInfo.phoneLabel = (String) android.provider.ContactsContract.CommonDataKinds.Phone
+                                .getTypeLabel(ctxt.getResources(), callerInfo.numberType,
+                                        callerInfo.numberLabel);
+                    }
+
+                    if (cv.containsKey(PhoneLookup._ID)) {
+                        callerInfo.personId = cv.getAsLong(PhoneLookup._ID);
+
+                        /*
+                         * if(cv.containsKey(PhoneLookup.LOOKUP_KEY) ) {
+                         * callerInfo.contactContentUri =
+                         * Contacts.getLookupUri(callerInfo.personId ,
+                         * cv.getAsString(PhoneLookup.LOOKUP_KEY)); }
+                         */
+
+                        callerInfo.contactContentUri = ContentUris.withAppendedId(
+                                Contacts.CONTENT_URI, callerInfo.personId);
+                    }
+
+                    if (cv.containsKey(PhoneLookup.CUSTOM_RINGTONE)) {
+                        callerInfo.contactRingtoneUri = Uri.parse(cv
+                                .getAsString(PhoneLookup.CUSTOM_RINGTONE));
+                    }
+
+                    if (cv.containsKey(PhoneLookup.PHOTO_ID)) {
+                        callerInfo.photoId = cv.getAsLong(PhoneLookup.PHOTO_ID);
+                    }
+
+                    if (cv.containsKey(PhoneLookup.PHOTO_URI)) {
+                        callerInfo.photoUri = Uri.parse(cv.getAsString(PhoneLookup.PHOTO_URI));
+                    }
+
+                    if (callerInfo.name != null && callerInfo.name.length() == 0) {
+                        callerInfo.name = null;
+                    }
+
+                }
+            } catch (Exception e) {
+                Log.e(THIS_FILE, "Exception while retrieving cursor infos");
+            } finally {
+                cursor.close();
+            }
+
+        }
 
         // if no query results were returned with a viable number,
         // fill in the original number value we used to query with.
         if (TextUtils.isEmpty(callerInfo.phoneNumber)) {
-        	callerInfo.phoneNumber = number;
+            callerInfo.phoneNumber = number;
         }
-    	
-		return callerInfo;
-	}
+
+        return callerInfo;
+    }
 
     @Override
     public CallerInfo findSelfInfo(Context ctxt) {
         CallerInfo callerInfo = new CallerInfo();
         return callerInfo;
+    }
+
+    @Override
+    public Loader<Cursor> getContactByGroupCursorLoader(Context ctxt, String groupName) {
+
+        if(TextUtils.isEmpty(groupName)) {
+            return null;
+        }
+        
+        String[] projection;
+        if (Compatibility.isCompatible(11)) {
+            projection = new String[] {
+                    Contacts._ID,
+                    Contacts.DISPLAY_NAME,
+                    Contacts.PHOTO_ID,
+                    Contacts.LOOKUP_KEY,
+                    Contacts.PHOTO_URI
+            };
+        } else {
+            projection = new String[] {
+                    Contacts._ID,
+                    Contacts.DISPLAY_NAME,
+                    Contacts.LOOKUP_KEY
+            };
+        }
+
+        Uri searchUri = Uri.withAppendedPath(Contacts.CONTENT_GROUP_URI, groupName);
+        
+        return new CursorLoader(ctxt, searchUri, projection,
+                null, null, null);
     }
 }

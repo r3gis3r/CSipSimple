@@ -34,6 +34,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.Contacts;
 import android.provider.Contacts.People;
+import android.support.v4.content.Loader;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.View;
@@ -331,5 +332,11 @@ public class ContactsUtils3 extends ContactsWrapper {
     public CallerInfo findSelfInfo(Context ctxt) {
         CallerInfo callerInfo = new CallerInfo();
         return callerInfo;
+    }
+
+    @Override
+    public Loader<Cursor> getContactByGroupCursorLoader(Context ctxt, String groupName) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

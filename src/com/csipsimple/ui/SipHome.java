@@ -51,11 +51,11 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.account.AccountsEditList;
-import com.csipsimple.ui.calllog.CallLogFragment;
+import com.csipsimple.ui.calllog.CallLogListFragment;
 import com.csipsimple.ui.dialpad.DialerFragment;
-import com.csipsimple.ui.favorites.FavList;
+import com.csipsimple.ui.favorites.FavListFragment;
 import com.csipsimple.ui.help.Help;
-import com.csipsimple.ui.messages.ConversationList;
+import com.csipsimple.ui.messages.ConversationsListFragment;
 import com.csipsimple.ui.prefs.MainPrefs;
 import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
@@ -168,10 +168,10 @@ public class SipHome extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mTabsAdapter = new TabsAdapter(this, getSupportActionBar(), mViewPager);
         mTabsAdapter.addTab(dialerTab, DialerFragment.class);
-        mTabsAdapter.addTab(callLogTab, CallLogFragment.class);
-        mTabsAdapter.addTab(favoritesTab, FavList.class);
+        mTabsAdapter.addTab(callLogTab, CallLogListFragment.class);
+        mTabsAdapter.addTab(favoritesTab, FavListFragment.class);
         if (messagingTab != null) {
-            mTabsAdapter.addTab(messagingTab, ConversationList.class);
+            mTabsAdapter.addTab(messagingTab, ConversationsListFragment.class);
         }
 
         hasTriedOnceActivateAcc = false;
@@ -322,9 +322,9 @@ public class SipHome extends FragmentActivity {
     }
 
     private DialerFragment mDialpadFragment;
-    private CallLogFragment mCallLogFragment;
-    private ConversationList mMessagesFragment;
-    private FavList mPhoneFavoriteFragment;
+    private CallLogListFragment mCallLogFragment;
+    private ConversationsListFragment mMessagesFragment;
+    private FavListFragment mPhoneFavoriteFragment;
 
     private Fragment getFragmentAt(int position) {
         switch (position) {
@@ -368,15 +368,15 @@ public class SipHome extends FragmentActivity {
             if (currentPosition == TAB_INDEX_DIALER) {
                 mDialpadFragment.onVisibilityChanged(true);
             }
-        } else if (fragment instanceof CallLogFragment) {
-            mCallLogFragment = (CallLogFragment) fragment;
+        } else if (fragment instanceof CallLogListFragment) {
+            mCallLogFragment = (CallLogListFragment) fragment;
             if (currentPosition == TAB_INDEX_CALL_LOG) {
                 mCallLogFragment.onVisibilityChanged(true);
             }
-        } else if (fragment instanceof ConversationList) {
-            mMessagesFragment = (ConversationList) fragment;
-        } else if (fragment instanceof FavList) {
-            mPhoneFavoriteFragment = (FavList) fragment;
+        } else if (fragment instanceof ConversationsListFragment) {
+            mMessagesFragment = (ConversationsListFragment) fragment;
+        } else if (fragment instanceof FavListFragment) {
+            mPhoneFavoriteFragment = (FavListFragment) fragment;
         }
 
     }

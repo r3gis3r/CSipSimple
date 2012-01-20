@@ -52,13 +52,13 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
-import com.csipsimple.ui.messages.ConverstationAdapter.ConversationListItemViews;
+import com.csipsimple.ui.messages.ConverstationsAdapter.ConversationListItemViews;
 import com.csipsimple.utils.Compatibility;
 
 /**
  * This activity provides a list view of existing conversations.
  */
-public class ConversationList extends ListFragment implements ViewPagerVisibilityListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class ConversationsListFragment extends ListFragment implements ViewPagerVisibilityListener, LoaderManager.LoaderCallbacks<Cursor> {
 	//private static final String THIS_FILE = "Conv List";
 	
     // IDs of the main menu items.
@@ -71,12 +71,23 @@ public class ConversationList extends ListFragment implements ViewPagerVisibilit
 	
     private boolean mDualPane;
 
-    private ConverstationAdapter mAdapter;
+    private ConverstationsAdapter mAdapter;
+
 
     @Override
-    public void onCreate(Bundle state) {
-        super.onCreate(state);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+
+        // Adapter
+        mAdapter = new ConverstationsAdapter(getActivity(), null);
+        setListAdapter(mAdapter);
+        
+        ListView lv = getListView();
+        lv.setOnCreateContextMenuListener(this);
+
+        // Start loading
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -97,16 +108,13 @@ public class ConversationList extends ListFragment implements ViewPagerVisibilit
         return v;
     }
     
+    
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // View management
         mDualPane = getResources().getBoolean(R.bool.use_dual_panes);
-
-        // Adapter
-        mAdapter = new ConverstationAdapter(getActivity(), null);
-
 
         // Modify list view
         ListView lv = getListView();
@@ -118,32 +126,15 @@ public class ConversationList extends ListFragment implements ViewPagerVisibilit
         } else {
             lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
             lv.setItemsCanFocus(true);
-        }
-        
-        lv.setOnCreateContextMenuListener(this);
-        
-     // Start out with a progress indicator.
-        // setListShown(false);
-
-        setListAdapter(mAdapter);
-
-        // Start loading
-        // getLoaderManager().initLoader(0, null, this);
-
-        
+        }        
     }
     
     @Override
     public void onResume() {
         super.onResume();
-        fetchMessages();
 
         SipNotifications nManager = new SipNotifications(getActivity());
         nManager.cancelMessages();
-    }
-
-    public void fetchMessages() {
-        getLoaderManager().restartLoader(0, null, this);
     }
 
     public void viewDetails(int position, ConversationListItemViews cri) {
@@ -203,7 +194,7 @@ public class ConversationList extends ListFragment implements ViewPagerVisibilit
             }
         });
 
-        if (getListAdapter().getCount() > 0) {
+        if (getListAdapter() != null && getListAdapter().getCount() > 0) {
 
             MenuItem deleteAllMenu = menu.add(R.string.menu_delete_all);
             deleteAllMenu.setIcon(android.R.drawable.ic_menu_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -352,8 +343,8 @@ public class ConversationList extends ListFragment implements ViewPagerVisibilit
         
         if (visible && isResumed()) {
             getLoaderManager().restartLoader(0, null, this);
-        }
-        if (visible) {
+        //}
+        //if (visible) {
             ListView lv = getListView();
             if (lv != null && mAdapter != null) {
                 final int checkedPos = lv.getCheckedItemPosition();

@@ -57,7 +57,7 @@ import com.csipsimple.utils.Log;
 /**
  * Displays a list of call log entries.
  */
-public class CallLogFragment extends ListFragment implements ViewPagerVisibilityListener,
+public class CallLogListFragment extends ListFragment implements ViewPagerVisibilityListener,
         CallLogAdapter.CallFetcher, LoaderManager.LoaderCallbacks<Cursor>, OnCallLogAction {
 
     private static final String THIS_FILE = "CallLogFragment";
@@ -66,11 +66,21 @@ public class CallLogFragment extends ListFragment implements ViewPagerVisibility
     private CallLogAdapter mAdapter;
 
     private boolean mDualPane;
-
+    
     @Override
-    public void onCreate(Bundle state) {
-        super.onCreate(state);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        
+
+        // Adapter
+        mAdapter = new CallLogAdapter(getActivity(), this);
+        mAdapter.setOnCallLogActionListener(this);
+
+        setListAdapter(mAdapter);
+
+        // Start loading
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -85,14 +95,6 @@ public class CallLogFragment extends ListFragment implements ViewPagerVisibility
         // View management
         mDualPane = getResources().getBoolean(R.bool.use_dual_panes);
 
-        // Adapter
-        mAdapter = new CallLogAdapter(getActivity(), this);
-        mAdapter.setOnCallLogActionListener(this);
-
-        setListAdapter(mAdapter);
-
-        // Start loading
-        // getLoaderManager().initLoader(0, null, this);
 
         // Modify list view
         ListView lv = getListView();
@@ -135,8 +137,8 @@ public class CallLogFragment extends ListFragment implements ViewPagerVisibility
         }
         if (visible && isResumed()) {
             getLoaderManager().restartLoader(0, null, this);
-        }
-        if (visible) {
+        //}
+        //if (visible) {
             ListView lv = getListView();
             if (lv != null && mAdapter != null) {
                 final int checkedPos = lv.getCheckedItemPosition();

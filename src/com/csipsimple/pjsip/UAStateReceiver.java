@@ -64,6 +64,7 @@ import org.pjsip.pjsua.pjsip_redirect_op;
 import org.pjsip.pjsua.pjsip_status_code;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
+import org.pjsip.pjsua.pjsua_buddy_info;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -211,9 +212,12 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_buddy_state(int buddyId) {
 		lockCpu();
-		Log.d(THIS_FILE, "On buddy state");
-		// buddy_info = pjsua.buddy_get_info(buddy_id, new pjsua_buddy_info());
+		Log.d(THIS_FILE, "On buddy state " + buddyId);
+		pjsua_buddy_info binfo = new pjsua_buddy_info();
+		pjsua.buddy_get_info(buddyId, binfo);
 		
+		Log.d(THIS_FILE, "On buddy state " + binfo.getMonitor_pres() + " state " + binfo.getSub_state_name());
+        Log.d(THIS_FILE, "status " + PjSipService.pjStrToString(binfo.getStatus_text()));
 		unlockCpu();
 	}
 

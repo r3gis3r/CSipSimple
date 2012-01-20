@@ -62,6 +62,7 @@ import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_config;
 import org.pjsip.pjsua.pjsua_acc_info;
+import org.pjsip.pjsua.pjsua_buddy_config;
 import org.pjsip.pjsua.pjsua_call_flag;
 import org.pjsip.pjsua.pjsua_call_setting;
 import org.pjsip.pjsua.pjsua_config;
@@ -1006,6 +1007,22 @@ public class PjSipService {
         }
         return toCall;
     }
+    
+    /**
+     * Add a buddy to buddies list
+     * @param buddyUri the uri to register to
+     * @throws SameThreadException
+     */
+    public void addBuddy(String buddyUri) throws SameThreadException {
+        int[] p_buddy_id = new int[1];
+        
+        pjsua_buddy_config buddy_cfg = new pjsua_buddy_config();
+        pjsua.buddy_config_default(buddy_cfg);
+        buddy_cfg.setSubscribe(1);
+        buddy_cfg.setUri(pjsua.pj_str_copy(buddyUri));
+        
+        pjsua.buddy_add(buddy_cfg , p_buddy_id);
+    }
 
     public void stopDialtoneGenerator() {
         if (dialtoneGenerator != null) {
@@ -1044,12 +1061,22 @@ public class PjSipService {
         }
     }
 
+    /**
+     * Mute microphone
+     * @param on true if microphone has to be muted
+     * @throws SameThreadException
+     */
     public void setMicrophoneMute(boolean on) throws SameThreadException {
         if (created && mediaManager != null) {
             mediaManager.setMicrophoneMute(on);
         }
     }
 
+    /**
+     * Change speaker phone mode
+     * @param on true if the speaker mode has to be on.
+     * @throws SameThreadException
+     */
     public void setSpeakerphoneOn(boolean on) throws SameThreadException {
         if (created && mediaManager != null) {
             mediaManager.setSpeakerphoneOn(on);
