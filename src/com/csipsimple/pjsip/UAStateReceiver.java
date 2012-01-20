@@ -409,14 +409,14 @@ public class UAStateReceiver extends Callback {
 		
 		boolean hasMessage = false;
 		int numberOfMessages = 0;
-		String voiceMailNumber = "";
+		//String accountNbr = "";
 		
 		String lines[] = msg.split("\\r?\\n");
 		// Decapsulate the application/simple-message-summary
 		// TODO : should we check mime-type?
 		// rfc3842
 		Pattern messWaitingPattern = Pattern.compile(".*Messages-Waiting[ \t]?:[ \t]?(yes|no).*", Pattern.CASE_INSENSITIVE); 
-		Pattern messAccountPattern = Pattern.compile(".*Message-Account[ \t]?:[ \t]?(.*)", Pattern.CASE_INSENSITIVE); 
+		//Pattern messAccountPattern = Pattern.compile(".*Message-Account[ \t]?:[ \t]?(.*)", Pattern.CASE_INSENSITIVE); 
 		Pattern messVoiceNbrPattern = Pattern.compile(".*Voice-Message[ \t]?:[ \t]?([0-9]*)/[0-9]*.*", Pattern.CASE_INSENSITIVE); 
 		
 		
@@ -432,12 +432,14 @@ public class UAStateReceiver extends Callback {
 				}
 				continue;
 			}
+			/*
 			m = messAccountPattern.matcher(line);
 			if(m.matches()) {
-				voiceMailNumber = m.group(1);
-				Log.d(THIS_FILE, "VM acc : " + voiceMailNumber);
+				accountNbr = m.group(1);
+				Log.d(THIS_FILE, "VM acc : " + accountNbr);
 				continue;
 			}
+			*/
 			m = messVoiceNbrPattern.matcher(line);
 			if(m.matches()) {
 				try {
@@ -456,7 +458,7 @@ public class UAStateReceiver extends Callback {
 				Log.d(THIS_FILE, acc_id+" -> Has found account "+acc.getDefaultDomain()+" "+ acc.id + " >> "+acc.getProfileName());
 			}
 			Log.d(THIS_FILE, "We can show the voice messages notification");
-			notificationManager.showNotificationForVoiceMail(acc, numberOfMessages, voiceMailNumber);
+			notificationManager.showNotificationForVoiceMail(acc, numberOfMessages);
 		}
 		unlockCpu();
 	}

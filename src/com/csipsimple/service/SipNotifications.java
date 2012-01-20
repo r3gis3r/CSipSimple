@@ -275,7 +275,7 @@ public class SipNotifications {
 		}
 	}
 
-	public void showNotificationForVoiceMail(SipProfile acc, int numberOfMessages, String voiceMailNumber) {
+	public void showNotificationForVoiceMail(SipProfile acc, int numberOfMessages) {
 		if (messageVoicemail == null) {
 			messageVoicemail = new Notification(android.R.drawable.stat_notify_voicemail, context.getString(R.string.voice_mail), System.currentTimeMillis());
 			messageVoicemail.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
@@ -284,8 +284,8 @@ public class SipNotifications {
 		}
 
 		Intent notificationIntent = new Intent(Intent.ACTION_CALL);
-		notificationIntent.setData(Uri.parse(voiceMailNumber));
-		if (acc != null) {
+		if(acc != null) {
+    		notificationIntent.setData(Uri.fromParts("csip", acc.vm_nbr + "@" + acc.getDefaultDomain(), null));
 			notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
 		}
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
