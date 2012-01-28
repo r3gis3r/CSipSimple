@@ -21,7 +21,6 @@
 
 package com.csipsimple.utils.contacts;
 
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -32,19 +31,17 @@ import android.database.MatrixCursor.RowBuilder;
 import android.database.MergeCursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.Contacts;
 import android.provider.Contacts.People;
-import android.support.v4.content.Loader;
+import android.provider.Contacts.Phones;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallerInfo;
+import com.csipsimple.service.PresenceManager.PresenceStatus;
 import com.csipsimple.utils.Log;
 
 import java.util.ArrayList;
@@ -60,21 +57,21 @@ public class ContactsUtils3 extends ContactsWrapper {
     public static final int NAME_INDEX = 5;
 
     protected static final String PROJECTION_CONTACTS[] = {
-            Contacts.People._ID,
-            Contacts.People.DISPLAY_NAME
+            People._ID,
+            People.DISPLAY_NAME
     };
 
     private static final String[] PROJECTION_PHONE = {
-            Contacts.Phones._ID, // 0
-            Contacts.Phones.PERSON_ID, // 1
-            Contacts.Phones.TYPE, // 2
-            Contacts.Phones.NUMBER, // 3
-            Contacts.Phones.LABEL, // 4
-            Contacts.Phones.DISPLAY_NAME, // 5
+            Phones._ID, // 0
+            Phones.PERSON_ID, // 1
+            Phones.TYPE, // 2
+            Phones.NUMBER, // 3
+            Phones.LABEL, // 4
+            Phones.DISPLAY_NAME, // 5
     };
 
-    private static final String SORT_ORDER = Contacts.Phones.DISPLAY_NAME + " ASC,"
-            + Contacts.Phones.TYPE;
+    private static final String SORT_ORDER = Phones.DISPLAY_NAME + " ASC,"
+            + Phones.TYPE;
     private static final String THIS_FILE = "ContactsUtils3";
 
     @Override
@@ -92,16 +89,16 @@ public class ContactsUtils3 extends ContactsWrapper {
         ArrayList<Phone> phones = new ArrayList<Phone>();
 
         Cursor pCur = ctxt.getContentResolver().query(
-                Contacts.Phones.CONTENT_URI,
+                Phones.CONTENT_URI,
                 null,
-                Contacts.Phones.PERSON_ID + " = ?",
+                Phones.PERSON_ID + " = ?",
                 new String[] {
                     id
                 }, null);
         while (pCur.moveToNext()) {
             phones.add(new Phone(
-                    pCur.getString(pCur.getColumnIndex(Contacts.Phones.NUMBER))
-                    , pCur.getString(pCur.getColumnIndex(Contacts.Phones.TYPE))
+                    pCur.getString(pCur.getColumnIndex(Phones.NUMBER))
+                    , pCur.getString(pCur.getColumnIndex(Phones.TYPE))
                     ));
         }
         pCur.close();
@@ -126,15 +123,15 @@ public class ContactsUtils3 extends ContactsWrapper {
             }
         }
 
-        Uri uri = Uri.withAppendedPath(Contacts.Phones.CONTENT_URI, "");
+        Uri uri = Phones.CONTENT_URI;
         /*
          * if we decide to filter based on phone types use a selection like
          * this. String selection = String.format("%s=%s OR %s=%s OR %s=%s",
          * Phone.TYPE, Phone.TYPE_MOBILE, Phone.TYPE, Phone.TYPE_WORK_MOBILE,
          * Phone.TYPE, Phone.TYPE_MMS);
          */
-        String selection = String.format("%s LIKE ? OR %s LIKE ?", Contacts.Phones.NUMBER,
-                Contacts.Phones.DISPLAY_NAME);
+        String selection = String.format("%s LIKE ? OR %s LIKE ?", Phones.NUMBER,
+                Phones.DISPLAY_NAME);
         Cursor phoneCursor =
                 ctxt.getContentResolver().query(uri,
                         PROJECTION_PHONE,
@@ -151,7 +148,7 @@ public class ContactsUtils3 extends ContactsWrapper {
             RowBuilder result = translated.newRow();
             result.add(Integer.valueOf(-1)); // ID
             result.add(Long.valueOf(-1)); // CONTACT_ID
-            result.add(Integer.valueOf(Contacts.Phones.TYPE_CUSTOM)); // TYPE
+            result.add(Integer.valueOf(Phones.TYPE_CUSTOM)); // TYPE
             result.add(cons); // NUMBER
 
             result.add("\u00A0"); // LABEL
@@ -199,7 +196,7 @@ public class ContactsUtils3 extends ContactsWrapper {
 
         TextView label = (TextView) view.findViewById(R.id.label);
         int type = cursor.getInt(TYPE_INDEX);
-        CharSequence labelText = android.provider.Contacts.Phones.getDisplayLabel(context, type,
+        CharSequence labelText = Phones.getDisplayLabel(context, type,
                 cursor.getString(LABEL_INDEX));
         // When there's no label, getDisplayLabel() returns a CharSequence of
         // length==1 containing
@@ -217,54 +214,9 @@ public class ContactsUtils3 extends ContactsWrapper {
     }
 
     @Override
-    public SimpleCursorAdapter getAllContactsAdapter(Activity ctxt, int layout, int[] holders) {
-        Uri uri = Uri.withAppendedPath(Contacts.People.CONTENT_URI, "");
-        Cursor resCursor = ctxt.managedQuery(uri, PROJECTION_CONTACTS, null, null,
-                Contacts.People.DISPLAY_NAME + " ASC");
-        return new ContactCursorAdapter(ctxt,
-                R.layout.contact_list_item,
-                resCursor,
-                new String[] {
-                        Contacts.People.DISPLAY_NAME
-                },
-                new int[] {
-                        R.id.contact_name
-                });
-    }
-
-    private class ContactCursorAdapter extends SimpleCursorAdapter {
-
-        public ContactCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
-            super(context, layout, c, from, to);
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            super.bindView(view, context, cursor);
-            Long contactId = cursor.getLong(cursor.getColumnIndex(Contacts.People._ID));
-            view.setTag(contactId);
-            ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
-
-            Uri uri = ContentUris.withAppendedId(Contacts.People.CONTENT_URI, contactId);
-            Bitmap bitmap = getContactPhoto(context, uri, R.drawable.picture_unknown);
-
-            imageView.setImageBitmap(bitmap);
-
-        }
-
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            View v = super.newView(context, cursor, parent);
-            v.setTag(cursor.getInt(cursor.getColumnIndex(Contacts.People._ID)));
-            return v;
-        }
-
-    }
-
-    @Override
     public CallerInfo findCallerInfo(Context ctxt, String number) {
         Uri searchUri = Uri
-                .withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(number));
+                .withAppendedPath(Phones.CONTENT_FILTER_URL, Uri.encode(number));
 
         CallerInfo callerInfo = new CallerInfo();
 
@@ -276,29 +228,29 @@ public class ContactsUtils3 extends ContactsWrapper {
                     ContentValues cv = new ContentValues();
                     DatabaseUtils.cursorRowToContentValues(cursor, cv);
                     callerInfo.contactExists = true;
-                    if (cv.containsKey(Contacts.Phones.DISPLAY_NAME)) {
-                        callerInfo.name = cv.getAsString(Contacts.Phones.DISPLAY_NAME);
+                    if (cv.containsKey(Phones.DISPLAY_NAME)) {
+                        callerInfo.name = cv.getAsString(Phones.DISPLAY_NAME);
                     }
 
-                    callerInfo.phoneNumber = cv.getAsString(Contacts.Phones.NUMBER);
+                    callerInfo.phoneNumber = cv.getAsString(Phones.NUMBER);
 
-                    if (cv.containsKey(Contacts.Phones.TYPE)
-                            && cv.containsKey(Contacts.Phones.LABEL)) {
-                        callerInfo.numberType = cv.getAsInteger(Contacts.Phones.TYPE);
-                        callerInfo.numberLabel = cv.getAsString(Contacts.Phones.LABEL);
-                        callerInfo.phoneLabel = Contacts.Phones.getDisplayLabel(ctxt,
+                    if (cv.containsKey(Phones.TYPE)
+                            && cv.containsKey(Phones.LABEL)) {
+                        callerInfo.numberType = cv.getAsInteger(Phones.TYPE);
+                        callerInfo.numberLabel = cv.getAsString(Phones.LABEL);
+                        callerInfo.phoneLabel = Phones.getDisplayLabel(ctxt,
                                 callerInfo.numberType, callerInfo.numberLabel)
                                 .toString();
                     }
 
-                    if (cv.containsKey(Contacts.Phones.PERSON_ID)) {
-                        callerInfo.personId = cv.getAsLong(Contacts.Phones.PERSON_ID);
+                    if (cv.containsKey(Phones.PERSON_ID)) {
+                        callerInfo.personId = cv.getAsLong(Phones.PERSON_ID);
                         callerInfo.contactContentUri = ContentUris.withAppendedId(
-                                Contacts.People.CONTENT_URI, callerInfo.personId);
+                                People.CONTENT_URI, callerInfo.personId);
                     }
 
-                    if (cv.containsKey(Contacts.Phones.CUSTOM_RINGTONE)) {
-                        String ringtoneUriString = cv.getAsString(Contacts.Phones.CUSTOM_RINGTONE);
+                    if (cv.containsKey(Phones.CUSTOM_RINGTONE)) {
+                        String ringtoneUriString = cv.getAsString(Phones.CUSTOM_RINGTONE);
                         if (!TextUtils.isEmpty(ringtoneUriString)) {
                             callerInfo.contactRingtoneUri = Uri.parse(ringtoneUriString);
                         }
@@ -334,9 +286,64 @@ public class ContactsUtils3 extends ContactsWrapper {
         return callerInfo;
     }
 
+
     @Override
-    public Loader<Cursor> getContactByGroupCursorLoader(Context ctxt, String groupName) {
+    public Cursor getContactsPhones(Context ctxt) {
+        Uri uri = Phones.CONTENT_URI;
+        Cursor resCursor = ctxt.getContentResolver().query(uri, PROJECTION_PHONE, null, null,
+                Phones.DISPLAY_NAME + " ASC");
+        return resCursor;
+    }
+
+    @Override
+    public void bindContactPhoneView(View view, Context context, Cursor cursor) {
+        
+        // Get values
+        String value = cursor.getString(cursor.getColumnIndex(Phones.NUMBER));
+        String displayName = cursor.getString(cursor.getColumnIndex(Phones.DISPLAY_NAME));
+        Long peopleId = cursor.getLong(cursor.getColumnIndex(Phones.PERSON_ID));
+        Uri uri = ContentUris.withAppendedId(People.CONTENT_URI, peopleId);
+        Bitmap bitmap = getContactPhoto(context, uri, R.drawable.picture_unknown);
+        
+        // Get views
+        TextView tv = (TextView) view.findViewById(R.id.contact_name);
+        TextView sub = (TextView) view.findViewById(R.id.subject);
+        ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
+        
+        // Bind
+        view.setTag(value);
+        tv.setText(displayName);
+        sub.setText(value);
+        imageView.setImageBitmap(bitmap);        
+    }
+
+    @Override
+    public int getContactIndexableColumnIndex(Cursor c) {
+        return c.getColumnIndex(People.DISPLAY_NAME);
+    }
+    
+
+    
+    @Override
+    public Cursor getContactsByGroup(Context ctxt, String groupName) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void bindContactView(View view, Context context, Cursor cursor) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<String> getCSipPhonesByGroup(Context ctxt, String groupName) {
+        return new ArrayList<String>();
+    }
+
+    @Override
+    public void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus) {
+        // TODO Auto-generated method stub
+        
     }
 }

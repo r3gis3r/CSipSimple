@@ -233,7 +233,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		public void run() {
 			// From now, the timer can't be cancelled anymore
 
-			Log.d(THIS_FILE, "FIRE START " + entryId);
+			Log.v(THIS_FILE, "FIRE START " + entryId);
 			
 			
 			try {
@@ -248,7 +248,7 @@ public class TimerWrapper extends BroadcastReceiver {
 			}finally {
 				wakeLock.release(this);
 			}
-			Log.d(THIS_FILE, "FIRE DONE " + entryId);
+			Log.v(THIS_FILE, "FIRE DONE " + entryId);
 			
 		}
 	}

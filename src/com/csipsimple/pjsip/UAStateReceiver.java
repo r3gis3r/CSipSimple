@@ -46,6 +46,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
+import com.csipsimple.service.PresenceManager.PresenceStatus;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
@@ -218,6 +219,21 @@ public class UAStateReceiver extends Callback {
 		
 		Log.d(THIS_FILE, "On buddy state " + binfo.getMonitor_pres() + " state " + binfo.getSub_state_name());
         Log.d(THIS_FILE, "status " + PjSipService.pjStrToString(binfo.getStatus_text()));
+        PresenceStatus presStatus = PresenceStatus.UNKNOWN;
+        switch (binfo.getStatus()) {
+            case PJSUA_BUDDY_STATUS_ONLINE:
+                presStatus = PresenceStatus.ONLINE;
+                break;
+            case PJSUA_BUDDY_STATUS_OFFLINE:
+                presStatus = PresenceStatus.OFFLINE;
+                break;
+            case PJSUA_BUDDY_STATUS_UNKNOWN:
+            default:
+                presStatus = PresenceStatus.UNKNOWN;
+                break;
+        }
+        
+        pjService.service.presenceMgr.changeBuddyState(PjSipService.pjStrToString(binfo.getUri()), binfo.getMonitor_pres(), presStatus); 
 		unlockCpu();
 	}
 

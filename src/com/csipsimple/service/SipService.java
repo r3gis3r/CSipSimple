@@ -906,6 +906,8 @@ public class SipService extends Service {
 
 	private Handler mHandler = new Handler();
 	private AccountStatusContentObserver statusObserver = null;
+
+    public PresenceManager presenceMgr;
 	
 	class AccountStatusContentObserver extends ContentObserver {
 		public AccountStatusContentObserver(Handler h) {
@@ -1180,6 +1182,8 @@ public class SipService extends Service {
 		}
 		Log.d(THIS_FILE, "Ask pjservice to start itself");
 		if(pjService.sipStart()) {
+		    presenceMgr = new PresenceManager();
+		    presenceMgr.startMonitoring(this);
 			Log.d(THIS_FILE, "Add all accounts");
 			addAllAccounts();
 		}
@@ -1201,6 +1205,9 @@ public class SipService extends Service {
 			*/
 		}
 		if(canStop) {
+		    if(presenceMgr != null) {
+		        presenceMgr.stopMonitoring();
+		    }
 			releaseResources();
 		}
 		//unregisterBroadcasts();
@@ -1400,6 +1407,29 @@ public class SipService extends Service {
 		}
 	}
 
+
+    /**
+     * Add a buddy to list 
+     * @param buddyUri the sip uri of the buddy to add
+     */
+    public int addBuddy(String buddyUri) throws SameThreadException {
+        int retVal = -1;
+        if(pjService != null) {
+            Log.d(THIS_FILE, "Trying to add buddy " + buddyUri);
+            retVal = pjService.addBuddy(buddyUri);
+        }
+        return retVal;
+    }
+
+    /**
+     * Remove a buddy from buddies
+     * @param buddyUri the sip uri of the buddy to remove
+     */
+    public void removeBuddy(String buddyUri) throws SameThreadException  {
+        if(pjService != null) {
+            pjService.removeBuddy(buddyUri);
+        }
+    }
 	
 	private boolean holdResources = false;
 	/**

@@ -31,7 +31,6 @@ import android.widget.ListView;
 
 import com.csipsimple.R;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
-import com.csipsimple.utils.contacts.ContactsWrapper;
 
 public class FavListFragment extends ListFragment implements ViewPagerVisibilityListener,
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -84,8 +83,7 @@ public class FavListFragment extends ListFragment implements ViewPagerVisibility
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        
-        return null;//ContactsWrapper.getInstance().getContactByGroupCursorLoader(getActivity(), "Contacts");
+        return new FavLoader(getActivity());
     }
 
     @Override

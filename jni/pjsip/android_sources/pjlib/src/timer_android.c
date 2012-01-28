@@ -93,7 +93,7 @@ static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 		pj_uint32_t ft = PJ_TIME_VAL_MSEC(*delay);
 
 		PJ_LOG(
-				4,
+				5,
 				(THIS_FILE, "Scheduling timer %d aka %x in %ld ms", entry->_timer_id, entry, ft));
 
 		timer_schedule_wrapper((int) entry, (int) entry, (int) ft);
@@ -379,7 +379,7 @@ PJ_DEF(pj_status_t) pj_timer_fire(long entry_ptr){
 
 		if (ht != NULL) {
 			PJ_LOG(
-					4,
+					5,
 					(THIS_FILE, "FIRE timer %d@%x", entry->_timer_id, entry));
 
 			pj_timer_heap_callback* cb = NULL;
@@ -399,7 +399,7 @@ PJ_DEF(pj_status_t) pj_timer_fire(long entry_ptr){
 				cb(ht, entry);
 			}
 
-			PJ_LOG(4, (THIS_FILE, "FIRE done and released"));
+			PJ_LOG(5, (THIS_FILE, "FIRE done and released"));
 
 		} else {
 			PJ_LOG(

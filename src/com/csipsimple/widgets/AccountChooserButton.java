@@ -50,6 +50,15 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
     protected static final String THIS_FILE = "AccountChooserButton";
 
+    private static final String[] ACC_PROJECTION = new String[] {
+                SipProfile.FIELD_ID,
+                SipProfile.FIELD_ACC_ID, // Needed for default domain
+                SipProfile.FIELD_REG_URI, // Needed for default domain
+                SipProfile.FIELD_PROXY, // Needed for default domain
+                SipProfile.FIELD_DISPLAY_NAME,
+                SipProfile.FIELD_WIZARD
+        };
+
     private final TextView textView;
     private final ImageView imageView;
     private HorizontalQuickActionWindow quickAction;
@@ -140,6 +149,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         super.onDetachedFromWindow();
         if (statusObserver != null) {
             getContext().getContentResolver().unregisterContentObserver(statusObserver);
+            statusObserver = null;
         }
     }
 
@@ -158,11 +168,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         quickAction.setAnchor(r);
         quickAction.removeAllItems();
 
-        Cursor c = getContext().getContentResolver().query(SipProfile.ACCOUNT_URI, new String[] {
-                SipProfile.FIELD_ID,
-                SipProfile.FIELD_DISPLAY_NAME,
-                SipProfile.FIELD_WIZARD
-        }, SipProfile.FIELD_ACTIVE + "=?", new String[] {
+        Cursor c = getContext().getContentResolver().query(SipProfile.ACCOUNT_URI, ACC_PROJECTION, SipProfile.FIELD_ACTIVE + "=?", new String[] {
                 "1"
         }, null);
 
@@ -235,11 +241,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
     }
 
     private void updateRegistration() {
-        Cursor c = getContext().getContentResolver().query(SipProfile.ACCOUNT_URI, new String[] {
-                SipProfile.FIELD_ID,
-                SipProfile.FIELD_DISPLAY_NAME,
-                SipProfile.FIELD_WIZARD
-        }, SipProfile.FIELD_ACTIVE + "=?", new String[] {
+        Cursor c = getContext().getContentResolver().query(SipProfile.ACCOUNT_URI, ACC_PROJECTION, SipProfile.FIELD_ACTIVE + "=?", new String[] {
                 "1"
         }, null);
 
@@ -303,6 +305,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
             Map<String, String> handlers = CallHandler.getAvailableCallHandlers(getContext());
             for (String callHandler : handlers.keySet()) {
                 // Try to prefer the GSM handler
+                // TODO -- auto detect package name
                 if (callHandler
                         .equalsIgnoreCase("com.csipsimple/com.csipsimple.plugins.telephony.CallHandler")) {
                     Log.d(THIS_FILE, "Prefer GSM");

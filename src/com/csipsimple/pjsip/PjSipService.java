@@ -1013,7 +1013,7 @@ public class PjSipService {
      * @param buddyUri the uri to register to
      * @throws SameThreadException
      */
-    public void addBuddy(String buddyUri) throws SameThreadException {
+    public int addBuddy(String buddyUri) throws SameThreadException {
         int[] p_buddy_id = new int[1];
         
         pjsua_buddy_config buddy_cfg = new pjsua_buddy_config();
@@ -1022,6 +1022,17 @@ public class PjSipService {
         buddy_cfg.setUri(pjsua.pj_str_copy(buddyUri));
         
         pjsua.buddy_add(buddy_cfg , p_buddy_id);
+        
+        return p_buddy_id[0];
+    }
+    
+
+    public void removeBuddy(String buddyUri) throws SameThreadException {
+        
+        int buddyId = pjsua.buddy_find(pjsua.pj_str_copy(buddyUri));
+        if(buddyId >= 0) {
+            pjsua.buddy_del(buddyId);
+        }
     }
 
     public void stopDialtoneGenerator() {
@@ -1617,4 +1628,5 @@ public class PjSipService {
         }
         return "";
     }
+
 }

@@ -27,26 +27,54 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.contacts.ContactsWrapper;
+import com.csipsimple.wizards.WizardUtils;
 
 public class FavAdapter extends ResourceCursorAdapter {
 
     private static final String THIS_FILE = "FavAdapter";
 
     public FavAdapter(Context context, Cursor c) {
-        super(context, R.layout.search_contact_list_item, c, 0);
+        super(context, R.layout.fav_list_item, c, 0);
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-
         ContentValues cv = new ContentValues();
-
         DatabaseUtils.cursorRowToContentValues(cursor, cv);
+        
+        int type = ContactsWrapper.TYPE_CONTACT;
+        if(cv.containsKey(ContactsWrapper.FIELD_TYPE)) {
+            type = cv.getAsInteger(ContactsWrapper.FIELD_TYPE);
+        }
+        
+        if(type == ContactsWrapper.TYPE_GROUP) {
+            showViewForHeader(view, true);
+            TextView tv = (TextView) view.findViewById(R.id.header_text);
+            tv.setText(cv.getAsString(SipProfile.FIELD_DISPLAY_NAME));
+            
+            ImageView icon = (ImageView) view.findViewById(R.id.header_icon);
+            icon.setImageResource(WizardUtils.getWizardIconRes(cv.getAsString(SipProfile.FIELD_WIZARD)));
+            Log.d(THIS_FILE, "It's a section ....");
+            
+        }else {
+            showViewForHeader(view, false);
+            ContactsWrapper.getInstance().bindContactView(view, context, cursor);
+            Log.d(THIS_FILE, "Contents = " + cv);
+        }
+    }
+    
+    private void showViewForHeader(View view, boolean isHeader) {
 
-        Log.d(THIS_FILE, "Contents = " + cv);
+        view.findViewById(R.id.header_view).setVisibility(isHeader ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.contact_view).setVisibility(isHeader ? View.GONE : View.VISIBLE );
     }
 
 }
+

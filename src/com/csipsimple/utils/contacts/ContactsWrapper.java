@@ -21,10 +21,6 @@
 
 package com.csipsimple.utils.contacts;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,18 +28,24 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v4.content.Loader;
 import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.SimpleCursorAdapter;
 
 import com.csipsimple.R;
 import com.csipsimple.models.CallerInfo;
+import com.csipsimple.service.PresenceManager.PresenceStatus;
 import com.csipsimple.utils.Compatibility;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ContactsWrapper {
     private static ContactsWrapper instance;
+    
+    public static final String FIELD_TYPE = "wrapped_type";
+    public static final int TYPE_GROUP = 0;
+    public static final int TYPE_CONTACT = 1;
 
     public static ContactsWrapper getInstance() {
         if (instance == null) {
@@ -112,6 +114,7 @@ public abstract class ContactsWrapper {
 
     /**
      * Bind to view the contact-phone tuple
+     * View should be expanded from search_contact_list_item.xml
      * 
      * @param view the view to fill with infos
      * @param context the context of the application
@@ -119,24 +122,49 @@ public abstract class ContactsWrapper {
      */
     public abstract void bindAutoCompleteView(View view, Context context, Cursor cursor);
 
+
     /**
-     * Create a basic contact adapter for all contacts entries.
+     * Bind to view the contact
+     * 
+     * @param view the view to fill with infos
+     * @param context the context of the application
+     * @param cursor the cursor to the contact-phone tuple
+     */
+    public abstract void bindContactPhoneView(View view, Context context, Cursor cursor);
+
+    /**
+     *  Get a cursor loader on contacts entries based on contact grouping 
      * 
      * @param ctxt the context of the application
-     * @param layout the layout to use
-     * @param holders the ids of views that will receive contact infos
-     * @return the contact cursor adapter
+     * @return the result cursor
      */
-    public abstract SimpleCursorAdapter getAllContactsAdapter(Activity ctxt, int layout,
-            int[] holders);
+    public abstract Cursor getContactsPhones(Context ctxt);
+    
+    /**
+     * Retrieve list of csip: im entries in a group
+     * @param groupName name of the group to search in
+     * @return
+     */
+    public abstract List<String> getCSipPhonesByGroup(Context ctxt, String groupName);
+    
+    /**
+     * Push back the presence status to the contact database
+     * @param buddyUri the presence to update
+     * @param presStatus the new presence status
+     */
+    public abstract void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus);
+
+    public abstract int getContactIndexableColumnIndex(Cursor c);
 
     /**
      * Get a cursor loader on contacts entries based on contact grouping 
      * @param ctxt the context of the application
      * @param groupName the name of the group to filter on
-     * @return The cursor loader
+     * @return the result cursor
      */
-    public abstract Loader<Cursor> getContactByGroupCursorLoader(Context ctxt, String groupName);
+    public abstract Cursor getContactsByGroup(Context ctxt, String groupName);
+    
+    public abstract void bindContactView(View view, Context context, Cursor cursor);
 
     public class Phone {
         private String number;
@@ -281,4 +309,9 @@ public abstract class ContactsWrapper {
     public abstract CallerInfo findCallerInfo(Context ctxt, String number);
 
     public abstract CallerInfo findSelfInfo(Context ctxt);
+
+    
+
+    
+
 }
