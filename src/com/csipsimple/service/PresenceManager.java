@@ -127,7 +127,7 @@ public class PresenceManager {
 
                     for (String csipUri : toDel) {
                         service.removeBuddy("sip:" + csipUri);
-                        ContactsWrapper.getInstance().updateCSipPresence(service, csipUri, PresenceStatus.UNKNOWN);
+                        ContactsWrapper.getInstance().updateCSipPresence(service, csipUri, PresenceStatus.UNKNOWN, "");
                     }
                 }
             });
@@ -214,9 +214,16 @@ public class PresenceManager {
             updateRegistrations();
         }
     }
-
-    public void changeBuddyState(String buddyUri, int monitorPres, PresenceStatus presStatus) {
-        ContactsWrapper.getInstance().updateCSipPresence(service, buddyUri.replace("sip:", ""), presStatus);
+    
+    /**
+     * Forward status change for a buddy to manager
+     * @param buddyUri buddy uri 
+     * @param monitorPres whether the status is currently monitored
+     * @param presStatus the status 
+     * @param statusText the text representing this status
+     */
+    public void changeBuddyState(String buddyUri, int monitorPres, PresenceStatus presStatus, String statusText) {
+        ContactsWrapper.getInstance().updateCSipPresence(service, buddyUri.replace("sip:", ""), presStatus, statusText);
         
     }
 

@@ -152,7 +152,7 @@ public abstract class ContactsWrapper {
      * @param buddyUri the presence to update
      * @param presStatus the new presence status
      */
-    public abstract void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus);
+    public abstract void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus, String statusText);
 
     public abstract int getContactIndexableColumnIndex(Cursor c);
 

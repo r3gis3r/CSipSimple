@@ -22,9 +22,11 @@
 package com.csipsimple.ui.favorites;
 
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.MergeCursor;
+import android.os.Handler;
 import android.provider.BaseColumns;
 import android.support.v4.content.AsyncTaskLoader;
 
@@ -40,6 +42,8 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
     public FavLoader(Context context) {
         super(context);
     }
+    
+    Handler mHandler = new Handler();
 
     @Override
     public Cursor loadInBackground() {
@@ -51,10 +55,18 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
         for (SipProfile acc : accounts) {
             cursorsToMerge[i++] = createHeaderCursorFor(acc);
             cursorsToMerge[i++] = createContentCursorFor(acc);
-
+            
         }
         if(cursorsToMerge.length > 0) {
-            return new MergeCursor(cursorsToMerge);
+            MergeCursor mg = new MergeCursor(cursorsToMerge);
+            mg.registerContentObserver(new ContentObserver(mHandler) {
+                @Override
+                public void onChange(boolean selfChange) {
+                    super.onChange(selfChange);
+                    onContentChanged();
+                }
+            });
+            return mg;
         }else {
             return null;
         }
@@ -74,7 +86,7 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                 onReleaseResources(currentResult);
             }
         }
-
+        
         currentResult = c;
 
         if (isStarted()) {
@@ -143,8 +155,6 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
      * actively loaded data set.
      */
     protected void onReleaseResources(Cursor c) {
-        // For a simple List<> there is nothing to do. For something
-        // like a Cursor, we would close it here.
         c.close();
     }
 

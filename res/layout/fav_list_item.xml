@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical"
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/header_icon"
@@ -44,14 +45,16 @@
     <RelativeLayout
         android:id="@+id/contact_view"
         android:layout_width="fill_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight" >
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_gravity="center_vertical" >
 
         <com.csipsimple.widgets.contactbadge.QuickContactBadge
             android:id="@+id/quick_contact_photo"
             android:layout_width="@dimen/call_log_list_contact_photo_size"
             android:layout_height="@dimen/call_log_list_contact_photo_size"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/call_log_inner_margin" />
+            android:layout_marginLeft="@dimen/call_log_inner_margin"
+            android:layout_marginRight="10dip" />
 
         <TextView
             android:id="@+id/contact_name"
@@ -59,13 +62,31 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="5dip"
             android:layout_marginTop="6dip"
             android:layout_toRightOf="@id/quick_contact_photo"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/status_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contact_name"
+            android:layout_margin="5dip"
+            android:layout_toRightOf="@id/quick_contact_photo"
+            android:contentDescription="@string/empty_description"
+            android:src="@android:drawable/presence_offline"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/status_icon"
+            android:layout_toRightOf="@id/status_icon"
+            android:gravity="center_vertical"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

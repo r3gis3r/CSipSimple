@@ -508,8 +508,8 @@ public class ContactsUtils5 extends ContactsWrapper {
                     Contacts.DISPLAY_NAME,
                     Contacts.PHOTO_ID,
                     Contacts.CONTACT_STATUS_ICON,
-                    Contacts.CONTACT_STATUS_LABEL,
-                    Contacts.CONTACT_STATUS_RES_PACKAGE,
+                    Contacts.CONTACT_STATUS,
+                    Contacts.CONTACT_PRESENCE,
                     Contacts.PHOTO_URI
             };
         } else {
@@ -517,9 +517,8 @@ public class ContactsUtils5 extends ContactsWrapper {
                     Contacts._ID,
                     Contacts.DISPLAY_NAME,
                     Contacts.PHOTO_ID,
-                    Contacts.CONTACT_STATUS_ICON,
-                    Contacts.CONTACT_STATUS_LABEL,
-                    Contacts.CONTACT_STATUS_RES_PACKAGE,
+                    Contacts.CONTACT_STATUS,
+                    Contacts.CONTACT_PRESENCE
             };
         }
 
@@ -580,20 +579,17 @@ public class ContactsUtils5 extends ContactsWrapper {
     
 
     @Override
-    public void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus) {
+    public void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus, String statusText) {
         
         if(Compatibility.isCompatible(8)) {
 //            if(csipDatasId.containsKey(buddyUri)) {
 //                long dataId = csipDatasId.get(buddyUri);
-                String status = "Unknown";
                 int presence = StatusUpdates.OFFLINE;
                 switch (presStatus) {
                     case ONLINE:
-                        status = "Online";
                         presence = StatusUpdates.AVAILABLE;
                         break;
                     case OFFLINE:
-                        status = "Offline";
                         presence = StatusUpdates.INVISIBLE;
                         break;
                     default:
@@ -607,7 +603,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                 builder.withValue(StatusUpdates.CUSTOM_PROTOCOL, "csip");
                 builder.withValue(StatusUpdates.PROTOCOL, CommonDataKinds.Im.PROTOCOL_CUSTOM);
                 builder.withValue(StatusUpdates.IM_HANDLE, buddyUri);
-                builder.withValue(StatusUpdates.STATUS, status);
+                builder.withValue(StatusUpdates.STATUS, statusText);
                 builder.withValue(StatusUpdates.PRESENCE, presence);
                 
                 if(Compatibility.isCompatible(11)) {
@@ -674,6 +670,8 @@ public class ContactsUtils5 extends ContactsWrapper {
         ci.contactContentUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
         ci.photoId = cursor.getLong(cursor.getColumnIndex(Contacts.PHOTO_ID));
         int photoUriColIndex = cursor.getColumnIndex(Contacts.PHOTO_ID);
+        String status = cursor.getString(cursor.getColumnIndex(Contacts.CONTACT_STATUS));
+        int presence = cursor.getInt(cursor.getColumnIndex(Contacts.CONTACT_PRESENCE));
 
         if (photoUriColIndex >= 0) {
             String photoUri = cursor.getString(photoUriColIndex);
@@ -681,10 +679,13 @@ public class ContactsUtils5 extends ContactsWrapper {
                 ci.photoUri = Uri.parse(photoUri);
             }
         }
+        boolean hasPresence = !TextUtils.isEmpty(status);
         
         // Get views
         TextView tv = (TextView) view.findViewById(R.id.contact_name);
         QuickContactBadge badge = (QuickContactBadge) view.findViewById(R.id.quick_contact_photo);
+        TextView statusText = (TextView) view.findViewById(R.id.status_text);
+        ImageView statusImage = (ImageView) view.findViewById(R.id.status_icon);
 
         // Bind
         tv.setText(displayName);
@@ -694,6 +695,13 @@ public class ContactsUtils5 extends ContactsWrapper {
                 ci,
                 SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
                         : R.drawable.ic_contact_picture_holo_dark);
+        
+        
+        
+        statusText.setVisibility(hasPresence ? View.VISIBLE : View.GONE);
+        statusText.setText(status);
+        statusImage.setVisibility(hasPresence ? View.VISIBLE : View.GONE);
+        statusImage.setImageResource(StatusUpdates.getPresenceIconResourceId(presence));
     }
 
 

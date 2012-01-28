@@ -342,7 +342,7 @@ public class ContactsUtils3 extends ContactsWrapper {
     }
 
     @Override
-    public void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus) {
+    public void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus, String statusText) {
         // TODO Auto-generated method stub
         
     }
