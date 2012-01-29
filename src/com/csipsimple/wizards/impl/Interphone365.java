@@ -40,7 +40,7 @@ public class Interphone365 extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.transport = SipProfile.TRANSPORT_UDP;
-		
+		account.vm_nbr = "2111";
 		return account;
 	}
 	

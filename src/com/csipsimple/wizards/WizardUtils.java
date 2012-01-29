@@ -575,7 +575,7 @@ public class WizardUtils {
             WIZARDS_DICT.put("INTERPHONE365", new WizardInfo("INTERPHONE365", "INTERPHONE365", 
                     R.drawable.ic_wizard_interphone365, 19, 
                     new Locale[]{
-                    new Locale("es_AR"), new Locale("es_ES") 
+                    locale("es_AR"), locale("es_ES") 
                     }, false, false, 
                     Interphone365.class));
             WIZARDS_DICT.put("BEEZTEL", new WizardInfo("BEEZTEL", "Beeztel", 
