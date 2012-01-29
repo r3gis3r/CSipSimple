@@ -154,6 +154,10 @@ public class PresenceManager {
      * Remove buddies for offline accounts
      */
     private void updateRegistrations() {
+        if(service == null) {
+            // Nothing to do at this point
+            return;
+        }
         Cursor c = service.getContentResolver().query(SipProfile.ACCOUNT_URI, ACC_PROJECTION,
                 SipProfile.FIELD_ACTIVE + "=?", new String[] {
                     "1"
