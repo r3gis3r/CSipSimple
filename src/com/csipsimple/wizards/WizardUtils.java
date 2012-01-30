@@ -82,6 +82,7 @@ import com.csipsimple.wizards.impl.Localphone;
 import com.csipsimple.wizards.impl.Mondotalk;
 import com.csipsimple.wizards.impl.Netelip;
 import com.csipsimple.wizards.impl.NeufTalk;
+import com.csipsimple.wizards.impl.Nymgo;
 import com.csipsimple.wizards.impl.OXO810;
 import com.csipsimple.wizards.impl.Odorik;
 import com.csipsimple.wizards.impl.OnSip;
@@ -304,6 +305,10 @@ public class WizardUtils {
 					R.drawable.ic_wizard_tanstagi, 35, 
 					new Locale[]{  }, false, true, 
 					Tanstagi.class));
+            WIZARDS_DICT.put("NYMGO", new WizardInfo("NYMGO", "Nymgo", 
+                    R.drawable.ic_wizard_nymgo, 18, 
+                    new Locale[]{  }, false, true, 
+                    Nymgo.class));
 			
 			
 			//Locales

@@ -7,7 +7,7 @@ all : libraries
 
 libraries : ext-sources ext-lib swig-glue
 	# Build main libraries using android ndk
-	ndk-build -j4
+	ndk-build -j6
 
 ext-lib :
 	# Build ffmpeg using make

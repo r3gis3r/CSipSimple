@@ -137,8 +137,6 @@ public class CallLogListFragment extends ListFragment implements ViewPagerVisibi
         }
         if (visible && isResumed()) {
             getLoaderManager().restartLoader(0, null, this);
-        //}
-        //if (visible) {
             ListView lv = getListView();
             if (lv != null && mAdapter != null) {
                 final int checkedPos = lv.getCheckedItemPosition();
