@@ -419,7 +419,7 @@ public class ContactsUtils5 extends ContactsWrapper {
 
         // Has sip uri
         if (Compatibility.isCompatible(9)) {
-            isPhoneType += " OR " + Data.MIMETYPE + "='" + CommonDataKinds.SipAddress.CONTENT_ITEM_TYPE;
+            isPhoneType += " OR " + Data.MIMETYPE + "='" + CommonDataKinds.SipAddress.CONTENT_ITEM_TYPE + "'";
         }
         // Sip: IM custo
         isPhoneType += " OR (" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
