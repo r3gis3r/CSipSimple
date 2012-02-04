@@ -54,6 +54,7 @@ import com.csipsimple.wizards.impl.Broadsoft;
 import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.Cellip;
+import com.csipsimple.wizards.impl.Cotas;
 import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.DvcNg;
 import com.csipsimple.wizards.impl.EasyBell;
@@ -587,6 +588,12 @@ public class WizardUtils {
                     R.drawable.ic_wizard_beeztel, 19, 
                     new Locale[]{ new Locale("es"), new Locale("en"), new Locale("pt"), new Locale("fr") }, false, false, 
                     Beeztel.class));
+            WIZARDS_DICT.put("COTAS", new WizardInfo("COTAS", "Cotas Line@net", 
+                    R.drawable.ic_wizard_cotas, 19, 
+                    new Locale[]{
+                    locale("es_CO")
+                    }, false, false, 
+                    Cotas.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
