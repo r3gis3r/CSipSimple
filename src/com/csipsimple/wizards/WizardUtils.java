@@ -122,6 +122,7 @@ import com.csipsimple.wizards.impl.VoipTel;
 import com.csipsimple.wizards.impl.Vono;
 import com.csipsimple.wizards.impl.WiMobile;
 import com.csipsimple.wizards.impl.Zadarma;
+import com.csipsimple.wizards.impl.ZonPt;
 
 
 public class WizardUtils {
@@ -601,6 +602,12 @@ public class WizardUtils {
                     locale("tr_TR")
                     }, false, false, 
                     Balses.class));
+            WIZARDS_DICT.put("ZONPT", new WizardInfo("ZONPT", "Zon Phone", 
+                    R.drawable.ic_wizard_zonpt, 19, 
+                    new Locale[]{
+                    locale("pt_PT")
+                    }, false, false, 
+                    ZonPt.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
