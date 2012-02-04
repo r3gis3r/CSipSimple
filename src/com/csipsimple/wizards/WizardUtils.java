@@ -44,6 +44,7 @@ import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.BGTel;
 import com.csipsimple.wizards.impl.BTone;
+import com.csipsimple.wizards.impl.Balses;
 import com.csipsimple.wizards.impl.Basic;
 import com.csipsimple.wizards.impl.Beeztel;
 import com.csipsimple.wizards.impl.BelCentrale;
@@ -594,6 +595,12 @@ public class WizardUtils {
                     locale("es_CO")
                     }, false, false, 
                     Cotas.class));
+            WIZARDS_DICT.put("BALSES", new WizardInfo("BALSES", "Balses", 
+                    R.drawable.ic_wizard_balses, 19, 
+                    new Locale[]{
+                    locale("tr_TR")
+                    }, false, false, 
+                    Balses.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
