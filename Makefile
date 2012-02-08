@@ -19,6 +19,11 @@ ext-sources : jni/silk/sources jni/zrtp4pj/sources jni/openssl/sources jni/pjsip
 swig-glue : 
 	cd jni/swig-glue; $(MAKE) $(MFLAGS)
 
+
+clean :
+	ndk-build clean
+	
+
 ## External resources from repos/zip ##
 jni/silk/sources :
 	cd jni/silk; \
@@ -29,20 +34,23 @@ jni/silk/sources :
 
 jni/zrtp4pj/sources :
 	cd jni/zrtp4pj; \
-	git clone git://github.com/r3gis3r/ZRTP4PJ.git sources
+	git clone git://github.com/r3gis3r/ZRTP4PJ.git sources; \
+	cd sources; \
+	git checkout origin; \
+	git checkout 10fe242813531daa61088af158b8b64c6fbe787e
 
 jni/openssl/sources :
 	cd jni/openssl; \
-	git clone git://github.com/guardianproject/openssl-android.git sources
+	git clone git://github.com/guardianproject/openssl-android.git sources; \
+	cd sources; \
+	git checkout origin; \
+	git checkout 1a3c5799337b90ddc56376ace7284a9e7f8cc988
 
 jni/pjsip/.patched_sources : $(pjsip_patches)
 	cd jni/pjsip && \
 	quilt push -a && \
 	touch .patched_sources
 
-clean :
-	ndk-build clean
-	
 
 update :
 	if [ -f jni/pjsip/.patched_sources ]; then cd jni/pjsip && quilt pop -af; rm .patched_sources; cd -; fi;
@@ -55,4 +63,6 @@ update :
 	cd jni/openssl/sources; \
 	git checkout origin; \
 	git checkout 1a3c5799337b90ddc56376ace7284a9e7f8cc988
+	# Update ffmpeg
+	cd jni/ffmpeg; $(MAKE) $(MFLAGS) update
 	
