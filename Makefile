@@ -1,5 +1,5 @@
 pjsip_patches := $(wildcard jni/pjsip/patches/*.diff)
-
+webrtc_patches := $(wildcard jni/webrtc/patches/*.diff)
 
 all : libraries
 	# Dispatch to external projects
@@ -13,7 +13,7 @@ ext-lib :
 	# Build ffmpeg using make
 	cd jni/ffmpeg; $(MAKE) $(MFLAGS)
 
-ext-sources : jni/silk/sources jni/zrtp4pj/sources jni/openssl/sources jni/pjsip/.patched_sources
+ext-sources : jni/silk/sources jni/zrtp4pj/sources jni/openssl/sources jni/pjsip/.patched_sources jni/webrtc/.patched_sources
 	# External sources fetched out from external repos/zip
 
 swig-glue : 
@@ -46,14 +46,20 @@ jni/openssl/sources :
 	git checkout origin; \
 	git checkout 1a3c5799337b90ddc56376ace7284a9e7f8cc988
 
+## Patches against remote projects
 jni/pjsip/.patched_sources : $(pjsip_patches)
 	cd jni/pjsip && \
 	quilt push -a && \
 	touch .patched_sources
 
+jni/webrtc/.patched_sources : $(webrtc_patches)
+	cd jni/webrtc && \
+	quilt push -a && \
+	touch .patched_sources
 
 update :
 	if [ -f jni/pjsip/.patched_sources ]; then cd jni/pjsip && quilt pop -af; rm .patched_sources; cd -; fi;
+	if [ -f jni/webrtc/.patched_sources ]; then cd jni/webrtc && quilt pop -af; rm .patched_sources; cd -; fi;
 	svn update --accept theirs-conflict
 	# Update ZRTP4pj
 	cd jni/zrtp4pj/sources; \

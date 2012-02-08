@@ -1,0 +1,15 @@
+Index: webrtc/sources/system_wrappers/source/thread_posix.cc
+===================================================================
+--- webrtc.orig/sources/system_wrappers/source/thread_posix.cc	2012-02-08 12:59:19.334224275 +0100
++++ webrtc/sources/system_wrappers/source/thread_posix.cc	2012-02-08 13:00:17.674224972 +0100
+@@ -190,8 +190,8 @@
+     }
+     return true;
+ }
+-
+-#if (defined(WEBRTC_LINUX) || defined(WEBRTC_ANDROID))
++// NDK does not contains cpu_set_t yet. Could replace by int, but to be sure disable
++#if (defined(WEBRTC_LINUX) && !defined(WEBRTC_ANDROID))
+ bool ThreadPosix::SetAffinity(const int* processorNumbers,
+                               const unsigned int amountOfProcessors) {
+   if (!processorNumbers || (amountOfProcessors == 0)) {
