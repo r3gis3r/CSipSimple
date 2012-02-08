@@ -54,6 +54,7 @@ import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipManager.PresenceStatus;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
@@ -72,14 +73,11 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 
 import org.pjsip.pjsua.pjsua;
 
+import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -269,7 +267,7 @@ public class SipService extends Service {
 		 * Send SMS using
 		 */
 		@Override
-		public void sendMessage(final String message, final String callee, final int accountId) throws RemoteException {
+		public void sendMessage(final String message, final String callee, final long accountId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
@@ -559,8 +557,22 @@ public class SipService extends Service {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.canRecord(callId);
 		}
-		
 
+        @Override
+        public void setPresence(final int presenceInt, final String statusText, final long accountId) throws RemoteException {
+            SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+            if(pjService == null) {
+                return;
+            }
+            
+            getExecutor().execute(new SipRunnable() {
+                @Override
+                protected void doRun() throws SameThreadException {
+                    presence = PresenceStatus.values()[presenceInt];
+                    pjService.setPresence(presence, statusText, accountId);
+                }
+            });
+        }
 
 		@Override
 		public void zrtpSASVerified(final int dataPtr) throws RemoteException {
@@ -709,75 +721,26 @@ public class SipService extends Service {
 
 	// Broadcast receiver for the service
 	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
-		private Timer mTimer = null;
-		private MyTimerTask mTask;
-		private Object createLock = new Object();
 
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 			// Run the handler in SipServiceExecutor to be protected by wake lock
-			getExecutor().execute(new Runnable() {
-				public void run() {
+			getExecutor().execute(new SipRunnable()  {
+				public void doRun() throws SameThreadException {
 					onReceiveInternal(context, intent);
 				}
 			});
 		}
 		
-		public void stop() {
-			synchronized (createLock) {
-				if (mTask != null) {
-					Log.d(THIS_FILE, "Delete already pushed task in stack");
-					mTask.cancel();
-					sipWakeLock.release(mTask);
-				}
-				
-				if(mTimer != null) {
-					mTimer.purge();
-					mTimer.cancel();
-				}
-				mTimer = null;
-			}
-		}
 
-		private void onReceiveInternal(Context context, Intent intent) {
+		private void onReceiveInternal(Context context, Intent intent) throws SameThreadException {
 			String action = intent.getAction();
 			Log.d(THIS_FILE, "Internal receive " + action);
 			if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 				Bundle b = intent.getExtras();
 				if (b != null) {
-					NetworkInfo netInfo = (NetworkInfo) b.get(ConnectivityManager.EXTRA_NETWORK_INFO);
-					String type = netInfo.getTypeName();
-					NetworkInfo.State state = netInfo.getState();
-
-					NetworkInfo activeNetInfo = getActiveNetworkInfo();
-					
-					/*
-					if (activeNetInfo != null) {
-						Log.d(THIS_FILE, "active network: " + activeNetInfo.getTypeName()
-								+ ((activeNetInfo.getState() == NetworkInfo.State.CONNECTED) ? " CONNECTED" : " DISCONNECTED"));
-					} else {
-						Log.d(THIS_FILE, "active network: null");
-					}
-					*/
-					
-					if ((state == NetworkInfo.State.CONNECTED) && (activeNetInfo != null) && (activeNetInfo.getType() != netInfo.getType())) {
-						Log.d(THIS_FILE, "ignore connect event: " + type + ", active: " + activeNetInfo.getTypeName());
-						return;
-					}
-
-					if (state == NetworkInfo.State.CONNECTED) {
-						Log.d(THIS_FILE, "Connectivity alert: CONNECTED " + type);
-						// Fire the event only if valid for incoming else ignore this event
-						if(prefsWrapper.isValidConnectionForIncoming() && 
-								!prefsWrapper.getPreferenceBooleanValue(PreferencesProviderWrapper.HAS_BEEN_QUIT)) {
-							onChanged(type, true);
-						}
-					} else if (state == NetworkInfo.State.DISCONNECTED) {
-						Log.d(THIS_FILE, "Connectivity alert: DISCONNECTED " + type);
-						onChanged(type, false);
-					} else {
-						Log.d(THIS_FILE, "Connectivity alert not processed: " + state + " " + type);
-					}
+					final NetworkInfo info = (NetworkInfo) b.get(ConnectivityManager.EXTRA_NETWORK_INFO);
+					onConnectivityChanged(info, false);
 				}
 			} else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_CHANGED)) {
 				final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, -1);
@@ -786,123 +749,27 @@ public class SipService extends Service {
 					final SipProfile account = getAccount(accountId);
 					if (account != null) {
 						Log.d(THIS_FILE, "Enqueue set account registration");
-						getExecutor().execute(new SipRunnable() {
-							@Override
-							protected void doRun() throws SameThreadException {
-								setAccountRegistration(account, account.active ? 1 : 0, true);
-							}
-						});
+						setAccountRegistration(account, account.active ? 1 : 0, true);
 					}
 				}
 			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
-				synchronized (createLock) {
-					if(mTask != null) {
-						Log.d(THIS_FILE, "Cancel current force registration task cause stop asked");
-						mTask.cancel();
-						sipWakeLock.release(mTask);
-						mTask = null;
-					}
-				}
 				cleanStop();
 			} else if (action.equals(SipManager.ACTION_SIP_REQUEST_RESTART)){
-				getExecutor().execute(new RestartRunnable());
+			    restartSipStack();
 			} else if(action.equals(ACTION_VPN_CONNECTIVITY)) {
-				// TODO : ensure no current call
 				String connection_state = intent.getSerializableExtra(BROADCAST_CONNECTION_STATE).toString();
 				boolean currentVpnState = connection_state.equalsIgnoreCase("CONNECTED");
 				if(lastKnownVpnState != currentVpnState) {
-					getExecutor().execute(new RestartRunnable());
+				    restartSipStack();
 					lastKnownVpnState = currentVpnState;
 				}
 			}
 		}
-
-		private NetworkInfo getActiveNetworkInfo() {
-			ConnectivityManager cm = (ConnectivityManager) SipService.this.getSystemService(Context.CONNECTIVITY_SERVICE);
-			return cm.getActiveNetworkInfo();
-		}
-
-		protected void onChanged(String type, boolean connected) {
-			boolean fireChanges = false;
-			synchronized (createLock) {
-				// When turning on WIFI, it needs some time for network
-				// connectivity to get stabile so we defer good news (because
-				// we want to skip the interim ones) but deliver bad news
-				// immediately
-				if (connected) {
-					Log.d(THIS_FILE, "Push a task to connected timer");
-					if (mTask != null) {
-						Log.d(THIS_FILE, "We already have a current task in stack");
-						mTask.cancel();
-						sipWakeLock.release(mTask);
-					}
-					mTask = new MyTimerTask(type, connected);
-					if(mTimer == null) {
-						mTimer = new Timer("Connected-timer");
-					}
-					mTimer.schedule(mTask, 2 * 1000L);
-					// hold wakup lock so that we can finish changes before the
-					// device goes to sleep
-					sipWakeLock.acquire(mTask);
-				} else {
-					// If it's about the same connection type cancel the pending connection
-					if ((mTask != null) && mTask.mNetworkType.equals(type)) {
-						mTask.cancel();
-						sipWakeLock.release(mTask);
-						mTask = null;
-					}
-					fireChanges = true;
-				}
-			}
-			if(fireChanges) {
-				Log.d(THIS_FILE, "Fire changes right now cause it's a deconnect info");
-				dataConnectionChanged(type, false);
-			}
-		}
-
-		private class MyTimerTask extends TimerTask {
-			private boolean mConnected;
-			private String mNetworkType;
-
-			public MyTimerTask(String type, boolean connected) {
-				mNetworkType = type;
-				mConnected = connected;
-			}
-
-			// timeout handler
-			@Override
-			public void run() {
-				Log.d(THIS_FILE, "Run connected timeout");
-				// delegate to mExecutor
-				getExecutor().execute(new Runnable() {
-					public void run() {
-						realRun();
-					}
-				});
-			}
-
-			private void realRun() {
-				synchronized (createLock) {
-					if (mTask != this) {
-						Log.w(THIS_FILE, "  unexpected task: " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
-						sipWakeLock.release(this);
-						mTask = null;
-						return;
-					}
-					Log.d(THIS_FILE, " deliver change for " + mNetworkType + (mConnected ? " CONNECTED" : "DISCONNECTED"));
-					// Check this is interesting for us now
-					if(prefsWrapper.isValidConnectionForIncoming() || (pjService != null && pjService.getActiveCallInProgress() != null) ) {
-						dataConnectionChanged(mNetworkType, true);
-					}else {
-						Log.d(THIS_FILE, "Ignore this change cause not valid for incoming");
-					}
-					sipWakeLock.release(this);
-					mTask = null;
-				}
-			}
-		}
+		
 
 	}
+	
+	
 
 	private Handler mHandler = new Handler();
 	private AccountStatusContentObserver statusObserver = null;
@@ -931,9 +798,9 @@ public class SipService extends Service {
 
 	private class ServicePhoneStateReceiver extends PhoneStateListener {
 		
-		private boolean ignoreFirstConnectionState = true;
+		//private boolean ignoreFirstConnectionState = true;
 		private boolean ignoreFirstCallState = true;
-		
+		/*
 		@Override
 		public void onDataConnectionStateChanged(final int state) {
 			if(!ignoreFirstConnectionState) {
@@ -952,6 +819,7 @@ public class SipService extends Service {
 			}
 			super.onDataConnectionStateChanged(state);
 		}
+		*/
 
 		@Override
 		public void onCallStateChanged(final int state, final String incomingNumber) {
@@ -991,6 +859,9 @@ public class SipService extends Service {
 		
 		boolean hasSetup = prefsWrapper.getPreferenceBooleanValue(PreferencesProviderWrapper.HAS_ALREADY_SETUP_SERVICE, false);
 		Log.d(THIS_FILE, "Service has been setup ? "+ hasSetup);
+		
+		presenceMgr = new PresenceManager();
+        
 		
 		if(!hasSetup) {
 			Log.e(THIS_FILE, "RESET SETTINGS !!!!");
@@ -1056,7 +927,6 @@ public class SipService extends Service {
 		if(deviceStateReceiver != null) {
 			try {
 				Log.d(THIS_FILE, "Stop and unregister device receiver");
-				deviceStateReceiver.stop();
 				unregisterReceiver(deviceStateReceiver);
 				deviceStateReceiver = null;
 			} catch (IllegalArgumentException e) {
@@ -1092,11 +962,12 @@ public class SipService extends Service {
 			return;
 		}
 		
-		
+		/*
 		boolean directConnect = true;
 		if(intent != null) {
 			directConnect = intent.getBooleanExtra(EXTRA_DIRECT_CONNECT, true);
 		}
+		*/
 		// Autostart the stack - make sure started and that receivers are there
 		// NOTE : the stack may also be autostarted cause of phoneConnectivityReceiver
 		if (!loadStack()) {
@@ -1104,9 +975,10 @@ public class SipService extends Service {
 		}
 		
 		
-		if(directConnect) {
+		//if(directConnect) {
 			Log.d(THIS_FILE, "Direct sip start");
 			getExecutor().execute(new StartRunnable());
+			/*
 		}else {
 			Log.d(THIS_FILE, "Defered SIP start !!");
 			NetworkInfo netInfo = (NetworkInfo) connectivityManager.getActiveNetworkInfo();
@@ -1125,7 +997,7 @@ public class SipService extends Service {
 				Log.d(THIS_FILE, ">> on changed disconnected");
 			}
 		}
-		
+		*/
 	}
 	
 	
@@ -1181,9 +1053,10 @@ public class SipService extends Service {
 			}
 		}
 		Log.d(THIS_FILE, "Ask pjservice to start itself");
+		
+
+        presenceMgr.startMonitoring(this);
 		if(pjService.sipStart()) {
-		    presenceMgr = new PresenceManager();
-		    presenceMgr.startMonitoring(this);
 			Log.d(THIS_FILE, "Add all accounts");
 			addAllAccounts();
 		}
@@ -1214,7 +1087,14 @@ public class SipService extends Service {
 		return canStop;
 	}
 	
-	
+
+    private void restartSipStack() throws SameThreadException {
+        if(stopSipStack()) {
+            startSipStack();
+        }else {
+            Log.e(THIS_FILE, "Can't stop ... so do not restart ! ");
+        }
+    }
 	
 	public boolean needToStartSip() {
 		//The connection is valid?
@@ -1508,6 +1388,10 @@ public class SipService extends Service {
 			}
 		}
 	};
+
+    private String mNetworkType;
+    private boolean mConnected = false;
+    private String mLocalIp;
 	
 	
 	
@@ -1515,114 +1399,66 @@ public class SipService extends Service {
 		return pjService.userAgentReceiver;
 	}
 
-	private String getLocalIpAddress() {
-		try {
-			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-				NetworkInterface intf = en.nextElement();
-				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-					InetAddress inetAddress = enumIpAddr.nextElement();
-					if (!inetAddress.isLoopbackAddress()) {
-						return inetAddress.getHostAddress().toString();
-					}
-				}
-			}
-		} catch (SocketException ex) {
-			Log.e(THIS_FILE, "Error while getting self IP", ex);
-		}
-		return null;
-	}
 
-	// private Integer oldNetworkType = null;
-	// private State oldNetworkState = null;
-	private String oldIPAddress = "0.0.0.0";
+    private String determineLocalIp() {
+        try {
+            DatagramSocket s = new DatagramSocket();
+            s.connect(InetAddress.getByName("192.168.1.1"), 80);
+            return s.getLocalAddress().getHostAddress();
+        } catch (IOException e) {
+            Log.d(THIS_FILE, "determineLocalIp()", e);
+            // dont do anything; there should be a connectivity change going
+            return null;
+        }
+    }
 
-	private synchronized void dataConnectionChanged(String type, boolean connecting) {
-		// Check if it should be ignored first
-		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-		boolean ipHasChanged = false;
-		Log.d(THIS_FILE, "Fire dataConnectionChanged for a " + (connecting ? "connection" : "disconnection"));
-		
-        if (ni != null
-                && !(ni.getTypeName().equalsIgnoreCase(type))
-                && (prefsWrapper.isValidConnectionForIncoming() || prefsWrapper
-                        .isValidConnectionForOutgoing())) {
-            // We should not stop here cause UTMS could stop while 
-            // Another (eg wifi) connection is valid for incoming or outgoing
-            // In this case just ignore this disconnection
-            Log.d(THIS_FILE,
-                    "Ignore this disconnection cause does it is not relevant of current connection");
-            return;
+	private void onConnectivityChanged(NetworkInfo info, boolean outgoingOnly) throws SameThreadException {
+        // We only care about the default network, and getActiveNetworkInfo()
+        // is the only way to distinguish them. However, as broadcasts are
+        // delivered asynchronously, we might miss DISCONNECTED events from
+        // getActiveNetworkInfo(), which is critical to our SIP stack. To
+        // solve this, if it is a DISCONNECTED event to our current network,
+        // respect it. Otherwise get a new one from getActiveNetworkInfo().
+        if (info == null || info.isConnected() ||
+                !info.getTypeName().equals(mNetworkType)) {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            info = cm.getActiveNetworkInfo();
         }
 
-		if (ni != null && connecting) {
-			//String currentType = ni.getTypeName();
-			String currentIPAddress = getLocalIpAddress();
-			// State currentState = ni.getState();
-			Log.d(THIS_FILE, "IP changes ?" + oldIPAddress + " vs " + currentIPAddress);
-			// if(/*currentType == oldNetworkType &&*/ currentState ==
-			// oldNetworkState) {
-			if (oldIPAddress == null || !oldIPAddress.equalsIgnoreCase(currentIPAddress)) {
+        // As a DISCONNECTED event everything that should be considered as such
+        boolean isValid = prefsWrapper.isValidConnectionForOutgoing();
+        if(!outgoingOnly) {
+            isValid |= prefsWrapper.isValidConnectionForIncoming();
+        }
+        boolean connected = (info != null && info.isConnected() && isValid);
+        
+        String networkType = connected ? info.getTypeName() : "null";
 
-				if (oldIPAddress == null || (oldIPAddress != null && !oldIPAddress.equalsIgnoreCase("0.0.0.0"))) {
-					// We just ignore this one
-					Log.d(THIS_FILE, "IP changing request >> Must restart sip stack");
-					ipHasChanged = true;
-				}
-			}
-			// }
+        // Ignore the event if the current active network is not changed.
+        if (connected == mConnected && networkType.equals(mNetworkType)) {
+            return;
+        }
+        
+        Log.d(THIS_FILE, "onConnectivityChanged(): " + mNetworkType +
+                    " -> " + networkType);
+        
 
-			oldIPAddress = currentIPAddress;
-			// oldNetworkState = currentState;
-		} else {
-			oldIPAddress = null;
-			// oldNetworkState = null;
-			// oldNetworkType = null;
-		}
+        // Now process the event
+        if (mConnected) {
+            mLocalIp = null;
+        }
 
-		if (prefsWrapper.isValidConnectionForOutgoing() || prefsWrapper.isValidConnectionForIncoming()) {
-			
-			// Only care if we are actually asking for a connect action
-			// else it means we recieve a disconnect from another connection 
-			// and we should wait for the connect call that will arrive soon
-			if(connecting) {
-				if (pjService == null || !pjService.isCreated()) {
-					// we was not yet started, so start now
-					getExecutor().execute(new StartRunnable());
-				} else if (ipHasChanged) {
-					// Check if IP has changed between
-					if (pjService != null && pjService.getActiveCallInProgress() == null) {
-						getExecutor().execute(new RestartRunnable());
-						// Log.e(THIS_FILE, "We should restart the stack ! ");
-					} else {
-						// TODO : else refine things => STUN, registration etc...
-						// Old ip address is actually current ip address now
-						if(oldIPAddress != null) {
-							final String finIpAddress = oldIPAddress;
-							getExecutor().execute(new SipRunnable() {
-								@Override
-								protected void doRun() throws SameThreadException {
-									pjService.updateTransportIp(finIpAddress);
-								}
-							});
-							
-						}
-						serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, 0, 0,
-								"Connection have been lost... you may have lost your communication. Hand over is not yet supported"));
-					}
-				} else {
-					Log.d(THIS_FILE, "Nothing done since already well registered");
-				}
-			}
+        mConnected = connected;
+        mNetworkType = networkType;
 
-		} else {
-			if (pjService != null && pjService.getActiveCallInProgress() != null) {
-				Log.w(THIS_FILE, "There is an ongoing call ! don't stop !! and wait for network to be back...");
-				return;
-			}
-			Log.d(THIS_FILE, "Will stop SERVICE");
-			getExecutor().execute(new DestroyRunnable());
-		}
+        if (connected) {
+            mLocalIp = determineLocalIp();
+            restartSipStack();
+        } else {
+            if(stopSipStack()) {
+                stopSelf();
+            }
+        }
 	}
 
 	public int getGSMCallState() {
@@ -1757,12 +1593,29 @@ public class SipService extends Service {
     		startSipStack();
     	}
     }
+    
+
+    class SyncStartRunnable extends ReturnRunnable {
+        @Override
+        protected Object runWithReturn() throws SameThreadException {
+            startSipStack();
+            return null;
+        }
+    }
 	
     class StopRunnable extends SipRunnable {
 		@Override
 		protected void doRun() throws SameThreadException {
     		stopSipStack();
     	}
+    }
+
+    class SyncStopRunnable extends ReturnRunnable {
+        @Override
+        protected Object runWithReturn() throws SameThreadException {
+            stopSipStack();
+            return null;
+        }
     }
     
 	class RestartRunnable extends SipRunnable {
@@ -1774,7 +1627,19 @@ public class SipService extends Service {
 				Log.e(THIS_FILE, "Can't stop ... so do not restart ! ");
 			}
 		}
-	} 
+	}
+	
+	class SyncRestartRunnable extends ReturnRunnable {
+	    @Override
+	    protected Object runWithReturn() throws SameThreadException {
+	        if(stopSipStack()) {
+                startSipStack();
+            }else {
+                Log.e(THIS_FILE, "Can't stop ... so do not restart ! ");
+            }
+	        return null;
+	    }
+	}
 	
 	class DestroyRunnable extends SipRunnable {
 		@Override
@@ -1885,4 +1750,14 @@ public class SipService extends Service {
             }
         });
     }
+    
+    private PresenceStatus presence = SipManager.PresenceStatus.ONLINE;
+    /**
+     * Get current last status for the user
+     * @return
+     */
+    public PresenceStatus getPresence() {
+        return presence;
+    }
+
 }

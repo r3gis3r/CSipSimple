@@ -104,4 +104,8 @@
     <string name="switch_to_digit">Switch to digit mode</string>
     <string name="no_voice_mail_configured">No voicemail configured</string>
 
+    <!-- Presence stuff -->
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+
 </resources>

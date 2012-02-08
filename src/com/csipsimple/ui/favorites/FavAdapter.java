@@ -25,6 +25,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.provider.BaseColumns;
 import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,13 +33,12 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.utils.Log;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.wizards.WizardUtils;
 
 public class FavAdapter extends ResourceCursorAdapter {
 
-    private static final String THIS_FILE = "FavAdapter";
+    //private static final String THIS_FILE = "FavAdapter";
 
     public FavAdapter(Context context, Cursor c) {
         super(context, R.layout.fav_list_item, c, 0);
@@ -57,16 +57,17 @@ public class FavAdapter extends ResourceCursorAdapter {
         if(type == ContactsWrapper.TYPE_GROUP) {
             showViewForHeader(view, true);
             TextView tv = (TextView) view.findViewById(R.id.header_text);
-            tv.setText(cv.getAsString(SipProfile.FIELD_DISPLAY_NAME));
-            
             ImageView icon = (ImageView) view.findViewById(R.id.header_icon);
+            PresenceStatusSpinner presSpinner = (PresenceStatusSpinner) view.findViewById(R.id.header_presence_spinner);
+            
+            tv.setText(cv.getAsString(SipProfile.FIELD_DISPLAY_NAME));
             icon.setImageResource(WizardUtils.getWizardIconRes(cv.getAsString(SipProfile.FIELD_WIZARD)));
-            Log.d(THIS_FILE, "It's a section ....");
+            presSpinner.setProfileId(cv.getAsLong(BaseColumns._ID));
             
         }else {
             showViewForHeader(view, false);
             ContactsWrapper.getInstance().bindContactView(view, context, cursor);
-            Log.d(THIS_FILE, "Contents = " + cv);
+            
         }
     }
     

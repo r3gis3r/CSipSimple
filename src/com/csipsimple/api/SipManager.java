@@ -111,7 +111,17 @@ public final class SipManager {
 	public static final int SUCCESS = 0;
 	public static final int ERROR_CURRENT_NETWORK = 10;
 	
-	public static final int CURRENT_API = 1003;
+
+    public enum PresenceStatus {
+        UNKNOWN,
+        ONLINE,
+        OFFLINE,
+        BUSY,
+        AWAY,
+    }
+	
+	
+	public static final int CURRENT_API = 1004;
     
 	
 	public static boolean isApiCompatible(ISipService service) {

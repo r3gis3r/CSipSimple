@@ -40,8 +40,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.service.PresenceManager.PresenceStatus;
 import com.csipsimple.utils.Log;
 
 import java.util.ArrayList;
@@ -342,7 +342,7 @@ public class ContactsUtils3 extends ContactsWrapper {
     }
 
     @Override
-    public void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus, String statusText) {
+    public void updateCSipPresence(Context ctxt, String buddyUri, SipManager.PresenceStatus presStatus, String statusText) {
         // TODO Auto-generated method stub
         
     }

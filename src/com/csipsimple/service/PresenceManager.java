@@ -25,6 +25,7 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Handler;
 
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
@@ -45,13 +46,6 @@ public class PresenceManager {
             SipProfile.FIELD_WIZARD
     };
     
-    public enum PresenceStatus {
-        UNKNOWN,
-        ONLINE,
-        OFFLINE,
-        BUSY,
-        AWAY,
-    }
 
     private SipService service;
 
@@ -60,7 +54,7 @@ public class PresenceManager {
 
     private AccountStatusContentObserver statusObserver;
 
-    public void startMonitoring(SipService srv) {
+    public synchronized void startMonitoring(SipService srv) {
         service = srv;
 
         statusObserver = new AccountStatusContentObserver(mHandler);
@@ -68,7 +62,7 @@ public class PresenceManager {
                 true, statusObserver);
     }
 
-    public void stopMonitoring() {
+    public synchronized void stopMonitoring() {
         if (statusObserver != null) {
             service.getContentResolver().unregisterContentObserver(statusObserver);
             statusObserver = null;
@@ -82,20 +76,24 @@ public class PresenceManager {
      * @param acc the profile to search in
      * @return a list of sip uris
      */
-    private List<String> getBuddiesForAccount(SipProfile acc){
-        return ContactsWrapper.getInstance().getCSipPhonesByGroup(service,
-                acc.display_name);
+    private synchronized List<String> getBuddiesForAccount(SipProfile acc){
+        if(service != null) {
+            return ContactsWrapper.getInstance().getCSipPhonesByGroup(service,
+                    acc.display_name);
+        }else {
+            return new ArrayList<String>();
+        }
     }
 
     /**
      * Add buddies for a given account
      * @param acc
      */
-    private void addBuddiesForAccount(SipProfile acc) {
+    private synchronized void addBuddiesForAccount(SipProfile acc) {
         // Get buddies uris for this account
         final List<String> toAdd = getBuddiesForAccount(acc);
 
-        if (toAdd.size() > 0) {
+        if (toAdd.size() > 0 && service != null) {
             service.getExecutor().execute(new SipRunnable() {
 
                 @Override
@@ -115,19 +113,23 @@ public class PresenceManager {
      * Delete buddies for a given account
      * @param acc
      */
-    private void deleteBuddiesForAccount(SipProfile acc) {
+    private synchronized void deleteBuddiesForAccount(SipProfile acc) {
         // Get buddies uris for this account
         final List<String> toDel = getBuddiesForAccount(acc);
 
-        if (toDel.size() > 0) {
+        if (toDel.size() > 0 && service != null) {
+            for (String csipUri : toDel) {
+                ContactsWrapper.getInstance().updateCSipPresence(service, csipUri, SipManager.PresenceStatus.UNKNOWN, "");
+            }
+            
             service.getExecutor().execute(new SipRunnable() {
 
                 @Override
                 protected void doRun() throws SameThreadException {
-
-                    for (String csipUri : toDel) {
-                        service.removeBuddy("sip:" + csipUri);
-                        ContactsWrapper.getInstance().updateCSipPresence(service, csipUri, PresenceStatus.UNKNOWN, "");
+                    if(service != null) {
+                        for (String csipUri : toDel) {
+                            service.removeBuddy("sip:" + csipUri);
+                        }
                     }
                 }
             });
@@ -153,7 +155,7 @@ public class PresenceManager {
      * Push buddies for registered account
      * Remove buddies for offline accounts
      */
-    private void updateRegistrations() {
+    private synchronized void updateRegistrations() {
         if(service == null) {
             // Nothing to do at this point
             return;
@@ -226,8 +228,10 @@ public class PresenceManager {
      * @param presStatus the status 
      * @param statusText the text representing this status
      */
-    public void changeBuddyState(String buddyUri, int monitorPres, PresenceStatus presStatus, String statusText) {
-        ContactsWrapper.getInstance().updateCSipPresence(service, buddyUri.replace("sip:", ""), presStatus, statusText);
+    public void changeBuddyState(String buddyUri, int monitorPres, SipManager.PresenceStatus presStatus, String statusText) {
+        if(service != null) {
+            ContactsWrapper.getInstance().updateCSipPresence(service, buddyUri.replace("sip:", ""), presStatus, statusText);
+        }
         
     }
 

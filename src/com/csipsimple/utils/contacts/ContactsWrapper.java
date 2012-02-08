@@ -33,8 +33,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.service.PresenceManager.PresenceStatus;
 import com.csipsimple.utils.Compatibility;
 
 import java.util.ArrayList;
@@ -152,7 +152,7 @@ public abstract class ContactsWrapper {
      * @param buddyUri the presence to update
      * @param presStatus the new presence status
      */
-    public abstract void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus, String statusText);
+    public abstract void updateCSipPresence(Context ctxt, String buddyUri, SipManager.PresenceStatus presStatus, String statusText);
 
     public abstract int getContactIndexableColumnIndex(Cursor c);
 

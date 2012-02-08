@@ -70,11 +70,13 @@ public class TimerWrapper extends BroadcastReceiver {
     		// Set new service
     		service = ctxt;
     		alarmManager = (AlarmManager) service.getSystemService(Context.ALARM_SERVICE);
+            wakeLock = new SipWakeLock((PowerManager) ctxt.getSystemService(Context.POWER_SERVICE));
+		}
+		if(!serviceRegistered) {
     		IntentFilter filter = new IntentFilter(TIMER_ACTION);
     		filter.addDataScheme(EXTRA_TIMER_SCHEME);
     		service.registerReceiver(this, filter);
     		serviceRegistered = true;
-    		wakeLock = new SipWakeLock((PowerManager) ctxt.getSystemService(Context.POWER_SERVICE));
 		}
 	}
 	
@@ -82,9 +84,9 @@ public class TimerWrapper extends BroadcastReceiver {
 	private synchronized void quit() {
 		Log.v(THIS_FILE, "Quit this wrapper");
 		if(serviceRegistered) {
+            serviceRegistered = false;
 			try {
 				service.unregisterReceiver(this);
-				serviceRegistered = false;
 			} catch (IllegalArgumentException e) {
 				Log.e(THIS_FILE, "Impossible to destroy timer wrapper", e);
 			}
@@ -132,12 +134,13 @@ public class TimerWrapper extends BroadcastReceiver {
 	}
 	
 	
-	private int doSchedule(int entry, int entryId, int intervalMs) {
+	private synchronized int doSchedule(int entry, int entryId, int intervalMs) {
 		//Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
 		PendingIntent pendingIntent = getPendingIntentForTimer(entry, entryId);
 		
 		// If less than 1 sec, do not wake up -- that's probably stun check so useless to wake up about that
-		int alarmType = (intervalMs < 1000) ? AlarmManager.ELAPSED_REALTIME : AlarmManager.ELAPSED_REALTIME_WAKEUP;
+		//int alarmType = (intervalMs < 1000) ? AlarmManager.ELAPSED_REALTIME : AlarmManager.ELAPSED_REALTIME_WAKEUP;
+		int alarmType = AlarmManager.ELAPSED_REALTIME_WAKEUP;
 		
 		// Cancel previous reg anyway
 		alarmManager.cancel(pendingIntent);
@@ -153,12 +156,14 @@ public class TimerWrapper extends BroadcastReceiver {
 		}
 		
 		// Push next
+        Log.v(THIS_FILE, "Schedule " + entry + " in " + intervalMs + "ms");
 		alarmManager.set(alarmType, firstTime, pendingIntent);
 		scheduleEntries.add((Integer) entry);
 		return 1;
 	}
 	
-	private int doCancel(int entry, int entryId) {
+	private synchronized int doCancel(int entry, int entryId) {
+        Log.v(THIS_FILE, "Cancel " + entry );
 		alarmManager.cancel(getPendingIntentForTimer(entry, entryId));
 		scheduleEntries.remove((Integer) entry);
 		return 1;
@@ -171,12 +176,14 @@ public class TimerWrapper extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		
 		if(TIMER_ACTION.equalsIgnoreCase(intent.getAction())) {
-			//Log.d(THIS_FILE, "FIRE Received : " + entryId);
+			Log.v(THIS_FILE, "FIRE Received...");
 			if(singleton == null) {
 				Log.w(THIS_FILE, "Not found singleton");
 				return;
 			}
 			int timerEntry = intent.getIntExtra(EXTRA_TIMER_ENTRY, -1);
+
+            Log.d(THIS_FILE, "Treat " + timerEntry);
 			singleton.treatAlarm(timerEntry);
 		}
 	}
@@ -188,21 +195,26 @@ public class TimerWrapper extends BroadcastReceiver {
 	
 	//private final Handler handler = new Handler();
 	
+	private final static Object singletonLock = new Object();
 	
 	// Public API
 	public static void create(SipService ctxt) {
-		if(singleton == null) {
-			singleton = new TimerWrapper(ctxt);
-		}else {
-			singleton.setContext(ctxt);
-		}
+	    synchronized (singletonLock) {
+	        if(singleton == null) {
+	            singleton = new TimerWrapper(ctxt);
+	        }else {
+	            singleton.setContext(ctxt);
+	        }
+        }
 	}
 
 
 	public static void destroy() {
-		if(singleton != null) {
-			singleton.quit();
-		}
+	    synchronized (singletonLock) {
+    		if(singleton != null) {
+    			singleton.quit();
+    		}
+	    }
 	}
 	
 	
@@ -237,8 +249,14 @@ public class TimerWrapper extends BroadcastReceiver {
 			
 			
 			try {
-			    if(scheduleEntries.contains(entryId)) {
-		            scheduleEntries.remove((Integer) entryId);
+			    boolean doFire = false;
+			    synchronized (TimerWrapper.this) {
+	                if(scheduleEntries.contains(entryId)) {
+	                    scheduleEntries.remove((Integer) entryId);
+	                    doFire = true;
+	                }
+                }
+			    if(doFire) {
 			        pjsua.pj_timer_fire(entryId);
 			    }else {
 			        Log.w(THIS_FILE, "Fire from old run " + entryId);

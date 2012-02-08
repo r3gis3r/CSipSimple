@@ -6,7 +6,8 @@
 
     <RelativeLayout
         android:id="@+id/header_view"
-        android:layout_width="wrap_content"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_vertical"
@@ -18,7 +19,8 @@
             android:layout_height="32dip"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_margin="5dip"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
             android:contentDescription="@string/empty_description"
             android:src="@drawable/ic_wizard_basic" />
 
@@ -31,15 +33,15 @@
             android:layout_toRightOf="@+id/header_icon"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <ImageView
-            android:id="@+id/header_divider"
-            android:layout_width="fill_parent"
-            android:layout_height="5dip"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:contentDescription="@string/empty_description"
-            android:scaleType="fitXY"
-            android:src="@drawable/divider_horizontal_dark" />
+        <com.csipsimple.ui.favorites.PresenceStatusSpinner
+            android:id="@+id/header_presence_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:spinnerMode="dropdown" >
+
+            <!-- Preview: listitem=@android:layout/simple_spinner_dropdown_item -->
+        </com.csipsimple.ui.favorites.PresenceStatusSpinner>
     </RelativeLayout>
 
     <RelativeLayout

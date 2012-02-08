@@ -35,7 +35,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.RemoteException;
-import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.Contacts;
@@ -49,8 +48,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.service.PresenceManager.PresenceStatus;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.ContactsAsyncHelper;
@@ -59,7 +58,6 @@ import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ContactsUtils5 extends ContactsWrapper {
@@ -522,7 +520,7 @@ public class ContactsUtils5 extends ContactsWrapper {
             };
         }
 
-        Uri searchUri = Uri.withAppendedPath(Contacts.CONTENT_GROUP_URI, groupName);
+        Uri searchUri = Uri.withAppendedPath(Contacts.CONTENT_GROUP_URI, Uri.encode(groupName));
         
         return ctxt.getContentResolver().query(searchUri, projection, null, null, Contacts.DISPLAY_NAME + " ASC");
     }
@@ -537,7 +535,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                 + " AND " 
                 + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM 
                 + " AND " 
-                + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='csip'";
+                + " LOWER("+CommonDataKinds.Im.CUSTOM_PROTOCOL + ")='csip'";
         
 
         Cursor contacts = getContactsByGroup(ctxt, groupName);
@@ -579,7 +577,7 @@ public class ContactsUtils5 extends ContactsWrapper {
     
 
     @Override
-    public void updateCSipPresence(Context ctxt, String buddyUri, PresenceStatus presStatus, String statusText) {
+    public void updateCSipPresence(Context ctxt, String buddyUri, SipManager.PresenceStatus presStatus, String statusText) {
         
         if(Compatibility.isCompatible(8)) {
 //            if(csipDatasId.containsKey(buddyUri)) {

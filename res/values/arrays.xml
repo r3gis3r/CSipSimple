@@ -41,5 +41,9 @@
         <item>Laughing</item> <!-- 15: :-D -->
         <item>Confused</item> <!-- 16: o_O -->
     </string-array>
+    <string-array name="presence_status_names">
+        <item>@string/online</item>
+        <item>@string/offline</item>
+    </string-array>
 
 </resources>

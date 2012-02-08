@@ -139,7 +139,7 @@
             android:dialogMessage="@string/w_expert_rtp_public_addr_desc"
             android:key="rtp_public_addr"
             android:summary="@string/w_expert_rtp_public_addr_desc"
-            android:title="@string/w_expert_rtp_bound_addr" />
+            android:title="@string/w_expert_rtp_public_addr" />
         <EditTextPreference
             android:dialogMessage="@string/w_expert_rtp_bound_addr_desc"
             android:key="rtp_bound_addr"

@@ -55,7 +55,6 @@ public class FavListFragment extends ListFragment implements ViewPagerVisibility
         
         // Start loading
         getLoaderManager().initLoader(0, null, this);
-        
     }
 
     @Override
@@ -79,6 +78,8 @@ public class FavListFragment extends ListFragment implements ViewPagerVisibility
 
         // Start out with a progress indicator.
         // setListShown(false);
+        
+
     }
 
     @Override

@@ -36,6 +36,7 @@ import android.view.KeyCharacterMap;
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipManager.PresenceStatus;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.service.MediaManager;
@@ -982,7 +983,7 @@ public class PjSipService {
     /**
      * Send sms/message using SIP server
      */
-    public ToCall sendMessage(String callee, String message, int accountId)
+    public ToCall sendMessage(String callee, String message, long accountId)
             throws SameThreadException {
         if (!created) {
             return null;
@@ -1014,6 +1015,9 @@ public class PjSipService {
      * @throws SameThreadException
      */
     public int addBuddy(String buddyUri) throws SameThreadException {
+        if (!created) {
+            return -1;
+        }
         int[] p_buddy_id = new int[1];
         
         pjsua_buddy_config buddy_cfg = new pjsua_buddy_config();
@@ -1026,14 +1030,21 @@ public class PjSipService {
         return p_buddy_id[0];
     }
     
-
+    /**
+     * Remove one buddy from the buddy list managed by pjsip
+     * @param buddyUri he uri to unregister
+     * @throws SameThreadException
+     */
     public void removeBuddy(String buddyUri) throws SameThreadException {
-        
+        if (!created) {
+            return;
+        }
         int buddyId = pjsua.buddy_find(pjsua.pj_str_copy(buddyUri));
         if(buddyId >= 0) {
             pjsua.buddy_del(buddyId);
         }
     }
+    
 
     public void stopDialtoneGenerator() {
         if (dialtoneGenerator != null) {
@@ -1173,7 +1184,7 @@ public class PjSipService {
                     status = pjsua.acc_del(profileState.getPjsuaId());
                     addAccount(account);
                 } else {
-                    pjsua.acc_set_online_status(profileState.getPjsuaId(), 1);
+                    pjsua.acc_set_online_status(profileState.getPjsuaId(), getOnlineForStatus(service.getPresence()));
                     status = pjsua.acc_set_registration(profileState.getPjsuaId(), renew);
                 }
             } else {
@@ -1191,6 +1202,36 @@ public class PjSipService {
         }
         // PJ_SUCCESS = 0
         return status == 0;
+    }
+    
+
+    /**
+     * Set self presence
+     * @param presence the SipManager.SipPresence
+     * @param statusText the text of the presence
+     * @throws SameThreadException
+     */
+    public void setPresence(PresenceStatus presence, String statusText, long accountId) throws SameThreadException  {
+        if (!created) {
+            Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
+            return;
+        }
+        SipProfile account = new SipProfile();
+        account.id = accountId;
+        SipProfileState profileState = getProfileState(account);
+        
+        // In case of already added, we have to act finely
+        // If it's local we can just consider that we have to re-add account 
+        // since it will actually just touch the account with a modify
+        if (profileState != null && profileState.isAddedToStack()) {
+            // The account is already there in accounts list
+            pjsua.acc_set_online_status(profileState.getPjsuaId(), getOnlineForStatus(presence));
+        }
+        
+    }
+    
+    private int getOnlineForStatus(PresenceStatus presence) {
+        return presence == PresenceStatus.ONLINE ? 1 : 0;
     }
 
     public long getAccountIdForPjsipId(int pjId) {
@@ -1259,7 +1300,7 @@ public class PjSipService {
      * @param accountId the context account
      * @return ToCall object representing what to call and using which account
      */
-    private ToCall sanitizeSipUri(String callee, int accountId) throws SameThreadException {
+    private ToCall sanitizeSipUri(String callee, long accountId) throws SameThreadException {
         // accountId is the id in term of csipsimple database
         // pjsipAccountId is the account id in term of pjsip adding
         int pjsipAccountId = (int) SipProfile.INVALID_ID;
@@ -1628,5 +1669,6 @@ public class PjSipService {
         }
         return "";
     }
+
 
 }

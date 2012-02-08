@@ -155,7 +155,9 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
      * actively loaded data set.
      */
     protected void onReleaseResources(Cursor c) {
-        c.close();
+        if(c != null) {
+            c.close();
+        }
     }
 
     /**

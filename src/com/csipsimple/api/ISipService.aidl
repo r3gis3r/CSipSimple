@@ -122,8 +122,11 @@ interface ISipService{
 	*/
 	void playWaveFile(String filePath, int callId, int way);
 	
-	//SMS
-	void sendMessage(String msg, String toNumber, int accountId);
+	// SMS
+	void sendMessage(String msg, String toNumber, long accountId);
+	
+	// Presence
+	void setPresence(int presence, String statusText, long accountId);
 	
 	//Secure
 	void zrtpSASVerified(int dataPtr);
