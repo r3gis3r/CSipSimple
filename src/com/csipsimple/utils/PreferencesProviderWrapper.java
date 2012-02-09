@@ -36,6 +36,7 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.net.Uri;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -175,16 +176,19 @@ public class PreferencesProviderWrapper {
 	// Check for wifi
 	private boolean isValidWifiConnectionFor(NetworkInfo ni, String suffix) {
 		
-		boolean valid_for_wifi = getPreferenceBooleanValue("use_wifi_" + suffix, true);
-		if (valid_for_wifi && 
-			ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
-			
-			// Wifi connected
-			if (ni.getState() == NetworkInfo.State.CONNECTED) {
-				return true;
-			}
-		}
-		return false;
+        boolean valid_for_wifi = getPreferenceBooleanValue("use_wifi_" + suffix, true);
+        // We consider ethernet as wifi
+        if (valid_for_wifi && ni != null) {
+            int type = ni.getType();
+            State state = ni.getState();
+            // Wifi connected
+            if (state == State.CONNECTED &&
+                    // 9 = ConnectivityManager.TYPE_ETHERNET
+                    (type == ConnectivityManager.TYPE_WIFI || type == 9 )) {
+                return true;
+            }
+        }
+        return false;
 	}
 	
 	// Check for acceptable mobile data network connection
@@ -195,10 +199,13 @@ public class PreferencesProviderWrapper {
 		boolean valid_for_gprs = getPreferenceBooleanValue("use_gprs_" + suffix, false);
 		
 		if ((valid_for_3g || valid_for_edge || valid_for_gprs) &&
-			 ni != null && ni.getType() == ConnectivityManager.TYPE_MOBILE) {
-
+			 ni != null) {
+		    int type = ni.getType();
+		    
 			// Any mobile network connected
-			if (ni.getState() == NetworkInfo.State.CONNECTED) {
+			if (ni.getState() == NetworkInfo.State.CONNECTED && 
+			        // Type 3,4,5 are other mobile data ways
+			        (type == ConnectivityManager.TYPE_MOBILE || (type <= 5 && type >= 3))) {
 				int subType = ni.getSubtype();
 				
 				// 3G (or better)
