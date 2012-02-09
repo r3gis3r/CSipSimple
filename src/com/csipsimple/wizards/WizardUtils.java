@@ -89,6 +89,7 @@ import com.csipsimple.wizards.impl.OXO810;
 import com.csipsimple.wizards.impl.Odorik;
 import com.csipsimple.wizards.impl.OnSip;
 import com.csipsimple.wizards.impl.Optimus;
+import com.csipsimple.wizards.impl.Orbtalk;
 import com.csipsimple.wizards.impl.Ovh;
 import com.csipsimple.wizards.impl.Pbxes;
 import com.csipsimple.wizards.impl.Pennytel;
@@ -608,6 +609,12 @@ public class WizardUtils {
                     locale("pt_PT")
                     }, false, false, 
                     ZonPt.class));
+            WIZARDS_DICT.put("ORBTALK", new WizardInfo("ORBTALK", "Orbtalk", 
+                    R.drawable.ic_wizard_orbtalk, 19, 
+                    new Locale[]{
+                    Locale.UK, Locale.US
+                    }, false, false, 
+                    Orbtalk.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
