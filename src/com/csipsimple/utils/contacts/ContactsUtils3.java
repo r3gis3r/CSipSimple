@@ -24,6 +24,7 @@ package com.csipsimple.utils.contacts;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.MatrixCursor;
@@ -31,6 +32,7 @@ import android.database.MatrixCursor.RowBuilder;
 import android.database.MergeCursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.Contacts.Intents;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
 import android.telephony.PhoneNumberUtils;
@@ -345,5 +347,18 @@ public class ContactsUtils3 extends ContactsWrapper {
     public void updateCSipPresence(Context ctxt, String buddyUri, SipManager.PresenceStatus presStatus, String statusText) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public Intent getAddContactIntent(String displayName, String csipUri) {
+
+        Intent intent = new Intent(Intents.Insert.ACTION);
+
+        if(!TextUtils.isEmpty(displayName)) {
+            intent.putExtra(Intents.Insert.NAME, displayName);
+        }
+        intent.putExtra(Intents.Insert.IM_HANDLE, csipUri);
+        intent.putExtra(Intents.Insert.IM_PROTOCOL, "csip");
+        return intent;
     }
 }

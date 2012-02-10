@@ -127,6 +127,8 @@ interface ISipService{
 	
 	// Presence
 	void setPresence(int presence, String statusText, long accountId);
+	int getPresence(long accountId);
+	String getPresenceStatus(long accountId);
 	
 	//Secure
 	void zrtpSASVerified(int dataPtr);

@@ -565,6 +565,7 @@ public class SipService extends Service {
                 return;
             }
             
+            
             getExecutor().execute(new SipRunnable() {
                 @Override
                 protected void doRun() throws SameThreadException {
@@ -572,6 +573,19 @@ public class SipService extends Service {
                     pjService.setPresence(presence, statusText, accountId);
                 }
             });
+        }
+        
+
+        @Override
+        public int getPresence(long accountId) throws RemoteException {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public String getPresenceStatus(long accountId) throws RemoteException {
+            // TODO Auto-generated method stub
+            return null;
         }
 
 		@Override
@@ -659,6 +673,7 @@ public class SipService extends Service {
 			return SipManager.SUCCESS;
 		}
 
+
 		
 	};
 
@@ -712,7 +727,7 @@ public class SipService extends Service {
 	private PreferencesProviderWrapper prefsWrapper;
 	private ServicePhoneStateReceiver phoneConnectivityReceiver;
 	private TelephonyManager telephonyManager;
-	private ConnectivityManager connectivityManager;
+//	private ConnectivityManager connectivityManager;
 
 	public SipNotifications notificationManager;
 	private SipServiceExecutor mExecutor;
@@ -852,7 +867,7 @@ public class SipService extends Service {
 		Log.setLogLevel(prefsWrapper.getLogLevel());
 		
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		notificationManager = new SipNotifications(this);
 		notificationManager.onServiceCreate();
 		sipWakeLock = new SipWakeLock((PowerManager) getSystemService(Context.POWER_SERVICE));

@@ -154,8 +154,21 @@ public abstract class ContactsWrapper {
      */
     public abstract void updateCSipPresence(Context ctxt, String buddyUri, SipManager.PresenceStatus presStatus, String statusText);
 
+    /**
+     * Get the column index of the column that should be used to index the list (the display name usually)
+     * @param c the cursor pointing to datas
+     * @return the column index
+     */
     public abstract int getContactIndexableColumnIndex(Cursor c);
 
+    /**
+     * Get the intent to fire to propose user to add somebody to contacts
+     * @param displayName the name to prefill
+     * @param csipUri the sip uri to prefill
+     * @return an android insert intent 
+     */
+    public abstract Intent getAddContactIntent(String displayName, String csipUri);
+    
     /**
      * Get a cursor loader on contacts entries based on contact grouping 
      * @param ctxt the context of the application

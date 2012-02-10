@@ -123,6 +123,8 @@ public final class SipUri {
     /**
      * Transform sip uri into something that doesn't depend on remote display
      * name
+     * For example, if you give "Display Name" <sip:user@domain.com>
+     * It will return sip:user@domain.com
      * 
      * @param sipContact full sip uri
      * @return simplified sip uri

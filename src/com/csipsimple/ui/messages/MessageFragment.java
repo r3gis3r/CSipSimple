@@ -38,8 +38,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.SupportActivity;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
+import android.support.v4.view.MenuItem.OnMenuItemClickListener;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -57,6 +61,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.ui.PickupSipUri;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.SmileyParser;
+import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.widgets.AccountChooserButton;
 
 public class MessageFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnClickListener {
@@ -80,7 +85,11 @@ public class MessageFragment extends ListFragment implements LoaderManager.Loade
     public void setOnQuitListener(OnQuitListener l) {
         quitListener = l;
     }
-    
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -280,5 +289,23 @@ public class MessageFragment extends ListFragment implements LoaderManager.Loade
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+    
+
+    // Options
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        
+        MenuItem addContactMenu = menu.add(R.string.menu_add_to_contacts);
+        addContactMenu.setIcon(R.drawable.ic_add_contact_holo_dark).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        addContactMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent it = ContactsWrapper.getInstance().getAddContactIntent(null, remoteFrom);
+                startActivity(it);
+                return true;
+            }
+        });
     }
 }

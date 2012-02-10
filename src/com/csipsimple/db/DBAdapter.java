@@ -49,7 +49,7 @@ public class DBAdapter {
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		private static final String DATABASE_NAME = "com.csipsimple.db";
-		private static final int DATABASE_VERSION = 31;
+		private static final int DATABASE_VERSION = 32;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -110,7 +110,8 @@ public class DBAdapter {
                 + SipProfile.FIELD_RTP_ENABLE_QOS            + " INTEGER DEFAULT -1,"
                 + SipProfile.FIELD_RTP_QOS_DSCP              + " INTEGER DEFAULT -1,"
                 + SipProfile.FIELD_RTP_BOUND_ADDR            + " TEXT,"
-                + SipProfile.FIELD_RTP_PUBLIC_ADDR           + " TEXT"
+                + SipProfile.FIELD_RTP_PUBLIC_ADDR           + " TEXT,"
+                + SipProfile.FIELD_ANDROID_GROUP             + " TEXT"
 				
 			+ ");";
 		
@@ -340,6 +341,16 @@ public class DBAdapter {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
                 }
 			}
+
+            if(oldVersion < 32) {
+                try {
+                    //Add android group for buddy list
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ANDROID_GROUP, "TEXT");
+                    Log.d(THIS_FILE, "Upgrade done");
+                }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
+            }
 			onCreate(db);
 		}
 	}

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -21,136 +22,135 @@
     android:layout_height="match_parent" >
 
     <!-- All the controls which are part of the pinned header are in this layout. -->
+
     <RelativeLayout
         android:id="@+id/controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-    >
+        android:layout_alignParentLeft="true" >
 
-         <ImageView
-             android:id="@+id/contact_background"
-             android:layout_width="match_parent"
-             android:layout_height="150dip"
-             android:adjustViewBounds="true"
-             android:scaleType="centerCrop"
-             android:contentDescription="@string/empty_description"
-         />
+        <ImageView
+            android:id="@+id/contact_background"
+            android:layout_width="match_parent"
+            android:layout_height="150dip"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/empty_description"
+            android:scaleType="centerCrop" />
+
         <LinearLayout
             android:id="@+id/blue_separator"
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:background="#F95555"
             android:layout_below="@+id/contact_background"
-        />
+            android:background="#F95555" />
+
         <View
             android:id="@+id/photo_text_bar"
             android:layout_width="match_parent"
             android:layout_height="42dip"
-            android:background="#7F000000"
-            android:layout_alignParentLeft="true"
             android:layout_alignBottom="@id/contact_background"
-        />
+            android:layout_alignParentLeft="true"
+            android:background="#7F000000" />
+
         <ImageView
             android:id="@+id/main_action"
             android:layout_width="wrap_content"
             android:layout_height="0dip"
-            android:scaleType="center"
-            android:contentDescription="@string/menu_view_contact"
-            android:layout_alignRight="@id/photo_text_bar"
             android:layout_alignBottom="@id/photo_text_bar"
+            android:layout_alignRight="@id/photo_text_bar"
             android:layout_alignTop="@id/photo_text_bar"
             android:layout_marginRight="@dimen/call_log_outer_margin"
-        />
+            android:contentDescription="@string/menu_view_contact"
+            android:scaleType="center" />
+
         <TextView
             android:id="@+id/header_text"
             android:layout_width="wrap_content"
             android:layout_height="0dip"
-            android:layout_alignLeft="@id/photo_text_bar"
-            android:layout_toLeftOf="@id/main_action"
-            android:layout_alignTop="@id/photo_text_bar"
             android:layout_alignBottom="@id/photo_text_bar"
-            android:layout_marginRight="@dimen/call_log_inner_margin"
+            android:layout_alignLeft="@id/photo_text_bar"
+            android:layout_alignTop="@id/photo_text_bar"
             android:layout_marginLeft="@dimen/call_detail_contact_name_margin"
+            android:layout_marginRight="@dimen/call_log_inner_margin"
+            android:layout_toLeftOf="@id/main_action"
             android:gravity="center_vertical"
-            android:textColor="#FFFFFF"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:singleLine="true"
-        />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF" />
+
         <ImageButton
             android:id="@+id/main_action_push_layer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/callBack"
-            android:layout_alignLeft="@id/contact_background"
-            android:layout_alignTop="@id/contact_background"
-            android:layout_alignRight="@id/contact_background"
             android:layout_alignBottom="@id/contact_background"
+            android:layout_alignLeft="@id/contact_background"
+            android:layout_alignRight="@id/contact_background"
+            android:layout_alignTop="@id/contact_background"
             android:background="?attr/selectableItemBackground"
-        />
-        <FrameLayout android:id="@+id/call_and_sms_container"
+            android:contentDescription="@string/callBack" />
+
+        <FrameLayout
+            android:id="@+id/call_and_sms_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/call_detail_button_spacing"
             android:layout_below="@id/header_text"
-            android:background="@android:color/black"
-        >
+            android:layout_marginBottom="@dimen/call_detail_button_spacing"
+            android:background="@android:color/black" >
+
             <LinearLayout
                 android:id="@+id/call_and_sms"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/call_log_list_item_height"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:background="@drawable/dialpad_background"
-            >
-                <LinearLayout android:id="@+id/call_and_sms_main_action"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:id="@+id/call_and_sms_main_action"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/call_log_indent_margin"
-                    android:orientation="vertical"
-                    android:gravity="center_vertical"
-                    android:focusable="true"
                     android:background="?attr/selectableItemBackground"
-                >
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/call_log_indent_margin" >
 
-                    <TextView android:id="@+id/call_and_sms_text"
+                    <TextView
+                        android:id="@+id/call_and_sms_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#FFFFFF"
-                    />
+                        android:textColor="#FFFFFF" />
 
-                    <TextView android:id="@+id/call_and_sms_label"
+                    <TextView
+                        android:id="@+id/call_and_sms_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#FFFFFF"
                         android:textAllCaps="true"
-                    />
-
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
 
                 <com.csipsimple.widgets.AccountChooserButton
                     android:id="@+id/call_choose_account"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent" />
-
             </LinearLayout>
         </FrameLayout>
     </RelativeLayout>
-    
+
     <!--
       The list view is under everything.
       It contains a first header element which is hidden under the controls UI.
       When scrolling, the controls move up until the name bar hits the top.
-      -->
+    -->
+
     <ListView
         android:id="@+id/history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/controls"
-    />
+        android:layout_below="@id/controls" />
 
 </RelativeLayout>

@@ -125,8 +125,10 @@ public class SipProfile implements Parcelable {
     public static final String FIELD_DATATYPE = "datatype";
     public static final String FIELD_DATA = "data";
 
+    // Android stuff
     public static final String FIELD_SIP_STACK = "sip_stack";
     public static final String FIELD_VOICE_MAIL_NBR = "vm_nbr";
+    public static final String FIELD_ANDROID_GROUP = "android_group";
     
     // Sip outbound
     public static final String FIELD_USE_RFC5626 = "use_rfc5626";
@@ -199,6 +201,7 @@ public class SipProfile implements Parcelable {
     public String rtp_bound_addr = "";
     public int rtp_enable_qos = -1;
     public int rtp_qos_dscp = -1;
+    public String android_group = "";
     
     
     public SipProfile() {
@@ -253,6 +256,7 @@ public class SipProfile implements Parcelable {
         rtp_bound_addr = getReadParcelableString(in.readString());
         rtp_enable_qos = in.readInt();
         rtp_qos_dscp = in.readInt();
+        android_group = getReadParcelableString(in.readString());
     }
 
     public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
@@ -315,6 +319,7 @@ public class SipProfile implements Parcelable {
         dest.writeString(getWriteParcelableString(rtp_bound_addr));
         dest.writeInt(rtp_enable_qos);
         dest.writeInt(rtp_qos_dscp);
+        dest.writeString(getWriteParcelableString(android_group));
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -365,6 +370,10 @@ public class SipProfile implements Parcelable {
             active = (tmp_i != 0);
         } else {
             active = true;
+        }
+        tmp_s = args.getAsString(FIELD_ANDROID_GROUP);
+        if (tmp_s != null) {
+            android_group = tmp_s;
         }
 
         // General account settings
@@ -514,6 +523,7 @@ public class SipProfile implements Parcelable {
             rtp_qos_dscp = tmp_i;
         }
         
+        
     }
 
     /**
@@ -569,6 +579,8 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_VOICE_MAIL_NBR, vm_nbr);
         args.put(FIELD_REG_DELAY_BEFORE_REFRESH, reg_delay_before_refresh);
         args.put(FIELD_TRY_CLEAN_REGISTERS, try_clean_registers);
+        
+        args.put(FIELD_ANDROID_GROUP, android_group);
 
         return args;
     }

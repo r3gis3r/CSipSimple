@@ -72,9 +72,8 @@ public class FavAdapter extends ResourceCursorAdapter {
     }
     
     private void showViewForHeader(View view, boolean isHeader) {
-
         view.findViewById(R.id.header_view).setVisibility(isHeader ? View.VISIBLE : View.GONE);
-        view.findViewById(R.id.contact_view).setVisibility(isHeader ? View.GONE : View.VISIBLE );
+        view.findViewById(R.id.contact_view).setVisibility(isHeader ? View.GONE : View.VISIBLE);
     }
 
 }

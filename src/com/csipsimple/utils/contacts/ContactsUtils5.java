@@ -25,6 +25,7 @@ import android.content.ContentProviderOperation;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -39,6 +40,8 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.Intents;
+import android.provider.ContactsContract.Intents.Insert;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.StatusUpdates;
 import android.telephony.PhoneNumberUtils;
@@ -49,11 +52,13 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.UriUtils;
 import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
 import java.io.InputStream;
@@ -704,6 +709,29 @@ public class ContactsUtils5 extends ContactsWrapper {
 
 
 
+    @Override
+    public Intent getAddContactIntent(String displayName, String csipUri) {
+        Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, Contacts.CONTENT_URI);
+        intent.setType(Contacts.CONTENT_ITEM_TYPE);
+
+        if(!TextUtils.isEmpty(displayName)) {
+            intent.putExtra(Insert.NAME, displayName);
+        }
+        
+        if(!TextUtils.isEmpty(csipUri)) {
+            ArrayList<ContentValues> data = new ArrayList<ContentValues>();
+            ContentValues csipProto = new ContentValues();
+            csipProto.put(Data.MIMETYPE, CommonDataKinds.Im.CONTENT_ITEM_TYPE);
+            csipProto.put(CommonDataKinds.Im.PROTOCOL, CommonDataKinds.Im.PROTOCOL_CUSTOM);
+            csipProto.put(CommonDataKinds.Im.CUSTOM_PROTOCOL, "csip");
+            csipProto.put(CommonDataKinds.Im.DATA, SipUri.getCanonicalSipContact(csipUri, false));
+            data.add(csipProto);
+    
+            intent.putParcelableArrayListExtra(Insert.DATA, data);
+        }
+        
+        return intent;
+    }
 
 
 }

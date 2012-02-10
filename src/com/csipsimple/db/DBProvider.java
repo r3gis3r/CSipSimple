@@ -99,7 +99,8 @@ public class DBProvider extends ContentProvider {
 		SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH,
 		
 		// RTP config
-		
+	    SipProfile.FIELD_RTP_PORT, SipProfile.FIELD_RTP_PUBLIC_ADDR, SipProfile.FIELD_RTP_BOUND_ADDR,
+	    SipProfile.FIELD_RTP_ENABLE_QOS, SipProfile.FIELD_RTP_QOS_DSCP,
 
 		// Proxy infos
 		SipProfile.FIELD_PROXY, SipProfile.FIELD_REG_USE_PROXY,
@@ -111,13 +112,14 @@ public class DBProvider extends ContentProvider {
 		
 		// CSipSimple specific
 		SipProfile.FIELD_SIP_STACK, SipProfile.FIELD_VOICE_MAIL_NBR, 
-		SipProfile.FIELD_TRY_CLEAN_REGISTERS,
+		SipProfile.FIELD_TRY_CLEAN_REGISTERS, SipProfile.FIELD_ANDROID_GROUP,
 		
 		// RFC 5626
 		SipProfile.FIELD_USE_RFC5626, SipProfile.FIELD_RFC5626_INSTANCE_ID, SipProfile.FIELD_RFC5626_REG_ID, 
 		
 		// Video
 		SipProfile.FIELD_VID_IN_AUTO_SHOW, SipProfile.FIELD_VID_OUT_AUTO_TRANSMIT,
+		
 		
 	};
 	public final static Class<?>[] ACCOUNT_FULL_PROJECTION_TYPES = {
@@ -132,8 +134,13 @@ public class DBProvider extends ContentProvider {
 		String.class, String.class,
 		Integer.class, Integer.class, Integer.class,
 		Integer.class,
-		 
-		 // Proxy infos
+		
+
+        // RTP config
+        Integer.class, String.class, String.class,
+        Integer.class, Integer.class,
+		
+		// Proxy infos
 		String.class, Integer.class,
 
         // Credentials
@@ -142,7 +149,7 @@ public class DBProvider extends ContentProvider {
 		
 		// CSipSimple specific
 		Integer.class, String.class,
-		Integer.class,
+		Integer.class, String.class,
 
         // RFC 5626
 		Integer.class, String.class, String.class,

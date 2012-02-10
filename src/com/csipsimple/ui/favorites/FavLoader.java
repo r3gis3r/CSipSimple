@@ -26,7 +26,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.MergeCursor;
-import android.os.Handler;
 import android.provider.BaseColumns;
 import android.support.v4.content.AsyncTaskLoader;
 
@@ -43,8 +42,9 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
         super(context);
     }
     
-    Handler mHandler = new Handler();
 
+    private ContentObserver loaderObserver = new ForceLoadContentObserver();
+    
     @Override
     public Cursor loadInBackground() {
         // First of all, get all active accounts
@@ -57,15 +57,13 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
             cursorsToMerge[i++] = createContentCursorFor(acc);
             
         }
+
+        getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
+                true, loaderObserver);
+        
         if(cursorsToMerge.length > 0) {
             MergeCursor mg = new MergeCursor(cursorsToMerge);
-            mg.registerContentObserver(new ContentObserver(mHandler) {
-                @Override
-                public void onChange(boolean selfChange) {
-                    super.onChange(selfChange);
-                    onContentChanged();
-                }
-            });
+            mg.registerContentObserver(loaderObserver);
             return mg;
         }else {
             return null;
@@ -102,7 +100,7 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
      */
     @Override
     protected void onStartLoading() {
-        if (currentResult != null) {
+        if (currentResult != null && !takeContentChanged()) {
             // If we currently have a result available, deliver it
             // immediately.
             deliverResult(currentResult);
@@ -156,8 +154,11 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
      */
     protected void onReleaseResources(Cursor c) {
         if(c != null) {
+            c.unregisterContentObserver(loaderObserver);
             c.close();
         }
+
+        getContext().getContentResolver().unregisterContentObserver(loaderObserver);
     }
 
     /**

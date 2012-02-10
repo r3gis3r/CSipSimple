@@ -49,6 +49,7 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
+import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.widgets.AccountChooserButton;
 
 /**
@@ -103,6 +104,9 @@ public class CallLogDetailsFragment extends Fragment {
     private static final int STATUS_CODE_COLUMN_INDEX = 5;
     private static final int STATUS_TEXT_COLUMN_INDEX = 6;
 
+    /**
+     * Action when the call icon is pressed
+     */
     private final View.OnClickListener mPrimaryActionListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -208,7 +212,16 @@ public class CallLogDetailsFragment extends Fragment {
             mainActionIntent = new Intent(Intent.ACTION_VIEW, contactUri);
             mainActionIcon = R.drawable.ic_contacts_holo_dark;
             mainActionDescription = nameOrNumber.toString();
-        } else {
+        } else if(!TextUtils.isEmpty(firstDetails.number)){
+            mainActionIntent = ContactsWrapper.getInstance().getAddContactIntent((String) firstDetails.name, (String) firstDetails.number);
+            mainActionIcon = SipHome.USE_LIGHT_THEME ? R.drawable.ic_add_contact_holo_light : R.drawable.ic_add_contact_holo_dark;
+            mainActionDescription = getString(R.string.menu_add_to_contacts);
+            if(TextUtils.isEmpty(firstDetails.name)) {
+                mHeaderTextView.setText(R.string.menu_add_to_contacts);
+            }else {
+                mHeaderTextView.setText(getString(R.string.menu_add_address_to_contacts, firstDetails.name));
+            }
+        }else {
             // If we cannot call the number, when we probably cannot add it as a
             // contact either.
             // This is usually the case of private, unknown, or payphone

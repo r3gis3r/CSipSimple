@@ -196,6 +196,8 @@ public class PresenceManager {
             } finally {
                 c.close();
             }
+        }else if(c != null) {
+            c.close();
         }
 
         for(SipProfile acc : accToRemove) {

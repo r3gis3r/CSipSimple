@@ -73,24 +73,23 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
 
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent, false);
+            return getCustomView(position, convertView, parent, true);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent, true);
+            return getCustomView(position, convertView, parent, false);
         }
 
-        public View getCustomView(int position, View convertView, ViewGroup parent, boolean selfDisplay) {
+        public View getCustomView(int position, View convertView, ViewGroup parent, boolean choiceMode) {
             View row = inflater.inflate(R.layout.fav_presence_item, parent, false);
-            TextView label = (TextView) row.findViewById(R.id.status_text);
-            ImageView icon = (ImageView) row.findViewById(R.id.status_icon);
-            TextView contactName = (TextView) row.findViewById(R.id.contact_name);
+            TextView label = (TextView) row.findViewById(R.id.item_status_text);
+            ImageView icon = (ImageView) row.findViewById(R.id.item_status_icon);
+            //TextView contactName = (TextView) row.findViewById(R.id.contact_name);
             
             // Show / hide
-            selfDisplay = false;
-            contactName.setVisibility(selfDisplay ? View.VISIBLE : View.GONE);
-            int padding = selfDisplay ? 3 : 15;
+            //contactName.setVisibility(/*dropDownMode ? View.VISIBLE : */View.GONE);
+            int padding = choiceMode ? 15 : 5;
             row.setPadding(padding, padding, padding, padding);
             
             // Content binding
