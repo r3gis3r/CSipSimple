@@ -22,11 +22,13 @@
 package com.csipsimple.ui;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -182,6 +184,7 @@ public class SipHome extends FragmentActivity {
 
         selectTabWithAction(getIntent());
         Log.setLogLevel(prefProviderWrapper.getLogLevel());
+        
 
         // Async check
         asyncSanityCheker = new Thread() {

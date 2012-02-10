@@ -58,6 +58,7 @@ import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.UriUtils;
 import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
@@ -612,7 +613,9 @@ public class ContactsUtils5 extends ContactsWrapper {
                 if(Compatibility.isCompatible(11)) {
                     builder.withValue(StatusUpdates.CHAT_CAPABILITY, StatusUpdates.CAPABILITY_HAS_VOICE );
                 }
-                builder.withValue(StatusUpdates.STATUS_RES_PACKAGE, "com.csipsimple");
+
+                String pkg = PreferencesProviderWrapper.getCurrentPackageInfos(ctxt).applicationInfo.packageName;
+                builder.withValue(StatusUpdates.STATUS_RES_PACKAGE, pkg);
                 builder.withValue(StatusUpdates.STATUS_LABEL, R.string.app_name);
                 builder.withValue(StatusUpdates.STATUS_ICON, R.drawable.ic_launcher_phone);
                 builder.withValue(StatusUpdates.STATUS_TIMESTAMP, System.currentTimeMillis());

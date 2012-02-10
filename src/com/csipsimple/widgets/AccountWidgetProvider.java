@@ -40,6 +40,7 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.wizards.WizardUtils;
 
@@ -47,9 +48,7 @@ public class AccountWidgetProvider extends AppWidgetProvider {
 
 	private static final String THIS_FILE = "Widget provider";
 	
-    static final ComponentName THIS_APPWIDGET =
-        new ComponentName("com.csipsimple",
-                "com.csipsimple.widgets.AccountWidgetProvider");
+    static ComponentName THIS_APPWIDGET = null;
 
 	
 	@Override
@@ -102,7 +101,11 @@ public class AccountWidgetProvider extends AppWidgetProvider {
      */
     public static void updateWidget(Context context) {
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        
+        if(THIS_APPWIDGET == null) {
+            String pkg = PreferencesProviderWrapper.getCurrentPackageInfos(context).applicationInfo.packageName;
+            THIS_APPWIDGET = new ComponentName(pkg,
+                            "com.csipsimple.widgets.AccountWidgetProvider");
+        }
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(THIS_APPWIDGET);
         for (int widgetId : appWidgetIds) {
         	RemoteViews view = buildUpdate(context, widgetId);

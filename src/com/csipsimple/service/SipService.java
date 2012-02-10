@@ -23,14 +23,18 @@ package com.csipsimple.service;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -78,6 +82,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -882,6 +887,24 @@ public class SipService extends Service {
 			Log.e(THIS_FILE, "RESET SETTINGS !!!!");
 			prefsWrapper.resetAllDefaultValues();
 		}
+
+		// Check whether we should register for stock tel: intents
+        // Useful for devices without gsm
+        PackageManager pm = getPackageManager();
+        String selfPkg = PreferencesProviderWrapper.getCurrentPackageInfos(this).applicationInfo.packageName;
+        Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
+        intentMakePstnCall.setData(Uri.fromParts("tel", "12345", null));
+        List<ResolveInfo> list = pm.queryIntentActivities(intentMakePstnCall, PackageManager.MATCH_DEFAULT_ONLY);
+        int enableState = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+        for(ResolveInfo ri : list) {
+            // Normally stock package is com.android.phone.xxxx
+            if(ri.activityInfo.packageName.contains("android") || ri.activityInfo.packageName.contains("phone")) {
+                enableState = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+                break;
+            }
+        }
+        pm.setComponentEnabledSetting(new ComponentName(selfPkg, "com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster"), enableState, PackageManager.DONT_KILL_APP);
+
 		
 		// Check connectivity, else just finish itself
 		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
@@ -889,6 +912,8 @@ public class SipService extends Service {
 			cleanStop();
 			return;
 		}
+		
+
 
 	}
 

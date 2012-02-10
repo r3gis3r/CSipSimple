@@ -287,33 +287,43 @@
         </activity>
 
         <activity-alias
-            android:name="PrivilegedOutgoingCallBroadcaster"
+            android:name="PrivilegedOutgoingSipCallBroadcaster"
             android:configChanges="orientation"
             android:launchMode="singleInstance"
             android:permission="android.permission.CALL_PRIVILEGED"
             android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
             android:theme="@style/CupcakeDialog" >
-
-            <!--
-             <intent-filter>
-                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
-                 <category android:name="android.intent.category.DEFAULT" />
-                 <data android:scheme="tel" />
-             </intent-filter>
-             <intent-filter>
-                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
-                 <category android:name="android.intent.category.DEFAULT" />
-                 <data android:mimeType="vnd.android.cursor.item/phone" />
-                 <data android:mimeType="vnd.android.cursor.item/phone_v2" />
-                 <data android:mimeType="vnd.android.cursor.item/person" />
-             </intent-filter>
-            -->
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="sip" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster"
+            android:configChanges="orientation"
+            android:enabled="false"
+            android:launchMode="singleInstance"
+            android:permission="android.permission.CALL_PRIVILEGED"
+            android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
+            android:theme="@style/CupcakeDialog" >
+            <intent-filter>
+                <action android:name="android.intent.action.CALL_PRIVILEGED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="tel" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CALL_PRIVILEGED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/phone" />
+                <data android:mimeType="vnd.android.cursor.item/phone_v2" />
+                <data android:mimeType="vnd.android.cursor.item/person" />
             </intent-filter>
         </activity-alias>
 
