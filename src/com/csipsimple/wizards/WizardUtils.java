@@ -98,6 +98,7 @@ import com.csipsimple.wizards.impl.Phonzo;
 import com.csipsimple.wizards.impl.PlanetPhone;
 import com.csipsimple.wizards.impl.Pozitel;
 import com.csipsimple.wizards.impl.Rapidvox;
+import com.csipsimple.wizards.impl.Sipkom;
 import com.csipsimple.wizards.impl.Smarto;
 import com.csipsimple.wizards.impl.Sapo;
 import com.csipsimple.wizards.impl.Sbohempevnalinko;
@@ -313,6 +314,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_nymgo, 18, 
                     new Locale[]{  }, false, true, 
                     Nymgo.class));
+            WIZARDS_DICT.put("SIPKOM", new WizardInfo("SIPKOM", "sipkom", 
+                    R.drawable.ic_wizard_sipkom, 18, 
+                    new Locale[]{  }, false, true, 
+                    Sipkom.class));
 			
 			
 			//Locales
