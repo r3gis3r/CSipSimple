@@ -32,13 +32,11 @@ import android.content.pm.ResolveInfo;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -69,6 +67,8 @@ import com.csipsimple.models.Filter;
 import com.csipsimple.pjsip.PjSipCalls;
 import com.csipsimple.pjsip.PjSipService;
 import com.csipsimple.pjsip.UAStateReceiver;
+import com.csipsimple.service.receiver.DynamicReceiver4;
+import com.csipsimple.service.receiver.DynamicReceiver5;
 import com.csipsimple.ui.InCallMediaControl;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
@@ -77,9 +77,6 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 
 import org.pjsip.pjsua.pjsua;
 
-import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -93,12 +90,6 @@ public class SipService extends Service {
 	// static boolean creating = false;
 	private static final String THIS_FILE = "SIP SRV";
 
-	// Comes from android.net.vpn.VpnManager.java
-	// Action for broadcasting a connectivity state.
-    private static final String ACTION_VPN_CONNECTIVITY = "vpn.connectivity";
-    /** Key to the connectivity state of a connectivity broadcast event. */
-    private static final String BROADCAST_CONNECTION_STATE = "connection_state";
-    private boolean lastKnownVpnState = false;
     
 
 	
@@ -728,7 +719,7 @@ public class SipService extends Service {
 	protected DBAdapter db;
 	private WakeLock wakeLock;
 	private WifiLock wifiLock;
-	private ServiceDeviceStateReceiver deviceStateReceiver;
+	private BroadcastReceiver deviceStateReceiver;
 	private PreferencesProviderWrapper prefsWrapper;
 	private ServicePhoneStateReceiver phoneConnectivityReceiver;
 	private TelephonyManager telephonyManager;
@@ -739,55 +730,6 @@ public class SipService extends Service {
 	private static PjSipService pjService;
 	private static HandlerThread executorThread;
 
-	// Broadcast receiver for the service
-	private class ServiceDeviceStateReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(final Context context, final Intent intent) {
-			// Run the handler in SipServiceExecutor to be protected by wake lock
-			getExecutor().execute(new SipRunnable()  {
-				public void doRun() throws SameThreadException {
-					onReceiveInternal(context, intent);
-				}
-			});
-		}
-		
-
-		private void onReceiveInternal(Context context, Intent intent) throws SameThreadException {
-			String action = intent.getAction();
-			Log.d(THIS_FILE, "Internal receive " + action);
-			if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-				Bundle b = intent.getExtras();
-				if (b != null) {
-					final NetworkInfo info = (NetworkInfo) b.get(ConnectivityManager.EXTRA_NETWORK_INFO);
-					onConnectivityChanged(info, false);
-				}
-			} else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_CHANGED)) {
-				final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, -1);
-				// Should that be threaded?
-				if (accountId != SipProfile.INVALID_ID) {
-					final SipProfile account = getAccount(accountId);
-					if (account != null) {
-						Log.d(THIS_FILE, "Enqueue set account registration");
-						setAccountRegistration(account, account.active ? 1 : 0, true);
-					}
-				}
-			} else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
-				cleanStop();
-			} else if (action.equals(SipManager.ACTION_SIP_REQUEST_RESTART)){
-			    restartSipStack();
-			} else if(action.equals(ACTION_VPN_CONNECTIVITY)) {
-				String connection_state = intent.getSerializableExtra(BROADCAST_CONNECTION_STATE).toString();
-				boolean currentVpnState = connection_state.equalsIgnoreCase("CONNECTED");
-				if(lastKnownVpnState != currentVpnState) {
-				    restartSipStack();
-					lastKnownVpnState = currentVpnState;
-				}
-			}
-		}
-		
-
-	}
 	
 	
 
@@ -943,8 +885,12 @@ public class SipService extends Service {
 			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_CHANGED);
 			intentfilter.addAction(SipManager.ACTION_SIP_CAN_BE_STOPPED);
 			intentfilter.addAction(SipManager.ACTION_SIP_REQUEST_RESTART);
-			intentfilter.addAction(ACTION_VPN_CONNECTIVITY);
-			deviceStateReceiver = new ServiceDeviceStateReceiver();
+			intentfilter.addAction(DynamicReceiver4.ACTION_VPN_CONNECTIVITY);
+			if(Compatibility.isCompatible(5)) {
+			    deviceStateReceiver = new DynamicReceiver5(this);
+			}else {
+			    deviceStateReceiver = new DynamicReceiver4(this);
+			}
 			registerReceiver(deviceStateReceiver, intentfilter);
 		}
 		// Telephony
@@ -1106,7 +1052,7 @@ public class SipService extends Service {
 	 * Safe stop the sip stack
 	 * @return true if can be stopped, false if there is a pending call and the sip service should not be stopped
 	 */
-	private boolean stopSipStack() throws SameThreadException {
+	public boolean stopSipStack() throws SameThreadException {
 		Log.d(THIS_FILE, "Stop sip stack");
 		boolean canStop = true;
 		if(pjService != null) {
@@ -1128,7 +1074,7 @@ public class SipService extends Service {
 	}
 	
 
-    private void restartSipStack() throws SameThreadException {
+    public void restartSipStack() throws SameThreadException {
         if(stopSipStack()) {
             startSipStack();
         }else {
@@ -1190,7 +1136,7 @@ public class SipService extends Service {
 
 	
 
-	private boolean setAccountRegistration(SipProfile account, int renew, boolean forceReAdd) throws SameThreadException {
+	public boolean setAccountRegistration(SipProfile account, int renew, boolean forceReAdd) throws SameThreadException {
 		boolean status = false;
 		if(pjService != null) {
 			status = pjService.setAccountRegistration(account, renew, forceReAdd);
@@ -1429,77 +1375,12 @@ public class SipService extends Service {
 		}
 	};
 
-    private String mNetworkType;
-    private boolean mConnected = false;
-    private String mLocalIp;
-	
-	
 	
 	public UAStateReceiver getUAStateReceiver() {
 		return pjService.userAgentReceiver;
 	}
 
 
-    private String determineLocalIp() {
-        try {
-            DatagramSocket s = new DatagramSocket();
-            s.connect(InetAddress.getByName("192.168.1.1"), 80);
-            return s.getLocalAddress().getHostAddress();
-        } catch (IOException e) {
-            Log.d(THIS_FILE, "determineLocalIp()", e);
-            // dont do anything; there should be a connectivity change going
-            return null;
-        }
-    }
-
-	private void onConnectivityChanged(NetworkInfo info, boolean outgoingOnly) throws SameThreadException {
-        // We only care about the default network, and getActiveNetworkInfo()
-        // is the only way to distinguish them. However, as broadcasts are
-        // delivered asynchronously, we might miss DISCONNECTED events from
-        // getActiveNetworkInfo(), which is critical to our SIP stack. To
-        // solve this, if it is a DISCONNECTED event to our current network,
-        // respect it. Otherwise get a new one from getActiveNetworkInfo().
-        if (info == null || info.isConnected() ||
-                !info.getTypeName().equals(mNetworkType)) {
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            info = cm.getActiveNetworkInfo();
-        }
-
-        // As a DISCONNECTED event everything that should be considered as such
-        boolean isValid = prefsWrapper.isValidConnectionForOutgoing();
-        if(!outgoingOnly) {
-            isValid |= prefsWrapper.isValidConnectionForIncoming();
-        }
-        boolean connected = (info != null && info.isConnected() && isValid);
-        
-        String networkType = connected ? info.getTypeName() : "null";
-
-        // Ignore the event if the current active network is not changed.
-        if (connected == mConnected && networkType.equals(mNetworkType)) {
-            return;
-        }
-        
-        Log.d(THIS_FILE, "onConnectivityChanged(): " + mNetworkType +
-                    " -> " + networkType);
-        
-
-        // Now process the event
-        if (mConnected) {
-            mLocalIp = null;
-        }
-
-        mConnected = connected;
-        mNetworkType = networkType;
-
-        if (connected) {
-            mLocalIp = determineLocalIp();
-            restartSipStack();
-        } else {
-            if(stopSipStack()) {
-                stopSelf();
-            }
-        }
-	}
 
 	public int getGSMCallState() {
 		return telephonyManager.getCallState();

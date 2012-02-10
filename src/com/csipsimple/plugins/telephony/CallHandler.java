@@ -20,9 +20,6 @@
  */
 package com.csipsimple.plugins.telephony;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,6 +37,8 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+
+import java.util.List;
 
 public class CallHandler extends BroadcastReceiver {
 
@@ -73,8 +72,9 @@ public class CallHandler extends BroadcastReceiver {
 						Resources remoteRes;
 						try {
 							//ComponentName cmp = new ComponentName(caller.activityInfo.packageName, caller.activityInfo.name);
-							// To be sure, also try to resolve resovePackage for android api-4 and upper
-							if(Compatibility.isCompatible(4)) {
+							// To be sure, also try to resolve resovePackage for android api-5 and upper
+						    /*
+							if(Compatibility.isCompatible(5)) {
 								try {
 									Field f = ResolveInfo.class.getDeclaredField("resolvePackageName");
 									String resPackage = (String) f.get(caller);
@@ -85,8 +85,8 @@ public class CallHandler extends BroadcastReceiver {
 								} catch (Exception e) {
 									Log.e(THIS_FILE, "Impossible to use 4 api ", e);
 								}
-								
 							}
+							*/
 							remoteRes = pm.getResourcesForApplication(caller.activityInfo.applicationInfo);
 							//remoteRes = pm.getResourcesForActivity(cmp);
 							bmp = BitmapFactory.decodeResource(remoteRes, caller.getIconResource());
