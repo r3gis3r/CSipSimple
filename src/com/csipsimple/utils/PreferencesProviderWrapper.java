@@ -407,13 +407,38 @@ public class PreferencesProviderWrapper {
 		return getPrefPort(SipConfigManager.TLS_TRANSPORT_PORT);
 	}
 	
-	public int getKeepAliveInterval() {
-		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-		if(ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
-			return getPreferenceIntegerValue(SipConfigManager.KEEP_ALIVE_INTERVAL_WIFI);
-		}
-		return getPreferenceIntegerValue(SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE);
+	
+	private int getKeepAliveInterval(String wifi_key, String mobile_key) {
+        NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+        if(ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
+            return getPreferenceIntegerValue(wifi_key);
+        }
+        return getPreferenceIntegerValue(mobile_key);
+    }
+	
+	/**
+	 * Retrieve UDP keep alive interval for the current connection
+	 * @return KA Interval in second 
+	 */
+	public int getUdpKeepAliveInterval() {
+		return getKeepAliveInterval(SipConfigManager.KEEP_ALIVE_INTERVAL_WIFI, SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE);
 	}
+
+    /**
+     * Retrieve TCP keep alive interval for the current connection
+     * @return KA Interval in second 
+     */
+    public int getTcpKeepAliveInterval() {
+        return getKeepAliveInterval(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_WIFI, SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_MOBILE);
+    }
+
+    /**
+     * Retrieve TLS keep alive interval for the current connection
+     * @return KA Interval in second 
+     */
+    public int getTlsKeepAliveInterval() {
+        return getKeepAliveInterval(SipConfigManager.TLS_KEEP_ALIVE_INTERVAL_WIFI, SipConfigManager.TLS_KEEP_ALIVE_INTERVAL_MOBILE);
+    }
 	
 	public int getRTPPort() {
 		return getPrefPort(SipConfigManager.RTP_PORT);

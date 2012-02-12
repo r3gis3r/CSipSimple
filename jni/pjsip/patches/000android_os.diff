@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjlib/include/pj/config.h
 ===================================================================
---- pjsip.orig/sources/pjlib/include/pj/config.h	2011-12-05 15:03:55.360258254 +0100
-+++ pjsip/sources/pjlib/include/pj/config.h	2011-12-05 15:05:40.000777138 +0100
+--- pjsip.orig/sources/pjlib/include/pj/config.h	2012-02-12 12:38:56.775499261 +0100
++++ pjsip/sources/pjlib/include/pj/config.h	2012-02-12 12:38:59.783499107 +0100
 @@ -91,6 +91,14 @@
       */
  #  include <pj/compat/os_linux_kernel.h>
@@ -20,7 +20,7 @@ Index: pjsip/sources/pjlib/include/pj/config.h
 Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/compat/os_android.h	2011-11-19 19:12:08.796051187 +0100
++++ pjsip/sources/pjlib/include/pj/compat/os_android.h	2012-02-12 12:38:59.783499107 +0100
 @@ -0,0 +1,147 @@
 +/* $Id: os_android.h $ */
 +/*
@@ -172,8 +172,8 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 Index: pjsip/sources/pjlib/include/pj/config_site.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/config_site.h	2011-12-05 15:05:40.000777138 +0100
-@@ -0,0 +1,115 @@
++++ pjsip/sources/pjlib/include/pj/config_site.h	2012-02-12 12:39:25.043497815 +0100
+@@ -0,0 +1,134 @@
 +//We distribute only for android so by default activate it
 +#ifndef PJ_ANDROID
 +#   define PJ_ANDROID   1
@@ -189,9 +189,28 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 +#define PJMEDIA_RTP_PT_TELEPHONE_EVENTS          101
 +#define PJMEDIA_RTP_PT_TELEPHONE_EVENTS_STR      "101"
 +
-+#define USE_CSIPSIMPLE_HACKS 1
++#ifndef USE_CSIPSIMPLE_HACKS
++#	define USE_CSIPSIMPLE_HACKS 1
++#endif
++
 +#define PJSUA_HAS_VIDEO 1
 +#define PJSIP_AUTH_HEADER_CACHING   1
++
++// CSipSimple hacks
++#if defined(USE_CSIPSIMPLE_HACKS) && USE_CSIPSIMPLE_HACKS!=0
++#ifdef __cplusplus
++extern "C" {
++#endif
++extern int css_tcp_keep_alive_interval;
++extern int css_tls_keep_alive_interval;
++#ifdef __cplusplus
++}
++#endif
++#	define PJSIP_TCP_KEEP_ALIVE_INTERVAL css_tcp_keep_alive_interval
++#	define PJSIP_TLS_KEEP_ALIVE_INTERVAL css_tls_keep_alive_interval
++
++#endif
++
 +
 +#if defined(PJ_ANDROID) && PJ_ANDROID!=0
 +

@@ -223,6 +223,10 @@ public class PjSipService {
                 cssCfg.setUse_no_update(prefsWrapper
                         .getPreferenceBooleanValue(SipConfigManager.FORCE_NO_UPDATE) ? pjsua.PJ_TRUE
                         : pjsua.PJ_FALSE);
+                
+                cssCfg.setTcp_keep_alive_interval(prefsWrapper.getTcpKeepAliveInterval());
+                cssCfg.setTls_keep_alive_interval(prefsWrapper.getTlsKeepAliveInterval());
+                
                 if (isTurnEnabled == 1) {
                     cssCfg.setTurn_username(pjsua.pj_str_copy(prefsWrapper
                             .getPreferenceStringValue(SipConfigManager.TURN_USERNAME)));
@@ -772,6 +776,9 @@ public class PjSipService {
         if (!created || account == null) {
             return null;
         }
+        if(account.id == SipProfile.INVALID_ID) {
+            return null;
+        }
         SipProfileState accountInfo = new SipProfileState(account);
         Cursor c = service.getContentResolver().query(
                 ContentUris.withAppendedId(SipProfile.ACCOUNT_STATUS_ID_URI_BASE, account.id),
@@ -1160,6 +1167,10 @@ public class PjSipService {
             Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
             return false;
         }
+        if(account.id == SipProfile.INVALID_ID) {
+            Log.w(THIS_FILE, "Trying to set registration on a deleted account");
+            return false;
+        }
 
         // If local account -- Ensure we are not deleting, because this would be invalid
         if(account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
@@ -1196,7 +1207,7 @@ public class PjSipService {
             if (renew == 1) {
                 addAccount(account);
             } else {
-                Log.w(THIS_FILE, "Ask to delete an unexisting account !!" + account.id);
+                Log.w(THIS_FILE, "Ask to unregister an unexisting account !!" + account.id);
             }
 
         }

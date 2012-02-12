@@ -128,26 +128,32 @@ public class OutgoingCallChooser extends ListActivity {
 
         super.onCreate(savedInstanceState);
 
+        Intent it = getIntent();
         prefsWrapper = new PreferencesProviderWrapper(this);
 
         // First step is to retrieve the number that was asked to us.
         number = PhoneNumberUtils.getNumberFromIntent(getIntent(), this);
         if (number == null) {
-            String action = getIntent().getAction();
-            if (action != null) {
+            String action = it.getAction();
+            Uri data = it.getData();
+            if (action != null && data != null) {
+                
                 if (action.equalsIgnoreCase(Intent.ACTION_CALL)) {
-                    number = getIntent().getData().getSchemeSpecificPart();
-                }
-                if (action.equalsIgnoreCase(Intent.ACTION_SENDTO)) {
-                    Uri data = getIntent().getData();
-                    if (data.getScheme().equalsIgnoreCase("imto")) {
+                     // Simple call intent
+                    number = data.getSchemeSpecificPart();
+                }else if (action.equalsIgnoreCase(Intent.ACTION_SENDTO)) {
+                    // Send to action -- could be im or sms
+                    String scheme = data.getScheme();
+                    if (scheme.equalsIgnoreCase("imto")) {
+                        // Im sent
                         String auth = data.getAuthority();
                         if ("skype".equalsIgnoreCase(auth) ||
                                 "sip".equalsIgnoreCase(auth)) {
                             String sipUser = data.getLastPathSegment();
-                            Log.d(THIS_FILE, ">> Found skype " + sipUser);
                             number = "sip:" + sipUser;
                         }
+                    }else if (scheme.equalsIgnoreCase("smsto")) {
+                        number = PhoneNumberUtils.stripSeparators(data.getSchemeSpecificPart());
                     }
                 }
             }

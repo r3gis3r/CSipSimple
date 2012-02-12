@@ -103,6 +103,13 @@ public class PrefsNetwork extends GenericPrefs {
 			hidePreference(TRANSPORT_KEY, SipConfigManager.TIMER_MIN_SE);
 			hidePreference(TRANSPORT_KEY, SipConfigManager.TIMER_SESS_EXPIRES);
 		}
+		
+		boolean canUseTLS = pfw.getLibCapability(PreferencesWrapper.LIB_CAP_TLS);
+        if(!canUseTLS) {
+            hidePreference(null, "tls");
+            hidePreference("secure_media", SipConfigManager.USE_ZRTP);
+        }
+        
 	}
 
 	@Override

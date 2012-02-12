@@ -217,10 +217,6 @@
             android:configChanges="orientation"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.csipsimple.ui.prefs.PrefsSecurity"
-            android:configChanges="orientation"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
             android:name="com.csipsimple.ui.prefs.AudioTester"
             android:label="@string/test_audio"
             android:screenOrientation="portrait"
@@ -275,19 +271,10 @@
                 <data android:scheme="sips" />
                 <data android:scheme="imto" />
             </intent-filter>
-            <!--
-            Required for honeycomb???
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tel" />
-			 </intent-filter>
-            -->
         </activity>
 
         <activity-alias
-            android:name="PrivilegedOutgoingSipCallBroadcaster"
+            android:name="com.csipsimple.ui.PrivilegedOutgoingSipCallBroadcaster"
             android:configChanges="orientation"
             android:launchMode="singleInstance"
             android:permission="android.permission.CALL_PRIVILEGED"
@@ -324,6 +311,13 @@
                 <data android:mimeType="vnd.android.cursor.item/phone" />
                 <data android:mimeType="vnd.android.cursor.item/phone_v2" />
                 <data android:mimeType="vnd.android.cursor.item/person" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="smsto" />
             </intent-filter>
         </activity-alias>
 

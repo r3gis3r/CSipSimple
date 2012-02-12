@@ -37,6 +37,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PhoneCapabilityTester;
 
 import java.util.List;
 
@@ -46,6 +47,9 @@ public class CallHandler extends BroadcastReceiver {
 
 	private static final String THIS_FILE = "CallHandlerTelephony";
 
+	private static Bitmap sPhoneAppBmp = null;
+	private static boolean sPhoneAppInfoLoaded = false;
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if(SipManager.ACTION_GET_PHONE_HANDLERS.equals(intent.getAction())) {
@@ -61,41 +65,26 @@ public class CallHandler extends BroadcastReceiver {
 				pendingIntent = PendingIntent.getActivity(context, 0, i, 0);
 			}
 			
-			// Build icon
-			Bitmap bmp = null;
-			List<ResolveInfo> callers = Compatibility.getIntentsForCall(context);
-			if(callers != null) {
-				for(final ResolveInfo caller : callers) {
-					if(caller.activityInfo.packageName.startsWith("com.android")) {
-						PackageManager pm = context.getPackageManager();
-						
-						Resources remoteRes;
-						try {
-							//ComponentName cmp = new ComponentName(caller.activityInfo.packageName, caller.activityInfo.name);
-							// To be sure, also try to resolve resovePackage for android api-5 and upper
-						    /*
-							if(Compatibility.isCompatible(5)) {
-								try {
-									Field f = ResolveInfo.class.getDeclaredField("resolvePackageName");
-									String resPackage = (String) f.get(caller);
-									Log.d(THIS_FILE, "Load from " + resPackage);
-									if(resPackage != null) {
-										//cmp = new ComponentName(resPackage, caller.activityInfo.name);
-									}
-								} catch (Exception e) {
-									Log.e(THIS_FILE, "Impossible to use 4 api ", e);
-								}
-							}
-							*/
-							remoteRes = pm.getResourcesForApplication(caller.activityInfo.applicationInfo);
-							//remoteRes = pm.getResourcesForActivity(cmp);
-							bmp = BitmapFactory.decodeResource(remoteRes, caller.getIconResource());
-						} catch (NameNotFoundException e) {
-							Log.e(THIS_FILE, "Impossible to load ", e);
-						}
-						
-					}
-				}
+			// Retrieve and cache infos from the phone app 
+			if(!sPhoneAppInfoLoaded) {
+    			List<ResolveInfo> callers = PhoneCapabilityTester.resolvePackageForPriviledgedCall(context);
+    			if(callers != null) {
+    				for(final ResolveInfo caller : callers) {
+    					if(caller.activityInfo.packageName.startsWith("com.android")) {
+    						PackageManager pm = context.getPackageManager();
+    						Resources remoteRes;
+    						try {
+    							// We load the resource in the context of the remote app to have a bitmap to return.
+    						    remoteRes = pm.getResourcesForApplication(caller.activityInfo.applicationInfo);
+    						    sPhoneAppBmp = BitmapFactory.decodeResource(remoteRes, caller.getIconResource());
+    						} catch (NameNotFoundException e) {
+    							Log.e(THIS_FILE, "Impossible to load ", e);
+    						}
+    						break;
+    					}
+    				}
+    			}
+    			sPhoneAppInfoLoaded = true;
 			}
 			
 			
@@ -105,8 +94,8 @@ public class CallHandler extends BroadcastReceiver {
 				results.putParcelable(com.csipsimple.utils.CallHandler.EXTRA_REMOTE_INTENT_TOKEN, pendingIntent);
 			}
 			results.putString(Intent.EXTRA_TITLE, context.getResources().getString(R.string.use_pstn));
-			if(bmp != null) {
-				results.putParcelable(Intent.EXTRA_SHORTCUT_ICON, bmp);
+			if(sPhoneAppBmp != null) {
+				results.putParcelable(Intent.EXTRA_SHORTCUT_ICON, sPhoneAppBmp);
 			}
 			
 			// This will exclude next time tel:xxx is raised from csipsimple treatment which is wanted

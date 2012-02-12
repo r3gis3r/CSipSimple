@@ -245,6 +245,13 @@ PJ_DECL(pj_str_t) get_error_message(int status) {
 	return pj_strerror(status, errmsg, sizeof(errmsg));
 }
 
+// External value
+#define DEFAULT_TCP_KA 180
+#define DEFAULT_TLS_KA 180
+
+int css_tcp_keep_alive_interval = DEFAULT_TCP_KA;
+int css_tls_keep_alive_interval = DEFAULT_TLS_KA;
+
 PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->use_compact_form_sdp = PJ_FALSE;
 	css_cfg->use_compact_form_headers = PJ_FALSE;
@@ -254,6 +261,8 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->extra_vid_codecs_cnt = 0;
 	css_cfg->audio_implementation.init_factory_name = pj_str("");
 	css_cfg->audio_implementation.shared_lib_path = pj_str("");
+	css_cfg->tcp_keep_alive_interval = DEFAULT_TCP_KA;
+	css_cfg->tls_keep_alive_interval = DEFAULT_TLS_KA;
 }
 
 static void* get_library_factory(dynamic_factory *impl) {

@@ -74,6 +74,10 @@ public class PreferencesWrapper {
 		put(SipConfigManager.TLS_TRANSPORT_PORT, "0");
 		put(SipConfigManager.KEEP_ALIVE_INTERVAL_WIFI, "80");
 		put(SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE, "40");
+        put(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_WIFI, "180");
+        put(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_MOBILE, "120");
+        put(SipConfigManager.TLS_KEEP_ALIVE_INTERVAL_WIFI, "180");
+        put(SipConfigManager.TLS_KEEP_ALIVE_INTERVAL_MOBILE, "120");
 		put(SipConfigManager.RTP_PORT, "4000");
 		put(SipConfigManager.OVERRIDE_NAMESERVER, "");
 		put(SipConfigManager.TIMER_MIN_SE, "90");

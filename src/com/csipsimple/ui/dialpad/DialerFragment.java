@@ -687,10 +687,14 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
             // != autoCompleteFragment) {
             // Execute a transaction, replacing any existing fragment
             // with this one inside the frame.
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.details, autoCompleteFragment, TAG_AUTOCOMPLETE_SIDE_FRAG);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
+            try {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.details, autoCompleteFragment, TAG_AUTOCOMPLETE_SIDE_FRAG);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+            }catch( IllegalStateException e) {
+                Log.e(THIS_FILE, "Not in correct state to instanciate the view", e);
+            }
             // }
         }
     }

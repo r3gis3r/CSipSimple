@@ -261,7 +261,7 @@ public class PjSipAccount {
 		}
 		
 		// Keep alive
-		cfg.setKa_interval(prefs.getKeepAliveInterval());
+		cfg.setKa_interval(prefs.getUdpKeepAliveInterval());
 		
 		// Video 
 		if(profile_vid_auto_show >= 0) {

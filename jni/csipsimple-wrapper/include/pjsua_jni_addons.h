@@ -113,6 +113,15 @@ typedef struct csipsimple_config {
 	 */
 	dynamic_factory video_capture_implementation;
 
+	/**
+	 * Interval for tcp keep alive
+	 */
+	int tcp_keep_alive_interval;
+
+	/**
+	 * Interval for tls keep alive
+	 */
+	int tls_keep_alive_interval;
 
 } csipsimple_config;
 

@@ -21,25 +21,18 @@
 
 package com.csipsimple.utils;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.csipsimple.api.SipConfigManager;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaRecorder.AudioSource;
 import android.net.Uri;
-import android.net.Uri.Builder;
 import android.provider.Contacts;
 import android.text.TextUtils;
+
+import com.csipsimple.api.SipConfigManager;
+
+import java.lang.reflect.Field;
 
 @SuppressWarnings("deprecation")
 public final class Compatibility {
@@ -427,53 +420,17 @@ public final class Compatibility {
         return true;
     }
 
-    public static List<ResolveInfo> getPossibleActivities(Context ctxt, Intent i) {
-        PackageManager pm = ctxt.getPackageManager();
-        try {
-            return pm.queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY
-                    | PackageManager.GET_RESOLVED_FILTER);
-        } catch (NullPointerException e) {
-            return new ArrayList<ResolveInfo>();
-        }
-    }
 
-    public static Intent getPriviledgedIntent(String number) {
-        Intent i = new Intent("android.intent.action.CALL_PRIVILEGED");
-        Builder b = new Uri.Builder();
-        b.scheme("tel").appendPath(number);
-        i.setData(b.build());
-        return i;
-    }
-
-    private static List<ResolveInfo> callIntents = null;
-
-    public final static List<ResolveInfo> getIntentsForCall(Context ctxt) {
-        if (callIntents == null) {
-            callIntents = getPossibleActivities(ctxt, getPriviledgedIntent("123"));
-        }
-        return callIntents;
-    }
-
-    public static boolean canResolveIntent(Context context, final Intent intent) {
-        final PackageManager packageManager = context.getPackageManager();
-        // final Intent intent = new Intent(action);
-        List<ResolveInfo> list = packageManager.queryIntentActivities(intent,
-                PackageManager.MATCH_DEFAULT_ONLY);
-        return list.size() > 0;
-    }
-
-    private static Boolean canMakeGSMCall = null;
-    private static Boolean canMakeSkypeCall = null;
-
+    /**
+     * Check if we can make gsm calls from within the application
+     * It will check setting and capability of the device
+     * @param context
+     * @return
+     */
     public static boolean canMakeGSMCall(Context context) {
         PreferencesWrapper prefs = new PreferencesWrapper(context);
         if (prefs.getGsmIntegrationType() == PreferencesWrapper.GSM_TYPE_AUTO) {
-            if (canMakeGSMCall == null) {
-                Intent intentMakePstnCall = new Intent(Intent.ACTION_CALL);
-                intentMakePstnCall.setData(Uri.fromParts("tel", "12345", null));
-                canMakeGSMCall = canResolveIntent(context, intentMakePstnCall);
-            }
-            return canMakeGSMCall;
+            return PhoneCapabilityTester.isPhone(context);
         }
         if (prefs.getGsmIntegrationType() == PreferencesWrapper.GSM_TYPE_PREVENT) {
             return false;
@@ -481,20 +438,6 @@ public final class Compatibility {
         return true;
     }
 
-    public static boolean canMakeSkypeCall(Context context) {
-        if (canMakeSkypeCall == null) {
-            try {
-                PackageInfo skype = context.getPackageManager().getPackageInfo("com.skype.raider",
-                        0);
-                if (skype != null) {
-                    canMakeSkypeCall = true;
-                }
-            } catch (NameNotFoundException e) {
-                canMakeSkypeCall = false;
-            }
-        }
-        return canMakeSkypeCall;
-    }
 
     public static Intent getContactPhoneIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK);

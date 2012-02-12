@@ -70,8 +70,13 @@
     <string name="enable_qos_desc">Enable QoS on packets</string>
     <string name="dscp_val">DSCP value</string>
     <string name="dscp_val_desc">DSCP value for SIP traffic</string>
-    <string name="keep_alive_interval_wifi">Wifi keep alive</string>
-    <string name="keep_alive_interval_mobile">Mobile keep alive</string>
+    <string name="udp_keep_alive_interval_wifi">Wifi UDP keep alive</string>
+    <string name="udp_keep_alive_interval_mobile">Mobile UDP keep alive</string>
+    <string name="tcp_keep_alive_interval_wifi">Wifi TCP keep alive</string>
+    <string name="tcp_keep_alive_interval_mobile">Mobile TCP keep alive</string>
+    <string name="tls_keep_alive_interval_wifi">Wifi TLS keep alive</string>
+    <string name="tls_keep_alive_interval_mobile">Mobile TLS keep alive</string>
+    <string name="keep_alive_interval">Connection keep alive</string>
     <string name="keep_alive_interval_desc">Interval (sec) for KA packets</string>
     <string name="use_compact_form">Use compact SIP</string>
     <string name="use_compact_form_desc">Reduce SIP packets size. May not work on old SIP servers</string>
