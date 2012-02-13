@@ -331,6 +331,9 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	pjmedia_add_rtpmap_for_static_pt =
 			css_cfg->use_compact_form_sdp ? PJ_FALSE : PJ_TRUE;
 
+	css_tcp_keep_alive_interval = css_cfg->tcp_keep_alive_interval;
+	css_tls_keep_alive_interval = css_cfg->tls_keep_alive_interval;
+
 	// Audio codec cfg
 	css_var.extra_aud_codecs_cnt = css_cfg->extra_aud_codecs_cnt;
 	unsigned i;
