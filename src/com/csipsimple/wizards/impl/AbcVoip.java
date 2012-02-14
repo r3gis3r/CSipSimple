@@ -1,9 +1,4 @@
 /**
- * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
- * This file is part of CSipSimple.
- *
- *  CSipSimple is free software: you can redistribute it and/or modify
-/**
  * Copyright (C) 2010-2012 Regis Montoya (aka r3gis - www.r3gis.fr)
  * This file is part of CSipSimple.
  *
@@ -26,39 +21,37 @@
 
 package com.csipsimple.wizards.impl;
 
-import com.csipsimple.R;
+import android.text.InputType;
+
 import com.csipsimple.api.SipProfile;
 
-public class Sip2Sip extends SimpleImplementation {
+public class AbcVoip extends SimpleImplementation {
 	
+
 	@Override
 	protected String getDomain() {
-		return "sip2sip.info";
+		return "sip.abc-voip.com";
 	}
 	
 	@Override
 	protected String getDefaultName() {
-		return "Sip2Sip";
+		return "abc-voip";
 	}
-	
+
 	//Customization
 	@Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
-		accountUsername.setTitle(R.string.w_common_username);
-		accountUsername.setDialogTitle(R.string.w_common_username);
-		// According issue 938 accounts of sip2sip can have alpha characters
-		//accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-	}
-	
-	public SipProfile buildAccount(SipProfile account) {
-		account = super.buildAccount(account);
-		account.proxies = new String[] { "sip:proxy.sipthor.net" };
-		return account;
+		
+		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		
 	}
 	
 	@Override
-	protected boolean canTcp() {
-	    return true;
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+	    acc.reg_timeout = 900;
+	    return acc;
 	}
+	
 }

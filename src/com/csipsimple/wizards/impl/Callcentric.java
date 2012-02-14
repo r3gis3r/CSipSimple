@@ -25,6 +25,12 @@ import android.text.InputType;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.models.Filter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class Callcentric extends SimpleImplementation {
 	
@@ -65,5 +71,24 @@ public class Callcentric extends SimpleImplementation {
 		account = super.buildAccount(account);
 		account.contact_rewrite_method = 1;
 		return account;
+	}
+	
+	@Override
+	public List<Filter> getDefaultFilters(SipProfile acc) {
+	    // For US and Canada resident, auto add 10 digits => prefix with 1 rewriting rule 
+	    if(Locale.CANADA.getCountry().equals(Locale.getDefault().getCountry()) || Locale.US.getCountry().equals(Locale.getDefault().getCountry())) {
+	        ArrayList<Filter> filters = new ArrayList<Filter>();
+            
+            Filter f = new Filter();
+            f.account = (int) acc.id;
+            f.action = Filter.ACTION_REPLACE;
+            f.matchPattern = "^(\\d{10})$";
+            f.replacePattern = "1$0";
+            f.matchType = Filter.MATCHER_HAS_N_DIGIT;
+            filters.add(f);
+            
+            return filters;
+	    }
+	    return null;
 	}
 }

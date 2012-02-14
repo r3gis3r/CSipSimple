@@ -41,6 +41,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.wizards.impl.A1;
+import com.csipsimple.wizards.impl.AbcVoip;
 import com.csipsimple.wizards.impl.Advanced;
 import com.csipsimple.wizards.impl.BGTel;
 import com.csipsimple.wizards.impl.BTone;
@@ -318,6 +319,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_sipkom, 18, 
                     new Locale[]{  }, false, true, 
                     Sipkom.class));
+            WIZARDS_DICT.put("ABCVOIP", new WizardInfo("ABCVOIP", "abc-voip", 
+                    R.drawable.ic_wizard_abcvoip, 18, 
+                    new Locale[]{  }, false, true, 
+                    AbcVoip.class));
 			
 			
 			//Locales
