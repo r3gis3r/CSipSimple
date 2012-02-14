@@ -319,7 +319,7 @@ public class WizardUtils {
                     R.drawable.ic_wizard_sipkom, 18, 
                     new Locale[]{  }, false, true, 
                     Sipkom.class));
-            WIZARDS_DICT.put("ABCVOIP", new WizardInfo("ABCVOIP", "abc-voip", 
+            WIZARDS_DICT.put("ABCVOIP", new WizardInfo("ABCVOIP", "ABC-VoIP", 
                     R.drawable.ic_wizard_abcvoip, 18, 
                     new Locale[]{  }, false, true, 
                     AbcVoip.class));

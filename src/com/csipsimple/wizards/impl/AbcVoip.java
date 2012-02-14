@@ -35,7 +35,7 @@ public class AbcVoip extends SimpleImplementation {
 	
 	@Override
 	protected String getDefaultName() {
-		return "abc-voip";
+		return "ABC-VoIP";
 	}
 
 	//Customization
