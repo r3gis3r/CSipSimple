@@ -1,56 +1,63 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_label">Nachrichten</string>
-  <string name="new_message">Neue Nachricht</string>
-  <string name="create_new_message">Nachricht verfassen</string>
-  <string name="menu_compose_new">Verfassen</string>
-  <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g>" zu Kontakten hinzufügen"</string>
-  <string name="menu_call">Anrufen</string>
-  <string name="menu_delete_all">Unterhaltungen löschen</string>
-  <string name="menu_delete">Unterhaltung löschen</string>
-  <string name="menu_view">Unterhaltung anzeigen</string>
-  <string name="anonymous_recipient">Unbekannt</string>
-  <string name="messagelist_sender_self">Ich</string>
-  <string name="delete_message">Nachricht löschen</string>
-  <string name="sent_on">"Gesendet: "<xliff:g id="date">%s</xliff:g></string>
-  <string name="kilobyte">KB</string>
-  <string name="undelivered_msg_dialog_title">Nachricht nicht zugestellt</string>
-  <string name="undelivered_sms_dialog_body">Kann diese Nachricht nicht senden</string>
-  <string name="delete_thread">Gespräch löschen</string>
-  <string name="download">Download</string>
-  <string name="downloading">Wird heruntergeladen</string>
-  <string name="copy_message_text">Kopiere Nachrichten Text</string>
-  <string name="message_options">Nachrichtenoptionen</string>
-  <string name="done">Fertig</string>
-  <string name="compose_title">Verfassen</string>
-  <string name="add_attachment">Anhängen</string>
-  <string name="view">Ansehen</string>
-  <string name="send">Senden</string>
-  <string name="type_to_compose_text_enter_to_send">Tippe zum Verfassen</string>
-  <string name="open_keyboard_to_compose_message">Öffne die Tastatur um Nachricht zu verfassen</string>
-  <string name="image_too_large">Bild zu groß</string>
-  <string name="ask_for_automatically_resize">Bild vor dem Senden automatisch anpassen?</string>
-  <string name="compressing">Bild zu groß. Komprimiere\\u2026</string>
-  <string name="unsupported_media_format">"Nicht untertsütztes "<xliff:g id="name">%1$s</xliff:g>" Format"</string>
-  <string name="menu_view_contact">Kontakt ansehen</string>
-  <string name="menu_add_to_contacts">Zu Kontakten hinzufügen</string>
-  <string name="hidden_sender_address">Verborgene Absender Adresse</string>
-  <string name="yes">OK</string>
-  <string name="no">Abbrechen</string>
-  <string name="edit">Ändern</string>
-  <string name="restore_default">Standardwerte laden</string>
-  <string name="confirm_dialog_title">Löschen</string>
-  <string name="confirm_delete_message">Die Nachricht wird gelöscht</string>
-  <string name="delete">Löschen</string>
-  <string name="status_none">(Keine)</string>
-  <string name="status_pending">Ausstehend</string>
-  <string name="status_received">Erhalten</string>
-  <string name="status_failed">Nicht erfolgreich</string>
-  <string name="status_unread">Ungelesen</string>
-  <string name="status_rejected">Abgelehnt</string>
-  <string name="recipient_label">Empfänger:\\u0020</string>
-  <string name="status_label">Status:\\u0020</string>
-  <string name="menu_insert_smiley">Smiley einfügen</string>
-  <string name="me">Ich</string>
-  <string name="sending_message">Sende\\u2026</string>
+
+    <string name="app_label">Nachrichten</string>
+    <string name="new_message">Neue Nachricht</string>
+    <string name="create_new_message">Nachricht verfassen</string>
+    <string name="menu_compose_new">Verfassen</string>
+    <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g>" zu Kontakten hinzufügen"</string>
+    <string name="menu_call">Anrufen</string>
+    <string name="menu_delete_all">Unterhaltungen löschen</string>
+    <string name="menu_delete">Unterhaltung löschen</string>
+    <string name="menu_view">Unterhaltung anzeigen</string>
+    <string name="anonymous_recipient">Unbekannt</string>
+    <string name="messagelist_sender_self">Ich</string>
+    <string name="delete_message">Nachricht löschen</string>
+    <string name="sent_on">"Gesendet: "<xliff:g id="date">%s</xliff:g></string>
+    <string name="kilobyte">KB</string>
+    <string name="undelivered_msg_dialog_title">Nachricht nicht zugestellt</string>
+    <string name="undelivered_sms_dialog_body">Kann diese Nachricht nicht senden</string>
+    <string name="delete_thread">Gespräch löschen</string>
+    <string name="download">Download</string>
+    <string name="downloading">Wird heruntergeladen</string>
+    <string name="copy_message_text">Kopiere Nachrichten Text</string>
+    <string name="message_options">Nachrichtenoptionen</string>
+    <string name="done">Fertig</string>
+    <string name="compose_title">Verfassen</string>
+    <string name="add_attachment">Anhängen</string>
+    <string name="view">Ansehen</string>
+    <string name="send">Senden</string>
+    <string name="type_to_compose_text_enter_to_send">Tippe zum Verfassen</string>
+    <string name="open_keyboard_to_compose_message">Öffne die Tastatur um Nachricht zu verfassen</string>
+    <string name="image_too_large">Bild zu groß</string>
+    <string name="ask_for_automatically_resize">Bild vor dem Senden automatisch anpassen?</string>
+    <string name="compressing">Bild zu groß. Komprimiere\\u2026</string>
+    <string name="unsupported_media_format">"Nicht untertsütztes "<xliff:g id="name">%1$s</xliff:g>" Format"</string>
+    <string name="menu_view_contact">Kontakt ansehen</string>
+    <string name="menu_add_to_contacts">Zu Kontakten hinzufügen</string>
+    <string name="hidden_sender_address">Verborgene Absender Adresse</string>
+    <string name="yes">OK</string>
+    <string name="no">Abbrechen</string>
+    <string name="edit">Ändern</string>
+    <string name="restore_default">Standardwerte laden</string>
+    <string name="confirm_dialog_title">Löschen</string>
+    <string name="confirm_delete_message">Die Nachricht wird gelöscht</string>
+    <string name="delete">Löschen</string>
+    <string name="status_none">(Keine)</string>
+    <string name="status_pending">Ausstehend</string>
+    <string name="status_received">Erhalten</string>
+    <string name="status_failed">Nicht erfolgreich</string>
+    <string name="status_unread">Ungelesen</string>
+    <string name="status_rejected">Abgelehnt</string>
+    <string name="recipient_label">Empfänger:\\u0020</string>
+    <string name="status_label">Status:\\u0020</string>
+    <string name="menu_insert_smiley">Smiley einfügen</string>
+    <string name="me">Ich</string>
+    <string name="sending_message">Sende\\u2026</string>
+    <string name="all_threads">Alle Themen</string>
+    <string name="confirm_delete_conversation">Das gesamte Thema wird gelöscht.</string>
+    <string name="confirm_delete_all_conversations">Alle Themen werden gelöscht.</string>
+    <string name="confirm_delete_locked_message">Bist du sicher, dass du diese gesperrte Nachricht löschen willst?</string>
+    <string name="confirm_delete_all_messages">Das gesamte Thema wird gelöscht.</string>
+
 </resources>
