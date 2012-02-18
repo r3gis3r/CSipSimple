@@ -167,8 +167,7 @@
         <activity
             android:name="com.csipsimple.ui.EditFilter"
             android:configChanges="orientation"
-            android:label="@string/filters"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:label="@string/filters" />
         <activity
             android:name="com.csipsimple.wizards.WizardChooser"
             android:configChanges="orientation"

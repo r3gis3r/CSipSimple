@@ -43,6 +43,7 @@ import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.wizards.impl.A1;
 import com.csipsimple.wizards.impl.AbcVoip;
 import com.csipsimple.wizards.impl.Advanced;
+import com.csipsimple.wizards.impl.Amivox;
 import com.csipsimple.wizards.impl.BGTel;
 import com.csipsimple.wizards.impl.BTone;
 import com.csipsimple.wizards.impl.Balses;
@@ -155,12 +156,12 @@ public class WizardUtils {
 	
 	private static boolean initDone = false;
 	
-	
     public static final String LABEL = "LABEL";
-    public static final String ICON  = "ICON";
-    public static final String ID  = "ID";
-    public static final String LANG_DISPLAY  = "DISPLAY";
-    public static final String PRIORITY  = "PRIORITY";
+    public static final String ICON = "ICON";
+    public static final String ID = "ID";
+    public static final String LANG_DISPLAY = "DISPLAY";
+    public static final String PRIORITY = "PRIORITY";
+    public static final String PRIORITY_INT = "PRIORITY_INT";
     
     public static final String EXPERT_WIZARD_TAG = "EXPERT";
     public static final String LOCAL_WIZARD_TAG = "LOCAL";
@@ -175,15 +176,21 @@ public class WizardUtils {
 		@Override
 		public int compare(Map<String, Object> infos1, Map<String, Object> infos2) {
 			if (infos1 != null && infos2 != null) {
-				Integer w1 = (Integer) infos1.get(PRIORITY);
-				Integer w2 = (Integer) infos2.get(PRIORITY);
-				//Log.d(THIS_FILE, "Compare : "+w1+ " vs "+w2);
-				if (w1 > w2) {
-					return -1;
-				}
-				if (w1 < w2) {
-					return 1;
-				}
+			    if((Boolean) infos1.get(PRIORITY_INT)) {
+    				Integer w1 = (Integer) infos1.get(PRIORITY);
+    				Integer w2 = (Integer) infos2.get(PRIORITY);
+    				//Log.d(THIS_FILE, "Compare : "+w1+ " vs "+w2);
+    				if (w1 > w2) {
+    					return -1;
+    				}
+    				if (w1 < w2) {
+    					return 1;
+    				}
+			    }else {
+			        String name1 = (String) infos1.get(LABEL);
+			        String name2 = (String) infos2.get(LABEL);
+			        return name1.compareToIgnoreCase(name2);
+			    }
 			}
 			return 0;
 		}
@@ -323,7 +330,12 @@ public class WizardUtils {
                     R.drawable.ic_wizard_abcvoip, 18, 
                     new Locale[]{  }, false, true, 
                     AbcVoip.class));
+            WIZARDS_DICT.put("AMIVOX", new WizardInfo("AMIVOX", "Amivox", 
+                    R.drawable.ic_wizard_amivox, 18, 
+                    new Locale[]{  }, false, true, 
+                    Amivox.class));
 			
+            
 			
 			//Locales
 			WIZARDS_DICT.put("CALLCENTRIC", new WizardInfo("CALLCENTRIC", "Callcentric", 
@@ -633,12 +645,13 @@ public class WizardUtils {
 		initDone = true;
 	}
 	
-	private static Map<String, Object> wizardInfoToMap(WizardInfo infos) {
+	private static Map<String, Object> wizardInfoToMap(WizardInfo infos, boolean usePriorityInt) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(LABEL, infos.label);
 		map.put(ID, infos.id);
 		map.put(ICON, infos.icon);
 		map.put(PRIORITY, infos.priority);
+		map.put(PRIORITY_INT, usePriorityInt);
 		return map;
 	}
 	
@@ -744,12 +757,12 @@ public class WizardUtils {
 				if(country != null) {
 					if(country.getCountry().equals(Locale.getDefault().getCountry())) {
 						found = true;
-						locale_list.add(wizardInfoToMap(wizard.getValue()));
+						locale_list.add(wizardInfoToMap(wizard.getValue(), true));
 						break;
 					}else if(country.getCountry().equalsIgnoreCase("")) {
 						if(country.getLanguage().equals(Locale.getDefault().getLanguage())) {
 							found = true;
-							locale_list.add(wizardInfoToMap(wizard.getValue()));
+							locale_list.add(wizardInfoToMap(wizard.getValue(), true));
 							break;
 						}
 					}
@@ -757,15 +770,15 @@ public class WizardUtils {
 			}
 			if(!found) {
 				if(wizard.getValue().isGeneric) {
-					generic_list.add(wizardInfoToMap(wizard.getValue()));
+					generic_list.add(wizardInfoToMap(wizard.getValue(), true));
 					found = true;
 				}else if(wizard.getValue().isWorld) {
-					world_list.add(wizardInfoToMap(wizard.getValue()));
+					world_list.add(wizardInfoToMap(wizard.getValue(), false));
 					found = true;
 				}
 			}
 			if(!found) {
-				others_list.add(wizardInfoToMap(wizard.getValue()));
+				others_list.add(wizardInfoToMap(wizard.getValue(), false));
 			}
 		}
 		

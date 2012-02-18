@@ -133,6 +133,11 @@ public class DragnDropListView extends ListView {
 		return INVALID_POSITION;
 	}
 
+	/**
+	 * Retrieve the item at a given y coordinate
+	 * @param y the y coordinate
+	 * @return the item index
+	 */
 	private int getItemForPosition(int y) {
 		int adjustedy = y - mDragPoint - 32;
 		int pos = myPointToPosition(0, adjustedy);
@@ -146,6 +151,10 @@ public class DragnDropListView extends ListView {
 		return pos;
 	}
 
+	/**
+	 * Adjust scroll limits depending on current movement
+	 * @param y the current y position
+	 */
 	private void adjustScrollBounds(int y) {
 		if (y >= mHeight / 3) {
 			mUpperBound = mHeight / 3;

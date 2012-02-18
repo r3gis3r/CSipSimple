@@ -12,7 +12,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical"
             android:padding="10dp" >
 
@@ -41,6 +40,7 @@
                     android:id="@+id/filter_matches"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:singleLine="true" >
                 </EditText>
             </LinearLayout>
@@ -63,6 +63,7 @@
                     android:id="@+id/filter_replace"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:singleLine="true" >
                 </EditText>
             </LinearLayout>
