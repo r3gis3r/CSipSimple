@@ -30,7 +30,6 @@ import com.csipsimple.models.Filter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 public class Callcentric extends SimpleImplementation {
 	

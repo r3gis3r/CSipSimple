@@ -40,7 +40,6 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
-import android.provider.ContactsContract.Intents;
 import android.provider.ContactsContract.Intents.Insert;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.StatusUpdates;
@@ -59,7 +58,6 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
-import com.csipsimple.utils.UriUtils;
 import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
 import java.io.InputStream;
