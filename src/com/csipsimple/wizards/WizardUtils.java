@@ -71,6 +71,8 @@ import com.csipsimple.wizards.impl.Freeconet;
 import com.csipsimple.wizards.impl.FreephoneLineCa;
 import com.csipsimple.wizards.impl.Freephonie;
 import com.csipsimple.wizards.impl.Gradwell;
+import com.csipsimple.wizards.impl.Haloo;
+import com.csipsimple.wizards.impl.HalooCentrala;
 import com.csipsimple.wizards.impl.IPComms;
 import com.csipsimple.wizards.impl.IPshka;
 import com.csipsimple.wizards.impl.ITTelenet;
@@ -637,6 +639,24 @@ public class WizardUtils {
                     Locale.UK, Locale.US
                     }, false, false, 
                     Orbtalk.class));
+            WIZARDS_DICT.put("ORBTALK", new WizardInfo("ORBTALK", "Orbtalk", 
+                    R.drawable.ic_wizard_orbtalk, 19, 
+                    new Locale[]{
+                    Locale.UK, Locale.US
+                    }, false, false, 
+                    Orbtalk.class));
+            WIZARDS_DICT.put("HALOOCENTRALA", new WizardInfo("HALOOCENTRALA", "Ha-loo centrala", 
+                    R.drawable.ic_wizard_haloo_centrala, 19, 
+                    new Locale[]{
+                    new Locale("CS", "cz"),
+                    }, false, false, 
+                    HalooCentrala.class));
+            WIZARDS_DICT.put("HALOO", new WizardInfo("HALOO", "Ha-loo", 
+                    R.drawable.ic_wizard_haloo, 19, 
+                    new Locale[]{
+                    new Locale("CS", "cz"),
+                    }, false, false, 
+                    Haloo.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
