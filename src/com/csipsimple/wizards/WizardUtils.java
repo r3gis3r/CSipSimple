@@ -123,6 +123,7 @@ import com.csipsimple.wizards.impl.UkrTelecom;
 import com.csipsimple.wizards.impl.VPhone;
 import com.csipsimple.wizards.impl.Vanbergsystems;
 import com.csipsimple.wizards.impl.Viva;
+import com.csipsimple.wizards.impl.VoipBel;
 import com.csipsimple.wizards.impl.VoipMS;
 import com.csipsimple.wizards.impl.VoipTel;
 import com.csipsimple.wizards.impl.Vono;
@@ -617,46 +618,32 @@ public class WizardUtils {
                     Beeztel.class));
             WIZARDS_DICT.put("COTAS", new WizardInfo("COTAS", "Cotas Line@net", 
                     R.drawable.ic_wizard_cotas, 19, 
-                    new Locale[]{
-                    locale("es_CO")
-                    }, false, false, 
+                    new Locale[]{ locale("es_CO") }, false, false, 
                     Cotas.class));
             WIZARDS_DICT.put("BALSES", new WizardInfo("BALSES", "Balses", 
                     R.drawable.ic_wizard_balses, 19, 
-                    new Locale[]{
-                    locale("tr_TR")
-                    }, false, false, 
+                    new Locale[]{ locale("tr_TR") }, false, false, 
                     Balses.class));
             WIZARDS_DICT.put("ZONPT", new WizardInfo("ZONPT", "Zon Phone", 
                     R.drawable.ic_wizard_zonpt, 19, 
-                    new Locale[]{
-                    locale("pt_PT")
-                    }, false, false, 
+                    new Locale[]{ locale("pt_PT") }, false, false, 
                     ZonPt.class));
             WIZARDS_DICT.put("ORBTALK", new WizardInfo("ORBTALK", "Orbtalk", 
                     R.drawable.ic_wizard_orbtalk, 19, 
-                    new Locale[]{
-                    Locale.UK, Locale.US
-                    }, false, false, 
-                    Orbtalk.class));
-            WIZARDS_DICT.put("ORBTALK", new WizardInfo("ORBTALK", "Orbtalk", 
-                    R.drawable.ic_wizard_orbtalk, 19, 
-                    new Locale[]{
-                    Locale.UK, Locale.US
-                    }, false, false, 
+                    new Locale[]{ Locale.UK, Locale.US }, false, false, 
                     Orbtalk.class));
             WIZARDS_DICT.put("HALOOCENTRALA", new WizardInfo("HALOOCENTRALA", "Ha-loo centrala", 
                     R.drawable.ic_wizard_haloo_centrala, 19, 
-                    new Locale[]{
-                    new Locale("CS", "cz"),
-                    }, false, false, 
+                    new Locale[]{ new Locale("CS", "cz"), }, false, false, 
                     HalooCentrala.class));
             WIZARDS_DICT.put("HALOO", new WizardInfo("HALOO", "Ha-loo", 
                     R.drawable.ic_wizard_haloo, 19, 
-                    new Locale[]{
-                    new Locale("CS", "cz"),
-                    }, false, false, 
+                    new Locale[]{ new Locale("CS", "cz"), }, false, false, 
                     Haloo.class));
+            WIZARDS_DICT.put("VOIPBEL", new WizardInfo("VOIPBEL", "VoIPBel", 
+                    R.drawable.ic_wizard_voipbel, 19, 
+                    new Locale[]{ locale("nl_BE"), locale("nl_NL"), locale("fr_BE") }, false, false, 
+                    VoipBel.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
