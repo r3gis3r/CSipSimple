@@ -22,8 +22,14 @@
  */
 package com.csipsimple.api;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+
 
 public class SipConfigManager {
 
@@ -137,6 +143,27 @@ public class SipConfigManager {
 	public static final int ECHO_MODE_WEBRTC_M = 3;
 	
 	
+
+    public final static String PREFS_TABLE_NAME = "preferences";
+    public final static String RESET_TABLE_NAME = "raz";
+
+    // For Provider
+    public final static String AUTHORITY = "com.csipsimple.prefs";
+    private final static String BASE_DIR_TYPE = "vnd.android.cursor.dir/vnd.csipsimple";
+    private final static String BASE_ITEM_TYPE = "vnd.android.cursor.item/vnd.csipsimple";
+    private final static String CONTENT_SCHEME = "content://";
+    // Preference
+    public final static String PREF_CONTENT_TYPE = BASE_DIR_TYPE + ".pref";
+    public final static String PREF_CONTENT_ITEM_TYPE = BASE_ITEM_TYPE + ".pref";
+    public final static Uri PREF_URI = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + PREFS_TABLE_NAME);
+    public final static Uri PREF_ID_URI_BASE = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + PREFS_TABLE_NAME + "/");
+
+    // Raz
+    public final static Uri RAZ_URI = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + RESET_TABLE_NAME);
+	
+
+    public final static String FIELD_NAME = "name";
+    public final static String FIELD_VALUE = "value";
 	
 	
 	public static String getCodecKey(String codecName, String type) {
@@ -175,5 +202,154 @@ public class SipConfigManager {
 		return "band_for_" + keyForNetwork(networkType, subType);
 	}
 	
+
+    private static Uri getPrefUriForKey(String key) {
+        return Uri.withAppendedPath(PREF_ID_URI_BASE, key);
+    }
+
+    /**
+     * Same than @see SipConfigManager#getPreferenceStringValue(Context, String, String)
+     * with null as default value
+     */
+    public static String getPreferenceStringValue(Context ctxt, String key) {
+        return getPreferenceStringValue(ctxt, key, null);
+    }
+    
+    /**
+     * Helper method to retrieve a csipsimple string config value
+     * @param ctxt The context of your app
+     * @param key the key for the setting you want to get
+     * @param defaultValue the value you want to return if nothing found
+     * @return the preference value
+     */
+    public static String getPreferenceStringValue(Context ctxt, String key, String defaultValue) {
+        String value = defaultValue;
+        Uri uri = getPrefUriForKey(key);
+        Cursor c = ctxt.getContentResolver().query(uri, null, String.class.getName(), null, null);
+        if(c!=null) {
+            c.moveToFirst();
+            String strValue = c.getString(1);
+            if(strValue != null) {
+                value = strValue;
+            }
+            c.close();
+        }
+        return value;
+    }
+
+    /**
+     * Same than @see SipConfigManager#getPreferenceBooleanValue(Context, String, Boolean)
+     * with null as default value
+     */
+    public static Boolean getPreferenceBooleanValue(Context ctxt, String key) {
+        return getPreferenceBooleanValue(ctxt, key, null);
+    }
+
+    /**
+     * Helper method to retrieve a csipsimple boolean config value
+     * @param ctxt The context of your app
+     * @param key the key for the setting you want to get
+     * @param defaultValue the value you want to return if nothing found
+     * @return the preference value
+     */
+    public static Boolean getPreferenceBooleanValue(Context ctxt, String key, Boolean defaultValue) {
+        Boolean value = defaultValue;
+        Uri uri = getPrefUriForKey(key);
+        Cursor c = ctxt.getContentResolver().query(uri, null, Boolean.class.getName(), null, null);
+        if(c!=null) {
+            c.moveToFirst();
+            int intValue = c.getInt(1);
+            if(intValue >= 0) {
+                value = (intValue == 1);
+            }
+            c.close();
+        }
+        return value;
+    }
+
+    /**
+     * Same than @see SipConfigManager#getPreferenceFloatValue(Context, String, Float)
+     * with null as default value
+     */
+    public static Float getPreferenceFloatValue(Context ctxt, String key) {
+        return getPreferenceFloatValue(ctxt, key, null);
+    }
+
+    /**
+     * Helper method to retrieve a csipsimple float config value
+     * @param ctxt The context of your app
+     * @param key the key for the setting you want to get
+     * @param defaultValue the value you want to return if nothing found
+     * @return the preference value
+     */
+    public static Float getPreferenceFloatValue(Context ctxt, String key,  Float defaultValue) {
+        Float value = defaultValue;
+        Uri uri = getPrefUriForKey(key);
+        Cursor c = ctxt.getContentResolver().query(uri, null, Float.class.getName(), null, null);
+        if(c!=null) {
+            c.moveToFirst();
+            Float fValue = c.getFloat(1);
+            if(fValue != null) {
+                value = fValue;
+            }
+            c.close();
+        }
+        return value;
+    }
+    
+    /**
+     * Get integer preference value
+     * @param key the key preference to retrieve
+     * @return the value
+     */
+    public static Integer getPreferenceIntegerValue(Context ctxt, String key) {
+        try {
+            return Integer.parseInt(getPreferenceStringValue(ctxt, key));
+        }catch(NumberFormatException e) {
+            Log.e("SipConfigManager", "Invalid " + key + " format : expect a int");
+        }catch(NullPointerException e) {
+            Log.e("SipConfigManager", "Invalid " + key + " format : expect a int");
+        }
+        return null;
+    }
+
+    /**
+     * Set the value of a preference string
+     * @param ctxt The context of android app
+     * @param key The key config to change
+     * @param value The value to set to
+     */
+    public static void setPreferenceStringValue(Context ctxt, String key, String value) {
+        Uri uri = getPrefUriForKey(key);
+        ContentValues values = new ContentValues();
+        values.put(SipConfigManager.FIELD_VALUE, value);
+        ctxt.getContentResolver().update(uri, values, String.class.getName(), null);
+    }
+
+    /**
+     * Set the value of a preference string
+     * @param ctxt The context of android app
+     * @param key The key config to change
+     * @param value The value to set to
+     */
+    public static void setPreferenceBooleanValue(Context ctxt, String key, boolean value) {
+        Uri uri = getPrefUriForKey(key);
+        ContentValues values = new ContentValues();
+        values.put(SipConfigManager.FIELD_VALUE, value);
+        ctxt.getContentResolver().update(uri, values, Boolean.class.getName(), null);
+    }
+
+    /**
+     * Set the value of a preference string
+     * @param ctxt The context of android app
+     * @param key The key config to change
+     * @param value The value to set to
+     */
+    public static void setPreferenceFloatValue(Context ctxt, String key, Float value) {
+        Uri uri = getPrefUriForKey(key);
+        ContentValues values = new ContentValues();
+        values.put(SipConfigManager.FIELD_VALUE, value);
+        ctxt.getContentResolver().update(uri, values, Float.class.getName(), null);
+    }
 	
 }

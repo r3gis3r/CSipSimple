@@ -21,6 +21,7 @@
 
 package com.csipsimple.service;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -44,29 +45,11 @@ public class PreferenceProvider extends ContentProvider {
 
 	private PreferencesWrapper prefs;
 
-	private final static String PREFS_TABLE_NAME = "preferences";
-	private final static String RESET_TABLE_NAME = "raz";
-
-	// For Provider
-	public final static String AUTHORITY = "com.csipsimple.prefs";
-	private final static String BASE_DIR_TYPE = "vnd.android.cursor.dir/vnd.csipsimple";
-	private final static String BASE_ITEM_TYPE = "vnd.android.cursor.item/vnd.csipsimple";
-	private final static String CONTENT_SCHEME = "content://";
-	// Preference
-	public final static String PREF_CONTENT_TYPE = BASE_DIR_TYPE + ".pref";
-	public final static String PREF_CONTENT_ITEM_TYPE = BASE_ITEM_TYPE + ".pref";
-	public final static Uri PREF_URI = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + PREFS_TABLE_NAME);
-	public final static Uri PREF_ID_URI_BASE = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + PREFS_TABLE_NAME + "/");
-
-	// Raz
-	public final static Uri RAZ_URI = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + RESET_TABLE_NAME);
 
 	private static final int PREFS = 1;
 	private static final int PREF_ID = 2;
 	private static final int RAZ = 3;
 
-	public final static String FIELD_NAME = "name";
-	public final static String FIELD_VALUE = "value";
 	public static final int COL_INDEX_NAME = 0;
 	public static final int COL_INDEX_VALUE = 1;
 	private static final String THIS_FILE = "PrefsProvider";
@@ -74,9 +57,9 @@ public class PreferenceProvider extends ContentProvider {
 
 	private final static UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
-		URI_MATCHER.addURI(AUTHORITY, PREFS_TABLE_NAME, PREFS);
-		URI_MATCHER.addURI(AUTHORITY, PREFS_TABLE_NAME + "/*", PREF_ID);
-		URI_MATCHER.addURI(AUTHORITY, RESET_TABLE_NAME, RAZ);
+		URI_MATCHER.addURI(SipConfigManager.AUTHORITY, SipConfigManager.PREFS_TABLE_NAME, PREFS);
+		URI_MATCHER.addURI(SipConfigManager.AUTHORITY, SipConfigManager.PREFS_TABLE_NAME + "/*", PREF_ID);
+		URI_MATCHER.addURI(SipConfigManager.AUTHORITY, SipConfigManager.RESET_TABLE_NAME, RAZ);
 	}
 
 	@Override
@@ -93,9 +76,9 @@ public class PreferenceProvider extends ContentProvider {
 		switch (URI_MATCHER.match(uri)) {
 		case PREFS:
 		case RAZ:
-			return PREF_CONTENT_TYPE;
+			return SipConfigManager.PREF_CONTENT_TYPE;
 		case PREF_ID:
-			return PREF_CONTENT_ITEM_TYPE;
+			return SipConfigManager.PREF_CONTENT_ITEM_TYPE;
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -103,7 +86,7 @@ public class PreferenceProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String order) {
-		MatrixCursor resCursor = new MatrixCursor(new String[] { FIELD_NAME, FIELD_VALUE });
+		MatrixCursor resCursor = new MatrixCursor(new String[] { SipConfigManager.FIELD_NAME, SipConfigManager.FIELD_VALUE });
 		if (URI_MATCHER.match(uri) == PREF_ID) {
 			String name = uri.getLastPathSegment();
 			Class<?> aClass = null;
@@ -158,11 +141,11 @@ public class PreferenceProvider extends ContentProvider {
 				}
 			}
 			if (aClass == String.class) {
-				prefs.setPreferenceStringValue(name, cv.getAsString(FIELD_VALUE));
+				prefs.setPreferenceStringValue(name, cv.getAsString(SipConfigManager.FIELD_VALUE));
 			} else if (aClass == Float.class) {
-				prefs.setPreferenceFloatValue(name, cv.getAsFloat(FIELD_VALUE));
+				prefs.setPreferenceFloatValue(name, cv.getAsFloat(SipConfigManager.FIELD_VALUE));
 			} else if (aClass == Boolean.class) {
-				prefs.setPreferenceBooleanValue(name, cv.getAsBoolean(FIELD_VALUE));
+				prefs.setPreferenceBooleanValue(name, cv.getAsBoolean(SipConfigManager.FIELD_VALUE));
 			}
 			count++;
 			break;
