@@ -68,6 +68,7 @@
         android:required="false" >
     </uses-feature>
 
+    <!-- COMMENT THIS if you plan to use in library mode -->
     <permission
         android:name="android.permission.USE_SIP"
         android:description="@string/permdesc_useSip"
@@ -80,6 +81,8 @@
         android:label="@string/permlab_configureSip"
         android:permissionGroup="android.permission-group.COST_MONEY"
         android:protectionLevel="dangerous" />
+        
+    <!--  END OF COMMENT THIS -->
 
     <application
         android:allowBackup="false"
