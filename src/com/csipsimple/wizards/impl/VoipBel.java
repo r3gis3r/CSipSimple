@@ -23,7 +23,9 @@ package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class VoipBel extends SimpleImplementation {
 	
@@ -54,5 +56,20 @@ public class VoipBel extends SimpleImplementation {
 	    acc.vm_nbr = "1233";
 	    return acc;
 	}
+	
+
+    @Override
+    public void setDefaultParams(PreferencesWrapper prefs) {
+        super.setDefaultParams(prefs);
+
+        // Add stun server
+        prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
+        prefs.addStunServer("stun.voipbel.nl");
+    }
+    
+    @Override
+    public boolean needRestart() {
+        return true;
+    }
 	
 }
