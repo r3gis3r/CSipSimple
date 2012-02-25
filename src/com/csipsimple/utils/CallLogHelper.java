@@ -26,9 +26,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.CallLog;
-import android.provider.ContactsContract.Data;
 
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;
@@ -97,12 +95,6 @@ public class CallLogHelper {
 			cv.put(CallLog.Calls.CACHED_NAME, callerInfo.name);
 			cv.put(CallLog.Calls.CACHED_NUMBER_LABEL, callerInfo.numberLabel);
 			cv.put(CallLog.Calls.CACHED_NUMBER_TYPE, callerInfo.numberType);
-			
-			if(Build.DEVICE.equalsIgnoreCase("saga")) {
-			    // For HTC desire S they need for some reason the personId
-			    // Thx Maximus for the tip
-			    cv.put(Data.RAW_CONTACT_ID, callerInfo.personId);
-			}
 		}
 		
 		return cv;
