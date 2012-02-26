@@ -78,20 +78,18 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/save_bt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/save" >
-        </Button>
-
-        <Button
             android:id="@+id/cancel_bt"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/cancel" >
-        </Button>
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/save_bt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/save" />
     </LinearLayout>
 
 </LinearLayout>

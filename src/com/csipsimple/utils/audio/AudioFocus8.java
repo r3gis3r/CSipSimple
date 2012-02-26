@@ -21,6 +21,7 @@
 
 package com.csipsimple.utils.audio;
 
+//import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
@@ -31,6 +32,7 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 
 
+//@TargetApi(8)
 public class AudioFocus8 extends AudioFocusWrapper{
 	
 	

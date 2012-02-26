@@ -32,6 +32,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -64,6 +65,18 @@ public class HorizontalQuickActionWindow extends PopupWindow implements KeyEvent
 
     private View anchorView;
     private Rect anchorRect;
+    
+    public HorizontalQuickActionWindow(Context aContext) {
+        this(aContext, (View) null);
+    }
+    
+    public HorizontalQuickActionWindow(Context aContext, AttributeSet attrs) {
+        this(aContext, (View) null);
+    }
+    
+    public HorizontalQuickActionWindow(Context aContext, AttributeSet attrs, int defStyle) {
+        this(aContext, (View) null);
+    }
 
     public HorizontalQuickActionWindow(Context aContext, View aView) {
         super(aContext);

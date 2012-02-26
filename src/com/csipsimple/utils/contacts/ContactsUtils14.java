@@ -21,6 +21,7 @@
 
 package com.csipsimple.utils.contacts;
 
+//import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,6 +35,7 @@ import android.provider.ContactsContract.Profile;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.Log;
 
+//@TargetApi(14)
 public class ContactsUtils14 extends ContactsUtils5 {
 
     private static final String THIS_FILE = "ContactsUtils14";

@@ -36,8 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
         android:layout_marginRight="20dip"
-        android:autoText="false"
-        android:capitalize="none"
         android:gravity="fill_horizontal"
         android:inputType="phone"
         android:scrollHorizontally="true"

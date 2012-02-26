@@ -39,20 +39,18 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/ok"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/ok" >
-        </Button>
-
-        <Button
             android:id="@+id/cancel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/cancel" >
-        </Button>
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/ok"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/ok" />
     </LinearLayout>
 
 </LinearLayout>

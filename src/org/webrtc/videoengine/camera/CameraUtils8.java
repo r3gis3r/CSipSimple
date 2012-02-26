@@ -10,10 +10,12 @@
 
 package org.webrtc.videoengine.camera;
 
+//import android.annotation.TargetApi;
 import android.hardware.Camera;
 
 import org.webrtc.videoengine.VideoCaptureAndroid;
 
+//@TargetApi(8)
 public class CameraUtils8 extends CameraUtils5 {
 
     private boolean ownsBuffers = true;

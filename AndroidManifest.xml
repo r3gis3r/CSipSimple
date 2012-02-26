@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:installLocation="auto"
     package="com.csipsimple"
-    android:versionCode="1249"
+    android:installLocation="auto"
+    android:versionCode="${svn.Revision}"
     android:versionName="0.04-00" >
 
     <supports-screens
@@ -81,12 +81,11 @@
         android:label="@string/permlab_configureSip"
         android:permissionGroup="android.permission-group.COST_MONEY"
         android:protectionLevel="dangerous" />
-        
-    <!--  END OF COMMENT THIS -->
+
+    <!-- END OF COMMENT THIS -->
 
     <application
         android:allowBackup="false"
-        android:debuggable="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher_nightly"
         android:label="@string/app_name" >

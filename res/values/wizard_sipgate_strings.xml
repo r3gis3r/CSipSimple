@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 
 	This file is part of CSipSimple.
@@ -16,18 +16,15 @@
 
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
- -->
-<resources>
-<string name="w_sipgate_display_name">Account name</string>
-<string name="w_sipgate_display_name_desc">Display name for this account</string>
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-<string name="w_sipgate_username">SIP-ID</string>
-<string name="w_sipgate_username_desc">Different from your sipgate login! Check on sipgate website your SIP-ID</string>
-
-<string name="w_sipgate_password">SIP Password</string>
-<string name="w_sipgate_password_desc">Different from your password! Check on sipgate website your SIP Password</string>
-
-<string name="w_sipgate_server_desc">Something like that : sipgate.co.uk</string>
-
+    <string name="w_sipgate_display_name">Account name</string>
+    <string name="w_sipgate_display_name_desc" tools:ignore="UnusedResources">Display name for this account</string>
+    <string name="w_sipgate_username">SIP-ID</string>
+    <string name="w_sipgate_username_desc" tools:ignore="UnusedResources">Different from your sipgate login! Check on sipgate website your SIP-ID</string>
+    <string name="w_sipgate_password" tools:ignore="UnusedResources">SIP Password</string>
+    <string name="w_sipgate_password_desc" tools:ignore="UnusedResources">Different from your password! Check on sipgate website your SIP Password</string>
+    <string name="w_sipgate_server_desc" tools:ignore="UnusedResources">Something like that : sipgate.co.uk</string>
 
 </resources>

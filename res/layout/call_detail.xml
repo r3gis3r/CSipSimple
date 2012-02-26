@@ -16,7 +16,6 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ex="http://schemas.android.com/apk/res/com.android.contacts"
     android:id="@+id/call_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >

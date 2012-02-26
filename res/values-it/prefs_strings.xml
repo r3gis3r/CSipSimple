@@ -75,8 +75,6 @@
     <string name="use_compact_form_desc">Riduce la dimensione dei pacchetti SIP. Potrebbe non funzionare su vecchi server SIP</string>
     <string name="user_agent">User agent</string>
     <string name="user_agent_desc">Agent presentato dall\'applicazione (se di default aggiungerà informazioni)</string>
-    <string name="ka_use_wake">Keep alive awake</string>
-    <string name="ka_use_wake_desc">Se attivato keep alive sveglierà il telefono</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">Trasporto sicuro</string>
     <string name="secure_transport_desc">Meccanismo di sicurezza per SIP e RTP</string>

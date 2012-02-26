@@ -62,8 +62,6 @@
     <string name="enable_qos_desc">Zapnout Qos paketů</string>
     <string name="dscp_val">hodnota DSCP</string>
     <string name="dscp_val_desc">DSCP hodnota pro Sip komunikaci</string>
-    <string name="keep_alive_interval_wifi">udržet wifi aktivní</string>
-    <string name="keep_alive_interval_mobile">udržet mobil aktivní</string>
     <string name="keep_alive_interval_desc">Interval (s) pro keep alive pakety</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">zabezpečit transport</string>

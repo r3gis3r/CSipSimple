@@ -66,8 +66,6 @@
     <string name="enable_qos_desc">Pakete mit QoS-Werten markieren</string>
     <string name="dscp_val">DSCP-Wert</string>
     <string name="dscp_val_desc">DSCP-Wert für SIP-Daten</string>
-    <string name="keep_alive_interval_wifi">WiFi Keep-Alive</string>
-    <string name="keep_alive_interval_mobile">3G Keep-Alive</string>
     <string name="keep_alive_interval_desc">Abstand von Keep-Alive Paketen (sek)</string>
     <string name="use_compact_form">Benutze Kompaktes SIP</string>
     <string name="use_compact_form_desc">Reduziere SIP Paketgröße. Wird ggf. nicht mit alten SIP Providern funktionieren</string>

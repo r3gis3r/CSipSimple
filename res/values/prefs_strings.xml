@@ -82,8 +82,10 @@
     <string name="use_compact_form_desc">Reduce SIP packets size. May not work on old SIP servers</string>
     <string name="user_agent">User agent</string>
     <string name="user_agent_desc">Agent presented by the application (if default will add infos)</string>
+    <!--
     <string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>
+    -->
     <string name="force_no_update">Force no update</string>
     <string name="force_no_update_desc">Some buggy remote party announce to support UPDATE method while it does not, this option force the legacy way to manage UPDATE/re-INVITE</string>
     <string name="timer_min_se">Minimum session expiration</string>

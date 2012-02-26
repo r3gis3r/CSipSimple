@@ -65,8 +65,6 @@
     <string name="enable_qos_desc">Habilita la funcionalidad Qos en los paquetes</string>
     <string name="dscp_val">Valor DSCP</string>
     <string name="dscp_val_desc">Valor DSCO para el tráfico SIP</string>
-    <string name="keep_alive_interval_wifi">Mantener activa la conexión Wifi</string>
-    <string name="keep_alive_interval_mobile">Mantener activo el móvil</string>
     <string name="use_compact_form">Utilizar SIP compacto</string>
     <string name="use_compact_form_desc">Reduce el tamaño de paquete SIP. Puede no funcionar en servidores SIP antiguos</string>
     <string name="tls">TLS</string>

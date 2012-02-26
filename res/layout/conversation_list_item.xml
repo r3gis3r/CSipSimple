@@ -83,6 +83,7 @@
             android:layout_alignBottom="@id/date"
             android:layout_marginLeft="3dip"
             android:layout_toLeftOf="@id/error"
+            android:contentDescription="@string/empty_description"
             android:visibility="gone" />
         <!-- android:src="@drawable/ic_attachment_universal_small" -->
 

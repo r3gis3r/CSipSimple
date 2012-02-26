@@ -68,15 +68,11 @@
     <string name="enable_qos_desc">Активирай QoS за пакетите</string>
     <string name="dscp_val">стойност на DSCP</string>
     <string name="dscp_val_desc">стойност на DSCP за SIP трафика</string>
-    <string name="keep_alive_interval_wifi">Wifi keep-alive интервал</string>
-    <string name="keep_alive_interval_mobile">Mobile keep-alive интервал</string>
     <string name="keep_alive_interval_desc">Интервал в секунди за KA пакети</string>
     <string name="use_compact_form">Използвай compact SIP</string>
     <string name="use_compact_form_desc">намали размера на SIP пакетите. Може да не работи на стари SIP сървъри</string>
     <string name="user_agent">Агент (UA)</string>
     <string name="user_agent_desc">Агент представян от приложението</string>
-    <string name="ka_use_wake">събуждане с Keep-alive</string>
-    <string name="ka_use_wake_desc">Ако е активирано keep-alive ще събужда телефона</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">Сигурен транспорт</string>
     <string name="secure_transport_desc">Механизъм за сигурен транспорт при SIP и RTP</string>

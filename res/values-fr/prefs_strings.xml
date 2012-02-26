@@ -75,8 +75,6 @@
     <string name="use_compact_form_desc">Réduit la taille des paquets SIP. Peut ne pas être supporté par certains fournisseurs SIP</string>
     <string name="user_agent">Agent utilisateur</string>
     <string name="user_agent_desc">Agent présenté par l\'application (si défaut, ajoutera des infos plateforme)</string>
-    <string name="ka_use_wake">Reveil du battement de coeur</string>
-    <string name="ka_use_wake_desc">Si actif, le battement de coeur réveille le téléphone</string>
     <string name="tls">Chiffrement TLS</string>
     <string name="secure_transport">Transport sécurisé</string>
     <string name="secure_transport_desc">Mécanismes de sécurité pour le SIP et RTP</string>

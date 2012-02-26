@@ -75,8 +75,6 @@
     <string name="use_compact_form_desc">הפחת את גודל מנות הסיפ. ייתכן שלא יעבוד על שרתי סיפ ישנים</string>
     <string name="user_agent">משתמש מורשה</string>
     <string name="user_agent_desc">מורשה שהוצג על ידי היישום (אם ברירת המחדל יוסיף מידע)</string>
-    <string name="ka_use_wake">שמור דלוק</string>
-    <string name="ka_use_wake_desc">אם מופעל להשאיר דלוק הטלפון התעורר</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">תעבורה מאובטחת</string>
     <string name="secure_transport_desc">אבטחת מנגנון של סיפ ו-RTP</string>

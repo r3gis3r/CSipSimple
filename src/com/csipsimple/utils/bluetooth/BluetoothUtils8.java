@@ -24,6 +24,7 @@ package com.csipsimple.utils.bluetooth;
 
 import java.util.Set;
 
+//import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
@@ -38,6 +39,7 @@ import android.media.AudioManager;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.utils.Log;
 
+//@TargetApi(8)
 public class BluetoothUtils8 extends BluetoothWrapper {
 
 	private static final String THIS_FILE = "BT8";
