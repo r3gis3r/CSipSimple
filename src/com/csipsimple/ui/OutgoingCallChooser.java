@@ -269,7 +269,7 @@ public class OutgoingCallChooser extends ListActivity {
     private void addExternalRows() {
 
         Map<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
-        externalTotalNbrs = callHandlers.size();
+        externalTotalNbrs = 0;
         loadedExternals = 0;
         externalProfiles = new ArrayList<SipProfile>();
 
@@ -279,6 +279,7 @@ public class OutgoingCallChooser extends ListActivity {
             externalProfile.id = CallHandler.getAccountIdForCallHandler(this, packageName);
 
             if (Filter.isCallableNumber(externalProfile, number, database)) {
+                externalTotalNbrs ++;
                 // Transform number
                 String finalNumber = Filter.rewritePhoneNumber(externalProfile, number, database);
                 final SipProfile extProfile = externalProfile;
