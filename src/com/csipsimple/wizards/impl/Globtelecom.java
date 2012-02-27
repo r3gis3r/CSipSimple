@@ -21,40 +21,18 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.text.InputType;
 
-import com.csipsimple.R;
-import com.csipsimple.api.SipProfile;
-
-public class ZonPt extends SimpleImplementation {
+public class Globtelecom extends SimpleImplementation {
 	
 
 	@Override
 	protected String getDomain() {
-		return "1290" + getText(accountUsername) + ".zpe.voxis.zon.pt";
+		return "globtelecom.ru";
 	}
 	
 	@Override
 	protected String getDefaultName() {
-		return "Zon Phone";
+		return "Globtelecom";
 	}
 
-	//Customization
-	@Override
-	public void fillLayout(final SipProfile account) {
-		super.fillLayout(account);
-		
-		accountUsername.setTitle(R.string.w_common_phone_number);
-		//accountUsername.setDialogTitle(R.string.w_common_phone_number);
-		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-		
-	}
-	@Override
-	public String getDefaultFieldSummary(String fieldName) {
-		if(fieldName.equals(USER_NAME)) {
-			return "Username in the form : XXXXXXXXX (don't add leading 1290)";
-		}
-		return super.getDefaultFieldSummary(fieldName);
-	}
-	
 }

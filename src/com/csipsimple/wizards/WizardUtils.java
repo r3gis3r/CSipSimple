@@ -70,6 +70,7 @@ import com.csipsimple.wizards.impl.Fayn;
 import com.csipsimple.wizards.impl.Freeconet;
 import com.csipsimple.wizards.impl.FreephoneLineCa;
 import com.csipsimple.wizards.impl.Freephonie;
+import com.csipsimple.wizards.impl.Globtelecom;
 import com.csipsimple.wizards.impl.Gradwell;
 import com.csipsimple.wizards.impl.Haloo;
 import com.csipsimple.wizards.impl.HalooCentrala;
@@ -644,6 +645,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voipbel, 19, 
                     new Locale[]{ locale("nl_BE"), locale("nl_NL"), locale("fr_BE") }, false, false, 
                     VoipBel.class));
+            WIZARDS_DICT.put("GLOBTELECOM", new WizardInfo("GLOBTELECOM", "Globtelecom", 
+                    R.drawable.ic_wizard_globtelecom, 10, 
+                    new Locale[]{locale("ru_RU"),}, false, false, 
+                    Globtelecom.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
