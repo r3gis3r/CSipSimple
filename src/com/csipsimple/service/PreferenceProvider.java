@@ -111,7 +111,10 @@ public class PreferenceProvider extends ContentProvider {
 			    }else {
 			        value = -1;
 			    }
+			} else if(aClass == Integer.class) {
+			    value = prefs.getPreferenceIntegerValue(name);
 			}
+			
 			if (value != null) {
 				resCursor.addRow(new Object[] { name, value });
 			} else {

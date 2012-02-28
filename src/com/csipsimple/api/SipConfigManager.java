@@ -28,7 +28,6 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 
 public class SipConfigManager {
@@ -303,16 +302,32 @@ public class SipConfigManager {
      * @return the value
      */
     public static Integer getPreferenceIntegerValue(Context ctxt, String key) {
-        try {
-            return Integer.parseInt(getPreferenceStringValue(ctxt, key));
-        }catch(NumberFormatException e) {
-            Log.e("SipConfigManager", "Invalid " + key + " format : expect a int");
-        }catch(NullPointerException e) {
-            Log.e("SipConfigManager", "Invalid " + key + " format : expect a int");
-        }
-        return null;
+        return getPreferenceIntegerValue(ctxt, key, null);
     }
 
+
+    /**
+     * Helper method to retrieve a csipsimple float config value
+     * @param ctxt The context of your app
+     * @param key the key for the setting you want to get
+     * @param defaultValue the value you want to return if nothing found
+     * @return the preference value
+     */
+    public static Integer getPreferenceIntegerValue(Context ctxt, String key,  Integer defaultValue) {
+        Integer value = defaultValue;
+        Uri uri = getPrefUriForKey(key);
+        Cursor c = ctxt.getContentResolver().query(uri, null, Integer.class.getName(), null, null);
+        if(c!=null) {
+            c.moveToFirst();
+            Integer iValue = c.getInt(1);
+            if(iValue != null) {
+                value = iValue;
+            }
+            c.close();
+        }
+        return value;
+    }
+    
     /**
      * Set the value of a preference string
      * @param ctxt The context of android app
