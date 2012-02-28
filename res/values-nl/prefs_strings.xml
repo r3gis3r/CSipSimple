@@ -62,8 +62,6 @@
     <string name="enable_qos_desc">QoS inschakelen voor pakketten</string>
     <string name="dscp_val">DSCP-waarde</string>
     <string name="dscp_val_desc">DSCP-waarde voor SIP-verkeer</string>
-    <string name="keep_alive_interval_wifi">Wi-Fi keep alive</string>
-    <string name="keep_alive_interval_mobile">Mobiel keep alive</string>
     <string name="keep_alive_interval_desc">Interval (sec) voor KA packets</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">Beveiligd transport</string>

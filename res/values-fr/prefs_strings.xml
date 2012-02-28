@@ -68,8 +68,7 @@
     <string name="enable_qos_desc">Activer la QoS sur les paquets</string>
     <string name="dscp_val">Valeur DSCP</string>
     <string name="dscp_val_desc">Valeur DSCP pour le trafic SIP</string>
-    <string name="keep_alive_interval_wifi">Battement de coeur wifi</string>
-    <string name="keep_alive_interval_mobile">Battement de coeur mobile</string>
+    <string name="keep_alive_interval">Conservation de connection</string>
     <string name="keep_alive_interval_desc">Intervalle (seconde) pour les paquets qui garde la connexion active</string>
     <string name="use_compact_form">Utiliser le SIP compact</string>
     <string name="use_compact_form_desc">Réduit la taille des paquets SIP. Peut ne pas être supporté par certains fournisseurs SIP</string>

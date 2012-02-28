@@ -21,10 +21,9 @@
 
 package com.csipsimple.widgets;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -32,6 +31,8 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
+
+import java.util.ArrayList;
 
 public class RegistrationNotification extends RemoteViews {
 
@@ -55,6 +56,18 @@ public class RegistrationNotification extends RemoteViews {
 
     public RegistrationNotification(String aPackageName) {
         super(aPackageName, R.layout.notification_registration_layout);
+    }
+
+    public RegistrationNotification(Context ctxt) {
+        this(ctxt.getPackageName());
+    }
+
+    public RegistrationNotification(Context ctxt, AttributeSet attr) {
+        this(ctxt.getPackageName());
+    }
+
+    public RegistrationNotification(Context ctxt, AttributeSet attr, int defStyle) {
+        this(ctxt.getPackageName());
     }
 
     /**
@@ -86,7 +99,8 @@ public class RegistrationNotification extends RemoteViews {
                     setImageViewResource(icons[i], wizardInfos.icon);
                     if (!TextUtils.isEmpty(dName)) {
                         setTextViewText(texts[i], dName);
-                        // setCharSequence(icons[i], "setContentDescription", dName);
+                        // setCharSequence(icons[i], "setContentDescription",
+                        // dName);
                     }
                 }
                 i++;

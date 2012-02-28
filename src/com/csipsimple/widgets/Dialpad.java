@@ -21,9 +21,7 @@
 
 package com.csipsimple.widgets;
 
-import java.util.HashMap;
-import java.util.Map;
-
+//import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
@@ -40,6 +38,10 @@ import com.csipsimple.R;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Theme;
 
+import java.util.HashMap;
+import java.util.Map;
+
+//@SuppressLint("UseSparseArrays")
 public class Dialpad extends LinearLayout implements OnClickListener {
 
 	private OnDialKeyListener onDialKeyListener;

@@ -62,8 +62,6 @@
     <string name="enable_qos_desc">Увімкнути QoS на пакетах</string>
     <string name="dscp_val">DSCP значення</string>
     <string name="dscp_val_desc">DSCP значення для SIP трафіку</string>
-    <string name="keep_alive_interval_wifi">Не вимикати WiFi</string>
-    <string name="keep_alive_interval_mobile">Не вимикати мобільний</string>
     <string name="keep_alive_interval_desc">Інтервал (сек) для KA пакетів</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">Захищений транспорт</string>

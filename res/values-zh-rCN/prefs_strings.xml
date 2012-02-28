@@ -62,8 +62,6 @@
     <string name="enable_qos_desc">开启数据包 QoS</string>
     <string name="dscp_val">DSCP 值</string>
     <string name="dscp_val_desc">SIP 传输的 DSCP 值</string>
-    <string name="keep_alive_interval_wifi">Wifi持续连接</string>
-    <string name="keep_alive_interval_mobile">移动数据持续连接</string>
     <string name="keep_alive_interval_desc">保持连接数据包发送时间间隔(秒)</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">安全传输</string>

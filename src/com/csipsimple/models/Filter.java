@@ -20,25 +20,23 @@
  */
 package com.csipsimple.models;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
+import android.util.SparseArray;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class Filter {
 	public static final String _ID = "_id";
@@ -252,16 +250,16 @@ public class Filter {
 	
 	
 	//Utilities functions
-	private static int getForPosition(Map<Integer, Integer> positions, Integer key) {
+	private static int getForPosition(SparseArray<Integer> positions, Integer key) {
 		return positions.get(key);
 	}
-	private static int getPositionFor(Map<Integer, Integer> positions, Integer value) {
+	
+	private static int getPositionFor(SparseArray<Integer> positions, Integer value) {
 		if(value != null) {
-			for (Entry<Integer, Integer> entry : positions.entrySet()) {
-				if (entry.getValue().equals(value)) {
-					return entry.getKey();
-				}
-			}
+		    int pos = positions.indexOfValue(value);
+		    if(pos >= 0) {
+		        return pos;
+		    }
 		}
 		return 0;
 	}
@@ -270,7 +268,7 @@ public class Filter {
 	/**
 	 * Available actions
 	 */
-	private final static Map<Integer, Integer> FILTER_ACTION_POS = new HashMap<Integer, Integer>();
+	private final static SparseArray<Integer> FILTER_ACTION_POS = new SparseArray<Integer>();
 	static {
 		FILTER_ACTION_POS.put(0, ACTION_CANT_CALL);
 		FILTER_ACTION_POS.put(1, ACTION_REPLACE);
@@ -290,7 +288,7 @@ public class Filter {
 	/**
 	 * Available matches patterns
 	 */
-	private final static Map<Integer, Integer> MATCHER_TYPE_POS = new HashMap<Integer, Integer>();
+	private final static SparseArray <Integer> MATCHER_TYPE_POS = new SparseArray<Integer>();
 	
 	static {
 		MATCHER_TYPE_POS.put(0, MATCHER_STARTS);
@@ -311,7 +309,7 @@ public class Filter {
 		return getPositionFor(MATCHER_TYPE_POS, selectedAction);
 	}
 	
-	private final static Map<Integer, Integer> REPLACE_TYPE_POS = new HashMap<Integer, Integer>();
+	private final static SparseArray<Integer> REPLACE_TYPE_POS = new SparseArray<Integer>();
 	static {
 		REPLACE_TYPE_POS.put(0, REPLACE_PREFIX);
 		REPLACE_TYPE_POS.put(1, REPLACE_SUFFIX);

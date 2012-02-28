@@ -68,15 +68,11 @@
     <string name="enable_qos_desc">Habilitar QoS nos pacotes</string>
     <string name="dscp_val">Valor DSCP</string>
     <string name="dscp_val_desc">Valor de DSCP para tráfego SIP</string>
-    <string name="keep_alive_interval_wifi">Intervalo de keep alive WiFi</string>
-    <string name="keep_alive_interval_mobile">Intervalo de keep alive Mobile</string>
     <string name="keep_alive_interval_desc">Intervalo (s) para pacote de KA</string>
     <string name="use_compact_form">Usar SIP compacto</string>
     <string name="use_compact_form_desc">Reduz o tamanho dos pacotes SIP, pode não funcionar com servidores antigos</string>
     <string name="user_agent">User Agent</string>
     <string name="user_agent_desc">Agente disponibilizado pela aplicação (default adiciona info)</string>
-    <string name="ka_use_wake">Acordar por keep alive</string>
-    <string name="ka_use_wake_desc">Se o keep alive deve acordar o telefone</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">Transporte Seguro</string>
     <string name="secure_transport_desc">Mecanismo de segurança para SIP e RTP</string>

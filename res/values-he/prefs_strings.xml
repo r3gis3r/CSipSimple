@@ -68,8 +68,6 @@
     <string name="enable_qos_desc">אפשר QoS במנות</string>
     <string name="dscp_val">ערך DSCP</string>
     <string name="dscp_val_desc">ערך DSCP עבור תעבורת סיפ</string>
-    <string name="keep_alive_interval_wifi">השאר Wifi דלוק</string>
-    <string name="keep_alive_interval_mobile">השאר 3G דלוק</string>
     <string name="keep_alive_interval_desc">מרווח זמן (שניות) עבור מנות KA</string>
     <string name="use_compact_form">השתמש בסיפ דחוס</string>
     <string name="use_compact_form_desc">הפחת את גודל מנות הסיפ. ייתכן שלא יעבוד על שרתי סיפ ישנים</string>

@@ -62,8 +62,6 @@
     <string name="enable_qos_desc">패킷에 대한 QoS 기능 허용</string>
     <string name="dscp_val">DSCP 값</string>
     <string name="dscp_val_desc">SIP 트래픽 용 DSCP 값</string>
-    <string name="keep_alive_interval_wifi">"Wifi  활성 유지"</string>
-    <string name="keep_alive_interval_mobile">Mobile 활성 유지</string>
     <string name="keep_alive_interval_desc">KA 패킷 인터벌</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">보안 전송</string>

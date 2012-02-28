@@ -66,8 +66,6 @@
     <string name="enable_qos_desc">啟用封包的QoS</string>
     <string name="dscp_val">DSCP 值</string>
     <string name="dscp_val_desc">SIP 流量之 DSCP 值</string>
-    <string name="keep_alive_interval_wifi">保持 Wifi 連線</string>
-    <string name="keep_alive_interval_mobile">保持行動數據連線</string>
     <string name="keep_alive_interval_desc">保持連線封包 (KA) 間隔</string>
     <string name="use_compact_form">使用簡潔 SIP</string>
     <string name="use_compact_form_desc">可減少 SIP 封包大小. 在較舊的SIP服務器上不一定適用.</string>

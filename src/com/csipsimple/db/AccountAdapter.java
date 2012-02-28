@@ -20,34 +20,34 @@
  */
 package com.csipsimple.db;
 
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.RemoteException;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
-import com.csipsimple.api.ISipService;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.wizards.WizardUtils;
+
+import java.util.List;
 
 public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickListener {
 
 	private static final String THIS_FILE = "PjSipAccount adapter";
 	private ISipService service;
-	private HashMap<Integer, AccountStatusDisplay> cacheStatusDisplay;
+	private SparseArray<AccountStatusDisplay> cacheStatusDisplay;
 	Activity context;
 	String forNumber = null;
 	private DBAdapter db;
@@ -62,13 +62,13 @@ public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickL
 	public AccountAdapter(Activity aContext, List<SipProfile> list) {
 		super(aContext, R.layout.choose_account_row, list);
 		this.context= aContext;
-		cacheStatusDisplay = new HashMap<Integer, AccountStatusDisplay>();
+		cacheStatusDisplay = new SparseArray<AccountStatusDisplay>();
 	}
 	
 	public AccountAdapter(Activity aContext, List<SipProfile> list, String aForNumber, DBAdapter database) {
 		super(aContext, R.layout.choose_account_row, list);
 		this.context= aContext;
-		cacheStatusDisplay = new HashMap<Integer, AccountStatusDisplay>();
+		cacheStatusDisplay = new SparseArray<AccountStatusDisplay>();
 		forNumber = aForNumber;
 		db = database;
 	}

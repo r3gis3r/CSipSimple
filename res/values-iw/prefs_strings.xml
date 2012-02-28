@@ -68,15 +68,11 @@
     <string name="enable_qos_desc">אפשר QoS במנות</string>
     <string name="dscp_val">ערך DSCP</string>
     <string name="dscp_val_desc">ערך DSCP עבור תעבורת סיפ</string>
-    <string name="keep_alive_interval_wifi">השאר Wifi דלוק</string>
-    <string name="keep_alive_interval_mobile">השאר 3G דלוק</string>
     <string name="keep_alive_interval_desc">מרווח זמן (שניות) עבור מנות KA</string>
     <string name="use_compact_form">השתמש בסיפ דחוס</string>
     <string name="use_compact_form_desc">הפחת את גודל מנות הסיפ. ייתכן שלא יעבוד על שרתי סיפ ישנים</string>
     <string name="user_agent">משתמש מורשה</string>
     <string name="user_agent_desc">מורשה שהוצג על ידי היישום (אם ברירת המחדל יוסיף מידע)</string>
-    <string name="ka_use_wake">שמור דלוק</string>
-    <string name="ka_use_wake_desc">אם מופעל להשאיר דלוק הטלפון התעורר</string>
     <string name="tls">TLS</string>
     <string name="secure_transport">תעבורה מאובטחת</string>
     <string name="secure_transport_desc">אבטחת מנגנון של סיפ ו-RTP</string>
