@@ -24,7 +24,9 @@ package com.csipsimple.wizards.impl;
 import android.text.InputType;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class ZonPt extends SimpleImplementation {
 	
@@ -57,4 +59,46 @@ public class ZonPt extends SimpleImplementation {
 		return super.getDefaultFieldSummary(fieldName);
 	}
 	
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+
+        acc.transport = SipProfile.TRANSPORT_TCP;
+        acc.reg_uri = "sip:" + getText(accountUsername) + ".zpe.voxis.zon.pt";
+        acc.proxies = new String[] {
+            acc.reg_uri
+        };
+        acc.username = "1290" + getText(accountUsername);
+        acc.allow_contact_rewrite = false;
+
+	    return acc;
+	}
+	
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+	    super.setDefaultParams(prefs);
+
+        //Only G711a/u and g722 on WB
+        prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"244");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
+        
+        //On NB set for gsm high priority
+        prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"244");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "0");
+
+        prefs.setPreferenceStringValue(SipConfigManager.USER_AGENT, "ZON ZON Phone 1.0.0 (1); ANDROIDv2.3.6; i9000");
+	    
+	}
 }
