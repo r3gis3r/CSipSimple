@@ -101,4 +101,9 @@ public class ZonPt extends SimpleImplementation {
         prefs.setPreferenceStringValue(SipConfigManager.USER_AGENT, "ZON ZON Phone 1.0.0 (1); ANDROIDv2.3.6; i9000");
 	    
 	}
+	
+	@Override
+	public boolean needRestart() {
+	    return true;
+	}
 }
