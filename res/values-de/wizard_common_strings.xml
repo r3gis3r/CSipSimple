@@ -1,13 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="w_common_display_name">Kontoname</string>
-  <string name="w_common_display_name_desc">Zeigt den Namen dieses Kontos</string>
-  <string name="w_common_username">Benutzername</string>
-  <string name="w_common_username_desc">Sip Konto Login (\@sip.server nicht anfügen)</string>
-  <string name="w_common_phone_number">SIP Telefonnummer</string>
-  <string name="w_common_phone_number_desc">SIP Telefonnummer für dieses Konto</string>
-  <string name="w_common_password">Passwort</string>
-  <string name="w_common_password_desc">Passwort für dieses Konto</string>
-  <string name="w_common_server">SIP Server</string>
-  <string name="w_common_server_desc">SIP Server Domainname IP[:Port]</string>
+
+    <string name="w_common_display_name">Kontoname</string>
+    <string name="w_common_display_name_desc">Zeigt den Namen dieses Kontos</string>
+    <string name="w_common_username">Benutzername</string>
+    <string name="w_common_username_desc">Sip Konto Login (\@sip.server nicht anfügen)</string>
+    <string name="w_common_phone_number">SIP Telefonnummer</string>
+    <string name="w_common_phone_number_desc">SIP Telefonnummer für dieses Konto</string>
+    <string name="w_common_password">Passwort</string>
+    <string name="w_common_password_desc">Passwort für dieses Konto</string>
+    <string name="w_common_server">SIP Server</string>
+    <string name="w_common_server_desc">SIP Server Domainname IP[:Port]</string>
+    <string name="create_account">Erstelle Account</string>
+
 </resources>

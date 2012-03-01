@@ -55,9 +55,10 @@
     <string name="me">Ich</string>
     <string name="sending_message">Sende\\u2026</string>
     <string name="all_threads">Alle Themen</string>
-    <string name="confirm_delete_conversation">Das gesamte Thema wird gelöscht.</string>
-    <string name="confirm_delete_all_conversations">Alle Themen werden gelöscht.</string>
-    <string name="confirm_delete_locked_message">Bist du sicher, dass du diese gesperrte Nachricht löschen willst?</string>
+    <string name="confirm_delete_conversation">Die gesamte Unterhaltung wird gelöscht.</string>
+    <string name="confirm_delete_all_conversations">Alle Unterhaltungen werden gelöscht.</string>
+    <string name="confirm_delete_message">Die gesamte Unterhaltung wird gelöscht.</string>
     <string name="confirm_delete_all_messages">Das gesamte Thema wird gelöscht.</string>
+    <string name="confirm_delete_locked_message">Bist du sicher, dass du diese gesperrte Nachricht löschen willst?</string>
 
 </resources>

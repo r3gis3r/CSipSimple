@@ -1,2 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources/>
+<resources>
+
+    <string name="test_audio">Audio Test</string>
+    <string name="test_audio_prepare">Bereite Audio Test vor…</string>
+    <string name="test_audio_ongoing">Sprich ins Mikrofon und höre in der Ohrmuschel.</string>
+    <string name="test_audio_network_failure">Test fehlgeschlagen: \nWechsel zuerst zu einem richtigen Netzwerk.</string>
+
+</resources>

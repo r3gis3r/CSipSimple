@@ -207,12 +207,28 @@
     <string name="force">Erzwingen</string>
     <string name="prevent">Verhindern</string>
     <string name="simple">Einfach</string>
-    <string name="use_android_setting">Android-Einstellung benutzen</string>
+    <string name="use_android_setting">Benutze Android Einstellungen</string>
     <string name="narrowband">Schmalband</string>
     <string name="wideband">Breitband</string>
     <string name="no_proxy">Kein Proxy</string>
     <string name="outbound_proxies">Ausgehende Proxies</string>
     <string name="accounts_proxies">Konto Proxies</string>
     <string name="all">Alle</string>
+    <string name="no_zrtp">Kein ZRTP</string>
+    <string name="create_zrtp">Erzeuge ZRTP</string>
+    <string name="user_agent_desc">Agent der von Anwendung angezeigt wird (fügt Informationen hinzu, wenn Standard)</string>
+    <string name="force_no_update">Zwinge kein Update</string>
+    <string name="timer_min_se">Minimale Session-Verfall Zeit</string>
+    <string name="timer_min_se_desc">Minimale Session-Verfall Zeit in Sekunden. Darf nicht geringer als 90 sein.</string>
+    <string name="timer_sess_expires">Session-Verfall Zeit</string>
+    <string name="timer_sess_expires_desc">Minimale Session-Verfall Zeit in Sekunden. Darf nicht geringer als min_se sein.</string>
+    <string name="use_zrtp_desc">Modus für Secured ZRTP</string>
+    <string name="use_webrtc_hack">Benutze WebRTC Implementation</string>
+    <string name="use_webrtc_hack_desc">Implementation von WebRTC Team</string>
+    <string name="do_focus_audio_desc">Deaktivieren erzeugt Überlappung mit Musik, kann aber beim  Routing helfen.</string>
+    <string name="micro_source">Mikrofon Quelle</string>
+    <string name="has_io_queue">IO Warteschlange</string>
+    <string name="audio_implementation">Audio Implementation</string>
+    <string name="obtain_themes_desc">Hol dir Design-Apps im Market</string>
 
 </resources>
