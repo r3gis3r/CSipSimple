@@ -22,6 +22,7 @@
 package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
@@ -49,6 +50,9 @@ public class ZonPt extends SimpleImplementation {
 		accountUsername.setTitle(R.string.w_common_phone_number);
 		//accountUsername.setDialogTitle(R.string.w_common_phone_number);
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		if(!TextUtils.isEmpty(account.username)) {
+		    accountUsername.setText(account.username.replaceFirst("^1290", ""));
+		}
 		
 	}
 	@Override
