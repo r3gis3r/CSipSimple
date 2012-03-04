@@ -109,6 +109,11 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.equalsIgnoreCase("GT-I5500")) {
             return true;
         }
+        // Samsung GT-S5360
+        if(android.os.Build.DEVICE.equalsIgnoreCase("GT-S5360")) {
+            return true;
+        }
+        
         // HTC evo 4G
         if (android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
             return true;
@@ -615,6 +620,11 @@ public final class Compatibility {
         if (lastSeenVersion < 1142) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                     isTabletScreen(prefWrapper.getContext()));
+        }
+        if (lastSeenVersion < 1296 && android.os.Build.DEVICE.equalsIgnoreCase("GT-S5360")) {
+            prefWrapper
+                    .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+
         }
         
         prefWrapper.endEditing();
