@@ -21,6 +21,7 @@
 
 package com.csipsimple.widgets;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -41,6 +42,7 @@ import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.CallHandler.onLoadListener;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
 
@@ -66,6 +68,8 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
     private Long targetAccountId = null;
 
     private boolean showExternals = true;
+    
+    private final ComponentName telCmp;
 
     private OnAccountChangeListener onAccountChange = null;
 
@@ -86,6 +90,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
     public AccountChooserButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        telCmp = new ComponentName(getContext(), com.csipsimple.plugins.telephony.CallHandler.class);
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.account_chooser_button, this, true);
         LinearLayout root = (LinearLayout) findViewById(R.id.quickaction_button);
@@ -202,7 +207,14 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         if (showExternals) {
             // Add external rows
             Map<String, String> callHandlers = CallHandler.getAvailableCallHandlers(getContext());
+            boolean includeGsm = Compatibility.canMakeGSMCall(getContext()); 
             for (String packageName : callHandlers.keySet()) {
+                Log.d(THIS_FILE, "Compare "+packageName+" to "+telCmp.flattenToString());
+                // We ensure that GSM integration is not prevented
+                if(!includeGsm && packageName.equals(telCmp.flattenToString())) {
+                    continue;
+                }
+                // Else we can add
                 CallHandler ch = new CallHandler(getContext());
                 ch.loadFrom(packageName, null, new onLoadListener() {
                     @Override
@@ -223,12 +235,23 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         quickAction.show();
     }
 
+    /**
+     * Set the currently selected account for this widget
+     * It will change internal state,
+     * Change icon and label of the account
+     * @param aAccount
+     */
     public void setAccount(SipProfile aAccount) {
         account = aAccount;
 
         if (account == null) {
-            textView.setText(getResources().getString(R.string.gsm));
-            imageView.setImageResource(R.drawable.ic_wizard_gsm);
+            if(Compatibility.canMakeGSMCall(getContext())) {
+                textView.setText(getResources().getString(R.string.gsm));
+                imageView.setImageResource(R.drawable.ic_wizard_gsm);
+            }else {
+                textView.setText(getResources().getString(R.string.acct_inactive));
+                imageView.setImageResource(android.R.drawable.ic_dialog_alert);
+            }
         } else {
             textView.setText(account.display_name);
             imageView.setImageDrawable(new BitmapDrawable(WizardUtils.getWizardBitmap(getContext(),
@@ -240,6 +263,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
     }
 
+    /**
+     * Update user interface when registration of account has changed
+     * This include change selected account if we are in canChangeIfValid mode
+     */
     private void updateRegistration() {
         Cursor c = getContext().getContentResolver().query(SipProfile.ACCOUNT_URI, ACC_PROJECTION, SipProfile.FIELD_ACTIVE + "=?", new String[] {
                 "1"
@@ -299,24 +326,36 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         setAccount(toSelectAcc);
     }
 
+    /**
+     * Retrieve account that is currently selected by this widget
+     * @return The SipProfile selected
+     */
     public SipProfile getSelectedAccount() {
         if (account == null) {
             SipProfile retAcc = new SipProfile();
-            Map<String, String> handlers = CallHandler.getAvailableCallHandlers(getContext());
-            for (String callHandler : handlers.keySet()) {
-                // Try to prefer the GSM handler
-                // TODO -- auto detect package name
-                if (callHandler
-                        .equalsIgnoreCase("com.csipsimple/com.csipsimple.plugins.telephony.CallHandler")) {
-                    Log.d(THIS_FILE, "Prefer GSM");
+            if(showExternals) {
+                Map<String, String> handlers = CallHandler.getAvailableCallHandlers(getContext());
+                boolean includeGsm = Compatibility.canMakeGSMCall(getContext()); 
+                
+                if(includeGsm) {
+                    for (String callHandler : handlers.keySet()) {
+                        // Try to prefer the GSM handler
+                        if (callHandler.equalsIgnoreCase(telCmp.flattenToString())) {
+                            retAcc.id = CallHandler.getAccountIdForCallHandler(getContext(), callHandler);
+                            return retAcc;
+                        }
+                    }
+                }
+                
+                // Fast way to get first if exists
+                for (String callHandler : handlers.values()) {
+                    // Ignore tel handler if we do not include gsm in settings
+                    if(callHandler.equals(telCmp.flattenToString()) && !includeGsm) {
+                        continue;
+                    }
                     retAcc.id = CallHandler.getAccountIdForCallHandler(getContext(), callHandler);
                     return retAcc;
                 }
-            }
-            // Fast way to get first if exists
-            for (String callHandler : handlers.values()) {
-                retAcc.id = CallHandler.getAccountIdForCallHandler(getContext(), callHandler);
-                return retAcc;
             }
 
             retAcc.id = SipProfile.INVALID_ID;
@@ -325,10 +364,18 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         return account;
     }
 
+    /**
+     * Attach listened to the widget that will fire when account selection change
+     * @param anAccountChangeListener the listener
+     */
     public void setOnAccountChangeListener(OnAccountChangeListener anAccountChangeListener) {
         onAccountChange = anAccountChangeListener;
     }
 
+    /**
+     * Set whether this button should consider plugins account as selectable accounts
+     * @param b true if you want the widget to show external accounts
+     */
     public void setShowExternals(boolean b) {
         showExternals = b;
     }

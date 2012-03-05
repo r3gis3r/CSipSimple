@@ -35,7 +35,6 @@ import android.os.Bundle;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PhoneCapabilityTester;
 
@@ -58,7 +57,7 @@ public class CallHandler extends BroadcastReceiver {
 			String number = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 			// We must handle that clean way cause when call just to 
 			// get the row in account list expect this to reply correctly
-			if(number != null && Compatibility.canMakeGSMCall(context)) {
+			if(number != null && PhoneCapabilityTester.isPhone(context)) {
 				// Build pending intent
 				Intent i = new Intent(Intent.ACTION_CALL);
 				i.setData(Uri.fromParts("tel", number, null));
