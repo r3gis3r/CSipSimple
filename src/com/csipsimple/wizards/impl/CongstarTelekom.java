@@ -40,9 +40,9 @@ public class CongstarTelekom extends AuthorizationImplementation {
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
-		accountUsername.setTitle(R.string.w_common_phone_number);
-		accountUsername.setDialogTitle(R.string.w_common_phone_number);
-		accountUsername.setDialogMessage("030xxxx");
+		accountUsername.setTitle("Telefonnummer (inkl. Vorwahl)");
+		accountUsername.setDialogTitle("Telefonnummer (inkl. Vorwahl)");
+		accountUsername.setDialogMessage("Beispiel: 030123456");
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 		
 		
@@ -56,7 +56,7 @@ public class CongstarTelekom extends AuthorizationImplementation {
 	@Override
 	public String getDefaultFieldSummary(String fieldName) {
 		if(fieldName.equals(USER_NAME)) {
-			return "030xxxx";
+			return "Beispiel: 030123456";
 		}else if(fieldName.equals(AUTH_NAME)) {
 		    return "cVertragsnummer";
 		}else if(fieldName.equals(PASSWORD)) {
