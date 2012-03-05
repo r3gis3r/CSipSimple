@@ -22,12 +22,14 @@ build/x264/armeabi/lib/libx264.a : x264_src
 ffmpeg_src :
 	git clone git://git.videolan.org/ffmpeg.git ffmpeg_src; \
 	cd ffmpeg_src; \
+	git fetch --tags; \
 	git checkout origin; \
 	git checkout n0.10
 
 x264_src :
 	git clone git://git.videolan.org/x264.git x264_src
 	# cd x264_src; \
+	# git fetch --tags; \
 	# git checkout origin; \
 	# git checkout 10fe242813531daa61088af158b8b64c6fbe787e
 
@@ -38,6 +40,7 @@ clean :
 update :
 	# FFmpeg
 	cd ffmpeg_src; \
+	git fetch --tags; \
 	git checkout origin; \
 	git checkout n0.10
 	# X264

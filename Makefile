@@ -36,6 +36,7 @@ jni/zrtp4pj/sources :
 	cd jni/zrtp4pj; \
 	git clone git://github.com/r3gis3r/ZRTP4PJ.git sources; \
 	cd sources; \
+	git fetch --tags; \
 	git checkout origin; \
 	git checkout 10fe242813531daa61088af158b8b64c6fbe787e
 
@@ -43,6 +44,7 @@ jni/openssl/sources :
 	cd jni/openssl; \
 	git clone git://github.com/guardianproject/openssl-android.git sources; \
 	cd sources; \
+	git fetch --tags; \
 	git checkout origin; \
 	git checkout 1a3c5799337b90ddc56376ace7284a9e7f8cc988
 
@@ -63,10 +65,12 @@ update :
 	svn update --accept theirs-conflict
 	# Update ZRTP4pj
 	cd jni/zrtp4pj/sources; \
+	git fetch --tags; \
 	git checkout origin; \
 	git checkout 10fe242813531daa61088af158b8b64c6fbe787e
 	# Update OpenSSL
 	cd jni/openssl/sources; \
+	git fetch --tags; \
 	git checkout origin; \
 	git checkout 1a3c5799337b90ddc56376ace7284a9e7f8cc988
 	# Update ffmpeg
