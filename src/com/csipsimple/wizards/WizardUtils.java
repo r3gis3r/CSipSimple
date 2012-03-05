@@ -57,6 +57,8 @@ import com.csipsimple.wizards.impl.Broadsoft;
 import com.csipsimple.wizards.impl.Callcentric;
 import com.csipsimple.wizards.impl.CamundaNet;
 import com.csipsimple.wizards.impl.Cellip;
+import com.csipsimple.wizards.impl.CongstarQSC;
+import com.csipsimple.wizards.impl.CongstarTelekom;
 import com.csipsimple.wizards.impl.Cotas;
 import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.DvcNg;
@@ -649,6 +651,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_globtelecom, 10, 
                     new Locale[]{locale("ru_RU"),}, false, false, 
                     Globtelecom.class));
+            WIZARDS_DICT.put("CONGSTARTEL", new WizardInfo("CONGSTARTEL", "Congstar Telekom", 
+                    R.drawable.ic_wizard_congstar, 10, 
+                    new Locale[]{Locale.GERMANY}, false, false, 
+                    CongstarTelekom.class));
+            WIZARDS_DICT.put("CONGSTARTEL", new WizardInfo("CONGSTARTEL", "Congstar QSC", 
+                    R.drawable.ic_wizard_congstar, 10, 
+                    new Locale[]{Locale.GERMANY}, false, false, 
+                    CongstarQSC.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
