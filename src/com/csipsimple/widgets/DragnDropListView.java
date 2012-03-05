@@ -65,15 +65,23 @@ public class DragnDropListView extends ListView {
 	private final int mTouchSlop;
 	private final int mItemHeightNormal;
 	private final int mItemHeightExpanded;
+	
+	private int grabberId = R.id.icon;
 
 	public DragnDropListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
-		// mRemoveMode = FLING;
 		mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 		Resources res = getResources();
 		mItemHeightNormal = res.getDimensionPixelSize(R.dimen.normal_height);
 		mItemHeightExpanded = res.getDimensionPixelSize(R.dimen.expanded_height);
+	}
+	
+	/**
+	 * Set the id of the view item that is considered as grabber item for the row
+	 * @param id the id of the view
+	 */
+	public void setGrabberId(int id) {
+	    grabberId = id;
 	}
 
 	@Override
@@ -89,7 +97,10 @@ public class DragnDropListView extends ListView {
 				ViewGroup item = (ViewGroup) getChildAt(itemnum - getFirstVisiblePosition());
 				mDragPoint = y - item.getTop();
 				mCoordOffset = ((int) ev.getRawY()) - y;
-				View dragger = item.findViewById(R.id.icon);
+				View dragger = item.findViewById(grabberId);
+				if(dragger == null || dragger.getVisibility() == View.GONE) {
+				    return super.onInterceptTouchEvent(ev);
+				}
 				Rect r = mTempRect;
 				dragger.getDrawingRect(r);
 				// The dragger icon itself is quite small, so pretend the

@@ -24,6 +24,7 @@ package com.csipsimple.ui.account;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -31,6 +32,7 @@ import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.BaseColumns;
@@ -43,9 +45,11 @@ import android.support.v4.view.MenuItem;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -56,6 +60,8 @@ import com.csipsimple.ui.account.AccountsEditListAdapter.AccountRowTag;
 import com.csipsimple.ui.account.AccountsEditListAdapter.OnCheckedRowListener;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.SipProfileJson;
+import com.csipsimple.widgets.DragnDropListView;
+import com.csipsimple.widgets.DragnDropListView.DropListener;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardChooser;
 import com.csipsimple.wizards.WizardUtils;
@@ -69,7 +75,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
 
     private boolean dualPane;
 	private Long curCheckPosition = SipProfile.INVALID_ID;
-	private String curCheckWizard = WizardUtils.EXPERT_WIZARD_TAG;
+	//private String curCheckWizard = WizardUtils.EXPERT_WIZARD_TAG;
 	private final Handler mHandler = new Handler();
 	private AccountStatusContentObserver statusObserver = null;
 	
@@ -87,7 +93,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
 	
 	
 	private final static String CURRENT_CHOICE = "curChoice";
-	private final static String CURRENT_WIZARD = "curWizard";
+	//private final static String CURRENT_WIZARD = "curWizard";
 
 	
 	@Override
@@ -111,7 +117,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
         if (savedInstanceState != null) {
             // Restore last state for checked position.
             curCheckPosition = savedInstanceState.getLong(CURRENT_CHOICE, SipProfile.INVALID_ID);
-            curCheckWizard = savedInstanceState.getString(CURRENT_WIZARD);
+            //curCheckWizard = savedInstanceState.getString(CURRENT_WIZARD);
         }
 
         
@@ -169,13 +175,8 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        /*
-                         * ListProfileFrag f = (ListProfileFrag)
-                         * getSupportFragmentManager
-                         * ().findFragmentById(R.id.list); ListProfileAdapter ad
-                         * = (ListProfileAdapter) f.getListView().getAdapter();
-                         * ad.toggleDraggable(); return true;
-                         */
+                        AccountsEditListAdapter ad = (AccountsEditListAdapter) getListAdapter();
+                        ad.toggleDraggable();
                         return true;
                     }
                 }).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -222,42 +223,44 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
 	}
 	
 	private static final String THIS_FILE = null;
-    
-	/*
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-    	
-    	View v = inflater.inflate(R.layout.profiles_list, container, false);
-    	ListView lv = (ListView) v.findViewById(android.R.id.list);
-    	
-    	lv.setDropListener(new DropListener() {
-			@Override
-			public void drop(int from, int to) {
-				Log.d(THIS_FILE, "Drop from " + from + " to " + to);
-				int i;
-				ArrayList<Long> orderedList = new ArrayList<Long>();
-				CursorAdapter ad = (CursorAdapter) getListAdapter();
-				for(i=0; i < ad.getCount(); i++) {
-					orderedList.add(ad.getItemId(i));
-				}
-				
-				Long moved = orderedList.remove(from);
-				orderedList.add(to, moved);
-				Log.d(THIS_FILE, "new list is "+orderedList);
-				ContentResolver cr = getActivity().getContentResolver();
-				for(i=0; i<orderedList.size(); i++) {
-					Uri uri = ContentUris.withAppendedId(DBAdapter.PROFILE_ID_URI_BASE, orderedList.get(i));
-					ContentValues cv = new ContentValues();
-					cv.put(Profile.FIELD_PRIORITY, i);
-					cr.update(uri, cv, null, null);
-				}
-			}
-		});
-    	
-    	return v;
+        // Use custom drag and drop view
+        View v = inflater.inflate(R.layout.accounts_edit_list, container, false);
+        
+        DragnDropListView lv = (DragnDropListView) v.findViewById(android.R.id.list);
+        lv.setGrabberId(R.id.grabber);
+        // Setup the drop listener
+        lv.setOnDropListener(new DropListener() {
+            @Override
+            public void drop(int from, int to) {
+                Log.d(THIS_FILE, "Drop from " + from + " to " + to);
+                int i;
+                // First of all, compute what we get before move
+                ArrayList<Long> orderedList = new ArrayList<Long>();
+                CursorAdapter ad = (CursorAdapter) getListAdapter();
+                for(i=0; i < ad.getCount(); i++) {
+                    orderedList.add(ad.getItemId(i));
+                }
+                // Then, invert in the current list the two items ids
+                Long moved = orderedList.remove(from);
+                orderedList.add(to, moved);
+                
+                // Finally save that in db
+                ContentResolver cr = getActivity().getContentResolver();
+                for(i=0; i<orderedList.size(); i++) {
+                    Uri uri = ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, orderedList.get(i));
+                    ContentValues cv = new ContentValues();
+                    cv.put(SipProfile.FIELD_PRIORITY, i);
+                    cr.update(uri, cv, null, null);
+                }
+            }
+        });
+        
+        return v;
     }
-    */
     
     private void updateCheckedItem() {
     	if(curCheckPosition != SipProfile.INVALID_ID) {

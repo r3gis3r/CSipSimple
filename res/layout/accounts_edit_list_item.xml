@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010-2012 Regis Montoya (aka r3gis - www.r3gis.fr)
+	This file is part of CSipSimple.
+	 
+	CSipSimple is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	If you own a pjsip commercial license you can also redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public License
+	as an android library.
+	
+	CSipSimple is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	 
+	You should have received a copy of the GNU General Public License
+	along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:gravity="bottom"
+    android:orientation="horizontal" >
+
+    <com.csipsimple.widgets.DontPressWithParentLayout
+        android:id="@+id/indicator"
+        style="@style/list_left_column"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:background="@drawable/account_selector"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <CheckBox
+            android:id="@+id/AccCheckBoxActive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_wizard_expert"
+            android:button="@null"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:focusable="false" />
+
+        <ImageView
+            android:id="@+id/bar_onoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/activate_account"
+            android:paddingTop="4dip"
+            android:src="@drawable/ic_indicator_off" />
+    </com.csipsimple.widgets.DontPressWithParentLayout>
+
+    <com.csipsimple.widgets.DontPressWithParentLayout
+        android:id="@+id/grabber"
+        style="@style/list_left_column"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:background="@drawable/grabber"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+    </com.csipsimple.widgets.DontPressWithParentLayout>
+
+    <ImageView
+        android:layout_width="1dip"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/empty_description"
+        android:paddingBottom="4dip"
+        android:paddingTop="4dip"
+        android:scaleType="fitXY"
+        android:src="@drawable/divider_vertical_dark" />
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="16dip"
+        android:paddingRight="16dip" >
+
+        <TextView
+            android:id="@+id/AccTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/AccTextStatusView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:textColor="#888888" />
+    </LinearLayout>
+
+</LinearLayout>

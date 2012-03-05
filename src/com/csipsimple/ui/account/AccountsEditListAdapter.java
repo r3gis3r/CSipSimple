@@ -44,9 +44,12 @@ public class AccountsEditListAdapter extends SimpleCursorAdapter implements OnCl
         public TextView labelView;
         public TextView statusView;
         public View indicator;
+        public View grabber;
         public CheckBox activeCheckbox;
         public ImageView barOnOff;
     }
+
+    private boolean draggable = false;
 
     public static final class AccountRowTag {
         public long accountId;
@@ -63,12 +66,12 @@ public class AccountsEditListAdapter extends SimpleCursorAdapter implements OnCl
 
     public AccountsEditListAdapter(Context context, Cursor c) {
         super(context,
-                R.layout.accounts_list_item, c,
+                R.layout.accounts_edit_list_item, c,
                 new String[] {
-                    SipProfile.FIELD_DISPLAY_NAME
+                        SipProfile.FIELD_DISPLAY_NAME
                 },
                 new int[] {
-                    R.id.AccTextView
+                        R.id.AccTextView
                 }, 0);
     }
 
@@ -80,6 +83,7 @@ public class AccountsEditListAdapter extends SimpleCursorAdapter implements OnCl
         AccountListItemViews tagView = new AccountListItemViews();
         tagView.labelView = (TextView) view.findViewById(R.id.AccTextView);
         tagView.indicator = view.findViewById(R.id.indicator);
+        tagView.grabber = view.findViewById(R.id.grabber);
         tagView.activeCheckbox = (CheckBox) view.findViewById(R.id.AccCheckBoxActive);
         tagView.statusView = (TextView) view.findViewById(R.id.AccTextStatusView);
         tagView.barOnOff = (ImageView) tagView.indicator.findViewById(R.id.bar_onoff);
@@ -106,6 +110,9 @@ public class AccountsEditListAdapter extends SimpleCursorAdapter implements OnCl
         tagIndicator.accountId = account.id;
         tagIndicator.activated = account.active;
         tagView.indicator.setTag(tagIndicator);
+
+        tagView.indicator.setVisibility(draggable ? View.GONE : View.VISIBLE);
+        tagView.grabber.setVisibility(draggable ? View.VISIBLE : View.GONE);
 
         // Get the status of this profile
 
@@ -147,6 +154,35 @@ public class AccountsEditListAdapter extends SimpleCursorAdapter implements OnCl
         if (checkListener != null && tag != null) {
             checkListener.onToggleRow((AccountRowTag) tag);
         }
+    }
+
+    /**
+     * Set draggable mode of the adapter Ie show or hide the grabber icon
+     * 
+     * @param aDraggable if true we enter dragging mode
+     */
+    public void setDraggable(boolean aDraggable) {
+        draggable = aDraggable;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Toggle dragable mode
+     * 
+     * @see AccountsEditList#setDraggable(boolean aDraggable)
+     */
+    public void toggleDraggable() {
+        setDraggable(!draggable);
+    }
+
+    /**
+     * Get draggable mode of the adapter
+     * 
+     * @see AccountsEditList#setDraggable(boolean aDraggable)
+     * @return true if in dragging mode
+     */
+    public boolean isDraggable() {
+        return draggable;
     }
 
 }

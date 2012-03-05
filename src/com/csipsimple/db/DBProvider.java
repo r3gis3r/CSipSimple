@@ -414,7 +414,7 @@ public class DBProvider extends ContentProvider {
             case ACCOUNTS:
                 qb.setTables(SipProfile.ACCOUNTS_TABLE_NAME);
                 if(sortOrder == null) {
-                	finalSortOrder = SipProfile.FIELD_PRIORITY + " DESC";
+                	finalSortOrder = SipProfile.FIELD_PRIORITY + " ASC";
                 }
                 break;
             case ACCOUNTS_ID:
@@ -604,9 +604,19 @@ public class DBProvider extends ContentProvider {
             rowId = ContentUris.parseId(uri);
         }
         if (rowId >= 0) {
-
             if (matched == ACCOUNTS_ID) {
-                broadcastAccountChange(rowId);
+                // Don't broadcast if we only changed wizard or only changed priority
+                boolean doBroadcast = true;
+                if(values.size() == 1) {
+                    if(values.containsKey(SipProfile.FIELD_WIZARD)) {
+                        doBroadcast = false;
+                    }else if(values.containsKey(SipProfile.FIELD_PRIORITY)) {
+                        doBroadcast = false;
+                    }
+                }
+                if(doBroadcast) {
+                    broadcastAccountChange(rowId);
+                }
             } else if (matched == ACCOUNTS_STATUS_ID) {
                 broadcastRegistrationChange(rowId);
             }

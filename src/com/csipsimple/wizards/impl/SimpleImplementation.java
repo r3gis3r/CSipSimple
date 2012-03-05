@@ -56,7 +56,7 @@ public abstract class SimpleImplementation extends BaseImplementation {
 		bindFields();
 		
 		String display_name = account.display_name;
-		if(display_name.equalsIgnoreCase("")) {
+		if(TextUtils.isEmpty(display_name)) {
 			display_name = getDefaultName();
 		}
 		accountDisplayName.setText(display_name);

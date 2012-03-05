@@ -55,8 +55,8 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 	
 	public void fillLayout(final SipProfile account) {
 		bindFields();
-		if(!TextUtils.isEmpty(account.getDisplayName())) {
-			accountDisplayName.setText(account.getDisplayName());
+		if(!TextUtils.isEmpty(account.display_name)) {
+			accountDisplayName.setText(account.display_name);
 		}else {
 			accountDisplayName.setText(getDefaultName());
 		}
