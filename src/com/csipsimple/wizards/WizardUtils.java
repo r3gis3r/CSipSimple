@@ -655,7 +655,7 @@ public class WizardUtils {
                     R.drawable.ic_wizard_congstar, 10, 
                     new Locale[]{Locale.GERMANY}, false, false, 
                     CongstarTelekom.class));
-            WIZARDS_DICT.put("CONGSTARTEL", new WizardInfo("CONGSTARTEL", "Congstar QSC", 
+            WIZARDS_DICT.put("CONGSTARQSC", new WizardInfo("CONGSTARQSC", "Congstar QSC", 
                     R.drawable.ic_wizard_congstar, 10, 
                     new Locale[]{Locale.GERMANY}, false, false, 
                     CongstarQSC.class));
