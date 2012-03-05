@@ -268,12 +268,12 @@ public final class Compatibility {
                 android.os.Build.DEVICE.equalsIgnoreCase("streak")) {
             return true;
         }
-        // Motorola milestone 1 and 2 & motorola droid & defy
-        if (android.os.Build.DEVICE.toLowerCase().contains("milestone2") ||
+        // Motorola milestone 1 and 2 & motorola droid & defy not under 2.3
+        if ( (android.os.Build.DEVICE.toLowerCase().contains("milestone2") ||
                 android.os.Build.BOARD.toLowerCase().contains("sholes") ||
                 android.os.Build.PRODUCT.toLowerCase().contains("sholes") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("olympus") ||
-                (android.os.Build.DEVICE.toLowerCase().contains("umts_jordan") && !isCompatible(9))) {
+                android.os.Build.DEVICE.toLowerCase().contains("umts_jordan") ) && !isCompatible(9)) {
             return true;
         }
 
