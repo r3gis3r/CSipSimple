@@ -238,8 +238,12 @@
 
         <activity
             android:name="com.csipsimple.ui.OutgoingCallChooser"
+            android:allowTaskReparenting="true"
             android:configChanges="orientation"
-            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:label="@string/call"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.csipsimple.ui.InCallActivity2"
             android:theme="@style/CupcakeDialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL" />
@@ -276,10 +280,13 @@
 
         <activity-alias
             android:name="com.csipsimple.ui.PrivilegedOutgoingSipCallBroadcaster"
+            android:allowTaskReparenting="true"
             android:configChanges="orientation"
-            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
             android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
+            android:taskAffinity="com.csipsimple.ui.InCallActivity2"
             android:theme="@style/CupcakeDialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
@@ -291,11 +298,14 @@
         </activity-alias>
         <activity-alias
             android:name="com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster"
+            android:allowTaskReparenting="true"
             android:configChanges="orientation"
             android:enabled="false"
-            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
             android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
+            android:taskAffinity="com.csipsimple.ui.InCallActivity2"
             android:theme="@style/CupcakeDialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />

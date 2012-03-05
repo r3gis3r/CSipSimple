@@ -139,7 +139,7 @@ public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickL
 	public void onClick(View v) {
 		if(service != null) {
 			try {
-				service.setAccountRegistration((Integer)v.getTag(), 1);
+				service.setAccountRegistration(((Long)v.getTag()).intValue(), 1);
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Unable to contact service", e);
 			}
