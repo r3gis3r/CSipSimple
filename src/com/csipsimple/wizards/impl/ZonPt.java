@@ -69,6 +69,7 @@ public class ZonPt extends SimpleImplementation {
 
         acc.transport = SipProfile.TRANSPORT_TCP;
         acc.reg_uri = "sip:" + getText(accountUsername) + ".zpe.voxis.zon.pt";
+        acc.acc_id = "<sip:1290" + getText(accountUsername)+"@"+getDomain()+">";
         acc.proxies = new String[] {
             acc.reg_uri
         };
