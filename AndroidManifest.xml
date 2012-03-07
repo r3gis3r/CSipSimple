@@ -398,7 +398,7 @@
         <!-- Embedded plugins -->
         <!-- Call handlers -->
         <receiver
-            android:name=".plugins.telephony.CallHandler"
+            android:name="com.csipsimple.plugins.telephony.CallHandler"
             android:permission="android.permission.PROCESS_OUTGOING_CALLS" >
             <intent-filter>
                 <action android:name="com.csipsimple.phone.action.HANDLE_CALL" />
@@ -410,7 +410,7 @@
             android:name="com.csipsimple.service.PreferenceProvider"
             android:authorities="com.csipsimple.prefs" />
         <provider
-            android:name=".db.DBProvider"
+            android:name="com.csipsimple.db.DBProvider"
             android:authorities="com.csipsimple.db"
             android:process=":sipStack" />
 
@@ -420,7 +420,7 @@
             android:theme="@style/DarkTheme"
             android:title="@string/accounts" />
         <activity
-            android:name=".ui.account.AccountEdit"
+            android:name="com.csipsimple.ui.account.AccountEdit"
             android:theme="@style/DarkTheme" />
     </application>
 
