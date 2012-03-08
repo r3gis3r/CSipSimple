@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjmedia/include/pjmedia-audiodev/audiodev.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/include/pjmedia-audiodev/audiodev.h	2012-02-12 12:31:44.919521362 +0100
-+++ pjsip/sources/pjmedia/include/pjmedia-audiodev/audiodev.h	2012-02-12 12:31:50.331521085 +0100
+--- pjsip.orig/sources/pjmedia/include/pjmedia-audiodev/audiodev.h	2012-03-07 11:00:48.641318282 +0100
++++ pjsip/sources/pjmedia/include/pjmedia-audiodev/audiodev.h	2012-03-07 11:03:43.089310985 +0100
 @@ -412,6 +412,11 @@
       */
      unsigned ec_tail_ms;
@@ -16,8 +16,8 @@ Index: pjsip/sources/pjmedia/include/pjmedia-audiodev/audiodev.h
       * if PJMEDIA_AUD_DEV_CAP_PLC is set in the flags.
 Index: pjsip/sources/pjmedia/src/pjmedia/sound_port.c
 ===================================================================
---- pjsip.orig/sources/pjmedia/src/pjmedia/sound_port.c	2012-02-12 12:31:44.895521363 +0100
-+++ pjsip/sources/pjmedia/src/pjmedia/sound_port.c	2012-02-12 12:31:50.331521085 +0100
+--- pjsip.orig/sources/pjmedia/src/pjmedia/sound_port.c	2012-03-07 11:00:48.613318282 +0100
++++ pjsip/sources/pjmedia/src/pjmedia/sound_port.c	2012-03-07 11:03:43.093310985 +0100
 @@ -272,12 +272,13 @@
  	if ((snd_port->aud_param.flags & PJMEDIA_AUD_DEV_CAP_EC_TAIL)==0) {
  	    snd_port->aud_param.flags |= PJMEDIA_AUD_DEV_CAP_EC_TAIL;
@@ -35,9 +35,9 @@ Index: pjsip/sources/pjmedia/src/pjmedia/sound_port.c
  	    snd_port->aud_stream = NULL;
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_media.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_media.c	2012-02-12 12:31:44.951521360 +0100
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_media.c	2012-02-12 12:31:50.335521084 +0100
-@@ -3588,6 +3588,7 @@
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_media.c	2012-03-07 11:02:03.665315145 +0100
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_media.c	2012-03-07 11:03:43.093310985 +0100
+@@ -3621,6 +3621,7 @@
  	param->flags |= (PJMEDIA_AUD_DEV_CAP_EC | PJMEDIA_AUD_DEV_CAP_EC_TAIL);
  	param->ec_enabled = PJ_TRUE;
  	param->ec_tail_ms = pjsua_var.media_cfg.ec_tail_len;
@@ -45,7 +45,7 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_media.c
      } else {
  	param->flags &= ~(PJMEDIA_AUD_DEV_CAP_EC|PJMEDIA_AUD_DEV_CAP_EC_TAIL);
      }
-@@ -4035,6 +4036,7 @@
+@@ -4068,6 +4069,7 @@
  PJ_DEF(pj_status_t) pjsua_set_ec(unsigned tail_ms, unsigned options)
  {
      pjsua_var.media_cfg.ec_tail_len = tail_ms;

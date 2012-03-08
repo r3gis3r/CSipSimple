@@ -34,7 +34,7 @@ using namespace webrtc;
 /* webrtc_cap_ device info */
 struct webrtc_cap_dev_info {
 	pjmedia_vid_dev_info info;
-	WebRtc_UWord8 webrtc_id[256];
+	char webrtc_id[256];
 	VideoCaptureCapability _capability[PJMEDIA_VID_DEV_INFO_FMT_CNT]; /**< The capability to use for this stream */
 	VideoCaptureRotation orientation;
 };
@@ -160,7 +160,7 @@ static pj_status_t webrtc_cap_factory_init(pjmedia_vid_dev_factory *f) {
 		pj_bzero(ddi, sizeof(*ddi));
 
 		// Get infos from webRTC
-		WebRtc_UWord8 name[256];
+		char name[256];
 		// Reverse index to find front camera before
 		unsigned cam_index = (cf->dev_count - d - 1 );
 		//unsigned cam_index = d;
@@ -299,7 +299,8 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 	struct webrtc_cap_factory *cf = (struct webrtc_cap_factory*) f;
 	pj_pool_t *pool;
 	struct webrtc_cap_stream *strm;
-	WebRtc_UWord8* webrtc_id;
+	char* webrtc_id;
+	VideoCaptureRotation rot;
 	unsigned i,
 		oWidth, oHeight, oFps,
 		nWidth, nHeight, nFps,
@@ -339,9 +340,10 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 	// Hold ref on video capture.
 	strm->_videoCapture->AddRef();
 
+	rot = cf->dev_info[param->cap_id].orientation;
 	// For now leave as it because seems to have a buggy use of libyuv in webrtc...
 	// Height seems to be +1 than it should be
-	//strm->_videoCapture->SetCaptureRotation(cf->dev_info[param->cap_id].orientation);
+	//strm->_videoCapture->SetCaptureRotation(rot);
 
 	PJ_LOG(4, (THIS_FILE, "Create for %s with idx %d", webrtc_id, param->cap_id));
 	// WARNING : we should NEVER create a capability here because webRTC here is not necessarily
