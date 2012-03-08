@@ -128,6 +128,7 @@ import com.csipsimple.wizards.impl.Vanbergsystems;
 import com.csipsimple.wizards.impl.Viva;
 import com.csipsimple.wizards.impl.VoipBel;
 import com.csipsimple.wizards.impl.VoipMS;
+import com.csipsimple.wizards.impl.VoipNor;
 import com.csipsimple.wizards.impl.VoipTel;
 import com.csipsimple.wizards.impl.Vono;
 import com.csipsimple.wizards.impl.WiMobile;
@@ -340,6 +341,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_amivox, 18, 
                     new Locale[]{  }, false, true, 
                     Amivox.class));
+            WIZARDS_DICT.put("VOIPNOR", new WizardInfo("VOIPNOR", "VOIPNOR", 
+                    R.drawable.ic_wizard_voipnor, 9, 
+                    new Locale[]{ }, false, true, 
+                    VoipNor.class));
 			
             
 			
