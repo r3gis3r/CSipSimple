@@ -104,6 +104,16 @@ public final class CustomDistribution {
 	public static boolean supportMessaging() {
 		return true;
 	}
+	
+	/**
+	 * Do we want to display record call option while in call
+	 * If true the record of conversation will be enabled both in 
+	 * ongoing call view and in settings as "auto record" feature
+	 * @return true if the feature is enabled in this distribution
+	 */
+    public static boolean supportCallRecord() {
+        return true;
+    }
 
 	/**
 	 * Shall we force the no mulitple call feature to be set to false
@@ -112,5 +122,6 @@ public final class CustomDistribution {
 	public static boolean forceNoMultipleCalls() {
 		return false;
 	}
+
 	
 }

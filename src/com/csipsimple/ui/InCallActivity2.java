@@ -552,7 +552,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(Menu.NONE, AUDIO_SETTINGS_MENU, Menu.NONE, R.string.prefs_media).setIcon(
                 R.drawable.ic_menu_media);
-        menu.add(Menu.NONE, RECORD_MENU, Menu.NONE, R.string.record).setIcon(R.drawable.record);
+        if(CustomDistribution.supportCallRecord()) {
+            menu.add(Menu.NONE, RECORD_MENU, Menu.NONE, R.string.record).setIcon(R.drawable.record);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

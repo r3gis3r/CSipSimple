@@ -71,6 +71,9 @@ public class PrefsCalls extends GenericPrefs {
 		if(CustomDistribution.forceNoMultipleCalls()) {
 			hidePreference(null, SipConfigManager.SUPPORT_MULTIPLE_CALLS);
 		}
+		if(!CustomDistribution.supportCallRecord()) {
+		    hidePreference(null, SipConfigManager.AUTO_RECORD_CALLS);
+		}
 	}
 	
 	
