@@ -1,32 +1,34 @@
-all : libraries
+BUILD_DIRECTORY := build
+FFMPEG_BUILD_DIRECTORY := $(BUILD_DIRECTORY)/ffmpeg
+X264_BUILD_DIRECTORY := $(BUILD_DIRECTORY)/x264
+FFMPEG_TEST_LIB := lib/libavcodec.a
+X264_TEST_LIB := lib/libx264.a
 
-libraries : libraries-armeabi #libraries-armeabi-v7a
+TARGETS := armeabi armeabi-v7a x86
 
-libraries-armeabi : build/ffmpeg/armeabi/lib/libavcodec.a
-#libraries-armeabi-v7a : build/ffmpeg/armeabi-v7a/lib/libavcodec.a
+FFMPEG_LIBS := $(foreach TARGET, $(TARGETS),$(FFMPEG_BUILD_DIRECTORY)/$(TARGET)/$(FFMPEG_TEST_LIB))
+X264_LIBS := $(foreach TARGET, $(TARGETS),$(X264_BUILD_DIRECTORY)/$(TARGET)/$(X264_TEST_LIB))
 
-build/ffmpeg/armeabi/lib/libavcodec.a : ffmpeg_src build/x264/armeabi/lib/libx264.a
-	./build_ffmpeg.sh armeabi
 
-#build/ffmpeg/armeabi-v7a/lib/libavcodec.a : ffmpeg_src build/x264/armeabi-v7a/lib
-#	./build_ffmpeg.sh armv7a
+all : $(FFMPEG_LIBS) $(X264_LIBS)
+	# All lib
 
-build/x264/armeabi/lib/libx264.a : x264_src
-	./build_x264.sh armeabi
+$(X264_BUILD_DIRECTORY)/%/$(X264_TEST_LIB) : x264_src/configure
+	./build_x264.sh $(subst /$(X264_TEST_LIB),,$(subst $(X264_BUILD_DIRECTORY)/,,$@))
 
-#build/x264/armeabi-v7a/lib : x264_src
-#	./build_x264.sh armv7a
 
+$(FFMPEG_BUILD_DIRECTORY)/%/$(FFMPEG_TEST_LIB) : ffmpeg_src/VERSION $(X264_BUILD_DIRECTORY)/%/$(X264_TEST_LIB)
+	./build_ffmpeg.sh $(subst /$(FFMPEG_TEST_LIB),,$(subst $(FFMPEG_BUILD_DIRECTORY)/,,$@))
 
 # Source checkout
-ffmpeg_src :
+ffmpeg_src/VERSION :
 	git clone git://git.videolan.org/ffmpeg.git ffmpeg_src; \
 	cd ffmpeg_src; \
 	git fetch --tags; \
 	git checkout origin; \
 	git checkout n0.10
 
-x264_src :
+x264_src/configure :
 	git clone git://git.videolan.org/x264.git x264_src
 	# cd x264_src; \
 	# git fetch --tags; \

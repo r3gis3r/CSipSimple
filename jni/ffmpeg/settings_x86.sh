@@ -10,11 +10,11 @@ if [[ "x$ANDROID_NDK" == "x" ]]; then
 fi
 
 NDK_PLATFORM_VERSION=9
-NDK_SYSROOT=$ANDROID_NDK/platforms/android-$NDK_PLATFORM_VERSION/arch-arm
+NDK_SYSROOT=$ANDROID_NDK/platforms/android-$NDK_PLATFORM_VERSION/arch-x86
 NDK_UNAME=`uname -s | tr '[A-Z]' '[a-z]'`
-NDK_TOOLCHAIN_BASE=$ANDROID_NDK/toolchains/arm-linux-androideabi-4.4.3/prebuilt/$NDK_UNAME-x86
-CC="$NDK_TOOLCHAIN_BASE/bin/arm-linux-androideabi-gcc --sysroot=$NDK_SYSROOT"
-LD=$NDK_TOOLCHAIN_BASE/bin/arm-linux-androideabi-ld
+NDK_TOOLCHAIN_BASE=$ANDROID_NDK/toolchains/x86-4.4.3/prebuilt/$NDK_UNAME-x86
+CC="$NDK_TOOLCHAIN_BASE/bin/i686-android-linux-gcc --sysroot=$NDK_SYSROOT"
+LD=$NDK_TOOLCHAIN_BASE/bin/i686-android-linux-ld
 
 # i use only a small number of formats - set this to 0 if you want everything.
 # changed 0 to the default, so it'll compile shitloads of codecs normally

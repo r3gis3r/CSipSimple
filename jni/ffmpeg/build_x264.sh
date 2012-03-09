@@ -1,14 +1,21 @@
 #!/bin/bash
 pushd `dirname $0`
-. settings.sh
+VERSION=$1
+DEST=`pwd`/build/x264
 
+case "$VERSION" in
+	x86)
+		. settings_x86.sh
+		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/i686-android-linux- --enable-pic --disable-asm "
+		;;
+	*)
+		. settings.sh
+		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/arm-linux-androideabi- --enable-pic --host=arm-linux "
+		;;
+esac
 
 pushd x264_src
-DEST=`pwd`/../build/x264
-VERSION=$1
 
-
-FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/arm-linux-androideabi- --enable-pic --host=arm-linux "
 FLAGS="$FLAGS --enable-static --disable-cli"
 FLAGS="$FLAGS --sysroot=$NDK_SYSROOT"
 
@@ -20,10 +27,15 @@ case "$VERSION" in
 		# renamed files
 		ABI="armeabi-v7a"
 		;;
-	armv7a)
+	armeabi-v7a)
 		EXTRA_CFLAGS="-march=armv7-a -mfloat-abi=softfp"
 		EXTRA_LDFLAGS=""
 		ABI="armeabi-v7a"
+		;;
+	x86)
+		EXTRA_CFLAGS=""
+		EXTRA_LDFLAGS=""
+		ABI="x86"
 		;;
 	*)
 		EXTRA_CFLAGS=""
@@ -34,6 +46,7 @@ esac
 DEST="$DEST/$ABI"
 FLAGS="$FLAGS --prefix=$DEST"
 
+echo "Build in $FLAGS --extra-cflags=\"$EXTRA_CFLAGS\" --extra-ldflags=\"$EXTRA_LDFLAGS\""
 mkdir -p $DEST
 ./configure $FLAGS --extra-cflags="$EXTRA_CFLAGS" --extra-ldflags="$EXTRA_LDFLAGS" | tee $DEST/configuration.txt
 make clean

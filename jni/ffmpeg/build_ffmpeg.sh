@@ -1,14 +1,21 @@
 #!/bin/bash
 pushd `dirname $0`
-. settings.sh
+VERSION=$1
+DEST=`pwd`/build/ffmpeg
 
+case "$VERSION" in
+	x86)
+		. settings_x86.sh
+		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/i686-android-linux- --enable-pic --target-os=linux --arch=x86 --disable-asm "
+		;;
+	*)
+		. settings.sh
+		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/arm-linux-androideabi- --enable-pic --target-os=linux --arch=arm "
+		;;
+esac
 
 pushd ffmpeg_src
-DEST=`pwd`/../build/ffmpeg
-VERSION=$1
 
-
-FLAGS="--target-os=linux --cross-prefix=$NDK_TOOLCHAIN_BASE/bin/arm-linux-androideabi- --arch=arm"
 FLAGS="$FLAGS --sysroot=$NDK_SYSROOT"
 FLAGS="$FLAGS --disable-shared --disable-symver"
 FLAGS="$FLAGS --disable-everything"
@@ -29,11 +36,16 @@ case "$VERSION" in
 		# renamed files
 		ABI="armeabi-v7a"
 		;;
-	armv7a)
+	armeabi-v7a)
 		#EXTRA_CFLAGS="$EXTRA_CFLAGS -march=armv7-a -mfloat-abi=softfp"
 		EXTRA_CFLAGS="$EXTRA_CFLAGS -I../build/x264/armeabi-v7a/include"
 		EXTRA_LDFLAGS="$EXTRA_LDFLAGS -L../build/x264/armeabi-v7a/lib"
 		ABI="armeabi-v7a"
+		;;
+	x86)
+		EXTRA_CFLAGS="$EXTRA_CFLAGS -I../build/x264/x86/include"
+		EXTRA_LDFLAGS="$EXTRA_LDFLAGS -L../build/x264/x86/lib"
+		ABI="x86"
 		;;
 	*)
 		EXTRA_CFLAGS="$EXTRA_CFLAGS -I../build/x264/armeabi/include"
