@@ -55,9 +55,10 @@ jni/pjsip/.patched_sources : $(pjsip_patches)
 	touch .patched_sources
 
 jni/webrtc/.patched_sources : $(webrtc_patches)
+	#quilt push -a && -- disabled
 	cd jni/webrtc && \
-	quilt push -a && \
 	touch .patched_sources
+	 
 
 update :
 	if [ -f jni/pjsip/.patched_sources ]; then cd jni/pjsip && quilt pop -af; rm .patched_sources; cd -; fi;
