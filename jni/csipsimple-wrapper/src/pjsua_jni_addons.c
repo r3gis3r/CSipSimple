@@ -61,6 +61,39 @@ struct css_data css_var;
 	return pj_str((char *) "INVALID/8000/1");
 }
 
+
+
+/**
+ * Get nbr of codecs
+ */
+PJ_DECL(int) codecs_vid_get_nbr() {
+#if PJMEDIA_HAS_VIDEO
+ 	pjsua_codec_info c[32];
+ 	unsigned i, count = PJ_ARRAY_SIZE(c);
+ 	pj_status_t status = pjsua_vid_enum_codecs(c, &count);
+ 	if (status == PJ_SUCCESS) {
+ 		return count;
+ 	}
+#endif
+ 	return 0;
+ }
+
+/**
+ * Get codec id
+ */
+ PJ_DECL(pj_str_t) codecs_vid_get_id(int codec_id) {
+#if PJMEDIA_HAS_VIDEO
+	pjsua_codec_info c[32];
+	unsigned i, count = PJ_ARRAY_SIZE(c);
+
+	pjsua_vid_enum_codecs(c, &count);
+	if (codec_id < count) {
+		return c[codec_id].codec_id;
+	}
+#endif
+	return pj_str((char *) "INVALID/8000/1");
+}
+
 /**
  * Get call infos
  */PJ_DECL(pj_str_t) call_dump(pjsua_call_id call_id, pj_bool_t with_media,

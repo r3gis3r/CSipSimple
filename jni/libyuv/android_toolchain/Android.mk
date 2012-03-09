@@ -23,12 +23,12 @@ LOCAL_SRC_FILES := source/compare.cc \
 	source/video_common.cc 
 	
 	
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-	LOCAL_ARM_NEON  := true
-	LOCAL_SRC_FILES += source/row_neon.cc source/rotate_neon.cc
-else
+#ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+#	LOCAL_ARM_NEON  := true
+#	LOCAL_SRC_FILES += source/row_neon.cc source/rotate_neon.cc
+#else
 	LOCAL_SRC_FILES += source/row_posix.cc
-endif
+#endif
 
 LOCAL_STATIC_LIBRARIES := cpufeatures
 

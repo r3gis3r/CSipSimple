@@ -1,0 +1,35 @@
+Index: webrtc/sources/system_wrappers/source/Android.mk
+===================================================================
+--- webrtc.orig/sources/system_wrappers/source/Android.mk	2012-03-09 18:33:04.174757650 +0100
++++ webrtc/sources/system_wrappers/source/Android.mk	2012-03-09 18:33:27.834756660 +0100
+@@ -18,6 +18,7 @@
+ LOCAL_CPP_EXTENSION := .cc
+ LOCAL_SRC_FILES := \
+     map.cc \
++    rw_lock_generic.cc \
+     sort.cc \
+     aligned_malloc.cc \
+     atomic32.cc \
+Index: webrtc/sources/system_wrappers/source/rw_lock.cc
+===================================================================
+--- webrtc.orig/sources/system_wrappers/source/rw_lock.cc	2012-03-09 18:33:13.238757271 +0100
++++ webrtc/sources/system_wrappers/source/rw_lock.cc	2012-03-09 18:33:32.982756444 +0100
+@@ -14,6 +14,9 @@
+ 
+ #if defined(_WIN32)
+     #include "rw_lock_win.h"
++#elif defined(WEBRTC_ANDROID)
++	#include <stdlib.h>
++	#include "rw_lock_generic.h"
+ #else
+     #include "rw_lock_posix.h"
+ #endif
+@@ -23,6 +26,8 @@
+ {
+ #ifdef _WIN32
+     RWLockWrapper* lock =  new RWLockWindows();
++#elif defined(WEBRTC_ANDROID)
++    RWLockWrapper* lock =  new RWLockWrapperGeneric();
+ #else
+     RWLockWrapper* lock =  new RWLockPosix();
+ #endif
