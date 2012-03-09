@@ -49,6 +49,7 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
+import com.csipsimple.utils.Log;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.widgets.AccountChooserButton;
 
@@ -61,6 +62,7 @@ import com.csipsimple.widgets.AccountChooserButton;
  */
 public class CallLogDetailsFragment extends Fragment {
 
+    private static final String THIS_FILE = "CallLogDetailsFragment";
     /** A long array extra containing ids of call log entries to display. */
     public static final String EXTRA_CALL_LOG_IDS = "EXTRA_CALL_LOG_IDS";
 
@@ -103,6 +105,7 @@ public class CallLogDetailsFragment extends Fragment {
     private static final int PROFILE_ID_COLUMN_INDEX = 4;
     private static final int STATUS_CODE_COLUMN_INDEX = 5;
     private static final int STATUS_TEXT_COLUMN_INDEX = 6;
+
 
     /**
      * Action when the call icon is pressed
@@ -171,6 +174,11 @@ public class CallLogDetailsFragment extends Fragment {
     private void updateData(final Uri... callUris) {
 
         final int numCalls = callUris.length;
+        if(numCalls == 0) {
+            Log.w(THIS_FILE, "No calls logs as parameters");
+            return;
+        }
+        
         PhoneCallDetails[] details = new PhoneCallDetails[numCalls];
         for (int index = 0; index < numCalls; ++index) {
             details[index] = getPhoneCallDetailsForUri(callUris[index]);

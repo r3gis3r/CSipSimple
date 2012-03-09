@@ -3,6 +3,7 @@
 APP_OPTIM        := release
 
 APP_ABI := armeabi armeabi-v7a
+#APP_ABI := x86 # WARNING --- for now, if you want to activate x86 build, set APP_OPTIM to "debug"
 
 
 

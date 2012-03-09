@@ -43,9 +43,9 @@ else ifeq ($(ARCH_ARM_HAVE_ARMV7A),true)
 MY_WEBRTC_COMMON_DEFS += \
     '-DWEBRTC_ANDROID_ARMV7A'
 endif
-else ifeq ($(TARGET_ARCH),x86)
-MY_WEBRTC_COMMON_DEFS += \
-    '-DWEBRTC_USE_SSE2'
+#else ifeq ($(TARGET_ARCH),x86)
+#MY_WEBRTC_COMMON_DEFS += \
+#    '-DWEBRTC_USE_SSE2'
 endif
 
 # Disable not wanted (for now) codecs

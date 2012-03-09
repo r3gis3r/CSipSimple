@@ -55,10 +55,10 @@ LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/ndk_stl_fixer.cpp
 LOCAL_LDLIBS := -llog
 
 # -- debug build
-ifeq ($(APP_OPTIM),debug)
-LOCAL_CFLAGS += -g #debug
-LOCAL_LDFLAGS += -Wl,-Map,xxx.map #create map fil
-endif
+#ifeq ($(APP_OPTIM),debug)
+#LOCAL_CFLAGS += -g #debug
+#LOCAL_LDFLAGS += -Wl,-Map,xxx.map #create map fil
+#endif
 # 
 
 ifeq ($(MY_USE_TLS),1)
