@@ -54,7 +54,6 @@
     <string name="disconnect_and_incoming_explaination">Vous êtes configuré pour être disponible sur ce réseau !!! En cliquant OK ici vous confirmez que vous ne voulez plus être disponible jusqu\'au prochain redémarrage de l\'application</string>
     <string name="disconnect_and_will_restart">"Sera redemarré à nouveau lorsque : "<xliff:g id="networks" example="3G">%s</xliff:g>" sera à nouveau disponible (changez vos options si vous ne voulez ça)"</string>
     <string name="gadget_title">Interupteur de compte SIP</string>
-    <string name="search_in_contacts">Chercher dans les contacts</string>
     <string name="pickup_sip_uri">Recherche d\'URI SIP</string>
     <string name="display_icon_in_status_bar_desc">L\'application doit-elle afficher une icone dans la barre de notification lorsque enregistrée</string>
     <string name="display_icon_in_status_bar">Afficher une icône dans la barre de notification</string>

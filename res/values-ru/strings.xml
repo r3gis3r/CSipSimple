@@ -54,7 +54,6 @@
     <string name="disconnect_and_incoming_explaination">Приложение настроено так, чтобы быть доступным для этой сети! После нажатия кнопки ОК Вы не будете доступны до следующего запуска приложения</string>
     <string name="disconnect_and_will_restart">"Автоматически перезапустится, когда: "<xliff:g id="networks" example="3G">%s</xliff:g>" будет доступно (измените настройки, если не хотите)"</string>
     <string name="gadget_title">Переключатель аккаунтов</string>
-    <string name="search_in_contacts">Поиск в контактах</string>
     <string name="pickup_sip_uri">Выберите SIP контакт</string>
     <string name="display_icon_in_status_bar_desc">В панеле уведомлений будет показана иконка при регистрации в сети</string>
     <string name="display_icon_in_status_bar">Показывать иконку</string>
