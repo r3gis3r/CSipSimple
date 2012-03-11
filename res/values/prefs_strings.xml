@@ -211,6 +211,8 @@
     <string name="no_zrtp">No ZRTP</string>
     <string name="create_zrtp">Create ZRTP</string>
     <string name="default_str">Default</string>
+    <string name="auto_connect_bluetooth">Auto connect bluetooth</string>
+    <string name="auto_connect_bluetooth_desc">Try to use BT SCO automatically (may break standard audio routing case)</string>
 
     <!-- UI -->
     <string name="general_ui">General user interface</string>

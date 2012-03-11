@@ -63,6 +63,7 @@ public class SipConfigManager {
 	public static final String SND_STREAM_LEVEL = "snd_stream_level";
 	public static final String HEADSET_ACTION = "headset_action";
 	public static final String AUDIO_IMPLEMENTATION = "audio_implementation";
+    public static final String AUTO_CONNECT_BLUETOOTH = "auto_connect_bluetooth";
 	
 	
 	//UI

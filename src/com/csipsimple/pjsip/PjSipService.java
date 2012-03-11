@@ -737,6 +737,11 @@ public class PjSipService {
         return status == pjsuaConstants.PJ_SUCCESS;
     }
 
+    /**
+     * Synchronize content provider backend from pjsip stack
+     * @param pjsuaId the pjsua id of the account to synchronize
+     * @throws SameThreadException
+     */
     public void updateProfileStateFromService(int pjsuaId) throws SameThreadException {
         if (!created) {
             return;
@@ -772,6 +777,11 @@ public class PjSipService {
         }
     }
 
+    /**
+     * Get the dynamic state of the profile
+     * @param account the sip profile from database. Important field is id. 
+     * @return the dynamic sip profile state
+     */
     public SipProfileState getProfileState(SipProfile account) {
         if (!created || account == null) {
             return null;
@@ -799,29 +809,53 @@ public class PjSipService {
     }
 
     private static ArrayList<String> codecs = new ArrayList<String>();
+    private static ArrayList<String> video_codecs = new ArrayList<String>();
     private static boolean codecs_initialized = false;
 
+    /**
+     * Reset the list of codecs stored
+     */
     public static void resetCodecs() {
         synchronized (codecs) {
             if (codecs_initialized) {
                 codecs.clear();
+                video_codecs.clear();
                 codecs_initialized = false;
             }
         }
     }
 
+    /**
+     * Retrieve codecs from pjsip stack and store it inside preference storage 
+     * so that it can be retrieved in the interface view
+     * @throws SameThreadException
+     */
     private void initCodecs() throws SameThreadException {
 
         synchronized (codecs) {
             if (!codecs_initialized) {
-                int nbrCodecs = pjsua.codecs_get_nbr();
-                for (int i = 0; i < nbrCodecs; i++) {
+                int nbrCodecs, i;
+                
+                // Audio codecs
+                nbrCodecs = pjsua.codecs_get_nbr();
+                for (i = 0; i < nbrCodecs; i++) {
                     String codecId = pjStrToString(pjsua.codecs_get_id(i));
                     codecs.add(codecId);
                     // Log.d(THIS_FILE, "Added codec " + codecId);
                 }
                 // Set it in prefs if not already set correctly
                 prefsWrapper.setCodecList(codecs);
+                
+                // Video codecs
+                nbrCodecs = pjsua.codecs_vid_get_nbr();
+                for (i = 0; i < nbrCodecs; i++) {
+                    String codecId = pjStrToString(pjsua.codecs_vid_get_id(i));
+                    video_codecs.add(codecId);
+                    Log.d(THIS_FILE, "Added video codec " + codecId);
+                }
+                // Set it in prefs if not already set correctly
+                prefsWrapper.setVideoCodecList(video_codecs);
+                
                 codecs_initialized = true;
                 // We are now always capable of tls and srtp !
                 prefsWrapper.setLibCapability(PreferencesProviderWrapper.LIB_CAP_TLS, true);
@@ -830,36 +864,70 @@ public class PjSipService {
         }
 
     }
+    
+    /**
+     * Append log for the codec in String builder
+     * @param sb the buffer to be appended with the codec info
+     * @param codec the codec name
+     * @param prio the priority of the codec
+     */
+    private void buffCodecLog(StringBuilder sb, String codec, short prio) {
+        if (prio > 0 && Log.getLogLevel() >= 4) {
+            sb.append(codec);
+            sb.append(" (");
+            sb.append(prio);
+            sb.append(") - ");
+        }
+    }
 
+    /**
+     * Set the codec priority in pjsip stack layer based on preference store
+     * @throws SameThreadException
+     */
     private void setCodecsPriorities() throws SameThreadException {
+        ConnectivityManager cm = ((ConnectivityManager) service
+                .getSystemService(Context.CONNECTIVITY_SERVICE));
+        
         synchronized (codecs) {
             if (codecs_initialized) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Added codecs : ");
-                ConnectivityManager cm = ((ConnectivityManager) service
-                        .getSystemService(Context.CONNECTIVITY_SERVICE));
                 NetworkInfo ni = cm.getActiveNetworkInfo();
                 if (ni != null) {
+                    
+                    StringBuilder audioSb = new StringBuilder();
+                    StringBuilder videoSb = new StringBuilder();
+                    audioSb.append("Audio codecs : ");
+                    videoSb.append("Video codecs : ");
+                    
                     String currentBandType = prefsWrapper.getPreferenceStringValue(
                             SipConfigManager.getBandTypeKey(ni.getType(), ni.getSubtype()),
                             SipConfigManager.CODEC_WB);
+                    
                     synchronized (codecs) {
+                        
                         for (String codec : codecs) {
                             short aPrio = prefsWrapper.getCodecPriority(codec, currentBandType,
                                     "-1");
-                            if (aPrio > 0) {
-                                sb.append(codec);
-                                sb.append(" (");
-                                sb.append(aPrio);
-                                sb.append(") - ");
+                            buffCodecLog(audioSb, codec, aPrio);
+                            if (aPrio >= 0) {
+                                pjsua.codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
                             }
+                        }
+                        
+                        for(String codec : video_codecs) {
+                            short aPrio = prefsWrapper.getCodecPriority(codec, currentBandType,
+                                    "-1");
+                            buffCodecLog(videoSb, codec, aPrio);
                             if (aPrio >= 0) {
                                 pjsua.codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
                             }
                         }
                     }
+                    
+                    Log.d(THIS_FILE, audioSb.toString());
+                    Log.d(THIS_FILE, videoSb.toString());
                 }
-                Log.d(THIS_FILE, sb.toString());
+                
+                
             }
         }
     }

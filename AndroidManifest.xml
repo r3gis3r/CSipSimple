@@ -159,10 +159,6 @@
 
         <!-- Accounts -->
         <activity
-            android:name="com.csipsimple.ui.ReorderAccountsList"
-            android:configChanges="orientation"
-            android:label="@string/accounts" />
-        <activity
             android:name="com.csipsimple.ui.account.AccountFilters"
             android:configChanges="orientation"
             android:label="@string/filters" />
@@ -216,7 +212,8 @@
         <activity
             android:name="com.csipsimple.ui.prefs.Codecs"
             android:configChanges="orientation"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:label="@string/codecs"
+            android:theme="@style/DarkTheme" />
         <activity
             android:name="com.csipsimple.ui.prefs.AudioTester"
             android:label="@string/test_audio"

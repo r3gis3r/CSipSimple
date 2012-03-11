@@ -71,7 +71,7 @@ public class MediaManager {
 	//By default we assume user want bluetooth.
 	//If bluetooth is not available connection will never be done and then
 	//UI will not show bluetooth is activated
-	private boolean userWantBluetooth = true;
+	private boolean userWantBluetooth = false;
 	private boolean userWantSpeaker = false;
 	private boolean userWantMicrophoneMute = false;
 
@@ -122,6 +122,7 @@ public class MediaManager {
 		useSgsWrkAround = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.USE_SGS_CALL_HACK);
 		useWebRTCImpl = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK);
 		doFocusAudio = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO);
+		userWantBluetooth = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_BLUETOOTH);
 	}
 	
 	public void stopService() {

@@ -164,6 +164,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.USE_WEBRTC_HACK, false);
 		put(SipConfigManager.DO_FOCUS_AUDIO, true);
 		put(SipConfigManager.INTEGRATE_WITH_NATIVE_MUSIC, true);
+		put(SipConfigManager.AUTO_CONNECT_BLUETOOTH, false);
 		
 		//UI
 		put(SipConfigManager.PREVENT_SCREEN_ROTATION, true);
@@ -687,15 +688,26 @@ public class PreferencesWrapper {
 		}
 	}
 
+	/**
+	 * Get current mode for the user
+	 * By default the user is a default user. If becomes an advanced user he will have access to expert mode.
+	 * @return
+	 */
 	public boolean isAdvancedUser() {
 		return prefs.getBoolean(IS_ADVANCED_USER, false);
 	}
 
-
+	/**
+	 * Toogle the user into an expert user. It will give him access to expert settings if was an expert user
+	 */
 	public void toogleExpertMode() {
 		setPreferenceBooleanValue(IS_ADVANCED_USER, !isAdvancedUser());
 	}
 	
+	/**
+	 * Turn the application as quited by user. It will not register anymore
+	 * @param quit true if the app should be considered as finished.
+	 */
 	public void setQuit(boolean quit) {
 		setPreferenceBooleanValue(HAS_BEEN_QUIT, quit);
 	}
@@ -704,19 +716,40 @@ public class PreferencesWrapper {
 	// Codec list management -- only internal use set at each start of the sip stack
 	public static final String CODECS_SEPARATOR = "|";
 	public static final String CODECS_LIST = "codecs_list";
+    public static final String CODECS_VIDEO_LIST = "codecs_video_list";
 	public static final String BACKUP_PREFIX = "backup_";
 	public static final String LIB_CAP_TLS = "cap_tls";
 	public static final String LIB_CAP_SRTP = "cap_srtp";
 	
-	
+	/**
+	 * Get list of audio codecs registered in preference system by @see {@link PreferencesProviderWrapper#setCodecList(java.util.List)}
+	 * @return List of possible audio codecs
+	 */
 	public String[] getCodecList() {
 		return TextUtils.split(prefs.getString(CODECS_LIST, ""),  Pattern.quote(CODECS_SEPARATOR) );
 	}
 
+    /**
+     * Get list of video codecs registered in preference system by @see {@link PreferencesProviderWrapper#setVideoCodecList(java.util.List)}
+     * @return List of possible video codecs
+     */
+    public String[] getVideoCodecList() {
+        return TextUtils.split(prefs.getString(CODECS_VIDEO_LIST, ""),  Pattern.quote(CODECS_SEPARATOR) );
+    }
+	
+	/**
+	 * Get the capability of the lib registered in preference system
+	 * @param cap on of the lib capabilty. @see {@link PreferencesProviderWrapper#LIB_CAP_SRTP}, {@link PreferencesProviderWrapper#LIB_CAP_TLS}
+	 * @return True if the lib if capable of this feature
+	 */
 	public boolean getLibCapability(String cap) {
 		return prefs.getBoolean(BACKUP_PREFIX + cap, false);
 	}
 
+	/**
+	 * Retrieve the context used for this preference wrapper
+	 * @return an android context
+	 */
 	public Context getContext() {
 		return context;
 	}

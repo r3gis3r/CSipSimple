@@ -42,6 +42,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PreferencesProviderWrapper {
 
@@ -567,11 +568,22 @@ public class PreferencesProviderWrapper {
 		return getPreferenceStringValue(SipConfigManager.TURN_SERVER);
 	}
 	
-	public void setCodecList(ArrayList<String> codecs) {
+	/**
+	 * Setup codecs list
+	 * Should be only done by the service that get infos from the sip stack(s)
+	 * @param codecs the list of codecs
+	 */
+	public void setCodecList(List<String> codecs) {
 		if(codecs != null) {
 			setPreferenceStringValue(PreferencesWrapper.CODECS_LIST, TextUtils.join(PreferencesWrapper.CODECS_SEPARATOR, codecs));
 		}
 	}
+	
+    public void setVideoCodecList(List<String> codecs) {
+        if(codecs != null) {
+            setPreferenceStringValue(PreferencesWrapper.CODECS_VIDEO_LIST, TextUtils.join(PreferencesWrapper.CODECS_SEPARATOR, codecs));
+        }
+    }
 	
 	public void setLibCapability(String cap, boolean canDo) {
 		setPreferenceBooleanValue(PreferencesWrapper.BACKUP_PREFIX + cap, canDo);
@@ -607,7 +619,6 @@ public class PreferencesProviderWrapper {
 	 * @param defaultValue the default value if the pref is not found MUST be casteable as Integer/short
 	 * @return the priority of the codec as defined in preferences
 	 */
-	
 	public short getCodecPriority(String codecName, String type, String defaultValue) {
 		String key = SipConfigManager.getCodecKey(codecName, type); 
 		if(key != null) {
@@ -623,6 +634,12 @@ public class PreferencesProviderWrapper {
 		return (short) Integer.parseInt(defaultValue);
 	}
 	
+	/**
+	 * Set the priority for the codec for a given bandwidth type
+	 * @param codecName the name of the codec as announced by codec
+	 * @param type bandwidth type @see {@link SipConfigManager#CODEC_NB} {@link SipConfigManager#CODEC_WB}
+	 * @param newValue Short value for preference as a string.
+	 */
 	public void setCodecPriority(String codecName, String type, String newValue) {
 		String key = SipConfigManager.getCodecKey(codecName, type); 
 		if(key != null) {
@@ -631,28 +648,6 @@ public class PreferencesProviderWrapper {
 		//TODO : else raise error
 	}
 	
-	
-
-
-    public boolean hasCodecPriority(String codecName) {
-		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-		String[] codecParts = codecName.split("/");
-		if(codecParts.length >=2 ) {
-			if(ni != null) {
-				String currentBandType = getPreferenceStringValue(SipConfigManager.getBandTypeKey(ni.getType(), ni.getSubtype()), 
-						SipConfigManager.CODEC_WB);
-				String key = SipConfigManager.getCodecKey(codecName, currentBandType); 
-				
-				String val = getPreferenceStringValue(key, null);
-				return (val != null);
-			}else {
-				String key = SipConfigManager.getCodecKey(codecName, SipConfigManager.CODEC_WB); 
-				String val = getPreferenceStringValue(key, null);
-				return (val != null);
-			}
-		}
-		return false;
-	}
 
 	public static File getRecordsFolder(Context ctxt) {
 		return PreferencesWrapper.getRecordsFolder(ctxt);

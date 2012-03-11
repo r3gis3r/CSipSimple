@@ -33,6 +33,14 @@ public class Log {
 	}
 	
 	/**
+	 * Get the current log level
+	 * @return the log level
+	 */
+	public static int getLogLevel() {
+	    return logLevel;
+	}
+	
+	/**
 	 * Log verbose
 	 * @param tag Tag for this log
 	 * @param msg Msg for this log
