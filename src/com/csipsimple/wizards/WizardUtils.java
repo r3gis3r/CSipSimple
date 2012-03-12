@@ -127,6 +127,7 @@ import com.csipsimple.wizards.impl.VPhone;
 import com.csipsimple.wizards.impl.Vanbergsystems;
 import com.csipsimple.wizards.impl.Viva;
 import com.csipsimple.wizards.impl.VoipBel;
+import com.csipsimple.wizards.impl.VoipLlama;
 import com.csipsimple.wizards.impl.VoipMS;
 import com.csipsimple.wizards.impl.VoipNor;
 import com.csipsimple.wizards.impl.VoipTel;
@@ -664,6 +665,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_congstar, 10, 
                     new Locale[]{Locale.GERMANY}, false, false, 
                     CongstarQSC.class));
+            WIZARDS_DICT.put("VOIPLLAMA", new WizardInfo("VOIPLLAMA", "VOIPLLAMA", 
+                    R.drawable.ic_wizard_voipllama, 10, 
+                    new Locale[]{Locale.ITALY, locale("es_ES") }, false, false, 
+                    VoipLlama.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

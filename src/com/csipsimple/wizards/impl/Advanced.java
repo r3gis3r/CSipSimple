@@ -36,22 +36,30 @@ import com.csipsimple.utils.Log;
 public class Advanced extends BaseImplementation {
 	protected static final String THIS_FILE = "Advanced W";
 	
-	private EditTextPreference accountDisplayName;
-	private EditTextPreference accountUserName;
-	private EditTextPreference accountServer;
-	private EditTextPreference accountPassword;
-	private EditTextPreference accountCallerId;
-	private CheckBoxPreference accountUseTcp;
-	private EditTextPreference accountProxy;
+	protected EditTextPreference accountDisplayName;
+	protected EditTextPreference accountUserName;
+	protected EditTextPreference accountServer;
+	protected EditTextPreference accountPassword;
+	protected EditTextPreference accountCallerId;
+	protected CheckBoxPreference accountUseTcp;
+	protected EditTextPreference accountProxy;
+	
+	protected final static String FIELD_DISPLAY_NAME = "display_name";
+    protected final static String FIELD_CALLER_ID = "caller_id";
+    protected final static String FIELD_SERVER = "server";
+    protected final static String FIELD_USERNAME = "username";
+    protected final static String FIELD_PASSWORD = "password";
+    protected final static String FIELD_TCP = "use_tcp";
+    protected final static String FIELD_PROXY = "proxy";
 	
 	private void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
-		accountCallerId = (EditTextPreference) parent.findPreference("caller_id");
-		accountServer = (EditTextPreference) parent.findPreference("server");
-		accountUserName = (EditTextPreference) parent.findPreference("username");
-		accountPassword = (EditTextPreference) parent.findPreference("password");
-		accountUseTcp = (CheckBoxPreference) parent.findPreference("use_tcp");
-		accountProxy = (EditTextPreference) parent.findPreference("proxy");
+		accountDisplayName = (EditTextPreference) parent.findPreference(FIELD_DISPLAY_NAME);
+		accountCallerId = (EditTextPreference) parent.findPreference(FIELD_CALLER_ID);
+		accountServer = (EditTextPreference) parent.findPreference(FIELD_SERVER);
+		accountUserName = (EditTextPreference) parent.findPreference(FIELD_USERNAME);
+		accountPassword = (EditTextPreference) parent.findPreference(FIELD_PASSWORD);
+		accountUseTcp = (CheckBoxPreference) parent.findPreference(FIELD_TCP);
+		accountProxy = (EditTextPreference) parent.findPreference(FIELD_PROXY);
 	}
 
 	public void fillLayout(final SipProfile account) {
@@ -84,12 +92,12 @@ public class Advanced extends BaseImplementation {
 	}
 
 	public void updateDescriptions() {
-		setStringFieldSummary("display_name");
-		setStringFieldSummary("caller_id");
-		setStringFieldSummary("server");
-		setStringFieldSummary("username");
-		setPasswordFieldSummary("password");
-		setStringFieldSummary("proxy");
+		setStringFieldSummary(FIELD_DISPLAY_NAME);
+		setStringFieldSummary(FIELD_CALLER_ID);
+		setStringFieldSummary(FIELD_SERVER);
+		setStringFieldSummary(FIELD_USERNAME);
+		setPasswordFieldSummary(FIELD_PASSWORD);
+		setStringFieldSummary(FIELD_PROXY);
 	}
 	
 	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
@@ -98,12 +106,12 @@ public class Advanced extends BaseImplementation {
 		private static final long serialVersionUID = 3055562364235868653L;
 
 	{
-		put("display_name", R.string.w_common_display_name_desc);
-		put("caller_id", R.string.w_advanced_caller_id_desc);
-		put("server", R.string.w_common_server_desc);
-		put("username", R.string.w_advanced_username_desc);
-		put("password", R.string.w_advanced_password_desc);
-		put("proxy", R.string.w_advanced_proxy_desc);
+		put(FIELD_DISPLAY_NAME, R.string.w_common_display_name_desc);
+		put(FIELD_CALLER_ID, R.string.w_advanced_caller_id_desc);
+		put(FIELD_SERVER, R.string.w_common_server_desc);
+		put(FIELD_USERNAME, R.string.w_advanced_username_desc);
+		put(FIELD_PASSWORD, R.string.w_advanced_password_desc);
+		put(FIELD_PROXY, R.string.w_advanced_proxy_desc);
 	}};
 
 	@Override
