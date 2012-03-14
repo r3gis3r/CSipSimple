@@ -721,35 +721,44 @@ public class PreferencesWrapper {
 	public static final String LIB_CAP_TLS = "cap_tls";
 	public static final String LIB_CAP_SRTP = "cap_srtp";
 	
-	/**
-	 * Get list of audio codecs registered in preference system by @see {@link PreferencesProviderWrapper#setCodecList(java.util.List)}
-	 * @return List of possible audio codecs
-	 */
+    /**
+     * Get list of audio codecs registered in preference system
+     * 
+     * @return List of possible audio codecs
+     * @see PreferencesProviderWrapper#setCodecList(java.util.List)
+     */
 	public String[] getCodecList() {
 		return TextUtils.split(prefs.getString(CODECS_LIST, ""),  Pattern.quote(CODECS_SEPARATOR) );
 	}
 
     /**
-     * Get list of video codecs registered in preference system by @see {@link PreferencesProviderWrapper#setVideoCodecList(java.util.List)}
+     * Get list of video codecs registered in preference system by
+     * 
      * @return List of possible video codecs
+     * @see PreferencesProviderWrapper#setVideoCodecList(java.util.List)
      */
     public String[] getVideoCodecList() {
         return TextUtils.split(prefs.getString(CODECS_VIDEO_LIST, ""),  Pattern.quote(CODECS_SEPARATOR) );
     }
 	
-	/**
-	 * Get the capability of the lib registered in preference system
-	 * @param cap on of the lib capabilty. @see {@link PreferencesProviderWrapper#LIB_CAP_SRTP}, {@link PreferencesProviderWrapper#LIB_CAP_TLS}
-	 * @return True if the lib if capable of this feature
-	 */
+    /**
+     * Get the capability of the lib registered in preference system
+     * 
+     * @param cap on of the lib capabilty. <br/>
+     *            For now valid caps are
+     *            {@link PreferencesProviderWrapper#LIB_CAP_SRTP} and
+     *            {@link PreferencesProviderWrapper#LIB_CAP_TLS}
+     * @return True if the lib if capable of this feature
+     */
 	public boolean getLibCapability(String cap) {
 		return prefs.getBoolean(BACKUP_PREFIX + cap, false);
 	}
 
-	/**
-	 * Retrieve the context used for this preference wrapper
-	 * @return an android context
-	 */
+    /**
+     * Retrieve the context used for this preference wrapper
+     * 
+     * @return an android context
+     */
 	public Context getContext() {
 		return context;
 	}

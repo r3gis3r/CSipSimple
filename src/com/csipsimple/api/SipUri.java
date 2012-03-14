@@ -139,7 +139,9 @@ public final class SipUri {
      * 
      * @param sipContact full sip uri
      * @param includeScheme whether to include scheme
-     * @return
+     * @return the canonical sip contact <br/>
+     *         Example sip:user@domain.com <br/>
+     *         or user@domain.com (if include scheme is false)
      */
     public static String getCanonicalSipContact(String sipContact, boolean includeScheme) {
         StringBuilder sb = new StringBuilder();

@@ -129,23 +129,22 @@ public class SipProfile implements Parcelable {
     public static final String FIELD_SIP_STACK = "sip_stack";
     public static final String FIELD_VOICE_MAIL_NBR = "vm_nbr";
     public static final String FIELD_ANDROID_GROUP = "android_group";
-    
+
     // Sip outbound
     public static final String FIELD_USE_RFC5626 = "use_rfc5626";
     public static final String FIELD_RFC5626_INSTANCE_ID = "rfc5626_instance_id";
     public static final String FIELD_RFC5626_REG_ID = "rfc5626_reg_id";
-    
-    // Video config 
+
+    // Video config
     public static final String FIELD_VID_IN_AUTO_SHOW = "vid_in_auto_show";
     public static final String FIELD_VID_OUT_AUTO_TRANSMIT = "vid_out_auto_transmit";
-    
+
     // RTP config
     public static final String FIELD_RTP_PORT = "rtp_port";
     public static final String FIELD_RTP_PUBLIC_ADDR = "rtp_public_addr";
     public static final String FIELD_RTP_BOUND_ADDR = "rtp_bound_addr";
     public static final String FIELD_RTP_ENABLE_QOS = "rtp_enable_qos";
     public static final String FIELD_RTP_QOS_DSCP = "rtp_qos_dscp";
-    
 
     public static final String FIELD_TRY_CLEAN_REGISTERS = "try_clean_reg";
 
@@ -202,8 +201,7 @@ public class SipProfile implements Parcelable {
     public int rtp_enable_qos = -1;
     public int rtp_qos_dscp = -1;
     public String android_group = "";
-    
-    
+
     public SipProfile() {
         display_name = "";
         wizard = "EXPERT";
@@ -476,7 +474,7 @@ public class SipProfile implements Parcelable {
         if (tmp_i != null && tmp_i >= 0) {
             try_clean_registers = tmp_i;
         }
-        
+
         // RFC 5626
         tmp_i = args.getAsInteger(FIELD_USE_RFC5626);
         if (tmp_i != null && tmp_i >= 0) {
@@ -490,7 +488,7 @@ public class SipProfile implements Parcelable {
         if (tmp_s != null) {
             rfc5626_reg_id = tmp_s;
         }
-        
+
         // Video
         tmp_i = args.getAsInteger(FIELD_VID_IN_AUTO_SHOW);
         if (tmp_i != null && tmp_i >= 0) {
@@ -500,7 +498,7 @@ public class SipProfile implements Parcelable {
         if (tmp_i != null && tmp_i >= 0) {
             vid_out_auto_transmit = tmp_i;
         }
-        
+
         // RTP cfg
         tmp_i = args.getAsInteger(FIELD_RTP_PORT);
         if (tmp_i != null && tmp_i >= 0) {
@@ -522,8 +520,7 @@ public class SipProfile implements Parcelable {
         if (tmp_i != null && tmp_i >= 0) {
             rtp_qos_dscp = tmp_i;
         }
-        
-        
+
     }
 
     /**
@@ -579,7 +576,7 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_VOICE_MAIL_NBR, vm_nbr);
         args.put(FIELD_REG_DELAY_BEFORE_REFRESH, reg_delay_before_refresh);
         args.put(FIELD_TRY_CLEAN_REGISTERS, try_clean_registers);
-        
+
         args.put(FIELD_ANDROID_GROUP, android_group);
 
         return args;
@@ -643,49 +640,20 @@ public class SipProfile implements Parcelable {
     /**
      * Gets the password.
      * 
-     * @return
+     * @return the password of the sip profile Using this from an external
+     *         application will always be empty
      */
     public String getPassword() {
         return data;
     }
 
     /**
-     * Gets the port number of the SIP server.
-     * 
-     * @return
-     */
-    public int getPort() {
-        ParsedSipUriInfos parsedInfo = SipUri.parseSipUri(reg_uri);
-        return parsedInfo.port;
-    }
-
-    /**
      * Gets the (user-defined) name of the profile.
      * 
-     * @return
+     * @return the display name for this profile
      */
     public String getProfileName() {
         return display_name;
-    }
-
-    /**
-     * Get the transport used for this account
-     * 
-     * @return "TCP" or "UDP" or "TLS" or "AUTO"
-     */
-    public String getProtocol() {
-        switch (transport) {
-            case TRANSPORT_AUTO:
-                return "AUTO";
-            case TRANSPORT_UDP:
-                return "UDP";
-            case TRANSPORT_TCP:
-                return "TCP";
-            case TRANSPORT_TLS:
-                return "TLS";
-            default:
-                return "UDP";
-        }
     }
 
     /**
@@ -698,15 +666,6 @@ public class SipProfile implements Parcelable {
             return proxies[0];
         }
         return "";
-    }
-
-    /**
-     * Keep alive
-     * 
-     * @return
-     */
-    public boolean getSendKeepAlive() {
-        return true;
     }
 
     /**
@@ -733,6 +692,10 @@ public class SipProfile implements Parcelable {
      * Gets the username when acc_id is username@domain. WARNING : this is
      * different from username of SipProfile which is the authentication name
      * cause of pjsip naming
+     * 
+     * @return the username of the account sip id. <br/>
+     *         Example if acc_id is "Display Name" <sip:user@domain.com>, it
+     *         will return user.
      */
     public String getSipUserName() {
         ParsedSipContactInfos parsed = SipUri.parseSipContact(acc_id);
@@ -774,7 +737,7 @@ public class SipProfile implements Parcelable {
         if (onlyActive) {
             selection = SipProfile.FIELD_ACTIVE + "=?";
             selectionArgs = new String[] {
-                "1"
+                    "1"
             };
         }
         Cursor c = ctxt.getContentResolver().query(ACCOUNT_URI, new String[] {

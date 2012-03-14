@@ -613,12 +613,16 @@ public class PreferencesProviderWrapper {
 	// Codecs
 	
 
-	/**
-	 * Get the codec priority
-	 * @param codecName codec name formated in the pjsip format (the corresponding pref is codec_{{lower(codecName)}}_{{codecFreq}})
-	 * @param defaultValue the default value if the pref is not found MUST be casteable as Integer/short
-	 * @return the priority of the codec as defined in preferences
-	 */
+    /**
+     * Get the codec priority
+     * 
+     * @param codecName codec name formated in the pjsip format (the
+     *            corresponding pref is
+     *            codec_{{lower(codecName)}}_{{codecFreq}})
+     * @param defaultValue the default value if the pref is not found MUST be
+     *            casteable as Integer/short
+     * @return the priority of the codec as defined in preferences
+     */
 	public short getCodecPriority(String codecName, String type, String defaultValue) {
 		String key = SipConfigManager.getCodecKey(codecName, type); 
 		if(key != null) {
@@ -634,12 +638,16 @@ public class PreferencesProviderWrapper {
 		return (short) Integer.parseInt(defaultValue);
 	}
 	
-	/**
-	 * Set the priority for the codec for a given bandwidth type
-	 * @param codecName the name of the codec as announced by codec
-	 * @param type bandwidth type @see {@link SipConfigManager#CODEC_NB} {@link SipConfigManager#CODEC_WB}
-	 * @param newValue Short value for preference as a string.
-	 */
+    /**
+     * Set the priority for the codec for a given bandwidth type
+     * 
+     * @param codecName the name of the codec as announced by codec
+     * @param type bandwidth type <br/>
+     *            For now, valid constants are :
+     *            {@link SipConfigManager#CODEC_NB} and
+     *            {@link SipConfigManager#CODEC_WB}
+     * @param newValue Short value for preference as a string.
+     */
 	public void setCodecPriority(String codecName, String type, String newValue) {
 		String key = SipConfigManager.getCodecKey(codecName, type); 
 		if(key != null) {

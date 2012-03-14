@@ -42,7 +42,7 @@ ifeq ($(MY_USE_G726),1)
 APP_MODULES += libpj_g726_codec
 endif
 ifeq ($(MY_USE_VIDEO),1)
-APP_MODULES += pj_video_android
+APP_MODULES += pj_video_android pj_screen_capture_android
 endif
 
 APP_PLATFORM := android-9

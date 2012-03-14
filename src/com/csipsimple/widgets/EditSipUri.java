@@ -224,22 +224,31 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
         updateDialTextHelper();
     }
 
+    /**
+     * Reset content of the field
+     * @see Editable#clear()
+     */
     public void clear() {
         dialUser.getText().clear();
     }
-
+    
+    /**
+     * Set the content of the field
+     * @param number The new content to set in the field 
+     */
     public void setTextValue(String number) {
         clear();
         dialUser.getText().append(number);
     }
 
+    /**
+     * Retrieve the underlying text field of this widget to modify it's behavior directly
+     * @return the underlying widget
+     */
     public EditText getTextField() {
         return dialUser;
     }
 
-    public void setListVisibility(int visibility) {
-        completeList.setVisibility(visibility);
-    }
 
     @Override
     public void onItemClick(AdapterView<?> ad, View view, int position, long arg3) {

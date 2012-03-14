@@ -36,6 +36,7 @@ import android.view.KeyCharacterMap;
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipManager.PresenceStatus;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
@@ -246,7 +247,7 @@ public class PjSipService {
                     cssCfg.setUse_zrtp(pjsua.PJ_FALSE);
                 }
 
-                Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynAudioCodecs(service);
+                Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynPlugins(service, SipManager.ACTION_GET_EXTRA_CODECS);
                 dynamic_factory[] cssCodecs = cssCfg.getExtra_aud_codecs();
                 int i = 0;
                 for (Entry<String, DynCodecInfos> availableCodec : availableCodecs.entrySet()) {
@@ -274,9 +275,11 @@ public class PjSipService {
 
                 // Video implementation
                 if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)){
-                    DynCodecInfos videoPlugin = ExtraPlugins.getDynVideoLib(service);
+                    // TODO :: Have plugins per capture / render / video codec / converter
+                    Map<String, DynCodecInfos> videoPlugins = ExtraPlugins.getDynPlugins(service, SipManager.ACTION_GET_VIDEO_PLUGIN);
                     
-                    if(videoPlugin != null) {
+                    if(videoPlugins.size() > 0) {
+                        DynCodecInfos videoPlugin = videoPlugins.values().iterator().next();
                         pj_str_t pjVideoFile = pjsua.pj_str_copy(videoPlugin.libraryPath);
                         // Render
                         {
@@ -291,6 +294,18 @@ public class PjSipService {
                             vidImpl.setInit_factory_name(pjsua
                                     .pj_str_copy("pjmedia_webrtc_vid_capture_factory"));
                             vidImpl.setShared_lib_path(pjVideoFile);
+                            /* -- For testing video screen -- Not yet released
+                            try {
+                                ComponentName cmp = new ComponentName("com.csipsimple.plugins.video", "com.csipsimple.plugins.video.CaptureReceiver");
+                                DynCodecInfos screenCapt = new ExtraPlugins.DynCodecInfos(service, cmp);
+                                vidImpl.setInit_factory_name(pjsua
+                                        .pj_str_copy(screenCapt.factoryInitFunction));
+                                vidImpl.setShared_lib_path(pjsua
+                                        .pj_str_copy(screenCapt.libraryPath));
+                            } catch (NameNotFoundException e) {
+                                Log.e(THIS_FILE, "Not found capture plugin");
+                            }
+                            */
                         }
                         // Codecs
                         cssCodecs = cssCfg.getExtra_vid_codecs();

@@ -178,8 +178,8 @@ public class AccountsEditListAdapter extends SimpleCursorAdapter implements OnCl
     /**
      * Get draggable mode of the adapter
      * 
-     * @see AccountsEditList#setDraggable(boolean aDraggable)
      * @return true if in dragging mode
+     * @see AccountsEditList#setDraggable(boolean aDraggable)
      */
     public boolean isDraggable() {
         return draggable;

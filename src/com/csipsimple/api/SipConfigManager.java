@@ -208,8 +208,9 @@ public class SipConfigManager {
     }
 
     /**
-     * Same than @see SipConfigManager#getPreferenceStringValue(Context, String, String)
-     * with null as default value
+     * Get string configuration value with null default value
+     * 
+     * @see SipConfigManager#getPreferenceStringValue(Context, String, String)
      */
     public static String getPreferenceStringValue(Context ctxt, String key) {
         return getPreferenceStringValue(ctxt, key, null);
@@ -238,8 +239,9 @@ public class SipConfigManager {
     }
 
     /**
-     * Same than @see SipConfigManager#getPreferenceBooleanValue(Context, String, Boolean)
-     * with null as default value
+     * Get boolean configuration value with null default value
+     * 
+     * @see SipConfigManager#getPreferenceBooleanValue(Context, String, Boolean)
      */
     public static Boolean getPreferenceBooleanValue(Context ctxt, String key) {
         return getPreferenceBooleanValue(ctxt, key, null);
@@ -247,6 +249,7 @@ public class SipConfigManager {
 
     /**
      * Helper method to retrieve a csipsimple boolean config value
+     * 
      * @param ctxt The context of your app
      * @param key the key for the setting you want to get
      * @param defaultValue the value you want to return if nothing found
@@ -268,8 +271,9 @@ public class SipConfigManager {
     }
 
     /**
-     * Same than @see SipConfigManager#getPreferenceFloatValue(Context, String, Float)
-     * with null as default value
+     * Get float configuration value with null default value
+     * 
+     * @see SipConfigManager#getPreferenceFloatValue(Context, String, Float)
      */
     public static Float getPreferenceFloatValue(Context ctxt, String key) {
         return getPreferenceFloatValue(ctxt, key, null);
@@ -277,6 +281,7 @@ public class SipConfigManager {
 
     /**
      * Helper method to retrieve a csipsimple float config value
+     * 
      * @param ctxt The context of your app
      * @param key the key for the setting you want to get
      * @param defaultValue the value you want to return if nothing found
@@ -298,9 +303,9 @@ public class SipConfigManager {
     }
     
     /**
-     * Get integer preference value
-     * @param key the key preference to retrieve
-     * @return the value
+     * Get integer configuration value with null default value
+     * 
+     * @see SipConfigManager#getPreferenceIntegerValue(Context, String, Integer)
      */
     public static Integer getPreferenceIntegerValue(Context ctxt, String key) {
         return getPreferenceIntegerValue(ctxt, key, null);
@@ -331,6 +336,7 @@ public class SipConfigManager {
     
     /**
      * Set the value of a preference string
+     * 
      * @param ctxt The context of android app
      * @param key The key config to change
      * @param value The value to set to
@@ -344,6 +350,7 @@ public class SipConfigManager {
 
     /**
      * Set the value of a preference string
+     * 
      * @param ctxt The context of android app
      * @param key The key config to change
      * @param value The value to set to

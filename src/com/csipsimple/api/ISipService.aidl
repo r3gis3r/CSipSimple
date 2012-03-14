@@ -113,9 +113,9 @@ interface ISipService{
 	
 	// Play files to stream
 	/**
-	* @param String filePath the file to play in stream
-	* @param int callId the call to play to
-	* @param int way the way the file should be played 
+	* @param filePath filePath the file to play in stream
+	* @param callId the call to play to
+	* @param way the way the file should be played 
 	*  (way & (1<<0)) => send to remote party (micro), 
 	*  (way & (1<<1) ) => send to user (speaker/earpiece)
 	* example : way = 3 : will play sound both ways
