@@ -133,6 +133,7 @@ import com.csipsimple.wizards.impl.VoipNor;
 import com.csipsimple.wizards.impl.VoipTel;
 import com.csipsimple.wizards.impl.Vono;
 import com.csipsimple.wizards.impl.WiMobile;
+import com.csipsimple.wizards.impl.XNet;
 import com.csipsimple.wizards.impl.Zadarma;
 import com.csipsimple.wizards.impl.ZonPt;
 
@@ -669,6 +670,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voipllama, 10, 
                     new Locale[]{Locale.ITALY, locale("es_ES") }, false, false, 
                     VoipLlama.class));
+            WIZARDS_DICT.put("XNET", new WizardInfo("XNET", "XNet", 
+                    R.drawable.ic_wizard_xnet, 10, 
+                    new Locale[]{new Locale("EN", "nz") }, false, false, 
+                    XNet.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
