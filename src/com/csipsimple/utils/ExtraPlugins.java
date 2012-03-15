@@ -116,7 +116,7 @@ public class ExtraPlugins {
             HashMap<String, DynCodecInfos> plugins = new HashMap<String, DynCodecInfos>();
             
             PackageManager packageManager = ctxt.getPackageManager();
-            Intent it = new Intent(SipManager.ACTION_GET_EXTRA_CODECS);
+            Intent it = new Intent(action);
             
             List<ResolveInfo> availables = packageManager.queryBroadcastReceivers(it, 0);
             for(ResolveInfo resInfo : availables) {
