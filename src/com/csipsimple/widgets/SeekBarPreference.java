@@ -124,7 +124,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		String t = String.valueOf(aValue/10.0);
 		valueText.setText(suffix == null ? t : t.concat(suffix));
 		value = (float) (aValue / 10.0);
-		callChangeListener(new Float(value));
+		callChangeListener(Float.valueOf(value));
 	}
 
 	public void onStartTrackingTouch(SeekBar seek) {

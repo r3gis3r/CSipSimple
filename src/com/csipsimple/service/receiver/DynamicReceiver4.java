@@ -86,14 +86,12 @@ public class DynamicReceiver4 extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        if(!compatIsInitialStickyBroadcast(intent)) {
-            // Run the handler in SipServiceExecutor to be protected by wake lock
-            service.getExecutor().execute(new SipRunnable()  {
-                public void doRun() throws SameThreadException {
-                    onReceiveInternal(context, intent);
-                }
-            });
-        }
+        // Run the handler in SipServiceExecutor to be protected by wake lock
+        service.getExecutor().execute(new SipRunnable()  {
+            public void doRun() throws SameThreadException {
+                onReceiveInternal(context, intent, compatIsInitialStickyBroadcast(intent));
+            }
+        });
     }
 
     /**
@@ -102,14 +100,14 @@ public class DynamicReceiver4 extends BroadcastReceiver {
      * @param intent Intent received
      * @throws SameThreadException
      */
-    private void onReceiveInternal(Context context, Intent intent) throws SameThreadException {
+    private void onReceiveInternal(Context context, Intent intent, boolean isSticky) throws SameThreadException {
         String action = intent.getAction();
         Log.d(THIS_FILE, "Internal receive " + action);
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             Bundle b = intent.getExtras();
             if (b != null) {
                 final NetworkInfo info = (NetworkInfo) b.get(ConnectivityManager.EXTRA_NETWORK_INFO);
-                onConnectivityChanged(info, false);
+                onConnectivityChanged(info, false, isSticky);
             }
         } else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_CHANGED)) {
             final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, -1);
@@ -158,7 +156,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
      * @param outgoingOnly start only if for outgoing 
      * @throws SameThreadException
      */
-    private void onConnectivityChanged(NetworkInfo info, boolean outgoingOnly) throws SameThreadException {
+    private void onConnectivityChanged(NetworkInfo info, boolean outgoingOnly, boolean isSticky) throws SameThreadException {
         // We only care about the default network, and getActiveNetworkInfo()
         // is the only way to distinguish them. However, as broadcasts are
         // delivered asynchronously, we might miss DISCONNECTED events from
@@ -197,12 +195,14 @@ public class DynamicReceiver4 extends BroadcastReceiver {
         mConnected = connected;
         mNetworkType = networkType;
 
-        if (connected) {
-            mLocalIp = determineLocalIp();
-            service.restartSipStack();
-        } else {
-            if(service.stopSipStack()) {
-                service.stopSelf();
+        if(!isSticky) {
+            if (connected) {
+                mLocalIp = determineLocalIp();
+                service.restartSipStack();
+            } else {
+                if(service.stopSipStack()) {
+                    service.stopSelf();
+                }
             }
         }
     }

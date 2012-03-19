@@ -23,6 +23,7 @@
 
 package com.csipsimple.api;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -45,67 +46,334 @@ public class SipProfile implements Parcelable {
     private static final String THIS_FILE = "SipProfile";
 
     // Constants
+    /**
+     * Constant for an invalid account id.
+     */
     public final static long INVALID_ID = -1;
 
     // Transport choices
+    /**
+     * Automatically choose transport.<br/>
+     * By default it uses UDP, if packet is higher than UDP limit it will switch
+     * to TCP.<br/>
+     * Take care with that , because not all sip servers support udp/tcp
+     * correclty.
+     */
     public final static int TRANSPORT_AUTO = 0;
+    /**
+     * Force UDP transport.
+     */
     public final static int TRANSPORT_UDP = 1;
+    /**
+     * Force TCP transport.
+     */
     public final static int TRANSPORT_TCP = 2;
+    /**
+     * Force TLS transport.
+     */
     public final static int TRANSPORT_TLS = 3;
 
     // Stack choices
+    /**
+     * Use pjsip as backend.<br/>
+     * For now it's the only one supported
+     */
     public static final int PJSIP_STACK = 0;
+    /**
+     * @deprecated Use google google android 2.3 backend.<br/>
+     *             This is not supported for now.
+     */
     public static final int GOOGLE_STACK = 1;
 
     // Password type choices
+    /**
+     * Plain password mode.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#a8b1e563c814bdf8012f0bdf966d0ad9d"
+     * >Pjsip documentation</a>
+     * 
+     * @see #datatype
+     */
     public static final int CRED_DATA_PLAIN_PASSWD = 0;
+    /**
+     * Digest mode.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#a8b1e563c814bdf8012f0bdf966d0ad9d"
+     * >Pjsip documentation</a>
+     * 
+     * @see #datatype
+     */
     public static final int CRED_DATA_DIGEST = 1;
+    /**
+     * @deprecated This mode is not supported by csipsimple for now.<br/>
+     *             <a target="_blank" href=
+     *             "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#a8b1e563c814bdf8012f0bdf966d0ad9d"
+     *             >Pjsip documentation</a>
+     * @see #datatype
+     */
     public static final int CRED_CRED_DATA_EXT_AKA = 2;
 
     // Scheme credentials choices
+    /**
+     * Digest scheme for credentials.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#ae31c9ec1c99fb1ffa20be5954ee995a7"
+     * >Pjsip documentation</a>
+     * 
+     * @see #scheme
+     */
     public static final String CRED_SCHEME_DIGEST = "Digest";
+    /**
+     * PGP scheme for credentials.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#ae31c9ec1c99fb1ffa20be5954ee995a7"
+     * >Pjsip documentation</a>
+     * 
+     * @see #scheme
+     */
     public static final String CRED_SCHEME_PGP = "PGP";
 
+    /**
+     * Separator for proxy field once stored in database.<br/>
+     * It's the pipe char.
+     * 
+     * @see #FIELD_PROXY
+     */
     public static final String PROXIES_SEPARATOR = "|";
 
     // Content Provider - account
+    /**
+     * Table name of content provider for accounts storage
+     */
     public final static String ACCOUNTS_TABLE_NAME = "accounts";
+    /**
+     * Content type for account / sip profile
+     */
     public final static String ACCOUNT_CONTENT_TYPE = SipManager.BASE_DIR_TYPE + ".account";
+    /**
+     * Item type for account / sip profile
+     */
     public final static String ACCOUNT_CONTENT_ITEM_TYPE = SipManager.BASE_ITEM_TYPE + ".account";
-    public final static Uri ACCOUNT_URI = Uri.parse(SipManager.CONTENT_SCHEME
+    /**
+     * Uri of accounts / sip profiles
+     */
+    public final static Uri ACCOUNT_URI = Uri.parse(ContentResolver.SCHEME_CONTENT + "://"
             + SipManager.AUTHORITY + "/" + ACCOUNTS_TABLE_NAME);
-    public final static Uri ACCOUNT_ID_URI_BASE = Uri.parse(SipManager.CONTENT_SCHEME
+    /**
+     * Base uri for the account / sip profile. <br/>
+     * To append with {@link #FIELD_ID}
+     * 
+     * @see ContentUris#appendId(android.net.Uri.Builder, long)
+     */
+    public final static Uri ACCOUNT_ID_URI_BASE = Uri.parse(ContentResolver.SCHEME_CONTENT + "://"
             + SipManager.AUTHORITY + "/" + ACCOUNTS_TABLE_NAME + "/");
 
     // Content Provider - account status
+    /**
+     * Virutal table name for sip profile adding/registration table.<br/>
+     * An application should use it in read only mode.
+     */
     public final static String ACCOUNTS_STATUS_TABLE_NAME = "accounts_status";
+    /**
+     * Content type for sip profile adding/registration state
+     */
     public final static String ACCOUNT_STATUS_CONTENT_TYPE = SipManager.BASE_DIR_TYPE
             + ".account_status";
+    /**
+     * Content type for sip profile adding/registration state item
+     */
     public final static String ACCOUNT_STATUS_CONTENT_ITEM_TYPE = SipManager.BASE_ITEM_TYPE
             + ".account_status";
-    public final static Uri ACCOUNT_STATUS_URI = Uri.parse(SipManager.CONTENT_SCHEME
+    /**
+     * Uri for the sip profile adding/registration state.
+     */
+    public final static Uri ACCOUNT_STATUS_URI = Uri.parse(ContentResolver.SCHEME_CONTENT + "://"
             + SipManager.AUTHORITY + "/" + ACCOUNTS_STATUS_TABLE_NAME);
-    public final static Uri ACCOUNT_STATUS_ID_URI_BASE = Uri.parse(SipManager.CONTENT_SCHEME
+    /**
+     * Base uri for the sip profile adding/registration state. <br/>
+     * To append with {@link #FIELD_ID}
+     * 
+     * @see ContentUris#appendId(android.net.Uri.Builder, long)
+     */
+    public final static Uri ACCOUNT_STATUS_ID_URI_BASE = Uri.parse(ContentResolver.SCHEME_CONTENT
+            + "://"
             + SipManager.AUTHORITY + "/" + ACCOUNTS_STATUS_TABLE_NAME + "/");
 
     // Fields for table accounts
+    /**
+     * Primary key identifier of the account in the database.
+     * 
+     * @see Long
+     */
     public static final String FIELD_ID = "id";
+    /**
+     * Activation state of the account.<br/>
+     * If false this account will be ignored by the sip stack.
+     * 
+     * @see Boolean
+     */
     public static final String FIELD_ACTIVE = "active";
+    /**
+     * The wizard associated to this account.<br/>
+     * Used for icon and edit layout view.
+     * 
+     * @see String
+     */
     public static final String FIELD_WIZARD = "wizard";
+    /**
+     * The display name of the account. <br/>
+     * This is used in the application interface to show the label representing
+     * the account.
+     * 
+     * @see String
+     */
     public static final String FIELD_DISPLAY_NAME = "display_name";
-
+    /**
+     * The priority of the account.<br/>
+     * This is used in the interface when presenting list of accounts.<br/>
+     * This can also be used to choose the default account. <br/>
+     * Higher means highest priority.
+     * 
+     * @see Integer
+     */
     public static final String FIELD_PRIORITY = "priority";
+    /**
+     * The full SIP URL for the account. <br/>
+     * The value can take name address or URL format, and will look something
+     * like "sip:account@serviceprovider".<br/>
+     * This field is mandatory.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#ab290b04e8150ed9627335a67e6127b7c"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_ACC_ID = "acc_id";
+    /**
+     * This is the URL to be put in the request URI for the registration, and
+     * will look something like "sip:serviceprovider".<br/>
+     * This field should be specified if registration is desired. If the value
+     * is empty, no account registration will be performed.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a08473de6401e966d23f34d3a9a05bdd0"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_REG_URI = "reg_uri";
+    /**
+     * Subscribe to message waiting indication events (RFC 3842).<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a0158ae24d72872a31a0b33c33450a7ab"
+     * >Pjsip documentation</a>
+     * 
+     * @see Boolean
+     */
     public static final String FIELD_MWI_ENABLED = "mwi_enabled";
+    /**
+     * If this flag is set, the presence information of this account will be
+     * PUBLISH-ed to the server where the account belongs.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a0d4128f44963deffda4ea9c15183a787"
+     * >Pjsip documentation</a>
+     * 
+     * @see Boolean
+     */
     public static final String FIELD_PUBLISH_ENABLED = "publish_enabled";
+    /**
+     * Optional interval for registration, in seconds. <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a2c097b9ae855783bfbb00056055dd96c"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     */
     public static final String FIELD_REG_TIMEOUT = "reg_timeout";
+    /**
+     * Specify the number of seconds to refresh the client registration before
+     * the registration expires.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a52a35fdf8c17263b2a27d2b17111c040"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     */
     public static final String FIELD_REG_DELAY_BEFORE_REFRESH = "reg_dbr";
+    /**
+     * Set the interval for periodic keep-alive transmission for this account. <br/>
+     * If this value is zero, keep-alive will be disabled for this account.<br/>
+     * The keep-alive transmission will be sent to the registrar's address,
+     * after successful registration.<br/>
+     * Note that in csipsimple this value is not applied anymore in flavor to
+     * {@link SipConfigManager#KEEP_ALIVE_INTERVAL_MOBILE} and
+     * {@link SipConfigManager#KEEP_ALIVE_INTERVAL_WIFI} <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a98722b6464d16b5a76aec81f2d2a0694"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     */
     public static final String FIELD_KA_INTERVAL = "ka_interval";
+    /**
+     * Optional PIDF tuple ID for outgoing PUBLISH and NOTIFY. <br/>
+     * If this value is not specified, a random string will be used. <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#aa603989566022840b4671f0171b6cba1"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_PIDF_TUPLE_ID = "pidf_tuple_id";
+    /**
+     * Optional URI to be put as Contact for this account.<br/>
+     * It is recommended that this field is left empty, so that the value will
+     * be calculated automatically based on the transport address.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a5dfdfba40038e33af95819fbe2b896f9"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_FORCE_CONTACT = "force_contact";
 
+    /**
+     * This option is used to update the transport address and the Contact
+     * header of REGISTER request.<br/>
+     * When this option is enabled, the library will keep track of the public IP
+     * address from the response of REGISTER request. <br/>
+     * Once it detects that the address has changed, it will unregister current
+     * Contact, update the Contact with transport address learned from Via
+     * header, and register a new Contact to the registrar.<br/>
+     * This will also update the public name of UDP transport if STUN is
+     * configured.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a22961bb72ea75f7ca7008464f081ca06"
+     * >Pjsip documentation</a>
+     * 
+     * @see Boolean
+     */
     public static final String FIELD_ALLOW_CONTACT_REWRITE = "allow_contact_rewrite";
+    /**
+     * Specify how Contact update will be done with the registration, if
+     * allow_contact_rewrite is enabled.<br/>
+     * <ul>
+     * <li>If set to 1, the Contact update will be done by sending
+     * unregistration to the currently registered Contact, while simultaneously
+     * sending new registration (with different Call-ID) for the updated
+     * Contact.</li>
+     * <li>If set to 2, the Contact update will be done in a single, current
+     * registration session, by removing the current binding (by setting its
+     * Contact's expires parameter to zero) and adding a new Contact binding,
+     * all done in a single request.</li>
+     * </ul>
+     * Value 1 is the legacy behavior.<br/>
+     * Value 2 is the default behavior.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a73b69a3a8d225147ce386e310e588285"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     */
     public static final String FIELD_CONTACT_REWRITE_METHOD = "contact_rewrite_method";
 
     public static final String FIELD_CONTACT_PARAMS = "contact_params";
@@ -159,19 +427,54 @@ public class SipProfile implements Parcelable {
 
     // Properties
     public int primaryKey = -1;
+    /**
+     * @see #FIELD_ID
+     */
     public long id = INVALID_ID;
+    /**
+     * @see #FIELD_DISPLAY_NAME
+     */
     public String display_name = "";
+    /**
+     * @see #FIELD_WIZARD
+     */
     public String wizard = "EXPERT";
+    /**
+     * @see #FIELD_TRANSPORT
+     */
     public Integer transport = 0;
+    /**
+     * @see #FIELD_ACTIVE
+     */
     public boolean active = true;
+    /**
+     * @see #FIELD_PRIORITY
+     */
     public int priority = 100;
+    /**
+     * @see #FIELD_ACC_ID
+     */
     public String acc_id = null;
+
+    /**
+     * @see #FIELD_REG_URI
+     */
     public String reg_uri = null;
+    /**
+     * @see #FIELD_PUBLISH_ENABLED
+     */
     public int publish_enabled = 0;
-    public int reg_timeout = 900; // 300 (5 minutes) was very low, now that ka
-                                  // is reliable we can consider increase this
-                                  // value
+    /**
+     * @see #FIELD_REG_TIMEOUT
+     */
+    public int reg_timeout = 900;
+    /**
+     * @see #FIELD_KA_INTERVAL
+     */
     public int ka_interval = 0;
+    /**
+     * @see #FIELD_PIDF_TUPLE_ID
+     */
     public String pidf_tuple_id = null;
     public String force_contact = null;
     public boolean allow_contact_rewrite = true;

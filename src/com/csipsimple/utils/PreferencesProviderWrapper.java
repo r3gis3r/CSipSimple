@@ -307,7 +307,7 @@ public class PreferencesProviderWrapper {
 		String ringtone = getPreferenceStringValue(SipConfigManager.RINGTONE, 
 				Settings.System.DEFAULT_RINGTONE_URI.toString());
 		
-		if(ringtone == null || TextUtils.isEmpty(ringtone)) {
+		if(TextUtils.isEmpty(ringtone)) {
 			ringtone = Settings.System.DEFAULT_RINGTONE_URI.toString();
 		}
 		return ringtone;
@@ -462,9 +462,6 @@ public class PreferencesProviderWrapper {
 	
 
 
-	public final static int HEADSET_ACTION_CLEAR_CALL = 0;
-	public final static int HEADSET_ACTION_MUTE = 1;
-	public final static int HEADSET_ACTION_HOLD = 2;
 	/**
 	 * Action do do when headset is pressed
 	 * @return
@@ -475,7 +472,7 @@ public class PreferencesProviderWrapper {
 		}catch(NumberFormatException e) {
 			Log.e(THIS_FILE, "Headset action option not well formated");
 		}
-		return HEADSET_ACTION_CLEAR_CALL;
+		return SipConfigManager.HEADSET_ACTION_CLEAR_CALL;
 	}
 	
 	
@@ -527,14 +524,6 @@ public class PreferencesProviderWrapper {
 		return 4;
 	}
 	
-	public int getBitsPerSample() {
-		try {
-			return Integer.parseInt(getPreferenceStringValue(SipConfigManager.BITS_PER_SAMPLE));
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Bits per sample not well formated");
-		}
-		return Integer.parseInt(PreferencesWrapper.STRING_PREFS.get(SipConfigManager.BITS_PER_SAMPLE));
-	}
 	
 	/**
 	 * Get whether ice is enabled
@@ -592,21 +581,17 @@ public class PreferencesProviderWrapper {
 
 
     // DTMF
-	public static final String DTMF_MODE_AUTO = "0";
-	public static final String DTMF_MODE_RTP = "1";
-	public static final String DTMF_MODE_INBAND = "2";
-	public static final String DTMF_MODE_INFO = "3";
 	
 	public boolean useSipInfoDtmf() {
-		return getPreferenceStringValue(SipConfigManager.DTMF_MODE).equalsIgnoreCase(DTMF_MODE_INFO);
+		return (getPreferenceIntegerValue(SipConfigManager.DTMF_MODE) == SipConfigManager.DTMF_MODE_INFO);
 	}
 	
 	public boolean forceDtmfInBand() {
-		return getPreferenceStringValue(SipConfigManager.DTMF_MODE).equalsIgnoreCase(DTMF_MODE_INBAND);
+		return (getPreferenceIntegerValue(SipConfigManager.DTMF_MODE) == SipConfigManager.DTMF_MODE_INBAND);
 	}
 
 	public boolean forceDtmfRTP() {
-		return getPreferenceStringValue(SipConfigManager.DTMF_MODE).equalsIgnoreCase(DTMF_MODE_RTP);
+		return (getPreferenceIntegerValue(SipConfigManager.DTMF_MODE) == SipConfigManager.DTMF_MODE_RTP);
 	}
 	
 	

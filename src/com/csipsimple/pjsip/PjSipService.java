@@ -263,7 +263,7 @@ public class PjSipService {
                 // Audio implementation
                 int implementation = prefsWrapper
                         .getPreferenceIntegerValue(SipConfigManager.AUDIO_IMPLEMENTATION);
-                if (implementation == 1) {
+                if (implementation == SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES) {
                     dynamic_factory audImp = cssCfg.getAudio_implementation();
                     audImp.setInit_factory_name(pjsua.pj_str_copy("pjmedia_opensl_factory"));
                     File openslLib = NativeLibManager.getBundledStackLibFile(service,
@@ -281,6 +281,7 @@ public class PjSipService {
                     if(videoPlugins.size() > 0) {
                         DynCodecInfos videoPlugin = videoPlugins.values().iterator().next();
                         pj_str_t pjVideoFile = pjsua.pj_str_copy(videoPlugin.libraryPath);
+                        Log.d(THIS_FILE, "Load video plugin at " + videoPlugin.libraryPath );
                         // Render
                         {
                             dynamic_factory vidImpl = cssCfg.getVideo_render_implementation();
@@ -399,8 +400,9 @@ public class PjSipService {
                 mediaCfg.setClock_rate(clockRate);
                 mediaCfg.setAudio_frame_ptime(prefsWrapper
                         .getPreferenceIntegerValue(SipConfigManager.SND_PTIME));
-                mediaCfg.setHas_ioqueue(prefsWrapper
-                        .getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE) ? 1 : 0);
+                // Disabled because only one thread enabled now for battery perfs on normal state
+                mediaCfg.setHas_ioqueue(/*prefsWrapper
+                        .getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE) ? 1 :*/ 0);
 
                 // ICE
                 mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());

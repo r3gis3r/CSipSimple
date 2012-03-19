@@ -434,10 +434,10 @@ public final class Compatibility {
      */
     public static boolean canMakeGSMCall(Context context) {
         PreferencesWrapper prefs = new PreferencesWrapper(context);
-        if (prefs.getGsmIntegrationType() == PreferencesWrapper.GSM_TYPE_AUTO) {
+        if (prefs.getGsmIntegrationType() == SipConfigManager.GENERIC_TYPE_AUTO) {
             return PhoneCapabilityTester.isPhone(context);
         }
-        if (prefs.getGsmIntegrationType() == PreferencesWrapper.GSM_TYPE_PREVENT) {
+        if (prefs.getGsmIntegrationType() == SipConfigManager.GENERIC_TYPE_PREVENT) {
             return false;
         }
         return true;

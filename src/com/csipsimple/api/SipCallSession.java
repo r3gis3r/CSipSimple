@@ -408,8 +408,8 @@ public final class SipCallSession implements Parcelable {
     }
 
     /**
-     * Check if the specific call info indicate it is an active call in
-     * progress.
+     * Check if the specific call info indicates that it is an active call in
+     * progress (incoming or early or calling or confirmed or connecting)
      * 
      * @return true if the call can be considered as in progress/active
      */
@@ -497,52 +497,88 @@ public final class SipCallSession implements Parcelable {
 
     /**
      * Get the information about the <b>media</b> security of this call
+     * 
      * @return the information about the <b>media</b> security
      */
     public String getMediaSecureInfo() {
         return mediaSecureInfo;
     }
 
+    /**
+     * Get the information about local held state of this call
+     * 
+     * @return the information about local held state of media
+     */
     public boolean isLocalHeld() {
         return mediaStatus == SipCallSession.MediaState.LOCAL_HOLD;
     }
 
+    /**
+     * Get the information about remote held state of this call
+     * 
+     * @return the information about remote held state of media
+     */
     public boolean isRemoteHeld() {
         return (mediaStatus == SipCallSession.MediaState.NONE && isActive() && !isBeforeConfirmed());
     }
 
+    /**
+     * Check if the specific call info indicates that it is a call that has not yet been confirmed by both ends.<br/>
+     * In other worlds if the call is in state, calling, incoming early or connecting.
+     * 
+     * @return true if the call can be considered not yet been confirmed
+     */
     public boolean isBeforeConfirmed() {
         return (callState == InvState.CALLING || callState == InvState.INCOMING
                 || callState == InvState.EARLY || callState == InvState.CONNECTING);
     }
 
+
+    /**
+     * Check if the specific call info indicates that it is a call that has been ended<br/>
+     * In other worlds if the call is in state, disconnected, invalid or null
+     * 
+     * @return true if the call can be considered as already ended
+     */
     public boolean isAfterEnded() {
         return (callState == InvState.DISCONNECTED || callState == InvState.INVALID || callState == InvState.NULL);
     }
 
     /**
-     * This method should be only used by CSipSimple service
+     * Get the latest status code of the sip dialog corresponding to this call
+     * call
      * 
-     * @param status_code
+     * @return the status code
+     * @see SipCallSession.StatusCode
+     */
+    public int getLastStatusCode() {
+        return lastStatusCode;
+    }
+    
+    /**
+     * This method should be only used by CSipSimple service <br/>
+     * Set the latest status code for this call of this serializable holder
+     * 
+     * @param status_code The code of the latest known sip dialog
+     * @see #getLastStatusCode()
+     * @see SipCallSession.StatusCode
      */
     public void setLastStatusCode(int status_code) {
         lastStatusCode = status_code;
     }
 
-    public int getLastStatusCode() {
-        return lastStatusCode;
-    }
-
     /**
-     * @return the lastStatusComment
+     * Get the last status comment of the sip dialog corresponding to this call
+     * 
+     * @return the last status comment string from server
      */
     public String getLastStatusComment() {
         return lastStatusComment;
     }
 
     /**
-     * Set the last status comment for this call <br/>
-     * This method should be only used by CSipSimple service
+     * This method should be only used by CSipSimple service <br/>
+     * Set the last status comment for this call 
      * 
      * @param lastStatusComment the lastStatusComment to set
      */
@@ -553,7 +589,7 @@ public final class SipCallSession implements Parcelable {
     /**
      * Get whether the call has a video media stream connected
      * 
-     * @return the mediaHasVideoStream
+     * @return true if the call has a video media stream
      */
     public boolean mediaHasVideo() {
         return mediaHasVideoStream;

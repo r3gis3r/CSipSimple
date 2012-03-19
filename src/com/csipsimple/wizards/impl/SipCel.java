@@ -21,10 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.text.TextUtils;
@@ -33,8 +29,11 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
-import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 
 public class SipCel extends SimpleImplementation {
@@ -131,7 +130,7 @@ public class SipCel extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
-		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, PreferencesProviderWrapper.DTMF_MODE_AUTO);
+		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, Integer.toString(SipConfigManager.DTMF_MODE_AUTO));
 		
 		
 		

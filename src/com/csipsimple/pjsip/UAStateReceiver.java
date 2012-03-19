@@ -52,7 +52,6 @@ import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Threading;
 import com.csipsimple.utils.TimerWrapper;
 
@@ -952,9 +951,11 @@ public class UAStateReceiver extends Callback {
 						@Override
 						protected void doRun() throws SameThreadException {
 							int preferedAction = pjService.prefsWrapper.getHeadsetAction();
-							if (preferedAction == PreferencesProviderWrapper.HEADSET_ACTION_CLEAR_CALL) {
+							if (preferedAction == SipConfigManager.HEADSET_ACTION_CLEAR_CALL) {
 								pjService.callHangup(callInfo.getCallId(), 0);
-							} else if (preferedAction == PreferencesProviderWrapper.HEADSET_ACTION_MUTE) {
+							} else if(preferedAction == SipConfigManager.HEADSET_ACTION_HOLD){
+							    pjService.callHold(callInfo.getCallId());
+							} else if (preferedAction == SipConfigManager.HEADSET_ACTION_MUTE) {
 								pjService.mediaManager.toggleMute();
 							}
 						}

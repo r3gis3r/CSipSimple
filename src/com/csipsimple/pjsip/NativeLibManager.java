@@ -49,13 +49,13 @@ public class NativeLibManager {
 	}
 	
 	public static File getLibFileFromPackage(ApplicationInfo appInfo, String libName, boolean allowFallback) {
-		Log.d(THIS_FILE, "Dir "+appInfo.dataDir);
+		Log.v(THIS_FILE, "Dir "+appInfo.dataDir);
 		if(Compatibility.isCompatible(9)) {
 			try {
 				Field f = ApplicationInfo.class.getField("nativeLibraryDir");
 				File nativeFile = new File((String) f.get(appInfo), libName);
 				if(nativeFile.exists()) {
-					Log.d(THIS_FILE, "Found native lib using clean way");
+					Log.v(THIS_FILE, "Found native lib using clean way");
 					return nativeFile;
 				}
 			} catch (Exception e) {

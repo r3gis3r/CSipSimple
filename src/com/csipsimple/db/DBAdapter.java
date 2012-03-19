@@ -40,7 +40,7 @@ public class DBAdapter {
 	private final Context context;
 	private DatabaseHelper databaseHelper;
 	private SQLiteDatabase db;
-
+	
 	public DBAdapter(Context aContext) {
 		context = aContext;
 		databaseHelper = new DatabaseHelper(context);
@@ -48,7 +48,6 @@ public class DBAdapter {
 
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
-		private static final String DATABASE_NAME = "com.csipsimple.db";
 		private static final int DATABASE_VERSION = 32;
 
 		// Creation sql command
@@ -164,8 +163,7 @@ public class DBAdapter {
 		
 		
 		DatabaseHelper(Context context) {
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
+			super(context, SipManager.AUTHORITY, null, DATABASE_VERSION);
 		}
 
 		@Override

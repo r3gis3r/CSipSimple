@@ -69,6 +69,11 @@ public class PrefsMedia extends GenericPrefs {
 	protected void afterBuildPrefs() {
 		super.afterBuildPrefs();
 		PreferencesWrapper pfw = new PreferencesWrapper(this);
+        
+		// Disable io queue because it needs one working thread that has been disabled
+		hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.HAS_IO_QUEUE);
+        
+        
 		if(!pfw.isAdvancedUser()) {
 			
 			
@@ -76,7 +81,6 @@ public class PrefsMedia extends GenericPrefs {
 			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.ECHO_CANCELLATION_TAIL);
 			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.ECHO_MODE);
 			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.SND_PTIME);
-			hidePreference(AUDIO_QUALITY_KEY, SipConfigManager.HAS_IO_QUEUE);
 			
 			
 			hidePreference(null, "band_types");
@@ -114,10 +118,10 @@ public class PrefsMedia extends GenericPrefs {
 		CharSequence[] entries = new CharSequence[isGinger ? 2 : 1];
 		CharSequence[] values = new CharSequence[isGinger ? 2 : 1];
 		
-		values[0] = "0";
+		values[0] = Integer.toString(SipConfigManager.AUDIO_IMPLEMENTATION_JAVA);
 		entries[0] = "Java";
 		if(isGinger) {
-			values[1] = "1";
+			values[1] = Integer.toString(SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES);
 			entries[1] = "OpenSL-ES";
 		}
 		

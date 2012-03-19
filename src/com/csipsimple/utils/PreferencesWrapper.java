@@ -89,7 +89,6 @@ public class PreferencesWrapper {
 		put(SipConfigManager.SND_MEDIA_QUALITY, "4");
 		put(SipConfigManager.SND_CLOCK_RATE, "16000");
 		put(SipConfigManager.SND_PTIME, "20");
-		put(SipConfigManager.BITS_PER_SAMPLE, "16");
 		put(SipConfigManager.SIP_AUDIO_MODE, "0");
 		put(SipConfigManager.MICRO_SOURCE, "1");
 		//put(SipConfigManager.THREAD_COUNT, "0");
@@ -562,12 +561,12 @@ public class PreferencesWrapper {
 	public boolean dialPressTone() {
 		int mode = getPreferenceIntegerValue(SipConfigManager.DIAL_PRESS_TONE_MODE);
 		switch (mode) {
-		case 0:
+		case SipConfigManager.GENERIC_TYPE_AUTO:
 			return Settings.System.getInt(resolver,
 	                Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1;
-		case 1:
+		case SipConfigManager.GENERIC_TYPE_FORCE:
 			return true;
-		case 2:
+		case SipConfigManager.GENERIC_TYPE_PREVENT:
 			return false;
 		default:
 			break;
@@ -578,12 +577,12 @@ public class PreferencesWrapper {
 	public boolean dialPressVibrate() {
 		int mode = getPreferenceIntegerValue(SipConfigManager.DIAL_PRESS_VIBRATE_MODE);
 		switch (mode) {
-		case 0:
+		case SipConfigManager.GENERIC_TYPE_AUTO:
 			return Settings.System.getInt(resolver,
 	                Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1;
-		case 1:
+		case SipConfigManager.GENERIC_TYPE_FORCE:
 			return true;
-		case 2:
+		case SipConfigManager.GENERIC_TYPE_PREVENT:
 			return false;
 		default:
 			break;
@@ -600,9 +599,6 @@ public class PreferencesWrapper {
 	}
 	
 	
-	public final static int GSM_TYPE_AUTO = 0;
-	public final static int GSM_TYPE_FORCE = 1;
-	public final static int GSM_TYPE_PREVENT = 2;
 	
 	public int getGsmIntegrationType() {
 		int prefsValue = 1;

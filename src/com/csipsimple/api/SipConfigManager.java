@@ -20,188 +20,1040 @@
  *  
  *  This file and this file only is also released under Apache license as an API file
  */
+
 package com.csipsimple.api;
 
+import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.media.AudioManager;
+import android.media.MediaRecorder.AudioSource;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.PowerManager;
+import android.provider.Settings.System;
 import android.telephony.TelephonyManager;
 
-
+/**
+ * Manage global configuration of the application.<br/>
+ * Provides wrapper around preference content provider and define preference
+ * keys constants
+ */
 public class SipConfigManager {
 
-	//Media
-	public static final String SND_MEDIA_QUALITY = "snd_media_quality";
-	public static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
-	public static final String RTP_PORT = "network_rtp_port";
-	public static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
-	public static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
-	public static final String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
-	public static final String SND_CLOCK_RATE = "snd_clock_rate";
-	public static final String ECHO_CANCELLATION = "echo_cancellation";
-	public static final String ENABLE_VAD = "enable_vad";
-	public static final String SND_MIC_LEVEL = "snd_mic_level";
-	public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
-	public static final String SND_BT_MIC_LEVEL = "snd_bt_mic_level";
-	public static final String SND_BT_SPEAKER_LEVEL = "snd_bt_speaker_level";
-	public static final String HAS_IO_QUEUE = "has_io_queue";
-	public static final String BITS_PER_SAMPLE = "bits_per_sample";
-	public static final String SET_AUDIO_GENERATE_TONE = "set_audio_generate_tone";
-	//public static final String THREAD_COUNT = "thread_count";
-	public static final String ECHO_MODE = "echo_mode";
-	public static final String SND_PTIME = "snd_ptime";
-	public static final String USE_SGS_CALL_HACK = "use_sgs_call_hack";
-	public static final String DTMF_MODE = "dtmf_mode";
-	public static final String USE_ROUTING_API = "use_routing_api";
-	public static final String USE_MODE_API = "use_mode_api";
-	public static final String SIP_AUDIO_MODE = "sip_audio_mode";
-	public static final String MICRO_SOURCE = "micro_source";
-	public static final String USE_WEBRTC_HACK = "use_webrtc_hack";
-	public static final String DO_FOCUS_AUDIO = "do_focus_audio";
-	public static final String SND_STREAM_LEVEL = "snd_stream_level";
-	public static final String HEADSET_ACTION = "headset_action";
-	public static final String AUDIO_IMPLEMENTATION = "audio_implementation";
-    public static final String AUTO_CONNECT_BLUETOOTH = "auto_connect_bluetooth";
-	
-	
-	//UI
-	public static final String USE_SOFT_VOLUME = "use_soft_volume";
-	public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
-	public static final String LOG_LEVEL = "log_level";
-	public static final String THEME = "selected_theme";
-	public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
-	public static final String ICON_IN_STATUS_BAR_NBR = "icon_in_status_bar_nbr";
-	public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
-	public static final String GSM_INTEGRATION_TYPE = "gsm_integration_type";
-	public static final String DIAL_PRESS_TONE_MODE = "dial_press_tone_mode";
-	public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";
-	public static final String INVERT_PROXIMITY_SENSOR = "invert_proximity_sensor";
-	public static final String USE_PARTIAL_WAKE_LOCK = "use_partial_wake_lock";
-	public static final String INTEGRATE_WITH_CALLLOGS = "integrate_with_native_calllogs";
-	public static final String INTEGRATE_WITH_DIALER = "integrate_with_native_dialer";
-	public static final String INTEGRATE_WITH_NATIVE_MUSIC = "integrate_with_native_music";
-	public static final String RINGTONE = "ringtone";
-	public static final String USE_ALTERNATE_UNLOCKER = "use_alternate_unlocker";
-	
-	// NETWORK
-	public static final String TURN_SERVER = "turn_server";
-	public static final String ENABLE_TURN = "enable_turn";
-	public static final String TURN_USERNAME = "turn_username";
-	public static final String TURN_PASSWORD = "turn_password";
-	public static final String ENABLE_ICE = "enable_ice";
-	public static final String ENABLE_STUN = "enable_stun";
-	public static final String STUN_SERVER = "stun_server";
-	public static final String USE_IPV6 = "use_ipv6";
-	public static final String ENABLE_UDP = "enable_udp";
-	public static final String ENABLE_TCP = "enable_tcp";
-	public static final String LOCK_WIFI = "lock_wifi";
-	public static final String LOCK_WIFI_PERFS = "lock_wifi_perfs";
-	public static final String ENABLE_DNS_SRV = "enable_dns_srv";
-	public static final String ENABLE_QOS = "enable_qos";
-	public static final String DSCP_VAL = "dscp_val";
-	public static final String KEEP_ALIVE_INTERVAL_WIFI = "keep_alive_interval_wifi";
-	public static final String KEEP_ALIVE_INTERVAL_MOBILE = "keep_alive_interval_mobile";
-    public static final String TCP_KEEP_ALIVE_INTERVAL_WIFI = "tcp_keep_alive_interval_wifi";
-    public static final String TCP_KEEP_ALIVE_INTERVAL_MOBILE = "tcp_keep_alive_interval_mobile";
-    public static final String TLS_KEEP_ALIVE_INTERVAL_WIFI = "tls_keep_alive_interval_wifi";
-    public static final String TLS_KEEP_ALIVE_INTERVAL_MOBILE = "tls_keep_alive_interval_mobile";
-	public static final String OVERRIDE_NAMESERVER = "override_nameserver";
-	public static final String USE_COMPACT_FORM = "use_compact_form";
-	public static final String USER_AGENT = "user_agent"; 
-	public static final String FORCE_NO_UPDATE = "force_no_update";
-	public static final String TIMER_MIN_SE = "timer_min_se";
-	public static final String TIMER_SESS_EXPIRES = "timer_sess_expires";
-	
-	// SECURE
-	public static final String ENABLE_TLS = "enable_tls";
-	public static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
-	public static final String TLS_SERVER_NAME = "network_tls_server_name";
-	public static final String CA_LIST_FILE = "ca_list_file";
-	public static final String CERT_FILE = "cert_file";
-	public static final String PRIVKEY_FILE = "privkey_file";
-	public static final String TLS_PASSWORD = "tls_password";
-	public static final String TLS_VERIFY_SERVER = "tls_verify_server";
-	public static final String TLS_VERIFY_CLIENT = "tls_verify_client";
-	public static final String TLS_METHOD = "tls_method";
-	public static final String USE_SRTP = "use_srtp";
-	public static final String USE_ZRTP = "use_zrtp";
-	
-	// CALLS
-	public static final String AUTO_RECORD_CALLS = "auto_record_calls";
-	public static final String DEFAULT_CALLER_ID = "default_caller_id";
-	public static final String SUPPORT_MULTIPLE_CALLS = "support_multiple_calls";
-	public static final String USE_VIDEO = "use_video";
-	
-	public static final String CODEC_NB = "nb";
-	public static final String CODEC_WB = "wb";
-	
-	public static final int ECHO_MODE_AUTO = 0;
-	public static final int ECHO_MODE_SIMPLE = 1;
-	public static final int ECHO_MODE_SPEEX = 2;
-	public static final int ECHO_MODE_WEBRTC_M = 3;
-	
-	
+    // Media
+    /**
+     * Media quality, 0-10.<br/>
+     * according to this table: 5-10: resampling use large filter<br/>
+     * 3-4: resampling use small filter<br/>
+     * 1-2: resampling use linear.<br/>
+     * The media quality also sets speex codec quality/complexity to the number.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a4cada00a781ce06cd536c4e56a522065"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String SND_MEDIA_QUALITY = "snd_media_quality";
+    /**
+     * Echo canceller tail length, in miliseconds.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a82c1cf18d42f5ec0a645ed2bdd6ae955"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
+    /**
+     * Port for begin of RTP range.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String RTP_PORT = "network_rtp_port";
+    /**
+     * Does the app will mount the TCP transport.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
+    /**
+     * Does the app will mount the UDP transport.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
+    /**
+     * Specify idle time of sound device before it is automatically closed, in
+     * seconds. <br/>
+     * Use value -1 to disable the auto-close feature of sound device<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a2c95e5ce554bbee9cc60d0328f508658"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String SND_AUTO_CLOSE_TIME = "snd_auto_close_time";
+    /**
+     * Clock rate to be applied to the conference bridge.<br/>
+     * If value is zero, default clock rate will be used
+     * (PJSUA_DEFAULT_CLOCK_RATE, which by default is 16KHz).<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a24792c277d6c6c309eccda9047f641a5"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String SND_CLOCK_RATE = "snd_clock_rate";
+    /**
+     * Enable echo cancellation?
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ECHO_CANCELLATION = "echo_cancellation";
+    /**
+     * Enable VAD?<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a9f99f0f3d10e14a7a0f75c7f2da8473b"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_VAD = "enable_vad";
+    /**
+     * Default micro amplification between 0.0 and 10.0.
+     * 
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     */
+    public static final String SND_MIC_LEVEL = "snd_mic_level";
+    /**
+     * Default speaker amplification between 0.0 and 10.0.
+     * 
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     */
+    public static final String SND_SPEAKER_LEVEL = "snd_speaker_level";
 
-    public final static String PREFS_TABLE_NAME = "preferences";
-    public final static String RESET_TABLE_NAME = "raz";
+    /**
+     * Default Bluethooth micro amplification between 0.0 and 10.0.
+     * 
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     */
+    public static final String SND_BT_MIC_LEVEL = "snd_bt_mic_level";
+
+    /**
+     * Default Bluethooth speaker amplification between 0.0 and 10.0.
+     * 
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     */
+    public static final String SND_BT_SPEAKER_LEVEL = "snd_bt_speaker_level";
+    /**
+     * This option is not used anymore because requires multiple working thread
+     * that is not suitable for mobility mode. <br/>
+     * Specify whether the media manager should manage its own ioqueue for the
+     * RTP/RTCP sockets. <br/>
+     * If yes, ioqueue will be created and at least one worker thread will be
+     * created too. <br/>
+     * If no, the RTP/RTCP sockets will share the same ioqueue as SIP sockets,
+     * and no worker thread is needed.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#ab1ddd57bc94ed7f5a64c819414cb9f96"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String HAS_IO_QUEUE = "has_io_queue";
+
+    // public static final String THREAD_COUNT = "thread_count";
+    /**
+     * Backend for echo cancellation. <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a734653d7e5d075984b9a51f053ded879"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see #ECHO_MODE_AUTO
+     * @see #ECHO_MODE_SIMPLE
+     * @see #ECHO_MODE_SPEEX
+     * @see #ECHO_MODE_WEBRTC_M
+     */
+    public static final String ECHO_MODE = "echo_mode";
+    /**
+     * Specify audio frame ptime. <br/>
+     * The value here will affect the samples per frame of both the sound device
+     * and the conference bridge. <br/>
+     * Specifying lower ptime will normally reduce the latency.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#ac6e637f5fdd868c8e77a1d1f5e9d1a51"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String SND_PTIME = "snd_ptime";
+    /**
+     * How to send DTMF codes.<br/>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see #DTMF_MODE_AUTO
+     * @see #DTMF_MODE_INBAND
+     * @see #DTMF_MODE_INFO
+     * @see #DTMF_MODE_RTP
+     */
+    public static final String DTMF_MODE = "dtmf_mode";
+    /**
+     * Should the app use samsung galaxy S hack to establish audio?<br/>
+     * Basically it starts opening audio in {@link AudioManager#MODE_IN_CALL}
+     * and then {@link AudioManager#MODE_NORMAL} to have things routed to
+     * earpiece<br/>
+     * Leave it managed by CSipSimple if you want to benefit auto detection
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_SGS_CALL_HACK = "use_sgs_call_hack";
+    /**
+     * Should we generate a silent tone just after the audio is established to
+     * workaround devices. <br/>
+     * This is useful for some samsung devices. <br/>
+     * Leave it managed by CSipSimple if you want to benefit auto detection
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String SET_AUDIO_GENERATE_TONE = "set_audio_generate_tone";
+    /**
+     * Should we use the android legacy route api to route to speaker/earpiece. <br/>
+     * Leave it managed by CSipSimple if you want to benefit auto detection
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_ROUTING_API = "use_routing_api";
+    /**
+     * Should we use the android modes {@link AudioManager#MODE_IN_CALL} and
+     * {@link AudioManager#MODE_NORMAL} to route to speaker/earpiece.<br/>
+     * Leave it managed by CSipSimple if you want to benefit auto detection
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_MODE_API = "use_mode_api";
+    /**
+     * Which mode to use when in a sip call.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see AudioManager#MODE_IN_CALL
+     * @see AudioManager#MODE_IN_COMMUNICATION
+     * @see AudioManager#MODE_NORMAL
+     * @see AudioManager#MODE_RINGTONE
+     */
+    public static final String SIP_AUDIO_MODE = "sip_audio_mode";
+    /**
+     * Which audio source when in a sip call.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see AudioSource#DEFAULT
+     * @see AudioSource#MIC
+     * @see AudioSource#VOICE_CALL
+     * @see AudioSource#VOICE_COMMUNICATION
+     * @see AudioSource#VOICE_DOWNLINK
+     * @see AudioSource#VOICE_RECOGNITION
+     * @see AudioSource#VOICE_UPLINK
+     */
+    public static final String MICRO_SOURCE = "micro_source";
+    /**
+     * Should we use the code of webRTC library to setup audio.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_WEBRTC_HACK = "use_webrtc_hack";
+    /**
+     * Should we focus audio stream used by the application.<br/>
+     * It will for example allows to mute music app while in call
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String DO_FOCUS_AUDIO = "do_focus_audio";
+    /**
+     * Level of android audio stream when starting call.<br/>
+     * This is the android audio level. <br/>
+     * Between 0.0 and 1.0
+     * 
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     */
+    public static final String SND_STREAM_LEVEL = "snd_stream_level";
+    /**
+     * Action to perform when headset button is pressed.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see #HEADSET_ACTION_CLEAR_CALL
+     * @see #HEADSET_ACTION_HOLD
+     * @see #HEADSET_ACTION_MUTE
+     */
+    public static final String HEADSET_ACTION = "headset_action";
+    /**
+     * Backend implementation to use for audio calls.<br/>
+     * Since android has several ways to plug to audio layer <br/>
+     * And CSipSimple has different implementations for each ways, the backend
+     * can be configured
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see #AUDIO_IMPLEMENTATION_JAVA
+     * @see #AUDIO_IMPLEMENTATION_OPENSLES
+     */
+    public static final String AUDIO_IMPLEMENTATION = "audio_implementation";
+    /**
+     * Should we automatically connect audio to bluetooth SCO if bluetooth seems
+     * to be activated. <br/>
+     * Depending on the device it may be introduce buggy routing <br/>
+     * Not all manufacturers implements the Bluetooth SCO so that it
+     * automatically ignore it if no device is paired
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String AUTO_CONNECT_BLUETOOTH = "auto_connect_bluetooth";
+
+    // UI
+    /**
+     * Should we use software volume instead of android audio volume? <br/>
+     * Some manufacturers are buggy with android audio volume for the stream
+     * used for voice over ip calls <br/>
+     * Using software volume force to emulate volume change instide the software
+     * instead of using android feature
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_SOFT_VOLUME = "use_soft_volume";
+    /**
+     * Should the user interface avoir rotation of the screen?
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String PREVENT_SCREEN_ROTATION = "prevent_screen_rotation";
+    /**
+     * Set the logging level of the application. <br/>
+     * <ul>
+     * <li>1 : error</li>
+     * <li>2 : warning</li>
+     * <li>3 : info</li>
+     * <li>4 : debug</li>
+     * <li>5 : verbose</li>
+     * </ul>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String LOG_LEVEL = "log_level";
+    /**
+     * Theme for the user interface. <br/>
+     * Expect a {@link ComponentName#flattenToString()} string
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String THEME = "selected_theme";
+    /**
+     * Display the icon status bar when registered? <br/>
+     * Warning, disabling that will unflag the application as important in
+     * backgroud. And android may decide to kill it more frequently
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
+    /**
+     * Display the number of registered accounts in status bar.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ICON_IN_STATUS_BAR_NBR = "icon_in_status_bar_nbr";
+    /**
+     * Should the application force the screen to remain on when a call is
+     * ongoing and calling over wifi.<br/>
+     * This is particularly useful for devices affected by the PSP behavior :<br/>
+     * These devices turn the wifi card into a slow mode when screen is off.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String KEEP_AWAKE_IN_CALL = "keep_awake_incall";
+    /**
+     * How GSM is integrated inside the application user interface.<br/>
+     * This excludes the outgoing call integration which should be managed using
+     * filters
+     * 
+     * @see #GENERIC_TYPE_AUTO
+     * @see #GENERIC_TYPE_FORCE
+     * @see #GENERIC_TYPE_PREVENT
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String GSM_INTEGRATION_TYPE = "gsm_integration_type";
+    /**
+     * Should the application generate a tone when a dial key is pressed ?
+     * 
+     * @see #GENERIC_TYPE_AUTO
+     * @see #GENERIC_TYPE_FORCE
+     * @see #GENERIC_TYPE_PREVENT
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String DIAL_PRESS_TONE_MODE = "dial_press_tone_mode";
+    /**
+     * Should the application generate a vibration when a dial key is pressed ?
+     * 
+     * @see #GENERIC_TYPE_AUTO
+     * @see #GENERIC_TYPE_FORCE
+     * @see #GENERIC_TYPE_PREVENT
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";
+    /**
+     * Should we consider proximity sensor values considered as inverted.<br/>
+     * Let csipsimple automatically manage this setting if you want auto
+     * detection to work
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String INVERT_PROXIMITY_SENSOR = "invert_proximity_sensor";
+    /**
+     * Should the application take a partial lock when sip is registered?<br/>
+     * This particular wake lock will ensures CPU is running which leads to
+     * higher battery consumption
+     * 
+     * @see PowerManager#PARTIAL_WAKE_LOCK
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_PARTIAL_WAKE_LOCK = "use_partial_wake_lock";
+    /**
+     * Shoud the application write its own calls logs into the system stock call
+     * logs
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String INTEGRATE_WITH_CALLLOGS = "integrate_with_native_calllogs";
+    /**
+     * Should the application hook outgoing call stock system and propose user a
+     * dialog to choose the outgoing sip account or gsm.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String INTEGRATE_WITH_DIALER = "integrate_with_native_dialer";
+    /**
+     * Should the application try to pause/resume music when in call.<br/>
+     * This setting is only used prior to android 2.2 version that has a clean
+     * way to do that
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String INTEGRATE_WITH_NATIVE_MUSIC = "integrate_with_native_music";
+    /**
+     * The default ringtone uri to setup if no ringtone found for incoming call.<br/>
+     * If empty will get the default ringtone of android.
+     * 
+     * @see System#RINGTONE
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String RINGTONE = "ringtone";
+    /**
+     * Should the application present buttons instead of slider.<br/>
+     * By default the application will use this mode for tablets
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_ALTERNATE_UNLOCKER = "use_alternate_unlocker";
+
+    // NETWORK
+    /**
+     * Specify TURN domain name or host name, in in "DOMAIN:PORT" or "HOST:PORT"
+     * format.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#ac4761935f0f0bd1271dafde91ca8f83d"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String TURN_SERVER = "turn_server";
+    /**
+     * Enable TURN relay candidate in ICE.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#ac4761935f0f0bd1271dafde91ca8f83d"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_TURN = "enable_turn";
+    /**
+     * Specify the credential username to authenticate with the TURN server.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a4305f174d0f9e3497b3e344236aeea91"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String TURN_USERNAME = "turn_username";
+    /**
+     * Specify the credential password to authenticate with the TURN server.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a4305f174d0f9e3497b3e344236aeea91"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String TURN_PASSWORD = "turn_password";
+    /**
+     * Enable ICE.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a8c3030ecc6b84a888f49f6b3e1b204a9"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_ICE = "enable_ice";
+    /**
+     * Enable STUN.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__config.htm#abec69c2c899604352f3450368757f39b"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String ENABLE_STUN = "enable_stun";
+    /**
+     * Stun server.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__config.htm#abec69c2c899604352f3450368757f39b"
+     * >Pjsip documentation</a><br/>
+     * If you want to set more than one server, separate it with commas.
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String STUN_SERVER = "stun_server";
+    /**
+     * Support IPv6.<br/>
+     * This has no effect now since the application by default supports IPv6
+     * except for DNS resolution<br/>
+     * This is a limitation of pjsip which resolution is in pjsip roadmap.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_IPV6 = "use_ipv6";
+    /**
+     * Enable UDP transport.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_UDP = "enable_udp";
+    /**
+     * Enable TCP transport.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_TCP = "enable_tcp";
+    /**
+     * Lock wifi when connected over wifi to try to keep wifi connection up
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String LOCK_WIFI = "lock_wifi";
+    /**
+     * Does the {@link #LOCK_WIFI} ensures performance of wifi as well.<br/>
+     * This should not be required and could lead to higher battery usage
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String LOCK_WIFI_PERFS = "lock_wifi_perfs";
+    /**
+     * Enable DNS SRV feature.<br/>
+     * By default disabled, the DNS resolution is made using android system
+     * directly <br/>
+     * If activated the application will do dns srv requests which is slower. <br/>
+     * It also requires to have dns servers. These will be retrieved from
+     * android os, or can be set using {@link #OVERRIDE_NAMESERVER}
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_DNS_SRV = "enable_dns_srv";
+    /**
+     * Enable QoS.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_QOS = "enable_qos";
+    /**
+     * DSCP value.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjlib/docs/html/structpj__qos__params.htm#afa7a796d83d188894d207ebba951e425"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String DSCP_VAL = "dscp_val";
+    /**
+     * Keep alive for UDP socket when connected on wifi in second.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String KEEP_ALIVE_INTERVAL_WIFI = "keep_alive_interval_wifi";
+    /**
+     * Keep alive for UDP socket when connected on mobile data in second.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String KEEP_ALIVE_INTERVAL_MOBILE = "keep_alive_interval_mobile";
+    /**
+     * Keep alive for TCP socket when connected on wifi in second.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TCP_KEEP_ALIVE_INTERVAL_WIFI = "tcp_keep_alive_interval_wifi";
+    /**
+     * Keep alive for TCP socket when connected on mobile data in second.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TCP_KEEP_ALIVE_INTERVAL_MOBILE = "tcp_keep_alive_interval_mobile";
+    /**
+     * Keep alive for TLS socket when connected on wifi in second.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TLS_KEEP_ALIVE_INTERVAL_WIFI = "tls_keep_alive_interval_wifi";
+    /**
+     * Keep alive for TLS socket when connected on mobile data in second.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TLS_KEEP_ALIVE_INTERVAL_MOBILE = "tls_keep_alive_interval_mobile";
+    /**
+     * DNS to override instead of using those detected as configured in android
+     * OS.<br/>
+     * For now only supports one alternate dns.
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String OVERRIDE_NAMESERVER = "override_nameserver";
+    /**
+     * Use compact form for sip headers and sdp.<br/>
+     * This will minimize size of packets sends.<br/>
+     * Take care with this option because some sip server does not manage it
+     * properly
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_COMPACT_FORM = "use_compact_form";
+    /**
+     * Change the user agent of the application<br/>
+     * By default if it's the name of the application, it will add extra infos
+     * about the device
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String USER_AGENT = "user_agent";
+    /**
+     * Avoid the use of the UPDATE method. <br/>
+     * This will ignore what's announced by remote part as feature which is
+     * useful for remote part that are buggy with that
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String FORCE_NO_UPDATE = "force_no_update";
+    /**
+     * Specify minimum session expiration period, in seconds. Must not be lower
+     * than 90. Default is 90.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__timer__setting.htm#a313ff979b8e59590ec6d50cfa993768b"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TIMER_MIN_SE = "timer_min_se";
+    /**
+     * Specify session expiration period, in seconds. Must not be lower than
+     * min_se. Default is 1800.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__timer__setting.htm#ae1923dbb2330ce7dbffa37042a50e727"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TIMER_SESS_EXPIRES = "timer_sess_expires";
+
+    // SECURE
+    /**
+     * Enable TLS transport.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_TLS = "enable_tls";
+    /**
+     * Local bound port for TLS transport. <br/>
+     * This is the listen port of the application. 0 means automatic
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
+    /**
+     * Optionally specify the server name instance to be contacted when making
+     * outgoing TLS connection. <br/>
+     * This setting is useful when the server is hosting multiple domains for
+     * the same TLS listening socket. <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#aa99531e84635a0a9e99046f62f11afa6"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String TLS_SERVER_NAME = "network_tls_server_name";
+    /**
+     * Certificate of Authority (CA) list file. <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#a96d826c6675c08e465e9dee11f1114d7"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String CA_LIST_FILE = "ca_list_file";
+    /**
+     * Public endpoint certificate file, which will be used as client- side
+     * certificate for outgoing TLS connection, and server-side certificate for
+     * incoming TLS connection.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#a03c3308853ef75a0c76d07ddc8227171"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String CERT_FILE = "cert_file";
+    /**
+     * Optional private key of the endpoint certificate to be used.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#a76e62480d01210a7cc21b7bf7c94a89f"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String PRIVKEY_FILE = "privkey_file";
+    /**
+     * Password to open private key.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#aa6d4b029668bf017162d4b1d09477fe5"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String TLS_PASSWORD = "tls_password";
+    /**
+     * Behavior of bad TLS verification on server side.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#aebbfb646cdfc7151edce2b5194cdbddb"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String TLS_VERIFY_SERVER = "tls_verify_server";
+    /**
+     * Behavior of bad TLS verification on client side.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#ade2b579f76aac470c27c6813a1f85b3c"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String TLS_VERIFY_CLIENT = "tls_verify_client";
+    /**
+     * TLS protocol method from pjsip_ssl_method.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#a3a453c419c092ecc05f0141da36183fa"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TLS_METHOD = "tls_method";
+    /**
+     * How should we use SRTP?<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__config.htm#a8d281b965658948b2bd0b72e01cd279c"
+     * >Pjsip documentation</a><br/>
+     * Values are integer of the <a target="_blank" href=
+     * "http://www.pjsip.org/pjmedia/docs/html/group__PJMEDIA__TRANSPORT__SRTP.htm#ga52f4c561c77ebd7a992feefc77624ace"
+     * >pjmedia_srtp_use</a>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String USE_SRTP = "use_srtp";
+    /**
+     * How should we use ZRTP? <br/>
+     * <ul>
+     * <li>0 : disable</li>
+     * <li>2 : create ZRTP</li>
+     * </ul>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String USE_ZRTP = "use_zrtp";
+
+    // CALLS
+    /**
+     * Automatically record calls to wav files?
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String AUTO_RECORD_CALLS = "auto_record_calls";
+    /**
+     * Display name to set by default for sip contact to send.<br/>
+     * This can be overriden per account.
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String DEFAULT_CALLER_ID = "default_caller_id";
+    /**
+     * Does the app allows multiple calls?<br/>
+     * Disabling it can help when the app multiply registers
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String SUPPORT_MULTIPLE_CALLS = "support_multiple_calls";
+    /**
+     * Does the app enable video calls by default?<br/>
+     * This setting is not yet stable because video feature is not fully
+     * integrated yet.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_VIDEO = "use_video";
+
+    // Enums
+    /**
+     * Echo mode automatic
+     * 
+     * @see #ECHO_MODE
+     */
+    public static final int ECHO_MODE_AUTO = 0;
+    /**
+     * Simple echo mode. It's a basic implementation
+     * 
+     * @see #ECHO_MODE
+     */
+    public static final int ECHO_MODE_SIMPLE = 1;
+    /**
+     * Accousting echo canceller of Speex
+     * 
+     * @see #ECHO_MODE
+     */
+    public static final int ECHO_MODE_SPEEX = 2;
+    /**
+     * Accounsting echo canceller of WebRTC
+     * 
+     * @see #ECHO_MODE
+     */
+    public static final int ECHO_MODE_WEBRTC_M = 3;
+
+    /**
+     * Automatic dtmf mode. <br/>
+     * Will try RTP mode and if not available will fallback on in band
+     * 
+     * @see #DTMF_MODE
+     */
+    public static final int DTMF_MODE_AUTO = 0;
+    /**
+     * Uses RTP telephony events to send DTMF
+     * 
+     * @see #DTMF_MODE
+     */
+    public static final int DTMF_MODE_RTP = 1;
+    /**
+     * Generate tones in band as media to simulate dtmf tones
+     * 
+     * @see #DTMF_MODE
+     */
+    public static final int DTMF_MODE_INBAND = 2;
+    /**
+     * Sends SIP info to send DTMF tones
+     * 
+     * @see #DTMF_MODE
+     */
+    public static final int DTMF_MODE_INFO = 3;
+
+    /**
+     * Pressing headset button hangup the call
+     * 
+     * @see #HEADSET_ACTION
+     */
+    public static final int HEADSET_ACTION_CLEAR_CALL = 0;
+    /**
+     * Pressing headset button mute the call
+     * 
+     * @see #HEADSET_ACTION
+     */
+    public static final int HEADSET_ACTION_MUTE = 1;
+    /**
+     * Pressing headset button hold the call
+     * 
+     * @see #HEADSET_ACTION
+     */
+    public static final int HEADSET_ACTION_HOLD = 2;
+
+    /**
+     * Uses java/jni implementation for audio device glue.
+     * 
+     * @see #AUDIO_IMPLEMENTATION
+     */
+    public static final int AUDIO_IMPLEMENTATION_JAVA = 0;
+    /**
+     * Uses opensl-ES implementation for audio device glue.
+     * 
+     * @see #AUDIO_IMPLEMENTATION
+     */
+    public static final int AUDIO_IMPLEMENTATION_OPENSLES = 1;
+
+    /**
+     * Auto detect setting depending of android settings.
+     */
+    public static final int GENERIC_TYPE_AUTO = 0;
+    /**
+     * Force the setting whatever the android setting is.
+     */
+    public static final int GENERIC_TYPE_FORCE = 1;
+    /**
+     * Disable the setting whatever the android setting is.
+     */
+    public static final int GENERIC_TYPE_PREVENT = 2;
+
+    public static final String PREFS_TABLE_NAME = "preferences";
+    public static final String RESET_TABLE_NAME = "raz";
 
     // For Provider
-    public final static String AUTHORITY = "com.csipsimple.prefs";
-    private final static String BASE_DIR_TYPE = "vnd.android.cursor.dir/vnd.csipsimple";
-    private final static String BASE_ITEM_TYPE = "vnd.android.cursor.item/vnd.csipsimple";
-    private final static String CONTENT_SCHEME = "content://";
+    /**
+     * Authority for preference content provider. <br/>
+     * Maybe be changed for forked versions of the app.
+     */
+    public static final String AUTHORITY = "com.csipsimple.prefs";
+    private static final String BASE_DIR_TYPE = "vnd.android.cursor.dir/vnd.csipsimple";
+    private static final String BASE_ITEM_TYPE = "vnd.android.cursor.item/vnd.csipsimple";
+    
     // Preference
-    public final static String PREF_CONTENT_TYPE = BASE_DIR_TYPE + ".pref";
-    public final static String PREF_CONTENT_ITEM_TYPE = BASE_ITEM_TYPE + ".pref";
-    public final static Uri PREF_URI = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + PREFS_TABLE_NAME);
-    public final static Uri PREF_ID_URI_BASE = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + PREFS_TABLE_NAME + "/");
+    /**
+     * Content type for preference provider.
+     */
+    public static final String PREF_CONTENT_TYPE = BASE_DIR_TYPE + ".pref";
+    /**
+     * Item type for preference provider.
+     */
+    public static final String PREF_CONTENT_ITEM_TYPE = BASE_ITEM_TYPE + ".pref";
+    /**
+     * Uri for preference content provider.<br/>
+     * Deeply advised to not use directly
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final Uri PREF_URI = Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/"
+            + PREFS_TABLE_NAME);
+
+    /**
+     * Base uri for a specific preference in the content provider.<br/>
+     * Deeply advised to not use directly
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final Uri PREF_ID_URI_BASE = Uri.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/"
+            + PREFS_TABLE_NAME + "/");
 
     // Raz
-    public final static Uri RAZ_URI = Uri.parse(CONTENT_SCHEME + AUTHORITY + "/" + RESET_TABLE_NAME);
-	
+    /**
+     * Reset uri to reset the entiere preference database to clean state
+     */
+    public static final Uri RAZ_URI = Uri
+            .parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/" + RESET_TABLE_NAME);
 
-    public final static String FIELD_NAME = "name";
-    public final static String FIELD_VALUE = "value";
-	
-	
-	public static String getCodecKey(String codecName, String type) {
-		String[] codecParts = codecName.split("/");
-		String preferenceKey = null;
-		if(codecParts.length >=2 ) {
-			return "codec_" + codecParts[0].toLowerCase() + "_" + codecParts[1] + "_" + type;
-		}
-		return preferenceKey;
-	}
-	
-	private static String keyForNetwork(int networkType, int subType) {
-		if(networkType == ConnectivityManager.TYPE_WIFI) {
-			return "wifi";
-		}else if(networkType == ConnectivityManager.TYPE_MOBILE) {
-			// 3G (or better)
-			if (subType >= TelephonyManager.NETWORK_TYPE_UMTS) {
-				return "3g";
-			}
-			
-			// GPRS (or unknown)
-			if ( subType == TelephonyManager.NETWORK_TYPE_GPRS || subType == TelephonyManager.NETWORK_TYPE_UNKNOWN) {
-				return "gprs";
-			}
-			
-			// EDGE
-			if ( subType == TelephonyManager.NETWORK_TYPE_EDGE) {
-				return "edge";
-			}
-		}
-		
-		return "other";
-	}
-	
-	public static String getBandTypeKey(int networkType, int subType) {
-		return "band_for_" + keyForNetwork(networkType, subType);
-	}
-	
+    /**
+     * Content value key for preference name<br/>
+     * Deeply advised to not use directly
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String FIELD_NAME = "name";
+    /**
+     * Content value key for preference value<br/>
+     * Deeply advised to not use directly
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     * @see #setPreferenceFloatValue(Context, String, Float)
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String FIELD_VALUE = "value";
+
+    /**
+     * Narrow band type to get codec preference key.<br/>
+     * 
+     * @see #getCodecKey(String, String)
+     */
+    public static final String CODEC_NB = "nb";
+
+    /**
+     * Wide band type to get codec preference key.<br/>
+     * 
+     * @see #getCodecKey(String, String)
+     */
+    public static final String CODEC_WB = "wb";
+
+    /**
+     * Get the preference key for a codec priority
+     * 
+     * @param codecName Name of the codec as known by pjsip. Example PCMU/8000/1
+     * @param type Type of the codec {@link #CODEC_NB} or {@link #CODEC_WB}
+     * @return The key to use to set/get the priority of a codec for a given
+     *         bandwidth
+     */
+    public static String getCodecKey(String codecName, String type) {
+        String[] codecParts = codecName.split("/");
+        String preferenceKey = null;
+        if (codecParts.length >= 2) {
+            return "codec_" + codecParts[0].toLowerCase() + "_" + codecParts[1] + "_" + type;
+        }
+        return preferenceKey;
+    }
+
+    /**
+     * Get the preference <b>partial</b> key for a given network kind
+     * 
+     * @param networkType Type of the network {@link ConnectivityManager}
+     * @param subType Subtype of the network {@link TelephonyManager}
+     * @return The partial key for the network kind
+     */
+    private static String keyForNetwork(int networkType, int subType) {
+        if (networkType == ConnectivityManager.TYPE_WIFI) {
+            return "wifi";
+        } else if (networkType == ConnectivityManager.TYPE_MOBILE) {
+            // 3G (or better)
+            if (subType >= TelephonyManager.NETWORK_TYPE_UMTS) {
+                return "3g";
+            }
+
+            // GPRS (or unknown)
+            if (subType == TelephonyManager.NETWORK_TYPE_GPRS
+                    || subType == TelephonyManager.NETWORK_TYPE_UNKNOWN) {
+                return "gprs";
+            }
+
+            // EDGE
+            if (subType == TelephonyManager.NETWORK_TYPE_EDGE) {
+                return "edge";
+            }
+        }
+
+        return "other";
+    }
+
+    /**
+     * Get preference key for the kind of bandwidth to associate to a network
+     * 
+     * @param networkType Type of the network {@link ConnectivityManager}
+     * @param subType Subtype of the network {@link TelephonyManager}
+     * @return the preference key for the network kind passed in argument
+     */
+    public static String getBandTypeKey(int networkType, int subType) {
+        return "band_for_" + keyForNetwork(networkType, subType);
+    }
 
     private static Uri getPrefUriForKey(String key) {
         return Uri.withAppendedPath(PREF_ID_URI_BASE, key);
@@ -215,9 +1067,10 @@ public class SipConfigManager {
     public static String getPreferenceStringValue(Context ctxt, String key) {
         return getPreferenceStringValue(ctxt, key, null);
     }
-    
+
     /**
      * Helper method to retrieve a csipsimple string config value
+     * 
      * @param ctxt The context of your app
      * @param key the key for the setting you want to get
      * @param defaultValue the value you want to return if nothing found
@@ -227,10 +1080,10 @@ public class SipConfigManager {
         String value = defaultValue;
         Uri uri = getPrefUriForKey(key);
         Cursor c = ctxt.getContentResolver().query(uri, null, String.class.getName(), null, null);
-        if(c!=null) {
+        if (c != null) {
             c.moveToFirst();
             String strValue = c.getString(1);
-            if(strValue != null) {
+            if (strValue != null) {
                 value = strValue;
             }
             c.close();
@@ -259,10 +1112,10 @@ public class SipConfigManager {
         Boolean value = defaultValue;
         Uri uri = getPrefUriForKey(key);
         Cursor c = ctxt.getContentResolver().query(uri, null, Boolean.class.getName(), null, null);
-        if(c!=null) {
+        if (c != null) {
             c.moveToFirst();
             int intValue = c.getInt(1);
-            if(intValue >= 0) {
+            if (intValue >= 0) {
                 value = (intValue == 1);
             }
             c.close();
@@ -287,21 +1140,21 @@ public class SipConfigManager {
      * @param defaultValue the value you want to return if nothing found
      * @return the preference value
      */
-    public static Float getPreferenceFloatValue(Context ctxt, String key,  Float defaultValue) {
+    public static Float getPreferenceFloatValue(Context ctxt, String key, Float defaultValue) {
         Float value = defaultValue;
         Uri uri = getPrefUriForKey(key);
         Cursor c = ctxt.getContentResolver().query(uri, null, Float.class.getName(), null, null);
-        if(c!=null) {
+        if (c != null) {
             c.moveToFirst();
             Float fValue = c.getFloat(1);
-            if(fValue != null) {
+            if (fValue != null) {
                 value = fValue;
             }
             c.close();
         }
         return value;
     }
-    
+
     /**
      * Get integer configuration value with null default value
      * 
@@ -311,29 +1164,29 @@ public class SipConfigManager {
         return getPreferenceIntegerValue(ctxt, key, null);
     }
 
-
     /**
      * Helper method to retrieve a csipsimple float config value
+     * 
      * @param ctxt The context of your app
      * @param key the key for the setting you want to get
      * @param defaultValue the value you want to return if nothing found
      * @return the preference value
      */
-    public static Integer getPreferenceIntegerValue(Context ctxt, String key,  Integer defaultValue) {
+    public static Integer getPreferenceIntegerValue(Context ctxt, String key, Integer defaultValue) {
         Integer value = defaultValue;
         Uri uri = getPrefUriForKey(key);
         Cursor c = ctxt.getContentResolver().query(uri, null, Integer.class.getName(), null, null);
-        if(c!=null) {
+        if (c != null) {
             c.moveToFirst();
             Integer iValue = c.getInt(1);
-            if(iValue != null) {
+            if (iValue != null) {
                 value = iValue;
             }
             c.close();
         }
         return value;
     }
-    
+
     /**
      * Set the value of a preference string
      * 
@@ -364,6 +1217,7 @@ public class SipConfigManager {
 
     /**
      * Set the value of a preference string
+     * 
      * @param ctxt The context of android app
      * @param key The key config to change
      * @param value The value to set to
@@ -374,5 +1228,18 @@ public class SipConfigManager {
         values.put(SipConfigManager.FIELD_VALUE, value);
         ctxt.getContentResolver().update(uri, values, Float.class.getName(), null);
     }
-	
+
+    /**
+     * Set the value of a preference integer
+     * 
+     * @param ctxt The context of android app
+     * @param key The key config to change
+     * @param value The value to set to
+     */
+    public static void setPreferenceIntegerValue(Context ctxt, String key, Integer value) {
+        if (value != null) {
+            setPreferenceStringValue(ctxt, key, value.toString());
+        }
+    }
+
 }
