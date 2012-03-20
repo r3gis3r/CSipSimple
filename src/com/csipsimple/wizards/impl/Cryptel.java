@@ -50,7 +50,7 @@ public class Cryptel extends SimpleImplementation {
         accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
         
         accountPassword.setTitle(R.string.w_cryptel_password);
-        accountUsername.setDialogTitle(R.string.w_cryptel_password);
+        accountPassword.setDialogTitle(R.string.w_cryptel_password);
 	}
 	
 
@@ -63,7 +63,7 @@ public class Cryptel extends SimpleImplementation {
         //Only G711a/u and g722 on WB
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"0");
-        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"243");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"235");
         prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB,"245");
         prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
@@ -71,9 +71,13 @@ public class Cryptel extends SimpleImplementation {
         prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
         prefs.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_WB, "242");
-        prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_WB, "239");
-        prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, "240");
+        prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, "0");
         prefs.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB, "244");
+        prefs.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_WB, "236");
+        prefs.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("G726-40/8000/1", SipConfigManager.CODEC_WB, "200");
         
         //On NB set for gsm high priority
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"0");
@@ -86,9 +90,13 @@ public class Cryptel extends SimpleImplementation {
         prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
         prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "245");
         prefs.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_NB, "244");
-        prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_NB, "243");
-        prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "240");
+        prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_NB, "0");
+        prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "0");
         prefs.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_NB, "239");
+        prefs.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_WB, "236");
+        prefs.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("G726-40/8000/1", SipConfigManager.CODEC_WB, "200");
     }
     
     @Override

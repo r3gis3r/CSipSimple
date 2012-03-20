@@ -661,6 +661,7 @@ public class SipHome extends FragmentActivity {
                 }, null);
 
                 Intent it = new Intent(this, BasePrefsWizard.class);
+                it.putExtra(SipProfile.FIELD_WIZARD, distribWizard.id);
                 Long accountId = null;
                 if (c != null && c.getCount() > 0) {
                     try {
@@ -674,9 +675,8 @@ public class SipHome extends FragmentActivity {
                 }
                 if (accountId != null) {
                     it.putExtra(SipProfile.FIELD_ID, accountId);
-                    it.putExtra(SipProfile.FIELD_WIZARD, distribWizard.id);
-                    startActivityForResult(it, REQUEST_EDIT_DISTRIBUTION_ACCOUNT);
                 }
+                startActivityForResult(it, REQUEST_EDIT_DISTRIBUTION_ACCOUNT);
 
                 return true;
             default:
