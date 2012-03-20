@@ -470,8 +470,6 @@ public class SipHome extends FragmentActivity {
                 if (distribWizard != null) {
                     accountIntent = new Intent(this, BasePrefsWizard.class);
                     accountIntent.putExtra(SipProfile.FIELD_WIZARD, distribWizard.id);
-                    // startActivity(new Intent(this, AccountsList.class));
-                    startActivity(new Intent(this, AccountsEditList.class));
                 } else {
                     accountIntent = new Intent(this, AccountsEditList.class);
                 }
