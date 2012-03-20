@@ -23,6 +23,7 @@
 
 package com.csipsimple.api;
 
+import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -376,47 +377,272 @@ public class SipProfile implements Parcelable {
      */
     public static final String FIELD_CONTACT_REWRITE_METHOD = "contact_rewrite_method";
 
+    /**
+     * Additional parameters that will be appended in the Contact header for
+     * this account.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#abef88254f9ef2a490503df6d3b297e54"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_CONTACT_PARAMS = "contact_params";
+    /**
+     * Additional URI parameters that will be appended in the Contact URI for
+     * this account.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#aced70341308928ae951525093bf47562"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_CONTACT_URI_PARAMS = "contact_uri_params";
+    /**
+     * Transport to use for this account.<br/>
+     * 
+     * @see #TRANSPORT_AUTO
+     * @see #TRANSPORT_UDP
+     * @see #TRANSPORT_TCP
+     * @see #TRANSPORT_TLS
+     */
     public static final String FIELD_TRANSPORT = "transport";
+    /**
+     * Way the application should use SRTP. <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a34b00edb1851924a99efd8fedab917ba"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     */
     public static final String FIELD_USE_SRTP = "use_srtp";
+    /**
+     * @deprecated for now not useful because only global info.
+     * @see SipConfigManager#USE_ZRTP
+     */
     public static final String FIELD_USE_ZRTP = "use_zrtp";
 
-    // For now, assume unique proxy
+    /**
+     * Optional URI of the proxies to be visited for all outgoing requests that
+     * are using this account (REGISTER, INVITE, etc).<br/>
+     * If multiple separate it by {@link #PROXIES_SEPARATOR}. <br/>
+     * Warning, for now api doesn't allow multiple credentials so if you have
+     * one credential per proxy may not work.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a93ad0699020c17ddad5eb98dea69f699"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     * @see #PROXIES_SEPARATOR
+     */
     public static final String FIELD_PROXY = "proxy";
+    /**
+     * Specify how the registration uses the outbound and account proxy
+     * settings. <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#ad932bbb3c2c256f801c775319e645717"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     */
     public static final String FIELD_REG_USE_PROXY = "reg_use_proxy";
 
     // For now, assume unique credential
+    /**
+     * Realm to filter on for credentials.<br/>
+     * Put star "*" char if you want it to match all requests.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#a96eee6bdc2b0e7e3b7eea9b4e1c15674"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_REALM = "realm";
+    /**
+     * Scheme (e.g. "digest").<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#ae31c9ec1c99fb1ffa20be5954ee995a7"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     * @see #CRED_SCHEME_DIGEST
+     * @see #CRED_SCHEME_PGP
+     */
     public static final String FIELD_SCHEME = "scheme";
+    /**
+     * Credential username.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#a3e1f72a171886985c6dfcd57d4bc4f17"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_USERNAME = "username";
+    /**
+     * Type of the data for credentials.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#a8b1e563c814bdf8012f0bdf966d0ad9d"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     * @see #CRED_DATA_PLAIN_PASSWD
+     * @see #CRED_DATA_DIGEST
+     * @see #CRED_CRED_DATA_EXT_AKA
+     */
     public static final String FIELD_DATATYPE = "datatype";
+    /**
+     * The data, which can be a plaintext password or a hashed digest.<br/>
+     * This is available on in read only for third party application for obvious
+     * security reason.<br/>
+     * If you update the content provider without passing this parameter it will
+     * not override it. <br/>
+     * If in a third party app you want to store the password to allow user to
+     * see it, you have to manage this by your own. <br/>
+     * However, it's highly recommanded to not store it by your own, and keep it
+     * stored only in csipsimple.<br/>
+     * It available for write/overwrite. <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsip__cred__info.htm#ab3947a7800c51d28a1b25f4fdaea78bd"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_DATA = "data";
 
     // Android stuff
+    /**
+     * The backend sip stack to use for this account.<br/>
+     * For now only pjsip backend is supported.
+     * 
+     * @see Integer
+     * @see #PJSIP_STACK
+     * @see #GOOGLE_STACK
+     */
     public static final String FIELD_SIP_STACK = "sip_stack";
+    /**
+     * Sip contact to call if user want to consult his voice mail.<br/>
+     * 
+     * @see String
+     */
     public static final String FIELD_VOICE_MAIL_NBR = "vm_nbr";
+    /**
+     * Associated contact group for buddy list of this account.<br/>
+     * Users of this group will be considered as part of the buddy list of this
+     * account and will automatically try to subscribe presence if activated.<br/>
+     * Warning : not implemented for now.
+     * 
+     * @see String
+     */
     public static final String FIELD_ANDROID_GROUP = "android_group";
 
     // Sip outbound
+    /**
+     * Control the use of SIP outbound feature. <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a306e4641988606f1ef0993e398ff98e7"
+     * >Pjsip documentation</a>
+     * 
+     * @see Boolean
+     */
     public static final String FIELD_USE_RFC5626 = "use_rfc5626";
+    /**
+     * Specify SIP outbound (RFC 5626) instance ID to be used by this
+     * application.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#ae025bf4538d1f9f9506b45015a46a8f6"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_RFC5626_INSTANCE_ID = "rfc5626_instance_id";
+    /**
+     * Specify SIP outbound (RFC 5626) registration ID.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a71376e1f32e35401fc6c2c3bcb2087d8"
+     * >Pjsip documentation</a>
+     * 
+     * @see String
+     */
     public static final String FIELD_RFC5626_REG_ID = "rfc5626_reg_id";
 
     // Video config
+    /**
+     * Auto show video of the remote party.<br/>
+     * TODO : complete when pjsip-2.x stable documentation out
+     */
     public static final String FIELD_VID_IN_AUTO_SHOW = "vid_in_auto_show";
+    /**
+     * Auto transmit video of our party.<br/>
+     * TODO : complete when pjsip-2.x stable documentation out
+     */
     public static final String FIELD_VID_OUT_AUTO_TRANSMIT = "vid_out_auto_transmit";
 
     // RTP config
+    /**
+     * Begin RTP port for the media of this account.<br/>
+     * By default it will use {@link SipConfigManager#RTP_PORT}
+     * 
+     * @see Integer
+     */
     public static final String FIELD_RTP_PORT = "rtp_port";
+    /**
+     * Public address to announce in SDP as self media address.<br/>
+     * Only use if you have static and known public ip on your device regarding
+     * the sip server. <br/>
+     * May be helpful in VPN configurations.
+     */
     public static final String FIELD_RTP_PUBLIC_ADDR = "rtp_public_addr";
+    /**
+     * Address to bound from client to enforce on interface to be used. <br/>
+     * By default the application bind all addresses. (0.0.0.0).<br/>
+     * This is only useful if you want to avoid one interface to be bound, but
+     * is useless to get audio path correctly working use
+     * {@link #FIELD_RTP_PUBLIC_ADDR}
+     */
     public static final String FIELD_RTP_BOUND_ADDR = "rtp_bound_addr";
+    /**
+     * Should the QoS be enabled on this account.<br/>
+     * By default it will use {@link SipConfigManager#ENABLE_QOS}.<br/>
+     * Default value is -1 to use global setting. 0 means disabled, 1 means
+     * enabled.<br/>
+     * 
+     * @see Integer
+     * @see SipConfigManager#ENABLE_QOS
+     */
     public static final String FIELD_RTP_ENABLE_QOS = "rtp_enable_qos";
+    /**
+     * The value of DSCP.<br/>
+     * 
+     * @see Integer
+     * @see SipConfigManager#DSCP_VAL
+     */
     public static final String FIELD_RTP_QOS_DSCP = "rtp_qos_dscp";
 
+    /**
+     * Should the application try to clean registration of all sip clients if no
+     * registration found.<br/>
+     * This is useful if the sip server manage limited serveral concurrent
+     * registrations.<br/>
+     * Since in this case the registrations may leak in case of failing
+     * unregisters, this option will unregister all contacts previously
+     * registred.
+     * 
+     * @see Boolean
+     */
     public static final String FIELD_TRY_CLEAN_REGISTERS = "try_clean_reg";
 
+    /**
+     * Simple project to use if you want to list accounts with basic infos on it
+     * only.
+     * 
+     * @see #FIELD_ACC_ID
+     * @see #FIELD_ACTIVE
+     * @see #FIELD_WIZARD
+     * @see #FIELD_DISPLAY_NAME
+     * @see #FIELD_WIZARD
+     * @see #FIELD_PRIORITY
+     * @see #FIELD_REG_URI
+     */
     public static final String[] LISTABLE_PROJECTION = new String[] {
+            SipProfile.FIELD_ID,
             SipProfile.FIELD_ACC_ID,
             SipProfile.FIELD_ACTIVE,
             SipProfile.FIELD_DISPLAY_NAME,
@@ -426,6 +652,9 @@ public class SipProfile implements Parcelable {
     };
 
     // Properties
+    /**
+     * Primary key for serialization of the object.
+     */
     public int primaryKey = -1;
     /**
      * @see #FIELD_ID
@@ -476,33 +705,121 @@ public class SipProfile implements Parcelable {
      * @see #FIELD_PIDF_TUPLE_ID
      */
     public String pidf_tuple_id = null;
+    /**
+     * @see #FIELD_FORCE_CONTACT
+     */
     public String force_contact = null;
+    /**
+     * @see #FIELD_ALLOW_CONTACT_REWRITE
+     */
     public boolean allow_contact_rewrite = true;
+    /**
+     * @see #FIELD_CONTACT_REWRITE_METHOD
+     */
     public int contact_rewrite_method = 2;
+    /**
+     * Exploded array of proxies
+     * 
+     * @see #FIELD_PROXY
+     */
     public String[] proxies = null;
+    /**
+     * @see #FIELD_REALM
+     */
     public String realm = null;
+    /**
+     * @see #FIELD_USERNAME
+     */
     public String username = null;
+    /**
+     * @see #FIELD_SCHEME
+     */
     public String scheme = null;
+    /**
+     * @see #FIELD_DATATYPE
+     */
     public int datatype = 0;
+    /**
+     * @see #FIELD_DATA
+     */
     public String data = null;
+    /**
+     * @see #FIELD_USE_SRTP
+     */
     public int use_srtp = -1;
+    /**
+     * @see #FIELD_USE_ZRTP
+     */
     public int use_zrtp = 0;
+    /**
+     * @see #FIELD_REG_USE_PROXY
+     */
     public int reg_use_proxy = 3;
+    /**
+     * @see #FIELD_SIP_STACK
+     */
     public int sip_stack = PJSIP_STACK;
+    /**
+     * @see #FIELD_VOICE_MAIL_NBR
+     */
     public String vm_nbr = null;
+    /**
+     * @see #FIELD_REG_DELAY_BEFORE_REFRESH
+     */
     public int reg_delay_before_refresh = -1;
+    /**
+     * @see #FIELD_TRY_CLEAN_REGISTERS
+     */
     public int try_clean_registers = 0;
+    /**
+     * Chache holder icon for the account wizard representation.<br/>
+     * This will not not be filled by default. You have to get it from wizard
+     * infos.
+     */
     public Bitmap icon = null;
+    /**
+     * @see #FIELD_USE_RFC5626
+     */
     public boolean use_rfc5626 = true;
+    /**
+     * @see #FIELD_RFC5626_INSTANCE_ID
+     */
     public String rfc5626_instance_id = "";
+    /**
+     * @see #FIELD_RFC5626_REG_ID
+     */
     public String rfc5626_reg_id = "";
+    /**
+     * @see #FIELD_VID_IN_AUTO_SHOW
+     */
     public int vid_in_auto_show = -1;
+    /**
+     * @see #FIELD_VID_OUT_AUTO_TRANSMIT
+     */
     public int vid_out_auto_transmit = -1;
+    /**
+     * @see #FIELD_RTP_PORT
+     */
     public int rtp_port = -1;
+    /**
+     * @see #FIELD_RTP_PUBLIC_ADDR
+     */
     public String rtp_public_addr = "";
+    /**
+     * @see #FIELD_RTP_BOUND_ADDR
+     */
     public String rtp_bound_addr = "";
+    /**
+     * @see #FIELD_RTP_ENABLE_QOS
+     */
     public int rtp_enable_qos = -1;
+    /**
+     * @see #FIELD_RTP_QOS_DSCP
+     */
     public int rtp_qos_dscp = -1;
+    /**
+     * @see #FIELD_ANDROID_GROUP
+     */
     public String android_group = "";
 
     public SipProfile() {
@@ -511,12 +828,24 @@ public class SipProfile implements Parcelable {
         active = true;
     }
 
+    /**
+     * Construct a sip profile wrapper from a cursor retrived avec a
+     * {@link ContentProvider} query on {@link #ACCOUNTS_TABLE_NAME}.
+     * 
+     * @param c the cursor to unpack
+     */
     public SipProfile(Cursor c) {
         super();
         createFromDb(c);
     }
 
-    public SipProfile(Parcel in) {
+    /**
+     * Construct from parcelable <br/>
+     * Only used by {@link #CREATOR}
+     * 
+     * @param in parcelable to build from
+     */
+    private SipProfile(Parcel in) {
         primaryKey = in.readInt();
         id = in.readInt();
         display_name = in.readString();
@@ -560,6 +889,10 @@ public class SipProfile implements Parcelable {
         android_group = getReadParcelableString(in.readString());
     }
 
+    /**
+     * Parcelable creator. So that it can be passed as an argument of the aidl
+     * interface
+     */
     public static final Parcelable.Creator<SipProfile> CREATOR = new Parcelable.Creator<SipProfile>() {
         public SipProfile createFromParcel(Parcel in) {
             return new SipProfile(in);
@@ -570,11 +903,17 @@ public class SipProfile implements Parcelable {
         }
     };
 
+    /**
+     * @see Parcelable#describeContents()
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * @see Parcelable#writeToParcel(Parcel, int)
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(primaryKey);
@@ -634,7 +973,7 @@ public class SipProfile implements Parcelable {
     }
 
     /**
-     * Fill account object from cursor
+     * Create account wrapper with cursor datas.
      * 
      * @param c cursor on the database
      */
@@ -644,6 +983,11 @@ public class SipProfile implements Parcelable {
         createFromContentValue(args);
     }
 
+    /**
+     * Create account wrapper with content values pairs.
+     * 
+     * @param args the content value to unpack.
+     */
     public final void createFromContentValue(ContentValues args) {
         Integer tmp_i;
         String tmp_s;
@@ -828,7 +1172,15 @@ public class SipProfile implements Parcelable {
 
     /**
      * Transform pjsua_acc_config into ContentValues that can be insert into
-     * database
+     * database. <br/>
+     * Take care that if your SipProfile is incomplete this content value may
+     * also be uncomplete and lead to override unwanted values of the existing
+     * database. <br/>
+     * So if updating, take care on what you actually want to update instead of
+     * using this utility method.
+     * 
+     * @return Complete content values from the current wrapper around sip
+     *         profile.
      */
     public ContentValues getDbContentValues() {
         ContentValues args = new ContentValues();
@@ -873,7 +1225,9 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_SCHEME, scheme);
         args.put(FIELD_USERNAME, username);
         args.put(FIELD_DATATYPE, datatype);
-        args.put(FIELD_DATA, data);
+        if (!TextUtils.isEmpty(data)) {
+            args.put(FIELD_DATA, data);
+        }
 
         args.put(FIELD_SIP_STACK, sip_stack);
         args.put(FIELD_VOICE_MAIL_NBR, vm_nbr);
@@ -1009,9 +1363,23 @@ public class SipProfile implements Parcelable {
     }
 
     // Helpers static factory
+    /**
+     * Helper method to retrieve a SipProfile object from its account database
+     * id.<br/>
+     * You have to specify the projection you want to use for to retrieve infos.<br/>
+     * As consequence the wrapper SipProfile object you'll get may be
+     * incomplete. So take care if you try to reinject it by updating to not
+     * override existing values of the database that you don't get here.
+     * 
+     * @param ctxt Your application context. Mainly useful to get the content provider for the request.
+     * @param accountId The sip profile {@link #FIELD_ID} you want to retrieve.
+     * @param projection The list of fields you want to retrieve. Must be in FIELD_* of this class.<br/>
+     * Reducing your requested fields to minimum will improve speed of the request.
+     * @return A wrapper SipProfile object on the request you done. If not found an invalid account with an {@link #id} equals to {@link #INVALID_ID}
+     */
     public static SipProfile getProfileFromDbId(Context ctxt, long accountId, String[] projection) {
         SipProfile account = new SipProfile();
-        if (accountId != SipProfile.INVALID_ID) {
+        if (accountId != INVALID_ID) {
             Cursor c = ctxt.getContentResolver().query(
                     ContentUris.withAppendedId(ACCOUNT_ID_URI_BASE, accountId),
                     projection, null, null, null);
@@ -1032,6 +1400,13 @@ public class SipProfile implements Parcelable {
         return account;
     }
 
+    /**
+     * Get the list of sip profiles available.
+     * @param ctxt Your application context. Mainly useful to get the content provider for the request.
+     * @param onlyActive Pass it to true if you are only interested in active accounts.
+     * @return The list of SipProfiles containings only fields of {@link #LISTABLE_PROJECTION} filled.
+     * @see #LISTABLE_PROJECTION
+     */
     public static ArrayList<SipProfile> getAllProfiles(Context ctxt, boolean onlyActive) {
         ArrayList<SipProfile> result = new ArrayList<SipProfile>();
 
@@ -1043,12 +1418,7 @@ public class SipProfile implements Parcelable {
                     "1"
             };
         }
-        Cursor c = ctxt.getContentResolver().query(ACCOUNT_URI, new String[] {
-                SipProfile.FIELD_ID,
-                SipProfile.FIELD_DISPLAY_NAME,
-                SipProfile.FIELD_WIZARD,
-                SipProfile.FIELD_ACTIVE
-        }, selection, selectionArgs, null);
+        Cursor c = ctxt.getContentResolver().query(ACCOUNT_URI, LISTABLE_PROJECTION, selection, selectionArgs, null);
 
         if (c != null) {
             try {

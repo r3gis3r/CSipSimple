@@ -60,6 +60,7 @@ import com.csipsimple.wizards.impl.Cellip;
 import com.csipsimple.wizards.impl.CongstarQSC;
 import com.csipsimple.wizards.impl.CongstarTelekom;
 import com.csipsimple.wizards.impl.Cotas;
+import com.csipsimple.wizards.impl.Cryptel;
 import com.csipsimple.wizards.impl.DeltaThree;
 import com.csipsimple.wizards.impl.DvcNg;
 import com.csipsimple.wizards.impl.EasyBell;
@@ -347,6 +348,11 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voipnor, 9, 
                     new Locale[]{ }, false, true, 
                     VoipNor.class));
+            WIZARDS_DICT.put("CRYPTEL", new WizardInfo("CRYPTEL", "Cryptel Inc", 
+                    R.drawable.ic_wizard_cryptel, 9, 
+                    new Locale[]{ }, false, true, 
+                    Cryptel.class));
+            
 			
             
 			

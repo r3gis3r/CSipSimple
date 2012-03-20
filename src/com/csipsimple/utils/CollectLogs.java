@@ -31,6 +31,7 @@ import java.util.Date;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.format.DateFormat;
 
@@ -158,7 +159,10 @@ public class CollectLogs {
 	
 	public final static String getApplicationInfo(Context ctx) {
 		String result = "";
-		result += "Based on the GPL CSipSimple version : ";
+		PackageManager pm = ctx.getPackageManager();
+        result += "Based on GPL application ";
+        result += ctx.getApplicationInfo().loadLabel(pm);
+        result += " version : ";
 		
 		PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(ctx);
 		if(pinfo != null) {
