@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
 
-    <string name="app_name">CSipSimple</string>
     <string name="next">Volgende</string>
     <string name="invalid_sip_uri">Sip uri nie geldig vir oproep nie</string>
     <string name="cancel">Kanselleer</string>

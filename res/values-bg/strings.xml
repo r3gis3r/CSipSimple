@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">cSIPsimple</string>
     <string name="next">Продължи</string>
     <string name="init">Инициализация …</string>
     <string name="unable_to_download_file">Невъзможно да се свали файла</string>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
 
-    <string name="app_name">CSipSimple</string>
     <string name="next">Siguiente</string>
     <string name="init">Inicializando…</string>
     <string name="unable_to_download_file">No se pudo descargar el archivo</string>

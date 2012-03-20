@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">CSipSimple</string>
     <string name="next">다음</string>
     <string name="init">진행 중…</string>
     <string name="unable_to_download_file">파일 다운로드 불가능</string>

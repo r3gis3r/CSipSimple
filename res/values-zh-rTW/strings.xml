@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">CSipSimple</string>
     <string name="next">下一頁</string>
     <string name="init">初始化中…</string>
     <string name="unable_to_download_file">無法下載檔案</string>
