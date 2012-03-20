@@ -829,7 +829,7 @@ public class SipProfile implements Parcelable {
     }
 
     /**
-     * Construct a sip profile wrapper from a cursor retrived avec a
+     * Construct a sip profile wrapper from a cursor retrieved with a
      * {@link ContentProvider} query on {@link #ACCOUNTS_TABLE_NAME}.
      * 
      * @param c the cursor to unpack
@@ -977,7 +977,7 @@ public class SipProfile implements Parcelable {
      * 
      * @param c cursor on the database
      */
-    public final void createFromDb(Cursor c) {
+    private final void createFromDb(Cursor c) {
         ContentValues args = new ContentValues();
         DatabaseUtils.cursorRowToContentValues(c, args);
         createFromContentValue(args);
@@ -988,7 +988,7 @@ public class SipProfile implements Parcelable {
      * 
      * @param args the content value to unpack.
      */
-    public final void createFromContentValue(ContentValues args) {
+    private final void createFromContentValue(ContentValues args) {
         Integer tmp_i;
         String tmp_s;
 

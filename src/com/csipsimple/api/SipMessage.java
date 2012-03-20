@@ -23,9 +23,12 @@
 
 package com.csipsimple.api;
 
+import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 
 /**
@@ -207,21 +210,15 @@ public class SipMessage {
     }
 
     /**
-     * Build from content values with keys FIELD_*.
+     * Construct a sip message wrapper from a cursor retrieved with a
+     * {@link ContentProvider} query on {@link #MESSAGES_TABLE_NAME}.
      * 
-     * @param cv the content values to use to build.
+     * @param c the cursor to unpack
      */
-    public SipMessage(ContentValues cv) {
-        from = cv.getAsString(FIELD_FROM);
-        to = cv.getAsString(FIELD_TO);
-        contact = cv.getAsString(FIELD_CONTACT);
-        body = cv.getAsString(FIELD_BODY);
-        mimeType = cv.getAsString(FIELD_MIME_TYPE);
-        date = cv.getAsLong(FIELD_DATE);
-        type = cv.getAsInteger(FIELD_TYPE);
-        status = cv.getAsInteger(FIELD_STATUS);
-        read = cv.getAsBoolean(FIELD_READ);
-        fullFrom = cv.getAsString(FIELD_FROM_FULL);
+    public SipMessage(Cursor c) {
+        ContentValues args = new ContentValues();
+        DatabaseUtils.cursorRowToContentValues(c, args);
+        createFromContentValue(args);
     }
 
     /**
@@ -243,11 +240,60 @@ public class SipMessage {
         cv.put(FIELD_FROM_FULL, fullFrom);
         return cv;
     }
+    
+    public final void createFromContentValue(ContentValues args) {
+        Integer tmp_i;
+        String tmp_s;
+        Long tmp_l;
+        Boolean tmp_b;
+        
+        tmp_s = args.getAsString(FIELD_FROM);
+        if(tmp_s != null) {
+            from = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_TO);
+        if(tmp_s != null) {
+            to = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_CONTACT);
+        if(tmp_s != null) {
+            contact = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_BODY);
+        if(tmp_s != null) {
+            body = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_MIME_TYPE);
+        if(tmp_s != null) {
+            mimeType = tmp_s;
+        }
+        tmp_l = args.getAsLong(FIELD_DATE);
+        if(tmp_l != null) {
+            date = tmp_l;
+        }
+        tmp_i = args.getAsInteger(FIELD_TYPE);
+        if(tmp_i != null) {
+            type = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_STATUS);
+        if(tmp_i != null) {
+            status = tmp_i;
+        }
+        tmp_b = args.getAsBoolean(FIELD_READ);
+        if(tmp_b != null) {
+            read = tmp_b;
+        }
+
+        tmp_s = args.getAsString(FIELD_FROM_FULL);
+        if(tmp_s != null) {
+            fullFrom = tmp_s;
+        }
+    }
 
     /**
      * Get the from of the message.
      * 
-     * @return the Frome of the sip message
+     * @return the From of the sip message
      */
     public String getFrom() {
         return from;
@@ -289,5 +335,100 @@ public class SipMessage {
     public String getDisplayName() {
         return SipUri.getDisplayedSimpleContact(fullFrom);
     }
+    
+    /**
+     * Get the number of the remote party.
+     * 
+     * @return The remote party number
+     */
+    public String getRemoteNumber() {
+        if (SipMessage.SELF.equalsIgnoreCase(from)) {
+            return to;
+        }else {
+            return from;
+        }
+    }
+    
+    /**
+     * Get the content of the body without error tag
+     * @return The body of the sip message
+     */
+    public String getBodyContent() {
+        int splitIndex = body.indexOf(" // ");
+        if(splitIndex != -1) {
+            return body.substring(0, splitIndex);
+        }
+        return body;
+    }
+    /**
+     * Get optional error of the sip message
+     *  
+     * @return The error string repr if any, null otherwise.
+     */
+    public String getErrorContent() {
+        if (status == SipMessage.STATUS_NONE
+                || status == SipCallSession.StatusCode.OK
+                || status == SipCallSession.StatusCode.ACCEPTED) {
+            return null;
+        }
+        
+        int splitIndex = body.indexOf(" // ");
+        if(splitIndex != -1) {
+            return body.substring(splitIndex + 4, body.length());
+        }
+        return null;
+    }
+    
+    /**
+     * Get the way of the message is send by the user of the application
+     * 
+     * @return true if message is sent by the user of the application
+     */
+    public boolean isOutgoing() {
+        if (SipMessage.SELF.equalsIgnoreCase(from)) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    
+    /**
+     * Get the send/receive date of the message.
+     * @return the date of the send of the message for outgoing, of receive for incoming.
+     */
+    public long getDate() {
+        return date;
+    }
+    
+    /**
+     * Get the complete remote contact from which the message comes.<br/>
+     * This includes display name.
+     *  
+     * @return the sip uri of remote contact as announced when sending this message.
+     */
+    public String getFullFrom() {
+        return fullFrom;
+    }
 
+    /**
+     * Get the type of the message.
+     * 
+     * @return Message type
+     * @see #MESSAGE_TYPE_FAILED
+     * @see #MESSAGE_TYPE_INBOX
+     * @see #MESSAGE_TYPE_QUEUED
+     * @see #MESSAGE_TYPE_SENT
+     */
+    public int getType() {
+        return type;
+    }
+
+    /**
+     * Get the mime type of the message.
+     * 
+     * @return the message mime type sent by remote party.
+     */
+    public String getMimeType() {
+        return mimeType;
+    }
 }

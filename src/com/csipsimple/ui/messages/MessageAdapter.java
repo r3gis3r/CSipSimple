@@ -39,7 +39,6 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.ui.SipHome;
@@ -81,17 +80,14 @@ public class MessageAdapter extends ResourceCursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         final MessageListItemViews tagView = (MessageListItemViews) view.getTag();
         
-        String from = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM));
-        String number = from;
-        if (SipMessage.SELF.equalsIgnoreCase(number)) {
-            number = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_TO));
-        }
-        String fullFrom = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
-        long date = cursor.getLong(cursor.getColumnIndex(SipMessage.FIELD_DATE));
-        String subject = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_BODY));
-        String mimeType = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_MIME_TYPE));
-        int type = cursor.getInt(cursor.getColumnIndex(SipMessage.FIELD_TYPE));
-        int status = cursor.getInt(cursor.getColumnIndex(SipMessage.FIELD_STATUS));
+        SipMessage msg = new SipMessage(cursor);
+        
+        String number = msg.getRemoteNumber();
+        long date = msg.getDate();
+        String subject = msg.getBodyContent();
+        String errorTxt = msg.getErrorContent();
+        String mimeType = msg.getMimeType();
+        int type = msg.getType();
 
         String timestamp = "";
         if (System.currentTimeMillis() - date > 1000 * 60 * 60 * 24) {
@@ -126,29 +122,18 @@ public class MessageAdapter extends ResourceCursorAdapter {
                     .setContentDescription("");
         }
 
-        if (status == SipMessage.STATUS_NONE
-                || status == SipCallSession.StatusCode.OK
-                || status == SipCallSession.StatusCode.ACCEPTED) {
+        if (TextUtils.isEmpty(errorTxt)) {
             tagView.errorView.setVisibility(View.GONE);
         } else {
-
-            int splitIndex = subject.indexOf(" // ");
-            String errorTxt = null;
-            if (splitIndex != -1) {
-                errorTxt = subject.substring(splitIndex + 4, subject.length());
-                subject = subject.substring(0, splitIndex);
-            }
-            if (errorTxt != null) {
-                tagView.errorView.setVisibility(View.VISIBLE);
-                tagView.errorView.setText(errorTxt);
-            }
+            tagView.errorView.setVisibility(View.VISIBLE);
+            tagView.errorView.setText(errorTxt);
         }
 
         // Subject
         tagView.contentView.setText(formatMessage(number, subject, mimeType));
         
         
-        if(SipMessage.SELF.equalsIgnoreCase(from)) {
+        if(msg.isOutgoing()) {
             setPhotoSide(tagView, ArrowPosition.LEFT);
     
             // Photo
@@ -163,7 +148,7 @@ public class MessageAdapter extends ResourceCursorAdapter {
             setPhotoSide(tagView, ArrowPosition.RIGHT);
             
             // Contact
-            CallerInfo info = CallerInfo.getCallerInfoFromSipUri(mContext, fullFrom);
+            CallerInfo info = CallerInfo.getCallerInfoFromSipUri(mContext, msg.getFullFrom());
     
             // Photo
             tagView.quickContactView.assignContactUri(info.contactContentUri);
