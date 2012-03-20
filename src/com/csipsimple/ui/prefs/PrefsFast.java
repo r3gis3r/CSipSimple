@@ -22,10 +22,7 @@
 package com.csipsimple.ui.prefs;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -43,8 +40,6 @@ public class PrefsFast extends Activity implements OnClickListener {
 	private RadioButton globProfileWifi;
 	private RadioButton globProfileNever;
 	private CheckBox globGsm;
-	private PreferencesWrapper prefsWrapper;
-	private SharedPreferences prefs;
 	
 	
 	enum Profile {
@@ -59,8 +54,6 @@ public class PrefsFast extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fast_settings);
 		
-		prefsWrapper = new PreferencesWrapper(this);
-		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		//Init checkboxes objects
 		globIntegrate = (CheckBox) findViewById(R.id.glob_integrate);
@@ -94,21 +87,21 @@ public class PrefsFast extends Activity implements OnClickListener {
 	}
 	
 	private void updateFromPrefs() {
-		globIntegrate.setChecked(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER));
-		boolean tgIn = prefs.getBoolean("use_3g_in", false);
-		boolean tgOut = prefs.getBoolean("use_3g_out", false);
-		boolean gprsIn = prefs.getBoolean("use_gprs_in", false);
-		boolean gprsOut = prefs.getBoolean("use_gprs_out", false);
-		boolean edgeIn = prefs.getBoolean("use_edge_in", false);
-		boolean edgeOut = prefs.getBoolean("use_edge_out", false);
-		boolean wifiIn = prefs.getBoolean("use_wifi_in", true);
-		boolean wifiOut = prefs.getBoolean("use_wifi_out", true);
+		globIntegrate.setChecked(SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.INTEGRATE_WITH_DIALER));
+		boolean tgIn = SipConfigManager.getPreferenceBooleanValue(this, "use_3g_in", false);
+		boolean tgOut = SipConfigManager.getPreferenceBooleanValue(this, "use_3g_out", false);
+		boolean gprsIn = SipConfigManager.getPreferenceBooleanValue(this, "use_gprs_in", false);
+		boolean gprsOut = SipConfigManager.getPreferenceBooleanValue(this, "use_gprs_out", false);
+		boolean edgeIn = SipConfigManager.getPreferenceBooleanValue(this, "use_edge_in", false);
+		boolean edgeOut = SipConfigManager.getPreferenceBooleanValue(this, "use_edge_out", false);
+		boolean wifiIn = SipConfigManager.getPreferenceBooleanValue(this, "use_wifi_in", true);
+		boolean wifiOut = SipConfigManager.getPreferenceBooleanValue(this, "use_wifi_out", true);
 		
 		boolean useGsmIn = (tgIn || gprsIn || edgeIn);
 		boolean useGsmOut = (tgOut || gprsOut || edgeOut);
 		
 		boolean useGsm = useGsmIn || useGsmOut ;
-		boolean lockWifi = prefs.getBoolean("lock_wifi", true);
+		boolean lockWifi = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.LOCK_WIFI, true);
 		
 		globGsm.setChecked( useGsm );
 		
@@ -149,8 +142,8 @@ public class PrefsFast extends Activity implements OnClickListener {
 		}else if( id == R.id.row_glob_tg ) {
 			globGsm.toggle();
 		}else if (id == R.id.save_bt) {
-			if(!prefsWrapper.hasAlreadySetup()) {
-				prefsWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, true);
+			if(!SipConfigManager.getPreferenceBooleanValue(this, PreferencesWrapper.HAS_ALREADY_SETUP, false) ) {
+			    SipConfigManager.setPreferenceBooleanValue(this, PreferencesWrapper.HAS_ALREADY_SETUP, true);
 			}
 			finish();
 		}
@@ -168,31 +161,28 @@ public class PrefsFast extends Activity implements OnClickListener {
 			mode = Profile.NEVER;
 		}
 		
-		Editor edt = prefs.edit();
-		
 		// About integration
-		edt.putBoolean(SipConfigManager.INTEGRATE_WITH_DIALER, integrate);
-		edt.putBoolean(SipConfigManager.INTEGRATE_WITH_CALLLOGS, integrate);
+		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.INTEGRATE_WITH_DIALER, integrate);
+		SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.INTEGRATE_WITH_CALLLOGS, integrate);
 		
 		// About out/in mode
 		if(mode != Profile.UNKOWN) {
 			
-			edt.putBoolean("use_3g_in", (useGsm && mode == Profile.ALWAYS));
-			edt.putBoolean("use_3g_out", useGsm);
-			edt.putBoolean("use_gprs_in", (useGsm && mode == Profile.ALWAYS));
-			edt.putBoolean("use_gprs_out", useGsm);
-			edt.putBoolean("use_edge_in", (useGsm && mode == Profile.ALWAYS));
-			edt.putBoolean("use_edge_out", useGsm);
+		    SipConfigManager.setPreferenceBooleanValue(this, "use_3g_in", (useGsm && mode == Profile.ALWAYS));
+			SipConfigManager.setPreferenceBooleanValue(this, "use_3g_out", useGsm);
+			SipConfigManager.setPreferenceBooleanValue(this, "use_gprs_in", (useGsm && mode == Profile.ALWAYS));
+			SipConfigManager.setPreferenceBooleanValue(this, "use_gprs_out", useGsm);
+			SipConfigManager.setPreferenceBooleanValue(this, "use_edge_in", (useGsm && mode == Profile.ALWAYS));
+			SipConfigManager.setPreferenceBooleanValue(this, "use_edge_out", useGsm);
 			
-			edt.putBoolean("use_wifi_in", mode != Profile.NEVER);
-			edt.putBoolean("use_wifi_out", true);
+			SipConfigManager.setPreferenceBooleanValue(this, "use_wifi_in", mode != Profile.NEVER);
+			SipConfigManager.setPreferenceBooleanValue(this, "use_wifi_out", true);
 			
-			edt.putBoolean("use_other_in", mode != Profile.NEVER);
-			edt.putBoolean("use_other_out", true);
+			SipConfigManager.setPreferenceBooleanValue(this, "use_other_in", mode != Profile.NEVER);
+			SipConfigManager.setPreferenceBooleanValue(this, "use_other_out", true);
 			
-			edt.putBoolean("lock_wifi", (mode == Profile.ALWAYS) && !useGsm);
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.LOCK_WIFI, (mode == Profile.ALWAYS) && !useGsm);
 		}
-		edt.commit();
 		
 	}
 

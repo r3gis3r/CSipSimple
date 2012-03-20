@@ -610,17 +610,6 @@ public class PreferencesWrapper {
 		}
 		return prefsValue;
 	}
-	
-
-	
-	/**
-	 * Check wether setup has already been done
-	 * @return
-	 */
-	public boolean hasAlreadySetup() {
-		return prefs.getBoolean(HAS_ALREADY_SETUP, false);
-	}
-	
 
 
 	private final static String CONFIG_FOLDER = "configs";
