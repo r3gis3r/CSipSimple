@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 	
 	This file is part of CSipSimple.
@@ -16,36 +16,43 @@
 
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
- -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <EditTextPreference
+        android:key="display_name"
+        android:singleLine="true"
+        android:title="@string/w_advanced_display_name" />
+    <EditTextPreference
+        android:key="caller_id"
+        android:singleLine="true"
+        android:title="@string/w_advanced_caller_id" />
+    <EditTextPreference
+        android:key="server"
+        android:singleLine="true"
+        android:title="@string/w_common_server" />
+    <EditTextPreference
+        android:key="username"
+        android:singleLine="true"
+        android:title="@string/w_advanced_username" />
+    <EditTextPreference
+        android:key="auth_id"
+        android:singleLine="true"
+        android:title="@string/w_advanced_auth_id" />
 
-		<EditTextPreference android:key="display_name"
-			android:singleLine="true"
-			android:title="@string/w_advanced_display_name"></EditTextPreference>
+    <com.csipsimple.widgets.PasswordPreference
+        android:key="password"
+        android:password="true"
+        android:singleLine="true"
+        android:title="@string/w_common_password" />
 
-		<EditTextPreference android:key="caller_id"
-			android:singleLine="true"
-			android:title="@string/w_advanced_caller_id"></EditTextPreference>
+    <CheckBoxPreference
+        android:key="use_tcp"
+        android:title="@string/w_advanced_use_tcp" />
 
-		<EditTextPreference android:key="server"
-			android:singleLine="true"
-			android:title="@string/w_common_server"></EditTextPreference>
-			
-		<EditTextPreference android:key="username"
-			android:singleLine="true"
-			android:title="@string/w_advanced_username"></EditTextPreference>
-			
-		<com.csipsimple.widgets.PasswordPreference android:key="password"
-			android:singleLine="true"
-			android:password="true"
-			android:title="@string/w_common_password"></com.csipsimple.widgets.PasswordPreference>
-
-		<CheckBoxPreference android:key="use_tcp" 
-			android:title="@string/w_advanced_use_tcp"></CheckBoxPreference>
-
-		<EditTextPreference android:key="proxy"
-			android:singleLine="true"
-			android:title="@string/w_advanced_proxy"></EditTextPreference>
+    <EditTextPreference
+        android:key="proxy"
+        android:singleLine="true"
+        android:title="@string/w_advanced_proxy" />
 
 </PreferenceScreen>

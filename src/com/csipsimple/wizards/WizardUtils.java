@@ -93,6 +93,7 @@ import com.csipsimple.wizards.impl.Mondotalk;
 import com.csipsimple.wizards.impl.Netelip;
 import com.csipsimple.wizards.impl.NeufTalk;
 import com.csipsimple.wizards.impl.Nymgo;
+import com.csipsimple.wizards.impl.OSTN;
 import com.csipsimple.wizards.impl.OXO810;
 import com.csipsimple.wizards.impl.Odorik;
 import com.csipsimple.wizards.impl.OnSip;
@@ -234,7 +235,7 @@ public class WizardUtils {
 				new Locale[] {}, true, false, 
 				Advanced.class));
 		WIZARDS_DICT.put(WizardUtils.EXPERT_WIZARD_TAG, new WizardInfo(WizardUtils.EXPERT_WIZARD_TAG, "Expert", 
-				R.drawable.ic_wizard_expert, 1, 
+				R.drawable.ic_wizard_expert, 5, 
 				new Locale[] {}, true, false, 
 				Expert.class));
 		WIZARDS_DICT.put(WizardUtils.LOCAL_WIZARD_TAG, new WizardInfo(WizardUtils.LOCAL_WIZARD_TAG, "Local", 
@@ -243,6 +244,13 @@ public class WizardUtils {
 				Local.class));
 		
 		if(CustomDistribution.distributionWantsOtherProviders()) {
+		    
+		    WIZARDS_DICT.put("OSTN", new WizardInfo("OSTN", "OSTN", 
+	                R.drawable.ic_wizard_ostn, 4, 
+	                new Locale[] {}, true, false, 
+	                OSTN.class));
+		    
+		    
 			//World wide
 			WIZARDS_DICT.put("EKIGA", new WizardInfo("EKIGA", "Ekiga", 
 					R.drawable.ic_wizard_ekiga, 50, 

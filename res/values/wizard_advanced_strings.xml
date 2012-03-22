@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 
 	This file is part of CSipSimple.
@@ -16,18 +16,21 @@
 
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
- -->
+-->
 <resources>
-<string name="w_advanced_display_name">Account name</string>
-<string name="w_advanced_display_name_desc">Display name for this account</string>
-<string name="w_advanced_caller_id">Caller ID</string>
-<string name="w_advanced_caller_id_desc">Caller ID to send with calls</string>
-<string name="w_advanced_username">Username</string>
-<string name="w_advanced_username_desc">Username for SIP server authentication (do no write the @sip.server)</string>
-<string name="w_advanced_password">Password</string>
-<string name="w_advanced_password_desc">Password for SIP server authentication</string>
-<string name="w_advanced_use_tcp">Use TCP (not UDP)</string>
-<string name="w_advanced_proxy">Proxy</string>
-<string name="w_advanced_proxy_desc">Proxy domain/IP[:port] (optional, not always needed)</string>
+
+    <string name="w_advanced_display_name">Account name</string>
+    <string name="w_advanced_display_name_desc">Display name for this account</string>
+    <string name="w_advanced_caller_id">Caller ID</string>
+    <string name="w_advanced_caller_id_desc">Caller ID to send with calls</string>
+    <string name="w_advanced_username">Username</string>
+    <string name="w_advanced_username_desc">Username for SIP server authentication (do no write the @sip.server)</string>
+    <string name="w_advanced_password">Password</string>
+    <string name="w_advanced_password_desc">Password for SIP server authentication</string>
+    <string name="w_advanced_use_tcp">Use TCP (not UDP)</string>
+    <string name="w_advanced_proxy">Proxy</string>
+    <string name="w_advanced_proxy_desc">Proxy domain/IP[:port] (optional, not always needed)</string>
+    <string name="w_advanced_auth_id">Sip authentication ID</string>
+    <string name="w_advanced_auth_id_desc">Leave blank for same than Username</string>
 
 </resources>

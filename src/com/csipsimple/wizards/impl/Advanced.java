@@ -26,6 +26,7 @@ import java.util.HashMap;
 import android.net.Uri;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
@@ -43,11 +44,13 @@ public class Advanced extends BaseImplementation {
 	protected EditTextPreference accountCallerId;
 	protected CheckBoxPreference accountUseTcp;
 	protected EditTextPreference accountProxy;
+	protected EditTextPreference accountAuthId;
 	
 	protected final static String FIELD_DISPLAY_NAME = "display_name";
     protected final static String FIELD_CALLER_ID = "caller_id";
     protected final static String FIELD_SERVER = "server";
     protected final static String FIELD_USERNAME = "username";
+    protected final static String FIELD_AUTH_ID = "auth_id";
     protected final static String FIELD_PASSWORD = "password";
     protected final static String FIELD_TCP = "use_tcp";
     protected final static String FIELD_PROXY = "proxy";
@@ -57,6 +60,7 @@ public class Advanced extends BaseImplementation {
 		accountCallerId = (EditTextPreference) parent.findPreference(FIELD_CALLER_ID);
 		accountServer = (EditTextPreference) parent.findPreference(FIELD_SERVER);
 		accountUserName = (EditTextPreference) parent.findPreference(FIELD_USERNAME);
+        accountAuthId = (EditTextPreference) parent.findPreference(FIELD_AUTH_ID);
 		accountPassword = (EditTextPreference) parent.findPreference(FIELD_PASSWORD);
 		accountUseTcp = (CheckBoxPreference) parent.findPreference(FIELD_TCP);
 		accountProxy = (EditTextPreference) parent.findPreference(FIELD_PROXY);
@@ -80,6 +84,16 @@ public class Advanced extends BaseImplementation {
 		accountCallerId.setText(parsedInfo.displayName);
 		accountUserName.setText(parsedInfo.userName);
 		
+		if(!TextUtils.isEmpty(account.username)) {
+		    if(!account.username.equals(parsedInfo.userName)) {
+		        accountAuthId.setText(account.username);
+		    }else {
+		        accountAuthId.setText("");
+		    }
+		}else {
+		    accountAuthId.setText("");
+		}
+		
 		accountPassword.setText(account.data);
 
 		accountUseTcp.setChecked(account.transport == SipProfile.TRANSPORT_TCP);
@@ -96,6 +110,7 @@ public class Advanced extends BaseImplementation {
 		setStringFieldSummary(FIELD_CALLER_ID);
 		setStringFieldSummary(FIELD_SERVER);
 		setStringFieldSummary(FIELD_USERNAME);
+		setStringFieldSummary(FIELD_AUTH_ID);
 		setPasswordFieldSummary(FIELD_PASSWORD);
 		setStringFieldSummary(FIELD_PROXY);
 	}
@@ -110,6 +125,7 @@ public class Advanced extends BaseImplementation {
 		put(FIELD_CALLER_ID, R.string.w_advanced_caller_id_desc);
 		put(FIELD_SERVER, R.string.w_common_server_desc);
 		put(FIELD_USERNAME, R.string.w_advanced_username_desc);
+        put(FIELD_AUTH_ID, R.string.w_advanced_auth_id_desc);
 		put(FIELD_PASSWORD, R.string.w_advanced_password_desc);
 		put(FIELD_PROXY, R.string.w_advanced_proxy_desc);
 	}};
@@ -127,7 +143,7 @@ public class Advanced extends BaseImplementation {
 		boolean isValid = true;
 		
 		isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
-		isValid &= checkField(accountCallerId, isEmpty(accountCallerId));
+		//isValid &= checkField(accountCallerId, isEmpty(accountCallerId));
 		isValid &= checkField(accountServer, isEmpty(accountServer));
 		isValid &= checkField(accountUserName, isEmpty(accountUserName));
 		isValid &= checkField(accountPassword, isEmpty(accountPassword));
@@ -145,7 +161,11 @@ public class Advanced extends BaseImplementation {
 		account.reg_uri = "sip:" + accountServer.getText();
 
 		account.realm = "*";
-		account.username = getText(accountUserName).trim();
+		
+        account.username = getText(accountAuthId).trim();
+        if (TextUtils.isEmpty(account.username)) {
+            account.username = getText(accountUserName).trim();
+        }
 		account.data = getText(accountPassword);
 		account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 		account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
