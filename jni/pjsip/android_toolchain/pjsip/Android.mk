@@ -40,7 +40,7 @@ LOCAL_SRC_FILES := $(PJSIP_SRC_DIR)/sip_config.c $(PJSIP_SRC_DIR)/sip_multipart.
 		$(PJSIPSIMPLE_SRC_DIR)/rpid.c $(PJSIPSIMPLE_SRC_DIR)/xpidf.c \
 		$(PJSUA_SRC_DIR)/pjsua_acc.c $(PJSUA_SRC_DIR)/pjsua_call.c $(PJSUA_SRC_DIR)/pjsua_core.c \
 		$(PJSUA_SRC_DIR)/pjsua_im.c $(PJSUA_SRC_DIR)/pjsua_media.c $(PJSUA_SRC_DIR)/pjsua_pres.c \
-		$(PJSUA_SRC_DIR)/pjsua_dump.c $(PJSUA_SRC_DIR)/pjsua_vid.c 
+		$(PJSUA_SRC_DIR)/pjsua_dump.c $(PJSUA_SRC_DIR)/pjsua_aud.c $(PJSUA_SRC_DIR)/pjsua_vid.c 
 
 ifeq ($(MY_USE_TLS),1)
 LOCAL_SRC_FILES += $(PJSIP_SRC_DIR)/sip_transport_tls_ossl.c
