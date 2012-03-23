@@ -1,0 +1,65 @@
+Index: pjsip/sources/pjsip/include/pjsip/sip_transport.h
+===================================================================
+--- pjsip.orig/sources/pjsip/include/pjsip/sip_transport.h	2012-03-23 13:32:25.146346298 +0100
++++ pjsip/sources/pjsip/include/pjsip/sip_transport.h	2012-03-23 13:33:44.102342997 +0100
+@@ -574,6 +574,13 @@
+     pjsip_tpselector	    tp_sel;
+ 
+     /**
++     * Special flag to indicate that this transmit data is a request that has
++     * been updated with proper authentication response and is ready to be
++     * sent for retry.
++     */
++    pj_bool_t		    auth_retry;
++
++    /**
+      * Arbitrary data attached by PJSIP modules.
+      */
+     void		    *mod_data[PJSIP_MAX_MODULE];
+Index: pjsip/sources/pjsip/src/pjsip/sip_auth_client.c
+===================================================================
+--- pjsip.orig/sources/pjsip/src/pjsip/sip_auth_client.c	2012-03-23 13:32:36.346345829 +0100
++++ pjsip/sources/pjsip/src/pjsip/sip_auth_client.c	2012-03-23 13:33:44.102342997 +0100
+@@ -1103,7 +1103,8 @@
+ 		     PJSIP_EINVALIDSTATUS);
+ 
+     tdata = old_request;
+-    
++    tdata->auth_retry = PJ_FALSE;
++
+     /*
+      * Respond to each authentication challenge.
+      */
+@@ -1174,6 +1175,9 @@
+     /* Must invalidate the message! */
+     pjsip_tx_data_invalidate_msg(tdata);
+ 
++    /* Retrying.. */
++    tdata->auth_retry = PJ_TRUE;
++
+     /* Increment reference counter. */
+     pjsip_tx_data_add_ref(tdata);
+ 
+Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c
+===================================================================
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-03-23 13:32:57.414344948 +0100
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-03-23 13:33:44.106342996 +0100
+@@ -3996,6 +3996,18 @@
+ 	goto on_return;
+     }
+ 
++    /* https://trac.pjsip.org/repos/ticket/1452:
++     *    If a request is retried due to 401/407 challenge, don't process the
++     *    transaction first but wait until we've retried it.
++     */
++    if (tsx->role == PJSIP_ROLE_UAC &&
++	(tsx->status_code==401 || tsx->status_code==407) &&
++	tsx->last_tx && tsx->last_tx->auth_retry)
++    {
++	PJSUA_UNLOCK();
++	return;
++    }
++
+     /* Notify application callback first */
+     if (pjsua_var.ua_cfg.cb.on_call_tsx_state) {
+ 	(*pjsua_var.ua_cfg.cb.on_call_tsx_state)(call->index, tsx, e);
