@@ -21,12 +21,14 @@
 
 package com.csipsimple.widgets;
 
-//import android.annotation.SuppressLint;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.media.ToneGenerator;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,13 +43,15 @@ import com.csipsimple.utils.Theme;
 import java.util.HashMap;
 import java.util.Map;
 
-//@SuppressLint("UseSparseArrays")
+
 public class Dialpad extends LinearLayout implements OnClickListener {
 
 	private OnDialKeyListener onDialKeyListener;
 	private final static String THIS_FILE = "Dialpad";
 	
-	private static final Map<Integer, int[]> DIGITS_BTNS = new HashMap<Integer, int[]>();
+	// Here we need a map to quickly find if the clicked button id is in the map keys
+	@SuppressLint("UseSparseArrays")
+    private static final Map<Integer, int[]> DIGITS_BTNS = new HashMap<Integer, int[]>();
 	
 	static {
 		DIGITS_BTNS.put(R.id.button0, new int[] {ToneGenerator.TONE_DTMF_0, KeyEvent.KEYCODE_0});
@@ -64,7 +68,7 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 		DIGITS_BTNS.put(R.id.buttonstar, new int[] {ToneGenerator.TONE_DTMF_S, KeyEvent.KEYCODE_STAR});
 	};
 	
-	private static final Map<Integer, String> DIGITS_NAMES = new HashMap<Integer, String>();
+	private static final SparseArray<String> DIGITS_NAMES = new SparseArray<String>();
 	static {
 		DIGITS_NAMES.put(R.id.button0, "0");
 		DIGITS_NAMES.put(R.id.button1, "1");

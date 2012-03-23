@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-//import android.annotation.TargetApi;
+import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.app.PendingIntent.CanceledException;
 import android.content.BroadcastReceiver;
@@ -507,7 +507,7 @@ public class OutgoingCallChooser extends ListActivity {
         return false;
     }
     
-    //@TargetApi(5)
+    @TargetApi(5)
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 

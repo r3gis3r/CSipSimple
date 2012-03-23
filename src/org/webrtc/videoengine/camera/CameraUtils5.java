@@ -10,7 +10,7 @@
 
 package org.webrtc.videoengine.camera;
 
-//import android.annotation.TargetApi;
+import android.annotation.TargetApi;
 import android.hardware.Camera;
 
 import org.webrtc.videoengine.VideoCaptureAndroid;
@@ -20,7 +20,7 @@ import org.webrtc.videoengine.VideoCaptureDeviceInfoAndroid.AndroidVideoCaptureD
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-//@TargetApi(5)
+@TargetApi(5)
 public class CameraUtils5 extends CameraUtilsWrapper {
 
     @Override

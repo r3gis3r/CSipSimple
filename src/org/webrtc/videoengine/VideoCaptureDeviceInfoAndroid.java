@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import dalvik.system.DexClassLoader;
 
-//import android.annotation.TargetApi;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
@@ -27,7 +27,8 @@ import android.util.Log;
 
 import org.webrtc.videoengine.camera.CameraUtilsWrapper;
 
-//@TargetApi(5)
+@TargetApi(5)
+@SuppressWarnings("deprecation")
 public class VideoCaptureDeviceInfoAndroid {
 
     // Context

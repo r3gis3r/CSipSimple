@@ -18,14 +18,14 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
-//import android.annotation.TargetApi;
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-//@TargetApi(5)
+@TargetApi(5)
 public class ViEAndroidGLES20 extends GLSurfaceView
     implements GLSurfaceView.Renderer {
   // True if onSurfaceCreated has been called.

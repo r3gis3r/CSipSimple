@@ -21,12 +21,12 @@
 
 package com.csipsimple.widgets.contactbadge;
 
-//import android.annotation.TargetApi;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-//@TargetApi(5)
+@TargetApi(5)
 public class OverlayedQuickContactBadge extends android.widget.QuickContactBadge {
 
     private QuickContactBadge topBadge;

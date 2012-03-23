@@ -10,7 +10,7 @@
 
 package org.webrtc.videoengine.camera;
 
-//import android.annotation.TargetApi;
+import android.annotation.TargetApi;
 import android.hardware.Camera;
 
 import org.webrtc.videoengine.VideoCaptureDeviceInfoAndroid;
@@ -20,7 +20,7 @@ import org.webrtc.videoengine.VideoCaptureDeviceInfoAndroid.FrontFacingCameraTyp
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-//@TargetApi(9)
+@TargetApi(9)
 public class CameraUtils9 extends CameraUtils8 {
     @Override
     public void Init(VideoCaptureDeviceInfoAndroid deviceInfoAndroid,

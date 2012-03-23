@@ -21,12 +21,12 @@
 
 package com.csipsimple.service.receiver;
 
-//import android.annotation.TargetApi;
+import android.annotation.TargetApi;
 import android.content.Intent;
 
 import com.csipsimple.service.SipService;
 
-//@TargetApi(5)
+@TargetApi(5)
 public class DynamicReceiver5 extends DynamicReceiver4 {
 
     public DynamicReceiver5(SipService aService) {

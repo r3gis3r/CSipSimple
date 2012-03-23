@@ -4,5 +4,4 @@
         <ignore path="res/layout/account_chooser_button.xml" />
     </issue>
     <issue id="MissingTranslation" severity="ignore" />
-    <issue id="NewApi" severity="ignore" />
 </lint>

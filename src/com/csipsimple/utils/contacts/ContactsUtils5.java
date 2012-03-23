@@ -21,7 +21,7 @@
 
 package com.csipsimple.utils.contacts;
 
-//import android.annotation.TargetApi;
+import android.annotation.TargetApi;
 import android.content.ContentProviderOperation;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -65,7 +65,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-//@TargetApi(5)
+@TargetApi(5)
 public class ContactsUtils5 extends ContactsWrapper {
 
     public static final int CONTACT_ID_INDEX = 1;
