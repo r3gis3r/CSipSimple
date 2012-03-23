@@ -11,8 +11,6 @@
 
 ////I know I should not do that here
 void on_zrtp_show_sas_wrapper(void* data, char* sas, int verified);
-void on_zrtp_secure_on_wrapper(void* data, char* cipher);
-void on_zrtp_secure_off_wrapper(void* data);
 
 #include "transport_zrtp.h"
 #include "libzrtpcpp/ZrtpCWrapper.h"
@@ -142,6 +140,7 @@ static void signSAS(void* data, char* sas)
 static int32_t checkSASSignature(void* data, char* sas)
 {
     PJ_LOG(3,(THIS_FILE, "ZRTP - check SAS signature"));
+    return 0;
 }
 
 
@@ -218,7 +217,6 @@ PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p){
 
 }
 
-extern char hs80[];
 
 pj_str_t jzrtp_getInfo(pjmedia_transport* tp){
 	pj_str_t result;
@@ -230,12 +228,13 @@ pj_str_t jzrtp_getInfo(pjmedia_transport* tp){
 
 	zrtp_cb_user_data* zrtp_cb_data = (zrtp_cb_user_data*) pjmedia_transport_zrtp_getUserData(tp);
 
-
-	pj_ansi_snprintf(msg, sizeof(msg),
-			"ZRTP - %s\n%.*s\n%.*s",
-			state ?  "OK" : "No verif.",
-			zrtp_cb_data->sas.slen, zrtp_cb_data->sas.ptr,
-			zrtp_cb_data->cipher.slen, zrtp_cb_data->cipher.ptr);
+	if (state) {
+		pj_ansi_snprintf(msg, sizeof(msg), "ZRTP - %s\n%.*s\n%.*s", "OK",
+				zrtp_cb_data->sas.slen, zrtp_cb_data->sas.ptr,
+				zrtp_cb_data->cipher.slen, zrtp_cb_data->cipher.ptr);
+	} else {
+		pj_ansi_snprintf(msg, sizeof(msg), "");
+	}
 	pj_strdup2_with_null(css_var.pool, &result, msg);
 
 

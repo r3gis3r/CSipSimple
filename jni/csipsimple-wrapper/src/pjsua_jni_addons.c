@@ -154,6 +154,7 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 	pjmedia_transport_info tp_info;
 
 	pj_str_t result = pj_str("");
+	PJ_LOG(3, (THIS_FILE, "Get call secure info..."));
 
 	PJ_ASSERT_RETURN(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls,
 			result);
@@ -167,9 +168,9 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 		call = &pjsua_var.calls[call_id];
 		for (i = 0; i < call->med_cnt; ++i) {
 			pjsua_call_media *call_med = &call->media[i];
-
+			PJ_LOG(4, (THIS_FILE, "Get secure for media type %d", call_med->type));
 			/* Get and ICE SRTP status */
-			if (call_med->tp) {
+			if (call_med->tp && call_med->type == PJMEDIA_TYPE_AUDIO) {
 				pjmedia_transport_info tp_info;
 
 				pjmedia_transport_info_init(&tp_info);
