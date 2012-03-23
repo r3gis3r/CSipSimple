@@ -298,6 +298,16 @@ public final class Compatibility {
         }
         return false;
     }
+    
+    private static boolean needWebRTCImplementation() {
+        if (android.os.Build.DEVICE.toLowerCase().contains("droid2")) {
+            return true;
+        }
+        if (android.os.Build.MODEL.toLowerCase().contains("droid bionic")) {
+            return true;
+        }
+        return false;
+    }
 
     private static void resetCodecsSettings(PreferencesWrapper preferencesWrapper) {
         // Disable iLBC if not armv7
@@ -408,9 +418,8 @@ public final class Compatibility {
                 guessInCallMode());
         preferencesWrapper.setPreferenceStringValue(SipConfigManager.MICRO_SOURCE,
                 getDefaultMicroSource());
-        if (android.os.Build.DEVICE.toLowerCase().contains("droid2")) {
-            preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK, true);
-        }
+        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
+                needWebRTCImplementation());
         
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                 isTabletScreen(preferencesWrapper.getContext()));
@@ -625,6 +634,10 @@ public final class Compatibility {
             prefWrapper
                     .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 
+        }
+        if (lastSeenVersion < 1343 && needWebRTCImplementation()) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
+                    needWebRTCImplementation());
         }
         
         prefWrapper.endEditing();
