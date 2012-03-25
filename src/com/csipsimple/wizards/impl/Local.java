@@ -32,7 +32,7 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class Local extends BaseImplementation {
-	protected static final String THIS_FILE = "Advanced W";
+	protected static final String THIS_FILE = "Local W";
 	
 	private EditTextPreference accountDisplayName;
 	
@@ -40,6 +40,7 @@ public class Local extends BaseImplementation {
 		accountDisplayName = (EditTextPreference) findPreference(SipProfile.FIELD_DISPLAY_NAME);
 		hidePreference(null, "caller_id");
 		hidePreference(null, "server");
+        hidePreference(null, "auth_id");
 		hidePreference(null, "username");
 		hidePreference(null, "password");
 		hidePreference(null, "use_tcp");

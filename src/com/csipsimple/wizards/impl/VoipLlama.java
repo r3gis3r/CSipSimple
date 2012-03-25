@@ -46,6 +46,7 @@ public class VoipLlama extends Advanced {
 		hidePreference(null, FIELD_TCP);
 		hidePreference(null, FIELD_PROXY);
 		hidePreference(null, FIELD_SERVER);
+		hidePreference(null, FIELD_AUTH_ID);
 		if(TextUtils.isEmpty(account.display_name)) {
 		    accountDisplayName.setText(getDefaultName());
 		}

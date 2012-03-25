@@ -1483,8 +1483,12 @@ public class PjSipService {
             if (p.matcher(callee).matches()) {
                 finalCallee = "<" + callee;
             } else {
+                String scheme = "sip";
+                if(account.transport == SipProfile.TRANSPORT_TLS) {
+                    scheme = "sips";
+                }
                 // Should it be encoded?
-                finalCallee = "<sip:" + /* Uri.encode( */callee/* ) */;
+                finalCallee = "<"+scheme+":" + /* Uri.encode( */callee/* ) */;
             }
             // Add domain if needed
             if(TextUtils.isEmpty(defaultDomain)) {
