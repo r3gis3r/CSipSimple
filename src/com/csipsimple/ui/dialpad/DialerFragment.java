@@ -153,6 +153,7 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
     private boolean mDualPane;
 
     private DialerAutocompleteDetailsFragment autoCompleteFragment;
+    private PhoneNumberFormattingTextWatcher digitFormater;
 
     // private ImageButton backFlipTextDialerButton;
 
@@ -160,6 +161,7 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDualPane = getResources().getBoolean(R.bool.use_dual_panes);
+        digitFormater = new PhoneNumberFormattingTextWatcher();
         setHasOptionsMenu(true);
     }
 
@@ -324,8 +326,6 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
 
         digits.setOnClickListener(this);
         digits.setKeyListener(DialerKeyListener.getInstance());
-        PhoneNumberFormattingTextWatcher digitFormater = new PhoneNumberFormattingTextWatcher();
-        digits.addTextChangedListener(digitFormater);
         digits.addTextChangedListener(this);
         digits.setCursorVisible(false);
         afterTextChanged(digits.getText());
@@ -419,11 +419,16 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
     /**
      * Set the mode of the text/digit input.
      * 
-     * @param target Whether we should be in text mode instead of digit mode
+     * @param target True if text mode. False if digit mode
      */
     private void setTextDialing(boolean target) {
         isDigit = !target;
         digits.setIsDigit(isDigit, true);
+        if(isDigit) {
+            digits.addTextChangedListener(digitFormater);
+        }else {
+            digits.removeTextChangedListener(digitFormater);
+        }
         digits.getText().clear();
         digits.setCursorVisible(!isDigit);
         dialPad.setVisibility(isDigit ? View.VISIBLE : View.GONE);
