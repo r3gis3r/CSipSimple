@@ -568,7 +568,40 @@ PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csi
 
 	csipsimple_acc_config *additional_acc_cfg = PJ_POOL_ZALLOC_T(css_var.pool, csipsimple_acc_config);
 	pj_memcpy(additional_acc_cfg, css_acc_cfg, sizeof(csipsimple_acc_config));
+	pj_strdup(css_var.pool, &additional_acc_cfg->p_preferred_identity, &css_acc_cfg->p_preferred_identity);
 	acc_cfg->user_data = additional_acc_cfg;
+
+	return PJ_SUCCESS;
+}
+
+PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg_data* msg_data){
+	csipsimple_acc_config *additional_acc_cfg = NULL;
+
+	// P-Asserted-Identity header
+	pj_str_t hp_preferred_identity_name = { "P-Preferred-Identity", 20 };
+	pjsip_generic_string_hdr hp_preferred_identity;
+
+	// Sanity check
+	PJ_ASSERT_RETURN(msg_data != NULL, PJ_EINVAL);
+
+
+	// Get acc infos
+	if(pjsua_acc_is_valid(acc_id)){
+		additional_acc_cfg = (csipsimple_acc_config *) pjsua_acc_get_user_data(acc_id);
+	}
+
+
+	// Process additionnal config for this account
+	if(additional_acc_cfg != NULL){
+
+		if(additional_acc_cfg->p_preferred_identity.slen > 0){
+			// Create new P-Asserted-Identity hdr if necessary
+			pjsip_generic_string_hdr_init2(&hp_preferred_identity, &hp_preferred_identity_name, &additional_acc_cfg->p_preferred_identity);
+
+			// Push it to msg data
+			pj_list_push_back(&msg_data->hdr_list, &hp_preferred_identity);
+		}
+	}
 
 	return PJ_SUCCESS;
 }

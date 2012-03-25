@@ -1263,7 +1263,7 @@ typedef enum pjsip_redirect_op
      */
     PJSIP_REDIRECT_STOP
 
-} pjsip_redirect_op;
+};
 
 // pjsip/include/psip-ua/sip_timer.h
 
@@ -1284,4 +1284,17 @@ struct pjsip_timer_setting
      */
     unsigned			 sess_expires;	
 
+};
+
+// Silent forward decl of msg_data
+
+
+// Force decl of msg_data so that the real one is used -- this produce a build error but harmless
+struct pjsua_msg_data
+{
+    pjsip_hdr	hdr_list;
+    pj_str_t	content_type;
+    pj_str_t	msg_body;
+    pjsip_media_type  multipart_ctype;
+    pjsip_multipart_part multipart_parts;
 };

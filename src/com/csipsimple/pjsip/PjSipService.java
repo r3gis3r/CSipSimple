@@ -70,6 +70,7 @@ import org.pjsip.pjsua.pjsua_call_setting;
 import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
 import org.pjsip.pjsua.pjsua_media_config;
+import org.pjsip.pjsua.pjsua_msg_data;
 import org.pjsip.pjsua.pjsua_transport_config;
 
 import java.io.File;
@@ -1022,15 +1023,20 @@ public class PjSipService {
             // Nothing to do with this values
             byte[] userData = new byte[1];
             int[] callId = new int[1];
+            pjsua_call_setting cs = new pjsua_call_setting();
+            pjsua_msg_data msgData = new pjsua_msg_data();
             int pjsuaAccId = toCall.getPjsipAccountId();
             
-            pjsua_call_setting cs = new pjsua_call_setting();
+            // Call settings to add video
             pjsua.call_setting_default(cs);
             cs.setAud_cnt(1);
             cs.setVid_cnt(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO) ? 1 : 0);
             cs.setFlag(0);
+            // Msg data to add headers
+            pjsua.msg_data_init(msgData);
+            pjsua.csipsimple_init_acc_msg_data(pjsuaAccId, msgData);
             
-            return pjsua.call_make_call(pjsuaAccId, uri, cs, userData, null, callId);
+            return pjsua.call_make_call(pjsuaAccId, uri, cs, userData, msgData, callId);
         } else {
             service.notifyUserOfMessage(service.getString(R.string.invalid_sip_uri) + " : "
                     + callee);
@@ -1099,8 +1105,7 @@ public class PjSipService {
             // Nothing to do with this values
             byte[] userData = new byte[1];
 
-            int status = pjsua.im_send(toCall.getPjsipAccountId(), uri, null, text,
-                    (org.pjsip.pjsua.SWIGTYPE_p_pjsua_msg_data) null, userData);
+            int status = pjsua.im_send(toCall.getPjsipAccountId(), uri, null, text, null, userData);
             return (status == pjsuaConstants.PJ_SUCCESS) ? toCall : null;
         }
         return toCall;

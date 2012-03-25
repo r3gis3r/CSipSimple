@@ -2,4 +2,3 @@
 typedef struct pjsua_media_config pjsua_media_config;
 (PJ_DECL.*?\s+pjsua_init\s*[^)]+\);)
 (PJ_DECL.*?\s+pjsua_destroy\s*[^)]+\);)
-(PJ_DECL.*?\s+pjmedia_ogl_factory\s*[^)]+\);)
