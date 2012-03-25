@@ -40,104 +40,7 @@ import android.util.Log;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.CustomDistribution;
-import com.csipsimple.wizards.impl.A1;
-import com.csipsimple.wizards.impl.AbcVoip;
-import com.csipsimple.wizards.impl.Advanced;
-import com.csipsimple.wizards.impl.Amivox;
-import com.csipsimple.wizards.impl.BGTel;
-import com.csipsimple.wizards.impl.BTone;
-import com.csipsimple.wizards.impl.Balses;
-import com.csipsimple.wizards.impl.Basic;
-import com.csipsimple.wizards.impl.Beeztel;
-import com.csipsimple.wizards.impl.BelCentrale;
-import com.csipsimple.wizards.impl.Betamax;
-import com.csipsimple.wizards.impl.Blueface;
-import com.csipsimple.wizards.impl.BroadVoice;
-import com.csipsimple.wizards.impl.Broadsoft;
-import com.csipsimple.wizards.impl.Callcentric;
-import com.csipsimple.wizards.impl.CamundaNet;
-import com.csipsimple.wizards.impl.Cellip;
-import com.csipsimple.wizards.impl.CongstarQSC;
-import com.csipsimple.wizards.impl.CongstarTelekom;
-import com.csipsimple.wizards.impl.Cotas;
-import com.csipsimple.wizards.impl.Cryptel;
-import com.csipsimple.wizards.impl.DeltaThree;
-import com.csipsimple.wizards.impl.DvcNg;
-import com.csipsimple.wizards.impl.EasyBell;
-import com.csipsimple.wizards.impl.Ekiga;
-import com.csipsimple.wizards.impl.EuroTelefon;
-import com.csipsimple.wizards.impl.Eutelia;
-import com.csipsimple.wizards.impl.Expert;
-import com.csipsimple.wizards.impl.FastVoip;
-import com.csipsimple.wizards.impl.Fayn;
-import com.csipsimple.wizards.impl.Freeconet;
-import com.csipsimple.wizards.impl.FreephoneLineCa;
-import com.csipsimple.wizards.impl.Freephonie;
-import com.csipsimple.wizards.impl.Globtelecom;
-import com.csipsimple.wizards.impl.Gradwell;
-import com.csipsimple.wizards.impl.Haloo;
-import com.csipsimple.wizards.impl.HalooCentrala;
-import com.csipsimple.wizards.impl.IPComms;
-import com.csipsimple.wizards.impl.IPshka;
-import com.csipsimple.wizards.impl.ITTelenet;
-import com.csipsimple.wizards.impl.IiNet;
-import com.csipsimple.wizards.impl.Innotel;
-import com.csipsimple.wizards.impl.Interphone365;
-import com.csipsimple.wizards.impl.Ip2Mobile;
-import com.csipsimple.wizards.impl.IpTel;
-import com.csipsimple.wizards.impl.Ippi;
-import com.csipsimple.wizards.impl.Keyyo;
-import com.csipsimple.wizards.impl.Local;
-import com.csipsimple.wizards.impl.Localphone;
-import com.csipsimple.wizards.impl.Mondotalk;
-import com.csipsimple.wizards.impl.Netelip;
-import com.csipsimple.wizards.impl.NeufTalk;
-import com.csipsimple.wizards.impl.Nymgo;
-import com.csipsimple.wizards.impl.OSTN;
-import com.csipsimple.wizards.impl.OXO810;
-import com.csipsimple.wizards.impl.Odorik;
-import com.csipsimple.wizards.impl.OnSip;
-import com.csipsimple.wizards.impl.Optimus;
-import com.csipsimple.wizards.impl.Orbtalk;
-import com.csipsimple.wizards.impl.Ovh;
-import com.csipsimple.wizards.impl.Pbxes;
-import com.csipsimple.wizards.impl.Pennytel;
-import com.csipsimple.wizards.impl.Pfingo;
-import com.csipsimple.wizards.impl.Phonzo;
-import com.csipsimple.wizards.impl.PlanetPhone;
-import com.csipsimple.wizards.impl.Pozitel;
-import com.csipsimple.wizards.impl.Rapidvox;
-import com.csipsimple.wizards.impl.Sipkom;
-import com.csipsimple.wizards.impl.Smarto;
-import com.csipsimple.wizards.impl.Sapo;
-import com.csipsimple.wizards.impl.Sbohempevnalinko;
-import com.csipsimple.wizards.impl.Scarlet;
-import com.csipsimple.wizards.impl.Sip2Sip;
-import com.csipsimple.wizards.impl.SipCel;
-import com.csipsimple.wizards.impl.SipSorcery;
-import com.csipsimple.wizards.impl.SipWise;
-import com.csipsimple.wizards.impl.Sipgate;
-import com.csipsimple.wizards.impl.Sipnet;
-import com.csipsimple.wizards.impl.SiptelPt;
-import com.csipsimple.wizards.impl.Sonetel;
-import com.csipsimple.wizards.impl.Speakezi;
-import com.csipsimple.wizards.impl.Tanstagi;
-import com.csipsimple.wizards.impl.Telsome;
-import com.csipsimple.wizards.impl.Tlenofon;
-import com.csipsimple.wizards.impl.UkrTelecom;
-import com.csipsimple.wizards.impl.VPhone;
-import com.csipsimple.wizards.impl.Vanbergsystems;
-import com.csipsimple.wizards.impl.Viva;
-import com.csipsimple.wizards.impl.VoipBel;
-import com.csipsimple.wizards.impl.VoipLlama;
-import com.csipsimple.wizards.impl.VoipMS;
-import com.csipsimple.wizards.impl.VoipNor;
-import com.csipsimple.wizards.impl.VoipTel;
-import com.csipsimple.wizards.impl.Vono;
-import com.csipsimple.wizards.impl.WiMobile;
-import com.csipsimple.wizards.impl.XNet;
-import com.csipsimple.wizards.impl.Zadarma;
-import com.csipsimple.wizards.impl.ZonPt;
+import com.csipsimple.wizards.impl.*;
 
 
 public class WizardUtils {
@@ -360,6 +263,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_cryptel, 9, 
                     new Locale[]{ }, false, true, 
                     Cryptel.class));
+            WIZARDS_DICT.put("FLOWROUTE", new WizardInfo("FLOWROUTE", "Flowroute", 
+                    R.drawable.ic_wizard_flowroute, 9, 
+                    new Locale[]{ }, false, true, 
+                    Flowroute.class));
             
 			
             
