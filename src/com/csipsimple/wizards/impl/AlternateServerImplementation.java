@@ -35,7 +35,7 @@ public abstract class AlternateServerImplementation extends SimpleImplementation
 	@Override
 	protected void bindFields() {
 		super.bindFields();
-		accountServer = (EditTextPreference) parent.findPreference(SERVER);
+		accountServer = (EditTextPreference) findPreference(SERVER);
 	}
 	
 	@Override

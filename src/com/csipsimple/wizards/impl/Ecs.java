@@ -48,12 +48,12 @@ public class Ecs extends BaseImplementation {
 	private EditTextPreference accountServerIp;
 	
 	private void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference(DISPLAY_NAME);
-		accountPhoneNumber = (EditTextPreference) parent.findPreference(PHONE_NUMBER);
-		accountUsername = (EditTextPreference) parent.findPreference(USER_NAME);
-		accountPassword = (EditTextPreference) parent.findPreference(PASSWORD);
-		accountServerDomain = (EditTextPreference) parent.findPreference(DOMAIN);
-		accountServerIp = (EditTextPreference) parent.findPreference(SERVER);
+		accountDisplayName = (EditTextPreference) findPreference(DISPLAY_NAME);
+		accountPhoneNumber = (EditTextPreference) findPreference(PHONE_NUMBER);
+		accountUsername = (EditTextPreference) findPreference(USER_NAME);
+		accountPassword = (EditTextPreference) findPreference(PASSWORD);
+		accountServerDomain = (EditTextPreference) findPreference(DOMAIN);
+		accountServerIp = (EditTextPreference) findPreference(SERVER);
 		
 	}
 

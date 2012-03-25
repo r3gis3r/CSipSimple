@@ -416,8 +416,12 @@ public class SipProfile implements Parcelable {
      */
     public static final String FIELD_USE_SRTP = "use_srtp";
     /**
-     * @deprecated for now not useful because only global info.
-     * @see SipConfigManager#USE_ZRTP
+     * Way the application should use SRTP. <br/>
+     * -1 means use default global value of {@link SipConfigManager#USE_ZRTP} <br/>
+     * 0 means disabled for this account <br/>
+     * 1 means enabled for this account
+     *  
+     * @see Integer
      */
     public static final String FIELD_USE_ZRTP = "use_zrtp";
 
@@ -750,7 +754,7 @@ public class SipProfile implements Parcelable {
     /**
      * @see #FIELD_USE_ZRTP
      */
-    public int use_zrtp = 0;
+    public int use_zrtp = -1;
     /**
      * @see #FIELD_REG_USE_PROXY
      */

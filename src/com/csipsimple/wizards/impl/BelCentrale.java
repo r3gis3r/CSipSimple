@@ -57,7 +57,7 @@ public class BelCentrale extends SimpleImplementation {
 				"pbx6", "pbx7", "pbx8", "pbx9", "pbx10", "pbx11", "pbx12", "pbx13", "pbx15"};
 
 		boolean recycle = true;
-		accountState = (ListPreference) parent.findPreference(STATE_KEY);
+		accountState = (ListPreference) findPreference(STATE_KEY);
 		if(accountState == null) {
 			accountState = new ListPreference(parent);
 			accountState.setKey(STATE_KEY);
@@ -72,7 +72,7 @@ public class BelCentrale extends SimpleImplementation {
         accountState.setDefaultValue("login");
         
         if(!recycle) {
-        	parent.getPreferenceScreen().addPreference(accountState);
+        	addPreference(accountState);
         }
         
 

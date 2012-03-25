@@ -125,6 +125,16 @@ typedef struct csipsimple_config {
 
 } csipsimple_config;
 
+typedef struct csipsimple_acc_config {
+
+	/**
+	 * Use ZRTP
+	 */
+	int use_zrtp;
+
+} csipsimple_acc_config;
+
+
 // methods
 PJ_DECL(int) codecs_get_nbr();
 PJ_DECL(pj_str_t) codecs_get_id(int codec_id) ;
@@ -136,12 +146,15 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id);
 PJ_DECL(pj_str_t) get_error_message(int status);
 
 PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg);
+PJ_DECL(void) csipsimple_acc_config_default(csipsimple_acc_config* css_acc_cfg);
+
 PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				pjsua_logging_config *log_cfg,
 				pjsua_media_config *media_cfg,
 				csipsimple_config *css_cfg,
 				jobject context);
 PJ_DECL(pj_status_t) csipsimple_destroy(void);
+PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csipsimple_acc_config* css_acc_cfg);
 PJ_DECL(pj_status_t) pj_timer_fire(long cpj_entry);
 PJ_DECL(pj_status_t) pjsua_acc_clean_all_registrations( pjsua_acc_id acc_id);
 PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr);
@@ -170,6 +183,7 @@ struct css_data {
     pj_bool_t ringback_on;
 
     // About zrtp cfg
+    pj_bool_t default_use_zrtp;
     char zid_file[512];
 
     jobject context;

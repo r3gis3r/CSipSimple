@@ -66,7 +66,7 @@ public class VoipMS extends SimpleImplementation {
 		
 		
 		boolean recycle = true;
-		sipServer = (ListPreference) parent.findPreference(PROVIDER_LIST_KEY);
+		sipServer = (ListPreference) findPreference(PROVIDER_LIST_KEY);
 		if(sipServer == null) {
 			sipServer = new ListPreference(parent);
 			sipServer.setKey(PROVIDER_LIST_KEY);
@@ -100,7 +100,7 @@ public class VoipMS extends SimpleImplementation {
         }
         
         if(!recycle) {
-            parent.getPreferenceScreen().addPreference(sipServer);
+            addPreference(sipServer);
     	}
    }
 

@@ -235,8 +235,7 @@ public class PjSipService {
                             .getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)));
                 }
 
-                // -- USE_ZRTP 1 is no_zrtp
-
+                // -- USE_ZRTP 1 is no_zrtp, 2 is create_zrtp
                 File zrtpFolder = PreferencesWrapper.getZrtpFolder(service);
                 if (zrtpFolder != null) {
                     cssCfg.setUse_zrtp((prefsWrapper
@@ -245,6 +244,7 @@ public class PjSipService {
                     cssCfg.setStorage_folder(pjsua.pj_str_copy(zrtpFolder.getAbsolutePath()));
                 } else {
                     cssCfg.setUse_zrtp(pjsua.PJ_FALSE);
+                    cssCfg.setStorage_folder(pjsua.pj_str_copy(""));
                 }
 
                 Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynPlugins(service, SipManager.ACTION_GET_EXTRA_CODECS);
@@ -690,6 +690,7 @@ public class PjSipService {
         SipProfileState currentAccountStatus = getProfileState(profile);
 
         if (currentAccountStatus.isAddedToStack()) {
+            pjsua.csipsimple_set_acc_user_data(account.cfg, account.css_cfg);
             status = pjsua.acc_modify(currentAccountStatus.getPjsuaId(), account.cfg);
             ContentValues cv = new ContentValues();
             cv.put(SipProfileState.ADDED_STATUS, status);
@@ -730,11 +731,13 @@ public class PjSipService {
                 
                 pjsua_acc_config nCfg = new pjsua_acc_config();
                 pjsua.acc_get_config(accId[0], nCfg);
+                pjsua.csipsimple_set_acc_user_data(nCfg, account.css_cfg);
                 nCfg.setVid_in_auto_show(pjsuaConstants.PJ_TRUE);
                 nCfg.setVid_out_auto_transmit(pjsuaConstants.PJ_TRUE);
                 status = pjsua.acc_modify(accId[0], nCfg);
             } else {
                 // Cause of standard account different from local account :)
+                pjsua.csipsimple_set_acc_user_data(account.cfg, account.css_cfg);
                 status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
 
             }
@@ -1019,13 +1022,15 @@ public class PjSipService {
             // Nothing to do with this values
             byte[] userData = new byte[1];
             int[] callId = new int[1];
+            int pjsuaAccId = toCall.getPjsipAccountId();
+            
             pjsua_call_setting cs = new pjsua_call_setting();
             pjsua.call_setting_default(cs);
             cs.setAud_cnt(1);
             cs.setVid_cnt(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO) ? 1 : 0);
             cs.setFlag(0);
-            return pjsua
-                    .call_make_call(toCall.getPjsipAccountId(), uri, cs, userData, null, callId);
+            
+            return pjsua.call_make_call(pjsuaAccId, uri, cs, userData, null, callId);
         } else {
             service.notifyUserOfMessage(service.getString(R.string.invalid_sip_uri) + " : "
                     + callee);

@@ -83,9 +83,9 @@
             android:key="reg_timeout"
             android:title="@string/w_expert_reg_timeout" />
         <EditTextPreference
-            android:key="reg_delay_before_refresh"
-            android:summary="@string/w_expert_reg_delay_before_refresh_desc"
-            android:title="@string/w_expert_reg_delay_before_refresh" />
+            android:key="reg_dbr"
+            android:summary="@string/w_expert_reg_dbr_desc"
+            android:title="@string/w_expert_reg_dbr" />
         <EditTextPreference
             android:key="force_contact"
             android:title="@string/w_expert_force_contact" />
@@ -127,6 +127,13 @@
             android:key="use_srtp"
             android:summary="@string/use_srtp_desc"
             android:title="@string/use_srtp" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/use_zrtp_acc_choices"
+            android:entryValues="@array/use_zrtp_acc_values"
+            android:key="use_zrtp"
+            android:summary="@string/use_zrtp_desc"
+            android:title="@string/use_zrtp" />
 
         <EditTextPreference
             android:defaultValue="-1"

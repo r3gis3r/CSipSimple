@@ -46,10 +46,10 @@ public abstract class SimpleImplementation extends BaseImplementation {
 	protected static String USE_TCP = "use_tcp";
 
 	protected void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference(DISPLAY_NAME);
-		accountUsername = (EditTextPreference) parent.findPreference(USER_NAME);
-		accountPassword = (EditTextPreference) parent.findPreference(PASSWORD);
-		accountUseTcp = (CheckBoxPreference) parent.findPreference(USE_TCP);
+		accountDisplayName = (EditTextPreference) findPreference(DISPLAY_NAME);
+		accountUsername = (EditTextPreference) findPreference(USER_NAME);
+		accountPassword = (EditTextPreference) findPreference(PASSWORD);
+		accountUseTcp = (CheckBoxPreference) findPreference(USE_TCP);
 	}
 	
 	public void fillLayout(final SipProfile account) {

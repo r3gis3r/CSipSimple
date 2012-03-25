@@ -44,11 +44,11 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 	protected static String SERVER = "server";
 
 	private void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference(DISPLAY_NAME);
-		accountUsername = (EditTextPreference) parent.findPreference(USER_NAME);
-		accountAuthorization = (EditTextPreference) parent.findPreference(AUTH_NAME);
-		accountPassword = (EditTextPreference) parent.findPreference(PASSWORD);
-		accountServer = (EditTextPreference) parent.findPreference(SERVER);
+		accountDisplayName = (EditTextPreference) findPreference(DISPLAY_NAME);
+		accountUsername = (EditTextPreference) findPreference(USER_NAME);
+		accountAuthorization = (EditTextPreference) findPreference(AUTH_NAME);
+		accountPassword = (EditTextPreference) findPreference(PASSWORD);
+		accountServer = (EditTextPreference) findPreference(SERVER);
 	}
 	
 	

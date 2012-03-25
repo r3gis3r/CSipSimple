@@ -53,12 +53,16 @@ public class Cryptel extends SimpleImplementation {
         accountPassword.setDialogTitle(R.string.w_cryptel_password);
 	}
 	
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+	    acc.use_zrtp = 1;
+	    return acc;
+	}
 
     @Override
     public void setDefaultParams(PreferencesWrapper prefs) {
         super.setDefaultParams(prefs);
-        prefs.setPreferenceStringValue(SipConfigManager.USE_ZRTP, "2");
-        
 
         //Only G711a/u and g722 on WB
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"0");

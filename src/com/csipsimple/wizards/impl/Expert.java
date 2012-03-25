@@ -54,6 +54,7 @@ public class Expert extends BaseImplementation {
 	private ListPreference accountContactRewriteMethod;
 	private EditTextPreference accountProxy;
 	private ListPreference accountUseSrtp;
+    private ListPreference accountUseZrtp;
 	private EditTextPreference accountRegDelayRefresh;
 	private EditTextPreference accountVm;
 	private CheckBoxPreference tryCleanRegisters;
@@ -69,35 +70,36 @@ public class Expert extends BaseImplementation {
     private EditTextPreference rtpQosDscp;
 	
 	private void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference(SipProfile.FIELD_DISPLAY_NAME);
-		accountAccId = (EditTextPreference) parent.findPreference(SipProfile.FIELD_ACC_ID);
-		accountRegUri = (EditTextPreference) parent.findPreference(SipProfile.FIELD_REG_URI);
-		accountRealm = (EditTextPreference) parent.findPreference(SipProfile.FIELD_REALM);
-		accountUserName = (EditTextPreference) parent.findPreference(SipProfile.FIELD_USERNAME);
-		accountData = (EditTextPreference) parent.findPreference(SipProfile.FIELD_DATA);
-		accountDataType = (ListPreference) parent.findPreference(SipProfile.FIELD_DATATYPE);
-		accountScheme = (ListPreference) parent.findPreference(SipProfile.FIELD_SCHEME);
-		accountTransport = (ListPreference) parent.findPreference(SipProfile.FIELD_TRANSPORT);
-		accountUseSrtp = (ListPreference) parent.findPreference(SipProfile.FIELD_USE_SRTP);
-		accountPublishEnabled = (CheckBoxPreference) parent.findPreference(SipProfile.FIELD_PUBLISH_ENABLED);
-		accountRegTimeout = (EditTextPreference) parent.findPreference(SipProfile.FIELD_REG_TIMEOUT);
-		accountRegDelayRefresh = (EditTextPreference) parent.findPreference("reg_delay_before_refresh");
-		accountForceContact = (EditTextPreference) parent.findPreference(SipProfile.FIELD_FORCE_CONTACT);
-		accountAllowContactRewrite = (CheckBoxPreference) parent.findPreference(SipProfile.FIELD_ALLOW_CONTACT_REWRITE);
-		accountContactRewriteMethod = (ListPreference) parent.findPreference(SipProfile.FIELD_CONTACT_REWRITE_METHOD);
-		accountProxy = (EditTextPreference) parent.findPreference(SipProfile.FIELD_PROXY);
-		accountVm = (EditTextPreference) parent.findPreference(SipProfile.FIELD_VOICE_MAIL_NBR);
-		tryCleanRegisters = (CheckBoxPreference) parent.findPreference(SipProfile.FIELD_TRY_CLEAN_REGISTERS);
-		useRfc5626 = (CheckBoxPreference) parent.findPreference(SipProfile.FIELD_USE_RFC5626);
-		rfc5626_instanceId = (EditTextPreference) parent.findPreference(SipProfile.FIELD_RFC5626_INSTANCE_ID);
-		rfc5626_regId = (EditTextPreference) parent.findPreference(SipProfile.FIELD_RFC5626_REG_ID);
-		vidInAutoShow = (ListPreference) parent.findPreference(SipProfile.FIELD_VID_IN_AUTO_SHOW);
-		vidOutAutoTransmit = (ListPreference) parent.findPreference(SipProfile.FIELD_VID_OUT_AUTO_TRANSMIT);
-		rtpEnableQos = (ListPreference) parent.findPreference(SipProfile.FIELD_RTP_ENABLE_QOS);
-		rtpQosDscp = (EditTextPreference) parent.findPreference(SipProfile.FIELD_RTP_QOS_DSCP);
-		rtpPort = (EditTextPreference) parent.findPreference(SipProfile.FIELD_RTP_PORT);
-        rtpBoundAddr = (EditTextPreference) parent.findPreference(SipProfile.FIELD_RTP_BOUND_ADDR);
-        rtpPublicAddr = (EditTextPreference) parent.findPreference(SipProfile.FIELD_RTP_PUBLIC_ADDR);
+		accountDisplayName = (EditTextPreference) findPreference(SipProfile.FIELD_DISPLAY_NAME);
+		accountAccId = (EditTextPreference) findPreference(SipProfile.FIELD_ACC_ID);
+		accountRegUri = (EditTextPreference) findPreference(SipProfile.FIELD_REG_URI);
+		accountRealm = (EditTextPreference) findPreference(SipProfile.FIELD_REALM);
+		accountUserName = (EditTextPreference) findPreference(SipProfile.FIELD_USERNAME);
+		accountData = (EditTextPreference) findPreference(SipProfile.FIELD_DATA);
+		accountDataType = (ListPreference) findPreference(SipProfile.FIELD_DATATYPE);
+		accountScheme = (ListPreference) findPreference(SipProfile.FIELD_SCHEME);
+		accountTransport = (ListPreference) findPreference(SipProfile.FIELD_TRANSPORT);
+		accountUseSrtp = (ListPreference) findPreference(SipProfile.FIELD_USE_SRTP);
+        accountUseZrtp = (ListPreference) findPreference(SipProfile.FIELD_USE_ZRTP);
+		accountPublishEnabled = (CheckBoxPreference) findPreference(SipProfile.FIELD_PUBLISH_ENABLED);
+		accountRegTimeout = (EditTextPreference) findPreference(SipProfile.FIELD_REG_TIMEOUT);
+		accountRegDelayRefresh = (EditTextPreference) findPreference(SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH);
+		accountForceContact = (EditTextPreference) findPreference(SipProfile.FIELD_FORCE_CONTACT);
+		accountAllowContactRewrite = (CheckBoxPreference) findPreference(SipProfile.FIELD_ALLOW_CONTACT_REWRITE);
+		accountContactRewriteMethod = (ListPreference) findPreference(SipProfile.FIELD_CONTACT_REWRITE_METHOD);
+		accountProxy = (EditTextPreference) findPreference(SipProfile.FIELD_PROXY);
+		accountVm = (EditTextPreference) findPreference(SipProfile.FIELD_VOICE_MAIL_NBR);
+		tryCleanRegisters = (CheckBoxPreference) findPreference(SipProfile.FIELD_TRY_CLEAN_REGISTERS);
+		useRfc5626 = (CheckBoxPreference) findPreference(SipProfile.FIELD_USE_RFC5626);
+		rfc5626_instanceId = (EditTextPreference) findPreference(SipProfile.FIELD_RFC5626_INSTANCE_ID);
+		rfc5626_regId = (EditTextPreference) findPreference(SipProfile.FIELD_RFC5626_REG_ID);
+		vidInAutoShow = (ListPreference) findPreference(SipProfile.FIELD_VID_IN_AUTO_SHOW);
+		vidOutAutoTransmit = (ListPreference) findPreference(SipProfile.FIELD_VID_OUT_AUTO_TRANSMIT);
+		rtpEnableQos = (ListPreference) findPreference(SipProfile.FIELD_RTP_ENABLE_QOS);
+		rtpQosDscp = (EditTextPreference) findPreference(SipProfile.FIELD_RTP_QOS_DSCP);
+		rtpPort = (EditTextPreference) findPreference(SipProfile.FIELD_RTP_PORT);
+        rtpBoundAddr = (EditTextPreference) findPreference(SipProfile.FIELD_RTP_BOUND_ADDR);
+        rtpPublicAddr = (EditTextPreference) findPreference(SipProfile.FIELD_RTP_PUBLIC_ADDR);
 	}
 
 	public void fillLayout(final SipProfile account) {
@@ -150,6 +152,7 @@ public class Expert extends BaseImplementation {
 		}
         Log.d(THIS_FILE, "use srtp : " + account.use_srtp);
 		accountUseSrtp.setValueIndex(account.use_srtp + 1);
+		accountUseZrtp.setValueIndex(account.use_zrtp + 1);
 		
 		
 		accountVm.setText(account.vm_nbr);
@@ -184,7 +187,7 @@ public class Expert extends BaseImplementation {
 		put(SipProfile.FIELD_PROXY, R.string.w_expert_proxy_desc);
 		put(SipProfile.FIELD_DATA, R.string.w_expert_data_desc);
         put(SipProfile.FIELD_DATATYPE, R.string.w_expert_datatype_desc);
-        put(SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH, R.string.w_expert_reg_delay_before_refresh_desc);
+        put(SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH, R.string.w_expert_reg_dbr_desc);
         put(SipProfile.FIELD_USE_SRTP, R.string.use_srtp_desc);
 	}};
 
@@ -231,6 +234,7 @@ public class Expert extends BaseImplementation {
 		account.acc_id = getText(accountAccId);
 		account.reg_uri = getText(accountRegUri);
 		account.use_srtp = getIntValue(accountUseSrtp, -1);
+        account.use_zrtp = getIntValue(accountUseZrtp, -1);
 
 		if (!isEmpty(accountUserName)) {
 			account.realm = getText(accountRealm);

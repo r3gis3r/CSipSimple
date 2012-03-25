@@ -56,14 +56,14 @@ public class Advanced extends BaseImplementation {
     protected final static String FIELD_PROXY = "proxy";
 	
 	private void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference(FIELD_DISPLAY_NAME);
-		accountCallerId = (EditTextPreference) parent.findPreference(FIELD_CALLER_ID);
-		accountServer = (EditTextPreference) parent.findPreference(FIELD_SERVER);
-		accountUserName = (EditTextPreference) parent.findPreference(FIELD_USERNAME);
-        accountAuthId = (EditTextPreference) parent.findPreference(FIELD_AUTH_ID);
-		accountPassword = (EditTextPreference) parent.findPreference(FIELD_PASSWORD);
-		accountUseTcp = (CheckBoxPreference) parent.findPreference(FIELD_TCP);
-		accountProxy = (EditTextPreference) parent.findPreference(FIELD_PROXY);
+		accountDisplayName = (EditTextPreference) findPreference(FIELD_DISPLAY_NAME);
+		accountCallerId = (EditTextPreference) findPreference(FIELD_CALLER_ID);
+		accountServer = (EditTextPreference) findPreference(FIELD_SERVER);
+		accountUserName = (EditTextPreference) findPreference(FIELD_USERNAME);
+        accountAuthId = (EditTextPreference) findPreference(FIELD_AUTH_ID);
+		accountPassword = (EditTextPreference) findPreference(FIELD_PASSWORD);
+		accountUseTcp = (CheckBoxPreference) findPreference(FIELD_TCP);
+		accountProxy = (EditTextPreference) findPreference(FIELD_PROXY);
 	}
 
 	public void fillLayout(final SipProfile account) {

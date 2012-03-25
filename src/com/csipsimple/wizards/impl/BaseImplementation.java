@@ -99,6 +99,19 @@ public abstract class BaseImplementation implements WizardIface {
     }
 	
     /**
+     * @see PreferenceScreen#findPreference(CharSequence)
+     */
+    protected Preference findPreference(String fieldName) {
+        return parent.findPreference(fieldName);
+    }
+    /**
+     * @see PreferenceScreen#addPreference(Preference)
+     */
+    protected void addPreference(Preference pref) {
+        parent.getPreferenceScreen().addPreference(pref);
+    }
+    
+    /**
      * Hide a preference from the preference screen.
      * @param parentGroup key for parent group if any. If null no parent group are searched
      * @param fieldName key for the field to remove

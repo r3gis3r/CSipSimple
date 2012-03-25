@@ -20,6 +20,7 @@
  */
 package com.csipsimple.pjsip;
 
+import org.pjsip.pjsua.csipsimple_acc_config;
 import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_qos_type;
 import org.pjsip.pjsua.pj_str_t;
@@ -49,6 +50,7 @@ public class PjSipAccount {
 	public String wizard;
 	public boolean active;
 	public pjsua_acc_config cfg;
+	public csipsimple_acc_config css_cfg;
 	public Long id;
 	public Integer transport = 0;
 	private int profile_vid_auto_show = -1;
@@ -62,10 +64,10 @@ public class PjSipAccount {
 	
 	public PjSipAccount() {
 		cfg = new pjsua_acc_config();
-		
 		pjsua.acc_config_default(cfg);
-		// By default keep alive interval is now 0 since it's managed globally at android level
-		cfg.setKa_interval(0);
+		
+		css_cfg = new csipsimple_acc_config();
+		pjsua.csipsimple_acc_config_default(css_cfg);
 	}
 	
 	/**
@@ -73,6 +75,8 @@ public class PjSipAccount {
 	 * @param profile the sip profile to use
 	 */
 	public PjSipAccount(SipProfile profile) {
+	    this();
+	    
 		if(profile.id != SipProfile.INVALID_ID) {
 			id = profile.id;
 		}
@@ -83,8 +87,6 @@ public class PjSipAccount {
 		active = profile.active;
 		transport = profile.transport;
 
-		cfg = new pjsua_acc_config();
-		pjsua.acc_config_default(cfg);
 		
 		cfg.setPriority(profile.priority);
 		if(profile.acc_id != null) {
@@ -120,13 +122,9 @@ public class PjSipAccount {
 			cfg.setUse_srtp(pjmedia_srtp_use.swigToEnum(profile.use_srtp));
 			cfg.setSrtp_secure_signaling(0);
 		}
-		// TODO : Reactivate that
-		/*
-		if(profile.use_zrtp > 0) {
-			cfg.setUse_zrtp(pjmedia_zrtp_use.swigToEnum(profile.use_zrtp));
-			hasZrtpValue = true;
-		}
-		*/
+		
+		css_cfg.setUse_zrtp(profile.use_zrtp);
+		
 		
 		if(profile.proxies != null) {
 			Log.d("PjSipAccount", "Create proxy "+profile.proxies.length);
@@ -293,18 +291,6 @@ public class PjSipAccount {
             qosParam.setDscp_val(dscpVal);
             qosParam.setFlags((short) 1); // DSCP
         }
-        
-        
-		// For now ZRTP option is not anymore account related but global option
-		/*
-		if(!hasZrtpValue) {
-			int useZrtp = prefs.getPreferenceIntegerValue(SipConfigManager.USE_ZRTP);
-			if(useZrtp == 1 || useZrtp == 2) {
-				cfg.setUse_zrtp(pjmedia_zrtp_use.swigToEnum(useZrtp));
-			}
-			Log.d("Pj profile", "--> added zrtp "+ useZrtp);
-		}
-		*/
 	}
 	
 	

@@ -137,7 +137,7 @@ public class Betamax extends AuthorizationImplementation {
 		accountUsername.setDialogTitle(R.string.w_advanced_caller_id_desc);
 		
 		boolean recycle = true;
-		providerListPref = (ListPreference) parent.findPreference(PROVIDER_LIST_KEY);
+		providerListPref = (ListPreference) findPreference(PROVIDER_LIST_KEY);
 		if(providerListPref == null) {
 			Log.d(THIS_FILE, "Create new list pref");
 			providerListPref = new ListPreference(parent);
@@ -164,7 +164,7 @@ public class Betamax extends AuthorizationImplementation {
         
 
         if(!recycle) {
-        	parent.getPreferenceScreen().addPreference(providerListPref);
+        	addPreference(providerListPref);
         }
         hidePreference(null, SERVER);
         

@@ -46,7 +46,7 @@ public class IiNet extends SimpleImplementation {
         accountState.setTitle(R.string.w_iinet_state);
         accountState.setSummary(R.string.w_iinet_state_desc);
         accountState.setDefaultValue("act");
-        parent.getPreferenceScreen().addPreference(accountState);
+        addPreference(accountState);
         
         String domain = account.reg_uri;
         if( domain != null ) {

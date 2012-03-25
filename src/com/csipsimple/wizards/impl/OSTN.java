@@ -37,6 +37,7 @@ public class OSTN extends AlternateServerImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.transport = SipProfile.TRANSPORT_TLS;
+		account.use_zrtp = 1;
 		return account;
 	}
 	

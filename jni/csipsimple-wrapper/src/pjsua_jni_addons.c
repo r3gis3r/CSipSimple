@@ -143,7 +143,7 @@ PJ_DECL(int) codecs_vid_get_nbr() {
 }
 
 /**
- * Is call using a secure RTP method (SRTP/ZRTP -- TODO)
+ * Is call using a secure RTP method (SRTP/ZRTP)
  */
 PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 
@@ -211,7 +211,41 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 	return result;
 }
 
+// ZRTP and other media dispatcher
+pjmedia_transport* on_transport_created_wrapper(pjsua_call_id call_id,
+	unsigned media_idx,
+	pjmedia_transport *base_tp,
+	unsigned flags) {
+	pj_status_t status = PJ_SUCCESS;
+	pjsua_call_info call_info;
+	void* acc_user_data;
+	int acc_use_zrtp = -1;
 
+	// By default, use default global def
+	pj_bool_t use_zrtp = css_var.default_use_zrtp;
+    status = pjsua_call_get_info(call_id, &call_info);
+	if(status == PJ_SUCCESS && pjsua_acc_is_valid (call_info.acc_id)){
+		acc_user_data = pjsua_acc_get_user_data(call_info.acc_id);
+		if(acc_user_data != NULL){
+			acc_use_zrtp = ((csipsimple_acc_config *) acc_user_data)->use_zrtp;
+			if(acc_use_zrtp >= 0){
+				use_zrtp = (acc_use_zrtp == 1) ? PJ_TRUE : PJ_FALSE;
+			}
+		}
+	}
+#if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
+	if(use_zrtp){
+		PJ_LOG(4, (THIS_FILE, "Dispatch transport creation on ZRTP one"));
+		return on_zrtp_transport_created(call_id, media_idx, base_tp, flags);
+	}
+#endif
+
+
+	return base_tp;
+}
+
+
+// ---- VIDEO STUFF ---- //
 pj_status_t vid_set_stream_window(pjsua_call_media* call_med, pjmedia_dir dir, void* window){
 	pj_status_t status = PJ_ENOTFOUND;
 	pjsua_vid_win *w = NULL;
@@ -407,11 +441,10 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 
 
 	// ZRTP cfg
-#if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
-	if (css_cfg->use_zrtp) {
-		ua_cfg->cb.on_create_media_transport = &on_zrtp_transport_created;
-	}
+	css_var.default_use_zrtp = css_cfg->use_zrtp;
+	ua_cfg->cb.on_create_media_transport = &on_transport_created_wrapper;
 
+#if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 	pj_ansi_snprintf(css_var.zid_file, sizeof(css_var.zid_file),
 			"%.*s/simple.zid", css_cfg->storage_folder.slen,
 			css_cfg->storage_folder.ptr);
@@ -525,6 +558,21 @@ PJ_DECL(pj_status_t) csipsimple_destroy(void) {
 	}
 	return (pj_status_t) pjsua_destroy();
 }
+
+
+PJ_DECL(void) csipsimple_acc_config_default(csipsimple_acc_config* css_acc_cfg){
+	css_acc_cfg->use_zrtp = -1;
+}
+
+PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csipsimple_acc_config* css_acc_cfg){
+
+	csipsimple_acc_config *additional_acc_cfg = PJ_POOL_ZALLOC_T(css_var.pool, csipsimple_acc_config);
+	pj_memcpy(additional_acc_cfg, css_acc_cfg, sizeof(csipsimple_acc_config));
+	acc_cfg->user_data = additional_acc_cfg;
+
+	return PJ_SUCCESS;
+}
+
 
 void update_active_calls(const pj_str_t *new_ip_addr) {
 	pjsip_tpselector tp_sel;

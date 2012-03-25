@@ -46,12 +46,12 @@ public abstract class Broadsoft extends BaseImplementation {
 	protected static String PROXY = "proxy";
 
 	private void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference(DISPLAY_NAME);
-		accountUsername = (EditTextPreference) parent.findPreference(USER_NAME);
-		accountAuthorization = (EditTextPreference) parent.findPreference(AUTH_NAME);
-		accountPassword = (EditTextPreference) parent.findPreference(PASSWORD);
-		accountServer = (EditTextPreference) parent.findPreference(SERVER);
-		accountProxy = (EditTextPreference) parent.findPreference(PROXY);
+		accountDisplayName = (EditTextPreference) findPreference(DISPLAY_NAME);
+		accountUsername = (EditTextPreference) findPreference(USER_NAME);
+		accountAuthorization = (EditTextPreference) findPreference(AUTH_NAME);
+		accountPassword = (EditTextPreference) findPreference(PASSWORD);
+		accountServer = (EditTextPreference) findPreference(SERVER);
+		accountProxy = (EditTextPreference) findPreference(PROXY);
 	}
 	
 	

@@ -37,7 +37,7 @@ public class Local extends BaseImplementation {
 	private EditTextPreference accountDisplayName;
 	
 	private void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
+		accountDisplayName = (EditTextPreference) findPreference(SipProfile.FIELD_DISPLAY_NAME);
 		hidePreference(null, "caller_id");
 		hidePreference(null, "server");
 		hidePreference(null, "username");

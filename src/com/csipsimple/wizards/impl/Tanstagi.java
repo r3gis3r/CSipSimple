@@ -82,7 +82,6 @@ public class Tanstagi extends SimpleImplementation {
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
-		prefs.setPreferenceStringValue(SipConfigManager.USE_ZRTP, "2");
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_TLS, true);
 	}
 	
@@ -120,7 +119,7 @@ public class Tanstagi extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.transport = SipProfile.TRANSPORT_TLS;
-		
+		account.use_zrtp = 1;
 		return account;
 	}
 	

@@ -56,7 +56,7 @@ public class BroadVoice extends SimpleImplementation {
 		
 		// Allow to add suffix x11
 		boolean recycle = true;
-		accountSuffix = (EditTextPreference) parent.findPreference(SUFFIX_KEY);
+		accountSuffix = (EditTextPreference) findPreference(SUFFIX_KEY);
 		if(accountSuffix == null) {
 			accountSuffix = new EditTextPreference(parent);
 			accountSuffix.setKey(SUFFIX_KEY);
@@ -75,7 +75,7 @@ public class BroadVoice extends SimpleImplementation {
 		}
 
         if(!recycle) {
-            parent.getPreferenceScreen().addPreference(accountSuffix);
+            addPreference(accountSuffix);
     	}
 		
 	}

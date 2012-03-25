@@ -64,7 +64,7 @@ public class Speakezi extends SimpleImplementation {
         super.fillLayout(account);
 
         boolean recycle = true;
-        sipServer = (ListPreference) parent.findPreference(PROVIDER_LIST_KEY);
+        sipServer = (ListPreference) findPreference(PROVIDER_LIST_KEY);
         if (sipServer == null) {
             sipServer = new ListPreference(parent);
             sipServer.setKey(PROVIDER_LIST_KEY);
@@ -98,7 +98,7 @@ public class Speakezi extends SimpleImplementation {
         }
 
         if (!recycle) {
-            parent.getPreferenceScreen().addPreference(sipServer);
+            addPreference(sipServer);
         }
     }
 

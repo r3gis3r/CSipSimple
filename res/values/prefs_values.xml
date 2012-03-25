@@ -191,6 +191,16 @@
         <item>@string/no_zrtp</item>
         <item>@string/create_zrtp</item>
     </string-array>
+    <string-array name="use_zrtp_acc_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="use_zrtp_acc_choices">
+        <item>@string/default_str</item>
+        <item>@string/no_zrtp</item>
+        <item>@string/create_zrtp</item>
+    </string-array>
     <string-array name="auto_on_off_values">
         <item>-1</item>
         <item>0</item>

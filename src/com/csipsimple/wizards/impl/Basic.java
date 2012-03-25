@@ -41,10 +41,10 @@ public class Basic extends BaseImplementation {
 	private EditTextPreference accountPassword;
 
 	private void bindFields() {
-		accountDisplayName = (EditTextPreference) parent.findPreference("display_name");
-		accountUserName = (EditTextPreference) parent.findPreference("username");
-		accountServer = (EditTextPreference) parent.findPreference("server");
-		accountPassword = (EditTextPreference) parent.findPreference("password");
+		accountDisplayName = (EditTextPreference) findPreference("display_name");
+		accountUserName = (EditTextPreference) findPreference("username");
+		accountServer = (EditTextPreference) findPreference("server");
+		accountPassword = (EditTextPreference) findPreference("password");
 	}
 	
 	public void fillLayout(final SipProfile account) {

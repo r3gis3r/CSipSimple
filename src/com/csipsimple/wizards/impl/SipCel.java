@@ -88,8 +88,8 @@ public class SipCel extends SimpleImplementation {
         useSafePort.setSummary("Connect to port 443 instead of 5060");
         
 
-        parent.getPreferenceScreen().addPreference(accountState);
-        parent.getPreferenceScreen().addPreference(useSafePort);
+        addPreference(accountState);
+        addPreference(useSafePort);
 	}
 	
 
