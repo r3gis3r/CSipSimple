@@ -25,6 +25,8 @@ import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
+import java.util.regex.Pattern;
+
 public class OSTN extends AlternateServerImplementation {
 	
 	
@@ -36,6 +38,17 @@ public class OSTN extends AlternateServerImplementation {
 	
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
+		String domain = getDomain();
+		String[] domainPart = domain.split(":");
+		boolean shouldAddPort = true;
+		if(domainPart.length > 1) {
+		    // If latest part is digit we should not add port
+		    shouldAddPort = !Pattern.matches("^[0-9]+$", domainPart[1]);
+		}
+		if(shouldAddPort) {
+		    domain = domain + ":5061";
+		}
+		account.proxies = new String[] { "sips:" + domain };
 		account.transport = SipProfile.TRANSPORT_TLS;
 		account.use_zrtp = 1;
 		return account;
@@ -44,7 +57,6 @@ public class OSTN extends AlternateServerImplementation {
     @Override
     public void setDefaultParams(PreferencesWrapper prefs) {
             super.setDefaultParams(prefs);
-            prefs.setPreferenceStringValue(SipConfigManager.USE_ZRTP, "2");
             prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_TLS, true);
     }
    
