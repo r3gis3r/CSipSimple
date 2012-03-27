@@ -154,6 +154,18 @@ public class Expert extends BaseImplementation {
 		accountUseSrtp.setValueIndex(account.use_srtp + 1);
 		accountUseZrtp.setValueIndex(account.use_zrtp + 1);
 		
+		useRfc5626.setChecked(account.use_rfc5626);
+		rfc5626_instanceId.setText(account.rfc5626_instance_id);
+		rfc5626_regId.setText(account.rfc5626_reg_id);
+		
+		rtpEnableQos.setValue(Integer.toString(account.rtp_enable_qos));
+        rtpQosDscp.setText(Integer.toString(account.rtp_qos_dscp));
+        rtpPort.setText(Integer.toString(account.rtp_port));
+        rtpBoundAddr.setText(account.rtp_bound_addr);
+        rtpPublicAddr.setText(account.rtp_public_addr);
+        
+        vidInAutoShow.setValue(Integer.toString(account.vid_in_auto_show));
+        vidOutAutoTransmit.setValue(Integer.toString(account.vid_out_auto_transmit));
 		
 		accountVm.setText(account.vm_nbr);
 		tryCleanRegisters.setChecked(account.try_clean_registers != 0);

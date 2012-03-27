@@ -1237,6 +1237,20 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_VOICE_MAIL_NBR, vm_nbr);
         args.put(FIELD_REG_DELAY_BEFORE_REFRESH, reg_delay_before_refresh);
         args.put(FIELD_TRY_CLEAN_REGISTERS, try_clean_registers);
+        
+        
+        args.put(FIELD_RTP_BOUND_ADDR, rtp_bound_addr);
+        args.put(FIELD_RTP_ENABLE_QOS, rtp_enable_qos);
+        args.put(FIELD_RTP_PORT, rtp_port);
+        args.put(FIELD_RTP_PUBLIC_ADDR, rtp_public_addr);
+        args.put(FIELD_RTP_QOS_DSCP, rtp_qos_dscp);
+        
+        args.put(FIELD_VID_IN_AUTO_SHOW, vid_in_auto_show);
+        args.put(FIELD_VID_OUT_AUTO_TRANSMIT, vid_out_auto_transmit);
+        
+        args.put(FIELD_RFC5626_INSTANCE_ID, rfc5626_instance_id);
+        args.put(FIELD_RFC5626_REG_ID, rfc5626_reg_id);
+        args.put(FIELD_USE_RFC5626, use_rfc5626);
 
         args.put(FIELD_ANDROID_GROUP, android_group);
 
