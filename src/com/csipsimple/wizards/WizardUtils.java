@@ -595,6 +595,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_xnet, 10, 
                     new Locale[]{new Locale("EN", "nz") }, false, false, 
                     XNet.class));
+            WIZARDS_DICT.put("MUNDOR", new WizardInfo("MUNDOR", "Mundo-R", 
+                    R.drawable.ic_wizard_mundor, 10, 
+                    new Locale[]{ locale("es_ES")  }, false, false, 
+                    MundoR.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
