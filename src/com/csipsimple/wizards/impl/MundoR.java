@@ -56,6 +56,7 @@ public class MundoR extends SimpleImplementation {
         acc.proxies = new String[] {};
         acc.reg_uri = "sip:213.60.204.6";
         acc.transport = SipProfile.TRANSPORT_UDP;
+        acc.reg_timeout = 3600;
         return acc;
     }
     

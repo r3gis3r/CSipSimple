@@ -32,6 +32,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
@@ -1056,10 +1057,20 @@ public class PjSipService {
             return -1;
         }
         int res = -1;
-
-        KeyCharacterMap km = KeyCharacterMap.load(KeyCharacterMap.NUMERIC);
-
-        String keyPressed = String.valueOf(km.getNumber(keyCode));
+        String keyPressed = "";
+        // Since some device (xoom...) are apparently buggy with key character map loading... 
+        // we have to do crappy thing here
+        if(keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9 ) {
+            keyPressed = Integer.toString(keyCode - KeyEvent.KEYCODE_0);
+        } else if (keyCode == KeyEvent.KEYCODE_POUND){
+            keyPressed = "#";
+        } else if (keyCode == KeyEvent.KEYCODE_STAR){
+            keyPressed = "*";
+        } else {
+            // Fallback... should never be there if using visible dialpad, but possible using keyboard
+            KeyCharacterMap km = KeyCharacterMap.load(KeyCharacterMap.NUMERIC);
+            keyPressed = Integer.toString(km.getNumber(keyCode));
+        }
         pj_str_t pjKeyPressed = pjsua.pj_str_copy(keyPressed);
         if (prefsWrapper.useSipInfoDtmf()) {
             res = pjsua.send_dtmf_info(callId, pjKeyPressed);
