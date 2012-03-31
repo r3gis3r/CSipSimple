@@ -36,6 +36,7 @@ import android.os.SystemClock;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
@@ -212,13 +213,15 @@ public class UAStateReceiver extends Callback {
 	@Override
 	public void on_buddy_state(int buddyId) {
 		lockCpu();
-		Log.d(THIS_FILE, "On buddy state " + buddyId);
+		
 		pjsua_buddy_info binfo = new pjsua_buddy_info();
 		pjsua.buddy_get_info(buddyId, binfo);
 		
-		Log.d(THIS_FILE, "On buddy state " + binfo.getMonitor_pres() + " state " + binfo.getSub_state_name());
-        Log.d(THIS_FILE, "status " + PjSipService.pjStrToString(binfo.getStatus_text()));
+		Log.d(THIS_FILE, "On buddy " + buddyId + " state " + binfo.getMonitor_pres() + " state " + PjSipService.pjStrToString(binfo.getStatus_text()));
         PresenceStatus presStatus = PresenceStatus.UNKNOWN;
+        // First get info from basic status
+        String presStatusTxt = PjSipService.pjStrToString(binfo.getStatus_text());
+        boolean isDefaultTxt = presStatusTxt.equalsIgnoreCase("Online") || presStatusTxt.equalsIgnoreCase("Offline");
         switch (binfo.getStatus()) {
             case PJSUA_BUDDY_STATUS_ONLINE:
                 presStatus = PresenceStatus.ONLINE;
@@ -231,12 +234,26 @@ public class UAStateReceiver extends Callback {
                 presStatus = PresenceStatus.UNKNOWN;
                 break;
         }
-        Log.d(THIS_FILE, "PjService " + pjService);
-        Log.d(THIS_FILE, "Service " + pjService.service);
-        Log.d(THIS_FILE, "Presence manager " + pjService.service.presenceMgr);
+        // Now get infos from RPID
+        switch(binfo.getRpid().getActivity()) {
+            case PJRPID_ACTIVITY_AWAY:
+                presStatus = PresenceStatus.AWAY;
+                if(isDefaultTxt) {
+                    presStatusTxt = "";
+                }
+                break;
+            case PJRPID_ACTIVITY_BUSY:
+                presStatus = PresenceStatus.BUSY;
+                if(isDefaultTxt) {
+                    presStatusTxt = "";
+                }
+                break;
+            default:
+                break;
+        }
         
         pjService.service.presenceMgr.changeBuddyState(PjSipService.pjStrToString(binfo.getUri()),
-                binfo.getMonitor_pres(), presStatus, PjSipService.pjStrToString(binfo.getStatus_text())); 
+                binfo.getMonitor_pres(), presStatus, presStatusTxt); 
 		unlockCpu();
 	}
 

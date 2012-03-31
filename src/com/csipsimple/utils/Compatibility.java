@@ -333,6 +333,10 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_NB, "235");
+        preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_NB, "0");
+        preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_NB, "0");
+        preferencesWrapper.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_NB, "0");
+        preferencesWrapper.setCodecPriority("G726-40/8000/1", SipConfigManager.CODEC_NB, "0");
 
         // For Wideband
         preferencesWrapper.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB, "60");
@@ -356,6 +360,10 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_WB, "0");
+        preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_WB, "0");
+        preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_WB, "0");
+        preferencesWrapper.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_WB, "0");
+        preferencesWrapper.setCodecPriority("G726-40/8000/1", SipConfigManager.CODEC_WB, "0");
 
         // Bands repartition
         preferencesWrapper.setPreferenceStringValue("band_for_wifi", SipConfigManager.CODEC_WB);

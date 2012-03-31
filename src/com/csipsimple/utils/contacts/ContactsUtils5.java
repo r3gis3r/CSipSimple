@@ -410,8 +410,7 @@ public class ContactsUtils5 extends ContactsWrapper {
         CallerInfo callerInfo = new CallerInfo();
         return callerInfo;
     }
-    
-    
+
     @Override
     public Cursor getContactsPhones(Context ctxt) {
 
@@ -423,7 +422,8 @@ public class ContactsUtils5 extends ContactsWrapper {
 
         // Has sip uri
         if (Compatibility.isCompatible(9)) {
-            isPhoneType += " OR " + Data.MIMETYPE + "='" + CommonDataKinds.SipAddress.CONTENT_ITEM_TYPE + "'";
+            isPhoneType += " OR " + Data.MIMETYPE + "='"
+                    + CommonDataKinds.SipAddress.CONTENT_ITEM_TYPE + "'";
         }
         // Sip: IM custo
         isPhoneType += " OR (" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
@@ -438,10 +438,9 @@ public class ContactsUtils5 extends ContactsWrapper {
         String query = Contacts.DISPLAY_NAME + " IS NOT NULL "
                 + " AND (" + isPhoneType + ")";
 
-
         String[] projection;
         if (Compatibility.isCompatible(11)) {
-            projection =  new String[] {
+            projection = new String[] {
                     Data._ID,
                     Data.CONTACT_ID,
                     Data.DATA1,
@@ -451,7 +450,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                     Data.PHOTO_URI
             };
         } else {
-            projection =  new String[] {
+            projection = new String[] {
                     Data._ID,
                     Data.CONTACT_ID,
                     Data.DATA1,
@@ -460,14 +459,13 @@ public class ContactsUtils5 extends ContactsWrapper {
                     Data.LOOKUP_KEY
             };
         }
-        
-        Cursor resCursor = ctxt.getContentResolver().query(uri, 
+
+        Cursor resCursor = ctxt.getContentResolver().query(uri,
                 projection, query,
                 null, Data.DISPLAY_NAME + " ASC");
-        
+
         return resCursor;
     }
-    
 
     @Override
     public void bindContactPhoneView(View view, Context context, Cursor cursor) {
@@ -479,19 +477,17 @@ public class ContactsUtils5 extends ContactsWrapper {
         Uri uri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
         Bitmap bitmap = getContactPhoto(context, uri, R.drawable.picture_unknown);
 
-        
         // Get views
         TextView tv = (TextView) view.findViewById(R.id.contact_name);
         TextView sub = (TextView) view.findViewById(R.id.subject);
         ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
-        
+
         // Bind
         view.setTag(value);
         tv.setText(displayName);
         sub.setText(value);
         imageView.setImageBitmap(bitmap);
     }
-    
 
     @Override
     public int getContactIndexableColumnIndex(Cursor c) {
@@ -501,10 +497,10 @@ public class ContactsUtils5 extends ContactsWrapper {
     @Override
     public Cursor getContactsByGroup(Context ctxt, String groupName) {
 
-        if(TextUtils.isEmpty(groupName)) {
+        if (TextUtils.isEmpty(groupName)) {
             return null;
         }
-        
+
         String[] projection;
         if (Compatibility.isCompatible(11)) {
             projection = new String[] {
@@ -527,142 +523,146 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
 
         Uri searchUri = Uri.withAppendedPath(Contacts.CONTENT_GROUP_URI, Uri.encode(groupName));
-        
-        return ctxt.getContentResolver().query(searchUri, projection, null, null, Contacts.DISPLAY_NAME + " ASC");
+
+        return ctxt.getContentResolver().query(searchUri, projection, null, null,
+                Contacts.DISPLAY_NAME + " ASC");
     }
-    
-    
-    //private HashMap<String, Long> csipDatasId = new HashMap<String, Long>();
+
+    // private HashMap<String, Long> csipDatasId = new HashMap<String, Long>();
 
     @Override
     public List<String> getCSipPhonesByGroup(Context ctxt, String groupName) {
         Uri dataUri = Data.CONTENT_URI;
         String dataQuery = Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
-                + " AND " 
-                + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM 
-                + " AND " 
-                + " LOWER("+CommonDataKinds.Im.CUSTOM_PROTOCOL + ")='csip'";
-        
+                + " AND "
+                + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
+                + " AND "
+                + " LOWER(" + CommonDataKinds.Im.CUSTOM_PROTOCOL + ")='csip'";
 
         Cursor contacts = getContactsByGroup(ctxt, groupName);
         ArrayList<String> results = new ArrayList<String>();
-        if(contacts != null) {
+        if (contacts != null) {
             try {
                 while (contacts.moveToNext()) {
                     // get csip data
                     Cursor dataCursor = ctxt.getContentResolver()
                             .query(dataUri,
                                     new String[] {
-                                        CommonDataKinds.Im._ID,
-                                        CommonDataKinds.Im.DATA,
+                                            CommonDataKinds.Im._ID,
+                                            CommonDataKinds.Im.DATA,
                                     },
                                     dataQuery + " AND " + Data.CONTACT_ID + "=?",
                                     new String[] {
                                         Long.toString(contacts.getLong(contacts
                                                 .getColumnIndex(Contacts._ID)))
                                     }, null);
-                    if(dataCursor != null && dataCursor.getCount() > 0) {
+                    if (dataCursor != null && dataCursor.getCount() > 0) {
                         dataCursor.moveToFirst();
-                        String val = dataCursor.getString(dataCursor.getColumnIndex(CommonDataKinds.Im.DATA));
-                        //long id = dataCursor.getLong(dataCursor.getColumnIndex(CommonDataKinds.Im._ID));
-                        if(!TextUtils.isEmpty(val)) {
+                        String val = dataCursor.getString(dataCursor
+                                .getColumnIndex(CommonDataKinds.Im.DATA));
+                        // long id =
+                        // dataCursor.getLong(dataCursor.getColumnIndex(CommonDataKinds.Im._ID));
+                        if (!TextUtils.isEmpty(val)) {
                             results.add(val);
-                            //csipDatasId.put(val, id);
+                            // csipDatasId.put(val, id);
                         }
                     }
                     dataCursor.close();
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 Log.e(THIS_FILE, "Error while looping on contacts", e);
-            }finally {
+            } finally {
                 contacts.close();
             }
         }
         return results;
     }
-    
 
     @Override
-    public void updateCSipPresence(Context ctxt, String buddyUri, SipManager.PresenceStatus presStatus, String statusText) {
-        
-        if(Compatibility.isCompatible(8)) {
-//            if(csipDatasId.containsKey(buddyUri)) {
-//                long dataId = csipDatasId.get(buddyUri);
-                int presence = StatusUpdates.OFFLINE;
-                switch (presStatus) {
-                    case ONLINE:
-                        presence = StatusUpdates.AVAILABLE;
-                        break;
-                    case OFFLINE:
-                        presence = StatusUpdates.INVISIBLE;
-                        break;
-                    default:
-                        break;
-                }
-                
-                ArrayList<ContentProviderOperation> operationList = new ArrayList<ContentProviderOperation>();
-                
-                ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(StatusUpdates.CONTENT_URI);
-                //builder.withValue(StatusUpdates.DATA_ID, dataId);
-                builder.withValue(StatusUpdates.CUSTOM_PROTOCOL, "csip");
-                builder.withValue(StatusUpdates.PROTOCOL, CommonDataKinds.Im.PROTOCOL_CUSTOM);
-                builder.withValue(StatusUpdates.IM_HANDLE, buddyUri);
-                builder.withValue(StatusUpdates.STATUS, statusText);
-                builder.withValue(StatusUpdates.PRESENCE, presence);
-                
-                if(Compatibility.isCompatible(11)) {
-                    builder.withValue(StatusUpdates.CHAT_CAPABILITY, StatusUpdates.CAPABILITY_HAS_VOICE );
-                }
+    public void updateCSipPresence(Context ctxt, String buddyUri,
+            SipManager.PresenceStatus presStatus, String statusText) {
 
-                String pkg = PreferencesProviderWrapper.getCurrentPackageInfos(ctxt).applicationInfo.packageName;
-                builder.withValue(StatusUpdates.STATUS_RES_PACKAGE, pkg);
-                builder.withValue(StatusUpdates.STATUS_LABEL, R.string.app_name);
-                builder.withValue(StatusUpdates.STATUS_ICON, R.drawable.ic_launcher_phone);
-                builder.withValue(StatusUpdates.STATUS_TIMESTAMP, System.currentTimeMillis());
-                operationList.add(builder.build());
-                /*
-                builder = ContentProviderOperation.newUpdate(Data.CONTENT_URI);
-                builder.withSelection(Data._ID + " = '" + dataId + "'", null);
-                builder.withValue(CommonDataKinds.Im.PRESENCE, presence);
-                operationList.add(builder.build());
-                */
-                try {
-                    ctxt.getContentResolver().applyBatch(ContactsContract.AUTHORITY, operationList);
-                } catch (RemoteException e) {
-                    Log.e(THIS_FILE, "Can't update status", e);
-                } catch (OperationApplicationException e) {
-                    Log.e(THIS_FILE, "Can't update status", e);
-                }
-
- //           }
-            
-            /*
-            
-            Uri dataUri = Data.CONTENT_URI;
-            String dataQuery = Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
-                    + " AND " 
-                    + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM 
-                    + " AND " 
-                    + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='csip'"
-                    + " AND "
-                    + CommonDataKinds.Im.DATA + "=?";
-            
-            ContentValues presenceValues = new ContentValues();
-            int val = CommonDataKinds.Im.OFFLINE;
+        if (Compatibility.isCompatible(8)) {
+            // if(csipDatasId.containsKey(buddyUri)) {
+            // long dataId = csipDatasId.get(buddyUri);
+            int presence = StatusUpdates.OFFLINE;
+            String correspondingPresence = "";
             switch (presStatus) {
                 case ONLINE:
-                    val = CommonDataKinds.Im.AVAILABLE;
+                    presence = StatusUpdates.AVAILABLE;
+                    correspondingPresence = ctxt.getString(R.string.online);
                     break;
                 case OFFLINE:
-                    // TODO -- is that good?
-                    val = CommonDataKinds.Im.AWAY;
+                    presence = StatusUpdates.INVISIBLE;
+                    correspondingPresence = ctxt.getString(R.string.offline);
+                    break;
+                case AWAY:
+                    presence = StatusUpdates.AWAY;
+                    correspondingPresence = ctxt.getString(R.string.away);
+                    break;
+                case BUSY:
+                    presence = StatusUpdates.DO_NOT_DISTURB;
+                    correspondingPresence = ctxt.getString(R.string.busy);
                     break;
                 default:
                     break;
             }
-            presenceValues.put(CommonDataKinds.Im.PRESENCE_STATUS, val);
-            ctxt.getContentResolver().update(dataUri, presenceValues, dataQuery, new String[] {buddyUri});
-            */
+            if(TextUtils.isEmpty(statusText)) {
+                statusText = correspondingPresence;
+            }
+
+            ArrayList<ContentProviderOperation> operationList = new ArrayList<ContentProviderOperation>();
+
+            ContentProviderOperation.Builder builder = ContentProviderOperation
+                    .newInsert(StatusUpdates.CONTENT_URI);
+            // builder.withValue(StatusUpdates.DATA_ID, dataId);
+            builder.withValue(StatusUpdates.CUSTOM_PROTOCOL, "csip");
+            builder.withValue(StatusUpdates.PROTOCOL, CommonDataKinds.Im.PROTOCOL_CUSTOM);
+            builder.withValue(StatusUpdates.IM_HANDLE, buddyUri);
+            builder.withValue(StatusUpdates.STATUS, statusText);
+            builder.withValue(StatusUpdates.PRESENCE, presence);
+
+            if (Compatibility.isCompatible(11)) {
+                builder.withValue(StatusUpdates.CHAT_CAPABILITY, StatusUpdates.CAPABILITY_HAS_VOICE);
+            }
+
+            String pkg = PreferencesProviderWrapper.getCurrentPackageInfos(ctxt).applicationInfo.packageName;
+            builder.withValue(StatusUpdates.STATUS_RES_PACKAGE, pkg);
+            builder.withValue(StatusUpdates.STATUS_LABEL, R.string.app_name);
+            builder.withValue(StatusUpdates.STATUS_ICON, R.drawable.ic_launcher_phone);
+            builder.withValue(StatusUpdates.STATUS_TIMESTAMP, System.currentTimeMillis());
+            operationList.add(builder.build());
+            /*
+             * builder = ContentProviderOperation.newUpdate(Data.CONTENT_URI);
+             * builder.withSelection(Data._ID + " = '" + dataId + "'", null);
+             * builder.withValue(CommonDataKinds.Im.PRESENCE, presence);
+             * operationList.add(builder.build());
+             */
+            try {
+                ctxt.getContentResolver().applyBatch(ContactsContract.AUTHORITY, operationList);
+            } catch (RemoteException e) {
+                Log.e(THIS_FILE, "Can't update status", e);
+            } catch (OperationApplicationException e) {
+                Log.e(THIS_FILE, "Can't update status", e);
+            }
+
+            // }
+
+            /*
+             * Uri dataUri = Data.CONTENT_URI; String dataQuery = Data.MIMETYPE
+             * + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' " + " AND " +
+             * CommonDataKinds.Im.PROTOCOL + "=" +
+             * CommonDataKinds.Im.PROTOCOL_CUSTOM + " AND " +
+             * CommonDataKinds.Im.CUSTOM_PROTOCOL + "='csip'" + " AND " +
+             * CommonDataKinds.Im.DATA + "=?"; ContentValues presenceValues =
+             * new ContentValues(); int val = CommonDataKinds.Im.OFFLINE; switch
+             * (presStatus) { case ONLINE: val = CommonDataKinds.Im.AVAILABLE;
+             * break; case OFFLINE: // TODO -- is that good? val =
+             * CommonDataKinds.Im.AWAY; break; default: break; }
+             * presenceValues.put(CommonDataKinds.Im.PRESENCE_STATUS, val);
+             * ctxt.getContentResolver().update(dataUri, presenceValues,
+             * dataQuery, new String[] {buddyUri});
+             */
         }
     }
 
@@ -681,12 +681,12 @@ public class ContactsUtils5 extends ContactsWrapper {
 
         if (photoUriColIndex >= 0) {
             String photoUri = cursor.getString(photoUriColIndex);
-            if(!TextUtils.isEmpty(photoUri)) {
+            if (!TextUtils.isEmpty(photoUri)) {
                 ci.photoUri = Uri.parse(photoUri);
             }
         }
         boolean hasPresence = !TextUtils.isEmpty(status);
-        
+
         // Get views
         TextView tv = (TextView) view.findViewById(R.id.contact_name);
         QuickContactBadge badge = (QuickContactBadge) view.findViewById(R.id.quick_contact_photo);
@@ -701,27 +701,23 @@ public class ContactsUtils5 extends ContactsWrapper {
                 ci,
                 SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
                         : R.drawable.ic_contact_picture_holo_dark);
-        
-        
-        
+
         statusText.setVisibility(hasPresence ? View.VISIBLE : View.GONE);
         statusText.setText(status);
         statusImage.setVisibility(hasPresence ? View.VISIBLE : View.GONE);
         statusImage.setImageResource(StatusUpdates.getPresenceIconResourceId(presence));
     }
 
-
-
     @Override
     public Intent getAddContactIntent(String displayName, String csipUri) {
         Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, Contacts.CONTENT_URI);
         intent.setType(Contacts.CONTENT_ITEM_TYPE);
 
-        if(!TextUtils.isEmpty(displayName)) {
+        if (!TextUtils.isEmpty(displayName)) {
             intent.putExtra(Insert.NAME, displayName);
         }
-        
-        if(!TextUtils.isEmpty(csipUri)) {
+
+        if (!TextUtils.isEmpty(csipUri)) {
             ArrayList<ContentValues> data = new ArrayList<ContentValues>();
             ContentValues csipProto = new ContentValues();
             csipProto.put(Data.MIMETYPE, CommonDataKinds.Im.CONTENT_ITEM_TYPE);
@@ -729,12 +725,11 @@ public class ContactsUtils5 extends ContactsWrapper {
             csipProto.put(CommonDataKinds.Im.CUSTOM_PROTOCOL, "csip");
             csipProto.put(CommonDataKinds.Im.DATA, SipUri.getCanonicalSipContact(csipUri, false));
             data.add(csipProto);
-    
+
             intent.putParcelableArrayListExtra(Insert.DATA, data);
         }
-        
+
         return intent;
     }
-
 
 }

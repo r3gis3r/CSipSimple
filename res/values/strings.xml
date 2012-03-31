@@ -102,6 +102,8 @@
     <!-- Presence stuff -->
     <string name="online">Online</string>
     <string name="offline">Offline</string>
+    <string name="away">Away</string>
+    <string name="busy">Busy</string>
     <string name="activate">Activate</string>
     <string name="deactivate">Deactivate</string>
     <string name="audio">Audio</string>

@@ -1296,3 +1296,43 @@ struct pjsua_msg_data
     pjsip_media_type  multipart_ctype;
     pjsip_multipart_part multipart_parts;
 };
+
+/**
+ * This structure describes person information in RPID document.
+ */
+struct pjrpid_element
+{
+    /** Element type. */
+    pjrpid_element_type	    type;
+
+    /** Optional id to set on the element. */
+    pj_str_t		    id;
+
+    /** Activity type. */
+    pjrpid_activity	    activity;
+
+    /** Optional text describing the person/element. */
+    pj_str_t		    note;
+
+};
+
+
+/**
+ * This enumeration describes subset of standard activities as 
+ * described by RFC 4880, RPID: Rich Presence Extensions to the 
+ * Presence Information Data Format (PIDF). 
+ */
+enum pjrpid_activity
+{
+    /** Activity is unknown. The activity would then be conceived
+     *  in the "note" field.
+     */
+    PJRPID_ACTIVITY_UNKNOWN,
+
+    /** The person is away */
+    PJRPID_ACTIVITY_AWAY,
+
+    /** The person is busy */
+    PJRPID_ACTIVITY_BUSY
+
+};

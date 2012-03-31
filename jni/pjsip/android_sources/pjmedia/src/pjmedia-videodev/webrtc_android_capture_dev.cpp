@@ -188,7 +188,6 @@ static pj_status_t webrtc_cap_factory_init(pjmedia_vid_dev_factory *f) {
 		pj_log_push_indent();
 		// Capabilities as pj formats
 		unsigned nbrOfCaps = cf->_deviceInfo->NumberOfCapabilities(ddi->webrtc_id);
-		PJ_LOG(4, (THIS_FILE, "Found %2d has %d capabilities", d, nbrOfCaps));
 
 		ddi->info.fmt_cnt = 0;
 		for (i = 0; i < nbrOfCaps && ddi->info.fmt_cnt < PJMEDIA_VID_DEV_INFO_FMT_CNT; i++) {
@@ -196,7 +195,7 @@ static pj_status_t webrtc_cap_factory_init(pjmedia_vid_dev_factory *f) {
 			cf->_deviceInfo->GetCapability(ddi->webrtc_id, i, ddi->_capability[ddi->info.fmt_cnt]);
 			pjmedia_format *fmt = &ddi->info.fmt[ddi->info.fmt_cnt];
 
-			PJ_LOG(4, (THIS_FILE, "Type %d - Codec %d, %dx%d @%dHz" , ddi->_capability[ddi->info.fmt_cnt].rawType,
+			PJ_LOG(5, (THIS_FILE, "Type %d - Codec %d, %dx%d @%dHz" , ddi->_capability[ddi->info.fmt_cnt].rawType,
 					ddi->_capability[ddi->info.fmt_cnt].codecType,
 					ddi->_capability[ddi->info.fmt_cnt].width,
 					ddi->_capability[ddi->info.fmt_cnt].height,
