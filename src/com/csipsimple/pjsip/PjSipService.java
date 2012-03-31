@@ -594,12 +594,14 @@ public class PjSipService {
         if (type.equals(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS)) {
             pjsip_tls_setting tlsSetting = cfg.getTls_setting();
 
+            /* TODO : THIS IS OBSOLETE -- remove from UI
             String serverName = prefsWrapper
                     .getPreferenceStringValue(SipConfigManager.TLS_SERVER_NAME);
             if (!TextUtils.isEmpty(serverName)) {
                 tlsSetting.setServer_name(pjsua.pj_str_copy(serverName));
             }
-
+            */
+            
             String caListFile = prefsWrapper
                     .getPreferenceStringValue(SipConfigManager.CA_LIST_FILE);
             if (!TextUtils.isEmpty(caListFile)) {
