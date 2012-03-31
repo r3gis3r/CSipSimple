@@ -130,7 +130,7 @@ public class UAStateReceiver extends Callback {
 		}
 		
 		try {
-            SipCallSession callInfo = updateCallInfoFromStack(callId);
+            SipCallSession callInfo = updateCallInfoFromStack(callId, null);
 			Log.d(THIS_FILE, "Incoming call << for account " + accId);
             
             //Extra check if set reference counted is false ???
@@ -180,7 +180,7 @@ public class UAStateReceiver extends Callback {
 		Log.d(THIS_FILE, "Call state <<");
 		try {
     		//Get current infos now on same thread cause fix has been done on pj
-            final SipCallSession callInfo = updateCallInfoFromStack(callId);
+            final SipCallSession callInfo = updateCallInfoFromStack(callId, e);
 			int callState = callInfo.getCallState();
 			
 			// If disconnected immediate stop required stuffs
@@ -385,7 +385,7 @@ public class UAStateReceiver extends Callback {
         }
 
         try {
-            final SipCallSession callInfo = updateCallInfoFromStack(callId);
+            final SipCallSession callInfo = updateCallInfoFromStack(callId, null);
 
             if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
                 pjsua.conf_connect(callInfo.getConfPort(), 0);
@@ -510,7 +510,7 @@ public class UAStateReceiver extends Callback {
 		pjService.service.getExecutor().execute(new SipRunnable() {
 			@Override
 			public void doRun() throws SameThreadException {
-				SipCallSession callInfo = updateCallInfoFromStack(callId);
+				SipCallSession callInfo = updateCallInfoFromStack(callId, null);
 				msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
 			}
 		});
@@ -566,7 +566,7 @@ public class UAStateReceiver extends Callback {
 	private HashMap<Integer, SipCallSession> callsList = new HashMap<Integer, SipCallSession>();
 	//private long currentCallStart = 0;
 	
-	private SipCallSession updateCallInfoFromStack(Integer callId) throws SameThreadException {
+	private SipCallSession updateCallInfoFromStack(Integer callId, pjsip_event e) throws SameThreadException {
 		SipCallSession callInfo;
 		Log.d(THIS_FILE, "Get call info for update");
 		synchronized (callsList) {
@@ -578,7 +578,7 @@ public class UAStateReceiver extends Callback {
 		}
 		Log.d(THIS_FILE, "Launch update");
 		// We update session infos. callInfo is both in/out and will be updated
-		PjSipCalls.updateSessionFromPj(callInfo, pjService);
+		PjSipCalls.updateSessionFromPj(callInfo, e, pjService);
 		synchronized (callsList) {
     		// Re-add to list mainly for case newly added session
     		callsList.put(callId, callInfo);

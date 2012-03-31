@@ -30,6 +30,7 @@ import com.csipsimple.utils.Log;
 
 import org.pjsip.pjsua.pj_time_val;
 import org.pjsip.pjsua.pjmedia_dir;
+import org.pjsip.pjsua.pjsip_event;
 import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
@@ -55,7 +56,7 @@ public final class PjSipCalls {
      * @param service PjSipService Sip service to retrieve pjsip accounts infos
      * @throws SameThreadException
      */
-    public static void updateSessionFromPj(SipCallSession session, PjSipService service)
+    public static void updateSessionFromPj(SipCallSession session, pjsip_event e, PjSipService service)
             throws SameThreadException {
         Log.d(THIS_FILE, "Update call " + session.getCallId());
         pjsua_call_info pjInfo = new pjsua_call_info();
@@ -64,7 +65,24 @@ public final class PjSipCalls {
         if (status == pjsua.PJ_SUCCESS) {
             // Transform pjInfo into CallSession object
             updateSession(session, pjInfo, service);
-
+            
+            // Update state here because we have pjsip_event here and can get q.850 state
+            if(e != null) {
+                int status_code = pjsua.get_event_status_code(e);
+                if(status_code == 0) {
+                    try {
+                        status_code = pjInfo.getLast_status().swigValue();
+                    } catch (IllegalArgumentException err) {
+                        // The status code does not exist in enum ignore it
+                    }
+                }
+                session.setLastStatusCode(status_code);
+                Log.d(THIS_FILE, "Last status code is " + status_code);
+                // TODO - get comment from q.850 state as well
+                String status_text = PjSipService.pjStrToString(pjInfo.getLast_status_text());
+                session.setLastStatusComment(status_text);
+            }
+            
             // And now, about secure information
             String secureInfo = PjSipService.pjStrToString(pjsua.call_secure_info(session
                     .getCallId()));
@@ -98,16 +116,6 @@ public final class PjSipCalls {
         // Should be unecessary cause we usually copy infos from a valid
         session.setCallId(pjCallInfo.getId());
 
-        try {
-            int status_code = pjCallInfo.getLast_status().swigValue();
-            session.setLastStatusCode(status_code);
-            Log.d(THIS_FILE, "Last status code is " + status_code);
-            String status_text = PjSipService.pjStrToString(pjCallInfo.getLast_status_text());
-            session.setLastStatusComment(status_text);
-
-        } catch (IllegalArgumentException e) {
-            // The status code does not exist in enum ignore it
-        }
         // Nothing to think about here cause we have a
         // bijection between int / state
         session.setCallState(pjCallInfo.getState().swigValue());
