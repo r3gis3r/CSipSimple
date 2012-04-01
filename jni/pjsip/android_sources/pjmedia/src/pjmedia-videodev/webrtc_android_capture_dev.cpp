@@ -23,10 +23,13 @@
 #include "webrtc_android_capture_dev.h"
 #define THIS_FILE		"webrtc_android_capture_dev.c"
 
+#define __TRACE 1
+
 #include "pj_loader.h"
 #include "pjsua_jni_addons.h"
 
 #include "video_capture_factory.h"
+
 
 using namespace webrtc;
 
@@ -117,6 +120,7 @@ static pjmedia_vid_dev_stream_op stream_op = {
 		&webrtc_cap_stream_stop,
 		&webrtc_cap_stream_destroy
 };
+
 
 /****************************************************************************
  * Factory operations
@@ -340,9 +344,8 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 	strm->_videoCapture->AddRef();
 
 	rot = cf->dev_info[param->cap_id].orientation;
-	// For now leave as it because seems to have a buggy use of libyuv in webrtc...
-	// Height seems to be +1 than it should be
-	//strm->_videoCapture->SetCaptureRotation(rot);
+
+	strm->_videoCapture->SetCaptureRotation(rot);
 
 	PJ_LOG(4, (THIS_FILE, "Create for %s with idx %d", webrtc_id, param->cap_id));
 	// WARNING : we should NEVER create a capability here because webRTC here is not necessarily
