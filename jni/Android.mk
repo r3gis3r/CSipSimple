@@ -35,7 +35,7 @@ NDK_PROJECT_PATH := $(JNI_PATH)
 endif
 
 # Build libyuv
-include $(JNI_PATH)/libyuv/android_toolchain/Android.mk
+include $(JNI_PATH)/third_party/android_toolchain/libyuv/Android.mk
 
 
 # Build wrapper

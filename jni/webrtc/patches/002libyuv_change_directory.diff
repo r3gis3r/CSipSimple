@@ -1,0 +1,20 @@
+Index: webrtc/sources/common_video/libyuv/Android.mk
+===================================================================
+--- webrtc.orig/sources/common_video/libyuv/Android.mk	2011-12-21 15:48:16.000000000 +0100
++++ webrtc/sources/common_video/libyuv/Android.mk	2012-04-01 13:11:55.712924056 +0200
+@@ -28,7 +28,7 @@
+ LOCAL_C_INCLUDES := \
+     $(LOCAL_PATH)/../.. \
+     $(LOCAL_PATH)/../../../.. \
+-    $(LOCAL_PATH)/../../../../libyuv/files/include
++    $(LOCAL_PATH)/../../../../third_party/libyuv/include
+ 
+ 
+ LOCAL_SHARED_LIBRARIES := \
+@@ -39,4 +39,4 @@
+ ifndef NDK_ROOT
+ include external/stlport/libstlport.mk
+ endif
+-include $(BUILD_STATIC_LIBRARY)
+\ Pas de fin de ligne à la fin du fichier
++include $(BUILD_STATIC_LIBRARY)
