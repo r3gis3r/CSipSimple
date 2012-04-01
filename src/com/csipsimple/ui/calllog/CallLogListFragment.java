@@ -264,7 +264,7 @@ public class CallLogListFragment extends ListFragment implements ViewPagerVisibi
             if(accId != null) {
                 it.putExtra(SipProfile.FIELD_ACC_ID, accId);
             }
-            startActivity(it);
+            getActivity().startActivity(it);
         }
     }
 

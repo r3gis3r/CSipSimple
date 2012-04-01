@@ -40,8 +40,12 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <!-- Not taken into account? -->
+    <!--
+    Not taken into account?
+    Regarding Diane's comment this was never implemented 
+    and was dropped in most recent android versions 
     <uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY" />
+    -->
 
     <uses-feature
         android:name="android.hardware.wifi"
@@ -227,7 +231,7 @@
 
         <!-- Call management -->
         <receiver android:name="com.csipsimple.service.OutgoingCall" >
-            <intent-filter android:priority="-1" >
+            <intent-filter android:priority="10" >
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" >
                 </action>
             </intent-filter>
@@ -235,12 +239,10 @@
 
         <activity
             android:name="com.csipsimple.ui.OutgoingCallChooser"
-            android:allowTaskReparenting="true"
             android:configChanges="orientation"
             android:excludeFromRecents="true"
             android:label="@string/call"
             android:launchMode="singleTask"
-            android:taskAffinity="com.csipsimple.ui.InCallActivity2"
             android:theme="@style/CupcakeDialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL" />
@@ -251,9 +253,8 @@
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
             </intent-filter>
-            <intent-filter android:priority="-1" >
-                <action android:name="android.phone.extra.NEW_CALL_INTENT" >
-                </action>
+            <intent-filter android:priority="10" >
+                <action android:name="android.phone.extra.NEW_CALL_INTENT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -277,13 +278,11 @@
 
         <activity-alias
             android:name="com.csipsimple.ui.PrivilegedOutgoingSipCallBroadcaster"
-            android:allowTaskReparenting="true"
             android:configChanges="orientation"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
             android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
-            android:taskAffinity="com.csipsimple.ui.InCallActivity2"
             android:theme="@style/CupcakeDialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
@@ -295,14 +294,12 @@
         </activity-alias>
         <activity-alias
             android:name="com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster"
-            android:allowTaskReparenting="true"
             android:configChanges="orientation"
             android:enabled="false"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
             android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
-            android:taskAffinity="com.csipsimple.ui.InCallActivity2"
             android:theme="@style/CupcakeDialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />

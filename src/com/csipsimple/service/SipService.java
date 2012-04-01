@@ -1454,7 +1454,7 @@ public class SipService extends Service {
     private static Looper createLooper() {
     //	synchronized (executorThread) {
 	    	if(executorThread == null) {
-	    		Log.w(THIS_FILE, "Creating new handler thread");
+	    		Log.d(THIS_FILE, "Creating new handler thread");
 		        executorThread = new HandlerThread("SipService.Executor");
 		        executorThread.start();
 	    	}

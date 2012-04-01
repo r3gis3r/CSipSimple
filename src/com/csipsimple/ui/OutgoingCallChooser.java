@@ -121,6 +121,8 @@ public class OutgoingCallChooser extends ListActivity {
     };
 
     private Long accountToCallTo = null;
+    private boolean hasLaunchedCall = false;
+    private boolean ignoreRewritingRules = false;
     private PreferencesProviderWrapper prefsWrapper;
 
     @Override
@@ -142,6 +144,9 @@ public class OutgoingCallChooser extends ListActivity {
                 if (action.equalsIgnoreCase(Intent.ACTION_CALL)) {
                      // Simple call intent
                     number = data.getSchemeSpecificPart();
+                    if(data.getScheme().equalsIgnoreCase("csip")) {
+                        ignoreRewritingRules = true;
+                    }
                 }else if (action.equalsIgnoreCase(Intent.ACTION_SENDTO)) {
                     // Send to action -- could be im or sms
                     String scheme = data.getScheme();
@@ -281,7 +286,10 @@ public class OutgoingCallChooser extends ListActivity {
             if (Filter.isCallableNumber(externalProfile, number, database)) {
                 externalTotalNbrs ++;
                 // Transform number
-                String finalNumber = Filter.rewritePhoneNumber(externalProfile, number, database);
+                String finalNumber = number;
+                if(!ignoreRewritingRules) {
+                    finalNumber = Filter.rewritePhoneNumber(externalProfile, number, database);
+                }
                 final SipProfile extProfile = externalProfile;
                 Log.d(THIS_FILE, "Will loaded external " + packageName);
                 CallHandler ch = new CallHandler(this);
@@ -438,8 +446,10 @@ public class OutgoingCallChooser extends ListActivity {
             }
             if (accountInfo != null && accountInfo.isValidForCall()) {
                 try {
-                    String phoneNumber = number;
-                    String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
+                    String toCall = number;
+                    if(!ignoreRewritingRules) {
+                        toCall = Filter.rewritePhoneNumber(account, number, database);
+                    }
 
                     service.makeCall("sip:" + toCall, (int) account.id);
                     finish();
@@ -451,7 +461,11 @@ public class OutgoingCallChooser extends ListActivity {
         }
     }
 
-    private boolean checkIfMustAccountNotValid() {
+    private synchronized boolean checkIfMustAccountNotValid() {
+        if(hasLaunchedCall) {
+            // Ignore this call the activity is about to die
+            return false;
+        }
         // Check for plugins callhandlers
         if (accountToCallTo != null && accountToCallTo < SipProfile.INVALID_ID) {
             // We have a external handler as force call account
@@ -492,9 +506,9 @@ public class OutgoingCallChooser extends ListActivity {
                     try {
                         String phoneNumber = number;
                         String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
-
-                        service.makeCall("sip:" + toCall, (int) account.id);
                         accountToCallTo = null;
+                        service.makeCall("sip:" + toCall, (int) account.id);
+                        hasLaunchedCall = true;
                         finish();
                         return true;
                     } catch (RemoteException e) {
