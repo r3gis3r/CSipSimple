@@ -47,30 +47,6 @@
     <uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY" />
     -->
 
-    <uses-feature
-        android:name="android.hardware.wifi"
-        android:required="false" >
-    </uses-feature>
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" >
-    </uses-feature>
-    <uses-feature
-        android:name="android.hardware.microphone"
-        android:required="true" >
-    </uses-feature>
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="false" >
-    </uses-feature>
-    <uses-feature
-        android:name="android.hardware.bluetooth"
-        android:required="false" >
-    </uses-feature>
-    <uses-feature
-        android:name="android.hardware.screen.portrait"
-        android:required="false" >
-    </uses-feature>
 
     <!-- COMMENT THIS if you plan to use in library mode -->
     <permission
@@ -87,6 +63,37 @@
         android:protectionLevel="dangerous" />
 
     <!-- END OF COMMENT THIS -->
+
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.screen.portrait"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
 
     <application
         android:allowBackup="false"
