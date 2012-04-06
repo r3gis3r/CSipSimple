@@ -33,12 +33,12 @@ public class Cryptel extends SimpleImplementation {
 
 	@Override
 	protected String getDomain() {
-		return "sip.cryptelcore.net";
+		return "sip.cryptelcore.net:5061";
 	}
 
 	@Override
 	protected String getDefaultName() {
-		return "Cryptel Inc";
+		return "Via Cryptel";
 	}
 	
 	@Override
@@ -57,6 +57,7 @@ public class Cryptel extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 	    SipProfile acc = super.buildAccount(account);
 	    acc.use_zrtp = 1;
+	    acc.transport = SipProfile.TRANSPORT_TLS;
 	    return acc;
 	}
 
@@ -101,6 +102,8 @@ public class Cryptel extends SimpleImplementation {
         prefs.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_WB, "0");
         prefs.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_WB, "0");
         prefs.setCodecPriority("G726-40/8000/1", SipConfigManager.CODEC_WB, "200");
+        
+        prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_TLS, true);
     }
     
     @Override

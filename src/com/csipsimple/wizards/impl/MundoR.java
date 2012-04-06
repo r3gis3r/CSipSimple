@@ -22,19 +22,15 @@
 package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
+import android.text.TextUtils;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
-public class MundoR extends SimpleImplementation {
+public class MundoR extends AlternateServerImplementation {
 	
-
-	@Override
-	protected String getDomain() {
-		return "telefonoweb.com";
-	}
 	
 	@Override
 	protected String getDefaultName() {
@@ -48,6 +44,10 @@ public class MundoR extends SimpleImplementation {
 	public void fillLayout(SipProfile account) {
 	    super.fillLayout(account);
         accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+        
+        if(TextUtils.isEmpty(account.getSipDomain())) {
+            accountServer.setText("telefonoweb.com");
+        }
 	}
 	
     @Override
