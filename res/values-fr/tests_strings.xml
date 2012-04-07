@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="test_audio">Test audio</string>
+  <string name="test_audio_prepare">Préparation du test audio...</string>
+  <string name="test_audio_ongoing">Test en cours...\nParlez au micro et écoutez à l\'écouteur</string>
+  <string name="test_audio_network_failure">Test échoué :\nBasculez vers un réseau valide avant de lancer le test</string>
+</resources>
