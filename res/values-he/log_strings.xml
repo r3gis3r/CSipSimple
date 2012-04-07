@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="unknown">לא ידוע</string>
-  <string name="type_incoming">נכנס</string>
-  <string name="type_outgoing">יוצא</string>
-  <string name="type_missed">לא נענו</string>
-  <string name="callBack">התקשר בחזרה</string>
-  <string name="callAgain">התקשר שוב</string>
-  <string name="returnCall">השב לשיחה</string>
-  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" mins "<xliff:g id="seconds" example="28">%s</xliff:g>" secs"</string>
+<resources>
+
+    <string name="unknown">לא ידוע</string>
+    <string name="type_incoming">נכנס</string>
+    <string name="type_outgoing">יוצא</string>
+    <string name="type_missed">לא נענו</string>
+    <string name="callBack">התקשר בחזרה</string>
+    <string name="callAgain">התקשר שוב</string>
+    <string name="returnCall">השב לשיחה</string>
+
 </resources>

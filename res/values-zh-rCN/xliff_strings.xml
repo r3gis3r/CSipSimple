@@ -18,12 +18,10 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g> zu Kontakten hinzufügen</string>
-    <!-- Time and date a message was sent -->
-    <string name="sent_on">Gesendet: <xliff:g id="date">%s</xliff:g></string>
-
-    <!-- Error message indicating the format for the specified media type (e.g. "picture") is unsupported -->
-    <string name="unsupported_media_format">Nicht untertsütztes <xliff:g id="name">%1$s</xliff:g> Format</string>
-    <string name="disconnect_and_will_restart">Startet automatisch erneut sobald <xliff:g id="networks">%s</xliff:g> zur Verfügung steht (Einstellungen ändern falls nicht gewünscht)</string>
+    <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g> 分 <xliff:g id="seconds" example="28">%s</xliff:g> 秒</string>
+    <string name="menu_add_address_to_contacts">添加 <xliff:g id="name">%s</xliff:g> 到联系人</string>
+    <string name="sent_on">发送时间: <xliff:g id="date">%s</xliff:g></string>
+    <string name="unsupported_media_format">不支持<xliff:g id="name">%1$s</xliff:g>格式</string>
+    <string name="disconnect_and_will_restart">当 : <xliff:g id="networks" example="3G">%s</xliff:g>可用时将自动重启(更改设置如果你不想这样)</string>
 
 </resources>

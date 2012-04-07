@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="unknown">Neznan</string>
-  <string name="type_incoming">Dohodni</string>
-  <string name="type_outgoing">Odhodni</string>
-  <string name="type_missed">Zgrešen</string>
-  <string name="callBack">Povratni klic</string>
-  <string name="callAgain">Ponovni klic</string>
-  <string name="returnCall">Vrnjen klic</string>
-  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" minut "<xliff:g id="seconds" example="28">%s</xliff:g>" sekund"</string>
+<resources>
+
+    <string name="unknown">Neznan</string>
+    <string name="type_incoming">Dohodni</string>
+    <string name="type_outgoing">Odhodni</string>
+    <string name="type_missed">Zgrešen</string>
+    <string name="callBack">Povratni klic</string>
+    <string name="callAgain">Ponovni klic</string>
+    <string name="returnCall">Vrnjen klic</string>
+
 </resources>

@@ -24,9 +24,6 @@
     <!-- Time and date a message was sent -->
     <string name="sent_on">Envoyé: <xliff:g id="date">%s</xliff:g></string>
 
-    <!-- Formatting for prepending MMS message text with sender's name. -->
-    <string name="name_colon"><b>            <xliff:g id="name">%s</xliff:g>
-</b>: </string>
     <!-- Error message indicating the format for the specified media type (e.g. "picture") is unsupported -->
     <string name="unsupported_media_format">Format <xliff:g id="name">%1$s</xliff:g> non supporté</string>
     <string name="disconnect_and_will_restart">Sera redemarré à nouveau lorsque : <xliff:g id="networks">%s</xliff:g> sera à nouveau disponible (changez vos options si vous ne voulez ça)</string>

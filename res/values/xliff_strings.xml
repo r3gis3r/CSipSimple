@@ -25,9 +25,6 @@
     <string name="menu_add_address_to_contacts">Add <xliff:g id="name">%s</xliff:g> to Contacts</string>
     <!-- Time and date a message was sent -->
     <string name="sent_on">"Sent: <xliff:g id="date">%s</xliff:g>"</string>
-    <!-- Formatting for prepending MMS message text with sender's name. -->
-    <string name="name_colon"><b>            <xliff:g id="name" example="Me">%s</xliff:g>
-</b>: </string>
     <string name="disconnect_and_will_restart">Will automatically restart when : <xliff:g id="networks" example="3G">%s</xliff:g> will become available (change settings if you don\'t want)</string>
     <string name="description_call">Call <xliff:g id="name">%1$s</xliff:g></string>
 

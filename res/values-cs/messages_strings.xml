@@ -65,7 +65,7 @@
     <!-- Dialog message text asking the user if he wants to resize the picture being attached -->
     <string name="ask_for_automatically_resize">Automaticky změnit velikost obrázku před odsláním ?</string>
     <!-- Toast message while an image is being resized -->
-    <string name="compressing">Obrázek je příliš velký. Komprese\u2026</string>
+    <string name="compressing">Obrázek je příliš velký. Komprese…</string>
     <!-- Context menu item on a message recipient for viewing their contact info -->
     <string name="menu_view_contact">zobrazit kontakt</string>
     <!--
@@ -111,12 +111,12 @@
     <!-- Status in "Report" window -->
     <string name="status_rejected">Odmítnuto</string>
     <!-- Label in "Report" window -->
-    <string name="recipient_label">příjemce:\u0020</string>
+    <string name="recipient_label">příjemce: </string>
     <!-- Menu item -->
     <string name="menu_insert_smiley">Vložit smajlík</string>
     <!-- Label for the "Me" number of this phone. -->
     <string name="me">Já</string>
     <!-- Brief small label shown to right of message when it is being sent. -->
-    <string name="sending_message">Odesílání\u2026</string>
+    <string name="sending_message">Odesílání…</string>
 
 </resources>

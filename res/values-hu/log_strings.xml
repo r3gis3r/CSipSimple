@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="unknown">Ismeretlen</string>
-  <string name="type_incoming">Bejövő</string>
-  <string name="type_outgoing">Kimenő</string>
-  <string name="type_missed">Elmulasztott</string>
-  <string name="callBack">Visszahív</string>
-  <string name="callAgain">Újra hív</string>
-  <string name="returnCall">Felhív</string>
-  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" perc "<xliff:g id="seconds" example="28">%s</xliff:g>" másodperc"</string>
+<resources>
+
+    <string name="unknown">Ismeretlen</string>
+    <string name="type_incoming">Bejövő</string>
+    <string name="type_outgoing">Kimenő</string>
+    <string name="type_missed">Elmulasztott</string>
+    <string name="callBack">Visszahív</string>
+    <string name="callAgain">Újra hív</string>
+    <string name="returnCall">Felhív</string>
+
 </resources>

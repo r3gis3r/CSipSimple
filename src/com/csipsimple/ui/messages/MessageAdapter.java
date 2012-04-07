@@ -199,24 +199,6 @@ public class MessageAdapter extends ResourceCursorAdapter {
     private CharSequence formatMessage(String contact, String body,
             String contentType) {
         SpannableStringBuilder buf = new SpannableStringBuilder();
-        /*
-        CharSequence template = mContext.getResources().getText(
-                R.string.name_colon);
-        String formatedContact;
-        if (contact.equalsIgnoreCase(SipMessage.SELF)) {
-            formatedContact = mContext.getString(R.string.messagelist_sender_self);
-        } else {
-            formatedContact = SipUri.getDisplayedSimpleContact(contact);
-        }
-
-        buf.append(TextUtils.replace(template,
-                new String[] {
-                    "%s"
-                },
-                new CharSequence[] {
-                    formatedContact
-                }));
-*/
         if (!TextUtils.isEmpty(body)) {
             // Converts html to spannable if ContentType is "text/html".
             if (contentType != null && "text/html".equals(contentType)) {

@@ -111,14 +111,14 @@
     <!-- Status in "Report" window -->
     <string name="status_rejected">Отхвърлено</string>
     <!-- Label in "Report" window -->
-    <string name="recipient_label">Получател:\u0020</string>
+    <string name="recipient_label">Получател: </string>
     <!-- Label in "Report" window -->
-    <string name="status_label">Статус:\u0020</string>
+    <string name="status_label">Статус: </string>
     <!-- Menu item -->
     <string name="menu_insert_smiley">Вмъкване на имотикона</string>
     <!-- Label for the "Me" number of this phone. -->
     <string name="me">Аз</string>
     <!-- Brief small label shown to right of message when it is being sent. -->
-    <string name="sending_message">Изпращане\u2026</string>
+    <string name="sending_message">Изпращане…</string>
 
 </resources>

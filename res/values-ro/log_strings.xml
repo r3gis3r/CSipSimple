@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="unknown">Necunoscut</string>
-  <string name="type_incoming">Primite</string>
-  <string name="type_outgoing">Iesiri</string>
-  <string name="type_missed">Pierdute</string>
-  <string name="callBack">Apeleaza inapoi</string>
-  <string name="callAgain">Apeleaza inca odata</string>
-  <string name="returnCall">Apeleaza</string>
-  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" min "<xliff:g id="seconds" example="28">%s</xliff:g>" sec"</string>
+<resources>
+
+    <string name="unknown">Necunoscut</string>
+    <string name="type_incoming">Primite</string>
+    <string name="type_outgoing">Iesiri</string>
+    <string name="type_missed">Pierdute</string>
+    <string name="callBack">Apeleaza inapoi</string>
+    <string name="callAgain">Apeleaza inca odata</string>
+    <string name="returnCall">Apeleaza</string>
+
 </resources>

@@ -18,12 +18,9 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g> zu Kontakten hinzufügen</string>
-    <!-- Time and date a message was sent -->
-    <string name="sent_on">Gesendet: <xliff:g id="date">%s</xliff:g></string>
-
-    <!-- Error message indicating the format for the specified media type (e.g. "picture") is unsupported -->
-    <string name="unsupported_media_format">Nicht untertsütztes <xliff:g id="name">%1$s</xliff:g> Format</string>
-    <string name="disconnect_and_will_restart">Startet automatisch erneut sobald <xliff:g id="networks">%s</xliff:g> zur Verfügung steht (Einstellungen ändern falls nicht gewünscht)</string>
+    <string name="unsupported_media_format">지원되지 않는 <xliff:g id="name">%1$s</xliff:g> 형식</string>
+    <string name="menu_add_address_to_contacts">전화번호부에 <xliff:g id="name">%s</xliff:g>  추가</string>
+    <string name="sent_on">발신 완료:<xliff:g id="date">%s</xliff:g></string>
+    <string name="disconnect_and_will_restart"><xliff:g id="networks" example="3G">%s</xliff:g>의 경우 자동으로 시작됩니다(원하지 않는 경우 설정을 변경하시면 됩니다)</string>
 
 </resources>

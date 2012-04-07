@@ -24,9 +24,6 @@
 
     <!-- Time and date a message was sent -->
     <string name="sent_on">poslat: <xliff:g id="date=">%s</xliff:g></string>
-    <!-- Formatting for prepending MMS message text with sender's name. -->
-    <string name="name_colon"><b>            <xliff:g id="name=">%s</xliff:g>
-</b>: </string>
 
     <!-- Error message indicating the format for the specified media type (e.g. "picture") is unsupported -->
     <string name="unsupported_media_format">Nepodporovaný <xliff:g id="name">%1$s</xliff:g> formát</string>
