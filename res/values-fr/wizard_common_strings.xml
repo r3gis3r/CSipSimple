@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_common_display_name">Nom du compte</string>
   <string name="w_common_display_name_desc">Nom d\'affichage du compte</string>
@@ -10,4 +10,5 @@
   <string name="w_common_password_desc">Mot de passe du compte SIP</string>
   <string name="w_common_server">Serveur</string>
   <string name="w_common_server_desc">Serveur sip : domaine/IP[:port]</string>
+  <string name="create_account">Créer un compte</string>
 </resources>

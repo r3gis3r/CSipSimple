@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Répondre</string>
   <string name="decline_call">Ignorer</string>
@@ -20,4 +20,6 @@
   <string name="record">Enregistrer</string>
   <string name="stop_recording">Arrêter l\'enregistrement</string>
   <string name="xfer">Transférer</string>
+  <string name="hold_call">Mettre en attente</string>
+  <string name="transfer_call">Transférer</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">Nom du compte</string>
   <string name="w_advanced_display_name_desc">Nom d\'affichage du compte</string>
@@ -11,4 +11,6 @@
   <string name="w_advanced_use_tcp">Utiliser le TCP (non=UDP)</string>
   <string name="w_advanced_proxy">Serveur proxy</string>
   <string name="w_advanced_proxy_desc">Proxy domaine/IP[:port] (optionnel)</string>
+  <string name="w_advanced_auth_id">Id d\'authentification SIP</string>
+  <string name="w_advanced_auth_id_desc">Laisser vide si identique au nom d\'utilisateur</string>
 </resources>
