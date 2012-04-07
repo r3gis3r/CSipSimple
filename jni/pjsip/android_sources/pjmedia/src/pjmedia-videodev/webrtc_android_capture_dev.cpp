@@ -307,7 +307,7 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 	unsigned i,
 		oWidth, oHeight, oFps,
 		nWidth, nHeight, nFps,
-		tWidth, tHeight, tFps;
+		tWidth, tHeight/*, tFps*/;
 
 	pj_status_t status = PJ_SUCCESS;
 
@@ -355,8 +355,11 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 	strm->_capability = NULL;
 	tWidth = param->fmt.det.vid.size.w;
 	tHeight = param->fmt.det.vid.size.h;
-	tFps = param->fmt.det.vid.fps.num / 1000;
-
+//	if(param->fmt.det.vid.fps.denum > 0){
+//		tFps = param->fmt.det.vid.fps.num * 1.0 / param->fmt.det.vid.fps.denum;
+//	}else{
+//		tFps = 15;
+//	}
 	for(i = 0; i < ddi->info.fmt_cnt; i++){
 		if(!strm->_capability){
 			strm->_capability = &ddi->_capability[i];
@@ -374,7 +377,7 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 		PJ_LOG(4, (THIS_FILE, "Compare : %dx%d@%d to %dx%d@%d with target %dx%d@%d",
 				oWidth, oHeight, oFps,
 				nWidth, nHeight, nFps,
-				tWidth, tHeight, tFps));
+				tWidth, tHeight, param->clock_rate));
 
 		if( abs(nHeight - tHeight) <= abs(oHeight - tHeight) /*&& !(nHeight < tHeight && oHeight >= tHeight)*/){
 			// We have better or equal height
@@ -384,7 +387,7 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 					// We have better or equal height
 					if(abs(nWidth - tWidth) == abs(oWidth - tWidth)){
 						// Same height, check on fps
-						if( abs(nFps - tFps) <= abs(oFps - tFps) ){
+						if( nFps > oFps ){
 							// Well if we reach this point, probably it's the same or better ;)
 							strm->_capability = &ddi->_capability[i];
 							continue;
@@ -411,6 +414,7 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 	param->fmt.det.vid.size.w = strm->_capability->width;
 	param->fmt.det.vid.size.h = strm->_capability->height;
 	param->fmt.det.vid.fps.num = strm->_capability->maxFPS * 1000;
+	param->fmt.det.vid.fps.denum = 1;
 	param->clock_rate = strm->_capability->maxFPS * 1000;
 	param->native_preview = PJ_TRUE;
 

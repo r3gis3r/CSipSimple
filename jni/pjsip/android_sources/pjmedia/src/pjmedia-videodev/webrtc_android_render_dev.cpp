@@ -243,18 +243,6 @@ static pj_status_t webrtcR_factory_default_param(pj_pool_t *pool,
 
 
 static pj_status_t init_stream(struct webrtcR_stream *strm){
-	// Init params
-	/*
-    pjmedia_video_format_detail *vfd;
-    vfd = pjmedia_format_get_video_format_detail(&strm->param.fmt, PJ_TRUE);
-
-	if (strm->param.disp_size.w == 0){
-		strm->param.disp_size.w = vfd->size.w;
-	}
-	if (strm->param.disp_size.h == 0){
-		strm->param.disp_size.h = vfd->size.h;
-	}
-	*/
 
 	if(strm->_renderWindow){
 
@@ -332,13 +320,6 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 
 	//PJ_LOG(4, (THIS_FILE, "Will render video frame : %dx%d (%d) for %x",
 	//	vfd->size.w, vfd->size.h, frame->size, stream->base));
-
-//	memset(stream->_videoFrame.Buffer(),
-//			255,
-//			stream->_videoFrame.Size());
-//	memset(stream->_videoFrame.Buffer() + stream->_videoFrame.Width() * stream->_videoFrame.Height(),
-//			127,
-//			stream->_videoFrame.Width() * stream->_videoFrame.Height() / 2);
 
 	memcpy(stream->_videoFrame.Buffer(), frame->buf, frame->size);
 

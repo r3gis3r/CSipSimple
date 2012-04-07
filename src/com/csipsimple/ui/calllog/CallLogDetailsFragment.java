@@ -268,7 +268,7 @@ public class CallLogDetailsFragment extends Fragment {
             displayNumber = mResources.getString(R.string.unknown);
         }
 
-        String callText = getString(R.string.call_number, displayNumber);
+        String callText = getString(R.string.description_call, displayNumber);
         configureCallButton(callText, firstDetails.numberLabel, firstDetails.number);
 
         ListView historyList = (ListView) getView().findViewById(R.id.history);

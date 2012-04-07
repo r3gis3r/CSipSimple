@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="callDetailsDurationFormat"><xliff:g id="minutes">%s</xliff:g> мин. <xliff:g id="seconds">%s</xliff:g> сек.</string>
+    <string name="menu_add_address_to_contacts">Въведи <xliff:g id="name">%s</xliff:g> в Контакти</string>
+    <!-- Time and date a message was sent -->
+    <string name="sent_on">Изпрати: <xliff:g id="date">%s</xliff:g></string>
+
+    <!-- Formatting for prepending MMS message text with sender's name. -->
+    <string name="name_colon"><b>            <xliff:g id="name" example="Me">%s</xliff:g>
+</b>: </string>
+    <!-- Error message indicating the format for the specified media type (e.g. "picture") is unsupported -->
+    <string name="unsupported_media_format">Не се поддържа <xliff:g id="name">%1$s</xliff:g> формат</string>
+
+</resources>

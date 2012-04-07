@@ -1,9 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
 
     <string name="next">Další</string>
     <string name="init">Inicializace…</string>
     <string name="unable_to_download_file">Nelze stáhnout soubor</string>
+    <string name="connection_not_valid">Selected network route not allowed with current settings you have setup</string>
     <string name="invalid_sip_uri">SIP URI je pro volání neplatné</string>
     <string name="accounts">Účty</string>
     <string name="other_accounts">Další účty</string>
@@ -51,7 +52,6 @@
     <string name="misc">Různé</string>
     <string name="warning">UPOZORNĚNÍ</string>
     <string name="disconnect_and_incoming_explaination">konfigurace kompletní jestli chcete být k dispozici pro tuto síť! Klikněte na tlačítko OK</string>
-    <string name="disconnect_and_will_restart">"Automaticky restartovat když : "<xliff:g id="networks" example="3G">%s</xliff:g>" bude aktivní (změňte nastavení jestli nechcete )"</string>
     <string name="gadget_title">přepínač sip účtů</string>
     <string name="pickup_sip_uri">vyzvednout sip kontakty</string>
     <string name="display_icon_in_status_bar_desc">Zobrazení ikony na liště v případě že jste registrováni.</string>
@@ -60,7 +60,26 @@
     <string name="choose_phone">Vyberte telefon</string>
     <string name="no_phone_found">Nenalezen žádný telefon pro tento kontakt</string>
     <string name="show_password">Zobrazit heslo</string>
-    <string name="this_codec_is_not_free">"** Tento kodek není zadarmo !!!**\nUjistěte se, že  (vaše SIP poskytovatele nebo sami) si zakoupili licenci, která vám umožní používat tento kodek! My (jako aplikace distributoři) nejsme zodpovědní za nelegální používání tohoto kodeku.\nJe jen na vás, abyste se ujistili, že jste oprávněni používat tento kodek.\nNákup odkaz:"</string>
+    <string name="this_codec_is_not_free">** Tento kodek není zadarmo !!!**\nUjistěte se, že  (vaše SIP poskytovatele nebo sami) si zakoupili licenci, která vám umožní používat tento kodek! My (jako aplikace distributoři) nejsme zodpovědní za nelegální používání tohoto kodeku.\nJe jen na vás, abyste se ujistili, že jste oprávněni používat tento kodek.\nNákup odkaz:</string>
     <string name="voice_mail">Hlasová pošta</string>
+    <string name="voice_mail_number">VM number</string>
+    <string name="type_sip_uri_or_autocomplete">Sip uri or autocomplete</string>
+    <string name="not_configured_multiple_calls">The application is not configured to allow multiple calls</string>
+    <string name="legal_information">Legal information</string>
+    <string name="update_nightly_build">Update nightly build</string>
+    <string name="loading">Loading</string>
+    <string name="reconnect">Reconnect</string>
+    <string name="switch_to_text">Switch to text mode</string>
+    <string name="switch_to_digit">Switch to digit mode</string>
+    <string name="no_voice_mail_configured">No voicemail configured</string>
+    <!-- Presence stuff -->
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="away">Away</string>
+    <string name="busy">Busy</string>
+    <string name="activate">Activate</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
 
 </resources>

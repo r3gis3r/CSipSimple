@@ -1,8 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_iinet_state">Status</string>
   <string name="w_iinet_state_desc">Relevant status fra følgende liste</string>
   <string name="w_iinet_username">VoIP telefonnummer</string>
   <string name="w_iinet_username_desc">Fjern eventuelle mellemrum og understregninger</string>
   <string name="w_iinet_password">VoIP Adgangskode</string>
+  <string name="w_iinet_password_desc">Not the same as connection password</string>
 </resources>

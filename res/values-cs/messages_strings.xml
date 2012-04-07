@@ -1,62 +1,122 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_label">Posílání zpráv</string>
-  <string name="new_message">Nová zpráva</string>
-  <string name="create_new_message">napsat novou zprávu</string>
-  <string name="menu_compose_new">Napsat</string>
-  <string name="menu_add_address_to_contacts">"přidat "<xliff:g id="name">%s</xliff:g>" do kontaktů"</string>
-  <string name="menu_call">volat</string>
-  <string name="menu_delete_all">smaž konverzace</string>
-  <string name="menu_delete">smaž konverzaci</string>
-  <string name="menu_view">zobrazit konverzaci</string>
-  <string name="anonymous_recipient">Anonymni</string>
-  <string name="messagelist_sender_self">Já</string>
-  <string name="delete_message">smaž zprávu</string>
-  <string name="sent_on">"poslat: "<xliff:g id="date">%s</xliff:g></string>
-  <string name="kilobyte">kB</string>
-  <string name="undelivered_msg_dialog_title">nedoručitelná zpráva</string>
-  <string name="undelivered_sms_dialog_body">nelze odeslat zprávu</string>
-  <string name="delete_thread">smaž konverzaci</string>
-  <string name="download">Stáhnout</string>
-  <string name="downloading">Stahování</string>
-  <string name="name_colon"><b><xliff:g id="name" example="Me">%s</xliff:g></b>": "</string>
-  <string name="copy_message_text">Kopírovat text zprávy</string>
-  <string name="message_options">nastavení zprávy</string>
-  <string name="done">Dokončeno</string>
-  <string name="compose_title">Napsat</string>
-  <string name="add_attachment">Přiložit</string>
-  <string name="view">Zobrazit</string>
-  <string name="send">Odeslat</string>
-  <string name="all_threads">všechny konverzace</string>
-  <string name="type_to_compose_text_enter_to_send">typ psaní zprávy</string>
-  <string name="open_keyboard_to_compose_message">otevřít klavesnici pro psaní zprávy</string>
-  <string name="image_too_large">obrázek je příliš velký</string>
-  <string name="ask_for_automatically_resize">Automaticky změnit velikost obrázku před odsláním ?</string>
-  <string name="compressing">Obrázek je příliš velký. Komprese\\u2026</string>
-  <string name="unsupported_media_format">"Nepodporovaný "<xliff:g id="name">%1$s</xliff:g>" formát"</string>
-  <string name="menu_view_contact">zobrazit kontakt</string>
-  <string name="menu_add_to_contacts">přidat kontakty</string>
-  <string name="hidden_sender_address">skrýt adresu odesílatele</string>
-  <string name="yes">OK</string>
-  <string name="no">Zrušit</string>
-  <string name="edit">Upravit</string>
-  <string name="restore_default">Obnovit výchozí nastavení</string>
-  <string name="confirm_dialog_title">Odstranit</string>
-  <string name="confirm_delete_conversation">konverzace bude smazána</string>
-  <string name="confirm_delete_all_conversations">všechny konverzace budou smazány</string>
-  <string name="confirm_delete_message">zpráva bude smazána</string>
-  <string name="confirm_delete_locked_message">Jste si jistí že chcete smazat zamčené zprávy ?</string>
-  <string name="confirm_delete_all_messages">konverzace bude smazána</string>
-  <string name="delete">Odstranit</string>
-  <string name="status_none">(Žádný)</string>
-  <string name="status_pending">Čeká se</string>
-  <string name="status_received">Přijaté</string>
-  <string name="status_failed">nedokončené</string>
-  <string name="status_unread">Nepřečtené</string>
-  <string name="status_rejected">Odmítnuto</string>
-  <string name="recipient_label">příjemce:\\u0020</string>
-  <string name="status_label">status:\\u0020</string>
-  <string name="menu_insert_smiley">Vložit smajlík</string>
-  <string name="me">Já</string>
-  <string name="sending_message">Odesílání\\u2026</string>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <!-- The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc. -->
+    <string name="app_label">Posílání zpráv</string>
+    <!-- Command name to open a Compose screen; displays in conversation list -->
+    <string name="new_message">Nová zpráva</string>
+    <!-- Summary text under "New Message" command; displays in conversation list -->
+    <string name="create_new_message">napsat novou zprávu</string>
+    <!-- Menu item for starting a new conversation -->
+    <string name="menu_compose_new">Napsat</string>
+    <!-- Menu item to call the recipient of the conversation on the phone (imperative verb) -->
+    <string name="menu_call">volat</string>
+    <!-- Menu item for deleting all conversations -->
+    <string name="menu_delete_all">smaž konverzace</string>
+    <!-- Context menu item on an individual conversation for deleting that conversation -->
+    <string name="menu_delete">smaž konverzaci</string>
+    <!-- Context menu item on an individual conversation for viewing that conversation -->
+    <string name="menu_view">zobrazit konverzaci</string>
+    <!-- Name to use when we have an unspecified sender -->
+    <string name="anonymous_recipient">Anonymni</string>
+    <!-- Name of the local user when displaying sender of an outgoing message (personal pronoun) -->
+    <string name="messagelist_sender_self">Já</string>
+    <string name="delete_message">smaž zprávu</string>
+    <!-- Abbreviation for "kilobyte" -->
+    <string name="kilobyte">kB</string>
+    <!-- Dialog box title brought up when warning the user that a message could not be delivered -->
+    <string name="undelivered_msg_dialog_title">nedoručitelná zpráva</string>
+    <!-- Dialog box message indicating that a message could not be delivered -->
+    <string name="undelivered_sms_dialog_body">nelze odeslat zprávu</string>
+    <!-- Menu item for deleting the entire conversation currently being viewed -->
+    <string name="delete_thread">smaž konverzaci</string>
+    <!--
+      Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
+         to be downloaded (imperative verb)
+    -->
+    <string name="download">Stáhnout</string>
+    <!--
+      Message displayed in place of the "download message" button once it has been pressed,
+         indicating that the download is in progress
+    -->
+    <string name="downloading">Stahování</string>
+    <!-- Individual message context menu item -->
+    <string name="copy_message_text">Kopírovat text zprávy</string>
+    <!-- Header for context menu on an individual message -->
+    <string name="message_options">nastavení zprávy</string>
+    <!-- Button text on edit slide screen indicating the user wants to finish editing that slide -->
+    <string name="done">Dokončeno</string>
+    <!-- Title bar displayed in compose message activity before a recipient has been selected -->
+    <string name="compose_title">Napsat</string>
+    <!-- Menu item in conversation screen for attaching something to the message being composed -->
+    <string name="add_attachment">Přiložit</string>
+    <!-- Button next to an attachment during message composition to view the attachment (imperative verb) -->
+    <string name="view">Zobrazit</string>
+    <!-- Button in conversation screen for sending the SMS message currently being composed (imperative verb) -->
+    <string name="send">Odeslat</string>
+    <!-- Menu item in conversation screen for returning to the conversation list -->
+    <string name="all_threads">všechny konverzace</string>
+    <!-- Hint text in message body field when keyboard is exposed -->
+    <string name="type_to_compose_text_enter_to_send">typ psaní zprávy</string>
+    <!-- Hint text in message body field when keyboard is hidden -->
+    <string name="open_keyboard_to_compose_message">otevřít klavesnici pro psaní zprávy</string>
+    <!-- Dialog title for warning the user that the picture they are trying to attach is too large -->
+    <string name="image_too_large">obrázek je příliš velký</string>
+    <!-- Dialog message text asking the user if he wants to resize the picture being attached -->
+    <string name="ask_for_automatically_resize">Automaticky změnit velikost obrázku před odsláním ?</string>
+    <!-- Toast message while an image is being resized -->
+    <string name="compressing">Obrázek je příliš velký. Komprese\u2026</string>
+    <!-- Context menu item on a message recipient for viewing their contact info -->
+    <string name="menu_view_contact">zobrazit kontakt</string>
+    <!--
+      Context menu item on a message recipient for adding them to the user's
+         contacts (used if the recipient is not already in the address book)
+    -->
+    <string name="menu_add_to_contacts">přidat kontakty</string>
+    <!-- Sender to be used if the sender address has been hidden -->
+    <string name="hidden_sender_address">skrýt adresu odesílatele</string>
+    <!-- Text to be used for affirmative response button in dialog boxes -->
+    <string name="yes">OK</string>
+    <!-- Text to be used for negative response button in dialog boxes -->
+    <string name="no">Zrušit</string>
+    <!-- Button text used for editing a slideshow (imperative verb) -->
+    <string name="edit">Upravit</string>
+    <!-- Settings screen menu item for restoring all settings to default -->
+    <string name="restore_default">Obnovit výchozí nastavení</string>
+    <!-- Confirm Delete -->
+    <!-- Delete confirmation dialog title -->
+    <string name="confirm_dialog_title">Odstranit</string>
+    <!-- Delete entire thread confirmation dialog message -->
+    <string name="confirm_delete_conversation">konverzace bude smazána</string>
+    <!-- Delete all threads confirmation dialog message -->
+    <string name="confirm_delete_all_conversations">všechny konverzace budou smazány</string>
+    <!-- Delete message confirmation dialog message -->
+    <string name="confirm_delete_message">zpráva bude smazána</string>
+    <!-- Delete message confirmation dialog message for a locked message -->
+    <string name="confirm_delete_locked_message">Jste si jistí že chcete smazat zamčené zprávy ?</string>
+    <!-- Delete entire thread confirmation dialog message -->
+    <string name="confirm_delete_all_messages">konverzace bude smazána</string>
+    <!-- Delete button title -->
+    <string name="delete">Odstranit</string>
+    <!-- Status in "Report" window -->
+    <string name="status_none">(Žádný)</string>
+    <!-- Status in "Report" window -->
+    <string name="status_pending">Čeká se</string>
+    <!-- Status in "Report" window -->
+    <string name="status_received">Přijaté</string>
+    <!-- Status in "Report" window -->
+    <string name="status_failed">nedokončené</string>
+    <!-- Status in "Report" window -->
+    <string name="status_unread">Nepřečtené</string>
+    <!-- Status in "Report" window -->
+    <string name="status_rejected">Odmítnuto</string>
+    <!-- Label in "Report" window -->
+    <string name="recipient_label">příjemce:\u0020</string>
+    <!-- Menu item -->
+    <string name="menu_insert_smiley">Vložit smajlík</string>
+    <!-- Label for the "Me" number of this phone. -->
+    <string name="me">Já</string>
+    <!-- Brief small label shown to right of message when it is being sent. -->
+    <string name="sending_message">Odesílání\u2026</string>
+
 </resources>

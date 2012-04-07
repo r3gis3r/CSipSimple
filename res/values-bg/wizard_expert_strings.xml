@@ -1,28 +1,30 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="w_expert_display_name">Име на профила</string>
-  <string name="w_expert_display_name_desc">Показване на име за този профил</string>
-  <string name="w_expert_acc_id">Абонатен номер</string>
-  <string name="w_expert_acc_id_desc">Формат : Име за показване &lt;sip:login\@registrar&gt;</string>
-  <string name="w_expert_reg_uri">Регистрация URI</string>
-  <string name="w_expert_reg_uri_desc">Формат : sip:registrar.net[:порт]</string>
-  <string name="w_expert_realm">Realm</string>
-  <string name="w_expert_realm_desc">Домейн за удостоверяване (ако не го знаете, използвайте \"*\")</string>
-  <string name="w_expert_username">Потребителско име</string>
-  <string name="w_expert_username_desc">Потребителско име за ауторизация</string>
-  <string name="w_expert_data">Парола</string>
-  <string name="w_expert_data_desc">Парола (или други данни) за ауторизация</string>
-  <string name="w_expert_t_proxy">Прокси</string>
-  <string name="w_expert_proxy">Прокси URI</string>
-  <string name="w_expert_proxy_desc">Формат : sip:proxy.net[:порт]</string>
-  <string name="w_expert_use_tcp">Използвай TCP (не UDP)</string>
-  <string name="w_expert_prevent_tcp">Забрани TCP (използвай само UDP)</string>
-  <string name="w_expert_publish_enabled">Публикуването позволено</string>
-  <string name="w_expert_reg_timeout">Регистрирането изтече (сек)</string>
-  <string name="w_expert_reg_delay_before_refresh">Време за изчакване на регистрация преди преинициализация (сек)</string>
-  <string name="w_expert_ka_interval">Поддържане на активност интервал (сек)</string>
-  <string name="w_expert_force_contact">Принуди контакт</string>
-  <string name="w_expert_allow_contact_rewrite">Позволи пренаписване на контакт</string>
-  <string name="w_expert_contact_rewrite_method">Метед за пренаписване на контакт</string>
-  <string name="w_expert_reg_use_proxy">Как да използваме прокси</string>
+
+    <string name="w_expert_display_name">Име на профила</string>
+    <string name="w_expert_display_name_desc">Показване на име за този профил</string>
+    <string name="w_expert_acc_id">Абонатен номер</string>
+    <string name="w_expert_acc_id_desc">Формат : Име за показване &lt;sip:login\@registrar></string>
+    <string name="w_expert_reg_uri">Регистрация URI</string>
+    <string name="w_expert_reg_uri_desc">Формат : sip:registrar.net[:порт]</string>
+    <string name="w_expert_realm">Realm</string>
+    <string name="w_expert_realm_desc">Домейн за удостоверяване (ако не го знаете, използвайте \"*\")</string>
+    <string name="w_expert_username">Потребителско име</string>
+    <string name="w_expert_username_desc">Потребителско име за ауторизация</string>
+    <string name="w_expert_data">Парола</string>
+    <string name="w_expert_data_desc">Парола (или други данни) за ауторизация</string>
+    <string name="w_expert_t_proxy">Прокси</string>
+    <string name="w_expert_proxy">Прокси URI</string>
+    <string name="w_expert_proxy_desc">Формат : sip:proxy.net[:порт]</string>
+    <string name="w_expert_use_tcp">Използвай TCP (не UDP)</string>
+    <string name="w_expert_prevent_tcp">Забрани TCP (използвай само UDP)</string>
+    <string name="w_expert_publish_enabled">Публикуването позволено</string>
+    <string name="w_expert_reg_timeout">Регистрирането изтече (сек)</string>
+    <string name="w_expert_reg_dbr">Време за изчакване на регистрация преди преинициализация (сек)</string>
+    <string name="w_expert_ka_interval">Поддържане на активност интервал (сек)</string>
+    <string name="w_expert_force_contact">Принуди контакт</string>
+    <string name="w_expert_allow_contact_rewrite">Позволи пренаписване на контакт</string>
+    <string name="w_expert_contact_rewrite_method">Метед за пренаписване на контакт</string>
+    <string name="w_expert_reg_use_proxy">Как да използваме прокси</string>
+
 </resources>

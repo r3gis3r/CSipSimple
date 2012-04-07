@@ -1,11 +1,12 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="unknown">Неизвестен</string>
-  <string name="type_incoming">Входящ</string>
-  <string name="type_outgoing">Изходящ</string>
-  <string name="type_missed">Пропуснати</string>
-  <string name="callBack">Връщане на обаждането</string>
-  <string name="callAgain">Позвъни отново</string>
-  <string name="returnCall">Върнато повикване</string>
-  <string name="callDetailsDurationFormat"><xliff:g id="minutes" example="42">%s</xliff:g>" мин. "<xliff:g id="seconds" example="28">%s</xliff:g>" сек."</string>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="unknown">Неизвестен</string>
+    <string name="type_incoming">Входящ</string>
+    <string name="type_outgoing">Изходящ</string>
+    <string name="type_missed">Пропуснати</string>
+    <string name="callBack">Връщане на обаждането</string>
+    <string name="callAgain">Позвъни отново</string>
+    <string name="returnCall">Върнато повикване</string>
+
 </resources>

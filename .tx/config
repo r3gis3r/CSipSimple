@@ -13,11 +13,6 @@ file_filter = res/values-<lang>/acct_status_strings.xml
 source_file = res/values/acct_status_strings.xml
 source_lang = en
 
-[csipsimple.arrays]
-file_filter = res/values-<lang>/arrays.xml
-source_file = res/values/arrays.xml
-source_lang = en
-
 [csipsimple.descriptions_strings]
 file_filter = res/values-<lang>/descriptions_strings.xml
 source_file = res/values/descriptions_strings.xml

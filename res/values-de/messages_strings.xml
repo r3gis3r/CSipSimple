@@ -1,64 +1,124 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
 
+    <!-- The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc. -->
     <string name="app_label">Nachrichten</string>
+    <!-- Command name to open a Compose screen; displays in conversation list -->
     <string name="new_message">Neue Nachricht</string>
+    <!-- Summary text under "New Message" command; displays in conversation list -->
     <string name="create_new_message">Nachricht verfassen</string>
+    <!-- Menu item for starting a new conversation -->
     <string name="menu_compose_new">Verfassen</string>
-    <string name="menu_add_address_to_contacts"><xliff:g id="name">%s</xliff:g>" zu Kontakten hinzufügen"</string>
+    <!-- Menu item to call the recipient of the conversation on the phone (imperative verb) -->
     <string name="menu_call">Anrufen</string>
+    <!-- Menu item for deleting all conversations -->
     <string name="menu_delete_all">Unterhaltungen löschen</string>
+    <!-- Context menu item on an individual conversation for deleting that conversation -->
     <string name="menu_delete">Unterhaltung löschen</string>
+    <!-- Context menu item on an individual conversation for viewing that conversation -->
     <string name="menu_view">Unterhaltung anzeigen</string>
+    <!-- Name to use when we have an unspecified sender -->
     <string name="anonymous_recipient">Unbekannt</string>
+    <!-- Name of the local user when displaying sender of an outgoing message (personal pronoun) -->
     <string name="messagelist_sender_self">Ich</string>
     <string name="delete_message">Nachricht löschen</string>
-    <string name="sent_on">"Gesendet: "<xliff:g id="date">%s</xliff:g></string>
+    <!-- Abbreviation for "kilobyte" -->
     <string name="kilobyte">KB</string>
+    <!-- Dialog box title brought up when warning the user that a message could not be delivered -->
     <string name="undelivered_msg_dialog_title">Nachricht nicht zugestellt</string>
+    <!-- Dialog box message indicating that a message could not be delivered -->
     <string name="undelivered_sms_dialog_body">Kann diese Nachricht nicht senden</string>
+    <!-- Menu item for deleting the entire conversation currently being viewed -->
     <string name="delete_thread">Gespräch löschen</string>
+    <!--
+      Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
+         to be downloaded (imperative verb)
+    -->
     <string name="download">Download</string>
+    <!--
+      Message displayed in place of the "download message" button once it has been pressed,
+         indicating that the download is in progress
+    -->
     <string name="downloading">Wird heruntergeladen</string>
+    <!-- Individual message context menu item -->
     <string name="copy_message_text">Kopiere Nachrichten Text</string>
+    <!-- Header for context menu on an individual message -->
     <string name="message_options">Nachrichtenoptionen</string>
+    <!-- Button text on edit slide screen indicating the user wants to finish editing that slide -->
     <string name="done">Fertig</string>
+    <!-- Title bar displayed in compose message activity before a recipient has been selected -->
     <string name="compose_title">Verfassen</string>
+    <!-- Menu item in conversation screen for attaching something to the message being composed -->
     <string name="add_attachment">Anhängen</string>
+    <!-- Button next to an attachment during message composition to view the attachment (imperative verb) -->
     <string name="view">Ansehen</string>
+    <!-- Button in conversation screen for sending the SMS message currently being composed (imperative verb) -->
     <string name="send">Senden</string>
-    <string name="type_to_compose_text_enter_to_send">Tippe zum Verfassen</string>
-    <string name="open_keyboard_to_compose_message">Öffne die Tastatur um Nachricht zu verfassen</string>
-    <string name="image_too_large">Bild zu groß</string>
-    <string name="ask_for_automatically_resize">Bild vor dem Senden automatisch anpassen?</string>
-    <string name="compressing">Bild zu groß. Komprimiere\\u2026</string>
-    <string name="unsupported_media_format">"Nicht untertsütztes "<xliff:g id="name">%1$s</xliff:g>" Format"</string>
-    <string name="menu_view_contact">Kontakt ansehen</string>
-    <string name="menu_add_to_contacts">Zu Kontakten hinzufügen</string>
-    <string name="hidden_sender_address">Verborgene Absender Adresse</string>
-    <string name="yes">OK</string>
-    <string name="no">Abbrechen</string>
-    <string name="edit">Ändern</string>
-    <string name="restore_default">Standardwerte laden</string>
-    <string name="confirm_dialog_title">Löschen</string>
-    <string name="confirm_delete_message">Die Nachricht wird gelöscht</string>
-    <string name="delete">Löschen</string>
-    <string name="status_none">(Keine)</string>
-    <string name="status_pending">Ausstehend</string>
-    <string name="status_received">Erhalten</string>
-    <string name="status_failed">Nicht erfolgreich</string>
-    <string name="status_unread">Ungelesen</string>
-    <string name="status_rejected">Abgelehnt</string>
-    <string name="recipient_label">Empfänger:\\u0020</string>
-    <string name="status_label">Status:\\u0020</string>
-    <string name="menu_insert_smiley">Smiley einfügen</string>
-    <string name="me">Ich</string>
-    <string name="sending_message">Sende\\u2026</string>
+    <!-- Menu item in conversation screen for returning to the conversation list -->
     <string name="all_threads">Alle Themen</string>
+    <!-- Hint text in message body field when keyboard is exposed -->
+    <string name="type_to_compose_text_enter_to_send">Tippe zum Verfassen</string>
+    <!-- Hint text in message body field when keyboard is hidden -->
+    <string name="open_keyboard_to_compose_message">Öffne die Tastatur um Nachricht zu verfassen</string>
+    <!-- Dialog title for warning the user that the picture they are trying to attach is too large -->
+    <string name="image_too_large">Bild zu groß</string>
+    <!-- Dialog message text asking the user if he wants to resize the picture being attached -->
+    <string name="ask_for_automatically_resize">Bild vor dem Senden automatisch anpassen?</string>
+    <!-- Toast message while an image is being resized -->
+    <string name="compressing">Bild zu groß. Komprimiere…</string>
+    <!-- Context menu item on a message recipient for viewing their contact info -->
+    <string name="menu_view_contact">Kontakt ansehen</string>
+    <!--
+      Context menu item on a message recipient for adding them to the user's
+         contacts (used if the recipient is not already in the address book)
+    -->
+    <string name="menu_add_to_contacts">Zu Kontakten hinzufügen</string>
+    <!-- Sender to be used if the sender address has been hidden -->
+    <string name="hidden_sender_address">Verborgene Absender Adresse</string>
+    <!-- Text to be used for affirmative response button in dialog boxes -->
+    <string name="yes">OK</string>
+    <!-- Text to be used for negative response button in dialog boxes -->
+    <string name="no">Abbrechen</string>
+    <!-- Button text used for editing a slideshow (imperative verb) -->
+    <string name="edit">Ändern</string>
+    <!-- Settings screen menu item for restoring all settings to default -->
+    <string name="restore_default">Standardwerte laden</string>
+    <!-- Confirm Delete -->
+    <!-- Delete confirmation dialog title -->
+    <string name="confirm_dialog_title">Löschen</string>
+    <!-- Delete entire thread confirmation dialog message -->
     <string name="confirm_delete_conversation">Die gesamte Unterhaltung wird gelöscht.</string>
+    <!-- Delete all threads confirmation dialog message -->
     <string name="confirm_delete_all_conversations">Alle Unterhaltungen werden gelöscht.</string>
-    <string name="confirm_delete_message">Die gesamte Unterhaltung wird gelöscht.</string>
-    <string name="confirm_delete_all_messages">Das gesamte Thema wird gelöscht.</string>
+    <!-- Delete message confirmation dialog message -->
+    <string name="confirm_delete_message">Die Nachricht wird gelöscht</string>
+    <!-- Delete message confirmation dialog message for a locked message -->
     <string name="confirm_delete_locked_message">Bist du sicher, dass du diese gesperrte Nachricht löschen willst?</string>
+    <!-- Delete entire thread confirmation dialog message -->
+    <string name="confirm_delete_all_messages">Das gesamte Thema wird gelöscht.</string>
+    <!-- Delete button title -->
+    <string name="delete">Löschen</string>
+    <!-- Status in "Report" window -->
+    <string name="status_none">(Keine)</string>
+    <!-- Status in "Report" window -->
+    <string name="status_pending">Ausstehend</string>
+    <!-- Status in "Report" window -->
+    <string name="status_received">Erhalten</string>
+    <!-- Status in "Report" window -->
+    <string name="status_failed">Nicht erfolgreich</string>
+    <!-- Status in "Report" window -->
+    <string name="status_unread">Ungelesen</string>
+    <!-- Status in "Report" window -->
+    <string name="status_rejected">Abgelehnt</string>
+    <!-- Label in "Report" window -->
+    <string name="recipient_label">Empfänger:</string>
+    <!-- Label in "Report" window -->
+    <string name="status_label">Status:</string>
+    <!-- Menu item -->
+    <string name="menu_insert_smiley">Smiley einfügen</string>
+    <!-- Label for the "Me" number of this phone. -->
+    <string name="me">Ich</string>
+    <!-- Brief small label shown to right of message when it is being sent. -->
+    <string name="sending_message">Sende…</string>
 
 </resources>
