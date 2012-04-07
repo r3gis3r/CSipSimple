@@ -482,7 +482,7 @@ public class WizardUtils {
 			WIZARDS_DICT.put("SIPNET", new WizardInfo("SIPNET", "Sipnet", 
 					R.drawable.ic_wizard_sipnet, 10, 
 					new Locale[]{
-					new Locale("RU", "ru"), locale("ru_RU")
+					locale("ru_RU")
 					}, false, false, 
 					Sipnet.class));
 			WIZARDS_DICT.put("CELLIP", new WizardInfo("CELLIP", "Cellip", 
@@ -599,6 +599,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_mundor, 10, 
                     new Locale[]{ locale("es_ES")  }, false, false, 
                     MundoR.class));
+            WIZARDS_DICT.put("VEGATEL", new WizardInfo("VEGATEL", "Vegatel", 
+                    R.drawable.ic_wizard_vega, 10, 
+                    new Locale[]{ locale("ru_RU")  }, false, false, 
+                    Vegatel.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

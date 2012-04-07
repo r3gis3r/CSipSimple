@@ -85,13 +85,6 @@
     <string name="legal_information">Legal information</string>
     <string name="update_nightly_build">Update nightly build</string>
     <string name="loading">Loading</string>
-
-    <!--
-         String describing the button to call a number or contact.
-
-        Note: AccessibilityServices use this attribute to announce what the view represents.
-              This is especially valuable for views without textual representation like ImageView.
-    -->
     <string name="reconnect">Reconnect</string>
     <string name="switch_to_text">Switch to text mode</string>
     <string name="switch_to_digit">Switch to digit mode</string>
