@@ -1,0 +1,120 @@
+[main]
+host = https://www.transifex.net
+lang_map = zh_CN: zh-rCN, zh_TW: zh-rTW, pt_BR: pt-rBR, en_GB: en-rGB
+type = ANDROID
+
+[csipsimple.strings]
+file_filter = res/values-<lang>/strings.xml
+source_file = res/values/strings.xml
+source_lang = en
+
+[csipsimple.acct_status_strings]
+file_filter = res/values-<lang>/acct_status_strings.xml
+source_file = res/values/acct_status_strings.xml
+source_lang = en
+
+[csipsimple.arrays]
+file_filter = res/values-<lang>/arrays.xml
+source_file = res/values/arrays.xml
+source_lang = en
+
+[csipsimple.descriptions_strings]
+file_filter = res/values-<lang>/descriptions_strings.xml
+source_file = res/values/descriptions_strings.xml
+source_lang = en
+
+[csipsimple.in_call_strings]
+file_filter = res/values-<lang>/in_call_strings.xml
+source_file = res/values/in_call_strings.xml
+source_lang = en
+
+[csipsimple.log_strings]
+file_filter = res/values-<lang>/log_strings.xml
+source_file = res/values/log_strings.xml
+source_lang = en
+
+[csipsimple.messages_strings]
+file_filter = res/values-<lang>/messages_strings.xml
+source_file = res/values/messages_strings.xml
+source_lang = en
+
+[csipsimple.prefs_strings]
+file_filter = res/values-<lang>/prefs_strings.xml
+source_file = res/values/prefs_strings.xml
+source_lang = en
+
+[csipsimple.tests_strings]
+file_filter = res/values-<lang>/tests_strings.xml
+source_file = res/values/tests_strings.xml
+source_lang = en
+
+[csipsimple.wizard_advanced_strings]
+file_filter = res/values-<lang>/wizard_advanced_strings.xml
+source_file = res/values/wizard_advanced_strings.xml
+source_lang = en
+
+[csipsimple.wizard_authorization_strings]
+file_filter = res/values-<lang>/wizard_authorization_strings.xml
+source_file = res/values/wizard_authorization_strings.xml
+source_lang = en
+
+[csipsimple.wizard_basic_strings]
+file_filter = res/values-<lang>/wizard_basic_strings.xml
+source_file = res/values/wizard_basic_strings.xml
+source_lang = en
+
+[csipsimple.wizard_callcentric_strings]
+file_filter = res/values-<lang>/wizard_callcentric_strings.xml
+source_file = res/values/wizard_callcentric_strings.xml
+source_lang = en
+
+[csipsimple.wizard_common_strings]
+file_filter = res/values-<lang>/wizard_common_strings.xml
+source_file = res/values/wizard_common_strings.xml
+source_lang = en
+
+[csipsimple.wizard_cryptel_strings]
+file_filter = res/values-<lang>/wizard_cryptel_strings.xml
+source_file = res/values/wizard_cryptel_strings.xml
+source_lang = en
+
+[csipsimple.wizard_ecs_strings]
+file_filter = res/values-<lang>/wizard_ecs_strings.xml
+source_file = res/values/wizard_ecs_strings.xml
+source_lang = en
+
+[csipsimple.wizard_expert_strings]
+file_filter = res/values-<lang>/wizard_expert_strings.xml
+source_file = res/values/wizard_expert_strings.xml
+source_lang = en
+
+[csipsimple.wizard_iinet_strings]
+file_filter = res/values-<lang>/wizard_iinet_strings.xml
+source_file = res/values/wizard_iinet_strings.xml
+source_lang = en
+
+[csipsimple.wizard_onsip_strings]
+file_filter = res/values-<lang>/wizard_onsip_strings.xml
+source_file = res/values/wizard_onsip_strings.xml
+source_lang = en
+
+[csipsimple.wizard_ovh_strings]
+file_filter = res/values-<lang>/wizard_ovh_strings.xml
+source_file = res/values/wizard_ovh_strings.xml
+source_lang = en
+
+[csipsimple.wizard_sipgate_strings]
+file_filter = res/values-<lang>/wizard_sipgate_strings.xml
+source_file = res/values/wizard_sipgate_strings.xml
+source_lang = en
+
+[csipsimple.wizard_sonetel_strings]
+file_filter = res/values-<lang>/wizard_sonetel_strings.xml
+source_file = res/values/wizard_sonetel_strings.xml
+source_lang = en
+
+[csipsimple.wizard_strings]
+file_filter = res/values-<lang>/wizard_strings.xml
+source_file = res/values/wizard_strings.xml
+source_lang = en
+
