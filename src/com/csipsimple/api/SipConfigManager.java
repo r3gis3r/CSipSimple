@@ -67,21 +67,21 @@ public class SipConfigManager {
      */
     public static final String ECHO_CANCELLATION_TAIL = "echo_cancellation_tail";
     /**
-     * Port for begin of RTP range.
+     * Starting RTP port number.
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String RTP_PORT = "network_rtp_port";
     /**
-     * Does the app will mount the TCP transport.
+     * Port to use for TCP transport.
      * 
-     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TCP_TRANSPORT_PORT = "network_tcp_transport_port";
     /**
-     * Does the app will mount the UDP transport.
+     * Port to use for UDP transport.
      * 
-     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String UDP_TRANSPORT_PORT = "network_udp_transport_port";
     /**
@@ -201,7 +201,7 @@ public class SipConfigManager {
      */
     public static final String DTMF_MODE = "dtmf_mode";
     /**
-     * Should the app use samsung galaxy S hack to establish audio?<br/>
+     * Should the application use samsung galaxy S hack to establish audio?<br/>
      * Basically it starts opening audio in {@link AudioManager#MODE_IN_CALL}
      * and then {@link AudioManager#MODE_NORMAL} to have things routed to
      * earpiece<br/>
@@ -211,8 +211,7 @@ public class SipConfigManager {
      */
     public static final String USE_SGS_CALL_HACK = "use_sgs_call_hack";
     /**
-     * Should we generate a silent tone just after the audio is established to
-     * workaround devices. <br/>
+     * Should we generate a silent tone just after the audio is established as a workaround to some devices.<br/>
      * This is useful for some samsung devices. <br/>
      * Leave it managed by CSipSimple if you want to benefit auto detection
      * 
@@ -220,15 +219,15 @@ public class SipConfigManager {
      */
     public static final String SET_AUDIO_GENERATE_TONE = "set_audio_generate_tone";
     /**
-     * Should we use the android legacy route api to route to speaker/earpiece. <br/>
+     * Should the application use the android legacy route api to route to speaker/earpiece?<br/>
      * Leave it managed by CSipSimple if you want to benefit auto detection
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String USE_ROUTING_API = "use_routing_api";
     /**
-     * Should we use the android modes {@link AudioManager#MODE_IN_CALL} and
-     * {@link AudioManager#MODE_NORMAL} to route to speaker/earpiece.<br/>
+     * Should the application use android {@link AudioManager#MODE_IN_CALL} and
+     * {@link AudioManager#MODE_NORMAL} modes to route to speaker/earpiece?<br/>
      * Leave it managed by CSipSimple if you want to benefit auto detection
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
@@ -245,7 +244,7 @@ public class SipConfigManager {
      */
     public static final String SIP_AUDIO_MODE = "sip_audio_mode";
     /**
-     * Which audio source when in a sip call.
+     * Which audio source to use when in a sip call.
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      * @see AudioSource#DEFAULT
@@ -258,7 +257,7 @@ public class SipConfigManager {
      */
     public static final String MICRO_SOURCE = "micro_source";
     /**
-     * Should we use the code of webRTC library to setup audio.
+     * Should the application use webRTC library code to setup audio.
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
@@ -299,8 +298,7 @@ public class SipConfigManager {
      */
     public static final String AUDIO_IMPLEMENTATION = "audio_implementation";
     /**
-     * Should we automatically connect audio to bluetooth SCO if bluetooth seems
-     * to be activated. <br/>
+     * Should we automatically connect audio to bluetooth SCO if activated.<br/>
      * Depending on the device it may be introduce buggy routing <br/>
      * Not all manufacturers implements the Bluetooth SCO so that it
      * automatically ignore it if no device is paired
@@ -321,7 +319,7 @@ public class SipConfigManager {
      */
     public static final String USE_SOFT_VOLUME = "use_soft_volume";
     /**
-     * Should the user interface avoir rotation of the screen?
+     * Prevent UI screen rotation?
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
@@ -340,7 +338,7 @@ public class SipConfigManager {
      */
     public static final String LOG_LEVEL = "log_level";
     /**
-     * Theme for the user interface. <br/>
+     * Theme to use for the UI. <br/>
      * Expect a {@link ComponentName#flattenToString()} string
      * 
      * @see #setPreferenceStringValue(Context, String, String)
@@ -355,7 +353,7 @@ public class SipConfigManager {
      */
     public static final String ICON_IN_STATUS_BAR = "icon_in_status_bar";
     /**
-     * Display the number of registered accounts in status bar.
+     * Display the number of registered accounts in status bar?
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
@@ -399,7 +397,7 @@ public class SipConfigManager {
      */
     public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";
     /**
-     * Should we consider proximity sensor values considered as inverted.<br/>
+     * Should we assume that proximity sensor values are inverted?<br/>
      * Let csipsimple automatically manage this setting if you want auto
      * detection to work
      * 
@@ -416,21 +414,20 @@ public class SipConfigManager {
      */
     public static final String USE_PARTIAL_WAKE_LOCK = "use_partial_wake_lock";
     /**
-     * Shoud the application write its own calls logs into the system stock call
-     * logs
+     * Should the application write its own calls logs into the system stock call
+     * logs?
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String INTEGRATE_WITH_CALLLOGS = "integrate_with_native_calllogs";
     /**
-     * Should the application hook outgoing call stock system and propose user a
-     * dialog to choose the outgoing sip account or gsm.
+     * Should the application hook outgoing call stock system and display user dialog to choose the outgoing sip account or gsm?
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String INTEGRATE_WITH_DIALER = "integrate_with_native_dialer";
     /**
-     * Should the application try to pause/resume music when in call.<br/>
+     * Should the application try to pause/resume music when in call?<br/>
      * This setting is only used prior to android 2.2 version that has a clean
      * way to do that
      * 
@@ -438,7 +435,7 @@ public class SipConfigManager {
      */
     public static final String INTEGRATE_WITH_NATIVE_MUSIC = "integrate_with_native_music";
     /**
-     * The default ringtone uri to setup if no ringtone found for incoming call.<br/>
+     * The default ringtone uri to setup if no ringtone is found for incoming call.<br/>
      * If empty will get the default ringtone of android.
      * 
      * @see System#RINGTONE
@@ -446,7 +443,7 @@ public class SipConfigManager {
      */
     public static final String RINGTONE = "ringtone";
     /**
-     * Should the application present buttons instead of slider.<br/>
+     * Should the application present buttons instead of slider?<br/>
      * By default the application will use this mode for tablets
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
@@ -455,7 +452,7 @@ public class SipConfigManager {
 
     // NETWORK
     /**
-     * Specify TURN domain name or host name, in in "DOMAIN:PORT" or "HOST:PORT"
+     * Specify TURN domain name or host name, in "DOMAIN:PORT" or "HOST:PORT"
      * format.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#ac4761935f0f0bd1271dafde91ca8f83d"
@@ -474,7 +471,7 @@ public class SipConfigManager {
      */
     public static final String ENABLE_TURN = "enable_turn";
     /**
-     * Specify the credential username to authenticate with the TURN server.<br/>
+     * Specify username to use wnen authenticating with the TURN server.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a4305f174d0f9e3497b3e344236aeea91"
      * >Pjsip documentation</a>
@@ -483,7 +480,7 @@ public class SipConfigManager {
      */
     public static final String TURN_USERNAME = "turn_username";
     /**
-     * Specify the credential password to authenticate with the TURN server.<br/>
+     * Specify password to use when authenticating with the TURN server.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a4305f174d0f9e3497b3e344236aeea91"
      * >Pjsip documentation</a>
@@ -520,7 +517,7 @@ public class SipConfigManager {
      */
     public static final String STUN_SERVER = "stun_server";
     /**
-     * Support IPv6.<br/>
+     * Use IPv6 support.<br/>
      * This has no effect now since the application by default supports IPv6
      * except for DNS resolution<br/>
      * This is a limitation of pjsip which resolution is in pjsip roadmap.
@@ -541,7 +538,7 @@ public class SipConfigManager {
      */
     public static final String ENABLE_TCP = "enable_tcp";
     /**
-     * Lock wifi when connected over wifi to try to keep wifi connection up
+     * Does the LOCK_WIFI ensures performance of wifi as well?
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
@@ -580,43 +577,43 @@ public class SipConfigManager {
      */
     public static final String DSCP_VAL = "dscp_val";
     /**
-     * Keep alive for UDP socket when connected on wifi in second.
+     * Send UDP socket keep alive when connected using wifi, in seconds.
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String KEEP_ALIVE_INTERVAL_WIFI = "keep_alive_interval_wifi";
     /**
-     * Keep alive for UDP socket when connected on mobile data in second.
+     * Send UDP socket keep alive when connected using mobile, in seconds.
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String KEEP_ALIVE_INTERVAL_MOBILE = "keep_alive_interval_mobile";
     /**
-     * Keep alive for TCP socket when connected on wifi in second.
+     * Send TCP socket keep alive when connected using wifi, in seconds.
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TCP_KEEP_ALIVE_INTERVAL_WIFI = "tcp_keep_alive_interval_wifi";
     /**
-     * Keep alive for TCP socket when connected on mobile data in second.
+     * Send TCP socket keep alive when connected using mobile, in seconds.
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TCP_KEEP_ALIVE_INTERVAL_MOBILE = "tcp_keep_alive_interval_mobile";
     /**
-     * Keep alive for TLS socket when connected on wifi in second.
+     * Send TLS socket keep alive when connected using wifi, in seconds.
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TLS_KEEP_ALIVE_INTERVAL_WIFI = "tls_keep_alive_interval_wifi";
     /**
-     * Keep alive for TLS socket when connected on mobile data in second.
+     * Send TLS socket keep alive when connected using mobile, in seconds.
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TLS_KEEP_ALIVE_INTERVAL_MOBILE = "tls_keep_alive_interval_mobile";
     /**
-     * DNS to override instead of using those detected as configured in android
+     * DNS to override instead of using the one configured in android
      * OS.<br/>
      * For now only supports one alternate dns.
      * 
@@ -633,15 +630,15 @@ public class SipConfigManager {
      */
     public static final String USE_COMPACT_FORM = "use_compact_form";
     /**
-     * Change the user agent of the application<br/>
-     * By default if it's the name of the application, it will add extra infos
+     * Change the user agent of the application.<br/>
+     * By default if it's the name of the application, it will add extra information
      * about the device
      * 
      * @see #setPreferenceStringValue(Context, String, String)
      */
     public static final String USER_AGENT = "user_agent";
     /**
-     * Avoid the use of the UPDATE method. <br/>
+     * Avoid the use of UPDATE.<br/>
      * This will ignore what's announced by remote part as feature which is
      * useful for remote part that are buggy with that
      * 
@@ -677,15 +674,14 @@ public class SipConfigManager {
      */
     public static final String ENABLE_TLS = "enable_tls";
     /**
-     * Local bound port for TLS transport. <br/>
+     * Local port to bind to for TLS transport.<br/>
      * This is the listen port of the application. 0 means automatic
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TLS_TRANSPORT_PORT = "network_tls_transport_port";
     /**
-     * Optionally specify the server name instance to be contacted when making
-     * outgoing TLS connection. <br/>
+     * Optionally specify the server name instance to connect to when making outgoing TLS connection. <br/>
      * This setting is useful when the server is hosting multiple domains for
      * the same TLS listening socket. <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#aa99531e84635a0a9e99046f62f11afa6"
@@ -704,9 +700,8 @@ public class SipConfigManager {
      */
     public static final String CA_LIST_FILE = "ca_list_file";
     /**
-     * Public endpoint certificate file, which will be used as client- side
-     * certificate for outgoing TLS connection, and server-side certificate for
-     * incoming TLS connection.<br/>
+     * Client certificate file, which will be used for outgoing TLS connections,
+     * and server-side certificate for incoming TLS connection.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#a03c3308853ef75a0c76d07ddc8227171"
      * >Pjsip documentation</a><br/>
@@ -715,7 +710,7 @@ public class SipConfigManager {
      */
     public static final String CERT_FILE = "cert_file";
     /**
-     * Optional private key of the endpoint certificate to be used.<br/>
+     * Optional private key for the endpoint certificate to be used.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#a76e62480d01210a7cc21b7bf7c94a89f"
      * >Pjsip documentation</a><br/>
@@ -724,7 +719,7 @@ public class SipConfigManager {
      */
     public static final String PRIVKEY_FILE = "privkey_file";
     /**
-     * Password to open private key.<br/>
+     * Password to open the private key.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#aa6d4b029668bf017162d4b1d09477fe5"
      * >Pjsip documentation</a><br/>
@@ -733,7 +728,7 @@ public class SipConfigManager {
      */
     public static final String TLS_PASSWORD = "tls_password";
     /**
-     * Behavior of bad TLS verification on server side.<br/>
+     * Default behavior when TLS verification fails on the server side.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#aebbfb646cdfc7151edce2b5194cdbddb"
      * >Pjsip documentation</a><br/>
@@ -742,7 +737,7 @@ public class SipConfigManager {
      */
     public static final String TLS_VERIFY_SERVER = "tls_verify_server";
     /**
-     * Behavior of bad TLS verification on client side.<br/>
+     * Default behavior when TLS verification fails on the client side.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsip__tls__setting.htm#ade2b579f76aac470c27c6813a1f85b3c"
      * >Pjsip documentation</a><br/>
@@ -760,7 +755,7 @@ public class SipConfigManager {
      */
     public static final String TLS_METHOD = "tls_method";
     /**
-     * How should we use SRTP?<br/>
+     * How use SRTP?<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__config.htm#a8d281b965658948b2bd0b72e01cd279c"
      * >Pjsip documentation</a><br/>
@@ -790,21 +785,21 @@ public class SipConfigManager {
      */
     public static final String AUTO_RECORD_CALLS = "auto_record_calls";
     /**
-     * Display name to set by default for sip contact to send.<br/>
+     * Default display name to use for sip contact.<br/>
      * This can be overriden per account.
      * 
      * @see #setPreferenceStringValue(Context, String, String)
      */
     public static final String DEFAULT_CALLER_ID = "default_caller_id";
     /**
-     * Does the app allows multiple calls?<br/>
+     * Should the application allow multiple calls?<br/>
      * Disabling it can help when the app multiply registers
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String SUPPORT_MULTIPLE_CALLS = "support_multiple_calls";
     /**
-     * Does the app enable video calls by default?<br/>
+     * Does the application enable video calls by default?<br/>
      * This setting is not yet stable because video feature is not fully
      * integrated yet.
      * 
@@ -814,7 +809,7 @@ public class SipConfigManager {
 
     // Enums
     /**
-     * Echo mode automatic
+     * Automatic echo mode.
      * 
      * @see #ECHO_MODE
      */
@@ -826,46 +821,46 @@ public class SipConfigManager {
      */
     public static final int ECHO_MODE_SIMPLE = 1;
     /**
-     * Accousting echo canceller of Speex
+     * Accoustic echo cancellation of Speex
      * 
      * @see #ECHO_MODE
      */
     public static final int ECHO_MODE_SPEEX = 2;
     /**
-     * Accounsting echo canceller of WebRTC
+     * Accoustic echo cancellation of WebRTC
      * 
      * @see #ECHO_MODE
      */
     public static final int ECHO_MODE_WEBRTC_M = 3;
 
     /**
-     * Automatic dtmf mode. <br/>
+     * Automatic DTMF mode. <br/>
      * Will try RTP mode and if not available will fallback on in band
      * 
      * @see #DTMF_MODE
      */
     public static final int DTMF_MODE_AUTO = 0;
     /**
-     * Uses RTP telephony events to send DTMF
+     * Uses RTP telephony events to send DTMF.
      * 
      * @see #DTMF_MODE
      */
     public static final int DTMF_MODE_RTP = 1;
     /**
-     * Generate tones in band as media to simulate dtmf tones
+     * Generate in-band tones as media to simulate DTMF tones.
      * 
      * @see #DTMF_MODE
      */
     public static final int DTMF_MODE_INBAND = 2;
     /**
-     * Sends SIP info to send DTMF tones
+     * Sends SIP info to send DTMF tones.
      * 
      * @see #DTMF_MODE
      */
     public static final int DTMF_MODE_INFO = 3;
 
     /**
-     * Pressing headset button hangup the call
+     * Pressing headset button hangup the call.
      * 
      * @see #HEADSET_ACTION
      */
@@ -884,28 +879,28 @@ public class SipConfigManager {
     public static final int HEADSET_ACTION_HOLD = 2;
 
     /**
-     * Uses java/jni implementation for audio device glue.
+     * Uses java/jni implementation audio implementation.
      * 
      * @see #AUDIO_IMPLEMENTATION
      */
     public static final int AUDIO_IMPLEMENTATION_JAVA = 0;
     /**
-     * Uses opensl-ES implementation for audio device glue.
+     * Uses opensl-ES implementation audio implementation.
      * 
      * @see #AUDIO_IMPLEMENTATION
      */
     public static final int AUDIO_IMPLEMENTATION_OPENSLES = 1;
 
     /**
-     * Auto detect setting depending of android settings.
+     * Auto detect options, depending on android settings.
      */
     public static final int GENERIC_TYPE_AUTO = 0;
     /**
-     * Force the setting whatever the android setting is.
+     * Force this option on.
      */
     public static final int GENERIC_TYPE_FORCE = 1;
     /**
-     * Disable the setting whatever the android setting is.
+     * Disable this option.
      */
     public static final int GENERIC_TYPE_PREVENT = 2;
 
@@ -956,14 +951,14 @@ public class SipConfigManager {
 
     // Raz
     /**
-     * Reset uri to reset the entiere preference database to clean state
+     * Reset uri to wipe the entire preference database clean.
      */
     public static final Uri RAZ_URI = Uri
             .parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/" + RESET_TABLE_NAME);
 
     /**
-     * Content value key for preference name<br/>
-     * Deeply advised to not use directly
+     * Content value key for preference name.<br/>
+     * It is strongly advised that you do NOT use this directly.
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      * @see #setPreferenceFloatValue(Context, String, Float)
@@ -972,8 +967,8 @@ public class SipConfigManager {
      */
     public static final String FIELD_NAME = "name";
     /**
-     * Content value key for preference value<br/>
-     * Deeply advised to not use directly
+     * Content value key for preference value.<br/>
+     * It is strongly advised that you do NOT use this directly.
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      * @see #setPreferenceFloatValue(Context, String, Float)
@@ -983,14 +978,14 @@ public class SipConfigManager {
     public static final String FIELD_VALUE = "value";
 
     /**
-     * Narrow band type to get codec preference key.<br/>
+     * Narrow band type codec preference key.<br/>
      * 
      * @see #getCodecKey(String, String)
      */
     public static final String CODEC_NB = "nb";
 
     /**
-     * Wide band type to get codec preference key.<br/>
+     * Wide band type codec preference key.<br/>
      * 
      * @see #getCodecKey(String, String)
      */
