@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="unknown">Okänd</string>
+  <string name="type_incoming">Inkommande</string>
+  <string name="type_outgoing">Utgående</string>
+  <string name="type_missed">Missat</string>
+  <string name="callBack">Ring senare</string>
+  <string name="callAgain">Ring igen</string>
+  <string name="returnCall">Ring tillbaka</string>
+  <string name="call">Ring</string>
+</resources>

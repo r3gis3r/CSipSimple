@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_basic_username">Användare</string>
+  <string name="w_basic_username_desc">Kontonamn/inloggning (skriv inte med @sip.server)</string>
+  <string name="w_basic_password">Lösenord</string>
+  <string name="w_basic_password_desc">Lösenord för att komma åt ditt konto</string>
+</resources>
