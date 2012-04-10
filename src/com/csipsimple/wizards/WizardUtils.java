@@ -603,6 +603,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_vega, 10, 
                     new Locale[]{ locale("ru_RU")  }, false, false, 
                     Vegatel.class));
+            WIZARDS_DICT.put("MOBILE4U", new WizardInfo("MOBILE4U", "Mobile4u", 
+                    R.drawable.ic_wizard_mobile4u, 10, 
+                    new Locale[]{ locale("hu_HU")  }, false, false, 
+                    Mobile4U.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
