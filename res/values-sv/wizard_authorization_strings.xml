@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_authorization_auth_name">Namn för autentisering</string>
+  <string name="w_authorization_auth_name_desc">Autentisering för SIP</string>
+  <string name="w_authorization_phone_number">Användarnamn</string>
+  <string name="w_authorization_phone_number_desc">Kontonamn för SIP</string>
+</resources>

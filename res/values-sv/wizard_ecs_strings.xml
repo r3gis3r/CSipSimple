@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_ecs_display_name">Kontonamn</string>
+  <string name="w_ecs_display_name_desc">Visningsnamn för detta konto</string>
+  <string name="w_ecs_phone_number">Telefonnummer</string>
+  <string name="w_ecs_phone_number_desc">SIP-telefonnummer för konto</string>
+  <string name="w_ecs_user_name">Inloggning för användare</string>
+  <string name="w_ecs_user_name_desc">Ditt virtuella inloggningsnamn</string>
+  <string name="w_ecs_password">Lösenord för användare</string>
+  <string name="w_ecs_password_desc">Lösenord för ditt konto</string>
+  <string name="w_ecs_server_domain">SIP-domän</string>
+  <string name="w_ecs_server_domain_desc">Domännamn för SIP-konton</string>
+  <string name="w_ecs_server_ip_desc">Domännamn eller IP för att komma åt ECS (lämna tomt om det är samma som SIP-domän)</string>
+</resources>

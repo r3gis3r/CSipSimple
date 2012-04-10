@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="w_onsip_authentication_name">Verifiering av användarnamn</string>
-  <string name="w_onsip_authentication_name_desc">Verifiering av SIP-användarnamn</string>
+  <string name="w_onsip_authentication_name">Autentisering av användarnamn</string>
+  <string name="w_onsip_authentication_name_desc">Autentisering av SIP-användarnamn</string>
   <string name="w_onsip_username">Användarnamn för SIP</string>
   <string name="w_onsip_username_desc">Användarnamn för SIP-konto</string>
   <string name="w_onsip_server">Domän</string>

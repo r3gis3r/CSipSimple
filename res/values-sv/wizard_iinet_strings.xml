@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_iinet_state">Stat</string>
+  <string name="w_iinet_state_desc">Den relevanta staten från följande lista</string>
+  <string name="w_iinet_username">VoIP-telefonnummer</string>
+  <string name="w_iinet_username_desc">Tag bort all formatering såsom mellanslag och bindestreck</string>
+  <string name="w_iinet_password">Speciellt lösenord för VoIP</string>
+  <string name="w_iinet_password_desc">Inte samma som lösenord för anslutning</string>
+</resources>

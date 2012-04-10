@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_sipgate_display_name">Kontonamn</string>
+  <string name="w_sipgate_display_name_desc">Visningsnamn för detta konto</string>
+  <string name="w_sipgate_username">SIP-ID</string>
+  <string name="w_sipgate_username_desc">Skliljer sig från ditt inloggningsnamn på Sipgate! Kontrollera SIP-ID på Sipgates webbplats</string>
+  <string name="w_sipgate_password">SIP-lösenord</string>
+  <string name="w_sipgate_password_desc">Skiljer sig från ditt lösenord! Kontrollera SIP-lösenord på Sipgates webbplats</string>
+  <string name="w_sipgate_server_desc">Något sådant: sipgate.co.uk</string>
+</resources>

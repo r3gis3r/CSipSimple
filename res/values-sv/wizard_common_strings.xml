@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_common_display_name">Kontonamn</string>
+  <string name="w_common_display_name_desc">Visningsnamn för detta konto</string>
+  <string name="w_common_username">Användarnamn</string>
+  <string name="w_common_username_desc">Inloggning till SIP (skriv inte med @sip.server)</string>
+  <string name="w_common_phone_number">Telefonnummer</string>
+  <string name="w_common_phone_number_desc">SIP-telefonnummer från din leverantör</string>
+  <string name="w_common_password">Lösenord</string>
+  <string name="w_common_password_desc">Lösenord för ditt konto</string>
+  <string name="w_common_server">Server</string>
+  <string name="w_common_server_desc">Domän/IP[:port] för SIP-server</string>
+  <string name="create_account">Skapa konto</string>
+</resources>

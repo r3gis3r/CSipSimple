@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_advanced_display_name">Kontonamn</string>
+  <string name="w_advanced_display_name_desc">Visningsnamn för detta konto</string>
+  <string name="w_advanced_caller_id">ID för uppringare</string>
+  <string name="w_advanced_caller_id_desc">ID för uppringare att skicka med samtal</string>
+  <string name="w_advanced_username">Användarnamn</string>
+  <string name="w_advanced_username_desc">Användarnamn för autentisering till SIP-server (skriv inte med @sip.server)</string>
+  <string name="w_advanced_password">Lösenord</string>
+  <string name="w_advanced_password_desc">Lösenord för autentisering till SIP-server</string>
+  <string name="w_advanced_use_tcp">Använd TCP (inte UDP)</string>
+  <string name="w_advanced_proxy">Proxy</string>
+  <string name="w_advanced_proxy_desc">Domän för proxy/IP[:port] (valfritt, behövs inte alltid)</string>
+  <string name="w_advanced_auth_id">ID för autentisering till SIP</string>
+  <string name="w_advanced_auth_id_desc">Lämna tomt för samma som användarnamn</string>
+</resources>

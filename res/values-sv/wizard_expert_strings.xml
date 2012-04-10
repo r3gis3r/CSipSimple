@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="w_expert_display_name">Kontonamn</string>
+    <string name="w_expert_display_name_desc">Visningsnamn för detta konto</string>
+    <string name="w_expert_acc_id">Konto-ID</string>
+    <string name="w_expert_acc_id_desc">Format : \"Visningsnamn &lt;sip:login@registrar>\"</string>
+    <string name="w_expert_reg_uri">URI för registrering</string>
+    <string name="w_expert_reg_uri_desc">Format : \"sip:registrar.net\"[:port]</string>
+    <string name="w_expert_realm">Realm</string>
+    <string name="w_expert_realm_desc">Domän för autentisering (om du inte vet, använd \'*\')</string>
+    <string name="w_expert_username">Användarnamn</string>
+    <string name="w_expert_username_desc">Användarnamn för autentisering</string>
+    <string name="w_expert_data">Data (lösenord)</string>
+    <string name="w_expert_data_desc">Lösenord (eller annan data) för autentisering</string>
+    <string name="w_expert_datatype">Datatyp</string>
+    <string name="w_expert_datatype_desc">Typ av data</string>
+    <string name="w_expert_t_proxy">Proxy</string>
+    <string name="w_expert_proxy">URI för proxy</string>
+    <string name="w_expert_proxy_desc">Format : \"sip:proxy.net\"[:port]</string>
+    <string name="w_expert_use_tcp">Använd TCP (inte UDP)</string>
+    <string name="w_expert_prevent_tcp">Förhindra TCP (försök enbart med UDP)</string>
+    <string name="w_expert_publish_enabled">Publicering akiverat</string>
+    <string name="w_expert_reg_timeout">Timeout för registrering (sek)</string>
+    <string name="w_expert_reg_dbr">Fördröjning av registrering innan uppdatering (sek)</string>
+    <string name="w_expert_reg_dbr_desc">Ange antalet sekunder för att uppdatera klienttregistreringen innan den löper ut.</string>
+    <string name="w_expert_ka_interval">Intervall för att upprätthålla (sek)</string>
+    <string name="w_expert_force_contact">Tvinga kontakt</string>
+    <string name="w_expert_allow_contact_rewrite">Tillåt omskrivning av kontakt</string>
+    <string name="w_expert_contact_rewrite_method">Metod för att skriva om kontakt</string>
+    <string name="w_expert_reg_use_proxy">Hur proxy skall användas</string>
+    <string name="w_expert_try_clean_registers">Försök att rensa register</string>
+    <string name="w_expert_try_clean_registers_desc">Tillåt app att försöka rensa gamla registreringar om det behövs</string>
+    <string name="w_expert_rtp_bound_addr">Bindningsadress för RTP</string>
+    <string name="w_expert_rtp_bound_addr_desc">Valfritt dit socket skall bindas till. För att enbart selektivt binda socket till särskildt gränssnittet (i stället för 0.0.0.0)</string>
+    <string name="w_expert_rtp_public_addr">Publik adress för RTP</string>
+    <string name="w_expert_rtp_public_addr_desc">Valfritt att annonsera adressen för RTP-transport.</string>
+    <string name="w_expert_media_transport">Mediatransport</string>
+
+</resources>
