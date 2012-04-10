@@ -607,6 +607,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_mobile4u, 10, 
                     new Locale[]{ locale("hu_HU")  }, false, false, 
                     Mobile4U.class));
+            WIZARDS_DICT.put("FRINGTALKTW", new WizardInfo("FRINGTALKTW", "Fring Talk TW", 
+                    R.drawable.ic_wizard_fringtalktw, 10, 
+                    new Locale[]{ locale("zh_TW")  }, false, false, 
+                    FringTalkTw.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
