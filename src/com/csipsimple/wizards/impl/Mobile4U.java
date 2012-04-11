@@ -58,13 +58,11 @@ public class Mobile4U extends SimpleImplementation {
 		}
 		return super.getDefaultFieldSummary(fieldName);
 	}
-	
+	/*
 	@Override
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
-		acc.proxies = new String[] {"sip:nat.gradwell.com:5082"};
-		acc.allow_contact_rewrite = false;
 		return acc;
 	}
-	
+	*/
 }
