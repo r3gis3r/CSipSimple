@@ -21,19 +21,15 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.preference.ListPreference;
 import android.text.TextUtils;
 
-import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 public class Speakezi extends SimpleImplementation {
 
+    /*
     ListPreference sipServer;
     static SortedMap<String, String[]> providers = new TreeMap<String, String[]>() {
         private static final long serialVersionUID = -2561302247222706262L;
@@ -46,7 +42,7 @@ public class Speakezi extends SimpleImplementation {
             });
         }
     };
-
+    */
     @Override
     protected String getDefaultName() {
         return "Speakezi";
@@ -57,12 +53,12 @@ public class Speakezi extends SimpleImplementation {
         return "sip.easivoice.co.za";
     }
 
-    private static final String PROVIDER_LIST_KEY = "provider_list";
+    //private static final String PROVIDER_LIST_KEY = "provider_list";
 
     @Override
     public void fillLayout(final SipProfile account) {
         super.fillLayout(account);
-
+/*
         boolean recycle = true;
         sipServer = (ListPreference) findPreference(PROVIDER_LIST_KEY);
         if (sipServer == null) {
@@ -100,6 +96,7 @@ public class Speakezi extends SimpleImplementation {
         if (!recycle) {
             addPreference(sipServer);
         }
+        */
     }
 
     @Override
@@ -112,7 +109,7 @@ public class Speakezi extends SimpleImplementation {
         SipProfile acc = super.buildAccount(account);
         // Use registrar and proxy to be the selected server
         // Keep user domain on old domain
-        String provider = sipServer.getValue();
+        String provider = "41.221.5.172";//sipServer.getValue();
         if(!TextUtils.isEmpty(provider)) {
             acc.reg_uri = "sip:" + provider;
             acc.proxies = new String[] {"sip:" + provider};
@@ -136,20 +133,23 @@ public class Speakezi extends SimpleImplementation {
         prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "241");
     }
 
+    /*
     @Override
     public void updateDescriptions() {
         super.updateDescriptions();
         setStringFieldSummary(PROVIDER_LIST_KEY);
     }
+    */
 
     @Override
     public String getDefaultFieldSummary(String fieldName) {
+        /*
         if(fieldName == PROVIDER_LIST_KEY) {
             if(sipServer != null) {
                 return sipServer.getEntry().toString();
             }
         }
-        
+        */
         return super.getDefaultFieldSummary(fieldName);
     }
 }
