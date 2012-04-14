@@ -23,6 +23,8 @@
   <string name="use_other">Utiliser les autres réseaux</string>
   <string name="use_other_in_desc">Par example le WiMax pour les appels entrants</string>
   <string name="use_other_out_desc">Par example le WiMax pour les appels sortant</string>
+  <string name="use_anyway">Utiliser quoiqu\'il arrive</string>
+  <string name="use_anyway_desc">Ne pas se préoccuper de l\'état du réseau vu par Android. Ne devrait pas être utiliser pour les cas normaux</string>
   <string name="use_3g">Utiliser la 3G (et mieux)</string>
   <string name="use_3g_disclamer">Votre opérateur DOIT vous autoriser l\'utilisation cette option</string>
   <string name="use_edge">Utiliser le EDGE</string>
