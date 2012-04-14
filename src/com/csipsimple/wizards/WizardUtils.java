@@ -267,6 +267,11 @@ public class WizardUtils {
                     R.drawable.ic_wizard_flowroute, 9, 
                     new Locale[]{ }, false, true, 
                     Flowroute.class));
+            WIZARDS_DICT.put("REACHPHONES", new WizardInfo("REACHPHONES", "ReachPhones.com", 
+                    R.drawable.ic_wizard_reachphones, 9, 
+                    new Locale[]{ }, false, true, 
+                    ReachPhones.class));
+            
             
 			
             
