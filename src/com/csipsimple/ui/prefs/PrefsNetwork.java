@@ -102,6 +102,10 @@ public class PrefsNetwork extends GenericPrefs {
 			
 			hidePreference(TRANSPORT_KEY, SipConfigManager.TIMER_MIN_SE);
 			hidePreference(TRANSPORT_KEY, SipConfigManager.TIMER_SESS_EXPIRES);
+			
+
+            hidePreference("for_incoming", "use_anyway_in");
+            hidePreference("for_outgoing", "use_anyway_out");
 		}
 		
 		boolean canUseTLS = pfw.getLibCapability(PreferencesWrapper.LIB_CAP_TLS);

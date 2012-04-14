@@ -29,7 +29,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
 import android.net.Uri;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -123,9 +122,8 @@ public class PreferencesProviderWrapper {
         // We consider ethernet as wifi
         if (valid_for_wifi && ni != null) {
             int type = ni.getType();
-            State state = ni.getState();
             // Wifi connected
-            if (state == State.CONNECTED &&
+            if (ni.isConnected() &&
                     // 9 = ConnectivityManager.TYPE_ETHERNET
                     (type == ConnectivityManager.TYPE_WIFI || type == 9 )) {
                 return true;
@@ -148,7 +146,7 @@ public class PreferencesProviderWrapper {
 		    int type = ni.getType();
 		    
 			// Any mobile network connected
-			if (ni.getState() == NetworkInfo.State.CONNECTED && 
+			if (ni.isConnected() && 
 			        // Type 3,4,5 are other mobile data ways
 			        (type == ConnectivityManager.TYPE_MOBILE || (type <= 5 && type >= 3))) {
 				int subType = ni.getSubtype();
@@ -183,12 +181,14 @@ public class PreferencesProviderWrapper {
 		if (valid_for_other && 
 			ni != null && 
 			ni.getType() != ConnectivityManager.TYPE_MOBILE && ni.getType() != ConnectivityManager.TYPE_WIFI) {
-			
-			if (ni.getState() == NetworkInfo.State.CONNECTED) {
-				return true;
-			}
+			return ni.isConnected();
 		}
 		return false;
+	}
+	
+	private boolean isValidAnywayConnectionFor(NetworkInfo ni, String suffix) {
+	    return getPreferenceBooleanValue("use_anyway_" + suffix, false);
+        
 	}
 	
 	// Generic function for both incoming and outgoing
@@ -204,6 +204,10 @@ public class PreferencesProviderWrapper {
 		if(isValidOtherConnectionFor(ni, suffix)) {
 			Log.d(THIS_FILE, "We are valid for OTHER");
 			return true;
+		}
+		if(isValidAnywayConnectionFor(ni, suffix)) {
+		    Log.d(THIS_FILE, "We are valid ANYWAY");
+            return true;
 		}
 		return false;
 	}

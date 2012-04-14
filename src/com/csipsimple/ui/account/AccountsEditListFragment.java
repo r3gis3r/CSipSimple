@@ -425,14 +425,14 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
         //getListView().setEmptyView(getActivity().findViewById(android.R.id.empty));
 		
         // Swap cursor
-        ((CursorAdapter) getListAdapter()).swapCursor(data);
+        mAdapter.swapCursor(data);
         // Select correct item if any
 		updateCheckedItem();
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
-		((CursorAdapter) getListAdapter()).swapCursor(null);
+		mAdapter.swapCursor(null);
 	}
 
 	

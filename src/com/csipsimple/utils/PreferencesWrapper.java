@@ -148,6 +148,8 @@ public class PreferencesWrapper {
 		put("use_gprs_out", false);
 		put("use_edge_in", false);
 		put("use_edge_out", false);
+        put("use_anyway_in", false);
+        put("use_anyway_out", false);
 		put(SipConfigManager.FORCE_NO_UPDATE, true);
 		
 		

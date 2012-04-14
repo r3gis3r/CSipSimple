@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
@@ -35,10 +34,6 @@ import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
-
-import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 public class DynamicReceiver4 extends BroadcastReceiver {
 
@@ -59,7 +54,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
     private boolean lastKnownVpnState = false;
     private String mNetworkType;
     private boolean mConnected = false;
-    private String mLocalIp;
+    //private String mLocalIp;
     
     private boolean hasStartedWifi = false;
     
@@ -104,11 +99,10 @@ public class DynamicReceiver4 extends BroadcastReceiver {
         String action = intent.getAction();
         Log.d(THIS_FILE, "Internal receive " + action);
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-            Bundle b = intent.getExtras();
-            if (b != null) {
-                final NetworkInfo info = (NetworkInfo) b.get(ConnectivityManager.EXTRA_NETWORK_INFO);
-                onConnectivityChanged(info, false, isSticky);
-            }
+            ConnectivityManager cm =
+                    (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            onConnectivityChanged(activeNetwork, false, isSticky);
         } else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_CHANGED)) {
             final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, -1);
             // Should that be threaded?
@@ -137,6 +131,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
      * Try to determine local IP of the phone
      * @return the ip address of the phone.
      */
+    /*
     private String determineLocalIp() {
         try {
             DatagramSocket s = new DatagramSocket();
@@ -148,6 +143,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
             return null;
         }
     }
+    */
 
     
     /**
@@ -189,7 +185,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
 
         // Now process the event
         if (mConnected) {
-            mLocalIp = null;
+        //    mLocalIp = null;
         }
 
         mConnected = connected;
@@ -197,7 +193,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
 
         if(!isSticky) {
             if (connected) {
-                mLocalIp = determineLocalIp();
+            //    mLocalIp = determineLocalIp();
                 service.restartSipStack();
             } else {
                 if(service.stopSipStack()) {
