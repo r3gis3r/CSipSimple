@@ -25,22 +25,23 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/right_panel_margin_vertical"
+        android:layout_marginLeft="@dimen/right_panel_margin_left"
+        android:layout_marginTop="@dimen/right_panel_margin_vertical"
         android:divider="@null"
         android:fadingEdge="none"
-		android:layout_marginLeft="@dimen/right_panel_margin_left"
-		android:layout_marginTop="@dimen/right_panel_margin_vertical"
-		android:layout_marginBottom="@dimen/right_panel_margin_vertical"
-		android:fadingEdgeLength="@dimen/right_panel_fading_edge"
+        android:fadingEdgeLength="@dimen/right_panel_fading_edge"
         android:scrollbarStyle="outsideOverlay" />
 
-    <TextView
+    <Button
         android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/empty_message_top_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableLeft="@drawable/ic_menu_msg_compose_holo_dark"
+        android:drawablePadding="10dip"
         android:gravity="center"
-        android:text="@string/recentCalls_empty"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="?android:attr/textColorSecondary" />
+        android:text="@string/menu_compose_new"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </FrameLayout>

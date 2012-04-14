@@ -49,9 +49,11 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.csipsimple.R;
@@ -78,6 +80,8 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
 	//private String curCheckWizard = WizardUtils.EXPERT_WIZARD_TAG;
 	private final Handler mHandler = new Handler();
 	private AccountStatusContentObserver statusObserver = null;
+    private View mHeaderView;
+    private AccountsEditListAdapter mAdapter;
 	
 	class AccountStatusContentObserver extends ContentObserver {
 		
@@ -119,36 +123,41 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
             curCheckPosition = savedInstanceState.getLong(CURRENT_CHOICE, SipProfile.INVALID_ID);
             //curCheckWizard = savedInstanceState.getString(CURRENT_WIZARD);
         }
-
         
-        AccountsEditListAdapter adapter = new AccountsEditListAdapter(getActivity(), null);
-        adapter.setOnCheckedRowListener(this);
-        //getListView().setEmptyView(getActivity().findViewById(R.id.progress_container));
-        //getActivity().findViewById(android.R.id.empty).setVisibility(View.GONE);
-        setListAdapter(adapter);
-        registerForContextMenu(getListView());
-
-        // Prepare the loader.  Either re-connect with an existing one,
-        // or start a new one.
-        getLoaderManager().initLoader(0, null, this);
+        ListView lv = getListView();
+        if(mAdapter == null) {
+            if(mHeaderView != null) {
+                lv.addHeaderView(mHeaderView , null, true);
+            }
+            mAdapter = new AccountsEditListAdapter(getActivity(), null);
+            mAdapter.setOnCheckedRowListener(this);
+            //getListView().setEmptyView(getActivity().findViewById(R.id.progress_container));
+            //getActivity().findViewById(android.R.id.empty).setVisibility(View.GONE);
+            setListAdapter(mAdapter);
+            registerForContextMenu(lv);
+    
+            // Prepare the loader.  Either re-connect with an existing one,
+            // or start a new one.
+            getLoaderManager().initLoader(0, null, this);
+            
+            lv.setVerticalFadingEdgeEnabled(true);
+        }
         
-        getListView().setVerticalFadingEdgeEnabled(true);
-
         if (dualPane) {
             // In dual-pane mode, the list view highlights the selected item.
         	Log.d("lp", "dual pane mode");
-            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        	//getListView().setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
-            getListView().setVerticalScrollBarEnabled(false);
-            getListView().setFadingEdgeLength(50);
+            lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        	//lv.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
+            lv.setVerticalScrollBarEnabled(false);
+            lv.setFadingEdgeLength(50);
             
             updateCheckedItem();
             // Make sure our UI is in the correct state.
             //showDetails(curCheckPosition, curCheckWizard);
         }else {
         	//getListView().setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_RIGHT);
-        	getListView().setVerticalScrollBarEnabled(true);
-        	getListView().setFadingEdgeLength(100);
+        	lv.setVerticalScrollBarEnabled(true);
+        	lv.setFadingEdgeLength(100);
         }
     }
 
@@ -163,13 +172,12 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        startActivityForResult(new Intent(getActivity(), WizardChooser.class),
-                                CHOOSE_WIZARD);
+                        onClickAddAccount();
                         return true;
                     }
                 })
                 .setShowAsAction(
-                        MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+                        MenuItem.SHOW_AS_ACTION_IF_ROOM );
 
         menu.add(R.string.reorder).setIcon(android.R.drawable.ic_menu_sort_by_size)
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -259,6 +267,20 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
             }
         });
         
+        OnClickListener addClickButtonListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickAddAccount();
+            }
+        };
+        // Header view
+        mHeaderView = inflater.inflate(R.layout.generic_add_header_list, container, false);
+        mHeaderView.setOnClickListener(addClickButtonListener);
+        
+        // Empty view
+        Button bt = (Button) v.findViewById(android.R.id.empty);
+        bt.setOnClickListener(addClickButtonListener);
+        
         return v;
     }
     
@@ -290,7 +312,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
     	super.onResume();
     	statusObserver = new AccountStatusContentObserver(mHandler);
     	getActivity().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI, true, statusObserver);
-    	((BaseAdapter) getListAdapter()).notifyDataSetChanged();
+    	mAdapter.notifyDataSetChanged();
     }
     
     @Override
@@ -304,13 +326,14 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
     
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-    	long fId = l.getItemIdAtPosition(position);
-        Log.d(THIS_FILE, "Checked " + position + " et " + id + " et " + fId);
+    	
+        Log.d(THIS_FILE, "Checked " + position + " et " + id);
         
-        getListView().setItemChecked(position, true);
+        ListView lv = getListView();
+        lv.setItemChecked(position, true);
         
         curCheckPosition = id;
-        Cursor c = (Cursor) getListAdapter().getItem(position);
+        Cursor c = (Cursor) getListAdapter().getItem(position - lv.getHeaderViewsCount());
         showDetails(id, c.getString(c.getColumnIndex(SipProfile.FIELD_WIZARD)));
     }
 
@@ -530,5 +553,10 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
         }
         return super.onContextItemSelected(item);
 
+	}
+	
+	private void onClickAddAccount() {
+	    startActivityForResult(new Intent(getActivity(), WizardChooser.class),
+                CHOOSE_WIZARD);
 	}
 }

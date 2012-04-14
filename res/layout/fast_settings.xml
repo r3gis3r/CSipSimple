@@ -42,7 +42,7 @@
                 android:id="@+id/row_glob_integrate"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/list_selector_background"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
@@ -88,7 +88,7 @@
                 android:id="@+id/row_glob_profile_always"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/list_selector_background"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
@@ -135,7 +135,7 @@
                 android:id="@+id/row_glob_profile_wifi"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/list_selector_background"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
@@ -183,7 +183,7 @@
                 android:id="@+id/row_glob_profile_never"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/list_selector_background"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
@@ -230,7 +230,7 @@
                 android:id="@+id/row_glob_tg"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/list_selector_background"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
@@ -267,11 +267,18 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/save_bt"
+    <LinearLayout
+        style="@style/ButtonBar.AlertDialog"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="@string/save" />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/save_bt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save" />
+    </LinearLayout>
 
 </LinearLayout>

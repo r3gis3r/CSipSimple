@@ -36,7 +36,7 @@
             android:id="@+id/custom_wizard_row"
             android:layout_width="fill_parent"
             android:layout_height="?android:attr/listPreferredItemHeight"
-            android:background="@android:drawable/list_selector_background"
+            android:background="?attr/selectableItemBackground"
             android:orientation="vertical"
             android:visibility="gone" >
 
@@ -78,6 +78,7 @@
 
         <Button
             android:id="@+id/cancel_bt"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -85,6 +86,7 @@
 
         <Button
             android:id="@+id/save_bt"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"

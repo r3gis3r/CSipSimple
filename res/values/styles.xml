@@ -124,4 +124,6 @@
 
     <style name="ButtonBar" parent="@android:style/ButtonBar" />
 
+    <style name="ButtonBar.AlertDialog" parent="@android:style/ButtonBar" />
+
 </resources>

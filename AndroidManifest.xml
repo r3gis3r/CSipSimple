@@ -146,12 +146,12 @@
             android:name="com.csipsimple.service.DeviceStateReceiver"
             android:process=":sipStack" >
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
-                </action>
-                <action android:name="android.intent.action.ANY_DATA_STATE" >
-                </action>
-                <action android:name="android.intent.action.BOOT_COMPLETED" >
-                </action>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <!--
+Remove that too fine change trigger                
+<action android:name="android.intent.action.ANY_DATA_STATE" />
+                -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="com.csipsimple.accounts.activate" >
                 </action>
             </intent-filter>
@@ -181,7 +181,7 @@
             android:name="com.csipsimple.wizards.WizardChooser"
             android:configChanges="orientation"
             android:label="@string/choose_wizard"
-            android:theme="@android:style/Theme.Dialog" />
+            android:theme="@style/DarkTheme.Dialog" />
 
         <!-- Preferences -->
         <activity
@@ -213,7 +213,7 @@
             android:name="com.csipsimple.ui.prefs.PrefsFast"
             android:configChanges="orientation"
             android:label="@string/prefs_fast"
-            android:theme="@style/CupcakeDialog" >
+            android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="com.csipsimple.ui.prefs.PrefsFast" />
 
@@ -229,12 +229,13 @@
             android:name="com.csipsimple.ui.prefs.AudioTester"
             android:label="@string/test_audio"
             android:screenOrientation="portrait"
-            android:theme="@style/CupcakeDialog" />
+            android:theme="@style/DarkTheme.Dialog" />
 
         <!-- Wizards -->
         <activity
             android:name="com.csipsimple.wizards.BasePrefsWizard"
-            android:configChanges="orientation" />
+            android:configChanges="orientation"
+            android:theme="@style/DarkTheme" />
 
         <!-- Call management -->
         <receiver android:name="com.csipsimple.service.OutgoingCall" >
@@ -250,7 +251,7 @@
             android:excludeFromRecents="true"
             android:label="@string/call"
             android:launchMode="singleTask"
-            android:theme="@style/CupcakeDialog" >
+            android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL" />
 
@@ -290,7 +291,7 @@
             android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
             android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
-            android:theme="@style/CupcakeDialog" >
+            android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
 
@@ -307,7 +308,7 @@
             android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
             android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
-            android:theme="@style/CupcakeDialog" >
+            android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
 
@@ -360,7 +361,7 @@
             android:configChanges="orientation"
             android:label="@string/prefs_media"
             android:taskAffinity="com.csipsimple.ui.InCallActivity"
-            android:theme="@style/CupcakeDialog" >
+            android:theme="@style/DarkTheme.Dialog" >
         </activity>
 
         <receiver android:name="com.csipsimple.service.HeadsetButtonReceiver" >
@@ -418,8 +419,8 @@
         <!-- New UI -->
         <activity
             android:name="com.csipsimple.ui.account.AccountsEditList"
-            android:theme="@style/DarkTheme"
-            android:title="@string/accounts" />
+            android:label="@string/accounts"
+            android:theme="@style/DarkTheme" />
         <activity
             android:name="com.csipsimple.ui.account.AccountEdit"
             android:theme="@style/DarkTheme" />

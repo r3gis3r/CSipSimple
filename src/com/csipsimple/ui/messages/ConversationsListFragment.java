@@ -45,6 +45,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -72,22 +73,30 @@ public class ConversationsListFragment extends ListFragment implements ViewPager
     private boolean mDualPane;
 
     private ConverstationsAdapter mAdapter;
+    private View mHeaderView;
 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-
-        // Adapter
-        mAdapter = new ConverstationsAdapter(getActivity(), null);
-        setListAdapter(mAdapter);
-        
         ListView lv = getListView();
-        lv.setOnCreateContextMenuListener(this);
-
-        // Start loading
-        getLoaderManager().initLoader(0, null, this);
+        
+        // Header view add
+        if(mAdapter == null) {
+            if(mHeaderView != null) {
+                lv.addHeaderView(mHeaderView, null, true);
+            }
+            // Adapter
+            mAdapter = new ConverstationsAdapter(getActivity(), null);
+            setListAdapter(mAdapter);
+            
+            
+            lv.setOnCreateContextMenuListener(this);
+    
+            // Start loading
+            getLoaderManager().initLoader(0, null, this);
+        }
     }
 
     @Override
@@ -95,19 +104,33 @@ public class ConversationsListFragment extends ListFragment implements ViewPager
         View v = inflater.inflate(R.layout.call_log_fragment, container, false);
         
         ListView lv = (ListView) v.findViewById(android.R.id.list);
-        // Add header
-        ViewGroup headerView = (ViewGroup)
-                inflater.inflate(R.layout.conversation_list_item, lv, false);
-        ((TextView) headerView.findViewById(R.id.from) ).setText(R.string.new_message);
-        ((TextView) headerView.findViewById(R.id.subject) ).setText(R.string.create_new_message);
-        headerView.findViewById(R.id.quick_contact_photo).setVisibility(View.GONE);
-        lv.addHeaderView(headerView, null, true);
         
-        TextView tv = (TextView) v.findViewById(android.R.id.empty);
-        tv.setText(R.string.status_none);
+        
+
+        View.OnClickListener addClickButtonListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickAddMessage();
+            }
+        };
+        
+
+        // Header view
+        mHeaderView = (ViewGroup)
+                inflater.inflate(R.layout.conversation_list_item, lv, false);
+        ((TextView) mHeaderView.findViewById(R.id.from) ).setText(R.string.new_message);
+        ((TextView) mHeaderView.findViewById(R.id.subject) ).setText(R.string.create_new_message);
+        mHeaderView.findViewById(R.id.quick_contact_photo).setVisibility(View.GONE);
+        mHeaderView.setOnClickListener(addClickButtonListener);
+        // Empty view
+        Button bt = (Button) v.findViewById(android.R.id.empty);
+        bt.setOnClickListener(addClickButtonListener);
         return v;
     }
     
+    private void onClickAddMessage() {
+        viewDetails(-getListView().getHeaderViewsCount(), null);
+    }
     
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -126,7 +149,7 @@ public class ConversationsListFragment extends ListFragment implements ViewPager
         } else {
             lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
             lv.setItemsCanFocus(true);
-        }        
+        }
     }
     
     @Override
@@ -189,7 +212,7 @@ public class ConversationsListFragment extends ListFragment implements ViewPager
         writeMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                viewDetails(-1, null);
+                onClickAddMessage();
                 return true;
             }
         });
@@ -352,8 +375,7 @@ public class ConversationsListFragment extends ListFragment implements ViewPager
                     // TODO post instead
                     Thread t = new Thread() {
                         public void run() {
-                            // -1 because of the new message row
-                            Cursor c = (Cursor) mAdapter.getItem(checkedPos - 1);
+                            Cursor c = (Cursor) mAdapter.getItem(checkedPos - getListView().getHeaderViewsCount());
                             if(c != null) {
                                 String from = c.getString(c.getColumnIndex(SipMessage.FIELD_FROM));
                                 String to = c.getString(c.getColumnIndex(SipMessage.FIELD_TO));

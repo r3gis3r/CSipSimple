@@ -61,8 +61,7 @@
         android:background="@drawable/grabber"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
-    </com.csipsimple.widgets.DontPressWithParentLayout>
+        android:visibility="gone" />
 
     <ImageView
         android:layout_width="1dip"

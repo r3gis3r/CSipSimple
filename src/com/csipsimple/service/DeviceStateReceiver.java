@@ -38,7 +38,7 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class DeviceStateReceiver extends BroadcastReceiver {
 
-    private static final String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
+    //private static final String ACTION_DATA_STATE_CHANGED = "android.intent.action.ANY_DATA_STATE";
     private static final String THIS_FILE = "Device State";
     public static final String APPLY_NIGHTLY_UPLOAD = "com.csipsimple.action.APPLY_NIGHTLY";
 
@@ -60,7 +60,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
         // data network status as well as a switch between wifi and mobile
         // networks.
         //
-        if (intentAction.equals(ACTION_DATA_STATE_CHANGED) ||
+        if (/*intentAction.equals(ACTION_DATA_STATE_CHANGED) ||*/
                 intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
                 intentAction.equals(Intent.ACTION_BOOT_COMPLETED)) {
             Log.d(THIS_FILE, ">>> Data device change detected" + intentAction);

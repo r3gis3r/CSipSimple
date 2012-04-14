@@ -32,7 +32,7 @@
         android:gravity="center_horizontal" />
 
     <LinearLayout
-        style="@style/ButtonBar"
+        style="@style/ButtonBar.AlertDialog"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
@@ -40,6 +40,7 @@
 
         <Button
             android:id="@+id/cancel"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -47,6 +48,7 @@
 
         <Button
             android:id="@+id/ok"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
