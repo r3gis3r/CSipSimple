@@ -172,11 +172,13 @@ Remove that too fine change trigger
         <activity
             android:name="com.csipsimple.ui.account.AccountFilters"
             android:configChanges="orientation"
-            android:label="@string/filters" />
+            android:label="@string/filters"
+            android:theme="@style/DarkTheme" />
         <activity
             android:name="com.csipsimple.ui.EditFilter"
             android:configChanges="orientation"
-            android:label="@string/filters" />
+            android:label="@string/filters"
+            android:theme="@style/DarkTheme" />
         <activity
             android:name="com.csipsimple.wizards.WizardChooser"
             android:configChanges="orientation"
