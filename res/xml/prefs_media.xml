@@ -81,11 +81,18 @@
             android:title="@string/auto_connect_bluetooth" />
     </PreferenceCategory>
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="codecs_per_bandwidth"
+        android:summary="@string/codecs_per_bandwidth_desc"
+        android:title="@string/codecs_per_bandwidth" />
+
     <PreferenceScreen
         android:key="codecs_list"
         android:summary="@string/codecs_availability_text"
         android:title="@string/codecs" />
     <PreferenceScreen
+        android:dependency="codecs_per_bandwidth"
         android:key="band_types"
         android:title="@string/codecs_band_types" >
         <ListPreference

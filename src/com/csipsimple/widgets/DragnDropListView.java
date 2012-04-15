@@ -102,10 +102,12 @@ public class DragnDropListView extends ListView {
 				    return super.onInterceptTouchEvent(ev);
 				}
 				Rect r = mTempRect;
-				dragger.getDrawingRect(r);
-				// The dragger icon itself is quite small, so pretend the
-				// touch area is bigger
-				if (x < r.right * 2) {
+				r.left=dragger.getLeft();
+				r.right=dragger.getRight();
+				r.top=dragger.getTop();
+				r.bottom=dragger.getBottom();   
+
+				if ((r.left<x) && (x<r.right)) {
 					item.setDrawingCacheEnabled(true);
 					// Create a copy of the drawing cache so that it does
 					// not get recycled

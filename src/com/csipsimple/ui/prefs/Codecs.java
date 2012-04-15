@@ -42,6 +42,7 @@ public class Codecs extends FragmentActivity {
 
 	protected static final String THIS_FILE = "Codecs";
     private ViewPager mViewPager;
+    private boolean useCodecsPerSpeed = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +58,24 @@ public class Codecs extends FragmentActivity {
         
         mViewPager = (ViewPager) findViewById(R.id.pager);
         TabsAdapter tabAdapter = new TabsAdapter(this, ab, mViewPager);
-
-        Tab audioNb = ab.newTab().setText( R.string.narrow_band ).setIcon(R.drawable.ic_prefs_media);
-        Tab audioWb = ab.newTab().setText( R.string.wide_band ).setIcon(R.drawable.ic_prefs_media);
-        Tab videoNb = ab.newTab().setText( R.string.narrow_band ).setIcon(R.drawable.ic_prefs_media_video);
-        Tab videoWb = ab.newTab().setText( R.string.wide_band ).setIcon(R.drawable.ic_prefs_media_video);
-        
-        tabAdapter.addTab(audioWb, CodecsFragment.class);
-        tabAdapter.addTab(audioNb, CodecsFragment.class);
-        tabAdapter.addTab(videoWb, CodecsFragment.class);
-        tabAdapter.addTab(videoNb, CodecsFragment.class);
+        useCodecsPerSpeed = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.CODECS_PER_BANDWIDTH);
+        if(useCodecsPerSpeed) {
+            Tab audioNb = ab.newTab().setText( R.string.slow ).setIcon(R.drawable.ic_prefs_media);
+            Tab audioWb = ab.newTab().setText( R.string.fast ).setIcon(R.drawable.ic_prefs_media);
+            Tab videoNb = ab.newTab().setText( R.string.slow ).setIcon(R.drawable.ic_prefs_media_video);
+            Tab videoWb = ab.newTab().setText( R.string.fast ).setIcon(R.drawable.ic_prefs_media_video);
+            
+            tabAdapter.addTab(audioWb, CodecsFragment.class);
+            tabAdapter.addTab(audioNb, CodecsFragment.class);
+            tabAdapter.addTab(videoWb, CodecsFragment.class);
+            tabAdapter.addTab(videoNb, CodecsFragment.class);
+        }else {
+            Tab audioTab = ab.newTab().setIcon(R.drawable.ic_prefs_media);
+            Tab videoTab = ab.newTab().setIcon(R.drawable.ic_prefs_media_video);
+            
+            tabAdapter.addTab(audioTab, CodecsFragment.class);
+            tabAdapter.addTab(videoTab, CodecsFragment.class);
+        }
 	}
 
     private class TabsAdapter extends FragmentPagerAdapter implements
@@ -104,8 +113,13 @@ public class Codecs extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             Bundle args = new Bundle();
-            args.putString(CodecsFragment.BAND_TYPE, (position % 2 == 0)? SipConfigManager.CODEC_WB : SipConfigManager.CODEC_NB );
-            args.putInt(CodecsFragment.MEDIA_TYPE, (position < 2)? CodecsFragment.MEDIA_AUDIO : CodecsFragment.MEDIA_VIDEO );
+            if(useCodecsPerSpeed) {
+                args.putString(CodecsFragment.BAND_TYPE, (position % 2 == 0)? SipConfigManager.CODEC_WB : SipConfigManager.CODEC_NB );
+                args.putInt(CodecsFragment.MEDIA_TYPE, (position < 2)? CodecsFragment.MEDIA_AUDIO : CodecsFragment.MEDIA_VIDEO );
+            }else {
+                args.putString(CodecsFragment.BAND_TYPE, SipConfigManager.CODEC_WB );
+                args.putInt(CodecsFragment.MEDIA_TYPE, (position < 1)? CodecsFragment.MEDIA_AUDIO : CodecsFragment.MEDIA_VIDEO );
+            }
             return Fragment.instantiate(mContext, mTabs.get(position), args);
             
         }

@@ -28,10 +28,10 @@
     android:orientation="vertical" >
 
     <ImageView
-        android:contentDescription="@string/empty_description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/divider_horizontal_dark" />
+        android:background="@android:drawable/divider_horizontal_dark"
+        android:contentDescription="@string/empty_description" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -39,26 +39,35 @@
         android:gravity="center_vertical"
         android:ignoreGravity="@+id/icon" >
 
-<!-- 			grabber -->
-
-        <ImageView
-            android:id="@+id/icon"
-            android:contentDescription="@string/empty_description"
+        <CheckBox
+            android:id="@+id/AccCheckBoxActive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/ic_mp_move" />
-<!-- 			The height is set to half the height of the parent, which is 64 dip -->
+            android:layout_marginRight="10dip"
+            android:contentDescription="@string/empty_description"
+            android:src="@drawable/grabber" />
+        <!-- The height is set to half the height of the parent, which is 64 dip -->
 
         <TextView
             android:id="@+id/line1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_toRightOf="@id/icon"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/AccCheckBoxActive"
             android:ellipsize="marquee"
+            android:gravity="center_vertical"
             android:paddingLeft="9dip"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium" />

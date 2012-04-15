@@ -287,6 +287,11 @@ public class SipConfigManager {
      */
     public static final String HEADSET_ACTION = "headset_action";
     /**
+     * Have per bandwidth speed codecs lists ?<br/>
+     * If true the user can manage one list per bandwidth speed (fast/slow)
+     */
+    public static final String CODECS_PER_BANDWIDTH = "codecs_per_bandwidth";
+    /**
      * Backend implementation to use for audio calls.<br/>
      * Since android has several ways to plug to audio layer <br/>
      * And CSipSimple has different implementations for each ways, the backend

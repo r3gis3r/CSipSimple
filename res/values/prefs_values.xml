@@ -168,8 +168,8 @@
         <item>wb</item>
     </string-array>
     <string-array name="band_types_name">
-        <item>@string/narrowband</item>
-        <item>@string/wideband</item>
+        <item>@string/slow</item>
+        <item>@string/fast</item>
     </string-array>
     <string-array name="reg_use_proxy_values">
         <item>0</item>

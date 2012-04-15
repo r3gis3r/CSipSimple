@@ -31,18 +31,21 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.widgets.DragnDropListView;
@@ -55,7 +58,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CodecsFragment extends ListFragment {
+public class CodecsFragment extends ListFragment implements OnCheckedChangeListener {
 
     protected static final String THIS_FILE = "CodecsFragment";
 
@@ -78,6 +81,8 @@ public class CodecsFragment extends ListFragment {
     private String bandtype;
     // Type for media (audio/video)
     private Integer mediatype;
+
+    private Boolean useCodecsPerSpeed = true;
     
 
     private static final Map<String, String> NON_FREE_CODECS = new HashMap<String, String>();
@@ -90,6 +95,7 @@ public class CodecsFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         prefsWrapper = new PreferencesWrapper(getActivity());
+        useCodecsPerSpeed  = SipConfigManager.getPreferenceBooleanValue(getActivity(), SipConfigManager.CODECS_PER_BANDWIDTH);
         initDatas();
         setHasOptionsMenu(true);
 
@@ -98,9 +104,11 @@ public class CodecsFragment extends ListFragment {
         // Adapter
         mAdapter = new SimpleAdapter(getActivity(), codecsList, R.layout.codecs_list_item, new String[] {
                 CODEC_NAME,
+                CODEC_NAME,
                 CODEC_PRIORITY
         }, new int[] {
                 R.id.line1,
+                R.id.AccCheckBoxActive,
                 R.id.entiere_line
         });
 
@@ -111,13 +119,20 @@ public class CodecsFragment extends ListFragment {
                     Log.d(THIS_FILE, "Entiere line is binded ");
                     TextView tv = (TextView) view.findViewById(R.id.line1);
                     ImageView grabber = (ImageView) view.findViewById(R.id.icon);
+                    CompoundButton checker = (CompoundButton) view.findViewById(R.id.AccCheckBoxActive);
+                    checker.setOnCheckedChangeListener(CodecsFragment.this);
                     if ((Short) data == 0) {
                         tv.setTextColor(Color.GRAY);
-                        grabber.setImageResource(R.drawable.ic_mp_disabled);
+                        grabber.setVisibility(View.GONE);
+                        checker.setChecked(false);
                     } else {
                         tv.setTextColor(Color.WHITE);
-                        grabber.setImageResource(R.drawable.ic_mp_move);
+                        grabber.setVisibility(View.VISIBLE);
+                        checker.setChecked(true);
                     }
+                    return true;
+                }else if(view.getId() == R.id.AccCheckBoxActive) {
+                    view.setTag(data);
                     return true;
                 }
                 return false;
@@ -200,7 +215,7 @@ public class CodecsFragment extends ListFragment {
                 for(Map<String, Object> codec : codecsList) {
                     if((Short) codec.get(CODEC_PRIORITY) > 0) {
                         if(currentPriority != (Short) codec.get(CODEC_PRIORITY)) {
-                            prefsWrapper.setCodecPriority((String)codec.get(CODEC_ID), bandtype, Short.toString(currentPriority));
+                            setCodecPriority((String)codec.get(CODEC_ID), currentPriority);
                             codec.put(CODEC_PRIORITY, currentPriority);
                         }
                         //Log.d(THIS_FILE, "Reorder : "+codec.toString());
@@ -218,6 +233,14 @@ public class CodecsFragment extends ListFragment {
         return v;
     }
     
+    private void setCodecPriority(String codecName, short priority) {
+        if(useCodecsPerSpeed) {
+            prefsWrapper.setCodecPriority(codecName, bandtype, Short.toString(priority));
+        }else {
+            prefsWrapper.setCodecPriority(codecName, SipConfigManager.CODEC_NB, Short.toString(priority));
+            prefsWrapper.setCodecPriority(codecName, SipConfigManager.CODEC_WB, Short.toString(priority));
+        }
+    }
     
 
     @Override
@@ -263,35 +286,41 @@ public class CodecsFragment extends ListFragment {
         int selId = item.getItemId();
         if (selId == MENU_ITEM_ACTIVATE) {
             boolean isDisabled = ((Short) codec.get(CODEC_PRIORITY) == 0);
-            final short newPrio = isDisabled ? (short) 1 : (short) 0;
-            if(NON_FREE_CODECS.containsKey(codec.get(CODEC_ID)) && isDisabled) {
-                final HashMap<String, Object> fCodec = codec;
-
-                final TextView message = new TextView(getActivity());
-                final SpannableString s = new SpannableString(getString(R.string.this_codec_is_not_free) + NON_FREE_CODECS.get(codec.get(CODEC_ID)));
-                Linkify.addLinks(s, Linkify.WEB_URLS);
-                message.setText(s);
-                message.setMovementMethod(LinkMovementMethod.getInstance());
-                message.setPadding(10, 10, 10, 10);
-                  
-                
-                //Alert user that we will disable for all incoming calls as he want to quit
-                new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.warning)
-                    .setView(message)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            setCodecActivated(fCodec, newPrio);
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-            }else {
-                setCodecActivated(codec, newPrio);
-            }
+            userActivateCodec(codec, isDisabled);
             return true;
         }
         return false;
+    }
+    
+    private void userActivateCodec(final Map<String, Object> codec, boolean activate) {
+        
+        String codecName = (String) codec.get(CODEC_ID);
+        final short newPrio = activate ? (short) 1 : (short) 0;
+        
+        if(NON_FREE_CODECS.containsKey(codecName) && activate) {
+
+            final TextView message = new TextView(getActivity());
+            final SpannableString s = new SpannableString(getString(R.string.this_codec_is_not_free) + NON_FREE_CODECS.get(codecName));
+            Linkify.addLinks(s, Linkify.WEB_URLS);
+            message.setText(s);
+            message.setMovementMethod(LinkMovementMethod.getInstance());
+            message.setPadding(10, 10, 10, 10);
+              
+            
+            //Alert user that we will disable for all incoming calls as he want to quit
+            new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.warning)
+                .setView(message)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        setCodecActivated(codec, newPrio);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+        }else {
+            setCodecActivated(codec, newPrio);
+        }
     }
     
     /**
@@ -300,11 +329,9 @@ public class CodecsFragment extends ListFragment {
      * @param newPrio the new priority of the codec (0 to disable)
      */
     private void setCodecActivated(Map<String, Object> codec, short newPrio) {
+        setCodecPriority((String) codec.get(CODEC_ID), newPrio);
         codec.put(CODEC_PRIORITY, newPrio);
-        prefsWrapper.setCodecPriority((String) codec.get(CODEC_ID), bandtype, Short.toString(newPrio));
-        
         Collections.sort(codecsList, codecsComparator);
-
         mAdapter.notifyDataSetChanged();
     }
 
@@ -329,4 +356,24 @@ public class CodecsFragment extends ListFragment {
             return 0;
         }
     };
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        String codecName = (String) buttonView.getTag();
+        if(codecName != null) {
+            HashMap<String, Object> codec = null;
+            for( int i = 0; i < mAdapter.getCount(); i++) {
+                @SuppressWarnings("unchecked")
+                HashMap<String, Object> tCodec = (HashMap<String, Object>) mAdapter.getItem(i);
+                if(codecName.equalsIgnoreCase( (String) tCodec.get(CODEC_NAME))) {
+                    codec = tCodec;
+                    break;
+                }
+            }
+            if(codec != null) {
+                userActivateCodec(codec, isChecked);
+            }
+        }
+    }
 }

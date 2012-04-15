@@ -238,13 +238,17 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
         // Use custom drag and drop view
         View v = inflater.inflate(R.layout.accounts_edit_list, container, false);
         
-        DragnDropListView lv = (DragnDropListView) v.findViewById(android.R.id.list);
+        final DragnDropListView lv = (DragnDropListView) v.findViewById(android.R.id.list);
         lv.setGrabberId(R.id.grabber);
         // Setup the drop listener
         lv.setOnDropListener(new DropListener() {
             @Override
             public void drop(int from, int to) {
                 Log.d(THIS_FILE, "Drop from " + from + " to " + to);
+                int hvC = lv.getHeaderViewsCount();
+                from = Math.max(0, from - hvC);
+                to = Math.max(0, to - hvC);
+                
                 int i;
                 // First of all, compute what we get before move
                 ArrayList<Long> orderedList = new ArrayList<Long>();
@@ -491,7 +495,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
             Log.e(THIS_FILE, "bad menuInfo", e);
             return null;
         }
-        Cursor c = (Cursor) getListAdapter().getItem(info.position);
+        Cursor c = (Cursor) getListAdapter().getItem(info.position - getListView().getHeaderViewsCount());
         if (c == null) {
             // For some reason the requested item isn't available, do nothing
             return null;

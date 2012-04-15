@@ -166,6 +166,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.DO_FOCUS_AUDIO, true);
 		put(SipConfigManager.INTEGRATE_WITH_NATIVE_MUSIC, true);
 		put(SipConfigManager.AUTO_CONNECT_BLUETOOTH, false);
+		put(SipConfigManager.CODECS_PER_BANDWIDTH, true);
 		
 		//UI
 		put(SipConfigManager.PREVENT_SCREEN_ROTATION, true);

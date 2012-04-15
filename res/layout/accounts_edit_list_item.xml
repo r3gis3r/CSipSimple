@@ -58,10 +58,17 @@
         android:id="@+id/grabber"
         style="@style/list_left_column"
         android:layout_height="?android:attr/listPreferredItemHeight"
-        android:background="@drawable/grabber"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" />
+        android:visibility="gone" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/empty_description"
+            android:src="@drawable/grabber" />
+    </com.csipsimple.widgets.DontPressWithParentLayout>
 
     <ImageView
         android:layout_width="1dip"

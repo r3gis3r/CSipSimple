@@ -173,8 +173,6 @@
     <string name="has_io_queue_desc">Activate Queue for input/output</string>
     <string name="set_audio_generate_tone">Tone hack</string>
     <string name="set_audio_generate_tone_desc">Generate a tone before making calls</string>
-    <string name="narrow_band">Narrowband</string>
-    <string name="wide_band">Wideband</string>
     <string name="band_for_wifi">Band type for wifi</string>
     <string name="band_for_3g">Band type for 3G</string>
     <string name="band_for_gprs">Band type for GPRS</string>
@@ -206,6 +204,8 @@
     <string name="use_android_setting">Use Android setting</string>
     <string name="narrowband">Narrowband</string>
     <string name="wideband">Wideband</string>
+    <string name="slow">Slow</string>
+    <string name="fast">Fast</string>
     <string name="no_proxy">No proxy</string>
     <string name="outbound_proxies">Outbound proxies</string>
     <string name="accounts_proxies">Accounts proxies</string>
@@ -215,6 +215,8 @@
     <string name="default_str">Default</string>
     <string name="auto_connect_bluetooth">Auto connect bluetooth</string>
     <string name="auto_connect_bluetooth_desc">Try to use BT SCO automatically (may break standard audio routing case)</string>
+    <string name="codecs_per_bandwidth">Codec priority list per bandwidth</string>
+    <string name="codecs_per_bandwidth_desc">Allow to have priority list for fast and for slow networks</string>
 
     <!-- UI -->
     <string name="general_ui">General user interface</string>
