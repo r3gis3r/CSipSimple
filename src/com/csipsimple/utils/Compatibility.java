@@ -110,7 +110,7 @@ public final class Compatibility {
             return true;
         }
         // Samsung GT-S5360
-        if(android.os.Build.DEVICE.equalsIgnoreCase("GT-S5360")) {
+        if(android.os.Build.DEVICE.startsWith("GT-S5360")) {
             return true;
         }
         
@@ -638,14 +638,14 @@ public final class Compatibility {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                     isTabletScreen(prefWrapper.getContext()));
         }
-        if (lastSeenVersion < 1296 && android.os.Build.DEVICE.equalsIgnoreCase("GT-S5360")) {
-            prefWrapper
-                    .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
-
-        }
         if (lastSeenVersion < 1343 && needWebRTCImplementation()) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
                     needWebRTCImplementation());
+        }
+        if (lastSeenVersion < 1388 && android.os.Build.DEVICE.startsWith("GT-S5360")) {
+            prefWrapper
+                    .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+
         }
         
         prefWrapper.endEditing();
