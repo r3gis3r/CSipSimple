@@ -616,6 +616,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_fringtalktw, 10, 
                     new Locale[]{ locale("zh_TW")  }, false, false, 
                     FringTalkTw.class));
+            WIZARDS_DICT.put("MESSAGENET", new WizardInfo("MESSAGENET", "Messagenet", 
+                    R.drawable.ic_wizard_messagenet, 20, 
+                    new Locale[]{Locale.ITALY}, false, false, 
+                    Messagenet.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
