@@ -296,6 +296,12 @@ public class CodecsFragment extends ListFragment implements OnCheckedChangeListe
         
         String codecName = (String) codec.get(CODEC_ID);
         final short newPrio = activate ? (short) 1 : (short) 0;
+
+        boolean isDisabled = ((Short) codec.get(CODEC_PRIORITY) == 0);
+        if(isDisabled == !activate) {
+            // Nothing to do, this codec is already enabled
+            return;
+        }
         
         if(NON_FREE_CODECS.containsKey(codecName) && activate) {
 
