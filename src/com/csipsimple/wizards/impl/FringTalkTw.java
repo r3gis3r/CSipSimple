@@ -39,7 +39,7 @@ public class FringTalkTw extends SimpleImplementation {
 	
 	@Override
 	protected String getDefaultName() {
-		return "Fring Talk";
+		return "fringTalk";
 	}
 
 	//Customization
