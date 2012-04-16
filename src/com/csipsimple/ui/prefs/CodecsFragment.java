@@ -82,7 +82,7 @@ public class CodecsFragment extends ListFragment implements OnCheckedChangeListe
     // Type for media (audio/video)
     private Integer mediatype;
 
-    private Boolean useCodecsPerSpeed = true;
+    private boolean useCodecsPerSpeed = true;
     
 
     private static final Map<String, String> NON_FREE_CODECS = new HashMap<String, String>();

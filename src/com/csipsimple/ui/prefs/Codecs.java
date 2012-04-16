@@ -43,6 +43,7 @@ public class Codecs extends FragmentActivity {
 	protected static final String THIS_FILE = "Codecs";
     private ViewPager mViewPager;
     private boolean useCodecsPerSpeed = true;
+    private boolean showVideoCodecs = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +60,27 @@ public class Codecs extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         TabsAdapter tabAdapter = new TabsAdapter(this, ab, mViewPager);
         useCodecsPerSpeed = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.CODECS_PER_BANDWIDTH);
+        showVideoCodecs   = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_VIDEO);
         if(useCodecsPerSpeed) {
             Tab audioNb = ab.newTab().setText( R.string.slow ).setIcon(R.drawable.ic_prefs_media);
             Tab audioWb = ab.newTab().setText( R.string.fast ).setIcon(R.drawable.ic_prefs_media);
-            Tab videoNb = ab.newTab().setText( R.string.slow ).setIcon(R.drawable.ic_prefs_media_video);
-            Tab videoWb = ab.newTab().setText( R.string.fast ).setIcon(R.drawable.ic_prefs_media_video);
-            
             tabAdapter.addTab(audioWb, CodecsFragment.class);
             tabAdapter.addTab(audioNb, CodecsFragment.class);
-            tabAdapter.addTab(videoWb, CodecsFragment.class);
-            tabAdapter.addTab(videoNb, CodecsFragment.class);
+            if(showVideoCodecs) {
+                Tab videoNb = ab.newTab().setText( R.string.slow ).setIcon(R.drawable.ic_prefs_media_video);
+                Tab videoWb = ab.newTab().setText( R.string.fast ).setIcon(R.drawable.ic_prefs_media_video);
+                
+                tabAdapter.addTab(videoWb, CodecsFragment.class);
+                tabAdapter.addTab(videoNb, CodecsFragment.class);
+            }
         }else {
             Tab audioTab = ab.newTab().setIcon(R.drawable.ic_prefs_media);
-            Tab videoTab = ab.newTab().setIcon(R.drawable.ic_prefs_media_video);
-            
             tabAdapter.addTab(audioTab, CodecsFragment.class);
-            tabAdapter.addTab(videoTab, CodecsFragment.class);
+            
+            if(showVideoCodecs) {
+                Tab videoTab = ab.newTab().setIcon(R.drawable.ic_prefs_media_video);
+                tabAdapter.addTab(videoTab, CodecsFragment.class);
+            }
         }
 	}
 
