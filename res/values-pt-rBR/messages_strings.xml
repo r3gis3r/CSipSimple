@@ -1,60 +1,116 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="app_label">Mensagens</string>
-    <string name="new_message">Nova mensagem</string>
-    <string name="create_new_message">Compor nova mensagem</string>
-    <string name="menu_compose_new">Compor</string>
-    <string name="menu_call">Chamar</string>
-    <string name="menu_delete_all">Deletar tópicos</string>
-    <string name="menu_delete">Apagar tópico</string>
-    <string name="menu_view">Visualizar Tópico</string>
-    <string name="anonymous_recipient">Anônimo</string>
-    <string name="messagelist_sender_self">Eu</string>
-    <string name="delete_message">Deletar Mensagem</string>
-    <string name="kilobyte">KB</string>
-    <string name="undelivered_msg_dialog_title">Mensagem não entregue</string>
-    <string name="undelivered_sms_dialog_body">Não foi possivel enviar esta mensagem</string>
-    <string name="delete_thread">Apagar tópico</string>
-    <string name="download">Baixar</string>
-    <string name="downloading">Baixando</string>
-    <string name="copy_message_text">Copiar texto da mensagem</string>
-    <string name="message_options">Opções de mensagem</string>
-    <string name="done">Pronto</string>
-    <string name="compose_title">Compor</string>
-    <string name="add_attachment">Anexar</string>
-    <string name="view">Visualizar</string>
-    <string name="send">Enviar</string>
-    <string name="all_threads">Todos tópicos</string>
-    <string name="type_to_compose_text_enter_to_send">Digite para compor</string>
-    <string name="open_keyboard_to_compose_message">Abra teclado para compor mensagem</string>
-    <string name="image_too_large">Foto muito grande</string>
-    <string name="ask_for_automatically_resize">Redimensionar foto antes de enviar?</string>
-    <string name="compressing">Foto muito grande. Compactando…</string>
-    <string name="menu_view_contact">Vizualizar contato</string>
-    <string name="menu_add_to_contacts">Adicionar aos Contatos</string>
-    <string name="hidden_sender_address">Endereço do remetente invisivel</string>
-    <string name="yes">OK</string>
-    <string name="no">Cancelar</string>
-    <string name="edit">Editar</string>
-    <string name="restore_default">Restaurar configurações padrões</string>
-    <string name="confirm_dialog_title">Deletar</string>
-    <string name="confirm_delete_conversation">O Tópico inteiro sera deletado</string>
-    <string name="confirm_delete_all_conversations">Todos os tópicos serão deletados</string>
-    <string name="confirm_delete_message">A mensagem será deletada</string>
-    <string name="confirm_delete_locked_message">Você tem certeza que deseja deletar esta mensagem travada</string>
-    <string name="confirm_delete_all_messages">O tópico inteiro será deletado</string>
-    <string name="delete">Deletar</string>
-    <string name="status_none">(Nenhum)</string>
-    <string name="status_pending">Pendente</string>
-    <string name="status_received">Recebido</string>
-    <string name="status_failed">Falha</string>
-    <string name="status_unread">Não lido</string>
-    <string name="status_rejected">Rejeitado</string>
-    <string name="recipient_label">Destinatário: </string>
-    <string name="status_label">Status: </string>
-    <string name="menu_insert_smiley">Inserir emoticon</string>
-    <string name="me">Eu</string>
-    <string name="sending_message">Enviando…</string>
-
+  <!--The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc.-->
+  <string name="app_label">Mensagens</string>
+  <!--Command name to open a Compose screen; displays in conversation list-->
+  <string name="new_message">Nova mensagem</string>
+  <!--Summary text under "New Message" command; displays in conversation list-->
+  <string name="create_new_message">Compor nova mensagem</string>
+  <!--Menu item for starting a new conversation-->
+  <string name="menu_compose_new">Compor</string>
+  <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
+  <string name="menu_call">Chamar</string>
+  <!--Menu item for deleting all conversations-->
+  <string name="menu_delete_all">Deletar tópicos</string>
+  <!--Context menu item on an individual conversation for deleting that conversation-->
+  <string name="menu_delete">Apagar tópico</string>
+  <!--Context menu item on an individual conversation for viewing that conversation-->
+  <string name="menu_view">Visualizar Tópico</string>
+  <!--Name to use when we have an unspecified sender-->
+  <string name="anonymous_recipient">Anônimo</string>
+  <!--Name of the local user when displaying sender of an outgoing message (personal pronoun)-->
+  <string name="messagelist_sender_self">Eu</string>
+  <string name="delete_message">Deletar Mensagem</string>
+  <!--Abbreviation for "kilobyte"-->
+  <string name="kilobyte">KB</string>
+  <!--Dialog box title brought up when warning the user that a message could not be delivered-->
+  <string name="undelivered_msg_dialog_title">Mensagem não entregue</string>
+  <!--Dialog box message indicating that a message could not be delivered-->
+  <string name="undelivered_sms_dialog_body">Não foi possivel enviar esta mensagem</string>
+  <!--Menu item for deleting the entire conversation currently being viewed-->
+  <string name="delete_thread">Apagar tópico</string>
+  <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
+         to be downloaded (imperative verb)-->
+  <string name="download">Baixar</string>
+  <!--Message displayed in place of the "download message" button once it has been pressed,
+         indicating that the download is in progress-->
+  <string name="downloading">Baixando</string>
+  <!--Individual message context menu item-->
+  <string name="copy_message_text">Copiar texto da mensagem</string>
+  <!--Header for context menu on an individual message-->
+  <string name="message_options">Opções de mensagem</string>
+  <!--Button text on edit slide screen indicating the user wants to finish editing that slide-->
+  <string name="done">Pronto</string>
+  <!--Title bar displayed in compose message activity before a recipient has been selected-->
+  <string name="compose_title">Compor</string>
+  <!--Menu item in conversation screen for attaching something to the message being composed-->
+  <string name="add_attachment">Anexar</string>
+  <!--Button next to an attachment during message composition to view the attachment (imperative verb)-->
+  <string name="view">Visualizar</string>
+  <!--Button in conversation screen for sending the SMS message currently being composed (imperative verb)-->
+  <string name="send">Enviar</string>
+  <!--Menu item in conversation screen for returning to the conversation list-->
+  <string name="all_threads">Todos tópicos</string>
+  <!--Hint text in message body field when keyboard is exposed-->
+  <string name="type_to_compose_text_enter_to_send">Digite para compor</string>
+  <!--Hint text in message body field when keyboard is hidden-->
+  <string name="open_keyboard_to_compose_message">Abra teclado para compor mensagem</string>
+  <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
+  <string name="image_too_large">Foto muito grande</string>
+  <!--Dialog message text asking the user if he wants to resize the picture being attached-->
+  <string name="ask_for_automatically_resize">Redimensionar foto antes de enviar?</string>
+  <!--Toast message while an image is being resized-->
+  <string name="compressing">Foto muito grande. Compactando…</string>
+  <!--Context menu item on a message recipient for viewing their contact info-->
+  <string name="menu_view_contact">Vizualizar contato</string>
+  <!--Context menu item on a message recipient for adding them to the user's
+         contacts (used if the recipient is not already in the address book)-->
+  <string name="menu_add_to_contacts">Adicionar aos Contatos</string>
+  <!--Sender to be used if the sender address has been hidden-->
+  <string name="hidden_sender_address">Endereço do remetente invisivel</string>
+  <!--Text to be used for affirmative response button in dialog boxes-->
+  <string name="yes">OK</string>
+  <!--Text to be used for negative response button in dialog boxes-->
+  <string name="no">Cancelar</string>
+  <!--Button text used for editing a slideshow (imperative verb)-->
+  <string name="edit">Editar</string>
+  <!--Settings screen menu item for restoring all settings to default-->
+  <string name="restore_default">Restaurar configurações padrões</string>
+  <!--Confirm Delete-->
+  <!--Delete confirmation dialog title-->
+  <string name="confirm_dialog_title">Deletar</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <string name="confirm_delete_conversation">O Tópico inteiro sera deletado</string>
+  <!--Delete all threads confirmation dialog message-->
+  <string name="confirm_delete_all_conversations">Todos os tópicos serão deletados</string>
+  <!--Delete message confirmation dialog message-->
+  <string name="confirm_delete_message">A mensagem será deletada</string>
+  <!--Delete message confirmation dialog message for a locked message-->
+  <string name="confirm_delete_locked_message">Você tem certeza que deseja deletar esta mensagem travada</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <string name="confirm_delete_all_messages">O tópico inteiro será deletado</string>
+  <!--Delete button title-->
+  <string name="delete">Deletar</string>
+  <!--Status in "Report" window-->
+  <string name="status_none">(Nenhum)</string>
+  <!--Status in "Report" window-->
+  <string name="status_pending">Pendente</string>
+  <!--Status in "Report" window-->
+  <string name="status_received">Recebido</string>
+  <!--Status in "Report" window-->
+  <string name="status_failed">Falha</string>
+  <!--Status in "Report" window-->
+  <string name="status_unread">Não lido</string>
+  <!--Status in "Report" window-->
+  <string name="status_rejected">Rejeitado</string>
+  <!--Label in "Report" window-->
+  <string name="recipient_label">Destinatário: </string>
+  <!--Label in "Report" window-->
+  <string name="status_label">Status: </string>
+  <!--Menu item-->
+  <string name="menu_insert_smiley">Inserir emoticon</string>
+  <!--Label for the "Me" number of this phone.-->
+  <string name="me">Eu</string>
+  <!--Brief small label shown to right of message when it is being sent.-->
+  <string name="sending_message">Enviando…</string>
 </resources>
