@@ -181,7 +181,7 @@ static pj_status_t cap_screen_factory_get_dev_info(pjmedia_vid_dev_factory *f,
 		unsigned index, pjmedia_vid_dev_info *info) {
 	struct cap_screen_factory *cf = (struct cap_screen_factory*) f;
 
-	PJ_ASSERT_RETURN(index < cf->dev_count, PJMEDIA_EVID_INVDEV);
+	PJ_ASSERT_RETURN(index < 1, PJMEDIA_EVID_INVDEV);
 
 	// Copy to pj struct
 	pj_ansi_strncpy(info->name, "Screen capture", sizeof(info->name));
