@@ -27,7 +27,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
-        android:background="?attr/selectableItemBackground"
+        android:background="?attr/actionBarItemBackground"
         android:paddingRight="10dip"
         android:paddingTop="@dimen/call_log_inner_margin" >
 

@@ -30,21 +30,24 @@ import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.SupportActivity;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
-import android.support.v4.view.MenuItem.OnMenuItemClickListener;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
@@ -57,7 +60,7 @@ import com.csipsimple.utils.Log;
 /**
  * Displays a list of call log entries.
  */
-public class CallLogListFragment extends ListFragment implements ViewPagerVisibilityListener,
+public class CallLogListFragment extends SherlockListFragment implements ViewPagerVisibilityListener,
         CallLogAdapter.CallFetcher, LoaderManager.LoaderCallbacks<Cursor>, OnCallLogAction {
 
     private static final String THIS_FILE = "CallLogFragment";
@@ -66,6 +69,8 @@ public class CallLogListFragment extends ListFragment implements ViewPagerVisibi
     private CallLogAdapter mAdapter;
 
     private boolean mDualPane;
+
+    private ActionMode mMode;
     
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -107,7 +112,17 @@ public class CallLogListFragment extends ListFragment implements ViewPagerVisibi
             lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
             lv.setItemsCanFocus(true);
         }
+        // Map long press
+        lv.setLongClickable(true);
+        lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 
+            @Override
+            public boolean onItemLongClick(AdapterView<?> ad, View v, int pos, long id) {
+                turnOnActionMode();
+                getListView().setItemChecked(pos, true);
+                return true;
+            }
+        });
         // Start out with a progress indicator.
         // setListShown(false);
     }
@@ -130,7 +145,7 @@ public class CallLogListFragment extends ListFragment implements ViewPagerVisibi
             mShowOptionsMenu = visible;
             // Invalidate the options menu since we are changing the list of
             // options shown in it.
-            SupportActivity activity = getSupportActivity();
+            SherlockFragmentActivity activity = getSherlockActivity();
             if (activity != null) {
                 activity.invalidateOptionsMenu();
             }
@@ -183,14 +198,14 @@ public class CallLogListFragment extends ListFragment implements ViewPagerVisibi
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setTitle(R.string.callLog_delDialog_title);
         alertDialog.setMessage(getString(R.string.callLog_delDialog_message));
-        alertDialog.setButton(getString(R.string.callLog_delDialog_yes),
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.callLog_delDialog_yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         getActivity().getContentResolver().delete(SipManager.CALLLOG_URI, null,
                                 null);
                     }
                 });
-        alertDialog.setButton2(getString(R.string.callLog_delDialog_no),
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.callLog_delDialog_no),
                 (DialogInterface.OnClickListener) null);
         try {
             alertDialog.show();
@@ -233,6 +248,14 @@ public class CallLogListFragment extends ListFragment implements ViewPagerVisibi
 
     @Override
     public void viewDetails(int position, long[] callIds) {
+        ListView lv = getListView();
+        if(mMode != null) {
+            lv.setItemChecked(position, !lv.isItemChecked(position));
+            mMode.invalidate();
+            // Don't see details in this case
+            return;
+        }
+        
         if (mDualPane) {
             // If we are not currently showing a fragment for the new
             // position, we need to create and install a new one.
@@ -268,4 +291,60 @@ public class CallLogListFragment extends ListFragment implements ViewPagerVisibi
         }
     }
 
+    
+    // Action mode
+    
+    private void turnOnActionMode() {
+        Log.d(THIS_FILE, "Long press");
+        mMode = getSherlockActivity().startActionMode(new CallLogActionMode());
+        ListView lv = getListView();
+        lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        
+    }
+    
+    private void turnOffActionMode(boolean dontFinish) {
+        ListView lv = getListView();
+        if(mMode != null) {
+            if(!dontFinish) {
+                mMode.finish();
+            }
+            mMode = null;
+        }
+
+        // Uncheck all
+        int count = lv.getAdapter().getCount();
+        for (int i = 0; i < count; i++) {
+            lv.setItemChecked(i, false);
+        }
+    }
+    
+    private class CallLogActionMode  implements ActionMode.Callback {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            Log.d(THIS_FILE, "onCreateActionMode");
+            getSherlockActivity().getSupportMenuInflater().inflate(R.menu.call_log_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            Log.d(THIS_FILE, "onPrepareActionMode");
+            menu.findItem(R.id.copy).setVisible(getListView().getCheckedItemCount() == 1);
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            Log.d(THIS_FILE, "onActionItemClicked");
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            Log.d(THIS_FILE, "onDestroyActionMode");
+            turnOffActionMode(true);
+        }
+        
+    }
 }

@@ -23,8 +23,10 @@ package com.csipsimple.ui.prefs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.ActionBar;
-import android.support.v4.app.ActionBar.Tab;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -38,7 +40,7 @@ import com.csipsimple.utils.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Codecs extends FragmentActivity {
+public class Codecs extends SherlockFragmentActivity {
 
 	protected static final String THIS_FILE = "Codecs";
     private ViewPager mViewPager;

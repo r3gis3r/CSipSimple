@@ -25,15 +25,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.csipsimple.R;
 
-public class Legal extends DialogFragment {
+public class Legal extends SherlockDialogFragment {
 
 	
 	public static Legal newInstance() {

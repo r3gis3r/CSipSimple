@@ -21,16 +21,16 @@
 
 package com.csipsimple.ui.calllog;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.ui.calllog.CallLogDetailsFragment.OnQuitListener;
 import com.csipsimple.utils.Compatibility;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.MenuItem;
 
-public class CallLogDetailsActivity extends FragmentActivity implements OnQuitListener {
+public class CallLogDetailsActivity extends SherlockFragmentActivity implements OnQuitListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

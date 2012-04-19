@@ -28,7 +28,7 @@
         android:id="@+id/add_filter"
         android:layout_width="fill_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
-        android:background="?attr/selectableItemBackground"
+        android:background="?attr/actionBarItemBackground"
         android:clickable="true"
         android:drawableLeft="@drawable/add_account"
         android:drawablePadding="5dip"

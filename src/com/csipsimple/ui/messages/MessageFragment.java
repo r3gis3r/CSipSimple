@@ -33,17 +33,11 @@ import android.net.Uri.Builder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.SupportActivity;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
-import android.support.v4.view.MenuItem.OnMenuItemClickListener;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -51,6 +45,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipMessage;
@@ -64,7 +63,7 @@ import com.csipsimple.utils.SmileyParser;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.widgets.AccountChooserButton;
 
-public class MessageFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnClickListener {
+public class MessageFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnClickListener {
     private static final String THIS_FILE = "ComposeMessage";
     private String remoteFrom;
     private TextView fromText;
@@ -138,7 +137,7 @@ public class MessageFragment extends ListFragment implements LoaderManager.Loade
     }
     
     @Override
-    public void onAttach(SupportActivity activity) {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         getActivity().bindService(new Intent(getActivity(), SipService.class), connection, Context.BIND_AUTO_CREATE);
     }

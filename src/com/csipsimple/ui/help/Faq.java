@@ -25,7 +25,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,10 +32,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.csipsimple.R;
 import com.csipsimple.utils.CustomDistribution;
 
-public class Faq extends DialogFragment {
+public class Faq extends SherlockDialogFragment {
 	private final static String FAQ_URL = CustomDistribution.getFaqLink();
 
 	public static Faq newInstance() {

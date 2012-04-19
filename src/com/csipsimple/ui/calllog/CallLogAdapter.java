@@ -196,6 +196,7 @@ public class CallLogAdapter extends GroupingListAdapter
     private void findAndCacheViews(View view) {
         // Get the views to bind to.
         CallLogListItemViews views = CallLogListItemViews.fromView(view);
+        views.primaryActionView.setLongClickable(true);
         views.primaryActionView.setOnClickListener(mPrimaryActionListener);
         views.secondaryActionView.setOnClickListener(mSecondaryActionListener);
         view.setTag(views);

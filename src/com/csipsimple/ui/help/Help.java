@@ -21,6 +21,7 @@
 
 package com.csipsimple.ui.help;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -29,8 +30,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.SupportActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +40,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
@@ -54,7 +54,7 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Help extends DialogFragment implements OnItemClickListener {
+public class Help extends SherlockDialogFragment implements OnItemClickListener {
 	
 	
 	private static final String THIS_FILE = "Help";
@@ -86,7 +86,7 @@ public class Help extends DialogFragment implements OnItemClickListener {
 
     
     @Override
-    public void onAttach(SupportActivity activity) {
+    public void onAttach(Activity activity) {
     	super.onAttach(activity);
     	
     	prefsWrapper = new PreferencesProviderWrapper(getActivity());
@@ -191,15 +191,15 @@ public class Help extends DialogFragment implements OnItemClickListener {
 		HelpArrayAdapter haa = (HelpArrayAdapter) av.getAdapter();
 		HelpEntry he = haa.getItem(position);
 		
-		DialogFragment newFragment;
+		SherlockDialogFragment newFragment;
 		switch (he.choiceTag) {
 		case FAQ:
 			newFragment = Faq.newInstance();
-	        newFragment.show(getSupportFragmentManager(), "faq");
+	        newFragment.show(getFragmentManager(), "faq");
 			break;
 		case LEGALS:
 			newFragment = Legal.newInstance();
-	        newFragment.show(getSupportFragmentManager(), "issues");
+	        newFragment.show(getFragmentManager(), "issues");
 			break;
 		case OPEN_ISSUES:
 			Intent it = new Intent(Intent.ACTION_VIEW);

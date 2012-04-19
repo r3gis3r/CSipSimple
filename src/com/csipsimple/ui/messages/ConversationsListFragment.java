@@ -30,18 +30,13 @@ import android.database.Cursor;
 import android.net.Uri.Builder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
-import android.support.v4.view.MenuItem.OnMenuItemClickListener;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -49,6 +44,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.csipsimple.R;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.service.SipNotifications;
@@ -59,7 +59,7 @@ import com.csipsimple.utils.Compatibility;
 /**
  * This activity provides a list view of existing conversations.
  */
-public class ConversationsListFragment extends ListFragment implements ViewPagerVisibilityListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class ConversationsListFragment extends SherlockListFragment implements ViewPagerVisibilityListener, LoaderManager.LoaderCallbacks<Cursor> {
 	//private static final String THIS_FILE = "Conv List";
 	
     // IDs of the main menu items.
@@ -261,7 +261,7 @@ public class ConversationsListFragment extends ListFragment implements ViewPager
     }
     
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(android.view.MenuItem item) {
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         

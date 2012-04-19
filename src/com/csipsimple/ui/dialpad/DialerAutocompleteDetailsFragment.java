@@ -24,14 +24,14 @@ package com.csipsimple.ui.dialpad;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.contacts.ContactsSearchAdapter;
 
-public class DialerAutocompleteDetailsFragment extends ListFragment {
+public class DialerAutocompleteDetailsFragment extends SherlockListFragment {
     private ContactsSearchAdapter autoCompleteAdapter;
     private CharSequence constraint = "";
     

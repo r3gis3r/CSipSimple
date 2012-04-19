@@ -31,15 +31,17 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.ActionBar;
-import android.support.v4.app.ActionBar.Tab;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -71,7 +73,7 @@ import com.csipsimple.wizards.WizardUtils.WizardInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SipHome extends FragmentActivity {
+public class SipHome extends SherlockFragmentActivity {
     public static final int ACCOUNTS_MENU = Menu.FIRST + 1;
     public static final int PARAMS_MENU = Menu.FIRST + 2;
     public static final int CLOSE_MENU = Menu.FIRST + 3;

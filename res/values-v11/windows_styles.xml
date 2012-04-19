@@ -18,7 +18,7 @@
 <resources>
 
     <style name="DarkTheme.Dialog" parent="android:Theme.Holo.Dialog">
-        <item name="selectableItemBackground">@drawable/abs__item_background_holo_dark</item>
+        <item name="actionBarItemBackground">@drawable/abs__item_background_holo_dark</item>
     </style>
 
 </resources>

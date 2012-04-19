@@ -21,6 +21,7 @@
 
 package com.csipsimple.ui.dialpad;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent.CanceledException;
 import android.content.ComponentName;
@@ -39,12 +40,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.SupportActivity;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
-import android.support.v4.view.MenuItem.OnMenuItemClickListener;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
@@ -55,7 +51,6 @@ import android.text.TextWatcher;
 import android.text.method.DialerKeyListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
@@ -71,6 +66,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipConfigManager;
@@ -93,7 +93,7 @@ import com.csipsimple.widgets.DialerCallBar.OnDialActionListener;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 
-public class DialerFragment extends Fragment implements OnClickListener, OnLongClickListener,
+public class DialerFragment extends SherlockFragment implements OnClickListener, OnLongClickListener,
         OnDialKeyListener, TextWatcher, OnDialActionListener, ViewPagerVisibilityListener, OnKeyListener {
 
     private static final String THIS_FILE = "DialerFragment";
@@ -280,8 +280,9 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
         }
     }
 
+    
     @Override
-    public void onAttach(SupportActivity activity) {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         getActivity().bindService(new Intent(SipManager.INTENT_SIP_SERVICE), connection,
                 Context.BIND_AUTO_CREATE);
@@ -439,7 +440,7 @@ public class DialerFragment extends Fragment implements OnClickListener, OnLongC
                 : R.drawable.ic_menu_switch_digit);
 
         // Invalidate to ask to require the text button to a digit button
-        getSupportActivity().invalidateOptionsMenu();
+        getSherlockActivity().invalidateOptionsMenu();
     }
 
     /**

@@ -36,18 +36,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.BaseColumns;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -56,6 +52,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.ui.account.AccountsEditListAdapter.AccountRowTag;
@@ -73,7 +73,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountsEditListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, /*OnQuitListener,*/ OnCheckedRowListener{
+public class AccountsEditListFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>, /*OnQuitListener,*/ OnCheckedRowListener{
 
     private boolean dualPane;
 	private Long curCheckPosition = SipProfile.INVALID_ID;
@@ -526,7 +526,7 @@ public class AccountsEditListFragment extends ListFragment implements LoaderMana
     }
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(android.view.MenuItem item) {
 	    final SipProfile account = profileFromContextMenuInfo(item.getMenuInfo());
         if (account == null) {
             // For some reason the requested item isn't available, do nothing

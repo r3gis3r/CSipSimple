@@ -36,7 +36,7 @@
             android:id="@+id/custom_wizard_row"
             android:layout_width="fill_parent"
             android:layout_height="?android:attr/listPreferredItemHeight"
-            android:background="?attr/selectableItemBackground"
+            android:background="?attr/actionBarItemBackground"
             android:orientation="vertical"
             android:visibility="gone" >
 
