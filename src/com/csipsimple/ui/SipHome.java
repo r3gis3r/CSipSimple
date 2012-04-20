@@ -579,24 +579,19 @@ public class SipHome extends SherlockFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO -- make sure we are not in split action bar a different way
-        boolean showInActionBar = Compatibility.isCompatible(14)
-                || Compatibility.isTabletScreen(this);
-        int ifRoomIfSplit = showInActionBar ? MenuItem.SHOW_AS_ACTION_IF_ROOM
-                : MenuItem.SHOW_AS_ACTION_NEVER;
 
         WizardInfo distribWizard = CustomDistribution.getCustomDistributionWizard();
         if (distribWizard != null) {
             menu.add(Menu.NONE, DISTRIB_ACCOUNT_MENU, Menu.NONE, "My " + distribWizard.label)
                     .setIcon(distribWizard.icon)
-                    .setShowAsAction(ifRoomIfSplit);
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
         if (CustomDistribution.distributionWantsOtherAccounts()) {
             menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE,
                     (distribWizard == null) ? R.string.accounts : R.string.other_accounts)
                     .setIcon(R.drawable.ic_menu_account_list)
                     .setAlphabeticShortcut('a')
-                    .setShowAsAction(ifRoomIfSplit | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         }
         menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, R.string.prefs)
                 .setIcon(android.R.drawable.ic_menu_preferences)

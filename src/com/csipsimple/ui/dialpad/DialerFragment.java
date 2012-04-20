@@ -80,7 +80,6 @@ import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.CallHandler.onLoadListener;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -477,16 +476,11 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        boolean showInActionBar = Compatibility.isCompatible(14)
-                || Compatibility.isTabletScreen(getActivity());
-
-        int ifRoomIfSplit = showInActionBar ? MenuItem.SHOW_AS_ACTION_IF_ROOM
-                : MenuItem.SHOW_AS_ACTION_NEVER;
 
         MenuItem delMenu = menu.add(isDigit ? R.string.switch_to_text : R.string.switch_to_digit);
         delMenu.setIcon(
                 isDigit ? R.drawable.ic_menu_switch_txt
-                        : R.drawable.ic_menu_switch_digit).setShowAsAction(ifRoomIfSplit);
+                        : R.drawable.ic_menu_switch_digit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         delMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

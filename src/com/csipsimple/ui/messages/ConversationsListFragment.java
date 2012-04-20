@@ -54,7 +54,6 @@ import com.csipsimple.api.SipMessage;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.ui.messages.ConverstationsAdapter.ConversationListItemViews;
-import com.csipsimple.utils.Compatibility;
 
 /**
  * This activity provides a list view of existing conversations.
@@ -201,14 +200,9 @@ public class ConversationsListFragment extends SherlockListFragment implements V
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         
-        boolean showInActionBar = Compatibility.isCompatible(14)
-                || Compatibility.isTabletScreen(getActivity());
-        int ifRoomIfSplit = showInActionBar ? MenuItem.SHOW_AS_ACTION_IF_ROOM
-                : MenuItem.SHOW_AS_ACTION_NEVER;
-        
         
         MenuItem writeMenu = menu.add(R.string.menu_compose_new);
-        writeMenu.setIcon(R.drawable.ic_menu_msg_compose_holo_dark).setShowAsAction(ifRoomIfSplit);
+        writeMenu.setIcon(R.drawable.ic_menu_msg_compose_holo_dark).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         writeMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

@@ -54,7 +54,6 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.ui.calllog.CallLogAdapter.OnCallLogAction;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 
 import java.util.ArrayList;
@@ -185,13 +184,9 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        boolean showInActionBar = Compatibility.isCompatible(14)
-                || Compatibility.isTabletScreen(getActivity());
-        int ifRoomIfSplit = showInActionBar ? MenuItem.SHOW_AS_ACTION_IF_ROOM
-                : MenuItem.SHOW_AS_ACTION_NEVER;
-
+        
         MenuItem delMenu = menu.add(R.string.callLog_delete_all);
-        delMenu.setIcon(android.R.drawable.ic_menu_delete).setShowAsAction(ifRoomIfSplit);
+        delMenu.setIcon(android.R.drawable.ic_menu_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         delMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

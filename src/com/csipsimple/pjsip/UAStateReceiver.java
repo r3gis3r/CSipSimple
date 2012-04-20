@@ -36,7 +36,6 @@ import android.os.SystemClock;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
