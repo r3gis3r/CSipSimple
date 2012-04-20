@@ -73,7 +73,8 @@ public class CallLogGroupBuilder {
         
         int numberColIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER);
         int typeColIndex = cursor.getColumnIndex(CallLog.Calls.TYPE);
-        
+        // In our portage case of GroupingListAdapter we must create group for single rows else the group list adapter will be messed
+        int minToGroup = 1; 
         int currentGroupSize = 1;
         // The number of the first entry in the group.
         CharArrayBuffer firstNumber = mBuffer1;
@@ -107,7 +108,7 @@ public class CallLogGroupBuilder {
             } else {
                 // Create a group for the previous set of calls, excluding the current one, but do
                 // not create a group for a single call.
-                if (currentGroupSize > 1) {
+                if (currentGroupSize >= minToGroup) {
                     addGroup(cursor.getPosition() - currentGroupSize, currentGroupSize);
                 }
                 // Start a new group; it will include at least the current call.
@@ -121,7 +122,7 @@ public class CallLogGroupBuilder {
             }
         }
         // If the last set of calls at the end of the call log was itself a group, create it now.
-        if (currentGroupSize > 1) {
+        if (currentGroupSize >= minToGroup) {
             addGroup(count - currentGroupSize, currentGroupSize);
         }
     }

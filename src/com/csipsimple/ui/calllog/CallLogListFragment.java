@@ -57,6 +57,8 @@ import com.csipsimple.ui.calllog.CallLogAdapter.OnCallLogAction;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 
+import java.util.ArrayList;
+
 /**
  * Displays a list of call log entries.
  */
@@ -120,6 +122,7 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
             public boolean onItemLongClick(AdapterView<?> ad, View v, int pos, long id) {
                 turnOnActionMode();
                 getListView().setItemChecked(pos, true);
+                mMode.invalidate();
                 return true;
             }
         });
@@ -171,6 +174,10 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
                     t.start();
                 }
             }
+        }
+        
+        if(!visible && mMode != null) {
+            mMode.finish();
         }
     }
 
@@ -302,22 +309,6 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
         
     }
     
-    private void turnOffActionMode(boolean dontFinish) {
-        ListView lv = getListView();
-        if(mMode != null) {
-            if(!dontFinish) {
-                mMode.finish();
-            }
-            mMode = null;
-        }
-
-        // Uncheck all
-        int count = lv.getAdapter().getCount();
-        for (int i = 0; i < count; i++) {
-            lv.setItemChecked(i, false);
-        }
-    }
-    
     private class CallLogActionMode  implements ActionMode.Callback {
 
         @Override
@@ -330,21 +321,66 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             Log.d(THIS_FILE, "onPrepareActionMode");
-            menu.findItem(R.id.copy).setVisible(getListView().getCheckedItemCount() == 1);
+            ListView lv = getListView();
+            int nbrCheckedItem = 0;
+
+            for (int i = 0; i < lv.getCount(); i++) {
+                if (lv.isItemChecked(i)) {
+                    nbrCheckedItem++;
+                }
+            }
+            menu.findItem(R.id.delete).setVisible(nbrCheckedItem > 0);
+            menu.findItem(R.id.copy).setVisible(nbrCheckedItem == 1);
             return false;
         }
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            Log.d(THIS_FILE, "onActionItemClicked");
+            int itemId = item.getItemId();
+            if(itemId == R.id.delete) {
+                deleteOnActionMode();
+                return true;
+            }else if(itemId == R.id.copy) {
+                
+                return true;
+            }
             return false;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             Log.d(THIS_FILE, "onDestroyActionMode");
-            turnOffActionMode(true);
+
+            ListView lv = getListView();
+            // Uncheck all
+            int count = lv.getAdapter().getCount();
+            for (int i = 0; i < count; i++) {
+                lv.setItemChecked(i, false);
+            }
         }
         
+    }
+    
+    private void deleteOnActionMode() {
+        ListView lv = getListView();
+        
+        ArrayList<Long> checkedIds = new ArrayList<Long>();
+        
+        for(int i = 0; i < lv.getCount(); i++) {
+            if(lv.isItemChecked(i)) {
+                long[] selectedIds = mAdapter.getCallIdsAtPosition(i);
+                
+                for(long id : selectedIds) {
+                    checkedIds.add(id);
+                }
+                
+            }
+        }
+        if(checkedIds.size() > 0) {
+            String strCheckedIds = TextUtils.join(", ", checkedIds);
+            Log.d(THIS_FILE, "Checked positions ("+ strCheckedIds +")");
+            getActivity().getContentResolver().delete(SipManager.CALLLOG_URI, CallLog.Calls._ID + " IN ("+strCheckedIds+")", null);
+            mMode.finish();
+        }
     }
 }

@@ -100,7 +100,7 @@ public class ContactsAsyncHelper extends Handler {
                 PhotoViewTag photoTag = (PhotoViewTag) args.view.getTag(TAG_PHOTO_INFOS);
                 if (photoTag != null && photoTag.uri != null) {
                     uri = photoTag.uri;
-                    Log.d(THIS_FILE, "get : " + uri);
+                    Log.v(THIS_FILE, "get : " + uri);
                     Bitmap img = contactsWrapper.getContactPhoto(args.context, uri,
                             args.defaultResource);
                     if (img != null) {
@@ -113,7 +113,7 @@ public class ContactsAsyncHelper extends Handler {
                 PhotoViewTag photoTag = (PhotoViewTag) args.view.getTag(TAG_PHOTO_INFOS);
                 if (photoTag != null && photoTag.uri != null) {
                     uri = photoTag.uri;
-                    Log.d(THIS_FILE, "get : " + uri);
+                    Log.v(THIS_FILE, "get : " + uri);
 
                     byte[] buffer = new byte[1024 * 16];
                     Bitmap img = null;
@@ -158,7 +158,6 @@ public class ContactsAsyncHelper extends Handler {
      * Private constructor for static class
      */
     private ContactsAsyncHelper() {
-        Log.d(THIS_FILE, "Self creation");
         HandlerThread thread = new HandlerThread("ContactsAsyncWorker");
         thread.start();
         sThreadHandler = new WorkerHandler(thread.getLooper());
@@ -186,7 +185,6 @@ public class ContactsAsyncHelper extends Handler {
             OnImageLoadCompleteListener listener, Object cookie, Context context,
             ImageView imageView, CallerInfo callerInfo, int placeholderImageResource) {
         if (sThreadHandler == null) {
-            Log.d(THIS_FILE, "Update image view with contact async");
             new ContactsAsyncHelper();
         }
 
@@ -227,7 +225,7 @@ public class ContactsAsyncHelper extends Handler {
     public static void updateImageViewWithContactPhotoAsync(Context context, ImageView imageView,
             Uri photoUri, int placeholderImageResource) {
         if (sThreadHandler == null) {
-            Log.d(THIS_FILE, "Update image view with contact async");
+            Log.v(THIS_FILE, "Update image view with contact async");
             new ContactsAsyncHelper();
         }
 
@@ -262,7 +260,7 @@ public class ContactsAsyncHelper extends Handler {
     }
 
     private static void defaultImage(ImageView imageView, int placeholderImageResource) {
-        Log.d(THIS_FILE, "No uri, just display placeholder.");
+        Log.v(THIS_FILE, "No uri, just display placeholder.");
         PhotoViewTag photoTag = new PhotoViewTag();
         photoTag.uri = null;
         imageView.setTag(TAG_PHOTO_INFOS, photoTag);
@@ -321,7 +319,7 @@ public class ContactsAsyncHelper extends Handler {
             }
             // notify the listener if it is there.
             if (args.listener != null) {
-                Log.d(THIS_FILE, "Notifying listener: " + args.listener.toString() +
+                Log.v(THIS_FILE, "Notifying listener: " + args.listener.toString() +
                         " image: " + args.loadedUri + " completed");
                 args.listener.onImageLoadComplete(msg.what, args.cookie, args.view,
                         imagePresent);
