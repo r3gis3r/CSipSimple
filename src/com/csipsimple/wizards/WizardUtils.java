@@ -271,6 +271,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_reachphones, 9, 
                     new Locale[]{ }, false, true, 
                     ReachPhones.class));
+            WIZARDS_DICT.put("ZENG", new WizardInfo("ZENG", "Zeng", 
+                    R.drawable.ic_wizard_zeng, 9, 
+                    new Locale[]{ }, false, true, 
+                    Zeng.class));
             
             
 			
