@@ -281,15 +281,18 @@ public class PjSipAccount {
             hasQos = (profile_enable_qos == 1);
         }
         if(hasQos) {
-            short dscpVal = (short) prefs.getDSCPVal();
-            if(profile_qos_dscp >= 0) {
-                profile_qos_dscp = dscpVal;
-            }
+            
             // TODO - video?
             rtpCfg.setQos_type(pj_qos_type.PJ_QOS_TYPE_VOICE);
             pj_qos_params qosParam = rtpCfg.getQos_params();
-            qosParam.setDscp_val(dscpVal);
-            qosParam.setFlags((short) 1); // DSCP
+            
+            short dscpVal = (short) prefs.getDSCPVal();
+            if(profile_qos_dscp >= 0) {
+                // If not set, we don't need to change dscp value
+                dscpVal = (short) profile_qos_dscp;
+                qosParam.setDscp_val(dscpVal);
+                qosParam.setFlags((short) 1); // DSCP
+            }
         }
 	}
 	
