@@ -3,11 +3,7 @@
 
     <style name="LightTheme" parent="Theme.Sherlock.Light" />
 
-    <style name="LightTheme.noTopActionBar" parent="LightTheme" />
-
     <style name="DarkTheme" parent="Theme.Sherlock" />
-
-    <style name="DarkTheme.noTopActionBar" parent="DarkTheme" />
 
     <style name="ButtonBar" parent="@android:style/Holo.ButtonBar" />
 

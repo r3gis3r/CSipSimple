@@ -108,10 +108,6 @@
         <!-- <item name="abBackground">#202020</item> -->
     </style>
 
-    <style name="DarkTheme.noTopActionBar" parent="DarkTheme">
-        <!-- <item name="abHeight">0dip</item> -->
-    </style>
-
     <!-- Notification -->
     <style name="NotificationText">
         <item name="android:textColor">?android:attr/textColorPrimary</item>

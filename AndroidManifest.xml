@@ -104,7 +104,7 @@
             android:name="com.csipsimple.ui.SipHome"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/DarkTheme.noTopActionBar"
+            android:theme="@style/DarkTheme"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

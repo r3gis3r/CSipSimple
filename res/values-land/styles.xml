@@ -17,8 +17,4 @@
 -->
 <resources>
 
-    <style name="LightTheme.noTopActionBar" parent="LightTheme" />
-
-    <style name="DarkTheme.noTopActionBar" parent="DarkTheme" />
-
 </resources>

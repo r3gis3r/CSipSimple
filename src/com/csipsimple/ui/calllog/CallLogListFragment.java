@@ -186,7 +186,7 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
         super.onCreateOptionsMenu(menu, inflater);
         
         MenuItem delMenu = menu.add(R.string.callLog_delete_all);
-        delMenu.setIcon(android.R.drawable.ic_menu_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        delMenu.setIcon(R.drawable.ic_ab_trash_dark).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         delMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
