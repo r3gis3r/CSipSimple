@@ -82,6 +82,9 @@ public class PreferencesWrapper {
 		put(SipConfigManager.OVERRIDE_NAMESERVER, "");
 		put(SipConfigManager.TIMER_MIN_SE, "90");
 		put(SipConfigManager.TIMER_SESS_EXPIRES, "1800");
+        put(SipConfigManager.TSX_T1_TIMEOUT, "-1");
+        put(SipConfigManager.TSX_T2_TIMEOUT, "-1");
+        put(SipConfigManager.TSX_T4_TIMEOUT, "-1");
 		
 		put(SipConfigManager.SND_AUTO_CLOSE_TIME, "1");
 		put(SipConfigManager.ECHO_CANCELLATION_TAIL, "200");

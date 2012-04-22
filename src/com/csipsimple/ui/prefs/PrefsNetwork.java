@@ -106,6 +106,8 @@ public class PrefsNetwork extends GenericPrefs {
 
             hidePreference("for_incoming", "use_anyway_in");
             hidePreference("for_outgoing", "use_anyway_out");
+            
+            hidePreference(null, "sip_protocol");
 		}
 		
 		boolean canUseTLS = pfw.getLibCapability(PreferencesWrapper.LIB_CAP_TLS);

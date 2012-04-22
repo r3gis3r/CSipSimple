@@ -103,32 +103,12 @@
             android:key="use_compact_form"
             android:summary="@string/use_compact_form_desc"
             android:title="@string/use_compact_form" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="force_no_update"
-            android:summary="@string/force_no_update_desc"
-            android:title="@string/force_no_update" />
 
         <EditTextPreference
             android:defaultValue="CSipSimple"
             android:key="user_agent"
             android:summary="@string/user_agent_desc"
             android:title="@string/user_agent" />
-
-        <!-- Timers -->
-
-        <EditTextPreference
-            android:defaultValue="90"
-            android:key="timer_min_se"
-            android:numeric="signed"
-            android:summary="@string/timer_min_se_desc"
-            android:title="@string/timer_min_se" />
-        <EditTextPreference
-            android:defaultValue="1800"
-            android:key="timer_sess_expires"
-            android:numeric="signed"
-            android:summary="@string/timer_sess_expires_desc"
-            android:title="@string/timer_sess_expires" />
     </PreferenceCategory>
 
     <PreferenceScreen
@@ -188,8 +168,7 @@
                 android:defaultValue="false"
                 android:key="enable_tls"
                 android:summary="@string/enable_tls_desc"
-                android:title="@string/enable_tls" >
-            </CheckBoxPreference>
+                android:title="@string/enable_tls" />
 
             <EditTextPreference
                 android:defaultValue="5061"
@@ -197,8 +176,7 @@
                 android:key="network_tls_transport_port"
                 android:numeric="integer"
                 android:summary="@string/network_tls_transport_port_desc"
-                android:title="@string/network_tls_transport_port" >
-            </EditTextPreference>
+                android:title="@string/network_tls_transport_port" />
 
             <ListPreference
                 android:defaultValue="0"
@@ -268,6 +246,48 @@
                 android:summary="@string/use_zrtp_desc"
                 android:title="@string/use_zrtp" />
         </PreferenceCategory>
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:key="sip_protocol"
+        android:summary="@string/sip_protocol_desc"
+        android:title="@string/sip_protocol" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="force_no_update"
+            android:summary="@string/force_no_update_desc"
+            android:title="@string/force_no_update" />
+        <!-- Timers -->
+
+        <EditTextPreference
+            android:defaultValue="90"
+            android:key="timer_min_se"
+            android:numeric="signed"
+            android:summary="@string/timer_min_se_desc"
+            android:title="@string/timer_min_se" />
+        <EditTextPreference
+            android:defaultValue="1800"
+            android:key="timer_sess_expires"
+            android:numeric="signed"
+            android:summary="@string/timer_sess_expires_desc"
+            android:title="@string/timer_sess_expires" />
+        <EditTextPreference
+            android:defaultValue="-1"
+            android:key="tsx_t1_timeout"
+            android:numeric="integer"
+            android:summary="@string/tsx_timeout_desc"
+            android:title="@string/tsx_t1_timeout" />
+        <EditTextPreference
+            android:defaultValue="-1"
+            android:key="tsx_t2_timeout"
+            android:numeric="integer"
+            android:summary="@string/tsx_timeout_desc"
+            android:title="@string/tsx_t2_timeout" />
+        <EditTextPreference
+            android:defaultValue="-1"
+            android:key="tsx_t4_timeout"
+            android:numeric="integer"
+            android:summary="@string/tsx_timeout_desc"
+            android:title="@string/tsx_t4_timeout" />
     </PreferenceScreen>
 
     <PreferenceCategory

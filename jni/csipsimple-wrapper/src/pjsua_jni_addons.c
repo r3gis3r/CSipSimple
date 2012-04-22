@@ -331,6 +331,9 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->audio_implementation.shared_lib_path = pj_str("");
 	css_cfg->tcp_keep_alive_interval = DEFAULT_TCP_KA;
 	css_cfg->tls_keep_alive_interval = DEFAULT_TLS_KA;
+	css_cfg->tsx_t1_timeout = PJSIP_T1_TIMEOUT;
+	css_cfg->tsx_t2_timeout = PJSIP_T2_TIMEOUT;
+	css_cfg->tsx_t4_timeout = PJSIP_T4_TIMEOUT;
 }
 
 static void* get_library_factory(dynamic_factory *impl) {
@@ -402,6 +405,11 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	css_tcp_keep_alive_interval = css_cfg->tcp_keep_alive_interval;
 	css_tls_keep_alive_interval = css_cfg->tls_keep_alive_interval;
 
+	// Transaction timeouts
+	pjsip_sip_cfg_var.tsx.t1 = css_cfg->tsx_t1_timeout;
+	pjsip_sip_cfg_var.tsx.t2 = css_cfg->tsx_t2_timeout;
+	pjsip_sip_cfg_var.tsx.t4 = css_cfg->tsx_t4_timeout;
+
 	// Audio codec cfg
 	css_var.extra_aud_codecs_cnt = css_cfg->extra_aud_codecs_cnt;
 	unsigned i;
@@ -415,6 +423,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				&cfg_codec->init_factory_name);
 
 	}
+
 	// Video codec cfg -- For now only destroy is useful but for future
 	// hopefully vid codec mgr will behaves as audio does
 	// Also in this case destroy will become obsolete
@@ -438,7 +447,6 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				&cfg_codec->init_factory_name);
 
 	}
-
 
 	// ZRTP cfg
 	css_var.default_use_zrtp = css_cfg->use_zrtp;

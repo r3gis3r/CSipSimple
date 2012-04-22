@@ -123,6 +123,21 @@ typedef struct csipsimple_config {
 	 */
 	int tls_keep_alive_interval;
 
+	/**
+	 * Transaction T1 Timeout
+	 */
+	int tsx_t1_timeout;
+
+	/**
+	 * Transaction T2 Timeout
+	 */
+	int tsx_t2_timeout;
+
+	/**
+	 * Transaction T4 Timeout
+	 */
+	int tsx_t4_timeout;
+
 } csipsimple_config;
 
 typedef struct csipsimple_acc_config {

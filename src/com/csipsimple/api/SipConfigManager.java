@@ -642,6 +642,7 @@ public class SipConfigManager {
      * @see #setPreferenceStringValue(Context, String, String)
      */
     public static final String USER_AGENT = "user_agent";
+
     /**
      * Avoid the use of UPDATE.<br/>
      * This will ignore what's announced by remote part as feature which is
@@ -650,6 +651,7 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String FORCE_NO_UPDATE = "force_no_update";
+
     /**
      * Specify minimum session expiration period, in seconds. Must not be lower
      * than 90. Default is 90.<br/>
@@ -660,6 +662,7 @@ public class SipConfigManager {
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TIMER_MIN_SE = "timer_min_se";
+
     /**
      * Specify session expiration period, in seconds. Must not be lower than
      * min_se. Default is 1800.<br/>
@@ -670,6 +673,30 @@ public class SipConfigManager {
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TIMER_SESS_EXPIRES = "timer_sess_expires";
+
+    /**
+     * Transaction T1 timeout value.<br/>
+     * Timeout of SIP transactions.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TSX_T1_TIMEOUT = "tsx_t1_timeout";
+
+    /**
+     * Transaction T2 timeout value.<br/>
+     * Timeout of SIP transactions.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TSX_T2_TIMEOUT = "tsx_t2_timeout";
+
+    /**
+     * Transaction T4 timeout value.<br/>
+     * Timeout of SIP transactions.
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TSX_T4_TIMEOUT = "tsx_t4_timeout";
 
     // SECURE
     /**

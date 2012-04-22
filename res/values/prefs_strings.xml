@@ -94,6 +94,12 @@
     <string name="timer_min_se_desc">Minimum session expiration period, in seconds. Must not be lower than 90.</string>
     <string name="timer_sess_expires">Session expiration period</string>
     <string name="timer_sess_expires_desc">Session expiration period, in seconds. Must not be lower than min_se.</string>
+    <string name="sip_protocol">SIP protocol</string>
+    <string name="sip_protocol_desc">SIP protocol tweak.</string>
+    <string name="tsx_t1_timeout">Transaction T1 timeout value.</string>
+    <string name="tsx_t2_timeout">Transaction T2 timeout value.</string>
+    <string name="tsx_t4_timeout">Transaction T4 timeout value.</string>
+    <string name="tsx_timeout_desc">Leave -1 for default RFC 3261 values</string>
 
     <!-- Security -->
     <string name="tls">TLS</string>

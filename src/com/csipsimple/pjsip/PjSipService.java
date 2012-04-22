@@ -230,6 +230,21 @@ public class PjSipService {
                 cssCfg.setTcp_keep_alive_interval(prefsWrapper.getTcpKeepAliveInterval());
                 cssCfg.setTls_keep_alive_interval(prefsWrapper.getTlsKeepAliveInterval());
                 
+                // Transaction timeouts
+                int tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_T1_TIMEOUT);
+                if(tsx_to > 0) {
+                    cssCfg.setTsx_t1_timeout(tsx_to);
+                }
+                tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_T2_TIMEOUT);
+                if(tsx_to > 0) {
+                    cssCfg.setTsx_t2_timeout(tsx_to);
+                }
+                tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_T4_TIMEOUT);
+                if(tsx_to > 0) {
+                    cssCfg.setTsx_t4_timeout(tsx_to);
+                }
+                
+                // TURN
                 if (isTurnEnabled == 1) {
                     cssCfg.setTurn_username(pjsua.pj_str_copy(prefsWrapper
                             .getPreferenceStringValue(SipConfigManager.TURN_USERNAME)));
