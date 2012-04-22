@@ -90,6 +90,12 @@
   <string name="timer_min_se_desc">Minimum session expiration period, in seconds. Must not be lower than 90.</string>
   <string name="timer_sess_expires">Session expiration period</string>
   <string name="timer_sess_expires_desc">Session expiration period, in seconds. Must not be lower than min_se.</string>
+  <string name="sip_protocol">Protocole SIP</string>
+  <string name="sip_protocol_desc">Modification avancée sur le protocole SIP</string>
+  <string name="tsx_t1_timeout">Valeur T1 d\'expiration de transaction</string>
+  <string name="tsx_t2_timeout">Valeur T2 d\'expiration de transaction</string>
+  <string name="tsx_t4_timeout">Valeur T4 d\'expiration de transaction</string>
+  <string name="tsx_timeout_desc">Laissez -1 pour utiliser les valeurs à défaut de la RFC 3261</string>
   <!--Security-->
   <string name="tls">Chiffrement TLS</string>
   <string name="secure_transport">Transport sécurisé</string>
@@ -166,8 +172,6 @@
   <string name="has_io_queue_desc">Activer la file entrée / sortie</string>
   <string name="set_audio_generate_tone">Hack de la tonalité</string>
   <string name="set_audio_generate_tone_desc">Générer une tonalité avant d\'effectuer un appel</string>
-  <string name="narrow_band">Bas débit</string>
-  <string name="wide_band">Haut débit</string>
   <string name="band_for_wifi">Type de débit pour le wifi</string>
   <string name="band_for_3g">Type de débit pour 3G</string>
   <string name="band_for_gprs">Type de débit pour GPRS</string>
@@ -199,6 +203,8 @@
   <string name="use_android_setting">Utiliser la configuration Android</string>
   <string name="narrowband">Bas débit</string>
   <string name="wideband">Haut débit</string>
+  <string name="slow">Lent</string>
+  <string name="fast">Rapide</string>
   <string name="no_proxy">Aucun proxy</string>
   <string name="outbound_proxies">Proxy sortants</string>
   <string name="accounts_proxies">Proxy des comptes</string>
@@ -208,6 +214,8 @@
   <string name="default_str">Default</string>
   <string name="auto_connect_bluetooth">Auto connect bluetooth</string>
   <string name="auto_connect_bluetooth_desc">Try to use BT SCO automatically (may break standard audio routing case)</string>
+  <string name="codecs_per_bandwidth">Liste de priorités par bande passante</string>
+  <string name="codecs_per_bandwidth_desc">Permet d\'avoir une liste de priorité différente pour les réseaux rapides et lents</string>
   <!--UI-->
   <string name="general_ui">Interface utilisateur générale</string>
   <string name="native_dialer_integration">Intégration au numéroteur Android</string>

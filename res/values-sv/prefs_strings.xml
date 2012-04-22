@@ -23,6 +23,8 @@
   <string name="use_other">Använd andra nätverk</string>
   <string name="use_other_in_desc">Till exempel WiMax för inkommande samtal</string>
   <string name="use_other_out_desc">Till exempel WiMax för utgående samtal</string>
+  <string name="use_anyway">Använd ändå</string>
+  <string name="use_anyway_desc">Strunta i Androids nätverksstatus. Bör inte användas för normala fall</string>
   <string name="use_3g">Använd 3G (och bättre)</string>
   <string name="use_3g_disclamer">Din operatör MÅSTE tillåta dig att använda det här alternativet</string>
   <string name="use_edge">Använd EDGE</string>
