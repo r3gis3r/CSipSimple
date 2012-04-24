@@ -508,7 +508,7 @@ public class SipConfigManager {
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__config.htm#abec69c2c899604352f3450368757f39b"
      * >Pjsip documentation</a>
      * 
-     * @see #setPreferenceStringValue(Context, String, String)
+     * @see #setPreferenceBooleanValue(Context, String, String)
      */
     public static final String ENABLE_STUN = "enable_stun";
     /**
