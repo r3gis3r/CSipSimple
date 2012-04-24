@@ -29,6 +29,11 @@ import android.text.TextUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Helper class for Sip uri manipulation in java space.
+ * Allows to parse sip uris and check it.
+ *
+ */
 public final class SipUri {
 
     private SipUri() {
@@ -42,10 +47,27 @@ public final class SipUri {
             .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?(sip(?:s)?):([^@>]*)(?:>)?");
 
     // Contact related
+    /**
+     * Holder for parsed sip contact information.<br/>
+     * Basically wrap AoR.
+     * We should have something like "{@link ParsedSipContactInfos#displayName} <{@link ParsedSipContactInfos#scheme}:{@link ParsedSipContactInfos#userName}@{@link ParsedSipContactInfos#domain}>
+     */
     public static class ParsedSipContactInfos {
+        /**
+         * Contact display name.
+         */
         public String displayName = "";
+        /**
+         * User name of AoR
+         */
         public String userName = "";
+        /**
+         * Domaine name
+         */
         public String domain = "";
+        /**
+         * Scheme of the protocol
+         */
         public String scheme = "sip";
 
         @Override
@@ -175,9 +197,22 @@ public final class SipUri {
     }
 
     // Uri related
+    /**
+     * Holder for parsed sip uri information.<br/>
+     * We should have something like "{@link ParsedSipUriInfos#scheme}:{@link ParsedSipUriInfos#domain}:{@link ParsedSipUriInfos#port}"
+     */
     public static class ParsedSipUriInfos {
+        /**
+         * Domain name/ip
+         */
         public String domain = "";
+        /**
+         * Scheme of the protocol
+         */
         public String scheme = "sip";
+        /**
+         * Port number
+         */
         public int port = 5060;
     }
 

@@ -25,6 +25,7 @@ package com.csipsimple.api;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -32,11 +33,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+/**
+ * Holder for a sip profile state.<br/>
+ * It allows to unpack content values from registration/activation status of a {@link SipProfile}.
+ */
 public class SipProfileState implements Parcelable, Serializable{
 
-	/**
-	 * 
-	 */
+    /**
+     * Primary key for serialization of the object.
+     */
 	private static final long serialVersionUID = -3630993161572726153L;
 	public int primaryKey = -1;
 	private int databaseId;
@@ -51,16 +56,79 @@ public class SipProfileState implements Parcelable, Serializable{
 	private int priority;
 	private String regUri = "";
 
+	/**
+	 * Account id.<br/>
+	 * Identifier of the SIP account associated
+	 * 
+	 * @see SipProfile#FIELD_ID
+	 * @see Integer
+	 */
 	public final static String ACCOUNT_ID = "account_id";
+	/**
+	 * Identifier for underlying sip stack. <br/>
+	 * Identifier to use as this account id for the sip stack when started and account added to sip stack.
+	 * Uses this identifier to call methods on sip stack.
+	 * 
+	 * @see Integer
+	 */
 	public final static String PJSUA_ID = "pjsua_id";
+	/**
+	 * Wizard key. <br/>
+	 * Wizard identifier associated to the account. This is a shortcut to not have to query {@link SipProfile} database
+	 * 
+	 * @see String
+	 */
 	public final static String WIZARD = "wizard";
+	/**
+	 * Activation state.<br/>
+	 * Active state of the account. This is a shortcut to not have to query {@link SipProfile} database
+	 * 
+	 * @see Boolean
+	 */
 	public final static String ACTIVE = "active";
+	/**
+	 * Status code of the latest registration.<br/>
+	 * SIP code of latest registration.
+	 * 
+	 * @see Integer
+	 */
 	public final static String STATUS_CODE = "status_code";
+	/**
+	 * Status comment of latest registration.<br/>
+	 * Sip comment of latest registration.
+	 * 
+	 * @see String
+	 */
 	public final static String STATUS_TEXT = "status_text";
+	/**
+	 * Status of sip stack adding of the account.<br/>
+	 * When the application adds the account to the stack it may fails if the sip profile is invalid.
+	 * 
+	 * @see Integer
+	 */
 	public final static String ADDED_STATUS = "added_status";
+	/**
+	 * Latest know expires time. <br/>
+	 * Expires value of latest registration. It's actually usefull to detect that it was unregister testing 0 value. 
+	 * Else it's not necessarily relevant information.
+	 * 
+	 * @see Integer
+	 */
 	public final static String EXPIRES = "expires";
+	/**
+	 * Display name of the account.<br.>
+	 * This is a shortcut to not have to query {@link SipProfile} database
+	 */
 	public final static String DISPLAY_NAME = "display_name";
+	/**
+     * Priority of the account.<br.>
+     * This is a shortcut to not have to query {@link SipProfile} database
+     */
 	public final static String PRIORITY = "priority";
+	/**
+     * Registration uri of the account.<br.>
+     * This is a shortcut to not have to query {@link SipProfile} database
+     */
 	public final static String REG_URI = "reg_uri";
 	
 
@@ -73,6 +141,10 @@ public class SipProfileState implements Parcelable, Serializable{
 		readFromParcel(in);
 	}
 	
+	/**
+     * Should not be used for external use of the API.
+	 * Default constructor.
+	 */
 	public SipProfileState() {
 		//Set default values
 		addedStatus = -1;
@@ -81,7 +153,12 @@ public class SipProfileState implements Parcelable, Serializable{
 		statusText = "";
 		expires = 0;
 	}
-	
+	/**
+     * Should not be used for external use of the API.
+	 * Constructor on the top of a sip account.
+	 * 
+	 * @param account The sip profile to associate this wrapper info to.
+	 */
 	public SipProfileState(SipProfile account) {
 		this();
 		
@@ -93,19 +170,28 @@ public class SipProfileState implements Parcelable, Serializable{
 		regUri = account.reg_uri;
 		
 	}
-	
+
+    /**
+     * Construct a sip state wrapper from a cursor retrieved with a
+     * {@link ContentProvider} query on {@link SipProfile#ACCOUNT_STATUS_URI}.
+     * 
+     * @param c the cursor to unpack
+     */
 	public SipProfileState(Cursor c) {
 		super();
 		createFromDb(c);
 	}
 
+    /**
+     * @see Parcelable#describeContents()
+     */
 	@Override
 	public int describeContents() {
 		return 0;
 	}
 	
 
-	public final void readFromParcel(Parcel in) {
+	private final void readFromParcel(Parcel in) {
 		primaryKey = in.readInt();
 		databaseId = in.readInt();
 		pjsuaId = in.readInt();
@@ -120,6 +206,9 @@ public class SipProfileState implements Parcelable, Serializable{
 		regUri = in.readString();
 	}
 
+    /**
+     * @see Parcelable#writeToParcel(Parcel, int)
+     */
 	@Override
 	public void writeToParcel(Parcel out, int arg1) {
 		out.writeInt(primaryKey);
@@ -137,6 +226,10 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 	
 
+    /**
+     * Parcelable creator. So that it can be passed as an argument of the aidl
+     * interface
+     */
 	public static final Parcelable.Creator<SipProfileState> CREATOR = new Parcelable.Creator<SipProfileState>() {
 		public SipProfileState createFromParcel(Parcel in) {
 			return new SipProfileState(in);
@@ -150,15 +243,19 @@ public class SipProfileState implements Parcelable, Serializable{
 	
 
 	/** 
-	 * Fill account object from cursor
-	 * @param c cursor on the database 
+	 * Fill account state object from cursor.
+	 * @param c cursor on the database queried from {@link SipProfile#ACCOUNT_STATUS_URI}
 	 */
 	public final void createFromDb(Cursor c) {
 		ContentValues args = new ContentValues();
 		DatabaseUtils.cursorRowToContentValues(c, args);
 		createFromContentValue(args);
 	}
-	
+
+    /** 
+     * Fill account state object from content values.
+     * @param args content values to wrap.
+     */
 	public final void createFromContentValue(ContentValues args) {
 		Integer tmp_i;
 		String tmp_s;
@@ -211,6 +308,13 @@ public class SipProfileState implements Parcelable, Serializable{
 		
 	}
 
+    /**
+     * Should not be used for external use of the API.
+     * Produce content value from the wrapper.
+     * 
+     * @return Complete content values from the current wrapper around sip
+     *         profile state.
+     */
 	public ContentValues getAsContentValue() {
 		ContentValues cv = new ContentValues();
 		cv.put(ACCOUNT_ID, databaseId);
@@ -235,6 +339,7 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
+     * Should not be used for external use of the API.
 	 * @return the databaseId
 	 */
 	public int getDatabaseId() {
@@ -242,6 +347,7 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
+     * Should not be used for external use of the API.
 	 * @param pjsuaId the pjsuaId to set
 	 */
 	public void setPjsuaId(int pjsuaId) {
@@ -249,13 +355,14 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
-	 * @return the pjsuaId
+	 * @return the pjsuaId {@link #PJSUA_ID}
 	 */
 	public int getPjsuaId() {
 		return pjsuaId;
 	}
 
 	/**
+     * Should not be used for external use of the API.
 	 * @param wizard the wizard to set
 	 */
 	public void setWizard(String wizard) {
@@ -263,13 +370,14 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
-	 * @return the wizard
+	 * @return the wizard {@link #WIZARD}
 	 */
 	public String getWizard() {
 		return wizard;
 	}
 
 	/**
+     * Should not be used for external use of the API.
 	 * @param active the active to set
 	 */
 	public void setActive(boolean active) {
@@ -277,13 +385,14 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
-	 * @return the active
+	 * @return the active {@link #ACTIVE}
 	 */
 	public boolean isActive() {
 		return active;
 	}
 
 	/**
+     * Should not be used for external use of the API.
 	 * @param statusCode the statusCode to set
 	 */
 	public void setStatusCode(int statusCode) {
@@ -291,13 +400,14 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
-	 * @return the statusCode
+	 * @return the statusCode {@link #STATUS_TEXT}
 	 */
 	public int getStatusCode() {
 		return statusCode;
 	}
 
 	/**
+     * Should not be used for external use of the API.
 	 * @param statusText the statusText to set
 	 */
 	public void setStatusText(String statusText) {
@@ -305,7 +415,7 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
-	 * @return the statusText
+	 * @return the statusText {@link #STATUS_TEXT}
 	 */
 	public String getStatusText() {
 		return statusText;
@@ -313,6 +423,7 @@ public class SipProfileState implements Parcelable, Serializable{
 
 
 	/**
+     * Should not be used for external use of the API.
 	 * @param addedStatus the addedStatus to set
 	 */
 	public void setAddedStatus(int addedStatus) {
@@ -321,7 +432,7 @@ public class SipProfileState implements Parcelable, Serializable{
 
 
 	/**
-	 * @return the addedStatus
+	 * @return the addedStatus {@link #ADDED_STATUS}
 	 */
 	public int getAddedStatus() {
 		return addedStatus;
@@ -329,6 +440,7 @@ public class SipProfileState implements Parcelable, Serializable{
 
 
 	/**
+     * Should not be used for external use of the API.
 	 * @param expires the expires to set
 	 */
 	public void setExpires(int expires) {
@@ -337,28 +449,36 @@ public class SipProfileState implements Parcelable, Serializable{
 
 
 	/**
-	 * @return the expires
+	 * @return the expires {@link #EXPIRES}
 	 */
 	public int getExpires() {
 		return expires;
 	}
-
-
+    
+    /**
+     * @return the display name {@link #DISPLAY_NAME}
+     */
 	public CharSequence getDisplayName() {
 		return displayName;
 	}
 
-	
+	/**
+	 * @return the priority {@link #PRIORITY}
+	 */
 	public int getPriority() {
 		return priority;
 	}
-
+	/**
+     * Should not be used for external use of the API.
+	 * @param priority
+	 */
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
 	
 
 	/**
+     * Should not be used for external use of the API.
 	 * @param regUri the regUri to set
 	 */
 	public void setRegUri(String regUri) {
@@ -367,16 +487,24 @@ public class SipProfileState implements Parcelable, Serializable{
 
 
 	/**
-	 * @return the regUri
+	 * @return the regUri {@link #REG_URI}
 	 */
 	public String getRegUri() {
 		return regUri;
 	}
 
+	/**
+	 * Is the account added to sip stack yet?
+	 * @return true if the account has been added to sip stack and has a sip stack id.
+	 */
 	public boolean isAddedToStack() {
 		return pjsuaId != -1;
 	}
 	
+	/**
+	 * Is the account valid for sip calls?
+	 * @return true if it should be possible to make a call using the associated account.
+	 */
 	public boolean isValidForCall() {
 		if(active) {
 			if(TextUtils.isEmpty(getRegUri())) {
@@ -387,6 +515,10 @@ public class SipProfileState implements Parcelable, Serializable{
 		return false;
 	}
 	
+	/**
+	 * Compare accounts profile states.
+	 * @return a comparator instance to compare profile states by priorities.
+	 */
 	public final static Comparator<SipProfileState> getComparator(){
 		return ACC_INFO_COMPARATOR;
 	}
