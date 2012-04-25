@@ -275,6 +275,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_zeng, 9, 
                     new Locale[]{ }, false, true, 
                     Zeng.class));
+            WIZARDS_DICT.put("VOIPTIGER", new WizardInfo("VOIPTIGER", "VoipTiger", 
+                    R.drawable.ic_wizard_voiptiger, 9, 
+                    new Locale[]{ }, false, true, 
+                    VoipTiger.class));
             
             
 			
