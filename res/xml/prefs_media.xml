@@ -90,36 +90,12 @@
     <PreferenceScreen
         android:key="codecs_list"
         android:summary="@string/codecs_availability_text"
-        android:title="@string/codecs" />
+        android:title="@string/codecs" >
+    </PreferenceScreen>
     <PreferenceScreen
         android:dependency="codecs_per_bandwidth"
         android:key="band_types"
         android:title="@string/codecs_band_types" >
-        <ListPreference
-            android:entries="@array/band_types_name"
-            android:entryValues="@array/band_types"
-            android:key="band_for_wifi"
-            android:title="@string/band_for_wifi" />
-        <ListPreference
-            android:entries="@array/band_types_name"
-            android:entryValues="@array/band_types"
-            android:key="band_for_3g"
-            android:title="@string/band_for_3g" />
-        <ListPreference
-            android:entries="@array/band_types_name"
-            android:entryValues="@array/band_types"
-            android:key="band_for_gprs"
-            android:title="@string/band_for_gprs" />
-        <ListPreference
-            android:entries="@array/band_types_name"
-            android:entryValues="@array/band_types"
-            android:key="band_for_edge"
-            android:title="@string/band_for_edge" />
-        <ListPreference
-            android:entries="@array/band_types_name"
-            android:entryValues="@array/band_types"
-            android:key="band_for_other"
-            android:title="@string/band_for_other" />
     </PreferenceScreen>
 
     <PreferenceCategory
@@ -168,10 +144,11 @@
 			<EditTextPreference android:title="Thread count" android:key="thread_count"
 				android:summary="Number of thread allocated for the native stack"
 				android:defaultValue="0"
-				android:numeric="signed"></EditTextPreference>
+				android:numeric="signed"/>
 				
 		</PreferenceCategory>
     -->
+
     <PreferenceCategory
         android:key="misc"
         android:title="@string/misc" >
@@ -182,64 +159,12 @@
             android:key="dtmf_mode"
             android:summary="@string/sip_dtmf_desc"
             android:title="@string/sip_dtmf" />
-
-        <EditTextPreference
-            android:defaultValue="1"
-            android:key="snd_auto_close_time"
-            android:numeric="signed"
-            android:summary="@string/snd_auto_close_time_desc"
-            android:title="@string/snd_auto_close_time" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_webrtc_hack"
-            android:summary="@string/use_webrtc_hack_desc"
-            android:title="@string/use_webrtc_hack" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_routing_api"
-            android:summary="@string/use_routing_api_desc"
-            android:title="@string/use_routing_api" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_mode_api"
-            android:summary="@string/use_mode_api_desc"
-            android:title="@string/use_mode_api" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_sgs_call_hack"
-            android:summary="@string/use_sgs_call_hack_desc"
-            android:title="@string/use_sgs_call_hack" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="set_audio_generate_tone"
-            android:summary="@string/set_audio_generate_tone_desc"
-            android:title="@string/set_audio_generate_tone" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="do_focus_audio"
-            android:summary="@string/do_focus_audio_desc"
-            android:title="@string/do_focus_audio" />
-
-        <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/micro_source_choices"
-            android:entryValues="@array/micro_source_values"
-            android:key="micro_source"
-            android:summary="@string/micro_source_desc"
-            android:title="@string/micro_source" />
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/sip_audio_mode_choices"
-            android:entryValues="@array/sip_audio_mode_values"
-            android:key="sip_audio_mode"
-            android:summary="@string/sip_audio_mode_desc"
-            android:title="@string/sip_audio_mode" />
-        <ListPreference
-            android:defaultValue="0"
-            android:key="audio_implementation"
-            android:summary="@string/audio_implementation_desc"
-            android:title="@string/audio_implementation" />
     </PreferenceCategory>
+
+    <PreferenceScreen
+        android:key="audio_troubleshooting"
+        android:summary="@string/audio_troubleshooting_desc"
+        android:title="@string/audio_troubleshooting" >
+    </PreferenceScreen>
 
 </PreferenceScreen>

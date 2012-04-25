@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+	
+	
+	This file is part of CSipSimple. CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="force_no_update"
+        android:summary="@string/force_no_update_desc"
+        android:title="@string/force_no_update" />
+    <!-- Timers -->
+
+    <EditTextPreference
+        android:defaultValue="90"
+        android:key="timer_min_se"
+        android:numeric="signed"
+        android:summary="@string/timer_min_se_desc"
+        android:title="@string/timer_min_se" />
+    <EditTextPreference
+        android:defaultValue="1800"
+        android:key="timer_sess_expires"
+        android:numeric="signed"
+        android:summary="@string/timer_sess_expires_desc"
+        android:title="@string/timer_sess_expires" />
+    <EditTextPreference
+        android:defaultValue="-1"
+        android:key="tsx_t1_timeout"
+        android:numeric="integer"
+        android:summary="@string/tsx_timeout_desc"
+        android:title="@string/tsx_t1_timeout" />
+    <EditTextPreference
+        android:defaultValue="-1"
+        android:key="tsx_t2_timeout"
+        android:numeric="integer"
+        android:summary="@string/tsx_timeout_desc"
+        android:title="@string/tsx_t2_timeout" />
+    <EditTextPreference
+        android:defaultValue="-1"
+        android:key="tsx_t4_timeout"
+        android:numeric="integer"
+        android:summary="@string/tsx_timeout_desc"
+        android:title="@string/tsx_t4_timeout" />
+
+</PreferenceScreen>

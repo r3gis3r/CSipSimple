@@ -19,10 +19,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.ui.prefs;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.csipsimple.ui.prefs.cupcake;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -30,6 +27,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +38,14 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.ui.prefs.PrefsFast;
+import com.csipsimple.ui.prefs.PrefsFilters;
+import com.csipsimple.ui.prefs.PrefsLogic;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPrefs extends ListActivity {
 	
@@ -49,6 +53,12 @@ public class MainPrefs extends ListActivity {
 	private PrefGroupAdapter adapter;
 	
 	private PreferencesWrapper prefsWrapper;
+	
+	private Intent getIntentForType(int t) {
+	    Intent it = new Intent(this, PrefsLoaderActivity.class);
+	    it.putExtra(PrefsLogic.EXTRA_PREFERENCE_TYPE, t);
+	    return it;
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +70,13 @@ public class MainPrefs extends ListActivity {
 		prefs_list.add(new PrefGroup(R.string.prefs_fast, R.string.prefs_fast_desc, 
 				R.drawable.ic_prefs_fast, new Intent(this, PrefsFast.class)));
 		prefs_list.add(new PrefGroup(R.string.prefs_network, R.string.prefs_network_desc, 
-				R.drawable.ic_prefs_network, new Intent(this, PrefsNetwork.class)));
+				R.drawable.ic_prefs_network, getIntentForType(PrefsLogic.TYPE_NETWORK)));
 		prefs_list.add(new PrefGroup(R.string.prefs_media, R.string.prefs_media_desc, 
-				R.drawable.ic_prefs_media, new Intent(this, PrefsMedia.class)));		
+				R.drawable.ic_prefs_media, getIntentForType(PrefsLogic.TYPE_MEDIA)));		
 		prefs_list.add(new PrefGroup(R.string.prefs_ui, R.string.prefs_ui_desc, 
-				R.drawable.ic_prefs_ui, new Intent(this, PrefsUI.class)));
+				R.drawable.ic_prefs_ui, getIntentForType(PrefsLogic.TYPE_UI)));
 		prefs_list.add(new PrefGroup(R.string.prefs_calls, R.string.prefs_calls_desc, 
-				R.drawable.ic_prefs_calls, new Intent(this, PrefsCalls.class)));
+				R.drawable.ic_prefs_calls, getIntentForType(PrefsLogic.TYPE_CALLS)));
 		prefs_list.add(new PrefGroup(R.string.filters, R.string.filters_desc, 
 				R.drawable.ic_prefs_filter, new Intent(this, PrefsFilters.class)));
 		
@@ -141,65 +151,26 @@ public class MainPrefs extends ListActivity {
 	    }
 	}
 	
-	//Menu
-	public static final int MENU_EXPERT_VIEW = Menu.FIRST + 1;
-	public static final int MENU_RESET_VIEW = Menu.FIRST + 2;
-	public static final int MENU_TEST_AUDIO = Menu.FIRST + 3;
-	
-	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-
-		menu.findItem(MENU_EXPERT_VIEW).setTitle(getToogleExpertTitle());
-		menu.findItem(MENU_TEST_AUDIO).setVisible(prefsWrapper.isAdvancedUser());
-		return super.onPrepareOptionsMenu(menu);
-	}
-	
-	private int getToogleExpertTitle() {
-		return prefsWrapper.isAdvancedUser()? R.string.advanced_preferences: R.string.expert_preferences;
-	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_EXPERT_VIEW, Menu.NONE, getToogleExpertTitle()).setIcon(
-						R.drawable.ic_wizard_expert);
-		menu.add(Menu.NONE, MENU_RESET_VIEW, Menu.NONE, R.string.restore_default).setIcon(
-				android.R.drawable.ic_menu_revert);
-		menu.add(Menu.NONE, MENU_TEST_AUDIO, Menu.NONE, R.string.test_audio).setIcon(R.drawable.ic_prefs_media);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_prefs, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 	
-	 @Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-			case MENU_TEST_AUDIO:
-				/*
-				Thread t = new Thread() {
-					public void run() {
-						pjsua.test_audio_dev(8000, 20);
-						pjsua.test_audio_dev(16000, 20);
-						pjsua.test_audio_dev(8000, 40);
-						pjsua.test_audio_dev(16000, 40);
-						
-					};
-				};
-				
-				t.start();
-				*/
-				startActivity(new Intent(this, AudioTester.class));
-				return true;
-			case MENU_RESET_VIEW:
-				prefsWrapper.resetAllDefaultValues();
-				return true;
-			case MENU_EXPERT_VIEW:
-				prefsWrapper.toogleExpertMode();
-				
-				return true;
-			default:
-				break;
-			}
-			return super.onOptionsItemSelected(item);
-		}
-	    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        PrefsLogic.onMainActivityPrepareOptionMenu(menu, this, prefsWrapper);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(PrefsLogic.onMainActivityOptionsItemSelected(item, this, prefsWrapper)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 	
 }

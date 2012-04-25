@@ -28,12 +28,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
@@ -46,8 +46,6 @@ import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 public class BasePrefsWizard extends GenericPrefs {
-
-	
 	
 	public static final int SAVE_MENU = Menu.FIRST + 1;
 	public static final int TRANSFORM_MENU = Menu.FIRST + 2;
@@ -294,5 +292,6 @@ public class BasePrefsWizard extends GenericPrefs {
 	protected String getDefaultFieldSummary(String fieldName) {
 		return wizard.getDefaultFieldSummary(fieldName);
 	}
+
 
 }

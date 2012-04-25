@@ -223,6 +223,8 @@
     <string name="auto_connect_bluetooth_desc">Try to use BT SCO automatically (may break standard audio routing case)</string>
     <string name="codecs_per_bandwidth">Codec priority list per bandwidth</string>
     <string name="codecs_per_bandwidth_desc">Allow to have priority list for fast and for slow networks</string>
+    <string name="audio_troubleshooting">Audio troubleshooting</string>
+    <string name="audio_troubleshooting_desc">Workarounds for audio routing</string>
 
     <!-- UI -->
     <string name="general_ui">General user interface</string>

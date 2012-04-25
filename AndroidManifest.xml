@@ -187,30 +187,24 @@ Remove that too fine change trigger
 
         <!-- Preferences -->
         <activity
-            android:name="com.csipsimple.ui.prefs.MainPrefs"
+            android:name="com.csipsimple.ui.prefs.hc.MainPrefs"
             android:configChanges="orientation"
             android:label="@string/prefs"
             android:theme="@style/DarkTheme" />
         <activity
-            android:name="com.csipsimple.ui.prefs.PrefsNetwork"
+            android:name="com.csipsimple.ui.prefs.cupcake.MainPrefs"
             android:configChanges="orientation"
-            android:label="@string/prefs_network" />
+            android:label="@string/prefs"
+            android:theme="@style/DarkTheme" />
         <activity
-            android:name="com.csipsimple.ui.prefs.PrefsMedia"
-            android:configChanges="orientation"
-            android:label="@string/prefs_media" />
-        <activity
-            android:name="com.csipsimple.ui.prefs.PrefsUI"
-            android:configChanges="orientation"
-            android:label="@string/prefs_ui" />
-        <activity
-            android:name="com.csipsimple.ui.prefs.PrefsCalls"
-            android:configChanges="orientation"
-            android:label="@string/prefs_calls" />
+            android:name="com.csipsimple.ui.prefs.cupcake.PrefsLoaderActivity"
+            android:label=""
+            android:theme="@style/DarkTheme" />
         <activity
             android:name="com.csipsimple.ui.prefs.PrefsFilters"
             android:configChanges="orientation"
-            android:label="@string/filters" />
+            android:label="@string/filters"
+            android:theme="@style/DarkTheme" />
         <activity
             android:name="com.csipsimple.ui.prefs.PrefsFast"
             android:configChanges="orientation"

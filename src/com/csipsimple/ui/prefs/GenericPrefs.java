@@ -21,21 +21,23 @@
 
 package com.csipsimple.ui.prefs;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.csipsimple.R;
 import com.csipsimple.utils.Log;
 
-public abstract class GenericPrefs extends PreferenceActivity implements
-        OnSharedPreferenceChangeListener {
+@SuppressWarnings("deprecation")
+public abstract class GenericPrefs extends SherlockPreferenceActivity implements
+        OnSharedPreferenceChangeListener, IPreferenceHelper {
 
     /**
      * Get the xml preference resource for this screen
@@ -179,7 +181,7 @@ public abstract class GenericPrefs extends PreferenceActivity implements
      *            preference is a root pref
      * @param fieldName the preference key name to hide
      */
-    protected void hidePreference(String parent, String fieldName) {
+    public void hidePreference(String parent, String fieldName) {
         PreferenceScreen pfs = getPreferenceScreen();
         PreferenceGroup parentPref = pfs;
         if (parent != null) {
@@ -189,11 +191,27 @@ public abstract class GenericPrefs extends PreferenceActivity implements
         Preference toRemovePref = pfs.findPreference(fieldName);
 
         if (toRemovePref != null && parentPref != null) {
-            boolean rem = parentPref.removePreference(toRemovePref);
-            Log.d("Generic prefs", "Has removed it : " + rem);
+            parentPref.removePreference(toRemovePref);
         } else {
-            Log.d("Generic prefs", "Not able to find" + parent + " " + fieldName);
+            Log.w("Generic prefs", "Not able to find" + parent + " " + fieldName);
         }
     }
 
+
+    @Override
+    public void setPreferenceScreenType(String key, int type) {
+        setPreferenceScreenType(getClass(), key, type);
+    }
+
+    @Override
+    public void setPreferenceScreenSub(String key, Class<?> activityClass, Class<?> fragmentClass, int type) {
+        setPreferenceScreenType(activityClass, key, type);
+    }
+    
+    private void setPreferenceScreenType(Class<?> classObj, String key, int type) {
+        Preference pf = findPreference(key);
+        Intent it = new Intent(this, classObj);
+        it.putExtra(PrefsLogic.EXTRA_PREFERENCE_TYPE, type);
+        pf.setIntent(it);
+    }
 }

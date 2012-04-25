@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <EditTextPreference
+        android:defaultValue="1"
+        android:key="snd_auto_close_time"
+        android:numeric="signed"
+        android:summary="@string/snd_auto_close_time_desc"
+        android:title="@string/snd_auto_close_time" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="use_webrtc_hack"
+        android:summary="@string/use_webrtc_hack_desc"
+        android:title="@string/use_webrtc_hack" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="use_routing_api"
+        android:summary="@string/use_routing_api_desc"
+        android:title="@string/use_routing_api" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="use_mode_api"
+        android:summary="@string/use_mode_api_desc"
+        android:title="@string/use_mode_api" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="use_sgs_call_hack"
+        android:summary="@string/use_sgs_call_hack_desc"
+        android:title="@string/use_sgs_call_hack" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="set_audio_generate_tone"
+        android:summary="@string/set_audio_generate_tone_desc"
+        android:title="@string/set_audio_generate_tone" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="do_focus_audio"
+        android:summary="@string/do_focus_audio_desc"
+        android:title="@string/do_focus_audio" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/micro_source_choices"
+        android:entryValues="@array/micro_source_values"
+        android:key="micro_source"
+        android:summary="@string/micro_source_desc"
+        android:title="@string/micro_source" />
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/sip_audio_mode_choices"
+        android:entryValues="@array/sip_audio_mode_values"
+        android:key="sip_audio_mode"
+        android:summary="@string/sip_audio_mode_desc"
+        android:title="@string/sip_audio_mode" />
+    <ListPreference
+        android:defaultValue="0"
+        android:key="audio_implementation"
+        android:summary="@string/audio_implementation_desc"
+        android:title="@string/audio_implementation" />
+
+</PreferenceScreen>

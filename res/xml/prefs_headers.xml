@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+	
+	
+	This file is part of CSipSimple. CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+-->
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <header
+        android:icon="@drawable/ic_prefs_fast"
+        android:summary="@string/prefs_fast_desc"
+        android:title="@string/prefs_fast" >
+    </header>
+    <header
+        android:fragment="com.csipsimple.ui.prefs.hc.PrefsLoaderFragment"
+        android:icon="@drawable/ic_prefs_network"
+        android:summary="@string/prefs_network_desc"
+        android:title="@string/prefs_network" >
+        <extra
+            android:name="preference_type"
+            android:value="20" />
+    </header>
+    <header
+        android:fragment="com.csipsimple.ui.prefs.hc.PrefsLoaderFragment"
+        android:icon="@drawable/ic_prefs_media"
+        android:summary="@string/prefs_media_desc"
+        android:title="@string/prefs_media" >
+        <extra
+            android:name="preference_type"
+            android:value="0" />
+    </header>
+    <header
+        android:fragment="com.csipsimple.ui.prefs.hc.PrefsLoaderFragment"
+        android:icon="@drawable/ic_prefs_ui"
+        android:summary="@string/prefs_ui_desc"
+        android:title="@string/prefs_ui" >
+        <extra
+            android:name="preference_type"
+            android:value="60" />
+    </header>
+    <header
+        android:fragment="com.csipsimple.ui.prefs.hc.PrefsLoaderFragment"
+        android:icon="@drawable/ic_prefs_calls"
+        android:summary="@string/prefs_calls_desc"
+        android:title="@string/prefs_calls" >
+        <extra
+            android:name="preference_type"
+            android:value="40" />
+    </header>
+    <header
+        android:icon="@drawable/ic_prefs_filter"
+        android:summary="@string/filters_desc"
+        android:title="@string/filters" >
+    </header>
+
+</preference-headers>

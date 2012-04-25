@@ -282,7 +282,8 @@ public final class Compatibility {
 
     private static boolean needToneWorkaround() {
         if (android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i5800") ||
-                android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i5801")) {
+                android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i5801") ||
+                android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i9003")) {
             return true;
         }
         return false;

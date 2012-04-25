@@ -58,7 +58,7 @@ import com.csipsimple.ui.dialpad.DialerFragment;
 import com.csipsimple.ui.favorites.FavListFragment;
 import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.messages.ConversationsListFragment;
-import com.csipsimple.ui.prefs.MainPrefs;
+
 import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
@@ -614,7 +614,11 @@ public class SipHome extends SherlockFragmentActivity {
                 startActivity(new Intent(this, AccountsEditList.class));
                 return true;
             case PARAMS_MENU:
-                startActivity(new Intent(this, MainPrefs.class));
+                if(Compatibility.isCompatible(11)) {
+                    startActivity(new Intent(this, com.csipsimple.ui.prefs.hc.MainPrefs.class));
+                }else {
+                    startActivity(new Intent(this, com.csipsimple.ui.prefs.cupcake.MainPrefs.class));
+                }
                 return true;
             case CLOSE_MENU:
                 Log.d(THIS_FILE, "CLOSE");
