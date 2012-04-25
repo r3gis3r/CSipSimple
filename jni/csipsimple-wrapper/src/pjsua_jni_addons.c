@@ -491,7 +491,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 			pjmedia_vid_dev_factory* (*init_factory)(
 					pj_pool_factory *pf) = get_library_factory(&css_cfg->video_render_implementation);
 			if(init_factory != NULL) {
-				pjmedia_vid_register_factory(init_factory);
+				pjmedia_vid_register_factory(init_factory, NULL);
 				PJ_LOG(4, (THIS_FILE, "Loaded video render dev"));
 			}
 		}
@@ -500,7 +500,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 			pjmedia_vid_dev_factory* (*init_factory)(
 								pj_pool_factory *pf) = get_library_factory(&css_cfg->video_capture_implementation);
 			if(init_factory != NULL) {
-				pjmedia_vid_register_factory(init_factory);
+				pjmedia_vid_register_factory(init_factory, NULL);
 				PJ_LOG(4, (THIS_FILE, "Loaded video capture dev"));
 			}
 		}

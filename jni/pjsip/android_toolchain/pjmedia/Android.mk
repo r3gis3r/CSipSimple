@@ -157,7 +157,7 @@ LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/webrtc_android_render_
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/webrtc_android_capture_dev.cpp
 
 # Ffmpeg codec
-LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/ffmpeg_codecs.c \
+LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/ffmpeg_vid_codecs.c \
 	$(PJLIB_SRC_DIR)/converter_libswscale.c \
 	$(PJLIB_SRC_DIR)/ffmpeg_util.c \
 	$(PJMEDIACODEC_SRC_DIR)/h263_packetizer.c \
