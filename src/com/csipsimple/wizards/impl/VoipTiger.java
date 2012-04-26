@@ -22,10 +22,12 @@
 package com.csipsimple.wizards.impl;
 
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class VoipTiger extends SimpleImplementation {
 	
+    private final static boolean CUSTOM_DISTRIBUTION = false;
 
 	@Override
 	protected String getDomain() {
@@ -37,16 +39,33 @@ public class VoipTiger extends SimpleImplementation {
 		return "VoipTiger";
 	}
 
+	@Override
+	public void fillLayout(SipProfile account) {
+	    super.fillLayout(account);
+	    if(CUSTOM_DISTRIBUTION) {
+	        hidePreference(null, DISPLAY_NAME);
+	    }
+	}
+	
+	
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+	    if(CUSTOM_DISTRIBUTION) {
+	        acc.display_name = acc.username;
+	    }
+	    return acc;
+	}
 
     @Override
     public void setDefaultParams(PreferencesWrapper prefs) {
         super.setDefaultParams(prefs);
-        // Prefer g729 (not possible due to license), and keep g711 fallback
+        // 
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"0");
-        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"235");
-        prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB, "239");
-        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"0");
-        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"240");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"239");
+        prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB, "237");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"240");
+        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"238");
         prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
@@ -56,11 +75,11 @@ public class VoipTiger extends SimpleImplementation {
         prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, "0");
         prefs.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB, "0");
         
-        //Prefer silk, g729 (not possible due to license), and keep g711 fallback
+        // 
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"0");
         prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"235");
         prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB, "239");
-        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"238");
         prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"240");
         prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
         prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
