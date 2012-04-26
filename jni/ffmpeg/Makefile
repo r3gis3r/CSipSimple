@@ -26,7 +26,7 @@ ffmpeg_src/VERSION :
 	cd ffmpeg_src; \
 	git fetch --tags; \
 	git checkout origin; \
-	git checkout n0.10
+	git checkout n0.10.2
 
 x264_src/configure :
 	git clone git://git.videolan.org/x264.git x264_src
@@ -44,7 +44,7 @@ update :
 	cd ffmpeg_src; \
 	git fetch --tags; \
 	git checkout origin; \
-	git checkout n0.10
+	git checkout n0.10.2
 	# X264
 	# cd x264_src; \
 	# git checkout origin; \
