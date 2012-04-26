@@ -4,7 +4,9 @@ X264_BUILD_DIRECTORY := $(BUILD_DIRECTORY)/x264
 FFMPEG_TEST_LIB := lib/libavcodec.a
 X264_TEST_LIB := lib/libx264.a
 
-TARGETS := armeabi armeabi-v7a x86
+# Get targets from Application.mk config file
+include ../Application.mk
+TARGETS := $(APP_ABI) 
 
 FFMPEG_LIBS := $(foreach TARGET, $(TARGETS),$(FFMPEG_BUILD_DIRECTORY)/$(TARGET)/$(FFMPEG_TEST_LIB))
 X264_LIBS := $(foreach TARGET, $(TARGETS),$(X264_BUILD_DIRECTORY)/$(TARGET)/$(X264_TEST_LIB))

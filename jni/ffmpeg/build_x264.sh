@@ -8,6 +8,10 @@ case "$VERSION" in
 		. settings_x86.sh
 		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/i686-android-linux- --enable-pic --disable-asm "
 		;;
+	mips)
+		. settings_mips.sh
+		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/mipsel-linux-android- --enable-pic --disable-asm "
+		;;
 	*)
 		. settings.sh
 		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/arm-linux-androideabi- --enable-pic --host=arm-linux "
@@ -36,6 +40,11 @@ case "$VERSION" in
 		EXTRA_CFLAGS=""
 		EXTRA_LDFLAGS=""
 		ABI="x86"
+		;;
+	mips)
+		EXTRA_CFLAGS=""
+		EXTRA_LDFLAGS=""
+		ABI="mips"
 		;;
 	*)
 		EXTRA_CFLAGS=""
