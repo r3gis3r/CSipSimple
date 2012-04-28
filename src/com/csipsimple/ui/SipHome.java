@@ -22,6 +22,7 @@
 package com.csipsimple.ui;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,34 +32,30 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.service.SipService;
 import com.csipsimple.ui.account.AccountsEditList;
 import com.csipsimple.ui.calllog.CallLogListFragment;
 import com.csipsimple.ui.dialpad.DialerFragment;
 import com.csipsimple.ui.favorites.FavListFragment;
 import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.messages.ConversationsListFragment;
-
 import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
@@ -89,10 +86,7 @@ public class SipHome extends SherlockFragmentActivity {
     private static final int TAB_INDEX_MESSAGES = 3;
 
     // protected static final int PICKUP_PHONE = 0;
-    private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = 0; // PICKUP_PHONE
-                                                                    // + 1;
-
-    private Intent serviceIntent;
+    private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = 0;
 
     //private PreferencesWrapper prefWrapper;
     private PreferencesProviderWrapper prefProviderWrapper;
@@ -424,11 +418,10 @@ public class SipHome extends SherlockFragmentActivity {
 
     // Service monitoring stuff
     private void startSipService() {
-        if (serviceIntent == null) {
-            serviceIntent = new Intent(this, SipService.class);
-        }
         Thread t = new Thread("StartSip") {
             public void run() {
+                Intent serviceIntent = new Intent(SipManager.INTENT_SIP_SERVICE);
+                serviceIntent.putExtra(SipManager.EXTRA_OUTGOING_ACTIVITY, new ComponentName(SipHome.this, SipHome.class));
                 startService(serviceIntent);
                 postStartSipService();
             };
@@ -547,35 +540,11 @@ public class SipHome extends SherlockFragmentActivity {
 
     @Override
     protected void onDestroy() {
+        disconnectAndQuit();
         super.onDestroy();
         Log.d(THIS_FILE, "---DESTROY SIP HOME END---");
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getRepeatCount() == 0
-                && !Compatibility.isCompatible(5)) {
-            onBackPressed();
-
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    public void onBackPressed() {
-        if (prefProviderWrapper != null) {
-            Log.d(THIS_FILE, "On back pressed ! ");
-            // ArrayList<String> networks =
-            // prefWrapper.getAllIncomingNetworks();
-            // if (networks.size() == 0) {
-            if (!prefProviderWrapper.isValidConnectionForIncoming()) {
-                disconnectAndQuit();
-                return;
-            }
-        }
-        finish();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -688,13 +657,9 @@ public class SipHome extends SherlockFragmentActivity {
 
     private void disconnectAndQuit() {
         Log.d(THIS_FILE, "True disconnection...");
-        if (serviceIntent != null) {
-            // stopService(serviceIntent);
-            // we don't not need anymore the currently started sip
-            Intent it = new Intent(SipManager.ACTION_SIP_CAN_BE_STOPPED);
-            sendBroadcast(it);
-        }
-        serviceIntent = null;
+        Intent intent = new Intent(SipManager.ACTION_OUTGOING_UNREGISTER);
+        intent.putExtra(SipManager.EXTRA_OUTGOING_ACTIVITY, new ComponentName(this, SipHome.class));
+        sendBroadcast(intent);
         finish();
     }
 

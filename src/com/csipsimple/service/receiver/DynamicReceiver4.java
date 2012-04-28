@@ -22,6 +22,7 @@
 package com.csipsimple.service.receiver;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -33,7 +34,6 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class DynamicReceiver4 extends BroadcastReceiver {
 
@@ -47,7 +47,6 @@ public class DynamicReceiver4 extends BroadcastReceiver {
     public static final String BROADCAST_CONNECTION_STATE = "connection_state";
     
     private SipService service;
-    private PreferencesProviderWrapper prefsWrapper;
     
     
     // Store current state
@@ -76,7 +75,6 @@ public class DynamicReceiver4 extends BroadcastReceiver {
     
     public DynamicReceiver4(SipService aService) {
         service = aService;
-        prefsWrapper = new PreferencesProviderWrapper(service);
     }
 
     @Override
@@ -102,7 +100,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
             ConnectivityManager cm =
                     (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            onConnectivityChanged(activeNetwork, false, isSticky);
+            onConnectivityChanged(activeNetwork, isSticky);
         } else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_CHANGED)) {
             final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, -1);
             // Should that be threaded?
@@ -113,6 +111,10 @@ public class DynamicReceiver4 extends BroadcastReceiver {
                     service.setAccountRegistration(account, account.active ? 1 : 0, true);
                 }
             }
+        } else if(action.equals(SipManager.ACTION_OUTGOING_UNREGISTER)){
+            service.unregisterForOutgoing((ComponentName) intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY));
+        } else if(action.equals(SipManager.ACTION_DEFER_OUTGOING_UNREGISTER)){
+            service.deferUnregisterForOutgoing((ComponentName) intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY));
         } else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
             service.cleanStop();
         } else if (action.equals(SipManager.ACTION_SIP_REQUEST_RESTART)){
@@ -149,10 +151,10 @@ public class DynamicReceiver4 extends BroadcastReceiver {
     /**
      * Treat the fact that the connectivity has changed
      * @param info Network info
-     * @param outgoingOnly start only if for outgoing 
+     * @param incomingOnly start only if for outgoing 
      * @throws SameThreadException
      */
-    private void onConnectivityChanged(NetworkInfo info, boolean outgoingOnly, boolean isSticky) throws SameThreadException {
+    private void onConnectivityChanged(NetworkInfo info, boolean isSticky) throws SameThreadException {
         // We only care about the default network, and getActiveNetworkInfo()
         // is the only way to distinguish them. However, as broadcasts are
         // delivered asynchronously, we might miss DISCONNECTED events from
@@ -165,12 +167,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
             info = cm.getActiveNetworkInfo();
         }
 
-        // As a DISCONNECTED event everything that should be considered as such
-        boolean isValid = prefsWrapper.isValidConnectionForOutgoing();
-        if(!outgoingOnly) {
-            isValid |= prefsWrapper.isValidConnectionForIncoming();
-        }
-        boolean connected = (info != null && info.isConnected() && isValid);
+        boolean connected = (info != null && info.isConnected() && service.isConnectivityValid());
         
         String networkType = connected ? info.getTypeName() : "null";
 

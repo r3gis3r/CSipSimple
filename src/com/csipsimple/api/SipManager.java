@@ -56,11 +56,22 @@ public final class SipManager {
      */
     public static final String INTENT_SIP_CONFIGURATION = "com.csipsimple.service.SipConfiguration";
     /**
-     * Bind sip service to control calls.
+     * Bind sip service to control calls.<br/>
+     * If you start the service using {@link Context#startService(Intent intent)}
+     * , you may want to pass {@link #EXTRA_OUTGOING_ACTIVITY} to specify you
+     * are starting the service in order to make outgoing calls. You are then in
+     * charge to unregister for outgoing calls when user finish with your
+     * activity or when you are not anymore in calls using
+     * {@link #ACTION_OUTGOING_UNREGISTER}<br/>
+     * If you actually make a call or ask service to do something but wants to
+     * unregister, you must defer unregister of your activity using
+     * {@link #ACTION_DEFER_OUTGOING_UNREGISTER}.
      * 
      * @see ISipService
+     * @see #EXTRA_OUTGOING_ACTIVITY
      */
     public static final String INTENT_SIP_SERVICE = "com.csipsimple.service.SipService";
+        
     /**
      * Shortcut to turn on / off a sip account.
      * <p>
@@ -144,7 +155,10 @@ public final class SipManager {
      * Broadcast sent when a ZRTP SAS
      */
     public static final String ACTION_ZRTP_SHOW_SAS = "com.csipsimple.service.SHOW_SAS";
-
+    /**
+     * Broadcast sent when a message has been received.<br/>
+     * By message here, we mean a SIP SIMPLE message of the sip simple protocol. Understand a chat / im message.
+     */
     public static final String ACTION_SIP_MESSAGE_RECEIVED = "com.csipsimple.service.MESSAGE_RECEIVED";
 
     // REGISTERED BROADCASTS
@@ -156,6 +170,20 @@ public final class SipManager {
      * Broadcast to send when the sip service should be restarted.
      */
     public static final String ACTION_SIP_REQUEST_RESTART = "com.csipsimple.service.ACTION_SIP_REQUEST_RESTART";
+    /**
+     * Broadcast to send when your activity doesn't allow anymore user to make outgoing calls.<br/>
+     * You have to pass registered {@link #EXTRA_OUTGOING_ACTIVITY} 
+     * 
+     * @see #EXTRA_OUTGOING_ACTIVITY
+     */
+    public static final String ACTION_OUTGOING_UNREGISTER = "com.csipsimple.service.ACTION_OUTGOING_UNREGISTER";
+    /**
+     * Broadcast to send when you have launched a sip action (such as make call), but that your app will not anymore allow user to make outgoing calls actions.<br/>
+     * You have to pass registered {@link #EXTRA_OUTGOING_ACTIVITY} 
+     * 
+     * @see #EXTRA_OUTGOING_ACTIVITY
+     */
+    public static final String ACTION_DEFER_OUTGOING_UNREGISTER = "com.csipsimple.service.ACTION_DEFER_OUTGOING_UNREGISTER";
 
     // PLUGINS BROADCASTS
     /**
@@ -267,6 +295,17 @@ public final class SipManager {
      * Extra key to contains infos about a sip call.
      */
     public static final String EXTRA_CALL_INFO = "call_info";
+    
+
+    /**
+     * Tell sip service that it's an user interface requesting for outgoing call.<br/>
+     * It's an extra to add to sip service start as string representing unique key for your activity.<br/>
+     * We advise to use your own component name {@link android.content.ComponentName} to avoid collisions.<br/>
+     * Each activity is in charge unregistering broadcasting {@link #ACTION_OUTGOING_UNREGISTER} or {@link #ACTION_DEFER_OUTGOING_UNREGISTER}<br/>
+     * 
+     * @see android.content.ComponentName
+     */
+    public static final String EXTRA_OUTGOING_ACTIVITY = "outgoing_activity";
     
     // Constants
     /**

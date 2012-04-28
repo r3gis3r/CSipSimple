@@ -21,10 +21,6 @@
 
 package com.csipsimple.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.app.PendingIntent.CanceledException;
@@ -66,12 +62,15 @@ import com.csipsimple.db.DBAdapter;
 import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
 import com.csipsimple.service.OutgoingCall;
-import com.csipsimple.service.SipService;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.CallHandler.onLoadListener;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class OutgoingCallChooser extends ListActivity {
 
@@ -195,7 +194,8 @@ public class OutgoingCallChooser extends ListActivity {
 
         // Start service and bind it. Finish selector in onServiceConnected
         if (prefsWrapper.isValidConnectionForOutgoing()) {
-            Intent sipService = new Intent(this, SipService.class);
+            Intent sipService = new Intent(SipManager.INTENT_SIP_SERVICE);
+            sipService.putExtra(SipManager.EXTRA_OUTGOING_ACTIVITY, new ComponentName(this, OutgoingCallChooser.class));
             startService(sipService);
             bindService(sipService, connection, Context.BIND_AUTO_CREATE);
             registerReceiver(regStateReceiver, new IntentFilter(
@@ -322,8 +322,7 @@ public class OutgoingCallChooser extends ListActivity {
                 OutgoingCall.ignoreNext = nextExclude;
             }
             ch.getIntent().send();
-            finishServiceIfNeeded();
-            finish();
+            finishServiceIfNeeded(false);
         } catch (CanceledException e) {
             Log.e(THIS_FILE, "Pending intent cancelled", e);
         }
@@ -452,7 +451,7 @@ public class OutgoingCallChooser extends ListActivity {
                     }
 
                     service.makeCall("sip:" + toCall, (int) account.id);
-                    finish();
+                    finishServiceIfNeeded(true);
                 } catch (RemoteException e) {
                     Log.e(THIS_FILE, "Unable to make the call", e);
                 }
@@ -509,7 +508,7 @@ public class OutgoingCallChooser extends ListActivity {
                         accountToCallTo = null;
                         service.makeCall("sip:" + toCall, (int) account.id);
                         hasLaunchedCall = true;
-                        finish();
+                        finishServiceIfNeeded(true);
                         return true;
                     } catch (RemoteException e) {
                         Log.e(THIS_FILE, "Unable to make the call", e);
@@ -535,20 +534,14 @@ public class OutgoingCallChooser extends ListActivity {
     }
 
     public void onBackPressed() {
-        finishServiceIfNeeded();
-        finish();
+        finishServiceIfNeeded(false);
     }
 
-    private void finishServiceIfNeeded() {
-        if (service != null) {
-            if (!prefsWrapper.isValidConnectionForIncoming()) {
-                try {
-                    service.forceStopService();
-                } catch (RemoteException e) {
-                    Log.e(THIS_FILE, "Unable to stop service", e);
-                }
-            }
-        }
+    private void finishServiceIfNeeded(boolean defer) {
+        Intent intent = new Intent(defer ? SipManager.ACTION_DEFER_OUTGOING_UNREGISTER : SipManager.ACTION_OUTGOING_UNREGISTER);
+        intent.putExtra(SipManager.EXTRA_OUTGOING_ACTIVITY, new ComponentName(this, OutgoingCallChooser.class));
+        sendBroadcast(intent);
+        finish();
     }
 
 }

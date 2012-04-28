@@ -705,6 +705,16 @@ public class UAStateReceiver extends Callback {
 					}
 					
 					Log.d(THIS_FILE, "Finish call2");
+                    broadCastAndroidCallState("IDLE", callInfo.getRemoteContact());
+                    
+                    //If no remaining calls, cancel the notification
+                    if(getActiveCallInProgress() == null) {
+                        notificationManager.cancelCalls();
+                        // We should now ask parent to stop if needed
+                        if(pjService != null && pjService.service != null) {
+                            pjService.service.treatDeferUnregistersForOutgoing();
+                        }
+                    }
 					
 					//CallLog
 					ContentValues cv = CallLogHelper.logValuesForCall(pjService.service, callInfo, callInfo.callStart);
@@ -715,6 +725,7 @@ public class UAStateReceiver extends Callback {
 					if(isNew != null && isNew == 1) {
 						notificationManager.showNotificationForMissedCall(cv);
 					}
+					
 					
 					//If needed fill native database
 					if(pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS)) {
@@ -757,19 +768,6 @@ public class UAStateReceiver extends Callback {
 					callInfo.callStart = 0;
 					
 					
-					broadCastAndroidCallState("IDLE", callInfo.getRemoteContact());
-					
-					
-					//If no remaining calls, cancel the notification
-					if(getActiveCallInProgress() == null) {
-						notificationManager.cancelCalls();
-						// We should now ask parent to stop if needed
-						if(pjService != null && pjService.service != null) {
-							if( ! pjService.prefsWrapper.isValidConnectionForIncoming()) {
-								pjService.service.cleanStop();
-							}
-						}
-					}
 					
 					break;
 				default:

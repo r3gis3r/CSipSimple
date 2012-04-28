@@ -78,6 +78,7 @@ import org.pjsip.pjsua.pjsua;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -838,7 +839,7 @@ public class SipService extends Service {
 
 		
 		// Check connectivity, else just finish itself
-		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
+		if (!isConnectivityValid()) {
 			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
 			cleanStop();
 			return;
@@ -871,6 +872,8 @@ public class SipService extends Service {
 		if (deviceStateReceiver == null) {
 			IntentFilter intentfilter = new IntentFilter();
 			intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            intentfilter.addAction(SipManager.ACTION_DEFER_OUTGOING_UNREGISTER);
+            intentfilter.addAction(SipManager.ACTION_OUTGOING_UNREGISTER);
 			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_CHANGED);
 			intentfilter.addAction(SipManager.ACTION_SIP_CAN_BE_STOPPED);
 			intentfilter.addAction(SipManager.ACTION_SIP_REQUEST_RESTART);
@@ -925,24 +928,22 @@ public class SipService extends Service {
 	}
 	
 	
-	public static final String EXTRA_DIRECT_CONNECT = "direct_connect";
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		
-		// Check connectivity, else just finish itself
-		if (!prefsWrapper.isValidConnectionForOutgoing() && !prefsWrapper.isValidConnectionForIncoming()) {
-			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
-			cleanStop();
-			return;
+		ComponentName outActivity = (ComponentName) intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY);
+		if(outActivity != null) {
+		    registerForOutgoing(outActivity);
 		}
 		
-		/*
-		boolean directConnect = true;
-		if(intent != null) {
-			directConnect = intent.getBooleanExtra(EXTRA_DIRECT_CONNECT, true);
-		}
-		*/
+        // Check connectivity, else just finish itself
+        if (!isConnectivityValid()) {
+            Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
+            cleanStop();
+            return;
+        }
+		
 		// Autostart the stack - make sure started and that receivers are there
 		// NOTE : the stack may also be autostarted cause of phoneConnectivityReceiver
 		if (!loadStack()) {
@@ -973,6 +974,44 @@ public class SipService extends Service {
 			}
 		}
 		*/
+	}
+	
+	
+	private List<ComponentName> activitiesForOutgoing = new ArrayList<ComponentName>();
+    private List<ComponentName> deferedUnregisterForOutgoing = new ArrayList<ComponentName>();
+	public void registerForOutgoing(ComponentName activityKey) {
+	    if(!activitiesForOutgoing.contains(activityKey)) {
+	        activitiesForOutgoing.add(activityKey);
+	    }
+	}
+	public void unregisterForOutgoing(ComponentName activityKey) {
+	    activitiesForOutgoing.remove(activityKey);
+	    
+	    if(!isConnectivityValid()) {
+	        cleanStop();
+	    }
+	}
+	public void deferUnregisterForOutgoing(ComponentName activityKey) {
+	    if(!deferedUnregisterForOutgoing.contains(activityKey)) {
+	        deferedUnregisterForOutgoing.add(activityKey);
+	    }
+	}
+	public void treatDeferUnregistersForOutgoing() {
+	    for(ComponentName cmp : deferedUnregisterForOutgoing) {
+	        activitiesForOutgoing.remove(cmp);
+	    }
+	    deferedUnregisterForOutgoing.clear();
+        if(!isConnectivityValid()) {
+            cleanStop();
+        }
+	}
+	
+	public boolean isConnectivityValid() {
+	    boolean valid = prefsWrapper.isValidConnectionForIncoming();
+	    if(activitiesForOutgoing.size() > 0) {
+	        valid |= prefsWrapper.isValidConnectionForOutgoing();
+	    }
+	    return valid;
 	}
 	
 	
@@ -1014,7 +1053,7 @@ public class SipService extends Service {
 		//Cache some prefs
 		supportMultipleCalls = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS);
 		
-		if(!needToStartSip()) {
+		if(!isConnectivityValid()) {
 			serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
 			Log.e(THIS_FILE, "No need to start sip");
 			return;
@@ -1070,12 +1109,6 @@ public class SipService extends Service {
             Log.e(THIS_FILE, "Can't stop ... so do not restart ! ");
         }
     }
-	
-	public boolean needToStartSip() {
-		//The connection is valid?
-		return prefsWrapper.isValidConnectionForIncoming() || prefsWrapper.isValidConnectionForOutgoing();
-	}
-
 	
 	public void notifyUserOfMessage(String msg) {
 		serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, msg));

@@ -63,18 +63,15 @@ public class DeviceStateReceiver extends BroadcastReceiver {
         if (/*intentAction.equals(ACTION_DATA_STATE_CHANGED) ||*/
                 intentAction.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
                 intentAction.equals(Intent.ACTION_BOOT_COMPLETED)) {
-            Log.d(THIS_FILE, ">>> Data device change detected" + intentAction);
-
+            
             if (prefWrapper.isValidConnectionForIncoming()
                     &&
                     !prefWrapper
                             .getPreferenceBooleanValue(PreferencesProviderWrapper.HAS_BEEN_QUIT)) {
                 Log.d(THIS_FILE, "Try to start service if not already started");
                 Intent sip_service_intent = new Intent(context, SipService.class);
-                sip_service_intent.putExtra(SipService.EXTRA_DIRECT_CONNECT, false);
                 context.startService(sip_service_intent);
             }
-            Log.d(THIS_FILE, "<<< Data device change detected");
 
         } else if (intentAction.equals(SipManager.INTENT_SIP_ACCOUNT_ACTIVATE)) {
             context.enforceCallingOrSelfPermission(SipManager.PERMISSION_CONFIGURE_SIP, null);
