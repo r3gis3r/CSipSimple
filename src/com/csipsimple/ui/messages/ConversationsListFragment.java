@@ -30,7 +30,6 @@ import android.database.Cursor;
 import android.net.Uri.Builder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
@@ -44,7 +43,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -54,11 +52,12 @@ import com.csipsimple.api.SipMessage;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.ui.messages.ConverstationsAdapter.ConversationListItemViews;
+import com.csipsimple.widgets.CSSListFragment;
 
 /**
  * This activity provides a list view of existing conversations.
  */
-public class ConversationsListFragment extends SherlockListFragment implements ViewPagerVisibilityListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class ConversationsListFragment extends CSSListFragment implements ViewPagerVisibilityListener {
 	//private static final String THIS_FILE = "Conv List";
 	
     // IDs of the main menu items.
@@ -80,31 +79,29 @@ public class ConversationsListFragment extends SherlockListFragment implements V
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         ListView lv = getListView();
+
+        if(getListAdapter() == null && mHeaderView != null) {
+            lv.addHeaderView(mHeaderView, null, true);
+        }
         
+        lv.setOnCreateContextMenuListener(this);
+    }
+    
+    private void attachAdapter() {
         // Header view add
         if(mAdapter == null) {
-            if(mHeaderView != null) {
-                lv.addHeaderView(mHeaderView, null, true);
-            }
             // Adapter
             mAdapter = new ConverstationsAdapter(getActivity(), null);
             setListAdapter(mAdapter);
-            
-            
-            lv.setOnCreateContextMenuListener(this);
-    
-            // Start loading
-            getLoaderManager().initLoader(0, null, this);
         }
+        
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
-        View v = inflater.inflate(R.layout.call_log_fragment, container, false);
+        View v = inflater.inflate(R.layout.message_list_fragment, container, false);
         
         ListView lv = (ListView) v.findViewById(android.R.id.list);
-        
-        
 
         View.OnClickListener addClickButtonListener = new View.OnClickListener() {
             @Override
@@ -232,18 +229,6 @@ public class ConversationsListFragment extends SherlockListFragment implements V
         return new CursorLoader(getActivity(), SipMessage.THREAD_URI, null, null, null, null);
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.changeCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.changeCursor(null);
-    }
-
-    
-
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
         AdapterView.AdapterContextMenuInfo info =
@@ -353,15 +338,22 @@ public class ConversationsListFragment extends SherlockListFragment implements V
                         : R.string.confirm_delete_conversation)
         .show();
     }
-    
+
+    boolean alreadyLoaded = false;
 
     @Override
     public void onVisibilityChanged(boolean visible) {
+
+        if(visible) {
+            attachAdapter();
+            // Start loading
+            if(!alreadyLoaded) {
+                getLoaderManager().initLoader(0, null, this);
+                alreadyLoaded = true;
+            }
+        }
         
         if (visible && isResumed()) {
-            getLoaderManager().restartLoader(0, null, this);
-        //}
-        //if (visible) {
             ListView lv = getListView();
             if (lv != null && mAdapter != null) {
                 final int checkedPos = lv.getCheckedItemPosition();
@@ -391,6 +383,13 @@ public class ConversationsListFragment extends SherlockListFragment implements V
                     t.start();
                 }
             }
+        }
+    }
+
+    @Override
+    public void changeCursor(Cursor c) {
+        if(mAdapter != null) {
+            mAdapter.changeCursor(c);
         }
     }
 	

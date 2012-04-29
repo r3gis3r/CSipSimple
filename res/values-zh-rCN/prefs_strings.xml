@@ -127,8 +127,6 @@
     <string name="has_io_queue_desc">启用 输入/输出 队列</string>
     <string name="set_audio_generate_tone">Tone hack</string>
     <string name="set_audio_generate_tone_desc">呼叫前产生音频</string>
-    <string name="narrow_band">窄带</string>
-    <string name="wide_band">宽带</string>
     <string name="band_for_wifi">Wifi频宽类型</string>
     <string name="band_for_3g">3G频宽类型</string>
     <string name="band_for_gprs">GPRS频宽类型</string>

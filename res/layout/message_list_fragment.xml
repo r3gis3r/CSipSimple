@@ -41,13 +41,15 @@
             android:fadingEdgeLength="@dimen/right_panel_fading_edge"
             android:scrollbarStyle="outsideOverlay" />
 
-        <TextView
+        <Button
             android:id="@android:id/empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_menu_msg_compose_holo_dark"
+            android:drawablePadding="10dip"
             android:gravity="center"
-            android:text="@string/no_call_history"
+            android:text="@string/menu_compose_new"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </FrameLayout>
 

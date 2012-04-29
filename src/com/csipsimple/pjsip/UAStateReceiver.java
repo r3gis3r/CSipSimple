@@ -186,7 +186,7 @@ public class UAStateReceiver extends Callback {
 			// If disconnected immediate stop required stuffs
 			if (callState == SipCallSession.InvState.DISCONNECTED) {
 				if(pjService.mediaManager != null) {
-					pjService.mediaManager.stopAnnoucing();
+					pjService.mediaManager.stopRingAndUnfocus();
 					pjService.mediaManager.resetSettings();
 				}
 				if(incomingCallLock != null && incomingCallLock.isHeld()) {
@@ -293,30 +293,32 @@ public class UAStateReceiver extends Callback {
 		//TODO : treat error / acknowledge of messages
 		int messageType = (status.equals(pjsip_status_code.PJSIP_SC_OK) 
 				|| status.equals(pjsip_status_code.PJSIP_SC_ACCEPTED))? SipMessage.MESSAGE_TYPE_SENT : SipMessage.MESSAGE_TYPE_FAILED;
-		String sTo = SipUri.getCanonicalSipContact(PjSipService.pjStrToString(to));
-
+		String toStr = SipUri.getCanonicalSipContact(PjSipService.pjStrToString(to));
 		String reasonStr = PjSipService.pjStrToString(reason);
+		String bodyStr = PjSipService.pjStrToString(body);
+		int statusInt = status.swigValue();
 		Log.d(THIS_FILE, "SipMessage in on pager status "+status.toString()+" / "+reasonStr);
 		
 		//Update the db
         ContentResolver cr = pjService.service.getContentResolver();
-        int sStatus = status.swigValue();
 		ContentValues args = new ContentValues();
         args.put(SipMessage.FIELD_TYPE, messageType);
-        args.put(SipMessage.FIELD_STATUS, sStatus);
-        if(sStatus != SipCallSession.StatusCode.OK 
-            && sStatus != SipCallSession.StatusCode.ACCEPTED ) {
-            args.put(SipMessage.FIELD_BODY, body + " // " + reasonStr);
+        args.put(SipMessage.FIELD_STATUS, statusInt);
+        if(statusInt != SipCallSession.StatusCode.OK 
+            && statusInt != SipCallSession.StatusCode.ACCEPTED ) {
+            args.put(SipMessage.FIELD_BODY, bodyStr + " // " + reasonStr);
         }
         cr.update(SipMessage.MESSAGE_URI, args,
-                SipMessage.FIELD_TO + "=? AND "+
-                SipMessage.FIELD_BODY+ "=? AND "+
-                SipMessage.FIELD_TYPE+ "="+SipMessage.MESSAGE_TYPE_QUEUED, 
-                new String[] {sTo, PjSipService.pjStrToString(body)});
+                SipMessage.FIELD_TO + "=? AND " +
+                        SipMessage.FIELD_BODY + "=? AND " +
+                        SipMessage.FIELD_TYPE + "=" + SipMessage.MESSAGE_TYPE_QUEUED,
+                new String[] {
+                        toStr, bodyStr
+                });
         
 		//Broadcast the information
 		Intent intent = new Intent(SipManager.ACTION_SIP_MESSAGE_RECEIVED);
-		intent.putExtra(SipMessage.FIELD_FROM, sTo);
+		intent.putExtra(SipMessage.FIELD_FROM, toStr);
 		pjService.service.sendBroadcast(intent);
 		unlockCpu();
 	}
@@ -394,6 +396,8 @@ public class UAStateReceiver extends Callback {
 		
 		
 		if(pjService.mediaManager != null) {
+		    // Do not unfocus here since we are probably in call.
+		    // Unfocus will be done anyway on call disconnect
 			pjService.mediaManager.stopRing();
 		}
 		if(incomingCallLock != null && incomingCallLock.isHeld()) {
@@ -403,9 +407,14 @@ public class UAStateReceiver extends Callback {
         try {
             final SipCallSession callInfo = updateCallInfoFromStack(callId, null);
 
-            if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE) {
-                pjsua.conf_connect(callInfo.getConfPort(), 0);
-                pjsua.conf_connect(0, callInfo.getConfPort());
+            /* Connect ports appropriately when media status is ACTIVE or REMOTE HOLD,
+             * otherwise we should NOT connect the ports.
+             */
+            if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE ||
+                    callInfo.getMediaStatus() == SipCallSession.MediaState.REMOTE_HOLD) {
+                int callConfSlot = callInfo.getConfPort();
+                pjsua.conf_connect(callConfSlot, 0);
+                pjsua.conf_connect(0, callConfSlot);
 
                 // Adjust software volume
                 if (pjService.mediaManager != null) {
@@ -684,6 +693,7 @@ public class UAStateReceiver extends Callback {
 					
 					if(pjService.mediaManager != null) {
 						if(callState == SipCallSession.InvState.CONFIRMED) {
+						    // Don't unfocus here
 							pjService.mediaManager.stopRing();
 						}
 					}

@@ -40,6 +40,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
@@ -832,19 +833,9 @@ public class SipService extends Service {
 		// Check whether we should register for stock tel: intents
         // Useful for devices without gsm
         PackageManager pm = getPackageManager();
-        String selfPkg = PreferencesProviderWrapper.getCurrentPackageInfos(this).applicationInfo.packageName;
         int enableState = PhoneCapabilityTester.isPhone(this) ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED : PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-        Log.d(THIS_FILE, "Enabling "+enableState);
-        pm.setComponentEnabledSetting(new ComponentName(selfPkg, "com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster"), enableState, PackageManager.DONT_KILL_APP);
-
-		
-		// Check connectivity, else just finish itself
-		if (!isConnectivityValid()) {
-			Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
-			cleanStop();
-			return;
-		}
-		
+        Log.d(THIS_FILE, "Enabling " + enableState);
+        pm.setComponentEnabledSetting(new ComponentName(this, "com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster"), enableState, PackageManager.DONT_KILL_APP);
 
 
 	}
@@ -931,10 +922,12 @@ public class SipService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		
-		ComponentName outActivity = (ComponentName) intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY);
-		if(outActivity != null) {
-		    registerForOutgoing(outActivity);
+		if(intent != null) {
+    		Parcelable p = intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY);
+    		if(p != null) {
+    		    ComponentName outActivity = (ComponentName) p;
+    		    registerForOutgoing(outActivity);
+    		}
 		}
 		
         // Check connectivity, else just finish itself

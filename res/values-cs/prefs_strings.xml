@@ -127,8 +127,6 @@
     <string name="has_io_queue_desc">Aktivovat frontu pro vstup/výstup</string>
     <string name="set_audio_generate_tone">Zaseknutí tónu</string>
     <string name="set_audio_generate_tone_desc">Generovat tón před vytvořením hovoru</string>
-    <string name="narrow_band">Úzkopásmové</string>
-    <string name="wide_band">Širokopásmové</string>
     <string name="band_for_wifi">pásmo pro wifi</string>
     <string name="band_for_3g">pásmo pro 3g</string>
     <string name="band_for_gprs">pásmo pro GPRS</string>

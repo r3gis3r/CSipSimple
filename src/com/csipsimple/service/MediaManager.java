@@ -447,8 +447,12 @@ public class MediaManager {
 		isSetAudioMode = false;
 	}
 	
-	
-	public void startRing(String remoteContact) {
+	/**
+	 * Start ringing announce for a given contact.
+	 * It will also focus audio for us.
+	 * @param remoteContact the contact to ring for. May resolve the contact ringtone if any.
+	 */
+	synchronized public void startRing(String remoteContact) {
 		saveAudioState();
 		audioFocusWrapper.focus();
 		
@@ -460,13 +464,20 @@ public class MediaManager {
 		
 	}
 	
-	public void stopRing() {
+	/**
+	 * Stop all ringing. <br/>
+	 * Warning, this will not unfocus audio.
+	 */
+	synchronized public void stopRing() {
 		if(ringer.isRinging()) {
 			ringer.stopRing();
 		}
 	}
 	
-	public void stopAnnoucing() {
+	/**
+	 * Stop call announcement.
+	 */
+	public void stopRingAndUnfocus() {
 		stopRing();
 		audioFocusWrapper.unFocus();
 	}

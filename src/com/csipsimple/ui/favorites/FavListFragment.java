@@ -23,17 +23,15 @@ package com.csipsimple.ui.favorites;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.ListView;
 
 import com.csipsimple.R;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
+import com.csipsimple.widgets.CSSListFragment;
 
-public class FavListFragment extends ListFragment implements ViewPagerVisibilityListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class FavListFragment extends CSSListFragment implements ViewPagerVisibilityListener {
     
 
     private FavAdapter mAdapter;
@@ -44,19 +42,21 @@ public class FavListFragment extends ListFragment implements ViewPagerVisibility
         super.onCreate(state);
         setHasOptionsMenu(true);
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        // Adapter
-        mAdapter = new FavAdapter(getActivity(), null);
-        setListAdapter(mAdapter);
-        
-        // Start loading
-        getLoaderManager().initLoader(0, null, this);
     }
 
+    private void attachAdapter() {
+        if(getListAdapter() == null) {
+            if(mAdapter == null) {
+                mAdapter = new FavAdapter(getActivity(), null);
+            }
+            setListAdapter(mAdapter);
+        }
+    }
+    
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -75,11 +75,6 @@ public class FavListFragment extends ListFragment implements ViewPagerVisibility
             lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
             lv.setItemsCanFocus(true);
         }
-
-        // Start out with a progress indicator.
-        // setListShown(false);
-        
-
     }
 
     @Override
@@ -87,33 +82,26 @@ public class FavListFragment extends ListFragment implements ViewPagerVisibility
         return new FavLoader(getActivity());
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Swap the new cursor in. (The framework will take care of closing the
-        // old cursor once we return.)
-        mAdapter.changeCursor(data);
 
-        // The list should now be shown.
-        /*
-         * if (isResumed()) { setListShown(true); } else {
-         * setListShownNoAnimation(true); }
-         */
-        
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed. We need to make sure we are no
-        // longer using it.
-        mAdapter.changeCursor(null);
-        
-    }
-
+    boolean alreadyLoaded = false;
     @Override
     public void onVisibilityChanged(boolean visible) {
-        // TODO Auto-generated method stub
-        
+
+        if(visible) {
+            attachAdapter();
+            // Start loading
+            if(!alreadyLoaded) {
+                getLoaderManager().initLoader(0, null, this);
+                alreadyLoaded = true;
+            }
+        }
+    }
+
+    @Override
+    public void changeCursor(Cursor c) {
+        if(mAdapter != null) {
+            mAdapter.changeCursor(c);
+        }
     }
 
 }

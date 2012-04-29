@@ -127,8 +127,6 @@
     <string name="has_io_queue_desc">입출력 큐 활성</string>
     <string name="set_audio_generate_tone">톤 해킹</string>
     <string name="set_audio_generate_tone_desc">전화를하기 전에 생성 톤</string>
-    <string name="narrow_band">협대역</string>
-    <string name="wide_band">광대역</string>
     <string name="band_for_wifi">와이파이를 위한 대역 타입</string>
     <string name="band_for_3g">3G를 위한 브랜드 타입</string>
     <string name="band_for_gprs">GPRS를 위한 브랜드 타입</string>

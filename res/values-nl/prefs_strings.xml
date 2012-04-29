@@ -127,8 +127,6 @@
     <string name="has_io_queue_desc">Activeer wachtrij voor invoer/uitvoer</string>
     <string name="set_audio_generate_tone">Tone hack</string>
     <string name="set_audio_generate_tone_desc">Genereer een toon voor het doen van een oproep</string>
-    <string name="narrow_band">Smalband</string>
-    <string name="wide_band">Breedband</string>
     <string name="band_for_wifi">Band type voor Wi-Fi</string>
     <string name="band_for_3g">Band type voor 3G</string>
     <string name="band_for_gprs">Band type voor GPRS</string>

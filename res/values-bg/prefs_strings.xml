@@ -147,8 +147,6 @@
     <string name="has_io_queue_desc">Активирайте опашка за вход/изход</string>
     <string name="set_audio_generate_tone">Тон</string>
     <string name="set_audio_generate_tone_desc">Генерира тон преди да направи обаждане</string>
-    <string name="narrow_band">нормален</string>
-    <string name="wide_band">висококачествено</string>
     <string name="band_for_wifi">честотна лента за wifi</string>
     <string name="band_for_3g">честотна лента за 3G</string>
     <string name="band_for_gprs">честотна лента за GPRS</string>

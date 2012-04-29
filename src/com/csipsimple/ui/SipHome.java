@@ -503,14 +503,15 @@ public class SipHome extends SherlockFragmentActivity {
         onForeground = true;
 
         prefProviderWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, false);
-
+        
+        // Set visible the currently selected account
+        sendFragmentVisibilityChange(mViewPager.getCurrentItem(), true);
+        
         Log.d(THIS_FILE, "WE CAN NOW start SIP service");
         startSipService();
 
-        // Set visible the currently selected account
-        sendFragmentVisibilityChange(mViewPager.getCurrentItem(), true);
-
     }
+    
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -540,7 +541,7 @@ public class SipHome extends SherlockFragmentActivity {
 
     @Override
     protected void onDestroy() {
-        disconnectAndQuit();
+        disconnect(false);
         super.onDestroy();
         Log.d(THIS_FILE, "---DESTROY SIP HOME END---");
     }
@@ -601,7 +602,7 @@ public class SipHome extends SherlockFragmentActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // prefWrapper.disableAllForIncoming();
                                     prefProviderWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, true);
-                                    disconnectAndQuit();
+                                    disconnect(true);
                                 }
                             })
                             .setNegativeButton(R.string.cancel, null)
@@ -613,7 +614,7 @@ public class SipHome extends SherlockFragmentActivity {
                                 TextUtils.join(", ", networks));
                         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                     }
-                    disconnectAndQuit();
+                    disconnect(true);
                 }
                 return true;
             case HELP_MENU:
@@ -655,12 +656,14 @@ public class SipHome extends SherlockFragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void disconnectAndQuit() {
+    private void disconnect(boolean quit) {
         Log.d(THIS_FILE, "True disconnection...");
         Intent intent = new Intent(SipManager.ACTION_OUTGOING_UNREGISTER);
         intent.putExtra(SipManager.EXTRA_OUTGOING_ACTIVITY, new ComponentName(this, SipHome.class));
         sendBroadcast(intent);
-        finish();
+        if(quit) {
+            finish();
+        }
     }
 
 }

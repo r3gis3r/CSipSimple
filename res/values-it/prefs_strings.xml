@@ -147,8 +147,6 @@
     <string name="has_io_queue_desc">Attiva Coda per input/output</string>
     <string name="set_audio_generate_tone">Tone hack</string>
     <string name="set_audio_generate_tone_desc">Genera un tono prima di fare le chiamate</string>
-    <string name="narrow_band">Narrowband</string>
-    <string name="wide_band">Wideband</string>
     <string name="band_for_wifi">Tipo banda per wifi</string>
     <string name="band_for_3g">Tipo banda per 3G</string>
     <string name="band_for_gprs">Tipo banda per GPRS</string>

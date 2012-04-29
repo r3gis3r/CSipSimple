@@ -33,11 +33,6 @@
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/right_panel_margin_vertical"
-            android:layout_marginLeft="@dimen/right_panel_margin_left"
-            android:layout_marginTop="@dimen/right_panel_margin_vertical"
-            android:divider="@null"
-            android:fadingEdge="none"
             android:fadingEdgeLength="@dimen/right_panel_fading_edge"
             android:scrollbarStyle="outsideOverlay" />
 
@@ -47,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/no_call_history"
+            android:text="@string/no_accounts"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </FrameLayout>
 

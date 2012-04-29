@@ -45,5 +45,8 @@
         <item>@string/online</item>
         <item>@string/offline</item>
     </string-array>
+    <string-array name="presence_not_active">
+        <item>@string/activate_presence_sharing</item>
+    </string-array>
 
 </resources>

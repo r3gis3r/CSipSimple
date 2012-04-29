@@ -89,15 +89,20 @@
     <string name="switch_to_text">Switch to text mode</string>
     <string name="switch_to_digit">Switch to digit mode</string>
     <string name="no_voice_mail_configured">No voicemail configured</string>
+    <string name="no_accounts">No accounts</string>
+    <string name="activate">Activate</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
 
     <!-- Presence stuff -->
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="away">Away</string>
     <string name="busy">Busy</string>
-    <string name="activate">Activate</string>
-    <string name="deactivate">Deactivate</string>
-    <string name="audio">Audio</string>
-    <string name="video">Video</string>
+    <string name="activate_presence_sharing">Share presence</string>
+    <string name="presence">Presence</string>
+    <string name="set_android_group">Set android group</string>
+    <string name="set_sip_data">Set sip data</string>
 
 </resources>

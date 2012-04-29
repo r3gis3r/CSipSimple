@@ -26,5 +26,6 @@
     <string name="callAgain">Call again</string>
     <string name="returnCall">Return call</string>
     <string name="call">Call</string>
+    <string name="no_call_history">No call history</string>
 
 </resources>

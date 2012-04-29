@@ -33,11 +33,21 @@
             android:layout_toRightOf="@+id/header_icon"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <com.csipsimple.ui.favorites.FavSettingsSpinner
+            android:id="@+id/header_cfg_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:spinnerMode="dropdown" >
+
+            <!-- Preview: listitem=@android:layout/simple_spinner_dropdown_item -->
+        </com.csipsimple.ui.favorites.FavSettingsSpinner>
+
         <com.csipsimple.ui.favorites.PresenceStatusSpinner
             android:id="@+id/header_presence_spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_height="fill_parent"
+            android:layout_toLeftOf="@id/header_cfg_spinner"
             android:spinnerMode="dropdown" >
 
             <!-- Preview: listitem=@android:layout/simple_spinner_dropdown_item -->

@@ -131,8 +131,6 @@
     <string name="has_io_queue_desc">Aktiviere Queue für Input/Output</string>
     <string name="set_audio_generate_tone">Tone Hack</string>
     <string name="set_audio_generate_tone_desc">Generiere einen Ton vor jedem Anruf</string>
-    <string name="narrow_band">Schmalband</string>
-    <string name="wide_band">Breitband</string>
     <string name="band_for_wifi">Bandtyp für WLAN</string>
     <string name="band_for_3g">Bandtyp für UMTS</string>
     <string name="band_for_gprs">Bandtyp für GPRS</string>

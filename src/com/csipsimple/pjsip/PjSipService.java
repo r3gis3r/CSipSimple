@@ -1271,7 +1271,7 @@ public class PjSipService {
 
     public void silenceRinger() {
         if (mediaManager != null) {
-            mediaManager.stopRing();
+            mediaManager.stopRingAndUnfocus();
         }
     }
 
@@ -1544,7 +1544,7 @@ public class PjSipService {
     public void onGSMStateChanged(int state, String incomingNumber) throws SameThreadException {
         // Avoid ringing if new GSM state is not idle
         if (state != TelephonyManager.CALL_STATE_IDLE && mediaManager != null) {
-            mediaManager.stopRing();
+            mediaManager.stopRingAndUnfocus();
         }
 
         // If new call state is not idle
@@ -1662,30 +1662,29 @@ public class PjSipService {
     // Recorder
     public final static int INVALID_RECORD = -1;
     public int recordedCall = INVALID_RECORD;
-    private int recPort = -1;
-    private int recorderId = -1;
-    private int recordedConfPort = -1;
+    private int recorderId = INVALID_RECORD;
 
     public void startRecording(int callId) {
-        // Ensure nothing is recording actually
+        if(!created) {
+            return;
+        }
+        // Make sure we are in a valid state for recording
+        SipCallSession callInfo = getCallInfo(callId);
+        if (callInfo == null || 
+                (callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE && callInfo.getMediaStatus() != SipCallSession.MediaState.REMOTE_HOLD) ) {
+            return;
+        }
+        
+        // If nothing is recording currently, create recorder
         if (recordedCall == INVALID_RECORD) {
-            SipCallSession callInfo = getCallInfo(callId);
-            if (callInfo == null || callInfo.getMediaStatus() != SipCallSession.MediaState.ACTIVE) {
-                return;
-            }
-
-            File mp3File = getRecordFile(callInfo.getRemoteContact());
-            if (mp3File != null) {
+            File wavFile = getRecordFile(callInfo.getRemoteContact());
+            if (wavFile != null) {
                 int[] recId = new int[1];
-                pj_str_t filename = pjsua.pj_str_copy(mp3File.getAbsolutePath());
+                pj_str_t filename = pjsua.pj_str_copy(wavFile.getAbsolutePath());
                 int status = pjsua.recorder_create(filename, 0, (byte[]) null, 0, 0, recId);
                 if (status == pjsuaConstants.PJ_SUCCESS) {
                     recorderId = recId[0];
-                    Log.d(THIS_FILE, "Record started : " + recorderId);
-                    recordedConfPort = callInfo.getConfPort();
-                    recPort = pjsua.recorder_get_conf_port(recorderId);
-                    pjsua.conf_connect(recordedConfPort, recPort);
-                    pjsua.conf_connect(0, recPort);
+                    Log.d(THIS_FILE, "Record started : " + recorderId + " for " + recordedCall);
                     recordedCall = callId;
                 }
             } else {
@@ -1693,17 +1692,27 @@ public class PjSipService {
                 Log.w(THIS_FILE, "Impossible to write file");
             }
         }
+        
+        if(recorderId != INVALID_RECORD) {
+            int recPort = pjsua.recorder_get_conf_port(recorderId);
+            pjsua.conf_connect(callInfo.getConfPort(), recPort);
+            pjsua.conf_connect(0, recPort);
+        }
+        
     }
 
     public void stopRecording() {
         if (!created) {
+            recorderId = INVALID_RECORD;
+            recordedCall = INVALID_RECORD;
             return;
         }
-        Log.d(THIS_FILE, "Stop recording " + recordedCall + " et " + recorderId);
-        if (recorderId != -1) {
+        Log.d(THIS_FILE, "Stop recording call " + recordedCall);
+        if (recorderId != INVALID_RECORD) {
+            pjsua.conf_remove_port(recorderId);
             pjsua.recorder_destroy(recorderId);
-            recorderId = -1;
         }
+        recorderId = INVALID_RECORD;
         recordedCall = INVALID_RECORD;
     }
 

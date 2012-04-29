@@ -127,8 +127,6 @@
     <string name="has_io_queue_desc">Активувати чергу для вводу/виводу</string>
     <string name="set_audio_generate_tone">Хак тону</string>
     <string name="set_audio_generate_tone_desc">Згенерувати тон перед дзвінком</string>
-    <string name="narrow_band">Вузькосмуговий</string>
-    <string name="wide_band">Широкосмуговий</string>
     <string name="band_for_wifi">Тип радіоканалу для WiFi</string>
     <string name="band_for_3g">Тип каналу для 3G</string>
     <string name="band_for_gprs">Тип каналу для GPRS</string>

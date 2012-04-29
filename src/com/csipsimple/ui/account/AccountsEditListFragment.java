@@ -36,7 +36,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.BaseColumns;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
@@ -52,7 +51,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -62,6 +60,7 @@ import com.csipsimple.ui.account.AccountsEditListAdapter.AccountRowTag;
 import com.csipsimple.ui.account.AccountsEditListAdapter.OnCheckedRowListener;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.SipProfileJson;
+import com.csipsimple.widgets.CSSListFragment;
 import com.csipsimple.widgets.DragnDropListView;
 import com.csipsimple.widgets.DragnDropListView.DropListener;
 import com.csipsimple.wizards.BasePrefsWizard;
@@ -73,7 +72,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountsEditListFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>, /*OnQuitListener,*/ OnCheckedRowListener{
+public class AccountsEditListFragment extends CSSListFragment implements /*OnQuitListener,*/ OnCheckedRowListener{
 
     private boolean dualPane;
 	private Long curCheckPosition = SipProfile.INVALID_ID;
@@ -109,9 +108,11 @@ public class AccountsEditListFragment extends SherlockListFragment implements Lo
 	@Override 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ListView lv = getListView();
 
         //getListView().setSelector(R.drawable.transparent);
-        getListView().setCacheColorHint(Color.TRANSPARENT);
+        lv.setCacheColorHint(Color.TRANSPARENT);
+        
         
         // View management
         View detailsFrame = getActivity().findViewById(R.id.details);
@@ -123,8 +124,7 @@ public class AccountsEditListFragment extends SherlockListFragment implements Lo
             curCheckPosition = savedInstanceState.getLong(CURRENT_CHOICE, SipProfile.INVALID_ID);
             //curCheckWizard = savedInstanceState.getString(CURRENT_WIZARD);
         }
-        
-        ListView lv = getListView();
+        setListShown(false);
         if(mAdapter == null) {
             if(mHeaderView != null) {
                 lv.addHeaderView(mHeaderView , null, true);
@@ -239,6 +239,7 @@ public class AccountsEditListFragment extends SherlockListFragment implements Lo
         View v = inflater.inflate(R.layout.accounts_edit_list, container, false);
         
         final DragnDropListView lv = (DragnDropListView) v.findViewById(android.R.id.list);
+        
         lv.setGrabberId(R.id.grabber);
         // Setup the drop listener
         lv.setOnDropListener(new DropListener() {
@@ -421,25 +422,10 @@ public class AccountsEditListFragment extends SherlockListFragment implements Lo
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		Log.d(THIS_FILE, "Load of ad finished");
-		
-		// Remove loading indicator
-		//getActivity().findViewById(R.id.progress_container).setVisibility(View.GONE);
-		// Reset empty view
-        //getListView().setEmptyView(getActivity().findViewById(android.R.id.empty));
-		
-        // Swap cursor
-        mAdapter.swapCursor(data);
-        // Select correct item if any
+        super.onLoadFinished(loader, data);
+		// Select correct item if any
 		updateCheckedItem();
 	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		mAdapter.swapCursor(null);
-	}
-
-	
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -563,4 +549,13 @@ public class AccountsEditListFragment extends SherlockListFragment implements Lo
 	    startActivityForResult(new Intent(getActivity(), WizardChooser.class),
                 CHOOSE_WIZARD);
 	}
+
+    @Override
+    public void changeCursor(Cursor c) {
+        if(mAdapter != null) {
+            mAdapter.changeCursor(c);
+        }
+    }
+	
+	
 }

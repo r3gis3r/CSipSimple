@@ -25,6 +25,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.ContentObserver;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.AttributeSet;
@@ -42,20 +44,44 @@ import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipManager.PresenceStatus;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.SipService;
+import com.csipsimple.utils.AccountListUtils;
+import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PresenceStatusSpinner extends Spinner implements android.widget.AdapterView.OnItemSelectedListener {
 
     private static final String THIS_FILE = "PresenceStatusSpinner";
 
     private long profileId = SipProfile.INVALID_ID;
+    
+    private boolean hasPresenceRegistration = false;
+    private ArrayList<CharSequence> possiblePresences = new ArrayList<CharSequence>();
+    private ArrayList<CharSequence> noPresences = new ArrayList<CharSequence>();
+
+    private PresencesAdapter mAdapter;
 
     public PresenceStatusSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
+        CharSequence[] fromRes;
+        
+        fromRes = context.getResources()
+                .getStringArray(R.array.presence_status_names);
+        for(CharSequence str : fromRes) {
+            possiblePresences.add(str);
+        }
+        fromRes = context.getResources()
+                .getStringArray(R.array.presence_not_active);
+        for(CharSequence str : fromRes) {
+            noPresences.add(str);
+        }
 
-        PresencesAdapter adapter = new PresencesAdapter(getContext());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        setAdapter(adapter);
+        mAdapter = new PresencesAdapter(getContext());
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        setAdapter(mAdapter);
+        updateRegistration();
         
         setOnItemSelectedListener(this);
     }
@@ -66,21 +92,34 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
         private LayoutInflater inflater;
 
         public PresencesAdapter(Context context) {
-            super(context, android.R.layout.simple_spinner_item, context.getResources()
-                    .getStringArray(R.array.presence_status_names));
+            super(context, android.R.layout.simple_spinner_item, possiblePresences);
             inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             return getCustomView(position, convertView, parent, true);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             return getCustomView(position, convertView, parent, false);
         }
 
+        /**
+         * Get the custom view for the presence spinner.
+         * @param position position of the item
+         * @param convertView view to convert
+         * @param parent Group to open to
+         * @param choiceMode true if it's part of drop down
+         * @return the view recycled.
+         */
         public View getCustomView(int position, View convertView, ViewGroup parent, boolean choiceMode) {
             View row = inflater.inflate(R.layout.fav_presence_item, parent, false);
             TextView label = (TextView) row.findViewById(R.id.item_status_text);
@@ -93,15 +132,22 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
             row.setPadding(padding, padding, padding, padding);
             
             // Content binding
-            label.setText(getItem(position));
-            icon.setImageResource(position == 0 ? android.R.drawable.presence_online : android.R.drawable.presence_invisible);
-            
+            if(hasPresenceRegistration) {
+                label.setText(getItem(position));
+                icon.setImageResource(position == 0 ? android.R.drawable.presence_online : android.R.drawable.presence_invisible);
+                icon.setVisibility(View.VISIBLE);
+            }else {
+                label.setText(choiceMode ? getItem(position) : getContext().getString(R.string.presence));
+                icon.setVisibility(View.GONE);
+            }
             return row;
         }
         
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
         if(service != null && profileId != SipProfile.INVALID_ID) {
@@ -131,30 +177,72 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
         }
     }
 
-    /*
-    @Override
-    protected void onDraw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        if( getSelectedItemPosition() == 0 ) {
-            paint.setARGB(255, 153, 204, 0);
-        }else {
-            paint.setARGB(255, 153, 153, 153);
-        }
-
-        canvas.drawRect(canvas.getClipBounds(), paint);
-        
-        super.onDraw(canvas);
-    }
-*/
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onNothingSelected(AdapterView<?> adapter) {
-        // TODO Auto-generated method stub
-        
+        // We have nothing to do in this case
     }
     
     
 
+    /**
+     * Observer for changes of account registration status
+     */
+    class AccountStatusContentObserver extends ContentObserver {
+        public AccountStatusContentObserver(Handler h) {
+            super(h);
+        }
+
+        public void onChange(boolean selfChange) {
+            Log.d(THIS_FILE, "Accounts status.onChange( " + selfChange + ")");
+            updateRegistration();
+        }
+    }
+    
+
+    private static final String[] ACC_PROJECTION = new String[] {
+            SipProfile.FIELD_ID,
+            SipProfile.FIELD_ACC_ID, // Needed for default domain
+            SipProfile.FIELD_REG_URI, // Needed for default domain
+            SipProfile.FIELD_PROXY, // Needed for default domain
+            SipProfile.FIELD_TRANSPORT, // Needed for default scheme
+            SipProfile.FIELD_DISPLAY_NAME,
+            SipProfile.FIELD_WIZARD,
+            SipProfile.FIELD_PUBLISH_ENABLED
+    };
+    
+    /**
+     * Update user interface when registration of account has changed
+     * This include change selected account if we are in canChangeIfValid mode
+     */
+    private void updateRegistration() {
+        if(profileId < 0) {
+            return;
+        }
+        SipProfile acc = SipProfile.getProfileFromDbId(getContext(), profileId, ACC_PROJECTION);
+        boolean isValid = false;
+        hasPresenceRegistration = false;
+        if(acc != null) {
+            AccountStatusDisplay accountStatusDisplay = AccountListUtils
+                    .getAccountDisplay(getContext(), acc.id);
+            if(accountStatusDisplay.availableForCalls) {
+                isValid = true;
+            }
+            hasPresenceRegistration = (acc.publish_enabled == 1);
+        }
+        
+        setEnabled(isValid);
+        mAdapter.clear();
+        List<CharSequence> l = hasPresenceRegistration ? possiblePresences : noPresences;
+        for(CharSequence str : l) {
+            mAdapter.add(str);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+    
+    
     // Service connection
     private ISipService service;
     private ServiceConnection connection = new ServiceConnection() {
@@ -170,9 +258,16 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
     };
     
 
+    private final Handler mHandler = new Handler();
+    private AccountStatusContentObserver statusObserver = null;
+    
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getContext().bindService(new Intent(getContext(), SipService.class), connection, Context.BIND_AUTO_CREATE);
+        statusObserver = new AccountStatusContentObserver(mHandler);
+        getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
+                true, statusObserver);
+        updateRegistration();
     };
     
     @Override
@@ -183,7 +278,12 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
         } catch (Exception e) {
             // Just ignore that
         }
+        if (statusObserver != null) {
+            getContext().getContentResolver().unregisterContentObserver(statusObserver);
+            statusObserver = null;
+        }
         service = null;
     }
 
+    
 }

@@ -147,8 +147,6 @@
     <string name="has_io_queue_desc">Ativar enfileiramento para entrada/saída</string>
     <string name="set_audio_generate_tone">Hack de tone</string>
     <string name="set_audio_generate_tone_desc">Gera um tom antes de fazer chamadas</string>
-    <string name="narrow_band">Banda Pequena</string>
-    <string name="wide_band">Banda Larga</string>
     <string name="band_for_wifi">Tipo de banda operando em WiFi</string>
     <string name="band_for_3g">Tipo de banda operando em 3G</string>
     <string name="band_for_gprs">Tipo de banda operando em GPRS</string>

@@ -477,8 +477,8 @@ public class DBProvider extends ContentProvider {
                     //SipMessage.FIELD_READ,
                     "COUNT(" + SipMessage.FIELD_DATE + ") AS counter"
                 };
-                qb.appendWhere(SipMessage.FIELD_TYPE + " in (" + SipMessage.MESSAGE_TYPE_INBOX
-                        + "," + SipMessage.MESSAGE_TYPE_SENT + ")");
+                //qb.appendWhere(SipMessage.FIELD_TYPE + " in (" + SipMessage.MESSAGE_TYPE_INBOX
+                //        + "," + SipMessage.MESSAGE_TYPE_SENT + ")");
                 finalGrouping = "message_ordering";
                 regUri = SipMessage.MESSAGE_URI;
                 break;

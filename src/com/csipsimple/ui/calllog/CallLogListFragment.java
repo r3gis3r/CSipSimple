@@ -30,7 +30,6 @@ import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
@@ -42,7 +41,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -55,14 +53,15 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.ui.calllog.CallLogAdapter.OnCallLogAction;
 import com.csipsimple.utils.Log;
+import com.csipsimple.widgets.CSSListFragment;
 
 import java.util.ArrayList;
 
 /**
  * Displays a list of call log entries.
  */
-public class CallLogListFragment extends SherlockListFragment implements ViewPagerVisibilityListener,
-        CallLogAdapter.CallFetcher, LoaderManager.LoaderCallbacks<Cursor>, OnCallLogAction {
+public class CallLogListFragment extends CSSListFragment implements ViewPagerVisibilityListener,
+        CallLogAdapter.CallFetcher, OnCallLogAction {
 
     private static final String THIS_FILE = "CallLogFragment";
 
@@ -77,18 +76,20 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        
-
-        // Adapter
-        mAdapter = new CallLogAdapter(getActivity(), this);
-        mAdapter.setOnCallLogActionListener(this);
-
-        setListAdapter(mAdapter);
-
-        // Start loading
-        getLoaderManager().initLoader(0, null, this);
     }
 
+    private void attachAdapter() {
+        if(getListAdapter() == null) {
+            if(mAdapter == null) {
+                Log.d(THIS_FILE, "Attach call log adapter now");
+                // Adapter
+                mAdapter = new CallLogAdapter(getActivity(), this);
+                mAdapter.setOnCallLogActionListener(this);
+            }
+            setListAdapter(mAdapter);
+        }
+    }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
         return inflater.inflate(R.layout.call_log_fragment, container, false);
@@ -125,22 +126,25 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
                 return true;
             }
         });
-        // Start out with a progress indicator.
-        // setListShown(false);
     }
     
+    /*
     @Override
     public void onResume() {
         super.onResume();
         fetchCalls();
     }
+    */
 
     @Override
     public void fetchCalls() {
+        attachAdapter();
         getLoaderManager().restartLoader(0, null, this);
 
     }
 
+    boolean alreadyLoaded = false;
+    
     @Override
     public void onVisibilityChanged(boolean visible) {
         if (mShowOptionsMenu != visible) {
@@ -152,8 +156,20 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
                 activity.invalidateOptionsMenu();
             }
         }
+        
+
+        if(visible) {
+            attachAdapter();
+            // Start loading
+            if(!alreadyLoaded) {
+                getLoaderManager().initLoader(0, null, this);
+                alreadyLoaded = true;
+            }
+        }
+        
+        
         if (visible && isResumed()) {
-            getLoaderManager().restartLoader(0, null, this);
+            //getLoaderManager().restartLoader(0, null, this);
             ListView lv = getListView();
             if (lv != null && mAdapter != null) {
                 final int checkedPos = lv.getCheckedItemPosition();
@@ -174,6 +190,7 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
                 }
             }
         }
+        
         
         if(!visible && mMode != null) {
             mMode.finish();
@@ -229,24 +246,6 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
                 Calls.DEFAULT_SORT_ORDER);
     }
 
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Swap the new cursor in. (The framework will take care of closing the
-        // old cursor once we return.)
-        mAdapter.changeCursor(data);
-
-        // The list should now be shown.
-        /*
-         * if (isResumed()) { setListShown(true); } else {
-         * setListShownNoAnimation(true); }
-         */
-    }
-
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed. We need to make sure we are no
-        // longer using it.
-        mAdapter.changeCursor(null);
-    }
 
     @Override
     public void viewDetails(int position, long[] callIds) {
@@ -378,4 +377,10 @@ public class CallLogListFragment extends SherlockListFragment implements ViewPag
             mMode.finish();
         }
     }
+    
+    @Override
+    public void changeCursor(Cursor c) {
+        mAdapter.changeCursor(c);
+    }
+    
 }

@@ -147,8 +147,6 @@
     <string name="has_io_queue_desc">הפעל תור של קלט/פלט</string>
     <string name="set_audio_generate_tone">הנמך את הטון</string>
     <string name="set_audio_generate_tone_desc">צור צליל לפני ביצוע שיחות</string>
-    <string name="narrow_band">פס צר</string>
-    <string name="wide_band">פס רחב</string>
     <string name="band_for_wifi">סוג פס עבור WiFi</string>
     <string name="band_for_3g">סוג פס עבור 3G</string>
     <string name="band_for_gprs">סוג פס עבור GPRS</string>
