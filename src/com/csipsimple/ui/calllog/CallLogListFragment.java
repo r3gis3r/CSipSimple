@@ -114,6 +114,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
             lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
             lv.setItemsCanFocus(true);
         }
+        
         // Map long press
         lv.setLongClickable(true);
         lv.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -351,6 +352,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
             for (int i = 0; i < count; i++) {
                 lv.setItemChecked(i, false);
             }
+            mMode = null;
         }
         
     }

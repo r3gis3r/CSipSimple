@@ -102,7 +102,7 @@
     <string name="busy">Busy</string>
     <string name="activate_presence_sharing">Share presence</string>
     <string name="presence">Presence</string>
-    <string name="set_android_group">Set android group</string>
-    <string name="set_sip_data">Set sip data</string>
+    <string name="set_android_group">Choose android group</string>
+    <string name="set_sip_data">Choose sip uri data</string>
 
 </resources>

@@ -1,13 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="unknown">Inconnu</string>
-    <string name="type_incoming">Entrant</string>
-    <string name="type_outgoing">Sortant</string>
-    <string name="type_missed">Manqué</string>
-    <string name="callBack">Rappeler</string>
-    <string name="callAgain">Appeler de nouveau</string>
-    <string name="returnCall">Rappeler</string>
-    <string name="call">Appeler</string>
-
+  <string name="unknown">Inconnu</string>
+  <string name="type_incoming">Entrant</string>
+  <string name="type_outgoing">Sortant</string>
+  <string name="type_missed">Manqué</string>
+  <string name="callBack">Rappeler</string>
+  <string name="callAgain">Appeler de nouveau</string>
+  <string name="returnCall">Rappeler</string>
+  <string name="call">Appeler</string>
+  <string name="no_call_history">Pas d\'historique</string>
 </resources>

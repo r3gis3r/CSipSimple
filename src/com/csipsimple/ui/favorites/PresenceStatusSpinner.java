@@ -58,41 +58,37 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
     private long profileId = SipProfile.INVALID_ID;
     
     private boolean hasPresenceRegistration = false;
-    private ArrayList<CharSequence> possiblePresences = new ArrayList<CharSequence>();
-    private ArrayList<CharSequence> noPresences = new ArrayList<CharSequence>();
+    private boolean isValid = false;
+    
 
     private PresencesAdapter mAdapter;
 
+
     public PresenceStatusSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
-        CharSequence[] fromRes;
         
-        fromRes = context.getResources()
-                .getStringArray(R.array.presence_status_names);
-        for(CharSequence str : fromRes) {
-            possiblePresences.add(str);
-        }
-        fromRes = context.getResources()
-                .getStringArray(R.array.presence_not_active);
-        for(CharSequence str : fromRes) {
-            noPresences.add(str);
-        }
 
-        mAdapter = new PresencesAdapter(getContext());
+        List<CharSequence> list = new ArrayList<CharSequence>();
+        String[] fromRes = context.getResources().getStringArray(R.array.presence_status_names);
+        for(CharSequence str : fromRes) {
+            list.add(str);
+        }
+        
+        mAdapter = new PresencesAdapter(getContext(), list);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         setAdapter(mAdapter);
         updateRegistration();
         
         setOnItemSelectedListener(this);
     }
-
     
     private class PresencesAdapter extends ArrayAdapter<CharSequence> {
 
         private LayoutInflater inflater;
+        
 
-        public PresencesAdapter(Context context) {
-            super(context, android.R.layout.simple_spinner_item, possiblePresences);
+        public PresencesAdapter(Context context, List<CharSequence> datas) {
+            super(context, android.R.layout.simple_spinner_item, datas);
             inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
@@ -150,11 +146,17 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
      */
     @Override
     public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
-        if(service != null && profileId != SipProfile.INVALID_ID) {
-            try {
-                service.setPresence(getSelectedPresence().ordinal(), "Test", profileId);
-            } catch (RemoteException e) {
-                Log.e(THIS_FILE, "Error while trying to set presence through service", e);
+        if(profileId != SipProfile.INVALID_ID) {
+            if(hasPresenceRegistration && isValid) {
+                if(position < PRESENCES_ITEMS_LENGTH) {
+                    if(service != null) {
+                        try {
+                            service.setPresence(getSelectedPresence().ordinal(), "Test", profileId);
+                        } catch (RemoteException e) {
+                            Log.e(THIS_FILE, "Error while trying to set presence through service", e);
+                        }
+                    }
+                }
             }
         }
     }
@@ -166,6 +168,8 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
     public void setProfileId(long accId) {
         profileId = accId;
     }
+    
+    private static final int PRESENCES_ITEMS_LENGTH = 2;
     
     private PresenceStatus getSelectedPresence() {
         switch (getSelectedItemPosition()) {
@@ -222,7 +226,7 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
             return;
         }
         SipProfile acc = SipProfile.getProfileFromDbId(getContext(), profileId, ACC_PROJECTION);
-        boolean isValid = false;
+        isValid = false;
         hasPresenceRegistration = false;
         if(acc != null) {
             AccountStatusDisplay accountStatusDisplay = AccountListUtils
@@ -234,12 +238,7 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
         }
         
         setEnabled(isValid);
-        mAdapter.clear();
-        List<CharSequence> l = hasPresenceRegistration ? possiblePresences : noPresences;
-        for(CharSequence str : l) {
-            mAdapter.add(str);
-        }
-        mAdapter.notifyDataSetChanged();
+        setVisibility(hasPresenceRegistration ? View.VISIBLE : View.GONE);
     }
     
     

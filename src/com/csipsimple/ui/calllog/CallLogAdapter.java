@@ -51,7 +51,6 @@ public class CallLogAdapter extends GroupingListAdapter
     private final Context mContext;
     private final CallFetcher mCallFetcher;
 
-    private boolean mLoading = true;
 
     protected static final String THIS_FILE = "CallLogAdapter";
 
@@ -123,25 +122,6 @@ public class CallLogAdapter extends GroupingListAdapter
     @Override
     protected void onContentChanged() {
         mCallFetcher.fetchCalls();
-    }
-
-    /**
-     * Set adapter in loading mode to avoid display of empty state
-     * 
-     * @param loading if we are in loading mode
-     */
-    public void setLoading(boolean loading) {
-        mLoading = loading;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        if (mLoading) {
-            // We don't want the empty state to show when loading.
-            return false;
-        } else {
-            return super.isEmpty();
-        }
     }
 
     @Override

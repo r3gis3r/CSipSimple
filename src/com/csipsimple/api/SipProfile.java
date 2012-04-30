@@ -277,8 +277,9 @@ public class SipProfile implements Parcelable {
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a0d4128f44963deffda4ea9c15183a787"
      * >Pjsip documentation</a>
+     * 1 for true, 0 for false
      * 
-     * @see Boolean
+     * @see Integer
      */
     public static final String FIELD_PUBLISH_ENABLED = "publish_enabled";
     /**

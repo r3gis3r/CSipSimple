@@ -28,9 +28,16 @@ import android.database.DatabaseUtils;
 import android.provider.BaseColumns;
 import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.internal.view.menu.ActionMenuPresenter;
+import com.actionbarsherlock.internal.view.menu.ActionMenuView;
+import com.actionbarsherlock.internal.view.menu.MenuBuilder;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.contacts.ContactsWrapper;
@@ -38,10 +45,16 @@ import com.csipsimple.wizards.WizardUtils;
 
 public class FavAdapter extends ResourceCursorAdapter {
 
+
     //private static final String THIS_FILE = "FavAdapter";
+    
+    private final static int MENU_SET_GROUP = Menu.FIRST;
+    private final static int MENU_SET_SIP_DATA = Menu.FIRST + 1;
 
     public FavAdapter(Context context, Cursor c) {
         super(context, R.layout.fav_list_item, c, 0);
+
+
     }
 
     @Override
@@ -64,6 +77,26 @@ public class FavAdapter extends ResourceCursorAdapter {
             icon.setImageResource(WizardUtils.getWizardIconRes(cv.getAsString(SipProfile.FIELD_WIZARD)));
             presSpinner.setProfileId(cv.getAsLong(BaseColumns._ID));
             
+            // Extra menu view if not already set
+            ViewGroup menuViewWrapper = (ViewGroup) view.findViewById(R.id.header_cfg_spinner);
+            
+            if(menuViewWrapper.getTag() == null) {
+
+                final LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
+                        LayoutParams.MATCH_PARENT);
+
+                ActionMenuPresenter mActionMenuPresenter = new ActionMenuPresenter(mContext);
+                mActionMenuPresenter.setReserveOverflow(true);
+                
+                MenuBuilder menuBuilder = new MenuBuilder(context);
+                menuBuilder.add(0, MENU_SET_GROUP, 0, R.string.set_android_group).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                menuBuilder.add(0, MENU_SET_SIP_DATA, 0, R.string.set_sip_data).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                menuBuilder.addMenuPresenter(mActionMenuPresenter);
+                ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(menuViewWrapper);
+                menuView.setBackgroundDrawable(null);
+                menuViewWrapper.addView(menuView, layoutParams);
+                menuViewWrapper.setTag(menuBuilder);
+            }
         }else {
             showViewForHeader(view, false);
             ContactsWrapper.getInstance().bindContactView(view, context, cursor);
