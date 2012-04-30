@@ -329,11 +329,11 @@ public class PjSipService {
                         cssCodecs = cssCfg.getExtra_vid_codecs();
                         cssCodecs[0].setShared_lib_path(pjVideoFile);
                         cssCodecs[0].setInit_factory_name(pjsua
-                                .pj_str_copy("pjmedia_codec_ffmpeg_init"));
+                                .pj_str_copy("pjmedia_codec_ffmpeg_vid_init"));
                         cssCodecs = cssCfg.getExtra_vid_codecs_destroy();
                         cssCodecs[0].setShared_lib_path(pjVideoFile);
                         cssCodecs[0].setInit_factory_name(pjsua
-                                .pj_str_copy("pjmedia_codec_ffmpeg_deinit"));
+                                .pj_str_copy("pjmedia_codec_ffmpeg_vid_deinit"));
                         cssCfg.setExtra_vid_codecs_cnt(1);
                         
                         // Converter
