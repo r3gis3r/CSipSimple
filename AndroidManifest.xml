@@ -420,6 +420,23 @@ Remove that too fine change trigger
         <activity
             android:name="com.csipsimple.ui.account.AccountEdit"
             android:theme="@style/DarkTheme" />
+
+        <!-- Extra codecs -->
+
+
+        <!-- SILK -->
+        <receiver android:name="com.csipsimple.plugins.codecs.ReceiverSilk" >
+            <meta-data
+                android:name="lib_name"
+                android:value="libpj_silk_codec.so" />
+            <meta-data
+                android:name="init_factory"
+                android:value="pjmedia_codec_silk_init" />
+
+            <intent-filter>
+                <action android:name="com.csipsimple.codecs.action.REGISTER_CODEC" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

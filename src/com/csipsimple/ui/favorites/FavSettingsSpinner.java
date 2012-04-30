@@ -56,7 +56,6 @@ public class FavSettingsSpinner extends Spinner implements android.widget.Adapte
 
     private PresencesAdapter mAdapter;
 
-    private boolean hasPresenceRegistration;
 
     public FavSettingsSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -94,7 +93,7 @@ public class FavSettingsSpinner extends Spinner implements android.widget.Adapte
             label.setText(getItem(position));
             icon.setVisibility(View.GONE);
             
-            int padding = 5;
+            int padding = 15;
             convertView.setPadding(padding, padding, padding, padding);
             
             return convertView;
