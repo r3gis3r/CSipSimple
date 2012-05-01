@@ -21,8 +21,14 @@
 
 package com.csipsimple.ui.favorites;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.provider.BaseColumns;
@@ -36,6 +42,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.internal.view.menu.ActionMenuPresenter;
 import com.actionbarsherlock.internal.view.menu.ActionMenuView;
 import com.actionbarsherlock.internal.view.menu.MenuBuilder;
+import com.actionbarsherlock.internal.view.menu.MenuBuilder.Callback;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
@@ -58,7 +65,7 @@ public class FavAdapter extends ResourceCursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         ContentValues cv = new ContentValues();
         DatabaseUtils.cursorRowToContentValues(cursor, cv);
         
@@ -75,7 +82,9 @@ public class FavAdapter extends ResourceCursorAdapter {
             
             tv.setText(cv.getAsString(SipProfile.FIELD_DISPLAY_NAME));
             icon.setImageResource(WizardUtils.getWizardIconRes(cv.getAsString(SipProfile.FIELD_WIZARD)));
-            presSpinner.setProfileId(cv.getAsLong(BaseColumns._ID));
+            final Long profileId = cv.getAsLong(BaseColumns._ID);
+            final String groupName = cv.getAsString(SipProfile.FIELD_ANDROID_GROUP);
+            presSpinner.setProfileId(profileId);
             
             // Extra menu view if not already set
             ViewGroup menuViewWrapper = (ViewGroup) view.findViewById(R.id.header_cfg_spinner);
@@ -87,8 +96,8 @@ public class FavAdapter extends ResourceCursorAdapter {
 
                 ActionMenuPresenter mActionMenuPresenter = new ActionMenuPresenter(mContext);
                 mActionMenuPresenter.setReserveOverflow(true);
-                
                 MenuBuilder menuBuilder = new MenuBuilder(context);
+                menuBuilder.setCallback(new MenuCallback(context, profileId, groupName));
                 menuBuilder.add(0, MENU_SET_GROUP, 0, R.string.set_android_group).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 menuBuilder.add(0, MENU_SET_SIP_DATA, 0, R.string.set_sip_data).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 menuBuilder.addMenuPresenter(mActionMenuPresenter);
@@ -108,6 +117,82 @@ public class FavAdapter extends ResourceCursorAdapter {
         view.findViewById(R.id.header_view).setVisibility(isHeader ? View.VISIBLE : View.GONE);
         view.findViewById(R.id.contact_view).setVisibility(isHeader ? View.GONE : View.VISIBLE);
     }
+    
+    private class MenuCallback implements Callback {
+        private Long profileId = SipProfile.INVALID_ID;
+        private Context context;
+        private String groupName;
+        
+        public MenuCallback(Context ctxt, Long aProfileId, String aGroupName) {
+            profileId = aProfileId;
+            context = ctxt;
+            groupName = aGroupName;
+        }
+        
+        @Override
+        public void onMenuModeChange(MenuBuilder menu) {
+            // Nothing to do
+        }
+        
+        @Override
+        public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+            int itemId = item.getItemId();
+            if(itemId == MENU_SET_GROUP) {
+                showDialogForGroupSelection(context, profileId, groupName);
+                return true;
+            }
+            return false;
+        }
+    }
 
+    
+    private void showDialogForGroupSelection(final Context context, final Long profileId, final String groupName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.set_android_group);
+        final Cursor choiceCursor = ContactsWrapper.getInstance().getGroups(context);
+        int selectedIndex = -1;
+        if(choiceCursor != null) {
+            if (choiceCursor.moveToFirst()) {
+                int i = 0;
+                do {
+                    String name = choiceCursor.getString(choiceCursor.getColumnIndex(ContactsWrapper.FIELD_GROUP_NAME));
+                    if(name.equalsIgnoreCase(groupName)) {
+                        selectedIndex = i;
+                        break;
+                    }
+                    i ++;
+                } while (choiceCursor.moveToNext());
+            }
+        }
+        builder.setSingleChoiceItems(choiceCursor, selectedIndex, ContactsWrapper.FIELD_GROUP_NAME, new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                choiceCursor.moveToPosition(which);
+                String name = choiceCursor.getString(choiceCursor.getColumnIndex(ContactsWrapper.FIELD_GROUP_NAME));
+                ContentValues cv = new ContentValues();
+                cv.put(SipProfile.FIELD_ANDROID_GROUP, name);
+                context.getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, profileId), cv, null, null);
+                choiceCursor.close();
+                dialog.dismiss();
+            }
+        });
+        
+        builder.setCancelable(true);
+        builder.setNeutralButton(R.string.cancel, new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                choiceCursor.close();
+                dialog.dismiss();
+            }
+        });
+        builder.setOnCancelListener(new OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                choiceCursor.close();
+            }
+        });
+        final Dialog dialog = builder.create();
+        dialog.show();
+    }
 }
 

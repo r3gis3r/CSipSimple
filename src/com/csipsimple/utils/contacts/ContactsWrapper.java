@@ -46,6 +46,7 @@ public abstract class ContactsWrapper {
     public static final String FIELD_TYPE = "wrapped_type";
     public static final int TYPE_GROUP = 0;
     public static final int TYPE_CONTACT = 1;
+    public static final String FIELD_GROUP_NAME = "title";
 
     public static ContactsWrapper getInstance() {
         if (instance == null) {
@@ -177,8 +178,24 @@ public abstract class ContactsWrapper {
      */
     public abstract Cursor getContactsByGroup(Context ctxt, String groupName);
     
+    /**
+     * Bind the contact view to cursor containing contact infos datas
+     * @param view The view to bind to
+     * @param context App context
+     * @param cursor Cursor containing data at the correct position
+     */
     public abstract void bindContactView(View view, Context context, Cursor cursor);
-
+    
+    /**
+     * Get list of groups.<br/>
+     * @param context 
+     * @return a cursor of groups. _id is the identifier, title is the name of the group
+     */
+    public abstract Cursor getGroups(Context context);
+    
+    /**
+     * Class to hold phone information
+     */
     public class Phone {
         private String number;
         private String type;

@@ -41,6 +41,7 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.Intents.Insert;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.StatusUpdates;
@@ -730,6 +731,18 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
 
         return intent;
+    }
+
+    @Override
+    public Cursor getGroups(Context context) {
+        Uri searchUri = Groups.CONTENT_URI;
+        String[] projection = new String[] {
+                Groups._ID,
+                Groups.TITLE /* No need of as title, since already title */
+        };
+        
+        return context.getContentResolver().query(searchUri, projection, null, null,
+                Groups.TITLE + " ASC");
     }
 
 }

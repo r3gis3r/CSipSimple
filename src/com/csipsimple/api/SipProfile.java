@@ -1427,6 +1427,17 @@ public class SipProfile implements Parcelable {
      * @see #LISTABLE_PROJECTION
      */
     public static ArrayList<SipProfile> getAllProfiles(Context ctxt, boolean onlyActive) {
+        return getAllProfiles(ctxt, onlyActive, LISTABLE_PROJECTION);
+    }
+    
+    /**
+     * Get the list of sip profiles available.
+     * @param ctxt Your application context. Mainly useful to get the content provider for the request.
+     * @param onlyActive Pass it to true if you are only interested in active accounts.
+     * @param projection The projection to use for cursor
+     * @return The list of SipProfiles
+     */
+    public static ArrayList<SipProfile> getAllProfiles(Context ctxt, boolean onlyActive, String[] projection) {
         ArrayList<SipProfile> result = new ArrayList<SipProfile>();
 
         String selection = null;
@@ -1437,7 +1448,7 @@ public class SipProfile implements Parcelable {
                     "1"
             };
         }
-        Cursor c = ctxt.getContentResolver().query(ACCOUNT_URI, LISTABLE_PROJECTION, selection, selectionArgs, null);
+        Cursor c = ctxt.getContentResolver().query(ACCOUNT_URI, projection, selection, selectionArgs, null);
 
         if (c != null) {
             try {

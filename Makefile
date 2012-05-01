@@ -80,5 +80,5 @@ update :
 	git checkout origin; \
 	git checkout 1a3c5799337b90ddc56376ace7284a9e7f8cc988
 	# Update ffmpeg
-	@cd jni/ffmpeg; $(MAKE) $(MFLAGS) update
+	$(MAKE) $(MFLAGS) -C jni/ffmpeg update
 	

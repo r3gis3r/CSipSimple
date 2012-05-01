@@ -28,6 +28,7 @@ import android.database.MatrixCursor;
 import android.database.MergeCursor;
 import android.provider.BaseColumns;
 import android.support.v4.content.AsyncTaskLoader;
+import android.text.TextUtils;
 
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.contacts.ContactsWrapper;
@@ -48,7 +49,17 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
     @Override
     public Cursor loadInBackground() {
         // First of all, get all active accounts
-        ArrayList<SipProfile> accounts = SipProfile.getAllProfiles(getContext(), true);
+        ArrayList<SipProfile> accounts = SipProfile.getAllProfiles(getContext(), true,
+                new String[] {
+                        SipProfile.FIELD_ID,
+                        SipProfile.FIELD_ACC_ID,
+                        SipProfile.FIELD_ACTIVE,
+                        SipProfile.FIELD_DISPLAY_NAME,
+                        SipProfile.FIELD_WIZARD,
+                        SipProfile.FIELD_PRIORITY,
+                        SipProfile.FIELD_ANDROID_GROUP,
+                        SipProfile.FIELD_REG_URI
+                });
 
         Cursor[] cursorsToMerge = new Cursor[2 * accounts.size()];
         int i = 0;
@@ -171,13 +182,15 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                         BaseColumns._ID, 
                         ContactsWrapper.FIELD_TYPE,
                         SipProfile.FIELD_DISPLAY_NAME,
-                        SipProfile.FIELD_WIZARD
+                        SipProfile.FIELD_WIZARD,
+                        SipProfile.FIELD_ANDROID_GROUP
                 });
         matrixCursor.addRow(new Object[] {
                 account.id,
                 ContactsWrapper.TYPE_GROUP,
                 account.display_name,
-                account.wizard
+                account.wizard,
+                account.android_group
         });
         return matrixCursor;
     }
@@ -187,7 +200,14 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
      * account.
      */
     private Cursor createContentCursorFor(SipProfile account) {
-        return ContactsWrapper.getInstance().getContactsByGroup(getContext(), account.display_name);
+        Cursor c = null;
+        if(!TextUtils.isEmpty(account.android_group)) {
+            c = ContactsWrapper.getInstance().getContactsByGroup(getContext(), account.android_group);
+        }
+        if(c != null) {
+            return c;
+        }
+        return new MatrixCursor (new String[] {"_id"});
     }
 
 }

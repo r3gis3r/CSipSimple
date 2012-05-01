@@ -35,6 +35,7 @@ import android.net.Uri;
 import android.provider.Contacts.Intents;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
+import android.provider.Contacts.Groups;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.View;
@@ -360,5 +361,17 @@ public class ContactsUtils3 extends ContactsWrapper {
         intent.putExtra(Intents.Insert.IM_HANDLE, csipUri);
         intent.putExtra(Intents.Insert.IM_PROTOCOL, "csip");
         return intent;
+    }
+
+    @Override
+    public Cursor getGroups(Context context) {
+        Uri searchUri = android.provider.Contacts.Groups.CONTENT_URI;
+        String[] projection = new String[] {
+                Groups._ID,
+                Groups.NAME + " AS '"+FIELD_GROUP_NAME+"'"
+        };
+        
+        return context.getContentResolver().query(searchUri, projection, null, null,
+                Groups.NAME + " ASC");
     }
 }
