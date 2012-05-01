@@ -57,11 +57,10 @@ public class FavAdapter extends ResourceCursorAdapter {
     
     private final static int MENU_SET_GROUP = Menu.FIRST;
     private final static int MENU_SET_SIP_DATA = Menu.FIRST + 1;
+    private final static int MENU_SHARE_PRESENCE = Menu.FIRST + 2;
 
     public FavAdapter(Context context, Cursor c) {
         super(context, R.layout.fav_list_item, c, 0);
-
-
     }
 
     @Override
@@ -76,18 +75,28 @@ public class FavAdapter extends ResourceCursorAdapter {
         
         if(type == ContactsWrapper.TYPE_GROUP) {
             showViewForHeader(view, true);
+            
+            // Get views
             TextView tv = (TextView) view.findViewById(R.id.header_text);
             ImageView icon = (ImageView) view.findViewById(R.id.header_icon);
             PresenceStatusSpinner presSpinner = (PresenceStatusSpinner) view.findViewById(R.id.header_presence_spinner);
             
-            tv.setText(cv.getAsString(SipProfile.FIELD_DISPLAY_NAME));
-            icon.setImageResource(WizardUtils.getWizardIconRes(cv.getAsString(SipProfile.FIELD_WIZARD)));
+            // Get datas
             final Long profileId = cv.getAsLong(BaseColumns._ID);
             final String groupName = cv.getAsString(SipProfile.FIELD_ANDROID_GROUP);
+            final String displayName = cv.getAsString(SipProfile.FIELD_DISPLAY_NAME);
+            final String wizard = cv.getAsString(SipProfile.FIELD_WIZARD);
+            final boolean publishedEnabled = (cv.getAsInteger(SipProfile.FIELD_PUBLISH_ENABLED) == 1);
+            
+            // Bind datas to view
+            tv.setText(displayName);
+            icon.setImageResource(WizardUtils.getWizardIconRes(wizard));
             presSpinner.setProfileId(profileId);
             
             // Extra menu view if not already set
             ViewGroup menuViewWrapper = (ViewGroup) view.findViewById(R.id.header_cfg_spinner);
+            
+            MenuCallback newMcb = new MenuCallback(context, profileId, groupName, publishedEnabled);
             
             if(menuViewWrapper.getTag() == null) {
 
@@ -97,14 +106,20 @@ public class FavAdapter extends ResourceCursorAdapter {
                 ActionMenuPresenter mActionMenuPresenter = new ActionMenuPresenter(mContext);
                 mActionMenuPresenter.setReserveOverflow(true);
                 MenuBuilder menuBuilder = new MenuBuilder(context);
-                menuBuilder.setCallback(new MenuCallback(context, profileId, groupName));
+                menuBuilder.setCallback(newMcb);
                 menuBuilder.add(0, MENU_SET_GROUP, 0, R.string.set_android_group).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 menuBuilder.add(0, MENU_SET_SIP_DATA, 0, R.string.set_sip_data).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                menuBuilder.add(0, MENU_SHARE_PRESENCE, 0, publishedEnabled ? R.string.deactivate_presence_sharing : R.string.activate_presence_sharing).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                
                 menuBuilder.addMenuPresenter(mActionMenuPresenter);
                 ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(menuViewWrapper);
                 menuView.setBackgroundDrawable(null);
                 menuViewWrapper.addView(menuView, layoutParams);
                 menuViewWrapper.setTag(menuBuilder);
+            }else {
+                MenuBuilder menuBuilder = (MenuBuilder) menuViewWrapper.getTag();
+                menuBuilder.setCallback(newMcb);
+                menuBuilder.findItem(MENU_SHARE_PRESENCE).setTitle(publishedEnabled ? R.string.deactivate_presence_sharing : R.string.activate_presence_sharing);
             }
         }else {
             showViewForHeader(view, false);
@@ -122,11 +137,13 @@ public class FavAdapter extends ResourceCursorAdapter {
         private Long profileId = SipProfile.INVALID_ID;
         private Context context;
         private String groupName;
+        private boolean publishEnabled;
         
-        public MenuCallback(Context ctxt, Long aProfileId, String aGroupName) {
+        public MenuCallback(Context ctxt, Long aProfileId, String aGroupName, boolean aPublishedEnabled) {
             profileId = aProfileId;
             context = ctxt;
             groupName = aGroupName;
+            publishEnabled = aPublishedEnabled;
         }
         
         @Override
@@ -139,6 +156,11 @@ public class FavAdapter extends ResourceCursorAdapter {
             int itemId = item.getItemId();
             if(itemId == MENU_SET_GROUP) {
                 showDialogForGroupSelection(context, profileId, groupName);
+                return true;
+            }else if(itemId == MENU_SHARE_PRESENCE) {
+                ContentValues cv = new ContentValues();
+                cv.put(SipProfile.FIELD_PUBLISH_ENABLED, publishEnabled ? 0 : 1);
+                context.getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, profileId), cv, null, null);
                 return true;
             }
             return false;
@@ -154,8 +176,9 @@ public class FavAdapter extends ResourceCursorAdapter {
         if(choiceCursor != null) {
             if (choiceCursor.moveToFirst()) {
                 int i = 0;
+                int colIdx = choiceCursor.getColumnIndex(ContactsWrapper.FIELD_GROUP_NAME);
                 do {
-                    String name = choiceCursor.getString(choiceCursor.getColumnIndex(ContactsWrapper.FIELD_GROUP_NAME));
+                    String name = choiceCursor.getString(colIdx);
                     if(name.equalsIgnoreCase(groupName)) {
                         selectedIndex = i;
                         break;

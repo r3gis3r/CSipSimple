@@ -58,6 +58,7 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                         SipProfile.FIELD_WIZARD,
                         SipProfile.FIELD_PRIORITY,
                         SipProfile.FIELD_ANDROID_GROUP,
+                        SipProfile.FIELD_PUBLISH_ENABLED,
                         SipProfile.FIELD_REG_URI
                 });
 
@@ -103,7 +104,6 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
             // deliver its results.
             super.deliverResult(c);
         }
-        
     }
 
     /**
@@ -139,6 +139,7 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
         // At this point we can release the resources associated with 'apps'
         // if needed.
         onReleaseResources(c);
+        
     }
 
     /**
@@ -183,14 +184,16 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                         ContactsWrapper.FIELD_TYPE,
                         SipProfile.FIELD_DISPLAY_NAME,
                         SipProfile.FIELD_WIZARD,
-                        SipProfile.FIELD_ANDROID_GROUP
+                        SipProfile.FIELD_ANDROID_GROUP,
+                        SipProfile.FIELD_PUBLISH_ENABLED
                 });
         matrixCursor.addRow(new Object[] {
                 account.id,
                 ContactsWrapper.TYPE_GROUP,
                 account.display_name,
                 account.wizard,
-                account.android_group
+                account.android_group,
+                account.publish_enabled
         });
         return matrixCursor;
     }
