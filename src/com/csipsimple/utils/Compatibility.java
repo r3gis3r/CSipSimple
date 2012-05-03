@@ -431,6 +431,11 @@ public final class Compatibility {
         
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                 isTabletScreen(preferencesWrapper.getContext()));
+        
+        if(android.os.Build.PRODUCT.startsWith("GoGear_Connect")) {
+            preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS, false);
+        }
+        
         preferencesWrapper.endEditing();
     }
 
