@@ -143,6 +143,9 @@ public class MediaManager {
 				return userWantSpeaker ? AudioManager.MODE_IN_CALL: AudioManager.MODE_NORMAL ;
 			}
 		}
+		if(userWantBluetooth) {
+		    targetMode = AudioManager.MODE_NORMAL;
+		}
 
 		Log.d(THIS_FILE, "Target mode... : " + targetMode);
 		return targetMode;
@@ -483,7 +486,7 @@ public class MediaManager {
 	}
 	
 	public void resetSettings() {
-		userWantBluetooth = true;
+		userWantBluetooth = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_BLUETOOTH);
 		userWantMicrophoneMute = false;
 		userWantSpeaker = false;
 	}
