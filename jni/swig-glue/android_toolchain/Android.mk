@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)/../nativesrc
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := swig-glue
-LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
+LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -fno-strict-aliasing
 
 PJ_ROOT_DIR := $(LOCAL_PATH)/../../pjsip/sources/
 PJ_ANDROID_ROOT_DIR := $(LOCAL_PATH)/../../pjsip/android_sources/
