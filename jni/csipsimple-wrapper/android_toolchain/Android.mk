@@ -1,12 +1,22 @@
-LOCAL_PATH := $(call my-dir)/../
+MODULE_PATH := $(call my-dir)/../
+
+# Hack for mips
+# Add a static target for libgcc
+include $(CLEAR_VARS)
+LOCAL_PATH := /
+LOCAL_MODULE    := libgcc 
+LOCAL_SRC_FILES := $(TARGET_LIBGCC)
+include $(PREBUILT_STATIC_LIBRARY)
+
 
 
 ##################
 # CSipSimple lib #
 ##################
 include $(CLEAR_VARS)
-LOCAL_MODULE := pjsipjni
+LOCAL_PATH := $(MODULE_PATH)
 
+LOCAL_MODULE := pjsipjni
 
 PJ_ROOT_DIR := $(LOCAL_PATH)/../pjsip/sources/
 PJ_ANDROID_ROOT_DIR := $(LOCAL_PATH)/../pjsip/android_sources/
@@ -44,28 +54,12 @@ LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/zrtp_android
 # NDK fixer
 LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/ndk_stl_fixer.cpp
 
-	
-#ifeq ($(MY_ANDROID_DEV),1)
-#LOCAL_SRC_FILES += $(JNI_SRC_DIR)/android_jni_dev.cpp
-#endif
-#ifeq ($(MY_ANDROID_DEV),2)
-#LOCAL_SRC_FILES += $(JNI_SRC_DIR)/opensl_dev.cpp
-#endif
 
 LOCAL_LDLIBS := -llog
-
-# -- debug build
-#ifeq ($(APP_OPTIM),debug)
-#LOCAL_CFLAGS += -g #debug
-#LOCAL_LDFLAGS += -Wl,-Map,xxx.map #create map fil
-#endif
-# 
 
 ifeq ($(MY_USE_TLS),1)
 LOCAL_LDLIBS += -ldl 
 endif
-
-#LOCAL_LDFLAGS := -Wl,-Map=moblox.map,--cref,--gc-section 
 
 ifeq ($(MY_USE_AMR),1)
 	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
@@ -135,6 +129,9 @@ LOCAL_STATIC_LIBRARIES += libwebrtc_aecm
 
 endif
 
+ifeq ($(TARGET_ARCH_ABI),mips)
+	LOCAL_STATIC_LIBRARIES += libgcc
+endif
 
 include $(BUILD_SHARED_LIBRARY)
 
