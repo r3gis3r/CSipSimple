@@ -1,12 +1,12 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="unknown">לא ידוע</string>
-    <string name="type_incoming">נכנס</string>
-    <string name="type_outgoing">יוצא</string>
-    <string name="type_missed">לא נענו</string>
-    <string name="callBack">התקשר בחזרה</string>
-    <string name="callAgain">התקשר שוב</string>
-    <string name="returnCall">השב לשיחה</string>
-
+  <string name="unknown">לא ידוע</string>
+  <string name="type_incoming">נכנסת</string>
+  <string name="type_outgoing">יוצאת</string>
+  <string name="type_missed">לא נענו</string>
+  <string name="callBack">התקשרות חזרה</string>
+  <string name="callAgain">התקשרות חוזרת</string>
+  <string name="returnCall">מענה לשיחה</string>
+  <string name="call">שיחה</string>
+  <string name="no_call_history">אין היסטורית שיחות</string>
 </resources>

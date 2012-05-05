@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_ovh_phone_number_desc">מספר הטלפון צריך להיות במתכונת כמו 0785xxxxxx</string>
   <string name="w_sapo_phone_number_desc">מספר הטלפון צריך להיות במתכונת כמו 972785xxxxxx+</string>
+  <string name="w_pbxes_user_extension">הרחבת משתמש (משהו כגון user-1)</string>
 </resources>

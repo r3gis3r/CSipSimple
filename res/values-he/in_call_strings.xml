@@ -1,23 +1,25 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="take_call">ענה</string>
-  <string name="decline_call">התעלם</string>
+  <string name="take_call">מענה</string>
+  <string name="decline_call">התעלמות</string>
   <string name="clear_call">סיום</string>
   <string name="touch_lock">טפיחה כפולה לפתיחה</string>
   <string name="dialpad">לוח חיוג</string>
   <string name="bluetooth">בלוטות\'</string>
   <string name="speaker">רמקול</string>
-  <string name="mute">השתק</string>
-  <string name="add_call">הוסף שיחה</string>
+  <string name="mute">השתקה</string>
+  <string name="add_call">הוספת שיחה</string>
   <string name="call_state_calling">מתקשר…</string>
   <string name="call_state_confirmed">מדבר</string>
   <string name="call_state_connecting">מתחבר…</string>
-  <string name="call_state_disconnected">נתק</string>
-  <string name="call_state_early">צלצל…</string>
+  <string name="call_state_disconnected">ניתוק</string>
+  <string name="call_state_early">מצלצל…</string>
   <string name="call_state_incoming">שיחה נכנסת…</string>
   <string name="call_state_null">שגיאה</string>
-  <string name="unlock">פתח נעילה</string>
-  <string name="record">הקלט</string>
+  <string name="unlock">פתיחת נעילה</string>
+  <string name="record">הקלטה</string>
   <string name="stop_recording">מפסיק להקליט</string>
-  <string name="xfer">העבר</string>
+  <string name="xfer">העברה</string>
+  <string name="hold_call">החזקה</string>
+  <string name="transfer_call">העברה</string>
 </resources>

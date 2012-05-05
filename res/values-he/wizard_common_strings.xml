@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_common_display_name">שם החשבון</string>
   <string name="w_common_display_name_desc">הצג שם עבור חשבון זה</string>
@@ -10,4 +10,5 @@
   <string name="w_common_password_desc">הסיסמה עבור החשבון שלך</string>
   <string name="w_common_server">שרת</string>
   <string name="w_common_server_desc">שרת סיפ דומיין/IP [יציאה:]</string>
+  <string name="create_account">יצירת חשבון</string>
 </resources>
