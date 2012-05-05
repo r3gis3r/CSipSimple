@@ -1,10 +1,19 @@
+JNI_DIR := $(call my-dir)
+# Include for local development
+_local_mk := $(strip $(wildcard $(JNI_DIR)/Local.mk))
+ifdef _local_mk
+include $(JNI_DIR)/Local.mk
+$(call __ndk_info,Uses local settings)
+else
+$(call __ndk_info,No local settings... build all in release mode !)
+endif
 
-#APP_OPTIM        := debug
+ifndef APP_OPTIM
 APP_OPTIM        := release
-
-APP_ABI := armeabi armeabi-v7a
-#APP_ABI := mips 
-#APP_ABI := x86 
+endif
+ifndef APP_ABI
+APP_ABI := armeabi armeabi-v7a x86 mips
+endif
 
 
 

@@ -1,11 +1,118 @@
-<project default="nightly">
+<project default="trunk">
+
+	<property name="css.tmp_libs_dir" value="../tmp_libs"/>
+
+
+	<!-- Exclude all built libs files -->
+	<target name="exclude_all_libs">
+		<move todir="${css.tmp_libs_dir}">
+			<fileset dir="libs" >
+				<include name="*/**"/>
+			</fileset>
+		</move>
+	</target>
+
+	<!-- Copy libs files to project libs folder -->
+	<target name="use_arch">
+		<echo>Copy libs for ${css.arch}</echo>
+		<move todir="libs">
+			<fileset dir="${css.tmp_libs_dir}">
+				<include name="${css.arch}/*"/>
+			</fileset>
+		</move>
+	</target>
+
+	<!-- Flag csipsimple so that it is known as distributed by a channel -->
+	<target name="flag_channel">
+		<echo>Flag channel ${css.channel}</echo>
+		<replaceregexp file="AndroidManifest.xml"
+			flags="m"
+			match='(meta-data[\t\r\n ]*android:name="app_channel"[\t\r\n ]*android:value=")[^"]*(")'
+			replace='\1${css.channel}\2' />
+	</target>
+
+	<!-- Flag csipsimple so that it's known as a kind of distribution -->
+	<target name="flag_type">
+		<echo>Flag type ${css.type}</echo>
+		<replaceregexp file="AndroidManifest.xml"
+			flags="m"
+			match='(meta-data[\t\r\n ]*android:name="app_type"[\t\r\n ]*android:value=")[^"]*(")'
+			replace='\1${css.type}\2' />
+
+	</target>
+
+	<!-- Flag the app as a nightly build -->
 	<target name="nightly">
 		<replaceregexp file="AndroidManifest.xml" 
 			match='android:icon="@drawable/ic_launcher_phone"'
 			replace='android:icon="@drawable/ic_launcher_nightly"' />
-		<replaceregexp file="AndroidManifest.xml"
-			flags="m"
-			match='(meta-data[\t\r\n ]*android:name="app_type"[\t\r\n ]*android:value=")[^"]*(")'
-			replace='\1nightly\2' />
+		
+		<antcall target="flag_type" >
+			<param name="css.type" value="nightly" />
+		</antcall>
 	</target>
+
+	<!-- Trunk build -->
+	<target name="trunk">
+		<antcall target="nightly" />
+		<antcall target="exclude_all_libs" />
+		<antcall target="use_arch" >
+			<param name="css.arch" value="armeabi"/>
+		</antcall>
+		<antcall target="use_arch" >
+			<param name="css.arch" value="armeabi-v7a"/>
+		</antcall>
+		<antcall target="flag_channel" >
+			<param name="css.channel" value="trunk"/>
+		</antcall>
+	</target>
+	
+	<!-- Only armeabi build -->
+	<target name="armeabi">
+		<antcall target="nightly" />
+		<antcall target="exclude_all_libs" />
+		<antcall target="use_arch" >
+			<param name="css.arch" value="armeabi"/>
+		</antcall>
+		<antcall target="flag_channel" >
+			<param name="css.channel" value="trunk"/>
+		</antcall>
+	</target>
+	
+	<!-- Only armeabi-v7a build -->
+	<target name="armeabi-v7a">
+		<antcall target="nightly" />
+		<antcall target="exclude_all_libs" />
+		<antcall target="use_arch" >
+			<param name="css.arch" value="armeabi-v7a"/>
+		</antcall>
+		<antcall target="flag_channel" >
+			<param name="css.channel" value="trunk"/>
+		</antcall>
+	</target>
+
+	<!-- Only x86 build -->
+	<target name="x86">
+		<antcall target="nightly" />
+		<antcall target="exclude_all_libs" />
+		<antcall target="use_arch" >
+			<param name="css.arch" value="x86"/>
+		</antcall>
+		<antcall target="flag_channel" >
+			<param name="css.channel" value="trunk"/>
+		</antcall>
+	</target>
+
+	<!-- Only mips build -->
+	<target name="mips">
+		<antcall target="nightly" />
+		<antcall target="exclude_all_libs" />
+		<antcall target="use_arch" >
+			<param name="css.arch" value="mips"/>
+		</antcall>
+		<antcall target="flag_channel" >
+			<param name="css.channel" value="trunk"/>
+		</antcall>
+	</target>
+	
 </project>
