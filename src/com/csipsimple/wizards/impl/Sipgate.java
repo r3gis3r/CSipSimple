@@ -21,20 +21,9 @@
 
 package com.csipsimple.wizards.impl;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.os.Handler;
 import android.os.Message;
+import android.preference.EditTextPreference;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -47,9 +36,26 @@ import com.csipsimple.utils.Base64;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Sipgate extends AlternateServerImplementation {
 	
-	@Override
+	private static final String PROXY_KEY = "proxy_server";
+
+    private EditTextPreference accountProxy;
+
+
+    @Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		//Override titles
@@ -62,11 +68,34 @@ public class Sipgate extends AlternateServerImplementation {
 		accountPassword.setTitle(R.string.w_sipgate_password);
 		accountPassword.setDialogTitle(R.string.w_sipgate_password);
 		
+		// Add optional proxy
+        boolean recycle = true;
+        accountProxy = (EditTextPreference) findPreference(PROXY_KEY);
+        if(accountProxy == null) {
+            accountProxy = new EditTextPreference(parent);
+            accountProxy.setKey(PROXY_KEY);
+            accountProxy.setTitle(R.string.w_advanced_proxy);
+            accountProxy.setSummary(R.string.w_advanced_proxy_desc);
+            accountProxy.setDialogMessage(R.string.w_advanced_proxy_desc);
+            recycle = false;
+        }
+        
+        String currentProxy = account.getProxyAddress();
+        String currentServer = account.getSipDomain();
+        if(!TextUtils.isEmpty(currentProxy) && !TextUtils.isEmpty(currentServer)
+                && !currentProxy.equalsIgnoreCase(currentProxy)) {
+            accountProxy.setText(currentProxy);
+        }
 
-		//Get wizard specific row
+        if(!recycle) {
+            addPreference(accountProxy);
+        }
+        
+		
+
+		//Get wizard specific row for balance
 		customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
 		customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
-		
 		updateAccountInfos(account);
 	}
 	
@@ -74,6 +103,10 @@ public class Sipgate extends AlternateServerImplementation {
 	
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
+		String nproxy = getText(accountProxy);
+		if(!TextUtils.isEmpty(nproxy)) {
+		    account.proxies = new String[] {"sip:"+nproxy};
+		}
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.allow_contact_rewrite = false;
 		return account;
@@ -98,8 +131,20 @@ public class Sipgate extends AlternateServerImplementation {
 		return true;
 	}
 	
+
+    @Override
+    public String getDefaultFieldSummary(String fieldName) {
+        if(PROXY_KEY.equals(fieldName)) {
+            return parent.getString(R.string.w_advanced_proxy_desc);
+        }
+        return super.getDefaultFieldSummary(fieldName);
+    }
 	
-	
+    @Override
+    public void updateDescriptions() {
+        super.updateDescriptions();
+        setStringFieldSummary(PROXY_KEY);
+    }
 
 	
 	// Balance consulting

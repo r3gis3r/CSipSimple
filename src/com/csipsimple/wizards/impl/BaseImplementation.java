@@ -109,6 +109,7 @@ public abstract class BaseImplementation implements WizardIface {
      */
     protected void addPreference(Preference pref) {
         parent.getPreferenceScreen().addPreference(pref);
+        markFieldValid(pref);
     }
     
     /**
