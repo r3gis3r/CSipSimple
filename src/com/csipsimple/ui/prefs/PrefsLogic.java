@@ -26,9 +26,9 @@ import android.content.Intent;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.telephony.TelephonyManager;
-import android.view.Menu;
-import android.view.MenuItem;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.Compatibility;

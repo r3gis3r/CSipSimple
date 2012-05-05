@@ -24,12 +24,12 @@ package com.csipsimple.ui.prefs.hc;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.ui.prefs.PrefsFast;
@@ -40,7 +40,7 @@ import com.csipsimple.utils.PreferencesWrapper;
 import java.util.List;
 
 @TargetApi(11)
-public class MainPrefs extends PreferenceActivity {
+public class MainPrefs extends SherlockPreferenceActivity {
     private PreferencesWrapper prefsWrapper;
     private List<Header> mFragments;
 
@@ -78,7 +78,7 @@ public class MainPrefs extends PreferenceActivity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.main_prefs, menu);
         return super.onCreateOptionsMenu(menu);
     }
