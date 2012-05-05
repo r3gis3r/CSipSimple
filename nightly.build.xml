@@ -1,7 +1,11 @@
 <project default="nightly">
 	<target name="nightly">
-		<replaceregexp file="AndroidManifest.xml" match='android:icon="@drawable/ic_launcher_phone"'
+		<replaceregexp file="AndroidManifest.xml" 
+			match='android:icon="@drawable/ic_launcher_phone"'
 			replace='android:icon="@drawable/ic_launcher_nightly"' />
-		
+		<replaceregexp file="AndroidManifest.xml"
+			flags="m"
+			match='(meta-data[\t\r\n ]*android:name="app_type"[\t\r\n ]*android:value=")[^"]*(")'
+			replace='\1nightly\2' />
 	</target>
 </project>
