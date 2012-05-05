@@ -27,7 +27,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -142,8 +141,7 @@ public class Help extends SherlockDialogFragment implements OnItemClickListener 
 
         items.add(new HelpEntry(android.R.drawable.ic_menu_gallery, R.string.legal_information, LEGALS));
         
-        PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(getActivity());
-		if(pinfo != null && pinfo.applicationInfo.icon == R.drawable.ic_launcher_nightly) {
+        if(NightlyUpdater.isNightlyBuild(getActivity())){
 			items.add(new HelpEntry(R.drawable.ic_launcher_nightly, R.string.update_nightly_build, NIGHTLY));
 		}
 		

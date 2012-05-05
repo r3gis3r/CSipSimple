@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -385,29 +384,26 @@ public class SipHome extends SherlockFragmentActivity {
         // integration
         // Compatibility.getDialerIntegrationState(SipHome.this);
         // }
+        
+        if(NightlyUpdater.isNightlyBuild(this)) {
+            Log.d(THIS_FILE, "Sanity check : we have a nightly build here");
+            ConnectivityManager connectivityService = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo ni = connectivityService.getActiveNetworkInfo();
+            // Only do the process if we are on wifi
+            if (ni != null && ni.isConnected() && ni.getType() == ConnectivityManager.TYPE_WIFI) {
+                // Only do the process if we didn't dismissed previously
+                NightlyUpdater nu = new NightlyUpdater(this);
 
-        PackageInfo pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(this);
-        if (pinfo != null) {
-            if (pinfo.applicationInfo.icon == R.drawable.ic_launcher_nightly) {
-                Log.d(THIS_FILE, "Sanity check : we have a nightly build here");
-                ConnectivityManager connectivityService = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-                NetworkInfo ni = connectivityService.getActiveNetworkInfo();
-                // Only do the process if we are on wifi
-                if (ni != null && ni.isConnected() && ni.getType() == ConnectivityManager.TYPE_WIFI) {
-                    // Only do the process if we didn't dismissed previously
-                    NightlyUpdater nu = new NightlyUpdater(this);
-
-                    if (!nu.ignoreCheckByUser()) {
-                        long lastCheck = nu.lastCheck();
-                        long current = System.currentTimeMillis();
-                        long oneDay = 43200000; // 12 hours
-                        if (current - oneDay > lastCheck) {
-                            if (onForeground) {
-                                // We have to check for an update
-                                UpdaterPopupLauncher ru = nu.getUpdaterPopup(false);
-                                if (ru != null && asyncSanityCheker != null) {
-                                    runOnUiThread(ru);
-                                }
+                if (!nu.ignoreCheckByUser()) {
+                    long lastCheck = nu.lastCheck();
+                    long current = System.currentTimeMillis();
+                    long oneDay = 43200000; // 12 hours
+                    if (current - oneDay > lastCheck) {
+                        if (onForeground) {
+                            // We have to check for an update
+                            UpdaterPopupLauncher ru = nu.getUpdaterPopup(false);
+                            if (ru != null && asyncSanityCheker != null) {
+                                runOnUiThread(ru);
                             }
                         }
                     }

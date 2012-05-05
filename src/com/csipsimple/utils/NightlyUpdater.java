@@ -21,14 +21,6 @@
 
 package com.csipsimple.utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.PendingIntent;
@@ -38,13 +30,26 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.service.DeviceStateReceiver;
 import com.csipsimple.service.Downloader;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class NightlyUpdater {
 
@@ -57,18 +62,63 @@ public class NightlyUpdater {
 	private Context context;
 	private SharedPreferences prefs;
 	private PackageInfo pinfo;
+    private String channel;
 
 	public NightlyUpdater(Context ctxt) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(ctxt);
 		context = ctxt;
 		pinfo = PreferencesProviderWrapper.getCurrentPackageInfos(context);
+        channel = getChannelFolder(context);
 	}
 	
-	private final static String BASE_UPDATE_VERSION = "http://nightlies.csipsimple.com/trunk/";
+	private final static String BASE_UPDATE_VERSION = "http://nightlies.csipsimple.com/";
+	
+	private final static String META_TYPE = "app_type";
+	private final static String META_CHANNEL = "app_channel";
+	
+	private final static String NIGHTLY_TYPE = "nightly";
+	//private final static String RELEASE_TYPE = "release";
+	
+	
+	private static Bundle getApplicationMetaData(Context ctxt) throws NameNotFoundException {
+	    ApplicationInfo apInfo = ctxt.getPackageManager().getApplicationInfo(ctxt.getPackageName(), PackageManager.GET_META_DATA);
+	    return apInfo.metaData;
+	}
+	
+	public static boolean isNightlyBuild(Context ctxt) {
+	    try {
+	        Bundle metaData = getApplicationMetaData(ctxt);
+            String appType = metaData.getString(META_TYPE);
+    	    if(!TextUtils.isEmpty(appType)) {
+        	    if(NIGHTLY_TYPE.equalsIgnoreCase(appType)) {
+        	        return true;
+        	    }
+    	    }
+	    } catch (NameNotFoundException e) {
+            Log.e(THIS_FILE, "Not able to get self app info", e);
+        }
+	    return false;
+	}
+	
+	public static String getChannelFolder(Context ctxt) {
+	    Bundle metaData;
+        try {
+            metaData = getApplicationMetaData(ctxt);
+            String appChannel = metaData.getString(META_CHANNEL);
+            if(!TextUtils.isEmpty(appChannel)) {
+                return appChannel;
+            }
+        } catch (NameNotFoundException e) {
+            Log.e(THIS_FILE, "Not able to get self app info", e);
+        }
+        return "trunk";
+	}
+	
 	
 	private int getLastOnlineVersion() {
 		try {
-			URL url = new URL(BASE_UPDATE_VERSION + "CSipSimple-latest-trunk.version");
+			URL url = new URL(BASE_UPDATE_VERSION + channel + "/CSipSimple-latest-" + channel + ".version");
+			Log.d(THIS_FILE, "Url : "+url);
 			InputStream content = (InputStream) url.getContent();
 			if(content != null) {
 				BufferedReader r = new BufferedReader(new InputStreamReader(content));
@@ -147,7 +197,7 @@ public class NightlyUpdater {
 						public void onClick(DialogInterface dialog, int which) {
 							
 							Intent it = new Intent();
-							it.setData(Uri.parse(BASE_UPDATE_VERSION + "CSipSimple-r"+version+"-trunk.apk"));
+							it.setData(Uri.parse(BASE_UPDATE_VERSION + channel + "/CSipSimple-r"+version+"-" + channel + ".apk"));
 							it.setClass(context, Downloader.class);
 							it.putExtra(Downloader.EXTRA_ICON, R.drawable.ic_launcher_nightly);
 							it.putExtra(Downloader.EXTRA_TITLE, "CSipSimple nightly build");

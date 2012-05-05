@@ -144,14 +144,16 @@ public class CollectLogs {
 		log.append("android.os.Build.MODEL : " + android.os.Build.MODEL );
         log.append(LINE_SEPARATOR); 
 		log.append("android.os.Build.PRODUCT : " + android.os.Build.PRODUCT );
-        log.append(LINE_SEPARATOR); 
+        log.append(LINE_SEPARATOR);
 		log.append("android.os.Build.TAGS : " + android.os.Build.TAGS );
+        log.append(LINE_SEPARATOR);
+        log.append("android.os.Build.CPU_ABI : " + android.os.Build.CPU_ABI );
         log.append(LINE_SEPARATOR); 
 		log.append("android.os.Build.VERSION.INCREMENTAL : " + android.os.Build.VERSION.INCREMENTAL );
         log.append(LINE_SEPARATOR); 
 		log.append("android.os.Build.VERSION.RELEASE : " + android.os.Build.VERSION.RELEASE );
         log.append(LINE_SEPARATOR); 
-		log.append("android.os.Build.VERSION.SDK : " + android.os.Build.VERSION.SDK );
+		log.append("android.os.Build.VERSION.SDK_INT : " + android.os.Build.VERSION.SDK_INT );
         log.append(LINE_SEPARATOR); 
 		
 		return log;
