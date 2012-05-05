@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -69,7 +69,7 @@ WebRtc_Word32 AudioCoder::Decode(AudioFrame& decodedAudio,
     {
         const WebRtc_UWord8 payloadType = _receiveCodec.pltype;
         _decodeTimestamp += _receiveCodec.pacsize;
-        if(_acm->IncomingPayload(incomingPayload,
+        if(_acm->IncomingPayload((const WebRtc_UWord8*) incomingPayload,
                                  payloadLength,
                                  payloadType,
                                  _decodeTimestamp) == -1)
@@ -94,8 +94,8 @@ WebRtc_Word32 AudioCoder::Encode(const AudioFrame& audio,
     // Fake a timestamp in case audio doesn't contain a correct timestamp.
     // Make a local copy of the audio frame since audio is const
     AudioFrame audioFrame = audio;
-    audioFrame._timeStamp = _encodeTimestamp;
-    _encodeTimestamp += audioFrame._payloadDataLengthInSamples;
+    audioFrame.timestamp_ = _encodeTimestamp;
+    _encodeTimestamp += audioFrame.samples_per_channel_;
 
     // For any codec with a frame size that is longer than 10 ms the encoded
     // length in bytes should be zero until a a full frame has been encoded.
