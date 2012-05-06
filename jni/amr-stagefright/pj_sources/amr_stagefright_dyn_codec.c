@@ -300,6 +300,12 @@ pj_status_t dlsym_stagefright(struct amr_data* amr_data){
 	pj_status_t status;
 	amr_data->libEncode = NULL;
 	amr_data->libDecode = NULL;
+
+	status = dlsym_stagefright_40(amr_data);
+	if(status == PJ_SUCCESS){
+		return status;
+	}
+
 	status = dlsym_stagefright_23(amr_data);
 	if(status == PJ_SUCCESS){
 		return status;
@@ -316,6 +322,29 @@ on_error :
 	dlclose_stagefright(amr_data);
 	return PJ_EINVAL;
 }
+
+
+pj_status_t dlsym_stagefright_40(struct amr_data* amr_data){
+	amr_data->libEncode = dlopen("libstagefright.so", RTLD_LAZY);
+	if(amr_data->libEncode != NULL){
+		amr_data->AMREncodeInit = dlsym(amr_data->libEncode, "AMREncodeInit");
+		amr_data->AMREncodeReset = dlsym(amr_data->libEncode, "AMREncodeReset");
+		amr_data->AMREncodeExit = dlsym(amr_data->libEncode, "AMREncodeExit");
+		amr_data->AMREncode = dlsym(amr_data->libEncode, "AMREncode");
+
+		amr_data->libDecode = dlopen("libstagefright_soft_amrdec.so", RTLD_LAZY);
+		if(amr_data->libDecode != NULL){
+			amr_data->GSMInitDecode = dlsym(amr_data->libDecode, "GSMInitDecode");
+			amr_data->AMRDecode = dlsym(amr_data->libDecode, "AMRDecode");
+			amr_data->Speech_Decode_Frame_reset = dlsym(amr_data->libDecode, "Speech_Decode_Frame_reset");
+			amr_data->GSMDecodeFrameExit = dlsym(amr_data->libDecode, "GSMDecodeFrameExit");
+		}
+
+	    return dlcheck_sym(amr_data);
+	}
+	return PJ_EINVAL;
+}
+
 
 pj_status_t dlsym_stagefright_23(struct amr_data* amr_data){
 	amr_data->libEncode = dlopen("libstagefright.so", RTLD_LAZY);
