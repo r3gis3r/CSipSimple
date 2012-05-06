@@ -669,6 +669,18 @@ public class SipService extends Service {
 			return SipManager.SUCCESS;
 		}
 
+        @Override
+        public long confGetRxTxLevel(final int port) throws RemoteException {
+            ReturnRunnable action = new ReturnRunnable() {
+                @Override
+                protected Object runWithReturn() throws SameThreadException {
+                    return (Long) pjService.getRxTxLevel(port);
+                }
+            };
+            getExecutor().execute(action);
+            return (Long) action.getResult();
+        }
+
 
 		
 	};

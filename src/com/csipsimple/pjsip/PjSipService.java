@@ -1817,5 +1817,12 @@ public class PjSipService {
         return "";
     }
 
+    public long getRxTxLevel(int port) {
+        long[] rx_level = new long[1];
+        long[] tx_level = new long[1];
+        pjsua.conf_get_signal_level(port, tx_level, rx_level);
+        return (rx_level[0] << 8 | tx_level[0] );
+    }
+
 
 }

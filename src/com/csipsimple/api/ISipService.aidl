@@ -99,6 +99,12 @@ interface ISipService{
 	void setBluetoothOn(boolean on);
 	void confAdjustTxLevel(int port, float value);
 	void confAdjustRxLevel(int port, float value);
+	/**
+	 * Get Rx and Tx sound level for a given port
+	 * @param int port id
+	 * @return The RX and TX (0-255) level encoded as RX << 8 | TX
+	 */
+	long confGetRxTxLevel(int port);
 	void setEchoCancellation(boolean on);
 	void adjustVolume(in SipCallSession callInfo, int direction, int flags);
 	MediaState getCurrentMediaState();
