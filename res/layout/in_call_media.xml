@@ -81,20 +81,22 @@
 
     <!-- <Button android:layout_height="wrap_content" android:id="@+id/record" android:text="Record" android:layout_gravity="center" android:layout_width="fill_parent"></Button> -->
 
+    <include layout="@layout/audio_test_view" />
+
     <LinearLayout
         android:id="@+id/ok_bar"
         style="@style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:layout_weight="0"
+        android:layout_weight="1"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/save_bt"
-            android:layout_width="0dip"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="@string/ok" >
         </Button>
     </LinearLayout>

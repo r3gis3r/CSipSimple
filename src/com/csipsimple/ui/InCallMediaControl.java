@@ -21,9 +21,6 @@
 
 package com.csipsimple.ui;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -33,27 +30,31 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.RemoteException;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.csipsimple.R;
-import com.csipsimple.api.ISipConfiguration;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Log;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class InCallMediaControl extends Activity implements OnSeekBarChangeListener, OnCheckedChangeListener, OnClickListener {
 	protected static final String THIS_FILE = "inCallMediaCtrl";
@@ -67,6 +68,9 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 	
 	private final static int AUTO_QUIT_DELAY = 3000;
 	private Timer quitTimer;
+    private ProgressBar txProgress;
+    private ProgressBar rxProgress;
+    private LinearLayout okBar;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,62 +78,55 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		
 		setContentView(R.layout.in_call_media);
 
-		LayoutParams params = getWindow().getAttributes();
-		params.width = LayoutParams.FILL_PARENT;
-		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
 
 		
 		speakerAmplification = (SeekBar) findViewById(R.id.speaker_level);
 		microAmplification = (SeekBar) findViewById(R.id.micro_level);
 		saveButton = (Button) findViewById(R.id.save_bt);
 		echoCancellation = (CheckBox) findViewById(R.id.echo_cancellation);
-	//	recordButton = (Button) findViewById(R.id.record);
+		okBar = (LinearLayout) findViewById(R.id.ok_bar);
 		
 		speakerAmplification.setOnSeekBarChangeListener(this);
 		microAmplification.setOnSeekBarChangeListener(this);
 		
-	//	recordButton.setOnClickListener(this);
 		saveButton.setOnClickListener(this);
 		
 		echoCancellation.setOnCheckedChangeListener(this);
+		
+		findViewById(R.id.audio_test_text).setVisibility(View.GONE);
+        rxProgress = (ProgressBar) findViewById(R.id.rx_bar);
+        txProgress = (ProgressBar) findViewById(R.id.tx_bar);
 	}
 	
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		Intent confServiceIntent = new Intent("com.csipsimple.service.SipConfiguration");
-		bindService(confServiceIntent , configurationConnection, BIND_AUTO_CREATE);
-		
-		Intent sipServiceIntent = new Intent("com.csipsimple.service.SipService");
+		Intent sipServiceIntent = new Intent(SipManager.INTENT_SIP_SERVICE);
 		bindService(sipServiceIntent , sipConnection, BIND_AUTO_CREATE);
 		
 		
-		int direction = getIntent().getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
+		int direction = getIntent().getIntExtra(Intent.EXTRA_KEY_EVENT, 0);
 		if(direction == AudioManager.ADJUST_LOWER  || direction == AudioManager.ADJUST_RAISE) {
 			isAutoClose = true;
-			LinearLayout l = (LinearLayout) findViewById(R.id.ok_bar);
-			if(l != null) {
-				l.setVisibility(View.GONE);
-			}
+			okBar.setVisibility(View.GONE);
 			delayedQuit(AUTO_QUIT_DELAY);
 		}else {
+		    okBar.setVisibility(View.VISIBLE);
 			isAutoClose = false;
 		}
 		
 		registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
+        if (monitorThread == null) {
+            monitorThread = new MonitorThread();
+            monitorThread.start();
+        }
 		
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		try {
-			unbindService(configurationConnection);
-		}catch(Exception e) {
-			//Just ignore that
-		}
 		try {
 			unbindService(sipConnection);
 		}catch(Exception e) {
@@ -146,8 +143,11 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		}catch (IllegalArgumentException e) {
 			//That's the case if not registered (early quit)
 		}
-		
-		configurationService = null;
+
+        if (monitorThread != null) {
+            monitorThread.markFinished();
+            monitorThread = null;
+        }
 		sipService = null;
 	}
 	
@@ -256,20 +256,6 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 
 	
 	
-	private ISipConfiguration configurationService;
-	private ServiceConnection configurationConnection = new ServiceConnection(){
-		@Override
-		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-			Log.d(THIS_FILE, "Configuration service -> "+arg0.flattenToString());
-			configurationService = ISipConfiguration.Stub.asInterface(arg1);
-			updateUIFromMedia();
-		}
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			
-		}
-    };
-    
     private ISipService sipService;
 	private ServiceConnection sipConnection = new ServiceConnection(){
 		@Override
@@ -285,33 +271,35 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
     };
 	
 
-	private void updateUIFromMedia() {
-		if(sipService != null && configurationService != null) {
-			try {
-				boolean useBT = sipService.getCurrentMediaState().isBluetoothScoOn;
-				
-				Float speakerLevel = configurationService.getPreferenceFloat(useBT ? 
-						SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL) * 10;
-				speakerAmplification.setProgress(speakerLevel.intValue());
-				Float microLevel = configurationService.getPreferenceFloat(useBT ?
-						SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL) * 10;
-				microAmplification.setProgress(microLevel.intValue());
-				
-				echoCancellation.setChecked(configurationService.getPreferenceBoolean(SipConfigManager.ECHO_CANCELLATION));
-			} catch (RemoteException e) {
-				Log.e(THIS_FILE, "Impossible to get mic/speaker level", e);
-			}
-			
-		//	updateCallButton();
-		}
-		
-	}
+    private void updateUIFromMedia() {
+
+        boolean useBT = false;
+        if (sipService != null) {
+            try {
+                useBT = sipService.getCurrentMediaState().isBluetoothScoOn;
+            } catch (RemoteException e) {
+                Log.e(THIS_FILE, "Sip service not avail for request ", e);
+            }
+        }
+
+        Float speakerLevel = SipConfigManager.getPreferenceFloatValue(this, useBT ?
+                SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL) * 10;
+        speakerAmplification.setProgress(speakerLevel.intValue());
+
+        Float microLevel = SipConfigManager.getPreferenceFloatValue(this, useBT ?
+                SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL) * 10;
+        microAmplification.setProgress(microLevel.intValue());
+
+        echoCancellation.setChecked(SipConfigManager.getPreferenceBooleanValue(this,
+                SipConfigManager.ECHO_CANCELLATION));
+
+    }
 
 
 	@Override
 	public void onProgressChanged(SeekBar arg0, int value, boolean arg2) {
 		Log.d(THIS_FILE, "Progress has changed");
-		if(sipService != null && configurationService != null) {
+		if(sipService != null) {
 			try {
 				Float newValue = (float) ( value / 10.0 );
 				String key;
@@ -320,11 +308,11 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 				if (sId == R.id.speaker_level) {
 					sipService.confAdjustTxLevel(0, newValue);
 					key =  useBT ? SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL;
-					configurationService.setPreferenceFloat(key, newValue);
+					SipConfigManager.setPreferenceFloatValue(this, key, newValue);
 				} else if (sId == R.id.micro_level) {
 					sipService.confAdjustRxLevel(0, newValue);
 					key =  useBT ? SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL;
-					configurationService.setPreferenceFloat(key, newValue);
+					SipConfigManager.setPreferenceFloatValue(this, key, newValue);
 				}
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Impossible to set mic/speaker level", e);
@@ -353,12 +341,12 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 
 	@Override
 	public void onCheckedChanged(CompoundButton arg0, boolean value) {
-		if(sipService != null && configurationService != null) {
+		if(sipService != null) {
 			try {
 				int bId = arg0.getId();
 				if (bId == R.id.echo_cancellation) {
 					sipService.setEchoCancellation(value);
-					configurationService.setPreferenceBoolean(SipConfigManager.ECHO_CANCELLATION, value);
+					SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.ECHO_CANCELLATION, value);
 				}
 				//Update quit timer
 				if(isAutoClose) {
@@ -376,16 +364,65 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 			finish();
 		}
 	}
+
 	
-	/*
-	private void updateCallButton() {
-		if(sipService != null) {
-			try {
-				boolean isRecording = (sipService.getRecordedCall() != -1);
-				recordButton.setText(isRecording?"Stop":"Record");
-			} catch (RemoteException e) {
-				Log.e(THIS_FILE, "Impossible to find record state", e);
-			}
-		}
-	}*/
+	// TODO : this should be a widget...
+    private class TxRxResult {
+        int tx_level;
+        int rx_level;
+    }
+
+    private MonitorThread monitorThread;
+
+    private class MonitorThread extends Thread {
+        private boolean finished = false;
+
+        public synchronized void markFinished() {
+            finished = true;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            while (true) {
+                if (sipService != null) {
+                    try {
+                        long value = sipService.confGetRxTxLevel(0);
+                        TxRxResult toPost = new TxRxResult();
+                        toPost.rx_level = (int) ((value >> 8) & 0xff);
+                        toPost.tx_level = (int) (value & 0xff);
+                        mHandler.sendMessage(mHandler.obtainMessage(CONF_LEVEL_CHANGE, toPost));
+                    } catch (RemoteException e) {
+                        Log.e(THIS_FILE, "Problem with remote service", e);
+                        break;
+                    }
+                }
+
+                // End of loop, sleep for a while and exit if necessary
+                try {
+                    sleep(100);
+                } catch (InterruptedException e) {
+                    Log.e(THIS_FILE, "Interupted monitor thread", e);
+                }
+                synchronized (this) {
+                    if (finished) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private static int CONF_LEVEL_CHANGE = 0;
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == CONF_LEVEL_CHANGE) {
+                TxRxResult res = (TxRxResult) msg.obj;
+                rxProgress.setProgress(res.rx_level);
+                txProgress.setProgress(res.tx_level);
+            }
+        }
+    };
 }
