@@ -512,6 +512,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
     public static final int AUDIO_SETTINGS_MENU = Menu.FIRST + 1;
     public static final int RECORD_MENU = Menu.FIRST + 2;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
@@ -548,6 +551,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         return super.onPrepareOptionsMenu(menu);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(Menu.NONE, AUDIO_SETTINGS_MENU, Menu.NONE, R.string.prefs_media).setIcon(
@@ -558,6 +564,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int optSel = item.getItemId();
@@ -598,6 +607,11 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         return currentCallInfo;
     }
 
+    /**
+     * Get call info for a given call id.
+     * @param callId the id of the call
+     * @return the sip call session.
+     */
     private SipCallSession getCallInfo(int callId) {
         if (callsInfo == null) {
             return null;
@@ -610,7 +624,12 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         return null;
     }
 
-
+    /**
+     * Get the call with the higher priority comparing two calls
+     * @param call1 First call object to compare
+     * @param call2 Second call object to compare
+     * @return The call object with highest priority
+     */
     private SipCallSession getPrioritaryCall(SipCallSession call1, SipCallSession call2) {
         // We prefer the not null
         if (call1 == null) {
@@ -634,13 +653,19 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         return (call1.callStart > call2.callStart) ? call2 : call1;
     }
 
-    
+    /**
+     * Should the application dispaly the overlay after a timeout.
+     * @return false if we are in table mode or if proximity sensor can be used
+     */
     private boolean shouldUseTimeoutOverlay() {
         return proximitySensor == null &&
                 proximityWakeLock == null &&
                 !Compatibility.isTabletScreen(this);
     }
     
+    /**
+     * Update the user interface from calls state.
+     */
     private synchronized void updateUIFromCall() {
         if (!serviceConnected) {
             return;
@@ -906,6 +931,9 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         }
     }
 
+    /**
+     * Update ui from media state.
+     */
     private synchronized void updateUIFromMedia() {
         if (service != null) {
             MediaState mediaState;

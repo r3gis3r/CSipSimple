@@ -90,9 +90,6 @@ public class SipService extends Service {
 	// static boolean creating = false;
 	private static final String THIS_FILE = "SIP SRV";
 
-    
-
-	
 	private SipWakeLock sipWakeLock;
 	private boolean autoAcceptCurrent = false;
 	public boolean supportMultipleCalls = false;
@@ -244,7 +241,7 @@ public class SipService extends Service {
 				SipCallSession activeCall = pjService.getActiveCallInProgress();
 				if(activeCall != null) {
 					if(!CustomDistribution.forceNoMultipleCalls()) {
-						serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.not_configured_multiple_calls, 0));
+					    notifyUserOfMessage(R.string.not_configured_multiple_calls);
 					}
 					return;
 				}
@@ -869,7 +866,9 @@ public class SipService extends Service {
 	
 	
 	
-	
+	/**
+	 * Register broadcast receivers.
+	 */
 	private void registerBroadcasts() {
 		// Register own broadcast receiver
 		if (deviceStateReceiver == null) {
@@ -904,6 +903,9 @@ public class SipService extends Service {
 		
 	}
 
+	/**
+	 * Remove registration of broadcasts receiver.
+	 */
 	private void unregisterBroadcasts() {
 		if(deviceStateReceiver != null) {
 			try {
@@ -930,8 +932,11 @@ public class SipService extends Service {
 		
 	}
 	
-	
-	@Override
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("deprecation")
+    @Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		if(intent != null) {
@@ -1059,7 +1064,7 @@ public class SipService extends Service {
 		supportMultipleCalls = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS);
 		
 		if(!isConnectivityValid()) {
-			serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, R.string.connection_not_valid, 0));
+		    notifyUserOfMessage(R.string.connection_not_valid);
 			Log.e(THIS_FILE, "No need to start sip");
 			return;
 		}
@@ -1115,8 +1120,21 @@ public class SipService extends Service {
         }
     }
 	
+    /**
+     * Notify user from a message the sip stack wants to transmit.
+     * For now it shows a toaster
+     * @param msg String message to display
+     */
 	public void notifyUserOfMessage(String msg) {
 		serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, msg));
+	}
+	/**
+	 * Notify user from a message the sip stack wants to transmit.
+     * For now it shows a toaster
+	 * @param resStringId The id of the string resource to display
+	 */
+	public void notifyUserOfMessage(int resStringId) {
+	    serviceHandler.sendMessage(serviceHandler.obtainMessage(TOAST_MESSAGE, resStringId, 0));
 	}
 	
 	private boolean hasSomeActiveAccount = false;

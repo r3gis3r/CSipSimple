@@ -1709,7 +1709,7 @@ public class PjSipService {
         }
         Log.d(THIS_FILE, "Stop recording call " + recordedCall);
         if (recorderId != INVALID_RECORD) {
-            pjsua.conf_remove_port(recorderId);
+            //pjsua.conf_remove_port(recorderId);
             pjsua.recorder_destroy(recorderId);
         }
         recorderId = INVALID_RECORD;

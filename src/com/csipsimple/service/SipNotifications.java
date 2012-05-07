@@ -34,6 +34,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.provider.CallLog;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Builder;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -54,10 +56,10 @@ public class SipNotifications {
 
 	private final NotificationManager notificationManager;
 	private final Context context;
-	private Notification inCallNotification;
-	private Notification missedCallNotification;
-	private Notification messageNotification;
-	private Notification messageVoicemail;
+	private Builder inCallNotification;
+	private Builder missedCallNotification;
+	private Builder messageNotification;
+	private Builder messageVoicemail;
 
 	public static final int REGISTER_NOTIF_ID = 1;
 	public static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
@@ -179,26 +181,32 @@ public class SipNotifications {
 		int icon = R.drawable.ic_stat_sipok;
 		CharSequence tickerText = context.getString(R.string.service_ticker_registered_text);
 		long when = System.currentTimeMillis();
+		
 
-		Notification notification = new Notification(icon, tickerText, when);
-
+        Builder nb = new NotificationCompat.Builder(context);
+        nb.setSmallIcon(icon);
+        nb.setTicker(tickerText);
+        nb.setWhen(when);
 		Intent notificationIntent = new Intent(SipManager.ACTION_SIP_DIALER);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+		
 		RegistrationNotification contentView = new RegistrationNotification(context.getPackageName());
 		contentView.clearRegistrations();
 		contentView.addAccountInfos(context, activeAccountsInfos);
 
 		// notification.setLatestEventInfo(context, contentTitle,
 		// contentText, contentIntent);
-		notification.contentIntent = contentIntent;
-		notification.contentView = contentView;
-		notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR | Notification.FLAG_ONLY_ALERT_ONCE;
+		nb.setContent(contentView);
+		nb.setContentIntent(contentIntent);
+		nb.setOngoing(true);
+		nb.setOnlyAlertOnce(true);
 		if (showNumbers) {
-			notification.number = activeAccountsInfos.size();
-		}
-
+		    nb.setNumber(activeAccountsInfos.size());
+        }
+		
+		Notification notification = nb.getNotification();
+		notification.flags |= Notification.FLAG_NO_CLEAR;
 		startForegroundCompat(REGISTER_NOTIF_ID, notification);
 	}
 
@@ -206,24 +214,31 @@ public class SipNotifications {
 	public void showNotificationForCall(SipCallSession currentCallInfo2) {
 		// This is the pending call notification
 		// int icon = R.drawable.ic_incall_ongoing;
-		int icon = android.R.drawable.stat_sys_phone_call;
+		@SuppressWarnings("deprecation")
+        int icon = android.R.drawable.stat_sys_phone_call;
 		CharSequence tickerText = context.getText(R.string.ongoing_call);
 		long when = System.currentTimeMillis();
 
-		if (inCallNotification == null) {
-			inCallNotification = new Notification(icon, tickerText, when);
-			inCallNotification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-			// notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
+		if(inCallNotification == null) {
+		    inCallNotification = new NotificationCompat.Builder(context);
+		    inCallNotification.setSmallIcon(icon);
+		    inCallNotification.setTicker(tickerText);
+		    inCallNotification.setWhen(when);
+		    inCallNotification.setOngoing(true);
 		}
-
+        
 		Intent notificationIntent = new Intent(SipManager.ACTION_SIP_CALL_UI);
 		notificationIntent.putExtra(SipManager.EXTRA_CALL_INFO, currentCallInfo2);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		
+        inCallNotification.setContentTitle(context.getText(R.string.ongoing_call));
+        inCallNotification.setContentText(currentCallInfo2.getRemoteContact());
+		inCallNotification.setContentIntent(contentIntent);
 
-		inCallNotification.setLatestEventInfo(context, context.getText(R.string.ongoing_call), currentCallInfo2.getRemoteContact(), contentIntent);
-
-		notificationManager.notify(CALL_NOTIF_ID, inCallNotification);
+		Notification notification = inCallNotification.getNotification();
+		notification.flags |= Notification.FLAG_NO_CLEAR;
+		notificationManager.notify(CALL_NOTIF_ID, notification);
 	}
 
 	public void showNotificationForMissedCall(ContentValues callLog) {
@@ -232,19 +247,24 @@ public class SipNotifications {
 		long when = System.currentTimeMillis();
 
 		if (missedCallNotification == null) {
-			missedCallNotification = new Notification(icon, tickerText, when);
-			missedCallNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-			missedCallNotification.defaults |= Notification.DEFAULT_LIGHTS;
-			missedCallNotification.defaults |= Notification.DEFAULT_SOUND;
+	        missedCallNotification = new NotificationCompat.Builder(context);
+	        missedCallNotification.setSmallIcon(icon);
+	        missedCallNotification.setTicker(tickerText);
+	        missedCallNotification.setWhen(when);
+	        missedCallNotification.setOnlyAlertOnce(true);
+	        missedCallNotification.setAutoCancel(true);
+	        missedCallNotification.setDefaults(Notification.DEFAULT_ALL);
 		}
 
 		Intent notificationIntent = new Intent(SipManager.ACTION_SIP_CALLLOG);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-		missedCallNotification.setLatestEventInfo(context, context.getText(R.string.missed_call), callLog.getAsString(CallLog.Calls.NUMBER), contentIntent);
-
-		notificationManager.notify(CALLLOG_NOTIF_ID, missedCallNotification);
+		missedCallNotification.setContentTitle(context.getText(R.string.missed_call));
+		missedCallNotification.setContentText(callLog.getAsString(CallLog.Calls.NUMBER));
+		missedCallNotification.setContentIntent(contentIntent);
+		
+		notificationManager.notify(CALLLOG_NOTIF_ID, missedCallNotification.getNotification());
 	}
 
 	public void showNotificationForMessage(SipMessage msg) {
@@ -257,11 +277,13 @@ public class SipNotifications {
 			CharSequence tickerText = buildTickerMessage(context, from, msg.getBody());
 
 			if (messageNotification == null) {
-				messageNotification = new Notification(SipUri.isPhoneNumber(from) ? R.drawable.stat_notify_sms : android.R.drawable.stat_notify_chat, tickerText,
-						System.currentTimeMillis());
-				messageNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-				messageNotification.defaults |= Notification.DEFAULT_SOUND;
-				messageNotification.defaults |= Notification.DEFAULT_LIGHTS;
+				messageNotification = new NotificationCompat.Builder(context);
+				messageNotification.setSmallIcon(SipUri.isPhoneNumber(from) ? R.drawable.stat_notify_sms : android.R.drawable.stat_notify_chat);
+				messageNotification.setTicker(tickerText);
+				messageNotification.setWhen(System.currentTimeMillis());
+				messageNotification.setDefaults(Notification.DEFAULT_ALL);
+				messageNotification.setAutoCancel(true);
+				messageNotification.setOnlyAlertOnce(true);
 			}
 
 			Intent notificationIntent = new Intent(SipManager.ACTION_SIP_MESSAGES);
@@ -269,18 +291,25 @@ public class SipNotifications {
 			notificationIntent.putExtra(SipMessage.FIELD_BODY, msg.getBody());
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-			messageNotification.setLatestEventInfo(context, from, msg.getBody(), contentIntent);
-			notificationManager.notify(MESSAGE_NOTIF_ID, messageNotification);
+			
+			messageNotification.setContentTitle(from);
+			messageNotification.setContentText(msg.getBody());
+			messageNotification.setContentIntent(contentIntent);
+			
+			notificationManager.notify(MESSAGE_NOTIF_ID, messageNotification.getNotification());
 		}
 	}
 
 	public void showNotificationForVoiceMail(SipProfile acc, int numberOfMessages) {
 		if (messageVoicemail == null) {
-			messageVoicemail = new Notification(android.R.drawable.stat_notify_voicemail, context.getString(R.string.voice_mail), System.currentTimeMillis());
-			messageVoicemail.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-			messageVoicemail.defaults |= Notification.DEFAULT_SOUND;
-			messageVoicemail.defaults |= Notification.DEFAULT_LIGHTS;
+			
+			messageVoicemail = new NotificationCompat.Builder(context);
+			messageVoicemail.setSmallIcon(android.R.drawable.stat_notify_voicemail);
+			messageVoicemail.setTicker(context.getString(R.string.voice_mail));
+			messageVoicemail.setWhen(System.currentTimeMillis());
+			messageVoicemail.setDefaults(Notification.DEFAULT_ALL);
+			messageVoicemail.setAutoCancel(true);
+			messageVoicemail.setOnlyAlertOnce(true);
 		}
 
 		Intent notificationIntent = new Intent(Intent.ACTION_CALL);
@@ -298,8 +327,11 @@ public class SipNotifications {
 		}
 		messageText += Integer.toString(numberOfMessages);
 
-		messageVoicemail.setLatestEventInfo(context, context.getString(R.string.voice_mail), messageText, contentIntent);
-		notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail);
+		messageVoicemail.setContentTitle(context.getString(R.string.voice_mail));
+		messageVoicemail.setContentText(messageText);
+		messageVoicemail.setContentIntent(contentIntent);
+		
+		notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail.getNotification());
 	}
 
 	private static String viewingRemoteFrom = null;

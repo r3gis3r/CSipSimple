@@ -93,7 +93,6 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		
 		echoCancellation.setOnCheckedChangeListener(this);
 		
-		findViewById(R.id.audio_test_text).setVisibility(View.GONE);
         rxProgress = (ProgressBar) findViewById(R.id.rx_bar);
         txProgress = (ProgressBar) findViewById(R.id.tx_bar);
 	}

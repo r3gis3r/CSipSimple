@@ -33,6 +33,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Binder;
 import android.provider.CallLog;
+import android.support.v4.database.DatabaseUtilsCompat;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipManager;
@@ -231,28 +232,28 @@ public class DBProvider extends ContentProvider {
                 count = db.delete(SipProfile.ACCOUNTS_TABLE_NAME, where, whereArgs);
                 break;
             case ACCOUNTS_ID:
-            	finalWhere = concatenateWhere(SipProfile.FIELD_ID + " = " + ContentUris.parseId(uri), where);
+            	finalWhere = DatabaseUtilsCompat.concatenateWhere(SipProfile.FIELD_ID + " = " + ContentUris.parseId(uri), where);
                 count = db.delete(SipProfile.ACCOUNTS_TABLE_NAME, finalWhere, whereArgs);
                 break;
             case CALLLOGS:
                 count = db.delete(SipManager.CALLLOGS_TABLE_NAME, where, whereArgs);
             	break;
             case CALLLOGS_ID:
-            	finalWhere = concatenateWhere(CallLog.Calls._ID + " = " + ContentUris.parseId(uri), where);
+            	finalWhere = DatabaseUtilsCompat.concatenateWhere(CallLog.Calls._ID + " = " + ContentUris.parseId(uri), where);
                 count = db.delete(SipManager.CALLLOGS_TABLE_NAME, finalWhere, whereArgs);
                 break;
             case FILTERS:
             	count = db.delete(SipManager.FILTERS_TABLE_NAME, where, whereArgs);
             	break;
             case FILTERS_ID:
-            	finalWhere = concatenateWhere(Filter._ID + " = " + ContentUris.parseId(uri), where);
+            	finalWhere = DatabaseUtilsCompat.concatenateWhere(Filter._ID + " = " + ContentUris.parseId(uri), where);
                 count = db.delete(SipManager.FILTERS_TABLE_NAME, finalWhere, whereArgs);
                 break;
             case MESSAGES:
                 count = db.delete(SipMessage.MESSAGES_TABLE_NAME, where, whereArgs);
                 break;
             case MESSAGES_ID:
-                finalWhere = concatenateWhere(SipMessage.FIELD_ID + " = " + ContentUris.parseId(uri), where);
+                finalWhere = DatabaseUtilsCompat.concatenateWhere(SipMessage.FIELD_ID + " = " + ContentUris.parseId(uri), where);
                 count = db.delete(SipMessage.MESSAGES_TABLE_NAME, finalWhere, whereArgs);
                 break;
             case THREADS_ID:
@@ -420,7 +421,7 @@ public class DBProvider extends ContentProvider {
             case ACCOUNTS_ID:
                 qb.setTables(SipProfile.ACCOUNTS_TABLE_NAME);
                 qb.appendWhere(SipProfile.FIELD_ID + "=?");
-                finalSelectionArgs = appendSelectionArgs(selectionArgs, new String[] { uri.getLastPathSegment() });
+                finalSelectionArgs = DatabaseUtilsCompat.appendSelectionArgs(selectionArgs, new String[] { uri.getLastPathSegment() });
                 break;
             case CALLLOGS:
                 qb.setTables(SipManager.CALLLOGS_TABLE_NAME);
@@ -431,7 +432,7 @@ public class DBProvider extends ContentProvider {
             case CALLLOGS_ID:
                 qb.setTables(SipManager.CALLLOGS_TABLE_NAME);
                 qb.appendWhere(CallLog.Calls._ID + "=?");
-                finalSelectionArgs = appendSelectionArgs(selectionArgs, new String[] { uri.getLastPathSegment() });
+                finalSelectionArgs = DatabaseUtilsCompat.appendSelectionArgs(selectionArgs, new String[] { uri.getLastPathSegment() });
                 break;
             case FILTERS:
                 qb.setTables(SipManager.FILTERS_TABLE_NAME);
@@ -442,7 +443,7 @@ public class DBProvider extends ContentProvider {
             case FILTERS_ID:
                 qb.setTables(SipManager.FILTERS_TABLE_NAME);
                 qb.appendWhere(Filter._ID + "=?");
-                finalSelectionArgs = appendSelectionArgs(selectionArgs, new String[] { uri.getLastPathSegment() });
+                finalSelectionArgs = DatabaseUtilsCompat.appendSelectionArgs(selectionArgs, new String[] { uri.getLastPathSegment() });
                 break;
             case MESSAGES:
                 qb.setTables(SipMessage.MESSAGES_TABLE_NAME);
@@ -453,7 +454,7 @@ public class DBProvider extends ContentProvider {
             case MESSAGES_ID:
                 qb.setTables(SipMessage.MESSAGES_TABLE_NAME);
                 qb.appendWhere(SipMessage.FIELD_ID + "=?");
-                finalSelectionArgs = appendSelectionArgs(selectionArgs, new String[] { uri.getLastPathSegment() });
+                finalSelectionArgs = DatabaseUtilsCompat.appendSelectionArgs(selectionArgs, new String[] { uri.getLastPathSegment() });
                 break;
             case THREADS:
                 qb.setTables(SipMessage.MESSAGES_TABLE_NAME);
@@ -500,7 +501,7 @@ public class DBProvider extends ContentProvider {
                     };
                 qb.appendWhere(MESSAGES_THREAD_SELECTION);
                 String from = uri.getLastPathSegment();
-                finalSelectionArgs = appendSelectionArgs(selectionArgs, new String[] { from, from });
+                finalSelectionArgs = DatabaseUtilsCompat.appendSelectionArgs(selectionArgs, new String[] { from, from });
                 regUri = SipMessage.MESSAGE_URI;
                 break;
             case ACCOUNTS_STATUS:
@@ -553,28 +554,28 @@ public class DBProvider extends ContentProvider {
                 count = db.update(SipProfile.ACCOUNTS_TABLE_NAME, values, where, whereArgs);
                 break;
             case ACCOUNTS_ID:
-                finalWhere = concatenateWhere(SipProfile.FIELD_ID + " = " + ContentUris.parseId(uri), where);
+                finalWhere = DatabaseUtilsCompat.concatenateWhere(SipProfile.FIELD_ID + " = " + ContentUris.parseId(uri), where);
                 count = db.update(SipProfile.ACCOUNTS_TABLE_NAME, values, finalWhere, whereArgs);
                 break;
             case CALLLOGS:
                 count = db.update(SipManager.CALLLOGS_TABLE_NAME, values, where, whereArgs);
                 break;
             case CALLLOGS_ID:
-                finalWhere = concatenateWhere(CallLog.Calls._ID + " = " + ContentUris.parseId(uri), where);
+                finalWhere = DatabaseUtilsCompat.concatenateWhere(CallLog.Calls._ID + " = " + ContentUris.parseId(uri), where);
                 count = db.update(SipManager.CALLLOGS_TABLE_NAME, values, finalWhere, whereArgs);
                 break;
             case FILTERS:
                 count = db.update(SipManager.FILTERS_TABLE_NAME, values, where, whereArgs);
                 break;
             case FILTERS_ID:
-                finalWhere = concatenateWhere(Filter._ID + " = " + ContentUris.parseId(uri), where);
+                finalWhere = DatabaseUtilsCompat.concatenateWhere(Filter._ID + " = " + ContentUris.parseId(uri), where);
                 count = db.update(SipManager.FILTERS_TABLE_NAME, values, finalWhere, whereArgs);
                 break;
             case MESSAGES:
                 count = db.update(SipMessage.MESSAGES_TABLE_NAME, values, where, whereArgs);
                 break;
             case MESSAGES_ID:
-                finalWhere = concatenateWhere(SipMessage.FIELD_ID + " = " + ContentUris.parseId(uri), where);
+                finalWhere = DatabaseUtilsCompat.concatenateWhere(SipMessage.FIELD_ID + " = " + ContentUris.parseId(uri), where);
                 count = db.update(SipMessage.MESSAGES_TABLE_NAME, values, where, whereArgs);
                 break;
             case ACCOUNTS_STATUS_ID:
@@ -628,29 +629,6 @@ public class DBProvider extends ContentProvider {
 	
 	
 	
-	// Internal helpers
-
-    // Utilities from source to be backward compatible
-	private static String concatenateWhere(String a, String b) {
-		 if (TextUtils.isEmpty(a)) {
-			 return b;
-		 }
-		 if (TextUtils.isEmpty(b)) {
-			 return a;
-		 }
-			 
-		 return "(" + a + ") AND (" + b + ")";
-	}
-	
-	public static String[] appendSelectionArgs(String[] originalValues, String[] newValues) {
-		if (originalValues == null || originalValues.length == 0) {
-			return newValues;
-		}
-		String[] result = new String[originalValues.length + newValues.length];
-		System.arraycopy(originalValues, 0, result, 0, originalValues.length);
-		System.arraycopy(newValues, 0, result, originalValues.length, newValues.length);
-		return result;
-	}
 	
 	/**
 	 * Build a {@link Cursor} with a single row that contains all values

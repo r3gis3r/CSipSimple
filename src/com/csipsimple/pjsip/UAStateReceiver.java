@@ -611,8 +611,12 @@ public class UAStateReceiver extends Callback {
 		return callInfo;
 	}
 	
+	/**
+	 * Get call info for a given call id.
+	 * @param callId the id of the call we want infos for
+	 * @return the call session infos.
+	 */
 	public SipCallSession getCallInfo(Integer callId) {
-		Log.d(THIS_FILE, "Get call info");
 		SipCallSession callInfo;
 		synchronized (callsList) {
 			callInfo = callsList.get(callId);
@@ -620,6 +624,10 @@ public class UAStateReceiver extends Callback {
 		return callInfo;
 	}
 	
+	/**
+	 * Get list of calls session available.
+	 * @return List of calls.
+	 */
 	public SipCallSession[] getCalls() {
 		if(callsList != null ) {
 			
@@ -662,13 +670,6 @@ public class UAStateReceiver extends Callback {
 		public void handleMessage(Message msg) {
 			lockCpu();
 			switch (msg.what) {
-			    /*
-			case ON_INCOMING_CALL:{
-				
-				
-				break;
-			}
-*/			
 			case ON_CALL_STATE:{
 				SipCallSession callInfo = (SipCallSession) msg.obj;
 				final int callState = callInfo.getCallState();
@@ -736,8 +737,13 @@ public class UAStateReceiver extends Callback {
 						notificationManager.showNotificationForMissedCall(cv);
 					}
 					
+					// If the call goes out in error...
+					if(callInfo.getLastStatusCode() != 200) {
+					    // We notify the user with toaster
+					    pjService.service.notifyUserOfMessage( callInfo.getLastStatusCode() + " / " + callInfo.getLastStatusComment());
+					}
 					
-					//If needed fill native database
+					// If needed fill native database
 					if(pjService.prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS)) {
 						//Don't add with new flag
 						cv.put(CallLog.Calls.NEW, false);
@@ -776,8 +782,6 @@ public class UAStateReceiver extends Callback {
 					}
 					callInfo.setIncoming(false);
 					callInfo.callStart = 0;
-					
-					
 					
 					break;
 				default:

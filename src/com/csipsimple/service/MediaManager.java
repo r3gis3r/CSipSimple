@@ -177,7 +177,8 @@ public class MediaManager {
 	/**
 	 * Set the audio mode as in call
 	 */
-	private synchronized void actualSetAudioInCall() {
+	@SuppressWarnings("deprecation")
+    private synchronized void actualSetAudioInCall() {
 		//Ensure not already set
 		if(isSetAudioMode) {
 			return;
@@ -352,6 +353,7 @@ public class MediaManager {
 	/**
 	 * Save current audio mode in order to be able to restore it once done
 	 */
+    @SuppressWarnings("deprecation")
 	private synchronized void saveAudioState() {
 		if( prefs.getBoolean("isSavedAudioState", false) ) {
 			//If we have already set, do not set it again !!! 
@@ -379,7 +381,10 @@ public class MediaManager {
 		ed.putBoolean("isSavedAudioState", true);
 		ed.commit();
 	}
-	
+    /**
+     * Restore the state of the audio
+     */
+    @SuppressWarnings("deprecation")
 	private final synchronized void restoreAudioState() {
 		if( !prefs.getBoolean("isSavedAudioState", false) ) {
 			//If we have NEVER set, do not try to reset !
