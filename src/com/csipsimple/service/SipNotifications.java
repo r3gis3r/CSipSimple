@@ -201,12 +201,13 @@ public class SipNotifications {
 		nb.setContentIntent(contentIntent);
 		nb.setOngoing(true);
 		nb.setOnlyAlertOnce(true);
-		if (showNumbers) {
-		    nb.setNumber(activeAccountsInfos.size());
-        }
 		
 		Notification notification = nb.getNotification();
 		notification.flags |= Notification.FLAG_NO_CLEAR;
+        if (showNumbers) {
+            // This only affects android 2.3 and lower
+            notification.number = activeAccountsInfos.size();
+        }
 		startForegroundCompat(REGISTER_NOTIF_ID, notification);
 	}
 
