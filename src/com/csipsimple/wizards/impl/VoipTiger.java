@@ -60,12 +60,12 @@ public class VoipTiger extends SimpleImplementation {
     @Override
     public void setDefaultParams(PreferencesWrapper prefs) {
         super.setDefaultParams(prefs);
-        // 
+        //  Ilbc, G729, G722,  G711
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"0");
-        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"239");
-        prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB, "237");
-        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"240");
-        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"238");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"220");
+        prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB, "230");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"220");
+        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"240");
         prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
@@ -77,9 +77,9 @@ public class VoipTiger extends SimpleImplementation {
         
         // 
         prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"0");
-        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"235");
-        prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB, "239");
-        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"238");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"220");
+        prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB, "230");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"220");
         prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"240");
         prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
         prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
