@@ -41,23 +41,30 @@ public class DigitsEditText extends EditText {
     private boolean isDigit = true;
     // private int baseInputType = InputType.TYPE_NULL;
 
+    public DigitsEditText(Context context) {
+        this(context, null);
+    }
+    
     public DigitsEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         // baseInputType = getInputType();
         setIsDigit(isDigit, false);
     }
+    
 
-    public void setIsDigit(boolean isDigit, boolean autofocus) {
+    public DigitsEditText(Context context, AttributeSet attrs, int style) {
+        this(context, attrs);
+    }
+    
+    
+    public synchronized void setIsDigit(boolean isDigit, boolean autofocus) {
         if(this.isDigit != isDigit || autofocus || isDigit) {
             this.isDigit = isDigit;
             final InputMethodManager imm = ((InputMethodManager) getContext()
                     .getSystemService(Context.INPUT_METHOD_SERVICE));
     
             if (isDigit) {
-                setInputType(InputType.TYPE_NULL /*
-                                                  * | InputType.
-                                                  * TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                                                  */);
+                setInputType(InputType.TYPE_NULL);
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
                 if (imm != null && imm.isActive(this)) {
                     imm.hideSoftInputFromWindow(getApplicationWindowToken(), 0);

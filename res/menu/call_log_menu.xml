@@ -7,9 +7,14 @@
         android:showAsAction="ifRoom"
         android:title="@string/delete"/>
     <item
-        android:id="@+id/copy"
-        android:icon="@drawable/ic_ab_content_copy_dark"
+        android:id="@+id/dialpad"
+        android:icon="@drawable/ic_ab_dialpad"
         android:showAsAction="ifRoom"
-        android:title="@android:string/copy"/>
+        android:title="@string/dialpad"/>
+    <item
+        android:id="@+id/invert_selection"
+        android:icon="@drawable/ic_action_select_invert"
+        android:showAsAction="ifRoom"
+        android:title="@string/invert_selection"/>
 
 </menu>

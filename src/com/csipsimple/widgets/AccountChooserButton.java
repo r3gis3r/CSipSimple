@@ -89,6 +89,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         void onChooseAccount(SipProfile account);
     }
 
+    public AccountChooserButton(Context context) {
+        this(context, null);
+    }
+    
     public AccountChooserButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         telCmp = new ComponentName(getContext(), com.csipsimple.plugins.telephony.CallHandler.class);
@@ -101,7 +105,11 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         imageView = (ImageView) findViewById(R.id.quickaction_icon);
         setAccount(null);
     }
-
+    
+    public AccountChooserButton(Context context, AttributeSet attrs, int style) {
+        this(context, attrs);
+    }
+    
     private final Handler mHandler = new Handler();
     private AccountStatusContentObserver statusObserver = null;
     private boolean canChangeIfValid = true;

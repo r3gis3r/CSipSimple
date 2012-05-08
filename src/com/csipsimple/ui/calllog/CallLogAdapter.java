@@ -306,6 +306,20 @@ public class CallLogAdapter extends GroupingListAdapter
         cursor.moveToPosition(position);
         return callIds;
     }
+    
+    /**
+     * Retrieve the remote sip uri for a call log at the given position
+     * @param position  the position to look at
+     * @return the sip uri
+     */
+    public String getCallRemoteAtPostion(int position) {
+        Cursor item = (Cursor) getItem(position);
+        if(item != null) {
+            String number = item.getString(item.getColumnIndex(CallLog.Calls.NUMBER));
+            return SipUri.getCanonicalSipContact(number, false);
+        }
+        return "";
+    }
 
     private void setPhoto(CallLogListItemViews views, CallerInfo ci) {
 

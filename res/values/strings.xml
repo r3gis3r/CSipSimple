@@ -94,6 +94,7 @@
     <string name="deactivate">Deactivate</string>
     <string name="audio">Audio</string>
     <string name="video">Video</string>
+    <string name="invert_selection">Invert selection</string>
 
     <!-- Presence stuff -->
     <string name="online">Online</string>

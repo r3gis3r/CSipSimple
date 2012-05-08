@@ -107,8 +107,9 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
     private LinearLayout digitsWrapper;
     private AccountChooserButton accountChooserButton;
-    private boolean isDigit/* , isTablet */;
-
+    private boolean isDigit;
+    /* , isTablet */
+    
     private DialingFeedback dialFeedback;
 
     private final int[] buttonsToAttach = new int[] {
@@ -153,6 +154,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
     private DialerAutocompleteDetailsFragment autoCompleteFragment;
     private PhoneNumberFormattingTextWatcher digitFormater;
+    private OnAutoCompleteListItemClicked autoCompleteListItemListener;
 
     // private ImageButton backFlipTextDialerButton;
 
@@ -161,6 +163,13 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         super.onCreate(savedInstanceState);
         mDualPane = getResources().getBoolean(R.bool.use_dual_panes);
         digitFormater = new PhoneNumberFormattingTextWatcher();
+        // Auto complete list in case of text
+        autoCompleteAdapter = new ContactsSearchAdapter(getActivity());
+        autoCompleteListItemListener = new OnAutoCompleteListItemClicked(autoCompleteAdapter);
+
+        // This implies
+        isDigit = prefsWrapper.startIsDigit();
+        
         setHasOptionsMenu(true);
     }
 
@@ -186,60 +195,38 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         // isTablet = Compatibility.isTabletScreen(getActivity());
 
         // Digits field setup
-        isDigit = prefsWrapper.startIsDigit();
-        digits.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView tv, int action, KeyEvent arg2) {
-                if (action == EditorInfo.IME_ACTION_GO) {
-                    placeCall();
-                    return true;
-                }
-                return false;
-            }
-        });
+        if(savedInstanceState != null) {
+            isDigit = savedInstanceState.getBoolean(TEXT_MODE_KEY, isDigit);
+        }
+        
+        digits.setOnEditorActionListener(keyboardActionListener);
 
         // Account chooser button setup
         accountChooserButton.setShowExternals(true);
-        accountChooserButton.setOnAccountChangeListener(new OnAccountChangeListener() {
-            @Override
-            public void onChooseAccount(SipProfile account) {
-                long accId = SipProfile.INVALID_ID;
-                if (account != null) {
-                    accId = account.id;
-                }
-                autoCompleteAdapter.setSelectedAccount(accId);
-            }
-        });
+        accountChooserButton.setOnAccountChangeListener(accountButtonChangeListener);
 
         // Dialpad
         dialPad.setOnDialKeyListener(this);
-
-        // Auto complete list in case of text
-        autoCompleteAdapter = new ContactsSearchAdapter(getActivity());
 
         // We only need to add the autocomplete list if we
         DialerCallBar listCallBar = new DialerCallBar(getActivity(), null);
         listCallBar.setOnDialActionListener(this);
         autoCompleteList.addFooterView(listCallBar);
         autoCompleteList.setAdapter(autoCompleteAdapter);
-        autoCompleteList.setOnItemClickListener(new OnAutoCompleteListItemClicked(
-                autoCompleteAdapter));
+        autoCompleteList.setOnItemClickListener(autoCompleteListItemListener);
 
         // Bottom bar setup
         callBar.setOnDialActionListener(this);
 
         // Ensure that current mode (text/digit) is applied
-        setTextDialing(!isDigit);
+        setTextDialing(!isDigit, true);
 
         // Init other buttons
         initButtons(v);
 
         // Apply third party theme if any
         applyTheme();
-        
-
         v.setOnKeyListener(this);
-
         return v;
     }
 
@@ -278,7 +265,6 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
             });
         }
     }
-
     
     @Override
     public void onAttach(Activity activity) {
@@ -308,9 +294,38 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         dialFeedback.pause();
         super.onDetach();
     }
-
+    
+    
+    private final static String TEXT_MODE_KEY = "text_mode";
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(TEXT_MODE_KEY, isDigit);
+        super.onSaveInstanceState(outState);
+    }
+    
+    private OnEditorActionListener keyboardActionListener = new OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView tv, int action, KeyEvent arg2) {
+            if (action == EditorInfo.IME_ACTION_GO) {
+                placeCall();
+                return true;
+            }
+            return false;
+        }
+    };
+    
+    OnAccountChangeListener accountButtonChangeListener = new OnAccountChangeListener() {
+        @Override
+        public void onChooseAccount(SipProfile account) {
+            long accId = SipProfile.INVALID_ID;
+            if (account != null) {
+                accId = account.id;
+            }
+            autoCompleteAdapter.setSelectedAccount(accId);
+        }
+    };
+    
     private void attachButtonListener(View v, int id) {
-        Log.d(THIS_FILE, "Attaching " + id);
         ImageButton button = (ImageButton) v.findViewById(id);
         button.setOnClickListener(this);
 
@@ -419,10 +434,24 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     /**
      * Set the mode of the text/digit input.
      * 
-     * @param target True if text mode. False if digit mode
+     * @param textMode True if text mode. False if digit mode
      */
-    private void setTextDialing(boolean target) {
-        isDigit = !target;
+    public void setTextDialing(boolean textMode) {
+        setTextDialing(textMode, false);
+    }
+    
+
+    /**
+     * Set the mode of the text/digit input.
+     * 
+     * @param textMode True if text mode. False if digit mode
+     */
+    public void setTextDialing(boolean textMode, boolean forceRefresh) {
+        if(!forceRefresh && isDigit == !textMode) {
+            // Nothing to do
+            return;
+        }
+        isDigit = !textMode;
         digits.setIsDigit(isDigit, true);
         if(isDigit) {
             digits.addTextChangedListener(digitFormater);

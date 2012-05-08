@@ -325,7 +325,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
                 }
             }
             menu.findItem(R.id.delete).setVisible(nbrCheckedItem > 0);
-            menu.findItem(R.id.copy).setVisible(nbrCheckedItem == 1);
+            menu.findItem(R.id.dialpad).setVisible(nbrCheckedItem == 1);
             return false;
         }
 
@@ -333,10 +333,13 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             int itemId = item.getItemId();
             if(itemId == R.id.delete) {
-                deleteOnActionMode();
+                actionModeDelete();
                 return true;
-            }else if(itemId == R.id.copy) {
-                
+            }else if(itemId == R.id.invert_selection) {
+                actionModeInvertSelection();
+                return true;
+            }else if(itemId == R.id.dialpad) {
+                actionModeDialpad();
                 return true;
             }
             return false;
@@ -357,7 +360,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
         
     }
     
-    private void deleteOnActionMode() {
+    private void actionModeDelete() {
         ListView lv = getListView();
         
         ArrayList<Long> checkedIds = new ArrayList<Long>();
@@ -378,6 +381,35 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
             getActivity().getContentResolver().delete(SipManager.CALLLOG_URI, CallLog.Calls._ID + " IN ("+strCheckedIds+")", null);
             mMode.finish();
         }
+    }
+    
+    private void actionModeInvertSelection() {
+        ListView lv = getListView();
+
+        for(int i = 0; i < lv.getCount(); i++) {
+            lv.setItemChecked(i, !lv.isItemChecked(i));
+        }
+        mMode.invalidate();
+    }
+    
+    private void actionModeDialpad() {
+        
+        ListView lv = getListView();
+
+        for(int i = 0; i < lv.getCount(); i++) {
+            if(lv.isItemChecked(i)) {
+                mAdapter.getItem(i);
+                String number = mAdapter.getCallRemoteAtPostion(i);
+                if(!TextUtils.isEmpty(number)) {
+                    Intent it = new Intent(Intent.ACTION_DIAL);
+                    it.setData(Uri.fromParts("sip", number, null));
+                    startActivity(it);
+                }
+                break;
+            }
+        }
+        mMode.invalidate();
+        
     }
     
     @Override

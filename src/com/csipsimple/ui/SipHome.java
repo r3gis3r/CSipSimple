@@ -30,6 +30,7 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -521,8 +522,17 @@ public class SipHome extends SherlockFragmentActivity {
             if (!TextUtils.isEmpty(callAction)) {
                 ActionBar ab = getSupportActionBar();
                 Tab toSelectTab = null;
-                if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_DIALER)) {
+                if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_DIALER)
+                        || callAction.equalsIgnoreCase(Intent.ACTION_DIAL)) {
                     toSelectTab = ab.getTabAt(TAB_INDEX_DIALER);
+                    Uri data = intent.getData();
+                    if(data != null && mDialpadFragment != null) {
+                        String nbr = data.getSchemeSpecificPart();
+                        if(!TextUtils.isEmpty(nbr)) {
+                            mDialpadFragment.setTextDialing(true);
+                            mDialpadFragment.setTextFieldValue(nbr);
+                        }
+                    }
                 } else if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_CALLLOG)) {
                     toSelectTab = ab.getTabAt(TAB_INDEX_CALL_LOG);
                 } else if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_MESSAGES)) {
