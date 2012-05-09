@@ -197,14 +197,16 @@ public class SipNotifications {
 
 		// notification.setLatestEventInfo(context, contentTitle,
 		// contentText, contentIntent);
-		nb.setContent(contentView);
-		nb.setContentIntent(contentIntent);
 		nb.setOngoing(true);
 		nb.setOnlyAlertOnce(true);
+        nb.setContentIntent(contentIntent);
+        nb.setContent(contentView);
 		
 		Notification notification = nb.getNotification();
 		notification.flags |= Notification.FLAG_NO_CLEAR;
-        if (showNumbers) {
+		// We have to re-write content view because getNotification setLatestEventInfo implicitly
+        notification.contentView = contentView;
+		if (showNumbers) {
             // This only affects android 2.3 and lower
             notification.number = activeAccountsInfos.size();
         }
