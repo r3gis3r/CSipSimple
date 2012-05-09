@@ -53,7 +53,6 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.db.AccountAdapter;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
 import com.csipsimple.service.OutgoingCall;
@@ -69,7 +68,6 @@ import java.util.Map;
 
 public class OutgoingCallChooser extends SherlockListActivity {
 
-    private DBAdapter database;
     private AccountAdapter adapter;
 
     String number;
@@ -179,10 +177,6 @@ public class OutgoingCallChooser extends SherlockListActivity {
         w = getWindow();
         w.requestFeature(Window.FEATURE_LEFT_ICON);
 
-        // Connect to database
-        if (database == null) {
-            database = new DBAdapter(this);
-        }
 
         // Need full selector, finish layout
         setContentView(R.layout.outgoing_account_list);
@@ -228,6 +222,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
         
         v.setFocusable(true);
         v.setClickable(true);
+        v.setBackgroundResource(com.actionbarsherlock.R.drawable.abs__item_background_holo_dark);
         v.setOnClickListener(l);
 
         root.addView(v);
@@ -251,17 +246,18 @@ public class OutgoingCallChooser extends SherlockListActivity {
 
         for (String packageName : callHandlers.keySet()) {
             Log.d(THIS_FILE, "Treating call handler... " + packageName);
-            SipProfile externalProfile = new SipProfile();
-            externalProfile.id = CallHandler.getAccountIdForCallHandler(this, packageName);
+            
+            long externalProfileId = CallHandler.getAccountIdForCallHandler(this, packageName);
 
-            if (Filter.isCallableNumber(externalProfile, number, database)) {
+            if (Filter.isCallableNumber(this, externalProfileId, number)) {
                 externalTotalNbrs ++;
                 // Transform number
                 String finalNumber = number;
                 if(!ignoreRewritingRules) {
-                    finalNumber = Filter.rewritePhoneNumber(externalProfile, number, database);
+                    finalNumber = Filter.rewritePhoneNumber(this, externalProfileId, number);
                 }
-                final SipProfile extProfile = externalProfile;
+                final SipProfile extProfile = new SipProfile();
+                extProfile.id = externalProfileId;
                 Log.d(THIS_FILE, "Will loaded external " + packageName);
                 CallHandler ch = new CallHandler(this);
                 ch.loadFrom(packageName, finalNumber, new onLoadListener() {
@@ -305,18 +301,17 @@ public class OutgoingCallChooser extends SherlockListActivity {
         if (accountToCallTo != null) {
             checkIfMustAccountNotValid();
         }
-
-        // If valid for outgoing we have to wait for service to be there
-        if (prefsWrapper.isValidConnectionForOutgoing()) {
-            if (service == null) {
-                return;
-            }
-        }
+        
         // We have to wait for all external profiles to be there
         if (loadedExternals != externalTotalNbrs) {
             return;
         }
-
+        // If valid for outgoing we have to wait for service to be there
+        if (service == null && prefsWrapper.isValidConnectionForOutgoing()) {
+            return;
+        }
+        
+        
         // Get all accounts
         List<SipProfile> accounts = new ArrayList<SipProfile>();
         // Get SIP accounts
@@ -333,9 +328,9 @@ public class OutgoingCallChooser extends SherlockListActivity {
         // Walk all accounts (SIP + CallHandlers)
         for (SipProfile account : accounts) {
             Log.d(THIS_FILE, "Checking account " + account.id);
-            if (Filter.isCallableNumber(account, number, database)) {
+            if (Filter.isCallableNumber(this, account.id, number)) {
                 Log.d(THIS_FILE, "Can call");
-                if (Filter.isMustCallNumber(account, number, database)) {
+                if (Filter.isMustCallNumber(this, account.id, number)) {
                     Log.d(THIS_FILE, "Must call using it");
                     // Simulate that's the only one
                     onlyAccount = account;
@@ -377,7 +372,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
         List<SipProfile> excludedAccounts = new ArrayList<SipProfile>();
         String phoneNumber = number;
         for (SipProfile acc : accountsList) {
-            if (!Filter.isCallableNumber(acc, phoneNumber, database)) {
+            if (!Filter.isCallableNumber(this, acc.id, phoneNumber)) {
                 excludedAccounts.add(acc);
             }
         }
@@ -386,7 +381,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
         }
 
         if (adapter == null) {
-            adapter = new AccountAdapter(this, accountsList, phoneNumber, database);
+            adapter = new AccountAdapter(this, accountsList, phoneNumber);
             adapter.setNotifyOnChange(false);
             setListAdapter(adapter);
             if (service != null) {
@@ -418,7 +413,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
                 try {
                     String toCall = number;
                     if(!ignoreRewritingRules) {
-                        toCall = Filter.rewritePhoneNumber(account, number, database);
+                        toCall = Filter.rewritePhoneNumber(this, account.id, number);
                     }
 
                     service.makeCall("sip:" + toCall, (int) account.id);
@@ -440,11 +435,9 @@ public class OutgoingCallChooser extends SherlockListActivity {
         if (accountToCallTo != null && accountToCallTo < SipProfile.INVALID_ID) {
             // We have a external handler as force call account
             String phoneNumber = number;
-            SipProfile externalAccount = new SipProfile();
-            externalAccount.id = accountToCallTo;
-            String toCall = Filter.rewritePhoneNumber(externalAccount, phoneNumber, database);
+            String toCall = Filter.rewritePhoneNumber(this, accountToCallTo, phoneNumber);
             CallHandler ch = new CallHandler(this);
-            ch.loadFrom(externalAccount.id, toCall, new onLoadListener() {
+            ch.loadFrom(accountToCallTo, toCall, new onLoadListener() {
                 @Override
                 public void onLoad(final CallHandler ch) {
                     Log.d(THIS_FILE, "Place external call " + ch.getIntent());
@@ -475,7 +468,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
                         TextUtils.isEmpty(accountInfo.getRegUri())) {
                     try {
                         String phoneNumber = number;
-                        String toCall = Filter.rewritePhoneNumber(account, phoneNumber, database);
+                        String toCall = Filter.rewritePhoneNumber(this, account.id, phoneNumber);
                         accountToCallTo = null;
                         service.makeCall("sip:" + toCall, (int) account.id);
                         hasLaunchedCall = true;

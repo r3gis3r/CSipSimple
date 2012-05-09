@@ -42,7 +42,6 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.contacts.ContactsAutocompleteAdapter;
@@ -253,9 +252,8 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
     @Override
     public void onItemClick(AdapterView<?> ad, View view, int position, long arg3) {
         String number = (String) view.getTag();
-        DBAdapter db = new DBAdapter(getContext());
         SipProfile account = accountChooserButtonText.getSelectedAccount();
-        String rewritten = Filter.rewritePhoneNumber(account, number, db);
+        String rewritten = Filter.rewritePhoneNumber(getContext(), account.id, number);
         setTextValue(rewritten);
         Log.d(THIS_FILE, "Clicked contact " + number);
     }

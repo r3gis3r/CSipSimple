@@ -75,7 +75,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
         	finish();
         }
         
-        filter = Filter.getProfileFromDbId(this, filterId, Filter.FULL_PROJ);
+        filter = Filter.getFilterFromDbId(this, filterId, Filter.FULL_PROJ);
         
 		super.onCreate(savedInstanceState);
 		

@@ -60,7 +60,6 @@ import com.csipsimple.api.SipMessage;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
 import com.csipsimple.pjsip.PjSipCalls;
@@ -725,7 +724,6 @@ public class SipService extends Service {
 
 	};
 
-	protected DBAdapter db;
 	private WakeLock wakeLock;
 	private WifiLock wifiLock;
 	private BroadcastReceiver deviceStateReceiver;
@@ -818,7 +816,6 @@ public class SipService extends Service {
 		singleton = this;
 
 		Log.i(THIS_FILE, "Create SIP Service");
-		db = new DBAdapter(this);
 		prefsWrapper = new PreferencesProviderWrapper(this);
 		Log.setLogLevel(prefsWrapper.getLogLevel());
 		
@@ -853,7 +850,6 @@ public class SipService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.i(THIS_FILE, "Destroying SIP Service");
-		db.close();
 		unregisterBroadcasts();
 		notificationManager.onServiceDestroy();
 		getExecutor().execute(new FinalizeDestroyRunnable());
@@ -1490,9 +1486,8 @@ public class SipService extends Service {
 			if (m.matches()) {
 				number = m.group(2);
 			}
-			synchronized (db) {
-				shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, db);
-			}
+			shouldAutoAnswer = Filter.isAutoAnswerNumber(this, acc.id, number);
+			
 		}else {
 			Log.d(THIS_FILE, "Oupps... that come from an unknown account...");
 			//TODO : add an option to auto hangup if unknown account

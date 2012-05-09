@@ -262,6 +262,7 @@ Remove that too fine change trigger
             android:excludeFromRecents="true"
             android:label="@string/call"
             android:launchMode="singleTask"
+            android:process=":sipStack"
             android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL" />

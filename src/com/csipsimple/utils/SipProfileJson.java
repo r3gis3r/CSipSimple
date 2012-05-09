@@ -31,7 +31,6 @@ import android.text.format.DateFormat;
 
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
 
@@ -72,11 +71,11 @@ public final class SipProfileJson {
         return cols.contentValueToJSON(cv);
     }
 
-    public static JSONObject serializeSipProfile(SipProfile profile, DBAdapter db) {
+    public static JSONObject serializeSipProfile(Context context, SipProfile profile) {
         JSONObject jsonProfile = serializeBaseSipProfile(profile);
         JSONArray jsonFilters = new JSONArray();
 
-        Cursor c = db.getFiltersForAccount(profile.id);
+        Cursor c = Filter.getFiltersForAccount(context, profile.id);
         int numRows = c.getCount();
         c.moveToFirst();
         for (int i = 0; i < numRows; ++i) {
@@ -102,8 +101,6 @@ public final class SipProfileJson {
     }
 
     private static JSONArray serializeSipProfiles(Context ctxt) {
-        DBAdapter db = new DBAdapter(ctxt);
-        db.open();
 
         JSONArray jsonSipProfiles = new JSONArray();
         Cursor c = ctxt.getContentResolver().query(SipProfile.ACCOUNT_URI,
@@ -112,7 +109,7 @@ public final class SipProfileJson {
             try {
                 while (c.moveToNext()) {
                     SipProfile account = new SipProfile(c);
-                    JSONObject p = serializeSipProfile(account, db);
+                    JSONObject p = serializeSipProfile(ctxt, account);
                     try {
                         jsonSipProfiles.put(jsonSipProfiles.length(), p);
                     } catch (JSONException e) {
@@ -135,7 +132,7 @@ public final class SipProfileJson {
                     .getAccountIdForCallHandler(ctxt, packageName);
             SipProfile gsmProfile = new SipProfile();
             gsmProfile.id = externalAccountId;
-            JSONObject p = serializeSipProfile(gsmProfile, db);
+            JSONObject p = serializeSipProfile(ctxt, gsmProfile);
             try {
                 jsonSipProfiles.put(jsonSipProfiles.length(), p);
             } catch (JSONException e) {
@@ -143,7 +140,6 @@ public final class SipProfileJson {
             }
         }
 
-        db.close();
         return jsonSipProfiles;
     }
 

@@ -30,8 +30,6 @@ import android.util.SparseArray;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
-import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.utils.Log;
 
 import java.util.regex.Matcher;
@@ -557,10 +555,9 @@ public class Filter {
 	
 	//Static utility method
 
-	public static boolean isCallableNumber(SipProfile account, String number, DBAdapter db) {
+	public static boolean isCallableNumber(Context ctxt, long accountId, String number) {
 		boolean canCall = true;
-		db.open();
-		Cursor c = db.getFiltersForAccount(account.id);
+		Cursor c = getFiltersForAccount(ctxt, accountId);
 		int numRows = c.getCount();
 		//Log.d(THIS_FILE, "F > This account has "+numRows+" filters");
 		c.moveToFirst();
@@ -573,7 +570,6 @@ public class Filter {
 			//Stop processing & rewrite
 			if(f.stopProcessing(number)) {
 				c.close();
-				db.close();
 				return canCall;
 			}
 			number = f.rewrite(number);
@@ -581,14 +577,13 @@ public class Filter {
 			c.moveToNext();
 		}
 		c.close();
-		db.close();
 		return canCall;
 	}
 	
 
-	public static boolean isMustCallNumber(SipProfile account, String number, DBAdapter db) {
-		db.open();
-		Cursor c = db.getFiltersForAccount(account.id);
+	public static boolean isMustCallNumber(Context ctxt, long accountId, String number) {
+		
+		Cursor c = getFiltersForAccount(ctxt, accountId);
 		int numRows = c.getCount();
 		c.moveToFirst();
 		for (int i = 0; i < numRows; ++i) {
@@ -597,13 +592,11 @@ public class Filter {
 			//Log.d(THIS_FILE, "Test filter "+f.match_pattern);
 			if(f.mustCall(number)) {
 				c.close();
-				db.close();
 				return true;
 			}
 			//Stop processing & rewrite
 			if(f.stopProcessing(number)) {
 				c.close();
-				db.close();
 				return false;
 			}
 			number = f.rewrite(number);
@@ -611,18 +604,16 @@ public class Filter {
 			c.moveToNext();
 		}
 		c.close();
-		db.close();
 		return false;
 	}
 	
-	public static String rewritePhoneNumber(SipProfile account, String number, Context ctxt) {
-		DBAdapter db = new DBAdapter(ctxt);
-		return rewritePhoneNumber(account, number, db);
+	public static String rewritePhoneNumber(long accountId, String number, Context ctxt) {
+		return rewritePhoneNumber(ctxt, accountId, number);
 	}
 	
-	public static String rewritePhoneNumber(SipProfile account, String number, DBAdapter db) {
-		db.open();
-		Cursor c = db.getFiltersForAccount(account.id);
+	public static String rewritePhoneNumber(Context ctxt, long accountId, String number) {
+		
+		Cursor c = getFiltersForAccount(ctxt, accountId);
 		int numRows = c.getCount();
 		//Log.d(THIS_FILE, "RW > This account has "+numRows+" filters");
 		c.moveToFirst();
@@ -633,19 +624,16 @@ public class Filter {
 			number = f.rewrite(number);
 			if(f.stopProcessing(number)) {
 				c.close();
-				db.close();
 				return number;
 			}
 			c.moveToNext();
 		}
 		c.close();
-		db.close();
 		return number;
 	}
 	
-	public static int isAutoAnswerNumber(SipProfile account, String number, DBAdapter db) {
-		db.open();
-		Cursor c = db.getFiltersForAccount(account.id);
+	public static int isAutoAnswerNumber(Context ctxt, long accountId, String number) {
+		Cursor c = getFiltersForAccount(ctxt, accountId);
 		int numRows = c.getCount();
 		c.moveToFirst();
 		for (int i = 0; i < numRows; ++i) {
@@ -665,7 +653,6 @@ public class Filter {
 			//Stop processing & rewrite
 			if(f.stopProcessing(number)) {
 				c.close();
-				db.close();
 				return 0;
 			}
 			number = f.rewrite(number);
@@ -673,14 +660,13 @@ public class Filter {
 			c.moveToNext();
 		}
 		c.close();
-		db.close();
 		return 0;
 	}
 	
 	
 
 	// Helpers static factory
-	public static Filter getProfileFromDbId(Context ctxt, long filterId, String[] projection) {
+	public static Filter getFilterFromDbId(Context ctxt, long filterId, String[] projection) {
 		Filter filter = new Filter();
 		if(filterId >= 0) {
 			Cursor c = ctxt.getContentResolver().query(ContentUris.withAppendedId(SipManager.FILTER_ID_URI_BASE, filterId), 
@@ -702,4 +688,7 @@ public class Filter {
 		return filter;
 	}
 	
+	public static Cursor getFiltersForAccount(Context ctxt, long accountId) {
+	    return ctxt.getContentResolver().query(SipManager.FILTER_URI, FULL_PROJ, FIELD_ACCOUNT+"=?", new String[]{Long.toString(accountId)}, DEFAULT_ORDER);
+	}
 }

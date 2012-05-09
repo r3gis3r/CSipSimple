@@ -29,13 +29,13 @@ package com.csipsimple.utils.contacts;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.Filter;
 
 /**
@@ -80,13 +80,8 @@ public class ContactsSearchAdapter extends CursorAdapter {
     @Override
     public final CharSequence convertToString(Cursor cursor) {
     	CharSequence number = ContactsWrapper.getInstance().transformToSipUri(mContext, cursor);
-    	if(number != null) {
-    		SipProfile account = new SipProfile();
-    		// We only need the id
-    		account.id = currentAccId;
-			DBAdapter db = new DBAdapter(mContext);
-			String rewritten = Filter.rewritePhoneNumber(account, number.toString(), db);
-			return rewritten;
+    	if(!TextUtils.isEmpty(number)) {
+			return Filter.rewritePhoneNumber(mContext, currentAccId, number.toString());
     	}
     	return number;
     }

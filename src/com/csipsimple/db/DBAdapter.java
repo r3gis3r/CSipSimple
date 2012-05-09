@@ -21,7 +21,6 @@
 package com.csipsimple.db;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -39,7 +38,6 @@ public class DBAdapter {
 
 	private final Context context;
 	private DatabaseHelper databaseHelper;
-	private SQLiteDatabase db;
 	
 	public DBAdapter(Context aContext) {
 		context = aContext;
@@ -361,7 +359,7 @@ public class DBAdapter {
 	 * @throws SQLException
 	 */
 	public DBAdapter open() throws SQLException {
-		db = databaseHelper.getWritableDatabase();
+		databaseHelper.getWritableDatabase();
 		opened = true;
 		return this;
 	}
@@ -382,30 +380,5 @@ public class DBAdapter {
 	    db.execSQL("ALTER TABLE " + table + " ADD "+ field + " " + type);
 	}
 	
-	
-	// --------
-	// Filters
-	// --------
-	
-	public Cursor getFiltersForAccount(long account_id) {
-		//Log.d(THIS_FILE, "Get filters for account "+account_id);
-		return db.query(SipManager.FILTERS_TABLE_NAME, Filter.FULL_PROJ, 
-				Filter.FIELD_ACCOUNT+"=?", new String[]{Long.toString(account_id)}, 
-				null, null, Filter.DEFAULT_ORDER);
-	}
-	
-	public int getCountFiltersForAccount(int account_id) {
-		Cursor c = db.rawQuery("SELECT COUNT(" + Filter.FIELD_ACCOUNT + ") FROM " + 
-				SipManager.FILTERS_TABLE_NAME + " WHERE " + Filter.FIELD_ACCOUNT + "=?;",
-				new String[]{Integer.toString(account_id)});
-		int numRows = 0;
-		if(c.getCount() > 0){
-			c.moveToFirst();
-			numRows = c.getInt(0);
-			
-		}
-		c.close();
-		return numRows;
-	}
 
 }

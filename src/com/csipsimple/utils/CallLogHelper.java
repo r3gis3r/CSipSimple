@@ -30,8 +30,6 @@ import android.provider.CallLog;
 
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;
-import com.csipsimple.api.SipProfile;
-import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.models.Filter;
 
@@ -96,10 +94,7 @@ public class CallLogHelper {
 		}
 
 
-        SipProfile acc = new SipProfile();
-        acc.id = call.getAccId();
-        DBAdapter db = new DBAdapter(context);
-        int hasBeenAutoanswered = Filter.isAutoAnswerNumber(acc , number, db);
+        int hasBeenAutoanswered = Filter.isAutoAnswerNumber(context, call.getAccId(), number);
         if(hasBeenAutoanswered == call.getLastStatusCode()) {
             nonAcknowledge = 0;
         }

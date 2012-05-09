@@ -67,8 +67,8 @@ public class OutgoingCall extends BroadcastReceiver {
 		
 		//Log.d(THIS_FILE, "act=" + action + " num=" + number + " fnum=" + full_number + " ignx=" + ignoreNext);	
 		
-		if ( !prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, true) || 
-				ignoreNext.equalsIgnoreCase(number) || 
+		if ( ignoreNext.equalsIgnoreCase(number) || 
+		        !prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, true) || 
 				action == null) {
 			
 			Log.d(THIS_FILE, "Our selector disabled, or Mobile chosen in our selector, send to tel");

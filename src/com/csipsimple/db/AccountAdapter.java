@@ -50,7 +50,6 @@ public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickL
 	private SparseArray<AccountStatusDisplay> cacheStatusDisplay;
 	Activity context;
 	String forNumber = null;
-	private DBAdapter db;
 	
 	public static final class AccountListItemViews {
 		TextView labelView;
@@ -65,12 +64,12 @@ public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickL
 		cacheStatusDisplay = new SparseArray<AccountStatusDisplay>();
 	}
 	
-	public AccountAdapter(Activity aContext, List<SipProfile> list, String aForNumber, DBAdapter database) {
+	public AccountAdapter(Activity aContext, List<SipProfile> list, String aForNumber) {
 		super(aContext, R.layout.choose_account_row, list);
 		this.context= aContext;
 		cacheStatusDisplay = new SparseArray<AccountStatusDisplay>();
 		forNumber = aForNumber;
-		db = database;
+		
 	}
 	
 	public void updateService(ISipService aService) {
@@ -119,10 +118,13 @@ public class AccountAdapter extends ArrayAdapter<SipProfile> implements OnClickL
 
 			tagView.labelView.setText(account.display_name);
 			// Update status label and color
-			if(!accountStatusDisplay.availableForCalls || forNumber == null || db == null) {
+			if(!accountStatusDisplay.availableForCalls || forNumber == null) {
 				tagView.statusView.setText(accountStatusDisplay.statusLabel);
 			}else {
-				tagView.statusView.setText(context.getString(R.string.outgoing_call_chooser_call_text)+" : "+Filter.rewritePhoneNumber(account, forNumber, db));
+                tagView.statusView.setText(context
+                        .getString(R.string.outgoing_call_chooser_call_text)
+                        + " : "
+                        + Filter.rewritePhoneNumber(getContext(), account.id, forNumber));
 			}
 			tagView.labelView.setTextColor(accountStatusDisplay.statusColor);
 			v.setClickable(!accountStatusDisplay.availableForCalls);
