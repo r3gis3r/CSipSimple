@@ -22,7 +22,6 @@
 package com.csipsimple.ui;
 
 import android.annotation.TargetApi;
-import android.app.ListActivity;
 import android.app.PendingIntent.CanceledException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -30,8 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.TypedArray;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,18 +36,16 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipCallSession;
@@ -72,7 +67,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class OutgoingCallChooser extends ListActivity {
+public class OutgoingCallChooser extends SherlockListActivity {
 
     private DBAdapter database;
     private AccountAdapter adapter;
@@ -221,45 +216,21 @@ public class OutgoingCallChooser extends ListActivity {
 
     private void addRow(CharSequence label, Drawable dr, OnClickListener l) {
         Log.d(THIS_FILE, "Append ROW " + label);
-        // Get attr
-
-        TypedArray a = obtainStyledAttributes(android.R.style.Theme, new int[] {
-            android.R.attr.listPreferredItemHeight
-        });
-        int sListItemHeight = a.getDimensionPixelSize(0, 0);
-        a.recycle();
-
         // Add line
         LinearLayout root = (LinearLayout) findViewById(R.id.acc_list_chooser_wrapper);
+        
+        View v = getLayoutInflater().inflate(R.layout.choose_account_row, root, false);
+        v.findViewById(R.id.AccTextStatusView).setVisibility(View.GONE);
+        v.findViewById(R.id.useLabel).setVisibility(View.GONE);
+        v.findViewById(R.id.refresh_button).setVisibility(View.GONE);
+        ((ImageView) v.findViewById(R.id.wizard_icon)).setImageDrawable(dr);
+        ((TextView) v.findViewById(R.id.AccTextView)).setText(label);
+        
+        v.setFocusable(true);
+        v.setClickable(true);
+        v.setOnClickListener(l);
 
-        ImageView separator = new ImageView(this);
-        separator.setImageResource(R.drawable.divider_horizontal_dark);
-        separator.setScaleType(ScaleType.FIT_XY);
-        root.addView(separator, new LayoutParams(LayoutParams.FILL_PARENT, 1));
-
-        LinearLayout line = new LinearLayout(this);
-        line.setFocusable(true);
-        line.setClickable(true);
-        line.setOrientation(LinearLayout.HORIZONTAL);
-        line.setGravity(Gravity.CENTER_VERTICAL);
-        line.setBackgroundResource(android.R.drawable.menuitem_background);
-
-        ImageView icon = new ImageView(this);
-        icon.setImageDrawable(dr);
-        icon.setScaleType(ScaleType.FIT_XY);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(48, 48);
-        lp.setMargins(6, 6, 6, 6);
-        line.addView(icon, lp);
-
-        TextView tv = new TextView(this);
-        tv.setText(label);
-        tv.setTextAppearance(this, android.R.style.TextAppearance_Medium);
-        tv.setTypeface(Typeface.DEFAULT_BOLD);
-        line.addView(tv, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-
-        line.setOnClickListener(l);
-
-        root.addView(line, new LayoutParams(LayoutParams.FILL_PARENT, sListItemHeight));
+        root.addView(v);
 
     }
 

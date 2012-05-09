@@ -32,13 +32,13 @@
         android:scrollbars="vertical" >
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <!-- Integration -->
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/row_glob_integrate"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -48,34 +48,31 @@
                 android:orientation="horizontal"
                 android:padding="5dip" >
 
-                <LinearLayout
-                    android:layout_width="0dip"
+                <TextView
+                    android:id="@+id/glob_integrate_text"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:orientation="vertical" >
+                    android:layout_toLeftOf="@+id/glob_integrate"
+                    android:text="@string/android_integration"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/android_integration"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/android_integration_desc"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/glob_integrate_text"
+                    android:layout_toLeftOf="@id/glob_integrate"
+                    android:text="@string/android_integration_desc"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <CheckBox
-                    android:id="@+id/glob_integrate"
+                    android:id="@id/glob_integrate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="6dip" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 style="?android:attr/listSeparatorTextViewStyle"
@@ -84,7 +81,7 @@
                 android:text="@string/availability_profile" />
             <!-- Battery profile -->
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/row_glob_profile_always"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -94,44 +91,39 @@
                 android:orientation="horizontal"
                 android:padding="5dip" >
 
-                <LinearLayout
-                    android:layout_width="0dip"
+                <TextView
+                    android:id="@+id/glob_profile_always_text"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:orientation="vertical" >
+                    android:layout_toLeftOf="@+id/glob_profile_always"
+                    android:text="@string/always_available"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/always_available"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/always_available_desc"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/glob_profile_always_text"
+                    android:layout_toLeftOf="@id/glob_profile_always"
+                    android:text="@string/always_available_desc"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <RadioButton
-                    android:id="@+id/glob_profile_always"
+                    android:id="@id/glob_profile_always"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="6dip" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <ImageView
+            <View
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/empty_description"
-                android:gravity="fill_horizontal"
-                android:scaleType="fitXY"
-                android:src="@android:drawable/divider_horizontal_dark" />
+                android:background="@android:drawable/divider_horizontal_dark"
+                android:gravity="fill_horizontal" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/row_glob_profile_wifi"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -141,45 +133,39 @@
                 android:orientation="horizontal"
                 android:padding="5dip" >
 
-                <LinearLayout
-                    android:layout_width="0dip"
+                <TextView
+                    android:id="@+id/glob_profile_wifi_text"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:orientation="vertical" >
+                    android:layout_toLeftOf="@+id/glob_profile_wifi"
+                    android:text="@string/wifi_available"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/wifi_available"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="marquee"
-                        android:text="@string/wifi_available_desc"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/glob_profile_wifi_text"
+                    android:layout_toLeftOf="@+id/glob_profile_wifi"
+                    android:text="@string/wifi_available_desc"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <RadioButton
                     android:id="@+id/glob_profile_wifi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="6dip" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <ImageView
+            <View
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/empty_description"
-                android:gravity="fill_horizontal"
-                android:scaleType="fitXY"
-                android:src="@android:drawable/divider_horizontal_dark" />
+                android:background="@android:drawable/divider_horizontal_dark"
+                android:gravity="fill_horizontal" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/row_glob_profile_never"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -189,35 +175,31 @@
                 android:orientation="horizontal"
                 android:padding="5dip" >
 
-                <LinearLayout
-                    android:layout_width="0dip"
+                <TextView
+                    android:id="@+id/glob_profile_never_text"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:orientation="vertical" >
+                    android:layout_toLeftOf="@+id/glob_profile_never"
+                    android:text="@string/never_available"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/never_available"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="marquee"
-                        android:text="@string/never_available_desc"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/glob_profile_never_text"
+                    android:layout_toLeftOf="@+id/glob_profile_never"
+                    android:text="@string/never_available_desc"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <RadioButton
                     android:id="@+id/glob_profile_never"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="6dip" />
-            </LinearLayout>
+            </RelativeLayout>
             <!-- 3G -->
 
             <TextView
@@ -226,7 +208,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/availability_tg" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/row_glob_tg"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -236,34 +218,31 @@
                 android:orientation="horizontal"
                 android:padding="5dip" >
 
-                <LinearLayout
-                    android:layout_width="0dip"
+                <TextView
+                    android:id="@+id/glob_tg_text"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:orientation="vertical" >
+                    android:layout_toLeftOf="@+id/glob_tg"
+                    android:text="@string/tg_allowed"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tg_allowed"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tg_allowed_desc"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/glob_tg_text"
+                    android:layout_toLeftOf="@+id/glob_tg"
+                    android:text="@string/tg_allowed_desc"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <CheckBox
                     android:id="@+id/glob_tg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="6dip" />
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

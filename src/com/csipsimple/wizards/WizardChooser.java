@@ -21,26 +21,26 @@
 
 package com.csipsimple.wizards;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import com.csipsimple.R;
 
-public class WizardChooser extends ExpandableListActivity {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class WizardChooser extends SherlockExpandableListActivity {
 	private String[] childFrom;
 	private int[] childTo;
 	private ArrayList<ArrayList<Map<String, Object>>> childDatas;

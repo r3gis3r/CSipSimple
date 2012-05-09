@@ -21,7 +21,6 @@
 
 package com.csipsimple.ui.prefs;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,11 +28,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.PreferencesWrapper;
 
-public class PrefsFast extends Activity implements OnClickListener {
+public class PrefsFast extends SherlockActivity implements OnClickListener {
 	
 	private CheckBox globIntegrate;
 	private RadioButton globProfileAlways;
@@ -52,7 +52,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fast_settings);
+        setContentView(R.layout.fast_settings);
 		
 		
 		//Init checkboxes objects
@@ -76,6 +76,7 @@ public class PrefsFast extends Activity implements OnClickListener {
 		findViewById(R.id.row_glob_tg).setOnClickListener(this);
 		
 		updateFromPrefs();
+		
 		
 	}
 	
