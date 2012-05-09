@@ -32,6 +32,10 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -555,55 +559,34 @@ public class Filter {
 	
 	//Static utility method
 
-	public static boolean isCallableNumber(Context ctxt, long accountId, String number) {
-		boolean canCall = true;
-		Cursor c = getFiltersForAccount(ctxt, accountId);
-		int numRows = c.getCount();
-		//Log.d(THIS_FILE, "F > This account has "+numRows+" filters");
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
-			Log.d(THIS_FILE, "Test filter "+f.matchPattern);
-			canCall &= f.canCall(number);
-			
-			//Stop processing & rewrite
-			if(f.stopProcessing(number)) {
-				c.close();
-				return canCall;
-			}
-			number = f.rewrite(number);
-			//Move to next
-			c.moveToNext();
-		}
-		c.close();
-		return canCall;
-	}
-	
+    public static boolean isCallableNumber(Context ctxt, long accountId, String number) {
+        boolean canCall = true;
+        List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
+        for (Filter f : filterList) {
+            Log.d(THIS_FILE, "Test filter " + f.matchPattern);
+            canCall &= f.canCall(number);
+
+            // Stop processing & rewrite
+            if (f.stopProcessing(number)) {
+                return canCall;
+            }
+            number = f.rewrite(number);
+        }
+        return canCall;
+    }
 
 	public static boolean isMustCallNumber(Context ctxt, long accountId, String number) {
-		
-		Cursor c = getFiltersForAccount(ctxt, accountId);
-		int numRows = c.getCount();
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
-			//Log.d(THIS_FILE, "Test filter "+f.match_pattern);
+	    List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
+        for (Filter f : filterList) {
 			if(f.mustCall(number)) {
-				c.close();
 				return true;
 			}
 			//Stop processing & rewrite
 			if(f.stopProcessing(number)) {
-				c.close();
 				return false;
 			}
 			number = f.rewrite(number);
-			//Move to next
-			c.moveToNext();
 		}
-		c.close();
 		return false;
 	}
 	
@@ -612,56 +595,39 @@ public class Filter {
 	}
 	
 	public static String rewritePhoneNumber(Context ctxt, long accountId, String number) {
-		
-		Cursor c = getFiltersForAccount(ctxt, accountId);
-		int numRows = c.getCount();
-		//Log.d(THIS_FILE, "RW > This account has "+numRows+" filters");
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
+        List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
+        for (Filter f : filterList) {
 			//Log.d(THIS_FILE, "RW > Test filter "+f.matches);
 			number = f.rewrite(number);
 			if(f.stopProcessing(number)) {
-				c.close();
 				return number;
 			}
-			c.moveToNext();
 		}
-		c.close();
 		return number;
 	}
 	
 	public static int isAutoAnswerNumber(Context ctxt, long accountId, String number) {
-		Cursor c = getFiltersForAccount(ctxt, accountId);
-		int numRows = c.getCount();
-		c.moveToFirst();
-		for (int i = 0; i < numRows; ++i) {
-			Filter f = new Filter();
-			f.createFromDb(c);
-			if( f.autoAnswer(number) ) {
-			    if(TextUtils.isEmpty(f.replacePattern)){
-			        return 200;
-			    }
-			    try {
-			        return Integer.parseInt(f.replacePattern);
-			    }catch (NumberFormatException e) {
-			        Log.e(THIS_FILE, "Invalid autoanswer code : " + f.replacePattern);
-			    }
-				return 200;
-			}
-			//Stop processing & rewrite
-			if(f.stopProcessing(number)) {
-				c.close();
-				return 0;
-			}
-			number = f.rewrite(number);
-			//Move to next
-			c.moveToNext();
-		}
-		c.close();
-		return 0;
-	}
+        List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
+        for (Filter f : filterList) {
+            if (f.autoAnswer(number)) {
+                if (TextUtils.isEmpty(f.replacePattern)) {
+                    return 200;
+                }
+                try {
+                    return Integer.parseInt(f.replacePattern);
+                } catch (NumberFormatException e) {
+                    Log.e(THIS_FILE, "Invalid autoanswer code : " + f.replacePattern);
+                }
+                return 200;
+            }
+            // Stop processing & rewrite
+            if (f.stopProcessing(number)) {
+                return 0;
+            }
+            number = f.rewrite(number);
+        }
+        return 0;
+    }
 	
 	
 
@@ -688,7 +654,35 @@ public class Filter {
 		return filter;
 	}
 	
-	public static Cursor getFiltersForAccount(Context ctxt, long accountId) {
+	private static Map<Long, List<Filter>> FILTERS_PER_ACCOUNT = new HashMap<Long, List<Filter>>();
+	
+	private static List<Filter> getFiltersForAccount(Context ctxt, long accountId){
+        if (!FILTERS_PER_ACCOUNT.containsKey(accountId)) {
+            ArrayList<Filter> aList = new ArrayList<Filter>();
+            Cursor c = getFiltersCursorForAccount(ctxt, accountId);
+            if (c != null) {
+                try {
+                    if (c.moveToFirst()) {
+                        do {
+                            aList.add(new Filter(c));
+                        } while (c.moveToNext());
+                    }
+                } catch (Exception e) {
+                    Log.e(THIS_FILE, "Error on looping over sip profiles", e);
+                } finally {
+                    c.close();
+                }
+            }
+            FILTERS_PER_ACCOUNT.put(accountId, aList);
+        }
+        return FILTERS_PER_ACCOUNT.get(accountId);
+	}
+	
+	public static void resetCache() {
+	    FILTERS_PER_ACCOUNT = null;
+	}
+	
+	public static Cursor getFiltersCursorForAccount(Context ctxt, long accountId) {
 	    return ctxt.getContentResolver().query(SipManager.FILTER_URI, FULL_PROJ, FIELD_ACCOUNT+"=?", new String[]{Long.toString(accountId)}, DEFAULT_ORDER);
 	}
 }

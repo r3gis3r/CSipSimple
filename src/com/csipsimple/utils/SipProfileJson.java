@@ -75,13 +75,11 @@ public final class SipProfileJson {
         JSONObject jsonProfile = serializeBaseSipProfile(profile);
         JSONArray jsonFilters = new JSONArray();
 
-        Cursor c = Filter.getFiltersForAccount(context, profile.id);
+        Cursor c = Filter.getFiltersCursorForAccount(context, profile.id);
         int numRows = c.getCount();
         c.moveToFirst();
         for (int i = 0; i < numRows; ++i) {
-            Filter f = new Filter();
-            f.createFromDb(c);
-
+            Filter f = new Filter(c);
             try {
                 jsonFilters.put(i, serializeBaseFilter(f));
             } catch (JSONException e) {

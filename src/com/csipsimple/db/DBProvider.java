@@ -290,6 +290,9 @@ public class DBProvider extends ContentProvider {
         		broadcastAccountChange(rowId);
         	}
         }
+        if (matched == FILTERS || matched == FILTERS_ID) {
+            Filter.resetCache();
+        }
         
 		return count;
 	}
@@ -374,6 +377,9 @@ public class DBProvider extends ContentProvider {
             }
             if(matched == ACCOUNTS_STATUS || matched == ACCOUNTS_STATUS_ID) {
                 broadcastRegistrationChange(rowId);
+            }
+            if (matched == FILTERS || matched == FILTERS_ID) {
+                Filter.resetCache();
             }
             
             return retUri;
@@ -622,7 +628,9 @@ public class DBProvider extends ContentProvider {
                 broadcastRegistrationChange(rowId);
             }
         }
-        
+        if (matched == FILTERS || matched == FILTERS_ID) {
+            Filter.resetCache();
+        }
 	
         return count;
 	}

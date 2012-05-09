@@ -106,7 +106,7 @@ public class AccountFilters extends ListActivity {
             }
         });
 
-        cursor = Filter.getFiltersForAccount(this, accountId);
+        cursor = Filter.getFiltersCursorForAccount(this, accountId);
         if (cursor != null) {
             startManagingCursor(cursor);
         }
