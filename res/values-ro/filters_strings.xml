@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cant_call">Nu pot apela</string>
+    <string name="rewrite">Rescriere</string>
+    <string name="stop_processing">Opreste procesarea</string>
+    <string name="direct_call">Apeleaza direct</string>
+    <string name="auto_answer">Raspuns automat</string>
+    <string name="starts_with">Incepe cu</string>
+    <string name="ends_with">Se termina cu</string>
+    <string name="contains">Conține</string>
+    <string name="all">Tot</string>
+    <string name="has_exactly_n_digits">Are exact N poziții</string>
+    <string name="has_more_than_n_digits">Are mai mult de N poziții</string>
+    <string name="is_exactly">Este fix</string>
+    <string name="custom_regexp">Expresie regulata personalizata</string>
+    <string name="replace_match_by">Inlocuieste cu</string>
+    <string name="replace_all_by">Inlocuieste tot cu</string>
+
+</resources>

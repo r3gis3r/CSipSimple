@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cant_call">不能呼叫</string>
+    <string name="rewrite">重写</string>
+    <string name="stop_processing">停止处理</string>
+    <string name="direct_call">直接呼叫</string>
+    <string name="auto_answer">自动回应</string>
+    <string name="starts_with">起始</string>
+    <string name="ends_with">结束</string>
+    <string name="contains">包含</string>
+    <string name="all">全部</string>
+    <string name="has_exactly_n_digits">有N个数字</string>
+    <string name="has_more_than_n_digits">大于N个数字</string>
+    <string name="is_exactly">全等于</string>
+    <string name="custom_regexp">自定义正则表达式</string>
+    <string name="prefix_by">前缀</string>
+    <string name="suffix_with">后缀</string>
+    <string name="replace_match_by">替换</string>
+    <string name="replace_all_by">替换所有</string>
+
+</resources>

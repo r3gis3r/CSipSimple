@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cant_call">Nem hívható</string>
+    <string name="rewrite">Átírás</string>
+    <string name="stop_processing">Feldolgozás leállítása</string>
+    <string name="direct_call">Közvetlen hívás</string>
+    <string name="auto_answer">Automatikus válasz</string>
+    <string name="custom_regexp">Saját RegExp</string>
+    <string name="prefix_by">Előtag:</string>
+    <string name="suffix_with">Utótag:</string>
+    <string name="replace_match_by">Találat felcserlése ezzel:</string>
+    <string name="replace_all_by">Mind felcserélése ezzel:</string>
+
+</resources>

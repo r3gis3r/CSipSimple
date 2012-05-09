@@ -113,3 +113,8 @@ file_filter = res/values-<lang>/wizard_strings.xml
 source_file = res/values/wizard_strings.xml
 source_lang = en
 
+[csipsimple.filters_strings]
+file_filter = res/values-<lang>/filters_strings.xml
+source_file = res/values/filters_strings.xml
+source_lang = en
+

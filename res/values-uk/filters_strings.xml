@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cant_call">Неможливо подзвонитиr</string>
+    <string name="rewrite">Переписування</string>
+    <string name="stop_processing">Стоп</string>
+    <string name="direct_call">Прямий дзвінок</string>
+    <string name="auto_answer">Авто відповідь</string>
+    <string name="starts_with">Починається з</string>
+    <string name="ends_with">Закінчується на</string>
+    <string name="contains">Містить</string>
+    <string name="all">Все</string>
+    <string name="has_exactly_n_digits">Має точно N цифр</string>
+    <string name="has_more_than_n_digits">Має більше ніж N цифр</string>
+    <string name="is_exactly">Точно</string>
+    <string name="custom_regexp">Користувацький RegExp</string>
+    <string name="prefix_by">Префікс</string>
+    <string name="suffix_with">Суффікс</string>
+    <string name="replace_match_by">Замінити співпадіння на</string>
+    <string name="replace_all_by">Замінити все на</string>
+
+</resources>

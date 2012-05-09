@@ -144,13 +144,13 @@ public class UAStateReceiver extends Callback {
 
             //Auto answer feature
             SipProfile acc = pjService.getAccountForPjsipId(accId);
-            final boolean shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc);
+            final int shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc);
             Log.d(THIS_FILE, "Should I anto answer ? " + shouldAutoAnswer);
-            if (shouldAutoAnswer) {
-                // Automatically answer incoming calls with 200/OK
-                pjService.callAnswer(callId, 200);
+            if (shouldAutoAnswer >= 200) {
+                // Automatically answer incoming calls with 200 or higher final code
+                pjService.callAnswer(callId, shouldAutoAnswer);
             } else {
-                // Automatically answer incoming calls with 180/RINGING
+                // Ring and inform remote about ringing with 180/RINGING
                 pjService.callAnswer(callId, 180);
                 
                 if(pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
@@ -160,10 +160,11 @@ public class UAStateReceiver extends Callback {
                     broadCastAndroidCallState("RINGING", remContact);
                 }
             }
-            //Or by api
-            launchCallHandler(callInfo);
-			
-			Log.d(THIS_FILE, "Incoming call >>");
+            if(shouldAutoAnswer < 300) {
+                //Or by api
+                launchCallHandler(callInfo);
+    			Log.d(THIS_FILE, "Incoming call >>");
+			}
         } catch (SameThreadException e) {
             // That's fine we are in a pjsip thread
         }finally {

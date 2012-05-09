@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string-array name="filters_action">
-        <item>Can\'t call</item>
-        <item>Rewrite</item>
-        <item>Stop processing</item>
-        <item>Directly call</item>
-        <item>Auto answer</item>
+        <item>@string/cant_call</item>
+        <item>@string/rewrite</item>
+        <item>@string/stop_processing</item>
+        <item>@string/direct_call</item>
+        <item>@string/auto_answer</item>
     </string-array>
     <string-array name="filters_type">
-        <item>Starts with</item>
-        <item>Ends with</item>
-        <item>Contains</item>
-        <item>All</item>
-        <item>Has exactly N digit</item>
-        <item>Has more than N digit</item>
-        <item>Is exactly</item>
-        <item>Custom RegExp</item>
+        <item>@string/starts_with</item>
+        <item>@string/ends_with</item>
+        <item>@string/contains</item>
+        <item>@string/all</item>
+        <item>@string/has_exactly_n_digits</item>
+        <item>@string/has_more_than_n_digits</item>
+        <item>@string/is_exactly</item>
+        <item></item>
     </string-array>
     <string-array name="replace_type">
-        <item>Prefix by</item>
-        <item>Suffix with</item>
-        <item>Replace match by</item>
-        <item>Replace all by</item>
-        <item>Custom RegExp</item>
+        <item>@string/prefix_by</item>
+        <item>@string/suffix_with</item>
+        <item>@string/replace_match_by</item>
+        <item>@string/replace_all_by</item>
+        <item>@string/custom_regexp</item>
     </string-array>
+
 </resources>

@@ -33,16 +33,14 @@
                     android:id="@+id/matcher_type"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/filters_type" >
-                </Spinner>
+                    android:entries="@array/filters_type" />
 
                 <EditText
                     android:id="@+id/filter_matches"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:singleLine="true" >
-                </EditText>
+                    android:singleLine="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -56,16 +54,14 @@
                     android:id="@+id/replace_type"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/replace_type" >
-                </Spinner>
+                    android:entries="@array/replace_type" />
 
                 <EditText
                     android:id="@+id/filter_replace"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:singleLine="true" >
-                </EditText>
+                    android:singleLine="true" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

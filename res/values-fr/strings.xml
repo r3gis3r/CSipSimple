@@ -76,12 +76,14 @@
   <string name="deactivate">Deactivate</string>
   <string name="audio">Audio</string>
   <string name="video">Video</string>
+  <string name="invert_selection">Inverser la séléction</string>
   <!--Presence stuff-->
   <string name="online">Online</string>
   <string name="offline">Offline</string>
   <string name="away">Away</string>
   <string name="busy">Busy</string>
   <string name="activate_presence_sharing">Partage de présence</string>
+  <string name="deactivate_presence_sharing">Ne plus partager la présence</string>
   <string name="presence">Présence</string>
   <string name="set_android_group">Choisir le groupe android</string>
   <string name="set_sip_data">Choisir les données pour l\'uri SIP</string>

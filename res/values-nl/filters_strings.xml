@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cant_call">Kan niet bellen</string>
+    <string name="rewrite">Herschrijf</string>
+    <string name="stop_processing">Stop verwerking</string>
+    <string name="direct_call">Directe oproep</string>
+    <string name="auto_answer">Auto antwoord</string>
+    <string name="starts_with">Begint met</string>
+    <string name="ends_with">Eindigt met</string>
+    <string name="contains">Bevat</string>
+    <string name="all">Alle</string>
+    <string name="has_exactly_n_digits">Heeft precies N cijfers</string>
+    <string name="has_more_than_n_digits">Heeft meer dan N cijfers</string>
+    <string name="is_exactly">Is precies</string>
+    <string name="custom_regexp">Maatwerk reguliere expressie</string>
+    <string name="prefix_by">Prefix met</string>
+    <string name="suffix_with">Suffix met</string>
+    <string name="replace_match_by">Vervang gevonden door</string>
+    <string name="replace_all_by">Vervang alles door</string>
+
+</resources>

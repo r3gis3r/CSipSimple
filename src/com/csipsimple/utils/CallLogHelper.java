@@ -30,7 +30,13 @@ import android.provider.CallLog;
 
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.db.DBAdapter;
 import com.csipsimple.models.CallerInfo;
+import com.csipsimple.models.Filter;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CallLogHelper {
 
@@ -64,8 +70,14 @@ public class CallLogHelper {
 		
 		cv.put(CallLog.Calls.NUMBER, remoteContact);
 		
-		cv.put(CallLog.Calls.NEW, (callStart > 0)?1:0);
-		cv.put(CallLog.Calls.DATE, (callStart>0 )?callStart:System.currentTimeMillis());
+		Pattern p = Pattern.compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?sip(?:s)?:([^@]*@[^>]*)(?:>)?", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(remoteContact);
+        String number = remoteContact;
+        if (m.matches()) {
+            number = m.group(2);
+        }
+        
+        cv.put(CallLog.Calls.DATE, (callStart > 0) ? callStart : System.currentTimeMillis());
 		int type = CallLog.Calls.OUTGOING_TYPE;
 		int nonAcknowledge = 0; 
 		if(call.isIncoming()) {
@@ -82,6 +94,15 @@ public class CallLogHelper {
 				nonAcknowledge = 0;
 			}
 		}
+
+
+        SipProfile acc = new SipProfile();
+        acc.id = call.getAccId();
+        DBAdapter db = new DBAdapter(context);
+        int hasBeenAutoanswered = Filter.isAutoAnswerNumber(acc , number, db);
+        if(hasBeenAutoanswered == call.getLastStatusCode()) {
+            nonAcknowledge = 0;
+        }
         cv.put(CallLog.Calls.TYPE, type);
         cv.put(CallLog.Calls.NEW, nonAcknowledge);
         cv.put(CallLog.Calls.DURATION,

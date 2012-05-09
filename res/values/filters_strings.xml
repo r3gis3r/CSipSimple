@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="optional_sip_code">Optional sip code</string>
+    <string name="cant_call">Can\'t call</string>
+    <string name="rewrite">Rewrite</string>
+    <string name="stop_processing">Stop processing</string>
+    <string name="direct_call">Directly call</string>
+    <string name="auto_answer">Auto answer</string>
+    <string name="starts_with">Starts with</string>
+    <string name="ends_with">Ends with</string>
+    <string name="contains">Contains</string>
+    <string name="all">All</string>
+    <string name="has_exactly_n_digits">Has exactly N digits</string>
+    <string name="has_more_than_n_digits">Has more than N digits</string>
+    <string name="is_exactly">Is exactly</string>
+    <string name="custom_regexp">Custom RegExp</string>
+    <string name="prefix_by">Prefix by</string>
+    <string name="suffix_with">Suffix with</string>
+    <string name="replace_match_by">Replace match by</string>
+    <string name="replace_all_by">Replace all by</string>
+
+</resources>

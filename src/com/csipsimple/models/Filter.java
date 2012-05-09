@@ -85,7 +85,7 @@ public class Filter {
 	};
 	
 	
-	public static final String DEFAULT_ORDER = FIELD_PRIORITY+" asc"; //TODO : should be a os constant... just find it
+	public static final String DEFAULT_ORDER = FIELD_PRIORITY + " asc";
 	private static final String THIS_FILE = "Filter";
 	
 	public Integer id;
@@ -493,6 +493,9 @@ public class Filter {
 		if(replacePattern == null) {
 			repr.type = REPLACE_MATCH_BY;
 			repr.fieldContent = "";
+			if(action != null && action == ACTION_AUTO_ANSWER) {
+			    repr.fieldContent = replacePattern;
+			}
 			return repr;
 		}else {
 			repr.fieldContent = replacePattern;
@@ -640,7 +643,7 @@ public class Filter {
 		return number;
 	}
 	
-	public static boolean isAutoAnswerNumber(SipProfile account, String number, DBAdapter db) {
+	public static int isAutoAnswerNumber(SipProfile account, String number, DBAdapter db) {
 		db.open();
 		Cursor c = db.getFiltersForAccount(account.id);
 		int numRows = c.getCount();
@@ -649,13 +652,21 @@ public class Filter {
 			Filter f = new Filter();
 			f.createFromDb(c);
 			if( f.autoAnswer(number) ) {
-				return true;
+			    if(TextUtils.isEmpty(f.replacePattern)){
+			        return 200;
+			    }
+			    try {
+			        return Integer.parseInt(f.replacePattern);
+			    }catch (NumberFormatException e) {
+			        Log.e(THIS_FILE, "Invalid autoanswer code : " + f.replacePattern);
+			    }
+				return 200;
 			}
 			//Stop processing & rewrite
 			if(f.stopProcessing(number)) {
 				c.close();
 				db.close();
-				return false;
+				return 0;
 			}
 			number = f.rewrite(number);
 			//Move to next
@@ -663,7 +674,7 @@ public class Filter {
 		}
 		c.close();
 		db.close();
-		return false;
+		return 0;
 	}
 	
 	

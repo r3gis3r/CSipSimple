@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cant_call">Обаждането е невъзможно</string>
+    <string name="rewrite">Пренаписване</string>
+    <string name="stop_processing">Спиране на обработката</string>
+    <string name="direct_call">Директно повикване</string>
+    <string name="auto_answer">Автоматичен отговор</string>
+    <string name="starts_with">Започва с</string>
+    <string name="ends_with">Завършва с</string>
+    <string name="contains">Съдържа</string>
+    <string name="all">Всички</string>
+    <string name="has_exactly_n_digits">Има точно N цифри</string>
+    <string name="has_more_than_n_digits">Има повече от N цифри</string>
+    <string name="is_exactly">Е точно</string>
+    <string name="custom_regexp">Филтър</string>
+    <string name="prefix_by">Префиксиран от</string>
+    <string name="suffix_with">Последван от</string>
+    <string name="replace_match_by">Замени съвпадащите с</string>
+    <string name="replace_all_by">Замени всички с</string>
+
+</resources>

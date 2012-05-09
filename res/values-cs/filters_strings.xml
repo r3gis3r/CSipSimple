@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cant_call">nemůžu volat</string>
+    <string name="rewrite">přepsat</string>
+    <string name="stop_processing">zastavit procs</string>
+    <string name="direct_call">volat přímo</string>
+    <string name="auto_answer">automatické zvednutí</string>
+    <string name="starts_with">začít s</string>
+    <string name="ends_with">ukončit s</string>
+    <string name="contains">Obsahuje</string>
+    <string name="all">Vše</string>
+    <string name="has_exactly_n_digits">má n-tý počet čísel</string>
+    <string name="has_more_than_n_digits">má větší než n-tý počet číslic</string>
+    <string name="is_exactly">je přesně</string>
+    <string name="custom_regexp">vlastní nastavení vypršení registrace</string>
+    <string name="prefix_by">předvolba</string>
+    <string name="suffix_with">připona s</string>
+    <string name="replace_match_by">Nahradit shodu</string>
+    <string name="replace_all_by">nahradit vše</string>
+
+</resources>

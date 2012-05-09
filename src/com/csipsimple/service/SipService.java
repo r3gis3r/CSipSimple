@@ -853,7 +853,7 @@ public class SipService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.i(THIS_FILE, "Destroying SIP Service");
-		
+		db.close();
 		unregisterBroadcasts();
 		notificationManager.onServiceDestroy();
 		getExecutor().execute(new FinalizeDestroyRunnable());
@@ -1465,15 +1465,22 @@ public class SipService extends Service {
 		autoAcceptCurrent = auto_response;
 	}
 	
-	public boolean shouldAutoAnswer(String remContact, SipProfile acc) {
+	/**
+	 * Should a current incoming call be answered.
+	 * A call to this method will reset internal state
+	 * @param remContact The remote contact to test
+	 * @param acc The incoming guessed account
+	 * @return the sip code to auto-answer with. If > 0 it means that an auto answer must be fired
+	 */
+	public int shouldAutoAnswer(String remContact, SipProfile acc) {
 
 		Log.d(THIS_FILE, "Search if should I auto answer for " + remContact);
-		boolean shouldAutoAnswer = false;
+		int shouldAutoAnswer = 0;
 		
 		if(autoAcceptCurrent) {
 			Log.d(THIS_FILE, "I should auto answer this one !!! ");
 			autoAcceptCurrent = false;
-			return true;
+			return 200;
 		}
 		
 		if(acc != null) {
@@ -1483,7 +1490,6 @@ public class SipService extends Service {
 			if (m.matches()) {
 				number = m.group(2);
 			}
-			Log.w(THIS_FILE, "Search if should auto answer : " + number);
 			synchronized (db) {
 				shouldAutoAnswer = Filter.isAutoAnswerNumber(acc, number, db);
 			}
