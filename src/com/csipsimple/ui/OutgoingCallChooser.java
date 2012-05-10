@@ -55,7 +55,6 @@ import com.csipsimple.api.SipProfileState;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
-import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.CallHandler.onLoadListener;
 import com.csipsimple.utils.Compatibility;
@@ -285,8 +284,12 @@ public class OutgoingCallChooser extends SherlockListActivity {
     private void placePluginCall(CallHandler ch) {
         try {
             String nextExclude = ch.getNextExcludeTelNumber();
-            if (nextExclude != null) {
-                OutgoingCall.ignoreNext = nextExclude;
+            if (service != null && nextExclude != null) {
+                try {
+                    service.ignoreNextOutgoingCallFor(nextExclude);
+                } catch (RemoteException e) {
+                    Log.e(THIS_FILE, "Ignore next outgoing number failed");
+                }
             }
             ch.getIntent().send();
             finishServiceIfNeeded(false);

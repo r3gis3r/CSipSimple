@@ -677,6 +677,11 @@ public class SipService extends Service {
             return (Long) action.getResult();
         }
 
+        @Override
+        public void ignoreNextOutgoingCallFor(String number) throws RemoteException {
+            OutgoingCall.ignoreNext = number;
+        }
+
 
 		
 	};

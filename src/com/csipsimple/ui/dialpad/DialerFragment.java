@@ -651,7 +651,13 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
             String vmNumber = tm.getVoiceMailNumber();
 
             if (!TextUtils.isEmpty(vmNumber)) {
-                OutgoingCall.ignoreNext = vmNumber;
+                if(service != null) {
+                    try {
+                        service.ignoreNextOutgoingCallFor(vmNumber);
+                    } catch (RemoteException e) {
+                        Log.e(THIS_FILE, "Not possible to ignore next");
+                    }
+                }
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", vmNumber, null));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

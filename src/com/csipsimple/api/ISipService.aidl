@@ -78,7 +78,14 @@ interface ISipService{
 	SipProfileState getSipProfileState(int accountId);
 	
 	//Call configuration control
+	/**
+	 * Switch next incoming request to auto answer
+	 */
 	void switchToAutoAnswer();
+	/**
+	 * Ignore next outgoing call request from tel handler processing
+	 */
+	void ignoreNextOutgoingCallFor(String number);
 	
 	//Call control
 	void makeCall(in String callee, int accountId);
