@@ -644,7 +644,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
                 missingVoicemailDialog.show();
             }
         } else if (accountToUse == CallHandler.getAccountIdForCallHandler(getActivity(),
-                "com.csipsimple/com.csipsimple.plugins.telephony.CallHandler")) {
+                (new ComponentName(getActivity(), com.csipsimple.plugins.telephony.CallHandler.class).flattenToString()))) {
             // Case gsm voice mail
             TelephonyManager tm = (TelephonyManager) getActivity().getSystemService(
                     Context.TELEPHONY_SERVICE);
