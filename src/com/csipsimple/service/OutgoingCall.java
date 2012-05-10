@@ -24,12 +24,15 @@ package com.csipsimple.service;
 import java.util.Map;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.telephony.PhoneNumberUtils;
 
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.models.Filter;
 import com.csipsimple.ui.OutgoingCallChooser;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.Log;
@@ -40,6 +43,7 @@ public class OutgoingCall extends BroadcastReceiver {
 	private static final String THIS_FILE = "Outgoing RCV";
 	private Context context;
 	private PreferencesProviderWrapper prefsWrapper;
+    private static Long gsmCallHandlerId = null;
 	
 	public static String ignoreNext = "";
 	
@@ -77,18 +81,36 @@ public class OutgoingCall extends BroadcastReceiver {
 			return;
 		}
 		
-		//Compute remote apps that could receive the outgoing call itnent through our api
-		Map<String, String> potentialHandlers = CallHandler.getAvailableCallHandlers(context);
-        Log.d(THIS_FILE, "We have " + potentialHandlers.size() + " potential handlers");
 		
 		// If this is an outgoing call with a valid number
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) ) {
-			// If sip is there or there is at least 2 call handlers (if only one we assume that's the embed gsm one !
+
+	        //Compute remote apps that could receive the outgoing call itnent through our api
+	        Map<String, String> potentialHandlers = CallHandler.getAvailableCallHandlers(context);
+	        Log.d(THIS_FILE, "We have " + potentialHandlers.size() + " potential handlers");
+	        
+		    
+			// If sip is there or there is at least 2 call handlers (if only one we assume that's the embed gsm one !)
 			if(prefsWrapper.isValidConnectionForOutgoing() || potentialHandlers.size() > 1) {
 				// Just to be sure of what is incoming : sanitize phone number (in case of it was not properly done by dialer
 				// Or by a third party app
 				number = PhoneNumberUtils.convertKeypadLettersToDigits(number);
 	            number = PhoneNumberUtils.stripSeparators(number);
+	            
+	            
+	            // We can now check that the number that we want to call can be managed by something different than gsm plugin
+	            // Note that this is now possible because we cache filters.
+	            if(gsmCallHandlerId == null) {
+	                gsmCallHandlerId = CallHandler.getAccountIdForCallHandler(aContext, (new ComponentName(aContext, com.csipsimple.plugins.telephony.CallHandler.class)).flattenToString());
+	            }
+	            if(gsmCallHandlerId != SipProfile.INVALID_ID) {
+	                if(Filter.isMustCallNumber(aContext, gsmCallHandlerId, number)) {
+	                    Log.d(THIS_FILE, "Filtering to force pass number along");
+	                    // Pass the call to pstn handle
+	                    setResultData(number);
+	                    return;
+	                }
+	            }
 				
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
