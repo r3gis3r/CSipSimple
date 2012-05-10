@@ -42,18 +42,15 @@ APP_MODULES := libpjsipjni pj_opensl_dev
 ifeq ($(MY_USE_SILK),1)
 APP_MODULES += libpj_silk_codec 
 endif
-ifeq ($(MY_USE_G7221),1)
-APP_MODULES += libpj_g7221_codec
-endif
-ifeq ($(MY_USE_CODEC2),1)
-APP_MODULES += libpj_codec2_codec
-endif
-ifeq ($(MY_USE_G726),1)
-APP_MODULES += libpj_g726_codec
-endif
-ifeq ($(MY_USE_VIDEO),1)
-APP_MODULES += pj_video_android pj_screen_capture_android
-endif
+
+# Modules for extra codecs are 
+# pj_g7221_codec pj_codec2_codec pj_g726_codec
+#
+# Modules for video is
+# pj_video_android
+#  
+# Module for screen capture is
+# pj_screen_capture_android
 
 APP_PLATFORM := android-9
 APP_STL := gnustl_static #stlport_static

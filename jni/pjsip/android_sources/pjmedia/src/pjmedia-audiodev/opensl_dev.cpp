@@ -258,13 +258,45 @@ static pj_status_t opensl_init(pjmedia_aud_dev_factory *f) {
 	/* Create OpenSL ES engine in thread-safe mode */
 	SLEngineOption EngineOption[] = {(SLuint32)	SL_ENGINEOPTION_THREADSAFE, (SLuint32) SL_BOOLEAN_TRUE};
 
-	//For future use
-	const SLInterfaceID ids[2] = {SL_IID_AUDIODECODERCAPABILITIES, SL_IID_AUDIOENCODERCAPABILITIES};
-	const SLboolean req[2] = { SL_BOOLEAN_FALSE, SL_BOOLEAN_FALSE};
+	/* FOR TESTS
+	// Nbr of engine interfaces
+	SLuint32 pNumSupportedInterfaces = 0;
+	slQueryNumSupportedEngineInterfaces(&pNumSupportedInterfaces);
+	PJ_LOG(2, (THIS_FILE, "Has supported engine interfaces %d ", pNumSupportedInterfaces));
 
+	for(SLuint32 i=0; i< pNumSupportedInterfaces; i++){
+		SLInterfaceID  pInterfaceId;
+		slQuerySupportedEngineInterfaces(i, &pInterfaceId);
+		if(pInterfaceId == SL_IID_OBJECT){
+			PJ_LOG(2, (THIS_FILE, "SL_IID_OBJECT"));
+		}else if( pInterfaceId == SL_IID_DYNAMICINTERFACEMANAGEMENT){
+			PJ_LOG(2, (THIS_FILE, "DYNAMICINTERFACEMANAGEMENT"));
+		}else if( pInterfaceId == SL_IID_ENGINE){
+			PJ_LOG(2, (THIS_FILE, "SL_IID_ENGINE"));
+		}else if( pInterfaceId == SL_IID_ENGINECAPABILITIES){
+			PJ_LOG(2, (THIS_FILE, "SL_IID_ENGINECAPABILITIES"));
+		}else if( pInterfaceId == SL_IID_THREADSYNC){
+			PJ_LOG(2, (THIS_FILE, "THREADSYNC"));
+		}else if( pInterfaceId == SL_IID_AUDIOIODEVICECAPABILITIES){
+			PJ_LOG(2, (THIS_FILE, "AUDIOIODEVICECAPABILITIES"));
+		}else if( pInterfaceId == SL_IID_AUDIOENCODERCAPABILITIES){
+			PJ_LOG(2, (THIS_FILE, "AUDIOENCODERCAPABILITIES"));
+		}else if( pInterfaceId == SL_IID_AUDIODECODERCAPABILITIES){
+			PJ_LOG(2, (THIS_FILE, "AUDIODECODERCAPABILITIES"));
+		}else if( pInterfaceId == SL_IID_3DCOMMIT){
+			PJ_LOG(2, (THIS_FILE, "3DCOMMIT"));
+		}else if( pInterfaceId == SL_IID_DEVICEVOLUME){
+			PJ_LOG(2, (THIS_FILE, "SL_IID_DEVICEVOLUME"));
+		}else if( pInterfaceId == SL_IID_ANDROIDEFFECTCAPABILITIES){
+			PJ_LOG(2, (THIS_FILE, "ANDROIDEFFECTCAPABILITIES"));
+		}else {
+			PJ_LOG(2, (THIS_FILE, "UNKNOWN %x", pInterfaceId->time_low));
+		}
+	}
+	*/
 
     // create engine
-    result = slCreateEngine(&pa->engineObject, 1, EngineOption, 2, ids, req);
+    result = slCreateEngine(&pa->engineObject, 1, EngineOption, 0, NULL, NULL);
     if(result != SL_RESULT_SUCCESS){
 		PJ_LOG(1, (THIS_FILE, "Can't create engine %d ", result));
 		return opensl_to_pj_error(result);

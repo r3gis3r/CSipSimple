@@ -41,6 +41,7 @@ x264_src/configure :
 clean :
 	@if [ -d ffmpeg_src ]; then $(MAKE) -C ffmpeg_src clean; fi;
 	@if [ -d x264_src ]; then $(MAKE) -C x264_src clean; fi;
+	@if [ -d build ]; then rm -rf build; fi;
 	
 update :
 	# FFmpeg
