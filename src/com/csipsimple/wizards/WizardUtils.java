@@ -628,6 +628,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_messagenet, 20, 
                     new Locale[]{Locale.ITALY}, false, false, 
                     Messagenet.class));
+            WIZARDS_DICT.put("VOIPMUCH", new WizardInfo("VOIPMUCH", "VoIP Much", 
+                    R.drawable.ic_wizard_voipmuch, 20, 
+                    new Locale[]{Locale.US, Locale.CANADA}, false, false, 
+                    VoipMuch.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
