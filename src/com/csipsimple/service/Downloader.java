@@ -113,7 +113,7 @@ public class Downloader extends IntentService {
         nb.setContent(contentView);
 	    
         final Notification notification = showNotif ? nb.getNotification() : null;
-		
+		notification.contentView = contentView;
 		if(!TextUtils.isEmpty(outPath)) {
 			try {
 				File output = new File(outPath);
