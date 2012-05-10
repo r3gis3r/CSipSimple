@@ -76,7 +76,6 @@ import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.service.OutgoingCall;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.utils.CallHandler;
 import com.csipsimple.utils.CallHandler.onLoadListener;
@@ -689,8 +688,12 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     private void placePluginCall(CallHandler ch) {
         try {
             String nextExclude = ch.getNextExcludeTelNumber();
-            if (nextExclude != null) {
-                OutgoingCall.ignoreNext = nextExclude;
+            if (service != null && nextExclude != null) {
+                try {
+                    service.ignoreNextOutgoingCallFor(nextExclude);
+                } catch (RemoteException e) {
+                    Log.e(THIS_FILE, "Impossible to ignore next outgoing call", e);
+                }
             }
             ch.getIntent().send();
         } catch (CanceledException e) {
