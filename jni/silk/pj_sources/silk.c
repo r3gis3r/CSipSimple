@@ -745,7 +745,7 @@ static pj_status_t silk_codec_decode(pjmedia_codec *codec,
     params = silk_factory.silk_param[id];
 
     //For silk parsing need to decode...
-    len = 320;
+    len = output->size;
 
     ret = SKP_Silk_SDK_Decode( silk->psDec, &silk->dec,
     		0, //not loss frames
@@ -754,19 +754,15 @@ static pj_status_t silk_codec_decode(pjmedia_codec *codec,
     		output->buf,
     		&len );
 	if(ret){
-		 PJ_LOG(1, (THIS_FILE, "Failed to decode silk frame : %d", ret));
-	}
-	//PJ_LOG(4, (THIS_FILE, "Decode silk frame len : %d, %d, %d", len, silk->dec.frameSize, silk->dec.framesPerPacket));
-	if(silk->dec.framesPerPacket == len){
+		PJ_LOG(1, (THIS_FILE, "Failed to decode silk frame : %d", ret));
+		output->type = PJMEDIA_FRAME_TYPE_NONE;
+		output->buf = NULL;
+		output->size = 0;
+	}else{
 		output->size = len;
 		output->type = PJMEDIA_FRAME_TYPE_AUDIO;
 		output->timestamp = input->timestamp;
-	}else{
-		output->size = 0;
-		output->type = PJMEDIA_FRAME_TYPE_NONE;
-		output->buf = NULL;
 	}
-
 
     return PJ_SUCCESS;
 }
