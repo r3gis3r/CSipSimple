@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/include/pjmedia-codec/types.h	2012-01-03 21:43:35.131900473 +0100
-+++ pjsip/sources/pjmedia/include/pjmedia-codec/types.h	2012-01-03 21:53:13.256406524 +0100
+--- pjsip.orig/sources/pjmedia/include/pjmedia-codec/types.h	2012-05-11 23:50:30.616002921 +0200
++++ pjsip/sources/pjmedia/include/pjmedia-codec/types.h	2012-05-11 23:51:30.176004188 +0200
 @@ -59,10 +59,19 @@
  #else
      PJMEDIA_RTP_PT_START = (PJMEDIA_RTP_PT_DYNAMIC-1),
@@ -60,8 +60,8 @@ Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
 +    // At the beggining
 +#if ( defined(PJMEDIA_HAS_SILK_CODEC) && PJMEDIA_HAS_SILK_CODEC!=0 )
 +    PJMEDIA_RTP_PT_SILK_NB = 96,		/**< SILK @ 8KHz	*/
-+    PJMEDIA_RTP_PT_SILK_MB = 97,		/**< SILK @ 12KHz	*/
-+    PJMEDIA_RTP_PT_SILK_WB = 98,		/**< SILK @ 16KHz	*/
++    PJMEDIA_RTP_PT_SILK_MB = 98,		/**< SILK @ 12KHz	*/
++    PJMEDIA_RTP_PT_SILK_WB = 97,		/**< SILK @ 16KHz	*/
 +    PJMEDIA_RTP_PT_SILK_UWB = 99,		/**< SILK @ 24KHz	*/
 +#endif
 +

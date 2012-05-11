@@ -30,13 +30,7 @@
 #include <silk.h>
 #include "SKP_Silk_SDK_API.h"
 
-/* Define codec specific settings */
-#define MAX_BYTES_PER_FRAME     250 // Equals peak bitrate of 100 kbps
-#define MAX_INPUT_FRAMES        5
-#define MAX_LBRR_DELAY          2
-#define MAX_FRAME_LENGTH        480
 #define FRAME_LENGTH_MS         20
-#define MAX_API_FS_KHZ          48
 
 #define THIS_FILE       "silk.c"
 
@@ -100,8 +94,8 @@ struct silk_param
     int		     pt;		/* Payload type.		    */
     unsigned	 clock_rate;	/* Default sampling rate to be used.*/
     int		     packet_size_ms;	/* packet size ms.		    */
-    int		     bitrate;		/* Bit rate for current mode.	    */
-    int		     max_bitrate;	/* Max bit rate for current mode.   */
+    pj_uint32_t  bitrate;		/* Bit rate for current mode.	    */
+    pj_uint32_t  max_bitrate;	/* Max bit rate for current mode.   */
     int 		complexity;
 };
 
@@ -115,8 +109,7 @@ static pjmedia_codec_op silk_op =
     &silk_codec_parse,
     &silk_codec_encode,
     &silk_codec_decode,
-    NULL
-   // &silk_codec_recover
+    &silk_codec_recover
 };
 
 /* Definition for SILK codec factory operations. */
@@ -146,6 +139,7 @@ static struct silk_factory
 struct silk_private
 {
     int			 param_id;	    /**< Index to speex param.	*/
+    pj_pool_t   *pool;        /**< Pool for each instance.    */
 
    // char		 obj_name[PJ_MAX_OBJ_NAME];
 
@@ -158,8 +152,16 @@ struct silk_private
     void* psDec;
 };
 
-
-
+int silk_get_type_for_clock_rate(int clock_rate) {
+	if (clock_rate <= silk_factory.silk_param[PARAM_NB].clock_rate) {
+		return PARAM_NB;
+	} else if (clock_rate <= silk_factory.silk_param[PARAM_MB].clock_rate) {
+		return PARAM_MB;
+	} else if (clock_rate <= silk_factory.silk_param[PARAM_WB].clock_rate) {
+		return PARAM_WB;
+	}
+	return PARAM_UWB;
+}
 
 PJ_DEF(pj_status_t) pjmedia_codec_silk_init(pjmedia_endpt *endpt)
 {
@@ -191,34 +193,45 @@ PJ_DEF(pj_status_t) pjmedia_codec_silk_init(pjmedia_endpt *endpt)
 	goto on_error;
     PJ_LOG(5, (THIS_FILE, "Init silk"));
 
-    /* Initialize default Speex parameter. */
-    silk_factory.silk_param[PARAM_NB].enabled = 1; //((options & PJMEDIA_SILK_NO_NB) == 0);
+    /* Table from silk docs
+    				| fs (Hz) | BR (kbps)
+    ----------------+---------+----------
+    Narrowband		|    8000 |  5 - 20
+    Mediumband		|   12000 |  7 - 25
+    Wideband		|   16000 |  8 - 30
+    Super Wideband	|   24000 | 20 - 40
+    */
+    silk_factory.silk_param[PARAM_NB].enabled = 1;
     silk_factory.silk_param[PARAM_NB].pt = PJMEDIA_RTP_PT_SILK_NB;
 	silk_factory.silk_param[PARAM_NB].clock_rate = 8000;
 	silk_factory.silk_param[PARAM_NB].packet_size_ms = FRAME_LENGTH_MS;
 	silk_factory.silk_param[PARAM_NB].complexity = 2;
-	silk_factory.silk_param[PARAM_NB].bitrate = 20000;
+	silk_factory.silk_param[PARAM_NB].bitrate = 13000;
+	silk_factory.silk_param[PARAM_NB].max_bitrate = 20000;
 
-	silk_factory.silk_param[PARAM_MB].enabled = 1; //((options & PJMEDIA_SILK_NO_MB) == 0);
+	silk_factory.silk_param[PARAM_MB].enabled = 1;
 	silk_factory.silk_param[PARAM_MB].pt = PJMEDIA_RTP_PT_SILK_MB;
 	silk_factory.silk_param[PARAM_MB].clock_rate = 12000;
 	silk_factory.silk_param[PARAM_MB].packet_size_ms = FRAME_LENGTH_MS;
 	silk_factory.silk_param[PARAM_MB].complexity = 2;
-	silk_factory.silk_param[PARAM_MB].bitrate = 30000;
+	silk_factory.silk_param[PARAM_MB].bitrate = 16000;
+	silk_factory.silk_param[PARAM_MB].max_bitrate = 25000;
 
-	silk_factory.silk_param[PARAM_WB].enabled = 1; //((options & PJMEDIA_SILK_NO_WB) == 0);
+	silk_factory.silk_param[PARAM_WB].enabled = 1;
 	silk_factory.silk_param[PARAM_WB].pt = PJMEDIA_RTP_PT_SILK_WB;
 	silk_factory.silk_param[PARAM_WB].clock_rate = 16000;
 	silk_factory.silk_param[PARAM_WB].packet_size_ms = FRAME_LENGTH_MS;
 	silk_factory.silk_param[PARAM_WB].complexity = 2;
-	silk_factory.silk_param[PARAM_WB].bitrate = 30000;
+	silk_factory.silk_param[PARAM_WB].bitrate = 19000;
+	silk_factory.silk_param[PARAM_WB].max_bitrate = 30000;
 
-	silk_factory.silk_param[PARAM_UWB].enabled = 1; //((options & PJMEDIA_SILK_NO_UWB) == 0);
+	silk_factory.silk_param[PARAM_UWB].enabled = 1;
 	silk_factory.silk_param[PARAM_UWB].pt = PJMEDIA_RTP_PT_SILK_UWB;
 	silk_factory.silk_param[PARAM_UWB].clock_rate = 24000;
 	silk_factory.silk_param[PARAM_UWB].packet_size_ms = FRAME_LENGTH_MS;
 	silk_factory.silk_param[PARAM_UWB].complexity = 2;
-	silk_factory.silk_param[PARAM_UWB].bitrate = 40000;
+	silk_factory.silk_param[PARAM_UWB].bitrate = 30000;
+	silk_factory.silk_param[PARAM_UWB].max_bitrate = 40000;
 
 
     /* Get the codec manager. */
@@ -298,7 +311,7 @@ PJ_DEF(pj_status_t) pjmedia_codec_silk_deinit(void)
 static pj_status_t silk_test_alloc(pjmedia_codec_factory *factory,
 				   const pjmedia_codec_info *info )
 {
-    const pj_str_t silk_tag = { "SILK", 4};
+    const pj_str_t silk_tag = {"SILK", 4};
     unsigned i;
 
     PJ_UNUSED_ARG(factory);
@@ -338,41 +351,20 @@ static pj_status_t silk_default_attr( pjmedia_codec_factory *factory,
     PJ_UNUSED_ARG(factory);
     PJ_LOG(5, (THIS_FILE, "silk default attr"));
     pj_bzero(attr, sizeof(pjmedia_codec_param));
+
+    int bandwidth_type = silk_get_type_for_clock_rate(id->clock_rate);
     attr->info.channel_cnt = 1;
-
-    //TODO : add good values here
-    if (id->clock_rate <= 8000) {
-		attr->info.clock_rate = silk_factory.silk_param[PARAM_NB].clock_rate;
-		attr->info.avg_bps = silk_factory.silk_param[PARAM_NB].bitrate;
-		attr->info.max_bps = 64000;//silk_factory.silk_param[PARAM_NB].max_bitrate;
-		attr->info.frm_ptime = silk_factory.silk_param[PARAM_NB].packet_size_ms;
-
-	} else if (id->clock_rate <= 12000) {
-		attr->info.clock_rate =  silk_factory.silk_param[PARAM_MB].clock_rate;
-		attr->info.avg_bps = silk_factory.silk_param[PARAM_MB].bitrate;
-		attr->info.max_bps = 64000;//silk_factory.silk_param[PARAM_MB].max_bitrate;
-		attr->info.frm_ptime = silk_factory.silk_param[PARAM_MB].packet_size_ms;
-	} else if (id->clock_rate <= 16000) {
-		attr->info.clock_rate =  silk_factory.silk_param[PARAM_WB].clock_rate;
-		attr->info.avg_bps = silk_factory.silk_param[PARAM_WB].bitrate;
-		attr->info.max_bps = 64000;//silk_factory.silk_param[PARAM_WB].max_bitrate;
-		attr->info.frm_ptime = silk_factory.silk_param[PARAM_WB].packet_size_ms;
-	} else {
-		attr->info.clock_rate = silk_factory.silk_param[PARAM_UWB].clock_rate;
-		attr->info.avg_bps = silk_factory.silk_param[PARAM_UWB].bitrate;
-		attr->info.max_bps = 64000;//silk_factory.silk_param[PARAM_UWB].max_bitrate;
-		attr->info.frm_ptime = silk_factory.silk_param[PARAM_UWB].packet_size_ms;
-	}
-
+	attr->info.clock_rate = silk_factory.silk_param[bandwidth_type].clock_rate;
+	attr->info.avg_bps = silk_factory.silk_param[bandwidth_type].bitrate;
+	attr->info.max_bps = silk_factory.silk_param[bandwidth_type].max_bitrate;
+	attr->info.frm_ptime = silk_factory.silk_param[bandwidth_type].packet_size_ms;
 	attr->info.pcm_bits_per_sample = 16;
-
 
 	attr->info.pt = (pj_uint8_t) id->pt;
 
     attr->setting.frm_per_pkt = 1;
     attr->setting.vad = 0;
     attr->setting.plc = 0;
-
     /* Default all other flag bits disabled. */
 
     return PJ_SUCCESS;
@@ -397,7 +389,6 @@ static pj_status_t silk_enum_codecs(pjmedia_codec_factory *factory,
 
     for (i=PJ_ARRAY_SIZE(silk_factory.silk_param)-1; i>=0 && *count<max; --i) {
 
-        PJ_LOG(5, (THIS_FILE, "silk add codecs"));
     	if (!silk_factory.silk_param[i].enabled){
     	    continue;
     	}
@@ -452,16 +443,10 @@ static pj_status_t silk_alloc_codec(pjmedia_codec_factory *factory,
     silk = (struct silk_private*) codec->codec_data;
     silk->enc_ready = PJ_FALSE;
     silk->dec_ready = PJ_FALSE;
+    silk->param_id = silk_get_type_for_clock_rate(id->clock_rate);
 
-    if (id->clock_rate <= 8000){
-    	silk->param_id = PARAM_NB;
-    }else if (id->clock_rate <= 12000){
-    	silk->param_id = PARAM_MB;
-    }else if (id->clock_rate <= 16000){
-    	silk->param_id = PARAM_WB;
-    }else{
-    	silk->param_id = PARAM_UWB;
-    }
+    /* Create pool for codec instance */
+    silk->pool = pjmedia_endpt_create_pool(silk_factory.endpt, "silkcodec", 512, 512);
 
     *p_codec = codec;
     return PJ_SUCCESS;
@@ -494,6 +479,8 @@ static pj_status_t silk_dealloc_codec( pjmedia_codec_factory *factory,
     pj_list_push_front(&silk_factory.codec_list, codec);
     pj_mutex_unlock(silk_factory.mutex);
 
+    pj_pool_release(silk->pool);
+
 
     return PJ_SUCCESS;
 }
@@ -525,8 +512,6 @@ static pj_status_t silk_codec_open(pjmedia_codec *codec,
     silk = (struct silk_private*) codec->codec_data;
     id = silk->param_id;
 
-
-
     pj_assert(silk != NULL);
     pj_assert(silk->enc_ready == PJ_FALSE &&
    	      silk->dec_ready == PJ_FALSE);
@@ -536,74 +521,57 @@ static pj_status_t silk_codec_open(pjmedia_codec *codec,
 
     params = silk_factory.silk_param[id];
 
-    PJ_LOG(5, (THIS_FILE, "Open silk codec @ %d", params.clock_rate));
+    //PJ_LOG(4, (THIS_FILE, "Open silk codec @ %d", params.clock_rate));
     /* default settings */
 	SKP_int32 API_fs_Hz = params.clock_rate;
 	SKP_int32 max_internal_fs_Hz = params.clock_rate;
-	if(max_internal_fs_Hz > 24000){
-		//TODO : refine ranges
-		max_internal_fs_Hz = 24000;
-	}
-	SKP_int32 targetRate_bps = params.bitrate;
-	SKP_int32 packetSize_ms = params.packet_size_ms;
-	SKP_int32 packetLoss_perc = 0, complexity_mode = params.complexity, smplsSinceLastPacket;
-	SKP_int32 INBandFEC_enabled = 0, DTX_enabled = 0, quiet = 0;
 
     /* Create Encoder */
-
     ret = SKP_Silk_SDK_Get_Encoder_Size( &encSizeBytes );
     if(ret){
         PJ_LOG(1, (THIS_FILE, "Unable to get encoder size : %d", ret));
         return PJ_EINVAL;
     }
-    silk->psEnc = malloc( encSizeBytes );
-
-
+    silk->psEnc = pj_pool_zalloc(silk->pool, encSizeBytes);
     /* Reset Encoder */
     ret = SKP_Silk_SDK_InitEncoder( silk->psEnc, &silk->enc );
     if(ret){
 		PJ_LOG(1, (THIS_FILE, "Unable to init encoder : %d", ret));
-		//TODO free malloc
 		return PJ_EINVAL;
 	}
-
-
 
     /* Set Encoder parameters */
     silk->enc.API_sampleRate        = API_fs_Hz;
     silk->enc.maxInternalSampleRate = max_internal_fs_Hz;
-    silk->enc.packetSize            = ( packetSize_ms * API_fs_Hz ) / 1000;
-    silk->enc.packetLossPercentage  = packetLoss_perc;
-    silk->enc.useInBandFEC          = INBandFEC_enabled;
-    silk->enc.useDTX                = DTX_enabled;
-    silk->enc.complexity            = complexity_mode;
-    silk->enc.bitRate               = ( targetRate_bps > 0 ? targetRate_bps : 0 );
+    silk->enc.packetSize            = ( params.packet_size_ms * API_fs_Hz ) / 1000;
+    silk->enc.packetLossPercentage  = 0;
+    silk->enc.useInBandFEC          = attr->setting.plc;
+    silk->enc.useDTX                = 0;
+    silk->enc.complexity            = params.complexity;
+    silk->enc.bitRate               = ( params.bitrate > 0 ? params.bitrate : 0 );
 
     silk->enc_ready = PJ_TRUE;
 
-
     //Decoder
-
-    /* Set Decoder parameters */
-    silk->dec.API_sampleRate		  = API_fs_Hz;
     /* Create decoder */
 	ret = SKP_Silk_SDK_Get_Decoder_Size( &decSizeBytes );
 	if(ret){
 		PJ_LOG(1, (THIS_FILE, "Unable to get dencoder size : %d", ret));
-		//TODO free malloc
 		return PJ_EINVAL;
 	}
-	silk->psDec = malloc( decSizeBytes );
+	silk->psDec = pj_pool_zalloc(silk->pool, decSizeBytes);
 	/* Reset decoder */
 	ret = SKP_Silk_SDK_InitDecoder( silk->psDec );
 	if(ret){
 		PJ_LOG(1, (THIS_FILE, "Unable to init dencoder : %d", ret));
-		//TODO free malloc
 		return PJ_EINVAL;
 	}
+    /* Set Decoder parameters */
+    silk->dec.API_sampleRate		  = API_fs_Hz;
+
     silk->dec_ready = PJ_TRUE;
 
-    PJ_LOG(4, (THIS_FILE, "Open silk codec > DONE !!"));
+    //PJ_LOG(4, (THIS_FILE, "Open silk codec > DONE !!"));
     return PJ_SUCCESS;
 }
 
@@ -649,7 +617,6 @@ static pj_status_t silk_codec_encode(pjmedia_codec *codec,
     pj_assert(silk && input && output);
 
     /* Encode */
-    //TODO silence detection
     output->size = 0;
     //PJ_LOG(4, (THIS_FILE, "Input size : %d - Encoder packet size  %d", input->size, silk->enc.packetSize));
     nBytes = output_buf_len;
@@ -671,6 +638,7 @@ static pj_status_t silk_codec_encode(pjmedia_codec *codec,
 	output->size = nBytes;
     output->type = PJMEDIA_FRAME_TYPE_AUDIO;
     output->timestamp = input->timestamp;
+    //PJ_LOG(4, (THIS_FILE, "Encoder packet size  %d for input %d", nBytes, output_buf_len));
 
     return PJ_SUCCESS;
 }
@@ -693,11 +661,11 @@ static pj_status_t  silk_codec_parse( pjmedia_codec *codec,
 
 	    PJ_ASSERT_RETURN(frame_cnt, PJ_EINVAL);
 
-	//    PJ_LOG(4, (THIS_FILE, "We have an input of %d bytes ", pkt_size));
+	    //PJ_LOG(4, (THIS_FILE, "We have an input of %d bytes ", pkt_size));
 
 	    count = 0;
 	    int dec_frame_size = pkt_size;
-	    int samples_per_frame = silk->enc.API_sampleRate * 20 / 1000;
+	    int samples_per_frame = FRAME_LENGTH_MS * silk->enc.API_sampleRate / 1000;
 
 	    while (pkt_size >= dec_frame_size && count < *frame_cnt) {
 			frames[count].type = PJMEDIA_FRAME_TYPE_AUDIO;
@@ -750,7 +718,7 @@ static pj_status_t silk_codec_decode(pjmedia_codec *codec,
 	if(ret){
 		 PJ_LOG(1, (THIS_FILE, "Failed to decode silk frame : %d", ret));
 	}
-//	PJ_LOG(4, (THIS_FILE, "Decode silk frame len : %d, %d, %d", len, silk->dec.frameSize, silk->dec.framesPerPacket));
+	//PJ_LOG(4, (THIS_FILE, "Decode silk frame len : %d, %d, %d", len, silk->dec.frameSize, silk->dec.framesPerPacket));
 	if(silk->dec.framesPerPacket == len){
 		output->size = len;
 		output->type = PJMEDIA_FRAME_TYPE_AUDIO;
@@ -772,20 +740,20 @@ static pj_status_t  silk_codec_recover(pjmedia_codec *codec,
 				      unsigned output_buf_len,
 				      struct pjmedia_frame *output)
 {
-	//TODO : reactivate this
 	struct silk_private *silk;
 	silk = (struct silk_private*) codec->codec_data;
 
-	SKP_int16 nBytes;
+	SKP_int16 nBytes = output_buf_len;
     int ret;
     PJ_ASSERT_RETURN(output, PJ_EINVAL);
 
-    PJ_LOG(5, (THIS_FILE, "Recover silk frame"));
+    PJ_LOG(4, (THIS_FILE, "Recover silk frame"));
 
     /* Decode */
 	ret = SKP_Silk_SDK_Decode( silk->psDec, &silk->dec, 1, NULL, 0, output->buf, &nBytes );
 	if(ret){
 		PJ_LOG(1, (THIS_FILE, "Failed to decode silk frame"));
+		return PJ_EINVAL;
 	}
 
 	output->size = nBytes;
