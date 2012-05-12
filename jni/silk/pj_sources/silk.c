@@ -692,31 +692,16 @@ static pj_status_t  silk_codec_parse( pjmedia_codec *codec,
 				     pjmedia_frame frames[])
 {
 	    unsigned count;
-		struct silk_private *silk;
-		silk = (struct silk_private*) codec->codec_data;
-
+	    PJ_UNUSED_ARG(codec);
 	    PJ_ASSERT_RETURN(frame_cnt, PJ_EINVAL);
 
-	    //PJ_LOG(4, (THIS_FILE, "We have an input of %d bytes ", pkt_size));
-
-	    count = 0;
-	    int dec_frame_size = pkt_size;
-	    int samples_per_frame = FRAME_LENGTH_MS * silk->enc.API_sampleRate / 1000;
-
-	    while (pkt_size >= dec_frame_size && count < *frame_cnt) {
-			frames[count].type = PJMEDIA_FRAME_TYPE_AUDIO;
-			frames[count].buf = pkt;
-			frames[count].size = dec_frame_size;
-			frames[count].timestamp.u64 = ts->u64 + count * samples_per_frame; // fHz * ptime / 1000
-
-			pkt = ((char*)pkt) + dec_frame_size;
-			pkt_size -= dec_frame_size;
-
-			++count;
-	    }
-	    *frame_cnt = count;
+	    // The decoder of opus is capable to parse itself, so consider all as a single input
+		frames[0].type = PJMEDIA_FRAME_TYPE_AUDIO;
+		frames[0].buf = pkt;
+		frames[0].size = pkt_size;
+		frames[0].timestamp.u64 = ts->u64;
+	    *frame_cnt = 1;
 	    return PJ_SUCCESS;
-
 }
 
 
@@ -726,21 +711,15 @@ static pj_status_t silk_codec_decode(pjmedia_codec *codec,
 				     unsigned output_buf_len,
 				     struct pjmedia_frame *output)
 {
-    SKP_int16 nBytes;
-    int ret = 0, id;
-
-    PJ_ASSERT_RETURN(input && output, PJ_EINVAL);
-
+    int ret = 0;
 	struct silk_private *silk;
 	unsigned count;
     SKP_int16 len;
-    struct silk_param params;
+
+    PJ_ASSERT_RETURN(input && output, PJ_EINVAL);
+
 
     silk = (struct silk_private*) codec->codec_data;
-    id = silk->param_id;
-
-
-    params = silk_factory.silk_param[id];
 
     //For silk parsing need to decode...
     len = output->size;

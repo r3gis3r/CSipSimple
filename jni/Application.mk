@@ -31,6 +31,7 @@ MY_USE_TLS := 1
 MY_USE_WEBRTC := 1
 MY_USE_AMR := 1
 MY_USE_G726 := 1
+MY_USE_OPUS := 1
 
 MY_USE_VIDEO := 1
 
@@ -40,11 +41,11 @@ MY_USE_VIDEO := 1
 # Only build pjsipjni and ignore openssl                    #
 APP_MODULES := libpjsipjni pj_opensl_dev
 ifeq ($(MY_USE_SILK),1)
-APP_MODULES += libpj_silk_codec 
+APP_MODULES += libpj_silk_codec
 endif
 
 # Modules for extra codecs are 
-# pj_g7221_codec pj_codec2_codec pj_g726_codec
+# pj_g7221_codec pj_codec2_codec pj_g726_codec pj_opus_codec
 #
 # Modules for video is
 # pj_video_android
@@ -62,7 +63,7 @@ BASE_PJSIP_FLAGS += -DPJMEDIA_HAS_G729_CODEC=$(MY_USE_G729) -DPJMEDIA_HAS_G726_C
 	-DPJMEDIA_HAS_SPEEX_CODEC=$(MY_USE_SPEEX) -DPJMEDIA_HAS_GSM_CODEC=$(MY_USE_GSM) \
 	-DPJMEDIA_HAS_SILK_CODEC=$(MY_USE_SILK) -DPJMEDIA_HAS_CODEC2_CODEC=$(MY_USE_CODEC2) \
 	-DPJMEDIA_HAS_G7221_CODEC=$(MY_USE_G7221) -DPJMEDIA_HAS_WEBRTC_CODEC=$(MY_USE_WEBRTC) \
-	-DPJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC=$(MY_USE_AMR)
+	-DPJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC=$(MY_USE_AMR) -DPJMEDIA_HAS_OPUS_CODEC=$(MY_USE_OPUS)
 
 # media
 BASE_PJSIP_FLAGS += -DPJMEDIA_HAS_WEBRTC_AEC=$(MY_USE_WEBRTC) \

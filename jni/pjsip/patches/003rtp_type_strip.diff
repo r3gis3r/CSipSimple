@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/include/pjmedia-codec/types.h	2012-05-11 23:50:30.616002921 +0200
-+++ pjsip/sources/pjmedia/include/pjmedia-codec/types.h	2012-05-11 23:51:30.176004188 +0200
+--- pjsip.orig/sources/pjmedia/include/pjmedia-codec/types.h	2012-05-12 14:52:59.260181253 +0200
++++ pjsip/sources/pjmedia/include/pjmedia-codec/types.h	2012-05-12 14:55:32.024174866 +0200
 @@ -59,10 +59,19 @@
  #else
      PJMEDIA_RTP_PT_START = (PJMEDIA_RTP_PT_DYNAMIC-1),
@@ -22,7 +22,7 @@ Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
      PJMEDIA_RTP_PT_L16_8KHZ_MONO,		/**< L16 @ 8KHz, mono	    */
      PJMEDIA_RTP_PT_L16_8KHZ_STEREO,		/**< L16 @ 8KHz, stereo     */
      //PJMEDIA_RTP_PT_L16_11KHZ_MONO,		/**< L16 @ 11KHz, mono	    */
-@@ -75,14 +84,26 @@
+@@ -75,14 +84,34 @@
      //PJMEDIA_RTP_PT_L16_32KHZ_STEREO,		/**< L16 @ 32KHz, stereo    */
      //PJMEDIA_RTP_PT_L16_48KHZ_MONO,		/**< L16 @ 48KHz, mono	    */
      //PJMEDIA_RTP_PT_L16_48KHZ_STEREO,		/**< L16 @ 48KHz, stereo    */
@@ -35,6 +35,14 @@ Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
      PJMEDIA_RTP_PT_AMR,				/**< AMR (4.75 - 12.2Kbps)  */
      PJMEDIA_RTP_PT_AMRWB,			/**< AMRWB (6.6 - 23.85Kbps)*/
      PJMEDIA_RTP_PT_AMRWBE,			/**< AMRWBE		    */
++#endif
++
++#if ( defined(PJMEDIA_HAS_OPUS_CODEC) && PJMEDIA_HAS_OPUS_CODEC!=0 )
++    PJMEDIA_RTP_PT_OPUS_NB,			/**< OPUS @ 8KHz	*/
++	PJMEDIA_RTP_PT_OPUS_MB,			/**< OPUS @ 12KHz	*/
++	PJMEDIA_RTP_PT_OPUS_WB,			/**< OPUS @ 16KHz	*/
++	PJMEDIA_RTP_PT_OPUS_SWB,		/**< OPUS @ 24KHz	*/
++	PJMEDIA_RTP_PT_OPUS_FB,			/**< OPUS @ 48KHz	*/
 +#endif
 +
 +#if ( defined(PJMEDIA_HAS_INTEL_IPP) && PJMEDIA_HAS_INTEL_IPP != 0 ) \
@@ -50,7 +58,7 @@ Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
      PJMEDIA_RTP_PT_G722_1_16,			/**< G722.1 (16Kbps)	    */
      PJMEDIA_RTP_PT_G722_1_24,			/**< G722.1 (24Kbps)	    */
      PJMEDIA_RTP_PT_G722_1_32,			/**< G722.1 (32Kbps)	    */
-@@ -91,7 +112,20 @@
+@@ -91,7 +120,20 @@
      PJMEDIA_RTP_PT_G7221C_48,			/**< G722.1 Annex C (48Kbps)*/
      PJMEDIA_RTP_PT_G7221_RSV1,			/**< G722.1 reserve	    */
      PJMEDIA_RTP_PT_G7221_RSV2,			/**< G722.1 reserve	    */
