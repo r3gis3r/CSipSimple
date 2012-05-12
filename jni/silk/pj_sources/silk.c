@@ -552,14 +552,14 @@ static pj_status_t silk_codec_open(pjmedia_codec *codec,
 	maxBitRate = ( params.bitrate > 0 ? params.bitrate : 0 );
     /* Check fmtp params */
     for (i = 0; i < attr->setting.enc_fmtp.cnt; ++i) {
-		if (pj_stricmp(&attr->setting.dec_fmtp.param[i].name,
+		if (pj_stricmp(&attr->setting.enc_fmtp.param[i].name,
 				   &STR_FMTP_USE_INBAND_FEC) == 0)	{
 			useInBandFEC = (pj_uint8_t)
-				  (pj_strtoul(&attr->setting.dec_fmtp.param[i].val));
+				  (pj_strtoul(&attr->setting.enc_fmtp.param[i].val));
 			break;
-		}else if(pj_stricmp(&attr->setting.dec_fmtp.param[i].name,
+		}else if(pj_stricmp(&attr->setting.enc_fmtp.param[i].name,
 				   &STR_FMTP_MAX_AVERAGE_BITRATE) == 0)	{
-			SKP_int32 remoteBitRate = (SKP_int32)(pj_strtoul(&attr->setting.dec_fmtp.param[i].val));
+			SKP_int32 remoteBitRate = (SKP_int32)(pj_strtoul(&attr->setting.enc_fmtp.param[i].val));
 			if(remoteBitRate < maxBitRate || maxBitRate == 0){
 				maxBitRate = remoteBitRate;
 			}
