@@ -3,7 +3,7 @@ external_repos := silk opus zrtp4pj openssl
 external_sources := $(foreach repos, $(external_repos),jni/$(repos)/sources)
 
 to_patch := pjsip webrtc
-to_patch_files := $(foreach proj, $(to_patch),jni/$(proj)/sources)
+to_patch_files := $(foreach proj, $(to_patch),jni/$(proj)/.patched_sources)
 
 all : libraries
 	# Dispatch to external projects
@@ -49,9 +49,6 @@ ScreenSharingLibs :
 	@(ndk-build -j6 APP_MODULES="pj_screen_capture_android")
 	@(./dispatch_shared_libs.sh)
 
-
-
-	 
 
 update : $(external_sources)
 	# Quilt removal
