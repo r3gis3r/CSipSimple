@@ -1,9 +1,3 @@
-pjsip_patches := $(wildcard jni/pjsip/patches/*.diff)
-webrtc_patches := $(wildcard jni/webrtc/patches/*.diff)
-
-openssl_tag := 1a3c5799337b90ddc56376ace7284a9e7f8cc988
-zrtp4pj_tag := 10fe242813531daa61088af158b8b64c6fbe787e
-opus_tag := v0.9.10
 
 all : libraries
 	# Dispatch to external projects
@@ -15,14 +9,33 @@ libraries : ext-sources swig-glue
 
 ffmpeg-lib :
 	# Build ffmpeg using make
-	@($(MAKE) -C jni/ffmpeg $(MFLAGS))
+	@($(MAKE) $(MFLAGS) -C jni/ffmpeg)
 
 ext-sources : jni/silk/sources jni/opus/sources jni/zrtp4pj/sources jni/openssl/sources jni/pjsip/.patched_sources jni/webrtc/.patched_sources
 	# External sources fetched out from external repos/zip
+	
+jni/silk/sources :
+	@($(MAKE) $(MFLAGS) -C jni/silk init)
+
+jni/opus/sources:
+	@($(MAKE) $(MFLAGS) -C jni/opus init)
+
+jni/zrtp4pj/sources:
+	@($(MAKE) $(MFLAGS) -C jni/zrtp4pj init)
+
+jni/openssl/sources :
+	@($(MAKE) $(MFLAGS) -C jni/openssl init)
+	
+## Patches against remote projects
+jni/pjsip/.patched_sources : 
+	@($(MAKE) $(MFLAGS) -C jni/pjsip patch)
+	
+
+jni/webrtc/.patched_sources : 
+	@($(MAKE) $(MFLAGS) -C jni/webrtc patch)
 
 swig-glue : 
-	@($(MAKE) -C jni/swig-glue $(MFLAGS))
-
+	@($(MAKE) $(MFLAGS) -C jni/swig-glue)
 
 clean :
 	# NDK clean
@@ -43,72 +56,24 @@ ScreenSharingLibs :
 	@(ndk-build -j6 APP_MODULES="pj_screen_capture_android")
 	@(./dispatch_shared_libs.sh)
 
-## External resources from repos/zip ##
-jni/silk/sources :
-	@cd jni/silk; \
-	wget http://developer.skype.com/silk/SILK_SDK_SRC_v1.0.8.zip; \
-	unzip -q SILK_SDK_SRC_v1.0.8.zip; \
-	mv SILK_SDK_SRC_v1.0.8 sources; \
-	rm SILK_SDK_SRC_v1.0.8.zip
 
-jni/zrtp4pj/sources :
-	@cd jni/zrtp4pj; \
-	git clone git://github.com/r3gis3r/ZRTP4PJ.git sources; \
-	cd sources; \
-	git fetch --tags; \
-	git checkout origin; \
-	git checkout $(zrtp4pj_tag)
 
-jni/openssl/sources :
-	@cd jni/openssl; \
-	git clone git://github.com/guardianproject/openssl-android.git sources; \
-	cd sources; \
-	git fetch --tags; \
-	git checkout origin; \
-	git checkout $(openssl_tag)
-	
-jni/opus/sources :
-	@cd jni/opus; \
-	git clone https://git.xiph.org/opus.git sources; \
-	cd sources; \
-	git fetch --tags; \
-	git checkout origin; \
-	git checkout $(opus_tag)
-	
-
-## Patches against remote projects
-jni/pjsip/.patched_sources : $(pjsip_patches)
-	@cd jni/pjsip && \
-	quilt push -a && \
-	touch .patched_sources
-
-jni/webrtc/.patched_sources : $(webrtc_patches)
-	@cd jni/webrtc && \
-	quilt push -a && \
-	touch .patched_sources
 	 
 
 update :
 	# Quilt removal
-	@if [ -f jni/pjsip/.patched_sources ]; then cd jni/pjsip && quilt pop -af; rm .patched_sources; cd -; fi;
-	@if [ -f jni/webrtc/.patched_sources ]; then cd jni/webrtc && quilt pop -af; rm .patched_sources; cd -; fi;
+	@($(MAKE) $(MFLAGS) -C jni/pjsip unpatch)
+	@($(MAKE) $(MFLAGS) -C jni/webrtc unpatch)
 	# Svn update
 	@svn update --accept theirs-conflict
+	# SILK update
+	@($(MAKE) $(MFLAGS) -C jni/silk update)
 	# Update ZRTP4pj
-	@cd jni/zrtp4pj/sources; \
-	git fetch --tags; \
-	git checkout origin; \
-	git checkout $(zrtp4pj_tag)
+	@($(MAKE) $(MFLAGS) -C jni/zrtp4pj update)
 	# Update OpenSSL
-	@cd jni/openssl/sources; \
-	git fetch --tags; \
-	git checkout origin; \
-	git checkout $(openssl_tag)
+	@($(MAKE) $(MFLAGS) -C jni/openssl update)
 	# Update libopus
-	@cd jni/opus/sources; \
-	git fetch --tags; \
-	git checkout origin; \
-	git checkout $(opus_tag)
+	@($(MAKE) $(MFLAGS) -C jni/opus update)
 	# Update ffmpeg
-	$(MAKE) $(MFLAGS) -C jni/ffmpeg update
+	@($(MAKE) $(MFLAGS) -C jni/ffmpeg update)
 	
