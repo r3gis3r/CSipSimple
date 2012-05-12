@@ -1,4 +1,10 @@
 
+external_repos := silk opus zrtp4pj openssl
+external_sources := $(foreach repos, $(external_repos),jni/$(repos)/sources)
+
+to_patch := pjsip webrtc
+to_patch_files := $(foreach proj, $(to_patch),jni/$(proj)/sources)
+
 all : libraries
 	# Dispatch to external projects
 	@(./dispatch_shared_libs.sh)
@@ -11,28 +17,15 @@ ffmpeg-lib :
 	# Build ffmpeg using make
 	@($(MAKE) $(MFLAGS) -C jni/ffmpeg)
 
-ext-sources : jni/silk/sources jni/opus/sources jni/zrtp4pj/sources jni/openssl/sources jni/pjsip/.patched_sources jni/webrtc/.patched_sources
+ext-sources : $(external_sources) $(to_patch_files)
 	# External sources fetched out from external repos/zip
 	
-jni/silk/sources :
-	@($(MAKE) $(MFLAGS) -C jni/silk init)
-
-jni/opus/sources:
-	@($(MAKE) $(MFLAGS) -C jni/opus init)
-
-jni/zrtp4pj/sources:
-	@($(MAKE) $(MFLAGS) -C jni/zrtp4pj init)
-
-jni/openssl/sources :
-	@($(MAKE) $(MFLAGS) -C jni/openssl init)
+jni/%/sources :
+	@($(MAKE) $(MFLAGS) -C $(subst /sources,,$@) init)
 	
 ## Patches against remote projects
-jni/pjsip/.patched_sources : 
-	@($(MAKE) $(MFLAGS) -C jni/pjsip patch)
-	
-
-jni/webrtc/.patched_sources : 
-	@($(MAKE) $(MFLAGS) -C jni/webrtc patch)
+jni/%/.patched_sources : 
+	@($(MAKE) $(MFLAGS) -C $(subst /.patched_sources,,$@) patch)
 
 swig-glue : 
 	@($(MAKE) $(MFLAGS) -C jni/swig-glue)
@@ -60,7 +53,7 @@ ScreenSharingLibs :
 
 	 
 
-update :
+update : $(external_sources)
 	# Quilt removal
 	@($(MAKE) $(MFLAGS) -C jni/pjsip unpatch)
 	@($(MAKE) $(MFLAGS) -C jni/webrtc unpatch)
