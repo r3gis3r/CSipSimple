@@ -40,7 +40,7 @@ LOCAL_SHARED_LIBRARIES += libpjsipjni
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 # Hack to mute restrict not supported by ndk 
-LOCAL_CFLAGS += -Drestrict=
+LOCAL_CFLAGS += -Drestrict=__restrict
 ifeq ($(TARGET_ARCH_ABI),armeabi)
 LOCAL_CFLAGS += -DFIXED_POINT
 endif
