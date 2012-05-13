@@ -145,7 +145,8 @@ public class OutgoingCallChooser extends SherlockListActivity {
                         // Im sent
                         String auth = data.getAuthority();
                         if ("skype".equalsIgnoreCase(auth) ||
-                                "sip".equalsIgnoreCase(auth)) {
+                                "sip".equalsIgnoreCase(auth)||
+                                "csip".equalsIgnoreCase(auth)) {
                             String sipUser = data.getLastPathSegment();
                             number = sipUser;
                         }

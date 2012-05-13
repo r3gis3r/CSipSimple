@@ -260,11 +260,13 @@ Remove that too fine change trigger
 
         <activity
             android:name="com.csipsimple.ui.OutgoingCallChooser"
+            android:allowTaskReparenting="false"
             android:configChanges="orientation"
             android:excludeFromRecents="true"
             android:label="@string/call"
             android:launchMode="singleTask"
             android:process=":sipStack"
+            android:taskAffinity=""
             android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL" />
@@ -294,7 +296,15 @@ Remove that too fine change trigger
                 <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
-                <data android:scheme="imto" />
+                <data
+                    android:host="csip"
+                    android:scheme="imto" />
+                <data
+                    android:host="sip"
+                    android:scheme="imto" />
+                <data
+                    android:host="skype"
+                    android:scheme="imto" />
             </intent-filter>
         </activity>
 
