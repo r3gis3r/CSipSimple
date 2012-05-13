@@ -1639,12 +1639,13 @@ public class PjSipService {
                         }
                     }
                 }
-               // if(dnsServersIpv4.size() > 0) {
+                
+                if(dnsServersIpv4.size() > 0) {
                     // Prefer pure ipv4 list since pjsua doesn't manage ipv6 resolution yet
-               //     dnsServers = dnsServersIpv4;
-               // }else {
+                    dnsServers = dnsServersIpv4;
+                }else {
                     dnsServers = dnsServersAll;
-               // }
+                }
                 
                 if (dnsServers.size() == 0) {
                     // This is the ultimate fallback... we should never be there !
