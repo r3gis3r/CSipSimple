@@ -1435,11 +1435,17 @@ public class SipService extends Service {
 	public static final class ToCall {
 		private Integer pjsipAccountId;
 		private String callee;
+		private String dtmf;
+		
 		public ToCall(Integer acc, String uri) {
 			pjsipAccountId = acc;
 			callee = uri;
 		}
-		
+		public ToCall(Integer acc, String uri, String dtmfChars) {
+            pjsipAccountId = acc;
+            callee = uri;
+            dtmf = dtmfChars;
+        }
 		/**
 		 * @return the pjsipAccountId
 		 */
@@ -1452,6 +1458,12 @@ public class SipService extends Service {
 		public String getCallee() {
 			return callee;
 		}
+		/**
+		 * @return the dtmf sequence to automatically dial for this call
+		 */
+		public String getDtmf() {
+            return dtmf;
+        }
 	};
 	
 	public SipProfile getAccount(long accountId) {

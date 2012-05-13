@@ -71,6 +71,8 @@
 /* The array elements are passed by value (copied) */
 JAVA_ARRAYSOFCLASSES(pjmedia_tone_desc)
 %apply pjmedia_tone_desc[] {const pjmedia_tone_desc tones[]};
+JAVA_ARRAYSOFCLASSES(pjmedia_tone_digit)
+%apply pjmedia_tone_digit[] {const pjmedia_tone_digit tones[]};
 JAVA_ARRAYSOFCLASSES(pj_str_t)
 %apply pj_str_t[]{pj_str_t nameserver[4]};
 JAVA_ARRAYSOFCLASSES(dynamic_factory)
@@ -780,6 +782,19 @@ struct pjmedia_tone_desc
     short   off_msec;       /**< Playback OFF duration, ini miliseconds.    */
     short   volume;         /**< Volume (1-16383), or 0 for default.        */
 };
+/**
+ * This structure describes individual MF digits to be played
+ * with #pjmedia_tonegen_play_digits().
+ */
+struct pjmedia_tone_digit
+{
+    char    digit;	    /**< The ASCI identification for the digit.	    */
+    short   on_msec;	    /**< Playback ON duration, in miliseconds.	    */
+    short   off_msec;	    /**< Playback OFF duration, ini miliseconds.    */
+    short   volume;	    /**< Volume (1-32767), or 0 for default, which
+				 PJMEDIA_TONEGEN_VOLUME will be used.	    */
+};
+
 
 // From pjlib/include/pj/pool.h:312
 struct pj_pool_t
@@ -974,6 +989,10 @@ PJ_DECL(pj_status_t) pjmedia_tonegen_play(pjmedia_port *tonegen,
 	unsigned count,
 	const pjmedia_tone_desc tones[],
 	unsigned options);
+PJ_DECL(pj_status_t) pjmedia_tonegen_play_digits(pjmedia_port *tonegen,
+	 unsigned count,
+	 const pjmedia_tone_digit digits[],
+	 unsigned options);
 // From pjmedia/include/pjmedia/tonegen.h:206
 PJ_DECL(pj_status_t) pjmedia_tonegen_rewind(pjmedia_port *tonegen);
 

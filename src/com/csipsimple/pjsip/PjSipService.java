@@ -31,6 +31,7 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.SparseArray;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 
@@ -41,6 +42,8 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipManager.PresenceStatus;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
+import com.csipsimple.api.SipUri;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
@@ -79,8 +82,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PjSipService {
     private static final String THIS_FILE = "PjService";
@@ -93,13 +94,15 @@ public class PjSipService {
     private Integer udpTranportId, tcpTranportId, tlsTransportId;
     private Integer localUdpAccPjId, localTcpAccPjId, localTlsAccPjId;
     public PreferencesProviderWrapper prefsWrapper;
-    private PjStreamDialtoneGenerator dialtoneGenerator;
+    //private PjStreamDialtoneGenerator dialtoneGenerator;
 
     private Integer hasBeenHoldByGSM = null;
 
     public UAStateReceiver userAgentReceiver;
     public MediaManager mediaManager;
 
+    private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
+    private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
     // -------
     // Locks
     // -------
@@ -1054,7 +1057,12 @@ public class PjSipService {
             pjsua.msg_data_init(msgData);
             pjsua.csipsimple_init_acc_msg_data(pjsuaAccId, msgData);
             
-            return pjsua.call_make_call(pjsuaAccId, uri, cs, userData, msgData, callId);
+            int status = pjsua.call_make_call(pjsuaAccId, uri, cs, userData, msgData, callId);
+            if(status == pjsuaConstants.PJ_SUCCESS) {
+                dtmfToAutoSend.put(callId[0], toCall.getDtmf());
+                Log.d(THIS_FILE, "DTMF - Store for " + callId[0] + " - "+toCall.getDtmf());
+            }
+            return status;
         } else {
             service.notifyUserOfMessage(service.getString(R.string.invalid_sip_uri) + " : "
                     + callee);
@@ -1101,10 +1109,10 @@ public class PjSipService {
 
             if (res != pjsua.PJ_SUCCESS && !prefsWrapper.forceDtmfRTP()) {
                 // Generate using analogic inband
-                if (dialtoneGenerator == null) {
-                    dialtoneGenerator = new PjStreamDialtoneGenerator();
+                if (dtmfDialtoneGenerators.get(callId) == null) {
+                    dtmfDialtoneGenerators.put(callId, new PjStreamDialtoneGenerator(callId));
                 }
-                res = dialtoneGenerator.sendPjMediaDialTone(callId, keyPressed);
+                res = dtmfDialtoneGenerators.get(callId).sendPjMediaDialTone(keyPressed);
                 Log.d(THIS_FILE, "Has been sent DTMF analogic : " + res);
             }
         }
@@ -1175,11 +1183,26 @@ public class PjSipService {
         }
     }
     
+    public void sendPendingDtmf(int callId) {
 
-    public void stopDialtoneGenerator() {
-        if (dialtoneGenerator != null) {
-            dialtoneGenerator.stopDialtoneGenerator();
-            dialtoneGenerator = null;
+        Log.d(THIS_FILE, "DTMF - Send pending dtmf " + callId);
+        if(dtmfToAutoSend.get(callId) != null) {
+            if (dtmfDialtoneGenerators.get(callId) == null) {
+                dtmfDialtoneGenerators.put(callId, new PjStreamDialtoneGenerator(callId));
+            }
+            Log.d(THIS_FILE, "DTMF - Send pending dtmf " + dtmfToAutoSend.get(callId));
+            dtmfDialtoneGenerators.get(callId).sendPjMediaDialTone(dtmfToAutoSend.get(callId));
+            dtmfToAutoSend.put(callId, null);
+        }
+    }
+
+    public void stopDialtoneGenerator(int callId) {
+        if (dtmfDialtoneGenerators.get(callId) != null) {
+            dtmfDialtoneGenerators.get(callId).stopDialtoneGenerator();
+            dtmfDialtoneGenerators.put(callId, null);
+        }
+        if(dtmfToAutoSend.get(callId) != null) {
+            dtmfToAutoSend.put(callId, null);
         }
     }
 
@@ -1425,7 +1448,6 @@ public class PjSipService {
         return null;
     }
 
-    // TO call utils
     /**
      * Transform a string callee into a valid sip uri in the context of an
      * account
@@ -1445,6 +1467,7 @@ public class PjSipService {
         account.id = accountId;
         SipProfileState profileState = getProfileState(account);
         long finalAccountId = accountId;
+        
 
         // If this is an invalid account id
         if (accountId == SipProfile.INVALID_ID || !profileState.isAddedToStack()) {
@@ -1495,47 +1518,42 @@ public class PjSipService {
         }
 
         // Check integrity of callee field
-        Pattern p = Pattern.compile("^.*(?:<)?(sip(?:s)?):([^@]*@[^>]*)(?:>)?$",
-                Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(callee);
-        String finalCallee = callee;
-
-        if (!m.matches()) {
-            // Assume this is a direct call using digit dialer
+        
+        ParsedSipContactInfos finalCallee = SipUri.parseSipContact(callee);
+        
+        if (TextUtils.isEmpty(finalCallee.domain) ||
+                TextUtils.isEmpty(finalCallee.scheme)) {
             Log.d(THIS_FILE, "default acc : " + finalAccountId);
             account = service.getAccount((int) finalAccountId);
-            String defaultDomain = account.getDefaultDomain();
-
-            Log.d(THIS_FILE, "default domain : " + defaultDomain);
-            p = Pattern.compile("^sip(s)?:[^@]*$", Pattern.CASE_INSENSITIVE);
-            if (p.matcher(callee).matches()) {
-                finalCallee = "<" + callee;
-            } else {
-                String scheme = "sip";
-                if(account.transport == SipProfile.TRANSPORT_TLS) {
-                    scheme = "sips";
-                }
-                // Should it be encoded?
-                finalCallee = "<"+scheme+":" + /* Uri.encode( */callee/* ) */;
-            }
-            // Add domain if needed
-            if(TextUtils.isEmpty(defaultDomain)) {
-                finalCallee += ">";
-            }else {
-                finalCallee += "@"+defaultDomain+">";
-            }
-        } else {
-            finalCallee = "<" + m.group(1) + ":" + m.group(2) + ">";
         }
-
+        
+        if (TextUtils.isEmpty(finalCallee.domain)) {
+            String defaultDomain = account.getDefaultDomain();
+            finalCallee.domain = defaultDomain;
+        }
+        if(TextUtils.isEmpty(finalCallee.scheme)) {
+            if(account.transport == SipProfile.TRANSPORT_TLS) {
+                finalCallee.scheme = "sips";
+            }else {
+                finalCallee.scheme = "sip";
+            }
+        }
+        String digitsToAdd = null;
+        if(!TextUtils.isEmpty(finalCallee.userName) && finalCallee.userName.contains(",")) {
+            int commaIndex = finalCallee.userName.indexOf(",");
+            digitsToAdd = finalCallee.userName.substring(commaIndex);
+            finalCallee.userName = finalCallee.userName.substring(0, commaIndex);
+        }
+        
         Log.d(THIS_FILE, "will call " + finalCallee);
-        if (pjsua.verify_sip_url(finalCallee) == 0) {
+        
+        if (pjsua.verify_sip_url(finalCallee.toString(false)) == 0) {
             // In worse worse case, find back the account id for uri.. but
             // probably useless case
             if (pjsipAccountId == SipProfile.INVALID_ID) {
-                pjsipAccountId = pjsua.acc_find_for_outgoing(pjsua.pj_str_copy(finalCallee));
+                pjsipAccountId = pjsua.acc_find_for_outgoing(pjsua.pj_str_copy(finalCallee.toString(false)));
             }
-            return new ToCall(pjsipAccountId, finalCallee);
+            return new ToCall(pjsipAccountId, finalCallee.toString(false), digitsToAdd);
         }
 
         return null;

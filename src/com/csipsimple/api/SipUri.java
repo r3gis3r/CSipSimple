@@ -40,11 +40,12 @@ public final class SipUri {
         // Singleton
     }
 
+    private final static String SIP_SCHEME_RULE = "sip(?:s)?|tel";
     private final static String DIGIT_NBR_RULE = "^[0-9\\-#\\+\\*\\(\\)]+$";
     private final static Pattern SIP_CONTACT_PATTERN = Pattern
-            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?(sip(?:s)?):([^@]*)@([^>]*)(?:>)?");
+            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?("+SIP_SCHEME_RULE+"):([^@]*)@([^>]*)(?:>)?");
     private final static Pattern SIP_HOST_PATTERN = Pattern
-            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?(sip(?:s)?):([^@>]*)(?:>)?");
+            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?("+SIP_SCHEME_RULE+"):([^@>]*)(?:>)?");
 
     // Contact related
     /**
@@ -68,13 +69,29 @@ public final class SipUri {
         /**
          * Scheme of the protocol
          */
-        public String scheme = "sip";
+        public String scheme = "";
+        
 
         @Override
         public String toString() {
+            return toString(true);
+        }
+        
+        public String toString(boolean includeDisplayName) {
+
             StringBuffer buildString = new StringBuffer();
-            buildString.append("<" + scheme + ":" + Uri.encode(userName) + "@" + domain + ">");
-            if (!TextUtils.isEmpty(userName)) {
+            if(!TextUtils.isEmpty(scheme)) {
+                buildString.append("<sip:");
+            }else {
+                buildString.append("<" + scheme + ":");
+            }
+            if(!TextUtils.isEmpty(userName)) {
+                buildString.append(Uri.encode(userName) + "@");
+            }
+            buildString.append(domain + ">");
+            
+            // Append display name at beggining if necessary
+            if (includeDisplayName && !TextUtils.isEmpty(displayName)) {
                 // Prepend with space
                 buildString.insert(0, " ");
                 // Start with display name
@@ -101,6 +118,17 @@ public final class SipUri {
                 parsedInfos.domain = m.group(4);
                 parsedInfos.userName = Uri.decode(m.group(3));
                 parsedInfos.scheme = m.group(2);
+            }else {
+                // Try to consider that as host
+                m = SIP_HOST_PATTERN.matcher(sipUri);
+                if(m.matches()) {
+                    parsedInfos.displayName = Uri.decode(m.group(1).trim());
+                    parsedInfos.domain = m.group(3);
+                    parsedInfos.scheme = m.group(2);
+                }else {
+                    // Final fallback, we have only a username given
+                    parsedInfos.userName = sipUri;
+                }
             }
         }
 

@@ -194,7 +194,7 @@ public class UAStateReceiver extends Callback {
 					incomingCallLock.release();
 				}
 				// Call is now ended
-				pjService.stopDialtoneGenerator();
+				pjService.stopDialtoneGenerator(callId);
 				//TODO : should be stopped only if it's the current call.
 				pjService.stopRecording();
 			}
@@ -699,6 +699,10 @@ public class UAStateReceiver extends Callback {
 							pjService.mediaManager.stopRing();
 						}
 					}
+					if(callState == SipCallSession.InvState.CONFIRMED) {
+                        pjService.sendPendingDtmf(callInfo.getCallId());
+                    }
+					
 					if(incomingCallLock != null && incomingCallLock.isHeld()) {
 						incomingCallLock.release();
 					}
