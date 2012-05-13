@@ -632,6 +632,11 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voipmuch, 20, 
                     new Locale[]{Locale.US, Locale.CANADA}, false, false, 
                     VoipMuch.class));
+            WIZARDS_DICT.put("VOIPPLANET", new WizardInfo("VOIPPLANET", "VoIP Planet", 
+                    R.drawable.ic_wizard_voipplanet, 10, 
+                    new Locale[]{
+                        locale("nl_NL")
+                    }, false, false, VoipPlanet.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
