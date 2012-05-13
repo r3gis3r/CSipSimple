@@ -80,6 +80,7 @@ import org.pjsip.pjsua.pjsua_transport_config;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -1618,25 +1619,34 @@ public class PjSipService {
             String prefsDNS = prefsWrapper
                     .getPreferenceStringValue(SipConfigManager.OVERRIDE_NAMESERVER);
             if (TextUtils.isEmpty(prefsDNS)) {
-                String dnsName1 = prefsWrapper.getSystemProp("net.dns1");
-                String dnsName2 = prefsWrapper.getSystemProp("net.dns2");
-                Log.d(THIS_FILE, "DNS server will be set to : " + dnsName1 + " / " + dnsName2);
-
-                if (dnsName1 == null && dnsName2 == null) {
-                    // TODO : WARNING : In this case....we have probably a
-                    // problem !
-                    nameservers = new pj_str_t[] {};
-                } else if (dnsName1 == null) {
+                String ipv6Escape = "[ \\[\\]]";
+                String ipv4Matcher = "^\\d+(\\.\\d+){3}$";
+                String ipv6Matcher = "^[0-9a-f]+(:[0-9a-f]*)+:[0-9a-f]+$";
+                List<String> dnsServers = new ArrayList<String>();
+                for(int i = 1; i <= 2; i++) {
+                    String dnsName = prefsWrapper.getSystemProp("net.dns"+i);
+                    if(!TextUtils.isEmpty(dnsName)) {
+                        dnsName = dnsName.replaceAll(ipv6Escape, "");
+                        if (!TextUtils.isEmpty(dnsName) &&
+                                (dnsName.matches(ipv4Matcher) || dnsName.matches(ipv6Matcher)) &&
+                                !dnsServers.contains(dnsName)) {
+                            dnsServers.add(dnsName);
+                        }
+                    }
+                }
+                if (dnsServers.size() == 0) {
+                    // This is the ultimate fallback... we should never be there !
                     nameservers = new pj_str_t[] {
-                        pjsua.pj_str_copy(dnsName2)
+                        pjsua.pj_str_copy("127.0.0.1")
                     };
-                } else if (dnsName2 == null) {
+                } else if (dnsServers.size() == 1) {
                     nameservers = new pj_str_t[] {
-                        pjsua.pj_str_copy(dnsName1)
+                        pjsua.pj_str_copy(dnsServers.get(0))
                     };
                 } else {
                     nameservers = new pj_str_t[] {
-                            pjsua.pj_str_copy(dnsName1), pjsua.pj_str_copy(dnsName2)
+                        pjsua.pj_str_copy(dnsServers.get(0)),
+                        pjsua.pj_str_copy(dnsServers.get(1))
                     };
                 }
             } else {
