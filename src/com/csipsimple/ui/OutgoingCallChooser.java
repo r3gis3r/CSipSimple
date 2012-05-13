@@ -147,7 +147,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
                         if ("skype".equalsIgnoreCase(auth) ||
                                 "sip".equalsIgnoreCase(auth)) {
                             String sipUser = data.getLastPathSegment();
-                            number = "sip:" + sipUser;
+                            number = sipUser;
                         }
                     }else if (scheme.equalsIgnoreCase("smsto")) {
                         number = PhoneNumberUtils.stripSeparators(data.getSchemeSpecificPart());
@@ -419,7 +419,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
                         toCall = Filter.rewritePhoneNumber(this, account.id, number);
                     }
 
-                    service.makeCall("sip:" + toCall, (int) account.id);
+                    service.makeCall(toCall, (int) account.id);
                     finishServiceIfNeeded(true);
                 } catch (RemoteException e) {
                     Log.e(THIS_FILE, "Unable to make the call", e);
@@ -473,7 +473,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
                         String phoneNumber = number;
                         String toCall = Filter.rewritePhoneNumber(this, account.id, phoneNumber);
                         accountToCallTo = null;
-                        service.makeCall("sip:" + toCall, (int) account.id);
+                        service.makeCall(toCall, (int) account.id);
                         hasLaunchedCall = true;
                         finishServiceIfNeeded(true);
                         return true;
