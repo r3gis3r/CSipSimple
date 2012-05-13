@@ -55,12 +55,9 @@ MY_WEBRTC_COMMON_DEFS += \
 	-DWEBRTC_CODEC_ILBC 
 
 #L16 is useless -DWEBRTC_CODEC_PCM16
-
-ifeq ($(TARGET_ARCH_ABI),armeabi)
-#Use fixed isac for armeabi
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),armeabi armeabi-v7a))
 MY_WEBRTC_COMMON_DEFS += -DWEBRTC_CODEC_ISACFX
 else
-#Use floating isac for others
 MY_WEBRTC_COMMON_DEFS += -DWEBRTC_CODEC_ISAC
 endif
 

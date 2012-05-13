@@ -30,7 +30,7 @@
 #include "pj_opus.h"
 #include <opus.h>
 
-#define FRAME_LENGTH_MS		20
+#define FRAME_LENGTH_MS		10
 #define USE_PLC 				1
 
 #define THIS_FILE       "pj_opus.c"
@@ -750,7 +750,7 @@ static pj_status_t opus_codec_decode(pjmedia_codec *codec,
     		(opus_int32) input->size, //Packet size
     		output->buf,
     		(int)(output->size >> 1),
-    		USE_PLC /* decode FEC */);
+    		0 /* decode FEC */);
 	if(ret <= 0){
 		PJ_LOG(1, (THIS_FILE, "Failed to decode opus frame : %d", ret));
 		output->type = PJMEDIA_FRAME_TYPE_NONE;
@@ -779,7 +779,7 @@ static pj_status_t  opus_codec_recover(pjmedia_codec *codec,
 
 	opus = (struct opus_private*) codec->codec_data;
 
-    PJ_LOG(4, (THIS_FILE, "Recover opus frame"));
+    PJ_LOG(5, (THIS_FILE, "Recover opus frame"));
 
     /* Decode */
 #if USE_PLC == 1

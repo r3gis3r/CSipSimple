@@ -21,7 +21,8 @@ LOCAL_C_INCLUDES += $(OPUS_PATH)/include $(OPUS_PATH)/celt $(OPUS_PATH)/silk
 # we need to rebuild silk cause we don't know what are diff required for opus and may change in the future
 include $(OPUS_PATH)/silk_sources.mk 
 LOCAL_SRC_FILES += $(SILK_SOURCES:%=../sources/%)
-ifeq ($(TARGET_ARCH_ABI),armeabi)
+
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),armeabi armeabi-v7a))
 LOCAL_C_INCLUDES += $(OPUS_PATH)/silk/fixed
 LOCAL_SRC_FILES += $(SILK_SOURCES_FIXED:%=../sources/%)
 else
@@ -39,9 +40,10 @@ LOCAL_SRC_FILES += ../pj_sources/pj_opus.c
 LOCAL_SHARED_LIBRARIES += libpjsipjni
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
+LOCAL_CFLAGS += -DOPUS_BUILD -DVAR_ARRAYS 
 # Hack to mute restrict not supported by ndk 
 LOCAL_CFLAGS += -Drestrict=__restrict
-ifeq ($(TARGET_ARCH_ABI),armeabi)
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),armeabi armeabi-v7a))
 LOCAL_CFLAGS += -DFIXED_POINT
 endif
 
