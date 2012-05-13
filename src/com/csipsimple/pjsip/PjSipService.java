@@ -1622,18 +1622,30 @@ public class PjSipService {
                 String ipv6Escape = "[ \\[\\]]";
                 String ipv4Matcher = "^\\d+(\\.\\d+){3}$";
                 String ipv6Matcher = "^[0-9a-f]+(:[0-9a-f]*)+:[0-9a-f]+$";
-                List<String> dnsServers = new ArrayList<String>();
+                List<String> dnsServers;
+                List<String> dnsServersAll = new ArrayList<String>();
+                List<String> dnsServersIpv4 = new ArrayList<String>();
                 for(int i = 1; i <= 2; i++) {
                     String dnsName = prefsWrapper.getSystemProp("net.dns"+i);
                     if(!TextUtils.isEmpty(dnsName)) {
                         dnsName = dnsName.replaceAll(ipv6Escape, "");
-                        if (!TextUtils.isEmpty(dnsName) &&
-                                (dnsName.matches(ipv4Matcher) || dnsName.matches(ipv6Matcher)) &&
-                                !dnsServers.contains(dnsName)) {
-                            dnsServers.add(dnsName);
+                        if (!TextUtils.isEmpty(dnsName) && !dnsServersAll.contains(dnsName)) {
+                                if(dnsName.matches(ipv4Matcher) || dnsName.matches(ipv6Matcher)) {
+                                    dnsServersAll.add(dnsName);
+                                }
+                                if(dnsName.matches(ipv4Matcher)) {
+                                    dnsServersIpv4.add(dnsName);
+                                }
                         }
                     }
                 }
+                if(dnsServersIpv4.size() > 0) {
+                    // Prefer pure ipv4 list since pjsua doesn't manage ipv6 resolution yet
+                    dnsServers = dnsServersIpv4;
+                }else {
+                    dnsServers = dnsServersAll;
+                }
+                
                 if (dnsServers.size() == 0) {
                     // This is the ultimate fallback... we should never be there !
                     nameservers = new pj_str_t[] {
