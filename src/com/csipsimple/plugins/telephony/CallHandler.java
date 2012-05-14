@@ -35,6 +35,7 @@ import android.os.Bundle;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PhoneCapabilityTester;
 
@@ -90,7 +91,7 @@ public class CallHandler extends BroadcastReceiver {
 			//Build the result for the row (label, icon, pending intent, and excluded phone number)
 			Bundle results = getResultExtras(true);
 			if(pendingIntent != null) {
-				results.putParcelable(com.csipsimple.utils.CallHandler.EXTRA_REMOTE_INTENT_TOKEN, pendingIntent);
+				results.putParcelable(CallHandlerPlugin.EXTRA_REMOTE_INTENT_TOKEN, pendingIntent);
 			}
 			results.putString(Intent.EXTRA_TITLE, context.getResources().getString(R.string.use_pstn));
 			if(sPhoneAppBmp != null) {

@@ -57,7 +57,7 @@ public final class SipManager {
     public static final String INTENT_SIP_CONFIGURATION = "com.csipsimple.service.SipConfiguration";
     /**
      * Bind sip service to control calls.<br/>
-     * If you start the service using {@link Context#startService(Intent intent)}
+     * If you start the service using {@link android.content.Context#startService(android.content.Intent intent)}
      * , you may want to pass {@link #EXTRA_OUTGOING_ACTIVITY} to specify you
      * are starting the service in order to make outgoing calls. You are then in
      * charge to unregister for outgoing calls when user finish with your
@@ -191,9 +191,44 @@ public final class SipManager {
      */
     public static final String ACTION_GET_DRAWABLES = "com.csipsimple.themes.GET_DRAWABLES";
     /**
-     * Plugin action for call handlers.
+     * Plugin action for call handlers.<br/>
+     * You can expect {@link android.content.Intent#EXTRA_PHONE_NUMBER} as argument for the
+     * number to call. <br/>
+     * Your receiver must
+     * {@link android.content.BroadcastReceiver#getResultExtras(boolean)} with parameter true to
+     * fill response. <br/>
+     * Your response contains :
+     * <ul>
+     * <li>{@link android.content.Intent#EXTRA_SHORTCUT_ICON} with
+     * {@link android.graphics.Bitmap} (mandatory) : Icon representing the call
+     * handler</li>
+     * <li>{@link android.content.Intent#EXTRA_TITLE} with
+     * {@link java.lang.String} (mandatory) : Title representing the call
+     * handler</li>
+     * <li>{@link android.content.Intent#EXTRA_REMOTE_INTENT_TOKEN} with
+     * {@link android.app.PendingIntent} (mandatory) : The intent to fire when
+     * this action is choosen</li>
+     * <li>{@link android.content.Intent#EXTRA_PHONE_NUMBER} with
+     * {@link java.lang.String} (optional) : Phone number if the pending intent
+     * launch a call intent. Empty if the pending intent launch something not
+     * related to a GSM call.</li>
+     * </ul>
      */
     public static final String ACTION_GET_PHONE_HANDLERS = "com.csipsimple.phone.action.HANDLE_CALL";
+    /**
+     * Plugin action for rewrite numbers. <br/>     
+     * You can expect {@link android.content.Intent#EXTRA_PHONE_NUMBER} as argument for the
+     * number to rewrite. <br/>
+     * Your receiver must
+     * {@link android.content.BroadcastReceiver#getResultExtras(boolean)} with parameter true to
+     * fill response. <br/>
+     * Your response contains :
+     * <ul>
+     * <li>{@link android.content.Intent#EXTRA_PHONE_NUMBER} with
+     * {@link java.lang.String} (optional) : Rewritten phone number.</li>
+     * </ul>
+     */
+    public final static String ACTION_REWRITE_NUMBER = "com.csipsimple.phone.action.REWRITE_NUMBER"; 
     /**
      * Plugin action for audio codec.
      */

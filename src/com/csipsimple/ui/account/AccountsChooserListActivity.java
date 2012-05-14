@@ -48,8 +48,8 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.utils.CallHandler;
-import com.csipsimple.utils.CallHandler.onLoadListener;
+import com.csipsimple.utils.CallHandlerPlugin;
+import com.csipsimple.utils.CallHandlerPlugin.OnLoadListener;
 import com.csipsimple.wizards.WizardUtils;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
@@ -137,12 +137,12 @@ public abstract class AccountsChooserListActivity extends Activity implements On
 
 	private void addExternalRows() {
 
-		Map<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
+		Map<String, String> callHandlers = CallHandlerPlugin.getAvailableCallHandlers(this);
 		for(String packageName : callHandlers.keySet()) {
-			CallHandler ch = new CallHandler(this);
-			ch.loadFrom(packageName, null, new onLoadListener() {
+			CallHandlerPlugin ch = new CallHandlerPlugin(this);
+			ch.loadFrom(packageName, null, new OnLoadListener() {
 				@Override
-				public void onLoad(final CallHandler ch) {
+				public void onLoad(final CallHandlerPlugin ch) {
 					addRow(ch.getLabel(), ch.getIconDrawable(), ch.getFakeProfile());
 				}
 			});

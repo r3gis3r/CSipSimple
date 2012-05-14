@@ -40,8 +40,8 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.AccountListUtils;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
-import com.csipsimple.utils.CallHandler;
-import com.csipsimple.utils.CallHandler.onLoadListener;
+import com.csipsimple.utils.CallHandlerPlugin;
+import com.csipsimple.utils.CallHandlerPlugin.OnLoadListener;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
@@ -215,7 +215,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
         if (showExternals) {
             // Add external rows
-            Map<String, String> callHandlers = CallHandler.getAvailableCallHandlers(getContext());
+            Map<String, String> callHandlers = CallHandlerPlugin.getAvailableCallHandlers(getContext());
             boolean includeGsm = Compatibility.canMakeGSMCall(getContext()); 
             for (String packageName : callHandlers.keySet()) {
                 Log.d(THIS_FILE, "Compare "+packageName+" to "+telCmp.flattenToString());
@@ -224,10 +224,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
                     continue;
                 }
                 // Else we can add
-                CallHandler ch = new CallHandler(getContext());
-                ch.loadFrom(packageName, null, new onLoadListener() {
+                CallHandlerPlugin ch = new CallHandlerPlugin(getContext());
+                ch.loadFrom(packageName, null, new OnLoadListener() {
                     @Override
-                    public void onLoad(final CallHandler ch) {
+                    public void onLoad(final CallHandlerPlugin ch) {
                         quickAction.addItem(ch.getIconDrawable(), ch.getLabel().toString(),
                                 new OnClickListener() {
                                     @Override
@@ -343,14 +343,14 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         if (account == null) {
             SipProfile retAcc = new SipProfile();
             if(showExternals) {
-                Map<String, String> handlers = CallHandler.getAvailableCallHandlers(getContext());
+                Map<String, String> handlers = CallHandlerPlugin.getAvailableCallHandlers(getContext());
                 boolean includeGsm = Compatibility.canMakeGSMCall(getContext()); 
                 
                 if(includeGsm) {
                     for (String callHandler : handlers.keySet()) {
                         // Try to prefer the GSM handler
                         if (callHandler.equalsIgnoreCase(telCmp.flattenToString())) {
-                            retAcc.id = CallHandler.getAccountIdForCallHandler(getContext(), callHandler);
+                            retAcc.id = CallHandlerPlugin.getAccountIdForCallHandler(getContext(), callHandler);
                             return retAcc;
                         }
                     }
@@ -362,7 +362,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
                     if(callHandler.equals(telCmp.flattenToString()) && !includeGsm) {
                         continue;
                     }
-                    retAcc.id = CallHandler.getAccountIdForCallHandler(getContext(), callHandler);
+                    retAcc.id = CallHandlerPlugin.getAccountIdForCallHandler(getContext(), callHandler);
                     return retAcc;
                 }
             }

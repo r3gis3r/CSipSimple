@@ -34,7 +34,7 @@ import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
 import com.csipsimple.ui.OutgoingCallChooser;
-import com.csipsimple.utils.CallHandler;
+import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 
@@ -86,7 +86,7 @@ public class OutgoingCall extends BroadcastReceiver {
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL) ) {
 
 	        //Compute remote apps that could receive the outgoing call itnent through our api
-	        Map<String, String> potentialHandlers = CallHandler.getAvailableCallHandlers(context);
+	        Map<String, String> potentialHandlers = CallHandlerPlugin.getAvailableCallHandlers(context);
 	        Log.d(THIS_FILE, "We have " + potentialHandlers.size() + " potential handlers");
 	        
 		    
@@ -101,7 +101,7 @@ public class OutgoingCall extends BroadcastReceiver {
 	            // We can now check that the number that we want to call can be managed by something different than gsm plugin
 	            // Note that this is now possible because we cache filters.
 	            if(gsmCallHandlerId == null) {
-	                gsmCallHandlerId = CallHandler.getAccountIdForCallHandler(aContext, (new ComponentName(aContext, com.csipsimple.plugins.telephony.CallHandler.class)).flattenToString());
+	                gsmCallHandlerId = CallHandlerPlugin.getAccountIdForCallHandler(aContext, (new ComponentName(aContext, com.csipsimple.plugins.telephony.CallHandler.class)).flattenToString());
 	            }
 	            if(gsmCallHandlerId != SipProfile.INVALID_ID) {
 	                if(Filter.isMustCallNumber(aContext, gsmCallHandlerId, number)) {

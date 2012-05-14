@@ -96,7 +96,7 @@ public class SipHome extends SherlockFragmentActivity {
     private ViewPager mViewPager;
     private TabsAdapter mTabsAdapter;
     private boolean mDualPane;
-    private Thread asyncSanityCheker;
+    private Thread asyncSanityChecker;
 
     public final static boolean USE_LIGHT_THEME = false;
 
@@ -181,12 +181,13 @@ public class SipHome extends SherlockFragmentActivity {
         
 
         // Async check
-        asyncSanityCheker = new Thread() {
+        asyncSanityChecker = new Thread() {
             public void run() {
                 asyncSanityCheck();
             };
         };
-        asyncSanityCheker.start();
+        asyncSanityChecker.start();
+        
     }
 
     /**
@@ -403,7 +404,7 @@ public class SipHome extends SherlockFragmentActivity {
                         if (onForeground) {
                             // We have to check for an update
                             UpdaterPopupLauncher ru = nu.getUpdaterPopup(false);
-                            if (ru != null && asyncSanityCheker != null) {
+                            if (ru != null && asyncSanityChecker != null) {
                                 runOnUiThread(ru);
                             }
                         }
@@ -483,10 +484,10 @@ public class SipHome extends SherlockFragmentActivity {
     protected void onPause() {
         Log.d(THIS_FILE, "On Pause SIPHOME");
         onForeground = false;
-        if(asyncSanityCheker != null) {
-            if(asyncSanityCheker.isAlive()) {
-                asyncSanityCheker.interrupt();
-                asyncSanityCheker = null;
+        if(asyncSanityChecker != null) {
+            if(asyncSanityChecker.isAlive()) {
+                asyncSanityChecker.interrupt();
+                asyncSanityChecker = null;
             }
         }
         super.onPause();

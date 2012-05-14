@@ -30,11 +30,12 @@ import android.net.ConnectivityManager;
 
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.utils.CallHandler;
+import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.ExtraPlugins;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.NightlyUpdater;
 import com.csipsimple.utils.PreferencesProviderWrapper;
+import com.csipsimple.utils.RewriterPlugin;
 
 public class DeviceStateReceiver extends BroadcastReceiver {
 
@@ -101,7 +102,8 @@ public class DeviceStateReceiver extends BroadcastReceiver {
             }
         } else if (Intent.ACTION_PACKAGE_ADDED.equalsIgnoreCase(intentAction) ||
                 Intent.ACTION_PACKAGE_REMOVED.equalsIgnoreCase(intentAction)) {
-            CallHandler.clearAvailableCallHandlers();
+            CallHandlerPlugin.clearAvailableCallHandlers();
+            RewriterPlugin.clearAvailableRewriters();
             ExtraPlugins.clearDynPlugins();
         } else if (APPLY_NIGHTLY_UPLOAD.equals(intentAction)) {
             NightlyUpdater nu = new NightlyUpdater(context);

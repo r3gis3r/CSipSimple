@@ -77,8 +77,8 @@ import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
-import com.csipsimple.utils.CallHandler;
-import com.csipsimple.utils.CallHandler.onLoadListener;
+import com.csipsimple.utils.CallHandlerPlugin;
+import com.csipsimple.utils.CallHandlerPlugin.OnLoadListener;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -562,10 +562,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
             }
         } else if (accountToUse != SipProfile.INVALID_ID) {
             // It's an external account, find correct external account
-            CallHandler ch = new CallHandler(getActivity());
-            ch.loadFrom(accountToUse, toCall, new onLoadListener() {
+            CallHandlerPlugin ch = new CallHandlerPlugin(getActivity());
+            ch.loadFrom(accountToUse, toCall, new OnLoadListener() {
                 @Override
-                public void onLoad(CallHandler ch) {
+                public void onLoad(CallHandlerPlugin ch) {
                     placePluginCall(ch);
                 }
             });
@@ -642,7 +642,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
                 missingVoicemailDialog.show();
             }
-        } else if (accountToUse == CallHandler.getAccountIdForCallHandler(getActivity(),
+        } else if (accountToUse == CallHandlerPlugin.getAccountIdForCallHandler(getActivity(),
                 (new ComponentName(getActivity(), com.csipsimple.plugins.telephony.CallHandler.class).flattenToString()))) {
             // Case gsm voice mail
             TelephonyManager tm = (TelephonyManager) getActivity().getSystemService(
@@ -685,7 +685,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         // TODO : manage others ?... for now, no way to do so cause no vm stored
     }
 
-    private void placePluginCall(CallHandler ch) {
+    private void placePluginCall(CallHandlerPlugin ch) {
         try {
             String nextExclude = ch.getNextExcludeTelNumber();
             if (service != null && nextExclude != null) {

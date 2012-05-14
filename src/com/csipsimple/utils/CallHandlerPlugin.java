@@ -45,12 +45,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CallHandler {
+public class CallHandlerPlugin {
 
-    private static final String THIS_FILE = "CallHandler";
+    private static final String THIS_FILE = "CallHandlerPlugin";
     public static final String EXTRA_REMOTE_INTENT_TOKEN = "android.intent.extra.remote_intent_token";
 
-    private onLoadListener listener;
+    private OnLoadListener listener;
     private PendingIntent pendingIntent = null;
     private Bitmap icon = null;
     private String nextExclude = null;
@@ -63,13 +63,19 @@ public class CallHandler {
     private final static String VIRTUAL_ACC_MAX_ENTRIES = "maxVirtualAcc";
     private final static String VIRTUAL_ACC_PREFIX = "vAcc_";
 
-    public CallHandler(Context ctxt) {
+    public CallHandlerPlugin(Context ctxt) {
         context = ctxt;
     }
 
-    public void loadFrom(final String packageName, String number, onLoadListener l) {
+    /**
+     * Load plugin from a given plugin component name 
+     * @param componentName Fully qualified component name to call
+     * @param number Optional number to call
+     * @param l Listener to fire on load completion
+     */
+    public void loadFrom(final String componentName, String number, OnLoadListener l) {
         listener = l;
-        ComponentName cn = ComponentName.unflattenFromString(packageName);
+        ComponentName cn = ComponentName.unflattenFromString(componentName);
 
         Intent it = new Intent(SipManager.ACTION_GET_PHONE_HANDLERS);
         it.putExtra(Intent.EXTRA_PHONE_NUMBER, number);
@@ -80,17 +86,22 @@ public class CallHandler {
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         Bundle resolvedInfos = getResultExtras(true);
-                        fillWith(packageName, resolvedInfos);
+                        fillWith(componentName, resolvedInfos);
                         if (listener != null) {
-                            listener.onLoad(CallHandler.this);
+                            listener.onLoad(CallHandlerPlugin.this);
                         }
                     }
                 }, null, Activity.RESULT_OK, null, null);
 
-        Log.d(THIS_FILE, "After broadcast");
     }
 
-    public void loadFrom(final Long accountId, String number, onLoadListener l) {
+    /**
+     * Load plugin from a given account id.
+     * @param accountId Fake (< -1) account id to load plugin from
+     * @param number Optional number to call
+     * @param l Listener to fire on load completion
+     */
+    public void loadFrom(final Long accountId, String number, OnLoadListener l) {
         Map<String, String> callHandlers = getAvailableCallHandlers(context);
         for (String packageName : callHandlers.keySet()) {
             if (accountId == getAccountIdForCallHandler(context, packageName)) {
@@ -183,13 +194,13 @@ public class CallHandler {
     /**
      * Interface for listener about load state of remote call handler plugin
      */
-    public interface onLoadListener {
+    public interface OnLoadListener {
         /**
          * Fired when call handler has been loaded
          * 
          * @param ch the call handler object that has been loaded
          */
-        void onLoad(CallHandler ch);
+        void onLoad(CallHandlerPlugin ch);
     }
 
     /**
@@ -217,7 +228,8 @@ public class CallHandler {
      */
     public Drawable getIconDrawable() {
         if (icon != null) {
-            return new BitmapDrawable(icon);
+            //return new BitmapDrawable(icon);
+            return new BitmapDrawable(context.getResources(), icon);
         }
         return null;
     }

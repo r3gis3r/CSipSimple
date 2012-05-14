@@ -55,8 +55,8 @@ import com.csipsimple.api.SipProfileState;
 import com.csipsimple.db.AccountAdapter;
 import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
-import com.csipsimple.utils.CallHandler;
-import com.csipsimple.utils.CallHandler.onLoadListener;
+import com.csipsimple.utils.CallHandlerPlugin;
+import com.csipsimple.utils.CallHandlerPlugin.OnLoadListener;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
@@ -208,17 +208,18 @@ public class OutgoingCallChooser extends SherlockListActivity {
         }
     }
 
-    private void addRow(CharSequence label, Drawable dr, OnClickListener l) {
+    private void addRow(CharSequence label, CharSequence nbr, Drawable dr, OnClickListener l) {
         Log.d(THIS_FILE, "Append ROW " + label);
         // Add line
         LinearLayout root = (LinearLayout) findViewById(R.id.acc_list_chooser_wrapper);
         
         View v = getLayoutInflater().inflate(R.layout.choose_account_row, root, false);
-        v.findViewById(R.id.AccTextStatusView).setVisibility(View.GONE);
         v.findViewById(R.id.useLabel).setVisibility(View.GONE);
         v.findViewById(R.id.refresh_button).setVisibility(View.GONE);
         ((ImageView) v.findViewById(R.id.wizard_icon)).setImageDrawable(dr);
         ((TextView) v.findViewById(R.id.AccTextView)).setText(label);
+        ((TextView) v.findViewById(R.id.AccTextStatusView)).setText(this.getString(R.string.outgoing_call_chooser_call_text)
+                + " : " + nbr);
         
         v.setFocusable(true);
         v.setClickable(true);
@@ -239,7 +240,7 @@ public class OutgoingCallChooser extends SherlockListActivity {
      */
     private void addExternalRows() {
 
-        Map<String, String> callHandlers = CallHandler.getAvailableCallHandlers(this);
+        Map<String, String> callHandlers = CallHandlerPlugin.getAvailableCallHandlers(this);
         externalTotalNbrs = 0;
         loadedExternals = 0;
         externalProfiles = new ArrayList<SipProfile>();
@@ -247,42 +248,55 @@ public class OutgoingCallChooser extends SherlockListActivity {
         for (String packageName : callHandlers.keySet()) {
             Log.d(THIS_FILE, "Treating call handler... " + packageName);
             
-            long externalProfileId = CallHandler.getAccountIdForCallHandler(this, packageName);
+            long externalProfileId = CallHandlerPlugin.getAccountIdForCallHandler(this, packageName);
 
             if (Filter.isCallableNumber(this, externalProfileId, number)) {
                 externalTotalNbrs ++;
                 // Transform number
-                String finalNumber = number;
+                String toCallNumber = number;
                 if(!ignoreRewritingRules) {
-                    finalNumber = Filter.rewritePhoneNumber(this, externalProfileId, number);
+                    toCallNumber = Filter.rewritePhoneNumber(this, externalProfileId, number);
                 }
-                final SipProfile extProfile = new SipProfile();
+                
+                SipProfile extProfile = new SipProfile();
                 extProfile.id = externalProfileId;
-                Log.d(THIS_FILE, "Will loaded external " + packageName);
-                CallHandler ch = new CallHandler(this);
-                ch.loadFrom(packageName, finalNumber, new onLoadListener() {
-                    @Override
-                    public void onLoad(final CallHandler ch) {
-                        Log.d(THIS_FILE, "Loaded external " + ch.getIntent());
-                        if (ch.getIntent() != null) {
-                            addRow(ch.getLabel(), ch.getIconDrawable(), new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    placePluginCall(ch);
-                                }
-                            });
-
-                            externalProfiles.add(extProfile);
-                        }
-                        loadedExternals++;
-                        checkNumberWithSipStarted();
-                    }
-                });
+                CallHandlerPlugin ch = new CallHandlerPlugin(this);
+                ch.loadFrom(packageName, toCallNumber, new onLoadPluginListener(extProfile, toCallNumber));
             }
         }
     }
+    
+    private class onLoadPluginListener implements OnLoadListener {
+        
+        private String number;
+        private SipProfile extProfile;
+        
+        onLoadPluginListener(SipProfile profile, String toCallNumber){
+            number = toCallNumber;
+            extProfile = profile;
+        }
+        
+        @Override
+        public void onLoad(final CallHandlerPlugin ch) {
+            Log.d(THIS_FILE, "Loaded external " + ch.getIntent());
+            if (ch.getIntent() != null) {
+                addRow(ch.getLabel(), number, ch.getIconDrawable(), new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        placePluginCall(ch);
+                    }
+                });
 
-    private void placePluginCall(CallHandler ch) {
+                externalProfiles.add(extProfile);
+            }
+            loadedExternals++;
+            checkNumberWithSipStarted();
+        }
+    }
+    
+    
+
+    private void placePluginCall(CallHandlerPlugin ch) {
         try {
             String nextExclude = ch.getNextExcludeTelNumber();
             if (service != null && nextExclude != null) {
@@ -440,10 +454,10 @@ public class OutgoingCallChooser extends SherlockListActivity {
             // We have a external handler as force call account
             String phoneNumber = number;
             String toCall = Filter.rewritePhoneNumber(this, accountToCallTo, phoneNumber);
-            CallHandler ch = new CallHandler(this);
-            ch.loadFrom(accountToCallTo, toCall, new onLoadListener() {
+            CallHandlerPlugin ch = new CallHandlerPlugin(this);
+            ch.loadFrom(accountToCallTo, toCall, new OnLoadListener() {
                 @Override
-                public void onLoad(final CallHandler ch) {
+                public void onLoad(final CallHandlerPlugin ch) {
                     Log.d(THIS_FILE, "Place external call " + ch.getIntent());
                     if (ch.getIntent() != null) {
                         placePluginCall(ch);
@@ -489,7 +503,6 @@ public class OutgoingCallChooser extends SherlockListActivity {
     }
     
     @TargetApi(5)
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK

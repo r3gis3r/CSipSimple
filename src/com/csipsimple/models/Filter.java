@@ -590,10 +590,14 @@ public class Filter {
 		return false;
 	}
 	
-	public static String rewritePhoneNumber(long accountId, String number, Context ctxt) {
-		return rewritePhoneNumber(ctxt, accountId, number);
-	}
-	
+	/**
+	 * Rewrite a phone number for use with an account.
+	 * 
+	 * @param ctxt The application context.
+	 * @param accountId The account id to use for outgoing call
+	 * @param number The number to rewrite
+	 * @return Rewritten number
+	 */
 	public static String rewritePhoneNumber(Context ctxt, long accountId, String number) {
         List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
         for (Filter f : filterList) {
