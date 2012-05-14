@@ -49,7 +49,7 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 	
 	private BroadcastReceiver mediaStateReceiver = new BroadcastReceiver() {
 		
-		@Override
+        @Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			Log.d(THIS_FILE, ">>> Bluetooth SCO state changed !!! ");

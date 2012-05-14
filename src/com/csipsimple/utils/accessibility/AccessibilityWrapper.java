@@ -31,18 +31,11 @@ public abstract class AccessibilityWrapper {
 	
 	public static AccessibilityWrapper getInstance() {
 		if(instance == null) {
-			String className =  "com.csipsimple.utils.accessibility.Accessibility";
 			if(Compatibility.isCompatible(4)) {
-				className += "4";
+			    instance = new com.csipsimple.utils.accessibility.Accessibility4();
 			}else {
-				className += "3";
+			    instance = new com.csipsimple.utils.accessibility.Accessibility3();
 			}
-			try {
-                Class<? extends AccessibilityWrapper> wrappedClass = Class.forName(className).asSubclass(AccessibilityWrapper.class);
-                instance = wrappedClass.newInstance();
-			} catch (Exception e) {
-	        	throw new IllegalStateException(e);
-	        }
 		}
 		
 		return instance;

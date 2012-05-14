@@ -32,18 +32,11 @@ private static AudioFocusWrapper instance;
 	
 	public static AudioFocusWrapper getInstance() {
 		if(instance == null) {
-			String className = "com.csipsimple.utils.audio.AudioFocus";
 			if(Compatibility.isCompatible(8)) {
-				className += "8";
+			    instance = new com.csipsimple.utils.audio.AudioFocus8();
 			}else {
-				className += "3";
+			    instance = new com.csipsimple.utils.audio.AudioFocus3();
 			}
-			try {
-                Class<? extends AudioFocusWrapper> wrappedClass = Class.forName(className).asSubclass(AudioFocusWrapper.class);
-                instance = wrappedClass.newInstance();
-	        } catch (Exception e) {
-	        	throw new IllegalStateException(e);
-	        }
 		}
 		
 		return instance;

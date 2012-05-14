@@ -50,20 +50,12 @@ public abstract class ContactsWrapper {
 
     public static ContactsWrapper getInstance() {
         if (instance == null) {
-            String className = "com.csipsimple.utils.contacts.ContactsUtils";
             if (Compatibility.isCompatible(14)) {
-                className += "14";
+                instance = new com.csipsimple.utils.contacts.ContactsUtils14();
             } else if (Compatibility.isCompatible(5)) {
-                className += "5";
+                instance = new com.csipsimple.utils.contacts.ContactsUtils5();
             } else {
-                className += "3";
-            }
-            try {
-                Class<? extends ContactsWrapper> wrappedClass = Class.forName(className)
-                        .asSubclass(ContactsWrapper.class);
-                instance = wrappedClass.newInstance();
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
+                instance = new com.csipsimple.utils.contacts.ContactsUtils3();
             }
         }
 

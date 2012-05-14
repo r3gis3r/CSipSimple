@@ -32,18 +32,11 @@ public abstract class BluetoothWrapper {
 	
 	public static BluetoothWrapper getInstance() {
 		if(instance == null) {
-			String className = "com.csipsimple.utils.bluetooth.BluetoothUtils";
 			if(Compatibility.isCompatible(8)) {
-				className += "8";
+                instance = new com.csipsimple.utils.bluetooth.BluetoothUtils8();
 			}else {
-				className += "3";
+                instance = new com.csipsimple.utils.bluetooth.BluetoothUtils3();
 			}
-			try {
-                Class<? extends BluetoothWrapper> wrappedClass = Class.forName(className).asSubclass(BluetoothWrapper.class);
-                instance = wrappedClass.newInstance();
-	        } catch (Exception e) {
-	        	throw new IllegalStateException(e);
-	        }
 		}
 		
 		return instance;
