@@ -637,6 +637,10 @@ public class WizardUtils {
                     new Locale[]{
                         locale("nl_NL")
                     }, false, false, VoipPlanet.class));
+            WIZARDS_DICT.put("ZENG_CN", new WizardInfo("ZENG_CN", "智通", 
+                    R.drawable.ic_wizard_zeng, 9, 
+                    new Locale[]{ locale("zh_CN"), locale("zh_TW")}, false, false, 
+                    ZengCn.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
