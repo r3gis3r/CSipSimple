@@ -26,7 +26,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.MergeCursor;
-import android.graphics.Bitmap.CompressFormat;
 import android.provider.BaseColumns;
 import android.support.v4.content.AsyncTaskLoader;
 import android.text.TextUtils;
@@ -39,9 +38,6 @@ import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.CallHandlerPlugin.OnLoadListener;
 import com.csipsimple.utils.Log;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +47,6 @@ import java.util.concurrent.TimeUnit;
 
 public class AccountsLoader extends AsyncTaskLoader<Cursor> {
 
-    public static final String FIELD_ICON = "icon";
     public static final String FIELD_FORCE_CALL = "force_call";
     public static final String FIELD_NBR_TO_CALL = "nbr_to_call";
     public static final String FIELD_STATUS_OUTGOING = "status_for_outgoing";
@@ -210,7 +205,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
             account = new SipProfile();
             long accId = CallHandlerPlugin.getAccountIdForCallHandler(getContext(), componentName);
             account.id = accId;
-            
+            account.wizard = "EXPERT";
             CallHandlerPlugin ch = new CallHandlerPlugin(getContext());
             final Semaphore semaphore = new Semaphore(0);
             
@@ -388,7 +383,6 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
             SipProfile.FIELD_ID,
             SipProfile.FIELD_DISPLAY_NAME,
             SipProfile.FIELD_WIZARD,
-            FIELD_ICON,
             FIELD_FORCE_CALL,
             FIELD_NBR_TO_CALL,
             FIELD_STATUS_OUTGOING,
@@ -402,25 +396,12 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
     private Cursor createCursorForAccount(FilteredProfile fa) {
         MatrixCursor matrixCursor = new MatrixCursor(COLUMN_HEADERS);
         
-        byte[] data = new byte[0];
-        if(fa.account.icon != null) {
-            try {
-                final ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
-                BufferedOutputStream out = new BufferedOutputStream(dataStream, 1024);
-                fa.account.icon.compress(CompressFormat.PNG, 100, out);
-                out.flush();
-                data = dataStream.toByteArray();
-            } catch (IOException e) {
-                Log.e(THIS_FILE, "Can't encode wizard icon", e);
-            }
-        }
         
         matrixCursor.addRow(new Object[] {
                 fa.account.id,
                 fa.account.id,
                 fa.account.display_name,
                 fa.account.wizard,
-                data,
                 fa.isForceCall ? 1 : 0,
                 fa.rewriteNumber(numberToCall),
                 fa.getStatusForOutgoing() ? 1 : 0,
@@ -434,7 +415,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
      * @param position The position to search at
      * @return The call handler plugin if any for this position
      */
-    public CallHandlerPlugin getCallHandlerAtPosition(long accId) {
+    public CallHandlerPlugin getCallHandlerWithAccountId(long accId) {
         for(FilteredProfile filteredAcc :finalAccounts) {
             if(filteredAcc.account.id == accId)
             return filteredAcc.getCallHandlerPlugin();

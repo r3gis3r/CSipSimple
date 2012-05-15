@@ -62,7 +62,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
     private void attachAdapter() {
         if(getListAdapter() == null) {
             if(mAdapter == null) {
-                mAdapter = new OutgoingAccountsAdapter(getActivity(), null);
+                mAdapter = new OutgoingAccountsAdapter(this, null);
             }
             setListAdapter(mAdapter);
         }
@@ -107,7 +107,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
         }else if(accountId < SipProfile.INVALID_ID) {
             // This is a plugin row.
             if(accLoader != null) {
-                CallHandlerPlugin ch = accLoader.getCallHandlerAtPosition(accountId);
+                CallHandlerPlugin ch = accLoader.getCallHandlerWithAccountId(accountId);
                 try {
                     String nextExclude = ch.getNextExcludeTelNumber();
                     if (nextExclude != null) {
@@ -165,6 +165,10 @@ public class OutgoingCallListFragment extends CSSListFragment {
         if(mAdapter != null) {
             placeCall((Cursor) mAdapter.getItem(position));
         }
+    }
+
+    public AccountsLoader getAccountLoader() {
+        return accLoader;
     }
 
 

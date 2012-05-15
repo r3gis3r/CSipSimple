@@ -23,8 +23,6 @@ package com.csipsimple.ui.account;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.ResourceCursorAdapter;
@@ -36,6 +34,7 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.widgets.CSSListFragment;
 import com.csipsimple.wizards.WizardUtils;
 
@@ -133,23 +132,29 @@ public class AccountsChooserListFragment extends CSSListFragment {
 
         private Integer INDEX_DISPLAY_NAME = null;
         private Integer INDEX_WIZARD = null;
-        private Integer INDEX_ICON = null;
+        private Integer INDEX_ID = null;
         
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             AccListItemViewTag tag = (AccListItemViewTag) view.getTag();
             if(tag != null) {
                 initIndexes(cursor);
+                Long accId = cursor.getLong(INDEX_ID);
                 String name = cursor.getString(INDEX_DISPLAY_NAME);
                 String wizard = cursor.getString(INDEX_WIZARD);
                 
                 tag.name.setText(name);
                 
-                byte[] iconBlob = cursor.getBlob(INDEX_ICON);
-                if(iconBlob.length > 0) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(iconBlob, 0, iconBlob.length);
-                    tag.icon.setImageBitmap(bmp);
-                }else {
+                boolean iconSet = false;
+                if(accLoader != null) {
+                   CallHandlerPlugin ch = accLoader.getCallHandlerWithAccountId(accId);
+                   if(ch != null) {
+                       tag.icon.setImageBitmap(ch.getIcon());
+                       iconSet = true;
+                   }
+                }
+                
+                if(!iconSet){
                     tag.icon.setImageResource(WizardUtils.getWizardIconRes(wizard));
                 }
             }
@@ -158,9 +163,9 @@ public class AccountsChooserListFragment extends CSSListFragment {
 
         private void initIndexes(Cursor c) {
             if(INDEX_DISPLAY_NAME == null) {
+                INDEX_ID = c.getColumnIndex(SipProfile.FIELD_ID);
                 INDEX_DISPLAY_NAME = c.getColumnIndex(SipProfile.FIELD_DISPLAY_NAME);
                 INDEX_WIZARD = c.getColumnIndex(SipProfile.FIELD_WIZARD);
-                INDEX_ICON = c.getColumnIndex(AccountsLoader.FIELD_ICON);
             }
         }
         
