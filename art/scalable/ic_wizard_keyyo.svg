@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="48"
+   height="48"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="ic_wizard_keyyo.svg"
+   inkscape:export-filename="/home/r3gis3r/workspaceandroid2/CSipSimple/res/drawable-xhdpi/ic_wizard_freephonie.png"
+   inkscape:export-xdpi="14.4"
+   inkscape:export-ydpi="14.4"><metadata
+   id="metadata8"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1600"
+   inkscape:window-height="842"
+   id="namedview6"
+   showgrid="false"
+   inkscape:zoom="5.6568543"
+   inkscape:cx="12.001511"
+   inkscape:cy="46.000016"
+   inkscape:window-x="0"
+   inkscape:window-y="27"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg2" /><defs
+   id="defs6" />
+ 
+
+
+<g
+   id="g3802"
+   transform="translate(-48.721939,0)"><rect
+     y="0.48979545"
+     x="49.211735"
+     height="47.020409"
+     width="47.020409"
+     id="rect2993"
+     style="fill:#d71a21;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.97959185px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" /><rect
+     y="37.974602"
+     x="49.696911"
+     height="9.0450668"
+     width="46.042088"
+     id="rect3779"
+     style="fill:#000000;fill-opacity:1;stroke:none" /></g><path
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   d="m 15.428266,4.4330983 2.91089,0 0,14.4614737 8.006274,-8.006273 4.31107,0 -7.219332,7.219332 7.994869,11.233874 -4.060162,0 -6.067432,-9.123959 -2.623138,2.623139 0,6.40958 -3.216196,0 z"
+   id="path3773"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="ccccccccccccc" /><text
+   xml:space="preserve"
+   style="font-size:49.16454315000000719px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0.31393671000000001px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+   x="19.631706"
+   y="9.3942013"
+   id="text3775"
+   sodipodi:linespacing="125%"
+   transform="scale(1.0488267,0.95344637)"><tspan
+     sodipodi:role="line"
+     id="tspan3777"
+     x="19.631706"
+     y="9.3942013"
+     style="font-size:7.37468099999999982px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:0.31393671000000001px;word-spacing:0px;font-family:Khmer OS System;-inkscape-font-specification:Khmer OS System;fill:#ffffff;fill-opacity:1">mobile</tspan></text>
+<text
+   xml:space="preserve"
+   style="font-size:49.16454315px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0.31393671px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+   x="15.095946"
+   y="46.654186"
+   id="text3775-5"
+   sodipodi:linespacing="125%"
+   transform="scale(1.0488267,0.95344637)"><tspan
+     sodipodi:role="line"
+     id="tspan3777-8"
+     x="15.095946"
+     y="46.654186"
+     style="font-size:7.374681px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:0.31393671px;word-spacing:0px;fill:#ffffff;fill-opacity:1;font-family:Khmer OS System;-inkscape-font-specification:Khmer OS System">VoIP</tspan></text>
+<path
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   d="m 23.5,30.390625 c -0.673097,0.01563 -1.308899,0.293274 -1.75,0.734375 -0.445914,0.445914 -0.638003,1 -1.4375,1 -0.799497,0 -0.998391,-0.560891 -1.4375,-1 -0.441101,-0.441101 -1.045653,-0.71875 -1.71875,-0.71875 -1.346194,0 -2.4375,1.091306 -2.4375,2.4375 0,1.346194 1.091306,2.4375 2.4375,2.4375 0.673097,0 1.277649,-0.27765 1.71875,-0.71875 0.43911,-0.439109 0.391702,-0.9375 1.4375,-0.9375 1.045798,0 0.991586,0.491587 1.4375,0.9375 0.441101,0.4411 1.076903,0.71875 1.75,0.703125 0.673097,-0.01563 1.308899,-0.262025 1.75,-0.703125 0.445914,-0.445913 0.391702,-0.9375 1.4375,-0.9375 1.045798,0 0.99839,0.498391 1.4375,0.9375 0.441101,0.4411 1.045653,0.6875 1.71875,0.6875 1.346194,0 2.4375,-1.091306 2.4375,-2.4375 0,-1.346194 -1.091306,-2.4375 -2.4375,-2.4375 -0.673097,0 -1.277649,0.308899 -1.71875,0.75 -0.439109,0.439109 -0.638003,0.96875 -1.4375,0.96875 -0.799497,0 -0.991586,-0.522836 -1.4375,-0.96875 -0.441101,-0.441101 -1.076903,-0.75 -1.75,-0.734375 z"
+   id="path3806"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="cssssssssscsssssssssc" /></svg>
