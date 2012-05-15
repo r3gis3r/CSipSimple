@@ -31,6 +31,7 @@ import android.widget.ListView;
 
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.ui.account.AccountsLoader;
 import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.CSSListFragment;
@@ -39,7 +40,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
     
     private static final String THIS_FILE = "OutgoingCallListFragment";
     private OutgoingAccountsAdapter mAdapter;
-    private OutgoingAccountsLoader accLoader;
+    private AccountsLoader accLoader;
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -71,7 +72,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
     @Override
     public Loader<Cursor> onCreateLoader(int loader, Bundle args) {
         OutgoingCallChooser superActivity = ((OutgoingCallChooser) getActivity());
-        accLoader = new OutgoingAccountsLoader(getActivity(), superActivity.getPhoneNumber(), superActivity.shouldIgnoreRewritingRules());
+        accLoader = new AccountsLoader(getActivity(), superActivity.getPhoneNumber(), superActivity.shouldIgnoreRewritingRules());
         return accLoader;
         
     }
@@ -91,12 +92,12 @@ public class OutgoingCallListFragment extends CSSListFragment {
         long accountId = c.getLong(c.getColumnIndex(SipProfile.FIELD_ID));
         if(accountId > SipProfile.INVALID_ID) {
             // Extra check for the account id.
-            boolean canCall = c.getInt(c.getColumnIndex(OutgoingAccountsLoader.FIELD_STATUS_OUTGOING)) == 1;
+            boolean canCall = c.getInt(c.getColumnIndex(AccountsLoader.FIELD_STATUS_OUTGOING)) == 1;
             if(!canCall) {
                 return false;
             }
             try {
-                String toCall = c.getString(c.getColumnIndex(OutgoingAccountsLoader.FIELD_NBR_TO_CALL));
+                String toCall = c.getString(c.getColumnIndex(AccountsLoader.FIELD_NBR_TO_CALL));
                 service.makeCall(toCall, (int) accountId);
                 superActivity.finishServiceIfNeeded(true);
                 return true;
@@ -142,7 +143,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
             }else {
                 // Now lets search for one in for call mode if service is ready
                 do {
-                    if(c.getInt(c.getColumnIndex(OutgoingAccountsLoader.FIELD_FORCE_CALL)) == 1) {
+                    if(c.getInt(c.getColumnIndex(AccountsLoader.FIELD_FORCE_CALL)) == 1) {
                         if(placeCall(c)) {
                             c.close();
                             return;

@@ -22,46 +22,46 @@
 package com.csipsimple.ui.prefs;
 
 import android.content.Intent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.os.Bundle;
 
+import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.ui.account.AccountFilters;
 import com.csipsimple.ui.account.AccountsChooserListActivity;
-import com.csipsimple.utils.Log;
+import com.csipsimple.utils.Compatibility;
 
 
-public class PrefsFilters  extends AccountsChooserListActivity implements OnItemClickListener, OnClickListener {
+public class PrefsFilters  extends AccountsChooserListActivity {
 	
-
-	private static final String THIS_FILE = "PrefsFilters";
-
-	
-	@Override
-	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		if(id != SipProfile.INVALID_ID){
-			Intent it = new Intent(this, AccountFilters.class);
-			it.putExtra(SipProfile.FIELD_ID,  id);
-			startActivity(it);
-		}
-	}
-	
-	@Override
-	public void onClick(View v) {
-		Long accId = (Long) v.getTag();
-		if(accId != null) {
-			Intent it = new Intent(this, AccountFilters.class);
-			it.putExtra(SipProfile.FIELD_ID,  accId);
-			startActivity(it);
-		}else {
-			Log.w(THIS_FILE, "Hey something is wrong here...");
-		}
-	}
-	
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    
 	@Override
 	protected boolean showInternalAccounts() {
 		return true;
 	}
+
+    @Override
+    public void onAccountClicked(long id) {
+        if(id != SipProfile.INVALID_ID){
+            Intent it = new Intent(this, AccountFilters.class);
+            it.putExtra(SipProfile.FIELD_ID,  id);
+            startActivity(it);
+        }
+    }
+    
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == Compatibility.getHomeMenuId()) {
+            finish();
+            return true;
+        }
+        return false;
+    }
 }

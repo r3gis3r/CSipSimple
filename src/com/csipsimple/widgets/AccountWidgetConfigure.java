@@ -25,17 +25,13 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.ui.account.AccountsChooserListActivity;
 import com.csipsimple.utils.Log;
 
-public class AccountWidgetConfigure extends AccountsChooserListActivity implements OnItemClickListener {
+public class AccountWidgetConfigure extends AccountsChooserListActivity {
 
 	private static final String WIDGET_PREFS = "widget_prefs";
 	private static final String THIS_FILE = "Widget config";
@@ -62,30 +58,6 @@ public class AccountWidgetConfigure extends AccountsChooserListActivity implemen
 	}
 	
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		
-		if(appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-			Cursor c = (Cursor) getAdapter().getItem(position);
-			SharedPreferences prefs = getSharedPreferences(WIDGET_PREFS, 0);
-            SharedPreferences.Editor edit = prefs.edit();
-            edit.putLong(getPrefsKey(appWidgetId), c.getLong(c.getColumnIndex(SipProfile.FIELD_ID)));
-            edit.commit();
-			
-            
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                            appWidgetId);
-            setResult(RESULT_OK, resultValue);
-            
-            AccountWidgetProvider.updateWidget(this);
-            
-            finish();
-		}else {
-			Log.w(THIS_FILE, "Invalid widget ID here...");
-		}
-	}
-	
 	private static String getPrefsKey(int widgetId) {
 		return "widget" + widgetId + "_account";
 	}
@@ -102,5 +74,29 @@ public class AccountWidgetConfigure extends AccountsChooserListActivity implemen
 		edit.remove(getPrefsKey(widgetId));
 		edit.commit();
 	}
+
+
+    @Override
+    public void onAccountClicked(long accountId) {
+
+        if(appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            SharedPreferences prefs = getSharedPreferences(WIDGET_PREFS, 0);
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putLong(getPrefsKey(appWidgetId), accountId);
+            edit.commit();
+            
+            
+            Intent resultValue = new Intent();
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                            appWidgetId);
+            setResult(RESULT_OK, resultValue);
+            
+            AccountWidgetProvider.updateWidget(this);
+            
+            finish();
+        }else {
+            Log.w(THIS_FILE, "Invalid widget ID here...");
+        }
+    }
 	
 }

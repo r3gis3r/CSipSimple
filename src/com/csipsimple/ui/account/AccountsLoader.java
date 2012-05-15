@@ -19,7 +19,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.ui.outgoingcall;
+package com.csipsimple.ui.account;
 
 import android.content.Context;
 import android.database.ContentObserver;
@@ -43,12 +43,13 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class OutgoingAccountsLoader extends AsyncTaskLoader<Cursor> {
+public class AccountsLoader extends AsyncTaskLoader<Cursor> {
 
     public static final String FIELD_ICON = "icon";
     public static final String FIELD_FORCE_CALL = "force_call";
@@ -61,15 +62,38 @@ public class OutgoingAccountsLoader extends AsyncTaskLoader<Cursor> {
 
     private Cursor currentResult;
 
-    private String numberToCall;
-    private boolean ignoreRewritting;
+    private final String numberToCall;
+    private final boolean ignoreRewritting;
+    private final boolean loadStatus;
+    private final boolean onlyActive;
+    private final boolean loadCallHandlerPlugins;
     
-    public OutgoingAccountsLoader(Context context, String number, boolean ignoreRewrittingRules) {
+    /**
+     * Constructor for loader for outgoing call context. <br/>
+     * This one will care of rewriting number and keep track of accounts status.
+     * @param context Your app context
+     * @param number Phone number for outgoing call
+     * @param ignoreRewrittingRules Should we ignore rewriting rules.
+     */
+    public AccountsLoader(Context context, String number, boolean ignoreRewrittingRules) {
         super(context);
         numberToCall = number;
         ignoreRewritting = ignoreRewrittingRules;
+        loadStatus = true;
+        onlyActive = true;
+        loadCallHandlerPlugins = true;
     }
     
+
+    public AccountsLoader(Context context, boolean onlyActiveAccounts, boolean withCallHandlerPlugins) {
+        super(context);
+        numberToCall = "";
+        ignoreRewritting = true;
+        loadStatus = false;
+        onlyActive = onlyActiveAccounts;
+        loadCallHandlerPlugins = withCallHandlerPlugins;
+        
+    }
 
     private ContentObserver loaderObserver = new ForceLoadContentObserver();
     private ArrayList<FilteredProfile> finalAccounts;
@@ -78,14 +102,15 @@ public class OutgoingAccountsLoader extends AsyncTaskLoader<Cursor> {
     @Override
     public Cursor loadInBackground() {
         // First register for status updates
-        getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
+        if(loadStatus) {
+            getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
                 true, loaderObserver);
-        
+        }
         
         finalAccounts = new ArrayList<FilteredProfile>();
         
         // Get all sip profiles
-        ArrayList<SipProfile> accounts = SipProfile.getAllProfiles(getContext(), true,
+        ArrayList<SipProfile> accounts = SipProfile.getAllProfiles(getContext(), onlyActive,
                 new String[] {
                         SipProfile.FIELD_ID,
                         SipProfile.FIELD_ACC_ID,
@@ -94,8 +119,12 @@ public class OutgoingAccountsLoader extends AsyncTaskLoader<Cursor> {
                         SipProfile.FIELD_WIZARD
                 });
         // And all external call handlers
-        Map<String, String> externalHandlers = CallHandlerPlugin.getAvailableCallHandlers(getContext());
-        
+        Map<String, String> externalHandlers;
+        if(loadCallHandlerPlugins) {
+            externalHandlers = CallHandlerPlugin.getAvailableCallHandlers(getContext());
+        }else {
+            externalHandlers = new HashMap<String, String>();
+        }
         if(TextUtils.isEmpty(numberToCall)) {
             // In case of empty number to call, just add everything without any other question
             for(SipProfile acc : accounts) {
@@ -348,8 +377,9 @@ public class OutgoingAccountsLoader extends AsyncTaskLoader<Cursor> {
             c.unregisterContentObserver(loaderObserver);
             c.close();
         }
-
-        getContext().getContentResolver().unregisterContentObserver(loaderObserver);
+        if(loadStatus) {
+            getContext().getContentResolver().unregisterContentObserver(loaderObserver);
+        }
     }
 
     

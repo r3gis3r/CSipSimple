@@ -16,7 +16,7 @@
         <item>@string/has_exactly_n_digits</item>
         <item>@string/has_more_than_n_digits</item>
         <item>@string/is_exactly</item>
-        <item></item>
+        <item>@string/custom_regexp</item>
     </string-array>
     <string-array name="replace_type">
         <item>@string/prefix_by</item>

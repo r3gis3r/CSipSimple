@@ -60,12 +60,6 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
         }
         setContentView(R.layout.outgoing_call_view);
         connectService();
-        //prefsWrapper = new PreferencesProviderWrapper(this);
-        /*
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setIcon(android.R.drawable.ic_menu_call);
-        getSupportActionBar().setTitle(getString(R.string.outgoing_call_chooser_call_text) + " " + phoneNumber);
-        */
     }
     
     private String phoneNumber = null;

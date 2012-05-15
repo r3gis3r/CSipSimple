@@ -407,7 +407,9 @@ Remove that too fine change trigger
                 android:resource="@xml/appwidget_info" />
         </receiver>
 
-        <activity android:name="com.csipsimple.widgets.AccountWidgetConfigure" >
+        <activity
+            android:name="com.csipsimple.widgets.AccountWidgetConfigure"
+            android:theme="@style/DarkTheme" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

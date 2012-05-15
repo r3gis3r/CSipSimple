@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.ui.account.AccountsLoader;
 import com.csipsimple.wizards.WizardUtils;
 
 public class OutgoingAccountsAdapter extends ResourceCursorAdapter {
@@ -64,7 +65,8 @@ public class OutgoingAccountsAdapter extends ResourceCursorAdapter {
             tag.name.setTextColor(color);
             tag.status.setText(context.getString(R.string.call) + " : " + nbr);
             
-            view.setAlpha(enabled ? 1.0f : 0.3f);
+            // TODO : set alpha cross 
+            //view.setAlpha(enabled ? 1.0f : 0.3f);
             
             byte[] iconBlob = cursor.getBlob(INDEX_ICON);
             if(iconBlob.length > 0) {
@@ -101,10 +103,10 @@ public class OutgoingAccountsAdapter extends ResourceCursorAdapter {
         if(INDEX_DISPLAY_NAME == null) {
             INDEX_DISPLAY_NAME = c.getColumnIndex(SipProfile.FIELD_DISPLAY_NAME);
             INDEX_WIZARD = c.getColumnIndex(SipProfile.FIELD_WIZARD);
-            INDEX_ICON = c.getColumnIndex(OutgoingAccountsLoader.FIELD_ICON);
-            INDEX_NBR = c.getColumnIndex(OutgoingAccountsLoader.FIELD_NBR_TO_CALL);
-            INDEX_STATUS_COLOR = c.getColumnIndex(OutgoingAccountsLoader.FIELD_STATUS_COLOR);
-            INDEX_STATUS_FOR_OUTGOING = c.getColumnIndex(OutgoingAccountsLoader.FIELD_STATUS_OUTGOING);
+            INDEX_ICON = c.getColumnIndex(AccountsLoader.FIELD_ICON);
+            INDEX_NBR = c.getColumnIndex(AccountsLoader.FIELD_NBR_TO_CALL);
+            INDEX_STATUS_COLOR = c.getColumnIndex(AccountsLoader.FIELD_STATUS_COLOR);
+            INDEX_STATUS_FOR_OUTGOING = c.getColumnIndex(AccountsLoader.FIELD_STATUS_OUTGOING);
         }
     }
     
