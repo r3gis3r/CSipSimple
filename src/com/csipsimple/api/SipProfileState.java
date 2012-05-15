@@ -533,10 +533,10 @@ public class SipProfileState implements Parcelable, Serializable{
 				int c2 = infos2.getPriority();
 				
 				if (c1 > c2) {
-					return -1;
+					return 1;
 				}
 				if (c1 < c2) {
-					return 1;
+					return -1;
 				}
 			}
 

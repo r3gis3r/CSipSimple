@@ -33,7 +33,7 @@ import android.telephony.PhoneNumberUtils;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
-import com.csipsimple.ui.OutgoingCallChooser;
+import com.csipsimple.ui.outgoingcall.OutgoingCallChooser;
 import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;

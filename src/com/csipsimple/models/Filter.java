@@ -683,7 +683,7 @@ public class Filter {
 	}
 	
 	public static void resetCache() {
-	    FILTERS_PER_ACCOUNT = null;
+	    FILTERS_PER_ACCOUNT = new HashMap<Long, List<Filter>>();
 	}
 	
 	public static Cursor getFiltersCursorForAccount(Context ctxt, long accountId) {

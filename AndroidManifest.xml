@@ -259,7 +259,7 @@ Remove that too fine change trigger
         </receiver>
 
         <activity
-            android:name="com.csipsimple.ui.OutgoingCallChooser"
+            android:name="com.csipsimple.ui.outgoingcall.OutgoingCallChooser"
             android:allowTaskReparenting="false"
             android:configChanges="orientation"
             android:excludeFromRecents="true"
@@ -314,7 +314,7 @@ Remove that too fine change trigger
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
-            android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
+            android:targetActivity="com.csipsimple.ui.outgoingcall.OutgoingCallChooser"
             android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
@@ -331,7 +331,7 @@ Remove that too fine change trigger
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
-            android:targetActivity="com.csipsimple.ui.OutgoingCallChooser"
+            android:targetActivity="com.csipsimple.ui.outgoingcall.OutgoingCallChooser"
             android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
