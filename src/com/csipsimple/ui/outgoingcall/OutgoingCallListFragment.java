@@ -131,9 +131,10 @@ public class OutgoingCallListFragment extends CSSListFragment {
     @Override
     public void changeCursor(Cursor c) {
         if(c != null) {
+            OutgoingCallChooser superActivity = ((OutgoingCallChooser)getActivity());
+            Long accountToCall = superActivity.getAccountToCallTo();
             // Move to first to search in this cursor
             c.moveToFirst();
-            
             // First of all, if only one is available... try call with it
             if(c.getCount() == 1) {
                 if(placeCall(c)) {
@@ -147,6 +148,14 @@ public class OutgoingCallListFragment extends CSSListFragment {
                         if(placeCall(c)) {
                             c.close();
                             return;
+                        }
+                    }
+                    if(accountToCall != SipProfile.INVALID_ID) {
+                        if(accountToCall == c.getLong(c.getColumnIndex(SipProfile.FIELD_ID))) {
+                            if(placeCall(c)) {
+                                c.close();
+                                return;
+                            }
                         }
                     }
                 } while(c.moveToNext());
