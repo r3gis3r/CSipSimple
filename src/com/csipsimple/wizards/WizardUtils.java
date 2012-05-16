@@ -641,6 +641,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_zeng, 9, 
                     new Locale[]{ locale("zh_CN"), locale("zh_TW")}, false, false, 
                     ZengCn.class));
+            WIZARDS_DICT.put("SIPME", new WizardInfo("SIPME", "sipme", 
+                    R.drawable.ic_wizard_sipme, 9, 
+                    new Locale[]{ new Locale("he") }, false, false, 
+                    SipMe.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

@@ -108,6 +108,11 @@ file_filter = res/values-<lang>/wizard_sonetel_strings.xml
 source_file = res/values/wizard_sonetel_strings.xml
 source_lang = en
 
+[csipsimple.wizard_sipme_strings]
+file_filter = res/values-<lang>/wizard_sipme_strings.xml
+source_file = res/values/wizard_sipme_strings.xml
+source_lang = en
+
 [csipsimple.wizard_strings]
 file_filter = res/values-<lang>/wizard_strings.xml
 source_file = res/values/wizard_strings.xml
