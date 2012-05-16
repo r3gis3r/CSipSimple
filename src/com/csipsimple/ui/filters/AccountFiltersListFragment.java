@@ -19,22 +19,17 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.ui.account;
+package com.csipsimple.ui.filters;
 
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.BaseColumns;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -47,62 +42,45 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.ui.account.AccountsEditListAdapter.AccountRowTag;
-import com.csipsimple.ui.account.AccountsEditListAdapter.OnCheckedRowListener;
-import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.utils.SipProfileJson;
+import com.csipsimple.models.Filter;
+import com.csipsimple.ui.account.AccountsEditListAdapter;
 import com.csipsimple.widgets.CSSListFragment;
 import com.csipsimple.widgets.DragnDropListView;
 import com.csipsimple.widgets.DragnDropListView.DropListener;
-import com.csipsimple.wizards.BasePrefsWizard;
-import com.csipsimple.wizards.WizardChooser;
-import com.csipsimple.wizards.WizardUtils;
-import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
-public class AccountsEditListFragment extends CSSListFragment implements /*OnQuitListener,*/ OnCheckedRowListener{
+public class AccountFiltersListFragment extends CSSListFragment {
+    private static final String THIS_FILE = "AccountFiltersListFragment";
 
     private boolean dualPane;
-	private Long curCheckPosition = SipProfile.INVALID_ID;
-	//private String curCheckWizard = WizardUtils.EXPERT_WIZARD_TAG;
-	private final Handler mHandler = new Handler();
-	private AccountStatusContentObserver statusObserver = null;
+	private Long curCheckFilterId = SipProfile.INVALID_ID;
     private View mHeaderView;
-    private AccountsEditListAdapter mAdapter;
-	
-	class AccountStatusContentObserver extends ContentObserver {
-		
-		public AccountStatusContentObserver(Handler h) {
-			super(h);
-		}
-
-		public void onChange(boolean selfChange) {
-			Log.d(THIS_FILE, "Accounts status.onChange( " + selfChange + ")");
-			((BaseAdapter) getListAdapter()).notifyDataSetChanged();
-		}
-	}
+    private AccountFiltersListAdapter mAdapter;
+	private long accountId;
 	
 	
 	private final static String CURRENT_CHOICE = "curChoice";
-	//private final static String CURRENT_WIZARD = "curWizard";
 
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+	}
+	
+	public void setAccountId(long accId) {
+	    accountId = accId;
 	}
 	
 	@Override 
@@ -121,7 +99,7 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
 
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            curCheckPosition = savedInstanceState.getLong(CURRENT_CHOICE, SipProfile.INVALID_ID);
+            curCheckFilterId = savedInstanceState.getLong(CURRENT_CHOICE, SipProfile.INVALID_ID);
             //curCheckWizard = savedInstanceState.getString(CURRENT_WIZARD);
         }
         setListShown(false);
@@ -129,16 +107,12 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
             if(mHeaderView != null) {
                 lv.addHeaderView(mHeaderView , null, true);
             }
-            mAdapter = new AccountsEditListAdapter(getActivity(), null);
-            mAdapter.setOnCheckedRowListener(this);
+            mAdapter = new AccountFiltersListAdapter(getActivity(), null);
             //getListView().setEmptyView(getActivity().findViewById(R.id.progress_container));
             //getActivity().findViewById(android.R.id.empty).setVisibility(View.GONE);
             setListAdapter(mAdapter);
             registerForContextMenu(lv);
     
-            // Prepare the loader.  Either re-connect with an existing one,
-            // or start a new one.
-            getLoaderManager().initLoader(0, null, this);
             
             lv.setVerticalFadingEdgeEnabled(true);
         }
@@ -160,19 +134,21 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
         	lv.setFadingEdgeLength(100);
         }
     }
-
-	private static final int CHOOSE_WIZARD = 0;
-	private static final int CHANGE_WIZARD = 1;
+	@Override
+	public void onResume() {
+	    super.onResume();
+        getLoaderManager().initLoader(0, null, this);
+	}
 	
 	// Menu stuff
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(R.string.add_account)
+        menu.add(R.string.add_filter)
                 .setIcon(android.R.drawable.ic_menu_add)
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        onClickAddAccount();
+                        onClickAddFilter();
                         return true;
                     }
                 })
@@ -189,54 +165,16 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
                     }
                 }).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
-        menu.add(R.string.backup_restore).setIcon(android.R.drawable.ic_menu_save)
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-
-                        // Populate choice list
-                        List<String> items = new ArrayList<String>();
-                        items.add(getResources().getString(R.string.backup));
-                        final File backupDir = PreferencesWrapper.getConfigFolder(getActivity());
-                        if (backupDir != null) {
-                            String[] filesNames = backupDir.list();
-                            for (String fileName : filesNames) {
-                                items.add(fileName);
-                            }
-                        }
-
-                        final String[] fItems = (String[]) items.toArray(new String[0]);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(R.string.backup_restore);
-                        builder.setItems(fItems, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-                                if (item == 0) {
-                                    SipProfileJson.saveSipConfiguration(getActivity());
-                                } else {
-                                    File fileToRestore = new File(backupDir + File.separator
-                                            + fItems[item]);
-                                    SipProfileJson.restoreSipConfiguration(getActivity(),
-                                            fileToRestore);
-                                }
-                            }
-                        });
-                        builder.setCancelable(true);
-                        AlertDialog backupDialog = builder.create();
-                        backupDialog.show();
-                        return true;
-                    }
-                });
-		
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 	
-	private static final String THIS_FILE = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        // Use custom drag and drop view
+        // Use custom drag and drop view -- reuse the one of accounts_edit_list
         View v = inflater.inflate(R.layout.accounts_edit_list, container, false);
+
         
         final DragnDropListView lv = (DragnDropListView) v.findViewById(android.R.id.list);
         
@@ -264,9 +202,9 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
                 // Finally save that in db
                 ContentResolver cr = getActivity().getContentResolver();
                 for(i=0; i<orderedList.size(); i++) {
-                    Uri uri = ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, orderedList.get(i));
+                    Uri uri = ContentUris.withAppendedId(SipManager.FILTER_ID_URI_BASE, orderedList.get(i));
                     ContentValues cv = new ContentValues();
-                    cv.put(SipProfile.FIELD_PRIORITY, i);
+                    cv.put(Filter.FIELD_PRIORITY, i);
                     cr.update(uri, cv, null, null);
                 }
             }
@@ -275,25 +213,27 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
         OnClickListener addClickButtonListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickAddAccount();
+                onClickAddFilter();
             }
         };
         // Header view
         mHeaderView = inflater.inflate(R.layout.generic_add_header_list, container, false);
         mHeaderView.setOnClickListener(addClickButtonListener);
+        ((TextView) mHeaderView.findViewById(R.id.text)).setText(R.string.add_filter);
         
         // Empty view
         Button bt = (Button) v.findViewById(android.R.id.empty);
+        bt.setText(R.string.add_filter);
         bt.setOnClickListener(addClickButtonListener);
         
         return v;
     }
     
     private void updateCheckedItem() {
-    	if(curCheckPosition != SipProfile.INVALID_ID) {
+    	if(curCheckFilterId != SipProfile.INVALID_ID) {
 	    	for(int i=0; i<getListAdapter().getCount(); i++) {
 	        	long profId = getListAdapter().getItemId(i);
-	        	if(profId == curCheckPosition) {
+	        	if(profId == curCheckFilterId) {
 	        		getListView().setItemChecked(i, true);
 	        	}
 	        }
@@ -308,25 +248,9 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(CURRENT_CHOICE, curCheckPosition);
+        outState.putLong(CURRENT_CHOICE, curCheckFilterId);
     }
     
-
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	statusObserver = new AccountStatusContentObserver(mHandler);
-    	getActivity().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI, true, statusObserver);
-    	mAdapter.notifyDataSetChanged();
-    }
-    
-    @Override
-    public void onPause() {
-    	super.onPause();
-    	if(statusObserver != null) {
-    		getActivity().getContentResolver().unregisterContentObserver(statusObserver);
-    	}
-    }
 
     
     @Override
@@ -337,9 +261,8 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
         ListView lv = getListView();
         lv.setItemChecked(position, true);
         
-        curCheckPosition = id;
-        Cursor c = (Cursor) getListAdapter().getItem(position - lv.getHeaderViewsCount());
-        showDetails(id, c.getString(c.getColumnIndex(SipProfile.FIELD_WIZARD)));
+        curCheckFilterId = id;
+        showDetails(id);
     }
 
     /**
@@ -347,7 +270,7 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
      * displaying a fragment in-place in the current UI, or starting a
      * whole new activity in which it is displayed.
      */
-    private void showDetails(long profileId, String wizard) {
+    private void showDetails(long filterId) {
         //curCheckPosition = index;
 
         /*
@@ -371,52 +294,27 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
         	
             // Otherwise we need to launch a new activity to display
             // the dialog fragment with selected text.
-            Intent intent = new Intent();
-            //intent.setClass(getActivity(), AccountEdit.class);
-            intent.setClass(getActivity(), BasePrefsWizard.class);
-            if(profileId != SipProfile.INVALID_ID) {
-                intent.putExtra(SipProfile.FIELD_ID, profileId);
-            }
-            intent.putExtra(SipProfile.FIELD_WIZARD, wizard);
-            startActivity(intent);
+
+            Intent it = new Intent(getActivity(), EditFilter.class);
+            it.putExtra(Intent.EXTRA_UID, filterId);
+            it.putExtra(Filter.FIELD_ACCOUNT, accountId);
+            startActivity(it);
         	
         	/*
         }
         */
     }
 
-    /*
-	@Override
-	public void onQuit() {
-		curCheckPosition = SipProfile.INVALID_ID;
-		if(dualPane) {
-			showDetails(curCheckPosition, null);
-		}
-	}
-
-	@Override
-	public void onShowProfile(long profileId) {
-		curCheckPosition = profileId;
-		updateCheckedItem();
-	}
-	*/
-
-	@Override
-	public void onToggleRow(AccountRowTag tag) {
-		ContentValues cv = new ContentValues();
-		cv.put(SipProfile.FIELD_ACTIVE, !tag.activated);
-		getActivity().getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, tag.accountId), cv, null, null);
-	}
-    
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		 return new CursorLoader(getActivity(), SipProfile.ACCOUNT_URI, new String[] {
-			SipProfile.FIELD_ID + " AS " + BaseColumns._ID,
-			SipProfile.FIELD_ID,
-			SipProfile.FIELD_DISPLAY_NAME,
-			SipProfile.FIELD_WIZARD,
-			SipProfile.FIELD_ACTIVE
-		 }, null, null, null);
+		 return new CursorLoader(getActivity(), SipManager.FILTER_URI, new String[] {
+			BaseColumns._ID,
+			Filter.FIELD_ACCOUNT,
+            Filter.FIELD_ACTION,
+            Filter.FIELD_MATCHES,
+			Filter.FIELD_PRIORITY,
+			Filter.FIELD_REPLACE
+		 }, Filter.FIELD_ACCOUNT + "=?", new String[] {Long.toString(accountId)}, Filter.DEFAULT_ORDER);
 		 
 	}
 
@@ -427,116 +325,58 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
 		updateCheckedItem();
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
-		    
-		    if(requestCode == CHOOSE_WIZARD) {
-		        // Wizard has been choosen, now create an account
-    			String wizardId = data.getStringExtra(WizardUtils.ID);
-    			if (wizardId != null) {
-    			    showDetails(SipProfile.INVALID_ID, wizardId);
-    			}
-            } else if (requestCode == CHANGE_WIZARD) {
-                // Change wizard done for this account.
-                String wizardId = data.getStringExtra(WizardUtils.ID);
-                long accountId = data.getLongExtra(Intent.EXTRA_UID, SipProfile.INVALID_ID);
-                
-                if (wizardId != null && accountId != SipProfile.INVALID_ID) {
-                    ContentValues cv = new ContentValues();
-                    cv.put(SipProfile.FIELD_WIZARD, wizardId);
-                    getActivity().getContentResolver().update(
-                            ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, accountId),
-                            cv, null, null);
-
-                }
-
-            }
-		}
-
-	}
-
 
 	// Context menu stuff
 	// Activate / deactive menu
-    public static final int MENU_ITEM_ACTIVATE = Menu.FIRST;
     // Modify the account
-    public static final int MENU_ITEM_MODIFY = Menu.FIRST + 1;
+    public static final int MENU_ITEM_MODIFY = Menu.FIRST ;
     // Delete the account
-    public static final int MENU_ITEM_DELETE = Menu.FIRST + 2;
-    // Change the wizard of the account
-    public static final int MENU_ITEM_WIZARD = Menu.FIRST + 3;
+    public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
 
     /**
-     * Retrieve sip account from a given context menu info pressed
+     * Retrieve filter id from a given context menu info pressed
      * @param cmi The context menu info to retrieve infos from
-     * @return corresponding sip profile if everything goes well, null if not able to retrieve profile
+     * @return corresponding filter id if everything goes well, -1 if not able to retrieve filter
      */
-    private SipProfile profileFromContextMenuInfo(ContextMenuInfo cmi) {
+    private long filterIdFromContextMenuInfo(ContextMenuInfo cmi) {
         AdapterView.AdapterContextMenuInfo info;
         try {
             info = (AdapterView.AdapterContextMenuInfo) cmi;
         } catch (ClassCastException e) {
             Log.e(THIS_FILE, "bad menuInfo", e);
-            return null;
+            return -1;
         }
-        Cursor c = (Cursor) getListAdapter().getItem(info.position - getListView().getHeaderViewsCount());
-        if (c == null) {
-            // For some reason the requested item isn't available, do nothing
-            return null;
-        }
-        return new SipProfile(c);
+        return info.id;
     }
     
 	@Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        final SipProfile account = profileFromContextMenuInfo(menuInfo);
-        if(account == null) {
+        final long filterId = filterIdFromContextMenuInfo(menuInfo);
+        if(filterId == -1) {
             return;
         }
-        WizardInfo wizardInfos = WizardUtils.getWizardClass(account.wizard);
 
-        // Setup the menu header
-        menu.setHeaderTitle(account.display_name);
-        menu.setHeaderIcon(wizardInfos.icon);
-
-        menu.add(0, MENU_ITEM_ACTIVATE, 0, account.active ? R.string.deactivate_account
-                : R.string.activate_account);
-        menu.add(0, MENU_ITEM_MODIFY, 0, R.string.modify_account);
-        menu.add(0, MENU_ITEM_DELETE, 0, R.string.delete_account);
-        menu.add(0, MENU_ITEM_WIZARD, 0, R.string.choose_wizard);
+        menu.add(0, MENU_ITEM_MODIFY, 0, R.string.edit);
+        menu.add(0, MENU_ITEM_DELETE, 0, R.string.delete_filter);
 
     }
 
 	@Override
 	public boolean onContextItemSelected(android.view.MenuItem item) {
-	    final SipProfile account = profileFromContextMenuInfo(item.getMenuInfo());
-        if (account == null) {
+	    final long filterId = filterIdFromContextMenuInfo(item.getMenuInfo());
+        if (filterId == -1) {
             // For some reason the requested item isn't available, do nothing
             return super.onContextItemSelected(item);
         }
         
         switch (item.getItemId()) {
             case MENU_ITEM_DELETE: {
-                getActivity().getContentResolver().delete(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, account.id), null, null);
+                getActivity().getContentResolver().delete(ContentUris.withAppendedId(SipManager.FILTER_ID_URI_BASE, filterId), null, null);
                 return true;
             }
             case MENU_ITEM_MODIFY : {
-                showDetails(account.id, account.wizard);
-                return true;
-            }
-            case MENU_ITEM_ACTIVATE: {
-                ContentValues cv = new ContentValues();
-                cv.put(SipProfile.FIELD_ACTIVE, ! account.active);
-                getActivity().getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, account.id), cv, null, null);
-                return true;
-            }
-            case MENU_ITEM_WIZARD:{
-                Intent it = new Intent(getActivity(), WizardChooser.class);
-                it.putExtra(Intent.EXTRA_UID, account.id);
-                startActivityForResult(it, CHANGE_WIZARD);
+                showDetails(filterId);
                 return true;
             }
         }
@@ -544,9 +384,8 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
 
 	}
 	
-	private void onClickAddAccount() {
-	    startActivityForResult(new Intent(getActivity(), WizardChooser.class),
-                CHOOSE_WIZARD);
+	private void onClickAddFilter() {
+	    showDetails(-1);
 	}
 
     @Override

@@ -19,7 +19,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.ui;
+package com.csipsimple.ui.filters;
 
 import android.app.Activity;
 import android.content.ContentUris;
@@ -47,7 +47,7 @@ import com.csipsimple.utils.Log;
 public class EditFilter extends Activity implements OnItemSelectedListener, TextWatcher {
 
 	private static final String THIS_FILE = "EditFilter";
-	private int filterId;
+	private Long filterId;
 	private Filter filter;
 	private Button saveButton;
 	private long accountId;
@@ -67,7 +67,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		
 		//Get back the concerned account and if any set the current (if not a new account is created)
 		Intent intent = getIntent();
-        filterId = intent.getIntExtra(Intent.EXTRA_UID, -1);
+        filterId = intent.getLongExtra(Intent.EXTRA_UID, -1);
         accountId = intent.getLongExtra(Filter.FIELD_ACCOUNT, SipProfile.INVALID_ID);
         
         if(accountId == SipProfile.INVALID_ID) {

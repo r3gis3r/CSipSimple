@@ -43,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Log;
 
 public class DragnDropListView extends ListView {
 
@@ -95,6 +96,7 @@ public class DragnDropListView extends ListView {
 			if (itemnum != AdapterView.INVALID_POSITION) {
 
 				ViewGroup item = (ViewGroup) getChildAt(itemnum - getFirstVisiblePosition());
+				Log.d("DnD view", "Start dragging at " + (itemnum - getFirstVisiblePosition()) + " for "+ itemnum + " # "+ getFirstVisiblePosition());
 				mDragPoint = y - item.getTop();
 				mCoordOffset = ((int) ev.getRawY()) - y;
 				View dragger = item.findViewById(grabberId);
@@ -121,6 +123,7 @@ public class DragnDropListView extends ListView {
 					int touchSlop = mTouchSlop;
 					mUpperBound = Math.min(y - touchSlop, mHeight / 3);
 					mLowerBound = Math.max(y + touchSlop, mHeight * 2 / 3);
+					item.setDrawingCacheEnabled(false);
 					return false;
 				}
 				mDragView = null;

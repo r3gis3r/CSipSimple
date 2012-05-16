@@ -23,39 +23,45 @@
     android:id="@+id/entiere_line"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:gravity="center_vertical" >
+    android:gravity="bottom" >
 
     <!-- grabber -->
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.csipsimple.widgets.DontPressWithParentLayout
+        android:id="@+id/grabber"
+        style="@style/list_left_column"
+        android:layout_height="?android:attr/listPreferredItemHeight"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/empty_description"
-        android:src="@drawable/ic_mp_move" />
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/empty_description"
+            android:src="@drawable/grabber" />
+    </com.csipsimple.widgets.DontPressWithParentLayout>
 
     <ImageView
         android:id="@+id/action_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/empty_description" />
-
-    <!-- The height is set to half the height of the parent, which is 64 dip -->
 
     <TextView
         android:id="@+id/line1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignWithParentIfMissing="true"
+        android:layout_width="fill_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="9dip"
+        android:layout_toLeftOf="@id/grabber"
         android:layout_toRightOf="@id/action_icon"
         android:ellipsize="marquee"
-        android:paddingLeft="9dip"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

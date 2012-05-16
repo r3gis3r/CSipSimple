@@ -19,44 +19,44 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.ui.prefs;
 
-import android.content.Intent;
+package com.csipsimple.ui.filters;
+
 import android.os.Bundle;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.ui.account.AccountsChooserListActivity;
-import com.csipsimple.ui.filters.AccountFilters;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.Log;
 
+public class AccountFilters extends SherlockFragmentActivity {
 
-public class PrefsFilters  extends AccountsChooserListActivity {
-	
-    
+    private static final String THIS_FILE = "AccountFilters";
+    private long accountId = SipProfile.INVALID_ID;
+    private AccountFiltersListFragment listFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-    
-	@Override
-	protected boolean showInternalAccounts() {
-		return true;
-	}
 
-    @Override
-    public void onAccountClicked(long id) {
-        if(id != SipProfile.INVALID_ID){
-            Intent it = new Intent(this, AccountFilters.class);
-            it.putExtra(SipProfile.FIELD_ID,  id);
-            startActivity(it);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            accountId = extras.getLong(SipProfile.FIELD_ID, -1);
         }
-    }
-    
 
-    @Override
+        if (accountId == -1) {
+            Log.e(THIS_FILE, "You provide an empty account id....");
+            finish();
+        }
+
+        setContentView(R.layout.account_filters_view);
+        listFragment = (AccountFiltersListFragment) getSupportFragmentManager().findFragmentById(R.id.list);
+        listFragment.setAccountId(accountId);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == Compatibility.getHomeMenuId()) {
             finish();

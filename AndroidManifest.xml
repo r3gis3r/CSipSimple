@@ -185,12 +185,12 @@ Remove that too fine change trigger
 
         <!-- Accounts -->
         <activity
-            android:name="com.csipsimple.ui.account.AccountFilters"
+            android:name="com.csipsimple.ui.filters.AccountFilters"
             android:configChanges="orientation"
             android:label="@string/filters"
             android:theme="@style/DarkTheme" />
         <activity
-            android:name="com.csipsimple.ui.EditFilter"
+            android:name="com.csipsimple.ui.filters.EditFilter"
             android:configChanges="orientation"
             android:label="@string/filters"
             android:theme="@style/DarkTheme" />
