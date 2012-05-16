@@ -25,7 +25,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
@@ -284,7 +283,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
     public void placeCall(String number, Long accId) {
         if(!TextUtils.isEmpty(number)) {
             Intent it = new Intent(Intent.ACTION_CALL);
-            it.setData(Uri.fromParts("csip", SipUri.getCanonicalSipContact(number, false), null));
+            it.setData(SipUri.forgeSipUri("csip", SipUri.getCanonicalSipContact(number, false)));
             it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if(accId != null) {
                 it.putExtra(SipProfile.FIELD_ACC_ID, accId);
@@ -402,7 +401,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
                 String number = mAdapter.getCallRemoteAtPostion(i);
                 if(!TextUtils.isEmpty(number)) {
                     Intent it = new Intent(Intent.ACTION_DIAL);
-                    it.setData(Uri.fromParts("sip", number, null));
+                    it.setData(SipUri.forgeSipUri("sip", number));
                     startActivity(it);
                 }
                 break;

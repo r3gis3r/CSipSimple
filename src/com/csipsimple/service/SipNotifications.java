@@ -21,10 +21,6 @@
 
 package com.csipsimple.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -32,7 +28,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.provider.CallLog;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
@@ -42,15 +37,19 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
-import com.csipsimple.api.SipManager;
-import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.RegistrationNotification;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class SipNotifications {
 
@@ -317,7 +316,7 @@ public class SipNotifications {
 
 		Intent notificationIntent = new Intent(Intent.ACTION_CALL);
 		if(acc != null) {
-    		notificationIntent.setData(Uri.fromParts("csip", acc.vm_nbr + "@" + acc.getDefaultDomain(), null));
+    		notificationIntent.setData(SipUri.forgeSipUri("csip", acc.vm_nbr + "@" + acc.getDefaultDomain()));
 			notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
 		}
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

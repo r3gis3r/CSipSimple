@@ -42,10 +42,12 @@ public final class SipUri {
 
     private final static String SIP_SCHEME_RULE = "sip(?:s)?|tel";
     private final static String DIGIT_NBR_RULE = "^[0-9\\-#\\+\\*\\(\\)]+$";
+    private final static Pattern SIP_CONTACT_ADDRESS_PATTERN = Pattern
+            .compile("^([^@:]+)@([^@:]+)$");
     private final static Pattern SIP_CONTACT_PATTERN = Pattern
-            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?("+SIP_SCHEME_RULE+"):([^@]*)@([^>]*)(?:>)?");
+            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?("+SIP_SCHEME_RULE+"):([^@]+)@([^>]+)(?:>)?$");
     private final static Pattern SIP_HOST_PATTERN = Pattern
-            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?("+SIP_SCHEME_RULE+"):([^@>]*)(?:>)?");
+            .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?("+SIP_SCHEME_RULE+"):([^@>]+)(?:>)?$");
 
     // Contact related
     /**
@@ -126,8 +128,14 @@ public final class SipUri {
                     parsedInfos.domain = m.group(3);
                     parsedInfos.scheme = m.group(2);
                 }else {
-                    // Final fallback, we have only a username given
-                    parsedInfos.userName = sipUri;
+                    m = SIP_CONTACT_ADDRESS_PATTERN.matcher(sipUri);
+                    if(m.matches()) {
+                        parsedInfos.userName = Uri.decode(m.group(1));
+                        parsedInfos.domain = m.group(2);
+                    }else {
+                        // Final fallback, we have only a username given
+                        parsedInfos.userName = sipUri;
+                    }
                 }
             }
         }
@@ -217,7 +225,15 @@ public final class SipUri {
                     sb.append(m.group(4));
                 }
             } else {
-                sb.append(sipContact);
+                m = SIP_CONTACT_ADDRESS_PATTERN.matcher(sipContact);
+                if(m.matches()) {
+                    if(includeScheme) {
+                        sb.append("sip:");
+                    }
+                    sb.append(sipContact);
+                }else {
+                    sb.append(sipContact);
+                }
             }
         }
 
@@ -272,6 +288,10 @@ public final class SipUri {
         }
 
         return parsedInfos;
+    }
+    
+    public static Uri forgeSipUri(String scheme, String contact) {
+        return Uri.fromParts(scheme, contact, null);
     }
 
 }

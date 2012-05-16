@@ -367,7 +367,7 @@ public class CallLogDetailsFragment extends SherlockFragment {
         View mainAction = convertView.findViewById(R.id.call_and_sms_main_action);
         mainAction.setOnClickListener(mPrimaryActionListener);
         mainAction.setContentDescription(callText);
-        mainAction.setTag(number);
+        mainAction.setTag(SipUri.getCanonicalSipContact(number.toString(), false));
         text.setText(callText);
 
         TextView label = (TextView) convertView.findViewById(R.id.call_and_sms_label);

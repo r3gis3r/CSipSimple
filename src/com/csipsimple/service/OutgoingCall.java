@@ -21,22 +21,22 @@
 
 package com.csipsimple.service;
 
-import java.util.Map;
-
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.telephony.PhoneNumberUtils;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.models.Filter;
 import com.csipsimple.ui.outgoingcall.OutgoingCallChooser;
 import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
+
+import java.util.Map;
 
 public class OutgoingCall extends BroadcastReceiver {
 
@@ -115,7 +115,7 @@ public class OutgoingCall extends BroadcastReceiver {
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
 				// Add csipsimple protocol :)
-				outgoingCallChooserIntent.setData(Uri.fromParts("sip", number, null));
+				outgoingCallChooserIntent.setData(SipUri.forgeSipUri("sip", number));
 				outgoingCallChooserIntent.setClassName(context, OutgoingCallChooser.class.getName());
 				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				Log.d(THIS_FILE, "Start outgoing call chooser for CSipSimple");
