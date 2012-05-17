@@ -22,6 +22,15 @@
 package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
@@ -31,6 +40,17 @@ import com.csipsimple.utils.PreferencesWrapper;
 
 public class Cryptel extends SimpleImplementation {
 
+    protected static final int DID_SUCCEED = 0;
+    protected static final int DID_ERROR = 1;
+    
+    private static final String webCreationPage = "http://50.28.50.63/index.php";
+
+    private LinearLayout customWizard;
+    private TextView customWizardText;
+    private WebView webView;
+    private LinearLayout settingsContainer;
+    private LinearLayout validationBar;
+    
 	@Override
 	protected String getDomain() {
 		return "sip.cryptelcore.net:5061";
@@ -51,6 +71,18 @@ public class Cryptel extends SimpleImplementation {
         
         accountPassword.setTitle(R.string.w_cryptel_password);
         accountPassword.setDialogTitle(R.string.w_cryptel_password);
+        
+
+        //Get wizard specific row
+        customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
+        customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
+        
+        validationBar = (LinearLayout) parent.findViewById(R.id.validation_bar);
+        
+        updateAccountInfos(account);
+        
+        // add webview
+        initWebView();
 	}
 	
 	@Override
@@ -109,6 +141,118 @@ public class Cryptel extends SimpleImplementation {
     @Override
     public boolean needRestart() {
         return true;
+    }
+    
+
+    private ProgressBar loadingProgressBar;
+    
+
+    private void updateAccountInfos(final SipProfile acc) {
+        if (acc != null && acc.id != SipProfile.INVALID_ID) {
+            customWizard.setVisibility(View.GONE);
+            /*
+            Thread t = new Thread() {
+
+                public void run() {
+                    try {
+                        HttpClient httpClient = new DefaultHttpClient();
+                        
+                        String requestURL = "https://soap.ippi.fr/credit/check_credit.php?"
+                            + "login=" + acc.username
+                            + "&code=" + MD5.MD5Hash(acc.data + DateFormat.format("yyyyMMdd", new Date()));
+                        
+                        HttpGet httpGet = new HttpGet(requestURL);
+
+                        // Create a response handler
+                        HttpResponse httpResponse = httpClient.execute(httpGet);
+                        if(httpResponse.getStatusLine().getStatusCode() == 200) {
+                            InputStreamReader isr = new InputStreamReader(httpResponse.getEntity().getContent());
+                            BufferedReader br = new BufferedReader(isr);
+                            String line = br.readLine();
+                            creditHandler.sendMessage(creditHandler.obtainMessage(DID_SUCCEED, line));
+                        }else {
+                            creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
+                        }
+                    } catch (Exception e) {
+                        creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
+                    }
+                }
+            };
+            t.start();
+            */
+        } else {
+            // add a row to link 
+            customWizardText.setText(R.string.create_account);
+            customWizard.setVisibility(View.VISIBLE);
+            customWizard.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    settingsContainer.setVisibility(View.GONE);
+                    validationBar.setVisibility(View.GONE);
+                    webView.setVisibility(View.VISIBLE);
+                    webView.loadUrl(webCreationPage);
+                    webView.requestFocus(View.FOCUS_DOWN);
+                }
+            });
+        }
+    }
+    
+
+    private void initWebView() {
+
+        webView = new WebView(parent);
+        settingsContainer = (LinearLayout) parent.findViewById(R.id.settings_container);
+        LinearLayout globalContainer = (LinearLayout) settingsContainer.getParent();
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        lp.weight = 1;
+        webView.setVisibility(View.GONE);
+        globalContainer.addView(webView, 0, lp);
+        
+        loadingProgressBar = new ProgressBar(parent, null, android.R.attr.progressBarStyleHorizontal);
+        lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 30);
+        lp.gravity = 1;
+        loadingProgressBar.setVisibility(View.GONE);
+        loadingProgressBar.setIndeterminate(false);
+        loadingProgressBar.setMax(100);
+        globalContainer.addView(loadingProgressBar, 0, lp);
+        
+        
+        // Setup webview 
+        webView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
+        
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setSavePassword(false);
+        webSettings.setSaveFormData(false);
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setSupportZoom(false);
+        webSettings.setCacheMode(WebSettings.LOAD_NORMAL);
+        webSettings.setNeedInitialFocus(true);
+        webView.addJavascriptInterface(new JSInterface(), "CSipSimpleWizard");
+        
+        // Adds Progress bar Support
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                if(progress < 100) {
+                    loadingProgressBar.setVisibility(View.VISIBLE);
+                    loadingProgressBar.setProgress(progress); 
+                }else {
+                    loadingProgressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public class JSInterface {
+        public void finishAccountCreation(boolean success, String userName, String password) {
+            webView.setVisibility(View.GONE);
+            settingsContainer.setVisibility(View.VISIBLE);
+            validationBar.setVisibility(View.VISIBLE);
+            if(success) {
+                setUsername(userName);
+                setPassword(password);
+                parent.updateValidation();
+            }
+        }
     }
     
 }

@@ -171,7 +171,7 @@ public class Ippi extends SimpleImplementation {
 			t.start();
 		} else {
 			// add a row to link 
-			customWizardText.setText("Create account");
+			customWizardText.setText(R.string.create_account);
 			customWizard.setVisibility(View.VISIBLE);
 			customWizard.setOnClickListener(new OnClickListener() {
 				@Override
