@@ -57,6 +57,7 @@ public class PjSipAccount {
 	private int profile_vid_auto_transmit = -1;
     private int profile_enable_qos;
     private int profile_qos_dscp;
+    private boolean profile_default_rtp_port = true;
 	
 	//private boolean hasZrtpValue = false;
 
@@ -181,6 +182,7 @@ public class PjSipAccount {
 		pjsua_transport_config rtpCfg = cfg.getRtp_cfg();
 		if(profile.rtp_port >= 0) {
 		    rtpCfg.setPort(profile.rtp_port);
+		    profile_default_rtp_port = false;
 		}
 		if(!TextUtils.isEmpty(profile.rtp_public_addr)) {
 		    rtpCfg.setPublic_addr(pjsua.pj_str_copy(profile.rtp_public_addr));
@@ -276,12 +278,14 @@ public class PjSipAccount {
 		
 		// RTP cfg
 		pjsua_transport_config rtpCfg = cfg.getRtp_cfg();
+		if(profile_default_rtp_port) {
+		    rtpCfg.setPort(prefs.getRTPPort());
+		}
 		boolean hasQos = prefs.getPreferenceBooleanValue(SipConfigManager.ENABLE_QOS);
         if(profile_enable_qos >= 0) {
             hasQos = (profile_enable_qos == 1);
         }
         if(hasQos) {
-            
             // TODO - video?
             rtpCfg.setQos_type(pj_qos_type.PJ_QOS_TYPE_VOICE);
             pj_qos_params qosParam = rtpCfg.getQos_params();
@@ -294,6 +298,7 @@ public class PjSipAccount {
                 qosParam.setFlags((short) 1); // DSCP
             }
         }
+        
 	}
 	
 	
