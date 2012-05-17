@@ -21,9 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import java.util.HashMap;
-
-import android.net.Uri;
 import android.preference.EditTextPreference;
 
 import com.csipsimple.R;
@@ -31,6 +28,8 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.utils.Log;
+
+import java.util.HashMap;
 
 public class Basic extends BaseImplementation {
 	protected static final String THIS_FILE = "Basic W";
@@ -110,7 +109,7 @@ public class Basic extends BaseImplementation {
 		account.display_name = accountDisplayName.getText().trim();
 		
 		String[] serverParts = accountServer.getText().split(":");
-		account.acc_id = "<sip:" + Uri.encode(accountUserName.getText()).trim() + "@"+serverParts[0].trim()+">";
+		account.acc_id = "<sip:" + SipUri.encodeUser(accountUserName.getText().trim()) + "@"+serverParts[0].trim()+">";
 		
 		String regUri = "sip:" + accountServer.getText();
 		account.reg_uri = regUri;

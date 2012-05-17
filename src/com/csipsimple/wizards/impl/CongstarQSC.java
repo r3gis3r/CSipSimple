@@ -21,11 +21,11 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.net.Uri;
 import android.text.InputType;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 
 public class CongstarQSC extends SimpleImplementation {
     
@@ -60,7 +60,7 @@ public class CongstarQSC extends SimpleImplementation {
         account.proxies = new String[] {"sip:farm2.tel2.congstar.qsc.de"};
         account.reg_uri = "sip:tel2.congstar.de";
         account.transport = SipProfile.TRANSPORT_UDP;
-        String uname = Uri.encode(accountUsername.getText().trim());
+        String uname = SipUri.encodeUser(accountUsername.getText().trim());
         account.acc_id = uname + " <sip:" + uname + "@" + getDomain() + ">";
         return account;
     }

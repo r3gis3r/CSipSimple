@@ -88,7 +88,7 @@ public final class SipUri {
                 buildString.append("<" + scheme + ":");
             }
             if(!TextUtils.isEmpty(userName)) {
-                buildString.append(Uri.encode(userName) + "@");
+                buildString.append(encodeUser(userName) + "@");
             }
             buildString.append(domain + ">");
             
@@ -292,6 +292,14 @@ public final class SipUri {
     
     public static Uri forgeSipUri(String scheme, String contact) {
         return Uri.fromParts(scheme, contact, null);
+    }
+    
+    public static String encodeUser(String user) {
+        //user             =  1*( unreserved / escaped / user-unreserved )
+        //user-unreserved  =  "&" / "=" / "+" / "$" / "," / ";" / "?" / "/"
+        //unreserved  =  alphanum / mark
+        //mark        =  "-" / "_" / "." / "!" / "~" / "*" / "'" / "(" / ")"
+        return Uri.encode(user, "&=+$,;?/-_.!~*'()");
     }
 
 }

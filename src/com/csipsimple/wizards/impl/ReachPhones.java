@@ -21,11 +21,11 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.net.Uri;
 import android.text.InputType;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.utils.PreferencesWrapper;
 
 public class ReachPhones extends SimpleImplementation {
@@ -53,7 +53,7 @@ public class ReachPhones extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		String finalUsername = accountUsername.getText().trim();
-		account.acc_id = "\"1-877-617-1017\" <sip:" + Uri.encode(finalUsername) + "@"+getDomain()+">";
+		account.acc_id = "\"1-877-617-1017\" <sip:" + SipUri.encodeUser(finalUsername) + "@"+getDomain()+">";
 		
 		return account;
 	}

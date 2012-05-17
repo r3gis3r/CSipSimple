@@ -21,9 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import java.util.HashMap;
-
-import android.net.Uri;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.text.TextUtils;
@@ -33,6 +30,8 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.utils.Log;
+
+import java.util.HashMap;
 
 public class Advanced extends BaseImplementation {
 	protected static final String THIS_FILE = "Advanced W";
@@ -156,7 +155,7 @@ public class Advanced extends BaseImplementation {
 		account.display_name = accountDisplayName.getText().trim();
 		String[] serverParts = accountServer.getText().split(":");
 		account.acc_id = accountCallerId.getText().trim() + 
-			" <sip:" + Uri.encode(accountUserName.getText().trim()) + "@" + serverParts[0].trim() + ">";
+			" <sip:" + SipUri.encodeUser(accountUserName.getText().trim()) + "@" + serverParts[0].trim() + ">";
 		
 		account.reg_uri = "sip:" + accountServer.getText();
 

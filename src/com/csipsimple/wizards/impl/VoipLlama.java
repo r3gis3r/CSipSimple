@@ -26,6 +26,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 
 public class VoipLlama extends Advanced {
 
@@ -58,7 +59,7 @@ public class VoipLlama extends Advanced {
 		account = super.buildAccount(account);
 		
         account.acc_id = accountCallerId.getText().trim() + 
-            " <sip:" + Uri.encode(accountUserName.getText().trim()) + "@" + getDomain() + ">";
+            " <sip:" + SipUri.encodeUser(accountUserName.getText().trim()) + "@" + getDomain() + ">";
 		
 		String regUri = "sip:" + getDomain();
 		account.reg_uri = regUri;

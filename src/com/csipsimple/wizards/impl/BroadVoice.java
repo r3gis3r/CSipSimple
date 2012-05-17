@@ -21,13 +21,13 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.net.Uri;
 import android.preference.EditTextPreference;
 import android.text.InputType;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 
 public class BroadVoice extends SimpleImplementation {
 	
@@ -96,7 +96,7 @@ public class BroadVoice extends SimpleImplementation {
 			}
 		}
 		
-		account.acc_id = "<sip:" + Uri.encode(finalUsername) + "@"+getDomain()+">";
+		account.acc_id = "<sip:" + SipUri.encodeUser(finalUsername) + "@"+getDomain()+">";
 		
 		return account;
 	}

@@ -26,6 +26,7 @@ import android.text.InputType;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 
 
 public class CongstarTelekom extends AuthorizationImplementation {
@@ -82,7 +83,7 @@ public class CongstarTelekom extends AuthorizationImplementation {
 		account =  super.buildAccount(account);
 		account.proxies = null;
 		account.transport = SipProfile.TRANSPORT_UDP;
-		String uname = Uri.encode(accountUsername.getText().trim());
+		String uname = SipUri.encodeUser(accountUsername.getText().trim());
         account.acc_id = uname + " <sip:" + uname + "@" + getDomain() + ">";
 		return account;
 	}
