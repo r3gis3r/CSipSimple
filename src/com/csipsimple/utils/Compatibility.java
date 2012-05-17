@@ -83,6 +83,11 @@ public final class Compatibility {
             return true;
         }
 
+        // ZTE joe
+        if (android.os.Build.DEVICE.equalsIgnoreCase("joe")) {
+            return true;
+        }
+
         if (!isCompatible(4)) {
             // If android 1.5, force routing api use
             return true;
@@ -101,8 +106,9 @@ public final class Compatibility {
             return false;
         }
 
-        // ZTE blade
-        if (android.os.Build.DEVICE.equalsIgnoreCase("blade")) {
+        // ZTE blade et joe
+        if (android.os.Build.DEVICE.equalsIgnoreCase("blade")
+                || android.os.Build.DEVICE.equalsIgnoreCase("joe")) {
             return true;
         }
         // Samsung GT-I5500
@@ -662,6 +668,14 @@ public final class Compatibility {
         if (lastSeenVersion < 1515) {
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "240");
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "240");
+        }
+        if (lastSeenVersion < 1516 &&
+                android.os.Build.DEVICE.equalsIgnoreCase("joe")) {
+            prefWrapper
+                    .setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
+            prefWrapper
+                    .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+
         }
         
         prefWrapper.endEditing();
