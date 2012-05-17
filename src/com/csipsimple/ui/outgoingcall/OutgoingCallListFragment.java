@@ -108,6 +108,10 @@ public class OutgoingCallListFragment extends CSSListFragment {
             // This is a plugin row.
             if(accLoader != null) {
                 CallHandlerPlugin ch = accLoader.getCallHandlerWithAccountId(accountId);
+                if(ch == null) {
+                    Log.w(THIS_FILE, "Call handler not anymore available in loader... something gone wrong");
+                    return false;
+                }
                 try {
                     String nextExclude = ch.getNextExcludeTelNumber();
                     if (nextExclude != null) {
@@ -129,7 +133,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
     }
 
     @Override
-    public void changeCursor(Cursor c) {
+    public synchronized void changeCursor(Cursor c) {
         if(c != null) {
             OutgoingCallChooser superActivity = ((OutgoingCallChooser)getActivity());
             Long accountToCall = superActivity.getAccountToCallTo();
@@ -170,7 +174,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
     }
     
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public synchronized void onListItemClick(ListView l, View v, int position, long id) {
         if(mAdapter != null) {
             placeCall((Cursor) mAdapter.getItem(position));
         }

@@ -102,7 +102,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
                 true, loaderObserver);
         }
         
-        finalAccounts = new ArrayList<FilteredProfile>();
+        ArrayList<FilteredProfile> prefinalAccounts = new ArrayList<FilteredProfile>();
         
         // Get all sip profiles
         ArrayList<SipProfile> accounts = SipProfile.getAllProfiles(getContext(), onlyActive,
@@ -123,10 +123,10 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
         if(TextUtils.isEmpty(numberToCall)) {
             // In case of empty number to call, just add everything without any other question
             for(SipProfile acc : accounts) {
-                finalAccounts.add(new FilteredProfile(acc, false));
+                prefinalAccounts.add(new FilteredProfile(acc, false));
             }
             for(Entry<String, String> extEnt : externalHandlers.entrySet() ) {
-                finalAccounts.add(new FilteredProfile(extEnt.getKey(), false));
+                prefinalAccounts.add(new FilteredProfile(extEnt.getKey(), false));
                 
             }
         }else {
@@ -137,7 +137,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
             for(SipProfile acc : accounts) {
                 if(Filter.isCallableNumber(getContext(), acc.id, numberToCall)) {
                     boolean forceCall = Filter.isMustCallNumber(getContext(), acc.id, numberToCall);
-                    finalAccounts.add(new FilteredProfile(acc, forceCall));
+                    prefinalAccounts.add(new FilteredProfile(acc, forceCall));
                     if(forceCall) {
                         break;
                     }
@@ -147,7 +147,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
                 long accId = CallHandlerPlugin.getAccountIdForCallHandler(getContext(), extEnt.getKey());
                 if(Filter.isCallableNumber(getContext(), accId, numberToCall)) {
                     boolean forceCall = Filter.isMustCallNumber(getContext(), accId, numberToCall);
-                    finalAccounts.add(new FilteredProfile(extEnt.getKey(), forceCall));
+                    prefinalAccounts.add(new FilteredProfile(extEnt.getKey(), forceCall));
                     if(forceCall) {
                         break;
                     }
@@ -158,9 +158,9 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
         
         
         // Build final cursor based on final filtered accounts
-        Cursor[] cursorsToMerge = new Cursor[finalAccounts.size()];
+        Cursor[] cursorsToMerge = new Cursor[prefinalAccounts.size()];
         int i = 0;
-        for (FilteredProfile acc : finalAccounts) {
+        for (FilteredProfile acc : prefinalAccounts) {
             cursorsToMerge[i++] = createCursorForAccount(acc);
         }
 
@@ -168,8 +168,10 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
         if(cursorsToMerge.length > 0) {
             MergeCursor mg = new MergeCursor(cursorsToMerge);
             mg.registerContentObserver(loaderObserver);
+            finalAccounts = prefinalAccounts;
             return mg;
         }else {
+            finalAccounts = prefinalAccounts;
             return null;
         }
     }
