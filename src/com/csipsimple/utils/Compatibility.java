@@ -311,8 +311,13 @@ public final class Compatibility {
     }
 
     private static void resetCodecsSettings(PreferencesWrapper preferencesWrapper) {
-        // Disable iLBC if not armv7
-        boolean supportFloating = getCpuAbi().equalsIgnoreCase("armeabi-v7a");
+        boolean supportFloating = false;
+        String abi = getCpuAbi();
+        if(!TextUtils.isEmpty(abi)) {
+            if(abi.equalsIgnoreCase("mips") || abi.equalsIgnoreCase("x86")) {
+                supportFloating = true;
+            }
+        }
 
         // For Narrowband
         preferencesWrapper.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB, "60");
@@ -324,7 +329,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB, "234");
-        preferencesWrapper.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_NB, "240");
+        preferencesWrapper.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_NB, "239");
         preferencesWrapper.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_NB, "0");
@@ -334,6 +339,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_NB, "235");
+        preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "240");
         preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_NB, "0");
@@ -360,6 +366,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_WB, "0");
+        preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "240");
         preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_WB, "0");
@@ -651,6 +658,10 @@ public final class Compatibility {
             prefWrapper
                     .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 
+        }
+        if (lastSeenVersion < 1515) {
+            prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "240");
+            prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "240");
         }
         
         prefWrapper.endEditing();

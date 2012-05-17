@@ -125,7 +125,7 @@ public class Cryptel extends SimpleImplementation {
         prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
         prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
         prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
-        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "245");
+        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "0");
         prefs.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_NB, "244");
         prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_NB, "239");
         prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "0");

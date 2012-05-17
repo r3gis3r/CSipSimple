@@ -31,7 +31,6 @@
 #include <opus.h>
 
 #define FRAME_LENGTH_MS		10
-#define USE_PLC 				1
 
 #define THIS_FILE       "pj_opus.c"
 
@@ -73,34 +72,10 @@ static pj_status_t  opus_codec_decode( pjmedia_codec *codec,
 				 const struct pjmedia_frame *input,
 				 unsigned output_buf_len,
 				 struct pjmedia_frame *output);
-#if !PLC_DISABLED
 static pj_status_t  opus_codec_recover( pjmedia_codec *codec,
 				  unsigned output_buf_len,
 				  struct pjmedia_frame *output);
-#endif
 
-
-enum
-{
-    PARAM_NB,   /* Index for narrowband parameter.	*/
-    PARAM_MB,	/* Index for medium parameter.	*/
-    PARAM_WB,	/* Index for wideband parameter.	*/
-    PARAM_SWB,	/* Index for ultra-wideband parameter	*/
-    PARAM_FB,	/* Index for super-wideband parameter	*/
-};
-
-/* Opus default parameter */
-struct opus_param
-{
-    int		     enabled;		/* Is this mode enabled?	    */
-    int		     pt;		/* Payload type.		    */
-    unsigned	 clock_rate;	/* Default sampling rate to be used.*/
-    int		     packet_size_ms;	/* packet size ms.		    */
-    pj_uint32_t  bitrate;		/* Bit rate for current mode.	    */
-    pj_uint32_t  max_bitrate;	/* Max bit rate for current mode.   */
-    int 		complexity;
-    char	     bitrate_str[8];
-};
 
 /* Definition for OPUS codec operations. */
 static pjmedia_codec_op opus_op =
@@ -134,14 +109,12 @@ static struct opus_factory
     pj_pool_t		       *pool;
     pj_mutex_t		       *mutex;
     pjmedia_codec	     codec_list;
-    struct opus_param	    opus_param[5];
 } opus_factory;
 
 
 /* OPUS codec private data. */
 struct opus_private
 {
-    int			 param_id;	    /**< Index to speex param.	*/
     pj_pool_t   *pool;        /**< Pool for each instance.    */
 
    // char		 obj_name[PJ_MAX_OBJ_NAME];
@@ -153,18 +126,6 @@ struct opus_private
     OpusDecoder* psDec;
 };
 
-int opus_get_type_for_clock_rate(int clock_rate) {
-	if (clock_rate <= opus_factory.opus_param[PARAM_NB].clock_rate) {
-		return PARAM_NB;
-	} else if (clock_rate <= opus_factory.opus_param[PARAM_MB].clock_rate) {
-		return PARAM_MB;
-	} else if (clock_rate <= opus_factory.opus_param[PARAM_WB].clock_rate) {
-		return PARAM_WB;
-	} else if (clock_rate <= opus_factory.opus_param[PARAM_SWB].clock_rate) {
-		return PARAM_SWB;
-	}
-	return PARAM_FB;
-}
 
 int opus_to_pjsip_error_code(int opus_error){
 	switch(opus_error){
@@ -191,6 +152,41 @@ int opus_to_pjsip_error_code(int opus_error){
 		return PJMEDIA_CODEC_EFAILED;
 	}
 	return PJMEDIA_ERROR;
+}
+
+/**
+ * Apply opus settings to dec_fmtp parameters
+ */
+void apply_opus_codec_params(pj_pool_t* pool, pjmedia_codec_param *attr){
+	attr->setting.dec_fmtp.cnt = 0;
+    // This is mainly no-op but is there for reference and external use
+    if(attr->setting.plc == 0){
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].name = pj_str("useinbandfec");
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].val = pj_str("0");
+		attr->setting.dec_fmtp.cnt ++;
+    }
+    if(attr->setting.vad == 1){
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].name = pj_str("usedtx");
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].val = pj_str("1");
+		attr->setting.dec_fmtp.cnt ++;
+    }
+    if(attr->info.channel_cnt == 2){
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].name = pj_str("stereo");
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].val = pj_str("1");
+		attr->setting.dec_fmtp.cnt ++;
+    }
+    if(attr->info.channel_cnt == 2){
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].name = pj_str("stereo");
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].val = pj_str("1");
+		attr->setting.dec_fmtp.cnt ++;
+	}
+    if(attr->info.clock_rate < 48000){
+		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].name = pj_str("maxcodedaudiobandwidth");
+		char clock_rate_char[8];
+		pj_utoa(attr->info.clock_rate, clock_rate_char);
+		pj_strdup2(pool, &attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].val, clock_rate_char);
+		attr->setting.dec_fmtp.cnt ++;
+    }
 }
 
 PJ_DEF(pj_status_t) pjmedia_codec_opus_init(pjmedia_endpt *endpt)
@@ -222,69 +218,6 @@ PJ_DEF(pj_status_t) pjmedia_codec_opus_init(pjmedia_endpt *endpt)
     if (status != PJ_SUCCESS)
 	goto on_error;
     PJ_LOG(5, (THIS_FILE, "Init opus"));
-
-    /* Table from opus rfc
- 	  +-------+---------+-----------+
-	  |  Mode | fs (Hz) | BR (kbps) |
-	  +-------+---------+-----------+
-	  | voice |   8000  |   6 - 20  |
-	  | voice |  12000  |   7 - 25  |
-	  | voice |  16000  |   8 - 30  |
-	  | voice |  24000  |  18 - 28  |
-	  | voice |  48000  |  24 - 32  |
-	  +-------+---------+-----------+
-    */
-    struct opus_param *opus_param;
-    opus_param = &opus_factory.opus_param[PARAM_NB];
-    opus_param->pt = PJMEDIA_RTP_PT_OPUS_NB;
-    opus_param->clock_rate = 8000;
-    opus_param->bitrate = 13000;
-	opus_param->max_bitrate = 20000;
-	pj_utoa(opus_param->bitrate, opus_param->bitrate_str);
-	opus_param->packet_size_ms = FRAME_LENGTH_MS;
-	opus_param->complexity = 2;
-	opus_param->enabled = 1;
-
-    opus_param = &opus_factory.opus_param[PARAM_MB];
-    opus_param->pt = PJMEDIA_RTP_PT_OPUS_MB;
-    opus_param->clock_rate = 12000;
-    opus_param->bitrate = 16000;
-    opus_param->max_bitrate = 25000;
-    pj_utoa(opus_param->bitrate, opus_param->bitrate_str);
-    opus_param->packet_size_ms = FRAME_LENGTH_MS;
-    opus_param->complexity = 2;
-    opus_param->enabled = 1;
-
-    opus_param = &opus_factory.opus_param[PARAM_WB];
-    opus_param->pt = PJMEDIA_RTP_PT_OPUS_WB;
-	opus_param->clock_rate = 16000;
-	opus_param->bitrate = 19000;
-	opus_param->max_bitrate = 30000;
-	pj_utoa(opus_param->bitrate, opus_param->bitrate_str);
-	opus_param->packet_size_ms = FRAME_LENGTH_MS;
-	opus_param->complexity = 2;
-	opus_param->enabled = 1;
-
-    opus_param = &opus_factory.opus_param[PARAM_SWB];
-    opus_param->pt = PJMEDIA_RTP_PT_OPUS_SWB;
-    opus_param->clock_rate = 24000;
-    opus_param->bitrate = 23000;
-    opus_param->max_bitrate = 28000;
-	pj_utoa(opus_param->bitrate, opus_param->bitrate_str);
-	opus_param->packet_size_ms = FRAME_LENGTH_MS;
-	opus_param->complexity = 2;
-	opus_param->enabled = 1;
-
-    opus_param = &opus_factory.opus_param[PARAM_FB];
-    opus_param->pt = PJMEDIA_RTP_PT_OPUS_FB;
-    opus_param->clock_rate = 48000;
-    opus_param->bitrate = 28000;
-    opus_param->max_bitrate = 32000;
-	pj_utoa(opus_param->bitrate, opus_param->bitrate_str);
-	opus_param->packet_size_ms = FRAME_LENGTH_MS;
-	opus_param->complexity = 2;
-	opus_param->enabled = 1;
-
 
     /* Get the codec manager. */
     codec_mgr = pjmedia_endpt_get_codec_mgr(endpt);
@@ -371,24 +304,24 @@ static pj_status_t opus_test_alloc(pjmedia_codec_factory *factory,
 
 
     /* Type MUST be audio. */
-    if (info->type != PJMEDIA_TYPE_AUDIO)
-	return PJMEDIA_CODEC_EUNSUP;
+    if (info->type != PJMEDIA_TYPE_AUDIO){
+    	return PJMEDIA_CODEC_EUNSUP;
+    }
 
     /* Check encoding name. */
-    if (pj_stricmp(&info->encoding_name, &opus_tag) != 0)
-	return PJMEDIA_CODEC_EUNSUP;
+    if (pj_stricmp(&info->encoding_name, &opus_tag) != 0){
+    	return PJMEDIA_CODEC_EUNSUP;
+    }
 
-    /* Channel count must be one */
-    if (info->channel_cnt != 1)
-	return PJMEDIA_CODEC_EUNSUP;
 
     /* Check clock-rate */
-    for (i=0; i<PJ_ARRAY_SIZE(opus_factory.opus_param); ++i) {
-	if (info->clock_rate == opus_factory.opus_param[i].clock_rate) {
-	    /* Okay, let's Speex! */
+	if (info->clock_rate == 8000 ||
+			info->clock_rate == 12000 ||
+			info->clock_rate == 16000 ||
+			info->clock_rate == 24000 ||
+			info->clock_rate == 48000 ) {
 	    return PJ_SUCCESS;
 	}
-    }
     /* Clock rate not supported */
     return PJMEDIA_CODEC_EUNSUP;
 }
@@ -400,37 +333,40 @@ static pj_status_t opus_default_attr( pjmedia_codec_factory *factory,
 				      const pjmedia_codec_info *id,
 				      pjmedia_codec_param *attr )
 {
-    struct opus_param *opus_param;
-    PJ_UNUSED_ARG(factory);
-    PJ_LOG(5, (THIS_FILE, "opus default attr"));
     pj_bzero(attr, sizeof(pjmedia_codec_param));
+    PJ_ASSERT_RETURN(factory == &opus_factory.base, PJ_EINVAL);
 
-    opus_param = &opus_factory.opus_param[opus_get_type_for_clock_rate(id->clock_rate)];
-
+    /* Table from opus rfc
+ 	  +-------+---------+-----------+
+	  |  Mode | fs (Hz) | BR (kbps) |
+	  +-------+---------+-----------+
+	  | voice |   8000  |   6 - 20  |
+	  | voice |  12000  |   7 - 25  |
+	  | voice |  16000  |   8 - 30  |
+	  | voice |  24000  |  18 - 28  |
+	  | voice |  48000  |  24 - 32  |
+	  +-------+---------+-----------+
+    */
+    // Default stereo is 0 in opus
     attr->info.channel_cnt = 1;
-	attr->info.clock_rate = opus_param->clock_rate;
-	attr->info.avg_bps = opus_param->bitrate;
-	attr->info.max_bps = opus_param->max_bitrate;
-	attr->info.frm_ptime = opus_param->packet_size_ms;
+    // By default use 16kHz as output in our case
+	attr->info.clock_rate = 16000;
+	attr->info.avg_bps = 20000;
+	attr->info.max_bps = 32000;
+	attr->info.frm_ptime = FRAME_LENGTH_MS;
 	attr->info.pcm_bits_per_sample = 16;
 
 	attr->info.pt = (pj_uint8_t) id->pt;
 
     attr->setting.frm_per_pkt = 1;
-    attr->setting.vad = 0;
-    attr->setting.plc = USE_PLC;
 
-    if(attr->setting.plc == 1){
-		attr->setting.dec_fmtp.cnt = 1;
-		// Inform PLC
-		attr->setting.dec_fmtp.param[0].name = pj_str("useinbandfec");
-		attr->setting.dec_fmtp.param[0].val = pj_str("1");
-    }
-	// Inform Bitrate
-	/*
-	attr->setting.dec_fmtp.param[1].name = pj_str("maxaveragebitrate");
-	attr->setting.dec_fmtp.param[1].val = pj_str(mode->bitrate_str);
-	*/
+    // Default usedtx is 0 in opus
+    attr->setting.vad = 0;
+    // Default useinbandfec is 1 in opus
+    attr->setting.plc = 1;
+
+    // Apply these settings to relevant fmtp parameters
+    apply_opus_codec_params(opus_factory.pool, attr);
 
     return PJ_SUCCESS;
 }
@@ -452,22 +388,15 @@ static pj_status_t opus_enum_codecs(pjmedia_codec_factory *factory,
     max = *count;
     *count = 0;
 
-    for (i=PJ_ARRAY_SIZE(opus_factory.opus_param)-1; i>=0 && *count<max; --i) {
+	pj_bzero(&codecs[*count], sizeof(pjmedia_codec_info));
+	codecs[*count].encoding_name = pj_str("opus");
+	codecs[*count].pt = PJMEDIA_RTP_PT_OPUS;
+	codecs[*count].type = PJMEDIA_TYPE_AUDIO;
+	codecs[*count].clock_rate = 48000;
+	// Actually we should not have to set this for opus
+	codecs[*count].channel_cnt = 1;
 
-    	if (!opus_factory.opus_param[i].enabled){
-    	    continue;
-    	}
-    	PJ_LOG(5, (THIS_FILE, "Add codec %d", opus_factory.opus_param[i].clock_rate));
-
-    	pj_bzero(&codecs[*count], sizeof(pjmedia_codec_info));
-    	codecs[*count].encoding_name = pj_str("opus");
-    	codecs[*count].pt = opus_factory.opus_param[i].pt;
-    	codecs[*count].type = PJMEDIA_TYPE_AUDIO;
-    	codecs[*count].clock_rate = opus_factory.opus_param[i].clock_rate;
-    	codecs[*count].channel_cnt = 1;
-
-    	++*count;
-	}
+	++*count;
 
 	return PJ_SUCCESS;
 
@@ -508,7 +437,6 @@ static pj_status_t opus_alloc_codec(pjmedia_codec_factory *factory,
     opus = (struct opus_private*) codec->codec_data;
     opus->enc_ready = PJ_FALSE;
     opus->dec_ready = PJ_FALSE;
-    opus->param_id = opus_get_type_for_clock_rate(id->clock_rate);
 
     /* Create pool for codec instance */
     opus->pool = pjmedia_endpt_create_pool(opus_factory.endpt, "opuscodec", 512, 512);
@@ -537,7 +465,6 @@ static pj_status_t opus_dealloc_codec( pjmedia_codec_factory *factory,
     if (opus->enc_ready == PJ_TRUE || opus->dec_ready == PJ_TRUE) {
     	opus_codec_close(codec);
     }
-
 
     /* Put in the free list. */
     pj_mutex_lock(opus_factory.mutex);
@@ -574,68 +501,82 @@ static pj_status_t opus_codec_open(pjmedia_codec *codec,
     struct opus_private *opus;
     int id, ret = 0;
     unsigned i;
-    struct opus_param params;
-    int encSizeBytes, decSizeBytes, API_fs_Hz, maxBitRate;
-	int useInBandFEC = 0;
-	unsigned channels = 1;
+    int structSizeBytes;
+	int tmpFmtpVal = 0;
     const pj_str_t STR_FMTP_USE_INBAND_FEC = {"useinbandfec", 12};
     const pj_str_t STR_FMTP_MAX_AVERAGE_BITRATE = {"maxaveragebitrate", 17};
+    const pj_str_t STR_FMTP_MAX_CODED_AUDIO_BANDWIDTH = {"maxcodedaudiobandwidth", 22};
+    const pj_str_t STR_FMTP_USE_DTX = {"usedtx", 6};
 
     opus = (struct opus_private*) codec->codec_data;
-    id = opus->param_id;
 
     pj_assert(opus != NULL);
     pj_assert(opus->enc_ready == PJ_FALSE &&
    	      opus->dec_ready == PJ_FALSE);
 
-    params = opus_factory.opus_param[id];
-
-    //PJ_LOG(4, (THIS_FILE, "Open opus codec @ %d", params.clock_rate));
-    /* default settings */
-	API_fs_Hz = params.clock_rate;
-	maxBitRate = 0;
-    /* Check fmtp params */
-    for (i = 0; i < attr->setting.enc_fmtp.cnt; ++i) {
-		if (pj_stricmp(&attr->setting.enc_fmtp.param[i].name,
-				   &STR_FMTP_USE_INBAND_FEC) == 0)	{
-			useInBandFEC = (pj_uint8_t)
-				  (pj_strtoul(&attr->setting.enc_fmtp.param[i].val));
-			break;
-		}else if(pj_stricmp(&attr->setting.enc_fmtp.param[i].name,
-				   &STR_FMTP_MAX_AVERAGE_BITRATE) == 0)	{
-			int remoteBitRate = (int)(pj_strtoul(&attr->setting.enc_fmtp.param[i].val));
-			if(remoteBitRate < maxBitRate || maxBitRate == 0){
-				maxBitRate = remoteBitRate;
-			}
-		}
-    }
-
     /* Create Encoder */
-    encSizeBytes = opus_encoder_get_size(channels);
-    opus->psEnc = pj_pool_zalloc(opus->pool, encSizeBytes);
-    ret = opus_encoder_init(opus->psEnc, API_fs_Hz, channels, OPUS_APPLICATION_VOIP);
+    structSizeBytes = opus_encoder_get_size(attr->info.channel_cnt);
+    opus->psEnc = pj_pool_zalloc(opus->pool, structSizeBytes);
+    PJ_LOG(2, (THIS_FILE, "Clock rate is %d ", attr->info.clock_rate));
+    ret = opus_encoder_init(opus->psEnc, attr->info.clock_rate, attr->info.channel_cnt, OPUS_APPLICATION_VOIP);
     if(ret){
 		PJ_LOG(1, (THIS_FILE, "Unable to init encoder : %d", ret));
+		// No need to destroy coder/decoder since alloc in pool
 		return PJ_EINVAL;
 	}
 
-    /* Set Encoder parameters */
-    if(maxBitRate >= 6000 && maxBitRate <= 510000){
-        opus_encoder_ctl(opus->psEnc, OPUS_SET_BITRATE(maxBitRate));
-    }
-    opus_encoder_ctl(opus->psEnc, OPUS_SET_INBAND_FEC(useInBandFEC));
-    opus_encoder_ctl(opus->psEnc, OPUS_SET_COMPLEXITY(params.complexity));
+    // Set Encoder parameters
+    // For android set 2 for now
+    opus_encoder_ctl(opus->psEnc, OPUS_SET_COMPLEXITY(2));
     opus_encoder_ctl(opus->psEnc, OPUS_SET_SIGNAL(OPUS_SIGNAL_VOICE));
+
+    // with fmtp params
+    for (i = 0; i < attr->setting.enc_fmtp.cnt; ++i) {
+		if (pj_stricmp(&attr->setting.enc_fmtp.param[i].name,
+				   &STR_FMTP_USE_INBAND_FEC) == 0)	{
+			tmpFmtpVal = (int)
+				  (pj_strtoul(&attr->setting.enc_fmtp.param[i].val));
+		    opus_encoder_ctl(opus->psEnc, OPUS_SET_INBAND_FEC(tmpFmtpVal));
+			break;
+		}else if(pj_stricmp(&attr->setting.enc_fmtp.param[i].name,
+				   &STR_FMTP_MAX_AVERAGE_BITRATE) == 0)	{
+			tmpFmtpVal = (int)(pj_strtoul(&attr->setting.enc_fmtp.param[i].val));
+			if(tmpFmtpVal >= 6000 && tmpFmtpVal <= 510000){
+				opus_encoder_ctl(opus->psEnc, OPUS_SET_BITRATE(tmpFmtpVal));
+			}
+		}else if(pj_stricmp(&attr->setting.enc_fmtp.param[i].name,
+				   &STR_FMTP_MAX_CODED_AUDIO_BANDWIDTH) == 0)	{
+			tmpFmtpVal = (int) (pj_strtoul(&attr->setting.enc_fmtp.param[i].val));
+			if(tmpFmtpVal <= 8000){
+				opus_encoder_ctl(opus->psEnc, OPUS_SET_MAX_BANDWIDTH(OPUS_BANDWIDTH_NARROWBAND));
+			}else if(tmpFmtpVal <= 12000){
+				opus_encoder_ctl(opus->psEnc, OPUS_SET_MAX_BANDWIDTH(OPUS_BANDWIDTH_MEDIUMBAND));
+			}else if(tmpFmtpVal <= 16000){
+				opus_encoder_ctl(opus->psEnc, OPUS_SET_MAX_BANDWIDTH(OPUS_BANDWIDTH_WIDEBAND));
+			}else if(tmpFmtpVal <= 24000){
+				opus_encoder_ctl(opus->psEnc, OPUS_SET_MAX_BANDWIDTH(OPUS_BANDWIDTH_SUPERWIDEBAND));
+			}else if(tmpFmtpVal <= 48000){
+				opus_encoder_ctl(opus->psEnc, OPUS_SET_MAX_BANDWIDTH(OPUS_BANDWIDTH_FULLBAND));
+			}
+		}else if(pj_stricmp(&attr->setting.enc_fmtp.param[i].name,
+				   &STR_FMTP_USE_DTX) == 0)	{
+			tmpFmtpVal = (int) (pj_strtoul(&attr->setting.enc_fmtp.param[i].val));
+			opus_encoder_ctl(opus->psEnc, OPUS_SET_DTX(tmpFmtpVal));
+		}
+    }
+
+	//attr->info.enc_ptime = ( attr->info.frm_ptime * attr->info.clock_rate) / 48000; // fake pjsip
 
     opus->enc_ready = PJ_TRUE;
 
     //Decoder
     /* Create decoder */
-    decSizeBytes = opus_decoder_get_size(channels);
-	opus->psDec = pj_pool_zalloc(opus->pool, decSizeBytes);
-	ret = opus_decoder_init(opus->psDec, API_fs_Hz, channels);
+    structSizeBytes = opus_decoder_get_size(attr->info.channel_cnt);
+	opus->psDec = pj_pool_zalloc(opus->pool, structSizeBytes);
+	ret = opus_decoder_init(opus->psDec, attr->info.clock_rate, attr->info.channel_cnt);
 	if(ret){
-		PJ_LOG(1, (THIS_FILE, "Unable to init dencoder : %d", ret));
+		PJ_LOG(1, (THIS_FILE, "Unable to init decoder : %d", ret));
+		// No need to destroy coder/decoder since alloc in pool
 		return PJ_EINVAL;
 	}
 
@@ -679,14 +620,14 @@ static pj_status_t opus_codec_encode(pjmedia_codec *codec,
 				     struct pjmedia_frame *output)
 {
 	struct opus_private *opus;
-	int ret;
+	int ret, frameSize;
     pj_assert(opus && input && output);
 
     opus = (struct opus_private*) codec->codec_data;
 
     /* Encode */
     output->size = 0;
-    //PJ_LOG(4, (THIS_FILE, "Input size : %d - Encoder packet size  %d", input->size, opus->enc.packetSize));
+    //PJ_LOG(4, (THIS_FILE, "Input size : %d - Encoder packet size", input->size));
 
     //That's fine with pjmedia cause input size is always already the good size
 	ret = opus_encode(opus->psEnc,
@@ -782,14 +723,12 @@ static pj_status_t  opus_codec_recover(pjmedia_codec *codec,
     PJ_LOG(5, (THIS_FILE, "Recover opus frame"));
 
     /* Decode */
-#if USE_PLC == 1
 	ret = opus_decode( opus->psDec,
 			(const unsigned char *) NULL,
 			0,
 			output->buf,
 			(output_buf_len >> 1),
 			0);
-#endif
 	if(ret < 0){
 		PJ_LOG(1, (THIS_FILE, "Failed to recover opus frame %d", ret));
 		return PJ_EINVAL;

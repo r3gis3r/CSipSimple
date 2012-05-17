@@ -282,10 +282,6 @@ static pj_status_t g729_default_attr (pjmedia_codec_factory *factory,
     attr->setting.dec_fmtp.param[0].name = pj_str("annexb");
     attr->setting.dec_fmtp.param[0].val = pj_str("no");
 
-    //attr->setting.enc_fmtp.cnt = 1;
-    //attr->setting.enc_fmtp.param[0].name = pj_str("annexb");
-    //attr->setting.enc_fmtp.param[0].val = pj_str("no");
-
     return PJ_SUCCESS;
 }
 
