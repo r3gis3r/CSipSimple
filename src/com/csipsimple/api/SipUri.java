@@ -196,7 +196,7 @@ public final class SipUri {
      * name
      * 
      * @param sipContact full sip uri
-     * @param includeScheme whether to include scheme
+     * @param includeScheme whether to include scheme in case of username
      * @return the canonical sip contact <br/>
      *         Example sip:user@domain.com <br/>
      *         or user@domain.com (if include scheme is false)
@@ -206,16 +206,17 @@ public final class SipUri {
         if (!TextUtils.isEmpty(sipContact)) {
             Matcher m = SIP_CONTACT_PATTERN.matcher(sipContact);
             boolean hasUsername = false;
+            boolean isHost = false;
 
             if (m.matches()) {
                 hasUsername = true;
             } else {
                 m = SIP_HOST_PATTERN.matcher(sipContact);
-
+                isHost = true;
             }
 
             if (m.matches()) {
-                if (includeScheme) {
+                if (includeScheme || isHost) {
                     sb.append(m.group(2));
                     sb.append(":");
                 }
