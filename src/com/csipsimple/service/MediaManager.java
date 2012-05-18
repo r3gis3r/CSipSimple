@@ -151,26 +151,21 @@ public class MediaManager {
 		return targetMode;
 	}
 	
+	public int validateAudioClockRate(int clockRate) {
+	    if(bluetoothWrapper != null && clockRate != 8000) {
+            if(userWantBluetooth && bluetoothWrapper.canBluetooth()) {
+                return -1;
+            }
+        }
+	    return 0;
+	}
 	
-	public int setAudioInCall(int clockRate) {
-		if(bluetoothWrapper != null && clockRate != 8000) {
-			if(userWantBluetooth && bluetoothWrapper.canBluetooth()) {
-				return -1;
-			}
-		}
-		
+	public void setAudioInCall() {
 		actualSetAudioInCall();
-		
-		return 0;
 	}
 	
 	public void unsetAudioInCall() {
-	//	Thread t = new Thread() {
-	//		public void run() {
-				actualUnsetAudioInCall();
-	//		};
-	//	};
-	//	t.start();
+	    actualUnsetAudioInCall();
 	}
 	
 	

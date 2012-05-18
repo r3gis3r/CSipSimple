@@ -607,7 +607,6 @@ static pj_status_t android_create_stream(pjmedia_aud_dev_factory *f,
 	pj_pool_t *pool;
 	struct android_aud_stream *stream;
 	pj_status_t status;
-	int has_set_in_call = 0;
 	int state = 0;
 
 	PJ_ASSERT_RETURN(play_cb && rec_cb && p_aud_strm, PJ_EINVAL);
@@ -653,11 +652,10 @@ static pj_status_t android_create_stream(pjmedia_aud_dev_factory *f,
 	jmethodID constructor_method=0, get_min_buffer_size_method = 0, method_id = 0;
 
 
-	status = on_setup_audio_wrapper(param->clock_rate);
+	status = on_validate_audio_clock_rate_wrapper(param->clock_rate);
 	if(status != PJ_SUCCESS){
 		return PJMEDIA_EAUD_INVOP;
 	}
-	has_set_in_call = 1;
 
 /*
 	if (attachResult != 0) {
@@ -902,9 +900,6 @@ static pj_status_t android_create_stream(pjmedia_aud_dev_factory *f,
 
 on_error:
 
-	if(has_set_in_call == 1){
-		on_teardown_audio_wrapper();
-	}
 	DETACH_JVM(jni_env);
 	pj_pool_release(pool);
 	return PJ_ENOMEM;
@@ -975,6 +970,7 @@ static pj_status_t strm_start(pjmedia_aud_stream *s)
 	ATTACH_JVM(jni_env);
 
 	pj_status_t status;
+	on_setup_audio_wrapper();
 
 	//Start threads
 	if(stream->record){
@@ -996,9 +992,11 @@ static pj_status_t strm_start(pjmedia_aud_stream *s)
 
 	PJ_LOG(4,(THIS_FILE, "Starting done"));
 
-	status = PJ_SUCCESS;
+	DETACH_JVM(jni_env);
+	return PJ_SUCCESS;
 
 on_error:
+	on_teardown_audio_wrapper();
 	DETACH_JVM(jni_env);
 	if(status != PJ_SUCCESS){
 		strm_destroy(&stream->base);
@@ -1023,6 +1021,7 @@ static pj_status_t strm_stop(pjmedia_aud_stream *s)
 	ATTACH_JVM(jni_env);
 	jmethodID method_id;
 
+	on_teardown_audio_wrapper();
 	stream->quit_flag = 1;
 
 	/*

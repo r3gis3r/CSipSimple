@@ -1426,13 +1426,17 @@ public class PjSipService {
         }
     }
 
-    public int setAudioInCall(int clockRate) {
+    public int validateAudioClockRate(int aClockRate) {
         if (mediaManager != null) {
-            return mediaManager.setAudioInCall(clockRate);
-        } else {
-            Log.e(THIS_FILE, "WARNING !!! WE HAVE NO MEDIA MANAGER AT THIS POINT");
+            return mediaManager.validateAudioClockRate(aClockRate);
         }
         return -1;
+    }
+    
+    public void setAudioInCall() {
+        if (mediaManager != null) {
+            mediaManager.setAudioInCall();
+        }
     }
 
     public void unsetAudioInCall() {

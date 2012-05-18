@@ -5,3 +5,4 @@
 005fix_contact_header_escape.diff
 006no_update_option.diff
 007reapply_codec_clock_rate.diff
+008fixes_media_stop_for_unconfirmed.diff

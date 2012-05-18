@@ -102,6 +102,10 @@ public:
 		pjsip_transaction *tsx,
 		pjsip_event *e) {}
 	virtual void on_call_media_state (pjsua_call_id call_id) {}
+	virtual void on_call_sdp_created (pjsua_call_id call_id,
+	                                pjmedia_sdp_session *sdp,
+	                                pj_pool_t *pool,
+	                                const pjmedia_sdp_session *rem_sdp) {}
 	virtual void on_stream_created (pjsua_call_id call_id, 
 		pjmedia_stream *strm,
 		unsigned stream_idx, 
@@ -154,8 +158,8 @@ public:
 	virtual pjsip_redirect_op on_call_redirected (pjsua_call_id call_id, const pj_str_t *target) {}
 	virtual void on_mwi_info (pjsua_acc_id acc_id, const pj_str_t *mime_type, const pj_str_t *body) {}
 	
-	
-	virtual pj_status_t on_setup_audio (int clock_rate) {}
+	virtual pj_status_t on_validate_audio_clock_rate (int clock_rate) {}
+	virtual void on_setup_audio () {}
 	virtual void on_teardown_audio () {}
 	virtual int on_set_micro_source () {}
 
@@ -195,6 +199,13 @@ void on_call_tsx_state_wrapper (pjsua_call_id call_id,
 void on_call_media_state_wrapper (pjsua_call_id call_id) {
 	ring_stop(call_id);
 	registeredCallbackObject->on_call_media_state(call_id);
+}
+
+void on_call_sdp_created_wrapper (pjsua_call_id call_id,
+	                                pjmedia_sdp_session *sdp,
+	                                pj_pool_t *pool,
+	                                const pjmedia_sdp_session *rem_sdp) {
+	registeredCallbackObject->on_call_sdp_created(call_id, sdp, pool, rem_sdp);
 }
 
 void on_stream_created_wrapper (pjsua_call_id call_id, 
@@ -344,9 +355,12 @@ void on_mwi_info_wrapper (pjsua_acc_id acc_id, pjsua_mwi_info *mwi_info) {
 	registeredCallbackObject->on_mwi_info(acc_id, &mime_type, &body);
 }
 
+pj_status_t on_validate_audio_clock_rate_wrapper (int clock_rate) {
+	return registeredCallbackObject->on_validate_audio_clock_rate(clock_rate);
+}
 
-pj_status_t on_setup_audio_wrapper (int clock_rate) {
-	return registeredCallbackObject->on_setup_audio(clock_rate);
+void on_setup_audio_wrapper () {
+	registeredCallbackObject->on_setup_audio();
 }
 
 void on_teardown_audio_wrapper () {
@@ -386,6 +400,7 @@ static struct pjsua_callback wrapper_callback_struct = {
 	&on_incoming_call_wrapper,
 	&on_call_tsx_state_wrapper,
 	&on_call_media_state_wrapper,
+	&on_call_sdp_created_wrapper,
 	&on_stream_created_wrapper,
 	&on_stream_destroyed_wrapper,
 	&on_dtmf_digit_wrapper,
@@ -448,6 +463,10 @@ public:
 		pjsip_transaction *tsx,
 		pjsip_event *e);
 	virtual void on_call_media_state (pjsua_call_id call_id);
+	virtual void on_call_sdp_created (pjsua_call_id call_id,
+	                                pjmedia_sdp_session *sdp,
+	                                pj_pool_t *pool,
+	                                const pjmedia_sdp_session *rem_sdp);
 	virtual void on_stream_created (pjsua_call_id call_id, 
 		pjmedia_stream *strm,
 		unsigned stream_idx, 
@@ -500,7 +519,8 @@ public:
 	virtual pjsip_redirect_op on_call_redirected (pjsua_call_id call_id, const pj_str_t *target);
 	virtual void on_mwi_info (pjsua_acc_id acc_id, const pj_str_t *mime_type, const pj_str_t *body);
 	
-	virtual pj_status_t on_setup_audio(int clock_rate);
+	virtual pj_status_t on_validate_audio_clock_rate(int clock_rate);
+	virtual void on_setup_audio();
 	virtual void on_teardown_audio();
 	virtual int on_set_micro_source();
 	

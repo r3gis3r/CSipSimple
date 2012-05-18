@@ -37,13 +37,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -83,9 +77,9 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.PickupSipUri;
+import com.csipsimple.ui.incall.CallProximityManager.ProximityDirector;
 import com.csipsimple.ui.incall.InCallControls.OnTriggerListener;
 import com.csipsimple.utils.CallsUtils;
-import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
@@ -98,8 +92,6 @@ import com.csipsimple.widgets.ScreenLocker;
 
 import org.webrtc.videoengine.ViERenderer;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -107,7 +99,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener,
-        SensorEventListener, IOnLeftRightChoice {
+        IOnLeftRightChoice, ProximityDirector {
     private final static String THIS_FILE = "SIP CALL HANDLER";
     private final static int DRAGGING_DELAY = 150;
     
@@ -118,7 +110,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     private SipCallSession[] callsInfo = null;
     private FrameLayout mainFrame;
     private InCallControls inCallControls;
-    private ScreenLocker lockOverlay;
 
     // Screen wake lock for incoming call
     private WakeLock wakeLock;
@@ -143,12 +134,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     private MediaState lastMediaState;
 
-    private SensorManager sensorManager;
-    private Sensor proximitySensor;
     private DialingFeedback dialFeedback;
-    private boolean proximitySensorTracked = false;
     private PowerManager powerManager;
-    private WakeLock proximityWakeLock;
     private PreferencesProviderWrapper prefsWrapper;
 
     // Dnd views
@@ -160,6 +147,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     private DisplayMetrics metrics;
     private SurfaceView cameraPreview;
+    private CallProximityManager proximityManager;
 
     private final static int PICKUP_SIP_URI_XFER = 0;
     private final static int PICKUP_SIP_URI_NEW_CALL = 1;
@@ -179,7 +167,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
         bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
         prefsWrapper = new PreferencesProviderWrapper(this);
-        invertProximitySensor = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INVERT_PROXIMITY_SENSOR);
 
         // Log.d(THIS_FILE, "Creating call handler for " +
         // callInfo.getCallId()+" state "+callInfo.getRemoteContact());
@@ -201,7 +188,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         dialPadTextView = (EditText) findViewById(R.id.digitsText);
         callInfoPanel = (ViewGroup) findViewById(R.id.callInfoPanel);
 
-        lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
+        ScreenLocker lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
         lockOverlay.setActivity(this, this);
 
         endCallTarget = (ImageView) findViewById(R.id.dropHangup);
@@ -229,11 +216,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
         registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_MEDIA_CHANGED));
         registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_ZRTP_SHOW_SAS));
-
-        // Sensor management
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        Log.d(THIS_FILE, "Proximty sensor : " + proximitySensor);
+        
+        proximityManager = new CallProximityManager(this, this, lockOverlay);
 
         dialFeedback = new DialingFeedback(this, true);
 
@@ -259,6 +243,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
         
         applyTheme();
+        proximityManager.startTracking();
         
     }
 
@@ -279,39 +264,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         manageKeyguard = true;
         keyguardLock.disableKeyguard();
         // }
-
-        if (proximitySensor != null && powerManager != null) {
-            WifiManager wman = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-            WifiInfo winfo = wman.getConnectionInfo();
-            if (winfo == null ||
-                    !prefsWrapper.getPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL)) {
-                // Try to use powermanager proximity sensor
-                try {
-                    Method method = powerManager.getClass().getDeclaredMethod(
-                            "getSupportedWakeLockFlags");
-                    int supportedFlags = (Integer) method.invoke(powerManager);
-                    Log.d(THIS_FILE, ">>> Flags supported : " + supportedFlags);
-                    Field f = PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK");
-                    int proximityScreenOffWakeLock = (Integer) f.get(null);
-                    if ((supportedFlags & proximityScreenOffWakeLock) != 0x0) {
-                        Log.d(THIS_FILE, ">>> We can use native screen locker !!");
-                        proximityWakeLock = powerManager.newWakeLock(proximityScreenOffWakeLock,
-                                "com.csipsimple.CallProximity");
-                        proximityWakeLock.setReferenceCounted(false);
-                    }
-
-                } catch (Exception e) {
-                    Log.d(THIS_FILE, "Impossible to get power manager supported wake lock flags");
-                }
-                /*
-                 * if ((powerManager.getSupportedWakeLockFlags() &
-                 * PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) != 0x0) {
-                 * mProximityWakeLock =
-                 * pm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK,
-                 * THIS_FILE); }
-                 */
-            }
-        }
+        
 
     }
 
@@ -323,17 +276,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         holdTargetRect = null;
         answerTargetRect = null;
         xferTargetRect = null;
-
-        // If we should manage it ourselves
-        if (proximitySensor != null && proximityWakeLock == null && !proximitySensorTracked) {
-            // Fall back to manual mode
-            isFirstRun = true;
-            Log.d(THIS_FILE, "Register sensor");
-            sensorManager.registerListener(this,
-                    proximitySensor,
-                    SensorManager.SENSOR_DELAY_NORMAL);
-            proximitySensorTracked = true;
-        }
         dialFeedback.resume();
         handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
 
@@ -342,25 +284,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     @Override
     protected void onPause() {
         super.onPause();
-
-        if (proximitySensor != null && proximitySensorTracked) {
-            proximitySensorTracked = false;
-            sensorManager.unregisterListener(this);
-            Log.d(THIS_FILE, "Unregister to sensor is done !!!");
-        }
-
         dialFeedback.pause();
-
-        lockOverlay.tearDown();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        if (proximityWakeLock != null && proximityWakeLock.isHeld()) {
-            proximityWakeLock.release();
-        }
         if (manageKeyguard) {
             keyguardLock.reenableKeyguard();
         }
@@ -390,9 +320,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
-        if (proximityWakeLock != null && proximityWakeLock.isHeld()) {
-            proximityWakeLock.release();
-        }
+        proximityManager.stopTracking();
+        proximityManager.release(0);
         try {
             unregisterReceiver(callStateReceiver);
         } catch (IllegalArgumentException e) {
@@ -653,15 +582,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         return (call1.callStart > call2.callStart) ? call2 : call1;
     }
 
-    /**
-     * Should the application dispaly the overlay after a timeout.
-     * @return false if we are in table mode or if proximity sensor can be used
-     */
-    private boolean shouldUseTimeoutOverlay() {
-        return proximitySensor == null &&
-                proximityWakeLock == null &&
-                !Compatibility.isTabletScreen(this);
-    }
     
     /**
      * Update the user interface from calls state.
@@ -845,29 +765,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     if (wakeLock != null && !wakeLock.isHeld()) {
                         wakeLock.acquire();
                     }
-
-                    if (shouldUseTimeoutOverlay()) {
-                        if (mainCallInfo.isIncoming()) {
-                            lockOverlay.hide();
-                        } else {
-                            lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
-                        }
-                    }
-
-                    if (proximityWakeLock != null) {
-                        if (mainCallInfo.isIncoming()) {
-                            // If call is incoming we do not use proximity
-                            // sensor to allow to take call
-                            if (proximityWakeLock.isHeld()) {
-                                proximityWakeLock.release();
-                            }
-                        } else {
-                            // Else we acquire wake lock
-                            if (!proximityWakeLock.isHeld()) {
-                                proximityWakeLock.acquire();
-                            }
-                        }
-                    }
                     break;
                 case SipCallSession.InvState.CONFIRMED:
                     backgroundResId = R.drawable.bg_in_call_gradient_connected;
@@ -878,14 +775,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                         Log.d(THIS_FILE, "Releasing wake up lock - confirmed");
                         wakeLock.release();
                     }
-                    if (shouldUseTimeoutOverlay()) {
-                        lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_START);
-                    }
-
-                    if (proximityWakeLock != null && !proximityWakeLock.isHeld()) {
-                        proximityWakeLock.acquire();
-                    }
-
                     break;
                 case SipCallSession.InvState.NULL:
                 case SipCallSession.InvState.DISCONNECTED:
@@ -916,6 +805,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             mainFrame.setBackgroundResource(backgroundResId);
             Log.d(THIS_FILE, "we leave the update ui function");
         }
+        
+        proximityManager.updateProximitySensorMode();
 
         if (mainsCalls == 0) {
             if (!CustomDistribution.forceNoMultipleCalls()) {
@@ -961,6 +852,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 Log.e(THIS_FILE, "Can't get the media state ", e);
             }
         }
+
+        proximityManager.updateProximitySensorMode();
     }
 
     private synchronized void delayedQuit() {
@@ -969,12 +862,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             Log.d(THIS_FILE, "Releasing wake up lock");
             wakeLock.release();
         }
-        if (proximityWakeLock != null && proximityWakeLock.isHeld()) {
-            proximityWakeLock.release();
-        }
-
-        // Update ui
-        lockOverlay.hide();
+        
+        proximityManager.release(0);
+        
         setDialpadVisibility(View.GONE);
         middleAddCall.setVisibility(View.GONE);
         setCallBadgesVisibility(View.VISIBLE);
@@ -1160,7 +1050,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     // private boolean showDetails = true;
 
-    private boolean isFirstRun = true;
 
     @Override
     public void onTrigger(int whichAction, SipCallSession call) {
@@ -1180,10 +1069,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
 
         // Reset proximity sensor timer
-        if (shouldUseTimeoutOverlay()) {
-            lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
-        }
-
+        proximityManager.restartTimer();
+        
         try {
             switch (whichAction) {
                 case TAKE_CALL: {
@@ -1307,9 +1194,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     @Override
     public void onTrigger(int keyCode, int dialTone) {
-        if (shouldUseTimeoutOverlay()) {
-            lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
-        }
+        proximityManager.restartTimer();
 
         if (service != null) {
             SipCallSession currentCall = getActiveCallInfo();
@@ -1328,64 +1213,19 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
-
-    private static final float PROXIMITY_THRESHOLD = 5.0f;
-    private boolean invertProximitySensor = false;
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        // Log.d(THIS_FILE, "Tracked : "+proximitySensorTracked);
-        if (proximitySensorTracked && !isFirstRun) {
-            float distance = event.values[0];
-            boolean active = (distance >= 0.0 && distance < PROXIMITY_THRESHOLD && distance < event.sensor
-                    .getMaximumRange());
-            if (invertProximitySensor) {
-                active = !active;
-            }
-            Log.d(THIS_FILE, "Distance is now " + distance);
-            boolean isValidCallState = false;
-
-            if (callsInfo != null) {
-                for (SipCallSession callInfo : callsInfo) {
-                    int state = callInfo.getCallState();
-                    isValidCallState |= (
-                            (state == SipCallSession.InvState.CONFIRMED) ||
-                                    (state == SipCallSession.InvState.CONNECTING) ||
-                                    (state == SipCallSession.InvState.CALLING) ||
-                            (state == SipCallSession.InvState.EARLY && !callInfo.isIncoming())
-                            );
-                }
-            }
-            if (isValidCallState && active) {
-                lockOverlay.show();
-            } else {
-                lockOverlay.hide();
-            }
-
-        }
-        if (isFirstRun) {
-            isFirstRun = false;
-        }
-    }
 
     @Override
     public void onLeftRightChoice(int whichHandle) {
         switch (whichHandle) {
             case LEFT_HANDLE:
                 Log.d(THIS_FILE, "We unlock");
-                lockOverlay.hide();
-                lockOverlay.reset();
-                if(shouldUseTimeoutOverlay()) {
-                    lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
-                }
+                proximityManager.release(0);
+                proximityManager.updateProximitySensorMode();
                 break;
             case RIGHT_HANDLE:
                 Log.d(THIS_FILE, "We clear the call");
                 onTrigger(OnTriggerListener.CLEAR_CALL, getActiveCallInfo());
-                lockOverlay.reset();
+                proximityManager.release(0);
             default:
                 break;
         }
@@ -1430,9 +1270,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             int Y = (int) event.getRawY();
 
             // Reset the not proximity sensor lock overlay
-            if (shouldUseTimeoutOverlay()) {
-                lockOverlay.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
-            }
+            proximityManager.restartTimer();
+            
 
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
@@ -1626,5 +1465,43 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
         AlertDialog backupDialog = builder.create();
         backupDialog.show();
+    }
+
+    
+    @Override
+    public boolean shouldActivateProximity() {
+
+        // TODO : missing headset & keyboard open
+        if(lastMediaState != null) {
+            if(lastMediaState.isBluetoothScoOn || lastMediaState.isSpeakerphoneOn) {
+                // Imediate reason to not enable proximity sensor
+                return false;
+            }
+        }
+        
+        if (callsInfo == null) {
+            return false;
+        }
+
+        boolean isValidCallState = true;
+        int count = 0;
+        for (SipCallSession callInfo : callsInfo) {
+            if(!callInfo.isAfterEnded()) {
+                int state = callInfo.getCallState();
+                
+                isValidCallState &= (
+                        (state == SipCallSession.InvState.CONFIRMED) ||
+                        (state == SipCallSession.InvState.CONNECTING) ||
+                        (state == SipCallSession.InvState.CALLING) ||
+                        (state == SipCallSession.InvState.EARLY && !callInfo.isIncoming())
+                        );
+                count ++;
+            }
+        }
+        if(count == 0) {
+            return false;
+        }
+
+        return isValidCallState;
     }
 }

@@ -542,13 +542,18 @@ public class UAStateReceiver extends Callback {
 		});
 	}
 	
+	public int on_validate_audio_clock_rate(int clockRate) {
+	    if(pjService != null) {
+            return pjService.validateAudioClockRate(clockRate);
+        }
+        return -1;
+	}
 	
 	@Override
-	public int on_setup_audio(int clockRate) {
+	public void on_setup_audio() {
 		if(pjService != null) {
-			return pjService.setAudioInCall(clockRate);
+			pjService.setAudioInCall();
 		}
-		return -1;
 	}
 	
 

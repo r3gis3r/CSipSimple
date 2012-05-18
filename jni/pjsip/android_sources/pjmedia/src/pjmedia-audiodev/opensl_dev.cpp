@@ -469,7 +469,6 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 	pj_pool_t *pool;
 	struct opensl_aud_stream *stream;
 	pj_status_t status = PJ_SUCCESS;
-	int has_set_in_call = 0;
 	SLresult result;
 	SLDataFormat_PCM format_pcm;
 
@@ -508,12 +507,10 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 			param->channel_count));
 
 
-	status = on_setup_audio_wrapper(param->clock_rate);
+	status = on_validate_audio_clock_rate_wrapper(param->clock_rate);
 	if(status != PJ_SUCCESS){
 		return PJMEDIA_EAUD_INVOP;
 	}
-	has_set_in_call = 1;
-
 
 	// Init OPENSL layer
 	{
@@ -652,9 +649,6 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 				goto on_error;
 			}
 
-
-
-
 			// register callback on the buffer queue
 			result = (*stream->recorderBufferQueue)->RegisterCallback(stream->recorderBufferQueue, bqRecorderCallback, (void *) stream);
 			assert(SL_RESULT_SUCCESS == result);
@@ -671,9 +665,6 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 	return PJ_SUCCESS;
 
 on_error:
-	if(has_set_in_call == 1){
-		on_teardown_audio_wrapper();
-	}
 	pj_pool_release(pool);
 	return PJ_ENOMEM;
 }
@@ -742,20 +733,7 @@ static pj_status_t strm_start(pjmedia_aud_stream *s)
 
 
 	//Set media in call
-	/*
-	 *
-	JNIEnv *jni_env = 0;
-	ATTACH_JVM(jni_env);
-	{
-
-		jmethodID setincall_method = jni_env->GetStaticMethodID(stream->ua_class, "setAudioInCall", "()V");
-		if(setincall_method == 0){
-			return PJ_ENOMEM;
-		}
-		jni_env->CallStaticVoidMethod(stream->ua_class, setincall_method);
-	}
-	*/
-
+	on_setup_audio_wrapper();
 
 	pj_status_t status;
 
@@ -792,7 +770,7 @@ static pj_status_t strm_start(pjmedia_aud_stream *s)
 	return PJ_SUCCESS;
 
 on_error:
-	//DETACH_JVM(jni_env);
+	on_teardown_audio_wrapper();
 	if(status != PJ_SUCCESS){
 		strm_destroy(&stream->base);
 	}
@@ -818,7 +796,6 @@ static pj_status_t strm_stop(pjmedia_aud_stream *s)
 	stream->quit_flag = 1;
 
 
-
 	if(stream->recorderBufferQueue && stream->recorderRecord) {
 		(*stream->recorderRecord)->SetRecordState(stream->recorderRecord, SL_RECORDSTATE_STOPPED);
 	}
@@ -840,10 +817,8 @@ static pj_status_t strm_stop(pjmedia_aud_stream *s)
 
 	}
 
-
-	on_teardown_audio_wrapper();
-
 	PJ_LOG(4,(THIS_FILE, "Stopping Done"));
+	on_teardown_audio_wrapper();
 
 	return PJ_SUCCESS;
 

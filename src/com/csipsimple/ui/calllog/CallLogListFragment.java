@@ -139,8 +139,9 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
     @Override
     public void fetchCalls() {
         attachAdapter();
-        getLoaderManager().restartLoader(0, null, this);
-
+        if(isResumed()) {
+            getLoaderManager().restartLoader(0, null, this);
+        }
     }
 
     boolean alreadyLoaded = false;

@@ -86,7 +86,7 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 		stab.setOnLeftRightListener(l);
 	}
 	
-	public void reset() {
+	private void reset() {
 		stab.resetView();
 	}
 	
@@ -123,7 +123,7 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 			win.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	        win.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
-		
+		clearLockTasks();
 	}
 	
 	public void hide() {
@@ -133,14 +133,20 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 			win.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 	        win.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
+		clearLockTasks();
+		reset();
+	}
+	
+	private void clearLockTasks() {
+	    if(lockTimer != null) {
+            lockTimer.cancel();
+            lockTimer.purge();
+            lockTimer = null;
+        }
 	}
 	
 	public void tearDown() {
-		if(lockTimer != null) {
-			lockTimer.cancel();
-			lockTimer.purge();
-			lockTimer = null;
-		}
+		clearLockTasks();
 	}
 	
 	
