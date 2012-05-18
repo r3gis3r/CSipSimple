@@ -19,7 +19,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.widgets;
+package com.csipsimple.ui.incall;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -44,16 +44,17 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.service.SipService;
-import com.csipsimple.ui.InCallActivity2.OnBadgeTouchListener;
+import com.csipsimple.ui.incall.InCallActivity.OnBadgeTouchListener;
+import com.csipsimple.ui.incall.InCallControls.OnTriggerListener;
 import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
-import com.csipsimple.widgets.InCallControls2.OnTriggerListener;
+import com.csipsimple.widgets.ExtensibleBadge;
 
 import org.webrtc.videoengine.ViERenderer;
 
-public class InCallInfo2 extends ExtensibleBadge {
+public class InCallInfo extends ExtensibleBadge {
 
     private static final String THIS_FILE = "InCallInfo";
     private SipCallSession callInfo;
@@ -74,7 +75,7 @@ public class InCallInfo2 extends ExtensibleBadge {
     private PreferencesProviderWrapper prefs;
     
 
-    public InCallInfo2(Context context, AttributeSet attrs) {
+    public InCallInfo(Context context, AttributeSet attrs) {
         super(context, attrs);
         initControllerView();
 

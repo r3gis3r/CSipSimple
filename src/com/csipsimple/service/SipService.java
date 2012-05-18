@@ -67,7 +67,7 @@ import com.csipsimple.pjsip.PjSipService;
 import com.csipsimple.pjsip.UAStateReceiver;
 import com.csipsimple.service.receiver.DynamicReceiver4;
 import com.csipsimple.service.receiver.DynamicReceiver5;
-import com.csipsimple.ui.InCallMediaControl;
+import com.csipsimple.ui.incall.InCallMediaControl;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;

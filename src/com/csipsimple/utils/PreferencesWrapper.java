@@ -247,7 +247,7 @@ public class PreferencesWrapper {
         }
 
         // Android upgrade
-        {
+        if(prefs != null){
             int lastSeenVersion = prefs.getInt(LAST_KNOWN_ANDROID_VERSION_PREF, 0);
             Log.d(THIS_FILE, "Last known android version " + lastSeenVersion);
             if (lastSeenVersion != Compatibility.getApiLevel()) {
@@ -329,6 +329,9 @@ public class PreferencesWrapper {
 	//Private static getters
 	// For string
 	private static String gPrefStringValue(SharedPreferences aPrefs, String key) {
+	    if(aPrefs == null) {
+	        return STRING_PREFS.get(key);
+	    }
 		if(STRING_PREFS.containsKey(key)) {
 			return aPrefs.getString(key, STRING_PREFS.get(key));
 		}
@@ -337,6 +340,9 @@ public class PreferencesWrapper {
 	
 	// For boolean
 	private static Boolean gPrefBooleanValue(SharedPreferences aPrefs, String key) {
+	    if(aPrefs == null) {
+	        return BOOLEAN_PREFS.get(key);
+	    }
 		if(BOOLEAN_PREFS.containsKey(key)) {
 			return aPrefs.getBoolean(key, BOOLEAN_PREFS.get(key));
 		}
@@ -348,6 +354,9 @@ public class PreferencesWrapper {
 	
 	// For float
 	private static Float gPrefFloatValue(SharedPreferences aPrefs, String key) {
+	    if(aPrefs == null) {
+	        return FLOAT_PREFS.get(key);
+	    }
 		if(FLOAT_PREFS.containsKey(key)) {
 			return aPrefs.getFloat(key, FLOAT_PREFS.get(key));
 		}
@@ -599,11 +608,6 @@ public class PreferencesWrapper {
 	public boolean startIsDigit() {
 		return !prefs.getBoolean("start_with_text_dialer", false);
 	}
-
-	public boolean useAlternateUnlocker() {
-		return prefs.getBoolean(SipConfigManager.USE_ALTERNATE_UNLOCKER, false);
-	}
-	
 	
 	
 	public int getGsmIntegrationType() {

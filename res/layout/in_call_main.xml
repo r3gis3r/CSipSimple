@@ -62,7 +62,7 @@
             android:paddingRight="6dip" />
     </LinearLayout>
 
-    <com.csipsimple.widgets.InCallControls2
+    <com.csipsimple.ui.incall.InCallControls
         android:id="@+id/inCallControls"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

@@ -23,7 +23,7 @@
  * Copyright (C) 2008 The Android Open Source Project
  */
 
-package com.csipsimple.widgets;
+package com.csipsimple.ui.incall;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -35,7 +35,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.csipsimple.R;
@@ -43,12 +43,13 @@ import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Theme;
 import com.csipsimple.utils.accessibility.AccessibilityWrapper;
-import com.csipsimple.widgets.SlidingTab.OnTriggerListener;
+import com.csipsimple.widgets.AlternateUnlocker;
+import com.csipsimple.widgets.IOnLeftRightChoice;
+import com.csipsimple.widgets.SlidingTab;
 
-public class InCallControls2 extends FrameLayout implements OnTriggerListener, OnClickListener {
+public class InCallControls extends FrameLayout implements IOnLeftRightChoice, OnClickListener {
 
 	private static final String THIS_FILE = "InCallControls";
 	OnTriggerListener onTriggerListener;
@@ -57,9 +58,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	private ToggleButton bluetoothButton, speakerButton, muteButton;
 	private View inCallButtons;
 	private boolean isDialpadOn = false;
-	private Button takeCallButton, declineCallButton;
-	private boolean useSlider;
-	private LinearLayout alternateLockerWidget;
+	private AlternateUnlocker alternateLockerWidget;
 	
 	
 	private static final int MODE_LOCKER = 0;
@@ -149,31 +148,57 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		void onTrigger(int whichAction, SipCallSession call);
 	}
 
-	public InCallControls2(Context context, AttributeSet attrs) {
-		super(context, attrs);
-
-		PreferencesWrapper prefs = new PreferencesWrapper(context);
-		supportMultipleCalls  = prefs.getPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS);
-		
-		LayoutInflater inflater = LayoutInflater.from(context);
-		inflater.inflate(R.layout.in_call_controls2, this, true);
-		
-		AccessibilityWrapper accessibilityManager = AccessibilityWrapper.getInstance();
-		accessibilityManager.init(getContext());
-		if(accessibilityManager.isEnabled()) {
-			useSlider = false;
-		}else {
-			useSlider = !prefs.useAlternateUnlocker();
-		}
+	public InCallControls(Context context) {
+        this(context, null, 0);
+    }
+	
+	public InCallControls(Context context, AttributeSet attrs) {
+		this(context, attrs, 0);
 	}
+	
+    public InCallControls(Context context, AttributeSet attrs, int style) {
+        super(context, attrs, style);
 
+        LayoutInflater inflater = LayoutInflater.from(context);
+        inflater.inflate(R.layout.in_call_controls, this, true);
+        
+        boolean useSlider = false;
+        
+        if(!isInEditMode()) {
+            supportMultipleCalls = SipConfigManager.getPreferenceBooleanValue(context, SipConfigManager.SUPPORT_MULTIPLE_CALLS);
+            AccessibilityWrapper accessibilityManager = AccessibilityWrapper.getInstance();
+            accessibilityManager.init(getContext());
+            if(!accessibilityManager.isEnabled()) {
+                useSlider = !SipConfigManager.getPreferenceBooleanValue(context, SipConfigManager.USE_ALTERNATE_UNLOCKER);
+            }
+        }
+        
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.in_call_controls_container);
+        IOnLeftRightProvider leftRightChooser;
+        if(useSlider) {
+            slidingTabWidget = new SlidingTab(context);
+            container.addView(slidingTabWidget, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            leftRightChooser = slidingTabWidget;
+            slidingTabWidget.setVisibility(GONE);
+        }else {
+            alternateLockerWidget = new AlternateUnlocker(context);
+            container.addView(alternateLockerWidget, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            leftRightChooser = alternateLockerWidget;
+            alternateLockerWidget.setVisibility(GONE);
+        }
+        leftRightChooser.setOnLeftRightListener(this);
+        
+        inCallButtons = findViewById(R.id.bottomButtonsContainer);
+        
+        // Hide all components by default
+        inCallButtons.setVisibility(GONE);
+    
+    }
+    
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
 
-		slidingTabWidget = (SlidingTab) findViewById(R.id.takeCallUnlocker);
-		alternateLockerWidget = (LinearLayout) findViewById(R.id.takeCallUnlockerAlternate);
-		inCallButtons = findViewById(R.id.bottomButtonsContainer);
 
 		addCallButton = (Button) findViewById(R.id.addCallButton);
 		clearCallButton = (Button) findViewById(R.id.clearCallButton);
@@ -183,33 +208,26 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		muteButton = (ToggleButton) findViewById(R.id.muteButton);
 		
 		
-		takeCallButton = (Button) findViewById(R.id.takeCallButton);
-		declineCallButton = (Button) findViewById(R.id.declineCallButton);
 	//	settingsButton = (ImageButton) findViewById(R.id.settingsButton);
 		
 		// Finalize object style
-		slidingTabWidget.setLeftHintText(R.string.take_call);
-		slidingTabWidget.setRightHintText(R.string.decline_call);
+		if(slidingTabWidget != null) {
+    		slidingTabWidget.setLeftHintText(R.string.take_call);
+    		slidingTabWidget.setRightHintText(R.string.decline_call);
+		}
 		setEnabledMediaButtons(false);
 		controlMode = MODE_LOCKER;
-		inCallButtons.setVisibility(GONE);
 		setCallLockerVisibility(VISIBLE);
 		inCallButtons.setVisibility(GONE);
 		
 
 		// Attach objects
-		slidingTabWidget.setOnTriggerListener(this);
 		clearCallButton.setOnClickListener(this);
 		dialButton.setOnClickListener(this);
 		bluetoothButton.setOnClickListener(this);
 		speakerButton.setOnClickListener(this);
 		muteButton.setOnClickListener(this);
-		takeCallButton.setOnClickListener(this);
-		declineCallButton.setOnClickListener(this);
 		addCallButton.setOnClickListener(this);
-	//	settingsButton.setOnClickListener(this);
-		
-		
 		addCallButton.setEnabled( supportMultipleCalls );
 	}
 	
@@ -244,9 +262,9 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	
 	
 	private void setCallLockerVisibility(int visibility) {
-		if (useSlider) {
+		if (slidingTabWidget != null) {
 			slidingTabWidget.setVisibility(visibility);
-		} else {
+		} else if(alternateLockerWidget != null){
 			alternateLockerWidget.setVisibility(visibility);
 		}
 	}
@@ -339,7 +357,7 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 	
 
 	@Override
-	public void onTrigger(View v, int whichHandle) {
+	public void onLeftRightChoice(int whichHandle) {
 		Log.d(THIS_FILE, "Call controls receive info from slider " + whichHandle);
 		if (controlMode != MODE_LOCKER) {
 			// Oups we are not in locker mode and we get a trigger from
@@ -359,7 +377,9 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		default:
 			break;
 		}
-		slidingTabWidget.resetView();
+		if(slidingTabWidget != null) {
+		    slidingTabWidget.resetView();
+		}
 	}
 
 	@Override
@@ -388,10 +408,6 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 			} else {
 				dispatchTriggerEvent(OnTriggerListener.MUTE_OFF);
 			}
-		} else if (id == R.id.takeCallButton) {
-			dispatchTriggerEvent(OnTriggerListener.TAKE_CALL);
-		} else if (id == R.id.declineCallButton) {
-			dispatchTriggerEvent(OnTriggerListener.DECLINE_CALL);
 		} else if (id == R.id.addCallButton) {
 			dispatchTriggerEvent(OnTriggerListener.ADD_CALL);
 		}
@@ -473,18 +489,19 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 			dialButton.setCompoundDrawablesWithIntrinsicBounds(null, dialDrawable, null, null);
 		}
 		
-		// To sliding tab
-		slidingTabWidget.setLeftTabDrawables(t.getDrawableResource("ic_jog_dial_answer"), 
-				t.getDrawableResource("jog_tab_target_green"), 
-				t.getDrawableResource("jog_tab_bar_left_answer"), 
-				t.getDrawableResource("jog_tab_left_answer"));
-		
-		slidingTabWidget.setRightTabDrawables(t.getDrawableResource("ic_jog_dial_decline"), 
-				t.getDrawableResource("jog_tab_target_red"), 
-				t.getDrawableResource("jog_tab_bar_right_decline"), 
-				t.getDrawableResource("jog_tab_right_decline"));
-		
-		
+		if(slidingTabWidget != null) {
+    		// To sliding tab
+    		slidingTabWidget.setLeftTabDrawables(t.getDrawableResource("ic_jog_dial_answer"), 
+    				t.getDrawableResource("jog_tab_target_green"), 
+    				t.getDrawableResource("jog_tab_bar_left_answer"), 
+    				t.getDrawableResource("jog_tab_left_answer"));
+    		
+    		slidingTabWidget.setRightTabDrawables(t.getDrawableResource("ic_jog_dial_decline"), 
+    				t.getDrawableResource("jog_tab_target_red"), 
+    				t.getDrawableResource("jog_tab_bar_right_decline"), 
+    				t.getDrawableResource("jog_tab_right_decline"));
+    		
+		}
 	}
 	
 	private StateListDrawable getToggleButtonDrawable(Theme t) {
@@ -566,4 +583,13 @@ public class InCallControls2 extends FrameLayout implements OnTriggerListener, O
 		}
 		return null;
 	}
+
+    public int getLockerVisibility() {
+        if(slidingTabWidget != null) {
+            return slidingTabWidget.getVisibility();
+        }else if(alternateLockerWidget != null) {
+            return alternateLockerWidget.getVisibility();
+        }
+        return View.GONE;
+    }
 }

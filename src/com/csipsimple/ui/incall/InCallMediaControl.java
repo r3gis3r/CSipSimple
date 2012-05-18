@@ -19,7 +19,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.ui;
+package com.csipsimple.ui.incall;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;

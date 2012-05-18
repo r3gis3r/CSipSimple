@@ -40,6 +40,7 @@ import android.widget.ImageView.ScaleType;
 
 import com.csipsimple.R;
 import com.csipsimple.utils.Log;
+import com.csipsimple.widgets.IOnLeftRightChoice.IOnLeftRightProvider;
 
 /**
  * A special widget containing two Sliders and a threshold for each. Moving
@@ -50,13 +51,13 @@ import com.csipsimple.utils.Log;
  * Deeply inspired from android SlidingTab internal widget but simplified for our use
  * 
  */
-public class SlidingTab extends ViewGroup {
+public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 
 	private static final float TARGET_ZONE = 2.0f / 3.0f;
 	private static final long VIBRATE_SHORT = 30;
 	private static final long VIBRATE_LONG = 40;
 
-	private OnTriggerListener onTriggerListener;
+	private IOnLeftRightChoice onTriggerListener;
 	private boolean triggered = false;
 	private Vibrator mVibrator;
 	// used to scale dimensions for bitmaps.
@@ -68,35 +69,7 @@ public class SlidingTab extends ViewGroup {
 	private float targetZone;
 	private static final String THIS_FILE = "SlidingTab";
 
-	/**
-	 * Interface definition for a callback to be invoked when a tab is triggered
-	 * by moving it beyond a target zone.
-	 */
-	public interface OnTriggerListener {
 
-		/**
-		 * The interface was triggered because the user grabbed the left handle
-		 * and moved it past the target zone.
-		 */
-		int LEFT_HANDLE = 0;
-
-		/**
-		 * The interface was triggered because the user grabbed the right handle
-		 * and moved it past the target zone.
-		 */
-		int RIGHT_HANDLE = 1;
-
-		/**
-		 * Called when the user moves a handle beyond the target zone.
-		 * 
-		 * @param v
-		 *            The view that was triggered.
-		 * @param whichHandle
-		 *            Which "dial handle" the user grabbed, either
-		 *            {@link #LEFT_HANDLE}, {@link #RIGHT_HANDLE}.
-		 */
-		void onTrigger(View v, int whichHandle);
-	}
 
 	/**
 	 * Simple container class for all things pertinent to a slider. A slider
@@ -150,8 +123,10 @@ public class SlidingTab extends ViewGroup {
 			text = new TextView(parent.getContext());
 			text.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
 			text.setBackgroundResource(barId);
-			text.setTextAppearance(parent.getContext(), R.style.TextAppearance_SlidingTabNormal);
-
+			if(!parent.isInEditMode()) {
+			    text.setTextAppearance(parent.getContext(), R.style.TextAppearance_SlidingTabNormal);
+			}
+			
 			// Create target
 			target = new ImageView(parent.getContext());
 			target.setImageResource(targetId);
@@ -378,7 +353,7 @@ public class SlidingTab extends ViewGroup {
 					triggered = true;
 					tracking = false;
 					currentSlider.setState(Slider.STATE_ACTIVE);
-					dispatchTriggerEvent(currentSlider.equals(leftSlider) ? OnTriggerListener.LEFT_HANDLE : OnTriggerListener.RIGHT_HANDLE);
+					dispatchTriggerEvent(currentSlider.equals(leftSlider) ? IOnLeftRightChoice.LEFT_HANDLE : IOnLeftRightChoice.RIGHT_HANDLE);
 				}
 
 				if (y <= handle.getBottom() && y >= handle.getTop()) {
@@ -504,15 +479,7 @@ public class SlidingTab extends ViewGroup {
 		mVibrator.vibrate(duration);
 	}
 
-	/**
-	 * Registers a callback to be invoked when the user triggers an event.
-	 * 
-	 * @param listener
-	 *            the OnDialTriggerListener to attach to this view
-	 */
-	public void setOnTriggerListener(OnTriggerListener listener) {
-		onTriggerListener = listener;
-	}
+	
 
 	/**
 	 * Dispatches a trigger event to listener. Ignored if a listener is not set.
@@ -525,9 +492,20 @@ public class SlidingTab extends ViewGroup {
 		Log.d(THIS_FILE, "We take the call....");
 		if (onTriggerListener != null) {
 			Log.d(THIS_FILE, "We transmit to the parent....");
-			onTriggerListener.onTrigger(this, whichHandle);
+			onTriggerListener.onLeftRightChoice(whichHandle);
 		}
 	}
+
+	/**
+     * Registers a callback to be invoked when the user triggers an event.
+     * 
+     * @param listener
+     *            the OnDialTriggerListener to attach to this view
+     */
+    @Override
+    public void setOnLeftRightListener(IOnLeftRightChoice l) {
+        onTriggerListener = l;
+    }
 
 
 }

@@ -360,7 +360,7 @@ Remove that too fine change trigger
 
         <!-- To be able to do video, this has to be launched in sipStack process -->
         <activity
-            android:name="com.csipsimple.ui.InCallActivity2"
+            android:name="com.csipsimple.ui.incall.InCallActivity"
             android:allowTaskReparenting="true"
             android:configChanges="orientation"
             android:excludeFromRecents="true"
@@ -378,18 +378,15 @@ Remove that too fine change trigger
             android:name="com.csipsimple.ui.PickupSipUri"
             android:configChanges="orientation"
             android:label="@string/pickup_sip_uri"
-            android:theme="@style/DarkTheme" >
-        </activity>
+            android:theme="@style/DarkTheme" />
         <activity
-            android:name="com.csipsimple.ui.InCallMediaControl"
+            android:name="com.csipsimple.ui.incall.InCallMediaControl"
             android:configChanges="orientation"
             android:label="@string/prefs_media"
-            android:taskAffinity="com.csipsimple.ui.InCallActivity"
-            android:theme="@style/DarkTheme.Dialog" >
-        </activity>
+            android:taskAffinity="com.csipsimple.ui.incall.InCallActivity"
+            android:theme="@style/DarkTheme.Dialog" />
 
-        <receiver android:name="com.csipsimple.service.HeadsetButtonReceiver" >
-        </receiver>
+        <receiver android:name="com.csipsimple.service.HeadsetButtonReceiver" />
 
         <!-- Widget -->
         <receiver

@@ -21,9 +21,6 @@
 
 package com.csipsimple.widgets;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
@@ -31,13 +28,15 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 
 import com.csipsimple.R;
-import com.csipsimple.widgets.SlidingTab.OnTriggerListener;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 
@@ -82,9 +81,9 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 		
 	}
 
-	public void setActivity(Activity anActivity, OnTriggerListener l) {
+	public void setActivity(Activity anActivity, IOnLeftRightChoice l) {
 		activity = anActivity;
-		stab.setOnTriggerListener(l);
+		stab.setOnLeftRightListener(l);
 	}
 	
 	public void reset() {

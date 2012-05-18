@@ -20,7 +20,7 @@
  */
 
 
-package com.csipsimple.ui;
+package com.csipsimple.ui.incall;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -82,6 +82,8 @@ import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.SipService;
+import com.csipsimple.ui.PickupSipUri;
+import com.csipsimple.ui.incall.InCallControls.OnTriggerListener;
 import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
@@ -91,9 +93,7 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Theme;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
-import com.csipsimple.widgets.InCallControls2;
-import com.csipsimple.widgets.InCallControls2.OnTriggerListener;
-import com.csipsimple.widgets.InCallInfo2;
+import com.csipsimple.widgets.IOnLeftRightChoice;
 import com.csipsimple.widgets.ScreenLocker;
 
 import org.webrtc.videoengine.ViERenderer;
@@ -106,8 +106,8 @@ import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class InCallActivity2 extends Activity implements OnTriggerListener, OnDialKeyListener,
-        SensorEventListener, com.csipsimple.widgets.SlidingTab.OnTriggerListener {
+public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener,
+        SensorEventListener, IOnLeftRightChoice {
     private final static String THIS_FILE = "SIP CALL HANDLER";
     private final static int DRAGGING_DELAY = 150;
     
@@ -117,7 +117,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
     private SipCallSession[] callsInfo = null;
     private FrameLayout mainFrame;
-    private InCallControls2 inCallControls;
+    private InCallControls inCallControls;
     private ScreenLocker lockOverlay;
 
     // Screen wake lock for incoming call
@@ -131,7 +131,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
     private LinearLayout dialPadContainer;
     private EditText dialPadTextView;
 
-    private final HashMap<Integer, InCallInfo2> badges = new HashMap<Integer, InCallInfo2>();
+    private final HashMap<Integer, InCallInfo> badges = new HashMap<Integer, InCallInfo>();
 
     private ViewGroup callInfoPanel;
     private Timer quitTimer;
@@ -169,7 +169,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(THIS_FILE, "Create in call");
-        setContentView(R.layout.in_call_main2);
+        setContentView(R.layout.in_call_main);
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -192,7 +192,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
         // remoteContact = (TextView) findViewById(R.id.remoteContact);
         mainFrame = (FrameLayout) findViewById(R.id.mainFrame);
-        inCallControls = (InCallControls2) findViewById(R.id.inCallControls);
+        inCallControls = (InCallControls) findViewById(R.id.inCallControls);
         inCallControls.setOnTriggerListener(this);
 
         dialPad = (Dialpad) findViewById(R.id.dialPad);
@@ -750,8 +750,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
             // Bottom height is 263px in hdpi
             mainHeight -= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 175, getResources().getDisplayMetrics());
         }else {
-            View v = findViewById(R.id.takeCallUnlocker);
-            if(v != null && v.getVisibility() == View.VISIBLE) {
+            if(inCallControls.getLockerVisibility() == View.VISIBLE) {
                 // If it's the locker, the best way is just to 
                 // remove some bottom part of the screen
                 mainHeight = mainHeight * 7 / 15;
@@ -760,10 +759,10 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         Log.d(THIS_FILE, "Avail size is : " + mainWidth + "x" + mainHeight);
         
         // Update each badges
-        ArrayList<InCallInfo2> badgesToRemove = new ArrayList<InCallInfo2>();
-        for (Entry<Integer, InCallInfo2> badgeSet : badges.entrySet()) {
+        ArrayList<InCallInfo> badgesToRemove = new ArrayList<InCallInfo>();
+        for (Entry<Integer, InCallInfo> badgeSet : badges.entrySet()) {
             SipCallSession callInfo = getCallInfo(badgeSet.getKey());
-            InCallInfo2 badge = badgeSet.getValue();
+            InCallInfo badge = badgeSet.getValue();
             if (callInfo != null) {
                 // Main call position / size should be done at the end
                 if (callInfo.isAfterEnded() && (mainsCalls + heldsCalls > 0)) {
@@ -818,7 +817,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         }
 
         // Remove useless badges
-        for (InCallInfo2 badge : badgesToRemove) {
+        for (InCallInfo badge : badgesToRemove) {
             callInfoPanel.removeView(badge);
             SipCallSession ci = badge.getCallInfo();
             if (ci != null) {
@@ -1013,7 +1012,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
     }
 
     private void addBadgeForCall(SipCallSession call) {
-        InCallInfo2 badge = new InCallInfo2(this, null);
+        InCallInfo badge = new InCallInfo(this, null);
         callInfoPanel.addView(badge);
 
         badge.forceLayout();
@@ -1022,7 +1021,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         badges.put(call.getCallId(), badge);
     }
 
-    private void layoutBadge(Rect wrap, InCallInfo2 mainBadge) {
+    private void layoutBadge(Rect wrap, InCallInfo mainBadge) {
         //Log.d(THIS_FILE,
         //        "Layout badge for " + wrap.width() + " x " + wrap.height() +
         //                " +" + wrap.top + " + " + wrap.left);
@@ -1373,7 +1372,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
     }
 
     @Override
-    public void onTrigger(View v, int whichHandle) {
+    public void onLeftRightChoice(int whichHandle) {
         switch (whichHandle) {
             case LEFT_HANDLE:
                 Log.d(THIS_FILE, "We unlock");
@@ -1398,7 +1397,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
 
     public class OnBadgeTouchListener implements OnTouchListener {
         private SipCallSession call;
-        private InCallInfo2 badge;
+        private InCallInfo badge;
         private boolean isDragging = false;
         private SetDraggingTimerTask draggingDelayTask;
         Vibrator vibrator;
@@ -1414,7 +1413,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
             }
         };
 
-        public OnBadgeTouchListener(InCallInfo2 aBadge, SipCallSession aCall) {
+        public OnBadgeTouchListener(InCallInfo aBadge, SipCallSession aCall) {
             call = aCall;
             badge = aBadge;
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -1502,7 +1501,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         }
     }
 
-    private void onDropBadge(int X, int Y, InCallInfo2 badge, SipCallSession call) {
+    private void onDropBadge(int X, int Y, InCallInfo badge, SipCallSession call) {
         Log.d(THIS_FILE, "Dropping !!! in " + X + ", " + Y);
 
         // Rectangle init if not already done
@@ -1532,7 +1531,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         } else if (holdTargetRect != null && holdTargetRect.contains(X, Y)) {
             // check if not drop on held call
             boolean dropOnOtherCall = false;
-            for (Entry<Integer, InCallInfo2> badgeSet : badges.entrySet()) {
+            for (Entry<Integer, InCallInfo> badgeSet : badges.entrySet()) {
                 Log.d(THIS_FILE, "On drop target searching for another badge");
                 int callId = badgeSet.getKey();
                 if (callId != call.getCallId()) {
@@ -1540,7 +1539,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
                     SipCallSession callInfo = getCallInfo(callId);
                     if (callInfo.isLocalHeld()) {
                         Log.d(THIS_FILE, "Other badge is hold");
-                        InCallInfo2 otherBadge = badgeSet.getValue();
+                        InCallInfo otherBadge = badgeSet.getValue();
                         Rect r = new Rect(otherBadge.getLeft(), otherBadge.getTop(),
                                 otherBadge.getRight(), otherBadge.getBottom());
                         Log.d(THIS_FILE, "Current X, Y " + X + ", " + Y + " -- " + r.top + ", "
@@ -1591,7 +1590,7 @@ public class InCallActivity2 extends Activity implements OnTriggerListener, OnDi
         // public InCallInfo2 badge;
         public SipCallSession call;
 
-        public DraggingInfo(boolean aIsDragging, InCallInfo2 aBadge, SipCallSession aCall) {
+        public DraggingInfo(boolean aIsDragging, InCallInfo aBadge, SipCallSession aCall) {
             isDragging = aIsDragging;
             // badge = aBadge;
             call = aCall;
