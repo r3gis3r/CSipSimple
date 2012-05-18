@@ -47,6 +47,7 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 
 	public static final int WAIT_BEFORE_LOCK_LONG = 10000;
 	public static final int WAIT_BEFORE_LOCK_START = 5000;
+    public static final int WAIT_BEFORE_LOCK_SHORT = 500;
 
 	private final static int SHOW_LOCKER = 0;
 	private final static int HIDE_LOCKER = 1;
