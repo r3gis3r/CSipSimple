@@ -235,7 +235,7 @@ public class CallProximityManager implements SensorEventListener, OrientationLis
             isProximityWakeHeld = true;
         }
         if(shouldUseTimeoutOverlay()) {
-            mScreenLocker.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_LONG);
+            mScreenLocker.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_SHORT);
         }
     }
     
