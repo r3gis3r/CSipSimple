@@ -29,6 +29,7 @@ package com.csipsimple.utils.contacts;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +82,8 @@ public class ContactsSearchAdapter extends CursorAdapter {
     public final CharSequence convertToString(Cursor cursor) {
     	CharSequence number = ContactsWrapper.getInstance().transformToSipUri(mContext, cursor);
     	if(!TextUtils.isEmpty(number)) {
-			return Filter.rewritePhoneNumber(mContext, currentAccId, number.toString());
+    	    String stripNbr = PhoneNumberUtils.stripSeparators(number.toString());
+			return Filter.rewritePhoneNumber(mContext, currentAccId, stripNbr);
     	}
     	return number;
     }

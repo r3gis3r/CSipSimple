@@ -535,14 +535,6 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
             toCall = PhoneNumberUtils.stripSeparators(digits.getText().toString());
         }else {
             toCall = digits.getText().toString();
-            // Add default scheme
-            if(!toCall.startsWith("sip:") && !toCall.startsWith("sips:") && !toCall.startsWith("tel:")) {
-                if(acc != null && acc.transport == SipProfile.TRANSPORT_TLS) {
-                    toCall = "sips:" + toCall;
-                }else {
-                    toCall = "sip:" + toCall;
-                }
-            }
         }
         
         if (TextUtils.isEmpty(toCall)) {
