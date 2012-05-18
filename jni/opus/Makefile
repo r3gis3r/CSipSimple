@@ -15,7 +15,7 @@ sources :
 	git checkout origin; \
 	git checkout $(opus_tag)
 
-update :
+update : sources
 	@cd sources; \
 	git fetch --tags; \
 	git checkout origin; \
