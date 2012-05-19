@@ -279,6 +279,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voiptiger, 9, 
                     new Locale[]{ }, false, true, 
                     VoipTiger.class));
+            WIZARDS_DICT.put("MITELEFONO", new WizardInfo("MITELEFONO", "MiTelefono", 
+                    R.drawable.ic_wizard_mitelefono, 9, 
+                    new Locale[]{ }, false, true, 
+                    MiTelefono.class));
             
             
 			
