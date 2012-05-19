@@ -21,15 +21,14 @@
 
 package com.csipsimple.wizards.impl;
 
-import java.util.HashMap;
-
-import android.net.Uri;
 import android.preference.EditTextPreference;
 import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
+
+import java.util.HashMap;
 
 public abstract class AuthorizationImplementation extends BaseImplementation {
 	protected EditTextPreference accountDisplayName;

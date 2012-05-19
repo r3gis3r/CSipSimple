@@ -645,6 +645,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_sipme, 9, 
                     new Locale[]{ new Locale("he") }, false, false, 
                     SipMe.class));
+            WIZARDS_DICT.put("TONLINE", new WizardInfo("TONLINE", "t-online.de", 
+                    R.drawable.ic_wizard_t_online, 9, 
+                    new Locale[]{ Locale.GERMAN }, false, false, 
+                    TOnline.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
