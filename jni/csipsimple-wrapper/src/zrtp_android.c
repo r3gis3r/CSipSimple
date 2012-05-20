@@ -133,11 +133,11 @@ static void zrtpInformEnrollment(void* data, int32_t info)
 {
     PJ_LOG(3,(THIS_FILE, "ZRTP - Inform PBX enrollement"));
 }
-static void signSAS(void* data, char* sas)
+static void signSAS(void* data, uint8_t* sas)
 {
     PJ_LOG(3,(THIS_FILE, "ZRTP - sign SAS"));
 }
-static int32_t checkSASSignature(void* data, char* sas)
+static int32_t checkSASSignature(void* data, uint8_t* sas)
 {
     PJ_LOG(3,(THIS_FILE, "ZRTP - check SAS signature"));
     return 0;

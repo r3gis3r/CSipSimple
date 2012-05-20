@@ -35,6 +35,7 @@ MY_USE_OPUS := 1
 
 MY_USE_VIDEO := 1
 
+MY_USE_STATIC_SSL := 0
 
 #############################################################
 # Do not change behind this line the are flags for pj build #
