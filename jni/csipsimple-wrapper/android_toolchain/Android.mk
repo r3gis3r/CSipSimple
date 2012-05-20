@@ -36,7 +36,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../webrtc/pj_sources/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../g729/pj_sources/
 
 # Include ZRTP interface 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/include/ 
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/include/ $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/zrtp/src/ 
 
 # Include swig wrapper headers
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../swig-glue/

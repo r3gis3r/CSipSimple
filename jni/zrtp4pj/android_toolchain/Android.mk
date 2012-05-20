@@ -12,8 +12,9 @@ OPENSSL_SRC_DIR := $(LOCAL_PATH)/../../../openssl/sources/
 
 # Self includes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include \
-			$(LOCAL_PATH)/include/crypto/ \
-			$(LOCAL_PATH)/include/ 
+			$(LOCAL_PATH)/zrtp/src/ \
+			$(LOCAL_PATH)/zrtp/src/libzrtpcpp \
+			$(LOCAL_PATH)/zrtp/srtp/ 
 
 # Pj includes
 LOCAL_C_INCLUDES += $(PJ_SRC_DIR)/pjsip/include $(PJ_SRC_DIR)/pjlib-util/include/ \
@@ -25,58 +26,67 @@ LOCAL_C_INCLUDES += $(OPENSSL_SRC_DIR)/include
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DDYNAMIC_TIMER=1
 
-# ciphersossl
-LOCAL_SRC_FILES := crypto/openssl/AesSrtp.cpp \
-	crypto/openssl/hmac.cpp \
-    crypto/openssl/ZrtpDH.cpp \
-    crypto/openssl/hmac256.cpp \
-    crypto/openssl/sha256.cpp \
-    crypto/openssl/hmac384.cpp \
-    crypto/openssl/sha384.cpp \
-    crypto/openssl/AesCFB.cpp
+###### From make file
+ciphersossl = zrtp/srtp/crypto/openssl/SrtpSymCrypto.o \
+    zrtp/srtp/crypto/openssl/hmac.o \
+    zrtp/src/libzrtpcpp/crypto/openssl/ZrtpDH.o \
+    zrtp/src/libzrtpcpp/crypto/openssl/hmac256.o \
+    zrtp/src/libzrtpcpp/crypto/openssl/sha256.o \
+    zrtp/src/libzrtpcpp/crypto/openssl/hmac384.o \
+    zrtp/src/libzrtpcpp/crypto/openssl/sha384.o \
+    zrtp/src/libzrtpcpp/crypto/openssl/AesCFB.o
 
-#skeinmac 
-LOCAL_SRC_FILES += crypto/skein.c crypto/skein_block.c crypto/skeinApi.c \
-	crypto/macSkein.cpp
+skeinmac = zrtp/srtp/crypto/skein.o zrtp/srtp/crypto/skein_block.o zrtp/srtp/crypto/skeinApi.o \
+    zrtp/srtp/crypto/macSkein.o
 
-#twofish 
-LOCAL_SRC_FILES += crypto/twofish.c \
-	crypto/twofish_cfb.c \
-	crypto/TwoCFB.cpp
+twofish = zrtp/src/libzrtpcpp/crypto/twofish.o \
+	zrtp/src/libzrtpcpp/crypto/twofish_cfb.o \
+	zrtp/src/libzrtpcpp/crypto/TwoCFB.o
 
-# zrtpobj
-LOCAL_SRC_FILES += zrtp/ZrtpCallbackWrapper.cpp \
-    zrtp/ZIDFile.cpp \
-    zrtp/ZIDRecord.cpp \
-    zrtp/ZRtp.cpp \
-	zrtp/ZrtpCrc32.cpp \
-	zrtp/ZrtpPacketCommit.cpp \
-	zrtp/ZrtpPacketConf2Ack.cpp \
-	zrtp/ZrtpPacketConfirm.cpp \
-	zrtp/ZrtpPacketDHPart.cpp \
-	zrtp/ZrtpPacketGoClear.cpp \
-	zrtp/ZrtpPacketClearAck.cpp \
-	zrtp/ZrtpPacketHelloAck.cpp \
-	zrtp/ZrtpPacketHello.cpp \
-	zrtp/ZrtpPacketError.cpp \
-	zrtp/ZrtpPacketErrorAck.cpp \
-	zrtp/ZrtpPacketPingAck.cpp \
-	zrtp/ZrtpPacketPing.cpp \
-	zrtp/ZrtpStateClass.cpp \
-	zrtp/ZrtpTextData.cpp \
-	zrtp/ZrtpConfigure.cpp \
-	zrtp/ZrtpCWrapper.cpp \
-	zrtp/Base32.cpp \
-	zrtp/ZrtpPacketSASrelay.cpp \
-	zrtp/ZrtpPacketRelayAck.cpp
+# Gcrypt support currently not tested
+#ciphersgcrypt = crypto/gcrypt/gcryptAesSrtp.o crypto/gcrypt/gcrypthmac.o \
+#          crypto/gcrypt/InitializeGcrypt.o
 
+zrtpobj = zrtp/src/ZrtpCallbackWrapper.o \
+    zrtp/src/ZIDFile.o \
+    zrtp/src/ZIDRecord.o \
+    zrtp/src/ZRtp.o \
+    zrtp/src/ZrtpCrc32.o \
+    zrtp/src/ZrtpPacketCommit.o \
+    zrtp/src/ZrtpPacketConf2Ack.o \
+    zrtp/src/ZrtpPacketConfirm.o \
+    zrtp/src/ZrtpPacketDHPart.o \
+    zrtp/src/ZrtpPacketGoClear.o \
+    zrtp/src/ZrtpPacketClearAck.o \
+    zrtp/src/ZrtpPacketHelloAck.o \
+    zrtp/src/ZrtpPacketHello.o \
+    zrtp/src/ZrtpPacketError.o \
+    zrtp/src/ZrtpPacketErrorAck.o \
+    zrtp/src/ZrtpPacketPingAck.o \
+    zrtp/src/ZrtpPacketPing.o \
+    zrtp/src/ZrtpPacketSASrelay.o \
+    zrtp/src/ZrtpPacketRelayAck.o \
+    zrtp/src/ZrtpStateClass.o \
+    zrtp/src/ZrtpTextData.o \
+    zrtp/src/ZrtpConfigure.o \
+    zrtp/src/ZrtpCWrapper.o \
+    zrtp/src/Base32.o
 
-#srtpobj 
-LOCAL_SRC_FILES += srtp/ZsrtpCWrapper.cpp srtp/CryptoContext.cpp srtp/CryptoContextCtrl.cpp
+srtpobj = srtp/ZsrtpCWrapper.o zrtp/srtp/CryptoContext.o zrtp/srtp/CryptoContextCtrl.o
+transportobj = transport_zrtp.o
+cryptobj =  $(ciphersossl) $(skeinmac) $(twofish)
+# -- END OF ZRTP4PJ makefile
 
-#transportobj 
-LOCAL_SRC_FILES += transport_zrtp.c
+zrtpsrc := $(zrtpobj:%.o=%.cpp)
+cryptsrc := $(cryptobj:%.o=%.cpp)
+cryptsrc := $(cryptsrc:%skein.cpp=%skein.c)
+cryptsrc := $(cryptsrc:%skein_block.cpp=%skein_block.c)
+cryptsrc := $(cryptsrc:%skeinApi.cpp=%skeinApi.c)
+cryptsrc := $(cryptsrc:%twofish.cpp=%twofish.c)
+cryptsrc := $(cryptsrc:%twofish_cfb.cpp=%twofish_cfb.c)
+srtpsrc := $(srtpobj:%.o=%.cpp)
+transportsrc := $(transportobj:%.o=%.c)
 
-
+LOCAL_SRC_FILES += $(zrtpsrc) $(cryptsrc) $(srtpsrc) $(transportsrc) 
 
 include $(BUILD_STATIC_LIBRARY)
