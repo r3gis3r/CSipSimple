@@ -74,7 +74,7 @@ public class SipMe extends SimpleImplementation {
     @Override
     public SipProfile buildAccount(SipProfile account) {
         SipProfile acc = super.buildAccount(account);
-        acc.vm_nbr = "*900";
+        acc.vm_nbr = "*999";
         return acc;
     }
 }
