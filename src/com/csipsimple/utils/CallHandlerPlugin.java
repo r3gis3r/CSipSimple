@@ -120,7 +120,7 @@ public class CallHandlerPlugin {
         nextExclude = resolvedInfos.getString(Intent.EXTRA_PHONE_NUMBER);
         label = resolvedInfos.getString(Intent.EXTRA_TITLE);
         if(TextUtils.isEmpty(label)) {
-            if(AVAILABLE_HANDLERS.containsKey(packageName)) {
+            if(AVAILABLE_HANDLERS != null && AVAILABLE_HANDLERS.containsKey(packageName)) {
                 label = AVAILABLE_HANDLERS.get(packageName);
             }
         }
