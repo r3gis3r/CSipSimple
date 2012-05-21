@@ -40,6 +40,7 @@ public class SipMe extends SimpleImplementation {
 		return "sipme";
 	}
 	
+	private final static String USUAL_PREFIX = "078555"; 
 	
     @Override
     public void fillLayout(SipProfile account) {
@@ -48,12 +49,19 @@ public class SipMe extends SimpleImplementation {
         accountUsername.setDialogTitle(R.string.w_common_phone_number);
         accountUsername.setDialogMessage(R.string.w_sipme_phone_number_desc);
         accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-
+        
         if(TextUtils.isEmpty(account.username)){
-            accountUsername.setText("078555");
+            accountUsername.setText(USUAL_PREFIX);
         }
     }
     
+    @Override
+    public boolean canSave() {
+    
+        boolean ok = super.canSave();
+        ok &= checkField(accountUsername, !accountUsername.getText().trim().equalsIgnoreCase(USUAL_PREFIX));
+        return ok;
+    }
 
     @Override
     public String getDefaultFieldSummary(String fieldName) {
@@ -61,5 +69,12 @@ public class SipMe extends SimpleImplementation {
             return parent.getString(R.string.w_sipme_phone_number_desc);
         }
         return super.getDefaultFieldSummary(fieldName);
+    }
+    
+    @Override
+    public SipProfile buildAccount(SipProfile account) {
+        SipProfile acc = super.buildAccount(account);
+        acc.vm_nbr = "*900";
+        return acc;
     }
 }
