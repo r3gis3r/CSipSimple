@@ -37,6 +37,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
@@ -118,6 +119,11 @@ public class CallHandlerPlugin {
         icon = (Bitmap) resolvedInfos.getParcelable(Intent.EXTRA_SHORTCUT_ICON);
         nextExclude = resolvedInfos.getString(Intent.EXTRA_PHONE_NUMBER);
         label = resolvedInfos.getString(Intent.EXTRA_TITLE);
+        if(TextUtils.isEmpty(label)) {
+            if(AVAILABLE_HANDLERS.containsKey(packageName)) {
+                label = AVAILABLE_HANDLERS.get(packageName);
+            }
+        }
 
         accountId = getAccountIdForCallHandler(context, packageName);
     }
@@ -208,7 +214,7 @@ public class CallHandlerPlugin {
      * 
      * @return A string to display to represent this call handler
      */
-    public CharSequence getLabel() {
+    public String getLabel() {
         return label;
     }
 

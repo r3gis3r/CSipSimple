@@ -228,7 +228,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
             } catch (InterruptedException e) {
                 Log.e(THIS_FILE, "Not possible to bind callhandler plugin");
             }
-            account.display_name = ch.getLabel().toString();
+            account.display_name = ch.getLabel();
             account.icon = ch.getIcon();
             
             isForceCall = forceCall;
