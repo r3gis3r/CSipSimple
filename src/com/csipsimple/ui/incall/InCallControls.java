@@ -238,10 +238,11 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 		
 		final int parentWidth = r - l;
 		final int parentHeight = b - t;
-		final int top = parentHeight * 3/4 - slidingTabWidget.getHeight()/2;
-		final int bottom = parentHeight * 3/4 + slidingTabWidget.getHeight() / 2;
-		slidingTabWidget.layout(0, top, parentWidth, bottom);
-		
+		if(slidingTabWidget != null) {
+    		final int top = parentHeight * 3/4 - slidingTabWidget.getHeight()/2;
+    		final int bottom = parentHeight * 3/4 + slidingTabWidget.getHeight() / 2;
+    		slidingTabWidget.layout(0, top, parentWidth, bottom);
+		}
 	}
 	
 
