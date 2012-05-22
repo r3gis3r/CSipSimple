@@ -92,6 +92,9 @@ public class Sipgate extends AlternateServerImplementation {
         }
         
 		
+        if(TextUtils.isEmpty(account.getSipDomain())) {
+            accountServer.setText("sipgate.de");
+        }
 
 		//Get wizard specific row for balance
 		customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
