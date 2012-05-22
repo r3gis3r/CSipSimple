@@ -216,17 +216,20 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
                 toCall = Filter.rewritePhoneNumber(getContext(), accId, numberToCall);
             }
             ch.loadFrom(accId, toCall, new OnLoadListener() {
-                
                 @Override
                 public void onLoad(CallHandlerPlugin ch) {
+                    Log.d(THIS_FILE, "Callhandler loaded");
                     semaphore.release();
                 }
             });
-            
+            boolean succeedInLoading = false;
             try {
-                semaphore.tryAcquire(3L, TimeUnit.SECONDS);
+                succeedInLoading = semaphore.tryAcquire(3L, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 Log.e(THIS_FILE, "Not possible to bind callhandler plugin");
+            }
+            if(!succeedInLoading) {
+                Log.e(THIS_FILE, "Unreachable callhandler plugin " + componentName);
             }
             account.display_name = ch.getLabel();
             account.icon = ch.getIcon();
