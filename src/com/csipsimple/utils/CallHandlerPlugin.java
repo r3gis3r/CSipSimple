@@ -68,7 +68,7 @@ public class CallHandlerPlugin {
     public CallHandlerPlugin(Context ctxt) {
         context = ctxt;
     }
-    private Handler mHandler = new Handler();
+    private static Handler mHandler = new Handler();
 
     /**
      * Load plugin from a given plugin component name 
