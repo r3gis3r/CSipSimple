@@ -38,6 +38,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipManager;
@@ -68,7 +69,7 @@ public class CallHandlerPlugin {
     public CallHandlerPlugin(Context ctxt) {
         context = ctxt;
     }
-    private static Handler mHandler = null;
+    private static Handler sThreadHandler = null;
 
     /**
      * Load plugin from a given plugin component name 
@@ -94,7 +95,7 @@ public class CallHandlerPlugin {
                             listener.onLoad(CallHandlerPlugin.this);
                         }
                     }
-                }, mHandler, Activity.RESULT_OK, null, null);
+                }, sThreadHandler, Activity.RESULT_OK, null, null);
 
     }
 
@@ -290,8 +291,10 @@ public class CallHandlerPlugin {
     }
 
     public static void initHandler() {
-        if(mHandler == null) {
-            mHandler = new Handler();
+        if(sThreadHandler == null) {
+            HandlerThread thread = new HandlerThread("ContactsAsyncWorker");
+            thread.start();
+            sThreadHandler = new Handler(thread.getLooper());
         }
     }
 
