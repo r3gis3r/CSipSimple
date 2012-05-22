@@ -37,6 +37,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipManager;
@@ -67,6 +68,7 @@ public class CallHandlerPlugin {
     public CallHandlerPlugin(Context ctxt) {
         context = ctxt;
     }
+    private Handler mHandler = new Handler();
 
     /**
      * Load plugin from a given plugin component name 
@@ -92,7 +94,7 @@ public class CallHandlerPlugin {
                             listener.onLoad(CallHandlerPlugin.this);
                         }
                     }
-                }, null, Activity.RESULT_OK, null, null);
+                }, mHandler, Activity.RESULT_OK, null, null);
 
     }
 
