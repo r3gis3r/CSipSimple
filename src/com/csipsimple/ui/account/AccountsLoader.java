@@ -77,6 +77,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
         loadStatus = true;
         onlyActive = true;
         loadCallHandlerPlugins = true;
+        CallHandlerPlugin.initHandler();
     }
     
 
@@ -87,6 +88,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
         loadStatus = false;
         onlyActive = onlyActiveAccounts;
         loadCallHandlerPlugins = withCallHandlerPlugins;
+        CallHandlerPlugin.initHandler();
         
     }
 

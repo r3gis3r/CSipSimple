@@ -68,7 +68,7 @@ public class CallHandlerPlugin {
     public CallHandlerPlugin(Context ctxt) {
         context = ctxt;
     }
-    private static Handler mHandler = new Handler();
+    private static Handler mHandler = null;
 
     /**
      * Load plugin from a given plugin component name 
@@ -287,6 +287,12 @@ public class CallHandlerPlugin {
         profile.icon = icon;
         return profile;
 
+    }
+
+    public static void initHandler() {
+        if(mHandler == null) {
+            mHandler = new Handler();
+        }
     }
 
 }
