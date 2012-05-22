@@ -19,17 +19,16 @@
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:baselineAligned="false"
     android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/settings_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1"
+        android:layout_above="@+id/validation_bar"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -64,8 +63,7 @@
             android:layout_height="fill_parent"
             android:drawSelectorOnTop="false"
             android:layoutAnimation="@anim/layout_slide_right"
-            android:persistentDrawingCache="animation|scrolling" >
-        </ListView>
+            android:persistentDrawingCache="animation|scrolling" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,7 +71,7 @@
         style="@style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
         <Button
@@ -93,4 +91,4 @@
             android:text="@string/save" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

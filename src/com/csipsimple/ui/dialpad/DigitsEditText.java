@@ -31,8 +31,6 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.csipsimple.utils.Log;
-
 /**
  * EditText which suppresses IME show up.
  */
@@ -91,7 +89,6 @@ public class DigitsEditText extends EditText {
         super.onSelectionChanged(selStart, selEnd);
         final InputMethodManager imm = ((InputMethodManager) getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE));
-        Log.d("DigitsEditText", ">> " + imm.isActive(this));
         if (imm != null && imm.isActive(this) && isDigit) {
             imm.hideSoftInputFromWindow(getApplicationWindowToken(), 0);
         }

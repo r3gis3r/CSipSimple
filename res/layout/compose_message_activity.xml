@@ -21,7 +21,7 @@
 -->
 <!-- Parts of this file are extract from the android project distributed under Apache license relicensed in GPLv3 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -71,9 +71,10 @@
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/bottom_panel"
+        android:layout_below="@id/recipients_subject_linear"
         android:layout_marginBottom="1dip"
-        android:layout_weight="1"
         android:drawSelectorOnTop="true"
         android:fadingEdge="none"
         android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -82,18 +83,19 @@
         android:transcriptMode="alwaysScroll"
         android:visibility="visible" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/bottom_panel"
         style="@style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_alignParentBottom="true" >
 
         <EditText
             android:id="@+id/embedded_text_editor"
-            android:layout_width="0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/button_with_counter"
             android:autoText="true"
             android:capitalize="sentences"
             android:hint="@string/type_to_compose_text_enter_to_send"
@@ -107,6 +109,7 @@
             android:id="@+id/button_with_counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:orientation="vertical" >
 
             <Button
@@ -132,6 +135,6 @@
                 android:textStyle="bold"
                 android:visibility="gone" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

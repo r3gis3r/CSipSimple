@@ -194,7 +194,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
                         AccountStatusDisplay accountStatusDisplay = AccountListUtils
                                 .getAccountDisplay(getContext(), account.id);
                         if (accountStatusDisplay.availableForCalls) {
-                            BitmapDrawable drawable = new BitmapDrawable(
+                            BitmapDrawable drawable = new BitmapDrawable(getResources(), 
                                     WizardUtils.getWizardBitmap(getContext(), account));
                             quickAction.addItem(drawable, account.display_name,
                                     new OnClickListener() {
@@ -254,7 +254,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         account = aAccount;
 
         if (account == null) {
-            if(Compatibility.canMakeGSMCall(getContext())) {
+            if(isInEditMode() || Compatibility.canMakeGSMCall(getContext())) {
                 textView.setText(getResources().getString(R.string.gsm));
                 imageView.setImageResource(R.drawable.ic_wizard_gsm);
             }else {
@@ -263,7 +263,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
             }
         } else {
             textView.setText(account.display_name);
-            imageView.setImageDrawable(new BitmapDrawable(WizardUtils.getWizardBitmap(getContext(),
+            imageView.setImageDrawable(new BitmapDrawable(getResources(), WizardUtils.getWizardBitmap(getContext(),
                     account)));
         }
         if (onAccountChange != null) {
