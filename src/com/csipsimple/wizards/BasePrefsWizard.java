@@ -222,7 +222,7 @@ public class BasePrefsWizard extends GenericPrefs {
 	/**
 	 * Save account and end the activity
 	 */
-	private void saveAndFinish() {
+	public void saveAndFinish() {
 		saveAccount();
 		Intent intent = getIntent();
 		setResult(RESULT_OK, intent);

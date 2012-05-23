@@ -21,33 +21,29 @@
 
 package com.csipsimple.wizards.impl;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.os.Handler;
 import android.os.Message;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.MD5;
+import com.csipsimple.wizards.impl.AccountCreationWebview.OnAccountCreationDoneListener;
 
-public class Zadarma extends SimpleImplementation {
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Zadarma extends SimpleImplementation implements OnAccountCreationDoneListener {
 
 
 	protected static final String THIS_FILE = "ZadarmaW";
@@ -58,9 +54,7 @@ public class Zadarma extends SimpleImplementation {
 
 	private LinearLayout customWizard;
 	private TextView customWizardText;
-	private WebView webView;
-	private LinearLayout settingsContainer;
-	private LinearLayout validationBar;
+    private AccountCreationWebview extAccCreator;
 	
 	@Override
 	protected String getDomain() {
@@ -83,12 +77,10 @@ public class Zadarma extends SimpleImplementation {
 		customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
 		customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
 		
-		validationBar = (LinearLayout) parent.findViewById(R.id.validation_bar);
 		
 		updateAccountInfos(account);
-		
-		// add webview
-		initWebView();
+
+        extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
 	}
 	
 
@@ -123,7 +115,6 @@ public class Zadarma extends SimpleImplementation {
 			}
 		}
 	};
-	private ProgressBar loadingProgressBar;
 	
 	private void updateAccountInfos(final SipProfile acc) {
 		if (acc != null && acc.id != SipProfile.INVALID_ID) {
@@ -163,11 +154,7 @@ public class Zadarma extends SimpleImplementation {
 			customWizard.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					settingsContainer.setVisibility(View.GONE);
-					validationBar.setVisibility(View.GONE);
-					webView.setVisibility(View.VISIBLE);
-					webView.loadUrl(webCreationPage);
-					webView.requestFocus(View.FOCUS_DOWN);
+				    extAccCreator.show();
 				}
 			});
 		}
@@ -186,61 +173,19 @@ public class Zadarma extends SimpleImplementation {
 	}
 	
 
-	private void initWebView() {
+    @Override
+    public void onAccountCreationDone(String username, String password) {
+        setUsername(username);
+        setPassword(password);
+    }
+    
 
-		webView = new WebView(parent);
-		settingsContainer = (LinearLayout) parent.findViewById(R.id.settings_container);
-		LinearLayout globalContainer = (LinearLayout) settingsContainer.getParent();
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		lp.weight = 1;
-		webView.setVisibility(View.GONE);
-		globalContainer.addView(webView, 0, lp);
-		
-		loadingProgressBar = new ProgressBar(parent, null, android.R.attr.progressBarStyleHorizontal);
-		lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 30);
-		lp.gravity = 1;
-		loadingProgressBar.setVisibility(View.GONE);
-		loadingProgressBar.setIndeterminate(false);
-		loadingProgressBar.setMax(100);
-		globalContainer.addView(loadingProgressBar, 0, lp);
-		
-		
-		// Setup webview 
-		webView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
-		
-		WebSettings webSettings = webView.getSettings();
-		webSettings.setSavePassword(false);
-		webSettings.setSaveFormData(false);
-		webSettings.setJavaScriptEnabled(true);
-		webSettings.setSupportZoom(false);
-		webSettings.setCacheMode(WebSettings.LOAD_NORMAL);
-		webSettings.setNeedInitialFocus(true);
-		webView.addJavascriptInterface(new JSInterface(), "CSipSimpleWizard");
-		
-		// Adds Progress bar Support
-		webView.setWebChromeClient(new WebChromeClient() {
-			public void onProgressChanged(WebView view, int progress) {
-				Log.d(THIS_FILE, "Progress changed to " + progress);
-				if(progress < 100) {
-					loadingProgressBar.setVisibility(View.VISIBLE);
-					loadingProgressBar.setProgress(progress); 
-				}else {
-					loadingProgressBar.setVisibility(View.GONE);
-				}
-			}
-		});
-	}
-
-	public class JSInterface {
-		public void finishAccountCreation(boolean success, String userName, String password) {
-			webView.setVisibility(View.GONE);
-			settingsContainer.setVisibility(View.VISIBLE);
-			validationBar.setVisibility(View.VISIBLE);
-			if(success) {
-				setUsername(userName);
-				setPassword(password);
-				parent.updateValidation();
-			}
-		}
-	}
+    @Override
+    public boolean saveAndQuit() {
+        if(canSave()) {
+            parent.saveAndFinish();
+            return true;
+        }
+        return false;
+    }
 }
