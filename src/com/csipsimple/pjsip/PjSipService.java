@@ -98,12 +98,14 @@ public class PjSipService {
     //private PjStreamDialtoneGenerator dialtoneGenerator;
 
     private Integer hasBeenHoldByGSM = null;
-
+    private Integer hasBeenChangedRingerMode = null;
+    
     public UAStateReceiver userAgentReceiver;
     public MediaManager mediaManager;
 
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
     private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
+    
     // -------
     // Locks
     // -------
@@ -1570,10 +1572,12 @@ public class PjSipService {
             mediaManager.stopRingAndUnfocus();
         }
 
+        
+        
         // If new call state is not idle
         if (state != TelephonyManager.CALL_STATE_IDLE && userAgentReceiver != null) {
             SipCallSession currentActiveCall = userAgentReceiver.getActiveCallInProgress();
-
+            
             if (currentActiveCall != null) {
                 AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
                 if (state != TelephonyManager.CALL_STATE_RINGING) {
@@ -1587,6 +1591,7 @@ public class PjSipService {
                 } else {
                     // We have a ringing incoming call.
                     // Avoid vibration
+                    hasBeenChangedRingerMode  = am.getRingerMode();
                     am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                 }
             }
@@ -1597,6 +1602,13 @@ public class PjSipService {
                 pjsua.set_snd_dev(0, 0);
                 callReinvite(hasBeenHoldByGSM, true);
                 hasBeenHoldByGSM = null;
+            }
+            
+            // GSM is now back to an IDLE state, reset ringerMode if was changed.
+            if(hasBeenChangedRingerMode != null) {
+                AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
+                am.setRingerMode(hasBeenChangedRingerMode);
+                hasBeenChangedRingerMode = null;
             }
         }
     }

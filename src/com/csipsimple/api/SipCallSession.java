@@ -408,14 +408,24 @@ public final class SipCallSession implements Parcelable {
     }
 
     /**
-     * Check if the specific call info indicates that it is an active call in
-     * progress (incoming or early or calling or confirmed or connecting)
+     * Check if the call state indicates that it is an active call in
+     * progress. 
+     * This is equivalent to state incoming or early or calling or confirmed or connecting
      * 
      * @return true if the call can be considered as in progress/active
      */
     public boolean isActive() {
         return (callState == InvState.INCOMING || callState == InvState.EARLY ||
                 callState == InvState.CALLING || callState == InvState.CONFIRMED || callState == InvState.CONNECTING);
+    }
+    
+    /**
+     * Chef if the call state indicates that it's an ongoing call.
+     * This is equivalent to state confirmed.
+     * @return true if the call can be considered as ongoing.
+     */
+    public boolean isOngoing() {
+        return callState == InvState.CONFIRMED;
     }
 
     /**

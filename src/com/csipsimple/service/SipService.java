@@ -893,8 +893,8 @@ public class SipService extends Service {
 			Log.d(THIS_FILE, "Listen for phone state ");
 			phoneConnectivityReceiver = new ServicePhoneStateReceiver();
 			
-			telephonyManager.listen(phoneConnectivityReceiver, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-					| PhoneStateListener.LISTEN_CALL_STATE );
+			telephonyManager.listen(phoneConnectivityReceiver, /*PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
+					| */PhoneStateListener.LISTEN_CALL_STATE );
 		}
 		// Content observer
 		if(statusObserver == null) {

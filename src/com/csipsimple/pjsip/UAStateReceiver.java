@@ -879,16 +879,26 @@ public class UAStateReceiver extends Callback {
 	// Private methods
 	// --------
 	
-
+	/**
+	 * Broadcast csipsimple intent about the fact we are currently have a sip call state change.<br/>
+	 * This may be used by third party applications that wants to track csipsimple call state
+	 * @param callInfo the new call state infos
+	 */
 	private void onBroadcastCallState(final SipCallSession callInfo) {
 		//Internal event
 		Intent callStateChangedIntent = new Intent(SipManager.ACTION_SIP_CALL_CHANGED);
 		callStateChangedIntent.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
-		pjService.service.sendBroadcast(callStateChangedIntent);
+		pjService.service.sendBroadcast(callStateChangedIntent, SipManager.PERMISSION_USE_SIP);
 		
 		
 	}
 
+	/**
+	 * Broadcast to android system that we currently have a phone call.
+	 * This may be managed by other sip apps that want to keep track of incoming calls for example.
+	 * @param state The state of the call
+	 * @param number The corresponding remote number
+	 */
 	private void broadCastAndroidCallState(String state, String number) {
 		//Android normalized event
 		Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
@@ -900,11 +910,17 @@ public class UAStateReceiver extends Callback {
 		pjService.service.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
 	}
 	
-	/**
-	 * 
-	 * @param currentCallInfo2 
-	 * @param callInfo
-	 */
+    /**
+     * Start the call activity for a given Sip Call Session. <br/>
+     * The call activity should take care to get any ongoing calls when started
+     * so the currentCallInfo2 parameter is indication only. <br/>
+     * This method ensure that the start of the activity is not fired too much
+     * in short delay and may just ignore requests if last time someone ask for
+     * a launch is too recent
+     * 
+     * @param currentCallInfo2 the call info that raise this request to open the
+     *            call handler activity
+     */
 	private synchronized void launchCallHandler(SipCallSession currentCallInfo2) {
 		long currentElapsedTime = SystemClock.elapsedRealtime();
 		
@@ -930,14 +946,10 @@ public class UAStateReceiver extends Callback {
 	/**
 	 * Check if any of call infos indicate there is an active
 	 * call in progress.
+	 * @see SipCallSession#isActive()
 	 */
 	public SipCallSession getActiveCallInProgress() {
-		//Log.d(THIS_FILE, "isActiveCallInProgress(), number of calls: " + callsList.keySet().size());
-		
-		//
-		// Go through the whole list of calls and check if
-		// any call is in an active state.
-		//
+		// Go through the whole list of calls and find the first active state.
 		for (Integer i : callsList.keySet()) { 
 			SipCallSession callInfo = getCallInfo(i);
 			if (callInfo.isActive()) {
