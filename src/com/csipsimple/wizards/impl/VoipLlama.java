@@ -21,7 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.net.Uri;
 import android.text.InputType;
 import android.text.TextUtils;
 
