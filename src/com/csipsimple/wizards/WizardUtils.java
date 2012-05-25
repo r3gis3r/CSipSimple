@@ -653,6 +653,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_t_online, 9, 
                     new Locale[]{ Locale.GERMAN }, false, false, 
                     TOnline.class));
+            WIZARDS_DICT.put("VOOCALL", new WizardInfo("VOOCALL", "voocall.cz", 
+                    R.drawable.ic_wizard_voocall, 9, 
+                    new Locale[]{ locale("cs_CZ") }, false, false, 
+                    Voocall.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
