@@ -34,6 +34,7 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.provider.Settings;
 
 import com.csipsimple.api.MediaState;
@@ -183,11 +184,14 @@ public class MediaManager {
 		
 		// Set the rest of the phone in a better state to not interferate with current call
 		// Do that only if we were not already in silent mode
+		/*
+		 * Not needed anymore with on flight gsm call capture
 		if(audioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
     		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_ON);
     		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_OFF);
     		audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
 		}
+		*/
 		
 		//LOCKS
 		
@@ -360,9 +364,9 @@ public class MediaManager {
 		ContentResolver ctntResolver = service.getContentResolver();
 		
 		Editor ed = prefs.edit();
-		ed.putInt("savedVibrateRing", audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER));
-		ed.putInt("savedVibradeNotif", audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION));
-		ed.putInt("savedRingerMode", audioManager.getRingerMode());
+//		ed.putInt("savedVibrateRing", audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER));
+//		ed.putInt("savedVibradeNotif", audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION));
+//		ed.putInt("savedRingerMode", audioManager.getRingerMode());
 		ed.putInt("savedWifiPolicy" , android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT));
 		
 		int inCallStream = Compatibility.getInCallStream();
@@ -392,9 +396,9 @@ public class MediaManager {
 		ContentResolver ctntResolver = service.getContentResolver();
 
 		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, prefs.getInt("savedWifiPolicy", Settings.System.WIFI_SLEEP_POLICY_DEFAULT));
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, prefs.getInt("savedVibrateRing", AudioManager.VIBRATE_SETTING_ONLY_SILENT));
-		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, prefs.getInt("savedVibradeNotif", AudioManager.VIBRATE_SETTING_OFF));
-		audioManager.setRingerMode(prefs.getInt("savedRingerMode", AudioManager.RINGER_MODE_NORMAL));
+//		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, prefs.getInt("savedVibrateRing", AudioManager.VIBRATE_SETTING_ONLY_SILENT));
+//		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, prefs.getInt("savedVibradeNotif", AudioManager.VIBRATE_SETTING_OFF));
+//		audioManager.setRingerMode(prefs.getInt("savedRingerMode", AudioManager.RINGER_MODE_NORMAL));
 		
 		int inCallStream = Compatibility.getInCallStream();
 		setStreamVolume(inCallStream, prefs.getInt("savedVolume", (int)(audioManager.getStreamMaxVolume(inCallStream)*0.8) ), 0);
@@ -631,4 +635,131 @@ public class MediaManager {
 	public boolean isUserWantMicrophoneMute() {
 		return userWantMicrophoneMute;
 	}
+	
+
+    // The possible tones we can play.
+    public static final int TONE_NONE = 0;
+    public static final int TONE_CALL_WAITING = 1;
+    public static final int TONE_BUSY = 2;
+    public static final int TONE_CONGESTION = 3;
+    public static final int TONE_BATTERY_LOW = 4;
+    public static final int TONE_CALL_ENDED = 5;
+    
+    /**
+     * Play a tone in band
+     * @param toneId the id of the tone to play.
+     */
+	public void playInCallTone(int toneId) {
+	    (new InCallTonePlayer(toneId)).start();
+	}
+
+    /**
+    * Helper class to play tones through the earpiece (or speaker / BT)
+    * during a call, using the ToneGenerator.
+    *
+    * To use, just instantiate a new InCallTonePlayer
+    * (passing in the TONE_* constant for the tone you want)
+    * and start() it.
+    *
+    * When we're done playing the tone, if the phone is idle at that
+    * point, we'll reset the audio routing and speaker state.
+    * (That means that for tones that get played *after* a call
+    * disconnects, like "busy" or "congestion" or "call ended", you
+    * should NOT call resetAudioStateAfterDisconnect() yourself.
+    * Instead, just start the InCallTonePlayer, which will automatically
+    * defer the resetAudioStateAfterDisconnect() call until the tone
+    * finishes playing.)
+    */
+    private class InCallTonePlayer extends Thread {
+        private int mToneId;
+
+
+        // The tone volume relative to other sounds in the stream
+        private static final int TONE_RELATIVE_VOLUME_HIPRI = 80;
+        private static final int TONE_RELATIVE_VOLUME_LOPRI = 50;
+
+        InCallTonePlayer(int toneId) {
+            super();
+            mToneId = toneId;
+        }
+
+        @Override
+        public void run() {
+            Log.d(THIS_FILE, "InCallTonePlayer.run(toneId = " + mToneId + ")...");
+
+            int toneType; // passed to ToneGenerator.startTone()
+            int toneVolume; // passed to the ToneGenerator constructor
+            int toneLengthMillis;
+            switch (mToneId) {
+                case TONE_CALL_WAITING:
+                    toneType = ToneGenerator.TONE_SUP_CALL_WAITING;
+                    toneVolume = TONE_RELATIVE_VOLUME_HIPRI;
+                    toneLengthMillis = 5000;
+                    break;
+                case TONE_BUSY:
+                    toneType = ToneGenerator.TONE_SUP_BUSY;
+                    toneVolume = TONE_RELATIVE_VOLUME_HIPRI;
+                    toneLengthMillis = 4000;
+                    break;
+                case TONE_CONGESTION:
+                    toneType = ToneGenerator.TONE_SUP_CONGESTION;
+                    toneVolume = TONE_RELATIVE_VOLUME_HIPRI;
+                    toneLengthMillis = 4000;
+                    break;
+                case TONE_BATTERY_LOW:
+                    // For now, use ToneGenerator.TONE_PROP_ACK (two quick
+                    // beeps). TODO: is there some other ToneGenerator
+                    // tone that would be more appropriate here? Or
+                    // should we consider adding a new custom tone?
+                    toneType = ToneGenerator.TONE_PROP_ACK;
+                    toneVolume = TONE_RELATIVE_VOLUME_HIPRI;
+                    toneLengthMillis = 1000;
+                    break;
+                case TONE_CALL_ENDED:
+                    toneType = ToneGenerator.TONE_PROP_PROMPT;
+                    toneVolume = TONE_RELATIVE_VOLUME_LOPRI;
+                    toneLengthMillis = 2000;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Bad toneId: " + mToneId);
+            }
+
+            // If the mToneGenerator creation fails, just continue without it. It is
+            // a local audio signal, and is not as important.
+            ToneGenerator toneGenerator;
+            try {
+                toneGenerator = new ToneGenerator(AudioManager.STREAM_VOICE_CALL, toneVolume);
+                // if (DBG) log("- created toneGenerator: " + toneGenerator);
+            } catch (RuntimeException e) {
+                Log.w(THIS_FILE, "InCallTonePlayer: Exception caught while creating ToneGenerator: " + e);
+                toneGenerator = null;
+            }
+
+            // Using the ToneGenerator (with the CALL_WAITING / BUSY /
+            // CONGESTION tones at least), the ToneGenerator itself knows
+            // the right pattern of tones to play; we do NOT need to
+            // manually start/stop each individual tone, or manually
+            // insert the correct delay between tones. (We just start it
+            // and let it run for however long we want the tone pattern to
+            // continue.)
+            //
+            // TODO: When we stop the ToneGenerator in the middle of a
+            // "tone pattern", it sounds bad if we cut if off while the
+            // tone is actually playing. Consider adding API to the
+            // ToneGenerator to say "stop at the next silent part of the
+            // pattern", or simply "play the pattern N times and then
+            // stop."
+
+            if (toneGenerator != null) {
+                toneGenerator.startTone(toneType);
+                SystemClock.sleep(toneLengthMillis);
+                toneGenerator.stopTone();
+
+                Log.v(THIS_FILE, "- InCallTonePlayer: done playing.");
+                toneGenerator.release();
+            }
+        }
+    }
+
+
 }

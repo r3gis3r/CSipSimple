@@ -47,6 +47,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
+import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
@@ -113,17 +114,22 @@ public class UAStateReceiver extends Callback {
 		lockCpu();
 		
 		//Check if we have not already an ongoing call
-		if(pjService != null && pjService.service != null && !pjService.service.supportMultipleCalls) {
+		boolean hasOngoingSipCall = false;
+		if(pjService != null && pjService.service != null) {
 			SipCallSession[] calls = getCalls();
 			if(calls != null) {
 				for( SipCallSession existingCall : calls ) {
 					if(!existingCall.isAfterEnded() && existingCall.getCallId() != callId) {
-						Log.e(THIS_FILE, "Settings to not support two call at the same time !!!");
-						//If there is an ongoing call and we do not support multiple calls
-						//Send busy here
-						pjsua.call_hangup(callId, 486, null, null);
-						unlockCpu();
-						return;
+					    if( !pjService.service.supportMultipleCalls ) {
+    						Log.e(THIS_FILE, "Settings to not support two call at the same time !!!");
+    						//If there is an ongoing call and we do not support multiple calls
+    						//Send busy here
+    						pjsua.call_hangup(callId, 486, null, null);
+    						unlockCpu();
+    						return;
+					    }else {
+					        hasOngoingSipCall = true;
+					    }
 					}
 				}
 			}
@@ -153,12 +159,15 @@ public class UAStateReceiver extends Callback {
                 // Ring and inform remote about ringing with 180/RINGING
                 pjService.callAnswer(callId, 180);
                 
-                if(pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE) {
-                    if(pjService.mediaManager != null) {
+                if(pjService.mediaManager != null) {
+                    if(pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE
+                           && !hasOngoingSipCall ) {
                         pjService.mediaManager.startRing(remContact);
+                    }else {
+                        pjService.mediaManager.playInCallTone(MediaManager.TONE_CALL_WAITING);
                     }
-                    broadCastAndroidCallState("RINGING", remContact);
                 }
+                broadCastAndroidCallState("RINGING", remContact);
             }
             if(shouldAutoAnswer < 300) {
                 //Or by api

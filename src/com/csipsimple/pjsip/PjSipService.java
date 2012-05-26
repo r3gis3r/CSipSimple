@@ -1577,12 +1577,11 @@ public class PjSipService {
         // If new call state is not idle
         if (state != TelephonyManager.CALL_STATE_IDLE && userAgentReceiver != null) {
             SipCallSession currentActiveCall = userAgentReceiver.getActiveCallInProgress();
-            
+            // If we have a sip call on our side
             if (currentActiveCall != null) {
                 AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
-                if (state != TelephonyManager.CALL_STATE_RINGING) {
-                    // New state is not ringing nor idle... so off hook, hold
-                    // current sip call
+                if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    // GSM is now off hook => hold current sip call
                     hasBeenHoldByGSM = currentActiveCall.getCallId();
                     callHold(hasBeenHoldByGSM);
                     pjsua.set_no_snd_dev();
@@ -1590,9 +1589,13 @@ public class PjSipService {
                     am.setMode(AudioManager.MODE_IN_CALL);
                 } else {
                     // We have a ringing incoming call.
-                    // Avoid vibration
-                    hasBeenChangedRingerMode  = am.getRingerMode();
+                    // Avoid ringing
+                    hasBeenChangedRingerMode = am.getRingerMode();
                     am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    // And try to notify with tone
+                    if(mediaManager != null) {
+                        mediaManager.playInCallTone(MediaManager.TONE_CALL_WAITING);
+                    }
                 }
             }
         } else {
