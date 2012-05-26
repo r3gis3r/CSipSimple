@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="optional_sip_code">Valfri SIP-kod</string>
+  <string name="cant_call">Kan inte ringa</string>
+  <string name="rewrite">Skriv om</string>
+  <string name="stop_processing">Avsluta bearbetning</string>
+  <string name="direct_call">Ring direkt</string>
+  <string name="auto_answer">Svara automatiskt</string>
+  <string name="starts_with">Börjar med</string>
+  <string name="ends_with">Slutar med</string>
+  <string name="contains">Innehåller</string>
+  <string name="all">Alla</string>
+  <string name="has_exactly_n_digits">Har exakt N siffror</string>
+  <string name="has_more_than_n_digits">Har fler än N siffror</string>
+  <string name="is_exactly">Är exakt</string>
+  <string name="custom_regexp">Valfri RegExp</string>
+  <string name="prefix_by">Med prefix</string>
+  <string name="suffix_with">Med suffix</string>
+  <string name="replace_match_by">Ersätt matchning med</string>
+  <string name="replace_all_by">Ersätt alla med</string>
+</resources>

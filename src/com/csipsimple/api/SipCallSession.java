@@ -195,6 +195,8 @@ public final class SipCallSession implements Parcelable {
     private int lastStatusCode = 0;
     private String lastStatusComment = "";
     private String mediaSecureInfo = "";
+    private boolean canRecord = false;
+    private boolean isRecording = false;
 
     /**
      * Construct from parcelable <br/>
@@ -217,6 +219,8 @@ public final class SipCallSession implements Parcelable {
         mediaSecure = (in.readInt() == 1);
         setLastStatusComment(in.readString());
         setMediaHasVideo((in.readInt() == 1));
+        canRecord = (in.readInt() == 1);
+        isRecording = (in.readInt() == 1);
     }
 
     /**
@@ -257,6 +261,8 @@ public final class SipCallSession implements Parcelable {
         dest.writeInt(mediaSecure ? 1 : 0);
         dest.writeString(getLastStatusComment());
         dest.writeInt(mediaHasVideo() ? 1 : 0);
+        dest.writeInt(canRecord ? 1 : 0);
+        dest.writeInt(isRecording ? 1 : 0);
     }
 
     /**
@@ -614,5 +620,44 @@ public final class SipCallSession implements Parcelable {
      */
     public void setMediaHasVideo(boolean mediaHasVideo) {
         this.mediaHasVideoStream = mediaHasVideo;
+    }
+    
+    /**
+     * Set the can record flag <br/>
+     * This method should be only used by CSipSimple service
+     * 
+     * @param canRecord pass true if the audio can be recorded
+     */
+    public void setCanRecord(boolean canRecord) {
+        this.canRecord = canRecord;
+    }
+    
+
+    /**
+     * Set the can record flag <br/>
+     * This method should be only used by CSipSimple service
+     * 
+     * @param canRecord pass true if the audio can be recorded
+     */
+    public void setIsRecording(boolean isRecording) {
+        this.isRecording = isRecording;
+    }
+    
+    /**
+     * Get the current call recording status for this call.
+     * 
+     * @return true if we are currently recording this call to a file
+     */
+    public boolean isRecording() {
+        return isRecording;
+    }
+    
+    /**
+     * Get the capability to record the call to a file.
+     * 
+     * @return true if it should be possible to record the call to a file
+     */
+    public boolean canRecord() {
+        return canRecord;
     }
 }

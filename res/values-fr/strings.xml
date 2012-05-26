@@ -77,6 +77,8 @@
   <string name="audio">Audio</string>
   <string name="video">Video</string>
   <string name="invert_selection">Inverser la séléction</string>
+  <string name="cant_write_file">Erreur d\'écriture du fichier</string>
+  <string name="info">Infos</string>
   <!--Presence stuff-->
   <string name="online">Online</string>
   <string name="offline">Offline</string>

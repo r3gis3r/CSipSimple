@@ -439,46 +439,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     }
 
     public static final int AUDIO_SETTINGS_MENU = Menu.FIRST + 1;
-    public static final int RECORD_MENU = Menu.FIRST + 2;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        MenuItem recItem = menu.findItem(RECORD_MENU);
-        boolean valueOk = false;
-
-        if (service != null) {
-            try {
-                boolean isRecording = (service.getRecordedCall() != -1);
-                if (isRecording) {
-                    recItem.setTitle(R.string.stop_recording);
-                    recItem.setIcon(R.drawable.stop);
-                    recItem.setEnabled(true);
-                    valueOk = true;
-                } else {
-                    SipCallSession currentCall = getActiveCallInfo();
-                    if (currentCall != null
-                            && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
-                        if (service.canRecord(currentCall.getCallId())) {
-                            recItem.setTitle(R.string.record);
-                            recItem.setIcon(R.drawable.record);
-                            recItem.setEnabled(true);
-                            valueOk = true;
-                        }
-                    }
-                }
-            } catch (RemoteException e) {
-                Log.e(THIS_FILE, "Can't call services methods", e);
-            }
-        }
-        if (!valueOk) {
-            recItem.setEnabled(false);
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
 
     /**
      * {@inheritDoc}
@@ -487,9 +448,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(Menu.NONE, AUDIO_SETTINGS_MENU, Menu.NONE, R.string.prefs_media).setIcon(
                 R.drawable.ic_menu_media);
-        if(CustomDistribution.supportCallRecord()) {
-            menu.add(Menu.NONE, RECORD_MENU, Menu.NONE, R.string.record).setIcon(R.drawable.record);
-        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -501,19 +459,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         int optSel = item.getItemId();
         if (optSel == AUDIO_SETTINGS_MENU) {
             startActivity(new Intent(this, InCallMediaControl.class));
-            return true;
-        } else if (optSel == RECORD_MENU) {
-            try {
-                if (service != null) {
-                    SipCallSession currentCall = getActiveCallInfo();
-                    if (currentCall != null
-                            && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
-                        service.startRecording(currentCall.getCallId());
-                    }
-                }
-            } catch (RemoteException e) {
-                // TODO : toaster
-            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -1186,6 +1131,19 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     startActivityForResult(pickupIntent, PICKUP_SIP_URI_NEW_CALL);
                     break;
                 }
+                case START_RECORDING :{
+                    if(service != null) {
+                        service.startRecording(call.getCallId());
+                    }
+                    break;
+                }
+                case STOP_RECORDING : {
+                    if(service != null) {
+                        service.stopRecording(call.getCallId());
+                    }
+                    break;
+                }
+                    
             }
         } catch (RemoteException e) {
             Log.e(THIS_FILE, "Was not able to call service method", e);

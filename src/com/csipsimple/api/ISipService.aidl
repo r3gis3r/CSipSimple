@@ -88,8 +88,29 @@ interface ISipService{
 	void ignoreNextOutgoingCallFor(String number);
 	
 	//Call control
+	/**
+	 * Place a call.
+	 * 
+	 * @param callee The sip uri to call. 
+	 * It can also be a simple number, in which case the app will autocomplete.
+	 * If you add the scheme, take care to fill completely else it could be considered as a call
+	 * to a sip IP/domain
+	 * @ param accountId The id of the account to use for this call. 
+	 */
 	void makeCall(in String callee, int accountId);
+	/**
+	 * Answer a call.
+	 * 
+	 * @param callId The id of the call to answer.
+	 * @param status The sip status code you'd like to answer with. 200 to take the call.  400 <= status < 500 if refusing.
+	 */
 	int answer(int callId, int status);
+	/**
+	 * Hangup a call.
+	 *
+	 * @param callId The id of the call to hangup.
+	 * @param status The sip status code you'd like to hangup with.
+	 */
 	int hangup(int callId, int status);
 	int sendDtmf(int callId, int keyCode);
 	int hold(int callId);
@@ -107,8 +128,9 @@ interface ISipService{
 	void confAdjustTxLevel(int port, float value);
 	void confAdjustRxLevel(int port, float value);
 	/**
-	 * Get Rx and Tx sound level for a given port
-	 * @param int port id
+	 * Get Rx and Tx sound level for a given port.
+	 *
+	 * @param port Port id we'd like to have the level
 	 * @return The RX and TX (0-255) level encoded as RX << 8 | TX
 	 */
 	long confGetRxTxLevel(int port);
@@ -119,9 +141,31 @@ interface ISipService{
 	int stopLoopbackTest();
 	
 	// Record calls
+	/**
+	 * Start recording of a call to a file (in/out).
+	 * 
+	 * @param callId the call id to start recording of.
+	 */
 	void startRecording(int callId);
-	void stopRecording();
-	int getRecordedCall();
+	/**
+	 * Stop recording of a call.
+	 * 
+	 * @param callId the call id to stop recording.
+	 */
+	void stopRecording(int callId);
+	/**
+	 * Is the call being recorded ?
+	 * 
+	 * @param callId the call id to get recording status of.
+	 * @return true if the call is currently being recorded
+	 */
+	boolean isRecording(int callId);
+	/**
+	 * Can the call be recorded ?
+	 * 
+	 * @param callId the call id to get record capability of.
+	 * @return true if it's possible to record the call. 
+	 */
 	boolean canRecord(int callId);
 	
 	// Play files to stream

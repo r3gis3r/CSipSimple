@@ -530,18 +530,18 @@ public class SipService extends Service {
 		}
 
 		@Override
-		public void stopRecording() throws RemoteException {
+		public void stopRecording(int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.stopRecording();
+			pjService.stopRecording(callId);
 		}
 
 		@Override
-		public int getRecordedCall() throws RemoteException {
+		public boolean isRecording(int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			if(pjService == null) {
-				return -1;
+				return false;
 			}
-			return pjService.getRecordedCall();
+			return pjService.isRecording(callId);
 		}
 
 		@Override

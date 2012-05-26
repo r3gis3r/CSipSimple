@@ -195,8 +195,8 @@ public class UAStateReceiver extends Callback {
 				}
 				// Call is now ended
 				pjService.stopDialtoneGenerator(callId);
-				//TODO : should be stopped only if it's the current call.
-				pjService.stopRecording();
+				pjService.stopRecording(callId);
+				pjService.stopPlaying(callId);
 			}
 			
 			msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
@@ -421,13 +421,9 @@ public class UAStateReceiver extends Callback {
                 if (pjService.mediaManager != null) {
                     pjService.mediaManager.setSoftwareVolume();
                 }
-                // Useless with Peter's patch
-                // pjsua.set_ec(
-                // pjService.prefsWrapper.getEchoCancellationTail(),
-                // pjService.prefsWrapper.getEchoMode());
-
+                
                 // Auto record
-                if (pjService.recordedCall == PjSipService.INVALID_RECORD
+                if (pjService.canRecord(callId)
                         &&
                         pjService.prefsWrapper
                                 .getPreferenceBooleanValue(SipConfigManager.AUTO_RECORD_CALLS)) {
@@ -591,15 +587,24 @@ public class UAStateReceiver extends Callback {
 		return TimerWrapper.cancel(entry, entryId);
 	}
 	
-	// -------
-	// Current call management -- assume for now one unique call is managed
-	// -------
+	/**
+	 * Map callId to known {@link SipCallSession}.
+	 * This is cache of known session maintained by the UA state receiver.
+	 * The UA state receiver is in charge to maintain calls list integrity for {@link PjSipService}.
+	 * All information it gets comes from the stack. Except recording status that comes from service.
+	 */
 	private HashMap<Integer, SipCallSession> callsList = new HashMap<Integer, SipCallSession>();
-	//private long currentCallStart = 0;
 	
+	/**
+	 * Update the call information from pjsip stack by calling pjsip primitives.
+	 * @param callId The id to the call to update
+	 * @param e the pjsip_even that raised the update request
+	 * @return The built sip call session. It's also stored in cache.
+	 * @throws SameThreadException if we are calling that from outside the pjsip thread. It's a virtual exception to make sure not called from bad place.
+	 */
 	private SipCallSession updateCallInfoFromStack(Integer callId, pjsip_event e) throws SameThreadException {
 		SipCallSession callInfo;
-		Log.d(THIS_FILE, "Get call info for update");
+		Log.d(THIS_FILE, "Updating call infos from the stack");
 		synchronized (callsList) {
 			callInfo = callsList.get(callId);
 			if(callInfo == null) {
@@ -607,9 +612,11 @@ public class UAStateReceiver extends Callback {
 				callInfo.setCallId(callId);
 			}
 		}
-		Log.d(THIS_FILE, "Launch update");
 		// We update session infos. callInfo is both in/out and will be updated
 		PjSipCalls.updateSessionFromPj(callInfo, e, pjService);
+		// We update from our current recording state
+		callInfo.setIsRecording(pjService.isRecording(callId));
+		callInfo.setCanRecord(pjService.canRecord(callId));
 		synchronized (callsList) {
     		// Re-add to list mainly for case newly added session
     		callsList.put(callId, callInfo);
@@ -1016,5 +1023,22 @@ public class UAStateReceiver extends Callback {
 		}
 		return false;
 	}
+	
+	/**
+	 * Update status of call recording info in call session info
+	 * @param callId The call id to modify
+	 * @param canRecord if we can now record the call
+	 * @param isRecording if we are currently recording the call
+	 */
+    public void updateRecordingStatus(int callId, boolean canRecord, boolean isRecording) {
+        SipCallSession callInfo = getCallInfo(callId);
+        callInfo.setCanRecord(canRecord);
+        callInfo.setIsRecording(isRecording);
+        synchronized (callsList) {
+            // Re-add it just to be sure
+            callsList.put(callId, callInfo);
+        }
+        onBroadcastCallState(callInfo);
+    }
 	
 }

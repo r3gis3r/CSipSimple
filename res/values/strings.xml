@@ -95,6 +95,8 @@
     <string name="audio">Audio</string>
     <string name="video">Video</string>
     <string name="invert_selection">Invert selection</string>
+    <string name="cant_write_file">Error writing file</string>
+    <string name="info">Info</string>
 
     <!-- Presence stuff -->
     <string name="online">Online</string>

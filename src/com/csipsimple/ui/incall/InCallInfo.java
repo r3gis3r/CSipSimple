@@ -48,6 +48,7 @@ import com.csipsimple.ui.incall.InCallActivity.OnBadgeTouchListener;
 import com.csipsimple.ui.incall.InCallControls.OnTriggerListener;
 import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.ContactsAsyncHelper;
+import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.widgets.ExtensibleBadge;
@@ -61,6 +62,8 @@ public class InCallInfo extends ExtensibleBadge {
     private String cachedRemoteUri = "";
     private int cachedInvState = SipCallSession.InvState.INVALID;
     private int cachedMediaState = SipCallSession.MediaState.ERROR;
+    private boolean cachedCanRecord = false;
+    private boolean cachedIsRecording = false;
     private ImageView photo, callIcon;
     private TextView remoteName, status;// , title;
     private Chronometer elapsedTime;
@@ -132,6 +135,8 @@ public class InCallInfo extends ExtensibleBadge {
 
         cachedInvState = callInfo.getCallState();
         cachedMediaState = callInfo.getMediaStatus();
+        cachedCanRecord = callInfo.canRecord();
+        cachedIsRecording = callInfo.isRecording();
 
         
         // VIDEO STUFF -- EXPERIMENTAL
@@ -166,7 +171,9 @@ public class InCallInfo extends ExtensibleBadge {
     private synchronized void updateQuickActions() {
         // Useless to process that
         if (cachedInvState == callInfo.getCallState() &&
-                cachedMediaState == callInfo.getMediaStatus()) {
+                cachedMediaState == callInfo.getMediaStatus() &&
+                cachedIsRecording == callInfo.isRecording() &&
+                cachedCanRecord == callInfo.canRecord()) {
             return;
         }
 
@@ -224,13 +231,33 @@ public class InCallInfo extends ExtensibleBadge {
 
         // Info item
         if (!callInfo.isAfterEnded()) {
-            addItem(R.drawable.ic_in_call_touch_round_details, "Info", new OnClickListener() {
+            addItem(R.drawable.ic_in_call_touch_round_details, R.string.info, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dispatchTriggerEvent(OnTriggerListener.DETAILED_DISPLAY);
                     collapse();
                 }
             });
+        }
+
+        if(CustomDistribution.supportCallRecord()) {
+            if(callInfo.canRecord() && ! callInfo.isRecording()) {
+                addItem(R.drawable.record, R.string.record, new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dispatchTriggerEvent(OnTriggerListener.START_RECORDING);
+                        collapse();
+                    }
+                });
+            }else if(callInfo.isRecording()) {
+                addItem(R.drawable.stop, R.string.stop_recording, new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dispatchTriggerEvent(OnTriggerListener.STOP_RECORDING);
+                        collapse();
+                    }
+                });
+            }
         }
 
     }

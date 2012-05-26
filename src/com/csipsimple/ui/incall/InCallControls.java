@@ -138,6 +138,15 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 		 * When xfer to a number is asked
 		 */
 		int XFER_CALL = ADD_CALL + 1;
+		
+		/**
+		 * When start recording is asked
+		 */
+		int START_RECORDING = XFER_CALL + 1;
+		/**
+		 * When stop recording is asked
+		 */
+		int STOP_RECORDING = START_RECORDING + 1;
 
 		/**
 		 * Called when the user make an action
