@@ -49,6 +49,7 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 	
 	private BroadcastReceiver mediaStateReceiver = new BroadcastReceiver() {
 		
+        @SuppressWarnings("deprecation")
         @Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
@@ -134,7 +135,8 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 		return isBluetoothConnected;
 	}
 	
-	public void register() {
+	@SuppressWarnings("deprecation")
+    public void register() {
 		Log.d(THIS_FILE, "Register BT media receiver");
 		context.registerReceiver(mediaStateReceiver , new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
 	}

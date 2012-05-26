@@ -25,7 +25,6 @@ package com.csipsimple.ui.incall;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -85,6 +84,7 @@ import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Theme;
+import com.csipsimple.utils.keyguard.KeyguardWrapper;
 import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.IOnLeftRightChoice;
@@ -113,10 +113,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     // Screen wake lock for incoming call
     private WakeLock wakeLock;
-    // Keygard for incoming call
-    private boolean manageKeyguard = false;
-    private KeyguardManager keyguardManager;
-    private KeyguardManager.KeyguardLock keyguardLock;
 
     private Dialpad dialPad;
     private LinearLayout dialPadContainer;
@@ -148,11 +144,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     private DisplayMetrics metrics;
     private SurfaceView cameraPreview;
     private CallProximityManager proximityManager;
+    private KeyguardWrapper keyguardManager;
 
     private final static int PICKUP_SIP_URI_XFER = 0;
     private final static int PICKUP_SIP_URI_NEW_CALL = 1;
     
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -218,6 +216,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_ZRTP_SHOW_SAS));
         
         proximityManager = new CallProximityManager(this, this, lockOverlay);
+        keyguardManager = KeyguardWrapper.getKeyguardManager(this);
 
         dialFeedback = new DialingFeedback(this, true);
 
@@ -251,21 +250,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     protected void onStart() {
         Log.d(THIS_FILE, "Start in call");
         super.onStart();
-        if (keyguardManager == null) {
-            keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-            keyguardLock = keyguardManager.newKeyguardLock("com.csipsimple.inCallKeyguard");
-        }
-
-        // If this line is uncommented keyguard will be prevented only if in
-        // keyguard mode is locked
-        // when incoming call arrives
-        // if(keyguardManager.inKeyguardRestrictedInputMode()) {
-
-        manageKeyguard = true;
-        keyguardLock.disableKeyguard();
-        // }
-        
-
+        keyguardManager.unlock();
     }
 
     @Override
@@ -290,10 +275,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     @Override
     protected void onStop() {
         super.onStop();
-
-        if (manageKeyguard) {
-            keyguardLock.reenableKeyguard();
-        }
+        keyguardManager.lock();
     }
 
     @Override
