@@ -6,7 +6,7 @@
     <string name="w_expert_acc_id">Konto-ID</string>
     <string name="w_expert_acc_id_desc">Format : "Visningsnamn &lt;sip:login@registrar>"</string>
     <string name="w_expert_reg_uri">URI för registrering</string>
-    <string name="w_expert_reg_uri_desc">Format : "sip:registrar.net"[:port]</string>
+    <string name="w_expert_reg_uri_desc">Format : "sip:registrar.net[:port]"</string>
     <string name="w_expert_realm">Realm</string>
     <string name="w_expert_realm_desc">Domän för autentisering (om du inte vet, använd \'*\')</string>
     <string name="w_expert_username">Användarnamn</string>
@@ -17,7 +17,7 @@
     <string name="w_expert_datatype_desc">Typ av data</string>
     <string name="w_expert_t_proxy">Proxy</string>
     <string name="w_expert_proxy">URI för proxy</string>
-    <string name="w_expert_proxy_desc">Format : "sip:proxy.net"[:port]</string>
+    <string name="w_expert_proxy_desc">Format : "sip:proxy.net[:port]"</string>
     <string name="w_expert_use_tcp">Använd TCP (inte UDP)</string>
     <string name="w_expert_prevent_tcp">Förhindra TCP (försök enbart med UDP)</string>
     <string name="w_expert_publish_enabled">Publicering akiverat</string>

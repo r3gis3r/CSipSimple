@@ -22,7 +22,7 @@
     <string name="w_expert_acc_id">Account id</string>
     <string name="w_expert_acc_id_desc">Format : "DisplayName &lt;sip:login@registrar>"</string>
     <string name="w_expert_reg_uri">Registration URI</string>
-    <string name="w_expert_reg_uri_desc">Format : "sip:registrar.net"[:port]</string>
+    <string name="w_expert_reg_uri_desc">Format : "sip:registrar.net[:port]"</string>
     <string name="w_expert_realm">Realm</string>
     <string name="w_expert_realm_desc">Authentication domain (if you don\'t know, use \'*\')</string>
     <string name="w_expert_username">Username</string>
@@ -33,7 +33,7 @@
     <string name="w_expert_datatype_desc">Type of data</string>
     <string name="w_expert_t_proxy">Proxy</string>
     <string name="w_expert_proxy">Proxy URI</string>
-    <string name="w_expert_proxy_desc">Format : "sip:proxy.net"[:port]</string>
+    <string name="w_expert_proxy_desc">Format : "sip:proxy.net[:port]"</string>
     <string name="w_expert_use_tcp">Use TCP (not UDP)</string>
     <string name="w_expert_prevent_tcp">Prevent TCP (only try UDP)</string>
     <string name="w_expert_publish_enabled">Publish enabled</string>

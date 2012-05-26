@@ -99,9 +99,9 @@ public class SipService extends Service {
 
 	// Implement public interface for the service
 	private final ISipService.Stub binder = new ISipService.Stub() {
-		/**
-		 * Start the sip stack according to current settings (create the stack)
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void sipStart() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -109,19 +109,18 @@ public class SipService extends Service {
 			getExecutor().execute(new StartRunnable());
 		}
 
-		/**
-		 * Stop the sip stack (destroy the stack)
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void sipStop() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			getExecutor().execute(new StopRunnable());
 		}
 
-	
-		/**
-		 * Force the stop of the service
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void forceStopService() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -130,9 +129,9 @@ public class SipService extends Service {
 			//stopSelf();
 		}
 
-		/**
-		 * Restart the service (threaded)
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void askThreadedRestart() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -140,9 +139,9 @@ public class SipService extends Service {
 			getExecutor().execute(new RestartRunnable());
 		};
 
-		/**
-		 * Populate pjsip accounts with accounts saved in sqlite
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void addAllAccounts() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -154,9 +153,9 @@ public class SipService extends Service {
 			});
 		}
 
-		/**
-		 * Unregister and delete accounts registered
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void removeAllAccounts() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -168,9 +167,10 @@ public class SipService extends Service {
 			});
 		}
 
-		/**
-		 * Reload all accounts with values found in database
-		 */
+
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void reAddAllAccounts() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -183,10 +183,12 @@ public class SipService extends Service {
 			});
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void setAccountRegistration(int accountId, int renew) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			
 			
 			final SipProfile acc = getAccount(accountId);
 			if(acc != null) {
@@ -200,21 +202,18 @@ public class SipService extends Service {
 			}
 		}
 
-		/**
-		 * Get account and it's informations
-		 * 
-		 * @param accountId
-		 *            the id (sqlite id) of the account
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public SipProfileState getSipProfileState(int accountId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return SipService.this.getSipProfileState(accountId);
 		}
 
-		/**
-		 * Switch in autoanswer mode
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void switchToAutoAnswer() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -222,13 +221,9 @@ public class SipService extends Service {
 			setAutoAnswerNext(true);
 		}
 
-		/**
-		 * Make a call
-		 * 
-		 * @param callee
-		 *            remote contact ot call If not well formated we try to add
-		 *            domain name of the default account
-		 */
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void makeCall(final String callee, final int accountId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -254,9 +249,8 @@ public class SipService extends Service {
 			
 		}
 		
-
 		/**
-		 * Send SMS using
+		 * {@inheritDoc}
 		 */
 		@Override
 		public void sendMessage(final String message, final String callee, final long accountId) throws RemoteException {
@@ -288,14 +282,10 @@ public class SipService extends Service {
 			});
 		}
 
-		/**
-		 * Answer an incoming call
-		 * 
-		 * @param callId
-		 *            the id of the call to answer to
-		 * @param status
-		 *            the status code to send
-		 */
+
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int answer(final int callId, final int status) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -310,14 +300,10 @@ public class SipService extends Service {
 			return SipManager.SUCCESS;
 		}
 
-		/**
-		 * Hangup a call
-		 * 
-		 * @param callId
-		 *            the id of the call to hang up
-		 * @param status
-		 *            the status code to send
-		 */
+
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int hangup(final int callId, final int status) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -333,7 +319,9 @@ public class SipService extends Service {
 			return SipManager.SUCCESS;
 		}
 		
-
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int xfer(final int callId, final String callee) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -348,6 +336,9 @@ public class SipService extends Service {
 			return (Integer) action.getResult();
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int xferReplace(final int callId, final int otherCallId, final int options) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -362,6 +353,9 @@ public class SipService extends Service {
 			return (Integer) action.getResult();
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int sendDtmf(final int callId, final int keyCode) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -376,6 +370,9 @@ public class SipService extends Service {
 			return (Integer) action.getResult();
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int hold(final int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -390,6 +387,9 @@ public class SipService extends Service {
 			return (Integer) action.getResult();
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int reinvite(final int callId, final boolean unhold) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -404,13 +404,18 @@ public class SipService extends Service {
 			return (Integer) action.getResult();
 		}
 		
-
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public SipCallSession getCallInfo(final int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			return pjService.getCallInfo(callId);
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void setBluetoothOn(final boolean on) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -420,9 +425,11 @@ public class SipService extends Service {
 					pjService.setBluetoothOn(on);
 				}
 			});
-			
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void setMicrophoneMute(final boolean on) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -434,6 +441,9 @@ public class SipService extends Service {
 			});
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void setSpeakerphoneOn(final boolean on) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -446,6 +456,9 @@ public class SipService extends Service {
 		}
 
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public SipCallSession[] getCalls() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -455,6 +468,9 @@ public class SipService extends Service {
 			return new SipCallSession[0];
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void confAdjustTxLevel(final int port, final float value) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -469,6 +485,9 @@ public class SipService extends Service {
 			});
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void confAdjustRxLevel(final int port, final float value) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -483,7 +502,10 @@ public class SipService extends Service {
 			});
 			
 		}
-		
+
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void adjustVolume(SipCallSession callInfo, int direction, int flags) throws RemoteException {
 
@@ -512,9 +534,15 @@ public class SipService extends Service {
     		}
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void setEchoCancellation(final boolean on) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			if(pjService == null) {
+                return;
+            }
 			getExecutor().execute(new SipRunnable() {
 				@Override
 				protected void doRun() throws SameThreadException {
@@ -523,18 +551,43 @@ public class SipService extends Service {
 			});
 		}
 
-		@Override
-		public void startRecording(int callId) throws RemoteException {
-			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.startRecording(callId);
-		}
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void startRecording(final int callId) throws RemoteException {
+            SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+            if (pjService == null) {
+                return;
+            }
+            getExecutor().execute(new SipRunnable() {
+                @Override
+                protected void doRun() throws SameThreadException {
+                    pjService.startRecording(callId);
+                }
+            });
+        }
 
-		@Override
-		public void stopRecording(int callId) throws RemoteException {
-			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			pjService.stopRecording(callId);
-		}
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void stopRecording(final int callId) throws RemoteException {
+            SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+            if (pjService == null) {
+                return;
+            }
+            getExecutor().execute(new SipRunnable() {
+                @Override
+                protected void doRun() throws SameThreadException {
+                    pjService.stopRecording(callId);
+                }
+            });
+        }
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public boolean isRecording(int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -544,20 +597,44 @@ public class SipService extends Service {
 			return pjService.isRecording(callId);
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public boolean canRecord(int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			if(pjService == null) {
+                return false;
+            }
 			return pjService.canRecord(callId);
 		}
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void playWaveFile(final String filePath, final int callId, final int way) throws RemoteException {
+            SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+            if(pjService == null) {
+                return;
+            }
+            getExecutor().execute(new SipRunnable() {
+                @Override
+                protected void doRun() throws SameThreadException {
+                    pjService.playWaveFile(filePath, callId, way);
+                }
+            });
+        }
+
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void setPresence(final int presenceInt, final String statusText, final long accountId) throws RemoteException {
             SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
             if(pjService == null) {
                 return;
             }
-            
-            
             getExecutor().execute(new SipRunnable() {
                 @Override
                 protected void doRun() throws SameThreadException {
@@ -568,18 +645,27 @@ public class SipService extends Service {
         }
         
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int getPresence(long accountId) throws RemoteException {
             // TODO Auto-generated method stub
             return 0;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public String getPresenceStatus(long accountId) throws RemoteException {
             // TODO Auto-generated method stub
             return null;
         }
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public void zrtpSASVerified(final int dataPtr) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -591,7 +677,10 @@ public class SipService extends Service {
 				}
 			});
 		}
-		
+
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public MediaState getCurrentMediaState() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
@@ -602,20 +691,18 @@ public class SipService extends Service {
 			return ms;
 		}
 
-		@Override
-		public void playWaveFile(String filePath, int callId, int way) throws RemoteException {
-			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			if(pjService == null) {
-				return;
-			}
-			pjService.playWaveFile(filePath, callId, way);
-		}
-		
+
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int getVersion() throws RemoteException {
 			return SipManager.CURRENT_API;
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public String showCallInfosDialog(final int callId) throws RemoteException {
 			ReturnRunnable action = new ReturnRunnable() {
@@ -631,6 +718,9 @@ public class SipService extends Service {
 			return (String) action.getResult();
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int startLoopbackTest() throws RemoteException {
 			if(pjService == null) {
@@ -648,6 +738,9 @@ public class SipService extends Service {
 			return SipManager.SUCCESS;
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public int stopLoopbackTest() throws RemoteException {
 			if(pjService == null) {
@@ -665,6 +758,9 @@ public class SipService extends Service {
 			return SipManager.SUCCESS;
 		}
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public long confGetRxTxLevel(final int port) throws RemoteException {
             ReturnRunnable action = new ReturnRunnable() {
@@ -677,6 +773,9 @@ public class SipService extends Service {
             return (Long) action.getResult();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void ignoreNextOutgoingCallFor(String number) throws RemoteException {
             OutgoingCall.ignoreNext = number;

@@ -1718,7 +1718,13 @@ public class PjSipService {
     // Recorder
     public final static int INVALID_RECORD = -1;
     private SparseArray<Integer> recordedCalls = new SparseArray<Integer>();
-    public void startRecording(int callId) {
+    /**
+     * Start recording of a call.
+     * 
+     * @param callId the call id of the call to record
+     * @throws SameThreadException virtual exception to be sure we are calling this from correct thread
+     */
+    public void startRecording(int callId) throws SameThreadException {
         // Make sure we are in a valid state for recording
         if (!canRecord(callId)) {
             return;
@@ -1757,9 +1763,11 @@ public class PjSipService {
 
     /**
      * Stop recording of a call.
+     * 
      * @param callId the call to stop record for.
+     * @throws SameThreadException virtual exception to be sure we are calling this from correct thread
      */
-    public void stopRecording(int callId) {
+    public void stopRecording(int callId) throws SameThreadException {
         if (!created) {
             // Sanitize array if we are stopped.
             recordedCalls.delete(callId);
@@ -1777,7 +1785,8 @@ public class PjSipService {
     }
     
     /**
-     * Can we record for this call id?
+     * Can we record for this call id ?
+     * 
      * @param callId The call id to record to a file
      * @return true if seems to be possible to record this call.
      */
@@ -1803,6 +1812,7 @@ public class PjSipService {
     
     /**
      * Are we currently recording the call?
+     * 
      * @param callId The call id to test for a recorder presence 
      * @return true if recording this call
      */
@@ -1813,7 +1823,8 @@ public class PjSipService {
 
     /**
      * Get the file to record to for a given remote contact.
-     * This will implicitly get the current date in file name
+     * This will implicitly get the current date in file name.
+     * 
      * @param remoteContact The remote contact name
      * @return The file to store conversation
      */
@@ -1837,48 +1848,77 @@ public class PjSipService {
     }
 
     // Wave player
-    int[] plId = null;
-    Integer playingCall =  null;
+    public final static int INVALID_PLAYER = -1;
+    private SparseArray<Integer> playedCalls = new SparseArray<Integer>();
     public final static int BITMASK_OUT = 1 << 0;
     public final static int BITMASK_IN = 1 << 1;
-
-    public void playWaveFile(String filePath, int callId, int way) {
+    
+    /**
+     * Play one wave file in call stream.
+     * 
+     * @param filePath The path to the file we'd like to play
+     * @param callId The call id we want to play to. Even if we only use
+     *            {@link #BITMASK_IN} this must correspond to some call since
+     *            it's used to identify internally created player.
+     * @param way The way we want to play this file to. Bitmasked value that
+     *            could be compounded of {@link #BITMASK_IN} (read local) and
+     *            {@link #BITMASK_OUT} (read to remote party of the call)
+     * @throws SameThreadException virtual exception to be sure we are calling
+     *             this from correct thread
+     */
+    public void playWaveFile(String filePath, int callId, int way) throws SameThreadException {
         if (!created) {
             return;
         }
 
-        // Create new player int holder or destroy existing one if any
-        if (plId == null) {
-            plId = new int[1];
-        } else {
-            pjsua.player_destroy(plId[0]);
-        }
+        // Stop any current player
+        stopPlaying(callId);
 
-        if(!TextUtils.isEmpty(filePath)) {
-            // We create a new player conf port.
-            pj_str_t filename = pjsua.pj_str_copy(filePath);
-    
-            int status = pjsua.player_create(filename, 1 /* PJMEDIA_FILE_NO_LOOP */, plId);
-    
-            if (status == pjsuaConstants.PJ_SUCCESS) {
-                SipCallSession callInfo = getCallInfo(callId);
-    
-                int wavConfPort = callInfo.getConfPort();
-                int wavPort = pjsua.player_get_conf_port(plId[0]);
-                if ((way & BITMASK_OUT) == BITMASK_OUT) {
-                    pjsua.conf_connect(wavPort, wavConfPort);
-                }
-                if ((way & BITMASK_IN) == BITMASK_IN) {
-                    pjsua.conf_connect(wavPort, 0);
-                }
-                // Once connected, start to play
-                pjsua.player_set_pos(plId[0], 0);
-            }
+        if(TextUtils.isEmpty(filePath)) {
+            // Nothing to do if we have not file path
+            return;
         }
-    }
-    
-    public void stopPlaying(int callId) {
         
+        // We create a new player conf port.
+        
+        int[] plId = new int[1];
+        int status = pjsua.player_create(pjsua.pj_str_copy(filePath), 1 /* PJMEDIA_FILE_NO_LOOP */, plId);
+        
+        if (status == pjsuaConstants.PJ_SUCCESS) {
+            // Save player
+            int playerId = plId[0];
+            playedCalls.put(callId, playerId);
+            
+            // Connect player to requested ports
+            int wavPort = pjsua.player_get_conf_port(playerId);
+            if ((way & BITMASK_OUT) == BITMASK_OUT) {
+                SipCallSession callInfo = getCallInfo(callId);
+                int wavConfPort = callInfo.getConfPort();
+                pjsua.conf_connect(wavPort, wavConfPort);
+            }
+            if ((way & BITMASK_IN) == BITMASK_IN) {
+                pjsua.conf_connect(wavPort, 0);
+            }
+            // Once connected, start to play
+            pjsua.player_set_pos(playerId, 0);
+        }
+        
+    }
+
+    /**
+     * Stop eventual player for a given call.
+     * 
+     * @param callId the call id corresponding to player previously created with
+     *            {@link #playWaveFile(String, int, int)}
+     * @throws SameThreadException virtual exception to be sure we are calling
+     *             this from correct thread
+     */
+    public void stopPlaying(int callId) throws SameThreadException {
+        int playerId = playedCalls.get(callId, INVALID_PLAYER);
+        if(playerId != INVALID_PLAYER) {
+            pjsua.player_destroy(playerId);
+            playedCalls.delete(callId);
+        }
     }
 
     public void updateTransportIp(String oldIPAddress) throws SameThreadException {
