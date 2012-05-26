@@ -73,6 +73,7 @@ import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PhoneCapabilityTester;
 import com.csipsimple.utils.PreferencesProviderWrapper;
+import com.csipsimple.utils.PreferencesWrapper;
 
 import org.pjsip.pjsua.pjsua;
 
@@ -1117,6 +1118,9 @@ public class SipService extends Service {
 	}
 	
 	public boolean isConnectivityValid() {
+	    if(prefsWrapper.getPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, false)) {
+	        return false;
+	    }
 	    boolean valid = prefsWrapper.isValidConnectionForIncoming();
 	    if(activitiesForOutgoing.size() > 0) {
 	        valid |= prefsWrapper.isValidConnectionForOutgoing();

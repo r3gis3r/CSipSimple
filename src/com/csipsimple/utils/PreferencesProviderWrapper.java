@@ -217,6 +217,10 @@ public class PreferencesProviderWrapper {
 	 * @return true if connection is valid
 	 */
 	public boolean isValidConnectionForOutgoing() {
+	    if(getPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, false)) {
+	        // Don't go further, we have been explicitly stopped
+	        return false;
+	    }
 		NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 		return isValidConnectionFor(ni, "out");
 	}

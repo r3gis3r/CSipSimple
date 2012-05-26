@@ -37,6 +37,7 @@ import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
 import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.CallHandlerPlugin.OnLoadListener;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesProviderWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,14 +108,20 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
         ArrayList<FilteredProfile> prefinalAccounts = new ArrayList<FilteredProfile>();
         
         // Get all sip profiles
-        ArrayList<SipProfile> accounts = SipProfile.getAllProfiles(getContext(), onlyActive,
-                new String[] {
-                        SipProfile.FIELD_ID,
-                        SipProfile.FIELD_ACC_ID,
-                        SipProfile.FIELD_ACTIVE,
-                        SipProfile.FIELD_DISPLAY_NAME,
-                        SipProfile.FIELD_WIZARD
-                });
+        ArrayList<SipProfile> accounts;
+        PreferencesProviderWrapper prefsWrapper = new PreferencesProviderWrapper(getContext());
+        if(onlyActive && !prefsWrapper.isValidConnectionForOutgoing() ) {
+            accounts = new ArrayList<SipProfile>();
+        }else {
+            accounts = SipProfile.getAllProfiles(getContext(), onlyActive,
+                    new String[] {
+                            SipProfile.FIELD_ID,
+                            SipProfile.FIELD_ACC_ID,
+                            SipProfile.FIELD_ACTIVE,
+                            SipProfile.FIELD_DISPLAY_NAME,
+                            SipProfile.FIELD_WIZARD
+                    });
+        }
         // And all external call handlers
         Map<String, String> externalHandlers;
         if(loadCallHandlerPlugins) {
