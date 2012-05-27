@@ -31,7 +31,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
-import com.csipsimple.api.SipManager;
 import com.csipsimple.ui.prefs.PrefsFast;
 import com.csipsimple.ui.prefs.PrefsFilters;
 import com.csipsimple.ui.prefs.PrefsLogic;
@@ -98,10 +97,4 @@ public class MainPrefs extends SherlockPreferenceActivity {
         return super.onOptionsItemSelected(item);
     }
     
-    @Override
-    public void onDestroy(){
-        Intent intent = new Intent(SipManager.ACTION_SIP_REQUEST_RESTART);
-        sendBroadcast(intent);
-        super.onDestroy();
-    }
 }

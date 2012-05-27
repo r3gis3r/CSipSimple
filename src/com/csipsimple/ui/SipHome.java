@@ -592,9 +592,9 @@ public class SipHome extends SherlockFragmentActivity {
                 return true;
             case PARAMS_MENU:
                 if(Compatibility.isCompatible(11)) {
-                    startActivity(new Intent(this, com.csipsimple.ui.prefs.hc.MainPrefs.class));
+                    startActivityForResult(new Intent(this, com.csipsimple.ui.prefs.hc.MainPrefs.class), CHANGE_PREFS);
                 }else {
-                    startActivity(new Intent(this, com.csipsimple.ui.prefs.cupcake.MainPrefs.class));
+                    startActivityForResult(new Intent(this, com.csipsimple.ui.prefs.cupcake.MainPrefs.class), CHANGE_PREFS);
                 }
                 return true;
             case CLOSE_MENU:
@@ -661,6 +661,15 @@ public class SipHome extends SherlockFragmentActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    private final static int CHANGE_PREFS = 1;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == CHANGE_PREFS) {
+            sendBroadcast(new Intent(SipManager.ACTION_SIP_REQUEST_RESTART));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void disconnect(boolean quit) {
