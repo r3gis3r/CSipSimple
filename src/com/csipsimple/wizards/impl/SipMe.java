@@ -59,7 +59,7 @@ public class SipMe extends SimpleImplementation {
     public boolean canSave() {
     
         boolean ok = super.canSave();
-        ok &= checkField(accountUsername, !accountUsername.getText().trim().equalsIgnoreCase(USUAL_PREFIX));
+        ok &= checkField(accountUsername, accountUsername.getText().trim().equalsIgnoreCase(USUAL_PREFIX));
         return ok;
     }
 
