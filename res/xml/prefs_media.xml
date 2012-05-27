@@ -74,11 +74,6 @@
             android:key="has_io_queue"
             android:summary="@string/has_io_queue_desc"
             android:title="@string/has_io_queue" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="auto_connect_bluetooth"
-            android:summary="@string/auto_connect_bluetooth_desc"
-            android:title="@string/auto_connect_bluetooth" />
     </PreferenceCategory>
 
     <CheckBoxPreference
@@ -159,6 +154,22 @@
             android:key="dtmf_mode"
             android:summary="@string/sip_dtmf_desc"
             android:title="@string/sip_dtmf" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="auto_connect_bluetooth"
+            android:summary="@string/auto_connect_bluetooth_desc"
+            android:title="@string/auto_connect_bluetooth" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="auto_connect_speaker"
+            android:summary="@string/auto_connect_speaker_desc"
+            android:title="@string/auto_connect_speaker" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="auto_detect_speaker"
+            android:summary="@string/auto_detect_speaker_desc"
+            android:title="@string/auto_detect_speaker" />
     </PreferenceCategory>
 
     <PreferenceScreen

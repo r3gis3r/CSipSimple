@@ -48,6 +48,7 @@ public class PrefsLogic {
     private static final String MEDIA_AUDIO_QUALITY_KEY = "audio_quality";
     private static final String MEDIA_BAND_TYPE_KEY = "band_types";
     private static final String MEDIA_CODEC_LIST_KEY = "codecs_list";
+    private static final String MEDIA_MISC_KEY = "misc";
     private static final String MEDIA_AUDIO_TROUBLESHOOT_KEY = "audio_troubleshooting";
 
     private static final String NWK_SECURE_TRANSPORT_KEY = "secure_transport";
@@ -155,6 +156,8 @@ public class PrefsLogic {
                     pfh.hidePreference(MEDIA_AUDIO_VOLUME_KEY, SipConfigManager.SND_BT_SPEAKER_LEVEL);
                     
                     pfh.hidePreference(MEDIA_AUDIO_VOLUME_KEY, SipConfigManager.USE_SOFT_VOLUME);
+                    
+                    pfh.hidePreference(MEDIA_MISC_KEY, SipConfigManager.AUTO_CONNECT_SPEAKER);
                     
                     //hidePreference("perfs", SipConfigManager.THREAD_COUNT);
                     //hidePreference(null, "perfs");
@@ -321,12 +324,6 @@ public class PrefsLogic {
     public static boolean onMainActivityOptionsItemSelected(MenuItem item, Context ctxt, PreferencesWrapper prefsWrapper) {
         int id = item.getItemId();
         if (id == R.id.audio_test) {
-            /*
-             * Thread t = new Thread() { public void run() {
-             * pjsua.test_audio_dev(8000, 20); pjsua.test_audio_dev(16000, 20);
-             * pjsua.test_audio_dev(8000, 40); pjsua.test_audio_dev(16000, 40);
-             * }; }; t.start();
-             */
             ctxt.startActivity(new Intent(ctxt, AudioTester.class));
             return true;
         } else if (id == R.id.reset_settings) {

@@ -124,6 +124,7 @@ public class MediaManager {
 		useWebRTCImpl = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK);
 		doFocusAudio = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO);
 		userWantBluetooth = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_BLUETOOTH);
+		userWantSpeaker = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_SPEAKER);
 	}
 	
 	public void stopService() {
@@ -137,7 +138,7 @@ public class MediaManager {
 		int targetMode = modeSipInCall;
 		
 		if(service.getPrefs().useModeApi()) {
-			Log.d(THIS_FILE, "User want speaker now..."+userWantSpeaker);
+            Log.d(THIS_FILE, "User want speaker now..." + userWantSpeaker);
 			if(!service.getPrefs().generateForSetCall()) {
 				return userWantSpeaker ? AudioManager.MODE_NORMAL : AudioManager.MODE_IN_CALL;
 			}else {
@@ -494,8 +495,8 @@ public class MediaManager {
 	
 	public void resetSettings() {
 		userWantBluetooth = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_BLUETOOTH);
+		userWantSpeaker = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_SPEAKER);
 		userWantMicrophoneMute = false;
-		userWantSpeaker = false;
 	}
 
 

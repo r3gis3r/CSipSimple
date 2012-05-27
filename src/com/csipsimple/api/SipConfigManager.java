@@ -311,6 +311,19 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String AUTO_CONNECT_BLUETOOTH = "auto_connect_bluetooth";
+    /**
+     * Should we automatically connect audio to speaker when call becomes active.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String AUTO_CONNECT_SPEAKER = "auto_connect_speaker";
+    /**
+     * Should we activate speaker automatically based on proximity and screen orientation.<br/>
+     * The speaker will be automatically turned on when phone is horizontal and off when vertical.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String AUTO_DETECT_SPEAKER = "auto_detect_speaker";
 
     // UI
     /**

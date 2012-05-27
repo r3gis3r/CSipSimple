@@ -145,6 +145,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     private SurfaceView cameraPreview;
     private CallProximityManager proximityManager;
     private KeyguardWrapper keyguardManager;
+    
+    private boolean useAutoDetectSpeaker = false;
 
     private final static int PICKUP_SIP_URI_XFER = 0;
     private final static int PICKUP_SIP_URI_NEW_CALL = 1;
@@ -240,6 +242,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 
             }
         }
+        
+        useAutoDetectSpeaker = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_DETECT_SPEAKER);
         
         applyTheme();
         proximityManager.startTracking();
@@ -980,10 +984,12 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     @Override
     public void onTrigger(int whichAction, SipCallSession call) {
-        Log.d(THIS_FILE, "In Call Activity is triggered");
-        Log.d(THIS_FILE, "We have a current call : " + call);
 
-        if (whichAction != ADD_CALL) {
+        // Sanity check for actions requiring valid call id
+        if (whichAction == TAKE_CALL || whichAction == DECLINE_CALL ||
+            whichAction == CLEAR_CALL || whichAction == DETAILED_DISPLAY || 
+            whichAction == TOGGLE_HOLD || whichAction == START_RECORDING ||
+            whichAction == STOP_RECORDING ) {
             // We check that current call is valid for any actions
             if (call == null) {
                 Log.e(THIS_FILE, "Try to do an action on a null call !!!");
@@ -1413,7 +1419,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
         // TODO : missing headset & keyboard open
         if(lastMediaState != null) {
-            if(lastMediaState.isBluetoothScoOn || lastMediaState.isSpeakerphoneOn) {
+            if(lastMediaState.isBluetoothScoOn) {
+                return false;
+            }
+            if(lastMediaState.isSpeakerphoneOn && ! useAutoDetectSpeaker) {
                 // Imediate reason to not enable proximity sensor
                 return false;
             }
@@ -1443,5 +1452,21 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
 
         return isValidCallState;
+    }
+
+    @Override
+    public void onProximityTrackingChanged(boolean acquired) {
+        if(useAutoDetectSpeaker) {
+            if(acquired) {
+                if(lastMediaState == null || lastMediaState.isSpeakerphoneOn) {
+                    onTrigger(SPEAKER_OFF, null);
+                }
+            }
+            if(!acquired) {
+                if(lastMediaState == null || !lastMediaState.isSpeakerphoneOn) {
+                    onTrigger(SPEAKER_ON, null);
+                }
+            }
+        }
     }
 }

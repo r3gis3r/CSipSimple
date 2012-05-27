@@ -221,6 +221,10 @@
     <string name="default_str">Default</string>
     <string name="auto_connect_bluetooth">Auto connect bluetooth</string>
     <string name="auto_connect_bluetooth_desc">Try to use BT SCO automatically (may break standard audio routing case)</string>
+    <string name="auto_connect_speaker">Auto connect rear speaker</string>
+    <string name="auto_connect_speaker_desc">Automatically use rear speaker when answering a call</string>
+    <string name="auto_detect_speaker">Auto detect speaker usage</string>
+    <string name="auto_detect_speaker_desc">Switch to rear speaker when phone is horizontal during a call.</string>
     <string name="codecs_per_bandwidth">Codec priority list per bandwidth</string>
     <string name="codecs_per_bandwidth_desc">Allow to have priority list for fast and for slow networks</string>
     <string name="audio_troubleshooting">Audio troubleshooting</string>

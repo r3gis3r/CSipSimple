@@ -77,11 +77,10 @@ public class CallProximityManager implements SensorEventListener, OrientationLis
     int WAIT_FOR_PROXIMITY_NEGATIVE = 1;
 
     private static Method powerLockReleaseIntMethod;
-
-
     
     public interface ProximityDirector {
         public boolean shouldActivateProximity();
+        public void onProximityTrackingChanged(boolean acquired);
     }
     
     CallProximityManager(Context context, ProximityDirector director, ScreenLocker screenLocker){
@@ -192,8 +191,14 @@ public class CallProximityManager implements SensorEventListener, OrientationLis
             
             if (isValidCallState && active) {
                 mScreenLocker.show();
+                if(mDirector != null) {
+                    mDirector.onProximityTrackingChanged(true);
+                }
             } else {
                 mScreenLocker.hide();
+                if(mDirector != null) {
+                    mDirector.onProximityTrackingChanged(false);
+                }
             }
 
         }
@@ -227,6 +232,10 @@ public class CallProximityManager implements SensorEventListener, OrientationLis
         if(shouldUseTimeoutOverlay()) {
             mScreenLocker.hide();
         }
+        // Notify
+        if(mDirector != null) {
+            mDirector.onProximityTrackingChanged(false);
+        }
     }
 
     public synchronized void acquire() {
@@ -236,6 +245,10 @@ public class CallProximityManager implements SensorEventListener, OrientationLis
         }
         if(shouldUseTimeoutOverlay()) {
             mScreenLocker.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_SHORT);
+        }
+        // Notify
+        if(mDirector != null) {
+            mDirector.onProximityTrackingChanged(true);
         }
     }
     
