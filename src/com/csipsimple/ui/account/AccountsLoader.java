@@ -64,6 +64,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
     private final boolean onlyActive;
     private final boolean loadCallHandlerPlugins;
     
+    
     /**
      * Constructor for loader for outgoing call context. <br/>
      * This one will care of rewriting number and keep track of accounts status.
@@ -78,7 +79,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
         loadStatus = true;
         onlyActive = true;
         loadCallHandlerPlugins = true;
-        CallHandlerPlugin.initHandler();
+        initHandlers();
     }
     
 
@@ -89,11 +90,15 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
         loadStatus = false;
         onlyActive = onlyActiveAccounts;
         loadCallHandlerPlugins = withCallHandlerPlugins;
+        initHandlers();
+    }
+    
+    private void initHandlers() {
         CallHandlerPlugin.initHandler();
-        
+        loaderObserver = new ForceLoadContentObserver();
     }
 
-    private ContentObserver loaderObserver = new ForceLoadContentObserver();
+    private ContentObserver loaderObserver;
     private ArrayList<FilteredProfile> finalAccounts;
     
     
@@ -104,7 +109,6 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
             getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
                 true, loaderObserver);
         }
-        
         ArrayList<FilteredProfile> prefinalAccounts = new ArrayList<FilteredProfile>();
         
         // Get all sip profiles

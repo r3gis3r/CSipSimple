@@ -36,7 +36,7 @@ public abstract class AccountsChooserListActivity extends SherlockFragmentActivi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.accounts_chooser_view);
         
-        listFragment = (AccountsChooserListFragment) getSupportFragmentManager().findFragmentById(R.id.list);
+        listFragment = (AccountsChooserListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
         
         listFragment.setShowCallHandlerPlugins(showInternalAccounts());
         listFragment.setOnAccountClickListener(this);

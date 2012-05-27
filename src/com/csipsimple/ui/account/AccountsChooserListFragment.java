@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.ResourceCursorAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -58,6 +59,12 @@ public class AccountsChooserListFragment extends CSSListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+    
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
+        return inflater.inflate(R.layout.accounts_chooser_fragment, container, false);
     }
 
     private void attachAdapter() {

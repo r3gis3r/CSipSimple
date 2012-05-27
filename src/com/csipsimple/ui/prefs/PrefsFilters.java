@@ -31,7 +31,7 @@ import com.csipsimple.ui.filters.AccountFilters;
 import com.csipsimple.utils.Compatibility;
 
 
-public class PrefsFilters  extends AccountsChooserListActivity {
+public class PrefsFilters extends AccountsChooserListActivity {
 	
     
     @Override
