@@ -292,7 +292,7 @@ public class CallHandlerPlugin {
 
     public static void initHandler() {
         if(sThreadHandler == null) {
-            HandlerThread thread = new HandlerThread("ContactsAsyncWorker");
+            HandlerThread thread = new HandlerThread("CallHandlerPluginWorker");
             thread.start();
             sThreadHandler = new Handler(thread.getLooper());
         }

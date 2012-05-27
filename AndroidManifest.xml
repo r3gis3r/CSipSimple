@@ -253,8 +253,7 @@ Remove that too fine change trigger
             android:name="com.csipsimple.service.OutgoingCall"
             android:process=":sipStack" >
             <intent-filter android:priority="10" >
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" >
-                </action>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </receiver>
 
@@ -424,7 +423,8 @@ Remove that too fine change trigger
         <!-- Call handlers -->
         <receiver
             android:name="com.csipsimple.plugins.telephony.CallHandler"
-            android:permission="android.permission.PROCESS_OUTGOING_CALLS" >
+            android:permission="android.permission.PROCESS_OUTGOING_CALLS"
+            android:process=":telCallHandler" >
             <intent-filter>
                 <action android:name="com.csipsimple.phone.action.HANDLE_CALL" />
             </intent-filter>
