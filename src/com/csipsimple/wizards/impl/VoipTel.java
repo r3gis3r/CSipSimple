@@ -22,13 +22,25 @@
 package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.wizards.impl.AccountCreationWebview.OnAccountCreationDoneListener;
 
-public class VoipTel extends SimpleImplementation {
-	
+public class VoipTel extends SimpleImplementation  implements OnAccountCreationDoneListener {
+
+    private static final String webCreationPage = "http://212.4.110.135:8080/subscriber/newSubscriberFree/alta?execution=e2s1";
+    
+
+    private LinearLayout customWizard;
+    private TextView customWizardText;
+    private AccountCreationWebview extAccCreator;
 
 	@Override
 	protected String getDomain() {
@@ -50,6 +62,13 @@ public class VoipTel extends SimpleImplementation {
 		super.fillLayout(account);
 
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		
+        //Get wizard specific row
+        customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
+        customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
+        extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
+        
+        updateAccountInfos(account);
 	}
 	
 	@Override
@@ -64,4 +83,38 @@ public class VoipTel extends SimpleImplementation {
 	public boolean needRestart() {
 		return true;
 	}
+	
+
+
+    private void updateAccountInfos(final SipProfile acc) {
+        if (acc != null && acc.id != SipProfile.INVALID_ID) {
+            customWizard.setVisibility(View.GONE);
+        } else {
+            // add a row to link 
+            customWizardText.setText(R.string.create_account);
+            customWizard.setVisibility(View.VISIBLE);
+            customWizard.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    extAccCreator.show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onAccountCreationDone(String username, String password) {
+        setUsername(username);
+        setPassword(password);
+    }
+    
+
+    @Override
+    public boolean saveAndQuit() {
+        if(canSave()) {
+            parent.saveAndFinish();
+            return true;
+        }
+        return false;
+    }
 }

@@ -36,8 +36,6 @@ import com.csipsimple.wizards.impl.AccountCreationWebview.OnAccountCreationDoneL
 
 public class Cryptel extends SimpleImplementation implements OnAccountCreationDoneListener {
 
-    protected static final int DID_SUCCEED = 0;
-    protected static final int DID_ERROR = 1;
     
     private static final String webCreationPage = "http://50.28.50.63/index.php";
 
@@ -70,10 +68,9 @@ public class Cryptel extends SimpleImplementation implements OnAccountCreationDo
         //Get wizard specific row
         customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
         customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
+        extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
         
         updateAccountInfos(account);
-
-        extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
 	}
 	
 	@Override
