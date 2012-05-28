@@ -86,12 +86,12 @@ public class OutgoingCallListFragment extends CSSListFragment {
         OutgoingCallChooser superActivity = ((OutgoingCallChooser)getActivity());
     
         ISipService service = superActivity.getConnectedService();
-        if(service == null) {
-            return false;
-        }
         long accountId = c.getLong(c.getColumnIndex(SipProfile.FIELD_ID));
         if(accountId > SipProfile.INVALID_ID) {
             // Extra check for the account id.
+            if(service == null) {
+                return false;
+            }
             boolean canCall = c.getInt(c.getColumnIndex(AccountsLoader.FIELD_STATUS_OUTGOING)) == 1;
             if(!canCall) {
                 return false;
@@ -114,7 +114,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
                 }
                 try {
                     String nextExclude = ch.getNextExcludeTelNumber();
-                    if (nextExclude != null) {
+                    if (nextExclude != null && service != null) {
                         try {
                             service.ignoreNextOutgoingCallFor(nextExclude);
                         } catch (RemoteException e) {

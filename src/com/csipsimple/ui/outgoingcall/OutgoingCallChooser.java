@@ -152,13 +152,12 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
      */
     private void connectService() {
         PreferencesProviderWrapper prefsWrapper = new PreferencesProviderWrapper(this);
+        Intent sipService = new Intent(SipManager.INTENT_SIP_SERVICE);
         if (prefsWrapper.isValidConnectionForOutgoing()) {
-            Intent sipService = new Intent(SipManager.INTENT_SIP_SERVICE);
             sipService.putExtra(SipManager.EXTRA_OUTGOING_ACTIVITY, getComponentName());
             startService(sipService);
-            bindService(sipService, connection, Context.BIND_AUTO_CREATE);
-            
         }
+        bindService(sipService, connection, Context.BIND_AUTO_CREATE);
     }
     /**
      * Get connected sip service.
