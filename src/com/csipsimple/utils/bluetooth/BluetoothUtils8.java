@@ -67,20 +67,26 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 			}
 		}
 	};
-	private Context context;
+	
+	protected Context context;
 	private MediaManager manager;
-	private BluetoothAdapter bluetoothAdapter;
+	protected BluetoothAdapter bluetoothAdapter;
 
-	public void init(Context aContext, MediaManager aManager) {
+	public void setContext(Context aContext){
 		context = aContext;
-		manager = aManager;
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		register();
-		try {
-			bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		}catch(RuntimeException e) {
-			Log.w(THIS_FILE, "Cant get default bluetooth adapter ", e);
+		if(bluetoothAdapter == null) {
+    		try {
+    			bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    		}catch(RuntimeException e) {
+    			Log.w(THIS_FILE, "Cant get default bluetooth adapter ", e);
+    		}
 		}
+	}
+	
+	public void setMediaManager(MediaManager aManager) {
+        manager = aManager;
+        register();
 	}
 	
 	public boolean canBluetooth() {
@@ -151,5 +157,8 @@ public class BluetoothUtils8 extends BluetoothWrapper {
 		bluetoothAdapter = null;
 	}
 
-
+    @Override
+    public boolean isBTHeadsetConnected() {
+        return canBluetooth();
+    }
 }

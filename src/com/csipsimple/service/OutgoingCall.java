@@ -50,27 +50,25 @@ public class OutgoingCall extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context aContext, Intent intent) {
-		String action = intent.getAction();
+	    context = aContext;
+        
+	    String action = intent.getAction();
 		String number = getResultData();
 		//String full_number = intent.getStringExtra("android.phone.extra.ORIGINAL_URI");
-
+		// Escape if no number
 		if (number == null) {
 			return;
 		}
 		
+		// If emergency number transmit as if we were not there
 		if(PhoneNumberUtils.isEmergencyNumber(number)) {
-			Log.d(THIS_FILE, "It's an emergency number ignore that");
 			ignoreNext = "";
 			setResultData(number);
 			return;
 		}
 		
-		
-		context = aContext;
 		prefsWrapper = new PreferencesProviderWrapper(context);
-		
-		//Log.d(THIS_FILE, "act=" + action + " num=" + number + " fnum=" + full_number + " ignx=" + ignoreNext);	
-		
+		// If we already passed the outgoing call receiver or we are not integrated, do as if we were not there
 		if ( ignoreNext.equalsIgnoreCase(number) || 
 		        !prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, true) || 
 				action == null) {

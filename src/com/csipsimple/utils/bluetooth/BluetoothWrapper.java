@@ -30,13 +30,18 @@ public abstract class BluetoothWrapper {
 	
 	private static BluetoothWrapper instance;
 	
-	public static BluetoothWrapper getInstance() {
+	public static BluetoothWrapper getInstance(Context context) {
 		if(instance == null) {
-			if(Compatibility.isCompatible(8)) {
+		    if(Compatibility.isCompatible(11)) {
+		        instance = new com.csipsimple.utils.bluetooth.BluetoothUtils14();
+		    }else if(Compatibility.isCompatible(8)) {
                 instance = new com.csipsimple.utils.bluetooth.BluetoothUtils8();
 			}else {
                 instance = new com.csipsimple.utils.bluetooth.BluetoothUtils3();
 			}
+		    if(instance != null) {
+		        instance.setContext(context);
+		    }
 		}
 		
 		return instance;
@@ -44,11 +49,12 @@ public abstract class BluetoothWrapper {
 	
 	protected BluetoothWrapper() {}
 
-	
-	public abstract void init(Context context, MediaManager manager);
+	public abstract void setContext(Context context);
+	public abstract void setMediaManager(MediaManager manager);
 	public abstract boolean canBluetooth();
 	public abstract void setBluetoothOn(boolean on);
 	public abstract boolean isBluetoothOn();
 	public abstract void register();
 	public abstract void unregister();
+	public abstract boolean isBTHeadsetConnected();
 }

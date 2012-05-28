@@ -21,46 +21,19 @@
 
 package com.csipsimple.utils.bluetooth;
 
-import android.content.Context;
 
-import com.csipsimple.service.MediaManager;
+import android.annotation.TargetApi;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothProfile;
 
-public class BluetoothUtils3 extends BluetoothWrapper {
-
-
-	public boolean canBluetooth() {
-		return false;
-	}
-
-	public void setBluetoothOn(boolean on) {
-		// Do nothing
-	}
-
-	public boolean isBluetoothOn() {
-		return false;
-	}
-
-	@Override
-	public void setContext(Context context) {
-		// Do nothing
-	}
-
-    public void setMediaManager(MediaManager aManager) {
-     // Do nothing
-    }
-
-	@Override
-	public void register() {
-		//Do nothing
-	}
-
-	@Override
-	public void unregister() {
-		// Do nothing
-	}
+@TargetApi(14)
+public class BluetoothUtils14 extends BluetoothUtils8 {
 
     @Override
-	public boolean isBTHeadsetConnected() {
-	    return false;
-	}
+    public boolean isBTHeadsetConnected() {
+        if(bluetoothAdapter != null) {
+            return (bluetoothAdapter.getProfileConnectionState(BluetoothProfile.HEADSET) == BluetoothAdapter.STATE_CONNECTED);
+        }
+        return false;
+    }
 }

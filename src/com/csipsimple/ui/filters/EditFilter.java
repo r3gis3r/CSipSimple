@@ -189,7 +189,7 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 		int action = Filter.getActionForPosition(actionSpinner.getSelectedItemPosition());
 		
 		if(TextUtils.isEmpty(matchesTextEditor.getText().toString()) && 
-				Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_ALL ){
+		        matcherNeedsText() ){
 			isValid = false;
 		}
 		if(action == Filter.ACTION_AUTO_ANSWER) {
@@ -236,12 +236,15 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 				initReplaceSpinner = true;
 			}
 		}
-		boolean showMatcherView = Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_ALL ;
-		matchesTextEditor.setVisibility(showMatcherView ? View.VISIBLE : View.GONE);
+		
+		matchesTextEditor.setVisibility(matcherNeedsText() ? View.VISIBLE : View.GONE);
 		checkFormValidity();
 	}
 	
-
+	private boolean matcherNeedsText() {
+	    return Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_ALL && 
+                Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_BLUETOOTH;
+	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {

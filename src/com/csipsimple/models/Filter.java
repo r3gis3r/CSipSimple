@@ -31,6 +31,7 @@ import android.util.SparseArray;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.bluetooth.BluetoothWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +63,7 @@ public class Filter {
 	public static final int MATCHER_ENDS = 5;
 	public static final int MATCHER_ALL = 6;
 	public static final int MATCHER_CONTAINS = 7;
+    public static final int MATCHER_BLUETOOTH = 8;
 	
 	public static final int REPLACE_PREFIX = 0;
 	public static final int REPLACE_MATCH_BY = 1;
@@ -88,6 +90,9 @@ public class Filter {
 	
 	
 	public static final String DEFAULT_ORDER = FIELD_PRIORITY + " asc";
+	
+	private static final String BLUETOOTH_MATCHER_KEY = "###BLUETOOTH###";
+	
 	private static final String THIS_FILE = "Filter";
 	
 	public Integer id;
@@ -169,8 +174,10 @@ public class Filter {
 		RegExpRepresentation m = getRepresentationForMatcher();
 		StringBuffer reprBuf = new StringBuffer();
 		reprBuf.append(matches_array[getPositionForMatcher(m.type)]);
-		reprBuf.append(' ');
-		reprBuf.append(m.fieldContent);
+		if(m.type != MATCHER_BLUETOOTH && m.type != MATCHER_ALL) {
+    		reprBuf.append(' ');
+    		reprBuf.append(m.fieldContent);
+		}
 		if(!TextUtils.isEmpty(replacePattern) && action == ACTION_REPLACE) {
 			m = getRepresentationForReplace();
 			reprBuf.append('\n');
@@ -198,13 +205,17 @@ public class Filter {
 		return true;
 	}
 	
-	public boolean mustCall(String number) {
+	public boolean mustCall(Context ctxt, String number) {
 		if(action == ACTION_DIRECTLY_CALL) {
-			try {
-				return Pattern.matches(matchPattern, number);
-			}catch(PatternSyntaxException e) {
-				logInvalidPattern(e);
-			}
+		    if(BLUETOOTH_MATCHER_KEY.equals(matchPattern)) {
+		        return BluetoothWrapper.getInstance(ctxt).isBTHeadsetConnected();
+		    }else {
+    			try {
+    				return Pattern.matches(matchPattern, number);
+    			}catch(PatternSyntaxException e) {
+    				logInvalidPattern(e);
+    			}
+		    }
 			
 		}
 		return false;
@@ -301,6 +312,7 @@ public class Filter {
 		MATCHER_TYPE_POS.put(5, MATCHER_HAS_MORE_N_DIGIT);
 		MATCHER_TYPE_POS.put(6, MATCHER_IS_EXACTLY);
 		MATCHER_TYPE_POS.put(7, MATCHER_REGEXP);
+        MATCHER_TYPE_POS.put(8, MATCHER_BLUETOOTH);
 	};
 	
 	public static int getMatcherForPosition(Integer selectedItemPosition) {
@@ -370,6 +382,9 @@ public class Filter {
 		case MATCHER_IS_EXACTLY:
 			matchPattern = "^("+Pattern.quote(representation.fieldContent)+")$";
 			break;
+		case MATCHER_BLUETOOTH:
+		    matchPattern = BLUETOOTH_MATCHER_KEY;
+		    break;
 		case MATCHER_REGEXP:
 		default:
 		    matchType = MATCHER_REGEXP;        // In case hit default:
@@ -387,7 +402,7 @@ public class Filter {
 		RegExpRepresentation repr = new RegExpRepresentation();
 		repr.type = matchType =  MATCHER_REGEXP;
 		if(matchPattern == null) {
-			repr.type = MATCHER_STARTS;
+			repr.type = matchType = MATCHER_STARTS;
 			repr.fieldContent = "";
 			return repr;
 		}else {
@@ -396,6 +411,10 @@ public class Filter {
 				repr.type = matchType = MATCHER_STARTS;
 				return repr;
 			}
+		}
+		
+		if(matchPattern.equals(BLUETOOTH_MATCHER_KEY)) {
+		    repr.type = matchType = MATCHER_BLUETOOTH;
 		}
 		
 		Matcher matcher = null;
@@ -578,7 +597,7 @@ public class Filter {
 	public static boolean isMustCallNumber(Context ctxt, long accountId, String number) {
 	    List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
         for (Filter f : filterList) {
-			if(f.mustCall(number)) {
+			if(f.mustCall(ctxt, number)) {
 				return true;
 			}
 			//Stop processing & rewrite

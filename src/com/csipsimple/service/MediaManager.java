@@ -112,8 +112,8 @@ public class MediaManager {
 	
 	public void startService() {
 		if(bluetoothWrapper == null) {
-			bluetoothWrapper = BluetoothWrapper.getInstance();
-			bluetoothWrapper.init(service, this);
+			bluetoothWrapper = BluetoothWrapper.getInstance(service);
+			bluetoothWrapper.setMediaManager(this);
 		}
 		if(audioFocusWrapper == null) {
 			audioFocusWrapper = AudioFocusWrapper.getInstance();

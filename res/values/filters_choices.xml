@@ -17,6 +17,7 @@
         <item>@string/has_more_than_n_digits</item>
         <item>@string/is_exactly</item>
         <item>@string/custom_regexp</item>
+        <item>@string/bluetooth</item>
     </string-array>
     <string-array name="replace_type">
         <item>@string/prefix_by</item>
