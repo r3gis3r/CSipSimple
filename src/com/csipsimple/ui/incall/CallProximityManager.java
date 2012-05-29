@@ -28,6 +28,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
@@ -74,7 +75,9 @@ public class CallProximityManager implements SensorEventListener, OrientationLis
     private int mOrientation;
     private boolean accelerometerEnabled = false;
     
-    int WAIT_FOR_PROXIMITY_NEGATIVE = 1;
+    private int WAIT_FOR_PROXIMITY_NEGATIVE = 1;
+    private final static int SCREEN_LOCKER_ACQUIRE_DELAY = "google_sdk".equals(Build.PRODUCT) ? ScreenLocker.WAIT_BEFORE_LOCK_LONG
+            : ScreenLocker.WAIT_BEFORE_LOCK_SHORT;
 
     private static Method powerLockReleaseIntMethod;
     
@@ -244,7 +247,7 @@ public class CallProximityManager implements SensorEventListener, OrientationLis
             isProximityWakeHeld = true;
         }
         if(shouldUseTimeoutOverlay()) {
-            mScreenLocker.delayedLock(ScreenLocker.WAIT_BEFORE_LOCK_SHORT);
+            mScreenLocker.delayedLock(SCREEN_LOCKER_ACQUIRE_DELAY);
         }
         // Notify
         if(mDirector != null) {
