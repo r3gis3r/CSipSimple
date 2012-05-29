@@ -117,7 +117,7 @@ public class CallLogDetailsFragment extends SherlockFragment {
             if (!TextUtils.isEmpty(nbr)) {
                 SipProfile acc = mAccountChooserButton.getSelectedAccount();
                 Intent it = new Intent(Intent.ACTION_CALL);
-                it.setData(Uri.parse("csip:" + nbr));
+                it.setData(SipUri.forgeSipUri("csip", nbr));
                 it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 it.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
                 startActivity(it);
