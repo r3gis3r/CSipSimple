@@ -340,7 +340,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "230");
         preferencesWrapper.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB, "0");
-        preferencesWrapper.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB, "234");
+        preferencesWrapper.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_NB, "239");
         preferencesWrapper.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "0");
@@ -350,7 +350,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_NB, "0");
-        preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_NB, "235");
+        preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "240");
         preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_NB, "0");
@@ -661,6 +661,7 @@ public final class Compatibility {
         if(lastSeenVersion < 1109) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.TIMER_MIN_SE, "90");
             prefWrapper.setPreferenceStringValue(SipConfigManager.TIMER_SESS_EXPIRES, "1800");
+            resetCodecsSettings(prefWrapper);
         }
         if (lastSeenVersion < 1142) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
