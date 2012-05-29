@@ -4,7 +4,6 @@
 #include <pj/config_site.h>
 #include <pjsua-lib/pjsua.h>
 #include <pjsua-lib/pjsua_internal.h>
-#include <pjmedia_audiodev.h>
 #include <jni.h>
 
 
