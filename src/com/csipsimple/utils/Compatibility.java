@@ -658,6 +658,10 @@ public final class Compatibility {
             prefWrapper.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE,
                     getDefaultFrequency());
         }
+        if(lastSeenVersion < 1109) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.TIMER_MIN_SE, "90");
+            prefWrapper.setPreferenceStringValue(SipConfigManager.TIMER_SESS_EXPIRES, "1800");
+        }
         if (lastSeenVersion < 1142) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                     isTabletScreen(prefWrapper.getContext()));
