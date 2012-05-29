@@ -75,7 +75,7 @@
 			<param name="css.arch" value="armeabi"/>
 		</antcall>
 		<antcall target="flag_channel" >
-			<param name="css.channel" value="trunk"/>
+			<param name="css.channel" value="armeabi"/>
 		</antcall>
 	</target>
 	
@@ -87,7 +87,7 @@
 			<param name="css.arch" value="armeabi-v7a"/>
 		</antcall>
 		<antcall target="flag_channel" >
-			<param name="css.channel" value="trunk"/>
+			<param name="css.channel" value="armeabi-v7a"/>
 		</antcall>
 	</target>
 
@@ -99,7 +99,7 @@
 			<param name="css.arch" value="x86"/>
 		</antcall>
 		<antcall target="flag_channel" >
-			<param name="css.channel" value="trunk"/>
+			<param name="css.channel" value="x86"/>
 		</antcall>
 	</target>
 
@@ -111,7 +111,7 @@
 			<param name="css.arch" value="mips"/>
 		</antcall>
 		<antcall target="flag_channel" >
-			<param name="css.channel" value="trunk"/>
+			<param name="css.channel" value="mips"/>
 		</antcall>
 	</target>
 	
