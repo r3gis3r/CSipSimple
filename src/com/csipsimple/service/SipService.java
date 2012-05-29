@@ -231,7 +231,13 @@ public class SipService extends Service {
 			//We have to ensure service is properly started and not just binded
 			SipService.this.startService(new Intent(SipService.this, SipService.class));
 			
-			if(!supportMultipleCalls && pjService != null) {
+			if(pjService == null) {
+			    Log.e(THIS_FILE, "Can't place call if service not started");
+			    // TODO - we should return a failing status here
+			    return;
+			}
+			
+			if(!supportMultipleCalls) {
 				// Check if there is no ongoing calls if so drop this request by alerting user
 				SipCallSession activeCall = pjService.getActiveCallInProgress();
 				if(activeCall != null) {
