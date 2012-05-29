@@ -185,6 +185,7 @@ public class UAStateReceiver extends Callback {
 	
 	@Override
 	public void on_call_state(final int callId, pjsip_event e) {
+	    pjsua.css_on_call_state(callId, e);
 		lockCpu();
 		
 		Log.d(THIS_FILE, "Call state <<");
@@ -402,9 +403,9 @@ public class UAStateReceiver extends Callback {
 
 	@Override
 	public void on_call_media_state(final int callId) {
+	    pjsua.css_on_call_media_state(callId);
+	    
 		lockCpu();
-		
-		
 		if(pjService.mediaManager != null) {
 		    // Do not unfocus here since we are probably in call.
 		    // Unfocus will be done anyway on call disconnect

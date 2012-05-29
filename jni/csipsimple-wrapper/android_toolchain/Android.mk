@@ -49,7 +49,9 @@ LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
 JNI_SRC_DIR := src/
 
-LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/zrtp_android.c
+LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/q850_reason_parser.c \
+	$(JNI_SRC_DIR)/zrtp_android.c $(JNI_SRC_DIR)/ringback_tone.c \
+	$(JNI_SRC_DIR)/android_logger.c $(JNI_SRC_DIR)/audio_codecs.c
 
 # NDK fixer
 LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/ndk_stl_fixer.cpp

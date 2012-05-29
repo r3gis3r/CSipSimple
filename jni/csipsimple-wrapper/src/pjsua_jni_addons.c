@@ -16,6 +16,8 @@
  */
 
 #include "pjsua_jni_addons.h"
+#include "android_logger.h"
+#include "csipsimple_internal.h"
 
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 #include "zrtp_android.h"
@@ -35,6 +37,7 @@
 
 /* CSS application instance. */
 struct css_data css_var;
+
 
 /**
  * Get nbr of codecs
@@ -336,7 +339,7 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->tsx_t4_timeout = PJSIP_T4_TIMEOUT;
 }
 
-static void* get_library_factory(dynamic_factory *impl) {
+PJ_DECL(void*) get_library_factory(dynamic_factory *impl) {
 	char lib_path[512];
 	char init_name[512];
 	pj_ansi_snprintf(lib_path, sizeof(lib_path), "%.*s",
@@ -658,115 +661,11 @@ PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr) {
 	return PJ_SUCCESS;
 }
 
-// Android app glue
-
-#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, "libpjsip", __VA_ARGS__)
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , "libpjsip", __VA_ARGS__)
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO   , "libpjsip", __VA_ARGS__)
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN   , "libpjsip", __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , "libpjsip", __VA_ARGS__)
-
-static void pj_android_log_msg(int level, const char *data, int len) {
-	if (level <= 1) {
-		LOGE("%s", data);
-	} else if (level == 2) {
-		LOGW("%s", data);
-	} else if (level == 3) {
-		LOGI("%s", data);
-	} else if (level == 4) {
-		LOGD("%s", data);
-	} else if (level >= 5) {
-		LOGV("%s", data);
-	}
-}
-
-//---------------------
-// RINGBACK MANAGEMENT-
-// --------------------
-/* Ringtones		    US	       UK  */
-#define RINGBACK_FREQ1	    440	    /* 400 */
-#define RINGBACK_FREQ2	    480	    /* 450 */
-#define RINGBACK_ON	    2000    /* 400 */
-#define RINGBACK_OFF	    4000    /* 200 */
-#define RINGBACK_CNT	    1	    /* 2   */
-#define RINGBACK_INTERVAL   4000    /* 2000 */
-
-void ringback_start() {
-	if (css_var.ringback_on) {
-		//Already ringing back
-		return;
-	}
-	css_var.ringback_on = PJ_TRUE;
-	if (++css_var.ringback_cnt == 1 && css_var.ringback_slot != PJSUA_INVALID_ID) {
-		pjsua_conf_connect(css_var.ringback_slot, 0);
-	}
-}
-
-void ring_stop(pjsua_call_id call_id) {
-	if (css_var.ringback_on) {
-		css_var.ringback_on = PJ_FALSE;
-
-		pj_assert(css_var.ringback_cnt>0);
-		if (--css_var.ringback_cnt == 0 &&
-		css_var.ringback_slot!=PJSUA_INVALID_ID) {pjsua_conf_disconnect(css_var.ringback_slot, 0);
-		pjmedia_tonegen_rewind(css_var.ringback_port);
-	}
-}
-}
-
-void init_ringback_tone() {
-	pj_status_t status;
-	pj_str_t name;
-	pjmedia_tone_desc tone[RINGBACK_CNT];
-	unsigned i;
-
-	css_var.ringback_slot = PJSUA_INVALID_ID;
-	css_var.ringback_on = PJ_FALSE;
-	css_var.ringback_cnt = 0;
-
-	//Ringback
-	name = pj_str((char *) "ringback");
-	status = pjmedia_tonegen_create2(css_var.pool, &name, 16000, 1, 320, 16,
-			PJMEDIA_TONEGEN_LOOP, &css_var.ringback_port);
-	if (status != PJ_SUCCESS) {
-		goto on_error;
-	}
-
-	pj_bzero(&tone, sizeof(tone));
-	for (i = 0; i < RINGBACK_CNT; ++i) {
-		tone[i].freq1 = RINGBACK_FREQ1;
-		tone[i].freq2 = RINGBACK_FREQ2;
-		tone[i].on_msec = RINGBACK_ON;
-		tone[i].off_msec = RINGBACK_OFF;
-	}
-	tone[RINGBACK_CNT - 1].off_msec = RINGBACK_INTERVAL;
-	pjmedia_tonegen_play(css_var.ringback_port, RINGBACK_CNT, tone,
-			PJMEDIA_TONEGEN_LOOP);
-	status = pjsua_conf_add_port(css_var.pool, css_var.ringback_port,
-			&css_var.ringback_slot);
-	if (status != PJ_SUCCESS) {
-		goto on_error;
-	}
-	return;
-
-	on_error: return;
-}
-
-void destroy_ringback_tone() {
-	/* Close ringback port */
-	if (css_var.ringback_port && css_var.ringback_slot != PJSUA_INVALID_ID) {
-		pjsua_conf_remove_port(css_var.ringback_slot);
-		css_var.ringback_slot = PJSUA_INVALID_ID;
-		pjmedia_port_destroy(css_var.ringback_port);
-		css_var.ringback_port = NULL;
-	}
-
-}
 
 /**
  * On call state used to automatically ringback.
  */
-void app_on_call_state(pjsua_call_id call_id, pjsip_event *e) {
+PJ_DECL(void) css_on_call_state(pjsua_call_id call_id, pjsip_event *e) {
 	pjsua_call_info call_info;
 	pjsua_call_get_info(call_id, &call_info);
 
@@ -812,246 +711,9 @@ void app_on_call_state(pjsua_call_id call_id, pjsip_event *e) {
 	}
 }
 
-// Codec loader override
-
-#include <pjmedia-codec.h>
-#include <pjmedia/g711.h>
-
-#if PJMEDIA_HAS_WEBRTC_CODEC
-#include <webrtc_codec.h>
-#endif
-
-#if PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC
-#include <amr_stagefright_dyn_codec.h>
-#endif
-
-#if PJMEDIA_HAS_G729_CODEC
-#include <pj_g729.h>
-#endif
-
-PJ_DEF(void) pjmedia_audio_codec_config_default(pjmedia_audio_codec_config*cfg) {
-	pj_bzero(cfg, sizeof(*cfg));
-	cfg->speex.option = 0;
-	cfg->speex.quality = PJMEDIA_CODEC_SPEEX_DEFAULT_QUALITY;
-	cfg->speex.complexity = PJMEDIA_CODEC_SPEEX_DEFAULT_COMPLEXITY;
-	cfg->ilbc.mode = 30;
-	cfg->passthrough.setting.ilbc_mode = cfg->ilbc.mode;
-}
-
-PJ_DEF(pj_status_t) pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
-		const pjmedia_audio_codec_config *c) {
-	pjmedia_audio_codec_config default_cfg;
-	pj_status_t status;
-
-	PJ_ASSERT_RETURN(endpt, PJ_EINVAL);
-	if (!c) {
-		pjmedia_audio_codec_config_default(&default_cfg);
-		c = &default_cfg;
-	}
-
-	PJ_ASSERT_RETURN(c->ilbc.mode==20 || c->ilbc.mode==30, PJ_EINVAL);
-
-#if PJMEDIA_HAS_PASSTHROUGH_CODECS
-	status = pjmedia_codec_passthrough_init2(endpt, &c->passthough.ilbc);
-	if (status != PJ_SUCCESS)
-	return status;
-#endif
-
-#if PJMEDIA_HAS_SPEEX_CODEC
-	/* Register speex. */
-	status = pjmedia_codec_speex_init(endpt, c->speex.option, c->speex.quality,
-			c->speex.complexity);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif
-
-#if PJMEDIA_HAS_ILBC_CODEC
-	/* Register iLBC. */
-	status = pjmedia_codec_ilbc_init(endpt, c->ilbc.mode);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif /* PJMEDIA_HAS_ILBC_CODEC */
-
-#if PJMEDIA_HAS_GSM_CODEC
-	/* Register GSM */
-	status = pjmedia_codec_gsm_init(endpt);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif /* PJMEDIA_HAS_GSM_CODEC */
-
-#if PJMEDIA_HAS_G711_CODEC
-	/* Register PCMA and PCMU */
-	status = pjmedia_codec_g711_init(endpt);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif	/* PJMEDIA_HAS_G711_CODEC */
-
-#if PJMEDIA_HAS_G722_CODEC
-	status = pjmedia_codec_g722_init(endpt);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif  /* PJMEDIA_HAS_G722_CODEC */
-
-#if PJMEDIA_HAS_L16_CODEC
-	/* Register L16 family codecs */
-	status = pjmedia_codec_l16_init(endpt, 0);
-	if (status != PJ_SUCCESS)
-	return status;
-#endif	/* PJMEDIA_HAS_L16_CODEC */
-
-#if PJMEDIA_HAS_OPENCORE_AMRNB_CODEC || PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC
-	/* Register OpenCORE AMR-NB */
-	status = pjmedia_codec_opencore_amrnb_init(endpt);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif
-
-#if PJMEDIA_HAS_WEBRTC_CODEC
-	/* Register WEBRTC */
-	status = pjmedia_codec_webrtc_init(endpt);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif /* PJMEDIA_HAS_WEBRTC_CODEC */
-
-#if PJMEDIA_HAS_G729_CODEC
-	/* Register WEBRTC */
-	status = pjmedia_codec_g729_init(endpt);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif /* PJMEDIA_HAS_G729_CODEC */
-
-	// Dynamic loading of plugins codecs
-	unsigned i;
-
-	for (i = 0; i < css_var.extra_aud_codecs_cnt; i++) {
-		dynamic_factory *codec = &css_var.extra_aud_codecs[i];
-		pj_status_t (*init_factory)(
-							pjmedia_endpt *endpt) = get_library_factory(codec);
-		if(init_factory != NULL){
-			status = init_factory(endpt);
-			if(status != PJ_SUCCESS) {
-				PJ_LOG(2, (THIS_FILE,"Error loading dynamic codec plugin"));
-			}
-    	}
-	}
-
-	return PJ_SUCCESS;
-}
-
 /**
- * Utility from freeswitch to extract code from q.850 cause
+ * On call media state used to automatically ringback.
  */
-int lookup_q850_cause(const char *cause) {
-	// Taken from http://wiki.freeswitch.org/wiki/Hangup_causes
-	if (pj_ansi_stricmp(cause, "cause=1") == 0) {
-		return 404;
-	} else if (pj_ansi_stricmp(cause, "cause=2") == 0) {
-		return 404;
-	} else if (pj_ansi_stricmp(cause, "cause=3") == 0) {
-		return 404;
-	} else if (pj_ansi_stricmp(cause, "cause=17") == 0) {
-		return 486;
-	} else if (pj_ansi_stricmp(cause, "cause=18") == 0) {
-		return 408;
-	} else if (pj_ansi_stricmp(cause, "cause=19") == 0) {
-		return 480;
-	} else if (pj_ansi_stricmp(cause, "cause=20") == 0) {
-		return 480;
-	} else if (pj_ansi_stricmp(cause, "cause=21") == 0) {
-		return 603;
-	} else if (pj_ansi_stricmp(cause, "cause=22") == 0) {
-		return 410;
-	} else if (pj_ansi_stricmp(cause, "cause=23") == 0) {
-		return 410;
-	} else if (pj_ansi_stricmp(cause, "cause=25") == 0) {
-		return 483;
-	} else if (pj_ansi_stricmp(cause, "cause=27") == 0) {
-		return 502;
-	} else if (pj_ansi_stricmp(cause, "cause=28") == 0) {
-		return 484;
-	} else if (pj_ansi_stricmp(cause, "cause=29") == 0) {
-		return 501;
-	} else if (pj_ansi_stricmp(cause, "cause=31") == 0) {
-		return 480;
-	} else if (pj_ansi_stricmp(cause, "cause=34") == 0) {
-		return 503;
-	} else if (pj_ansi_stricmp(cause, "cause=38") == 0) {
-		return 503;
-	} else if (pj_ansi_stricmp(cause, "cause=41") == 0) {
-		return 503;
-	} else if (pj_ansi_stricmp(cause, "cause=42") == 0) {
-		return 503;
-	} else if (pj_ansi_stricmp(cause, "cause=44") == 0) {
-		return 503;
-	} else if (pj_ansi_stricmp(cause, "cause=52") == 0) {
-		return 403;
-	} else if (pj_ansi_stricmp(cause, "cause=54") == 0) {
-		return 403;
-	} else if (pj_ansi_stricmp(cause, "cause=57") == 0) {
-		return 403;
-	} else if (pj_ansi_stricmp(cause, "cause=58") == 0) {
-		return 503;
-	} else if (pj_ansi_stricmp(cause, "cause=65") == 0) {
-		return 488;
-	} else if (pj_ansi_stricmp(cause, "cause=69") == 0) {
-		return 501;
-	} else if (pj_ansi_stricmp(cause, "cause=79") == 0) {
-		return 501;
-	} else if (pj_ansi_stricmp(cause, "cause=88") == 0) {
-		return 488;
-	} else if (pj_ansi_stricmp(cause, "cause=102") == 0) {
-		return 504;
-	} else if (pj_ansi_stricmp(cause, "cause=487") == 0) {
-		return 487;
-	} else {
-		return 0;
-	}
+PJ_DECL(void) css_on_call_media_state(pjsua_call_id call_id){
+	ring_stop(call_id);
 }
-
-/**
- * Get Q.850 reason code from pjsip_event
- */
-int get_q850_reason_code(pjsip_event *e) {
-	int cause = 0;
-	const pj_str_t HDR = { "Reason", 6 };
-	pj_bool_t is_q850 = PJ_FALSE;
-
-	if (e->body.tsx_state.type == PJSIP_EVENT_RX_MSG) {
-
-		pjsip_generic_string_hdr *hdr =
-				(pjsip_generic_string_hdr*) pjsip_msg_find_hdr_by_name(
-						e->body.tsx_state.src.rdata->msg_info.msg, &HDR, NULL);
-
-		if (hdr) {
-			char *token = strtok(hdr->hvalue.ptr, ";");
-			while (token != NULL) {
-				if (!is_q850 && pj_ansi_stricmp(token, "Q.850") == 0) {
-					is_q850 = PJ_TRUE;
-				} else if (cause == 0) {
-					cause = lookup_q850_cause(token);
-				}
-				token = strtok(NULL, ";");
-			}
-		}
-	}
-
-	return (is_q850) ? cause : 0;
-}
-
-
-/**
- * Get event status code of an event. Including Q.850 processing
- */
-PJ_DECL(int) get_event_status_code(pjsip_event *e) {
-	if (!e || e->type != PJSIP_EVENT_TSX_STATE) {
-		return 0;
-	}
-
-	int retval = get_q850_reason_code(e);
-	if (retval > 0) {
-		return retval;
-	} else {
-		return e->body.tsx_state.tsx->status_code;
-	}
-}
-

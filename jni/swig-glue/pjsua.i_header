@@ -179,9 +179,6 @@ static Callback* registeredCallbackObject = NULL;
 
 extern "C" {
 void on_call_state_wrapper(pjsua_call_id call_id, pjsip_event *e) {
-#if USE_CSIPSIMPLE
-	app_on_call_state(call_id, e);
-#endif
 	registeredCallbackObject->on_call_state(call_id, e);
 }
 
@@ -197,7 +194,6 @@ void on_call_tsx_state_wrapper (pjsua_call_id call_id,
 }
 
 void on_call_media_state_wrapper (pjsua_call_id call_id) {
-	ring_stop(call_id);
 	registeredCallbackObject->on_call_media_state(call_id);
 }
 
