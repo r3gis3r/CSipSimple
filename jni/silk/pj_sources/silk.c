@@ -376,10 +376,14 @@ static pj_status_t silk_default_attr( pjmedia_codec_factory *factory,
     attr->setting.vad = 0;
     attr->setting.plc = 1;
 
+
     attr->setting.dec_fmtp.cnt = 1;
-    // Inform PLC
+    // useinbandfec: specifies that SILK in-band FEC is supported by the decoder and MAY be used during a session.
+    // Possible values are 1 and 0. It is RECOMMENDED to provide 0 in case FEC is not implemented on the
+    // receiving side
+    // In our case, not yet implemented.
 	attr->setting.dec_fmtp.param[0].name = pj_str("useinbandfec");
-	attr->setting.dec_fmtp.param[0].val = pj_str("1");
+	attr->setting.dec_fmtp.param[0].val = pj_str("0");
 	// Inform Bitrate
 	/*
 	attr->setting.dec_fmtp.param[1].name = pj_str("maxaveragebitrate");
@@ -529,7 +533,9 @@ static pj_status_t silk_codec_open(pjmedia_codec *codec,
     unsigned i;
     struct silk_param params;
     SKP_int32 encSizeBytes, decSizeBytes, API_fs_Hz, max_internal_fs_Hz, maxBitRate;
-	SKP_int useInBandFEC = 0;
+	// useinbandfec: specifies that SILK in-band FEC is supported by the decoder and MAY be used during a session.
+    // [...] If no value is specified, useinbandfec is assumed to be 1.
+    SKP_int useInBandFEC = 1;
     const pj_str_t STR_FMTP_USE_INBAND_FEC = {"useinbandfec", 12};
     const pj_str_t STR_FMTP_MAX_AVERAGE_BITRATE = {"maxaveragebitrate", 17};
 
