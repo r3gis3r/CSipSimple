@@ -48,9 +48,9 @@ public class Fayn extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 
-		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB, "245");
-		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"244");
-		prefs.setCodecPriority("g729/8000/1", SipConfigManager.CODEC_NB, "243");
+		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB, "245");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"244");
+		prefs.setCodecPriority("g729/8000/1", SipConfigManager.CODEC_WB, "243");
 		
 		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB, "243");
 		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"244");

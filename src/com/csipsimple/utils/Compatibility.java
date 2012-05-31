@@ -319,6 +319,9 @@ public final class Compatibility {
         if (android.os.Build.MODEL.toLowerCase().contains("droid bionic")) {
             return true;
         }
+        if (android.os.Build.DEVICE.toLowerCase().contains("sunfire")) {
+            return true;
+        }
         return false;
     }
 
@@ -667,10 +670,6 @@ public final class Compatibility {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                     isTabletScreen(prefWrapper.getContext()));
         }
-        if (lastSeenVersion < 1343 && needWebRTCImplementation()) {
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
-                    needWebRTCImplementation());
-        }
         if (lastSeenVersion < 1388 && android.os.Build.DEVICE.startsWith("GT-S5360")) {
             prefWrapper
                     .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
@@ -690,6 +689,10 @@ public final class Compatibility {
             prefWrapper
                     .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
 
+        }
+        if (lastSeenVersion < 1581 && needWebRTCImplementation()) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
+                    needWebRTCImplementation());
         }
         prefWrapper.endEditing();
     }
