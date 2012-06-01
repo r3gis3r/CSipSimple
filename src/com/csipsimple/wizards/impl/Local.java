@@ -21,9 +21,18 @@
 
 package com.csipsimple.wizards.impl;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 import android.preference.EditTextPreference;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
@@ -35,7 +44,7 @@ public class Local extends BaseImplementation {
 	protected static final String THIS_FILE = "Local W";
 	
 	private EditTextPreference accountDisplayName;
-	
+    
 	private void bindFields() {
 		accountDisplayName = (EditTextPreference) findPreference(SipProfile.FIELD_DISPLAY_NAME);
 		hidePreference(null, "caller_id");
@@ -51,6 +60,13 @@ public class Local extends BaseImplementation {
 		bindFields();
 		
 		accountDisplayName.setText(account.display_name);
+		
+        //Get wizard specific row
+        TextView tv = (TextView) parent.findViewById(R.id.custom_wizard_text);
+        tv.setText(getLocalIpAddresses());
+        tv.setTextSize(10.0f);
+        tv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        ((LinearLayout) parent.findViewById(R.id.custom_wizard_row)).setVisibility(View.VISIBLE);
 		
 	}
 
@@ -85,8 +101,6 @@ public class Local extends BaseImplementation {
 	}
 
 	public SipProfile buildAccount(SipProfile account) {
-		Log.d(THIS_FILE, "begin of save ....");
-		
 		account.display_name = accountDisplayName.getText();
 		account.reg_uri = "";
 		account.acc_id = "";
@@ -109,4 +123,26 @@ public class Local extends BaseImplementation {
 		prefs.setPreferenceStringValue(SipConfigManager.UDP_TRANSPORT_PORT, "5060");
 		
 	}
+	
+    public String getLocalIpAddresses() {
+        ArrayList<String> addresses = new ArrayList<String>();
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en
+                    .hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr
+                        .hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        addresses.add(inetAddress.getHostAddress().toString());
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            Log.e(THIS_FILE, "Impossible to get ip address", ex);
+        }
+        return TextUtils.join("\n", addresses);
+    }
+    
+    
 }
