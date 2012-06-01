@@ -657,6 +657,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voocall, 9, 
                     new Locale[]{ locale("cs_CZ") }, false, false, 
                     Voocall.class));
+            WIZARDS_DICT.put("MOBEX", new WizardInfo("MOBEX", "Mobex", 
+                    R.drawable.ic_wizard_mobex, 9, 
+                    new Locale[] {new Locale("PT", "br")}, false, false, 
+                    Mobex.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
