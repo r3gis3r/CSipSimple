@@ -152,8 +152,8 @@
     <string name="snd_media_quality_desc">Quality of the media stream (modify only if you know what you are doing)</string>
     <string name="snd_clock_rate">Clock rate</string>
     <string name="snd_clock_rate_desc">Audio channel frequency</string>
-    <string name="snd_ptime">Frame ptime</string>
-    <string name="snd_ptime_desc">Specifying lower ptime will normally reduce the latency</string>
+    <string name="snd_ptime">Audio frame ptime</string>
+    <string name="snd_ptime_desc">The value here will affect the samples per frame of both the sound device and the conference bridge. Specifying lower ptime will normally reduce the latency.</string>
     <string name="echo_cancellation_tail">Echo cancellation tail</string>
     <string name="echo_cancellation_tail_desc">Tail length of echo cancellation</string>
     <string name="echo_mode">Echo mode</string>

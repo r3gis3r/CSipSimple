@@ -145,8 +145,8 @@
   <string name="snd_media_quality_desc">Qualité du flux média (à ne modifier que si vous savez exactement ce que vous faites)</string>
   <string name="snd_clock_rate">Fréquence</string>
   <string name="snd_clock_rate_desc">Fréquence du canal audio</string>
-  <string name="snd_ptime">Ptime de la frame</string>
-  <string name="snd_ptime_desc">Un ptime plus petit réduit la latence</string>
+  <string name="snd_ptime">Ptime de la frame audio</string>
+  <string name="snd_ptime_desc">Cette valeur affecte le nombre de sample par frame pour l\'appareil audio et le pont de conférence. Une valeur faible réduit la latence.</string>
   <string name="echo_cancellation_tail">Longueur d\'annulation de l\'écho</string>
   <string name="echo_cancellation_tail_desc">Longueur de la trainée sur laquelle appliquer l\'annulation d\'écho</string>
   <string name="echo_mode">Mode de l\'écho</string>
@@ -214,6 +214,10 @@
   <string name="default_str">Default</string>
   <string name="auto_connect_bluetooth">Auto connect bluetooth</string>
   <string name="auto_connect_bluetooth_desc">Try to use BT SCO automatically (may break standard audio routing case)</string>
+  <string name="auto_connect_speaker">Connection auto du Haut Parleur</string>
+  <string name="auto_connect_speaker_desc">Utiliser le haut parleur automatiquement lors de la réponse à un appel</string>
+  <string name="auto_detect_speaker">Utiliser le Haut Parleur automatiquement</string>
+  <string name="auto_detect_speaker_desc">Basculer vers le haut parleur lorsque le téléphone est horizontal.</string>
   <string name="codecs_per_bandwidth">Liste de priorités par bande passante</string>
   <string name="codecs_per_bandwidth_desc">Permet d\'avoir une liste de priorité différente pour les réseaux rapides et lents</string>
   <string name="audio_troubleshooting">Dépannage audio</string>
