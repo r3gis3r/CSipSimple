@@ -71,8 +71,8 @@ public class QuickContactBadge extends FrameLayout {
         }
         if (badge != null) {
             ImageView imageView = badge.getImageView();
-            LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,
-                    LayoutParams.FILL_PARENT);
+            LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
+                    LayoutParams.MATCH_PARENT);
             addView(imageView, params);
         }
 

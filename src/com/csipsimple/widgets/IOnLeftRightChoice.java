@@ -21,7 +21,6 @@
 
 package com.csipsimple.widgets;
 
-import android.view.View;
 
 /**
  * Interface definition for a callback to be invoked when a tab is triggered by

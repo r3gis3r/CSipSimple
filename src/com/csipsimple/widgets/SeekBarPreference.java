@@ -76,12 +76,12 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		valueText = new TextView(context);
 		valueText.setGravity(Gravity.CENTER_HORIZONTAL);
 		valueText.setTextSize(32);
-		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		layout.addView(valueText, params);
 
 		seekBar = new SeekBar(context);
 		seekBar.setOnSeekBarChangeListener(this);
-		layout.addView(seekBar, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+		layout.addView(seekBar, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
 		if (shouldPersist()) {
 			value = getPersistedFloat(defaultValue);

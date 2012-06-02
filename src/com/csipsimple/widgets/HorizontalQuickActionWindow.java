@@ -86,7 +86,7 @@ public class HorizontalQuickActionWindow extends PopupWindow implements KeyEvent
         screenWidth = wm.getDefaultDisplay().getWidth();
         anchorView = aView;
 
-        setWindowLayoutMode(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        setWindowLayoutMode(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         resources = aContext.getResources();
         shadowWidth = resources.getDimensionPixelSize(R.dimen.quickaction_shadow_horiz);
         setWidth(screenWidth + shadowWidth + shadowWidth);
@@ -211,7 +211,7 @@ public class HorizontalQuickActionWindow extends PopupWindow implements KeyEvent
         // height of popup
         if (isShowing()) {
             int x, y, windowAnimations;
-            this.getContentView().measure(ViewGroup.LayoutParams.FILL_PARENT,
+            this.getContentView().measure(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             final int blockHeight = this.getContentView().getMeasuredHeight();
 

@@ -121,7 +121,7 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 
 			// Create hint TextView
 			text = new TextView(parent.getContext());
-			text.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
+			text.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 			text.setBackgroundResource(barId);
 			if(!parent.isInEditMode()) {
 			    text.setTextAppearance(parent.getContext(), R.style.TextAppearance_SlidingTabNormal);

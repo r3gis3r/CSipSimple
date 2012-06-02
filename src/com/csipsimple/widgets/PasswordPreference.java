@@ -60,7 +60,6 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 	@Override
 	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
-		Log.d(THIS_FILE, ">>> BINDING TO VIEW !!!");
 		try {
 			CheckBox checkbox = showPwdCheckbox;
 			ViewParent oldParent = checkbox.getParent();
@@ -75,7 +74,7 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 				container = (ViewGroup) container.getChildAt(0);
 			}
 			if (container != null) {
-				container.addView(checkbox, ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+				container.addView(checkbox, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 			}
 		}catch(Exception e) {
 			// Just do nothing in case weird ROM in use

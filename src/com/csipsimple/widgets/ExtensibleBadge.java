@@ -65,7 +65,7 @@ public class ExtensibleBadge extends LinearLayout implements OnClickListener, On
 		IDLE
 	};
 	
-	public ExtensibleBadge(Context context, AttributeSet attrs) {
+    public ExtensibleBadge(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.extensible_card, this, true);
@@ -80,7 +80,7 @@ public class ExtensibleBadge extends LinearLayout implements OnClickListener, On
 		contentRAnimation.setDuration(ANIM_DURATION);
 		contentRAnimation.setAnimationListener(animListener);
 		
-		gestureScanner = new GestureDetector(this);
+		gestureScanner = new GestureDetector(context, this);
 		
 		// Prepare track entrance animation
 		/*

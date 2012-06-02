@@ -60,7 +60,7 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 		
 		
 		stab = new SlidingTab(getContext());
-		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		//lp.setMargins(0, 286, 0, 0);
 		stab.setLayoutParams(lp);
 		stab.setLeftHintText(R.string.unlock);
