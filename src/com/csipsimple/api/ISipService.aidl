@@ -95,7 +95,7 @@ interface ISipService{
 	 * It can also be a simple number, in which case the app will autocomplete.
 	 * If you add the scheme, take care to fill completely else it could be considered as a call
 	 * to a sip IP/domain
-	 * @ param accountId The id of the account to use for this call. 
+	 * @param accountId The id of the account to use for this call. 
 	 */
 	void makeCall(in String callee, int accountId);
 	/**

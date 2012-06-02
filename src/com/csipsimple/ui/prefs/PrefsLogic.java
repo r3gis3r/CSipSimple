@@ -200,10 +200,10 @@ public class PrefsLogic {
                 TelephonyManager telephonyManager = (TelephonyManager) ctxt.getSystemService(Context.TELEPHONY_SERVICE);
                 
                 if (telephonyManager.getPhoneType() == 2 /*TelephonyManager.PHONE_TYPE_CDMA*/) {
-                    pfh.hidePreference("for_incoming", "use_gprs_in");
-                    pfh.hidePreference("for_outgoing", "use_gprs_out");
-                    pfh.hidePreference("for_incoming", "use_edge_in");
-                    pfh.hidePreference("for_outgoing", "use_edge_out");
+                    pfh.hidePreference("for_incoming", SipConfigManager.USE_GPRS_IN);
+                    pfh.hidePreference("for_outgoing", SipConfigManager.USE_GPRS_OUT);
+                    pfh.hidePreference("for_incoming", SipConfigManager.USE_EDGE_IN);
+                    pfh.hidePreference("for_outgoing", SipConfigManager.USE_EDGE_OUT);
                 }
                 
 
@@ -233,8 +233,8 @@ public class PrefsLogic {
                     
                     
 
-                    pfh.hidePreference("for_incoming", "use_anyway_in");
-                    pfh.hidePreference("for_outgoing", "use_anyway_out");
+                    pfh.hidePreference("for_incoming", SipConfigManager.USE_ANYWAY_IN);
+                    pfh.hidePreference("for_outgoing", SipConfigManager.USE_ANYWAY_OUT);
                     
                     pfh.hidePreference(null, NWK_SIP_PROTOCOL_KEY);
                     pfh.hidePreference(null, NWK_PERFS_KEY);

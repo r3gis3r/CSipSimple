@@ -634,10 +634,10 @@ public final class SipCallSession implements Parcelable {
     
 
     /**
-     * Set the can record flag <br/>
+     * Set the is record flag <br/>
      * This method should be only used by CSipSimple service
      * 
-     * @param canRecord pass true if the audio can be recorded
+     * @param isRecording pass true if the audio is currently recording
      */
     public void setIsRecording(boolean isRecording) {
         this.isRecording = isRecording;

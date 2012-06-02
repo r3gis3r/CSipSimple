@@ -521,7 +521,7 @@ public class SipConfigManager {
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__config.htm#abec69c2c899604352f3450368757f39b"
      * >Pjsip documentation</a>
      * 
-     * @see #setPreferenceBooleanValue(Context, String, String)
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String ENABLE_STUN = "enable_stun";
     /**
@@ -821,7 +821,91 @@ public class SipConfigManager {
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String USE_ZRTP = "use_zrtp";
+    
+    /**
+     * Enable wifi for incoming calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_WIFI_IN = "use_wifi_in";
 
+    /**
+     * Enable wifi for outgoing calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_WIFI_OUT = "use_wifi_out";
+    
+    /**
+     * Enable other networks for incoming calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_OTHER_IN = "use_other_in";
+
+    /**
+     * Enable other networks for outgoing calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_OTHER_OUT = "use_other_out";
+    
+    /**
+     * Enable 3G for incoming calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_3G_IN = "use_3g_in";
+
+    /**
+     * Enable 3G for outgoing calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_3G_OUT = "use_3g_out";
+    
+    /**
+     * Enable gprs (2G) for incoming calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_GPRS_IN = "use_gprs_in";
+
+    /**
+     * Enable gprs (2G) for outgoing calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_GPRS_OUT = "use_gprs_out";
+
+    /**
+     * Enable edge for incoming calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_EDGE_IN = "use_edge_in";
+
+    /**
+     * Enable edge for outgoing calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_EDGE_OUT = "use_edge_out";
+    
+    /**
+     * Enable anyway for incoming calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_ANYWAY_IN = "use_anyway_in";
+
+    /**
+     * Enable anyway for outgoing calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_ANYWAY_OUT = "use_anyway_out";
+    
     // CALLS
     /**
      * Automatically record calls to wav files?

@@ -141,18 +141,18 @@ public class PreferencesWrapper {
 		put(SipConfigManager.ENABLE_STUN, false);
 		put(SipConfigManager.ENABLE_QOS, false);
 		put(SipConfigManager.USE_COMPACT_FORM, false);
-		put("use_wifi_in", true);
-		put("use_wifi_out", true);
-		put("use_other_in", true);
-		put("use_other_out", true);
-		put("use_3g_in", false);
-		put("use_3g_out", false);
-		put("use_gprs_in", false);
-		put("use_gprs_out", false);
-		put("use_edge_in", false);
-		put("use_edge_out", false);
-        put("use_anyway_in", false);
-        put("use_anyway_out", false);
+		put(SipConfigManager.USE_WIFI_IN, true);
+		put(SipConfigManager.USE_WIFI_OUT, true);
+		put(SipConfigManager.USE_OTHER_IN, true);
+		put(SipConfigManager.USE_OTHER_OUT, true);
+		put(SipConfigManager.USE_3G_IN, false);
+		put(SipConfigManager.USE_3G_OUT, false);
+		put(SipConfigManager.USE_GPRS_IN, false);
+		put(SipConfigManager.USE_GPRS_OUT, false);
+		put(SipConfigManager.USE_EDGE_IN, false);
+		put(SipConfigManager.USE_EDGE_OUT, false);
+        put(SipConfigManager.USE_ANYWAY_IN, false);
+        put(SipConfigManager.USE_ANYWAY_OUT, false);
 		put(SipConfigManager.FORCE_NO_UPDATE, true);
 		
 		

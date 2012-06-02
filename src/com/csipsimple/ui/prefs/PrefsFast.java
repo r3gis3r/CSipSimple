@@ -89,14 +89,14 @@ public class PrefsFast extends SherlockActivity implements OnClickListener {
 	
 	private void updateFromPrefs() {
 		globIntegrate.setChecked(SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.INTEGRATE_WITH_DIALER));
-		boolean tgIn = SipConfigManager.getPreferenceBooleanValue(this, "use_3g_in", false);
-		boolean tgOut = SipConfigManager.getPreferenceBooleanValue(this, "use_3g_out", false);
-		boolean gprsIn = SipConfigManager.getPreferenceBooleanValue(this, "use_gprs_in", false);
-		boolean gprsOut = SipConfigManager.getPreferenceBooleanValue(this, "use_gprs_out", false);
-		boolean edgeIn = SipConfigManager.getPreferenceBooleanValue(this, "use_edge_in", false);
-		boolean edgeOut = SipConfigManager.getPreferenceBooleanValue(this, "use_edge_out", false);
-		boolean wifiIn = SipConfigManager.getPreferenceBooleanValue(this, "use_wifi_in", true);
-		boolean wifiOut = SipConfigManager.getPreferenceBooleanValue(this, "use_wifi_out", true);
+		boolean tgIn = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_3G_IN, false);
+		boolean tgOut = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_3G_OUT, false);
+		boolean gprsIn = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_GPRS_IN, false);
+		boolean gprsOut = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_GPRS_OUT, false);
+		boolean edgeIn = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_EDGE_IN, false);
+		boolean edgeOut = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_EDGE_OUT, false);
+		boolean wifiIn = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_WIFI_IN, true);
+		boolean wifiOut = SipConfigManager.getPreferenceBooleanValue(this, SipConfigManager.USE_WIFI_OUT, true);
 		
 		boolean useGsmIn = (tgIn || gprsIn || edgeIn);
 		boolean useGsmOut = (tgOut || gprsOut || edgeOut);
@@ -169,18 +169,18 @@ public class PrefsFast extends SherlockActivity implements OnClickListener {
 		// About out/in mode
 		if(mode != Profile.UNKOWN) {
 			
-		    SipConfigManager.setPreferenceBooleanValue(this, "use_3g_in", (useGsm && mode == Profile.ALWAYS));
-			SipConfigManager.setPreferenceBooleanValue(this, "use_3g_out", useGsm);
-			SipConfigManager.setPreferenceBooleanValue(this, "use_gprs_in", (useGsm && mode == Profile.ALWAYS));
-			SipConfigManager.setPreferenceBooleanValue(this, "use_gprs_out", useGsm);
-			SipConfigManager.setPreferenceBooleanValue(this, "use_edge_in", (useGsm && mode == Profile.ALWAYS));
-			SipConfigManager.setPreferenceBooleanValue(this, "use_edge_out", useGsm);
+		    SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_3G_IN, (useGsm && mode == Profile.ALWAYS));
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_3G_OUT, useGsm);
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_GPRS_IN, (useGsm && mode == Profile.ALWAYS));
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_GPRS_OUT, useGsm);
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_EDGE_IN, (useGsm && mode == Profile.ALWAYS));
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_EDGE_OUT, useGsm);
 			
-			SipConfigManager.setPreferenceBooleanValue(this, "use_wifi_in", mode != Profile.NEVER);
-			SipConfigManager.setPreferenceBooleanValue(this, "use_wifi_out", true);
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_WIFI_IN, mode != Profile.NEVER);
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_WIFI_OUT, true);
 			
-			SipConfigManager.setPreferenceBooleanValue(this, "use_other_in", mode != Profile.NEVER);
-			SipConfigManager.setPreferenceBooleanValue(this, "use_other_out", true);
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_OTHER_IN, mode != Profile.NEVER);
+			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.USE_OTHER_OUT, true);
 			
 			SipConfigManager.setPreferenceBooleanValue(this, SipConfigManager.LOCK_WIFI, (mode == Profile.ALWAYS) && !useGsm);
 		}
