@@ -325,6 +325,13 @@ public class SipConfigManager {
      */
     public static final String AUTO_DETECT_SPEAKER = "auto_detect_speaker";
 
+    /**
+     * Suffix key for the number of frames per RTP packet for one codec. <br/>
+     * To be prefixed with {codec rtp name}_{codec clock rate}_.
+     * You can use {@link #getCodecKey(String, String)} if you have codec in form G729/8000 for example.
+     */
+    public static final String FRAMES_PER_PACKET_SUFFIX = "fpp";
+    
     // UI
     /**
      * Should we use software volume instead of android audio volume? <br/>

@@ -20,6 +20,7 @@
 #include <pjmedia/endpoint.h>
 #include <pjmedia/errno.h>
 #include <pjmedia/port.h>
+#include <pjmedia-codec/types.h>
 #include <pjmedia/plc.h>
 #include <pjmedia/silencedet.h>
 #include <pj/pool.h>
@@ -85,6 +86,8 @@ static pjmedia_codec_factory_op webrtc_factory_op = {
 		&webrtc_dealloc_codec,
 		&pjmedia_codec_webrtc_deinit
 };
+static char CHAR_MODE[] = "mode";
+static pj_str_t STR_MODE = {CHAR_MODE, 4};
 
 /* webRTC factory private data */
 static struct webrtc_factory {
@@ -237,6 +240,9 @@ static pj_status_t webrtc_default_attr(pjmedia_codec_factory *factory,
 	attr->info.channel_cnt = codecParam.channels;
 	attr->info.avg_bps = codecParam.rate * codecParam.plfreq / 8000;
 	attr->info.max_bps = codecParam.rate * codecParam.plfreq / 8000;
+	if(id->pt == PJMEDIA_RTP_PT_ILBC){
+		attr->info.max_bps = 15200;
+	}
 	attr->info.pcm_bits_per_sample = 16;
 	attr->info.frm_ptime = codecParam.pacsize * 1000 / (codecParam.channels * codecParam.plfreq);
 	attr->info.pt = codecParam.pltype;
@@ -244,6 +250,23 @@ static pj_status_t webrtc_default_attr(pjmedia_codec_factory *factory,
 	attr->setting.frm_per_pkt = 1;
 	attr->setting.plc = 0;
 	attr->setting.vad = 1;
+
+	if (id->pt == PJMEDIA_RTP_PT_ILBC) {
+		attr->setting.dec_fmtp.cnt = 1;
+		attr->setting.dec_fmtp.param[0].name = STR_MODE;
+		if((160 == codecParam.pacsize) ||
+		        (320 == codecParam.pacsize)) {
+			// processing block of 20ms
+			char mode[] = "20";
+			attr->setting.dec_fmtp.param[0].val = pj_str(mode);
+		} else if((240 == codecParam.pacsize) ||
+		        (480 == codecParam.pacsize)) {
+			// processing block of 30ms
+			char mode[] = "30";
+			attr->setting.dec_fmtp.param[0].val = pj_str(mode);
+		}
+
+	}
 
 	return PJ_SUCCESS;
 }
@@ -259,6 +282,7 @@ static pj_status_t webrtc_enum_codecs(pjmedia_codec_factory *factory,
 
 	max = *count;
 
+	// TODO : we could use AudioCodingModule::RegisterReceiveCodec / UnRegister... in order to change PT
 	AudioCodingModule *acmTmp = AudioCodingModule::Create(0);
 	struct CodecInst sendCodecTmp;
 	numCodecs = acmTmp->NumberOfCodecs();
@@ -371,8 +395,10 @@ static pj_status_t webrtc_open(pjmedia_codec *codec,
 		pjmedia_codec_param *attr) {
 	struct webrtc_private *priv = (struct webrtc_private*) codec->codec_data;
 	pj_pool_t *pool;
-	CodecInst codecParam;
+	CodecInst coderParam, decoderParam;
+	unsigned i;
 	pj_status_t status;
+    pj_uint16_t dec_fmtp_mode = 30, enc_fmtp_mode = 30;
 
 	priv->pt = attr->info.pt;
 	priv->clock_rate = attr->info.clock_rate;
@@ -384,13 +410,42 @@ static pj_status_t webrtc_open(pjmedia_codec *codec,
 	pool = priv->pool;
 
 	status = find_codec(attr->info.pt, attr->info.clock_rate,
-			attr->info.channel_cnt, &codecParam);
+			attr->info.channel_cnt, &coderParam);
+	status = find_codec(attr->info.pt, attr->info.clock_rate,
+			attr->info.channel_cnt, &decoderParam);
 
 	if (status != PJ_SUCCESS) {
 		return status;
 	}
-	priv->coder->SetEncodeCodec(codecParam);
-	priv->coder->SetDecodeCodec(codecParam);
+
+	if (attr->info.pt == PJMEDIA_RTP_PT_ILBC) {
+		/* Get decoder mode */
+		for (i = 0; i < attr->setting.dec_fmtp.cnt; ++i) {
+			if (pj_stricmp(&attr->setting.dec_fmtp.param[i].name, &STR_MODE)
+					== 0) {
+				dec_fmtp_mode = (pj_uint16_t) pj_strtoul(
+						&attr->setting.dec_fmtp.param[i].val);
+				break;
+			}
+		}
+		decoderParam.pacsize = dec_fmtp_mode * coderParam.plfreq / 1000;
+		decoderParam.rate = (dec_fmtp_mode == 20)? 15200 : 13300;
+
+		/* Get encoder mode */
+		for (i = 0; i < attr->setting.enc_fmtp.cnt; ++i) {
+			if (pj_stricmp(&attr->setting.enc_fmtp.param[i].name, &STR_MODE)
+					== 0) {
+				enc_fmtp_mode = (pj_uint16_t) pj_strtoul(
+						&attr->setting.enc_fmtp.param[i].val);
+				break;
+			}
+		}
+		coderParam.pacsize = enc_fmtp_mode * coderParam.plfreq / 1000;
+	}
+
+
+	priv->coder->SetEncodeCodec(coderParam);
+	priv->coder->SetDecodeCodec(decoderParam);
 
 	return PJ_SUCCESS;
 }

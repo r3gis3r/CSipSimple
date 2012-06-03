@@ -140,10 +140,6 @@ typedef struct csipsimple_acc_config {
 
 
 // methods
-PJ_DECL(int) codecs_get_nbr();
-PJ_DECL(pj_str_t) codecs_get_id(int codec_id) ;
-PJ_DECL(int) codecs_vid_get_nbr();
-PJ_DECL(pj_str_t) codecs_vid_get_id(int codec_id) ;
 PJ_DECL(pj_status_t) send_dtmf_info(int current_call, pj_str_t digits);
 PJ_DECL(pj_str_t) call_dump(pjsua_call_id call_id, pj_bool_t with_media, const char *indent);
 PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id);

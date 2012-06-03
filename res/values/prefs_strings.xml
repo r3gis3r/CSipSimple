@@ -229,6 +229,10 @@
     <string name="codecs_per_bandwidth_desc">Allow to have priority list for fast and for slow networks</string>
     <string name="audio_troubleshooting">Audio troubleshooting</string>
     <string name="audio_troubleshooting_desc">Workarounds for audio routing</string>
+    <string name="codecs_extra_settings">Extra codec settings</string>
+    <string name="frames_per_rtp_packet">Frames per RTP packet</string>
+    <string name="g729_frame_per_packet">G729 RTP frames per packet</string>
+    <string name="ilbc_frame_per_packet">iLBC RTP frames per packet</string>
 
     <!-- UI -->
     <string name="general_ui">General user interface</string>

@@ -411,13 +411,17 @@ public class PreferencesWrapper {
 	 * @param key the key preference to retrieve
 	 * @return the value
 	 */
-	public int getPreferenceIntegerValue(String key) {
+	public Integer getPreferenceIntegerValue(String key) {
 		try {
 			return Integer.parseInt(getPreferenceStringValue(key));
 		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Invalid "+key+" format : expect a int");
+			Log.d(THIS_FILE, "Invalid "+key+" format : expect a int");
 		}
-		return Integer.parseInt(STRING_PREFS.get(key));
+		String val = STRING_PREFS.get(key);
+		if(val != null) {
+		    return Integer.parseInt(val);
+		}
+		return null;
 	}
 	
 	/**

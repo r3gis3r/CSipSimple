@@ -92,6 +92,20 @@
         android:key="band_types"
         android:title="@string/codecs_band_types" >
     </PreferenceScreen>
+    <PreferenceScreen
+        android:key="codecs_extra_settings"
+        android:title="@string/codecs_extra_settings" >
+        <PreferenceCategory android:title="@string/frames_per_rtp_packet" >
+            <EditTextPreference
+                android:key="codec_g729_8000_fpp"
+                android:numeric="signed"
+                android:title="@string/g729_frame_per_packet" />
+            <EditTextPreference
+                android:key="codec_ilbc_8000_fpp"
+                android:numeric="signed"
+                android:title="@string/ilbc_frame_per_packet" />
+        </PreferenceCategory>
+    </PreferenceScreen>
 
     <PreferenceCategory
         android:key="audio_volume"

@@ -692,10 +692,11 @@ public class PjSipService {
         account.applyExtraParams(service);
 
         // Force the use of a transport
+        /*
         switch (account.transport) {
             case SipProfile.TRANSPORT_UDP:
                 if (udpTranportId != null) {
-                    account.cfg.setTransport_id(udpTranportId);
+                    //account.cfg.setTransport_id(udpTranportId);
                 }
                 break;
             case SipProfile.TRANSPORT_TCP:
@@ -711,6 +712,7 @@ public class PjSipService {
             default:
                 break;
         }
+        */
 
         SipProfileState currentAccountStatus = getProfileState(profile);
 
@@ -953,8 +955,16 @@ public class PjSipService {
                             short aPrio = prefsWrapper.getCodecPriority(codec, currentBandType,
                                     "-1");
                             buffCodecLog(audioSb, codec, aPrio);
+                            pj_str_t codecStr = pjsua.pj_str_copy(codec);
                             if (aPrio >= 0) {
-                                pjsua.codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
+                                pjsua.codec_set_priority(codecStr, aPrio);
+                            }
+                            
+                            String codecKey = SipConfigManager.getCodecKey(codec, SipConfigManager.FRAMES_PER_PACKET_SUFFIX);
+                            Integer frmPerPacket = SipConfigManager.getPreferenceIntegerValue(service, codecKey);
+                            if(frmPerPacket != null) {
+                                Log.d(THIS_FILE, "Set codec " + codec + " fpp : " + frmPerPacket);
+                                pjsua.codec_set_frames_per_packet(codecStr, frmPerPacket);
                             }
                         }
                         
