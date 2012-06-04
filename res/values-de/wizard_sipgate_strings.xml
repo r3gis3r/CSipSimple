@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_sipgate_display_name">Kontoname</string>
   <string name="w_sipgate_display_name_desc">Zeigt den Namen dieses Kontos</string>
   <string name="w_sipgate_username">SIP-ID</string>
-  <string name="w_sipgate_username_desc">Unterscheidet sich vom Sipgate Login! Bei Sipgate einlogen um die SIP-ID zu erhalten.</string>
+  <string name="w_sipgate_username_desc">Unterscheidet sich vom Sipgate Login! Bei Sipgate einlogg</string>
   <string name="w_sipgate_password">SIP-Passwort</string>
-  <string name="w_sipgate_password_desc">Unterscheidet sich vom Sipgate Passwort! Bei Sipgate einlogen um das SIP Passwort zu erhalten.</string>
+  <string name="w_sipgate_password_desc">Unterscheidet sich vom Sipgate Passwort! Bei Sipgate einloggen um das SIP Passwort zu erhalten.</string>
   <string name="w_sipgate_server_desc">Zum Beispiel: sipgate.de</string>
 </resources>
