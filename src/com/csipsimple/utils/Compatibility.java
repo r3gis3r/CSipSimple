@@ -120,9 +120,8 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.equalsIgnoreCase("GT-I5500")) {
             return true;
         }
-        // Samsung GT-S5360 GT-S5830
-        if(android.os.Build.DEVICE.toUpperCase().startsWith("GT-S5360")
-                || android.os.Build.DEVICE.toUpperCase().startsWith("GT-S5830") ) {
+        // Samsung GT-S5360 GT-S5830 GT-S6102 ... probably all..
+        if(android.os.Build.DEVICE.toUpperCase().startsWith("GT-S") ) {
             return true;
         }
         
@@ -139,7 +138,8 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.equalsIgnoreCase("U8150") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("U8110") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("U8120") ||
-                android.os.Build.DEVICE.equalsIgnoreCase("U8100")) {
+                android.os.Build.DEVICE.equalsIgnoreCase("U8100") ||
+                android.os.Build.PRODUCT.equalsIgnoreCase("U8655") ) {
             return true;
         }
 
@@ -670,20 +670,11 @@ public final class Compatibility {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                     isTabletScreen(prefWrapper.getContext()));
         }
-        if (lastSeenVersion < 1388 && android.os.Build.DEVICE.startsWith("GT-S5360")) {
-            prefWrapper
-                    .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
-
-        }
         if (lastSeenVersion < 1515) {
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "240");
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "240");
         }
-        if (lastSeenVersion < 1546 &&
-                (android.os.Build.DEVICE.equalsIgnoreCase("joe") ||
-                        android.os.Build.DEVICE.toUpperCase().startsWith("GT-S5830")  
-                )
-                ) {
+        if (lastSeenVersion < 1546 && android.os.Build.DEVICE.equalsIgnoreCase("joe")) {
             prefWrapper
                     .setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
             prefWrapper
@@ -693,6 +684,11 @@ public final class Compatibility {
         if (lastSeenVersion < 1581 && needWebRTCImplementation()) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
                     needWebRTCImplementation());
+        }
+        if(lastSeenVersion < 1590 &&
+                (android.os.Build.DEVICE.toUpperCase().startsWith("GT-S") || android.os.Build.PRODUCT.equalsIgnoreCase("U8655") )) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
+            
         }
         prefWrapper.endEditing();
     }
