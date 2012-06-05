@@ -192,7 +192,6 @@
     <string name="support_multiple_calls">Erlaube mehrere gleichzeitige Anrufe</string>
     <string name="support_multiple_calls_desc">Erlaube Konferenzen und mehrere gleichzeige Anrufe</string>
     <string name="expert_preferences">Experten Modus</string>
-    <string name="advanced_preferences">Erweiterter Modus</string>
     <string name="plain_password">Klartext</string>
     <string name="data_digest">Datenauszug</string>
     <string name="disabled">Deaktiviert</string>

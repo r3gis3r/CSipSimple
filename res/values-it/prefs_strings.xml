@@ -210,7 +210,6 @@
     <string name="support_multiple_calls">Supporto alle chiamate multiple</string>
     <string name="support_multiple_calls_desc">Consente conferenza e chiamate multiple contemporanee</string>
     <string name="expert_preferences">Modalità esperto</string>
-    <string name="advanced_preferences">Modalità avanzata</string>
     <string name="plain_password">Password in chiaro</string>
     <string name="disabled">Disattivato</string>
     <string name="optional">Opzionale</string>

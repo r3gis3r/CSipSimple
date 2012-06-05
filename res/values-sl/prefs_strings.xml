@@ -134,7 +134,6 @@
     <string name="tg_allowed_desc">Operater dovoli VoIP preko mobilnega prenosa podatkov</string>
     <string name="codecs_availability_text">Na voljo samo, ko je SIP prijavljen</string>
     <string name="expert_preferences">Način za strokovnjake</string>
-    <string name="advanced_preferences">Napredni način</string>
     <string name="digest">Povzetek</string>
     <string name="plain_password">Navadno geslo</string>
     <string name="data_digest">Povzetek podatkov</string>

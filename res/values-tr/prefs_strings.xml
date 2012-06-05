@@ -56,7 +56,6 @@
     <string name="wifi_available">WiFi mevcut</string>
     <string name="never_available">Sadece giden için</string>
     <string name="expert_preferences">Uzman modu</string>
-    <string name="advanced_preferences">"Gelişmiş  mod"</string>
     <string name="digest">Özet</string>
     <string name="disabled">Devre dışı</string>
     <string name="optional">İsteğe bağlı</string>

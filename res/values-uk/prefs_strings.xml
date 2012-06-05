@@ -180,7 +180,6 @@
     <string name="auto_record_calls">Автоматично записувати дзвінки</string>
     <string name="auto_record_calls_desc">Записувати дзвінки при зєднанні</string>
     <string name="expert_preferences">Режим експерта</string>
-    <string name="advanced_preferences">Розширений режим</string>
     <string name="digest">Підбірка</string>
     <string name="plain_password">Plain пароль</string>
     <string name="disabled">Вимк.</string>

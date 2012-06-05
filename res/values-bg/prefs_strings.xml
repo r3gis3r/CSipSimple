@@ -210,7 +210,6 @@
     <string name="support_multiple_calls">Поддържа множество повиквания</string>
     <string name="support_multiple_calls_desc">Позволя конферентни и едновременни разговори</string>
     <string name="expert_preferences">Режим за напреднали</string>
-    <string name="advanced_preferences">За напреднали</string>
     <string name="digest">Резюме</string>
     <string name="plain_password">Обикновена парола</string>
     <string name="data_digest">Данни резюме</string>

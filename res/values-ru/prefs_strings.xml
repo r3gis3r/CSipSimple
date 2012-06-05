@@ -166,7 +166,6 @@
     <string name="auto_record_calls">Автозапись звонков</string>
     <string name="auto_record_calls_desc">Запись звонков по мере соединения</string>
     <string name="expert_preferences">Экспертный режим</string>
-    <string name="advanced_preferences">Расширенный режим</string>
     <string name="digest">Дайджест</string>
     <string name="plain_password">Обычный пароль</string>
     <string name="data_digest">Набор данных</string>

@@ -274,7 +274,6 @@
     <string name="use_video_desc">Skicka video automatiskt från enhet</string>
     <!-- Settings modes -->
     <string name="expert_preferences">Expertläga</string>
-    <string name="advanced_preferences">Utökat läge</string>
     <!-- Generic -->
     <string name="leave_minus_1_default">Lämna -1 för standard</string>
 

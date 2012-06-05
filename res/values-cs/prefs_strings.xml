@@ -180,7 +180,6 @@
     <string name="auto_record_calls">Automatické nahrávání hovorů</string>
     <string name="auto_record_calls_desc">Nahrávání hovorů ihned po spojení</string>
     <string name="expert_preferences">Režim pro experty</string>
-    <string name="advanced_preferences">Pokročilý mód</string>
     <string name="digest">Přehled</string>
     <string name="plain_password">Prosté heslo</string>
     <string name="data_digest">Datový přehled</string>

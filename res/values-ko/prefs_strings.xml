@@ -180,7 +180,6 @@
     <string name="auto_record_calls">통화 자동 기록</string>
     <string name="auto_record_calls_desc">연결과 동시에 통화 기록</string>
     <string name="expert_preferences">전문가 모드</string>
-    <string name="advanced_preferences">고급 모드</string>
     <string name="digest">편집</string>
     <string name="plain_password">간단한 비밀 번호</string>
     <string name="data_digest">데이터 편집</string>

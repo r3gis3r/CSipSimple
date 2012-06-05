@@ -302,7 +302,7 @@
 
     <!-- Settings modes -->
     <string name="expert_preferences">Expert mode</string>
-    <string name="advanced_preferences">Advanced mode</string>
+    <string name="normal_preferences">Normal mode</string>
 
     <!-- Generic -->
     <string name="leave_minus_1_default">Leave -1 to default</string>

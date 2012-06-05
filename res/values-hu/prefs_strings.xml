@@ -137,7 +137,6 @@
     <string name="tg_allowed_desc">A szolgáltató nem tiltja a VoIP kapcsolatot</string>
     <string name="codecs_availability_text">Csak regisztrált SIP esetén elérhető</string>
     <string name="expert_preferences">Szakértő mód</string>
-    <string name="advanced_preferences">Hozzáértő mód</string>
     <string name="plain_password">Kódolatlan jelszó</string>
     <string name="data_digest">Digest adat</string>
     <string name="disabled">Letiltva</string>

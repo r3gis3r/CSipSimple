@@ -210,7 +210,6 @@
     <string name="support_multiple_calls">Suporte a multiplas chamadas</string>
     <string name="support_multiple_calls_desc">Habilita conferências e chamadas simultâneas</string>
     <string name="expert_preferences">Modo especialista</string>
-    <string name="advanced_preferences">Modo avançado</string>
     <string name="digest">Resumo</string>
     <string name="plain_password">Palavra-passe simples</string>
     <string name="data_digest">Resumo de Dados</string>

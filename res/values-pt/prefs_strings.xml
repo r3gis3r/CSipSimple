@@ -169,7 +169,6 @@
     <string name="auto_record_calls">Gravação automática de chamadas</string>
     <string name="auto_record_calls_desc">Gravar chamadas assim que conectado</string>
     <string name="expert_preferences">Modo perito</string>
-    <string name="advanced_preferences">Modo avançado</string>
     <string name="digest">Resumo</string>
     <string name="plain_password">Palavra-passe simples</string>
     <string name="data_digest">Resumo de Dados</string>
@@ -184,13 +183,13 @@
     <string name="prevent">Prevenir</string>
     <string name="simple">Simples</string>
     <string name="use_android_setting">Usar configurações do Android</string>
-<string name="narrowband">Banda Pequena</string>
-<string name="wideband">Banda Larga</string>
-<string name="no_proxy">Sem proxy</string>
-<string name="outbound_proxies">Proxys de saída (outbound)</string>
-<string name="accounts_proxies">Proxys de Registro (account)</string>
-<string name="all">Todos</string>
-<string name="no_zrtp">Sem ZRTP</string>
-<string name="create_zrtp">Criar ZRTP</string>
+    <string name="narrowband">Banda Pequena</string>
+    <string name="wideband">Banda Larga</string>
+    <string name="no_proxy">Sem proxy</string>
+    <string name="outbound_proxies">Proxys de saída (outbound)</string>
+    <string name="accounts_proxies">Proxys de Registro (account)</string>
+    <string name="all">Todos</string>
+    <string name="no_zrtp">Sem ZRTP</string>
+    <string name="create_zrtp">Criar ZRTP</string>
 
 </resources>

@@ -210,7 +210,6 @@
     <string name="support_multiple_calls">תמיכה בשיחות מרובות</string>
     <string name="support_multiple_calls_desc">אפשר שיחות ועידה מרובות בו זמנית</string>
     <string name="expert_preferences">מצב מומחה</string>
-    <string name="advanced_preferences">מצב מתקדם</string>
     <string name="digest">מלקט</string>
     <string name="plain_password">סיסמה גלויה</string>
     <string name="data_digest">מלקט מידע</string>

@@ -222,6 +222,10 @@
   <string name="codecs_per_bandwidth_desc">Permet d\'avoir une liste de priorité différente pour les réseaux rapides et lents</string>
   <string name="audio_troubleshooting">Dépannage audio</string>
   <string name="audio_troubleshooting_desc">Solutions de contournement pour la route audio</string>
+  <string name="codecs_extra_settings">Options additionelles des codecs</string>
+  <string name="frames_per_rtp_packet">Frames par paquet RTP</string>
+  <string name="g729_frame_per_packet">G729 frames par paquet</string>
+  <string name="ilbc_frame_per_packet">iLBC frames par paquet</string>
   <!--UI-->
   <string name="general_ui">Interface utilisateur générale</string>
   <string name="native_dialer_integration">Intégration au numéroteur Android</string>
@@ -287,7 +291,7 @@
   <string name="use_video_desc">Send video from device automatically</string>
   <!--Settings modes-->
   <string name="expert_preferences">Mode expert</string>
-  <string name="advanced_preferences">Mode avancé</string>
+  <string name="normal_preferences">Mode normal</string>
   <!--Generic-->
   <string name="leave_minus_1_default">Leave -1 to default</string>
 </resources>

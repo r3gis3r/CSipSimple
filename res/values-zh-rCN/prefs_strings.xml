@@ -180,7 +180,6 @@
     <string name="auto_record_calls">通话自动录音</string>
     <string name="auto_record_calls_desc">连接建立后马上录音</string>
     <string name="expert_preferences">专家模式</string>
-    <string name="advanced_preferences">高级模式</string>
     <string name="digest">摘要</string>
     <string name="plain_password">显示密码</string>
     <string name="data_digest">数据摘要</string>
