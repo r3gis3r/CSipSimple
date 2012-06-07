@@ -118,13 +118,16 @@ static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
 	}
 
 	PJ_LOG(5, (THIS_FILE, "Cancel timer %d", entry->_timer_id));
-	if (ht->entries[entry->_timer_id] == NULL) {
-		PJ_LOG(
-				1,
-				(THIS_FILE, "Cancelling something not linked to heap anymore: %d", entry->_timer_id));
+
+	// This includes case where the entry is not linked to the heap anymore
+	if (ht->entries[entry->_timer_id] != entry) {
+		PJ_LOG(1,
+				(THIS_FILE, "Cancelling something not linked to this heap : %d", entry->_timer_id));
 		return 0;
 	}
 
+	// Note -- due to the fact we rely on android alarm manager, nothing ensure here that cancelCount is actually valid.
+	// Previous checks should do the trick to be sure we have actually 1 cancelled timer here.
 	int cancelCount = timer_cancel_wrapper((int) entry, (int) entry);
 
 	if (cancelCount > 0) {
