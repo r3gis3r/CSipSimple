@@ -58,11 +58,7 @@ LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/q850_reason_
 LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/ndk_stl_fixer.cpp
 
 
-LOCAL_LDLIBS := -llog
-
-ifeq ($(MY_USE_TLS),1)
-LOCAL_LDLIBS += -ldl 
-endif
+LOCAL_LDLIBS := -llog -ldl
 
 ifeq ($(MY_USE_AMR),1)
 	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
@@ -85,12 +81,12 @@ endif
 ifeq ($(MY_USE_G729),1)
 	LOCAL_STATIC_LIBRARIES += pj_g729_codec
 endif
-ifeq ($(MY_USE_CODEC2),1)
-	LOCAL_STATIC_LIBRARIES += codec2
+
+ifeq ($(MY_USE_ZRTP),1)
+	LOCAL_STATIC_LIBRARIES += zrtp4pj
 endif
 
 ifeq ($(MY_USE_TLS),1)
-	LOCAL_STATIC_LIBRARIES += zrtp4pj
 ifeq ($(MY_USE_STATIC_SSL),1)
 # This is to do builds with full openssl built in.
 # Not use unless you know what you do and create a ssl_static target in openssl lib

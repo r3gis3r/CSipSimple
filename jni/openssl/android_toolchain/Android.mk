@@ -42,7 +42,7 @@ include $(LOCAL_PATH)/android-config.mk
 LOCAL_SRC_FILES += $(local_src_files:%=crypto/%)
 LOCAL_CFLAGS += $(local_c_flags)
 LOCAL_C_INCLUDES += $(local_c_includes)
-LOCAL_LDLIBS += -lz
+LOCAL_LDLIBS += -lz -ldl
 ifeq ($(TARGET_ARCH),arm)
 	LOCAL_SRC_FILES += $(arm_src_files:%=crypto/%)
 	LOCAL_CFLAGS += $(arm_cflags)
