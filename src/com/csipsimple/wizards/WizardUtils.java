@@ -661,6 +661,15 @@ public class WizardUtils {
                     R.drawable.ic_wizard_mobex, 9, 
                     new Locale[] {new Locale("PT", "br")}, false, false, 
                     Mobex.class));
+            WIZARDS_DICT.put("SVANTO", new WizardInfo("SVANTO", "Svanto", 
+                    R.drawable.ic_wizard_svanto, 5, 
+                    new Locale[] {
+                        new Locale("pl"), Locale.FRANCE,
+                        locale("fr_BE"), locale("nl_BE"), locale("nl_NL"),
+                        locale("fr_CH"), locale("de_CH"),
+                        Locale.GERMANY, locale("es_ES"), locale("pt_PT")
+                    }, false, false, 
+                    Svanto.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
