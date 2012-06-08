@@ -142,21 +142,13 @@ public class PjSipService {
                 hasSipStack = true;
                 return true;
             } catch (UnsatisfiedLinkError e) {
-                // If it fails we probably are running on a special hardware,
-                // redirect to support webpage
+                // If it fails we probably are running on a special hardware
                 Log.e(THIS_FILE,
                         "We have a problem with the current stack.... NOT YET Implemented", e);
                 hasSipStack = false;
                 sipStackIsCorrupted = true;
 
-                /*
-                 * //Obsolete Intent it = new Intent(Intent.ACTION_VIEW);
-                 * it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                 * it.setData(Uri.parse(
-                 * "http://code.google.com/p/csipsimple/wiki/NewHardwareSupportRequest"
-                 * )); startActivity(it);
-                 */
-                // service.stopSelf();
+                service.notifyUserOfMessage("Can't load native library. CPU arch invalid for this build");
                 return false;
             } catch (Exception e) {
                 Log.e(THIS_FILE, "We have a problem with the current stack....", e);
@@ -510,25 +502,6 @@ public class PjSipService {
                     pjsua.acc_add_local(tlsTransportId, pjsua.PJ_FALSE, p_acc_id);
                     localTlsAccPjId = p_acc_id[0];
                 }
-
-                // RTP transport
-                /*
-                 * { pjsua_transport_config cfg = new pjsua_transport_config();
-                 * pjsua.transport_config_default(cfg);
-                 * cfg.setPort(prefsWrapper.getRTPPort()); if
-                 * (prefsWrapper.getPreferenceBooleanValue
-                 * (SipConfigManager.ENABLE_QOS)) { Log.d(THIS_FILE,
-                 * "Activate qos for voice packets");
-                 * cfg.setQos_type(pj_qos_type.PJ_QOS_TYPE_VOICE); } if
-                 * (prefsWrapper.useIPv6()) { status =
-                 * pjsua.media_transports_create_ipv6(cfg); } else { status =
-                 * pjsua.media_transports_create(cfg); } if (status !=
-                 * pjsuaConstants.PJ_SUCCESS) { String msg =
-                 * "Fail to add media transport " +
-                 * pjStrToString(pjsua.get_error_message(status));
-                 * Log.e(THIS_FILE, msg); service.notifyUserOfMessage(msg);
-                 * cleanPjsua(); return false; } }
-                 */
             }
 
             // Initialization is done, now start pjsua
@@ -1094,7 +1067,6 @@ public class PjSipService {
         if (!created) {
             return -1;
         }
-        int res = -1;
         String keyPressed = "";
         // Since some device (xoom...) are apparently buggy with key character map loading... 
         // we have to do crappy thing here
@@ -1109,7 +1081,16 @@ public class PjSipService {
             KeyCharacterMap km = KeyCharacterMap.load(KeyCharacterMap.NUMERIC);
             keyPressed = Integer.toString(km.getNumber(keyCode));
         }
-        pj_str_t pjKeyPressed = pjsua.pj_str_copy(keyPressed);
+        return sendDtmf(callId, keyPressed);
+    }
+    
+    private int sendDtmf(int callId, String keyPressed) throws SameThreadException {
+        // TODO : we should split "," and ";" to timers instead of ignoring it in most cases 
+        String rtpDtmf = keyPressed.replace(",", "");
+        rtpDtmf = rtpDtmf.replace(";", "");
+        pj_str_t pjKeyPressed = pjsua.pj_str_copy(rtpDtmf);
+        
+        int res = -1;
         if (prefsWrapper.useSipInfoDtmf()) {
             res = pjsua.send_dtmf_info(callId, pjKeyPressed);
             Log.d(THIS_FILE, "Has been sent DTMF INFO : " + res);
@@ -1196,15 +1177,13 @@ public class PjSipService {
         }
     }
     
-    public void sendPendingDtmf(int callId) {
-
-        Log.d(THIS_FILE, "DTMF - Send pending dtmf " + callId);
+    public void sendPendingDtmf(int callId) throws SameThreadException {
         if(dtmfToAutoSend.get(callId) != null) {
             if (dtmfDialtoneGenerators.get(callId) == null) {
                 dtmfDialtoneGenerators.put(callId, new PjStreamDialtoneGenerator(callId));
             }
-            Log.d(THIS_FILE, "DTMF - Send pending dtmf " + dtmfToAutoSend.get(callId));
-            dtmfDialtoneGenerators.get(callId).sendPjMediaDialTone(dtmfToAutoSend.get(callId));
+            Log.d(THIS_FILE, "DTMF - Send pending dtmf " + dtmfToAutoSend.get(callId) + " for " + callId);
+            sendDtmf(callId, dtmfToAutoSend.get(callId));
             dtmfToAutoSend.put(callId, null);
         }
     }

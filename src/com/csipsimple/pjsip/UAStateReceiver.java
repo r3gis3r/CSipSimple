@@ -721,8 +721,15 @@ public class UAStateReceiver extends Callback {
 							pjService.mediaManager.stopRing();
 						}
 					}
+					// Auto send pending dtmf
+					final int callId = callInfo.getCallId();
 					if(callState == SipCallSession.InvState.CONFIRMED) {
-                        pjService.sendPendingDtmf(callInfo.getCallId());
+	                    pjService.service.getExecutor().execute(new SipRunnable() {
+	                        @Override
+	                        protected void doRun() throws SameThreadException {
+	                            pjService.sendPendingDtmf(callId);
+	                        }
+	                    });
                     }
 					
 					if(incomingCallLock != null && incomingCallLock.isHeld()) {
