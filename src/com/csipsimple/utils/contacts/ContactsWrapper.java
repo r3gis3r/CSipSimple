@@ -327,13 +327,28 @@ public abstract class ContactsWrapper {
 
         return true;
     }
-
+    
+    /**
+     * Get the information of a number caller
+     * @param ctxt The application context
+     * @param number The phone number to search
+     * @return Caller information if anyone found
+     */
     public abstract CallerInfo findCallerInfo(Context ctxt, String number);
 
+    /**
+     * Get the information of a sip uri caller
+     * @param ctxt The application context
+     * @param sipUri The sip uri to search
+     * @return Caller information if anyone found
+     */
+    public abstract CallerInfo findCallerInfoForUri(Context ctxt, String sipUri);
+    
+    /**
+     * Get self information based. This works better in ICS where it's formalized
+     * @param ctxt The application context
+     * @return Caller information of the current application user
+     */
     public abstract CallerInfo findSelfInfo(Context ctxt);
-
-    
-
-    
 
 }

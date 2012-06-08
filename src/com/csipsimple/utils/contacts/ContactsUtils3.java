@@ -282,6 +282,15 @@ public class ContactsUtils3 extends ContactsWrapper {
         return callerInfo;
     }
 
+
+    @Override
+    public CallerInfo findCallerInfoForUri(Context ctxt, String sipUri) {
+
+        CallerInfo callerInfo = new CallerInfo();
+        callerInfo.phoneNumber = sipUri;
+        
+        return callerInfo;
+    }
     
     @Override
     public CallerInfo findSelfInfo(Context ctxt) {

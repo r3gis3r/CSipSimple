@@ -80,7 +80,6 @@ public final class SipUri {
         }
         
         public String toString(boolean includeDisplayName) {
-
             StringBuffer buildString = new StringBuffer();
             if(!TextUtils.isEmpty(scheme)) {
                 buildString.append("<sip:");
@@ -99,6 +98,16 @@ public final class SipUri {
                 // Start with display name
                 buildString.insert(0, Uri.encode(displayName));
             }
+            return buildString.toString();
+        }
+        
+        public String getContactAddress() {
+            StringBuffer buildString = new StringBuffer();
+
+            if(!TextUtils.isEmpty(userName)) {
+                buildString.append(encodeUser(userName) + "@");
+            }
+            buildString.append(domain);
             return buildString.toString();
         }
     }

@@ -248,35 +248,7 @@ public class ContactsUtils5 extends ContactsWrapper {
             return "";
         }
         number = number.trim();
-        /*
-         * String name = cursor.getString(NAME_INDEX); int type =
-         * cursor.getInt(TYPE_INDEX); String label =
-         * cursor.getString(LABEL_INDEX); CharSequence displayLabel =
-         * android.provider.Contacts.Phones.getDisplayLabel(ctxt, type, label);
-         * if (name == null) { name = ""; } else { // Names with commas are the
-         * bane of the recipient editor's existence. // We've worked around them
-         * by using spans, but there are edge cases // where the spans get
-         * deleted. Furthermore, having commas in names // can be confusing to
-         * the user since commas are used as separators // between recipients.
-         * The best solution is to simply remove commas // from names. name =
-         * name.replace(", ", " ") .replace(",", " "); // Make sure we leave a
-         * space between parts of names. } String nameAndNumber =
-         * ContactsWrapper.formatNameAndNumber(name, number); SpannableString
-         * out = new SpannableString(nameAndNumber); int len = out.length(); if
-         * (!TextUtils.isEmpty(name)) { out.setSpan(new Annotation("name",
-         * name), 0, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); } else {
-         * out.setSpan(new Annotation("name", number), 0, len,
-         * Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); } String person_id =
-         * cursor.getString(CONTACT_ID_INDEX); out.setSpan(new
-         * Annotation("person_id", person_id), 0, len,
-         * Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); out.setSpan(new
-         * Annotation("label", displayLabel.toString()), 0, len,
-         * Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); out.setSpan(new
-         * Annotation("number", number), 0, len,
-         * Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-         */
         return number;
-        // return out;
     }
 
     @SuppressWarnings("deprecation")
@@ -321,6 +293,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                     PhoneLookup.NUMBER,
                     PhoneLookup.PHOTO_ID,
                     PhoneLookup.LOOKUP_KEY,
+                    PhoneLookup.CUSTOM_RINGTONE,
                     PhoneLookup.PHOTO_URI
             };
         } else {
@@ -330,6 +303,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                     PhoneLookup.TYPE,
                     PhoneLookup.LABEL,
                     PhoneLookup.NUMBER,
+                    PhoneLookup.CUSTOM_RINGTONE,
                     PhoneLookup.LOOKUP_KEY
             };
         }
@@ -359,21 +333,15 @@ public class ContactsUtils5 extends ContactsWrapper {
 
                     if (cv.containsKey(PhoneLookup._ID)) {
                         callerInfo.personId = cv.getAsLong(PhoneLookup._ID);
-
-                        /*
-                         * if(cv.containsKey(PhoneLookup.LOOKUP_KEY) ) {
-                         * callerInfo.contactContentUri =
-                         * Contacts.getLookupUri(callerInfo.personId ,
-                         * cv.getAsString(PhoneLookup.LOOKUP_KEY)); }
-                         */
-
                         callerInfo.contactContentUri = ContentUris.withAppendedId(
                                 Contacts.CONTENT_URI, callerInfo.personId);
                     }
 
                     if (cv.containsKey(PhoneLookup.CUSTOM_RINGTONE)) {
-                        callerInfo.contactRingtoneUri = Uri.parse(cv
-                                .getAsString(PhoneLookup.CUSTOM_RINGTONE));
+                        String cRt = cv.getAsString(PhoneLookup.CUSTOM_RINGTONE);
+                        if(!TextUtils.isEmpty(cRt)) {
+                            callerInfo.contactRingtoneUri = Uri.parse(cRt);
+                        }
                     }
 
                     if (cv.containsKey(PhoneLookup.PHOTO_ID)) {
@@ -381,7 +349,10 @@ public class ContactsUtils5 extends ContactsWrapper {
                     }
 
                     if (cv.containsKey(PhoneLookup.PHOTO_URI)) {
-                        callerInfo.photoUri = Uri.parse(cv.getAsString(PhoneLookup.PHOTO_URI));
+                        String cPu = cv.getAsString(PhoneLookup.PHOTO_URI);
+                        if(!TextUtils.isEmpty(cPu)) {
+                            callerInfo.photoUri = Uri.parse(cPu);
+                        }
                     }
 
                     if (callerInfo.name != null && callerInfo.name.length() == 0) {
@@ -390,7 +361,7 @@ public class ContactsUtils5 extends ContactsWrapper {
 
                 }
             } catch (Exception e) {
-                Log.e(THIS_FILE, "Exception while retrieving cursor infos");
+                Log.e(THIS_FILE, "Exception while retrieving cursor infos", e);
             } finally {
                 cursor.close();
             }
@@ -405,6 +376,120 @@ public class ContactsUtils5 extends ContactsWrapper {
 
         return callerInfo;
     }
+    
+
+    @Override
+    public CallerInfo findCallerInfoForUri(Context ctxt, String sipUri) {
+        CallerInfo callerInfo = new CallerInfo();
+        String[] projection;
+        if (Compatibility.isCompatible(11)) {
+            projection = new String[] {
+                    Data._ID,
+                    Data.CONTACT_ID,
+                    Data.DATA1,
+                    Data.DISPLAY_NAME,
+                    Data.PHOTO_ID,
+                    Data.CUSTOM_RINGTONE,
+                    Data.LOOKUP_KEY,
+                    Data.PHOTO_URI
+            };
+        } else {
+            projection = new String[] {
+                    Data._ID,
+                    Data.CONTACT_ID,
+                    Data.DATA1,
+                    Data.DISPLAY_NAME,
+                    Data.PHOTO_ID,
+                    Data.CUSTOM_RINGTONE,
+                    Data.LOOKUP_KEY
+            };
+        }
+        
+
+        Uri uri = Data.CONTENT_URI;
+
+        // Has phone number
+        String whereSipUriClause = "(" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
+                + " AND " + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
+                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='sip'" + ")";
+
+        // CSip IM custo
+        whereSipUriClause += " OR (" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
+                + " AND " + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
+                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='csip'" + ")";
+
+        // Has sip uri
+        if (Compatibility.isCompatible(9)) {
+            whereSipUriClause += " OR " + Data.MIMETYPE + "='"
+                    + CommonDataKinds.SipAddress.CONTENT_ITEM_TYPE + "'";
+        }
+        
+        String query = Contacts.DISPLAY_NAME + " IS NOT NULL "
+                + " AND (" + whereSipUriClause + ") AND " + Data.DATA1 + "='" + sipUri + "'";
+        
+
+        Cursor cursor = ctxt.getContentResolver().query(uri,
+                projection, query,
+                null, Data.DISPLAY_NAME + " ASC");
+        
+        
+        if (cursor != null) {
+            try {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+
+                    ContentValues cv = new ContentValues();
+                    DatabaseUtils.cursorRowToContentValues(cursor, cv);
+                    callerInfo.contactExists = true;
+                    if (cv.containsKey(Data.DISPLAY_NAME)) {
+                        callerInfo.name = cv.getAsString(Data.DISPLAY_NAME);
+                    }
+
+                    callerInfo.phoneNumber = sipUri;
+
+                    callerInfo.numberLabel = "sip";
+                    callerInfo.phoneLabel = "sip";
+
+                    if (cv.containsKey(Data.CONTACT_ID)) {
+                        callerInfo.personId = cv.getAsLong(Data.CONTACT_ID);
+                        
+                        callerInfo.contactContentUri = ContentUris.withAppendedId(
+                                Contacts.CONTENT_URI, callerInfo.personId);
+                    }
+
+                    if (cv.containsKey(Data.CUSTOM_RINGTONE)) {
+                        String cRt = cv.getAsString(Data.CUSTOM_RINGTONE);
+                        if(!TextUtils.isEmpty(cRt)) {
+                            callerInfo.contactRingtoneUri = Uri.parse(cRt);
+                        }
+                    }
+
+                    if (cv.containsKey(Data.PHOTO_ID)) {
+                        callerInfo.photoId = cv.getAsLong(Data.PHOTO_ID);
+                    }
+
+                    if (cv.containsKey(Data.PHOTO_URI)) {
+                        String cPu = cv.getAsString(Data.PHOTO_URI);
+                        if(!TextUtils.isEmpty(cPu)) {
+                            callerInfo.photoUri = Uri.parse(cPu);
+                        }
+                    }
+
+                    if (callerInfo.name != null && callerInfo.name.length() == 0) {
+                        callerInfo.name = null;
+                    }
+
+                }
+            } catch (Exception e) {
+                Log.e(THIS_FILE, "Exception while retrieving cursor infos", e);
+            } finally {
+                cursor.close();
+            }
+        }
+        
+        
+        return callerInfo;
+    }
 
     @Override
     public CallerInfo findSelfInfo(Context ctxt) {
@@ -415,7 +500,7 @@ public class ContactsUtils5 extends ContactsWrapper {
     @Override
     public Cursor getContactsPhones(Context ctxt) {
 
-        Uri uri = ContactsContract.Data.CONTENT_URI;
+        Uri uri = Data.CONTENT_URI;
 
         // Has phone number
         String isPhoneType = "(" + Data.MIMETYPE + "='" + CommonDataKinds.Phone.CONTENT_ITEM_TYPE
