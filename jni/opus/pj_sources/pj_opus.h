@@ -1,10 +1,10 @@
 
-#ifndef __PJMEDIA_CODEC_SILK_CODEC_H__
-#define __PJMEDIA_CODEC_SILK_CODEC_H__
+#ifndef __PJMEDIA_CODEC_OPUS_CODEC_H__
+#define __PJMEDIA_CODEC_OPUS_CODEC_H__
 
 /**
- * @file silk.h
- * @brief SILK codec.
+ * @file pj_opus.h
+ * @brief OPUS codec.
  */
 
 #include <pjmedia-codec/types.h>
@@ -22,5 +22,4 @@ PJ_END_DECL
  * @}
  */
 
-#endif	/* __PJMEDIA_CODEC_SILK_CODEC_H__ */
-
+#endif	/* __PJMEDIA_CODEC_OPUS_CODEC_H__ */
