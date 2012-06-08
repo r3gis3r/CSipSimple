@@ -477,7 +477,7 @@ public class PjSipService {
 
                 }
                 // TCP
-                if (prefsWrapper.isTCPEnabled() && !prefsWrapper.useIPv6()) {
+                if (prefsWrapper.isTCPEnabled()) {
                     pjsip_transport_type_e t = pjsip_transport_type_e.PJSIP_TRANSPORT_TCP;
                     if (prefsWrapper.useIPv6()) {
                         t = pjsip_transport_type_e.PJSIP_TRANSPORT_TCP6;

@@ -43,7 +43,7 @@ public final class SipUri {
     private final static String SIP_SCHEME_RULE = "sip(?:s)?|tel";
     private final static String DIGIT_NBR_RULE = "^[0-9\\-#\\+\\*\\(\\)]+$";
     private final static Pattern SIP_CONTACT_ADDRESS_PATTERN = Pattern
-            .compile("^([^@:]+)@([^@:]+)$");
+            .compile("^([^@:]+)@([^@]+)$");
     private final static Pattern SIP_CONTACT_PATTERN = Pattern
             .compile("^(?:\")?([^<\"]*)(?:\")?[ ]*(?:<)?("+SIP_SCHEME_RULE+"):([^@]+)@([^>]+)(?:>)?$");
     private final static Pattern SIP_HOST_PATTERN = Pattern
