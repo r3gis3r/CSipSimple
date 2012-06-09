@@ -47,6 +47,7 @@ import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
+import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.service.SipService.ToCall;
 import com.csipsimple.utils.ExtraPlugins;
 import com.csipsimple.utils.ExtraPlugins.DynCodecInfos;
@@ -82,10 +83,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Map.Entry;
 
 public class PjSipService {
     private static final String THIS_FILE = "PjService";
+    private static final int DTMF_TONE_PAUSE_LENGTH = 300;
+    private static final int DTMF_TONE_WAIT_LENGTH = 2000;
     public SipService service;
 
     private boolean created = false;
@@ -103,7 +108,9 @@ public class PjSipService {
     public UAStateReceiver userAgentReceiver;
     public MediaManager mediaManager;
 
+    private Timer tasksTimer;
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
+    private SparseArray<TimerTask> dtmfTasks = new SparseArray<TimerTask>(5);
     private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
     
     // -------
@@ -549,7 +556,11 @@ public class PjSipService {
             cleanPjsua();
             TimerWrapper.destroy();
         }
-        Log.i(THIS_FILE, ">> Media m " + mediaManager);
+        if(tasksTimer != null) {
+            tasksTimer.cancel();
+            tasksTimer.purge();
+            tasksTimer = null;
+        }
         return true;
     }
 
@@ -1084,12 +1095,40 @@ public class PjSipService {
         return sendDtmf(callId, keyPressed);
     }
     
-    private int sendDtmf(int callId, String keyPressed) throws SameThreadException {
-        // TODO : we should split "," and ";" to timers instead of ignoring it in most cases 
-        String rtpDtmf = keyPressed.replace(",", "");
-        rtpDtmf = rtpDtmf.replace(";", "");
-        pj_str_t pjKeyPressed = pjsua.pj_str_copy(rtpDtmf);
+    private int sendDtmf(final int callId, String keyPressed) throws SameThreadException {
+        if(TextUtils.isEmpty(keyPressed)) {
+            return pjsua.PJ_SUCCESS;
+        }
         
+        String dtmfToDial = keyPressed;
+        String remainingDtmf = "";
+        int pauseBeforeRemaining = 0;
+        boolean foundSeparator = false;
+        if(keyPressed.contains(",") || keyPressed.contains(";")) {
+            dtmfToDial = "";
+            for(int i = 0; i < keyPressed.length(); i++) {
+                char c = keyPressed.charAt(i);
+                if(!foundSeparator) {
+                    if(c == ',' || c == ';') {
+                        pauseBeforeRemaining += (c == ',') ? DTMF_TONE_PAUSE_LENGTH : DTMF_TONE_WAIT_LENGTH;
+                        foundSeparator = true;
+                    } else {
+                        dtmfToDial += c;
+                    }
+                }else {
+                    if ((c == ',' || c == ';') && TextUtils.isEmpty(remainingDtmf)){
+                        pauseBeforeRemaining += (c == ',') ? DTMF_TONE_PAUSE_LENGTH : DTMF_TONE_WAIT_LENGTH;
+                    }else {
+                        remainingDtmf += c;
+                    }
+                }
+            }
+            
+        }
+        
+        
+        
+        pj_str_t pjKeyPressed = pjsua.pj_str_copy(dtmfToDial);
         int res = -1;
         if (prefsWrapper.useSipInfoDtmf()) {
             res = pjsua.send_dtmf_info(callId, pjKeyPressed);
@@ -1110,6 +1149,40 @@ public class PjSipService {
                 Log.d(THIS_FILE, "Has been sent DTMF analogic : " + res);
             }
         }
+        
+        
+        
+        // Finally, push remaining DTMF in the future
+        if(!TextUtils.isEmpty(remainingDtmf)) {
+            if(tasksTimer == null) {
+                tasksTimer = new Timer("com.csipsimple.PjSipServiceTasks");
+            }
+            TimerTask tt = new TimerTask() {
+                @Override
+                public void run() {
+                    service.getExecutor().execute(new SipRunnable() {
+                        @Override
+                        protected void doRun() throws SameThreadException {
+                            Log.d(THIS_FILE, "Running pending DTMF send");
+                            sendPendingDtmf(callId);
+                        }
+                    });
+                }
+            };
+            dtmfToAutoSend.put(callId, remainingDtmf);
+            dtmfTasks.put(callId, tt);
+            Log.d(THIS_FILE, "Schedule DTMF " + remainingDtmf + " in "+ pauseBeforeRemaining);
+            tasksTimer.schedule(tt, pauseBeforeRemaining);
+        }else {
+            if(dtmfToAutoSend.get(callId) != null) {
+                dtmfToAutoSend.put(callId, null);
+            }
+            if(dtmfTasks.get(callId) != null) {
+                dtmfTasks.put(callId, null);
+            }
+        }
+        
+        
         return res;
     }
 
@@ -1179,12 +1252,8 @@ public class PjSipService {
     
     public void sendPendingDtmf(int callId) throws SameThreadException {
         if(dtmfToAutoSend.get(callId) != null) {
-            if (dtmfDialtoneGenerators.get(callId) == null) {
-                dtmfDialtoneGenerators.put(callId, new PjStreamDialtoneGenerator(callId));
-            }
             Log.d(THIS_FILE, "DTMF - Send pending dtmf " + dtmfToAutoSend.get(callId) + " for " + callId);
             sendDtmf(callId, dtmfToAutoSend.get(callId));
-            dtmfToAutoSend.put(callId, null);
         }
     }
 
@@ -1195,6 +1264,10 @@ public class PjSipService {
         }
         if(dtmfToAutoSend.get(callId) != null) {
             dtmfToAutoSend.put(callId, null);
+        }
+        if(dtmfTasks.get(callId) != null) {
+            dtmfTasks.get(callId).cancel();
+            dtmfTasks.put(callId, null);
         }
     }
 

@@ -21,10 +21,11 @@
 
 package com.csipsimple.pjsip;
 
+import com.csipsimple.utils.Log;
+
 import org.pjsip.pjsua.pj_pool_t;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_port;
-import org.pjsip.pjsua.pjmedia_tone_desc;
 import org.pjsip.pjsua.pjmedia_tone_digit;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
@@ -39,6 +40,7 @@ import org.pjsip.pjsua.pjsua_call_info;
 public class PjStreamDialtoneGenerator {
 
     
+    private static final String THIS_FILE = "PjStreamDialtoneGenerator";
     private static String SUPPORTED_DTMF = "0123456789abcd*#";
     private final int callId;
 	private pj_pool_t dialtonePool;
@@ -113,7 +115,7 @@ public class PjStreamDialtoneGenerator {
 	
 	/**
 	 * Send multiple tones.
-	 * @param dtmfChars tones list to send. Any unknown tones will be considered as pause (1sec). ";" will be considered as 3sec pause instead of wait tone. 
+	 * @param dtmfChars tones list to send. 
 	 * @return the pjsip status
 	 */
 	public synchronized int sendPjMediaDialTone(String dtmfChars) {
@@ -128,40 +130,15 @@ public class PjStreamDialtoneGenerator {
 		for(int i = 0 ; i < dtmfChars.length(); i++ ) {
 		    char d = dtmfChars.charAt(i);
 		    if(SUPPORTED_DTMF.indexOf(d) == -1) {
-		        // We should reach that only if first chars are unknown
-                // Not supported char, use 3sec temp for a ";", 1 sec else
-		        // We don't support wait for dialtone w since no way to get analog tone parsing
-		        pjmedia_tone_desc[] tone = new pjmedia_tone_desc[1];
-		        tone[0] = new pjmedia_tone_desc();
-		        tone[0].setVolume((short) 0);
-		        tone[0].setOn_msec((short) 0);
-		        tone[0].setOff_msec((short) ((d == ';')? 3000 : 1000));
-		        tone[0].setFreq1((short) 10);
-		        tone[0].setFreq2((short) 10);
-		        
-		        pjsua.pjmedia_tonegen_play(dialtoneGen, 1, tone, 0);
+		        Log.w(THIS_FILE, "Unsupported DTMF char " + d);
 		    } else {
 		        // Found dtmf char, use digit api
 		        pjmedia_tone_digit[] tone = new pjmedia_tone_digit[1];
 		        tone[0] = new pjmedia_tone_digit();
                 tone[0].setVolume((short) 0);
                 tone[0].setOn_msec((short) 100);
+                tone[0].setOff_msec((short) 200);
                 tone[0].setDigit(d);
-                
-                // Get offtime based on next invalid
-                short offTime = 200;
-                int unsupportedNext = 0;
-                while( i+unsupportedNext+1 < dtmfChars.length() && SUPPORTED_DTMF.indexOf(dtmfChars.charAt(i+unsupportedNext+1)) == -1) {
-                    if(dtmfChars.charAt(i+unsupportedNext+1) == ';') {
-                        offTime += 3000;
-                    }else {
-                        offTime += 1000;
-                    }
-                    unsupportedNext ++;
-                }
-                i += unsupportedNext;
-                
-                tone[0].setOff_msec((short) offTime);
                 pjsua.pjmedia_tonegen_play_digits(dialtoneGen, 1, tone, 0);
 		    }
 		}
