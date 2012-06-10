@@ -35,6 +35,9 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
@@ -43,6 +46,7 @@ import com.csipsimple.api.SipMessage;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.widgets.RegistrationNotification;
@@ -59,6 +63,7 @@ public class SipNotifications {
 	private Builder missedCallNotification;
 	private Builder messageNotification;
 	private Builder messageVoicemail;
+	
 
 	public static final int REGISTER_NOTIF_ID = 1;
 	public static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
@@ -77,7 +82,49 @@ public class SipNotifications {
 			cancelCalls();
 			isInit = true;
 		}
+		
+		if( ! Compatibility.isCompatible(9) ) {
+		    searchNotificationPrimaryText(aContext);
+		}
 	}
+
+    private Integer notificationPrimaryTextColor = null;
+
+    private static String TO_SEARCH = "Search";
+	// Retrieve notification textColor with android < 2.3
+	@SuppressWarnings("deprecation")
+    private void searchNotificationPrimaryText(Context aContext) {
+	    try {
+	        Notification ntf = new Notification();
+	        ntf.setLatestEventInfo(aContext, TO_SEARCH, "", null);
+	        LinearLayout group = new LinearLayout(aContext);
+	        ViewGroup event = (ViewGroup) ntf.contentView.apply(aContext, group);
+	        recurseSearchNotificationPrimaryText(event);
+	        group.removeAllViews();
+	    } catch (Exception e) {
+	        Log.e(THIS_FILE, "Can't retrieve the color", e);
+	    }
+	}
+	
+	private boolean recurseSearchNotificationPrimaryText(ViewGroup gp) {
+	    final int count = gp.getChildCount();
+	    for (int i = 0; i < count; ++i) {
+	        if (gp.getChildAt(i) instanceof TextView){
+	            final TextView text = (TextView) gp.getChildAt(i);
+	            final String szText = text.getText().toString();
+	            if (TO_SEARCH.equals(szText)) {
+	                notificationPrimaryTextColor = text.getTextColors().getDefaultColor();
+	                return true;
+	            }
+	        } else if (gp.getChildAt(i) instanceof ViewGroup) {
+	            if(recurseSearchNotificationPrimaryText((ViewGroup) gp.getChildAt(i))) {
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
+	}
+	
 
 	// Foreground api
 
@@ -192,6 +239,9 @@ public class SipNotifications {
 		
 		RegistrationNotification contentView = new RegistrationNotification(context.getPackageName());
 		contentView.clearRegistrations();
+		if(!Compatibility.isCompatible(9)) {
+		    contentView.setTextsColor(notificationPrimaryTextColor);
+		}
 		contentView.addAccountInfos(context, activeAccountsInfos);
 
 		// notification.setLatestEventInfo(context, contentTitle,

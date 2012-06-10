@@ -108,5 +108,13 @@ public class RegistrationNotification extends RemoteViews {
         }
 
     }
-
+    
+    public void setTextsColor(Integer color) {
+        if(color == null) {
+            return;
+        }
+        for(int i = 0; i < texts.length; i++) {
+            setTextColor(texts[i], color);
+        }
+    }
 }
