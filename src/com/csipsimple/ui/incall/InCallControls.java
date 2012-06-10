@@ -178,7 +178,7 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
             AccessibilityWrapper accessibilityManager = AccessibilityWrapper.getInstance();
             accessibilityManager.init(getContext());
             if(!accessibilityManager.isEnabled()) {
-                useSlider = !SipConfigManager.getPreferenceBooleanValue(context, SipConfigManager.USE_ALTERNATE_UNLOCKER);
+                useSlider = !SipConfigManager.getPreferenceBooleanValue(context, SipConfigManager.USE_ALTERNATE_UNLOCKER, useSlider);
             }
         }
         
