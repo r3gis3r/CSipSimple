@@ -21,8 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.os.Handler;
-import android.os.Message;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -38,21 +36,16 @@ import com.csipsimple.utils.MD5;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.impl.AccountCreationWebview.OnAccountCreationDoneListener;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.HttpRequestBase;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.Date;
 
 public class Ippi extends SimpleImplementation implements OnAccountCreationDoneListener {
 
 
 	protected static final String THIS_FILE = "IppiW";
-	protected static final int DID_SUCCEED = 0;
-	protected static final int DID_ERROR = 1;
 	
 	private static final String webCreationPage = "https://m.ippi.fr/subscribe/android.php";
 
@@ -87,37 +80,6 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
         extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
 	}
 	
-
-
-
-	private Handler creditHandler = new Handler() {
-		public void handleMessage(Message message) {
-			switch (message.what) {
-			case DID_SUCCEED: {
-				//Here we get the credit info, now add a row in the interface
-				String response = (String) message.obj;
-				try{
-					float value = Float.parseFloat(response.trim());
-					if(value >= 0) {
-						customWizardText.setText("Credit : " + Math.round(value * 100.0)/100.0 + " euros");
-						customWizard.setVisibility(View.VISIBLE);
-					}
-				}catch(NumberFormatException e) {
-					Log.e(THIS_FILE, "Impossible to parse result", e);
-				}catch (NullPointerException e) {
-					Log.e(THIS_FILE, "Null result");
-				}
-				
-				break;
-			}
-			case DID_ERROR: {
-				Exception e = (Exception) message.obj;
-				e.printStackTrace();
-				break;
-			}
-			}
-		}
-	};
 	
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
@@ -132,34 +94,7 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 	private void updateAccountInfos(final SipProfile acc) {
 		if (acc != null && acc.id != SipProfile.INVALID_ID) {
 			customWizard.setVisibility(View.GONE);
-			Thread t = new Thread() {
-
-				public void run() {
-					try {
-						HttpClient httpClient = new DefaultHttpClient();
-						
-						String requestURL = "https://soap.ippi.fr/credit/check_credit.php?"
-							+ "login=" + acc.username
-							+ "&code=" + MD5.MD5Hash(acc.data + DateFormat.format("yyyyMMdd", new Date()));
-						
-						HttpGet httpGet = new HttpGet(requestURL);
-
-						// Create a response handler
-						HttpResponse httpResponse = httpClient.execute(httpGet);
-						if(httpResponse.getStatusLine().getStatusCode() == 200) {
-							InputStreamReader isr = new InputStreamReader(httpResponse.getEntity().getContent());
-							BufferedReader br = new BufferedReader(isr);
-							String line = br.readLine();
-							creditHandler.sendMessage(creditHandler.obtainMessage(DID_SUCCEED, line));
-						}else {
-							creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
-						}
-					} catch (Exception e) {
-						creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
-					}
-				}
-			};
-			t.start();
+			accountBalanceHelper.launchRequest(acc);
 		} else {
 			// add a row to link 
 			customWizardText.setText(R.string.create_account);
@@ -172,6 +107,51 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 			});
 		}
 	}
+	
+
+    private AccountBalanceHelper accountBalanceHelper = new AccountBalanceHelper() {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public HttpRequestBase getRequest(SipProfile acc) throws IOException {
+
+            String requestURL = "https://soap.ippi.fr/credit/check_credit.php?"
+                    + "login=" + acc.username
+                    + "&code=" + MD5.MD5Hash(acc.data + DateFormat.format("yyyyMMdd", new Date()));
+
+            return new HttpGet(requestURL);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String parseResponseLine(String line) {
+            try {
+                float value = Float.parseFloat(line.trim());
+                if (value >= 0) {
+                    return "Credit : " + Math.round(value * 100.0) / 100.0 + " euros";
+                }
+            } catch (NumberFormatException e) {
+                Log.e(THIS_FILE, "Can't get value for line");
+            }
+            return null;
+        }
+
+        @Override
+        public void applyResultError() {
+            customWizard.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void applyResultSuccess(String balanceText) {
+            customWizardText.setText(balanceText);
+            customWizard.setVisibility(View.VISIBLE);
+        }
+        
+    };
 	
 	
 	@Override

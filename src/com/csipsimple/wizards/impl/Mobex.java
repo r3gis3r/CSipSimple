@@ -21,8 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.os.Handler;
-import android.os.Message;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -37,20 +35,15 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Mobex extends SimpleImplementation {
-    protected static final int DID_SUCCEED = 0;
-    protected static final int DID_ERROR = 1;
     private String THIS_FILE = "MobexW";
 
 
@@ -166,37 +159,6 @@ public class Mobex extends SimpleImplementation {
     }
     
     // Account balance
-    /**
-     * Handle credit account message updates.
-     */
-    private Handler creditHandler = new Handler() {
-        public void handleMessage(Message message) {
-            switch (message.what) {
-            case DID_SUCCEED: {
-                //Here we get the credit info, now add a row in the interface
-                String response = (String) message.obj;
-                try{
-                    float value = Float.parseFloat(response.trim());
-                    if(value >= 0) {
-                        customWizardText.setText("Credito : " + Math.round(value * 100.0)/100.0 + " euros");
-                        customWizard.setVisibility(View.VISIBLE);
-                    }
-                }catch(NumberFormatException e) {
-                    Log.e(THIS_FILE, "Impossible to parse result", e);
-                }catch (NullPointerException e) {
-                    Log.e(THIS_FILE, "Null result");
-                }
-                
-                break;
-            }
-            case DID_ERROR: {
-                Exception e = (Exception) message.obj;
-                e.printStackTrace();
-                break;
-            }
-            }
-        }
-    };
     
     
     /**
@@ -207,58 +169,7 @@ public class Mobex extends SimpleImplementation {
     private void updateAccountInfos(final SipProfile acc) {
         if (acc != null && acc.id != SipProfile.INVALID_ID) {
             customWizard.setVisibility(View.GONE);
-            Thread t = new Thread() {
-                public void run() {
-                    try {
-                        HttpClient httpClient = new DefaultHttpClient();
-                        
-                        String requestURL = "http://200.152.124.172/billing/webservice/Server.php";
-                        
-                        HttpPost httpPost = new HttpPost(requestURL);
-                        httpPost.addHeader("SOAPAction", "\"mostra_creditos\"");
-                        httpPost.addHeader("Content-Type", "text/xml");
-
-                        // prepare POST body
-                        String body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><SOAP-ENV:Envelope " +
-                        		"SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" " +
-                        		"xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" " +
-                        		"xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\" " +
-                        		"xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\"" +
-                        		"><SOAP-ENV:Body><mostra_creditos SOAP-ENC:root=\"1\">" +
-                        		"<chave xsi:type=\"xsd:string\">" +
-                        		acc.data +
-                        		"</chave><username xsi:type=\"xsd:string\">" +
-                        		acc.username +
-                        		"</username></mostra_creditos></SOAP-ENV:Body></SOAP-ENV:Envelope>";
-
-                        // set POST body
-                        HttpEntity entity = new StringEntity(body);
-                        httpPost.setEntity(entity);
-
-                        // Create a response handler
-                        HttpResponse httpResponse = httpClient.execute(httpPost);
-                        if(httpResponse.getStatusLine().getStatusCode() == 200) {
-                            InputStreamReader isr = new InputStreamReader(httpResponse.getEntity().getContent());
-                            BufferedReader br = new BufferedReader(isr);
-                            Pattern p = Pattern.compile("^.*<return xsi:type=\"xsd:string\">(.*)</return>.*$");
-                            
-                            String line = null;
-                            while( (line = br.readLine() ) != null ) {
-                                Matcher matcher = p.matcher(line);
-                                if(matcher.matches()) {
-                                    creditHandler.sendMessage(creditHandler.obtainMessage(DID_SUCCEED, matcher.group(1)));
-                                    break;
-                                }
-                            }
-                        }else {
-                            creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
-                        }
-                    } catch (Exception e) {
-                        creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
-                    }
-                }
-            };
-            t.start();
+            accountBalanceHelper.launchRequest(acc);
         } else {
             // add a row to link 
             customWizardText.setText(R.string.create_account);
@@ -266,4 +177,67 @@ public class Mobex extends SimpleImplementation {
             // Not yet...
         }
     }
+    
+    
+    private AccountBalanceHelper accountBalanceHelper = new AccountBalanceHelper() {
+
+        private Pattern p = Pattern.compile("^.*<return xsi:type=\"xsd:string\">(.*)</return>.*$");
+        
+        @Override
+        public String parseResponseLine(String line) {
+            Matcher matcher = p.matcher(line);
+            if(matcher.matches()) {
+                String strValue = matcher.group(1).trim();
+                try {
+                    float value = Float.parseFloat(strValue.trim());
+                    if(value >= 0) {
+                        strValue = Double.toString( Math.round(value * 100.0)/100.0 );
+                    }
+                }catch(NumberFormatException e) {
+                    Log.d(THIS_FILE, "Can't parse float value in credit "+ strValue);
+                }
+                return "Creditos : " + strValue + " euros";
+            }
+            return null;
+        }
+        
+        @Override
+        public HttpRequestBase getRequest(SipProfile acc)  throws IOException {
+
+            String requestURL = "http://200.152.124.172/billing/webservice/Server.php";
+            
+            HttpPost httpPost = new HttpPost(requestURL);
+            httpPost.addHeader("SOAPAction", "\"mostra_creditos\"");
+            httpPost.addHeader("Content-Type", "text/xml");
+
+            // prepare POST body
+            String body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><SOAP-ENV:Envelope " +
+                    "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" " +
+                    "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" " +
+                    "xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\" " +
+                    "xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\"" +
+                    "><SOAP-ENV:Body><mostra_creditos SOAP-ENC:root=\"1\">" +
+                    "<chave xsi:type=\"xsd:string\">" +
+                    acc.data +
+                    "</chave><username xsi:type=\"xsd:string\">" +
+                    acc.username +
+                    "</username></mostra_creditos></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+
+            // set POST body
+            HttpEntity entity = new StringEntity(body);
+            httpPost.setEntity(entity);
+            return httpPost;
+        }
+
+        @Override
+        public void applyResultError() {
+            customWizard.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void applyResultSuccess(String balanceText) {
+            customWizardText.setText(balanceText);
+            customWizard.setVisibility(View.VISIBLE);
+        }
+    };
 }
