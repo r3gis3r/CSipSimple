@@ -362,6 +362,14 @@ public class SipConfigManager {
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String LOG_LEVEL = "log_level";
+    
+    /**
+     * Use direct file logging instead of use of logcat. <br/>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String LOG_USE_DIRECT_FILE = "log_use_direct_file";
+    
     /**
      * Theme to use for the UI. <br/>
      * Expect a {@link ComponentName#flattenToString()} string

@@ -135,8 +135,13 @@
             android:key="log_level"
             android:numeric="signed"
             android:summary="@string/log_level_desc"
-            android:title="@string/log_level" >
-        </EditTextPreference>
+            android:title="@string/log_level" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="log_use_direct_file"
+            android:summary="@string/log_use_direct_file_desc"
+            android:title="@string/log_use_direct_file" />
     </PreferenceCategory>
 
 </PreferenceScreen>

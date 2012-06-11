@@ -399,6 +399,16 @@ public class PjSipService {
                 logCfg.setConsole_level(prefsWrapper.getLogLevel());
                 logCfg.setLevel(prefsWrapper.getLogLevel());
                 logCfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
+                
+                if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.LOG_USE_DIRECT_FILE, false)) {
+                    File dir = PreferencesWrapper.getLogsFolder(service);
+                    if( dir != null) {
+                        Date d = new Date();
+                        File outFile = new File(dir.getAbsoluteFile() + File.separator + "logs_"+DateFormat.format("MM-dd-yy", d)+".txt");
+                        logCfg.setLog_filename(pjsua.pj_str_copy(outFile.getAbsolutePath()));
+                        logCfg.setLog_file_flags(0x1108 /* PJ_O_APPEND */);
+                    }
+                }
 
                 // MEDIA CONFIG
                 pjsua.media_config_default(mediaCfg);
@@ -946,7 +956,7 @@ public class PjSipService {
                             
                             String codecKey = SipConfigManager.getCodecKey(codec, SipConfigManager.FRAMES_PER_PACKET_SUFFIX);
                             Integer frmPerPacket = SipConfigManager.getPreferenceIntegerValue(service, codecKey);
-                            if(frmPerPacket != null) {
+                            if(frmPerPacket != null && frmPerPacket > 0) {
                                 Log.d(THIS_FILE, "Set codec " + codec + " fpp : " + frmPerPacket);
                                 pjsua.codec_set_frames_per_packet(codecStr, frmPerPacket);
                             }

@@ -185,6 +185,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.USE_ALTERNATE_UNLOCKER, false);
 		put(HAS_BEEN_QUIT, false);
 		put(HAS_ALREADY_SETUP_SERVICE, false);
+		put(SipConfigManager.LOG_USE_DIRECT_FILE, false);
 		
 		//Calls
 		put(SipConfigManager.AUTO_RECORD_CALLS, false);
