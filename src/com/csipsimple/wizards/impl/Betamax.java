@@ -213,6 +213,9 @@ public class Betamax extends AuthorizationImplementation {
             put("VoipGain", new String[] {
                     "sip.voipgain.com", "stun.voipgain.com"
             });
+            put("VoipZoom", new String[] {
+                    "sip.voipzoom.com", "stun.voipzoom.com"
+            });
 
             /*
              * put("InternetCalls", new String[] {"", ""});
