@@ -307,6 +307,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 		pjsua_logging_config *log_cfg, pjsua_media_config *media_cfg,
 		csipsimple_config *css_cfg, jobject context) {
 	pj_status_t result;
+	unsigned i;
 
 	/* Create memory pool for application. */
 	css_var.pool = pjsua_pool_create("css", 1000, 1000);
@@ -355,9 +356,22 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	pjsip_sip_cfg_var.tsx.t2 = css_cfg->tsx_t2_timeout;
 	pjsip_sip_cfg_var.tsx.t4 = css_cfg->tsx_t4_timeout;
 
+	// Call recorder
+	for(i = 0; i < PJ_ARRAY_SIZE(css_var.call_recorder_ids); i++){
+		css_var.call_recorder_ids[i] = PJSUA_INVALID_ID;
+		css_var.call_stereo_recoders[i].file_port = NULL;
+		css_var.call_stereo_recoders[i].splitcomb_port = NULL;
+		css_var.call_stereo_recoders[i].master_stereo_port = NULL;
+		css_var.call_stereo_recoders[i].pool = NULL;
+		css_var.call_stereo_recoders[i].splitcomb_chan0_port = NULL;
+		css_var.call_stereo_recoders[i].splitcomb_chan0_slot = PJSUA_INVALID_ID;
+		css_var.call_stereo_recoders[i].splitcomb_chan1_port = NULL;
+		css_var.call_stereo_recoders[i].splitcomb_chan1_slot = PJSUA_INVALID_ID;
+
+	}
+
 	// Audio codec cfg
 	css_var.extra_aud_codecs_cnt = css_cfg->extra_aud_codecs_cnt;
-	unsigned i;
 	for (i = 0; i < css_cfg->extra_aud_codecs_cnt; i++) {
 		dynamic_factory *css_codec = &css_var.extra_aud_codecs[i];
 		dynamic_factory *cfg_codec = &css_cfg->extra_aud_codecs[i];
@@ -366,7 +380,6 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				&cfg_codec->shared_lib_path);
 		pj_strdup_with_null(css_var.pool, &css_codec->init_factory_name,
 				&cfg_codec->init_factory_name);
-
 	}
 
 	// Video codec cfg -- For now only destroy is useful but for future

@@ -25,6 +25,22 @@ PJ_BEGIN_DECL
 
 PJ_DECL(void*) get_library_factory(dynamic_factory *impl);
 
+struct css_stereo_recorder_data {
+	pj_pool_t		*pool;
+
+	// Stereo ports
+    pjmedia_port *file_port;
+    pjmedia_port *splitcomb_port;
+    pjmedia_master_port *master_stereo_port;
+
+    // Mono ports and slots
+    pjmedia_port *splitcomb_chan0_port;
+    pjsua_conf_port_id splitcomb_chan0_slot;
+    pjmedia_port *splitcomb_chan1_port;
+    pjsua_conf_port_id splitcomb_chan1_slot;
+
+};
+
 struct css_data {
     pj_pool_t	    *pool;	    /**< Pool for the css app. */
 
@@ -48,6 +64,10 @@ struct css_data {
     char zid_file[512];
 
     jobject context;
+
+    // About call recording
+    pjsua_recorder_id	call_recorder_ids[PJSUA_MAX_CALLS];
+    struct css_stereo_recorder_data call_stereo_recoders[PJSUA_MAX_CALLS];
 };
 
 extern struct css_data css_var;

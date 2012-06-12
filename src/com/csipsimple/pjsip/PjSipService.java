@@ -1791,8 +1791,6 @@ public class PjSipService {
 
 
     // Recorder
-    public final static int INVALID_RECORD = -1;
-    private SparseArray<Integer> recordedCalls = new SparseArray<Integer>();
     /**
      * Start recording of a call.
      * 
@@ -1804,36 +1802,18 @@ public class PjSipService {
         if (!canRecord(callId)) {
             return;
         }
-
         SipCallSession callInfo = getCallInfo(callId);
-        // If nothing is recording currently, create recorder
-        if( recordedCalls.get(callId, INVALID_RECORD) == INVALID_RECORD ) {
-            
-            File wavFile = getRecordFile(callInfo.getRemoteContact());
-            if (wavFile != null) {
-                // We create a recorder for current call
-                int[] recId = new int[1];
-                pj_str_t filename = pjsua.pj_str_copy(wavFile.getAbsolutePath());
-                int status = pjsua.recorder_create(filename, 0, (byte[]) null, 0, 0, recId);
-                if (status == pjsuaConstants.PJ_SUCCESS) {
-                    Log.d(THIS_FILE, "Record created : " + recId[0] + " for " + callId);
-                    recordedCalls.put(callId, recId[0]);
-                }
+        File wavFile = getRecordFile(callInfo.getRemoteContact());
+        if (wavFile != null) {
+            pj_str_t filename = pjsua.pj_str_copy(wavFile.getAbsolutePath());
+            if (pjsua.call_recording_start(callId, filename, pjsuaConstants.PJ_FALSE) == pjsua.PJ_SUCCESS) {
+                userAgentReceiver.updateRecordingStatus(callId, false, true);
             } else {
-                Log.w(THIS_FILE, "Impossible to write file");
                 service.notifyUserOfMessage(R.string.cant_write_file);
             }
+        } else {
+            service.notifyUserOfMessage(R.string.cant_write_file);
         }
-        
-        // If a recorded has been created, connect call port to recorder and sound port (0) to recorder.
-        int recorderId = recordedCalls.get(callId, INVALID_RECORD);
-        if( recorderId != INVALID_RECORD ) {
-            int recPort = pjsua.recorder_get_conf_port(recorderId);
-            pjsua.conf_connect(callInfo.getConfPort(), recPort);
-            pjsua.conf_connect(0, recPort);
-            userAgentReceiver.updateRecordingStatus(callId, false, true);
-        }
-        
     }
 
     /**
@@ -1844,17 +1824,10 @@ public class PjSipService {
      */
     public void stopRecording(int callId) throws SameThreadException {
         if (!created) {
-            // Sanitize array if we are stopped.
-            recordedCalls.delete(callId);
             return;
         }
-        
-        int recorderId = recordedCalls.get(callId, INVALID_RECORD);
-        if(recorderId != INVALID_RECORD) {
-            Log.d(THIS_FILE, "Stop recorder " + recorderId);
-            // This also delete associated conf port
-            pjsua.recorder_destroy(recorderId);
-            recordedCalls.delete(callId);
+
+        if (pjsua.call_recording_stop(callId) == pjsuaConstants.PJ_SUCCESS) {
             userAgentReceiver.updateRecordingStatus(callId, true, false);
         }
     }
@@ -1891,9 +1864,8 @@ public class PjSipService {
      * @param callId The call id to test for a recorder presence 
      * @return true if recording this call
      */
-    public boolean isRecording(int callId) {
-        int recorderId = recordedCalls.get(callId, INVALID_RECORD);
-        return (recorderId != INVALID_RECORD);
+    public boolean isRecording(int callId) throws SameThreadException {
+        return (pjsua.call_recording_status(callId) == pjsuaConstants.PJ_TRUE);
     }
 
     /**

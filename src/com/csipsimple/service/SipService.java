@@ -601,7 +601,12 @@ public class SipService extends Service {
 			if(pjService == null) {
 				return false;
 			}
-			return pjService.isRecording(callId);
+			
+			SipCallSession info = pjService.getCallInfo(callId);
+			if(info != null) {
+			    return info.isRecording();
+			}
+			return false;
 		}
 
         /**

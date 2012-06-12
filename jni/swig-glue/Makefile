@@ -11,7 +11,8 @@ PJSUA_HEADERS=${PJSIP_DIR}/pjsip/include/pjsua-lib/pjsua.h
 # For CSipSimple
 PJSUA_HEADERS+=${CURDIR}/../csipsimple-wrapper/include/pjsua_jni_addons.h \
 	${CURDIR}/../csipsimple-wrapper/include/zrtp_android.h \
-	${CURDIR}/../csipsimple-wrapper/include/csipsimple_codecs_utils.h 
+	${CURDIR}/../csipsimple-wrapper/include/csipsimple_codecs_utils.h  \
+	${CURDIR}/../csipsimple-wrapper/include/call_recorder.h 
 LINUX_INCLUDE=-I /usr/lib/jvm/java-6-sun/include -I /usr/lib/jvm/java-6-sun/include/linux -I ${PJSIP_DIR}/pjsip/include -I ${PJSIP_DIR}/jni/include
 LINUX_LIBDIR=
 CFLAGS=-DPJMEDIA_HAS_SRTP=1 -DPJ_HAS_SSL_SOCK=1 -DPJMEDIA_HAS_ZRTP=1 -DUSE_CSIPSIMPLE=1
