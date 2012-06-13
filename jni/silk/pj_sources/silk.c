@@ -200,12 +200,13 @@ PJ_DEF(pj_status_t) pjmedia_codec_silk_init(pjmedia_endpt *endpt)
     Wideband		|   16000 |  8 - 30
     Super Wideband	|   24000 | 20 - 40
     */
+    // TODO : we should find the correct formula to get from silk doc bitrate to silk max_bitrate.
     struct silk_param *silk_param;
     silk_param = &silk_factory.silk_param[PARAM_NB];
     silk_param->pt = PJMEDIA_RTP_PT_SILK_NB;
     silk_param->clock_rate = 8000;
     silk_param->bitrate = 13000;
-	silk_param->max_bitrate = 20000;
+	silk_param->max_bitrate = /*20000*/64000;
 	pj_utoa(silk_param->bitrate, silk_param->bitrate_str);
 	silk_param->packet_size_ms = FRAME_LENGTH_MS;
 	silk_param->complexity = 2;
@@ -215,7 +216,7 @@ PJ_DEF(pj_status_t) pjmedia_codec_silk_init(pjmedia_endpt *endpt)
     silk_param->pt = PJMEDIA_RTP_PT_SILK_MB;
     silk_param->clock_rate = 12000;
     silk_param->bitrate = 16000;
-    silk_param->max_bitrate = 25000;
+    silk_param->max_bitrate = /*25000*/64000;
     pj_utoa(silk_param->bitrate, silk_param->bitrate_str);
     silk_param->packet_size_ms = FRAME_LENGTH_MS;
     silk_param->complexity = 2;
@@ -225,7 +226,7 @@ PJ_DEF(pj_status_t) pjmedia_codec_silk_init(pjmedia_endpt *endpt)
     silk_param->pt = PJMEDIA_RTP_PT_SILK_WB;
 	silk_param->clock_rate = 16000;
 	silk_param->bitrate = 19000;
-	silk_param->max_bitrate = 30000;
+	silk_param->max_bitrate = /*30000*/64000;
 	pj_utoa(silk_param->bitrate, silk_param->bitrate_str);
 	silk_param->packet_size_ms = FRAME_LENGTH_MS;
 	silk_param->complexity = 2;
@@ -235,7 +236,7 @@ PJ_DEF(pj_status_t) pjmedia_codec_silk_init(pjmedia_endpt *endpt)
     silk_param->pt = PJMEDIA_RTP_PT_SILK_UWB;
     silk_param->clock_rate = 24000;
     silk_param->bitrate = 30000;
-    silk_param->max_bitrate = 40000;
+    silk_param->max_bitrate = /*40000*/64000;
 	pj_utoa(silk_param->bitrate, silk_param->bitrate_str);
 	silk_param->packet_size_ms = FRAME_LENGTH_MS;
 	silk_param->complexity = 2;
@@ -698,15 +699,27 @@ static pj_status_t  silk_codec_parse( pjmedia_codec *codec,
 				     pjmedia_frame frames[])
 {
 	    unsigned count;
-	    PJ_UNUSED_ARG(codec);
+		struct silk_private *silk;
+		silk = (struct silk_private*) codec->codec_data;
+
 	    PJ_ASSERT_RETURN(frame_cnt, PJ_EINVAL);
 
-	    // The decoder of opus is capable to parse itself, so consider all as a single input
-		frames[0].type = PJMEDIA_FRAME_TYPE_AUDIO;
-		frames[0].buf = pkt;
-		frames[0].size = pkt_size;
-		frames[0].timestamp.u64 = ts->u64;
-	    *frame_cnt = 1;
+	    count = 0;
+	    int dec_frame_size = pkt_size;
+	    int samples_per_frame = silk->enc.API_sampleRate * 20 / 1000;
+
+	    while (pkt_size >= dec_frame_size && count < *frame_cnt) {
+			frames[count].type = PJMEDIA_FRAME_TYPE_AUDIO;
+			frames[count].buf = pkt;
+			frames[count].size = dec_frame_size;
+			frames[count].timestamp.u64 = ts->u64 + count * samples_per_frame; // fHz * ptime / 1000
+
+			pkt = ((char*)pkt) + dec_frame_size;
+			pkt_size -= dec_frame_size;
+
+			++count;
+	    }
+	    *frame_cnt = count;
 	    return PJ_SUCCESS;
 }
 
