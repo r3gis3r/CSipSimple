@@ -194,7 +194,7 @@ public class MondotalkCreate extends Activity implements OnClickListener, TextWa
         
         try {
             // No SOAP lib.... bourrinage !
-            String requestURL = "https://api001.mondotalk.com/test_api/captcha.php";
+            String requestURL = "https://api001.mondotalk.com/webservices/captcha.php";
 
             HttpPost httpPost = new HttpPost(requestURL);
             httpPost.addHeader("SOAPAction", "\"Captcha\"");
