@@ -37,12 +37,16 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -60,6 +64,7 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.ui.PickupSipUri;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.SmileyParser;
+import com.csipsimple.utils.clipboard.ClipboardWrapper;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.widgets.AccountChooserButton;
 
@@ -80,6 +85,7 @@ public class MessageFragment extends SherlockListFragment implements LoaderManag
     }
 
     private OnQuitListener quitListener;
+    private ClipboardWrapper clipboardManager;
 
     public void setOnQuitListener(OnQuitListener l) {
         quitListener = l;
@@ -88,6 +94,11 @@ public class MessageFragment extends SherlockListFragment implements LoaderManag
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        
+
+        ListView lv = getListView();
+        lv.setOnCreateContextMenuListener(this);
+        
     }
 
     @Override
@@ -96,6 +107,7 @@ public class MessageFragment extends SherlockListFragment implements LoaderManag
 
         SmileyParser.init(getActivity());
         notifications = new SipNotifications(getActivity());
+        clipboardManager = ClipboardWrapper.getInstance(getActivity());
     }
     
     @Override
@@ -307,4 +319,33 @@ public class MessageFragment extends SherlockListFragment implements LoaderManag
             }
         });
     }
+    
+    // Context menu
+    public static final int MENU_COPY = ContextMenu.FIRST;
+
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenuInfo menuInfo) {
+        menu.add(0, MENU_COPY, 0, R.string.copy_message_text);
+    }
+    
+    @Override
+    public boolean onContextItemSelected(android.view.MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Cursor c = (Cursor) mAdapter.getItem(info.position);
+        if (c != null) {
+            SipMessage msg = new SipMessage(c);
+            switch (item.getItemId()) {
+                case MENU_COPY: {
+                    clipboardManager.setText(msg.getDisplayName(), msg.getBody());
+                    break;
+                }
+                default:
+                    break;
+            }
+
+        }
+        return super.onContextItemSelected(item);
+    }
+    
 }
