@@ -32,7 +32,7 @@ public abstract class BluetoothWrapper {
 	
 	public static BluetoothWrapper getInstance(Context context) {
 		if(instance == null) {
-		    if(Compatibility.isCompatible(11)) {
+		    if(Compatibility.isCompatible(14)) {
 		        instance = new com.csipsimple.utils.bluetooth.BluetoothUtils14();
 		    }else if(Compatibility.isCompatible(8)) {
                 instance = new com.csipsimple.utils.bluetooth.BluetoothUtils8();
