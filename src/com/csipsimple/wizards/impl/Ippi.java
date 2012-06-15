@@ -47,7 +47,6 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 
 	protected static final String THIS_FILE = "IppiW";
 	
-	private static final String webCreationPage = "https://m.ippi.fr/subscribe/android.php";
 
 	private LinearLayout customWizard;
 	private TextView customWizardText;
@@ -77,7 +76,7 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 		
 		updateAccountInfos(account);
 
-        extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
+        extAccCreator = new AccountCreationWebview(parent, "https://m.ippi.fr/subscribe/android.php", this);
 	}
 	
 	

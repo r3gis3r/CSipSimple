@@ -52,8 +52,6 @@ public class BasePrefsWizard extends GenericPrefs {
 	public static final int FILTERS_MENU = Menu.FIRST + 3;
 	public static final int DELETE_MENU = Menu.FIRST + 4;
 
-	public static final int CHOOSE_WIZARD = 0;
-	public static final int MODIFY_FILTERS = 1;
 	private static final String THIS_FILE = "Base Prefs wizard";
 
 	protected SipProfile account = null;
@@ -176,6 +174,18 @@ public class BasePrefsWizard extends GenericPrefs {
 		return super.onPrepareOptionsMenu(menu);
 	}
 
+
+    private static final int CHOOSE_WIZARD = 0;
+    private static final int MODIFY_FILTERS = CHOOSE_WIZARD + 1;
+    
+    private static final int FINAL_ACTIVITY_CODE = MODIFY_FILTERS;
+    
+    private int currentActivityCode = FINAL_ACTIVITY_CODE;
+    public int getFreeSubActivityCode() {
+        currentActivityCode ++;
+        return currentActivityCode;
+    }
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -206,6 +216,7 @@ public class BasePrefsWizard extends GenericPrefs {
 		return super.onOptionsItemSelected(item);
 	}
 
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -216,6 +227,10 @@ public class BasePrefsWizard extends GenericPrefs {
 				setResult(RESULT_OK, getIntent());
 				finish();
 			}
+		}
+		
+		if(requestCode > FINAL_ACTIVITY_CODE) {
+		    wizard.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 

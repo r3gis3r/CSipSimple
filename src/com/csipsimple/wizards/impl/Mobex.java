@@ -196,7 +196,7 @@ public class Mobex extends SimpleImplementation {
                 }catch(NumberFormatException e) {
                     Log.d(THIS_FILE, "Can't parse float value in credit "+ strValue);
                 }
-                return "Creditos : " + strValue + " euros";
+                return "Creditos : " + strValue + " R$";
             }
             return null;
         }
@@ -220,9 +220,9 @@ public class Mobex extends SimpleImplementation {
                     "<chave xsi:type=\"xsd:string\">" +
                     acc.data +
                     "</chave><username xsi:type=\"xsd:string\">" +
-                    acc.username +
+                    acc.username.replaceAll("^12", "") +
                     "</username></mostra_creditos></SOAP-ENV:Body></SOAP-ENV:Envelope>";
-
+            Log.d(THIS_FILE, "Sending request for user " + acc.username.replaceAll("^12", ""));
             // set POST body
             HttpEntity entity = new StringEntity(body);
             httpPost.setEntity(entity);

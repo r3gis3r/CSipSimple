@@ -21,6 +21,7 @@
 
 package com.csipsimple.wizards.impl;
 
+import android.content.Intent;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
@@ -179,4 +180,8 @@ public abstract class BaseImplementation implements WizardIface {
 	public List<Filter> getDefaultFilters(SipProfile acc) {
 		return null;
 	}
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // By default empty implementation
+    }
 }

@@ -464,6 +464,11 @@ Remove that too fine change trigger
                 <action android:name="com.csipsimple.codecs.action.REGISTER_CODEC" />
             </intent-filter>
         </receiver>
+
+        <!-- Extra wizard creation account activities -->
+        <activity
+            android:name="com.csipsimple.wizards.impl.MondotalkCreate"
+            android:theme="@style/DarkTheme" />
     </application>
 
 </manifest>

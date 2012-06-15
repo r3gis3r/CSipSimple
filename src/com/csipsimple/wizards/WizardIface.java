@@ -21,6 +21,8 @@
 
 package com.csipsimple.wizards;
 
+import android.content.Intent;
+
 import java.util.List;
 
 import com.csipsimple.api.SipProfile;
@@ -44,5 +46,8 @@ public interface WizardIface {
 	boolean canSave();
 	boolean needRestart();
 	List<Filter> getDefaultFilters(SipProfile acc);
+	
+	// Extras
+    void onActivityResult(int requestCode, int resultCode, Intent data);
 	
 }

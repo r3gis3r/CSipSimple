@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/validation_bar" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/cw_first_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/first_name"
+                android:nextFocusForward="@+id/cw_last_name"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/cw_last_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cw_first_name"
+                android:hint="@string/last_name"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/cw_email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cw_last_name"
+                android:hint="@string/email_address"
+                android:inputType="textEmailAddress"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/cw_phone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cw_email"
+                android:hint="@string/w_common_phone_number"
+                android:inputType="phone"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/cw_country_code"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cw_phone"
+                android:hint="@string/country_code"
+                android:inputType="number"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:id="@+id/cw_captcha_container"
+                android:layout_width="fill_parent"
+                android:layout_height="100dip"
+                android:layout_below="@+id/cw_country_code"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/cw_captcha_img"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:contentDescription="@string/empty_description"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/cw_captcha_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:indeterminate="true" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/cw_captcha"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cw_captcha_container"
+                android:hint="@string/captcha"
+                android:singleLine="true" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/validation_bar"
+        style="@style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/cancel_bt"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/save_bt"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/save" />
+    </LinearLayout>
+
+</RelativeLayout>
