@@ -24,9 +24,23 @@
 #if PJMEDIA_AUDIO_DEV_HAS_OPENSL
 
 #include <SLES/OpenSLES.h>
+
+#ifdef __ANDROID__
 #include <SLES/OpenSLES_Android.h>
 #include <SLES/OpenSLES_AndroidConfiguration.h>
 #include <sys/system_properties.h>
+#include <android/api-level.h>
+
+#define W_SLBufferQueueItf SLAndroidSimpleBufferQueueItf
+#define W_SLBufferQueueState SLAndroidSimpleBufferQueueState
+#define W_SL_IID_BUFFERQUEUE SL_IID_ANDROIDSIMPLEBUFFERQUEUE
+
+#else
+
+#define W_SLBufferQueueItf SLBufferQueueItf
+#define W_SLBufferQueueState SLBufferQueueState
+#define W_SL_IID_BUFFERQUEUE SL_IID_BUFFERQUEUE
+#endif
 
 #include "pjmedia/errno.h"
 #include "audio_dev_wrap.h"
@@ -66,21 +80,24 @@ struct opensl_aud_stream
 
 	pj_bool_t quit_flag;
 
+	// pj audio callbacks
 	pjmedia_aud_rec_cb rec_cb;
 	pjmedia_aud_play_cb play_cb;
 
+	// Queues.
+	W_SLBufferQueueItf playerBufferQueue;
+	W_SLBufferQueueItf recorderBufferQueue;
 
 	//Player
 	SLObjectItf playerObject;
 	SLPlayItf playerPlay;
-	SLAndroidSimpleBufferQueueItf playerBufferQueue;
     unsigned playerBufferSize;
     char * playerBuffer;
 
     //Recorder
     SLObjectItf recorderObject;
     SLRecordItf recorderRecord;
-    SLAndroidSimpleBufferQueueItf recorderBufferQueue;
+
     unsigned recorderBufferSize;
     char * recorderBuffer;
 
@@ -141,7 +158,7 @@ static pjmedia_aud_stream_op opensl_strm_op =
 
 
 // this callback handler is called every time a buffer finishes playing
-void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context) {
+void bqPlayerCallback(W_SLBufferQueueItf bq, void *context) {
     assert(NULL != context);
 	SLresult result;
     int status;
@@ -175,8 +192,7 @@ void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context) {
 	}
 }
 
-
-void bqRecorderCallback(SLAndroidSimpleBufferQueueItf bq, void *context) {
+void bqRecorderCallback(W_SLBufferQueueItf bq, void *context) {
 	assert(NULL != context);
 	SLresult result;
 	int status;
@@ -514,10 +530,12 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 
 	// Init OPENSL layer
 	{
-
 		// configure Audio PCM format
+#ifdef __ANDROID__
 		SLDataLocator_AndroidSimpleBufferQueue loc_bq = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, PREFILL_BUFFERS };
-
+#else
+		SLDataLocator_BufferQueue loc_bq = { SL_DATALOCATOR_BUFFERQUEUE, PREFILL_BUFFERS };
+#endif
 		format_pcm.formatType = SL_DATAFORMAT_PCM;
 		format_pcm.numChannels = param->channel_count;
 		// Here samples per sec should be supported else we will get an error
@@ -528,24 +546,31 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 		format_pcm.endianness = SL_BYTEORDER_LITTLEENDIAN;
 
 
-		// configure audio sink
-		SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, pa->outputMixObject};
 
 
 		if (stream->dir & PJMEDIA_DIR_PLAYBACK) {
-
-			const SLInterfaceID ids[2] = {SL_IID_BUFFERQUEUE, SL_IID_ANDROIDCONFIGURATION};
+#ifdef __ANDROID__
+			const SLInterfaceID ids[2] = {W_SL_IID_BUFFERQUEUE, SL_IID_ANDROIDCONFIGURATION};
 			const SLboolean req[2] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
+			int numIface = 2;
+#else
+			const SLInterfaceID ids[1] = {W_SL_IID_BUFFERQUEUE};
+			const SLboolean req[1] = {SL_BOOLEAN_TRUE};
+			int numIface = 1;
+#endif
+			// configure audio sink
+			SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, pa->outputMixObject};
 			SLDataSource audioSrc = {&loc_bq, &format_pcm};
 			SLDataSink audioSnk = {&loc_outmix, NULL};
 
 			// create audio player
-			result = (*pa->engineEngine)->CreateAudioPlayer(pa->engineEngine, &stream->playerObject, &audioSrc, &audioSnk, 2, ids, req);
+			result = (*pa->engineEngine)->CreateAudioPlayer(pa->engineEngine, &stream->playerObject, &audioSrc, &audioSnk, numIface, ids, req);
 			if(result != SL_RESULT_SUCCESS){
 				PJ_LOG(1, (THIS_FILE, "Can't create player: %d", result));
 				goto on_error;
 			}
 
+#ifdef __ANDROID__
 			SLAndroidConfigurationItf playerConfig;
 			result = (*stream->playerObject)->GetInterface(stream->playerObject, SL_IID_ANDROIDCONFIGURATION, &playerConfig);
 			if(result != SL_RESULT_SUCCESS){
@@ -554,7 +579,10 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 			}
 			SLint32 streamType = SL_ANDROID_STREAM_VOICE;
 			result = (*playerConfig)->SetConfiguration(playerConfig, SL_ANDROID_KEY_STREAM_TYPE, &streamType, sizeof(SLint32));
-
+			if(result != SL_RESULT_SUCCESS){
+				PJ_LOG(2, (THIS_FILE, "Can't set audio player stream type to voice"));
+			}
+#endif
 			// realize the player
 			result = (*stream->playerObject)->Realize(stream->playerObject, SL_BOOLEAN_FALSE);
 			if(result != SL_RESULT_SUCCESS){
@@ -571,8 +599,7 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 			}
 
 			// get the buffer queue interface
-			result = (*stream->playerObject)->GetInterface(stream->playerObject, SL_IID_BUFFERQUEUE,
-					&stream->playerBufferQueue);
+			result = (*stream->playerObject)->GetInterface(stream->playerObject, W_SL_IID_BUFFERQUEUE, &stream->playerBufferQueue);
 			if(result != SL_RESULT_SUCCESS){
 				PJ_LOG(1, (THIS_FILE, "Can't get buffer queue iface"));
 				goto on_error;
@@ -589,22 +616,30 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 
 		if (stream->dir & PJMEDIA_DIR_CAPTURE) {
 
+#ifdef __ANDROID__
+		    const SLInterfaceID ids[2] = {W_SL_IID_BUFFERQUEUE, SL_IID_ANDROIDCONFIGURATION};
+		    const SLboolean req[2] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
+		    int numIface = 2;
+#else
+			const SLInterfaceID ids[1] = {W_SL_IID_BUFFERQUEUE};
+			const SLboolean req[1] = {SL_BOOLEAN_TRUE};
+			int numIface = 1;
+#endif
+
 		    SLDataLocator_IODevice loc_dev = {SL_DATALOCATOR_IODEVICE, SL_IODEVICE_AUDIOINPUT,
 		            SL_DEFAULTDEVICEID_AUDIOINPUT, NULL};
 		    SLDataSource audioSrc = {&loc_dev, NULL};
 		    SLDataSink audioSnk = {&loc_bq, &format_pcm};
 
 
-		    const SLInterfaceID ids[2] = {SL_IID_ANDROIDSIMPLEBUFFERQUEUE, SL_IID_ANDROIDCONFIGURATION};
-		    const SLboolean req[2] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
 
-			result = (*pa->engineEngine)->CreateAudioRecorder(pa->engineEngine, &stream->recorderObject, &audioSrc, &audioSnk, 2, ids, req);
+			result = (*pa->engineEngine)->CreateAudioRecorder(pa->engineEngine, &stream->recorderObject, &audioSrc, &audioSnk, numIface, ids, req);
 			if(result != SL_RESULT_SUCCESS){
 				PJ_LOG(1, (THIS_FILE, "Can't create recorder: %d", result));
 				goto on_error;
 			}
 
-
+#ifdef __ANDROID__
 			SLAndroidConfigurationItf recorderConfig;
 			result = (*stream->recorderObject)->GetInterface(stream->recorderObject, SL_IID_ANDROIDCONFIGURATION, &recorderConfig);
 			if(result != SL_RESULT_SUCCESS){
@@ -613,18 +648,21 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 			}
 
 			SLint32 streamType = SL_ANDROID_RECORDING_PRESET_GENERIC;
+			// Precompil test is for NDK api use version.
+			// Dynamic propriety test is for actual running on a device.
+			// Both test are necessary to address build with older ndk and to address run with device from 9 <= runnning api < 14.
+#if __ANDROID_API__ >= 14
 			char sdk_version[PROP_VALUE_MAX];
 			__system_property_get("ro.build.version.sdk", sdk_version);
-
 			pj_str_t pj_sdk_version = pj_str(sdk_version);
 			int sdk_v = pj_strtoul(&pj_sdk_version);
-			if(sdk_v >= 10){
-				streamType = 0x7;
+			if(sdk_v >= 14){
+				streamType = SL_ANDROID_RECORDING_PRESET_VOICE_COMMUNICATION;
 			}
-
+#endif
 			PJ_LOG(3, (THIS_FILE, "We have a stream type %d Cause SDK : %d", streamType, sdk_v));
 			result = (*recorderConfig)->SetConfiguration(recorderConfig, SL_ANDROID_KEY_RECORDING_PRESET, &streamType, sizeof(SLint32));
-
+#endif
 
 
 			// realize the recorder
@@ -643,7 +681,7 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 			}
 
 			// get the buffer queue interface
-			result = (*stream->recorderObject)->GetInterface(stream->recorderObject, SL_IID_ANDROIDSIMPLEBUFFERQUEUE, &stream->recorderBufferQueue);
+			result = (*stream->recorderObject)->GetInterface(stream->recorderObject, W_SL_IID_BUFFERQUEUE, &stream->recorderBufferQueue);
 			if(result != SL_RESULT_SUCCESS){
 				PJ_LOG(1, (THIS_FILE, "Can't get recorder buffer queue iface"));
 				goto on_error;
@@ -783,7 +821,7 @@ static pj_status_t strm_stop(pjmedia_aud_stream *s)
 	struct opensl_aud_stream *stream = (struct opensl_aud_stream*)s;
 	int i;
 	SLresult result;
-	SLAndroidSimpleBufferQueueState state;
+	W_SLBufferQueueState state;
 
 	//We assume that all jni calls are safe ... that's acceptable
 	if(stream->quit_flag == 0){
