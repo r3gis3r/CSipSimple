@@ -21,16 +21,53 @@
 
 package com.csipsimple.wizards.impl;
 
+import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesWrapper;
+
 
 public class EasyBell extends SimpleImplementation {
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	protected String getDomain() {
 		return "msp.easybell.de";
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	protected String getDefaultName() {
 		return "easybell";
-	}	
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+	    acc.transport = SipProfile.TRANSPORT_TCP;
+	    return acc;
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+        prefs.setPreferenceStringValue(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_MOBILE,  "90");
+        prefs.setPreferenceStringValue(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_WIFI,  "90");
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean needRestart() {
+	    return true;
+	}
 }
