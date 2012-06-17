@@ -283,6 +283,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_mitelefono, 9, 
                     new Locale[]{ }, false, true, 
                     MiTelefono.class));
+            WIZARDS_DICT.put("CATITEL", new WizardInfo("CATITEL", "Catitel", 
+                    R.drawable.ic_wizard_catitel, 9, 
+                    new Locale[]{ }, false, true, 
+                    Catitel.class));
             
             
 			
