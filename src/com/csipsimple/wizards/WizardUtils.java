@@ -670,6 +670,10 @@ public class WizardUtils {
                         Locale.GERMANY, locale("es_ES"), locale("pt_PT")
                     }, false, false, 
                     Svanto.class));
+            WIZARDS_DICT.put("VITELITY", new WizardInfo("VITELITY", "Vitelity", 
+                    R.drawable.ic_wizard_vitelity, 9, 
+                    new Locale[] {Locale.US}, false, false, 
+                    Vitelity.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

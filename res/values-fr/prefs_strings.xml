@@ -264,6 +264,8 @@
   <string name="obtain_themes_desc">Récupérer les applications thèmes depuis le market</string>
   <string name="display_icon_in_status_bar_nbr">Afficher le nombre dans la barre de status</string>
   <string name="display_icon_in_status_bar_nbr_desc">Nombre de comptes enregistrés dans la barre de notification</string>
+  <string name="log_use_direct_file">Traces directement dans un fichier</string>
+  <string name="log_use_direct_file_desc">Ecrire les logs dans un fichier au lieu d\'utiliser Logcat</string>
   <!--Fast settings-->
   <string name="android_integration">S\'intégrer à Android</string>
   <string name="android_integration_desc">S\'intégrer à la numérotation et aux journaux d\'appel d\'Android</string>

@@ -21,8 +21,6 @@
 
 package com.csipsimple.wizards;
 
-import java.util.List;
-
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,6 +42,8 @@ import com.csipsimple.ui.prefs.GenericPrefs;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
+
+import java.util.List;
 
 public class BasePrefsWizard extends GenericPrefs {
 	
@@ -91,16 +91,16 @@ public class BasePrefsWizard extends GenericPrefs {
 				saveAndFinish();
 			}
 		});
-		wizard.fillLayout(account);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+        wizard.fillLayout(account);
 		updateDescriptions();
 		updateValidation();
 	}
-
+	
 	private boolean setWizardId(String wId) {
 		if (wizardId == null) {
 			return setWizardId(WizardUtils.EXPERT_WIZARD_TAG);
@@ -251,6 +251,13 @@ public class BasePrefsWizard extends GenericPrefs {
 		saveAccount(wizardId);
 	}
 	
+	
+	@Override
+	protected void onDestroy() {
+	    super.onDestroy();
+	    getSharedPreferences(WIZARD_PREF_NAME, MODE_PRIVATE).edit().clear().commit();
+	}
+	
 	/**
 	 * Save the account with given wizard id
 	 * @param wizardId the wizard to use for account entry
@@ -291,6 +298,7 @@ public class BasePrefsWizard extends GenericPrefs {
 			Intent intent = new Intent(SipManager.ACTION_SIP_REQUEST_RESTART);
 			sendBroadcast(intent);
 		}
+		
 	}
 
 	@Override
@@ -307,6 +315,12 @@ public class BasePrefsWizard extends GenericPrefs {
 	protected String getDefaultFieldSummary(String fieldName) {
 		return wizard.getDefaultFieldSummary(fieldName);
 	}
-
+	
+	private static final String WIZARD_PREF_NAME = "Wizard";
+	
+	@Override
+	public SharedPreferences getSharedPreferences(String name, int mode) {
+	    return super.getSharedPreferences(WIZARD_PREF_NAME, mode);
+	}
 
 }

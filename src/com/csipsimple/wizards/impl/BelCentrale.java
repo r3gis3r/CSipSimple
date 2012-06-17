@@ -81,7 +81,7 @@ public class BelCentrale extends SimpleImplementation {
 	        for(CharSequence state : states) {
 	        	String currentComp = "sip:"+state+".belcentrale.nl";
 	        	if( domain.startsWith(currentComp) ) {
-	        		accountState.setValue((String) state);
+	        		accountState.setValue(state.toString());
 	        		break;
 	        	}
 	        }

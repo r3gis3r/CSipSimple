@@ -53,7 +53,7 @@ public class IiNet extends SimpleImplementation {
 	        for(CharSequence state : states) {
 	        	String currentComp = "sip:sip."+state+".iinet.net.au";
 	        	if( currentComp.equalsIgnoreCase(domain) ) {
-	        		accountState.setValue((String) state);
+	        		accountState.setValue(state.toString());
 	        		break;
 	        	}
 	        }

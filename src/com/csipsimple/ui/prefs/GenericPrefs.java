@@ -52,8 +52,19 @@ public abstract class GenericPrefs extends SherlockPreferenceActivity implements
         beforeBuildPrefs();
         addPreferencesFromResource(getXmlPreferences());
         afterBuildPrefs();
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updateDescriptions();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override

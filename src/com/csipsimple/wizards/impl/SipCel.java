@@ -67,6 +67,8 @@ public class SipCel extends SimpleImplementation {
         accountState.setDialogTitle(R.string.w_common_server);
         accountState.setTitle(R.string.w_common_server);
         accountState.setDefaultValue("com");
+
+        addPreference(accountState);
         
         String domain = account.reg_uri;
         boolean useSafe = false;
@@ -82,14 +84,14 @@ public class SipCel extends SimpleImplementation {
 	        	useSafe = true;
 	        }
         }
+
+        addPreference(useSafePort);
         
         useSafePort.setChecked(useSafe);
         useSafePort.setTitle("Use alternate port");
         useSafePort.setSummary("Connect to port 443 instead of 5060");
         
 
-        addPreference(accountState);
-        addPreference(useSafePort);
 	}
 	
 

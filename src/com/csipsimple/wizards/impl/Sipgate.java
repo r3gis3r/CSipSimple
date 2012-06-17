@@ -79,6 +79,10 @@ public class Sipgate extends AlternateServerImplementation {
             accountProxy.setDialogMessage(R.string.w_advanced_proxy_desc);
             recycle = false;
         }
+
+        if(!recycle) {
+            addPreference(accountProxy);
+        }
         
         String currentProxy = account.getProxyAddress();
         String currentServer = account.getSipDomain();
@@ -87,10 +91,6 @@ public class Sipgate extends AlternateServerImplementation {
             accountProxy.setText(currentProxy);
         }
 
-        if(!recycle) {
-            addPreference(accountProxy);
-        }
-        
 		
         if(TextUtils.isEmpty(account.getSipDomain())) {
             accountServer.setText("sipgate.de");

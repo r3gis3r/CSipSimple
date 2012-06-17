@@ -66,6 +66,11 @@ public class BroadVoice extends SimpleImplementation {
 			recycle = false;
 		}
 		
+
+        if(!recycle) {
+            addPreference(accountSuffix);
+        }
+        
 		String uName = account.getSipUserName();
 		String[] uNames = uName.split("x");
 		
@@ -74,10 +79,6 @@ public class BroadVoice extends SimpleImplementation {
 			accountSuffix.setText(uNames[1]);
 		}
 
-        if(!recycle) {
-            addPreference(accountSuffix);
-    	}
-		
 	}
 
 	

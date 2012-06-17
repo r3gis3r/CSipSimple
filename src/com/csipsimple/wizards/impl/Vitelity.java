@@ -21,6 +21,9 @@
 
 package com.csipsimple.wizards.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -28,33 +31,30 @@ import android.preference.ListPreference;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.models.Filter;
 
 
-public class VoipMS extends SimpleImplementation {
+public class Vitelity extends SimpleImplementation {
 	
 	
 	@Override
 	protected String getDefaultName() {
-		return "VoIP.ms";
+		return "Vitelity";
 	}
 	
 	ListPreference sipServer; 
 	static SortedMap<String, String> providers = new TreeMap<String, String>(){
 		private static final long serialVersionUID = -2561302247222706262L;
 	{
-		put("Atlanta, GA", "atlanta.voip.ms");
-		put("Chicago, IL", "chicago.voip.ms");
-		put("Dallas, TX", "dallas.voip.ms");
-		put("Houston, TX", "houston.voip.ms");
-		put("Los Angeles, CA", "losangeles.voip.ms");
-		put("New York, NY", "newyork.voip.ms");
-		put("Seattle, WA", "seattle.voip.ms");
-		put("Tampa, FL", "tampa.voip.ms");
-		put("Montreal 2,QC", "montreal2.voip.ms");
-		put("Toronto 2, ON", "toronto2.voip.ms");
-		put("Montreal,QC", "montreal.voip.ms");
-		put("Toronto, ON", "toronto.voip.ms");
-		put("London, UK", "london.voip.ms");
+		put("sip1", "sip1.vitelity.net");
+        put("sip2", "sip2.vitelity.net");
+        put("sip3", "sip3.vitelity.net");
+        put("sip4", "sip4.vitelity.net");
+        put("sip5", "sip5.vitelity.net");
+        put("sip6", "sip6.vitelity.net");
+        put("sip7", "sip7.vitelity.net");
+        put("sip8", "sip8.vitelity.net");
+        put("sip9", "sip9.vitelity.net");
 	}
 	};
 
@@ -86,18 +86,18 @@ public class VoipMS extends SimpleImplementation {
 		sipServer.setEntryValues(v);
 		sipServer.setDialogTitle(R.string.w_common_server);
 		sipServer.setTitle(R.string.w_common_server);
-        sipServer.setDefaultValue("atlanta.voip.ms");
-        
+		sipServer.setDefaultValue("sip1.vitelity.net");
+
         if(!recycle) {
             addPreference(sipServer);
         }
-		
+        
         String domain = account.reg_uri;
         if( domain != null ) {
-            for(CharSequence state : v) {
+	        for(CharSequence state : v) {
                 String currentComp = "sip:" + state;
 	        	if( currentComp.equalsIgnoreCase(domain) ) {
-	        		sipServer.setValue(state.toString());
+                    sipServer.setValue(state.toString());
 	        		break;
 	        	}
 	        }
@@ -130,4 +130,25 @@ public class VoipMS extends SimpleImplementation {
 		
 		return super.getDefaultFieldSummary(fieldName);
 	}
+	
+
+    @Override
+    public List<Filter> getDefaultFilters(SipProfile acc) {
+        // For US and Canada resident, auto add 10 digits => prefix with 1 rewriting rule 
+        String country = Locale.getDefault().getCountry();
+        if (Locale.CANADA.getCountry().equals(country) || Locale.US.getCountry().equals(country)) {
+            ArrayList<Filter> filters = new ArrayList<Filter>();
+            
+            Filter f = new Filter();
+            f.account = (int) acc.id;
+            f.action = Filter.ACTION_REPLACE;
+            f.matchPattern = "^(\\d{10})$";
+            f.replacePattern = "1$0";
+            f.matchType = Filter.MATCHER_HAS_N_DIGIT;
+            filters.add(f);
+            
+            return filters;
+        }
+        return null;
+    }
 }
