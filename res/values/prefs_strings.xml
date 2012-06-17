@@ -139,10 +139,10 @@
     <string name="enable_vad">Voice audio detection</string>
     <string name="enable_vad_desc">Activate voice audio detection</string>
     <string name="snd_mic_level">Micro amplification</string>
-    <string name="snd_mic_level_desc">Adjust the micro signal level (1 do nothing)</string>
+    <string name="snd_mic_level_desc">Adjust the mic signal level (1 do nothing)</string>
     <string name="snd_speaker_level">Speaker amplification</string>
     <string name="snd_speaker_level_desc">Adjust the speaker signal level (1 do nothing)</string>
-    <string name="snd_bt_mic_level">Bluetooth micro amplification</string>
+    <string name="snd_bt_mic_level">Bluetooth mic amplification</string>
     <string name="snd_bt_speaker_level">Bluetooth listening amplification</string>
     <string name="snd_stream_level">Initial stream level</string>
     <string name="snd_stream_level_desc">Set the initial level for audio stream (Android stream)</string>
@@ -173,8 +173,8 @@
     <string name="use_webrtc_hack_desc">Implementation made by WebRTC team</string>
     <string name="do_focus_audio">Focus audio</string>
     <string name="do_focus_audio_desc">Disabling will result overlaps with music but may help with routing</string>
-    <string name="micro_source">Micro source</string>
-    <string name="micro_source_desc">Source for micro. Choosing the appropriate value may improve echo cancellation</string>
+    <string name="micro_source">Mic source</string>
+    <string name="micro_source_desc">Source for microphone. Choosing the appropriate value may improve echo cancellation</string>
     <string name="has_io_queue">IO Queue</string>
     <string name="has_io_queue_desc">Activate Queue for input/output</string>
     <string name="set_audio_generate_tone">Tone hack</string>
@@ -226,7 +226,7 @@
     <string name="auto_detect_speaker">Auto detect speaker usage</string>
     <string name="auto_detect_speaker_desc">Switch to rear speaker when phone is horizontal during a call.</string>
     <string name="codecs_per_bandwidth">Codec priority list per bandwidth</string>
-    <string name="codecs_per_bandwidth_desc">Allow to have priority list for fast and for slow networks</string>
+    <string name="codecs_per_bandwidth_desc">Use separate codec priority lists for fast and slow networks</string>
     <string name="audio_troubleshooting">Audio troubleshooting</string>
     <string name="audio_troubleshooting_desc">Workarounds for audio routing</string>
     <string name="codecs_extra_settings">Extra codec settings</string>
