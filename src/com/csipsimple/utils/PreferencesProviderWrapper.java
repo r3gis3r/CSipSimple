@@ -418,7 +418,7 @@ public class PreferencesProviderWrapper {
 			//If that's the official -not custom- user agent, send the release, the device and the api level
 			PackageInfo pinfo = getCurrentPackageInfos(ctx);
 			if(pinfo != null) {
-				userAgent +=  " r" + pinfo.versionCode+" / "+android.os.Build.DEVICE+"-"+Compatibility.getApiLevel();
+				userAgent +=  "_" + android.os.Build.DEVICE + "-" + Compatibility.getApiLevel()+"/r"+pinfo.versionCode;
 			}
 		}
 		return userAgent;
