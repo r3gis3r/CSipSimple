@@ -93,12 +93,20 @@ public class BasePrefsWizard extends GenericPrefs {
 		});
 	}
 
+	private boolean isResumed = false;
 	@Override
 	protected void onResume() {
 		super.onResume();
         wizard.fillLayout(account);
+        isResumed = true;
 		updateDescriptions();
 		updateValidation();
+	}
+	
+	@Override
+	protected void onPause() {
+	    super.onPause();
+	    isResumed = false;
 	}
 	
 	private boolean setWizardId(String wId) {
@@ -143,8 +151,10 @@ public class BasePrefsWizard extends GenericPrefs {
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		updateDescriptions();
-		updateValidation();
+	    if(isResumed) {
+    		updateDescriptions();
+    		updateValidation();
+	    }
 	}
 
 	/**
