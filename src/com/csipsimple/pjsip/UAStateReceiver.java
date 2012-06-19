@@ -140,8 +140,8 @@ public class UAStateReceiver extends Callback {
 			Log.d(THIS_FILE, "Incoming call << for account " + accId);
             
             //Extra check if set reference counted is false ???
-            if(!incomingCallLock.isHeld()) {
-                incomingCallLock.acquire();
+            if(!ongoingCallLock.isHeld()) {
+                ongoingCallLock.acquire();
             }
             
             final String remContact = callInfo.getRemoteContact();
@@ -200,13 +200,17 @@ public class UAStateReceiver extends Callback {
 					pjService.mediaManager.stopRingAndUnfocus();
 					pjService.mediaManager.resetSettings();
 				}
-				if(incomingCallLock != null && incomingCallLock.isHeld()) {
-					incomingCallLock.release();
+				if(ongoingCallLock != null && ongoingCallLock.isHeld()) {
+					ongoingCallLock.release();
 				}
 				// Call is now ended
 				pjService.stopDialtoneGenerator(callId);
 				pjService.stopRecording(callId);
 				pjService.stopPlaying(callId);
+			} else {
+                if(ongoingCallLock != null && !ongoingCallLock.isHeld()) {
+                    ongoingCallLock.acquire();
+                }
 			}
 			
 			msgHandler.sendMessage(msgHandler.obtainMessage(ON_CALL_STATE, callInfo));
@@ -411,9 +415,6 @@ public class UAStateReceiver extends Callback {
 		    // Unfocus will be done anyway on call disconnect
 			pjService.mediaManager.stopRing();
 		}
-		if(incomingCallLock != null && incomingCallLock.isHeld()) {
-			incomingCallLock.release();
-        }
 
         try {
             final SipCallSession callInfo = updateCallInfoFromStack(callId, null);
@@ -669,7 +670,7 @@ public class UAStateReceiver extends Callback {
 
 	private WorkerHandler msgHandler;
 	private HandlerThread handlerThread;
-	private WakeLock incomingCallLock;
+	private WakeLock ongoingCallLock;
 
 	private WakeLock eventLock;
 
@@ -731,11 +732,6 @@ public class UAStateReceiver extends Callback {
 	                        }
 	                    });
                     }
-					
-					if(incomingCallLock != null && incomingCallLock.isHeld()) {
-						incomingCallLock.release();
-					}
-					
 					// If state is confirmed and not already intialized
 					if(callState == SipCallSession.InvState.CONFIRMED && callInfo.callStart == 0) {
 						callInfo.callStart = System.currentTimeMillis();
@@ -744,9 +740,6 @@ public class UAStateReceiver extends Callback {
 				case SipCallSession.InvState.DISCONNECTED:
 					if(pjService.mediaManager != null) {
 						pjService.mediaManager.stopRing();
-					}
-					if(incomingCallLock != null && incomingCallLock.isHeld()) {
-						incomingCallLock.release();
 					}
 					
 					Log.d(THIS_FILE, "Finish call2");
@@ -877,10 +870,10 @@ public class UAStateReceiver extends Callback {
 			eventLock.setReferenceCounted(true);
 
 		}
-		if(incomingCallLock == null) {
+		if(ongoingCallLock == null) {
             PowerManager pman = (PowerManager) pjService.service.getSystemService(Context.POWER_SERVICE);
-            incomingCallLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.incomingCallLock");
-            incomingCallLock.setReferenceCounted(false);
+            ongoingCallLock = pman.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.csipsimple.ongoingCallLock");
+            ongoingCallLock.setReferenceCounted(false);
 		}
 	}
 	

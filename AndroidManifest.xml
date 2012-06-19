@@ -420,11 +420,11 @@ Remove that too fine change trigger
             android:windowSoftInputMode="stateHidden" />
 
         <!-- Embedded plugins -->
-        <!-- Call handlers -->
+        <!-- Call handlers android:process=":telCallHandler" -->
         <receiver
             android:name="com.csipsimple.plugins.telephony.CallHandler"
             android:permission="android.permission.PROCESS_OUTGOING_CALLS"
-            android:process=":telCallHandler" >
+            android:process=":sipStack" >
             <intent-filter>
                 <action android:name="com.csipsimple.phone.action.HANDLE_CALL" />
             </intent-filter>
