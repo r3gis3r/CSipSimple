@@ -464,7 +464,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                         }
                     }
 
-                    if (cv.containsKey(Data.PHOTO_ID)) {
+                    if (cv.containsKey(Data.PHOTO_ID) && cv.getAsLong(Data.PHOTO_ID) != null) {
                         callerInfo.photoId = cv.getAsLong(Data.PHOTO_ID);
                     }
 
