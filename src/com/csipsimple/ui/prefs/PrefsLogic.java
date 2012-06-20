@@ -274,6 +274,7 @@ public class PrefsLogic {
                 if(!pfw.isAdvancedUser()) {
                     pfh.hidePreference(null, "advanced_ui");
                     pfh.hidePreference("android_integration", SipConfigManager.GSM_INTEGRATION_TYPE);
+                    pfh.hidePreference("android_integration", SipConfigManager.INTEGRATE_TEL_PRIVILEDGED);
                     
                 }
                 

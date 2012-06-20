@@ -8,5 +8,6 @@
   <string name="callAgain">Appeler de nouveau</string>
   <string name="returnCall">Rappeler</string>
   <string name="call">Appeler</string>
+  <string name="sip_call">Appel SIP</string>
   <string name="no_call_history">Pas d\'historique</string>
 </resources>

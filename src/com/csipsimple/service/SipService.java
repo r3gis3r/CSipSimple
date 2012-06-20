@@ -71,7 +71,6 @@ import com.csipsimple.ui.incall.InCallMediaControl;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PhoneCapabilityTester;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 
@@ -952,12 +951,6 @@ public class SipService extends Service {
 			prefsWrapper.resetAllDefaultValues();
 		}
 
-		// Check whether we should register for stock tel: intents
-        // Useful for devices without gsm
-        PackageManager pm = getPackageManager();
-        int enableState = PhoneCapabilityTester.isPhone(this) ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED : PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-        Log.d(THIS_FILE, "Enabling " + enableState);
-        pm.setComponentEnabledSetting(new ComponentName(this, "com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster"), enableState, PackageManager.DONT_KILL_APP);
 
 
 	}
@@ -969,14 +962,26 @@ public class SipService extends Service {
 		unregisterBroadcasts();
 		notificationManager.onServiceDestroy();
 		getExecutor().execute(new FinalizeDestroyRunnable());
-		
 	}
 	
 	public void cleanStop () {
 		getExecutor().execute(new DestroyRunnable());
 	}
 	
-	
+	private void applyComponentEnablingState(boolean active) {
+	    int enableState = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+	    if(active && prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEDGED) ) {
+            // Check whether we should register for stock tel: intents
+            // Useful for devices without gsm
+            enableState = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+	    }
+        PackageManager pm = getPackageManager();
+        
+        ComponentName cmp = new ComponentName(this, "com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster");
+        if( pm.getComponentEnabledSetting(cmp) != enableState ) {
+            pm.setComponentEnabledSetting(cmp, enableState, PackageManager.DONT_KILL_APP);
+        }
+	}
 	
 	/**
 	 * Register broadcast receivers.
@@ -1196,6 +1201,10 @@ public class SipService extends Service {
 
         presenceMgr.startMonitoring(this);
 		if(pjService.sipStart()) {
+		    // This should be done after in acquire resource
+		    // But due to http://code.google.com/p/android/issues/detail?id=21635
+		    // not a good idea
+	        applyComponentEnablingState(true);
 			Log.d(THIS_FILE, "Add all accounts");
 			addAllAccounts();
 		}
@@ -1220,8 +1229,16 @@ public class SipService extends Service {
 		    if(presenceMgr != null) {
 		        presenceMgr.stopMonitoring();
 		    }
+		    
+		    // Due to http://code.google.com/p/android/issues/detail?id=21635
+            // exclude 14 and upper from auto disabling on stop.
+            if(!Compatibility.isCompatible(14)) {
+                applyComponentEnablingState(false);
+            }
+            
 			releaseResources();
 		}
+
 		//unregisterBroadcasts();
 		return canStop;
 	}
@@ -1286,6 +1303,7 @@ public class SipService extends Service {
 
 		if (hasSomeSuccess) {
 			acquireResources();
+			
 		} else {
 			releaseResources();
 			if (notificationManager != null) {

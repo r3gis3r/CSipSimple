@@ -328,6 +328,7 @@ Remove that too fine change trigger
             android:configChanges="orientation"
             android:enabled="false"
             android:excludeFromRecents="true"
+            android:label="@string/sip_call"
             android:launchMode="singleTask"
             android:permission="android.permission.CALL_PRIVILEGED"
             android:targetActivity="com.csipsimple.ui.outgoingcall.OutgoingCallChooser"

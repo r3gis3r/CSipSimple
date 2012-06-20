@@ -232,6 +232,8 @@
   <string name="advanced_ui">Modifications avancées</string>
   <string name="integrate_with_native_dialer">Activer l\'intégration</string>
   <string name="integrate_with_native_dialer_desc">Quand un appel est initié partout dans Android il vous sera demandé si vous voulez utiliser le GSM ou le SIP</string>
+  <string name="integrate_tel_priviledged">Intégration à l\'intent avec privilèges</string>
+  <string name="integrate_tel_priviledged_desc">Une façon différente de s\'intégré  à l\'application téléphone native. Vous devriez désactiver l\'intégration pour utiliser celle ci.</string>
   <string name="integrate_with_native_calllogs">Intégrations au journal d\'appel</string>
   <string name="integrate_with_native_calllogs_desc">Les appels SIP seront rajoutés (si possible) aux journaux d\'appels d\'Android</string>
   <string name="dial_press_tone">Retour sonore du numéroteur</string>

@@ -505,6 +505,10 @@ public final class Compatibility {
         return intent;
 
     }
+    
+    private static boolean shouldUsePriviledgedIntegration(Context ctxt) {
+        return !PhoneCapabilityTester.isPhone(ctxt);
+    }
 
     public static void updateVersion(PreferencesWrapper prefWrapper, int lastSeenVersion,
             int runningVersion) {
@@ -688,8 +692,12 @@ public final class Compatibility {
         if(lastSeenVersion < 1590 &&
                 (android.os.Build.DEVICE.toUpperCase().startsWith("GT-S") || android.os.Build.PRODUCT.equalsIgnoreCase("U8655") )) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
-            
         }
+        
+        if(lastSeenVersion < 1634) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEDGED, shouldUsePriviledgedIntegration(prefWrapper.getContext()));
+        }
+        
         prefWrapper.endEditing();
     }
 

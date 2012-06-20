@@ -56,10 +56,11 @@ public class PresenceManager {
 
     public synchronized void startMonitoring(SipService srv) {
         service = srv;
-
-        statusObserver = new AccountStatusContentObserver(mHandler);
-        service.getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
-                true, statusObserver);
+        if(statusObserver == null) {
+            statusObserver = new AccountStatusContentObserver(mHandler);
+            service.getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
+                    true, statusObserver);
+        }
     }
 
     public synchronized void stopMonitoring() {

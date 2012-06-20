@@ -113,6 +113,8 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
                         }
                     }
                 }
+            }else {
+                phoneNumber = PhoneNumberUtils.stripSeparators(phoneNumber);
             }
             // Still null ... well make it empty.
             if(phoneNumber == null) {
