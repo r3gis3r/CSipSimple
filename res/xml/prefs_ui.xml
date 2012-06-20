@@ -28,9 +28,9 @@
             android:title="@string/integrate_with_native_dialer" />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="integrate_tel_priviledged"
-            android:summary="@string/integrate_tel_priviledged_desc"
-            android:title="@string/integrate_tel_priviledged" />
+            android:key="integrate_tel_privileged"
+            android:summary="@string/integrate_tel_privileged_desc"
+            android:title="@string/integrate_tel_privileged" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="integrate_with_native_calllogs"

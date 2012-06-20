@@ -970,7 +970,7 @@ public class SipService extends Service {
 	
 	private void applyComponentEnablingState(boolean active) {
 	    int enableState = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-	    if(active && prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEDGED) ) {
+	    if(active && prefsWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED) ) {
             // Check whether we should register for stock tel: intents
             // Useful for devices without gsm
             enableState = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;

@@ -240,8 +240,8 @@
     <string name="advanced_ui">Advanced tweaks</string>
     <string name="integrate_with_native_dialer">Dialer integration</string>
     <string name="integrate_with_native_dialer_desc">When dialing with native dialer you\'ll be asked if you want to use SIP or mobile</string>
-    <string name="integrate_tel_priviledged">Integrate priviledged intent</string>
-    <string name="integrate_tel_priviledged_desc">Different way to integrate stock dialer. You should disable integrate dialer integration if you use it.</string>
+    <string name="integrate_tel_privileged">Integrate privileged intent</string>
+    <string name="integrate_tel_privileged_desc">Different way to integrate stock dialer. You should disable integrate dialer integration if you use it.</string>
     <string name="integrate_with_native_calllogs">Call logs integration</string>
     <string name="integrate_with_native_calllogs_desc">SIP calls will be merged (if possible) into native call logs</string>
     <string name="dial_press_tone">Dialing tone feedback</string>

@@ -460,13 +460,13 @@ public class SipConfigManager {
      */
     public static final String INTEGRATE_WITH_DIALER = "integrate_with_native_dialer";
     /**
-     * Should the application hook outgoing call stock system for outgoing priviledged calls.
+     * Should the application hook outgoing call stock system for outgoing privileged calls.
      * This should normally be exclusive of {@link #INTEGRATE_WITH_DIALER}. 
      * This integration method is not recommanded.
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
-    public static final String INTEGRATE_TEL_PRIVILEDGED = "integrate_tel_priviledged";
+    public static final String INTEGRATE_TEL_PRIVILEGED = "integrate_tel_privileged";
     /**
      * Should the application try to pause/resume music when in call?<br/>
      * This setting is only used prior to android 2.2 version that has a clean

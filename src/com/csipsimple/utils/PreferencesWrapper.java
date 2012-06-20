@@ -182,7 +182,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.ICON_IN_STATUS_BAR_NBR, false);
 		put(SipConfigManager.INTEGRATE_WITH_CALLLOGS, true);
 		put(SipConfigManager.INTEGRATE_WITH_DIALER, true);
-		put(SipConfigManager.INTEGRATE_TEL_PRIVILEDGED, false);
+		put(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, false);
 		put(SipConfigManager.USE_ALTERNATE_UNLOCKER, false);
 		put(HAS_BEEN_QUIT, false);
 		put(HAS_ALREADY_SETUP_SERVICE, false);
