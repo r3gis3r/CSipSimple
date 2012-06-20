@@ -693,9 +693,11 @@ public final class Compatibility {
                 (android.os.Build.DEVICE.toUpperCase().startsWith("GT-S") || android.os.Build.PRODUCT.equalsIgnoreCase("U8655") )) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
         }
-        
         if(lastSeenVersion < 1634) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEDGED, shouldUsePriviledgedIntegration(prefWrapper.getContext()));
+            if(android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i9003")) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround());
+            }
         }
         
         prefWrapper.endEditing();
