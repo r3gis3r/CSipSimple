@@ -196,7 +196,9 @@ public class Mobex extends SimpleImplementation {
                 }catch(NumberFormatException e) {
                     Log.d(THIS_FILE, "Can't parse float value in credit "+ strValue);
                 }
-                return "Creditos : " + strValue + " R$";
+                Log.d(THIS_FILE, "We parse " + "Creditos : " + strValue + " R$");
+                //return "Creditos : " + strValue + " R$";
+                return null;
             }
             return null;
         }
