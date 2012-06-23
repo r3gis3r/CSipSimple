@@ -114,7 +114,15 @@ public final class SipManager {
      * Should raise the sip message list.
      */
     public static final String ACTION_SIP_MESSAGES = "com.csipsimple.phone.action.MESSAGES";
-
+    /**
+     * Action launched to enter fast settings.<br/>
+     */
+    public static final String ACTION_UI_PREFS_FAST = "com.csipsimple.ui.action.PREFS_FAST";
+    /**
+     * Action launched to enter global csipsimple settings.<br/>
+     */
+    public static final String ACTION_UI_PREFS_GLOBAL = "com.csipsimple.ui.action.PREFS_GLOBAL";
+    
     // SERVICE BROADCASTS
     /**
      * Broadcast sent when call state has changed.
@@ -383,7 +391,7 @@ public final class SipManager {
      * Major version x 1000 + minor version. <br/>
      * Major version are backward compatible.
      */
-    public static final int CURRENT_API = 2001;
+    public static final int CURRENT_API = 2002;
 
     /**
      * Ensure capability of the remote sip service to reply our requests <br/>

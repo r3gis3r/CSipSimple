@@ -67,7 +67,7 @@ public class CallHandler extends BroadcastReceiver {
 			
 			// Retrieve and cache infos from the phone app 
 			if(!sPhoneAppInfoLoaded) {
-    			List<ResolveInfo> callers = PhoneCapabilityTester.resolvePackageForPriviledgedCall(context);
+    			List<ResolveInfo> callers = PhoneCapabilityTester.resolveActivitiesForPriviledgedCall(context);
     			if(callers != null) {
     				for(final ResolveInfo caller : callers) {
     					if(caller.activityInfo.packageName.startsWith("com.android")) {

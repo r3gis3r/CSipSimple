@@ -81,7 +81,9 @@ public final class PhoneCapabilityTester {
      * Returns true if this device can be used to make phone calls
      */
     public static boolean isPhone(Context context) {
-        if (!sIsInitialized) initialize(context);
+        if (!sIsInitialized) {
+            initialize(context);
+        }
         // Is the device physically capabable of making phone calls?
         return sIsPhone;
     }
@@ -91,8 +93,16 @@ public final class PhoneCapabilityTester {
         
         sIsPhone = (telephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE);
         //sIsSipPhone = sIsPhone && SipManager.isVoipSupported(context);
-        callIntents = getPossibleActivities(context, getPriviledgedIntent("123"));
+        Intent pIntent = getPriviledgedIntent("123");
+        callIntents = getPossibleActivities(context, pIntent);
+        PackageManager pm = context.getPackageManager();
+        defaultCallIntent = pm.resolveActivity(pIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        
         sIsInitialized = true;
+    }
+    
+    public static void deinit() {
+        sIsInitialized = false;
     }
 
     /**
@@ -115,17 +125,25 @@ public final class PhoneCapabilityTester {
     }
 
     private static List<ResolveInfo> callIntents = null;
+    private static ResolveInfo defaultCallIntent = null;
 
     /**
      * Find packages registered for priviledged call management
      * @param ctxt the application context
      * @return list of package resolved info for a priviledged call intent
      */
-    public final static List<ResolveInfo> resolvePackageForPriviledgedCall(Context ctxt) {
+    public final static List<ResolveInfo> resolveActivitiesForPriviledgedCall(Context ctxt) {
         if (!sIsInitialized) {
             initialize(ctxt);
         }
         return callIntents;
+    }
+    
+    public final static ResolveInfo resolveActivityForPriviledgedCall(Context ctxt) {
+        if (!sIsInitialized) {
+            initialize(ctxt);
+        }
+        return defaultCallIntent;
     }
     
     /**

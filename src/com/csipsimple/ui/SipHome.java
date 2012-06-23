@@ -44,6 +44,8 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
+import com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
@@ -56,8 +58,8 @@ import com.csipsimple.ui.dialpad.DialerFragment;
 import com.csipsimple.ui.favorites.FavListFragment;
 import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.messages.ConversationsListFragment;
-import com.csipsimple.ui.prefs.PrefsFast;
-import com.csipsimple.utils.Compatibility;
+import com.csipsimple.ui.warnings.WarningFragment;
+import com.csipsimple.ui.warnings.WarningUtils;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.NightlyUpdater;
@@ -80,10 +82,11 @@ public class SipHome extends SherlockFragmentActivity {
 
     private static final String THIS_FILE = "SIP_HOME";
 
-    private static final int TAB_INDEX_DIALER = 0;
-    private static final int TAB_INDEX_CALL_LOG = 1;
-    private static final int TAB_INDEX_FAVORITES = 2;
-    private static final int TAB_INDEX_MESSAGES = 3;
+    private static int TAB_ID_DIALER = 0;
+    private static int TAB_ID_CALL_LOG = 1;
+    private static int TAB_ID_FAVORITES = 2;
+    private static int TAB_ID_MESSAGES = 3;
+    private static int TAB_ID_WARNING = 4;
 
     // protected static final int PICKUP_PHONE = 0;
     private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = 0;
@@ -97,6 +100,8 @@ public class SipHome extends SherlockFragmentActivity {
     private TabsAdapter mTabsAdapter;
     private boolean mDualPane;
     private Thread asyncSanityChecker;
+    private Tab warningTab;
+    private ObjectAnimator warningTabfadeAnim;
 
     public final static boolean USE_LIGHT_THEME = false;
 
@@ -140,6 +145,7 @@ public class SipHome extends SherlockFragmentActivity {
 
         ab.setDisplayShowHomeEnabled(false);
         ab.setDisplayShowTitleEnabled(false);
+        
 
         Tab dialerTab = ab.newTab()
                 // .setText(R.string.dial_tab_name_text)
@@ -147,28 +153,34 @@ public class SipHome extends SherlockFragmentActivity {
         Tab callLogTab = ab.newTab()
                 // .setText(R.string.calllog_tab_name_text)
                 .setIcon(R.drawable.ic_ab_history_holo_dark);
-
         Tab favoritesTab = ab.newTab()
                 // .setText(R.string.messages_tab_name_text)
                 .setIcon(R.drawable.ic_ab_favourites_holo_dark);
-
+        
         Tab messagingTab = null;
         if (CustomDistribution.supportMessaging()) {
             messagingTab = ab.newTab()
                     // .setText(R.string.messages_tab_name_text)
                     .setIcon(R.drawable.ic_ab_text_holo_dark);
         }
-
+        
+        warningTab = ab.newTab().setIcon(android.R.drawable.ic_dialog_alert);
+        warningTabfadeAnim = ObjectAnimator.ofInt(warningTab.getIcon(), "alpha", 255, 100);
+        warningTabfadeAnim.setDuration(1500);
+        warningTabfadeAnim.setRepeatCount(ValueAnimator.INFINITE);
+        warningTabfadeAnim.setRepeatMode(ValueAnimator.REVERSE);
+        
         mDualPane = getResources().getBoolean(R.bool.use_dual_panes);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mTabsAdapter = new TabsAdapter(this, getSupportActionBar(), mViewPager);
-        mTabsAdapter.addTab(dialerTab, DialerFragment.class);
-        mTabsAdapter.addTab(callLogTab, CallLogListFragment.class);
-        mTabsAdapter.addTab(favoritesTab, FavListFragment.class);
+        mTabsAdapter.addTab(dialerTab, DialerFragment.class, TAB_ID_DIALER);
+        mTabsAdapter.addTab(callLogTab, CallLogListFragment.class, TAB_ID_CALL_LOG);
+        mTabsAdapter.addTab(favoritesTab, FavListFragment.class, TAB_ID_FAVORITES);
         if (messagingTab != null) {
-            mTabsAdapter.addTab(messagingTab, ConversationsListFragment.class);
+            mTabsAdapter.addTab(messagingTab, ConversationsListFragment.class, TAB_ID_MESSAGES);
         }
+        
 
         hasTriedOnceActivateAcc = false;
 
@@ -207,7 +219,9 @@ public class SipHome extends SherlockFragmentActivity {
         private final ActionBar mActionBar;
         private final ViewPager mViewPager;
         private final List<String> mTabs = new ArrayList<String>();
+        private final List<Integer> mTabsId = new ArrayList<Integer>();
         private boolean hasClearedDetails = false;
+        
 
         private int mCurrentPosition = -1;
         /**
@@ -225,10 +239,33 @@ public class SipHome extends SherlockFragmentActivity {
             mViewPager.setOnPageChangeListener(this);
         }
 
-        public void addTab(ActionBar.Tab tab, Class<?> clss) {
+        public void addTab(ActionBar.Tab tab, Class<?> clss, int tabId) {
             mTabs.add(clss.getName());
+            mTabsId.add(tabId);
             mActionBar.addTab(tab.setTabListener(this));
             notifyDataSetChanged();
+        }
+        
+        public void removeTabAt(int location) {
+            mTabs.remove(location);
+            mTabsId.remove(location);
+            mActionBar.removeTabAt(location);
+            notifyDataSetChanged();
+        }
+        
+        public Integer getIdForPosition(int position) {
+            if(position >= 0 && position < mTabsId.size()) {
+                return mTabsId.get(position);
+            }
+            return null;
+        }
+        
+        public Integer getPositionForId(int id) {
+            int fPos = mTabsId.indexOf(id);
+            if(fPos >= 0) {
+                return fPos;
+            }
+            return null;
         }
 
         @Override
@@ -238,7 +275,7 @@ public class SipHome extends SherlockFragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return Fragment.instantiate(mContext, mTabs.get(position), null);
+            return Fragment.instantiate(mContext, mTabs.get(position), new Bundle());
         }
 
         @Override
@@ -323,20 +360,24 @@ public class SipHome extends SherlockFragmentActivity {
     private CallLogListFragment mCallLogFragment;
     private ConversationsListFragment mMessagesFragment;
     private FavListFragment mPhoneFavoriteFragment;
+    private WarningFragment mWarningFragment;
 
     private Fragment getFragmentAt(int position) {
-        switch (position) {
-            case TAB_INDEX_DIALER:
+        Integer id = mTabsAdapter.getIdForPosition(position);
+        if(id != null) {
+            if (id == TAB_ID_DIALER) {
                 return mDialpadFragment;
-            case TAB_INDEX_CALL_LOG:
+            } else if (id == TAB_ID_CALL_LOG) {
                 return mCallLogFragment;
-            case TAB_INDEX_MESSAGES:
+            } else if (position == TAB_ID_MESSAGES) {
                 return mMessagesFragment;
-            case TAB_INDEX_FAVORITES:
+            } else if (position == TAB_ID_FAVORITES) {
                 return mPhoneFavoriteFragment;
-            default:
-                throw new IllegalStateException("Unknown fragment index: " + position);
+            } else if (position == TAB_ID_WARNING) {
+                return mWarningFragment;
+            }
         }
+        throw new IllegalStateException("Unknown fragment index: " + position);
     }
 
     public Fragment getCurrentFragment() {
@@ -360,21 +401,30 @@ public class SipHome extends SherlockFragmentActivity {
         // In that case, we will setup the "current position" soon after the
         // ViewPager is ready.
         final int currentPosition = mViewPager != null ? mViewPager.getCurrentItem() : -1;
-
+        Integer tabId = null; 
+        if(mTabsAdapter != null) {
+            tabId = mTabsAdapter.getIdForPosition(currentPosition);
+        }
         if (fragment instanceof DialerFragment) {
             mDialpadFragment = (DialerFragment) fragment;
-            if (currentPosition == TAB_INDEX_DIALER) {
+            if (tabId != null && tabId == TAB_ID_DIALER) {
                 mDialpadFragment.onVisibilityChanged(true);
             }
         } else if (fragment instanceof CallLogListFragment) {
             mCallLogFragment = (CallLogListFragment) fragment;
-            if (currentPosition == TAB_INDEX_CALL_LOG) {
+            if (tabId != null && tabId == TAB_ID_CALL_LOG) {
                 mCallLogFragment.onVisibilityChanged(true);
             }
         } else if (fragment instanceof ConversationsListFragment) {
             mMessagesFragment = (ConversationsListFragment) fragment;
         } else if (fragment instanceof FavListFragment) {
             mPhoneFavoriteFragment = (FavListFragment) fragment;
+        } else if (fragment instanceof WarningFragment) {
+            mWarningFragment = (WarningFragment) fragment;
+            synchronized (warningList) {
+                mWarningFragment.setWarningList(warningList);
+            }
+            
         }
 
     }
@@ -387,6 +437,7 @@ public class SipHome extends SherlockFragmentActivity {
         // Compatibility.getDialerIntegrationState(SipHome.this);
         // }
         
+        // Nightly build check
         if(NightlyUpdater.isNightlyBuild(this)) {
             Log.d(THIS_FILE, "Sanity check : we have a nightly build here");
             ConnectivityManager connectivityService = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -412,6 +463,10 @@ public class SipHome extends SherlockFragmentActivity {
                 }
             }
         }
+        
+        applyWarning(WarningUtils.WARNING_PRIVILEGED_INTENT, WarningUtils.shouldWarnPrivilegedIntent(this, prefProviderWrapper));
+        applyWarning(WarningUtils.WARNING_NO_STUN, WarningUtils.shouldWarnNoStun(prefProviderWrapper));
+        applyWarning(WarningUtils.WARNING_VPN_ICS, WarningUtils.shouldWarnVpnIcs(prefProviderWrapper));
     }
 
     // Service monitoring stuff
@@ -432,7 +487,7 @@ public class SipHome extends SherlockFragmentActivity {
         // If we have never set fast settings
         if (CustomDistribution.showFirstSettingScreen()) {
             if (!prefProviderWrapper.getPreferenceBooleanValue(PreferencesWrapper.HAS_ALREADY_SETUP, false)) {
-                Intent prefsIntent = new Intent(this, PrefsFast.class);
+                Intent prefsIntent = new Intent(SipManager.ACTION_UI_PREFS_FAST);
                 prefsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(prefsIntent);
                 return;
@@ -525,19 +580,28 @@ public class SipHome extends SherlockFragmentActivity {
                 Tab toSelectTab = null;
                 if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_DIALER)
                         || callAction.equalsIgnoreCase(Intent.ACTION_DIAL)) {
-                    toSelectTab = ab.getTabAt(TAB_INDEX_DIALER);
-                    Uri data = intent.getData();
-                    if(data != null && mDialpadFragment != null) {
-                        String nbr = data.getSchemeSpecificPart();
-                        if(!TextUtils.isEmpty(nbr)) {
-                            mDialpadFragment.setTextDialing(true);
-                            mDialpadFragment.setTextFieldValue(nbr);
+                    Integer pos = mTabsAdapter.getPositionForId(TAB_ID_DIALER);
+                    if(pos != null) {
+                        toSelectTab = ab.getTabAt(pos);
+                        Uri data = intent.getData();
+                        if(data != null && mDialpadFragment != null) {
+                            String nbr = data.getSchemeSpecificPart();
+                            if(!TextUtils.isEmpty(nbr)) {
+                                mDialpadFragment.setTextDialing(true);
+                                mDialpadFragment.setTextFieldValue(nbr);
+                            }
                         }
                     }
                 } else if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_CALLLOG)) {
-                    toSelectTab = ab.getTabAt(TAB_INDEX_CALL_LOG);
+                    Integer pos = mTabsAdapter.getPositionForId(TAB_ID_CALL_LOG);
+                    if(pos != null) {
+                        toSelectTab = ab.getTabAt(pos);
+                    }
                 } else if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_MESSAGES)) {
-                    toSelectTab = ab.getTabAt(TAB_INDEX_MESSAGES);
+                    Integer pos = mTabsAdapter.getPositionForId(TAB_ID_MESSAGES);
+                    if(pos != null) {
+                        toSelectTab = ab.getTabAt(pos);
+                    }
                 }
                 if (toSelectTab != null) {
                     ab.selectTab(toSelectTab);
@@ -591,11 +655,7 @@ public class SipHome extends SherlockFragmentActivity {
                 startActivity(new Intent(this, AccountsEditList.class));
                 return true;
             case PARAMS_MENU:
-                if(Compatibility.isCompatible(11)) {
-                    startActivityForResult(new Intent(this, com.csipsimple.ui.prefs.hc.MainPrefs.class), CHANGE_PREFS);
-                }else {
-                    startActivityForResult(new Intent(this, com.csipsimple.ui.prefs.cupcake.MainPrefs.class), CHANGE_PREFS);
-                }
+                startActivityForResult(new Intent(SipManager.ACTION_UI_PREFS_GLOBAL), CHANGE_PREFS);
                 return true;
             case CLOSE_MENU:
                 Log.d(THIS_FILE, "CLOSE");
@@ -681,5 +741,65 @@ public class SipHome extends SherlockFragmentActivity {
             finish();
         }
     }
-
+    
+    
+    
+    
+    // Warning view
+    
+    private List<String> warningList = new ArrayList<String>();
+    private void applyWarning(String warnCode, boolean active) {
+        synchronized (warningList) {
+            if(active) {
+                warningList.add(warnCode);
+            }else {
+                warningList.remove(warnCode);
+            }
+        }
+        runOnUiThread(refreshWarningTabRunnable);
+    }
+    
+    Runnable refreshWarningTabRunnable = new Runnable() {
+        @Override
+        public void run() {
+            refreshWarningTabDisplay();
+        }
+    };
+    
+    private void refreshWarningTabDisplay() {
+        List<String> warnList = new ArrayList<String>();
+        synchronized (warningList) {
+            warnList.addAll(warningList);
+        }
+        if(mWarningFragment != null) {
+            mWarningFragment.setWarningList(warnList);
+        }
+        if(warnList.size() > 0) {
+            // Show warning tab if any to display
+            if(mTabsAdapter.getPositionForId(TAB_ID_WARNING) == null) {
+                // And not yet displayed
+                Log.w(THIS_FILE, "Reason to warn " + warnList);
+                
+                mTabsAdapter.addTab(warningTab, WarningFragment.class, TAB_ID_WARNING);
+                warningTabfadeAnim.start();
+            }
+        }else {
+            // Hide warning tab since nothing to warn about
+            ActionBar ab = getSupportActionBar();
+            int selPos = -1;
+            if(ab != null) {
+                selPos = ab.getSelectedTab().getPosition();
+            }
+            Integer pos = mTabsAdapter.getPositionForId(TAB_ID_WARNING);
+            if(pos != null) {
+                mTabsAdapter.removeTabAt(pos);
+                if(selPos == pos && ab != null) {
+                    ab.selectTab(ab.getTabAt(0));
+                }
+            }
+            if(warningTabfadeAnim.isStarted()) {
+                warningTabfadeAnim.end();
+            }
+        }
+    }
 }

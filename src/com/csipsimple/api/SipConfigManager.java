@@ -324,6 +324,13 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String AUTO_DETECT_SPEAKER = "auto_detect_speaker";
+    
+    /**
+     * Should the entire audio stream be restarted when audio routing change is asked.<br/>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String RESTART_AUDIO_ON_ROUTING_CHANGES = "restart_aud_on_routing_change";
 
     /**
      * Suffix key for the number of frames per RTP packet for one codec. <br/>
@@ -844,6 +851,14 @@ public class SipConfigManager {
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String USE_ZRTP = "use_zrtp";
+    
+    /**
+     * Interval for polling network routes. <br/>
+     * This is useful to set if using VPN on android 4.0
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String NETWORK_ROUTES_POLLING = "network_route_polling";
     
     /**
      * Enable wifi for incoming calls

@@ -230,6 +230,7 @@ public class PrefsLogic {
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.ENABLE_QOS);
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.DSCP_VAL);
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.USER_AGENT);
+                    pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.NETWORK_ROUTES_POLLING);
                     
                     
 

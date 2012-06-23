@@ -23,12 +23,19 @@ package com.csipsimple.utils.bluetooth;
 
 import android.content.Context;
 
-import com.csipsimple.service.MediaManager;
 import com.csipsimple.utils.Compatibility;
 
 public abstract class BluetoothWrapper {
 	
+    public interface BluetoothChangeListener {
+        void onBluetoothStateChanged(int status);
+    }
+    
+    
 	private static BluetoothWrapper instance;
+    protected Context context;
+    
+    protected BluetoothChangeListener btChangesListener;
 	
 	public static BluetoothWrapper getInstance(Context context) {
 		if(instance == null) {
@@ -49,8 +56,14 @@ public abstract class BluetoothWrapper {
 	
 	protected BluetoothWrapper() {}
 
-	public abstract void setContext(Context context);
-	public abstract void setMediaManager(MediaManager manager);
+	protected void setContext(Context ctxt) {
+	    context = ctxt;
+	}
+	
+	public void setBluetoothChangeListener(BluetoothChangeListener l) {
+	    btChangesListener = l;
+	}
+	
 	public abstract boolean canBluetooth();
 	public abstract void setBluetoothOn(boolean on);
 	public abstract boolean isBluetoothOn();

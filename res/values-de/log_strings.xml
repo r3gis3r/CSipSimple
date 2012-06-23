@@ -8,5 +8,6 @@
   <string name="callAgain">Wahlwiederholung</string>
   <string name="returnCall">Rückruf</string>
   <string name="call">Anruf</string>
+  <string name="sip_call">SIP Anruf</string>
   <string name="no_call_history">Keine Anrufhistorie</string>
 </resources>

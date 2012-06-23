@@ -204,13 +204,27 @@ Remove that too fine change trigger
         <activity
             android:name="com.csipsimple.ui.prefs.hc.MainPrefs"
             android:configChanges="orientation"
+            android:enabled="@bool/use_hc_prefs"
             android:label="@string/prefs"
-            android:theme="@style/DarkTheme" />
+            android:theme="@style/DarkTheme" >
+            <intent-filter>
+                <action android:name="com.csipsimple.ui.action.PREFS_GLOBAL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.csipsimple.ui.prefs.cupcake.MainPrefs"
             android:configChanges="orientation"
+            android:enabled="@bool/use_cupcake_prefs"
             android:label="@string/prefs"
-            android:theme="@style/DarkTheme" />
+            android:theme="@style/DarkTheme" >
+            <intent-filter>
+                <action android:name="com.csipsimple.ui.action.PREFS_GLOBAL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.csipsimple.ui.prefs.cupcake.PrefsLoaderActivity"
             android:label=""
@@ -226,7 +240,7 @@ Remove that too fine change trigger
             android:label="@string/prefs_fast"
             android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
-                <action android:name="com.csipsimple.ui.prefs.PrefsFast" />
+                <action android:name="com.csipsimple.ui.action.PREFS_FAST" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -252,7 +266,7 @@ Remove that too fine change trigger
         <receiver
             android:name="com.csipsimple.service.OutgoingCall"
             android:process=":sipStack" >
-            <intent-filter android:priority="10" >
+            <intent-filter android:priority="0" >
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </receiver>

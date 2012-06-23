@@ -100,6 +100,8 @@
     <string name="tsx_t2_timeout">Transaction T2 timeout value.</string>
     <string name="tsx_t4_timeout">Transaction T4 timeout value.</string>
     <string name="tsx_timeout_desc">Leave -1 for default RFC 3261 values</string>
+    <string name="network_route_polling">Check for network changes each (minutes)</string>
+    <string name="network_route_polling_desc">Android 4.0 VPN check workaround. Leave to 0 if not in this case to disable</string>
 
     <!-- Security -->
     <string name="tls">TLS</string>
@@ -179,6 +181,8 @@
     <string name="has_io_queue_desc">Activate Queue for input/output</string>
     <string name="set_audio_generate_tone">Tone hack</string>
     <string name="set_audio_generate_tone_desc">Generate a tone before making calls</string>
+    <string name="restart_aud_on_routing_change">Restart stream when change routing</string>
+    <string name="restart_aud_on_routing_change_desc">Mandatory for Bluetooth when default clock rate is different of 8kHz. Disabling could help to switch faster.</string>
     <string name="band_for_wifi">Band type for wifi</string>
     <string name="band_for_3g">Band type for 3G</string>
     <string name="band_for_gprs">Band type for GPRS</string>

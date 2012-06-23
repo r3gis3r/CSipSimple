@@ -48,8 +48,9 @@ import com.csipsimple.utils.Ringer;
 import com.csipsimple.utils.accessibility.AccessibilityWrapper;
 import com.csipsimple.utils.audio.AudioFocusWrapper;
 import com.csipsimple.utils.bluetooth.BluetoothWrapper;
+import com.csipsimple.utils.bluetooth.BluetoothWrapper.BluetoothChangeListener;
 
-public class MediaManager {
+public class MediaManager implements BluetoothChangeListener {
 	
 	final private static String THIS_FILE = "MediaManager";
 	
@@ -57,6 +58,7 @@ public class MediaManager {
 	private SipService service;
 	private AudioManager audioManager;
 	private Ringer ringer;
+	
 
 	//Locks
 	private WifiLock wifiLock;
@@ -72,6 +74,7 @@ public class MediaManager {
 	private boolean userWantSpeaker = false;
 	private boolean userWantMicrophoneMute = false;
 
+	private boolean restartAudioWhenRoutingChange = true;
 	private Intent mediaStateChangedIntent;
 	
 	//Bluetooth related
@@ -109,7 +112,8 @@ public class MediaManager {
 	public void startService() {
 		if(bluetoothWrapper == null) {
 			bluetoothWrapper = BluetoothWrapper.getInstance(service);
-			bluetoothWrapper.setMediaManager(this);
+			bluetoothWrapper.setBluetoothChangeListener(this);
+			bluetoothWrapper.register();
 		}
 		if(audioFocusWrapper == null) {
 			audioFocusWrapper = AudioFocusWrapper.getInstance();
@@ -121,12 +125,15 @@ public class MediaManager {
 		doFocusAudio = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO);
 		userWantBluetooth = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_BLUETOOTH);
 		userWantSpeaker = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_SPEAKER);
+		restartAudioWhenRoutingChange = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.RESTART_AUDIO_ON_ROUTING_CHANGES);
 	}
 	
 	public void stopService() {
 		Log.i(THIS_FILE, "Remove media manager....");
 		if(bluetoothWrapper != null) {
 			bluetoothWrapper.unregister();
+			bluetoothWrapper.setBluetoothChangeListener(null);
+			bluetoothWrapper = null;
 		}
 	}
 	
@@ -238,10 +245,18 @@ public class MediaManager {
 			Log.d(THIS_FILE, "Set mode audio in call to "+targetMode);
 			
 			if(service.getPrefs().generateForSetCall()) {
+			    boolean needOutOfSilent = (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT);
+			    if(needOutOfSilent) {
+			        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+			    }
 				ToneGenerator toneGenerator = new ToneGenerator( AudioManager.STREAM_VOICE_CALL, 1);
 				toneGenerator.startTone(41 /*ToneGenerator.TONE_CDMA_CONFIRM*/);
 				toneGenerator.stopTone();
 				toneGenerator.release();
+				// Restore silent mode
+				if(needOutOfSilent) {
+                    audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                }
 			}
 			
 			//Set mode
@@ -496,20 +511,24 @@ public class MediaManager {
 	}
 	
 	public void setSpeakerphoneOn(boolean on) throws SameThreadException {
-		if(service != null) {
+		if(service != null && restartAudioWhenRoutingChange) {
 			service.setNoSnd();
 			userWantSpeaker = on;
 			service.setSnd();
+		}else {
+		    audioManager.setSpeakerphoneOn(on);
 		}
 		broadcastMediaChanged();
 	}
 	
 	public void setBluetoothOn(boolean on) throws SameThreadException {
 		Log.d(THIS_FILE, "Set BT "+on);
-		if(service != null) {
-			service.setNoSnd();
+		if(service != null && restartAudioWhenRoutingChange) {
+		    service.setNoSnd();
 			userWantBluetooth = on;
 			service.setSnd();
+		}else {
+		    bluetoothWrapper.setBluetoothOn(on);
 		}
 		broadcastMediaChanged();
 	}
@@ -743,6 +762,12 @@ public class MediaManager {
                 toneGenerator.release();
             }
         }
+    }
+
+    @Override
+    public void onBluetoothStateChanged(int status) {
+        setSoftwareVolume();
+        broadcastMediaChanged();
     }
 
 

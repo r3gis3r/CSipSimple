@@ -247,14 +247,16 @@ public final class SipProfileJson {
         }
 
         StringBuffer contentBuf = new StringBuffer();
-
+        
         try {
             BufferedReader buf;
             String line;
-            buf = new BufferedReader(new FileReader(fileToRestore));
+            FileReader fr = new FileReader(fileToRestore);
+            buf = new BufferedReader(fr);
             while ((line = buf.readLine()) != null) {
                 contentBuf.append(line);
             }
+            fr.close();
         } catch (FileNotFoundException e) {
             Log.e(THIS_FILE, "Error while restoring", e);
         } catch (IOException e) {

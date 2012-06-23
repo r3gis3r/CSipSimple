@@ -108,6 +108,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.PRIVKEY_FILE, "");
 		put(SipConfigManager.TLS_PASSWORD, "");
 		put(SipConfigManager.TLS_METHOD, "0");
+		put(SipConfigManager.NETWORK_ROUTES_POLLING, "0");
 		
 		put(SipConfigManager.DSCP_VAL, "26");
 		put(SipConfigManager.DTMF_MODE, "0");
@@ -172,6 +173,7 @@ public class PreferencesWrapper {
         put(SipConfigManager.AUTO_CONNECT_SPEAKER, false);
         put(SipConfigManager.AUTO_DETECT_SPEAKER, false);
 		put(SipConfigManager.CODECS_PER_BANDWIDTH, true);
+		put(SipConfigManager.RESTART_AUDIO_ON_ROUTING_CHANGES, true);
 		
 		//UI
 		put(SipConfigManager.PREVENT_SCREEN_ROTATION, true);

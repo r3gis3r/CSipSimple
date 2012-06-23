@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <bool name="use_hc_prefs">true</bool>
+    <bool name="use_cupcake_prefs">false</bool>
+
+</resources>

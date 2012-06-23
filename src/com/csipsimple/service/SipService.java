@@ -22,7 +22,6 @@
 package com.csipsimple.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -841,7 +840,7 @@ public class SipService extends Service {
 
 	private WakeLock wakeLock;
 	private WifiLock wifiLock;
-	private BroadcastReceiver deviceStateReceiver;
+	private DynamicReceiver4 deviceStateReceiver;
 	private PreferencesProviderWrapper prefsWrapper;
 	private ServicePhoneStateReceiver phoneConnectivityReceiver;
 	private TelephonyManager telephonyManager;
@@ -1003,6 +1002,7 @@ public class SipService extends Service {
 			    deviceStateReceiver = new DynamicReceiver4(this);
 			}
 			registerReceiver(deviceStateReceiver, intentfilter);
+			deviceStateReceiver.startMonitoring();
 		}
 		// Telephony
 		if (phoneConnectivityReceiver == null) {
@@ -1027,6 +1027,7 @@ public class SipService extends Service {
 		if(deviceStateReceiver != null) {
 			try {
 				Log.d(THIS_FILE, "Stop and unregister device receiver");
+				deviceStateReceiver.stopMonitoring();
 				unregisterReceiver(deviceStateReceiver);
 				deviceStateReceiver = null;
 			} catch (IllegalArgumentException e) {
@@ -1154,7 +1155,6 @@ public class SipService extends Service {
 		pjService.setService(this);
 		
 		if (pjService.tryToLoadStack()) {
-			registerBroadcasts();
 			return true;
 		}
 		return false;
@@ -1205,6 +1205,8 @@ public class SipService extends Service {
 		    // But due to http://code.google.com/p/android/issues/detail?id=21635
 		    // not a good idea
 	        applyComponentEnablingState(true);
+	        
+	        registerBroadcasts();
 			Log.d(THIS_FILE, "Add all accounts");
 			addAllAccounts();
 		}
@@ -1235,11 +1237,11 @@ public class SipService extends Service {
             if(!Compatibility.isCompatible(14)) {
                 applyComponentEnablingState(false);
             }
-            
+
+            unregisterBroadcasts();
 			releaseResources();
 		}
 
-		//unregisterBroadcasts();
 		return canStop;
 	}
 	

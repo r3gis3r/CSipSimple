@@ -28,12 +28,21 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.utils.Log;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DynamicReceiver4 extends BroadcastReceiver {
 
@@ -50,12 +59,15 @@ public class DynamicReceiver4 extends BroadcastReceiver {
     
     
     // Store current state
-    private boolean lastKnownVpnState = false;
     private String mNetworkType;
     private boolean mConnected = false;
-    //private String mLocalIp;
+    private String mRoutes = "";
     
     private boolean hasStartedWifi = false;
+
+
+    private Timer pollingTimer;
+
     
     /**
      * Check if the intent received is a sticky broadcast one 
@@ -86,6 +98,8 @@ public class DynamicReceiver4 extends BroadcastReceiver {
             }
         });
     }
+    
+    
 
     /**
      * Internal receiver that will run on sip executor thread
@@ -120,32 +134,40 @@ public class DynamicReceiver4 extends BroadcastReceiver {
         } else if (action.equals(SipManager.ACTION_SIP_REQUEST_RESTART)){
             service.restartSipStack();
         } else if(action.equals(ACTION_VPN_CONNECTIVITY)) {
-            String connection_state = intent.getSerializableExtra(BROADCAST_CONNECTION_STATE).toString();
-            boolean currentVpnState = connection_state.equalsIgnoreCase("CONNECTED");
-            if(lastKnownVpnState != currentVpnState) {
-                service.restartSipStack();
-                lastKnownVpnState = currentVpnState;
-            }
+            onConnectivityChanged(null, isSticky);
         }
     }
     
-    /**
-     * Try to determine local IP of the phone
-     * @return the ip address of the phone.
-     */
-    /*
-    private String determineLocalIp() {
+
+    private static final String PROC_NET_ROUTE = "/proc/net/route";
+    private String dumpRoutes() {
+        String routes = "";
+        FileReader fr = null;
         try {
-            DatagramSocket s = new DatagramSocket();
-            s.connect(InetAddress.getByName("192.168.1.1"), 80);
-            return s.getLocalAddress().getHostAddress();
+            fr = new FileReader(PROC_NET_ROUTE);
+            if(fr != null) {
+                StringBuffer contentBuf = new StringBuffer();
+                BufferedReader buf = new BufferedReader(fr);
+                String line;
+                while ((line = buf.readLine()) != null) {
+                    contentBuf.append(line);
+                }
+                routes = contentBuf.toString();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(THIS_FILE, "No route file found routes", e);
         } catch (IOException e) {
-            Log.d(THIS_FILE, "determineLocalIp()", e);
-            // dont do anything; there should be a connectivity change going
-            return null;
+            Log.e(THIS_FILE, "Unable to read route file", e);
+        }finally {
+            try {
+                fr.close();
+            } catch (IOException e) {
+                Log.e(THIS_FILE, "Unable to close route file", e);
+            }
         }
+        
+        return routes;
     }
-    */
 
     
     /**
@@ -168,35 +190,79 @@ public class DynamicReceiver4 extends BroadcastReceiver {
         }
 
         boolean connected = (info != null && info.isConnected() && service.isConnectivityValid());
-        
         String networkType = connected ? info.getTypeName() : "null";
-
+        String currentRoutes = dumpRoutes();
+        String oldRoutes;
+        synchronized (mRoutes) {
+            oldRoutes = mRoutes;
+        }
+        
         // Ignore the event if the current active network is not changed.
-        if (connected == mConnected && networkType.equals(mNetworkType)) {
+        if (connected == mConnected && networkType.equals(mNetworkType) && currentRoutes.equals(oldRoutes)) {
             return;
         }
-        
-        Log.d(THIS_FILE, "onConnectivityChanged(): " + mNetworkType +
-                    " -> " + networkType);
-        
-
-        // Now process the event
-        if (mConnected) {
-        //    mLocalIp = null;
+        if(Log.getLogLevel() >= 4) {
+            if(!networkType.equals(mNetworkType)) {
+                Log.d(THIS_FILE, "onConnectivityChanged(): " + mNetworkType +
+                            " -> " + networkType);
+            }else {
+                Log.d(THIS_FILE, "Route changed : "+ mRoutes+" -> "+currentRoutes);
+            }
         }
-
+        // Now process the event
+        synchronized (mRoutes) {
+            mRoutes = currentRoutes;
+        }
         mConnected = connected;
         mNetworkType = networkType;
 
         if(!isSticky) {
             if (connected) {
-            //    mLocalIp = determineLocalIp();
                 service.restartSipStack();
             } else {
+                Log.d(THIS_FILE, "We are not connected, stop");
                 if(service.stopSipStack()) {
                     service.stopSelf();
                 }
             }
+        }
+    }
+    
+    
+    
+    public void startMonitoring() {
+        int pollingIntervalMin = service.getPrefs().getPreferenceIntegerValue(SipConfigManager.NETWORK_ROUTES_POLLING);
+
+        Log.d(THIS_FILE, "Start monitoring of route file ? " + pollingIntervalMin);
+        if(pollingIntervalMin > 0) {
+            pollingTimer = new Timer("RouteChangeMonitor", true);
+            pollingTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    String currentRoutes = dumpRoutes();
+                    String oldRoutes;
+                    synchronized (mRoutes) {
+                        oldRoutes = mRoutes;
+                    }
+                    if(!currentRoutes.equalsIgnoreCase(oldRoutes)) {
+                        Log.d(THIS_FILE, "Route changed");
+                        // Run the handler in SipServiceExecutor to be protected by wake lock
+                        service.getExecutor().execute(new SipRunnable()  {
+                            public void doRun() throws SameThreadException {
+                                onConnectivityChanged(null, false);
+                            }
+                        });
+                    }
+                }
+            }, new Date(), pollingIntervalMin * 60 * 1000);
+        }
+    }
+    
+    public void stopMonitoring() {
+        if(pollingTimer != null) {
+            pollingTimer.cancel();
+            pollingTimer.purge();
+            pollingTimer = null;
         }
     }
 }

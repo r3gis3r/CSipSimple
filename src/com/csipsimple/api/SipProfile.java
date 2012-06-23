@@ -545,7 +545,7 @@ public class SipProfile implements Parcelable {
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a306e4641988606f1ef0993e398ff98e7"
      * >Pjsip documentation</a>
      * 
-     * @see Boolean
+     * @see Integer
      */
     public static final String FIELD_USE_RFC5626 = "use_rfc5626";
     /**
@@ -1251,7 +1251,7 @@ public class SipProfile implements Parcelable {
         
         args.put(FIELD_RFC5626_INSTANCE_ID, rfc5626_instance_id);
         args.put(FIELD_RFC5626_REG_ID, rfc5626_reg_id);
-        args.put(FIELD_USE_RFC5626, use_rfc5626);
+        args.put(FIELD_USE_RFC5626, use_rfc5626 ? 1 : 0);
 
         args.put(FIELD_ANDROID_GROUP, android_group);
 

@@ -21,10 +21,12 @@
 
 package com.csipsimple.utils.clipboard;
 
+import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 
+@TargetApi(11)
 public class Clipboard11 extends ClipboardWrapper {
 
     private ClipboardManager clipboardManager;

@@ -34,6 +34,7 @@ import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.ExtraPlugins;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.NightlyUpdater;
+import com.csipsimple.utils.PhoneCapabilityTester;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.RewriterPlugin;
 
@@ -105,6 +106,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
             CallHandlerPlugin.clearAvailableCallHandlers();
             RewriterPlugin.clearAvailableRewriters();
             ExtraPlugins.clearDynPlugins();
+            PhoneCapabilityTester.deinit();
         } else if (APPLY_NIGHTLY_UPLOAD.equals(intentAction)) {
             NightlyUpdater nu = new NightlyUpdater(context);
             nu.applyUpdate(intent);

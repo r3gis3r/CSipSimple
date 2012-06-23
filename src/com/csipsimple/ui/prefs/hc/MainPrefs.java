@@ -31,7 +31,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
-import com.csipsimple.ui.prefs.PrefsFast;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.ui.prefs.PrefsFilters;
 import com.csipsimple.ui.prefs.PrefsLogic;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -49,7 +49,7 @@ public class MainPrefs extends SherlockPreferenceActivity {
         for(Header header : target) {
             // Well not the cleanest way to do that...
             if(header.iconRes == R.drawable.ic_prefs_fast) {
-                header.intent = new Intent(this, PrefsFast.class);
+                header.intent = new Intent(SipManager.ACTION_UI_PREFS_FAST);
             }else if(header.iconRes == R.drawable.ic_prefs_filter) {
                 header.intent = new Intent(this, PrefsFilters.class);
             }

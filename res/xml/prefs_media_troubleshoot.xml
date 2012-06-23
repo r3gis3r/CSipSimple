@@ -69,6 +69,13 @@
         android:key="sip_audio_mode"
         android:summary="@string/sip_audio_mode_desc"
         android:title="@string/sip_audio_mode" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="restart_aud_on_routing_change"
+        android:summary="@string/restart_aud_on_routing_change_desc"
+        android:title="@string/restart_aud_on_routing_change" />
+
     <ListPreference
         android:defaultValue="0"
         android:key="audio_implementation"

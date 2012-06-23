@@ -84,6 +84,12 @@
             android:key="override_nameserver"
             android:summary="@string/override_nameserver_desc"
             android:title="@string/override_nameserver" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="network_route_polling"
+            android:numeric="signed"
+            android:summary="@string/network_route_polling_desc"
+            android:title="@string/network_route_polling" />
 
         <CheckBoxPreference
             android:defaultValue="true"
