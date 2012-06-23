@@ -23,13 +23,13 @@ package com.csipsimple.wizards;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
@@ -41,8 +41,6 @@ import java.util.List;
 import java.util.Map;
 
 public class WizardChooser extends SherlockExpandableListActivity {
-	private String[] childFrom;
-	private int[] childTo;
 	private ArrayList<ArrayList<Map<String, Object>>> childDatas;
 
 	// private static final String THIS_FILE = "SIP ADD ACC W";
@@ -56,8 +54,6 @@ public class WizardChooser extends SherlockExpandableListActivity {
 		Context context = getApplicationContext();
 		
 		// Now build the list adapter
-		childFrom = new String[] { WizardUtils.LABEL, WizardUtils.ICON };
-		childTo = new int[] { android.R.id.text1, R.id.icon };
 		childDatas = WizardUtils.getWizardsGroupedList();
 		
 		WizardsListAdapter adapter = new WizardsListAdapter(
@@ -70,7 +66,7 @@ public class WizardChooser extends SherlockExpandableListActivity {
 				// Child
                 childDatas,
 				R.layout.wizard_row,
-				childFrom, childTo );
+				new String[] { WizardUtils.LABEL }, new int[] { android.R.id.text1 } );
 		
 		
 		setListAdapter(adapter);
@@ -110,29 +106,17 @@ public class WizardChooser extends SherlockExpandableListActivity {
 		}
 		
 		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
-			View v;
-			if (convertView == null) {
-				v = newChildView(isLastChild, parent);
-			} else {
-				v = convertView;
-			}
-			bindView(v, childDatas.get(groupPosition).get(childPosition), childFrom, childTo, groupPosition, childPosition);
+			View v = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
+			bindView(v, childDatas.get(groupPosition).get(childPosition), groupPosition, childPosition);
 			return v;
 		}
-
-
-		private void bindView(View view, Map<String, ?> data, String[] from, int[] to, int groupPosition, int childPosition) {
+		
+		private void bindView(View view, Map<String, ?> data, int groupPosition, int childPosition) {
 			// Apply TextViews
-			TextView v = (TextView) view.findViewById(to[0]);
-			if (v != null) {
-				v.setText((String) data.get(from[0]));
-			}
-			// Apply ImageView
-			ImageView imgV = (ImageView) view.findViewById(to[1]);
-			if (imgV != null) {
-				imgV.setImageResource((Integer) data.get(from[1]));
-			}
+			TextView v = (TextView) view;
+			Drawable d = getResources().getDrawable((Integer) data.get( WizardUtils.ICON ));
+			v.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+//			v.setCompoundDrawables(d, null, null, null);
 		}
 	}
 

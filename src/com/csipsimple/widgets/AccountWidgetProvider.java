@@ -39,9 +39,8 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.AccountListUtils;
-import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.AccountListUtils.AccountStatusDisplay;
+import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
 
 public class AccountWidgetProvider extends AppWidgetProvider {
@@ -102,9 +101,7 @@ public class AccountWidgetProvider extends AppWidgetProvider {
     public static void updateWidget(Context context) {
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         if(THIS_APPWIDGET == null) {
-            String pkg = PreferencesProviderWrapper.getCurrentPackageInfos(context).applicationInfo.packageName;
-            THIS_APPWIDGET = new ComponentName(pkg,
-                            "com.csipsimple.widgets.AccountWidgetProvider");
+            THIS_APPWIDGET = new ComponentName(context, AccountWidgetProvider.class);
         }
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(THIS_APPWIDGET);
         for (int widgetId : appWidgetIds) {

@@ -19,27 +19,15 @@
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
+    android:drawablePadding="10dip"
+    android:gravity="center_vertical"
     android:paddingBottom="6dip"
-    android:paddingLeft="6dip"
+    android:paddingLeft="10dip"
     android:paddingRight="6dip"
-    android:paddingTop="6dip" >
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="48dip"
-        android:layout_height="48dip"
-        android:contentDescription="@string/empty_description" />
-
-    <TextView
-        android:id="@android:id/text1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:paddingLeft="10dip"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold" />
-
-</LinearLayout>
+    android:paddingTop="6dip"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:textStyle="bold" />
