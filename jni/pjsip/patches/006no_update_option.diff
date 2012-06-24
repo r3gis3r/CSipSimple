@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-06-12 15:07:17.529417994 +0200
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-06-12 15:07:38.321417123 +0200
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-06-25 00:36:30.502323447 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-06-25 00:37:04.190322038 +0200
 @@ -23,6 +23,9 @@
  
  #define THIS_FILE		"pjsua_call.c"
@@ -12,7 +12,7 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c
  
  /* Retry interval of sending re-INVITE for locking a codec when remote
   * SDP answer contains multiple codec, in milliseconds.
-@@ -2843,7 +2846,11 @@
+@@ -3014,7 +3017,11 @@
  					      PJSIP_H_ALLOW,
  					      NULL, &STR_UPDATE) ==
  						PJSIP_DIALOG_CAP_SUPPORTED;
