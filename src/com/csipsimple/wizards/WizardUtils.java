@@ -678,6 +678,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_vitelity, 9, 
                     new Locale[] {Locale.US}, false, false, 
                     Vitelity.class));
+            WIZARDS_DICT.put("FRITZBOX", new WizardInfo("FRITZBOX", "Fritz!Box", 
+                    R.drawable.ic_wizard_fritzbox, 9, 
+                    new Locale[] {Locale.GERMANY}, false, false, 
+                    Fritzbox.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
