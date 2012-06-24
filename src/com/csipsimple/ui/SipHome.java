@@ -60,6 +60,7 @@ import com.csipsimple.ui.help.Help;
 import com.csipsimple.ui.messages.ConversationsListFragment;
 import com.csipsimple.ui.warnings.WarningFragment;
 import com.csipsimple.ui.warnings.WarningUtils;
+import com.csipsimple.ui.warnings.WarningUtils.OnWarningChanged;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.NightlyUpdater;
@@ -72,7 +73,7 @@ import com.csipsimple.wizards.WizardUtils.WizardInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SipHome extends SherlockFragmentActivity {
+public class SipHome extends SherlockFragmentActivity implements OnWarningChanged {
     public static final int ACCOUNTS_MENU = Menu.FIRST + 1;
     public static final int PARAMS_MENU = Menu.FIRST + 2;
     public static final int CLOSE_MENU = Menu.FIRST + 3;
@@ -423,6 +424,7 @@ public class SipHome extends SherlockFragmentActivity {
             mWarningFragment = (WarningFragment) fragment;
             synchronized (warningList) {
                 mWarningFragment.setWarningList(warningList);
+                mWarningFragment.setOnWarningChangedListener(this);
             }
             
         }
@@ -773,6 +775,7 @@ public class SipHome extends SherlockFragmentActivity {
         }
         if(mWarningFragment != null) {
             mWarningFragment.setWarningList(warnList);
+            mWarningFragment.setOnWarningChangedListener(this);
         }
         if(warnList.size() > 0) {
             // Show warning tab if any to display
@@ -801,5 +804,10 @@ public class SipHome extends SherlockFragmentActivity {
                 warningTabfadeAnim.end();
             }
         }
+    }
+
+    @Override
+    public void onWarningRemoved(String warnKey) {
+        applyWarning(warnKey, false);
     }
 }

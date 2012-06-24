@@ -359,6 +359,7 @@ public class PjSipService {
                 cfg.setThread_cnt(0);
                 cfg.setUse_srtp(getUseSrtp());
                 cfg.setSrtp_secure_signaling(0);
+                cfg.setNat_type_in_sdp(0);
 
                 pjsip_timer_setting timerSetting = cfg.getTimer_setting();
                 int minSe = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TIMER_MIN_SE);

@@ -27,20 +27,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.csipsimple.R;
+import com.csipsimple.ui.warnings.WarningUtils.OnWarningChanged;
+import com.csipsimple.ui.warnings.WarningUtils.WarningBlockView;
 import com.csipsimple.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class WarningFragment extends SherlockFragment {
+public class WarningFragment extends SherlockFragment implements OnWarningChanged {
 
     private static final String THIS_FILE = "WarningFragment";
     private List<String> warnList = new ArrayList<String>();
-    private LinearLayout viewContainer = null;
+    private ViewGroup viewContainer = null;
     
     
     public void setWarningList(List<String> list) {
@@ -52,9 +54,10 @@ public class WarningFragment extends SherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        viewContainer = new LinearLayout(getActivity());
+        View v = inflater.inflate(R.layout.warning_container, container,false);
+        viewContainer = (ViewGroup) v.findViewById(R.id.container); 
         bindView();
-        return viewContainer;
+        return v;
     }
     
     private void bindView() {
@@ -62,11 +65,28 @@ public class WarningFragment extends SherlockFragment {
             viewContainer.removeAllViews();
             for(String warn : warnList) {
                 Log.d(THIS_FILE, "Add " + warn + " warning");
-                TextView tv = new TextView(getActivity());
-                tv.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-                tv.setText(warn);
-                viewContainer.addView(tv);
+                WarningBlockView v = WarningUtils.getViewForWarning(getActivity(), warn);
+                if(v != null) {
+                    v.setOnWarnChangedListener(this);
+                    v.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                    viewContainer.addView(v);
+                }
             }
         }
+    }
+    
+    private OnWarningChanged onWChangedListener;
+
+    @Override
+    public void onWarningRemoved(String warnKey) {
+        if(onWChangedListener != null) {
+            onWChangedListener.onWarningRemoved(warnKey);
+        }
+    }
+    /**
+     * @param onWChangedListener the onWChangedListener to set
+     */
+    public void setOnWarningChangedListener(OnWarningChanged onWChangedListener) {
+        this.onWChangedListener = onWChangedListener;
     }
 }

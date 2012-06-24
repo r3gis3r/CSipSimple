@@ -21,6 +21,9 @@
 
 package com.csipsimple.wizards.impl;
 
+import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.utils.PreferencesWrapper;
+
 
 public class NeufTalk extends SimpleImplementation {
 
@@ -32,4 +35,10 @@ public class NeufTalk extends SimpleImplementation {
 	protected String getDefaultName() {
 		return "NeufTalk";
 	}
+	
+    @Override
+    public void setDefaultParams(PreferencesWrapper prefs) {
+        super.setDefaultParams(prefs);
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
+    }
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+
+    <string name="warn_ignore">Ignore</string>
+    <!-- STUN enabled -->
+    <string name="warn_no_stun">STUN not enabled</string>
+    <string name="warn_no_stun_description"> If you have no incoming sound while in call, it probably due to the fact you are under a NATed network and your SIP provider doesn\'t manage that.\n 
+       	In order to workaround this case, it\'s sometimes useful to enable the STUN option.\n
+       	If you have no incoming audio problem ignore this warning.\n
+       	If you are in a country where public network is separated from other public networks, you may have to change the STUN server.\n
+       	Use of STUN consume more battery.</string>
+    <string name="warn_no_stun_enable">Turn STUN on</string>
+
+    <!-- Vpn on android 4.0 -->
+    <string name="warn_vpn_ics">VPN changes for 4.0</string>
+    <string name="warn_vpn_ics_description"> You are running android 4.0 which doesn\'t notify about VPN status.\n
+        A possible workaround is to check the route at regular interval.</string>
+    <string name="warn_vpn_ics_1">Check each 1 minute</string>
+    <string name="warn_vpn_ics_5">Check each 5 minutes</string>
+
+    <!-- Privileged intent -->
+    <string name="warn_priv_int">Dialer integration</string>
+    <string name="warn_priv_int_description">It appears that other applications installed on the phone tries to integrate to android too.\n
+	    They do that a way that doesn\'t allow clever features like the one provided by us such as Filtering/Rewriting rules.\n\n
+	    You have two choice : \n
+	    Continue using our integration and install plugins to support other applications. (This will allow to apply filtering/rewriting rules on these applications too). \n
+	    To do so, choose to always use mobile dialer instead of other applications using the checkbox when you\'ll make your next call.</string>
+    <string name="warn_priv_int_description2">Second solution is to make the application integrate the same non clever way than other application.\n
+	    This is an option supported by the application but discouraged because it\'s way less clever and provide a worse user experience.</string>
+    <string name="warn_priv_int_register">Use non clever integration</string>
+
+</resources>

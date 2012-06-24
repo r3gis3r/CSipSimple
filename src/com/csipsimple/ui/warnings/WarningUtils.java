@@ -23,7 +23,13 @@ package com.csipsimple.ui.warnings;
 
 import android.content.Context;
 import android.content.pm.ResolveInfo;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 
+import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.PhoneCapabilityTester;
@@ -34,9 +40,30 @@ import java.util.List;
 public class WarningUtils {
     
     
+    public static WarningBlockView getViewForWarning(Context ctxt, String warning) {
+        
+        if(warning.equals(WARNING_NO_STUN)) {
+            return new WarningNoStun(ctxt);
+        }else if(warning.equals(WARNING_VPN_ICS)) {
+            return new WarningVpnIcs(ctxt);
+        }else if(warning.equals(WARNING_PRIVILEGED_INTENT)) {
+            return new WarningPrivilegedIntent(ctxt);
+        }
+        /*
+        // For now default is to display warning simply
+        TextView tv = new TextView(ctxt);
+        tv.setText(warning);
+        return tv;
+        */
+        return null;
+    }
+    
     // Privileged intent
     public static String WARNING_PRIVILEGED_INTENT = "warn_privileged_intent";
     public static boolean shouldWarnPrivilegedIntent(Context ctxt, PreferencesProviderWrapper prefProviderWrapper) {
+        if(prefProviderWrapper.getPreferenceBooleanValue(getIgnoreKey(WARNING_PRIVILEGED_INTENT), false)) {
+            return false;
+        }
         if(prefProviderWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, false)) {
 
             List<ResolveInfo> privilegedActs = PhoneCapabilityTester.resolveActivitiesForPriviledgedCall(ctxt);
@@ -64,9 +91,14 @@ public class WarningUtils {
         return false;
     }
     
+    
+    
     // Stun
     public static String WARNING_NO_STUN = "warn_no_stun";
     public static boolean shouldWarnNoStun(PreferencesProviderWrapper prefProviderWrapper) {
+        if(prefProviderWrapper.getPreferenceBooleanValue(getIgnoreKey(WARNING_NO_STUN), false)) {
+            return false;
+        }
         if(!prefProviderWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_STUN) 
                 && prefProviderWrapper.getPreferenceBooleanValue(SipConfigManager.USE_3G_OUT)) {
             return true;
@@ -79,6 +111,9 @@ public class WarningUtils {
     // Vpn for ICS
     public static String WARNING_VPN_ICS = "warn_vpn_ics";
     public static boolean shouldWarnVpnIcs(PreferencesProviderWrapper prefProviderWrapper) {
+        if(prefProviderWrapper.getPreferenceBooleanValue(getIgnoreKey(WARNING_VPN_ICS), false)) {
+            return false;
+        }
         if(Compatibility.isCompatible(14) && prefProviderWrapper.getPreferenceIntegerValue(SipConfigManager.NETWORK_ROUTES_POLLING) == 0) {
             // services/java/com/android/server/connectivity/Vpn.java
             String[] daemons = new String[] {"racoon", "mtpd"};
@@ -90,6 +125,71 @@ public class WarningUtils {
             }
         }
         return false;
+    }
+    public static String getIgnoreKey(String warnKey) {
+        return "ignore_" + warnKey;
+    }
+    
+    public interface OnWarningChanged {
+        void onWarningRemoved(String warnKey);
+    }
+    
+    public static abstract class WarningBlockView extends RelativeLayout implements OnClickListener {
+        
+
+        protected OnWarningChanged onWarnChangedListener = null;
+        
+        public WarningBlockView(Context context) {
+            this(context, null);
+        }
+        public WarningBlockView(Context context, AttributeSet attrs) {
+            this(context, attrs, 0);
+        }
+        public WarningBlockView(Context context, AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+            LayoutInflater inflater = LayoutInflater.from(context);
+            inflater.inflate(getLayout(), this, true);
+            bindView();
+        }
+        
+        /**
+         * Get corresponding layout to inflate
+         * @return the layout id to inflate.
+         */
+        protected abstract int getLayout();
+        
+        /**
+         * Get the related warning key
+         * @return
+         */
+        protected abstract String getWarningKey();
+        
+        /**
+         * Bind the view items
+         */
+        protected void bindView() {
+            
+        }
+
+        /**
+         * @param onWarnChangedListener the onWarnChangedListener to set
+         */
+        public void setOnWarnChangedListener(OnWarningChanged onWarnChangedListener) {
+            this.onWarnChangedListener = onWarnChangedListener;
+        }
+        
+
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            if(id == R.id.warn_ignore) {
+                SipConfigManager.setPreferenceBooleanValue(getContext(), WarningUtils.getIgnoreKey(getWarningKey()), true);
+                if(onWarnChangedListener != null) {
+                    onWarnChangedListener.onWarningRemoved(getWarningKey());
+                }
+            }
+        }
+
     }
     
 }
