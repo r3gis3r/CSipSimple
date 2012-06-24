@@ -96,8 +96,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/button_with_counter"
-            android:autoText="true"
-            android:capitalize="sentences"
             android:hint="@string/type_to_compose_text_enter_to_send"
             android:imeOptions="actionSend|flagNoEnterAction"
             android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine"

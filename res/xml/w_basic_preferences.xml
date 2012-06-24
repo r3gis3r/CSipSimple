@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 	
 	This file is part of CSipSimple.
@@ -16,27 +16,36 @@
 
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
- -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <EditTextPreference
+        android:dialogMessage="@string/w_common_display_name_desc"
+        android:key="display_name"
+        android:singleLine="true"
+        android:summary="@string/w_common_display_name_desc"
+        android:title="@string/w_common_display_name" />
+    <EditTextPreference
+        android:dialogMessage="@string/w_basic_username_desc"
+        android:inputType="text|textNoSuggestions"
+        android:key="username"
+        android:singleLine="true"
+        android:summary="@string/w_basic_username_desc"
+        android:title="@string/w_basic_username" />
+    <EditTextPreference
+        android:dialogMessage="@string/w_common_server_desc"
+        android:inputType="text|textNoSuggestions"
+        android:key="server"
+        android:singleLine="true"
+        android:summary="@string/w_common_server_desc"
+        android:title="@string/w_common_server" />
 
-		<EditTextPreference android:key="display_name"
-			android:singleLine="true"
-			android:title="@string/w_common_display_name"></EditTextPreference>
-
-		<EditTextPreference android:key="username"
-			android:singleLine="true"
-			android:title="@string/w_basic_username"></EditTextPreference>
-			
-		<EditTextPreference android:key="server"
-			android:singleLine="true"
-			android:title="@string/w_common_server"></EditTextPreference>
-			
-		<com.csipsimple.widgets.PasswordPreference android:key="password"
-			android:singleLine="true"
-			android:password="true"
-			android:title="@string/w_basic_password"></com.csipsimple.widgets.PasswordPreference>
-
-
+    <com.csipsimple.widgets.PasswordPreference
+        android:dialogMessage="@string/w_basic_password_desc"
+        android:key="password"
+        android:password="true"
+        android:singleLine="true"
+        android:summary="@string/w_basic_password_desc"
+        android:title="@string/w_basic_password" />
 
 </PreferenceScreen>

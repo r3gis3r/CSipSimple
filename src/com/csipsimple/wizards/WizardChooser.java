@@ -23,7 +23,6 @@ package com.csipsimple.wizards;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,10 +112,7 @@ public class WizardChooser extends SherlockExpandableListActivity {
 		
 		private void bindView(View view, Map<String, ?> data, int groupPosition, int childPosition) {
 			// Apply TextViews
-			TextView v = (TextView) view;
-			Drawable d = getResources().getDrawable((Integer) data.get( WizardUtils.ICON ));
-			v.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
-//			v.setCompoundDrawables(d, null, null, null);
+			((TextView) view).setCompoundDrawablesWithIntrinsicBounds((Integer) data.get( WizardUtils.ICON ), 0, 0, 0);
 		}
 	}
 

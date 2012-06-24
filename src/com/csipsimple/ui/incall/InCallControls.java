@@ -399,6 +399,11 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 			dispatchTriggerEvent(OnTriggerListener.CLEAR_CALL);
 		} else if (id == R.id.dialpadButton) {
 			dispatchTriggerEvent(isDialpadOn ? OnTriggerListener.DIALPAD_OFF : OnTriggerListener.DIALPAD_ON);
+			((Button) v).setCompoundDrawablesWithIntrinsicBounds(0, 
+			        isDialpadOn ? 
+			                R.drawable.ic_in_call_touch_dialpad :
+			                R.drawable.ic_in_call_touch_dialpad_close, 
+			        0, 0);
 			isDialpadOn = !isDialpadOn;
 		} else if (id == R.id.bluetoothButton) {
 			if (((ToggleButton) v).isChecked()) {

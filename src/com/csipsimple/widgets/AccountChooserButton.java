@@ -155,7 +155,9 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         statusObserver = new AccountStatusContentObserver(mHandler);
         getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
                 true, statusObserver);
-        updateRegistration();
+        if(!isInEditMode()) {
+            updateRegistration();
+        }
     }
 
     @Override

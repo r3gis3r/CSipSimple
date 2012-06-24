@@ -85,13 +85,18 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
             }
         });
         dialUser.addTextChangedListener(this);
-
+        
+        if(isInEditMode()) {
+            // Don't bind cursor in this case
+            return;
+        }
         Cursor c = ContactsWrapper.getInstance().getContactsPhones(context);
         contactsAdapter = new ContactAdapter(context, c);
         completeList.setAdapter(contactsAdapter);
         completeList.setOnItemClickListener(this);
 
         dialUser.setAdapter(autoCompleteAdapter);
+        
 
     }
 
