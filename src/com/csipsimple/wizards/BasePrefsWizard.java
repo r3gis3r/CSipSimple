@@ -312,7 +312,6 @@ public class BasePrefsWizard extends GenericPrefs {
 			Intent intent = new Intent(SipManager.ACTION_SIP_REQUEST_RESTART);
 			sendBroadcast(intent);
 		}
-		
 	}
 
 	@Override

@@ -1,10 +1,10 @@
 Index: webrtc/sources/system_wrappers/source/Android.mk
 ===================================================================
---- webrtc.orig/sources/system_wrappers/source/Android.mk	2012-05-05 12:54:35.398284261 +0200
-+++ webrtc/sources/system_wrappers/source/Android.mk	2012-05-05 12:54:58.306284748 +0200
-@@ -18,6 +18,7 @@
- LOCAL_CPP_EXTENSION := .cc
- LOCAL_SRC_FILES := \
+--- webrtc.orig/sources/system_wrappers/source/Android.mk	2012-06-25 11:16:56.000000000 +0200
++++ webrtc/sources/system_wrappers/source/Android.mk	2012-06-25 11:37:27.051155227 +0200
+@@ -20,6 +20,7 @@
+     android/cpu-features.c \
+     cpu_features_android.c \
      map.cc \
 +    rw_lock_generic.cc \
      sort.cc \
@@ -12,8 +12,8 @@ Index: webrtc/sources/system_wrappers/source/Android.mk
      atomic32_posix.cc \
 Index: webrtc/sources/system_wrappers/source/rw_lock.cc
 ===================================================================
---- webrtc.orig/sources/system_wrappers/source/rw_lock.cc	2012-05-05 12:54:23.326284004 +0200
-+++ webrtc/sources/system_wrappers/source/rw_lock.cc	2012-05-05 12:54:58.306284748 +0200
+--- webrtc.orig/sources/system_wrappers/source/rw_lock.cc	2012-06-25 11:16:01.083209010 +0200
++++ webrtc/sources/system_wrappers/source/rw_lock.cc	2012-06-25 11:37:27.051155227 +0200
 @@ -14,6 +14,9 @@
  
  #if defined(_WIN32)

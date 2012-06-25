@@ -113,6 +113,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     // Screen wake lock for incoming call
     private WakeLock wakeLock;
+    // Screen wake lock for video
+    private WakeLock videoWakeLock;
 
     private Dialpad dialPad;
     private LinearLayout dialPadContainer;
@@ -174,7 +176,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
                 | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,
                 "com.csipsimple.onIncomingCall");
-
+        
+        
         takeKeyEvents(true);
 
         // remoteContact = (TextView) findViewById(R.id.remoteContact);
@@ -239,6 +242,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 lp.gravity = Gravity.TOP | Gravity.LEFT;
                 cameraPreview.setVisibility(View.GONE);
                 mainFrame.addView(cameraPreview, lp);
+
+                videoWakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "com.csipsimple.videoCall");
                 
             }
         }
@@ -267,13 +272,20 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         xferTargetRect = null;
         dialFeedback.resume();
         handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
-
+        
+        if(videoWakeLock != null) {
+            videoWakeLock.acquire();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         dialFeedback.pause();
+
+        if(videoWakeLock != null && videoWakeLock.isHeld()) {
+            videoWakeLock.release();
+        }
     }
 
     @Override

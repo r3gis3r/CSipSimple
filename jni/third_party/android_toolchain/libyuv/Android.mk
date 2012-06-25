@@ -13,7 +13,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/include $(LOCAL_PATH)/source
 
 LOCAL_SRC_FILES := source/compare.cc \
 	source/convert.cc \
-	source/convertfrom.cc \
+	source/convert_from.cc \
 	source/cpu_id.cc \
 	source/format_conversion.cc \
 	source/planar_functions.cc \
