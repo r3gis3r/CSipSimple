@@ -26,7 +26,7 @@
 #define __TRACE 1
 
 #include "pj_loader.h"
-#include "pjsua_jni_addons.h"
+#include "csipsimple_internal.h"
 
 #include "video_capture_factory.h"
 

@@ -22,6 +22,7 @@
 package com.csipsimple.wizards.impl;
 
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
 
@@ -34,6 +35,13 @@ public class NeufTalk extends SimpleImplementation {
 	@Override
 	protected String getDefaultName() {
 		return "NeufTalk";
+	}
+	
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+	    acc.allow_contact_rewrite = false;
+	    return acc;
 	}
 	
     @Override
