@@ -376,7 +376,7 @@ Remove that too fine change trigger
         <activity
             android:name="com.csipsimple.ui.incall.InCallActivity"
             android:allowTaskReparenting="true"
-            android:configChanges="orientation"
+            android:configChanges="keyboardHidden|orientation"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:process=":sipStack"

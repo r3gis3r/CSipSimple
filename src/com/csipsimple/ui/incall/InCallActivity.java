@@ -59,6 +59,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLayoutChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -99,7 +100,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener,
-        IOnLeftRightChoice, ProximityDirector {
+        IOnLeftRightChoice, ProximityDirector, OnLayoutChangeListener {
     private final static String THIS_FILE = "SIP CALL HANDLER";
     private final static int DRAGGING_DELAY = 150;
     
@@ -176,6 +177,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
                 | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,
                 "com.csipsimple.onIncomingCall");
+        wakeLock.setReferenceCounted(false);
         
         
         takeKeyEvents(true);
@@ -232,21 +234,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         if (quitTimer == null) {
             quitTimer = new Timer("Quit-timer");
         }
-        
-        // Video stuff
-        if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
-            if(cameraPreview == null) {
-                // TODO : make visible only if one of calls is video one
-                cameraPreview = ViERenderer.CreateLocalRenderer(this);
-                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(100, 100);
-                lp.gravity = Gravity.TOP | Gravity.LEFT;
-                cameraPreview.setVisibility(View.GONE);
-                mainFrame.addView(cameraPreview, lp);
 
-                videoWakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "com.csipsimple.videoCall");
-                
-            }
-        }
+        attachVideoPreview();
+        mainFrame.addOnLayoutChangeListener(this);
         
         useAutoDetectSpeaker = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_DETECT_SPEAKER);
         
@@ -259,6 +249,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     protected void onStart() {
         Log.d(THIS_FILE, "Start in call");
         super.onStart();
+        
         keyguardManager.unlock();
     }
 
@@ -271,21 +262,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         answerTargetRect = null;
         xferTargetRect = null;
         dialFeedback.resume();
+        
+        
         handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
         
-        if(videoWakeLock != null) {
-            videoWakeLock.acquire();
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         dialFeedback.pause();
-
-        if(videoWakeLock != null && videoWakeLock.isHeld()) {
-            videoWakeLock.release();
-        }
     }
 
     @Override
@@ -325,11 +311,49 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         } catch (IllegalArgumentException e) {
             // That's the case if not registered (early quit)
         }
-
+         
         // Remove badges
+        for(InCallInfo badge : badges.values()) {
+            callInfoPanel.removeView(badge);
+            badge.terminate();
+        }
         badges.clear();
-
+        detachVideoPreview();
+        
         super.onDestroy();
+    }
+    
+    @SuppressWarnings("deprecation")
+    private void attachVideoPreview() {
+
+        // Video stuff
+        if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
+            if(cameraPreview == null) {
+                Log.d(THIS_FILE, "Create Local Renderer");
+                cameraPreview = ViERenderer.CreateLocalRenderer(this);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(100, 100);
+                lp.gravity = Gravity.TOP | Gravity.LEFT;
+                cameraPreview.setVisibility(View.GONE);
+                mainFrame.addView(cameraPreview, lp);
+
+                videoWakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "com.csipsimple.videoCall");
+                videoWakeLock.setReferenceCounted(false);
+                
+            }else {
+                Log.d(THIS_FILE, "NO NEED TO Create Local Renderer");
+            }
+        }
+
+        if(videoWakeLock != null && videoWakeLock.isHeld()) {
+            videoWakeLock.release();
+        }
+    }
+    
+    private void detachVideoPreview() {
+        if(mainFrame != null && cameraPreview != null) {
+            mainFrame.removeView(cameraPreview);
+        }
+        cameraPreview = null;
     }
 
     @Override
@@ -341,9 +365,17 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         super.onNewIntent(intent);
     }
 
+    
+    
+    
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        Log.d(THIS_FILE, "Configuration changed");
+        if(cameraPreview != null && cameraPreview.getVisibility() == View.VISIBLE) {
+            
+            cameraPreview.setVisibility(View.GONE);
+        }
         updateUIFromCall();
     }
 
@@ -561,19 +593,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     } else {
                         mainsCalls++;
                     }
+                    if(callInfo.mediaHasVideo()) {
+                        showCameraPreview = true;
+                    }
                 }
 
                 mainCallInfo = getPrioritaryCall(callInfo, mainCallInfo);
-                if(callInfo.mediaHasVideo()) {
-                    showCameraPreview = true;
-                }
+                
             }
         }
         
-        // Update the camera preview visibility 
-        if(cameraPreview != null) {
-            cameraPreview.setVisibility(showCameraPreview ? View.VISIBLE : View.GONE);
-        }
         
 
         boolean hasBottomButtons = false;
@@ -681,6 +710,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
         // Remove useless badges
         for (InCallInfo badge : badgesToRemove) {
+            badge.terminate();
             callInfoPanel.removeView(badge);
             SipCallSession ci = badge.getCallInfo();
             if (ci != null) {
@@ -758,6 +788,22 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         } else {
             middleAddCall.setVisibility(View.GONE);
         }
+        
+        // Update the camera preview visibility 
+        if(cameraPreview != null) {
+            cameraPreview.setVisibility(showCameraPreview ? View.VISIBLE : View.GONE);
+            if(showCameraPreview) {
+                if(videoWakeLock != null) {
+                    videoWakeLock.acquire();
+                }
+            }else {
+
+                if(videoWakeLock != null && videoWakeLock.isHeld()) {
+                    videoWakeLock.release();
+                }
+            }
+        }
+        
 
         if (heldsCalls + mainsCalls == 0) {
             delayedQuit();
@@ -1480,5 +1526,15 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 }
             }
         }
+    }
+
+    @Override
+    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
+            int oldTop, int oldRight, int oldBottom) {
+        Log.d(THIS_FILE, "Layouting main view");
+        if(cameraPreview != null) {
+            cameraPreview.setVisibility(View.GONE);
+        }
+        updateUIFromCall();
     }
 }

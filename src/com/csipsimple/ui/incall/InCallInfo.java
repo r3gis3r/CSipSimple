@@ -152,10 +152,10 @@ public class InCallInfo extends ExtensibleBadge {
                             photoLp.height);
                     renderView.setLayoutParams(lp);
                     container.addView(renderView, 0);
-    
+
+                    Log.d(THIS_FILE, "Set window...");
+                    SipService.setVideoWindow(callInfo.getCallId(), renderView);
                 }
-                
-                SipService.setVideoWindow(callInfo.getCallId(), renderView);
             }else {
                 if(renderView != null) {
                     renderView.setVisibility(View.GONE);
@@ -167,6 +167,7 @@ public class InCallInfo extends ExtensibleBadge {
         // End of video stuff
         dragListener.setCallState(callInfo);
     }
+    
 
     private synchronized void updateQuickActions() {
         // Useless to process that
@@ -450,14 +451,12 @@ public class InCallInfo extends ExtensibleBadge {
         dragListener = l;
         super.setOnTouchListener(l);
     }
-    
-    @Override
-    protected void onDetachedFromWindow() {
+
+    public void terminate() {
         if(callInfo != null && renderView != null) {
-            //SipService.setVideoWindow(callInfo.getCallId(), null);
-            renderView = null;
+            SipService.setVideoWindow(callInfo.getCallId(), null);
         }
-        super.onDetachedFromWindow();
     }
+    
 
 }

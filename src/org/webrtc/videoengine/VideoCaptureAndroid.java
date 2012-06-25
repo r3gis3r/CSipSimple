@@ -85,9 +85,9 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
 
         Log.d(TAG, "tryStartCapture " + width +
                 " height " + height +" frame rate " + frameRate +
-                "isCaptureRunning " + isCaptureRunning +
-                "isSurfaceReady " + isSurfaceReady +
-                "isCaptureStarted " + isCaptureStarted);
+                " isCaptureRunning " + isCaptureRunning +
+                " isSurfaceReady " + isSurfaceReady +
+                " isCaptureStarted " + isCaptureStarted);
 
         if (isCaptureRunning || !isSurfaceReady || !isCaptureStarted) {
             return 0;
@@ -250,5 +250,6 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.d(TAG, "VideoCaptureAndroid::surfaceDestroyed");
         isSurfaceReady = false;
+        surfaceHolder = null;
     }
 }

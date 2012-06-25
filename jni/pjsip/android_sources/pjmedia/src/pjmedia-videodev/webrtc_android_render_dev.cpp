@@ -65,6 +65,7 @@ struct webrtcR_stream {
 	pjmedia_vid_dev_stream base; /**< Base stream	    */
 	pjmedia_vid_dev_param param; /**< Settings	    */
 	pj_pool_t *pool; /**< Memory pool.       */
+    pj_mutex_t		       *mutex;
 
 	pjmedia_vid_dev_cb vid_cb; /**< Stream callback.   */
 	void *user_data; /**< Application data.  */
@@ -243,7 +244,8 @@ static pj_status_t webrtcR_factory_default_param(pj_pool_t *pool,
 
 
 static pj_status_t init_stream(struct webrtcR_stream *strm){
-
+	pj_status_t status = PJ_EINVAL;
+    pj_mutex_lock(strm->mutex);
 	if(strm->_renderWindow){
 
 		strm->_renderModule = VideoRender::CreateVideoRender(0,
@@ -269,10 +271,25 @@ static pj_status_t init_stream(struct webrtcR_stream *strm){
 		toFrame.SetRenderTime(nowMs);
 		strm->_renderProvider->RenderFrame(0, toFrame);
 
-
-		return PJ_SUCCESS;
+		status = PJ_SUCCESS;
 	}
-	return PJ_EINVAL;
+
+    pj_mutex_unlock(strm->mutex);
+	return status;
+}
+
+static pj_status_t destroy_stream(struct webrtcR_stream *strm){
+
+    pj_mutex_lock(strm->mutex);
+
+	if(strm->_renderModule){
+		strm->_renderModule->StopRender(0);
+		strm->_renderModule->DeleteIncomingRenderStream(0);
+		VideoRender::DestroyVideoRender(strm->_renderModule);
+		strm->_renderModule = NULL;
+	}
+    pj_mutex_unlock(strm->mutex);
+	return PJ_SUCCESS;
 }
 
 
@@ -283,21 +300,23 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 	pj_status_t status;
 
 	stream->last_ts.u64 = frame->timestamp.u64;
-
+    pj_mutex_lock(stream->mutex);
 	if (!stream->is_running) {
+		pj_mutex_unlock(stream->mutex);
 		return PJ_EINVALIDOP;
 	}
 
 	if (frame->size == 0 || frame->buf == NULL
 			|| frame->size == 0){
+		pj_mutex_unlock(stream->mutex);
 		return PJ_SUCCESS;
 	}
 
 	if(stream->_renderWindow == NULL || stream->_renderProvider == NULL){
 		// We have nothing to show things in yet
+		pj_mutex_unlock(stream->mutex);
 		return PJ_SUCCESS;
 	}
-
 
     pjmedia_video_format_detail *vfd;
     vfd = pjmedia_format_get_video_format_detail(&stream->param.fmt, PJ_TRUE);
@@ -309,6 +328,7 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
     theoric_size += (theoric_size >> 1);
     if(theoric_size != frame->size){
     	PJ_LOG(2, (THIS_FILE, "Unexpected frame size regarding params %d vs %dx%d", frame->size, vfd->size.w, vfd->size.h));
+		pj_mutex_unlock(stream->mutex);
     	return PJ_EINVALIDOP;
     }
 
@@ -328,6 +348,8 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 	stream->_renderProvider->RenderFrame(0, stream->_videoFrame);
 
 	//PJ_LOG(4, (THIS_FILE, "Rendering @%lld > %lld", frame->timestamp.u64, nowMs));
+
+	pj_mutex_unlock(stream->mutex);
 
 	return PJ_SUCCESS;
 }
@@ -361,6 +383,10 @@ static pj_status_t webrtcR_factory_create_stream(pjmedia_vid_dev_factory *f,
 	pj_memcpy(&strm->vid_cb, cb, sizeof(*cb));
 	strm->user_data = user_data;
 
+
+    /* Create mutex. */
+    status = pj_mutex_create_simple(strm->pool, "render_stream",
+				    &strm->mutex);
 
 	/* Create render stream here */
 	if (param->dir & PJMEDIA_DIR_RENDER) {
@@ -442,6 +468,9 @@ static pj_status_t webrtcR_stream_set_cap(pjmedia_vid_dev_stream *s,
 	if (cap == PJMEDIA_VID_DEV_CAP_OUTPUT_WINDOW) {
 		// Only do that if we have no window set currently
 		if(!strm->_renderWindow || !pval){
+			if(!pval){
+				destroy_stream(strm);
+			}
 			strm->_renderWindow = (void *)pval;
 
 			PJ_LOG(4, (THIS_FILE, "Setup window to => %x", pval));
@@ -474,7 +503,9 @@ static pj_status_t webrtcR_stream_start(pjmedia_vid_dev_stream *strm) {
 
 	PJ_LOG(4, (THIS_FILE, "Starting webRTC video stream"));
 
+    pj_mutex_lock(stream->mutex);
 	stream->is_running = PJ_TRUE;
+    pj_mutex_unlock(stream->mutex);
 
 	return PJ_SUCCESS;
 }
@@ -485,11 +516,16 @@ static pj_status_t webrtcR_stream_stop(pjmedia_vid_dev_stream *strm) {
 
 	PJ_LOG(4, (THIS_FILE, "Stop webrtc renderer"));
 
+    pj_mutex_lock(stream->mutex);
 	if(stream->_renderModule){
 		stream->_renderModule->StopRender(0);
 		stream->_renderModule->DeleteIncomingRenderStream(0);
 	}
+
 	stream->is_running = PJ_FALSE;
+    pj_mutex_unlock(stream->mutex);
+
+
 
 	return PJ_SUCCESS;
 }
@@ -500,16 +536,15 @@ static pj_status_t webrtcR_stream_destroy(pjmedia_vid_dev_stream *strm) {
 	pj_status_t status;
 
 	PJ_ASSERT_RETURN(stream != NULL, PJ_EINVAL);
+	destroy_stream(stream);
 
-	if(stream->is_running){
-		webrtcR_stream_stop(strm);
-	}
+    pj_mutex_lock(stream->mutex);
+	stream->is_running = PJ_FALSE;
+    pj_mutex_unlock(stream->mutex);
 
-	if(stream->_renderModule){
-		VideoRender::DestroyVideoRender(stream->_renderModule);
-		stream->_renderModule = NULL;
-	}
 
+	pj_mutex_destroy(stream->mutex);
+	stream->mutex = NULL;
 	pj_pool_release(stream->pool);
 
 	return PJ_SUCCESS;

@@ -481,16 +481,32 @@ static pj_status_t webrtc_cap_stream_set_cap(pjmedia_vid_dev_stream *s,
 	} else if(cap == PJMEDIA_VID_DEV_CAP_INPUT_PREVIEW){
 		return PJ_SUCCESS;
 	} else if(cap == PJMEDIA_VID_DEV_CAP_OUTPUT_WINDOW){
-		// Consider that as the fact window has been set and we could try to re-attach ourself
-		if(!strm->window_available){
-			PJ_LOG(4, (THIS_FILE, "We had no window available previously and now one is avail"));
-			//we can start right now :)
-			strm->window_available = PJ_TRUE;
+		if(pval){
+			// Consider that as the fact window has been set and we could try to re-attach ourself
+			if(!strm->window_available){
+				PJ_LOG(4, (THIS_FILE, "We had no window available previously and now one is avail"));
+				//we can start right now :)
+				strm->window_available = PJ_TRUE;
+				// We are capturing frames, but previously we had no window
+				// Just start capture now
+				if(strm->capturing){
+					PJ_LOG(4, (THIS_FILE, "We should start capturing right now"));
+					webrtc_cap_stream_start(s);
+				}
+			}
+		}else{
+			strm->window_available = PJ_FALSE;
 			// We are capturing frames, but previously we had no window
 			// Just start capture now
 			if(strm->capturing){
 				PJ_LOG(4, (THIS_FILE, "We should start capturing right now"));
-				webrtc_cap_stream_start(s);
+				if(strm->_videoCapture != NULL && strm->_videoCapture->CaptureStarted()){
+					WebRtc_Word32 status;
+					status = strm->_videoCapture->DeRegisterCaptureDataCallback();
+					status = strm->_videoCapture->StopCapture();
+
+					PJ_LOG(4, (THIS_FILE, "Stop webrtc capture %d", status));
+				}
 			}
 		}
 		return PJ_SUCCESS;
@@ -575,7 +591,7 @@ static pj_status_t webrtc_cap_stream_start(pjmedia_vid_dev_stream *strm) {
 static pj_status_t webrtc_cap_stream_stop(pjmedia_vid_dev_stream *strm) {
 	struct webrtc_cap_stream *stream = (struct webrtc_cap_stream*) strm;
 
-	if(stream->_videoCapture->CaptureStarted()){
+	if(stream->_videoCapture != NULL && stream->_videoCapture->CaptureStarted()){
 		WebRtc_Word32 status;
 		status = stream->_videoCapture->DeRegisterCaptureDataCallback();
 
