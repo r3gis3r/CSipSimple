@@ -100,7 +100,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener,
-        IOnLeftRightChoice, ProximityDirector, OnLayoutChangeListener {
+        IOnLeftRightChoice, ProximityDirector {
     private final static String THIS_FILE = "SIP CALL HANDLER";
     private final static int DRAGGING_DELAY = 150;
     
@@ -236,7 +236,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
 
         attachVideoPreview();
-        mainFrame.addOnLayoutChangeListener(this);
         
         useAutoDetectSpeaker = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_DETECT_SPEAKER);
         
@@ -1528,13 +1527,4 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
     }
 
-    @Override
-    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
-            int oldTop, int oldRight, int oldBottom) {
-        Log.d(THIS_FILE, "Layouting main view");
-        if(cameraPreview != null) {
-            cameraPreview.setVisibility(View.GONE);
-        }
-        updateUIFromCall();
-    }
 }
