@@ -57,6 +57,7 @@ public class WarningPrivilegedIntent extends WarningBlockView  {
 
     @Override
     public void onClick(View v) {
+        super.onClick(v);
         int id = v.getId();
         if(id == R.id.warn_priv_int_register) {
             SipConfigManager.setPreferenceBooleanValue(getContext(), SipConfigManager.INTEGRATE_TEL_PRIVILEGED, true);

@@ -59,6 +59,7 @@ public class WarningVpnIcs extends WarningBlockView implements OnClickListener {
 
     @Override
     public void onClick(View v) {
+        super.onClick(v);
         int id = v.getId();
         if(id == R.id.warn_vpn_ics_1) {
             SipConfigManager.setPreferenceIntegerValue(getContext(), SipConfigManager.NETWORK_ROUTES_POLLING, 1);
