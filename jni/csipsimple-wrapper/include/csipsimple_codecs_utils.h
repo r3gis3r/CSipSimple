@@ -20,6 +20,10 @@ PJ_DECL(int) codecs_vid_get_nbr();
 PJ_DECL(pj_str_t) codecs_vid_get_id(int codec_id);
 PJ_DECL(pj_status_t) codec_set_frames_per_packet(pj_str_t codec_id,
 		int frames_per_packet);
+PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned id,
+		unsigned width, unsigned height,
+		unsigned fps,
+		unsigned avg_kbps, unsigned max_kbps);
 
 PJ_END_DECL
 

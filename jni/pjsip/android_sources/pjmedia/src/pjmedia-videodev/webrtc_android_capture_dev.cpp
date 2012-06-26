@@ -23,7 +23,7 @@
 #include "webrtc_android_capture_dev.h"
 #define THIS_FILE		"webrtc_android_capture_dev.c"
 
-#define __TRACE 1
+#define DEFAULT_CLOCK_RATE	90000
 
 #include "pj_loader.h"
 #include "csipsimple_internal.h"
@@ -213,7 +213,7 @@ static pj_status_t webrtc_cap_factory_init(pjmedia_vid_dev_factory *f) {
 				// And anyway no device in my hands supports that for now
 				pjmedia_format_init_video(fmt, PJMEDIA_FORMAT_I420,
 						ddi->_capability[ddi->info.fmt_cnt].width, ddi->_capability[ddi->info.fmt_cnt].height,
-						ddi->_capability[ddi->info.fmt_cnt].maxFPS * 1000, 1);
+						ddi->_capability[ddi->info.fmt_cnt].maxFPS, 1);
 				ddi->info.fmt_cnt++;
 			}
 		}
@@ -282,10 +282,7 @@ static pj_status_t webrtc_cap_factory_default_param(pj_pool_t *pool,
 	param->flags = PJMEDIA_VID_DEV_CAP_FORMAT |
 			PJMEDIA_VID_DEV_CAP_INPUT_PREVIEW |
 			PJMEDIA_VID_DEV_CAP_OUTPUT_WINDOW;
-	PJ_LOG(4, (THIS_FILE, "Default frequency should be %d", di->info.fmt[0].det.vid.fps.num));
-	// -- we should get max else of : di->info.fmt[0].det.vid.fps.num;
-	// But simplier is to over sample to 30 000 -- not seen any android cam @higher rate for now
-	param->clock_rate = 30000;
+	param->clock_rate = DEFAULT_CLOCK_RATE;
 	param->native_preview = PJ_TRUE;
 	pj_memcpy(&param->fmt, &di->info.fmt[0], sizeof(param->fmt));
 
@@ -377,7 +374,7 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 		PJ_LOG(4, (THIS_FILE, "Compare : %dx%d@%d to %dx%d@%d with target %dx%d@%d",
 				oWidth, oHeight, oFps,
 				nWidth, nHeight, nFps,
-				tWidth, tHeight, param->clock_rate));
+				tWidth, tHeight, param->fmt.det.vid.fps.num / param->fmt.det.vid.fps.denum));
 
 		if( abs(nHeight - tHeight) <= abs(oHeight - tHeight) /*&& !(nHeight < tHeight && oHeight >= tHeight)*/){
 			// We have better or equal height
@@ -413,9 +410,8 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 	// Setup correct choosen values for opened stream
 	param->fmt.det.vid.size.w = strm->_capability->width;
 	param->fmt.det.vid.size.h = strm->_capability->height;
-	param->fmt.det.vid.fps.num = strm->_capability->maxFPS * 1000;
+	param->fmt.det.vid.fps.num = strm->_capability->maxFPS;
 	param->fmt.det.vid.fps.denum = 1;
-	param->clock_rate = strm->_capability->maxFPS * 1000;
 	param->native_preview = PJ_TRUE;
 
 
