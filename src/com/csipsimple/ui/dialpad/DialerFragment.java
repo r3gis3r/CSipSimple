@@ -35,7 +35,6 @@ import android.content.res.Resources;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -112,7 +111,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     private DialingFeedback dialFeedback;
 
     private final int[] buttonsToAttach = new int[] {
-            R.id.button0, R.id.switchTextView
+            R.id.switchTextView
+    };
+    private final int[] buttonsToLongAttach = new int[] {
+            R.id.button0, R.id.button1
     };
 
     // TimingLogger timings = new TimingLogger("SIP_HOME", "test");
@@ -324,18 +326,21 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         }
     };
     
-    private void attachButtonListener(View v, int id) {
+    private void attachButtonListener(View v, int id, boolean longAttach) {
         ImageButton button = (ImageButton) v.findViewById(id);
-        button.setOnClickListener(this);
-
-        if (id == R.id.button0 || id == R.id.deleteButton) {
+        if(longAttach) {
             button.setOnLongClickListener(this);
+        }else {
+            button.setOnClickListener(this);
         }
     }
 
     private void initButtons(View v) {
         for (int buttonId : buttonsToAttach) {
-            attachButtonListener(v, buttonId);
+            attachButtonListener(v, buttonId, false);
+        }
+        for (int buttonId : buttonsToLongAttach) {
+            attachButtonListener(v, buttonId, true);
         }
 
         digits.setOnClickListener(this);
@@ -380,11 +385,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     public void onClick(View view) {
         // ImageButton b = null;
         int view_id = view.getId();
-
-        if (view_id == R.id.button0) {
-            dialFeedback.giveFeedback(ToneGenerator.TONE_DTMF_0);
-            keyPressed(KeyEvent.KEYCODE_0);
-        } else if (view_id == R.id.switchTextView) {
+        if (view_id == R.id.switchTextView) {
             // Set as text dialing if we are currently digit dialing
             setTextDialing(isDigit);
         } else if (view_id == R.id.digitsText) {
@@ -401,6 +402,11 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
             dialFeedback.hapticFeedback();
             keyPressed(KeyEvent.KEYCODE_PLUS);
             return true;
+        }else if(vId == R.id.button1) {
+            if(digits.length() == 0) {
+                placeVMCall();
+                return true;
+            }
         }
         return false;
     }

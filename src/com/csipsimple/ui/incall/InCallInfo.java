@@ -376,17 +376,6 @@ public class InCallInfo extends ExtensibleBadge {
 
     }
 
-    public void switchDetailedInfo(boolean showDetails) {
-        /*
-         * currentInfo.setVisibility(showDetails?GONE:VISIBLE);
-         * currentDetailedInfo.setVisibility(showDetails?VISIBLE:GONE);
-         * if(showDetails && callInfo != null) { String infos =
-         * PjSipCalls.dumpCallInfo(callInfo.getCallId()); TextView detailText =
-         * (TextView) findViewById(R.id.detailsText); detailText.setText(infos);
-         * }
-         */
-    }
-
     private static final int LOAD_CALLER_INFO = 0;
 
     private final Handler userHandler = new Handler() {
@@ -398,7 +387,7 @@ public class InCallInfo extends ExtensibleBadge {
                 ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(getContext(),
                         photo,
                         callerInfo,
-                        R.drawable.picture_unknown);
+                        R.drawable.ic_contact_picture_180_holo_light);
                 remoteName.setText(callerInfo.name);
                 photo.setContentDescription(callerInfo.name);
             }

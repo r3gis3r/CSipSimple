@@ -60,12 +60,12 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
-    <style name="DialPadButton">
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_weight">0.33</item>
-        <item name="android:layout_margin">5dp</item>
-        <item name="android:background">@drawable/btn_dial</item>
+    <style name="DialtactsDialpadButtonStyle">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:soundEffectsEnabled">false</item>
     </style>
 
     <style name="DialPadRow">

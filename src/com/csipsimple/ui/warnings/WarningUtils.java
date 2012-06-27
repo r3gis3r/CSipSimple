@@ -65,7 +65,9 @@ public class WarningUtils {
             return false;
         }
         if(prefProviderWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, false)) {
-
+            if(!PhoneCapabilityTester.isPhone(ctxt)) {
+                return false;
+            }
             List<ResolveInfo> privilegedActs = PhoneCapabilityTester.resolveActivitiesForPriviledgedCall(ctxt);
             if(privilegedActs.size() > 1) {
                 // TODO : should check that default activity is actually gsm one if any

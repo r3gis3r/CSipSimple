@@ -32,7 +32,7 @@
         android:contentDescription="@string/empty_description"
         android:paddingTop="4dip"
         android:scaleType="centerInside"
-        android:src="@drawable/picture_unknown" />
+        android:src="@drawable/ic_contact_picture_holo_dark" />
 
     <TextView
         android:id="@+id/contact_name"

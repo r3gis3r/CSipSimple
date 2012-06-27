@@ -59,7 +59,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLayoutChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -197,13 +196,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         lockOverlay.setActivity(this, this);
 
         endCallTarget = (ImageView) findViewById(R.id.dropHangup);
-        endCallTarget.getBackground().setDither(true);
         holdTarget = (ImageView) findViewById(R.id.dropHold);
-        holdTarget.getBackground().setDither(true);
         answerTarget = (ImageView) findViewById(R.id.dropAnswer);
-        answerTarget.getBackground().setDither(true);
         xferTarget = (ImageView) findViewById(R.id.dropXfer);
-        xferTarget.getBackground().setDither(true);
 
         middleAddCall = (Button) findViewById(R.id.add_call_button);
         middleAddCall.setOnClickListener(new OnClickListener() {
@@ -241,6 +236,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         
         applyTheme();
         proximityManager.startTracking();
+        
+        SipCallSession initialSession = getIntent().getParcelableExtra(SipManager.EXTRA_CALL_INFO);
+        inCallControls.setCallState(initialSession);
         
     }
 
@@ -1242,6 +1240,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         private SipCallSession call;
         private InCallInfo badge;
         private boolean isDragging = false;
+        private boolean ditherSet = false;
         private SetDraggingTimerTask draggingDelayTask;
         Vibrator vibrator;
         int beginX = 0;
@@ -1285,6 +1284,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     beginX = X;
                     beginY = Y;
                     draggingTimer.schedule(draggingDelayTask, DRAGGING_DELAY);
+                    if(!ditherSet) {
+                        endCallTarget.getBackground().setDither(true);
+                        holdTarget.getBackground().setDither(true);
+                        answerTarget.getBackground().setDither(true);
+                        xferTarget.getBackground().setDither(true);
+                        ditherSet = true;
+                    }
                 case MotionEvent.ACTION_MOVE:
                     if (isDragging) {
                         float size = Math.max(75.0f, event.getSize() + 50.0f);

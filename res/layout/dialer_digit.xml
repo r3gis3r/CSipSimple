@@ -37,7 +37,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_marginBottom="10dip"
-        android:layout_weight="0.15"
+        android:layout_weight="@integer/dialpad_layout_weight_digits"
         android:background="@drawable/btn_dial_textfield"
         android:orientation="horizontal"
         android:padding="0dip" >
@@ -75,18 +75,26 @@
             android:layout_height="fill_parent"
             android:layout_weight="0" />
     </LinearLayout>
+    <!--  -->
+    <!-- Keypad section -->
+    <!-- <include layout="@layout/dialpad" /> -->
 
     <com.csipsimple.widgets.Dialpad
         android:id="@+id/dialPad"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="0.65" />
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="@integer/dialpad_layout_weight_dialpad" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialpad_vertical_margin"
+        android:background="#66000000" />
 
     <ListView
         android:id="@+id/autoCompleteList"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.65"
+        android:layout_weight="@integer/dialpad_layout_weight_dialpad"
         android:visibility="gone" />
 
     <com.csipsimple.widgets.DialerCallBar
@@ -96,6 +104,6 @@
         android:layout_marginLeft="1dip"
         android:layout_marginRight="1dip"
         android:layout_marginTop="2dip"
-        android:layout_weight="0.20" />
+        android:layout_weight="@integer/dialpad_layout_weight_additional_buttons" />
 
 </LinearLayout>

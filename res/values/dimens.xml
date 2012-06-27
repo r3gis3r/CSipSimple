@@ -28,6 +28,15 @@
     <!-- Empty message margins -->
     <dimen name="empty_message_top_margin">48dip</dimen>
 
+    <!-- Dialer -->
+    <integer name="dialpad_layout_weight_dialpad">65</integer>
+    <integer name="dialpad_layout_weight_additional_buttons">15</integer>
+    <integer name="dialpad_layout_weight_digits">20</integer>
+
+    <dimen name="dialpad_horizontal_margin">0dip</dimen>
+    <dimen name="dialpad_vertical_margin">2dip</dimen>
+    <dimen name="dialpad_digits_text_size">35sp</dimen>
+
     <!-- Call Log -->
     <dimen name="call_log_icon_margin">4dip</dimen>
     <dimen name="call_log_call_action_size">32dip</dimen>

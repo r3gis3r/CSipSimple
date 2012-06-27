@@ -315,7 +315,7 @@ public class ContactsUtils3 extends ContactsWrapper {
         String displayName = cursor.getString(cursor.getColumnIndex(Phones.DISPLAY_NAME));
         Long peopleId = cursor.getLong(cursor.getColumnIndex(Phones.PERSON_ID));
         Uri uri = ContentUris.withAppendedId(People.CONTENT_URI, peopleId);
-        Bitmap bitmap = getContactPhoto(context, uri, R.drawable.picture_unknown);
+        Bitmap bitmap = getContactPhoto(context, uri, R.drawable.ic_contact_picture_holo_dark);
         
         // Get views
         TextView tv = (TextView) view.findViewById(R.id.contact_name);

@@ -48,7 +48,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/empty_description"
                 android:scaleType="fitCenter"
-                android:src="@drawable/picture_unknown" />
+                android:src="@drawable/ic_contact_picture_180_holo_light" />
 
             <Chronometer
                 android:id="@+id/elapsedTime"

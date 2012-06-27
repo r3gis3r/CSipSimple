@@ -20,106 +20,108 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_centerHorizontal="true"
-    android:orientation="vertical" >
+<!--     android:layout_marginTop="@dimen/dialpad_vertical_margin" -->
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialpad"
+    android:layout_width="match_parent"
+    android:layout_height="0px"
+    android:layout_gravity="center_horizontal"
+    android:layout_weight="@integer/dialpad_layout_weight_dialpad"
+    android:background="@drawable/dialpad_background"
+    android:paddingBottom="10dip"
+    android:paddingLeft="5dip"
+    android:paddingRight="5dip" >
 
-    <LinearLayout style="@style/DialPadRow" >
+    <TableRow
+        android:layout_height="0px"
+        android:layout_weight="1" >
 
         <ImageButton
             android:id="@+id/button1"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_one"
-            android:soundEffectsEnabled="false"
-            android:src="@drawable/dial_num_1_no_vm" />
+            android:src="@drawable/dial_num_1" />
 
         <ImageButton
             android:id="@+id/button2"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_two"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_2" />
 
         <ImageButton
             android:id="@+id/button3"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_three"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_3" />
-    </LinearLayout>
+    </TableRow>
 
-    <LinearLayout style="@style/DialPadRow" >
+    <TableRow
+        android:layout_height="0px"
+        android:layout_weight="1" >
 
         <ImageButton
             android:id="@+id/button4"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_four"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_4" />
 
         <ImageButton
             android:id="@+id/button5"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_five"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_5" />
 
         <ImageButton
             android:id="@+id/button6"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_six"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_6" />
-    </LinearLayout>
+    </TableRow>
 
-    <LinearLayout style="@style/DialPadRow" >
+    <TableRow
+        android:layout_height="0px"
+        android:layout_weight="1" >
 
         <ImageButton
             android:id="@+id/button7"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_seven"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_7" />
 
         <ImageButton
             android:id="@+id/button8"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_eight"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_8" />
 
         <ImageButton
             android:id="@+id/button9"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_nine"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_9" />
-    </LinearLayout>
+    </TableRow>
 
-    <LinearLayout style="@style/DialPadRow" >
+    <TableRow
+        android:layout_height="0px"
+        android:layout_weight="1" >
 
         <ImageButton
             android:id="@+id/buttonstar"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_star"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_star" />
 
         <ImageButton
             android:id="@+id/button0"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_zero"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_0" />
 
         <ImageButton
             android:id="@+id/buttonpound"
-            style="@style/DialPadButton"
+            style="@style/DialtactsDialpadButtonStyle"
             android:contentDescription="@string/description_image_button_pound"
-            android:soundEffectsEnabled="false"
             android:src="@drawable/dial_num_pound" />
-    </LinearLayout>
+    </TableRow>
 
-</LinearLayout>
+</TableLayout>

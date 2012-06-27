@@ -699,6 +699,9 @@ public final class Compatibility {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround());
             }
         }
+        if(lastSeenVersion < 1653 && !PhoneCapabilityTester.isPhone(prefWrapper.getContext())) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, true);
+        }
         
         prefWrapper.endEditing();
     }
