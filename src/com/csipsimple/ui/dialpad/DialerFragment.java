@@ -328,6 +328,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     
     private void attachButtonListener(View v, int id, boolean longAttach) {
         ImageButton button = (ImageButton) v.findViewById(id);
+        if(button == null) {
+            Log.w(THIS_FILE, "Not found button " + id);
+            return;
+        }
         if(longAttach) {
             button.setOnLongClickListener(this);
         }else {

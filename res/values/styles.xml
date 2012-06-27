@@ -64,8 +64,7 @@
         <item name="android:layout_width">0dip</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:soundEffectsEnabled">false</item>
+        <item name="android:background">?attr/actionBarItemBackground</item>
     </style>
 
     <style name="DialPadRow">
@@ -102,6 +101,21 @@
 
     <style name="DarkTheme" parent="Theme.Sherlock"></style>
 
+    <style name="DarkTheme.Dialog" parent="Theme.Sherlock.Dialog">
+
+        <!-- TODO : use android:attr on 11 -->
+        <item name="actionBarItemBackground">@drawable/abs__item_background_holo_dark</item>
+        <!--
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowBackground">@drawable/panel_background</item>
+        -->
+    </style>
+
+    <style name="DarkTheme.NoTitle" parent="Theme.Sherlock.NoActionBar">
+        <item name="actionBarItemBackground">@drawable/abs__item_background_holo_dark</item>
+    </style>
+
     <!-- Notification -->
     <style name="NotificationText">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
@@ -115,15 +129,5 @@
     <style name="ButtonBar" parent="@android:style/ButtonBar" />
 
     <style name="ButtonBar.AlertDialog" parent="@android:style/ButtonBar" />
-
-    <!-- <style name="DarkTheme.Dialog" parent="android:Theme.Dialog"> -->
-    <style name="DarkTheme.Dialog" parent="Theme.Sherlock.Dialog">
-        <item name="actionBarItemBackground">@drawable/abs__item_background_holo_dark</item>
-        <!--
-        <item name="android:windowNoTitle">false</item>
-        <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:windowBackground">@drawable/panel_background</item>
-        -->
-    </style>
 
 </resources>

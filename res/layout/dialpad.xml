@@ -20,9 +20,8 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!--     android:layout_marginTop="@dimen/dialpad_vertical_margin" -->
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dialpad"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="0px"
     android:layout_gravity="center_horizontal"

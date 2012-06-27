@@ -24,8 +24,6 @@ package com.csipsimple.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.media.ToneGenerator;
 import android.util.AttributeSet;
 import android.util.SparseArray;
@@ -37,7 +35,6 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 
 import com.csipsimple.R;
-import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Theme;
 
 import java.util.HashMap;
@@ -47,7 +44,6 @@ import java.util.Map;
 public class Dialpad extends TableLayout implements OnClickListener {
 
 	private OnDialKeyListener onDialKeyListener;
-	private final static String THIS_FILE = "Dialpad";
 	
 	// Here we need a map to quickly find if the clicked button id is in the map keys
 	@SuppressLint("UseSparseArrays")
@@ -111,7 +107,9 @@ public class Dialpad extends TableLayout implements OnClickListener {
 		
 		for(int buttonId : DIGITS_BTNS.keySet()) {
 			ImageButton button = (ImageButton) findViewById(buttonId);
-			button.setOnClickListener(this);
+			if(button != null) {
+			    button.setOnClickListener(this);
+			}
 		}
 		
 	}
@@ -136,13 +134,13 @@ public class Dialpad extends TableLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		int view_id = v.getId();
-		dispatchDialKeyEvent(view_id);
+		dispatchDialKeyEvent(v.getId());
 		
 	}
 	
 
 	public void applyTheme(Theme t) {
+	    /*
 		Log.d(THIS_FILE, "Theming in progress");
 		for(int buttonId : DIGITS_BTNS.keySet()) {
 			
@@ -172,6 +170,7 @@ public class Dialpad extends TableLayout implements OnClickListener {
 				b.setImageDrawable(src);
 			}
 		}
+		*/
 		
 	}
 
