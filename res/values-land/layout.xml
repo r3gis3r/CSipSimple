@@ -14,11 +14,8 @@
 		copy of the GNU General Public License along with CSipSimple. If not,
 		see <http://www.gnu.org/licenses/>.
 -->
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item name="sip_home" type="layout">@layout/sip_home_dual_pane</item>
-    <item name="dialpad_compose" type="layout">@layout/dialpad_compose_3x5</item>
-
-    <bool name="use_dual_panes">true</bool>
+    <item name="dialpad_compose" type="layout">@layout/dialpad_compose_4x4</item>
 
 </resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <com.csipsimple.widgets.Dialpad
+        android:id="@+id/dialPad"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="@integer/dialpad_layout_weight_dialpad" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialpad_vertical_margin"
+        android:background="#66000000" />
+
+    <com.csipsimple.widgets.DialerCallBar
+        android:id="@+id/dialerCallBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="@integer/dialpad_layout_weight_additional_buttons"
+        android:background="@drawable/dialpad_background"
+        android:orientation="horizontal" />
+
+</merge>

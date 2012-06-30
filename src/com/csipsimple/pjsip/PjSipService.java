@@ -28,6 +28,7 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -1042,7 +1043,7 @@ public class PjSipService {
      * @param callee remote contact ot call If not well formated we try to add
      *            domain name of the default account
      */
-    public int makeCall(String callee, int accountId) throws SameThreadException {
+    public int makeCall(String callee, int accountId, Bundle b) throws SameThreadException {
         if (!created) {
             return -1;
         }
@@ -1061,7 +1062,10 @@ public class PjSipService {
             // Call settings to add video
             pjsua.call_setting_default(cs);
             cs.setAud_cnt(1);
-            cs.setVid_cnt(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO) ? 1 : 0);
+            cs.setVid_cnt(0);
+            if(b != null && b.getBoolean(SipCallSession.OPT_CALL_VIDEO, false)) {
+                cs.setVid_cnt(1);
+            }
             cs.setFlag(0);
             // Msg data to add headers
             pjsua.msg_data_init(msgData);

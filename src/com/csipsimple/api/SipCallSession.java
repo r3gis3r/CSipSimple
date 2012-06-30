@@ -80,6 +80,14 @@ public final class SipCallSession implements Parcelable {
         private InvState() {
         }
     }
+    
+    /**
+     * Option key to flag video use for the call. <br/>
+     * The value must be a boolean.
+     * 
+     * @see Boolean
+     */
+    public static final String OPT_CALL_VIDEO = "opt_call_video";
 
     /**
      * Describe the media state of the call <br/>
@@ -278,6 +286,8 @@ public final class SipCallSession implements Parcelable {
             return new SipCallSession[size];
         }
     };
+
+    
 
     /**
      * A sip call session is equal to another if both means the same callId

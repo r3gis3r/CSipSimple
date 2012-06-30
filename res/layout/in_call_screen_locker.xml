@@ -19,16 +19,20 @@
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/in_call_controls_container"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
 
-    <ViewStub
-        android:id="@+id/bottomButtonsContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout="@layout/in_call_controls_buttons" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lockerOverlay"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#8000" >
+
+    <!--
+		<TextView android:id="@+id/lockerIcon"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:gravity="center" android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true" android:layout_marginBottom="70dip"
+			android:text="@string/touch_lock" android:textAppearance="?android:attr/textAppearanceLarge"
+			android:background="@drawable/dialpad_lock" />
+    -->
 
 </RelativeLayout>

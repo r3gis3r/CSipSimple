@@ -307,9 +307,10 @@ public class MessageFragment extends SherlockListFragment implements LoaderManag
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        
+
+        int actionRoom = getResources().getBoolean(R.bool.menu_in_bar) ? MenuItem.SHOW_AS_ACTION_IF_ROOM : MenuItem.SHOW_AS_ACTION_NEVER;
         MenuItem addContactMenu = menu.add(R.string.menu_add_to_contacts);
-        addContactMenu.setIcon(R.drawable.ic_add_contact_holo_dark).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        addContactMenu.setIcon(R.drawable.ic_add_contact_holo_dark).setShowAsAction(actionRoom);
         addContactMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

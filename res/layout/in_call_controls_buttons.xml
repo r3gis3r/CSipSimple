@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottomButtonsContainer"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="4dip"
+    android:paddingLeft="4dip"
+    android:paddingRight="4dip" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/addCallButton"
+            style="@style/CallButton"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_in_call_touch_add_call"
+            android:text="@string/add_call" />
+
+        <Button
+            android:id="@+id/clearCallButton"
+            style="@style/CallButton"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_in_call_touch_end"
+            android:text="@string/clear_call"
+            android:textColor="#FF6072" />
+
+        <Button
+            android:id="@+id/dialpadButton"
+            style="@style/CallButton"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_in_call_touch_dialpad"
+            android:text="@string/dialpad" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ToggleButton
+            android:id="@+id/bluetoothButton"
+            style="@style/CallToggleButton"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:textOff="@string/bluetooth"
+            android:textOn="@string/bluetooth" />
+
+        <ToggleButton
+            android:id="@+id/muteButton"
+            style="@style/CallToggleButton"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOff="@string/mute"
+            android:textOn="@string/mute" />
+
+        <ToggleButton
+            android:id="@+id/speakerButton"
+            style="@style/CallToggleButton"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOff="@string/speaker"
+            android:textOn="@string/speaker" />
+    </LinearLayout>
+
+</LinearLayout>

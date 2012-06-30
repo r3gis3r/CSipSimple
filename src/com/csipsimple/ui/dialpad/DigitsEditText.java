@@ -31,6 +31,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.csipsimple.R;
+
 /**
  * EditText which suppresses IME show up.
  */
@@ -46,7 +48,7 @@ public class DigitsEditText extends EditText {
     public DigitsEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         // baseInputType = getInputType();
-        setIsDigit(isDigit, false);
+        //setIsDigit(isDigit, false);
     }
     
 
@@ -60,10 +62,10 @@ public class DigitsEditText extends EditText {
             this.isDigit = isDigit;
             final InputMethodManager imm = ((InputMethodManager) getContext()
                     .getSystemService(Context.INPUT_METHOD_SERVICE));
-    
+            
             if (isDigit) {
-                setInputType(InputType.TYPE_NULL);
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                setRawInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.dialpad_digits_text_size));
                 if (imm != null && imm.isActive(this)) {
                     imm.hideSoftInputFromWindow(getApplicationWindowToken(), 0);
                 }
@@ -152,4 +154,5 @@ public class DigitsEditText extends EditText {
         // blink but for now no better way were found to hide keyboard for sure
         setIsDigit(isDigit, false);
     }
+    
 }

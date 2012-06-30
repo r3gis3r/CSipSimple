@@ -202,9 +202,10 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        
+
+        int actionRoom = getResources().getBoolean(R.bool.menu_in_bar) ? MenuItem.SHOW_AS_ACTION_IF_ROOM : MenuItem.SHOW_AS_ACTION_NEVER;
         MenuItem delMenu = menu.add(R.string.callLog_delete_all);
-        delMenu.setIcon(R.drawable.ic_ab_trash_dark).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        delMenu.setIcon(R.drawable.ic_ab_trash_dark).setShowAsAction(actionRoom);
         delMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

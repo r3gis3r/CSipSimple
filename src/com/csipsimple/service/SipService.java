@@ -34,6 +34,7 @@ import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -225,34 +226,41 @@ public class SipService extends Service {
          */
 		@Override
 		public void makeCall(final String callee, final int accountId) throws RemoteException {
-			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			//We have to ensure service is properly started and not just binded
-			SipService.this.startService(new Intent(SipService.this, SipService.class));
-			
-			if(pjService == null) {
-			    Log.e(THIS_FILE, "Can't place call if service not started");
-			    // TODO - we should return a failing status here
-			    return;
-			}
-			
-			if(!supportMultipleCalls) {
-				// Check if there is no ongoing calls if so drop this request by alerting user
-				SipCallSession activeCall = pjService.getActiveCallInProgress();
-				if(activeCall != null) {
-					if(!CustomDistribution.forceNoMultipleCalls()) {
-					    notifyUserOfMessage(R.string.not_configured_multiple_calls);
-					}
-					return;
-				}
-			}
-			getExecutor().execute(new SipRunnable() {
-				@Override
-				protected void doRun() throws SameThreadException {
-					pjService.makeCall(callee, accountId);
-				}
-			});
-			
+			makeCallWithOptions(callee, accountId, null);
 		}
+		
+
+        @Override
+        public void makeCallWithOptions(final String callee, final int accountId, final Bundle options)
+                throws RemoteException {
+            SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+            //We have to ensure service is properly started and not just binded
+            SipService.this.startService(new Intent(SipService.this, SipService.class));
+            
+            if(pjService == null) {
+                Log.e(THIS_FILE, "Can't place call if service not started");
+                // TODO - we should return a failing status here
+                return;
+            }
+            
+            if(!supportMultipleCalls) {
+                // Check if there is no ongoing calls if so drop this request by alerting user
+                SipCallSession activeCall = pjService.getActiveCallInProgress();
+                if(activeCall != null) {
+                    if(!CustomDistribution.forceNoMultipleCalls()) {
+                        notifyUserOfMessage(R.string.not_configured_multiple_calls);
+                    }
+                    return;
+                }
+            }
+            getExecutor().execute(new SipRunnable() {
+                @Override
+                protected void doRun() throws SameThreadException {
+                    pjService.makeCall(callee, accountId, options);
+                }
+            });
+        }
+		
 		
 		/**
 		 * {@inheritDoc}
@@ -790,6 +798,7 @@ public class SipService extends Service {
         public void ignoreNextOutgoingCallFor(String number) throws RemoteException {
             OutgoingCall.ignoreNext = number;
         }
+
 
 
 		

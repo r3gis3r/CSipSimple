@@ -44,6 +44,7 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 	private Timer lockTimer;
 	private Activity activity;
 	private SlidingTab stab;
+    private IOnLeftRightChoice onLRChoiceListener;
 
 	public static final int WAIT_BEFORE_LOCK_LONG = 10000;
 	public static final int WAIT_BEFORE_LOCK_START = 5000;
@@ -57,44 +58,69 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 	public ScreenLocker(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setOnTouchListener(this);
-		
-		
-		stab = new SlidingTab(getContext());
-		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		//lp.setMargins(0, 286, 0, 0);
-		stab.setLayoutParams(lp);
-		stab.setLeftHintText(R.string.unlock);
-		stab.setLeftTabResources(R.drawable.ic_jog_dial_unlock, R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_answer, R.drawable.jog_tab_left_answer);
-		stab.setRightHintText(R.string.clear_call);
-		
-		addView(stab);
 	}
 	
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		super.onLayout(changed, l, t, r, b);
-		
-		final int parentWidth = r - l;
-		final int parentHeight = b - t;
-		final int top = parentHeight * 3/4 - stab.getHeight()/2;
-		final int bottom = parentHeight * 3/4 + stab.getHeight() / 2;
-		stab.layout(0, top, parentWidth, bottom);
-		
+		updateTabLayout(l, t, r, b);
 	}
 
-	public void setActivity(Activity anActivity, IOnLeftRightChoice l) {
+    /**
+     * Re-layout the slider to put it on bottom of the screen
+     * @param l parent view left
+     * @param t parent view top
+     * @param r parent view right
+     * @param b parent view bottom
+     */
+	private void updateTabLayout(int l, int t, int r, int b) {
+
+        if(stab != null) {
+            final int parentWidth = r - l;
+            final int parentHeight = b - t;
+            final int top = parentHeight * 3/4 - stab.getHeight()/2;
+            final int bottom = parentHeight * 3/4 + stab.getHeight() / 2;
+            stab.layout(0, top, parentWidth, bottom);
+        }
+	}
+
+	public void setActivity(Activity anActivity) {
 		activity = anActivity;
-		stab.setOnLeftRightListener(l);
+	}
+	
+	public void setOnLeftRightListener(IOnLeftRightChoice l) {
+	    onLRChoiceListener = l;
 	}
 	
 	private void reset() {
-		stab.resetView();
+	    if(stab != null) {
+	        stab.resetView();
+	    }
 	}
 	
 	public boolean onTouch(View v, MotionEvent event) {
 		return true;
 	}
 	
+	
+	@Override
+	public void setVisibility(int visibility) {
+	    super.setVisibility(visibility);
+	    // We inflate the sliding tab only if we become visible.
+	    if(visibility == VISIBLE && stab == null) {
+	        stab = new SlidingTab(getContext());
+	        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+	        //lp.setMargins(0, 286, 0, 0);
+	        stab.setLayoutParams(lp);
+	        stab.setLeftHintText(R.string.unlock);
+	        stab.setLeftTabResources(R.drawable.ic_jog_dial_unlock, R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_answer, R.drawable.jog_tab_left_answer);
+	        stab.setRightHintText(R.string.clear_call);
+	        stab.setOnLeftRightListener(onLRChoiceListener);
+	        
+	        addView(stab);
+	        updateTabLayout(getLeft(), getTop(), getRight(), getBottom());
+	    }
+	}
 
 	private class LockTimerTask extends TimerTask{
 		@Override

@@ -26,8 +26,6 @@
 package com.csipsimple.ui.incall;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,11 +52,11 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 	private static final String THIS_FILE = "InCallControls";
 	OnTriggerListener onTriggerListener;
 	private SlidingTab slidingTabWidget;
-	private Button clearCallButton, dialButton, addCallButton;
-	private ToggleButton bluetoothButton, speakerButton, muteButton;
-	private View inCallButtons;
+    private AlternateUnlocker alternateLockerWidget;
+	//private Button clearCallButton, dialButton, addCallButton;
+	//private ToggleButton bluetoothButton, speakerButton, muteButton;
+	//private View inCallButtons;
 	private boolean isDialpadOn = false;
-	private AlternateUnlocker alternateLockerWidget;
 	
 	
 	private static final int MODE_LOCKER = 0;
@@ -68,6 +66,7 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 	private MediaState lastMediaState;
 	private SipCallSession currentCall;
 	private boolean supportMultipleCalls = false;
+    private boolean useSlider;
 
 	/**
 	 * Interface definition for a callback to be invoked when a tab is triggered
@@ -171,7 +170,7 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.in_call_controls, this, true);
         
-        boolean useSlider = false;
+        useSlider = false;
         
         if(!isInEditMode()) {
             supportMultipleCalls = SipConfigManager.getPreferenceBooleanValue(context, SipConfigManager.SUPPORT_MULTIPLE_CALLS);
@@ -181,120 +180,109 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
                 useSlider = !SipConfigManager.getPreferenceBooleanValue(context, SipConfigManager.USE_ALTERNATE_UNLOCKER, useSlider);
             }
         }
-        
-        RelativeLayout container = (RelativeLayout) findViewById(R.id.in_call_controls_container);
-        IOnLeftRightProvider leftRightChooser;
-        if(useSlider) {
-            slidingTabWidget = new SlidingTab(context);
-            container.addView(slidingTabWidget, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-            leftRightChooser = slidingTabWidget;
-            slidingTabWidget.setVisibility(GONE);
-        }else {
-            alternateLockerWidget = new AlternateUnlocker(context);
-            container.addView(alternateLockerWidget, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-            leftRightChooser = alternateLockerWidget;
-            alternateLockerWidget.setVisibility(GONE);
-        }
-        leftRightChooser.setOnLeftRightListener(this);
-        
-        inCallButtons = findViewById(R.id.bottomButtonsContainer);
-        
-        // Hide all components by default
-        inCallButtons.setVisibility(GONE);
     
     }
     
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-
-
-		addCallButton = (Button) findViewById(R.id.addCallButton);
-		clearCallButton = (Button) findViewById(R.id.clearCallButton);
-		dialButton = (Button) findViewById(R.id.dialpadButton);
-		bluetoothButton = (ToggleButton) findViewById(R.id.bluetoothButton);
-		speakerButton = (ToggleButton) findViewById(R.id.speakerButton);
-		muteButton = (ToggleButton) findViewById(R.id.muteButton);
-		
-		
-	//	settingsButton = (ImageButton) findViewById(R.id.settingsButton);
-		
 		// Finalize object style
-		if(slidingTabWidget != null) {
-    		slidingTabWidget.setLeftHintText(R.string.take_call);
-    		slidingTabWidget.setRightHintText(R.string.decline_call);
-		}
 		setEnabledMediaButtons(false);
-		controlMode = MODE_LOCKER;
-		setCallLockerVisibility(VISIBLE);
-		inCallButtons.setVisibility(GONE);
-		
-
-		// Attach objects
-		clearCallButton.setOnClickListener(this);
-		dialButton.setOnClickListener(this);
-		bluetoothButton.setOnClickListener(this);
-		speakerButton.setOnClickListener(this);
-		muteButton.setOnClickListener(this);
-		addCallButton.setOnClickListener(this);
-		addCallButton.setEnabled( supportMultipleCalls );
+		controlMode = MODE_NO_ACTION;
 	}
-	
+
 	
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		super.onLayout(changed, l, t, r, b);
-		
-		final int parentWidth = r - l;
-		final int parentHeight = b - t;
-		if(slidingTabWidget != null) {
-    		final int top = parentHeight * 3/4 - slidingTabWidget.getHeight()/2;
-    		final int bottom = parentHeight * 3/4 + slidingTabWidget.getHeight() / 2;
-    		slidingTabWidget.layout(0, top, parentWidth, bottom);
-		}
+		updateTabLayout(l, t, r, b);
 	}
 	
-
+    /**
+     * Re-layout the slider to put it on bottom of the screen
+     * @param l parent view left
+     * @param t parent view top
+     * @param r parent view right
+     * @param b parent view bottom
+     */
+    private void updateTabLayout(int l, int t, int r, int b) {
+        if(slidingTabWidget != null) {
+            final int parentWidth = r - l;
+            final int parentHeight = b - t;
+            final int top = parentHeight * 3 / 4 - slidingTabWidget.getHeight() / 2;
+            final int bottom = parentHeight * 3 / 4 + slidingTabWidget.getHeight() / 2;
+            slidingTabWidget.layout(0, top, parentWidth, bottom);
+        }
+    }
+	
+	private boolean callOngoing = false;
 	public void setEnabledMediaButtons(boolean isInCall) {
-		if (lastMediaState == null) {
-			speakerButton.setEnabled(isInCall);
-			muteButton.setEnabled(isInCall);
-			bluetoothButton.setEnabled(isInCall);
-
-		} else {
-			speakerButton.setEnabled(lastMediaState.canSpeakerphoneOn && isInCall);
-			muteButton.setEnabled(lastMediaState.canMicrophoneMute && isInCall);
-			bluetoothButton.setEnabled(lastMediaState.canBluetoothSco && isInCall);
-		}
-
-		dialButton.setEnabled(isInCall);
+        callOngoing = isInCall;
+        setMediaState(lastMediaState);
 	}
 	
 	
 	private void setCallLockerVisibility(int visibility) {
-		if (slidingTabWidget != null) {
-			slidingTabWidget.setVisibility(visibility);
-		} else if(alternateLockerWidget != null){
-			alternateLockerWidget.setVisibility(visibility);
-		}
+        if(visibility == View.VISIBLE) {
+            // Inflate sub views only if display is requested
+            RelativeLayout container = (RelativeLayout) findViewById(R.id.in_call_controls_container);
+            if(useSlider) {
+                if(slidingTabWidget == null) {
+                    slidingTabWidget = new SlidingTab(getContext());
+                    slidingTabWidget.setOnLeftRightListener(this);
+                    container.addView(slidingTabWidget, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                    slidingTabWidget.setLeftHintText(R.string.take_call);
+                    slidingTabWidget.setRightHintText(R.string.decline_call);
+                    updateTabLayout(getLeft(), getTop(), getRight(), getBottom());
+                }
+            }else {
+                if(alternateLockerWidget == null) {
+                    alternateLockerWidget = new AlternateUnlocker(getContext());
+                    alternateLockerWidget.setOnLeftRightListener(this);
+                    container.addView(alternateLockerWidget, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                }
+            }
+        }
+        
+        if(slidingTabWidget != null) {
+            slidingTabWidget.setVisibility(visibility);
+        }else if(alternateLockerWidget != null) {
+            alternateLockerWidget.setVisibility(visibility);
+        }
 	}
 	
-	
-	/**
-	 * Toggle the mute button as if pressed by the user.
-	 */
-	public void toggleMuteButton() {
-		muteButton.setChecked(!muteButton.isChecked());
-		muteButton.performClick();
-	}
+	private void setCallButtonsVisibility(int visibility) {
+	    View v = findViewById(R.id.bottomButtonsContainer);
+	    v.setVisibility(visibility);
+	    
+	    if(visibility == View.VISIBLE || visibility == View.INVISIBLE) {
+	        // We can now bind things.
+	        View addCallButton = findViewById(R.id.addCallButton);
+	        View clearCallButton = findViewById(R.id.clearCallButton);
+	        View dialButton = findViewById(R.id.dialpadButton);
+	        View bluetoothButton = findViewById(R.id.bluetoothButton);
+	        View speakerButton = findViewById(R.id.speakerButton);
+	        View muteButton = findViewById(R.id.muteButton);
 
+	        clearCallButton.setOnClickListener(this);
+	        dialButton.setOnClickListener(this);
+	        addCallButton.setOnClickListener(this);
+	        bluetoothButton.setOnClickListener(this);
+	        speakerButton.setOnClickListener(this);
+	        muteButton.setOnClickListener(this);
+	        
+	        addCallButton.setEnabled( supportMultipleCalls );
+	        dialButton.setEnabled(callOngoing);
+	    }
+	}
+	
 
 	public void setCallState(SipCallSession callInfo) {
 		currentCall = callInfo;
 		
 		if(currentCall == null) {
 			controlMode = MODE_NO_ACTION;
-			inCallButtons.setVisibility(GONE);
+			setCallButtonsVisibility(GONE);
 			setCallLockerVisibility(GONE);
 			return;
 		}
@@ -304,44 +292,38 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 		switch (state) {
 		case SipCallSession.InvState.INCOMING:
 			controlMode = MODE_LOCKER;
-			inCallButtons.setVisibility(GONE);
 			setCallLockerVisibility(VISIBLE);
-			inCallButtons.setVisibility(GONE);
+			setCallButtonsVisibility(GONE);
 			break;
 		case SipCallSession.InvState.CALLING:
 		case SipCallSession.InvState.CONNECTING:
 			controlMode = MODE_CONTROL;
 			setCallLockerVisibility(GONE);
-			inCallButtons.setVisibility(VISIBLE);
-			clearCallButton.setEnabled(true);
+			setCallButtonsVisibility(VISIBLE);
 			setEnabledMediaButtons(true);
 			break;
 		case SipCallSession.InvState.CONFIRMED:
 			controlMode = MODE_CONTROL;
 			setCallLockerVisibility(GONE);
-			inCallButtons.setVisibility(VISIBLE);
-
-			clearCallButton.setEnabled(true);
+			setCallButtonsVisibility(VISIBLE);
 			setEnabledMediaButtons(true);
 			break;
 		case SipCallSession.InvState.NULL:
 		case SipCallSession.InvState.DISCONNECTED:
 			controlMode = MODE_NO_ACTION;
-			inCallButtons.setVisibility(GONE);
+			setCallButtonsVisibility(GONE);
 			setCallLockerVisibility(GONE);
 			break;
 		case SipCallSession.InvState.EARLY:
 		default:
 			if (currentCall.isIncoming()) {
 				controlMode = MODE_LOCKER;
-				inCallButtons.setVisibility(GONE);
 				setCallLockerVisibility(VISIBLE);
-				inCallButtons.setVisibility(GONE);
+				setCallButtonsVisibility(GONE);
 			} else {
 				controlMode = MODE_CONTROL;
 				setCallLockerVisibility(GONE);
-				inCallButtons.setVisibility(VISIBLE);
-				clearCallButton.setEnabled(true);
+				setCallButtonsVisibility(VISIBLE);
 				setEnabledMediaButtons(true);
 			}
 			break;
@@ -457,22 +439,37 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 
 	public void setMediaState(MediaState mediaState) {
 		lastMediaState = mediaState;
-		muteButton.setEnabled(mediaState.canMicrophoneMute);
-		muteButton.setChecked(mediaState.isMicrophoneMute);
+
+        View dialButton = findViewById(R.id.dialpadButton);
+        if(dialButton == null) {
+            return;
+        }
+        // Resolve others buttons
+		ToggleButton bluetoothButton = (ToggleButton) findViewById(R.id.bluetoothButton);
+		ToggleButton speakerButton = (ToggleButton) findViewById(R.id.speakerButton);
+		ToggleButton muteButton = (ToggleButton) findViewById(R.id.muteButton);
+
+		if (lastMediaState == null) {
+            speakerButton.setEnabled(callOngoing);
+            muteButton.setEnabled(callOngoing);
+            bluetoothButton.setEnabled(callOngoing);
+        } else {
+            speakerButton.setEnabled(lastMediaState.canSpeakerphoneOn && callOngoing);
+            speakerButton.setChecked(mediaState.isSpeakerphoneOn);
+            muteButton.setEnabled(lastMediaState.canMicrophoneMute && callOngoing);
+            muteButton.setChecked(mediaState.isMicrophoneMute);
+            bluetoothButton.setEnabled(lastMediaState.canBluetoothSco && callOngoing);
+            bluetoothButton.setChecked(mediaState.isBluetoothScoOn);
+        }
 		
-	//	Log.d(THIS_FILE, ">>> Can bluetooth : "+mediaState.canBluetoothSco);
-		bluetoothButton.setEnabled(mediaState.canBluetoothSco);
-		bluetoothButton.setChecked(mediaState.isBluetoothScoOn);
-		
-		speakerButton.setEnabled(mediaState.canSpeakerphoneOn);
-		speakerButton.setChecked(mediaState.isSpeakerphoneOn);
-		
-		
+		dialButton.setEnabled(callOngoing);
 	}
 
 	public void applyTheme(Theme t) {
 		//Apply backgrounds
-		
+        
+        // TODO : re-enable
+        /*
 		// To toggle buttons
 		StateListDrawable tStd = getToggleButtonDrawable(t);
 		if(tStd != null) {
@@ -481,7 +478,6 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 			muteButton.setBackgroundDrawable(getToggleButtonDrawable(t));
 			bluetoothButton.setBackgroundDrawable(getToggleButtonDrawable(t));
 		}
-		
 		// To buttons
 		StateListDrawable bStd = getButtonDrawable(t);
 		if(bStd != null) {
@@ -503,6 +499,7 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 		if(dialDrawable != null) {
 			dialButton.setCompoundDrawablesWithIntrinsicBounds(null, dialDrawable, null, null);
 		}
+		*/
 		
 		if(slidingTabWidget != null) {
     		// To sliding tab
@@ -518,7 +515,7 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
     		
 		}
 	}
-	
+	/*
 	private StateListDrawable getToggleButtonDrawable(Theme t) {
 
 		Drawable toggleOnNormal = t.getDrawableResource("btn_in_call_switch_on_normal");
@@ -568,7 +565,6 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 	}
 	
 	
-	
 	private StateListDrawable getButtonDrawable(Theme t) {
 
 		Drawable btNormal = t.getDrawableResource("btn_in_call_main_normal");
@@ -598,6 +594,7 @@ public class InCallControls extends FrameLayout implements IOnLeftRightChoice, O
 		}
 		return null;
 	}
+	*/
 
     public int getLockerVisibility() {
         if(slidingTabWidget != null) {

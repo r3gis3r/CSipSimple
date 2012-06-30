@@ -31,7 +31,7 @@
     <!-- Dialer -->
     <integer name="dialpad_layout_weight_dialpad">65</integer>
     <integer name="dialpad_layout_weight_additional_buttons">15</integer>
-    <integer name="dialpad_layout_weight_digits">20</integer>
+    <integer name="dialpad_layout_weight_digits">20</integer><integer name="dialpad_layout_weight_autocomplete_list">40</integer>
 
     <dimen name="dialpad_horizontal_margin">0dip</dimen>
     <dimen name="dialpad_vertical_margin">2dip</dimen>

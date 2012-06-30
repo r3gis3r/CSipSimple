@@ -64,8 +64,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
@@ -116,8 +114,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     // Screen wake lock for video
     private WakeLock videoWakeLock;
 
-    private Dialpad dialPad;
-    private LinearLayout dialPadContainer;
     private EditText dialPadTextView;
 
     private final HashMap<Integer, InCallInfo> badges = new HashMap<Integer, InCallInfo>();
@@ -137,10 +133,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     private PreferencesProviderWrapper prefsWrapper;
 
     // Dnd views
-    private ImageView endCallTarget;
-    private Rect endCallTargetRect;
-    private ImageView holdTarget, answerTarget, xferTarget;
-    private Rect holdTargetRect, answerTargetRect, xferTargetRect;
+    //private ImageView endCallTarget, holdTarget, answerTarget, xferTarget;
+    private Rect endCallTargetRect, holdTargetRect, answerTargetRect, xferTargetRect;
     private Button middleAddCall;
 
     private DisplayMetrics metrics;
@@ -158,6 +152,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handler.setActivityInstance(this);
         Log.d(THIS_FILE, "Create in call");
         setContentView(R.layout.in_call_main);
 
@@ -186,19 +181,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         inCallControls = (InCallControls) findViewById(R.id.inCallControls);
         inCallControls.setOnTriggerListener(this);
 
-        dialPad = (Dialpad) findViewById(R.id.dialPad);
-        dialPad.setOnDialKeyListener(this);
-        dialPadContainer = (LinearLayout) findViewById(R.id.dialPadContainer);
-        dialPadTextView = (EditText) findViewById(R.id.digitsText);
         callInfoPanel = (ViewGroup) findViewById(R.id.callInfoPanel);
 
+        
         ScreenLocker lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
-        lockOverlay.setActivity(this, this);
-
-        endCallTarget = (ImageView) findViewById(R.id.dropHangup);
-        holdTarget = (ImageView) findViewById(R.id.dropHold);
-        answerTarget = (ImageView) findViewById(R.id.dropAnswer);
-        xferTarget = (ImageView) findViewById(R.id.dropXfer);
+        lockOverlay.setActivity(this);
+        lockOverlay.setOnLeftRightListener(this);
+        
 
         middleAddCall = (Button) findViewById(R.id.add_call_button);
         middleAddCall.setOnClickListener(new OnClickListener() {
@@ -241,6 +230,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         inCallControls.setCallState(initialSession);
         
     }
+    
 
     @Override
     protected void onStart() {
@@ -316,6 +306,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
         badges.clear();
         detachVideoPreview();
+
+        handler.setActivityInstance(null);
         
         super.onDestroy();
     }
@@ -382,7 +374,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             new Theme(this, theme, new Theme.onLoadListener() {
                 @Override
                 public void onLoad(Theme t) {
-                    dialPad.applyTheme(t);
+                    Dialpad dialPad = (Dialpad) findViewById(R.id.dialPad);
+                    if(dialPad != null) {
+                        dialPad.applyTheme(t);
+                    }
                     inCallControls.applyTheme(t);
                 }
             });
@@ -394,36 +389,35 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     private static final int UPDATE_DRAGGING = 3;
     private static final int SHOW_SAS = 4;
     // Ui handler
-    private Handler handler = new Handler() {
+    private static InCallActivityHandler handler = new InCallActivityHandler();
+    private static class InCallActivityHandler extends Handler {
+        private InCallActivity activity;
         public void handleMessage(Message msg) {
+            if(activity == null) {
+                super.handleMessage(msg);
+            }
             switch (msg.what) {
                 case UPDATE_FROM_CALL:
-                    updateUIFromCall();
+                    activity.updateUIFromCall();
                     break;
                 case UPDATE_FROM_MEDIA:
-                    updateUIFromMedia();
+                    activity.updateUIFromMedia();
                     break;
                 case UPDATE_DRAGGING:
                     DraggingInfo di = (DraggingInfo) msg.obj;
-                    inCallControls.setVisibility(di.isDragging ? View.GONE : View.VISIBLE);
-                    endCallTarget.setVisibility(di.isDragging ? View.VISIBLE : View.GONE);
-                    holdTarget.setVisibility(
-                            (di.isDragging && di.call.isActive() && !di.call.isBeforeConfirmed()) ?
-                                    View.VISIBLE : View.GONE);
-                    answerTarget.setVisibility((di.call.isActive() && di.call.isBeforeConfirmed()
-                            && di.call.isIncoming() && di.isDragging) ?
-                            View.VISIBLE : View.GONE);
-                    xferTarget.setVisibility((!di.call.isBeforeConfirmed()
-                            && !di.call.isAfterEnded() && di.isDragging) ?
-                            View.VISIBLE : View.GONE);
+                    activity.updateDragging(di);
                     break;
                 case SHOW_SAS:
                     ZrtpSasInfo sasInfo = (ZrtpSasInfo) msg.obj;
-                    showZRTPInfo(sasInfo.dataPtr, sasInfo.sas);
+                    activity.showZRTPInfo(sasInfo.dataPtr, sasInfo.sas);
                     break;
                 default:
                     super.handleMessage(msg);
             }
+        }
+        
+        public void setActivityInstance(InCallActivity act) {
+            activity = act;
         }
     };
 
@@ -464,6 +458,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     public static final int AUDIO_SETTINGS_MENU = Menu.FIRST + 1;
 
@@ -841,6 +836,40 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
         proximityManager.updateProximitySensorMode();
     }
+    
+
+    private void setSubViewVisibilitySafely(int id, boolean visible) {
+        View v = findViewById(id);
+        if(v != null) {
+            v.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+    }
+    
+    private boolean ditherSet = false;
+    protected void updateDragging(DraggingInfo di) {
+
+        inCallControls.setVisibility(di.isDragging ? View.GONE : View.VISIBLE);
+        findViewById(R.id.dropZones).setVisibility(di.isDragging ? View.VISIBLE : View.GONE);
+        
+        setSubViewVisibilitySafely(R.id.dropHangup, di.isDragging);
+        setSubViewVisibilitySafely(R.id.dropHold, (di.isDragging && di.call.isActive() && !di.call.isBeforeConfirmed()));
+        setSubViewVisibilitySafely(R.id.dropAnswer, (di.call.isActive() && di.call.isBeforeConfirmed()
+                && di.call.isIncoming() && di.isDragging));
+        setSubViewVisibilitySafely(R.id.dropXfer, (!di.call.isBeforeConfirmed()
+                && !di.call.isAfterEnded() && di.isDragging));
+        
+
+        if(!ditherSet) {
+            int[] dropZones = new int[] {R.id.dropHangup, R.id.dropHold, R.id.dropAnswer, R.id.dropXfer};
+            for(int id : dropZones) {
+                View v = findViewById(id);
+                if(v != null) {
+                    v.getBackground().setDither(true);
+                    ditherSet = true;
+                }
+            }
+        }
+    }
 
     private synchronized void delayedQuit() {
 
@@ -874,9 +903,16 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     };
 
     private void setDialpadVisibility(int visibility) {
-        dialPadContainer.setVisibility(visibility);
+        View dp = findViewById(R.id.dialPadContainer);
+        dp.setVisibility(visibility);
         int antiVisibility = visibility == View.GONE ? View.VISIBLE : View.GONE;
         setCallBadgesVisibility(antiVisibility);
+        
+        if(dialPadTextView == null && visibility == View.VISIBLE) {
+            Dialpad dialPad = (Dialpad) findViewById(R.id.dialPad);
+            dialPad.setOnDialKeyListener(this);
+            dialPadTextView = (EditText) findViewById(R.id.digitsText);
+        }
     }
 
     private void setCallBadgesVisibility(int visibility) {
@@ -1203,9 +1239,13 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 try {
                     service.sendDtmf(currentCall.getCallId(), keyCode);
                     dialFeedback.giveFeedback(dialTone);
-                    KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
-                    char nbr = event.getNumber();
-                    dialPadTextView.getText().append(nbr);
+                    
+                    if(dialPadTextView != null) {
+                        // Update text view
+                        KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+                        char nbr = event.getNumber();
+                        dialPadTextView.getText().append(nbr);
+                    }
                 } catch (RemoteException e) {
                     Log.e(THIS_FILE, "Was not able to send dtmf tone", e);
                 }
@@ -1240,7 +1280,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         private SipCallSession call;
         private InCallInfo badge;
         private boolean isDragging = false;
-        private boolean ditherSet = false;
         private SetDraggingTimerTask draggingDelayTask;
         Vibrator vibrator;
         int beginX = 0;
@@ -1284,13 +1323,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     beginX = X;
                     beginY = Y;
                     draggingTimer.schedule(draggingDelayTask, DRAGGING_DELAY);
-                    if(!ditherSet) {
-                        endCallTarget.getBackground().setDither(true);
-                        holdTarget.getBackground().setDither(true);
-                        answerTarget.getBackground().setDither(true);
-                        xferTarget.getBackground().setDither(true);
-                        ditherSet = true;
-                    }
                 case MotionEvent.ACTION_MOVE:
                     if (isDragging) {
                         float size = Math.max(75.0f, event.getSize() + 50.0f);
@@ -1348,26 +1380,30 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             call = callInfo;
         }
     }
+    
+    private Rect getViewRect(int id) {
+        View v = findViewById(id);
+        if(v != null && v.getVisibility() == View.VISIBLE) {
+            return new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+        }
+        return null;
+    }
 
     private void onDropBadge(int X, int Y, InCallInfo badge, SipCallSession call) {
         Log.d(THIS_FILE, "Dropping !!! in " + X + ", " + Y);
 
         // Rectangle init if not already done
-        if (endCallTargetRect == null && endCallTarget.getVisibility() == View.VISIBLE) {
-            endCallTargetRect = new Rect(endCallTarget.getLeft(), endCallTarget.getTop(),
-                    endCallTarget.getRight(), endCallTarget.getBottom());
+        if (endCallTargetRect == null) {
+            endCallTargetRect = getViewRect(R.id.dropHangup);
         }
-        if (holdTargetRect == null && holdTarget.getVisibility() == View.VISIBLE) {
-            holdTargetRect = new Rect(holdTarget.getLeft(), holdTarget.getTop(),
-                    holdTarget.getRight(), holdTarget.getBottom());
+        if (holdTargetRect == null) {
+            holdTargetRect = getViewRect(R.id.dropHold);
         }
-        if (answerTargetRect == null && answerTarget.getVisibility() == View.VISIBLE) {
-            answerTargetRect = new Rect(answerTarget.getLeft(), answerTarget.getTop(),
-                    answerTarget.getRight(), answerTarget.getBottom());
+        if (answerTargetRect == null) {
+            answerTargetRect = getViewRect(R.id.dropAnswer);
         }
-        if (xferTargetRect == null && xferTarget.getVisibility() == View.VISIBLE) {
-            xferTargetRect = new Rect(xferTarget.getLeft(), xferTarget.getTop(),
-                    xferTarget.getRight(), xferTarget.getBottom());
+        if (xferTargetRect == null) {
+            xferTargetRect = getViewRect(R.id.dropXfer);
         }
 
         // Rectangle matching

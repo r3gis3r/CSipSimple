@@ -98,6 +98,20 @@ interface ISipService{
 	 * @param accountId The id of the account to use for this call. 
 	 */
 	void makeCall(in String callee, int accountId);
+	
+	
+	/**
+	 * Place a call.
+	 * 
+	 * @param callee The sip uri to call. 
+	 * It can also be a simple number, in which case the app will autocomplete.
+	 * If you add the scheme, take care to fill completely else it could be considered as a call
+	 * to a sip IP/domain
+	 * @param accountId The id of the account to use for this call. 
+	 * @param options The options you'd like to apply for this calls {@link SipCallSession#OPT_CALL_VIDEO}
+	 */
+	void makeCallWithOptions(in String callee, int accountId, in Bundle options);
+	
 	/**
 	 * Answer a call.
 	 * 

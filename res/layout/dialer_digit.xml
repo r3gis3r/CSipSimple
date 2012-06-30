@@ -30,16 +30,19 @@
     android:paddingBottom="@dimen/right_panel_margin_vertical"
     android:paddingTop="@dimen/right_panel_margin_vertical" >
 
-    <LinearLayout
+    <!-- android:background="@drawable/btn_dial_textfield" -->
+
+    <RelativeLayout
         android:id="@+id/topField"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_marginBottom="0dip"
         android:layout_weight="@integer/dialpad_layout_weight_digits"
-        android:background="@drawable/btn_dial_textfield"
+        android:background="@drawable/dialpad_background"
         android:orientation="horizontal"
         android:padding="0dip" >
 
+        <!--
         <ImageButton
             android:id="@+id/switchTextView"
             android:layout_width="wrap_content"
@@ -47,56 +50,42 @@
             android:background="@drawable/btn_dial_textbadge"
             android:contentDescription="@string/switch_to_text"
             android:src="@drawable/ic_menu_switch_txt" />
+        -->
 
         <com.csipsimple.ui.dialpad.DigitsEditText
             android:id="@+id/digitsText"
-            android:layout_width="0dip"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="0dip"
-            android:layout_marginLeft="5dip"
-            android:layout_marginRight="5dip"
-            android:layout_marginTop="0dip"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/accountChooserButton"
             android:background="@android:color/transparent"
             android:contentDescription="@string/description_digits_edittext"
+            android:gravity="center"
             android:imeActionLabel="@string/call"
             android:imeOptions="actionGo"
-            android:inputType="none"
-            android:maxLines="1"
             android:nextFocusRight="@+id/accountChooserButton"
-            android:scrollHorizontally="true"
-            android:textSize="28sp" />
+            android:textAppearance="@style/DialtactsDigitsTextAppearance"
+            android:textColor="?attr/textColorPrimary" />
 
         <com.csipsimple.widgets.AccountChooserButton
             android:id="@+id/accountChooserButton"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight="0" />
-    </LinearLayout>
-    <!-- Keypad section -->
-
-    <com.csipsimple.widgets.Dialpad
-        android:id="@+id/dialPad"
-        android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="@integer/dialpad_layout_weight_dialpad" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dialpad_vertical_margin"
-        android:background="#66000000" />
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+    </RelativeLayout>
+    <!-- Autocomplete -->
 
     <ListView
         android:id="@+id/autoCompleteList"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="@integer/dialpad_layout_weight_dialpad"
+        android:layout_weight="@integer/dialpad_layout_weight_autocomplete_list"
         android:visibility="gone" />
 
-    <com.csipsimple.widgets.DialerCallBar
-        android:id="@+id/dialerCallBar"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="@integer/dialpad_layout_weight_additional_buttons" />
+    <!-- Keypad section -->
+
+    <include layout="@layout/dialpad_compose" />
 
 </LinearLayout>

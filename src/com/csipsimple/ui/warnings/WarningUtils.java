@@ -170,7 +170,10 @@ public class WarningUtils {
          * Bind the view items
          */
         protected void bindView() {
-            
+            View ignoreView = findViewById(R.id.warn_ignore);
+            if(ignoreView != null) {
+                ignoreView.setOnClickListener(this);
+            }
         }
 
         /**

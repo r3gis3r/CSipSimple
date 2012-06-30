@@ -389,9 +389,13 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
     }
 
     private void sendFragmentVisibilityChange(int position, boolean visibility) {
-        final Fragment fragment = getFragmentAt(position);
-        if (fragment instanceof ViewPagerVisibilityListener) {
-            ((ViewPagerVisibilityListener) fragment).onVisibilityChanged(visibility);
+        try {
+            final Fragment fragment = getFragmentAt(position);
+            if (fragment instanceof ViewPagerVisibilityListener) {
+                ((ViewPagerVisibilityListener) fragment).onVisibilityChanged(visibility);
+            }
+        }catch(IllegalStateException e) {
+            Log.e(THIS_FILE, "Fragment not anymore managed");
         }
     }
 
@@ -623,18 +627,20 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        int actionRoom = getResources().getBoolean(R.bool.menu_in_bar) ? MenuItem.SHOW_AS_ACTION_IF_ROOM : MenuItem.SHOW_AS_ACTION_NEVER;
+        
         WizardInfo distribWizard = CustomDistribution.getCustomDistributionWizard();
         if (distribWizard != null) {
             menu.add(Menu.NONE, DISTRIB_ACCOUNT_MENU, Menu.NONE, "My " + distribWizard.label)
                     .setIcon(distribWizard.icon)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                    .setShowAsAction(actionRoom);
         }
         if (CustomDistribution.distributionWantsOtherAccounts()) {
             menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE,
                     (distribWizard == null) ? R.string.accounts : R.string.other_accounts)
                     .setIcon(R.drawable.ic_menu_account_list)
                     .setAlphabeticShortcut('a')
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+                    .setShowAsAction(actionRoom | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         }
         menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, R.string.prefs)
                 .setIcon(android.R.drawable.ic_menu_preferences)
