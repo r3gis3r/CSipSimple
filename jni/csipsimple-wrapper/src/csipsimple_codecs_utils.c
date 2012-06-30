@@ -188,8 +188,10 @@ PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned id,
 	    if (pj_stricmp(&param.dec_fmtp.param[i].name, &PROFILE_LEVEL_ID) == 0) {
 	    	if(param.dec_fmtp.param[i].val.slen >= 6) {
 	    		// Unchanged profile_idc and profile_iop so +4
+	    		/*
 				char *p = param.dec_fmtp.param[i].val.ptr + 4;
-				pj_val_to_hex_digit(id, &p);
+				pj_val_to_hex_digit(id, p);
+				*/
 	    	}else{
 		    	PJ_LOG(2, (THIS_FILE, "Impossible to set dec_fmtp"));
 	    	}
