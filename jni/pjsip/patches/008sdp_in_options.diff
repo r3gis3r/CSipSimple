@@ -1,0 +1,44 @@
+Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c
+===================================================================
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_core.c	2012-06-29 16:37:15.532214875 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c	2012-06-29 17:01:53.248153071 +0200
+@@ -423,23 +423,27 @@
+ 	pjsip_msg_add_hdr(tdata->msg, h);
+     }
+ 
+-    /* Get media socket info, make sure transport is ready */
+-#if DISABLED_FOR_TICKET_1185
+-    if (pjsua_var.calls[0].med_tp) {
+-	pjmedia_transport_info tpinfo;
+-	pjmedia_sdp_session *sdp;
++    /* Build a SDP response. As media probably not started at this point, use fake sock info */
++    {
++    pjmedia_sdp_session *sdp;
++    pjmedia_sock_info sock_info;
++	pj_uint16_t port;
++	int acc_id = pjsua_acc_find_for_incoming(rdata);
+ 
+-	pjmedia_transport_info_init(&tpinfo);
+-	pjmedia_transport_get_info(pjsua_var.calls[0].med_tp, &tpinfo);
++    pj_bzero(&sock_info, sizeof(pjmedia_sock_info));
++    /* We use local ip if able to resolve it. No bother with status here, the point is to get some IP to send. */
++    pj_gethostip(pj_AF_INET(), &sock_info.rtp_addr_name);
++    /* We use configured rtp port. It's not necessarily relevant, but just to give a port. It's inline with the fact we send hostip */
++    port = pjsua_var.acc[acc_id].cfg.rtp_cfg.port;
++	pj_sockaddr_set_port(&sock_info.rtp_addr_name, port);
+ 
+-	/* Add SDP body, using call0's RTP address */
++	/* Add SDP body, using fake RTP address */
+ 	status = pjmedia_endpt_create_sdp(pjsua_var.med_endpt, tdata->pool, 1,
+-					  &tpinfo.sock_info, &sdp);
++				  &sock_info, &sdp);
+ 	if (status == PJ_SUCCESS) {
+-	    pjsip_create_sdp_body(tdata->pool, sdp, &tdata->msg->body);
+-	}
++		pjsip_create_sdp_body(tdata->pool, sdp, &tdata->msg->body);
++    }
+     }
+-#endif
+ 
+     /* Send response */
+     pjsip_get_response_addr(tdata->pool, rdata, &res_addr);
