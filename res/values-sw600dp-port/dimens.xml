@@ -2,7 +2,7 @@
 <resources>
 
     <dimen name="right_panel_margin_left">5dip</dimen>
-    <dimen name="right_panel_margin_vertical">35dip</dimen>
+    <dimen name="right_panel_margin_vertical">0dip</dimen>
     <dimen name="right_panel_fading_edge">70px</dimen>
 
 </resources>

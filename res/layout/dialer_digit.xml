@@ -21,7 +21,7 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.csipsimple.ui.dialpad.DialerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/top_digit_dialer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -88,4 +88,4 @@
 
     <include layout="@layout/dialpad_compose" />
 
-</LinearLayout>
+</com.csipsimple.ui.dialpad.DialerLayout>

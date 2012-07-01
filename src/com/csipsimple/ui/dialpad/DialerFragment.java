@@ -157,6 +157,8 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     private PhoneNumberFormattingTextWatcher digitFormater;
     private OnAutoCompleteListItemClicked autoCompleteListItemListener;
 
+    private DialerLayout dialerLayout;
+
     // private ImageButton backFlipTextDialerButton;
 
     @Override
@@ -192,6 +194,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         callBar = (DialerCallBar) v.findViewById(R.id.dialerCallBar);
         autoCompleteList = (ListView) v.findViewById(R.id.autoCompleteList);
         accountChooserButton = (AccountChooserButton) v.findViewById(R.id.accountChooserButton);
+        dialerLayout = (DialerLayout) v.findViewById(R.id.top_digit_dialer);
         //switchTextView = (ImageButton) v.findViewById(R.id.switchTextView);
 
         // isTablet = Compatibility.isTabletScreen(getActivity());
@@ -202,6 +205,9 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         }
         
         digits.setOnEditorActionListener(keyboardActionListener);
+        
+        // Layout 
+        dialerLayout.setForceNoList(mDualPane);
 
         // Account chooser button setup
         accountChooserButton.setShowExternals(true);
@@ -440,7 +446,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         }
 
         // If single pane for smartphone use autocomplete list
-        if (!isDigit && !mDualPane) {
+        if (hasAutocompleteList()) {
             if (digits.length() >= 2) {
                 autoCompleteAdapter.getFilter().filter(digits.getText().toString());
             } else {
@@ -484,13 +490,21 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         digits.setCursorVisible(!isDigit);
         digits.setIsDigit(isDigit, true);
         
+        // Update views visibility
         dialPad.setVisibility(isDigit ? View.VISIBLE : View.GONE);
-        autoCompleteList.setVisibility(isDigit ? View.GONE : View.VISIBLE);
+        autoCompleteList.setVisibility(hasAutocompleteList() ? View.VISIBLE : View.GONE);
         //switchTextView.setImageResource(isDigit ? R.drawable.ic_menu_switch_txt
         //        : R.drawable.ic_menu_switch_digit);
 
         // Invalidate to ask to require the text button to a digit button
         getSherlockActivity().invalidateOptionsMenu();
+    }
+    
+    private boolean hasAutocompleteList() {
+        if(!isDigit) {
+            return true;
+        }
+        return dialerLayout.canShowList();
     }
 
     /**
