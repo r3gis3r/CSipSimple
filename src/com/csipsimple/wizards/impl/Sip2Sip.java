@@ -54,6 +54,7 @@ public class Sip2Sip extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.proxies = new String[] { "sip:proxy.sipthor.net" };
+		account.vm_nbr = "1233";
 		return account;
 	}
 	
