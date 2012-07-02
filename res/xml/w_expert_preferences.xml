@@ -196,7 +196,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="Outbound proxy RFC5626" >
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="use_rfc5626"
             android:summary="Control the use of SIP outbound feature. (currently only works with TCP and TLS transports)"
             android:title="Enable RFC5626" />
