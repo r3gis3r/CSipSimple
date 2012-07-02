@@ -299,6 +299,15 @@
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="csip" />
+                <data android:scheme="sip" />
+                <data android:scheme="sips" />
+            </intent-filter>
             <intent-filter android:priority="10" >
                 <action android:name="android.phone.extra.NEW_CALL_INTENT" />
 

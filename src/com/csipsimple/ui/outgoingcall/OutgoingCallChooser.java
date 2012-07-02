@@ -92,13 +92,7 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
                         scheme = scheme.toLowerCase();
                     }
                     
-                    if (action.equalsIgnoreCase(Intent.ACTION_CALL)) {
-                         // Simple call intent
-                        phoneNumber = data.getSchemeSpecificPart();
-                        if(SCHEME_CSIP.equals(scheme)) {
-                            ignoreRewritingRules = true;
-                        }
-                    }else if (action.equalsIgnoreCase(Intent.ACTION_SENDTO)) {
+                    if (action.equalsIgnoreCase(Intent.ACTION_SENDTO)) {
                         // Send to action -- could be im or sms
                         if (SCHEME_IMTO.equals(scheme)) {
                             // Im sent
@@ -111,7 +105,13 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
                         }else if (SCHEME_SMSTO.equals(scheme)) {
                             phoneNumber = PhoneNumberUtils.stripSeparators(data.getSchemeSpecificPart());
                         }
-                    }
+                    } else {
+                        // Simple call intent
+                       phoneNumber = data.getSchemeSpecificPart();
+                       if(SCHEME_CSIP.equals(scheme)) {
+                           ignoreRewritingRules = true;
+                       }
+                    } 
                 }
             } else {
                 String action = it.getAction();
