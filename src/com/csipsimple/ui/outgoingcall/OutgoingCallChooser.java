@@ -113,8 +113,19 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
                         }
                     }
                 }
-            }else {
-                phoneNumber = PhoneNumberUtils.stripSeparators(phoneNumber);
+            } else {
+                String action = it.getAction();
+
+                Uri data = it.getData();
+                if (action != null && data != null) {
+                    String scheme = data.getScheme();
+                    if(scheme != null) {
+                        scheme = scheme.toLowerCase();
+                        if(SCHEME_SMSTO.equals(scheme) || "tel".equals(scheme)) {
+                            phoneNumber = PhoneNumberUtils.stripSeparators(phoneNumber);
+                        }
+                    }
+                }
             }
             // Still null ... well make it empty.
             if(phoneNumber == null) {
