@@ -309,7 +309,7 @@ public class DBAdapter {
 			if(oldVersion < 30) {
 			    try {
 			      //Add reg delay before refresh row
-			        addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_USE_RFC5626, "INTEGER DEFAULT 1");
+			        addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_USE_RFC5626, "INTEGER DEFAULT 0");
                     addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RFC5626_INSTANCE_ID, "TEXT");
                     addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_RFC5626_REG_ID, "TEXT");
 

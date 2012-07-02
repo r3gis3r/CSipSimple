@@ -785,7 +785,7 @@ public class SipProfile implements Parcelable {
     /**
      * @see #FIELD_USE_RFC5626
      */
-    public boolean use_rfc5626 = true;
+    public boolean use_rfc5626 = false;
     /**
      * @see #FIELD_RFC5626_INSTANCE_ID
      */
