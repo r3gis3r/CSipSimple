@@ -50,6 +50,9 @@ public class Catitel extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 	    SipProfile acc = super.buildAccount(account);
 	    acc.vm_nbr = "3042";
+	    if(acc.display_name.equals(getDefaultName())) {
+	        acc.display_name = acc.display_name + " ("+ acc.username + ")";
+	    }
 	    return acc;
 	}
 	
