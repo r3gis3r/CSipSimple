@@ -219,6 +219,12 @@ public class Betamax extends AuthorizationImplementation {
             put("Telbo", new String[] {
                     "sip.telbo.com", "stun.telbo.com"
             });
+            put("Llevoip", new String[] {
+                    "77.72.174.129", "77.72.174.160"
+            });
+            put("Llevoip (server 2)", new String[] {
+                    "77.72.174.130:6000", "77.72.174.162"
+            });
 
             /*
              * put("InternetCalls", new String[] {"", ""});
