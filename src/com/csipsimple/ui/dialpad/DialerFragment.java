@@ -256,10 +256,9 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
                     // t.applyBackgroundDrawable(deleteButton,
                     // "btn_dial_delete");
                     // t.applyBackgroundDrawable(dialButton, "btn_dial_action");
-                    t.applyBackgroundDrawable(getView().findViewById(R.id.vmButton),
-                            "btn_dial_action_left_normal");
-
+                    
                     // Bg ... to be done
+                    /*
                     Drawable bg = t.getDrawableResource("dialpad_bg");
                     if (bg != null) {
                         if (bg instanceof BitmapDrawable) {
@@ -272,12 +271,11 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
                     Drawable dAct = t.getDrawableResource("btn_dial_textfield_activated");
                     Drawable dEmpt = t.getDrawableResource("btn_dial_textfield_normal");
                     if (dAct != null && dEmpt != null) {
-                        /*
                         digitsBackground = dAct;
                         digitsEmptyBackground = dEmpt;
-                        */
                         afterTextChanged(digits.getText());
                     }
+                    */
                 }
             });
         }
