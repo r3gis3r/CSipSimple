@@ -61,11 +61,17 @@ public abstract class AuthorizationImplementation extends BaseImplementation {
 			accountDisplayName.setText(getDefaultName());
 		}
 		
-		accountUsername.setText(account.getSipUserName());
-		accountServer.setText(account.getSipDomain());
+		if(accountUsername != null) {
+		    accountUsername.setText(account.getSipUserName());
+		}
+		if(accountServer != null) {
+		    accountServer.setText(account.getSipDomain());
+		}
 		
 		accountPassword.setText(account.data);
-		accountAuthorization.setText(account.username);
+		if(accountAuthorization != null) {
+		    accountAuthorization.setText(account.username);
+		}
 	}
 
 	public void updateDescriptions() {
