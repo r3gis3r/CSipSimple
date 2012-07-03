@@ -22,7 +22,13 @@
 package com.csipsimple.wizards.impl;
 
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.models.Filter;
 import com.csipsimple.utils.PreferencesWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class Sipkom extends SimpleImplementation {
 	
@@ -43,11 +49,27 @@ public class Sipkom extends SimpleImplementation {
 		// Add stun server
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
 		prefs.addStunServer("stun.sipkom.com");
+		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
 	}
 	
 
 	@Override
 	public boolean needRestart() {
 		return true;
+	}
+	
+	@Override
+	public List<Filter> getDefaultFilters(SipProfile acc) {
+	    ArrayList<Filter> filters = new ArrayList<Filter>();
+
+        Filter f = new Filter();
+        f.account = (int) acc.id;
+        f.action = Filter.ACTION_REPLACE;
+        f.matchPattern = "^"+Pattern.quote("+")+"(.*)$";
+        f.replacePattern = "$1";
+        f.matchType = Filter.MATCHER_STARTS;
+        filters.add(f);
+        
+        return filters;
 	}
 }
