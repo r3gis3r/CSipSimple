@@ -30,6 +30,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 
 import com.csipsimple.api.SipConfigManager;
 
@@ -37,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -676,6 +678,24 @@ public class PreferencesWrapper {
 	
 	public static File getLogsFolder(Context ctxt) {
 		return getSubFolder(ctxt, LOGS_FOLDER, false);
+	}
+	
+	public static File getLogsFile(Context ctxt, boolean isPjsip) {
+        File dir = PreferencesWrapper.getLogsFolder(ctxt);
+        File outFile = null;
+        if( dir != null) {
+            Date d = new Date();
+            StringBuffer fileName = new StringBuffer();
+            if(isPjsip) {
+                fileName.append("pjsip");
+            }
+            fileName.append("logs_");
+            fileName.append(DateFormat.format("yy-MM-dd_kkmmss", d));
+            fileName.append(".txt");
+            outFile = new File(dir.getAbsoluteFile() + File.separator + fileName.toString());
+        }
+        
+        return outFile;
 	}
 	
 	public static File getZrtpFolder(Context ctxt) {

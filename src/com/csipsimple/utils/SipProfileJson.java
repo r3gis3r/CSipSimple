@@ -160,7 +160,7 @@ public final class SipProfileJson {
         if (dir != null) {
             Date d = new Date();
             File file = new File(dir.getAbsoluteFile() + File.separator + "backup_"
-                    + DateFormat.format("MM-dd-yy_kkmmss", d) + ".json");
+                    + DateFormat.format("yy-MM-dd_kkmmss", d) + ".json");
             Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
 
             JSONObject configChain = new JSONObject();

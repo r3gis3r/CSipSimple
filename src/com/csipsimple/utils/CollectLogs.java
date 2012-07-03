@@ -21,19 +21,17 @@
 
 package com.csipsimple.utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Date;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.text.format.DateFormat;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class CollectLogs {
 
@@ -96,15 +94,10 @@ public class CollectLogs {
         	ArrayList<String> commandLine = new ArrayList<String>();
             commandLine.add("logcat");
         	
-        	
-        	File dir = PreferencesWrapper.getLogsFolder(ctxt);
-        	if( dir != null) {
-    			Date d = new Date();
-    			outFile = new File(dir.getAbsoluteFile() + File.separator + "logs_"+DateFormat.format("MM-dd-yy_kkmmss", d)+".txt");
-    			
+            outFile = PreferencesWrapper.getLogsFile(ctxt, false);
+        	if( outFile != null) {
     			commandLine.add("-f");
     			commandLine.add(outFile.getAbsolutePath());
-    			Log.d(THIS_FILE, commandLine.toString());
         	}
 
             commandLine.add("-d");

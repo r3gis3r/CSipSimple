@@ -403,10 +403,8 @@ public class PjSipService {
                 logCfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
                 
                 if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.LOG_USE_DIRECT_FILE, false)) {
-                    File dir = PreferencesWrapper.getLogsFolder(service);
-                    if( dir != null) {
-                        Date d = new Date();
-                        File outFile = new File(dir.getAbsoluteFile() + File.separator + "logs_"+DateFormat.format("MM-dd-yy", d)+".txt");
+                    File outFile = PreferencesWrapper.getLogsFile(service, true);
+                    if( outFile != null) {
                         logCfg.setLog_filename(pjsua.pj_str_copy(outFile.getAbsolutePath()));
                         logCfg.setLog_file_flags(0x1108 /* PJ_O_APPEND */);
                     }
@@ -1888,7 +1886,7 @@ public class PjSipService {
             Date d = new Date();
             File file = new File(dir.getAbsoluteFile() + File.separator
                     + sanitizeForFile(remoteContact) + "_"
-                    + DateFormat.format("MM-dd-yy_kkmmss", d) + ".wav");
+                    + DateFormat.format("yy-MM-dd_kkmmss", d) + ".wav");
             Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
             return file;
         }
