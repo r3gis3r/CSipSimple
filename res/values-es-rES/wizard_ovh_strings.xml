@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_ovh_phone_number_desc">Número de telefono en formato internacional p. ej. 0033xxxxxxxxx</string>
+  <string name="w_sapo_phone_number_desc">Número de telefono en formato internacional p. ej. +35130xxxxxx</string>
+  <string name="w_pbxes_user_extension">Extensión de usuario (algo como user-1)</string>
+</resources>

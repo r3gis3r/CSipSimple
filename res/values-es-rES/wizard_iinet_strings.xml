@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_iinet_state">Estado</string>
+  <string name="w_iinet_state_desc">El estado que mejor le convenga de la siguiente lista</string>
+  <string name="w_iinet_username">Número de teléfono VoIP</string>
+  <string name="w_iinet_username_desc">Suprimir todos los caracteres especiales</string>
+  <string name="w_iinet_password">Contraseña especial de VoIP</string>
+  <string name="w_iinet_password_desc">No es la misma que la contraseña de conexión</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_ecs_display_name">Nombre de la cuenta</string>
+  <string name="w_ecs_display_name_desc">Nombre para mostrar de esta cuenta</string>
+  <string name="w_ecs_phone_number">Número de teléfono</string>
+  <string name="w_ecs_phone_number_desc">Número de teléfono de la cuenta SIP</string>
+  <string name="w_ecs_user_name">Nombre de usuario</string>
+  <string name="w_ecs_user_name_desc">Su inicio de sesión en virtualdesk</string>
+  <string name="w_ecs_password">Contraseña</string>
+  <string name="w_ecs_password_desc">Contraseña de su cuenta</string>
+  <string name="w_ecs_server_domain">Dominio SIP</string>
+  <string name="w_ecs_server_domain_desc">Nombre de dominio de sus cuentas SIP</string>
+  <string name="w_ecs_server_ip_desc">Nombre de dominio o dirección IP para acceder a la ECS (dejar en blanco si es la misma que la del dominio SIP)</string>
+</resources>

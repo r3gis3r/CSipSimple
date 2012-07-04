@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_common_display_name">Nombre de la cuenta</string>
+  <string name="w_common_display_name_desc">Nombre para mostrar de esta cuenta</string>
+  <string name="w_common_username">Nombre de usuario</string>
+  <string name="w_common_username_desc">Inicio de sesión de la cuenta SIP (no escribir @sip.server)</string>
+  <string name="w_common_phone_number">Número de teléfono</string>
+  <string name="w_common_phone_number_desc">Número de telefono suministrado por su proveedor SIP</string>
+  <string name="w_common_password">Contraseña</string>
+  <string name="w_common_password_desc">Contraseña para tu cuenta</string>
+  <string name="w_common_server">Servidor</string>
+  <string name="w_common_server_desc">Dominio/IP del servidor SIP[:puerto]</string>
+  <string name="create_account">Crear una cuenta</string>
+</resources>

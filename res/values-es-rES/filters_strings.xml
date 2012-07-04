@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="optional_sip_code">Código SIP opcional</string>
+  <string name="cant_call">No se puede llamar</string>
+  <string name="rewrite">Reescribir</string>
+  <string name="stop_processing">Parar el proceso</string>
+  <string name="direct_call">Llamar directamente</string>
+  <string name="auto_answer">Respuesta automática</string>
+  <string name="starts_with">Comienza por</string>
+  <string name="ends_with">Termina en</string>
+  <string name="contains">Contiene</string>
+  <string name="all">Todo</string>
+  <string name="has_exactly_n_digits">Tiene exactamente N dígitos</string>
+  <string name="has_more_than_n_digits">Tiene más de N dígitos</string>
+  <string name="is_exactly">Es exactamente</string>
+  <string name="custom_regexp">RegExp personalizada</string>
+  <string name="prefix_by">Tiene como prefijo</string>
+  <string name="suffix_with">Tiene como sufijo</string>
+  <string name="replace_match_by">Sustituir la palabra que corresponda por</string>
+  <string name="replace_all_by">Sustituir todo por</string>
+</resources>

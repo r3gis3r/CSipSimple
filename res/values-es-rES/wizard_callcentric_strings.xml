@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_callcentric_display_name">Nombre de la cuenta</string>
+  <string name="w_callcentric_display_name_desc">Nombre para mostrar de la cuenta</string>
+  <string name="w_callcentric_phone_number">Número de teléfono SIP</string>
+  <string name="w_callcentric_phone_number_desc">Número de telefono de Callcentric (17777xxxxxxx)</string>
+  <string name="w_callcentric_password">Contraseña</string>
+  <string name="w_callcentric_password_desc">Contraseña para tu cuenta Callcentric</string>
+</resources>
