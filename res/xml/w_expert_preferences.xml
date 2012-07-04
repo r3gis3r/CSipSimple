@@ -179,6 +179,12 @@
             android:key="vm_nbr"
             android:title="@string/voice_mail" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="mwi_enabled"
+            android:summary="@string/w_expert_mwi_enabled_desc"
+            android:title="@string/w_expert_mwi_enabled" />
+
         <ListPreference
             android:defaultValue="-1"
             android:entries="@array/auto_on_off_choices"

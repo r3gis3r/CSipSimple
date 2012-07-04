@@ -826,6 +826,10 @@ public class SipProfile implements Parcelable {
      * @see #FIELD_ANDROID_GROUP
      */
     public String android_group = "";
+    /**
+     * @see #FIELD_MWI_ENABLED
+     */
+    public boolean mwi_enabled = true;
 
     public SipProfile() {
         display_name = "";
@@ -892,6 +896,7 @@ public class SipProfile implements Parcelable {
         rtp_enable_qos = in.readInt();
         rtp_qos_dscp = in.readInt();
         android_group = getReadParcelableString(in.readString());
+        mwi_enabled = (in.readInt() != 0);
     }
 
     /**
@@ -965,6 +970,7 @@ public class SipProfile implements Parcelable {
         dest.writeInt(rtp_enable_qos);
         dest.writeInt(rtp_qos_dscp);
         dest.writeString(getWriteParcelableString(android_group));
+        dest.writeInt(mwi_enabled ? 1 : 0);
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -996,7 +1002,7 @@ public class SipProfile implements Parcelable {
     private final void createFromContentValue(ContentValues args) {
         Integer tmp_i;
         String tmp_s;
-
+        
         // Application specific settings
         tmp_i = args.getAsInteger(FIELD_ID);
         if (tmp_i != null) {
@@ -1118,6 +1124,10 @@ public class SipProfile implements Parcelable {
         if (tmp_i != null && tmp_i >= 0) {
             sip_stack = tmp_i;
         }
+        tmp_i = args.getAsInteger(FIELD_MWI_ENABLED);
+        if(tmp_i != null && tmp_i >= 0) {
+            mwi_enabled = (tmp_i == 1);
+        }
         tmp_s = args.getAsString(FIELD_VOICE_MAIL_NBR);
         if (tmp_s != null) {
             vm_nbr = tmp_s;
@@ -1204,8 +1214,6 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_ACC_ID, acc_id);
         args.put(FIELD_REG_URI, reg_uri);
 
-        // MWI not yet in JNI
-
         args.put(FIELD_PUBLISH_ENABLED, publish_enabled);
         args.put(FIELD_REG_TIMEOUT, reg_timeout);
         args.put(FIELD_KA_INTERVAL, ka_interval);
@@ -1235,6 +1243,7 @@ public class SipProfile implements Parcelable {
         }
 
         args.put(FIELD_SIP_STACK, sip_stack);
+        args.put(FIELD_MWI_ENABLED, mwi_enabled);
         args.put(FIELD_VOICE_MAIL_NBR, vm_nbr);
         args.put(FIELD_REG_DELAY_BEFORE_REFRESH, reg_delay_before_refresh);
         args.put(FIELD_TRY_CLEAN_REGISTERS, try_clean_registers);

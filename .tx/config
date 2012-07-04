@@ -1,6 +1,6 @@
 [main]
 host = https://www.transifex.net
-lang_map = zh_CN: zh-rCN, zh_TW: zh-rTW, pt_BR: pt-rBR, en_GB: en-rGB
+lang_map = zh_CN: zh-rCN, zh_TW: zh-rTW, pt_BR: pt-rBR, en_GB: en-rGB, es_ES: es-rES
 type = ANDROID
 
 [csipsimple.strings]

@@ -52,5 +52,7 @@
     <string name="w_expert_rtp_public_addr">RTP public address</string>
     <string name="w_expert_rtp_public_addr_desc">Optional to advertise the address of RTP transport.</string>
     <string name="w_expert_media_transport">Media transport</string>
+    <string name="w_expert_mwi_enabled">Subscribe MWI</string>
+    <string name="w_expert_mwi_enabled_desc">Get notifications of voice mail box</string>
 
 </resources>

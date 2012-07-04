@@ -57,6 +57,7 @@ public class Expert extends BaseImplementation {
     private ListPreference accountUseZrtp;
 	private EditTextPreference accountRegDelayRefresh;
 	private EditTextPreference accountVm;
+    private CheckBoxPreference mwiEnabled;
 	private CheckBoxPreference tryCleanRegisters;
     private CheckBoxPreference useRfc5626;
     private EditTextPreference rfc5626_regId;
@@ -89,6 +90,7 @@ public class Expert extends BaseImplementation {
 		accountContactRewriteMethod = (ListPreference) findPreference(SipProfile.FIELD_CONTACT_REWRITE_METHOD);
 		accountProxy = (EditTextPreference) findPreference(SipProfile.FIELD_PROXY);
 		accountVm = (EditTextPreference) findPreference(SipProfile.FIELD_VOICE_MAIL_NBR);
+        mwiEnabled = (CheckBoxPreference) findPreference(SipProfile.FIELD_MWI_ENABLED);
 		tryCleanRegisters = (CheckBoxPreference) findPreference(SipProfile.FIELD_TRY_CLEAN_REGISTERS);
 		useRfc5626 = (CheckBoxPreference) findPreference(SipProfile.FIELD_USE_RFC5626);
 		rfc5626_instanceId = (EditTextPreference) findPreference(SipProfile.FIELD_RFC5626_INSTANCE_ID);
@@ -168,6 +170,7 @@ public class Expert extends BaseImplementation {
         vidOutAutoTransmit.setValue(Integer.toString(account.vid_out_auto_transmit));
 		
 		accountVm.setText(account.vm_nbr);
+		mwiEnabled.setChecked(account.mwi_enabled);
 		tryCleanRegisters.setChecked(account.try_clean_registers != 0);
 	}
 	
@@ -307,6 +310,7 @@ public class Expert extends BaseImplementation {
 		}else {
 			account.vm_nbr = "";
 		}
+		account.mwi_enabled = mwiEnabled.isChecked();
 		
         account.try_clean_registers = (tryCleanRegisters.isChecked()) ? 1 : 0;
 		

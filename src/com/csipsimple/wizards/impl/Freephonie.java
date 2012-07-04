@@ -67,6 +67,7 @@ public class Freephonie extends SimpleImplementation {
 		account.proxies = null;
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.vm_nbr = "**1";
+		account.mwi_enabled = false;
 		return account;
 	}
 	
