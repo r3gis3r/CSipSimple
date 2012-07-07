@@ -21,6 +21,7 @@
 
 package com.csipsimple.ui.outgoingcall;
 
+import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ public class OutgoingCallListFragment extends CSSListFragment {
     private static final String THIS_FILE = "OutgoingCallListFragment";
     private OutgoingAccountsAdapter mAdapter;
     private AccountsLoader accLoader;
+    private long startDate;
+    
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -52,6 +55,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
         super.onResume();
         attachAdapter();
         getLoaderManager().initLoader(0, null, this);
+        startDate = System.currentTimeMillis();
     }
     
     @Override
@@ -76,6 +80,8 @@ public class OutgoingCallListFragment extends CSSListFragment {
         return accLoader;
         
     }
+    
+    final long MOBILE_CALL_DELAY_MS = 500;
     
     /**
      * Place the call for a given cursor positionned at right index in list
@@ -112,24 +118,49 @@ public class OutgoingCallListFragment extends CSSListFragment {
                     Log.w(THIS_FILE, "Call handler not anymore available in loader... something gone wrong");
                     return false;
                 }
-                try {
-                    String nextExclude = ch.getNextExcludeTelNumber();
-                    if (nextExclude != null && service != null) {
-                        try {
-                            service.ignoreNextOutgoingCallFor(nextExclude);
-                        } catch (RemoteException e) {
-                            Log.e(THIS_FILE, "Ignore next outgoing number failed");
-                        }
+                String nextExclude = ch.getNextExcludeTelNumber();
+                long delay = 0;
+                if (nextExclude != null && service != null) {
+                    try {
+                        service.ignoreNextOutgoingCallFor(nextExclude);
+                    } catch (RemoteException e) {
+                        Log.e(THIS_FILE, "Ignore next outgoing number failed");
                     }
-                    ch.getIntent().send();
-                    superActivity.finishServiceIfNeeded(false);
-                    return true;
-                } catch (CanceledException e) {
-                    Log.e(THIS_FILE, "Pending intent cancelled", e);
+                    delay = MOBILE_CALL_DELAY_MS - (System.currentTimeMillis() - startDate);
                 }
+                PluginCallRunnable pendingTask = new PluginCallRunnable(ch.getIntent(), delay);
+                pendingTask.start();
+                return true;
             }
         }
         return false;
+    }
+    
+    private class PluginCallRunnable extends Thread {
+        private PendingIntent pendingIntent;
+        private long delay;
+        public PluginCallRunnable(PendingIntent pi, long d) {
+            pendingIntent = pi;
+            delay = d;
+        }
+        
+        @Override
+        public void run() {
+            if(delay > 0) {
+                try {
+                    sleep(delay);
+                } catch (InterruptedException e) {
+                    Log.e(THIS_FILE, "Thread that fires outgoing call has been interrupted");
+                }
+            }
+            OutgoingCallChooser superActivity = ((OutgoingCallChooser)getActivity());
+            try {
+                pendingIntent.send();
+            } catch (CanceledException e) {
+                Log.e(THIS_FILE, "Pending intent cancelled", e);
+            }
+            superActivity.finishServiceIfNeeded(false);
+        }
     }
 
     @Override
