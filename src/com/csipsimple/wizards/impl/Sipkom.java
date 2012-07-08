@@ -42,6 +42,12 @@ public class Sipkom extends SimpleImplementation {
 		return "sipkom";
 	}
 	
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+        acc.mwi_enabled = false;
+	    return acc;
+	}
 	
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
