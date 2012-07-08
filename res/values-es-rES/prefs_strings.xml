@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="prefs">Ajustes</string>
-  <string name="prefs_fast">Configuración sencilla</string>
+  <string name="prefs_fast">Configuración rápida</string>
   <string name="prefs_fast_desc">Opciones rápidas para los que no están familiarizados con el SIP</string>
   <string name="prefs_network">Red</string>
   <string name="prefs_network_desc">Como se conecta el SIP a la red</string>
@@ -21,8 +21,8 @@
   <string name="use_wifi_in_desc">Utilizar WiFi para las llamadas entrantes</string>
   <string name="use_wifi_out_desc">Utilizar WiFi para las llamadas salientes</string>
   <string name="use_other">Utilizar otras redes</string>
-  <string name="use_other_in_desc">Por ejemplo WiMMax para las llamadas entrantes</string>
-  <string name="use_other_out_desc">Por ejemplo WiMMax para las llamadas salientes</string>
+  <string name="use_other_in_desc">Por ejemplo WiMax para las llamadas entrantes</string>
+  <string name="use_other_out_desc">Por ejemplo WiMax para las llamadas salientes</string>
   <string name="use_anyway">Usar de todos modos</string>
   <string name="use_anyway_desc">No tener en cuenta el estodo de red de Android. No debe ser utilizado para casos normales</string>
   <string name="use_3g">Utilizar 3G (o superior)</string>
@@ -64,7 +64,7 @@
   <string name="turn_password_desc">Contaseña para la autentificación TURN</string>
   <string name="enable_stun">Habilitar STUN</string>
   <string name="enable_stun_desc">Activar la funcionalidad STUN</string>
-  <string name="stun_server">Servidores STUN</string>
+  <string name="stun_server">Servidor STUN</string>
   <string name="stun_server_desc">Servidores STUN (HOST[:PUERTO], ...)</string>
   <string name="enable_qos">Habilitar QoS</string>
   <string name="enable_qos_desc">Habilitar QoS sobre paquetes</string>
@@ -76,8 +76,8 @@
   <string name="tcp_keep_alive_interval_mobile">Móvil TCP keep alive</string>
   <string name="tls_keep_alive_interval_wifi">Wifi TLS keep alive</string>
   <string name="tls_keep_alive_interval_mobile">Móvil TLS keep alive</string>
-  <string name="keep_alive_interval">Conexión keep alive (mantener activa))</string>
-  <string name="keep_alive_interval_desc">Intervalo (seg) para los paquetes KA</string>
+  <string name="keep_alive_interval">Mantener activa la conexión</string>
+  <string name="keep_alive_interval_desc">Intervalo (seg) para los paquetes Keep Alive</string>
   <string name="use_compact_form">Utilizar SIP compacto</string>
   <string name="use_compact_form_desc">Reduce el tamaño de los paquetes SIP. Puede no funcionar en servidores SIP antiguos</string>
   <string name="user_agent">Agente de usuario</string>
@@ -99,7 +99,7 @@
   <!--Security-->
   <string name="tls">Cifrado TLS</string>
   <string name="secure_transport">Protocolo seguro</string>
-  <string name="secure_transport_desc">Mecanismo seguro paara SIP y RTP</string>
+  <string name="secure_transport_desc">Mecanismo seguro para SIP y RTP</string>
   <string name="secure_media">Medios seguros</string>
   <string name="network_tls_transport_port">Puerto TLS</string>
   <string name="network_tls_transport_port_desc">Puerto local de escucha</string>
@@ -135,14 +135,14 @@
   <string name="snd_mic_level_desc">Ajustar el nivel de señal del micrófono (1 no hace nada)</string>
   <string name="snd_speaker_level">Amplificación del altavoz</string>
   <string name="snd_speaker_level_desc">Ajustar el nivel de señal del altavoz (1 no hace nada)</string>
-  <string name="snd_bt_mic_level">Amplificación del micrófono bluetooth</string>
-  <string name="snd_bt_speaker_level">Amplificación de auricular bluetooth</string>
-  <string name="snd_stream_level">Nivel sonoro inicial</string>
-  <string name="snd_stream_level_desc">Establece el nivel inicial del flujo de sonido Android</string>
+  <string name="snd_bt_mic_level">Amplificación del mic. bluetooth</string>
+  <string name="snd_bt_speaker_level">Amplif. del auricular bluetooth</string>
+  <string name="snd_stream_level">Volumen inicial</string>
+  <string name="snd_stream_level_desc">Establece el volumen inicial del sonido (Android)</string>
   <string name="snd_auto_close_time">Cierre automático del canal de audio</string>
   <string name="snd_auto_close_time_desc">Tiempo de espera para cerrar el canal de audio</string>
-  <string name="snd_media_quality">Calidad de los medios</string>
-  <string name="snd_media_quality_desc">Calidad del flujo multimedia (modificar sólo si sabes exactamente lo que haces)</string>
+  <string name="snd_media_quality">Calidad multimedia</string>
+  <string name="snd_media_quality_desc">Calidad del flujo multimedia (modificar sólo si sabe exactamente lo que hace)</string>
   <string name="snd_clock_rate">Frecuencia</string>
   <string name="snd_clock_rate_desc">Frecuencia del canal de audio</string>
   <string name="snd_ptime">Ptime del frame de audio</string>
@@ -164,7 +164,7 @@
   <string name="sip_audio_mode_desc">Cambiar sólo si los desarrolladores se lo aconsejan</string>
   <string name="use_webrtc_hack">Usar la implementación WebRTC</string>
   <string name="use_webrtc_hack_desc">Implemetación hecha por el equipo WebRTC</string>
-  <string name="do_focus_audio">Adquisición de audio</string>
+  <string name="do_focus_audio">Acaparación del audio</string>
   <string name="do_focus_audio_desc">Si lo deshabilita la musica y el sonido de la llamada se mezclarán pero puede ayudar con el enrutado. </string>
   <string name="micro_source">Fuente de microfono</string>
   <string name="micro_source_desc">Fuente del microfono. Eligiendo el valor adecuado se muede mejorar mucho la anulación de eco</string>
@@ -172,13 +172,13 @@
   <string name="has_io_queue_desc">Activar el archivo de entrada/salida</string>
   <string name="set_audio_generate_tone">Hack de tono</string>
   <string name="set_audio_generate_tone_desc">Generar un tono antes de efectuar una llamada</string>
-  <string name="band_for_wifi">Tasa de bits para WiFi</string>
-  <string name="band_for_3g">Tasa de bits para 3G</string>
-  <string name="band_for_gprs">Tasa de bits para   GPRS</string>
-  <string name="band_for_edge">Tasa de bits para  EDGE</string>
-  <string name="band_for_other">Tasa de bits para otros</string>
-  <string name="codecs_band_types">Tipos de conexione para los codecs</string>
-  <string name="use_sgs_call_hack">Utilizar Samsung Galaxy Hack</string>
+  <string name="band_for_wifi">Velocidad de la conexión WiFi</string>
+  <string name="band_for_3g">Velocidad de la conexión 3G</string>
+  <string name="band_for_gprs">Velocidad de la conexión  GPRS</string>
+  <string name="band_for_edge">Velocidad de la conexión EDGE</string>
+  <string name="band_for_other">Velocidad de otras conexiones</string>
+  <string name="codecs_band_types">Velocidad de las conexiones para los codecs</string>
+  <string name="use_sgs_call_hack">Utilizar Hack para Samsung Galaxy</string>
   <string name="use_sgs_call_hack_desc">Preconfigurar el modo de llamada para solucionar problemas de enrutado del sonido</string>
   <string name="audio_implementation">Implementación del audio</string>
   <string name="audio_implementation_desc">Controlador de audio a utilizar</string>
@@ -203,8 +203,8 @@
   <string name="use_android_setting">Utilizar los ajustes de Android</string>
   <string name="narrowband">Banda estrecha</string>
   <string name="wideband">Banda ancha</string>
-  <string name="slow">Lento</string>
-  <string name="fast">Rápido</string>
+  <string name="slow">Lenta</string>
+  <string name="fast">Rápida</string>
   <string name="no_proxy">Sin proxy</string>
   <string name="outbound_proxies">Proxies de salida</string>
   <string name="accounts_proxies">Proxy de cuentas</string>
@@ -214,15 +214,15 @@
   <string name="default_str">Por defecto</string>
   <string name="auto_connect_bluetooth">Conexión automátca del bluetooth</string>
   <string name="auto_connect_bluetooth_desc">Intentar usar BT SCO de forma automática (puede estropear el enrutamiento de audio estándar)</string>
-  <string name="auto_connect_speaker">Conexión automática del altavoz trasero</string>
+  <string name="auto_connect_speaker">Conexión auto. del altavoz trasero</string>
   <string name="auto_connect_speaker_desc">Utiliza automáticamente el altavoz trasero al contestar una llamada</string>
-  <string name="auto_detect_speaker">Deteccion automática del uso del altavoz</string>
-  <string name="auto_detect_speaker_desc">Cambiar al altravoz trasero cuando el teléfono esta en posición horizontal durante una llamada</string>
-  <string name="codecs_per_bandwidth">Lista de prioridad de codecs por ancho de banda</string>
+  <string name="auto_detect_speaker">Selección auto. del altavoz</string>
+  <string name="auto_detect_speaker_desc">Cambiar al altavoz trasero cuando el teléfono está horizontal durante una llamada</string>
+  <string name="codecs_per_bandwidth">Prioridad de los codecs por ancho de banda</string>
   <string name="codecs_per_bandwidth_desc">Utilizar listas independientes de prioridad para las redes lentas y rápidas</string>
   <string name="audio_troubleshooting">Solución de problemas de audio</string>
   <string name="audio_troubleshooting_desc">Soluciones para la salida del sonido</string>
-  <string name="codecs_extra_settings">Ajustes adicionales de los codecs</string>
+  <string name="codecs_extra_settings">Más ajustes decodecs</string>
   <string name="frames_per_rtp_packet">Frames por paquete RTP</string>
   <string name="g729_frame_per_packet">Frames G729 RTP por paquete</string>
   <string name="ilbc_frame_per_packet">Frames iLBC RTP por paquete</string>
@@ -230,12 +230,12 @@
   <string name="general_ui">Interfaz de usuario general</string>
   <string name="native_dialer_integration">Integración del marcador telefónico de Android</string>
   <string name="advanced_ui">Ajustes avanzados</string>
-  <string name="integrate_with_native_dialer">Activar la ntegración</string>
+  <string name="integrate_with_native_dialer">Activar la integración</string>
   <string name="integrate_with_native_dialer_desc">Cuando marca con el marcador telefónico de android, se le pregunta si quiere utilizar el SIP o el móvil</string>
   <string name="integrate_tel_priviledged">Intento de integrar con privilegios</string>
   <string name="integrate_tel_priviledged_desc">Una forma diferente de integrarse con el marcador telefónico de androis. Usted debe desactivar la integración para usar esta opción.</string>
   <string name="integrate_with_native_calllogs">Integración del registro de llamadas</string>
-  <string name="integrate_with_native_calllogs_desc">Las llamadas SIP serán iincluidas (si es posible) en el registro de llamadas de Android</string>
+  <string name="integrate_with_native_calllogs_desc">Las llamadas SIP serán incluidas (si es posible) en el registro de llamadas de Android</string>
   <string name="dial_press_tone">Reacción sonora del marcador telefónico</string>
   <string name="dial_press_tone_desc">Reproducir un sonido cuando se pulsa un número</string>
   <string name="dial_press_vibrate">Reacción de vibración del marcador telefónico</string>
@@ -259,14 +259,14 @@
   <string name="gsm_integration_type">Integración con el móvil</string>
   <string name="gsm_integration_type_desc">Como usa la aplicación su linea teléfónica (o no)</string>
   <string name="invert_proximity_sensor">Invertir el sensor de proximidad</string>
-  <string name="invert_proximity_sensor_desc">Puede ayidar con algunos dispositivos en los que el fabricante confundió lejos t cerca</string>
+  <string name="invert_proximity_sensor_desc">Puede ayudar con algunos dispositivos en los que el fabricante confundió lejos y cerca</string>
   <string name="theme">Tema</string>
   <string name="theme_desc">Tema para la aplicación</string>
   <string name="obtain_themes">Obtener más temas</string>
   <string name="obtain_themes_desc">Obtener temas para la aplicación desde el market</string>
   <string name="display_icon_in_status_bar_nbr">Mostrar el número en la barra de estado</string>
   <string name="display_icon_in_status_bar_nbr_desc">Mostrar el número de las cuentas registradas en la barra de notificación</string>
-  <string name="log_use_direct_file">Registrar directamente a un archivo</string>
+  <string name="log_use_direct_file">Registrar  a un archivo directamente</string>
   <string name="log_use_direct_file_desc">Registrar directamente en un archivo en lugar de utilizar Logcat</string>
   <!--Fast settings-->
   <string name="android_integration">Integrar con Android</string>
@@ -278,21 +278,21 @@
   <string name="wifi_available_desc">Su disponibilidad se basa en la conexión WiFi</string>
   <string name="never_available">Sólo para las llamadas salientes</string>
   <string name="never_available_desc">Activar el cliente SIP automaticamente sólo cuando se inicia una llamada</string>
-  <string name="availability_tg">Disponibilidad de una conexión de datos móvil</string>
-  <string name="tg_allowed">Me está permitido realizar llamadas VOIP con mi conexión de datos móvil</string>
+  <string name="availability_tg">Utilizar mi conexión  de datos móvil</string>
+  <string name="tg_allowed">Mi operador permite  realizar llamadas VOIP</string>
   <string name="tg_allowed_desc">Su operador permite realizar llamadas VOIP con su conexión de datos móvil</string>
   <string name="codecs_availability_text">Sólo está disponible si el SIP se encuentra actualmente registrado</string>
   <!--Calls settings-->
-  <string name="auto_record_calls">Grabar automaticamente las llamadas</string>
+  <string name="auto_record_calls">Grabar automáticamente las llamadas</string>
   <string name="auto_record_calls_desc">Comenzar a grabar las llamadas tan pronto como conecten</string>
-  <string name="support_multiple_calls">Admite llamadas multiple</string>
+  <string name="support_multiple_calls">Admitir llamadas multiples</string>
   <string name="support_multiple_calls_desc">Permite conferencias y multiples llamadas simultaneas</string>
-  <string name="vid_in_auto_show">Mostrar el video automaticamente</string>
+  <string name="vid_in_auto_show">Mostrar el video automáticamente</string>
   <string name="vid_in_auto_show_desc">Mostrar el video remoto automáticamente</string>
-  <string name="vid_out_auto_transmit">Enviar automaticamente el video</string>
-  <string name="vid_out_auto_transmit_desc">Enviar el video desde el dispositivo automaticamente</string>
+  <string name="vid_out_auto_transmit">Enviar automáticamente el video</string>
+  <string name="vid_out_auto_transmit_desc">Enviar el video desde el dispositivo automáticamente</string>
   <string name="use_video">Utilizar video</string>
-  <string name="use_video_desc">Enviar el video desde el dispositivo automaticamente</string>
+  <string name="use_video_desc">Enviar el video desde el dispositivo automáticamente</string>
   <!--Settings modes-->
   <string name="expert_preferences">Modo esperto</string>
   <string name="normal_preferences">Modo normal</string>

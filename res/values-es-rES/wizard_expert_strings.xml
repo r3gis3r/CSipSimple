@@ -4,11 +4,11 @@
     <string name="w_expert_display_name">Nombre de cuenta</string>
     <string name="w_expert_display_name_desc">Nombre para mostrar de esta cuenta</string>
     <string name="w_expert_acc_id">ID de la cuenta</string>
-    <string name="w_expert_acc_id_desc">Formato : NombreParaMostrar &lt;sip:login\@registrar></string>
+    <string name="w_expert_acc_id_desc">Formato : NombreParaMostrar &lt;sip:login@registrar&gt;</string>
     <string name="w_expert_reg_uri">URI de registro</string>
     <string name="w_expert_reg_uri_desc">Formato: sip:registrar.net[:puerto]</string>
     <string name="w_expert_realm">Ámbito</string>
-    <string name="w_expert_realm_desc">Dominio de authentificación (si no lo sabe, use \'*\')</string>
+    <string name="w_expert_realm_desc">Dominio de autentificación (si no lo sabe, use \'*\')</string>
     <string name="w_expert_username">Nombre de usuario</string>
     <string name="w_expert_username_desc">Nombre de usuario para la autentificación</string>
     <string name="w_expert_data">Dato (Contraseña)</string>
@@ -17,16 +17,16 @@
     <string name="w_expert_datatype_desc">Tipo del dato contraseña</string>
     <string name="w_expert_t_proxy">Servidor proxy</string>
     <string name="w_expert_proxy">URI del proxy</string>
-    <string name="w_expert_proxy_desc">Formato : \"sip:proxy.net[:puerto]\"</string>
+    <string name="w_expert_proxy_desc">Formato : &quot;sip:proxy.net[:puerto]&quot;</string>
     <string name="w_expert_use_tcp">Usar TCP (No = UDP)</string>
     <string name="w_expert_prevent_tcp">Evitar TCP (Usar sólo UDP)</string>
     <string name="w_expert_publish_enabled">Publicar el estado/presencia</string>
-    <string name="w_expert_reg_timeout">Tiempo de espera del registro (seg)</string>
-    <string name="w_expert_reg_dbr">Tiempo de espera antes de actualizar el registro (seg)</string>
+    <string name="w_expert_reg_timeout">T. de espera del registro (seg)</string>
+    <string name="w_expert_reg_dbr">T. de espera antes de actualizar el registro (seg)</string>
     <string name="w_expert_reg_dbr_desc">Especifica el número de segundos para actualizar el registro  del cliente antes de que el registro expire..</string>
     <string name="w_expert_ka_interval">Intervalo keep-alive (seg)</string>
     <string name="w_expert_force_contact">Forzar el campo contacto</string>
-    <string name="w_expert_allow_contact_rewrite">Permitir reescribrir es campo contacto</string>
+    <string name="w_expert_allow_contact_rewrite">Permitir reescribrir el campo contacto</string>
     <string name="w_expert_contact_rewrite_method">Método de reescritura del campo contacto</string>
     <string name="w_expert_reg_use_proxy">Como usar el proxy</string>
     <string name="w_expert_try_clean_registers">Intentar borrar los registros</string>
