@@ -529,7 +529,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     private SipCallSession getPrioritaryCall(SipCallSession call1, SipCallSession call2) {
         // We prefer the not null
         if (call1 == null) {
-            return call1;
+            return call2;
         } else if (call2 == null) {
             return call1;
         }
