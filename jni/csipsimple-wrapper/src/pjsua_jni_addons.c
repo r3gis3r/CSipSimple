@@ -44,7 +44,10 @@ struct css_data css_var;
  */PJ_DECL(pj_str_t) call_dump(pjsua_call_id call_id, pj_bool_t with_media,
 		const char *indent) {
 	char some_buf[1024 * 3];
-	pjsua_call_dump(call_id, with_media, some_buf, sizeof(some_buf), indent);
+	pj_status_t status = pjsua_call_dump(call_id, with_media, some_buf, sizeof(some_buf), indent);
+	if(status != PJ_SUCCESS){
+		return pj_strerror(status, some_buf, sizeof(some_buf));
+	}
 	return pj_str(some_buf);
 }
 

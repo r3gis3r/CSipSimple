@@ -1115,6 +1115,11 @@ public class PjSipService {
             return pjsua.PJ_SUCCESS;
         }
         
+
+        if(pjsua.call_is_active(callId) != pjsuaConstants.PJ_TRUE) {
+            return -1;
+        }
+        
         String dtmfToDial = keyPressed;
         String remainingDtmf = "";
         int pauseBeforeRemaining = 0;
