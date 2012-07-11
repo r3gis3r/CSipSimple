@@ -659,12 +659,14 @@ public class UAStateReceiver extends Callback {
 			int i = 0;
 			for( Entry<Integer, SipCallSession> entry : callsList.entrySet()) {
 				callsInfos[i] = entry.getValue();
-				i++;
+				/*
 				if(callsInfos[i] != null) {
 				    Log.d(THIS_FILE, "Has one call with id " + callsInfos[i].getCallId() + " " + callsInfos[i]);
 				}else {
 				    Log.w(THIS_FILE, "One of the cached calls is not valid... at index " + i);
 				}
+				*/
+				i++;
 			}
 			return callsInfos;
 		}
