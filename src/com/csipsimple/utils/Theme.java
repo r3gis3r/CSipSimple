@@ -21,9 +21,6 @@
 
 package com.csipsimple.utils;
 
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -35,12 +32,17 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.View;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class Theme {
 
@@ -137,4 +139,57 @@ public class Theme {
 	public interface onLoadListener {
 		void onLoad(Theme t);
 	}
+	
+	
+	private static boolean needRepeatableFix() {
+        // In ICS and upper the problem is fixed, so no need to apply by code
+	    return (!Compatibility.isCompatible(14));
+	}
+	
+    /**
+     * @param v The view to fix background of.
+     * @see #fixRepeatableDrawable(Drawable)
+     */
+    public static void fixRepeatableBackground(View v) {
+        if(!needRepeatableFix()) {
+            return;
+        }
+        fixRepeatableDrawable(v.getBackground());
+    }
+    
+    /**
+     * Fix the repeatable background of a drawable.
+     * This support both bitmap and layer drawables
+     * @param d the drawable to fix.
+     */
+    public static void fixRepeatableDrawable(Drawable d) {
+        if(!needRepeatableFix()) {
+            return;
+        }
+        if (d instanceof LayerDrawable) {
+            LayerDrawable layer = (LayerDrawable) d;
+            for (int i = 0; i < layer.getNumberOfLayers(); i++) {
+                fixRepeatableDrawable(layer.getDrawable(i));
+            }
+        } else if (d instanceof BitmapDrawable) {
+            fixRepeatableBitmapDrawable((BitmapDrawable) d);
+        }
+    
+    }
+    
+    /**
+     * Fix the repeatable background of a bitmap drawable.
+     * This only support a BitmapDrawable
+     * @param d the BitmapDrawable to set repeatable.
+     */
+    public static void fixRepeatableBitmapDrawable(BitmapDrawable d) {
+        if(!needRepeatableFix()) {
+            return;
+        }
+        // I don't want to mutate because it's better to share the drawable fix for all that share this constant state
+        //d.mutate();
+        //Log.d(THIS_FILE, "Exisiting tile mode : " + d.getTileModeX() + ", "+ d.getTileModeY());
+        d.setTileModeXY(d.getTileModeX(), d.getTileModeY());
+        
+    }
 }

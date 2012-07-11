@@ -1579,7 +1579,7 @@ public class PjSipService {
                             do {
                                 SipProfileState ps = new SipProfileState(c);
                                 if (ps.isValidForCall()) {
-                                    finalAccountId = ps.getDatabaseId();
+                                    finalAccountId = ps.getAccountId();
                                     pjsipAccountId = ps.getPjsuaId();
                                     break;
                                 }
@@ -1593,7 +1593,7 @@ public class PjSipService {
                 }
             } else {
                 // Use the default account
-                finalAccountId = profileState.getDatabaseId();
+                finalAccountId = profileState.getAccountId();
                 pjsipAccountId = profileState.getPjsuaId();
             }
         } else {

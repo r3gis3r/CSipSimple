@@ -84,7 +84,7 @@ public class AccountListUtils {
 					accountDisplay.checkBoxIndicator = R.drawable.ic_indicator_on;
 					accountDisplay.statusLabel = context.getString(R.string.acct_registered);
 					accountDisplay.availableForCalls = true;
-				}else if (accountInfo.getPjsuaId() >= 0) {
+				}else if (accountInfo.isAddedToStack()) {
 					String pjStat = accountInfo.getStatusText();	// Used only on error status message
 					int statusCode = accountInfo.getStatusCode();
 					if (statusCode == SipCallSession.StatusCode.OK) {

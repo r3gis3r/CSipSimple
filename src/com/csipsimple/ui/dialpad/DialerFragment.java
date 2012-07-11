@@ -31,9 +31,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -100,7 +97,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     private DigitsEditText digits;
     //private ImageButton switchTextView;
 
-    private View digitDialer;
+    //private View digitDialer;
 
     private AccountChooserButton accountChooserButton;
     private boolean isDigit;
@@ -278,6 +275,11 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
                     */
                 }
             });
+        }
+        
+        // Fix dialer background
+        if(callBar != null) {
+            Theme.fixRepeatableBackground(callBar);
         }
     }
     

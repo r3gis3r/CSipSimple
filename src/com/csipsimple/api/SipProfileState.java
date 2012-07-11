@@ -58,7 +58,7 @@ public class SipProfileState implements Parcelable, Serializable{
 
 	/**
 	 * Account id.<br/>
-	 * Identifier of the SIP account associated
+	 * Identifier of the SIP account associated. It's the identifier of the account for the API.
 	 * 
 	 * @see SipProfile#FIELD_ID
 	 * @see Integer
@@ -66,8 +66,7 @@ public class SipProfileState implements Parcelable, Serializable{
 	public final static String ACCOUNT_ID = "account_id";
 	/**
 	 * Identifier for underlying sip stack. <br/>
-	 * Identifier to use as this account id for the sip stack when started and account added to sip stack.
-	 * Uses this identifier to call methods on sip stack.
+	 * This is an internal identifier you normally don't need to use when using the api from an external application.
 	 * 
 	 * @see Integer
 	 */
@@ -339,10 +338,10 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
-     * Should not be used for external use of the API.
-	 * @return the databaseId
+     * Get the identifier identifier of the account that this state is linked to.
+	 * @return the accountId identifier of the account : {@link #ACCOUNT_ID}
 	 */
-	public int getDatabaseId() {
+	public int getAccountId() {
 		return databaseId;
 	}
 
@@ -355,6 +354,7 @@ public class SipProfileState implements Parcelable, Serializable{
 	}
 
 	/**
+	 * Should not be used for external use of the API.
 	 * @return the pjsuaId {@link #PJSUA_ID}
 	 */
 	public int getPjsuaId() {
@@ -510,7 +510,7 @@ public class SipProfileState implements Parcelable, Serializable{
 			if(TextUtils.isEmpty(getRegUri())) {
 				return true;
 			}
-			return (getPjsuaId() >= 0 && getStatusCode() == SipCallSession.StatusCode.OK && getExpires() > 0);
+			return (isAddedToStack() && getStatusCode() == SipCallSession.StatusCode.OK && getExpires() > 0);
 		}
 		return false;
 	}
