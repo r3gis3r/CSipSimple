@@ -68,6 +68,11 @@ PJ_INLINE(void) unlock_timer_heap( pj_timer_heap_t *ht )
 }
 
 
+static int get_entry_id(pj_timer_heap_t *ht, pj_timer_entry *entry){
+	return entry->_timer_id + MAX_ENTRY_PER_HEAP * ht->heap_id;
+}
+
+
 // protected by timer heap lock
 static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 				   pj_timer_entry *entry, 
@@ -96,7 +101,7 @@ static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 				5,
 				(THIS_FILE, "Scheduling timer %d aka %x in %ld ms", entry->_timer_id, entry, ft));
 
-		timer_schedule_wrapper((int) entry, (int) entry, (int) ft);
+		timer_schedule_wrapper((int) entry, get_entry_id(ht, entry), (int) ft);
 
 		return PJ_SUCCESS;
 	} else {
@@ -128,7 +133,7 @@ static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
 
 	// Note -- due to the fact we rely on android alarm manager, nothing ensure here that cancelCount is actually valid.
 	// Previous checks should do the trick to be sure we have actually 1 cancelled timer here.
-	int cancelCount = timer_cancel_wrapper((int) entry, (int) entry);
+	int cancelCount = timer_cancel_wrapper((int) entry, get_entry_id(ht, entry));
 
 	if (cancelCount > 0) {
 		// Free the slot of this entry in ht
@@ -340,76 +345,63 @@ PJ_DEF(pj_status_t) pj_timer_heap_earliest_time( pj_timer_heap_t * ht,
 }
 
 PJ_BEGIN_DECL
-PJ_DEF(pj_status_t) pj_timer_fire(long entry_ptr){
+PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 
 
     pj_thread_desc a_thread_desc;
 	pj_thread_t *a_thread;
 	unsigned i, j;
+	int entry_id, heap_id;
+	pj_timer_entry *entry;
 
-	pj_timer_entry *entry = (pj_timer_entry *) entry_ptr;
+	entry_id = entry_code_id % MAX_ENTRY_PER_HEAP;
+	heap_id = entry_code_id / MAX_ENTRY_PER_HEAP;
 
-	if (entry != NULL) {
-
-		// First step is to register the thread if not already done
-		if (!pj_thread_is_registered()) {
-			char thread_name[160];
-			int len = pj_ansi_snprintf(thread_name, sizeof(thread_name),
-					"timer_thread_%d", entry_ptr);
-			thread_name[len] = '\0';
-			pj_thread_register(thread_name, a_thread_desc, &a_thread);
-			PJ_LOG(5, (THIS_FILE, "Registered thread %s", thread_name));
-		}
-
-		// Find corresponding ht
-		pj_timer_heap_t *ht = NULL;
-		for (i = 0; i < MAX_HEAPS; i++) {
-			pj_timer_heap_t *tHeap = sHeaps[i];
-			if (tHeap != NULL) {
-				lock_timer_heap(tHeap);
-				for (j = 0; j < MAX_ENTRY_PER_HEAP; j++) {
-					if (tHeap->entries[j] == entry) {
-						ht = tHeap;
-						break;
-					}
-				}
-				unlock_timer_heap(tHeap);
-			}
-			if (ht != NULL) {
-				break;
-			}
-		}
-
-		if (ht != NULL) {
-			PJ_LOG(
-					5,
-					(THIS_FILE, "FIRE timer %d@%x", entry->_timer_id, entry));
-
-			pj_timer_heap_callback* cb = NULL;
-
-			lock_timer_heap(ht);
-			// Get callback if entry still valid
-			if (entry->_timer_id >= 0) {
-				cb = entry->cb;
-			}
-			// Release slot
-			ht->entries[entry->_timer_id] = NULL;
-			entry->_timer_id = -1;
-			unlock_timer_heap(ht);
-
-			// Callback
-			if (cb) {
-				cb(ht, entry);
-			}
-
-			PJ_LOG(5, (THIS_FILE, "FIRE done and released"));
-
-		} else {
-			PJ_LOG(
-					2,
-					(THIS_FILE, "FIRE Ignore : No heap found for this entry %x", entry));
-		}
+	if(heap_id > MAX_HEAPS){
+		PJ_LOG(1, (THIS_FILE, "Invalid timer code %d", entry_code_id));
+		return PJ_EINVAL;
 	}
+
+	// First step is to register the thread if not already done
+	if (!pj_thread_is_registered()) {
+		char thread_name[160];
+		int len = pj_ansi_snprintf(thread_name, sizeof(thread_name),
+				"timer_thread_%d", entry_code_id);
+		thread_name[len] = '\0';
+		pj_thread_register(thread_name, a_thread_desc, &a_thread);
+		PJ_LOG(5, (THIS_FILE, "Registered thread %s", thread_name));
+	}
+
+
+	// Find corresponding ht
+	pj_timer_heap_t *ht = sHeaps[heap_id];
+	if (ht != NULL) {
+		PJ_LOG(5, (THIS_FILE, "FIRE timer %d@%x", entry->_timer_id, entry));
+
+		pj_timer_heap_callback* cb = NULL;
+		lock_timer_heap(ht);
+
+		// Get callback if entry valid
+		entry = ht->entries[entry_id];
+		if (entry != NULL && entry->_timer_id >= 0) {
+			cb = entry->cb;
+		}
+		// Release slot
+		ht->entries[entry_id] = NULL;
+		entry->_timer_id = -1;
+		unlock_timer_heap(ht);
+
+		// Callback
+		if (cb) {
+			cb(ht, entry);
+		}
+
+		PJ_LOG(5, (THIS_FILE, "FIRE done and released"));
+
+	} else {
+		PJ_LOG(2, (THIS_FILE, "FIRE Ignore : No heap found at %d for this entry %d", heap_id, entry_code_id));
+	}
+
 	return PJ_SUCCESS;
 }
 PJ_END_DECL

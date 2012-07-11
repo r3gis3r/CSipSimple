@@ -531,6 +531,7 @@ PJ_DECL(pj_status_t) csipsimple_destroy(void) {
 
 PJ_DECL(void) csipsimple_acc_config_default(csipsimple_acc_config* css_acc_cfg){
 	css_acc_cfg->use_zrtp = -1;
+	css_acc_cfg->p_preferred_identity.slen = 0;
 }
 
 PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csipsimple_acc_config* css_acc_cfg){

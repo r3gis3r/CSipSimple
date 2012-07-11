@@ -157,7 +157,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 PJ_DECL(pj_status_t) csipsimple_destroy(void);
 PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csipsimple_acc_config* css_acc_cfg);
 PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg_data* msg_data);
-PJ_DECL(pj_status_t) pj_timer_fire(long cpj_entry);
+PJ_DECL(pj_status_t) pj_timer_fire(int entry_id);
 PJ_DECL(pj_status_t) pjsua_acc_clean_all_registrations( pjsua_acc_id acc_id);
 PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr);
 PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id, jobject window);

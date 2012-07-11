@@ -107,10 +107,11 @@ public class TimerWrapper extends BroadcastReceiver {
 		}
 		
 		if(alarmManager != null) {
-			for(Integer entry : scheduleEntries) {
-				alarmManager.cancel(getPendingIntentForTimer(entry, entry));
+			for(Integer entryId : scheduleEntries) {
+				alarmManager.cancel(getPendingIntentForTimer(entryId));
 			}
 		}
+		scheduleEntries.clear();
 //		hashOffset ++;
 //		hashOffset = hashOffset % 10;
 	}
@@ -125,18 +126,18 @@ public class TimerWrapper extends BroadcastReceiver {
 	}
 	*/
 
-	private PendingIntent getPendingIntentForTimer(int entry, int entryId) {
+	private PendingIntent getPendingIntentForTimer(int entryId) {
 		Intent intent = new Intent(TIMER_ACTION);
 		String toSend = EXTRA_TIMER_SCHEME + "://" + Integer.toString(entryId);
 		intent.setData(Uri.parse(toSend));
-		intent.putExtra(EXTRA_TIMER_ENTRY, entry);
+		intent.putExtra(EXTRA_TIMER_ENTRY, entryId);
 		return PendingIntent.getBroadcast(service, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 	
 	
-	private synchronized int doSchedule(int entry, int entryId, int intervalMs) {
+	private synchronized int doSchedule(int entryId, int intervalMs) {
 		//Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
-		PendingIntent pendingIntent = getPendingIntentForTimer(entry, entryId);
+		PendingIntent pendingIntent = getPendingIntentForTimer(entryId);
 		
 		// If less than 1 sec, do not wake up -- that's probably stun check so useless to wake up about that
 		//int alarmType = (intervalMs < 1000) ? AlarmManager.ELAPSED_REALTIME : AlarmManager.ELAPSED_REALTIME_WAKEUP;
@@ -144,7 +145,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		
 		// Cancel previous reg anyway
 		alarmManager.cancel(pendingIntent);
-		scheduleEntries.remove((Integer) entry);
+		scheduleEntries.remove((Integer) entryId);
 		
 		
 		long firstTime = SystemClock.elapsedRealtime();
@@ -156,16 +157,16 @@ public class TimerWrapper extends BroadcastReceiver {
 		}
 		
 		// Push next
-        Log.v(THIS_FILE, "Schedule " + entry + " in " + intervalMs + "ms");
+        Log.v(THIS_FILE, "Schedule " + entryId + " in " + intervalMs + "ms");
 		alarmManager.set(alarmType, firstTime, pendingIntent);
-		scheduleEntries.add((Integer) entry);
+		scheduleEntries.add((Integer) entryId);
 		return 1;
 	}
 	
-	private synchronized int doCancel(int entry, int entryId) {
-        Log.v(THIS_FILE, "Cancel " + entry );
-		alarmManager.cancel(getPendingIntentForTimer(entry, entryId));
-		scheduleEntries.remove((Integer) entry);
+	private synchronized int doCancel(int entryId) {
+        Log.v(THIS_FILE, "Cancel " + entryId );
+		alarmManager.cancel(getPendingIntentForTimer(entryId));
+		scheduleEntries.remove((Integer) entryId);
 		return 1;
 	}
 	
@@ -223,11 +224,11 @@ public class TimerWrapper extends BroadcastReceiver {
 			Log.e(THIS_FILE, "Timer NOT initialized");
 			return -1;
 		}
-		return singleton.doSchedule(entry, entryId, time);
+		return singleton.doSchedule(entryId, time);
 	}
 	
 	public static int cancel(int entry, int entryId) {
-		return singleton.doCancel(entry, entryId);
+		return singleton.doCancel(entryId);
 	}
 	
 	
