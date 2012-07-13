@@ -122,6 +122,12 @@ typedef struct csipsimple_config {
 	 */
 	int tsx_t4_timeout;
 
+	/**
+	 * Disable automatic switching from UDP to TCP if outgoing request
+	 * is greater than 1300 bytes. See PJSIP_DONT_SWITCH_TO_TCP.
+	 */
+	pj_bool_t disable_tcp_switch;
+
 } csipsimple_config;
 
 typedef struct csipsimple_acc_config {

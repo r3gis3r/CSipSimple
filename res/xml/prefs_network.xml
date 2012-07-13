@@ -60,6 +60,12 @@
             android:summary="@string/network_tcp_transport_port_desc"
             android:title="@string/network_tcp_transport_port" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="disable_tcp_switch"
+            android:summary="@string/disable_tcp_switch_desc"
+            android:title="@string/disable_tcp_switch" />
+
         <!-- Media transport -->
         <EditTextPreference
             android:defaultValue="4000"

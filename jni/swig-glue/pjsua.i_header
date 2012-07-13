@@ -424,6 +424,7 @@ static struct pjsua_callback wrapper_callback_struct = {
 	NULL, //Typing 2
 	&on_nat_detect_wrapper,
 	&on_call_redirected_wrapper,
+	NULL, //on_mwi_state
 	&on_mwi_info_wrapper,
 	NULL, //on_call_media_transport_state
 	NULL, //on_transport_state

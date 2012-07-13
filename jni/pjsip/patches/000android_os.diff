@@ -1,33 +1,11 @@
-Index: pjsip/sources/pjlib/include/pj/config.h
-===================================================================
---- pjsip.orig/sources/pjlib/include/pj/config.h	2012-02-12 12:38:56.775499261 +0100
-+++ pjsip/sources/pjlib/include/pj/config.h	2012-02-12 12:38:59.783499107 +0100
-@@ -91,6 +91,14 @@
-      */
- #  include <pj/compat/os_linux_kernel.h>
- 
-+#elif defined(PJ_ANDROID) && PJ_ANDROID!=0
-+    /*
-+     * Android
-+     */
-+#   undef PJ_ANDROID
-+#   define PJ_ANDROID   1
-+#   include <pj/compat/os_android.h>
-+
- #elif defined(PJ_LINUX) || defined(linux) || defined(__linux)
-     /*
-      * Linux
-Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
+Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/compat/os_android.h	2012-02-12 12:38:59.783499107 +0100
-@@ -0,0 +1,147 @@
-+/* $Id: os_android.h $ */
++++ pjsip/sources/pjlib/include/pj/compat/os_auto.h	2012-07-13 13:39:43.660400604 +0200
+@@ -0,0 +1,134 @@
++/* $Id: os_linux.h 3553 2011-05-05 06:14:19Z nanang $ */
 +/*
-+ * Since deeply inspired from os_linux.h and voidroid project (MIT relicense)
-+ * Copyright (C) 2009-2010 r3gis (http://www.r3gis.fr)
-+ * Copyright (C) 2009 Jurij Smakov <jurij@wooyd.org>
-+ * Copyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
++ * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
 + * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
 + *
 + * This program is free software; you can redistribute it and/or modify
@@ -44,8 +22,8 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 + * along with this program; if not, write to the Free Software
 + * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 + */
-+#ifndef __PJ_COMPAT_OS_ANDROID_H__
-+#define __PJ_COMPAT_OS_ANDROID_H__
++#ifndef __PJ_COMPAT_OS_AUTO_H__
++#define __PJ_COMPAT_OS_AUTO_H__
 +
 +/**
 + * @file os_linux.h
@@ -94,11 +72,6 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 +#define PJ_SOCKADDR_HAS_LEN	    0
 +#define sin_zero     __pad
 +
-+
-+
-+/* Seems to fix problems when restarting too frequently */
-+#define PJ_IOQUEUE_MAX_HANDLES	    1024
-+
 +/**
 + * If this macro is set, it tells select I/O Queue that select() needs to
 + * be given correct value of nfds (i.e. largest fd + 1). This requires
@@ -144,7 +117,7 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 +
 +#define PJ_ATOMIC_VALUE_TYPE	    long
 +
-+/* pthread_rwlock_t does not appear to be defined on Android */
++/* pthread_rwlock_t does not appear to be defined on all Android arch -- TODO : don't emulate when available */
 +#define PJ_EMULATE_RWMUTEX	    1
 +
 +/* If 1, pj_thread_create() should enforce the stack size when creating
@@ -161,19 +134,14 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_android.h
 +/* Linux has socklen_t */
 +#define PJ_HAS_SOCKLEN_T		1
 +
-+
-+#  define PJ_IS_LITTLE_ENDIAN	1
-+#  define PJ_IS_BIG_ENDIAN	0
-+
-+
-+#endif	/* __PJ_COMPAT_OS_ANDROID_H__ */
++#endif	/* __PJ_COMPAT_OS_AUTO_H__ */
 +
 +
 Index: pjsip/sources/pjlib/include/pj/config_site.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/config_site.h	2012-02-12 12:39:25.043497815 +0100
-@@ -0,0 +1,134 @@
++++ pjsip/sources/pjlib/include/pj/config_site.h	2012-07-13 13:40:17.604399185 +0200
+@@ -0,0 +1,133 @@
 +//We distribute only for android so by default activate it
 +#ifndef PJ_ANDROID
 +#   define PJ_ANDROID   1
@@ -270,10 +238,6 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 +    /* Use the lighter WSOLA implementation */
 +    #define PJMEDIA_WSOLA_IMP                   PJMEDIA_WSOLA_IMP_WSOLA_LITE
 +
-+    /* We probably need more buffers especially if MDA audio backend
-+     * is used, so increase the limit
-+     */
-+  //  #define PJMEDIA_SOUND_BUFFER_COUNT          32
 +
 +//	#define PJMEDIA_SND_DEFAULT_REC_LATENCY 150
 +//	#define PJMEDIA_SND_DEFAULT_PLAY_LATENCY 200
@@ -286,8 +250,10 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 +     * set to 4 to make sure pjsua instantiates resampler with small filter.
 +     */
 +    #define PJSUA_DEFAULT_CODEC_QUALITY         4
-+	//We need hi availablitly so retry each minute if network fails -
-+	//all the more so as we unregister if network not available for us
++	/**
++	 * We need hi availablitly so retry each minute if network fails -
++	 * all the more so as we unregister if network not available for us
++	 */
 +	#define PJSUA_REG_RETRY_INTERVAL	60
 +	//#define PJSUA_DEFAULT_ILBC_MODE 			20
 +
@@ -297,14 +263,173 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 +    #define PJSIP_MAX_DIALOG_COUNT 		31
 +    #define PJSUA_MAX_CALLS			4
 +
-+    /* Other pjsua settings */
-+    #define PJSUA_MAX_ACC			11 // Mean 10 accounts active at maximum
-+    #define PJSUA_MAX_PLAYERS			4
-+    #define PJSUA_MAX_RECORDERS			4
-+    #define PJSUA_MAX_CONF_PORTS		(PJSUA_MAX_CALLS+2*PJSUA_MAX_PLAYERS)
-+    #define PJSUA_MAX_BUDDIES			32
++	/* Other pjsua settings */
++	#define PJSUA_MAX_ACC			11 // Mean 10 accounts active at maximum
++	#define PJSUA_MAX_PLAYERS			4
++	#define PJSUA_MAX_RECORDERS			4
++	#define PJSUA_MAX_CONF_PORTS		(PJSUA_MAX_CALLS+2*PJSUA_MAX_PLAYERS)
++	#define PJSUA_MAX_BUDDIES			32
 +
-+
++	/* Seems to fix problems when restarting too frequently */
++	#define PJ_IOQUEUE_MAX_HANDLES	    1024
 +
 +
 +#endif
+Index: pjsip/sources/pjmedia/include/pjmedia/config_auto.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/pjmedia/include/pjmedia/config_auto.h	2012-07-13 13:39:12.756401897 +0200
+@@ -0,0 +1,38 @@
++/* $Id: config_auto.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
++/*
++ * Copyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
++ * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++#ifndef __PJMEDIA_CONFIG_AUTO_H_
++#define __PJMEDIA_CONFIG_AUTO_H_
++
++/**
++ * @file config_auto.h
++ * @brief PJMEDIA configuration as set by autoconf script
++ */
++
++/*
++ * Note:
++ *	The configuration in config_site.h overrides any other settings,
++ *	including the setting as detected by autoconf.
++ */
++
++
++#endif	/* __PJMEDIA_CONFIG_AUTO_H_ */
++
++
++
+Index: pjsip/sources/pjsip/include/pjsip/sip_autoconf.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/pjsip/include/pjsip/sip_autoconf.h	2012-07-13 13:39:12.760401896 +0200
+@@ -0,0 +1,30 @@
++/* $Id: sip_autoconf.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
++/*
++ * Copyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
++ * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++#ifndef __PJSIP_SIP_AUTOCONF_H__
++#define __PJSIP_SIP_AUTOCONF_H__
++
++/**
++ * @file sip_autoconf.h
++ * @brief Describes operating system specifics (automatically detected by
++ *        autoconf)
++ */
++
++#endif	/* __PJSIP_SIP_AUTOCONF_H__ */
++
+Index: pjsip/sources/pjlib/include/pj/compat/m_auto.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/pjlib/include/pj/compat/m_auto.h	2012-07-13 13:39:12.760401896 +0200
+@@ -0,0 +1,38 @@
++/* $Id: m_auto.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
++/*
++ * Copyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
++ * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++#ifndef __PJ_COMPAT_M_AUTO_H__
++#define __PJ_COMPAT_M_AUTO_H__
++
++/**
++ * @file m_auto.h
++ * @brief Automatically generated process definition file.
++ */
++
++#define PJ_M_NAME "android"
++
++
++#define PJ_IS_LITTLE_ENDIAN 1
++#define PJ_IS_BIG_ENDIAN 0
++
++/* Deprecated */
++#define PJ_HAS_PENTIUM		0
++
++#endif	/* __PJ_COMPAT_M_AUTO_H__ */
++
+Index: pjsip/sources/pjmedia/include/pjmedia-codec/config_auto.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ pjsip/sources/pjmedia/include/pjmedia-codec/config_auto.h	2012-07-13 13:39:12.760401896 +0200
+@@ -0,0 +1,32 @@
++/* $Id: config_auto.h.in 3841 2011-10-24 09:28:13Z ming $ */
++/*
++ * Copyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
++ * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++#ifndef __PJMEDIA_CODEC_CONFIG_AUTO_H_
++#define __PJMEDIA_CODEC_CONFIG_AUTO_H_
++
++/**
++ * @file config_auto.h
++ * @brief PJMEDIA-CODEC configuration as set by autoconf script
++ */
++
++
++
++#endif	/* __PJMEDIA_CODEC_CONFIG_AUTO_H_ */
++
++

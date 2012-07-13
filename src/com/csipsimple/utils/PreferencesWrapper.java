@@ -157,6 +157,7 @@ public class PreferencesWrapper {
         put(SipConfigManager.USE_ANYWAY_IN, false);
         put(SipConfigManager.USE_ANYWAY_OUT, false);
 		put(SipConfigManager.FORCE_NO_UPDATE, true);
+        put(SipConfigManager.DISABLE_TCP_SWITCH, true);
 		
 		
 		//Media

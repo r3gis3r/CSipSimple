@@ -102,6 +102,8 @@
     <string name="tsx_timeout_desc">Leave -1 for default RFC 3261 values</string>
     <string name="network_route_polling">Check for network changes each (minutes)</string>
     <string name="network_route_polling_desc">Android 4.0 VPN check workaround. Leave to 0 if not in this case to disable</string>
+    <string name="disable_tcp_switch">Disable TCP switch</string>
+    <string name="disable_tcp_switch_desc">If activated, prevent the stack to switch to TCP for big UDP packets.</string>
 
     <!-- Security -->
     <string name="tls">TLS</string>

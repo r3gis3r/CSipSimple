@@ -236,6 +236,8 @@ public class PjSipService {
                 cssCfg.setTcp_keep_alive_interval(prefsWrapper.getTcpKeepAliveInterval());
                 cssCfg.setTls_keep_alive_interval(prefsWrapper.getTlsKeepAliveInterval());
                 
+                cssCfg.setDisable_tcp_switch(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.DISABLE_TCP_SWITCH) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+                
                 // Transaction timeouts
                 int tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_T1_TIMEOUT);
                 if(tsx_to > 0) {

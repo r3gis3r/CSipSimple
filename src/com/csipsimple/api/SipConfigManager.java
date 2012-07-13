@@ -973,6 +973,13 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String USE_VIDEO = "use_video";
+    
+    /**
+     * Should the stack never switch to TCP when packets are too big?
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String DISABLE_TCP_SWITCH = "disable_tcp_switch";
 
     // Enums
     /**

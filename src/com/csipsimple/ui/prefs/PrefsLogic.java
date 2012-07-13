@@ -220,6 +220,7 @@ public class PrefsLogic {
                     
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.ENABLE_TCP);
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.ENABLE_UDP);
+                    pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.DISABLE_TCP_SWITCH);
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.TCP_TRANSPORT_PORT);
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.UDP_TRANSPORT_PORT);
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.RTP_PORT);
