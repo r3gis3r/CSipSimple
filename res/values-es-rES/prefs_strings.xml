@@ -5,7 +5,7 @@
   <string name="prefs_fast_desc">Opciones rápidas para los que no están familiarizados con el SIP</string>
   <string name="prefs_network">Red</string>
   <string name="prefs_network_desc">Como se conecta el SIP a la red</string>
-  <string name="prefs_media">Medios de comunicación</string>
+  <string name="prefs_media">Multimedia</string>
   <string name="prefs_media_desc">Codecs y comportamiento del sonido en la llamada</string>
   <string name="prefs_ui">Interfaz de usuario</string>
   <string name="prefs_ui_desc">Ajustar la interfaz de usuario</string>
@@ -24,7 +24,7 @@
   <string name="use_other_in_desc">Por ejemplo WiMax para las llamadas entrantes</string>
   <string name="use_other_out_desc">Por ejemplo WiMax para las llamadas salientes</string>
   <string name="use_anyway">Usar de todos modos</string>
-  <string name="use_anyway_desc">No tener en cuenta el estodo de red de Android. No debe ser utilizado para casos normales</string>
+  <string name="use_anyway_desc">No tener en cuenta el estado de red de Android. No debe ser utilizado para casos normales</string>
   <string name="use_3g">Utilizar 3G (o superior)</string>
   <string name="use_3g_disclamer">Su compañía DEBE permitirle utilizar esta opción</string>
   <string name="use_edge">Utilizar EDGE</string>
@@ -85,7 +85,7 @@
   <!--<string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>-->
   <string name="force_no_update">Forzar a no actualizar</string>
-  <string name="force_no_update_desc">Algunas partes remotas informan por error que soportan el metodo UPDATE cuando en relidad no lo hacen, esta opción fuerza el modo heredado para manejar UPDATE/re-IMVITE</string>
+  <string name="force_no_update_desc">Algunas partes remotas informan por error que soportan el método UPDATE cuando en relidad no lo hacen, esta opción fuerza el modo heredado para manejar UPDATE/re-INVITE</string>
   <string name="timer_min_se">Tiempo mínimo para que la sesión expire</string>
   <string name="timer_min_se_desc">Periodo minimo para que la sesion expire. No debe ser menor de 90</string>
   <string name="timer_sess_expires">Tiempo para que la sesión expire</string>
@@ -167,7 +167,7 @@
   <string name="do_focus_audio">Acaparación del audio</string>
   <string name="do_focus_audio_desc">Si lo deshabilita la musica y el sonido de la llamada se mezclarán pero puede ayudar con el enrutado. </string>
   <string name="micro_source">Fuente de microfono</string>
-  <string name="micro_source_desc">Fuente del microfono. Eligiendo el valor adecuado se muede mejorar mucho la anulación de eco</string>
+  <string name="micro_source_desc">Fuente del microfono. Eligiendo el valor adecuado se puede mejorar mucho la anulación de eco</string>
   <string name="has_io_queue">Archivo de entrada/salida</string>
   <string name="has_io_queue_desc">Activar el archivo de entrada/salida</string>
   <string name="set_audio_generate_tone">Hack de tono</string>
@@ -222,7 +222,7 @@
   <string name="codecs_per_bandwidth_desc">Utilizar listas independientes de prioridad para las redes lentas y rápidas</string>
   <string name="audio_troubleshooting">Solución de problemas de audio</string>
   <string name="audio_troubleshooting_desc">Soluciones para la salida del sonido</string>
-  <string name="codecs_extra_settings">Más ajustes decodecs</string>
+  <string name="codecs_extra_settings">Más ajustes de codecs</string>
   <string name="frames_per_rtp_packet">Frames por paquete RTP</string>
   <string name="g729_frame_per_packet">Frames G729 RTP por paquete</string>
   <string name="ilbc_frame_per_packet">Frames iLBC RTP por paquete</string>
@@ -232,8 +232,8 @@
   <string name="advanced_ui">Ajustes avanzados</string>
   <string name="integrate_with_native_dialer">Activar la integración</string>
   <string name="integrate_with_native_dialer_desc">Cuando marca con el marcador telefónico de android, se le pregunta si quiere utilizar el SIP o el móvil</string>
-  <string name="integrate_tel_priviledged">Intento de integrar con privilegios</string>
-  <string name="integrate_tel_priviledged_desc">Una forma diferente de integrarse con el marcador telefónico de androis. Usted debe desactivar la integración para usar esta opción.</string>
+  <string name="integrate_tel_priviledged">Intento de integración con privilegios</string>
+  <string name="integrate_tel_priviledged_desc">Una forma diferente de integrarse con el marcador telefónico de android. Usted debe desactivar la integración para usar esta opción.</string>
   <string name="integrate_with_native_calllogs">Integración del registro de llamadas</string>
   <string name="integrate_with_native_calllogs_desc">Las llamadas SIP serán incluidas (si es posible) en el registro de llamadas de Android</string>
   <string name="dial_press_tone">Reacción sonora del marcador telefónico</string>
