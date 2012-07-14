@@ -359,7 +359,7 @@ public class PjSipService {
                 // With new timer implementation, thread count of pjsip can be 0
                 // it will use less CPU since now thread are launched by
                 // alarmManager
-                cfg.setThread_cnt(0);
+                cfg.setThread_cnt(prefsWrapper.getPreferenceIntegerValue(SipConfigManager.THREAD_COUNT));
                 cfg.setUse_srtp(getUseSrtp());
                 cfg.setSrtp_secure_signaling(0);
                 cfg.setNat_type_in_sdp(0);

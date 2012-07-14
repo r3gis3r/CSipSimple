@@ -147,20 +147,16 @@
             android:summary="@string/use_soft_volume_desc"
             android:title="@string/use_soft_volume" />
     </PreferenceCategory>
-
-    <!--
-		<PreferenceCategory android:title="@string/perfs" android:key="perfs">
-			<EditTextPreference android:title="Thread count" android:key="thread_count"
-				android:summary="Number of thread allocated for the native stack"
-				android:defaultValue="0"
-				android:numeric="signed"/>
-				
-		</PreferenceCategory>
-    -->
-
     <PreferenceCategory
         android:key="misc"
         android:title="@string/misc" >
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="thread_count"
+            android:numeric="signed"
+            android:summary="@string/thread_count_desc"
+            android:title="@string/thread_count" />
+
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/dtmf_mode_choices"

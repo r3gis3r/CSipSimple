@@ -164,7 +164,7 @@ public class SipConfigManager {
      */
     public static final String HAS_IO_QUEUE = "has_io_queue";
 
-    // public static final String THREAD_COUNT = "thread_count";
+    public static final String THREAD_COUNT = "thread_count";
     /**
      * Backend for echo cancellation. <br/>
      * <a target="_blank" href=

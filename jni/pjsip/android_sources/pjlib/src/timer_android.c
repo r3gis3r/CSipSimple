@@ -99,7 +99,7 @@ static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 
 		PJ_LOG(
 				5,
-				(THIS_FILE, "Scheduling timer %d aka %x in %ld ms", entry->_timer_id, entry, ft));
+				(THIS_FILE, "Scheduling timer %d of %d in %ld ms", entry->_timer_id, ht->heap_id, ft));
 
 		timer_schedule_wrapper((int) entry, get_entry_id(ht, entry), (int) ft);
 

@@ -158,9 +158,8 @@ public class PrefsLogic {
                     pfh.hidePreference(MEDIA_AUDIO_VOLUME_KEY, SipConfigManager.USE_SOFT_VOLUME);
                     
                     pfh.hidePreference(MEDIA_MISC_KEY, SipConfigManager.AUTO_CONNECT_SPEAKER);
+                    pfh.hidePreference(MEDIA_MISC_KEY, SipConfigManager.THREAD_COUNT);
                     
-                    //hidePreference("perfs", SipConfigManager.THREAD_COUNT);
-                    //hidePreference(null, "perfs");
                     pfh.hidePreference(null, MEDIA_BAND_TYPE_KEY);
                     pfh.hidePreference(null, MEDIA_AUDIO_TROUBLESHOOT_KEY);
                 }else {
