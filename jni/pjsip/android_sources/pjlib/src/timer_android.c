@@ -376,7 +376,7 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 	// Find corresponding ht
 	pj_timer_heap_t *ht = sHeaps[heap_id];
 	if (ht != NULL) {
-		PJ_LOG(5, (THIS_FILE, "FIRE timer %d@%x", entry->_timer_id, entry));
+		PJ_LOG(5, (THIS_FILE, "FIRE timer %d of heap %d", entry_id, heap_id));
 
 		pj_timer_heap_callback* cb = NULL;
 		lock_timer_heap(ht);
