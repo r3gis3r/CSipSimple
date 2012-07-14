@@ -609,9 +609,16 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
 
         Uri searchUri = Uri.withAppendedPath(Contacts.CONTENT_GROUP_URI, Uri.encode(groupName));
-
-        return ctxt.getContentResolver().query(searchUri, projection, null, null,
-                Contacts.DISPLAY_NAME + " ASC");
+        
+        
+        Cursor c = null;
+        try {
+            c = ctxt.getContentResolver().query(searchUri, projection, null, null,
+                    Contacts.DISPLAY_NAME + " ASC");
+        } catch(Exception e) {
+            Log.e(THIS_FILE, "Error while retrieving group", e);
+        }
+        return c;
     }
 
     // private HashMap<String, Long> csipDatasId = new HashMap<String, Long>();
