@@ -53,7 +53,6 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
-import com.csipsimple.ui.account.AccountsEditListAdapter;
 import com.csipsimple.widgets.CSSListFragment;
 import com.csipsimple.widgets.DragnDropListView;
 import com.csipsimple.widgets.DragnDropListView.DropListener;
@@ -155,15 +154,6 @@ public class AccountFiltersListFragment extends CSSListFragment {
                 .setShowAsAction(
                         MenuItem.SHOW_AS_ACTION_IF_ROOM );
 
-        menu.add(R.string.reorder).setIcon(android.R.drawable.ic_menu_sort_by_size)
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        AccountsEditListAdapter ad = (AccountsEditListAdapter) getListAdapter();
-                        ad.toggleDraggable();
-                        return true;
-                    }
-                }).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		
 		super.onCreateOptionsMenu(menu, inflater);
 	}
