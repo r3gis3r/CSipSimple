@@ -41,7 +41,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="0.5"
-            android:text="@string/warn_ignore" />
+            android:text="@string/warn_no_stun_ignore" />
 
         <Button
             android:id="@+id/warn_stun_on"
