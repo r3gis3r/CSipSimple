@@ -186,6 +186,24 @@ public final class SipUri {
     public static boolean isPhoneNumber(String phone) {
         return (!TextUtils.isEmpty(phone) && Pattern.matches(DIGIT_NBR_RULE, phone));
     }
+    
+    /**
+     * Get extract a phone number from sip uri if any available
+     * 
+     * @param uriInfos the parsed information of the uri obtained with {@link #parseSipContact(String)}
+     * @return null if no phone number detected. The phone number else.
+     */
+    public static String getPhoneNumber(ParsedSipContactInfos uriInfos) {
+        if(uriInfos == null) {
+            return null;
+        }
+        if(isPhoneNumber(uriInfos.userName)) {
+           return uriInfos.userName; 
+        }else if(isPhoneNumber(uriInfos.displayName)) {
+            return uriInfos.displayName;
+        }
+        return null;
+    }
 
     /**
      * Transform sip uri into something that doesn't depend on remote display

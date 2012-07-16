@@ -36,6 +36,7 @@ import android.os.SystemClock;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
@@ -789,16 +790,11 @@ public class UAStateReceiver extends Callback {
 						//Reformat number for callogs
 						ParsedSipContactInfos callerInfos = SipUri.parseSipContact(cv.getAsString(Calls.NUMBER));
 						if (callerInfos != null) {
-							String phoneNumber = null;
-							if(SipUri.isPhoneNumber(callerInfos.displayName)) {
-								phoneNumber = callerInfos.displayName;
-							}else if(SipUri.isPhoneNumber(callerInfos.userName)) {
-								phoneNumber = callerInfos.userName;
-							}
+							String phoneNumber = SipUri.getPhoneNumber(callerInfos);
 							
 							//Only log numbers that can be called by GSM too.
 							// TODO : if android 2.3 add sip uri also
-							if(phoneNumber != null) {
+							if(!TextUtils.isEmpty(phoneNumber)) {
 								cv.put(Calls.NUMBER, phoneNumber);
 								// For log in call logs => don't add as new calls... we manage it ourselves.
 								cv.put(Calls.NEW, false);

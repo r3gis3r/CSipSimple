@@ -78,19 +78,11 @@ public class CallerInfo {
         @Override
         protected CallerInfo create(String sipUri) {
             CallerInfo callerInfo = null;
-            
             ParsedSipContactInfos uriInfos = SipUri.parseSipContact(sipUri);
-            if (SipUri.isPhoneNumber(uriInfos.userName)) {
-                Log.d(THIS_FILE, "Number looks usable, try People lookup");
-                callerInfo = ContactsWrapper.getInstance().findCallerInfo(mContext,
-                        uriInfos.userName);
-            }
-            // If contact uid doesn't match; we can try with contact display
-            // name
-            if (callerInfo == null && SipUri.isPhoneNumber(uriInfos.displayName)) {
-                Log.d(THIS_FILE, "Display name looks usable, try People lookup");
-                callerInfo = ContactsWrapper.getInstance().findCallerInfo(mContext,
-                        uriInfos.displayName);
+            String phoneNumber = SipUri.getPhoneNumber(uriInfos);
+            if (!TextUtils.isEmpty(phoneNumber)) {
+                Log.d(THIS_FILE, "Number found " + phoneNumber + ", try People lookup");
+                callerInfo = ContactsWrapper.getInstance().findCallerInfo(mContext, phoneNumber);
             }
 
             if (callerInfo == null || !callerInfo.contactExists) {
