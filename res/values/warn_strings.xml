@@ -26,7 +26,8 @@
        	If you have no incoming audio problem ignore this warning.\n
        	If you are in a country where public network is separated from other public networks, you may have to change the STUN server.\n
        	Use of STUN consume more battery.</string>
-    <string name="warn_no_stun_enable">Turn STUN on</string>
+    <string name="warn_no_stun_enable">I\'m getting silent calls</string>
+    <string name="warn_no_stun_ignore">My calls are fine</string>
 
     <!-- Vpn on android 4.0 -->
     <string name="warn_vpn_ics">VPN changes for 4.0</string>
