@@ -103,6 +103,10 @@
             android:title="@string/w_expert_contact_rewrite_method" />
 
         <CheckBoxPreference
+            android:key="allow_via_rewrite"
+            android:summary="@string/w_expert_allow_via_rewrite_desc"
+            android:title="@string/w_expert_allow_via_rewrite" />
+        <CheckBoxPreference
             android:key="try_clean_reg"
             android:summary="@string/w_expert_try_clean_registers_desc"
             android:title="@string/w_expert_try_clean_registers" />

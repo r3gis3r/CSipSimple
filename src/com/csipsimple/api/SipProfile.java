@@ -633,6 +633,22 @@ public class SipProfile implements Parcelable {
      * @see Boolean
      */
     public static final String FIELD_TRY_CLEAN_REGISTERS = "try_clean_reg";
+    
+    
+    /**
+     * This option is used to overwrite the "sent-by" field of the Via header
+     * for outgoing messages with the same interface address as the one in
+     * the REGISTER request, as long as the request uses the same transport
+     * instance as the previous REGISTER request. <br/>
+     *
+     * Default: true <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm"
+     * >Pjsip documentation</a>
+     * 
+     * @see Boolean
+     */
+    public static final String FIELD_ALLOW_VIA_REWRITE = "allow_via_rewrite";
 
     /**
      * Simple project to use if you want to list accounts with basic infos on it
@@ -722,6 +738,10 @@ public class SipProfile implements Parcelable {
      * @see #FIELD_CONTACT_REWRITE_METHOD
      */
     public int contact_rewrite_method = 2;
+    /**
+     * @see #FIELD_ALLOW_VIA_REWRITE
+     */
+    public boolean allow_via_rewrite = true;
     /**
      * Exploded array of proxies
      * 
@@ -897,6 +917,7 @@ public class SipProfile implements Parcelable {
         rtp_qos_dscp = in.readInt();
         android_group = getReadParcelableString(in.readString());
         mwi_enabled = (in.readInt() != 0);
+        allow_via_rewrite = (in.readInt() != 0);
     }
 
     /**
@@ -971,6 +992,7 @@ public class SipProfile implements Parcelable {
         dest.writeInt(rtp_qos_dscp);
         dest.writeString(getWriteParcelableString(android_group));
         dest.writeInt(mwi_enabled ? 1 : 0);
+        dest.writeInt(allow_via_rewrite ? 1 : 0);
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -1077,6 +1099,10 @@ public class SipProfile implements Parcelable {
         tmp_i = args.getAsInteger(FIELD_CONTACT_REWRITE_METHOD);
         if (tmp_i != null) {
             contact_rewrite_method = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_ALLOW_VIA_REWRITE);
+        if (tmp_i != null) {
+            allow_via_rewrite = (tmp_i == 1);
         }
 
         tmp_i = args.getAsInteger(FIELD_USE_SRTP);
@@ -1220,6 +1246,7 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_PIDF_TUPLE_ID, pidf_tuple_id);
         args.put(FIELD_FORCE_CONTACT, force_contact);
         args.put(FIELD_ALLOW_CONTACT_REWRITE, allow_contact_rewrite ? 1 : 0);
+        args.put(FIELD_ALLOW_VIA_REWRITE, allow_via_rewrite ? 1 : 0);
         args.put(FIELD_CONTACT_REWRITE_METHOD, contact_rewrite_method);
         args.put(FIELD_USE_SRTP, use_srtp);
         args.put(FIELD_USE_ZRTP, use_zrtp);

@@ -703,6 +703,9 @@ public final class Compatibility {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
         }
+        if(lastSeenVersion < 1688) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
+        }
         
         prefWrapper.endEditing();
     }

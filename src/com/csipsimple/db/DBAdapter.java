@@ -46,7 +46,7 @@ public class DBAdapter {
 
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
-		private static final int DATABASE_VERSION = 32;
+		private static final int DATABASE_VERSION = 33;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -108,7 +108,8 @@ public class DBAdapter {
                 + SipProfile.FIELD_RTP_QOS_DSCP              + " INTEGER DEFAULT -1,"
                 + SipProfile.FIELD_RTP_BOUND_ADDR            + " TEXT,"
                 + SipProfile.FIELD_RTP_PUBLIC_ADDR           + " TEXT,"
-                + SipProfile.FIELD_ANDROID_GROUP             + " TEXT"
+                + SipProfile.FIELD_ANDROID_GROUP             + " TEXT,"
+                + SipProfile.FIELD_ALLOW_VIA_REWRITE         + " INTEGER DEFAULT 1"
 				
 			+ ");";
 		
@@ -342,6 +343,16 @@ public class DBAdapter {
                 try {
                     //Add android group for buddy list
                     addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ANDROID_GROUP, "TEXT");
+                    Log.d(THIS_FILE, "Upgrade done");
+                }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
+            }
+            if(oldVersion < 33) {
+                try {
+                    //Add reg delay before refresh row
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ALLOW_VIA_REWRITE, "INTEGER DEFAULT 1");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ALLOW_VIA_REWRITE + "=1");
                     Log.d(THIS_FILE, "Upgrade done");
                 }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);

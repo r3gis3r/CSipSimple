@@ -165,7 +165,7 @@ public class PjSipAccount {
 		
 		cfg.setMwi_enabled(profile.mwi_enabled ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
 		
-		cfg.setAllow_via_rewrite(pjsuaConstants.PJ_FALSE);
+		//cfg.setAllow_via_rewrite(pjsuaConstants.PJ_FALSE);
 		
 		// RFC5626
 		cfg.setUse_rfc5626(profile.use_rfc5626? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
