@@ -24,7 +24,7 @@
     android:id="@+id/quickaction_button"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:background="@drawable/btn_account_chooser"
+    android:background="@drawable/abs__spinner_ab_holo_dark"
     android:clickable="true"
     android:focusable="true"
     android:gravity="center"
