@@ -682,6 +682,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_fritzbox, 9, 
                     new Locale[] {Locale.GERMANY}, false, false, 
                     Fritzbox.class));
+            WIZARDS_DICT.put("BLICNET", new WizardInfo("BLICNET", "Blicnet", 
+                    R.drawable.ic_wizard_blicnet, 19, 
+                    new Locale[] {locale("bs") /*, new Locale("sr"), new Locale("hr")*/}, false, false, 
+                    Blicnet.class));
 			
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
