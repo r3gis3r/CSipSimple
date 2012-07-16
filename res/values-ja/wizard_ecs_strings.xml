@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_ecs_display_name">アカウント名</string>
+  <string name="w_ecs_display_name_desc">アカウントの表示名</string>
+  <string name="w_ecs_phone_number">電話番号</string>
+  <string name="w_ecs_phone_number_desc">アカウントのSIP電話番号</string>
+  <string name="w_ecs_user_name">ユーザログイン</string>
+  <string name="w_ecs_user_name_desc">バーチャルデスクログイン</string>
+  <string name="w_ecs_password">ユーザパスワード</string>
+  <string name="w_ecs_password_desc">アカウントのパスワード</string>
+  <string name="w_ecs_server_domain">SIPドメイン</string>
+  <string name="w_ecs_server_domain_desc">SIPアカウントのドメイン名</string>
+  <string name="w_ecs_server_ip_desc">ECSにアクセスするためのドメイン名またはIPアドレス (空白でSIPドメインを使用)</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_iinet_state">状態</string>
+  <string name="w_iinet_state_desc">次のリストから適切な状態を選択してください。</string>
+  <string name="w_iinet_username">VoIP電話番号</string>
+  <string name="w_iinet_username_desc">スペースや記号などを削除してください。</string>
+  <string name="w_iinet_password">特別なVoIPパスワード</string>
+  <string name="w_iinet_password_desc">接続パスワードとは異なります。</string>
+</resources>

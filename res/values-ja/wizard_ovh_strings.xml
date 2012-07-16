@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_ovh_phone_number_desc">電話番号は0033xxxxxxの形式です。</string>
+  <string name="w_sapo_phone_number_desc">電話番号は+35130xxxxxxの形式です。</string>
+  <string name="w_pbxes_user_extension">ユーザ拡張 (例: user-1)</string>
+</resources>

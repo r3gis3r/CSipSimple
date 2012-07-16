@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_common_display_name">アカウント名</string>
+  <string name="w_common_display_name_desc">アカウントの表示名</string>
+  <string name="w_common_username">ユーザ名</string>
+  <string name="w_common_username_desc">SIPアカウント名 / ログイン (@sip.serverを記入しないでください)</string>
+  <string name="w_common_phone_number">電話番号</string>
+  <string name="w_common_phone_number_desc">プロバイダーから取得したSIP電話番号</string>
+  <string name="w_common_password">パスワード</string>
+  <string name="w_common_password_desc">アカウントのパスワード</string>
+  <string name="w_common_server">サーバ</string>
+  <string name="w_common_server_desc">SIPサーバドメイン/IP[:ポート]</string>
+  <string name="create_account">アカウントを作成</string>
+  <string name="first_name">名</string>
+  <string name="last_name">姓</string>
+  <string name="email_address">メールアドレス</string>
+  <string name="captcha">CAPTCHA</string>
+  <string name="country_code">国コード</string>
+</resources>

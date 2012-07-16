@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_advanced_display_name">アカウント名</string>
+  <string name="w_advanced_display_name_desc">このアカウントの表示名</string>
+  <string name="w_advanced_caller_id">発信者番号</string>
+  <string name="w_advanced_caller_id_desc">通話時に送信する発信者番号</string>
+  <string name="w_advanced_username">ユーザ名</string>
+  <string name="w_advanced_username_desc">SIPサーバ認証のユーザ名 (@sip.serverを記入しないでください)</string>
+  <string name="w_advanced_password">パスワード</string>
+  <string name="w_advanced_password_desc">SIPサーバ認証のパスワード</string>
+  <string name="w_advanced_use_tcp">TCPを使用(UDPを使わない)</string>
+  <string name="w_advanced_proxy">プロキシ</string>
+  <string name="w_advanced_proxy_desc">プロキシ ドメイン/IP[:ポート] (オプション, 必須ではありません)</string>
+  <string name="w_advanced_auth_id">SIP認証ID</string>
+  <string name="w_advanced_auth_id_desc">空白でユーザ名を使用</string>
+</resources>

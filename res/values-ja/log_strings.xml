@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="unknown">不明</string>
+  <string name="type_incoming">着信</string>
+  <string name="type_outgoing">発信</string>
+  <string name="type_missed">不在</string>
+  <string name="callBack">コールバック</string>
+  <string name="callAgain">リダイヤル</string>
+  <string name="returnCall">折り返し</string>
+  <string name="call">通話</string>
+  <string name="sip_call">SIP通話</string>
+  <string name="no_call_history">通話履歴がありません</string>
+</resources>

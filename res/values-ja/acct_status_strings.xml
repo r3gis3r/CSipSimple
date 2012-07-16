@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="acct_inactive">活動停止中</string>
+  <string name="acct_inactive">休止中</string>
   <string name="acct_unregistered">未登録</string>
   <string name="acct_expired">期限切れ</string>
   <string name="acct_registering">登録中…</string>
   <string name="acct_registered">登録済み</string>
   <string name="acct_regerror">登録エラー</string>
-  <string name="acct_regfailed">登録失敗 。設定を確認してください。</string>
+  <string name="acct_regfailed">登録失敗 - 設定を確認してください。</string>
 </resources>

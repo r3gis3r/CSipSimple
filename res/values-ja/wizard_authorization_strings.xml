@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_authorization_auth_name">認証名</string>
+  <string name="w_authorization_auth_name_desc">SIP認証</string>
+  <string name="w_authorization_phone_number">ユーザ名</string>
+  <string name="w_authorization_phone_number_desc">SIPユーザアカウント</string>
+</resources>

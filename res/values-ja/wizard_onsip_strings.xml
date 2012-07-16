@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_onsip_authentication_name">認証ユーザ名</string>
+  <string name="w_onsip_authentication_name_desc">SIP認証ユーザ</string>
+  <string name="w_onsip_username">SIPユーザ名</string>
+  <string name="w_onsip_username_desc">SIPアカウント名</string>
+  <string name="w_onsip_server">ドメイン</string>
+  <string name="w_onsip_server_desc">SIPドメイン</string>
+  <string name="w_onsip_password">SIPパスワード</string>
+  <string name="w_onsip_password_desc">SIPアカウントパスワード</string>
+</resources>

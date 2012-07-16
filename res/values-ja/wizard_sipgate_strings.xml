@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_sipgate_display_name">アカウント名</string>
+  <string name="w_sipgate_display_name_desc">アカウントの表示名</string>
+  <string name="w_sipgate_username">SIP-ID</string>
+  <string name="w_sipgate_username_desc">sipgateのログイン名ではありません。sipgateのウェブサイトでSIP-IDを確認してください。</string>
+  <string name="w_sipgate_password">SIPパスワード</string>
+  <string name="w_sipgate_password_desc">sipgateのパスワードではありません。sipgateのウェブサイトでSIPパスワードを確認してください。</string>
+  <string name="w_sipgate_server_desc">例: sipgate.co.uk</string>
+</resources>
