@@ -73,7 +73,7 @@ public class Blicnet extends SimpleImplementation {
         prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, Integer.toString(SipConfigManager.DTMF_MODE_INFO));
         
         // g729 and PCMA as fallback
-        prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"");
+        prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"200");
         prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"0");
         prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB,"245");

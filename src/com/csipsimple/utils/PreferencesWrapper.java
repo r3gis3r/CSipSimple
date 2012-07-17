@@ -570,7 +570,11 @@ public class PreferencesWrapper {
 	public short getCodecPriority(String codecName, String type, String defaultValue) {
 		String key = SipConfigManager.getCodecKey(codecName, type); 
 		if(key != null) {
-			return (short) Integer.parseInt(prefs.getString(key, defaultValue));
+		    try {
+		        return (short) Integer.parseInt(prefs.getString(key, defaultValue));
+		    }catch(NumberFormatException e) {
+		        Log.e(THIS_FILE, "Invalid codec priority", e);
+		    }
 		}
 		return (short) Integer.parseInt(defaultValue);
 	}
