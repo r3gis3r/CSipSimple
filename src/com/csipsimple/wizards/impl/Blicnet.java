@@ -55,14 +55,15 @@ public class Blicnet extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.proxies = null;
-		account.transport = SipProfile.TRANSPORT_UDP;
         account.acc_id = "<sip:200044"
                 + SipUri.encodeUser(accountUsername.getText().trim()) + "@"+getDomain()+">";
         account.username = "200044" + getText(accountUsername).trim();
         account.allow_contact_rewrite = false;
         account.contact_rewrite_method = 1;
         account.try_clean_registers = 1;
-        
+        account.allow_via_rewrite = false;
+        account.mwi_enabled = false;
+        account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
 	}
 	

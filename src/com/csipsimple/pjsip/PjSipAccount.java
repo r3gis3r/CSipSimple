@@ -117,6 +117,7 @@ public class PjSipAccount {
 		
 		cfg.setAllow_contact_rewrite(profile.allow_contact_rewrite ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
 		cfg.setContact_rewrite_method(profile.contact_rewrite_method);
+        cfg.setAllow_via_rewrite(profile.allow_via_rewrite ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
 		
 		
 		if(profile.use_srtp != -1) {
@@ -165,7 +166,6 @@ public class PjSipAccount {
 		
 		cfg.setMwi_enabled(profile.mwi_enabled ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
 		
-		//cfg.setAllow_via_rewrite(pjsuaConstants.PJ_FALSE);
 		
 		// RFC5626
 		cfg.setUse_rfc5626(profile.use_rfc5626? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
