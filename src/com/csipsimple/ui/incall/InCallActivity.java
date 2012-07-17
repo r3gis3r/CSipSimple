@@ -1261,7 +1261,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             case LEFT_HANDLE:
                 Log.d(THIS_FILE, "We unlock");
                 proximityManager.release(0);
-                proximityManager.updateProximitySensorMode();
+                proximityManager.restartTimer();
                 break;
             case RIGHT_HANDLE:
                 Log.d(THIS_FILE, "We clear the call");
