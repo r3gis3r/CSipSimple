@@ -46,6 +46,7 @@ public class FreephoneLineCa extends SimpleImplementation {
 		account = super.buildAccount(account);
 		account.reg_timeout = 3600;
 		account.allow_contact_rewrite = false;
+		account.allow_via_rewrite = false;
 		
 		return account;
 	}

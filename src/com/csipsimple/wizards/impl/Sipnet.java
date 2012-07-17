@@ -94,6 +94,7 @@ public class Sipnet extends SimpleImplementation {
         account.use_srtp = 0;
         account.use_zrtp = 1;
         account.allow_contact_rewrite = false;
+        account.allow_via_rewrite = false;
         account.contact_rewrite_method = 1;
         
         return account;

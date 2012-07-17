@@ -41,6 +41,7 @@ public class NeufTalk extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 	    SipProfile acc = super.buildAccount(account);
 	    acc.allow_contact_rewrite = false;
+	    acc.allow_via_rewrite = false;
 	    return acc;
 	}
 	

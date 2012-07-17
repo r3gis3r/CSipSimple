@@ -112,6 +112,7 @@ public class Sipgate extends AlternateServerImplementation {
 		}
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.allow_contact_rewrite = false;
+		account.allow_via_rewrite = false;
 		return account;
 	}
 

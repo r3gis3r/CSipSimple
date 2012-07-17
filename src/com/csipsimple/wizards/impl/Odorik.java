@@ -60,6 +60,7 @@ public class Odorik extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
 		acc.allow_contact_rewrite = false;
+		acc.allow_via_rewrite = false;
 		acc.try_clean_registers = 1;
 		return acc;
 	}

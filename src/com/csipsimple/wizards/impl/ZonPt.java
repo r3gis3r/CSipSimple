@@ -75,6 +75,7 @@ public class ZonPt extends SimpleImplementation {
         };
         acc.username = "1290" + getText(accountUsername);
         acc.allow_contact_rewrite = false;
+        acc.allow_via_rewrite = false;
 
 	    return acc;
 	}

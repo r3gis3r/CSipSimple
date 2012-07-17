@@ -40,6 +40,7 @@ public class Vono extends SimpleImplementation {
 		//Ensure registration timeout value
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.allow_contact_rewrite = false;
+		account.allow_via_rewrite = false;
 		account.contact_rewrite_method = 1;
 		account.proxies = null; //new String[] {"sip:vono.net.br:1571"};
 		return account;

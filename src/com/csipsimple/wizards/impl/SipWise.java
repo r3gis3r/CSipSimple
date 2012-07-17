@@ -38,6 +38,7 @@ public class SipWise extends AlternateServerImplementation {
 		account = super.buildAccount(account);
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.allow_contact_rewrite = false;
+		account.allow_via_rewrite = false;
 		return account;
 	}
 	

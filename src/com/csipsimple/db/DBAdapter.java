@@ -353,6 +353,7 @@ public class DBAdapter {
                     //Add reg delay before refresh row
                     addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ALLOW_VIA_REWRITE, "INTEGER DEFAULT 1");
                     db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ALLOW_VIA_REWRITE + "=1");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ALLOW_VIA_REWRITE + "=0 WHERE "+SipProfile.FIELD_ALLOW_CONTACT_REWRITE+"=0");
                     Log.d(THIS_FILE, "Upgrade done");
                 }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
