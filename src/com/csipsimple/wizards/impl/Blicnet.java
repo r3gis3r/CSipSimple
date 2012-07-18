@@ -113,4 +113,9 @@ public class Blicnet extends SimpleImplementation {
         prefs.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "0");
 	}
 	
+	
+	@Override
+	public boolean needRestart() {
+	    return true;
+	}
 }
