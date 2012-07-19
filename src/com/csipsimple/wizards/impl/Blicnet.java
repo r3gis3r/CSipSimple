@@ -26,8 +26,12 @@ import android.text.TextUtils;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.api.SipUri;
+import com.csipsimple.models.Filter;
 import com.csipsimple.utils.PreferencesWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class Blicnet extends SimpleImplementation {
 	
@@ -40,24 +44,32 @@ public class Blicnet extends SimpleImplementation {
 	protected String getDefaultName() {
 		return "Blicnet";
 	}
-	
+
+    private final static String USUAL_PREFIX = "200044";
 	//Customization
 	@Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
         accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-        
-		if(!TextUtils.isEmpty(account.username)) {
-		    accountUsername.setText(account.username.replaceAll("^200044", ""));
-		}
+
+        if(TextUtils.isEmpty(account.username)){
+            accountUsername.setText(USUAL_PREFIX);
+        }
 	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canSave() {
+        boolean ok = super.canSave();
+        ok &= checkField(accountUsername, accountUsername.getText().trim().equalsIgnoreCase(USUAL_PREFIX));
+        return ok;
+    }
 
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.proxies = null;
-        account.acc_id = "<sip:200044"
-                + SipUri.encodeUser(accountUsername.getText().trim()) + "@"+getDomain()+">";
-        account.username = "200044" + getText(accountUsername).trim();
         account.allow_contact_rewrite = false;
         account.contact_rewrite_method = 1;
         account.try_clean_registers = 1;
@@ -118,4 +130,20 @@ public class Blicnet extends SimpleImplementation {
 	public boolean needRestart() {
 	    return true;
 	}
+	
+
+    @Override
+    public List<Filter> getDefaultFilters(SipProfile acc) {
+        ArrayList<Filter> filters = new ArrayList<Filter>();
+        
+        Filter f = new Filter();
+        f.account = (int) acc.id;
+        f.action = Filter.ACTION_REPLACE;
+        f.matchPattern = "^" + Pattern.quote("+") + "(.*)$";
+        f.replacePattern = "00$1";
+        f.matchType = Filter.MATCHER_STARTS;
+        filters.add(f);
+        
+        return filters;
+    }
 }
