@@ -109,7 +109,7 @@ public class DBAdapter {
                 + SipProfile.FIELD_RTP_BOUND_ADDR            + " TEXT,"
                 + SipProfile.FIELD_RTP_PUBLIC_ADDR           + " TEXT,"
                 + SipProfile.FIELD_ANDROID_GROUP             + " TEXT,"
-                + SipProfile.FIELD_ALLOW_VIA_REWRITE         + " INTEGER DEFAULT 1"
+                + SipProfile.FIELD_ALLOW_VIA_REWRITE         + " INTEGER DEFAULT 0"
 				
 			+ ");";
 		
@@ -352,8 +352,7 @@ public class DBAdapter {
                 try {
                     //Add reg delay before refresh row
                     addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ALLOW_VIA_REWRITE, "INTEGER DEFAULT 1");
-                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ALLOW_VIA_REWRITE + "=1");
-                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ALLOW_VIA_REWRITE + "=0 WHERE "+SipProfile.FIELD_ALLOW_CONTACT_REWRITE+"=0");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ALLOW_VIA_REWRITE + "=0");
                     Log.d(THIS_FILE, "Upgrade done");
                 }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);

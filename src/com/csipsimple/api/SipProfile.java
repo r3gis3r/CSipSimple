@@ -741,7 +741,7 @@ public class SipProfile implements Parcelable {
     /**
      * @see #FIELD_ALLOW_VIA_REWRITE
      */
-    public boolean allow_via_rewrite = true;
+    public boolean allow_via_rewrite = false;
     /**
      * Exploded array of proxies
      * 
