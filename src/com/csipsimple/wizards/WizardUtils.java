@@ -287,7 +287,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_catitel, 9, 
                     new Locale[]{ }, false, true, 
                     Catitel.class));
-            
+            WIZARDS_DICT.put("TECOBU", new WizardInfo("TECOBU", "TECOBU", 
+                    R.drawable.ic_wizard_tecobu, 19, 
+                    new Locale[]{ }, false, true, 
+                    Tecobu.class));
             
 			
             
@@ -686,10 +689,6 @@ public class WizardUtils {
                     R.drawable.ic_wizard_blicnet, 19, 
                     new Locale[] {locale("bs") , new Locale("sr"), new Locale("hr")}, false, false, 
                     Blicnet.class));
-            WIZARDS_DICT.put("TECOBU", new WizardInfo("TECOBU", "TECOBU", 
-                    R.drawable.ic_wizard_tecobu, 19, 
-                    new Locale[]{ locale("cs_CZ") }, false, false, 
-                    Tecobu.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

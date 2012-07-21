@@ -24,8 +24,10 @@ package com.csipsimple.wizards.impl;
 import android.text.InputType;
 
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
+import com.csipsimple.utils.PreferencesWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +71,19 @@ public class Callcentric extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.contact_rewrite_method = 1;
+		account.mwi_enabled = false;
 		return account;
+	}
+	
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+	    super.setDefaultParams(prefs);
+	    prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
+	    prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_VAD, false);
+	}
+	@Override
+	public boolean needRestart() {
+	    return true;
 	}
 	
 	@Override
