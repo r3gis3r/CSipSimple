@@ -27,6 +27,7 @@ import com.csipsimple.utils.Log;
 
 import android.content.Context;
 import android.preference.EditTextPreference;
+import android.provider.Settings;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
@@ -39,16 +40,17 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 
 	private static final String THIS_FILE = "PasswordPreference";
 	private CheckBox showPwdCheckbox;
+    private boolean canShowPassword;
 
 
 
 	public PasswordPreference(Context context) {
-		super(context, null);
+		this(context, null);
 	}
 
 	public PasswordPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		Log.d(THIS_FILE, "Create me....");
+		canShowPassword =  (Settings.System.getInt(getContext().getContentResolver(), Settings.System.TEXT_SHOW_PASSWORD, 1) == 1); 
 		
 		showPwdCheckbox = new CheckBox(context);
 		showPwdCheckbox.setText(R.string.show_password);
@@ -60,6 +62,9 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 	@Override
 	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
+		if(!canShowPassword) {
+		    return;
+		}
 		try {
 			CheckBox checkbox = showPwdCheckbox;
 			ViewParent oldParent = checkbox.getParent();
