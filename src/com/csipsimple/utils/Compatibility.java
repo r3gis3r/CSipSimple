@@ -74,10 +74,6 @@ public final class Compatibility {
         Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - "
                 + android.os.Build.DEVICE);
 
-        if (isCompatible(9)) {
-            return false;
-        }
-
         // HTC evo 4G
         if (android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
             return true;
@@ -104,12 +100,6 @@ public final class Compatibility {
     public static boolean shouldUseModeApi() {
         Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - "
                 + android.os.Build.DEVICE);
-
-        // Horray api level 9 thanks to the stock sip app seems to be consistant
-        // :D
-        if (isCompatible(9)) {
-            return false;
-        }
 
         // ZTE blade et joe
         if (android.os.Build.DEVICE.equalsIgnoreCase("blade")
