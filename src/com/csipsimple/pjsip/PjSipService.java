@@ -24,6 +24,7 @@ package com.csipsimple.pjsip;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -1803,6 +1804,7 @@ public class PjSipService {
 
 
     // Recorder
+    private SparseArray<String> recordingFiles = new SparseArray<String>();
     /**
      * Start recording of a call.
      * 
@@ -1820,6 +1822,7 @@ public class PjSipService {
             pj_str_t filename = pjsua.pj_str_copy(wavFile.getAbsolutePath());
             if (pjsua.call_recording_start(callId, filename, pjsuaConstants.PJ_FALSE) == pjsua.PJ_SUCCESS) {
                 userAgentReceiver.updateRecordingStatus(callId, false, true);
+                recordingFiles.put(callId, wavFile.getAbsolutePath());
             } else {
                 service.notifyUserOfMessage(R.string.cant_write_file);
             }
@@ -1841,6 +1844,16 @@ public class PjSipService {
 
         if (pjsua.call_recording_stop(callId) == pjsuaConstants.PJ_SUCCESS) {
             userAgentReceiver.updateRecordingStatus(callId, true, false);
+            // Broadcast the status
+            String file = recordingFiles.get(callId);
+            if(!TextUtils.isEmpty(file)) {
+                SipCallSession callInfo = getCallInfo(callId);
+                Intent it = new Intent(SipManager.ACTION_SIP_CALL_RECORDED);
+                it.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
+                it.putExtra(SipManager.EXTRA_FILE_PATH, file);
+                service.sendBroadcast(it, SipManager.PERMISSION_USE_SIP);
+                recordingFiles.delete(callId);
+            }
         }
     }
     

@@ -297,7 +297,7 @@ public class UAStateReceiver extends Callback {
 		//TODO : could be parcelable !
 		intent.putExtra(SipMessage.FIELD_FROM, msg.getFrom());
 		intent.putExtra(SipMessage.FIELD_BODY, msg.getBody());
-		pjService.service.sendBroadcast(intent);
+		pjService.service.sendBroadcast(intent, SipManager.PERMISSION_USE_SIP);
 		
 		//Notify android os of the new message
 		notificationManager.showNotificationForMessage(msg);
@@ -336,7 +336,7 @@ public class UAStateReceiver extends Callback {
 		//Broadcast the information
 		Intent intent = new Intent(SipManager.ACTION_SIP_MESSAGE_RECEIVED);
 		intent.putExtra(SipMessage.FIELD_FROM, toStr);
-		pjService.service.sendBroadcast(intent);
+		pjService.service.sendBroadcast(intent, SipManager.PERMISSION_USE_SIP);
 		unlockCpu();
 	}
 
@@ -352,12 +352,6 @@ public class UAStateReceiver extends Callback {
 				// Update java infos
 				Log.d(THIS_FILE, "New reg state for : " + accountId);
 				pjService.updateProfileStateFromService(accountId);
-				
-				// Dispatch to UA handler thread
-				if(msgHandler != null) {
-					msgHandler.sendMessage(msgHandler.obtainMessage(ON_REGISTRATION_STATE, accountId));
-				}
-				
 				
 				//Try to recover registration many other clients (or self) also registered
 				SipProfile account = pjService.getAccountForPjsipId(accountId);
@@ -528,7 +522,7 @@ public class UAStateReceiver extends Callback {
 			Intent zrtpIntent = new Intent(SipManager.ACTION_ZRTP_SHOW_SAS);
 			zrtpIntent.putExtra(Intent.EXTRA_SUBJECT, sasString);
 			zrtpIntent.putExtra(Intent.EXTRA_UID, dataPtr);
-			pjService.service.sendBroadcast(zrtpIntent);
+			pjService.service.sendBroadcast(zrtpIntent, SipManager.PERMISSION_USE_SIP);
 		}else{
 			updateZrtpInfos(dataPtr);
 		}
@@ -687,8 +681,8 @@ public class UAStateReceiver extends Callback {
 	//private static final int ON_INCOMING_CALL = 1;
 	private static final int ON_CALL_STATE = 2;
 	private static final int ON_MEDIA_STATE = 3;
-	private static final int ON_REGISTRATION_STATE = 4;
-	private static final int ON_PAGER = 5;
+	//private static final int ON_REGISTRATION_STATE = 4;
+	//private static final int ON_PAGER = 5;
 
 
 
@@ -827,22 +821,6 @@ public class UAStateReceiver extends Callback {
 				callInfo.setMediaStatus(mediaCallInfo.getMediaStatus());
 				stateReceiver.callsList.put(mediaCallInfo.getCallId(), callInfo);
 				stateReceiver.onBroadcastCallState(callInfo);
-				break;
-			}
-			case ON_REGISTRATION_STATE:{
-				Log.d(THIS_FILE, "In reg state");
-				// Send a broadcast message that for an account
-				// registration state has changed
-				Intent regStateChangedIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
-				stateReceiver.pjService.service.sendBroadcast(regStateChangedIntent);
-				break;
-			}
-			case ON_PAGER: {
-				//startSMSRing();
-				//String message = (String) msg.obj;
-				//pjService.showMessage(message);
-				Log.e(THIS_FILE, "yana you in CASE ON_PAGER");
-				//stopRing();
 				break;
 			}
 			}

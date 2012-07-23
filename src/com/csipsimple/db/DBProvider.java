@@ -688,7 +688,7 @@ public class DBProvider extends ContentProvider {
 	private void broadcastRegistrationChange(long accountId) {
         Intent publishIntent = new Intent(SipManager.ACTION_SIP_REGISTRATION_CHANGED);
         publishIntent.putExtra(SipProfile.FIELD_ID, accountId);
-        getContext().sendBroadcast(publishIntent);
+        getContext().sendBroadcast(publishIntent, SipManager.PERMISSION_USE_SIP);
 	    
 	}
 }

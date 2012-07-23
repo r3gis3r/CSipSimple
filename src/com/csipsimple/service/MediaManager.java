@@ -595,7 +595,7 @@ public class MediaManager implements BluetoothChangeListener {
 	
 	
 	public void broadcastMediaChanged() {
-		service.sendBroadcast(mediaStateChangedIntent);
+		service.sendBroadcast(mediaStateChangedIntent, SipManager.PERMISSION_USE_SIP);
 	}
 	
 	private static final String ACTION_AUDIO_VOLUME_UPDATE = "org.openintents.audio.action_volume_update";

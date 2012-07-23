@@ -168,6 +168,18 @@ public final class SipManager {
      * By message here, we mean a SIP SIMPLE message of the sip simple protocol. Understand a chat / im message.
      */
     public static final String ACTION_SIP_MESSAGE_RECEIVED = "com.csipsimple.service.MESSAGE_RECEIVED";
+    /**
+     * Broadcast sent when a conversation has been recorded.<br/>
+     * This is linked to the call record feature of CSipSimple available through {@link ISipService#startRecording(int)}
+     * <p>
+     * Provided extras :
+     * <ul>
+     * <li>{@link SipManager#EXTRA_FILE_PATH} the path to the recorded file</li>
+     * <li>{@link SipManager#EXTRA_CALL_INFO} the information on the call recorded</li>
+     * </ul>
+     * </p>
+     */
+    public static final String ACTION_SIP_CALL_RECORDED = "com.csipsimple.service.CALL_RECORDED";
 
     // REGISTERED BROADCASTS
     /**
@@ -335,7 +347,8 @@ public final class SipManager {
 
     // EXTRAS
     /**
-     * Extra key to contains infos about a sip call.
+     * Extra key to contains infos about a sip call.<br/>
+     * @see SipCallSession
      */
     public static final String EXTRA_CALL_INFO = "call_info";
     
@@ -349,6 +362,12 @@ public final class SipManager {
      * @see android.content.ComponentName
      */
     public static final String EXTRA_OUTGOING_ACTIVITY = "outgoing_activity";
+    
+    /**
+     * Extra key to contain an string to path of a file.<br/>
+     * @see java.lang.String
+     */
+    public static final String EXTRA_FILE_PATH = "file_path";
     
     // Constants
     /**
