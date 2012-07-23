@@ -1993,7 +1993,8 @@ public class PjSipService {
             if (pjStr != null) {
                 // If there's utf-8 ptr length is possibly lower than slen
                 int len = pjStr.getSlen();
-                if(pjStr.getPtr() != null) {
+                if(len > 0 && pjStr.getPtr() != null) {
+                    // Be robust to smaller length detected
                     if(pjStr.getPtr().length() < len) {
                         len = pjStr.getPtr().length();
                     }
