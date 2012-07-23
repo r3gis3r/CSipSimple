@@ -47,8 +47,10 @@ public class LiberTalk extends SimpleImplementation {
 	    SipProfile acc = super.buildAccount(account);
 	    String phoneNumber = SipUri.encodeUser(accountUsername.getText().trim());
         acc.acc_id = phoneNumber + " <sip:+3399"+ phoneNumber + "@"+getDomain()+">";
+        acc.reg_uri = "sip:ims.mnc010.mcc208.3gppnetwork.org:5064";
         acc.username = "NDI"+phoneNumber+".LIBERTALK@sfr.fr";
-	    acc.reg_timeout = 3600;
+	    
+        acc.reg_timeout = 3600;
 	    acc.proxies = new String[] {"sip:internet.p-cscf.sfr.net:5064"};
 	    acc.vm_nbr = "147";
 	    return acc;
