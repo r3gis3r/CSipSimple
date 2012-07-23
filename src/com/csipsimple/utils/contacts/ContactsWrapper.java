@@ -71,10 +71,11 @@ public abstract class ContactsWrapper {
      * 
      * @param ctxt the context of the application
      * @param uri Uri of the contact
+     * @param hiRes Should we try to retrieve hiRes photo
      * @param defaultResource the default resource id if no photo found
      * @return the bitmap for the contact or loaded default resource
      */
-    public abstract Bitmap getContactPhoto(Context ctxt, Uri uri, Integer defaultResource);
+    public abstract Bitmap getContactPhoto(Context ctxt, Uri uri, boolean hiRes, Integer defaultResource);
 
     /**
      * List all phone number for a given contact id

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/call_card_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:padding="2dip"
+    tools:ignore="Overdraw" >
+
+    <ImageView
+        android:id="@+id/contact_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/call_action_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/empty_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_contact_picture_holo_light" />
+
+    <RelativeLayout
+        android:id="@+id/contact_name_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#9e808080"
+        android:gravity="center_vertical" >
+
+        <com.csipsimple.widgets.MarqueeTextView
+            android:id="@+id/contact_name_display_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="25sp" />
+
+        <com.csipsimple.widgets.MarqueeTextView
+            android:id="@+id/contact_name_sip_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/contact_name_display_name"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:padding="2dip"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+
+        <Chronometer
+            android:id="@+id/elapsedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/call_status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_name_bar"
+        android:layout_marginTop="1dip"
+        android:background="#c818617b"
+        android:gravity="center_vertical|right"
+        android:padding="3dip"
+        android:text="@string/call_state_calling"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <RelativeLayout
+        android:id="@+id/call_secure_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/call_status_text"
+        android:layout_marginTop="1dip"
+        android:background="#c8d4aa00" >
+
+        <ImageView
+            android:id="@+id/call_secure_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="2dip"
+            android:contentDescription="@string/empty_description"
+            android:src="@drawable/stat_sys_vp_phone_call" />
+
+        <TextView
+            android:id="@+id/call_secure_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/call_secure_icon"
+            android:padding="2dip"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/call_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/end_call_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginTop="2dip"
+        android:background="#000000" />
+
+    <LinearLayout
+        android:id="@+id/end_call_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="2dip"
+        android:background="@drawable/end_call_background"
+        android:maxHeight="256dip"
+        android:minHeight="64dip"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/endButton"
+            style="?attr/actionButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/done"
+            android:src="@drawable/ic_end_call" />
+    </LinearLayout>
+
+</RelativeLayout>

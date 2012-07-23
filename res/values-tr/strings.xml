@@ -12,7 +12,6 @@
     <string name="choose_wizard">Sihirbaz seçin</string>
     <string name="use">kullanım</string>
     <string name="use_pstn">Mobil kullanımı</string>
-    <string name="use_skype">Skype kullanımı</string>
     <string name="ongoing_call">Arama devam ediyor</string>
     <string name="missed_call">Cevapsız çağrı</string>
     <string name="recentCalls_empty">Hiçbir çağrı kaydı yok</string>

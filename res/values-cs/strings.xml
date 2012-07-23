@@ -18,7 +18,6 @@
     <string name="choose_wizard">Vybrat průvodce</string>
     <string name="use">Použít:</string>
     <string name="use_pstn">Použít mobilní telefon</string>
-    <string name="use_skype">POužít Skype</string>
     <string name="ongoing_call">Probíhá hovor</string>
     <string name="missed_call">Zmeškaný hovor</string>
     <string name="recentCalls_empty">Žádné záznamy o hovorech</string>

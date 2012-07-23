@@ -17,7 +17,6 @@
     <string name="choose_wizard">Elegir asistente</string>
     <string name="use">Usar:</string>
     <string name="use_pstn">Usar móvil</string>
-    <string name="use_skype">Usar Skype</string>
     <string name="ongoing_call">Llamada en progreso</string>
     <string name="missed_call">Llamada perdida</string>
     <string name="recentCalls_empty">No hay registros de llamadas</string>

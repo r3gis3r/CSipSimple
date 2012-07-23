@@ -17,7 +17,6 @@
     <string name="choose_wizard">快速設定</string>
     <string name="use">使用 :</string>
     <string name="use_pstn">使用電話線路</string>
-    <string name="use_skype">使用 Skype</string>
     <string name="ongoing_call">呼叫中</string>
     <string name="missed_call">未接來電</string>
     <string name="recentCalls_empty">無通話紀錄</string>

@@ -19,6 +19,5 @@
     <item name="sip_home" type="layout">@layout/sip_home_one_pane</item>
 
     <bool name="use_dual_panes">false</bool>
-    <bool name="use_vertical_dialer_stack">true</bool>
 
 </resources>

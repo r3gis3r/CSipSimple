@@ -23,22 +23,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialPadContainer"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingBottom="170dip" >
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-    <EditText
+    <TextView
         android:id="@+id/digitsText"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="@integer/dialpad_layout_weight_digits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:cursorVisible="false"
-        android:editable="false"
-        android:focusableInTouchMode="false"
-        android:freezesText="true"
+        android:ellipsize="start"
         android:gravity="center"
-        android:inputType="phone"
         android:maxLines="1"
         android:padding="6dip"
         android:scrollHorizontally="true"
@@ -48,7 +42,6 @@
     <com.csipsimple.widgets.Dialpad
         android:id="@+id/dialPad"
         android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="@integer/dialpad_layout_weight_dialpad" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

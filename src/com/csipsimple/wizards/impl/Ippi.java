@@ -40,6 +40,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.Date;
 
 public class Ippi extends SimpleImplementation implements OnAccountCreationDoneListener {
@@ -108,8 +109,15 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 	}
 	
 
-    private AccountBalanceHelper accountBalanceHelper = new AccountBalanceHelper() {
-
+    private AccountBalanceHelper accountBalanceHelper = new AccountBalance(this);
+    
+    private static class AccountBalance extends AccountBalanceHelper {
+        
+        WeakReference<Ippi> w;
+        
+        AccountBalance(Ippi wizard){
+            w = new WeakReference<Ippi>(wizard);
+        }
         /**
          * {@inheritDoc}
          */
@@ -141,13 +149,19 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 
         @Override
         public void applyResultError() {
-            customWizard.setVisibility(View.GONE);
+            Ippi wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizard.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void applyResultSuccess(String balanceText) {
-            customWizardText.setText(balanceText);
-            customWizard.setVisibility(View.VISIBLE);
+            Ippi wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizardText.setText(balanceText);
+                wizard.customWizard.setVisibility(View.VISIBLE);
+            }
         }
         
     };

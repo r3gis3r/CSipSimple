@@ -20,6 +20,5 @@
     <item name="dialpad_compose" type="layout">@layout/dialpad_compose_3x5</item>
 
     <bool name="use_dual_panes">true</bool>
-    <bool name="use_vertical_dialer_stack">false</bool>
 
 </resources>

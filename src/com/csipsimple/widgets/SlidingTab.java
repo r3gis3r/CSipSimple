@@ -246,10 +246,11 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 			}
 			
 		}
-
+		/*
 		public int getTabWidth() {
 			return tab.getBackground().getIntrinsicWidth();
 		}
+		*/
 
 		public int getTabHeight() {
 			return tab.getBackground().getIntrinsicHeight();
@@ -282,17 +283,17 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 		if (widthSpecMode == MeasureSpec.UNSPECIFIED || heightSpecMode == MeasureSpec.UNSPECIFIED) {
 			throw new RuntimeException("Sliding tab cannot have UNSPECIFIED dimensions");
 		}
-		*/
 
 		final int leftTabWidth = (int) (density * leftSlider.getTabWidth() + 0.5f);
 		final int rightTabWidth = (int) (density * rightSlider.getTabWidth() + 0.5f);
+		
+        */
 		final int leftTabHeight = (int) (density * leftSlider.getTabHeight() + 0.5f);
 		final int rightTabHeight = (int) (density * rightSlider.getTabHeight() + 0.5f);
-		final int width = Math.max(widthSpecSize, leftTabWidth + rightTabWidth);
+		/*final int width = Math.min(widthSpecSize, leftTabWidth + rightTabWidth);*/
 		final int height = Math.max(leftTabHeight, rightTabHeight);
 
-		Log.d(THIS_FILE, "Heights are : "+leftTabHeight+" and "+rightTabHeight+" density "+density);
-		setMeasuredDimension(width, height);
+		setMeasuredDimension(widthSpecSize, height);
 	}
 
 	@Override
@@ -379,7 +380,7 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 	public void resetView() {
 		leftSlider.reset();
 		rightSlider.reset();
-		onLayout(true, getLeft(), getTop(), getLeft() + getWidth(), getTop() + getHeight());
+		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
 	}
 
 	@Override
@@ -387,11 +388,9 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 		if (!changed) {
 			return;
 		}
-
 		// Center the widgets in the view
 		leftSlider.layout(l, t, r, b, Slider.ALIGN_LEFT);
 		rightSlider.layout(l, t, r, b, Slider.ALIGN_RIGHT);
-
 		invalidate();
 	}
 

@@ -17,7 +17,6 @@
     <string name="choose_wizard">Выбрать мастера настроек</string>
     <string name="use">Использовать :</string>
     <string name="use_pstn">Мобильный</string>
-    <string name="use_skype">Использовать Skype</string>
     <string name="ongoing_call">Набор номера</string>
     <string name="missed_call">Пропущенные звонки</string>
     <string name="recentCalls_empty">Нет вызовов</string>

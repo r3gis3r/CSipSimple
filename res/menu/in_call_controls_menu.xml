@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/speakerButton"
+        android:checkable="true"
+        android:icon="@drawable/ic_sound_speakerphone_holo_dark"
+        android:showAsAction="ifRoom"
+        android:title="@string/speaker"/>
+    <item
+        android:id="@+id/muteButton"
+        android:checkable="true"
+        android:icon="@drawable/ic_mute_holo_dark"
+        android:showAsAction="ifRoom"
+        android:title="@string/mute"/>
+    <item
+        android:id="@+id/bluetoothButton"
+        android:checkable="true"
+        android:icon="@drawable/ic_sound_bluetooth_holo_dark"
+        android:showAsAction="ifRoom"
+        android:title="@string/bluetooth"/>
+    <item
+        android:id="@+id/addCallButton"
+        android:icon="@android:drawable/ic_menu_add"
+        android:showAsAction="ifRoom"
+        android:title="@string/add_call"/>
+    <item
+        android:id="@+id/mediaSettingsButton"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="ifRoom"
+        android:title="@string/prefs_media"/>
+
+</menu>

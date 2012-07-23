@@ -1,40 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<style name="TextAppearance.SlidingTabActive" parent="@android:attr/textAppearanceMedium">
-		<item name="android:textColor">@android:color/black</item>
-		<item name="android:textSize">22sp</item>
-	</style>
-
-	  <!-- Regular (non-toggle) buttons in the in-call onscreen touch UI. -->
-    <style name="CallButton">
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/incall_button</item>
-        <item name="android:layout_marginTop">4dip</item>
-        <item name="android:layout_marginBottom">4dip</item>
-        <item name="android:layout_marginLeft">4dip</item>
-        <item name="android:layout_marginRight">4dip</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    <style name="TextAppearance.SlidingTabActive" parent="@android:attr/textAppearanceMedium">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
-    <!-- Toggle buttons in the in-call onscreen touch UI. -->
-    <style name="CallToggleButton">
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/incall_toggle_button</item>
-        <item name="android:layout_marginTop">4dip</item>
-        <item name="android:layout_marginBottom">4dip</item>
-        <item name="android:layout_marginLeft">4dip</item>
-        <item name="android:layout_marginRight">4dip</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-    </style>
-    
-    <style name="DialPadButton">
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_weight">0.33</item>
-		<item name="android:layout_margin">2dp</item>
-		<item name="android:background">@drawable/btn_dial</item>
-	</style>
 </resources>

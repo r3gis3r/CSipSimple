@@ -17,7 +17,6 @@
     <string name="choose_wizard">마법사 선택</string>
     <string name="use">사용:</string>
     <string name="use_pstn">휴대 전화</string>
-    <string name="use_skype">스카이프</string>
     <string name="ongoing_call">처리중인 통화</string>
     <string name="missed_call">부재중 통화</string>
     <string name="recentCalls_empty">통화 기록 없음</string>

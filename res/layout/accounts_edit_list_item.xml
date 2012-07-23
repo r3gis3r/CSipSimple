@@ -77,7 +77,7 @@
         android:paddingBottom="4dip"
         android:paddingTop="4dip"
         android:scaleType="fitXY"
-        android:src="@drawable/divider_vertical_dark" />
+        android:src="@drawable/abs__list_divider_holo_dark" />
 
     <LinearLayout
         android:layout_width="0dip"

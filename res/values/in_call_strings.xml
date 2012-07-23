@@ -37,6 +37,9 @@
     <string name="stop_recording">Stop recording</string>
     <string name="xfer">Transfer</string>
     <string name="hold_call">Hold</string>
+    <string name="on_hold">On Hold</string>
+    <string name="resume_call">Resume</string>
     <string name="transfer_call">Transfer</string>
+    <string name="send_dtmf">Send DTMF</string>
 
 </resources>

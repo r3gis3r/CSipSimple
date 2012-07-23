@@ -39,7 +39,6 @@
     <!-- Regular (non-toggle) buttons in the in-call onscreen touch UI. -->
     <style name="CallButton">
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/incall_button</item>
         <item name="android:layout_marginTop">8dip</item>
         <item name="android:layout_marginBottom">8dip</item>
         <item name="android:layout_marginLeft">8dip</item>
@@ -49,16 +48,6 @@
     </style>
 
     <!-- Toggle buttons in the in-call onscreen touch UI. -->
-    <style name="CallToggleButton">
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/incall_toggle_button</item>
-        <item name="android:layout_marginTop">8dip</item>
-        <item name="android:layout_marginBottom">8dip</item>
-        <item name="android:layout_marginLeft">8dip</item>
-        <item name="android:layout_marginRight">8dip</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-    </style>
 
     <style name="DialtactsDialpadButtonStyle">
         <item name="android:layout_width">0dip</item>

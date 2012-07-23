@@ -37,6 +37,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class Zadarma extends SimpleImplementation implements OnAccountCreationDoneListener {
 
@@ -138,7 +139,16 @@ public class Zadarma extends SimpleImplementation implements OnAccountCreationDo
         }
     }
 
-    private AccountBalanceHelper accountBalanceHelper = new AccountBalanceHelper() {
+    private AccountBalanceHelper accountBalanceHelper = new AccountBalance(this);
+    
+    private static class AccountBalance extends AccountBalanceHelper {
+        
+        WeakReference<Zadarma> w;
+        
+        AccountBalance(Zadarma wizard){
+            w = new WeakReference<Zadarma>(wizard);
+        }
+
 
         /**
          * {@inheritDoc}
@@ -174,7 +184,10 @@ public class Zadarma extends SimpleImplementation implements OnAccountCreationDo
          */
         @Override
         public void applyResultError() {
-            customWizard.setVisibility(View.GONE);
+            Zadarma wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizard.setVisibility(View.GONE);
+            }
         }
 
         /**
@@ -182,8 +195,11 @@ public class Zadarma extends SimpleImplementation implements OnAccountCreationDo
          */
         @Override
         public void applyResultSuccess(String balanceText) {
-            customWizardText.setText(balanceText);
-            customWizard.setVisibility(View.VISIBLE);
+            Zadarma wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizardText.setText(balanceText);
+                wizard.customWizard.setVisibility(View.VISIBLE);
+            }
         }
 
     };

@@ -17,7 +17,6 @@
     <string name="choose_wizard">Kies instelmethode</string>
     <string name="use">Gebruik:</string>
     <string name="use_pstn">Gebruik mobiel</string>
-    <string name="use_skype">Gebruik Skype</string>
     <string name="ongoing_call">Oproep bezig</string>
     <string name="missed_call">Gemist oproep</string>
     <string name="recentCalls_empty">Geen gesprekkenlijst</string>

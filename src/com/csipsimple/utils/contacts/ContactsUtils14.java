@@ -27,6 +27,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
@@ -35,10 +38,29 @@ import android.provider.ContactsContract.Profile;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.Log;
 
+import java.io.InputStream;
+
 @TargetApi(14)
 public class ContactsUtils14 extends ContactsUtils5 {
 
     private static final String THIS_FILE = "ContactsUtils14";
+
+    @Override
+    public Bitmap getContactPhoto(Context ctxt, Uri uri, boolean hiRes, Integer defaultResource) {
+        Bitmap img = null;
+        InputStream s = ContactsContract.Contacts.openContactPhotoInputStream(
+                ctxt.getContentResolver(), uri, hiRes);
+        img = BitmapFactory.decodeStream(s);
+
+        if (img == null) {
+            BitmapDrawable drawableBitmap = ((BitmapDrawable) ctxt.getResources().getDrawable(
+                    defaultResource));
+            if (drawableBitmap != null) {
+                img = drawableBitmap.getBitmap();
+            }
+        }
+        return img;
+    }
 
     @Override
     public CallerInfo findSelfInfo(Context ctxt) {

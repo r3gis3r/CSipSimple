@@ -35,7 +35,6 @@
     <string name="choose_wizard">Choose wizard</string>
     <string name="use">Use :</string>
     <string name="use_pstn">Use mobile</string>
-    <string name="use_skype">Use Skype</string>
     <string name="ongoing_call">Call in Progress</string>
     <string name="missed_call">Missed call</string>
     <string name="recentCalls_empty">No Call Logs</string>

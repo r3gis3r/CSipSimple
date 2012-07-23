@@ -19,14 +19,9 @@
     <dimen name="normal_height">64dip</dimen>
     <dimen name="expanded_height">128dip</dimen>
     <dimen name="quickaction_shadow_horiz">0dip</dimen>
-    <dimen name="quickaction_shadow_vert">30dip</dimen>
-    <dimen name="quickaction_shadow_touch">20dip</dimen>
     <dimen name="right_panel_margin_left">0dip</dimen>
     <dimen name="right_panel_margin_vertical">0dip</dimen>
     <dimen name="right_panel_fading_edge">50px</dimen>
-
-    <!-- Empty message margins -->
-    <dimen name="empty_message_top_margin">48dip</dimen>
 
     <!-- Dialer -->
     <integer name="dialpad_layout_weight_dialpad">65</integer>
@@ -34,7 +29,6 @@
     <integer name="dialpad_layout_weight_digits">20</integer>
     <integer name="dialpad_layout_weight_autocomplete_list">40</integer>
 
-    <dimen name="dialpad_horizontal_margin">0dip</dimen>
     <dimen name="dialpad_vertical_margin">2dip</dimen>
     <dimen name="dialpad_digits_text_size">35sp</dimen>
 
@@ -42,7 +36,6 @@
     <dimen name="call_log_icon_margin">4dip</dimen>
     <dimen name="call_log_call_action_size">32dip</dimen>
     <dimen name="call_log_call_action_width">52dip</dimen>
-    <dimen name="call_log_call_action_height">64dip</dimen>
     <dimen name="call_log_inner_margin">8dip</dimen>
     <dimen name="call_log_outer_margin">0dip</dimen>
     <dimen name="call_log_indent_margin">24dip</dimen>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!--
+<!--
 		Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 		Copyright (C) 2007-2008 Esmertec AG.
 	 	Copyright (C) 2007-2008 The Android Open Source Project
@@ -15,29 +15,13 @@
 		General Public License for more details. You should have received a
 		copy of the GNU General Public License along with CSipSimple. If not,
 		see <http://www.gnu.org/licenses/>.
-	-->
-	<!--
-	Parts of this file are extract from the android project distributed under Apache license relicensed in GPLv3
-	-->
-<resources> 
-	 <color name="account_inactive">#FF646464</color>
-	 <color name="account_unregistered">#FFFFC200</color>
-	 <color name="account_valid">#FF84E300</color>
-	 <color name="account_error">#FFFF0F00</color>
-	 
-	 
-    <!-- the background color used for unread conversation -->
-    <color name="unread_bgcolor">#ffffffff</color>
-    <color name="read_bgcolor">#ffeeeeee</color>
-    <drawable name="light_blue_background">#ffecfbff</drawable>
-    
-    <!-- toggle buttons -->
-    <color name="tg_top_normal">#c9cccf</color>
-    <color name="tg_bottom_normal">#a9adb4</color>
-    <color name="tg_top_on">#4f8df1</color>
-    <color name="tg_bottom_on">#175cce</color>
-    
-        
-    <!-- Color of image view placeholder. -->
-    <color name="image_placeholder">#DDDDDD</color>
+-->
+<!-- 	Parts of this file are extract from the android project distributed under Apache license relicensed in GPLv3 -->
+<resources>
+
+    <color name="account_inactive">#FF646464</color>
+    <color name="account_unregistered">#FFFFC200</color>
+    <color name="account_valid">#FF84E300</color>
+    <color name="account_error">#FFFF0F00</color>
+
 </resources>

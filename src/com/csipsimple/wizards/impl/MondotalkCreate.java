@@ -51,6 +51,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.Socket;
 import java.net.URL;
 import java.util.regex.Matcher;
@@ -142,34 +143,46 @@ public class MondotalkCreate extends Activity implements OnClickListener, TextWa
     private final static int MSG_CAPTCHA_LOADED = 0;
     private final static int MSG_SAVE_DONE = 1;
     private final static int MSG_SAVE_ERROR = 2;
-    
-    private Handler mHander = new Handler() {
-        public void dispatchMessage(Message msg) {
 
+    private Handler mHander = new MondotalkHandler(this);
+    
+    private static class MondotalkHandler extends Handler {
+        
+        WeakReference<MondotalkCreate> w;
+        
+        MondotalkHandler(MondotalkCreate wizard){
+            w = new WeakReference<MondotalkCreate>(wizard);
+        }
+        
+        public void dispatchMessage(Message msg) {
+            MondotalkCreate wizard = w.get();
+            if(wizard == null) {
+                return;
+            }
             switch (msg.what) {
                 case MSG_CAPTCHA_LOADED:
-                    if(captchaBitmap != null && captchaImg != null) {
-                        captchaImg.setImageBitmap(captchaBitmap);
-                        captchaImg.setVisibility(View.VISIBLE);
-                        captchaProgress.setVisibility(View.GONE);
+                    if(wizard.captchaBitmap != null && wizard.captchaImg != null) {
+                        wizard.captchaImg.setImageBitmap(wizard.captchaBitmap);
+                        wizard.captchaImg.setVisibility(View.VISIBLE);
+                        wizard.captchaProgress.setVisibility(View.GONE);
                     }
                     break;
                 case MSG_SAVE_DONE:
-                    if(progressDialog != null) {
-                        progressDialog.dismiss();
+                    if(wizard.progressDialog != null) {
+                        wizard.progressDialog.dismiss();
                     }
                     AccountCreationResult res = (AccountCreationResult) msg.obj;
-                    Intent it = getIntent();
+                    Intent it = wizard.getIntent();
                     it.putExtra(SipProfile.FIELD_USERNAME, res.username);
                     it.putExtra(SipProfile.FIELD_DATA, res.password);
-                    setResult(RESULT_OK, it);
-                    finish();
+                    wizard.setResult(RESULT_OK, it);
+                    wizard.finish();
                     break;
                 case MSG_SAVE_ERROR:
-                    if(progressDialog != null) {
-                        progressDialog.dismiss();
+                    if(wizard.progressDialog != null) {
+                        wizard.progressDialog.dismiss();
                     }
-                    Toast toast = Toast.makeText(MondotalkCreate.this, (String)msg.obj, Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(wizard, (String)msg.obj, Toast.LENGTH_LONG);
                     toast.show();
                     break;
             }

@@ -22,7 +22,6 @@
 
 package com.csipsimple.ui.incall;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
@@ -38,9 +37,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
@@ -49,22 +46,17 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.MediaState;
@@ -75,38 +67,36 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.PickupSipUri;
 import com.csipsimple.ui.incall.CallProximityManager.ProximityDirector;
-import com.csipsimple.ui.incall.InCallControls.OnTriggerListener;
+import com.csipsimple.ui.incall.DtmfDialogFragment.OnDtmfListener;
 import com.csipsimple.utils.CallsUtils;
-import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Theme;
 import com.csipsimple.utils.keyguard.KeyguardWrapper;
 import com.csipsimple.widgets.Dialpad;
-import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 import com.csipsimple.widgets.IOnLeftRightChoice;
 import com.csipsimple.widgets.ScreenLocker;
 
 import org.webrtc.videoengine.ViERenderer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class InCallActivity extends Activity implements OnTriggerListener, OnDialKeyListener,
-        IOnLeftRightChoice, ProximityDirector {
-    private final static String THIS_FILE = "SIP CALL HANDLER";
+public class InCallActivity extends SherlockFragmentActivity implements IOnCallActionTrigger, 
+        IOnLeftRightChoice, ProximityDirector, OnDtmfListener {
+    private final static String THIS_FILE = "InCallActivity";
     private final static int DRAGGING_DELAY = 150;
     
 
-    private int MAIN_PADDING/* = 15*/;
-    private int HOLD_PADDING/* = 7*/;
-
+    private Object callMutex = new Object();
     private SipCallSession[] callsInfo = null;
-    private FrameLayout mainFrame;
+    private MediaState lastMediaState;
+    
+    
+    private ViewGroup mainFrame;
     private InCallControls inCallControls;
 
     // Screen wake lock for incoming call
@@ -114,11 +104,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     // Screen wake lock for video
     private WakeLock videoWakeLock;
 
-    private EditText dialPadTextView;
-
-    private final HashMap<Integer, InCallInfo> badges = new HashMap<Integer, InCallInfo>();
-
-    private ViewGroup callInfoPanel;
+    private InCallInfoGrid activeCallsGrid;
     private Timer quitTimer;
 
     // private LinearLayout detailedContainer, holdContainer;
@@ -126,7 +112,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     // True if running unit tests
     // private boolean inTest;
 
-    private MediaState lastMediaState;
 
     private DialingFeedback dialFeedback;
     private PowerManager powerManager;
@@ -135,14 +120,17 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     // Dnd views
     //private ImageView endCallTarget, holdTarget, answerTarget, xferTarget;
     private Rect endCallTargetRect, holdTargetRect, answerTargetRect, xferTargetRect;
-    private Button middleAddCall;
+    
 
-    private DisplayMetrics metrics;
     private SurfaceView cameraPreview;
     private CallProximityManager proximityManager;
     private KeyguardWrapper keyguardManager;
     
     private boolean useAutoDetectSpeaker = false;
+    private InCallAnswerControls inCallAnswerControls;
+    private CallsAdapter activeCallsAdapter;
+    private InCallInfoGrid heldCallsGrid;
+    private CallsAdapter heldCallsAdapter;
 
     private final static int PICKUP_SIP_URI_XFER = 0;
     private final static int PICKUP_SIP_URI_NEW_CALL = 1;
@@ -152,15 +140,15 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handler.setActivityInstance(this);
+        //handler.setActivityInstance(this);
         Log.d(THIS_FILE, "Create in call");
         setContentView(R.layout.in_call_main);
 
-        metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        HOLD_PADDING = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
-        MAIN_PADDING = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());;
-        
+        SipCallSession initialSession = getIntent().getParcelableExtra(SipManager.EXTRA_CALL_INFO);
+        synchronized (callMutex) {
+            callsInfo = new SipCallSession[1];
+            callsInfo[0] = initialSession;
+        }
 
         bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
         prefsWrapper = new PreferencesProviderWrapper(this);
@@ -177,18 +165,31 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         takeKeyEvents(true);
 
         // remoteContact = (TextView) findViewById(R.id.remoteContact);
-        mainFrame = (FrameLayout) findViewById(R.id.mainFrame);
+        mainFrame = (ViewGroup) findViewById(R.id.mainFrame);
         inCallControls = (InCallControls) findViewById(R.id.inCallControls);
         inCallControls.setOnTriggerListener(this);
+        inCallAnswerControls = (InCallAnswerControls) findViewById(R.id.inCallAnswerControls);
+        inCallAnswerControls.setOnTriggerListener(this);
 
-        callInfoPanel = (ViewGroup) findViewById(R.id.callInfoPanel);
+        activeCallsGrid = (InCallInfoGrid) findViewById(R.id.activeCallsGrid);
+        if(activeCallsAdapter == null) {
+            activeCallsAdapter = new CallsAdapter(true);
+        }
+        activeCallsGrid.setAdapter(activeCallsAdapter);
+        
+
+        heldCallsGrid = (InCallInfoGrid) findViewById(R.id.heldCallsGrid);
+        if(heldCallsAdapter == null) {
+            heldCallsAdapter = new CallsAdapter(false);
+        }
+        heldCallsGrid.setAdapter(heldCallsAdapter);
 
         
         ScreenLocker lockOverlay = (ScreenLocker) findViewById(R.id.lockerOverlay);
         lockOverlay.setActivity(this);
         lockOverlay.setOnLeftRightListener(this);
         
-
+        /*
         middleAddCall = (Button) findViewById(R.id.add_call_button);
         middleAddCall.setOnClickListener(new OnClickListener() {
             @Override
@@ -200,6 +201,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             middleAddCall.setEnabled(false);
             middleAddCall.setText(R.string.not_configured_multiple_calls);
         }
+        */
 
         // Listen to media & sip events to update the UI
         registerReceiver(callStateReceiver, new IntentFilter(SipManager.ACTION_SIP_CALL_CHANGED));
@@ -226,9 +228,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         applyTheme();
         proximityManager.startTracking();
         
-        SipCallSession initialSession = getIntent().getParcelableExtra(SipManager.EXTRA_CALL_INFO);
         inCallControls.setCallState(initialSession);
-        
+        inCallAnswerControls.setCallState(initialSession);
     }
     
 
@@ -250,8 +251,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         xferTargetRect = null;
         dialFeedback.resume();
         
-        
-        handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
+
+        runOnUiThread(new UpdateUIFromCallRunnable());
         
     }
 
@@ -270,6 +271,10 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     @Override
     protected void onDestroy() {
 
+        if(infoDialog != null) {
+            infoDialog.dismiss();
+        }
+        
         if (quitTimer != null) {
             quitTimer.cancel();
             quitTimer.purge();
@@ -298,16 +303,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         } catch (IllegalArgumentException e) {
             // That's the case if not registered (early quit)
         }
-         
-        // Remove badges
-        for(InCallInfo badge : badges.values()) {
-            callInfoPanel.removeView(badge);
-            badge.terminate();
+        
+        if(activeCallsGrid != null) {
+            activeCallsGrid.terminate();
         }
-        badges.clear();
+        
         detachVideoPreview();
 
-        handler.setActivityInstance(null);
+        //handler.setActivityInstance(null);
         
         super.onDestroy();
     }
@@ -323,6 +326,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(100, 100);
                 lp.gravity = Gravity.TOP | Gravity.LEFT;
                 cameraPreview.setVisibility(View.GONE);
+                // TODO
                 mainFrame.addView(cameraPreview, lp);
 
                 videoWakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "com.csipsimple.videoCall");
@@ -365,7 +369,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             
             cameraPreview.setVisibility(View.GONE);
         }
-        updateUIFromCall();
+        runOnUiThread(new UpdateUIFromCallRunnable());
     }
 
     private void applyTheme() {
@@ -378,48 +382,12 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     if(dialPad != null) {
                         dialPad.applyTheme(t);
                     }
-                    inCallControls.applyTheme(t);
+                    //inCallControls.applyTheme(t);
                 }
             });
         }
     }
 
-    private static final int UPDATE_FROM_CALL = 1;
-    private static final int UPDATE_FROM_MEDIA = 2;
-    private static final int UPDATE_DRAGGING = 3;
-    private static final int SHOW_SAS = 4;
-    // Ui handler
-    private static InCallActivityHandler handler = new InCallActivityHandler();
-    private static class InCallActivityHandler extends Handler {
-        private InCallActivity activity;
-        public void handleMessage(Message msg) {
-            if(activity == null) {
-                super.handleMessage(msg);
-            }
-            switch (msg.what) {
-                case UPDATE_FROM_CALL:
-                    activity.updateUIFromCall();
-                    break;
-                case UPDATE_FROM_MEDIA:
-                    activity.updateUIFromMedia();
-                    break;
-                case UPDATE_DRAGGING:
-                    DraggingInfo di = (DraggingInfo) msg.obj;
-                    activity.updateDragging(di);
-                    break;
-                case SHOW_SAS:
-                    ZrtpSasInfo sasInfo = (ZrtpSasInfo) msg.obj;
-                    activity.showZRTPInfo(sasInfo.dataPtr, sasInfo.sas);
-                    break;
-                default:
-                    super.handleMessage(msg);
-            }
-        }
-        
-        public void setActivityInstance(InCallActivity act) {
-            activity = act;
-        }
-    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -459,33 +427,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    public static final int AUDIO_SETTINGS_MENU = Menu.FIRST + 1;
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(Menu.NONE, AUDIO_SETTINGS_MENU, Menu.NONE, R.string.prefs_media).setIcon(
-                R.drawable.ic_menu_media);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int optSel = item.getItemId();
-        if (optSel == AUDIO_SETTINGS_MENU) {
-            startActivity(new Intent(this, InCallMediaControl.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Get the call that is active on the view
      * 
@@ -501,23 +442,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             currentCallInfo = getPrioritaryCall(callInfo, currentCallInfo);
         }
         return currentCallInfo;
-    }
-
-    /**
-     * Get call info for a given call id.
-     * @param callId the id of the call
-     * @return the sip call session.
-     */
-    private SipCallSession getCallInfo(int callId) {
-        if (callsInfo == null) {
-            return null;
-        }
-        for (SipCallSession callInfo : callsInfo) {
-            if (callInfo.getCallId() == callId) {
-                return callInfo;
-            }
-        }
-        return null;
     }
 
     /**
@@ -553,288 +477,130 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
     /**
      * Update the user interface from calls state.
      */
-    private synchronized void updateUIFromCall() {
-        if (!serviceConnected) {
-            return;
-        }
-
-        // Current call is the call emphasis by the UI.
-        SipCallSession mainCallInfo = null;
-        boolean showCameraPreview = false;
-
-        int mainsCalls = 0;
-        int heldsCalls = 0;
-        int heldIndex = 0;
-        int mainIndex = 0;
-
-        // Add badges if necessary
-        if (callsInfo != null) {
-            for (SipCallSession callInfo : callsInfo) {
-                Log.d(THIS_FILE,
-                        "We have a call " + callInfo.getCallId() + " / " + callInfo.getCallState()
-                                + "/" + callInfo.getMediaStatus());
-
-                if (!callInfo.isAfterEnded() && !hasBadgeForCall(callInfo)) {
-                    Log.d(THIS_FILE, "Has to add badge for " + callInfo.getCallId());
-                    addBadgeForCall(callInfo);
-                }
-
-                if (!callInfo.isAfterEnded()) {
-                    if (callInfo.isLocalHeld()) {
-                        heldsCalls++;
-                    } else {
-                        mainsCalls++;
-                    }
-                    if(callInfo.mediaHasVideo()) {
-                        showCameraPreview = true;
-                    }
-                }
-
-                mainCallInfo = getPrioritaryCall(callInfo, mainCallInfo);
+    private class UpdateUIFromCallRunnable implements Runnable {
+        
+        @Override
+        public void run() {
+            
+            
+            // Current call is the call emphasis by the UI.
+            SipCallSession mainCallInfo = null;
+            boolean showCameraPreview = false;
+    
+            int mainsCalls = 0;
+            int heldsCalls = 0;
+    
+            synchronized (callMutex) {
                 
-            }
-        }
+                if (callsInfo != null) {
+                    for (SipCallSession callInfo : callsInfo) {
+                        Log.d(THIS_FILE,
+                                "We have a call " + callInfo.getCallId() + " / " + callInfo.getCallState()
+                                        + "/" + callInfo.getMediaStatus());
         
-        
-
-        boolean hasBottomButtons = false;
-        // Update call control visibility - must be done before call cards 
-        // because badge avail size depends on that
-        if ((mainsCalls == 1 || (mainsCalls == 0 && heldsCalls == 1)) && mainCallInfo != null) {
-            Log.d(THIS_FILE, "Current call is " + mainCallInfo.getCallId());
-
-            // Update in call actions
-            inCallControls.setCallState(mainCallInfo);
-            inCallControls.setVisibility(View.VISIBLE);
-            hasBottomButtons = true;
-        } else {
-            inCallControls.setVisibility(View.GONE);
-        }
-        
-        // Update call cards layouting
-        
-        int fullWidth = mainFrame.getWidth();
-        if(fullWidth == 0) {
-            // Not yet rendered, fall back to screen dimension
-            fullWidth = metrics.widthPixels;
-        }
-        int mainWidth = fullWidth; 
-        if (heldsCalls > 0) {
-            // In this case available width for MAIN part is 2/3 of the view
-            mainWidth -= mainWidth / 3;
-        }
-
-        // Compute main height (remove all possible bottom views)
-        int mainHeight = mainFrame.getHeight();
-        if(mainHeight == 0) {
-            //Not yet rendered, fall back to screen dimension
-            mainHeight = metrics.heightPixels;
-        }
-        if(hasBottomButtons) {
-            // Bottom height is 263px in hdpi
-            mainHeight -= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 175, getResources().getDisplayMetrics());
-        }else {
-            if(inCallControls.getLockerVisibility() == View.VISIBLE) {
-                // If it's the locker, the best way is just to 
-                // remove some bottom part of the screen
-                mainHeight = mainHeight * 7 / 15;
-            }
-        }
-        Log.d(THIS_FILE, "Avail size is : " + mainWidth + "x" + mainHeight);
-        
-        // Update each badges
-        ArrayList<InCallInfo> badgesToRemove = new ArrayList<InCallInfo>();
-        for (Entry<Integer, InCallInfo> badgeSet : badges.entrySet()) {
-            SipCallSession callInfo = getCallInfo(badgeSet.getKey());
-            InCallInfo badge = badgeSet.getValue();
-            if (callInfo != null) {
-                // Main call position / size should be done at the end
-                if (callInfo.isAfterEnded() && (mainsCalls + heldsCalls > 0)) {
-                    // The badge should be removed
-                    badgesToRemove.add(badge);
-
-                } else if (callInfo.isLocalHeld()) {
-                    // The call is held
-                    int y = MAIN_PADDING + heldIndex * (mainHeight / 3 + MAIN_PADDING);
-                    Rect wrap = new Rect(
-                            mainWidth + HOLD_PADDING,
-                            y,
-                            metrics.widthPixels - HOLD_PADDING,
-                            y + mainHeight / 3);
-                    layoutBadge(wrap, badge);
-                    heldIndex++;
-
-                } else {
-
-                    // The call is normal
-                    int x = MAIN_PADDING;
-                    int y = MAIN_PADDING;
-                    int end_x = mainWidth - MAIN_PADDING;
-                    int end_y = mainHeight - MAIN_PADDING;
-                    if (mainsCalls > 1) {
-                        // we split view in 4
-                        if ((mainIndex % 2) == 0) {
-                            // First column
-                            end_x = mainWidth / 2 - MAIN_PADDING;
-                        } else {
-                            // Second column
-                            x = mainWidth / 2 + MAIN_PADDING;
+                        if (!callInfo.isAfterEnded()) {
+                            if (callInfo.isLocalHeld()) {
+                                heldsCalls++;
+                            } else {
+                                mainsCalls++;
+                            }
+                            if(callInfo.mediaHasVideo()) {
+                                showCameraPreview = true;
+                            }
                         }
-                        if (mainIndex < 2) {
-                            end_y = mainHeight / 2 - MAIN_PADDING;
-                        } else {
-                            y = mainHeight / 2 + MAIN_PADDING;
+        
+                        mainCallInfo = getPrioritaryCall(callInfo, mainCallInfo);
+                        
+                    }
+                }
+            }
+            
+            // Update call control visibility - must be done before call cards 
+            // because badge avail size depends on that
+            if ((mainsCalls + heldsCalls) >= 1) {
+                // Update in call actions
+                inCallControls.setCallState(mainCallInfo);
+                inCallAnswerControls.setCallState(mainCallInfo);
+            } else {
+                inCallControls.setCallState(null);
+                inCallAnswerControls.setCallState(null);
+            }
+            
+            activeCallsAdapter.notifyDataSetChanged();
+            heldCallsAdapter.notifyDataSetChanged();
+            
+            heldCallsGrid.setVisibility((heldsCalls > 0)? View.VISIBLE : View.GONE);
+            
+            //findViewById(R.id.inCallContainer).requestLayout();
+            
+            if (mainCallInfo != null) {
+                Log.d(THIS_FILE, "Active call is " + mainCallInfo.getCallId());
+                Log.d(THIS_FILE, "Update ui from call " + mainCallInfo.getCallId() + " state "
+                        + CallsUtils.getStringCallState(mainCallInfo, InCallActivity.this));
+                int state = mainCallInfo.getCallState();
+    
+                //int backgroundResId = R.drawable.bg_in_call_gradient_unidentified;
+    
+                // We manage wake lock
+                switch (state) {
+                    case SipCallSession.InvState.INCOMING:
+                    case SipCallSession.InvState.EARLY:
+                    case SipCallSession.InvState.CALLING:
+                    case SipCallSession.InvState.CONNECTING:
+    
+                        Log.d(THIS_FILE, "Acquire wake up lock");
+                        if (wakeLock != null && !wakeLock.isHeld()) {
+                            wakeLock.acquire();
                         }
+                        break;
+                    case SipCallSession.InvState.CONFIRMED:
+                        break;
+                    case SipCallSession.InvState.NULL:
+                    case SipCallSession.InvState.DISCONNECTED:
+                        Log.d(THIS_FILE, "Active call session is disconnected or null wait for quit...");
+                        // This will release locks
+                        delayedQuit();
+                        return;
+    
+                }
+                
+                Log.d(THIS_FILE, "we leave the update ui function");
+            }
+            
+            proximityManager.updateProximitySensorMode();
+            
+            
+            // Update the camera preview visibility 
+            if(cameraPreview != null) {
+                cameraPreview.setVisibility(showCameraPreview ? View.VISIBLE : View.GONE);
+                if(showCameraPreview) {
+                    if(videoWakeLock != null) {
+                        videoWakeLock.acquire();
                     }
-                    Rect wrap = new Rect(
-                            x,
-                            y,
-                            end_x,
-                            end_y);
-                    Log.d(THIS_FILE, "Layout badge for size "+x+","+y+" to "+end_x+","+end_y);
-                    layoutBadge(wrap, badge);
-                    mainIndex++;
+                }else {
+    
+                    if(videoWakeLock != null && videoWakeLock.isHeld()) {
+                        videoWakeLock.release();
+                    }
                 }
             }
-            // Update badge state
-            badge.setCallState(callInfo);
-        }
-
-        // Remove useless badges
-        for (InCallInfo badge : badgesToRemove) {
-            badge.terminate();
-            callInfoPanel.removeView(badge);
-            SipCallSession ci = badge.getCallInfo();
-            if (ci != null) {
-                badges.remove(ci.getCallId());
+            
+    
+            if (heldsCalls + mainsCalls == 0) {
+                delayedQuit();
             }
-        }
-
-
-        if (mainCallInfo != null) {
-            Log.d(THIS_FILE, "Active call is " + mainCallInfo.getCallId());
-            Log.d(THIS_FILE, "Update ui from call " + mainCallInfo.getCallId() + " state "
-                    + CallsUtils.getStringCallState(mainCallInfo, this));
-            int state = mainCallInfo.getCallState();
-
-            int backgroundResId = R.drawable.bg_in_call_gradient_unidentified;
-
-            // We manage wake lock
-            switch (state) {
-                case SipCallSession.InvState.INCOMING:
-                case SipCallSession.InvState.EARLY:
-                case SipCallSession.InvState.CALLING:
-                case SipCallSession.InvState.CONNECTING:
-
-                    Log.d(THIS_FILE, "Acquire wake up lock");
-                    if (wakeLock != null && !wakeLock.isHeld()) {
-                        wakeLock.acquire();
-                    }
-                    break;
-                case SipCallSession.InvState.CONFIRMED:
-                    backgroundResId = R.drawable.bg_in_call_gradient_connected;
-                    if (lastMediaState != null && lastMediaState.isBluetoothScoOn) {
-                        backgroundResId = R.drawable.bg_in_call_gradient_bluetooth;
-                    }
-                    if (wakeLock != null && wakeLock.isHeld()) {
-                        Log.d(THIS_FILE, "Releasing wake up lock - confirmed");
-                        wakeLock.release();
-                    }
-                    break;
-                case SipCallSession.InvState.NULL:
-                case SipCallSession.InvState.DISCONNECTED:
-                    Log.d(THIS_FILE, "Active call session is disconnected or null wait for quit...");
-                    // This will release locks
-                    delayedQuit();
-                    return;
-
-            }
-
-            int mediaStatus = mainCallInfo.getMediaStatus();
-            switch (mediaStatus) {
-                case SipCallSession.MediaState.ACTIVE:
-                    break;
-                case SipCallSession.MediaState.REMOTE_HOLD:
-                case SipCallSession.MediaState.LOCAL_HOLD:
-                case SipCallSession.MediaState.NONE:
-                    if (backgroundResId == R.drawable.bg_in_call_gradient_connected ||
-                            backgroundResId == R.drawable.bg_in_call_gradient_bluetooth) {
-                        backgroundResId = R.drawable.bg_in_call_gradient_on_hold;
-                    }
-                    break;
-                case SipCallSession.MediaState.ERROR:
-                default:
-                    break;
-            }
-
-            mainFrame.setBackgroundResource(backgroundResId);
-            Log.d(THIS_FILE, "we leave the update ui function");
-        }
-        
-        proximityManager.updateProximitySensorMode();
-
-        if (mainsCalls == 0) {
-            if (!CustomDistribution.forceNoMultipleCalls()) {
-                middleAddCall.setVisibility(View.VISIBLE);
-            }
-        } else {
-            middleAddCall.setVisibility(View.GONE);
-        }
-        
-        // Update the camera preview visibility 
-        if(cameraPreview != null) {
-            cameraPreview.setVisibility(showCameraPreview ? View.VISIBLE : View.GONE);
-            if(showCameraPreview) {
-                if(videoWakeLock != null) {
-                    videoWakeLock.acquire();
-                }
-            }else {
-
-                if(videoWakeLock != null && videoWakeLock.isHeld()) {
-                    videoWakeLock.release();
-                }
-            }
-        }
-        
-
-        if (heldsCalls + mainsCalls == 0) {
-            delayedQuit();
         }
     }
 
     /**
      * Update ui from media state.
      */
-    private synchronized void updateUIFromMedia() {
-        if (service != null) {
-            MediaState mediaState;
-            try {
-                mediaState = service.getCurrentMediaState();
-                Log.d(THIS_FILE, "Media update ....");
-                if (!mediaState.equals(lastMediaState)) {
-                    SipCallSession callInfo = getActiveCallInfo();
-                    lastMediaState = mediaState;
-
-                    if (callInfo != null) {
-                        int state = callInfo.getCallState();
-
-                        // Background
-                        if (state == SipCallSession.InvState.CONFIRMED) {
-                            mainFrame
-                                    .setBackgroundResource(lastMediaState.isBluetoothScoOn ? R.drawable.bg_in_call_gradient_bluetooth
-                                            : R.drawable.bg_in_call_gradient_connected);
-                        }
-                    }
-
-                    // Actions
-                    inCallControls.setMediaState(lastMediaState);
-                }
-            } catch (RemoteException e) {
-                Log.e(THIS_FILE, "Can't get the media state ", e);
-            }
+    private class UpdateUIFromMediaRunnable implements Runnable {
+        @Override
+        public void run() {
+            inCallControls.setMediaState(lastMediaState);
+            proximityManager.updateProximitySensorMode();
         }
-
-        proximityManager.updateProximitySensorMode();
     }
     
 
@@ -845,29 +611,24 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
     }
     
-    private boolean ditherSet = false;
-    protected void updateDragging(DraggingInfo di) {
-
-        inCallControls.setVisibility(di.isDragging ? View.GONE : View.VISIBLE);
-        findViewById(R.id.dropZones).setVisibility(di.isDragging ? View.VISIBLE : View.GONE);
+    private class UpdateDraggingRunnable implements Runnable {
+        private DraggingInfo di;
         
-        setSubViewVisibilitySafely(R.id.dropHangup, di.isDragging);
-        setSubViewVisibilitySafely(R.id.dropHold, (di.isDragging && di.call.isActive() && !di.call.isBeforeConfirmed()));
-        setSubViewVisibilitySafely(R.id.dropAnswer, (di.call.isActive() && di.call.isBeforeConfirmed()
-                && di.call.isIncoming() && di.isDragging));
-        setSubViewVisibilitySafely(R.id.dropXfer, (!di.call.isBeforeConfirmed()
-                && !di.call.isAfterEnded() && di.isDragging));
+        UpdateDraggingRunnable(DraggingInfo draggingInfo){
+            di = draggingInfo;
+        }
         
-
-        if(!ditherSet) {
-            int[] dropZones = new int[] {R.id.dropHangup, R.id.dropHold, R.id.dropAnswer, R.id.dropXfer};
-            for(int id : dropZones) {
-                View v = findViewById(id);
-                if(v != null) {
-                    v.getBackground().setDither(true);
-                    ditherSet = true;
-                }
-            }
+        public void run() {
+            inCallControls.setVisibility(di.isDragging ? View.GONE : View.VISIBLE);
+            findViewById(R.id.dropZones).setVisibility(di.isDragging ? View.VISIBLE : View.GONE);
+            
+            setSubViewVisibilitySafely(R.id.dropHangup, di.isDragging);
+            setSubViewVisibilitySafely(R.id.dropHold, (di.isDragging && di.call.isActive() && !di.call.isBeforeConfirmed()));
+            setSubViewVisibilitySafely(R.id.dropAnswer, (di.call.isActive() && di.call.isBeforeConfirmed()
+                    && di.call.isIncoming() && di.isDragging));
+            setSubViewVisibilitySafely(R.id.dropXfer, (!di.call.isBeforeConfirmed()
+                    && !di.call.isAfterEnded() && di.isDragging));
+            
         }
     }
 
@@ -880,11 +641,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         
         proximityManager.release(0);
         
-        setDialpadVisibility(View.GONE);
-        middleAddCall.setVisibility(View.GONE);
-        setCallBadgesVisibility(View.VISIBLE);
+        activeCallsGrid.setVisibility(View.VISIBLE);
         inCallControls.setVisibility(View.GONE);
-        mainFrame.setBackgroundResource(R.drawable.bg_in_call_gradient_ended);
 
         Log.d(THIS_FILE, "Start quit timer");
         if (quitTimer != null) {
@@ -902,53 +660,30 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         }
     };
 
-    private void setDialpadVisibility(int visibility) {
-        View dp = findViewById(R.id.dialPadContainer);
-        dp.setVisibility(visibility);
-        int antiVisibility = visibility == View.GONE ? View.VISIBLE : View.GONE;
-        setCallBadgesVisibility(antiVisibility);
-        
-        if(dialPadTextView == null && visibility == View.VISIBLE) {
-            Dialpad dialPad = (Dialpad) findViewById(R.id.dialPad);
-            dialPad.setOnDialKeyListener(this);
-            dialPadTextView = (EditText) findViewById(R.id.digitsText);
+    private void showDialpad(int callId) {
+        DtmfDialogFragment newFragment = DtmfDialogFragment.newInstance(callId);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+    
+
+
+    @Override
+    public void OnDtmf(int callId, int keyCode, int dialTone) {
+        proximityManager.restartTimer();
+
+        if (service != null) {
+            if (callId != SipCallSession.INVALID_CALL_ID) {
+                try {
+                    service.sendDtmf(callId, keyCode);
+                    dialFeedback.giveFeedback(dialTone);
+                } catch (RemoteException e) {
+                    Log.e(THIS_FILE, "Was not able to send dtmf tone", e);
+                }
+            }
         }
+        
     }
 
-    private void setCallBadgesVisibility(int visibility) {
-        callInfoPanel.setVisibility(visibility);
-    }
-
-    private boolean hasBadgeForCall(SipCallSession call) {
-        return badges.containsKey(call.getCallId());
-    }
-
-    private void addBadgeForCall(SipCallSession call) {
-        InCallInfo badge = new InCallInfo(this, null);
-        callInfoPanel.addView(badge);
-
-        badge.forceLayout();
-        badge.setOnTriggerListener(this);
-        badge.setOnTouchListener(new OnBadgeTouchListener(badge, call));
-        badges.put(call.getCallId(), badge);
-    }
-
-    private void layoutBadge(Rect wrap, InCallInfo mainBadge) {
-        //Log.d(THIS_FILE,
-        //        "Layout badge for " + wrap.width() + " x " + wrap.height() +
-        //                " +" + wrap.top + " + " + wrap.left);
-        // Set badge size
-        Rect r = mainBadge.setSize(wrap.width(), wrap.height());
-        // Reposition badge at the correct place
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        Log.d(THIS_FILE, "Sized @ : " + r.width() + "x" + r.height());
-        lp.topMargin = wrap.centerY() - (r.height() >> 1);
-        lp.leftMargin = wrap.centerX() - (r.width() >> 1);
-        lp.gravity = Gravity.TOP | Gravity.LEFT;
-        //Log.d(THIS_FILE, "Set margins : " + lp.topMargin + ", " + lp.leftMargin);
-        mainBadge.setLayoutParams(lp);
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -1009,10 +744,6 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         return super.onKeyUp(keyCode, event);
     }
 
-    private class ZrtpSasInfo {
-        public String sas;
-        public int dataPtr;
-    }
 
     private BroadcastReceiver callStateReceiver = new BroadcastReceiver() {
 
@@ -1023,20 +754,32 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             if (action.equals(SipManager.ACTION_SIP_CALL_CHANGED)) {
                 if (service != null) {
                     try {
-                        callsInfo = service.getCalls();
+                        synchronized (callMutex) {
+                            callsInfo = service.getCalls();
+                            runOnUiThread(new UpdateUIFromCallRunnable());
+                        }
                     } catch (RemoteException e) {
                         Log.e(THIS_FILE, "Not able to retrieve calls");
                     }
                 }
-
-                handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
             } else if (action.equals(SipManager.ACTION_SIP_MEDIA_CHANGED)) {
-                handler.sendMessage(handler.obtainMessage(UPDATE_FROM_MEDIA));
+                if (service != null) {
+                    MediaState mediaState;
+                    try {
+                        mediaState = service.getCurrentMediaState();
+                        Log.d(THIS_FILE, "Media update ...." + mediaState.isSpeakerphoneOn);
+                        synchronized (callMutex) {
+                            if (!mediaState.equals(lastMediaState)) {
+                                lastMediaState = mediaState;
+                                runOnUiThread(new UpdateUIFromMediaRunnable());
+                            }   
+                        }
+                    } catch (RemoteException e) {
+                        Log.e(THIS_FILE, "Can't get the media state ", e);
+                    }
+                }
             } else if (action.equals(SipManager.ACTION_ZRTP_SHOW_SAS)) {
-                ZrtpSasInfo sasInfo = new ZrtpSasInfo();
-                sasInfo.sas = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-                sasInfo.dataPtr = intent.getIntExtra(Intent.EXTRA_UID, 0);
-                handler.sendMessage(handler.obtainMessage(SHOW_SAS, sasInfo));
+                runOnUiThread(new ShowZRTPInfoRunnable(intent.getIntExtra(Intent.EXTRA_UID, 0), intent.getStringExtra(Intent.EXTRA_SUBJECT)));
             }
         }
     };
@@ -1056,8 +799,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 // "Service started get real call info "+callInfo.getCallId());
                 callsInfo = service.getCalls();
                 serviceConnected = true;
-                handler.sendMessage(handler.obtainMessage(UPDATE_FROM_CALL));
-                handler.sendMessage(handler.obtainMessage(UPDATE_FROM_MEDIA));
+
+                runOnUiThread(new UpdateUIFromCallRunnable());
+                runOnUiThread(new UpdateUIFromMediaRunnable());
             } catch (RemoteException e) {
                 Log.e(THIS_FILE, "Can't get back the call", e);
             }
@@ -1069,6 +813,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             callsInfo = null;
         }
     };
+    private AlertDialog infoDialog;
 
     // private boolean showDetails = true;
 
@@ -1080,7 +825,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         if (whichAction == TAKE_CALL || whichAction == DECLINE_CALL ||
             whichAction == CLEAR_CALL || whichAction == DETAILED_DISPLAY || 
             whichAction == TOGGLE_HOLD || whichAction == START_RECORDING ||
-            whichAction == STOP_RECORDING ) {
+            whichAction == STOP_RECORDING || whichAction == DTMF_DISPLAY ) {
             // We check that current call is valid for any actions
             if (call == null) {
                 Log.e(THIS_FILE, "Try to do an action on a null call !!!");
@@ -1145,6 +890,8 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 case SPEAKER_ON:
                 case SPEAKER_OFF: {
                     if (service != null) {
+                        Log.d(THIS_FILE, "Manually switch to speaker");
+                        useAutoDetectSpeaker = false;
                         service.setSpeakerphoneOn((whichAction == SPEAKER_ON) ? true : false);
                     }
                     break;
@@ -1156,15 +903,17 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     }
                     break;
                 }
-                case DIALPAD_ON:
-                case DIALPAD_OFF: {
-                    setDialpadVisibility((whichAction == DIALPAD_ON) ? View.VISIBLE : View.GONE);
+                case DTMF_DISPLAY: {
+                    showDialpad(call.getCallId());
                     break;
                 }
                 case DETAILED_DISPLAY: {
                     if (service != null) {
+                        if(infoDialog != null) {
+                            infoDialog.dismiss();
+                        }
                         String infos = service.showCallInfosDialog(call.getCallId());
-
+                        
                         SpannableStringBuilder buf = new SpannableStringBuilder();
                         Builder builder = new AlertDialog.Builder(this);
 
@@ -1174,11 +923,11 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                         buf.setSpan(textSmallSpan, 0, buf.length(),
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                        AlertDialog dialog = builder.setIcon(android.R.drawable.ic_dialog_info)
+                        infoDialog = builder.setIcon(android.R.drawable.ic_dialog_info)
                                 .setMessage(buf)
                                 .setNeutralButton(R.string.ok, null)
                                 .create();
-                        dialog.show();
+                        infoDialog.show();
                     }
                     break;
                 }
@@ -1228,31 +977,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             Log.e(THIS_FILE, "Was not able to call service method", e);
         }
     }
-
-    @Override
-    public void onTrigger(int keyCode, int dialTone) {
-        proximityManager.restartTimer();
-
-        if (service != null) {
-            SipCallSession currentCall = getActiveCallInfo();
-            if (currentCall != null && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
-                try {
-                    service.sendDtmf(currentCall.getCallId(), keyCode);
-                    dialFeedback.giveFeedback(dialTone);
-                    
-                    if(dialPadTextView != null) {
-                        // Update text view
-                        KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
-                        char nbr = event.getNumber();
-                        dialPadTextView.getText().append(nbr);
-                    }
-                } catch (RemoteException e) {
-                    Log.e(THIS_FILE, "Was not able to send dtmf tone", e);
-                }
-            }
-        }
-
-    }
+    
 
 
     @Override
@@ -1265,7 +990,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 break;
             case RIGHT_HANDLE:
                 Log.d(THIS_FILE, "We clear the call");
-                onTrigger(OnTriggerListener.CLEAR_CALL, getActiveCallInfo());
+                onTrigger(IOnCallActionTrigger.CLEAR_CALL, getActiveCallInfo());
                 proximityManager.release(0);
             default:
                 break;
@@ -1278,7 +1003,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     public class OnBadgeTouchListener implements OnTouchListener {
         private SipCallSession call;
-        private InCallInfo badge;
+        private InCallCard badge;
         private boolean isDragging = false;
         private SetDraggingTimerTask draggingDelayTask;
         Vibrator vibrator;
@@ -1294,7 +1019,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
             }
         };
 
-        public OnBadgeTouchListener(InCallInfo aBadge, SipCallSession aCall) {
+        public OnBadgeTouchListener(InCallCard aBadge, SipCallSession aCall) {
             call = aCall;
             badge = aBadge;
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -1325,14 +1050,14 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     draggingTimer.schedule(draggingDelayTask, DRAGGING_DELAY);
                 case MotionEvent.ACTION_MOVE:
                     if (isDragging) {
-                        float size = Math.max(75.0f, event.getSize() + 50.0f);
-
+                        /*float size = Math.max(75.0f, event.getSize() + 50.0f);
+                        
                         Rect wrap = new Rect(
                                 (int) (X - (size)),
                                 (int) (Y - (size)),
                                 (int) (X + (size / 2.0f)),
                                 (int) (Y + (size / 2.0f)));
-                        layoutBadge(wrap, badge);
+                                */
                         badge.bringToFront();
                         // Log.d(THIS_FILE, "Is moving to "+X+", "+Y);
                         return true;
@@ -1369,8 +1094,9 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
         private void setDragging(boolean dragging) {
             isDragging = dragging;
-            handler.sendMessage(handler.obtainMessage(UPDATE_DRAGGING, new DraggingInfo(isDragging,
-                    badge, call)));
+            DraggingInfo di = new DraggingInfo(isDragging,
+                    badge, call);
+            runOnUiThread(new UpdateDraggingRunnable(di));
         }
 
         public void setCallState(SipCallSession callInfo) {
@@ -1389,7 +1115,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         return null;
     }
 
-    private void onDropBadge(int X, int Y, InCallInfo badge, SipCallSession call) {
+    private void onDropBadge(int X, int Y, InCallCard badge, SipCallSession call) {
         Log.d(THIS_FILE, "Dropping !!! in " + X + ", " + Y);
 
         // Rectangle init if not already done
@@ -1415,6 +1141,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         } else if (holdTargetRect != null && holdTargetRect.contains(X, Y)) {
             // check if not drop on held call
             boolean dropOnOtherCall = false;
+            /*
             for (Entry<Integer, InCallInfo> badgeSet : badges.entrySet()) {
                 Log.d(THIS_FILE, "On drop target searching for another badge");
                 int callId = badgeSet.getKey();
@@ -1443,6 +1170,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     }
                 }
             }
+                */
 
             // Drop in hold zone
 
@@ -1466,7 +1194,7 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                 onTrigger(TOGGLE_HOLD, call);
             }
         }
-        updateUIFromCall();
+        runOnUiThread(new UpdateUIFromMediaRunnable());
     }
 
     private class DraggingInfo {
@@ -1474,23 +1202,27 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
         // public InCallInfo2 badge;
         public SipCallSession call;
 
-        public DraggingInfo(boolean aIsDragging, InCallInfo aBadge, SipCallSession aCall) {
+        public DraggingInfo(boolean aIsDragging, InCallCard aBadge, SipCallSession aCall) {
             isDragging = aIsDragging;
             // badge = aBadge;
             call = aCall;
         }
     }
 
-    private void showZRTPInfo(final int dataPtr, String sasString) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        Resources r = getResources();
-        builder.setTitle("ZRTP supported by remote party");
-        builder.setMessage("Do you confirm the SAS : " + sasString);
-        builder.setPositiveButton(r.getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Log.d(THIS_FILE, "ZRTP confirmed");
+    
+    private class ShowZRTPInfoRunnable implements Runnable, DialogInterface.OnClickListener {
+        private String sasString;
+        private int dataPtr;
 
+        public ShowZRTPInfoRunnable(int aDataPtr, String sas) {
+            dataPtr = aDataPtr;
+            sasString = sas;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if(which == DialogInterface.BUTTON_POSITIVE) {
+                Log.d(THIS_FILE, "ZRTP confirmed");
                 if (service != null) {
                     try {
                         service.zrtpSASVerified(dataPtr);
@@ -1499,18 +1231,24 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
                     }
                     dialog.dismiss();
                 }
-            }
-        });
-        builder.setNegativeButton(r.getString(R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            }else if(which == DialogInterface.BUTTON_NEGATIVE) {
                 dialog.dismiss();
             }
-        });
+        }
+        @Override
+        public void run() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(InCallActivity.this);
+            Resources r = getResources();
+            builder.setTitle("ZRTP supported by remote party");
+            builder.setMessage("Do you confirm the SAS : " + sasString);
+            builder.setPositiveButton(r.getString(R.string.yes), this);
+            builder.setNegativeButton(r.getString(R.string.no), this);
 
-        AlertDialog backupDialog = builder.create();
-        backupDialog.show();
+            AlertDialog backupDialog = builder.create();
+            backupDialog.show();
+        }
     }
+    
 
     
     @Override
@@ -1555,18 +1293,130 @@ public class InCallActivity extends Activity implements OnTriggerListener, OnDia
 
     @Override
     public void onProximityTrackingChanged(boolean acquired) {
-        if(useAutoDetectSpeaker) {
+        if(useAutoDetectSpeaker && service != null) {
             if(acquired) {
                 if(lastMediaState == null || lastMediaState.isSpeakerphoneOn) {
-                    onTrigger(SPEAKER_OFF, null);
+                    try {
+                        service.setSpeakerphoneOn(false);
+                    } catch (RemoteException e) {
+                        Log.e(THIS_FILE, "Can't run speaker change");
+                    }
                 }
-            }
-            if(!acquired) {
+            }else {
                 if(lastMediaState == null || !lastMediaState.isSpeakerphoneOn) {
-                    onTrigger(SPEAKER_ON, null);
+                    try {
+                        service.setSpeakerphoneOn(true);
+                    } catch (RemoteException e) {
+                        Log.e(THIS_FILE, "Can't run speaker change");
+                    }
                 }
             }
         }
     }
+
+    
+    // Active call adapter
+    private class CallsAdapter extends BaseAdapter {
+        
+        private boolean mActiveCalls;
+        
+        private List<Integer> seenConnected = new ArrayList<Integer>();
+        
+        public CallsAdapter(boolean notOnHold) {
+            mActiveCalls = notOnHold;
+        }
+
+        private boolean isValidCallForAdapter(SipCallSession call) {
+            boolean holdStateOk = false;
+            if(mActiveCalls && !call.isLocalHeld()) {
+                holdStateOk = true;
+            }
+            if(!mActiveCalls && call.isLocalHeld()) {
+                holdStateOk = true;
+            }
+            if(holdStateOk) {
+                if(call.isAfterEnded()) {
+                    // Only valid if we already seen this call in this adapter to be valid
+                    if(seenConnected.contains(Integer.valueOf(call.getCallId()))) {
+                        return true;
+                    }
+                    return false;
+                }else {
+                    seenConnected.add(call.getCallId());
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        @Override
+        public int getCount() {
+            int count = 0;
+            synchronized (callMutex) {
+                if(callsInfo == null) {
+                    return 0;
+                }
+                
+                for(SipCallSession call : callsInfo) {
+                    if(isValidCallForAdapter(call)) {
+                        count ++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            synchronized (callMutex) {
+                if(callsInfo == null) {
+                    return null;
+                }
+                int count = 0;
+                for(SipCallSession call : callsInfo) {
+                    if(isValidCallForAdapter(call)) {
+                        if(count == position) {
+                            return call;
+                        }
+                        count ++;
+                     }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            SipCallSession call = (SipCallSession) getItem(position);
+            if(call != null) {
+                return call.getCallId();
+            }
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null) {
+                convertView = new InCallCard(InCallActivity.this, null);
+            }
+            
+            if(convertView instanceof InCallCard) {
+                InCallCard vc = (InCallCard) convertView;
+                vc.setOnTriggerListener(InCallActivity.this);
+                // TODO ---
+                //badge.setOnTouchListener(new OnBadgeTouchListener(badge, call));
+                
+                SipCallSession session = (SipCallSession) getItem(position);
+                Log.d(THIS_FILE, "Set call for " + session.getCallState());
+                vc.setCallState(session);
+            }
+
+            return convertView;
+        }
+        
+    }
+    
+
+
 
 }

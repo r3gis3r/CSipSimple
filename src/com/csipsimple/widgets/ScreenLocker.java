@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 
 import com.csipsimple.R;
 
+import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -177,14 +178,24 @@ public class ScreenLocker extends RelativeLayout implements OnTouchListener{
 	}
 	
 	
-	private Handler handler = new Handler() {
+	private Handler handler = new ShowHideHandler(this);
+	
+	private static class ShowHideHandler extends Handler {
+	    WeakReference<ScreenLocker> sc;
+	    ShowHideHandler(ScreenLocker screenLocker){
+	        sc = new WeakReference<ScreenLocker>(screenLocker);
+	    }
 		public void handleMessage(Message msg) {
+		    ScreenLocker screenLocker = sc.get();
+		    if(screenLocker == null) {
+		        return;
+		    }
 			switch (msg.what) {
 			case SHOW_LOCKER:
-				show();
+				screenLocker.show();
 				break;
 			case HIDE_LOCKER:
-				hide();
+			    screenLocker.hide();
 				break;
 			default:
 				super.handleMessage(msg);

@@ -88,9 +88,8 @@ public class ContactsUtils5 extends ContactsWrapper {
             + Contacts.DISPLAY_NAME + "," + CommonDataKinds.Phone.TYPE;
     private static final String THIS_FILE = "ContactsUtils5";
 
-    public Bitmap getContactPhoto(Context ctxt, Uri uri, Integer defaultResource) {
+    public Bitmap getContactPhoto(Context ctxt, Uri uri, boolean hiRes, Integer defaultResource) {
         Bitmap img = null;
-
         InputStream s = ContactsContract.Contacts.openContactPhotoInputStream(
                 ctxt.getContentResolver(), uri);
         img = BitmapFactory.decodeStream(s);
@@ -561,7 +560,7 @@ public class ContactsUtils5 extends ContactsWrapper {
         String displayName = cursor.getString(cursor.getColumnIndex(Data.DISPLAY_NAME));
         Long contactId = cursor.getLong(cursor.getColumnIndex(Data.CONTACT_ID));
         Uri uri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
-        Bitmap bitmap = getContactPhoto(context, uri, R.drawable.ic_contact_picture_holo_dark);
+        Bitmap bitmap = getContactPhoto(context, uri, false, R.drawable.ic_contact_picture_holo_dark);
 
         // Get views
         TextView tv = (TextView) view.findViewById(R.id.contact_name);

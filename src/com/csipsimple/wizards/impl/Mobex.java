@@ -40,11 +40,12 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Mobex extends SimpleImplementation {
-    private String THIS_FILE = "MobexW";
+    private static String THIS_FILE = "MobexW";
 
 
     private LinearLayout customWizard;
@@ -179,9 +180,18 @@ public class Mobex extends SimpleImplementation {
     }
     
     
-    private AccountBalanceHelper accountBalanceHelper = new AccountBalanceHelper() {
+    private AccountBalanceHelper accountBalanceHelper = new AccountBalance(this);
+    
+    private static class AccountBalance extends AccountBalanceHelper {
+        
+        private WeakReference<Mobex> w;
 
         private Pattern p = Pattern.compile("^.*<return xsi:type=\"xsd:string\">(.*)</return>.*$");
+        
+
+        AccountBalance(Mobex wizard){
+            w = new WeakReference<Mobex>(wizard);
+        }
         
         @Override
         public String parseResponseLine(String line) {
@@ -233,13 +243,19 @@ public class Mobex extends SimpleImplementation {
 
         @Override
         public void applyResultError() {
-            customWizard.setVisibility(View.GONE);
+            Mobex wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizard.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void applyResultSuccess(String balanceText) {
-            customWizardText.setText(balanceText);
-            customWizard.setVisibility(View.VISIBLE);
+            Mobex wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizardText.setText(balanceText);
+                wizard.customWizard.setVisibility(View.VISIBLE);
+            }
         }
     };
 }

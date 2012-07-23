@@ -33,6 +33,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.util.LruCache;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -45,6 +47,14 @@ import java.io.InputStream;
 
 public class ContactsAsyncHelper extends Handler {
     private static final String THIS_FILE = "ContactsAsyncHelper";
+    
+    // TODO : use LRUCache for bitmaps.
+    
+    LruCache<Uri, Bitmap> photoCache = new LruCache<Uri, Bitmap>(5 * 1024 * 1024 /* 5MiB */) {
+        protected int sizeOf(Uri key, Bitmap value) {
+            return value.getRowBytes() * value.getWidth();
+        }
+    };
 
     /**
      * Interface for a WorkerHandler result return.
@@ -83,6 +93,7 @@ public class ContactsAsyncHelper extends Handler {
         public Uri uri;
     }
 
+    public static final String HIGH_RES_URI_PARAM = "hiRes";
     /**
      * Thread worker class that handles the task of opening the stream and
      * loading the images.
@@ -100,9 +111,23 @@ public class ContactsAsyncHelper extends Handler {
                 PhotoViewTag photoTag = (PhotoViewTag) args.view.getTag(TAG_PHOTO_INFOS);
                 if (photoTag != null && photoTag.uri != null) {
                     uri = photoTag.uri;
+                    boolean hiRes = false;
+                    String p = uri.getQueryParameter(HIGH_RES_URI_PARAM);
+                    if(!TextUtils.isEmpty(p) && p.equalsIgnoreCase("1")) {
+                        hiRes = true;
+                    }
                     Log.v(THIS_FILE, "get : " + uri);
-                    Bitmap img = contactsWrapper.getContactPhoto(args.context, uri,
-                            args.defaultResource);
+                    Bitmap img = null;
+                    synchronized (photoCache) {
+                        img = photoCache.get(uri);
+                    }
+                    if(img == null) {
+                        img = contactsWrapper.getContactPhoto(args.context, uri, hiRes,
+                                args.defaultResource);
+                        synchronized (photoCache) {
+                            photoCache.put(uri, img);
+                        }
+                    }
                     if (img != null) {
                         args.result = img;
                     } else {
@@ -115,33 +140,43 @@ public class ContactsAsyncHelper extends Handler {
                     uri = photoTag.uri;
                     Log.v(THIS_FILE, "get : " + uri);
 
-                    byte[] buffer = new byte[1024 * 16];
                     Bitmap img = null;
-                    try {
-                        InputStream is = args.context.getContentResolver().openInputStream(uri);
-                        if (is != null) {
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            try {
-                                int size;
-                                while ((size = is.read(buffer)) != -1) {
-                                    baos.write(buffer, 0, size);
-                                }
-                            } finally {
-                                is.close();
-                            }
-                            byte[] boasBytes = baos.toByteArray();
-                            img = BitmapFactory.decodeByteArray(boasBytes, 0, boasBytes.length,
-                                    null);
-                        }
-                    } catch (Exception ex) {
-                        Log.v(THIS_FILE, "Cannot load photo " + uri, ex);
-                    }
 
+                    synchronized (photoCache) {
+                        img = photoCache.get(uri);
+                    }
+                    if(img == null) {
+                        byte[] buffer = new byte[1024 * 16];
+                        try {
+                            InputStream is = args.context.getContentResolver().openInputStream(uri);
+                            if (is != null) {
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                try {
+                                    int size;
+                                    while ((size = is.read(buffer)) != -1) {
+                                        baos.write(buffer, 0, size);
+                                    }
+                                } finally {
+                                    is.close();
+                                }
+                                byte[] boasBytes = baos.toByteArray();
+                                img = BitmapFactory.decodeByteArray(boasBytes, 0, boasBytes.length,
+                                        null);
+                            }
+                        } catch (Exception ex) {
+                            Log.v(THIS_FILE, "Cannot load photo " + uri, ex);
+                        }
+                    }
+                    
                     if (img != null) {
                         args.result = img;
+                        synchronized (photoCache) {
+                            photoCache.put(uri, img);
+                        }
                     } else {
                         args.result = null;
                     }
+                    
                 }
             }
             args.loadedUri = uri;

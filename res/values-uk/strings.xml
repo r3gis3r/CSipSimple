@@ -17,7 +17,6 @@
     <string name="choose_wizard">Вибрати майстра</string>
     <string name="use">Використовувати:</string>
     <string name="use_pstn">Використовувати мобільний</string>
-    <string name="use_skype">Використовувати скайп</string>
     <string name="ongoing_call">Дзвінок в процесі</string>
     <string name="missed_call">Пропущений виклик</string>
     <string name="recentCalls_empty">Немає викликів</string>

@@ -76,6 +76,7 @@ import com.csipsimple.utils.PreferencesWrapper;
 
 import org.pjsip.pjsua.pjsua;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -883,7 +884,7 @@ public class SipService extends Service {
     public SipServiceExecutor getExecutor() {
         // create mExecutor lazily
         if (mExecutor == null) {
-        	mExecutor = new SipServiceExecutor();
+        	mExecutor = new SipServiceExecutor(this);
         }
         return mExecutor;
     }
@@ -1668,10 +1669,12 @@ public class SipService extends Service {
 		}
 	}
 
+	
     private static Looper createLooper() {
     //	synchronized (executorThread) {
 	    	if(executorThread == null) {
 	    		Log.d(THIS_FILE, "Creating new handler thread");
+	    		// ADT gives a fake warning due to bad parse rule.
 		        executorThread = new HandlerThread("SipService.Executor");
 		        executorThread.start();
 	    	}
@@ -1683,13 +1686,19 @@ public class SipService extends Service {
 
     // Executes immediate tasks in a single executorThread.
     // Hold/release wake lock for running tasks
-    public class SipServiceExecutor extends Handler {
-        SipServiceExecutor() {
+    public static class SipServiceExecutor extends Handler {
+        WeakReference<SipService> handlerService;
+        
+        SipServiceExecutor(SipService s) {
             super(createLooper());
+            handlerService = new WeakReference<SipService>(s);
         }
 
         public void execute(Runnable task) {
-            sipWakeLock.acquire(task);
+            SipService s = handlerService.get();
+            if(s != null) {
+                s.sipWakeLock.acquire(task);
+            }
             Message.obtain(this, 0/* don't care */, task).sendToTarget();
         }
 
@@ -1708,7 +1717,11 @@ public class SipService extends Service {
             } catch (Throwable t) {
                 Log.e(THIS_FILE, "run task: " + task, t);
             } finally {
-                sipWakeLock.release(task);
+
+                SipService s = handlerService.get();
+                if(s != null) {
+                    s.sipWakeLock.release(task);
+                }
             }
         }
     }

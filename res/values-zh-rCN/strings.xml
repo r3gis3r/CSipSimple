@@ -17,7 +17,6 @@
     <string name="choose_wizard">选择向导</string>
     <string name="use">使用：</string>
     <string name="use_pstn">使用手机</string>
-    <string name="use_skype">使用Skype</string>
     <string name="ongoing_call">正在通话</string>
     <string name="missed_call">未接来电</string>
     <string name="recentCalls_empty">无通话记录</string>

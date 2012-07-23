@@ -40,6 +40,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -163,7 +164,15 @@ public class Sipgate extends AlternateServerImplementation {
 		}
 	}
 	
-    private AccountBalanceHelper accountBalanceHelper = new AccountBalanceHelper() {
+    private AccountBalanceHelper accountBalanceHelper= new AccountBalance(this);
+    
+    private static class AccountBalance extends AccountBalanceHelper {
+        
+        WeakReference<Sipgate> w;
+        
+        AccountBalance(Sipgate wizard){
+            w = new WeakReference<Sipgate>(wizard);
+        }
 
         Pattern p = Pattern.compile("^.*TotalIncludingVat</name><value><double>(.*)</double>.*$");
 
@@ -216,7 +225,10 @@ public class Sipgate extends AlternateServerImplementation {
          */
         @Override
         public void applyResultError() {
-            customWizard.setVisibility(View.GONE);
+            Sipgate wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizard.setVisibility(View.GONE);
+            }
         }
 
         /**
@@ -224,8 +236,11 @@ public class Sipgate extends AlternateServerImplementation {
          */
         @Override
         public void applyResultSuccess(String balanceText) {
-            customWizardText.setText(balanceText);
-            customWizard.setVisibility(View.VISIBLE);
+            Sipgate wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizardText.setText(balanceText);
+                wizard.customWizard.setVisibility(View.VISIBLE);
+            }
         }
     };
 	

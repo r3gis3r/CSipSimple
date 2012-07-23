@@ -37,6 +37,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -419,16 +420,27 @@ public class Betamax extends AuthorizationImplementation {
         }
     }
 
-    private AccountBalanceHelper accountBalanceHelper = new AccountBalanceHelper() {
+    private AccountBalanceHelper accountBalanceHelper = new AccountBalance(this);
+    
+    private static class AccountBalance extends AccountBalanceHelper {
+        
+        WeakReference<Betamax> w;
+        
+        AccountBalance(Betamax wizard){
+            w = new WeakReference<Betamax>(wizard);
+        }
 
         /**
          * {@inheritDoc}
          */
         @Override
         public HttpRequestBase getRequest(SipProfile acc) throws IOException {
-
+            Betamax wizard = w.get();
+            if(wizard == null) {
+                return null;
+            }
             String requestURL = "https://";
-            String provider = providerListPref.getValue();
+            String provider = wizard.providerListPref.getValue();
             if (provider != null) {
                 String[] set = providers.get(provider);
                 requestURL += set[0].replace("sip.", "www.");
@@ -462,7 +474,10 @@ public class Betamax extends AuthorizationImplementation {
          */
         @Override
         public void applyResultError() {
-            customWizard.setVisibility(View.GONE);
+            Betamax wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizard.setVisibility(View.GONE);
+            }
         }
 
         /**
@@ -470,8 +485,11 @@ public class Betamax extends AuthorizationImplementation {
          */
         @Override
         public void applyResultSuccess(String balanceText) {
-            customWizardText.setText(balanceText);
-            customWizard.setVisibility(View.VISIBLE);
+            Betamax wizard = w.get();
+            if(wizard != null) {
+                wizard.customWizardText.setText(balanceText);
+                wizard.customWizard.setVisibility(View.VISIBLE);
+            }
         }
 
     };

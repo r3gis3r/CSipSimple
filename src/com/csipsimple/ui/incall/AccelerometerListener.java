@@ -26,6 +26,8 @@ import android.os.Message;
 
 import com.csipsimple.utils.Log;
 
+import java.lang.ref.WeakReference;
+
 /**
  * This class is used to listen to the accelerometer to monitor the
  * orientation of the phone. The client of this class is notified when
@@ -140,20 +142,31 @@ public final class AccelerometerListener {
             // ignore
         }
     };
+    
+    Handler mHandler = new AccelerometerHandler(this);
 
-    Handler mHandler = new Handler() {
+    private static class AccelerometerHandler extends Handler {
+        WeakReference<AccelerometerListener> l;
+        AccelerometerHandler(AccelerometerListener listener){
+            l = new WeakReference<AccelerometerListener>(listener);
+        }
+        
         public void handleMessage(Message msg) {
+            AccelerometerListener listener = l.get();
+            if(listener == null) {
+                return;
+            }
             switch (msg.what) {
             case ORIENTATION_CHANGED:
-                synchronized (this) {
-                    mOrientation = mPendingOrientation;
+                synchronized (listener) {
+                    listener.mOrientation = listener.mPendingOrientation;
                     if (DEBUG) {
                         Log.d(TAG, "orientation: " +
-                            (mOrientation == ORIENTATION_HORIZONTAL ? "horizontal"
-                                : (mOrientation == ORIENTATION_VERTICAL ? "vertical"
+                            (listener.mOrientation == ORIENTATION_HORIZONTAL ? "horizontal"
+                                : (listener.mOrientation == ORIENTATION_VERTICAL ? "vertical"
                                     : "unknown")));
                     }
-                    mListener.orientationChanged(mOrientation);
+                    listener.mListener.orientationChanged(listener.mOrientation);
                 }
                 break;
             }

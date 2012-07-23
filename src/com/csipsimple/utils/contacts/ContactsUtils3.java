@@ -78,7 +78,7 @@ public class ContactsUtils3 extends ContactsWrapper {
     private static final String THIS_FILE = "ContactsUtils3";
 
     @Override
-    public Bitmap getContactPhoto(Context ctxt, Uri uri, Integer defaultResource) {
+    public Bitmap getContactPhoto(Context ctxt, Uri uri, boolean hiRes, Integer defaultResource) {
         Bitmap img = null;
         try {
             img = People.loadContactPhoto(ctxt, uri, defaultResource, null);
@@ -315,7 +315,7 @@ public class ContactsUtils3 extends ContactsWrapper {
         String displayName = cursor.getString(cursor.getColumnIndex(Phones.DISPLAY_NAME));
         Long peopleId = cursor.getLong(cursor.getColumnIndex(Phones.PERSON_ID));
         Uri uri = ContentUris.withAppendedId(People.CONTENT_URI, peopleId);
-        Bitmap bitmap = getContactPhoto(context, uri, R.drawable.ic_contact_picture_holo_dark);
+        Bitmap bitmap = getContactPhoto(context, uri, false, R.drawable.ic_contact_picture_holo_dark);
         
         // Get views
         TextView tv = (TextView) view.findViewById(R.id.contact_name);

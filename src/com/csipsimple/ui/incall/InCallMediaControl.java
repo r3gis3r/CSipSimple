@@ -30,9 +30,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.RemoteException;
 import android.view.KeyEvent;
 import android.view.View;
@@ -40,9 +38,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ProgressBar;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -364,13 +362,6 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		}
 	}
 
-	
-	// TODO : this should be a widget...
-    private class TxRxResult {
-        int tx_level;
-        int rx_level;
-    }
-
     private MonitorThread monitorThread;
 
     private class MonitorThread extends Thread {
@@ -387,10 +378,7 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
                 if (sipService != null) {
                     try {
                         long value = sipService.confGetRxTxLevel(0);
-                        TxRxResult toPost = new TxRxResult();
-                        toPost.rx_level = (int) ((value >> 8) & 0xff);
-                        toPost.tx_level = (int) (value & 0xff);
-                        mHandler.sendMessage(mHandler.obtainMessage(CONF_LEVEL_CHANGE, toPost));
+                        runOnUiThread(new UpdateConfLevelRunnable((int) ((value >> 8) & 0xff), (int) (value & 0xff)));
                     } catch (RemoteException e) {
                         Log.e(THIS_FILE, "Problem with remote service", e);
                         break;
@@ -412,16 +400,17 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
         }
     }
 
-    private static int CONF_LEVEL_CHANGE = 0;
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == CONF_LEVEL_CHANGE) {
-                TxRxResult res = (TxRxResult) msg.obj;
-                rxProgress.setProgress(res.rx_level);
-                txProgress.setProgress(res.tx_level);
-            }
+    private class UpdateConfLevelRunnable implements Runnable {
+        private final int mRx, mTx;
+        UpdateConfLevelRunnable(int rx, int tx){
+            mRx = rx;
+            mTx = tx;
         }
-    };
+        @Override
+        public void run() {
+            txProgress.setProgress(mTx);
+            rxProgress.setProgress(mRx);
+        }
+    }
+    
 }

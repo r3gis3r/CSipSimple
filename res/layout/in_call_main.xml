@@ -20,47 +20,17 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainFrame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="6dip"
-    android:paddingRight="6dip"
-    android:paddingTop="10dip" >
-
-    <ViewStub
-        android:id="@+id/dialPadContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout="@layout/in_call_dialpad" />
-
-    <com.csipsimple.ui.incall.InCallControls
-        android:id="@+id/inCallControls"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    android:layout_height="match_parent" >
 
     <ViewStub
         android:id="@+id/dropZones"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout="@layout/in_call_drop_zones" />
-
-    <Button
-        android:id="@+id/add_call_button"
-        style="@style/CallButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="170dip"
-        android:layout_marginRight="50dip"
-        android:drawableTop="@drawable/ic_in_call_touch_round_add_call"
-        android:text="@string/add_call"
-        android:visibility="gone" />
-
-    <FrameLayout
-        android:id="@+id/callInfoPanel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <com.csipsimple.widgets.ScreenLocker
         android:id="@+id/lockerOverlay"
@@ -79,4 +49,61 @@
         -->
     </com.csipsimple.widgets.ScreenLocker>
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/inCallContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="3"
+            android:orientation="horizontal" >
+
+            <!--
+				Can we do better than using two linear layouts here?
+				The problem is that RelativeLayout doesn't allow to use weight and
+				plays bad with hidden childs and above/below only support one id
+            -->
+            <!-- Grid for active calls -->
+
+            <com.csipsimple.ui.incall.InCallInfoGrid
+                android:id="@+id/activeCallsGrid"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:paddingBottom="4dip"
+                android:paddingTop="4dip"
+                tools:ignore="NestedWeights" />
+
+            <!-- Grid for held calls -->
+
+            <com.csipsimple.ui.incall.InCallInfoGrid
+                android:id="@+id/heldCallsGrid"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/in_call_held_background"
+                android:padding="4dip"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Answer slider/buttons -->
+
+        <com.csipsimple.ui.incall.InCallAnswerControls
+            android:id="@+id/inCallAnswerControls"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="2"
+            android:visibility="gone" />
+
+        <!-- Wraps split action bar manually managed -->
+
+        <com.csipsimple.ui.incall.InCallControls
+            android:id="@+id/inCallControls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

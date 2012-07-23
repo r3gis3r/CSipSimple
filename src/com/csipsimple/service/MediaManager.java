@@ -516,6 +516,7 @@ public class MediaManager implements BluetoothChangeListener {
 			userWantSpeaker = on;
 			service.setSnd();
 		}else {
+            userWantSpeaker = on;
 		    audioManager.setSpeakerphoneOn(on);
 		}
 		broadcastMediaChanged();
@@ -528,6 +529,7 @@ public class MediaManager implements BluetoothChangeListener {
 			userWantBluetooth = on;
 			service.setSnd();
 		}else {
+            userWantBluetooth = on;
 		    bluetoothWrapper.setBluetoothOn(on);
 		}
 		broadcastMediaChanged();
