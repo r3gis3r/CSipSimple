@@ -32,23 +32,6 @@
         android:layout_height="match_parent"
         android:layout="@layout/in_call_drop_zones" />
 
-    <com.csipsimple.widgets.ScreenLocker
-        android:id="@+id/lockerOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#8000"
-        android:visibility="gone" >
-
-        <!--
-		<TextView android:id="@+id/lockerIcon"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:gravity="center" android:layout_alignParentBottom="true"
-			android:layout_centerHorizontal="true" android:layout_marginBottom="70dip"
-			android:text="@string/touch_lock" android:textAppearance="?android:attr/textAppearanceLarge"
-			android:background="@drawable/dialpad_lock" />
-        -->
-    </com.csipsimple.widgets.ScreenLocker>
-
     <LinearLayout
         android:id="@+id/inCallContainer"
         android:layout_width="match_parent"
@@ -105,5 +88,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <com.csipsimple.widgets.ScreenLocker
+        android:id="@+id/lockerOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8000"
+        android:visibility="gone" >
+
+        <!--
+		<TextView android:id="@+id/lockerIcon"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:gravity="center" android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true" android:layout_marginBottom="70dip"
+			android:text="@string/touch_lock" android:textAppearance="?android:attr/textAppearanceLarge"
+			android:background="@drawable/dialpad_lock" />
+        -->
+    </com.csipsimple.widgets.ScreenLocker>
 
 </RelativeLayout>
