@@ -312,10 +312,15 @@ public class WizardUtils {
 					R.drawable.ic_wizard_freephonie, 30, 
 					new Locale[]{Locale.FRANCE}, false, false, 
 					Freephonie.class));
+			// Neuftalk is obsolete
 			WIZARDS_DICT.put("NEUFTALK", new WizardInfo("NEUFTALK", "NeufTalk", 
-					R.drawable.ic_wizard_neuftalk, 25, 
+					R.drawable.ic_wizard_neuftalk, 1, 
 					new Locale[]{Locale.FRANCE}, false, false, 
 					NeufTalk.class));
+            WIZARDS_DICT.put("LIBERTALK", new WizardInfo("LIBERTALK", "SFR LiberTalk", 
+                    R.drawable.ic_wizard_sfr, 25, 
+                    new Locale[]{Locale.FRANCE}, false, false, 
+                    LiberTalk.class));
 			WIZARDS_DICT.put("IPPI", new WizardInfo("IPPI", "ippi", 
 					R.drawable.ic_wizard_ippi, 21, 
 					new Locale[]{ Locale.FRENCH, Locale.CANADA, Locale.US, }, false, false, 
