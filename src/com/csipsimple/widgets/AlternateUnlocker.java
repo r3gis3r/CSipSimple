@@ -30,16 +30,14 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.widgets.IOnLeftRightChoice.IOnLeftRightProvider;
 
-public class AlternateUnlocker extends RelativeLayout implements IOnLeftRightProvider, OnClickListener {
+public class AlternateUnlocker extends LinearLayout implements IOnLeftRightProvider, OnClickListener {
 
 	private IOnLeftRightChoice onTriggerListener;
-    private Button takeCallButton, declineCallButton;
 
     public AlternateUnlocker(Context context) {
 		this(context, null);
@@ -54,16 +52,17 @@ public class AlternateUnlocker extends RelativeLayout implements IOnLeftRightPro
 	
 	public AlternateUnlocker(Context context, AttributeSet attrs, int style) {
 	    super(context, attrs, style);
+	    setOrientation(HORIZONTAL);
 
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.alternate_unlocker, this, true);
         
         
-        takeCallButton = (Button) findViewById(R.id.takeCallButton);
-        declineCallButton = (Button) findViewById(R.id.declineCallButton);
-        
-        takeCallButton.setOnClickListener(this);
-        declineCallButton.setOnClickListener(this);
+        View btn;
+        btn = findViewById(R.id.takeCallButton);
+        btn.setOnClickListener(this);
+        btn = findViewById(R.id.declineCallButton);
+        btn.setOnClickListener(this);
 	}
 
     @Override

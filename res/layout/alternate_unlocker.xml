@@ -19,30 +19,51 @@
     You should have received a copy of the GNU General Public License
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:layout_marginBottom="20dip"
-    android:orientation="horizontal" >
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <Button
-        android:id="@+id/takeCallButton"
-        style="@style/CallButton"
-        android:layout_width="1dip"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:drawableTop="@drawable/ic_in_call_touch_answer"
-        android:text="@string/take_call" />
+        android:background="@drawable/end_call_background"
+        android:gravity="center_vertical" >
 
-    <Button
-        android:id="@+id/declineCallButton"
-        style="@style/CallButton"
-        android:layout_width="1dip"
-        android:layout_height="wrap_content"
+        <FrameLayout
+            android:id="@+id/declineCallButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/actionBarItemBackground" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_end_call"
+                android:gravity="center"
+                android:text="@string/decline_call" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:drawableTop="@drawable/ic_in_call_touch_end"
-        android:text="@string/decline_call"
-        android:textColor="#FF6072" />
+        android:background="@drawable/take_call_background" >
 
-</LinearLayout>
+        <FrameLayout
+            android:id="@+id/takeCallButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/actionBarItemBackground" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_dial_action_call"
+                android:gravity="center"
+                android:text="@string/take_call" />
+        </FrameLayout>
+    </FrameLayout>
+
+</merge>
