@@ -26,7 +26,6 @@
 package com.csipsimple.ui.calllog;
 
 
-import android.database.CharArrayBuffer;
 import android.database.Cursor;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
@@ -42,10 +41,6 @@ public class CallLogGroupBuilder {
         void addGroup(int cursorPosition, int size, boolean expanded);
     }
 
-    /** Reusable char array buffer. */
-    private final CharArrayBuffer mBuffer1 = new CharArrayBuffer(128);
-    /** Reusable char array buffer. */
-    private final CharArrayBuffer mBuffer2 = new CharArrayBuffer(128);
 
     /** The object on which the groups are created. */
     private final GroupCreator mGroupCreator;
@@ -70,31 +65,27 @@ public class CallLogGroupBuilder {
         if (count == 0) {
             return;
         }
-        
         int numberColIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER);
         int typeColIndex = cursor.getColumnIndex(CallLog.Calls.TYPE);
-        // In our portage case of GroupingListAdapter we must create group for single rows else the group list adapter will be messed
-        int minToGroup = 1; 
+
         int currentGroupSize = 1;
-        // The number of the first entry in the group.
-        CharArrayBuffer firstNumber = mBuffer1;
-        // The number of the current row in the cursor.
-        CharArrayBuffer currentNumber = mBuffer2;
         cursor.moveToFirst();
-        cursor.copyStringToBuffer(numberColIndex, firstNumber);
+        // The number of the first entry in the group.
+        String firstNumber = cursor.getString(numberColIndex);
         // This is the type of the first call in the group.
         int firstCallType = cursor.getInt(typeColIndex);
         while (cursor.moveToNext()) {
-            cursor.copyStringToBuffer(numberColIndex, currentNumber);
+            // The number of the current row in the cursor.
+            final String currentNumber = cursor.getString(numberColIndex);
             final int callType = cursor.getInt(typeColIndex);
-            final boolean sameNumber = equalPhoneNumbers(firstNumber, currentNumber);
-            boolean shouldGroup;
-            
+            final boolean sameNumber = equalNumbers(firstNumber, currentNumber);
+            final boolean shouldGroup;
+
             if (!sameNumber) {
                 // Should only group with calls from the same number.
                 shouldGroup = false;
-            } else if (firstCallType == Calls.MISSED_TYPE) {
-                // Missed calls should only be grouped with subsequent missed calls.
+            } else if ( firstCallType == Calls.MISSED_TYPE) {
+                // Voicemail and missed calls should only be grouped with subsequent missed calls.
                 shouldGroup = callType == Calls.MISSED_TYPE;
             } else {
                 // Incoming and outgoing calls group together.
@@ -108,21 +99,18 @@ public class CallLogGroupBuilder {
             } else {
                 // Create a group for the previous set of calls, excluding the current one, but do
                 // not create a group for a single call.
-                if (currentGroupSize >= minToGroup) {
+                if (currentGroupSize > 1) {
                     addGroup(cursor.getPosition() - currentGroupSize, currentGroupSize);
                 }
                 // Start a new group; it will include at least the current call.
                 currentGroupSize = 1;
-                // The current entry is now the first in the group. For the CharArrayBuffers, we
-                // need to swap them.
-                firstCallType = callType;
-                CharArrayBuffer temp = firstNumber;  // Used to swap.
+                // The current entry is now the first in the group.
                 firstNumber = currentNumber;
-                currentNumber = temp;
+                firstCallType = callType;
             }
         }
         // If the last set of calls at the end of the call log was itself a group, create it now.
-        if (currentGroupSize >= minToGroup) {
+        if (currentGroupSize > 1) {
             addGroup(count - currentGroupSize, currentGroupSize);
         }
     }
@@ -138,10 +126,45 @@ public class CallLogGroupBuilder {
         mGroupCreator.addGroup(cursorPosition, size, false);
     }
 
-    private boolean equalPhoneNumbers(CharArrayBuffer buffer1, CharArrayBuffer buffer2) {
-        // TODO add PhoneNumberUtils.compare(CharSequence, CharSequence) to avoid
-        // string allocation
-        return PhoneNumberUtils.compare(new String(buffer1.data, 0, buffer1.sizeCopied),
-                new String(buffer2.data, 0, buffer2.sizeCopied));
+    
+    private boolean equalNumbers(String number1, String number2) {
+//        if (PhoneNumberUtils.isUriNumber(number1) || PhoneNumberUtils.isUriNumber(number2)) {
+//            return compareSipAddresses(number1, number2);
+//        } else {
+        // Optim -- first try to compare very simply
+        if(number1.equals(number2)) {
+            return true;
+        }
+        return PhoneNumberUtils.compare(number1, number2);
+//        }
     }
+    /*
+    boolean compareSipAddresses(String number1, String number2) {
+        if (number1 == null || number2 == null) return number1 == number2;
+
+        int index1 = number1.indexOf('@');
+        final String userinfo1;
+        final String rest1;
+        if (index1 != -1) {
+            userinfo1 = number1.substring(0, index1);
+            rest1 = number1.substring(index1);
+        } else {
+            userinfo1 = number1;
+            rest1 = "";
+        }
+
+        int index2 = number2.indexOf('@');
+        final String userinfo2;
+        final String rest2;
+        if (index2 != -1) {
+            userinfo2 = number2.substring(0, index2);
+            rest2 = number2.substring(index2);
+        } else {
+            userinfo2 = number2;
+            rest2 = "";
+        }
+
+        return userinfo1.equals(userinfo2) && rest1.equalsIgnoreCase(rest2);
+    }
+    */
 }

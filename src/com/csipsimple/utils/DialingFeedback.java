@@ -27,16 +27,14 @@
 
 package com.csipsimple.utils;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Vibrator;
-import android.app.Activity;
 
-import com.csipsimple.utils.PreferencesWrapper;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DialingFeedback {
 
@@ -87,7 +85,9 @@ public class DialingFeedback {
 					try {
 						toneGenerator = new ToneGenerator(toneStream, TONE_RELATIVE_VOLUME);
 						//Allow user to control dialtone
-						if (!inCall) context.setVolumeControlStream(toneStream);
+						if (!inCall) {
+						    context.setVolumeControlStream(toneStream);
+						}
 					} catch (RuntimeException e) {
 						//If impossible, nothing to do
 						toneGenerator = null;
@@ -135,21 +135,19 @@ public class DialingFeedback {
 		
 		switch (ringerMode) {
 			case AudioManager.RINGER_MODE_NORMAL:
-				if (dialPressVibrate) vibrator.vibrate(HAPTIC_LENGTH_MS);
+				if (dialPressVibrate) {
+				    vibrator.vibrate(HAPTIC_LENGTH_MS);
+				}
 				if (dialPressTone) {
-					synchronized (toneGeneratorLock) {
-						if (toneGenerator == null) {
-							return;
-						}
-						toneGenerator.startTone(tone);
-						
-						//TODO : see if it could not be factorized
-						toneTimer.schedule(new StopTimerTask(), TONE_LENGTH_MS);
-					}					
+				    ThreadedTonePlay threadedTone = new ThreadedTonePlay(tone);
+				    threadedTone.start();
+				    toneTimer.schedule(new StopTimerTask(), TONE_LENGTH_MS);
 				}
 				break;
 			case AudioManager.RINGER_MODE_VIBRATE:
-				if (dialPressVibrate) vibrator.vibrate(HAPTIC_LENGTH_MS);
+				if (dialPressVibrate) {
+				    vibrator.vibrate(HAPTIC_LENGTH_MS);
+				}
 				break;
 			case AudioManager.RINGER_MODE_SILENT:
 				break;
@@ -160,6 +158,24 @@ public class DialingFeedback {
 		if (dialPressVibrate && ringerMode != AudioManager.RINGER_MODE_SILENT) {
 			vibrator.vibrate(HAPTIC_LENGTH_MS);
 		}
+	}
+	
+	class ThreadedTonePlay extends Thread {
+	    private final int tone;
+        
+	    ThreadedTonePlay(int t){
+	        tone = t;
+	    }
+	    
+	    @Override
+	    public void run() {
+            synchronized (toneGeneratorLock) {
+                if (toneGenerator == null) {
+                    return;
+                }
+                toneGenerator.startTone(tone);
+            }
+	    }
 	}
 	
 	class StopTimerTask extends TimerTask{
