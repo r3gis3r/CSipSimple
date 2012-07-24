@@ -27,6 +27,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -62,6 +63,8 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
 
     public EditSipUri(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setGravity(Gravity.CENTER_HORIZONTAL);
+        setOrientation(VERTICAL);
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.edit_sip_uri, this, true);
 

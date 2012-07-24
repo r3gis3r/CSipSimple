@@ -4,8 +4,13 @@
     <com.csipsimple.widgets.Dialpad
         android:id="@+id/dialPad"
         android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="@integer/dialpad_layout_weight_dialpad" />
+        android:layout_height="0dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="@integer/dialpad_layout_weight_dialpad"
+        android:background="@drawable/dialpad_background"
+        android:paddingBottom="10dip"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip" />
 
     <View
         android:layout_width="match_parent"

@@ -29,6 +29,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -96,13 +97,22 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
     public AccountChooserButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         telCmp = new ComponentName(getContext(), com.csipsimple.plugins.telephony.CallHandler.class);
+        
+        // UI management
+        setClickable(true);
+        setFocusable(true);
+        setBackgroundResource(R.drawable.abs__spinner_ab_holo_dark);
+        setOrientation(VERTICAL);
+        setPadding(6, 0, 6, 0);
+        setGravity(Gravity.CENTER);
+        // Inflate sub views
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.account_chooser_button, this, true);
-        LinearLayout root = (LinearLayout) findViewById(R.id.quickaction_button);
-        root.setOnClickListener(this);
-
+        setOnClickListener(this);
         textView = (TextView) findViewById(R.id.quickaction_text);
         imageView = (ImageView) findViewById(R.id.quickaction_icon);
+        
+        // Init accounts
         setAccount(null);
     }
     
@@ -177,8 +187,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         Rect r = new Rect(xy[0], xy[1], xy[0] + v.getWidth(), xy[1] + v.getHeight());
 
         if (quickAction == null) {
-            LinearLayout root = (LinearLayout) findViewById(R.id.quickaction_button);
-            quickAction = new HorizontalQuickActionWindow(getContext(), root);
+            quickAction = new HorizontalQuickActionWindow(getContext(), this);
         }
 
         quickAction.setAnchor(r);

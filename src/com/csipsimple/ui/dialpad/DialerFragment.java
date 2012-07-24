@@ -138,9 +138,6 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     private Dialpad dialPad;
 
     private PreferencesWrapper prefsWrapper;
-    // private TextView domainTextHelper;
-
-    /* private EditSipUri sipTextUri; */
     private AlertDialog missingVoicemailDialog;
 
     // Auto completion for text mode
@@ -156,7 +153,6 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
     private DialerLayout dialerLayout;
 
-    // private ImageButton backFlipTextDialerButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

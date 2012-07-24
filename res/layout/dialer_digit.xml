@@ -30,8 +30,6 @@
     android:paddingBottom="@dimen/right_panel_margin_vertical"
     android:paddingTop="@dimen/right_panel_margin_vertical" >
 
-    <!-- android:background="@drawable/btn_dial_textfield" -->
-
     <RelativeLayout
         android:id="@+id/topField"
         android:layout_width="fill_parent"

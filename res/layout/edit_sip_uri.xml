@@ -20,18 +20,13 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:orientation="vertical" >
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <LinearLayout
         android:id="@+id/topFieldText"
         android:layout_width="fill_parent"
         android:layout_height="60dip"
         android:layout_marginBottom="10dip"
-        android:background="@drawable/btn_dial_textfield"
         android:orientation="horizontal"
         android:padding="0dip" >
 
@@ -71,4 +66,4 @@
         android:layout_height="fill_parent"
         android:fastScrollEnabled="true" />
 
-</LinearLayout>
+</merge>
