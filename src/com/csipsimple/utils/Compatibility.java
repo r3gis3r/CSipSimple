@@ -448,6 +448,12 @@ public final class Compatibility {
             preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS, false);
         }
         
+        preferencesWrapper
+                .setPreferenceStringValue(
+                        SipConfigManager.AUDIO_IMPLEMENTATION,
+                        Integer.toString(Compatibility.isCompatible(11) ? SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES
+                                : SipConfigManager.AUDIO_IMPLEMENTATION_JAVA));
+        
         preferencesWrapper.endEditing();
     }
 
@@ -668,13 +674,6 @@ public final class Compatibility {
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "240");
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "240");
         }
-        if (lastSeenVersion < 1546 && android.os.Build.DEVICE.equalsIgnoreCase("joe")) {
-            prefWrapper
-                    .setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
-            prefWrapper
-                    .setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
-
-        }
         if (lastSeenVersion < 1581 && needWebRTCImplementation()) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
                     needWebRTCImplementation());
@@ -688,15 +687,25 @@ public final class Compatibility {
         if(lastSeenVersion < 1653 && !PhoneCapabilityTester.isPhone(prefWrapper.getContext())) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, true);
         }
-        if(lastSeenVersion < 1671 &&
-                (android.os.Build.DEVICE.toUpperCase().startsWith("GT-S") || android.os.Build.PRODUCT.equalsIgnoreCase("U8655") )) {
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API, shouldUseModeApi());
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API, shouldUseRoutingApi());
-        }
         if(lastSeenVersion < 1688) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
         }
-        
+        if (lastSeenVersion < 1729) {
+            prefWrapper
+                    .setPreferenceStringValue(
+                            SipConfigManager.AUDIO_IMPLEMENTATION,
+                            Integer.toString(Compatibility.isCompatible(11) ? SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES
+                                    : SipConfigManager.AUDIO_IMPLEMENTATION_JAVA));
+            // Audio routing/mode api
+            if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-S")
+                    || android.os.Build.PRODUCT.equalsIgnoreCase("U8655")
+                    || android.os.Build.DEVICE.equalsIgnoreCase("joe")) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                        shouldUseModeApi());
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API,
+                        shouldUseRoutingApi());
+            }
+        }
         prefWrapper.endEditing();
     }
 
