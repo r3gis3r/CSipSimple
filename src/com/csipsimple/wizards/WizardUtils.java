@@ -694,6 +694,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_blicnet, 19, 
                     new Locale[] {locale("bs") , new Locale("sr"), new Locale("hr")}, false, false, 
                     Blicnet.class));
+            WIZARDS_DICT.put("MEGAVOIP", new WizardInfo("MEGAVOIP", "Megavoip Telecom", 
+                    R.drawable.ic_wizard_megavoip, 12, 
+                    new Locale[] {new Locale("PT", "br")}, false, false, 
+                    MegaVoip.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
