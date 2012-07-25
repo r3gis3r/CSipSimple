@@ -864,7 +864,6 @@ public class SipService extends Service {
 	
 	
 
-	private Handler mHandler = new Handler();
 	private AccountStatusContentObserver statusObserver = null;
 
     public PresenceManager presenceMgr;
@@ -1024,7 +1023,7 @@ public class SipService extends Service {
 		}
 		// Content observer
 		if(statusObserver == null) {
-        	statusObserver = new AccountStatusContentObserver(mHandler);
+        	statusObserver = new AccountStatusContentObserver(serviceHandler);
     		getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI, true, statusObserver);
 		}
 		
@@ -1077,6 +1076,7 @@ public class SipService extends Service {
 		
         // Check connectivity, else just finish itself
         if (!isConnectivityValid()) {
+            notifyUserOfMessage(R.string.connection_not_valid);
             Log.d(THIS_FILE, "Harakiri... we are not needed since no way to use self");
             cleanStop();
             return;
@@ -1551,15 +1551,26 @@ public class SipService extends Service {
 
 	private static final int TOAST_MESSAGE = 0;
 
-	private Handler serviceHandler = new Handler() {
-		@Override
+	private Handler serviceHandler = new ServiceHandler(this);
+	        
+	private static class ServiceHandler extends Handler {
+	    WeakReference<SipService> s;
+		public ServiceHandler(SipService sipService) {
+		    s = new WeakReference<SipService>(sipService);
+        }
+
+        @Override
 		public void handleMessage(Message msg) {
-			
+            super.handleMessage(msg);
+            SipService sipService = s.get();
+            if(sipService == null) {
+                return;
+            }
 			if (msg.what == TOAST_MESSAGE) {
 				if (msg.arg1 != 0) {
-					Toast.makeText(SipService.this, msg.arg1, Toast.LENGTH_LONG).show();
+					Toast.makeText(sipService, msg.arg1, Toast.LENGTH_LONG).show();
 				} else {
-					Toast.makeText(SipService.this, (String) msg.obj, Toast.LENGTH_LONG).show();
+					Toast.makeText(sipService, (String) msg.obj, Toast.LENGTH_LONG).show();
 				}
 			}
 		}

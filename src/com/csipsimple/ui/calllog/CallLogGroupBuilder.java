@@ -132,7 +132,7 @@ public class CallLogGroupBuilder {
 //            return compareSipAddresses(number1, number2);
 //        } else {
         // Optim -- first try to compare very simply
-        if(number1.equals(number2)) {
+        if(number1 != null && number2 != null && number1.equals(number2)) {
             return true;
         }
         return PhoneNumberUtils.compare(number1, number2);
