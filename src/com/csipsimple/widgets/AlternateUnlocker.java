@@ -51,7 +51,7 @@ public class AlternateUnlocker extends LinearLayout implements IOnLeftRightProvi
 	}
 	
 	public AlternateUnlocker(Context context, AttributeSet attrs, int style) {
-	    super(context, attrs, style);
+	    super(context, attrs);
 	    setOrientation(HORIZONTAL);
 
         LayoutInflater inflater = LayoutInflater.from(context);
