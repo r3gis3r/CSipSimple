@@ -80,6 +80,16 @@ public class MegaVoip extends SimpleImplementation {
         prefs.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_NB, "0");
         prefs.setCodecPriority("G726-40/8000/1", SipConfigManager.CODEC_NB, "0");
         prefs.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "0");
+        
+        // access
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_WIFI_IN, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_WIFI_OUT, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_3G_IN, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_3G_OUT, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_GPRS_IN, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_GPRS_OUT, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_EDGE_IN, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.USE_EDGE_OUT, true);
 	}
 	
 
