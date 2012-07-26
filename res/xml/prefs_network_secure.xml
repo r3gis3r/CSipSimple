@@ -70,6 +70,7 @@
             android:defaultValue=""
             android:dependency="enable_tls"
             android:key="tls_password"
+            android:password="true"
             android:summary="@string/tls_password_desc"
             android:title="@string/tls_password" />
 

@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/call_card_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:padding="2dip"
     tools:ignore="Overdraw" >
 
-    <ImageView
+    <com.csipsimple.widgets.MaxScaleImageView
         android:id="@+id/contact_photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -125,8 +125,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="2dip"
         android:background="@drawable/end_call_background"
-        android:maxHeight="256dip"
-        android:minHeight="64dip"
         android:orientation="horizontal" >
 
         <ImageButton
@@ -135,6 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/done"
+            android:minHeight="64dip"
             android:src="@drawable/ic_end_call" />
     </LinearLayout>
 

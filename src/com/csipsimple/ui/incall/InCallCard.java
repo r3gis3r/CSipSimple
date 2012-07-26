@@ -35,7 +35,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,7 +83,6 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
 
     private ActionMenuPresenter mActionMenuPresenter;
 
-
     
 
     public InCallCard(Context context, AttributeSet attrs) {
@@ -108,25 +106,33 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         endCallBar = (ViewGroup) findViewById(R.id.end_call_bar);
 
 
-        ImageButton btn;
-        btn = (ImageButton) findViewById(R.id.endButton);
+        View btn;
+        btn = findViewById(R.id.endButton);
         btn.setOnClickListener(this);
-        
-        ViewGroup menuViewWrapper = (ViewGroup) findViewById(R.id.call_action_bar);
-        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
 
-        mActionMenuPresenter = new ActionMenuPresenter(getContext());
-        mActionMenuPresenter.setReserveOverflow(true);
         btnMenuBuilder = new MenuBuilder(getContext());
         btnMenuBuilder.setCallback(this);
         MenuInflater inflater = new MenuInflater(getContext());
         inflater.inflate(R.menu.in_call_card_menu, btnMenuBuilder);
+        
+        mActionMenuPresenter = new ActionMenuPresenter(getContext());
+        mActionMenuPresenter.setReserveOverflow(true);
+        
         btnMenuBuilder.addMenuPresenter(mActionMenuPresenter);
+        
+        updateMenuView();
+    }
+    
+    private void updateMenuView() {
+        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        ViewGroup menuViewWrapper = (ViewGroup) findViewById(R.id.call_action_bar);
+        
+        menuViewWrapper.removeAllViews();
+        mActionMenuPresenter.setWidthLimit(getWidth(), true);
         ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(menuViewWrapper);
         menuView.setBackgroundDrawable(null);
         menuViewWrapper.addView(menuView, layoutParams);
-        
     }
 
     public synchronized void setCallState(SipCallSession aCallInfo) {
@@ -185,21 +191,25 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
     }
     
     /* We accept height twice than width */
-    private float minRatio = 0.5f;
+    private static float minRatio = 0.5f;
     /* We accept width 1/4 bigger than height */ 
-    private float maxRatio = 1.25f;
+    private static float maxRatio = 1.25f;
+    
+    private static float minButtonRation = 0.75f;
     
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        
         if(changed) {
             float w = right - left;
             float h = bottom - top;
             if(w > 0 && h > 0) {
                 float currentRatio = w/h;
                 float newWidth = w;
+                float newHeight = h;
                 Log.d(THIS_FILE, "Current ratio is " + currentRatio);
                 if(currentRatio < minRatio) {
-                    float newHeight = w / minRatio;
+                    newHeight = w / minRatio;
                     int padding = (int) FloatMath.floor((h - newHeight) /2);
                     setPadding(0, padding, 0, padding);
                 }else if(currentRatio > maxRatio) {
@@ -209,14 +219,20 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 }else {
                     setPadding(0, 0, 0, 0);
                 }
-                mActionMenuPresenter.setWidthLimit((int) newWidth, true);
-                mActionMenuPresenter.initForMenu(getContext(), btnMenuBuilder);
-                /*
-                mActionMenuPresenter.setItemLimit(1);
-                mActionMenuPresenter.flagActionItems();
-                */
+
+                View v = findViewById(R.id.end_call_bar);
+                ViewGroup.LayoutParams lp = v.getLayoutParams();
+                if(currentRatio < minButtonRation) {
+                    lp.height = (int) ((1.0f - minButtonRation) * newHeight); 
+                }else {
+                    lp.height = ViewGroup.LayoutParams.WRAP_CONTENT; 
+                }
+                v.setLayoutParams(lp);
+                
+                updateMenuView();
             }
         }
+        
         super.onLayout(changed, left, top, right, bottom);
     }
 
@@ -404,7 +420,9 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         InCallCard target;
     }
 
-    private final static Handler userHandler = new Handler() {
+    private final static Handler userHandler = new ContactLoadedHandler();
+    
+    private static class ContactLoadedHandler extends Handler {
 
         @Override
         public void handleMessage(Message msg) {
@@ -414,7 +432,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                     // Flag we'd like high res loading
                     lci.callerInfo.contactContentUri = lci.callerInfo.contactContentUri.buildUpon().appendQueryParameter(ContactsAsyncHelper.HIGH_RES_URI_PARAM, "1").build();
                 }
-                ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(lci.target.getContext(),
+                ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(
+                        lci.target.getContext(),
                         lci.target.photo,
                         lci.callerInfo,
                         R.drawable.ic_contact_picture_180_holo_light);
@@ -422,11 +441,12 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 lci.target.photo.setContentDescription(lci.callerInfo.name);
             }
 
-        };
+        }
     };
 
     private IOnCallActionTrigger onTriggerListener;
     private OnBadgeTouchListener dragListener;
+    
 
     /*
      * Registers a callback to be invoked when the user triggers an event.
