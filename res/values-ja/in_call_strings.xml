@@ -21,5 +21,8 @@
   <string name="stop_recording">録音停止</string>
   <string name="xfer">転送</string>
   <string name="hold_call">保留</string>
+  <string name="on_hold">保留</string>
+  <string name="resume_call">再開</string>
   <string name="transfer_call">転送</string>
+  <string name="send_dtmf">DTMF送信</string>
 </resources>
