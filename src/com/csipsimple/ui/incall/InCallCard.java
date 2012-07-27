@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.actionbarsherlock.internal.view.menu.ActionMenuPresenter;
 import com.actionbarsherlock.internal.view.menu.ActionMenuView;
 import com.actionbarsherlock.internal.view.menu.MenuBuilder;
@@ -72,6 +73,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
     private boolean cachedCanRecord = false;
     private boolean cachedIsRecording = false;
     private boolean cachedIsHold = false;
+    private boolean cachedVideo = false;
     private ImageView photo;
     private TextView remoteName, remoteSipAddress, callStatusText, callSecureText;
     private ViewGroup callSecureBar;
@@ -80,8 +82,12 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
     private PreferencesProviderWrapper prefs;
     private ViewGroup endCallBar;
     private MenuBuilder btnMenuBuilder;
+    private boolean hasVideo = false;
+    private boolean canVideo = false;
 
     private ActionMenuPresenter mActionMenuPresenter;
+
+    
 
     
 
@@ -91,7 +97,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         inflater.inflate(R.layout.in_call_card, this, true);
 
         prefs = new PreferencesProviderWrapper(context);
-        
+        canVideo = prefs.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO);
         initControllerView();
     }
 
@@ -131,7 +137,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         menuViewWrapper.removeAllViews();
         mActionMenuPresenter.setWidthLimit(getWidth(), true);
         ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(menuViewWrapper);
-        menuView.setBackgroundDrawable(null);
+        UtilityWrapper.getInstance().setBackgroundDrawable(menuView, null);
         menuViewWrapper.addView(menuView, layoutParams);
     }
 
@@ -153,10 +159,11 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         cachedCanRecord = callInfo.canRecord();
         cachedIsRecording = callInfo.isRecording();
         cachedIsHold = callInfo.isLocalHeld();
+        cachedVideo = callInfo.mediaHasVideo();
         
         // VIDEO STUFF -- EXPERIMENTAL
-        if(prefs.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
-            if (callInfo.getCallId() >= 0 && callInfo.mediaHasVideo()) {
+        if(canVideo) {
+            if (callInfo.getCallId() >= 0 && cachedVideo) {
                 if (renderView == null) {
                     renderView = ViERenderer.CreateRenderer(getContext(), true);
                     photo.setVisibility(View.GONE);
@@ -173,12 +180,20 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
 
                     Log.d(THIS_FILE, "Set window...");
                     SipService.setVideoWindow(callInfo.getCallId(), renderView);
+                    
+                    
+                    View v = findViewById(R.id.end_call_bar);
+                    ViewGroup.LayoutParams lp2 = v.getLayoutParams();
+                    lp2.height = ViewGroup.LayoutParams.WRAP_CONTENT; 
+                    v.setLayoutParams(lp2);
                 }
+                hasVideo = true;
             }else {
                 if(renderView != null) {
                     renderView.setVisibility(View.GONE);
                     photo.setVisibility(View.VISIBLE);
                 }
+                hasVideo = false;
             }
         }
         // End of video stuff
@@ -222,7 +237,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
 
                 View v = findViewById(R.id.end_call_bar);
                 ViewGroup.LayoutParams lp = v.getLayoutParams();
-                if(currentRatio < minButtonRation) {
+                if(currentRatio < minButtonRation && !hasVideo) {
                     lp.height = (int) ((1.0f - minButtonRation) * newHeight); 
                 }else {
                     lp.height = ViewGroup.LayoutParams.WRAP_CONTENT; 
@@ -243,7 +258,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 cachedMediaState == callInfo.getMediaStatus() &&
                 cachedIsRecording == callInfo.isRecording() &&
                 cachedCanRecord == callInfo.canRecord() &&
-                cachedIsHold == callInfo.isLocalHeld()) {
+                cachedIsHold == callInfo.isLocalHeld() &&
+                cachedVideo  == callInfo.mediaHasVideo()) {
             Log.w(THIS_FILE, "Nothing changed, ignore this update");
             return;
         }
@@ -255,6 +271,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         btnMenuBuilder.findItem(R.id.clearCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.holdCallButton).setVisible(active)
                 .setTitle(callInfo.isLocalHeld() ? R.string.resume_call : R.string.hold_call);
+        btnMenuBuilder.findItem(R.id.videoCallButton).setVisible(active && canVideo && !callInfo.mediaHasVideo());
         active = !callInfo.isAfterEnded();
         btnMenuBuilder.findItem(R.id.detailedDisplayCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.dtmfCallButton).setVisible(active);
@@ -267,7 +284,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         }
         btnMenuBuilder.findItem(R.id.recordCallButton).setVisible(active).setTitle(
                 callInfo.isRecording() ? R.string.stop_recording : R.string.record);
-
+        
     }
 
     /**
@@ -528,6 +545,9 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             return true;
         }else if(itemId == R.id.dtmfCallButton) {
             dispatchTriggerEvent(IOnCallActionTrigger.DTMF_DISPLAY);
+            return true;
+        }else if(itemId == R.id.videoCallButton) {
+            dispatchTriggerEvent(callInfo.mediaHasVideo() ? IOnCallActionTrigger.STOP_VIDEO : IOnCallActionTrigger.START_VIDEO);
             return true;
         }
         return false;

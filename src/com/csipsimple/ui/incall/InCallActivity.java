@@ -46,7 +46,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
-import android.view.Gravity;
+import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -54,7 +54,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.csipsimple.R;
@@ -80,13 +80,12 @@ import com.csipsimple.widgets.ScreenLocker;
 
 import org.webrtc.videoengine.ViERenderer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class InCallActivity extends SherlockFragmentActivity implements IOnCallActionTrigger, 
         IOnLeftRightChoice, ProximityDirector, OnDtmfListener {
+    private static final int QUIT_DELAY = 3000;
     private final static String THIS_FILE = "InCallActivity";
     private final static int DRAGGING_DELAY = 150;
     
@@ -163,22 +162,26 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         
         
         takeKeyEvents(true);
-
-        // remoteContact = (TextView) findViewById(R.id.remoteContact);
+        
+        // Cache findViews
         mainFrame = (ViewGroup) findViewById(R.id.mainFrame);
         inCallControls = (InCallControls) findViewById(R.id.inCallControls);
-        inCallControls.setOnTriggerListener(this);
         inCallAnswerControls = (InCallAnswerControls) findViewById(R.id.inCallAnswerControls);
+        activeCallsGrid = (InCallInfoGrid) findViewById(R.id.activeCallsGrid);
+        heldCallsGrid = (InCallInfoGrid) findViewById(R.id.heldCallsGrid);
+
+        // Bind
+        attachVideoPreview();
+
+        inCallControls.setOnTriggerListener(this);
         inCallAnswerControls.setOnTriggerListener(this);
 
-        activeCallsGrid = (InCallInfoGrid) findViewById(R.id.activeCallsGrid);
         if(activeCallsAdapter == null) {
             activeCallsAdapter = new CallsAdapter(true);
         }
         activeCallsGrid.setAdapter(activeCallsAdapter);
         
 
-        heldCallsGrid = (InCallInfoGrid) findViewById(R.id.heldCallsGrid);
         if(heldCallsAdapter == null) {
             heldCallsAdapter = new CallsAdapter(false);
         }
@@ -221,7 +224,6 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             quitTimer = new Timer("Quit-timer");
         }
 
-        attachVideoPreview();
         
         useAutoDetectSpeaker = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.AUTO_DETECT_SPEAKER);
         
@@ -323,17 +325,22 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             if(cameraPreview == null) {
                 Log.d(THIS_FILE, "Create Local Renderer");
                 cameraPreview = ViERenderer.CreateLocalRenderer(this);
-                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(100, 100);
-                lp.gravity = Gravity.TOP | Gravity.LEFT;
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(100, 100);
+                lp.leftMargin = 2;
+                lp.topMargin= 4;
+                lp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
                 cameraPreview.setVisibility(View.GONE);
                 // TODO
                 mainFrame.addView(cameraPreview, lp);
-
-                videoWakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "com.csipsimple.videoCall");
-                videoWakeLock.setReferenceCounted(false);
+                
                 
             }else {
                 Log.d(THIS_FILE, "NO NEED TO Create Local Renderer");
+            }
+            
+            if(videoWakeLock == null) {
+                videoWakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "com.csipsimple.videoCall");
+                videoWakeLock.setReferenceCounted(false);
             }
         }
 
@@ -345,6 +352,10 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
     private void detachVideoPreview() {
         if(mainFrame != null && cameraPreview != null) {
             mainFrame.removeView(cameraPreview);
+        }
+
+        if(videoWakeLock != null && videoWakeLock.isHeld()) {
+            videoWakeLock.release();
         }
         cameraPreview = null;
     }
@@ -646,7 +657,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
 
         Log.d(THIS_FILE, "Start quit timer");
         if (quitTimer != null) {
-            quitTimer.schedule(new QuitTimerTask(), 3000);
+            quitTimer.schedule(new QuitTimerTask(), QUIT_DELAY);
         } else {
             finish();
         }
@@ -825,7 +836,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         if (whichAction == TAKE_CALL || whichAction == DECLINE_CALL ||
             whichAction == CLEAR_CALL || whichAction == DETAILED_DISPLAY || 
             whichAction == TOGGLE_HOLD || whichAction == START_RECORDING ||
-            whichAction == STOP_RECORDING || whichAction == DTMF_DISPLAY ) {
+            whichAction == STOP_RECORDING || whichAction == DTMF_DISPLAY ||
+            whichAction == START_VIDEO || whichAction == STOP_VIDEO ) {
             // We check that current call is valid for any actions
             if (call == null) {
                 Log.e(THIS_FILE, "Try to do an action on a null call !!!");
@@ -971,7 +983,15 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     }
                     break;
                 }
-                    
+                case START_VIDEO :
+                case STOP_VIDEO : {
+                    if(service != null) {
+                        Bundle opts = new Bundle();
+                        opts.putBoolean(SipCallSession.OPT_CALL_VIDEO, whichAction == START_VIDEO);
+                        service.updateCallOptions(call.getCallId(), opts);
+                    }
+                    break;
+                }
             }
         } catch (RemoteException e) {
             Log.e(THIS_FILE, "Was not able to call service method", e);
@@ -1320,7 +1340,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         
         private boolean mActiveCalls;
         
-        private List<Integer> seenConnected = new ArrayList<Integer>();
+        private SparseArray<Long> seenConnected = new SparseArray<Long>();
         
         public CallsAdapter(boolean notOnHold) {
             mActiveCalls = notOnHold;
@@ -1335,14 +1355,17 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 holdStateOk = true;
             }
             if(holdStateOk) {
+                long currentTime = System.currentTimeMillis();
                 if(call.isAfterEnded()) {
                     // Only valid if we already seen this call in this adapter to be valid
-                    if(seenConnected.contains(Integer.valueOf(call.getCallId()))) {
+                    if(seenConnected.get(call.getCallId(), currentTime + 2 * QUIT_DELAY) < currentTime + QUIT_DELAY) {
                         return true;
+                    }else {
+                        seenConnected.delete(call.getCallId());
+                        return false;
                     }
-                    return false;
                 }else {
-                    seenConnected.add(call.getCallId());
+                    seenConnected.put(call.getCallId(), currentTime);
                     return true;
                 }
             }

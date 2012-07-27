@@ -38,6 +38,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.View;
 
+import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 
@@ -131,7 +132,7 @@ public class Theme {
 	public void applyBackgroundDrawable(View button, String res) {
 		Drawable d = getDrawableResource(res);
 		if(d != null) {
-			button.setBackgroundDrawable(d);
+		    UtilityWrapper.getInstance().setBackgroundDrawable(button, d);
 		}
 	}
 	

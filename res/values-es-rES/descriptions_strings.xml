@@ -64,6 +64,10 @@
 
          Used by AccessibilityService to announce the purpose of the button.-->
   <string name="description_dial_button">dial</string>
+  <!--String describing the Dial Video ImageButton
+
+         Used by AccessibilityService to announce the purpose of the button.-->
+  <string name="description_dial_video_button">Videollamada</string>
   <!--String describing the Delete/Backspace ImageButton
 
          Used by AccessibilityService to announce the purpose of the button.-->

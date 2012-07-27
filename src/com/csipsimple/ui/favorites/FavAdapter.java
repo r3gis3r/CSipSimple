@@ -39,6 +39,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.actionbarsherlock.internal.view.menu.ActionMenuPresenter;
 import com.actionbarsherlock.internal.view.menu.ActionMenuView;
 import com.actionbarsherlock.internal.view.menu.MenuBuilder;
@@ -113,7 +114,7 @@ public class FavAdapter extends ResourceCursorAdapter {
                 
                 menuBuilder.addMenuPresenter(mActionMenuPresenter);
                 ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(menuViewWrapper);
-                menuView.setBackgroundDrawable(null);
+                UtilityWrapper.getInstance().setBackgroundDrawable(menuView, null);
                 menuViewWrapper.addView(menuView, layoutParams);
                 menuViewWrapper.setTag(menuBuilder);
             }else {

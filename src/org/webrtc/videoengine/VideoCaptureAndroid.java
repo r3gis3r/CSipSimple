@@ -251,5 +251,6 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
         Log.d(TAG, "VideoCaptureAndroid::surfaceDestroyed");
         isSurfaceReady = false;
         surfaceHolder = null;
+        StopCapture();
     }
 }

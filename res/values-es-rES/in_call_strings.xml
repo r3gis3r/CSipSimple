@@ -21,5 +21,8 @@
   <string name="stop_recording">Detener la grabación</string>
   <string name="xfer">Transferir</string>
   <string name="hold_call">Retener</string>
+  <string name="on_hold">En espera</string>
+  <string name="resume_call">Reanudar</string>
   <string name="transfer_call">Transferir</string>
+  <string name="send_dtmf">Enviar DTMF</string>
 </resources>

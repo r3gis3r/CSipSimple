@@ -74,6 +74,7 @@ import org.pjsip.pjsua.pjsua_acc_info;
 import org.pjsip.pjsua.pjsua_buddy_config;
 import org.pjsip.pjsua.pjsua_call_flag;
 import org.pjsip.pjsua.pjsua_call_setting;
+import org.pjsip.pjsua.pjsua_call_vid_strm_op;
 import org.pjsip.pjsua.pjsua_config;
 import org.pjsip.pjsua.pjsua_logging_config;
 import org.pjsip.pjsua.pjsua_media_config;
@@ -85,9 +86,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Map.Entry;
 
 public class PjSipService {
     private static final String THIS_FILE = "PjService";
@@ -970,7 +971,7 @@ public class PjSipService {
                                     "-1");
                             buffCodecLog(videoSb, codec, aPrio);
                             if (aPrio >= 0) {
-                                pjsua.codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
+                                pjsua.vid_codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
                             }
                         }
                         // H264 preferences
@@ -1082,6 +1083,28 @@ public class PjSipService {
             service.notifyUserOfMessage(service.getString(R.string.invalid_sip_uri) + " : "
                     + callee);
         }
+        return -1;
+    }
+    
+    public int updateCallOptions(int callId, Bundle options) {
+        // TODO : if more options we should redesign this part.
+        if(options.containsKey(SipCallSession.OPT_CALL_VIDEO)) {
+            boolean add = options.getBoolean(SipCallSession.OPT_CALL_VIDEO);
+            SipCallSession ci = getCallInfo(callId);
+            if(add && ci.mediaHasVideo()) {
+                // We already have one video running -- refuse to send another
+                return -1;
+            }else if (!add && !ci.mediaHasVideo()) {
+                // We have no current video, no way to remove.
+                return -1;
+            }
+            pjsua_call_vid_strm_op op = add ? pjsua_call_vid_strm_op.PJSUA_CALL_VID_STRM_ADD : pjsua_call_vid_strm_op.PJSUA_CALL_VID_STRM_REMOVE;
+            if(!add) {
+                // TODO : manage remove case
+            }
+            return pjsua.call_set_vid_strm(callId, op, null);
+        }
+        
         return -1;
     }
 

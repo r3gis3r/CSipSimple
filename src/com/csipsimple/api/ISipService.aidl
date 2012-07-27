@@ -203,4 +203,7 @@ interface ISipService{
 	
 	//Secure
 	void zrtpSASVerified(int dataPtr);
+	
+	// Video
+	void updateCallOptions(int callId, in Bundle options);
 }
