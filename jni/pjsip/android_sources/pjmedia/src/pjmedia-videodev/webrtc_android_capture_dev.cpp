@@ -477,6 +477,7 @@ static pj_status_t webrtc_cap_stream_set_cap(pjmedia_vid_dev_stream *s,
 	} else if(cap == PJMEDIA_VID_DEV_CAP_INPUT_PREVIEW){
 		return PJ_SUCCESS;
 	} else if(cap == PJMEDIA_VID_DEV_CAP_OUTPUT_WINDOW){
+		PJ_LOG(4, (THIS_FILE, "Webrtc Capture set window now."));
 		if(pval){
 			// Consider that as the fact window has been set and we could try to re-attach ourself
 			if(!strm->window_available){
@@ -495,7 +496,7 @@ static pj_status_t webrtc_cap_stream_set_cap(pjmedia_vid_dev_stream *s,
 			// We are capturing frames, but previously we had no window
 			// Just start capture now
 			if(strm->capturing){
-				PJ_LOG(4, (THIS_FILE, "We should start capturing right now"));
+				PJ_LOG(4, (THIS_FILE, "We should stop capturing right now"));
 				if(strm->_videoCapture != NULL && strm->_videoCapture->CaptureStarted()){
 					WebRtc_Word32 status;
 					status = strm->_videoCapture->DeRegisterCaptureDataCallback();

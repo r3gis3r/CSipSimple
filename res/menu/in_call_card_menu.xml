@@ -23,11 +23,6 @@
         android:showAsAction="ifRoom"
         android:title="@string/info"/>
     <item
-        android:id="@+id/videoCallButton"
-        android:icon="@drawable/ic_prefs_media_video"
-        android:showAsAction="ifRoom"
-        android:title="@string/video"/>
-    <item
         android:id="@+id/recordCallButton"
         android:showAsAction="never"
         android:title="@string/record"/>
@@ -36,5 +31,10 @@
         android:icon="@drawable/ic_ab_dialpad"
         android:showAsAction="ifRoom"
         android:title="@string/send_dtmf"/>
+    <item
+        android:id="@+id/videoCallButton"
+        android:icon="@drawable/ic_prefs_media_video"
+        android:showAsAction="ifRoom"
+        android:title="@string/video"/>
 
 </menu>
