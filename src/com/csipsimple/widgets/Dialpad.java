@@ -138,6 +138,19 @@ public class Dialpad extends TableLayout implements OnClickListener {
 		
 	}
 	
+	boolean mForceWidth = false;
+	public void setForceWidth(boolean forceWidth) {
+	    mForceWidth = forceWidth;
+	}
+	
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	    if(mForceWidth) {
+	        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), getMeasuredHeight());
+	    }
+	};
+    
+	
 
 	public void applyTheme(Theme t) {
 	    /*

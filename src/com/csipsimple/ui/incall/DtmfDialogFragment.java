@@ -75,6 +75,7 @@ public class DtmfDialogFragment extends SherlockDialogFragment implements OnDial
         View v = inflater.inflate(R.layout.in_call_dialpad, container, false);
 
         Dialpad dialPad = (Dialpad) v.findViewById(R.id.dialPad);
+        dialPad.setForceWidth(true);
         dialPad.setOnDialKeyListener(this);
         dialPadTextView = (TextView) v.findViewById(R.id.digitsText);
         return v;

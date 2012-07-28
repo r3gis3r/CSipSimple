@@ -54,7 +54,6 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.service.SipService;
-import com.csipsimple.ui.incall.InCallActivity.OnBadgeTouchListener;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
@@ -129,16 +128,27 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         updateMenuView();
     }
     
+    private boolean added = false;
     private void updateMenuView() {
-        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        ViewGroup menuViewWrapper = (ViewGroup) findViewById(R.id.call_action_bar);
-        
-        menuViewWrapper.removeAllViews();
-        mActionMenuPresenter.setWidthLimit(getWidth(), true);
-        ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(menuViewWrapper);
-        UtilityWrapper.getInstance().setBackgroundDrawable(menuView, null);
-        menuViewWrapper.addView(menuView, layoutParams);
+        int w = getWidth();
+        if(w <= 0) {
+            w = getResources().getDisplayMetrics().widthPixels;
+        }
+        if(!added) {
+            final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            ViewGroup menuViewWrapper = (ViewGroup) findViewById(R.id.call_action_bar);
+            mActionMenuPresenter.setWidthLimit(w, true);
+            // Use width limit (this means we don't care item limits 
+            mActionMenuPresenter.setItemLimit(20);
+            ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(menuViewWrapper);
+            UtilityWrapper.getInstance().setBackgroundDrawable(menuView, null);
+            menuViewWrapper.addView(menuView, layoutParams);
+            added = true;
+        }else {
+            mActionMenuPresenter.setWidthLimit(w, true);
+            mActionMenuPresenter.updateMenuView(true);
+        }
     }
 
     public synchronized void setCallState(SipCallSession aCallInfo) {
@@ -199,10 +209,11 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         // End of video stuff
         
         //requestLayout();
-        
+        /*
         if(dragListener != null) {
             dragListener.setCallState(callInfo);
         }
+        */
     }
     
     /* We accept height twice than width */
@@ -234,7 +245,6 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 }else {
                     setPadding(0, 0, 0, 0);
                 }
-
                 View v = findViewById(R.id.end_call_bar);
                 ViewGroup.LayoutParams lp = v.getLayoutParams();
                 if(currentRatio < minButtonRation && !hasVideo) {
@@ -461,9 +471,15 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         }
     };
 
-    private IOnCallActionTrigger onTriggerListener;
+    /*
     private OnBadgeTouchListener dragListener;
+    public void setOnTouchListener(OnBadgeTouchListener l) {
+        dragListener = l;
+        super.setOnTouchListener(l);
+    }
+    */
     
+    private IOnCallActionTrigger onTriggerListener;
 
     /*
      * Registers a callback to be invoked when the user triggers an event.
@@ -482,10 +498,6 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
     }
     
 
-    public void setOnTouchListener(OnBadgeTouchListener l) {
-        dragListener = l;
-        super.setOnTouchListener(l);
-    }
 
     public void terminate() {
         if(callInfo != null && renderView != null) {

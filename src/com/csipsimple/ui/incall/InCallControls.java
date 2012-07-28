@@ -86,6 +86,8 @@ public class InCallControls extends FrameLayout implements Callback {
         // Full width
         mActionMenuPresenter.setWidthLimit(
                 getContext().getResources().getDisplayMetrics().widthPixels, true);
+        // We use width limit, no need to limit items.
+        mActionMenuPresenter.setItemLimit(20);
         btnMenuBuilder = new MenuBuilder(getContext());
         btnMenuBuilder.setCallback(this);
         MenuInflater inflater = new MenuInflater(getContext());

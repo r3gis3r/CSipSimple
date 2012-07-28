@@ -34,24 +34,20 @@ import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
-import android.os.Vibrator;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 import android.util.SparseArray;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
@@ -87,7 +83,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         IOnLeftRightChoice, ProximityDirector, OnDtmfListener {
     private static final int QUIT_DELAY = 3000;
     private final static String THIS_FILE = "InCallActivity";
-    private final static int DRAGGING_DELAY = 150;
+    //private final static int DRAGGING_DELAY = 150;
     
 
     private Object callMutex = new Object();
@@ -118,7 +114,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
 
     // Dnd views
     //private ImageView endCallTarget, holdTarget, answerTarget, xferTarget;
-    private Rect endCallTargetRect, holdTargetRect, answerTargetRect, xferTargetRect;
+    //private Rect endCallTargetRect, holdTargetRect, answerTargetRect, xferTargetRect;
     
 
     private SurfaceView cameraPreview;
@@ -246,11 +242,12 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
     @Override
     protected void onResume() {
         super.onResume();
-
+        /*
         endCallTargetRect = null;
         holdTargetRect = null;
         answerTargetRect = null;
         xferTargetRect = null;
+        */
         dialFeedback.resume();
         
 
@@ -282,12 +279,13 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             quitTimer.purge();
             quitTimer = null;
         }
-
+        /*
         if (draggingTimer != null) {
             draggingTimer.cancel();
             draggingTimer.purge();
             draggingTimer = null;
         }
+        */
 
         try {
             unbindService(connection);
@@ -615,13 +613,13 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
     }
     
 
+    /*
     private void setSubViewVisibilitySafely(int id, boolean visible) {
         View v = findViewById(id);
         if(v != null) {
             v.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
-    
     private class UpdateDraggingRunnable implements Runnable {
         private DraggingInfo di;
         
@@ -642,7 +640,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             
         }
     }
-
+    */
+    
     private synchronized void delayedQuit() {
 
         if (wakeLock != null && wakeLock.isHeld()) {
@@ -1018,6 +1017,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
 
     }
 
+    /*
     // Drag and drop feature
     private Timer draggingTimer;
 
@@ -1070,14 +1070,14 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     draggingTimer.schedule(draggingDelayTask, DRAGGING_DELAY);
                 case MotionEvent.ACTION_MOVE:
                     if (isDragging) {
-                        /*float size = Math.max(75.0f, event.getSize() + 50.0f);
+                        float size = Math.max(75.0f, event.getSize() + 50.0f);
                         
                         Rect wrap = new Rect(
                                 (int) (X - (size)),
                                 (int) (Y - (size)),
                                 (int) (X + (size / 2.0f)),
                                 (int) (Y + (size / 2.0f)));
-                                */
+                                
                         badge.bringToFront();
                         // Log.d(THIS_FILE, "Is moving to "+X+", "+Y);
                         return true;
@@ -1118,6 +1118,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     badge, call);
             runOnUiThread(new UpdateDraggingRunnable(di));
         }
+        
 
         public void setCallState(SipCallSession callInfo) {
             Log.d(THIS_FILE,
@@ -1161,7 +1162,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         } else if (holdTargetRect != null && holdTargetRect.contains(X, Y)) {
             // check if not drop on held call
             boolean dropOnOtherCall = false;
-            /*
+            
             for (Entry<Integer, InCallInfo> badgeSet : badges.entrySet()) {
                 Log.d(THIS_FILE, "On drop target searching for another badge");
                 int callId = badgeSet.getKey();
@@ -1190,7 +1191,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     }
                 }
             }
-                */
+            
 
             // Drop in hold zone
 
@@ -1228,7 +1229,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             call = aCall;
         }
     }
-
+    */
     
     private class ShowZRTPInfoRunnable implements Runnable, DialogInterface.OnClickListener {
         private String sasString;
