@@ -67,7 +67,7 @@ public class InCallInfoGrid extends FrameLayout {
 
     public void removeViewAt(int position) {
         if(position < 0 || position >= mItems.size()) {
-            Log.w(THIS_FILE, "Trying to remove unknown view at "+ position);
+            Log.w(THIS_FILE, "Trying to remove unknown view at " + position);
         }else {
             final View ii = mItems.get(position);
             if(ii instanceof InCallCard) {
@@ -146,7 +146,7 @@ public class InCallInfoGrid extends FrameLayout {
             
             // TODO : warn - scroll - other?if we are outside bounds with min cell height
             if(cellHeight < minRowHeight) {
-                Log.w(THIS_FILE, "May render weird... min height not correct " + cellHeight);
+                Log.d(THIS_FILE, "May render weird... min height not correct " + cellHeight);
             }
         }
         

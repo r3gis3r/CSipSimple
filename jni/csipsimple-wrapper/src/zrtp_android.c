@@ -129,7 +129,7 @@ static void showMessage(void* data, int32_t sev, int32_t subCode)
         break;
 
     case zrtp_ZrtpError:
-        PJ_LOG(3,(THIS_FILE, "ZRTP Error: severity: %d, subcode: %x", sev, subCode));
+        PJ_LOG(1,(THIS_FILE, "ZRTP Error: severity: %d, subcode: %x", sev, subCode));
         break;
     }
 }

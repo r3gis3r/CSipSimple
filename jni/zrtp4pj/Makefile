@@ -1,5 +1,5 @@
 # This makefile aim is only for now to address source checkout and patch
-zrtp4pj_tag := 1.1.0
+zrtp4pj_tag := 1.1.0_1
 #10fe242813531daa61088af158b8b64c6fbe787e
 
 all :

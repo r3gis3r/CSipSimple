@@ -270,7 +270,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 cachedCanRecord == callInfo.canRecord() &&
                 cachedIsHold == callInfo.isLocalHeld() &&
                 cachedVideo  == callInfo.mediaHasVideo()) {
-            Log.w(THIS_FILE, "Nothing changed, ignore this update");
+            Log.d(THIS_FILE, "Nothing changed, ignore this update");
             return;
         }
         

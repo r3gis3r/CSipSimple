@@ -134,6 +134,7 @@ public class OutgoingAccountsAdapter extends ResourceCursorAdapter {
 
     private static Method setAlphaMethod = null;
     
+    @SuppressWarnings("deprecation")
     private void setRowViewAlpha(View v, float alpha) {
         if(Compatibility.isCompatible(11)) {
             // In honeycomb or upper case, use the new setAlpha method

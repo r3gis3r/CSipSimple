@@ -643,7 +643,7 @@ public class PreferencesWrapper {
 	private final static String CONFIG_FOLDER = "configs";
 	private final static String RECORDS_FOLDER = "records";
 	private final static String LOGS_FOLDER = "logs";
-	private final static String ZRTP_FOLDER = "zrtp";
+	/*private final static String ZRTP_FOLDER = "zrtp";*/
 	 
 	private static File getStorageFolder(Context ctxt, boolean preferCache) {
 		File root = Environment.getExternalStorageDirectory();
@@ -704,7 +704,8 @@ public class PreferencesWrapper {
 	}
 	
 	public static File getZrtpFolder(Context ctxt) {
-		return getSubFolder(ctxt, ZRTP_FOLDER, true);
+	    return ctxt.getFilesDir();
+		/*return getSubFolder(ctxt, ZRTP_FOLDER, true);*/
 	}
 	
 	public static void cleanLogsFiles(Context ctxt) {
