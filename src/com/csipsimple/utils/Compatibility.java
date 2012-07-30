@@ -444,6 +444,12 @@ public final class Compatibility {
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                 isTabletScreen(preferencesWrapper.getContext()));
         
+        boolean usePriviledged = shouldUsePriviledgedIntegration(preferencesWrapper.getContext());
+        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, usePriviledged);
+        if(usePriviledged) {
+            preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, !usePriviledged);
+        }
+        
         if(android.os.Build.PRODUCT.startsWith("GoGear_Connect")) {
             preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS, false);
         }
@@ -679,7 +685,6 @@ public final class Compatibility {
                     needWebRTCImplementation());
         }
         if(lastSeenVersion < 1634) {
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, shouldUsePriviledgedIntegration(prefWrapper.getContext()));
             if(android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i9003")) {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround());
             }
@@ -704,6 +709,13 @@ public final class Compatibility {
                         shouldUseModeApi());
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ROUTING_API,
                         shouldUseRoutingApi());
+            }
+        }
+        if(lastSeenVersion < 1752) {
+            boolean usePriv = shouldUsePriviledgedIntegration(prefWrapper.getContext());
+            if(usePriv) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, usePriv);
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, !usePriv);
             }
         }
         prefWrapper.endEditing();

@@ -102,12 +102,14 @@ public abstract class BaseImplementation implements WizardIface {
     /**
      * @see PreferenceScreen#findPreference(CharSequence)
      */
+    @SuppressWarnings("deprecation")
     protected Preference findPreference(String fieldName) {
         return parent.findPreference(fieldName);
     }
     /**
      * @see PreferenceScreen#addPreference(Preference)
      */
+    @SuppressWarnings("deprecation")
     protected void addPreference(Preference pref) {
         parent.getPreferenceScreen().addPreference(pref);
         markFieldValid(pref);
@@ -118,7 +120,8 @@ public abstract class BaseImplementation implements WizardIface {
      * @param parentGroup key for parent group if any. If null no parent group are searched
      * @param fieldName key for the field to remove
      */
-	protected void hidePreference(String parentGroup, String fieldName) {
+	@SuppressWarnings("deprecation")
+    protected void hidePreference(String parentGroup, String fieldName) {
 		PreferenceScreen pfs = parent.getPreferenceScreen();
 		PreferenceGroup parentPref = pfs; 
 		if (parentGroup != null) {
