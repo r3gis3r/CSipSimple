@@ -123,3 +123,8 @@ file_filter = res/values-<lang>/filters_strings.xml
 source_file = res/values/filters_strings.xml
 source_lang = en
 
+[csipsimple.warn_strings]
+file_filter = res/values-<lang>/warn_strings.xml
+source_file = res/values/warn_strings.xml
+source_lang = en
+
