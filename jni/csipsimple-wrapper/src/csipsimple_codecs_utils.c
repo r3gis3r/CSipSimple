@@ -180,8 +180,8 @@ PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned id,
 	param.enc_fmt.det.vid.fps.num = (fps > 0 ) ? fps : level_info.def_fps;
 	param.enc_fmt.det.vid.fps.denum = 1;
 
-	param.enc_fmt.det.vid.avg_bps = (avg_kbps > 0 && avg_kbps <= level_info.bitrate ) ? avg_kbps * 1000 : level_info.def_bitrate * 1000;
-	param.enc_fmt.det.vid.max_bps = (max_kbps > 0 && max_kbps <= level_info.bitrate) ? max_kbps * 1000 : level_info.def_bitrate * 1000;
+	param.enc_fmt.det.vid.avg_bps = ( avg_kbps > 0 && avg_kbps <= level_info.bitrate ) ? avg_kbps * 1000 : level_info.def_bitrate * 1000;
+	param.enc_fmt.det.vid.max_bps = ( max_kbps > 0 && max_kbps <= level_info.bitrate ) ? max_kbps * 1000 : level_info.def_bitrate * 1000;
 
 	// We expect here to already have fmtp_level_profile_id
 	for (i = 0; i < param.dec_fmtp.cnt; ++i) {

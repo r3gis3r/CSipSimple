@@ -232,13 +232,12 @@ PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id,
 	int i;
 
 	if( !(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls) ){
-		return PJ_ENOTFOUND;
+			return PJ_ENOTFOUND;
 	}
 
 	PJ_LOG(4, (THIS_FILE, "Setup android window for call %d", call_id));
 
 	PJSUA_LOCK();
-
 	// Retrieve the stream
 	if (pjsua_call_has_media(call_id)) {
 		call = &pjsua_var.calls[call_id];
@@ -247,6 +246,7 @@ PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id,
 
 			vid_set_stream_window(call_med, PJMEDIA_DIR_RENDER, window);
 			vid_set_stream_window(call_med, PJMEDIA_DIR_CAPTURE, window);
+			status = PJ_SUCCESS;
 		}
 	}
 
