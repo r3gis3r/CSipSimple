@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="unknown">Nieznany</string>
+  <string name="type_incoming">Przychodzące</string>
+  <string name="type_outgoing">Wychodzące</string>
+  <string name="type_missed">Nieodebrane</string>
+  <string name="callBack">Oddzwoń</string>
+  <string name="callAgain">Ponowne wybieranie</string>
+  <string name="returnCall">Zadzwoń ponownie</string>
+  <string name="call">Zadzwoń</string>
+  <string name="sip_call">Połączenie SIP</string>
+  <string name="no_call_history">Brak historii połączeń</string>
+</resources>
