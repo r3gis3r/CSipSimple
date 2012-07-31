@@ -64,10 +64,13 @@ public class WarningUtils {
         if(prefProviderWrapper.getPreferenceBooleanValue(getIgnoreKey(WARNING_PRIVILEGED_INTENT), false)) {
             return false;
         }
-        if(prefProviderWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, false)) {
+        if(!prefProviderWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, false) ||
+                prefProviderWrapper.getPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, false) ) {
             if(!PhoneCapabilityTester.isPhone(ctxt)) {
-                return false;
+                // It's not a phone... we should be priviledged.
+                return true;
             }
+            // We want to check that other apps are integrated. If so could be misleading for users too.
             List<ResolveInfo> privilegedActs = PhoneCapabilityTester.resolveActivitiesForPriviledgedCall(ctxt);
             if(privilegedActs.size() > 1) {
                 // TODO : should check that default activity is actually gsm one if any

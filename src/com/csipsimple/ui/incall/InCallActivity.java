@@ -323,15 +323,12 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             if(cameraPreview == null) {
                 Log.d(THIS_FILE, "Create Local Renderer");
                 cameraPreview = ViERenderer.CreateLocalRenderer(this);
-                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(100, 100);
-                lp.leftMargin = 2;
-                lp.topMargin= 4;
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(256, 256);
+                //lp.leftMargin = 2;
+                //lp.topMargin= 4;
                 lp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
                 cameraPreview.setVisibility(View.GONE);
-                // TODO
                 mainFrame.addView(cameraPreview, lp);
-                
-                
             }else {
                 Log.d(THIS_FILE, "NO NEED TO Create Local Renderer");
             }
@@ -355,7 +352,10 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         if(videoWakeLock != null && videoWakeLock.isHeld()) {
             videoWakeLock.release();
         }
-        cameraPreview = null;
+        if(cameraPreview != null) {
+            cameraPreview = null;
+        }
+        
     }
 
     @Override

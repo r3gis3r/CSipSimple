@@ -139,7 +139,7 @@ public class InCallInfoGrid extends FrameLayout {
             numColumns = Math.min(possibleColumns, count);
             numRows = count / numColumns;
             
-            Log.d(THIS_FILE, "Render a grid of " + numColumns + " x " + numRows);
+            Log.v(THIS_FILE, "Render a grid of " + numColumns + " x " + numRows);
             
             cellWidth = width / numColumns;
             cellHeight = height / numRows;

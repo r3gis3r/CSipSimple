@@ -343,7 +343,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                         }
                     }
 
-                    if (cv.containsKey(PhoneLookup.PHOTO_ID)) {
+                    if (cv.containsKey(PhoneLookup.PHOTO_ID) && cv.getAsLong(PhoneLookup.PHOTO_ID) != null) {
                         callerInfo.photoId = cv.getAsLong(PhoneLookup.PHOTO_ID);
                     }
 

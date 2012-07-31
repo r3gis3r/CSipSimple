@@ -976,6 +976,7 @@ public class PjSipService {
                         }
                         // H264 preferences
                         //pjsua.codec_h264_set_profile(30, 720, 480, 15, 1024, 2048);
+                        //pjsua.codec_h264_set_profile(30, 1280, 720, 15, 1024, 2048);
                     }
                     
                     Log.d(THIS_FILE, audioSb.toString());

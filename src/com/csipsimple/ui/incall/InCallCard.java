@@ -188,9 +188,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                     renderView.setLayoutParams(lp);
                     container.addView(renderView, 0);
 
-                    Log.d(THIS_FILE, "Set window...");
+                    Log.d(THIS_FILE, "Render window added");
                     SipService.setVideoWindow(callInfo.getCallId(), renderView);
-                    
                     
                     View v = findViewById(R.id.end_call_bar);
                     ViewGroup.LayoutParams lp2 = v.getLayoutParams();
