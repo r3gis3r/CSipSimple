@@ -46,5 +46,7 @@
     <string name="warn_priv_int_description2">Second solution is to make the application integrate the same non clever way than other application.\n
 	    This is an option supported by the application but discouraged because it\'s way less clever and provide a worse user experience.</string>
     <string name="warn_priv_int_register">Use non clever integration</string>
+    <string name="warn_sdcard">Installation on SDCard</string>
+    <string name="warn_sdcard_description">You have configured to be available for incoming call. But you have moved the application to SDCard.\nThis is discouraged, you should leave the application on internal storage.</string>
 
 </resources>

@@ -477,7 +477,6 @@ static pj_status_t webrtc_cap_stream_set_cap(pjmedia_vid_dev_stream *s,
 	} else if(cap == PJMEDIA_VID_DEV_CAP_INPUT_PREVIEW){
 		return PJ_SUCCESS;
 	} else if(cap == PJMEDIA_VID_DEV_CAP_OUTPUT_WINDOW){
-		PJ_LOG(4, (THIS_FILE, "Webrtc Capture set window now."));
 		if(pval){
 			// Consider that as the fact window has been set and we could try to re-attach ourself
 			if(!strm->window_available){

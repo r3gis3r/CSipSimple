@@ -23,10 +23,15 @@ package com.csipsimple.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaRecorder.AudioSource;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.Contacts;
 import android.text.TextUtils;
 
@@ -780,4 +785,34 @@ public final class Compatibility {
         return 0x0102002c;
         // return android.R.id.home;
     }
+    
+
+    public static boolean isInstalledOnSdCard(Context context) {
+        // check for API level 8 and higher
+        if (Compatibility.isCompatible(8)) {
+            PackageManager pm = context.getPackageManager();
+            try {
+                PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+                ApplicationInfo ai = pi.applicationInfo;
+                return (ai.flags & 0x00040000 /*ApplicationInfo.FLAG_EXTERNAL_STORAGE*/) == 0x00040000 /*ApplicationInfo.FLAG_EXTERNAL_STORAGE*/;
+            } catch (NameNotFoundException e) {
+                // ignore
+            }
+        }
+
+        // check for API level 7 - check files dir
+        try {
+            String filesDir = context.getFilesDir().getAbsolutePath();
+            if (filesDir.startsWith("/data/")) {
+                return false;
+            } else if (filesDir.contains(Environment.getExternalStorageDirectory().getPath())) {
+                return true;
+            }
+        } catch (Throwable e) {
+            // ignore
+        }
+
+        return false;
+    }
+
 }

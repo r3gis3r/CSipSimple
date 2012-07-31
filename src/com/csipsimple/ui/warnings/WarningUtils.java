@@ -48,6 +48,8 @@ public class WarningUtils {
             return new WarningVpnIcs(ctxt);
         }else if(warning.equals(WARNING_PRIVILEGED_INTENT)) {
             return new WarningPrivilegedIntent(ctxt);
+        }else if(warning.equals(WARNING_SDCARD)) {
+            return new WarningSDCard(ctxt);
         }
         /*
         // For now default is to display warning simply
@@ -115,15 +117,15 @@ public class WarningUtils {
     
     // Vpn for ICS
     public static String WARNING_VPN_ICS = "warn_vpn_ics";
-    public static boolean shouldWarnVpnIcs(PreferencesProviderWrapper prefProviderWrapper) {
-        if(prefProviderWrapper.getPreferenceBooleanValue(getIgnoreKey(WARNING_VPN_ICS), false)) {
+    public static boolean shouldWarnVpnIcs(PreferencesProviderWrapper prefs) {
+        if(prefs.getPreferenceBooleanValue(getIgnoreKey(WARNING_VPN_ICS), false)) {
             return false;
         }
-        if(Compatibility.isCompatible(14) && prefProviderWrapper.getPreferenceIntegerValue(SipConfigManager.NETWORK_ROUTES_POLLING) == 0) {
+        if(Compatibility.isCompatible(14) && prefs.getPreferenceIntegerValue(SipConfigManager.NETWORK_ROUTES_POLLING) == 0) {
             // services/java/com/android/server/connectivity/Vpn.java
             String[] daemons = new String[] {"racoon", "mtpd"};
             for(String daemon : daemons) {
-                String state = prefProviderWrapper.getSystemProp("init.svc." + daemon);
+                String state = prefs.getSystemProp("init.svc." + daemon);
                 if("running".equals(state)) {
                     return true;
                 }
@@ -131,6 +133,25 @@ public class WarningUtils {
         }
         return false;
     }
+    
+    
+    // SDCard
+    public static String WARNING_SDCARD = "warn_sdcard";
+    public static boolean shouldWarnSDCard(Context ctxt, PreferencesProviderWrapper prefs) {
+        if(Compatibility.isInstalledOnSdCard(ctxt)) {
+            if(prefs.getPreferenceBooleanValue(SipConfigManager.USE_WIFI_IN) || 
+                    prefs.getPreferenceBooleanValue(SipConfigManager.USE_3G_IN) || 
+                    prefs.getPreferenceBooleanValue(SipConfigManager.USE_GPRS_IN) || 
+                    prefs.getPreferenceBooleanValue(SipConfigManager.USE_EDGE_IN) ||
+                    prefs.getPreferenceBooleanValue(SipConfigManager.USE_ANYWAY_IN) ) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    
     public static String getIgnoreKey(String warnKey) {
         return "ignore_" + warnKey;
     }
