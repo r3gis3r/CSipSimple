@@ -69,9 +69,11 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
         
 
         List<CharSequence> list = new ArrayList<CharSequence>();
-        String[] fromRes = context.getResources().getStringArray(R.array.presence_status_names);
-        for(CharSequence str : fromRes) {
-            list.add(str);
+        if(!isInEditMode()) {
+            String[] fromRes = context.getResources().getStringArray(R.array.presence_status_names);
+            for(CharSequence str : fromRes) {
+                list.add(str);
+            }
         }
         
         mAdapter = new PresencesAdapter(getContext(), list);

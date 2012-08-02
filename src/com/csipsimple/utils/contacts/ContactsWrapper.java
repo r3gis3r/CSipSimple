@@ -46,6 +46,7 @@ public abstract class ContactsWrapper {
     public static final String FIELD_TYPE = "wrapped_type";
     public static final int TYPE_GROUP = 0;
     public static final int TYPE_CONTACT = 1;
+    public static final int TYPE_CONFIGURE = 2;
     public static final String FIELD_GROUP_NAME = "title";
 
     public static ContactsWrapper getInstance() {

@@ -210,7 +210,12 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
         if(c != null) {
             return c;
         }
-        return new MatrixCursor (new String[] {"_id"});
+        MatrixCursor mc = new MatrixCursor (new String[] {
+                BaseColumns._ID, 
+                ContactsWrapper.FIELD_TYPE
+        });
+        mc.addRow(new Object[] {account.id, ContactsWrapper.TYPE_CONFIGURE});
+        return mc;
     }
 
 }

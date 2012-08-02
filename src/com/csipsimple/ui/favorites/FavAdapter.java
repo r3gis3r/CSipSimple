@@ -28,7 +28,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
+import android.view.View.OnClickListener;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.provider.BaseColumns;
@@ -51,7 +51,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.wizards.WizardUtils;
 
-public class FavAdapter extends ResourceCursorAdapter {
+public class FavAdapter extends ResourceCursorAdapter implements OnClickListener {
 
 
     //private static final String THIS_FILE = "FavAdapter";
@@ -73,10 +73,11 @@ public class FavAdapter extends ResourceCursorAdapter {
         if(cv.containsKey(ContactsWrapper.FIELD_TYPE)) {
             type = cv.getAsInteger(ContactsWrapper.FIELD_TYPE);
         }
+
+        showViewForType(view, type);
+        
         
         if(type == ContactsWrapper.TYPE_GROUP) {
-            showViewForHeader(view, true);
-            
             // Get views
             TextView tv = (TextView) view.findViewById(R.id.header_text);
             ImageView icon = (ImageView) view.findViewById(R.id.header_icon);
@@ -98,7 +99,7 @@ public class FavAdapter extends ResourceCursorAdapter {
             ViewGroup menuViewWrapper = (ViewGroup) view.findViewById(R.id.header_cfg_spinner);
             
             MenuCallback newMcb = new MenuCallback(context, profileId, groupName, publishedEnabled);
-            
+
             if(menuViewWrapper.getTag() == null) {
 
                 final LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -122,16 +123,28 @@ public class FavAdapter extends ResourceCursorAdapter {
                 menuBuilder.setCallback(newMcb);
                 menuBuilder.findItem(MENU_SHARE_PRESENCE).setTitle(publishedEnabled ? R.string.deactivate_presence_sharing : R.string.activate_presence_sharing);
             }
-        }else {
-            showViewForHeader(view, false);
+        }else if(type == ContactsWrapper.TYPE_CONTACT) {
             ContactsWrapper.getInstance().bindContactView(view, context, cursor);
-            
+        } else if (type == ContactsWrapper.TYPE_CONFIGURE) {
+            // We only bind if it's the correct type
+            View v = view.findViewById(R.id.configure_view);
+            v.setOnClickListener(this);
+            ConfigureObj cfg = new ConfigureObj();
+            cfg.profileId = cv.getAsLong(BaseColumns._ID);
+            v.setTag(cfg);
         }
     }
     
-    private void showViewForHeader(View view, boolean isHeader) {
-        view.findViewById(R.id.header_view).setVisibility(isHeader ? View.VISIBLE : View.GONE);
-        view.findViewById(R.id.contact_view).setVisibility(isHeader ? View.GONE : View.VISIBLE);
+    private class ConfigureObj extends Object {
+        Long profileId = SipProfile.INVALID_ID;
+        String groupName = "";
+    }
+    
+    private void showViewForType(View view, int type) {
+        
+        view.findViewById(R.id.header_view).setVisibility((type == ContactsWrapper.TYPE_GROUP) ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.contact_view).setVisibility((type == ContactsWrapper.TYPE_CONTACT) ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.configure_view).setVisibility((type == ContactsWrapper.TYPE_CONFIGURE) ? View.VISIBLE : View.GONE);
     }
     
     private class MenuCallback implements Callback {
@@ -188,7 +201,7 @@ public class FavAdapter extends ResourceCursorAdapter {
                 } while (choiceCursor.moveToNext());
             }
         }
-        builder.setSingleChoiceItems(choiceCursor, selectedIndex, ContactsWrapper.FIELD_GROUP_NAME, new OnClickListener() {
+        builder.setSingleChoiceItems(choiceCursor, selectedIndex, ContactsWrapper.FIELD_GROUP_NAME, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 choiceCursor.moveToPosition(which);
@@ -202,7 +215,7 @@ public class FavAdapter extends ResourceCursorAdapter {
         });
         
         builder.setCancelable(true);
-        builder.setNeutralButton(R.string.cancel, new OnClickListener() {
+        builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 choiceCursor.close();
@@ -217,6 +230,15 @@ public class FavAdapter extends ResourceCursorAdapter {
         });
         final Dialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if(id == R.id.configure_view) {
+            ConfigureObj cfg = (ConfigureObj) v.getTag();
+            showDialogForGroupSelection(mContext, cfg.profileId, cfg.groupName);
+        }
     }
 }
 

@@ -95,6 +95,37 @@
             android:layout_toRightOf="@id/status_icon"
             android:gravity="center_vertical"
             android:visibility="gone" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dip"
+            android:layout_height="@dimen/call_log_call_action_size"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toLeftOf="@+id/secondary_action_icon"
+            android:background="@drawable/ic_divider_dashed_holo_dark" />
+
+        <ImageButton
+            android:id="@+id/secondary_action_icon"
+            android:layout_width="@dimen/call_log_call_action_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="?attr/actionBarItemBackground"
+            android:contentDescription="@string/call"
+            android:nextFocusLeft="@id/primary_action_view"
+            android:paddingBottom="@dimen/call_log_inner_margin"
+            android:paddingLeft="@dimen/call_log_inner_margin"
+            android:paddingRight="@dimen/call_log_inner_margin"
+            android:paddingTop="@dimen/call_log_inner_margin"
+            android:scaleType="center"
+            android:src="@drawable/ic_ab_dialer_holo_dark" />
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/configure_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/configure" />
 
 </LinearLayout>
