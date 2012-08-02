@@ -698,6 +698,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_megavoip, 12, 
                     new Locale[] {new Locale("PT", "br")}, false, false, 
                     MegaVoip.class));
+            WIZARDS_DICT.put("MULTIFONRU", new WizardInfo("MULTIFONRU", "Multifon.ru", 
+                    R.drawable.ic_wizard_multifon, 12, 
+                    new Locale[] {locale("ru_RU")}, false, false, 
+                    MultifonRu.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
