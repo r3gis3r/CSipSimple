@@ -88,12 +88,14 @@ public class NightlyUpdater {
 	public static boolean isNightlyBuild(Context ctxt) {
 	    try {
 	        Bundle metaData = getApplicationMetaData(ctxt);
-            String appType = metaData.getString(META_TYPE);
-    	    if(!TextUtils.isEmpty(appType)) {
-        	    if(NIGHTLY_TYPE.equalsIgnoreCase(appType)) {
-        	        return true;
+	        if(metaData != null) {
+                String appType = metaData.getString(META_TYPE);
+        	    if(!TextUtils.isEmpty(appType)) {
+            	    if(NIGHTLY_TYPE.equalsIgnoreCase(appType)) {
+            	        return true;
+            	    }
         	    }
-    	    }
+	        }
 	    } catch (NameNotFoundException e) {
             Log.e(THIS_FILE, "Not able to get self app info", e);
         }
@@ -101,12 +103,13 @@ public class NightlyUpdater {
 	}
 	
 	public static String getChannelFolder(Context ctxt) {
-	    Bundle metaData;
         try {
-            metaData = getApplicationMetaData(ctxt);
-            String appChannel = metaData.getString(META_CHANNEL);
-            if(!TextUtils.isEmpty(appChannel)) {
-                return appChannel;
+            Bundle metaData = getApplicationMetaData(ctxt);
+            if(metaData != null) {
+                String appChannel = metaData.getString(META_CHANNEL);
+                if(!TextUtils.isEmpty(appChannel)) {
+                    return appChannel;
+                }
             }
         } catch (NameNotFoundException e) {
             Log.e(THIS_FILE, "Not able to get self app info", e);
