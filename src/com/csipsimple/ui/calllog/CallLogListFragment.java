@@ -285,7 +285,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
     public void placeCall(String number, Long accId) {
         if(!TextUtils.isEmpty(number)) {
             Intent it = new Intent(Intent.ACTION_CALL);
-            it.setData(SipUri.forgeSipUri("csip", SipUri.getCanonicalSipContact(number, false)));
+            it.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_CSIP, SipUri.getCanonicalSipContact(number, false)));
             it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if(accId != null) {
                 it.putExtra(SipProfile.FIELD_ACC_ID, accId);
@@ -403,7 +403,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
                 String number = mAdapter.getCallRemoteAtPostion(i);
                 if(!TextUtils.isEmpty(number)) {
                     Intent it = new Intent(Intent.ACTION_DIAL);
-                    it.setData(SipUri.forgeSipUri("sip", number));
+                    it.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_SIP, number));
                     startActivity(it);
                 }
                 break;

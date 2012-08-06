@@ -88,23 +88,24 @@ public class ContactsUtils3 extends ContactsWrapper {
         return img;
     }
 
-    public List<Phone> getPhoneNumbers(Context ctxt, String id) {
+    public List<Phone> getPhoneNumbers(Context ctxt, long contactId, int flags) {
         ArrayList<Phone> phones = new ArrayList<Phone>();
-
-        Cursor pCur = ctxt.getContentResolver().query(
-                Phones.CONTENT_URI,
-                null,
-                Phones.PERSON_ID + " = ?",
-                new String[] {
-                    id
-                }, null);
-        while (pCur.moveToNext()) {
-            phones.add(new Phone(
-                    pCur.getString(pCur.getColumnIndex(Phones.NUMBER))
-                    , pCur.getString(pCur.getColumnIndex(Phones.TYPE))
-                    ));
+        if ((flags & ContactsWrapper.URI_NBR) > 0) {
+            Cursor pCur = ctxt.getContentResolver().query(
+                    Phones.CONTENT_URI,
+                    null,
+                    Phones.PERSON_ID + " = ?",
+                    new String[] {
+                        Long.toString(contactId)
+                    }, null);
+            while (pCur.moveToNext()) {
+                phones.add(new Phone(
+                        pCur.getString(pCur.getColumnIndex(Phones.NUMBER))
+                        , pCur.getString(pCur.getColumnIndex(Phones.TYPE))
+                        ));
+            }
+            pCur.close();
         }
-        pCur.close();
         return (phones);
     }
 
@@ -368,7 +369,7 @@ public class ContactsUtils3 extends ContactsWrapper {
             intent.putExtra(Intents.Insert.NAME, displayName);
         }
         intent.putExtra(Intents.Insert.IM_HANDLE, csipUri);
-        intent.putExtra(Intents.Insert.IM_PROTOCOL, "csip");
+        intent.putExtra(Intents.Insert.IM_PROTOCOL, SipManager.PROTOCOL_CSIP);
         return intent;
     }
 
@@ -382,5 +383,11 @@ public class ContactsUtils3 extends ContactsWrapper {
         
         return context.getContentResolver().query(searchUri, projection, null, null,
                 Groups.NAME + " ASC");
+    }
+
+    @Override
+    public boolean insertOrUpdateCSipUri(Context ctxt, long contactId, String uri) {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

@@ -148,6 +148,7 @@ public class PjSipService {
                 // "libssl.so").getAbsolutePath());
                 // System.loadLibrary("crypto");
                 // System.loadLibrary("ssl");
+                System.loadLibrary(NativeLibManager.STD_LIB_NAME);
                 System.loadLibrary(NativeLibManager.STACK_NAME);
                 hasSipStack = true;
                 return true;
@@ -1649,9 +1650,9 @@ public class PjSipService {
         }
         if(TextUtils.isEmpty(finalCallee.scheme)) {
             if(account.transport == SipProfile.TRANSPORT_TLS) {
-                finalCallee.scheme = "sips";
+                finalCallee.scheme = SipManager.PROTOCOL_SIPS;
             }else {
-                finalCallee.scheme = "sip";
+                finalCallee.scheme = SipManager.PROTOCOL_SIP;
             }
         }
         String digitsToAdd = null;

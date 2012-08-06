@@ -67,11 +67,11 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
     private Long accountToCallTo = null;
     
     
-    private final static String SCHEME_CSIP = "csip";
+    private final static String SCHEME_CSIP = SipManager.PROTOCOL_CSIP;
     private final static String SCHEME_IMTO = "imto";
     private final static String SCHEME_SMSTO = "smsto";
-    private final static String AUTHORITY_CSIP = "csip";
-    private final static String AUTHORITY_SIP = "sip";
+    private final static String AUTHORITY_CSIP = SipManager.PROTOCOL_CSIP;
+    private final static String AUTHORITY_SIP = SipManager.PROTOCOL_SIP;
     private final static String AUTHORITY_SKYPE = "skype";
     
     /**

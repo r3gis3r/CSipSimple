@@ -59,7 +59,8 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                         SipProfile.FIELD_PRIORITY,
                         SipProfile.FIELD_ANDROID_GROUP,
                         SipProfile.FIELD_PUBLISH_ENABLED,
-                        SipProfile.FIELD_REG_URI
+                        SipProfile.FIELD_REG_URI,
+                        SipProfile.FIELD_PROXY
                 });
 
         Cursor[] cursorsToMerge = new Cursor[2 * accounts.size()];
@@ -185,7 +186,10 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                         SipProfile.FIELD_DISPLAY_NAME,
                         SipProfile.FIELD_WIZARD,
                         SipProfile.FIELD_ANDROID_GROUP,
-                        SipProfile.FIELD_PUBLISH_ENABLED
+                        SipProfile.FIELD_PUBLISH_ENABLED,
+                        SipProfile.FIELD_REG_URI,
+                        SipProfile.FIELD_PROXY,
+                        SipProfile.FIELD_ACC_ID
                 });
         matrixCursor.addRow(new Object[] {
                 account.id,
@@ -193,7 +197,10 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                 account.display_name,
                 account.wizard,
                 account.android_group,
-                account.publish_enabled
+                account.publish_enabled,
+                account.reg_uri,
+                TextUtils.join(SipProfile.PROXIES_SEPARATOR, account.proxies),
+                account.acc_id
         });
         return matrixCursor;
     }

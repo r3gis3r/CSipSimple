@@ -45,5 +45,9 @@
         <item>@string/online</item>
         <item>@string/offline</item>
     </string-array>
+    <string-array name="sip_data_sources">
+        <item>@string/uri_nbr</item>
+        <item>@string/uri_im</item>
+    </string-array>
 
 </resources>

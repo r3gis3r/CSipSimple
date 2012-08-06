@@ -49,6 +49,7 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.widgets.RegistrationNotification;
 
 import java.lang.reflect.InvocationTargetException;
@@ -366,7 +367,7 @@ public class SipNotifications {
 
 		Intent notificationIntent = new Intent(Intent.ACTION_CALL);
 		if(acc != null) {
-    		notificationIntent.setData(SipUri.forgeSipUri("csip", acc.vm_nbr + "@" + acc.getDefaultDomain()));
+    		notificationIntent.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_CSIP, acc.vm_nbr + "@" + acc.getDefaultDomain()));
 			notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
 		}
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

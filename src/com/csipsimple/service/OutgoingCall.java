@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.telephony.PhoneNumberUtils;
 
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.Filter;
@@ -113,7 +114,7 @@ public class OutgoingCall extends BroadcastReceiver {
 				// Launch activity to choose what to do with this call
 				Intent outgoingCallChooserIntent = new Intent(Intent.ACTION_CALL);
 				// Add csipsimple protocol :)
-				outgoingCallChooserIntent.setData(SipUri.forgeSipUri("sip", number));
+				outgoingCallChooserIntent.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_SIP, number));
 				outgoingCallChooserIntent.setClassName(context, OutgoingCallChooser.class.getName());
 				outgoingCallChooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				Log.d(THIS_FILE, "Start outgoing call chooser for CSipSimple");

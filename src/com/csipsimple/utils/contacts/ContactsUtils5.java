@@ -23,6 +23,7 @@ package com.csipsimple.utils.contacts;
 
 import android.annotation.TargetApi;
 import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -44,6 +45,7 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.Intents.Insert;
 import android.provider.ContactsContract.PhoneLookup;
+import android.provider.ContactsContract.RawContacts;
 import android.provider.ContactsContract.StatusUpdates;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
@@ -104,51 +106,58 @@ public class ContactsUtils5 extends ContactsWrapper {
         return img;
     }
 
-    public List<Phone> getPhoneNumbers(Context ctxt, String id) {
+    public List<Phone> getPhoneNumbers(Context ctxt, long contactId, int flag) {
+        String id = Long.toString(contactId);
         ArrayList<Phone> phones = new ArrayList<Phone>();
-
-        Cursor pCur = ctxt.getContentResolver().query(
-                CommonDataKinds.Phone.CONTENT_URI,
-                null,
-                CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                new String[] {
-                    id
-                }, null);
-        while (pCur.moveToNext()) {
-            phones.add(new Phone(
-                    pCur.getString(pCur
-                            .getColumnIndex(CommonDataKinds.Phone.NUMBER)),
-                    pCur.getString(pCur.getColumnIndex(CommonDataKinds.Phone.TYPE))
-                    ));
-
+        Cursor pCur;
+        
+        if ((flag & ContactsWrapper.URI_NBR) > 0) {
+            pCur = ctxt.getContentResolver().query(
+                    CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                    new String[] {
+                        id
+                    }, null);
+            while (pCur.moveToNext()) {
+                phones.add(new Phone(
+                        pCur.getString(pCur
+                                .getColumnIndex(CommonDataKinds.Phone.NUMBER)),
+                        pCur.getString(pCur.getColumnIndex(CommonDataKinds.Phone.TYPE))
+                        ));
+    
+            }
+            pCur.close();
         }
-        pCur.close();
 
         // Add any custom IM named 'sip' and set its type to 'sip'
-        pCur = ctxt.getContentResolver().query(
-                Data.CONTENT_URI,
-                null,
-                Data.CONTACT_ID + " = ? AND " + Data.MIMETYPE
-                        + " = ?",
-                new String[] {
-                        id, CommonDataKinds.Im.CONTENT_ITEM_TYPE
-                }, null);
-        while (pCur.moveToNext()) {
-            // Could also use some other IM type but may be confusing. Are there
-            // phones with no 'custom' IM type?
-            if (pCur.getInt(pCur.getColumnIndex(CommonDataKinds.Im.PROTOCOL)) == CommonDataKinds.Im.PROTOCOL_CUSTOM) {
-                if ("sip".equalsIgnoreCase(pCur.getString(pCur
-                        .getColumnIndex(CommonDataKinds.Im.CUSTOM_PROTOCOL)))) {
-                    phones.add(new Phone(pCur.getString(pCur
-                            .getColumnIndex(CommonDataKinds.Im.DATA)), "sip"));
+        if ((flag & ContactsWrapper.URI_IM) > 0) {
+            pCur = ctxt.getContentResolver().query(
+                    Data.CONTENT_URI,
+                    null,
+                    Data.CONTACT_ID + " = ? AND " + Data.MIMETYPE
+                            + " = ?",
+                    new String[] {
+                            id, CommonDataKinds.Im.CONTENT_ITEM_TYPE
+                    }, null);
+            while (pCur.moveToNext()) {
+                // Could also use some other IM type but may be confusing. Are there
+                // phones with no 'custom' IM type?
+                if (pCur.getInt(pCur.getColumnIndex(CommonDataKinds.Im.PROTOCOL)) == CommonDataKinds.Im.PROTOCOL_CUSTOM) {
+                    String proto = pCur.getString(pCur
+                            .getColumnIndex(CommonDataKinds.Im.CUSTOM_PROTOCOL));
+                    if (SipManager.PROTOCOL_SIP.equalsIgnoreCase(proto) || SipManager.PROTOCOL_CSIP.equalsIgnoreCase(proto)) {
+                        phones.add(new Phone(pCur.getString(pCur
+                                .getColumnIndex(CommonDataKinds.Im.DATA)), SipManager.PROTOCOL_SIP));
+                    }
                 }
+    
             }
-
+            pCur.close();
         }
-        pCur.close();
-
+        
         // Add any SIP uri if android 9
-        if (Compatibility.isCompatible(9)) {
+        if (Compatibility.isCompatible(9) && ((flag & ContactsWrapper.URI_SIP) > 0)) {
             pCur = ctxt.getContentResolver().query(
                     Data.CONTENT_URI,
                     null,
@@ -161,7 +170,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                 // Could also use some other IM type but may be confusing. Are
                 // there phones with no 'custom' IM type?
                 phones.add(new Phone(pCur.getString(pCur
-                        .getColumnIndex(ContactsContract.Data.DATA1)), "sip"));
+                        .getColumnIndex(ContactsContract.Data.DATA1)), SipManager.PROTOCOL_SIP));
             }
             pCur.close();
         }
@@ -410,12 +419,12 @@ public class ContactsUtils5 extends ContactsWrapper {
         // Has phone number
         String whereSipUriClause = "(" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
                 + " AND " + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
-                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='sip'" + ")";
+                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='"+SipManager.PROTOCOL_SIP+"'" + ")";
 
         // CSip IM custo
         whereSipUriClause += " OR (" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
                 + " AND " + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
-                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='csip'" + ")";
+                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='"+SipManager.PROTOCOL_CSIP+"'" + ")";
 
         // Has sip uri
         if (Compatibility.isCompatible(9)) {
@@ -513,12 +522,12 @@ public class ContactsUtils5 extends ContactsWrapper {
         // Sip: IM custo
         isPhoneType += " OR (" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
                 + " AND " + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
-                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='sip'" + ")";
+                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='"+SipManager.PROTOCOL_SIP+"'" + ")";
 
         // CSip IM custo
         isPhoneType += " OR (" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
                 + " AND " + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
-                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='csip'" + ")";
+                + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "='"+SipManager.PROTOCOL_CSIP+"'" + ")";
 
         String query = Contacts.DISPLAY_NAME + " IS NOT NULL "
                 + " AND (" + isPhoneType + ")";
@@ -629,7 +638,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                 + " AND "
                 + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
                 + " AND "
-                + " LOWER(" + CommonDataKinds.Im.CUSTOM_PROTOCOL + ")='csip'";
+                + " LOWER(" + CommonDataKinds.Im.CUSTOM_PROTOCOL + ")='"+SipManager.PROTOCOL_CSIP+"'";
 
         Cursor contacts = getContactsByGroup(ctxt, groupName);
         ArrayList<String> results = new ArrayList<String>();
@@ -643,7 +652,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                                             CommonDataKinds.Im._ID,
                                             CommonDataKinds.Im.DATA,
                                     },
-                                    dataQuery + " AND " + Data.CONTACT_ID + "=?",
+                                    dataQuery + " AND " + CommonDataKinds.Im.CONTACT_ID + "=?",
                                     new String[] {
                                         Long.toString(contacts.getLong(contacts
                                                 .getColumnIndex(Contacts._ID)))
@@ -708,7 +717,7 @@ public class ContactsUtils5 extends ContactsWrapper {
             ContentProviderOperation.Builder builder = ContentProviderOperation
                     .newInsert(StatusUpdates.CONTENT_URI);
             // builder.withValue(StatusUpdates.DATA_ID, dataId);
-            builder.withValue(StatusUpdates.CUSTOM_PROTOCOL, "csip");
+            builder.withValue(StatusUpdates.CUSTOM_PROTOCOL, SipManager.PROTOCOL_CSIP);
             builder.withValue(StatusUpdates.PROTOCOL, CommonDataKinds.Im.PROTOCOL_CUSTOM);
             builder.withValue(StatusUpdates.IM_HANDLE, buddyUri);
             builder.withValue(StatusUpdates.STATUS, statusText);
@@ -814,7 +823,7 @@ public class ContactsUtils5 extends ContactsWrapper {
             ContentValues csipProto = new ContentValues();
             csipProto.put(Data.MIMETYPE, CommonDataKinds.Im.CONTENT_ITEM_TYPE);
             csipProto.put(CommonDataKinds.Im.PROTOCOL, CommonDataKinds.Im.PROTOCOL_CUSTOM);
-            csipProto.put(CommonDataKinds.Im.CUSTOM_PROTOCOL, "csip");
+            csipProto.put(CommonDataKinds.Im.CUSTOM_PROTOCOL, SipManager.PROTOCOL_CSIP);
             csipProto.put(CommonDataKinds.Im.DATA, SipUri.getCanonicalSipContact(csipUri, false));
             data.add(csipProto);
 
@@ -834,6 +843,75 @@ public class ContactsUtils5 extends ContactsWrapper {
         
         return context.getContentResolver().query(searchUri, projection, null, null,
                 Groups.TITLE + " ASC");
+    }
+
+    @Override
+    public boolean insertOrUpdateCSipUri(Context ctxt, long contactId, String uri) {
+
+        ContentResolver cr = ctxt.getContentResolver();
+        long rawContactId = -1;
+        Cursor c = cr.query(RawContacts.CONTENT_URI,
+                new String[]{RawContacts._ID},
+                RawContacts.CONTACT_ID + "=?",
+                new String[]{String.valueOf(contactId)}, null);
+        try {
+            if(c.moveToNext()) {
+                rawContactId = c.getLong(c.getColumnIndex(RawContacts._ID));
+            }
+        } catch (Exception e) {
+            Log.e(THIS_FILE, "Error while looping on contacts", e);
+        } finally {
+            c.close();
+        }
+        
+        if(rawContactId != -1) {
+            String csipUri = SipUri.getCanonicalSipContact(uri, false);
+            // First try update
+            ContentValues cv = new ContentValues();
+            cv.put(CommonDataKinds.Im.DATA, csipUri);
+            Cursor cs = cr.query(Data.CONTENT_URI, new String[] {CommonDataKinds.Im._ID},
+                    CommonDataKinds.Im.MIMETYPE + "=?"
+                    + " AND " + CommonDataKinds.Im.PROTOCOL + "=?" 
+                    + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "=?" 
+                    + " AND " + CommonDataKinds.Im.RAW_CONTACT_ID + "=?", new String [] {
+                CommonDataKinds.Im.CONTENT_ITEM_TYPE,
+                Integer.toString(CommonDataKinds.Im.PROTOCOL_CUSTOM),
+                SipManager.PROTOCOL_CSIP,
+                Long.toString(rawContactId)
+            }, null);
+            if(cs != null) {
+                int count = cs.getCount();
+                cs.close();
+                
+                
+                if(count > 0) {
+                    int updated = cr.update(Data.CONTENT_URI, cv, 
+                        CommonDataKinds.Im.MIMETYPE + "=?"
+                        + " AND " + CommonDataKinds.Im.PROTOCOL + "=?" 
+                        + " AND " + CommonDataKinds.Im.CUSTOM_PROTOCOL + "=?" 
+                        + " AND " + CommonDataKinds.Im.RAW_CONTACT_ID + "=?", new String [] {
+                    CommonDataKinds.Im.CONTENT_ITEM_TYPE,
+                    Integer.toString(CommonDataKinds.Im.PROTOCOL_CUSTOM),
+                    SipManager.PROTOCOL_CSIP,
+                    Long.toString(rawContactId)
+                    });
+                    Log.d(THIS_FILE, "Updated : " + updated);
+                }else {
+                    cv.put(CommonDataKinds.Im.MIMETYPE, CommonDataKinds.Im.CONTENT_ITEM_TYPE);
+                    cv.put(CommonDataKinds.Im.PROTOCOL, CommonDataKinds.Im.PROTOCOL_CUSTOM);
+                    cv.put(CommonDataKinds.Im.CUSTOM_PROTOCOL, SipManager.PROTOCOL_CSIP);
+                    cv.put(CommonDataKinds.Im.RAW_CONTACT_ID, rawContactId);
+                    Uri insertedUri = cr.insert(Data.CONTENT_URI, cv);
+                    if(insertedUri == null) {
+                        return false;
+                    }
+                    Log.d(THIS_FILE, "Inserted : " + insertedUri.toString());
+                }
+                
+                return true;
+            }
+        }
+        return false;
     }
 
 }

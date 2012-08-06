@@ -78,14 +78,21 @@ public abstract class ContactsWrapper {
      */
     public abstract Bitmap getContactPhoto(Context ctxt, Uri uri, boolean hiRes, Integer defaultResource);
 
+    
+    
+    public static int URI_NBR = 1 << 0;
+    public static int URI_IM = 1 << 1;
+    public static int URI_SIP = 1 << 2;
+    public static int URI_ALLS = URI_IM | URI_NBR | URI_SIP;
     /**
      * List all phone number for a given contact id
      * 
      * @param ctxt the context of the application
-     * @param id the contact id as string
+     * @param contactId the contact id
+     * @param flag which numbers to get
      * @return a list of possible phone numbers
      */
-    public abstract List<Phone> getPhoneNumbers(Context ctxt, String id);
+    public abstract List<Phone> getPhoneNumbers(Context ctxt, long contactId, int flag);
 
     /**
      * Find contacts-phone tuple in the contact database based on an user input
@@ -165,6 +172,15 @@ public abstract class ContactsWrapper {
     public abstract Intent getAddContactIntent(String displayName, String csipUri);
     
     /**
+     * Insert or update csip uri to a contact custom im csip protocol
+     * @param ctxt the Context of the app
+     * @param contactId the id of the contact to insert datas to
+     * @param uri the uri to insert as csip im custom protocol
+     * @return true if insert/update done.
+     */
+    public abstract boolean insertOrUpdateCSipUri(Context ctxt, long contactId, String uri);
+    
+    /**
      * Get a cursor loader on contacts entries based on contact grouping 
      * @param ctxt the context of the application
      * @param groupName the name of the group to filter on
@@ -226,7 +242,7 @@ public abstract class ContactsWrapper {
 
     public void treatContactPickerPositiveResult(final Context ctxt, final String contactId,
             final OnPhoneNumberSelected l) {
-        List<Phone> phones = getPhoneNumbers(ctxt, contactId);
+        List<Phone> phones = getPhoneNumbers(ctxt, Long.parseLong(contactId), URI_ALLS);
 
         if (phones.size() == 0) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(ctxt);
@@ -273,7 +289,7 @@ public abstract class ContactsWrapper {
     }
 
     private String formatNumber(String number, String type) {
-        if (type != null && type.equals("sip")) {
+        if (type != null && type.equals(SipManager.PROTOCOL_SIP)) {
             return "sip:" + number;
         } else {
             if (!number.startsWith("sip:")) {

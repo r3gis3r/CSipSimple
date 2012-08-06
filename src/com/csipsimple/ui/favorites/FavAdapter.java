@@ -28,12 +28,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.view.View.OnClickListener;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.provider.BaseColumns;
+import android.provider.ContactsContract.Contacts;
 import android.support.v4.widget.ResourceCursorAdapter;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -44,22 +46,22 @@ import com.actionbarsherlock.internal.view.menu.ActionMenuPresenter;
 import com.actionbarsherlock.internal.view.menu.ActionMenuView;
 import com.actionbarsherlock.internal.view.menu.MenuBuilder;
 import com.actionbarsherlock.internal.view.menu.MenuBuilder.Callback;
-import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.Log;
 import com.csipsimple.utils.contacts.ContactsWrapper;
+import com.csipsimple.utils.contacts.ContactsWrapper.Phone;
 import com.csipsimple.wizards.WizardUtils;
+
+import java.util.List;
 
 public class FavAdapter extends ResourceCursorAdapter implements OnClickListener {
 
 
-    //private static final String THIS_FILE = "FavAdapter";
+    private static final String THIS_FILE = "FavAdapter";
     
-    private final static int MENU_SET_GROUP = Menu.FIRST;
-    private final static int MENU_SET_SIP_DATA = Menu.FIRST + 1;
-    private final static int MENU_SHARE_PRESENCE = Menu.FIRST + 2;
-
     public FavAdapter(Context context, Cursor c) {
         super(context, R.layout.fav_list_item, c, 0);
     }
@@ -84,11 +86,14 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
             PresenceStatusSpinner presSpinner = (PresenceStatusSpinner) view.findViewById(R.id.header_presence_spinner);
             
             // Get datas
+            SipProfile acc = new SipProfile(cursor);
+            
             final Long profileId = cv.getAsLong(BaseColumns._ID);
-            final String groupName = cv.getAsString(SipProfile.FIELD_ANDROID_GROUP);
-            final String displayName = cv.getAsString(SipProfile.FIELD_DISPLAY_NAME);
-            final String wizard = cv.getAsString(SipProfile.FIELD_WIZARD);
-            final boolean publishedEnabled = (cv.getAsInteger(SipProfile.FIELD_PUBLISH_ENABLED) == 1);
+            final String groupName = acc.android_group;
+            final String displayName = acc.display_name;
+            final String wizard = acc.wizard;
+            final boolean publishedEnabled = (acc.publish_enabled == 1);
+            final String domain = acc.getDefaultDomain();
             
             // Bind datas to view
             tv.setText(displayName);
@@ -98,8 +103,8 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
             // Extra menu view if not already set
             ViewGroup menuViewWrapper = (ViewGroup) view.findViewById(R.id.header_cfg_spinner);
             
-            MenuCallback newMcb = new MenuCallback(context, profileId, groupName, publishedEnabled);
-
+            MenuCallback newMcb = new MenuCallback(context, profileId, groupName, domain, publishedEnabled);
+            MenuBuilder menuBuilder;
             if(menuViewWrapper.getTag() == null) {
 
                 final LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -107,22 +112,22 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
 
                 ActionMenuPresenter mActionMenuPresenter = new ActionMenuPresenter(mContext);
                 mActionMenuPresenter.setReserveOverflow(true);
-                MenuBuilder menuBuilder = new MenuBuilder(context);
+                menuBuilder = new MenuBuilder(context);
                 menuBuilder.setCallback(newMcb);
-                menuBuilder.add(0, MENU_SET_GROUP, 0, R.string.set_android_group).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                menuBuilder.add(0, MENU_SET_SIP_DATA, 0, R.string.set_sip_data).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                menuBuilder.add(0, MENU_SHARE_PRESENCE, 0, publishedEnabled ? R.string.deactivate_presence_sharing : R.string.activate_presence_sharing).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                
+                MenuInflater inflater = new MenuInflater(context);
+                inflater.inflate(R.menu.fav_menu, menuBuilder);
                 menuBuilder.addMenuPresenter(mActionMenuPresenter);
                 ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(menuViewWrapper);
                 UtilityWrapper.getInstance().setBackgroundDrawable(menuView, null);
                 menuViewWrapper.addView(menuView, layoutParams);
                 menuViewWrapper.setTag(menuBuilder);
             }else {
-                MenuBuilder menuBuilder = (MenuBuilder) menuViewWrapper.getTag();
+                menuBuilder = (MenuBuilder) menuViewWrapper.getTag();
                 menuBuilder.setCallback(newMcb);
-                menuBuilder.findItem(MENU_SHARE_PRESENCE).setTitle(publishedEnabled ? R.string.deactivate_presence_sharing : R.string.activate_presence_sharing);
             }
+            menuBuilder.findItem(R.id.share_presence).setTitle(publishedEnabled ? R.string.deactivate_presence_sharing : R.string.activate_presence_sharing);
+            menuBuilder.findItem(R.id.set_sip_data).setVisible(!TextUtils.isEmpty(groupName));
+            
         }else if(type == ContactsWrapper.TYPE_CONTACT) {
             ContactsWrapper.getInstance().bindContactView(view, context, cursor);
         } else if (type == ContactsWrapper.TYPE_CONFIGURE) {
@@ -151,12 +156,14 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         private Long profileId = SipProfile.INVALID_ID;
         private Context context;
         private String groupName;
+        private String domain;
         private boolean publishEnabled;
         
-        public MenuCallback(Context ctxt, Long aProfileId, String aGroupName, boolean aPublishedEnabled) {
+        public MenuCallback(Context ctxt, Long aProfileId, String aGroupName, String aDomain, boolean aPublishedEnabled) {
             profileId = aProfileId;
             context = ctxt;
             groupName = aGroupName;
+            domain = aDomain;
             publishEnabled = aPublishedEnabled;
         }
         
@@ -168,13 +175,16 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         @Override
         public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
             int itemId = item.getItemId();
-            if(itemId == MENU_SET_GROUP) {
+            if(itemId == R.id.set_group) {
                 showDialogForGroupSelection(context, profileId, groupName);
                 return true;
-            }else if(itemId == MENU_SHARE_PRESENCE) {
+            }else if(itemId == R.id.share_presence) {
                 ContentValues cv = new ContentValues();
                 cv.put(SipProfile.FIELD_PUBLISH_ENABLED, publishEnabled ? 0 : 1);
                 context.getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, profileId), cv, null, null);
+                return true;
+            }else if(itemId == R.id.set_sip_data) {
+                showDialogForSipData(context, profileId, groupName, domain);
                 return true;
             }
             return false;
@@ -231,6 +241,21 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         final Dialog dialog = builder.create();
         dialog.show();
     }
+    
+    private void showDialogForSipData(final Context context, final Long profileId, final String groupName, final String domain) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.set_android_group);
+        builder.setCancelable(true);
+        builder.setItems(R.array.sip_data_sources, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                applyNumbersToCSip(groupName, 1 << which, domain);
+            }
+        });
+        
+        final Dialog dialog = builder.create();
+        dialog.show();
+    }
 
     @Override
     public void onClick(View v) {
@@ -238,6 +263,30 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         if(id == R.id.configure_view) {
             ConfigureObj cfg = (ConfigureObj) v.getTag();
             showDialogForGroupSelection(mContext, cfg.profileId, cfg.groupName);
+        }
+    }
+    
+    private void applyNumbersToCSip(String groupName, int flag, String domain) {
+        Log.d(THIS_FILE, "Apply numbers to csip " + groupName + " > " + domain);
+        ContactsWrapper cw = ContactsWrapper.getInstance();
+        Cursor c = cw.getContactsByGroup(mContext, groupName);
+        try {
+            while (c.moveToNext()) {
+                long contactId = c.getLong(c.getColumnIndex(Contacts._ID));
+                List<Phone> phones = cw.getPhoneNumbers(mContext, contactId, flag);
+                if(phones.size() > 0){
+                    String nbr = phones.get(0).getNumber();
+                    if(!nbr.contains("@")){
+                        nbr += "@" + domain;
+                    }
+                    Log.d(THIS_FILE, "Apply number to " + contactId + " > " + nbr);
+                    cw.insertOrUpdateCSipUri(mContext, contactId, nbr);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(THIS_FILE, "Error while looping on contacts", e);
+        } finally {
+            c.close();
         }
     }
 }

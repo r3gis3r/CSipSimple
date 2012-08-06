@@ -56,7 +56,7 @@ endif
 # pj_screen_capture_android
 
 APP_PLATFORM := android-14
-APP_STL := gnustl_static #stlport_static
+APP_STL := stlport_shared
 
 BASE_PJSIP_FLAGS := -DPJ_ANDROID=1 -DUSE_CSIPSIMPLE=$(MY_USE_CSIPSIMPLE)
 # about codecs

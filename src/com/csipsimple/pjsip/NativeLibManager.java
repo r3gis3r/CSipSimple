@@ -34,6 +34,7 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class NativeLibManager {
 	private static final String THIS_FILE = "NativeLibMgr";
+    public static final String STD_LIB_NAME = "stlport_shared";
 	public static final String STACK_NAME = "pjsipjni";
 	
 	public static File getBundledStackLibFile(Context ctx, String libName) {

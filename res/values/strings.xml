@@ -108,5 +108,8 @@
     <string name="configure">Configure</string>
     <string name="set_android_group">Choose android group</string>
     <string name="set_sip_data">Choose sip uri data</string>
+    <string name="uri_nbr">Phone number</string>
+    <string name="uri_im">IM with custom SIP scheme</string>
+    <string name="uri_sip">Internet call</string>
 
 </resources>

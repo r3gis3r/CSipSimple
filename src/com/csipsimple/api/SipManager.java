@@ -86,6 +86,18 @@ public final class SipManager {
      */
     public static final String INTENT_SIP_ACCOUNT_ACTIVATE = "com.csipsimple.accounts.activate";
 
+    /**
+     * Scheme for csip uri.
+     */
+    public static final String PROTOCOL_CSIP = "csip";
+    /**
+     * Scheme for sip uri.
+     */
+    public static final String PROTOCOL_SIP = "sip";
+    /**
+     * Scheme for sips (sip+tls) uri.
+     */
+    public static final String PROTOCOL_SIPS = "sips";
     // -------
     // ACTIONS
     /**

@@ -281,7 +281,7 @@ public final class SipUri {
         /**
          * Scheme of the protocol
          */
-        public String scheme = "sip";
+        public String scheme = SipManager.PROTOCOL_SIP;
         /**
          * Port number
          */
