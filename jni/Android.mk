@@ -8,6 +8,15 @@ ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),armeabi armeabi-v7a))
 USE_FIXED_POINT := 1
 endif
 
+
+# Add a static target for libgcc
+include $(CLEAR_VARS)
+LOCAL_PATH := /
+LOCAL_MODULE    := libgcc 
+LOCAL_SRC_FILES := $(TARGET_LIBGCC)
+include $(PREBUILT_STATIC_LIBRARY)
+
+
 # Include all submodules declarations
 include $(JNI_PATH)/pjsip/android_toolchain/Android.mk
 include $(JNI_PATH)/webrtc/android_toolchain/Android.mk

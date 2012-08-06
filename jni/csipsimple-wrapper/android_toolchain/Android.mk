@@ -1,15 +1,5 @@
 MODULE_PATH := $(call my-dir)/../
 
-# Hack for mips
-# Add a static target for libgcc
-include $(CLEAR_VARS)
-LOCAL_PATH := /
-LOCAL_MODULE    := libgcc 
-LOCAL_SRC_FILES := $(TARGET_LIBGCC)
-include $(PREBUILT_STATIC_LIBRARY)
-
-
-
 ##################
 # CSipSimple lib #
 ##################
@@ -59,7 +49,7 @@ LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/q850_reason_
 LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/ndk_stl_fixer.cpp
 
 
-LOCAL_LDLIBS := -llog -ldl
+LOCAL_LDLIBS += -llog -ldl
 
 ifeq ($(MY_USE_AMR),1)
 	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
@@ -127,9 +117,7 @@ endif
 
 endif
 
-ifeq ($(TARGET_ARCH_ABI),mips)
-	LOCAL_STATIC_LIBRARIES += libgcc
-endif
+LOCAL_STATIC_LIBRARIES += libgcc
 
 include $(BUILD_SHARED_LIBRARY)
 

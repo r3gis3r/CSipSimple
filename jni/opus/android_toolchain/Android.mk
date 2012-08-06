@@ -47,9 +47,7 @@ ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),armeabi armeabi-v7a))
 LOCAL_CFLAGS += -DFIXED_POINT
 endif
 
-ifeq ($(TARGET_ARCH_ABI),mips)
-	LOCAL_STATIC_LIBRARIES += libgcc
-endif
+LOCAL_STATIC_LIBRARIES += libgcc
 
 include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)

@@ -50,9 +50,7 @@ LOCAL_SHARED_LIBRARIES += libpjsipjni
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
-ifeq ($(TARGET_ARCH_ABI),mips)
-	LOCAL_STATIC_LIBRARIES += libgcc
-endif
+LOCAL_STATIC_LIBRARIES += libgcc
 
 include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
