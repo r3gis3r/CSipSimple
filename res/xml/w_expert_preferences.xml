@@ -224,5 +224,54 @@
             android:summary="Specify SIP outbound (RFC 5626) registration ID."
             android:title="RFC5626 Reg id" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/nat_traversal" >
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/acc_stun_use_choices"
+            android:entryValues="@array/acc_stun_use_values"
+            android:key="sip_stun_use"
+            android:title="STUN for SIP" />
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/acc_stun_use_choices"
+            android:entryValues="@array/acc_stun_use_values"
+            android:key="media_stun_use"
+            android:title="STUN for Media" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="ice_cfg_use"
+            android:title="Custom ICE configuration" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="ice_cfg_use"
+            android:key="ice_cfg_enable"
+            android:title="Enable ICE" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="turn_cfg_use"
+            android:title="Custom TURN configuration" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="turn_cfg_use"
+            android:key="turn_cfg_enable"
+            android:title="Enable TURN" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:dependency="turn_cfg_use"
+            android:key="turn_cfg_server"
+            android:title="TURN server" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:dependency="turn_cfg_use"
+            android:key="turn_cfg_user"
+            android:title="TURN user" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:dependency="turn_cfg_use"
+            android:key="turn_cfg_pwd"
+            android:title="TURN password" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

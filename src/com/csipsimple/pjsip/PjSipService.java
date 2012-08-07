@@ -222,7 +222,7 @@ public class PjSipService {
                 pjsua.setCallbackObject(userAgentReceiver);
 
                 Log.d(THIS_FILE, "Attach is done to callback");
-                int isTurnEnabled = prefsWrapper.getTurnEnabled();
+                
 
                 // CSS CONFIG
                 pjsua.csipsimple_config_default(cssCfg);
@@ -255,13 +255,6 @@ public class PjSipService {
                     cssCfg.setTsx_t4_timeout(tsx_to);
                 }
                 
-                // TURN
-                if (isTurnEnabled == 1) {
-                    cssCfg.setTurn_username(pjsua.pj_str_copy(prefsWrapper
-                            .getPreferenceStringValue(SipConfigManager.TURN_USERNAME)));
-                    cssCfg.setTurn_password(pjsua.pj_str_copy(prefsWrapper
-                            .getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)));
-                }
 
                 // -- USE_ZRTP 1 is no_zrtp, 2 is create_zrtp
                 File zrtpFolder = PreferencesWrapper.getZrtpFolder(service);
@@ -443,10 +436,20 @@ public class PjSipService {
 
                 // ICE
                 mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());
+
                 // TURN
+                int isTurnEnabled = prefsWrapper.getTurnEnabled();
                 if (isTurnEnabled == 1) {
                     mediaCfg.setEnable_turn(isTurnEnabled);
                     mediaCfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
+                    pjsua.set_turn_credentials(
+                            pjsua.pj_str_copy(prefsWrapper
+                                    .getPreferenceStringValue(SipConfigManager.TURN_USERNAME)), 
+                            pjsua.pj_str_copy(prefsWrapper
+                                    .getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)), 
+                                   pjsua.pj_str_copy("*"), mediaCfg.getTurn_auth_cred());
+                }else {
+                    mediaCfg.setEnable_turn(pjsua.PJ_FALSE);
                 }
 
                 // INITIALIZE

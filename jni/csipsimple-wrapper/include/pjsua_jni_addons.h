@@ -40,16 +40,6 @@ typedef struct csipsimple_config {
 	pj_bool_t use_no_update;
 
 	/**
-	 * Turn username
-	 */
-	pj_str_t turn_username;
-
-	/**
-	 * Turn password
-	 */
-	pj_str_t turn_password;
-
-	/**
 	 * Use ZRTP
 	 */
 	pj_bool_t use_zrtp;
@@ -167,6 +157,7 @@ PJ_DECL(pj_status_t) pj_timer_fire(int entry_id);
 PJ_DECL(pj_status_t) pjsua_acc_clean_all_registrations( pjsua_acc_id acc_id);
 PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr);
 PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id, jobject window);
+PJ_DECL(pj_status_t) set_turn_credentials(const pj_str_t username, const pj_str_t password, const pj_str_t realm, pj_stun_auth_cred *turn_auth_cred);
 
 // App callback
 PJ_DECL(void) css_on_call_state(pjsua_call_id call_id, pjsip_event *e);

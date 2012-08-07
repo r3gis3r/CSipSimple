@@ -29,7 +29,12 @@ import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_config;
+import org.pjsip.pjsua.pjsua_ice_config;
+import org.pjsip.pjsua.pjsua_ice_config_use;
+import org.pjsip.pjsua.pjsua_stun_use;
 import org.pjsip.pjsua.pjsua_transport_config;
+import org.pjsip.pjsua.pjsua_turn_config;
+import org.pjsip.pjsua.pjsua_turn_config_use;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -198,6 +203,28 @@ public class PjSipAccount {
         profile_enable_qos = profile.rtp_enable_qos;
         profile_qos_dscp = profile.rtp_qos_dscp;
         
+        cfg.setSip_stun_use(profile.sip_stun_use == 0 ? pjsua_stun_use.PJSUA_STUN_USE_DISABLED : pjsua_stun_use.PJSUA_STUN_USE_DEFAULT);
+        cfg.setMedia_stun_use(profile.media_stun_use == 0 ? pjsua_stun_use.PJSUA_STUN_USE_DISABLED : pjsua_stun_use.PJSUA_STUN_USE_DEFAULT);
+        if(profile.ice_cfg_use == 1) {
+            cfg.setIce_cfg_use(pjsua_ice_config_use.PJSUA_ICE_CONFIG_USE_CUSTOM);
+            pjsua_ice_config iceCfg = cfg.getIce_cfg();
+            iceCfg.setEnable_ice( (profile.ice_cfg_enable == 1 )? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+        }else {
+            cfg.setIce_cfg_use(pjsua_ice_config_use.PJSUA_ICE_CONFIG_USE_DEFAULT);
+        }
+        if(profile.turn_cfg_use == 1) {
+            cfg.setTurn_cfg_use(pjsua_turn_config_use.PJSUA_TURN_CONFIG_USE_CUSTOM);
+            pjsua_turn_config turnCfg = cfg.getTurn_cfg();
+            turnCfg.setEnable_turn( (profile.turn_cfg_enable == 1) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+            turnCfg.setTurn_server( pjsua.pj_str_copy(profile.turn_cfg_server) );
+            pjsua.set_turn_credentials(
+                    pjsua.pj_str_copy(profile.turn_cfg_user),
+                    pjsua.pj_str_copy(profile.turn_cfg_password), 
+                    pjsua.pj_str_copy("*"), 
+                    turnCfg.getTurn_auth_cred());
+        }else {
+            cfg.setTurn_cfg_use(pjsua_turn_config_use.PJSUA_TURN_CONFIG_USE_DEFAULT);
+        }
 	}
 	
 	

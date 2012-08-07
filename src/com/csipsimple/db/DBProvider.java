@@ -122,6 +122,11 @@ public class DBProvider extends ContentProvider {
 		// Video
 		SipProfile.FIELD_VID_IN_AUTO_SHOW, SipProfile.FIELD_VID_OUT_AUTO_TRANSMIT,
 		
+		// STUN, ICE, TURN
+		SipProfile.FIELD_SIP_STUN_USE, SipProfile.FIELD_MEDIA_STUN_USE,
+		SipProfile.FIELD_ICE_CFG_USE, SipProfile.FIELD_ICE_CFG_ENABLE,
+		SipProfile.FIELD_TURN_CFG_USE, SipProfile.FIELD_TURN_CFG_ENABLE, SipProfile.FIELD_TURN_CFG_SERVER, SipProfile.FIELD_TURN_CFG_USER, SipProfile.FIELD_TURN_CFG_PASSWORD,
+        
 		
 	};
 	public final static Class<?>[] ACCOUNT_FULL_PROJECTION_TYPES = {
@@ -158,7 +163,12 @@ public class DBProvider extends ContentProvider {
 		Integer.class, String.class, String.class,
 		
 		// Video
-		Integer.class, Integer.class
+		Integer.class, Integer.class,
+		
+        // STUN, ICE, TURN
+        Integer.class, Integer.class,
+        Integer.class, Integer.class,
+        Integer.class, Integer.class, String.class, String.class, String.class,
 	};
 
 

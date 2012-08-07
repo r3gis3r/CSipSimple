@@ -211,5 +211,13 @@
         <item>@string/disabled</item>
         <item>@string/force</item>
     </string-array>
+    <string-array name="acc_stun_use_values">
+        <item>-1</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="acc_stun_use_choices">
+        <item>@string/default_str</item>
+        <item>@string/disabled</item>
+    </string-array>
 
 </resources>

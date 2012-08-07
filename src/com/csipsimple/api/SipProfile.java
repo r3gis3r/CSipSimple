@@ -651,6 +651,53 @@ public class SipProfile implements Parcelable {
     public static final String FIELD_ALLOW_VIA_REWRITE = "allow_via_rewrite";
 
     /**
+     * Control the use of STUN for the SIP signaling.
+     */
+    public static final String FIELD_SIP_STUN_USE = "sip_stun_use";
+    
+    /**
+     * Control the use of STUN for the transports.
+     */
+    public static final String FIELD_MEDIA_STUN_USE = "media_stun_use";
+    
+    /**
+     * Control the use of ICE in the account. 
+     * By default, the settings in the pjsua_media_config will be used. 
+     */
+    public static final String FIELD_ICE_CFG_USE = "ice_cfg_use";
+
+    /**
+     * Enable ICE. 
+     */
+    public static final String FIELD_ICE_CFG_ENABLE = "ice_cfg_enable";
+    
+    /**
+     * Control the use of TURN in the account. 
+     * By default, the settings in the pjsua_media_config will be used. 
+     */
+    public static final String FIELD_TURN_CFG_USE = "turn_cfg_use";
+    
+    /**
+     *  Enable TURN.
+     */
+    public static final String FIELD_TURN_CFG_ENABLE = "turn_cfg_enable";
+    
+    /**
+     *  TURN server.
+     */
+    public static final String FIELD_TURN_CFG_SERVER = "turn_cfg_server";
+    
+    /**
+     *  TURN username.
+     */
+    public static final String FIELD_TURN_CFG_USER = "turn_cfg_user";
+    
+    /**
+     *  TURN password.
+     */
+    public static final String FIELD_TURN_CFG_PASSWORD = "turn_cfg_pwd";
+    
+    /**
      * Simple project to use if you want to list accounts with basic infos on it
      * only.
      * 
@@ -850,7 +897,43 @@ public class SipProfile implements Parcelable {
      * @see #FIELD_MWI_ENABLED
      */
     public boolean mwi_enabled = true;
-
+    /**
+     * @see #FIELD_SIP_STUN_USE
+     */
+    public int sip_stun_use = -1;
+    /**
+     * @see #FIELD_MEDIA_STUN_USE
+     */
+    public int media_stun_use = -1;
+    /**
+     * @see #FIELD_ICE_CFG_USE
+     */
+    public int ice_cfg_use = -1;
+    /**
+     * @see #FIELD_ICE_CFG_ENABLE
+     */
+    public int ice_cfg_enable = 0;
+    /**
+     * @see #FIELD_TURN_CFG_USE
+     */
+    public int turn_cfg_use = -1;
+    /**
+     * @see #FIELD_ICE_CFG_ENABLE
+     */
+    public int turn_cfg_enable = 0;
+    /**
+     * @see #FIELD_TURN_CFG_SERVER
+     */
+    public String turn_cfg_server = "";
+    /**
+     * @see #FIELD_TURN_CFG_USER
+     */
+    public String turn_cfg_user = "";
+    /**
+     * @see #FIELD_TURN_CFG_PASSWORD
+     */
+    public String turn_cfg_password = "";
+    
     public SipProfile() {
         display_name = "";
         wizard = "EXPERT";
@@ -918,6 +1001,15 @@ public class SipProfile implements Parcelable {
         android_group = getReadParcelableString(in.readString());
         mwi_enabled = (in.readInt() != 0);
         allow_via_rewrite = (in.readInt() != 0);
+        sip_stun_use = in.readInt();
+        media_stun_use = in.readInt();
+        ice_cfg_use = in.readInt();
+        ice_cfg_enable = in.readInt();
+        turn_cfg_use = in.readInt();
+        turn_cfg_enable = in.readInt();
+        turn_cfg_server = getReadParcelableString(in.readString());
+        turn_cfg_user = getReadParcelableString(in.readString());
+        turn_cfg_password = getReadParcelableString(in.readString());
     }
 
     /**
@@ -993,6 +1085,15 @@ public class SipProfile implements Parcelable {
         dest.writeString(getWriteParcelableString(android_group));
         dest.writeInt(mwi_enabled ? 1 : 0);
         dest.writeInt(allow_via_rewrite ? 1 : 0);
+        dest.writeInt(sip_stun_use);
+        dest.writeInt(media_stun_use);
+        dest.writeInt(ice_cfg_use);
+        dest.writeInt(ice_cfg_enable);
+        dest.writeInt(turn_cfg_use);
+        dest.writeInt(turn_cfg_enable);
+        dest.writeString(getWriteParcelableString(turn_cfg_server));
+        dest.writeString(getWriteParcelableString(turn_cfg_user));
+        dest.writeString(getWriteParcelableString(turn_cfg_password));
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -1208,6 +1309,44 @@ public class SipProfile implements Parcelable {
         if (tmp_i != null && tmp_i >= 0) {
             rtp_qos_dscp = tmp_i;
         }
+        
+
+        tmp_i = args.getAsInteger(FIELD_SIP_STUN_USE);
+        if (tmp_i != null && tmp_i >= 0) {
+            sip_stun_use = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_MEDIA_STUN_USE);
+        if (tmp_i != null && tmp_i >= 0) {
+            media_stun_use = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_ICE_CFG_USE);
+        if (tmp_i != null && tmp_i >= 0) {
+            ice_cfg_use = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_ICE_CFG_ENABLE);
+        if (tmp_i != null && tmp_i >= 0) {
+            ice_cfg_enable = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_TURN_CFG_USE);
+        if (tmp_i != null && tmp_i >= 0) {
+            turn_cfg_use = tmp_i;
+        }
+        tmp_i = args.getAsInteger(FIELD_ICE_CFG_ENABLE);
+        if (tmp_i != null && tmp_i >= 0) {
+            turn_cfg_enable = tmp_i;
+        }
+        tmp_s = args.getAsString(FIELD_TURN_CFG_SERVER);
+        if (tmp_s != null) {
+            turn_cfg_server = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_TURN_CFG_USER);
+        if (tmp_s != null) {
+            turn_cfg_user = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_TURN_CFG_PASSWORD);
+        if (tmp_s != null) {
+            turn_cfg_password = tmp_s;
+        }
 
     }
 
@@ -1290,7 +1429,17 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_USE_RFC5626, use_rfc5626 ? 1 : 0);
 
         args.put(FIELD_ANDROID_GROUP, android_group);
-
+        
+        args.put(FIELD_SIP_STUN_USE, sip_stun_use);
+        args.put(FIELD_MEDIA_STUN_USE, media_stun_use);
+        args.put(FIELD_ICE_CFG_USE, ice_cfg_use);
+        args.put(FIELD_ICE_CFG_ENABLE, ice_cfg_enable);
+        args.put(FIELD_TURN_CFG_USE, turn_cfg_use);
+        args.put(FIELD_TURN_CFG_ENABLE, turn_cfg_enable);
+        args.put(FIELD_TURN_CFG_SERVER, turn_cfg_server);
+        args.put(FIELD_TURN_CFG_USER, turn_cfg_user);
+        args.put(FIELD_TURN_CFG_PASSWORD, turn_cfg_password);
+        
         return args;
     }
 

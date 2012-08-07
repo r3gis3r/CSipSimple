@@ -46,7 +46,7 @@ public class DBAdapter {
 
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
-		private static final int DATABASE_VERSION = 33;
+		private static final int DATABASE_VERSION = 34;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -109,7 +109,16 @@ public class DBAdapter {
                 + SipProfile.FIELD_RTP_BOUND_ADDR            + " TEXT,"
                 + SipProfile.FIELD_RTP_PUBLIC_ADDR           + " TEXT,"
                 + SipProfile.FIELD_ANDROID_GROUP             + " TEXT,"
-                + SipProfile.FIELD_ALLOW_VIA_REWRITE         + " INTEGER DEFAULT 0"
+                + SipProfile.FIELD_ALLOW_VIA_REWRITE         + " INTEGER DEFAULT 0,"
+                + SipProfile.FIELD_SIP_STUN_USE              + " INTEGER DEFAULT -1,"
+                + SipProfile.FIELD_MEDIA_STUN_USE            + " INTEGER DEFAULT -1,"
+                + SipProfile.FIELD_ICE_CFG_USE               + " INTEGER DEFAULT -1,"
+                + SipProfile.FIELD_ICE_CFG_ENABLE            + " INTEGER DEFAULT 0,"
+                + SipProfile.FIELD_TURN_CFG_USE              + " INTEGER DEFAULT -1,"
+                + SipProfile.FIELD_TURN_CFG_ENABLE           + " INTEGER DEFAULT 0,"
+                + SipProfile.FIELD_TURN_CFG_SERVER           + " TEXT,"
+                + SipProfile.FIELD_TURN_CFG_USER             + " TEXT,"
+                + SipProfile.FIELD_TURN_CFG_PASSWORD         + " TEXT"
 				
 			+ ");";
 		
@@ -350,9 +359,32 @@ public class DBAdapter {
             }
             if(oldVersion < 33) {
                 try {
-                    //Add reg delay before refresh row
-                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ALLOW_VIA_REWRITE, "INTEGER DEFAULT 1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ALLOW_VIA_REWRITE, "INTEGER DEFAULT 0");
                     db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ALLOW_VIA_REWRITE + "=0");
+                    Log.d(THIS_FILE, "Upgrade done");
+                }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
+            }
+            if(oldVersion < 34) {
+                try {
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_SIP_STUN_USE, "INTEGER DEFAULT -1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_MEDIA_STUN_USE, "INTEGER DEFAULT -1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ICE_CFG_USE, "INTEGER DEFAULT -1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ICE_CFG_ENABLE, "INTEGER DEFAULT 0");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_TURN_CFG_USE, "INTEGER DEFAULT -1");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_TURN_CFG_ENABLE, "INTEGER DEFAULT 0");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_TURN_CFG_SERVER, "TEXT");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_TURN_CFG_USER, "TEXT");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_TURN_CFG_PASSWORD, "TEXT");
+                    
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_SIP_STUN_USE + "=-1");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_MEDIA_STUN_USE + "=-1");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ICE_CFG_USE + "=-1");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ICE_CFG_ENABLE + "=0");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TURN_CFG_USE + "=-1");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TURN_CFG_ENABLE + "=0");
+                    
                     Log.d(THIS_FILE, "Upgrade done");
                 }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);

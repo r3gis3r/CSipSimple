@@ -254,6 +254,42 @@ PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id,
 	return status;
 }
 
+PJ_DECL(pj_status_t) set_turn_credentials(const pj_str_t username, const pj_str_t password, const pj_str_t realm, pj_stun_auth_cred *turn_auth_cred) {
+
+	PJ_ASSERT_RETURN(turn_auth_cred, PJ_EINVAL);
+
+	/* Create memory pool for application. */
+	if(css_var.pool == NULL){
+		css_var.pool = pjsua_pool_create("css", 1000, 1000);
+		PJ_ASSERT_RETURN(css_var.pool, PJ_ENOMEM);
+	}
+
+	if (username.slen) {
+		turn_auth_cred->type = PJ_STUN_AUTH_CRED_STATIC;
+		pj_strdup_with_null(css_var.pool,
+					&turn_auth_cred->data.static_cred.username,
+					&username);
+	} else {
+		turn_auth_cred->data.static_cred.username.slen = 0;
+	}
+
+	if(password.slen) {
+		turn_auth_cred->data.static_cred.data_type = PJ_STUN_PASSWD_PLAIN;
+		pj_strdup_with_null(css_var.pool,
+				&turn_auth_cred->data.static_cred.data,
+				&password);
+	}else{
+		turn_auth_cred->data.static_cred.data.slen = 0;
+	}
+
+	if(realm.slen) {
+
+	} else {
+		turn_auth_cred->data.static_cred.realm = pj_str("*");
+	}
+
+	return PJ_SUCCESS;
+}
 
 static char errmsg[PJ_ERR_MSG_SIZE];
 //Get error message
@@ -314,26 +350,12 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	unsigned i;
 
 	/* Create memory pool for application. */
-	css_var.pool = pjsua_pool_create("css", 1000, 1000);
-	PJ_ASSERT_RETURN(css_var.pool, PJ_ENOMEM);
-
+	if(css_var.pool == NULL){
+		css_var.pool = pjsua_pool_create("css", 1000, 1000);
+		PJ_ASSERT_RETURN(css_var.pool, PJ_ENOMEM);
+	}
 	// Finalize configuration
 	log_cfg->cb = &pj_android_log_msg;
-	if (css_cfg->turn_username.slen) {
-		media_cfg->turn_auth_cred.type = PJ_STUN_AUTH_CRED_STATIC;
-		media_cfg->turn_auth_cred.data.static_cred.realm = pj_str("*");
-		pj_strdup_with_null(css_var.pool,
-				&media_cfg->turn_auth_cred.data.static_cred.username,
-				&css_cfg->turn_username);
-
-		if (css_cfg->turn_password.slen) {
-			media_cfg->turn_auth_cred.data.static_cred.data_type =
-					PJ_STUN_PASSWD_PLAIN;
-			pj_strdup_with_null(css_var.pool,
-					&media_cfg->turn_auth_cred.data.static_cred.data,
-					&css_cfg->turn_password);
-		}
-	}
 
 	// Static cfg
 	extern pj_bool_t pjsip_use_compact_form;

@@ -70,6 +70,15 @@ public class Expert extends BaseImplementation {
     private EditTextPreference rtpPublicAddr;
     private EditTextPreference rtpBoundAddr;
     private EditTextPreference rtpQosDscp;
+    private ListPreference sipStunUse;
+    private ListPreference mediaStunUse;
+    private CheckBoxPreference iceCfgUse;
+    private CheckBoxPreference iceCfgEnable;
+    private CheckBoxPreference turnCfgUse;
+    private CheckBoxPreference turnCfgEnable;
+    private EditTextPreference turnCfgServer;
+    private EditTextPreference turnCfgUser;
+    private EditTextPreference turnCfgPassword;
 	
 	private void bindFields() {
 		accountDisplayName = (EditTextPreference) findPreference(SipProfile.FIELD_DISPLAY_NAME);
@@ -104,6 +113,16 @@ public class Expert extends BaseImplementation {
 		rtpPort = (EditTextPreference) findPreference(SipProfile.FIELD_RTP_PORT);
         rtpBoundAddr = (EditTextPreference) findPreference(SipProfile.FIELD_RTP_BOUND_ADDR);
         rtpPublicAddr = (EditTextPreference) findPreference(SipProfile.FIELD_RTP_PUBLIC_ADDR);
+        
+        sipStunUse = (ListPreference) findPreference(SipProfile.FIELD_SIP_STUN_USE);
+        mediaStunUse = (ListPreference) findPreference(SipProfile.FIELD_MEDIA_STUN_USE);
+        iceCfgUse = (CheckBoxPreference) findPreference(SipProfile.FIELD_ICE_CFG_USE);
+        iceCfgEnable = (CheckBoxPreference) findPreference(SipProfile.FIELD_ICE_CFG_ENABLE);
+        turnCfgUse = (CheckBoxPreference) findPreference(SipProfile.FIELD_TURN_CFG_USE);
+        turnCfgEnable = (CheckBoxPreference) findPreference(SipProfile.FIELD_TURN_CFG_ENABLE);
+        turnCfgServer = (EditTextPreference) findPreference(SipProfile.FIELD_TURN_CFG_SERVER);
+        turnCfgUser = (EditTextPreference) findPreference(SipProfile.FIELD_TURN_CFG_USER);
+        turnCfgPassword = (EditTextPreference) findPreference(SipProfile.FIELD_TURN_CFG_PASSWORD);
 	}
 
 	public void fillLayout(final SipProfile account) {
@@ -175,6 +194,16 @@ public class Expert extends BaseImplementation {
 		accountVm.setText(account.vm_nbr);
 		mwiEnabled.setChecked(account.mwi_enabled);
 		tryCleanRegisters.setChecked(account.try_clean_registers != 0);
+		
+		sipStunUse.setValue(Integer.toString(account.sip_stun_use));
+		mediaStunUse.setValue(Integer.toString(account.media_stun_use));
+		iceCfgUse.setChecked(account.ice_cfg_use == 1);
+		iceCfgEnable.setChecked(account.ice_cfg_enable == 1);
+        turnCfgUse.setChecked(account.turn_cfg_use == 1);
+        turnCfgEnable.setChecked(account.turn_cfg_enable == 1);
+        turnCfgServer.setText(account.turn_cfg_server);
+        turnCfgUser.setText(account.turn_cfg_user);
+        turnCfgPassword.setText(account.turn_cfg_password);
 	}
 	
 
@@ -330,6 +359,16 @@ public class Expert extends BaseImplementation {
         account.rtp_public_addr = rtpPublicAddr.getText();
         account.rtp_enable_qos = getIntValue(rtpEnableQos, -1);
         account.rtp_qos_dscp = getIntValue(rtpQosDscp, -1);
+        
+        account.sip_stun_use = getIntValue(sipStunUse, -1);
+        account.media_stun_use = getIntValue(mediaStunUse, -1);
+        account.ice_cfg_use = iceCfgUse.isChecked() ? 1 : -1;
+        account.ice_cfg_enable = iceCfgEnable.isChecked() ? 1 : 0;
+        account.turn_cfg_use = turnCfgUse.isChecked() ? 1 : -1;
+        account.turn_cfg_enable = turnCfgEnable.isChecked() ? 1 : 0;
+        account.turn_cfg_server = turnCfgServer.getText();
+        account.turn_cfg_user = turnCfgUser.getText();
+        account.turn_cfg_password = turnCfgPassword.getText();
         
 		return account;
 	}
