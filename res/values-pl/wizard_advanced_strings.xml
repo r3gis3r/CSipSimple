@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_advanced_display_name">Nazwa konta</string>
+  <string name="w_advanced_display_name_desc">Wyświetla nazwę dla tego konta</string>
+  <string name="w_advanced_caller_id">Wyślij swój numer</string>
+  <string name="w_advanced_caller_id_desc">Wyślij swój numer przy wykonywaniu połączeń</string>
+  <string name="w_advanced_username">Nazwa użytkownika</string>
+  <string name="w_advanced_username_desc">Nazwa użytkownika dla uwierzytelniania serwera SIP (nie załączaj @sip.server)</string>
+  <string name="w_advanced_password">Hasło</string>
+  <string name="w_advanced_password_desc">Hasło dla uwierzytelniania serwera SIP</string>
+  <string name="w_advanced_use_tcp">Używaj TCP (a nie UDP)</string>
+  <string name="w_advanced_proxy">Serwer proxy</string>
+  <string name="w_advanced_proxy_desc">Domena Proxy/IP[:port] (opcjonalne, nie zawsze potrzebne)</string>
+  <string name="w_advanced_auth_id">Identyfikator uwierzytelniania Sip</string>
+  <string name="w_advanced_auth_id_desc">Pozostaw puste dla tego samego jak Nazwa użytkownika</string>
+</resources>

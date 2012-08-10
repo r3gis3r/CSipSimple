@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_sipgate_display_name">Nazwa konta</string>
+  <string name="w_sipgate_display_name_desc">Wyświetla nazwę tego konta</string>
+  <string name="w_sipgate_username">Identyfikator SIP</string>
+  <string name="w_sipgate_username_desc">Różni się od twojego loginu sipgate! Sprawdź na stronie internetowej sipgate twój identyfikator SIP</string>
+  <string name="w_sipgate_password">Hasło SIP</string>
+  <string name="w_sipgate_password_desc">Różni się od twojego hasła! Sprawdź na stronie internetowej sipgate twoje hasło SIP</string>
+  <string name="w_sipgate_server_desc">Na przykład: sipgate.co.uk</string>
+</resources>

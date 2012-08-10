@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_authorization_auth_name">Nazwa uwierzytelnienia</string>
+  <string name="w_authorization_auth_name_desc">Uwierzytelnienie SIP</string>
+  <string name="w_authorization_phone_number">Nazwa użytkownika</string>
+  <string name="w_authorization_phone_number_desc">Konto użytkownika SIP</string>
+</resources>

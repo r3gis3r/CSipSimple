@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_onsip_authentication_name">Nazwa użytkownika uwierzytelnienia</string>
+  <string name="w_onsip_authentication_name_desc">Uwierzytelnienie użytkownika SIP</string>
+  <string name="w_onsip_username">Nazwa użytkownika SIP</string>
+  <string name="w_onsip_username_desc">Nazwa użytkownika konta SIP</string>
+  <string name="w_onsip_server">Domena</string>
+  <string name="w_onsip_server_desc">Domena SIP</string>
+  <string name="w_onsip_password">Hasło SIP</string>
+  <string name="w_onsip_password_desc">Hasło konta SIP</string>
+</resources>

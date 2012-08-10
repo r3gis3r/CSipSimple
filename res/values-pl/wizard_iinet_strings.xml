@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_iinet_state">Stan</string>
+  <string name="w_iinet_state_desc">Odpowiedni stan z poniższej listy</string>
+  <string name="w_iinet_username">Numer telefonu VoIP</string>
+  <string name="w_iinet_username_desc">Usuń wszystkie formatowanie, takie jak spacje i myślniki</string>
+  <string name="w_iinet_password">Specjalne hasło VoIP</string>
+  <string name="w_iinet_password_desc">Nie to samo co hasło połączenia</string>
+</resources>

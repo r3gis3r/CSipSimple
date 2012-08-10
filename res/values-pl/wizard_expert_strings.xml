@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_expert_display_name">Nazwa konta</string>
+  <string name="w_expert_display_name_desc">Wyświetla nazwę dla tego konta</string>
+  <string name="w_expert_acc_id">Numer ID konta</string>
+  <string name="w_expert_acc_id_desc">Format: \"WyświetlanaNazwa &lt;sip:login@registrar&gt;\"</string>
+  <string name="w_expert_reg_uri">URI rejestracji</string>
+  <string name="w_expert_reg_uri_desc">Format: \"sip:registrar.net[:port]\"</string>
+  <string name="w_expert_realm">Domena</string>
+  <string name="w_expert_realm_desc">Domena uwierzytelnienia (jeśli nie znasz, użyj \'*\')</string>
+  <string name="w_expert_username">Nazwa użytkownika</string>
+  <string name="w_expert_username_desc">Nazwa użytkownika dla uwierzytelnienia</string>
+  <string name="w_expert_data">Dane (hasło)</string>
+  <string name="w_expert_data_desc">Hasło (lub inne dane) w celu uwierzytelnienia</string>
+  <string name="w_expert_datatype">Typ danych</string>
+  <string name="w_expert_datatype_desc">Typ danych dla hasła</string>
+  <string name="w_expert_t_proxy">Proxy</string>
+  <string name="w_expert_proxy">URI proxy</string>
+  <string name="w_expert_proxy_desc">Format: \"sip:proxy.net[:port]\"</string>
+  <string name="w_expert_use_tcp">Używaj TCP (a nie UDP)</string>
+  <string name="w_expert_prevent_tcp">Zapobiec TCP (tylko próbuj UDP)</string>
+  <string name="w_expert_publish_enabled">Publikowanie włączone</string>
+  <string name="w_expert_reg_timeout">Limit czasu rejestru (sek)</string>
+  <string name="w_expert_reg_dbr">Opóźnienie rejestru przed odświeżeniem (sek)</string>
+  <string name="w_expert_reg_dbr_desc">Określa liczbę sekund, aby odświeżyć rejestrację klienta przed wygaśnięciem rejestracji.</string>
+  <string name="w_expert_ka_interval">Interwał utrzymania aktywności (sek)</string>
+  <string name="w_expert_force_contact">Wymuś kontakt</string>
+  <string name="w_expert_allow_contact_rewrite">Zezwól na zmianę kontaktu</string>
+  <string name="w_expert_contact_rewrite_method">Metoda zmiany kontaktu</string>
+  <string name="w_expert_reg_use_proxy">Jak używać proxy</string>
+  <string name="w_expert_try_clean_registers">Spróbuj wyczyścić rejestry</string>
+  <string name="w_expert_try_clean_registers_desc">Zezwól aplikacji wyczyścić stare rejestracje w razie potrzeby</string>
+  <string name="w_expert_rtp_bound_addr">Związany adres RTP</string>
+  <string name="w_expert_rtp_bound_addr_desc">Opcjonalnie tam, gdzie przywiązane powinno być gniazdo. Tylko selektywnie przypisz gniazdo do określonego interfejsu (zamiast 0.0.0.0)</string>
+  <string name="w_expert_rtp_public_addr">Publiczny adres RTP</string>
+  <string name="w_expert_rtp_public_addr_desc">Opcjonalnie aby ogłaszać adres transportu RTP.</string>
+  <string name="w_expert_media_transport">Transport multimedia</string>
+  <string name="w_expert_mwi_enabled">Subskrybuj MWI</string>
+  <string name="w_expert_mwi_enabled_desc">Otrzymuj powiadomienia skrzynki głosowej</string>
+  <string name="w_expert_allow_via_rewrite">Zezwól na zmianę Via</string>
+  <string name="w_expert_allow_via_rewrite_desc">Napraw wysłanie przez Via aby używac tego samego adresu interfejsu jakiego w żądaniu REJESTRU</string>
+</resources>

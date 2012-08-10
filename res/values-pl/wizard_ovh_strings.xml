@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_ovh_phone_number_desc">Telefon powinien być w następującym formacie 0033xxxxxx</string>
+  <string name="w_sapo_phone_number_desc">Telefon powinien być w następującym formacie +35130xxxxxx</string>
+  <string name="w_pbxes_user_extension">Rozszerzenie użytkownika (na przykład user-1)</string>
+</resources>

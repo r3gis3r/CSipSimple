@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_sonetel_email">Email</string>
+  <string name="w_sonetel_email_desc">Adres e-mail użytkownika</string>
+</resources>

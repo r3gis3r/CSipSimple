@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_basic_username">Użytkownik</string>
+  <string name="w_basic_username_desc">Nazwa konta / Login (nie załączaj @asip.server)</string>
+  <string name="w_basic_password">Hasło</string>
+  <string name="w_basic_password_desc">Hasło uzyskania dostępu do konta</string>
+</resources>
