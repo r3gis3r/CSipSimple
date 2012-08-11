@@ -142,6 +142,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.ENABLE_ICE, false);
 		put(SipConfigManager.ENABLE_TURN, false);
 		put(SipConfigManager.ENABLE_STUN, false);
+        put(SipConfigManager.ENABLE_STUN2, false);
 		put(SipConfigManager.ENABLE_QOS, false);
 		put(SipConfigManager.USE_COMPACT_FORM, false);
 		put(SipConfigManager.USE_WIFI_IN, true);

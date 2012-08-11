@@ -392,6 +392,7 @@ public class PjSipService {
                         stunServersCount++;
                     }
                     cfg.setStun_srv(stunServers);
+                    cfg.setStun_map_use_stun2(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_STUN2) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
                 }
 
                 // LOGGING CONFIG

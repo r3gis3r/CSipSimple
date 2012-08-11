@@ -162,6 +162,12 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            android:dependency="enable_stun"
+            android:key="enable_stun2"
+            android:summary="@string/enable_stun2_desc"
+            android:title="@string/enable_stun2" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="enable_turn"
             android:summary="@string/enable_turn_desc"
             android:title="@string/enable_turn" />

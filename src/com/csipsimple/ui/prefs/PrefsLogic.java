@@ -23,7 +23,6 @@ package com.csipsimple.ui.prefs;
 
 import android.content.Context;
 import android.content.Intent;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.telephony.TelephonyManager;
 
@@ -35,10 +34,6 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.utils.Theme;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class PrefsLogic {
 
@@ -179,20 +174,6 @@ public class PrefsLogic {
             
             case TYPE_MEDIA_TROUBLESHOOT : {
 
-                ListPreference lp = (ListPreference) pfh.findPreference(SipConfigManager.AUDIO_IMPLEMENTATION);
-                boolean isGinger = Compatibility.isCompatible(9);
-                CharSequence[] entries = new CharSequence[isGinger ? 2 : 1];
-                CharSequence[] values = new CharSequence[isGinger ? 2 : 1];
-                
-                values[0] = Integer.toString(SipConfigManager.AUDIO_IMPLEMENTATION_JAVA);
-                entries[0] = "Java";
-                if(isGinger) {
-                    values[1] = Integer.toString(SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES);
-                    entries[1] = "OpenSL-ES";
-                }
-                
-                lp.setEntries(entries);
-                lp.setEntryValues(values);
                 break;
             }
             case TYPE_NETWORK: {
@@ -232,7 +213,7 @@ public class PrefsLogic {
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.USER_AGENT);
                     pfh.hidePreference(NWK_TRANSPORT_KEY, SipConfigManager.NETWORK_ROUTES_POLLING);
                     
-                    
+                    pfh.hidePreference(NWK_NAT_TRAVERSAL_KEY, SipConfigManager.ENABLE_STUN2);
 
                     pfh.hidePreference("for_incoming", SipConfigManager.USE_ANYWAY_IN);
                     pfh.hidePreference("for_outgoing", SipConfigManager.USE_ANYWAY_OUT);
@@ -279,6 +260,11 @@ public class PrefsLogic {
                     
                 }
                 
+                // Disable themes for now
+                pfh.hidePreference("android_integration", SipConfigManager.THEME);
+                pfh.hidePreference("android_integration", "obtain_themes");
+                
+                /*
                 ListPreference lp = (ListPreference) pfh.findPreference(SipConfigManager.THEME);
                 HashMap<String, String> themes = Theme.getAvailableThemes(ctxt);
                 
@@ -293,6 +279,7 @@ public class PrefsLogic {
                 
                 lp.setEntries(entries);
                 lp.setEntryValues(values);
+                */
                 break;
             }
             case TYPE_CALLS : {

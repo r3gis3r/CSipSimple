@@ -66,6 +66,8 @@
     <string name="turn_password_desc">Password for TURN authentication</string>
     <string name="enable_stun">Enable STUN</string>
     <string name="enable_stun_desc">Turn on STUN feature</string>
+    <string name="enable_stun2">Use new STUN format</string>
+    <string name="enable_stun2_desc">STUN requests for resolving socket mapped address should use the new format</string>
     <string name="stun_server">STUN servers</string>
     <string name="stun_server_desc">STUN servers (HOST[:PORT], …)</string>
     <string name="enable_qos">Enable QoS</string>

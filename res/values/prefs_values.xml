@@ -219,5 +219,11 @@
         <item>@string/default_str</item>
         <item>@string/disabled</item>
     </string-array>
+    <string-array name="audio_implementation_values">
+        <item>0</item>
+    </string-array>
+    <string-array name="audio_implementation_choices">
+        <item>Java</item>
+    </string-array>
 
 </resources>

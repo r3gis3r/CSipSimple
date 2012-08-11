@@ -565,6 +565,19 @@ public class SipConfigManager {
      */
     public static final String STUN_SERVER = "stun_server";
     /**
+     * Enable STUN new format.<br/>
+     * This specifies whether STUN requests for resolving socket mapped
+     * address should use the new format, i.e: having STUN magic cookie
+     * in its transaction ID.
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__config.htm#abec69c2c899604352f3450368757f39b"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_STUN2 = "enable_stun2";
+    
+    /**
      * Use IPv6 support.<br/>
      * This has no effect now since the application by default supports IPv6
      * except for DNS resolution<br/>

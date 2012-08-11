@@ -78,6 +78,8 @@
 
     <ListPreference
         android:defaultValue="0"
+        android:entries="@array/audio_implementation_choices"
+        android:entryValues="@array/audio_implementation_values"
         android:key="audio_implementation"
         android:summary="@string/audio_implementation_desc"
         android:title="@string/audio_implementation" />
