@@ -57,12 +57,9 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Compatibility;
-import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
-import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -768,45 +765,29 @@ public class ContactsUtils5 extends ContactsWrapper {
     }
 
     @Override
-    public void bindContactView(View view, Context context, Cursor cursor) {
-
+    public ContactInfo getContactInfo(Context context, Cursor cursor) {
+        ContactInfo ci = new ContactInfo();
         // Get values
-        String displayName = cursor.getString(cursor.getColumnIndex(Contacts.DISPLAY_NAME));
-        Long contactId = cursor.getLong(cursor.getColumnIndex(Contacts._ID));
-        CallerInfo ci = new CallerInfo();
-        ci.contactContentUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
-        ci.photoId = cursor.getLong(cursor.getColumnIndex(Contacts.PHOTO_ID));
+        ci.displayName = cursor.getString(cursor.getColumnIndex(Contacts.DISPLAY_NAME));
+        ci.contactId = cursor.getLong(cursor.getColumnIndex(Contacts._ID));
+        ci.callerInfo.contactContentUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, ci.contactId);
+        ci.callerInfo.photoId = cursor.getLong(cursor.getColumnIndex(Contacts.PHOTO_ID));
         int photoUriColIndex = cursor.getColumnIndex(Contacts.PHOTO_ID);
-        String status = cursor.getString(cursor.getColumnIndex(Contacts.CONTACT_STATUS));
-        int presence = cursor.getInt(cursor.getColumnIndex(Contacts.CONTACT_PRESENCE));
+        ci.status = cursor.getString(cursor.getColumnIndex(Contacts.CONTACT_STATUS));
+        ci.presence = cursor.getInt(cursor.getColumnIndex(Contacts.CONTACT_PRESENCE));
 
         if (photoUriColIndex >= 0) {
             String photoUri = cursor.getString(photoUriColIndex);
             if (!TextUtils.isEmpty(photoUri)) {
-                ci.photoUri = Uri.parse(photoUri);
+                ci.callerInfo.photoUri = Uri.parse(photoUri);
             }
         }
-        boolean hasPresence = !TextUtils.isEmpty(status);
-
-        // Get views
-        TextView tv = (TextView) view.findViewById(R.id.contact_name);
-        QuickContactBadge badge = (QuickContactBadge) view.findViewById(R.id.quick_contact_photo);
-        TextView statusText = (TextView) view.findViewById(R.id.status_text);
-        ImageView statusImage = (ImageView) view.findViewById(R.id.status_icon);
-
-        // Bind
-        tv.setText(displayName);
-
-        badge.assignContactUri(ci.contactContentUri);
-        ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(context, badge.getImageView(),
-                ci,
-                SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
-                        : R.drawable.ic_contact_picture_holo_dark);
-
-        statusText.setVisibility(hasPresence ? View.VISIBLE : View.GONE);
-        statusText.setText(status);
-        statusImage.setVisibility(hasPresence ? View.VISIBLE : View.GONE);
-        statusImage.setImageResource(StatusUpdates.getPresenceIconResourceId(presence));
+        ci.hasPresence = !TextUtils.isEmpty(ci.status);
+        return ci;
+    }
+    
+    public int getPresenceIconResourceId(int presence) {
+        return StatusUpdates.getPresenceIconResourceId(presence);
     }
 
     @Override
@@ -830,6 +811,13 @@ public class ContactsUtils5 extends ContactsWrapper {
             intent.putParcelableArrayListExtra(Insert.DATA, data);
         }
 
+        return intent;
+    }
+    
+    @Override
+    public Intent getViewContactIntent(Long contactId) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId));
         return intent;
     }
 

@@ -53,6 +53,7 @@
     <string name="dial_tab_name_text">Dial</string>
     <string name="calllog_tab_name_text">CallLogs</string>
     <string name="messages_tab_name_text">Messages</string>
+    <string name="favorites_tab_name_text">Favorites</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="service_ticker_registered_text">SIP Registered</string>
     <string name="outgoing_call_chooser_call_text">Call</string>
@@ -96,6 +97,7 @@
     <string name="invert_selection">Invert selection</string>
     <string name="cant_write_file">Error writing file</string>
     <string name="info">Info</string>
+    <string name="csipsimple_shortcut">CSipSimple shortcut</string>
 
     <!-- Presence stuff -->
     <string name="online">Online</string>

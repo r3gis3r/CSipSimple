@@ -127,6 +127,11 @@ public final class SipManager {
      */
     public static final String ACTION_SIP_MESSAGES = "com.csipsimple.phone.action.MESSAGES";
     /**
+     * Action launched when user want to go in sip favorites.
+     * Should raise the sip favorites view.
+     */
+    public static final String ACTION_SIP_FAVORITES = "com.csipsimple.phone.action.FAVORITES";
+    /**
      * Action launched to enter fast settings.<br/>
      */
     public static final String ACTION_UI_PREFS_FAST = "com.csipsimple.ui.action.PREFS_FAST";

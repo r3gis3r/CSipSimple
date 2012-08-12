@@ -54,7 +54,8 @@
         android:id="@+id/contact_view"
         android:layout_width="fill_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
-        android:layout_gravity="center_vertical" >
+        android:layout_gravity="center_vertical"
+        android:background="?attr/actionBarItemBackground" >
 
         <com.csipsimple.widgets.contactbadge.QuickContactBadge
             android:id="@+id/quick_contact_photo"

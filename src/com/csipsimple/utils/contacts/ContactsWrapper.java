@@ -172,6 +172,13 @@ public abstract class ContactsWrapper {
     public abstract Intent getAddContactIntent(String displayName, String csipUri);
     
     /**
+     * Get the intent to fire to display contact to a user
+     * @param contactId the id of the contact to show
+     * @return an android view intent
+     */
+    public abstract Intent getViewContactIntent(Long contactId);
+    
+    /**
      * Insert or update csip uri to a contact custom im csip protocol
      * @param ctxt the Context of the app
      * @param contactId the id of the contact to insert datas to
@@ -189,12 +196,17 @@ public abstract class ContactsWrapper {
     public abstract Cursor getContactsByGroup(Context ctxt, String groupName);
     
     /**
-     * Bind the contact view to cursor containing contact infos datas
-     * @param view The view to bind to
+     * Get the contact information form the cursor
      * @param context App context
      * @param cursor Cursor containing data at the correct position
      */
-    public abstract void bindContactView(View view, Context context, Cursor cursor);
+    public abstract ContactInfo getContactInfo(Context context, Cursor cursor);
+    
+    /**
+     * @see android.provider.ContactsContract.StatusUpdates#getPresenceIconResourceId(int)
+     * @return
+     */
+    public abstract int getPresenceIconResourceId(int presence);
     
     /**
      * Get list of groups.<br/>
@@ -202,6 +214,15 @@ public abstract class ContactsWrapper {
      * @return a cursor of groups. _id is the identifier, title is the name of the group
      */
     public abstract Cursor getGroups(Context context);
+    
+    public class ContactInfo {
+        public Long contactId = null;
+        public String displayName;
+        public CallerInfo callerInfo = new CallerInfo();
+        public boolean hasPresence = false;
+        public int presence;
+        public String status;
+    }
     
     /**
      * Class to hold phone information

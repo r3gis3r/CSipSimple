@@ -28,6 +28,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.provider.BaseColumns;
@@ -50,9 +51,13 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.ui.SipHome;
+import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.contacts.ContactsWrapper;
+import com.csipsimple.utils.contacts.ContactsWrapper.ContactInfo;
 import com.csipsimple.utils.contacts.ContactsWrapper.Phone;
+import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 import com.csipsimple.wizards.WizardUtils;
 
 import java.util.List;
@@ -61,6 +66,25 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
 
 
     private static final String THIS_FILE = "FavAdapter";
+    
+
+    /** Listener for the primary action in the list, opens the call details. */
+    private final View.OnClickListener mPrimaryActionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ContactInfo ci = (ContactInfo) view.getTag();
+            Intent it = ContactsWrapper.getInstance().getViewContactIntent(ci.contactId);
+            mContext.startActivity(it);
+        }
+    };
+    /** Listener for the secondary action in the list, either call or play. */
+    private final View.OnClickListener mSecondaryActionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ContactInfo ci = (ContactInfo) view.getTag();
+            
+        }
+    };
     
     public FavAdapter(Context context, Cursor c) {
         super(context, R.layout.fav_list_item, c, 0);
@@ -129,7 +153,35 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
             menuBuilder.findItem(R.id.set_sip_data).setVisible(!TextUtils.isEmpty(groupName));
             
         }else if(type == ContactsWrapper.TYPE_CONTACT) {
-            ContactsWrapper.getInstance().bindContactView(view, context, cursor);
+            ContactInfo ci = ContactsWrapper.getInstance().getContactInfo(context, cursor);
+
+            // Get views
+            TextView tv = (TextView) view.findViewById(R.id.contact_name);
+            QuickContactBadge badge = (QuickContactBadge) view.findViewById(R.id.quick_contact_photo);
+            TextView statusText = (TextView) view.findViewById(R.id.status_text);
+            ImageView statusImage = (ImageView) view.findViewById(R.id.status_icon);
+
+            // Bind
+            if(ci.contactId != null) {
+                tv.setText(ci.displayName);
+                badge.assignContactUri(ci.callerInfo.contactContentUri);
+                ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(context, badge.getImageView(),
+                        ci.callerInfo,
+                        SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
+                                : R.drawable.ic_contact_picture_holo_dark);
+    
+                statusText.setVisibility(ci.hasPresence ? View.VISIBLE : View.GONE);
+                statusText.setText(ci.status);
+                statusImage.setVisibility(ci.hasPresence ? View.VISIBLE : View.GONE);
+                statusImage.setImageResource(ContactsWrapper.getInstance().getPresenceIconResourceId(ci.presence));
+            }
+            View v;
+            v = view.findViewById(R.id.contact_view);
+            v.setTag(ci);
+            v.setOnClickListener(mPrimaryActionListener);
+            v = view.findViewById(R.id.secondary_action_icon);
+            v.setTag(ci);
+            v.setOnClickListener(mSecondaryActionListener);
         } else if (type == ContactsWrapper.TYPE_CONFIGURE) {
             // We only bind if it's the correct type
             View v = view.findViewById(R.id.configure_view);

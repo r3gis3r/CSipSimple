@@ -149,19 +149,19 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         
 
         Tab dialerTab = ab.newTab()
-                // .setText(R.string.dial_tab_name_text)
+                 .setContentDescription(R.string.dial_tab_name_text)
                 .setIcon(R.drawable.ic_ab_dialer_holo_dark);
         Tab callLogTab = ab.newTab()
-                // .setText(R.string.calllog_tab_name_text)
+                 .setContentDescription(R.string.calllog_tab_name_text)
                 .setIcon(R.drawable.ic_ab_history_holo_dark);
         Tab favoritesTab = ab.newTab()
-                // .setText(R.string.messages_tab_name_text)
+                 .setContentDescription(R.string.favorites_tab_name_text)
                 .setIcon(R.drawable.ic_ab_favourites_holo_dark);
         
         Tab messagingTab = null;
         if (CustomDistribution.supportMessaging()) {
             messagingTab = ab.newTab()
-                    // .setText(R.string.messages_tab_name_text)
+                    .setContentDescription(R.string.messages_tab_name_text)
                     .setIcon(R.drawable.ic_ab_text_holo_dark);
         }
         
@@ -412,18 +412,28 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         }
         if (fragment instanceof DialerFragment) {
             mDialpadFragment = (DialerFragment) fragment;
-            if (tabId != null && tabId == TAB_ID_DIALER) {
+            if (initTabId == tabId && tabId != null && tabId == TAB_ID_DIALER) {
                 mDialpadFragment.onVisibilityChanged(true);
+                initTabId = null;
             }
         } else if (fragment instanceof CallLogListFragment) {
             mCallLogFragment = (CallLogListFragment) fragment;
-            if (tabId != null && tabId == TAB_ID_CALL_LOG) {
+            if (initTabId == tabId && tabId != null && tabId == TAB_ID_CALL_LOG) {
                 mCallLogFragment.onVisibilityChanged(true);
+                initTabId = null;
             }
         } else if (fragment instanceof ConversationsListFragment) {
             mMessagesFragment = (ConversationsListFragment) fragment;
+            if (initTabId == tabId && tabId != null && tabId == TAB_ID_MESSAGES) {
+                mMessagesFragment.onVisibilityChanged(true);
+                initTabId = null;
+            }
         } else if (fragment instanceof FavListFragment) {
             mPhoneFavoriteFragment = (FavListFragment) fragment;
+            if (initTabId == tabId && tabId != null && tabId == TAB_ID_FAVORITES) {
+                mPhoneFavoriteFragment.onVisibilityChanged(true);
+                initTabId = null;
+            }
         } else if (fragment instanceof WarningFragment) {
             mWarningFragment = (WarningFragment) fragment;
             synchronized (warningList) {
@@ -579,12 +589,14 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         selectTabWithAction(intent);
     }
 
+    Integer initTabId = null;
     private void selectTabWithAction(Intent intent) {
         if (intent != null) {
             String callAction = intent.getAction();
             if (!TextUtils.isEmpty(callAction)) {
                 ActionBar ab = getSupportActionBar();
                 Tab toSelectTab = null;
+                Integer toSelectId = null;
                 if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_DIALER)
                         || callAction.equalsIgnoreCase(Intent.ACTION_DIAL)) {
                     Integer pos = mTabsAdapter.getPositionForId(TAB_ID_DIALER);
@@ -598,21 +610,34 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                                 mDialpadFragment.setTextFieldValue(nbr);
                             }
                         }
+                        toSelectId = TAB_ID_DIALER;
                     }
                 } else if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_CALLLOG)) {
                     Integer pos = mTabsAdapter.getPositionForId(TAB_ID_CALL_LOG);
                     if(pos != null) {
                         toSelectTab = ab.getTabAt(pos);
+                        toSelectId = TAB_ID_CALL_LOG;
+                    }
+                } else if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_FAVORITES)) {
+                    Integer pos = mTabsAdapter.getPositionForId(TAB_ID_FAVORITES);
+                    if(pos != null) {
+                        toSelectTab = ab.getTabAt(pos);
+                        toSelectId = TAB_ID_FAVORITES;
                     }
                 } else if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_MESSAGES)) {
                     Integer pos = mTabsAdapter.getPositionForId(TAB_ID_MESSAGES);
                     if(pos != null) {
                         toSelectTab = ab.getTabAt(pos);
+                        toSelectId = TAB_ID_MESSAGES;
                     }
                 }
                 if (toSelectTab != null) {
                     ab.selectTab(toSelectTab);
+                    initTabId = toSelectId;
+                }else {
+                    initTabId = null;
                 }
+                
             }
         }
     }

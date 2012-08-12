@@ -32,6 +32,7 @@ import android.database.MatrixCursor.RowBuilder;
 import android.database.MergeCursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.Contacts;
 import android.provider.Contacts.Intents;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
@@ -344,9 +345,14 @@ public class ContactsUtils3 extends ContactsWrapper {
     }
 
     @Override
-    public void bindContactView(View view, Context context, Cursor cursor) {
-        // TODO Auto-generated method stub
+    public ContactInfo getContactInfo(Context context, Cursor cursor) {
+        ContactInfo ci = new ContactInfo();
         
+        return ci;
+    }
+    
+    public int getPresenceIconResourceId(int presence) {
+        return R.drawable.emo_im_wtf;
     }
 
     @Override
@@ -370,6 +376,13 @@ public class ContactsUtils3 extends ContactsWrapper {
         }
         intent.putExtra(Intents.Insert.IM_HANDLE, csipUri);
         intent.putExtra(Intents.Insert.IM_PROTOCOL, SipManager.PROTOCOL_CSIP);
+        return intent;
+    }
+
+    @Override
+    public Intent getViewContactIntent(Long contactId) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId));
         return intent;
     }
 

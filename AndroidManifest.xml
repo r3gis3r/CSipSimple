@@ -138,6 +138,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter android:priority="10" >
+                <action android:name="com.csipsimple.phone.action.FAVORITES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter android:priority="10" >
                 <action android:name="com.csipsimple.phone.action.MESSAGES" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -441,8 +446,27 @@
         <activity
             android:name="com.csipsimple.widgets.AccountWidgetConfigure"
             android:theme="@style/DarkTheme" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
 
-            <!-- Here filter for protected-broadcasts -->
+        <receiver
+            android:name="com.csipsimple.widgets.ShortcutWidgetProvider"
+            android:icon="@drawable/ic_ab_favourites_holo_dark"
+            android:label="@string/csipsimple_shortcut" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appshortcut_info" />
+        </receiver>
+
+        <activity
+            android:name="com.csipsimple.widgets.ShortcutWidgetConfigure"
+            android:theme="@style/DarkTheme" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
