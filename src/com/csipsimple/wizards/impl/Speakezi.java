@@ -21,8 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.text.TextUtils;
-
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -50,7 +48,7 @@ public class Speakezi extends SimpleImplementation {
 
     @Override
     protected String getDomain() {
-        return "sip.easivoice.co.za";
+        return "41.221.5.172";//"sip.easivoice.co.za";
     }
 
     //private static final String PROVIDER_LIST_KEY = "provider_list";
@@ -104,11 +102,13 @@ public class Speakezi extends SimpleImplementation {
         return true;
     }
     
+    /*
     @Override
     public SipProfile buildAccount(SipProfile account) {
         SipProfile acc = super.buildAccount(account);
         // Use registrar and proxy to be the selected server
         // Keep user domain on old domain
+        
         String provider = "41.221.5.172";//sipServer.getValue();
         if(!TextUtils.isEmpty(provider)) {
             acc.reg_uri = "sip:" + provider;
@@ -117,6 +117,7 @@ public class Speakezi extends SimpleImplementation {
         
         return acc;
     }
+    */
 
     @Override
     public void setDefaultParams(PreferencesWrapper prefs) {
