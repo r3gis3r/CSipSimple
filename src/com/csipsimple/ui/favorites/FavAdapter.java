@@ -50,7 +50,9 @@ import com.actionbarsherlock.internal.view.menu.MenuBuilder.Callback;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
@@ -82,7 +84,29 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         @Override
         public void onClick(View view) {
             ContactInfo ci = (ContactInfo) view.getTag();
-            
+            List<String> phones = ContactsWrapper.getInstance().getCSipPhonesContact(mContext, ci.contactId);
+            if(phones != null && phones.size() > 0) {
+                Cursor c = (Cursor) getItem((Integer) ci.userData);
+                Long profileId = null;
+                while(c.moveToPrevious()) {
+                    int cTypeIdx = c.getColumnIndex(ContactsWrapper.FIELD_TYPE);
+                    int cAccIdx = c.getColumnIndex(BaseColumns._ID);
+                    if(cTypeIdx >= 0 && cAccIdx >= 0) {
+                        if(c.getInt(cTypeIdx) == ContactsWrapper.TYPE_GROUP) {
+                            profileId = c.getLong(cAccIdx);
+                            break;
+                        }
+                    }
+                }
+                
+                Intent it = new Intent(Intent.ACTION_CALL);
+                it.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_CSIP, phones.get(0)));
+                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if(profileId != null) {
+                    it.putExtra(SipProfile.FIELD_ACC_ID, profileId);
+                }
+                mContext.startActivity(it);
+            }
         }
     };
     
@@ -154,7 +178,7 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
             
         }else if(type == ContactsWrapper.TYPE_CONTACT) {
             ContactInfo ci = ContactsWrapper.getInstance().getContactInfo(context, cursor);
-
+            ci.userData = cursor.getPosition();
             // Get views
             TextView tv = (TextView) view.findViewById(R.id.contact_name);
             QuickContactBadge badge = (QuickContactBadge) view.findViewById(R.id.quick_contact_photo);

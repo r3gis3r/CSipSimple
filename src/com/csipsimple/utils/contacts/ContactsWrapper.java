@@ -148,6 +148,12 @@ public abstract class ContactsWrapper {
      * @return
      */
     public abstract List<String> getCSipPhonesByGroup(Context ctxt, String groupName);
+    /**
+     * Retrieve list of csip: im entries in a group
+     * @param contactId id of the contact to retrieve csip address of
+     * @return
+     */
+    public abstract List<String> getCSipPhonesContact(Context ctxt, Long contactId);
     
     /**
      * Push back the presence status to the contact database
@@ -222,6 +228,7 @@ public abstract class ContactsWrapper {
         public boolean hasPresence = false;
         public int presence;
         public String status;
+        public Object userData;
     }
     
     /**

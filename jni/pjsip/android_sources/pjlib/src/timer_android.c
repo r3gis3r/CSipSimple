@@ -357,7 +357,7 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 	entry_id = entry_code_id % MAX_ENTRY_PER_HEAP;
 	heap_id = entry_code_id / MAX_ENTRY_PER_HEAP;
 
-	if(heap_id > MAX_HEAPS){
+	if(heap_id < 0 || heap_id >= MAX_HEAPS){
 		PJ_LOG(1, (THIS_FILE, "Invalid timer code %d", entry_code_id));
 		return PJ_EINVAL;
 	}

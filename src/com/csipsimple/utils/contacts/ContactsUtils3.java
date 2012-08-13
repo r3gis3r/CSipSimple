@@ -403,4 +403,10 @@ public class ContactsUtils3 extends ContactsWrapper {
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public List<String> getCSipPhonesContact(Context ctxt, Long contactId) {
+        // TODO Auto-generated method stub
+        return new ArrayList<String>();
+    }
 }

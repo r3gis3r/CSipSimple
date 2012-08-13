@@ -626,46 +626,17 @@ public class ContactsUtils5 extends ContactsWrapper {
         return c;
     }
 
-    // private HashMap<String, Long> csipDatasId = new HashMap<String, Long>();
-
     @Override
     public List<String> getCSipPhonesByGroup(Context ctxt, String groupName) {
-        Uri dataUri = Data.CONTENT_URI;
-        String dataQuery = Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
-                + " AND "
-                + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
-                + " AND "
-                + " LOWER(" + CommonDataKinds.Im.CUSTOM_PROTOCOL + ")='"+SipManager.PROTOCOL_CSIP+"'";
 
         Cursor contacts = getContactsByGroup(ctxt, groupName);
         ArrayList<String> results = new ArrayList<String>();
         if (contacts != null) {
             try {
                 while (contacts.moveToNext()) {
-                    // get csip data
-                    Cursor dataCursor = ctxt.getContentResolver()
-                            .query(dataUri,
-                                    new String[] {
-                                            CommonDataKinds.Im._ID,
-                                            CommonDataKinds.Im.DATA,
-                                    },
-                                    dataQuery + " AND " + CommonDataKinds.Im.CONTACT_ID + "=?",
-                                    new String[] {
-                                        Long.toString(contacts.getLong(contacts
-                                                .getColumnIndex(Contacts._ID)))
-                                    }, null);
-                    if (dataCursor != null && dataCursor.getCount() > 0) {
-                        dataCursor.moveToFirst();
-                        String val = dataCursor.getString(dataCursor
-                                .getColumnIndex(CommonDataKinds.Im.DATA));
-                        // long id =
-                        // dataCursor.getLong(dataCursor.getColumnIndex(CommonDataKinds.Im._ID));
-                        if (!TextUtils.isEmpty(val)) {
-                            results.add(val);
-                            // csipDatasId.put(val, id);
-                        }
-                    }
-                    dataCursor.close();
+                    List<String> res = getCSipPhonesContact(ctxt, contacts.getLong(contacts
+                            .getColumnIndex(Contacts._ID)));
+                    results.addAll(res);
                 }
             } catch (Exception e) {
                 Log.e(THIS_FILE, "Error while looping on contacts", e);
@@ -673,6 +644,45 @@ public class ContactsUtils5 extends ContactsWrapper {
                 contacts.close();
             }
         }
+        return results;
+    }
+
+    @Override
+    public List<String> getCSipPhonesContact(Context ctxt, Long contactId) {
+        ArrayList<String> results = new ArrayList<String>();
+        Uri dataUri = Data.CONTENT_URI;
+        String dataQuery = Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
+                + " AND "
+                + CommonDataKinds.Im.PROTOCOL + "=" + CommonDataKinds.Im.PROTOCOL_CUSTOM
+                + " AND "
+                + " LOWER(" + CommonDataKinds.Im.CUSTOM_PROTOCOL + ")='"+SipManager.PROTOCOL_CSIP+"'";
+        // get csip data
+        Cursor dataCursor = ctxt.getContentResolver()
+                .query(dataUri,
+                        new String[] {
+                                CommonDataKinds.Im._ID,
+                                CommonDataKinds.Im.DATA,
+                        },
+                        dataQuery + " AND " + CommonDataKinds.Im.CONTACT_ID + "=?",
+                        new String[] {
+                            Long.toString(contactId)
+                        }, null);
+
+        try {
+            if (dataCursor != null && dataCursor.getCount() > 0) {
+                dataCursor.moveToFirst();
+                String val = dataCursor.getString(dataCursor
+                        .getColumnIndex(CommonDataKinds.Im.DATA));
+                if (!TextUtils.isEmpty(val)) {
+                    results.add(val);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(THIS_FILE, "Error while looping on data", e);
+        } finally {
+            dataCursor.close();
+        }
+        
         return results;
     }
 
