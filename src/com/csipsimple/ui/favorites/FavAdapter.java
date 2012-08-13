@@ -53,6 +53,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
+import com.csipsimple.models.Filter;
 import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
@@ -85,7 +86,19 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         public void onClick(View view) {
             ContactInfo ci = (ContactInfo) view.getTag();
             List<String> phones = ContactsWrapper.getInstance().getCSipPhonesContact(mContext, ci.contactId);
+            boolean useCSip = true;
+            String toCall = null;
             if(phones != null && phones.size() > 0) {
+                toCall = phones.get(0);
+            }else {
+                List<Phone> cPhones = ContactsWrapper.getInstance().getPhoneNumbers(mContext, ci.contactId, ContactsWrapper.URI_ALLS);
+                if(cPhones != null && cPhones.size() > 0) {
+                    toCall = cPhones.get(0).getNumber();
+                    useCSip = false;
+                }
+            }
+            
+            if(!TextUtils.isEmpty(toCall) ) {
                 Cursor c = (Cursor) getItem((Integer) ci.userData);
                 Long profileId = null;
                 while(c.moveToPrevious()) {
@@ -100,7 +113,7 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
                 }
                 
                 Intent it = new Intent(Intent.ACTION_CALL);
-                it.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_CSIP, phones.get(0)));
+                it.setData(SipUri.forgeSipUri(useCSip ? SipManager.PROTOCOL_CSIP : SipManager.PROTOCOL_SIP, toCall));
                 it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 if(profileId != null) {
                     it.putExtra(SipProfile.FIELD_ACC_ID, profileId);
@@ -325,7 +338,7 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         builder.setItems(R.array.sip_data_sources, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                applyNumbersToCSip(groupName, 1 << which, domain);
+                applyNumbersToCSip(groupName, 1 << which, domain, profileId);
             }
         });
         
@@ -342,7 +355,7 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         }
     }
     
-    private void applyNumbersToCSip(String groupName, int flag, String domain) {
+    private void applyNumbersToCSip(String groupName, int flag, String domain, long profileId) {
         Log.d(THIS_FILE, "Apply numbers to csip " + groupName + " > " + domain);
         ContactsWrapper cw = ContactsWrapper.getInstance();
         Cursor c = cw.getContactsByGroup(mContext, groupName);
@@ -353,6 +366,10 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
                 if(phones.size() > 0){
                     String nbr = phones.get(0).getNumber();
                     if(!nbr.contains("@")){
+                        if(flag == ContactsWrapper.URI_NBR) {
+                            // Apply rewriting rules
+                            nbr = Filter.rewritePhoneNumber(mContext, profileId, nbr);
+                        }
                         nbr += "@" + domain;
                     }
                     Log.d(THIS_FILE, "Apply number to " + contactId + " > " + nbr);
