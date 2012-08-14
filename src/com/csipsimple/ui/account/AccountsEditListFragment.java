@@ -315,8 +315,10 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
     @Override
     public void onResume() {
     	super.onResume();
-    	statusObserver = new AccountStatusContentObserver(mHandler);
-    	getActivity().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI, true, statusObserver);
+    	if(statusObserver == null) {
+        	statusObserver = new AccountStatusContentObserver(mHandler);
+        	getActivity().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI, true, statusObserver);
+    	}
     	mAdapter.notifyDataSetChanged();
     }
     
@@ -325,6 +327,7 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
     	super.onPause();
     	if(statusObserver != null) {
     		getActivity().getContentResolver().unregisterContentObserver(statusObserver);
+    		statusObserver = null;
     	}
     }
 

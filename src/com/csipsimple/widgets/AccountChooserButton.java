@@ -162,9 +162,11 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        statusObserver = new AccountStatusContentObserver(mHandler);
-        getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
-                true, statusObserver);
+        if(statusObserver == null) {
+            statusObserver = new AccountStatusContentObserver(mHandler);
+            getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
+                    true, statusObserver);
+        }
         if(!isInEditMode()) {
             updateRegistration();
         }

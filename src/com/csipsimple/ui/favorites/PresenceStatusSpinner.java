@@ -265,9 +265,11 @@ public class PresenceStatusSpinner extends Spinner implements android.widget.Ada
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getContext().bindService(new Intent(getContext(), SipService.class), connection, Context.BIND_AUTO_CREATE);
-        statusObserver = new AccountStatusContentObserver(mHandler);
-        getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
-                true, statusObserver);
+        if(statusObserver == null) {
+            statusObserver = new AccountStatusContentObserver(mHandler);
+            getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
+                    true, statusObserver);
+        }
         updateRegistration();
     };
     
