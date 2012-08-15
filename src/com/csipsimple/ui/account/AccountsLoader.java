@@ -95,6 +95,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
     
     private void initHandlers() {
         CallHandlerPlugin.initHandler();
+        loaderObserver = new ForceLoadContentObserver();
     }
 
     private ContentObserver loaderObserver;
@@ -105,11 +106,8 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
     public Cursor loadInBackground() {
         // First register for status updates
         if(loadStatus) {
-            if(loaderObserver == null) {
-                loaderObserver = new ForceLoadContentObserver();
-                getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
-                    true, loaderObserver);
-            }
+            getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
+                true, loaderObserver);
         }
         ArrayList<FilteredProfile> prefinalAccounts = new ArrayList<FilteredProfile>();
         
@@ -393,10 +391,7 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
             c.close();
         }
         if(loadStatus) {
-            if(loaderObserver != null) {
-                getContext().getContentResolver().unregisterContentObserver(loaderObserver);
-                loaderObserver = null;
-            }
+            getContext().getContentResolver().unregisterContentObserver(loaderObserver);
         }
     }
 

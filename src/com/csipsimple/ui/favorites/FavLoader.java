@@ -44,7 +44,7 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
     }
     
 
-    private ContentObserver loaderObserver = null;
+    private ContentObserver loaderObserver = new ForceLoadContentObserver();
     
     @Override
     public Cursor loadInBackground() {
@@ -70,12 +70,9 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
             cursorsToMerge[i++] = createContentCursorFor(acc);
             
         }
-        
-        if(loaderObserver == null) {
-            loaderObserver = new ForceLoadContentObserver();
-            getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
+
+        getContext().getContentResolver().registerContentObserver(SipProfile.ACCOUNT_STATUS_URI,
                 true, loaderObserver);
-        }
         
         if(cursorsToMerge.length > 0) {
             MergeCursor mg = new MergeCursor(cursorsToMerge);
@@ -173,10 +170,8 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
             c.unregisterContentObserver(loaderObserver);
             c.close();
         }
-        if(loaderObserver != null) {
-            getContext().getContentResolver().unregisterContentObserver(loaderObserver);
-            loaderObserver = null;
-        }
+
+        getContext().getContentResolver().unregisterContentObserver(loaderObserver);
     }
 
     /**
