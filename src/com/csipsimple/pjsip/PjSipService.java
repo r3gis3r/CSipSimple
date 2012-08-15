@@ -1690,7 +1690,7 @@ public class PjSipService {
         
         // If new call state is not idle
         if (state != TelephonyManager.CALL_STATE_IDLE && userAgentReceiver != null) {
-            SipCallSession currentActiveCall = userAgentReceiver.getActiveCallInProgress();
+            SipCallSession currentActiveCall = userAgentReceiver.getActiveCallOngoing();
             // If we have a sip call on our side
             if (currentActiveCall != null) {
                 AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);

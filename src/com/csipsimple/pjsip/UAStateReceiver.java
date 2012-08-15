@@ -959,6 +959,22 @@ public class UAStateReceiver extends Callback {
 		return null;
 	}
 	
+	 /**
+     * Check if any of call infos indicate there is an active
+     * call in progress.
+     * @see SipCallSession#isActive()
+     */
+    public SipCallSession getActiveCallOngoing() {
+        // Go through the whole list of calls and find the first active state.
+        for (Integer i : callsList.keySet()) { 
+            SipCallSession callInfo = getCallInfo(i);
+            if (callInfo.isActive() && callInfo.isOngoing()) {
+                return callInfo;
+            }
+        }
+        return null;
+    }
+	
 	
 	/**
 	 * Broadcast the Headset button press event internally if
