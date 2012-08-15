@@ -85,11 +85,14 @@ public interface IOnCallActionTrigger {
      * When xfer to a number is asked
      */
     int XFER_CALL = ADD_CALL + 1;
-
+    /**
+     * When transfer to a call is asked
+     */
+    int TRANSFER_CALL = XFER_CALL + 1;
     /**
      * When start recording is asked
      */
-    int START_RECORDING = XFER_CALL + 1;
+    int START_RECORDING = TRANSFER_CALL + 1;
     /**
      * When stop recording is asked
      */

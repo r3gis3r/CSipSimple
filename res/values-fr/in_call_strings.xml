@@ -19,10 +19,10 @@
   <string name="unlock">Déverrouiller</string>
   <string name="record">Enregistrer</string>
   <string name="stop_recording">Arrêter l\'enregistrement</string>
-  <string name="xfer">Transférer</string>
+  <string name="xfer_uri">Transférer vers un numéro</string>
   <string name="hold_call">Mettre en attente</string>
   <string name="on_hold">En attente</string>
   <string name="resume_call">Reprendre</string>
-  <string name="transfer_call">Transférer</string>
+  <string name="transfer_to_call">Transférer vers un appel</string>
   <string name="send_dtmf">Envoyer DTMF</string>
 </resources>

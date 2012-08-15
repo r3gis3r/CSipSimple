@@ -20,6 +20,5 @@
     <string name="unlock">Отключване</string>
     <string name="record">Запис</string>
     <string name="stop_recording">Спиране на записа</string>
-    <string name="xfer">Прехвърляне на обаждане</string>
 
 </resources>

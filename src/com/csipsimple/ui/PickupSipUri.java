@@ -98,9 +98,17 @@ public class PickupSipUri extends Activity implements OnClickListener {
 		Intent resultValue = new Intent();
 		 ToCall result = sipUri.getValue();
 		 if(result != null) {
+		     // Restore existing extras.
+		     Intent it = getIntent();
+		     if(it != null) {
+		         Bundle b = it.getExtras();
+		         if(b != null) {
+		             resultValue.putExtras(b);
+		         }
+		     }
 			 resultValue.putExtra(Intent.EXTRA_PHONE_NUMBER,
 						result.getCallee());
-			 resultValue.putExtra(SipProfile.FIELD_ACC_ID,
+			 resultValue.putExtra(SipProfile.FIELD_ID,
 						result.getAccountId());
 			 setResult(RESULT_OK, resultValue);
 		 }else {

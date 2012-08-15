@@ -44,7 +44,6 @@
         android:layout_gravity="left|center_vertical"
         android:layout_marginRight="0dip"
         android:background="@drawable/grey_left_gradient"
-        android:contentDescription="@string/transfer_call"
         android:scaleType="center"
         android:src="@drawable/ic_tab_selected_contacts" />
 

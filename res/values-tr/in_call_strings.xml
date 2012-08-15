@@ -1,20 +1,21 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="take_call">Yanıtla</string>
-  <string name="decline_call">Yoksay</string>
-  <string name="clear_call">Bitir</string>
-  <string name="dialpad">Tuş takımı</string>
-  <string name="bluetooth">Bluetooth</string>
-  <string name="speaker">hopârlör</string>
-  <string name="mute">Sessiz</string>
-  <string name="add_call">Çağrı ekle</string>
-  <string name="call_state_calling">Aranıyor…</string>
-  <string name="call_state_confirmed">Konuşuyor</string>
-  <string name="call_state_connecting">Bağlanıyor…</string>
-  <string name="call_state_incoming">Gelen çağrı…</string>
-  <string name="call_state_null">HATA</string>
-  <string name="unlock">Kilidi Aç</string>
-  <string name="record">Kayıt</string>
-  <string name="stop_recording">Kaydı durdur</string>
-  <string name="xfer">Aktarma</string>
+
+    <string name="take_call">Yanıtla</string>
+    <string name="decline_call">Yoksay</string>
+    <string name="clear_call">Bitir</string>
+    <string name="dialpad">Tuş takımı</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="speaker">hopârlör</string>
+    <string name="mute">Sessiz</string>
+    <string name="add_call">Çağrı ekle</string>
+    <string name="call_state_calling">Aranıyor…</string>
+    <string name="call_state_confirmed">Konuşuyor</string>
+    <string name="call_state_connecting">Bağlanıyor…</string>
+    <string name="call_state_incoming">Gelen çağrı…</string>
+    <string name="call_state_null">HATA</string>
+    <string name="unlock">Kilidi Aç</string>
+    <string name="record">Kayıt</string>
+    <string name="stop_recording">Kaydı durdur</string>
+
 </resources>

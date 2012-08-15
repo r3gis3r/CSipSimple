@@ -1,23 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="take_call">Antwoorden</string>
-  <string name="decline_call">Negeren</string>
-  <string name="clear_call">Beëindigen</string>
-  <string name="touch_lock">Tik dubbel om te ontgrendelen</string>
-  <string name="dialpad">Kiezer</string>
-  <string name="bluetooth">Bluetooth</string>
-  <string name="speaker">Luidspreker</string>
-  <string name="mute">Gedempt</string>
-  <string name="add_call">Oproep toevoegen</string>
-  <string name="call_state_calling">Bellen …</string>
-  <string name="call_state_confirmed">In gesprek</string>
-  <string name="call_state_connecting">Verbinden …</string>
-  <string name="call_state_disconnected">Opgehangen</string>
-  <string name="call_state_early">Bellen …</string>
-  <string name="call_state_incoming">Inkomende oproep</string>
-  <string name="call_state_null">FOUT</string>
-  <string name="unlock">Ontgrendelen</string>
-  <string name="record">Opnemen</string>
-  <string name="stop_recording">Stoppen met opnemen</string>
-  <string name="xfer">Doorverbinden</string>
+
+    <string name="take_call">Antwoorden</string>
+    <string name="decline_call">Negeren</string>
+    <string name="clear_call">Beëindigen</string>
+    <string name="touch_lock">Tik dubbel om te ontgrendelen</string>
+    <string name="dialpad">Kiezer</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="speaker">Luidspreker</string>
+    <string name="mute">Gedempt</string>
+    <string name="add_call">Oproep toevoegen</string>
+    <string name="call_state_calling">Bellen …</string>
+    <string name="call_state_confirmed">In gesprek</string>
+    <string name="call_state_connecting">Verbinden …</string>
+    <string name="call_state_disconnected">Opgehangen</string>
+    <string name="call_state_early">Bellen …</string>
+    <string name="call_state_incoming">Inkomende oproep</string>
+    <string name="call_state_null">FOUT</string>
+    <string name="unlock">Ontgrendelen</string>
+    <string name="record">Opnemen</string>
+    <string name="stop_recording">Stoppen met opnemen</string>
+
 </resources>

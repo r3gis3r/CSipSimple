@@ -49,8 +49,8 @@ include $(WEBRTC_PATH)/modules/audio_coding/codecs/cng/Android.mk
 include $(WEBRTC_PATH)/modules/audio_coding/codecs/g711/Android.mk
 include $(WEBRTC_PATH)/modules/audio_coding/codecs/ilbc/Android.mk
 #include $(WEBRTC_PATH)/modules/audio_coding/codecs/PCM16B/main/source/Android.mk
-include $(WEBRTC_PATH)/modules/audio_coding/codecs/iSAC/fix/source/Android.mk
-include $(WEBRTC_PATH)/modules/audio_coding/codecs/iSAC/main/source/Android.mk
+include $(WEBRTC_PATH)/modules/audio_coding/codecs/isac/fix/source/Android.mk
+include $(WEBRTC_PATH)/modules/audio_coding/codecs/isac/main/source/Android.mk
 
 ### NOISE SUPPR ###
 include $(WEBRTC_PATH)/modules/audio_processing/ns/Android.mk

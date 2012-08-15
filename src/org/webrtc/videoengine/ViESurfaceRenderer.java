@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -10,6 +10,12 @@
 
 package org.webrtc.videoengine;
 
+// The following four imports are needed saveBitmapToJPEG which
+// is for debug only
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import android.graphics.Bitmap;
@@ -22,134 +28,157 @@ import android.view.SurfaceHolder.Callback;
 
 public class ViESurfaceRenderer implements Callback {
 
-  // the bitmap used for drawing.
-  private Bitmap bitmap = null;
-  private ByteBuffer byteBuffer;
-  private SurfaceHolder surfaceHolder;
-  // Rect of the source bitmap to draw
-  private Rect srcRect = new Rect();
-  // Rect of the destination canvas to draw to
-  private Rect dstRect = new Rect();
-  private int  dstHeight = 0;
-  private int  dstWidth = 0;
-  private float dstTopScale = 0;
-  private float dstBottomScale = 1;
-  private float dstLeftScale = 0;
-  private float dstRightScale = 1;
+    private final static String TAG = "WEBRTC";
 
-  public  ViESurfaceRenderer(SurfaceView view) {
-    surfaceHolder = view.getHolder();
-    if(surfaceHolder == null)
-      return;
+    // the bitmap used for drawing.
+    private Bitmap bitmap = null;
+    private ByteBuffer byteBuffer = null;
+    private SurfaceHolder surfaceHolder;
+    // Rect of the source bitmap to draw
+    private Rect srcRect = new Rect();
+    // Rect of the destination canvas to draw to
+    private Rect dstRect = new Rect();
+    private float dstTopScale = 0;
+    private float dstBottomScale = 1;
+    private float dstLeftScale = 0;
+    private float dstRightScale = 1;
 
-    Canvas canvas = surfaceHolder.lockCanvas();
-    if(canvas != null) {
-      Rect dst =surfaceHolder.getSurfaceFrame();
-      if(dst != null) {
-        dstRect = dst;
-        dstHeight =dstRect.bottom-dstRect.top;
-        dstWidth = dstRect.right-dstRect.left;
-      }
-      surfaceHolder.unlockCanvasAndPost(canvas);
+    public ViESurfaceRenderer(SurfaceView view) {
+        surfaceHolder = view.getHolder();
+        if(surfaceHolder == null)
+            return;
+        surfaceHolder.addCallback(this);
     }
 
-    surfaceHolder.addCallback(this);
-  }
+    // surfaceChanged and surfaceCreated share this function
+    private void changeDestRect(int dstWidth, int dstHeight) {
+        dstRect.right = (int)(dstRect.left + dstRightScale * dstWidth);
+        dstRect.bottom = (int)(dstRect.top + dstBottomScale * dstHeight);
+    }
 
-  public void surfaceChanged(SurfaceHolder holder, int format,
-                             int in_width, int in_height) {
+    public void surfaceChanged(SurfaceHolder holder, int format,
+            int in_width, int in_height) {
+        Log.d(TAG, "ViESurfaceRender::surfaceChanged");
 
-    dstHeight = in_height;
-    dstWidth = in_width;
-    dstRect.left = (int)(dstLeftScale*dstWidth);
-    dstRect.top = (int)(dstTopScale*dstHeight);
-    dstRect.bottom = (int)(dstBottomScale*dstHeight);
-    dstRect.right = (int) (dstRightScale*dstWidth);
-  }
+        changeDestRect(in_width, in_height);
 
-  public void surfaceCreated(SurfaceHolder holder) {
-    // TODO(leozwang) Auto-generated method stub
-  }
+        Log.d(TAG, "ViESurfaceRender::surfaceChanged" +
+                " in_width:" + in_width + " in_height:" + in_height +
+                " srcRect.left:" + srcRect.left +
+                " srcRect.top:" + srcRect.top +
+                " srcRect.right:" + srcRect.right +
+                " srcRect.bottom:" + srcRect.bottom +
+                " dstRect.left:" + dstRect.left +
+                " dstRect.top:" + dstRect.top +
+                " dstRect.right:" + dstRect.right +
+                " dstRect.bottom:" + dstRect.bottom);
+    }
 
-  public void surfaceDestroyed(SurfaceHolder holder) {
-    // TODO(leozwang) Auto-generated method stub
-  }
-
-  public Bitmap CreateBitmap(int width, int height) {
-    if (bitmap == null) {
-      try {
-        android.os.Process.setThreadPriority(
-            android.os.Process.THREAD_PRIORITY_DISPLAY);
-      }
-      catch (Exception e) {
+    public void surfaceCreated(SurfaceHolder holder) {
+        Canvas canvas = surfaceHolder.lockCanvas();
+        if(canvas != null) {
+            Rect dst = surfaceHolder.getSurfaceFrame();
+            if(dst != null) {
+                changeDestRect(dst.right - dst.left, dst.bottom - dst.top);
+                Log.d(TAG, "ViESurfaceRender::surfaceCreated" +
+                        " dst.left:" + dst.left +
+                        " dst.top:" + dst.top +
+                        " dst.right:" + dst.right +
+                        " dst.bottom:" + dst.bottom +
+                        " srcRect.left:" + srcRect.left +
+                        " srcRect.top:" + srcRect.top +
+                        " srcRect.right:" + srcRect.right +
+                        " srcRect.bottom:" + srcRect.bottom +
+                        " dstRect.left:" + dstRect.left +
+                        " dstRect.top:" + dstRect.top +
+                        " dstRect.right:" + dstRect.right +
+                        " dstRect.bottom:" + dstRect.bottom);
+            }
+            surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
-    bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-    srcRect.left = 0;
-    srcRect.top = 0;
-    srcRect.bottom = height;
-    srcRect.right = width;
 
-    return bitmap;
-  }
-
-  public ByteBuffer CreateByteBuffer(int width, int height) {
-    if (bitmap == null) {
-      try {
-        android.os.Process
-            .setThreadPriority(android.os.Process.THREAD_PRIORITY_DISPLAY);
-      }
-      catch (Exception e) {
-      }
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.d(TAG, "ViESurfaceRenderer::surfaceDestroyed");
+        bitmap = null;
+        byteBuffer = null;
     }
 
-    try {
-      bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-      byteBuffer = ByteBuffer.allocateDirect(width*height*2);
-      srcRect.left = 0;
-      srcRect.top = 0;
-      srcRect.bottom = height;
-      srcRect.right = width;
+    public Bitmap CreateBitmap(int width, int height) {
+        Log.d(TAG, "CreateByteBitmap " + width + ":" + height);
+        if (bitmap == null) {
+            try {
+                android.os.Process.setThreadPriority(
+                    android.os.Process.THREAD_PRIORITY_DISPLAY);
+            }
+            catch (Exception e) {
+            }
+        }
+        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        srcRect.left = 0;
+        srcRect.top = 0;
+        srcRect.bottom = height;
+        srcRect.right = width;
+        return bitmap;
     }
-    catch (Exception ex) {
-      Log.e("*WEBRTC*", "Failed to CreateByteBuffer");
-      bitmap = null;
-      byteBuffer = null;
+
+    public ByteBuffer CreateByteBuffer(int width, int height) {
+        Log.d(TAG, "CreateByteBuffer " + width + ":" + height);
+        if (bitmap == null) {
+            bitmap = CreateBitmap(width, height);
+            byteBuffer = ByteBuffer.allocateDirect(width * height * 2);
+        }
+        return byteBuffer;
     }
 
-    return byteBuffer;
-  }
-
-  public void SetCoordinates(float left, float top,
-                             float right, float bottom) {
-    dstLeftScale = left;
-    dstTopScale = top;
-    dstRightScale = right;
-    dstBottomScale = bottom;
-
-    dstRect.left = (int)(dstLeftScale*dstWidth);
-    dstRect.top = (int)(dstTopScale*dstHeight);
-    dstRect.bottom = (int)(dstBottomScale*dstHeight);
-    dstRect.right = (int) (dstRightScale*dstWidth);
-  }
-
-  public void DrawByteBuffer() {
-    if(byteBuffer == null)
-      return;
-    byteBuffer.rewind();
-    bitmap.copyPixelsFromBuffer(byteBuffer);
-    DrawBitmap();
-  }
-
-  public void DrawBitmap() {
-    if(bitmap == null)
-      return;
-
-    Canvas canvas = surfaceHolder.lockCanvas();
-    if(canvas != null) {
-      canvas.drawBitmap(bitmap, srcRect, dstRect, null);
-      surfaceHolder.unlockCanvasAndPost(canvas);
+    public void SetCoordinates(float left, float top,
+            float right, float bottom) {
+        Log.d(TAG, "SetCoordinates " + left + "," + top + ":" +
+                right + "," + bottom);
+        dstLeftScale = left;
+        dstTopScale = top;
+        dstRightScale = right;
+        dstBottomScale = bottom;
     }
-  }
+
+    // It saves bitmap data to a JPEG picture, this function is for debug only.
+    private void saveBitmapToJPEG(int width, int height) {
+        ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteOutStream);
+
+        try{
+            FileOutputStream output = new FileOutputStream(String.format(
+                "/sdcard/render_%d.jpg", System.currentTimeMillis()));
+            output.write(byteOutStream.toByteArray());
+            output.flush();
+            output.close();
+        }
+        catch (FileNotFoundException e) {
+        }
+        catch (IOException e) {
+        }
+    }
+
+    public void DrawByteBuffer() {
+        if(byteBuffer == null)
+            return;
+        byteBuffer.rewind();
+        bitmap.copyPixelsFromBuffer(byteBuffer);
+        DrawBitmap();
+    }
+
+    public void DrawBitmap() {
+        if(bitmap == null)
+            return;
+
+        Canvas canvas = surfaceHolder.lockCanvas();
+        if(canvas != null) {
+            // The follow line is for debug only
+            // saveBitmapToJPEG(srcRect.right - srcRect.left,
+            //                  srcRect.bottom - srcRect.top);
+            canvas.drawBitmap(bitmap, srcRect, dstRect, null);
+            surfaceHolder.unlockCanvasAndPost(canvas);
+        }
+    }
 
 }

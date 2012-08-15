@@ -1,25 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="take_call">Annehmen</string>
-  <string name="decline_call">Abweisen</string>
-  <string name="clear_call">Auflegen</string>
-  <string name="touch_lock">Doppelklicken zum Entsperren</string>
-  <string name="dialpad">Wähltasten</string>
-  <string name="bluetooth">Bluetooth</string>
-  <string name="speaker">Lautsprecher</string>
-  <string name="mute">Stumm</string>
-  <string name="add_call">Anruf hinzufügen</string>
-  <string name="call_state_calling">Wähle…</string>
-  <string name="call_state_confirmed">Aufgebaut</string>
-  <string name="call_state_connecting">Verbinde…</string>
-  <string name="call_state_disconnected">Aufgelegt</string>
-  <string name="call_state_early">Klingelt…</string>
-  <string name="call_state_incoming">Eingehender Anruf…</string>
-  <string name="call_state_null">Fehler</string>
-  <string name="unlock">Entsperre</string>
-  <string name="record">Aufnahme</string>
-  <string name="stop_recording">Aufnahme stoppen</string>
-  <string name="xfer">Weiterleiten</string>
-  <string name="hold_call">Halten</string>
-  <string name="transfer_call">Weiterleiten</string>
+
+    <string name="take_call">Annehmen</string>
+    <string name="decline_call">Abweisen</string>
+    <string name="clear_call">Auflegen</string>
+    <string name="touch_lock">Doppelklicken zum Entsperren</string>
+    <string name="dialpad">Wähltasten</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="speaker">Lautsprecher</string>
+    <string name="mute">Stumm</string>
+    <string name="add_call">Anruf hinzufügen</string>
+    <string name="call_state_calling">Wähle…</string>
+    <string name="call_state_confirmed">Aufgebaut</string>
+    <string name="call_state_connecting">Verbinde…</string>
+    <string name="call_state_disconnected">Aufgelegt</string>
+    <string name="call_state_early">Klingelt…</string>
+    <string name="call_state_incoming">Eingehender Anruf…</string>
+    <string name="call_state_null">Fehler</string>
+    <string name="unlock">Entsperre</string>
+    <string name="record">Aufnahme</string>
+    <string name="stop_recording">Aufnahme stoppen</string>
+    <string name="hold_call">Halten</string>
+
 </resources>

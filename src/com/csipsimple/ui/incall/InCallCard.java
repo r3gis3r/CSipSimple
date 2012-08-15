@@ -86,9 +86,6 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
 
     private ActionMenuPresenter mActionMenuPresenter;
 
-    
-
-    
 
     public InCallCard(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -134,10 +131,12 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         if(w <= 0) {
             w = getResources().getDisplayMetrics().widthPixels;
         }
+        w -= 100;
         if(!added) {
             final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             ViewGroup menuViewWrapper = (ViewGroup) findViewById(R.id.call_action_bar);
+            mActionMenuPresenter.setReserveOverflow(true);
             mActionMenuPresenter.setWidthLimit(w, true);
             // Use width limit (this means we don't care item limits 
             mActionMenuPresenter.setItemLimit(20);
@@ -222,12 +221,13 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
     
     private static float minButtonRation = 0.75f;
     
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        
-        if(changed) {
-            float w = right - left;
-            float h = bottom - top;
+
+    private final Handler handler = new Handler();
+    private final Runnable postLayout = new Runnable() {
+        @Override
+        public void run() {
+            float w = getWidth();
+            float h = getHeight();
             if(w > 0 && h > 0) {
                 float currentRatio = w/h;
                 float newWidth = w;
@@ -252,9 +252,15 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                     lp.height = ViewGroup.LayoutParams.WRAP_CONTENT; 
                 }
                 v.setLayoutParams(lp);
-                
                 updateMenuView();
             }
+        }
+    };
+    
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        if(changed) {
+            handler.postDelayed(postLayout, 100);
         }
         
         super.onLayout(changed, left, top, right, bottom);
@@ -278,6 +284,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         btnMenuBuilder.findItem(R.id.declineCallButton).setVisible(callInfo.isBeforeConfirmed());
         boolean active = (!callInfo.isAfterEnded() && !callInfo.isBeforeConfirmed());
         btnMenuBuilder.findItem(R.id.clearCallButton).setVisible(active);
+        btnMenuBuilder.findItem(R.id.xferCallButton).setVisible(active);
+        btnMenuBuilder.findItem(R.id.transferCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.holdCallButton).setVisible(active)
                 .setTitle(callInfo.isLocalHeld() ? R.string.resume_call : R.string.hold_call);
         btnMenuBuilder.findItem(R.id.videoCallButton).setVisible(active && canVideo && !callInfo.mediaHasVideo());
@@ -390,11 +398,6 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 cachedMediaState == callInfo.getMediaStatus()) {
             return;
         }
-        if(callInfo.isLocalHeld()) {
-            elapsedTime.setVisibility(View.GONE);
-        }else {
-            elapsedTime.setVisibility(View.VISIBLE);
-        }
     }
 
     private void updateElapsedTimer() {
@@ -409,7 +412,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         
         setVisibleWithFade(callSecureBar, callInfo.isSecure());
         callSecureText.setText(callInfo.getMediaSecureInfo());
-
+        
         int state = callInfo.getCallState();
         switch (state) {
             case SipCallSession.InvState.INCOMING:
@@ -417,13 +420,16 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             case SipCallSession.InvState.EARLY:
             case SipCallSession.InvState.CONNECTING:
                 elapsedTime.setVisibility(GONE);
-                elapsedTime.start();
                 break;
             case SipCallSession.InvState.CONFIRMED:
                 Log.v(THIS_FILE, "we start the timer now ");
-                elapsedTime.start();
-                elapsedTime.setVisibility(VISIBLE);
-
+                if(callInfo.isLocalHeld()) {
+                    elapsedTime.stop();
+                    elapsedTime.setVisibility(View.GONE);
+                }else {
+                    elapsedTime.start();
+                    elapsedTime.setVisibility(View.VISIBLE);
+                }
                 break;
             case SipCallSession.InvState.NULL:
             case SipCallSession.InvState.DISCONNECTED:
@@ -559,6 +565,12 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             return true;
         }else if(itemId == R.id.videoCallButton) {
             dispatchTriggerEvent(callInfo.mediaHasVideo() ? IOnCallActionTrigger.STOP_VIDEO : IOnCallActionTrigger.START_VIDEO);
+            return true;
+        }else if(itemId == R.id.xferCallButton) {
+            dispatchTriggerEvent(IOnCallActionTrigger.XFER_CALL);
+            return true;
+        }else if(itemId == R.id.transferCallButton) {
+            dispatchTriggerEvent(IOnCallActionTrigger.TRANSFER_CALL);
             return true;
         }
         return false;

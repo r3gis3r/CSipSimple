@@ -20,6 +20,5 @@
     <string name="unlock">Разблокировать</string>
     <string name="record">Запись</string>
     <string name="stop_recording">Стоп</string>
-    <string name="xfer">Трансфер</string>
 
 </resources>

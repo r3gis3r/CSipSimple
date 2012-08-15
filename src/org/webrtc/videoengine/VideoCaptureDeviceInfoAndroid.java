@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -31,13 +31,12 @@ import org.webrtc.videoengine.camera.CameraUtilsWrapper;
 @SuppressWarnings("deprecation")
 public class VideoCaptureDeviceInfoAndroid {
 
-    // Context
+    //Context
     Context context;
 
-    // Set this to 2 for VERBOSE logging. 1 for DEBUG
-    private static int LOGLEVEL = 0;
-    private static boolean VERBOSE = LOGLEVEL > 2;
-    private static boolean DEBUG = LOGLEVEL > 1;
+    // Set VERBOSE as the default logging level because camera device info
+    // is very useful information and doesn't degrade performance normally
+    private final static String TAG = "WEBRTC";
 
     // Private class with info about all available cameras and the capabilities
     public class AndroidVideoCaptureDevice {
@@ -59,10 +58,10 @@ public class VideoCaptureDeviceInfoAndroid {
 
     public enum FrontFacingCameraType {
         None, // This is not a front facing camera
-        GalaxyS, // Galaxy S front facing camera.
-        HTCEvo, // HTC Evo front facing camera
-        Android23, // Android 2.3 front facing camera.
-    }
+                GalaxyS, // Galaxy S front facing camera.
+                HTCEvo, // HTC Evo front facing camera
+                Android23, // Android 2.3 front facing camera.
+                }
 
     String currentDeviceUniqueId;
     int id;
@@ -71,21 +70,17 @@ public class VideoCaptureDeviceInfoAndroid {
     private CameraUtilsWrapper cameraUtils;
 
     public static VideoCaptureDeviceInfoAndroid
-            CreateVideoCaptureDeviceInfoAndroid(int in_id, Context in_context) {
-        if (DEBUG) {
-            Log.d("*WEBRTC*",
-                    String.format(Locale.US, "VideoCaptureDeviceInfoAndroid"));
-        }
+    CreateVideoCaptureDeviceInfoAndroid(int in_id, Context in_context) {
+        Log.d(TAG,
+                String.format(Locale.US, "VideoCaptureDeviceInfoAndroid"));
 
         VideoCaptureDeviceInfoAndroid self =
                 new VideoCaptureDeviceInfoAndroid(in_id, in_context);
-        if (self != null && self.Init() == 0) {
+        if(self != null && self.Init() == 0) {
             return self;
         }
         else {
-            if (DEBUG) {
-                Log.d("*WEBRTC*", "Failed to create VideoCaptureDeviceInfoAndroid.");
-            }
+            Log.d(TAG, "Failed to create VideoCaptureDeviceInfoAndroid.");
         }
         return null;
     }
@@ -99,12 +94,13 @@ public class VideoCaptureDeviceInfoAndroid {
     }
 
     private int Init() {
-        // Populate the deviceList with available cameras and their
-        // capabilities.
-        try {
+        // Populate the deviceList with available cameras and their capabilities.
+        try{
             cameraUtils.Init(this, deviceList);
-        } catch (Exception ex) {
-            Log.e("*WEBRTC*", "Failed to init VideoCaptureDeviceInfo ex", ex);
+        } 
+        catch (Exception ex) {
+            Log.e(TAG, "Failed to init VideoCaptureDeviceInfo ex" +
+                    ex.getLocalizedMessage());
             return -1;
         }
         VerifyCapabilities();
@@ -123,26 +119,25 @@ public class VideoCaptureDeviceInfoAndroid {
             return;
         }
         if(frameRates != null) {
-            for (Integer frameRate : frameRates) {
-                if (VERBOSE) {
-                    Log.v("*WEBRTC*",
-                            "VideoCaptureDeviceInfoAndroid:frameRate " + frameRate);
-                }
-                if (frameRate > maxFPS) {
-                    maxFPS = frameRate;
-                }
+        for(Integer frameRate:frameRates) {
+            if(frameRate > maxFPS) {
+                maxFPS = frameRate;
             }
+        }
         }else {
             maxFPS = 15;
         }
 
         newDevice.captureCapabilies = new CaptureCapabilityAndroid[sizes.size()];
-        for (int i = 0; i < sizes.size(); ++i) {
+        for(int i = 0; i < sizes.size(); ++i) {
             Size s = sizes.get(i);
             newDevice.captureCapabilies[i] = new CaptureCapabilityAndroid();
             newDevice.captureCapabilies[i].height = s.height;
             newDevice.captureCapabilies[i].width = s.width;
             newDevice.captureCapabilies[i].maxFPS = maxFPS;
+            Log.v(TAG,
+                    "VideoCaptureDeviceInfo " + "maxFPS:" + maxFPS +
+                    " width:" + s.width + " height:" + s.height);
         }
     }
 
@@ -153,7 +148,7 @@ public class VideoCaptureDeviceInfoAndroid {
     // http://code.google.com/p/android/issues/detail?id=5514#c0
     private void VerifyCapabilities() {
         // Nexus S or Galaxy S
-        if (android.os.Build.DEVICE.equals("GT-I9000") ||
+        if(android.os.Build.DEVICE.equals("GT-I9000") ||
                 android.os.Build.DEVICE.equals("crespo")) {
             CaptureCapabilityAndroid specificCapability =
                     new CaptureCapabilityAndroid();
@@ -176,22 +171,22 @@ public class VideoCaptureDeviceInfoAndroid {
         }
         // Motorola Milestone Camera server does not work at 30fps
         // even though it reports that it can
-        if (android.os.Build.MANUFACTURER.equals("motorola") &&
+        if(android.os.Build.MANUFACTURER.equals("motorola") &&
                 android.os.Build.DEVICE.equals("umts_sholes")) {
-            for (AndroidVideoCaptureDevice device : deviceList) {
-                for (CaptureCapabilityAndroid capability : device.captureCapabilies) {
-                    capability.maxFPS = 15;
+            for(AndroidVideoCaptureDevice device:deviceList) {
+                for(CaptureCapabilityAndroid capability:device.captureCapabilies) {
+                    capability.maxFPS=15;
                 }
             }
         }
     }
 
     private void AddDeviceSpecificCapability(
-            CaptureCapabilityAndroid specificCapability) {
-        for (AndroidVideoCaptureDevice device : deviceList) {
+        CaptureCapabilityAndroid specificCapability) {
+        for(AndroidVideoCaptureDevice device:deviceList) {
             boolean foundCapability = false;
-            for (CaptureCapabilityAndroid capability : device.captureCapabilies) {
-                if (capability.width == specificCapability.width &&
+            for(CaptureCapabilityAndroid capability:device.captureCapabilies) {
+                if(capability.width == specificCapability.width &&
                         capability.height == specificCapability.height) {
                     foundCapability = true;
                     break;
@@ -207,13 +202,11 @@ public class VideoCaptureDeviceInfoAndroid {
                 foundCapability = true;
             }
             
-            if (foundCapability == false) {
-                
-                
-                CaptureCapabilityAndroid newCaptureCapabilies[] =
-                        new CaptureCapabilityAndroid[device.captureCapabilies.length + 1];
-                for (int i = 0; i < device.captureCapabilies.length; ++i) {
-                    newCaptureCapabilies[i + 1] = device.captureCapabilies[i];
+            if(foundCapability==false) {
+                CaptureCapabilityAndroid newCaptureCapabilies[]=
+                        new CaptureCapabilityAndroid[device.captureCapabilies.length+1];
+                for(int i = 0; i < device.captureCapabilies.length; ++i) {
+                    newCaptureCapabilies[i+1] = device.captureCapabilies[i];
                 }
                 newCaptureCapabilies[0] = specificCapability;
                 device.captureCapabilies = newCaptureCapabilies;
@@ -227,16 +220,16 @@ public class VideoCaptureDeviceInfoAndroid {
     }
 
     public String GetDeviceUniqueName(int deviceNumber) {
-        if (deviceNumber < 0 || deviceNumber >= deviceList.size()) {
+        if(deviceNumber < 0 || deviceNumber >= deviceList.size()) {
             return null;
         }
         return deviceList.get(deviceNumber).deviceUniqueName;
     }
 
-    public CaptureCapabilityAndroid[] GetCapabilityArray(String deviceUniqueId)
+    public CaptureCapabilityAndroid[] GetCapabilityArray (String deviceUniqueId)
     {
-        for (AndroidVideoCaptureDevice device : deviceList) {
-            if (device.deviceUniqueName.equals(deviceUniqueId)) {
+        for (AndroidVideoCaptureDevice device: deviceList) {
+            if(device.deviceUniqueName.equals(deviceUniqueId)) {
                 return (CaptureCapabilityAndroid[]) device.captureCapabilies;
             }
         }
@@ -246,8 +239,8 @@ public class VideoCaptureDeviceInfoAndroid {
     // Returns the camera orientation as described by
     // android.hardware.Camera.CameraInfo.orientation
     public int GetOrientation(String deviceUniqueId) {
-        for (AndroidVideoCaptureDevice device : deviceList) {
-            if (device.deviceUniqueName.equals(deviceUniqueId)) {
+        for (AndroidVideoCaptureDevice device: deviceList) {
+            if(device.deviceUniqueName.equals(deviceUniqueId)) {
                 return device.orientation;
             }
         }
@@ -258,18 +251,15 @@ public class VideoCaptureDeviceInfoAndroid {
     public VideoCaptureAndroid AllocateCamera(int id, long context,
             String deviceUniqueId) {
         try {
-            if (DEBUG) {
-                Log.d("*WEBRTC*", "AllocateCamera " + deviceUniqueId);
-            }
+            Log.d(TAG, "AllocateCamera " + deviceUniqueId);
 
             Camera camera = null;
             AndroidVideoCaptureDevice deviceToUse = null;
-            for (AndroidVideoCaptureDevice device : deviceList) {
-                Log.d("*WEBRTC*", "Search in " + device.deviceUniqueName);
-                if (device.deviceUniqueName.equals(deviceUniqueId)) {
+            for (AndroidVideoCaptureDevice device: deviceList) {
+                if(device.deviceUniqueName.equals(deviceUniqueId)) {
                     // Found the wanted camera
                     deviceToUse = device;
-                    switch (device.frontCameraType) {
+                    switch(device.frontCameraType) {
                         case GalaxyS:
                             camera = AllocateGalaxySFrontCamera();
                             break;
@@ -282,18 +272,15 @@ public class VideoCaptureDeviceInfoAndroid {
                 }
             }
 
-            if (camera == null) {
-                Log.v("*WEBRTC*", "AllocateCamera - NO CAMERA !!!");
+            if(camera == null) {
                 return null;
             }
-            if (VERBOSE) {
-                Log.v("*WEBRTC*", "AllocateCamera - creating VideoCaptureAndroid");
-            }
+            Log.v(TAG, "AllocateCamera - creating VideoCaptureAndroid");
 
             return new VideoCaptureAndroid(id, context, camera, deviceToUse);
 
-        } catch (Exception ex) {
-            Log.e("*WEBRTC*", "AllocateCamera Failed to open camera- ex " +
+        }catch (Exception ex) {
+            Log.e(TAG, "AllocateCamera Failed to open camera- ex " +
                     ex.getLocalizedMessage());
         }
         return null;
@@ -301,16 +288,16 @@ public class VideoCaptureDeviceInfoAndroid {
 
     // Searches for a front facing camera device. This is device specific code.
     public Camera.Parameters
-            SearchOldFrontFacingCameras(AndroidVideoCaptureDevice newDevice)
-                    throws SecurityException, IllegalArgumentException,
-                    NoSuchMethodException, ClassNotFoundException,
-                    IllegalAccessException, InvocationTargetException {
+    SearchOldFrontFacingCameras(AndroidVideoCaptureDevice newDevice)
+            throws SecurityException, IllegalArgumentException,
+            NoSuchMethodException, ClassNotFoundException,
+            IllegalAccessException, InvocationTargetException {
         // Check the id of the opened camera device
         // Returns null on X10 and 1 on Samsung Galaxy S.
         Camera camera = Camera.open();
         Camera.Parameters parameters = camera.getParameters();
         String cameraId = parameters.get("camera-id");
-        if (cameraId != null && cameraId.equals("1")) {
+        if(cameraId != null && cameraId.equals("1")) {
             // This might be a Samsung Galaxy S with a front facing camera.
             try {
                 parameters.set("camera-id", 2);
@@ -320,9 +307,10 @@ public class VideoCaptureDeviceInfoAndroid {
                 newDevice.orientation = 0;
                 camera.release();
                 return parameters;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 // Nope - it did not work.
-                Log.e("*WEBRTC*", "Init Failed to open front camera camera - ex " +
+                Log.e(TAG, "Init Failed to open front camera camera - ex " +
                         ex.getLocalizedMessage());
             }
         }
@@ -337,7 +325,7 @@ public class VideoCaptureDeviceInfoAndroid {
                     new File("/system/framework/com.sprint.hardware.twinCamDevice.jar");
             exists = file.exists();
         }
-        if (exists) {
+        if(exists) {
             newDevice.frontCameraType = FrontFacingCameraType.HTCEvo;
             newDevice.orientation = 0;
             Camera evCamera = AllocateEVOFrontFacingCamera();
@@ -359,23 +347,23 @@ public class VideoCaptureDeviceInfoAndroid {
                 new File("/system/framework/com.htc.hardware.twinCamDevice.jar");
         classPath = "com.htc.hardware.twinCamDevice.FrontFacingCamera";
         boolean exists = file.exists();
-        if (!exists) {
+        if (!exists){
             file =
                     new File("/system/framework/com.sprint.hardware.twinCamDevice.jar");
             classPath = "com.sprint.hardware.twinCamDevice.FrontFacingCamera";
             exists = file.exists();
         }
-        if (!exists) {
+        if(!exists) {
             return null;
         }
 
         String dexOutputDir = "";
-        if (context != null) {
+        if(context != null) {
             dexOutputDir = context.getFilesDir().getAbsolutePath();
             File mFilesDir = new File(dexOutputDir, "dexfiles");
-            if (!mFilesDir.exists()) {
+            if(!mFilesDir.exists()){
                 // Log.e("*WEBRTCN*", "Directory doesn't exists");
-                if (!mFilesDir.mkdirs()) {
+                if(!mFilesDir.mkdirs()) {
                     // Log.e("*WEBRTCN*", "Unable to create files directory");
                 }
             }
@@ -388,18 +376,17 @@ public class VideoCaptureDeviceInfoAndroid {
                         null, ClassLoader.getSystemClassLoader());
 
         Method method = loader.loadClass(classPath).getDeclaredMethod(
-                "getFrontFacingCamera", (Class[]) null);
-        Camera camera = (Camera) method.invoke((Object[]) null, (Object[]) null);
+            "getFrontFacingCamera", (Class[]) null);
+        Camera camera = (Camera) method.invoke((Object[])null,(Object[]) null);
         return camera;
     }
 
     // Returns a handle to Galaxy S front camera.
     // The caller is responsible to release it on completion.
-    private Camera AllocateGalaxySFrontCamera()
-    {
+    private Camera AllocateGalaxySFrontCamera() {
         Camera camera = Camera.open();
         Camera.Parameters parameters = camera.getParameters();
-        parameters.set("camera-id", 2);
+        parameters.set("camera-id",2);
         camera.setParameters(parameters);
         return camera;
     }

@@ -23,6 +23,7 @@ package com.csipsimple.ui.incall;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.view.View;
@@ -40,7 +41,6 @@ public class InCallInfoGrid extends FrameLayout {
     private static final String THIS_FILE = "InCallInfoGrid";
 
     private final ArrayList<View> mItems = new ArrayList<View>();
-    
 
     public InCallInfoGrid(Context context) {
         this(context, null);
@@ -97,17 +97,24 @@ public class InCallInfoGrid extends FrameLayout {
             populate();
         }
     }
-    
+
+    private final Handler handler = new Handler();
+    private final Runnable postLayout = new Runnable() {
+        @Override
+        public void run() {
+            populate();
+        }
+    };
     
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    synchronized protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if(changed) {
-            populate();
+            handler.postDelayed(postLayout, 100);
         }
         super.onLayout(changed, left, top, right, bottom);
     }
     
-    void populate() {
+    synchronized void populate() {
         
         if (mAdapter == null) {
             return;
@@ -148,6 +155,12 @@ public class InCallInfoGrid extends FrameLayout {
             if(cellHeight < minRowHeight) {
                 Log.d(THIS_FILE, "May render weird... min height not correct " + cellHeight);
             }
+            if(cellHeight <= 0 || cellWidth <= 0) {
+                Log.w(THIS_FILE, "The call grid cannot render " + cellHeight + "x" + cellWidth
+                        + " for " + width + "x" + height);
+                cellWidth = minColumnWidth;
+                cellHeight = minRowHeight;
+            }
         }
         
         // Add it if needed.
@@ -168,19 +181,28 @@ public class InCallInfoGrid extends FrameLayout {
             // Set layout of the view
             int posX = curIndex % numColumns;
             int posY = curIndex / numColumns;
-            LayoutParams lp = new FrameLayout.LayoutParams(cellWidth, cellHeight);
+            LayoutParams lp = (LayoutParams) ii.getLayoutParams();
+            if(lp == null) {
+                lp = new FrameLayout.LayoutParams(cellWidth, cellHeight);
+            }else {
+                lp.height = cellHeight;
+                lp.width = cellWidth;
+            }
             lp.leftMargin = posX * cellWidth;
             lp.topMargin = posY * cellHeight;
+            ii.setLayoutParams(lp);
             // Append to parent if needed
             ViewParent p = ii.getParent();
             if(p == null) {
                 addView(ii);
             }else {
-                if(p != this) {
+                if(p == this) {
+                    updateViewLayout(ii, lp); 
+                }else {
                     Log.w(THIS_FILE, "Call card already attached to somebody else");
                 }
             }
-            ii.setLayoutParams(lp);
+            ii.forceLayout();
         }
         
         // Remove useles
@@ -190,11 +212,8 @@ public class InCallInfoGrid extends FrameLayout {
             }
         }
         
-        if (hasFocus()) {
-            // TODO : forward to first call card
-        }
-        
     }
+    
     
 
     private class CallDataObserver extends DataSetObserver {

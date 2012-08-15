@@ -24,6 +24,7 @@ package com.csipsimple.ui.incall;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -76,6 +77,7 @@ import com.csipsimple.widgets.ScreenLocker;
 
 import org.webrtc.videoengine.ViERenderer;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -129,6 +131,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
 
     private final static int PICKUP_SIP_URI_XFER = 0;
     private final static int PICKUP_SIP_URI_NEW_CALL = 1;
+    private static final String CALL_ID = "call_id";
     
 
     @SuppressWarnings("deprecation")
@@ -404,23 +407,20 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             case PICKUP_SIP_URI_XFER:
                 if (resultCode == RESULT_OK && service != null) {
                     String callee = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-                    try {
-                        // TODO : should get the call that was xfered in buffer
-                        // first.
-                        SipCallSession currentCall = getActiveCallInfo();
-                        if (currentCall != null
-                                && currentCall.getCallId() != SipCallSession.INVALID_CALL_ID) {
-                            service.xfer(currentCall.getCallId(), callee);
+                    long callId = data.getLongExtra(CALL_ID, SipProfile.INVALID_ID);
+                    if(callId != SipProfile.INVALID_ID) {
+                        try {
+                            service.xfer((int) callId, callee);
+                        } catch (RemoteException e) {
+                            // TODO : toaster
                         }
-                    } catch (RemoteException e) {
-                        // TODO : toaster
                     }
                 }
                 return;
             case PICKUP_SIP_URI_NEW_CALL:
                 if (resultCode == RESULT_OK && service != null) {
                     String callee = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-                    long accountId = data.getLongExtra(SipProfile.FIELD_ACC_ID,
+                    long accountId = data.getLongExtra(SipProfile.FIELD_ID,
                             SipProfile.INVALID_ID);
                     if (accountId != SipProfile.INVALID_ID) {
                         try {
@@ -430,6 +430,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                         }
                     }
                 }
+                return;
             default:
                 break;
         }
@@ -535,10 +536,11 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 inCallAnswerControls.setCallState(null);
             }
             
+            heldCallsGrid.setVisibility((heldsCalls > 0)? View.VISIBLE : View.GONE);
+            
             activeCallsAdapter.notifyDataSetChanged();
             heldCallsAdapter.notifyDataSetChanged();
             
-            heldCallsGrid.setVisibility((heldsCalls > 0)? View.VISIBLE : View.GONE);
             
             //findViewById(R.id.inCallContainer).requestLayout();
             
@@ -829,13 +831,14 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
 
 
     @Override
-    public void onTrigger(int whichAction, SipCallSession call) {
+    public void onTrigger(int whichAction, final SipCallSession call) {
 
         // Sanity check for actions requiring valid call id
         if (whichAction == TAKE_CALL || whichAction == DECLINE_CALL ||
             whichAction == CLEAR_CALL || whichAction == DETAILED_DISPLAY || 
             whichAction == TOGGLE_HOLD || whichAction == START_RECORDING ||
             whichAction == STOP_RECORDING || whichAction == DTMF_DISPLAY ||
+            whichAction == XFER_CALL || whichAction == TRANSFER_CALL ||
             whichAction == START_VIDEO || whichAction == STOP_VIDEO ) {
             // We check that current call is valid for any actions
             if (call == null) {
@@ -961,10 +964,53 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 }
                 case XFER_CALL: {
                     Intent pickupIntent = new Intent(this, PickupSipUri.class);
+                    pickupIntent.putExtra(CALL_ID, call.getCallId());
                     startActivityForResult(pickupIntent, PICKUP_SIP_URI_XFER);
                     break;
                 }
+                case TRANSFER_CALL: {
+                    final ArrayList<SipCallSession> remoteCalls = new ArrayList<SipCallSession>();
+                    if(callsInfo != null) {
+                        for(SipCallSession remoteCall : callsInfo) {
+                            // Verify not current call
+                            if(remoteCall.getCallId() != call.getCallId() && remoteCall.isOngoing()) {
+                                remoteCalls.add(remoteCall);
+                            }
+                        }
+                    }
 
+                    if(remoteCalls.size() > 0) {
+                        Builder builder = new AlertDialog.Builder(this);
+                        CharSequence[] simpleAdapter = new String[remoteCalls.size()];
+                        for(int i = 0; i < remoteCalls.size(); i++) {
+                            simpleAdapter[i] = remoteCalls.get(i).getRemoteContact();
+                        }
+                        builder.setSingleChoiceItems(simpleAdapter , -1, new Dialog.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (service != null) {
+                                            try {
+                                                // 1 = PJSUA_XFER_NO_REQUIRE_REPLACES
+                                                service.xferReplace(call.getCallId(), remoteCalls.get(which).getCallId(), 1);
+                                            } catch (RemoteException e) {
+                                                Log.e(THIS_FILE, "Was not able to call service method", e);
+                                            }
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setCancelable(true)
+                                .setNeutralButton(R.string.cancel, new Dialog.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
+                    
+                    break;
+                }
                 case ADD_CALL: {
                     Intent pickupIntent = new Intent(this, PickupSipUri.class);
                     startActivityForResult(pickupIntent, PICKUP_SIP_URI_NEW_CALL);
@@ -1431,7 +1477,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 //badge.setOnTouchListener(new OnBadgeTouchListener(badge, call));
                 
                 SipCallSession session = (SipCallSession) getItem(position);
-                Log.d(THIS_FILE, "Set call for " + session.getCallState());
+                Log.d(THIS_FILE, "Set call state : " + session.getCallState());
                 vc.setCallState(session);
             }
 

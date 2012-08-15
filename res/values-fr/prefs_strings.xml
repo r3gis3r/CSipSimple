@@ -64,6 +64,8 @@
   <string name="turn_password_desc">Mot de passe pour l\'authentification TURN</string>
   <string name="enable_stun">Activer STUN</string>
   <string name="enable_stun_desc">Activer la fonctionnalité STUN</string>
+  <string name="enable_stun2">Utiliser le nouveau format STUN</string>
+  <string name="enable_stun2_desc">Les requêtes STUN pour résoudre l’adresse de connexion doit utiliser le nouveau format </string>
   <string name="stun_server">Serveur STUN</string>
   <string name="stun_server_desc">Serveur STUN (hôte[:port],…)</string>
   <string name="enable_qos">Activer la QoS</string>
