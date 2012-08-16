@@ -61,6 +61,7 @@ import com.csipsimple.ui.messages.ConversationsListFragment;
 import com.csipsimple.ui.warnings.WarningFragment;
 import com.csipsimple.ui.warnings.WarningUtils;
 import com.csipsimple.ui.warnings.WarningUtils.OnWarningChanged;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.NightlyUpdater;
@@ -139,13 +140,13 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         setContentView(R.layout.sip_home);
 
         final ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowHomeEnabled(false);
+        ab.setDisplayShowTitleEnabled(false);
         ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         // ab.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         // showAbTitle = Compatibility.hasPermanentMenuKey
 
-        ab.setDisplayShowHomeEnabled(false);
-        ab.setDisplayShowTitleEnabled(false);
         
 
         Tab dialerTab = ab.newTab()
@@ -662,11 +663,15 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                     .setShowAsAction(actionRoom);
         }
         if (CustomDistribution.distributionWantsOtherAccounts()) {
+            int accountRoom = actionRoom;
+            if(Compatibility.isCompatible(10)) {
+                accountRoom |= MenuItem.SHOW_AS_ACTION_WITH_TEXT;
+            }
             menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE,
                     (distribWizard == null) ? R.string.accounts : R.string.other_accounts)
                     .setIcon(R.drawable.ic_menu_account_list)
                     .setAlphabeticShortcut('a')
-                    .setShowAsAction(actionRoom | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+                    .setShowAsAction( accountRoom );
         }
         menu.add(Menu.NONE, PARAMS_MENU, Menu.NONE, R.string.prefs)
                 .setIcon(android.R.drawable.ic_menu_preferences)
