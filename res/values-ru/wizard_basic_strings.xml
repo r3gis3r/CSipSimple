@@ -1,6 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_basic_username">Пользователь</string>
+  <string name="w_basic_username_desc">Имя пользователя / логин (без @sip.server)</string>
   <string name="w_basic_password">Пароль</string>
   <string name="w_basic_password_desc">Пароль доступа к аккаунту</string>
 </resources>

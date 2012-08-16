@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="test_audio">Тест аудио</string>
+  <string name="test_audio_prepare">Подготовка теста аудио</string>
+  <string name="test_audio_ongoing">Тест запущен... ⏎ Говорите в микрофон и слушайте в наушники</string>
+  <string name="test_audio_network_failure">Тест провален: ⏎ Сначала переключитесь на работающую сеть</string>
+</resources>

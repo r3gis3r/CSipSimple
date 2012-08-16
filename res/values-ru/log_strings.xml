@@ -1,12 +1,13 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="unknown">Неизвестные</string>
-    <string name="type_incoming">Входящие</string>
-    <string name="type_outgoing">Исходящие</string>
-    <string name="type_missed">Пропущенные</string>
-    <string name="callBack">Позвонить</string>
-    <string name="callAgain">Перезвонить</string>
-    <string name="returnCall">Обратный вызов</string>
-
+  <string name="unknown">Неизвестные</string>
+  <string name="type_incoming">Входящие</string>
+  <string name="type_outgoing">Исходящие</string>
+  <string name="type_missed">Пропущенные</string>
+  <string name="callBack">Позвонить</string>
+  <string name="callAgain">Перезвонить</string>
+  <string name="returnCall">Обратный вызов</string>
+  <string name="call">Звонок</string>
+  <string name="sip_call">SIP звонок</string>
+  <string name="no_call_history">История звонков пуста</string>
 </resources>

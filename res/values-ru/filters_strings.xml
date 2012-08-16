@@ -1,22 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="cant_call">Невозможно позвонить</string>
-    <string name="rewrite">Переписать</string>
-    <string name="stop_processing">Остановить обработку</string>
-    <string name="direct_call">Прямой вызов</string>
-    <string name="auto_answer">Автоответ</string>
-    <string name="starts_with">Начинается с</string>
-    <string name="ends_with">Заканчивается на</string>
-    <string name="contains">Содержит</string>
-    <string name="all">Все</string>
-    <string name="has_exactly_n_digits">Имеет точно N цифр</string>
-    <string name="has_more_than_n_digits">Имеет больше N цифр</string>
-    <string name="is_exactly">Точно</string>
-    <string name="custom_regexp">Свое регулярное выражение</string>
-    <string name="prefix_by">Префикс</string>
-    <string name="suffix_with">Суффикс</string>
-    <string name="replace_match_by">Заменить на</string>
-    <string name="replace_all_by">Заменить всё на</string>
-
+  <string name="optional_sip_code">Опциональный sip код</string>
+  <string name="cant_call">Невозможно позвонить</string>
+  <string name="rewrite">Переписать</string>
+  <string name="stop_processing">Остановить обработку</string>
+  <string name="direct_call">Прямой вызов</string>
+  <string name="auto_answer">Автоответ</string>
+  <string name="starts_with">Начинается с</string>
+  <string name="ends_with">Заканчивается на</string>
+  <string name="contains">Содержит</string>
+  <string name="all">Все</string>
+  <string name="has_exactly_n_digits">Имеет точно N цифр</string>
+  <string name="has_more_than_n_digits">Имеет больше N цифр</string>
+  <string name="is_exactly">Точно</string>
+  <string name="custom_regexp">Свое регулярное выражение</string>
+  <string name="prefix_by">Префикс</string>
+  <string name="suffix_with">Суффикс</string>
+  <string name="replace_match_by">Заменить на</string>
+  <string name="replace_all_by">Заменить всё на</string>
 </resources>

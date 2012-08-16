@@ -1,13 +1,16 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">Название аккаунта</string>
   <string name="w_advanced_display_name_desc">Отображаемое название аккаунта</string>
   <string name="w_advanced_caller_id">Идентификатор звонящего</string>
   <string name="w_advanced_caller_id_desc">Идентификатор звонящего при исходящих вызовах Caller ID</string>
   <string name="w_advanced_username">Имя пользователя</string>
+  <string name="w_advanced_username_desc">Имя пользователя для авторизации на SIP сервере (без @sip.server)</string>
   <string name="w_advanced_password">Пароль</string>
   <string name="w_advanced_password_desc">Пароль аутентификации на SIP сервере</string>
   <string name="w_advanced_use_tcp">Использовать TCP</string>
   <string name="w_advanced_proxy">Прокси</string>
   <string name="w_advanced_proxy_desc">Прокси-сервер /IP[:порт] (опционально; не всегда требуется)</string>
+  <string name="w_advanced_auth_id">Sip идентификатор</string>
+  <string name="w_advanced_auth_id_desc">Оставьте пустым, чтобы было идентично Имени пользователя</string>
 </resources>
