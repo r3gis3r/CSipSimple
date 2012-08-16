@@ -283,6 +283,11 @@ public final class Compatibility {
                 android.os.Build.DEVICE.toLowerCase().contains("umts_jordan") ) && !isCompatible(9)) {
             return true;
         }
+        
+        // Alcatel ONE touch 
+        if(android.os.Build.DEVICE.startsWith("one_touch_990")) {
+            return true;
+        }
 
         return false;
     }
@@ -722,6 +727,10 @@ public final class Compatibility {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, usePriv);
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, !usePriv);
             }
+        }
+        if(lastSeenVersion < 1777 && android.os.Build.DEVICE.startsWith("one_touch_990")) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL,
+                    needPspWorkaround());
         }
         prefWrapper.endEditing();
     }

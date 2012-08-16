@@ -730,7 +730,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 return true;
             case KeyEvent.KEYCODE_CALL:
             case KeyEvent.KEYCODE_ENDCALL:
-                return inCallControls.onKeyDown(keyCode, event);
+                return inCallAnswerControls.onKeyDown(keyCode, event);
             case KeyEvent.KEYCODE_SEARCH:
                 // Prevent search
                 return true;
@@ -750,7 +750,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             case KeyEvent.KEYCODE_SEARCH:
                 return true;
             case KeyEvent.KEYCODE_ENDCALL:
-                return inCallControls.onKeyDown(keyCode, event);
+                return inCallAnswerControls.onKeyDown(keyCode, event);
 
         }
         return super.onKeyUp(keyCode, event);
@@ -1485,8 +1485,5 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         }
         
     }
-    
-
-
 
 }
