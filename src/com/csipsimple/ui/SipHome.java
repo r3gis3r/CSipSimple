@@ -664,7 +664,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         }
         if (CustomDistribution.distributionWantsOtherAccounts()) {
             int accountRoom = actionRoom;
-            if(Compatibility.isCompatible(10)) {
+            if(Compatibility.isCompatible(13)) {
                 accountRoom |= MenuItem.SHOW_AS_ACTION_WITH_TEXT;
             }
             menu.add(Menu.NONE, ACCOUNTS_MENU, Menu.NONE,
