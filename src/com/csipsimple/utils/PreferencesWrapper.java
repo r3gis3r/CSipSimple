@@ -87,6 +87,7 @@ public class PreferencesWrapper {
         put(SipConfigManager.TSX_T1_TIMEOUT, "-1");
         put(SipConfigManager.TSX_T2_TIMEOUT, "-1");
         put(SipConfigManager.TSX_T4_TIMEOUT, "-1");
+        put(SipConfigManager.TSX_TD_TIMEOUT, "-1");
 		
 		put(SipConfigManager.SND_AUTO_CLOSE_TIME, "1");
 		put(SipConfigManager.ECHO_CANCELLATION_TAIL, "200");

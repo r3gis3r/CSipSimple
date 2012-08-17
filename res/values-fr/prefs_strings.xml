@@ -97,6 +97,7 @@
   <string name="tsx_t1_timeout">Valeur T1 d\'expiration de transaction</string>
   <string name="tsx_t2_timeout">Valeur T2 d\'expiration de transaction</string>
   <string name="tsx_t4_timeout">Valeur T4 d\'expiration de transaction</string>
+  <string name="tsx_td_timeout">Délai maximal de pour l\'établissement de l\'INVITE</string>
   <string name="tsx_timeout_desc">Laissez -1 pour utiliser les valeurs à défaut de la RFC 3261</string>
   <string name="network_route_polling">Vérifier les changements réseau toute les (en minutes)</string>
   <string name="network_route_polling_desc">Contournement pour la vérification du VPN avec android 4.0. Laissez à 0 pour désactiver</string>

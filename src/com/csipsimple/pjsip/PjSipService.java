@@ -254,6 +254,10 @@ public class PjSipService {
                 if(tsx_to > 0) {
                     cssCfg.setTsx_t4_timeout(tsx_to);
                 }
+                tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_TD_TIMEOUT);
+                if(tsx_to > 0) {
+                    cssCfg.setTsx_td_timeout(tsx_to);
+                }
                 
 
                 // -- USE_ZRTP 1 is no_zrtp, 2 is create_zrtp

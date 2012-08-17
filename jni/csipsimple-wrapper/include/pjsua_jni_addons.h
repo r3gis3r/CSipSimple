@@ -111,6 +111,10 @@ typedef struct csipsimple_config {
 	 * Transaction T4 Timeout
 	 */
 	int tsx_t4_timeout;
+	/**
+	 * Transaction TD Timeout
+	 */
+	int tsx_td_timeout;
 
 	/**
 	 * Disable automatic switching from UDP to TCP if outgoing request

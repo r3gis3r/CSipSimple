@@ -39,20 +39,26 @@
     <EditTextPreference
         android:defaultValue="-1"
         android:key="tsx_t1_timeout"
-        android:numeric="integer"
+        android:numeric="signed"
         android:summary="@string/tsx_timeout_desc"
         android:title="@string/tsx_t1_timeout" />
     <EditTextPreference
         android:defaultValue="-1"
         android:key="tsx_t2_timeout"
-        android:numeric="integer"
+        android:numeric="signed"
         android:summary="@string/tsx_timeout_desc"
         android:title="@string/tsx_t2_timeout" />
     <EditTextPreference
         android:defaultValue="-1"
         android:key="tsx_t4_timeout"
-        android:numeric="integer"
+        android:numeric="signed"
         android:summary="@string/tsx_timeout_desc"
         android:title="@string/tsx_t4_timeout" />
+    <EditTextPreference
+        android:defaultValue="-1"
+        android:key="tsx_td_timeout"
+        android:numeric="signed"
+        android:summary="@string/tsx_timeout_desc"
+        android:title="@string/tsx_td_timeout" />
 
 </PreferenceScreen>

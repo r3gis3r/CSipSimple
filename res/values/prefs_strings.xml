@@ -101,6 +101,7 @@
     <string name="tsx_t1_timeout">Transaction T1 timeout value.</string>
     <string name="tsx_t2_timeout">Transaction T2 timeout value.</string>
     <string name="tsx_t4_timeout">Transaction T4 timeout value.</string>
+    <string name="tsx_td_timeout">Transaction completed timer for INVITE.</string>
     <string name="tsx_timeout_desc">Leave -1 for default RFC 3261 values</string>
     <string name="network_route_polling">Check for network changes each (minutes)</string>
     <string name="network_route_polling_desc">Android 4.0 VPN check workaround. Leave to 0 if not in this case to disable</string>

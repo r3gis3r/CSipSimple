@@ -733,6 +733,7 @@ public class SipConfigManager {
     /**
      * Transaction T1 timeout value.<br/>
      * Timeout of SIP transactions.
+     * -1 for default values
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
@@ -741,6 +742,7 @@ public class SipConfigManager {
     /**
      * Transaction T2 timeout value.<br/>
      * Timeout of SIP transactions.
+     * -1 for default values
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
@@ -749,11 +751,21 @@ public class SipConfigManager {
     /**
      * Transaction T4 timeout value.<br/>
      * Timeout of SIP transactions.
+     * -1 for default values
      * 
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String TSX_T4_TIMEOUT = "tsx_t4_timeout";
 
+    /**
+     *  Transaction TD timeout value.
+     *  Transaction completed timer for INVITE.
+     *  -1 for default values
+     *  
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String TSX_TD_TIMEOUT = "tsx_td_timeout";
+    
     // SECURE
     /**
      * Enable TLS transport.

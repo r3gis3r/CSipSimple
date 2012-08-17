@@ -318,6 +318,7 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->tsx_t1_timeout = PJSIP_T1_TIMEOUT;
 	css_cfg->tsx_t2_timeout = PJSIP_T2_TIMEOUT;
 	css_cfg->tsx_t4_timeout = PJSIP_T4_TIMEOUT;
+	css_cfg->tsx_td_timeout = PJSIP_TD_TIMEOUT;
 	css_cfg->disable_tcp_switch = PJ_TRUE;
 }
 
@@ -381,6 +382,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	pjsip_sip_cfg_var.tsx.t1 = css_cfg->tsx_t1_timeout;
 	pjsip_sip_cfg_var.tsx.t2 = css_cfg->tsx_t2_timeout;
 	pjsip_sip_cfg_var.tsx.t4 = css_cfg->tsx_t4_timeout;
+	pjsip_sip_cfg_var.tsx.td = css_cfg->tsx_td_timeout;
 	pjsip_sip_cfg_var.endpt.disable_tcp_switch = css_cfg->disable_tcp_switch;
 
 	// Call recorder
