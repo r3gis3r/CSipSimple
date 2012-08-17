@@ -21,7 +21,9 @@
 
 package com.csipsimple.wizards.impl;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesWrapper;
 
 
 public class Pbxes extends SimpleImplementation {
@@ -42,6 +44,18 @@ public class Pbxes extends SimpleImplementation {
 		SipProfile acc = super.buildAccount(account);
 		acc.vm_nbr = "*43";
 		return acc;
+	}
+	
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+	    super.setDefaultParams(prefs);
+	    // We need to change T1 value because pbxes.org drop registrations when retransmition are made by SIP client
+	    prefs.setPreferenceStringValue(SipConfigManager.TSX_T1_TIMEOUT, "1000");
+	}
+	
+	@Override
+	public boolean needRestart() {
+	    return true;
 	}
 	
 	@Override
