@@ -51,6 +51,7 @@
             android:title="@string/theme" />
 
         <PreferenceScreen
+            android:key="obtain_themes"
             android:summary="@string/obtain_themes_desc"
             android:title="@string/obtain_themes" >
             <intent
@@ -84,14 +85,17 @@
             android:defaultValue="false"
             android:key="start_with_text_dialer"
             android:summary="@string/start_with_text_dialer_desc"
-            android:title="@string/start_with_text_dialer" >
-        </CheckBoxPreference>
+            android:title="@string/start_with_text_dialer" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="use_alternate_unlocker"
             android:summary="@string/use_alternate_unlocker_desc"
-            android:title="@string/use_alternate_unlocker" >
-        </CheckBoxPreference>
+            android:title="@string/use_alternate_unlocker" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prevent_screen_rotation"
+            android:summary="@string/prevent_screen_rotation_desc"
+            android:title="@string/prevent_screen_rotation" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="advanced_ui"
@@ -100,8 +104,7 @@
             android:defaultValue="true"
             android:key="integrate_with_native_music"
             android:summary="@string/integrate_with_native_music_desc"
-            android:title="@string/integrate_with_native_music" >
-        </CheckBoxPreference>
+            android:title="@string/integrate_with_native_music" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="keep_awake_incall"
@@ -116,14 +119,7 @@
             android:defaultValue="false"
             android:key="use_partial_wake_lock"
             android:summary="@string/use_partial_wake_lock_desc"
-            android:title="@string/use_partial_wake_lock" >
-        </CheckBoxPreference>
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="prevent_screen_rotation"
-            android:summary="@string/prevent_screen_rotation_desc"
-            android:title="@string/prevent_screen_rotation" >
-        </CheckBoxPreference>
+            android:title="@string/use_partial_wake_lock" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="icon_in_status_bar"

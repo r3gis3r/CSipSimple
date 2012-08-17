@@ -30,6 +30,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,7 +40,7 @@ import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.service.SipService;
 
-public class AudioTester extends Activity {
+public class AudioTester extends Activity implements OnClickListener {
 
     private final static String THIS_FILE = "AudioTester";
 
@@ -56,7 +58,7 @@ public class AudioTester extends Activity {
         statusTextView = (TextView) findViewById(R.id.audio_test_text);
         rxProgress = (ProgressBar) findViewById(R.id.rx_bar);
         txProgress = (ProgressBar) findViewById(R.id.tx_bar);
-
+        findViewById(R.id.cancel_bt).setOnClickListener(this);
     }
 
     private ISipService service;
@@ -180,6 +182,14 @@ public class AudioTester extends Activity {
                 txProgress.setProgress(mTx);
             }
             
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if(id == R.id.cancel_bt) {
+            finish();
         }
     }
 

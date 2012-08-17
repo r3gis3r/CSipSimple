@@ -329,6 +329,6 @@ public class PrefsLogic {
     public static void onMainActivityPrepareOptionMenu(Menu menu, Context ctxt, PreferencesWrapper prefsWrapper) {
 
         menu.findItem(R.id.expert).setTitle(prefsWrapper.isAdvancedUser()? R.string.normal_preferences: R.string.expert_preferences);
-        menu.findItem(R.id.audio_test).setVisible(prefsWrapper.isAdvancedUser());
+        //menu.findItem(R.id.audio_test).setVisible(prefsWrapper.isAdvancedUser());
     }
 }
