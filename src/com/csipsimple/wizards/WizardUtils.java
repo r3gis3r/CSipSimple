@@ -702,6 +702,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_multifon, 12, 
                     new Locale[] {locale("ru_RU")}, false, false, 
                     MultifonRu.class));
+            WIZARDS_DICT.put("VOIPDOUP", new WizardInfo("VOIPDOUP", "Voipdoup", 
+                    R.drawable.ic_wizard_voipdoup, 19, 
+                    new Locale[]{ locale("zh_CN"), locale("zh_TW")}, false, false, 
+                    Voipdoup.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
