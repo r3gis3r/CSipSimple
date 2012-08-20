@@ -64,9 +64,15 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
 	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
 		try {
-			showPwdCheckbox = new CheckBox(getContext());
-	        showPwdCheckbox.setText(R.string.show_password);
-	        showPwdCheckbox.setOnClickListener(this);
+		    if(showPwdCheckbox == null) {
+    			showPwdCheckbox = new CheckBox(getContext());
+    	        showPwdCheckbox.setText(R.string.show_password);
+    	        showPwdCheckbox.setOnClickListener(this);
+		    }
+		    
+	        canShowPassword = false;
+	        getEditText().setInputType(
+	                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 	        updateCanShowPassword();
 			ViewParent oldParent = showPwdCheckbox.getParent();
 			if (oldParent != view) {
