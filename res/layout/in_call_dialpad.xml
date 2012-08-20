@@ -35,7 +35,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:padding="6dip"
-        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:textColor="@android:color/white"
         android:textSize="28sp" />
 
