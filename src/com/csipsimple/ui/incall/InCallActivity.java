@@ -407,8 +407,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             case PICKUP_SIP_URI_XFER:
                 if (resultCode == RESULT_OK && service != null) {
                     String callee = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-                    long callId = data.getLongExtra(CALL_ID, SipProfile.INVALID_ID);
-                    if(callId != SipProfile.INVALID_ID) {
+                    int callId = data.getIntExtra(CALL_ID, -1);
+                    if(callId != -1) {
                         try {
                             service.xfer((int) callId, callee);
                         } catch (RemoteException e) {
