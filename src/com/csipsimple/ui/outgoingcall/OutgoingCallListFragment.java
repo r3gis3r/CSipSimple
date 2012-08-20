@@ -128,9 +128,12 @@ public class OutgoingCallListFragment extends CSSListFragment {
                     }
                     delay = MOBILE_CALL_DELAY_MS - (System.currentTimeMillis() - startDate);
                 }
-                PluginCallRunnable pendingTask = new PluginCallRunnable(ch.getIntent(), delay);
-                Log.d(THIS_FILE, "Deferring call task of " + delay);
-                pendingTask.start();
+                
+                if(ch.getIntent() != null) {
+                    PluginCallRunnable pendingTask = new PluginCallRunnable(ch.getIntent(), delay);
+                    Log.d(THIS_FILE, "Deferring call task of " + delay);
+                    pendingTask.start();
+                }
                 return true;
             }
         }

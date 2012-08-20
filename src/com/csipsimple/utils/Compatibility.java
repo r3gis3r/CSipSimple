@@ -324,6 +324,16 @@ public final class Compatibility {
         }
         return false;
     }
+    
+
+    private static boolean shouldFocusAudio() {
+        /* HTC One X */
+        if (android.os.Build.DEVICE.toLowerCase().startsWith("endeavoru") ||
+                android.os.Build.DEVICE.toLowerCase().startsWith("evita") ) {
+            return true;
+        }
+        return true;
+    }
 
     private static void resetCodecsSettings(PreferencesWrapper preferencesWrapper) {
         boolean supportFloating = false;
@@ -450,6 +460,8 @@ public final class Compatibility {
                 getDefaultMicroSource());
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
                 needWebRTCImplementation());
+        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO,
+                shouldFocusAudio());
         
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                 isTabletScreen(preferencesWrapper.getContext()));
@@ -731,6 +743,11 @@ public final class Compatibility {
         if(lastSeenVersion < 1777 && android.os.Build.DEVICE.startsWith("one_touch_990")) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL,
                     needPspWorkaround());
+        }
+        if (lastSeenVersion < 1794 && 
+                (android.os.Build.DEVICE.toLowerCase().startsWith("endeavoru") ||
+                        android.os.Build.DEVICE.toLowerCase().startsWith("evita") ) ) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
         }
         prefWrapper.endEditing();
     }
