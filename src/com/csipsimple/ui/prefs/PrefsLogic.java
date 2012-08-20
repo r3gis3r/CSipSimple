@@ -30,10 +30,15 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
+import com.csipsimple.utils.ExtraPlugins;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.ExtraPlugins.DynCodecInfos;
+
+import java.util.Map;
 
 public class PrefsLogic {
 
@@ -289,6 +294,10 @@ public class PrefsLogic {
                 }
                 if(!CustomDistribution.supportCallRecord()) {
                     pfh.hidePreference(null, SipConfigManager.AUTO_RECORD_CALLS);
+                }
+                Map<String, DynCodecInfos> videoPlugins = ExtraPlugins.getDynPlugins(ctxt, SipManager.ACTION_GET_VIDEO_PLUGIN);
+                if(videoPlugins.size() == 0) {
+                    pfh.hidePreference(null, SipConfigManager.USE_VIDEO);
                 }
             }
             default:
