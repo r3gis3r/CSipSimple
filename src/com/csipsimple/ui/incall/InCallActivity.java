@@ -1405,7 +1405,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 long currentTime = System.currentTimeMillis();
                 if(call.isAfterEnded()) {
                     // Only valid if we already seen this call in this adapter to be valid
-                    if(seenConnected.get(call.getCallId(), currentTime + 2 * QUIT_DELAY) < currentTime + QUIT_DELAY) {
+                    if(hasNoMoreActiveCall() && seenConnected.get(call.getCallId(), currentTime + 2 * QUIT_DELAY) < currentTime + QUIT_DELAY) {
                         return true;
                     }else {
                         seenConnected.delete(call.getCallId());
@@ -1417,6 +1417,23 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 }
             }
             return false;
+        }
+        
+        private boolean hasNoMoreActiveCall() {
+            synchronized (callMutex) {
+                if(callsInfo == null) {
+                    return true;
+                }
+                
+                for(SipCallSession call : callsInfo) {
+                    // As soon as we have one not after ended, we have at least active call
+                    if(!call.isAfterEnded()) {
+                        return false;
+                    }
+                }
+                
+            }
+            return true;
         }
         
         @Override
