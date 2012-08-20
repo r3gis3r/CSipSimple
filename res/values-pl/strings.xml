@@ -35,6 +35,7 @@
   <string name="dial_tab_name_text">Wybierz</string>
   <string name="calllog_tab_name_text">Historia połączeń</string>
   <string name="messages_tab_name_text">Wiadomości</string>
+  <string name="favorites_tab_name_text">Ulubione</string>
   <string name="menu_disconnect">Wyloguj się</string>
   <string name="service_ticker_registered_text">SIP zarejestrowany</string>
   <string name="outgoing_call_chooser_call_text">Zadzwoń</string>
@@ -78,6 +79,7 @@
   <string name="invert_selection">Odwróć zaznaczenie</string>
   <string name="cant_write_file">Błąd podczas zapisu pliku</string>
   <string name="info">Informacje</string>
+  <string name="csipsimple_shortcut">Skrót CSipSimple</string>
   <!--Presence stuff-->
   <string name="online">Dostępny</string>
   <string name="offline">Rozłączony</string>
@@ -86,6 +88,10 @@
   <string name="activate_presence_sharing">Udostępnij obecność</string>
   <string name="deactivate_presence_sharing">Zakończ udostępnianie obecności</string>
   <string name="presence">Obecność</string>
+  <string name="configure">Konfiguruj</string>
   <string name="set_android_group">Wybierz grupę systemu Android</string>
   <string name="set_sip_data">Wybierz dane SIP URI</string>
+  <string name="uri_nbr">Numer telefonu</string>
+  <string name="uri_im">Komunikator z niestandardowym systemem SIP</string>
+  <string name="uri_sip">Połączenie internetowe</string>
 </resources>

@@ -1,28 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">Odbierz</string>
-    <string name="decline_call">Odrzuć</string>
-    <string name="clear_call">Odłóż</string>
-    <string name="touch_lock">Dwukrotnie dotknij, aby odblokować</string>
-    <string name="dialpad">DTMF</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="speaker">Głośnik</string>
-    <string name="mute">Wycisz</string>
-    <string name="add_call">Dodaj połączenie</string>
-    <string name="call_state_calling">Wybieranie numeru…</string>
-    <string name="call_state_confirmed">Nawiązane</string>
-    <string name="call_state_connecting">Łączenie…</string>
-    <string name="call_state_disconnected">Rozłączone</string>
-    <string name="call_state_early">Dzwonienie…</string>
-    <string name="call_state_incoming">Połączenie przychodzące…</string>
-    <string name="call_state_null">BŁĄD</string>
-    <string name="unlock">Odblokuj</string>
-    <string name="record">Nagraj</string>
-    <string name="stop_recording">Zatrzymaj nagrywanie</string>
-    <string name="hold_call">Wstrzymaj</string>
-    <string name="on_hold">Wstrzymany</string>
-    <string name="resume_call">Wznów</string>
-    <string name="send_dtmf">Wyślij DTMF</string>
-
+  <string name="take_call">Odbierz</string>
+  <string name="decline_call">Odrzuć</string>
+  <string name="clear_call">Odłóż</string>
+  <string name="touch_lock">Dwukrotnie dotknij, aby odblokować</string>
+  <string name="dialpad">DTMF</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Głośnik</string>
+  <string name="mute">Wycisz</string>
+  <string name="add_call">Dodaj połączenie</string>
+  <string name="call_state_calling">Wybieranie numeru…</string>
+  <string name="call_state_confirmed">Nawiązane</string>
+  <string name="call_state_connecting">Łączenie…</string>
+  <string name="call_state_disconnected">Rozłączone</string>
+  <string name="call_state_early">Dzwonienie…</string>
+  <string name="call_state_incoming">Połączenie przychodzące…</string>
+  <string name="call_state_null">BŁĄD</string>
+  <string name="unlock">Odblokuj</string>
+  <string name="record">Nagraj</string>
+  <string name="stop_recording">Zatrzymaj nagrywanie</string>
+  <string name="xfer_uri">Przenieś do numeru</string>
+  <string name="hold_call">Wstrzymaj</string>
+  <string name="on_hold">Wstrzymany</string>
+  <string name="resume_call">Wznów</string>
+  <string name="transfer_to_call">Przenieś do połączenia</string>
+  <string name="send_dtmf">Wyślij DTMF</string>
 </resources>

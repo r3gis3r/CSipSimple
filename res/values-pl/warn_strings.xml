@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="warn_ignore">Ignoruj</string>
+  <!--STUN enabled-->
+  <string name="warn_no_stun">STUN nie jest włączone</string>
+  <string name="warn_no_stun_description">Jeśli nie masz dźwięku przychodzącego podczas rozmowy, to prawdopodobnie jesteś połączony do sieci NAT i twój dostawca nie obsługuje SIP.⏎ ⏎ »W celu obejścia tego problemu, to czasami warto włączyć opcję STUN.⏎ ⏎ »Jeśli nie masz problemów z dźwiękiem przychodzącym to ignoruj to ostrzeżenie.⏎ ⏎ »Jeśli jesteś w kraju, gdzie sieć publiczna jest oddzielona od innych sieci publicznych, być może musisz zmienić serwera STUN.⏎ ⏎ »Korzystanie z serwera STUN zużywa więcej baterii..</string>
+  <string name="warn_no_stun_enable">Otrzymuję ciche rozmowy</string>
+  <string name="warn_no_stun_ignore">Moje połączenia są w porządku</string>
+  <!--Vpn on android 4.0-->
+  <string name="warn_vpn_ics">Zmiany VPN dla 4.0</string>
+  <string name="warn_vpn_ics_description">Używasz Android 4.0, który nie powiadamia o stanie VPN.⏎ ⏎ Jednym rozwiązaniem jest sprawdzić trasę w regularnych odstępach czasu.</string>
+  <string name="warn_vpn_ics_1">Sprawdzaj każdą minutę</string>
+  <string name="warn_vpn_ics_5">Sprawdzaj co 5 minut</string>
+  <!--Privileged intent-->
+  <string name="warn_priv_int">Integracja dialera</string>
+  <string name="warn_priv_int_description">Wygląda na to, że inne aplikacje zainstalowane na telefonie, też próbują integrować z Androidem.⏎ ⏎ » Robią to w taki sposób, który nie pozwala na nasze  sprytne funkcje, takie jak zasady Filtrowania/Przepisania.⏎ ⏎ ⏎ » Masz dwie możliwości : ⏎ ⏎ » Kontynuuj używając naszej integracji i zainstaluj wtyczki, aby wspierać inne aplikacje. (Pozwoli to zastosować zasady filtrowania/przepisania także na te aplikacje). ⏎ ⏎ » Aby tego wykonać, należy wybrać, aby zawsze używać dialera telefonu zamiast innych aplikacji za pomocą pola wyboru, gdy wykonasz kolejną rozmowę.</string>
+  <string name="warn_priv_int_description2">Drugie rozwiązanie to, zintegrować aplikację w ten sam niesprytny sposób niż inną aplikację.⏎ ⏎ » Ta opcja jest obsługiwana przez aplikację, ale odradzana, ponieważ jest to sposób mniej sprytny i zapewnia gorsze doświadczenie użytkownika.</string>
+  <string name="warn_priv_int_register">Używaj niesprytną integrację</string>
+  <string name="warn_sdcard">Instalacja na karcie SD</string>
+  <string name="warn_sdcard_description">Ustawiłeś, że jesteś dostępny dla połączeń przychodzących. Ale przeniosłeś aplikację na kartę SD.⏎ Nie jest to zalecane, należy pozostawić aplikację w pamięci wewnętrznej.</string>
+</resources>
