@@ -292,7 +292,7 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
                 int colIdx = choiceCursor.getColumnIndex(ContactsWrapper.FIELD_GROUP_NAME);
                 do {
                     String name = choiceCursor.getString(colIdx);
-                    if(name.equalsIgnoreCase(groupName)) {
+                    if(!TextUtils.isEmpty(name) && name.equalsIgnoreCase(groupName)) {
                         selectedIndex = i;
                         break;
                     }
