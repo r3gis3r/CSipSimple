@@ -191,6 +191,10 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                         SipProfile.FIELD_PROXY,
                         SipProfile.FIELD_ACC_ID
                 });
+        String proxies = "";
+        if(account.proxies != null) {
+            proxies = TextUtils.join(SipProfile.PROXIES_SEPARATOR, account.proxies);
+        }
         matrixCursor.addRow(new Object[] {
                 account.id,
                 ContactsWrapper.TYPE_GROUP,
@@ -199,7 +203,7 @@ public class FavLoader extends AsyncTaskLoader<Cursor> {
                 account.android_group,
                 account.publish_enabled,
                 account.reg_uri,
-                TextUtils.join(SipProfile.PROXIES_SEPARATOR, account.proxies),
+                proxies,
                 account.acc_id
         });
         return matrixCursor;
