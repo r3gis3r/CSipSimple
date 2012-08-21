@@ -109,6 +109,9 @@ public class Mondotalk extends SimpleImplementation {
                 if(!TextUtils.isEmpty(uname) && !TextUtils.isEmpty(pwd)) {
                     setUsername(uname);
                     setPassword(pwd);
+                    if(canSave()) {
+                        parent.saveAndFinish();
+                    }
                 }
             }
         }
