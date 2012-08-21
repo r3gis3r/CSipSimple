@@ -291,11 +291,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_tecobu, 19, 
                     new Locale[]{ }, false, true, 
                     Tecobu.class));
-            WIZARDS_DICT.put("AJTEL", new WizardInfo("AJTEL", "Ajtel", 
-                    R.drawable.ic_wizard_ajtel, 19, 
-                    new Locale[]{ }, false, true, 
-                    Ajtel.class));
-            
+            WIZARDS_DICT.put("MESSAGENET", new WizardInfo("MESSAGENET", "Messagenet", 
+                    R.drawable.ic_wizard_messagenet, 20, 
+                    new Locale[]{}, false, true, 
+                    Messagenet.class));
             
 			
 			//Locales
@@ -643,10 +642,6 @@ public class WizardUtils {
                     R.drawable.ic_wizard_fringtalktw, 10, 
                     new Locale[]{ locale("zh_TW")  }, false, false, 
                     FringTalkTw.class));
-            WIZARDS_DICT.put("MESSAGENET", new WizardInfo("MESSAGENET", "Messagenet", 
-                    R.drawable.ic_wizard_messagenet, 20, 
-                    new Locale[]{Locale.ITALY}, false, false, 
-                    Messagenet.class));
             WIZARDS_DICT.put("VOIPMUCH", new WizardInfo("VOIPMUCH", "VoIP Much", 
                     R.drawable.ic_wizard_voipmuch, 20, 
                     new Locale[]{Locale.US, Locale.CANADA}, false, false, 
@@ -709,6 +704,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voipdoup, 19, 
                     new Locale[]{ locale("zh_CN"), locale("zh_TW")}, false, false, 
                     Voipdoup.class));
+            WIZARDS_DICT.put("AJTEL", new WizardInfo("AJTEL", "Ajtel", 
+                    R.drawable.ic_wizard_ajtel, 19, 
+                    new Locale[]{ new Locale("es") }, false, false, 
+                    Ajtel.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
