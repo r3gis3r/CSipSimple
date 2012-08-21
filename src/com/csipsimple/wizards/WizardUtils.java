@@ -291,8 +291,11 @@ public class WizardUtils {
                     R.drawable.ic_wizard_tecobu, 19, 
                     new Locale[]{ }, false, true, 
                     Tecobu.class));
+            WIZARDS_DICT.put("AJTEL", new WizardInfo("AJTEL", "Ajtel", 
+                    R.drawable.ic_wizard_ajtel, 19, 
+                    new Locale[]{ }, false, true, 
+                    Ajtel.class));
             
-			
             
 			
 			//Locales
