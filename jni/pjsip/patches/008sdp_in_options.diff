@@ -1,8 +1,8 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_core.c	2012-08-07 14:49:33.427890723 +0200
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c	2012-08-07 14:51:13.043886557 +0200
-@@ -481,23 +481,27 @@
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_core.c	2012-08-21 11:42:52.923030450 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c	2012-08-21 11:51:52.328453355 +0200
+@@ -481,23 +481,30 @@
  	pjsip_msg_add_hdr(tdata->msg, h);
      }
  
@@ -25,6 +25,9 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c
 +    pj_gethostip(pj_AF_INET(), &sock_info.rtp_addr_name);
 +    /* We use configured rtp port. It's not necessarily relevant, but just to give a port. It's inline with the fact we send hostip */
 +    port = pjsua_var.acc[acc_id].cfg.rtp_cfg.port;
++    if(port <= 0){
++    	port = 4000;
++    }
 +	pj_sockaddr_set_port(&sock_info.rtp_addr_name, port);
  
 -	/* Add SDP body, using call0's RTP address */
