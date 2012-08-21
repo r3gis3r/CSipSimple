@@ -334,6 +334,18 @@ public final class Compatibility {
         }
         return true;
     }
+    
+    private static int getDefaultAudioImplementation() {
+        // Acer A510
+        if (android.os.Build.DEVICE.toLowerCase().startsWith("picasso")) {
+            return SipConfigManager.AUDIO_IMPLEMENTATION_JAVA;
+        }
+        
+        if(Compatibility.isCompatible(11)) {
+            return SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES;
+        }
+        return SipConfigManager.AUDIO_IMPLEMENTATION_JAVA;
+    }
 
     private static void resetCodecsSettings(PreferencesWrapper preferencesWrapper) {
         boolean supportFloating = false;
@@ -476,11 +488,7 @@ public final class Compatibility {
             preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS, false);
         }
         
-        preferencesWrapper
-                .setPreferenceStringValue(
-                        SipConfigManager.AUDIO_IMPLEMENTATION,
-                        Integer.toString(Compatibility.isCompatible(11) ? SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES
-                                : SipConfigManager.AUDIO_IMPLEMENTATION_JAVA));
+        preferencesWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
         
         preferencesWrapper.endEditing();
     }
@@ -718,11 +726,7 @@ public final class Compatibility {
             prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
         }
         if (lastSeenVersion < 1729) {
-            prefWrapper
-                    .setPreferenceStringValue(
-                            SipConfigManager.AUDIO_IMPLEMENTATION,
-                            Integer.toString(Compatibility.isCompatible(11) ? SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES
-                                    : SipConfigManager.AUDIO_IMPLEMENTATION_JAVA));
+            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
             // Audio routing/mode api
             if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-S")
                     || android.os.Build.PRODUCT.equalsIgnoreCase("U8655")
@@ -748,6 +752,10 @@ public final class Compatibility {
                 (android.os.Build.DEVICE.toLowerCase().startsWith("endeavoru") ||
                         android.os.Build.DEVICE.toLowerCase().startsWith("evita") ) ) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
+        }
+        
+        if(lastSeenVersion < 1798 && android.os.Build.DEVICE.toLowerCase().startsWith("picasso")) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
         }
         prefWrapper.endEditing();
     }
