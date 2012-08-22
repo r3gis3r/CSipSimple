@@ -708,6 +708,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_ajtel, 19, 
                     new Locale[]{ new Locale("es") }, false, false, 
                     Ajtel.class));
+            WIZARDS_DICT.put("CALLROMANIA", new WizardInfo("CALLROMANIA", "CallRomania", 
+                    R.drawable.ic_wizard_callromania, 12, 
+                    new Locale[]{ locale("ro_RO"), new Locale("es_ES"), Locale.ITALY, Locale.GERMANY, Locale.FRANCE, Locale.UK, Locale.US  }, false, false, 
+                    CallRomania.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
