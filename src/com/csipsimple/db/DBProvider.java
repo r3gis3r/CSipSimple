@@ -44,6 +44,7 @@ import com.csipsimple.db.DBAdapter.DatabaseHelper;
 import com.csipsimple.models.Filter;
 import com.csipsimple.utils.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -239,6 +240,8 @@ public class DBProvider extends ContentProvider {
         int matched = URI_MATCHER.match(uri);
         Uri regUri = uri;
         
+        ArrayList<Long> oldRegistrationsAccounts = null;
+        
         switch (matched) {
             case ACCOUNTS:
                 count = db.delete(SipProfile.ACCOUNTS_TABLE_NAME, where, whereArgs);
@@ -280,7 +283,11 @@ public class DBProvider extends ContentProvider {
                 regUri = SipMessage.MESSAGE_URI;
                 break;
             case ACCOUNTS_STATUS:
+                oldRegistrationsAccounts = new ArrayList<Long>();
             	synchronized (profilesStatus) {
+            	    for(Long accId : profilesStatus.keySet()) {
+            	        oldRegistrationsAccounts.add(accId);
+            	    }
         			profilesStatus.clear();
         		}
             	break;
@@ -296,14 +303,25 @@ public class DBProvider extends ContentProvider {
 
         getContext().getContentResolver().notifyChange(regUri, null);
 
-        if(matched == ACCOUNTS_ID) {
+        if(matched == ACCOUNTS_ID || matched == ACCOUNTS_STATUS_ID) {
         	long rowId = ContentUris.parseId(uri);
         	if(rowId >= 0) {
-        		broadcastAccountChange(rowId);
+        	    if(matched == ACCOUNTS_ID) {
+        	        broadcastAccountChange(rowId);
+        	    }else if(matched == ACCOUNTS_STATUS_ID) {
+        	        broadcastRegistrationChange(rowId);
+        	    }
         	}
         }
         if (matched == FILTERS || matched == FILTERS_ID) {
             Filter.resetCache();
+        }
+        if(matched == ACCOUNTS_STATUS && oldRegistrationsAccounts != null) {
+            for(Long accId : oldRegistrationsAccounts) {
+                if(accId != null) {
+                    broadcastRegistrationChange(accId);
+                }
+            }
         }
         
 		return count;
