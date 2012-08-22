@@ -1,0 +1,13 @@
+Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c
+===================================================================
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-08-21 18:19:14.392947393 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-08-22 16:11:21.820950097 +0200
+@@ -1995,7 +1995,7 @@
+      *   answer code 183 or 2xx is issued
+      */
+     if (!call->med_ch_cb && 
+-	(call->opt_inited || (code==183 && code/100==2)) &&
++	(!call->opt_inited && (code==183 || code/100==2)) &&
+ 	(!call->inv->neg ||
+ 	 pjmedia_sdp_neg_get_state(call->inv->neg) == 
+ 		PJMEDIA_SDP_NEG_STATE_NULL))
