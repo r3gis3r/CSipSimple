@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="take_call">Atender</string>
+  <string name="decline_call">Ignorar</string>
+  <string name="clear_call">Finalizar</string>
+  <string name="touch_lock">Duplo toque para desbloquear</string>
+  <string name="dialpad">Teclado numérico</string>
+  <string name="bluetooth">BlueTooth</string>
+  <string name="speaker">Altofalante</string>
+  <string name="mute">Silencio</string>
+  <string name="add_call">Engadir chamada</string>
+  <string name="call_state_calling">A chamar...</string>
+  <string name="call_state_confirmed">Falando</string>
+  <string name="call_state_connecting">A conectar...</string>
+  <string name="call_state_disconnected">Desconectado</string>
+  <string name="call_state_early">A soar...</string>
+  <string name="call_state_incoming">Recibindo unha chamada</string>
+  <string name="call_state_null">ERRO</string>
+  <string name="unlock">Desbloquear</string>
+  <string name="record">Gravar</string>
+  <string name="stop_recording">Deter a gravación</string>
+  <string name="hold_call">Reter</string>
+  <string name="on_hold">En espera</string>
+</resources>

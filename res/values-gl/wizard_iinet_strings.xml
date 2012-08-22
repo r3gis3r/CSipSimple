@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_iinet_state">Estado</string>
+  <string name="w_iinet_state_desc">O estado relevante da seguinte listaxe</string>
+  <string name="w_iinet_username">Número de teléfoo VoiP</string>
+  <string name="w_iinet_username_desc">Eliminar calquera formato como os espazos ou os guións</string>
+  <string name="w_iinet_password">Contrasinal especial de VoiP</string>
+  <string name="w_iinet_password_desc">Non é o mesmo que o contrasinal de conexión</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_expert_display_name">Nome da conta</string>
+  <string name="w_expert_display_name_desc">Mostrar o nome desta conta</string>
+  <string name="w_expert_acc_id">ID da conta</string>
+  <string name="w_expert_username">Nome de usuario</string>
+  <string name="w_expert_username_desc">Nome de usuario para a autenticación</string>
+  <string name="w_expert_data">Contrasinal</string>
+  <string name="w_expert_data_desc">Contrasinal (ou outro dato) para a autenticación</string>
+  <string name="w_expert_datatype">Tipo de dato</string>
+  <string name="w_expert_t_proxy">Proxy</string>
+  <string name="w_expert_proxy">URI do proxy</string>
+</resources>

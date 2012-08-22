@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="unknown">Descoñecido</string>
+  <string name="type_incoming">Entrante</string>
+  <string name="type_outgoing">Saínte</string>
+  <string name="type_missed">Perdidas</string>
+  <string name="callBack">Devolver a chamada</string>
+  <string name="callAgain">Volver chamar</string>
+  <string name="returnCall">Devolver a chamada</string>
+  <string name="call">Chamar</string>
+  <string name="sip_call">Chamada SIP</string>
+  <string name="no_call_history">Sen rexistros</string>
+</resources>

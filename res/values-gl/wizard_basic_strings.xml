@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_basic_username">Usuario</string>
+  <string name="w_basic_username_desc">Conta/Acceder (non escriba @sip.server)</string>
+  <string name="w_basic_password">Contrasinal</string>
+  <string name="w_basic_password_desc">Contrasinal para acceder á conta</string>
+</resources>
