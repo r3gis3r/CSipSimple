@@ -511,7 +511,7 @@ public class MediaManager implements BluetoothChangeListener {
 	}
 	
 	public void setSpeakerphoneOn(boolean on) throws SameThreadException {
-		if(service != null && restartAudioWhenRoutingChange) {
+		if(service != null && restartAudioWhenRoutingChange && !ringer.isRinging()) {
 			service.setNoSnd();
 			userWantSpeaker = on;
 			service.setSnd();
@@ -524,7 +524,7 @@ public class MediaManager implements BluetoothChangeListener {
 	
 	public void setBluetoothOn(boolean on) throws SameThreadException {
 		Log.d(THIS_FILE, "Set BT "+on);
-		if(service != null && restartAudioWhenRoutingChange) {
+		if(service != null && restartAudioWhenRoutingChange && !ringer.isRinging()) {
 		    service.setNoSnd();
 			userWantBluetooth = on;
 			service.setSnd();
