@@ -35,6 +35,12 @@ typedef struct csipsimple_config {
 	pj_bool_t use_compact_form_headers;
 
 	/**
+	 * Disable SDP bandwidth modifier "TIAS"
+     * (RFC3890)
+	 */
+	pj_bool_t add_bandwidth_tias_in_sdp;
+
+	/**
 	 * For to send no update and use re-invite instead
 	 */
 	pj_bool_t use_no_update;

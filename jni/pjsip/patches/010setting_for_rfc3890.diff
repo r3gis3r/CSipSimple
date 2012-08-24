@@ -1,0 +1,64 @@
+Index: pjsip/sources/pjmedia/src/pjmedia/endpoint.c
+===================================================================
+--- pjsip.orig/sources/pjmedia/src/pjmedia/endpoint.c	2012-08-24 10:28:20.961451828 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/endpoint.c	2012-08-24 10:38:33.365464845 +0200
+@@ -49,6 +49,9 @@
+ pj_bool_t pjmedia_add_rtpmap_for_static_pt = 
+ 	    PJMEDIA_ADD_RTPMAP_FOR_STATIC_PT;
+ 
++/* Config to control use of RFC3890 TIAS */
++pj_bool_t pjmedia_add_bandwidth_tias_in_sdp =
++		PJMEDIA_ADD_BANDWIDTH_TIAS_IN_SDP;
+ 
+ 
+ /* Worker thread proc. */
+@@ -551,7 +554,7 @@
+     /* Put bandwidth info in media level using bandwidth modifier "TIAS"
+      * (RFC3890).
+      */
+-    if (max_bitrate) {
++    if (max_bitrate && pjmedia_add_bandwidth_tias_in_sdp) {
+ 	const pj_str_t STR_BANDW_MODIFIER = { "TIAS", 4 };
+ 	pjmedia_sdp_bandw *b;
+ 	    
+@@ -715,7 +718,7 @@
+     /* Put bandwidth info in media level using bandwidth modifier "TIAS"
+      * (RFC3890).
+      */
+-    if (max_bitrate) {
++    if (max_bitrate && pjmedia_add_bandwidth_tias_in_sdp) {
+ 	const pj_str_t STR_BANDW_MODIFIER = { "TIAS", 4 };
+ 	pjmedia_sdp_bandw *b;
+ 	    
+Index: pjsip/sources/pjmedia/include/pjmedia/config.h
+===================================================================
+--- pjsip.orig/sources/pjmedia/include/pjmedia/config.h	2012-08-24 10:32:43.485457407 +0200
++++ pjsip/sources/pjmedia/include/pjmedia/config.h	2012-08-24 10:38:04.209464225 +0200
+@@ -685,6 +685,27 @@
+ 
+ 
+ /**
++ * This macro controls whether pjmedia should include SDP
++ * bandwidth modifier "TIAS" (RFC3890).
++ * This option is known to be needed to have video working on
++ * some Avaya server. It's also known to break buggy SDP parser
++ * of some mainstream SIP providers.
++ *
++ \verbatim
++    extern pj_bool_t pjmedia_add_rtpmap_for_static_pt;
++
++    // Do not enable bandwidth information inclusion in sdp
++    pjmedia_add_bandwidth_tias_in_sdp = PJ_FALSE;
++ \endverbatim
++ *
++ * Default: 1 (yes)
++ */
++#ifndef PJMEDIA_ADD_BANDWIDTH_TIAS_IN_SDP
++#   define PJMEDIA_ADD_BANDWIDTH_TIAS_IN_SDP	1
++#endif
++
++
++/**
+  * This macro controls whether pjmedia should include SDP rtpmap 
+  * attribute for static payload types. SDP rtpmap for static
+  * payload types are optional, although they are normally included

@@ -766,6 +766,18 @@ public class SipConfigManager {
      */
     public static final String TSX_TD_TIMEOUT = "tsx_td_timeout";
     
+    
+    /**
+     * Whether media negotiation should include SDP
+     * bandwidth modifier "TIAS" (RFC3890).
+     * This option is known to be needed to have video working on
+     * some Avaya server. It's also known to break buggy SDP parser
+     * of some mainstream SIP providers.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ADD_BANDWIDTH_TIAS_IN_SDP = "add_bandwidth_tias_in_sdp";
+    
     // SECURE
     /**
      * Enable TLS transport.

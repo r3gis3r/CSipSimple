@@ -307,6 +307,7 @@ int css_tls_keep_alive_interval = DEFAULT_TLS_KA;
 PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->use_compact_form_sdp = PJ_FALSE;
 	css_cfg->use_compact_form_headers = PJ_FALSE;
+	css_cfg->add_bandwidth_tias_in_sdp = PJ_FALSE;
 	css_cfg->use_no_update = PJ_FALSE;
 	css_cfg->use_zrtp = PJ_FALSE;
 	css_cfg->extra_aud_codecs_cnt = 0;
@@ -362,6 +363,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	extern pj_bool_t pjsip_use_compact_form;
 	extern pj_bool_t pjsip_include_allow_hdr_in_dlg;
 	extern pj_bool_t pjmedia_add_rtpmap_for_static_pt;
+	extern pj_bool_t pjmedia_add_bandwidth_tias_in_sdp;
 	extern pj_bool_t pjsua_no_update;
 
 	pjsua_no_update = css_cfg->use_no_update ? PJ_TRUE : PJ_FALSE;
@@ -374,6 +376,9 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	/* Do not include rtpmap for static payload types (<96) */
 	pjmedia_add_rtpmap_for_static_pt =
 			css_cfg->use_compact_form_sdp ? PJ_FALSE : PJ_TRUE;
+	/* Do not enable bandwidth information inclusion in sdp */
+	pjmedia_add_bandwidth_tias_in_sdp =
+			css_cfg->add_bandwidth_tias_in_sdp ? PJ_TRUE : PJ_FALSE;
 
 	css_tcp_keep_alive_interval = css_cfg->tcp_keep_alive_interval;
 	css_tls_keep_alive_interval = css_cfg->tls_keep_alive_interval;

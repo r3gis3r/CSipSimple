@@ -80,6 +80,8 @@ public class Callcentric extends SimpleImplementation {
 	    super.setDefaultParams(prefs);
 	    prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
 	    prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_VAD, false);
+	    // It's the default but we need to be very sure
+	    prefs.setPreferenceBooleanValue(SipConfigManager.ADD_BANDWIDTH_TIAS_IN_SDP, false);
 	}
 	@Override
 	public boolean needRestart() {

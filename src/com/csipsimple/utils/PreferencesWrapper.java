@@ -160,6 +160,7 @@ public class PreferencesWrapper {
         put(SipConfigManager.USE_ANYWAY_OUT, false);
 		put(SipConfigManager.FORCE_NO_UPDATE, true);
         put(SipConfigManager.DISABLE_TCP_SWITCH, true);
+        put(SipConfigManager.ADD_BANDWIDTH_TIAS_IN_SDP, false);
 		
 		
 		//Media
