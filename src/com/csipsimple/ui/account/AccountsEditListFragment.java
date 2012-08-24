@@ -262,12 +262,14 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
                 orderedList.add(to, moved);
                 
                 // Finally save that in db
-                ContentResolver cr = getActivity().getContentResolver();
-                for(i=0; i<orderedList.size(); i++) {
-                    Uri uri = ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, orderedList.get(i));
-                    ContentValues cv = new ContentValues();
-                    cv.put(SipProfile.FIELD_PRIORITY, i);
-                    cr.update(uri, cv, null, null);
+                if(getActivity() != null) {
+                    ContentResolver cr = getActivity().getContentResolver();
+                    for(i=0; i<orderedList.size(); i++) {
+                        Uri uri = ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, orderedList.get(i));
+                        ContentValues cv = new ContentValues();
+                        cv.put(SipProfile.FIELD_PRIORITY, i);
+                        cr.update(uri, cv, null, null);
+                    }
                 }
             }
         });
