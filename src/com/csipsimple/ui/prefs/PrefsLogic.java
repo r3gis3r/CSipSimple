@@ -23,6 +23,7 @@ package com.csipsimple.ui.prefs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.telephony.TelephonyManager;
 
@@ -37,8 +38,11 @@ import com.csipsimple.utils.ExtraPlugins;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.ExtraPlugins.DynCodecInfos;
+import com.csipsimple.utils.Theme;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class PrefsLogic {
 
@@ -265,11 +269,6 @@ public class PrefsLogic {
                     
                 }
                 
-                // Disable themes for now
-                pfh.hidePreference("android_integration", SipConfigManager.THEME);
-                pfh.hidePreference("android_integration", "obtain_themes");
-                
-                /*
                 ListPreference lp = (ListPreference) pfh.findPreference(SipConfigManager.THEME);
                 HashMap<String, String> themes = Theme.getAvailableThemes(ctxt);
                 
@@ -284,7 +283,7 @@ public class PrefsLogic {
                 
                 lp.setEntries(entries);
                 lp.setEntryValues(values);
-                */
+                
                 break;
             }
             case TYPE_CALLS : {

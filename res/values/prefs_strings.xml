@@ -10,7 +10,7 @@
     <string name="prefs_media_desc">Codecs and in-call sound behavior</string>
     <string name="prefs_ui">User interface</string>
     <string name="prefs_ui_desc">Tweak the user interface</string>
-    <string name="prefs_calls">Calls options</string>
+    <string name="prefs_calls">Call options</string>
     <string name="prefs_calls_desc">Options related to calls</string>
 
     <!-- Network -->

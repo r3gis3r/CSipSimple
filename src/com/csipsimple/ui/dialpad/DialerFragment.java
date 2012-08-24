@@ -225,7 +225,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         setTextDialing(!isDigit, true);
 
         // Apply third party theme if any
-        applyTheme();
+        applyTheme(v);
         v.setOnKeyListener(this);
         return v;
     }
@@ -238,39 +238,82 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         }
     }
 
-    private void applyTheme() {
+    private void applyTheme(View v) {
         String theme = prefsWrapper.getPreferenceStringValue(SipConfigManager.THEME);
         if (!TextUtils.isEmpty(theme)) {
-            new Theme(getActivity(), theme, new Theme.onLoadListener() {
-                @Override
-                public void onLoad(Theme t) {
-
-                    dialPad.applyTheme(t);
-                    // t.applyBackgroundDrawable(deleteButton,
-                    // "btn_dial_delete");
-                    // t.applyBackgroundDrawable(dialButton, "btn_dial_action");
-                    
-                    // Bg ... to be done
-                    /*
-                    Drawable bg = t.getDrawableResource("dialpad_bg");
-                    if (bg != null) {
-                        if (bg instanceof BitmapDrawable) {
-                            BitmapDrawable dbg = (BitmapDrawable) bg;
-                            dbg.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-                        }
-                        digitDialer.setBackgroundDrawable(bg);
-                    }
-
-                    Drawable dAct = t.getDrawableResource("btn_dial_textfield_activated");
-                    Drawable dEmpt = t.getDrawableResource("btn_dial_textfield_normal");
-                    if (dAct != null && dEmpt != null) {
-                        digitsBackground = dAct;
-                        digitsEmptyBackground = dEmpt;
-                        afterTextChanged(digits.getText());
-                    }
-                    */
+            Theme t = new Theme(getActivity(), theme);
+            dialPad.applyTheme(t);
+            
+            View subV;
+            // Delete button
+            subV = v.findViewById(R.id.deleteButton);
+            if(subV != null) {
+                t.applyBackgroundDrawable(subV, "btn_dial_delete");
+                t.applyLayoutMargin(subV, "btn_dial_delete_margin");
+            }
+            
+            // Dial button
+            subV = v.findViewById(R.id.dialButton);
+            if(subV != null) {
+                t.applyBackgroundDrawable(subV, "btn_dial_action");
+                t.applyLayoutMargin(subV, "btn_dial_action_margin");
+            }
+            
+            // Additional button
+            subV = v.findViewById(R.id.dialVideoButton);
+            if(subV != null) {
+                t.applyBackgroundDrawable(subV, "btn_add_action");
+                t.applyLayoutMargin(subV, "btn_dial_add_margin");
+            }
+            
+            // Action dividers
+            subV = v.findViewById(R.id.divider1);
+            if(subV != null) {
+                t.applyBackgroundDrawable(subV, "btn_bar_divider");
+                t.applyLayoutSize(subV, "btn_dial_divider");
+            }
+            subV = v.findViewById(R.id.divider2);
+            if(subV != null) {
+                t.applyBackgroundDrawable(subV, "btn_bar_divider");
+                t.applyLayoutSize(subV, "btn_dial_divider");
+            }
+            
+            // Dialpad background
+            subV = v.findViewById(R.id.dialPad);
+            if(subV != null) {
+                t.applyBackgroundDrawable(subV, "dialpad_background");
+            }
+            
+            // Callbar background
+            subV = v.findViewById(R.id.dialerCallBar);
+            if(subV != null) {
+                t.applyBackgroundDrawable(subV, "dialer_callbar_background");
+            }
+            
+            // Top field background
+            subV = v.findViewById(R.id.topField);
+            if(subV != null) {
+                t.applyBackgroundDrawable(subV, "dialer_textfield_background");
+            }
+            
+            /*
+            Drawable bg = t.getDrawableResource("dialpad_bg");
+            if (bg != null) {
+                if (bg instanceof BitmapDrawable) {
+                    BitmapDrawable dbg = (BitmapDrawable) bg;
+                    dbg.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
                 }
-            });
+                digitDialer.setBackgroundDrawable(bg);
+            }
+
+            Drawable dAct = t.getDrawableResource("btn_dial_textfield_activated");
+            Drawable dEmpt = t.getDrawableResource("btn_dial_textfield_normal");
+            if (dAct != null && dEmpt != null) {
+                digitsBackground = dAct;
+                digitsEmptyBackground = dEmpt;
+                afterTextChanged(digits.getText());
+            }
+            */
         }
         
         // Fix dialer background

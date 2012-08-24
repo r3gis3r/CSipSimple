@@ -30,6 +30,7 @@
         android:state_enabled="false" />
 
     <View
+        android:id="@+id/divider1"
         android:layout_width="1dip"
         android:layout_height="24dip"
         android:layout_gravity="center_vertical"
@@ -47,6 +48,7 @@
         android:state_enabled="false" />
 
     <View
+        android:id="@+id/divider2"
         android:layout_width="1dip"
         android:layout_height="24dip"
         android:layout_gravity="center_vertical"

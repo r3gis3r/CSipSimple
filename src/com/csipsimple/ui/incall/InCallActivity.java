@@ -71,7 +71,6 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Theme;
 import com.csipsimple.utils.keyguard.KeyguardWrapper;
-import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.IOnLeftRightChoice;
 import com.csipsimple.widgets.ScreenLocker;
 
@@ -387,16 +386,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
     private void applyTheme() {
         String theme = prefsWrapper.getPreferenceStringValue(SipConfigManager.THEME);
         if (!TextUtils.isEmpty(theme)) {
-            new Theme(this, theme, new Theme.onLoadListener() {
-                @Override
-                public void onLoad(Theme t) {
-                    Dialpad dialPad = (Dialpad) findViewById(R.id.dialPad);
-                    if(dialPad != null) {
-                        dialPad.applyTheme(t);
-                    }
-                    //inCallControls.applyTheme(t);
-                }
-            });
+            Theme t = new Theme(this, theme);
+            // TODO ...
         }
     }
 

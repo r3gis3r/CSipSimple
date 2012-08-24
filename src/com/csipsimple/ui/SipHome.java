@@ -21,6 +21,7 @@
 
 package com.csipsimple.ui;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -28,6 +29,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -39,6 +42,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -46,6 +54,7 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
 import com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator;
+import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
@@ -68,6 +77,7 @@ import com.csipsimple.utils.NightlyUpdater;
 import com.csipsimple.utils.NightlyUpdater.UpdaterPopupLauncher;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.utils.Theme;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
@@ -84,11 +94,11 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
 
     private static final String THIS_FILE = "SIP_HOME";
 
-    private static int TAB_ID_DIALER = 0;
-    private static int TAB_ID_CALL_LOG = 1;
-    private static int TAB_ID_FAVORITES = 2;
-    private static int TAB_ID_MESSAGES = 3;
-    private static int TAB_ID_WARNING = 4;
+    private final static int TAB_ID_DIALER = 0;
+    private final static int TAB_ID_CALL_LOG = 1;
+    private final static int TAB_ID_FAVORITES = 2;
+    private final static int TAB_ID_MESSAGES = 3;
+    private final static int TAB_ID_WARNING = 4;
 
     // protected static final int PICKUP_PHONE = 0;
     private static final int REQUEST_EDIT_DISTRIBUTION_ACCOUNT = 0;
@@ -580,9 +590,89 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         
         Log.d(THIS_FILE, "WE CAN NOW start SIP service");
         startSipService();
-
+        
+        applyTheme();
     }
     
+    private ArrayList<View> getVisibleLeafs(View v) {
+        ArrayList<View> res = new ArrayList<View>();
+        if(v.getVisibility() != View.VISIBLE) {
+            return res;
+        }
+        if(v instanceof ViewGroup) {
+            for(int i = 0; i < ((ViewGroup) v).getChildCount(); i++) {
+                ArrayList<View> subLeafs = getVisibleLeafs(((ViewGroup) v).getChildAt(i));
+                res.addAll(subLeafs);
+            }
+            return res;
+        }
+        res.add(v);
+        return res;
+    }
+
+    @TargetApi(14)
+    private void applyTheme() {
+        String theme = prefProviderWrapper.getPreferenceStringValue(SipConfigManager.THEME);
+        if (!TextUtils.isEmpty(theme)) {
+            Theme t = new Theme(this, theme);
+            
+            ActionBar ab = getSupportActionBar();
+            if(ab != null) {
+                View vg = getWindow().getDecorView().findViewById(android.R.id.content);
+                // Action bar container
+                ViewGroup abc = (ViewGroup) ((ViewGroup) vg.getParent()).getChildAt(0);
+                // 
+                ArrayList<View> leafs = getVisibleLeafs(abc);
+                int i = 0;
+                for(View leaf : leafs) {
+                    if(leaf instanceof ImageView) {
+                        Integer id = mTabsAdapter.getIdForPosition(i);
+                        if(id != null) {
+                            int tabId = id;
+                            Drawable customIcon = null;
+                            switch (tabId) {
+                                case TAB_ID_DIALER:
+                                    customIcon = t.getDrawableResource("ic_ab_dialer");
+                                    break;
+                                case TAB_ID_CALL_LOG:
+                                    customIcon = t.getDrawableResource("ic_ab_history");
+                                    break;
+                                case TAB_ID_MESSAGES:
+                                    customIcon = t.getDrawableResource("ic_ab_text");
+                                    break;
+                                case TAB_ID_FAVORITES:
+                                    customIcon = t.getDrawableResource("ic_ab_favourites");
+                                    break;
+                                default:
+                                    break;
+                            }
+                            if(customIcon != null) {
+                                ((ImageView) leaf).setImageDrawable(customIcon);
+                            }
+
+                            t.applyBackgroundStateListSelectableDrawable((View) leaf.getParent(), "tab");
+                            if(i == 0) {
+                                ViewParent tabLayout = leaf.getParent().getParent();
+                                if(tabLayout instanceof LinearLayout) {
+                                    Drawable d = t.getDrawableResource("tab_divider");
+                                    if(d != null) {
+                                        UtilityWrapper.getInstance().setLinearLayoutDividerDrawable((LinearLayout) tabLayout, d);
+                                    }
+                                    Integer dim = t.getDimension("tab_divider_padding");
+                                    if(dim != null) {
+                                        UtilityWrapper.getInstance().setLinearLayoutDividerPadding((LinearLayout) tabLayout, dim);
+                                    }
+                                }
+                            }
+                            i++;
+                        }
+                    }
+                }
+                
+                ab.setSplitBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+            }
+        }
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {

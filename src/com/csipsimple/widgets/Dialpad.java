@@ -24,6 +24,7 @@ package com.csipsimple.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.media.ToneGenerator;
 import android.util.AttributeSet;
 import android.util.SparseArray;
@@ -35,6 +36,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Theme;
 
 import java.util.HashMap;
@@ -65,6 +67,8 @@ public class Dialpad extends TableLayout implements OnClickListener {
 	};
 	
 	private static final SparseArray<String> DIGITS_NAMES = new SparseArray<String>();
+
+    private static final String THIS_FILE = null;
 	static {
 		DIGITS_NAMES.put(R.id.button0, "0");
 		DIGITS_NAMES.put(R.id.button1, "1");
@@ -153,37 +157,23 @@ public class Dialpad extends TableLayout implements OnClickListener {
 	
 
 	public void applyTheme(Theme t) {
-	    /*
+	    
 		Log.d(THIS_FILE, "Theming in progress");
 		for(int buttonId : DIGITS_BTNS.keySet()) {
 			
 			ImageButton b = (ImageButton) findViewById(buttonId);
+			// We need to use state list as reused
+			t.applyBackgroundStateListDrawable(b, "btn_dial");
 			
-			// We have to reload for each button because std share state else
-			Drawable pressed = t.getDrawableResource("btn_dial_pressed");
-			Drawable focused = t.getDrawableResource("btn_dial_selected");
-			if(focused == null) {
-				focused = pressed;
-			}
-			Drawable normal = t.getDrawableResource("btn_dial_normal");
-			StateListDrawable std = null;
-			if(pressed != null && focused != null && normal != null) {
-				std = new StateListDrawable();
-				std.addState(new int[] {android.R.attr.state_pressed}, pressed);
-				std.addState(new int[] {android.R.attr.state_focused}, focused);
-				std.addState(new int[] {}, normal);
-			}
-			
-			
-			if(std != null) {
-				b.setBackgroundDrawable(std);
-			}
+			// Src of button
 			Drawable src = t.getDrawableResource("dial_num_"+DIGITS_NAMES.get(buttonId));
 			if(src != null) {
 				b.setImageDrawable(src);
 			}
+			
+			// Padding of button
+			t.applyLayoutMargin(b, "dialpad_btn_margin");
 		}
-		*/
 		
 	}
 
