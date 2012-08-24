@@ -248,7 +248,7 @@ public class PreferencesProviderWrapper {
 	
 
     public int getLogLevel() {
-		int prefsValue = SipConfigManager.getPreferenceIntegerValue(context, SipConfigManager.LOG_LEVEL, 4);
+		int prefsValue = SipConfigManager.getPreferenceIntegerValue(context, SipConfigManager.LOG_LEVEL, 1);
 		if(prefsValue <= 6 && prefsValue >= 1) {
 			return prefsValue;
 		}
