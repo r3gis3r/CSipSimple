@@ -112,7 +112,7 @@ public class CallLogAdapter extends GroupingListAdapter
 
         // mContactPhotoManager = ContactPhotoManager.getInstance(mContext);
         PhoneCallDetailsHelper phoneCallDetailsHelper = new PhoneCallDetailsHelper(resources);
-        mCallLogViewsHelper = new CallLogListItemHelper(phoneCallDetailsHelper, resources);
+        mCallLogViewsHelper = new CallLogListItemHelper(phoneCallDetailsHelper, context);
         mCallLogGroupBuilder = new CallLogGroupBuilder(this);
     }
 
@@ -248,7 +248,6 @@ public class CallLogAdapter extends GroupingListAdapter
 
         mCallLogViewsHelper.setPhoneCallDetails(views, details);
         setPhoto(views, info);
-
     }
 
     /** Returns true if this is the last item of a section. */

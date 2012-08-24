@@ -33,6 +33,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Theme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,17 +115,32 @@ public class CallTypeIconsView extends View {
     }
 
     private static class Resources {
-        public final Drawable incoming;
-        public final Drawable outgoing;
-        public final Drawable missed;
-        public final int iconMargin;
+        public Drawable incoming = null;
+        public Drawable outgoing = null;
+        public Drawable missed = null;
+        public Integer iconMargin = null;
 
         public Resources(Context context) {
             final android.content.res.Resources r = context.getResources();
-            incoming = r.getDrawable(R.drawable.ic_call_incoming_holo_dark);
-            outgoing = r.getDrawable(R.drawable.ic_call_outgoing_holo_dark);
-            missed = r.getDrawable(R.drawable.ic_call_missed_holo_dark);
-            iconMargin = r.getDimensionPixelSize(R.dimen.call_log_icon_margin);
+            Theme t = Theme.getCurrentTheme(context);
+            if(t != null) {
+                incoming = t.getDrawableResource("ic_call_incoming");
+                outgoing = t.getDrawableResource("ic_call_outgoing");
+                missed = t.getDrawableResource("ic_call_missed");
+                iconMargin = t.getDimension("call_log_icon_margin");
+            }
+            if(incoming == null) {
+                incoming = r.getDrawable(R.drawable.ic_call_incoming_holo_dark);
+            }
+            if(outgoing == null) {
+                outgoing = r.getDrawable(R.drawable.ic_call_outgoing_holo_dark);
+            }
+            if(missed == null) {
+                missed = r.getDrawable(R.drawable.ic_call_missed_holo_dark);
+            }
+            if(iconMargin == null) {
+                iconMargin = r.getDimensionPixelSize(R.dimen.call_log_icon_margin);
+            }
         }
     }
 }

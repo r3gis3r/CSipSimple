@@ -611,10 +611,8 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
 
     @TargetApi(14)
     private void applyTheme() {
-        String theme = prefProviderWrapper.getPreferenceStringValue(SipConfigManager.THEME);
-        if (!TextUtils.isEmpty(theme)) {
-            Theme t = new Theme(this, theme);
-            
+        Theme t = Theme.getCurrentTheme(this);
+        if (t != null) {
             ActionBar ab = getSupportActionBar();
             if(ab != null) {
                 View vg = getWindow().getDecorView().findViewById(android.R.id.content);

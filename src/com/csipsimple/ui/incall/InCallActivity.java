@@ -43,7 +43,6 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 import android.util.SparseArray;
 import android.view.KeyEvent;
@@ -384,9 +383,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
     }
 
     private void applyTheme() {
-        String theme = prefsWrapper.getPreferenceStringValue(SipConfigManager.THEME);
-        if (!TextUtils.isEmpty(theme)) {
-            Theme t = new Theme(this, theme);
+        Theme t = Theme.getCurrentTheme(this);
+        if (t != null) {
             // TODO ...
         }
     }

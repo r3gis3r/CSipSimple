@@ -276,8 +276,8 @@ public class PrefsLogic {
                 CharSequence[] values = new CharSequence[themes.size()];
                 int i = 0;
                 for( Entry<String, String> theme : themes.entrySet() ) {
-                    entries[i] = theme.getKey();
-                    values[i] = theme.getValue();
+                    entries[i] = theme.getValue();
+                    values[i] = theme.getKey();
                     i++;
                 }
                 

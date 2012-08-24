@@ -25,11 +25,14 @@
 
 package com.csipsimple.ui.calllog;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.csipsimple.R;
+import com.csipsimple.utils.Theme;
 
 /**
  * Helper class to fill in the views of a call log entry.
@@ -39,6 +42,7 @@ import com.csipsimple.R;
     private final PhoneCallDetailsHelper mPhoneCallDetailsHelper;
     /** Resources to look up strings. */
     private final Resources mResources;
+    private final Theme mTheme;
 
     /**
      * Creates a new helper instance.
@@ -46,9 +50,10 @@ import com.csipsimple.R;
      * @param phoneCallDetailsHelper used to set the details of a phone call
      * @param phoneNumberHelper used to process phone number
      */
-    public CallLogListItemHelper(PhoneCallDetailsHelper phoneCallDetailsHelper, Resources resources) {
+    public CallLogListItemHelper(PhoneCallDetailsHelper phoneCallDetailsHelper, Context ctxt) {
         mPhoneCallDetailsHelper = phoneCallDetailsHelper;
-        mResources = resources;
+        mResources = ctxt.getResources();
+        mTheme = Theme.getCurrentTheme(ctxt);
     }
 
     /**
@@ -64,13 +69,24 @@ import com.csipsimple.R;
         // Call is the secondary action.
         configureCallSecondaryAction(views, details);
         views.dividerView.setVisibility(View.VISIBLE);
+        if(mTheme != null) {
+            mTheme.applyBackgroundDrawable(views.dividerView, "ic_vertical_divider");
+        }
     }
 
     /** Sets the secondary action to correspond to the call button. */
     private void configureCallSecondaryAction(CallLogListItemViews views,
             PhoneCallDetails details) {
         views.secondaryActionView.setVisibility(View.VISIBLE);
-        views.secondaryActionView.setImageResource(R.drawable.ic_ab_dialer_holo_dark);
+        Drawable d = null;
+        if(mTheme != null) {
+            d = mTheme.getDrawableResource("badge_action_call");
+        }
+        if(d == null) {
+            views.secondaryActionView.setImageResource(R.drawable.ic_ab_dialer_holo_dark);
+        }else {
+            views.secondaryActionView.setImageDrawable(d);
+        }
         views.secondaryActionView.setContentDescription(getCallActionDescription(details));
     }
 

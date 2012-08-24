@@ -56,10 +56,7 @@ public class DialerLayout extends LinearLayout {
         init();
     }
     
-    
-
     private void init() {
-
         // Cache weights
         int btnsWeight = getResources().getInteger(R.integer.dialpad_layout_weight_additional_buttons);
         int padWeight = getResources().getInteger(R.integer.dialpad_layout_weight_dialpad);
@@ -71,22 +68,23 @@ public class DialerLayout extends LinearLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
+        DisplayMetrics dm = getResources().getDisplayMetrics();
         float density = dm.density;
         
         // If we detect that height for pad will not be enough... force it's height instead of having weight
-        if( height *  expectedBtnHeightFactor < MIN_BTNS_HEIGHT * density ) {
-            for(int i = 0; i < getChildCount(); i++) {
-                View v = getChildAt(i);
-                if(v.getId() == R.id.dialerCallBar) {
-                    Log.d(THIS_FILE, "We force height of additional buttons");
-                    LayoutParams lp = (LayoutParams) v.getLayoutParams();
-                    lp.height = (int)(MIN_BTNS_HEIGHT * density);
-                    lp.weight = 0;
-                    v.setLayoutParams(lp);
-                }
+        View dialerCallBar = findViewById(R.id.dialerCallBar);
+        if(dialerCallBar != null) {
+            LayoutParams lp = (LayoutParams) dialerCallBar.getLayoutParams();
+            if( height *  expectedBtnHeightFactor < MIN_BTNS_HEIGHT * density ) {
+                lp.height = (int)(MIN_BTNS_HEIGHT * density);
+                lp.weight = 0;
+            }else {
+                lp.height = 0;
+                lp.weight = getResources().getInteger(R.integer.dialpad_layout_weight_additional_buttons);
             }
+            dialerCallBar.setLayoutParams(lp);
         }
+        
         // If we detect that height is enough to show the list
         if(!forceNoList && 
                 height > (LIST_BTNS_HEIGHT + LIST_DIALPAD_HEIGHT + LIST_DIGITS_HEIGHT + LIST_MIN_HEIGHT)* density ) {

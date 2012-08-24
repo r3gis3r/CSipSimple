@@ -240,9 +240,8 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     }
 
     private void applyTheme(View v) {
-        String theme = prefsWrapper.getPreferenceStringValue(SipConfigManager.THEME);
-        if (!TextUtils.isEmpty(theme)) {
-            Theme t = new Theme(getActivity(), theme);
+        Theme t = Theme.getCurrentTheme(getActivity());
+        if (t != null) {
             dialPad.applyTheme(t);
             
             View subV;

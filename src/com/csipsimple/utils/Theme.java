@@ -34,6 +34,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -41,6 +42,7 @@ import android.widget.ImageView;
 
 import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.csipsimple.R;
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 
 import java.util.HashMap;
@@ -69,10 +71,18 @@ public class Theme {
         }
 	}
 	
+	public static Theme getCurrentTheme(Context ctxt) {
+	    String themeName = SipConfigManager.getPreferenceStringValue(ctxt, SipConfigManager.THEME);
+	    if(!TextUtils.isEmpty(themeName)) {
+	        return new Theme(ctxt, themeName);
+	    }
+	    return null;
+	}
+	
 	
 	public static HashMap<String, String> getAvailableThemes(Context ctxt){
 		HashMap<String, String> result = new HashMap<String, String>();
-		result.put(ctxt.getResources().getString(R.string.app_name), "");
+		result.put("", ctxt.getResources().getString(R.string.app_name));
 		
 		PackageManager packageManager = ctxt.getPackageManager();
 		Intent it = new Intent(SipManager.ACTION_GET_DRAWABLES);
@@ -82,8 +92,12 @@ public class Theme {
 		for(ResolveInfo resInfo : availables) {
 			Log.d(THIS_FILE, "We have -- "+resInfo);
 			ActivityInfo actInfos = resInfo.activityInfo;
-			String packagedActivityName = actInfos.packageName + "/" + actInfos.name;
-			result.put((String) resInfo.loadLabel(packageManager), packagedActivityName);
+			ComponentName cmp = new ComponentName(actInfos.packageName, actInfos.name);
+			String label = (String) actInfos.loadLabel(packageManager);
+			if(TextUtils.isEmpty(label)) {
+			    label = (String) resInfo.loadLabel(packageManager);
+			}
+			result.put(cmp.flattenToString(), label);
 		}
 		
 		return result;
