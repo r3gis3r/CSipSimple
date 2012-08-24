@@ -1,24 +1,22 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">Răspunde</string>
-    <string name="decline_call">Ignoră</string>
-    <string name="clear_call">Sfârşit</string>
-    <string name="touch_lock">Atingeţi de două ori pentru a debloca</string>
-    <string name="dialpad">Tastatură</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="speaker">Difuzor</string>
-    <string name="mute">Mut</string>
-    <string name="add_call">Adauga un apel</string>
-    <string name="call_state_calling">Se apelează…</string>
-    <string name="call_state_confirmed">Se Vorbește</string>
-    <string name="call_state_connecting">Se conectează…</string>
-    <string name="call_state_disconnected">Deconectare</string>
-    <string name="call_state_early">Suna…</string>
-    <string name="call_state_incoming">Intrare apel…</string>
-    <string name="call_state_null">Eroare</string>
-    <string name="unlock">Deblochează</string>
-    <string name="record">Înregistrare</string>
-    <string name="stop_recording">Opreste inregistrarea</string>
-
+  <string name="take_call">Răspunde</string>
+  <string name="decline_call">Ignoră</string>
+  <string name="clear_call">Sfârşit</string>
+  <string name="touch_lock">Atingeţi de două ori pentru a debloca</string>
+  <string name="dialpad">Tastatură</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Difuzor</string>
+  <string name="mute">Mut</string>
+  <string name="add_call">Adauga un apel</string>
+  <string name="call_state_calling">Se apelează…</string>
+  <string name="call_state_confirmed">Se Vorbește</string>
+  <string name="call_state_connecting">Se conectează…</string>
+  <string name="call_state_disconnected">Deconectare</string>
+  <string name="call_state_early">Suna…</string>
+  <string name="call_state_incoming">Intrare apel…</string>
+  <string name="call_state_null">Eroare</string>
+  <string name="unlock">Deblochează</string>
+  <string name="record">Înregistrare</string>
+  <string name="stop_recording">Opreste inregistrarea</string>
 </resources>

@@ -1,24 +1,22 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">Atender</string>
-    <string name="decline_call">Ignorar</string>
-    <string name="clear_call">Finalizar</string>
-    <string name="touch_lock">Duplo toque para desbloquear</string>
-    <string name="dialpad">Teclado Numérico</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="speaker">Viva Voz</string>
-    <string name="mute">Mudo</string>
-    <string name="add_call">Adicionar Ligação</string>
-    <string name="call_state_calling">Chamando</string>
-    <string name="call_state_confirmed">Conversando</string>
-    <string name="call_state_connecting">A estabelecer ligação…</string>
-    <string name="call_state_disconnected">Desligado</string>
-    <string name="call_state_early">Chamando…</string>
-    <string name="call_state_incoming">Recebendo Ligação…</string>
-    <string name="call_state_null">ERRO</string>
-    <string name="unlock">Desbloquear</string>
-    <string name="record">Gravar</string>
-    <string name="stop_recording">Parar gravação</string>
-
+  <string name="take_call">Atender</string>
+  <string name="decline_call">Ignorar</string>
+  <string name="clear_call">Finalizar</string>
+  <string name="touch_lock">Duplo toque para desbloquear</string>
+  <string name="dialpad">Teclado Numérico</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Viva Voz</string>
+  <string name="mute">Mudo</string>
+  <string name="add_call">Adicionar Ligação</string>
+  <string name="call_state_calling">Chamando</string>
+  <string name="call_state_confirmed">Conversando</string>
+  <string name="call_state_connecting">A estabelecer ligação…</string>
+  <string name="call_state_disconnected">Desligado</string>
+  <string name="call_state_early">Chamando…</string>
+  <string name="call_state_incoming">Recebendo Ligação…</string>
+  <string name="call_state_null">ERRO</string>
+  <string name="unlock">Desbloquear</string>
+  <string name="record">Gravar</string>
+  <string name="stop_recording">Parar gravação</string>
 </resources>

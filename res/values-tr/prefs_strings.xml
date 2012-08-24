@@ -1,65 +1,73 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="prefs">Ayarlar</string>
-    <string name="prefs_fast">Basit konfigürasyon</string>
-    <string name="prefs_network">Ağ</string>
-    <string name="prefs_media">Medya</string>
-    <string name="prefs_ui">Kullanıcı arayüzü</string>
-    <string name="prefs_calls">Arama seçenekleri</string>
-    <string name="prefs_calls_desc">Aramalar ile ilgili seçenekler</string>
-    <string name="for_incomings">Gelen aramalar için</string>
-    <string name="for_outgoings">Yapılan aramalar için</string>
-    <string name="perfs">Performanslar</string>
-    <string name="transport">Taşıma</string>
-    <string name="use_wifi">WiFi kullan</string>
-    <string name="use_wifi_in_desc">"Gelen aramalar için  WiFi kullanın"</string>
-    <string name="use_wifi_out_desc">"Yapılan aramalar için  WiFi kullanın"</string>
-    <string name="use_other">Diğer ağları kullan</string>
-    <string name="use_3g">3G kullanımı</string>
-    <string name="use_edge">EDGE kullanımı</string>
-    <string name="use_gprs">GPRS kullanımı</string>
-    <string name="enable_tcp">TCP</string>
-    <string name="enable_tcp_desc">TCP taşıma etkinleştir</string>
-    <string name="enable_tls">TLS</string>
-    <string name="enable_tls_desc">TLS taşıma etkinleştir</string>
-    <string name="enable_udp">UDP</string>
-    <string name="enable_udp_desc">UDP taşıma etkinleştir</string>
-    <string name="network_udp_transport_port">UDP Portu</string>
-    <string name="network_tcp_transport_port">TCP Portu</string>
-    <string name="network_rtp_port">RTP portu</string>
-    <string name="use_ipv6">IPv6 kullan</string>
-    <string name="override_nameserver">Özel bir DNS kullan</string>
-    <string name="enable_ice">ICE etkinleştirin</string>
-    <string name="enable_stun">STUN etkinleştirin</string>
-    <string name="dscp_val">DSCP değeri</string>
-    <string name="tls">TLS</string>
-    <string name="secure_transport">Güvenli taşıma</string>
-    <string name="secure_media">Güvenli medya</string>
-    <string name="network_tls_transport_port">TLS Portu</string>
-    <string name="network_tls_server_name">TLS sunucu adı</string>
-    <string name="cert_file">TLS sertifika dosyası</string>
-    <string name="tls_password">TLS parola</string>
-    <string name="verify_server">Sunucu kontrol</string>
-    <string name="verify_server_desc">Sunucu sertifikası doğrulama</string>
-    <string name="verify_client">İstemci kontrol</string>
-    <string name="tls_method">TLS Yöntemi</string>
-    <string name="tls_method_desc">TLS için taşıma metodu</string>
-    <string name="use_srtp">SRTP modu</string>
-    <string name="audio_volume">Ses</string>
-    <string name="codecs">Çözücüler</string>
-    <string name="snd_media_quality">Medya kalitesi</string>
-    <string name="snd_clock_rate_desc">Ses kanal frekansı</string>
-    <string name="sip_dtmf">DTMF modu</string>
-    <string name="general_ui">Genel kullanıcı arayüzü</string>
-    <string name="ringtone">Melodi</string>
-    <string name="wifi_available">WiFi mevcut</string>
-    <string name="never_available">Sadece giden için</string>
-    <string name="expert_preferences">Uzman modu</string>
-    <string name="digest">Özet</string>
-    <string name="disabled">Devre dışı</string>
-    <string name="optional">İsteğe bağlı</string>
-    <string name="mandatory">Zorunlu</string>
-    <string name="auto">Otomatik</string>
-
+  <string name="prefs">Ayarlar</string>
+  <string name="prefs_fast">Basit konfigürasyon</string>
+  <string name="prefs_network">Ağ</string>
+  <string name="prefs_media">Medya</string>
+  <string name="prefs_ui">Kullanıcı arayüzü</string>
+  <string name="prefs_calls">Arama seçenekleri</string>
+  <string name="prefs_calls_desc">Aramalar ile ilgili seçenekler</string>
+  <!--Network-->
+  <string name="for_incomings">Gelen aramalar için</string>
+  <string name="for_outgoings">Yapılan aramalar için</string>
+  <string name="perfs">Performanslar</string>
+  <string name="transport">Taşıma</string>
+  <string name="use_wifi">WiFi kullan</string>
+  <string name="use_wifi_in_desc">Gelen aramalar için  WiFi kullanın</string>
+  <string name="use_wifi_out_desc">Yapılan aramalar için  WiFi kullanın</string>
+  <string name="use_other">Diğer ağları kullan</string>
+  <string name="use_3g">3G kullanımı</string>
+  <string name="use_edge">EDGE kullanımı</string>
+  <string name="use_gprs">GPRS kullanımı</string>
+  <string name="enable_tcp">TCP</string>
+  <string name="enable_tcp_desc">TCP taşıma etkinleştir</string>
+  <string name="enable_tls">TLS</string>
+  <string name="enable_tls_desc">TLS taşıma etkinleştir</string>
+  <string name="enable_udp">UDP</string>
+  <string name="enable_udp_desc">UDP taşıma etkinleştir</string>
+  <string name="network_udp_transport_port">UDP Portu</string>
+  <string name="network_tcp_transport_port">TCP Portu</string>
+  <string name="network_rtp_port">RTP portu</string>
+  <string name="use_ipv6">IPv6 kullan</string>
+  <string name="override_nameserver">Özel bir DNS kullan</string>
+  <string name="enable_ice">ICE etkinleştirin</string>
+  <string name="enable_stun">STUN etkinleştirin</string>
+  <string name="dscp_val">DSCP değeri</string>
+  <!--<string name="ka_use_wake">Keep alive awake</string>
+    <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>-->
+  <!--Security-->
+  <string name="tls">TLS</string>
+  <string name="secure_transport">Güvenli taşıma</string>
+  <string name="secure_media">Güvenli medya</string>
+  <string name="network_tls_transport_port">TLS Portu</string>
+  <string name="network_tls_server_name">TLS sunucu adı</string>
+  <string name="cert_file">TLS sertifika dosyası</string>
+  <string name="tls_password">TLS parola</string>
+  <string name="verify_server">Sunucu kontrol</string>
+  <string name="verify_server_desc">Sunucu sertifikası doğrulama</string>
+  <string name="verify_client">İstemci kontrol</string>
+  <string name="tls_method">TLS Yöntemi</string>
+  <string name="tls_method_desc">TLS için taşıma metodu</string>
+  <string name="use_srtp">SRTP modu</string>
+  <!--Media-->
+  <string name="audio_volume">Ses</string>
+  <string name="codecs">Çözücüler</string>
+  <string name="snd_media_quality">Medya kalitesi</string>
+  <string name="snd_clock_rate_desc">Ses kanal frekansı</string>
+  <string name="sip_dtmf">DTMF modu</string>
+  <string name="digest">Özet</string>
+  <string name="disabled">Devre dışı</string>
+  <string name="optional">İsteğe bağlı</string>
+  <string name="mandatory">Zorunlu</string>
+  <string name="auto">Otomatik</string>
+  <!--UI-->
+  <string name="general_ui">Genel kullanıcı arayüzü</string>
+  <string name="ringtone">Melodi</string>
+  <!--Fast settings-->
+  <string name="wifi_available">WiFi mevcut</string>
+  <string name="never_available">Sadece giden için</string>
+  <!--Calls settings-->
+  <!--Settings modes-->
+  <string name="expert_preferences">Uzman modu</string>
+  <!--Generic-->
 </resources>

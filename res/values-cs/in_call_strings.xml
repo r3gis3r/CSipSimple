@@ -1,24 +1,28 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">Přijmout</string>
-    <string name="decline_call">Ignorovat</string>
-    <string name="clear_call">Ukončit</string>
-    <string name="touch_lock">Klikněte dvakrát pro odemčení</string>
-    <string name="dialpad">Číselník</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="speaker">Reproduktor</string>
-    <string name="mute">Ztlumit</string>
-    <string name="add_call">Přidat hovor</string>
-    <string name="call_state_calling">Volání…</string>
-    <string name="call_state_confirmed">Hovor</string>
-    <string name="call_state_connecting">Připojování…</string>
-    <string name="call_state_disconnected">položit</string>
-    <string name="call_state_early">Vyzvánění…</string>
-    <string name="call_state_incoming">Příchozí hovor…</string>
-    <string name="call_state_null">Chyba</string>
-    <string name="unlock">Odemknout</string>
-    <string name="record">Nahrát</string>
-    <string name="stop_recording">Zastavit nahrávání</string>
-
+  <string name="take_call">Přijmout</string>
+  <string name="decline_call">Ignorovat</string>
+  <string name="clear_call">Ukončit</string>
+  <string name="touch_lock">Klikněte dvakrát pro odemčení</string>
+  <string name="dialpad">Číselník</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Reproduktor</string>
+  <string name="mute">Ztlumit</string>
+  <string name="add_call">Přidat hovor</string>
+  <string name="call_state_calling">Volání…</string>
+  <string name="call_state_confirmed">Hovor</string>
+  <string name="call_state_connecting">Připojování…</string>
+  <string name="call_state_disconnected">položit</string>
+  <string name="call_state_early">Vyzvánění…</string>
+  <string name="call_state_incoming">Příchozí hovor…</string>
+  <string name="call_state_null">Chyba</string>
+  <string name="unlock">Odemknout</string>
+  <string name="record">Nahrát</string>
+  <string name="stop_recording">Zastavit nahrávání</string>
+  <string name="xfer_uri">Převést na číslo</string>
+  <string name="hold_call">Přidržet</string>
+  <string name="on_hold">Přidrženo</string>
+  <string name="resume_call">Pokračovat</string>
+  <string name="transfer_to_call">Převést na volání</string>
+  <string name="send_dtmf">Odeslat DTMF</string>
 </resources>

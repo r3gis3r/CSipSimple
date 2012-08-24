@@ -1,12 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="unknown">Neznámý</string>
-    <string name="type_incoming">Příchozí</string>
-    <string name="type_outgoing">Odchozí</string>
-    <string name="type_missed">Zmeškaný</string>
-    <string name="callBack">volat zpět</string>
-    <string name="callAgain">volat znovu</string>
-    <string name="returnCall">volat zpět</string>
-
+  <string name="unknown">Neznámé</string>
+  <string name="type_incoming">Příchozí</string>
+  <string name="type_outgoing">Odchozí</string>
+  <string name="type_missed">Zmeškané</string>
+  <string name="callBack">Volání zpět</string>
+  <string name="callAgain">Volání znovu</string>
+  <string name="returnCall">Návrat k volání</string>
+  <string name="call">Volání</string>
+  <string name="sip_call">SIP volání</string>
+  <string name="no_call_history">Žádná historie volání</string>
 </resources>

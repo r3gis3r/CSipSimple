@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="prefs">Impostazioni</string>
@@ -12,6 +12,7 @@
     <string name="prefs_ui_desc">Tweak interfaccia utente</string>
     <string name="prefs_calls">Opzioni di chiamata</string>
     <string name="prefs_calls_desc">Opzioni relative alle chiamate</string>
+    <!-- Network -->
     <string name="for_incomings">Per chiamate in ingresso</string>
     <string name="for_outgoings">Per chiamate in uscita</string>
     <string name="perfs">Prestazioni</string>
@@ -73,6 +74,11 @@
     <string name="use_compact_form_desc">Riduce la dimensione dei pacchetti SIP. Potrebbe non funzionare su vecchi server SIP</string>
     <string name="user_agent">User agent</string>
     <string name="user_agent_desc">Agent presentato dall\'applicazione (se di default aggiungerà informazioni)</string>
+    <!--
+    <string name="ka_use_wake">Keep alive awake</string>
+    <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>
+    -->
+    <!-- Security -->
     <string name="tls">TLS</string>
     <string name="secure_transport">Trasporto sicuro</string>
     <string name="secure_transport_desc">Meccanismo di sicurezza per SIP e RTP</string>
@@ -99,6 +105,7 @@
     <string name="use_srtp_desc">Modalità per RTP Sicuro</string>
     <string name="use_zrtp">Modo ZRTP</string>
     <string name="use_zrtp_desc">Modo per ZRTP sicuro</string>
+    <!-- Media -->
     <string name="audio_quality">Qualità audio</string>
     <string name="audio_volume">Volume</string>
     <string name="codecs">Codec</string>
@@ -107,9 +114,9 @@
     <string name="enable_vad">Rilevamento della voce</string>
     <string name="enable_vad_desc">Attiva il rilevamento della voce</string>
     <string name="snd_mic_level">Amplificazione del microfono</string>
-    <string name="snd_mic_level_desc">"Regola il livello di segnale del microfono  (1 non fa nulla)"</string>
+    <string name="snd_mic_level_desc">Regola il livello di segnale del microfono  (1 non fa nulla)</string>
     <string name="snd_speaker_level">Amplificazione dell\'altoparlante</string>
-    <string name="snd_speaker_level_desc">"Regola il livello di segnale dell\'altoparlante  (1 non fa nulla)"</string>
+    <string name="snd_speaker_level_desc">Regola il livello di segnale dell\'altoparlante  (1 non fa nulla)</string>
     <string name="snd_bt_mic_level">Amplificazione microfono Bluetooth</string>
     <string name="snd_bt_speaker_level">Amplificazione nell\'ascolto Bluetooth</string>
     <string name="snd_stream_level">Livello stream iniziale</string>
@@ -155,6 +162,22 @@
     <string name="codecs_band_types">Tipi di ampiezza di banda delle connessioni per i codec</string>
     <string name="use_sgs_call_hack">Use l\'Hack per il Samsung Galaxy</string>
     <string name="use_sgs_call_hack_desc">Preimposta la modalità di chiamata per risolvere il routing</string>
+    <string name="plain_password">Password in chiaro</string>
+    <string name="disabled">Disattivato</string>
+    <string name="optional">Opzionale</string>
+    <string name="mandatory">Obbligatorio</string>
+    <string name="auto">Automatico</string>
+    <string name="normal">Normale</string>
+    <string name="force">Forza</string>
+    <string name="prevent">Previeni</string>
+    <string name="simple">Semplice</string>
+    <string name="use_android_setting">Usa le impostazioni di android</string>
+    <string name="no_proxy">Nessun proxy</string>
+    <string name="outbound_proxies">Proxy fuori banda</string>
+    <string name="all">Tutto</string>
+    <string name="no_zrtp">Nessuno ZRTP</string>
+    <string name="create_zrtp">Crea ZRTP</string>
+    <!-- UI -->
     <string name="general_ui">Interfaccia utente generale</string>
     <string name="native_dialer_integration">Integrazione con il dialer nativo</string>
     <string name="advanced_ui">Tweaks avanzati</string>
@@ -192,6 +215,7 @@
     <string name="obtain_themes_desc">Prendi temi dell\'applicazione dal market</string>
     <string name="display_icon_in_status_bar_nbr">Mostra numero nella barra di stato</string>
     <string name="display_icon_in_status_bar_nbr_desc">Mostra il numero di account registrati nella barra di stato</string>
+    <!-- Fast settings -->
     <string name="android_integration">Integrazione con Android</string>
     <string name="android_integration_desc">Integrazione con il dialer nativo e log delle chiamate</string>
     <string name="availability_profile">Profilo di disponibilità</string>
@@ -205,25 +229,13 @@
     <string name="tg_allowed">Mi è consentito usare la connessione dati mobile</string>
     <string name="tg_allowed_desc">Il tuo operatore telefonico permette l\'uso della connessione dati mobile per il VoIP</string>
     <string name="codecs_availability_text">Disponibile solo se sip è registrato</string>
+    <!-- Calls settings -->
     <string name="auto_record_calls">Registra automaticamente le chiamate</string>
     <string name="auto_record_calls_desc">Registra le chiamate appena connesso</string>
     <string name="support_multiple_calls">Supporto alle chiamate multiple</string>
     <string name="support_multiple_calls_desc">Consente conferenza e chiamate multiple contemporanee</string>
+    <!-- Settings modes -->
     <string name="expert_preferences">Modalità esperto</string>
-    <string name="plain_password">Password in chiaro</string>
-    <string name="disabled">Disattivato</string>
-    <string name="optional">Opzionale</string>
-    <string name="mandatory">Obbligatorio</string>
-    <string name="auto">Automatico</string>
-    <string name="normal">Normale</string>
-    <string name="force">Forza</string>
-    <string name="prevent">Previeni</string>
-    <string name="simple">Semplice</string>
-    <string name="use_android_setting">Usa le impostazioni di android</string>
-    <string name="no_proxy">Nessun proxy</string>
-    <string name="outbound_proxies">Proxy fuori banda</string>
-    <string name="all">Tutto</string>
-    <string name="no_zrtp">Nessuno ZRTP</string>
-    <string name="create_zrtp">Crea ZRTP</string>
+    <!-- Generic -->
 
 </resources>

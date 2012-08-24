@@ -1,13 +1,16 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">Název účtu</string>
-  <string name="w_advanced_display_name_desc">Zobrazí název účtu</string>
+  <string name="w_advanced_display_name_desc">Zobrazit název účtu</string>
   <string name="w_advanced_caller_id">ID Volajícího</string>
   <string name="w_advanced_caller_id_desc">ID Volajícího poslat s hovorem</string>
   <string name="w_advanced_username">Uživatelské jméno</string>
+  <string name="w_advanced_username_desc">Uživatelské jméno pro autentizaci  k SIP serveru (nepište @sip.server)</string>
   <string name="w_advanced_password">Heslo</string>
-  <string name="w_advanced_password_desc">Uživatelské jméno pro autorizaci SIP serveru</string>
+  <string name="w_advanced_password_desc">Heslo pro autorizaci k SIP serveru</string>
   <string name="w_advanced_use_tcp">Používat TCP ( ne UDP)</string>
   <string name="w_advanced_proxy">Proxy</string>
   <string name="w_advanced_proxy_desc">Proxy Doména/IP[:port] (volitelné, není vždy potřeba)</string>
+  <string name="w_advanced_auth_id">ID autentizace Sip</string>
+  <string name="w_advanced_auth_id_desc">Ponechte prázdné pokud je jméno stejné</string>
 </resources>

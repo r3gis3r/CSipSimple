@@ -1,6 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_basic_username">Uživatel</string>
+  <string name="w_basic_username_desc">Název účtu / Přihlášení (nepište @sip.server)</string>
   <string name="w_basic_password">Heslo</string>
   <string name="w_basic_password_desc">Heslo pro přístup do účtu</string>
 </resources>

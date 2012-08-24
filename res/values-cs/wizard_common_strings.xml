@@ -1,12 +1,19 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_common_display_name">Název účtu</string>
   <string name="w_common_display_name_desc">Zobrazí název účtu</string>
   <string name="w_common_username">Uživatelské jméno</string>
+  <string name="w_common_username_desc">Přihlášení k Sip účetu (nepište @sip.server)</string>
   <string name="w_common_phone_number">Telefonní číslo</string>
   <string name="w_common_phone_number_desc">Telefonní číslo přidělené operátorem</string>
   <string name="w_common_password">Heslo</string>
   <string name="w_common_password_desc">Heslo vašeho účtu</string>
   <string name="w_common_server">Server</string>
   <string name="w_common_server_desc">SIP server Doména/ip [:port]</string>
+  <string name="create_account">Vytvořit účet</string>
+  <string name="first_name">Jméno</string>
+  <string name="last_name">Příjmení</string>
+  <string name="email_address">E-mail</string>
+  <string name="captcha">Captcha</string>
+  <string name="country_code">Kód země</string>
 </resources>

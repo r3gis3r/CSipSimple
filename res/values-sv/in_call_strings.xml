@@ -1,25 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">Svara</string>
-    <string name="decline_call">Ignorera</string>
-    <string name="clear_call">Avsluta</string>
-    <string name="touch_lock">Dubbelknacka för att låsa upp</string>
-    <string name="dialpad">Tonval</string>
-    <string name="bluetooth">Blåtand</string>
-    <string name="speaker">Högtalare</string>
-    <string name="mute">Dämpa</string>
-    <string name="add_call">Lägg till samtal</string>
-    <string name="call_state_calling">Ringer upp...</string>
-    <string name="call_state_confirmed">Pratar</string>
-    <string name="call_state_connecting">Ansluter...</string>
-    <string name="call_state_disconnected">Lade på</string>
-    <string name="call_state_early">Ringer...</string>
-    <string name="call_state_incoming">Inkommade samtal...</string>
-    <string name="call_state_null">FEL</string>
-    <string name="unlock">Lås upp</string>
-    <string name="record">Spela in</string>
-    <string name="stop_recording">Avsluta inspelning</string>
-    <string name="hold_call">Håll kvar</string>
-
+  <string name="take_call">Svara</string>
+  <string name="decline_call">Ignorera</string>
+  <string name="clear_call">Avsluta</string>
+  <string name="touch_lock">Dubbelknacka för att låsa upp</string>
+  <string name="dialpad">Tonval</string>
+  <string name="bluetooth">Blåtand</string>
+  <string name="speaker">Högtalare</string>
+  <string name="mute">Dämpa</string>
+  <string name="add_call">Lägg till samtal</string>
+  <string name="call_state_calling">Ringer upp...</string>
+  <string name="call_state_confirmed">Pratar</string>
+  <string name="call_state_connecting">Ansluter...</string>
+  <string name="call_state_disconnected">Lade på</string>
+  <string name="call_state_early">Ringer...</string>
+  <string name="call_state_incoming">Inkommade samtal...</string>
+  <string name="call_state_null">FEL</string>
+  <string name="unlock">Lås upp</string>
+  <string name="record">Spela in</string>
+  <string name="stop_recording">Avsluta inspelning</string>
+  <string name="hold_call">Håll kvar</string>
 </resources>

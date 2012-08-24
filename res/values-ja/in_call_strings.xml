@@ -1,28 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">応答</string>
-    <string name="decline_call">無視</string>
-    <string name="clear_call">終了</string>
-    <string name="touch_lock">ダブルタップでアンロック</string>
-    <string name="dialpad">DTMF</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="speaker">スピーカー</string>
-    <string name="mute">ミュート</string>
-    <string name="add_call">通話を追加</string>
-    <string name="call_state_calling">発信中...</string>
-    <string name="call_state_confirmed">通話中</string>
-    <string name="call_state_connecting">接続中...</string>
-    <string name="call_state_disconnected">通話終了</string>
-    <string name="call_state_early">呼び出し中...</string>
-    <string name="call_state_incoming">着信中...</string>
-    <string name="call_state_null">エラー</string>
-    <string name="unlock">アンロック</string>
-    <string name="record">録音</string>
-    <string name="stop_recording">録音停止</string>
-    <string name="hold_call">保留</string>
-    <string name="on_hold">保留</string>
-    <string name="resume_call">再開</string>
-    <string name="send_dtmf">DTMF送信</string>
-
+  <string name="take_call">応答</string>
+  <string name="decline_call">無視</string>
+  <string name="clear_call">終了</string>
+  <string name="touch_lock">ダブルタップでアンロック</string>
+  <string name="dialpad">DTMF</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">スピーカー</string>
+  <string name="mute">ミュート</string>
+  <string name="add_call">通話を追加</string>
+  <string name="call_state_calling">発信中...</string>
+  <string name="call_state_confirmed">通話中</string>
+  <string name="call_state_connecting">接続中...</string>
+  <string name="call_state_disconnected">通話終了</string>
+  <string name="call_state_early">呼び出し中...</string>
+  <string name="call_state_incoming">着信中...</string>
+  <string name="call_state_null">エラー</string>
+  <string name="unlock">アンロック</string>
+  <string name="record">録音</string>
+  <string name="stop_recording">録音停止</string>
+  <string name="hold_call">保留</string>
+  <string name="on_hold">保留</string>
+  <string name="resume_call">再開</string>
+  <string name="send_dtmf">DTMF送信</string>
 </resources>

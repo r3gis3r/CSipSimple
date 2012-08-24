@@ -1,24 +1,22 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">Відповісти</string>
-    <string name="decline_call">Ігнорувати</string>
-    <string name="clear_call">Завершення</string>
-    <string name="touch_lock">Натисніть двічі щоб розблокувати</string>
-    <string name="dialpad">Панель набору номера</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="speaker">Гучномовець</string>
-    <string name="mute">Вимкнути звук</string>
-    <string name="add_call">Додати виклик</string>
-    <string name="call_state_calling">Виклик…</string>
-    <string name="call_state_confirmed">Розмовляю</string>
-    <string name="call_state_connecting">З\'єднання…</string>
-    <string name="call_state_disconnected">Покласти трубку</string>
-    <string name="call_state_early">Дзвінок…</string>
-    <string name="call_state_incoming">Вхідний дзвінок…</string>
-    <string name="call_state_null">ПОМИЛКА</string>
-    <string name="unlock">Розблокувати</string>
-    <string name="record">Записати</string>
-    <string name="stop_recording">Зупинити запис</string>
-
+  <string name="take_call">Відповісти</string>
+  <string name="decline_call">Ігнорувати</string>
+  <string name="clear_call">Завершення</string>
+  <string name="touch_lock">Натисніть двічі щоб розблокувати</string>
+  <string name="dialpad">Панель набору номера</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Гучномовець</string>
+  <string name="mute">Вимкнути звук</string>
+  <string name="add_call">Додати виклик</string>
+  <string name="call_state_calling">Виклик…</string>
+  <string name="call_state_confirmed">Розмовляю</string>
+  <string name="call_state_connecting">З\'єднання…</string>
+  <string name="call_state_disconnected">Покласти трубку</string>
+  <string name="call_state_early">Дзвінок…</string>
+  <string name="call_state_incoming">Вхідний дзвінок…</string>
+  <string name="call_state_null">ПОМИЛКА</string>
+  <string name="unlock">Розблокувати</string>
+  <string name="record">Записати</string>
+  <string name="stop_recording">Зупинити запис</string>
 </resources>

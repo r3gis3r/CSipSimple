@@ -1,24 +1,22 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">응답</string>
-    <string name="decline_call">무시</string>
-    <string name="clear_call">종료</string>
-    <string name="touch_lock">해제할 더블 탭</string>
-    <string name="dialpad">다이얼패드</string>
-    <string name="bluetooth">블루투스</string>
-    <string name="speaker">스피커</string>
-    <string name="mute">정숙 모드</string>
-    <string name="add_call">통화 추가</string>
-    <string name="call_state_calling">통화 중…</string>
-    <string name="call_state_confirmed">대화 중…</string>
-    <string name="call_state_connecting">연결 중…</string>
-    <string name="call_state_disconnected">통화 종료</string>
-    <string name="call_state_early">호출 중…</string>
-    <string name="call_state_incoming">전화 수신…</string>
-    <string name="call_state_null">에러</string>
-    <string name="unlock">잠금 해제</string>
-    <string name="record">녹음</string>
-    <string name="stop_recording">녹음 중지</string>
-
+  <string name="take_call">응답</string>
+  <string name="decline_call">무시</string>
+  <string name="clear_call">종료</string>
+  <string name="touch_lock">해제할 더블 탭</string>
+  <string name="dialpad">다이얼패드</string>
+  <string name="bluetooth">블루투스</string>
+  <string name="speaker">스피커</string>
+  <string name="mute">정숙 모드</string>
+  <string name="add_call">통화 추가</string>
+  <string name="call_state_calling">통화 중…</string>
+  <string name="call_state_confirmed">대화 중…</string>
+  <string name="call_state_connecting">연결 중…</string>
+  <string name="call_state_disconnected">통화 종료</string>
+  <string name="call_state_early">호출 중…</string>
+  <string name="call_state_incoming">전화 수신…</string>
+  <string name="call_state_null">에러</string>
+  <string name="unlock">잠금 해제</string>
+  <string name="record">녹음</string>
+  <string name="stop_recording">녹음 중지</string>
 </resources>
