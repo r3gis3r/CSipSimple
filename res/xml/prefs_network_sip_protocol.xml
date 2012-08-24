@@ -23,7 +23,7 @@
         android:summary="@string/force_no_update_desc"
         android:title="@string/force_no_update" />
     <CheckBoxPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="add_bandwidth_tias_in_sdp"
         android:summary="@string/add_bandwidth_tias_in_sdp_desc"
         android:title="@string/add_bandwidth_tias_in_sdp" />
