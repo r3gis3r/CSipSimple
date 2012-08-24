@@ -37,6 +37,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
 
 import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.csipsimple.R;
@@ -116,6 +117,14 @@ public class Theme {
 		    UtilityWrapper.getInstance().setBackgroundDrawable(button, d);
 		}
 	}
+	
+
+    public void applyImageDrawable(ImageView subV, String res) {
+        Drawable d = getDrawableResource(res);
+        if(d != null) {
+            subV.setImageDrawable(d);
+        }
+    }
 	
     public void applyBackgroundStateListDrawable(View v, String prefix) {
         Drawable pressed = getDrawableResource(prefix+"_press");
@@ -256,6 +265,8 @@ public class Theme {
         d.setTileModeXY(d.getTileModeX(), d.getTileModeY());
         
     }
+
+
 
 
 

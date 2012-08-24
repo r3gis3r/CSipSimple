@@ -29,7 +29,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -668,8 +667,10 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                         }
                     }
                 }
-                
-                ab.setSplitBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+                Drawable d = t.getDrawableResource("split_background");
+                if(d != null) {
+                    ab.setSplitBackgroundDrawable(d);
+                }
             }
         }
     }

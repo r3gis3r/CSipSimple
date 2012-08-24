@@ -56,6 +56,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -250,6 +251,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
             if(subV != null) {
                 t.applyBackgroundDrawable(subV, "btn_dial_delete");
                 t.applyLayoutMargin(subV, "btn_dial_delete_margin");
+                t.applyImageDrawable((ImageView) subV, "ic_dial_action_delete");
             }
             
             // Dial button
@@ -257,6 +259,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
             if(subV != null) {
                 t.applyBackgroundDrawable(subV, "btn_dial_action");
                 t.applyLayoutMargin(subV, "btn_dial_action_margin");
+                t.applyImageDrawable((ImageView) subV, "ic_dial_action_call");
             }
             
             // Additional button
@@ -296,24 +299,6 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
                 t.applyBackgroundDrawable(subV, "dialer_textfield_background");
             }
             
-            /*
-            Drawable bg = t.getDrawableResource("dialpad_bg");
-            if (bg != null) {
-                if (bg instanceof BitmapDrawable) {
-                    BitmapDrawable dbg = (BitmapDrawable) bg;
-                    dbg.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-                }
-                digitDialer.setBackgroundDrawable(bg);
-            }
-
-            Drawable dAct = t.getDrawableResource("btn_dial_textfield_activated");
-            Drawable dEmpt = t.getDrawableResource("btn_dial_textfield_normal");
-            if (dAct != null && dEmpt != null) {
-                digitsBackground = dAct;
-                digitsEmptyBackground = dEmpt;
-                afterTextChanged(digits.getText());
-            }
-            */
         }
         
         // Fix dialer background
