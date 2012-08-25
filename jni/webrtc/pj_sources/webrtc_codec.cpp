@@ -257,13 +257,11 @@ static pj_status_t webrtc_default_attr(pjmedia_codec_factory *factory,
 		if((160 == codecParam.pacsize) ||
 		        (320 == codecParam.pacsize)) {
 			// processing block of 20ms
-			char mode[] = "20";
-			attr->setting.dec_fmtp.param[0].val = pj_str(mode);
-		} else if((240 == codecParam.pacsize) ||
-		        (480 == codecParam.pacsize)) {
+			attr->setting.dec_fmtp.param[0].val = pj_str((char *) "20");
+		} else /*if((240 == codecParam.pacsize) ||
+		        (480 == codecParam.pacsize))*/ {
 			// processing block of 30ms
-			char mode[] = "30";
-			attr->setting.dec_fmtp.param[0].val = pj_str(mode);
+			attr->setting.dec_fmtp.param[0].val = pj_str((char *) "30");
 		}
 
 	}
