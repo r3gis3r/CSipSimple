@@ -712,6 +712,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_callromania, 12, 
                     new Locale[]{ locale("ro_RO"), new Locale("es_ES"), Locale.ITALY, Locale.GERMANY, Locale.FRANCE, Locale.UK, Locale.US  }, false, false, 
                     CallRomania.class));
+            WIZARDS_DICT.put("ANV", new WizardInfo("ANV", "ANV", 
+                    R.drawable.ic_wizard_anv, 5, 
+                    new Locale[] {new Locale("PT", "pt")}, false, false, 
+                    Anv.class));
+            WIZARDS_DICT.put("INTERTELECOMGR", new WizardInfo("INTERTELECOMGR", "Inter Telecom", 
+                    R.drawable.ic_wizard_intertelecom, 9, 
+                    new Locale[] {locale("el_GR"), locale("ru_RU"), locale("bg_BG"), locale("el_CY") }, false, false, 
+                    InterTelecomGr.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
