@@ -34,8 +34,8 @@ clean :
 	# NDK clean
 	@(ndk-build clean)
 	# FFmpeg clean
-	$(MAKE) -C jni/ffmpeg clean
-	$(MAKE) -C jni/swig-glue clean
+	@($(MAKE) -C jni/ffmpeg clean)
+	@($(MAKE) -C jni/swig-glue clean)
 
 CodecPackLibs :
 	@(ndk-build -j6 APP_MODULES="pj_g7221_codec pj_codec2_codec pj_g726_codec pj_opus_codec")
