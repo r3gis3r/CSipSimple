@@ -1021,7 +1021,6 @@ static pj_status_t strm_stop(pjmedia_aud_stream *s)
 	ATTACH_JVM(jni_env);
 	jmethodID method_id;
 
-	on_teardown_audio_wrapper();
 	stream->quit_flag = 1;
 
 	/*
@@ -1057,7 +1056,7 @@ static pj_status_t strm_stop(pjmedia_aud_stream *s)
 		}
 	}
 
-
+	on_teardown_audio_wrapper();
 
 	PJ_LOG(4,(THIS_FILE, "Stopping Done"));
 
@@ -1108,8 +1107,6 @@ static pj_status_t strm_destroy(pjmedia_aud_stream *s)
 		PJ_LOG(2,(THIS_FILE, "Nothing to release !!! track"));
 	}
 
-	//Unset media in call
-	on_teardown_audio_wrapper();
 
 //	pj_sem_destroy(stream->audio_launch_sem);
 	pj_pool_release(stream->pool);
