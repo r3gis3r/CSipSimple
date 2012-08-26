@@ -48,6 +48,7 @@ public class Anv extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
         account.transport = SipProfile.TRANSPORT_TCP;
+        account.proxies = null;
 		return account;
 	}
 	
