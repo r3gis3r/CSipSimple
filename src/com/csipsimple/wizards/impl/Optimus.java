@@ -22,6 +22,7 @@
 package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
@@ -40,6 +41,8 @@ public class Optimus extends SimpleImplementation {
 		return "Optimus";
 	}
 
+    private final static String USUAL_PREFIX = "351";
+
 	
 	//Customization
 	@Override
@@ -49,12 +52,27 @@ public class Optimus extends SimpleImplementation {
 		accountUsername.setTitle(R.string.w_common_phone_number);
 		accountUsername.setDialogTitle(R.string.w_common_phone_number);
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+
+        if(TextUtils.isEmpty(account.username)){
+            accountUsername.setText(USUAL_PREFIX);
+        }
 		
 	}
+	
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canSave() {
+        boolean ok = super.canSave();
+        ok &= checkField(accountUsername, accountUsername.getText().trim().equalsIgnoreCase(USUAL_PREFIX));
+        return ok;
+    }
+    
 	@Override
 	public String getDefaultFieldSummary(String fieldName) {
 		if(fieldName.equals(USER_NAME)) {
-			return "351+" + parent.getString(R.string.w_common_phone_number_desc);
+            return USUAL_PREFIX + "+" + parent.getString(R.string.w_common_phone_number_desc);
 		}
 		return super.getDefaultFieldSummary(fieldName);
 	}
@@ -62,7 +80,7 @@ public class Optimus extends SimpleImplementation {
 	
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
-		account.proxies = new String[] {"sip:asbg.sip.optimus.pt"};
+		account.proxies = new String[] {"sip:asbg.sip.optimus.pt;hide"};
 		account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
 	}
