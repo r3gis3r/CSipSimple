@@ -310,6 +310,7 @@ public class Betamax extends AuthorizationImplementation {
     @Override
     public SipProfile buildAccount(SipProfile account) {
         account = super.buildAccount(account);
+        account.mwi_enabled = false;
         return account;
     }
 
