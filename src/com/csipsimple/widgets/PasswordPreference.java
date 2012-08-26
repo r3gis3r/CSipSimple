@@ -70,7 +70,7 @@ public class PasswordPreference extends EditTextPreference implements OnClickLis
     	        showPwdCheckbox.setOnClickListener(this);
 		    }
 		    
-	        canShowPassword = false;
+	        canShowPassword = TextUtils.isEmpty(getText());
 	        getEditText().setInputType(
 	                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 	        updateCanShowPassword();
