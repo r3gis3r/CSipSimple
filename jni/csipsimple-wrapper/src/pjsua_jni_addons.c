@@ -529,7 +529,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	return result;
 }
 
-PJ_DECL(pj_status_t) csipsimple_destroy(void) {
+PJ_DECL(pj_status_t) csipsimple_destroy(unsigned flags) {
 	destroy_ringback_tone();
 
 #if PJMEDIA_HAS_VIDEO
@@ -556,7 +556,7 @@ PJ_DECL(pj_status_t) csipsimple_destroy(void) {
 		(*jni_env)->DeleteGlobalRef(jni_env, css_var.context);
 		DETACH_JVM(jni_env);
 	}
-	return (pj_status_t) pjsua_destroy();
+	return (pj_status_t) pjsua_destroy2(flags);
 }
 
 

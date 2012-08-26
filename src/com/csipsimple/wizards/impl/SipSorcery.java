@@ -42,6 +42,7 @@ public class SipSorcery extends SimpleImplementation {
 		account = super.buildAccount(account);
 		//Ensure registration timeout value
 		account.reg_timeout = 600;
+		account.mwi_enabled = false;
 		return account;
 	}
 }

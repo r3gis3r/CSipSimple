@@ -160,7 +160,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 				pjsua_media_config *media_cfg,
 				csipsimple_config *css_cfg,
 				jobject context);
-PJ_DECL(pj_status_t) csipsimple_destroy(void);
+PJ_DECL(pj_status_t) csipsimple_destroy(unsigned flags);
 PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csipsimple_acc_config* css_acc_cfg);
 PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg_data* msg_data);
 PJ_DECL(pj_status_t) pj_timer_fire(int entry_id);

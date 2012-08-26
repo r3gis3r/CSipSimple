@@ -578,7 +578,6 @@ public class PjSipService {
         }
         if (created) {
             cleanPjsua();
-            TimerWrapper.destroy();
         }
         if(tasksTimer != null) {
             tasksTimer.cancel();
@@ -592,7 +591,11 @@ public class PjSipService {
         Log.d(THIS_FILE, "Detroying...");
         // This will destroy all accounts so synchronize with accounts
         // management lock
-        pjsua.csipsimple_destroy();
+        long flags = 1;
+        if(!prefsWrapper.isValidConnectionForOutgoing()) {
+            flags = 3;
+        }
+        pjsua.csipsimple_destroy(flags);
         service.getContentResolver().delete(SipProfile.ACCOUNT_STATUS_URI, null, null);
         if (userAgentReceiver != null) {
             userAgentReceiver.stopService();
@@ -604,6 +607,8 @@ public class PjSipService {
             mediaManager = null;
         }
 
+        TimerWrapper.destroy();
+        
         created = false;
     }
 
