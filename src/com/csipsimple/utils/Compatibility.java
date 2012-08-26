@@ -330,7 +330,11 @@ public final class Compatibility {
         /* HTC One X */
         if (android.os.Build.DEVICE.toLowerCase().startsWith("endeavoru") ||
                 android.os.Build.DEVICE.toLowerCase().startsWith("evita") ) {
-            return true;
+            return false;
+        }
+        
+        if(android.os.Build.DEVICE.toUpperCase().startsWith("GT-P7510") && isCompatible(15)) {
+            return false;
         }
         return true;
     }
@@ -748,14 +752,12 @@ public final class Compatibility {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL,
                     needPspWorkaround());
         }
-        if (lastSeenVersion < 1794 && 
-                (android.os.Build.DEVICE.toLowerCase().startsWith("endeavoru") ||
-                        android.os.Build.DEVICE.toLowerCase().startsWith("evita") ) ) {
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
-        }
         
         if(lastSeenVersion < 1798 && android.os.Build.DEVICE.toLowerCase().startsWith("picasso")) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
+        }
+        if (lastSeenVersion < 1834 && !shouldFocusAudio() ) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
         }
         prefWrapper.endEditing();
     }
@@ -785,6 +787,7 @@ public final class Compatibility {
 
         prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL,
                 needPspWorkaround());
+        prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
 
         // }
         
