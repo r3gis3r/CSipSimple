@@ -25,12 +25,12 @@
             android:singleLine="true"
             android:title="@string/w_ecs_display_name" />
         <EditTextPreference
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="phone_number"
             android:singleLine="true"
             android:title="@string/w_ecs_phone_number" />
         <EditTextPreference
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="user_name"
             android:singleLine="true"
             android:title="@string/w_ecs_user_name" />
@@ -43,12 +43,12 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="Server" >
         <EditTextPreference
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="server_domain"
             android:singleLine="true"
             android:title="@string/w_ecs_server_domain" />
         <EditTextPreference
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="server_ip"
             android:singleLine="true"
             android:title="@string/w_common_server" />

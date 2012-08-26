@@ -26,23 +26,23 @@
             android:title="@string/w_expert_display_name" />
         <EditTextPreference
             android:dialogMessage="@string/w_expert_acc_id_desc"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="acc_id"
             android:title="@string/w_expert_acc_id" />
         <EditTextPreference
             android:dialogMessage="@string/w_expert_reg_uri_desc"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="reg_uri"
             android:title="@string/w_expert_reg_uri" />
     </PreferenceCategory>
     <PreferenceCategory android:title="SIP Authentication" >
         <EditTextPreference
             android:dialogMessage="@string/w_expert_realm_desc"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="realm"
             android:title="@string/w_expert_realm" />
         <EditTextPreference
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="username"
             android:summary="@string/w_expert_username_desc"
             android:title="@string/w_expert_username" />
@@ -82,12 +82,12 @@
             android:key="reg_timeout"
             android:title="@string/w_expert_reg_timeout" />
         <EditTextPreference
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="reg_dbr"
             android:summary="@string/w_expert_reg_dbr_desc"
             android:title="@string/w_expert_reg_dbr" />
         <EditTextPreference
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="force_contact"
             android:title="@string/w_expert_force_contact" />
 
@@ -114,7 +114,7 @@
     <PreferenceCategory android:title="@string/w_expert_t_proxy" >
         <EditTextPreference
             android:dialogMessage="@string/w_expert_proxy_desc"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="proxy"
             android:title="@string/w_expert_proxy" />
     </PreferenceCategory>
@@ -150,13 +150,13 @@
             android:title="@string/network_rtp_port" />
         <EditTextPreference
             android:dialogMessage="@string/w_expert_rtp_public_addr_desc"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="rtp_public_addr"
             android:summary="@string/w_expert_rtp_public_addr_desc"
             android:title="@string/w_expert_rtp_public_addr" />
         <EditTextPreference
             android:dialogMessage="@string/w_expert_rtp_bound_addr_desc"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="rtp_bound_addr"
             android:summary="@string/w_expert_rtp_bound_addr_desc"
             android:title="@string/w_expert_rtp_bound_addr" />
@@ -179,7 +179,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/misc" >
         <EditTextPreference
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="vm_nbr"
             android:title="@string/voice_mail" />
 
@@ -213,13 +213,13 @@
 
         <EditTextPreference
             android:dialogMessage="Empty for auto generated, or look like &lt;urn:uuid:00000000-0000-1000-8000-AABBCCDDEEFF>"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="rfc5626_instance_id"
             android:summary="Specify SIP outbound (RFC 5626) instance ID to be use"
             android:title="RFC5626 Instance id" />
         <EditTextPreference
             android:dialogMessage="Empty for auto generated."
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textVisiblePassword"
             android:key="rfc5626_reg_id"
             android:summary="Specify SIP outbound (RFC 5626) registration ID."
             android:title="RFC5626 Reg id" />

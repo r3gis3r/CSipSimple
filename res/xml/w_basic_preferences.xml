@@ -27,14 +27,14 @@
         android:title="@string/w_common_display_name" />
     <EditTextPreference
         android:dialogMessage="@string/w_basic_username_desc"
-        android:inputType="text|textNoSuggestions"
+        android:inputType="textVisiblePassword"
         android:key="username"
         android:singleLine="true"
         android:summary="@string/w_basic_username_desc"
         android:title="@string/w_basic_username" />
     <EditTextPreference
         android:dialogMessage="@string/w_common_server_desc"
-        android:inputType="text|textNoSuggestions"
+        android:inputType="textVisiblePassword"
         android:key="server"
         android:singleLine="true"
         android:summary="@string/w_common_server_desc"
