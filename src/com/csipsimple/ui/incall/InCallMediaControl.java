@@ -84,6 +84,9 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		echoCancellation = (CheckBox) findViewById(R.id.echo_cancellation);
 		okBar = (LinearLayout) findViewById(R.id.ok_bar);
 		
+		speakerAmplification.setMax((int) (max * subdivision * 2));
+		microAmplification.setMax((int) (max * subdivision * 2));
+		
 		speakerAmplification.setOnSeekBarChangeListener(this);
 		microAmplification.setOnSeekBarChangeListener(this);
 		
@@ -280,25 +283,39 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
         }
 
         Float speakerLevel = SipConfigManager.getPreferenceFloatValue(this, useBT ?
-                SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL) * 10;
-        speakerAmplification.setProgress(speakerLevel.intValue());
+                SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL);
+        speakerAmplification.setProgress(valueToProgressUnit(speakerLevel));
 
         Float microLevel = SipConfigManager.getPreferenceFloatValue(this, useBT ?
-                SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL) * 10;
-        microAmplification.setProgress(microLevel.intValue());
+                SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL);
+        microAmplification.setProgress(valueToProgressUnit(microLevel));
 
         echoCancellation.setChecked(SipConfigManager.getPreferenceBooleanValue(this,
                 SipConfigManager.ECHO_CANCELLATION));
 
     }
 
+    private double subdivision = 5;
+    private double max = 15;
+    
+    private int valueToProgressUnit(float val) {
+        Log.d(THIS_FILE, "Value is " + val);
+        double dB = (10.0f * Math.log10(val));
+        return (int) ( (dB + max) * subdivision);
+    }
+    
+    private float progressUnitToValue(int pVal) {
+        Log.d(THIS_FILE, "Progress is " + pVal);
+        double dB = pVal / subdivision - max;
+        return (float) Math.pow(10, dB / 10.0f);
+    }
 
 	@Override
 	public void onProgressChanged(SeekBar arg0, int value, boolean arg2) {
 		Log.d(THIS_FILE, "Progress has changed");
 		if(sipService != null) {
 			try {
-				Float newValue = (float) ( value / 10.0 );
+				float newValue = progressUnitToValue( value );
 				String key;
 				boolean useBT = sipService.getCurrentMediaState().isBluetoothScoOn;
 				int sId = arg0.getId();

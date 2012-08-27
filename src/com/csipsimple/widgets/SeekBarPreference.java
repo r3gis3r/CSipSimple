@@ -48,6 +48,8 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	private final String dialogMessage, suffix;
 	
 	private float value = 0.0f;
+	private static final String DB_SUFFIX = "dB";
+    private double subdivision = 5;
 
 	public SeekBarPreference(Context aContext, AttributeSet attrs) {
 		super(aContext, attrs);
@@ -87,17 +89,52 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 			value = getPersistedFloat(defaultValue);
 		}
 		
-		seekBar.setMax( (int)(max*10) );
-		seekBar.setProgress( (int)(10*value) );
+		applySeekBarValues();
 		
 		return layout;
 	}
+	
+	
+	private void applySeekBarValues() {
+        if(DB_SUFFIX.equals(suffix)) {
+            seekBar.setMax( (int) (2 *  max  * subdivision) );
+        }else {
+            seekBar.setMax(valueToProgressUnit(max));
+	    }
+        seekBar.setProgress(valueToProgressUnit(value));
+	}
 
+	
+	private int valueToProgressUnit(float val) {
+	    if(DB_SUFFIX.equals(suffix)) {
+	        Log.d(THIS_FILE, "Value is " + val);
+	        double dB = (10.0f * Math.log10(val));
+	        return (int) ( (dB + max) * subdivision);
+	    }
+	    return (int)(val * subdivision);
+	}
+	
+	private float progressUnitToValue(int pVal) {
+        if(DB_SUFFIX.equals(suffix)) {
+            Log.d(THIS_FILE, "Progress is " + pVal);
+            double dB = pVal / subdivision - max;
+            return (float) Math.pow(10, dB / 10.0f);
+        }
+	    
+	    return (float) (pVal / subdivision);
+	}
+	
+	private String progressUnitToDisplay(int pVal) {
+        if(DB_SUFFIX.equals(suffix)) {
+            return Float.toString((float) (pVal / subdivision - max));
+        }
+        return Float.toString((float) (pVal / subdivision));
+	}
+	
 	@Override
 	protected void onBindDialogView(View v) {
 		super.onBindDialogView(v);
-		seekBar.setMax( (int) (10*max) );
-		seekBar.setProgress( (int) (10 * value) );
+		applySeekBarValues();
 	}
 
 	@Override
@@ -121,10 +158,13 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	}
 
 	public void onProgressChanged(SeekBar seek, int aValue, boolean fromTouch) {
-		String t = String.valueOf(aValue/10.0);
+		String t = progressUnitToDisplay(aValue);
 		valueText.setText(suffix == null ? t : t.concat(suffix));
-		value = (float) (aValue / 10.0);
-		callChangeListener(Float.valueOf(value));
+		if(fromTouch) {
+    		value = progressUnitToValue(aValue);
+    		Log.d(THIS_FILE, "Set ratio value " + value);
+    		callChangeListener(Float.valueOf(value));
+		}
 	}
 
 	public void onStartTrackingTouch(SeekBar seek) {
