@@ -509,7 +509,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         }else {
             digits.removeTextChangedListener(digitFormater);
         }
-        digits.getText().clear();
+        //digits.getText().clear();
         digits.setCursorVisible(!isDigit);
         digits.setIsDigit(isDigit, true);
         
