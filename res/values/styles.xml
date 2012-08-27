@@ -84,10 +84,6 @@
         <item name="android:windowExitAnimation">@anim/quickaction_below_exit</item>
     </style>
 
-    <style name="LightTheme" parent="Theme.Sherlock.Light"></style>
-
-    <style name="LightTheme.noTopActionBar" parent="LightTheme"></style>
-
     <style name="DarkTheme" parent="Theme.Sherlock"></style>
 
     <style name="DarkTheme.Dialog" parent="Theme.Sherlock.Dialog">
