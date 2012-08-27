@@ -30,7 +30,6 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 
@@ -133,7 +132,7 @@ public class QuickContactBadge extends FrameLayout {
 
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setStrokeWidth(0);
-            paint.setColor(SipHome.USE_LIGHT_THEME ? android.graphics.Color.WHITE : android.graphics.Color.BLACK);     
+            paint.setColor(android.graphics.Color.BLACK);     
             paint.setStyle(Paint.Style.FILL_AND_STROKE);
             paint.setAntiAlias(true);
 

@@ -114,8 +114,6 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
     private Tab warningTab;
     private ObjectAnimator warningTabfadeAnim;
 
-    public final static boolean USE_LIGHT_THEME = false;
-
     /**
      * Listener interface for Fragments accommodated in {@link ViewPager}
      * enabling them to know when it becomes visible or invisible inside the
@@ -130,19 +128,6 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
 
         //prefWrapper = new PreferencesWrapper(this);
         prefProviderWrapper = new PreferencesProviderWrapper(this);
-
-        /*
-         * Resources r; try { r =
-         * getPackageManager().getResourcesForApplication("com.etatgere"); int
-         * rThemeId = r.getIdentifier("com.etatgere:style/LightTheme", null,
-         * null); Log.e(THIS_FILE, "Remote theme " + rThemeId); Theme t =
-         * r.newTheme(); t.applyStyle(rThemeId, false); //getTheme().setTo(t); }
-         * catch (NameNotFoundException e) { Log.e(THIS_FILE,
-         * "Not found app etatgere"); }
-         */
-        if (USE_LIGHT_THEME) {
-            setTheme(R.style.LightTheme_noTopActionBar);
-        }
 
         super.onCreate(savedInstanceState);
 

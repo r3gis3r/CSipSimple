@@ -41,7 +41,6 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.SmileyParser;
 import com.csipsimple.widgets.contactbadge.QuickContactBadge;
@@ -141,8 +140,7 @@ public class MessageAdapter extends ResourceCursorAdapter {
             ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(mContext, 
                     tagView.quickContactView.getImageView(),
                     personalInfo,
-                    SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
-                            : R.drawable.ic_contact_picture_holo_dark);
+                    R.drawable.ic_contact_picture_holo_dark);
             
         }else {
             setPhotoSide(tagView, ArrowPosition.RIGHT);
@@ -155,8 +153,7 @@ public class MessageAdapter extends ResourceCursorAdapter {
             ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(mContext, 
                     tagView.quickContactView.getImageView(),
                     info,
-                    SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
-                            : R.drawable.ic_contact_picture_holo_dark);
+                    R.drawable.ic_contact_picture_holo_dark);
         }
 
     }

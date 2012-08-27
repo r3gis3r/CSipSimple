@@ -26,8 +26,6 @@ import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
-import com.csipsimple.R;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.ui.messages.MessageFragment.OnQuitListener;
 import com.csipsimple.utils.Compatibility;
 
@@ -36,10 +34,6 @@ public class MessageActivity extends SherlockFragmentActivity implements OnQuitL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (SipHome.USE_LIGHT_THEME) {
-            setTheme(R.style.LightTheme_noTopActionBar);
-        }
         
         if (savedInstanceState == null) {
             // During initial setup, plug in the details fragment.

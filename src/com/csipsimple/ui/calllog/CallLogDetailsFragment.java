@@ -47,7 +47,6 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.contacts.ContactsWrapper;
@@ -222,7 +221,7 @@ public class CallLogDetailsFragment extends SherlockFragment {
             mainActionDescription = nameOrNumber.toString();
         } else if(!TextUtils.isEmpty(firstDetails.number)){
             mainActionIntent = ContactsWrapper.getInstance().getAddContactIntent((String) firstDetails.name, (String) firstDetails.number);
-            mainActionIcon = SipHome.USE_LIGHT_THEME ? R.drawable.ic_add_contact_holo_light : R.drawable.ic_add_contact_holo_dark;
+            mainActionIcon = R.drawable.ic_add_contact_holo_dark;
             mainActionDescription = getString(R.string.menu_add_to_contacts);
             if(TextUtils.isEmpty(firstDetails.name)) {
                 mHeaderTextView.setText(R.string.menu_add_to_contacts);
@@ -337,8 +336,7 @@ public class CallLogDetailsFragment extends SherlockFragment {
 
     /** Load the contact photos and places them in the corresponding views. */
     private void loadContactPhotos(Uri photoUri, Uri contactUri) {
-        int defaultLargePhoto = SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_180_holo_light
-                : R.drawable.ic_contact_picture_180_holo_dark;
+        int defaultLargePhoto = R.drawable.ic_contact_picture_180_holo_dark;
 
         if (photoUri != null) {
             // Android 4.0 - high res photo

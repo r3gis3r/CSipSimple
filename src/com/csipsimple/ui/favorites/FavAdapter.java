@@ -54,7 +54,6 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.Filter;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.contacts.ContactsWrapper;
@@ -204,8 +203,7 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
                 badge.assignContactUri(ci.callerInfo.contactContentUri);
                 ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(context, badge.getImageView(),
                         ci.callerInfo,
-                        SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
-                                : R.drawable.ic_contact_picture_holo_dark);
+                        R.drawable.ic_contact_picture_holo_dark);
     
                 statusText.setVisibility(ci.hasPresence ? View.VISIBLE : View.GONE);
                 statusText.setText(ci.status);

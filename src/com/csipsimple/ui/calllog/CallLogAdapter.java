@@ -35,7 +35,6 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 
 /**
@@ -326,8 +325,7 @@ public class CallLogAdapter extends GroupingListAdapter
         ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(mContext, views.quickContactView
                 .getImageView(),
                 ci,
-                SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
-                        : R.drawable.ic_contact_picture_holo_dark);
+                R.drawable.ic_contact_picture_holo_dark);
     }
 
     @Override

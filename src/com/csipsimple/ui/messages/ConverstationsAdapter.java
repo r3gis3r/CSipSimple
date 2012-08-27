@@ -38,7 +38,6 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
-import com.csipsimple.ui.SipHome;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
@@ -127,8 +126,7 @@ public class ConverstationsAdapter extends SimpleCursorAdapter {
         ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(mContext, 
                 tagView.quickContactView.getImageView(),
                 info,
-                SipHome.USE_LIGHT_THEME ? R.drawable.ic_contact_picture_holo_light
-                        : R.drawable.ic_contact_picture_holo_dark);
+                R.drawable.ic_contact_picture_holo_dark);
 
         // From
         tagView.fromView.setText(formatMessage(cursor));

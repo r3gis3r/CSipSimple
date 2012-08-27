@@ -18,7 +18,7 @@
         android:layout_alignParentTop="true"
         android:contentDescription="@string/empty_description"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_contact_picture_holo_light" />
+        android:src="@drawable/ic_contact_picture_180_holo_light" />
 
     <RelativeLayout
         android:id="@+id/contact_name_bar"
