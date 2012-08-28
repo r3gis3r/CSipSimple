@@ -140,7 +140,7 @@ pjmedia_vid_dev_factory* pjmedia_webrtc_vid_capture_factory(
 	f->base.op = &factory_op;
 
 	// Init webRTC with what we know
-	VideoCaptureFactory::SetAndroidObjects(android_jvm, css_var.context);
+	SetCaptureAndroidVM(android_jvm, css_var.context);
 
 	return &f->base;
 }

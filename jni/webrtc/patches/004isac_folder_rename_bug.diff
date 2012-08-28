@@ -1,7 +1,7 @@
 Index: webrtc/sources/modules/audio_coding/main/source/Android.mk
 ===================================================================
---- webrtc.orig/sources/modules/audio_coding/main/source/Android.mk	2011-11-24 18:22:13.000000000 +0100
-+++ webrtc/sources/modules/audio_coding/main/source/Android.mk	2012-08-15 16:14:18.217830820 +0200
+--- webrtc.orig/sources/modules/audio_coding/main/source/Android.mk	2012-08-22 11:11:45.973701898 +0200
++++ webrtc/sources/modules/audio_coding/main/source/Android.mk	2012-08-22 11:13:07.993698468 +0200
 @@ -45,8 +45,8 @@
      $(LOCAL_PATH)/../../codecs/g711/include \
      $(LOCAL_PATH)/../../codecs/g722/include \
@@ -15,8 +15,8 @@ Index: webrtc/sources/modules/audio_coding/main/source/Android.mk
      $(LOCAL_PATH)/../../../.. \
 Index: webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk
 ===================================================================
---- webrtc.orig/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-15 15:57:37.329872683 +0200
-+++ webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-15 16:18:20.633820683 +0200
+--- webrtc.orig/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-22 11:11:46.029701896 +0200
++++ webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-22 11:13:07.993698468 +0200
 @@ -52,7 +52,8 @@
      pitchfilter_armv6.S
  else
@@ -25,5 +25,18 @@ Index: webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk
 +    lattice_c.c \
 +    pitch_filter_c.c
  endif
+ 
+ # Flags passed to both C and C++ files.
+Index: webrtc/sources/common_video/libyuv/Android.mk
+===================================================================
+--- webrtc.orig/sources/common_video/libyuv/Android.mk	2012-08-22 11:13:05.885698556 +0200
++++ webrtc/sources/common_video/libyuv/Android.mk	2012-08-27 22:32:23.735935628 +0200
+@@ -17,7 +17,7 @@
+ LOCAL_MODULE_TAGS := optional
+ LOCAL_CPP_EXTENSION := .cc
+ LOCAL_SRC_FILES := \
+-    libyuv.cc \
++    webrtc_libyuv.cc \
+     scaler.cc
  
  # Flags passed to both C and C++ files.

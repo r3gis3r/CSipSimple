@@ -161,6 +161,7 @@ PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned id,
 	const pj_str_t codec_id = { "H264", 4 };
     const pj_str_t PROFILE_LEVEL_ID	= {"profile-level-id", 16};
 	h264_level_info_t level_info;
+	char profile_id[7];
 
 	status = PJ_EINVAL;
 
@@ -186,14 +187,14 @@ PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned id,
 	// We expect here to already have fmtp_level_profile_id
 	for (i = 0; i < param.dec_fmtp.cnt; ++i) {
 	    if (pj_stricmp(&param.dec_fmtp.param[i].name, &PROFILE_LEVEL_ID) == 0) {
-	    	if(param.dec_fmtp.param[i].val.slen >= 6) {
-	    		// Unchanged profile_idc and profile_iop so +4
-	    		/*
-				char *p = param.dec_fmtp.param[i].val.ptr + 4;
-				pj_val_to_hex_digit(id, p);
-				*/
+	    	if(param.dec_fmtp.param[i].val.slen == 6) {
+	    		pj_memcpy(profile_id, param.dec_fmtp.param[i].val.ptr, param.dec_fmtp.param[i].val.slen * sizeof(char));
+				pj_val_to_hex_digit(id, (profile_id+4));
+				profile_id[6] = '\0';
+				param.dec_fmtp.param[i].val = pj_str(profile_id);
+				PJ_LOG(4, (THIS_FILE, "Profile is now %.*s", param.dec_fmtp.param[i].val.slen, param.dec_fmtp.param[i].val.ptr));
 	    	}else{
-		    	PJ_LOG(2, (THIS_FILE, "Impossible to set dec_fmtp"));
+		    	PJ_LOG(2, (THIS_FILE, "Impossible to set dec_fmtp %d", param.dec_fmtp.param[i].val.slen));
 	    	}
 	    }
 	}

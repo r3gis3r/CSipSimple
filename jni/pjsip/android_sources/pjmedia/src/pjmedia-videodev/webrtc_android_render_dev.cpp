@@ -172,7 +172,7 @@ static pj_status_t webrtcR_factory_init(pjmedia_vid_dev_factory *f) {
 	}
 
 	// Init JVM
-	status = VideoRender::SetAndroidObjects(android_jvm);
+	SetRenderAndroidVM(android_jvm);
 	Trace::SetLevelFilter(kTraceAll);
 
 
@@ -329,7 +329,7 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
     if(theoric_size != frame->size){
     	PJ_LOG(2, (THIS_FILE, "Unexpected frame size regarding params %d vs %dx%d", frame->size, vfd->size.w, vfd->size.h));
 		pj_mutex_unlock(stream->mutex);
-    	return PJ_EINVALIDOP;
+    	return PJ_EINVAL;
     }
 
 
@@ -338,8 +338,8 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 	stream->_videoFrame.SetHeight(height);
 	stream->_videoFrame.SetLength(stream->_videoFrame.Size());
 
-	//PJ_LOG(4, (THIS_FILE, "Will render video frame : %dx%d (%d) for %x",
-	//	vfd->size.w, vfd->size.h, frame->size, stream->base));
+//	PJ_LOG(4, (THIS_FILE, "Will render video frame : %dx%d (%d) for %x",
+//		vfd->size.w, vfd->size.h, frame->size, stream->base));
 
 	memcpy(stream->_videoFrame.Buffer(), frame->buf, frame->size);
 
