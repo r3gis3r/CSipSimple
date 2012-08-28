@@ -298,6 +298,11 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
                 t.applyBackgroundDrawable(subV, "dialer_textfield_background");
             }
             
+            subV = v.findViewById(R.id.digitsText);
+            if(subV != null) {
+                t.applyTextColor((TextView) subV, "textColorPrimary");
+            }
+            
         }
         
         // Fix dialer background
@@ -505,11 +510,13 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         }
         isDigit = !textMode;
         if(isDigit) {
+            // We need to clear the field because the formatter will now 
+            // apply and unapply to this field which could lead to wrong values when unapplied
+            digits.getText().clear();
             digits.addTextChangedListener(digitFormater);
         }else {
             digits.removeTextChangedListener(digitFormater);
         }
-        //digits.getText().clear();
         digits.setCursorVisible(!isDigit);
         digits.setIsDigit(isDigit, true);
         
