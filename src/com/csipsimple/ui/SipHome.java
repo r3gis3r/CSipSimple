@@ -21,7 +21,6 @@
 
 package com.csipsimple.ui;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -594,22 +593,21 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         return res;
     }
 
-    @TargetApi(14)
     private void applyTheme() {
         Theme t = Theme.getCurrentTheme(this);
         if (t != null) {
             ActionBar ab = getSupportActionBar();
-            if(ab != null) {
+            if (ab != null) {
                 View vg = getWindow().getDecorView().findViewById(android.R.id.content);
                 // Action bar container
                 ViewGroup abc = (ViewGroup) ((ViewGroup) vg.getParent()).getChildAt(0);
-                // 
+                //
                 ArrayList<View> leafs = getVisibleLeafs(abc);
                 int i = 0;
-                for(View leaf : leafs) {
-                    if(leaf instanceof ImageView) {
+                for (View leaf : leafs) {
+                    if (leaf instanceof ImageView) {
                         Integer id = mTabsAdapter.getIdForPosition(i);
-                        if(id != null) {
+                        if (id != null) {
                             int tabId = id;
                             Drawable customIcon = null;
                             switch (tabId) {
@@ -628,21 +626,25 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                                 default:
                                     break;
                             }
-                            if(customIcon != null) {
+                            if (customIcon != null) {
                                 ((ImageView) leaf).setImageDrawable(customIcon);
                             }
 
-                            t.applyBackgroundStateListSelectableDrawable((View) leaf.getParent(), "tab");
-                            if(i == 0) {
+                            t.applyBackgroundStateListSelectableDrawable((View) leaf.getParent(),
+                                    "tab");
+                            if (i == 0) {
                                 ViewParent tabLayout = leaf.getParent().getParent();
-                                if(tabLayout instanceof LinearLayout) {
+                                if (tabLayout instanceof LinearLayout) {
                                     Drawable d = t.getDrawableResource("tab_divider");
-                                    if(d != null) {
-                                        UtilityWrapper.getInstance().setLinearLayoutDividerDrawable((LinearLayout) tabLayout, d);
+                                    if (d != null) {
+                                        UtilityWrapper.getInstance()
+                                                .setLinearLayoutDividerDrawable(
+                                                        (LinearLayout) tabLayout, d);
                                     }
                                     Integer dim = t.getDimension("tab_divider_padding");
-                                    if(dim != null) {
-                                        UtilityWrapper.getInstance().setLinearLayoutDividerPadding((LinearLayout) tabLayout, dim);
+                                    if (dim != null) {
+                                        UtilityWrapper.getInstance().setLinearLayoutDividerPadding(
+                                                (LinearLayout) tabLayout, dim);
                                     }
                                 }
                             }
@@ -650,10 +652,16 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                         }
                     }
                 }
+                if(i > 0) {
+                    t.applyBackgroundDrawable((View) leafs.get(0).getParent().getParent(), "abs_background");
+                }
+                
                 Drawable d = t.getDrawableResource("split_background");
-                if(d != null) {
+                if (d != null) {
                     ab.setSplitBackgroundDrawable(d);
                 }
+                
+                t.applyBackgroundDrawable(vg, "content_background");
             }
         }
     }

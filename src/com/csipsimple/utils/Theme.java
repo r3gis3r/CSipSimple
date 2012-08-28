@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.csipsimple.R;
@@ -124,6 +125,19 @@ public class Theme {
         }
         return null;
     }
+    
+    public Integer getColor(String name) {
+
+        if(remoteRes != null && pInfos != null) {
+            int id = remoteRes.getIdentifier(name, "color", pInfos.packageName);
+            if(id > 0) {
+                return remoteRes.getColor(id);
+            }
+        }else {
+            Log.d(THIS_FILE, "No results yet !! ");
+        }
+        return null;
+    }
 
 	public void applyBackgroundDrawable(View button, String res) {
 		Drawable d = getDrawableResource(res);
@@ -137,6 +151,14 @@ public class Theme {
         Drawable d = getDrawableResource(res);
         if(d != null) {
             subV.setImageDrawable(d);
+        }
+    }
+    
+
+    public void applyTextColor(TextView subV, String name) {
+        Integer color = getColor(name);
+        if(color != null) {
+            subV.setTextColor(color);
         }
     }
 	
@@ -279,6 +301,7 @@ public class Theme {
         d.setTileModeXY(d.getTileModeX(), d.getTileModeY());
         
     }
+
 
 
 
