@@ -106,7 +106,7 @@ public class OutgoingCall extends BroadcastReceiver {
 	                if(Filter.isMustCallNumber(aContext, gsmCallHandlerId, number)) {
 	                    Log.d(THIS_FILE, "Filtering to force pass number along");
 	                    // Pass the call to pstn handle
-	                    setResultData(number);
+	                    setResultData(Filter.rewritePhoneNumber(aContext, gsmCallHandlerId, number));
 	                    return;
 	                }
 	            }
