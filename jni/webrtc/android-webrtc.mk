@@ -5,7 +5,8 @@
 # tree. An additional intellectual property rights grant can be found
 # in the file PATENTS.  All contributing project authors may
 # be found in the AUTHORS file in the root of the source tree.
-intermediates := /tmp
+intermediates := /tmp/$(TARGET_ARCH_ABI)
+$(shell mkdir -p $(intermediates))
 
 # These defines will apply to all source files
 # Think again before changing it
