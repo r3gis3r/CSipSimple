@@ -29,7 +29,7 @@ case "$VERSION" in
 		EXTRA_LDFLAGS="-Wl,--fix-cortex-a8"
 		# Runtime choosing neon vs non-neon requires
 		# renamed files
-		ABI="armeabi-v7a"
+		ABI="armeabi-v7a-neon"
 		;;
 	armeabi-v7a)
 		EXTRA_CFLAGS="-march=armv7-a -mfloat-abi=softfp"

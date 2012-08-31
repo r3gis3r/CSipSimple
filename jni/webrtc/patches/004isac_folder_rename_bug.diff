@@ -16,9 +16,13 @@ Index: webrtc/sources/modules/audio_coding/main/source/Android.mk
 Index: webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk
 ===================================================================
 --- webrtc.orig/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-22 11:11:46.029701896 +0200
-+++ webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-22 11:13:07.993698468 +0200
-@@ -52,7 +52,8 @@
-     pitchfilter_armv6.S
++++ webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-30 23:15:38.802010925 +0200
+@@ -49,10 +49,11 @@
+ # Using .S (instead of .s) extention is to include a C header file in assembly.
+ LOCAL_SRC_FILES += \
+     lattice_armv7.S \
+-    pitchfilter_armv6.S
++    pitch_filter_armv6.S
  else
  LOCAL_SRC_FILES += \
 -    lattice_c.c

@@ -1,0 +1,13 @@
+Index: webrtc/sources/modules/audio_processing/aecm/Android.mk
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/aecm/Android.mk	2012-06-25 11:17:13.000000000 +0200
++++ webrtc/sources/modules/audio_processing/aecm/Android.mk	2012-08-31 14:56:08.677613291 +0200
+@@ -60,7 +60,7 @@
+ 
+ # Generate a header file aecm_core_neon_offsets.h which will be included in
+ # assembly file aecm_core_neon.S, from file aecm_core_neon_offsets.c.
+-$(GEN): $(LOCAL_PATH)/../../../../src/build/generate_asm_header.py \
++$(GEN): $(LOCAL_PATH)/../../../build/generate_asm_header.py \
+             $(intermediates)/aecm_core_neon_offsets.S
+ 	@python $^ $@ offset_aecm_
+ 
