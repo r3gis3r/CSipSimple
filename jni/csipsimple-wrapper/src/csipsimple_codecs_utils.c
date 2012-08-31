@@ -149,19 +149,19 @@ static pj_status_t get_h264_level_info(unsigned id, h264_level_info_t *level)
 }
 
 
-PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned id,
+PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned profile_id, unsigned level_id,
 		unsigned width, unsigned height,
 		unsigned fps,
 		unsigned avg_kbps, unsigned max_kbps) {
 	pj_status_t status = PJ_ENOTSUP;
 #if PJMEDIA_HAS_VIDEO
-	PJ_LOG(4, (THIS_FILE, "Set H264 profile %d %dx%d@%d %dkbps", id, width, height, fps, avg_kbps));
+	PJ_LOG(4, (THIS_FILE, "Set H264 profile %d-%d %dx%d@%d %dkbps", profile_id, level_id, width, height, fps, avg_kbps));
 	pjmedia_vid_codec_param param;
 	unsigned i;
 	const pj_str_t codec_id = { "H264", 4 };
     const pj_str_t PROFILE_LEVEL_ID	= {"profile-level-id", 16};
 	h264_level_info_t level_info;
-	char profile_id[7];
+	char profile_level_id_str[7];
 
 	status = PJ_EINVAL;
 
@@ -170,7 +170,7 @@ PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned id,
 		return status;
 	}
 
-	status = get_h264_level_info(id, &level_info);
+	status = get_h264_level_info( (level_id > 0) ? level_id : 20, &level_info);
 	if(status != PJ_SUCCESS) {
 		return status;
 	}
@@ -182,16 +182,25 @@ PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned id,
 	param.enc_fmt.det.vid.fps.denum = 1;
 
 	param.enc_fmt.det.vid.avg_bps = ( avg_kbps > 0 && avg_kbps <= level_info.bitrate ) ? avg_kbps * 1000 : level_info.def_bitrate * 1000;
-	param.enc_fmt.det.vid.max_bps = ( max_kbps > 0 && max_kbps <= level_info.bitrate ) ? max_kbps * 1000 : level_info.def_bitrate * 1000;
+	param.enc_fmt.det.vid.max_bps = ( max_kbps > 0 && max_kbps <= level_info.bitrate ) ? max_kbps * 1000 : level_info.bitrate * 1000;
 
 	// We expect here to already have fmtp_level_profile_id
 	for (i = 0; i < param.dec_fmtp.cnt; ++i) {
 	    if (pj_stricmp(&param.dec_fmtp.param[i].name, &PROFILE_LEVEL_ID) == 0) {
 	    	if(param.dec_fmtp.param[i].val.slen == 6) {
-	    		pj_memcpy(profile_id, param.dec_fmtp.param[i].val.ptr, param.dec_fmtp.param[i].val.slen * sizeof(char));
-				pj_val_to_hex_digit(id, (profile_id+4));
-				profile_id[6] = '\0';
-				param.dec_fmtp.param[i].val = pj_str(profile_id);
+	    		// First copy current value
+	    		pj_memcpy(profile_level_id_str, param.dec_fmtp.param[i].val.ptr, param.dec_fmtp.param[i].val.slen * sizeof(char));
+	    		// Set profile_id
+	    		if(profile_id > 0){
+	    			pj_val_to_hex_digit(profile_id, (profile_level_id_str));
+	    		}
+
+	    		// Set level_id
+	    		if(level_id > 0) {
+	    			pj_val_to_hex_digit(level_id, (profile_level_id_str+4));
+	    		}
+	    		profile_level_id_str[6] = '\0';
+				param.dec_fmtp.param[i].val = pj_str(profile_level_id_str);
 				PJ_LOG(4, (THIS_FILE, "Profile is now %.*s", param.dec_fmtp.param[i].val.slen, param.dec_fmtp.param[i].val.ptr));
 	    	}else{
 		    	PJ_LOG(2, (THIS_FILE, "Impossible to set dec_fmtp %d", param.dec_fmtp.param[i].val.slen));
