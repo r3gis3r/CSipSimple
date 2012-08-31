@@ -64,7 +64,7 @@
             android:imeOptions="actionGo"
             android:nextFocusRight="@+id/accountChooserButton"
             android:textAppearance="@style/DialtactsDigitsTextAppearance"
-            android:textColor="?attr/textColorPrimary" />
+            android:textColor="@android:color/white" />
 
         <com.csipsimple.widgets.AccountChooserButton
             android:id="@+id/accountChooserButton"
