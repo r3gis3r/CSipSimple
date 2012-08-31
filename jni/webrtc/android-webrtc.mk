@@ -27,6 +27,7 @@ MY_WEBRTC_COMMON_DEFS := \
 ifeq ($(TARGET_ARCH),arm)
 MY_WEBRTC_COMMON_DEFS += \
     -DWEBRTC_ARCH_ARM
+endif
 
 # Transform NDK vars to Android Build Vars
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
@@ -34,32 +35,29 @@ ARCH_ARM_HAVE_ARMV7A := true
 WEBRTC_BUILD_NEON_LIBS := true
 MY_WEBRTC_COMMON_DEFS += \
     -DWEBRTC_DETECT_ARM_NEON
+else
+ARCH_ARM_HAVE_ARMV7A := false
+WEBRTC_BUILD_NEON_LIBS := false
 endif
 
 
 # TODO(kma): test if the code under next two macros works with generic GCC compilers
-ifeq ($(ARCH_ARM_HAVE_NEON),true)
-WEBRTC_BUILD_NEON_LIBS := true
-MY_WEBRTC_COMMON_DEFS += \
-    '-DWEBRTC_ARCH_ARM_NEON'
-MY_ARM_CFLAGS_NEON := \
-    -flax-vector-conversions
-endif
+#ifeq ($(ARCH_ARM_HAVE_NEON),true)
+#WEBRTC_BUILD_NEON_LIBS := true
+#MY_WEBRTC_COMMON_DEFS += \
+#    '-DWEBRTC_ARCH_ARM_NEON'
+#MY_ARM_CFLAGS_NEON := \
+#    -flax-vector-conversions
+#endif
 
-    #Fine - already done by typedef
-    #'-DWEBRTC_ARCH_ARM'
-# TODO: test if the code under next two MACROs works with generic GCC compilers
-ifeq ($(ARCH_ARM_HAVE_NEON),true)
-MY_WEBRTC_COMMON_DEFS += \
-    '-DWEBRTC_ANDROID_ARMV7A_NEON'
-else ifeq ($(ARCH_ARM_HAVE_ARMV7A),true)
+ifeq ($(ARCH_ARM_HAVE_ARMV7A),true)
 MY_WEBRTC_COMMON_DEFS += \
     '-DWEBRTC_ANDROID_ARMV7A'
 endif
-#else ifeq ($(TARGET_ARCH),x86)
+#ifeq ($(TARGET_ARCH),x86)
 #MY_WEBRTC_COMMON_DEFS += \
 #    '-DWEBRTC_USE_SSE2'
-endif
+#endif
 
 # Disable not wanted (for now) codecs
 # This disable engine internal auto configuration and replace by ower settings
