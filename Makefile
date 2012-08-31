@@ -9,13 +9,16 @@ all : libraries
 	# Dispatch to external projects
 	@(./dispatch_shared_libs.sh)
 
-libraries : ext-sources swig-glue
+libraries : ext-sources swig-glue webrtc-preprocess
 	# Build main libraries using android ndk
 	@(ndk-build -j6)
 
 ffmpeg-lib :
 	# Build ffmpeg using make
 	@($(MAKE) $(MFLAGS) -C jni/ffmpeg)
+	
+webrtc-preprocess :
+	@($(MAKE) $(MFLAGS) -C jni/webrtc preprocess)
 
 ext-sources : $(external_sources) $(to_patch_files)
 	# External sources fetched out from external repos/zip
