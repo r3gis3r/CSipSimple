@@ -1,8 +1,9 @@
 # This makefile aim is only for now to address source patch
 patches_files := $(wildcard patches/*.diff)
 
-NDK_CINCLUDES_ARMEABI_V7A := $(filter-out -c -o, $(filter -%,$(shell ndk-build -n -C ~/android/android-ndk-r8/samples/hello-jni NDK_LOG=1 APP_ABI=armeabi-v7a | grep gcc)))
-NDK_GCC_ARMEABI_V7A := $(filter %gcc, $(shell ndk-build -n -C ~/android/android-ndk-r8/samples/hello-jni NDK_LOG=1 APP_ABI=armeabi-v7a | grep gcc))
+NDK_ROOT := $(shell dirname $(shell which ndk-build))
+NDK_CINCLUDES_ARMEABI_V7A := $(filter-out -c -o, $(filter -%,$(shell ndk-build -n -C $(NDK_ROOT)/samples/hello-jni NDK_LOG=1 APP_ABI=armeabi-v7a | grep gcc)))
+NDK_GCC_ARMEABI_V7A := $(filter %gcc, $(shell ndk-build -n -C $(NDK_ROOT)/samples/hello-jni NDK_LOG=1 APP_ABI=armeabi-v7a | grep gcc))
 
 AECM_NEON_DIR := sources/modules/audio_processing/aecm
 AECM_NEON_GEN := $(AECM_NEON_DIR)/aecm_core_neon_offsets.h
