@@ -49,7 +49,6 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.contacts.ContactsWrapper;
 import com.csipsimple.widgets.RegistrationNotification;
 
 import java.lang.reflect.InvocationTargetException;
@@ -252,7 +251,7 @@ public class SipNotifications {
         nb.setContentIntent(contentIntent);
         nb.setContent(contentView);
 		
-		Notification notification = nb.getNotification();
+		Notification notification = nb.build();
 		notification.flags |= Notification.FLAG_NO_CLEAR;
 		// We have to re-write content view because getNotification setLatestEventInfo implicitly
         notification.contentView = contentView;
@@ -289,7 +288,7 @@ public class SipNotifications {
         inCallNotification.setContentText(currentCallInfo2.getRemoteContact());
 		inCallNotification.setContentIntent(contentIntent);
 
-		Notification notification = inCallNotification.getNotification();
+		Notification notification = inCallNotification.build();
 		notification.flags |= Notification.FLAG_NO_CLEAR;
 		notificationManager.notify(CALL_NOTIF_ID, notification);
 	}
@@ -317,7 +316,7 @@ public class SipNotifications {
 		missedCallNotification.setContentText(callLog.getAsString(CallLog.Calls.NUMBER));
 		missedCallNotification.setContentIntent(contentIntent);
 		
-		notificationManager.notify(CALLLOG_NOTIF_ID, missedCallNotification.getNotification());
+		notificationManager.notify(CALLLOG_NOTIF_ID, missedCallNotification.build());
 	}
 
 	public void showNotificationForMessage(SipMessage msg) {
@@ -349,7 +348,7 @@ public class SipNotifications {
 			messageNotification.setContentText(msg.getBody());
 			messageNotification.setContentIntent(contentIntent);
 			
-			notificationManager.notify(MESSAGE_NOTIF_ID, messageNotification.getNotification());
+			notificationManager.notify(MESSAGE_NOTIF_ID, messageNotification.build());
 		}
 	}
 
@@ -384,7 +383,7 @@ public class SipNotifications {
 		messageVoicemail.setContentText(messageText);
 		messageVoicemail.setContentIntent(contentIntent);
 		
-		notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail.getNotification());
+		notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail.build());
 	}
 
 	private static String viewingRemoteFrom = null;

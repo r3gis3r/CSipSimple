@@ -105,9 +105,10 @@ ifeq ($(MY_USE_WEBRTC),1)
 # AEC
 ifeq ($(USE_FIXED_POINT),1)
 	LOCAL_STATIC_LIBRARIES += libwebrtc_isacfix libwebrtc_aecm
+	
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
 	# We add neon libs that will be used only if neon autodetected by webrtc
-	LOCAL_STATIC_LIBRARIES += libwebrtc_isacfix_neon libwebrtc_aecm_neon
+	LOCAL_STATIC_LIBRARIES += libwebrtc_isacfix_neon libwebrtc_aecm_neon 
 endif
 
 else
@@ -116,6 +117,10 @@ endif
 
 #NS
 	LOCAL_STATIC_LIBRARIES += libwebrtc_ns
+
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)	
+	LOCAL_STATIC_LIBRARIES += libwebrtc_ns_neon
+endif
 	
 #Common
 	LOCAL_STATIC_LIBRARIES += libwebrtc_apm_utility libwebrtc_system_wrappers libwebrtc_spl 

@@ -208,7 +208,7 @@ public class MediaManager implements BluetoothChangeListener {
 		WifiManager wman = (WifiManager) service.getSystemService(Context.WIFI_SERVICE);
 		if(wifiLock == null) {
 			wifiLock = wman.createWifiLock( 
-							(Compatibility.isCompatible(9)) ? 3 : WifiManager.WIFI_MODE_FULL, 
+							(Compatibility.isCompatible(9)) ? WifiManager.WIFI_MODE_FULL_HIGH_PERF : WifiManager.WIFI_MODE_FULL, 
 							"com.csipsimple.InCallLock");
 			wifiLock.setReferenceCounted(false);
 		}

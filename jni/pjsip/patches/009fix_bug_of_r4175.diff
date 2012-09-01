@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-08-24 10:22:12.441443994 +0200
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-08-29 22:52:13.730705129 +0200
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-08-31 22:14:45.799280331 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c	2012-08-31 22:14:50.727280128 +0200
 @@ -1995,7 +1995,7 @@
       *   answer code 183 or 2xx is issued
       */

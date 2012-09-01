@@ -112,7 +112,7 @@ public class Downloader extends IntentService {
         contentView.setViewVisibility(R.id.status_progress_wrapper, View.VISIBLE);
         nb.setContent(contentView);
 	    
-        final Notification notification = showNotif ? nb.getNotification() : null;
+        final Notification notification = showNotif ? nb.build() : null;
 		notification.contentView = contentView;
 		if(!TextUtils.isEmpty(outPath)) {
 			try {
