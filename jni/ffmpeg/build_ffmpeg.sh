@@ -6,7 +6,7 @@ DEST=`pwd`/build/ffmpeg
 case "$VERSION" in
 	x86)
 		. settings_x86.sh
-		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/i686-android-linux- --enable-pic --target-os=linux --arch=x86 --disable-asm "
+		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/i686-linux-android- --enable-pic --target-os=linux --arch=x86 --disable-asm "
 		;;
 	mips)
 		. settings_mips.sh

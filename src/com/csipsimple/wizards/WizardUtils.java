@@ -720,6 +720,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_intertelecom, 9, 
                     new Locale[] {locale("el_GR"), locale("ru_RU"), locale("bg_BG"), locale("el_CY") }, false, false, 
                     InterTelecomGr.class));
+            WIZARDS_DICT.put("DELLVOICE", new WizardInfo("DELLVOICE", "Dell Voice", 
+                    R.drawable.ic_wizard_dell, 9, 
+                    new Locale[] {Locale.CANADA, Locale.CANADA_FRENCH}, false, false, 
+                    DellVoice.class));
+            WIZARDS_DICT.put("FONGO", new WizardInfo("FONGO", "Fongo", 
+                    R.drawable.ic_wizard_fongo, 9, 
+                    new Locale[] {Locale.CANADA, Locale.CANADA_FRENCH}, false, false, 
+                    DellVoice.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
