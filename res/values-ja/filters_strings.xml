@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="optional_sip_code">オプションSIPコード</string>
+  <string name="cant_call">呼び出しできません</string>
+  <string name="rewrite">書き換え</string>
+  <string name="stop_processing">処理中止</string>
+  <string name="direct_call">直接呼び出し</string>
+  <string name="auto_answer">自動応答</string>
+  <string name="starts_with">で始まる</string>
+  <string name="ends_with">で終わる</string>
+  <string name="contains">含む</string>
+  <string name="all">全て</string>
+  <string name="has_exactly_n_digits">N個の数字がある</string>
+  <string name="has_more_than_n_digits">N個以上の数字がある</string>
+  <string name="is_exactly">と同じである</string>
+  <string name="custom_regexp">カスタム正規表現</string>
+  <string name="prefix_by">で始まる</string>
+  <string name="suffix_with">が最後につく</string>
+  <string name="replace_match_by">により適合したら置き換える</string>
+  <string name="replace_all_by">に全て置き換える</string>
+</resources>

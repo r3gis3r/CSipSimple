@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_expert_display_name">アカウント名</string>
+  <string name="w_expert_display_name_desc">アカウントの表示名</string>
+  <string name="w_expert_acc_id">アカウントID</string>
+  <string name="w_expert_acc_id_desc">書式: \"表示名 &lt;sip:login@registrar&gt;\"</string>
+  <string name="w_expert_reg_uri">登録URI</string>
+  <string name="w_expert_reg_uri_desc">書式: \"sip:registrar.net[:ポート]\"</string>
+  <string name="w_expert_realm">Realm</string>
+  <string name="w_expert_realm_desc">認証ドメイン (分からない場合は \'*\' を使用してください)</string>
+  <string name="w_expert_username">ユーザ名</string>
+  <string name="w_expert_username_desc">認証のユーザ名</string>
+  <string name="w_expert_data">データ (パスワード)</string>
+  <string name="w_expert_data_desc">認証用のパスワード(またはその他のデータ)</string>
+  <string name="w_expert_datatype">データタイプ</string>
+  <string name="w_expert_datatype_desc">データのタイプ</string>
+  <string name="w_expert_t_proxy">プロキシ</string>
+  <string name="w_expert_proxy">プロキシURI</string>
+  <string name="w_expert_proxy_desc">フォーマット: \"sip:proxy.net[:ポート]\"</string>
+  <string name="w_expert_use_tcp">TCPを使用 (UDPを使わない)</string>
+  <string name="w_expert_prevent_tcp">TCPを抑制 (UDPのみ使用)</string>
+  <string name="w_expert_publish_enabled">パブリッシュ有効</string>
+  <string name="w_expert_reg_timeout">登録タイムアウト (秒)</string>
+  <string name="w_expert_reg_dbr">更新前の登録遅延(秒)</string>
+  <string name="w_expert_reg_dbr_desc">レジストが期限切れになる前にクライアントの登録を更新する秒数を指定してください。</string>
+  <string name="w_expert_ka_interval">キープアライブ間隔 (秒)</string>
+  <string name="w_expert_force_contact">強制コンタクト</string>
+  <string name="w_expert_allow_contact_rewrite">連絡先の書き換えを許可</string>
+  <string name="w_expert_contact_rewrite_method">コンタクト書き換え方法</string>
+  <string name="w_expert_reg_use_proxy">プロキシ使用方法</string>
+  <string name="w_expert_try_clean_registers">登録をクリーンアップ</string>
+  <string name="w_expert_try_clean_registers_desc">必要ならば、古い登録をクリーンアップすることをアプリに許可する</string>
+  <string name="w_expert_rtp_bound_addr">RTPバウンドアドレス</string>
+  <string name="w_expert_rtp_bound_addr_desc">ソケットがどこに割り当てられなければならないかのオプション。特定のインターフェースにソケットが選択的に割り当てられます。(0.0.0.0以外になります)</string>
+  <string name="w_expert_rtp_public_addr">RTP公開アドレス</string>
+  <string name="w_expert_rtp_public_addr_desc">RTP転送のアドレスを告知するオプション</string>
+  <string name="w_expert_media_transport">メディアトランスポート</string>
+  <string name="w_expert_mwi_enabled">MWI購読</string>
+  <string name="w_expert_mwi_enabled_desc">ボイスメールの通知を取得</string>
+  <string name="w_expert_allow_via_rewrite">Viaの書き換え許可</string>
+  <string name="w_expert_allow_via_rewrite_desc">登録リクエストの中で同じインターフェースのアドレスの一つとして使うようにVia sent-byを修正</string>
+</resources>
