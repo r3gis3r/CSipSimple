@@ -225,5 +225,51 @@
     <string-array name="audio_implementation_choices">
         <item>Java</item>
     </string-array>
+    <string-array name="h264_profile_values">
+        <item>66</item>
+        <item>77</item>
+    </string-array>
+    <string-array name="h264_profile_choices">
+        <item>Baseline</item>
+        <item>Mainline</item>
+    </string-array>
+    <string-array name="h264_level_values">
+        <item>10</item>
+        <item>9</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+    </string-array>
+    <string-array name="h264_level_choices">
+        <item>1.0</item>
+        <item>1b</item>
+        <item>1.1</item>
+        <item>1.2</item>
+        <item>1.3</item>
+        <item>2.0</item>
+        <item>2.1</item>
+        <item>2.2</item>
+        <item>3.0</item>
+        <item>3.1</item>
+        <item>3.2</item>
+        <item>4.0</item>
+        <item>4.1</item>
+        <item>4.2</item>
+        <item>5.0</item>
+        <item>5.1</item>
+        <item>5.2</item>
+    </string-array>
 
 </resources>

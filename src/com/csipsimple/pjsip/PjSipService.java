@@ -988,6 +988,15 @@ public class PjSipService {
                             if (aPrio >= 0) {
                                 pjsua.vid_codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
                             }
+                            Log.d(THIS_FILE, "Video codec : " + codec);
+                            if(codec.startsWith("H264")) {
+                                int h264profile = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_PROFILE, 66);
+                                int h264level = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_LEVEL, 30);
+                                if(h264level > 0 && h264profile > 0) {
+                                    pjsua.codec_h264_set_profile(h264profile, h264level, 0, 0, 15, 0, 0);
+                                    Log.d(THIS_FILE, "Set h264 profile : " + h264profile + ", " + h264level);
+                                }
+                            }
                         }
                         // H264 preferences
                         //pjsua.codec_h264_set_profile(66, 21, 352,  288, 15, 100, 120);

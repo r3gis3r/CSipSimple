@@ -105,6 +105,20 @@
                 android:numeric="signed"
                 android:title="@string/ilbc_frame_per_packet" />
         </PreferenceCategory>
+        <PreferenceCategory android:title="@string/video" >
+            <ListPreference
+                android:defaultValue="66"
+                android:entries="@array/h264_profile_choices"
+                android:entryValues="@array/h264_profile_values"
+                android:key="codec_h264_profile"
+                android:title="@string/codec_h264_profile" />
+            <ListPreference
+                android:defaultValue="30"
+                android:entries="@array/h264_level_choices"
+                android:entryValues="@array/h264_level_values"
+                android:key="codec_h264_level"
+                android:title="@string/codec_h264_level" />
+        </PreferenceCategory>
     </PreferenceScreen>
 
     <PreferenceCategory

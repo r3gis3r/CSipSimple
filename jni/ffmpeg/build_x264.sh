@@ -1,20 +1,26 @@
 #!/bin/bash
 pushd `dirname $0`
-VERSION=$1
+TARGET_ARCH_ABI=$1
 DEST=`pwd`/build/x264
+ANDROID_API_LEVEL=9
+minimal_featureset=1
 
-case "$VERSION" in
+NDK_ROOT=$(dirname $(which ndk-build))
+ndk_gcc_res=$(ndk-build -n -C $NDK_ROOT/samples/hello-jni NDK_LOG=1 APP_ABI=$TARGET_ARCH_ABI APP_PLATFORM=android-$ANDROID_API_LEVEL | grep gcc)
+NDK_CROSS_PREFIX=$(echo $ndk_gcc_res | awk '{ print $1 }' | sed 's/gcc//')
+NDK_SYSROOT=$(echo $ndk_gcc_res | sed 's/^.*-I\([^ ]*\)\/usr\/include .*$/\1/')
+
+FLAGS="--cross-prefix=$NDK_CROSS_PREFIX"
+
+case "$TARGET_ARCH_ABI" in
 	x86)
-		. settings_x86.sh
-		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/i686-linux-android- --enable-pic --disable-asm "
+		FLAGS="$FLAGS --enable-pic --disable-asm "
 		;;
 	mips)
-		. settings_mips.sh
-		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/mipsel-linux-android- --enable-pic --disable-asm "
+		FLAGS="$FLAGS --enable-pic --disable-asm "
 		;;
 	*)
-		. settings.sh
-		FLAGS="--cross-prefix=$NDK_TOOLCHAIN_BASE/bin/arm-linux-androideabi- --enable-pic --host=arm-linux "
+		FLAGS="$FLAGS --enable-pic --host=arm-linux "
 		;;
 esac
 
@@ -23,7 +29,7 @@ pushd x264_src
 FLAGS="$FLAGS --enable-static --disable-cli"
 FLAGS="$FLAGS --sysroot=$NDK_SYSROOT"
 
-case "$VERSION" in
+case "$TARGET_ARCH_ABI" in
 	neon)
 		EXTRA_CFLAGS="-march=armv7-a -mfloat-abi=softfp -mfpu=neon"
 		EXTRA_LDFLAGS="-Wl,--fix-cortex-a8"

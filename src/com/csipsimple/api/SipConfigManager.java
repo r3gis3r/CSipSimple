@@ -339,6 +339,18 @@ public class SipConfigManager {
      */
     public static final String FRAMES_PER_PACKET_SUFFIX = "fpp";
     
+    /**
+     * H264 Codec profile.<br/>
+     * 66 : baseline
+     * 77 : mainline 
+     */
+    public static final String H264_PROFILE = "codec_h264_profile";
+    /**
+     * H264 Codec level.<br/>
+     * 10 for 1.0, 20 for 2.0, 31 for 3.1 etc
+     */
+    public static final String H264_LEVEL = "codec_h264_level";
+    
     // UI
     /**
      * Should we use software volume instead of android audio volume? <br/>

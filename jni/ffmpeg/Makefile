@@ -18,11 +18,11 @@ all : $(FFMPEG_LIBS) $(X264_LIBS)
 	# All lib
 
 $(X264_BUILD_DIRECTORY)/%/$(X264_TEST_LIB) : x264_src/configure
-	@./build_x264.sh $(subst /$(X264_TEST_LIB),,$(subst $(X264_BUILD_DIRECTORY)/,,$@))
+	./build_x264.sh $(subst /$(X264_TEST_LIB),,$(subst $(X264_BUILD_DIRECTORY)/,,$@))
 
 
 $(FFMPEG_BUILD_DIRECTORY)/%/$(FFMPEG_TEST_LIB) : ffmpeg_src/VERSION $(X264_BUILD_DIRECTORY)/%/$(X264_TEST_LIB)
-	@./build_ffmpeg.sh $(subst /$(FFMPEG_TEST_LIB),,$(subst $(FFMPEG_BUILD_DIRECTORY)/,,$@))
+	./build_ffmpeg.sh $(subst /$(FFMPEG_TEST_LIB),,$(subst $(FFMPEG_BUILD_DIRECTORY)/,,$@))
 
 # Source checkout
 ffmpeg_src/VERSION :
