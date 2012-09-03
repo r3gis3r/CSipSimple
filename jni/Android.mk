@@ -36,5 +36,6 @@ NDK_PROJECT_PATH := $(JNI_PATH)
 endif
 
 include $(JNI_PATH)/third_party/android_toolchain/libyuv/Android.mk
+#include $(JNI_PATH)/libvpx/android_toolchain/Android.mk
 include $(JNI_PATH)/swig-glue/android_toolchain/Android.mk
 include $(JNI_PATH)/csipsimple-wrapper/android_toolchain/Android.mk
