@@ -43,6 +43,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
     private OutgoingAccountsAdapter mAdapter;
     private AccountsLoader accLoader;
     private long startDate;
+    private boolean callMade = false;
     
     @Override
     public void onCreate(Bundle state) {
@@ -53,6 +54,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        callMade = false;
         attachAdapter();
         getLoaderManager().initLoader(0, null, this);
         startDate = System.currentTimeMillis();
@@ -169,7 +171,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
 
     @Override
     public synchronized void changeCursor(Cursor c) {
-        if(c != null) {
+        if(c != null && callMade == false) {
             OutgoingCallChooser superActivity = ((OutgoingCallChooser)getActivity());
             Long accountToCall = superActivity.getAccountToCallTo();
             // Move to first to search in this cursor
@@ -178,6 +180,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
             if(c.getCount() == 1) {
                 if(placeCall(c)) {
                     c.close();
+                    callMade = true;
                     return;
                 }
             }else {
@@ -186,6 +189,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
                     if(c.getInt(c.getColumnIndex(AccountsLoader.FIELD_FORCE_CALL)) == 1) {
                         if(placeCall(c)) {
                             c.close();
+                            callMade = true;
                             return;
                         }
                     }
@@ -193,6 +197,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
                         if(accountToCall == c.getLong(c.getColumnIndex(SipProfile.FIELD_ID))) {
                             if(placeCall(c)) {
                                 c.close();
+                                callMade = true;
                                 return;
                             }
                         }

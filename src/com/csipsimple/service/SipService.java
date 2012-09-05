@@ -22,6 +22,7 @@
 package com.csipsimple.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -879,6 +880,8 @@ public class SipService extends Service {
 	private AccountStatusContentObserver statusObserver = null;
 
     public PresenceManager presenceMgr;
+
+    private BroadcastReceiver serviceReceiver;
 	
 	class AccountStatusContentObserver extends ContentObserver {
 		public AccountStatusContentObserver(Handler h) {
@@ -964,7 +967,7 @@ public class SipService extends Service {
 		Log.d(THIS_FILE, "Service has been setup ? "+ hasSetup);
 		
 		presenceMgr = new PresenceManager();
-        
+        registerServiceBroadcasts();
 		
 		if(!hasSetup) {
 			Log.e(THIS_FILE, "RESET SETTINGS !!!!");
@@ -980,6 +983,7 @@ public class SipService extends Service {
 		super.onDestroy();
 		Log.i(THIS_FILE, "Destroying SIP Service");
 		unregisterBroadcasts();
+		unregisterServiceBroadcasts();
 		notificationManager.onServiceDestroy();
 		getExecutor().execute(new FinalizeDestroyRunnable());
 	}
@@ -1003,6 +1007,34 @@ public class SipService extends Service {
         }
 	}
 	
+	private void registerServiceBroadcasts() {
+	    if(serviceReceiver == null) {
+	        IntentFilter intentfilter = new IntentFilter();
+            intentfilter.addAction(SipManager.ACTION_DEFER_OUTGOING_UNREGISTER);
+            intentfilter.addAction(SipManager.ACTION_OUTGOING_UNREGISTER);
+            serviceReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    if(action.equals(SipManager.ACTION_OUTGOING_UNREGISTER)){
+                        unregisterForOutgoing((ComponentName) intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY));
+                    } else if(action.equals(SipManager.ACTION_DEFER_OUTGOING_UNREGISTER)){
+                        deferUnregisterForOutgoing((ComponentName) intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY));
+                    }
+                }
+                
+            };
+            registerReceiver(serviceReceiver, intentfilter);
+	   }
+	}
+	
+	private void unregisterServiceBroadcasts() {
+	    if(serviceReceiver != null) {
+	        unregisterReceiver(serviceReceiver);
+	        serviceReceiver = null;
+	    }
+	}
+	
 	/**
 	 * Register broadcast receivers.
 	 */
@@ -1011,8 +1043,6 @@ public class SipService extends Service {
 		if (deviceStateReceiver == null) {
 			IntentFilter intentfilter = new IntentFilter();
 			intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            intentfilter.addAction(SipManager.ACTION_DEFER_OUTGOING_UNREGISTER);
-            intentfilter.addAction(SipManager.ACTION_OUTGOING_UNREGISTER);
 			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_CHANGED);
 			intentfilter.addAction(SipManager.ACTION_SIP_CAN_BE_STOPPED);
 			intentfilter.addAction(SipManager.ACTION_SIP_REQUEST_RESTART);

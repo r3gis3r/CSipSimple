@@ -22,7 +22,6 @@
 package com.csipsimple.service.receiver;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -125,10 +124,6 @@ public class DynamicReceiver4 extends BroadcastReceiver {
                     service.setAccountRegistration(account, account.active ? 1 : 0, true);
                 }
             }
-        } else if(action.equals(SipManager.ACTION_OUTGOING_UNREGISTER)){
-            service.unregisterForOutgoing((ComponentName) intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY));
-        } else if(action.equals(SipManager.ACTION_DEFER_OUTGOING_UNREGISTER)){
-            service.deferUnregisterForOutgoing((ComponentName) intent.getParcelableExtra(SipManager.EXTRA_OUTGOING_ACTIVITY));
         } else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
             service.cleanStop();
         } else if (action.equals(SipManager.ACTION_SIP_REQUEST_RESTART)){

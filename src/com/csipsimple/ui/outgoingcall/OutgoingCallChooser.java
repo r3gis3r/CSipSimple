@@ -210,7 +210,7 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
     
     /**
      * Finish the activity and send unregistration to service as outgoing activity.
-     * @param defer If true the activity will ask sip service to remain active until end of next call (because it will iniate a call).
+     * @param defer If true the activity will ask sip service to remain active until end of next call (because it will initiate a call).
      * If false, ask sip service to consider outgoing mode as not anymore valid right now. Usually cause call will be managed another way than a sip way.
      */
     public void finishServiceIfNeeded(boolean defer) {
