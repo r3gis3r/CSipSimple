@@ -295,6 +295,12 @@ public class WizardUtils {
                     R.drawable.ic_wizard_messagenet, 20, 
                     new Locale[]{}, false, true, 
                     Messagenet.class));
+            WIZARDS_DICT.put("ITALKWORLD", new WizardInfo("ITALKWORLD", "italkworld", 
+                    R.drawable.ic_wizard_italkworld, 20, 
+                    new Locale[]{}, false, true, 
+                    ItalkWorld.class));
+            
+            
             
 			
 			//Locales
