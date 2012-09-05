@@ -23,7 +23,9 @@ package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class Chattaboxx extends SimpleImplementation {
 	
@@ -43,5 +45,16 @@ public class Chattaboxx extends SimpleImplementation {
 	protected String getDefaultName() {
 		return "chattaboxx";
 	}
-	
+
+    @Override
+    public void setDefaultParams(PreferencesWrapper prefs) {
+        super.setDefaultParams(prefs);
+        // Add stun server
+        prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
+    }
+    
+    @Override
+    public boolean needRestart() {
+        return true;
+    }
 }

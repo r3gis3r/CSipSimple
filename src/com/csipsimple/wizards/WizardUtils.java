@@ -728,7 +728,7 @@ public class WizardUtils {
                     R.drawable.ic_wizard_fongo, 9, 
                     new Locale[] {Locale.CANADA, Locale.CANADA_FRENCH}, false, false, 
                     DellVoice.class));
-            WIZARDS_DICT.put("CHATTABOXX", new WizardInfo("CHATTABOXX", "Chattabox", 
+            WIZARDS_DICT.put("CHATTABOXX", new WizardInfo("CHATTABOXX", "Chattaboxx", 
                     R.drawable.ic_wizard_chattaboxx, 9, 
                     new Locale[] {locale("en_BS")}, false, false, 
                     Chattaboxx.class));
