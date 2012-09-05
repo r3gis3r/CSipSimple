@@ -738,6 +738,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_chattaboxx, 9, 
                     new Locale[] {locale("en_BS")}, false, false, 
                     Chattaboxx.class));
+            WIZARDS_DICT.put("EASYCALLGR", new WizardInfo("EASYCALLGR", "EasyCall.Gr", 
+                    R.drawable.ic_wizard_easycallgr, 19, 
+                    new Locale[] {locale("el_GR")}, false, false, 
+                    EasyCallGr.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
