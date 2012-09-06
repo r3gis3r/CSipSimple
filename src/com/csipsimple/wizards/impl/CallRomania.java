@@ -75,7 +75,7 @@ public class CallRomania extends SimpleImplementation {
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_ICE, true);
         prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
-        prefs.addStunServer("stun.ippi.fr");
+        prefs.addStunServer("stun.callromania.ro");
 	}
 	
 	@Override
