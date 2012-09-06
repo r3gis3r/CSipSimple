@@ -742,6 +742,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_easycallgr, 19, 
                     new Locale[] {locale("el_GR")}, false, false, 
                     EasyCallGr.class));
+            WIZARDS_DICT.put("TENET", new WizardInfo("TENET", "TeNet", 
+                    R.drawable.ic_wizard_tenet, 10, 
+                    new Locale[]{new Locale("UK", "ua")}, false, false, 
+                    TeNet.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
