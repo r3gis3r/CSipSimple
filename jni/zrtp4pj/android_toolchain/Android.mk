@@ -73,6 +73,7 @@ zrtpobj = zrtp/zrtp/ZrtpCallbackWrapper.o \
     zrtp/zrtp/ZrtpConfigure.o \
     zrtp/zrtp/ZrtpCWrapper.o \
     zrtp/zrtp/Base32.o
+    
 
 srtpobj = srtp/ZsrtpCWrapper.o zrtp/srtp/CryptoContext.o zrtp/srtp/CryptoContextCtrl.o
 transportobj = transport_zrtp.o
@@ -89,6 +90,6 @@ cryptsrc := $(cryptsrc:%twofish_cfb.cpp=%twofish_cfb.c)
 srtpsrc := $(srtpobj:%.o=%.cpp)
 transportsrc := $(transportobj:%.o=%.c)
 
-LOCAL_SRC_FILES += $(zrtpsrc) $(cryptsrc) $(srtpsrc) $(transportsrc) 
+LOCAL_SRC_FILES += $(zrtpsrc) $(cryptsrc) $(srtpsrc) $(transportsrc) zrtp/common/osSpecifics.c
 
 include $(BUILD_STATIC_LIBRARY)
