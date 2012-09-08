@@ -255,7 +255,7 @@ public class DBAdapter {
 					//Add use zrtp row
 					db.execSQL("ALTER TABLE " + SipProfile.ACCOUNTS_TABLE_NAME + " ADD "+
 							SipProfile.FIELD_USE_ZRTP + " INTEGER");
-					db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_USE_ZRTP + "=0");
+					db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_USE_ZRTP + "=-1");
 				}catch(SQLiteException e) {
 					Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
 				}
