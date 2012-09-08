@@ -125,6 +125,10 @@ endif
 #Common
 	LOCAL_STATIC_LIBRARIES += libwebrtc_apm_utility libwebrtc_system_wrappers libwebrtc_spl 
 
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)	
+	LOCAL_STATIC_LIBRARIES += libwebrtc_spl_neon
+endif
+
 endif
 
 LOCAL_STATIC_LIBRARIES += libgcc
