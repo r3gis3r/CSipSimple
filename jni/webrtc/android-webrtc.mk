@@ -50,8 +50,9 @@ MY_ARM_CFLAGS_NEON := \
 else
 WEBRTC_BUILD_NEON_LIBS := false
 endif
-
-
+else
+WEBRTC_BUILD_NEON_LIBS := false
+ARCH_ARM_HAVE_ARMV7A := false
 endif # ifeq ($(TARGET_ARCH),arm)
 
 
