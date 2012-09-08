@@ -3,3 +3,4 @@
 003libyuv_misusage_rotation.diff
 004isac_folder_rename_bug.diff
 005more_relative_folder_neon.diff
+006use_c_ns_neon.diff

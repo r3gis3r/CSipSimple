@@ -107,7 +107,7 @@ public class SipConfigManager {
      */
     public static final String SND_CLOCK_RATE = "snd_clock_rate";
     /**
-     * Enable echo cancellation?
+     * Enable echo cancellation ?
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
@@ -121,6 +121,13 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String ENABLE_VAD = "enable_vad";
+    /**
+     * Enable noise suppression ?
+     * Only working if echo cancellation activated and webRTC echo canceller backend used.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String ENABLE_NOISE_SUPPRESSION = "enable_ns";
     /**
      * Default micro amplification between 0.0 and 10.0.
      * 

@@ -5,6 +5,11 @@ NDK_ROOT := $(shell dirname $(shell which ndk-build))
 NDK_CINCLUDES_ARMEABI_V7A := $(filter-out -c -o -MF, $(filter -%,$(shell ndk-build -n -C $(NDK_ROOT)/samples/hello-jni NDK_LOG=1 APP_ABI=armeabi-v7a | grep gcc)))
 NDK_GCC_ARMEABI_V7A := $(filter %gcc, $(shell ndk-build -n -C $(NDK_ROOT)/samples/hello-jni NDK_LOG=1 APP_ABI=armeabi-v7a | grep gcc))
 
+MY_ARM_CFLAGS_NEON := \
+    -mfpu=neon \
+    -mfloat-abi=softfp \
+    -flax-vector-conversions
+
 AECM_NEON_DIR := sources/modules/audio_processing/aecm
 AECM_NEON_GEN := $(AECM_NEON_DIR)/aecm_core_neon_offsets.h
 AECM_NEON_INTERMEDIATE := $(AECM_NEON_GEN:%.h=%.S)
@@ -35,14 +40,14 @@ $(AECM_NEON_GEN) : sources/build/generate_asm_header.py $(AECM_NEON_INTERMEDIATE
 	@python $^ $@ offset_aecm_
 
 $(AECM_NEON_INTERMEDIATE) : $(AECM_NEON_SRC)
-	$(NDK_GCC_ARMEABI_V7A) $(NDK_CINCLUDES_ARMEABI_V7A) $(patsubst %,-I%,$(AECM_NEON_INCLUDES)) -S -o $@ $^
+	$(NDK_GCC_ARMEABI_V7A) $(NDK_CINCLUDES_ARMEABI_V7A) $(patsubst %,-I%,$(AECM_NEON_INCLUDES)) $(MY_ARM_CFLAGS_NEON) -S -o $@ $^
 	
 	
 $(NS_NEON_GEN) : sources/build/generate_asm_header.py $(NS_NEON_INTERMEDIATE)
 	@python $^ $@ offset_nsx_
 
 $(NS_NEON_INTERMEDIATE) : $(NS_NEON_SRC)
-	$(NDK_GCC_ARMEABI_V7A) $(NDK_CINCLUDES_ARMEABI_V7A) $(patsubst %,-I%,$(NS_NEON_INCLUDES)) -S -o $@ $^
+	$(NDK_GCC_ARMEABI_V7A) $(NDK_CINCLUDES_ARMEABI_V7A) $(patsubst %,-I%,$(NS_NEON_INCLUDES)) $(MY_ARM_CFLAGS_NEON) -S -o $@ $^
 
 patch : .patched_sources
 	@# Patch done

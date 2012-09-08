@@ -1,7 +1,7 @@
 Index: pjsip/sources/aconfigure
 ===================================================================
---- pjsip.orig/sources/aconfigure	2012-06-07 17:13:05.870511622 +0200
-+++ pjsip/sources/aconfigure	2012-06-07 17:13:26.282510768 +0200
+--- pjsip.orig/sources/aconfigure	2012-09-08 10:48:27.611555767 +0200
++++ pjsip/sources/aconfigure	2012-09-08 10:48:29.791555676 +0200
 @@ -642,6 +642,7 @@
  SDL_CONFIG
  ac_resample_dll
@@ -51,8 +51,8 @@ Index: pjsip/sources/aconfigure
    esac
 Index: pjsip/sources/aconfigure.ac
 ===================================================================
---- pjsip.orig/sources/aconfigure.ac	2012-06-07 17:13:05.870511622 +0200
-+++ pjsip/sources/aconfigure.ac	2012-06-07 17:13:26.282510768 +0200
+--- pjsip.orig/sources/aconfigure.ac	2012-09-08 10:48:27.575555769 +0200
++++ pjsip/sources/aconfigure.ac	2012-09-08 10:48:29.791555676 +0200
 @@ -19,6 +19,7 @@
  		 pjmedia/build/os-auto.mak
  		 pjsip/build/os-auto.mak
@@ -87,8 +87,8 @@ Index: pjsip/sources/aconfigure.ac
  AC_ARG_ENABLE(g711-codec,
 Index: pjsip/sources/build/rules.mak
 ===================================================================
---- pjsip.orig/sources/build/rules.mak	2012-06-07 17:11:42.830515094 +0200
-+++ pjsip/sources/build/rules.mak	2012-06-07 17:13:26.286510767 +0200
+--- pjsip.orig/sources/build/rules.mak	2012-09-08 10:48:27.595555768 +0200
++++ pjsip/sources/build/rules.mak	2012-09-08 10:48:29.791555676 +0200
 @@ -140,6 +140,11 @@
  		$(CC_OUT)$(subst /,$(HOST_PSEP),$@) \
  		$(subst /,$(HOST_PSEP),$<) 
@@ -103,8 +103,8 @@ Index: pjsip/sources/build/rules.mak
  		$(CC_OUT)$(subst /,$(HOST_PSEP),$@) \
 Index: pjsip/sources/pjmedia/build/os-auto.mak.in
 ===================================================================
---- pjsip.orig/sources/pjmedia/build/os-auto.mak.in	2012-06-07 17:11:42.762515098 +0200
-+++ pjsip/sources/pjmedia/build/os-auto.mak.in	2012-06-07 17:13:26.286510767 +0200
+--- pjsip.orig/sources/pjmedia/build/os-auto.mak.in	2012-09-08 10:48:27.563555769 +0200
++++ pjsip/sources/pjmedia/build/os-auto.mak.in	2012-09-08 10:48:29.795555676 +0200
 @@ -91,6 +91,9 @@
  
  endif
@@ -117,8 +117,8 @@ Index: pjsip/sources/pjmedia/build/os-auto.mak.in
  else
 Index: pjsip/sources/pjmedia/build/os-darwinos.mak
 ===================================================================
---- pjsip.orig/sources/pjmedia/build/os-darwinos.mak	2012-06-07 17:11:42.790515093 +0200
-+++ pjsip/sources/pjmedia/build/os-darwinos.mak	2012-06-07 17:13:26.286510767 +0200
+--- pjsip.orig/sources/pjmedia/build/os-darwinos.mak	2012-09-08 10:48:27.571555769 +0200
++++ pjsip/sources/pjmedia/build/os-darwinos.mak	2012-09-08 10:48:29.795555676 +0200
 @@ -59,6 +59,9 @@
  
  endif
@@ -131,8 +131,8 @@ Index: pjsip/sources/pjmedia/build/os-darwinos.mak
  else
 Index: pjsip/sources/pjmedia/build/os-linux.mak
 ===================================================================
---- pjsip.orig/sources/pjmedia/build/os-linux.mak	2012-06-07 17:11:42.742515102 +0200
-+++ pjsip/sources/pjmedia/build/os-linux.mak	2012-06-07 17:13:26.286510767 +0200
+--- pjsip.orig/sources/pjmedia/build/os-linux.mak	2012-09-08 10:48:27.551555770 +0200
++++ pjsip/sources/pjmedia/build/os-linux.mak	2012-09-08 10:48:29.795555676 +0200
 @@ -53,6 +53,9 @@
  
  endif
@@ -145,8 +145,8 @@ Index: pjsip/sources/pjmedia/build/os-linux.mak
  else
 Index: pjsip/sources/pjmedia/build/os-win32.mak
 ===================================================================
---- pjsip.orig/sources/pjmedia/build/os-win32.mak	2012-06-07 17:11:42.722515096 +0200
-+++ pjsip/sources/pjmedia/build/os-win32.mak	2012-06-07 17:13:26.286510767 +0200
+--- pjsip.orig/sources/pjmedia/build/os-win32.mak	2012-09-08 10:48:27.535555770 +0200
++++ pjsip/sources/pjmedia/build/os-win32.mak	2012-09-08 10:48:29.795555676 +0200
 @@ -55,6 +55,9 @@
  
  endif
@@ -159,8 +159,8 @@ Index: pjsip/sources/pjmedia/build/os-win32.mak
  else
 Index: pjsip/sources/pjmedia/include/pjmedia/echo.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/include/pjmedia/echo.h	2012-06-07 17:11:42.702515103 +0200
-+++ pjsip/sources/pjmedia/include/pjmedia/echo.h	2012-06-07 17:13:26.290510767 +0200
+--- pjsip.orig/sources/pjmedia/include/pjmedia/echo.h	2012-09-08 10:48:27.515555771 +0200
++++ pjsip/sources/pjmedia/include/pjmedia/echo.h	2012-09-08 10:48:29.795555676 +0200
 @@ -78,6 +78,12 @@
       */
      PJMEDIA_ECHO_SIMPLE	= 2,
@@ -176,8 +176,8 @@ Index: pjsip/sources/pjmedia/include/pjmedia/echo.h
       */
 Index: pjsip/sources/pjmedia/src/pjmedia/echo_common.c
 ===================================================================
---- pjsip.orig/sources/pjmedia/src/pjmedia/echo_common.c	2012-06-07 17:11:42.678515103 +0200
-+++ pjsip/sources/pjmedia/src/pjmedia/echo_common.c	2012-06-07 17:13:26.290510767 +0200
+--- pjsip.orig/sources/pjmedia/src/pjmedia/echo_common.c	2012-09-08 10:48:27.499555772 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/echo_common.c	2012-09-08 10:48:29.799555676 +0200
 @@ -118,6 +118,20 @@
  #endif
  
@@ -215,8 +215,8 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_common.c
  	       (options & PJMEDIA_ECHO_ALGO_MASK) == PJMEDIA_ECHO_DEFAULT)
 Index: pjsip/sources/pjmedia/src/pjmedia/echo_internal.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/src/pjmedia/echo_internal.h	2012-06-07 17:11:42.642515106 +0200
-+++ pjsip/sources/pjmedia/src/pjmedia/echo_internal.h	2012-06-07 17:13:26.290510767 +0200
+--- pjsip.orig/sources/pjmedia/src/pjmedia/echo_internal.h	2012-09-08 10:48:27.463555773 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/echo_internal.h	2012-09-08 10:48:29.803555675 +0200
 @@ -72,6 +72,20 @@
  					 unsigned options,
  					 void *reserved );
@@ -241,8 +241,8 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_internal.h
 Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c	2012-06-07 17:13:26.290510767 +0200
-@@ -0,0 +1,336 @@
++++ pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c	2012-09-08 12:26:10.823310550 +0200
+@@ -0,0 +1,344 @@
 +/**
 + * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 + * This file is part of pjsip_android.
@@ -276,7 +276,9 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +#define WEBRTC_AEC_USE_MOBILE 1
 +#endif
 +
-+#define PJMEDIA_WEBRTC_USE_NS 0
++#ifndef PJMEDIA_WEBRTC_USE_NS
++#define PJMEDIA_WEBRTC_USE_NS PJ_FALSE
++#endif
 +
 +#ifndef PJMEDIA_WEBRTC_AEC_AGGRESSIVENESS
 +    #define PJMEDIA_WEBRTC_AEC_AGGRESSIVENESS kAecNlpModerate
@@ -286,18 +288,32 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +    #define PJMEDIA_WEBRTC_NS_POLICY 0
 +#endif
 +
-+#define WEBRTC_SUBFRAME_LEN   160    // WebRTC AEC only allows max 160 samples/frame
 +
 +#define THIS_FILE    "echo_webrtc_aec.c"
 +
 +#if WEBRTC_AEC_USE_MOBILE == 1
 +#include <modules/audio_processing/aecm/include/echo_control_mobile.h>
++#define W_WebRtcAec_Create WebRtcAecm_Create
++#define W_WebRtcAec_Free WebRtcAecm_Free
++#define W_WebRtcAec_get_error_code WebRtcAecm_get_error_code
++#define W_WebRtcAec_Init(INST, CR) WebRtcAecm_Init(INST, CR)
++#define W_WebRtcAec_BufferFarend WebRtcAecm_BufferFarend
 +#else
 +#include <modules/audio_processing/aec/include/echo_cancellation.h>
++#define W_WebRtcAec_Create WebRtcAec_Create
++#define W_WebRtcAec_Free WebRtcAec_Free
++#define W_WebRtcAec_get_error_code WebRtcAec_get_error_code
++#define W_WebRtcAec_Init(INST, CR) WebRtcAec_Init(INST, CR, CR)
++#define W_WebRtcAec_BufferFarend WebRtcAec_BufferFarend
 +#endif
++
 +#include <modules/audio_processing/ns/include/noise_suppression_x.h>
 +
 +#include "echo_internal.h"
++
++
++
++pj_bool_t pjmedia_webrtc_use_ns = PJMEDIA_WEBRTC_USE_NS;
 +
 +typedef struct webrtc_ec
 +{
@@ -306,18 +322,15 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +    unsigned	samples_per_frame;
 +    unsigned	echo_tail;
 +    unsigned	echo_skew;
-+    unsigned    clock_rate;
++    unsigned   clock_rate;
++    unsigned 	blockLen10ms;
 +    pj_int16_t*	tmp_frame;
 +    pj_int16_t*	tmp_frame2;
 +} webrtc_ec;
 +
 +
 +static void print_webrtc_aec_error(const char* tag, void *AEC_inst) {
-+#if WEBRTC_AEC_USE_MOBILE == 1
-+	unsigned status = WebRtcAecm_get_error_code(AEC_inst);
-+#else
-+    unsigned status = WebRtcAec_get_error_code(AEC_inst);
-+#endif
++	unsigned status = W_WebRtcAec_get_error_code(AEC_inst);
 +    PJ_LOG(4, (THIS_FILE, "WebRTC AEC ERROR (%s) %d ", tag, status));
 +}
 +
@@ -337,52 +350,44 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +    int status;
 +
 +    *p_echo = NULL;
-+	/*
-+    if (clock_rate != 16000) {
-+        PJ_LOG(4, (THIS_FILE, "Unsupported sample rate: %d", clock_rate));
-+        return PJ_EINVAL;
-+    }
-+    */
 +
 +    echo = PJ_POOL_ZALLOC_T(pool, webrtc_ec);
 +    PJ_ASSERT_RETURN(echo != NULL, PJ_ENOMEM);
 +
 +    // Alloc memory
-+#if WEBRTC_AEC_USE_MOBILE == 1
-+    status = WebRtcAecm_Create(&echo->AEC_inst);
-+#else
-+    status = WebRtcAec_Create(&echo->AEC_inst);
-+#endif
++    status = W_WebRtcAec_Create(&echo->AEC_inst);
 +    if(status){
 +    	return PJ_ENOMEM;
 +    }
 +PJ_LOG(4, (THIS_FILE, "Create webRTC AEC with clock rate %d", clock_rate));
 +    // Init
-+#if WEBRTC_AEC_USE_MOBILE == 1
-+    status = WebRtcAecm_Init(echo->AEC_inst,
++    status = W_WebRtcAec_Init(echo->AEC_inst,
 +    		clock_rate);
-+#else
-+    status = WebRtcAec_Init(echo->AEC_inst,
-+    		clock_rate,
-+    		clock_rate);
-+#endif
 +
 +	if(status != 0) {
 +        if (echo->AEC_inst) {
 +            print_webrtc_aec_error("Init", echo->AEC_inst);
++            W_WebRtcAec_Free(echo->AEC_inst);
++            echo->AEC_inst = NULL;
 +        }
-+#if WEBRTC_AEC_USE_MOBILE == 1
-+    	WebRtcAecm_Free(echo->AEC_inst);
-+#else
-+    	WebRtcAec_Free(echo->AEC_inst);
-+#endif
 +    	return PJ_EBUG;
 +    }
 +
++	// Set configuration -- sample code for future use
++	// For now keep default values
++/*
 +#if WEBRTC_AEC_USE_MOBILE == 1
-+	// TODO
++	AecmConfig aecm_config;
++	aecm_config.cngMode = AecmTrue;
++	aecm_config.echoMode = 4;
++
++    status = WebRtcAecm_set_config(echo->AEC_inst, aecm_config);
++    if(status != 0) {
++        print_webrtc_aec_error("Init config", echo->AEC_inst);
++        WebRtcAec_Free(echo->AEC_inst);
++    	return PJ_EBUG;
++    }
 +#else
-+	/*
 +    AecConfig aec_config;
 +    aec_config.nlpMode = PJMEDIA_WEBRTC_AEC_AGGRESSIVENESS;
 +    aec_config.skewMode = kAecTrue;
@@ -395,36 +400,43 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +        WebRtcAec_Free(echo->AEC_inst);
 +    	return PJ_EBUG;
 +    }
-+    */
 +#endif
++*/
 +
-+#if PJMEDIA_WEBRTC_USE_NS == 1
-+    status = WebRtcNsx_Create(&echo->NS_inst);
-+    if(status != 0) {
-+    	return PJ_ENOMEM;
-+    }
++	if(pjmedia_webrtc_use_ns == PJ_TRUE){
++		status = WebRtcNsx_Create(&echo->NS_inst);
++		if(status != 0) {
++			return PJ_ENOMEM;
++		}
 +
-+    status = WebRtcNsx_Init(echo->NS_inst, clock_rate);
-+    if(status != 0) {
-+        if (echo->NS_inst) {
-+    	    WebRtcNsx_Free(echo->NS_inst);
-+            PJ_LOG(4, (THIS_FILE, "Could not initialize noise suppressor"));
-+        }
-+    	return PJ_EBUG;
-+    }
++		status = WebRtcNsx_Init(echo->NS_inst, clock_rate);
++		if(status != 0) {
++			if(echo->AEC_inst){
++				W_WebRtcAec_Free(echo->AEC_inst);
++				echo->AEC_inst = NULL;
++			}
 +
-+    status = WebRtcNsx_set_policy(echo->NS_inst, PJMEDIA_WEBRTC_NS_POLICY);
-+    if (status != 0) {
-+        PJ_LOG(4, (THIS_FILE, "Could not set noise suppressor policy"));
-+    }
-+#else
-+    echo->NS_inst = NULL;
-+#endif
++			if (echo->NS_inst) {
++				PJ_LOG(4, (THIS_FILE, "Could not initialize noise suppressor"));
++				WebRtcNsx_Free(echo->NS_inst);
++				echo->NS_inst = NULL;
++			}
++			return PJ_EBUG;
++		}
++
++		status = WebRtcNsx_set_policy(echo->NS_inst, PJMEDIA_WEBRTC_NS_POLICY);
++		if (status != 0) {
++			PJ_LOG(2, (THIS_FILE, "Could not set noise suppressor policy"));
++		}
++	}else{
++		echo->NS_inst = NULL;
++	}
 +
 +    echo->samples_per_frame = samples_per_frame;
 +    echo->echo_tail = tail_ms;
 +    echo->echo_skew = 0;
 +    echo->clock_rate = clock_rate;
++    echo->blockLen10ms = (10 * channel_count * clock_rate / 1000);
 +
 +    /* Create temporary frames for echo cancellation */
 +    echo->tmp_frame = (pj_int16_t*) pj_pool_zalloc(pool, 2*samples_per_frame);
@@ -448,11 +460,7 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +    PJ_ASSERT_RETURN(echo, PJ_EINVAL);
 +
 +    if (echo->AEC_inst) {
-+#if WEBRTC_AEC_USE_MOBILE == 1
-+    	WebRtcAecm_Free(echo->AEC_inst);
-+#else
-+    	WebRtcAec_Free(echo->AEC_inst);
-+#endif
++    	W_WebRtcAec_Free(echo->AEC_inst);
 +    	echo->AEC_inst = NULL;
 +    }
 +    if (echo->NS_inst) {
@@ -473,18 +481,22 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +    pj_assert(echo != NULL);
 +    int status;
 +    /* re-initialize the EC */
-+#if WEBRTC_AEC_USE_MOBILE == 1
-+	status = WebRtcAecm_Init(echo->AEC_inst, echo->clock_rate);
-+#else
-+    status = WebRtcAec_Init(echo->AEC_inst, echo->clock_rate, echo->clock_rate);
-+#endif
++	status = W_WebRtcAec_Init(echo->AEC_inst, echo->clock_rate);
 +    if(status != 0) {
 +        print_webrtc_aec_error("re-Init", echo->AEC_inst);
 +        return;
 +    } else {
 +
 +#if WEBRTC_AEC_USE_MOBILE == 1
-+		//TODO
++    	AecmConfig aecm_config;
++    	aecm_config.cngMode = AecmTrue;
++    	aecm_config.echoMode = 4;
++
++        status = WebRtcAecm_set_config(echo->AEC_inst, aecm_config);
++        if(status != 0) {
++            print_webrtc_aec_error("re-Init config", echo->AEC_inst);
++            return;
++        }
 +#else
 +        AecConfig aec_config;
 +        aec_config.nlpMode = PJMEDIA_WEBRTC_AEC_AGGRESSIVENESS;
@@ -518,8 +530,8 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +    /* Sanity checks */
 +    PJ_ASSERT_RETURN(echo && rec_frm && play_frm && options==0 && reserved==NULL, PJ_EINVAL);
 +
-+	tail_factor = echo->samples_per_frame / WEBRTC_SUBFRAME_LEN;
-+    for(i=0; i < echo->samples_per_frame; i+= WEBRTC_SUBFRAME_LEN) {
++	tail_factor = echo->samples_per_frame / echo->blockLen10ms;
++    for(i=0; i < echo->samples_per_frame; i+= echo->blockLen10ms) {
 +    	if(echo->NS_inst){
 +			/* Noise suppression */
 +			status = WebRtcNsx_Process(echo->NS_inst,
@@ -528,17 +540,13 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +									  (WebRtc_Word16 *) (&echo->tmp_frame[i]),
 +									  NULL);
 +			if (status != 0) {
-+				PJ_LOG(4, (THIS_FILE, "Error suppressing noise"));
++				PJ_LOG(1, (THIS_FILE, "Error suppressing noise"));
 +				return PJ_EBUG;
 +			}
 +    	}
 +
 +		/* Feed farend buffer */
-+#if WEBRTC_AEC_USE_MOBILE == 1
-+		status = WebRtcAecm_BufferFarend(echo->AEC_inst, &play_frm[i], WEBRTC_SUBFRAME_LEN);
-+#else
-+		status = WebRtcAec_BufferFarend(echo->AEC_inst, &play_frm[i], WEBRTC_SUBFRAME_LEN);
-+#endif
++		status = W_WebRtcAec_BufferFarend(echo->AEC_inst, &play_frm[i], echo->blockLen10ms);
 +		if(status != 0) {
 +			print_webrtc_aec_error("buffer farend", echo->AEC_inst);
 +			return PJ_EBUG;
@@ -551,7 +559,7 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +							(WebRtc_Word16 *) (&rec_frm[i]),
 +							(echo->NS_inst)?(WebRtc_Word16 *) (&echo->tmp_frame[i]):(WebRtc_Word16 *) (&rec_frm[i]),
 +							(WebRtc_Word16 *) (&echo->tmp_frame2[i]),
-+							WEBRTC_SUBFRAME_LEN,
++							echo->blockLen10ms,
 +							echo->echo_tail / tail_factor);
 +#else
 +		status = WebRtcAec_Process(echo->AEC_inst,
@@ -559,7 +567,7 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +							NULL,
 +							(WebRtc_Word16 *) (&echo->tmp_frame2[i]),
 +							NULL,
-+							WEBRTC_SUBFRAME_LEN,
++							echo->blockLen10ms,
 +							echo->echo_tail / tail_factor,
 +							echo->echo_skew);
 +#endif
@@ -581,8 +589,8 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +#endif
 Index: pjsip/sources/third_party/build/os-auto.mak.in
 ===================================================================
---- pjsip.orig/sources/third_party/build/os-auto.mak.in	2012-06-07 17:11:42.954515089 +0200
-+++ pjsip/sources/third_party/build/os-auto.mak.in	2012-06-07 17:13:26.294510767 +0200
+--- pjsip.orig/sources/third_party/build/os-auto.mak.in	2012-09-08 10:48:27.687555764 +0200
++++ pjsip/sources/third_party/build/os-auto.mak.in	2012-09-08 10:48:29.803555675 +0200
 @@ -31,3 +31,4 @@
  endif
  endif
@@ -590,8 +598,8 @@ Index: pjsip/sources/third_party/build/os-auto.mak.in
 +DIRS += webrtc
 Index: pjsip/sources/third_party/build/os-darwinos.mak
 ===================================================================
---- pjsip.orig/sources/third_party/build/os-darwinos.mak	2012-06-07 17:11:42.982515091 +0200
-+++ pjsip/sources/third_party/build/os-darwinos.mak	2012-06-07 17:13:26.294510767 +0200
+--- pjsip.orig/sources/third_party/build/os-darwinos.mak	2012-09-08 10:48:27.703555763 +0200
++++ pjsip/sources/third_party/build/os-darwinos.mak	2012-09-08 10:48:29.803555675 +0200
 @@ -3,5 +3,5 @@
  DIRS += speex
  DIRS += portaudio
@@ -601,8 +609,8 @@ Index: pjsip/sources/third_party/build/os-darwinos.mak
  
 Index: pjsip/sources/third_party/build/os-linux.mak
 ===================================================================
---- pjsip.orig/sources/third_party/build/os-linux.mak	2012-06-07 17:11:42.870515096 +0200
-+++ pjsip/sources/third_party/build/os-linux.mak	2012-06-07 17:13:26.294510767 +0200
+--- pjsip.orig/sources/third_party/build/os-linux.mak	2012-09-08 10:48:27.627555766 +0200
++++ pjsip/sources/third_party/build/os-linux.mak	2012-09-08 10:48:29.807555675 +0200
 @@ -3,5 +3,5 @@
  DIRS += speex
  DIRS += portaudio
@@ -613,7 +621,7 @@ Index: pjsip/sources/third_party/build/os-linux.mak
 Index: pjsip/sources/third_party/build/webrtc/Makefile
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/Makefile	2012-06-07 17:13:26.294510767 +0200
++++ pjsip/sources/third_party/build/webrtc/Makefile	2012-09-08 10:48:29.807555675 +0200
 @@ -0,0 +1,159 @@
 +include ../../../build.mak
 +include ../../../build/common.mak
@@ -777,7 +785,7 @@ Index: pjsip/sources/third_party/build/webrtc/Makefile
 Index: pjsip/sources/third_party/build/webrtc/os-auto.mak.in
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/os-auto.mak.in	2012-06-07 17:13:26.294510767 +0200
++++ pjsip/sources/third_party/build/webrtc/os-auto.mak.in	2012-09-08 10:48:29.807555675 +0200
 @@ -0,0 +1,42 @@
 +#@configure_input@
 +
@@ -824,7 +832,7 @@ Index: pjsip/sources/third_party/build/webrtc/os-auto.mak.in
 Index: pjsip/sources/third_party/build/webrtc/os-darwinos.mak
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/os-darwinos.mak	2012-06-07 17:13:26.294510767 +0200
++++ pjsip/sources/third_party/build/webrtc/os-darwinos.mak	2012-09-08 10:48:29.807555675 +0200
 @@ -0,0 +1,12 @@
 +
 +export CFLAGS += -DWEBRTC_TARGET_MAC_INTEL -DWEBRTC_MAC_INTEL -DWEBRTC_MAC -DWEBRTC_THREAD_RR -DWEBRTC_CLOCK_TYPE_REALTIME
@@ -841,7 +849,7 @@ Index: pjsip/sources/third_party/build/webrtc/os-darwinos.mak
 Index: pjsip/sources/third_party/build/webrtc/os-linux.mak
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/os-linux.mak	2012-06-07 17:13:26.294510767 +0200
++++ pjsip/sources/third_party/build/webrtc/os-linux.mak	2012-09-08 10:48:29.807555675 +0200
 @@ -0,0 +1,10 @@
 +export CFLAGS += -DWEBRTC_TARGET_PC -DWEBRTC_LINUX -DWEBRTC_THREAD_RR
 +export CFLAGS += -pthread
@@ -856,7 +864,7 @@ Index: pjsip/sources/third_party/build/webrtc/os-linux.mak
 Index: pjsip/sources/third_party/build/webrtc/os-win32.mak
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/os-win32.mak	2012-06-07 17:13:26.298510768 +0200
++++ pjsip/sources/third_party/build/webrtc/os-win32.mak	2012-09-08 10:48:29.807555675 +0200
 @@ -0,0 +1,10 @@
 +export CFLAGS += -DWEBRTC_TARGET_PC -D_WIN32 -D_CRT_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_DEPRECATE -D__STD_C
 +

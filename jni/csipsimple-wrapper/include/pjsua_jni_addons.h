@@ -128,6 +128,13 @@ typedef struct csipsimple_config {
 	 */
 	pj_bool_t disable_tcp_switch;
 
+	/**
+	 * Enable or not noise suppressor.
+	 * Only has impact if using webRTC echo canceller as backend.
+	 * Disabled by default
+	 */
+	pj_bool_t use_noise_suppressor;
+
 } csipsimple_config;
 
 typedef struct csipsimple_acc_config {

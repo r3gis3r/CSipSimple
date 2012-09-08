@@ -31,6 +31,8 @@
   <string name="use_gprs">Používat GPRS</string>
   <string name="lock_wifi">Uzamknout WiFi připojení</string>
   <string name="lock_wifi_desc">Zamezí vypnutí WiFi pokud je SIP připojený</string>
+  <string name="lock_wifi_perfs">Zmčení vysokého výkonu</string>
+  <string name="lock_wifi_perfs_desc">Wifi uzamčena v módu vysokého výkonu (vybíjí byterii rychleji)</string>
   <string name="enable_tcp">TCP</string>
   <string name="enable_tcp_desc">Povolit TCP transport</string>
   <string name="enable_tls">TLS</string>
@@ -81,9 +83,11 @@
   <string name="use_compact_form">Použít kompaktní SIP</string>
   <string name="use_compact_form_desc">Snížit velikost SIP paketů. Nemusí fungovat na starých SIP serverech</string>
   <string name="user_agent">Uživatelský agent</string>
+  <string name="user_agent_desc">Zástupce prezentován aplikací aplikace (pokud jsou informace přidány ve výchozím nastavení)</string>
   <!--<string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>-->
   <string name="force_no_update">Vnutit zákaz aktualizací</string>
+  <string name="force_no_update_desc">Některé chybné vzdálené protějšky oznamují podporu pro funkci UPDATE, ačkoli to nepodporují. Tato možnost vyžaduje použití zastaralého způsobu,  UPADTE/re-INVITE</string>
   <string name="timer_min_se">Minimální platnost relace </string>
   <string name="timer_min_se_desc">Minimální platnosti relace v sekundách. Nesmí být nižší než 90.</string>
   <string name="timer_sess_expires">Doba platnosti relace</string>
@@ -93,6 +97,7 @@
   <string name="tsx_t1_timeout">Časový limit Transakce T1.</string>
   <string name="tsx_t2_timeout">Časový limit Transakce T2.</string>
   <string name="tsx_t4_timeout">Časový limit Transakce T4.</string>
+  <string name="tsx_td_timeout">Transakce dokončila časovač pro INVITE.</string>
   <string name="tsx_timeout_desc">Nechte -1 pro implicitní hodnoty RFC 3261</string>
   <string name="network_route_polling">Zkontrolovat změny sítě každých (minut)</string>
   <string name="network_route_polling_desc">Zjistit řešení Android 4.0 VPN. Nechte na 0, pokud naní tato věc  vypnouta.</string>
@@ -238,6 +243,7 @@
   <string name="advanced_ui">Pokročilé vychztávky</string>
   <string name="integrate_with_native_dialer">Integrace vytáčení</string>
   <string name="integrate_with_native_dialer_desc">Při vytáčení z telefonu se dotázat zda chcete použít sip nebo mobilní telefon</string>
+  <string name="integrate_tel_privileged">Integrovat výsadní záměr</string>
   <string name="integrate_tel_privileged_desc">Jiný způsob, jak integrovat původní číselník. Měli byste vypnout integraci číselníku, pokud jej používáte.</string>
   <string name="integrate_with_native_calllogs">Integrování protokolu volání</string>
   <string name="integrate_with_native_calllogs_desc">Sip volání bude sloučeno do záznamu volání v telefonu</string>

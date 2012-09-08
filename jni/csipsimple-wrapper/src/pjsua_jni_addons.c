@@ -321,6 +321,7 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->tsx_t4_timeout = PJSIP_T4_TIMEOUT;
 	css_cfg->tsx_td_timeout = PJSIP_TD_TIMEOUT;
 	css_cfg->disable_tcp_switch = PJ_TRUE;
+	css_cfg->use_noise_suppressor = PJ_FALSE;
 }
 
 PJ_DECL(void*) get_library_factory(dynamic_factory *impl) {
@@ -365,6 +366,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	extern pj_bool_t pjmedia_add_rtpmap_for_static_pt;
 	extern pj_bool_t pjmedia_add_bandwidth_tias_in_sdp;
 	extern pj_bool_t pjsua_no_update;
+	extern pj_bool_t pjmedia_webrtc_use_ns;
 
 	pjsua_no_update = css_cfg->use_no_update ? PJ_TRUE : PJ_FALSE;
 
@@ -379,6 +381,9 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	/* Do not enable bandwidth information inclusion in sdp */
 	pjmedia_add_bandwidth_tias_in_sdp =
 			css_cfg->add_bandwidth_tias_in_sdp ? PJ_TRUE : PJ_FALSE;
+	/* Use noise suppressor ? */
+	pjmedia_webrtc_use_ns =
+			css_cfg->use_noise_suppressor ? PJ_TRUE : PJ_FALSE;
 
 	css_tcp_keep_alive_interval = css_cfg->tcp_keep_alive_interval;
 	css_tls_keep_alive_interval = css_cfg->tls_keep_alive_interval;

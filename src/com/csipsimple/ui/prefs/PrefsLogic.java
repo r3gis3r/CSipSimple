@@ -149,6 +149,7 @@ public class PrefsLogic {
                     pfh.hidePreference(MEDIA_AUDIO_QUALITY_KEY, SipConfigManager.SND_MEDIA_QUALITY);
                     pfh.hidePreference(MEDIA_AUDIO_QUALITY_KEY, SipConfigManager.ECHO_CANCELLATION_TAIL);
                     pfh.hidePreference(MEDIA_AUDIO_QUALITY_KEY, SipConfigManager.ECHO_MODE);
+                    pfh.hidePreference(MEDIA_AUDIO_QUALITY_KEY, SipConfigManager.ENABLE_NOISE_SUPPRESSION);
                     pfh.hidePreference(MEDIA_AUDIO_QUALITY_KEY, SipConfigManager.SND_PTIME);
                     
                     

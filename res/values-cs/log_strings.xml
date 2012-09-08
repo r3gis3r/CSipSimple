@@ -4,8 +4,8 @@
   <string name="type_incoming">Příchozí</string>
   <string name="type_outgoing">Odchozí</string>
   <string name="type_missed">Zmeškané</string>
-  <string name="callBack">Volání zpět</string>
-  <string name="callAgain">Volání znovu</string>
+  <string name="callBack">Zpětné volání</string>
+  <string name="callAgain">Opětovné volání</string>
   <string name="returnCall">Návrat k volání</string>
   <string name="call">Volání</string>
   <string name="sip_call">SIP volání</string>

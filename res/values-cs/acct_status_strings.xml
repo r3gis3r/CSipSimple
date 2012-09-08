@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="acct_inactive">Neaktivní</string>
   <string name="acct_unregistered">Neregistrováno</string>
   <string name="acct_expired">Registrace vypršela</string>
   <string name="acct_registering">Registruji…</string>
   <string name="acct_registered">Registrováno</string>
-  <string name="acct_regerror">Chyba registrace</string>
-  <string name="acct_regfailed">registrace selhala - zkontrolujte nastavení</string>
+  <string name="acct_regerror">Chyba při registraci</string>
+  <string name="acct_regfailed">Registrace se nezdařila - Zkontrolujte vaší konfiguraci</string>
 </resources>

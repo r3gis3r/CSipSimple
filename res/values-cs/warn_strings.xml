@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="warn_ignore">Ignorovat</string>
+  <!--STUN enabled-->
+  <string name="warn_no_stun">STUN není povolen</string>
+  <string name="warn_no_stun_description">Pokud nemáte příchozí zvuk, zatímco voláte, je to pravděpodobně kvůli skutečnosti, že jste pod NATovanou síti a SIP provider toto není schopen zvládnout.\n \n       \tZa účelem řešení tohoto případu, je někdy užitečné, aby byla možnost STUN povolena.\n\n       Pokud nemáte problém s příchozím zvukem, ignorujte toto varování.\n\n       \tPokud se nacházíte v zemi, kde je veřejná síť oddělena od ostatních veřejných sítí, možná budete muset změnit STUN server.\n\n       \tPoužití STUN spotřebovává více baterie.</string>
+  <string name="warn_no_stun_enable">Dostávám tiché volání</string>
+  <string name="warn_no_stun_ignore">Moje hovory jsou v pořádku</string>
+  <!--Vpn on android 4.0-->
+  <string name="warn_vpn_ics">VPN změny pro 4.0</string>
+  <string name="warn_vpn_ics_description">Nacházíte se systému Android 4.0, který neumí informovat o stavu VPN. \nMožné řešení je kontrolovat trasu v pravidelném intervalu.</string>
+  <string name="warn_vpn_ics_1">Zkontrolovat každou 1 minutu</string>
+  <string name="warn_vpn_ics_5">Zkontrolovat každých 5 minut</string>
+  <!--Privileged intent-->
+  <string name="warn_priv_int">Integrace vytáčení</string>
+  <string name="warn_priv_int_description">Zdá se, že další aplikace nainstalované v telefonu se také  snaží integrovat do androidu. \n\n\t    Dělají to tak, že neumožňují chytré funkce, jako je ta obsažená u nás - Filtrování/ přepisování pravidel. \n\n\n\t   Máte dvě volby:  \n\n\t    Pokračovat pomocí naší integrace a nainstalovat pluginy pro podporu dalších aplikací. (To umožní používat Filtrování / přepisování pravidel také pro tyto aplikace).\n\n\t    Chcete-li tak učinit, zvolte vždy používat mobilní komunikátor místo jiných aplikací pomocí zaškrtávacího políčka, až budete provádět váš příští hovor.</string>
+  <string name="warn_priv_int_description2">Druhé řešení je, aby se aplikace integrovala stejným \"nechytrým\" způsobem, jako jiné aplikace. \n\n\t    Tato možnost je podporována aplikací, ale nedoporučujeme ji, protože je mnohem méně chytrá a poskytuje horší uživatelský komfort.</string>
+  <string name="warn_priv_int_register">Použíití \"nechytré\" integrace</string>
+  <string name="warn_sdcard">Instalace na SD kartu</string>
+  <string name="warn_sdcard_description">Aplikaci máte nakonfigurovánu tak, že je k dispozici pro příchozí volání. Ale přestěhovali jste ji na SD kartu. To se nedoporučuje, měli byste nechat aplikaci v interním úložišti.</string>
+</resources>

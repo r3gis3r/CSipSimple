@@ -4,14 +4,16 @@
   <string name="w_expert_display_name_desc">Zobrazí název účtu</string>
   <string name="w_expert_acc_id">ID Účtu</string>
   <string name="w_expert_acc_id_desc">Formát : DisplayName &lt;sip:login\@registrar&gt;</string>
-  <string name="w_expert_reg_uri">Registration URI</string>
-  <string name="w_expert_reg_uri_desc">Formát : sip:registrar.net[:port]</string>
+  <string name="w_expert_reg_uri">Registrace URI</string>
+  <string name="w_expert_reg_uri_desc">Formát : \"sip:registrar.net[:port]\"</string>
   <string name="w_expert_realm">Oblast</string>
   <string name="w_expert_realm_desc">Autorizační doména</string>
   <string name="w_expert_username">Uživatelské jméno</string>
   <string name="w_expert_username_desc">Uživatelské jméno pro ověření</string>
   <string name="w_expert_data">Heslo</string>
   <string name="w_expert_data_desc">Heslo pro Ověření</string>
+  <string name="w_expert_datatype">Datový typ</string>
+  <string name="w_expert_datatype_desc">Typ dat</string>
   <string name="w_expert_t_proxy">Proxy</string>
   <string name="w_expert_proxy">Proxy URI</string>
   <string name="w_expert_proxy_desc">Format : sip:proxy.net[:port]</string>
@@ -19,6 +21,8 @@
   <string name="w_expert_prevent_tcp">Nepovolit TCP ( pouze přes UDP )</string>
   <string name="w_expert_publish_enabled">Publikování povoleno</string>
   <string name="w_expert_reg_timeout">Vypršení registrace (sec)</string>
+  <string name="w_expert_reg_dbr">Registrace zpoždění před obnovením (sec)</string>
+  <string name="w_expert_reg_dbr_desc">Zadejte počet sekund na obnovení registracce klienta před vypršením registrace.</string>
   <string name="w_expert_ka_interval">Keep-alive interval (sec)</string>
   <string name="w_expert_force_contact">Platnost kontaktu</string>
   <string name="w_expert_allow_contact_rewrite">Povolit přepsání kontaktu</string>
@@ -26,6 +30,13 @@
   <string name="w_expert_reg_use_proxy">Jak používat proxy</string>
   <string name="w_expert_try_clean_registers">Zkuste vyčistit registry</string>
   <string name="w_expert_try_clean_registers_desc">V případě potřeby povolit aplikaci pokusit se vyčistit staré zápisy </string>
+  <string name="w_expert_rtp_bound_addr">RTP vázaná adresa</string>
+  <string name="w_expert_rtp_bound_addr_desc">Volba, kde má být konektor připojen. Pouze selektivně přiřadit slot ke konkrétnímu rozhraní (místo 0.0.0.0)</string>
+  <string name="w_expert_rtp_public_addr">RTP veřejná adresa</string>
+  <string name="w_expert_rtp_public_addr_desc">Volitelně inzerovat adresu RTP transportu.</string>
+  <string name="w_expert_media_transport">tarnsport medii</string>
   <string name="w_expert_mwi_enabled">Přihlásit MWI</string>
   <string name="w_expert_mwi_enabled_desc">Získat upozornění z hlasové schránky</string>
+  <string name="w_expert_allow_via_rewrite">Povolit přes přepsání</string>
+  <string name="w_expert_allow_via_rewrite_desc">Určí, že Via použije k odeslání stejnou adresu rozhraní, jako v požadavku REGISTR</string>
 </resources>

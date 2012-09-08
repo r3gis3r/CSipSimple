@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="test_audio">Test zvuku</string>
+  <string name="test_audio_prepare">Příprava na test zvuku...</string>
+  <string name="test_audio_ongoing">Testování probíhá...\nMluvte do mikrofonu a poslouchejte ve sluchátku</string>
+  <string name="test_audio_network_failure">Test selhal:\nPřejděte nejprve na platnou síť.</string>
+</resources>

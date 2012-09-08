@@ -1,5 +1,5 @@
 LOCAL_PATH := $(call my-dir)
-WEBRTC_PATH := $(LOCAL_PATH)/../sources/
+WEBRTC_PATH := $(LOCAL_PATH)/../sources
 
 ifeq ($(MY_USE_WEBRTC),1)
 
@@ -10,15 +10,15 @@ LOCAL_MODULE := pj_webrtc_codec
 
 #CODECS
 # webrtc
-LOCAL_C_INCLUDES += $(WEBRTC_PATH)/ $(WEBRTC_PATH)/modules/interface/ $(WEBRTC_PATH)/modules/audio_coding/main/interface/
+LOCAL_C_INCLUDES += $(WEBRTC_PATH)/ $(WEBRTC_PATH)/modules/interface/ $(WEBRTC_PATH)/modules/audio_coding/main/interface
 # pj
-PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources/
-LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
-	$(PJ_DIR)/pjlib-util/include/ \
-	$(PJ_DIR)/pjnath/include/ \
-	$(PJ_DIR)/pjmedia/include/
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
+LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
+	$(PJ_DIR)/pjlib-util/include \
+	$(PJ_DIR)/pjnath/include \
+	$(PJ_DIR)/pjmedia/include
 #self
-LOCAL_C_INCLUDES += ../pj_sources/
+LOCAL_C_INCLUDES += ../pj_sources
 
 
 LOCAL_SRC_FILES := ../pj_sources/webrtc_codec.cpp ../pj_sources/webrtc_coder.cpp 

@@ -235,6 +235,9 @@ public class PjSipService {
                 cssCfg.setUse_no_update(prefsWrapper
                         .getPreferenceBooleanValue(SipConfigManager.FORCE_NO_UPDATE) ? pjsua.PJ_TRUE
                         : pjsua.PJ_FALSE);
+                cssCfg.setUse_noise_suppressor(prefsWrapper
+                        .getPreferenceBooleanValue(SipConfigManager.ENABLE_NOISE_SUPPRESSION) ? pjsua.PJ_TRUE
+                        : pjsua.PJ_FALSE);
                 
                 cssCfg.setTcp_keep_alive_interval(prefsWrapper.getTcpKeepAliveInterval());
                 cssCfg.setTls_keep_alive_interval(prefsWrapper.getTlsKeepAliveInterval());

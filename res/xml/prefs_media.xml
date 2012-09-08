@@ -46,6 +46,12 @@
             android:key="enable_vad"
             android:summary="@string/enable_vad_desc"
             android:title="@string/enable_vad" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="echo_cancellation"
+            android:key="enable_ns"
+            android:summary="@string/enable_ns_desc"
+            android:title="@string/enable_ns" />
 
         <EditTextPreference
             android:defaultValue="4"

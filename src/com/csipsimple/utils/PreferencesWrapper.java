@@ -168,6 +168,7 @@ public class PreferencesWrapper {
 		//Media
 		put(SipConfigManager.ECHO_CANCELLATION, true);
 		put(SipConfigManager.ENABLE_VAD, false);
+        put(SipConfigManager.ENABLE_NOISE_SUPPRESSION, false);
 		put(SipConfigManager.USE_SOFT_VOLUME, false);
 		put(SipConfigManager.USE_ROUTING_API, false);
 		put(SipConfigManager.USE_MODE_API, false);
