@@ -1,0 +1,20 @@
+Index: ffmpeg/ffmpeg_src/libavutil/arm/intmath.h
+===================================================================
+--- ffmpeg.orig/ffmpeg_src/libavutil/arm/intmath.h	2012-09-04 22:39:17.235134046 +0200
++++ ffmpeg/ffmpeg_src/libavutil/arm/intmath.h	2012-09-04 22:48:02.235112091 +0200
+@@ -75,6 +75,7 @@
+     return x;
+ }
+ 
++/* Disabled due to inline problems with ndk-r8x
+ #define av_clip_uintp2 av_clip_uintp2_arm
+ static av_always_inline av_const unsigned av_clip_uintp2_arm(int a, int p)
+ {
+@@ -82,6 +83,7 @@
+     __asm__ ("usat %0, %2, %1" : "=r"(x) : "r"(a), "i"(p));
+     return x;
+ }
++*/
+ 
+ #else /* HAVE_ARMV6 */
+ 

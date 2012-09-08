@@ -29,7 +29,7 @@ pushd ffmpeg_src
 FLAGS="$FLAGS --sysroot=$NDK_SYSROOT"
 FLAGS="$FLAGS --disable-shared --disable-symver"
 FLAGS="$FLAGS --disable-everything"
-FLAGS="$FLAGS --enable-small"
+#FLAGS="$FLAGS --enable-small"
 FLAGS="$FLAGS --enable-gpl"
 FLAGS="$FLAGS --enable-decoder=h263 --enable-encoder=h263"
 FALGS="$FLAGS --enable-runtime-cpudetect"

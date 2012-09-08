@@ -2,7 +2,7 @@
 external_repos := silk opus zrtp4pj openssl
 external_sources := $(foreach repos, $(external_repos),jni/$(repos)/sources)
 
-to_patch := pjsip webrtc
+to_patch := pjsip webrtc ffmpeg
 to_patch_files := $(foreach proj, $(to_patch),jni/$(proj)/.patched_sources)
 
 all : libraries
@@ -13,7 +13,7 @@ libraries : ext-sources swig-glue webrtc-preprocess
 	# Build main libraries using android ndk
 	@(ndk-build -j6)
 
-ffmpeg-lib :
+ffmpeg-lib : jni/ffmpeg/.patched_sources
 	# Build ffmpeg using make
 	@($(MAKE) $(MFLAGS) -C jni/ffmpeg)
 	
@@ -36,7 +36,7 @@ swig-glue :
 clean :
 	# NDK clean
 	@(ndk-build clean)
-	# FFmpeg clean
+	# Remote clean
 	@($(MAKE) -C jni/ffmpeg clean)
 	@($(MAKE) -C jni/swig-glue clean)
 	@($(MAKE) -C jni/webrtc clean)
@@ -56,18 +56,11 @@ ScreenSharingLibs :
 
 update : $(external_sources)
 	# Quilt removal
-	@($(MAKE) $(MFLAGS) -C jni/pjsip unpatch)
-	@($(MAKE) $(MFLAGS) -C jni/webrtc unpatch)
+	@$(foreach dir,$(to_patch),$(MAKE) $(MFLAGS) -C jni/$(dir) unpatch;)
 	# Svn update
 	@svn update --accept theirs-conflict
-	# SILK update
-	@($(MAKE) $(MFLAGS) -C jni/silk update)
-	# Update ZRTP4pj
-	@($(MAKE) $(MFLAGS) -C jni/zrtp4pj update)
-	# Update OpenSSL
-	@($(MAKE) $(MFLAGS) -C jni/openssl update)
-	# Update libopus
-	@($(MAKE) $(MFLAGS) -C jni/opus update)
+	# Remote sources update
+	@$(foreach dir,$(external_repos),$(MAKE) $(MFLAGS) -C jni/$(dir) update;)
 	# Update ffmpeg
 	@($(MAKE) $(MFLAGS) -C jni/ffmpeg update)
 	

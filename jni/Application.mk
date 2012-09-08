@@ -1,21 +1,9 @@
 JNI_DIR := $(call my-dir)
-# Include for local development
-_local_mk := $(strip $(wildcard $(JNI_DIR)/Local.mk))
-ifdef _local_mk
-include $(JNI_DIR)/Local.mk
-$(call __ndk_info,Uses local settings)
-else
-$(call __ndk_info,No local settings... build all in release mode !)
-endif
 
-ifndef APP_OPTIM
+# Create a Local.mk file if you need to customize values below
+
 APP_OPTIM        := release
-endif
-ifndef APP_ABI
 APP_ABI := armeabi armeabi-v7a x86 mips
-endif
-
-
 
 MY_USE_CSIPSIMPLE := 1
 
@@ -41,6 +29,15 @@ MY_USE_STATIC_SSL := 0
 #############################################################
 # Do not change behind this line the are flags for pj build #
 # Only build pjsipjni and ignore openssl                    #
+# Include for local development
+_local_mk := $(strip $(wildcard $(JNI_DIR)/Local.mk))
+ifdef _local_mk
+include $(JNI_DIR)/Local.mk
+$(call __ndk_info,Uses local settings)
+else
+$(call __ndk_info,No local settings... build all in release mode !)
+endif
+
 APP_MODULES := libpjsipjni pj_opensl_dev
 ifeq ($(MY_USE_SILK),1)
 APP_MODULES += libpj_silk_codec

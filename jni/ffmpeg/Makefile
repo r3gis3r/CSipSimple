@@ -8,6 +8,10 @@ ffmpeg_version := n0.10.4
 
 # Get targets from Application.mk config file
 include ../Application.mk
+_local_mk := $(strip $(wildcard ../Local.mk))
+ifdef _local_mk
+include ../Local.mk
+endif
 TARGETS := $(APP_ABI) 
 
 FFMPEG_LIBS := $(foreach TARGET, $(TARGETS),$(FFMPEG_BUILD_DIRECTORY)/$(TARGET)/$(FFMPEG_TEST_LIB))
@@ -39,6 +43,15 @@ x264_src/configure :
 	# git checkout origin; \
 	# git checkout 10fe242813531daa61088af158b8b64c6fbe787e
 
+patch : .patched_sources
+	@# Patch done
+
+.patched_sources : $(patches_files)
+	@quilt push -a && \
+	touch .patched_sources
+
+unpatch :
+	@if [ -f .patched_sources ]; then quilt pop -af; rm .patched_sources; fi;
 
 clean :
 	@if [ -f ffmpeg_src/config.mak ]; then $(MAKE) -C ffmpeg_src clean; fi;

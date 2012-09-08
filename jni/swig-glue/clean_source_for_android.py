@@ -1,12 +1,10 @@
 #!/usr/bin/python
-
-
 import re
 import sys
 
 
 def remove_rtti(text):
-	return text.replace("dynamic_cast<SwigDirector_Callback *>", "(SwigDirector_Callback*)")
+	return re.sub(r'dynamic_cast<(.* \*)>', r'(\1)', text)
 
 def make_dalvik_compat(text):
 	init_text = """/* Utility class for managing the JNI environment */
