@@ -72,3 +72,6 @@ BASE_PJSIP_FLAGS += -DPJMEDIA_HAS_WEBRTC_AEC=$(MY_USE_WEBRTC) \
 
 # TLS ZRTP
 BASE_PJSIP_FLAGS += -DPJ_HAS_SSL_SOCK=$(MY_USE_TLS) -DPJMEDIA_HAS_ZRTP=$(MY_USE_ZRTP)
+
+# Force some settings for compatibility with some buggy sip providers (Pflingo)
+BASE_PJSIP_FLAGS += -DPJSUA_SDP_SESS_HAS_CONN=1
