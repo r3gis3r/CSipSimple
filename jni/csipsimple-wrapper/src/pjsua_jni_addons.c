@@ -139,13 +139,10 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 						else if (tp_info.spc_info[j].type
 								== PJMEDIA_TRANSPORT_TYPE_ZRTP) {
-							pjmedia_zrtp_info *zrtp_info =
-									(pjmedia_zrtp_info*) tp_info.spc_info[j].buffer;
-
-							//	if(zrtp_info->active){
 							result = jzrtp_getInfo(call_med->tp);
-							break;
-							//	}
+							if(result.slen > 0){
+								break;
+							}
 						}
 #endif
 					}
