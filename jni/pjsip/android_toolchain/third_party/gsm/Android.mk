@@ -3,13 +3,13 @@
 # GSM #
 #######
 
-LOCAL_PATH := $(call my-dir)/../../../sources/third_party/gsm/
+LOCAL_PATH := $(call my-dir)/../../../sources/third_party/gsm
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := gsm
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../pjlib/include/ $(LOCAL_PATH)/inc \
-			$(LOCAL_PATH)/../build/gsm/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../pjlib/include $(LOCAL_PATH)/inc \
+			$(LOCAL_PATH)/../build/gsm
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 PJLIB_SRC_DIR := src

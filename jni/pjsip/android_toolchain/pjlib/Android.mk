@@ -2,14 +2,14 @@
 # PJLIB #
 #########
 
-LOCAL_PATH := $(call my-dir)/../../sources/pjlib/
+LOCAL_PATH := $(call my-dir)/../../sources/pjlib
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := pjlib
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/include/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
 ifeq ($(MY_USE_TLS),1)
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../openssl/sources/include/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../openssl/sources/include
 endif
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)

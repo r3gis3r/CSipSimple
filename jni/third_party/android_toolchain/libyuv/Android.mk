@@ -1,4 +1,4 @@
-LOCAL_PATH := $(call my-dir)/../../libyuv/
+LOCAL_PATH := $(call my-dir)/../../libyuv
 
 include $(CLEAR_VARS)
 

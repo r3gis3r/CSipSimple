@@ -31,9 +31,9 @@ def type_to_signature(itype):
 		return "Ljava/lang/Object;"
 	return "Lorg/pjsip/pjsua/%s;" % itype
 
-def parse_java_file(input_stream):
+def parse_java_file(input_stream, package, module):
 	outputs = []
-
+	package_prefix = "Java_%s_%sJNI" % (package.replace(".", "_"), module)
 	for line in input_stream:
 		definition = re.match(r'.*public final static native ([^\( ]*) ([^\)]*)\(([^)]*)\).*',line)
 		if definition is not None:
@@ -49,7 +49,7 @@ def parse_java_file(input_stream):
 					args_sigs.append(type_to_signature(argf.group(2)))
 		
 			sig = "(%s)%s" % (''.join(args_sigs), type_to_signature(retour))
-			outputs.append("{\"%s\", \"%s\", (void*)& Java_org_pjsip_pjsua_pjsuaJNI_%s}" % (name, sig, name.replace('_', '_1')))
+			outputs.append("{\"%s\", \"%s\", (void*)& %s_%s}" % (name, sig, package_prefix, name.replace('_', '_1')))
 	return outputs
 
 def render_to_template(defs, template_string):
@@ -59,7 +59,7 @@ def render_to_template(defs, template_string):
 
 if __name__ == "__main__":
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "i:o:t:", ["input=", "output=", "template="])
+		opts, args = getopt.getopt(sys.argv[1:], "i:o:t:m:p:", ["input=", "output=", "template=", "module=", "package="])
 	except getopt.GetoptError, err:
 		# print help information and exit:
 		print str(err) # will print something like "option -a not recognized"
@@ -68,6 +68,8 @@ if __name__ == "__main__":
 	input_stream = None
 	output_file = None
 	template_string = None
+	package = ""
+	module = ""
 	for o, a in opts:
 		if o in ("-i", "--input"):
 			input_stream = open(a)
@@ -75,8 +77,12 @@ if __name__ == "__main__":
 			output_file = open(a, "w")
 		if o in ("-t", "--template"):
 			template_string = open(a).read()
+		if o in ("-m", "--module"):
+			module = a
+		if o in ("-p", "--package"):
+			package = a
 
-	defs = parse_java_file(input_stream)
+	defs = parse_java_file(input_stream, package, module)
 	output_file.write(render_to_template(defs, template_string))
 	output_file.close()
 	input_stream.close()

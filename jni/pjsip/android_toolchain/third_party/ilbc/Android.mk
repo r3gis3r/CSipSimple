@@ -2,12 +2,12 @@
 # ILBC  #
 #########
 
-LOCAL_PATH := $(call my-dir)/../../../sources/third_party/ilbc/
+LOCAL_PATH := $(call my-dir)/../../../sources/third_party/ilbc
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := ilbc
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)../../pjlib/include/ $(LOCAL_PATH)
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../pjlib/include/ $(LOCAL_PATH)
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 PJLIB_SRC_DIR := 

@@ -2,12 +2,12 @@
 # SPEEX #
 #########
 
-LOCAL_PATH := $(call my-dir)/../../../sources/third_party/speex/
+LOCAL_PATH := $(call my-dir)/../../../sources/third_party/speex
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := speex
-LOCAL_C_INCLUDES := $(LOCAL_PATH)../build/speex $(LOCAL_PATH)include \
-		   $(LOCAL_PATH)libspeex $(LOCAL_PATH)../../pjlib/include/
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../build/speex $(LOCAL_PATH)/include \
+		   $(LOCAL_PATH)/libspeex $(LOCAL_PATH)/../../pjlib/include
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DHAVE_CONFIG_H=1
 PJLIB_SRC_DIR := libspeex
 

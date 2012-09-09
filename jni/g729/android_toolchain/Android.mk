@@ -7,16 +7,16 @@ ifeq ($(MY_USE_G729),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_g729_codec
 
-G729_PATH := $(LOCAL_PATH)/../sources/
-PJ_G729_PATH := $(LOCAL_PATH)/../pj_sources/
+G729_PATH := $(LOCAL_PATH)/../sources
+PJ_G729_PATH := $(LOCAL_PATH)/../pj_sources
 
 
 # pj
-PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources/
-LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
-	$(PJ_DIR)/pjlib-util/include/ \
-	$(PJ_DIR)/pjnath/include/ \
-	$(PJ_DIR)/pjmedia/include/
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
+LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
+	$(PJ_DIR)/pjlib-util/include \
+	$(PJ_DIR)/pjnath/include \
+	$(PJ_DIR)/pjmedia/include
 # g729
 LOCAL_C_INCLUDES += $(G729_PATH)/include
 G729_FILES := $(wildcard $(G729_PATH)/src/*.c)

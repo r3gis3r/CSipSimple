@@ -103,8 +103,6 @@ public final class Compatibility {
     }
 
     public static boolean shouldUseModeApi() {
-        Log.d(THIS_FILE, "Current device " + android.os.Build.BRAND + " - "
-                + android.os.Build.DEVICE);
 
         // ZTE blade et joe
         if (android.os.Build.DEVICE.equalsIgnoreCase("blade")

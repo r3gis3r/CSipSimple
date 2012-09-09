@@ -2,12 +2,12 @@
 # PJNATH #
 ##########
 
-LOCAL_PATH := $(call my-dir)/../../sources/pjnath/
+LOCAL_PATH := $(call my-dir)/../../sources/pjnath
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := pjnath
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../pjlib/include/ $(LOCAL_PATH)/../pjlib-util/include/ $(LOCAL_PATH)/include/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../pjlib/include $(LOCAL_PATH)/../pjlib-util/include $(LOCAL_PATH)/include
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 PJLIB_SRC_DIR := ./src/pjnath
 

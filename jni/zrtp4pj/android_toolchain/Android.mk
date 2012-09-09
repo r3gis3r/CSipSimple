@@ -7,20 +7,20 @@ LOCAL_PATH := $(call my-dir)/../sources/zsrtp
 include $(CLEAR_VARS)
 LOCAL_MODULE    := zrtp4pj
 
-PJ_SRC_DIR := $(LOCAL_PATH)/../../../pjsip/sources/
-OPENSSL_SRC_DIR := $(LOCAL_PATH)/../../../openssl/sources/
+PJ_SRC_DIR := $(LOCAL_PATH)/../../../pjsip/sources
+OPENSSL_SRC_DIR := $(LOCAL_PATH)/../../../openssl/sources
 
 # Self includes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include \
-			$(LOCAL_PATH)/zrtp/ \
-			$(LOCAL_PATH)/zsrtp/ \
-			$(LOCAL_PATH)/zrtp/zrtp/ \
+			$(LOCAL_PATH)/zrtp \
+			$(LOCAL_PATH)/zsrtp \
+			$(LOCAL_PATH)/zrtp/zrtp \
 			$(LOCAL_PATH)/zrtp/zrtp/libzrtpcpp \
-			$(LOCAL_PATH)/zrtp/srtp/ 
+			$(LOCAL_PATH)/zrtp/srtp 
 
 # Pj includes
-LOCAL_C_INCLUDES += $(PJ_SRC_DIR)/pjsip/include $(PJ_SRC_DIR)/pjlib-util/include/ \
-			$(PJ_ROOT_DIR)/pjlib/include/ $(PJ_SRC_DIR)/pjmedia/include \
+LOCAL_C_INCLUDES += $(PJ_SRC_DIR)/pjsip/include $(PJ_SRC_DIR)/pjlib-util/include \
+			$(PJ_ROOT_DIR)/pjlib/include $(PJ_SRC_DIR)/pjmedia/include \
 			$(PJ_SRC_DIR)/pjnath/include $(PJ_SRC_DIR)/pjlib/include
 			
 #OpenSSL includes

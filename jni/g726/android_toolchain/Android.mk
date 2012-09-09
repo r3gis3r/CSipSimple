@@ -8,15 +8,15 @@ ifeq ($(MY_USE_G726),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_g726_codec
 
-G726_PATH := $(LOCAL_PATH)/../sources/
-PJ_G726_PATH := $(LOCAL_PATH)/../pj_sources/
+G726_PATH := $(LOCAL_PATH)/../sources
+PJ_G726_PATH := $(LOCAL_PATH)/../pj_sources
 
 # pj
-PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources/
-LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
-	$(PJ_DIR)/pjlib-util/include/ \
-	$(PJ_DIR)/pjnath/include/ \
-	$(PJ_DIR)/pjmedia/include/
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
+LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
+	$(PJ_DIR)/pjlib-util/include \
+	$(PJ_DIR)/pjnath/include \
+	$(PJ_DIR)/pjmedia/include
 # g726
 LOCAL_C_INCLUDES += $(G726_PATH)/
 G726_FILES := $(wildcard $(G726_PATH)/*.c)

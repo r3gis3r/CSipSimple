@@ -1,10 +1,13 @@
 # Java target
-JAVA_PROJECT_DIR=../../
+JAVA_PROJECT_DIR=../..
+JAVA_PACKAGE=org.pjsip.pjsua
 JAVA_PACKAGE_DIR=$(JAVA_PROJECT_DIR)/src/org/pjsip/pjsua
-
+JAVA_MODULE=pjsua
 # C target
 C_TARGET_DIR=nativesrc
-C_TARGET_FILE=$(C_TARGET_DIR)/pjsua_wrap.cpp
+C_TARGET_FILE=$(C_TARGET_DIR)/$(JAVA_MODULE)_wrap.cpp
+
+INTERFACE_FILE=$(JAVA_MODULE).i
 
 # To generate with SWIG
 PJSIP_DIR=../pjsip/sources
@@ -22,14 +25,14 @@ PYTHON=python
 
 all : $(C_TARGET_FILE) $(JAVA_PACKAGE_DIR)
 
-$(C_TARGET_FILE) $(JAVA_PACKAGE_DIR): pjsua.i clean_source_for_android.py clean_callback_for_android.py JavaJNI2CJNI_Load.py
+$(C_TARGET_FILE) $(JAVA_PACKAGE_DIR): $(INTERFACE_FILE) clean_source_for_android.py clean_callback_for_android.py JavaJNI2CJNI_Load.py
 	@mkdir -p $(C_TARGET_DIR)
 	@$(RM) -r $(JAVA_PACKAGE_DIR)
-	@mkdir -p ${JAVA_PACKAGE_DIR}
-	@${SWIG} ${CFLAGS} \
+	@mkdir -p $(JAVA_PACKAGE_DIR)
+	@${SWIG} $(CFLAGS) \
 		-o $(C_TARGET_FILE) \
-		-outdir $(JAVA_PACKAGE_DIR) -java -package org.pjsip.pjsua \
-		-c++ pjsua.i 
+		-outdir $(JAVA_PACKAGE_DIR) -java -package $(JAVA_PACKAGE) \
+		-c++ $(INTERFACE_FILE) 
 	
 	
 	#Clean source for android target
@@ -42,18 +45,18 @@ $(C_TARGET_FILE) $(JAVA_PACKAGE_DIR): pjsua.i clean_source_for_android.py clean_
 	
 	
 	#Build pj loader
-	@$(PYTHON) JavaJNI2CJNI_Load.py -i $(JAVA_PACKAGE_DIR)/pjsuaJNI.java -o $(C_TARGET_DIR)/pj_loader.c -t ./pj_loader.c.template
+	@$(PYTHON) JavaJNI2CJNI_Load.py -i $(JAVA_PACKAGE_DIR)/$(JAVA_MODULE)JNI.java -o $(C_TARGET_DIR)/pj_loader.c -t ./pj_loader.c.template -m $(JAVA_MODULE) -p $(JAVA_PACKAGE)
 	@cat $(C_TARGET_DIR)/pj_loader.c >> $(C_TARGET_FILE)
 	@$(RM) $(C_TARGET_DIR)/pj_loader.c
 
 
-pjsua.i : $(PJSUA_HEADERS) pjsua.i_header pjsua.i_footer
+$(JAVA_MODULE).i : $(PJSUA_HEADERS) pjsua.i_header pjsua.i_footer
 	@echo > pjsua.i_body
 	@for f in $(PJSUA_HEADERS); do $(PYTHON) ./clean_header_for_swig.py $$f >> pjsua.i_body; done
 	@cat pjsua.i_header pjsua.i_body pjsua.i_footer > pjsua.i
 	@$(RM) pjsua.i_body || true
 	
 clean :
-	@if [ -f pjsua.i ]; then $(RM) pjsua.i; fi;
+	@if [ -f pjsua.i ]; then $(RM) $(JAVA_MODULE).i; fi;
 	@if [ -d $(C_TARGET_DIR) ]; then $(RM) -r $(C_TARGET_DIR); fi;
 	@if [ -d $(JAVA_PACKAGE_DIR) ]; then $(RM) -r $(JAVA_PACKAGE_DIR); fi;

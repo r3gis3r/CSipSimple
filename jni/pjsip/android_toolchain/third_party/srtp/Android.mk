@@ -3,15 +3,15 @@
 # SRTP #
 ########
 
-LOCAL_PATH := $(call my-dir)/../../../sources/third_party/srtp/
+LOCAL_PATH := $(call my-dir)/../../../sources/third_party/srtp
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := srtp
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../pjlib/include \
-			$(LOCAL_PATH)crypto/include/ \
-			$(LOCAL_PATH)include/ \
-			$(LOCAL_PATH)/../build/srtp/
+			$(LOCAL_PATH)/crypto/include \
+			$(LOCAL_PATH)/include \
+			$(LOCAL_PATH)/../build/srtp
 
 			
 

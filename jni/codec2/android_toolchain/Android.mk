@@ -7,16 +7,16 @@ ifeq ($(MY_USE_CODEC2),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_codec2_codec
 
-CODEC2_PATH := ../sources/
-PJ_CODEC2_PATH := ../pj_sources/
-CODEC2_GEN_PATH := ../generated/
+CODEC2_PATH := ../sources
+PJ_CODEC2_PATH := ../pj_sources
+CODEC2_GEN_PATH := ../generated
 
 # pj
-PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources/
-LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
-	$(PJ_DIR)/pjlib-util/include/ \
-	$(PJ_DIR)/pjnath/include/ \
-	$(PJ_DIR)/pjmedia/include/
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
+LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
+	$(PJ_DIR)/pjlib-util/include \
+	$(PJ_DIR)/pjnath/include \
+	$(PJ_DIR)/pjmedia/include
 # codec2
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CODEC2_PATH)
 LOCAL_SRC_FILES += $(CODEC2_PATH)/dump.c \

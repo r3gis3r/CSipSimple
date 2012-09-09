@@ -6,15 +6,15 @@ ifeq ($(MY_USE_OPUS),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_opus_codec
 
-PJ_OPUS_PATH := $(LOCAL_PATH)/../pj_sources/
-OPUS_PATH := $(LOCAL_PATH)/../sources/
+PJ_OPUS_PATH := $(LOCAL_PATH)/../pj_sources
+OPUS_PATH := $(LOCAL_PATH)/../sources
 
 # pj
-PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources/
-LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
-	$(PJ_DIR)/pjlib-util/include/ \
-	$(PJ_DIR)/pjnath/include/ \
-	$(PJ_DIR)/pjmedia/include/
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
+LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
+	$(PJ_DIR)/pjlib-util/include \
+	$(PJ_DIR)/pjnath/include \
+	$(PJ_DIR)/pjmedia/include
 # opus
 LOCAL_C_INCLUDES += $(OPUS_PATH)/include $(OPUS_PATH)/celt $(OPUS_PATH)/silk
 

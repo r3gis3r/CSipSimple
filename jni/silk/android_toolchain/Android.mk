@@ -8,16 +8,16 @@ ifeq ($(MY_USE_SILK),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_silk_codec
 ifeq ($(TARGET_ARCH_ABI),armeabi)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FIX_v1.0.8/
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FIX_v1.0.8
 else
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FLP_v1.0.8/
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FLP_v1.0.8
 else
 ifeq ($(TARGET_ARCH_ABI),mips)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_MIPS_v1.0.8/
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_MIPS_v1.0.8
 else
 ifeq ($(TARGET_ARCH_ABI),x86)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FLP_v1.0.8/
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FLP_v1.0.8
 endif
 endif
 endif
@@ -27,11 +27,11 @@ endif
 PJ_SILK_PATH := $(LOCAL_PATH)/../pj_sources/
 
 # pj
-PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources/
-LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include/ \
-	$(PJ_DIR)/pjlib-util/include/ \
-	$(PJ_DIR)/pjnath/include/ \
-	$(PJ_DIR)/pjmedia/include/
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
+LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
+	$(PJ_DIR)/pjlib-util/include \
+	$(PJ_DIR)/pjnath/include \
+	$(PJ_DIR)/pjmedia/include
 # silk
 LOCAL_C_INCLUDES += $(SILK_PATH)/interface
 SILK_FILES := $(wildcard $(SILK_PATH)/src/*.c)

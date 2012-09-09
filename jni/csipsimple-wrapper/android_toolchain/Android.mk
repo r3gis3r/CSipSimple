@@ -1,4 +1,4 @@
-MODULE_PATH := $(call my-dir)/../
+MODULE_PATH := $(call my-dir)/..
 
 ##################
 # CSipSimple lib #
@@ -8,11 +8,11 @@ LOCAL_PATH := $(MODULE_PATH)
 
 LOCAL_MODULE := pjsipjni
 
-PJ_ROOT_DIR := $(LOCAL_PATH)/../pjsip/sources/
-PJ_ANDROID_ROOT_DIR := $(LOCAL_PATH)/../pjsip/android_sources/
+PJ_ROOT_DIR := $(LOCAL_PATH)/../pjsip/sources
+PJ_ANDROID_ROOT_DIR := $(LOCAL_PATH)/../pjsip/android_sources
 
 #Include PJ interfaces
-LOCAL_C_INCLUDES += $(PJ_ROOT_DIR)/pjsip/include $(PJ_ROOT_DIR)/pjlib-util/include/ \
+LOCAL_C_INCLUDES += $(PJ_ROOT_DIR)/pjsip/include $(PJ_ROOT_DIR)/pjlib-util/include \
 			$(PJ_ROOT_DIR)/pjlib/include/ $(PJ_ROOT_DIR)/pjmedia/include \
 			$(PJ_ROOT_DIR)/pjnath/include $(PJ_ROOT_DIR)/pjlib/include
 #Include PJ android interfaces
@@ -20,19 +20,19 @@ LOCAL_C_INCLUDES += $(PJ_ANDROID_ROOT_DIR)/pjmedia/include/pjmedia-audiodev
 LOCAL_C_INCLUDES += $(PJ_ANDROID_ROOT_DIR)/pjmedia/include/pjmedia-videodev
 
 # Include WebRTC 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../webrtc/pj_sources/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../webrtc/pj_sources
 
 # Include g729 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../g729/pj_sources/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../g729/pj_sources
 
 # Include ZRTP interface 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/include/ $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/zrtp/zrtp/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/include $(LOCAL_PATH)/../zrtp4pj/sources/zsrtp/zrtp/zrtp
 
 # Include swig wrapper headers
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../swig-glue/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../swig-glue
 
 # Include self headers
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/include/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
 
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
@@ -53,7 +53,7 @@ LOCAL_LDLIBS += -llog -ldl
 
 ifeq ($(MY_USE_AMR),1)
 	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
-	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../amr-stagefright/pj_sources/
+	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../amr-stagefright/pj_sources
 endif
 
 

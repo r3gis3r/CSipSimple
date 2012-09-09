@@ -2,12 +2,12 @@
 # PJLIB-UTIL #
 ##############
 
-LOCAL_PATH := $(call my-dir)/../../sources/pjlib-util/
+LOCAL_PATH := $(call my-dir)/../../sources/pjlib-util
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := pjlib-util
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../pjlib/include/ $(LOCAL_PATH)/include/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../pjlib/include $(LOCAL_PATH)/include
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 PJLIB_SRC_DIR := src/pjlib-util
 
