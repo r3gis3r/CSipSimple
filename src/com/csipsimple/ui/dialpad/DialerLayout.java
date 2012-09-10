@@ -75,14 +75,18 @@ public class DialerLayout extends LinearLayout {
         View dialerCallBar = findViewById(R.id.dialerCallBar);
         if(dialerCallBar != null) {
             LayoutParams lp = (LayoutParams) dialerCallBar.getLayoutParams();
+            int orientation = LinearLayout.HORIZONTAL;
+            if(dialerCallBar instanceof LinearLayout) {
+                orientation = ((LinearLayout) dialerCallBar).getOrientation();
+            }
             if( height *  expectedBtnHeightFactor < MIN_BTNS_HEIGHT * density ) {
-                lp.height = (int)(MIN_BTNS_HEIGHT * density);
-                lp.weight = 0;
-            }else {
-                int orientation = LinearLayout.HORIZONTAL;
-                if(dialerCallBar instanceof LinearLayout) {
-                    orientation = ((LinearLayout) dialerCallBar).getOrientation();
+                if(orientation == LinearLayout.HORIZONTAL) {
+                    lp.height = (int)(MIN_BTNS_HEIGHT * density);
+                    lp.weight = 0;
+                }else {
+                    lp.weight = getResources().getInteger(R.integer.dialpad_layout_weight_additional_buttons);
                 }
+            }else {
                 if(orientation == LinearLayout.HORIZONTAL) {
                     lp.height = 0;
                 }else {

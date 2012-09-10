@@ -324,6 +324,7 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 PJ_DECL(void*) get_library_factory(dynamic_factory *impl) {
 	char lib_path[512];
 	char init_name[512];
+	FILE* file;
 	pj_ansi_snprintf(lib_path, sizeof(lib_path), "%.*s",
 			impl->shared_lib_path.slen, impl->shared_lib_path.ptr);
 	pj_ansi_snprintf(init_name, sizeof(init_name), "%.*s",
@@ -337,7 +338,7 @@ PJ_DECL(void*) get_library_factory(dynamic_factory *impl) {
 		}
 		return func_ptr;
 	} else {
-		PJ_LOG(1, (THIS_FILE, "Not found lib : %s", lib_path));
+		PJ_LOG(1, (THIS_FILE, "Cannot open : %s %s", lib_path, dlerror()));
 	}
 	return NULL;
 }

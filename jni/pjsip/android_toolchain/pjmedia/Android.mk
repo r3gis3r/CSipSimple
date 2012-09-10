@@ -90,7 +90,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := pj_g7221_codec
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../pjlib/include $(LOCAL_PATH)/../pjlib-util/include/ \
-	$(LOCAL_PATH)/../pjnath/include $(LOCAL_PATH)include/ $(LOCAL_PATH)/.. \
+	$(LOCAL_PATH)/../pjnath/include $(LOCAL_PATH)/include $(LOCAL_PATH)/.. \
 	$(LOCAL_PATH)/../third_party
 
 
@@ -99,6 +99,7 @@ LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
 LOCAL_STATIC_LIBRARIES += g7221
 LOCAL_SHARED_LIBRARIES += libpjsipjni
+LOCAL_STATIC_LIBRARIES += libgcc
 
 include $(BUILD_SHARED_LIBRARY)
 endif
@@ -196,6 +197,7 @@ LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DWEBRTC_ANDROID \
 	
 LOCAL_SHARED_LIBRARIES += libpjsipjni
 LOCAL_LDLIBS += -lGLESv2 -llog
+LOCAL_STATIC_LIBRARIES += libgcc
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -217,6 +219,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-
 LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/android_screen_capture_dev.c
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
+LOCAL_STATIC_LIBRARIES += libgcc
 
 LOCAL_SHARED_LIBRARIES += libpjsipjni
 
