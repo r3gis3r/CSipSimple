@@ -553,7 +553,6 @@ public class WizardUtils {
 					R.drawable.ic_wizard_belcentrale, 20, 
 					new Locale[]{ locale("nl_BE"), locale("nl_NL"), locale("fr_BE") }, false, false, 
 					BelCentrale.class));
-
 			WIZARDS_DICT.put("FREECONET", new WizardInfo("FREECONET", "Freeconet", 
 					R.drawable.ic_wizard_freeconet, 19, 
 					new Locale[]{
@@ -756,6 +755,12 @@ public class WizardUtils {
                         new Locale("EL", "gr"),
                     }, false, false, 
                     Modulus.class));
+            WIZARDS_DICT.put("MWEB", new WizardInfo("MWEB", "MWeb", 
+                    R.drawable.ic_wizard_mweb, 30, 
+                    new Locale[]{
+                        new Locale("EN", "za"),
+                    }, false, false, 
+                    MWeb.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
