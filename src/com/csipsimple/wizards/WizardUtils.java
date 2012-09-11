@@ -299,6 +299,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_italkworld, 20, 
                     new Locale[]{}, false, true, 
                     ItalkWorld.class));
+            WIZARDS_DICT.put("LOLAWIRELESS", new WizardInfo("LOLAWIRELESS", "Lola Wireless", 
+                    R.drawable.ic_wizard_lolawireless, 20, 
+                    new Locale[]{}, false, true, 
+                    LolaWireless.class));
             
             
             
