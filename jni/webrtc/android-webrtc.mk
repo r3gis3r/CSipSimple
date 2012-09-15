@@ -24,6 +24,9 @@ MY_WEBRTC_COMMON_DEFS := \
 
 
 
+ARCH_ARM_HAVE_ARMV7A := false
+WEBRTC_BUILD_NEON_LIBS := false
+
 ifeq ($(TARGET_ARCH),arm)
 MY_WEBRTC_COMMON_DEFS += \
     -DWEBRTC_ARCH_ARM
@@ -31,28 +34,23 @@ MY_WEBRTC_COMMON_DEFS += \
 # Transform NDK vars to Android Build Vars
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
 ARCH_ARM_HAVE_ARMV7A := true
-#MY_WEBRTC_COMMON_DEFS += \
-#    -DWEBRTC_ARCH_ARM_V7A \
-#    -DWEBRTC_DETECT_ARM_NEON
-else
-ARCH_ARM_HAVE_ARMV7A := false
+ifeq ($(BUILD_NEON_COMPLIANT_TOOLCHAIN),true)
+MY_WEBRTC_COMMON_DEFS += \
+    -DWEBRTC_ARCH_ARM_V7A \
+    -DWEBRTC_DETECT_ARM_NEON
+endif
 endif
 
 
 ifneq (,$(filter -DWEBRTC_DETECT_ARM_NEON -DWEBRTC_ARCH_ARM_NEON, \
     $(MY_WEBRTC_COMMON_DEFS)))
-WEBRTC_BUILD_NEON_LIBS := false #true
+WEBRTC_BUILD_NEON_LIBS := true
 # TODO(kma): Use MY_ARM_CFLAGS_NEON for Neon libraies in AECM, NS, and iSAC.
-#MY_ARM_CFLAGS_NEON := \
-#    -mfpu=neon \
-#    -mfloat-abi=softfp \
-#    -flax-vector-conversions
-else
-WEBRTC_BUILD_NEON_LIBS := false
-endif
-else
-WEBRTC_BUILD_NEON_LIBS := false
-ARCH_ARM_HAVE_ARMV7A := false
+MY_ARM_CFLAGS_NEON := \
+    -mfpu=neon \
+    -mfloat-abi=softfp \
+    -flax-vector-conversions
+endif # if COMMON DEFS contains ARM_NEON
 endif # ifeq ($(TARGET_ARCH),arm)
 
 

@@ -23,9 +23,9 @@ CFLAGS=-DPJMEDIA_HAS_SRTP=1 -DPJ_HAS_SSL_SOCK=1 -DPJMEDIA_HAS_ZRTP=1 -DUSE_CSIPS
 SWIG=swig2.0
 PYTHON=python
 
-all : $(C_TARGET_FILE) $(JAVA_PACKAGE_DIR)
+all : $(C_TARGET_FILE)
 
-$(C_TARGET_FILE) $(JAVA_PACKAGE_DIR): $(INTERFACE_FILE) clean_source_for_android.py clean_callback_for_android.py JavaJNI2CJNI_Load.py
+$(C_TARGET_FILE): $(INTERFACE_FILE) clean_source_for_android.py clean_callback_for_android.py JavaJNI2CJNI_Load.py
 	@mkdir -p $(C_TARGET_DIR)
 	@$(RM) -r $(JAVA_PACKAGE_DIR)
 	@mkdir -p $(JAVA_PACKAGE_DIR)
