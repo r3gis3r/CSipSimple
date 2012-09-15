@@ -47,10 +47,12 @@ public class PrefsFilters extends AccountsChooserListActivity {
 	}
 
     @Override
-    public void onAccountClicked(long id) {
+    public void onAccountClicked(long id, String displayName, String wizard) {
         if(id != SipProfile.INVALID_ID){
             Intent it = new Intent(this, AccountFilters.class);
             it.putExtra(SipProfile.FIELD_ID,  id);
+            it.putExtra(SipProfile.FIELD_DISPLAY_NAME, displayName);
+            it.putExtra(SipProfile.FIELD_WIZARD, wizard);
             startActivity(it);
         }
     }

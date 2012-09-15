@@ -77,7 +77,7 @@ public class AccountWidgetConfigure extends AccountsChooserListActivity {
 
 
     @Override
-    public void onAccountClicked(long accountId) {
+    public void onAccountClicked(long accountId, String d, String w) {
 
         if(appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
             SharedPreferences prefs = getSharedPreferences(WIDGET_PREFS, 0);

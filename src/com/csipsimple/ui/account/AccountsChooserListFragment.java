@@ -43,6 +43,20 @@ public class AccountsChooserListFragment extends CSSListFragment {
     
     private AccountsChooserAdapter mAdapter;
     private AccountsLoader accLoader;
+
+    private Integer INDEX_DISPLAY_NAME = null;
+    private Integer INDEX_WIZARD = null;
+    private Integer INDEX_ID = null;
+    
+
+    private void initIndexes(Cursor c) {
+        if(INDEX_DISPLAY_NAME == null) {
+            INDEX_ID = c.getColumnIndex(SipProfile.FIELD_ID);
+            INDEX_DISPLAY_NAME = c.getColumnIndex(SipProfile.FIELD_DISPLAY_NAME);
+            INDEX_WIZARD = c.getColumnIndex(SipProfile.FIELD_WIZARD);
+        }
+    }
+    
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -98,13 +112,22 @@ public class AccountsChooserListFragment extends CSSListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         if(mAdapter != null && accListener != null) {
             Cursor c = (Cursor) mAdapter.getItem(position);
-            long accId = c.getLong(c.getColumnIndex(SipProfile.FIELD_ID));
-            accListener.onAccountClicked(accId);
+            initIndexes(c);
+            long accId = c.getLong(INDEX_ID);
+            String displayName = c.getString(INDEX_DISPLAY_NAME);
+            String wizard = c.getString(INDEX_WIZARD);
+            accListener.onAccountClicked(accId, displayName, wizard);
         }
     }
     
     public interface OnAccountClickListener {
-        public void onAccountClicked(long accountId); 
+        /**
+         * Fired when an account row is cliked
+         * @param accountId the id of the clicked account
+         * @param name the display name of the clicked account
+         * @param wizard the wizard of the clicked account
+         */
+        public void onAccountClicked(long accountId, String name, String wizard); 
     }
     private OnAccountClickListener accListener = null;
     public void setOnAccountClickListener(OnAccountClickListener l) {
@@ -136,11 +159,6 @@ public class AccountsChooserListFragment extends CSSListFragment {
             ImageView icon;
         }
 
-
-        private Integer INDEX_DISPLAY_NAME = null;
-        private Integer INDEX_WIZARD = null;
-        private Integer INDEX_ID = null;
-        
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             AccListItemViewTag tag = (AccListItemViewTag) view.getTag();
@@ -166,17 +184,6 @@ public class AccountsChooserListFragment extends CSSListFragment {
                 }
             }
         }
-        
-
-        private void initIndexes(Cursor c) {
-            if(INDEX_DISPLAY_NAME == null) {
-                INDEX_ID = c.getColumnIndex(SipProfile.FIELD_ID);
-                INDEX_DISPLAY_NAME = c.getColumnIndex(SipProfile.FIELD_DISPLAY_NAME);
-                INDEX_WIZARD = c.getColumnIndex(SipProfile.FIELD_WIZARD);
-            }
-        }
-        
-
     }
     
     private boolean showExternal;

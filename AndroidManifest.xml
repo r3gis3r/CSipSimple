@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.csipsimple"
     android:installLocation="auto"
-    android:versionCode="1788"
-    android:versionName="0.04-00" >
+    android:versionCode="1890"
+    android:versionName="0.04-01" >
 
     <supports-screens
         android:anyDensity="true"
@@ -273,6 +273,7 @@
         <activity
             android:name="com.csipsimple.wizards.BasePrefsWizard"
             android:configChanges="orientation"
+            android:label="@string/edit"
             android:theme="@style/DarkTheme" />
 
         <!-- Call management -->

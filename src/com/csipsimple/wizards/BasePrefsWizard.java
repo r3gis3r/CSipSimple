@@ -139,7 +139,9 @@ public class BasePrefsWizard extends GenericPrefs {
 		}
 		wizardId = wId;
 		wizard.setParent(this);
-
+		if(getSupportActionBar() != null) {
+		    getSupportActionBar().setIcon(WizardUtils.getWizardIconRes(wizardId));
+		}
 		return true;
 	}
 
@@ -216,6 +218,8 @@ public class BasePrefsWizard extends GenericPrefs {
 			if (account.id != SipProfile.INVALID_ID) {
 				Intent it = new Intent(this, AccountFilters.class);
 				it.putExtra(SipProfile.FIELD_ID, account.id);
+				it.putExtra(SipProfile.FIELD_DISPLAY_NAME, account.display_name);
+				it.putExtra(SipProfile.FIELD_WIZARD, account.wizard);
 				startActivityForResult(it, MODIFY_FILTERS);
 				return true;
 			}
