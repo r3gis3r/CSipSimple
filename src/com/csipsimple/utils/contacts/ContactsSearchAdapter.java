@@ -28,12 +28,15 @@ package com.csipsimple.utils.contacts;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Address;
 import android.support.v4.widget.CursorAdapter;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AlphabetIndexer;
+import android.widget.SectionIndexer;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
@@ -42,10 +45,12 @@ import com.csipsimple.models.Filter;
 /**
  * This adapter is used to filter contacts on both name and number.
  */
-public class ContactsSearchAdapter extends CursorAdapter {
+public class ContactsSearchAdapter extends CursorAdapter implements SectionIndexer {
 
     private final Context mContext;
     private long currentAccId = SipProfile.INVALID_ID;
+    AlphabetIndexer alphaIndexer;
+
     
     public ContactsSearchAdapter(Context context) {
         // Note that the RecipientsAdapter doesn't support auto-requeries. If we
@@ -55,6 +60,7 @@ public class ContactsSearchAdapter extends CursorAdapter {
         // See MessageFragment for an example.
         super(context, null, false /* no auto-requery */);
         mContext = context;
+        
     }
     
     public final void setSelectedAccount(long accId) {
@@ -75,7 +81,16 @@ public class ContactsSearchAdapter extends CursorAdapter {
 
     @Override
     public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
-        return ContactsWrapper.getInstance().searchContact(mContext, constraint);
+        Cursor c = ContactsWrapper.getInstance().searchContact(mContext, constraint);
+        
+        if(alphaIndexer == null) {
+            // TODO -- 5 is a value to get from contacts wrapper
+            alphaIndexer = new AlphabetIndexer(c, 5,
+                    " ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        }else {
+            alphaIndexer.setCursor(c);
+        }
+        return c;
     }
     
     @Override
@@ -86,6 +101,30 @@ public class ContactsSearchAdapter extends CursorAdapter {
 			return Filter.rewritePhoneNumber(mContext, currentAccId, stripNbr);
     	}
     	return number;
+    }
+
+    @Override
+    public int getPositionForSection(int section) {
+        if(alphaIndexer != null) {
+            return alphaIndexer.getPositionForSection(section);
+        }
+        return 0;
+    }
+
+    @Override
+    public int getSectionForPosition(int position) {
+        if(alphaIndexer != null) {
+            return alphaIndexer.getSectionForPosition(position);
+        }
+        return 0;
+    }
+
+    @Override
+    public Object[] getSections() {
+        if(alphaIndexer != null) {
+            return alphaIndexer.getSections();
+        }
+        return null;
     }
 
     

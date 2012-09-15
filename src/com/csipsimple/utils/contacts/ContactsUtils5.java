@@ -58,6 +58,7 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.Compatibility;
+import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 
@@ -194,20 +195,28 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
 
         // TODO : filter more complex, see getAllContactsAdapter
-        Uri uri = Uri.withAppendedPath(CommonDataKinds.Phone.CONTENT_FILTER_URI,
-                Uri.encode(cons));
-        /*
-         * if we decide to filter based on phone types use a selection like
-         * this. String selection = String.format("%s=%s OR %s=%s OR %s=%s",
-         * Phone.TYPE, Phone.TYPE_MOBILE, Phone.TYPE, Phone.TYPE_WORK_MOBILE,
-         * Phone.TYPE, Phone.TYPE_MMS);
-         */
-        Cursor phoneCursor =
-                ctxt.getContentResolver().query(uri,
-                        PROJECTION_PHONE,
-                        null, // selection,
-                        null,
-                        SORT_ORDER);
+        Cursor phoneCursor;
+        if(!TextUtils.isEmpty(cons)) {
+            Uri uri = Uri.withAppendedPath(CommonDataKinds.Phone.CONTENT_FILTER_URI,
+                    Uri.encode(cons));
+            /*
+             * if we decide to filter based on phone types use a selection like
+             * this. String selection = String.format("%s=%s OR %s=%s OR %s=%s",
+             * Phone.TYPE, Phone.TYPE_MOBILE, Phone.TYPE, Phone.TYPE_WORK_MOBILE,
+             * Phone.TYPE, Phone.TYPE_MMS);
+             */
+             phoneCursor = ctxt.getContentResolver().query(uri,
+                            PROJECTION_PHONE,
+                            null, // selection,
+                            null,
+                            SORT_ORDER);
+        }else {
+             phoneCursor = ctxt.getContentResolver().query(CommonDataKinds.Phone.CONTENT_URI,
+                            PROJECTION_PHONE,
+                            null, // selection,
+                            null,
+                            Contacts.DISPLAY_NAME);
+        }
 
         if (phone.length() > 0) {
 
@@ -262,6 +271,7 @@ public class ContactsUtils5 extends ContactsWrapper {
         TextView name = (TextView) view.findViewById(R.id.name);
         TextView label = (TextView) view.findViewById(R.id.label);
         TextView number = (TextView) view.findViewById(R.id.number);
+        ImageView imageView = (ImageView) view.findViewById(R.id.contact_photo);
 
         name.setText(cursor.getString(NAME_INDEX));
 
@@ -280,6 +290,9 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
 
         number.setText(cursor.getString(NUMBER_INDEX));
+
+        Uri uri = ContentUris.withAppendedId(Contacts.CONTENT_URI, cursor.getLong(CONTACT_ID_INDEX));
+        ContactsAsyncHelper.updateImageViewWithContactAsync(context, imageView, uri, R.drawable.ic_contact_picture_holo_dark);
     }
 
     @Override
@@ -571,7 +584,7 @@ public class ContactsUtils5 extends ContactsWrapper {
         // Get views
         TextView tv = (TextView) view.findViewById(R.id.contact_name);
         TextView sub = (TextView) view.findViewById(R.id.subject);
-        ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
+        ImageView imageView = (ImageView) view.findViewById(R.id.contact_photo);
 
         // Bind
         view.setTag(value);

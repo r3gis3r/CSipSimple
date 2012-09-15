@@ -72,6 +72,7 @@ public class ContactsAsyncHelper extends Handler {
     // constants
     private static final int EVENT_LOAD_IMAGE = 1;
     private static final int EVENT_LOAD_IMAGE_URI = 2;
+    private static final int EVENT_LOAD_CONTACT_URI = 3;
     private static final int DEFAULT_TOKEN = -1;
     private static final int TAG_PHOTO_INFOS = R.id.icon;
     private static ContactsWrapper contactsWrapper;
@@ -134,7 +135,7 @@ public class ContactsAsyncHelper extends Handler {
                         args.result = null;
                     }
                 }
-            } else if (msg.arg1 == EVENT_LOAD_IMAGE_URI) {
+            } else if (msg.arg1 == EVENT_LOAD_IMAGE_URI || msg.arg1 == EVENT_LOAD_CONTACT_URI) {
                 PhotoViewTag photoTag = (PhotoViewTag) args.view.getTag(TAG_PHOTO_INFOS);
                 if (photoTag != null && photoTag.uri != null) {
                     uri = photoTag.uri;
@@ -145,26 +146,36 @@ public class ContactsAsyncHelper extends Handler {
                     synchronized (photoCache) {
                         img = photoCache.get(uri);
                     }
-                    if(img == null) {
-                        byte[] buffer = new byte[1024 * 16];
-                        try {
-                            InputStream is = args.context.getContentResolver().openInputStream(uri);
-                            if (is != null) {
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                try {
-                                    int size;
-                                    while ((size = is.read(buffer)) != -1) {
-                                        baos.write(buffer, 0, size);
+                    if (img == null) {
+
+                        if (msg.arg1 == EVENT_LOAD_IMAGE_URI) {
+
+                            try {
+                                byte[] buffer = new byte[1024 * 16];
+                                InputStream is = args.context.getContentResolver().openInputStream(
+                                        uri);
+                                if (is != null) {
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    try {
+                                        int size;
+                                        while ((size = is.read(buffer)) != -1) {
+                                            baos.write(buffer, 0, size);
+                                        }
+                                    } finally {
+                                        is.close();
                                     }
-                                } finally {
-                                    is.close();
+                                    byte[] boasBytes = baos.toByteArray();
+                                    img = BitmapFactory.decodeByteArray(boasBytes, 0,
+                                            boasBytes.length,
+                                            null);
                                 }
-                                byte[] boasBytes = baos.toByteArray();
-                                img = BitmapFactory.decodeByteArray(boasBytes, 0, boasBytes.length,
-                                        null);
+
+                            } catch (Exception ex) {
+                                Log.v(THIS_FILE, "Cannot load photo " + uri, ex);
                             }
-                        } catch (Exception ex) {
-                            Log.v(THIS_FILE, "Cannot load photo " + uri, ex);
+
+                        } else if (msg.arg1 == EVENT_LOAD_CONTACT_URI) {
+                            img = ContactsWrapper.getInstance().getContactPhoto(args.context, uri, false, null);
                         }
                     }
                     
@@ -259,6 +270,16 @@ public class ContactsAsyncHelper extends Handler {
 
     public static void updateImageViewWithContactPhotoAsync(Context context, ImageView imageView,
             Uri photoUri, int placeholderImageResource) {
+       updateImageViewWithUriAsync(context, imageView, photoUri, placeholderImageResource, EVENT_LOAD_IMAGE_URI);
+    }
+    
+    public static void updateImageViewWithContactAsync(Context context, ImageView imageView,
+            Uri contactUri, int placeholderImageResource) {
+       updateImageViewWithUriAsync(context, imageView, contactUri, placeholderImageResource, EVENT_LOAD_CONTACT_URI);
+    }
+
+    private static void updateImageViewWithUriAsync(Context context, ImageView imageView,
+            Uri photoUri, int placeholderImageResource, int eventType) {
         if (sThreadHandler == null) {
             Log.v(THIS_FILE, "Update image view with contact async");
             new ContactsAsyncHelper();
@@ -288,7 +309,7 @@ public class ContactsAsyncHelper extends Handler {
 
         // setup message arguments
         Message msg = sThreadHandler.obtainMessage();
-        msg.arg1 = EVENT_LOAD_IMAGE_URI;
+        msg.arg1 = eventType;
         msg.obj = args;
 
         preloadImage(imageView, placeholderImageResource, msg);
@@ -328,7 +349,7 @@ public class ContactsAsyncHelper extends Handler {
     @Override
     public void handleMessage(Message msg) {
         WorkerArgs args = (WorkerArgs) msg.obj;
-        if (msg.arg1 == EVENT_LOAD_IMAGE || msg.arg1 == EVENT_LOAD_IMAGE_URI) {
+        if (msg.arg1 == EVENT_LOAD_IMAGE || msg.arg1 == EVENT_LOAD_IMAGE_URI || msg.arg1 == EVENT_LOAD_CONTACT_URI) {
             boolean imagePresent = false;
             // Sanity check on image view
             PhotoViewTag photoTag = (PhotoViewTag) args.view.getTag(TAG_PHOTO_INFOS);

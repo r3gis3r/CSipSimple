@@ -197,9 +197,12 @@ public class ContactsUtils3 extends ContactsWrapper {
     @Override
     public void bindAutoCompleteView(View view, Context context, Cursor cursor) {
         TextView name = (TextView) view.findViewById(R.id.name);
-        name.setText(cursor.getString(NAME_INDEX));
-
         TextView label = (TextView) view.findViewById(R.id.label);
+        TextView number = (TextView) view.findViewById(R.id.number);
+        ImageView image = (ImageView) view.findViewById(R.id.contact_photo);
+        
+        
+        name.setText(cursor.getString(NAME_INDEX));
         int type = cursor.getInt(TYPE_INDEX);
         CharSequence labelText = Phones.getDisplayLabel(context, type,
                 cursor.getString(LABEL_INDEX));
@@ -214,8 +217,12 @@ public class ContactsUtils3 extends ContactsWrapper {
             label.setVisibility(View.VISIBLE);
         }
 
-        TextView number = (TextView) view.findViewById(R.id.number);
         number.setText(cursor.getString(NUMBER_INDEX));
+
+        Long peopleId = cursor.getLong(CONTACT_ID_INDEX);
+        Uri uri = ContentUris.withAppendedId(People.CONTENT_URI, peopleId);
+        Bitmap bitmap = getContactPhoto(context, uri, false, R.drawable.ic_contact_picture_holo_dark);
+        image.setImageBitmap(bitmap);
     }
 
     @Override
@@ -322,7 +329,7 @@ public class ContactsUtils3 extends ContactsWrapper {
         // Get views
         TextView tv = (TextView) view.findViewById(R.id.contact_name);
         TextView sub = (TextView) view.findViewById(R.id.subject);
-        ImageView imageView = (ImageView) view.findViewById(R.id.contact_picture);
+        ImageView imageView = (ImageView) view.findViewById(R.id.contact_photo);
         
         // Bind
         view.setTag(value);

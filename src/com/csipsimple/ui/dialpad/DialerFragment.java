@@ -213,6 +213,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         // We only need to add the autocomplete list if we
         autoCompleteList.setAdapter(autoCompleteAdapter);
         autoCompleteList.setOnItemClickListener(autoCompleteListItemListener);
+        autoCompleteList.setFastScrollEnabled(true);
 
         // Bottom bar setup
         callBar.setOnDialActionListener(this);
@@ -228,6 +229,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         // Apply third party theme if any
         applyTheme(v);
         v.setOnKeyListener(this);
+        applyTextToAutoComplete();
         return v;
     }
     
@@ -472,14 +474,18 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         if (!notEmpty && isDigit) {
             digits.setCursorVisible(false);
         }
+        applyTextToAutoComplete();
+    }
+    
+    private void applyTextToAutoComplete() {
 
         // If single pane for smartphone use autocomplete list
         if (hasAutocompleteList()) {
-            if (digits.length() >= 2) {
+            //if (digits.length() >= 2) {
                 autoCompleteAdapter.getFilter().filter(digits.getText().toString());
-            } else {
-                autoCompleteAdapter.swapCursor(null);
-            }
+            //} else {
+            //    autoCompleteAdapter.swapCursor(null);
+            //}
         }
         // Dual pane : always use autocomplete list
         if (mDualPane && autoCompleteFragment != null) {
