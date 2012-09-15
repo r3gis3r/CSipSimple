@@ -56,5 +56,11 @@ public class Fix2Mob extends SimpleImplementation {
 		}
 		return super.getDefaultFieldSummary(fieldName);
 	}
+    
+    public SipProfile buildAccount(SipProfile account) {
+        account = super.buildAccount(account);
+        account.vm_nbr = "123";
+        return account;
+    }
 	
 }
