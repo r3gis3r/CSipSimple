@@ -54,7 +54,7 @@ public class MundoR extends AlternateServerImplementation {
     public SipProfile buildAccount(SipProfile account) {
         SipProfile acc = super.buildAccount(account);
         acc.proxies = new String[] {};
-        acc.reg_uri = "sip:213.60.204.6";
+        acc.reg_uri = "sip:212.51.55.6";
         acc.transport = SipProfile.TRANSPORT_UDP;
         acc.reg_timeout = 3600;
         return acc;
