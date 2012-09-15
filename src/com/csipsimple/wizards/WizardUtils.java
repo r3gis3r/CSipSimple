@@ -761,6 +761,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_lolawireless, 20, 
                     new Locale[]{Locale.US}, false, false, 
                     LolaWireless.class));
+            WIZARDS_DICT.put("FIXE2MOB", new WizardInfo("FIXE2MOB", "Fixe2Mob", 
+                    R.drawable.ic_wizard_fix2mod, 5, 
+                    new Locale[]{Locale.FRANCE}, false, false, 
+                    Fix2Mob.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
