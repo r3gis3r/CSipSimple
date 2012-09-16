@@ -298,7 +298,9 @@ public class CallLogAdapter extends GroupingListAdapter
         int position = cursor.getPosition();
         long[] callIds = new long[count];
         for (int index = 0; index < count; ++index) {
-            callIds[index] = cursor.getLong(cursor.getColumnIndex(CallLog.Calls._ID));
+            if(!cursor.isAfterLast()) {
+                callIds[index] = cursor.getLong(cursor.getColumnIndex(CallLog.Calls._ID));
+            }
             cursor.moveToNext();
         }
         cursor.moveToPosition(position);
