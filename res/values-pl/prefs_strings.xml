@@ -103,6 +103,8 @@
   <string name="network_route_polling_desc">Obejście sprawdzania VPN Androida 4.0. Pozostaw na 0, jeśli nie w tym przypadku wyłączyć</string>
   <string name="disable_tcp_switch">Wyłącz przełącznik TCP</string>
   <string name="disable_tcp_switch_desc">Jeśli jest aktywny, zapobiega stosu przełączyć na TCP dla dużych pakietów UDP.</string>
+  <string name="add_bandwidth_tias_in_sdp">Dodaj modyfikator przepustowości TIAS w SDP</string>
+  <string name="add_bandwidth_tias_in_sdp_desc">Jak zdefiniowano w RFC3890. Wymagany dla widea na serwerach Avaya lecz wywołuje błędne parsowanie na niektórych serwerach SIP.</string>
   <!--Security-->
   <string name="tls">TLS</string>
   <string name="secure_transport">Bezpieczny transport</string>
@@ -138,6 +140,8 @@
   <string name="echo_cancellation_desc">Włącza wycinanie echa</string>
   <string name="enable_vad">Wykrywanie głosu</string>
   <string name="enable_vad_desc">Włącza wykrywanie gosu</string>
+  <string name="enable_ns">Redukcja szumów</string>
+  <string name="enable_ns_desc">Działa, jeśli eliminacja echa jest aktywna i używany będzie eliminator echa WebRTC</string>
   <string name="snd_mic_level">Wzmocnienie mikrofonu</string>
   <string name="snd_mic_level_desc">Zwiększa poziom czułości mikrofonu (1 oznacza bez zmian)</string>
   <string name="snd_speaker_level">Wzmocnienie głośnika</string>
@@ -235,6 +239,8 @@
   <string name="frames_per_rtp_packet">Klatki na pakiet RTP</string>
   <string name="g729_frame_per_packet">Klatki G729 RTP na pakiet</string>
   <string name="ilbc_frame_per_packet">Klatki iLBC RTP na pakiet</string>
+  <string name="codec_h264_profile">Profil H264</string>
+  <string name="codec_h264_level">Poziom H264</string>
   <string name="thread_count">Ilość wątków</string>
   <string name="thread_count_desc">Liczba wątków przeznaczonych dla rodzimego stosu</string>
   <!--UI-->

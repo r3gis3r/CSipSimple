@@ -103,6 +103,8 @@
   <string name="network_route_polling_desc">Zjistit řešení Android 4.0 VPN. Nechte na 0, pokud naní tato věc  vypnouta.</string>
   <string name="disable_tcp_switch">Zakázat TCP přepínač</string>
   <string name="disable_tcp_switch_desc">Pokud je aktivní, brání zásobníku přejít na TCP pro velké pakety UDP.</string>
+  <string name="add_bandwidth_tias_in_sdp">Přidat šířku pásma modifikátorů TIAS v SDP</string>
+  <string name="add_bandwidth_tias_in_sdp_desc">Podle RFC3890. Nutné pro video na serverech společnosti Avaya, avšak doby přerušení způsobují nespolehlivé parsování pro některé SIP servery.</string>
   <!--Security-->
   <string name="tls">TLS</string>
   <string name="secure_transport">zabezpečit transport</string>
@@ -138,6 +140,8 @@
   <string name="echo_cancellation_desc">Aktivuje funkce pro potlačení echa</string>
   <string name="enable_vad">detekce hlasu</string>
   <string name="enable_vad_desc">aktivace hlasové detekc</string>
+  <string name="enable_ns">Redukce šumu</string>
+  <string name="enable_ns_desc">Funguje, pokud je potlačení ozvě aktivováno a použit WebRTC backend pro potlačení ozvěn.</string>
   <string name="snd_mic_level">zesílení mikrofonu</string>
   <string name="snd_mic_level_desc">nastavení úrovně signálu mikrofonu</string>
   <string name="snd_speaker_level">zesíleni reproduktoru</string>
@@ -235,6 +239,8 @@
   <string name="frames_per_rtp_packet">RTP snímků za paket</string>
   <string name="g729_frame_per_packet">G729 RTP snímků za paket</string>
   <string name="ilbc_frame_per_packet">iLBC RTP snímků za paket</string>
+  <string name="codec_h264_profile">H264 profil</string>
+  <string name="codec_h264_level">H264 úroveň</string>
   <string name="thread_count">Počet vláken</string>
   <string name="thread_count_desc">Počet vláken přidělených pro nativní zásobník</string>
   <!--UI-->

@@ -103,6 +103,8 @@
   <string name="network_route_polling_desc">Contournement pour la vérification du VPN avec android 4.0. Laissez à 0 pour désactiver</string>
   <string name="disable_tcp_switch">Désactiver le basculement en TCP.</string>
   <string name="disable_tcp_switch_desc">Si activté, empèche la pile SIP de basculer en TCP lorsque les paquets UDP sont trop gros.</string>
+  <string name="add_bandwidth_tias_in_sdp">Ajouter le champ TIAS dans les SDP</string>
+  <string name="add_bandwidth_tias_in_sdp_desc">Comme défini dans la RFC3890. Nécessaire pour les serveurs Avaya. Buggué sur d\'autres serveurs SIP</string>
   <!--Security-->
   <string name="tls">Chiffrement TLS</string>
   <string name="secure_transport">Transport sécurisé</string>
@@ -138,6 +140,8 @@
   <string name="echo_cancellation_desc">Activer l\'annulation d\'echo</string>
   <string name="enable_vad">Détection de silence</string>
   <string name="enable_vad_desc">Activer la détection active de voix (réduit la bande passante utilisée)</string>
+  <string name="enable_ns">Réduction du bruit</string>
+  <string name="enable_ns_desc">Marche si l\'annulation d\'echo activé et que le mode d\'annulation WebRTC est utilisé.</string>
   <string name="snd_mic_level">Amplification du micro</string>
   <string name="snd_mic_level_desc">Ajuster le gain du signal du micro (1 n\'a pas d\'effet)</string>
   <string name="snd_speaker_level">Amplification de l\'écoute</string>
@@ -235,6 +239,8 @@
   <string name="frames_per_rtp_packet">Frames par paquet RTP</string>
   <string name="g729_frame_per_packet">G729 frames par paquet</string>
   <string name="ilbc_frame_per_packet">iLBC frames par paquet</string>
+  <string name="codec_h264_profile">Profile H264</string>
+  <string name="codec_h264_level">Level H264</string>
   <string name="thread_count">Nombre de threads</string>
   <string name="thread_count_desc">Nombre de thread alloué à la pile SIP. Si plus grand que 0 la batterie sera plus utilisée.</string>
   <!--UI-->

@@ -23,6 +23,7 @@
   <string name="use_other">その他のネットワークを使用</string>
   <string name="use_other_in_desc">着信にWiMAXなどを使用</string>
   <string name="use_other_out_desc">発信にWiMAXなどを使用</string>
+  <string name="use_anyway">そのまま使用する</string>
   <string name="use_anyway_desc">Androidのネットワーク状態を確認しない。通常は使うべきではありません。</string>
   <string name="use_3g">3Gを使用 (及びLTE)</string>
   <string name="use_3g_disclamer">このオプションは携帯電話会社の許可が必須です</string>
@@ -63,6 +64,8 @@
   <string name="turn_password_desc">TURN認証のパスワード</string>
   <string name="enable_stun">STUNを有効</string>
   <string name="enable_stun_desc">STUN機能を有効</string>
+  <string name="enable_stun2">新しいSTUNフォーマットを利用</string>
+  <string name="enable_stun2_desc">ソケットで使用されているアドレスを決めるSTUNリクエストに新しいフォーマットをするようにする</string>
   <string name="stun_server">STUNサーバ</string>
   <string name="stun_server_desc">STUNサーバ (ホスト[:ポート], ...)</string>
   <string name="enable_qos">QoSを有効</string>
@@ -80,6 +83,7 @@
   <string name="use_compact_form">コンパクトSIPを使用</string>
   <string name="use_compact_form_desc">SIPパケットサイズを削減します。古いSIPサーバでは動作しないかもしれません。</string>
   <string name="user_agent">ユーザエージェント</string>
+  <string name="user_agent_desc">アプリケーションで展開されるエージェント(デフォルトで\n情報が追加される場合)</string>
   <!--<string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>-->
   <string name="force_no_update">常にアップデート無し</string>
@@ -93,10 +97,14 @@
   <string name="tsx_t1_timeout">トランザクションT1タイムアウト値</string>
   <string name="tsx_t2_timeout">トランザクションT2タイムアウト値</string>
   <string name="tsx_t4_timeout">トランザクションT4タイムアウト値</string>
+  <string name="tsx_td_timeout">INVITE のためのトランザクションを完了するまでのタイマー</string>
   <string name="tsx_timeout_desc">-1でRFC 3261のデフォルト値</string>
   <string name="network_route_polling">ネットワークの変更を確認する間隔 (分)</string>
   <string name="network_route_polling_desc">Android 4.0 VPNチェックの代替手段。該当しない場合は0のままにして無効にしてください。</string>
   <string name="disable_tcp_switch">TCPスイッチを無効</string>
+  <string name="disable_tcp_switch_desc">有効にすると大きなUDPパケットをTCPに切り替えるスタックを防止します。</string>
+  <string name="add_bandwidth_tias_in_sdp">SDPで帯域を調整するTIASを追加</string>
+  <string name="add_bandwidth_tias_in_sdp_desc">RFC3890による。Avayaのサーバの映像通信で必要だが、SIPサーバによっては間違った実装のため動かないことがある。</string>
   <!--Security-->
   <string name="tls">TLS</string>
   <string name="secure_transport">セキュアトランスポート</string>
@@ -132,6 +140,8 @@
   <string name="echo_cancellation_desc">エコーキャンセルを有効</string>
   <string name="enable_vad">音声検出</string>
   <string name="enable_vad_desc">音声検出を有効</string>
+  <string name="enable_ns">ノイズ防止</string>
+  <string name="enable_ns_desc">エコーキャンセルが動作していて、WebRTCエコーキャンセラーが裏で使われてるときに稼働します。</string>
   <string name="snd_mic_level">マイクアンプ</string>
   <string name="snd_mic_level_desc">マイクの音量レベルを調整 (1で調整なし)</string>
   <string name="snd_speaker_level">スピーカーアンプ</string>
@@ -147,6 +157,7 @@
   <string name="snd_clock_rate">クロックレート</string>
   <string name="snd_clock_rate_desc">オーディオチャンネル周波数</string>
   <string name="snd_ptime">音声フレーム ptime</string>
+  <string name="snd_ptime_desc">会議通話や音声デバイスの両方の音声サンプリングレートに影響を与える値です。通常は遅延を押さえるためにptimeは低い値を指定してください。</string>
   <string name="echo_cancellation_tail">ICEを有効</string>
   <string name="echo_cancellation_tail_desc">エコーキャンセルの余韻の長さ</string>
   <string name="echo_mode">エコーモード</string>
@@ -157,16 +168,23 @@
   <string name="use_soft_volume">ソフトウェアボリュームを使用</string>
   <string name="use_soft_volume_desc">Androidボリュームの代わりにソフトウェアボリュームを使用</string>
   <string name="use_routing_api">ルーティングAPIを使用</string>
+  <string name="use_routing_api_desc">音声がイヤフォンではなくスピーカーに出るようになっている場合に有効化する</string>
   <string name="use_mode_api">オーディオAPI利用モード</string>
+  <string name="use_mode_api_desc">音声がイヤフォンではなくスピーカーに出るようになっている場合に有効化する</string>
   <string name="sip_audio_mode">SIP通話のオーディオモード</string>
+  <string name="sip_audio_mode_desc">開発者がアドバイスしたときのみ変更してください。</string>
   <string name="use_webrtc_hack">WebRTC実装を使用</string>
   <string name="use_webrtc_hack_desc">この実装はWebRTCチームによって作られました。</string>
   <string name="do_focus_audio">フォーカスオーディオ</string>
+  <string name="do_focus_audio_desc">無効にすると音声が音楽に混じることになりますが、ルーティングの手助けになるかもしれません。</string>
   <string name="micro_source">マイクソース</string>
+  <string name="micro_source_desc">マイク音量。適切な値を設定することによりエコーキャンセルが改善するかもしれません。</string>
   <string name="has_io_queue">IOキュー</string>
+  <string name="has_io_queue_desc">入力/出力のキューを起動</string>
   <string name="set_audio_generate_tone">トーンハック</string>
   <string name="set_audio_generate_tone_desc">通話前にトーンを生成</string>
   <string name="restart_aud_on_routing_change">ルーティングが変更されたらストリームを再起動</string>
+  <string name="restart_aud_on_routing_change_desc">Bluetoothの既定のクロックが8kHzでない場合に必須。無効にすると切り替えが早くなる。</string>
   <string name="band_for_wifi">WiFiの帯域タイプ</string>
   <string name="band_for_3g">3Gの帯域タイプ</string>
   <string name="band_for_gprs">GPRSの帯域タイプ</string>
@@ -174,6 +192,7 @@
   <string name="band_for_other">その他の帯域タイプ</string>
   <string name="codecs_band_types">接続帯域別のコーデック</string>
   <string name="use_sgs_call_hack">Samsung Galaxyハックを使用</string>
+  <string name="use_sgs_call_hack_desc">ルーティングを解決するためのプリセット呼び出しモード</string>
   <string name="audio_implementation">オーディオ実装</string>
   <string name="audio_implementation_desc">オーディオのバックエンド</string>
   <string name="digest">ダイジェスト</string>
@@ -185,6 +204,7 @@
   <string name="mandatory">必須</string>
   <string name="auto">自動</string>
   <string name="rtp">RTP</string>
+  <string name="in_band">バンド世代</string>
   <string name="sip_info">SIP 情報</string>
   <string name="legacy">レガシー</string>
   <string name="normal">普通</string>
@@ -219,6 +239,8 @@
   <string name="frames_per_rtp_packet">RTPパケットのフレーム数</string>
   <string name="g729_frame_per_packet">パケットのG729 RTPフレーム数</string>
   <string name="ilbc_frame_per_packet">パケットのiLBC RTPフレーム数</string>
+  <string name="codec_h264_profile">H264 プロファイル</string>
+  <string name="codec_h264_level">H264 レベル</string>
   <string name="thread_count">スレッドカウント</string>
   <string name="thread_count_desc">ネイティブスタックに割り当てるスレッド数</string>
   <!--UI-->
@@ -234,18 +256,25 @@
   <string name="dial_press_tone">ダイヤルトーンフィードバック</string>
   <string name="dial_press_tone_desc">ダイヤル中に操作音を再生</string>
   <string name="dial_press_vibrate">ダイヤルバイブフィードバック</string>
+  <string name="dial_press_vibrate_desc">ダイヤル時にバイブ</string>
   <string name="start_with_text_dialer">テキストダイヤラー</string>
   <string name="start_with_text_dialer_desc">テキストダイヤラーをデフォルト</string>
   <string name="use_alternate_unlocker">スライド応答を使わない</string>
   <string name="use_alternate_unlocker_desc">ボタンの代わりにスライドで着信に応答</string>
   <string name="keep_awake_incall">通話中のスリープ抑制</string>
+  <string name="keep_awake_incall_desc">WiFi使用時に画面オフになった場合、音声の途切れを修正</string>
+  <string name="use_partial_wake_lock">起動ロックの部分的使用</string>
+  <string name="use_partial_wake_lock_desc">アプリがCPUを常に使い続けるのを保証(バッテリーを消耗します)</string>
   <string name="log_level">ログレベル</string>
   <string name="log_level_desc">デバッグ用のログレベル (0 無し ～ 5 詳細)</string>
   <string name="integrate_with_native_music">音楽アプリと連携</string>
+  <string name="integrate_with_native_music_desc">公式ではない音楽プレーヤを使っている場合にそれを無効にする</string>
   <string name="ringtone">着信音</string>
   <string name="ringtone_desc">SIP通話のデフォルト着信音</string>
   <string name="prevent_screen_rotation">スクリーン回転を抑制</string>
+  <string name="prevent_screen_rotation_desc">スクリーン回転を避けて、ポートレートモードを保持</string>
   <string name="gsm_integration_type">モバイル電話連携</string>
+  <string name="gsm_integration_type_desc">アプリケーションが携帯電話をどのように制御するか(もしくはしないか)</string>
   <string name="invert_proximity_sensor">近接センサーを逆転</string>
   <string name="invert_proximity_sensor_desc">いくつかのデバイスでは近接センサーが逆になっている事があります</string>
   <string name="theme">テーマ</string>
@@ -259,12 +288,17 @@
   <!--Fast settings-->
   <string name="android_integration">Androidと連携</string>
   <string name="android_integration_desc">ネイティブダイヤラーと通話履歴に連携</string>
+  <string name="availability_profile">稼働率プロファイル</string>
   <string name="always_available">常に使用可</string>
+  <string name="always_available_desc">バッテリーを消耗しますが、受信がいつでも受けられます。</string>
   <string name="wifi_available">WiFiで使用可</string>
+  <string name="wifi_available_desc">WiFiプロファイルに基づいた着信の稼働率</string>
   <string name="never_available">発信のみ</string>
   <string name="never_available_desc">必要な時に自動でSIPクライアントを有効化</string>
+  <string name="availability_tg">モバイルデータ稼働率</string>
   <string name="tg_allowed">モバイルで使用許可</string>
   <string name="tg_allowed_desc">携帯電話会社がモバイル接続でのVoIP接続を認めている必要があります。</string>
+  <string name="codecs_availability_text">SIPが現在登録されている場合にのみ利用</string>
   <!--Calls settings-->
   <string name="auto_record_calls">通話を自動録音</string>
   <string name="auto_record_calls_desc">接続時に通話を録音</string>
