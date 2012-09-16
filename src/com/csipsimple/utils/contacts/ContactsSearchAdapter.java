@@ -28,7 +28,6 @@ package com.csipsimple.utils.contacts;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.location.Address;
 import android.support.v4.widget.CursorAdapter;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
@@ -84,8 +83,7 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
         Cursor c = ContactsWrapper.getInstance().searchContact(mContext, constraint);
         
         if(alphaIndexer == null) {
-            // TODO -- 5 is a value to get from contacts wrapper
-            alphaIndexer = new AlphabetIndexer(c, 5,
+            alphaIndexer = new AlphabetIndexer(c, ContactsWrapper.getInstance().getContactIndexableColumnIndex(c),
                     " ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         }else {
             alphaIndexer.setCursor(c);
