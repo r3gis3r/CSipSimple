@@ -94,7 +94,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                 ctxt.getContentResolver(), uri);
         img = BitmapFactory.decodeStream(s);
 
-        if (img == null) {
+        if (img == null && defaultResource != null) {
             BitmapDrawable drawableBitmap = ((BitmapDrawable) ctxt.getResources().getDrawable(
                     defaultResource));
             if (drawableBitmap != null) {
