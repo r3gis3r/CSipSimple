@@ -82,7 +82,7 @@ public class ContactsUtils3 extends ContactsWrapper {
     public Bitmap getContactPhoto(Context ctxt, Uri uri, boolean hiRes, Integer defaultResource) {
         Bitmap img = null;
         try {
-            img = People.loadContactPhoto(ctxt, uri, defaultResource, null);
+            img = People.loadContactPhoto(ctxt, uri, defaultResource != null ? defaultResource : R.drawable.ic_contact_picture_holo_dark, null);
         } catch (IllegalArgumentException e) {
             Log.w("Contact3", "Failed to find contact photo");
         }
