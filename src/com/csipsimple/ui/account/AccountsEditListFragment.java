@@ -505,8 +505,10 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
 
         // Setup the menu header
         menu.setHeaderTitle(account.display_name);
-        menu.setHeaderIcon(wizardInfos.icon);
-
+        if(wizardInfos != null) {
+            menu.setHeaderIcon(wizardInfos.icon);
+        }
+        
         menu.add(0, MENU_ITEM_ACTIVATE, 0, account.active ? R.string.deactivate_account
                 : R.string.activate_account);
         menu.add(0, MENU_ITEM_MODIFY, 0, R.string.modify_account);
