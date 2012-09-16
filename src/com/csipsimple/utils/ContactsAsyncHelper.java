@@ -339,8 +339,11 @@ public class ContactsAsyncHelper extends Handler {
     }
 
     private static boolean isAlreadyProcessed(ImageView imageView, Uri uri) {
-        PhotoViewTag vt = (PhotoViewTag) imageView.getTag(TAG_PHOTO_INFOS);
-        return (vt != null && UriUtils.areEqual(uri, vt.uri));
+        if(imageView != null) {
+            PhotoViewTag vt = (PhotoViewTag) imageView.getTag(TAG_PHOTO_INFOS);
+            return (vt != null && UriUtils.areEqual(uri, vt.uri));
+        }
+        return true;
     }
 
     /**
