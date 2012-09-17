@@ -299,6 +299,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_italkworld, 20, 
                     new Locale[]{}, false, true, 
                     ItalkWorld.class));
+            WIZARDS_DICT.put("MYDIVERT", new WizardInfo("MYDIVERT", "MyDivert", 
+                    R.drawable.ic_wizard_mydivert, 5, 
+                    new Locale[]{}, false, true, 
+                    MyDivert.class));
             
             
             
