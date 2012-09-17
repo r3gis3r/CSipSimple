@@ -768,7 +768,9 @@ public class WizardUtils {
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
-			WIZARDS_DICT.put(info.id, info);
+			if(info != null) {
+			    WIZARDS_DICT.put(info.id, info);
+			}
 		}
 		initDone = true;
 	}
