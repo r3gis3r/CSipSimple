@@ -675,6 +675,7 @@ static pj_status_t android_create_stream(pjmedia_aud_dev_factory *f,
 
 	PJ_LOG(3, (THIS_FILE, "Sample format is : %d for %d ", sampleFormat, param->bits_per_sample));
 
+	on_setup_audio_wrapper();
 
 
 	if (stream->dir & PJMEDIA_DIR_CAPTURE) {
@@ -899,7 +900,7 @@ static pj_status_t android_create_stream(pjmedia_aud_dev_factory *f,
 	return PJ_SUCCESS;
 
 on_error:
-
+	on_teardown_audio_wrapper();
 	DETACH_JVM(jni_env);
 	pj_pool_release(pool);
 	return PJ_ENOMEM;
@@ -1111,6 +1112,8 @@ static pj_status_t strm_destroy(pjmedia_aud_stream *s)
 //	pj_sem_destroy(stream->audio_launch_sem);
 	pj_pool_release(stream->pool);
 	PJ_LOG(3,(THIS_FILE, "Stream is destroyed"));
+
+	on_teardown_audio_wrapper();
 
 	DETACH_JVM(jni_env);
 	return PJ_SUCCESS;

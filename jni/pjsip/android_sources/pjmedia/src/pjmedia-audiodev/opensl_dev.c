@@ -513,6 +513,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 	if(status != PJ_SUCCESS){
 		return PJMEDIA_EAUD_INVOP;
 	}
+	on_setup_audio_wrapper();
+
     if (stream->dir & PJMEDIA_DIR_PLAYBACK) {
         /* Audio source */
         SLDataSource audioSrc = {&loc_bq, &format_pcm};
@@ -731,6 +733,7 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
     return PJ_SUCCESS;
     
 on_error:
+	on_teardown_audio_wrapper();
     strm_destroy(&stream->base);
     return status;
 }
@@ -956,7 +959,7 @@ static pj_status_t strm_destroy(pjmedia_aud_stream *s)
     
     pj_pool_release(stream->pool);
     PJ_LOG(4, (THIS_FILE, "OpenSL stream destroyed"));
-    
+    on_teardown_audio_wrapper();
     return PJ_SUCCESS;
 }
 
