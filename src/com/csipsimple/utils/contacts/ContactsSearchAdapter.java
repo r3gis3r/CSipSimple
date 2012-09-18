@@ -28,6 +28,7 @@ package com.csipsimple.utils.contacts;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.support.v4.widget.CursorAdapter;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
@@ -104,7 +105,11 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
     @Override
     public int getPositionForSection(int section) {
         if(alphaIndexer != null) {
-            return alphaIndexer.getPositionForSection(section);
+            try {
+                return alphaIndexer.getPositionForSection(section);
+            }catch(CursorIndexOutOfBoundsException e) {
+                // Not a problem we are just not yet init
+            }
         }
         return 0;
     }
@@ -112,7 +117,11 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
     @Override
     public int getSectionForPosition(int position) {
         if(alphaIndexer != null) {
-            return alphaIndexer.getSectionForPosition(position);
+            try {
+                return alphaIndexer.getSectionForPosition(position);
+            }catch(CursorIndexOutOfBoundsException e) {
+                // Not a problem we are just not yet init
+            }
         }
         return 0;
     }
