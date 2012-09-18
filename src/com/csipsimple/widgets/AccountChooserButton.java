@@ -297,9 +297,9 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         SipProfile toSelectAcc = null;
         SipProfile firstAvail = null;
         
-        if (c != null && c.getCount() > 0) {
+        if (c != null) {
             try {
-                if (c.moveToFirst()) {
+                if (c.getCount() > 0 && c.moveToFirst()) {
                     do {
                         final SipProfile acc = new SipProfile(c);
 
