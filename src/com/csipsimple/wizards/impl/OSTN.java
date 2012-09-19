@@ -51,6 +51,7 @@ public class OSTN extends AlternateServerImplementation {
 		account.proxies = new String[] { "sips:" + domain };
 		account.transport = SipProfile.TRANSPORT_TLS;
 		account.use_zrtp = 1;
+    account.vm_nbr = "*98";
 		return account;
 	}
 	
