@@ -157,6 +157,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             return;
         }
 
+        Log.d(THIS_FILE, "Set call state : " + callInfo.getCallState());
         
         updateRemoteName();
         updateCallStateBar();

@@ -1484,7 +1484,6 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 //badge.setOnTouchListener(new OnBadgeTouchListener(badge, call));
                 
                 SipCallSession session = (SipCallSession) getItem(position);
-                Log.d(THIS_FILE, "Set call state : " + session.getCallState());
                 vc.setCallState(session);
             }
 
