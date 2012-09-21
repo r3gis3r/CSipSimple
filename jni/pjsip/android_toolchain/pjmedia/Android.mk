@@ -197,10 +197,11 @@ LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DWEBRTC_ANDROID \
 	
 LOCAL_SHARED_LIBRARIES += libpjsipjni
 LOCAL_LDLIBS += -lGLESv2 -llog
-LOCAL_STATIC_LIBRARIES += libgcc
+LOCAL_STATIC_LIBRARIES += libgcc cpufeatures
 
 include $(BUILD_SHARED_LIBRARY)
 
+$(call import-module,cpufeatures)
 ## The screen capture backend
 
 include $(CLEAR_VARS)

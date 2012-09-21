@@ -88,6 +88,9 @@ public class MediaManager implements BluetoothChangeListener {
 	private boolean useSgsWrkAround = false;
 	private boolean useWebRTCImpl = false;
 	private boolean doFocusAudio = true;
+
+
+    private boolean startBeforeInit;
 	private static int modeSipInCall = AudioManager.MODE_NORMAL;
 	
 
@@ -126,6 +129,7 @@ public class MediaManager implements BluetoothChangeListener {
 		userWantBluetooth = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_BLUETOOTH);
 		userWantSpeaker = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_SPEAKER);
 		restartAudioWhenRoutingChange = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.RESTART_AUDIO_ON_ROUTING_CHANGES);
+		startBeforeInit = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT);
 	}
 	
 	public void stopService() {
@@ -165,8 +169,10 @@ public class MediaManager implements BluetoothChangeListener {
 	    return 0;
 	}
 	
-	public void setAudioInCall() {
-		actualSetAudioInCall();
+	public void setAudioInCall(boolean beforeInit) {
+	    if(!beforeInit || (beforeInit && startBeforeInit) ) {
+	        actualSetAudioInCall();
+	    }
 	}
 	
 	public void unsetAudioInCall() {

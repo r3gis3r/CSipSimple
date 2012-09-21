@@ -553,9 +553,9 @@ public class UAStateReceiver extends Callback {
 	}
 	
 	@Override
-	public void on_setup_audio() {
+	public void on_setup_audio(int beforeInit) {
 		if(pjService != null) {
-			pjService.setAudioInCall();
+			pjService.setAudioInCall(beforeInit);
 		}
 	}
 	

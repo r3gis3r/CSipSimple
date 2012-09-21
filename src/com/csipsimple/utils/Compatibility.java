@@ -323,6 +323,14 @@ public final class Compatibility {
         return false;
     }
     
+    public static boolean shouldSetupAudioBeforeInit() {
+        if(android.os.Build.MANUFACTURER.equalsIgnoreCase("htc") || 
+                android.os.Build.BRAND.equalsIgnoreCase("htc") ) {
+            return false;
+        }
+        return true;
+    }
+    
 
     private static boolean shouldFocusAudio() {
         /* HTC One X */
@@ -491,6 +499,7 @@ public final class Compatibility {
         }
         
         preferencesWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
+        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
         
         preferencesWrapper.endEditing();
     }
@@ -756,6 +765,9 @@ public final class Compatibility {
         }
         if (lastSeenVersion < 1834 && !shouldFocusAudio() ) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
+        }
+        if(lastSeenVersion < 1915) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
         }
         prefWrapper.endEditing();
     }

@@ -513,7 +513,7 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
 	if(status != PJ_SUCCESS){
 		return PJMEDIA_EAUD_INVOP;
 	}
-	on_setup_audio_wrapper();
+	on_setup_audio_wrapper(PJ_TRUE);
 
     if (stream->dir & PJMEDIA_DIR_PLAYBACK) {
         /* Audio source */
@@ -832,7 +832,7 @@ static pj_status_t strm_start(pjmedia_aud_stream *s)
     stream->quit_flag = 0;
 
 	/* Set media in call */
-	on_setup_audio_wrapper();
+	on_setup_audio_wrapper(PJ_FALSE);
 
     if (stream->recordBufQ && stream->recordRecord) {
         /* Enqueue an empty buffer to be filled by the recorder

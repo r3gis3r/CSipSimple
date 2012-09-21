@@ -675,7 +675,7 @@ static pj_status_t android_create_stream(pjmedia_aud_dev_factory *f,
 
 	PJ_LOG(3, (THIS_FILE, "Sample format is : %d for %d ", sampleFormat, param->bits_per_sample));
 
-	on_setup_audio_wrapper();
+	on_setup_audio_wrapper(PJ_TRUE);
 
 
 	if (stream->dir & PJMEDIA_DIR_CAPTURE) {
@@ -971,7 +971,7 @@ static pj_status_t strm_start(pjmedia_aud_stream *s)
 	ATTACH_JVM(jni_env);
 
 	pj_status_t status;
-	on_setup_audio_wrapper();
+	on_setup_audio_wrapper(PJ_FALSE);
 
 	//Start threads
 	if(stream->record){

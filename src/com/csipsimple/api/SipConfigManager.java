@@ -333,11 +333,18 @@ public class SipConfigManager {
     public static final String AUTO_DETECT_SPEAKER = "auto_detect_speaker";
     
     /**
-     * Should the entire audio stream be restarted when audio routing change is asked.<br/>
+     * Should the entire audio stream be restarted when audio routing change is asked ?<br/>
      * 
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String RESTART_AUDIO_ON_ROUTING_CHANGES = "restart_aud_on_routing_change";
+    
+    /**
+     * Should audio routing be done before media stream start ? <br/>
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String SETUP_AUDIO_BEFORE_INIT = "setup_audio_before_init";
 
     /**
      * Suffix key for the number of frames per RTP packet for one codec. <br/>

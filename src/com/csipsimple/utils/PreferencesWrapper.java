@@ -183,6 +183,7 @@ public class PreferencesWrapper {
         put(SipConfigManager.AUTO_DETECT_SPEAKER, false);
 		put(SipConfigManager.CODECS_PER_BANDWIDTH, true);
 		put(SipConfigManager.RESTART_AUDIO_ON_ROUTING_CHANGES, true);
+        put(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, true);
 		
 		//UI
 		put(SipConfigManager.PREVENT_SCREEN_ROTATION, true);

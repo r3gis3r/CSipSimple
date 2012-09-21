@@ -1572,9 +1572,9 @@ public class PjSipService {
         return -1;
     }
     
-    public void setAudioInCall() {
+    public void setAudioInCall(int beforeInit) {
         if (mediaManager != null) {
-            mediaManager.setAudioInCall();
+            mediaManager.setAudioInCall(beforeInit == pjsuaConstants.PJ_TRUE);
         }
     }
 

@@ -54,6 +54,11 @@
         android:key="do_focus_audio"
         android:summary="@string/do_focus_audio_desc"
         android:title="@string/do_focus_audio" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="setup_audio_before_init"
+        android:summary="@string/setup_audio_before_init_desc"
+        android:title="@string/setup_audio_before_init" />
 
     <ListPreference
         android:defaultValue="1"

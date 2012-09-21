@@ -161,7 +161,7 @@ public:
 	virtual void on_mwi_info (pjsua_acc_id acc_id, const pj_str_t *mime_type, const pj_str_t *body) {}
 	
 	virtual pj_status_t on_validate_audio_clock_rate (int clock_rate) {}
-	virtual void on_setup_audio () {}
+	virtual void on_setup_audio (pj_bool_t before_init) {}
 	virtual void on_teardown_audio () {}
 	virtual int on_set_micro_source () {}
 
@@ -357,8 +357,8 @@ pj_status_t on_validate_audio_clock_rate_wrapper (int clock_rate) {
 	return registeredCallbackObject->on_validate_audio_clock_rate(clock_rate);
 }
 
-void on_setup_audio_wrapper () {
-	registeredCallbackObject->on_setup_audio();
+void on_setup_audio_wrapper (pj_bool_t before_init) {
+	registeredCallbackObject->on_setup_audio(before_init);
 }
 
 void on_teardown_audio_wrapper () {
@@ -519,7 +519,7 @@ public:
 	virtual void on_mwi_info (pjsua_acc_id acc_id, const pj_str_t *mime_type, const pj_str_t *body);
 	
 	virtual pj_status_t on_validate_audio_clock_rate(int clock_rate);
-	virtual void on_setup_audio();
+	virtual void on_setup_audio(pj_bool_t before_init);
 	virtual void on_teardown_audio();
 	virtual int on_set_micro_source();
 	
