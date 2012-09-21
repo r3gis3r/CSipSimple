@@ -468,7 +468,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         } else if (call2.isLocalHeld()) {
             return call1;
         }
-        // We prefer the most recent
+        // We prefer the older call 
+        // to keep consistancy on what will be replied if new call arrives
         return (call1.callStart > call2.callStart) ? call2 : call1;
     }
 
