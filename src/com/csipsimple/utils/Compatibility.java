@@ -324,8 +324,16 @@ public final class Compatibility {
     }
     
     public static boolean shouldSetupAudioBeforeInit() {
-        if(android.os.Build.MANUFACTURER.equalsIgnoreCase("htc") || 
-                android.os.Build.BRAND.equalsIgnoreCase("htc") ) {
+        // Try to match all htc device
+        if(android.os.Build.MANUFACTURER.equalsIgnoreCase("htc") ) {
+            return false;
+        }
+        // Try to match all htc device
+        // Incredible + Nexus One too
+        if (android.os.Build.PRODUCT.toLowerCase().startsWith("htc")
+                || android.os.Build.BRAND.toLowerCase().startsWith("htc")
+                || android.os.Build.PRODUCT.toLowerCase().equalsIgnoreCase("inc")
+                || android.os.Build.DEVICE.equalsIgnoreCase("passion") ) {
             return false;
         }
         return true;
@@ -766,7 +774,7 @@ public final class Compatibility {
         if (lastSeenVersion < 1834 && !shouldFocusAudio() ) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
         }
-        if(lastSeenVersion < 1915) {
+        if(lastSeenVersion < 1919) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
         }
         prefWrapper.endEditing();
