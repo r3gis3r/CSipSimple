@@ -75,6 +75,10 @@
             android:title="@string/transport" />
 
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="ipv6_media_use"
+            android:title="@string/w_expert_ipv6_media_use" />
+        <CheckBoxPreference
             android:key="publish_enabled"
             android:title="@string/w_expert_publish_enabled" />
 

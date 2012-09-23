@@ -56,5 +56,6 @@
     <string name="w_expert_mwi_enabled_desc">Get notifications of voice mail box</string>
     <string name="w_expert_allow_via_rewrite">Allow via rewrite</string>
     <string name="w_expert_allow_via_rewrite_desc">Fix the Via sent-by to use the same interface address as the one in the REGISTER request</string>
+    <string name="w_expert_ipv6_media_use">Use IPV6 for media</string>
 
 </resources>

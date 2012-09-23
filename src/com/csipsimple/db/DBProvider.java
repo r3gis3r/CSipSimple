@@ -128,7 +128,7 @@ public class DBProvider extends ContentProvider {
 		SipProfile.FIELD_ICE_CFG_USE, SipProfile.FIELD_ICE_CFG_ENABLE,
 		SipProfile.FIELD_TURN_CFG_USE, SipProfile.FIELD_TURN_CFG_ENABLE, SipProfile.FIELD_TURN_CFG_SERVER, SipProfile.FIELD_TURN_CFG_USER, SipProfile.FIELD_TURN_CFG_PASSWORD,
         
-		
+		SipProfile.FIELD_IPV6_MEDIA_USE,
 	};
 	public final static Class<?>[] ACCOUNT_FULL_PROJECTION_TYPES = {
 		Long.class,
@@ -170,6 +170,9 @@ public class DBProvider extends ContentProvider {
         Integer.class, Integer.class,
         Integer.class, Integer.class,
         Integer.class, Integer.class, String.class, String.class, String.class,
+        
+        // IPV6
+        Integer.class
 	};
 
 

@@ -31,6 +31,7 @@ import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_acc_config;
 import org.pjsip.pjsua.pjsua_ice_config;
 import org.pjsip.pjsua.pjsua_ice_config_use;
+import org.pjsip.pjsua.pjsua_ipv6_use;
 import org.pjsip.pjsua.pjsua_stun_use;
 import org.pjsip.pjsua.pjsua_transport_config;
 import org.pjsip.pjsua.pjsua_turn_config;
@@ -169,8 +170,9 @@ public class PjSipAccount {
 			cfg.setCred_count(0);
 		}
 		
-		cfg.setMwi_enabled(profile.mwi_enabled ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
-		
+        cfg.setMwi_enabled(profile.mwi_enabled ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+        cfg.setIpv6_media_use(profile.ipv6_media_use == 1 ? pjsua_ipv6_use.PJSUA_IPV6_ENABLED
+                : pjsua_ipv6_use.PJSUA_IPV6_DISABLED);
 		
 		// RFC5626
 		cfg.setUse_rfc5626(profile.use_rfc5626? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);

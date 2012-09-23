@@ -46,7 +46,7 @@ public class DBAdapter {
 
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
-		private static final int DATABASE_VERSION = 34;
+		private static final int DATABASE_VERSION = 35;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -118,7 +118,8 @@ public class DBAdapter {
                 + SipProfile.FIELD_TURN_CFG_ENABLE           + " INTEGER DEFAULT 0,"
                 + SipProfile.FIELD_TURN_CFG_SERVER           + " TEXT,"
                 + SipProfile.FIELD_TURN_CFG_USER             + " TEXT,"
-                + SipProfile.FIELD_TURN_CFG_PASSWORD         + " TEXT"
+                + SipProfile.FIELD_TURN_CFG_PASSWORD         + " TEXT,"
+                + SipProfile.FIELD_IPV6_MEDIA_USE            + " INTEGER DEFAULT 0"
 				
 			+ ");";
 		
@@ -385,6 +386,16 @@ public class DBAdapter {
                     db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TURN_CFG_USE + "=-1");
                     db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TURN_CFG_ENABLE + "=0");
                     
+                    Log.d(THIS_FILE, "Upgrade done");
+                }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
+            }
+            if(oldVersion < 35) {
+
+                try {
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_IPV6_MEDIA_USE, "INTEGER DEFAULT 0");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_IPV6_MEDIA_USE + "=0");
                     Log.d(THIS_FILE, "Upgrade done");
                 }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);

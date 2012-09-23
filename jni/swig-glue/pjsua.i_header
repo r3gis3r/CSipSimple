@@ -868,8 +868,9 @@ enum pjsip_event_id_e
     PJSIP_EVENT_USER
 
 };
-
-// From pjsip/include/pjsip/sip_types.h:61
+/**
+ * Transport types.
+ */
 enum pjsip_transport_type_e
 {
     /** Unspecified. */
@@ -903,7 +904,10 @@ enum pjsip_transport_type_e
     PJSIP_TRANSPORT_UDP6 = PJSIP_TRANSPORT_UDP + PJSIP_TRANSPORT_IPV6,
 
     /** TCP over IPv6 */
-    PJSIP_TRANSPORT_TCP6 = PJSIP_TRANSPORT_TCP + PJSIP_TRANSPORT_IPV6
+    PJSIP_TRANSPORT_TCP6 = PJSIP_TRANSPORT_TCP + PJSIP_TRANSPORT_IPV6,
+
+    /** TLS over IPv6 */
+    PJSIP_TRANSPORT_TLS6 = PJSIP_TRANSPORT_TLS + PJSIP_TRANSPORT_IPV6
 
 };
 

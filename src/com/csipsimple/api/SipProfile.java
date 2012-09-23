@@ -698,6 +698,11 @@ public class SipProfile implements Parcelable {
     public static final String FIELD_TURN_CFG_PASSWORD = "turn_cfg_pwd";
     
     /**
+     * Should media use ipv6?
+     */
+    public static final String FIELD_IPV6_MEDIA_USE = "ipv6_media_use";
+    
+    /**
      * Simple project to use if you want to list accounts with basic infos on it
      * only.
      * 
@@ -934,6 +939,11 @@ public class SipProfile implements Parcelable {
      */
     public String turn_cfg_password = "";
     
+    /**
+     * @see #FIELD_IPV6_MEDIA_USE
+     */
+    public int ipv6_media_use = 0;
+    
     public SipProfile() {
         display_name = "";
         wizard = "EXPERT";
@@ -1010,6 +1020,7 @@ public class SipProfile implements Parcelable {
         turn_cfg_server = getReadParcelableString(in.readString());
         turn_cfg_user = getReadParcelableString(in.readString());
         turn_cfg_password = getReadParcelableString(in.readString());
+        ipv6_media_use = in.readInt();
     }
 
     /**
@@ -1094,6 +1105,7 @@ public class SipProfile implements Parcelable {
         dest.writeString(getWriteParcelableString(turn_cfg_server));
         dest.writeString(getWriteParcelableString(turn_cfg_user));
         dest.writeString(getWriteParcelableString(turn_cfg_password));
+        dest.writeInt(ipv6_media_use);
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -1347,7 +1359,10 @@ public class SipProfile implements Parcelable {
         if (tmp_s != null) {
             turn_cfg_password = tmp_s;
         }
-
+        tmp_i = args.getAsInteger(FIELD_IPV6_MEDIA_USE);
+        if (tmp_i != null && tmp_i >= 0) {
+            ipv6_media_use = tmp_i;
+        }
     }
 
     /**
@@ -1439,6 +1454,8 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_TURN_CFG_SERVER, turn_cfg_server);
         args.put(FIELD_TURN_CFG_USER, turn_cfg_user);
         args.put(FIELD_TURN_CFG_PASSWORD, turn_cfg_password);
+        
+        args.put(FIELD_IPV6_MEDIA_USE, ipv6_media_use);
         
         return args;
     }

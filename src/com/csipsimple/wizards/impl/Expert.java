@@ -66,19 +66,12 @@ public class Expert extends BaseImplementation {
     private ListPreference vidOutAutoTransmit;
     private ListPreference vidInAutoShow;
     private ListPreference rtpEnableQos;
-    private EditTextPreference rtpPort;
-    private EditTextPreference rtpPublicAddr;
-    private EditTextPreference rtpBoundAddr;
-    private EditTextPreference rtpQosDscp;
-    private ListPreference sipStunUse;
-    private ListPreference mediaStunUse;
-    private CheckBoxPreference iceCfgUse;
-    private CheckBoxPreference iceCfgEnable;
-    private CheckBoxPreference turnCfgUse;
-    private CheckBoxPreference turnCfgEnable;
-    private EditTextPreference turnCfgServer;
-    private EditTextPreference turnCfgUser;
-    private EditTextPreference turnCfgPassword;
+    private EditTextPreference rtpPort, rtpPublicAddr, rtpBoundAddr, rtpQosDscp;
+    private ListPreference sipStunUse, mediaStunUse;
+    private CheckBoxPreference iceCfgUse, iceCfgEnable, turnCfgUse, turnCfgEnable;
+    private EditTextPreference turnCfgServer, turnCfgUser, turnCfgPassword;
+
+    private CheckBoxPreference ipv6MediaEnable;
 	
 	private void bindFields() {
 		accountDisplayName = (EditTextPreference) findPreference(SipProfile.FIELD_DISPLAY_NAME);
@@ -123,6 +116,8 @@ public class Expert extends BaseImplementation {
         turnCfgServer = (EditTextPreference) findPreference(SipProfile.FIELD_TURN_CFG_SERVER);
         turnCfgUser = (EditTextPreference) findPreference(SipProfile.FIELD_TURN_CFG_USER);
         turnCfgPassword = (EditTextPreference) findPreference(SipProfile.FIELD_TURN_CFG_PASSWORD);
+        
+        ipv6MediaEnable = (CheckBoxPreference) findPreference(SipProfile.FIELD_IPV6_MEDIA_USE);
 	}
 
 	public void fillLayout(final SipProfile account) {
@@ -204,6 +199,8 @@ public class Expert extends BaseImplementation {
         turnCfgServer.setText(account.turn_cfg_server);
         turnCfgUser.setText(account.turn_cfg_user);
         turnCfgPassword.setText(account.turn_cfg_password);
+        
+        ipv6MediaEnable.setChecked(account.ipv6_media_use == 1);
 	}
 	
 
@@ -369,6 +366,8 @@ public class Expert extends BaseImplementation {
         account.turn_cfg_server = turnCfgServer.getText();
         account.turn_cfg_user = turnCfgUser.getText();
         account.turn_cfg_password = turnCfgPassword.getText();
+        
+        account.ipv6_media_use = ipv6MediaEnable.isChecked() ? 1 : 0;
         
 		return account;
 	}

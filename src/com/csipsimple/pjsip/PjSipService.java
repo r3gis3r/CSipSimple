@@ -100,8 +100,9 @@ public class PjSipService {
 
     private boolean hasSipStack = false;
     private boolean sipStackIsCorrupted = false;
-    private Integer udpTranportId, tcpTranportId, tlsTransportId;
-    private Integer localUdpAccPjId, localTcpAccPjId, localTlsAccPjId;
+    private Integer localUdpAccPjId, localUdp6AccPjId, 
+        localTcpAccPjId, localTcp6AccPjId, 
+        localTlsAccPjId, localTls6AccPjId;
     public PreferencesProviderWrapper prefsWrapper;
     //private PjStreamDialtoneGenerator dialtoneGenerator;
 
@@ -115,6 +116,7 @@ public class PjSipService {
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
     private SparseArray<TimerTask> dtmfTasks = new SparseArray<TimerTask>(5);
     private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
+    
     
     // -------
     // Locks
@@ -186,9 +188,6 @@ public class PjSipService {
         // Ensure the stack is not already created or is being created
         if (!created) {
             Log.d(THIS_FILE, "Starting sip stack");
-            udpTranportId = null;
-            tcpTranportId = null;
-            tlsTransportId = null;
 
             // Pj timer
             TimerWrapper.create(service);
@@ -480,61 +479,63 @@ public class PjSipService {
 
             // Add transports
             {
+                // TODO : allow to configure local accounts.
+
+                // We need a local account for each transport 
+                // to not have the
+                // application lost when direct call to the IP
+                
                 // UDP
                 if (prefsWrapper.isUDPEnabled()) {
-                    pjsip_transport_type_e t = pjsip_transport_type_e.PJSIP_TRANSPORT_UDP;
-                    if (prefsWrapper.useIPv6()) {
-                        t = pjsip_transport_type_e.PJSIP_TRANSPORT_UDP6;
-                    }
-                    udpTranportId = createTransport(t, prefsWrapper.getUDPTransportPort());
-                    if (udpTranportId == null) {
+                    localUdpAccPjId = createLocalTransportAndAccount(
+                            pjsip_transport_type_e.PJSIP_TRANSPORT_UDP,
+                            prefsWrapper.getUDPTransportPort());
+                    if (localUdpAccPjId == null) {
                         cleanPjsua();
                         return false;
                     }
-
-                    // We need a local account to not have the
-                    // application lost when direct call to the IP
-                    // TODO : allow to configure this account
-                    
-                    int[] p_acc_id = new int[1];
-                    pjsua.acc_add_local(udpTranportId, pjsua.PJ_FALSE, p_acc_id);
-                    localUdpAccPjId = p_acc_id[0];
-                    // Log.d(THIS_FILE, "Udp account "+p_acc_id);
-
+                    // UDP v6
+                    if (prefsWrapper.useIPv6()) {
+                        localUdp6AccPjId = createLocalTransportAndAccount(
+                                pjsip_transport_type_e.PJSIP_TRANSPORT_UDP6,
+                                prefsWrapper.getUDPTransportPort());
+                    }
                 }
+                
                 // TCP
                 if (prefsWrapper.isTCPEnabled()) {
-                    pjsip_transport_type_e t = pjsip_transport_type_e.PJSIP_TRANSPORT_TCP;
-                    if (prefsWrapper.useIPv6()) {
-                        t = pjsip_transport_type_e.PJSIP_TRANSPORT_TCP6;
-                    }
-                    tcpTranportId = createTransport(t, prefsWrapper.getTCPTransportPort());
-                    if (tcpTranportId == null) {
+                    localTcpAccPjId = createLocalTransportAndAccount(
+                            pjsip_transport_type_e.PJSIP_TRANSPORT_TCP,
+                            prefsWrapper.getTCPTransportPort());
+                    if (localTcpAccPjId == null) {
                         cleanPjsua();
                         return false;
                     }
 
-                    // We need a local account to not have the
-                    // application lost when direct call to the IP
-                    int[] p_acc_id = new int[1];
-                    pjsua.acc_add_local(tcpTranportId, pjsua.PJ_FALSE, p_acc_id);
-                    localTcpAccPjId = p_acc_id[0];
+                    // TCP v6
+                    if (prefsWrapper.useIPv6()) {
+                        localTcp6AccPjId = createLocalTransportAndAccount(
+                                pjsip_transport_type_e.PJSIP_TRANSPORT_TCP6,
+                                prefsWrapper.getTCPTransportPort());
+                    }
                 }
 
                 // TLS
                 if (prefsWrapper.isTLSEnabled() && !prefsWrapper.useIPv6()) {
-                    tlsTransportId = createTransport(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS,
+                    localTlsAccPjId = createLocalTransportAndAccount(
+                            pjsip_transport_type_e.PJSIP_TRANSPORT_TLS,
                             prefsWrapper.getTLSTransportPort());
-
-                    if (tlsTransportId == null) {
+                    if (localTlsAccPjId == null) {
                         cleanPjsua();
                         return false;
                     }
-                    // We need a local account to not have the
-                    // application lost when direct call to the IP
-                    int[] p_acc_id = new int[1];
-                    pjsua.acc_add_local(tlsTransportId, pjsua.PJ_FALSE, p_acc_id);
-                    localTlsAccPjId = p_acc_id[0];
+                    
+                    // TLS v6
+                    if(prefsWrapper.useIPv6()) {
+                        localTls6AccPjId = createLocalTransportAndAccount(
+                                pjsip_transport_type_e.PJSIP_TRANSPORT_TLS6,
+                                prefsWrapper.getTLSTransportPort());
+                    }
                 }
             }
 
@@ -673,7 +674,6 @@ public class PjSipService {
             cfg.setTls_setting(tlsSetting);
         }
 
-        // else?
         if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_QOS)) {
             Log.d(THIS_FILE, "Activate qos for this transport");
             pj_qos_params qosParam = cfg.getQos_params();
@@ -694,6 +694,22 @@ public class PjSipService {
             return null;
         }
         return tId[0];
+    }
+    
+    private Integer createLocalAccount(Integer transportId)
+            throws SameThreadException  {
+        if(transportId == null) {
+            return null;
+        }
+        int[] p_acc_id = new int[1];
+        pjsua.acc_add_local(transportId, pjsua.PJ_FALSE, p_acc_id);
+        return p_acc_id[0];
+    }
+    
+    private Integer createLocalTransportAndAccount(pjsip_transport_type_e type, int port)
+            throws SameThreadException {
+        Integer transportId = createTransport(type, port);
+        return createLocalAccount(transportId);
     }
 
     public boolean addAccount(SipProfile profile) throws SameThreadException {
@@ -775,6 +791,7 @@ public class PjSipService {
                 pjsua_acc_config nCfg = new pjsua_acc_config();
                 pjsua.acc_get_config(accId[0], nCfg);
                 pjsua.csipsimple_set_acc_user_data(nCfg, account.css_cfg);
+                // TODO : use video cfg here
                 nCfg.setVid_in_auto_show(pjsuaConstants.PJ_TRUE);
                 nCfg.setVid_out_auto_transmit(pjsuaConstants.PJ_TRUE);
                 status = pjsua.acc_modify(accId[0], nCfg);
