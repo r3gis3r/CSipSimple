@@ -487,9 +487,10 @@ public class PjSipService {
                 
                 // UDP
                 if (prefsWrapper.isUDPEnabled()) {
+                    int udpPort = prefsWrapper.getUDPTransportPort();
                     localUdpAccPjId = createLocalTransportAndAccount(
                             pjsip_transport_type_e.PJSIP_TRANSPORT_UDP,
-                            prefsWrapper.getUDPTransportPort());
+                            udpPort);
                     if (localUdpAccPjId == null) {
                         cleanPjsua();
                         return false;
@@ -498,15 +499,16 @@ public class PjSipService {
                     if (prefsWrapper.useIPv6()) {
                         localUdp6AccPjId = createLocalTransportAndAccount(
                                 pjsip_transport_type_e.PJSIP_TRANSPORT_UDP6,
-                                prefsWrapper.getUDPTransportPort());
+                                udpPort == 0 ? udpPort : udpPort + 10);
                     }
                 }
                 
                 // TCP
                 if (prefsWrapper.isTCPEnabled()) {
+                    int tcpPort = prefsWrapper.getTCPTransportPort();
                     localTcpAccPjId = createLocalTransportAndAccount(
                             pjsip_transport_type_e.PJSIP_TRANSPORT_TCP,
-                            prefsWrapper.getTCPTransportPort());
+                            tcpPort);
                     if (localTcpAccPjId == null) {
                         cleanPjsua();
                         return false;
@@ -516,15 +518,16 @@ public class PjSipService {
                     if (prefsWrapper.useIPv6()) {
                         localTcp6AccPjId = createLocalTransportAndAccount(
                                 pjsip_transport_type_e.PJSIP_TRANSPORT_TCP6,
-                                prefsWrapper.getTCPTransportPort());
+                                tcpPort == 0 ? tcpPort : tcpPort + 10);
                     }
                 }
 
                 // TLS
                 if (prefsWrapper.isTLSEnabled()) {
+                    int tlsPort = prefsWrapper.getTLSTransportPort();
                     localTlsAccPjId = createLocalTransportAndAccount(
                             pjsip_transport_type_e.PJSIP_TRANSPORT_TLS,
-                            prefsWrapper.getTLSTransportPort());
+                            tlsPort);
                     if (localTlsAccPjId == null) {
                         cleanPjsua();
                         return false;
@@ -534,7 +537,7 @@ public class PjSipService {
                     if(prefsWrapper.useIPv6()) {
                         localTls6AccPjId = createLocalTransportAndAccount(
                                 pjsip_transport_type_e.PJSIP_TRANSPORT_TLS6,
-                                prefsWrapper.getTLSTransportPort());
+                                tlsPort == 0 ? tlsPort : tlsPort + 10);
                     }
                 }
             }
