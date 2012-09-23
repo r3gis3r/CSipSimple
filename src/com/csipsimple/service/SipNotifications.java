@@ -365,7 +365,7 @@ public class SipNotifications {
 		}
 
 		Intent notificationIntent = new Intent(Intent.ACTION_CALL);
-		if(acc != null) {
+		if(acc != null && !TextUtils.isEmpty(acc.vm_nbr)) {
     		notificationIntent.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_CSIP, acc.vm_nbr + "@" + acc.getDefaultDomain()));
 			notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
 		}
