@@ -521,7 +521,7 @@ public class PjSipService {
                 }
 
                 // TLS
-                if (prefsWrapper.isTLSEnabled() && !prefsWrapper.useIPv6()) {
+                if (prefsWrapper.isTLSEnabled()) {
                     localTlsAccPjId = createLocalTransportAndAccount(
                             pjsip_transport_type_e.PJSIP_TRANSPORT_TLS,
                             prefsWrapper.getTLSTransportPort());
