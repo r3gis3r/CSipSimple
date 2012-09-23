@@ -364,14 +364,15 @@ public class SipNotifications {
 			messageVoicemail.setOnlyAlertOnce(true);
 		}
 
-		Intent notificationIntent = new Intent(Intent.ACTION_CALL);
+		PendingIntent contentIntent = null;
 		if(acc != null && !TextUtils.isEmpty(acc.vm_nbr)) {
+	        Intent notificationIntent = new Intent(Intent.ACTION_CALL);
     		notificationIntent.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_CSIP, acc.vm_nbr + "@" + acc.getDefaultDomain()));
 			notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
+	        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		}
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		String messageText = "";
 		if (acc != null) {
@@ -381,8 +382,9 @@ public class SipNotifications {
 
 		messageVoicemail.setContentTitle(context.getString(R.string.voice_mail));
 		messageVoicemail.setContentText(messageText);
-		messageVoicemail.setContentIntent(contentIntent);
-		
+		if(contentIntent != null) {
+		    messageVoicemail.setContentIntent(contentIntent);
+		}
 		notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail.build());
 	}
 
