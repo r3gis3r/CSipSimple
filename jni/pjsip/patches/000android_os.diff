@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/compat/os_auto.h	2012-07-13 13:39:43.660400604 +0200
++++ pjsip/sources/pjlib/include/pj/compat/os_auto.h	2012-09-23 23:46:15.461798139 +0200
 @@ -0,0 +1,134 @@
 +/* $Id: os_linux.h 3553 2011-05-05 06:14:19Z nanang $ */
 +/*
@@ -140,8 +140,8 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 Index: pjsip/sources/pjlib/include/pj/config_site.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/config_site.h	2012-07-13 13:40:17.604399185 +0200
-@@ -0,0 +1,133 @@
++++ pjsip/sources/pjlib/include/pj/config_site.h	2012-09-23 23:47:30.089799727 +0200
+@@ -0,0 +1,134 @@
 +//We distribute only for android so by default activate it
 +#ifndef PJ_ANDROID
 +#   define PJ_ANDROID   1
@@ -264,8 +264,9 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 +    #define PJSUA_MAX_CALLS			4
 +
 +	/* Other pjsua settings */
-+	#define PJSUA_MAX_ACC			11 // Mean 10 accounts active at maximum
-+	#define PJSUA_MAX_PLAYERS			4
++        /* We have to care about local accounts. So upscale it */
++	#define PJSUA_MAX_ACC			20
++        #define PJSUA_MAX_PLAYERS			4
 +	#define PJSUA_MAX_RECORDERS			4
 +	#define PJSUA_MAX_CONF_PORTS		(PJSUA_MAX_CALLS+2*PJSUA_MAX_PLAYERS)
 +	#define PJSUA_MAX_BUDDIES			32
@@ -278,7 +279,7 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 Index: pjsip/sources/pjmedia/include/pjmedia/config_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjmedia/include/pjmedia/config_auto.h	2012-07-13 13:39:12.756401897 +0200
++++ pjsip/sources/pjmedia/include/pjmedia/config_auto.h	2012-09-23 23:46:15.461798139 +0200
 @@ -0,0 +1,38 @@
 +/* $Id: config_auto.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
 +/*
@@ -321,7 +322,7 @@ Index: pjsip/sources/pjmedia/include/pjmedia/config_auto.h
 Index: pjsip/sources/pjsip/include/pjsip/sip_autoconf.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjsip/include/pjsip/sip_autoconf.h	2012-07-13 13:39:12.760401896 +0200
++++ pjsip/sources/pjsip/include/pjsip/sip_autoconf.h	2012-09-23 23:46:15.461798139 +0200
 @@ -0,0 +1,30 @@
 +/* $Id: sip_autoconf.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
 +/*
@@ -356,7 +357,7 @@ Index: pjsip/sources/pjsip/include/pjsip/sip_autoconf.h
 Index: pjsip/sources/pjlib/include/pj/compat/m_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/compat/m_auto.h	2012-07-13 13:39:12.760401896 +0200
++++ pjsip/sources/pjlib/include/pj/compat/m_auto.h	2012-09-23 23:46:15.461798139 +0200
 @@ -0,0 +1,38 @@
 +/* $Id: m_auto.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
 +/*
@@ -399,7 +400,7 @@ Index: pjsip/sources/pjlib/include/pj/compat/m_auto.h
 Index: pjsip/sources/pjmedia/include/pjmedia-codec/config_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjmedia/include/pjmedia-codec/config_auto.h	2012-07-13 13:39:12.760401896 +0200
++++ pjsip/sources/pjmedia/include/pjmedia-codec/config_auto.h	2012-09-23 23:46:15.461798139 +0200
 @@ -0,0 +1,32 @@
 +/* $Id: config_auto.h.in 3841 2011-10-24 09:28:13Z ming $ */
 +/*
