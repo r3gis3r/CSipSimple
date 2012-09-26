@@ -1,7 +1,7 @@
 Index: webrtc/sources/modules/video_capture/main/source/video_capture_impl.cc
 ===================================================================
---- webrtc.orig/sources/modules/video_capture/main/source/video_capture_impl.cc	2012-08-15 15:57:39.000000000 +0200
-+++ webrtc/sources/modules/video_capture/main/source/video_capture_impl.cc	2012-08-15 16:07:47.973847145 +0200
+--- webrtc.orig/sources/modules/video_capture/main/source/video_capture_impl.cc	2012-09-26 22:37:15.000000000 +0200
++++ webrtc/sources/modules/video_capture/main/source/video_capture_impl.cc	2012-09-26 22:49:41.642770214 +0200
 @@ -11,6 +11,7 @@
  #include "video_capture_impl.h"
  
@@ -10,46 +10,48 @@ Index: webrtc/sources/modules/video_capture/main/source/video_capture_impl.cc
  #include "critical_section_wrapper.h"
  #include "module_common_types.h"
  #include "ref_count.h"
-@@ -291,6 +292,29 @@
-         memset(_captureFrame.Buffer(), 0, _captureFrame.Size());
-         // Keeping stride = width for I420 destination.
-         int dstStride  = width;
+@@ -290,6 +291,31 @@
+         // In Windows, the image starts bottom left, instead of top left.
+         // Setting a negative source height, inverts the image (within LibYuv).
+         _captureFrame.SetHeight(abs(height));
++
 +
 +        // Libyuv doesn't crop or scale in convert method
 +        // So width/height of target frame has to be correct regarding expected rotation mode
 +        // see discution here http://code.google.com/p/libyuv/issues/detail?id=18
-+        WebRtc_UWord8* targetBuf =  _captureFrame.Buffer();
++        VideoFrame* targetFramePt =  &_captureFrame;
 +        // TODO - tmp frame recreation should be avoided at each loop
 +        // But I want minimum impact of webrtc code for now --
 +        // to be reviewed when integrated to webrtc code if accepted
 +        VideoFrame tmpFrame;
 +        if(_rotateFrame == kRotate90 || _rotateFrame == kRotate270){
-+        	// We need to invert it here
-+        	dstStride = height;
-+            int tmpRequiredLength = CalcBufferSize(kI420, height, width);
-+        	tmpFrame.VerifyAndAllocate(tmpRequiredLength);
-+			if (!tmpFrame.Buffer())
-+			{
-+				WEBRTC_TRACE(webrtc::kTraceError, webrtc::kTraceVideoCapture, _id,
-+						   "Failed to allocate frame buffer.");
-+				return -1;
-+			}
-+			targetBuf = tmpFrame.Buffer();
++		// We need to invert it here
++		dstStride = height;
++		int tmpRequiredLength = CalcBufferSize(kI420, height, width);
++		tmpFrame.VerifyAndAllocate(tmpRequiredLength);
++		if (!tmpFrame.Buffer()) {
++			WEBRTC_TRACE(webrtc::kTraceError, webrtc::kTraceVideoCapture, _id,
++				"Failed to allocate frame buffer.");
++			return -1;
++		}
++		tmpFrame.SetWidth(height);
++		tmpFrame.SetHeight(width);
++		targetFramePt = &tmpFrame;
 +        }
 +
+         // TODO(mikhal) : Set stride when available.
          const int conversionResult = ConvertToI420(commonVideoType,
                                                     videoFrame,
-                                                    0, 0,  // No cropping
-@@ -298,7 +322,7 @@
+@@ -297,7 +323,7 @@
+                                                    width, height,
                                                     videoFrameLength,
-                                                    width, height, dstStride,
                                                     _rotateFrame,
--                                                   _captureFrame.Buffer());
-+                                                   targetBuf);
+-                                                   &_captureFrame);
++                                                   targetFramePt);
          if (conversionResult < 0)
          {
              WEBRTC_TRACE(webrtc::kTraceError, webrtc::kTraceVideoCapture, _id,
-@@ -306,6 +330,30 @@
+@@ -305,6 +331,30 @@
                         frameInfo.rawType);
              return -1;
          }

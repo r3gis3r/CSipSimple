@@ -1,7 +1,7 @@
 Index: webrtc/sources/system_wrappers/source/Android.mk
 ===================================================================
---- webrtc.orig/sources/system_wrappers/source/Android.mk	2012-06-25 11:16:56.000000000 +0200
-+++ webrtc/sources/system_wrappers/source/Android.mk	2012-06-25 11:37:27.051155227 +0200
+--- webrtc.orig/sources/system_wrappers/source/Android.mk	2012-09-26 23:03:45.086734939 +0200
++++ webrtc/sources/system_wrappers/source/Android.mk	2012-09-26 23:03:47.814734825 +0200
 @@ -20,6 +20,7 @@
      android/cpu-features.c \
      cpu_features_android.c \
@@ -12,24 +12,23 @@ Index: webrtc/sources/system_wrappers/source/Android.mk
      atomic32_posix.cc \
 Index: webrtc/sources/system_wrappers/source/rw_lock.cc
 ===================================================================
---- webrtc.orig/sources/system_wrappers/source/rw_lock.cc	2012-06-25 11:16:01.083209010 +0200
-+++ webrtc/sources/system_wrappers/source/rw_lock.cc	2012-06-25 11:37:27.051155227 +0200
-@@ -14,6 +14,9 @@
- 
+--- webrtc.orig/sources/system_wrappers/source/rw_lock.cc	2012-09-26 23:03:45.114734938 +0200
++++ webrtc/sources/system_wrappers/source/rw_lock.cc	2012-09-26 23:04:04.238734137 +0200
+@@ -15,6 +15,8 @@
  #if defined(_WIN32)
-     #include "rw_lock_win.h"
+ #include "rw_lock_generic.h"
+ #include "rw_lock_win.h"
 +#elif defined(WEBRTC_ANDROID)
-+	#include <stdlib.h>
-+	#include "rw_lock_generic.h"
++#include "rw_lock_generic.h"
  #else
-     #include "rw_lock_posix.h"
+ #include "rw_lock_posix.h"
  #endif
-@@ -23,6 +26,8 @@
- {
- #ifdef _WIN32
-     RWLockWrapper* lock =  new RWLockWindows();
+@@ -29,6 +31,8 @@
+     return lock;
+   }
+   return new RWLockGeneric();
 +#elif defined(WEBRTC_ANDROID)
-+    RWLockWrapper* lock =  new RWLockWrapperGeneric();
++  return new RWLockGeneric();
  #else
-     RWLockWrapper* lock =  new RWLockPosix();
+   return RWLockPosix::Create();
  #endif

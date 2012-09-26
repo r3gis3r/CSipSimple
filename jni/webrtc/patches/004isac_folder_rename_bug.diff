@@ -1,7 +1,7 @@
 Index: webrtc/sources/modules/audio_coding/main/source/Android.mk
 ===================================================================
---- webrtc.orig/sources/modules/audio_coding/main/source/Android.mk	2012-08-22 11:11:45.973701898 +0200
-+++ webrtc/sources/modules/audio_coding/main/source/Android.mk	2012-08-22 11:13:07.993698468 +0200
+--- webrtc.orig/sources/modules/audio_coding/main/source/Android.mk	2012-09-26 22:52:45.000000000 +0200
++++ webrtc/sources/modules/audio_coding/main/source/Android.mk	2012-09-26 22:59:20.666745998 +0200
 @@ -45,8 +45,8 @@
      $(LOCAL_PATH)/../../codecs/g711/include \
      $(LOCAL_PATH)/../../codecs/g722/include \
@@ -15,14 +15,10 @@ Index: webrtc/sources/modules/audio_coding/main/source/Android.mk
      $(LOCAL_PATH)/../../../.. \
 Index: webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk
 ===================================================================
---- webrtc.orig/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-22 11:11:46.029701896 +0200
-+++ webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-08-30 23:15:38.802010925 +0200
-@@ -49,10 +49,11 @@
- # Using .S (instead of .s) extention is to include a C header file in assembly.
- LOCAL_SRC_FILES += \
-     lattice_armv7.S \
--    pitchfilter_armv6.S
-+    pitch_filter_armv6.S
+--- webrtc.orig/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-09-26 22:53:34.000000000 +0200
++++ webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk	2012-09-26 23:01:13.990741258 +0200
+@@ -52,7 +52,8 @@
+     pitch_filter_armv6.S
  else
  LOCAL_SRC_FILES += \
 -    lattice_c.c
@@ -33,8 +29,8 @@ Index: webrtc/sources/modules/audio_coding/codecs/isac/fix/source/Android.mk
  # Flags passed to both C and C++ files.
 Index: webrtc/sources/common_video/libyuv/Android.mk
 ===================================================================
---- webrtc.orig/sources/common_video/libyuv/Android.mk	2012-08-22 11:13:05.885698556 +0200
-+++ webrtc/sources/common_video/libyuv/Android.mk	2012-08-27 22:32:23.735935628 +0200
+--- webrtc.orig/sources/common_video/libyuv/Android.mk	2012-09-26 22:59:07.000000000 +0200
++++ webrtc/sources/common_video/libyuv/Android.mk	2012-09-26 22:59:20.670745997 +0200
 @@ -17,7 +17,7 @@
  LOCAL_MODULE_TAGS := optional
  LOCAL_CPP_EXTENSION := .cc

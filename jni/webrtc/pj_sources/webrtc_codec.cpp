@@ -512,7 +512,7 @@ static pj_status_t webrtc_encode(pjmedia_codec *codec,
 	output->size = 0;
 	offset = 0;
 	while (nsamples >= enc_samples_per_frame) {
-		pjmedia_copy_samples((pj_int16_t*) audioFrame.data_, (pj_int16_t*) input->buf + offset, enc_samples_per_frame);
+		pjmedia_copy_samples((pj_int16_t*) audioFrame.data_, ((pj_int16_t*) input->buf) + offset, enc_samples_per_frame);
 		audioFrame.num_channels_ = 1;
 		audioFrame.sample_rate_hz_ = priv->clock_rate;
 		audioFrame.samples_per_channel_ = enc_samples_per_frame;
@@ -544,7 +544,7 @@ static pj_status_t webrtc_decode(pjmedia_codec *codec,
 
 	output->size = 0;
 	offset = 0;
-	//PJ_LOG(4, (THIS_FILE, "Will decode %d", pacsize));
+	//PJ_LOG(4, (THIS_FILE, "Will decode %d", priv->pacbsize));
 	while(output->size < priv->pacbsize){
 		AudioFrame decodedFrame;
 		if(output->size == 0){
@@ -559,11 +559,11 @@ static pj_status_t webrtc_decode(pjmedia_codec *codec,
 			return PJ_EINVAL;
 		}
 
-		pjmedia_copy_samples((pj_int16_t*) output->buf + offset, (pj_int16_t*) decodedFrame.data_, decodedFrame.samples_per_channel_);
+		pjmedia_copy_samples(((pj_int16_t*) output->buf) + offset, (pj_int16_t*) decodedFrame.data_, decodedFrame.samples_per_channel_);
 		output->size += decodedFrame.samples_per_channel_ << 1;
 		offset += decodedFrame.samples_per_channel_;
 
-		//PJ_LOG(4, (THIS_FILE, "Decoded 10ms %d to %d", offset, decodedFrame._payloadDataLengthInSamples));
+		//PJ_LOG(4, (THIS_FILE, "Decoded 10ms %d to %d", offset, decodedFrame.samples_per_channel_));
 	}
 	output->type = PJMEDIA_FRAME_TYPE_AUDIO;
 	output->timestamp = input->timestamp;
