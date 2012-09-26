@@ -43,11 +43,17 @@ public class CallLogHelper {
 	private static final String EXTRA_CALL_LOG_URI = "uri";
 	// Provider name
 	public static final String EXTRA_SIP_PROVIDER = "provider";
+    private static final String THIS_FILE = "CallLogHelper";
 	
 
 	public static void addCallLog(Context context, ContentValues values, ContentValues extraValues) {
 		ContentResolver contentResolver = context.getContentResolver();
-		Uri result = contentResolver.insert(CallLog.Calls.CONTENT_URI, values);
+		Uri result = null;
+		try {
+		    result = contentResolver.insert(CallLog.Calls.CONTENT_URI, values);
+		}catch(IllegalArgumentException e) {
+		    Log.w(THIS_FILE, "Cannot insert call log entry. Probably not a phone", e);
+		}
 		
 		if(result != null) {
 			// Announce that to other apps
