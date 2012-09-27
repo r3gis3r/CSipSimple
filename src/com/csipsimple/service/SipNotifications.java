@@ -352,42 +352,45 @@ public class SipNotifications {
 		}
 	}
 
-	public void showNotificationForVoiceMail(SipProfile acc, int numberOfMessages) {
-		if (messageVoicemail == null) {
-			
-			messageVoicemail = new NotificationCompat.Builder(context);
-			messageVoicemail.setSmallIcon(android.R.drawable.stat_notify_voicemail);
-			messageVoicemail.setTicker(context.getString(R.string.voice_mail));
-			messageVoicemail.setWhen(System.currentTimeMillis());
-			messageVoicemail.setDefaults(Notification.DEFAULT_ALL);
-			messageVoicemail.setAutoCancel(true);
-			messageVoicemail.setOnlyAlertOnce(true);
-		}
+    public void showNotificationForVoiceMail(SipProfile acc, int numberOfMessages) {
+        if (messageVoicemail == null) {
 
-		PendingIntent contentIntent = null;
-		if(acc != null && !TextUtils.isEmpty(acc.vm_nbr)) {
-	        Intent notificationIntent = new Intent(Intent.ACTION_CALL);
-    		notificationIntent.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_CSIP, acc.vm_nbr + "@" + acc.getDefaultDomain()));
-			notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
-	        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	        contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-		}
+            messageVoicemail = new NotificationCompat.Builder(context);
+            messageVoicemail.setSmallIcon(android.R.drawable.stat_notify_voicemail);
+            messageVoicemail.setTicker(context.getString(R.string.voice_mail));
+            messageVoicemail.setWhen(System.currentTimeMillis());
+            messageVoicemail.setDefaults(Notification.DEFAULT_ALL);
+            messageVoicemail.setAutoCancel(true);
+            messageVoicemail.setOnlyAlertOnce(true);
+        }
 
+        PendingIntent contentIntent = null;
+        Intent notificationIntent;
+        if (acc != null && !TextUtils.isEmpty(acc.vm_nbr)) {
+            notificationIntent = new Intent(Intent.ACTION_CALL);
+            notificationIntent.setData(SipUri.forgeSipUri(SipManager.PROTOCOL_CSIP, acc.vm_nbr
+                    + "@" + acc.getDefaultDomain()));
+            notificationIntent.putExtra(SipProfile.FIELD_ACC_ID, acc.id);
+        } else {
+            notificationIntent = new Intent(SipManager.ACTION_SIP_DIALER);
+        }
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
-		String messageText = "";
-		if (acc != null) {
-			messageText += acc.getProfileName() + " : ";
-		}
-		messageText += Integer.toString(numberOfMessages);
+        String messageText = "";
+        if (acc != null) {
+            messageText += acc.getProfileName() + " : ";
+        }
+        messageText += Integer.toString(numberOfMessages);
 
-		messageVoicemail.setContentTitle(context.getString(R.string.voice_mail));
-		messageVoicemail.setContentText(messageText);
-		if(contentIntent != null) {
-		    messageVoicemail.setContentIntent(contentIntent);
-        // TODO : allow message with no content intent
-		    notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail.build());
-		}
-	}
+        messageVoicemail.setContentTitle(context.getString(R.string.voice_mail));
+        messageVoicemail.setContentText(messageText);
+        if (contentIntent != null) {
+            messageVoicemail.setContentIntent(contentIntent);
+            notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail.build());
+        }
+    }
 
 	private static String viewingRemoteFrom = null;
 
