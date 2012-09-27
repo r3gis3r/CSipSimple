@@ -384,8 +384,9 @@ public class SipNotifications {
 		messageVoicemail.setContentText(messageText);
 		if(contentIntent != null) {
 		    messageVoicemail.setContentIntent(contentIntent);
+        // TODO : allow message with no content intent
+		    notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail.build());
 		}
-		notificationManager.notify(VOICEMAIL_NOTIF_ID, messageVoicemail.build());
 	}
 
 	private static String viewingRemoteFrom = null;
