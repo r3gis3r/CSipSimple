@@ -284,18 +284,27 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         boolean active = callInfo.isBeforeConfirmed() && callInfo.isIncoming();
         btnMenuBuilder.findItem(R.id.takeCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.declineCallButton).setVisible(active);
-        active = !callInfo.isAfterEnded() && (!callInfo.isBeforeConfirmed() || (!callInfo.isIncoming() && callInfo.isBeforeConfirmed()));
+        
+        active = !callInfo.isAfterEnded()
+                && (!callInfo.isBeforeConfirmed() || (!callInfo.isIncoming() && callInfo
+                        .isBeforeConfirmed()));
         btnMenuBuilder.findItem(R.id.clearCallButton).setVisible(active);
+        
         active = (!callInfo.isAfterEnded() && !callInfo.isBeforeConfirmed());
         btnMenuBuilder.findItem(R.id.xferCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.transferCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.holdCallButton).setVisible(active)
                 .setTitle(callInfo.isLocalHeld() ? R.string.resume_call : R.string.hold_call);
         btnMenuBuilder.findItem(R.id.videoCallButton).setVisible(active && canVideo && !callInfo.mediaHasVideo());
-        active = !callInfo.isAfterEnded() && (callInfo.getCallState() == InvState.EARLY || callInfo.getCallState() == InvState.CONFIRMED);
+        
+        active = !callInfo.isAfterEnded()
+                && (callInfo.getCallState() == InvState.EARLY
+                        || callInfo.getCallState() == InvState.CONFIRMED || callInfo.getCallState() == InvState.CONNECTING);
         btnMenuBuilder.findItem(R.id.dtmfCallButton).setVisible(active);
+        
         active = !callInfo.isAfterEnded();
         btnMenuBuilder.findItem(R.id.detailedDisplayCallButton).setVisible(active);
+        
         active = CustomDistribution.supportCallRecord();
         if(!callInfo.isRecording() && !callInfo.canRecord()) {
             active = false;
