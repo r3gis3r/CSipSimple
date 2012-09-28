@@ -1,77 +1,54 @@
 Index: pjsip/sources/pjmedia/include/pjmedia-codec/types.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/include/pjmedia-codec/types.h	2012-05-17 09:56:29.125337938 +0200
-+++ pjsip/sources/pjmedia/include/pjmedia-codec/types.h	2012-05-17 09:57:19.418470415 +0200
-@@ -59,10 +59,19 @@
+--- pjsip.orig/sources/pjmedia/include/pjmedia-codec/types.h	2012-09-28 21:05:30.000000000 +0200
++++ pjsip/sources/pjmedia/include/pjmedia-codec/types.h	2012-09-28 21:15:19.929625663 +0200
+@@ -59,18 +59,19 @@
  #else
      PJMEDIA_RTP_PT_START = (PJMEDIA_RTP_PT_DYNAMIC-1),
  #endif
-+    // Note : in csipsimple we start at 101 for telephone events (because of buggy sip servers)
+-
 +    PJMEDIA_RTP_PT_ILBC = 102,			/**< iLBC (13.3/15.2Kbps)   */
 +    // r3gis3r : webRTC codecs position is important because of the fact its hardcoded in the lib
-+
 +#if defined(PJMEDIA_HAS_WEBRTC_CODEC) && PJMEDIA_HAS_WEBRTC_CODEC != 0
-+    PJMEDIA_RTP_PT_ISAC_WB = 103,
-+    PJMEDIA_RTP_PT_ISAC_UWB = 104,
++	PJMEDIA_RTP_PT_ISAC_WB = 103,
++	PJMEDIA_RTP_PT_ISAC_UWB = 104,
 +#endif
- 
      PJMEDIA_RTP_PT_SPEEX_NB,			/**< Speex narrowband/8KHz  */
      PJMEDIA_RTP_PT_SPEEX_WB,			/**< Speex wideband/16KHz   */
      PJMEDIA_RTP_PT_SPEEX_UWB,			/**< Speex 32KHz	    */
+-    PJMEDIA_RTP_PT_SILK_NB,			/**< SILK narrowband/8KHz   */
+-    PJMEDIA_RTP_PT_SILK_MB,			/**< SILK mediumband/12KHz  */
+-    PJMEDIA_RTP_PT_SILK_WB,			/**< SILK wideband/16KHz    */
+-    PJMEDIA_RTP_PT_SILK_SWB,			/**< SILK 24KHz		    */
+-    PJMEDIA_RTP_PT_ILBC,			/**< iLBC (13.3/15.2Kbps)   */
+     PJMEDIA_RTP_PT_AMR,				/**< AMR (4.75 - 12.2Kbps)  */
+     PJMEDIA_RTP_PT_AMRWB,			/**< AMRWB (6.6 - 23.85Kbps)*/
+     PJMEDIA_RTP_PT_AMRWBE,			/**< AMRWBE		    */
++    PJMEDIA_RTP_PT_OPUS,			/**< OPUS 	*/
+     PJMEDIA_RTP_PT_G726_16,			/**< G726 @ 16Kbps	    */
+     PJMEDIA_RTP_PT_G726_24,			/**< G726 @ 24Kbps	    */
+     PJMEDIA_RTP_PT_G726_32,			/**< G726 @ 32Kbps	    */
+@@ -83,6 +84,7 @@
+     PJMEDIA_RTP_PT_G7221C_48,			/**< G722.1 Annex C (48Kbps)*/
+     PJMEDIA_RTP_PT_G7221_RSV1,			/**< G722.1 reserve	    */
+     PJMEDIA_RTP_PT_G7221_RSV2,			/**< G722.1 reserve	    */
 +#if defined(PJMEDIA_HAS_L16_CODEC) && PJMEDIA_HAS_L16_CODEC != 0
      PJMEDIA_RTP_PT_L16_8KHZ_MONO,		/**< L16 @ 8KHz, mono	    */
      PJMEDIA_RTP_PT_L16_8KHZ_STEREO,		/**< L16 @ 8KHz, stereo     */
      //PJMEDIA_RTP_PT_L16_11KHZ_MONO,		/**< L16 @ 11KHz, mono	    */
-@@ -75,14 +84,30 @@
+@@ -95,7 +97,15 @@
      //PJMEDIA_RTP_PT_L16_32KHZ_STEREO,		/**< L16 @ 32KHz, stereo    */
      //PJMEDIA_RTP_PT_L16_48KHZ_MONO,		/**< L16 @ 48KHz, mono	    */
      //PJMEDIA_RTP_PT_L16_48KHZ_STEREO,		/**< L16 @ 48KHz, stereo    */
--    PJMEDIA_RTP_PT_ILBC,			/**< iLBC (13.3/15.2Kbps)   */
-+#endif
-+
-+#if ( defined(PJMEDIA_HAS_INTEL_IPP) && PJMEDIA_HAS_INTEL_IPP != 0 ) \
-+	|| ( defined(PJMEDIA_HAS_PASSTHROUGH_CODECS) && PJMEDIA_HAS_PASSTHROUGH_CODECS!=0 ) \
-+	|| ( defined(PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC) && PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC!=0 )
-     PJMEDIA_RTP_PT_AMR,				/**< AMR (4.75 - 12.2Kbps)  */
-     PJMEDIA_RTP_PT_AMRWB,			/**< AMRWB (6.6 - 23.85Kbps)*/
-     PJMEDIA_RTP_PT_AMRWBE,			/**< AMRWBE		    */
-+#endif
-+
-+#if ( defined(PJMEDIA_HAS_OPUS_CODEC) && PJMEDIA_HAS_OPUS_CODEC!=0 )
-+	PJMEDIA_RTP_PT_OPUS,			/**< OPUS 	*/
-+#endif
-+
-+#if ( defined(PJMEDIA_HAS_INTEL_IPP) && PJMEDIA_HAS_INTEL_IPP != 0 ) \
-+		|| ( defined(PJMEDIA_HAS_G726_CODEC) && PJMEDIA_HAS_G726_CODEC!=0 )
-     PJMEDIA_RTP_PT_G726_16,			/**< G726 @ 16Kbps	    */
-     PJMEDIA_RTP_PT_G726_24,			/**< G726 @ 24Kbps	    */
-     PJMEDIA_RTP_PT_G726_32,			/**< G726 @ 32Kbps	    */
-     PJMEDIA_RTP_PT_G726_40,			/**< G726 @ 40Kbps	    */
-+#endif
-+
-+#if ( defined(PJMEDIA_HAS_G7221_CODEC) && PJMEDIA_HAS_G7221_CODEC!=0 ) \
-+	|| ( defined(PJMEDIA_HAS_INTEL_IPP) && PJMEDIA_HAS_INTEL_IPP != 0 )
-     PJMEDIA_RTP_PT_G722_1_16,			/**< G722.1 (16Kbps)	    */
-     PJMEDIA_RTP_PT_G722_1_24,			/**< G722.1 (24Kbps)	    */
-     PJMEDIA_RTP_PT_G722_1_32,			/**< G722.1 (32Kbps)	    */
-@@ -91,7 +116,20 @@
-     PJMEDIA_RTP_PT_G7221C_48,			/**< G722.1 Annex C (48Kbps)*/
-     PJMEDIA_RTP_PT_G7221_RSV1,			/**< G722.1 reserve	    */
-     PJMEDIA_RTP_PT_G7221_RSV2,			/**< G722.1 reserve	    */
 +#endif
  
 +    // To save space, put these additional codecs proper to csipsimple in the free space
-+    // At the beggining
-+#if ( defined(PJMEDIA_HAS_SILK_CODEC) && PJMEDIA_HAS_SILK_CODEC!=0 )
-+    PJMEDIA_RTP_PT_SILK_NB = 96,		/**< SILK @ 8KHz	*/
-+    PJMEDIA_RTP_PT_SILK_MB = 98,		/**< SILK @ 12KHz	*/
-+    PJMEDIA_RTP_PT_SILK_WB = 97,		/**< SILK @ 16KHz	*/
-+    PJMEDIA_RTP_PT_SILK_UWB = 99,		/**< SILK @ 24KHz	*/
-+#endif
-+
-+#if ( defined(PJMEDIA_HAS_CODEC2_CODEC) && PJMEDIA_HAS_CODEC2_CODEC!=0 )
++    // At the beggining as in CSipSimple we force telephony event on 101 (for buggy sip servers)
++    PJMEDIA_RTP_PT_SILK_NB = 96,			/**< SILK narrowband/8KHz   */
++    PJMEDIA_RTP_PT_SILK_MB = 97,			/**< SILK mediumband/12KHz  */
++    PJMEDIA_RTP_PT_SILK_WB = 98,			/**< SILK wideband/16KHz    */
++    PJMEDIA_RTP_PT_SILK_SWB = 99,			/**< SILK 24KHz		    */
 +    PJMEDIA_RTP_PT_CODEC2 = 100,
-+#endif
      /* Caution!
       * Ensure the value of the last pt above is <= 127.
       */

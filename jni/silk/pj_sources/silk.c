@@ -238,7 +238,7 @@ PJ_DEF(pj_status_t) pjmedia_codec_silk_init(pjmedia_endpt *endpt)
 	silk_param->enabled = 1;
 
     silk_param = &silk_factory.silk_param[PARAM_UWB];
-    silk_param->pt = PJMEDIA_RTP_PT_SILK_UWB;
+    silk_param->pt = PJMEDIA_RTP_PT_SILK_SWB;
     silk_param->clock_rate = 24000;
     silk_param->bitrate = 30000;
 	pj_utoa(silk_param->bitrate, silk_param->bitrate_str);
