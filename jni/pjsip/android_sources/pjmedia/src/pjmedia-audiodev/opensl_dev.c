@@ -733,7 +733,6 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
     return PJ_SUCCESS;
     
 on_error:
-	on_teardown_audio_wrapper();
     strm_destroy(&stream->base);
     return status;
 }
