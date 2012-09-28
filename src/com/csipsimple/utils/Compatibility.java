@@ -362,6 +362,9 @@ public final class Compatibility {
         if(Compatibility.isCompatible(11)) {
             return SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES;
         }
+        if(android.os.Build.DEVICE.equalsIgnoreCase("ST25i") && Compatibility.isCompatible(10)) {
+            return SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES;
+        }
         return SipConfigManager.AUDIO_IMPLEMENTATION_JAVA;
     }
 
@@ -776,6 +779,9 @@ public final class Compatibility {
         }
         if(lastSeenVersion < 1919) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
+        }
+        if(lastSeenVersion < 1931 && android.os.Build.DEVICE.equalsIgnoreCase("ST25i")) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
         }
         prefWrapper.endEditing();
     }
