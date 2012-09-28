@@ -48,6 +48,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipCallSession.InvState;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
@@ -288,10 +289,11 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         active = (!callInfo.isAfterEnded() && !callInfo.isBeforeConfirmed());
         btnMenuBuilder.findItem(R.id.xferCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.transferCallButton).setVisible(active);
-        btnMenuBuilder.findItem(R.id.dtmfCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.holdCallButton).setVisible(active)
                 .setTitle(callInfo.isLocalHeld() ? R.string.resume_call : R.string.hold_call);
         btnMenuBuilder.findItem(R.id.videoCallButton).setVisible(active && canVideo && !callInfo.mediaHasVideo());
+        active = !callInfo.isAfterEnded() && (callInfo.getCallState() == InvState.EARLY || callInfo.getCallState() == InvState.CONFIRMED);
+        btnMenuBuilder.findItem(R.id.dtmfCallButton).setVisible(active);
         active = !callInfo.isAfterEnded();
         btnMenuBuilder.findItem(R.id.detailedDisplayCallButton).setVisible(active);
         active = CustomDistribution.supportCallRecord();
