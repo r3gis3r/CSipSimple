@@ -45,7 +45,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -780,7 +779,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                 return true;
             case CLOSE_MENU:
                 Log.d(THIS_FILE, "CLOSE");
-                if (prefProviderWrapper.isValidConnectionForIncoming()) {
+                /*if (prefProviderWrapper.isValidConnectionForIncoming()) {*/
                     // Alert user that we will disable for all incoming calls as
                     // he want to quit
                     new AlertDialog.Builder(this)
@@ -795,6 +794,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                             })
                             .setNegativeButton(R.string.cancel, null)
                             .show();
+                    /*
                 } else {
                     ArrayList<String> networks = prefProviderWrapper.getAllIncomingNetworks();
                     if (networks.size() > 0) {
@@ -804,6 +804,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                     }
                     disconnect(true);
                 }
+                */
                 return true;
             case HELP_MENU:
                 // Create the fragment and show it as a dialog.
