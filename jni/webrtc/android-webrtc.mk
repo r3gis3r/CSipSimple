@@ -34,9 +34,11 @@ MY_WEBRTC_COMMON_DEFS += \
 # Transform NDK vars to Android Build Vars
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
 ARCH_ARM_HAVE_ARMV7A := true
+ifeq ($(BUILD_NEON_COMPLIANT_TOOLCHAIN),true)
 MY_WEBRTC_COMMON_DEFS += \
     -DWEBRTC_ARCH_ARM_V7A \
     -DWEBRTC_DETECT_ARM_NEON
+endif
 endif
 
 
