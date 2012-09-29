@@ -37,6 +37,6 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/item_status_icon"
         android:gravity="center_vertical"
-        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

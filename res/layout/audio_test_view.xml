@@ -74,7 +74,7 @@
 
     <Button
         android:id="@+id/cancel_bt"
-        style="?android:attr/buttonBarButtonStyle"
+        style="@style/ButtonBarButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rx_icon"

@@ -37,7 +37,7 @@
 
         <Button
             android:id="@+id/warn_ignore"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/ButtonBarButton"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="0.5"
@@ -45,7 +45,7 @@
 
         <Button
             android:id="@+id/warn_stun_on"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/ButtonBarButton"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="0.5"

@@ -3,6 +3,7 @@
     <issue id="ContentDescription">
         <ignore path="res/layout/account_chooser_button.xml" />
     </issue>
+    <issue id="DefaultLocale" severity="ignore" />
     <issue id="MissingTranslation" severity="ignore" />
     <issue id="TypographyEllipsis" severity="ignore" />
 </lint>

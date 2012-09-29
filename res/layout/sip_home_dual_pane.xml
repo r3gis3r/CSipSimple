@@ -38,7 +38,7 @@
         android:layout_marginRight="40dip"
         android:layout_marginTop="10dip"
         android:layout_weight="7"
-        android:background="?android:attr/detailsElementBackground"
+        android:background="@drawable/detailsElementBackground"
         android:padding="48dip" />
 
 </LinearLayout>

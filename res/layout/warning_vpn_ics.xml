@@ -37,7 +37,7 @@
 
         <Button
             android:id="@+id/warn_ignore"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/ButtonBarButton"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="0.3"
@@ -45,7 +45,7 @@
 
         <Button
             android:id="@+id/warn_vpn_ics_1"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/ButtonBarButton"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="0.3"
@@ -53,7 +53,7 @@
 
         <Button
             android:id="@+id/warn_vpn_ics_5"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/ButtonBarButton"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="0.3"
