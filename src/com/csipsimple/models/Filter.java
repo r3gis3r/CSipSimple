@@ -26,7 +26,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
-import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
@@ -192,48 +192,78 @@ public class Filter {
 		Log.e(THIS_FILE, "Invalid pattern ", e);
 	}
 	
-	public boolean canCall(String number) {
-		//Log.d(THIS_FILE, "Check if filter is valid for "+number+" >> "+action+" and "+matchPattern);
+	private boolean patternMatches(Context ctxt, String number, boolean defaultValue) {
+	    if(BLUETOOTH_MATCHER_KEY.equals(matchPattern)) {
+            return BluetoothWrapper.getInstance(ctxt).isBTHeadsetConnected();
+        }else {
+            try {
+                return Pattern.matches(matchPattern, number);
+            }catch(PatternSyntaxException e) {
+                logInvalidPattern(e);
+            }
+        }
+	    return defaultValue;
+	}
+	
+	/**
+	 * Does the filter allows to call ?
+	 * @param ctxt Application context
+	 * @param number number to test
+	 * @return true if we can call this number
+	 */
+	public boolean canCall(Context ctxt, String number) {
 		if(action == ACTION_CANT_CALL) {
-			try {
-				return !Pattern.matches(matchPattern, number);
-			}catch(PatternSyntaxException e) {
-				logInvalidPattern(e);
-			}
+		    return !patternMatches(ctxt, number, false);
 			
 		}
 		return true;
 	}
 	
+	/**
+	 * Does the filter force to call ?
+	 * @param ctxt Application context
+	 * @param number number to test
+	 * @return true if we must call this number
+	 */
 	public boolean mustCall(Context ctxt, String number) {
 		if(action == ACTION_DIRECTLY_CALL) {
-		    if(BLUETOOTH_MATCHER_KEY.equals(matchPattern)) {
-		        return BluetoothWrapper.getInstance(ctxt).isBTHeadsetConnected();
-		    }else {
-    			try {
-    				return Pattern.matches(matchPattern, number);
-    			}catch(PatternSyntaxException e) {
-    				logInvalidPattern(e);
-    			}
-		    }
+		    return patternMatches(ctxt, number, false);
 			
 		}
 		return false;
 	}
 	
-	public boolean stopProcessing(String number) {
-		//Log.d(THIS_FILE, "Should stop processing "+number+" ? ");
+	/**
+	 * Should the filter avoid next filters ?
+	 * @param ctxt Application context
+	 * @param number number to test
+	 * @return true if we should not process next filters
+	 */
+	public boolean stopProcessing(Context ctxt, String number) {
 		if(action == ACTION_CAN_CALL || action == ACTION_DIRECTLY_CALL) {
-			try {
-				return Pattern.matches(matchPattern, number);
-			}catch(PatternSyntaxException e) {
-				logInvalidPattern(e);
-			}
+			return patternMatches(ctxt, number, false);
 		}
-		//Log.d(THIS_FILE, "Response : false");
 		return false;
 	}
 	
+	/**
+	 * Does the filter auto answer a call ?
+	 * @param ctxt Application context
+	 * @param number number to test
+	 * @return true if the call should be auto-answered
+	 */
+    public boolean autoAnswer(Context ctxt, String number) {
+        if(action == ACTION_AUTO_ANSWER) {
+            return patternMatches(ctxt, number, false);
+        }
+        return false;
+    }
+	
+    /**
+     * Rewrite the number with this filter rule
+     * @param number the number to rewrite
+     * @return the rewritten number
+     */
 	public String rewrite(String number) {
 		if(action == ACTION_REPLACE) {
 			try {
@@ -248,26 +278,14 @@ public class Filter {
 		}
 		return number;
 	}
-
-	public boolean autoAnswer(String number) {
-		if(action == ACTION_AUTO_ANSWER) {
-			try {
-				//TODO : get contact part
-				return Pattern.matches(matchPattern, number);
-			}catch(PatternSyntaxException e) {
-				logInvalidPattern(e);
-			}
-		}
-		return false;
-	}
 	
 	
 	//Utilities functions
-	private static int getForPosition(SparseArray<Integer> positions, Integer key) {
+	private static int getForPosition(SparseIntArray positions, Integer key) {
 		return positions.get(key);
 	}
 	
-	private static int getPositionFor(SparseArray<Integer> positions, Integer value) {
+	private static int getPositionFor(SparseIntArray positions, Integer value) {
 		if(value != null) {
 		    int pos = positions.indexOfValue(value);
 		    if(pos >= 0) {
@@ -281,7 +299,7 @@ public class Filter {
 	/**
 	 * Available actions
 	 */
-	private final static SparseArray<Integer> FILTER_ACTION_POS = new SparseArray<Integer>();
+	private final static SparseIntArray FILTER_ACTION_POS = new SparseIntArray();
 	static {
 		FILTER_ACTION_POS.put(0, ACTION_CANT_CALL);
 		FILTER_ACTION_POS.put(1, ACTION_REPLACE);
@@ -301,7 +319,7 @@ public class Filter {
 	/**
 	 * Available matches patterns
 	 */
-	private final static SparseArray <Integer> MATCHER_TYPE_POS = new SparseArray<Integer>();
+	private final static SparseIntArray MATCHER_TYPE_POS = new SparseIntArray();
 	
 	static {
 		MATCHER_TYPE_POS.put(0, MATCHER_STARTS);
@@ -323,7 +341,7 @@ public class Filter {
 		return getPositionFor(MATCHER_TYPE_POS, selectedAction);
 	}
 	
-	private final static SparseArray<Integer> REPLACE_TYPE_POS = new SparseArray<Integer>();
+	private final static SparseIntArray REPLACE_TYPE_POS = new SparseIntArray();
 	static {
 		REPLACE_TYPE_POS.put(0, REPLACE_PREFIX);
 		REPLACE_TYPE_POS.put(1, REPLACE_SUFFIX);
@@ -583,10 +601,10 @@ public class Filter {
         List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
         for (Filter f : filterList) {
             Log.d(THIS_FILE, "Test filter " + f.matchPattern);
-            canCall &= f.canCall(number);
+            canCall &= f.canCall(ctxt, number);
 
             // Stop processing & rewrite
-            if (f.stopProcessing(number)) {
+            if (f.stopProcessing(ctxt, number)) {
                 return canCall;
             }
             number = f.rewrite(number);
@@ -601,7 +619,7 @@ public class Filter {
 				return true;
 			}
 			//Stop processing & rewrite
-			if(f.stopProcessing(number)) {
+			if(f.stopProcessing(ctxt, number)) {
 				return false;
 			}
 			number = f.rewrite(number);
@@ -622,7 +640,7 @@ public class Filter {
         for (Filter f : filterList) {
 			//Log.d(THIS_FILE, "RW > Test filter "+f.matches);
 			number = f.rewrite(number);
-			if(f.stopProcessing(number)) {
+			if(f.stopProcessing(ctxt, number)) {
 				return number;
 			}
 		}
@@ -632,7 +650,7 @@ public class Filter {
 	public static int isAutoAnswerNumber(Context ctxt, long accountId, String number) {
         List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
         for (Filter f : filterList) {
-            if (f.autoAnswer(number)) {
+            if (f.autoAnswer(ctxt, number)) {
                 if (TextUtils.isEmpty(f.replacePattern)) {
                     return 200;
                 }
@@ -644,7 +662,7 @@ public class Filter {
                 return 200;
             }
             // Stop processing & rewrite
-            if (f.stopProcessing(number)) {
+            if (f.stopProcessing(ctxt, number)) {
                 return 0;
             }
             number = f.rewrite(number);
