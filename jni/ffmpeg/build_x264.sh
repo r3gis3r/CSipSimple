@@ -14,14 +14,14 @@ FLAGS="--cross-prefix=$NDK_CROSS_PREFIX"
 
 case "$TARGET_ARCH_ABI" in
 	x86)
-		FLAGS="$FLAGS --enable-pic --disable-asm "
-		;;
+            FLAGS="$FLAGS --enable-pic --disable-asm --host=i686-linux"
+	    ;;
 	mips)
-		FLAGS="$FLAGS --enable-pic --disable-asm "
-		;;
+            FLAGS="$FLAGS --enable-pic --disable-asm --host=mips-linux"
+	    ;;
 	*)
-		FLAGS="$FLAGS --enable-pic --host=arm-linux "
-		;;
+	    FLAGS="$FLAGS --enable-pic --host=arm-linux "
+	    ;;
 esac
 
 pushd x264_src
