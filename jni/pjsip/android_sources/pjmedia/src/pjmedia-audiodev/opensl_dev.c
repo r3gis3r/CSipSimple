@@ -734,7 +734,7 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
     
 on_error:
     strm_destroy(&stream->base);
-    return status;
+    return PJMEDIA_EAUD_INVOP;
 }
 
 /* API: Get stream parameters */
