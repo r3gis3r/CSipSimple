@@ -324,19 +324,14 @@ public final class Compatibility {
     }
     
     public static boolean shouldSetupAudioBeforeInit() {
-        // Try to match all htc device
-        if(android.os.Build.MANUFACTURER.equalsIgnoreCase("htc") ) {
-            return false;
+        // Setup for GT / GS samsung devices.
+        if (android.os.Build.DEVICE.toLowerCase().startsWith("gt-")
+                || android.os.Build.DEVICE.toLowerCase().startsWith("gs-")
+                || android.os.Build.PRODUCT.toLowerCase().startsWith("gt-")
+                || android.os.Build.PRODUCT.toLowerCase().startsWith("gs-") ) {
+            return true;
         }
-        // Try to match all htc device
-        // Incredible + Nexus One too
-        if (android.os.Build.PRODUCT.toLowerCase().startsWith("htc")
-                || android.os.Build.BRAND.toLowerCase().startsWith("htc")
-                || android.os.Build.PRODUCT.toLowerCase().equalsIgnoreCase("inc")
-                || android.os.Build.DEVICE.equalsIgnoreCase("passion") ) {
-            return false;
-        }
-        return true;
+        return false;
     }
     
 
@@ -777,11 +772,11 @@ public final class Compatibility {
         if (lastSeenVersion < 1834 && !shouldFocusAudio() ) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
         }
-        if(lastSeenVersion < 1919) {
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
-        }
         if(lastSeenVersion < 1931 && android.os.Build.DEVICE.equalsIgnoreCase("ST25i")) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
+        }
+        if(lastSeenVersion < 1942) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
         }
         prefWrapper.endEditing();
     }
