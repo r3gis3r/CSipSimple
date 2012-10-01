@@ -4,3 +4,4 @@
 004isac_folder_rename_bug.diff
 005more_relative_folder_neon.diff
 006use_c_ns_neon.diff
+007cpu-features_workaround_buggy_pthread_once.diff
