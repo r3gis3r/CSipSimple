@@ -109,12 +109,9 @@ public final class Compatibility {
                 || android.os.Build.DEVICE.equalsIgnoreCase("joe")) {
             return true;
         }
-        // Samsung GT-I5500
-        if (android.os.Build.DEVICE.equalsIgnoreCase("GT-I5500")) {
-            return true;
-        }
         // Samsung GT-S5360 GT-S5830 GT-S6102 ... probably all..
-        if(android.os.Build.DEVICE.toUpperCase().startsWith("GT-S") ) {
+        if( android.os.Build.DEVICE.toUpperCase().startsWith("GT-") ||
+                android.os.Build.PRODUCT.toUpperCase().startsWith("GT-")) {
             return true;
         }
         
@@ -326,9 +323,7 @@ public final class Compatibility {
     public static boolean shouldSetupAudioBeforeInit() {
         // Setup for GT / GS samsung devices.
         if (android.os.Build.DEVICE.toLowerCase().startsWith("gt-")
-                || android.os.Build.DEVICE.toLowerCase().startsWith("gs-")
-                || android.os.Build.PRODUCT.toLowerCase().startsWith("gt-")
-                || android.os.Build.PRODUCT.toLowerCase().startsWith("gs-") ) {
+                || android.os.Build.PRODUCT.toLowerCase().startsWith("gt-") ) {
             return true;
         }
         return false;
@@ -775,8 +770,13 @@ public final class Compatibility {
         if(lastSeenVersion < 1931 && android.os.Build.DEVICE.equalsIgnoreCase("ST25i")) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
         }
-        if(lastSeenVersion < 1942) {
+        if(lastSeenVersion < 1943) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
+            if( android.os.Build.DEVICE.toUpperCase().startsWith("GT-") ||
+                    android.os.Build.PRODUCT.toUpperCase().startsWith("GT-")) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                        shouldUseModeApi());
+            }
         }
         prefWrapper.endEditing();
     }
