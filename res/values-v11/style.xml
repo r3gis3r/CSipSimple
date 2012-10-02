@@ -9,6 +9,4 @@
 
     <style name="ButtonBar.AlertDialog" parent="@android:style/Holo.ButtonBar.AlertDialog" />
 
-    <item name="detailsElementBackground" type="drawable">?android:attr/detailsElementBackground</item>
-
 </resources>

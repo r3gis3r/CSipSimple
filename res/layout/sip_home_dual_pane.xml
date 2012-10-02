@@ -20,6 +20,7 @@
     along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -38,7 +39,8 @@
         android:layout_marginRight="40dip"
         android:layout_marginTop="10dip"
         android:layout_weight="7"
-        android:background="@drawable/detailsElementBackground"
-        android:padding="48dip" />
+        android:background="?android:attr/detailsElementBackground"
+        android:padding="48dip"
+        tools:ignore="NewApi" />
 
 </LinearLayout>

@@ -117,6 +117,4 @@
 
     <style name="ButtonBar.AlertDialog" parent="@android:style/ButtonBar" />
 
-    <item name="detailsElementBackground" type="drawable">@android:drawable/dialog_frame</item>
-
 </resources>
