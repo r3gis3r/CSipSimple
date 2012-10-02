@@ -1,1 +1,1 @@
-Placeholder, for otherwise empty commit r169. Forgot log message.
+Placeholder, for otherwise empty commit.
