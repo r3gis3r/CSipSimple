@@ -772,6 +772,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_fix2mod, 5, 
                     new Locale[]{Locale.FRANCE}, false, false, 
                     Fix2Mob.class));
+            WIZARDS_DICT.put("DELTATELECOM", new WizardInfo("DELTATELECOM", "JSC - DeltaTelecom", 
+                    R.drawable.ic_wizard_deltatelecom, 20, 
+                    new Locale[]{  locale("ru_RU"), }, false, false, 
+                    DeltaTelecom.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
