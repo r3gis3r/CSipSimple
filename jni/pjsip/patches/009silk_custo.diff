@@ -1,0 +1,37 @@
+Index: pjsip/sources/pjmedia/src/pjmedia-codec/silk.c
+===================================================================
+--- pjsip.orig/sources/pjmedia/src/pjmedia-codec/silk.c	2012-10-06 01:01:23.743060888 +0200
++++ pjsip/sources/pjmedia/src/pjmedia-codec/silk.c	2012-10-06 01:02:16.327062251 +0200
+@@ -244,7 +244,7 @@
+     sp->bitrate = CALC_BITRATE(sp->max_bitrate);
+     sp->ptime = FRAME_LENGTH_MS;
+     sp->complexity = PJMEDIA_CODEC_SILK_DEFAULT_COMPLEXITY;
+-    sp->enabled = 0;
++    sp->enabled = 1;
+ 
+     sp = &silk_factory.silk_param[PARAM_WB];
+     sp->pt = PJMEDIA_RTP_PT_SILK_WB;
+@@ -262,7 +262,7 @@
+     sp->bitrate = CALC_BITRATE(sp->max_bitrate);
+     sp->ptime = FRAME_LENGTH_MS;
+     sp->complexity = PJMEDIA_CODEC_SILK_DEFAULT_COMPLEXITY;
+-    sp->enabled = 0;
++    sp->enabled = 1;
+ 
+ 
+     /* Get the codec manager. */
+@@ -311,10 +311,14 @@
+     {
+         if (silk_factory.silk_param[i].clock_rate == clock_rate) {
+ 	    silk_factory.silk_param[i].enabled = opt->enabled;
++	    if(opt->complexity > 0){
+             silk_factory.silk_param[i].complexity = opt->complexity;
++	    }
++	    if(opt->quality > 0){
+             silk_factory.silk_param[i].bitrate =
+                 CALC_BITRATE_QUALITY(opt->quality,
+                                      silk_factory.silk_param[i].max_bitrate);
++	    }
+ 	    return PJ_SUCCESS;
+ 	}
+     }
