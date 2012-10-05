@@ -8,10 +8,10 @@ ifeq ($(MY_USE_SILK),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_silk_codec
 ifeq ($(TARGET_ARCH_ABI),armeabi)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FIX_v1.0.8
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_ARM_v1.0.8
 else
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FLP_v1.0.8
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_ARM_v1.0.8
 else
 ifeq ($(TARGET_ARCH_ABI),mips)
 SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_MIPS_v1.0.8
@@ -44,15 +44,15 @@ LOCAL_SRC_FILES += $(SILK_FILES:$(LOCAL_PATH)/%=%)
 LOCAL_SRC_FILES += $(SILK_FILES_S:$(LOCAL_PATH)/%=%)
 # self
 LOCAL_C_INCLUDES += $(PJ_SILK_PATH)
-LOCAL_SRC_FILES += ../pj_sources/silk.c
+LOCAL_SRC_FILES += ../../pjsip/sources/pjmedia/src/pjmedia-codec/silk.c
 
-LOCAL_SHARED_LIBRARIES += libpjsipjni
+#LOCAL_SHARED_LIBRARIES += libpjsipjni
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
-LOCAL_STATIC_LIBRARIES += libgcc
+#LOCAL_STATIC_LIBRARIES += libgcc
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 endif

@@ -119,11 +119,29 @@ PJ_DEF(pj_status_t) pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
 #endif /* PJMEDIA_HAS_WEBRTC_CODEC */
 
 #if PJMEDIA_HAS_G729_CODEC
-	/* Register WEBRTC */
+	/* Register G729 */
 	status = pjmedia_codec_g729_init(endpt);
 	if (status != PJ_SUCCESS)
 		return status;
 #endif /* PJMEDIA_HAS_G729_CODEC */
+
+
+#if PJMEDIA_HAS_SILK_CODEC
+	status = pjmedia_codec_silk_init(endpt);
+	if (status != PJ_SUCCESS)
+		return status;
+
+	// Our default config
+	pjmedia_codec_silk_setting silk_settings;
+	silk_settings.complexity = -1;
+	silk_settings.enabled = PJ_TRUE;
+	silk_settings.quality = -1;
+	pjmedia_codec_silk_set_config(8000, &silk_settings);
+	pjmedia_codec_silk_set_config(12000, &silk_settings);
+	pjmedia_codec_silk_set_config(16000, &silk_settings);
+	pjmedia_codec_silk_set_config(24000, &silk_settings);
+
+#endif /* PJMEDIA_HAS_SILK_CODEC */
 
 	// Dynamic loading of plugins codecs
 	unsigned i;

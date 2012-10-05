@@ -39,9 +39,6 @@ $(call __ndk_info,No local settings... build all in release mode !)
 endif
 
 APP_MODULES := libpjsipjni pj_opensl_dev
-ifeq ($(MY_USE_SILK),1)
-APP_MODULES += libpj_silk_codec
-endif
 
 # Modules for extra codecs are 
 # pj_g7221_codec pj_codec2_codec pj_g726_codec pj_opus_codec

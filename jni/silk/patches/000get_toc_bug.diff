@@ -1,0 +1,52 @@
+Index: silk/sources/SILK_SDK_SRC_ARM_v1.0.8/src/SKP_Silk_dec_API.c
+===================================================================
+--- silk.orig/sources/SILK_SDK_SRC_ARM_v1.0.8/src/SKP_Silk_dec_API.c	2012-10-05 23:21:11.729813834 +0200
++++ silk/sources/SILK_SDK_SRC_ARM_v1.0.8/src/SKP_Silk_dec_API.c	2012-10-05 23:21:15.125813920 +0200
+@@ -253,7 +253,7 @@
+         }
+     }
+     if( Silk_TOC->corrupt || sDec.FrameTermination == SKP_SILK_MORE_FRAMES || 
+-        sDec.nFramesInPacket > SILK_MAX_FRAMES_PER_PACKET ) {
++        sDec.nFramesDecoded > SILK_MAX_FRAMES_PER_PACKET ) {
+         /* Corrupt packet */
+         SKP_memset( Silk_TOC, 0, sizeof( SKP_Silk_TOC_struct ) );
+         Silk_TOC->corrupt = 1;
+Index: silk/sources/SILK_SDK_SRC_FIX_v1.0.8/src/SKP_Silk_dec_API.c
+===================================================================
+--- silk.orig/sources/SILK_SDK_SRC_FIX_v1.0.8/src/SKP_Silk_dec_API.c	2012-10-05 23:21:11.753813833 +0200
++++ silk/sources/SILK_SDK_SRC_FIX_v1.0.8/src/SKP_Silk_dec_API.c	2012-10-05 23:21:15.125813920 +0200
+@@ -253,7 +253,7 @@
+         }
+     }
+     if( Silk_TOC->corrupt || sDec.FrameTermination == SKP_SILK_MORE_FRAMES || 
+-        sDec.nFramesInPacket > SILK_MAX_FRAMES_PER_PACKET ) {
++        sDec.nFramesDecoded > SILK_MAX_FRAMES_PER_PACKET ) {
+         /* Corrupt packet */
+         SKP_memset( Silk_TOC, 0, sizeof( SKP_Silk_TOC_struct ) );
+         Silk_TOC->corrupt = 1;
+Index: silk/sources/SILK_SDK_SRC_FLP_v1.0.8/src/SKP_Silk_dec_API.c
+===================================================================
+--- silk.orig/sources/SILK_SDK_SRC_FLP_v1.0.8/src/SKP_Silk_dec_API.c	2012-10-05 23:21:11.769813831 +0200
++++ silk/sources/SILK_SDK_SRC_FLP_v1.0.8/src/SKP_Silk_dec_API.c	2012-10-05 23:21:15.125813920 +0200
+@@ -253,7 +253,7 @@
+         }
+     }
+     if( Silk_TOC->corrupt || sDec.FrameTermination == SKP_SILK_MORE_FRAMES || 
+-        sDec.nFramesInPacket > SILK_MAX_FRAMES_PER_PACKET ) {
++        sDec.nFramesDecoded > SILK_MAX_FRAMES_PER_PACKET ) {
+         /* Corrupt packet */
+         SKP_memset( Silk_TOC, 0, sizeof( SKP_Silk_TOC_struct ) );
+         Silk_TOC->corrupt = 1;
+Index: silk/sources/SILK_SDK_SRC_MIPS_v1.0.8/src/SKP_Silk_dec_API.c
+===================================================================
+--- silk.orig/sources/SILK_SDK_SRC_MIPS_v1.0.8/src/SKP_Silk_dec_API.c	2012-10-05 23:21:11.705813831 +0200
++++ silk/sources/SILK_SDK_SRC_MIPS_v1.0.8/src/SKP_Silk_dec_API.c	2012-10-05 23:21:15.129813920 +0200
+@@ -253,7 +253,7 @@
+         }
+     }
+     if( Silk_TOC->corrupt || sDec.FrameTermination == SKP_SILK_MORE_FRAMES || 
+-        sDec.nFramesInPacket > SILK_MAX_FRAMES_PER_PACKET ) {
++        sDec.nFramesDecoded > SILK_MAX_FRAMES_PER_PACKET ) {
+         /* Corrupt packet */
+         SKP_memset( Silk_TOC, 0, sizeof( SKP_Silk_TOC_struct ) );
+         Silk_TOC->corrupt = 1;

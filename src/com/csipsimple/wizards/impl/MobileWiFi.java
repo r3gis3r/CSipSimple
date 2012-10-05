@@ -41,8 +41,6 @@ public class MobileWiFi extends SimpleImplementation {
     private TextView customWizardText;
     private LinearLayout customWizard;
 
-
-
     @Override
     protected String getDefaultName() {
         return "Mobile-Wi.fi";
@@ -50,18 +48,39 @@ public class MobileWiFi extends SimpleImplementation {
 
     @Override
     protected String getDomain() {
-        return "csipsimple.mobile-wi.fi";
+        return "sip.mobile-wi.fi";
+    }
+    
+    private boolean useIpv6() {
+        return false;
     }
 
     public SipProfile buildAccount(SipProfile account) {
         account = super.buildAccount(account);
         String domain = getDomain();
-        account.reg_uri = "sips:" + domain;
-        account.proxies = new String[] {
-                "sips:" + domain
-        };
+        String scheme = "sips";
+        
+        // For TLS
+        account.reg_uri = scheme +":" + domain;
         account.transport = SipProfile.TRANSPORT_TLS;
         account.vm_nbr = "1000";
+        
+        // For ipv6
+        account.proxies = new String[] {
+                scheme + ":" + (useIpv6() ? "[2001:470:9ff3::1]" : "csipsimple.mobile-wi.fi")
+        };
+        if(useIpv6()) {
+            account.sip_stun_use = 0;
+            account.media_stun_use = 0;
+            account.ice_cfg_enable = 1;
+            account.ice_cfg_use = 0;
+        } else {
+            account.sip_stun_use = -1;
+            account.media_stun_use = -1;
+            account.ice_cfg_enable = 0;
+        }
+        
+        
         return account;
     }
 
