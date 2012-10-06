@@ -31,7 +31,7 @@ FLAGS="$FLAGS --disable-shared --disable-symver"
 FLAGS="$FLAGS --disable-everything"
 #FLAGS="$FLAGS --enable-small"
 FLAGS="$FLAGS --enable-gpl"
-FALGS="$FLAGS --enable-runtime-cpudetect"
+FLAGS="$FLAGS --enable-runtime-cpudetect"
 
 # For h263
 FLAGS="$FLAGS --enable-decoder=h263 --enable-encoder=h263"
