@@ -135,7 +135,7 @@ PJ_DEF(pj_status_t) pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
 	pjmedia_codec_silk_setting silk_settings;
 	silk_settings.complexity = -1;
 	silk_settings.enabled = PJ_TRUE;
-	silk_settings.quality = -1;
+	silk_settings.quality = 3;
 	pjmedia_codec_silk_set_config(8000, &silk_settings);
 	pjmedia_codec_silk_set_config(12000, &silk_settings);
 	pjmedia_codec_silk_set_config(16000, &silk_settings);
