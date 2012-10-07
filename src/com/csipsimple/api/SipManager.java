@@ -252,6 +252,25 @@ public final class SipManager {
      * </ul>
      */
     public static final String ACTION_GET_PHONE_HANDLERS = "com.csipsimple.phone.action.HANDLE_CALL";
+    
+    /**
+     * Plugin action for call management extension. <br/>
+     * Any app that register this plugin and has rights to {@link #PERMISSION_USE_SIP} will appear 
+     * in the call cards. <br/>
+     * The activity entry in manifest may have following metadata
+     * <ul>
+     * <li>{@link #EXTRA_SIP_CALL_MIN_STATE} minimum call state for this plugin to be active. Default {@link SipCallSession.InvState#EARLY}.</li>
+     * <li>{@link #EXTRA_SIP_CALL_MAX_STATE} maximum call state for this plugin to be active. Default {@link SipCallSession.InvState#CONFIRMED}.</li>
+     * <li>{@link #EXTRA_SIP_CALL_CALL_WAY} bitmask flag for selecting only one way. 1 << 0 for incoming; 1 << 1 for outgoing. Default (1 << 0 | 1 << 1) (any way).</li>
+     * </ul> 
+     * Receiver activity will get an extra with key {@value #EXTRA_CALL_INFO} with a {@link SipCallSession}.
+     */
+    public static final String ACTION_INCALL_PLUGIN = "com.csipsimple.sipcall.action.HANDLE_CALL_PLUGIN";
+    
+    public static final String EXTRA_SIP_CALL_MIN_STATE = "com.csipsimple.sipcall.MIN_STATE";
+    public static final String EXTRA_SIP_CALL_MAX_STATE = "com.csipsimple.sipcall.MAX_STATE";
+    public static final String EXTRA_SIP_CALL_CALL_WAY = "com.csipsimple.sipcall.CALL_WAY";
+    
     /**
      * Plugin action for rewrite numbers. <br/>     
      * You can expect {@link android.content.Intent#EXTRA_PHONE_NUMBER} as argument for the

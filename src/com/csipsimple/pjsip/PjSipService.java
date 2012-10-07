@@ -275,7 +275,7 @@ public class PjSipService {
                     cssCfg.setStorage_folder(pjsua.pj_str_copy(""));
                 }
 
-                Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynPlugins(service, SipManager.ACTION_GET_EXTRA_CODECS);
+                Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynCodecPlugins(service, SipManager.ACTION_GET_EXTRA_CODECS);
                 dynamic_factory[] cssCodecs = cssCfg.getExtra_aud_codecs();
                 int i = 0;
                 for (Entry<String, DynCodecInfos> availableCodec : availableCodecs.entrySet()) {
@@ -304,7 +304,7 @@ public class PjSipService {
                 // Video implementation
                 if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)){
                     // TODO :: Have plugins per capture / render / video codec / converter
-                    Map<String, DynCodecInfos> videoPlugins = ExtraPlugins.getDynPlugins(service, SipManager.ACTION_GET_VIDEO_PLUGIN);
+                    Map<String, DynCodecInfos> videoPlugins = ExtraPlugins.getDynCodecPlugins(service, SipManager.ACTION_GET_VIDEO_PLUGIN);
                     
                     if(videoPlugins.size() > 0) {
                         DynCodecInfos videoPlugin = videoPlugins.values().iterator().next();

@@ -22,6 +22,7 @@
 package com.csipsimple.ui.incall;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -50,6 +51,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipCallSession.InvState;
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
@@ -57,10 +59,14 @@ import com.csipsimple.models.CallerInfo;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.CustomDistribution;
+import com.csipsimple.utils.ExtraPlugins;
+import com.csipsimple.utils.ExtraPlugins.DynActivityPlugin;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 
 import org.webrtc.videoengine.ViERenderer;
+
+import java.util.Map;
 
 public class InCallCard extends FrameLayout implements OnClickListener, Callback {
 
@@ -87,6 +93,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
 
     private ActionMenuPresenter mActionMenuPresenter;
 
+    private Map<String, DynActivityPlugin> incallPlugins;
+
 
     public InCallCard(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -96,6 +104,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         prefs = new PreferencesProviderWrapper(context);
         canVideo = prefs.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO);
         initControllerView();
+        
+        incallPlugins = ExtraPlugins.getDynActivityPlugins(context, SipManager.ACTION_INCALL_PLUGIN);
     }
 
     private void initControllerView() {
@@ -315,6 +325,29 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         btnMenuBuilder.findItem(R.id.recordCallButton).setVisible(active).setTitle(
                 callInfo.isRecording() ? R.string.stop_recording : R.string.record);
         
+        // Expand plugins
+        btnMenuBuilder.removeGroup(R.id.controls);
+        for(DynActivityPlugin callPlugin : incallPlugins.values()) {
+            int minState = callPlugin.getMetaDataInt(SipManager.EXTRA_SIP_CALL_MIN_STATE, SipCallSession.InvState.EARLY);
+            int maxState = callPlugin.getMetaDataInt(SipManager.EXTRA_SIP_CALL_MIN_STATE, SipCallSession.InvState.CONFIRMED);
+            int way = callPlugin.getMetaDataInt(SipManager.EXTRA_SIP_CALL_CALL_WAY, (1 << 0 | 1 << 1));
+            if(callInfo.getCallState() < minState) {
+                continue;
+            }
+            if(callInfo.getCallState() > maxState) {
+                continue;
+            }
+            if(callInfo.isIncoming() && ((way & (1 << 0)) == 0) ) {
+                continue;
+            }
+            if(!callInfo.isIncoming() && ((way & (1 << 1)) == 0) ) {
+                continue;
+            }
+            MenuItem pluginMenu = btnMenuBuilder.add(R.id.controls, MenuBuilder.NONE, MenuBuilder.NONE, callPlugin.getName());
+            Intent it = callPlugin.getIntent();
+            it.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
+            pluginMenu.setIntent(callPlugin.getIntent());
+        }
     }
 
     /**

@@ -295,7 +295,7 @@ public class PrefsLogic {
                 if(!CustomDistribution.supportCallRecord()) {
                     pfh.hidePreference(null, SipConfigManager.AUTO_RECORD_CALLS);
                 }
-                Map<String, DynCodecInfos> videoPlugins = ExtraPlugins.getDynPlugins(ctxt, SipManager.ACTION_GET_VIDEO_PLUGIN);
+                Map<String, DynCodecInfos> videoPlugins = ExtraPlugins.getDynCodecPlugins(ctxt, SipManager.ACTION_GET_VIDEO_PLUGIN);
                 if(videoPlugins.size() == 0) {
                     pfh.hidePreference(null, SipConfigManager.USE_VIDEO);
                 }
