@@ -29,7 +29,13 @@
 #include "pj_opus.h"
 #include <opus.h>
 
+/* Opus can encode frames of 2.5, 5, 10, 20, 40, or 60 ms. */
 #define FRAME_LENGTH_MS		20
+/* It can also combine multiple frames into packets of up to 120 ms */
+/* So at maximum 2.5ms * 48frames = 120ms*/
+#define OPUS_MAX_FRAMES_PER_PACKET 48
+
+#define OPUS_CLOCK_RATE 48000
 
 #define _TRACE_OPUS 0
 
@@ -88,6 +94,7 @@ static struct opus_factory {
 /* OPUS codec private data. */
 struct opus_private {
 	pj_pool_t *pool; /**< Pool for each instance.    */
+    pj_uint8_t   pcm_bytes_per_sample;
 
 	// char		 obj_name[PJ_MAX_OBJ_NAME];
 
@@ -96,6 +103,14 @@ struct opus_private {
 
 	pj_bool_t dec_ready;
 	OpusDecoder* psDec;
+
+
+    /* Buffer of 120ms to hold decoded frames. */
+    void        *dec_buf;
+    pj_size_t    dec_buf_size;
+    pj_size_t    dec_buf_max_size;
+    int          dec_buf_sample_per_frame;
+    pj_uint32_t  pkt_info;    /**< Packet info for buffered frames.  */
 };
 
 int opus_to_pjsip_error_code(int opus_error) {
@@ -323,7 +338,7 @@ static pj_status_t opus_default_attr(pjmedia_codec_factory *factory,
 
     /* Inform the stream to prepare a larger buffer since we cannot parse
      * OPUS packets and split it into individual frames.
-     * Max frm_ptime of opus is 120ms
+     * Max packet size of opus is 120ms audio
      */
     attr->info.max_rx_frame_size = attr->info.max_bps *
 			           120 / 8 / 1000;
@@ -331,9 +346,6 @@ static pj_status_t opus_default_attr(pjmedia_codec_factory *factory,
     {
 	++attr->info.max_rx_frame_size;
     }
-    /* Max opus frame per packet is ? -- from code seems 48 but to check,
-     * for now just 5 to avoid big memory usage */
-    attr->info.max_rx_frame_size *= 5;
 
 
 	attr->setting.frm_per_pkt = 1;
@@ -468,6 +480,7 @@ static pj_status_t opus_codec_open(pjmedia_codec *codec,
 	unsigned i;
 	int structSizeBytes;
 	int tmpFmtpVal = 0;
+	unsigned max_nsamples;
 	const pj_str_t STR_FMTP_USE_INBAND_FEC = { "useinbandfec", 12 };
 	const pj_str_t STR_FMTP_MAX_AVERAGE_BITRATE = { "maxaveragebitrate", 17 };
 	const pj_str_t STR_FMTP_MAX_CODED_AUDIO_BANDWIDTH = {
@@ -544,6 +557,12 @@ static pj_status_t opus_codec_open(pjmedia_codec *codec,
 
 	opus->enc_ready = PJ_TRUE;
 
+	/* Decoder buffer */
+    opus->pcm_bytes_per_sample = attr->info.pcm_bits_per_sample / 8;
+	max_nsamples = 120 * OPUS_CLOCK_RATE / 1000; /* 120ms is max frame time */
+	opus->dec_buf_max_size = max_nsamples * opus->pcm_bytes_per_sample;
+	opus->dec_buf = pj_pool_alloc(opus->pool, opus->dec_buf_max_size);
+
 	/* Create decoder */
 	structSizeBytes = opus_decoder_get_size(attr->info.channel_cnt);
 	opus->psDec = pj_pool_zalloc(opus->pool, structSizeBytes);
@@ -601,7 +620,7 @@ static pj_status_t opus_codec_encode(pjmedia_codec *codec,
 	opus = (struct opus_private*) codec->codec_data;
 
 	/* Check frame in size */
-	nsamples = input->size >> 1;
+	nsamples = input->size / opus->pcm_bytes_per_sample;
 	// TODO : check?
 
 	/* Encode */
@@ -631,25 +650,29 @@ static pj_status_t opus_codec_encode(pjmedia_codec *codec,
 static pj_status_t opus_codec_parse(pjmedia_codec *codec, void *pkt,
 		pj_size_t pkt_size, const pj_timestamp *ts, unsigned *frame_cnt,
 		pjmedia_frame frames[]) {
-
+	struct opus_private *opus;
 	unsigned char toc;
 	const unsigned char *raw_frames[48];
 	short size[48];
-	int payload_offset;
+	int payload_offset, samples_per_frame;
     unsigned i;
 
-	PJ_UNUSED_ARG(codec);
 	PJ_ASSERT_RETURN(frame_cnt, PJ_EINVAL);
+
+	opus = (struct opus_private*) codec->codec_data;
 
     *frame_cnt = opus_packet_parse(pkt, pkt_size,
     		&toc,
     		raw_frames,
     		size,
     		&payload_offset);
+
+    samples_per_frame = opus_packet_get_samples_per_frame(pkt, OPUS_CLOCK_RATE);
+
 #if _TRACE_OPUS
     PJ_LOG(4, (THIS_FILE, "Pkt info : bw -> %d , spf -> %d" ,
     		opus_packet_get_bandwidth(pkt),
-    		opus_packet_get_samples_per_frame(pkt, 48000)
+    		samples_per_frame
     		));
 #endif
 
@@ -659,8 +682,10 @@ static pj_status_t opus_codec_parse(pjmedia_codec *codec, void *pkt,
                               (((unsigned)pkt & 0xFF) << 8) | i;
         frames[i].buf = pkt;
         frames[i].size = pkt_size;
-        frames[i].timestamp.u64 = ts->u64 + 0; // TODO -- i * opus->samples_per_frame -- to compute?;
+        frames[i].timestamp.u64 = ts->u64 + i * samples_per_frame;
+#if _TRACE_OPUS
     	PJ_LOG(4, (THIS_FILE, "parsed %d of %d",frames[i].size, *frame_cnt));
+#endif
     }
 
 	return PJ_SUCCESS;
@@ -671,25 +696,60 @@ static pj_status_t opus_codec_decode(pjmedia_codec *codec,
 		struct pjmedia_frame *output) {
 	int ret = 0;
 	struct opus_private *opus;
+	int frm_cnt, out_size;
+    unsigned pkt_info, frm_info;
 
-	PJ_ASSERT_RETURN(input && output, PJ_EINVAL);
+    PJ_ASSERT_RETURN(codec && input && output_buf_len && output, PJ_EINVAL);
 
 	opus = (struct opus_private*) codec->codec_data;
+    frm_cnt = opus_packet_get_nb_frames(input->buf, input->size);
+    pkt_info = input->bit_info & 0xFFFFFF00;
+    frm_info = input->bit_info & 0xF;
 
-	ret = opus_decode(opus->psDec,
-			(const unsigned char *) input->buf, (opus_int32) input->size,
-			output->buf, output_buf_len,
-			0 /* decode FEC */);
-	if (ret <= 0) {
-		PJ_LOG(1, (THIS_FILE, "Failed to decode opus frame : %d", ret));
-		output->type = PJMEDIA_FRAME_TYPE_NONE;
-		output->buf = NULL;
+    if (opus->pkt_info != pkt_info || input->bit_info == 0) {
+
+		opus->pkt_info = pkt_info;
+
+		opus->dec_buf_sample_per_frame = opus_packet_get_samples_per_frame(input->buf, OPUS_CLOCK_RATE);
+		/* We need to decode all the frames in the packet. */
+		opus->dec_buf_size = opus_decode(opus->psDec,
+							(const unsigned char *) input->buf, (opus_int32) input->size,
+							opus->dec_buf, opus->dec_buf_max_size,
+							0 /* decode FEC */);
+		if(opus->dec_buf_size <= 0){
+			PJ_LOG(3, (THIS_FILE, "Failed to decode frame (err=%d)", opus->dec_buf_size));
+			opus->dec_buf_size = 0;
+		} else {
+			opus->dec_buf_size = opus->dec_buf_size * opus->pcm_bytes_per_sample;
+		}
+	}
+
+	/* We have this packet decoded now (either was previously in the buffer or was just added to buffer. */
+	if (opus->dec_buf_size == 0) {
+		/* The decoding was a failure. */
 		output->size = 0;
 	} else {
-		output->size = ret << 1;
-		output->type = PJMEDIA_FRAME_TYPE_AUDIO;
-		output->timestamp = input->timestamp;
+		unsigned frm_size = opus->dec_buf_sample_per_frame * opus->pcm_bytes_per_sample;
+#if _TRACE_OPUS
+		PJ_LOG(4, (THIS_FILE, "Decode : copy from big buffer %d to %d", output_buf_len, frm_size));
+#endif
+	    PJ_ASSERT_RETURN(output_buf_len >= frm_size, PJ_ETOOSMALL);
+		/* Copy the decoded frame from the buffer. */
+		pj_memcpy(output->buf, ((opus_int16*)opus->dec_buf) + (frm_info * frm_size),
+				  frm_size);
+		output->size = frm_size;
+
 	}
+
+	if (output->size == 0) {
+		output->type = PJMEDIA_TYPE_NONE;
+		output->buf = NULL;
+		return PJMEDIA_CODEC_EFAILED;
+	}
+
+	output->type = PJMEDIA_TYPE_AUDIO;
+	output->timestamp = input->timestamp;
+
 #if _TRACE_OPUS
 	PJ_LOG(4, (THIS_FILE, "Decoded %d to %d with max %d", input->size, output->size, output_buf_len));
 #endif
