@@ -35,7 +35,7 @@ public class TeNet extends SimpleImplementation {
 	
 	@Override
 	protected String getDefaultName() {
-		return "TeNet";
+		return "TeNeT";
 	}
 
     //Customization

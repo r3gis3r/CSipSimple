@@ -33,6 +33,8 @@ import android.widget.TextView;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 
+import java.util.Locale;
+
 public class Mondotalk extends SimpleImplementation {
 
     private LinearLayout customWizard;
@@ -71,6 +73,19 @@ public class Mondotalk extends SimpleImplementation {
 		account = super.buildAccount(account);
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.reg_timeout = 180;
+		
+		// Use port 80 for blocked countries
+		String currentCountry = Locale.getDefault().getCountry();
+		if(!TextUtils.isEmpty(currentCountry)) {
+            if ("AE".equalsIgnoreCase(currentCountry) || 
+                    "CN".equalsIgnoreCase(currentCountry) ||
+                    "PK".equalsIgnoreCase(currentCountry)) {
+                account.proxies = new String[] {
+                        "sip99.mondotalk.com:80"
+                };
+            }
+		}
+		
 		return account;
 	}
 	

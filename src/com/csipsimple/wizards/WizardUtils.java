@@ -405,8 +405,15 @@ public class WizardUtils {
 					new Locale[] {new Locale("TR", "tr")}, false, false, 
 					Pozitel.class));
 			WIZARDS_DICT.put("MONDOTALK", new WizardInfo("MONDOTALK", "Mondotalk", 
-					R.drawable.ic_wizard_mondotalk, 20, 
-					new Locale[] {new Locale("EN", "au"), new Locale("EN", "us"), new Locale("EN", "nz")}, false, false, 
+					R.drawable.ic_wizard_mondotalk, 35, 
+					new Locale[] {
+			            Locale.ENGLISH, Locale.ITALIAN, Locale.GERMAN,
+                        new Locale("ES"), new Locale("PT"),
+                        locale("cs_CZ"),new Locale("sk"), new Locale("sl"),
+                        locale("zh_CN"), locale("zh_TW"),
+                        new Locale("ja"), new Locale("ko"),
+                        new Locale("ar_AE")
+			        }, false, false, 
 					Mondotalk.class));
 			WIZARDS_DICT.put("A1", new WizardInfo("A1", "A1", 
 					R.drawable.ic_wizard_a1, 20, 
@@ -748,7 +755,7 @@ public class WizardUtils {
                     R.drawable.ic_wizard_easycallgr, 19, 
                     new Locale[] {locale("el_GR")}, false, false, 
                     EasyCallGr.class));
-            WIZARDS_DICT.put("TENET", new WizardInfo("TENET", "TeNet", 
+            WIZARDS_DICT.put("TENET", new WizardInfo("TENET", "TeNeT", 
                     R.drawable.ic_wizard_tenet, 10, 
                     new Locale[]{new Locale("UK", "ua")}, false, false, 
                     TeNet.class));
