@@ -69,7 +69,7 @@ public class DeltaTelecom extends SimpleImplementation {
         super.setDefaultParams(prefs);
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
 
-        prefs.addStunServer("stun.ippi.fr");
+        prefs.addStunServer("stun.skylink.ru");
     }
 
 }
