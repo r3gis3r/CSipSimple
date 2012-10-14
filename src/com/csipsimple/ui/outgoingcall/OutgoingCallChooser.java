@@ -29,7 +29,6 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
@@ -41,6 +40,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
+import com.csipsimple.utils.UriUtils;
 
 public class OutgoingCallChooser extends SherlockFragmentActivity {
 
@@ -68,11 +68,6 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
     
     
     private final static String SCHEME_CSIP = SipManager.PROTOCOL_CSIP;
-    private final static String SCHEME_IMTO = "imto";
-    private final static String SCHEME_SMSTO = "smsto";
-    private final static String AUTHORITY_CSIP = SipManager.PROTOCOL_CSIP;
-    private final static String AUTHORITY_SIP = SipManager.PROTOCOL_SIP;
-    private final static String AUTHORITY_SKYPE = "skype";
     
     /**
      * Get the phone number that raised this activity.
@@ -81,49 +76,20 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
     public String getPhoneNumber() {
         if(phoneNumber == null) {
             Intent it = getIntent();
-            // First step is to retrieve the number that was asked to us.
-            phoneNumber = PhoneNumberUtils.getNumberFromIntent(getIntent(), this);
-            if (phoneNumber == null) {
+            // Use utility function to extract number
+            phoneNumber = UriUtils.extractNumberFromIntent(it, this);
+            
+            // Additional check to know if a csip uri (so that no rewriting rules applies)
+            if (phoneNumber != null) {
                 String action = it.getAction();
                 Uri data = it.getData();
-                if (action != null && data != null) {
+                if(!Intent.ACTION_SENDTO.equalsIgnoreCase(action) && data != null) {
                     String scheme = data.getScheme();
                     if(scheme != null) {
                         scheme = scheme.toLowerCase();
                     }
-                    
-                    if (action.equalsIgnoreCase(Intent.ACTION_SENDTO)) {
-                        // Send to action -- could be im or sms
-                        if (SCHEME_IMTO.equals(scheme)) {
-                            // Im sent
-                            String auth = data.getAuthority();
-                            if (AUTHORITY_CSIP.equals(auth) ||
-                                    AUTHORITY_SIP.equals(auth) ||
-                                    AUTHORITY_SKYPE.equals(auth) ) {
-                                phoneNumber = data.getLastPathSegment();
-                            }
-                        }else if (SCHEME_SMSTO.equals(scheme)) {
-                            phoneNumber = PhoneNumberUtils.stripSeparators(data.getSchemeSpecificPart());
-                        }
-                    } else {
-                        // Simple call intent
-                       phoneNumber = data.getSchemeSpecificPart();
-                       if(SCHEME_CSIP.equals(scheme)) {
-                           ignoreRewritingRules = true;
-                       }
-                    } 
-                }
-            } else {
-                String action = it.getAction();
-
-                Uri data = it.getData();
-                if (action != null && data != null) {
-                    String scheme = data.getScheme();
-                    if(scheme != null) {
-                        scheme = scheme.toLowerCase();
-                        if(SCHEME_SMSTO.equals(scheme) || "tel".equals(scheme)) {
-                            phoneNumber = PhoneNumberUtils.stripSeparators(phoneNumber);
-                        }
+                    if(SCHEME_CSIP.equals(scheme)) {
+                        ignoreRewritingRules = true;
                     }
                 }
             }

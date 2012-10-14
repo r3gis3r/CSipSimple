@@ -52,6 +52,8 @@ public class OutgoingCall extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context aContext, Intent intent) {
 	    context = aContext;
+
+        // No need to check permission here as we are always fired with correct permission
         
 	    String action = intent.getAction();
 		String number = getResultData();
@@ -60,12 +62,19 @@ public class OutgoingCall extends BroadcastReceiver {
 		if (number == null) {
 			return;
 		}
+
 		
 		// If emergency number transmit as if we were not there
 		if(PhoneNumberUtils.isEmergencyNumber(number)) {
 			ignoreNext = "";
 			setResultData(number);
 			return;
+		}
+		
+		if(!Intent.ACTION_NEW_OUTGOING_CALL.equals(action)) {
+		    Log.e(THIS_FILE, "Not launching with correct action ! Do not process");
+		    setResultData(number);
+            return;
 		}
 		
 		prefsWrapper = new PreferencesProviderWrapper(context);

@@ -75,6 +75,7 @@ import com.csipsimple.utils.NightlyUpdater.UpdaterPopupLauncher;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Theme;
+import com.csipsimple.utils.UriUtils;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
@@ -409,6 +410,11 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                 mDialpadFragment.onVisibilityChanged(true);
                 initTabId = null;
             }
+            if(initDialerWithText != null) {
+                mDialpadFragment.setTextDialing(true);
+                mDialpadFragment.setTextFieldValue(initDialerWithText);
+                initDialerWithText = null;
+            }
         } else if (fragment instanceof CallLogListFragment) {
             mCallLogFragment = (CallLogListFragment) fragment;
             if (initTabId == tabId && tabId != null && tabId == TAB_ID_CALL_LOG) {
@@ -671,6 +677,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         selectTabWithAction(intent);
     }
 
+    private String initDialerWithText = null;
     Integer initTabId = null;
     private void selectTabWithAction(Intent intent) {
         if (intent != null) {
@@ -680,17 +687,22 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                 Tab toSelectTab = null;
                 Integer toSelectId = null;
                 if (callAction.equalsIgnoreCase(SipManager.ACTION_SIP_DIALER)
-                        || callAction.equalsIgnoreCase(Intent.ACTION_DIAL)) {
+                        || callAction.equalsIgnoreCase(Intent.ACTION_DIAL)
+                        || callAction.equalsIgnoreCase(Intent.ACTION_VIEW)
+                        || callAction.equalsIgnoreCase(Intent.ACTION_SENDTO) /* TODO : sendto should im if not csip? */) {
                     Integer pos = mTabsAdapter.getPositionForId(TAB_ID_DIALER);
                     if(pos != null) {
                         toSelectTab = ab.getTabAt(pos);
                         Uri data = intent.getData();
+                        String nbr = UriUtils.extractNumberFromIntent(intent, this);
                         if(data != null && mDialpadFragment != null) {
-                            String nbr = data.getSchemeSpecificPart();
+                            
                             if(!TextUtils.isEmpty(nbr)) {
                                 mDialpadFragment.setTextDialing(true);
                                 mDialpadFragment.setTextFieldValue(nbr);
                             }
+                        }else {
+                            initDialerWithText = nbr;
                         }
                         toSelectId = TAB_ID_DIALER;
                     }

@@ -96,12 +96,13 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
     //private Drawable digitsBackground, digitsEmptyBackground;
     private DigitsEditText digits;
+    private String initText = null;
     //private ImageButton switchTextView;
 
     //private View digitDialer;
 
     private AccountChooserButton accountChooserButton;
-    private boolean isDigit;
+    private Boolean isDigit = null;
     /* , isTablet */
     
     private DialingFeedback dialFeedback;
@@ -165,7 +166,9 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         autoCompleteListItemListener = new OnAutoCompleteListItemClicked(autoCompleteAdapter);
 
         // This implies
-        isDigit = prefsWrapper.startIsDigit();
+        if(isDigit == null) {
+            isDigit = prefsWrapper.startIsDigit();
+        }
         
         setHasOptionsMenu(true);
     }
@@ -225,6 +228,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         initButtons(v);
         // Ensure that current mode (text/digit) is applied
         setTextDialing(!isDigit, true);
+        if(initText != null) {
+            digits.setText(initText);
+            initText = null;
+        }
 
         // Apply third party theme if any
         applyTheme(v);
@@ -510,11 +517,14 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
      * @param textMode True if text mode. False if digit mode
      */
     public void setTextDialing(boolean textMode, boolean forceRefresh) {
-        if(!forceRefresh && isDigit == !textMode) {
+        if(!forceRefresh && (isDigit != null && isDigit == !textMode)) {
             // Nothing to do
             return;
         }
         isDigit = !textMode;
+        if(digits == null) {
+            return;
+        }
         if(isDigit) {
             // We need to clear the field because the formatter will now 
             // apply and unapply to this field which could lead to wrong values when unapplied
@@ -549,6 +559,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
      * @param value the new text to see in the text field
      */
     public void setTextFieldValue(CharSequence value) {
+        if(digits == null) {
+            initText = value.toString();
+            return;
+        }
         digits.setText(value);
         // make sure we keep the caret at the end of the text view
         Editable spannable = digits.getText();

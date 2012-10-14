@@ -149,6 +149,43 @@
             </intent-filter>
         </activity>
 
+        <activity-alias
+            android:name="com.csipsimple.ui.SipDialer"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:targetActivity="com.csipsimple.ui.SipHome"
+            android:theme="@style/DarkTheme"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="csip" />
+                <data android:scheme="sip" />
+                <data android:scheme="sips" />
+                <data
+                    android:host="csip"
+                    android:scheme="imto" />
+                <data
+                    android:host="sip"
+                    android:scheme="imto" />
+                <data
+                    android:host="skype"
+                    android:scheme="imto" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="csip" />
+                <data android:scheme="sip" />
+                <data android:scheme="sips" />
+            </intent-filter>
+        </activity-alias>
+
         <!-- Main service -->
         <!-- Require at least the configure permission to use -->
         <service
@@ -279,6 +316,7 @@
         <!-- Call management -->
         <receiver
             android:name="com.csipsimple.service.OutgoingCall"
+            android:permission="android.permission.CALL_PHONE"
             android:process=":sipStack" >
 
             <!-- Here filter for protected-broadcasts -->
@@ -294,20 +332,12 @@
             android:excludeFromRecents="true"
             android:label="@string/call"
             android:launchMode="singleTask"
+            android:permission="android.permission.USE_SIP"
             android:process=":sipStack"
             android:taskAffinity=""
             android:theme="@style/DarkTheme.Dialog" >
             <intent-filter>
                 <action android:name="android.intent.action.CALL" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="csip" />
-                <data android:scheme="sip" />
-                <data android:scheme="sips" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -323,26 +353,6 @@
                 <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SENDTO" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="csip" />
-                <data android:scheme="sip" />
-                <data android:scheme="sips" />
-                <data
-                    android:host="csip"
-                    android:scheme="imto" />
-                <data
-                    android:host="sip"
-                    android:scheme="imto" />
-                <data
-                    android:host="skype"
-                    android:scheme="imto" />
             </intent-filter>
         </activity>
 
@@ -446,6 +456,7 @@
 
         <activity
             android:name="com.csipsimple.widgets.AccountWidgetConfigure"
+            android:permission="android.permission.BIND_APPWIDGET"
             android:theme="@style/DarkTheme" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -467,6 +478,7 @@
 
         <activity
             android:name="com.csipsimple.widgets.ShortcutWidgetConfigure"
+            android:permission="android.permission.BIND_APPWIDGET"
             android:theme="@style/DarkTheme" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

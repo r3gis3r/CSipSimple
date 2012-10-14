@@ -25,7 +25,12 @@
 
 package com.csipsimple.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.telephony.PhoneNumberUtils;
+
+import com.csipsimple.api.SipManager;
 
 /**
  * Utility methods for dealing with URIs.
@@ -70,6 +75,56 @@ public class UriUtils {
         return number != null && (number.contains("@") || number.contains("%40"));
     }
 
+    private final static String SCHEME_IMTO = "imto";
+    private final static String SCHEME_TEL = "tel";
+    private final static String SCHEME_SMSTO = "smsto";
+    private final static String AUTHORITY_CSIP = SipManager.PROTOCOL_CSIP;
+    private final static String AUTHORITY_SIP = SipManager.PROTOCOL_SIP;
+    private final static String AUTHORITY_SKYPE = "skype";
 
+    public static String extractNumberFromIntent(Intent it, Context ctxt) {
+        String phoneNumber = PhoneNumberUtils.getNumberFromIntent(it, ctxt);
+
+        String action = it.getAction();
+        Uri data = it.getData();
+        if(phoneNumber == null) {
+            if (action != null && data != null) {
+                String scheme = data.getScheme();
+                if(scheme != null) {
+                    scheme = scheme.toLowerCase();
+                }
+                
+                if (action.equalsIgnoreCase(Intent.ACTION_SENDTO)) {
+                    // Send to action -- could be im or sms
+                    if (SCHEME_IMTO.equals(scheme)) {
+                        // Im sent
+                        String auth = data.getAuthority();
+                        if (AUTHORITY_CSIP.equals(auth) ||
+                                AUTHORITY_SIP.equals(auth) ||
+                                AUTHORITY_SKYPE.equals(auth) ) {
+                            phoneNumber = data.getLastPathSegment();
+                        }
+                    }else if (SCHEME_SMSTO.equals(scheme)) {
+                        phoneNumber = PhoneNumberUtils.stripSeparators(data.getSchemeSpecificPart());
+                    }
+                } else {
+                    // Simple call intent
+                   phoneNumber = data.getSchemeSpecificPart();
+                } 
+            }
+        }else {
+            if (action != null && data != null) {
+                String scheme = data.getScheme();
+                if(scheme != null) {
+                    scheme = scheme.toLowerCase();
+                    if(SCHEME_SMSTO.equals(scheme) || SCHEME_TEL.equals(scheme)) {
+                        phoneNumber = PhoneNumberUtils.stripSeparators(phoneNumber);
+                    }
+                }
+            }
+        }
+        
+        return phoneNumber;
+    }
 
 }
