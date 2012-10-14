@@ -303,10 +303,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_mydivert, 5, 
                     new Locale[]{}, false, true, 
                     MyDivert.class));
-            WIZARDS_DICT.put("MOBILEWIFI", new WizardInfo("MOBILEWIFI", "Mobile-Wi.fi", 
+            WIZARDS_DICT.put("MOBILEWIFI", new WizardInfo("MOBILEWIFI", "Mobile-Wi.Fi", 
                     R.drawable.ic_wizard_mobilewifi, 5, 
                     new Locale[]{}, false, true, 
                     MobileWiFi.class));
+            WIZARDS_DICT.put("ONEWORLD", new WizardInfo("ONEWORLD", "1WorldSip", 
+                    R.drawable.ic_wizard_oneworldsip, 45, 
+                    new Locale[]{}, false, true, 
+                    OneWorld.class));
             
             
 			

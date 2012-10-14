@@ -36,14 +36,14 @@ import com.csipsimple.utils.PreferencesWrapper;
 public class MobileWiFi extends SimpleImplementation {
 
     
-    private static final String webCreationPage = "https://mobile-wi.fi/signup.php";
+    private static final String webCreationPage = "http://mobile-wi.fi";
     
     private TextView customWizardText;
     private LinearLayout customWizard;
 
     @Override
     protected String getDefaultName() {
-        return "Mobile-Wi.fi";
+        return "Mobile-Wi.Fi";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MobileWiFi extends SimpleImplementation {
         account.transport = SipProfile.TRANSPORT_TLS;
         account.vm_nbr = "1000";
         
-        // For ipv6
+        // For ipv6 -- future use... not yet a button two switch (and anyway will not be done this way as we should autodetect)
         account.proxies = new String[] {
                 scheme + ":" + (useIpv6() ? "[2001:470:9ff3::1]" : "csipsimple.mobile-wi.fi")
         };
