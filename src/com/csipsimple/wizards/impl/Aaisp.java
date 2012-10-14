@@ -22,19 +22,21 @@
 package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
+import android.text.TextUtils;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
-public class Freespeech extends SimpleImplementation {
+public class Aaisp extends SimpleImplementation {
 	
 	@Override
 	protected String getDomain() {
-		return "freespeech.ie";
+		return "proxy.aasip.co.uk";
 	}
-	
+
+    private final static String USUAL_PREFIX = "+44";
 
     @Override
     public void fillLayout(final SipProfile account) {
@@ -44,6 +46,21 @@ public class Freespeech extends SimpleImplementation {
         accountUsername.setDialogTitle(R.string.w_common_phone_number);
         accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
         
+
+        if(TextUtils.isEmpty(account.username)){
+            accountUsername.setText(USUAL_PREFIX);
+        }
+        
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canSave() {
+        boolean ok = super.canSave();
+        ok &= checkField(accountUsername, accountUsername.getText().trim().equalsIgnoreCase(USUAL_PREFIX));
+        return ok;
     }
     
     @Override
@@ -57,16 +74,12 @@ public class Freespeech extends SimpleImplementation {
 
 	@Override
 	protected String getDefaultName() {
-		return "Freespeech.ie";
+		return "A&A";
 	}
 	
 
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
-		// Contact rewrite not needed for them.
-		// Besides stun will be enabled.
-		account.contact_rewrite_method = 1;
-		account.allow_contact_rewrite = false;
 		return account;
 	}
 	
@@ -76,15 +89,7 @@ public class Freespeech extends SimpleImplementation {
 
         // Add stun server
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
-        
-
-        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"240");
-        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"239");
-        
-        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"239");
-        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"240");
-        
-        prefs.addStunServer("stun.freespeech.ie");
+        prefs.addStunServer("stun.aa.net.uk");
 	}
 	
 	

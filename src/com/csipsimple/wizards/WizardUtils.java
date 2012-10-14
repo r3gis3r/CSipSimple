@@ -787,6 +787,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_freespeech, 20, 
                     new Locale[]{ Locale.UK, new Locale("EN", "ie") }, false, false, 
                     Freespeech.class));
+            WIZARDS_DICT.put("ANDREWSANDARNOLD", new WizardInfo("ANDREWSANDARNOLD", "Andrews and Arnold", 
+                    R.drawable.ic_wizard_aaisp, 20, 
+                    new Locale[]{ Locale.UK }, false, false, 
+                    Aaisp.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
