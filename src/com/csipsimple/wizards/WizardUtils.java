@@ -783,6 +783,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_deltatelecom, 20, 
                     new Locale[]{  locale("ru_RU"), }, false, false, 
                     DeltaTelecom.class));
+            WIZARDS_DICT.put("FREESPEECHIE", new WizardInfo("FREESPEECHIE", "Freespeech.ie", 
+                    R.drawable.ic_wizard_freespeech, 20, 
+                    new Locale[]{ Locale.UK, new Locale("EN", "ie") }, false, false, 
+                    Freespeech.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

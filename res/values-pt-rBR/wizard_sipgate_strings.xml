@@ -1,5 +1,8 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_sipgate_display_name">Nome da conta</string>
   <string name="w_sipgate_display_name_desc">Mostrar nome para esta conta</string>
+  <string name="w_sipgate_username">SIP-ID</string>
+  <string name="w_sipgate_password">SIP Senha</string>
+  <string name="w_sipgate_server_desc">Algo assim: sipgate.co.uk</string>
 </resources>

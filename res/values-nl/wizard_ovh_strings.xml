@@ -1,4 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="w_ovh_phone_number_desc">Telefoonnummer moet opgemaakt worden als 0033xxxxxx</string>
+  <string name="w_ovh_phone_number_desc">Telefoonnummer moet de vorm 0033xxxxxx hebben</string>
+  <string name="w_sapo_phone_number_desc">Telefoonnummer moet de vorm +35130xxxxxx hebben</string>
+  <string name="w_pbxes_user_extension">Gebruikersextensie (iets als user-1)</string>
 </resources>

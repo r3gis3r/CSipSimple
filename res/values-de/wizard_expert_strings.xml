@@ -1,29 +1,33 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="w_expert_display_name">Kontoname</string>
-    <string name="w_expert_display_name_desc">Zeigt den Namen dieses Kontos</string>
-    <string name="w_expert_acc_id">Konto ID</string>
-    <string name="w_expert_acc_id_desc">Format: Displayname &lt;sip:login\@registrar></string>
-    <string name="w_expert_reg_uri">Registrar URL</string>
-    <string name="w_expert_reg_uri_desc">Format: sip:registrar.net[:Port]</string>
-    <string name="w_expert_realm">Realm</string>
-    <string name="w_expert_realm_desc">Authentifikationsdomain (benutze \'*\', wenn du sie nicht kennst)</string>
-    <string name="w_expert_username">Benutzername</string>
-    <string name="w_expert_username_desc">Benutzername / Login</string>
-    <string name="w_expert_data">Passwort</string>
-    <string name="w_expert_data_desc">Passwort für dieses Konto</string>
-    <string name="w_expert_t_proxy">Proxy</string>
-    <string name="w_expert_proxy">Proxy URL</string>
-    <string name="w_expert_proxy_desc">Format: sip:proxy.net[:Port]</string>
-    <string name="w_expert_use_tcp">Verwende TCP (nicht UDP)</string>
-    <string name="w_expert_prevent_tcp">Verhindere TCP (verwende nur UDP)</string>
-    <string name="w_expert_publish_enabled">Publish enabled</string>
-    <string name="w_expert_reg_timeout">Register Timeout (sec)</string>
-    <string name="w_expert_ka_interval">Keep-alive Interval (sec)</string>
-    <string name="w_expert_force_contact">Force contact</string>
-    <string name="w_expert_allow_contact_rewrite">Erlaube Contact-Rewrite</string>
-    <string name="w_expert_contact_rewrite_method">Methode für den Contact-Rewrite</string>
-    <string name="w_expert_reg_use_proxy">Wie man einen Proxy benutzt</string>
-
+  <string name="w_expert_display_name">Kontoname</string>
+  <string name="w_expert_display_name_desc">Zeigt den Namen dieses Kontos</string>
+  <string name="w_expert_acc_id">Konto ID</string>
+  <string name="w_expert_acc_id_desc">Format: Displayname &lt;sip:login\@registrar&gt;</string>
+  <string name="w_expert_reg_uri">Registrar URL</string>
+  <string name="w_expert_reg_uri_desc">Format: sip:registrar.net[:Port]</string>
+  <string name="w_expert_realm">Realm</string>
+  <string name="w_expert_realm_desc">Authentifikationsdomain (benutze \'*\', wenn du sie nicht kennst)</string>
+  <string name="w_expert_username">Benutzername</string>
+  <string name="w_expert_username_desc">Benutzername / Login</string>
+  <string name="w_expert_data">Passwort</string>
+  <string name="w_expert_data_desc">Passwort für dieses Konto</string>
+  <string name="w_expert_datatype">Datentyp</string>
+  <string name="w_expert_datatype_desc">Typ der Daten</string>
+  <string name="w_expert_t_proxy">Proxy</string>
+  <string name="w_expert_proxy">Proxy URL</string>
+  <string name="w_expert_proxy_desc">Format: sip:proxy.net[:Port]</string>
+  <string name="w_expert_use_tcp">Verwende TCP (nicht UDP)</string>
+  <string name="w_expert_prevent_tcp">Verhindere TCP (verwende nur UDP)</string>
+  <string name="w_expert_publish_enabled">Publish enabled</string>
+  <string name="w_expert_reg_timeout">Register Timeout (sec)</string>
+  <string name="w_expert_reg_dbr">Registrierte Verzögerung vor der Aktualisierung (Sekunden)</string>
+  <string name="w_expert_reg_dbr_desc">Lege die Sekunden fest nachdem die Client-Registration abläuft</string>
+  <string name="w_expert_ka_interval">Keep-alive Interval (sec)</string>
+  <string name="w_expert_force_contact">Force contact</string>
+  <string name="w_expert_allow_contact_rewrite">Erlaube Contact-Rewrite</string>
+  <string name="w_expert_contact_rewrite_method">Methode für den Contact-Rewrite</string>
+  <string name="w_expert_reg_use_proxy">Wie man einen Proxy benutzt</string>
+  <string name="w_expert_rtp_public_addr">RTP öffentliche Adresse</string>
+  <string name="w_expert_mwi_enabled_desc">Erhalte Benachrichtigungen der Sprachbox</string>
 </resources>

@@ -3,6 +3,7 @@
   <string name="next">Volgende</string>
   <string name="init">Initialiseren …</string>
   <string name="unable_to_download_file">Kan bestand niet downloaden</string>
+  <string name="connection_not_valid">De geselecteerde netwerkroute is niet toegestaan met de door u geselecteerde instellingen</string>
   <string name="invalid_sip_uri">SIP-URI is ongeldig voor oproep</string>
   <string name="accounts">Accounts</string>
   <string name="other_accounts">Andere accounts</string>
@@ -34,6 +35,7 @@
   <string name="dial_tab_name_text">Kiezen</string>
   <string name="calllog_tab_name_text">Gesprekkenlijst</string>
   <string name="messages_tab_name_text">Berichten</string>
+  <string name="favorites_tab_name_text">Favorieten</string>
   <string name="menu_disconnect">Ophangen</string>
   <string name="service_ticker_registered_text">SIP geregistreerd</string>
   <string name="outgoing_call_chooser_call_text">Oproepen</string>
@@ -59,5 +61,37 @@
   <string name="show_password">Toon wachtwoord</string>
   <string name="this_codec_is_not_free">**Deze codec is niet gratis !!!**\nControleer of iemand (uw SIP-provider of uzelf) een licentie heeft gekocht die het gebruik van deze codec toestaat! Wij (als applicatie-distributeurs) zijn niet verantwoordelijk voor illegaal gebruik van deze codec.\nHet is aan u om zeker te stellen dat u bent geautoriseerd om deze codec te gebruiken.\nLink om te kopen :</string>
   <string name="voice_mail">Voicemail</string>
+  <string name="voice_mail_number">VM nummer</string>
+  <string name="type_sip_uri_or_autocomplete">SIP URI of autoaanvulling</string>
+  <string name="not_configured_multiple_calls">De applicatie is niet ingesteld om meerdere gesprekken toe te staan</string>
+  <string name="legal_information">Juridische informatie</string>
+  <string name="update_nightly_build">Update nachtelijke versie</string>
+  <string name="loading">Laden</string>
+  <string name="reconnect">Herverbinden</string>
+  <string name="switch_to_text">Wissel naar tekstmodus</string>
+  <string name="switch_to_digit">Wissel naar nummermodus</string>
+  <string name="no_voice_mail_configured">Geen voicemail ingesteld</string>
+  <string name="no_accounts">Geen accounts</string>
+  <string name="activate">Activeren</string>
+  <string name="deactivate">Deactiveren</string>
+  <string name="audio">Audio</string>
+  <string name="video">Video</string>
+  <string name="invert_selection">Selectie omkeren</string>
+  <string name="cant_write_file">Fout bij schrijven bestand</string>
+  <string name="info">Info</string>
+  <string name="csipsimple_shortcut">CSipSimple snelkoppeling</string>
   <!--Presence stuff-->
+  <string name="online">Online</string>
+  <string name="offline">Offline</string>
+  <string name="away">Afwezig</string>
+  <string name="busy">Bezig</string>
+  <string name="activate_presence_sharing">Deel aanwezigheid</string>
+  <string name="deactivate_presence_sharing">Stop delen van aanwezigheid</string>
+  <string name="presence">Aanwezigheid</string>
+  <string name="configure">Configureren</string>
+  <string name="set_android_group">Kies Android groep</string>
+  <string name="set_sip_data">Kies sip uri data</string>
+  <string name="uri_nbr">Telefoonnummer</string>
+  <string name="uri_im">IM met aangepast SIP schema</string>
+  <string name="uri_sip">Internetoproep</string>
 </resources>

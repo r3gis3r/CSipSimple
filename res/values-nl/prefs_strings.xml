@@ -23,7 +23,9 @@
   <string name="use_other">Gebruik andere netwerken</string>
   <string name="use_other_in_desc">Bijvoorbeeld WiMAX voor inkomende oproepen</string>
   <string name="use_other_out_desc">Bijvoorbeeld WiMAX voor uitgaande oproepen</string>
-  <string name="use_3g">Gebruik 3G</string>
+  <string name="use_anyway">Alsnog gebruiken</string>
+  <string name="use_anyway_desc">Niets geven om de Android netwerkstatus. Niet aan te raden bij normaal gebruik.</string>
+  <string name="use_3g">Gebruik 3G (en beter)</string>
   <string name="use_3g_disclamer">Uw provider MOET deze optie toestaan</string>
   <string name="use_edge">Gebruik EDGE</string>
   <string name="use_gprs">Gebruik GPRS</string>
@@ -54,6 +56,10 @@
   <string name="enable_turn_desc">Zet TURN-optie aan</string>
   <string name="turn_server">TURN-server</string>
   <string name="turn_server_desc">TURN-server (HOST:POORT)</string>
+  <string name="turn_username">TURN gebruiker</string>
+  <string name="turn_username_desc">Gebruikersnaam voor TURN authentificatie</string>
+  <string name="turn_password">TURN wachtwoord</string>
+  <string name="turn_password_desc">Wachtwoord voor TURN authentificatie</string>
   <string name="enable_stun">STUN inschakelen</string>
   <string name="enable_stun_desc">Zet STUN aan</string>
   <string name="stun_server">STUN servers</string>
@@ -62,9 +68,22 @@
   <string name="enable_qos_desc">QoS inschakelen voor pakketten</string>
   <string name="dscp_val">DSCP-waarde</string>
   <string name="dscp_val_desc">DSCP-waarde voor SIP-verkeer</string>
+  <string name="udp_keep_alive_interval_wifi">Wifi UDP in stand houden</string>
+  <string name="udp_keep_alive_interval_mobile">Mobiel UDP in stand houden</string>
+  <string name="tcp_keep_alive_interval_wifi">Wifi TCP in stand houden</string>
+  <string name="tcp_keep_alive_interval_mobile">Mobiel TCP in stand houden</string>
+  <string name="tls_keep_alive_interval_wifi">Wifi TLS in stand houden</string>
+  <string name="tls_keep_alive_interval_mobile">Mobiel TLS in stand houden</string>
+  <string name="keep_alive_interval">Connectie in stand houden</string>
   <string name="keep_alive_interval_desc">Interval (sec) voor KA packets</string>
+  <string name="use_compact_form">Gebruik compact SIP</string>
+  <string name="use_compact_form_desc">Verminder SIP pakketgrootte. Werkt mogelijk niet bij oude SIP servers.</string>
+  <string name="user_agent">Gebruikersagent</string>
   <!--<string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>-->
+  <string name="force_no_update">Forceer geen update</string>
+  <string name="sip_protocol">SIP protocol</string>
+  <string name="sip_protocol_desc">SIP protocol aanpassing.</string>
   <!--Security-->
   <string name="tls">TLS</string>
   <string name="secure_transport">Beveiligd transport</string>
@@ -90,6 +109,8 @@
   <string name="tls_method_desc">Methode voor TLS-transport</string>
   <string name="use_srtp">SRTP-modus</string>
   <string name="use_srtp_desc">Modus voor veilige RTP</string>
+  <string name="use_zrtp">ZRTP modus</string>
+  <string name="use_zrtp_desc">Modus voor Beveiligd ZRTP</string>
   <!--Media-->
   <string name="audio_quality">Geluidskwaliteit</string>
   <string name="audio_volume">Geluidsniveau</string>
@@ -98,6 +119,8 @@
   <string name="echo_cancellation_desc">Activeer echo-onderdrukking</string>
   <string name="enable_vad">Voice audio detection</string>
   <string name="enable_vad_desc">Activeer voice audio detection</string>
+  <string name="enable_ns">Ruisonderdrukking</string>
+  <string name="enable_ns_desc">Werkt wanneer echoannulering is geactiveerd en de WebRTC echoannuleringsfunctie gebruikt wordt.</string>
   <string name="snd_mic_level">Microfoonversterking</string>
   <string name="snd_mic_level_desc">Pas het signaalniveau van de microfoon aan (1: doe niets)</string>
   <string name="snd_speaker_level">Luidsprekerversterking</string>
@@ -127,6 +150,11 @@
   <string name="use_mode_api_desc">Probeer dit aan te zetten als het geluid naar de luidspreker gaat in plaats van naar de hoofdtelefoon</string>
   <string name="sip_audio_mode">Geluidsmodus voor SIP-oproepen</string>
   <string name="sip_audio_mode_desc">Alleen wijzigen als de ontwikkelaars dit adviseren</string>
+  <string name="use_webrtc_hack">Gebruik WebRTC implementatie</string>
+  <string name="use_webrtc_hack_desc">Implementatie gemaakt door het WebRTC team</string>
+  <string name="do_focus_audio">Focus audio</string>
+  <string name="micro_source">Microfoon bron</string>
+  <string name="micro_source_desc">Bron voor de microfoon. Een geschikte waarde kiezen kan de echoannulering verbeteren.</string>
   <string name="has_io_queue">IO-wachtrij</string>
   <string name="has_io_queue_desc">Activeer wachtrij voor invoer/uitvoer</string>
   <string name="set_audio_generate_tone">Tone hack</string>
@@ -137,21 +165,40 @@
   <string name="band_for_edge">Band type voor EDGE</string>
   <string name="band_for_other">Band type anders</string>
   <string name="codecs_band_types">Verbindingsbandbreedte type voor codecs</string>
+  <string name="use_sgs_call_hack">Gebruik Samsung Galaxy Hack</string>
+  <string name="audio_implementation">Audio implementatie</string>
+  <string name="pgp">PGP</string>
   <string name="plain_password">Eenvoudig wachtwoord</string>
   <string name="data_digest">Digest-data</string>
   <string name="disabled">Uitgeschakeld</string>
   <string name="optional">Optioneel</string>
   <string name="mandatory">Vereist</string>
   <string name="auto">Automatisch</string>
+  <string name="rtp">RTP</string>
   <string name="in_band">In-band generatie</string>
+  <string name="sip_info">SIP INFO</string>
   <string name="legacy">Erfenis</string>
   <string name="normal">Normaal</string>
   <string name="force">Afdwingen</string>
   <string name="prevent">Voorkomen</string>
+  <string name="speex">Speex</string>
   <string name="simple">Eenvoudig</string>
+  <string name="webrtc">WebRTC</string>
   <string name="use_android_setting">Gebruik Android-instellingen</string>
   <string name="narrowband">Smalband</string>
   <string name="wideband">Breedband</string>
+  <string name="slow">Langzaam</string>
+  <string name="fast">Snel</string>
+  <string name="no_proxy">Geen proxy</string>
+  <string name="outbound_proxies">Uitgaande proxies</string>
+  <string name="accounts_proxies">Account proxies</string>
+  <string name="all">Alle</string>
+  <string name="no_zrtp">Geen ZRTP</string>
+  <string name="create_zrtp">Creëer ZRTP</string>
+  <string name="default_str">Standaard</string>
+  <string name="auto_connect_bluetooth">Automatisch verbinden bluetooth</string>
+  <string name="codec_h264_profile">H264 profiel</string>
+  <string name="codec_h264_level">H264 niveau</string>
   <!--UI-->
   <string name="general_ui">Algemene gebruikersinterface</string>
   <string name="native_dialer_integration">Integratie met ingebouwde kiezer</string>
@@ -184,6 +231,12 @@
   <string name="gsm_integration_type_desc">Hoe de toepassing uw mobiele telefoon gebruikt (of niet)</string>
   <string name="invert_proximity_sensor">Inverteer nabijheidssensor</string>
   <string name="invert_proximity_sensor_desc">Kan helpen op sommige apparaten als de fabrikant dichtbij en veraf verwisselde</string>
+  <string name="theme">Thema</string>
+  <string name="theme_desc">Thema voor de applicatie</string>
+  <string name="obtain_themes">Meer thema\'s verkrijgen</string>
+  <string name="obtain_themes_desc">Verkrijg thema\'s uit de Play Store</string>
+  <string name="display_icon_in_status_bar_nbr">Toon nummer in notificatiebalk</string>
+  <string name="display_icon_in_status_bar_nbr_desc">Toon het aantal geregistreerde accounts in de notificatiebalk</string>
   <!--Fast settings-->
   <string name="android_integration">Integreer met Android</string>
   <string name="android_integration_desc">Integratie met ingebouwde kiezer en gesprekslijsten</string>
@@ -201,7 +254,16 @@
   <!--Calls settings-->
   <string name="auto_record_calls">Neem automatisch oproepen op</string>
   <string name="auto_record_calls_desc">Neem oproepen op zo snel als verbonden</string>
+  <string name="support_multiple_calls">Ondersteun meerdere oproepen</string>
+  <string name="support_multiple_calls_desc">Conferenties en meerdere gelijktijdige oproepen toestaan</string>
+  <string name="vid_in_auto_show">Automatisch video tonen</string>
+  <string name="vid_in_auto_show_desc">Automatisch video van de ander tonen</string>
+  <string name="vid_out_auto_transmit">Automatisch video versturen</string>
+  <string name="vid_out_auto_transmit_desc">Verstuur video automatisch vanaf toestel</string>
+  <string name="use_video">Gebruik video</string>
+  <string name="use_video_desc">Verstuur video automatisch vanaf toestel</string>
   <!--Settings modes-->
   <string name="expert_preferences">Expert-modus</string>
+  <string name="normal_preferences">Normale modus</string>
   <!--Generic-->
 </resources>

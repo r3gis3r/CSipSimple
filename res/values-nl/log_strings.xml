@@ -1,12 +1,13 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="unknown">Onbekend</string>
-    <string name="type_incoming">Inkomend</string>
-    <string name="type_outgoing">Uitgaand</string>
-    <string name="type_missed">Gemist</string>
-    <string name="callBack">Terugbellen</string>
-    <string name="callAgain">Opnieuw bellen</string>
-    <string name="returnCall">Gesprek teruggeven</string>
-
+  <string name="unknown">Onbekend</string>
+  <string name="type_incoming">Inkomend</string>
+  <string name="type_outgoing">Uitgaand</string>
+  <string name="type_missed">Gemist</string>
+  <string name="callBack">Terugbellen</string>
+  <string name="callAgain">Opnieuw bellen</string>
+  <string name="returnCall">Gesprek teruggeven</string>
+  <string name="call">Bellen</string>
+  <string name="sip_call">SIP Bellen</string>
+  <string name="no_call_history">Geen gesprekshistorie</string>
 </resources>

@@ -1,13 +1,16 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">Account-naam</string>
   <string name="w_advanced_display_name_desc">Weergavenaam voor dit account</string>
   <string name="w_advanced_caller_id">Nummerweergave</string>
   <string name="w_advanced_caller_id_desc">Weer te geven nummer bij oproep</string>
   <string name="w_advanced_username">Gebruikersnaam</string>
+  <string name="w_advanced_username_desc">Gebruikersnaam voor SIP server authentificatie (zonder het @sip.server)</string>
   <string name="w_advanced_password">Wachtwoord</string>
   <string name="w_advanced_password_desc">Wachtwoord voor SIP-server authenticatie</string>
   <string name="w_advanced_use_tcp">Gebruik TCP (geen UDP)</string>
   <string name="w_advanced_proxy">Proxy</string>
   <string name="w_advanced_proxy_desc">Proxy domein/IP[:poort] (optioneel, niet altijd nodig)</string>
+  <string name="w_advanced_auth_id">Sip authentificatie ID</string>
+  <string name="w_advanced_auth_id_desc">Leeg laten indien gelijk aan Gebruikersnaam</string>
 </resources>

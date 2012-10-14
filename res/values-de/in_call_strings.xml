@@ -19,5 +19,7 @@
   <string name="unlock">Entsperre</string>
   <string name="record">Aufnahme</string>
   <string name="stop_recording">Aufnahme stoppen</string>
+  <string name="xfer_uri">Übergeben an </string>
   <string name="hold_call">Halten</string>
+  <string name="send_dtmf">Sende DTMF</string>
 </resources>

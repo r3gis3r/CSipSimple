@@ -19,4 +19,10 @@
   <string name="unlock">Ontgrendelen</string>
   <string name="record">Opnemen</string>
   <string name="stop_recording">Stoppen met opnemen</string>
+  <string name="xfer_uri">Overbrengen naar nummer</string>
+  <string name="hold_call">In wacht zetten</string>
+  <string name="on_hold">In Wacht</string>
+  <string name="resume_call">Hervatten</string>
+  <string name="transfer_to_call">Overbrengen naar bellen</string>
+  <string name="send_dtmf">Stuur DTMF</string>
 </resources>

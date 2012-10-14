@@ -79,6 +79,8 @@
   <string name="timer_sess_expires">Session-Verfall Zeit</string>
   <string name="timer_sess_expires_desc">Minimale Session-Verfall Zeit in Sekunden. Darf nicht geringer als min_se sein.</string>
   <string name="sip_protocol">SIP Protokoll</string>
+  <string name="network_route_polling">Jede (Minuten) auf Netzwerkänderungen prüfen</string>
+  <string name="disable_tcp_switch">TCP switch deaktivieren</string>
   <!--Security-->
   <string name="tls">TLS</string>
   <string name="secure_transport">Gesicherte Übertragung</string>
@@ -111,6 +113,7 @@
   <string name="echo_cancellation_desc">Aktiviert die Echounterdrückung</string>
   <string name="enable_vad">Sprachaktivitätserkennung</string>
   <string name="enable_vad_desc">Aktiviert die Sprachaktivitätserkennung</string>
+  <string name="enable_ns">Lärmreduktion</string>
   <string name="snd_mic_level">Mikrofonpegel</string>
   <string name="snd_mic_level_desc">Stellt den Mikrofonpegel ein (1=keine Veränderung)</string>
   <string name="snd_speaker_level">Lautsprecherpegel</string>
@@ -145,6 +148,7 @@
   <string name="use_webrtc_hack_desc">Implementation von WebRTC Team</string>
   <string name="do_focus_audio_desc">Deaktivieren erzeugt Überlappung mit Musik, kann aber beim  Routing helfen.</string>
   <string name="micro_source">Mikrofon Quelle</string>
+  <string name="micro_source_desc">Quelle des Mikrofons. Die Wahl des geeigneten Werts kann die Echounterdrückung verbessern.</string>
   <string name="has_io_queue">IO Warteschlange</string>
   <string name="has_io_queue_desc">Aktiviere Queue für Input/Output</string>
   <string name="set_audio_generate_tone">Tone Hack</string>
@@ -181,6 +185,10 @@
   <string name="no_zrtp">Kein ZRTP</string>
   <string name="create_zrtp">Erzeuge ZRTP</string>
   <string name="default_str">Standard</string>
+  <string name="auto_detect_speaker">Automatische Lautsprechererkennung</string>
+  <string name="auto_detect_speaker_desc">Umschalten auf den hinteren Lautsprecher falls das Telefon während eines Anrufes waagrecht gehalten wird</string>
+  <string name="codecs_extra_settings">Erweiterte Codec Einstellungen</string>
+  <string name="codec_h264_profile">H264 Profil</string>
   <!--UI-->
   <string name="general_ui">Standard-Benutzeroberfläche</string>
   <string name="native_dialer_integration">Native Telefon Integration</string>
@@ -231,7 +239,7 @@
   <string name="never_available_desc">Aktiviert die SIP Anwendung nur wenn es nötig ist</string>
   <string name="availability_tg">Verfügbarkeit UMTS</string>
   <string name="tg_allowed">Ich darf UMTS verwenden</string>
-  <string name="tg_allowed_desc">Aktivert die Verwendung von UMTS. (Ich habe sichergestellt, daß mein Provider die Verwendung von VoIP über UMTS erlaubt)</string>
+  <string name="tg_allowed_desc">Aktivert die Verwendung von UMTS. (Ich habe sichergestellt, dass mein Provider die Verwendung von VoIP über UMTS erlaubt)</string>
   <string name="codecs_availability_text">Nur verfügbar, wenn SIP registriert ist</string>
   <!--Calls settings-->
   <string name="auto_record_calls">Anrufe automatisch aufnehmen</string>
