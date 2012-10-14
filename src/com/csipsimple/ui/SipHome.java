@@ -695,14 +695,14 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                         toSelectTab = ab.getTabAt(pos);
                         Uri data = intent.getData();
                         String nbr = UriUtils.extractNumberFromIntent(intent, this);
-                        if(data != null && mDialpadFragment != null) {
-                            
-                            if(!TextUtils.isEmpty(nbr)) {
+
+                        if (!TextUtils.isEmpty(nbr)) {
+                            if (data != null && mDialpadFragment != null) {
                                 mDialpadFragment.setTextDialing(true);
                                 mDialpadFragment.setTextFieldValue(nbr);
+                            } else {
+                                initDialerWithText = nbr;
                             }
-                        }else {
-                            initDialerWithText = nbr;
                         }
                         toSelectId = TAB_ID_DIALER;
                     }

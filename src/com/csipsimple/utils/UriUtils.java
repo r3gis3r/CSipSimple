@@ -83,10 +83,16 @@ public class UriUtils {
     private final static String AUTHORITY_SKYPE = "skype";
 
     public static String extractNumberFromIntent(Intent it, Context ctxt) {
-        String phoneNumber = PhoneNumberUtils.getNumberFromIntent(it, ctxt);
-
+        if(it == null) {
+            return null;
+        }
+        String phoneNumber = null;
         String action = it.getAction();
         Uri data = it.getData();
+        if(data != null && action != null) {
+            phoneNumber = PhoneNumberUtils.getNumberFromIntent(it, ctxt);
+        }
+        
         if(phoneNumber == null) {
             if (action != null && data != null) {
                 String scheme = data.getScheme();
