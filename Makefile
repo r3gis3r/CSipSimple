@@ -9,7 +9,7 @@ all : libraries
 	# Dispatch to external projects
 	@(./dispatch_shared_libs.sh)
 
-libraries : ext-sources swig-glue webrtc-preprocess
+libraries : ext-sources webrtc-preprocess
 	# Build main libraries using android ndk
 	@(ndk-build -j6)
 
@@ -30,15 +30,12 @@ jni/%/sources :
 jni/%/.patched_sources : 
 	@($(MAKE) $(MFLAGS) -C $(subst /.patched_sources,,$@) patch)
 
-swig-glue : 
-	@($(MAKE) $(MFLAGS) -C jni/swig-glue)
 
 clean :
 	# NDK clean
 	@(ndk-build clean)
 	# Remote clean
 	@($(MAKE) -C jni/ffmpeg clean)
-	@($(MAKE) -C jni/swig-glue clean)
 	@($(MAKE) -C jni/webrtc clean)
 
 CodecPackLibs :

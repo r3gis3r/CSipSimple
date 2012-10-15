@@ -165,6 +165,12 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         callInfo = aCallInfo;
         if (callInfo == null) {
             updateElapsedTimer();
+            cachedInvState = SipCallSession.InvState.INVALID;
+            cachedMediaState = SipCallSession.MediaState.ERROR;
+            cachedCanRecord = false;
+            cachedIsRecording = false;
+            cachedIsHold = false;
+            cachedVideo = false;
             return;
         }
 

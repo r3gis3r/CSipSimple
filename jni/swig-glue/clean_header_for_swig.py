@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import re
-import sys
+import sys, os
 
 def remove_comments(text):
     """ remove c-style comments.
@@ -62,7 +62,8 @@ def remove_not_decls(text):
 def remove_useless_methods(text):
 	""" Remove useless methods that we don't want to see exported
 """
-	ignored_methods_file = open("ignored_methods.txt")
+	folder = os.path.dirname(os.path.realpath(__file__))
+	ignored_methods_file = open(os.path.join(folder, "ignored_methods.txt"))
 	for method_name in ignored_methods_file.readlines():
 		if len(method_name) > 0:
 			pattern = re.compile(method_name, re.MULTILINE)

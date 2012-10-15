@@ -40,6 +40,9 @@ endif
 
 APP_MODULES := libpjsipjni pj_opensl_dev
 
+SWIG ?= swig2.0
+PYTHON ?= python
+
 # Modules for extra codecs are 
 # pj_g7221_codec pj_codec2_codec pj_g726_codec pj_opus_codec
 #
@@ -71,4 +74,6 @@ BASE_PJSIP_FLAGS += -DPJMEDIA_HAS_WEBRTC_AEC=$(MY_USE_WEBRTC) \
 BASE_PJSIP_FLAGS += -DPJ_HAS_SSL_SOCK=$(MY_USE_TLS) -DPJMEDIA_HAS_ZRTP=$(MY_USE_ZRTP)
 
 # Force some settings for compatibility with some buggy sip providers (Pflingo)
-BASE_PJSIP_FLAGS += -DPJSUA_SDP_SESS_HAS_CONN=1
+BASE_PJSIP_FLAGS += -DPJSUA_SDP_SESS_HAS_CONN=1 
+
+BASE_PJSIP_FLAGS += -Wno-psabi
