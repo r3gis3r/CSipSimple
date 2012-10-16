@@ -79,29 +79,36 @@ public class Advanced extends BaseImplementation {
 		}else {
 			serverFull = serverFull.replaceFirst("sip:", "");
 		}
-		accountServer.setText(serverFull);
-		accountCallerId.setText(parsedInfo.displayName);
-		accountUserName.setText(parsedInfo.userName);
 		
-		if(!TextUtils.isEmpty(account.username)) {
-		    if(!account.username.equals(parsedInfo.userName)) {
-		        accountAuthId.setText(account.username);
-		    }else {
-		        accountAuthId.setText("");
-		    }
-		}else {
-		    accountAuthId.setText("");
-		}
+		// We have to set safe, because custom wizards may hide some fields
+		setFieldTextSafe(accountServer, serverFull);
+		setFieldTextSafe(accountCallerId, parsedInfo.displayName);
+        setFieldTextSafe(accountUserName, parsedInfo.userName);
 		
-		accountPassword.setText(account.data);
+		if(!TextUtils.isEmpty(account.username)
+		        && !account.username.equals(parsedInfo.userName)) {
+		    setFieldTextSafe(accountAuthId, account.username);
+	    }else {
+            setFieldTextSafe(accountAuthId, "");
+	        
+	    }
 
-		accountUseTcp.setChecked(account.transport == SipProfile.TRANSPORT_TCP);
-		
+        setFieldTextSafe(accountPassword, account.data);
+        if(accountUseTcp != null) {
+            accountUseTcp.setChecked(account.transport == SipProfile.TRANSPORT_TCP);
+        }
+        
 		if(account.proxies != null && account.proxies.length > 0) {
-			accountProxy.setText(account.proxies[0].replaceFirst("sip:", ""));
+	        setFieldTextSafe(accountProxy, account.proxies[0].replaceFirst("sip:", ""));
 		}else {
-			accountProxy.setText("");
+		    setFieldTextSafe(accountProxy, "");
 		}
+	}
+	
+	private void setFieldTextSafe(EditTextPreference pref, String value) {
+	    if(pref != null) {
+	        pref.setText(value);
+	    }
 	}
 
 	public void updateDescriptions() {

@@ -91,13 +91,13 @@ public class BasePrefsWizard extends GenericPrefs {
 				saveAndFinish();
 			}
 		});
+        wizard.fillLayout(account);
 	}
 
 	private boolean isResumed = false;
 	@Override
 	protected void onResume() {
 		super.onResume();
-        wizard.fillLayout(account);
         isResumed = true;
 		updateDescriptions();
 		updateValidation();
