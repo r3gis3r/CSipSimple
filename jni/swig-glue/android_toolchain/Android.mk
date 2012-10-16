@@ -38,7 +38,7 @@ $(SWIG_GLUE_NATIVE_PATH)/$(SWIG_GLUE_NATIVE_FILE) :: $(CONCAT_INTERFACE_FILE) $(
 	@mkdir -p $(SWIG_GLUE_NATIVE_PATH)
 	@$(RM) -r $(JAVA_PACKAGE_DIR)
 	mkdir -p $(JAVA_PACKAGE_DIR)
-	$(SWIG) $(MY_PJSIP_FLAGS) \
+	$(SWIG) $(filter-out -W%,$(MY_PJSIP_FLAGS)) \
 		-o $@ \
 		-outdir $(JAVA_PACKAGE_DIR) -java -package $(JAVA_PACKAGE) \
 		-c++ $(CONCAT_INTERFACE_FILE)
