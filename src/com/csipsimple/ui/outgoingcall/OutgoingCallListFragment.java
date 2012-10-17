@@ -174,32 +174,34 @@ public class OutgoingCallListFragment extends CSSListFragment {
         if(c != null && callMade == false) {
             OutgoingCallChooser superActivity = ((OutgoingCallChooser)getActivity());
             Long accountToCall = superActivity.getAccountToCallTo();
+            boolean canCallOtherAccounts = superActivity.canCallAutomatically();
             // Move to first to search in this cursor
             c.moveToFirst();
             // First of all, if only one is available... try call with it
-            if(c.getCount() == 1) {
+            if(c.getCount() == 1 && canCallOtherAccounts) {
                 if(placeCall(c)) {
                     c.close();
                     callMade = true;
                     return;
                 }
             }else {
-                // Now lets search for one in for call mode if service is ready
                 do {
-                    if(c.getInt(c.getColumnIndex(AccountsLoader.FIELD_FORCE_CALL)) == 1) {
-                        if(placeCall(c)) {
-                            c.close();
-                            callMade = true;
-                            return;
-                        }
-                    }
                     if(accountToCall != SipProfile.INVALID_ID) {
+                        // It's account that is asked
                         if(accountToCall == c.getLong(c.getColumnIndex(SipProfile.FIELD_ID))) {
                             if(placeCall(c)) {
                                 c.close();
                                 callMade = true;
                                 return;
                             }
+                        }
+                    } else if((c.getInt(c.getColumnIndex(AccountsLoader.FIELD_FORCE_CALL)) == 1) && canCallOtherAccounts) {
+                        // Or one with forceCall flag
+                        // We don't use this filter if one account were specified.
+                        if(placeCall(c)) {
+                            c.close();
+                            callMade = true;
+                            return;
                         }
                     }
                 } while(c.moveToNext());

@@ -65,6 +65,7 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
     private String phoneNumber = null;
     private boolean ignoreRewritingRules = false;
     private Long accountToCallTo = null;
+    private Boolean callAutomatically = null;
     
     
     private final static String SCHEME_CSIP = SipManager.PROTOCOL_CSIP;
@@ -123,6 +124,28 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
             accountToCallTo = getIntent().getLongExtra(SipProfile.FIELD_ACC_ID, SipProfile.INVALID_ID);
         }
         return accountToCallTo;
+    }
+
+    /**
+     * Should we allow automatic calls of others accounts
+     * @return True if we can call automatically some accounts.
+     */
+    public boolean canCallAutomatically() {
+        if(callAutomatically == null) {
+            if(getAccountToCallTo() == SipProfile.INVALID_ID) {
+                // No account specified, we can call automatically
+                callAutomatically = true;
+            }else {
+                int fallbackBehavior = getIntent().getIntExtra(SipManager.EXTRA_FALLBACK_BEHAVIOR, SipManager.FALLBACK_ASK);
+                if(fallbackBehavior == SipManager.FALLBACK_AUTO_CALL_OTHER) {
+                    // The other app explicitely asked to fallback to other
+                    callAutomatically = true;
+                }else {
+                    callAutomatically = false;
+                }
+            }
+        }
+        return callAutomatically;
     }
     
     /* Service connection */
@@ -200,5 +223,7 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
         phoneNumber = null;
         accountToCallTo = null;
         ignoreRewritingRules = false;
+        callAutomatically = false;
     }
+
 }

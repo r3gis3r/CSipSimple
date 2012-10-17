@@ -405,6 +405,33 @@ public final class SipManager {
      */
     public static final String EXTRA_FILE_PATH = "file_path";
     
+    /**
+     * Extra key to contain behavior of outgoing call chooser activity.<br/>
+     * In case an account is specified in the outgoing call intent with {@link SipProfile#FIELD_ACC_ID}
+     * and the application doesn't find this account,
+     * this extra parameter allows to determine what is the fallback behavior of
+     * the activity. <br/>
+     * By default {@link #FALLBACK_ASK}.
+     * Other options : 
+     */
+    public static final String EXTRA_FALLBACK_BEHAVIOR = "fallback_behavior";
+    /**
+     * Parameter for {@link #EXTRA_FALLBACK_BEHAVIOR}.
+     * Prompt user with other choices without calling automatically.
+     */
+    public static final int FALLBACK_ASK = 0;
+    /**
+     * Parameter for {@link #EXTRA_FALLBACK_BEHAVIOR}.
+     * Warn user about the fact current account not valid and exit.
+     * WARNING : not yet implemented, will behaves just like {@link #FALLBACK_ASK} for now
+     */
+    public static final int FALLBACK_PREVENT = 1;
+    /**
+     * Parameter for {@link #EXTRA_FALLBACK_BEHAVIOR}
+     * Automatically fallback to any other available account in case requested sip profile is not there.
+     */
+    public static final int FALLBACK_AUTO_CALL_OTHER = 2;
+    
     // Constants
     /**
      * Constant for success return
@@ -446,7 +473,7 @@ public final class SipManager {
      * Major version x 1000 + minor version. <br/>
      * Major version are backward compatible.
      */
-    public static final int CURRENT_API = 2002;
+    public static final int CURRENT_API = 2003;
 
     /**
      * Ensure capability of the remote sip service to reply our requests <br/>
