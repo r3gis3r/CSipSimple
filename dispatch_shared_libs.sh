@@ -2,7 +2,7 @@
 
 move_generic_lib() {
 	echo -n "Moving $1.so to $2 project ... "
-	libs_files=$(ls libs/*/${1}.so 2> /dev/null | wc -l)
+	libs_files=$(ls libs/*/${1}.so 2> /dev/null | wc -l | sed -e 's/^[ \t]*//')
 	if [ "$libs_files" != "0" ]; then
 		for lib_folder in libs/*; do
 			if [ -d ${lib_folder} ]; then
