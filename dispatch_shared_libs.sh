@@ -12,7 +12,7 @@ move_generic_lib() {
 		done
 		echo "[OK]";
 	else
-		echo "[KO] - lib not built"
+		echo "[--] - plugin not built"
 	fi
 }
 
