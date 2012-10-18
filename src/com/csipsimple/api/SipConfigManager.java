@@ -364,6 +364,11 @@ public class SipConfigManager {
      * 10 for 1.0, 20 for 2.0, 31 for 3.1 etc
      */
     public static final String H264_LEVEL = "codec_h264_level";
+    /**
+     * H264 Codec bitrate in kbps.<br/>
+     * Use 0 for default bitrate for level.
+     */
+    public static final String H264_BITRATE = "codec_h264_bitrate";
     
     // UI
     /**

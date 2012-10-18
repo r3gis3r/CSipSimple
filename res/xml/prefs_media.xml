@@ -124,6 +124,13 @@
                 android:entryValues="@array/h264_level_values"
                 android:key="codec_h264_level"
                 android:title="@string/codec_h264_level" />
+
+            <EditTextPreference
+                android:defaultValue="0"
+                android:key="codec_h264_bitrate"
+                android:numeric="signed"
+                android:summary="@string/codec_h264_bitrate_desc"
+                android:title="@string/codec_h264_bitrate" />
         </PreferenceCategory>
     </PreferenceScreen>
 
