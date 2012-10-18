@@ -145,7 +145,6 @@ int opus_to_pjsip_error_code(int opus_error) {
  */
 void apply_opus_codec_params(pj_pool_t* pool, pjmedia_codec_param *attr) {
 	attr->setting.dec_fmtp.cnt = 0;
-	// This is mainly no-op but is there for reference and external use
 	if (attr->setting.plc == 0) {
 		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].name = pj_str(
 				"useinbandfec");
@@ -224,7 +223,8 @@ PJ_DEF(pj_status_t) pjmedia_codec_opus_init(pjmedia_endpt *endpt) {
 
 	return PJ_SUCCESS;
 
-	on_error: if (opus_factory.mutex) {
+	on_error:
+	if (opus_factory.mutex) {
 		pj_mutex_destroy(opus_factory.mutex);
 		opus_factory.mutex = NULL;
 	}
@@ -352,8 +352,7 @@ static pj_status_t opus_default_attr(pjmedia_codec_factory *factory,
 	/* Default usedtx is 0 in opus */
 	attr->setting.vad = 0;
 	/* Default useinbandfec is 1 in opus */
-	/* TODO : temporarily disabled -- renable it */
-	attr->setting.plc = 0;
+	attr->setting.plc = 1;
 
 	// Apply these settings to relevant fmtp parameters
 	apply_opus_codec_params(opus_factory.pool, attr);
@@ -381,7 +380,6 @@ static pj_status_t opus_enum_codecs(pjmedia_codec_factory *factory,
 	codecs[*count].pt = PJMEDIA_RTP_PT_OPUS;
 	codecs[*count].type = PJMEDIA_TYPE_AUDIO;
 	codecs[*count].clock_rate = 48000;
-	// Actually we should not have to set this for opus
 	codecs[*count].channel_cnt = 1;
 
 	++*count;
@@ -763,15 +761,16 @@ static pj_status_t opus_codec_recover(pjmedia_codec *codec,
 		unsigned output_buf_len, struct pjmedia_frame *output) {
 	struct opus_private *opus;
 	int ret = 0;
+	int frame_size;
 
 	PJ_ASSERT_RETURN(output, PJ_EINVAL);
-
 	opus = (struct opus_private*) codec->codec_data;
 
+	frame_size = output_buf_len / opus->pcm_bytes_per_sample;
 	/* Decode */
 	ret = opus_decode(opus->psDec,
 			(const unsigned char *) NULL, 0,
-			output->buf, output_buf_len,
+			output->buf, frame_size,
 			0);
 	if (ret < 0) {
 		PJ_LOG(1, (THIS_FILE, "Failed to recover opus frame %d", ret));
@@ -784,7 +783,10 @@ static pj_status_t opus_codec_recover(pjmedia_codec *codec,
 		output->buf = NULL;
 		output->size = 0;
 	} else {
-		output->size = ret << 1;
+#if _TRACE_OPUS
+		PJ_LOG(4, (THIS_FILE, "Frame recovered %d", ret));
+#endif
+		output->size = ret * opus->pcm_bytes_per_sample;
 		output->type = PJMEDIA_FRAME_TYPE_AUDIO;
 	}
 
