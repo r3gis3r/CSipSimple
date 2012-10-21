@@ -90,6 +90,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
     private MenuBuilder btnMenuBuilder;
     private boolean hasVideo = false;
     private boolean canVideo = false;
+    private boolean cachedZrtpVerified;
+    private boolean cachedZrtpActive;
 
     private ActionMenuPresenter mActionMenuPresenter;
 
@@ -171,6 +173,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             cachedIsRecording = false;
             cachedIsHold = false;
             cachedVideo = false;
+            cachedZrtpActive = false;
+            cachedZrtpVerified = false;
             return;
         }
 
@@ -187,6 +191,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         cachedIsRecording = callInfo.isRecording();
         cachedIsHold = callInfo.isLocalHeld();
         cachedVideo = callInfo.mediaHasVideo();
+        cachedZrtpActive = callInfo.getHasZrtp();
+        cachedZrtpVerified = callInfo.isZrtpSASVerified();
         
         // VIDEO STUFF -- EXPERIMENTAL
         if(canVideo) {
@@ -274,6 +280,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             }
         }
     };
+
     
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -292,7 +299,10 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 cachedIsRecording == callInfo.isRecording() &&
                 cachedCanRecord == callInfo.canRecord() &&
                 cachedIsHold == callInfo.isLocalHeld() &&
-                cachedVideo  == callInfo.mediaHasVideo()) {
+                cachedVideo  == callInfo.mediaHasVideo() &&
+                cachedZrtpActive == callInfo.getHasZrtp() &&
+                cachedZrtpVerified == callInfo.isZrtpSASVerified()
+                ) {
             Log.d(THIS_FILE, "Nothing changed, ignore this update");
             return;
         }
@@ -331,6 +341,13 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         btnMenuBuilder.findItem(R.id.recordCallButton).setVisible(active).setTitle(
                 callInfo.isRecording() ? R.string.stop_recording : R.string.record);
         
+        // ZRTP stuff
+        active = callInfo.getHasZrtp() && !callInfo.isAfterEnded();
+        btnMenuBuilder.findItem(R.id.zrtpAcceptance).setVisible(active).setTitle(
+                callInfo.isZrtpSASVerified() ? R.string.zrtp_revoke_trusted_remote : R.string.zrtp_trust_remote);
+        
+        
+        
         // Expand plugins
         btnMenuBuilder.removeGroup(R.id.controls);
         for(DynActivityPlugin callPlugin : incallPlugins.values()) {
@@ -354,6 +371,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             it.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
             pluginMenu.setIntent(callPlugin.getIntent());
         }
+        
+        
     }
 
     /**
@@ -623,6 +642,9 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             return true;
         }else if(itemId == R.id.transferCallButton) {
             dispatchTriggerEvent(IOnCallActionTrigger.TRANSFER_CALL);
+            return true;
+        }else if(itemId == R.id.zrtpAcceptance) {
+            dispatchTriggerEvent(callInfo.isZrtpSASVerified()? IOnCallActionTrigger.ZRTP_REVOKE : IOnCallActionTrigger.ZRTP_TRUST);
             return true;
         }
         return false;

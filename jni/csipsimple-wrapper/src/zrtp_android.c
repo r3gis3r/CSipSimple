@@ -25,8 +25,6 @@
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 
 
-////I know I should not do that here
-void on_zrtp_show_sas_wrapper(void* data, char* sas, int verified);
 
 #include "transport_zrtp.h"
 #include "libzrtpcpp/ZrtpCWrapper.h"
@@ -86,37 +84,47 @@ typedef struct zrtp_cb_user_data {
 	pjmedia_transport *zrtp_tp;
 	pj_str_t sas;
 	pj_str_t cipher;
+	int sas_verified;
 } zrtp_cb_user_data;
 
 static void zrtpShowSas(void* data, char* sas, int verified){
 	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) data;
+	PJ_LOG(4, (THIS_FILE, "Show sas : %s in ctxt %x", sas, zrtp_data));
 	pj_strdup2_with_null(css_var.pool, &zrtp_data->sas, sas);
-	on_zrtp_show_sas_wrapper(data, sas, verified);
+	zrtp_data->sas_verified = verified;
+	on_zrtp_show_sas_wrapper(zrtp_data->call_id, sas, verified);
 }
 
 static void zrtpSecureOn(void* data, char* cipher){
 	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) data;
 	pj_strdup2_with_null(css_var.pool, &zrtp_data->cipher, cipher);
-	on_zrtp_update_transport_wrapper(data);
+
+	on_zrtp_update_transport_wrapper(zrtp_data->call_id);
 }
 
 static void zrtpSecureOff(void* data){
-	on_zrtp_update_transport_wrapper(data);
+	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) data;
+	on_zrtp_update_transport_wrapper(zrtp_data->call_id);
 }
 
 static void confirmGoClear(void* data)
 {
-    PJ_LOG(3,(THIS_FILE, "GoClear????????"));
+    PJ_LOG(3,(THIS_FILE, "GoClear?"));
 }
 static void showMessage(void* data, int32_t sev, int32_t subCode)
 {
+	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) data;
     switch (sev)
     {
     case zrtp_Info:
         PJ_LOG(3,(THIS_FILE, "ZRTP info message: %s", InfoCodes[subCode]));
         if(subCode == zrtp_InfoSecureStateOn
         		|| subCode == zrtp_InfoSecureStateOff){
-        	on_zrtp_update_transport_wrapper(data);
+        	if(zrtp_data != NULL){
+        		on_zrtp_update_transport_wrapper(zrtp_data->call_id);
+        	}else{
+        		PJ_LOG(1, (THIS_FILE, "Got a message without associated call_id"));
+        	}
         }
         break;
 
@@ -175,17 +183,16 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 		status = pjmedia_transport_zrtp_create(endpt, NULL, base_tp,
 											   &zrtp_tp, (flags & PJSUA_MED_TP_CLOSE_MEMBER));
 
-
-
 		if(status == PJ_SUCCESS){
 			PJ_LOG(3,(THIS_FILE, "ZRTP transport created"));
-
+			// TODO : we should use our own pool
 			// Build callback data ponter
 			zrtp_cb_user_data* zrtp_cb_data = PJ_POOL_ZALLOC_T(css_var.pool, zrtp_cb_user_data);
 			zrtp_cb_data->zrtp_tp = zrtp_tp;
 			zrtp_cb_data->call_id = call_id;
 			zrtp_cb_data->cipher = pj_str("");
 			zrtp_cb_data->sas = pj_str("");
+			zrtp_cb_data->sas_verified = PJ_FALSE;
 
 
 			// Build callback struct
@@ -221,50 +228,126 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 		}
 }
 
-PJ_DECL(void) jzrtp_SASVerified(long zrtp_data_p) {
-	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) zrtp_data_p;
-	ZrtpContext* ctxt = pjmedia_transport_zrtp_getZrtpContext(zrtp_data->zrtp_tp);
-	zrtp_SASVerified(ctxt);
-}
+struct jzrtp_allContext {
+	ZrtpContext* zrtpContext;
+	zrtp_cb_user_data* cbUserData;
+};
 
-PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p){
-	zrtp_cb_user_data* zrtp_data = (zrtp_cb_user_data*) zrtp_data_p;
-	return zrtp_data->call_id;
+struct jzrtp_allContext jzrtp_getContext(pjsua_call_id call_id) {
 
-}
+	pjsua_call *call;
+	pj_status_t status;
+	unsigned i;
+	pjmedia_transport_info tp_info;
+
+	struct jzrtp_allContext result;
+	result.cbUserData = NULL;
+	result.zrtpContext = NULL;
+
+	PJ_ASSERT_RETURN(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls,
+			NULL);
 
 
-pj_str_t jzrtp_getInfo(pjmedia_transport* tp){
-	pj_str_t result;
+	if (pjsua_call_has_media(call_id)) {
+		call = &pjsua_var.calls[call_id];
+		for (i = 0; i < call->med_cnt; ++i) {
+			pjsua_call_media *call_med = &call->media[i];
+			if (call_med->tp && call_med->type == PJMEDIA_TYPE_AUDIO) {
+				pjmedia_transport_info tp_info;
 
-	char msg[512];
-
-	ZrtpContext *ctx = pjmedia_transport_zrtp_getZrtpContext(tp);
-	int32_t state = zrtp_inState(ctx, SecureState);
-
-	zrtp_cb_user_data* zrtp_cb_data = (zrtp_cb_user_data*) pjmedia_transport_zrtp_getUserData(tp);
-
-	if (state) {
-		pj_ansi_snprintf(msg, sizeof(msg), "ZRTP - %s\n%.*s\n%.*s", "OK",
-				zrtp_cb_data->sas.slen, zrtp_cb_data->sas.ptr,
-				zrtp_cb_data->cipher.slen, zrtp_cb_data->cipher.ptr);
-	} else {
-		pj_ansi_snprintf(msg, sizeof(msg), "");
+				pjmedia_transport_info_init(&tp_info);
+				pjmedia_transport_get_info(call_med->tp, &tp_info);
+				if (tp_info.specific_info_cnt > 0) {
+					unsigned j;
+					for (j = 0; j < tp_info.specific_info_cnt; ++j) {
+						if (tp_info.spc_info[j].type
+								== PJMEDIA_TRANSPORT_TYPE_ZRTP) {
+							result.zrtpContext = pjmedia_transport_zrtp_getZrtpContext(call_med->tp);
+							result.cbUserData = (zrtp_cb_user_data*) pjmedia_transport_zrtp_getUserData(call_med->tp);
+						}
+					}
+				}
+			}
+		}
 	}
-	pj_strdup2_with_null(css_var.pool, &result, msg);
-
-
-	PJ_LOG(4, (THIS_FILE, "ZRTP getInfos : %s", msg));
-
 	return result;
 }
 
-#else
-PJ_DECL(void) jzrtp_SASVerified(long zrtp_data_p) {
-	//TODO : log
+PJ_DECL(void) jzrtp_SASVerified(pjsua_call_id call_id) {
+	struct jzrtp_allContext ac = jzrtp_getContext(call_id);
+	if(ac.cbUserData != NULL){
+		ac.cbUserData->sas_verified = 1;
+	}
+	if(ac.zrtpContext != NULL){
+		zrtp_SASVerified(ac.zrtpContext);
+	}else{
+		PJ_LOG(1, (THIS_FILE, "jzrtp_SASVerified: No ZRTP context for call %d", call_id));
+	}
 }
 
-PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p){
-	return -1;
+PJ_DECL(void) jzrtp_SASRevoked(pjsua_call_id call_id) {
+	struct jzrtp_allContext ac = jzrtp_getContext(call_id);
+	if(ac.cbUserData != NULL){
+		ac.cbUserData->sas_verified = 0;
+	}
+	if(ac.zrtpContext != NULL){
+		zrtp_resetSASVerified(ac.zrtpContext);
+	}else{
+		PJ_LOG(1, (THIS_FILE, "jzrtp_SASRevoked: No ZRTP context for call %d", call_id));
+	}
+}
+
+zrtp_state_info jzrtp_getInfoFromContext(struct jzrtp_allContext ac){
+	zrtp_state_info info;
+	info.sas.slen = 0;
+	info.sas.ptr = "";
+	info.sas_verified = PJ_FALSE;
+	info.cipher.slen = 0;
+	info.cipher.ptr = "";
+	info.secure = PJ_FALSE;
+	info.call_id = PJSUA_INVALID_ID;
+	PJ_LOG(4, (THIS_FILE, "jzrtp_getInfoFromContext : user data %x", ac.cbUserData));
+	if(ac.zrtpContext != NULL){
+		int32_t state = zrtp_inState(ac.zrtpContext, SecureState);
+		info.secure = state ? PJ_TRUE : PJ_FALSE;
+		if(ac.cbUserData){
+			info.sas_verified = ac.cbUserData->sas_verified;
+			info.call_id = ac.cbUserData->call_id;
+			pj_strassign(&info.sas, &ac.cbUserData->sas);
+			pj_strassign(&info.cipher, &ac.cbUserData->cipher);
+		}
+
+	}
+	return info;
+}
+
+PJ_DECL(zrtp_state_info) jzrtp_getInfoFromCall(pjsua_call_id call_id){
+	PJSUA_LOCK();
+	struct jzrtp_allContext ctxt = jzrtp_getContext(call_id);
+	zrtp_state_info info = jzrtp_getInfoFromContext(ctxt);
+	PJSUA_UNLOCK();
+	return info;
+}
+
+
+zrtp_state_info jzrtp_getInfoFromTransport(pjmedia_transport* tp){
+	PJSUA_LOCK();
+	struct jzrtp_allContext ctxt;
+	ctxt.zrtpContext = pjmedia_transport_zrtp_getZrtpContext(tp);
+	ctxt.cbUserData = (zrtp_cb_user_data*) pjmedia_transport_zrtp_getUserData(tp);
+	zrtp_state_info info =  jzrtp_getInfoFromContext(ctxt);
+	PJSUA_UNLOCK();
+	return info;
+}
+
+
+
+#else
+PJ_DECL(void) jzrtp_SASVerified(pjsua_call_id call_id) {
+	//TODO : log
+}
+PJ_DECL(void) jzrtp_SASRevoked(pjsua_call_id call_id) {
+	//TODO : log
+}
 }
 #endif

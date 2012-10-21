@@ -515,27 +515,27 @@ public class UAStateReceiver extends Callback {
 	//public boolean zrtpOn = false;
 	
 	@Override
-	public void on_zrtp_show_sas(int dataPtr, pj_str_t sas, int verified) {
+	public void on_zrtp_show_sas(int callId, pj_str_t sas, int verified) {
 		String sasString = PjSipService.pjStrToString(sas);
 		Log.d(THIS_FILE, "ZRTP show SAS " + sasString + " verified : " + verified);
 		if(verified != 1) {
+            SipCallSession callInfo = pjService.getCallInfo(callId);
 			Intent zrtpIntent = new Intent(SipManager.ACTION_ZRTP_SHOW_SAS);
 			zrtpIntent.putExtra(Intent.EXTRA_SUBJECT, sasString);
-			zrtpIntent.putExtra(Intent.EXTRA_UID, dataPtr);
+			zrtpIntent.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
 			pjService.service.sendBroadcast(zrtpIntent, SipManager.PERMISSION_USE_SIP);
 		}else{
-			updateZrtpInfos(dataPtr);
+			updateZrtpInfos(callId);
 		}
 	}
 	
 
 	@Override
-	public void on_zrtp_update_transport(int dataPtr) {
-		updateZrtpInfos(dataPtr);
+	public void on_zrtp_update_transport(int callId) {
+		updateZrtpInfos(callId);
 	}
 
-	public void updateZrtpInfos(int dataPtr) {
-		final int callId = pjsua.jzrtp_getCallId(dataPtr);
+	public void updateZrtpInfos(final int callId) {
 		pjService.service.getExecutor().execute(new SipRunnable() {
 			@Override
 			public void doRun() throws SameThreadException {

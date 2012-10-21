@@ -41,5 +41,7 @@
     <string name="resume_call">Resume</string>
     <string name="transfer_to_call">Transfer to call</string>
     <string name="send_dtmf">Send DTMF</string>
+    <string name="zrtp_trust_remote">Trust ZRTP remote</string>
+    <string name="zrtp_revoke_trusted_remote">Revoke trusted ZRTP remote</string>
 
 </resources>

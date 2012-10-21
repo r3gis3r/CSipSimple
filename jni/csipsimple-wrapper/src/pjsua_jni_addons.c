@@ -96,20 +96,15 @@ struct css_data css_var;
 PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 
 	pjsua_call *call;
-	pjsip_dialog *dlg;
 	pj_status_t status;
 	unsigned i;
 	pjmedia_transport_info tp_info;
 
 	pj_str_t result = pj_str("");
-	PJ_LOG(3, (THIS_FILE, "Get call secure info..."));
 
 	PJ_ASSERT_RETURN(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls,
 			result);
 
-	/* Use PJSUA_LOCK() instead of acquire_call():
-	 *  https://trac.pjsip.org/repos/ticket/1371
-	 */
 	PJSUA_LOCK();
 
 	if (pjsua_call_has_media(call_id)) {
@@ -117,7 +112,6 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 		for (i = 0; i < call->med_cnt; ++i) {
 			pjsua_call_media *call_med = &call->media[i];
 			PJ_LOG(4, (THIS_FILE, "Get secure for media type %d", call_med->type));
-			/* Get and ICE SRTP status */
 			if (call_med->tp && call_med->type == PJMEDIA_TYPE_AUDIO) {
 				pjmedia_transport_info tp_info;
 
@@ -139,8 +133,19 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 						else if (tp_info.spc_info[j].type
 								== PJMEDIA_TRANSPORT_TYPE_ZRTP) {
-							result = jzrtp_getInfo(call_med->tp);
-							if(result.slen > 0){
+							zrtp_state_info info = jzrtp_getInfoFromTransport(call_med->tp);
+							if(info.secure){
+								char msg[512];
+								PJ_LOG(4, (THIS_FILE, "ZRTP :: V %d", info.sas_verified));
+								PJ_LOG(4, (THIS_FILE, "ZRTP :: S L %d", info.sas.slen));
+								PJ_LOG(4, (THIS_FILE, "ZRTP :: C L %d", info.cipher.slen));
+
+								pj_ansi_snprintf(msg, sizeof(msg), "ZRTP - %s\n%.*s\n%.*s",
+										info.sas_verified ? "Verified": "Not verified",
+										info.sas.slen, info.sas.ptr,
+										info.cipher.slen, info.cipher.ptr);
+
+								pj_strdup2_with_null(css_var.pool, &result, msg);
 								break;
 							}
 						}

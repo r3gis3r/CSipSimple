@@ -687,16 +687,31 @@ public class SipService extends Service {
          * {@inheritDoc}
          */
 		@Override
-		public void zrtpSASVerified(final int dataPtr) throws RemoteException {
+		public void zrtpSASVerified(final int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			getExecutor().execute(new SipRunnable() {
 				@Override
 				protected void doRun() throws SameThreadException {
-					pjService.zrtpSASVerified((int) dataPtr);
-					pjService.userAgentReceiver.updateZrtpInfos(dataPtr);
+					pjService.zrtpSASVerified(callId);
+					pjService.userAgentReceiver.updateZrtpInfos(callId);
 				}
 			});
 		}
+		
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void zrtpSASRevoke(final int callId) throws RemoteException {
+            SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+            getExecutor().execute(new SipRunnable() {
+                @Override
+                protected void doRun() throws SameThreadException {
+                    pjService.zrtpSASRevoke(callId);
+                    pjService.userAgentReceiver.updateZrtpInfos(callId);
+                }
+            });
+        }
 
         /**
          * {@inheritDoc}

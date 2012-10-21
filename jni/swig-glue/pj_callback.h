@@ -73,8 +73,8 @@ public:
 	virtual int on_set_micro_source () {}
 
 //#if PJMEDIA_HAS_ZRTP
-	virtual void on_zrtp_show_sas (int data, const pj_str_t *sas, int verified) {}
-	virtual void on_zrtp_update_transport (int data) {}
+	virtual void on_zrtp_show_sas (pjsua_call_id call_id, const pj_str_t *sas, int verified) {}
+	virtual void on_zrtp_update_transport (pjsua_call_id call_id) {}
 //#endif
 
 //#if USE_CSIPSIMPLE

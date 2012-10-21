@@ -1781,11 +1781,18 @@ public class PjSipService {
      * pjsua.send_keep_alive(acc.getPjsuaId()); } }
      */
 
-    public void zrtpSASVerified(int dataPtr) throws SameThreadException {
+    public void zrtpSASVerified(int callId) throws SameThreadException {
         if (!created) {
             return;
         }
-        pjsua.jzrtp_SASVerified(dataPtr);
+        pjsua.jzrtp_SASVerified(callId);
+    }
+
+    public void zrtpSASRevoke(int callId) throws SameThreadException {
+        if (!created) {
+            return;
+        }
+        pjsua.jzrtp_SASRevoked(callId);
     }
 
     // Config subwrapper

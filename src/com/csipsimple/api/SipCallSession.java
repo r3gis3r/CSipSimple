@@ -205,6 +205,8 @@ public final class SipCallSession implements Parcelable {
     private String mediaSecureInfo = "";
     private boolean canRecord = false;
     private boolean isRecording = false;
+    private boolean zrtpSASVerified = false;
+    private boolean hasZrtp = false;
 
     /**
      * Construct from parcelable <br/>
@@ -229,6 +231,8 @@ public final class SipCallSession implements Parcelable {
         setMediaHasVideo((in.readInt() == 1));
         canRecord = (in.readInt() == 1);
         isRecording = (in.readInt() == 1);
+        hasZrtp = (in.readInt() == 1);
+        zrtpSASVerified = (in.readInt() == 1);
     }
 
     /**
@@ -271,6 +275,8 @@ public final class SipCallSession implements Parcelable {
         dest.writeInt(mediaHasVideo() ? 1 : 0);
         dest.writeInt(canRecord ? 1 : 0);
         dest.writeInt(isRecording ? 1 : 0);
+        dest.writeInt(hasZrtp ? 1 : 0);
+        dest.writeInt(zrtpSASVerified ? 1 : 0);
     }
 
     /**
@@ -669,5 +675,37 @@ public final class SipCallSession implements Parcelable {
      */
     public boolean canRecord() {
         return canRecord;
+    }
+
+    /**
+     * @return the zrtpSASVerified
+     */
+    public boolean isZrtpSASVerified() {
+        return zrtpSASVerified;
+    }
+
+    /**
+     * This method should be only used by CSipSimple service
+     * 
+     * @param zrtpSASVerified the zrtpSASVerified to set
+     */
+    public void setZrtpSASVerified(boolean zrtpSASVerified) {
+        this.zrtpSASVerified = zrtpSASVerified;
+    }
+
+    /**
+     * @return whether call has Zrtp encryption active
+     */
+    public boolean getHasZrtp() {
+        return hasZrtp;
+    }
+
+    /**
+     * This method should be only used by CSipSimple service
+     * 
+     * @param hasZrtp the hasZrtp to set
+     */
+    public void setHasZrtp(boolean hasZrtp) {
+        this.hasZrtp = hasZrtp;
     }
 }

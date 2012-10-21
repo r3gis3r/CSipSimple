@@ -473,7 +473,7 @@ public final class SipManager {
      * Major version x 1000 + minor version. <br/>
      * Major version are backward compatible.
      */
-    public static final int CURRENT_API = 2003;
+    public static final int CURRENT_API = 2004;
 
     /**
      * Ensure capability of the remote sip service to reply our requests <br/>

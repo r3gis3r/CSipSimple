@@ -35,6 +35,7 @@ import org.pjsip.pjsua.pjsip_inv_state;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_call_info;
+import org.pjsip.pjsua.zrtp_state_info;
 
 /**
  * Singleton class to manage pjsip calls. It allows to convert retrieve pjsip
@@ -88,6 +89,9 @@ public final class PjSipCalls {
                     .getCallId()));
             session.setMediaSecureInfo(secureInfo);
             session.setMediaSecure(!TextUtils.isEmpty(secureInfo));
+            zrtp_state_info zrtpInfo = pjsua.jzrtp_getInfoFromCall(session.getCallId());
+            session.setZrtpSASVerified(zrtpInfo.getSas_verified() == pjsuaConstants.PJ_TRUE);
+            session.setHasZrtp(zrtpInfo.getSecure() == pjsuaConstants.PJ_TRUE);
 
             // About video info
             int vidStreamIdx = pjsua.call_get_vid_stream_idx(session.getCallId());

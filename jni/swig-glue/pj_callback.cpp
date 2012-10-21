@@ -196,13 +196,13 @@ int on_set_micro_source_wrapper () {
 	return registeredCallbackObject->on_set_micro_source();
 }
 
-void on_zrtp_show_sas_wrapper(void* data, char* sas, int verified){
+void on_zrtp_show_sas_wrapper(pjsua_call_id call_id, char* sas, int verified){
 	pj_str_t sas_string = pj_str(sas);
-	registeredCallbackObject->on_zrtp_show_sas((int) data, &sas_string, verified);
+	registeredCallbackObject->on_zrtp_show_sas(call_id, &sas_string, verified);
 }
 
-void on_zrtp_update_transport_wrapper(void* data){
-	registeredCallbackObject->on_zrtp_update_transport((int) data);
+void on_zrtp_update_transport_wrapper(pjsua_call_id call_id){
+	registeredCallbackObject->on_zrtp_update_transport(call_id);
 }
 
 int timer_schedule_wrapper(int entry, int entryId, int time) {

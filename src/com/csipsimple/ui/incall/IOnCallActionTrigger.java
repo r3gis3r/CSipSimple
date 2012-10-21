@@ -109,6 +109,14 @@ public interface IOnCallActionTrigger {
      * Stop the video stream
      */
     int STOP_VIDEO = START_VIDEO + 1;
+    /**
+     * Stop the video stream
+     */
+    int ZRTP_TRUST = STOP_VIDEO + 1;
+    /**
+     * Stop the video stream
+     */
+    int ZRTP_REVOKE = ZRTP_TRUST + 1;
     
     /**
      * Called when the user make an action

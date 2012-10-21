@@ -202,8 +202,12 @@ interface ISipService{
 	String getPresenceStatus(long accountId);
 	
 	//Secure
-	void zrtpSASVerified(int dataPtr);
+	void zrtpSASVerified(int callId);
 	
 	// Video
 	void updateCallOptions(int callId, in Bundle options);
+	/**
+	 * Revoke a ZRTP SAS
+	 */ 
+	void zrtpSASRevoke(int callId);
 }

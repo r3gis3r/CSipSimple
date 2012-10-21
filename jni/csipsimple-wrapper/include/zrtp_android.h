@@ -14,8 +14,17 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 
 PJ_BEGIN_DECL
 
-PJ_DECL(void) jzrtp_SASVerified(long zrtp_data_p);
-PJ_DECL(int) jzrtp_getCallId(long zrtp_data_p);
+typedef struct zrtp_state_info {
+	pjsua_call_id call_id;
+	pj_bool_t secure;
+	pj_str_t sas;
+	pj_str_t cipher;
+	pj_bool_t sas_verified;
+} zrtp_state_info;
+
+PJ_DECL(void) jzrtp_SASVerified(pjsua_call_id call_id);
+PJ_DECL(void) jzrtp_SASRevoked(pjsua_call_id call_id);
+PJ_DECL(zrtp_state_info) jzrtp_getInfoFromCall(pjsua_call_id call_id);
 PJ_END_DECL
 
 
@@ -24,7 +33,7 @@ PJ_END_DECL
 extern "C" {
 #endif
 
-pj_str_t jzrtp_getInfo(pjmedia_transport* tp);
+zrtp_state_info jzrtp_getInfoFromTransport(pjmedia_transport* tp);
 
 #ifdef __cplusplus
 }

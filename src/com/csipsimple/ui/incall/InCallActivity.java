@@ -781,7 +781,9 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     }
                 }
             } else if (action.equals(SipManager.ACTION_ZRTP_SHOW_SAS)) {
-                runOnUiThread(new ShowZRTPInfoRunnable(intent.getIntExtra(Intent.EXTRA_UID, 0), intent.getStringExtra(Intent.EXTRA_SUBJECT)));
+                SipCallSession callSession = intent.getParcelableExtra(SipManager.EXTRA_CALL_INFO);
+                String sas = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                runOnUiThread(new ShowZRTPInfoRunnable(callSession, sas));
             }
         }
     };
@@ -1027,6 +1029,18 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     }
                     break;
                 }
+                case ZRTP_TRUST : {
+                    if(service != null) {
+                        service.zrtpSASVerified(call.getCallId());
+                    }
+                    break;
+                }
+                case ZRTP_REVOKE : {
+                    if(service != null) {
+                        service.zrtpSASRevoke(call.getCallId());
+                    }
+                    break;
+                }
             }
         } catch (RemoteException e) {
             Log.e(THIS_FILE, "Was not able to call service method", e);
@@ -1269,10 +1283,10 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
     
     private class ShowZRTPInfoRunnable implements Runnable, DialogInterface.OnClickListener {
         private String sasString;
-        private int dataPtr;
+        private SipCallSession callSession;
 
-        public ShowZRTPInfoRunnable(int aDataPtr, String sas) {
-            dataPtr = aDataPtr;
+        public ShowZRTPInfoRunnable(SipCallSession call, String sas) {
+            callSession = call;
             sasString = sas;
         }
 
@@ -1282,7 +1296,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 Log.d(THIS_FILE, "ZRTP confirmed");
                 if (service != null) {
                     try {
-                        service.zrtpSASVerified(dataPtr);
+                        service.zrtpSASVerified(callSession.getCallId());
                     } catch (RemoteException e) {
                         Log.e(THIS_FILE, "Error while calling service", e);
                     }

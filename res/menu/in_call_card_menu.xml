@@ -30,6 +30,10 @@
         android:showAsAction="never"
         android:title="@string/record"/>
     <item
+        android:id="@+id/zrtpAcceptance"
+        android:showAsAction="never"
+        android:title="@string/zrtp_trust_remote"/>
+    <item
         android:id="@+id/dtmfCallButton"
         android:icon="@drawable/ic_ab_dialpad"
         android:showAsAction="ifRoom"
