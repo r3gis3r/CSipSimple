@@ -26,15 +26,20 @@
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , "libpjsip", __VA_ARGS__)
 
 PJ_DEF(void) pj_android_log_msg(int level, const char *data, int len) {
-	if (level <= 1) {
-		LOGE("%s", data);
-	} else if (level == 2) {
-		LOGW("%s", data);
-	} else if (level == 3) {
-		LOGI("%s", data);
-	} else if (level == 4) {
-		LOGD("%s", data);
-	} else if (level >= 5) {
-		LOGV("%s", data);
+	const char delims[] = "\n";
+	char *line = strtok(data, delims);
+	while(line != NULL){
+		if (level <= 1) {
+			LOGE("%s", line);
+		} else if (level == 2) {
+			LOGW("%s", line);
+		} else if (level == 3) {
+			LOGI("%s", line);
+		} else if (level == 4) {
+			LOGD("%s", line);
+		} else if (level >= 5) {
+			LOGV("%s", line);
+		}
+		line = strtok(NULL, delims);
 	}
 }
