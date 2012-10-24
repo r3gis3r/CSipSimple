@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_advanced_display_name">ឈ្មោះ​គណនី</string>
+  <string name="w_advanced_display_name_desc">បង្ហាញ​​​ឈ្មោះ​សម្រាប់​គណនី​នេះ</string>
+  <string name="w_advanced_caller_id">លេខ​សម្គាល់​អ្នក​​ហៅ</string>
+  <string name="w_advanced_caller_id_desc">លេខ​សម្គាល់​អ្នក​ហៅ​ត្រូវ​​ផ្ញើពេល​ហៅ</string>
+  <string name="w_advanced_username">ឈ្មោះ​អ្នក​ប្រើ</string>
+  <string name="w_advanced_username_desc">ឈ្មោះ​អ្នក​ប្រើ​សម្រាប់​ផ្ទៀងផ្ទាត់​ម៉ាស៊ីន​មេ SIP (កុំ​សរសេរ @sip.server)</string>
+  <string name="w_advanced_password">ពាក្យ​សម្ងាត់</string>
+  <string name="w_advanced_password_desc">ពាក្យ​សម្ងាត់​សម្រាប់​​ផ្ទៀងផ្ទាត់​ម៉ាស៊ីន​មេ SIP</string>
+  <string name="w_advanced_use_tcp">ប្រើ TCP (មិនមែន UDP)</string>
+  <string name="w_advanced_proxy">ប្រូកស៊ី</string>
+  <string name="w_advanced_proxy_desc">ដែន​ប្រូកស៊ី/IP[:port] (ជា​ជម្រើស មិន​ត្រូវ​ការ​ជា​និច្ច​ឡើយ)</string>
+  <string name="w_advanced_auth_id">លេខ​សម្គាល់​​ផ្ទៀងផ្ទាត់ Sip</string>
+  <string name="w_advanced_auth_id_desc">ទុក​ឲ្យ​នៅ​ទទេ ចំពោះ​​អ្នក​ប្រើ​ដែល​មាន​​​ឈ្មោះ​​ដូច​គ្នា</string>
+</resources>

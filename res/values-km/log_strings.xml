@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="unknown">មិន​ស្គាល់</string>
+  <string name="type_incoming">ចូល</string>
+  <string name="type_outgoing">ចេញ</string>
+  <string name="type_missed">​ខកខាន</string>
+  <string name="callBack">ហៅ​ទៅ​វិញ</string>
+  <string name="callAgain">ហៅ​ម្ដង​ទៀត</string>
+  <string name="returnCall">ហៅ​ទៅ​វិញ</string>
+  <string name="call">ហៅ</string>
+  <string name="sip_call">ការ​ហៅ SIP</string>
+  <string name="no_call_history">គ្មាន​ប្រវត្តិ​ហៅ</string>
+</resources>

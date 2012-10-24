@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_onsip_authentication_name">ផ្ទៀងផ្ទាត់​ឈ្មោះ​អ្នក​ប្រើ​</string>
+  <string name="w_onsip_authentication_name_desc">កា​រផ្ទៀងផ្ទាត់​​អ្នក​ប្រើរបស់​ SIP</string>
+  <string name="w_onsip_username">ឈ្មោះ​អ្នក​ប្រើ SIP</string>
+  <string name="w_onsip_username_desc">ឈ្មោះ​អ្នក​ប្រើ​គណនី Sip</string>
+  <string name="w_onsip_server">ដែន</string>
+  <string name="w_onsip_server_desc">ដែន SIP</string>
+  <string name="w_onsip_password">ពាក្យ​សម្ងាត់ SIP</string>
+  <string name="w_onsip_password_desc">ពាក្យ​សម្ងាត់​គណនី SIP</string>
+</resources>

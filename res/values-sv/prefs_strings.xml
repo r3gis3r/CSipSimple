@@ -64,6 +64,8 @@
   <string name="turn_password_desc">Lösenord för autentisering av TURN</string>
   <string name="enable_stun">Aktivera STUN</string>
   <string name="enable_stun_desc">Slå på funktionen STUN</string>
+  <string name="enable_stun2">Använd nytt STUN-format</string>
+  <string name="enable_stun2_desc">STUN-begäran för att lösa kartlagda socketadresser skall använda det nya formatet</string>
   <string name="stun_server">Servrar för STUN</string>
   <string name="stun_server_desc">Servrar för STUN (VÄRD[:PORT], …)</string>
   <string name="enable_qos">Aktivera QoS</string>
@@ -95,7 +97,14 @@
   <string name="tsx_t1_timeout">Timeoutvärde för överföring av T1.</string>
   <string name="tsx_t2_timeout">Timeoutvärde för överföring av T2.</string>
   <string name="tsx_t4_timeout">Timeoutvärde för överföring av T4.</string>
+  <string name="tsx_td_timeout">Timer till Överföring slutförd för INVITE.</string>
   <string name="tsx_timeout_desc">Ange -1 för standardvärden åt RFC 3261</string>
+  <string name="network_route_polling">Kontrollera om nätverket ändras varje (minuter)</string>
+  <string name="network_route_polling_desc">Lösning för kontroll i Android 4.0 VPN. Låt vara 0 om inte i det här fallet för att inaktivera</string>
+  <string name="disable_tcp_switch">Inaktivera omkoppling av TCP</string>
+  <string name="disable_tcp_switch_desc">Om aktiverad, förhindra att stacken växlar till TCP för stora UDP-paket.</string>
+  <string name="add_bandwidth_tias_in_sdp">Lägg till bandbreddsmodifierare TIAS i SDP</string>
+  <string name="add_bandwidth_tias_in_sdp_desc">Enligt RFC3890. Behövs för video på Avaya-servrar, men bryter felaktig tolkning för vissa SIP-servrar.</string>
   <!--Security-->
   <string name="tls">TLS</string>
   <string name="secure_transport">Säkra transport</string>
@@ -131,6 +140,8 @@
   <string name="echo_cancellation_desc">Aktivera ekoannulering</string>
   <string name="enable_vad">Detektering av röstljud</string>
   <string name="enable_vad_desc">Aktivera detektering av röstljud</string>
+  <string name="enable_ns">Brusreducering</string>
+  <string name="enable_ns_desc">Fungerar om ekoannulering är aktiverad och WebRTC ekoannulering används</string>
   <string name="snd_mic_level">Förstärkning av mikrofon</string>
   <string name="snd_mic_level_desc">Justera nivån för högtalarsignalen (1 gör ingenting)</string>
   <string name="snd_speaker_level">Förstärkning av högtalare</string>
@@ -172,6 +183,8 @@
   <string name="has_io_queue_desc">Aktivera kö för Input/Output</string>
   <string name="set_audio_generate_tone">Tonhack</string>
   <string name="set_audio_generate_tone_desc">Generera en ton innan samtal görs</string>
+  <string name="restart_aud_on_routing_change">Starta om ström när dirigering ändras</string>
+  <string name="restart_aud_on_routing_change_desc">Obligatorisk för Blåtand när förvald klockfrekvens är annan än 8 kHz. Inaktivering kan hjälpa att byta snabbare.</string>
   <string name="band_for_wifi">Bandtyp för WiFi</string>
   <string name="band_for_3g">Bandtyp för 3G</string>
   <string name="band_for_gprs">Bandtyp för GPRS</string>
@@ -226,12 +239,18 @@
   <string name="frames_per_rtp_packet">Frames per RTP-paket</string>
   <string name="g729_frame_per_packet">G729 RTP frames per paket</string>
   <string name="ilbc_frame_per_packet">iLBC RTP frames per paket</string>
+  <string name="codec_h264_profile">Profil för H264</string>
+  <string name="codec_h264_level">Nivå för H264</string>
+  <string name="thread_count">Antal trådar</string>
+  <string name="thread_count_desc">Antal trådar som allokeras för den ursprungliga stacken</string>
   <!--UI-->
   <string name="general_ui">Allmänt användargränssnitt</string>
   <string name="native_dialer_integration">Ursprunglig integration med samtalshanterare</string>
   <string name="advanced_ui">Utökade anpassningar</string>
   <string name="integrate_with_native_dialer">Integration med samtalshanterare</string>
   <string name="integrate_with_native_dialer_desc">När du ringer med ursprunglig samtalshanterare blir du tillfrågad om du vill använda SIP eller mobil</string>
+  <string name="integrate_tel_privileged">Integrera privilegierad avsikt</string>
+  <string name="integrate_tel_privileged_desc">Olika sätt att integrera samtalshanterare. Du bör inaktivera detta om du använden den urpsrungliga integrerade.</string>
   <string name="integrate_with_native_calllogs">Integration med samtalsloggar</string>
   <string name="integrate_with_native_calllogs_desc">SIP-samtal kommer att slås samman (om möjligt) till ursprungliga samtalsloggar</string>
   <string name="dial_press_tone">Respons för kopplingston</string>

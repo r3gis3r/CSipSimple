@@ -6,7 +6,7 @@
   <string name="prefs_network">Netwerk</string>
   <string name="prefs_network_desc">Hoe SIP kan worden verbonden naar het netwerk</string>
   <string name="prefs_media">Media</string>
-  <string name="prefs_media_desc">Codecs en gedrag van ingesprek geluid</string>
+  <string name="prefs_media_desc">Coderingen en gedrag van geluid tijdens oproepen</string>
   <string name="prefs_ui">Gebruikersinterface</string>
   <string name="prefs_ui_desc">Gebruikersinterface aanpassen</string>
   <string name="prefs_calls">Oproep opties</string>
@@ -14,7 +14,7 @@
   <!--Network-->
   <string name="for_incomings">Voor inkomende gesprekken</string>
   <string name="for_outgoings">Voor uitgaande gesprekken</string>
-  <string name="perfs">Uitvoeringen</string>
+  <string name="perfs">Prestaties</string>
   <string name="transport">Transport</string>
   <string name="transport_desc">Forceer het gebruik van een transport voor dit account</string>
   <string name="use_wifi">Gebruik Wi-Fi</string>
@@ -31,6 +31,8 @@
   <string name="use_gprs">Gebruik GPRS</string>
   <string name="lock_wifi">Vergrendel Wi-Fi</string>
   <string name="lock_wifi_desc">Voorkom Wi-Fi-slaapstand wanneer SIP verbonden is</string>
+  <string name="lock_wifi_perfs">Hoge prestatiemodus</string>
+  <string name="lock_wifi_perfs_desc">Wifi instellen op Hoge prestatiemodus (kost meer batterij)</string>
   <string name="enable_tcp">TCP</string>
   <string name="enable_tcp_desc">TCP-transport inschakelen</string>
   <string name="enable_tls">TLS</string>
@@ -62,6 +64,8 @@
   <string name="turn_password_desc">Wachtwoord voor TURN authentificatie</string>
   <string name="enable_stun">STUN inschakelen</string>
   <string name="enable_stun_desc">Zet STUN aan</string>
+  <string name="enable_stun2">Gebruik nieuw STUN formaat</string>
+  <string name="enable_stun2_desc">STUN verzoeken voor het oplossen van socket verbindingsadressen horen het nieuwe formaat te gebruiken</string>
   <string name="stun_server">STUN servers</string>
   <string name="stun_server_desc">STUN servers (HOST[:PORT], …)</string>
   <string name="enable_qos">Zet QoS aan</string>
@@ -79,11 +83,28 @@
   <string name="use_compact_form">Gebruik compact SIP</string>
   <string name="use_compact_form_desc">Verminder SIP pakketgrootte. Werkt mogelijk niet bij oude SIP servers.</string>
   <string name="user_agent">Gebruikersagent</string>
+  <string name="user_agent_desc">Middel gepresenteerd door de applicatie (indien standaard wordt info toegevoegd)</string>
   <!--<string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>-->
   <string name="force_no_update">Forceer geen update</string>
+  <string name="force_no_update_desc">Een onstabiele aankondiging aan de andere partij om UPDATE te ondersteunen terwijl dit niet zo is. Deze optie forceert de oude methode om UPDATE/re-INVITE bij te houden.</string>
+  <string name="timer_min_se">Minimum sessie expiratie</string>
+  <string name="timer_min_se_desc">Minimum sessie vervalperiode in seconden. Mag niet lager dan 90 zijn.</string>
+  <string name="timer_sess_expires">Sessie expiratie periode</string>
+  <string name="timer_sess_expires_desc">Sessie vervalperiode in seconden. Mag niet lager dan min_se zijn.</string>
   <string name="sip_protocol">SIP protocol</string>
   <string name="sip_protocol_desc">SIP protocol aanpassing.</string>
+  <string name="tsx_t1_timeout">Transactie T1 expiratiewaarde</string>
+  <string name="tsx_t2_timeout">Transactie T2 expiratiewaarde</string>
+  <string name="tsx_t4_timeout">Transactie T4 expiratiewaarde</string>
+  <string name="tsx_td_timeout">Transactie compleet timer voor INVITE.</string>
+  <string name="tsx_timeout_desc">Laat -1 voor standaard RFC 3261 waardes</string>
+  <string name="network_route_polling">Controleer voor netwerkveranderingen iedere (minuten)</string>
+  <string name="network_route_polling_desc">Mogelijke Android 4.0 VPN check oplossing. Op 0 laten staan om dit gedeactiveerd te laten.</string>
+  <string name="disable_tcp_switch">TCP schakel uitschakelen</string>
+  <string name="disable_tcp_switch_desc">Wanneer geactiveerd, wordt er geen gebruik gemaakt van TCP voor grote UDP pakketten.</string>
+  <string name="add_bandwidth_tias_in_sdp">Gebruik bandbreedte-wijziger TIAS in SDP</string>
+  <string name="add_bandwidth_tias_in_sdp_desc">Per RFC3890.  Benodigd voor video op Avaya servers, maar werkt niet altijd op andere SIP servers.</string>
   <!--Security-->
   <string name="tls">TLS</string>
   <string name="secure_transport">Beveiligd transport</string>
@@ -114,7 +135,7 @@
   <!--Media-->
   <string name="audio_quality">Geluidskwaliteit</string>
   <string name="audio_volume">Geluidsniveau</string>
-  <string name="codecs">Codecs</string>
+  <string name="codecs">Coderingen</string>
   <string name="echo_cancellation">Echo-onderdrukking</string>
   <string name="echo_cancellation_desc">Activeer echo-onderdrukking</string>
   <string name="enable_vad">Voice audio detection</string>
@@ -125,6 +146,8 @@
   <string name="snd_mic_level_desc">Pas het signaalniveau van de microfoon aan (1: doe niets)</string>
   <string name="snd_speaker_level">Luidsprekerversterking</string>
   <string name="snd_speaker_level_desc">Pas het signaalniveau van de luidspreker aan (1: doe niets)</string>
+  <string name="snd_bt_mic_level">Bluetooth microfoonversterking</string>
+  <string name="snd_bt_speaker_level">Bluetooth luisterversterking</string>
   <string name="snd_stream_level">Initiële stroomniveau</string>
   <string name="snd_stream_level_desc">Stel het initiële niveau voor de geluidsstroom in (Android stroom)</string>
   <string name="snd_auto_close_time">Tijd voor automatisch sluiten</string>
@@ -153,20 +176,26 @@
   <string name="use_webrtc_hack">Gebruik WebRTC implementatie</string>
   <string name="use_webrtc_hack_desc">Implementatie gemaakt door het WebRTC team</string>
   <string name="do_focus_audio">Focus audio</string>
+  <string name="do_focus_audio_desc">Uitzetten zal resulteren in overlappen met muziek, maar kan helpen bij de routering</string>
   <string name="micro_source">Microfoon bron</string>
   <string name="micro_source_desc">Bron voor de microfoon. Een geschikte waarde kiezen kan de echoannulering verbeteren.</string>
   <string name="has_io_queue">IO-wachtrij</string>
   <string name="has_io_queue_desc">Activeer wachtrij voor invoer/uitvoer</string>
   <string name="set_audio_generate_tone">Tone hack</string>
   <string name="set_audio_generate_tone_desc">Genereer een toon voor het doen van een oproep</string>
+  <string name="restart_aud_on_routing_change">Herstart stream bij veranderen routering</string>
+  <string name="restart_aud_on_routing_change_desc">Verplicht voor Bluetooth wanneer de standaard kloksnelheid verschilt van 8kHz. Uitzetten kan helpen om sneller te wisselen tussen spreker en luisteraar.</string>
   <string name="band_for_wifi">Band type voor Wi-Fi</string>
   <string name="band_for_3g">Band type voor 3G</string>
   <string name="band_for_gprs">Band type voor GPRS</string>
   <string name="band_for_edge">Band type voor EDGE</string>
   <string name="band_for_other">Band type anders</string>
-  <string name="codecs_band_types">Verbindingsbandbreedte type voor codecs</string>
+  <string name="codecs_band_types">Verbindingsbandbreedte type voor coderingen</string>
   <string name="use_sgs_call_hack">Gebruik Samsung Galaxy Hack</string>
+  <string name="use_sgs_call_hack_desc">Vooraf ingestelde modus om routering op te lossen</string>
   <string name="audio_implementation">Audio implementatie</string>
+  <string name="audio_implementation_desc">Audiodriver</string>
+  <string name="digest">Verkort overzicht</string>
   <string name="pgp">PGP</string>
   <string name="plain_password">Eenvoudig wachtwoord</string>
   <string name="data_digest">Digest-data</string>
@@ -197,14 +226,31 @@
   <string name="create_zrtp">Creëer ZRTP</string>
   <string name="default_str">Standaard</string>
   <string name="auto_connect_bluetooth">Automatisch verbinden bluetooth</string>
+  <string name="auto_connect_bluetooth_desc">Probeer om BT SCO automatisch te gebruiken (kan de standaard audio routering niet werkend maken)</string>
+  <string name="auto_connect_speaker">Automatisch achterste speaker verbinden</string>
+  <string name="auto_connect_speaker_desc">Automatisch achterste speaker gebruiken bij het antwoorden van een oproep</string>
+  <string name="auto_detect_speaker">Automatisch speaker gebruik detecteren</string>
+  <string name="auto_detect_speaker_desc">Gebruik achterste speaker wanneer de telefoon horizontaal is tijdens een oproep.</string>
+  <string name="codecs_per_bandwidth">Coderingsprioriteitenlijst per bandbreedte</string>
+  <string name="codecs_per_bandwidth_desc">Gebruik verschillende coderingsprioriteitenlijsten voor snelle en langzame netwerken</string>
+  <string name="audio_troubleshooting">Audioprobleemoplossing</string>
+  <string name="audio_troubleshooting_desc">Mogelijke oplossing voor audio routering</string>
+  <string name="codecs_extra_settings">Extra coderings instellingen</string>
+  <string name="frames_per_rtp_packet">Frames per RTP pakket</string>
+  <string name="g729_frame_per_packet">G729 RTP frames per pakket</string>
+  <string name="ilbc_frame_per_packet">iLBC RTP frames per pakket</string>
   <string name="codec_h264_profile">H264 profiel</string>
   <string name="codec_h264_level">H264 niveau</string>
+  <string name="thread_count">Aantal threads</string>
+  <string name="thread_count_desc">Aantal threads toegewezen voor de SIP stack.</string>
   <!--UI-->
   <string name="general_ui">Algemene gebruikersinterface</string>
   <string name="native_dialer_integration">Integratie met ingebouwde kiezer</string>
   <string name="advanced_ui">Geavanceerde aanpassingen</string>
   <string name="integrate_with_native_dialer">Integratie met kiezer</string>
   <string name="integrate_with_native_dialer_desc">Wanneer u kiest met de ingebouwde kiezer zal u worden gevraagd of u via SIP of mobiel wilt bellen</string>
+  <string name="integrate_tel_privileged">Integreer bevoorrechte intenties</string>
+  <string name="integrate_tel_privileged_desc">Alternatieve manier om in de standaard telefoonkiezer te integreren. Wanneer u deze inschakelt, hoort u de standaard telefoonkiezerintegratie uit te schakelen.</string>
   <string name="integrate_with_native_calllogs">Integratie met de gesprekkenlijst</string>
   <string name="integrate_with_native_calllogs_desc">SIP-oproepen zullen worden opgenomen (indien mogelijk) in de ingebouwde gesprekkenlijst</string>
   <string name="dial_press_tone">Kiestoon terugkoppeling</string>
@@ -237,6 +283,8 @@
   <string name="obtain_themes_desc">Verkrijg thema\'s uit de Play Store</string>
   <string name="display_icon_in_status_bar_nbr">Toon nummer in notificatiebalk</string>
   <string name="display_icon_in_status_bar_nbr_desc">Toon het aantal geregistreerde accounts in de notificatiebalk</string>
+  <string name="log_use_direct_file">Direct in een bestand loggen</string>
+  <string name="log_use_direct_file_desc">Direct naar een bestand loggen in plaats van logcat</string>
   <!--Fast settings-->
   <string name="android_integration">Integreer met Android</string>
   <string name="android_integration_desc">Integratie met ingebouwde kiezer en gesprekslijsten</string>
@@ -266,4 +314,5 @@
   <string name="expert_preferences">Expert-modus</string>
   <string name="normal_preferences">Normale modus</string>
   <!--Generic-->
+  <string name="leave_minus_1_default">Laat -1 voor standaard.</string>
 </resources>

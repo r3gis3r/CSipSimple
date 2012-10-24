@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_sipgate_display_name">ឈ្មោះ​គណនី</string>
+  <string name="w_sipgate_display_name_desc">បង្ហាញ​​ឈ្មោះសម្រាប់​​គណនី​នេះ</string>
+  <string name="w_sipgate_username">លេខ​សម្គាល់ SIP</string>
+  <string name="w_sipgate_username_desc">ខុស​ពី​ការ​ចូល sipgate របស់​អ្នក ! ពិនិត្យ​លេខ​សម្គាល់ SIP អ្នក​លើ​តំបន់​បណ្ដាញ​ sipgate</string>
+  <string name="w_sipgate_password">ពាក្យ​សម្ងាត់ SIP</string>
+  <string name="w_sipgate_password_desc">ខុសពី​ពាក្យ​សម្ងាត់​របស់​អ្នក ! ពិនិត្យ​​ពាក្យ​សម្ងាត់ SIP អ្នក​លើ​តំបន់​បណ្ដាញ sipgate</string>
+  <string name="w_sipgate_server_desc">អ្វី​មួយ​ដូច​ជា៖ sipgate.co.uk</string>
+</resources>

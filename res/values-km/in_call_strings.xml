@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="take_call">ឆ្លើយតប</string>
+  <string name="decline_call">មិន​អើពើ</string>
+  <string name="clear_call">បញ្ចប់</string>
+  <string name="touch_lock">ប៉ះ​ពីរដង​ដើម្បីដោះសោ</string>
+  <string name="dialpad">DTMF</string>
+  <string name="bluetooth">ប៊្លូធូស</string>
+  <string name="speaker">អូប៉ាល័រ</string>
+  <string name="mute">បិទ​សំឡេង</string>
+  <string name="add_call">បន្ថែម​ការ​ហៅ</string>
+  <string name="call_state_calling">កំពុង​ហៅ…</string>
+  <string name="call_state_confirmed">កំពុង​និយាយ</string>
+  <string name="call_state_connecting">កំពុង​តភ្ជាប់…</string>
+  <string name="call_state_disconnected">ឈប់​និយាយ</string>
+  <string name="call_state_early">កំពុង​រោទ៍…</string>
+  <string name="call_state_incoming">កំពុង​ហៅ​ចូល…</string>
+  <string name="call_state_null">កំហុស</string>
+  <string name="unlock">ដោះ​សោ</string>
+  <string name="record">ថត</string>
+  <string name="stop_recording">ឈប់​ថត</string>
+  <string name="xfer_uri">ផ្ទេរ​ទៅ​លេខ</string>
+  <string name="hold_call">រង់ចាំ</string>
+  <string name="on_hold">កំពុង​រង់ចាំ</string>
+  <string name="resume_call">បន្ត</string>
+  <string name="transfer_to_call">ផ្ទេរ​ទៅ​ការ​ហៅ</string>
+  <string name="send_dtmf">ផ្ញើ DTMF</string>
+</resources>

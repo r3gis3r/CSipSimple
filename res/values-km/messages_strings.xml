@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc.-->
+  <string name="app_label">ការ​ផ្ញើ​សារ</string>
+  <!--Command name to open a Compose screen; displays in conversation list-->
+  <string name="new_message">សារ​ថ្មី</string>
+  <!--Summary text under "New Message" command; displays in conversation list-->
+  <string name="create_new_message">តែង​សារ​ថ្មី</string>
+  <!--Menu item for starting a new conversation-->
+  <string name="menu_compose_new">តែង</string>
+  <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
+  <string name="menu_call">ហៅ</string>
+  <!--Menu item for deleting all conversations-->
+  <string name="menu_delete_all">លុប​សែស្រឡាយ</string>
+  <!--Context menu item on an individual conversation for deleting that conversation-->
+  <string name="menu_delete">លុប​សែស្រឡាយ</string>
+  <!--Context menu item on an individual conversation for viewing that conversation-->
+  <string name="menu_view">មើល​សែស្រឡាយ</string>
+  <!--Name to use when we have an unspecified sender-->
+  <string name="anonymous_recipient">អនាមិក</string>
+  <!--Name of the local user when displaying sender of an outgoing message (personal pronoun)-->
+  <string name="messagelist_sender_self">ខ្ញុំ</string>
+  <string name="delete_message">លុប​សារ</string>
+  <!--Abbreviation for "kilobyte"-->
+  <string name="kilobyte">KB</string>
+  <!--Dialog box title brought up when warning the user that a message could not be delivered-->
+  <string name="undelivered_msg_dialog_title">មិន​បាន​បញ្ជូន​សារ</string>
+  <!--Dialog box message indicating that a message could not be delivered-->
+  <string name="undelivered_sms_dialog_body">មិន​អាច​ផ្ញើ​សារ​នេះ​បាន​ទេ ។</string>
+  <!--Menu item for deleting the entire conversation currently being viewed-->
+  <string name="delete_thread">លុប​សែស្រឡាយ</string>
+  <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
+         to be downloaded (imperative verb)-->
+  <string name="download">ទាញ​យក</string>
+  <!--Message displayed in place of the "download message" button once it has been pressed,
+         indicating that the download is in progress-->
+  <string name="downloading">កំពុង​ទាញ​យក</string>
+  <!--Individual message context menu item-->
+  <string name="copy_message_text">ចម្លង​អត្ថបទ​សារ</string>
+  <!--Header for context menu on an individual message-->
+  <string name="message_options">ជម្រើស​សារ</string>
+  <!--Button text on edit slide screen indicating the user wants to finish editing that slide-->
+  <string name="done">ធ្វើ​រួច</string>
+  <!--Title bar displayed in compose message activity before a recipient has been selected-->
+  <string name="compose_title">តែង</string>
+  <!--Menu item in conversation screen for attaching something to the message being composed-->
+  <string name="add_attachment">ភ្ជាប់</string>
+  <!--Button next to an attachment during message composition to view the attachment (imperative verb)-->
+  <string name="view">មើល</string>
+  <!--Button in conversation screen for sending the SMS message currently being composed (imperative verb)-->
+  <string name="send">ផ្ញើ</string>
+  <!--Menu item in conversation screen for returning to the conversation list-->
+  <string name="all_threads">សែស្រឡាយ​ទាំងអស់</string>
+  <!--Hint text in message body field when keyboard is exposed-->
+  <string name="type_to_compose_text_enter_to_send">វាយ​អក្សរ​ដើម្បី​តែង</string>
+  <!--Hint text in message body field when keyboard is hidden-->
+  <string name="open_keyboard_to_compose_message">បើក​ក្ដារចុច​ដើម្បី​តែង​សារ</string>
+  <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
+  <string name="image_too_large">រូបភាព​ធំ​ពេក</string>
+  <!--Dialog message text asking the user if he wants to resize the picture being attached-->
+  <string name="ask_for_automatically_resize">ប្ដូរ​ទំហំ​រូបភាព​ស្វ័យប្រវត្តិ​នៅ​មុន​ពេល​ផ្ញើ​ ?</string>
+  <!--Toast message while an image is being resized-->
+  <string name="compressing">រូបភាព​ធំ​ពេក ។ កំពុង​បង្ហាប់...</string>
+  <!--Context menu item on a message recipient for viewing their contact info-->
+  <string name="menu_view_contact">មើល​ទំនាក់ទំនង</string>
+  <!--Context menu item on a message recipient for adding them to the user's
+         contacts (used if the recipient is not already in the address book)-->
+  <string name="menu_add_to_contacts">បន្ថែម​ទៅ​ទំនាក់ទំនង</string>
+  <!--Sender to be used if the sender address has been hidden-->
+  <string name="hidden_sender_address">លាក់​អាសយដ្ឋាន​អ្នក​ផ្ញើ</string>
+  <!--Text to be used for affirmative response button in dialog boxes-->
+  <string name="yes">យល់ព្រម</string>
+  <!--Text to be used for negative response button in dialog boxes-->
+  <string name="no">បោះបង់</string>
+  <!--Button text used for editing a slideshow (imperative verb)-->
+  <string name="edit">កែសម្រួល</string>
+  <!--Settings screen menu item for restoring all settings to default-->
+  <string name="restore_default">ស្ដារ​ការ​កំណត់​លំនាំដើម</string>
+  <!--Confirm Delete-->
+  <!--Delete confirmation dialog title-->
+  <string name="confirm_dialog_title">លុប</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <string name="confirm_delete_conversation">សែស្រឡាយ​ទាំងមូល​នឹង​ត្រូវ​លុប ។</string>
+  <!--Delete all threads confirmation dialog message-->
+  <string name="confirm_delete_all_conversations">សែស្រឡាយ​ទាំងអស់​នឹង​ត្រូវ​លុប ។</string>
+  <!--Delete message confirmation dialog message-->
+  <string name="confirm_delete_message">សារ​នឹង​ត្រូវ​បាន​លុប ។</string>
+  <!--Delete message confirmation dialog message for a locked message-->
+  <string name="confirm_delete_locked_message">តើ​អ្នក​ពិតជា​ចង់​លុប​សារ​ជាប់​សោ​នេះ​មែន​ឬ ?</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <string name="confirm_delete_all_messages">សែស្រឡាយ​ទាំងមូល​នឹង​ត្រូវ​លុប ។</string>
+  <!--Delete button title-->
+  <string name="delete">លុប</string>
+  <!--Status in "Report" window-->
+  <string name="status_none">(គ្មាន)</string>
+  <!--Status in "Report" window-->
+  <string name="status_pending">មិន​ទាន់​សម្រេច</string>
+  <!--Status in "Report" window-->
+  <string name="status_received">បាន​ទទួល</string>
+  <!--Status in "Report" window-->
+  <string name="status_failed">មិន​ជោគជ័យ</string>
+  <!--Status in "Report" window-->
+  <string name="status_unread">មិន​ទាន់​អាន</string>
+  <!--Status in "Report" window-->
+  <string name="status_rejected">បាន​បដិសេធ</string>
+  <!--Label in "Report" window-->
+  <!--Label in "Report" window-->
+  <!--Menu item-->
+  <!--Label for the "Me" number of this phone.-->
+  <!--Brief small label shown to right of message when it is being sent.-->
+</resources>

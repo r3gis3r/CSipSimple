@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_ovh_phone_number_desc">លេខ​ទូរស័ព្ទ​គួរ​មាន​​ទ្រង់ទ្រាយ​ដូច 0033xxxxxx</string>
+  <string name="w_sapo_phone_number_desc">លេខ​ទូរស័ព្ទ​គួរ​មាន​​ទ្រង់ទ្រាយ​ដូច +35130xxxxxx</string>
+  <string name="w_pbxes_user_extension">ផ្នែក​បន្ថែម​អ្នក​ប្រើ (អ្វី​មួយ​ដូច user-1)</string>
+</resources>

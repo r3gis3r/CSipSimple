@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_basic_username">អ្នក​ប្រើ</string>
+  <string name="w_basic_username_desc">ឈ្មោះ​​គណនី / ចូល (កុំ​សរសេរ @sip.server)</string>
+  <string name="w_basic_password">ពាក្យ​សម្ងាត់</string>
+  <string name="w_basic_password_desc">ពាក្យ​សម្ងាត់​ចូល​គណនីអ្នក</string>
+</resources>

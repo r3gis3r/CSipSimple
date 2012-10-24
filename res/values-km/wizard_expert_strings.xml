@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_expert_display_name">ឈ្មោះ​គណនី</string>
+  <string name="w_expert_display_name_desc">បង្ហាញ​ឈ្មោះ​សម្រាប់​គណនី​នេះ</string>
+  <string name="w_expert_acc_id">លេខ​សម្គាល់​គណនី</string>
+  <string name="w_expert_acc_id_desc">ទ្រង់ទ្រាយ ៖ \"DisplayName &lt;sip:login@registrar&gt;\"</string>
+  <string name="w_expert_reg_uri">URI ​ចុះ​ឈ្មោះ</string>
+  <string name="w_expert_reg_uri_desc">ទ្រង់ទ្រាយ៖ \"sip:registrar.net[:port]\"</string>
+  <string name="w_expert_realm">តំបន់</string>
+  <string name="w_expert_realm_desc">ដែន​​ផ្ទៀងផ្ទាត់​ (បើ​អ្នក​មិន​ស្គាល់ ប្រើ \'*\')</string>
+  <string name="w_expert_username">ឈ្មោះ​អ្នក​ប្រើ</string>
+  <string name="w_expert_username_desc">ឈ្មោះ​អ្នក​ប្រើ​សម្រាប់​​​ផ្ទៀងផ្ទាត់</string>
+  <string name="w_expert_data">ទិន្នន័យ (ពាក្យសម្ងាត់)</string>
+  <string name="w_expert_data_desc">ពាក្យ​សម្ងាត់ (ឬ​ទិន្នន័យ​ផ្សេង) សម្រាប់​​​ផ្ទៀងផ្ទាត់</string>
+  <string name="w_expert_datatype">ប្រភេទ​ទិន្នន័យ</string>
+  <string name="w_expert_datatype_desc">ប្រភេទ​ទិន្នន័យ</string>
+  <string name="w_expert_t_proxy">ប្រូកស៊ី</string>
+  <string name="w_expert_proxy">URI ប្រូកស៊ី</string>
+  <string name="w_expert_proxy_desc">ទ្រង់ទ្រាយ៖ \"sip:proxy.net[:port]\"</string>
+  <string name="w_expert_use_tcp">ប្រើ TCP (មិន​មែន UDP)</string>
+  <string name="w_expert_prevent_tcp">ការពារ TCP (សាកល្បង​តែ UDP)</string>
+  <string name="w_expert_publish_enabled">បាន​បើក​ការ​ផ្សាយ</string>
+  <string name="w_expert_reg_timeout">រយៈ​ពេល​ចុះ​​ឈ្មោះ (វិ.)</string>
+  <string name="w_expert_reg_dbr">ការ​ចុះ​​ឈ្មោះ​​​ពន្យារ​ពេល​មុន​​​ពេល​ផ្ទុក​ឡើង​វិញ (វិ.)</string>
+  <string name="w_expert_reg_dbr_desc">កំណត់​ចំនួន​វិនាទី​ ដើម្បី​ផ្ទុក​ការ​ចុះ​​ឈ្មោះ​ម៉ាស៊ីន មុន​ពេល​ការ​ចុះ​ឈ្មោះ​ផុត​កំណត់ ។</string>
+  <string name="w_expert_ka_interval">ចន្លោះ​ពេល Keep-alive (វិ.)</string>
+  <string name="w_expert_force_contact">បង្ខំ​ទំនាក់ទំនង</string>
+  <string name="w_expert_allow_contact_rewrite">អនុញ្ញាត​ឲ្យ​សរសេរ​ទំនាក់ទំនង​ឡើង​វិញ</string>
+  <string name="w_expert_contact_rewrite_method">វិធីសាស្ត្រ​សរសេរ​ទំនាក់ទំនង​ឡើង​​វិញ</string>
+  <string name="w_expert_reg_use_proxy">របៀប​ប្រើ​ប្រូកស៊ី</string>
+  <string name="w_expert_try_clean_registers">ព្យាយាម​​សម្អាត​ការ​ចុះ​ឈ្មោះ</string>
+  <string name="w_expert_try_clean_registers_desc">អនុញ្ញាត​ឲ្យ​កម្មវិធី​​​សម្អាត​​ការ​ចុះ​ឈ្មោះ​ចាស់ៗ បើចាំបាច់</string>
+  <string name="w_expert_rtp_bound_addr">អាសយដ្ឋានភ្ជាប់ RTP</string>
+  <string name="w_expert_rtp_bound_addr_desc">ជា​ជម្រើស​ដែល​រន្ធ​គួរ​​​​​ត្រូវ​​ភ្ជាប់ ។ ជម្រើស​ភ្ជាប់​រន្ធ​ដែល​ជា​ចំណុច​ប្រទាក់​ជាក់លាក់ (ជំនួស​ឲ្យ 0.0.0.0)</string>
+  <string name="w_expert_rtp_public_addr">អាសយដ្ឋាន​សាធារណៈ​ RTP</string>
+  <string name="w_expert_rtp_public_addr_desc">ជា​ជម្រើស​ត្រូវ​ផ្សាយ​អាសយដ្ឋាន​បញ្ជូន RTP ។</string>
+  <string name="w_expert_media_transport">ការ​បញ្ជូន​មេឌៀ</string>
+  <string name="w_expert_mwi_enabled">ជាវ MWI</string>
+  <string name="w_expert_mwi_enabled_desc">ទទួល​បាន​ការ​ជូន​ដំណឹង​ប្រអប់​​សំបុត្រ​ជា​សំឡេង</string>
+  <string name="w_expert_allow_via_rewrite">អនុញ្ញាត​តាម​រយៈ​សរសេរ​ឡើង​វិញ</string>
+  <string name="w_expert_allow_via_rewrite_desc">កំណត់​តាមរយៈ​អ្វី​បានផ្ញើ​ ដើម្បី​ប្រើ​​អាសយដ្ឋាន​ចំណុច​ប្រទាក់​តែ​មួយ​ដូច​មាន​ក្នុង​សំណើ​ចុះឈ្មោះ</string>
+</resources>

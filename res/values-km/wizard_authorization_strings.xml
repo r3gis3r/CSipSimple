@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_authorization_auth_name">ឈ្មោះ​​ផ្ទៀងផ្ទាត់</string>
+  <string name="w_authorization_auth_name_desc">​ការ​ផ្ទៀងផ្ទាត់ sip</string>
+  <string name="w_authorization_phone_number">ឈ្មោះ​អ្នកប្រើ</string>
+  <string name="w_authorization_phone_number_desc">គណនី​អ្នកប្រើ sip</string>
+</resources>

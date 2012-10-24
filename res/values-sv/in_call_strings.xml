@@ -19,5 +19,10 @@
   <string name="unlock">Lås upp</string>
   <string name="record">Spela in</string>
   <string name="stop_recording">Avsluta inspelning</string>
+  <string name="xfer_uri">Överför till nummer</string>
   <string name="hold_call">Håll kvar</string>
+  <string name="on_hold">Parkerad</string>
+  <string name="resume_call">Återta</string>
+  <string name="transfer_to_call">Överför till samtal</string>
+  <string name="send_dtmf">Skicka DTFM</string>
 </resources>

@@ -11,4 +11,9 @@
   <string name="w_common_server">Server</string>
   <string name="w_common_server_desc">Domän/IP[:port] för SIP-server</string>
   <string name="create_account">Skapa konto</string>
+  <string name="first_name">Förnamn</string>
+  <string name="last_name">Efternamn</string>
+  <string name="email_address">E-postadress</string>
+  <string name="captcha">Captcha</string>
+  <string name="country_code">Landskod</string>
 </resources>

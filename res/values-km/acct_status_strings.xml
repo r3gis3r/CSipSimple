@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="acct_inactive">អសកម្ម</string>
+  <string name="acct_unregistered">មិន​បាន​ចុះឈ្មោះ</string>
+  <string name="acct_expired">ការ​ចុះឈ្មោះ​បាន​ផុត​កំណត់</string>
+  <string name="acct_registering">កំពុង​ចុះឈ្មោះ...</string>
+  <string name="acct_registered">បាន​ចុះឈ្មោះ</string>
+  <string name="acct_regerror">កំហុស​ពេល​ចុះឈ្មោះ</string>
+  <string name="acct_regfailed">ការ​ចុះឈ្មោះ​បាន​បរាជ័យ ពិនិត្យ​ការ​កំណត់​រចនាសម្ព័ន្ធ​របស់​អ្នក</string>
+</resources>

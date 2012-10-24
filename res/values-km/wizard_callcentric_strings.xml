@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="w_callcentric_display_name">ឈ្មោះ​គណនី</string>
+  <string name="w_callcentric_display_name_desc">បង្ហាញ​ឈ្មោះ​សម្រាប់​គណនី​នេះ</string>
+  <string name="w_callcentric_phone_number">លេខ​ទូរស័ព្ទ SIP</string>
+  <string name="w_callcentric_phone_number_desc">លេខ​ទូរស័ព្ទ Callcentric SIP (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">ពាក្យសម្ងាត់</string>
+  <string name="w_callcentric_password_desc">ពាក្យសម្ងាត់​សម្រាប់​គណនី Callcentric</string>
+</resources>
