@@ -323,14 +323,18 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 .setTitle(callInfo.isLocalHeld() ? R.string.resume_call : R.string.hold_call);
         btnMenuBuilder.findItem(R.id.videoCallButton).setVisible(active && canVideo && !callInfo.mediaHasVideo());
         
+
+        // DTMF
         active = !callInfo.isAfterEnded()
                 && (callInfo.getCallState() == InvState.EARLY
                         || callInfo.getCallState() == InvState.CONFIRMED || callInfo.getCallState() == InvState.CONNECTING);
         btnMenuBuilder.findItem(R.id.dtmfCallButton).setVisible(active);
         
+        // Info
         active = !callInfo.isAfterEnded();
         btnMenuBuilder.findItem(R.id.detailedDisplayCallButton).setVisible(active);
         
+        // Record
         active = CustomDistribution.supportCallRecord();
         if(!callInfo.isRecording() && !callInfo.canRecord()) {
             active = false;
@@ -341,7 +345,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         btnMenuBuilder.findItem(R.id.recordCallButton).setVisible(active).setTitle(
                 callInfo.isRecording() ? R.string.stop_recording : R.string.record);
         
-        // ZRTP stuff
+        // ZRTP
         active = callInfo.getHasZrtp() && !callInfo.isAfterEnded();
         btnMenuBuilder.findItem(R.id.zrtpAcceptance).setVisible(active).setTitle(
                 callInfo.isZrtpSASVerified() ? R.string.zrtp_revoke_trusted_remote : R.string.zrtp_trust_remote);
@@ -567,7 +571,6 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
 
     
     private void dispatchTriggerEvent(int whichHandle) {
-        Log.d(THIS_FILE, "dispatch " + onTriggerListener);
         if (onTriggerListener != null) {
             onTriggerListener.onTrigger(whichHandle, callInfo);
         }

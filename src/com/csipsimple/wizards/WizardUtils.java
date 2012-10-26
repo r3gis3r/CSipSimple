@@ -311,6 +311,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_oneworldsip, 45, 
                     new Locale[]{}, false, true, 
                     OneWorld.class));
+            WIZARDS_DICT.put("PTTJAPAN", new WizardInfo("PTTJAPAN", "PTTJapan", 
+                    R.drawable.ic_wizard_pttjapan, 45, 
+                    new Locale[]{}, false, true, 
+                    PTTJapan.class));
             
             
 			
@@ -795,6 +799,13 @@ public class WizardUtils {
                     R.drawable.ic_wizard_aaisp, 20, 
                     new Locale[]{ Locale.UK }, false, false, 
                     Aaisp.class));
+            WIZARDS_DICT.put("YESMY", new WizardInfo("YESMY", "Yes.my", 
+                    R.drawable.ic_wizard_yesmy, 10, 
+                    new Locale[]{
+                        locale("ms_MY")
+                    }, false, false, YesMy.class));
+            
+            
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

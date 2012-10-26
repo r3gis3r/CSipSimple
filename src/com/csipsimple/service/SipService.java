@@ -818,8 +818,6 @@ public class SipService extends Service {
 
         @Override
         public void updateCallOptions(final int callId, final Bundle options) throws RemoteException {
-            // TODO Auto-generated method stub
-
             getExecutor().execute(new SipRunnable() {
                 @Override
                 protected void doRun() throws SameThreadException {
