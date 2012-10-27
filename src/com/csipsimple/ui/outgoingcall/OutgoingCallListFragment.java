@@ -177,7 +177,9 @@ public class OutgoingCallListFragment extends CSSListFragment {
             boolean canCallOtherAccounts = superActivity.canCallAutomatically();
             // Move to first to search in this cursor
             c.moveToFirst();
-            // First of all, if only one is available... try call with it
+            
+            // If only one is available.
+            // We don't use this filter if account were specified.
             if(c.getCount() == 1 && canCallOtherAccounts) {
                 if(placeCall(c)) {
                     c.close();
@@ -187,7 +189,7 @@ public class OutgoingCallListFragment extends CSSListFragment {
             }else {
                 do {
                     if(accountToCall != SipProfile.INVALID_ID) {
-                        // It's account that is asked
+                        // It's account that was asked to call
                         if(accountToCall == c.getLong(c.getColumnIndex(SipProfile.FIELD_ID))) {
                             if(placeCall(c)) {
                                 c.close();
@@ -196,8 +198,8 @@ public class OutgoingCallListFragment extends CSSListFragment {
                             }
                         }
                     } else if((c.getInt(c.getColumnIndex(AccountsLoader.FIELD_FORCE_CALL)) == 1) && canCallOtherAccounts) {
-                        // Or one with forceCall flag
-                        // We don't use this filter if one account were specified.
+                        // If one with forceCall flag
+                        // We don't use this filter if account were specified.
                         if(placeCall(c)) {
                             c.close();
                             callMade = true;

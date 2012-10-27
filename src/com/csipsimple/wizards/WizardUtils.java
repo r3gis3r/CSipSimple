@@ -315,6 +315,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_pttjapan, 45, 
                     new Locale[]{}, false, true, 
                     PTTJapan.class));
+            WIZARDS_DICT.put("PEOPLELINE", new WizardInfo("PEOPLELINE", "PeopleLine", 
+                    R.drawable.ic_wizard_peopleline, 45, 
+                    new Locale[]{}, false, true, 
+                    PeopleLine.class));
             
             
 			
@@ -804,6 +808,10 @@ public class WizardUtils {
                     new Locale[]{
                         locale("ms_MY")
                     }, false, false, YesMy.class));
+            WIZARDS_DICT.put("NETFONECA", new WizardInfo("NETFONECA", "Netfone.ca", 
+                    R.drawable.ic_wizard_voipportal, 10, 
+                    new Locale[]{Locale.CANADA}, false, false, 
+                    NetfoneCa.class));
             
             
             
