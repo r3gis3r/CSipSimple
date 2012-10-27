@@ -311,7 +311,7 @@ public class WizardUtils {
                     R.drawable.ic_wizard_oneworldsip, 45, 
                     new Locale[]{}, false, true, 
                     OneWorld.class));
-            WIZARDS_DICT.put("PTTJAPAN", new WizardInfo("PTTJAPAN", "PTTJapan", 
+            WIZARDS_DICT.put("PTTJAPAN", new WizardInfo("PTTJAPAN", "PTTJapanPlus", 
                     R.drawable.ic_wizard_pttjapan, 45, 
                     new Locale[]{}, false, true, 
                     PTTJapan.class));

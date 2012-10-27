@@ -31,7 +31,7 @@ public class PTTJapan extends SimpleImplementation {
 
 	@Override
 	protected String getDefaultName() {
-		return "PTTJapan";
+		return "PTTJapanPlus";
 	}
 	
 }
