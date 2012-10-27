@@ -31,8 +31,6 @@ import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.MatrixCursor;
-import android.database.MatrixCursor.RowBuilder;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -219,8 +217,8 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
 
         if (phone.length() > 0) {
-
-            MatrixCursor translated = new MatrixCursor(PROJECTION_PHONE, 1 /* 2 */);
+            /*
+            MatrixCursor translated = new MatrixCursor(PROJECTION_PHONE, 1);
 
             RowBuilder result = translated.newRow();
             result.add(Integer.valueOf(-1)); // ID
@@ -230,7 +228,7 @@ public class ContactsUtils5 extends ContactsWrapper {
 
             result.add("\u00A0"); // LABEL
             result.add(cons); // NAME
-
+            */
             // Rewriten as phone number
             /*
              * result = translated.newRow(); result.add(Integer.valueOf(-1)); //
@@ -443,12 +441,13 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
         
         String query = Contacts.DISPLAY_NAME + " IS NOT NULL "
-                + " AND (" + whereSipUriClause + ") AND " + Data.DATA1 + "='" + sipUri + "'";
+                + " AND (" + whereSipUriClause + ") AND " + Data.DATA1 + "=?";
         
 
         Cursor cursor = ctxt.getContentResolver().query(uri,
                 projection, query,
-                null, Data.DISPLAY_NAME + " ASC");
+                new String[] {sipUri}, 
+                Data.DISPLAY_NAME + " ASC");
         
         
         if (cursor != null) {
