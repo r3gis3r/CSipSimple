@@ -67,6 +67,11 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
     private Long accountToCallTo = null;
     private Boolean callAutomatically = null;
     
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        resetInternals();
+    }
     
     private final static String SCHEME_CSIP = SipManager.PROTOCOL_CSIP;
     
@@ -223,7 +228,7 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
         phoneNumber = null;
         accountToCallTo = null;
         ignoreRewritingRules = false;
-        callAutomatically = false;
+        callAutomatically = null;
     }
 
 }
