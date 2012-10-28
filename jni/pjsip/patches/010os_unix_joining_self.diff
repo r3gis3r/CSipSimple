@@ -1,0 +1,14 @@
+Index: pjsip/sources/pjlib/src/pj/os_core_unix.c
+===================================================================
+--- pjsip.orig/sources/pjlib/src/pj/os_core_unix.c	2012-10-28 20:42:59.828310528 +0100
++++ pjsip/sources/pjlib/src/pj/os_core_unix.c	2012-10-28 20:44:19.300307203 +0100
+@@ -687,6 +687,9 @@
+     int result;
+ 
+     PJ_CHECK_STACK();
++    if(pj_thread_this()->thread == rec->thread){
++    	return PJ_SUCCESS;
++    }
+ 
+     PJ_LOG(6, (pj_thread_this()->obj_name, "Joining thread %s", p->obj_name));
+     result = pthread_join( rec->thread, &ret);

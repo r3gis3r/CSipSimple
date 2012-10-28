@@ -33,7 +33,6 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.csipsimple.R;
-import com.csipsimple.utils.Log;
 
 import java.lang.reflect.Method;
 
@@ -42,10 +41,10 @@ import java.lang.reflect.Method;
  */
 public class DigitsEditText extends EditText {
 
-    private static final String THIS_FILE = "DigitsEditText";
+    //private static final String THIS_FILE = "DigitsEditText";
     private Boolean isDigit = null;
     // private int baseInputType = InputType.TYPE_NULL;
-    private Method showSoftInputOnFocus;
+    private Method showSoftInputOnFocus = null;
 
     public DigitsEditText(Context context) {
         this(context, null);
@@ -57,11 +56,15 @@ public class DigitsEditText extends EditText {
     
     public DigitsEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        try {
-            showSoftInputOnFocus = UtilityWrapper.safelyGetSuperclassMethod(getClass(), "setShowSoftInputOnFocus", boolean.class);
-        }catch(RuntimeException e) {
-            Log.e(THIS_FILE, "Cannot find show soft input on focus method ", e);
+        /*
+        if(Compatibility.isCompatible(Build.VERSION_CODES.JELLY_BEAN)) {
+            try {
+                showSoftInputOnFocus = UtilityWrapper.safelyGetSuperclassMethod(getClass(), "setShowSoftInputOnFocus", boolean.class);
+            }catch(RuntimeException e) {
+                Log.e(THIS_FILE, "Cannot find show soft input on focus method ", e);
+            }
         }
+        */
         setIsDigit(true, false);
     }
     

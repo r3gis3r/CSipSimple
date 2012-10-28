@@ -108,15 +108,26 @@ static pj_status_t webrtcR_stream_stop(pjmedia_vid_dev_stream *strm);
 static pj_status_t webrtcR_stream_destroy(pjmedia_vid_dev_stream *strm);
 
 /* Operations */
-static pjmedia_vid_dev_factory_op factory_op = { &webrtcR_factory_init,
-		&webrtcR_factory_destroy, &webrtcR_factory_get_dev_count,
-		&webrtcR_factory_get_dev_info, &webrtcR_factory_default_param,
-		&webrtcR_factory_create_stream, &webrtcR_factory_refresh };
+static pjmedia_vid_dev_factory_op factory_op = {
+		&webrtcR_factory_init,
+		&webrtcR_factory_destroy,
+		&webrtcR_factory_get_dev_count,
+		&webrtcR_factory_get_dev_info,
+		&webrtcR_factory_default_param,
+		&webrtcR_factory_create_stream,
+		&webrtcR_factory_refresh
+};
 
-static pjmedia_vid_dev_stream_op stream_op = { &webrtcR_stream_get_param,
-		&webrtcR_stream_get_cap, &webrtcR_stream_set_cap, &webrtcR_stream_start,
-		NULL, &webrtcR_stream_put_frame, &webrtcR_stream_stop,
-		&webrtcR_stream_destroy };
+static pjmedia_vid_dev_stream_op stream_op = {
+		&webrtcR_stream_get_param,
+		&webrtcR_stream_get_cap,
+		&webrtcR_stream_set_cap,
+		&webrtcR_stream_start,
+		NULL,
+		&webrtcR_stream_put_frame,
+		&webrtcR_stream_stop,
+		&webrtcR_stream_destroy
+};
 
 /****************************************************************************
  * Factory operations
@@ -251,25 +262,34 @@ static pj_status_t init_stream(struct webrtcR_stream *strm){
 		strm->_renderModule = VideoRender::CreateVideoRender(0,
 				strm->_renderWindow, false);
 
-		PJ_LOG(4, (THIS_FILE, "Render module created %x", strm->_renderModule));
 		strm->_renderProvider = strm->_renderModule->AddIncomingRenderStream(0,
 				0, 0.0f, 0.0f, 1.0f, 1.0f);
-		PJ_LOG(4, (THIS_FILE, "Render provider created %x", strm->_renderProvider));
 
-
-		int stat = strm->_renderModule->StartRender(0);
-		PJ_LOG(4, (THIS_FILE, "Render thread started %d", stat));
-
-		// Deliver one fake frame to init renderer
 		VideoFrame toFrame;
 		toFrame.VerifyAndAllocate(3);
 		toFrame.SetHeight(1);
 		toFrame.SetWidth(1);
 		toFrame.SetLength(3);
+
+		// We start with green
+		memset(toFrame.Buffer(), 0, 3);
+		strm->_renderModule->SetStartImage(0, toFrame);
+
+		// We timeout with black
+		toFrame.Buffer()[1] = 128;
+		toFrame.Buffer()[2] = 128;
+		strm->_renderModule->SetTimeoutImage(0, toFrame, 1000);
+
+		int stat = strm->_renderModule->StartRender(0);
+		PJ_LOG(4, (THIS_FILE, "Render thread started %d", stat));
+
+		// Deliver one fake start frame to init renderer
 		memset(toFrame.Buffer(), 0, 3);
 		WebRtc_Word64 nowMs = TickTime::MillisecondTimestamp();
 		toFrame.SetRenderTime(nowMs);
 		strm->_renderProvider->RenderFrame(0, toFrame);
+
+		PJ_LOG(4, (THIS_FILE, "Fake first frame rendered"));
 
 		status = PJ_SUCCESS;
 	}
@@ -300,6 +320,7 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 	pj_status_t status;
 
 	stream->last_ts.u64 = frame->timestamp.u64;
+
     pj_mutex_lock(stream->mutex);
 	if (!stream->is_running) {
 		pj_mutex_unlock(stream->mutex);
@@ -321,6 +342,10 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
     pjmedia_video_format_detail *vfd;
     vfd = pjmedia_format_get_video_format_detail(&stream->param.fmt, PJ_TRUE);
 
+//	PJ_LOG(4, (THIS_FILE, "webrtc Verify size %d against %dx%d",
+//								frame->size,
+//								vfd->size.w, vfd->size.h));
+
     // w * h * 1.5 = frame size normally because I420
     unsigned width = vfd->size.w;
     unsigned height = vfd->size.h;
@@ -332,22 +357,17 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
     	return PJ_EINVAL;
     }
 
-
-	stream->_videoFrame.VerifyAndAllocate( frame->size );
+	stream->_videoFrame.VerifyAndAllocate(frame->size);
 	stream->_videoFrame.SetWidth(width);
 	stream->_videoFrame.SetHeight(height);
-	stream->_videoFrame.SetLength(stream->_videoFrame.Size());
-
-//	PJ_LOG(4, (THIS_FILE, "Will render video frame : %dx%d (%d) for %x",
-//		vfd->size.w, vfd->size.h, frame->size, stream->base));
+	stream->_videoFrame.SetLength(frame->size);
 
 	memcpy(stream->_videoFrame.Buffer(), frame->buf, frame->size);
 
+	// TODO : shall we try to use frame timestamp?
 	WebRtc_Word64 nowMs = TickTime::MillisecondTimestamp();
 	stream->_videoFrame.SetRenderTime( nowMs );
 	stream->_renderProvider->RenderFrame(0, stream->_videoFrame);
-
-	//PJ_LOG(4, (THIS_FILE, "Rendering @%lld > %lld", frame->timestamp.u64, nowMs));
 
 	pj_mutex_unlock(stream->mutex);
 
@@ -468,23 +488,35 @@ static pj_status_t webrtcR_stream_set_cap(pjmedia_vid_dev_stream *s,
 	if (cap == PJMEDIA_VID_DEV_CAP_OUTPUT_WINDOW) {
 		// Only do that if we have no window set currently
 		if(!strm->_renderWindow || !pval){
+			PJ_LOG(4, (THIS_FILE, "Setup render window to %x", pval));
+
 			if(!pval){
 				destroy_stream(strm);
 			}
 			strm->_renderWindow = (void *)pval;
 
-			PJ_LOG(4, (THIS_FILE, "Setup window to => %x", pval));
-			init_stream(strm);
+			if(pval){
+				init_stream(strm);
+			}
 			return PJ_SUCCESS;
 		}
 		return PJ_EEXISTS;
 	} else if (cap == PJMEDIA_VID_DEV_CAP_FORMAT) {
-		// TODO
-		PJ_LOG(4, (THIS_FILE, "try to change format...."));
-		return PJMEDIA_EVID_ERR;
+	    pjmedia_video_format_detail *vfd;
+	    pjmedia_format * target_format = (pjmedia_format *)pval;
+	    if(target_format != NULL){
+			pj_mutex_lock(strm->mutex);
+			// TODO : check that change only is a change about size
+			PJ_LOG(4, (THIS_FILE, "Trying to change format to %dx%d",
+							target_format->det.vid.size.w,
+							target_format->det.vid.size.h));
+			vfd = pjmedia_format_get_video_format_detail(&strm->param.fmt, PJ_TRUE);
+			vfd->size = target_format->det.vid.size;
+			pj_mutex_unlock(strm->mutex);
+	    }
+		return PJ_SUCCESS;
 	} else if (cap == PJMEDIA_VID_DEV_CAP_OUTPUT_RESIZE) {
-		// TODO -- thread safe it
-
+		// TODO -- actually as disp_size is never used this is useless;
 		pjmedia_rect_size *new_disp_size = (pjmedia_rect_size *)pval;
 		if(new_disp_size){
 			PJ_LOG(4, (THIS_FILE, "RESCALE %dx%d", new_disp_size->w, new_disp_size->h));
@@ -501,10 +533,15 @@ static pj_status_t webrtcR_stream_set_cap(pjmedia_vid_dev_stream *s,
 static pj_status_t webrtcR_stream_start(pjmedia_vid_dev_stream *strm) {
 	struct webrtcR_stream *stream = (struct webrtcR_stream*) strm;
 
-	PJ_LOG(4, (THIS_FILE, "Starting webRTC video stream"));
+	PJ_LOG(4, (THIS_FILE, "Starting webRTC video renderer"));
 
     pj_mutex_lock(stream->mutex);
+
 	stream->is_running = PJ_TRUE;
+	if(stream->_renderModule){
+		stream->_renderModule->StartRender(0);
+	}
+
     pj_mutex_unlock(stream->mutex);
 
 	return PJ_SUCCESS;
@@ -514,15 +551,15 @@ static pj_status_t webrtcR_stream_start(pjmedia_vid_dev_stream *strm) {
 static pj_status_t webrtcR_stream_stop(pjmedia_vid_dev_stream *strm) {
 	struct webrtcR_stream *stream = (struct webrtcR_stream*) strm;
 
-	PJ_LOG(4, (THIS_FILE, "Stop webrtc renderer"));
+	PJ_LOG(4, (THIS_FILE, "Stop webRTC video renderer"));
 
     pj_mutex_lock(stream->mutex);
+
 	if(stream->_renderModule){
 		stream->_renderModule->StopRender(0);
-		stream->_renderModule->DeleteIncomingRenderStream(0);
 	}
-
 	stream->is_running = PJ_FALSE;
+
     pj_mutex_unlock(stream->mutex);
 
 

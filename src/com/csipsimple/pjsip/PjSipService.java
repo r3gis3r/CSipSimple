@@ -1018,6 +1018,7 @@ public class PjSipService {
                                 int h264bitrate = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_BITRATE, 0);
                                 if(h264level > 0 && h264profile > 0) {
                                     pjsua.codec_h264_set_profile(h264profile, h264level, 0, 0, 15, h264bitrate, 0);
+                                    //pjsua.codec_h264_set_profile(h264profile, h264level, 352, 480, 15, h264bitrate, 0); // 352×480 
                                     Log.d(THIS_FILE, "Set h264 profile : " + h264profile + ", " + h264level + ", "+ h264bitrate);
                                 }
                             }
