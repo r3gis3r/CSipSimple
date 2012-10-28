@@ -40,15 +40,13 @@
         android:orientation="horizontal"
         android:padding="0dip" >
 
-        <!--
-        <ImageButton
-            android:id="@+id/switchTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:background="@drawable/btn_dial_textbadge"
-            android:contentDescription="@string/switch_to_text"
-            android:src="@drawable/ic_menu_switch_txt" />
-        -->
+        <!-- Dummy item to prevent DigitsEditText from receiving focus -->
+
+        <View
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
         <com.csipsimple.ui.dialpad.DigitsEditText
             android:id="@+id/digitsText"
