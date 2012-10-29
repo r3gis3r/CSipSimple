@@ -123,5 +123,9 @@ public final class CustomDistribution {
 		return false;
 	}
 
+    public static boolean distributionWantsGeneric(String wizardTag) {
+        return true;
+    }
+
 	
 }

@@ -78,6 +78,8 @@ public class WizardUtils {
     public static final String PRIORITY_INT = "PRIORITY_INT";
     
     public static final String EXPERT_WIZARD_TAG = "EXPERT";
+    public static final String BASIC_WIZARD_TAG = "BASIC";
+    public static final String ADVANCED_WIZARD_TAG = "ADVANCED";
     public static final String LOCAL_WIZARD_TAG = "LOCAL";
     
     
@@ -129,22 +131,30 @@ public class WizardUtils {
 		WIZARDS_DICT = new HashMap<String, WizardInfo>();
 		
 		//Generic
-		WIZARDS_DICT.put("BASIC", new WizardInfo("BASIC", "Basic", 
-				R.drawable.ic_wizard_basic, 50, 
-				new Locale[] {}, true, false, 
-				Basic.class));
-		WIZARDS_DICT.put("ADVANCED", new WizardInfo("ADVANCED", "Advanced", 
-				R.drawable.ic_wizard_advanced, 10, 
-				new Locale[] {}, true, false, 
-				Advanced.class));
-		WIZARDS_DICT.put(WizardUtils.EXPERT_WIZARD_TAG, new WizardInfo(WizardUtils.EXPERT_WIZARD_TAG, "Expert", 
-				R.drawable.ic_wizard_expert, 5, 
-				new Locale[] {}, true, false, 
-				Expert.class));
-		WIZARDS_DICT.put(WizardUtils.LOCAL_WIZARD_TAG, new WizardInfo(WizardUtils.LOCAL_WIZARD_TAG, "Local", 
-				R.drawable.ic_wizard_expert, 1, 
-				new Locale[] {}, true, false, 
-				Local.class));
+		if(CustomDistribution.distributionWantsGeneric(BASIC_WIZARD_TAG)) {
+    		WIZARDS_DICT.put(BASIC_WIZARD_TAG, new WizardInfo(BASIC_WIZARD_TAG, "Basic", 
+    				R.drawable.ic_wizard_basic, 50, 
+    				new Locale[] {}, true, false, 
+    				Basic.class));
+		}
+        if(CustomDistribution.distributionWantsGeneric(ADVANCED_WIZARD_TAG)) {
+    		WIZARDS_DICT.put(ADVANCED_WIZARD_TAG, new WizardInfo(ADVANCED_WIZARD_TAG, "Advanced", 
+    				R.drawable.ic_wizard_advanced, 10, 
+    				new Locale[] {}, true, false, 
+    				Advanced.class));
+        }
+        if(CustomDistribution.distributionWantsGeneric(EXPERT_WIZARD_TAG)) {
+    		WIZARDS_DICT.put(EXPERT_WIZARD_TAG, new WizardInfo(EXPERT_WIZARD_TAG, "Expert", 
+    				R.drawable.ic_wizard_expert, 5, 
+    				new Locale[] {}, true, false, 
+    				Expert.class));
+        }
+        if(CustomDistribution.distributionWantsGeneric(LOCAL_WIZARD_TAG)) {
+    		WIZARDS_DICT.put(LOCAL_WIZARD_TAG, new WizardInfo(LOCAL_WIZARD_TAG, "Local", 
+    				R.drawable.ic_wizard_expert, 1, 
+    				new Locale[] {}, true, false, 
+    				Local.class));
+        }
 		
 		if(CustomDistribution.distributionWantsOtherProviders()) {
 		    
@@ -886,39 +896,85 @@ public class WizardUtils {
 		return account.icon;
 	}
 
+	private static ArrayList<HashMap<String, String>> wizardGroups = null;
 
 	public static ArrayList<HashMap<String, String>> getWizardsGroups(Context context) {
-		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+	    if(wizardGroups != null) {
+	        return wizardGroups;
+	    }
+		wizardGroups = new ArrayList<HashMap<String, String>>();
+		boolean hasLocal = false;
+		boolean hasGeneric = false;
+		boolean hasWorld = false;
+		boolean hasOther = false;
+		
+        Set<Entry<String, WizardInfo>> wizards = getWizardsList().entrySet();
+		for( Entry<String, WizardInfo> wizard : wizards) {
+		    boolean found = false;
+
+            if(wizard.getValue().isGeneric) {
+                hasGeneric = true;
+                found = true;
+            }else if(wizard.getValue().isWorld) {
+                hasWorld = true;
+                found = true;
+            }
+            if(!found) {
+    		    for (Locale country : wizard.getValue().countries) {
+                    if(country != null) {
+                        if(country.getCountry().equals(Locale.getDefault().getCountry())) {
+                            hasLocal = true;
+                            found = true;
+                            break;
+                        }else if(country.getCountry().equalsIgnoreCase("")) {
+                            if(country.getLanguage().equals(Locale.getDefault().getLanguage())) {
+                                hasLocal = true;
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+		    
+            if(!found) {
+                hasOther = true;
+            }
+            if(hasLocal && hasGeneric && hasOther && hasWorld) {
+                break;
+            }
+        }
+		
+		
 		HashMap<String, String> m;
 		
 		//Local
-		m = new HashMap<String, String>();
-		
-	//	m.put("lang", Locale.getDefault().getCountry());
-		m.put(LANG_DISPLAY, Locale.getDefault().getDisplayCountry());
-		result.add(m);
-		
+		if(hasLocal) {
+    		m = new HashMap<String, String>();
+    		m.put(LANG_DISPLAY, Locale.getDefault().getDisplayCountry());
+    		wizardGroups.add(m);
+		}
 		//Generic
-		m = new HashMap<String, String>();
-	//	m.put("lang", "generic");
-		m.put(LANG_DISPLAY, context.getString(R.string.generic_wizards_text));
-		result.add(m);
-		
-		if(CustomDistribution.distributionWantsOtherProviders()) {
-			//World
-			m = new HashMap<String, String>();
-		//	m.put("lang", "world");
-			m.put(LANG_DISPLAY, context.getString(R.string.world_wide_providers_text));
-			result.add(m);
-			
-			//Others
-			m = new HashMap<String, String>();
-		//	m.put("lang", "others");
-			m.put(LANG_DISPLAY, context.getString(R.string.other_country_providers_text));
-			result.add(m);
+		if(hasGeneric) {
+    		m = new HashMap<String, String>();
+    		m.put(LANG_DISPLAY, context.getString(R.string.generic_wizards_text));
+    		wizardGroups.add(m);
 		}
 		
-		return result;
+		if(hasWorld) {
+			//World
+			m = new HashMap<String, String>();
+			m.put(LANG_DISPLAY, context.getString(R.string.world_wide_providers_text));
+			wizardGroups.add(m);
+		}
+		if(hasOther) {
+			//Others
+			m = new HashMap<String, String>();
+			m.put(LANG_DISPLAY, context.getString(R.string.other_country_providers_text));
+			wizardGroups.add(m);
+		}
+		
+		return wizardGroups;
 	}
 
 
@@ -968,10 +1024,18 @@ public class WizardUtils {
 		Collections.sort(others_list, comparator);
 		
 		ArrayList<ArrayList<Map<String, Object>>> result = new ArrayList<ArrayList<Map<String,Object>>>();
-		result.add(locale_list);
-		result.add(generic_list);
-		result.add(world_list);
-		result.add(others_list);
+		if(locale_list.size() > 0) {
+		    result.add(locale_list);
+		}
+		if(generic_list.size() > 0) {
+		    result.add(generic_list);
+		}
+		if(world_list.size() > 0) {
+		    result.add(world_list);
+		}
+		if(others_list.size() > 0) {
+		    result.add(others_list);
+		}
 		return result;
 	}
 

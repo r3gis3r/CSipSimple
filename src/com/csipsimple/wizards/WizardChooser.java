@@ -77,9 +77,13 @@ public class WizardChooser extends SherlockExpandableListActivity {
 				finish();
 			}
 		});
-		getExpandableListView().expandGroup(0);
-		getExpandableListView().expandGroup(1);
 		
+		if(childDatas.size() >= 1) {
+		    getExpandableListView().expandGroup(0);
+		}
+		if(childDatas.size() >= 2) {
+		    getExpandableListView().expandGroup(1);
+		}
 	}
 	
 	@Override
