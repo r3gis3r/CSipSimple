@@ -23,7 +23,6 @@ package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
 
-import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -39,19 +38,9 @@ public class Fusion extends SimpleImplementation {
     public void fillLayout(final SipProfile account) {
         super.fillLayout(account);
         
-        accountUsername.setTitle(R.string.w_common_phone_number);
-        accountUsername.setDialogTitle(R.string.w_common_phone_number);
         accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
         
     }
-    @Override
-    public String getDefaultFieldSummary(String fieldName) {
-        if(fieldName.equals(USER_NAME)) {
-            return parent.getString(R.string.w_common_phone_number_desc);
-        }
-        return super.getDefaultFieldSummary(fieldName);
-    }
-
 
 	@Override
 	protected String getDefaultName() {
