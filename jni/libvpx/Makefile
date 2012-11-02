@@ -25,7 +25,7 @@ init : $(VPX_CONFIGURES)
 preprocess : $(VPX_CONFIGURES)
 	# Preconfigure for each done
 
-$(BUILD_DIRECTORY)/%/config.mk : sources
+$(BUILD_DIRECTORY)/%/config.mk : sources .patched_sources
 	@mkdir -p $(subst /config.mk,,$@)
 	cd $(subst /config.mk,,$@); \
 	if [ "$(BUILD_DIRECTORY)/armeabi/config.mk" = "$@" ]; then TGT=armv5te-android-gcc; fi; \
