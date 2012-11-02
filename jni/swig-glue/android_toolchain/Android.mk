@@ -73,6 +73,8 @@ $(CONCAT_PJSUA_FILE) :: $(PJ_SWIG_HEADERS) $(SWIG_GLUE_PATH)/clean_header_for_sw
 
 
 # Clean target addition
+## Automatically adds to NDK clean target for this module as
+## correctly named
 privatecleantarget := clean-swig-glue-$(TARGET_ARCH_ABI)
 .PHONY: $(privatecleantarget)
 $(privatecleantarget)::

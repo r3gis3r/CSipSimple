@@ -36,10 +36,6 @@ FLAGS="$FLAGS --enable-runtime-cpudetect"
 # For h263
 FLAGS="$FLAGS --enable-decoder=h263 --enable-encoder=h263"
 
-# For vpx
-#FLAGS="$FLAGS --enable-decoder=vp8 --enable-encoder=libvpx --enable-parser=vp8"
-#FLAGS="$FLAGS --enable-libvpx"
-
 #For x264
 FLAGS="$FLAGS --enable-decoder=h264 --enable-encoder=libx264 --enable-parser=h264"
 FLAGS="$FLAGS --enable-libx264"
