@@ -1,15 +1,15 @@
 
-external_repos := silk opus zrtp4pj openssl
+external_repos := silk opus zrtp4pj openssl libvpx
 external_sources := $(foreach repos, $(external_repos),jni/$(repos)/sources)
 
-to_patch := pjsip webrtc ffmpeg silk
+to_patch := pjsip webrtc ffmpeg silk libvpx
 to_patch_files := $(foreach proj, $(to_patch),jni/$(proj)/.patched_sources)
 
 all : libraries
 	# Dispatch to external projects
 	@(./dispatch_shared_libs.sh)
 
-libraries : ext-sources webrtc-preprocess
+libraries : ext-sources webrtc-preprocess libvpx-preprocess
 	# Build main libraries using android ndk
 	@(ndk-build -j6)
 
@@ -19,6 +19,9 @@ ffmpeg-lib : jni/ffmpeg/.patched_sources
 	
 webrtc-preprocess :
 	@($(MAKE) $(MFLAGS) -C jni/webrtc preprocess)
+	
+libvpx-preprocess :
+	@($(MAKE) $(MFLAGS) -C jni/libvpx preprocess)
 
 ext-sources : $(external_sources) $(to_patch_files)
 	# External sources fetched out from external repos/zip
@@ -43,7 +46,7 @@ CodecPackLibs :
 	@(./dispatch_shared_libs.sh)
 	
 VideoLibs : ffmpeg-lib
-	@(ndk-build -j6 APP_MODULES="pj_video_android")
+	@(ndk-build -j6 APP_MODULES="pj_video_android vpx")
 	@(./dispatch_shared_libs.sh)
 
 ScreenSharingLibs :

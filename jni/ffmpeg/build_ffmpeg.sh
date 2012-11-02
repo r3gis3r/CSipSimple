@@ -17,7 +17,7 @@ case "$TARGET_ARCH_ABI" in
 		FLAGS="$FLAGS --enable-pic --target-os=linux --arch=x86 --disable-asm "
 		;;
 	mips)
-		FLAGS="$FLAGS --arch=mips --disable-asm "
+		FLAGS="$FLAGS --arch=mips --target-os=linux --disable-asm "
 		;;
 	*)
 		FLAGS="$FLAGS --enable-pic --target-os=linux --arch=arm "

@@ -1,0 +1,537 @@
+Index: libvpx/sources/build/make/Android.mk
+===================================================================
+--- libvpx.orig/sources/build/make/Android.mk	2012-11-02 19:52:41.761821654 +0100
++++ libvpx/sources/build/make/Android.mk	2012-11-02 19:54:19.369817572 +0100
+@@ -41,8 +41,7 @@
+ # Running ndk-build will build libvpx and include it in your project.
+ #
+ 
+-CONFIG_DIR := $(LOCAL_PATH)
+-LIBVPX_PATH := $(LOCAL_PATH)/libvpx
++
+ ASM_CNV_PATH_LOCAL := $(TARGET_ARCH_ABI)/ads2gas
+ ASM_CNV_PATH := $(LOCAL_PATH)/$(ASM_CNV_PATH_LOCAL)
+ 
+@@ -51,7 +50,17 @@
+ ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+   include $(CONFIG_DIR)/libs-armv7-android-gcc.mk
+ else
++ifeq ($(TARGET_ARCH_ABI),armeabi)
+   include $(CONFIG_DIR)/libs-armv5te-android-gcc.mk
++else
++ifeq ($(TARGET_ARCH_ABI),x86)
++  include $(CONFIG_DIR)/libs-x86-android-gcc.mk
++else
++ifeq ($(TARGET_ARCH_ABI),mips)
++  include $(CONFIG_DIR)/libs-mips32-android-gcc.mk
++endif
++endif
++endif
+ endif
+ 
+ # Rule that is normally in Makefile created by libvpx
+@@ -102,6 +111,8 @@
+ 	@grep $(OFFSET_PATTERN) $$< | tr -d '\#' | $(CONFIG_DIR)/$(ASM_CONVERSION) > $$@
+ endef
+ 
++
++ifeq ($(TARGET_ARCH),arm)
+ # Use ads2gas script to convert from RVCT format to GAS format.  This passes
+ #  puts the processed file under $(ASM_CNV_PATH).  Local clean rule
+ #  to handle removing these
+@@ -114,26 +125,28 @@
+ endif
+ 
+ .PRECIOUS: %.asm.s
+-$(ASM_CNV_PATH)/libvpx/%.asm.s: $(LIBVPX_PATH)/%.asm $(ASM_CNV_OFFSETS_DEPEND)
++$(ASM_CNV_PATH)/%.asm.s: $(LIBVPX_PATH)/%.asm $(ASM_CNV_OFFSETS_DEPEND)
+ 	@mkdir -p $(dir $@)
+ 	@$(CONFIG_DIR)/$(ASM_CONVERSION) <$< > $@
+ 
+-# For building vpx_rtcd.h, which has a rule in libs.mk
+-TGT_ISA:=$(word 1, $(subst -, ,$(TOOLCHAIN)))
+-target := libs
++endif
+ 
+-LOCAL_SRC_FILES += vpx_config.c
++# For building vpx_rtcd.h, which has a rule in libs.mk
++TGT_ISA_$(TARGET_ARCH_ABI):=$(word 1, $(subst -, ,$(TOOLCHAIN)))
++LOCAL_SRC_FILES += ../build/$(TARGET_ARCH_ABI)/vpx_config.c
+ 
+ # Remove duplicate entries
+-CODEC_SRCS_UNIQUE = $(sort $(CODEC_SRCS))
++CODEC_SRCS_UNIQUE := $(sort $(CODEC_SRCS))
+ 
+ # Pull out C files.  vpx_config.c is in the immediate directory and
+ # so it does not need libvpx/ prefixed like the rest of the source files.
+-CODEC_SRCS_C = $(filter %.c, $(CODEC_SRCS_UNIQUE))
+-LOCAL_CODEC_SRCS_C = $(filter-out vpx_config.c, $(CODEC_SRCS_C))
++CODEC_SRCS_C := $(filter %.c, $(CODEC_SRCS_UNIQUE))
++LOCAL_CODEC_SRCS_C := $(filter-out vpx_config.c, $(CODEC_SRCS_C))
+ 
+-LOCAL_SRC_FILES += $(foreach file, $(LOCAL_CODEC_SRCS_C), libvpx/$(file))
++LOCAL_SRC_FILES += $(foreach file, $(LOCAL_CODEC_SRCS_C), $(file))
+ 
++
++ifeq ($(TARGET_ARCH),arm)
+ # Pull out assembly files, splitting NEON from the rest.  This is
+ # done to specify that the NEON assembly files use NEON assembler flags.
+ CODEC_SRCS_ASM_ALL = $(filter %.asm.s, $(CODEC_SRCS_UNIQUE))
+@@ -141,26 +154,30 @@
+                  $(CODEC_SRCS_ASM_ALL), \
+                  $(if $(findstring neon,$(v)),,$(v)))
+ CODEC_SRCS_ASM_ADS2GAS = $(patsubst %.s, \
+-                         $(ASM_CNV_PATH_LOCAL)/libvpx/%.s, \
++                         $(ASM_CNV_PATH_LOCAL)/%.s, \
+                          $(CODEC_SRCS_ASM))
+ LOCAL_SRC_FILES += $(CODEC_SRCS_ASM_ADS2GAS)
++endif
++
+ 
+ ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+-  CODEC_SRCS_ASM_NEON = $(foreach v, \
++  CODEC_SRCS_ASM_NEON := $(foreach v, \
+                         $(CODEC_SRCS_ASM_ALL),\
+                         $(if $(findstring neon,$(v)),$(v),))
+-  CODEC_SRCS_ASM_NEON_ADS2GAS = $(patsubst %.s, \
+-                                $(ASM_CNV_PATH_LOCAL)/libvpx/%.s, \
++  CODEC_SRCS_ASM_NEON_ADS2GAS := $(patsubst %.s, \
++                                $(ASM_CNV_PATH_LOCAL)/%.s, \
+                                 $(CODEC_SRCS_ASM_NEON))
+   LOCAL_SRC_FILES += $(patsubst %.s, \
+                      %.s.neon, \
+                      $(CODEC_SRCS_ASM_NEON_ADS2GAS))
+ endif
+ 
++
+ LOCAL_CFLAGS += \
+     -DHAVE_CONFIG_H=vpx_config.h \
+     -I$(LIBVPX_PATH) \
+-    -I$(ASM_CNV_PATH)
++    -I$(ASM_CNV_PATH) \
++    -I$(CONFIG_DIR)
+ 
+ LOCAL_MODULE := libvpx
+ 
+@@ -168,16 +185,18 @@
+ 
+ LOCAL_STATIC_LIBRARIES := cpufeatures
+ 
+-$(foreach file, $(LOCAL_SRC_FILES), $(LOCAL_PATH)/$(file)): vpx_rtcd.h
++$(foreach file, $(LOCAL_SRC_FILES), $(LOCAL_PATH)/$(file)): $(BUILD_PFX)vpx_rtcd.h
+ 
+-.PHONY: clean
+-clean:
++.PHONY: clean-libvpx-$(TARGET_ARCH_ABI)
++clean-libvpx-$(TARGET_ARCH_ABI):
+ 	@echo "Clean: ads2gas files [$(TARGET_ARCH_ABI)]"
+ 	@$(RM) $(CODEC_SRCS_ASM_ADS2GAS) $(CODEC_SRCS_ASM_NEON_ADS2GAS)
+ 	@$(RM) $(patsubst %.asm, %.*, $(ASM_CNV_OFFSETS_DEPEND))
+ 	@$(RM) -r $(ASM_CNV_PATH)
+ 	@$(RM) $(CLEAN-OBJS)
+ 
++clean : clean-libvpx-$(TARGET_ARCH_ABI)
++
+ include $(BUILD_SHARED_LIBRARY)
+ 
+ $(eval $(call asm_offsets_template,\
+Index: libvpx/sources/libs.mk
+===================================================================
+--- libvpx.orig/sources/libs.mk	2012-11-02 19:52:41.761821654 +0100
++++ libvpx/sources/libs.mk	2012-11-02 19:54:19.373817572 +0100
+@@ -17,6 +17,22 @@
+   ASM:=.asm
+ endif
+ 
++# Reset everything
++CODEC_SRCS-yes :=
++VP8_CX_SRCS-yes :=
++VP8_DX_SRCS-yes :=
++VP8_COMMON_SRCS-yes :=
++SCALE_SRCS-yes :=
++VP8_CX_SRCS_REMOVE-yes :=
++VP8_DX_SRCS_REMOVE-yes :=
++VP8_COMMON_SRCS_REMOVE-yes :=
++CODEC_SRCS-no :=
++VP8_CX_SRCS-no :=
++VP8_DX_SRCS-no :=
++VP8_COMMON_SRCS-no :=
++SCALE_SRCS-no :=
++
++
+ CODEC_SRCS-yes += CHANGELOG
+ CODEC_SRCS-yes += libs.mk
+ 
+@@ -95,8 +111,8 @@
+ CODEC_SRCS-$(BUILD_LIBVPX) += vpx_ports/asm_offsets.h
+ CODEC_SRCS-$(BUILD_LIBVPX) += vpx_ports/vpx_timer.h
+ CODEC_SRCS-$(BUILD_LIBVPX) += vpx_ports/mem.h
+-CODEC_SRCS-$(BUILD_LIBVPX) += $(BUILD_PFX)vpx_config.c
+-INSTALL-SRCS-no += $(BUILD_PFX)vpx_config.c
++CODEC_SRCS-$(BUILD_LIBVPX) += vpx_config.c
++INSTALL-SRCS-no += vpx_config.c
+ ifeq ($(ARCH_X86)$(ARCH_X86_64),yes)
+ CODEC_SRCS-$(BUILD_LIBVPX) += vpx_ports/emms.asm
+ CODEC_SRCS-$(BUILD_LIBVPX) += vpx_ports/x86.h
+@@ -135,7 +151,7 @@
+ 
+ # Generate a list of all enabled sources, in particular for exporting to gyp
+ # based build systems.
+-libvpx_srcs.txt:
++$(CONFIG_DIR)/libvpx_srcs.txt:
+ 	@echo "    [CREATE] $@"
+ 	@echo $(CODEC_SRCS) | xargs -n1 echo | sort -u > $@
+ 
+@@ -183,7 +199,7 @@
+ PROJECTS-$(BUILD_LIBVPX) += vpx.vcproj
+ 
+ vpx.vcproj: vpx_config.asm
+-vpx.vcproj: vpx_rtcd.h
++vpx.vcproj: $(BUILD_PFX)vpx_rtcd.h
+ 
+ endif
+ else
+@@ -196,39 +212,39 @@
+ LIBVPX_SO               := libvpx.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+ LIBS-$(BUILD_LIBVPX_SO) += $(BUILD_PFX)$(LIBVPX_SO)\
+                            $(notdir $(LIBVPX_SO_SYMLINKS))
+-$(BUILD_PFX)$(LIBVPX_SO): $(LIBVPX_OBJS) libvpx.ver
+-$(BUILD_PFX)$(LIBVPX_SO): extralibs += -lm
+-$(BUILD_PFX)$(LIBVPX_SO): SONAME = libvpx.so.$(VERSION_MAJOR)
+-$(BUILD_PFX)$(LIBVPX_SO): SO_VERSION_SCRIPT = libvpx.ver
++#$(BUILD_PFX)$(LIBVPX_SO): $(LIBVPX_OBJS) $(CONFIG_DIR)/libvpx.ver
++#$(BUILD_PFX)$(LIBVPX_SO): extralibs += -lm
++#$(BUILD_PFX)$(LIBVPX_SO): SONAME = libvpx.so.$(VERSION_MAJOR)
++#$(BUILD_PFX)$(LIBVPX_SO): SO_VERSION_SCRIPT = $(CONFIG_DIR)/libvpx.ver
+ LIBVPX_SO_SYMLINKS      := $(addprefix $(LIBSUBDIR)/, \
+                              libvpx.so libvpx.so.$(VERSION_MAJOR) \
+                              libvpx.so.$(VERSION_MAJOR).$(VERSION_MINOR))
+ 
+-libvpx.ver: $(call enabled,CODEC_EXPORTS)
+-	@echo "    [CREATE] $@"
+-	$(qexec)echo "{ global:" > $@
+-	$(qexec)for f in $?; do awk '{print $$2";"}' < $$f >>$@; done
+-	$(qexec)echo "local: *; };" >> $@
+-CLEAN-OBJS += libvpx.ver
+-
+-define libvpx_symlink_template
+-$(1): $(2)
+-	@echo "    [LN]      $$@"
+-	$(qexec)ln -sf $(LIBVPX_SO) $$@
+-endef
+-
+-$(eval $(call libvpx_symlink_template,\
+-    $(addprefix $(BUILD_PFX),$(notdir $(LIBVPX_SO_SYMLINKS))),\
+-    $(BUILD_PFX)$(LIBVPX_SO)))
+-$(eval $(call libvpx_symlink_template,\
+-    $(addprefix $(DIST_DIR)/,$(LIBVPX_SO_SYMLINKS)),\
+-    $(DIST_DIR)/$(LIBSUBDIR)/$(LIBVPX_SO)))
++#$(CONFIG_DIR)/libvpx.ver: $(call enabled,CODEC_EXPORTS)
++#	@echo "    [CREATE] $@"
++#	$(qexec)echo "{ global:" > $@
++#	$(qexec)for f in $?; do awk '{print $$2";"}' < $$f >>$@; done
++#	$(qexec)echo "local: *; };" >> $@
++#CLEAN-OBJS += $(CONFIG_DIR)/libvpx.ver
++#
++#define libvpx_symlink_template
++#$(1): $(2)
++#	@echo "    [LN]      $$@"
++#	$(qexec)ln -sf $(LIBVPX_SO) $$@
++#endef
++
++#$(eval $(call libvpx_symlink_template,\
++#    $(addprefix $(BUILD_PFX),$(notdir $(LIBVPX_SO_SYMLINKS))),\
++#    $(BUILD_PFX)$(LIBVPX_SO)))
++#$(eval $(call libvpx_symlink_template,\
++#    $(addprefix $(DIST_DIR)/,$(LIBVPX_SO_SYMLINKS)),\
++#    $(DIST_DIR)/$(LIBSUBDIR)/$(LIBVPX_SO)))
+ 
+ INSTALL-LIBS-$(CONFIG_SHARED) += $(LIBVPX_SO_SYMLINKS)
+ INSTALL-LIBS-$(CONFIG_SHARED) += $(LIBSUBDIR)/$(LIBVPX_SO)
+ 
+-LIBS-$(BUILD_LIBVPX) += vpx.pc
+-vpx.pc: config.mk libs.mk
++LIBS-$(BUILD_LIBVPX) += $(CONFIG_DIR)/vpx.pc
++$(CONFIG_DIR)/vpx.pc: config.mk libs.mk
+ 	@echo "    [CREATE] $@"
+ 	$(qexec)echo '# pkg-config file from libvpx $(VERSION_STRING)' > $@
+ 	$(qexec)echo 'prefix=$(PREFIX)' >> $@
+@@ -244,8 +260,8 @@
+ 	$(qexec)echo 'Libs: -L$${libdir} -lvpx' >> $@
+ 	$(qexec)echo 'Cflags: -I$${includedir}' >> $@
+ INSTALL-LIBS-yes += $(LIBSUBDIR)/pkgconfig/vpx.pc
+-INSTALL_MAPS += $(LIBSUBDIR)/pkgconfig/%.pc %.pc
+-CLEAN-OBJS += vpx.pc
++INSTALL_MAPS += $(LIBSUBDIR)/pkgconfig/%.pc $(CONFIG_DIR)/%.pc
++CLEAN-OBJS += $(CONFIG_DIR)/vpx.pc
+ endif
+ 
+ LIBS-$(LIPO_LIBVPX) += libvpx.a
+@@ -322,18 +338,22 @@
+   endif
+ endif
+ 
+-$(shell $(SRC_PATH_BARE)/build/make/version.sh "$(SRC_PATH_BARE)" $(BUILD_PFX)vpx_version.h)
++$(shell $(SRC_PATH_BARE)/build/make/version.sh "$(SRC_PATH_BARE)" jni/libvpx/build/$(TARGET_ARCH_ABI)/vpx_version.h)
+ CLEAN-OBJS += $(BUILD_PFX)vpx_version.h
+ 
+ #
+ # Rule to generate runtime cpu detection files
+ #
++define extract-target-arch
++$(word $(words $(subst /, ,$(dir $1))),$(subst /, ,$(dir $1)))
++endef
++
+ $(OBJS-yes:.o=.d): $(BUILD_PFX)vpx_rtcd.h
+ $(BUILD_PFX)vpx_rtcd.h: $(SRC_PATH_BARE)/$(sort $(filter %rtcd_defs.sh,$(CODEC_SRCS)))
+-	@echo "    [CREATE] $@"
+-	$(qexec)$(SRC_PATH_BARE)/build/make/rtcd.sh --arch=$(TGT_ISA) \
++	@echo "    [CREATE] $@ with $(call extract-target-arch, $@) -> $(TGT_ISA_$(call extract-target-arch, $@))"
++	$(qexec)$(SRC_PATH_BARE)/build/make/rtcd.sh --arch=$(TGT_ISA_$(call extract-target-arch, $@)) \
+           --sym=vpx_rtcd \
+-          --config=$(target)$(if $(FAT_ARCHS),,-$(TOOLCHAIN)).mk \
++          --config=$(subst vpx_rtcd.h,,$@)libs-$(TGT_ISA_$(call extract-target-arch, $@))-android-gcc.mk \
+           $(RTCD_OPTIONS) $^ > $@
+ CLEAN-OBJS += $(BUILD_PFX)vpx_rtcd.h
+ 
+@@ -426,9 +446,9 @@
+ ##
+ ## documentation directives
+ ##
+-CLEAN-OBJS += libs.doxy
+-DOCS-yes += libs.doxy
+-libs.doxy: $(CODEC_DOC_SRCS)
++CLEAN-OBJS += $(BUILD_PFX)libs.doxy
++DOCS-yes += $(BUILD_PFX)libs.doxy
++$(BUILD_PFX)libs.doxy: $(CODEC_DOC_SRCS)
+ 	@echo "    [CREATE] $@"
+ 	@rm -f $@
+ 	@echo "INPUT += $^" >> $@
+Index: libvpx/sources/configure
+===================================================================
+--- libvpx.orig/sources/configure	2012-11-02 19:52:41.761821654 +0100
++++ libvpx/sources/configure	2012-11-02 19:54:19.401817571 +0100
+@@ -97,6 +97,7 @@
+ all_platforms="${all_platforms} armv7-linux-gcc"     #neon Cortex-A8
+ all_platforms="${all_platforms} armv7-none-rvct"     #neon Cortex-A8
+ all_platforms="${all_platforms} mips32-linux-gcc"
++all_platforms="${all_platforms} mips32-android-gcc"
+ all_platforms="${all_platforms} ppc32-darwin8-gcc"
+ all_platforms="${all_platforms} ppc32-darwin9-gcc"
+ all_platforms="${all_platforms} ppc32-linux-gcc"
+@@ -112,6 +113,7 @@
+ all_platforms="${all_platforms} x86-darwin11-gcc"
+ all_platforms="${all_platforms} x86-darwin12-gcc"
+ all_platforms="${all_platforms} x86-linux-gcc"
++all_platforms="${all_platforms} x86-android-gcc"
+ all_platforms="${all_platforms} x86-linux-icc"
+ all_platforms="${all_platforms} x86-os2-gcc"
+ all_platforms="${all_platforms} x86-solaris-gcc"
+@@ -360,7 +362,7 @@
+ 
+ process_targets() {
+     enabled child || write_common_config_banner
+-    enabled universal || write_common_target_config_h  ${BUILD_PFX}vpx_config.h
++    enabled universal || write_common_target_config_h  vpx_config.h
+ 
+     # TODO: add host tools target (obj_int_extract, etc)
+ 
+@@ -441,7 +443,7 @@
+ 
+         if enabled $tgt; then
+             echo "Creating makefiles for ${toolchain} ${tgt}"
+-            write_common_target_config_mk $tgt_fn ${BUILD_PFX}vpx_config.h
++            write_common_target_config_mk $tgt_fn vpx_config.h
+             #write_${tgt}_config
+         fi
+     done
+@@ -594,8 +596,8 @@
+ ##
+ CONFIGURE_ARGS="$@"
+ process "$@"
+-print_webm_license ${BUILD_PFX}vpx_config.c "/*" " */"
+-cat <<EOF >> ${BUILD_PFX}vpx_config.c
++print_webm_license vpx_config.c "/*" " */"
++cat <<EOF >> vpx_config.c
+ static const char* const cfg = "$CONFIGURE_ARGS";
+ const char *vpx_codec_build_config(void) {return cfg;}
+ EOF
+Index: libvpx/sources/build/make/configure.sh
+===================================================================
+--- libvpx.orig/sources/build/make/configure.sh	2012-11-02 19:52:41.761821654 +0100
++++ libvpx/sources/build/make/configure.sh	2012-11-02 19:54:19.405817571 +0100
+@@ -787,10 +787,11 @@
+             ;;
+ 
+         android*)
++            TOOLCHAIN_PREFIX=arm-linux-androideabi-
+             SDK_PATH=${sdk_path}
+             COMPILER_LOCATION=`find "${SDK_PATH}" \
+-                               -name "arm-linux-androideabi-gcc*" -print -quit`
+-            TOOLCHAIN_PATH=${COMPILER_LOCATION%/*}/arm-linux-androideabi-
++                               -name "${TOOLCHAIN_PREFIX}gcc*" -print -quit`
++            TOOLCHAIN_PATH=${COMPILER_LOCATION%/*}/${TOOLCHAIN_PREFIX}
+             CC=${TOOLCHAIN_PATH}gcc
+             AR=${TOOLCHAIN_PATH}ar
+             LD=${TOOLCHAIN_PATH}gcc
+@@ -897,6 +898,39 @@
+         check_add_cflags -march=${tgt_isa}
+     check_add_asflags -march=${tgt_isa}
+     check_add_asflags -KPIC
++
++        case  ${tgt_os} in
++            android*)
++                TOOLCHAIN_PREFIX=mipsel-linux-android-
++                SDK_PATH=${sdk_path}
++                COMPILER_LOCATION=`find "${SDK_PATH}" \
++                                   -name "${TOOLCHAIN_PREFIX}gcc*" -print -quit`
++                TOOLCHAIN_PATH=${COMPILER_LOCATION%/*}/${TOOLCHAIN_PREFIX}
++                CC=${TOOLCHAIN_PATH}gcc
++                AR=${TOOLCHAIN_PATH}ar
++                LD=${TOOLCHAIN_PATH}gcc
++                AS=${TOOLCHAIN_PATH}as
++                STRIP=${TOOLCHAIN_PATH}strip
++                NM=${TOOLCHAIN_PATH}nm
++
++                if [ -z "${alt_libc}" ]; then
++                    alt_libc=`find "${SDK_PATH}" -name arch-mips -print | \
++                              awk '{n = split($0,a,"/"); \
++                                    split(a[n-1],b,"-"); \
++                                    print $0 " " b[2]}' | \
++                              sort -g -k 2 | \
++                              awk '{ print $1 }' | tail -1`
++                fi
++
++                add_cflags "--sysroot=${alt_libc}"
++                add_ldflags "--sysroot=${alt_libc}"
++
++                add_cflags "-I${SDK_PATH}/sources/android/cpufeatures/"
++
++                enable pic
++                soft_enable realtime_only
++              ;;
++        esac
+     ;;
+     ppc*)
+         enable ppc
+@@ -925,12 +959,19 @@
+         bits=32
+         enabled x86_64 && bits=64
+         soft_enable runtime_cpu_detect
+-        soft_enable mmx
+-        soft_enable sse
+-        soft_enable sse2
+-        soft_enable sse3
+-        soft_enable ssse3
+-        soft_enable sse4_1
++
++        case  ${tgt_os} in
++            android*)
++               ;;
++            *)
++                soft_enable mmx
++                soft_enable sse
++                soft_enable sse2
++                soft_enable sse3
++                soft_enable ssse3
++                soft_enable sse4_1
++                ;;
++        esac
+ 
+         case  ${tgt_os} in
+             win*)
+@@ -944,6 +985,37 @@
+             os2)
+                 AS=${AS:-nasm}
+                 ;;
++            android*)
++                TOOLCHAIN_PREFIX=i686-linux-android-
++                SDK_PATH=${sdk_path}
++                COMPILER_LOCATION=`find "${SDK_PATH}" \
++                                   -name "${TOOLCHAIN_PREFIX}gcc*" -print -quit`
++                TOOLCHAIN_PATH=${COMPILER_LOCATION%/*}/${TOOLCHAIN_PREFIX}
++                CC=${TOOLCHAIN_PATH}gcc
++                AR=${TOOLCHAIN_PATH}ar
++                LD=${TOOLCHAIN_PATH}gcc
++                AS=${TOOLCHAIN_PATH}as
++                STRIP=${TOOLCHAIN_PATH}strip
++                NM=${TOOLCHAIN_PATH}nm
++
++                if [ -z "${alt_libc}" ]; then
++                    alt_libc=`find "${SDK_PATH}" -name arch-x86 -print | \
++                              awk '{n = split($0,a,"/"); \
++                                    split(a[n-1],b,"-"); \
++                                    print $0 " " b[2]}' | \
++                              sort -g -k 2 | \
++                              awk '{ print $1 }' | tail -1`
++                fi
++
++                add_cflags "--sysroot=${alt_libc}"
++                add_ldflags "--sysroot=${alt_libc}"
++
++                add_cflags "-I${SDK_PATH}/sources/android/cpufeatures/"
++
++                enable pic
++                soft_enable realtime_only
++              ;;
++
+         esac
+ 
+         AS="${alt_as:-${AS:-auto}}"
+@@ -1114,6 +1186,8 @@
+         upname="`toupper $cfg`"
+         if enabled $cfg; then
+             echo "${prefix}_${upname}=yes" >> $makefile
++        else
++            echo "${prefix}_${upname}=no" >> $makefile
+         fi
+     done
+ }
+Index: libvpx/sources/vp8/common/systemdependent.h
+===================================================================
+--- libvpx.orig/sources/vp8/common/systemdependent.h	2012-11-02 19:52:41.761821654 +0100
++++ libvpx/sources/vp8/common/systemdependent.h	2012-11-02 19:54:19.405817571 +0100
+@@ -10,7 +10,7 @@
+ 
+ 
+ #include "vpx_config.h"
+-#if ARCH_X86 || ARCH_X86_64
++#if (ARCH_X86 || ARCH_X86_64) && !ANDROID
+ void vpx_reset_mmx_state(void);
+ #define vp8_clear_system_state() vpx_reset_mmx_state()
+ #else
+Index: libvpx/sources/vp8/common/postproc.c
+===================================================================
+--- libvpx.orig/sources/vp8/common/postproc.c	2012-11-02 19:52:41.761821654 +0100
++++ libvpx/sources/vp8/common/postproc.c	2012-11-02 19:54:19.409817571 +0100
+@@ -738,7 +738,7 @@
+         }
+     }
+ 
+-#if ARCH_X86||ARCH_X86_64
++#if (ARCH_X86||ARCH_X86_64) && !ANDROID
+     vpx_reset_mmx_state();
+ #endif
+ 
+Index: libvpx/sources/build/make/rtcd.sh
+===================================================================
+--- libvpx.orig/sources/build/make/rtcd.sh	2012-11-02 19:53:47.689818898 +0100
++++ libvpx/sources/build/make/rtcd.sh	2012-11-02 19:54:19.409817571 +0100
+@@ -303,13 +303,17 @@
+ require c
+ case $arch in
+   x86)
++    if [[ "$config_file" != *android* ]]; then
+     ALL_ARCHS=$(filter mmx sse sse2 sse3 ssse3 sse4_1)
++    fi
+     x86
+     ;;
+   x86_64)
++    if [[ "$config_file" != *android* ]]; then
+     ALL_ARCHS=$(filter mmx sse sse2 sse3 ssse3 sse4_1)
+     REQUIRES=${REQUIRES:-mmx sse sse2}
+     require $(filter $REQUIRES)
++    fi
+     x86
+     ;;
+   armv5te)
