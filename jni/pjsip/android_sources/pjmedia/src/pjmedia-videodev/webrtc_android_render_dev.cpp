@@ -271,17 +271,21 @@ static pj_status_t init_stream(struct webrtcR_stream *strm){
 		toFrame.SetWidth(1);
 		toFrame.SetLength(3);
 
-		// We start with green
+		// We start with black
 		memset(toFrame.Buffer(), 0, 3);
-		strm->_renderModule->SetStartImage(0, toFrame);
-
-		// We timeout with black
 		toFrame.Buffer()[1] = 128;
 		toFrame.Buffer()[2] = 128;
-		strm->_renderModule->SetTimeoutImage(0, toFrame, 1000);
+		strm->_renderModule->SetStartImage(0, toFrame);
+
+		// We timeout with gray
+		toFrame.Buffer()[0] = 128;
+		strm->_renderModule->SetTimeoutImage(0, toFrame, 20000);
 
 		int stat = strm->_renderModule->StartRender(0);
 		PJ_LOG(4, (THIS_FILE, "Render thread started %d", stat));
+
+		/*
+		// Not needed anymore as have start frame now
 
 		// Deliver one fake start frame to init renderer
 		memset(toFrame.Buffer(), 0, 3);
@@ -290,7 +294,7 @@ static pj_status_t init_stream(struct webrtcR_stream *strm){
 		strm->_renderProvider->RenderFrame(0, toFrame);
 
 		PJ_LOG(4, (THIS_FILE, "Fake first frame rendered"));
-
+		*/
 		status = PJ_SUCCESS;
 	}
 
