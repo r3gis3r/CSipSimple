@@ -1,8 +1,8 @@
 Index: pjsip/sources/pjmedia/src/pjmedia-codec/silk.c
 ===================================================================
---- pjsip.orig/sources/pjmedia/src/pjmedia-codec/silk.c	2012-10-06 01:01:23.743060888 +0200
-+++ pjsip/sources/pjmedia/src/pjmedia-codec/silk.c	2012-11-02 09:20:26.839610565 +0100
-@@ -244,7 +244,7 @@
+--- pjsip.orig/sources/pjmedia/src/pjmedia-codec/silk.c	2012-11-03 16:30:32.883566795 +0100
++++ pjsip/sources/pjmedia/src/pjmedia-codec/silk.c	2012-11-03 16:31:07.335567688 +0100
+@@ -246,7 +246,7 @@
      sp->bitrate = CALC_BITRATE(sp->max_bitrate);
      sp->ptime = FRAME_LENGTH_MS;
      sp->complexity = PJMEDIA_CODEC_SILK_DEFAULT_COMPLEXITY;
@@ -11,7 +11,7 @@ Index: pjsip/sources/pjmedia/src/pjmedia-codec/silk.c
  
      sp = &silk_factory.silk_param[PARAM_WB];
      sp->pt = PJMEDIA_RTP_PT_SILK_WB;
-@@ -262,7 +262,7 @@
+@@ -264,7 +264,7 @@
      sp->bitrate = CALC_BITRATE(sp->max_bitrate);
      sp->ptime = FRAME_LENGTH_MS;
      sp->complexity = PJMEDIA_CODEC_SILK_DEFAULT_COMPLEXITY;
@@ -20,36 +20,3 @@ Index: pjsip/sources/pjmedia/src/pjmedia-codec/silk.c
  
  
      /* Get the codec manager. */
-@@ -311,10 +311,14 @@
-     {
-         if (silk_factory.silk_param[i].clock_rate == clock_rate) {
- 	    silk_factory.silk_param[i].enabled = opt->enabled;
-+	    if(opt->complexity > 0){
-             silk_factory.silk_param[i].complexity = opt->complexity;
-+	    }
-+	    if(opt->quality > 0){
-             silk_factory.silk_param[i].bitrate =
-                 CALC_BITRATE_QUALITY(opt->quality,
-                                      silk_factory.silk_param[i].max_bitrate);
-+	    }
- 	    return PJ_SUCCESS;
- 	}
-     }
-@@ -588,7 +592,7 @@
-     }
- 
-     /* Check fmtp params */
--    enc_use_fec = PJ_FALSE;
-+    enc_use_fec = PJ_TRUE;
-     enc_bitrate = sp->bitrate;
-     for (i = 0; i < attr->setting.enc_fmtp.cnt; ++i) {
- 	pjmedia_codec_fmtp *fmtp = &attr->setting.enc_fmtp;
-@@ -614,7 +618,7 @@
-     silk->enc_ctl.API_sampleRate        = attr->info.clock_rate;
-     silk->enc_ctl.maxInternalSampleRate = attr->info.clock_rate;
-     silk->enc_ctl.packetSize            = silk->samples_per_frame;
--    silk->enc_ctl.packetLossPercentage  = 0;
-+    silk->enc_ctl.packetLossPercentage  = 10; /* To have useInBandFEC actually do something use something > LBRR_LOSS_THRES (1) */
-     silk->enc_ctl.useInBandFEC          = enc_use_fec;
-     silk->enc_ctl.useDTX                = attr->setting.vad;
-     silk->enc_ctl.complexity            = sp->complexity;
