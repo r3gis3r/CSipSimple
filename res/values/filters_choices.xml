@@ -18,6 +18,7 @@
         <item>@string/is_exactly</item>
         <item>@string/custom_regexp</item>
         <item>@string/bluetooth</item>
+        <item>@string/call_info_header</item>
     </string-array>
     <string-array name="replace_type">
         <item>@string/prefix_by</item>

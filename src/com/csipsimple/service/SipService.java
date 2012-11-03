@@ -1695,7 +1695,7 @@ public class SipService extends Service {
 	 * @param acc The incoming guessed account
 	 * @return the sip code to auto-answer with. If > 0 it means that an auto answer must be fired
 	 */
-	public int shouldAutoAnswer(String remContact, SipProfile acc) {
+	public int shouldAutoAnswer(String remContact, SipProfile acc, Bundle extraHdr) {
 
 		Log.d(THIS_FILE, "Search if should I auto answer for " + remContact);
 		int shouldAutoAnswer = 0;
@@ -1713,7 +1713,7 @@ public class SipService extends Service {
 			if (m.matches()) {
 				number = m.group(2);
 			}
-			shouldAutoAnswer = Filter.isAutoAnswerNumber(this, acc.id, number);
+			shouldAutoAnswer = Filter.isAutoAnswerNumber(this, acc.id, number, extraHdr);
 			
 		}else {
 			Log.d(THIS_FILE, "Oupps... that come from an unknown account...");

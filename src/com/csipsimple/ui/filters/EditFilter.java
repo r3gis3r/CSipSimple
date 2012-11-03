@@ -242,8 +242,10 @@ public class EditFilter extends Activity implements OnItemSelectedListener, Text
 	}
 	
 	private boolean matcherNeedsText() {
-	    return Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_ALL && 
-                Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() ) != Filter.MATCHER_BLUETOOTH;
+	    int fmatcher = Filter.getMatcherForPosition(matcherSpinner.getSelectedItemPosition() );
+	    return  fmatcher != Filter.MATCHER_ALL && 
+	            fmatcher != Filter.MATCHER_BLUETOOTH && 
+	            fmatcher != Filter.MATCHER_CALLINFO_AUTOREPLY;
 	}
 
 	@Override

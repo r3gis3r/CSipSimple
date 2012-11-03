@@ -175,6 +175,7 @@ PJ_DECL(pj_status_t) pjsua_acc_clean_all_registrations( pjsua_acc_id acc_id);
 PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr);
 PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id, jobject window);
 PJ_DECL(pj_status_t) set_turn_credentials(const pj_str_t username, const pj_str_t password, const pj_str_t realm, pj_stun_auth_cred *turn_auth_cred);
+PJ_DECL(pj_str_t)    get_rx_data_header(const pj_str_t name, pjsip_rx_data* data);
 
 // App callback
 PJ_DECL(void) css_on_call_state(pjsua_call_id call_id, pjsip_event *e);

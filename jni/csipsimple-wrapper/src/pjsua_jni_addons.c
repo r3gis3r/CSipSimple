@@ -585,10 +585,8 @@ PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csi
 
 PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg_data* msg_data){
 	csipsimple_acc_config *additional_acc_cfg = NULL;
-
 	// P-Asserted-Identity header
 	pj_str_t hp_preferred_identity_name = { "P-Preferred-Identity", 20 };
-	pjsip_generic_string_hdr hp_preferred_identity;
 
 	// Sanity check
 	PJ_ASSERT_RETURN(msg_data != NULL, PJ_EINVAL);
@@ -599,16 +597,14 @@ PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg
 		additional_acc_cfg = (csipsimple_acc_config *) pjsua_acc_get_user_data(acc_id);
 	}
 
-
 	// Process additionnal config for this account
 	if(additional_acc_cfg != NULL){
-
 		if(additional_acc_cfg->p_preferred_identity.slen > 0){
 			// Create new P-Asserted-Identity hdr if necessary
-			pjsip_generic_string_hdr_init2(&hp_preferred_identity, &hp_preferred_identity_name, &additional_acc_cfg->p_preferred_identity);
-
+			pjsip_generic_string_hdr* hdr = pjsip_generic_string_hdr_create(css_var.pool,
+					&hp_preferred_identity_name, &additional_acc_cfg->p_preferred_identity);
 			// Push it to msg data
-			pj_list_push_back(&msg_data->hdr_list, &hp_preferred_identity);
+			pj_list_push_back(&msg_data->hdr_list, hdr);
 		}
 	}
 
@@ -616,7 +612,7 @@ PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg
 }
 
 
-void update_active_calls(const pj_str_t *new_ip_addr) {
+static void update_active_calls(const pj_str_t *new_ip_addr) {
 	pjsip_tpselector tp_sel;
 	pjsua_init_tpselector(0, &tp_sel); // << 0 is hard coded here for active transportId.  could be passed in if needed.
 	int ndx;
@@ -659,6 +655,15 @@ PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr) {
 	return PJ_SUCCESS;
 }
 
+
+PJ_DECL(pj_str_t) get_rx_data_header(const pj_str_t name, pjsip_rx_data* data){
+	pjsip_generic_string_hdr *hdr =
+			(pjsip_generic_string_hdr*) pjsip_msg_find_hdr_by_name(data->msg_info.msg, &name, NULL);
+	if (hdr && hdr->hvalue.ptr) {
+		return hdr->hvalue;
+	}
+	return pj_str("");
+}
 
 /**
  * On call state used to automatically ringback.

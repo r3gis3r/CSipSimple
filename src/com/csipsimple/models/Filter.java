@@ -25,6 +25,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 
@@ -64,6 +65,7 @@ public class Filter {
 	public static final int MATCHER_ALL = 6;
 	public static final int MATCHER_CONTAINS = 7;
     public static final int MATCHER_BLUETOOTH = 8;
+    public static final int MATCHER_CALLINFO_AUTOREPLY = 9;
 	
 	public static final int REPLACE_PREFIX = 0;
 	public static final int REPLACE_MATCH_BY = 1;
@@ -92,6 +94,8 @@ public class Filter {
 	public static final String DEFAULT_ORDER = FIELD_PRIORITY + " asc";
 	
 	private static final String BLUETOOTH_MATCHER_KEY = "###BLUETOOTH###";
+    private static final String CALLINFO_AUTOREPLY_MATCHER_KEY = "###CALLINFO_AUTOREPLY###";
+	
 	
 	private static final String THIS_FILE = "Filter";
 	
@@ -174,7 +178,9 @@ public class Filter {
 		RegExpRepresentation m = getRepresentationForMatcher();
 		StringBuffer reprBuf = new StringBuffer();
 		reprBuf.append(matches_array[getPositionForMatcher(m.type)]);
-		if(m.type != MATCHER_BLUETOOTH && m.type != MATCHER_ALL) {
+		if(m.type != MATCHER_BLUETOOTH &&
+		        m.type != MATCHER_CALLINFO_AUTOREPLY &&
+		        m.type != MATCHER_ALL) {
     		reprBuf.append(' ');
     		reprBuf.append(m.fieldContent);
 		}
@@ -192,8 +198,20 @@ public class Filter {
 		Log.e(THIS_FILE, "Invalid pattern ", e);
 	}
 	
-	private boolean patternMatches(Context ctxt, String number, boolean defaultValue) {
-	    if(BLUETOOTH_MATCHER_KEY.equals(matchPattern)) {
+	private boolean patternMatches(Context ctxt, String number, Bundle extraHdr, boolean defaultValue) {
+	    if(CALLINFO_AUTOREPLY_MATCHER_KEY.equals(matchPattern)) {
+	        if(extraHdr != null &&
+                extraHdr.containsKey("Call-Info")) {
+                String hdrValue = extraHdr.getString("Call-Info");
+                if(hdrValue != null) {
+                    hdrValue = hdrValue.trim();
+                }
+                if(!TextUtils.isEmpty(hdrValue) &&
+                        "answer-after=0".equalsIgnoreCase(hdrValue)){
+                    return true;
+                }
+            }
+	    }else if(BLUETOOTH_MATCHER_KEY.equals(matchPattern)) {
             return BluetoothWrapper.getInstance(ctxt).isBTHeadsetConnected();
         }else {
             try {
@@ -213,7 +231,7 @@ public class Filter {
 	 */
 	public boolean canCall(Context ctxt, String number) {
 		if(action == ACTION_CANT_CALL) {
-		    return !patternMatches(ctxt, number, false);
+		    return !patternMatches(ctxt, number, null, false);
 			
 		}
 		return true;
@@ -227,7 +245,7 @@ public class Filter {
 	 */
 	public boolean mustCall(Context ctxt, String number) {
 		if(action == ACTION_DIRECTLY_CALL) {
-		    return patternMatches(ctxt, number, false);
+		    return patternMatches(ctxt, number, null, false);
 			
 		}
 		return false;
@@ -241,7 +259,7 @@ public class Filter {
 	 */
 	public boolean stopProcessing(Context ctxt, String number) {
 		if(action == ACTION_CAN_CALL || action == ACTION_DIRECTLY_CALL) {
-			return patternMatches(ctxt, number, false);
+			return patternMatches(ctxt, number, null, false);
 		}
 		return false;
 	}
@@ -252,9 +270,9 @@ public class Filter {
 	 * @param number number to test
 	 * @return true if the call should be auto-answered
 	 */
-    public boolean autoAnswer(Context ctxt, String number) {
+    public boolean autoAnswer(Context ctxt, String number, Bundle extraHdr) {
         if(action == ACTION_AUTO_ANSWER) {
-            return patternMatches(ctxt, number, false);
+            return patternMatches(ctxt, number, extraHdr, false);
         }
         return false;
     }
@@ -331,6 +349,7 @@ public class Filter {
 		MATCHER_TYPE_POS.put(6, MATCHER_IS_EXACTLY);
 		MATCHER_TYPE_POS.put(7, MATCHER_REGEXP);
         MATCHER_TYPE_POS.put(8, MATCHER_BLUETOOTH);
+        MATCHER_TYPE_POS.put(9, MATCHER_CALLINFO_AUTOREPLY);
 	};
 	
 	public static int getMatcherForPosition(Integer selectedItemPosition) {
@@ -403,6 +422,9 @@ public class Filter {
 		case MATCHER_BLUETOOTH:
 		    matchPattern = BLUETOOTH_MATCHER_KEY;
 		    break;
+		case MATCHER_CALLINFO_AUTOREPLY:
+		    matchPattern = CALLINFO_AUTOREPLY_MATCHER_KEY;
+		    break;
 		case MATCHER_REGEXP:
 		default:
 		    matchType = MATCHER_REGEXP;        // In case hit default:
@@ -433,6 +455,8 @@ public class Filter {
 		
 		if(matchPattern.equals(BLUETOOTH_MATCHER_KEY)) {
 		    repr.type = matchType = MATCHER_BLUETOOTH;
+		}else if(matchPattern.equalsIgnoreCase(CALLINFO_AUTOREPLY_MATCHER_KEY)) {
+		    repr.type = matchType = MATCHER_CALLINFO_AUTOREPLY;
 		}
 		
 		Matcher matcher = null;
@@ -647,10 +671,10 @@ public class Filter {
 		return number;
 	}
 	
-	public static int isAutoAnswerNumber(Context ctxt, long accountId, String number) {
+	public static int isAutoAnswerNumber(Context ctxt, long accountId, String number, Bundle extraHdr) {
         List<Filter> filterList = getFiltersForAccount(ctxt, accountId);
         for (Filter f : filterList) {
-            if (f.autoAnswer(ctxt, number)) {
+            if (f.autoAnswer(ctxt, number, extraHdr)) {
                 if (TextUtils.isEmpty(f.replacePattern)) {
                     return 200;
                 }

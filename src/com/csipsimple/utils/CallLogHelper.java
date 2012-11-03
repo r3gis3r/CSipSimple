@@ -100,7 +100,7 @@ public class CallLogHelper {
 		}
 
 
-        int hasBeenAutoanswered = Filter.isAutoAnswerNumber(context, call.getAccId(), number);
+        int hasBeenAutoanswered = Filter.isAutoAnswerNumber(context, call.getAccId(), number, null);
         if(hasBeenAutoanswered == call.getLastStatusCode()) {
             nonAcknowledge = 0;
         }

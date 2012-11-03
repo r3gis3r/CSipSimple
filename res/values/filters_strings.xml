@@ -19,5 +19,6 @@
     <string name="suffix_with">Suffix with</string>
     <string name="replace_match_by">Replace match by</string>
     <string name="replace_all_by">Replace all by</string>
+    <string name="call_info_header">Has Call-Info for immediate answer</string>
 
 </resources>

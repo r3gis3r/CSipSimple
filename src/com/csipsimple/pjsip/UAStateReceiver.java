@@ -26,6 +26,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -152,7 +153,9 @@ public class UAStateReceiver extends Callback {
 
             //Auto answer feature
             SipProfile acc = pjService.getAccountForPjsipId(accId);
-            final int shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc);
+            Bundle extraHdr = new Bundle();
+            fillRDataHeader("Call-Info", rdata, extraHdr);
+            final int shouldAutoAnswer = pjService.service.shouldAutoAnswer(remContact, acc, extraHdr);
             Log.d(THIS_FILE, "Should I anto answer ? " + shouldAutoAnswer);
             if (shouldAutoAnswer >= 200) {
                 // Automatically answer incoming calls with 200 or higher final code
@@ -1057,5 +1060,12 @@ public class UAStateReceiver extends Callback {
                 pjService.sendPendingDtmf(callId);
             }
         });
+    }
+    
+    private void fillRDataHeader(String hdrName, SWIGTYPE_p_pjsip_rx_data rdata, Bundle out) throws SameThreadException {
+        String valueHdr = PjSipService.pjStrToString(pjsua.get_rx_data_header(pjsua.pj_str_copy(hdrName), rdata));
+        if(!TextUtils.isEmpty(valueHdr)) {
+            out.putString(hdrName, valueHdr);
+        }
     }
 }
