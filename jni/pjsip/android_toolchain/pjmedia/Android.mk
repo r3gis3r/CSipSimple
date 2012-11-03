@@ -199,6 +199,14 @@ LOCAL_SHARED_LIBRARIES += libpjsipjni
 LOCAL_LDLIBS += -lGLESv2 -llog
 LOCAL_STATIC_LIBRARIES += libgcc cpufeatures
 
+USE_STAGEFRIGHT_H264:=0
+ANDROID_LIBS := ./jni/ffmpeg/ffmpeg_src/android-libs
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+ifeq ($(USE_STAGEFRIGHT_H264),1)
+	LOCAL_LDLIBS += -L$(ANDROID_LIBS) -Wl,-rpath-link,$(ANDROID_LIBS) -lstagefright -lutils -lbinder
+endif
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,cpufeatures)
