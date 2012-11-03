@@ -826,6 +826,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_fusion, 10, 
                     new Locale[]{Locale.JAPAN}, false, false, 
                     Fusion.class));
+            WIZARDS_DICT.put("YOUMAGIC", new WizardInfo("YOUMAGIC", "YouMagic", 
+                    R.drawable.ic_wizard_youmagic, 30, 
+                    new Locale[]{ locale("ru_RU") }, false, false, 
+                    YouMagic.class));
             
             
             
