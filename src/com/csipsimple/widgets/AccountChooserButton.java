@@ -238,23 +238,40 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
                 }
                 // Else we can add
                 CallHandlerPlugin ch = new CallHandlerPlugin(getContext());
-                ch.loadFrom(packageName, null, new OnLoadListener() {
-                    @Override
-                    public void onLoad(final CallHandlerPlugin ch) {
-                        quickAction.addItem(ch.getIconDrawable(), ch.getLabel().toString(),
-                                new OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        setAccount(ch.getFakeProfile());
-                                        quickAction.dismiss();
-                                    }
-                                });
-                    }
-                });
+                ch.loadFrom(packageName, null, new OnPluginLoadListener());
             }
         }
 
         quickAction.show();
+    }
+    
+    private class OnPluginLoadListener implements OnLoadListener {
+        @Override
+        public void onLoad(CallHandlerPlugin ch) {
+            mHandler.post(new PluginButtonManager(ch));
+        }
+    }
+    /**
+     * This runnable is intended to be run in UI thread (so in handler).
+     */
+    private class PluginButtonManager implements Runnable, OnClickListener {
+        CallHandlerPlugin ch;
+
+        PluginButtonManager(CallHandlerPlugin callHandler) {
+            ch = callHandler;
+        }
+
+        @Override
+        public void run() {
+            quickAction.addItem(ch.getIconDrawable(),
+                    ch.getLabel().toString(), this);
+        }
+        
+        @Override
+        public void onClick(View v) {
+            setAccount(ch.getFakeProfile());
+            quickAction.dismiss();
+        }
     }
 
     /**
