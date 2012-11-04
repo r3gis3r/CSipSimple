@@ -7,3 +7,5 @@
 008sdp_in_options.diff
 009silk_custo.diff
 010os_unix_joining_self.diff
+011add_vpx_type.h
+012refine_find_for_incoming_acc.diff

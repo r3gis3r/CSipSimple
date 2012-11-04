@@ -1,0 +1,134 @@
+Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
+===================================================================
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2012-11-03 16:30:46.715567155 +0100
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2012-11-04 19:34:12.237992553 +0100
+@@ -2631,6 +2631,55 @@
+     return pjsua_var.default_acc;
+ }
+ 
++#define MAX_COMPARE_LEN 64
++
++static unsigned max_common_substr_len(const pj_str_t* str1, const pj_str_t* str2)
++{
++	unsigned max_len = 0;
++	/* We compare only on first MAX_COMPARE_LEN char */
++	unsigned tree[MAX_COMPARE_LEN][MAX_COMPARE_LEN];
++	unsigned m1=0, m2=0;
++	int i=0, j=0;
++
++	if(str1->slen == 0 || str2->slen == 0)
++	{
++		return 0;
++	}
++
++	/* Init tree */
++	for(i=0;i < MAX_COMPARE_LEN;i++) {
++		pj_bzero(tree[i], PJ_ARRAY_SIZE( tree[i] ));
++	}
++
++	m1 = PJ_MIN(str1->slen, MAX_COMPARE_LEN);
++	m2 = PJ_MIN(str2->slen, MAX_COMPARE_LEN);
++
++    for (i = 0; i < m1; i++) {
++        for (j = 0; j < m2; j++) {
++            if (str1->ptr[i] != str2->ptr[j])
++            {
++                tree[i][j] = 0;
++            }
++            else
++            {
++                if ((i == 0) || (j == 0))
++                {
++                    tree[i][j] = 1;
++                }
++                else
++                {
++                    tree[i][j] = 1 + tree[i - 1][j - 1];
++                }
++
++                if (tree[i][j] > max_len)
++                {
++                    max_len = tree[i][j];
++                }
++            }
++        }
++    }
++	return max_len;
++}
+ 
+ /*
+  * This is an internal function to find the most appropriate account to be
+@@ -2641,6 +2690,9 @@
+     pjsip_uri *uri;
+     pjsip_sip_uri *sip_uri;
+     unsigned i;
++    int current_matching_score = 0;
++    int matching_scores[PJSUA_MAX_ACC];
++    pjsua_acc_id best_matching = pjsua_var.default_acc;
+ 
+     /* Check that there's at least one account configured */
+     PJ_ASSERT_RETURN(pjsua_var.acc_cnt!=0, pjsua_var.default_acc);
+@@ -2673,6 +2725,9 @@
+ 	}
+     }
+ 
++    /* No exact matching, try fuzzy matching */
++    pj_bzero(matching_scores, sizeof(matching_scores));
++
+     /* No matching account, try match domain part only. */
+     for (i=0; i < pjsua_var.acc_cnt; ++i) {
+ 	unsigned acc_id = pjsua_var.acc_ids[i];
+@@ -2680,8 +2735,11 @@
+ 
+ 	if (acc->valid && pj_stricmp(&acc->srv_domain, &sip_uri->host)==0) {
+ 	    /* Match ! */
+-	    PJSUA_UNLOCK();
+-	    return acc_id;
++		/* We apply 100 weight if account has reg uri
++		 * Because in pragmatic case we are more looking
++		 * for these one than for the local acc
++		 */
++	    matching_scores[i] += (acc->cfg.reg_uri.slen > 0) ? (300 * sip_uri->host.slen) : 1;
+ 	}
+     }
+ 
+@@ -2690,7 +2748,12 @@
+ 	unsigned acc_id = pjsua_var.acc_ids[i];
+ 	pjsua_acc *acc = &pjsua_var.acc[acc_id];
+ 
+-	if (acc->valid && pj_stricmp(&acc->user_part, &sip_uri->user)==0) {
++	if (acc->valid) {
++		/* We apply 100 weight if account has reg uri
++		 * Because in pragmatic case we are more looking
++		 * for these one than for the local acc
++		 */
++		unsigned weight = (acc->cfg.reg_uri.slen > 0) ? 100 : 1;
+ 
+ 	    if (acc->cfg.transport_id != PJSUA_INVALID_ID) {
+ 		pjsip_transport_type_e type;
+@@ -2701,16 +2764,21 @@
+ 		if (pjsua_var.tpdata[acc->cfg.transport_id].type != type)
+ 		    continue;
+ 	    }
+-
+ 	    /* Match ! */
+-	    PJSUA_UNLOCK();
+-	    return acc_id;
++        matching_scores[i] += (max_common_substr_len(&acc->user_part, &sip_uri->user) * weight);
+ 	}
+     }
+ 
+     /* Still no match, use default account */
+     PJSUA_UNLOCK();
+-    return pjsua_var.default_acc;
++    for(i=0; i<pjsua_var.acc_cnt; i++) {
++        if(current_matching_score < matching_scores[i])
++        {
++            best_matching = pjsua_var.acc_ids[i];
++            current_matching_score = matching_scores[i];
++        }
++    }
++    return best_matching;
+ }
+ 
+ 
