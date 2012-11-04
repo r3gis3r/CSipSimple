@@ -456,7 +456,6 @@
 
         <activity
             android:name="com.csipsimple.widgets.AccountWidgetConfigure"
-            android:permission="android.permission.BIND_APPWIDGET"
             android:theme="@style/DarkTheme" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -478,7 +477,6 @@
 
         <activity
             android:name="com.csipsimple.widgets.ShortcutWidgetConfigure"
-            android:permission="android.permission.BIND_APPWIDGET"
             android:theme="@style/DarkTheme" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
