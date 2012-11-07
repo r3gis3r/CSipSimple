@@ -1225,31 +1225,31 @@ public class PjSipService {
             }
             
         }
-        
-        
-        
-        pj_str_t pjKeyPressed = pjsua.pj_str_copy(dtmfToDial);
-        int res = -1;
-        if (prefsWrapper.useSipInfoDtmf()) {
-            res = pjsua.send_dtmf_info(callId, pjKeyPressed);
-            Log.d(THIS_FILE, "Has been sent DTMF INFO : " + res);
-        } else {
-            if (!prefsWrapper.forceDtmfInBand()) {
-                // Generate using RTP
-                res = pjsua.call_dial_dtmf(callId, pjKeyPressed);
-                Log.d(THIS_FILE, "Has been sent in RTP DTMF : " + res);
-            }
 
-            if (res != pjsua.PJ_SUCCESS && !prefsWrapper.forceDtmfRTP()) {
-                // Generate using analogic inband
-                if (dtmfDialtoneGenerators.get(callId) == null) {
-                    dtmfDialtoneGenerators.put(callId, new PjStreamDialtoneGenerator(callId));
+        int res = 0;
+        if(!TextUtils.isEmpty(dtmfToDial)) {
+            pj_str_t pjKeyPressed = pjsua.pj_str_copy(dtmfToDial);
+            res = -1;
+            if (prefsWrapper.useSipInfoDtmf()) {
+                res = pjsua.send_dtmf_info(callId, pjKeyPressed);
+                Log.d(THIS_FILE, "Has been sent DTMF INFO : " + res);
+            } else {
+                if (!prefsWrapper.forceDtmfInBand()) {
+                    // Generate using RTP
+                    res = pjsua.call_dial_dtmf(callId, pjKeyPressed);
+                    Log.d(THIS_FILE, "Has been sent in RTP DTMF : " + res);
                 }
-                res = dtmfDialtoneGenerators.get(callId).sendPjMediaDialTone(keyPressed);
-                Log.d(THIS_FILE, "Has been sent DTMF analogic : " + res);
+    
+                if (res != pjsua.PJ_SUCCESS && !prefsWrapper.forceDtmfRTP()) {
+                    // Generate using analogic inband
+                    if (dtmfDialtoneGenerators.get(callId) == null) {
+                        dtmfDialtoneGenerators.put(callId, new PjStreamDialtoneGenerator(callId));
+                    }
+                    res = dtmfDialtoneGenerators.get(callId).sendPjMediaDialTone(keyPressed);
+                    Log.d(THIS_FILE, "Has been sent DTMF analogic : " + res);
+                }
             }
         }
-        
         
         
         // Finally, push remaining DTMF in the future
@@ -1710,7 +1710,11 @@ public class PjSipService {
         String digitsToAdd = null;
         if(!TextUtils.isEmpty(finalCallee.userName) && 
                 (finalCallee.userName.contains(",") || finalCallee.userName.contains(";"))) {
-            int commaIndex = Math.min(finalCallee.userName.indexOf(","), finalCallee.userName.indexOf(";"));
+            int commaIndex = finalCallee.userName.indexOf(",");
+            int semiColumnIndex =finalCallee.userName.indexOf(";"); 
+            if(semiColumnIndex > 0 && semiColumnIndex < commaIndex) {
+                commaIndex = semiColumnIndex;
+            }
             digitsToAdd = finalCallee.userName.substring(commaIndex);
             finalCallee.userName = finalCallee.userName.substring(0, commaIndex);
         }
