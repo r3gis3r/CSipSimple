@@ -92,8 +92,8 @@ import java.util.TimerTask;
 
 public class PjSipService {
     private static final String THIS_FILE = "PjService";
-    private static final int DTMF_TONE_PAUSE_LENGTH = 300;
-    private static final int DTMF_TONE_WAIT_LENGTH = 2000;
+    private static int DTMF_TONE_PAUSE_LENGTH = 300;
+    private static int DTMF_TONE_WAIT_LENGTH = 2000;
     public SipService service;
 
     private boolean created = false;
@@ -217,6 +217,9 @@ public class PjSipService {
                 }
 
                 mediaManager.startService();
+                
+                DTMF_TONE_PAUSE_LENGTH = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DTMF_PAUSE_TIME);
+                DTMF_TONE_WAIT_LENGTH = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DTMF_WAIT_TIME);
 
                 pjsua.setCallbackObject(userAgentReceiver);
 
@@ -1705,8 +1708,9 @@ public class PjSipService {
             }
         }
         String digitsToAdd = null;
-        if(!TextUtils.isEmpty(finalCallee.userName) && finalCallee.userName.contains(",")) {
-            int commaIndex = finalCallee.userName.indexOf(",");
+        if(!TextUtils.isEmpty(finalCallee.userName) && 
+                (finalCallee.userName.contains(",") || finalCallee.userName.contains(";"))) {
+            int commaIndex = Math.min(finalCallee.userName.indexOf(","), finalCallee.userName.indexOf(";"));
             digitsToAdd = finalCallee.userName.substring(commaIndex);
             finalCallee.userName = finalCallee.userName.substring(0, commaIndex);
         }

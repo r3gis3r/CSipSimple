@@ -299,6 +299,11 @@ public class PrefsLogic {
                 if(videoPlugins.size() == 0) {
                     pfh.hidePreference(null, SipConfigManager.USE_VIDEO);
                 }
+
+                if(!pfw.isAdvancedUser()) {
+                    pfh.hidePreference(MEDIA_MISC_KEY, SipConfigManager.DTMF_PAUSE_TIME);
+                    pfh.hidePreference(MEDIA_MISC_KEY, SipConfigManager.DTMF_WAIT_TIME);
+                }
             }
             default:
                 break;

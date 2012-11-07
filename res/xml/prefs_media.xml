@@ -188,14 +188,6 @@
             android:summary="@string/thread_count_desc"
             android:title="@string/thread_count" />
 
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/dtmf_mode_choices"
-            android:entryValues="@array/dtmf_mode_values"
-            android:key="dtmf_mode"
-            android:summary="@string/sip_dtmf_desc"
-            android:title="@string/sip_dtmf" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="auto_connect_bluetooth"

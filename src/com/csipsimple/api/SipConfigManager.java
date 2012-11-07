@@ -208,6 +208,22 @@ public class SipConfigManager {
      */
     public static final String DTMF_MODE = "dtmf_mode";
     /**
+     * Pause time in ms of DTMF , separator.<br/>
+     * 
+     * Default is 300ms
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String DTMF_PAUSE_TIME = "dtmf_pause_time";
+    /**
+     * Pause time in ms of DTMF , separator.<br/>
+     * 
+     * Default is 2000ms
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String DTMF_WAIT_TIME = "dtmf_wait_time";
+    /**
      * Should the application use samsung galaxy S hack to establish audio?<br/>
      * Basically it starts opening audio in {@link AudioManager#MODE_IN_CALL}
      * and then {@link AudioManager#MODE_NORMAL} to have things routed to

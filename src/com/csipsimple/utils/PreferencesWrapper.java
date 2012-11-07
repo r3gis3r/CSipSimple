@@ -118,6 +118,8 @@ public class PreferencesWrapper {
 		
 		put(SipConfigManager.DSCP_VAL, "26");
 		put(SipConfigManager.DTMF_MODE, "0");
+        put(SipConfigManager.DTMF_PAUSE_TIME, "300");
+        put(SipConfigManager.DTMF_WAIT_TIME, "2000");
 		
 
 		put(SipConfigManager.GSM_INTEGRATION_TYPE, "0");

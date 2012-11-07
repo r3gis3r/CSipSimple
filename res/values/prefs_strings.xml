@@ -172,6 +172,10 @@
     <string name="codecs_desc">Priority (0 is disabled)</string>
     <string name="sip_dtmf">DTMF mode</string>
     <string name="sip_dtmf_desc">How to send DTMF</string>
+    <string name="dtmf_pause_time">Time of DTMF pause</string>
+    <string name="dtmf_pause_time_desc">Pause (,) separator waiting time in ms</string>
+    <string name="dtmf_wait_time">Time of DTMF wait</string>
+    <string name="dtmf_wait_time_desc">Wait (;) separator waiting time in ms</string>
     <string name="use_soft_volume">Use software volume</string>
     <string name="use_soft_volume_desc">Use software volume instead of android volume</string>
     <string name="use_routing_api">Use routing API</string>
