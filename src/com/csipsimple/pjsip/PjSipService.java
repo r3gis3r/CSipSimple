@@ -61,6 +61,7 @@ import com.csipsimple.wizards.WizardUtils;
 
 import org.pjsip.pjsua.csipsimple_config;
 import org.pjsip.pjsua.dynamic_factory;
+import org.pjsip.pjsua.pj_pool_t;
 import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
@@ -1123,15 +1124,37 @@ public class PjSipService {
                 cs.setVid_cnt(1);
             }
             cs.setFlag(0);
+            
+            pj_pool_t pool = pjsua.pool_create("call_tmp", 512, 512);
+            
             // Msg data to add headers
             pjsua.msg_data_init(msgData);
-            pjsua.csipsimple_init_acc_msg_data(pjsuaAccId, msgData);
+            pjsua.csipsimple_init_acc_msg_data(pool, pjsuaAccId, msgData);
+            if(b != null) {
+                Bundle extraHeaders = b.getBundle(SipCallSession.OPT_CALL_EXTRA_HEADERS);
+                if(extraHeaders != null) {
+                    for(String key : extraHeaders.keySet()) {
+                        try {
+                            String value = extraHeaders.getString(key);
+                            if(!TextUtils.isEmpty(value)) {
+                                int res = pjsua.csipsimple_msg_data_add_string_hdr(pool, msgData, pjsua.pj_str_copy(key), pjsua.pj_str_copy(value));
+                                if(res == pjsuaConstants.PJ_SUCCESS) {
+                                    Log.e(THIS_FILE, "Failed to add Xtra hdr (" + key + " : " + value + ") probably not X- header");
+                                }
+                            }
+                        }catch(Exception e) {
+                            Log.e(THIS_FILE, "Invalid header value for key : " + key);
+                        }
+                    }
+                }
+            }
             
             int status = pjsua.call_make_call(pjsuaAccId, uri, cs, userData, msgData, callId);
             if(status == pjsuaConstants.PJ_SUCCESS) {
                 dtmfToAutoSend.put(callId[0], toCall.getDtmf());
                 Log.d(THIS_FILE, "DTMF - Store for " + callId[0] + " - "+toCall.getDtmf());
             }
+            pjsua.pj_pool_release(pool);
             return status;
         } else {
             service.notifyUserOfMessage(service.getString(R.string.invalid_sip_uri) + " : "

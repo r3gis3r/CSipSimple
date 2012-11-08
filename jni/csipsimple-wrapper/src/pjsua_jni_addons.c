@@ -583,7 +583,7 @@ PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csi
 	return PJ_SUCCESS;
 }
 
-PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg_data* msg_data){
+PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pj_pool_t* pool, pjsua_acc_id acc_id, pjsua_msg_data* msg_data){
 	csipsimple_acc_config *additional_acc_cfg = NULL;
 	// P-Asserted-Identity header
 	pj_str_t hp_preferred_identity_name = { "P-Preferred-Identity", 20 };
@@ -601,7 +601,7 @@ PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg
 	if(additional_acc_cfg != NULL){
 		if(additional_acc_cfg->p_preferred_identity.slen > 0){
 			// Create new P-Asserted-Identity hdr if necessary
-			pjsip_generic_string_hdr* hdr = pjsip_generic_string_hdr_create(css_var.pool,
+			pjsip_generic_string_hdr* hdr = pjsip_generic_string_hdr_create(pool,
 					&hp_preferred_identity_name, &additional_acc_cfg->p_preferred_identity);
 			// Push it to msg data
 			pj_list_push_back(&msg_data->hdr_list, hdr);
@@ -611,6 +611,23 @@ PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pjsua_acc_id acc_id, pjsua_msg
 	return PJ_SUCCESS;
 }
 
+PJ_DECL(pj_status_t) csipsimple_msg_data_add_string_hdr(pj_pool_t* pool, pjsua_msg_data* msg_data, pj_str_t* hdr_name, pj_str_t* hdr_value){
+
+    // Sanity check
+    PJ_ASSERT_RETURN(msg_data != NULL && hdr_name != NULL && hdr_value != NULL, PJ_EINVAL);
+    if(hdr_name->slen <= 2 || hdr_value->slen <= 0){
+        return PJ_EINVAL;
+    }
+    // Ensure it's a X- prefixed header. This is to avoid crappy usage/override of specified headers
+    // That should be implemented properly elsewhere.
+    if(hdr_name->ptr[0] != 'X' || hdr_name->ptr[1] != '-'){
+        return PJ_EINVAL;
+    }
+    pjsip_generic_string_hdr* hdr = pjsip_generic_string_hdr_create(pool,
+                        hdr_name, hdr_value);
+    // Push it to msg data
+    pj_list_push_back(&msg_data->hdr_list, hdr);
+}
 
 static void update_active_calls(const pj_str_t *new_ip_addr) {
 	pjsip_tpselector tp_sel;

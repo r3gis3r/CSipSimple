@@ -23,6 +23,7 @@
 
 package com.csipsimple.api;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
@@ -88,6 +89,13 @@ public final class SipCallSession implements Parcelable {
      * @see Boolean
      */
     public static final String OPT_CALL_VIDEO = "opt_call_video";
+    /**
+     * Option key to add custom headers (with X- prefix). <br/>
+     * The value must be a bundle with key representing header name, and value representing header value.
+     * 
+     * @see Bundle
+     */
+    public static final String OPT_CALL_EXTRA_HEADERS = "opt_call_extra_headers";
 
     /**
      * Describe the media state of the call <br/>
@@ -292,6 +300,7 @@ public final class SipCallSession implements Parcelable {
             return new SipCallSession[size];
         }
     };
+
 
     
 
