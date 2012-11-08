@@ -108,7 +108,7 @@ interface ISipService{
 	 * If you add the scheme, take care to fill completely else it could be considered as a call
 	 * to a sip IP/domain
 	 * @param accountId The id of the account to use for this call. 
-	 * @param options The options you'd like to apply for this calls {@link SipCallSession#OPT_CALL_VIDEO}
+	 * @param options The options you'd like to apply for this calls {@link SipCallSession#OPT_CALL_VIDEO}, {@link SipCallSession#OPT_CALL_EXTRA_HEADERS}
 	 */
 	void makeCallWithOptions(in String callee, int accountId, in Bundle options);
 	
