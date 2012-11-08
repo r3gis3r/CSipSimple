@@ -279,7 +279,7 @@ static pj_status_t init_stream(struct webrtcR_stream *strm){
 
 		// We timeout with gray
 		toFrame.Buffer()[0] = 128;
-		strm->_renderModule->SetTimeoutImage(0, toFrame, 20000);
+		//strm->_renderModule->SetTimeoutImage(0, toFrame, 20000);
 
 		int stat = strm->_renderModule->StartRender(0);
 		PJ_LOG(4, (THIS_FILE, "Render thread started %d", stat));
@@ -324,6 +324,9 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 	pj_status_t status;
 
 	stream->last_ts.u64 = frame->timestamp.u64;
+	if(frame->type != PJMEDIA_FRAME_TYPE_VIDEO){
+	    return PJ_SUCCESS;
+	}
 
     pj_mutex_lock(stream->mutex);
 	if (!stream->is_running) {
@@ -365,14 +368,18 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 	stream->_videoFrame.SetWidth(width);
 	stream->_videoFrame.SetHeight(height);
 	stream->_videoFrame.SetLength(frame->size);
+	stream->_videoFrame.SetTimeStamp(frame->timestamp.u64);
 
 	memcpy(stream->_videoFrame.Buffer(), frame->buf, frame->size);
 
 	// TODO : shall we try to use frame timestamp?
 	WebRtc_Word64 nowMs = TickTime::MillisecondTimestamp();
-	stream->_videoFrame.SetRenderTime( nowMs );
+	stream->_videoFrame.SetRenderTime( nowMs + 200);
 	stream->_renderProvider->RenderFrame(0, stream->_videoFrame);
 
+//    PJ_LOG(4, (THIS_FILE, "webrtc put frame size %d against %lld vs %lld",
+//                                  frame->size,
+//                                  frame->timestamp.u64, nowMs));
 	pj_mutex_unlock(stream->mutex);
 
 	return PJ_SUCCESS;

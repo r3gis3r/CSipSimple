@@ -578,11 +578,13 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     if(videoWakeLock != null) {
                         videoWakeLock.acquire();
                     }
+                    SipService.setVideoWindow(SipCallSession.INVALID_CALL_ID, cameraPreview, true);
                 }else {
     
                     if(videoWakeLock != null && videoWakeLock.isHeld()) {
                         videoWakeLock.release();
                     }
+                    SipService.setVideoWindow(SipCallSession.INVALID_CALL_ID, null, true);
                 }
             }
             
@@ -1343,6 +1345,9 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         boolean isValidCallState = true;
         int count = 0;
         for (SipCallSession callInfo : callsInfo) {
+            if(callInfo.mediaHasVideo()) {
+                return false;
+            }
             if(!callInfo.isAfterEnded()) {
                 int state = callInfo.getCallState();
                 

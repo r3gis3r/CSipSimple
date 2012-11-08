@@ -227,7 +227,7 @@ pj_status_t vid_set_stream_window(pjsua_call_media* call_med, pjmedia_dir dir, v
 	return status;
 }
 
-PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id,
+PJ_DECL(pj_status_t) vid_set_android_renderer(pjsua_call_id call_id,
 		jobject window) {
 	pj_status_t status = PJ_ENOTFOUND;
 	pjsua_call *call;
@@ -237,23 +237,51 @@ PJ_DECL(pj_status_t) vid_set_android_window(pjsua_call_id call_id,
 			return PJ_ENOTFOUND;
 	}
 
-	PJ_LOG(4, (THIS_FILE, "Setup android window for call %d", call_id));
-
+	PJ_LOG(4, (THIS_FILE, "Setup android renderer for call %d", call_id));
 	PJSUA_LOCK();
 	// Retrieve the stream
 	if (pjsua_call_has_media(call_id)) {
 		call = &pjsua_var.calls[call_id];
 		for (i = 0; i < call->med_cnt; ++i) {
 			pjsua_call_media *call_med = &call->media[i];
-
 			vid_set_stream_window(call_med, PJMEDIA_DIR_RENDER, window);
-			vid_set_stream_window(call_med, PJMEDIA_DIR_CAPTURE, window);
 			status = PJ_SUCCESS;
 		}
 	}
 
 	PJSUA_UNLOCK();
 	return status;
+}
+
+
+PJ_DECL(pj_status_t) vid_set_android_capturer(jobject window) {
+    unsigned ci, i, count;
+    pj_status_t status = PJ_ENOTFOUND;
+    pjsua_call *call;
+    pjsua_call_id calls_id[PJSUA_MAX_ACC];
+
+    count = PJ_ARRAY_SIZE(calls_id);
+    status = pjsua_enum_calls(calls_id, &count);
+    if(status != PJ_SUCCESS){
+        return status;
+    }
+
+    PJ_LOG(4, (THIS_FILE, "Setup android capturer for all calls"));
+    PJSUA_LOCK();
+    for(ci = 0; ci < count; ++ci){
+        pjsua_call_id call_id = calls_id[ci];
+        if(pjsua_call_is_active(call_id) && pjsua_call_has_media(call_id)){
+            call = &pjsua_var.calls[call_id];
+            for (i = 0; i < call->med_cnt; ++i) {
+                pjsua_call_media *call_med = &call->media[i];
+                vid_set_stream_window(call_med, PJMEDIA_DIR_CAPTURE, window);
+                status = PJ_SUCCESS;
+            }
+        }
+    }
+
+    PJSUA_UNLOCK();
+    return status;
 }
 
 PJ_DECL(pj_status_t) set_turn_credentials(const pj_str_t username, const pj_str_t password, const pj_str_t realm, pj_stun_auth_cred *turn_auth_cred) {

@@ -1,90 +1,34 @@
 Index: webrtc/sources/modules/video_capture/main/source/video_capture_impl.cc
 ===================================================================
---- webrtc.orig/sources/modules/video_capture/main/source/video_capture_impl.cc	2012-10-18 23:31:12.396088135 +0200
-+++ webrtc/sources/modules/video_capture/main/source/video_capture_impl.cc	2012-10-19 00:09:18.399992528 +0200
-@@ -11,6 +11,7 @@
- #include "video_capture_impl.h"
+--- webrtc.orig/sources/modules/video_capture/main/source/video_capture_impl.cc	2012-10-19 00:11:16.487987590 +0200
++++ webrtc/sources/modules/video_capture/main/source/video_capture_impl.cc	2012-11-08 23:55:00.773401149 +0100
+@@ -291,9 +291,10 @@
+     TickTime startProcessTime = TickTime::Now();
  
- #include "common_video/libyuv/include/webrtc_libyuv.h"
-+#include "common_video/libyuv/include/scaler.h"
- #include "critical_section_wrapper.h"
- #include "module_common_types.h"
- #include "ref_count.h"
-@@ -326,6 +327,30 @@
-         // In Windows, the image starts bottom left, instead of top left.
-         // Setting a negative source height, inverts the image (within LibYuv).
-         _captureFrame.SetHeight(abs(height));
-+
-+
-+        // Libyuv doesn't crop or scale in convert method
-+        // So width/height of target frame has to be correct regarding expected rotation mode
-+        // see discution here http://code.google.com/p/libyuv/issues/detail?id=18
-+        VideoFrame* targetFramePt =  &_captureFrame;
-+        // TODO - tmp frame recreation should be avoided at each loop
-+        // But I want minimum impact of webrtc code for now --
-+        // to be reviewed when integrated to webrtc code if accepted
-+        VideoFrame tmpFrame;
-+        if(_rotateFrame == kRotate90 || _rotateFrame == kRotate270){
-+		int tmpRequiredLength = CalcBufferSize(kI420, height, width);
-+		tmpFrame.VerifyAndAllocate(tmpRequiredLength);
-+		if (!tmpFrame.Buffer()) {
-+			WEBRTC_TRACE(webrtc::kTraceError, webrtc::kTraceVideoCapture, _id,
-+				"Failed to allocate frame buffer.");
-+			return -1;
-+		}
-+		tmpFrame.SetWidth(height);
-+		tmpFrame.SetHeight(width);
-+		tmpFrame.SetLength(tmpRequiredLength);
-+		targetFramePt = &tmpFrame;
-+        }
-+
-         // TODO(mikhal) : Set stride when available.
+     CriticalSectionScoped cs(&_callBackCs);
+-
+-    const WebRtc_Word32 width = frameInfo.width;
+-    const WebRtc_Word32 height = frameInfo.height;
++    const WebRtc_Word32 initWidth = frameInfo.width;
++    const WebRtc_Word32 initHeight = frameInfo.height;
++    const WebRtc_Word32 width = (_rotateFrame == kRotate90 || _rotateFrame == kRotate270)? frameInfo.height : frameInfo.width;
++    const WebRtc_Word32 height = (_rotateFrame == kRotate90 || _rotateFrame == kRotate270)? frameInfo.width : frameInfo.height;
+ 
+     if (frameInfo.codecType == kVideoCodecUnknown)
+     {
+@@ -330,7 +331,7 @@
          const int conversionResult = ConvertToI420(commonVideoType,
                                                     videoFrame,
-@@ -333,7 +358,7 @@
-                                                    width, height,
+                                                    0, 0,  // No cropping
+-                                                   width, height,
++                                                   initWidth, initHeight,
                                                     videoFrameLength,
                                                     _rotateFrame,
--                                                   &_captureFrame);
-+                                                   targetFramePt);
-         if (conversionResult < 0)
-         {
-             WEBRTC_TRACE(webrtc::kTraceError, webrtc::kTraceVideoCapture, _id,
-@@ -341,6 +366,30 @@
-                        frameInfo.rawType);
-             return -1;
-         }
-+
-+        // Finalize rotation with a scale to display proper image
-+        if(_rotateFrame == kRotate90 || _rotateFrame == kRotate270){
-+        	// TODO : this should maybe instanciated only once too
-+        	Scaler scaler;
-+        	int retVal = 0;
-+        	retVal = scaler.Set(height, width,
-+        	                       width, height, kI420, kI420, kScaleBox);
-+        	if (retVal < 0)
-+			{
-+				WEBRTC_TRACE(webrtc::kTraceError, webrtc::kTraceVideoCapture, _id,
-+						   "Failed to init scaler of I420 frame for rotation constraint");
-+				return -1;
-+			}
-+        	retVal = scaler.Scale(tmpFrame, &_captureFrame);
-+        	if (retVal < 0)
-+			{
-+				WEBRTC_TRACE(webrtc::kTraceError, webrtc::kTraceVideoCapture, _id,
-+						   "Failed to scale I420 frame due to rotation constraint");
-+				return -1;
-+			}
-+        }
-+
-+
-         _captureFrame.SetLength(requiredLength);
-         DeliverCapturedFrame(_captureFrame, captureTime, frameInfo.codecType);
-     }
+                                                    &_captureFrame);
 Index: webrtc/sources/common_video/libyuv/webrtc_libyuv.cc
 ===================================================================
---- webrtc.orig/sources/common_video/libyuv/webrtc_libyuv.cc	2012-10-18 22:59:54.260166684 +0200
-+++ webrtc/sources/common_video/libyuv/webrtc_libyuv.cc	2012-10-18 23:48:56.856043612 +0200
+--- webrtc.orig/sources/common_video/libyuv/webrtc_libyuv.cc	2012-10-19 00:11:16.487987590 +0200
++++ webrtc/sources/common_video/libyuv/webrtc_libyuv.cc	2012-10-19 00:12:20.959984894 +0200
 @@ -176,6 +176,10 @@
    // All sanity tests are conducted within LibYuv.
    int dst_height = dst_frame->Height();

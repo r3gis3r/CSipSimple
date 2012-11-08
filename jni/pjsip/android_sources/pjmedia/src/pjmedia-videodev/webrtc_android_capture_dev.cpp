@@ -408,8 +408,13 @@ static pj_status_t webrtc_cap_factory_create_stream(pjmedia_vid_dev_factory *f,
 	}
 
 	// Setup correct choosen values for opened stream
-	param->fmt.det.vid.size.w = strm->_capability->width;
-	param->fmt.det.vid.size.h = strm->_capability->height;
+	if(rot == kCameraRotate0 || rot == kCameraRotate180){
+        param->fmt.det.vid.size.w = strm->_capability->width;
+        param->fmt.det.vid.size.h = strm->_capability->height;
+	}else{
+	    param->fmt.det.vid.size.w = strm->_capability->height;
+	    param->fmt.det.vid.size.h = strm->_capability->width;
+	}
 	param->fmt.det.vid.fps.num = strm->_capability->maxFPS;
 	param->fmt.det.vid.fps.denum = 1;
 	param->native_preview = PJ_TRUE;

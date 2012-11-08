@@ -76,6 +76,7 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 
 import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -1942,17 +1943,29 @@ public class SipService extends Service {
     
     
     
-    public static void setVideoWindow(int callId, Object window) {
+    public static void setVideoWindow(int callId, Object window, boolean local) {
         if(singleton != null) {
-            singleton.setPrivateVideoWindow(callId, window);
+            if(local) {
+                singleton.setCaptureVideoWindow(window);
+            }else {
+                singleton.setRenderVideoWindow(callId, window);
+            }
         }
     }
 
-    private void setPrivateVideoWindow(final int callId, final Object window) {
+    private void setRenderVideoWindow(final int callId, final Object window) {
         getExecutor().execute(new SipRunnable() {
             @Override
             protected void doRun() throws SameThreadException {
-                pjsua.vid_set_android_window(callId, window);
+                pjsua.vid_set_android_renderer(callId, window);
+            }
+        });
+    }
+    private void setCaptureVideoWindow(final Object window) {
+        getExecutor().execute(new SipRunnable() {
+            @Override
+            protected void doRun() throws SameThreadException {
+                pjsua.vid_set_android_capturer(window);
             }
         });
     }
