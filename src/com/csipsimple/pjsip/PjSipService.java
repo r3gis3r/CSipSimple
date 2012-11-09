@@ -1268,7 +1268,7 @@ public class PjSipService {
                     if (dtmfDialtoneGenerators.get(callId) == null) {
                         dtmfDialtoneGenerators.put(callId, new PjStreamDialtoneGenerator(callId));
                     }
-                    res = dtmfDialtoneGenerators.get(callId).sendPjMediaDialTone(keyPressed);
+                    res = dtmfDialtoneGenerators.get(callId).sendPjMediaDialTone(dtmfToDial);
                     Log.d(THIS_FILE, "Has been sent DTMF analogic : " + res);
                 }
             }
@@ -1277,6 +1277,8 @@ public class PjSipService {
         
         // Finally, push remaining DTMF in the future
         if(!TextUtils.isEmpty(remainingDtmf)) {
+            dtmfToAutoSend.put(callId, remainingDtmf);
+            
             if(tasksTimer == null) {
                 tasksTimer = new Timer("com.csipsimple.PjSipServiceTasks");
             }
@@ -1292,7 +1294,6 @@ public class PjSipService {
                     });
                 }
             };
-            dtmfToAutoSend.put(callId, remainingDtmf);
             dtmfTasks.put(callId, tt);
             Log.d(THIS_FILE, "Schedule DTMF " + remainingDtmf + " in "+ pauseBeforeRemaining);
             tasksTimer.schedule(tt, pauseBeforeRemaining);
