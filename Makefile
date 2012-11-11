@@ -46,7 +46,7 @@ CodecPackLibs :
 	@(./dispatch_shared_libs.sh)
 	
 VideoLibs : ffmpeg-lib
-	@(ndk-build -j6 APP_MODULES="pj_video_android vpx")
+	@(ndk-build -j6 APP_MODULES="pj_video_android pj_vpx")
 	@(./dispatch_shared_libs.sh)
 
 ScreenSharingLibs :

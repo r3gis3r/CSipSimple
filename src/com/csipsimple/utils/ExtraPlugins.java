@@ -59,6 +59,12 @@ public class ExtraPlugins {
 		public String factoryInitFunction;
 		
 		/**
+		 * The function to call inside the native library to deinit this plugin
+		 * The params depends of the kind of plugin it is
+		 */
+		public String factoryDeinitFunction;
+		
+		/**
 		 * Build codec infos based on a component name of a manifest
 		 * It will retrieve {@link SipManager#META_LIB_NAME} and {@link SipManager#META_LIB_INIT_FACTORY} from the meta datas of the component
 		 * @param ctxt The current application context
@@ -69,6 +75,7 @@ public class ExtraPlugins {
 			PackageManager pm = ctxt.getPackageManager();
 			ActivityInfo infos = pm.getReceiverInfo(cmp, PackageManager.GET_META_DATA);
 			factoryInitFunction = infos.metaData.getString(SipManager.META_LIB_INIT_FACTORY);
+            factoryDeinitFunction = infos.metaData.getString(SipManager.META_LIB_DEINIT_FACTORY);
 			
 			String libName = infos.metaData.getString(SipManager.META_LIB_NAME);
 			

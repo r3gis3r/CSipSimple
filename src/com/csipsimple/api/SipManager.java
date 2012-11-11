@@ -290,6 +290,10 @@ public final class SipManager {
      */
     public static final String ACTION_GET_EXTRA_CODECS = "com.csipsimple.codecs.action.REGISTER_CODEC";
     /**
+     * Plugin action for video codec.
+     */
+    public static final String ACTION_GET_EXTRA_VIDEO_CODECS = "com.csipsimple.codecs.action.REGISTER_VIDEO_CODEC";
+    /**
      * Plugin action for video.
      */
     public static final String ACTION_GET_VIDEO_PLUGIN = "com.csipsimple.plugins.action.REGISTER_VIDEO";
@@ -301,6 +305,10 @@ public final class SipManager {
      * Meta constant name for the factory name.
      */
     public static final String META_LIB_INIT_FACTORY = "init_factory";
+    /**
+     * Meta constant name for the factory deinit name.
+     */
+    public static final String META_LIB_DEINIT_FACTORY = "deinit_factory";
 
     // Content provider
     /**

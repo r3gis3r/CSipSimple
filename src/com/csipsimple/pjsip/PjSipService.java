@@ -340,16 +340,29 @@ public class PjSipService {
                             }
                             */
                         }
-                        // Codecs
+                        // Video codecs
+                        availableCodecs = ExtraPlugins.getDynCodecPlugins(service,
+                                SipManager.ACTION_GET_EXTRA_VIDEO_CODECS);
                         cssCodecs = cssCfg.getExtra_vid_codecs();
-                        cssCodecs[0].setShared_lib_path(pjVideoFile);
-                        cssCodecs[0].setInit_factory_name(pjsua
-                                .pj_str_copy("pjmedia_codec_ffmpeg_vid_init"));
-                        cssCodecs = cssCfg.getExtra_vid_codecs_destroy();
-                        cssCodecs[0].setShared_lib_path(pjVideoFile);
-                        cssCodecs[0].setInit_factory_name(pjsua
-                                .pj_str_copy("pjmedia_codec_ffmpeg_vid_deinit"));
-                        cssCfg.setExtra_vid_codecs_cnt(1);
+                        dynamic_factory[] cssCodecsDestroy = cssCfg.getExtra_vid_codecs_destroy();
+                        i = 0;
+                        for (Entry<String, DynCodecInfos> availableCodec : availableCodecs
+                                .entrySet()) {
+                            DynCodecInfos dyn = availableCodec.getValue();
+                            if (!TextUtils.isEmpty(dyn.libraryPath)) {
+                                // Create
+                                cssCodecs[i].setShared_lib_path(pjsua.pj_str_copy(dyn.libraryPath));
+                                cssCodecs[i].setInit_factory_name(pjsua
+                                        .pj_str_copy(dyn.factoryInitFunction));
+                                // Destroy
+                                cssCodecsDestroy[i].setShared_lib_path(pjsua
+                                        .pj_str_copy(dyn.libraryPath));
+                                cssCodecsDestroy[i].setInit_factory_name(pjsua
+                                        .pj_str_copy(dyn.factoryDeinitFunction));
+                            }
+                            i++;
+                        }
+                        cssCfg.setExtra_vid_codecs_cnt(i);
                         
                         // Converter
                         dynamic_factory convertImpl = cssCfg.getVid_converter();
@@ -1003,7 +1016,7 @@ public class PjSipService {
                             String codecKey = SipConfigManager.getCodecKey(codec, SipConfigManager.FRAMES_PER_PACKET_SUFFIX);
                             Integer frmPerPacket = SipConfigManager.getPreferenceIntegerValue(service, codecKey);
                             if(frmPerPacket != null && frmPerPacket > 0) {
-                                Log.d(THIS_FILE, "Set codec " + codec + " fpp : " + frmPerPacket);
+                                Log.v(THIS_FILE, "Set codec " + codec + " fpp : " + frmPerPacket);
                                 pjsua.codec_set_frames_per_packet(codecStr, frmPerPacket);
                             }
                         }
@@ -1015,7 +1028,6 @@ public class PjSipService {
                             if (aPrio >= 0) {
                                 pjsua.vid_codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
                             }
-                            Log.d(THIS_FILE, "Video codec : " + codec);
                             if(codec.startsWith("H264")) {
                                 int h264profile = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_PROFILE, 66);
                                 int h264level = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_LEVEL, 30);

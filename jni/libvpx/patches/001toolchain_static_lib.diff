@@ -1,0 +1,13 @@
+Index: libvpx/sources/build/make/Android.mk
+===================================================================
+--- libvpx.orig/sources/build/make/Android.mk	2012-11-02 19:54:19.369817572 +0100
++++ libvpx/sources/build/make/Android.mk	2012-11-10 17:34:08.058169293 +0100
+@@ -197,7 +197,7 @@
+ 
+ clean : clean-libvpx-$(TARGET_ARCH_ABI)
+ 
+-include $(BUILD_SHARED_LIBRARY)
++include $(BUILD_STATIC_LIBRARY)
+ 
+ $(eval $(call asm_offsets_template,\
+     $(ASM_CNV_PATH)/asm_com_offsets.asm, \
