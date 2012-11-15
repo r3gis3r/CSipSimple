@@ -56,7 +56,7 @@ public class CallTypeIconsView extends View {
 
     public CallTypeIconsView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mResources = new Resources(context);
+        mResources = new Resources(context, this);
         mCallTypes = new ArrayList<Integer>();
     }
 
@@ -120,9 +120,12 @@ public class CallTypeIconsView extends View {
         public Drawable missed = null;
         public Integer iconMargin = null;
 
-        public Resources(Context context) {
+        public Resources(Context context, View v) {
             final android.content.res.Resources r = context.getResources();
-            Theme t = Theme.getCurrentTheme(context);
+            Theme t = null;
+            if(!v.isInEditMode()) {
+                t = Theme.getCurrentTheme(context);
+            }
             if(t != null) {
                 incoming = t.getDrawableResource("ic_call_incoming");
                 outgoing = t.getDrawableResource("ic_call_outgoing");

@@ -830,6 +830,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_youmagic, 30, 
                     new Locale[]{ locale("ru_RU") }, false, false, 
                     YouMagic.class));
+            WIZARDS_DICT.put("OPTIMUMLIGHTPATH", new WizardInfo("OPTIMUMLIGHTPATH", "Optimum LightPath", 
+                    R.drawable.ic_wizard_optimum_lightpath, 10, 
+                    new Locale[]{Locale.US}, false, false, 
+                    OptimumLightPath.class));
             
             
             
