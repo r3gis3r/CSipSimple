@@ -50,6 +50,7 @@ public class Ajtel extends SimpleImplementation {
 		put("serpiente.ajtel.net", "serpiente.ajtel.net");
 		put("andromeda.ajtel.net", "andromeda.ajtel.net");
 		put("escorpion.ajtel.net", "escorpion.ajtel.net");
+		put("gateway.ajtel.net", "gateway.ajtel.net");
 	}
 	};
 
