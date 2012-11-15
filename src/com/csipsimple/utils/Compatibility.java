@@ -778,6 +778,9 @@ public final class Compatibility {
                         shouldUseModeApi());
             }
         }
+        if(lastSeenVersion < 2010) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.DTMF_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
+        }
         prefWrapper.endEditing();
     }
 

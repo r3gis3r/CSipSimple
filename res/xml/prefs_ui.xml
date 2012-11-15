@@ -80,6 +80,13 @@
             android:key="dial_press_vibrate_mode"
             android:summary="@string/dial_press_vibrate_desc"
             android:title="@string/dial_press_vibrate" />
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/dial_press_mode_choices"
+            android:entryValues="@array/dial_press_mode_values"
+            android:key="dtmf_press_tone_mode"
+            android:summary="@string/dtmf_press_tone_desc"
+            android:title="@string/dtmf_press_tone" />
 
         <CheckBoxPreference
             android:defaultValue="false"

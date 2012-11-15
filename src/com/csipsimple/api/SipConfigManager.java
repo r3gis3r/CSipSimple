@@ -484,6 +484,15 @@ public class SipConfigManager {
      */
     public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";
     /**
+     * Should the application generate a tone when a dtmf key is pressed ?
+     * 
+     * @see #GENERIC_TYPE_AUTO
+     * @see #GENERIC_TYPE_FORCE
+     * @see #GENERIC_TYPE_PREVENT
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String DTMF_PRESS_TONE_MODE = "dtmf_press_tone_mode";
+    /**
      * Should we assume that proximity sensor values are inverted?<br/>
      * Let csipsimple automatically manage this setting if you want auto
      * detection to work

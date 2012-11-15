@@ -125,6 +125,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.GSM_INTEGRATION_TYPE, "0");
 		put(SipConfigManager.DIAL_PRESS_TONE_MODE, "0");
 		put(SipConfigManager.DIAL_PRESS_VIBRATE_MODE, "0");
+        put(SipConfigManager.DTMF_PRESS_TONE_MODE, "2");
 		
 		put(SipConfigManager.DEFAULT_CALLER_ID, "");
 		put(SipConfigManager.THEME, "");
@@ -601,8 +602,11 @@ public class PreferencesWrapper {
 	// ---- 
 	// UI related
 	// ----
-	public boolean dialPressTone() {
-		int mode = getPreferenceIntegerValue(SipConfigManager.DIAL_PRESS_TONE_MODE);
+	public boolean dialPressTone(boolean inCall) {
+		Integer mode = getPreferenceIntegerValue(inCall ? SipConfigManager.DTMF_PRESS_TONE_MODE : SipConfigManager.DIAL_PRESS_TONE_MODE);
+		if(mode == null) {
+		    mode = inCall ? SipConfigManager.GENERIC_TYPE_PREVENT : SipConfigManager.GENERIC_TYPE_AUTO; 
+		}
 		switch (mode) {
 		case SipConfigManager.GENERIC_TYPE_AUTO:
 			return Settings.System.getInt(resolver,
@@ -722,10 +726,12 @@ public class PreferencesWrapper {
 		File logsFolder = getLogsFolder(ctxt);
 		if(logsFolder != null) {
 			File[] files = logsFolder.listFiles();
-			for(File file: files) {
-				if(file.isFile()) {
-					file.delete();
-				}
+			if(files != null) {
+    			for(File file: files) {
+    				if(file.isFile()) {
+    					file.delete();
+    				}
+    			}
 			}
 		}
 	}

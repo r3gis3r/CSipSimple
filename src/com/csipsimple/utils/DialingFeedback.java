@@ -72,7 +72,7 @@ public class DialingFeedback {
 	
 	public void resume() {
 		
-		dialPressTone = prefsWrapper.dialPressTone();
+		dialPressTone = prefsWrapper.dialPressTone(inCall);
 		dialPressVibrate = prefsWrapper.dialPressVibrate();
 
         if (dialPressTone) {

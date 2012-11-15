@@ -28,42 +28,41 @@ import com.csipsimple.utils.PreferencesWrapper;
 import java.util.regex.Pattern;
 
 public class OSTN extends AlternateServerImplementation {
-	
-	
-	@Override
-	protected String getDefaultName() {
-		return "OSTN";
-	}
-	
-	
-	public SipProfile buildAccount(SipProfile account) {
-		account = super.buildAccount(account);
-		String domain = getDomain();
-		String[] domainPart = domain.split(":");
-		boolean shouldAddPort = true;
-		if(domainPart.length > 1) {
-		    // If latest part is digit we should not add port
-		    shouldAddPort = !Pattern.matches("^[0-9]+$", domainPart[1]);
-		}
-		if(shouldAddPort) {
-		    domain = domain + ":5061";
-		}
-		account.proxies = new String[] { "sips:" + domain };
-		account.transport = SipProfile.TRANSPORT_TLS;
-		account.use_zrtp = 1;
-    account.vm_nbr = "*98";
-		return account;
-	}
-	
+
+    @Override
+    protected String getDefaultName() {
+        return "OSTN";
+    }
+
+    public SipProfile buildAccount(SipProfile account) {
+        account = super.buildAccount(account);
+        String domain = getDomain();
+        String[] domainPart = domain.split(":");
+        boolean shouldAddPort = true;
+        if (domainPart.length > 1) {
+            // If latest part is digit we should not add port
+            shouldAddPort = !Pattern.matches("^[0-9]+$", domainPart[1]);
+        }
+        if (shouldAddPort) {
+            domain = domain + ":5061";
+        }
+        account.proxies = new String[] {
+            "sips:" + domain
+        };
+        account.transport = SipProfile.TRANSPORT_TLS;
+        account.use_zrtp = 1;
+        account.vm_nbr = "*98";
+        return account;
+    }
+
     @Override
     public void setDefaultParams(PreferencesWrapper prefs) {
-            super.setDefaultParams(prefs);
-            prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_TLS, true);
+        super.setDefaultParams(prefs);
+        prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_TLS, true);
     }
-   
 
     @Override
     public boolean needRestart() {
-            return true;
+        return true;
     }
 }

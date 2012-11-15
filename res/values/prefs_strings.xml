@@ -271,6 +271,8 @@
     <string name="integrate_with_native_calllogs_desc">SIP calls will be merged (if possible) into native call logs</string>
     <string name="dial_press_tone">Dialing tone feedback</string>
     <string name="dial_press_tone_desc">Play touch tones when dialing</string>
+    <string name="dtmf_press_tone">DTMF tone feedback</string>
+    <string name="dtmf_press_tone_desc">Play touch tones when sending DTMF in call</string>
     <string name="dial_press_vibrate">Dialing vibrate feedback</string>
     <string name="dial_press_vibrate_desc">Haptic (vibrate) feedback when dialing</string>
     <string name="start_with_text_dialer">Text dialer</string>
