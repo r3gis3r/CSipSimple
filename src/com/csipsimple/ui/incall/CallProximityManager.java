@@ -103,21 +103,29 @@ public class CallProximityManager implements SensorEventListener, OrientationLis
                     !SipConfigManager.getPreferenceBooleanValue(context, SipConfigManager.KEEP_AWAKE_IN_CALL)) {
                 // Try to use powermanager proximity sensor
                 try {
-                    Method method = powerManager.getClass().getDeclaredMethod(
-                            "getSupportedWakeLockFlags");
-                    int supportedFlags = (Integer) method.invoke(powerManager);
-                    Log.d(THIS_FILE, ">>> Flags supported : " + supportedFlags);
+                    boolean supportProximity = false;
                     Field f = PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK");
                     int proximityScreenOffWakeLock = (Integer) f.get(null);
-                    if ((supportedFlags & proximityScreenOffWakeLock) != 0x0) {
-                        Log.d(THIS_FILE, ">>> We can use native screen locker !!");
+                    if(Compatibility.isCompatible(17)) {
+                        // Changes of the private API on android 4.2
+                        Method method = powerManager.getClass().getDeclaredMethod("isWakeLockLevelSupported", int.class);
+                        supportProximity = (Boolean) method.invoke(powerManager, proximityScreenOffWakeLock);
+                        Log.d(THIS_FILE, "Use 4.2 detection way for proximity sensor detection. Result is " + supportProximity);
+                    }else {
+                        Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
+                        int supportedFlags = (Integer) method.invoke(powerManager);
+                        Log.d(THIS_FILE, "Proxmity flags supported : " + supportedFlags);
+                        supportProximity = ((supportedFlags & proximityScreenOffWakeLock) != 0x0);
+                    }
+                    if (supportProximity) {
+                        Log.d(THIS_FILE, "We can use native screen locker !!");
                         proximityWakeLock = powerManager.newWakeLock(proximityScreenOffWakeLock,
                                 "com.csipsimple.CallProximity");
                         proximityWakeLock.setReferenceCounted(false);
                     }
                     
                 } catch (Exception e) {
-                    Log.d(THIS_FILE, "Impossible to get power manager supported wake lock flags");
+                    Log.d(THIS_FILE, "Impossible to get power manager supported wake lock flags ");
                 }
                 if(powerLockReleaseIntMethod == null) {
                     try {
