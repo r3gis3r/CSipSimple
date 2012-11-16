@@ -1,29 +1,42 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="w_expert_display_name">Nome account</string>
-    <string name="w_expert_display_name_desc">Nome visualizzato per questo account</string>
-    <string name="w_expert_acc_id">Id account</string>
-    <string name="w_expert_acc_id_desc">Formato : NomeVisualizzato &lt;sip:login\@registrar.net></string>
-    <string name="w_expert_reg_uri">URI di registrazione</string>
-    <string name="w_expert_reg_uri_desc">Formato : sip:registrar.net[:porta]</string>
-    <string name="w_expert_realm">Realm</string>
-    <string name="w_expert_realm_desc">Dominio di autenticazione (se non lo conosci, usa \'*\')</string>
-    <string name="w_expert_username">Username</string>
-    <string name="w_expert_username_desc">Nome utente per autenticazione</string>
-    <string name="w_expert_data">Password</string>
-    <string name="w_expert_data_desc">"Password (o altri dati)  per autenticazione"</string>
-    <string name="w_expert_t_proxy">Proxy</string>
-    <string name="w_expert_proxy">Proxy URI</string>
-    <string name="w_expert_proxy_desc">Formato : sip:proxy.net[:porta]</string>
-    <string name="w_expert_use_tcp">Usa TCP (no UDP)</string>
-    <string name="w_expert_prevent_tcp">Previeni TCP (usa solo UDP)</string>
-    <string name="w_expert_publish_enabled">Publish abilitato</string>
-    <string name="w_expert_reg_timeout">Register timeout (sec)</string>
-    <string name="w_expert_ka_interval">Keep-alive interval (sec)</string>
-    <string name="w_expert_force_contact">Force contact</string>
-    <string name="w_expert_allow_contact_rewrite">Consenti riscrittura contatto</string>
-    <string name="w_expert_contact_rewrite_method">Metodo riscrittura contatto</string>
-    <string name="w_expert_reg_use_proxy">Come usare il proxy</string>
-
+  <string name="w_expert_display_name">Nome account</string>
+  <string name="w_expert_display_name_desc">Nome visualizzato per questo account</string>
+  <string name="w_expert_acc_id">Id account</string>
+  <string name="w_expert_acc_id_desc">Formato : NomeVisualizzato &lt;sip:login\@registrar.net&gt;</string>
+  <string name="w_expert_reg_uri">URI di registrazione</string>
+  <string name="w_expert_reg_uri_desc">Formato : sip:registrar.net[:porta]</string>
+  <string name="w_expert_realm">Realm</string>
+  <string name="w_expert_realm_desc">Dominio di autenticazione (se non lo conosci, usa \'*\')</string>
+  <string name="w_expert_username">Username</string>
+  <string name="w_expert_username_desc">Nome utente per autenticazione</string>
+  <string name="w_expert_data">Password</string>
+  <string name="w_expert_data_desc">Password (o altri dati)  per autenticazione</string>
+  <string name="w_expert_datatype">Tipo di dato</string>
+  <string name="w_expert_datatype_desc">Tipo di dato</string>
+  <string name="w_expert_t_proxy">Proxy</string>
+  <string name="w_expert_proxy">Proxy URI</string>
+  <string name="w_expert_proxy_desc">Formato : sip:proxy.net[:porta]</string>
+  <string name="w_expert_use_tcp">Usa TCP (no UDP)</string>
+  <string name="w_expert_prevent_tcp">Previeni TCP (usa solo UDP)</string>
+  <string name="w_expert_publish_enabled">Publish abilitato</string>
+  <string name="w_expert_reg_timeout">Register timeout (sec)</string>
+  <string name="w_expert_reg_dbr">Ritardo di registrazione prima di aggiornare (sec)</string>
+  <string name="w_expert_reg_dbr_desc">Specificare il numero di secondi per aggiornare la registrazione del client prima che la registrazione scada</string>
+  <string name="w_expert_ka_interval">Keep-alive interval (sec)</string>
+  <string name="w_expert_force_contact">Force contact</string>
+  <string name="w_expert_allow_contact_rewrite">Consenti riscrittura contatto</string>
+  <string name="w_expert_contact_rewrite_method">Metodo riscrittura contatto</string>
+  <string name="w_expert_reg_use_proxy">Come usare il proxy</string>
+  <string name="w_expert_try_clean_registers">Prova a pulire i registri</string>
+  <string name="w_expert_try_clean_registers_desc">Consente all\'applicazione di provare a pulire le registrazioni vecchie, se necessario</string>
+  <string name="w_expert_rtp_bound_addr">RTP bound address</string>
+  <string name="w_expert_rtp_bound_addr_desc">Optional where the socket should be bound to. To only selectively bind the socket to particular interface (instead of 0.0.0.0)</string>
+  <string name="w_expert_rtp_public_addr">Indirizzo pubblico RTP</string>
+  <string name="w_expert_rtp_public_addr_desc">Opzionale per pubblicizzare l\'indirizzo di trasporto RTP.</string>
+  <string name="w_expert_media_transport">Media transport</string>
+  <string name="w_expert_mwi_enabled">Sottoscrive MWI</string>
+  <string name="w_expert_mwi_enabled_desc">Ottiene notifiche della mail vocale</string>
+  <string name="w_expert_allow_via_rewrite">Consenti via riscrittura</string>
+  <string name="w_expert_allow_via_rewrite_desc">Fissa Via sent-by per utilizzare lo stesso indirizzo interfaccia come quello nella richiesta REGISTER</string>
 </resources>

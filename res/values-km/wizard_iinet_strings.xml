@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="w_iinet_state">ស្ថានភាព</string>
+  <string name="w_iinet_state_desc">ស្ថាន​ភាព​ទាក់ទង​ពី​បញ្ជី​ខាងក្រោម</string>
   <string name="w_iinet_username">លេខ​ទូរស័ព្ទ VoIP</string>
-  <string name="w_iinet_password">បញ្ជាក់​ពាក្យ​សម្ងាត់ VoIP</string>
+  <string name="w_iinet_username_desc">យក​ទ្រង់ទ្រាយ​មួយ​ចំនួន​ចេញ​ដូចជា ដកឃ្លា និង​សញ្ញា​ដក (dashes) ។</string>
+  <string name="w_iinet_password">ពាក្យ​សម្ងាត់ VoIP ពិសេស</string>
+  <string name="w_iinet_password_desc">មិន​ដូច​ពាក្យសម្ងាត់​ការ​តភ្ជាប់</string>
 </resources>

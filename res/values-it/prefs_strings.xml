@@ -24,6 +24,8 @@
     <string name="use_other">Usa altre reti</string>
     <string name="use_other_in_desc">Per esempio WiMax per chiamate in ingresso</string>
     <string name="use_other_out_desc">Per esempio WiMax per chiamate in uscita</string>
+    <string name="use_anyway">Usa in ogni caso</string>
+    <string name="use_anyway_desc">Ignora lo stato della rete di Android. Non dovrebbe essere usato per i casi normali</string>
     <string name="use_3g">Usa 3G</string>
     <string name="use_3g_disclamer">La tua compagnia telefonica DEVE consentire questa opzione</string>
     <string name="use_edge">Usa EDGE</string>
@@ -63,12 +65,21 @@
     <string name="turn_password_desc">Password per l\'autenticazione di TURN</string>
     <string name="enable_stun">Abilita STUN</string>
     <string name="enable_stun_desc">Attiva funzionalità STUN</string>
+    <string name="enable_stun2">Usa il nuovo formato STUN</string>
+    <string name="enable_stun2_desc">Richieste STUN per la risoluzione di indirizzo mappato socket dovrebbero utilizzare il nuovo formato</string>
     <string name="stun_server">STUN servers</string>
     <string name="stun_server_desc">STUN servers (HOST[:PORT], …)</string>
     <string name="enable_qos">Abilita QoS</string>
     <string name="enable_qos_desc">Abilita QoS sui pacchetti</string>
     <string name="dscp_val">Valore DSCP</string>
     <string name="dscp_val_desc">Valore DSCP per il traffico SIP</string>
+    <string name="udp_keep_alive_interval_wifi">Wifi UDP keep alive</string>
+    <string name="udp_keep_alive_interval_mobile">Mobile UDP keep alive</string>
+    <string name="tcp_keep_alive_interval_wifi">Wifi TCP keep alive</string>
+    <string name="tcp_keep_alive_interval_mobile">Mobile TCP keep alive</string>
+    <string name="tls_keep_alive_interval_wifi">Wifi TLS keep alive</string>
+    <string name="tls_keep_alive_interval_mobile">Mobile TLS keep alive</string>
+    <string name="keep_alive_interval">Connection keep alive</string>
     <string name="keep_alive_interval_desc">Intervallo (sec) per pacchetti KA</string>
     <string name="use_compact_form">Usa SIP compatto</string>
     <string name="use_compact_form_desc">Riduce la dimensione dei pacchetti SIP. Potrebbe non funzionare su vecchi server SIP</string>
@@ -78,6 +89,25 @@
     <string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>
     -->
+    <string name="force_no_update">Forza nessun update</string>
+    <string name="force_no_update_desc">Alcuni server remoti dichiarano di supportare il metodo UPDATE mentre non è così, questa opzione forza il metodo legacy di gestire UPDATE/re-INVITE</string>
+    <string name="timer_min_se">Scadenza minima di sessione</string>
+    <string name="timer_min_se_desc">Periodo di scadenza minima di sessione, in secondi. Non deve essere minore di 90</string>
+    <string name="timer_sess_expires">Periodo di scadenza di sessione</string>
+    <string name="timer_sess_expires_desc">Periodo di scadenza di sessione, in secondi. Non deve essere minore della scadenza minima</string>
+    <string name="sip_protocol">protocollo SIP</string>
+    <string name="sip_protocol_desc">Tweak protocollo SIP</string>
+    <string name="tsx_t1_timeout">Transaction T1 timeout value.</string>
+    <string name="tsx_t2_timeout">Transaction T2 timeout value.</string>
+    <string name="tsx_t4_timeout">Transaction T4 timeout value.</string>
+    <string name="tsx_td_timeout">Transaction completed timer for INVITE.</string>
+    <string name="tsx_timeout_desc">Lascia -1 per i valori RFC 3261 predefiniti</string>
+    <string name="network_route_polling">Controlla cambiamenti di rete ogni (minuti)</string>
+    <string name="network_route_polling_desc">Verifica soluzione per Android 4.0 VPN . Lasciare a 0 se non è il caso per disattivare</string>
+    <string name="disable_tcp_switch">Disabilita il passaggio a TCP</string>
+    <string name="disable_tcp_switch_desc">Se attivato, impedisce allo stack di passare a TCP per i grandi pacchetti UDP.</string>
+    <string name="add_bandwidth_tias_in_sdp">Aggiunge il modificatore di ampiezza di banda TIAS in SDP</string>
+    <string name="add_bandwidth_tias_in_sdp_desc">Come da RFC3890. Necessario per il video sui server Avaya, ma compromette il parsing su alcuni server SIP.</string>
     <!-- Security -->
     <string name="tls">TLS</string>
     <string name="secure_transport">Trasporto sicuro</string>
@@ -113,6 +143,8 @@
     <string name="echo_cancellation_desc">Attiva la cancellazione dell\'echo</string>
     <string name="enable_vad">Rilevamento della voce</string>
     <string name="enable_vad_desc">Attiva il rilevamento della voce</string>
+    <string name="enable_ns">Riduzione del rumore</string>
+    <string name="enable_ns_desc">Funziona se la cancellazione dell\'eco è attivata ed è impiegato il backend  WebRTC </string>
     <string name="snd_mic_level">Amplificazione del microfono</string>
     <string name="snd_mic_level_desc">Regola il livello di segnale del microfono  (1 non fa nulla)</string>
     <string name="snd_speaker_level">Amplificazione dell\'altoparlante</string>
@@ -154,6 +186,8 @@
     <string name="has_io_queue_desc">Attiva Coda per input/output</string>
     <string name="set_audio_generate_tone">Tone hack</string>
     <string name="set_audio_generate_tone_desc">Genera un tono prima di fare le chiamate</string>
+    <string name="restart_aud_on_routing_change">Riavvia lo stream quando cambia il routing</string>
+    <string name="restart_aud_on_routing_change_desc">Obbligatorio per Bluetooth quando il clock rate di default è diverso di 8kHz. La disabilitazione potrebbe contribuire a cambiare più velocemente.</string>
     <string name="band_for_wifi">Tipo banda per wifi</string>
     <string name="band_for_3g">Tipo banda per 3G</string>
     <string name="band_for_gprs">Tipo banda per GPRS</string>
@@ -162,27 +196,64 @@
     <string name="codecs_band_types">Tipi di ampiezza di banda delle connessioni per i codec</string>
     <string name="use_sgs_call_hack">Use l\'Hack per il Samsung Galaxy</string>
     <string name="use_sgs_call_hack_desc">Preimposta la modalità di chiamata per risolvere il routing</string>
+    <string name="audio_implementation">Implementazione audio</string>
+    <string name="audio_implementation_desc">Backend per l\'audio</string>
+    <string name="digest">Digest</string>
+    <string name="pgp">PGP</string>
     <string name="plain_password">Password in chiaro</string>
+    <string name="data_digest">Data digest</string>
     <string name="disabled">Disattivato</string>
     <string name="optional">Opzionale</string>
     <string name="mandatory">Obbligatorio</string>
     <string name="auto">Automatico</string>
+    <string name="rtp">RTP</string>
+    <string name="in_band">In band generation</string>
+    <string name="sip_info">SIP INFO</string>
+    <string name="legacy">Legacy</string>
     <string name="normal">Normale</string>
     <string name="force">Forza</string>
     <string name="prevent">Previeni</string>
+    <string name="speex">Speex</string>
     <string name="simple">Semplice</string>
+    <string name="webrtc">WebRTC</string>
     <string name="use_android_setting">Usa le impostazioni di android</string>
+    <string name="narrowband">Banda stretta</string>
+    <string name="wideband">Banda larga</string>
+    <string name="slow">Lento</string>
+    <string name="fast">Veloce</string>
     <string name="no_proxy">Nessun proxy</string>
     <string name="outbound_proxies">Proxy fuori banda</string>
+    <string name="accounts_proxies">Accounts proxies</string>
     <string name="all">Tutto</string>
     <string name="no_zrtp">Nessuno ZRTP</string>
     <string name="create_zrtp">Crea ZRTP</string>
+    <string name="default_str">Default</string>
+    <string name="auto_connect_bluetooth">Connessione automatica bluetooth</string>
+    <string name="auto_connect_bluetooth_desc">Prova a usare BT SCO automaticamente ()</string>
+    <string name="auto_connect_speaker">Connetti automaticamente l\'altoparlante posteriore</string>
+    <string name="auto_connect_speaker_desc">Usa automaticamente l\'altoparlante posteriore rispondendo ad una chiamata</string>
+    <string name="auto_detect_speaker">Rilevamento automatico dell\'utilizzo dell\'altoparlante</string>
+    <string name="auto_detect_speaker_desc">Passa all\'altoparlante posteriore quando il telefono è in posizione orizzontale durante una chiamata.</string>
+    <string name="codecs_per_bandwidth">Lista di priorità codec per ampiezza di banda</string>
+    <string name="codecs_per_bandwidth_desc">Usa lista di priorità dei codec separate per reti lente e veloci</string>
+    <string name="audio_troubleshooting">Risoluzione dei problemi audio</string>
+    <string name="audio_troubleshooting_desc">Soluzioni alternative per il routing audio</string>
+    <string name="codecs_extra_settings">Configurazione extra codec</string>
+    <string name="frames_per_rtp_packet">Frames per pacchetto RTP</string>
+    <string name="g729_frame_per_packet">G729 frames per pacchetto RTP</string>
+    <string name="ilbc_frame_per_packet">iLBC frames per pacchetto RTP</string>
+    <string name="codec_h264_profile">Profilo H264</string>
+    <string name="codec_h264_level">Livello H264</string>
+    <string name="thread_count">Conteggio thread</string>
+    <string name="thread_count_desc">Numero di thread allocati per lo stack nativo</string>
     <!-- UI -->
     <string name="general_ui">Interfaccia utente generale</string>
     <string name="native_dialer_integration">Integrazione con il dialer nativo</string>
     <string name="advanced_ui">Tweaks avanzati</string>
     <string name="integrate_with_native_dialer">Integrazione dialer</string>
     <string name="integrate_with_native_dialer_desc">Quando componi il numero con il dialer nativo ti verrà chiesto se vuoi usare SIP o GSM</string>
+    <string name="integrate_tel_privileged">Integra privileged intent</string>
+    <string name="integrate_tel_privileged_desc">Modo diverso per integrare dialer stock. È necessario disattivare l\'integrazione di integrazione dialer se lo si utilizza.</string>
     <string name="integrate_with_native_calllogs">Integrazione con il log delle chiamate nativo</string>
     <string name="integrate_with_native_calllogs_desc">Le chiamate SIP verranno inserite (se possibile) nel log nativo delle chiamate</string>
     <string name="dial_press_tone">Toni in composizione</string>
@@ -215,6 +286,8 @@
     <string name="obtain_themes_desc">Prendi temi dell\'applicazione dal market</string>
     <string name="display_icon_in_status_bar_nbr">Mostra numero nella barra di stato</string>
     <string name="display_icon_in_status_bar_nbr_desc">Mostra il numero di account registrati nella barra di stato</string>
+    <string name="log_use_direct_file">Logga direttamente su file</string>
+    <string name="log_use_direct_file_desc">Logga direttamente su file senza usare logcat</string>
     <!-- Fast settings -->
     <string name="android_integration">Integrazione con Android</string>
     <string name="android_integration_desc">Integrazione con il dialer nativo e log delle chiamate</string>
@@ -234,8 +307,16 @@
     <string name="auto_record_calls_desc">Registra le chiamate appena connesso</string>
     <string name="support_multiple_calls">Supporto alle chiamate multiple</string>
     <string name="support_multiple_calls_desc">Consente conferenza e chiamate multiple contemporanee</string>
+    <string name="vid_in_auto_show">Mostra video automaticamente</string>
+    <string name="vid_in_auto_show_desc">Mostra automaticamente il video del lato remoto</string>
+    <string name="vid_out_auto_transmit">Invia video automaticamente</string>
+    <string name="vid_out_auto_transmit_desc">Invia automaticamente il video dal dispositivo</string>
+    <string name="use_video">Usa il video</string>
+    <string name="use_video_desc">Invia automaticamente il video dal dispositivo</string>
     <!-- Settings modes -->
     <string name="expert_preferences">Modalità esperto</string>
+    <string name="normal_preferences">Modo normale</string>
     <!-- Generic -->
+    <string name="leave_minus_1_default">Lascia -1 come default</string>
 
 </resources>

@@ -19,4 +19,10 @@
   <string name="unlock">Sblocca</string>
   <string name="record">Registra</string>
   <string name="stop_recording">Interrompi registrazione</string>
+  <string name="xfer_uri">Trasferisci al numero</string>
+  <string name="hold_call">Attesa</string>
+  <string name="on_hold">In attesa</string>
+  <string name="resume_call">Riprendi</string>
+  <string name="transfer_to_call">Trasferisci a chiamata</string>
+  <string name="send_dtmf">Invia DTMF</string>
 </resources>

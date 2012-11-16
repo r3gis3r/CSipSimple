@@ -1,22 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="cant_call">Non può chiamare</string>
-    <string name="rewrite">Riscrivere</string>
-    <string name="stop_processing">Fermare esecuzione</string>
-    <string name="direct_call">Chiamare direttamente</string>
-    <string name="auto_answer">Rispondere automaticamente</string>
-    <string name="starts_with">Inizia con</string>
-    <string name="ends_with">Finisce con</string>
-    <string name="contains">Contiene</string>
-    <string name="all">Tutto</string>
-    <string name="has_exactly_n_digits">Ha esattamente N cifre</string>
-    <string name="has_more_than_n_digits">Ha più di N cifre</string>
-    <string name="is_exactly">E\' esattamente</string>
-    <string name="custom_regexp">RegExp personalizzata</string>
-    <string name="prefix_by">Prefisso con</string>
-    <string name="suffix_with">Suffisso con</string>
-    <string name="replace_match_by">Rimpiazza corrispondenza con</string>
-    <string name="replace_all_by">Rimpiazza tutto con</string>
-
+  <string name="optional_sip_code">Codice sip opzionale</string>
+  <string name="cant_call">Non può chiamare</string>
+  <string name="rewrite">Riscrivere</string>
+  <string name="stop_processing">Fermare esecuzione</string>
+  <string name="direct_call">Chiamare direttamente</string>
+  <string name="auto_answer">Rispondere automaticamente</string>
+  <string name="starts_with">Inizia con</string>
+  <string name="ends_with">Finisce con</string>
+  <string name="contains">Contiene</string>
+  <string name="all">Tutto</string>
+  <string name="has_exactly_n_digits">Ha esattamente N cifre</string>
+  <string name="has_more_than_n_digits">Ha più di N cifre</string>
+  <string name="is_exactly">E\' esattamente</string>
+  <string name="custom_regexp">RegExp personalizzata</string>
+  <string name="prefix_by">Prefisso con</string>
+  <string name="suffix_with">Suffisso con</string>
+  <string name="replace_match_by">Rimpiazza corrispondenza con</string>
+  <string name="replace_all_by">Rimpiazza tutto con</string>
 </resources>

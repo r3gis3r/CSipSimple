@@ -3,6 +3,7 @@
   <string name="next">Avanti</string>
   <string name="init">Inizializzazione …</string>
   <string name="unable_to_download_file">Impossibile scaricare file</string>
+  <string name="connection_not_valid">Rete selezionata non ammessa nella configurazione attuale</string>
   <string name="invalid_sip_uri">L\'uri sip non è valido per la chiamata</string>
   <string name="accounts">Account</string>
   <string name="other_accounts">Altri account</string>
@@ -34,6 +35,7 @@
   <string name="dial_tab_name_text">Componi</string>
   <string name="calllog_tab_name_text">Registro chiamate</string>
   <string name="messages_tab_name_text">Messaggi</string>
+  <string name="favorites_tab_name_text">Favoriti</string>
   <string name="menu_disconnect">Disconnetti</string>
   <string name="service_ticker_registered_text">SIP Registrato</string>
   <string name="outgoing_call_chooser_call_text">Chiama</string>
@@ -48,7 +50,7 @@
   <string name="ok">OK</string>
   <string name="misc">Misc</string>
   <string name="warning">Attenzione</string>
-  <string name="disconnect_and_incoming_explaination">Sei configurati per essere disponibile per questa rete!!! Facendo clic su OK confermi di non voler essere disponibile fino al prossimo avvio dell\'applicazione</string>
+  <string name="disconnect_and_incoming_explaination">Configurato per essere disponibile per questa rete!!! Cliccando su OK confermi di non voler essere disponibile fino al prossimo avvio dell\'applicazione</string>
   <string name="gadget_title">Switcher dell\'account SIP</string>
   <string name="pickup_sip_uri">Prendi il contatto SIP</string>
   <string name="display_icon_in_status_bar_desc">L\'applicazione dovrebbe visualizzare un\'icona nello status bar quando registrata</string>
@@ -59,8 +61,37 @@
   <string name="show_password">Mostra password</string>
   <string name="this_codec_is_not_free">**Questo codec non è gratuito!!!**\nSi prega di assicurarsi che qualcuno (il tuo provider SIP o te stesso) abbia acquistato una licenza che ti permetta di usare il codec! Noi (come distributori dell\'applicazione) non siamo responsabili di un uso illegale di questo codec.\nE\' tua responsabilità assicurarti che sei autorizzato ad usare questo codec.\nLink per l\'acquisto:</string>
   <string name="voice_mail">Mail vocale</string>
+  <string name="voice_mail_number">Numero WM</string>
   <string name="type_sip_uri_or_autocomplete">Sip uri o autocompletamento</string>
   <string name="not_configured_multiple_calls">L\'applicazione non è configurata in modo da consentire chiamate multiple</string>
   <string name="legal_information">Informazioni legali</string>
+  <string name="update_nightly_build">Update nightly build</string>
+  <string name="loading">Loading</string>
+  <string name="reconnect">Riconnetti</string>
+  <string name="switch_to_text">Passa al modo testuale</string>
+  <string name="switch_to_digit">Passa al modo numerico</string>
+  <string name="no_voice_mail_configured">Mail vocale non configurata</string>
+  <string name="no_accounts">Nessun account</string>
+  <string name="activate">Attivato</string>
+  <string name="deactivate">Deattivato</string>
+  <string name="audio">Audio</string>
+  <string name="video">Video</string>
+  <string name="invert_selection">Inverti selezione</string>
+  <string name="cant_write_file">Errore nella scrittura del file</string>
+  <string name="info">Info</string>
+  <string name="csipsimple_shortcut">Collegamento CSipSimple</string>
   <!--Presence stuff-->
+  <string name="online">Online</string>
+  <string name="offline">Offline</string>
+  <string name="away">Lontano</string>
+  <string name="busy">Occupato</string>
+  <string name="activate_presence_sharing">Condividi presenza</string>
+  <string name="deactivate_presence_sharing">Interrompi condivisione presenza</string>
+  <string name="presence">Presenza</string>
+  <string name="configure">Configura</string>
+  <string name="set_android_group">Scegli gruppo android</string>
+  <string name="set_sip_data">Choose sip uri data</string>
+  <string name="uri_nbr">Numero telefono</string>
+  <string name="uri_im">IM with custom SIP scheme</string>
+  <string name="uri_sip">Chiamata internet</string>
 </resources>

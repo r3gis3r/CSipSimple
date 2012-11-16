@@ -12,10 +12,10 @@
   <string name="all">ទាំងអស់</string>
   <string name="has_exactly_n_digits">មាន​ចំនួន N តួ</string>
   <string name="has_more_than_n_digits">មាន​ច្រើន​ជាង N តួ</string>
-  <string name="is_exactly">មាន</string>
+  <string name="is_exactly">ដូច</string>
   <string name="custom_regexp">RegExp ផ្ទាល់ខ្លួន</string>
-  <string name="prefix_by">បន្ថែម​ដើម​ដោយ</string>
-  <string name="suffix_with">បន្ថែម​ចុង​ដោយ</string>
+  <string name="prefix_by">បន្ថែម​ពី​មុខ​ដោយ</string>
+  <string name="suffix_with">បន្ថែមពី​ក្រោយ​ដោយ</string>
   <string name="replace_match_by">ជំនួស​ការ​ផ្គូផ្គង​ដោយ</string>
   <string name="replace_all_by">ជំនួស​ទាំងអស់​ដោយ</string>
 </resources>
