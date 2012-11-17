@@ -3,7 +3,6 @@
 003rtp_type_strip.diff
 004clean_all_registrations.diff
 006no_update_option.diff
-007reapply_codec_clock_rate.diff
 008sdp_in_options.diff
 009silk_custo.diff
 010os_unix_joining_self.diff
