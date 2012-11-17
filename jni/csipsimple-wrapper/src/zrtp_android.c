@@ -220,6 +220,11 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 			* thus the parameter is NULL.
 			*/
 			pjmedia_transport_zrtp_initialize(zrtp_tp, css_var.zid_file, PJ_TRUE);
+#if 0
+			// This is a crappy hack for buggy versions of sip servers that does not correctly manage hello
+			ZrtpContext* zrtpContext = pjmedia_transport_zrtp_getZrtpContext(zrtp_tp);
+			zrtp_setMandatoryOnly(zrtpContext);
+#endif
 
 			return zrtp_tp;
 		} else {
