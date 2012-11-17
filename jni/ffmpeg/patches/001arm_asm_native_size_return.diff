@@ -1,7 +1,7 @@
 Index: ffmpeg/ffmpeg_src/libavutil/arm/intmath.h
 ===================================================================
---- ffmpeg.orig/ffmpeg_src/libavutil/arm/intmath.h	2012-09-04 22:48:02.235112091 +0200
-+++ ffmpeg/ffmpeg_src/libavutil/arm/intmath.h	2012-09-04 22:51:01.127104607 +0200
+--- ffmpeg.orig/ffmpeg_src/libavutil/arm/intmath.h	2012-11-13 23:31:36.241144475 +0100
++++ ffmpeg/ffmpeg_src/libavutil/arm/intmath.h	2012-11-13 23:31:42.469144607 +0100
 @@ -44,7 +44,7 @@
  }
  
