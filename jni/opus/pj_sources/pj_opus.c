@@ -98,6 +98,8 @@ struct opus_private {
 
 	// char		 obj_name[PJ_MAX_OBJ_NAME];
 
+    int externalFs; /* Clock rate we would like to limit from outside */
+
 	pj_bool_t enc_ready;
 	OpusEncoder* psEnc;
 
@@ -326,8 +328,15 @@ static pj_status_t opus_default_attr(pjmedia_codec_factory *factory,
 	 +-------+---------+-----------+
 	 */
 	attr->info.channel_cnt = 1;
-	/* TODO : would like to use 16kHz as internal clock rate in our case
-	 * Maybe not here the best place to change that (maybe using sdp params)
+	/*
+	 * TODO : would like to use 16kHz as internal clock rate in our case
+	 * pjmedia seems to have no support of different clock rate for RTP
+	 * and for associated port. Keeping 48kHz for RTP is needed (we just have
+	 * to transform timestamps) but to feed codec with 16kHz frames seems requires
+	 * some extra work in pjmedia.
+	 * For now we are obliged to use pjmedia resampler while would be
+	 * more efficient to use the Opus feature instead.
+	 * Using g722 hack was tried but seems useless.
 	 */
 	attr->info.clock_rate = 48000;
 	attr->info.avg_bps = 20000;
@@ -490,12 +499,13 @@ static pj_status_t opus_codec_open(pjmedia_codec *codec,
 	pj_assert(opus != NULL);
 	pj_assert(opus->enc_ready == PJ_FALSE && opus->dec_ready == PJ_FALSE);
 
+    PJ_LOG(4, (THIS_FILE, "Clock rate is %d ", attr->info.clock_rate));
+    opus->externalFs = attr->info.clock_rate;
 
 	/* Create Encoder */
 	structSizeBytes = opus_encoder_get_size(attr->info.channel_cnt);
 	opus->psEnc = pj_pool_zalloc(opus->pool, structSizeBytes);
-	PJ_LOG(4, (THIS_FILE, "Clock rate is %d ", attr->info.clock_rate));
-	ret = opus_encoder_init(opus->psEnc, attr->info.clock_rate,
+	ret = opus_encoder_init(opus->psEnc, opus->externalFs,
 			attr->info.channel_cnt, OPUS_APPLICATION_VOIP);
 	if (ret) {
 		PJ_LOG(1, (THIS_FILE, "Unable to init encoder : %d", ret));
@@ -564,7 +574,7 @@ static pj_status_t opus_codec_open(pjmedia_codec *codec,
 	/* Create decoder */
 	structSizeBytes = opus_decoder_get_size(attr->info.channel_cnt);
 	opus->psDec = pj_pool_zalloc(opus->pool, structSizeBytes);
-	ret = opus_decoder_init(opus->psDec, attr->info.clock_rate,
+	ret = opus_decoder_init(opus->psDec, opus->externalFs,
 			attr->info.channel_cnt);
 	if (ret) {
 		PJ_LOG(1, (THIS_FILE, "Unable to init decoder : %d", ret));
@@ -665,7 +675,7 @@ static pj_status_t opus_codec_parse(pjmedia_codec *codec, void *pkt,
     		size,
     		&payload_offset);
 
-    samples_per_frame = opus_packet_get_samples_per_frame(pkt, OPUS_CLOCK_RATE);
+    samples_per_frame = opus_packet_get_samples_per_frame(pkt, opus->externalFs);
 
 #if _TRACE_OPUS
     PJ_LOG(4, (THIS_FILE, "Pkt info : bw -> %d , spf -> %d" ,
@@ -708,7 +718,7 @@ static pj_status_t opus_codec_decode(pjmedia_codec *codec,
 
 		opus->pkt_info = pkt_info;
 
-		opus->dec_buf_sample_per_frame = opus_packet_get_samples_per_frame(input->buf, OPUS_CLOCK_RATE);
+		opus->dec_buf_sample_per_frame = opus_packet_get_samples_per_frame(input->buf, opus->externalFs);
 		/* We need to decode all the frames in the packet. */
 		opus->dec_buf_size = opus_decode(opus->psDec,
 							(const unsigned char *) input->buf, (opus_int32) input->size,
@@ -722,7 +732,7 @@ static pj_status_t opus_codec_decode(pjmedia_codec *codec,
 		}
 	}
 
-	/* We have this packet decoded now (either was previously in the buffer or was just added to buffer. */
+	/* We have this packet decoded now (either was previously in the buffer or was just added to buffer). */
 	if (opus->dec_buf_size == 0) {
 		/* The decoding was a failure. */
 		output->size = 0;
@@ -731,12 +741,13 @@ static pj_status_t opus_codec_decode(pjmedia_codec *codec,
 #if _TRACE_OPUS
 		PJ_LOG(4, (THIS_FILE, "Decode : copy from big buffer %d to %d", output_buf_len, frm_size));
 #endif
-	    PJ_ASSERT_RETURN(output_buf_len >= frm_size, PJ_ETOOSMALL);
+	    if(output_buf_len < frm_size){
+	        return PJ_ETOOSMALL;
+	    }
 		/* Copy the decoded frame from the buffer. */
 		pj_memcpy(output->buf, ((opus_int16*)opus->dec_buf) + (frm_info * frm_size),
 				  frm_size);
 		output->size = frm_size;
-
 	}
 
 	if (output->size == 0) {

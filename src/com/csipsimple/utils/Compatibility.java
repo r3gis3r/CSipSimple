@@ -387,7 +387,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_NB, "0");
-        preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "240");
+        preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_NB, "0");
@@ -414,7 +414,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_WB, "0");
-        preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "240");
+        preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G726-32/8000/1", SipConfigManager.CODEC_WB, "0");
@@ -780,6 +780,11 @@ public final class Compatibility {
         }
         if(lastSeenVersion < 2010) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.DTMF_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
+        }
+        if(lastSeenVersion < 2015) {
+            // By default disable opus for now as seems that the 48kHz resampling doesn't play well on all devices
+            prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "0");
+            prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "0");
         }
         prefWrapper.endEditing();
     }
