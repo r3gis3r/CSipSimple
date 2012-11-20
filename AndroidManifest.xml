@@ -28,7 +28,11 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.CALL_PRIVILEGED" />
+    <!--
+    <uses-permission android:name="android.permission.CALL_PRIVILEGED" /> 
+    was useless anyway as only granted to system app and
+    we don't have core integration anymore with these plugins
+    -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.VIBRATE" />

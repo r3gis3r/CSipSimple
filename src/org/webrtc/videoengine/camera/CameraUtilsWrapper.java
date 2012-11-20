@@ -26,20 +26,14 @@ public abstract class CameraUtilsWrapper {
 
     public static CameraUtilsWrapper getInstance() {
         if (instance == null) {
-            String className = "org.webrtc.videoengine.camera.CameraUtils";
             if (Compatibility.isCompatible(9)) {
-                className += "9";
+                instance = new org.webrtc.videoengine.camera.CameraUtils9();
             } else if (Compatibility.isCompatible(8)) {
-                className += "8";
-            } else {
-                className += "5";
-            }
-            try {
-                Class<? extends CameraUtilsWrapper> wrappedClass = Class.forName(className)
-                        .asSubclass(CameraUtilsWrapper.class);
-                instance = wrappedClass.newInstance();
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
+                instance = new org.webrtc.videoengine.camera.CameraUtils8();
+            } else if (Compatibility.isCompatible(5)){
+                instance = new org.webrtc.videoengine.camera.CameraUtils5();
+            }else {
+                instance = new org.webrtc.videoengine.camera.CameraUtils3();
             }
         }
 

@@ -19,11 +19,14 @@ import java.util.Locale;
 
 import dalvik.system.DexClassLoader;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.util.Log;
+
+import com.csipsimple.utils.Compatibility;
 
 import org.webrtc.videoengine.camera.CameraUtilsWrapper;
 
@@ -54,6 +57,7 @@ public class VideoCaptureDeviceInfoAndroid {
         public int orientation;
         // Camera index used in Camera.Open on Android 2.3 and onwards
         public int index;
+        public CaptureCapabilityAndroid bestCapability;
     }
 
     public enum FrontFacingCameraType {
@@ -129,6 +133,9 @@ public class VideoCaptureDeviceInfoAndroid {
         }
 
         newDevice.captureCapabilies = new CaptureCapabilityAndroid[sizes.size()];
+        newDevice.bestCapability = new CaptureCapabilityAndroid();
+        int bestBandwidth = 0;
+        
         for(int i = 0; i < sizes.size(); ++i) {
             Size s = sizes.get(i);
             newDevice.captureCapabilies[i] = new CaptureCapabilityAndroid();
@@ -138,7 +145,34 @@ public class VideoCaptureDeviceInfoAndroid {
             Log.v(TAG,
                     "VideoCaptureDeviceInfo " + "maxFPS:" + maxFPS +
                     " width:" + s.width + " height:" + s.height);
+            
+            // We use h264 primer formula here to estimate bandwidth need
+            int currentBandwidth = (int) (s.width * s.height * maxFPS * 0.07);
+            int maxBestBandwidth = 1000000;
+            // We'd like to find a bandwidth < 1 Mbits
+            if (bestBandwidth == 0 ||
+                    (currentBandwidth < bestBandwidth && currentBandwidth >= maxBestBandwidth)) {
+                newDevice.bestCapability.width = s.width;
+                newDevice.bestCapability.height = s.height;
+                newDevice.bestCapability.maxFPS = maxFPS;
+                bestBandwidth = currentBandwidth;
+            } else if (currentBandwidth < maxBestBandwidth) {
+                if (s.width > newDevice.bestCapability.width ||
+                        s.height > newDevice.bestCapability.height ||
+                        bestBandwidth > maxBestBandwidth) {
+                    if(s.height != s.width) {
+                        newDevice.bestCapability.width = s.width;
+                        newDevice.bestCapability.height = s.height;
+                        newDevice.bestCapability.maxFPS = maxFPS;
+                        bestBandwidth = currentBandwidth;
+                    }
+                }
+
+            }
         }
+        
+        Log.d(TAG, "Best capability found " + newDevice.bestCapability.width + " x "
+                + newDevice.bestCapability.height);
     }
 
     // Function that make sure device specific capabilities are
@@ -234,6 +268,17 @@ public class VideoCaptureDeviceInfoAndroid {
             }
         }
         return null;
+    }
+    
+    public CaptureCapabilityAndroid GetBestCapability (String deviceUniqueId)
+    {
+        for (AndroidVideoCaptureDevice device: deviceList) {
+            if(device.deviceUniqueName.equals(deviceUniqueId)) {
+                return (CaptureCapabilityAndroid) device.bestCapability;
+            }
+        }
+        return null;
+        
     }
 
     // Returns the camera orientation as described by
@@ -375,7 +420,7 @@ public class VideoCaptureDeviceInfoAndroid {
                 new DexClassLoader(file.getAbsolutePath(), dexOutputDir,
                         null, ClassLoader.getSystemClassLoader());
 
-        Method method = loader.loadClass(classPath).getDeclaredMethod(
+        Method method = ((ClassLoader)loader).loadClass(classPath).getDeclaredMethod(
             "getFrontFacingCamera", (Class[]) null);
         Camera camera = (Camera) method.invoke((Object[])null,(Object[]) null);
         return camera;

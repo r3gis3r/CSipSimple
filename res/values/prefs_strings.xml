@@ -258,6 +258,8 @@
     <string name="thread_count_desc">Number of thread allocated for the native stack</string>
     <string name="setup_audio_before_init">Setup audio before init</string>
     <string name="setup_audio_before_init_desc">Put audio in correct mode before audio stream initialization</string>
+    <string name="video_capture_size">Video capture size</string>
+    <string name="video_capture_size_desc">Size of capture frames</string>
 
     <!-- UI -->
     <string name="general_ui">General user interface</string>

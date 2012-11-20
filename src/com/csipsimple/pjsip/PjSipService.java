@@ -57,6 +57,9 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.TimerWrapper;
+import com.csipsimple.utils.video.VideoUtilsWrapper;
+import com.csipsimple.utils.video.VideoUtilsWrapper.VideoCaptureCapability;
+import com.csipsimple.utils.video.VideoUtilsWrapper.VideoCaptureDeviceInfo;
 import com.csipsimple.wizards.WizardUtils;
 
 import org.pjsip.pjsua.csipsimple_config;
@@ -1028,21 +1031,30 @@ public class PjSipService {
                             if (aPrio >= 0) {
                                 pjsua.vid_codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
                             }
+                            String videoSize = SipConfigManager.getPreferenceStringValue(service, SipConfigManager.VIDEO_CAPTURE_SIZE, "");
+                            if(TextUtils.isEmpty(videoSize) || videoSize.equalsIgnoreCase("0x0@0")) {
+                                List<VideoCaptureDeviceInfo> cps = VideoUtilsWrapper.getInstance().getVideoCaptureDevices(service);
+                                if(cps.size() > 0) {
+                                    videoSize = cps.get(cps.size() - 1).bestCapability.toPreferenceValue();
+                                }
+                            }
+                            VideoCaptureCapability videoCap = new VideoUtilsWrapper.VideoCaptureCapability(videoSize);
                             if(codec.startsWith("H264")) {
                                 int h264profile = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_PROFILE, 66);
                                 int h264level = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_LEVEL, 30);
                                 int h264bitrate = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_BITRATE, 0);
-                                if(h264level > 0 && h264profile > 0) {
-                                    pjsua.codec_h264_set_profile(h264profile, h264level, 0, 0, 0, h264bitrate, 0);
+                                
+                                if(h264profile > 0) {
+                                    pjsua.codec_h264_set_profile(h264profile, h264level, 
+                                            videoCap.width, 
+                                            videoCap.height, 
+                                            videoCap.fps, 
+                                            h264bitrate, 0);
                                     //pjsua.codec_h264_set_profile(h264profile, h264level, 352, 480, 15, h264bitrate, 0); // 352×480 
                                     Log.d(THIS_FILE, "Set h264 profile : " + h264profile + ", " + h264level + ", "+ h264bitrate);
                                 }
                             }
                         }
-                        // H264 preferences
-                        //pjsua.codec_h264_set_profile(66, 21, 352,  288, 15, 100, 120);
-                        //pjsua.codec_h264_set_profile(66, 30, 720, 480, 15, 1024, 2048);
-                        //pjsua.codec_h264_set_profile(66, 31, 1280, 720, 15, 360, 600);
                     }
                     
                     Log.d(THIS_FILE, audioSb.toString());

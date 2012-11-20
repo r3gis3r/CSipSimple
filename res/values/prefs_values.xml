@@ -234,6 +234,7 @@
         <item>Mainline</item>
     </string-array>
     <string-array name="h264_level_values">
+        <item>0</item>
         <item>10</item>
         <item>9</item>
         <item>11</item>
@@ -253,6 +254,7 @@
         <item>52</item>
     </string-array>
     <string-array name="h264_level_choices">
+        <item>@string/auto</item>
         <item>1.0</item>
         <item>1b</item>
         <item>1.1</item>

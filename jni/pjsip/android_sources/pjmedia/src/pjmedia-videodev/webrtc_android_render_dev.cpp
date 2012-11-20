@@ -264,37 +264,34 @@ static pj_status_t init_stream(struct webrtcR_stream *strm){
 
 		strm->_renderProvider = strm->_renderModule->AddIncomingRenderStream(0,
 				0, 0.0f, 0.0f, 1.0f, 1.0f);
-
-		VideoFrame toFrame;
-		toFrame.VerifyAndAllocate(3);
-		toFrame.SetHeight(1);
-		toFrame.SetWidth(1);
-		toFrame.SetLength(3);
-
-		// We start with black
-		memset(toFrame.Buffer(), 0, 3);
-		toFrame.Buffer()[1] = 128;
-		toFrame.Buffer()[2] = 128;
-		strm->_renderModule->SetStartImage(0, toFrame);
+		WebRtc_Word64 startTime = TickTime::MillisecondTimestamp();
+        // We start with gray
+		{
+            VideoFrame sFrame;
+            sFrame.VerifyAndAllocate(6);
+            sFrame.SetHeight(2);
+            sFrame.SetWidth(2);
+            sFrame.SetLength(6);
+            sFrame.SetRenderTime(startTime);
+            pj_memset(sFrame.Buffer(), 128, 6 * sizeof(WebRtc_UWord8));
+            strm->_renderModule->SetStartImage(0, sFrame);
+		}
 
 		// We timeout with gray
-		toFrame.Buffer()[0] = 128;
-		//strm->_renderModule->SetTimeoutImage(0, toFrame, 20000);
-
+		// Apparently we have problems if we use a timeout frame
+        // WebRTC doesn't respect our timeout
+		if(0){
+            VideoFrame toFrame;
+            toFrame.VerifyAndAllocate(6);
+            toFrame.SetHeight(2);
+            toFrame.SetWidth(2);
+            toFrame.SetLength(6);
+            toFrame.SetRenderTime(startTime);
+            pj_memset(toFrame.Buffer(), 128, 6 * sizeof(WebRtc_UWord8));
+            strm->_renderModule->SetTimeoutImage(0, toFrame, (WebRtc_UWord32) 2000);
+		}
 		int stat = strm->_renderModule->StartRender(0);
 		PJ_LOG(4, (THIS_FILE, "Render thread started %d", stat));
-
-		/*
-		// Not needed anymore as have start frame now
-
-		// Deliver one fake start frame to init renderer
-		memset(toFrame.Buffer(), 0, 3);
-		WebRtc_Word64 nowMs = TickTime::MillisecondTimestamp();
-		toFrame.SetRenderTime(nowMs);
-		strm->_renderProvider->RenderFrame(0, toFrame);
-
-		PJ_LOG(4, (THIS_FILE, "Fake first frame rendered"));
-		*/
 		status = PJ_SUCCESS;
 	}
 
@@ -334,8 +331,7 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 		return PJ_EINVALIDOP;
 	}
 
-	if (frame->size == 0 || frame->buf == NULL
-			|| frame->size == 0){
+	if (frame->size == 0 || frame->buf == NULL){
 		pj_mutex_unlock(stream->mutex);
 		return PJ_SUCCESS;
 	}
@@ -368,13 +364,13 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 	stream->_videoFrame.SetWidth(width);
 	stream->_videoFrame.SetHeight(height);
 	stream->_videoFrame.SetLength(frame->size);
-	stream->_videoFrame.SetTimeStamp(frame->timestamp.u64);
 
-	memcpy(stream->_videoFrame.Buffer(), frame->buf, frame->size);
+	pj_memcpy(stream->_videoFrame.Buffer(), frame->buf, frame->size);
 
 	// TODO : shall we try to use frame timestamp?
 	WebRtc_Word64 nowMs = TickTime::MillisecondTimestamp();
-	stream->_videoFrame.SetRenderTime( nowMs + 200);
+	stream->_videoFrame.SetRenderTime( nowMs + 400);
+    stream->_videoFrame.SetTimeStamp(frame->timestamp.u64/*nowMs*/);
 	stream->_renderProvider->RenderFrame(0, stream->_videoFrame);
 
 //    PJ_LOG(4, (THIS_FILE, "webrtc put frame size %d against %lld vs %lld",

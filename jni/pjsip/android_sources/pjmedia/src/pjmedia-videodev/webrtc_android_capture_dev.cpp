@@ -551,7 +551,7 @@ void PjVideoCaptureDataCallback::OnIncomingCapturedFrame(int id, VideoFrame &vid
 		PJ_LOG(5,(THIS_FILE, "Capture thread started"));
 	}
 
-	//PJ_LOG(4, (THIS_FILE, "We have a frame size of %d", videoFrame.Size()));
+	//PJ_LOG(4, (THIS_FILE, "Capture : We have a frame size of %d", videoFrame.Size()));
 	frame.bit_info = 0;
 	frame.size = videoFrame.Size();
 	frame.timestamp.u64 = videoFrame.TimeStamp();
@@ -565,7 +565,7 @@ void PjVideoCaptureDataCallback::OnIncomingCapturedFrame(int id, VideoFrame &vid
 void PjVideoCaptureDataCallback::OnCaptureDelayChanged(const WebRtc_Word32 id,
         const WebRtc_Word32 delay){
 	// WARNING : if we want to log, we must be attached to thread !
-	//PJ_LOG(4, (THIS_FILE, "Delay changed : %d", id));
+	PJ_LOG(2, (THIS_FILE, "Delay changed for %d : %d", id, delay));
 }
 
 /* API: Start stream. */

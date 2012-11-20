@@ -5,11 +5,11 @@
     android:padding="5dp" >
 
     <ImageView
-        android:contentDescription="@string/downloading"
         android:id="@+id/status_icon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:contentDescription="@string/downloading" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -20,21 +20,23 @@
             android:id="@+id/status_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.StatusBar.EventContent.Title"
-            android:textStyle="bold"
-            android:layout_alignParentTop="true" />
-		<LinearLayout 
+            android:layout_alignParentTop="true"
+            android:textAppearance="@style/NotificationTitle"
+            android:textStyle="bold" />
+
+        <LinearLayout
             android:id="@+id/status_progress_wrapper"
             android:layout_width="fill_parent"
-            android:layout_below="@id/status_text"
-            android:layout_height="wrap_content">
-        <ProgressBar
-            android:id="@+id/status_progress"
-            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:indeterminateOnly="false" 
-            style="?android:attr/progressBarStyleHorizontal" />
+            android:layout_below="@id/status_text" >
+
+            <ProgressBar
+                android:id="@+id/status_progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"
+                android:indeterminateOnly="false" />
         </LinearLayout>
     </RelativeLayout>
 

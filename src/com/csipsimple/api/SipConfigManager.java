@@ -1066,6 +1066,12 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String USE_VIDEO = "use_video";
+    /**
+     * Video capture size in form (width)x(height)@(fps)
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String VIDEO_CAPTURE_SIZE = "video_capture_size";
     
     /**
      * Should the stack never switch to TCP when packets are too big?

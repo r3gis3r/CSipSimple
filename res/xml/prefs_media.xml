@@ -119,7 +119,7 @@
                 android:key="codec_h264_profile"
                 android:title="@string/codec_h264_profile" />
             <ListPreference
-                android:defaultValue="30"
+                android:defaultValue="0"
                 android:entries="@array/h264_level_choices"
                 android:entryValues="@array/h264_level_values"
                 android:key="codec_h264_level"
@@ -203,6 +203,15 @@
             android:key="auto_detect_speaker"
             android:summary="@string/auto_detect_speaker_desc"
             android:title="@string/auto_detect_speaker" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="video_category"
+        android:title="@string/video" >
+        <ListPreference
+            android:defaultValue=""
+            android:key="video_capture_size"
+            android:summary="@string/video_capture_size_desc"
+            android:title="@string/video_capture_size" />
     </PreferenceCategory>
 
     <PreferenceScreen

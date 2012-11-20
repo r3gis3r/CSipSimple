@@ -22,7 +22,7 @@ MY_WEBRTC_COMMON_DEFS := \
 #    '-DNETEQ_VOICEENGINE_CODECS' [module audio_coding neteq]
 #    '-DWEBRTC_MODULE_UTILITY_VIDEO' [module media_file] [module utility]
 
-
+#MY_WEBRTC_COMMON_DEFS += -DANDROID_LOG
 
 ARCH_ARM_HAVE_ARMV7A := false
 WEBRTC_BUILD_NEON_LIBS := false

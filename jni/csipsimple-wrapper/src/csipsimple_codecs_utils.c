@@ -112,36 +112,38 @@ typedef struct h264_level_info_t
     unsigned def_w;	    /* Default width.			*/
     unsigned def_h;	    /* Default height.			*/
     unsigned def_fps;	    /* Default fps.			*/
-    unsigned def_bitrate;  /* Default bitrate (kbps). */
 } h264_level_info_t;
+
+static const h264_level_info_t H264_LEVELS_INFO[] =
+{
+    { 10,   1485,    99,     64,  176,  144, 15 },
+    { 9,    1485,    99,    128,  176,  144, 15 }, /*< level 1b */
+    { 11,   3000,   396,    192,  320,  240, 10 },
+    { 12,   6000,   396,    384,  352,  288, 15 },
+    { 13,  11880,   396,    768,  352,  288, 15 },
+    { 20,  11880,   396,   2000,  352,  288, 30 },
+    { 21,  19800,   792,   4000,  352,  288, 30 },
+    { 22,  20250,  1620,   4000,  352,  288, 30 },
+    { 30,  40500,  1620,  10000,  720,  480, 30 },
+    { 31, 108000,  3600,  14000, 1280,  720, 30 },
+    { 32, 216000,  5120,  20000, 1280,  720, 30 },
+    { 40, 245760,  8192,  20000, 1920, 1080, 30 },
+    { 41, 245760,  8192,  50000, 1920, 1080, 30 },
+    { 42, 522240,  8704,  50000, 1920, 1080, 30 },
+    { 50, 589824, 22080, 135000, 1920, 1080, 30 },
+    { 51, 983040, 36864, 240000, 1920, 1080, 30 },
+};
+
 
 /* Get H.264 level info from specified level ID */
 static pj_status_t get_h264_level_info(unsigned id, h264_level_info_t *level)
 {
     unsigned i;
-    const h264_level_info_t level_info[] =
-    {
-	{ 10,   1485,    99,     64,  176,  144, 15, 2 },
-	{ 9,    1485,    99,    128,  176,  144, 15, 4 }, /*< level 1b */
-	{ 11,   3000,   396,    192,  320,  240, 10, 5 },
-	{ 12,   6000,   396,    384,  352,  288, 15, 10 },
-	{ 13,  11880,   396,    768,  352,  288, 15, 20 },
-	{ 20,  11880,   396,   2000,  352,  288, 30, 50 },
-	{ 21,  19800,   792,   4000,  352,  288, 30, 100 },
-	{ 22,  20250,  1620,   4000,  352,  288, 30, 128 },
-	{ 30,  40500,  1620,  10000,  720,  480, 30, 725 }, /* H264 primer : w x h x fps x motion rank x 0.07 */
-	{ 31, 108000,  3600,  14000, 1280,  720, 30, 360 },
-	{ 32, 216000,  5120,  20000, 1280,  720, 30, 512 },
-	{ 40, 245760,  8192,  20000, 1920, 1080, 30, 512 },
-	{ 41, 245760,  8192,  50000, 1920, 1080, 30, 1024 },
-	{ 42, 522240,  8704,  50000, 1920, 1080, 30, 1024 },
-	{ 50, 589824, 22080, 135000, 1920, 1080, 30, 3000 },
-	{ 51, 983040, 36864, 240000, 1920, 1080, 30, 6000 },
-    };
 
-    for (i = 0; i < PJ_ARRAY_SIZE(level_info); ++i) {
-	if (level_info[i].id == id) {
-	    *level = level_info[i];
+
+    for (i = 0; i < PJ_ARRAY_SIZE(H264_LEVELS_INFO); ++i) {
+	if (H264_LEVELS_INFO[i].id == id) {
+	    *level = H264_LEVELS_INFO[i];
 	    return PJ_SUCCESS;
 	}
     }
@@ -161,6 +163,7 @@ PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned profile_id, unsigned level_
 	const pj_str_t codec_id = { "H264", 4 };
     const pj_str_t PROFILE_LEVEL_ID	= {"profile-level-id", 16};
 	h264_level_info_t level_info;
+	int macro_block_size_sec;
 	char profile_level_id_str[7];
 
 	status = PJ_EINVAL;
@@ -170,19 +173,52 @@ PJ_DECL(pj_status_t) codec_h264_set_profile(unsigned profile_id, unsigned level_
 		return status;
 	}
 
-	status = get_h264_level_info( (level_id > 0) ? level_id : 20, &level_info);
+	if(level_id == 0 && width > 0 && height > 0 && fps > 0){
+	    macro_block_size_sec = ((width+15) / 16) * ((height+15) / 16 ) * fps;
+	    int idx;
+	    for(idx = 0; idx < PJ_ARRAY_SIZE(H264_LEVELS_INFO); ++idx){
+	        if(H264_LEVELS_INFO[idx].max_mbps <= macro_block_size_sec){
+	            level_id = H264_LEVELS_INFO[idx].id;
+	        }else{
+	            break;
+	        }
+	    }
+	}
+
+	status = get_h264_level_info( (level_id > 0) ? level_id : 30, &level_info);
 	if(status != PJ_SUCCESS) {
 		return status;
 	}
-	PJ_LOG(4, (THIS_FILE, "Found default infos for this level %d %dx%d@%d %d", level_info.id, level_info.def_w, level_info.def_h, level_info.def_fps, level_info.def_bitrate));
+	// Check level regarding width/height parameters
+	if(width > 0 && height > 0 && fps > 0){
+	    macro_block_size_sec = ((width+15) / 16) * ((height+15) / 16 ) * fps;
+	    if(macro_block_size_sec > level_info.max_mbps){
+	        // Invalid reg selected level
+	        width = height = fps = 0;
+	    }
+	}else{
+	    // If we have not the 3 params, it's invalid
+	    width = height = fps = 0;
+	}
+
+    PJ_LOG(4, (THIS_FILE, "Found default infos for this level %d %dx%d@%d",
+                    level_info.id,
+                    level_info.def_w, level_info.def_h, level_info.def_fps));
 
 	param.enc_fmt.det.vid.size.w = (width > 0) ? width : level_info.def_w;
 	param.enc_fmt.det.vid.size.h = (height > 0) ? height : level_info.def_h;
 	param.enc_fmt.det.vid.fps.num = (fps > 0 ) ? fps : level_info.def_fps;
 	param.enc_fmt.det.vid.fps.denum = 1;
 
-	param.enc_fmt.det.vid.avg_bps = ( avg_kbps > 0 && avg_kbps <= level_info.bitrate ) ? avg_kbps * 1000 : level_info.def_bitrate * 1000;
-	param.enc_fmt.det.vid.max_bps = ( max_kbps > 0 && max_kbps <= level_info.bitrate ) ? max_kbps * 1000 : level_info.bitrate * 1000;
+	if(avg_kbps == 0){
+	    /* H264 primer from adobe : w x h x fps x motion rank x 0.07 */
+	    avg_kbps = ((float)(param.enc_fmt.det.vid.size.w * param.enc_fmt.det.vid.size.h * param.enc_fmt.det.vid.fps.num) ) * 0.07;
+	}
+	if(max_kbps == 0) {
+	    max_kbps = avg_kbps;
+	}
+	param.enc_fmt.det.vid.avg_bps = ( avg_kbps <= level_info.bitrate ) ? avg_kbps * 1000 : level_info.bitrate * 1000;
+	param.enc_fmt.det.vid.max_bps = ( max_kbps <= level_info.bitrate ) ? max_kbps * 1000 : level_info.bitrate * 1000;
 
 	// We expect here to already have fmtp_level_profile_id
 	for (i = 0; i < param.dec_fmtp.cnt; ++i) {

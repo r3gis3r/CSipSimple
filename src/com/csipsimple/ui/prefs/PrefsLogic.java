@@ -39,8 +39,12 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.ExtraPlugins.DynCodecInfos;
 import com.csipsimple.utils.Theme;
+import com.csipsimple.utils.video.VideoUtilsWrapper;
+import com.csipsimple.utils.video.VideoUtilsWrapper.VideoCaptureCapability;
+import com.csipsimple.utils.video.VideoUtilsWrapper.VideoCaptureDeviceInfo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -53,6 +57,7 @@ public class PrefsLogic {
     private static final String MEDIA_BAND_TYPE_KEY = "band_types";
     private static final String MEDIA_CODEC_LIST_KEY = "codecs_list";
     private static final String MEDIA_MISC_KEY = "misc";
+    private static final String MEDIA_VIDEO_CATEGORY = "video_category";
     private static final String MEDIA_AUDIO_TROUBLESHOOT_KEY = "audio_troubleshooting";
 
     private static final String NWK_SECURE_TRANSPORT_KEY = "secure_transport";
@@ -178,7 +183,37 @@ public class PrefsLogic {
                 Intent it = new Intent(ctxt, Codecs.class);
                 pf.setIntent(it);
                 
-
+                if(pfw.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
+                    VideoUtilsWrapper vuw = VideoUtilsWrapper.getInstance();
+                    List<VideoCaptureDeviceInfo> capt = vuw.getVideoCaptureDevices(ctxt);
+                    int size = capt.get(capt.size() - 1).capabilities.size();
+//                    for(VideoCaptureDeviceInfo vcdi : capt) {
+//                        size += vcdi.capabilities.size();
+//                    }
+                    CharSequence[] entries = new CharSequence[size+1];
+                    CharSequence[] values = new CharSequence[size+1];
+                    ListPreference lp = (ListPreference) pfh.findPreference(SipConfigManager.VIDEO_CAPTURE_SIZE);
+                    int i = 0;
+                    entries[0] = ctxt.getText(R.string.auto);
+                    values[0] = "";
+                    i ++;
+                    //for(VideoCaptureDeviceInfo vcdi : capt) {
+                    VideoCaptureDeviceInfo vcdi = capt.get(capt.size() - 1);
+                    for( VideoCaptureCapability cap : vcdi.capabilities ) {
+                        entries[i] = cap.toPreferenceDisplay();
+                        values[i] = cap.toPreferenceValue();
+                        i++;
+                    }
+                    if(vcdi.bestCapability != null) {
+                        lp.setDefaultValue(vcdi.bestCapability.toPreferenceValue());
+                    }
+                        
+                    //}
+                    lp.setEntries(entries);
+                    lp.setEntryValues(values);
+                }else {
+                    pfh.hidePreference(null, MEDIA_VIDEO_CATEGORY);
+                }
                 break;
             }
             
