@@ -863,11 +863,19 @@ static pj_status_t pj_vpx_codec_decode(pjmedia_vid_codec *codec,
     for (i = 0; i < pkt_count; ++i) {
         unsigned extension_len = 0;
         unsigned payload_size = packets[i].size;
+
+        if(payload_size <= 0){
+            continue;
+        }
+
         s = packets[i].buf;
 
         /* First octet is for */
         /* |X|R|N|S|PartID | */
         if( s[0] & 0x80 ){
+            if(payload_size <= 1){
+                continue;
+            }
             /* We have extension in octet 2 */
             /* |I|L|T|K| RSV   | */
             if( s[1] & 0x80 ) extension_len++;
@@ -882,7 +890,7 @@ static pj_status_t pj_vpx_codec_decode(pjmedia_vid_codec *codec,
         //PJ_LOG(4, (THIS_FILE, "Unpack RTP %d size %d, start %d", i, packets[i].size, s[0] & 0x10));
         if((vpx->dec_frame_len + payload_size) < vpx->dec_buf_size) {
             pj_memcpy((p + vpx->dec_frame_len), s, payload_size);
-            vpx->dec_frame_len += (packets[i].size - 1);
+            vpx->dec_frame_len += payload_size;
         } else {
             PJ_LOG(1, (THIS_FILE, "Buffer is too small"));
         }
@@ -897,6 +905,7 @@ static pj_status_t pj_vpx_codec_decode(pjmedia_vid_codec *codec,
             vpx->dec_buf, vpx->dec_frame_len,
             0, VPX_DL_REALTIME);
     if (res == VPX_CODEC_UNSUP_BITSTREAM){
+        PJ_LOG(2, (THIS_FILE, "More likely we are missing a keyframe, request it"));
         /* Broadcast missing keyframe event */
        pjmedia_event event;
        pjmedia_event_init(&event, PJMEDIA_EVENT_KEYFRAME_MISSING,
