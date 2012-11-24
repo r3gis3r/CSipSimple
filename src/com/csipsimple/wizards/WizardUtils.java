@@ -329,6 +329,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_peopleline, 45, 
                     new Locale[]{}, false, true, 
                     PeopleLine.class));
+            WIZARDS_DICT.put("FEELYCALL", new WizardInfo("FEELYCALL", "FreelyCall", 
+                    R.drawable.ic_wizard_freelycall, 45, 
+                    new Locale[]{}, false, true, 
+                    FreelyCall.class));
             
             
 			
