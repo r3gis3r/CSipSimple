@@ -21,7 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.text.TextUtils;
 
@@ -39,7 +38,7 @@ import java.util.regex.Pattern;
 public class SipCel extends SimpleImplementation {
 
 	ListPreference accountState;
-	CheckBoxPreference useSafePort;
+	//CheckBoxPreference useSafePort;
 
 	@Override
 	protected String getDomain() {
@@ -59,7 +58,7 @@ public class SipCel extends SimpleImplementation {
 		CharSequence[] states = new CharSequence[] {"com", "eu", "mobi", "tel"};
 		
         accountState = new ListPreference(parent);
-        useSafePort = new CheckBoxPreference(parent);
+        //useSafePort = new CheckBoxPreference(parent);
         
         accountState.setEntries(states);
         accountState.setEntryValues(states);
@@ -71,7 +70,7 @@ public class SipCel extends SimpleImplementation {
         addPreference(accountState);
         
         String domain = account.reg_uri;
-        boolean useSafe = false;
+        //boolean useSafe = false;
         if( domain != null ) {
 	        for(CharSequence state : states) {
 	        	String currentComp = "sip:sip.sipcel."+state;
@@ -80,20 +79,26 @@ public class SipCel extends SimpleImplementation {
 	        		break;
 	        	}
 	        }
+	        /*
 	        if(domain.endsWith(":443")) {
 	        	useSafe = true;
 	        }
+	        */
         }
-
+        /*
         addPreference(useSafePort);
         
         useSafePort.setChecked(useSafe);
         useSafePort.setTitle("Use alternate port");
         useSafePort.setSummary("Connect to port 443 instead of 5060");
-        
+        */
 
 	}
 	
+	@Override
+	protected boolean canTcp() {
+	    return true;
+	}
 
 	@Override
 	public boolean needRestart() {
@@ -106,22 +111,21 @@ public class SipCel extends SimpleImplementation {
 		SipProfile acc = super.buildAccount(account);
 		String remoteServerUri = "sip:sip.sipcel.";
 		String ext = "com";
-		String port = "";
 		
 		if(!TextUtils.isEmpty(accountState.getValue())){
 			ext = accountState.getValue();
 		}
-		
-		if(useSafePort.isChecked()) {
-			port = ":443";
+
+        String proxyPort = "";
+		if(account.transport == SipProfile.TRANSPORT_TCP) {
+		    proxyPort = ":443";
 		}
 		
-		remoteServerUri += ext + port;
+		remoteServerUri += ext;
 		acc.reg_uri = remoteServerUri;
-		acc.proxies = new String[] { remoteServerUri };
+		acc.proxies = new String[] { remoteServerUri + proxyPort };
 		acc.publish_enabled = 1;
 		acc.reg_timeout = 120;
-		acc.transport = SipProfile.TRANSPORT_AUTO;
 		
 		return acc;
 	}
@@ -132,36 +136,42 @@ public class SipCel extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
+		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_QOS, true);
+        prefs.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE, "8000");
 		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, Integer.toString(SipConfigManager.DTMF_MODE_AUTO));
-		
-		
-		
-		//Only g729, gsm, ilbc, ulaw 
-		prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB,"244");
-		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"241");
+
+        prefs.setPreferenceStringValue(SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE, "900");
+        prefs.setPreferenceStringValue(SipConfigManager.KEEP_ALIVE_INTERVAL_WIFI, "1800");
+        prefs.setPreferenceStringValue(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_MOBILE, "1200");
+        prefs.setPreferenceStringValue(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_WIFI, "3600");
+
+		//For Wifi: Speex 32Khz, speex 16, g729, gsm.
+		prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB,"242");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"100");
 		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"0");
 		prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"0");
-		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"242");
+		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"0");
 		prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
-		prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"0");
-		prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
-		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "243");
+		prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"243");
+		prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"244");
+		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "241");
 		
-		//On NB ulaw, ilbc, gsm,  g729
-		prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB,"242");
-		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"244");
+		//For 3G: G729, GSM 8Khz, Ilbc 8Khz, speex 8Khz.
+		prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_NB,"244");
+		prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"100");
 		prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"0");
-		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"243");
-		prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
+		prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"242");
+		prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"241");
 		prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
 		prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
-		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "241");
+		prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "243");
 	}
 	
 	@Override
 	public List<Filter> getDefaultFilters(SipProfile acc) {
-ArrayList<Filter> filters = new ArrayList<Filter>();
+	    ArrayList<Filter> filters = new ArrayList<Filter>();
 		
 		Filter f = new Filter();
 		f.account = (int) acc.id;
