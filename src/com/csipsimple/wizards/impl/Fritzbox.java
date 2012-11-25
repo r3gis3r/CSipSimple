@@ -68,6 +68,7 @@ public class Fritzbox extends AlternateServerImplementation {
         account.acc_id = "<sip:"
                 + SipUri.encodeUser(accountUsername.getText().trim()) + "@fritz.box>";
 		account.contact_rewrite_method = 1;
+		account.allow_contact_rewrite = false;
 		return account;
 	}
 	
