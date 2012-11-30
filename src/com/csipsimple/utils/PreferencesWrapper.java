@@ -667,7 +667,7 @@ public class PreferencesWrapper {
 		}
 		
 	    if (root.canWrite()){
-			File dir = new File(root.getAbsolutePath() + File.separator + "CSipSimple");
+			File dir = new File(root.getAbsolutePath() + File.separator + CustomDistribution.getSDCardFolder());
 			if(!dir.exists()) {
 				dir.mkdirs();
 				Log.d(THIS_FILE, "Create directory " + dir.getAbsolutePath());

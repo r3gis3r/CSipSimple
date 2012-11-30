@@ -123,8 +123,22 @@ public final class CustomDistribution {
 		return false;
 	}
 
+	/**
+	 * Should the wizard list display a given generic wizard
+	 * @param wizardTag the tag of the generic wizard
+	 * @return true if you'd like the wizard to be listed
+	 */
     public static boolean distributionWantsGeneric(String wizardTag) {
         return true;
+    }
+
+    /**
+     * Get the SD card folder name.
+     * This folder will be used to store call records, configs and logs
+     * @return the name of the folder to use
+     */
+    public static String getSDCardFolder() {
+        return "CSipSimple";
     }
 
 	
