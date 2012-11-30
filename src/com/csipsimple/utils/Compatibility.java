@@ -123,6 +123,10 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.toLowerCase().startsWith("thunder")) {
             return true;
         }
+        // LG-E720(b)
+        if (android.os.Build.MODEL.toUpperCase().startsWith("LG-E720") && !Compatibility.isCompatible(9)) {
+            return true;
+        }
 
         // Huawei
         if (android.os.Build.DEVICE.equalsIgnoreCase("U8150") ||
@@ -786,6 +790,14 @@ public final class Compatibility {
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "0");
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "0");
         }
+        if (lastSeenVersion < 2026) {
+            if (android.os.Build.MODEL.toUpperCase().startsWith("LG-E720")
+                    && !Compatibility.isCompatible(9)) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                        shouldUseModeApi());
+            }
+        }
+        
         prefWrapper.endEditing();
     }
 

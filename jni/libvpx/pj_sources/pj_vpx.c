@@ -878,7 +878,14 @@ static pj_status_t pj_vpx_codec_decode(pjmedia_vid_codec *codec,
             }
             /* We have extension in octet 2 */
             /* |I|L|T|K| RSV   | */
-            if( s[1] & 0x80 ) extension_len++;
+            if( s[1] & 0x80 ){
+                extension_len++;
+                if(payload_size <= 2){
+                    continue;
+                }
+                // I present check M flag for long picture ID
+                if( s[2] & 0x80 ) extension_len++;
+            }
             if( s[1] & 0x40 ) extension_len++;
             if( (s[1] & 0x20) | (s[1] & 0x10) ) extension_len++;
         }

@@ -186,31 +186,35 @@ public class PrefsLogic {
                 if(pfw.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
                     VideoUtilsWrapper vuw = VideoUtilsWrapper.getInstance();
                     List<VideoCaptureDeviceInfo> capt = vuw.getVideoCaptureDevices(ctxt);
-                    int size = capt.get(capt.size() - 1).capabilities.size();
-//                    for(VideoCaptureDeviceInfo vcdi : capt) {
-//                        size += vcdi.capabilities.size();
-//                    }
-                    CharSequence[] entries = new CharSequence[size+1];
-                    CharSequence[] values = new CharSequence[size+1];
-                    ListPreference lp = (ListPreference) pfh.findPreference(SipConfigManager.VIDEO_CAPTURE_SIZE);
-                    int i = 0;
-                    entries[0] = ctxt.getText(R.string.auto);
-                    values[0] = "";
-                    i ++;
-                    //for(VideoCaptureDeviceInfo vcdi : capt) {
-                    VideoCaptureDeviceInfo vcdi = capt.get(capt.size() - 1);
-                    for( VideoCaptureCapability cap : vcdi.capabilities ) {
-                        entries[i] = cap.toPreferenceDisplay();
-                        values[i] = cap.toPreferenceValue();
-                        i++;
+                    if(capt.size() == 0) {
+                        pfh.hidePreference(null, MEDIA_VIDEO_CATEGORY);
+                    } else {
+                        int size = capt.get(capt.size() - 1).capabilities.size();
+    //                    for(VideoCaptureDeviceInfo vcdi : capt) {
+    //                        size += vcdi.capabilities.size();
+    //                    }
+                        CharSequence[] entries = new CharSequence[size+1];
+                        CharSequence[] values = new CharSequence[size+1];
+                        ListPreference lp = (ListPreference) pfh.findPreference(SipConfigManager.VIDEO_CAPTURE_SIZE);
+                        int i = 0;
+                        entries[0] = ctxt.getText(R.string.auto);
+                        values[0] = "";
+                        i ++;
+                        //for(VideoCaptureDeviceInfo vcdi : capt) {
+                        VideoCaptureDeviceInfo vcdi = capt.get(capt.size() - 1);
+                        for( VideoCaptureCapability cap : vcdi.capabilities ) {
+                            entries[i] = cap.toPreferenceDisplay();
+                            values[i] = cap.toPreferenceValue();
+                            i++;
+                        }
+                        if(vcdi.bestCapability != null) {
+                            lp.setDefaultValue(vcdi.bestCapability.toPreferenceValue());
+                        }
+                            
+                        //}
+                        lp.setEntries(entries);
+                        lp.setEntryValues(values);
                     }
-                    if(vcdi.bestCapability != null) {
-                        lp.setDefaultValue(vcdi.bestCapability.toPreferenceValue());
-                    }
-                        
-                    //}
-                    lp.setEntries(entries);
-                    lp.setEntryValues(values);
                 }else {
                     pfh.hidePreference(null, MEDIA_VIDEO_CATEGORY);
                 }
