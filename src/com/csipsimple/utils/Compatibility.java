@@ -136,6 +136,11 @@ public final class Compatibility {
                 android.os.Build.PRODUCT.equalsIgnoreCase("U8655") ) {
             return true;
         }
+        
+        // Moto defy mini
+        if (android.os.Build.MODEL.equalsIgnoreCase("XT320")) {
+            return true;
+        }
 
         return false;
     }
@@ -790,9 +795,10 @@ public final class Compatibility {
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "0");
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "0");
         }
-        if (lastSeenVersion < 2026) {
-            if (android.os.Build.MODEL.toUpperCase().startsWith("LG-E720")
-                    && !Compatibility.isCompatible(9)) {
+        if (lastSeenVersion < 2030) {
+            if ((android.os.Build.MODEL.toUpperCase().startsWith("LG-E720")
+                    && !Compatibility.isCompatible(9))
+                    || android.os.Build.MODEL.equalsIgnoreCase("XT320")) {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                         shouldUseModeApi());
             }
