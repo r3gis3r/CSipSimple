@@ -15,6 +15,7 @@ PJ_SWIG_HEADERS := $(PJ_ROOT_DIR)/pjsip/include/pjsua-lib/pjsua.h
 # For CSipSimple
 PJ_SWIG_HEADERS += $(CSS_WRAPPER_ROOT_DIR)/include/pjsua_jni_addons.h \
 	$(CSS_WRAPPER_ROOT_DIR)/include/zrtp_android.h \
+	$(CSS_WRAPPER_ROOT_DIR)/include/zrtp_android_callback.h \
 	$(CSS_WRAPPER_ROOT_DIR)/include/csipsimple_codecs_utils.h  \
 	$(CSS_WRAPPER_ROOT_DIR)/include/call_recorder.h
 	
@@ -27,6 +28,7 @@ CONCAT_PJSUA_FILE := $(SWIG_GLUE_PATH)/.$(JAVA_MODULE).i
 INTERFACES_FILES := $(SWIG_GLUE_PATH)/generic_java.i \
 					$(SWIG_GLUE_PATH)/pjsua_header.i \
 					$(SWIG_GLUE_PATH)/pjsip_header.i \
+					$(CSS_WRAPPER_ROOT_DIR)/include/csipsimple-wrapper.i \
 					$(CONCAT_PJSUA_FILE)
 					
 
@@ -39,6 +41,7 @@ $(SWIG_GLUE_NATIVE_PATH)/$(SWIG_GLUE_NATIVE_FILE) :: $(CONCAT_INTERFACE_FILE) $(
 	@$(RM) -r $(JAVA_PACKAGE_DIR)
 	mkdir -p $(JAVA_PACKAGE_DIR)
 	$(SWIG) $(filter-out -W%,$(MY_PJSIP_FLAGS)) \
+		-I$(CSS_WRAPPER_ROOT_DIR)/include \
 		-o $@ \
 		-outdir $(JAVA_PACKAGE_DIR) -java -package $(JAVA_PACKAGE) \
 		-c++ $(CONCAT_INTERFACE_FILE)

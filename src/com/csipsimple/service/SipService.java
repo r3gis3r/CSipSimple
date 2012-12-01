@@ -76,7 +76,6 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 
 import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsuaConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -694,7 +693,7 @@ public class SipService extends Service {
 				@Override
 				protected void doRun() throws SameThreadException {
 					pjService.zrtpSASVerified(callId);
-					pjService.userAgentReceiver.updateZrtpInfos(callId);
+					pjService.zrtpReceiver.updateZrtpInfos(callId);
 				}
 			});
 		}
@@ -709,7 +708,7 @@ public class SipService extends Service {
                 @Override
                 protected void doRun() throws SameThreadException {
                     pjService.zrtpSASRevoke(callId);
-                    pjService.userAgentReceiver.updateZrtpInfos(callId);
+                    pjService.zrtpReceiver.updateZrtpInfos(callId);
                 }
             });
         }

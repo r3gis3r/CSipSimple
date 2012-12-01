@@ -34,6 +34,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 
@@ -114,6 +115,7 @@ public class PjSipService {
     private Integer hasBeenChangedRingerMode = null;
     
     public UAStateReceiver userAgentReceiver;
+    public ZrtpStateReceiver zrtpReceiver;
     public MediaManager mediaManager;
 
     private Timer tasksTimer;
@@ -212,9 +214,13 @@ public class PjSipService {
                 // SERVICE CONFIG
 
                 if (userAgentReceiver == null) {
-                    Log.d(THIS_FILE, "create receiver....");
+                    Log.d(THIS_FILE, "create ua receiver");
                     userAgentReceiver = new UAStateReceiver();
                     userAgentReceiver.initService(this);
+                }
+                if(zrtpReceiver == null) {
+                    Log.d(THIS_FILE, "create zrtp receiver");
+                    zrtpReceiver = new ZrtpStateReceiver(this);
                 }
                 if (mediaManager == null) {
                     mediaManager = new MediaManager(service);
@@ -226,6 +232,7 @@ public class PjSipService {
                 DTMF_TONE_WAIT_LENGTH = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DTMF_WAIT_TIME);
 
                 pjsua.setCallbackObject(userAgentReceiver);
+                pjsua.setZrtpCallbackObject(zrtpReceiver);
 
                 Log.d(THIS_FILE, "Attach is done to callback");
                 
@@ -1664,6 +1671,17 @@ public class PjSipService {
         }
         return null;
     }
+    
+    public void refreshCallMediaState(final int callId) {
+        service.getExecutor().execute(new SipRunnable() {
+            @Override
+            public void doRun() throws SameThreadException {
+                if(created && userAgentReceiver != null) {
+                    userAgentReceiver.updateCallMediaState(callId);
+                }
+            }
+        });
+    }
 
     /**
      * Transform a string callee into a valid sip uri in the context of an
@@ -2058,7 +2076,7 @@ public class PjSipService {
 
     // Wave player
     public final static int INVALID_PLAYER = -1;
-    private SparseArray<Integer> playedCalls = new SparseArray<Integer>();
+    private SparseIntArray playedCalls = new SparseIntArray();
     public final static int BITMASK_OUT = 1 << 0;
     public final static int BITMASK_IN = 1 << 1;
     

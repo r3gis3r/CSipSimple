@@ -37,16 +37,15 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
-JNI_SRC_DIR := src/
+JNI_SRC_DIR := src
 
 LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/q850_reason_parser.c \
-	$(JNI_SRC_DIR)/zrtp_android.c $(JNI_SRC_DIR)/ringback_tone.c \
+	$(JNI_SRC_DIR)/zrtp_android.c $(JNI_SRC_DIR)/zrtp_android_callback.cpp \
+	$(JNI_SRC_DIR)/ringback_tone.c \
 	$(JNI_SRC_DIR)/android_logger.c $(JNI_SRC_DIR)/audio_codecs.c \
 	$(JNI_SRC_DIR)/csipsimple_codecs_utils.c \
 	$(JNI_SRC_DIR)/call_recorder.c 
 
-# NDK fixer
-LOCAL_SRC_FILES +=$(JNI_SRC_DIR)/ndk_stl_fixer.cpp
 
 
 LOCAL_LDLIBS += -llog -ldl
