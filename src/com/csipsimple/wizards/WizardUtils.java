@@ -838,7 +838,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_optimum_lightpath, 10, 
                     new Locale[]{Locale.US}, false, false, 
                     OptimumLightPath.class));
-            
+            WIZARDS_DICT.put("BGOPENNET", new WizardInfo("BGOPENNET", "BGOPEN.NET", 
+                    R.drawable.ic_wizard_bgopen, 10, 
+                    new Locale[]{ locale("bg_BG") }, false, false, 
+                    BgOpen.class));
+            WIZARDS_DICT.put("MEGAFONBG", new WizardInfo("MEGAFONBG", "МЕГАФОН", 
+                    R.drawable.ic_wizard_megafon, 10, 
+                    new Locale[]{ locale("bg_BG") }, false, false, 
+                    MegafonBg.class));
             
             
 		}else {
