@@ -576,12 +576,23 @@ static pj_status_t amr_test_alloc( pjmedia_codec_factory *factory,
 				   const pjmedia_codec_info *info )
 {
     PJ_UNUSED_ARG(factory);
+    const pj_str_t amr_tag = {"AMR", 3};
 
-    /* Check payload type. */
-    if (info->pt != PJMEDIA_RTP_PT_AMR)
-	return PJMEDIA_CODEC_EUNSUP;
 
-    /* Ignore the rest, since it's static payload type. */
+    /* Type MUST be audio. */
+    if (info->type != PJMEDIA_TYPE_AUDIO)
+    return PJMEDIA_CODEC_EUNSUP;
+
+    /* Check encoding name. */
+    if (pj_stricmp(&info->encoding_name, &amr_tag) != 0)
+    return PJMEDIA_CODEC_EUNSUP;
+
+    /* Channel count must be one */
+    if (info->channel_cnt != 1)
+    return PJMEDIA_CODEC_EUNSUP;
+
+    if(info->clock_rate != 8000)
+    return PJMEDIA_CODEC_EUNSUP;
 
     return PJ_SUCCESS;
 }

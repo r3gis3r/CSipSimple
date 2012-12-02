@@ -333,6 +333,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_freelycall, 45, 
                     new Locale[]{}, false, true, 
                     FreelyCall.class));
+            WIZARDS_DICT.put("TELENATIVE", new WizardInfo("TELENATIVE", "TeleNative", 
+                    R.drawable.ic_wizard_telenative, 45, 
+                    new Locale[]{}, false, true, 
+                    TeleNative.class));
             
             
 			

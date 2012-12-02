@@ -232,15 +232,25 @@ PJ_DEF(pj_status_t) pjmedia_codec_codec2_deinit(void)
 static pj_status_t codec2_test_alloc( pjmedia_codec_factory *factory,
 				   const pjmedia_codec_info *info )
 {
+    const pj_str_t codec2_tag = { "CODEC2", 6 };
     PJ_UNUSED_ARG(factory);
 
-    /* Check payload type. */
-    if (info->pt != PJMEDIA_RTP_PT_CODEC2)
-	return PJMEDIA_CODEC_EUNSUP;
+    /* The type must be audio */
+    if (info->type != PJMEDIA_TYPE_AUDIO) {
+        return PJMEDIA_CODEC_EUNSUP;
+    }
 
-    /* Ignore the rest, since it's static payload type. */
+    /* Check encoding name. */
+    if (pj_stricmp(&info->encoding_name, &codec2_tag) != 0) {
+        return PJMEDIA_CODEC_EUNSUP;
+    }
 
-    return PJ_SUCCESS;
+    /* Check clock-rate */
+    if (info->clock_rate == 8000) {
+        return PJ_SUCCESS;
+    }
+
+    return PJMEDIA_CODEC_EUNSUP;
 }
 
 /*
