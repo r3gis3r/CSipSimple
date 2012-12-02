@@ -210,8 +210,11 @@ pj_status_t find_codec(unsigned pt, unsigned clock_rate, unsigned channel_cnt,
 		AudioCodingModule::Codec(i, codecParam);
 		if (pt == codecParam.pltype && channel_cnt == codecParam.channels
 				&& clock_rate == codecParam.plfreq) {
-			memcpy(codec, &codecParam, sizeof(CodecInst));
-			return PJ_SUCCESS;
+		    // TODO : we should use encoding name instead
+		    if(pt == PJMEDIA_RTP_PT_ILBC || pt == PJMEDIA_RTP_PT_ISAC_WB || pt == PJMEDIA_RTP_PT_ISAC_UWB ){
+                pj_memcpy(codec, &codecParam, sizeof(CodecInst));
+                return PJ_SUCCESS;
+		    }
 
 		}
 	}
