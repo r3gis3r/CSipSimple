@@ -850,6 +850,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_megafon, 10, 
                     new Locale[]{ locale("bg_BG") }, false, false, 
                     MegafonBg.class));
+            WIZARDS_DICT.put("SIGNUMTEL", new WizardInfo("SIGNUMTEL", "Signumtel.hr", 
+                    R.drawable.ic_wizard_signumtel, 10, 
+                    new Locale[]{ locale("bs") , new Locale("sr"), new Locale("hr"), new Locale("mk") }, false, false, 
+                    Signumtel.class));
             
             
 		}else {
