@@ -47,6 +47,7 @@ public class OptimumLightPath extends AlternateServerImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.contact_rewrite_method = 1;
+        account.try_clean_registers = 0;
 		return account;
 	}
 	

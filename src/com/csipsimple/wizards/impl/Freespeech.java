@@ -66,6 +66,7 @@ public class Freespeech extends SimpleImplementation {
 		// Contact rewrite not needed for them.
 		// Besides stun will be enabled.
 		account.contact_rewrite_method = 1;
+        account.try_clean_registers = 0;
 		account.allow_contact_rewrite = false;
 		return account;
 	}

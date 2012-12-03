@@ -67,10 +67,6 @@ JAVA_ARRAYSOFCLASSES(dynamic_factory)
 %header %{
 
 #include <pjsua-lib/pjsua.h>
-#include "pjsua_jni_addons.h"
-#include "csipsimple_codecs_utils.h"
-#include "call_recorder.h"
-#include "zrtp_android.h"
 #include "pj_callback.h"
 
 extern struct pjsua_callback wrapper_callback_struct;

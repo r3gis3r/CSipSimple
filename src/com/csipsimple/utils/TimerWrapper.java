@@ -21,11 +21,6 @@
 
 package com.csipsimple.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.pjsip.pjsua.pjsua;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -33,11 +28,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
 
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipWakeLock;
+
+import org.pjsip.pjsua.pjsua;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TimerWrapper extends BroadcastReceiver {
 	
@@ -51,10 +56,14 @@ public class TimerWrapper extends BroadcastReceiver {
 
 	//private WakeLock wakeLock;
 	private static TimerWrapper singleton;
+
+    private static HandlerThread executorThread;
 	
 	private boolean serviceRegistered = false;
 	
 	private final List<Integer> scheduleEntries = new ArrayList<Integer>();
+
+    private SipTimersExecutor mExecutor;
 	
 	
 	private TimerWrapper(SipService ctxt) {
@@ -190,8 +199,7 @@ public class TimerWrapper extends BroadcastReceiver {
 	}
 	
 	public void treatAlarm(int entry) {
-		TimerJob t = new TimerJob(entry);
-		t.start();
+		getExecutor().execute(new TimerJob(entry));
 	}
 	
 	//private final Handler handler = new Handler();
@@ -218,7 +226,6 @@ public class TimerWrapper extends BroadcastReceiver {
 	    }
 	}
 	
-	
 	public static int schedule(int entry, int entryId, int time) {
 		if(singleton == null) {
 			Log.e(THIS_FILE, "Timer NOT initialized");
@@ -230,14 +237,42 @@ public class TimerWrapper extends BroadcastReceiver {
 	public static int cancel(int entry, int entryId) {
 		return singleton.doCancel(entryId);
 	}
-	
-	
 
-	private class TimerJob extends Thread {
+    private static Looper createLooper() {
+        if (executorThread == null) {
+            Log.d(THIS_FILE, "Creating new handler thread");
+            executorThread = new HandlerThread("SipTimers.Executor");
+            executorThread.start();
+        }
+        return executorThread.getLooper();
+    }
+    
+    private SipTimersExecutor getExecutor() {
+        // create mExecutor lazily
+        if (mExecutor == null) {
+            mExecutor = new SipTimersExecutor(this);
+        }
+        return mExecutor;
+    }
+
+    // Executes immediate tasks in a single executorThread.
+    public static class SipTimersExecutor extends Handler {
+        WeakReference<TimerWrapper> handlerService;
+        
+        SipTimersExecutor(TimerWrapper s) {
+            super(createLooper());
+            handlerService = new WeakReference<TimerWrapper>(s);
+        }
+
+        public void execute(Runnable task) {
+                Message.obtain(this, 0/* don't care */, task).sendToTarget();
+        }
+    }
+
+	private class TimerJob implements Runnable {
 		private final int entryId;
 		
 		public TimerJob(int anEntry) {
-			super("TimerJob");
 			entryId = anEntry;
 			wakeLock.acquire(this);
 		}
@@ -245,10 +280,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		@Override
 		public void run() {
 			// From now, the timer can't be cancelled anymore
-
 			Log.v(THIS_FILE, "FIRE START " + entryId);
-			
-			
 			try {
 			    boolean doFire = false;
 			    synchronized (TimerWrapper.this) {

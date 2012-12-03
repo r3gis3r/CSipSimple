@@ -88,6 +88,7 @@ public class BroadVoice extends SimpleImplementation {
 		account.proxies = null;
 		account.reg_timeout = 3600;
 		account.contact_rewrite_method = 1;
+        account.try_clean_registers = 0;
 		
 		String finalUsername = accountUsername.getText().trim();
 		if(accountSuffix != null) {

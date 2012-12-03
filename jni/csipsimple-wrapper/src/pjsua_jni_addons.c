@@ -493,9 +493,10 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 
 	result = (pj_status_t) pjsua_init(ua_cfg, log_cfg, media_cfg);
 	if (result == PJ_SUCCESS) {
-		init_ringback_tone();
+		/* Ringback tone */
+	    init_ringback_tone();
 
-		// Init audio device
+		/* Init audio device */
 		pj_status_t added_audio = PJ_ENOTFOUND;
 		if (css_cfg->audio_implementation.init_factory_name.slen > 0) {
 			pjmedia_aud_dev_factory* (*init_factory)(

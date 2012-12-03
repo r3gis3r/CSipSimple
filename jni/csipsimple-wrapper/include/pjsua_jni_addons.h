@@ -172,7 +172,6 @@ PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csi
 PJ_DECL(pj_status_t) csipsimple_init_acc_msg_data(pj_pool_t* pool, pjsua_acc_id acc_id, pjsua_msg_data* msg_data);
 PJ_DECL(pj_status_t) csipsimple_msg_data_add_string_hdr(pj_pool_t* pool, pjsua_msg_data* msg_data, pj_str_t* hdr_name, pj_str_t* hdr_value);
 PJ_DECL(pj_status_t) pj_timer_fire(int entry_id);
-PJ_DECL(pj_status_t) pjsua_acc_clean_all_registrations( pjsua_acc_id acc_id);
 PJ_DECL(pj_status_t) update_transport(const pj_str_t *new_ip_addr);
 PJ_DECL(pj_status_t) vid_set_android_renderer(pjsua_call_id call_id, jobject window);
 PJ_DECL(pj_status_t) vid_set_android_capturer(jobject window);

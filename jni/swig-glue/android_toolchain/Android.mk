@@ -17,7 +17,8 @@ PJ_SWIG_HEADERS += $(CSS_WRAPPER_ROOT_DIR)/include/pjsua_jni_addons.h \
 	$(CSS_WRAPPER_ROOT_DIR)/include/zrtp_android.h \
 	$(CSS_WRAPPER_ROOT_DIR)/include/zrtp_android_callback.h \
 	$(CSS_WRAPPER_ROOT_DIR)/include/csipsimple_codecs_utils.h  \
-	$(CSS_WRAPPER_ROOT_DIR)/include/call_recorder.h
+	$(CSS_WRAPPER_ROOT_DIR)/include/call_recorder.h \
+	$(CSS_WRAPPER_ROOT_DIR)/include/pjsip_mobile_reg_handler.h
 	
 SWIG_PYTHON_TOOLS := $(SWIG_GLUE_PATH)/clean_source_for_android.py \
 					$(SWIG_GLUE_PATH)/clean_callback_for_android.py \

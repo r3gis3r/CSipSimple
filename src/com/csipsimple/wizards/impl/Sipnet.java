@@ -96,6 +96,7 @@ public class Sipnet extends SimpleImplementation {
         account.allow_contact_rewrite = false;
         account.allow_via_rewrite = false;
         account.contact_rewrite_method = 1;
+        account.try_clean_registers = 0;
         
         return account;
     }

@@ -122,6 +122,7 @@ public class PjSipService {
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
     private SparseArray<TimerTask> dtmfTasks = new SparseArray<TimerTask>(5);
     private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
+    private RegHandlerReceiver regHandlerReceiver;
     
     
     // -------
@@ -221,6 +222,9 @@ public class PjSipService {
                 if(zrtpReceiver == null) {
                     Log.d(THIS_FILE, "create zrtp receiver");
                     zrtpReceiver = new ZrtpStateReceiver(this);
+                }
+                if(regHandlerReceiver == null) {
+                    regHandlerReceiver = new RegHandlerReceiver(this);
                 }
                 if (mediaManager == null) {
                     mediaManager = new MediaManager(service);
@@ -497,11 +501,9 @@ public class PjSipService {
                     cleanPjsua();
                     return false;
                 }
-
-                /*
-                 * if (stunServersCount > 0) { int s = pjsua.detect_nat_type();
-                 * Log.d(THIS_FILE, ">>> NAT TYPE is "+s); }
-                 */
+                
+                status = pjsua.mobile_reg_handler_init();
+                pjsua.mobile_reg_handler_set_callback(regHandlerReceiver);
             }
 
             // Add transports
@@ -750,7 +752,6 @@ public class PjSipService {
 
         }
         PjSipAccount account = new PjSipAccount(profile);
-
         account.applyExtraParams(service);
 
         // Force the use of a transport
@@ -777,10 +778,12 @@ public class PjSipService {
         */
 
         SipProfileState currentAccountStatus = getProfileState(profile);
+        account.cfg.setRegister_on_acc_add(pjsuaConstants.PJ_FALSE);
 
         if (currentAccountStatus.isAddedToStack()) {
             pjsua.csipsimple_set_acc_user_data(account.cfg, account.css_cfg);
             status = pjsua.acc_modify(currentAccountStatus.getPjsuaId(), account.cfg);
+            regHandlerReceiver.set_account_cleaning_state(currentAccountStatus.getPjsuaId(), profile.try_clean_registers);
             ContentValues cv = new ContentValues();
             cv.put(SipProfileState.ADDED_STATUS, status);
             service.getContentResolver().update(
@@ -829,7 +832,8 @@ public class PjSipService {
                 // Cause of standard account different from local account :)
                 pjsua.csipsimple_set_acc_user_data(account.cfg, account.css_cfg);
                 status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
-
+                regHandlerReceiver.set_account_cleaning_state(accId[0], profile.try_clean_registers);
+                pjsua.acc_set_registration(accId[0], 1);
             }
 
             if (status == pjsuaConstants.PJ_SUCCESS) {
@@ -884,6 +888,8 @@ public class PjSipService {
 
                 Log.d(THIS_FILE, "Profile state UP : " + cv);
             }
+        } else {
+            Log.e(THIS_FILE, "Trying to update not added account " + pjsuaId);
         }
     }
 

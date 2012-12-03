@@ -50,6 +50,7 @@ public class PeopleLine extends AlternateServerImplementation {
     public SipProfile buildAccount(SipProfile account) {
         SipProfile acc = super.buildAccount(account);
         acc.contact_rewrite_method = 1;
+        account.try_clean_registers = 0;
         return acc;
     }
     

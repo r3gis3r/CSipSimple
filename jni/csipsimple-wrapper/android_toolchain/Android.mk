@@ -44,7 +44,8 @@ LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/q850_reason_
 	$(JNI_SRC_DIR)/ringback_tone.c \
 	$(JNI_SRC_DIR)/android_logger.c $(JNI_SRC_DIR)/audio_codecs.c \
 	$(JNI_SRC_DIR)/csipsimple_codecs_utils.c \
-	$(JNI_SRC_DIR)/call_recorder.c 
+	$(JNI_SRC_DIR)/call_recorder.c \
+	$(JNI_SRC_DIR)/pjsip_mobile_reg_handler.cpp 
 
 
 

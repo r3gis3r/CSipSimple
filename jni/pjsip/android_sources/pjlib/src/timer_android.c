@@ -346,8 +346,6 @@ PJ_DEF(pj_status_t) pj_timer_heap_earliest_time( pj_timer_heap_t * ht,
 
 PJ_BEGIN_DECL
 PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
-
-
     pj_thread_desc a_thread_desc;
 	pj_thread_t *a_thread;
 	unsigned i, j;
@@ -386,15 +384,19 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 		if (entry != NULL && entry->_timer_id >= 0) {
 			cb = entry->cb;
 		}
+        unlock_timer_heap(ht);
+
+        // Callback
+        if (cb) {
+            cb(ht, entry);
+        }
+
+        lock_timer_heap(ht);
 		// Release slot
 		ht->entries[entry_id] = NULL;
 		entry->_timer_id = -1;
 		unlock_timer_heap(ht);
 
-		// Callback
-		if (cb) {
-			cb(ht, entry);
-		}
 
 		PJ_LOG(5, (THIS_FILE, "FIRE done and released"));
 

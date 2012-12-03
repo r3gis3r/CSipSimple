@@ -1,7 +1,6 @@
 000android_os.diff
 002pjsip-webrtc-aec.diff
 003rtp_type_strip.diff
-004clean_all_registrations.diff
 006no_update_option.diff
 008sdp_in_options.diff
 009silk_custo.diff

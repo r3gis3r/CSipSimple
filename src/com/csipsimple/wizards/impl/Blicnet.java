@@ -72,7 +72,7 @@ public class Blicnet extends SimpleImplementation {
 		account.proxies = null;
         account.allow_contact_rewrite = false;
         account.contact_rewrite_method = 1;
-        account.try_clean_registers = 1;
+        account.try_clean_registers = 0;
         account.allow_via_rewrite = false;
         account.mwi_enabled = false;
         account.transport = SipProfile.TRANSPORT_UDP;
