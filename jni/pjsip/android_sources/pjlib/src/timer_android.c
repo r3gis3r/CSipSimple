@@ -384,19 +384,18 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 		if (entry != NULL && entry->_timer_id >= 0) {
 			cb = entry->cb;
 		}
-        unlock_timer_heap(ht);
+        //unlock_timer_heap(ht);
 
-        // Callback
-        if (cb) {
-            cb(ht, entry);
-        }
-
-        lock_timer_heap(ht);
+        //lock_timer_heap(ht);
 		// Release slot
 		ht->entries[entry_id] = NULL;
 		entry->_timer_id = -1;
 		unlock_timer_heap(ht);
 
+        // Callback may modify current entry (re-enqueue), so do not fire cb before release the slot
+        if (cb) {
+            cb(ht, entry);
+        }
 
 		PJ_LOG(5, (THIS_FILE, "FIRE done and released"));
 

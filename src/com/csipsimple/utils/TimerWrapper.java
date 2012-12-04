@@ -265,7 +265,6 @@ public class TimerWrapper extends BroadcastReceiver {
         }
 
         public void execute(Runnable task) {
-            Log.d(THIS_FILE, "Timer execute asked");
             Message.obtain(this, 0/* don't care */, task).sendToTarget();
         }
 
