@@ -265,7 +265,25 @@ public class TimerWrapper extends BroadcastReceiver {
         }
 
         public void execute(Runnable task) {
-                Message.obtain(this, 0/* don't care */, task).sendToTarget();
+            Log.d(THIS_FILE, "Timer execute asked");
+            Message.obtain(this, 0/* don't care */, task).sendToTarget();
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.obj instanceof Runnable) {
+                executeInternal((Runnable) msg.obj);
+            } else {
+                Log.w(THIS_FILE, "can't handle msg: " + msg);
+            }
+        }
+
+        private void executeInternal(Runnable task) {
+            try {
+                task.run();
+            } catch (Throwable t) {
+                Log.e(THIS_FILE, "run task: " + task, t);
+            }
         }
     }
 
