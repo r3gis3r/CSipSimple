@@ -858,7 +858,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_signumtel, 10, 
                     new Locale[]{ locale("bs") , new Locale("sr"), new Locale("hr"), new Locale("mk") }, false, false, 
                     Signumtel.class));
-            
+            WIZARDS_DICT.put("SKYTEL", new WizardInfo("SKYTEL", "Skytel", 
+                    R.drawable.ic_wizard_skytel, 10, 
+                    new Locale[]{ locale("zh_TW") }, false, false, 
+                    Skytel.class));
+            WIZARDS_DICT.put("ZENTC", new WizardInfo("ZENTC", "Zentc", 
+                    R.drawable.ic_wizard_zentc, 10, 
+                    new Locale[]{ locale("zh_TW") }, false, false, 
+                    Zentc.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
