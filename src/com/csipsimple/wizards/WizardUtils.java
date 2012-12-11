@@ -337,6 +337,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_telenative, 45, 
                     new Locale[]{}, false, true, 
                     TeleNative.class));
+            WIZARDS_DICT.put("DIRECTDIAL", new WizardInfo("DIRECTDIAL", "DirectDial", 
+                    R.drawable.ic_wizard_directdial, 45, 
+                    new Locale[]{}, false, true, 
+                    DirectDial.class));
             
             
 			
