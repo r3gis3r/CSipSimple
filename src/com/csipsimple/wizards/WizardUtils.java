@@ -341,6 +341,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_directdial, 45, 
                     new Locale[]{}, false, true, 
                     DirectDial.class));
+            WIZARDS_DICT.put("TPOINT", new WizardInfo("TPOINT", "TPointSystem", 
+                    R.drawable.ic_wizard_tpoint, 45, 
+                    new Locale[]{}, false, true, 
+                    TPoint.class));
+            WIZARDS_DICT.put("COMMPEAK", new WizardInfo("COMMPEAK", "CommPeak", 
+                    R.drawable.ic_wizard_commpeak, 45, 
+                    new Locale[]{}, false, true, 
+                    CommPeak.class));
             
             
 			
