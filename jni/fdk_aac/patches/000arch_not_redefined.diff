@@ -1,0 +1,23 @@
+Index: fdk_aac/sources/libFDK/include/FDK_archdef.h
+===================================================================
+--- fdk_aac.orig/sources/libFDK/include/FDK_archdef.h	2012-11-21 21:36:36.083080603 +0100
++++ fdk_aac/sources/libFDK/include/FDK_archdef.h	2012-11-22 23:16:17.099195055 +0100
+@@ -2,7 +2,7 @@
+ /* -----------------------------------------------------------------------------------------------------------
+ Software License for The Fraunhofer FDK AAC Codec Library for Android
+ 
+-© Copyright  1995 - 2012 Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
++ï¿½ Copyright  1995 - 2012 Fraunhofer-Gesellschaft zur Fï¿½rderung der angewandten Forschung e.V.
+   All rights reserved.
+ 
+  1.    INTRODUCTION
+@@ -129,7 +129,9 @@
+ 
+ /* Define __ARM_ARCH_7_A__ if the armv7 intructions are being supported. */
+ #if defined(__TARGET_ARCH_7_A) || defined(__ARM_ARCH_7A__)
++#ifndef __ARM_ARCH_5TE__
+ #define __ARM_ARCH_5TE__
++#endif
+ #define __ARM_ARCH_6__
+ #define __ARM_ARCH_7_A__
+ #endif

@@ -25,6 +25,7 @@ include $(JNI_PATH)/g726/android_toolchain/Android.mk
 include $(JNI_PATH)/g729/android_toolchain/Android.mk
 include $(JNI_PATH)/codec2/android_toolchain/Android.mk
 include $(JNI_PATH)/opus/android_toolchain/Android.mk
+include $(JNI_PATH)/fdk_aac/android_toolchain/Android.mk
 include $(JNI_PATH)/zrtp4pj/android_toolchain/Android.mk
 
 ifeq ($(MY_USE_TLS),1)

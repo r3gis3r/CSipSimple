@@ -42,7 +42,7 @@ clean :
 	@($(MAKE) -C jni/webrtc clean)
 
 CodecPackLibs :
-	@(ndk-build -j6 APP_MODULES="pj_g7221_codec pj_codec2_codec pj_g726_codec pj_opus_codec")
+	@(ndk-build -j6 APP_MODULES="pj_g7221_codec pj_codec2_codec pj_g726_codec pj_opus_codec pj_aac_codec")
 	@(./dispatch_shared_libs.sh)
 	
 VideoLibs : ffmpeg-lib
