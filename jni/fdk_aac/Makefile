@@ -16,6 +16,9 @@ patch : .patched_sources
 .patched_sources : $(patches_files) sources
 	@quilt push -a && \
 	touch .patched_sources
+	
+unpatch :
+	@if [ -f .patched_sources ]; then quilt pop -af; rm .patched_sources; fi;
 
 sources :
 	@git clone $(fdk_url) sources; \
