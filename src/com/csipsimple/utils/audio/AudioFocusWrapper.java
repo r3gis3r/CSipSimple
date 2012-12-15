@@ -46,7 +46,7 @@ private static AudioFocusWrapper instance;
 	
 	
 	public abstract void init(SipService service, AudioManager manager);
-	public abstract void focus();
+	public abstract void focus(boolean userWantsBluetooth);
 	public abstract void unFocus();
 	
 	

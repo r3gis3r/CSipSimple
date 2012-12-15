@@ -59,13 +59,13 @@ public class AudioFocus8 extends AudioFocusWrapper{
 	}
 
 	
-	public void focus() {
+	public void focus(boolean userWantsBT) {
 		Log.d(THIS_FILE, "Focus again "+isFocused);
 		if(!isFocused) {
 			HeadsetButtonReceiver.setService(service.getUAStateReceiver());
 			audioManager.registerMediaButtonEventReceiver(headsetButtonReceiverName);
 			audioManager.requestAudioFocus(focusChangedListener, 
-					Compatibility.getInCallStream(), AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+					Compatibility.getInCallStream(userWantsBT), AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 			isFocused = true;
 		}
 	}

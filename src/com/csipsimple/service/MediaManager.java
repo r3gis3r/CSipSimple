@@ -342,12 +342,12 @@ public class MediaManager implements BluetoothChangeListener {
 		
 		//Set stream solo/volume/focus
 
-		int inCallStream = Compatibility.getInCallStream();
+		int inCallStream = Compatibility.getInCallStream(userWantBluetooth);
 		if(doFocusAudio) {
 			if(!accessibilityManager.isEnabled()) {
 				audioManager.setStreamSolo(inCallStream, true);
 			}
-			audioFocusWrapper.focus();
+			audioFocusWrapper.focus(userWantBluetooth);
 		}
 		Log.d(THIS_FILE, "Initial volume level : " + service.getPrefs().getInitialVolumeLevel());
 		setStreamVolume(inCallStream,  
@@ -377,7 +377,7 @@ public class MediaManager implements BluetoothChangeListener {
 //		ed.putInt("savedRingerMode", audioManager.getRingerMode());
 		ed.putInt("savedWifiPolicy" , android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT));
 		
-		int inCallStream = Compatibility.getInCallStream();
+		int inCallStream = Compatibility.getInCallStream(userWantBluetooth);
 		ed.putInt("savedVolume", audioManager.getStreamVolume(inCallStream));
 		
 		int targetMode = getAudioTargetMode();
@@ -408,7 +408,7 @@ public class MediaManager implements BluetoothChangeListener {
 //		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, prefs.getInt("savedVibradeNotif", AudioManager.VIBRATE_SETTING_OFF));
 //		audioManager.setRingerMode(prefs.getInt("savedRingerMode", AudioManager.RINGER_MODE_NORMAL));
 		
-		int inCallStream = Compatibility.getInCallStream();
+		int inCallStream = Compatibility.getInCallStream(userWantBluetooth);
 		setStreamVolume(inCallStream, prefs.getInt("savedVolume", (int)(audioManager.getStreamMaxVolume(inCallStream)*0.8) ), 0);
 		
 		int targetMode = getAudioTargetMode();
@@ -436,7 +436,7 @@ public class MediaManager implements BluetoothChangeListener {
 
 		Log.d(THIS_FILE, "Unset Audio In call");
 
-		int inCallStream = Compatibility.getInCallStream();
+		int inCallStream = Compatibility.getInCallStream(userWantBluetooth);
 		if(bluetoothWrapper != null) {
 			//This fixes the BT activation but... but... seems to introduce a lot of other issues
 			//bluetoothWrapper.setBluetoothOn(true);
@@ -469,7 +469,6 @@ public class MediaManager implements BluetoothChangeListener {
 	 */
 	synchronized public void startRing(String remoteContact) {
 		saveAudioState();
-		audioFocusWrapper.focus();
 		
 		if(!ringer.isRinging()) {
 			ringer.ring(remoteContact, service.getPrefs().getRingtone());
@@ -632,7 +631,7 @@ public class MediaManager implements BluetoothChangeListener {
         	ringer.updateRingerMode();
         }
         
-        int inCallStream = Compatibility.getInCallStream();
+        int inCallStream = Compatibility.getInCallStream(userWantBluetooth);
         if(streamType == inCallStream) {
         	int maxLevel = audioManager.getStreamMaxVolume(inCallStream);
         	float modifiedLevel = (audioManager.getStreamVolume(inCallStream)/(float) maxLevel)*10.0f;
@@ -643,10 +642,13 @@ public class MediaManager implements BluetoothChangeListener {
 	}
 	
 	// Public accessor
-	public boolean isUserWantMicrophoneMute() {
+	public boolean doesUserWantMicrophoneMute() {
 		return userWantMicrophoneMute;
 	}
-	
+
+    public boolean doesUserWantBluetooth() {
+        return userWantBluetooth;
+    }
 
     // The possible tones we can play.
     public static final int TONE_NONE = 0;
@@ -777,6 +779,8 @@ public class MediaManager implements BluetoothChangeListener {
         setSoftwareVolume();
         broadcastMediaChanged();
     }
+
+
 
 
 }

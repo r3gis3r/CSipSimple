@@ -544,7 +544,7 @@ public class SipService extends Service {
 	        		adjustVolumeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	        		startActivity(adjustVolumeIntent);
 	        	}else {
-	        		pjService.adjustStreamVolume(Compatibility.getInCallStream(), direction, flags);
+	        		pjService.adjustStreamVolume(Compatibility.getInCallStream(pjService.mediaManager.doesUserWantBluetooth()), direction, flags);
 	        	}
     		}
 		}
@@ -886,14 +886,9 @@ public class SipService extends Service {
 	private SipServiceExecutor mExecutor;
 	private static PjSipService pjService;
 	private static HandlerThread executorThread;
-
 	
-	
-
 	private AccountStatusContentObserver statusObserver = null;
-
     public PresenceManager presenceMgr;
-
     private BroadcastReceiver serviceReceiver;
 	
 	class AccountStatusContentObserver extends ContentObserver {

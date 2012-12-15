@@ -49,7 +49,7 @@ public class AudioFocus3 extends AudioFocusWrapper {
 		audioManager = manager;
 	}
 
-	public void focus() {
+	public void focus(boolean userWantsBT) {
 		if(!isFocused) {
 			pauseMusic();
 			registerHeadsetButton();

@@ -61,7 +61,7 @@ public final class Compatibility {
      * 
      * @return
      */
-    public static int getInCallStream() {
+    public static int getInCallStream(boolean requestBluetooth) {
         /* Archos 5IT */
         if (android.os.Build.BRAND.equalsIgnoreCase("archos")
                 && android.os.Build.DEVICE.equalsIgnoreCase("g7a")) {
@@ -71,6 +71,10 @@ public final class Compatibility {
             // falled back to music
             return AudioManager.STREAM_MUSIC;
         }
+        if(requestBluetooth) {
+            return 6; /* STREAM_BLUETOOTH_SCO -- Thx @Stefan for the contrib */
+        }
+        
         // return AudioManager.STREAM_MUSIC;
         return AudioManager.STREAM_VOICE_CALL;
     }
