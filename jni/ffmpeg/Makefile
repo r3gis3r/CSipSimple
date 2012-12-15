@@ -3,6 +3,7 @@ FFMPEG_BUILD_DIRECTORY := $(BUILD_DIRECTORY)/ffmpeg
 X264_BUILD_DIRECTORY := $(BUILD_DIRECTORY)/x264
 FFMPEG_TEST_LIB := lib/libavcodec.a
 X264_TEST_LIB := lib/libx264.a
+patches_files := $(wildcard patches/*.diff)
 
 ffmpeg_version := n0.11.2
 x264_version := stable

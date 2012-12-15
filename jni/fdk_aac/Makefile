@@ -1,12 +1,21 @@
 # This makefile aim is only for now to address source checkout and patch
 fdk_tag := jb-release
 fdk_url := https://android.googlesource.com/platform/external/aac
+patches_files := $(wildcard patches/*.diff)
 
 all :
 	# For now we do nothing to build - it's made by android_toolchain
 	
 init : sources
 	# Init done
+
+
+patch : .patched_sources
+	@# Patch done
+
+.patched_sources : $(patches_files) sources
+	@quilt push -a && \
+	touch .patched_sources
 
 sources :
 	@git clone $(fdk_url) sources; \
