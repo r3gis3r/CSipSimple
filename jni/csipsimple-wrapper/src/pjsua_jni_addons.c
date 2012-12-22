@@ -426,20 +426,6 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	pjsip_sip_cfg_var.tsx.td = css_cfg->tsx_td_timeout;
 	pjsip_sip_cfg_var.endpt.disable_tcp_switch = css_cfg->disable_tcp_switch;
 
-	// Call recorder
-	for(i = 0; i < PJ_ARRAY_SIZE(css_var.call_recorder_ids); i++){
-		css_var.call_recorder_ids[i] = PJSUA_INVALID_ID;
-		css_var.call_stereo_recoders[i].file_port = NULL;
-		css_var.call_stereo_recoders[i].splitcomb_port = NULL;
-		css_var.call_stereo_recoders[i].master_stereo_port = NULL;
-		css_var.call_stereo_recoders[i].pool = NULL;
-		css_var.call_stereo_recoders[i].splitcomb_chan0_port = NULL;
-		css_var.call_stereo_recoders[i].splitcomb_chan0_slot = PJSUA_INVALID_ID;
-		css_var.call_stereo_recoders[i].splitcomb_chan1_port = NULL;
-		css_var.call_stereo_recoders[i].splitcomb_chan1_slot = PJSUA_INVALID_ID;
-
-	}
-
 	// Audio codec cfg
 	css_var.extra_aud_codecs_cnt = css_cfg->extra_aud_codecs_cnt;
 	for (i = 0; i < css_cfg->extra_aud_codecs_cnt; i++) {

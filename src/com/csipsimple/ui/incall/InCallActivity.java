@@ -470,7 +470,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         }
         // We prefer the older call 
         // to keep consistancy on what will be replied if new call arrives
-        return (call1.callStart > call2.callStart) ? call2 : call1;
+        return (call1.getCallStart() > call2.getCallStart()) ? call2 : call1;
     }
 
     
@@ -1012,7 +1012,9 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 }
                 case START_RECORDING :{
                     if(service != null) {
-                        service.startRecording(call.getCallId());
+                        // TODO : add a tweaky setting for two channel recording in different files.
+                        // Would just result here in two calls to start recording with different bitmask
+                        service.startRecording(call.getCallId(), SipManager.BITMASK_ALL);
                     }
                     break;
                 }

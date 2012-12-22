@@ -156,19 +156,23 @@ interface ISipService{
 	
 	// Record calls
 	/**
-	 * Start recording of a call to a file (in/out).
+	 * Start recording of a call to a file.
 	 * 
 	 * @param callId the call id to start recording of.
+     * @param way the way the recording takes
+     *  {@link SipManager#BITMASK_IN} => record remote party (what goes out speaker/earpiece)
+     *  {@link SipManager#BITMASK_OUT} =>  record self (what comes from micro), 
+     * If 0 will record all ways.
 	 */
-	void startRecording(int callId);
+	void startRecording(int callId, int way);
 	/**
 	 * Stop recording of a call.
 	 * 
-	 * @param callId the call id to stop recording.
+	 * @param callId the call id to stop recording (of all recording ways)
 	 */
 	void stopRecording(int callId);
 	/**
-	 * Is the call being recorded ?
+	 * Is the call being recorded (for at least one way) ?
 	 * 
 	 * @param callId the call id to get recording status of.
 	 * @return true if the call is currently being recorded
@@ -187,8 +191,8 @@ interface ISipService{
 	* @param filePath filePath the file to play in stream
 	* @param callId the call to play to
 	* @param way the way the file should be played 
-	*  (way & (1<<0)) => send to remote party (micro), 
-	*  (way & (1<<1) ) => send to user (speaker/earpiece)
+	* {@link SipManager#BITMASK_IN} =>  send to user (speaker/earpiece)
+	*  {@link SipManager#BITMASK_OUT}  => send to remote party (micro), 
 	* example : way = 3 : will play sound both ways
 	*/
 	void playWaveFile(String filePath, int callId, int way);

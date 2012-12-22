@@ -570,7 +570,7 @@ public class SipService extends Service {
          * {@inheritDoc}
          */
         @Override
-        public void startRecording(final int callId) throws RemoteException {
+        public void startRecording(final int callId, final int way) throws RemoteException {
             SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
             if (pjService == null) {
                 return;
@@ -578,7 +578,7 @@ public class SipService extends Service {
             getExecutor().execute(new SipRunnable() {
                 @Override
                 protected void doRun() throws SameThreadException {
-                    pjService.startRecording(callId);
+                    pjService.startRecording(callId, way);
                 }
             });
         }
@@ -1711,8 +1711,8 @@ public class SipService extends Service {
 			shouldAutoAnswer = Filter.isAutoAnswerNumber(this, acc.id, number, extraHdr);
 			
 		}else {
-			Log.d(THIS_FILE, "Oupps... that come from an unknown account...");
-			//TODO : add an option to auto hangup if unknown account
+			Log.e(THIS_FILE, "Oupps... that come from an unknown account...");
+			// If some user need to auto hangup if comes from unknown account, just needed to add local account and filter on it.
 		}
 		return shouldAutoAnswer;
 	}

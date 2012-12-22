@@ -24,8 +24,8 @@ package com.csipsimple.pjsip;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
-import com.csipsimple.api.SipCallSession;
 import com.csipsimple.service.SipService.SameThreadException;
+import com.csipsimple.service.impl.SipCallSessionImpl;
 import com.csipsimple.utils.Log;
 
 import org.pjsip.pjsua.pj_time_val;
@@ -57,7 +57,7 @@ public final class PjSipCalls {
      * @param service PjSipService Sip service to retrieve pjsip accounts infos
      * @throws SameThreadException
      */
-    public static void updateSessionFromPj(SipCallSession session, pjsip_event e, PjSipService service)
+    public static void updateSessionFromPj(SipCallSessionImpl session, pjsip_event e, PjSipService service)
             throws SameThreadException {
         Log.d(THIS_FILE, "Update call " + session.getCallId());
         pjsua_call_info pjInfo = new pjsua_call_info();
@@ -115,7 +115,7 @@ public final class PjSipCalls {
      * @param pjCallInfo the call info from pjsip
      * @param service PjSipService Sip service to retrieve pjsip accounts infos
      */
-    private static void updateSession(SipCallSession session, pjsua_call_info pjCallInfo,
+    private static void updateSession(SipCallSessionImpl session, pjsua_call_info pjCallInfo,
             PjSipService service) {
         // Should be unecessary cause we usually copy infos from a valid
         session.setCallId(pjCallInfo.getId());

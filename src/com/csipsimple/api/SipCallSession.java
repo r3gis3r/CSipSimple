@@ -34,7 +34,7 @@ import android.os.SystemClock;
  * <b>Changing these fields has no effect on the sip call session </b>: it's
  * only a structured holder for datas <br/>
  */
-public final class SipCallSession implements Parcelable {
+public class SipCallSession implements Parcelable {
 
     /**
      * Describe the control state of a call <br/>
@@ -194,27 +194,27 @@ public final class SipCallSession implements Parcelable {
      */
     public int primaryKey = -1;
     /**
-     * The starting time oof the call
+     * The starting time of the call
      */
-    public long callStart = 0;
+    protected long callStart = 0;
 
-    private int callId = INVALID_CALL_ID;
-    private int callState = InvState.INVALID;
-    private String remoteContact;
-    private boolean isIncoming;
-    private int confPort = -1;
-    private long accId = SipProfile.INVALID_ID;
-    private int mediaStatus = MediaState.NONE;
-    private boolean mediaSecure = false;
-    private boolean mediaHasVideoStream = false;
-    private long connectStart = 0;
-    private int lastStatusCode = 0;
-    private String lastStatusComment = "";
-    private String mediaSecureInfo = "";
-    private boolean canRecord = false;
-    private boolean isRecording = false;
-    private boolean zrtpSASVerified = false;
-    private boolean hasZrtp = false;
+    protected int callId = INVALID_CALL_ID;
+    protected int callState = InvState.INVALID;
+    protected String remoteContact;
+    protected boolean isIncoming;
+    protected int confPort = -1;
+    protected long accId = SipProfile.INVALID_ID;
+    protected int mediaStatus = MediaState.NONE;
+    protected boolean mediaSecure = false;
+    protected boolean mediaHasVideoStream = false;
+    protected long connectStart = 0;
+    protected int lastStatusCode = 0;
+    protected String lastStatusComment = "";
+    protected String mediaSecureInfo = "";
+    protected boolean canRecord = false;
+    protected boolean isRecording = false;
+    protected boolean zrtpSASVerified = false;
+    protected boolean hasZrtp = false;
 
     /**
      * Construct from parcelable <br/>
@@ -228,15 +228,15 @@ public final class SipCallSession implements Parcelable {
         callState = in.readInt();
         mediaStatus = in.readInt();
         remoteContact = in.readString();
-        setIncoming((in.readInt() == 1));
+        isIncoming = (in.readInt() == 1);
         confPort = in.readInt();
         accId = in.readInt();
         lastStatusCode = in.readInt();
         mediaSecureInfo = in.readString();
         connectStart = in.readLong();
         mediaSecure = (in.readInt() == 1);
-        setLastStatusComment(in.readString());
-        setMediaHasVideo((in.readInt() == 1));
+        lastStatusComment = in.readString();
+        mediaHasVideoStream = (in.readInt() == 1);
         canRecord = (in.readInt() == 1);
         isRecording = (in.readInt() == 1);
         hasZrtp = (in.readInt() == 1);
@@ -333,16 +333,6 @@ public final class SipCallSession implements Parcelable {
     }
 
     /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the call id of this serializable holder
-     * 
-     * @param callId2 the call id to setup
-     */
-    public void setCallId(int callId2) {
-        callId = callId2;
-    }
-
-    /**
      * Get the call state of this call info
      * 
      * @return the invitation state
@@ -352,29 +342,8 @@ public final class SipCallSession implements Parcelable {
         return callState;
     }
 
-    /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the call state of this serializable holder
-     * 
-     * @param callState2 the new invitation state
-     * @see InvState
-     */
-    public void setCallState(int callState2) {
-        callState = callState2;
-    }
-
     public int getMediaStatus() {
         return mediaStatus;
-    }
-
-    /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the sip media state of this serializable holder
-     * 
-     * @param mediaStatus2 the new media status
-     */
-    public void setMediaStatus(int mediaStatus2) {
-        mediaStatus = mediaStatus2;
     }
 
     /**
@@ -384,28 +353,6 @@ public final class SipCallSession implements Parcelable {
      */
     public String getRemoteContact() {
         return remoteContact;
-    }
-
-    /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the remote contact of this serializable holder
-     * 
-     * @param remoteContact2 the new remote contact representation string
-     * @see #getRemoteContact()
-     */
-    public void setRemoteContact(String remoteContact2) {
-        remoteContact = remoteContact2;
-    }
-
-    /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the fact that this call was initiated by the remote party
-     * 
-     * @param isIncoming the isIncoming to set
-     * @see #isIncoming()
-     */
-    public void setIncoming(boolean isIncoming) {
-        this.isIncoming = isIncoming;
     }
 
     /**
@@ -425,17 +372,6 @@ public final class SipCallSession implements Parcelable {
      */
     public long getConnectStart() {
         return connectStart;
-    }
-
-    /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the time of the beginning of the call as a connected call
-     * 
-     * @param connectStart2 the new connected start time for this call
-     * @see #getConnectStart()
-     */
-    public void setConnectStart(long connectStart2) {
-        connectStart = connectStart2;
     }
 
     /**
@@ -472,17 +408,6 @@ public final class SipCallSession implements Parcelable {
     }
 
     /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the conf port of this serializable holder
-     * 
-     * @param confPort2
-     * @see #getConfPort()
-     */
-    public void setConfPort(int confPort2) {
-        confPort = confPort2;
-    }
-
-    /**
      * Get the identifier of the account corresponding to this call <br/>
      * This identifier is the one you have in {@link SipProfile#id} <br/>
      * It may return {@link SipProfile#INVALID_ID} if no account detected for
@@ -495,45 +420,12 @@ public final class SipCallSession implements Parcelable {
     }
 
     /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the account id for this call of this serializable holder
-     * 
-     * @param accId2 The {@link SipProfile#id} of the account use for this call
-     * @see #getAccId()
-     */
-    public void setAccId(long accId2) {
-        accId = accId2;
-    }
-
-    /**
      * Get the secure level of the call
      * 
      * @return true if the call has a <b>media</b> encrypted
      */
     public boolean isSecure() {
         return mediaSecure;
-    }
-
-    /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the media security level for this call of this serializable holder
-     * 
-     * @param mediaSecure2 true if the call has a <b>media</b> encrypted
-     * @see #isSecure()
-     */
-    public void setMediaSecure(boolean mediaSecure2) {
-        mediaSecure = mediaSecure2;
-    }
-
-    /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the media security info for this call of this serializable holder
-     * 
-     * @param aInfo the information about the <b>media</b> security
-     * @see #getMediaSecureInfo()
-     */
-    public void setMediaSecureInfo(String aInfo) {
-        mediaSecureInfo = aInfo;
     }
 
     /**
@@ -595,18 +487,6 @@ public final class SipCallSession implements Parcelable {
     public int getLastStatusCode() {
         return lastStatusCode;
     }
-    
-    /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the latest status code for this call of this serializable holder
-     * 
-     * @param status_code The code of the latest known sip dialog
-     * @see #getLastStatusCode()
-     * @see SipCallSession.StatusCode
-     */
-    public void setLastStatusCode(int status_code) {
-        lastStatusCode = status_code;
-    }
 
     /**
      * Get the last status comment of the sip dialog corresponding to this call
@@ -618,16 +498,6 @@ public final class SipCallSession implements Parcelable {
     }
 
     /**
-     * This method should be only used by CSipSimple service <br/>
-     * Set the last status comment for this call 
-     * 
-     * @param lastStatusComment the lastStatusComment to set
-     */
-    public void setLastStatusComment(String lastStatusComment) {
-        this.lastStatusComment = lastStatusComment;
-    }
-
-    /**
      * Get whether the call has a video media stream connected
      * 
      * @return true if the call has a video media stream
@@ -636,38 +506,6 @@ public final class SipCallSession implements Parcelable {
         return mediaHasVideoStream;
     }
 
-    /**
-     * Set the media video stream flag <br/>
-     * This method should be only used by CSipSimple service
-     * 
-     * @param mediaHasVideo pass true if the media of the underlying call has a
-     *            video stream
-     */
-    public void setMediaHasVideo(boolean mediaHasVideo) {
-        this.mediaHasVideoStream = mediaHasVideo;
-    }
-    
-    /**
-     * Set the can record flag <br/>
-     * This method should be only used by CSipSimple service
-     * 
-     * @param canRecord pass true if the audio can be recorded
-     */
-    public void setCanRecord(boolean canRecord) {
-        this.canRecord = canRecord;
-    }
-    
-
-    /**
-     * Set the is record flag <br/>
-     * This method should be only used by CSipSimple service
-     * 
-     * @param isRecording pass true if the audio is currently recording
-     */
-    public void setIsRecording(boolean isRecording) {
-        this.isRecording = isRecording;
-    }
-    
     /**
      * Get the current call recording status for this call.
      * 
@@ -694,15 +532,6 @@ public final class SipCallSession implements Parcelable {
     }
 
     /**
-     * This method should be only used by CSipSimple service
-     * 
-     * @param zrtpSASVerified the zrtpSASVerified to set
-     */
-    public void setZrtpSASVerified(boolean zrtpSASVerified) {
-        this.zrtpSASVerified = zrtpSASVerified;
-    }
-
-    /**
      * @return whether call has Zrtp encryption active
      */
     public boolean getHasZrtp() {
@@ -710,11 +539,11 @@ public final class SipCallSession implements Parcelable {
     }
 
     /**
-     * This method should be only used by CSipSimple service
-     * 
-     * @param hasZrtp the hasZrtp to set
+     * Get the start time of the call.
+     * @return the callStart start time of the call.
      */
-    public void setHasZrtp(boolean hasZrtp) {
-        this.hasZrtp = hasZrtp;
+    public long getCallStart() {
+        return callStart;
     }
+
 }

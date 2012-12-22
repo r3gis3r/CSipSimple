@@ -52,6 +52,7 @@ import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
+import com.csipsimple.service.impl.SipCallSessionImpl;
 import com.csipsimple.utils.CallLogHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Threading;
@@ -115,9 +116,9 @@ public class UAStateReceiver extends Callback {
 		//Check if we have not already an ongoing call
 		boolean hasOngoingSipCall = false;
 		if(pjService != null && pjService.service != null) {
-			SipCallSession[] calls = getCalls();
+		    SipCallSessionImpl[] calls = getCalls();
 			if(calls != null) {
-				for( SipCallSession existingCall : calls ) {
+				for( SipCallSessionImpl existingCall : calls ) {
 					if(!existingCall.isAfterEnded() && existingCall.getCallId() != callId) {
 					    if( !pjService.service.supportMultipleCalls ) {
     						Log.e(THIS_FILE, "Settings to not support two call at the same time !!!");
@@ -135,7 +136,7 @@ public class UAStateReceiver extends Callback {
 		}
 		
 		try {
-            SipCallSession callInfo = updateCallInfoFromStack(callId, null);
+		    SipCallSessionImpl callInfo = updateCallInfoFromStack(callId, null);
 			Log.d(THIS_FILE, "Incoming call << for account " + accId);
             
             //Extra check if set reference counted is false ???
@@ -386,7 +387,7 @@ public class UAStateReceiver extends Callback {
                         &&
                         pjService.prefsWrapper
                                 .getPreferenceBooleanValue(SipConfigManager.AUTO_RECORD_CALLS)) {
-                    pjService.startRecording(callId);
+                    pjService.startRecording(callId, SipManager.BITMASK_IN | SipManager.BITMASK_OUT);
                 }
 
             }
@@ -521,7 +522,7 @@ public class UAStateReceiver extends Callback {
 	 * The UA state receiver is in charge to maintain calls list integrity for {@link PjSipService}.
 	 * All information it gets comes from the stack. Except recording status that comes from service.
 	 */
-	private HashMap<Integer, SipCallSession> callsList = new HashMap<Integer, SipCallSession>();
+	private HashMap<Integer, SipCallSessionImpl> callsList = new HashMap<Integer, SipCallSessionImpl>();
 	
 	/**
 	 * Update the call information from pjsip stack by calling pjsip primitives.
@@ -530,13 +531,13 @@ public class UAStateReceiver extends Callback {
 	 * @return The built sip call session. It's also stored in cache.
 	 * @throws SameThreadException if we are calling that from outside the pjsip thread. It's a virtual exception to make sure not called from bad place.
 	 */
-	private SipCallSession updateCallInfoFromStack(Integer callId, pjsip_event e) throws SameThreadException {
-		SipCallSession callInfo;
+	private SipCallSessionImpl updateCallInfoFromStack(Integer callId, pjsip_event e) throws SameThreadException {
+		SipCallSessionImpl callInfo;
 		Log.d(THIS_FILE, "Updating call infos from the stack");
 		synchronized (callsList) {
 			callInfo = callsList.get(callId);
 			if(callInfo == null) {
-				callInfo = new SipCallSession();
+				callInfo = new SipCallSessionImpl();
 				callInfo.setCallId(callId);
 			}
 		}
@@ -557,8 +558,8 @@ public class UAStateReceiver extends Callback {
 	 * @param callId the id of the call we want infos for
 	 * @return the call session infos.
 	 */
-	public SipCallSession getCallInfo(Integer callId) {
-		SipCallSession callInfo;
+	public SipCallSessionImpl getCallInfo(Integer callId) {
+	    SipCallSessionImpl callInfo;
 		synchronized (callsList) {
 			callInfo = callsList.get(callId);
 		}
@@ -569,12 +570,12 @@ public class UAStateReceiver extends Callback {
 	 * Get list of calls session available.
 	 * @return List of calls.
 	 */
-	public SipCallSession[] getCalls() {
+	public SipCallSessionImpl[] getCalls() {
 		if(callsList != null ) {
 			
-			SipCallSession[] callsInfos = new SipCallSession[callsList.size()];
+			SipCallSessionImpl[] callsInfos = new SipCallSessionImpl[callsList.size()];
 			int i = 0;
-			for( Entry<Integer, SipCallSession> entry : callsList.entrySet()) {
+			for( Entry<Integer, SipCallSessionImpl> entry : callsList.entrySet()) {
 				callsInfos[i] = entry.getValue();
 				/*
 				if(callsInfos[i] != null) {
@@ -587,7 +588,7 @@ public class UAStateReceiver extends Callback {
 			}
 			return callsInfos;
 		}
-		return new SipCallSession[0];
+		return new SipCallSessionImpl[0];
 	}
 
 	
@@ -625,7 +626,7 @@ public class UAStateReceiver extends Callback {
 		    stateReceiver.lockCpu();
 			switch (msg.what) {
 			case ON_CALL_STATE:{
-				SipCallSession callInfo = (SipCallSession) msg.obj;
+			    SipCallSessionImpl callInfo = (SipCallSessionImpl) msg.obj;
 				final int callState = callInfo.getCallState();
 				
 				switch (callState) {
@@ -657,8 +658,8 @@ public class UAStateReceiver extends Callback {
 					    stateReceiver.sendPendingDtmf(callInfo.getCallId());
                     }
 					// If state is confirmed and not already intialized
-					if(callState == SipCallSession.InvState.CONFIRMED && callInfo.callStart == 0) {
-						callInfo.callStart = System.currentTimeMillis();
+					if(callState == SipCallSession.InvState.CONFIRMED && callInfo.getCallStart() == 0) {
+						callInfo.setCallStart(System.currentTimeMillis());
 					}
 					break;
 				case SipCallSession.InvState.DISCONNECTED:
@@ -679,7 +680,7 @@ public class UAStateReceiver extends Callback {
                     }
 					
 					//CallLog
-					ContentValues cv = CallLogHelper.logValuesForCall(stateReceiver.pjService.service, callInfo, callInfo.callStart);
+					ContentValues cv = CallLogHelper.logValuesForCall(stateReceiver.pjService.service, callInfo, callInfo.getCallStart());
 					
 					//Fill our own database
 					stateReceiver.pjService.service.getContentResolver().insert(SipManager.CALLLOG_URI, cv);
@@ -727,7 +728,7 @@ public class UAStateReceiver extends Callback {
 						}
 					}
 					callInfo.setIncoming(false);
-					callInfo.callStart = 0;
+					callInfo.setCallStart(0);
 					
 					break;
 				default:
@@ -738,7 +739,7 @@ public class UAStateReceiver extends Callback {
 			}
 			case ON_MEDIA_STATE:{
 				SipCallSession mediaCallInfo = (SipCallSession) msg.obj;
-				SipCallSession callInfo = stateReceiver.callsList.get(mediaCallInfo.getCallId());
+				SipCallSessionImpl callInfo = stateReceiver.callsList.get(mediaCallInfo.getCallId());
 				callInfo.setMediaStatus(mediaCallInfo.getMediaStatus());
 				stateReceiver.callsList.put(mediaCallInfo.getCallId(), callInfo);
 				stateReceiver.onBroadcastCallState(callInfo);
@@ -961,7 +962,7 @@ public class UAStateReceiver extends Callback {
 	 * @param isRecording if we are currently recording the call
 	 */
     public void updateRecordingStatus(int callId, boolean canRecord, boolean isRecording) {
-        SipCallSession callInfo = getCallInfo(callId);
+        SipCallSessionImpl callInfo = getCallInfo(callId);
         callInfo.setCanRecord(canRecord);
         callInfo.setIsRecording(isRecording);
         synchronized (callsList) {

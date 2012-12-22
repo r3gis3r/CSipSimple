@@ -32,9 +32,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 
@@ -47,6 +45,10 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
+import com.csipsimple.pjsip.player.IPlayerHandler;
+import com.csipsimple.pjsip.player.impl.SimpleWavPlayerHandler;
+import com.csipsimple.pjsip.recorder.IRecorderHandler;
+import com.csipsimple.pjsip.recorder.impl.SimpleWavRecorderHandler;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
@@ -87,8 +89,8 @@ import org.pjsip.pjsua.pjsua_msg_data;
 import org.pjsip.pjsua.pjsua_transport_config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -1965,30 +1967,35 @@ public class PjSipService {
 
 
     // Recorder
-    private SparseArray<String> recordingFiles = new SparseArray<String>();
+    private SparseArray<List<IRecorderHandler>> callRecorders = new SparseArray<List<IRecorderHandler>>();
     /**
      * Start recording of a call.
      * 
      * @param callId the call id of the call to record
      * @throws SameThreadException virtual exception to be sure we are calling this from correct thread
      */
-    public void startRecording(int callId) throws SameThreadException {
+    public void startRecording(int callId, int way) throws SameThreadException {
         // Make sure we are in a valid state for recording
         if (!canRecord(callId)) {
             return;
         }
-        SipCallSession callInfo = getCallInfo(callId);
-        File wavFile = getRecordFile(callInfo.getRemoteContact());
-        if (wavFile != null) {
-            pj_str_t filename = pjsua.pj_str_copy(wavFile.getAbsolutePath());
-            if (pjsua.call_recording_start(callId, filename, pjsuaConstants.PJ_FALSE) == pjsua.PJ_SUCCESS) {
-                userAgentReceiver.updateRecordingStatus(callId, false, true);
-                recordingFiles.put(callId, wavFile.getAbsolutePath());
-            } else {
-                service.notifyUserOfMessage(R.string.cant_write_file);
-            }
-        } else {
+        // Sanitize call way : if 0 assume all
+        if(way == 0) {
+            way = SipManager.BITMASK_ALL;
+        }
+        
+        try {
+            File recFolder = PreferencesProviderWrapper.getRecordsFolder(service);
+            IRecorderHandler recoder = new SimpleWavRecorderHandler(getCallInfo(callId), recFolder, way);
+            List<IRecorderHandler> recordersList = callRecorders.get(callId, new ArrayList<IRecorderHandler>());
+            recordersList.add(recoder);
+            callRecorders.put(callId, recordersList);
+            recoder.startRecording();
+            userAgentReceiver.updateRecordingStatus(callId, false, true);
+        }catch(IOException e) {
             service.notifyUserOfMessage(R.string.cant_write_file);
+        }catch(RuntimeException e) {
+            Log.e(THIS_FILE, "Impossible to record ", e);
         }
     }
 
@@ -2002,19 +2009,20 @@ public class PjSipService {
         if (!created) {
             return;
         }
-
-        if (pjsua.call_recording_stop(callId) == pjsuaConstants.PJ_SUCCESS) {
-            userAgentReceiver.updateRecordingStatus(callId, true, false);
-            // Broadcast the status
-            String file = recordingFiles.get(callId);
-            if(!TextUtils.isEmpty(file)) {
+        List<IRecorderHandler> recoders = callRecorders.get(callId, null);
+        if(recoders != null) {
+            for(IRecorderHandler recoder : recoders) {
+                recoder.stopRecording();
+                // Broadcast to other apps the a new sip record has been done
                 SipCallSession callInfo = getCallInfo(callId);
                 Intent it = new Intent(SipManager.ACTION_SIP_CALL_RECORDED);
                 it.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
-                it.putExtra(SipManager.EXTRA_FILE_PATH, file);
+                recoder.fillBroadcastWithInfo(it);
                 service.sendBroadcast(it, SipManager.PERMISSION_USE_SIP);
-                recordingFiles.delete(callId);
             }
+            // In first case we drop everything
+            callRecorders.delete(callId);
+            userAgentReceiver.updateRecordingStatus(callId, true, false);
         }
     }
     
@@ -2041,7 +2049,6 @@ public class PjSipService {
             return false;
         }
         return true;
-    
     }
     
     /**
@@ -2051,51 +2058,28 @@ public class PjSipService {
      * @return true if recording this call
      */
     public boolean isRecording(int callId) throws SameThreadException {
-        return (pjsua.call_recording_status(callId) == pjsuaConstants.PJ_TRUE);
-    }
-
-    /**
-     * Get the file to record to for a given remote contact.
-     * This will implicitly get the current date in file name.
-     * 
-     * @param remoteContact The remote contact name
-     * @return The file to store conversation
-     */
-    private File getRecordFile(String remoteContact) {
-        File dir = PreferencesProviderWrapper.getRecordsFolder(service);
-        if (dir != null) {
-            Date d = new Date();
-            File file = new File(dir.getAbsoluteFile() + File.separator
-                    + sanitizeForFile(remoteContact) + "_"
-                    + DateFormat.format("yy-MM-dd_kkmmss", d) + ".wav");
-            Log.d(THIS_FILE, "Out dir " + file.getAbsolutePath());
-            return file;
+        List<IRecorderHandler> recorders = callRecorders.get(callId, null);
+        if(recorders == null) {
+            return false;
         }
-        return null;
+        return recorders.size() > 0;
     }
 
-    private String sanitizeForFile(String remoteContact) {
-        String fileName = remoteContact;
-        fileName = fileName.replaceAll("[\\.\\\\<>:; \"\'\\*]", "_");
-        return fileName;
-    }
 
-    // Wave player
-    public final static int INVALID_PLAYER = -1;
-    private SparseIntArray playedCalls = new SparseIntArray();
-    public final static int BITMASK_OUT = 1 << 0;
-    public final static int BITMASK_IN = 1 << 1;
-    
+    // Stream players
+    // We use a list for future possible extensions. For now api only manages one
+    private SparseArray<List<IPlayerHandler>> callPlayers = new SparseArray<List<IPlayerHandler>>();
+
     /**
      * Play one wave file in call stream.
      * 
      * @param filePath The path to the file we'd like to play
      * @param callId The call id we want to play to. Even if we only use
-     *            {@link #BITMASK_IN} this must correspond to some call since
+     *            {@link SipManager#BITMASK_IN} this must correspond to some call since
      *            it's used to identify internally created player.
      * @param way The way we want to play this file to. Bitmasked value that
-     *            could be compounded of {@link #BITMASK_IN} (read local) and
-     *            {@link #BITMASK_OUT} (read to remote party of the call)
+     *            could be compounded of {@link SipManager#BITMASK_IN} (read local) and
+     *            {@link SipManager#BITMASK_OUT} (read to remote party of the call)
      * @throws SameThreadException virtual exception to be sure we are calling
      *             this from correct thread
      */
@@ -2103,39 +2087,30 @@ public class PjSipService {
         if (!created) {
             return;
         }
-
         // Stop any current player
         stopPlaying(callId);
-
         if(TextUtils.isEmpty(filePath)) {
             // Nothing to do if we have not file path
             return;
         }
-        
-        // We create a new player conf port.
-        
-        int[] plId = new int[1];
-        int status = pjsua.player_create(pjsua.pj_str_copy(filePath), 1 /* PJMEDIA_FILE_NO_LOOP */, plId);
-        
-        if (status == pjsuaConstants.PJ_SUCCESS) {
-            // Save player
-            int playerId = plId[0];
-            playedCalls.put(callId, playerId);
-            
-            // Connect player to requested ports
-            int wavPort = pjsua.player_get_conf_port(playerId);
-            if ((way & BITMASK_OUT) == BITMASK_OUT) {
-                SipCallSession callInfo = getCallInfo(callId);
-                int wavConfPort = callInfo.getConfPort();
-                pjsua.conf_connect(wavPort, wavConfPort);
-            }
-            if ((way & BITMASK_IN) == BITMASK_IN) {
-                pjsua.conf_connect(wavPort, 0);
-            }
-            // Once connected, start to play
-            pjsua.player_set_pos(playerId, 0);
+        if(way == 0) {
+            way = SipManager.BITMASK_ALL;
         }
         
+        // We create a new player conf port.
+        try {
+            IPlayerHandler player = new SimpleWavPlayerHandler(getCallInfo(callId), filePath, way);
+            List<IPlayerHandler> playersList = callPlayers.get(callId, new ArrayList<IPlayerHandler>());
+            playersList.add(player);
+            callPlayers.put(callId, playersList);
+            
+            player.startPlaying();
+        }catch(IOException e) {
+            // TODO : add a can't read file txt
+            service.notifyUserOfMessage(R.string.cant_write_file);
+        }catch(RuntimeException e) {
+            Log.e(THIS_FILE, "Impossible to play file", e);
+        }
     }
 
     /**
@@ -2147,10 +2122,12 @@ public class PjSipService {
      *             this from correct thread
      */
     public void stopPlaying(int callId) throws SameThreadException {
-        int playerId = playedCalls.get(callId, INVALID_PLAYER);
-        if(playerId != INVALID_PLAYER) {
-            pjsua.player_destroy(playerId);
-            playedCalls.delete(callId);
+        List<IPlayerHandler> players = callPlayers.get(callId, null);
+        if(players != null) {
+            for(IPlayerHandler player : players) {
+                player.stopPlaying();
+            }
+            callPlayers.delete(callId);
         }
     }
 

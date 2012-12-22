@@ -261,7 +261,10 @@ public final class SipManager {
      * <ul>
      * <li>{@link #EXTRA_SIP_CALL_MIN_STATE} minimum call state for this plugin to be active. Default {@link SipCallSession.InvState#EARLY}.</li>
      * <li>{@link #EXTRA_SIP_CALL_MAX_STATE} maximum call state for this plugin to be active. Default {@link SipCallSession.InvState#CONFIRMED}.</li>
-     * <li>{@link #EXTRA_SIP_CALL_CALL_WAY} bitmask flag for selecting only one way. 1 << 0 for incoming; 1 << 1 for outgoing. Default (1 << 0 | 1 << 1) (any way).</li>
+     * <li>{@link #EXTRA_SIP_CALL_CALL_WAY} bitmask flag for selecting only one way. 
+     *  {@link #BITMASK_IN} for incoming; 
+     *  {@link #BITMASK_OUT} for outgoing.
+     *  Default ({@link #BITMASK_IN} | {@link #BITMASK_OUT}) (any way).</li>
      * </ul> 
      * Receiver activity will get an extra with key {@value #EXTRA_CALL_INFO} with a {@link SipCallSession}.
      */
@@ -270,6 +273,19 @@ public final class SipManager {
     public static final String EXTRA_SIP_CALL_MIN_STATE = "com.csipsimple.sipcall.MIN_STATE";
     public static final String EXTRA_SIP_CALL_MAX_STATE = "com.csipsimple.sipcall.MAX_STATE";
     public static final String EXTRA_SIP_CALL_CALL_WAY = "com.csipsimple.sipcall.CALL_WAY";
+    
+    /**
+     * Bitmask to keep media/call coming from outside
+     */
+    public final static int BITMASK_IN = 1 << 0;
+    /**
+     * Bitmask to keep only media/call coming from the app
+     */
+    public final static int BITMASK_OUT = 1 << 1;
+    /**
+     * Bitmask to keep all media/call whatever incoming/outgoing
+     */
+    public final static int BITMASK_ALL = BITMASK_IN | BITMASK_OUT;
     
     /**
      * Plugin action for rewrite numbers. <br/>     
