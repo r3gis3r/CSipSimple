@@ -361,11 +361,13 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.toLowerCase().startsWith("picasso")) {
             return SipConfigManager.AUDIO_IMPLEMENTATION_JAVA;
         }
-        
-        if(Compatibility.isCompatible(11)) {
+        if (Compatibility.isCompatible(11)) {
             return SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES;
         }
-        if(android.os.Build.DEVICE.equalsIgnoreCase("ST25i") && Compatibility.isCompatible(10)) {
+        if (android.os.Build.DEVICE.equalsIgnoreCase("ST25i") && Compatibility.isCompatible(10)) {
+            return SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES;
+        }
+        if (android.os.Build.DEVICE.equalsIgnoreCase("u8510") && Compatibility.isCompatible(10)) {
             return SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES;
         }
         return SipConfigManager.AUDIO_IMPLEMENTATION_JAVA;
@@ -805,6 +807,12 @@ public final class Compatibility {
                     || android.os.Build.MODEL.equalsIgnoreCase("XT320")) {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                         shouldUseModeApi());
+            }
+        }
+        if(lastSeenVersion < 2052) {
+            if (android.os.Build.DEVICE.equalsIgnoreCase("u8510") && Compatibility.isCompatible(10)) {
+                prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION,
+                        Integer.toString(getDefaultAudioImplementation()));
             }
         }
         
