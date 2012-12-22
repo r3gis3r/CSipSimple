@@ -1,5 +1,8 @@
 # This makefile aim is only for now to address source checkout and patch
 patches_files := $(wildcard patches/*.diff)
+silk_version := v1.0.9
+silk_remote_folder := SILK_SDK_SRC_$(version)
+silk_repo := https://developer.skype.com/silk/$(silk_remote_folder).zip
 
 all :
 	# For now we do nothing to build - it's made by android_toolchain
@@ -8,15 +11,16 @@ init : sources
 	# Init done
 
 
-sources :
-	@wget http://developer.skype.com/silk/SILK_SDK_SRC_v1.0.8.zip; \
-	unzip -q SILK_SDK_SRC_v1.0.8.zip; \
-	mv SILK_SDK_SRC_v1.0.8 sources; \
-	rm SILK_SDK_SRC_v1.0.8.zip
+sources : sources/SILK_SDK_SRC_ARM_$(version)
+	# source checkout done
+	
+sources/SILK_SDK_SRC_ARM_$(version) :
+	@wget $(silk_repo); \
+	unzip -d $< sources -q $(silk_remote_folder).zip; \
+	rm $(silk_remote_folder).zip
 
 update :
-	# For now no update for SILK
-	
+	# managed by sources
 	
 patch : .patched_sources
 	@# Patch done

@@ -1,5 +1,5 @@
 LOCAL_PATH := $(call my-dir)
-
+version := v1.0.9
 
 
 ifeq ($(MY_USE_SILK),1)
@@ -8,16 +8,16 @@ ifeq ($(MY_USE_SILK),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_silk_codec
 ifeq ($(TARGET_ARCH_ABI),armeabi)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_ARM_v1.0.8
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_ARM_$(version)
 else
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_ARM_v1.0.8
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_ARM_$(version)
 else
 ifeq ($(TARGET_ARCH_ABI),mips)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_MIPS_v1.0.8
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_MIPS_$(version)
 else
 ifeq ($(TARGET_ARCH_ABI),x86)
-SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FLP_v1.0.8
+SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_FLP_$(version)
 endif
 endif
 endif
