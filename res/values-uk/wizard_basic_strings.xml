@@ -1,6 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_basic_username">Кристувач</string>
+  <string name="w_basic_username_desc">Імя користувача/Логін (Вказувати без @sip.server)</string>
   <string name="w_basic_password">Пароль</string>
   <string name="w_basic_password_desc">Пароль для доступу до свого облікового запису</string>
 </resources>

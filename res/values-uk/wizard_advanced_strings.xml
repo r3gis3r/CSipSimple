@@ -1,13 +1,16 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">Назва облікового запису</string>
   <string name="w_advanced_display_name_desc">Ім\'я акаунту</string>
   <string name="w_advanced_caller_id">Caller ID</string>
   <string name="w_advanced_caller_id_desc">Caller ID, щоб відправити зі дзвінками</string>
   <string name="w_advanced_username">Ім\'я користувача</string>
+  <string name="w_advanced_username_desc">Імя користувача (Вказувати без @sip.server)</string>
   <string name="w_advanced_password">Пароль</string>
   <string name="w_advanced_password_desc">Пароль для аутентифікації</string>
   <string name="w_advanced_use_tcp">Використовувати TCP (не UDP)</string>
   <string name="w_advanced_proxy">Проксі-сервер</string>
   <string name="w_advanced_proxy_desc">Проксі домен / IP [: порт] (опційно, не завжди необхідно)</string>
+  <string name="w_advanced_auth_id">ID Sip аутентифікації</string>
+  <string name="w_advanced_auth_id_desc">Залишити пустим якщо схоже з Іменем користувача</string>
 </resources>

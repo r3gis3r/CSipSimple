@@ -87,6 +87,7 @@
   <!--<string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>-->
   <string name="force_no_update">បង្ខំ​មិន​ឲ្យ​ធ្វើ​បច្ចុប្បន្នភាព</string>
+  <string name="force_no_update_desc">Some buggy remote party announce to support UPDATE method while it does not, this option force the legacy way to manage UPDATE/re-INVITE</string>
   <string name="timer_min_se">​ផុត​កំណត់​សម័យ​អប្បបរមា</string>
   <string name="timer_min_se_desc">អំឡុង​ពេល​​​ផុត​កំណត់​សម័យ​​​​អប្បបរមា គិត​ជា​វិនាទី ។ មិន​ត្រូវ​តិច​ជាង 90 វិនាទី​ឡើយ ។</string>
   <string name="timer_sess_expires">អំឡុង​ពេល​​ផុត​​កំណត់​សម័យ</string>
@@ -155,6 +156,7 @@
   <string name="snd_media_quality_desc">គុណភាព​ចរន្ត​មេឌៀ (កែប្រែ បើ​អ្នក​មិន​ដឹង​អ្វី​​ដែល​អ្នក​កំពុង​ធ្វើ)</string>
   <string name="snd_clock_rate">Clock rate</string>
   <string name="snd_clock_rate_desc">រលក​អាកាស​វិទ្យុ​ឆានែល​អូឌីយ៉ូ</string>
+  <string name="snd_ptime">Audio frame ptime</string>
   <string name="snd_ptime_desc">តម្លៃ​​នេះ​នឹង​មាន​ឥទ្ធិពល​លើ​​គំរូ​ក្នុង​ស៊ុម​ទាំងពីរ​ឧបករណ៍​សំឡេង និង ការ​ភ្ជាប់​ជា​សន្និសីទ ។ បញ្ជាក់​ ptime តិច​ជាង​នឹង​កាត់​បន្ថយ latency ។</string>
   <string name="echo_cancellation_tail">ចម្ងាយ​ការ​បំបាត់​អេកូ</string>
   <string name="echo_cancellation_tail_desc">រយៈ​ចម្ងាយ​ការ​បំបាត់​អេកូ</string>
@@ -247,6 +249,7 @@
   <string name="advanced_ui">ការ​កែ​កម្រិត​ខ្ពស់</string>
   <string name="integrate_with_native_dialer">ការ​រួម​បញ្ចូល​បន្ទះ​លេខ</string>
   <string name="integrate_with_native_dialer_desc">នៅ​ពេល​ចុច​បន្ទះ​លេខ​​ដើម​ អ្នក​នឹង​ត្រូវ​បាន​សួរ​ បើ​អ្នក​ចង់​ប្រើ​ SIP ឬ​ទូរស័ព្ទ​ចល័ត</string>
+  <string name="integrate_tel_privileged">Integrate privileged intent</string>
   <string name="integrate_tel_privileged_desc">វិធី​ផ្សេង​គ្នា​ក្នុង​ការ​​​រួមបញ្ចូល​បន្ទះ​លេខ​ ។ អ្នក​​​គួរ​បិទ​បន្ទះ​លេខ​រួម​បញ្ចូល បើ​អ្នក​ប្រើ​វា ។</string>
   <string name="integrate_with_native_calllogs">ការ​រួម​បញ្ចូល​​​កំណត់​ហេតុ​​ហៅ</string>
   <string name="integrate_with_native_calllogs_desc">ការ​ហៅ SIP នឹង​ត្រូវ​បាន​បញ្ចូល​ចូល​គ្នា (បើ​អាច) បញ្ចូល​ក្នុង​កំណត់​ហេតុ​ហៅ​ដើម</string>
@@ -260,6 +263,7 @@
   <string name="use_alternate_unlocker_desc">ប្រើ​ប៊ូតុង​ជំនួស​ការ​រុញ​ដើម្បី​ការ​ហៅ​ចូល</string>
   <string name="keep_awake_incall">នៅ​តែ​ដំណើរការ​នៅ​ពេល​ហៅ</string>
   <string name="keep_awake_incall_desc">កំណត់ បើ​​មាន​សំឡេង នៅ​ពេល​​អេក្រង់​បិទ​ខណៈ​ពេល​ហៅ​តាម​ WIFI</string>
+  <string name="use_partial_wake_lock">Use partial wake lock</string>
   <string name="use_partial_wake_lock_desc">ប្រាកដ​ថា CPU ដំណើរការ​ជានិច្ច​​​​សម្រាប់​​កម្មវិធី (ជិត​អស់​ថ្ម)</string>
   <string name="log_level">កម្រិត​កំណត់ហេតុ</string>
   <string name="log_level_desc">កម្រិត​កំណត់​ហេតុ​បំបាត់​កំហុស​រវាង 0 (គ្មាន) និង 5 (បរិយាយ)</string>

@@ -19,4 +19,10 @@
   <string name="unlock">Розблокувати</string>
   <string name="record">Записати</string>
   <string name="stop_recording">Зупинити запис</string>
+  <string name="xfer_uri">Перенаправити на номер</string>
+  <string name="hold_call">Утримати</string>
+  <string name="on_hold">На Утриманні</string>
+  <string name="resume_call">Продовжити</string>
+  <string name="transfer_to_call">Перенаправити виклик</string>
+  <string name="send_dtmf">Відіслати DTMF</string>
 </resources>
