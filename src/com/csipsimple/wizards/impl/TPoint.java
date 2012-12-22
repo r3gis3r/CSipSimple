@@ -33,7 +33,7 @@ public class TPoint extends SimpleImplementation {
 
     @Override
     protected String getDefaultName() {
-        return "TPointSystem";
+        return "TPointSystems";
     }
 
     @Override
