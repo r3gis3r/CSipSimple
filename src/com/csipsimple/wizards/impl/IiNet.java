@@ -73,7 +73,7 @@ public class IiNet extends SimpleImplementation {
 		
 		account.reg_uri = regUri;
 		account.proxies = new String[] { regUri } ;
-		
+		account.mwi_enabled = false;
 		return account;
 	}
 	
