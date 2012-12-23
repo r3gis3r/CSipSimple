@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2010-2012 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2010-2013 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2012-2013 Dennis Guse (http://dennisguse.de)
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
