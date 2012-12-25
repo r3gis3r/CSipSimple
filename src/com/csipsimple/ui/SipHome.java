@@ -148,10 +148,12 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         Tab callLogTab = ab.newTab()
                  .setContentDescription(R.string.calllog_tab_name_text)
                 .setIcon(R.drawable.ic_ab_history_holo_dark);
-        Tab favoritesTab = ab.newTab()
-                 .setContentDescription(R.string.favorites_tab_name_text)
-                .setIcon(R.drawable.ic_ab_favourites_holo_dark);
-        
+        Tab favoritesTab = null;
+        if(CustomDistribution.supportFavorites()) {
+            favoritesTab = ab.newTab()
+                    .setContentDescription(R.string.favorites_tab_name_text)
+                    .setIcon(R.drawable.ic_ab_favourites_holo_dark);
+        }
         Tab messagingTab = null;
         if (CustomDistribution.supportMessaging()) {
             messagingTab = ab.newTab()
@@ -171,7 +173,9 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         mTabsAdapter = new TabsAdapter(this, getSupportActionBar(), mViewPager);
         mTabsAdapter.addTab(dialerTab, DialerFragment.class, TAB_ID_DIALER);
         mTabsAdapter.addTab(callLogTab, CallLogListFragment.class, TAB_ID_CALL_LOG);
-        mTabsAdapter.addTab(favoritesTab, FavListFragment.class, TAB_ID_FAVORITES);
+        if(favoritesTab != null) {
+            mTabsAdapter.addTab(favoritesTab, FavListFragment.class, TAB_ID_FAVORITES);
+        }
         if (messagingTab != null) {
             mTabsAdapter.addTab(messagingTab, ConversationsListFragment.class, TAB_ID_MESSAGES);
         }
@@ -364,11 +368,11 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                 return mDialpadFragment;
             } else if (id == TAB_ID_CALL_LOG) {
                 return mCallLogFragment;
-            } else if (position == TAB_ID_MESSAGES) {
+            } else if (id == TAB_ID_MESSAGES) {
                 return mMessagesFragment;
-            } else if (position == TAB_ID_FAVORITES) {
+            } else if (id == TAB_ID_FAVORITES) {
                 return mPhoneFavoriteFragment;
-            } else if (position == TAB_ID_WARNING) {
+            } else if (id == TAB_ID_WARNING) {
                 return mWarningFragment;
             }
         }

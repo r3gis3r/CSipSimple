@@ -106,6 +106,14 @@ public final class CustomDistribution {
 	}
 	
 	/**
+	 * Do we want to display the favorites feature
+	 * @return true if the feature is enabled in this distribution
+	 */
+	public static boolean supportFavorites() {
+	    return true;
+	}
+	
+	/**
 	 * Do we want to display record call option while in call
 	 * If true the record of conversation will be enabled both in 
 	 * ongoing call view and in settings as "auto record" feature
