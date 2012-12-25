@@ -1,5 +1,5 @@
 LOCAL_PATH := $(call my-dir)
-version := v1.0.9
+version := v1.0.8
 
 
 ifeq ($(MY_USE_SILK),1)
