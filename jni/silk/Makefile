@@ -1,6 +1,6 @@
 # This makefile aim is only for now to address source checkout and patch
 patches_files := $(wildcard patches/*.diff)
-silk_version := v1.0.8
+silk_version := v1.0.9
 silk_remote_folder := SILK_SDK_SRC_$(silk_version)
 silk_repo := https://developer.skype.com/silk/$(silk_remote_folder).zip
 
@@ -19,7 +19,7 @@ sources/SILK_SDK_SRC_ARM_$(silk_version) :
 	unzip -d $< sources -q $(silk_remote_folder).zip; \
 	rm $(silk_remote_folder).zip
 	@# Needed for 1.0.8 // todo test
-	@mv sources/SILK_SDK_SRC_$(silk_version)/* sources/
+	@#@mv sources/SILK_SDK_SRC_$(silk_version)/* sources/
 
 update : sources/SILK_SDK_SRC_ARM_$(silk_version)
 	# managed by sources
