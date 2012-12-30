@@ -82,8 +82,9 @@ public class ContactsUtils5 extends ContactsWrapper {
             CommonDataKinds.Phone.DISPLAY_NAME, // 5
     };
 
+    private static final String DISPLAY_NAME_ORDER = Contacts.DISPLAY_NAME + " COLLATE LOCALIZED";
     private static final String SORT_ORDER = Contacts.TIMES_CONTACTED + " DESC,"
-            + Contacts.DISPLAY_NAME + "," + CommonDataKinds.Phone.TYPE;
+            +  DISPLAY_NAME_ORDER + "," + CommonDataKinds.Phone.TYPE;
     private static final String THIS_FILE = "ContactsUtils5";
 
     public Bitmap getContactPhoto(Context ctxt, Uri uri, boolean hiRes, Integer defaultResource) {
@@ -213,7 +214,7 @@ public class ContactsUtils5 extends ContactsWrapper {
                             PROJECTION_PHONE,
                             null, // selection,
                             null,
-                            Contacts.DISPLAY_NAME);
+                           DISPLAY_NAME_ORDER);
         }
 
         if (phone.length() > 0) {
