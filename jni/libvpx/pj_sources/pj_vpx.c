@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2010-2012 Regis Montoya (aka r3gis - www.r3gis.fr)
  * This file is part of pjsip_android.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,12 @@
 #include <vpx/vp8cx.h>
 #include <vpx/vpx_decoder.h>
 #include <vpx/vp8dx.h>
+
+#if 1
+#   define TRACE_(x)    PJ_LOG(4, x)
+#else
+#   define TRACE_(x)
+#endif
 
 /* Prototypes for LibVPX codecs factory */
 static pj_status_t pj_vpx_test_alloc(pjmedia_vid_codec_factory *factory,
@@ -136,9 +142,8 @@ typedef struct vpx_private {
         pj_pool_factory *pf) {
     pj_pool_t *pool;
     pj_status_t status;
-    unsigned i;
 
-    PJ_LOG(4, (THIS_FILE, "Init px codec"));
+    TRACE_((THIS_FILE, "Init vpx codec"));
 
     if (vpx_factory.pool != NULL ) {
         /* Already initialized. */
@@ -183,7 +188,7 @@ typedef struct vpx_private {
  * Unregister VPX factory from pjmedia endpoint.
  */PJ_DEF(pj_status_t) pjmedia_codec_vpx_deinit(void) {
     pj_status_t status = PJ_SUCCESS;
-    PJ_LOG(4, (THIS_FILE, "Deinit px codec"));
+    TRACE_((THIS_FILE, "Deinit vpx codec"));
 
     if (vpx_factory.pool == NULL ) {
         /* Already deinitialized */
@@ -211,7 +216,6 @@ typedef struct vpx_private {
  */
 static pj_status_t pj_vpx_test_alloc(pjmedia_vid_codec_factory *factory,
         const pjmedia_vid_codec_info *info) {
-    const vpx_codec_desc *desc;
     const pj_str_t vpx_tag = { "VP8", 3};
 
     PJ_ASSERT_RETURN(factory==&vpx_factory.base, PJ_EINVAL);
@@ -237,7 +241,7 @@ static pj_status_t pj_vpx_default_attr(pjmedia_vid_codec_factory *factory,
     PJ_ASSERT_RETURN(factory==&vpx_factory.base, PJ_EINVAL);
     PJ_ASSERT_RETURN(info && attr, PJ_EINVAL);
 
-    PJ_LOG(4, (THIS_FILE, "vpx default attr"));
+    TRACE_((THIS_FILE, "vpx default attr"));
 
 
     pj_bzero(attr, sizeof(pjmedia_vid_codec_param));
@@ -249,11 +253,11 @@ static pj_status_t pj_vpx_default_attr(pjmedia_vid_codec_factory *factory,
     attr->dir = PJMEDIA_DIR_ENCODING_DECODING;
 
     /* Encoded format */
-    pjmedia_format_init_video(&attr->enc_fmt, PJMEDIA_RTP_PT_VP8, 640, 480, 30,
+    pjmedia_format_init_video(&attr->enc_fmt, PJMEDIA_FORMAT_PACK('L', 'V', 'P', '8'), 640, 480, 30,
             1);
 
     /* Decoded format */
-    pjmedia_format_init_video(&attr->dec_fmt, PJMEDIA_RTP_PT_VP8, 640, 480, 30,
+    pjmedia_format_init_video(&attr->dec_fmt, PJMEDIA_FORMAT_I420, 640, 480, 30,
             1);
 
     /* Decoding fmtp */
@@ -276,11 +280,10 @@ static pj_status_t pj_vpx_default_attr(pjmedia_vid_codec_factory *factory,
  */
 static pj_status_t pj_vpx_enum_codecs(pjmedia_vid_codec_factory *factory,
         unsigned *count, pjmedia_vid_codec_info codecs[]) {
-    unsigned i;
 
     PJ_ASSERT_RETURN(codecs && *count > 0, PJ_EINVAL);
     PJ_ASSERT_RETURN(factory == &vpx_factory.base, PJ_EINVAL);
-    PJ_LOG(4, (THIS_FILE, "Enum codecs..."));
+    TRACE_((THIS_FILE, "Enum codecs..."));
 
     *count = 0;
     codecs[*count].fmt_id = PJMEDIA_FORMAT_PACK('L', 'V', 'P', '8');
@@ -317,7 +320,7 @@ static pj_status_t pj_vpx_alloc_codec(pjmedia_vid_codec_factory *factory,
     PJ_ASSERT_RETURN(factory && info && p_codec, PJ_EINVAL);
     PJ_ASSERT_RETURN(factory == &vpx_factory.base, PJ_EINVAL);
 
-    PJ_LOG(4, (THIS_FILE, "vpx pj_vpx_alloc_codec"));
+    TRACE_((THIS_FILE, "vpx pj_vpx_alloc_codec"));
 
 
     if (info->pt != PJMEDIA_RTP_PT_VP8) {
@@ -359,7 +362,7 @@ static pj_status_t pj_vpx_dealloc_codec(pjmedia_vid_codec_factory *factory,
 
     PJ_ASSERT_RETURN(factory && codec, PJ_EINVAL);
     PJ_ASSERT_RETURN(factory == &vpx_factory.base, PJ_EINVAL);
-    PJ_LOG(4, (THIS_FILE, "vpx pj_vpx_dealloc_codec"));
+    TRACE_((THIS_FILE, "vpx pj_vpx_dealloc_codec"));
 
     /* Close codec, if it's not closed. */
     vpx = (vpx_private*) codec->codec_data;
@@ -376,7 +379,7 @@ static pj_status_t pj_vpx_dealloc_codec(pjmedia_vid_codec_factory *factory,
 static pj_status_t pj_vpx_codec_init(pjmedia_vid_codec *codec, pj_pool_t *pool) {
     PJ_UNUSED_ARG(codec);
     PJ_UNUSED_ARG(pool);
-    PJ_LOG(4, (THIS_FILE, "vpx pj_vpx_codec_init"));
+    TRACE_((THIS_FILE, "vpx pj_vpx_codec_init"));
 
     return PJ_SUCCESS;
 }
@@ -388,7 +391,7 @@ static pj_status_t pj_vpx_encoder_open(vpx_private *vpx) {
     int cpu_speed, rc_max_intra_target;
     int res;
 
-    PJ_LOG(4, (THIS_FILE, "vpx pj_vpx_encoder_open"));
+    TRACE_((THIS_FILE, "vpx pj_vpx_encoder_open"));
 
     res = vpx_codec_enc_config_default(iface, &enccfg, 0);
     if (res != VPX_CODEC_OK) {
@@ -542,8 +545,8 @@ static pj_status_t pj_vpx_codec_open(pjmedia_vid_codec *codec,
     }
 
     /* Open the encoder */
-    PJ_LOG(4,
-            (THIS_FILE, "Open vpx version : %s build : %s", vpx_codec_version_str(), vpx_codec_build_config()));
+    TRACE_((THIS_FILE, "Open vpx version : %s build : %s",
+    		vpx_codec_version_str(), vpx_codec_build_config()));
 
     if (vpx->param.dir & PJMEDIA_DIR_ENCODING) {
         status = pj_vpx_encoder_open(vpx);
@@ -620,7 +623,6 @@ static pj_status_t pj_vpx_codec_encode_begin(pjmedia_vid_codec *codec,
         const pjmedia_vid_encode_opt *opt, const pjmedia_frame *input,
         unsigned out_size, pjmedia_frame *output, pj_bool_t *has_more) {
     vpx_private *vpx = (vpx_private*) codec->codec_data;
-    pj_status_t status;
     vpx_image_t *rawimg;
     vpx_enc_frame_flags_t flags = 0;
     pj_uint8_t *p;
@@ -666,8 +668,6 @@ static pj_status_t pj_vpx_codec_encode_begin(pjmedia_vid_codec *codec,
 static pj_status_t pj_vpx_codec_encode_more(pjmedia_vid_codec *codec,
         unsigned out_size, pjmedia_frame *output, pj_bool_t *has_more) {
     vpx_private *vpx = (vpx_private*) codec->codec_data;
-    const pj_uint8_t *payload;
-    pj_status_t status;
     const vpx_codec_cx_pkt_t *pkt;
 
     /* Default return */
@@ -802,21 +802,21 @@ static pj_status_t check_decode_result(pjmedia_vid_codec *codec,
 static pj_status_t pj_vpx_codec_decode_whole(pjmedia_vid_codec *codec,
         const vpx_image_t *img, const pj_timestamp *ts,
         unsigned output_buf_len, pjmedia_frame *output) {
-
+	pj_status_t status;
     int half_width = (img->d_w + 1) >> 1;
     int half_height = (img->d_h + 1) >> 1;
-    uint32_t required_size;
     uint8_t* buf;
     uint32_t pos = 0;
     uint32_t plane, y;
     uint8_t* buffer = output->buf;
     int buffer_size = img->d_w * img->d_h + half_width * half_height * 2;
-    int reference_updates = 0;
 
     /* Check decoding result, e.g: see if the format got changed,
      * keyframe found/missing.
      */
-    check_decode_result(codec, img, ts);
+    status = check_decode_result(codec, img, ts);
+    if (status != PJ_SUCCESS)
+    	return status;
 
     /* Reset output frame bit info */
     output->bit_info = 0;
@@ -848,7 +848,6 @@ static pj_status_t pj_vpx_codec_decode(pjmedia_vid_codec *codec,
         pj_size_t pkt_count, pjmedia_frame packets[], unsigned out_size,
         pjmedia_frame *output) {
     vpx_private *vpx = (vpx_private*) codec->codec_data;
-    pj_status_t status;
     pj_uint8_t *p;
     pj_uint8_t *s;
     vpx_image_t *img;
@@ -928,18 +927,35 @@ static pj_status_t pj_vpx_codec_decode(pjmedia_vid_codec *codec,
                &packets[0].timestamp,
                codec);
        pjmedia_event_publish(NULL, codec, &event, 0);
+       return PJMEDIA_CODEC_EBADBITSTREAM;
+    } else if (res == VPX_CODEC_CORRUPT_FRAME) {
+        PJ_LOG(1,
+                (THIS_FILE, "Failed to decode packet : %s of size %d (%s)",
+                		vpx_codec_err_to_string(res), vpx->dec_frame_len,
+                		vpx->decoder.err_detail));
+        /* TODO : better error code. Map with res? */
+        return PJMEDIA_CODEC_EFRMINLEN;
+    } else if (res == VPX_CODEC_INVALID_PARAM) {
+            PJ_LOG(1,
+                    (THIS_FILE, "Failed to decode packet : %s (%s)",
+                    		vpx_codec_err_to_string(res),
+                    		vpx->decoder.err_detail));
+            /* TODO : better error code. Map with res? */
+            return PJMEDIA_CODEC_EINMODE;
     } else if (res != VPX_CODEC_OK) {
         PJ_LOG(1,
-                (THIS_FILE, "Failed to decode packet : %s of size %d", vpx_codec_err_to_string(res), vpx->dec_frame_len));
+                (THIS_FILE, "Failed to decode packet : %s (%s)",
+                		vpx_codec_err_to_string(res),
+                		vpx->decoder.err_detail));
         /* TODO : better error code. Map with res? */
-        return PJ_SUCCESS;
+        return PJMEDIA_ERROR;
     }
 
     /* No need to loop here for first implementation */
     img = vpx_codec_get_frame(&vpx->decoder, &iter);
     if (img != NULL) {
         /* We have a frame available */
-        pj_vpx_codec_decode_whole(codec, img, &packets[0].timestamp, out_size, output);
+        return pj_vpx_codec_decode_whole(codec, img, &packets[0].timestamp, out_size, output);
     }
 
     return PJ_SUCCESS;

@@ -8,6 +8,7 @@ to_patch_files := $(foreach proj, $(to_patch),jni/$(proj)/.patched_sources)
 all : libraries
 	# Dispatch to external projects
 	@(./dispatch_shared_libs.sh)
+	# Build native library SUCCESSFUL
 
 libraries : ext-sources webrtc-preprocess libvpx-preprocess
 	# Build main libraries using android ndk
