@@ -35,7 +35,8 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.wizards.impl.AccountCreationWebview.OnAccountCreationDoneListener;
+import com.csipsimple.wizards.utils.AccountCreationWebview;
+import com.csipsimple.wizards.utils.AccountCreationWebview.OnAccountCreationDoneListener;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;

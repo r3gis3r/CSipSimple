@@ -21,8 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,18 +31,30 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.wizards.utils.AccountCreationWebview;
+import com.csipsimple.wizards.utils.AccountCreationWebview.OnAccountCreationDoneListener;
 
-public class Tanstagi extends SimpleImplementation {
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
-	
-	private static final String webCreationPage = "https://create.tanstagi.net/gork/new";
+public class Tanstagi extends SimpleImplementation implements OnAccountCreationDoneListener {
+	private static final String webCreationPage = "https://intimi.ca:4242/gork/new.pl";
 
 	private LinearLayout customWizard;
 	private TextView customWizardText;
-	//private WebView webView;
-	//private LinearLayout settingsContainer;
-	//private LinearLayout validationBar;
+    private AccountCreationWebview extAccCreator;
+
+    private HostnameVerifier defaultVerifier;
+
+    private SSLSocketFactory defaultSSLSocketFactory;
 	
 	@Override
 	protected String getDomain() {
@@ -70,9 +80,9 @@ public class Tanstagi extends SimpleImplementation {
 		//validationBar = (LinearLayout) parent.findViewById(R.id.validation_bar);
 		
 		updateAccountInfos(account);
-		
-		// add webview
-		//initWebView();
+
+        extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
+        extAccCreator.setUntrustedCertificate();
 	}
 	
 
@@ -95,22 +105,15 @@ public class Tanstagi extends SimpleImplementation {
 		if (acc != null && acc.id != SipProfile.INVALID_ID) {
 			customWizard.setVisibility(View.GONE);
 		} else {
-			// add a row to link 
-			customWizardText.setText(R.string.create_account);
-			customWizard.setVisibility(View.VISIBLE);
-			customWizard.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					/*
-					settingsContainer.setVisibility(View.GONE);
-					validationBar.setVisibility(View.GONE);
-					webView.setVisibility(View.VISIBLE);
-					webView.loadUrl(webCreationPage);
-					webView.requestFocus(View.FOCUS_DOWN);
-					*/
-					parent.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webCreationPage)));
-				}
-			});
+            // add a row to link
+            customWizardText.setText(R.string.create_account);
+            customWizard.setVisibility(View.VISIBLE);
+            customWizard.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    extAccCreator.show();
+                }
+            });
 		}
 	}
 	
@@ -122,66 +125,83 @@ public class Tanstagi extends SimpleImplementation {
 		account.use_zrtp = 1;
 		return account;
 	}
-	
-	
-	
-	
-	/*
-	private void initWebView() {
 
-		webView = new WebView(parent);
-		settingsContainer = (LinearLayout) parent.findViewById(R.id.settings_container);
-		LinearLayout globalContainer = (LinearLayout) settingsContainer.getParent();
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		lp.weight = 1;
-		webView.setVisibility(View.GONE);
-		globalContainer.addView(webView, 0, lp);
-		
-		loadingProgressBar = new ProgressBar(parent, null, android.R.attr.progressBarStyleHorizontal);
-		lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 30);
-		lp.gravity = 1;
-		loadingProgressBar.setVisibility(View.GONE);
-		loadingProgressBar.setIndeterminate(false);
-		loadingProgressBar.setMax(100);
-		globalContainer.addView(loadingProgressBar, 0, lp);
-		
-		
-		// Setup webview 
-		webView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
-		
-		WebSettings webSettings = webView.getSettings();
-		webSettings.setSavePassword(false);
-		webSettings.setSaveFormData(false);
-		webSettings.setJavaScriptEnabled(true);
-		webSettings.setSupportZoom(false);
-		webSettings.setCacheMode(WebSettings.LOAD_NORMAL);
-		webSettings.setNeedInitialFocus(true);
-		webView.addJavascriptInterface(new JSInterface(), "CSipSimpleWizard");
-		
-		// Adds Progress bar Support
-		webView.setWebChromeClient(new WebChromeClient() {
-			public void onProgressChanged(WebView view, int progress) {
-				if(progress < 100) {
-					loadingProgressBar.setVisibility(View.VISIBLE);
-					loadingProgressBar.setProgress(progress); 
-				}else {
-					loadingProgressBar.setVisibility(View.GONE);
-				}
-			}
-		});
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onAccountCreationDone(String username, String password) {
+        setUsername(username);
+        setPassword(password);
+    }
 
-	public class JSInterface {
-		public void finishAccountCreation(boolean success, String userName, String password) {
-			webView.setVisibility(View.GONE);
-			settingsContainer.setVisibility(View.VISIBLE);
-			validationBar.setVisibility(View.VISIBLE);
-			if(success) {
-				setUsername(userName);
-				setPassword(password);
-				parent.updateValidation();
-			}
-		}
-	}
-	*/
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean saveAndQuit() {
+        if (canSave()) {
+            parent.saveAndFinish();
+            return true;
+        }
+        return false;
+    }
+	
+    @Override
+    public void onStart() {
+        super.onStart();
+        trustEveryone();
+    }
+    
+    public void onStop() {
+        super.onStop();
+        untrustEveryone();
+    }
+    
+    private void trustEveryone() {
+        // TODO : this should actually not be everyone -- but only the one we accept
+        try {
+            if(defaultVerifier == null) {
+                defaultVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
+            }
+            if(defaultSSLSocketFactory == null) {
+                defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
+            }
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, new X509TrustManager[] {
+                    new X509TrustManager() {
+                        public void checkClientTrusted(X509Certificate[] chain,
+                                String authType) throws CertificateException {
+                        }
+
+                        public void checkServerTrusted(X509Certificate[] chain,
+                                String authType) throws CertificateException {
+                        }
+
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return new X509Certificate[0];
+                        }
+                    }
+            }, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(
+                    context.getSocketFactory());
+        } catch (Exception e) { // should never happen
+            e.printStackTrace();
+        }
+    }
+    
+    private void untrustEveryone() {
+        if(defaultVerifier != null) {
+            HttpsURLConnection.setDefaultHostnameVerifier(defaultVerifier);
+        }
+        if(defaultSSLSocketFactory != null) {
+             HttpsURLConnection.setDefaultSSLSocketFactory(defaultSSLSocketFactory);
+        }
+    }
 }

@@ -101,12 +101,14 @@ public class BasePrefsWizard extends GenericPrefs {
         isResumed = true;
 		updateDescriptions();
 		updateValidation();
+		wizard.onStart();
 	}
 	
 	@Override
 	protected void onPause() {
 	    super.onPause();
 	    isResumed = false;
+	    wizard.onStop();
 	}
 	
 	private boolean setWizardId(String wId) {

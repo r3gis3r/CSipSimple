@@ -31,7 +31,8 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
-import com.csipsimple.wizards.impl.AccountCreationWebview.OnAccountCreationDoneListener;
+import com.csipsimple.wizards.utils.AccountCreationWebview;
+import com.csipsimple.wizards.utils.AccountCreationWebview.OnAccountCreationDoneListener;
 
 public class VoipTel extends SimpleImplementation  implements OnAccountCreationDoneListener {
 

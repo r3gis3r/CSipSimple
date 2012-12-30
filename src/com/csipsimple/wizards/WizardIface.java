@@ -103,4 +103,6 @@ public interface WizardIface {
     // Extras
     void onActivityResult(int requestCode, int resultCode, Intent data);
 
+    void onStart();
+    void onStop();
 }

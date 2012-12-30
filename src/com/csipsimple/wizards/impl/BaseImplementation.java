@@ -187,4 +187,8 @@ public abstract class BaseImplementation implements WizardIface {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // By default empty implementation
     }
+    
+    public void onStart() {}
+    public void onStop() {}
+    
 }

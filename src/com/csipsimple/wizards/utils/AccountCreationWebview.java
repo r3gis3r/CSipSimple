@@ -19,7 +19,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.wizards.impl;
+package com.csipsimple.wizards.utils;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +46,7 @@ public class AccountCreationWebview {
         public boolean saveAndQuit();
     }
     
-    AccountCreationWebview(BasePrefsWizard aParent, String url, OnAccountCreationDoneListener l){
+    public AccountCreationWebview(BasePrefsWizard aParent, String url, OnAccountCreationDoneListener l){
         parent = aParent;
         creationListener = l;
         webCreationPage = url;
@@ -83,6 +83,9 @@ public class AccountCreationWebview {
         });
     }
     
+    public void setUntrustedCertificate() {
+        AccountCreationWebviewHelper.getInstance().setSSLNoSecure(webView);
+    }
 
     public class JSInterface {
         /**
