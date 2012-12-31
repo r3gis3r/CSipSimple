@@ -74,6 +74,7 @@
     <string name="enable_qos_desc">Enable QoS on packets</string>
     <string name="dscp_val">DSCP value</string>
     <string name="dscp_val_desc">DSCP value for SIP traffic</string>
+    <string name="rtp_dscp_val_desc">DSCP value for RTP traffic</string>
     <string name="udp_keep_alive_interval_wifi">Wifi UDP keep alive</string>
     <string name="udp_keep_alive_interval_mobile">Mobile UDP keep alive</string>
     <string name="tcp_keep_alive_interval_wifi">Wifi TCP keep alive</string>

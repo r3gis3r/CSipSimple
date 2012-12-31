@@ -178,7 +178,7 @@
             android:dialogMessage="@string/leave_minus_1_default"
             android:key="rtp_qos_dscp"
             android:numeric="signed"
-            android:summary="@string/dscp_val_desc"
+            android:summary="@string/rtp_dscp_val_desc"
             android:title="@string/dscp_val" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/misc" >
