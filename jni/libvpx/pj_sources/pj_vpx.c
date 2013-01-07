@@ -221,10 +221,6 @@ static pj_status_t pj_vpx_test_alloc(pjmedia_vid_codec_factory *factory,
     PJ_ASSERT_RETURN(factory==&vpx_factory.base, PJ_EINVAL);
     PJ_ASSERT_RETURN(info, PJ_EINVAL);
 
-    /* Type MUST be video. */
-    if (info->type != PJMEDIA_TYPE_VIDEO)
-    return PJMEDIA_CODEC_EUNSUP;
-
     /* Check encoding name. */
     if (pj_stricmp(&info->encoding_name, &vpx_tag) != 0)
     return PJMEDIA_CODEC_EUNSUP;

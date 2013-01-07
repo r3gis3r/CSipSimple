@@ -228,6 +228,9 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                 hasVideo = false;
             }
         }
+        if (onTriggerListener != null) {
+            onTriggerListener.onDisplayVideo(hasVideo && canVideo);
+        }
         // End of video stuff
         
         //requestLayout();

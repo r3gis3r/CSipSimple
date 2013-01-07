@@ -125,4 +125,5 @@ public interface IOnCallActionTrigger {
      */
     void onTrigger(int whichAction, SipCallSession call);
 
+    void onDisplayVideo(boolean show);
 }

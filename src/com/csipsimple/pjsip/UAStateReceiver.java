@@ -727,9 +727,7 @@ public class UAStateReceiver extends Callback {
 							}
 						}
 					}
-					callInfo.setIncoming(false);
-					callInfo.setCallStart(0);
-					
+					callInfo.applyDisconnect();
 					break;
 				default:
 					break;

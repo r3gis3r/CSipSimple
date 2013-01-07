@@ -148,6 +148,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
                     contentBuf.append(line);
                 }
                 routes = contentBuf.toString();
+                buf.close();
             }
         } catch (FileNotFoundException e) {
             Log.e(THIS_FILE, "No route file found routes", e);

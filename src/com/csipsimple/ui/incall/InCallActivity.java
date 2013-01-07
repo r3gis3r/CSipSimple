@@ -310,15 +310,12 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         }
         
         detachVideoPreview();
-
         //handler.setActivityInstance(null);
-        
         super.onDestroy();
     }
     
     @SuppressWarnings("deprecation")
     private void attachVideoPreview() {
-
         // Video stuff
         if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
             if(cameraPreview == null) {
@@ -349,14 +346,12 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         if(mainFrame != null && cameraPreview != null) {
             mainFrame.removeView(cameraPreview);
         }
-
         if(videoWakeLock != null && videoWakeLock.isHeld()) {
             videoWakeLock.release();
         }
         if(cameraPreview != null) {
             cameraPreview = null;
         }
-        
     }
 
     @Override
@@ -364,12 +359,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         setIntent(intent);
         // TODO : update UI
         Log.d(THIS_FILE, "New intent is launched");
-
         super.onNewIntent(intent);
     }
-
-    
-    
     
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -481,17 +472,13 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         
         @Override
         public void run() {
-            
-            
             // Current call is the call emphasis by the UI.
             SipCallSession mainCallInfo = null;
-            boolean showCameraPreview = false;
     
             int mainsCalls = 0;
             int heldsCalls = 0;
     
             synchronized (callMutex) {
-                
                 if (callsInfo != null) {
                     for (SipCallSession callInfo : callsInfo) {
                         Log.d(THIS_FILE,
@@ -504,13 +491,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                             } else {
                                 mainsCalls++;
                             }
-                            if(callInfo.mediaHasVideo()) {
-                                showCameraPreview = true;
-                            }
                         }
-        
                         mainCallInfo = getPrioritaryCall(callInfo, mainCallInfo);
-                        
                     }
                 }
             }
@@ -530,7 +512,6 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             
             activeCallsAdapter.notifyDataSetChanged();
             heldCallsAdapter.notifyDataSetChanged();
-            
             
             //findViewById(R.id.inCallContainer).requestLayout();
             
@@ -560,6 +541,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     case SipCallSession.InvState.DISCONNECTED:
                         Log.d(THIS_FILE, "Active call session is disconnected or null wait for quit...");
                         // This will release locks
+                        onDisplayVideo(false);
                         delayedQuit();
                         return;
     
@@ -570,31 +552,17 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             
             proximityManager.updateProximitySensorMode();
             
-            
-            // Update the camera preview visibility 
-            if(cameraPreview != null) {
-                cameraPreview.setVisibility(showCameraPreview ? View.VISIBLE : View.GONE);
-                if(showCameraPreview) {
-                    if(videoWakeLock != null) {
-                        videoWakeLock.acquire();
-                    }
-                    SipService.setVideoWindow(SipCallSession.INVALID_CALL_ID, cameraPreview, true);
-                }else {
-    
-                    if(videoWakeLock != null && videoWakeLock.isHeld()) {
-                        videoWakeLock.release();
-                    }
-                    SipService.setVideoWindow(SipCallSession.INVALID_CALL_ID, null, true);
-                }
-            }
-            
-    
             if (heldsCalls + mainsCalls == 0) {
                 delayedQuit();
             }
         }
     }
 
+    @Override
+    public void onDisplayVideo(boolean show) {
+        runOnUiThread(new UpdateVideoPreviewRunnable(show));
+    }
+    
     /**
      * Update ui from media state.
      */
@@ -603,6 +571,33 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         public void run() {
             inCallControls.setMediaState(lastMediaState);
             proximityManager.updateProximitySensorMode();
+        }
+    }
+    
+    private class UpdateVideoPreviewRunnable implements Runnable {
+        private final boolean show;
+        UpdateVideoPreviewRunnable(boolean show){
+            this.show = show;
+        }
+        @Override
+        public void run() {
+            // Update the camera preview visibility 
+            if(cameraPreview != null) {
+                cameraPreview.setVisibility(show ? View.VISIBLE : View.GONE);
+                if(show) {
+                    if(videoWakeLock != null) {
+                        videoWakeLock.acquire();
+                    }
+                    SipService.setVideoWindow(SipCallSession.INVALID_CALL_ID, cameraPreview, true);
+                }else {
+                    if(videoWakeLock != null && videoWakeLock.isHeld()) {
+                        videoWakeLock.release();
+                    }
+                    SipService.setVideoWindow(SipCallSession.INVALID_CALL_ID, null, true);
+                }
+            }else {
+                Log.w(THIS_FILE, "No camera preview available to be shown");
+            }
         }
     }
     
@@ -1512,5 +1507,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         }
         
     }
+
+
 
 }

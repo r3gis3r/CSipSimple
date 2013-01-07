@@ -23,7 +23,6 @@ package com.csipsimple.service.impl;
 
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipProfile;
-import com.csipsimple.api.SipCallSession.InvState;
 
 public class SipCallSessionImpl extends SipCallSession {
 
@@ -191,5 +190,18 @@ public class SipCallSessionImpl extends SipCallSession {
      */
     public void setMediaStatus(int mediaStatus2) {
         mediaStatus = mediaStatus2;
+    }
+
+    public void applyDisconnect() {
+        isIncoming = false;
+        mediaStatus = MediaState.NONE;
+        mediaSecure = false;
+        mediaHasVideoStream = false;
+        callStart = 0;
+        mediaSecureInfo = "";
+        canRecord = false;
+        isRecording = false;
+        zrtpSASVerified = false;
+        hasZrtp = false;
     }
 }
