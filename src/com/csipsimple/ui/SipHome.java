@@ -795,32 +795,27 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                 return true;
             case CLOSE_MENU:
                 Log.d(THIS_FILE, "CLOSE");
-                /*if (prefProviderWrapper.isValidConnectionForIncoming()) {*/
+                boolean currentlyActiveForIncoming = prefProviderWrapper.isValidConnectionForIncoming();
+                boolean futureActiveForIncoming = (prefProviderWrapper.getAllIncomingNetworks().size() > 0);
+                if (currentlyActiveForIncoming || futureActiveForIncoming) {
                     // Alert user that we will disable for all incoming calls as
                     // he want to quit
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.warning)
-                            .setMessage(getString(R.string.disconnect_and_incoming_explaination))
+                            .setMessage(
+                                    getString(currentlyActiveForIncoming ? R.string.disconnect_and_incoming_explaination
+                                            : R.string.disconnect_and_future_incoming_explaination))
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // prefWrapper.disableAllForIncoming();
                                     prefProviderWrapper.setPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, true);
                                     disconnect(true);
                                 }
                             })
                             .setNegativeButton(R.string.cancel, null)
                             .show();
-                    /*
                 } else {
-                    ArrayList<String> networks = prefProviderWrapper.getAllIncomingNetworks();
-                    if (networks.size() > 0) {
-                        String msg = getString(R.string.disconnect_and_will_restart,
-                                TextUtils.join(", ", networks));
-                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-                    }
                     disconnect(true);
                 }
-                */
                 return true;
             case HELP_MENU:
                 // Create the fragment and show it as a dialog.
