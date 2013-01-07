@@ -146,6 +146,11 @@ public final class Compatibility {
             return true;
         }
 
+        // Alcatel
+        if (android.os.Build.DEVICE.toUpperCase().startsWith("ONE_TOUCH_993D")) {
+            return true;
+        }
+        
         return false;
     }
 
@@ -813,6 +818,12 @@ public final class Compatibility {
             if (android.os.Build.DEVICE.equalsIgnoreCase("u8510") && Compatibility.isCompatible(10)) {
                 prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION,
                         Integer.toString(getDefaultAudioImplementation()));
+            }
+        }
+        if (lastSeenVersion < 2069) {
+            if (android.os.Build.DEVICE.toUpperCase().startsWith("ONE_TOUCH_993D")) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                        shouldUseModeApi());
             }
         }
         
