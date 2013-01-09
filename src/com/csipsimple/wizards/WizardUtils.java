@@ -568,10 +568,14 @@ public class WizardUtils {
 					Odorik.class));
 			WIZARDS_DICT.put("FREEPHONELINECA", new WizardInfo("FREEPHONELINECA", "Freephoneline.ca", 
 					R.drawable.ic_wizard_freephonelineca, 19, 
-					new Locale[]{
-					Locale.CANADA  
-					}, false, false, 
+					new Locale[]{ Locale.CANADA, locale("fr_CA") }, 
+					false, false, 
 					FreephoneLineCa.class));
+            WIZARDS_DICT.put("BABYTEL", new WizardInfo("BABYTEL", "Babytel", 
+                    R.drawable.ic_wizard_babytel, 45, 
+                    new Locale[]{ Locale.CANADA, locale("fr_CA") }, 
+                    false, false, 
+                    Babytel.class));
 			WIZARDS_DICT.put("SIPNET", new WizardInfo("SIPNET", "Sipnet", 
 					R.drawable.ic_wizard_sipnet, 10, 
 					new Locale[]{
@@ -874,6 +878,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_zentc, 10, 
                     new Locale[]{ locale("zh_TW") }, false, false, 
                     Zentc.class));
+            WIZARDS_DICT.put("TELEMEGA", new WizardInfo("TELEMEGA", "Telemega", 
+                    R.drawable.ic_wizard_telemega, 10, 
+                    new Locale[]{ Locale.US }, false, false, 
+                    Telemega.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
