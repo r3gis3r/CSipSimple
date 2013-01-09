@@ -1010,8 +1010,13 @@ public class SipService extends Service {
         PackageManager pm = getPackageManager();
         
         ComponentName cmp = new ComponentName(this, "com.csipsimple.ui.PrivilegedOutgoingCallBroadcaster");
-        if( pm.getComponentEnabledSetting(cmp) != enableState ) {
-            pm.setComponentEnabledSetting(cmp, enableState, PackageManager.DONT_KILL_APP);
+        try {
+            if (pm.getComponentEnabledSetting(cmp) != enableState) {
+                pm.setComponentEnabledSetting(cmp, enableState, PackageManager.DONT_KILL_APP);
+            }
+        } catch (IllegalArgumentException e) {
+            Log.d(THIS_FILE,
+                    "Current manifest has no PrivilegedOutgoingCallBroadcaster -- you can ignore this if voluntary", e);
         }
 	}
 	
