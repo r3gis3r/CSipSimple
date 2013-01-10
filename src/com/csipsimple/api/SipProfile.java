@@ -847,7 +847,7 @@ public class SipProfile implements Parcelable {
     /**
      * @see #FIELD_TRY_CLEAN_REGISTERS
      */
-    public int try_clean_registers = 0;
+    public int try_clean_registers = 1;
     /**
      * Chache holder icon for the account wizard representation.<br/>
      * This will not not be filled by default. You have to get it from wizard

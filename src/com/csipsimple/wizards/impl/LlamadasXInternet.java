@@ -35,9 +35,16 @@ public class LlamadasXInternet extends SimpleImplementation {
     @Override
     public void fillLayout(final SipProfile account) {
         super.fillLayout(account);
-
+        
         accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 
+    }
+    @Override
+    public SipProfile buildAccount(SipProfile account) {
+        SipProfile acc = super.buildAccount(account);
+        acc.contact_rewrite_method = 1;
+        acc.try_clean_registers = 0;
+        return acc;
     }
 
     @Override

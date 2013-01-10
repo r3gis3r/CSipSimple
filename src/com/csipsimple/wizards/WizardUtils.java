@@ -886,6 +886,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_qtel, 10, 
                     new Locale[]{  locale("hu_HU") }, false, false, 
                     QuaesTel.class));
+            WIZARDS_DICT.put("LLAMAXINTER", new WizardInfo("LLAMAXINTER", "Llamadas X Internet", 
+                    R.drawable.ic_wizard_llamadas_xinternet, 10, 
+                    new Locale[]{  locale("es_MX") }, false, false, 
+                    LlamadasXInternet.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

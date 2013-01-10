@@ -43,7 +43,6 @@ public class EuroTelefon extends SimpleImplementation {
 		account = super.buildAccount(account);
 		account.reg_timeout = 90;
 		account.vm_nbr = "*197";
-		account.try_clean_registers = 1;
 		return account;
 	}
 	

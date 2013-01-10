@@ -183,7 +183,6 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 		//Proxy useless....?????
 		//account.proxies = null;
 		account.vm_nbr = "*1234";
-		account.try_clean_registers = 1;
 		return account;
 	}
 	
