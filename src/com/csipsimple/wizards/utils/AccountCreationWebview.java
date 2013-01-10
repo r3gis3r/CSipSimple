@@ -21,6 +21,7 @@
 
 package com.csipsimple.wizards.utils;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -46,6 +47,7 @@ public class AccountCreationWebview {
         public boolean saveAndQuit();
     }
     
+    @SuppressLint("SetJavaScriptEnabled")
     public AccountCreationWebview(BasePrefsWizard aParent, String url, OnAccountCreationDoneListener l){
         parent = aParent;
         creationListener = l;
@@ -87,6 +89,14 @@ public class AccountCreationWebview {
         AccountCreationWebviewHelper.getInstance().setSSLNoSecure(webView);
     }
 
+    private class HideWebviewRunnable implements Runnable {
+        public void run() {
+            webView.setVisibility(View.GONE);
+            settingsContainer.setVisibility(View.VISIBLE);
+            validationBar.setVisibility(View.VISIBLE);
+        }
+    }
+    
     public class JSInterface {
         /**
          * Allow webview to callback application about the fact account has been fully created.
@@ -96,9 +106,7 @@ public class AccountCreationWebview {
          * @param password the password to use for this user account
          */
         public void finishAccountCreation(boolean success, String userName, String password) {
-            webView.setVisibility(View.GONE);
-            settingsContainer.setVisibility(View.VISIBLE);
-            validationBar.setVisibility(View.VISIBLE);
+            parent.runOnUiThread(new HideWebviewRunnable());
             if(success) {
                 if(creationListener != null) {
                     creationListener.onAccountCreationDone(userName, password);
@@ -117,9 +125,7 @@ public class AccountCreationWebview {
          * @return true if the account was saved and quitted.
          */
         public boolean finishAccountCreationAndQuit(boolean success, String userName, String password) {
-            webView.setVisibility(View.GONE);
-            settingsContainer.setVisibility(View.VISIBLE);
-            validationBar.setVisibility(View.VISIBLE);
+            parent.runOnUiThread(new HideWebviewRunnable());
             if(success) {
                 if(creationListener != null) {
                     creationListener.onAccountCreationDone(userName, password);
