@@ -882,6 +882,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_telemega, 10, 
                     new Locale[]{ Locale.US }, false, false, 
                     Telemega.class));
+            WIZARDS_DICT.put("QUAESTEL", new WizardInfo("QUAESTEL", "QuaesTel", 
+                    R.drawable.ic_wizard_qtel, 10, 
+                    new Locale[]{  locale("hu_HU") }, false, false, 
+                    QuaesTel.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
