@@ -84,7 +84,7 @@ public class DeviceStateReceiver extends BroadcastReceiver {
             if (accId == SipProfile.INVALID_ID) {
                 // allow remote side to send us integers.
                 // previous call will warn, but that's fine, no worries
-                accId = intent.getLongExtra(SipProfile.FIELD_ID, SipProfile.INVALID_ID);
+                accId = intent.getIntExtra(SipProfile.FIELD_ID, (int) SipProfile.INVALID_ID);
             }
 
             if (accId != SipProfile.INVALID_ID) {
