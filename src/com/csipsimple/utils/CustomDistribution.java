@@ -149,5 +149,13 @@ public final class CustomDistribution {
         return "CSipSimple";
     }
 
-	
+    /**
+     * Get the complete URL for the nightly updater.
+     * Return null or "" to disable.
+     * Check NightlyUpdater.java for the full URL and how the server should respond...
+     * @return
+     */
+	public static String getNightlyUpdaterURL() {
+		return "http://nightlies.csipsimple.com/";
+	}
 }

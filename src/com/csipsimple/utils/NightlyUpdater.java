@@ -71,7 +71,7 @@ public class NightlyUpdater {
         channel = getChannelFolder(context);
 	}
 	
-	private final static String BASE_UPDATE_VERSION = "http://nightlies.csipsimple.com/";
+	private final static String BASE_UPDATE_VERSION = CustomDistribution.getNightlyUpdaterURL();
 	
 	private final static String META_TYPE = "app_type";
 	private final static String META_CHANNEL = "app_channel";
@@ -91,9 +91,11 @@ public class NightlyUpdater {
 	        if(metaData != null) {
                 String appType = metaData.getString(META_TYPE);
         	    if(!TextUtils.isEmpty(appType)) {
-            	    if(NIGHTLY_TYPE.equalsIgnoreCase(appType)) {
-            	        return true;
-            	    }
+        	    		if (!TextUtils.isEmpty(BASE_UPDATE_VERSION)) {
+        	    			if (NIGHTLY_TYPE.equalsIgnoreCase(appType)) {
+        	    					return true;
+        	    			}
+        	    		}
         	    }
 	        }
 	    } catch (NameNotFoundException e) {
