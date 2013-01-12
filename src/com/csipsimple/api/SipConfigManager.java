@@ -1079,6 +1079,16 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String DISABLE_TCP_SWITCH = "disable_tcp_switch";
+    
+    /**
+     * Disable rport in request
+     * Only activate for buggy servers. Disable RFC 3581 support by not sending rport.
+     * Preferred fix is to fix the server that get broken with extra parameters : even if 
+     * not support this RFC should never forbid to register if rport appears.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String DISABLE_RPORT = "disable_rport";
 
     // Enums
     /**

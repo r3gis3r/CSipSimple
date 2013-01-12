@@ -351,6 +351,7 @@ PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg) {
 	css_cfg->tsx_t4_timeout = PJSIP_T4_TIMEOUT;
 	css_cfg->tsx_td_timeout = PJSIP_TD_TIMEOUT;
 	css_cfg->disable_tcp_switch = PJ_TRUE;
+    css_cfg->disable_rport = PJ_FALSE;
 	css_cfg->use_noise_suppressor = PJ_FALSE;
 }
 
@@ -425,6 +426,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 	pjsip_sip_cfg_var.tsx.t4 = css_cfg->tsx_t4_timeout;
 	pjsip_sip_cfg_var.tsx.td = css_cfg->tsx_td_timeout;
 	pjsip_sip_cfg_var.endpt.disable_tcp_switch = css_cfg->disable_tcp_switch;
+    pjsip_sip_cfg_var.endpt.disable_rport = css_cfg->disable_rport;
 
 	// Audio codec cfg
 	css_var.extra_aud_codecs_cnt = css_cfg->extra_aud_codecs_cnt;

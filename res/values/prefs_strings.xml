@@ -108,6 +108,8 @@
     <string name="network_route_polling_desc">Android 4.0 VPN check workaround. Leave to 0 if not in this case to disable</string>
     <string name="disable_tcp_switch">Disable TCP switch</string>
     <string name="disable_tcp_switch_desc">If activated, prevent the stack to switch to TCP for big UDP packets.</string>
+    <string name="disable_rport">Disable rport in request</string>
+    <string name="disable_rport_desc">Only activate for buggy servers. Disable RFC 3581 support by not sending rport.</string>
     <string name="add_bandwidth_tias_in_sdp">Add bandwidth modifier TIAS in SDP</string>
     <string name="add_bandwidth_tias_in_sdp_desc">As per RFC3890. Needed for video on Avaya servers but breaks buggy parsing for some SIP servers.</string>
 

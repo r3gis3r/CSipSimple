@@ -27,8 +27,13 @@
         android:key="add_bandwidth_tias_in_sdp"
         android:summary="@string/add_bandwidth_tias_in_sdp_desc"
         android:title="@string/add_bandwidth_tias_in_sdp" />
-    <!-- Timers -->
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="disable_rport"
+        android:summary="@string/disable_rport_desc"
+        android:title="@string/disable_rport" />
 
+    <!-- Timers -->
     <EditTextPreference
         android:defaultValue="90"
         android:key="timer_min_se"

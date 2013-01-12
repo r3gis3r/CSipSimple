@@ -262,9 +262,16 @@ public class PjSipService {
                 cssCfg.setTcp_keep_alive_interval(prefsWrapper.getTcpKeepAliveInterval());
                 cssCfg.setTls_keep_alive_interval(prefsWrapper.getTlsKeepAliveInterval());
                 
-                cssCfg.setDisable_tcp_switch(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.DISABLE_TCP_SWITCH) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
-                cssCfg.setAdd_bandwidth_tias_in_sdp(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ADD_BANDWIDTH_TIAS_IN_SDP) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
-                
+                cssCfg.setDisable_tcp_switch(prefsWrapper
+                        .getPreferenceBooleanValue(SipConfigManager.DISABLE_TCP_SWITCH) ? pjsuaConstants.PJ_TRUE
+                        : pjsuaConstants.PJ_FALSE);
+                cssCfg.setDisable_rport(prefsWrapper
+                        .getPreferenceBooleanValue(SipConfigManager.DISABLE_RPORT) ? pjsuaConstants.PJ_TRUE
+                        : pjsuaConstants.PJ_FALSE);
+                cssCfg.setAdd_bandwidth_tias_in_sdp(prefsWrapper
+                        .getPreferenceBooleanValue(SipConfigManager.ADD_BANDWIDTH_TIAS_IN_SDP) ? pjsuaConstants.PJ_TRUE
+                        : pjsuaConstants.PJ_FALSE);
+
                 // Transaction timeouts
                 int tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_T1_TIMEOUT);
                 if(tsx_to > 0) {

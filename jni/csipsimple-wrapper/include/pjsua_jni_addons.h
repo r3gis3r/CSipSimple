@@ -129,6 +129,13 @@ typedef struct csipsimple_config {
 	pj_bool_t disable_tcp_switch;
 
 	/**
+     * Disable rport in request.
+     *
+     * Default is PJ_FALSE.
+     */
+    pj_bool_t disable_rport;
+
+	/**
 	 * Enable or not noise suppressor.
 	 * Only has impact if using webRTC echo canceller as backend.
 	 * Disabled by default

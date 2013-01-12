@@ -826,6 +826,9 @@ public final class Compatibility {
                         shouldUseModeApi());
             }
         }
+        if(lastSeenVersion < 2081) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.DISABLE_RPORT, false);
+        }
         
         prefWrapper.endEditing();
     }
