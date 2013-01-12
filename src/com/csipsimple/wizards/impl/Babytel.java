@@ -45,7 +45,6 @@ public class Babytel extends Advanced {
         super.fillLayout(account);
         accountUserName.setDialogTitle(R.string.w_common_phone_number_desc);
         accountUserName.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-        accountCallerId.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
         hidePreference(null, FIELD_TCP);
         hidePreference(null, FIELD_PROXY);
         hidePreference(null, FIELD_SERVER);
