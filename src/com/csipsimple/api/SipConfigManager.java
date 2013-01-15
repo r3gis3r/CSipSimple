@@ -553,6 +553,13 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String USE_ALTERNATE_UNLOCKER = "use_alternate_unlocker";
+    /**
+     * Start application dialer UI with text dialer instead of digit dialer.
+     * By default false.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String START_WITH_TEXT_DIALER = "start_with_text_dialer";
 
     // NETWORK
     /**

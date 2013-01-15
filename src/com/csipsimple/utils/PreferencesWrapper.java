@@ -123,10 +123,10 @@ public class PreferencesWrapper {
         put(SipConfigManager.DTMF_WAIT_TIME, "2000");
 		
 
-		put(SipConfigManager.GSM_INTEGRATION_TYPE, "0");
-		put(SipConfigManager.DIAL_PRESS_TONE_MODE, "0");
-		put(SipConfigManager.DIAL_PRESS_VIBRATE_MODE, "0");
-        put(SipConfigManager.DTMF_PRESS_TONE_MODE, "2");
+		put(SipConfigManager.GSM_INTEGRATION_TYPE, Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
+		put(SipConfigManager.DIAL_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
+		put(SipConfigManager.DIAL_PRESS_VIBRATE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
+        put(SipConfigManager.DTMF_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
 		
 		put(SipConfigManager.DEFAULT_CALLER_ID, "");
 		put(SipConfigManager.THEME, "");
@@ -205,6 +205,7 @@ public class PreferencesWrapper {
 		put(HAS_BEEN_QUIT, false);
 		put(HAS_ALREADY_SETUP_SERVICE, false);
 		put(SipConfigManager.LOG_USE_DIRECT_FILE, false);
+		put(SipConfigManager.START_WITH_TEXT_DIALER, false);
 		
 		//Calls
 		put(SipConfigManager.AUTO_RECORD_CALLS, false);
@@ -638,23 +639,6 @@ public class PreferencesWrapper {
 		}
 		return false;
 	}
-
-	public boolean startIsDigit() {
-		return !prefs.getBoolean("start_with_text_dialer", false);
-	}
-	
-	
-	public int getGsmIntegrationType() {
-		int prefsValue = 1;
-		String gsmType = getPreferenceStringValue(SipConfigManager.GSM_INTEGRATION_TYPE);
-		try {
-			prefsValue = Integer.parseInt(gsmType);
-		}catch(NumberFormatException e) {
-			Log.e(THIS_FILE, "Gsm type " + gsmType + " not well formated");
-		}
-		return prefsValue;
-	}
-
 
 	private final static String CONFIG_FOLDER = "configs";
 	private final static String RECORDS_FOLDER = "records";

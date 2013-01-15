@@ -165,9 +165,8 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         autoCompleteAdapter = new ContactsSearchAdapter(getActivity());
         autoCompleteListItemListener = new OnAutoCompleteListItemClicked(autoCompleteAdapter);
 
-        // This implies
         if(isDigit == null) {
-            isDigit = prefsWrapper.startIsDigit();
+            isDigit = !prefsWrapper.getPreferenceBooleanValue(SipConfigManager.START_WITH_TEXT_DIALER);
         }
         
         setHasOptionsMenu(true);

@@ -28,7 +28,7 @@
     <string name="use_anyway">Use anyway</string>
     <string name="use_anyway_desc">Don\'t care Android network status. Should not be used for normal cases</string>
     <string name="use_3g">Use 3G (and better)</string>
-    <string name="use_3g_disclamer">Your carrier MUST allow you to use this option</string>
+    <string name="use_3g_disclamer">Your carrier MUST allow you to use this option. Note that mobile carrier may also bill extra charge for data usage.</string>
     <string name="use_edge">Use EDGE</string>
     <string name="use_gprs">Use GPRS</string>
     <string name="lock_wifi">Lock WiFi</string>
@@ -321,7 +321,7 @@
     <string name="never_available_desc">Activate the SIP client automatically when necessary</string>
     <string name="availability_tg">Mobile data availability</string>
     <string name="tg_allowed">I\'m allowed to use mobile</string>
-    <string name="tg_allowed_desc">Your carrier allows VoIP over your mobile data connection</string>
+    <string name="tg_allowed_desc">Your carrier allows VoIP over your mobile data connection. Note that mobile carrier may also bill extra charge for data usage.</string>
     <string name="codecs_availability_text">Only available if sip is currently registered</string>
 
     <!-- Calls settings -->

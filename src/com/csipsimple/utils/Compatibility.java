@@ -541,11 +541,12 @@ public final class Compatibility {
      * @return
      */
     public static boolean canMakeGSMCall(Context context) {
-        PreferencesWrapper prefs = new PreferencesWrapper(context);
-        if (prefs.getGsmIntegrationType() == SipConfigManager.GENERIC_TYPE_AUTO) {
+        int integType = SipConfigManager.getPreferenceIntegerValue(context,
+                SipConfigManager.GSM_INTEGRATION_TYPE, SipConfigManager.GENERIC_TYPE_PREVENT);
+        if (integType == SipConfigManager.GENERIC_TYPE_AUTO) {
             return PhoneCapabilityTester.isPhone(context);
         }
-        if (prefs.getGsmIntegrationType() == SipConfigManager.GENERIC_TYPE_PREVENT) {
+        if (integType == SipConfigManager.GENERIC_TYPE_PREVENT) {
             return false;
         }
         return true;
