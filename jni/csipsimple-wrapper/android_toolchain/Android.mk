@@ -43,9 +43,7 @@ LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/q850_reason_
 	$(JNI_SRC_DIR)/zrtp_android.c $(JNI_SRC_DIR)/zrtp_android_callback.cpp \
 	$(JNI_SRC_DIR)/ringback_tone.c \
 	$(JNI_SRC_DIR)/android_logger.c $(JNI_SRC_DIR)/audio_codecs.c \
-	$(JNI_SRC_DIR)/csipsimple_codecs_utils.c \
-	$(JNI_SRC_DIR)/pjsip_mobile_reg_handler.cpp 
-
+	$(JNI_SRC_DIR)/csipsimple_codecs_utils.c 
 
 
 LOCAL_LDLIBS += -llog -ldl
@@ -56,8 +54,11 @@ ifeq ($(MY_USE_AMR),1)
 endif
 
 
+# Pjsip basics
 LOCAL_STATIC_LIBRARIES += swig-glue pjsip pjmedia swig-glue pjnath pjlib-util pjlib resample srtp 
 
+# Pjsip modules
+LOCAL_STATIC_LIBRARIES += pjsip_mod_reghandler
 
 ifeq ($(MY_USE_ILBC),1)
 	LOCAL_STATIC_LIBRARIES += ilbc

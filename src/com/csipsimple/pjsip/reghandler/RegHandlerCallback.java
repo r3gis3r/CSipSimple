@@ -19,20 +19,21 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.pjsip;
+package com.csipsimple.pjsip.reghandler;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.SparseIntArray;
 
+import com.csipsimple.pjsip.PjSipService;
 import com.csipsimple.utils.Log;
 
 import org.pjsip.pjsua.MobileRegHandlerCallback;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjsua;
 
-public class RegHandlerReceiver extends MobileRegHandlerCallback {
+public class RegHandlerCallback extends MobileRegHandlerCallback {
     private static final String THIS_FILE = "RegHandlerReceiver";
     private static final String REG_URI_PREFIX = "reg_uri_";
     private static final String REG_EXPIRES_PREFIX = "reg_expires_";
@@ -41,8 +42,8 @@ public class RegHandlerReceiver extends MobileRegHandlerCallback {
     private SparseIntArray accountCleanRegisters = new SparseIntArray();
     private pj_str_t EMPTY_STR = pjsua.pj_str_copy("");
     
-    public RegHandlerReceiver(PjSipService pjSipService) {
-        prefs_db = pjSipService.service.getSharedPreferences("reg_handler_db", Context.MODE_PRIVATE);
+    public RegHandlerCallback(Context ctxt) {
+        prefs_db = ctxt.getSharedPreferences("reg_handler_db", Context.MODE_PRIVATE);
     }
     
     public void set_account_cleaning_state(int acc_id, int active) {
@@ -74,5 +75,5 @@ public class RegHandlerReceiver extends MobileRegHandlerCallback {
         // TODO : have this asynchronous
         edt.commit();
     }
-    
+
 }

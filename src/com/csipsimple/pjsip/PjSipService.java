@@ -50,6 +50,7 @@ import com.csipsimple.pjsip.player.IPlayerHandler;
 import com.csipsimple.pjsip.player.impl.SimpleWavPlayerHandler;
 import com.csipsimple.pjsip.recorder.IRecorderHandler;
 import com.csipsimple.pjsip.recorder.impl.SimpleWavRecorderHandler;
+import com.csipsimple.pjsip.reghandler.RegHandlerModule;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
@@ -92,6 +93,7 @@ import org.pjsip.pjsua.pjsua_transport_config;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -125,8 +127,6 @@ public class PjSipService {
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
     private SparseArray<TimerTask> dtmfTasks = new SparseArray<TimerTask>(5);
     private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
-    private RegHandlerReceiver regHandlerReceiver;
-    
     
     // -------
     // Locks
@@ -226,14 +226,12 @@ public class PjSipService {
                     Log.d(THIS_FILE, "create zrtp receiver");
                     zrtpReceiver = new ZrtpStateReceiver(this);
                 }
-                if(regHandlerReceiver == null) {
-                    regHandlerReceiver = new RegHandlerReceiver(this);
-                }
                 if (mediaManager == null) {
                     mediaManager = new MediaManager(service);
                 }
-
                 mediaManager.startService();
+                
+                initModules();
                 
                 DTMF_TONE_PAUSE_LENGTH = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DTMF_PAUSE_TIME);
                 DTMF_TONE_WAIT_LENGTH = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DTMF_WAIT_TIME);
@@ -511,9 +509,6 @@ public class PjSipService {
                     cleanPjsua();
                     return false;
                 }
-                
-                status = pjsua.mobile_reg_handler_init();
-                pjsua.mobile_reg_handler_set_callback(regHandlerReceiver);
             }
 
             // Add transports
@@ -579,6 +574,11 @@ public class PjSipService {
                                 tlsPort == 0 ? tlsPort : tlsPort + 10);
                     }
                 }
+            }
+            
+            // Add pjsip modules
+            for(PjsipModule mod : pjsipModules.values()){
+                mod.onBeforeStartPjsip();
             }
 
             // Initialization is done, now start pjsua
@@ -793,7 +793,7 @@ public class PjSipService {
         if (currentAccountStatus.isAddedToStack()) {
             pjsua.csipsimple_set_acc_user_data(account.cfg, account.css_cfg);
             status = pjsua.acc_modify(currentAccountStatus.getPjsuaId(), account.cfg);
-            regHandlerReceiver.set_account_cleaning_state(currentAccountStatus.getPjsuaId(), profile.try_clean_registers);
+            beforeAccountRegistration(currentAccountStatus.getPjsuaId(), profile);
             ContentValues cv = new ContentValues();
             cv.put(SipProfileState.ADDED_STATUS, status);
             service.getContentResolver().update(
@@ -842,7 +842,7 @@ public class PjSipService {
                 // Cause of standard account different from local account :)
                 pjsua.csipsimple_set_acc_user_data(account.cfg, account.css_cfg);
                 status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
-                regHandlerReceiver.set_account_cleaning_state(accId[0], profile.try_clean_registers);
+                beforeAccountRegistration(accId[0], profile);
                 pjsua.acc_set_registration(accId[0], 1);
             }
 
@@ -859,6 +859,12 @@ public class PjSipService {
         }
 
         return status == pjsuaConstants.PJ_SUCCESS;
+    }
+    
+    void beforeAccountRegistration(int pjId, SipProfile profile) {
+        for(PjsipModule mod : pjsipModules.values()) {
+            mod.onBeforeAccountStartRegistration(pjId, profile);
+        }
     }
 
     /**
@@ -2176,5 +2182,39 @@ public class PjSipService {
         return (rx_level[0] << 8 | tx_level[0] );
     }
 
+
+    private Map<String, PjsipModule> pjsipModules  = new  HashMap<String, PjsipModule>();
+
+    private void initModules() {
+        // TODO : this should be more modular and done from outside
+        PjsipModule rModule = new RegHandlerModule();
+        pjsipModules.put(RegHandlerModule.class.getCanonicalName(), rModule);
+        
+        for(PjsipModule mod : pjsipModules.values()) {
+            mod.setContext(service);
+        }
+    }
+
+    public interface PjsipModule {
+        /**
+         * Set the android context for the module.
+         * Could be usefull to get preferences for examples.
+         * @param ctxt android context
+         */
+        void setContext(Context ctxt);
+
+        /**
+         * Here pjsip endpoint should have this module added.
+         */
+        void onBeforeStartPjsip();
+        
+        /**
+         * This is fired just after account was added to pjsip and before will be registered.
+         * Modules does not necessarily implement something here.
+         * @param pjId the pjsip id of the added account.
+         * @param acc the profile account.
+         */
+        void onBeforeAccountStartRegistration(int pjId, SipProfile acc);
+    }
 
 }
