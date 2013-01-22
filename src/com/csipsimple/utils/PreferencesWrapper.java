@@ -643,7 +643,6 @@ public class PreferencesWrapper {
 	private final static String CONFIG_FOLDER = "configs";
 	private final static String RECORDS_FOLDER = "records";
 	private final static String LOGS_FOLDER = "logs";
-	/*private final static String ZRTP_FOLDER = "zrtp";*/
 	 
 	private static File getStorageFolder(Context ctxt, boolean preferCache) {
 		File root = Environment.getExternalStorageDirectory();
