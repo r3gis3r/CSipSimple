@@ -637,8 +637,13 @@ public class PjSipService {
         Log.d(THIS_FILE, "Detroying...");
         // This will destroy all accounts so synchronize with accounts
         // management lock
-        long flags = 1;
+        //long flags = 1; /*< Lazy disconnect : only RX */
+        // Try with TX & RX if network is considered as available
+        long flags = 0;
         if(!prefsWrapper.isValidConnectionForOutgoing()) {
+            // If we are current not valid for outgoing, 
+            // it means that we don't want the network for SIP now
+            // so don't use RX | TX to not consume data at all
             flags = 3;
         }
         pjsua.csipsimple_destroy(flags);
