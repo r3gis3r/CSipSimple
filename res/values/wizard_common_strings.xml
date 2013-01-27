@@ -28,6 +28,7 @@
     <string name="w_common_server">Server</string>
     <string name="w_common_server_desc">SIP server domain/IP[:port]</string>
     <string name="create_account">Create account</string>
+    <string name="already_have_account">I already have an account</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="email_address">Email address</string>

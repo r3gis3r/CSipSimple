@@ -26,19 +26,16 @@ import android.content.Intent;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.wizards.utils.AccountCreationFirstView;
+import com.csipsimple.wizards.utils.AccountCreationFirstView.OnAccountCreationFirstViewListener;
 
 import java.util.Locale;
 
-public class Mondotalk extends SimpleImplementation {
-
-    private LinearLayout customWizard;
-    private TextView customWizardText;
+public class Mondotalk extends SimpleImplementation implements OnAccountCreationFirstViewListener {
     
 	@Override
 	protected String getDomain() {
@@ -51,6 +48,9 @@ public class Mondotalk extends SimpleImplementation {
 	}
 	
     private int CREATE_ACCOUNT;
+    private ViewGroup settingsContainer;
+    private ViewGroup validationBar;
+    private AccountCreationFirstView firstView;
 	
 	@Override
 	public void fillLayout(SipProfile account) {
@@ -59,10 +59,9 @@ public class Mondotalk extends SimpleImplementation {
 		accountUsername.setTitle(R.string.w_common_phone_number);
 		accountUsername.setDialogTitle(R.string.w_common_phone_number);
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-		
-        //Get wizard specific row
-        customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
-        customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
+
+        settingsContainer = (ViewGroup) parent.findViewById(R.id.settings_container);
+        validationBar = (ViewGroup) parent.findViewById(R.id.validation_bar);
         
         CREATE_ACCOUNT = parent.getFreeSubActivityCode();
 		
@@ -95,23 +94,26 @@ public class Mondotalk extends SimpleImplementation {
 	}
 	
 	
-	
 
+    private void setFirstViewVisibility(boolean visible) {
+        if(firstView != null) {
+            firstView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+        validationBar.setVisibility(visible ? View.GONE : View.VISIBLE);
+        settingsContainer.setVisibility(visible ? View.GONE : View.VISIBLE);
+    }
+    
     private void updateAccountInfos(final SipProfile acc) {
         if (acc != null && acc.id != SipProfile.INVALID_ID) {
-            customWizard.setVisibility(View.GONE);
-            // Not yet account balance helper
-            //accountBalanceHelper.launchRequest(acc);
+            setFirstViewVisibility(false);
         } else {
-            // add a row to link 
-            customWizardText.setText(R.string.create_account);
-            customWizard.setVisibility(View.VISIBLE);
-            customWizard.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    parent.startActivityForResult(new Intent(parent, MondotalkCreate.class), CREATE_ACCOUNT);
-                }
-            });
+            if(firstView == null) {
+                firstView = new AccountCreationFirstView(parent);
+                ViewGroup globalContainer = (ViewGroup) settingsContainer.getParent();
+                firstView.setOnAccountCreationFirstViewListener(this);
+                globalContainer.addView(firstView);
+            }
+            setFirstViewVisibility(true);
         }
     }
     
@@ -130,6 +132,18 @@ public class Mondotalk extends SimpleImplementation {
                 }
             }
         }
+    }
+    
+
+    @Override
+    public void onCreateAccountRequested() {
+        setFirstViewVisibility(false);
+        parent.startActivityForResult(new Intent(parent, MondotalkCreate.class), CREATE_ACCOUNT);
+    }
+
+    @Override
+    public void onEditAccountRequested() {
+        setFirstViewVisibility(false);
     }
     
 }

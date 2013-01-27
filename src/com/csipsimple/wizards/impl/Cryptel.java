@@ -23,26 +23,29 @@ package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.wizards.utils.AccountCreationFirstView;
+import com.csipsimple.wizards.utils.AccountCreationFirstView.OnAccountCreationFirstViewListener;
 import com.csipsimple.wizards.utils.AccountCreationWebview;
 import com.csipsimple.wizards.utils.AccountCreationWebview.OnAccountCreationDoneListener;
 
 
-public class Cryptel extends SimpleImplementation implements OnAccountCreationDoneListener {
+public class Cryptel extends SimpleImplementation implements OnAccountCreationDoneListener, OnAccountCreationFirstViewListener {
 
     
     private static final String webCreationPage = "http://50.28.50.63/index.php";
 
-    private LinearLayout customWizard;
-    private TextView customWizardText;
     private AccountCreationWebview extAccCreator;
+
+    private ViewGroup settingsContainer;
+    private ViewGroup validationBar;
+
+    private AccountCreationFirstView firstView;
     
 	@Override
 	protected String getDomain() {
@@ -64,11 +67,10 @@ public class Cryptel extends SimpleImplementation implements OnAccountCreationDo
         
         accountPassword.setTitle(R.string.w_cryptel_password);
         accountPassword.setDialogTitle(R.string.w_cryptel_password);
-        
 
-        //Get wizard specific row
-        customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
-        customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
+        settingsContainer = (ViewGroup) parent.findViewById(R.id.settings_container);
+        validationBar = (ViewGroup) parent.findViewById(R.id.validation_bar);
+        
         extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
         
         updateAccountInfos(account);
@@ -131,51 +133,26 @@ public class Cryptel extends SimpleImplementation implements OnAccountCreationDo
     public boolean needRestart() {
         return true;
     }
-    
+
+    private void setFirstViewVisibility(boolean visible) {
+        if(firstView != null) {
+            firstView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+        validationBar.setVisibility(visible ? View.GONE : View.VISIBLE);
+        settingsContainer.setVisibility(visible ? View.GONE : View.VISIBLE);
+    }
 
     private void updateAccountInfos(final SipProfile acc) {
         if (acc != null && acc.id != SipProfile.INVALID_ID) {
-            customWizard.setVisibility(View.GONE);
-            /*
-            Thread t = new Thread() {
-
-                public void run() {
-                    try {
-                        HttpClient httpClient = new DefaultHttpClient();
-                        
-                        String requestURL = "https://soap.ippi.fr/credit/check_credit.php?"
-                            + "login=" + acc.username
-                            + "&code=" + MD5.MD5Hash(acc.data + DateFormat.format("yyyyMMdd", new Date()));
-                        
-                        HttpGet httpGet = new HttpGet(requestURL);
-
-                        // Create a response handler
-                        HttpResponse httpResponse = httpClient.execute(httpGet);
-                        if(httpResponse.getStatusLine().getStatusCode() == 200) {
-                            InputStreamReader isr = new InputStreamReader(httpResponse.getEntity().getContent());
-                            BufferedReader br = new BufferedReader(isr);
-                            String line = br.readLine();
-                            creditHandler.sendMessage(creditHandler.obtainMessage(DID_SUCCEED, line));
-                        }else {
-                            creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
-                        }
-                    } catch (Exception e) {
-                        creditHandler.sendMessage(creditHandler.obtainMessage(DID_ERROR));
-                    }
-                }
-            };
-            t.start();
-            */
+            setFirstViewVisibility(false);
         } else {
-            // add a row to link 
-            customWizardText.setText(R.string.create_account);
-            customWizard.setVisibility(View.VISIBLE);
-            customWizard.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    extAccCreator.show();
-                }
-            });
+            if(firstView == null) {
+                firstView = new AccountCreationFirstView(parent);
+                ViewGroup globalContainer = (ViewGroup) settingsContainer.getParent();
+                firstView.setOnAccountCreationFirstViewListener(this);
+                globalContainer.addView(firstView);
+            }
+            setFirstViewVisibility(true);
         }
     }
 
@@ -194,5 +171,16 @@ public class Cryptel extends SimpleImplementation implements OnAccountCreationDo
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onCreateAccountRequested() {
+        setFirstViewVisibility(false);
+        extAccCreator.show();
+    }
+
+    @Override
+    public void onEditAccountRequested() {
+        setFirstViewVisibility(false);
     }
 }

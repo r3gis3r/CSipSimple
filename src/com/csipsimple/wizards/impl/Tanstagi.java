@@ -23,16 +23,20 @@ package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.wizards.utils.AccountCreationFirstView;
+import com.csipsimple.wizards.utils.AccountCreationFirstView.OnAccountCreationFirstViewListener;
 import com.csipsimple.wizards.utils.AccountCreationWebview;
 import com.csipsimple.wizards.utils.AccountCreationWebview.OnAccountCreationDoneListener;
+
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -41,20 +45,21 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-public class Tanstagi extends SimpleImplementation implements OnAccountCreationDoneListener {
+public class Tanstagi extends SimpleImplementation implements OnAccountCreationDoneListener, OnAccountCreationFirstViewListener {
 	private static final String webCreationPage = "https://intimi.ca:4242/gork/new.pl";
 
-	private LinearLayout customWizard;
-	private TextView customWizardText;
+	//private LinearLayout customWizard;
+	//private TextView customWizardText;
     private AccountCreationWebview extAccCreator;
 
     private HostnameVerifier defaultVerifier;
 
     private SSLSocketFactory defaultSSLSocketFactory;
+
+    private AccountCreationFirstView firstView;
+
+    private ViewGroup settingsContainer;
+    private ViewGroup validationBar;
 	
 	@Override
 	protected String getDomain() {
@@ -73,11 +78,8 @@ public class Tanstagi extends SimpleImplementation implements OnAccountCreationD
 		super.fillLayout(account);
 		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
 
-		//Get wizard specific row
-		customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
-		customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
-		
-		//validationBar = (LinearLayout) parent.findViewById(R.id.validation_bar);
+        settingsContainer = (ViewGroup) parent.findViewById(R.id.settings_container);
+        validationBar = (ViewGroup) parent.findViewById(R.id.validation_bar);
 		
 		updateAccountInfos(account);
 
@@ -101,19 +103,25 @@ public class Tanstagi extends SimpleImplementation implements OnAccountCreationD
 		return true;
 	}
 	
+	private void setFirstViewVisibility(boolean visible) {
+        if(firstView != null) {
+            firstView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+        validationBar.setVisibility(visible ? View.GONE : View.VISIBLE);
+        settingsContainer.setVisibility(visible ? View.GONE : View.VISIBLE);
+	}
+	
 	private void updateAccountInfos(final SipProfile acc) {
 		if (acc != null && acc.id != SipProfile.INVALID_ID) {
-			customWizard.setVisibility(View.GONE);
+		    setFirstViewVisibility(false);
 		} else {
-            // add a row to link
-            customWizardText.setText(R.string.create_account);
-            customWizard.setVisibility(View.VISIBLE);
-            customWizard.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    extAccCreator.show();
-                }
-            });
+		    if(firstView == null) {
+		        firstView = new AccountCreationFirstView(parent);
+		        ViewGroup globalContainer = (ViewGroup) settingsContainer.getParent();
+		        firstView.setOnAccountCreationFirstViewListener(this);
+		        globalContainer.addView(firstView);
+		    }
+		    setFirstViewVisibility(true);
 		}
 	}
 	
@@ -203,5 +211,16 @@ public class Tanstagi extends SimpleImplementation implements OnAccountCreationD
         if(defaultSSLSocketFactory != null) {
              HttpsURLConnection.setDefaultSSLSocketFactory(defaultSSLSocketFactory);
         }
+    }
+
+    @Override
+    public void onCreateAccountRequested() {
+        setFirstViewVisibility(false);
+        extAccCreator.show();
+    }
+
+    @Override
+    public void onEditAccountRequested() {
+        setFirstViewVisibility(false);
     }
 }

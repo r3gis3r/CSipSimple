@@ -24,22 +24,24 @@ package com.csipsimple.wizards.impl;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.wizards.utils.AccountCreationFirstView;
+import com.csipsimple.wizards.utils.AccountCreationFirstView.OnAccountCreationFirstViewListener;
 
-public class MobileWiFi extends SimpleImplementation {
+public class MobileWiFi extends SimpleImplementation implements OnAccountCreationFirstViewListener {
 
     
     private static final String webCreationPage = "http://mobile-wi.fi";
     
-    private TextView customWizardText;
-    private LinearLayout customWizard;
+    private ViewGroup validationBar;
+    private ViewGroup settingsContainer;
+
+    private AccountCreationFirstView firstView;
 
     @Override
     protected String getDefaultName() {
@@ -98,28 +100,43 @@ public class MobileWiFi extends SimpleImplementation {
     public void fillLayout(SipProfile account) {
         super.fillLayout(account);
 
-        //Get wizard specific row
-        customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
-        customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
+        settingsContainer = (ViewGroup) parent.findViewById(R.id.settings_container);
+        validationBar = (ViewGroup) parent.findViewById(R.id.validation_bar);
 
         updateAccountInfos(account);
     }
 
+    private void setFirstViewVisibility(boolean visible) {
+        if(firstView != null) {
+            firstView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+        validationBar.setVisibility(visible ? View.GONE : View.VISIBLE);
+        settingsContainer.setVisibility(visible ? View.GONE : View.VISIBLE);
+    }
     
 
     private void updateAccountInfos(final SipProfile acc) {
         if (acc != null && acc.id != SipProfile.INVALID_ID) {
-            customWizard.setVisibility(View.GONE);
+            setFirstViewVisibility(false);
         } else {
-            // add a row to link 
-            customWizardText.setText(R.string.create_account);
-            customWizard.setVisibility(View.VISIBLE);
-            customWizard.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    parent.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webCreationPage)));
-                }
-            });
+            if(firstView == null) {
+                firstView = new AccountCreationFirstView(parent);
+                ViewGroup globalContainer = (ViewGroup) settingsContainer.getParent();
+                firstView.setOnAccountCreationFirstViewListener(this);
+                globalContainer.addView(firstView);
+            }
+            setFirstViewVisibility(true);
         }
+    }
+
+    @Override
+    public void onCreateAccountRequested() {
+        setFirstViewVisibility(false);
+        parent.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webCreationPage)));
+    }
+
+    @Override
+    public void onEditAccountRequested() {
+        setFirstViewVisibility(false);
     }
 }

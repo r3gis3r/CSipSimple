@@ -49,6 +49,12 @@ public class Fritzbox extends AlternateServerImplementation {
 		accountServer.setTitle(R.string.w_fritz_proxy);
 		accountServer.setDialogTitle(R.string.w_fritz_proxy);
 		
+		if(account != null && account.proxies != null && account.proxies.length > 0) {
+		    accountServer.setText(account.proxies[0].replace("sip:", ""));
+		}else {
+		    accountServer.setText("fritz.box");
+		}
+		
 	}
 	@Override
 	public String getDefaultFieldSummary(String fieldName) {

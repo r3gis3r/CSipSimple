@@ -172,10 +172,7 @@ public class Mobex extends SimpleImplementation {
             customWizard.setVisibility(View.GONE);
             accountBalanceHelper.launchRequest(acc);
         } else {
-            // add a row to link 
-            customWizardText.setText(R.string.create_account);
             customWizard.setVisibility(View.GONE);
-            // Not yet...
         }
     }
     

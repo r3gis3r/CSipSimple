@@ -24,7 +24,7 @@ package com.csipsimple.wizards.impl;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +34,8 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.MD5;
 import com.csipsimple.utils.PreferencesWrapper;
+import com.csipsimple.wizards.utils.AccountCreationFirstView;
+import com.csipsimple.wizards.utils.AccountCreationFirstView.OnAccountCreationFirstViewListener;
 import com.csipsimple.wizards.utils.AccountCreationWebview;
 import com.csipsimple.wizards.utils.AccountCreationWebview.OnAccountCreationDoneListener;
 
@@ -44,7 +46,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Date;
 
-public class Ippi extends SimpleImplementation implements OnAccountCreationDoneListener {
+public class Ippi extends SimpleImplementation implements OnAccountCreationDoneListener, OnAccountCreationFirstViewListener {
 
 
 	protected static final String THIS_FILE = "IppiW";
@@ -53,6 +55,12 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 	private LinearLayout customWizard;
 	private TextView customWizardText;
     private AccountCreationWebview extAccCreator;
+
+    private ViewGroup validationBar;
+    private ViewGroup settingsContainer;
+
+
+    private AccountCreationFirstView firstView;
 	
 	@Override
 	protected String getDomain() {
@@ -74,7 +82,9 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 		//Get wizard specific row
 		customWizardText = (TextView) parent.findViewById(R.id.custom_wizard_text);
 		customWizard = (LinearLayout) parent.findViewById(R.id.custom_wizard_row);
-		
+
+        settingsContainer = (ViewGroup) parent.findViewById(R.id.settings_container);
+        validationBar = (ViewGroup) parent.findViewById(R.id.validation_bar);
 		
 		updateAccountInfos(account);
 
@@ -91,21 +101,27 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
 		prefs.addStunServer("stun.ippi.fr");
 	}
-	
+
+    private void setFirstViewVisibility(boolean visible) {
+        if(firstView != null) {
+            firstView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+        validationBar.setVisibility(visible ? View.GONE : View.VISIBLE);
+        settingsContainer.setVisibility(visible ? View.GONE : View.VISIBLE);
+    }
+    
 	private void updateAccountInfos(final SipProfile acc) {
 		if (acc != null && acc.id != SipProfile.INVALID_ID) {
 			customWizard.setVisibility(View.GONE);
 			accountBalanceHelper.launchRequest(acc);
 		} else {
-			// add a row to link 
-			customWizardText.setText(R.string.create_account);
-			customWizard.setVisibility(View.VISIBLE);
-			customWizard.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					extAccCreator.show();
-				}
-			});
+            if(firstView == null) {
+                firstView = new AccountCreationFirstView(parent);
+                ViewGroup globalContainer = (ViewGroup) settingsContainer.getParent();
+                firstView.setOnAccountCreationFirstViewListener(this);
+                globalContainer.addView(firstView);
+            }
+            setFirstViewVisibility(true);
 		}
 	}
 	
@@ -202,4 +218,14 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
         return false;
     }
 
+    @Override
+    public void onCreateAccountRequested() {
+        setFirstViewVisibility(false);
+        extAccCreator.show();
+    }
+
+    @Override
+    public void onEditAccountRequested() {
+        setFirstViewVisibility(false);
+    }
 }
