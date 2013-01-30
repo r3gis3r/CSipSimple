@@ -890,6 +890,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_llamadas_xinternet, 10, 
                     new Locale[]{  locale("es_MX") }, false, false, 
                     LlamadasXInternet.class));
+            WIZARDS_DICT.put("OCN", new WizardInfo("OCN", "OCN", 
+                    R.drawable.ic_wizard_ocn, 10, 
+                    new Locale[]{Locale.JAPAN}, false, false, 
+                    Ocn.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
