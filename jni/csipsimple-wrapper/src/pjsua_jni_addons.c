@@ -313,7 +313,9 @@ PJ_DECL(pj_status_t) set_turn_credentials(const pj_str_t username, const pj_str_
 	}
 
 	if(realm.slen) {
-
+        pj_strdup_with_null(css_var.pool,
+                    &turn_auth_cred->data.static_cred.realm,
+                    &realm);
 	} else {
 		turn_auth_cred->data.static_cred.realm = pj_str("*");
 	}
