@@ -528,9 +528,14 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
             }, null, null, null);
             int accountCount = 0;
             if (c != null) {
-                accountCount = c.getCount();
+                try {
+                    accountCount = c.getCount();
+                } catch (Exception e) {
+                    Log.e(THIS_FILE, "Something went wrong while retrieving the account", e);
+                } finally {
+                    c.close();
+                }
             }
-            c.close();
 
             if (accountCount == 0) {
                 Intent accountIntent = null;
