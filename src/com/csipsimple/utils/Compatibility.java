@@ -131,6 +131,10 @@ public final class Compatibility {
         if (android.os.Build.MODEL.toUpperCase().startsWith("LG-E720") && !Compatibility.isCompatible(9)) {
             return true;
         }
+        // LG-LS840
+        if (android.os.Build.DEVICE.toLowerCase().startsWith("cayman")) {
+            return true;
+        }
 
         // Huawei
         if (android.os.Build.DEVICE.equalsIgnoreCase("U8150") ||
@@ -829,6 +833,10 @@ public final class Compatibility {
         }
         if(lastSeenVersion < 2081) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.DISABLE_RPORT, false);
+        }
+        if(lastSeenVersion < 2104 && android.os.Build.DEVICE.toLowerCase().startsWith("cayman")) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                    shouldUseModeApi());
         }
         
         prefWrapper.endEditing();
