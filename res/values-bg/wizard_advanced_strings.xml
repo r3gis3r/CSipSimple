@@ -1,14 +1,16 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">Име на профила</string>
-  <string name="w_advanced_display_name_desc">Показване на име за този профил</string>
+  <string name="w_advanced_display_name_desc">Името, с което ще се изобразява профила</string>
   <string name="w_advanced_caller_id">Идентификатор на позвъняващ</string>
   <string name="w_advanced_caller_id_desc">(Caller ID) Идентификатор на позвъняващия, използван при повикване</string>
   <string name="w_advanced_username">Потребителско име</string>
-  <string name="w_advanced_username_desc">Потребителско име за SIP автентикация (не пишете \@име.на.хост)</string>
+  <string name="w_advanced_username_desc">Потребителско име за SIP оторизация (не въвеждайте @името.на.сървъра)</string>
   <string name="w_advanced_password">Парола</string>
-  <string name="w_advanced_password_desc">Парола за ауторизация към SIP сървъра</string>
-  <string name="w_advanced_use_tcp">Използвай TCP (не UDP)</string>
+  <string name="w_advanced_password_desc">Паролата за оторизация към SIP сървъра</string>
+  <string name="w_advanced_use_tcp">Ползване на TCP (вместо UDP)</string>
   <string name="w_advanced_proxy">Прокси</string>
   <string name="w_advanced_proxy_desc">Прокси домейн/IP[:порт] (по избор, не винаги е необходимо)</string>
+  <string name="w_advanced_auth_id">Идентификатор (ID) за оторизация</string>
+  <string name="w_advanced_auth_id_desc">Оставете празно, ако съвпада с потребителското име</string>
 </resources>

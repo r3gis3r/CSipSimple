@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="acct_inactive">Неактивен</string>
-  <string name="acct_unregistered">Не е регистриран</string>
-  <string name="acct_expired">Срокът на регистрация изтече</string>
-  <string name="acct_registering">Регистриране …</string>
+  <string name="acct_unregistered">Нерегистриран</string>
+  <string name="acct_expired">Срокът на регистрацията изтече</string>
+  <string name="acct_registering">Регистриране…</string>
   <string name="acct_registered">Регистриран</string>
-  <string name="acct_regerror">Грешка при регистрацията</string>
-  <string name="acct_regfailed">Регистрацията е неуспешна! Моля, проверете отново въведените параметри.</string>
+  <string name="acct_regerror">Грешка при регистрането</string>
+  <string name="acct_regfailed">Неуспешно регистриране! Моля, проверете отново въведеното.</string>
 </resources>

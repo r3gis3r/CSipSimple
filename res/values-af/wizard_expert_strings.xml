@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_expert_data">Wagwoord</string>
   <string name="w_expert_use_tcp">Gebruik TCP (nie UDP nie)</string>

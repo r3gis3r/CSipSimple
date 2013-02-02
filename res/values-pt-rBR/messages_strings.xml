@@ -54,11 +54,11 @@
   <!--Hint text in message body field when keyboard is exposed-->
   <string name="type_to_compose_text_enter_to_send">Digite para compor</string>
   <!--Hint text in message body field when keyboard is hidden-->
-  <string name="open_keyboard_to_compose_message">Abra teclado para compor mensagem</string>
+  <string name="open_keyboard_to_compose_message">Abrir teclado para compor mensagem</string>
   <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
   <string name="image_too_large">Foto muito grande</string>
   <!--Dialog message text asking the user if he wants to resize the picture being attached-->
-  <string name="ask_for_automatically_resize">Redimensionar foto antes de enviar?</string>
+  <string name="ask_for_automatically_resize">Redimensionar foto automaticamente antes de enviar?</string>
   <!--Toast message while an image is being resized-->
   <string name="compressing">Foto muito grande. Compactando…</string>
   <!--Context menu item on a message recipient for viewing their contact info-->
@@ -67,7 +67,7 @@
          contacts (used if the recipient is not already in the address book)-->
   <string name="menu_add_to_contacts">Adicionar aos Contatos</string>
   <!--Sender to be used if the sender address has been hidden-->
-  <string name="hidden_sender_address">Endereço do remetente invisivel</string>
+  <string name="hidden_sender_address">Endereço de remetente oculto</string>
   <!--Text to be used for affirmative response button in dialog boxes-->
   <string name="yes">OK</string>
   <!--Text to be used for negative response button in dialog boxes-->
@@ -86,7 +86,7 @@
   <!--Delete message confirmation dialog message-->
   <string name="confirm_delete_message">A mensagem será deletada</string>
   <!--Delete message confirmation dialog message for a locked message-->
-  <string name="confirm_delete_locked_message">Você tem certeza que deseja deletar esta mensagem travada</string>
+  <string name="confirm_delete_locked_message">Você tem certeza que deseja deletar esta mensagem travada?</string>
   <!--Delete entire thread confirmation dialog message-->
   <string name="confirm_delete_all_messages">O tópico inteiro será deletado</string>
   <!--Delete button title-->

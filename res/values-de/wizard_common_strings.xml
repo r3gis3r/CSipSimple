@@ -13,7 +13,7 @@
   <string name="create_account">Erstelle Account</string>
   <string name="first_name">Vorname</string>
   <string name="last_name">Nachname</string>
-  <string name="email_address">Email Adresse</string>
+  <string name="email_address">E-Mail</string>
   <string name="captcha">Captcha</string>
   <string name="country_code">Ländercode</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="w_cryptel_password">kryptischer Schlüssel</string>
-  <string name="w_cryptel_password_desc">kryptischer Schlüssel</string>
+  <string name="w_cryptel_password">Krypto-Schlüssel</string>
+  <string name="w_cryptel_password_desc">Krypto-Schlüssel</string>
 </resources>

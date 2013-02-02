@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_ecs_display_name">Nome da conta</string>
-  <string name="w_ecs_display_name_desc">Mostrar nome para esta conta</string>
+  <string name="w_ecs_display_name_desc">Nome de exibição desta conta</string>
   <string name="w_ecs_phone_number">Número de telefone</string>
-  <string name="w_ecs_phone_number_desc">Conta número de telefone SIP</string>
+  <string name="w_ecs_phone_number_desc">Número de telefone da conta SIP</string>
   <string name="w_ecs_user_name">Login do usuário</string>
-  <string name="w_ecs_user_name_desc">Seu login virtual</string>
+  <string name="w_ecs_user_name_desc">Login do seu escritório virtual</string>
   <string name="w_ecs_password">Senha do usuário</string>
   <string name="w_ecs_password_desc">Senha para a sua conta</string>
-  <string name="w_ecs_server_domain">SIP Domínio</string>
-  <string name="w_ecs_server_domain_desc">nome do domínio para sua conta SIP </string>
-  <string name="w_ecs_server_ip_desc">Nome de domínio ou endereço IP para acessar o ECS (deixe em branco se mesmo domínio SIP)</string>
+  <string name="w_ecs_server_domain">Domínio SIP</string>
+  <string name="w_ecs_server_domain_desc">Nome do domínio para sua conta SIP </string>
+  <string name="w_ecs_server_ip_desc">Nome de domínio ou endereço IP para acessar o ECS (deixe em branco se igual ao domínio SIP)</string>
 </resources>

@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_sipgate_display_name">Nome da conta</string>
-  <string name="w_sipgate_display_name_desc">Mostrar nome para esta conta</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_display_name_desc" ns0:ignore="UnusedResources">Nome de exibição desta conta</string>
   <string name="w_sipgate_username">SIP-ID</string>
-  <string name="w_sipgate_password">SIP Senha</string>
-  <string name="w_sipgate_server_desc">Algo assim: sipgate.co.uk</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_username_desc" ns0:ignore="UnusedResources">Diferente do seu login sipgate! Verifique no site sipgate o seu SIP-ID</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password" ns0:ignore="UnusedResources">Senha SIP</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password_desc" ns0:ignore="UnusedResources">Diferente da sua senha! Verifique no site sipgate a sua Senha SIP</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_server_desc" ns0:ignore="UnusedResources">Algo assim: sipgate.co.uk</string>
 </resources>

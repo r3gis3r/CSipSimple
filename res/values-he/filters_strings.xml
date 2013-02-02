@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="cant_call">לא ניתן להתקשר</string>
-    <string name="rewrite">לכתוב מחדש</string>
-    <string name="stop_processing">עצור תהליך</string>
-    <string name="direct_call">להתקשר ישירות</string>
-    <string name="auto_answer">מענה אוטומטי</string>
-    <string name="starts_with">מתחיל עם</string>
-    <string name="ends_with">מסתיים עם</string>
-    <string name="contains">מכיל</string>
-    <string name="all">הכל</string>
-    <string name="has_exactly_n_digits">יש בדיוק n ספרות</string>
-    <string name="has_more_than_n_digits">יש יותר מ N ספרות</string>
-    <string name="is_exactly">זה בדיוק</string>
-    <string name="custom_regexp">מותאם אישית RegExp</string>
-    <string name="prefix_by">קידומת על ידי</string>
-    <string name="suffix_with">סיומת עם</string>
-    <string name="replace_match_by">החלף התאמה על ידי</string>
-    <string name="replace_all_by">החלף הכל על ידי</string>
-
+  <string name="cant_call">לא ניתן להתקשר</string>
+  <string name="rewrite">לכתוב מחדש</string>
+  <string name="stop_processing">עצור תהליך</string>
+  <string name="direct_call">להתקשר ישירות</string>
+  <string name="auto_answer">מענה אוטומטי</string>
+  <string name="starts_with">מתחיל עם</string>
+  <string name="ends_with">מסתיים עם</string>
+  <string name="contains">מכיל</string>
+  <string name="all">הכל</string>
+  <string name="has_exactly_n_digits">יש בדיוק n ספרות</string>
+  <string name="has_more_than_n_digits">יש יותר מ N ספרות</string>
+  <string name="is_exactly">זה בדיוק</string>
+  <string name="custom_regexp">מותאם אישית RegExp</string>
+  <string name="prefix_by">קידומת על ידי</string>
+  <string name="suffix_with">סיומת עם</string>
+  <string name="replace_match_by">החלף התאמה על ידי</string>
+  <string name="replace_all_by">החלף הכל על ידי</string>
 </resources>

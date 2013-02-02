@@ -1,21 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="optional_sip_code">Optionaler SIP Code</string>
-  <string name="cant_call">Dieser Anruf ist nicht möglich</string>
-  <string name="rewrite">umschreiben</string>
+  <string name="cant_call">Anruf nicht möglich</string>
+  <string name="rewrite">Neu schreiben</string>
   <string name="stop_processing">Bearbeitung abbrechen</string>
   <string name="direct_call">Direkter Anruf</string>
   <string name="auto_answer">Automatische Anrufbeantwortung</string>
   <string name="starts_with">Startet mit</string>
   <string name="ends_with">Endet mit</string>
   <string name="contains">enthält</string>
-  <string name="all">Alle</string>
-  <string name="has_exactly_n_digits">Hat genau N Stellen</string>
-  <string name="has_more_than_n_digits">Hat mehr als N Stellen</string>
-  <string name="is_exactly">Ist genau</string>
-  <string name="custom_regexp">Benutzerdefinierter Regulärer Ausdruck</string>
-  <string name="prefix_by">Präfix von</string>
-  <string name="suffix_with">Suffix mit</string>
-  <string name="replace_match_by">Ersetze passende durch</string>
+  <string name="all">alle</string>
+  <string name="has_exactly_n_digits">hat genau N Stellen</string>
+  <string name="has_more_than_n_digits">hat mehr als N Stellen</string>
+  <string name="is_exactly">ist genau</string>
+  <string name="custom_regexp">Benutzerdefinierter regulärer Ausdruck</string>
+  <string name="prefix_by">Präfix </string>
+  <string name="suffix_with">Suffix </string>
+  <string name="replace_match_by">Ersetze Übereinstimmung durch</string>
   <string name="replace_all_by">Ersetze alle durch</string>
 </resources>

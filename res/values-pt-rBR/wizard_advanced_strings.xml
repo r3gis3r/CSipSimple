@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">Nome da conta</string>
-  <string name="w_advanced_display_name_desc">Mostrar nome para esta conta</string>
-  <string name="w_advanced_caller_id">Identificação da Chamada</string>
-  <string name="w_advanced_caller_id_desc">Identificação da Chamada para enviar ao chamar</string>
+  <string name="w_advanced_display_name_desc">Nome de exibição desta conta</string>
+  <string name="w_advanced_caller_id">Identificação do Chamador</string>
+  <string name="w_advanced_caller_id_desc">Identificação do Chamador para enviar ao chamar</string>
   <string name="w_advanced_username">Nome de usuário</string>
   <string name="w_advanced_username_desc">Nome de usuário para autenticação SIP (Não inclua o \@sip.server)</string>
   <string name="w_advanced_password">Senha</string>
@@ -11,4 +11,6 @@
   <string name="w_advanced_use_tcp">Use TCP (não UDP)</string>
   <string name="w_advanced_proxy">Proxy</string>
   <string name="w_advanced_proxy_desc">Domínio/IP[:porta] do proxy (opcional)</string>
+  <string name="w_advanced_auth_id">ID de autenticação SIP</string>
+  <string name="w_advanced_auth_id_desc">Deixe em branco para usar o Nome de usuário</string>
 </resources>

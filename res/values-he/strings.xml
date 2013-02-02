@@ -35,6 +35,7 @@
   <string name="dial_tab_name_text">חייגן</string>
   <string name="calllog_tab_name_text">יומן שיחות</string>
   <string name="messages_tab_name_text">הודעות</string>
+  <string name="favorites_tab_name_text">מעודפים</string>
   <string name="menu_disconnect">ניתוק</string>
   <string name="service_ticker_registered_text">סיפ רשום</string>
   <string name="outgoing_call_chooser_call_text">התקשרות</string>
@@ -75,6 +76,10 @@
   <string name="deactivate">נטרול</string>
   <string name="audio">אודיו</string>
   <string name="video">וידאו</string>
+  <string name="invert_selection">הפוך בחירה</string>
+  <string name="cant_write_file">שגיאה בכתיבה לקובץ</string>
+  <string name="info">מידע</string>
+  <string name="csipsimple_shortcut">קיצור דרך של CSipSimple</string>
   <!--Presence stuff-->
   <string name="online">מקוון</string>
   <string name="offline">לא מקוון</string>
@@ -83,6 +88,9 @@
   <string name="activate_presence_sharing">שיתוף נוכחות</string>
   <string name="deactivate_presence_sharing">הפסקת שיתוף נוכחות</string>
   <string name="presence">נוכחות</string>
+  <string name="configure">הגדר</string>
   <string name="set_android_group">בחירת קבוצת אנדרואיד</string>
   <string name="set_sip_data">בחירת כתובת נתוני SIP</string>
+  <string name="uri_nbr">מספר טלפון</string>
+  <string name="uri_sip">שיחת אינטרנט</string>
 </resources>

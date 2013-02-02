@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_basic_username">Потребител</string>
-  <string name="w_basic_username_desc">Потребителско име / Логин (не въвеждайте \@sip.server)</string>
+  <string name="w_basic_username_desc">Име на профила / Потребител (не въвеждайте @името.на.сървъра)</string>
   <string name="w_basic_password">Парола</string>
-  <string name="w_basic_password_desc">Парола за достъп до вашият акаунт</string>
+  <string name="w_basic_password_desc">Парола за достъп до профила</string>
 </resources>

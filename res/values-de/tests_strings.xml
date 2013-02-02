@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="test_audio">Audio Test</string>
-  <string name="test_audio_prepare">Bereite Audio Test vor…</string>
-  <string name="test_audio_ongoing">Sprich ins Mikrofon und höre in der Ohrmuschel.</string>
-  <string name="test_audio_network_failure">Test fehlgeschlagen: \nWechsel zuerst zu einem richtigen Netzwerk.</string>
+  <string name="test_audio">Audio-Test</string>
+  <string name="test_audio_prepare">Bereite Audio-Test vor…</string>
+  <string name="test_audio_ongoing">Test läuft...\nSprich ins Mikro und höre im Hörer ab.</string>
+  <string name="test_audio_network_failure">Test fehlgeschlagen: \nBitte zu einem zulässigen Netzwerk wechseln.</string>
 </resources>

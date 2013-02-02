@@ -1,22 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Отговор</string>
-  <string name="decline_call">Пренебрегване</string>
+  <string name="decline_call">Игнориране</string>
   <string name="clear_call">Край</string>
-  <string name="touch_lock">Чукни два пъти за отключване</string>
-  <string name="dialpad">Клавиатура</string>
+  <string name="touch_lock">За отключване, докоснете двукратно</string>
+  <string name="dialpad">DTMF</string>
   <string name="bluetooth">Блутут</string>
   <string name="speaker">Високоговорител</string>
   <string name="mute">Без звук</string>
-  <string name="add_call">Добавяне на обаждане</string>
-  <string name="call_state_calling">Набиране …</string>
+  <string name="add_call">Добави обаждане</string>
+  <string name="call_state_calling">Набиране…</string>
   <string name="call_state_confirmed">В разговор</string>
-  <string name="call_state_connecting">Свързване …</string>
-  <string name="call_state_disconnected">Затваряне</string>
-  <string name="call_state_early">Звънене …</string>
-  <string name="call_state_incoming">Входящо позвъняване …</string>
+  <string name="call_state_connecting">Свързване…</string>
+  <string name="call_state_disconnected">Приключване на разговора</string>
+  <string name="call_state_early">Звънене…</string>
+  <string name="call_state_incoming">Вх. обаждане…</string>
   <string name="call_state_null">ГРЕШКА</string>
   <string name="unlock">Отключване</string>
   <string name="record">Запис</string>
   <string name="stop_recording">Спиране на записа</string>
+  <string name="xfer_uri">Прехвърляне към номер</string>
+  <string name="hold_call">Задържане на обаждането</string>
+  <string name="on_hold">Задържано</string>
+  <string name="resume_call">Възстановяване</string>
+  <string name="transfer_to_call">Прехвърляне към обаждане</string>
+  <string name="send_dtmf">Изпращане на DTMF</string>
 </resources>

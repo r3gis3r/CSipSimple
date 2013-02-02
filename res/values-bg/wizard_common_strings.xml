@@ -1,13 +1,19 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_common_display_name">Име на профила</string>
-  <string name="w_common_display_name_desc">Показване на име за този профил</string>
+  <string name="w_common_display_name_desc">Името, с което ще се изобразява профила</string>
   <string name="w_common_username">Потребителско име</string>
-  <string name="w_common_username_desc">Sip акаунт логин (не пишете \@sip.server)</string>
+  <string name="w_common_username_desc">SIP профил (не въвеждайте @името.на.сървъра)</string>
   <string name="w_common_phone_number">Телефонен номер</string>
-  <string name="w_common_phone_number_desc">Sip телефонен номер предоставен от Вашия доставчик</string>
+  <string name="w_common_phone_number_desc">SIP тел. номер предоставен от Вашия доставчик</string>
   <string name="w_common_password">Парола</string>
-  <string name="w_common_password_desc">Парола за Вашия профил</string>
+  <string name="w_common_password_desc">Паролата за профила</string>
   <string name="w_common_server">Сървър</string>
-  <string name="w_common_server_desc">Домейн на SIP сървъра/IP[:port]</string>
+  <string name="w_common_server_desc">Домейн на SIP сървъра/IP[:порт]</string>
+  <string name="create_account">Създаване на профил</string>
+  <string name="first_name">Собствено име</string>
+  <string name="last_name">Фамилно име</string>
+  <string name="email_address">Имейл адрес</string>
+  <string name="captcha">Captcha</string>
+  <string name="country_code">Код на държавата</string>
 </resources>

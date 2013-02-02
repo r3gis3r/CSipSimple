@@ -11,13 +11,13 @@
   <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
   <string name="menu_call">Anrufen</string>
   <!--Menu item for deleting all conversations-->
-  <string name="menu_delete_all">Unterhaltungen löschen</string>
+  <string name="menu_delete_all">Themen löschen</string>
   <!--Context menu item on an individual conversation for deleting that conversation-->
-  <string name="menu_delete">Unterhaltung löschen</string>
+  <string name="menu_delete">Thema löschen</string>
   <!--Context menu item on an individual conversation for viewing that conversation-->
-  <string name="menu_view">Unterhaltung anzeigen</string>
+  <string name="menu_view">Thema anzeigen</string>
   <!--Name to use when we have an unspecified sender-->
-  <string name="anonymous_recipient">Unbekannt</string>
+  <string name="anonymous_recipient">Anonym</string>
   <!--Name of the local user when displaying sender of an outgoing message (personal pronoun)-->
   <string name="messagelist_sender_self">Ich</string>
   <string name="delete_message">Nachricht löschen</string>
@@ -28,7 +28,7 @@
   <!--Dialog box message indicating that a message could not be delivered-->
   <string name="undelivered_sms_dialog_body">Kann diese Nachricht nicht senden</string>
   <!--Menu item for deleting the entire conversation currently being viewed-->
-  <string name="delete_thread">Gespräch löschen</string>
+  <string name="delete_thread">Thema löschen</string>
   <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
          to be downloaded (imperative verb)-->
   <string name="download">Download</string>
@@ -36,7 +36,7 @@
          indicating that the download is in progress-->
   <string name="downloading">Wird heruntergeladen</string>
   <!--Individual message context menu item-->
-  <string name="copy_message_text">Kopiere Nachrichten Text</string>
+  <string name="copy_message_text">Kopiere Nachrichtentext</string>
   <!--Header for context menu on an individual message-->
   <string name="message_options">Nachrichtenoptionen</string>
   <!--Button text on edit slide screen indicating the user wants to finish editing that slide-->
@@ -52,37 +52,37 @@
   <!--Menu item in conversation screen for returning to the conversation list-->
   <string name="all_threads">Alle Themen</string>
   <!--Hint text in message body field when keyboard is exposed-->
-  <string name="type_to_compose_text_enter_to_send">Tippe zum Verfassen</string>
+  <string name="type_to_compose_text_enter_to_send">Text tippen</string>
   <!--Hint text in message body field when keyboard is hidden-->
   <string name="open_keyboard_to_compose_message">Öffne die Tastatur um Nachricht zu verfassen</string>
   <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
   <string name="image_too_large">Bild zu groß</string>
   <!--Dialog message text asking the user if he wants to resize the picture being attached-->
-  <string name="ask_for_automatically_resize">Bild vor dem Senden automatisch anpassen?</string>
+  <string name="ask_for_automatically_resize">Bild vor dem Senden automatisch verkleinern?</string>
   <!--Toast message while an image is being resized-->
   <string name="compressing">Bild zu groß. Komprimiere…</string>
   <!--Context menu item on a message recipient for viewing their contact info-->
-  <string name="menu_view_contact">Kontakt ansehen</string>
+  <string name="menu_view_contact">Kontakt zeigen</string>
   <!--Context menu item on a message recipient for adding them to the user's
          contacts (used if the recipient is not already in the address book)-->
   <string name="menu_add_to_contacts">Zu Kontakten hinzufügen</string>
   <!--Sender to be used if the sender address has been hidden-->
-  <string name="hidden_sender_address">Verborgene Absender Adresse</string>
+  <string name="hidden_sender_address">Verborgene Absenderadresse</string>
   <!--Text to be used for affirmative response button in dialog boxes-->
   <string name="yes">OK</string>
   <!--Text to be used for negative response button in dialog boxes-->
   <string name="no">Abbrechen</string>
   <!--Button text used for editing a slideshow (imperative verb)-->
-  <string name="edit">Ändern</string>
+  <string name="edit">Bearbeite</string>
   <!--Settings screen menu item for restoring all settings to default-->
   <string name="restore_default">Standardwerte laden</string>
   <!--Confirm Delete-->
   <!--Delete confirmation dialog title-->
   <string name="confirm_dialog_title">Löschen</string>
   <!--Delete entire thread confirmation dialog message-->
-  <string name="confirm_delete_conversation">Die gesamte Unterhaltung wird gelöscht.</string>
+  <string name="confirm_delete_conversation">Das gesamte Thema wird gelöscht.</string>
   <!--Delete all threads confirmation dialog message-->
-  <string name="confirm_delete_all_conversations">Alle Unterhaltungen werden gelöscht.</string>
+  <string name="confirm_delete_all_conversations">Alle Themen werden gelöscht.</string>
   <!--Delete message confirmation dialog message-->
   <string name="confirm_delete_message">Die Nachricht wird gelöscht</string>
   <!--Delete message confirmation dialog message for a locked message-->
@@ -92,7 +92,7 @@
   <!--Delete button title-->
   <string name="delete">Löschen</string>
   <!--Status in "Report" window-->
-  <string name="status_none">(Keine)</string>
+  <string name="status_none">(keine)</string>
   <!--Status in "Report" window-->
   <string name="status_pending">Ausstehend</string>
   <!--Status in "Report" window-->

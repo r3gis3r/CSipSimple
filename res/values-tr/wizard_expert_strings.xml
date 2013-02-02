@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_expert_display_name">Hesap adı</string>
   <string name="w_expert_display_name_desc">Bu hesap için görünen ad</string>

@@ -1,6 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="other_country_providers_text">Andere Länder</string>
-  <string name="world_wide_providers_text">Weltweit</string>
+  <string name="other_country_providers_text">Anbieter anderer Länder</string>
+  <string name="world_wide_providers_text">Weltweite Anbieter</string>
   <string name="generic_wizards_text">Allgemein</string>
 </resources>

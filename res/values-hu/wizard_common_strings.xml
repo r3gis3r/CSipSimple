@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_common_display_name">Fiók neve</string>
   <string name="w_common_display_name_desc">Megjelenítendő név a fiók használatakor</string>

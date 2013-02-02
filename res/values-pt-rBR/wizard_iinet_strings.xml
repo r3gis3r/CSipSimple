@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_iinet_state">Estado</string>
   <string name="w_iinet_state_desc">O estado relevante da seguinte lista</string>

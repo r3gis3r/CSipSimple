@@ -1,12 +1,13 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="unknown">Desconhecido</string>
-    <string name="type_incoming">Recebendo</string>
-    <string name="type_outgoing">Discando</string>
-    <string name="type_missed">Não atendida</string>
-    <string name="callBack">Ligar de volta</string>
-    <string name="callAgain">Ligar novamente</string>
-    <string name="returnCall">Retornar ligação</string>
-
+  <string name="unknown">Desconhecido</string>
+  <string name="type_incoming">Entrada</string>
+  <string name="type_outgoing">Saída</string>
+  <string name="type_missed">Perdidas</string>
+  <string name="callBack">Retornar</string>
+  <string name="callAgain">Ligar novamente</string>
+  <string name="returnCall">Retornar chamada</string>
+  <string name="call">Chamar</string>
+  <string name="sip_call">Chamada SIP</string>
+  <string name="no_call_history">Sem registro de chamadas</string>
 </resources>

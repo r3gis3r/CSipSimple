@@ -16,6 +16,6 @@
   <string name="custom_regexp">RegExp personalizada</string>
   <string name="prefix_by">Adicionar prefixo</string>
   <string name="suffix_with">Adicionar sufixo</string>
-  <string name="replace_match_by">Substituir ocorrência com</string>
-  <string name="replace_all_by">Alterar todos por</string>
+  <string name="replace_match_by">Substituir ocorrência por</string>
+  <string name="replace_all_by">Substituir tudo por</string>
 </resources>

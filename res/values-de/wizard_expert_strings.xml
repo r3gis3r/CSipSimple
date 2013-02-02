@@ -7,7 +7,7 @@
   <string name="w_expert_reg_uri">Registrar URL</string>
   <string name="w_expert_reg_uri_desc">Format: sip:registrar.net[:Port]</string>
   <string name="w_expert_realm">Realm</string>
-  <string name="w_expert_realm_desc">Authentifikationsdomain (benutze \'*\', wenn du sie nicht kennst)</string>
+  <string name="w_expert_realm_desc">Authentifikationsdomäne (benutze \'*\', wenn du sie nicht kennst)</string>
   <string name="w_expert_username">Benutzername</string>
   <string name="w_expert_username_desc">Benutzername / Login</string>
   <string name="w_expert_data">Passwort</string>
@@ -22,12 +22,21 @@
   <string name="w_expert_publish_enabled">Publish enabled</string>
   <string name="w_expert_reg_timeout">Register Timeout (sec)</string>
   <string name="w_expert_reg_dbr">Registrierte Verzögerung vor der Aktualisierung (Sekunden)</string>
-  <string name="w_expert_reg_dbr_desc">Lege die Sekunden fest nachdem die Client-Registration abläuft</string>
-  <string name="w_expert_ka_interval">Keep-alive Interval (sec)</string>
-  <string name="w_expert_force_contact">Force contact</string>
+  <string name="w_expert_reg_dbr_desc">Zeit in Sekunden, bevor die Client-Registrierung abläuft.</string>
+  <string name="w_expert_ka_interval">Keep-alive Intervall (Sekunden)</string>
+  <string name="w_expert_force_contact">Kontakt forcieren.</string>
   <string name="w_expert_allow_contact_rewrite">Erlaube Contact-Rewrite</string>
   <string name="w_expert_contact_rewrite_method">Methode für den Contact-Rewrite</string>
   <string name="w_expert_reg_use_proxy">Wie man einen Proxy benutzt</string>
+  <string name="w_expert_try_clean_registers">Versuche, die Register zu löschen.</string>
+  <string name="w_expert_try_clean_registers_desc">Erlaube der App zu versuchen, bei Bedarf alte Registrierungen zu löschen</string>
+  <string name="w_expert_rtp_bound_addr">Socket-Bindungsadresse für RTP</string>
+  <string name="w_expert_rtp_bound_addr_desc">Optional. Spezifiziert, woran der Socket gebunden werden soll, um den Socket nur gezielt an eine bestimmte Schnittstelle zu binden (anstelle von 0.0.0.0)</string>
   <string name="w_expert_rtp_public_addr">RTP öffentliche Adresse</string>
+  <string name="w_expert_rtp_public_addr_desc">Optional. Verkündet die Adresse des RTP-Transports.</string>
+  <string name="w_expert_media_transport">Medientransport</string>
+  <string name="w_expert_mwi_enabled">Abonniere MWI</string>
   <string name="w_expert_mwi_enabled_desc">Erhalte Benachrichtigungen der Sprachbox</string>
+  <string name="w_expert_allow_via_rewrite">Erlaube Via-rewrite</string>
+  <string name="w_expert_allow_via_rewrite_desc">Korrigiere den Ursprungs-Via (sent-by) dahingehend, dass dieselbe Schnittstellenadresse wie diejenige in der REGISTER-Anfrage verwendet wird</string>
 </resources>

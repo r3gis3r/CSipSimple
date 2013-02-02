@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_sipgate_display_name">Kontoname</string>
-  <string name="w_sipgate_display_name_desc">Zeigt den Namen dieses Kontos</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_display_name_desc" ns0:ignore="UnusedResources">Zeigt den Namen dieses Kontos</string>
   <string name="w_sipgate_username">SIP-ID</string>
-  <string name="w_sipgate_username_desc">Unterscheidet sich vom Sipgate Login! Bei Sipgate einlogg</string>
-  <string name="w_sipgate_password">SIP-Passwort</string>
-  <string name="w_sipgate_password_desc">Unterscheidet sich vom Sipgate Passwort! Bei Sipgate einloggen um das SIP Passwort zu erhalten.</string>
-  <string name="w_sipgate_server_desc">Zum Beispiel: sipgate.de</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_username_desc" ns0:ignore="UnusedResources">Nicht mit dem SipGate-Login identisch! Ggf. findest du die SIP-ID auf deinem Sipgate-Account.</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password" ns0:ignore="UnusedResources">SIP-Passwort</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password_desc" ns0:ignore="UnusedResources">Nicht mit dem SipGate-Passwort identisch! Ggf. findest du das SIP-Passwort auf deinem Sipgate-Account.</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_server_desc" ns0:ignore="UnusedResources">Zum Beispiel: sipgate.de</string>
 </resources>

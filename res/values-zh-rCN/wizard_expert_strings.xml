@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_expert_display_name">账号名称</string>
   <string name="w_expert_display_name_desc">账号的显示名称</string>

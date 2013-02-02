@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_onsip_authentication_name">Потребителско име за оторизация</string>
   <string name="w_onsip_authentication_name_desc">SIP потребител за оторизация</string>
   <string name="w_onsip_username">SIP потребителско име</string>
-  <string name="w_onsip_username_desc">SIP потребителско име на акаунта</string>
+  <string name="w_onsip_username_desc">Потребителско име за SIP профила</string>
   <string name="w_onsip_server">Домейн</string>
   <string name="w_onsip_server_desc">SIP домейн</string>
   <string name="w_onsip_password">SIP парола</string>
-  <string name="w_onsip_password_desc">Парола за SIP акаунт</string>
+  <string name="w_onsip_password_desc">Парола за SIP профила</string>
 </resources>

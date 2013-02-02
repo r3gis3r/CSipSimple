@@ -59,6 +59,7 @@
   <string name="show_password">Показване на паролата</string>
   <string name="this_codec_is_not_free">** Този кодек не е безплатен!!!***</string>
   <string name="voice_mail">Гласова поща</string>
+  <string name="voice_mail_number">VM номер</string>
   <string name="type_sip_uri_or_autocomplete">SIP URI или автоматично попълване</string>
   <string name="not_configured_multiple_calls">Това приложение не е конфигурирано за използване на едновременни повиквания</string>
   <string name="legal_information">Юридическа информация</string>

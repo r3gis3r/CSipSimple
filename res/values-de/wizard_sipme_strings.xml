@@ -1,4 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="w_sipme_phone_number_desc">Deine Telefonnummer, beginnt normaler Weise mit 078555</string>
+  <string name="w_sipme_phone_number_desc">Deine Telefonnummer, beginnt z.B. mit 078555.</string>
 </resources>

@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="acct_inactive">Inativo</string>
   <string name="acct_unregistered">Não Registrado</string>
-  <string name="acct_expired">Registro expirou</string>
+  <string name="acct_expired">Registro Expirado</string>
   <string name="acct_registering">Registrando…</string>
   <string name="acct_registered">Registrado</string>
-  <string name="acct_regerror">Erro registrando</string>
-  <string name="acct_regfailed">Registro falhou</string>
+  <string name="acct_regerror">Erro ao registrar</string>
+  <string name="acct_regfailed">Falha no registro - Verifique suas configurações</string>
 </resources>

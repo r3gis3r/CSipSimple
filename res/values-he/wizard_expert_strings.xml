@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_expert_display_name">שם החשבון</string>
   <string name="w_expert_display_name_desc">הצג שם עבור חשבון זה</string>
@@ -12,6 +12,8 @@
   <string name="w_expert_username_desc">שם משתמש לאימות</string>
   <string name="w_expert_data">סיסמה</string>
   <string name="w_expert_data_desc">סיסמה (או נתונים אחרים) עבור אימות</string>
+  <string name="w_expert_datatype">סוג נתון</string>
+  <string name="w_expert_datatype_desc">סוג נתון</string>
   <string name="w_expert_t_proxy">פרוקסי</string>
   <string name="w_expert_proxy">פרוקסי URI</string>
   <string name="w_expert_proxy_desc">תבנית: SIP: proxy.net [: יציאה]</string>
@@ -19,8 +21,10 @@
   <string name="w_expert_prevent_tcp">מנע TCP (נסה רק UDP)</string>
   <string name="w_expert_publish_enabled">פרסם מאופשר</string>
   <string name="w_expert_reg_timeout">עבר זמן לרישום (שניות)</string>
+  <string name="w_expert_reg_dbr">השהיית רישום לפני ריענון (שניות)</string>
   <string name="w_expert_ka_interval">שמור פער פעיל (שניות)</string>
   <string name="w_expert_force_contact">ליצור קשר בכוח</string>
   <string name="w_expert_allow_contact_rewrite">אפשר ליצור קשר מחדש</string>
   <string name="w_expert_contact_rewrite_method">שיטת צור קשר מחדש</string>
+  <string name="w_expert_reg_use_proxy">כיצד להשתמש בשרת מתווך</string>
 </resources>

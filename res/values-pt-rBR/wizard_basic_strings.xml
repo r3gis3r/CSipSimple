@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_basic_username">Usuário</string>
-  <string name="w_basic_username_desc">Nome de usuário / Login (na escerve o \@sip.server)</string>
+  <string name="w_basic_username_desc">Nome de usuário (não inclua o \@sip.server)</string>
   <string name="w_basic_password">Senha</string>
   <string name="w_basic_password_desc">Senha para acessar sua conta</string>
 </resources>

@@ -1,9 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="test_audio">Teste de Áudio</string>
-    <string name="test_audio_prepare">Preparando áudio de teste…</string>
-    <string name="test_audio_ongoing">Testando saída… \nFale ao microfone e escute no fone de ouvido</string>
-    <string name="test_audio_network_failure">Falha no teste : \nPrimeiro altere para um rede valida</string>
-
+  <string name="test_audio">Teste de Áudio</string>
+  <string name="test_audio_prepare">Preparando teste de áudio...</string>
+  <string name="test_audio_ongoing">Teste em andamento…\nFale ao microfone e escute no fone de ouvido</string>
+  <string name="test_audio_network_failure">Falha no teste:\nAltere para um rede válida primeiro</string>
 </resources>

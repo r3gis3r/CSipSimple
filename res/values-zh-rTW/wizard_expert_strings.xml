@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_expert_display_name">帳戶名</string>
   <string name="w_expert_display_name_desc">此帳戶之顯示名稱</string>

@@ -1,6 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="other_country_providers_text">Outras Operadoras</string>
-  <string name="world_wide_providers_text">Operadoras Mundiais</string>
+  <string name="other_country_providers_text">Provedores de outros países</string>
+  <string name="world_wide_providers_text">Provedores mundiais</string>
   <string name="generic_wizards_text">Assistentes genéricos</string>
 </resources>

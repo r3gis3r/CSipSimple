@@ -63,7 +63,11 @@
   <!--String describing the Dial ImageButton
 
          Used by AccessibilityService to announce the purpose of the button.-->
-  <string name="description_dial_button">Набери</string>
+  <string name="description_dial_button">Набиране</string>
+  <!--String describing the Dial Video ImageButton
+
+         Used by AccessibilityService to announce the purpose of the button.-->
+  <string name="description_dial_video_button">Видео набиране</string>
   <!--String describing the Delete/Backspace ImageButton
 
          Used by AccessibilityService to announce the purpose of the button.-->
