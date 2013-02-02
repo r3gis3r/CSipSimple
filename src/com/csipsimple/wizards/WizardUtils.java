@@ -894,6 +894,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_ocn, 10, 
                     new Locale[]{Locale.JAPAN}, false, false, 
                     Ocn.class));
+            WIZARDS_DICT.put("TELEKOM_SRBIJA", new WizardInfo("TELEKOM_SRBIJA", "Telekom Srbija", 
+                    R.drawable.ic_wizard_telekom_srbija, 10, 
+                    new Locale[]{new Locale("sr")}, false, false, 
+                    TelekomSrbija.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
