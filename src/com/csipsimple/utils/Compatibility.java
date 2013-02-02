@@ -834,7 +834,7 @@ public final class Compatibility {
         if(lastSeenVersion < 2081) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.DISABLE_RPORT, false);
         }
-        if(lastSeenVersion < 2104 && android.os.Build.DEVICE.toLowerCase().startsWith("cayman")) {
+        if(lastSeenVersion < 2105 && android.os.Build.DEVICE.toLowerCase().startsWith("cayman")) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                     shouldUseModeApi());
         }
