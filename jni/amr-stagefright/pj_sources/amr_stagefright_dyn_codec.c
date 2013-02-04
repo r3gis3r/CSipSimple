@@ -39,7 +39,7 @@
 #if defined(PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC) && (PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC!=0)
 
 #include <pjmedia-codec/amr_helper.h>
-#include <pjmedia-codec/opencore_amrnb.h>
+#include <pjmedia-codec/opencore_amr.h>
 #include <dlfcn.h>
 
 #define THIS_FILE       "amr_stagefright_dyn.c"
