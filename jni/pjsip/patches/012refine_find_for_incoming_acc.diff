@@ -1,8 +1,8 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2012-12-01 18:38:07.583749802 +0100
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2012-12-01 19:32:58.793216160 +0100
-@@ -2577,6 +2577,55 @@
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2013-02-04 11:15:08.669601423 +0100
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c	2013-02-04 11:15:40.781600080 +0100
+@@ -2594,6 +2594,55 @@
      return pjsua_var.default_acc;
  }
  
@@ -58,7 +58,7 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
  
  /*
   * This is an internal function to find the most appropriate account to be
-@@ -2587,6 +2636,9 @@
+@@ -2604,6 +2653,9 @@
      pjsip_uri *uri;
      pjsip_sip_uri *sip_uri;
      unsigned i;
@@ -68,7 +68,7 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
  
      /* Check that there's at least one account configured */
      PJ_ASSERT_RETURN(pjsua_var.acc_cnt!=0, pjsua_var.default_acc);
-@@ -2619,6 +2671,9 @@
+@@ -2636,6 +2688,9 @@
  	}
      }
  
@@ -78,7 +78,7 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
      /* No matching account, try match domain part only. */
      for (i=0; i < pjsua_var.acc_cnt; ++i) {
  	unsigned acc_id = pjsua_var.acc_ids[i];
-@@ -2626,8 +2681,11 @@
+@@ -2643,8 +2698,11 @@
  
  	if (acc->valid && pj_stricmp(&acc->srv_domain, &sip_uri->host)==0) {
  	    /* Match ! */
@@ -92,7 +92,7 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
  	}
      }
  
-@@ -2636,7 +2694,12 @@
+@@ -2653,7 +2711,12 @@
  	unsigned acc_id = pjsua_var.acc_ids[i];
  	pjsua_acc *acc = &pjsua_var.acc[acc_id];
  
@@ -106,7 +106,7 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_acc.c
  
  	    if (acc->cfg.transport_id != PJSUA_INVALID_ID) {
  		pjsip_transport_type_e type;
-@@ -2647,16 +2710,21 @@
+@@ -2664,16 +2727,21 @@
  		if (pjsua_var.tpdata[acc->cfg.transport_id].type != type)
  		    continue;
  	    }
