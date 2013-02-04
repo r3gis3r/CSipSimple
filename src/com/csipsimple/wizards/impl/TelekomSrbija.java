@@ -63,6 +63,7 @@ public class TelekomSrbija extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.proxies = new String[] {"sip:sbcbg2.ims.telekomsrbija.com"};
+		account.username =  getText(accountUsername).trim() + "@" + getDomain();
 		account.use_rfc5626 = true;
 		return account;
 	}
