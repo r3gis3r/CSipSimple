@@ -1,8 +1,8 @@
 ###########
 # PJMEDIA #
 ###########
-
-LOCAL_PATH := $(call my-dir)/../../sources/pjmedia
+TOOLCHAIN_PATH:=$(call my-dir)
+LOCAL_PATH := $(TOOLCHAIN_PATH)/../../sources/pjmedia
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := pjmedia
@@ -81,157 +81,10 @@ LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-audiodev/android_jni_dev.cpp
 
 include $(BUILD_STATIC_LIBRARY)
 
-
-# G7221 shared lib
-
-ifeq ($(MY_USE_G7221),1)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := pj_g7221_codec
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../pjlib/include $(LOCAL_PATH)/../pjlib-util/include/ \
-	$(LOCAL_PATH)/../pjnath/include $(LOCAL_PATH)/include $(LOCAL_PATH)/.. \
-	$(LOCAL_PATH)/../third_party
-
-
-LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/g7221.c $(PJMEDIACODEC_SRC_DIR)/g7221_sdp_match.c 
-LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
-
-LOCAL_STATIC_LIBRARIES += g7221
-LOCAL_SHARED_LIBRARIES += libpjsipjni
-LOCAL_STATIC_LIBRARIES += libgcc
-
-include $(BUILD_SHARED_LIBRARY)
-endif
-
-# OpenSL-ES implementation
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := pj_opensl_dev
-
-
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../pjlib/include $(LOCAL_PATH)/../pjlib-util/include \
-	$(LOCAL_PATH)/../pjnath/include $(LOCAL_PATH)/include $(LOCAL_PATH)/..
-
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-audiodev
-
-
-LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-audiodev/opensl_dev.c
-
-
-LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DPJMEDIA_AUDIO_DEV_HAS_OPENSL=1
-LOCAL_SHARED_LIBRARIES += libpjsipjni
-LOCAL_LDLIBS += -lOpenSLES
-
-LOCAL_STATIC_LIBRARIES += libgcc
-
-include $(BUILD_SHARED_LIBRARY)
-
-
-ifeq ($(MY_USE_VIDEO),1)
-# Video capture/render implementation
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := pj_video_android
-
-
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../webrtc/sources/modules/video_render/main/interface \
-	$(LOCAL_PATH)/../../../webrtc/sources/modules/video_capture/main/interface \
-	$(LOCAL_PATH)/../../../webrtc/sources/modules/interface \
-	$(LOCAL_PATH)/../../../webrtc/sources/system_wrappers/interface \
-	$(LOCAL_PATH)/../../../webrtc/sources/modules \
-	$(LOCAL_PATH)/../../../webrtc/sources \
-	$(LOCAL_PATH)/../pjlib/include $(LOCAL_PATH)/../pjlib-util/include \
-	$(LOCAL_PATH)/../pjsip/include \
-	$(LOCAL_PATH)/../pjnath/include $(LOCAL_PATH)/include $(LOCAL_PATH)/.. 
-
-# We depends on csipsimple at this point because we need service to be stored somewhere
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-videodev \
-	$(LOCAL_PATH)/../../../swig-glue \
-	$(LOCAL_PATH)/../../../csipsimple-wrapper/include
-
-# Ffmpeg codec depend on ffmpeg
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../ffmpeg/ffmpeg_src
-
-# Pj implementation for renderer
-LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/webrtc_android_render_dev.cpp
-# Pj implementation for capture
-LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/webrtc_android_capture_dev.cpp
-
-# Ffmpeg codec
-LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/ffmpeg_vid_codecs.c \
-	$(PJLIB_SRC_DIR)/converter_libswscale.c \
-	$(PJLIB_SRC_DIR)/ffmpeg_util.c \
-	$(PJMEDIACODEC_SRC_DIR)/h263_packetizer.c \
-	$(PJMEDIACODEC_SRC_DIR)/h264_packetizer.c \
-	$(PJLIB_SRC_DIR)/vid_codec_util.c
-
-
-
-# For render and capture
-LOCAL_STATIC_LIBRARIES += libwebrtc_video_render libwebrtc_video_capture
-
-# Common webrtc utility
-LOCAL_STATIC_LIBRARIES += libwebrtc_yuv libyuv libwebrtc_apm_utility \
-	libwebrtc_system_wrappers libwebrtc_spl
-
-
-# Ffmpeg codec
-BASE_FFMPEG_BUILD_DIR :=  $(LOCAL_PATH)/../../../ffmpeg/build/ffmpeg/$(TARGET_ARCH_ABI)/lib
-LOCAL_LDLIBS += $(BASE_FFMPEG_BUILD_DIR)/libavcodec.a \
-		$(BASE_FFMPEG_BUILD_DIR)/libavformat.a \
-		$(BASE_FFMPEG_BUILD_DIR)/libswscale.a \
-		$(BASE_FFMPEG_BUILD_DIR)/libavutil.a
-
-# Add X264	
-BASE_X264_BUILD_DIR :=  $(LOCAL_PATH)/../../../ffmpeg/build/x264/$(TARGET_ARCH_ABI)/lib
-LOCAL_LDLIBS += $(BASE_X264_BUILD_DIR)/libx264.a
- 
-# Add ffmpeg to flags for pj part build
-LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DWEBRTC_ANDROID \
-	-DPJMEDIA_HAS_FFMPEG=1 \
-	-DPJMEDIA_HAS_FFMPEG_CODEC=1 \
-	-DPJMEDIA_HAS_FFMPEG_CODEC_H264=1
-	
-	
-LOCAL_SHARED_LIBRARIES += libpjsipjni
-LOCAL_LDLIBS += -lGLESv2 -llog
-LOCAL_STATIC_LIBRARIES += libgcc cpufeatures
-
-USE_STAGEFRIGHT_H264:=0
-ANDROID_LIBS := ./jni/ffmpeg/ffmpeg_src/android-libs
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-ifeq ($(USE_STAGEFRIGHT_H264),1)
-	LOCAL_LDLIBS += -L$(ANDROID_LIBS) -Wl,-rpath-link,$(ANDROID_LIBS) -lstagefright -lutils -lbinder
-endif
-endif
-
-include $(BUILD_SHARED_LIBRARY)
+include $(TOOLCHAIN_PATH)/Codec_g7221.mk
+include $(TOOLCHAIN_PATH)/OpenSL_ES.mk
+include $(TOOLCHAIN_PATH)/Video.mk
+include $(TOOLCHAIN_PATH)/Screencapture.mk
 
 $(call import-module,cpufeatures)
-## The screen capture backend
 
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := pj_screen_capture_android
-
-
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../pjlib/include $(LOCAL_PATH)/../pjlib-util/include \
-	$(LOCAL_PATH)/../pjsip/include \
-	$(LOCAL_PATH)/../pjnath/include $(LOCAL_PATH)/include $(LOCAL_PATH)/.. 
-
-# We depends on csipsimple at this point because we need service to be stored somewhere
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../android_sources/pjmedia/include/pjmedia-videodev
-
-# Pj implementation for capture
-LOCAL_SRC_FILES += $(PJ_ANDROID_SRC_DIR)/pjmedia-videodev/android_screen_capture_dev.c
-
-LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
-LOCAL_STATIC_LIBRARIES += libgcc
-
-LOCAL_SHARED_LIBRARIES += libpjsipjni
-
-include $(BUILD_SHARED_LIBRARY)
-
-endif
