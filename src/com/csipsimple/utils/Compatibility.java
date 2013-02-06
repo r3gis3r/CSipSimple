@@ -838,7 +838,10 @@ public final class Compatibility {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                     shouldUseModeApi());
         }
-        
+        if(lastSeenVersion < 2111) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.MEDIA_THREAD_COUNT, "2");
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE, true);
+        }
         prefWrapper.endEditing();
     }
 

@@ -145,8 +145,6 @@ public class PrefsLogic {
         
         switch (t) {
             case TYPE_MEDIA: {
-                // Disable io queue because it needs one working thread that has been disabled
-                pfh.hidePreference(MEDIA_AUDIO_QUALITY_KEY, SipConfigManager.HAS_IO_QUEUE);
                 
                 // Expert mode
                 if(!pfw.isAdvancedUser()) {
@@ -168,7 +166,8 @@ public class PrefsLogic {
                     pfh.hidePreference(MEDIA_AUDIO_VOLUME_KEY, SipConfigManager.USE_SOFT_VOLUME);
                     
                     pfh.hidePreference(MEDIA_MISC_KEY, SipConfigManager.AUTO_CONNECT_SPEAKER);
-                    pfh.hidePreference(MEDIA_MISC_KEY, SipConfigManager.THREAD_COUNT);
+                    pfh.hidePreference(MEDIA_AUDIO_QUALITY_KEY, SipConfigManager.MEDIA_THREAD_COUNT);
+                    pfh.hidePreference(MEDIA_AUDIO_QUALITY_KEY, SipConfigManager.HAS_IO_QUEUE);
                     
                     pfh.hidePreference(null, MEDIA_BAND_TYPE_KEY);
                     pfh.hidePreference(null, MEDIA_AUDIO_TROUBLESHOOT_KEY);

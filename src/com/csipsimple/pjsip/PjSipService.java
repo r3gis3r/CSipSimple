@@ -401,7 +401,11 @@ public class PjSipService {
                 // With new timer implementation, thread count of pjsip can be 0
                 // it will use less CPU since now thread are launched by
                 // alarmManager
-                cfg.setThread_cnt(prefsWrapper.getPreferenceIntegerValue(SipConfigManager.THREAD_COUNT));
+                int threadCount = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.THREAD_COUNT);
+                if(threadCount <= 0) {
+                    threadCount = 1;
+                }
+                cfg.setThread_cnt(threadCount);
                 cfg.setUse_srtp(getUseSrtp());
                 cfg.setSrtp_secure_signaling(0);
                 cfg.setNat_type_in_sdp(0);
@@ -477,9 +481,12 @@ public class PjSipService {
                 mediaCfg.setClock_rate(clockRate);
                 mediaCfg.setAudio_frame_ptime(prefsWrapper
                         .getPreferenceIntegerValue(SipConfigManager.SND_PTIME));
-                // Disabled because only one thread enabled now for battery perfs on normal state
-                mediaCfg.setHas_ioqueue(/*prefsWrapper
-                        .getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE) ? 1 :*/ 0);
+                
+                // Disabled ? because only one thread enabled now for battery perfs on normal state
+                int mediaThreadCount = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.MEDIA_THREAD_COUNT);
+                mediaCfg.setThread_cnt(mediaThreadCount);
+                boolean hasIoQueue = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE);
+                mediaCfg.setHas_ioqueue((hasIoQueue && (mediaThreadCount > 0)) ? 1 : 0);
 
                 // ICE
                 mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());

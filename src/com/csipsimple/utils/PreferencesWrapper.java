@@ -98,6 +98,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.SIP_AUDIO_MODE, "0");
 		put(SipConfigManager.MICRO_SOURCE, "1");
 		put(SipConfigManager.THREAD_COUNT, "0");
+        put(SipConfigManager.MEDIA_THREAD_COUNT, "2");
 		put(SipConfigManager.HEADSET_ACTION, "0");
 		put(SipConfigManager.AUDIO_IMPLEMENTATION, "0");
 		put(SipConfigManager.H264_PROFILE, "66");
@@ -178,7 +179,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.USE_SOFT_VOLUME, false);
 		put(SipConfigManager.USE_ROUTING_API, false);
 		put(SipConfigManager.USE_MODE_API, false);
-		put(SipConfigManager.HAS_IO_QUEUE, false);
+		put(SipConfigManager.HAS_IO_QUEUE, true);
 		put(SipConfigManager.SET_AUDIO_GENERATE_TONE, false);
 		put(SipConfigManager.USE_SGS_CALL_HACK, false);
 		put(SipConfigManager.USE_WEBRTC_HACK, false);

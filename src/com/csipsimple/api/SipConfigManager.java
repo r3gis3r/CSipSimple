@@ -170,7 +170,14 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String HAS_IO_QUEUE = "has_io_queue";
+    /**
+     * Media thread count
+     */
+    public static final String MEDIA_THREAD_COUNT = "media_thread_count";
 
+    /**
+     * Sip stack thread count
+     */
     public static final String THREAD_COUNT = "thread_count";
     /**
      * Backend for echo cancellation. <br/>

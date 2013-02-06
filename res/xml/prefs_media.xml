@@ -82,6 +82,13 @@
             android:title="@string/has_io_queue" />
     </PreferenceCategory>
 
+    <EditTextPreference
+        android:defaultValue="2"
+        android:key="media_thread_count"
+        android:numeric="signed"
+        android:summary="@string/thread_count_desc"
+        android:title="@string/thread_count" />
+
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="codecs_per_bandwidth"
@@ -181,13 +188,6 @@
     <PreferenceCategory
         android:key="misc"
         android:title="@string/misc" >
-        <EditTextPreference
-            android:defaultValue="0"
-            android:key="thread_count"
-            android:numeric="signed"
-            android:summary="@string/thread_count_desc"
-            android:title="@string/thread_count" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="auto_connect_bluetooth"

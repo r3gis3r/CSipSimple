@@ -70,5 +70,11 @@
         android:numeric="signed"
         android:summary="@string/tsx_timeout_desc"
         android:title="@string/tsx_td_timeout" />
+    <EditTextPreference
+        android:defaultValue="0"
+        android:key="thread_count"
+        android:numeric="signed"
+        android:summary="@string/thread_count_desc"
+        android:title="@string/thread_count" />
 
 </PreferenceScreen>
