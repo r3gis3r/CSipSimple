@@ -38,7 +38,7 @@ else
 $(call __ndk_info,No local settings... build all in release mode !)
 endif
 
-APP_MODULES := libpjsipjni pj_opensl_dev
+APP_MODULES := libpjsipjni pj_opensl_dev pj_g729_codec
 
 SWIG ?= swig2.0
 PYTHON ?= python

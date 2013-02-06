@@ -28,7 +28,12 @@ LOCAL_SRC_FILES += ../pj_sources/pj_g729.c
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
-include $(BUILD_STATIC_LIBRARY)
+
+LOCAL_SHARED_LIBRARIES += libpjsipjni
+LOCAL_STATIC_LIBRARIES += libgcc
+
+include $(BUILD_SHARED_LIBRARY)
+
 include $(CLEAR_VARS)
 
 endif

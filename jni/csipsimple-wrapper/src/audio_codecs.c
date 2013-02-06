@@ -28,10 +28,6 @@
 #include <amr_stagefright_dyn_codec.h>
 #endif
 
-#if PJMEDIA_HAS_G729_CODEC
-#include <pj_g729.h>
-#endif
-
 #define THIS_FILE "audio_codecs.c"
 
 PJ_DEF(void) pjmedia_audio_codec_config_default(pjmedia_audio_codec_config*cfg) {
@@ -117,14 +113,6 @@ PJ_DEF(pj_status_t) pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
 	if (status != PJ_SUCCESS)
 		return status;
 #endif /* PJMEDIA_HAS_WEBRTC_CODEC */
-
-#if PJMEDIA_HAS_G729_CODEC
-	/* Register G729 */
-	status = pjmedia_codec_g729_init(endpt);
-	if (status != PJ_SUCCESS)
-		return status;
-#endif /* PJMEDIA_HAS_G729_CODEC */
-
 
 #if PJMEDIA_HAS_SILK_CODEC
 	status = pjmedia_codec_silk_init(endpt);
