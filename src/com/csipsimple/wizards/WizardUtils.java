@@ -349,7 +349,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_commpeak, 45, 
                     new Locale[]{}, false, true, 
                     CommPeak.class));
-            
+            WIZARDS_DICT.put("SUPERCEL", new WizardInfo("SUPERCEL", "SuperCel", 
+                    R.drawable.ic_wizard_supercel, 45, 
+                    new Locale[]{}, false, true, 
+                    SuperCel.class));
             
 			
 			//Locales
