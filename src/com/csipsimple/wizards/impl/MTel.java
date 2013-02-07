@@ -21,8 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.text.InputType;
-
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
@@ -48,7 +46,7 @@ public class MTel extends SimpleImplementation {
 		
 		accountUsername.setTitle(R.string.w_common_phone_number);
 		accountUsername.setDialogTitle(R.string.w_common_phone_number);
-		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		//accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 		
 	}
 	@Override
