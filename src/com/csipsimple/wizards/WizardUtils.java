@@ -905,10 +905,6 @@ public class WizardUtils {
                     R.drawable.ic_wizard_mtel, 10, 
                     new Locale[]{new Locale("sr")}, false, false, 
                     MTel.class));
-            WIZARDS_DICT.put("DEPS", new WizardInfo("DEPS", "Deps", 
-                    R.drawable.ic_wizard_deps, 10, 
-                    new Locale[]{new Locale("UK", "ua"), locale("ru_RU"), locale("cs_CZ"), locale("ro_RO"), locale("hr_HR"), locale("bg_BG"),}, false, false, 
-                    Deps.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
