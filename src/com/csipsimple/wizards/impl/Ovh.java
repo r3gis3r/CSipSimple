@@ -117,6 +117,12 @@ public class Ovh extends SimpleImplementation {
 		
 	}
 
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+	    acc.vm_nbr ="123";
+	    return acc;
+	}
     @Override
     public void updateDescriptions() {
         super.updateDescriptions();
