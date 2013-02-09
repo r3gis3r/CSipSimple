@@ -113,7 +113,14 @@ public class VoipTel extends SimpleImplementation  implements OnAccountCreationD
         setUsername(username);
         setPassword(password);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onAccountCreationDone(String username, String password, String extra) {
+        onAccountCreationDone(username, password);
+    }
 
     @Override
     public boolean saveAndQuit() {

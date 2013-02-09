@@ -522,15 +522,26 @@ public class OneWorld extends SimpleImplementation implements OnAccountCreationD
         countryCodeNbrs.put("ZW", "263");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onAccountCreationDone(String username, String password) {
-        // Actually useless here as they do a very crappy way to go back in the
+        // Actually useless here as they do a weird way to go back in the
         // application
         // Probably necessary for iPhone but absolutely useless in android as we
         // can inject
-        // A javascript api to the webview so that user experience is better !
+        // A javascript api to the webview so that user experience is better ! ;)
         setUsername(username);
         setPassword(password);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onAccountCreationDone(String username, String password, String extra) {
+        onAccountCreationDone(username, password);
     }
 
     @Override

@@ -201,12 +201,22 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 		account.vm_nbr = "*1234";
 		return account;
 	}
-	
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onAccountCreationDone(String username, String password) {
         setUsername(username);
         setPassword(password);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onAccountCreationDone(String username, String password, String extra) {
+        onAccountCreationDone(username, password);
     }
 
     @Override

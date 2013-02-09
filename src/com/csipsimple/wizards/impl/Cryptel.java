@@ -156,13 +156,22 @@ public class Cryptel extends SimpleImplementation implements OnAccountCreationDo
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onAccountCreationDone(String username, String password) {
-
         setUsername(username);
         setPassword(password);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onAccountCreationDone(String username, String password, String extra) {
+        onAccountCreationDone(username, password);
+    }
 
     @Override
     public boolean saveAndQuit() {
@@ -183,4 +192,5 @@ public class Cryptel extends SimpleImplementation implements OnAccountCreationDo
     public void onEditAccountRequested() {
         setFirstViewVisibility(false);
     }
+
 }

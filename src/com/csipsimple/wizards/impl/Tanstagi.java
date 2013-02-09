@@ -147,6 +147,14 @@ public class Tanstagi extends SimpleImplementation implements OnAccountCreationD
      * {@inheritDoc}
      */
     @Override
+    public void onAccountCreationDone(String username, String password, String extra) {
+        onAccountCreationDone(username, password);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean saveAndQuit() {
         if (canSave()) {
             parent.saveAndFinish();

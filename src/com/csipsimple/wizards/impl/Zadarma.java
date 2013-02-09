@@ -124,6 +124,14 @@ public class Zadarma extends SimpleImplementation implements OnAccountCreationDo
      * {@inheritDoc}
      */
     @Override
+    public void onAccountCreationDone(String username, String password, String extra) {
+        onAccountCreationDone(username, password);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean saveAndQuit() {
         if (canSave()) {
             parent.saveAndFinish();
