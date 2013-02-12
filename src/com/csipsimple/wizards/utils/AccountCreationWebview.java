@@ -95,6 +95,7 @@ public class AccountCreationWebview {
             webView.setVisibility(View.GONE);
             settingsContainer.setVisibility(View.VISIBLE);
             validationBar.setVisibility(View.VISIBLE);
+            parent.updateValidation();
         }
     }
     
@@ -146,7 +147,6 @@ public class AccountCreationWebview {
                 if(creationListener != null) {
                     creationListener.onAccountCreationDone(userName, password, extraData);
                 }
-                parent.updateValidation();
             }
         }
     }
