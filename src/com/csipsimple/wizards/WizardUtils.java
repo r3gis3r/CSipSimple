@@ -353,6 +353,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_supercel, 45, 
                     new Locale[]{}, false, true, 
                     SuperCel.class));
+            WIZARDS_DICT.put("GATHERCALL", new WizardInfo("GATHERCALL", "GatherCall", 
+                    R.drawable.ic_wizard_voiptelie, 45, 
+                    new Locale[]{}, false, true, 
+                    GatherCall.class));
             
 			
 			//Locales
