@@ -96,7 +96,10 @@ public final class SipUri {
                 // Prepend with space
                 buildString.insert(0, " ");
                 // Start with display name
-                buildString.insert(0, Uri.encode(displayName));
+                // qdtext         =  LWS / %x21 / %x23-5B / %x5D-7E  / UTF8-NONASCII
+                String encodedName = displayName.replace("\"", "%22");
+                encodedName = encodedName.replace("\\", "%5C");
+                buildString.insert(0, "\""+encodedName+"\" ");
             }
             return buildString.toString();
         }

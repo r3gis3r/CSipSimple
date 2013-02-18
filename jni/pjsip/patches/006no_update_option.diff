@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_call.c	2013-01-14 23:16:19.963165417 +0100
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c	2013-01-14 23:17:41.955161988 +0100
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_call.c	2013-02-16 16:02:37.000000000 +0100
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c	2013-02-16 16:04:27.095600376 +0100
 @@ -23,6 +23,9 @@
  
  #define THIS_FILE		"pjsua_call.c"
@@ -12,16 +12,16 @@ Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_call.c
  
  /* Retry interval of sending re-INVITE for locking a codec when remote
   * SDP answer contains multiple codec, in milliseconds.
-@@ -3058,7 +3061,11 @@
- 					      PJSIP_H_ALLOW,
- 					      NULL, &STR_UPDATE) ==
- 						PJSIP_DIALOG_CAP_SUPPORTED;
+@@ -3262,7 +3265,11 @@
+ 	}
+     }
+     
 -    if (rem_can_update) {
 +    if (rem_can_update
 +#if USE_CSIPSIMPLE_HACKS
-+    		&& !pjsua_no_update
++            && !pjsua_no_update
 +#endif
-+) {
- 	status = pjsip_inv_update(call->inv, NULL, new_sdp, &tdata);
++    ) {
+ 	status = pjsip_inv_update(inv, NULL, new_offer, &tdata);
      } else {
- 	status = pjsip_inv_reinvite(call->inv, NULL, new_sdp, &tdata);
+ 	status = pjsip_inv_reinvite(inv, NULL, new_offer, &tdata);

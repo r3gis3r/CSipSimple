@@ -1,9 +1,9 @@
 # This makefile aim is only for now to address source checkout and patch
 zrtp4pj_repo := git://github.com/r3gis3r/ZRTP4PJ.git
-zrtp4pj_tag := 1.1.0_2
+zrtp4pj_tag := 1.1.0_3
 #10fe242813531daa61088af158b8b64c6fbe787e
 zrtpcpp_repo := git://github.com/r3gis3r/ZRTPCPP.git
-zrtpcpp_tag := 2.3.0_1
+zrtpcpp_tag := 2.3.0_2
 
 
 git_update=git fetch --tags; \

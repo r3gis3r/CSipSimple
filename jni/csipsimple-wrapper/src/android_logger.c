@@ -27,7 +27,8 @@
 
 PJ_DEF(void) pj_android_log_msg(int level, const char *data, int len) {
 	const char delims[] = "\n";
-	char *line = strtok(data, delims);
+	char* cpy = strndup(data, len);
+	char *line = strtok(cpy, delims);
 	while(line != NULL){
 		if (level <= 1) {
 			LOGE("%s", line);
@@ -42,4 +43,5 @@ PJ_DEF(void) pj_android_log_msg(int level, const char *data, int len) {
 		}
 		line = strtok(NULL, delims);
 	}
+	free(cpy);
 }
