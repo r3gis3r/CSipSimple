@@ -357,7 +357,7 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voiptelie, 45, 
                     new Locale[]{}, false, true, 
                     GatherCall.class));
-            WIZARDS_DICT.put("TRAVELTELE", new WizardInfo("TRAVELTELE", "Traveltele", 
+            WIZARDS_DICT.put("TRAVELTELE", new WizardInfo("TRAVELTELE", "Travel Telekom", 
                     R.drawable.ic_wizard_traveltele, 45, 
                     new Locale[]{}, false, true, 
                     TravelTele.class));

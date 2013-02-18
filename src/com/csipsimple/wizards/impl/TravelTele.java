@@ -35,7 +35,7 @@ public class TravelTele extends SimpleImplementation {
 	
 	@Override
 	protected String getDefaultName() {
-		return "Traveltele";
+		return "Travel Telekom";
 	}
 
 	
