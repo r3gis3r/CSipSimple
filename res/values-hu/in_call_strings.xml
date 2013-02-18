@@ -19,4 +19,10 @@
   <string name="unlock">Felold</string>
   <string name="record">Felvétel</string>
   <string name="stop_recording">Felvétel megállítás</string>
+  <string name="xfer_uri">Átirányítás számra</string>
+  <string name="hold_call">Tartás</string>
+  <string name="on_hold">Tartásban</string>
+  <string name="resume_call">Visszaállít</string>
+  <string name="transfer_to_call">Átirányítás hívásra</string>
+  <string name="send_dtmf">DTMF küldése</string>
 </resources>

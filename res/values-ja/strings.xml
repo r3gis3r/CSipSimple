@@ -45,12 +45,13 @@
   <string name="faq">FAQ</string>
   <string name="help">ヘルプ</string>
   <string name="record_logs">ログを記録して開発チームに送信及びバグ報告</string>
-  <string name="send_logs">ログの記録停止 (ログの送信)</string>
+  <string name="send_logs">ログの記録(送信)停止</string>
   <string name="view_existing_issues">既知の問題を確認</string>
   <string name="ok">OK</string>
   <string name="misc">その他</string>
   <string name="warning">警告</string>
-  <string name="disconnect_and_incoming_explaination">このネットワークで利用可能なように設定済みです。次回起動時まで利用したくない場合はOKをクリックしてください。</string>
+  <string name="disconnect_and_incoming_explaination">今のネットワークで通話できるよう設定済です。OKをクリックすると次にアプリケーションを起動するまで通話できなくなります。</string>
+  <string name="disconnect_and_future_incoming_explaination">アプリケーションを切断した場合、ネットワーク設定がどのようになっていても、次にアプリケーションを起動するまでSIPは利用できなくなります。</string>
   <string name="gadget_title">SIPアカウントスイッチャー</string>
   <string name="pickup_sip_uri">SIP連絡先選択</string>
   <string name="display_icon_in_status_bar_desc">SIPに登録完了した場合にステータスバーにアイコンを表示</string>

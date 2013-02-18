@@ -39,4 +39,5 @@
   <string name="w_expert_mwi_enabled_desc">ボイスメールの通知を取得</string>
   <string name="w_expert_allow_via_rewrite">Viaの書き換え許可</string>
   <string name="w_expert_allow_via_rewrite_desc">登録リクエストの中で同じインターフェースのアドレスの一つとして使うようにVia sent-byを修正</string>
+  <string name="w_expert_ipv6_media_use">IPv6を通信に利用</string>
 </resources>

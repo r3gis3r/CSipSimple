@@ -5,9 +5,9 @@
   <!--Command name to open a Compose screen; displays in conversation list-->
   <string name="new_message">Ново съобщение</string>
   <!--Summary text under "New Message" command; displays in conversation list-->
-  <string name="create_new_message">Напиши ново съобщение</string>
+  <string name="create_new_message">Напишете ново съобщение</string>
   <!--Menu item for starting a new conversation-->
-  <string name="menu_compose_new">Напиши</string>
+  <string name="menu_compose_new">Напишете</string>
   <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
   <string name="menu_call">Обаждане</string>
   <!--Menu item for deleting all conversations-->
@@ -26,15 +26,15 @@
   <!--Dialog box title brought up when warning the user that a message could not be delivered-->
   <string name="undelivered_msg_dialog_title">Недоставено съобщение</string>
   <!--Dialog box message indicating that a message could not be delivered-->
-  <string name="undelivered_sms_dialog_body">Невъзможно е да се изпрати това съобщение</string>
+  <string name="undelivered_sms_dialog_body">Съобщението не може да се изпрати</string>
   <!--Menu item for deleting the entire conversation currently being viewed-->
   <string name="delete_thread">Спри процес</string>
   <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
          to be downloaded (imperative verb)-->
-  <string name="download">Изтегляне</string>
+  <string name="download">Свали</string>
   <!--Message displayed in place of the "download message" button once it has been pressed,
          indicating that the download is in progress-->
-  <string name="downloading">Изтегляне</string>
+  <string name="downloading">Сваляне</string>
   <!--Individual message context menu item-->
   <string name="copy_message_text">Копирай текста на съобщението</string>
   <!--Header for context menu on an individual message-->
@@ -60,22 +60,22 @@
   <!--Dialog message text asking the user if he wants to resize the picture being attached-->
   <string name="ask_for_automatically_resize">Автоматично оразмеряване на картинката преди изпращане?</string>
   <!--Toast message while an image is being resized-->
-  <string name="compressing">Картинката е прекалено голяма. Компресиране\u2026</string>
+  <string name="compressing">Картинката е прекалено голяма. Компресиране…</string>
   <!--Context menu item on a message recipient for viewing their contact info-->
   <string name="menu_view_contact">Виж контакт</string>
   <!--Context menu item on a message recipient for adding them to the user's
          contacts (used if the recipient is not already in the address book)-->
-  <string name="menu_add_to_contacts">Добави в контакти</string>
+  <string name="menu_add_to_contacts">Добавяне към контакти</string>
   <!--Sender to be used if the sender address has been hidden-->
-  <string name="hidden_sender_address">Скрит адрес на подателя</string>
+  <string name="hidden_sender_address">Адреса на подателя е скрит</string>
   <!--Text to be used for affirmative response button in dialog boxes-->
-  <string name="yes">ОК</string>
+  <string name="yes">Добре</string>
   <!--Text to be used for negative response button in dialog boxes-->
   <string name="no">Отказ</string>
   <!--Button text used for editing a slideshow (imperative verb)-->
   <string name="edit">Редактиране</string>
   <!--Settings screen menu item for restoring all settings to default-->
-  <string name="restore_default">Възстанови настройките по подразбиране</string>
+  <string name="restore_default">Върни стандартните настройки</string>
   <!--Confirm Delete-->
   <!--Delete confirmation dialog title-->
   <string name="confirm_dialog_title">Изтриване</string>
@@ -84,9 +84,9 @@
   <!--Delete all threads confirmation dialog message-->
   <string name="confirm_delete_all_conversations">Всички процеси ще бъдат изтрити</string>
   <!--Delete message confirmation dialog message-->
-  <string name="confirm_delete_message">Това съобщение ще бъде изтрито</string>
+  <string name="confirm_delete_message">Съобщението ще бъде изтрито</string>
   <!--Delete message confirmation dialog message for a locked message-->
-  <string name="confirm_delete_locked_message">Сигурни ли сте, че искате да изтриете това заключено съобщение?</string>
+  <string name="confirm_delete_locked_message">Наистина ли искате заключеното съобщение да бъде изтрито?</string>
   <!--Delete entire thread confirmation dialog message-->
   <string name="confirm_delete_all_messages">Всичко ще бъде изтрито</string>
   <!--Delete button title-->
@@ -106,9 +106,9 @@
   <!--Label in "Report" window-->
   <string name="recipient_label">Получател: </string>
   <!--Label in "Report" window-->
-  <string name="status_label">Статус: </string>
+  <string name="status_label">Състояние: </string>
   <!--Menu item-->
-  <string name="menu_insert_smiley">Вмъкване на имотикона</string>
+  <string name="menu_insert_smiley">Вмъкване на емотикона</string>
   <!--Label for the "Me" number of this phone.-->
   <string name="me">Аз</string>
   <!--Brief small label shown to right of message when it is being sent.-->

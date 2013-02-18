@@ -39,4 +39,5 @@
   <string name="w_expert_mwi_enabled_desc">Ottiene notifiche della mail vocale</string>
   <string name="w_expert_allow_via_rewrite">Consenti via riscrittura</string>
   <string name="w_expert_allow_via_rewrite_desc">Fissa Via sent-by per utilizzare lo stesso indirizzo interfaccia come quello nella richiesta REGISTER</string>
+  <string name="w_expert_ipv6_media_use">Usa IPV6 per media</string>
 </resources>

@@ -25,4 +25,6 @@
   <string name="resume_call">再開</string>
   <string name="transfer_to_call">呼び出しへ転送</string>
   <string name="send_dtmf">DTMF送信</string>
+  <string name="zrtp_trust_remote">ZRTPの通信先を信認</string>
+  <string name="zrtp_revoke_trusted_remote">信認しているZRTPの通信先を取り消し</string>
 </resources>

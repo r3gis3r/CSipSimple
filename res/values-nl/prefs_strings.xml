@@ -72,6 +72,7 @@
   <string name="enable_qos_desc">QoS inschakelen voor pakketten</string>
   <string name="dscp_val">DSCP-waarde</string>
   <string name="dscp_val_desc">DSCP-waarde voor SIP-verkeer</string>
+  <string name="rtp_dscp_val_desc">DSCP waarde voor RTP verkeer</string>
   <string name="udp_keep_alive_interval_wifi">Wifi UDP in stand houden</string>
   <string name="udp_keep_alive_interval_mobile">Mobiel UDP in stand houden</string>
   <string name="tcp_keep_alive_interval_wifi">Wifi TCP in stand houden</string>
@@ -103,6 +104,8 @@
   <string name="network_route_polling_desc">Mogelijke Android 4.0 VPN check oplossing. Op 0 laten staan om dit gedeactiveerd te laten.</string>
   <string name="disable_tcp_switch">TCP schakel uitschakelen</string>
   <string name="disable_tcp_switch_desc">Wanneer geactiveerd, wordt er geen gebruik gemaakt van TCP voor grote UDP pakketten.</string>
+  <string name="disable_rport">Uitschakelen rport bij verzoeken</string>
+  <string name="disable_rport_desc">Alleen activeren bij onstabiele servers. Schakel RFC 3581 ondersteuning uit door rport niet te versturen.</string>
   <string name="add_bandwidth_tias_in_sdp">Gebruik bandbreedte-wijziger TIAS in SDP</string>
   <string name="add_bandwidth_tias_in_sdp_desc">Per RFC3890.  Benodigd voor video op Avaya servers, maar werkt niet altijd op andere SIP servers.</string>
   <!--Security-->
@@ -165,6 +168,10 @@
   <string name="codecs_desc">Prioriteit (0 is uitgeschakeld)</string>
   <string name="sip_dtmf">DTMF-modus</string>
   <string name="sip_dtmf_desc">DTMF-verzendwijze</string>
+  <string name="dtmf_pause_time">Tijd voor DTMF pauze</string>
+  <string name="dtmf_pause_time_desc">Pauze (,) scheidingsteken wachttijd in ms</string>
+  <string name="dtmf_wait_time">Tijd voor DTMF wachten</string>
+  <string name="dtmf_wait_time_desc">Wacjt (;) scheidingsteken wachttijd in ms</string>
   <string name="use_soft_volume">Gebruik software-geluidssterkte</string>
   <string name="use_soft_volume_desc">Gebruik software-geluidssterkte in plaats van Android-geluidssterkte</string>
   <string name="use_routing_api">Gebruik routerings-API</string>
@@ -241,8 +248,14 @@
   <string name="ilbc_frame_per_packet">iLBC RTP frames per pakket</string>
   <string name="codec_h264_profile">H264 profiel</string>
   <string name="codec_h264_level">H264 niveau</string>
+  <string name="codec_h264_bitrate">H264 bitrate</string>
+  <string name="codec_h264_bitrate_desc">Gebruik 0 voor geselecteerd level</string>
   <string name="thread_count">Aantal threads</string>
   <string name="thread_count_desc">Aantal threads toegewezen voor de SIP stack.</string>
+  <string name="setup_audio_before_init">Audio instellen voor initialisatie</string>
+  <string name="setup_audio_before_init_desc">Audio in correcte modus zetten voor stream initialisatie</string>
+  <string name="video_capture_size">Video-opname formaat</string>
+  <string name="video_capture_size_desc">Grootte van de opname frames</string>
   <!--UI-->
   <string name="general_ui">Algemene gebruikersinterface</string>
   <string name="native_dialer_integration">Integratie met ingebouwde kiezer</string>
@@ -255,6 +268,8 @@
   <string name="integrate_with_native_calllogs_desc">SIP-oproepen zullen worden opgenomen (indien mogelijk) in de ingebouwde gesprekkenlijst</string>
   <string name="dial_press_tone">Kiestoon terugkoppeling</string>
   <string name="dial_press_tone_desc">Speel kiestonen af bij kiezen</string>
+  <string name="dtmf_press_tone">DTMF feedback toon</string>
+  <string name="dtmf_press_tone_desc">Speel tonen af bij het versturen van DTMF in een gesprek</string>
   <string name="dial_press_vibrate">Vibratie bij kiezen</string>
   <string name="dial_press_vibrate_desc">Terugkoppeling met vibratie bij het kiezen</string>
   <string name="start_with_text_dialer">Tekstkiezer</string>

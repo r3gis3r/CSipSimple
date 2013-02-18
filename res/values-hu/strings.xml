@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="next">Következő</string>
+  <string name="init">Inicializálás...</string>
   <string name="unable_to_download_file">Nem lehet letölteni a fájlt</string>
   <string name="invalid_sip_uri">Helytelen Sip uri hívás</string>
   <string name="accounts">Fiókok</string>
@@ -19,6 +20,7 @@
   <string name="missed_call">Elmulasztott hívás</string>
   <string name="recentCalls_empty">Nincs hívás lista</string>
   <string name="filters">Szűrők</string>
+  <string name="filters_for">Szűrők...</string>
   <string name="add_filter">Szűrő létrehozás / átírás</string>
   <string name="delete_filter">Szűrő törlés</string>
   <string name="callLog_delete_entry">E hívás törlése</string>
@@ -31,10 +33,13 @@
   <string name="dial_tab_name_text">Hívás</string>
   <string name="calllog_tab_name_text">Híváslista</string>
   <string name="messages_tab_name_text">Üzenetek</string>
+  <string name="favorites_tab_name_text">Kedvencek</string>
   <string name="menu_disconnect">Szétkapcsolás</string>
   <string name="service_ticker_registered_text">SIP Regisztrálva</string>
   <string name="outgoing_call_chooser_call_text">Hívás</string>
   <string name="reorder">Újrahívás</string>
+  <string name="backup_restore">Mentés/Visszaállítás</string>
+  <string name="backup">Mentés</string>
   <string name="faq">GYIK</string>
   <string name="help">Segítség</string>
   <string name="record_logs">Összegyűjtött rendszerüzenetek elküldése a fejlesztő csapatnak</string>
@@ -47,5 +52,29 @@
   <string name="gadget_title">SIP Fiókváltó</string>
   <string name="pickup_sip_uri">SIP kapcsolat használata</string>
   <string name="display_icon_in_status_bar">Kirakja az ikont az állapotsávba</string>
+  <string name="show_password">Látható jelszó</string>
+  <string name="voice_mail">Hangposta</string>
+  <string name="voice_mail_number">Hangposta száma</string>
+  <string name="update_nightly_build">Nightly build-ekre is frissíthet..</string>
+  <string name="loading">Betöltés</string>
+  <string name="reconnect">Újrakapcsolódás</string>
+  <string name="switch_to_text">Szöveges módba váltás</string>
+  <string name="switch_to_digit">Numerikus módba váltás</string>
+  <string name="no_voice_mail_configured">Nincs hangposta beállítva</string>
+  <string name="no_accounts">Nincsenek hozzáférések</string>
+  <string name="activate">Aktiválás</string>
+  <string name="deactivate">Deaktiválás</string>
+  <string name="audio">Hang</string>
+  <string name="video">Videó</string>
+  <string name="invert_selection">Fordított kijelölés</string>
+  <string name="cant_write_file">Nem sikerült a fájlba írás</string>
+  <string name="info">Információ</string>
   <!--Presence stuff-->
+  <string name="online">Kapcsolódva</string>
+  <string name="offline">Nincs kapcsolódva</string>
+  <string name="away">Pihen</string>
+  <string name="busy">Foglalt</string>
+  <string name="configure">Beállítás</string>
+  <string name="uri_nbr">Telefonszám</string>
+  <string name="uri_sip">Internet hívás</string>
 </resources>

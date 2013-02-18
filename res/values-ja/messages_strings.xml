@@ -26,7 +26,7 @@
   <!--Dialog box title brought up when warning the user that a message could not be delivered-->
   <string name="undelivered_msg_dialog_title">未配送のメッセージ</string>
   <!--Dialog box message indicating that a message could not be delivered-->
-  <string name="undelivered_sms_dialog_body">メッセージを送信出来ませんでした。</string>
+  <string name="undelivered_sms_dialog_body">メッセージを送信出来ません。</string>
   <!--Menu item for deleting the entire conversation currently being viewed-->
   <string name="delete_thread">スレッドを削除</string>
   <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message

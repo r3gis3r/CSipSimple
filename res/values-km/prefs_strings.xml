@@ -72,6 +72,7 @@
   <string name="enable_qos_desc">បើក QoS លើ​​ប្រអប់</string>
   <string name="dscp_val">តម្លៃ DSCP</string>
   <string name="dscp_val_desc">តម្លៃ DSCP សម្រាប់​ចរាចរ SIP</string>
+  <string name="rtp_dscp_val_desc">តម្លៃ DSCP សម្រាប់​ចរាចរ RTP</string>
   <string name="udp_keep_alive_interval_wifi">រក្សាទុក Wifi UDP ដែល​មាន</string>
   <string name="udp_keep_alive_interval_mobile">រក្សាទុក UDP ចល័ត​ដែល​មាន</string>
   <string name="tcp_keep_alive_interval_wifi">រក្សាទុក Wifi TCP ដែល​មាន</string>
@@ -103,6 +104,8 @@
   <string name="network_route_polling_desc">ពិនិត្យ Android 4.0 VPN ។ កំណត់ 0 បើ​​មិន​ក្នុង​ករណី​នេះ ត្រូវ​បិទ</string>
   <string name="disable_tcp_switch">បិទ​ការ​ប្ដូរ TCP</string>
   <string name="disable_tcp_switch_desc">បើ​សកម្ម មិន​ឲ្យ​កញ្ចប់​ប្ដូរ​ទៅ TCP សម្រាប់​កញ្ចប់​​ព័ត៌មាន UDP ធំ ។</string>
+  <string name="disable_rport">បិទ rport ក្នុង​សំណើ</string>
+  <string name="disable_rport_desc">មាន​តែ​ធ្វើ​ឲ្យ​ម៉ាស៊ីនមេ​បំបាត់កំហុសកម្ម​​ប៉ុណ្ណោះ។ បិទ​ការគាំទ្រ RFC 3581 ដោយ​មិន​ផ្ញើ​ rport ។</string>
   <string name="add_bandwidth_tias_in_sdp">បន្ថែម​កម្មវិធី​កែប្រែ​កម្រិត​រលក TIAS ក្នុង SDP</string>
   <string name="add_bandwidth_tias_in_sdp_desc">ក្នុង RFC3890 ។ ចាំបាច់​សម្រាប់​វីដេអូ​លើ​ម៉ាស៊ីន​មេ Avaya ប៉ុន្តែ​ការ​ញែក breaks buggy សម្រាប់​ម៉ាស៊ីន​មេ​មួយ​ចំនួន ។</string>
   <!--Security-->
@@ -165,6 +168,10 @@
   <string name="codecs_desc">អាទិភាព (0 បាន​បិទ)</string>
   <string name="sip_dtmf">របៀប DTMF</string>
   <string name="sip_dtmf_desc">របៀប​ផ្ញើ DTMF</string>
+  <string name="dtmf_pause_time">ពេលវេលា​ផ្អាក DTMF</string>
+  <string name="dtmf_pause_time_desc">​សញ្ញា​បំបែក​ផ្អាក (,) ពេលវេលា​រង់ចាំ​គិត​ជាមិល្លីវិនាទី</string>
+  <string name="dtmf_wait_time">ពេលវេលា​រង់ចាំ DTMF</string>
+  <string name="dtmf_wait_time_desc">សញ្ញា​បំបែក​រង់ចាំ (;) ពេលវេលា​រង់ចាំ​គិត​មិល្លីវិនាទី</string>
   <string name="use_soft_volume">ប្រើ​កម្រិត​សំឡេង​កម្មវិធី</string>
   <string name="use_soft_volume_desc">ប្រើ​កម្រិត​សំឡេង​កម្មវិធី​ជំនួស​កម្រិត​សំឡេង android</string>
   <string name="use_routing_api">ប្រើ API នាំផ្លូវ</string>
@@ -241,8 +248,14 @@
   <string name="ilbc_frame_per_packet">ស៊ុម iLBC ក្នុង​កញ្ចប់​ព័ត៌មាន</string>
   <string name="codec_h264_profile">ទម្រង់ H264</string>
   <string name="codec_h264_level">កម្រិត H264</string>
+  <string name="codec_h264_bitrate">អត្រាប៊ីត H264</string>
+  <string name="codec_h264_bitrate_desc">ប្រើ ០ ជា​លំនាំដើម សម្រាប់​កម្រិត​បាន​ជ្រើស</string>
   <string name="thread_count">ចំនួន​សែស្រឡាយ</string>
   <string name="thread_count_desc">ចំនួន​សែស្រឡាយ​បាន​បម្រុងទុក​សម្រាប់​ជង់​ដើម</string>
+  <string name="setup_audio_before_init">រៀបចំ​អូឌីយ៉ូ​មុន init</string>
+  <string name="setup_audio_before_init_desc">ដាក់​អូឌីយ៉ូ​ក្នុង​របៀប​ត្រឹមត្រូវ​មុន​នឹង​ចាប់ផ្ដើម​ចរន្ត</string>
+  <string name="video_capture_size">ទំហំ​ចាប់​វីដេអូ</string>
+  <string name="video_capture_size_desc">ទំហំ​ស៊ុម​ចាប់យក</string>
   <!--UI-->
   <string name="general_ui">ចំណុច​ប្រទាក់​អ្នក​ប្រើ​ទូទៅ</string>
   <string name="native_dialer_integration">ការ​រួម​បញ្ចូល​បន្ទះ​លេខ​ដើម</string>
@@ -255,6 +268,8 @@
   <string name="integrate_with_native_calllogs_desc">ការ​ហៅ SIP នឹង​ត្រូវ​បាន​បញ្ចូល​ចូល​គ្នា (បើ​អាច) បញ្ចូល​ក្នុង​កំណត់​ហេតុ​ហៅ​ដើម</string>
   <string name="dial_press_tone">ប្រតិកម្ម​សំឡេង​ពេល​ចុច</string>
   <string name="dial_press_tone_desc">បន្លឺ​​សំឡេង​នៅ​​ពេល​ចុច</string>
+  <string name="dtmf_press_tone">មតិ​ត្រឡប់ DTMF</string>
+  <string name="dtmf_press_tone_desc">ចាក់​សំឡេង​ប៉ះ​ពេល​ផ្ញើ DTMF ការ​ហៅ</string>
   <string name="dial_press_vibrate">ប្រតិកម្ម​​ញ័រ​ពេល​ចុច</string>
   <string name="dial_press_vibrate_desc">ប្រតិកម្ម​ប៉ះ (ញ័រ) នៅ​ពេល​ចុច</string>
   <string name="start_with_text_dialer">បន្ទះ​លេខ</string>

@@ -258,7 +258,9 @@
     <string name="codec_h264_bitrate">H264 bitrate</string>
     <string name="codec_h264_bitrate_desc">Use 0 for default for selected level</string>
     <string name="thread_count">Thread count</string>
-    <string name="thread_count_desc">Number of thread allocated for the native stack</string>
+    <string name="thread_count_desc">Number of thread allocated to SIP stack. 0 saves battery.</string>
+    <string name="media_thread_count">Media thread count</string>
+    <string name="media_thread_count_desc">Number of thread allocated for media processing</string>
     <string name="setup_audio_before_init">Setup audio before init</string>
     <string name="setup_audio_before_init_desc">Put audio in correct mode before audio stream initialization</string>
     <string name="video_capture_size">Video capture size</string>

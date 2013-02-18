@@ -25,4 +25,6 @@
   <string name="resume_call">Hervatten</string>
   <string name="transfer_to_call">Overbrengen naar bellen</string>
   <string name="send_dtmf">Stuur DTMF</string>
+  <string name="zrtp_trust_remote">Vertrouw ZRTP gesprekspartner</string>
+  <string name="zrtp_revoke_trusted_remote">ZRTP vertrouwen gesprekspartner intrekken</string>
 </resources>

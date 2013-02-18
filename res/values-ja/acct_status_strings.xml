@@ -2,7 +2,7 @@
 <resources>
   <string name="acct_inactive">休止中</string>
   <string name="acct_unregistered">未登録</string>
-  <string name="acct_expired">期限切れ</string>
+  <string name="acct_expired">登録期限切れ</string>
   <string name="acct_registering">登録中…</string>
   <string name="acct_registered">登録済み</string>
   <string name="acct_regerror">登録エラー</string>

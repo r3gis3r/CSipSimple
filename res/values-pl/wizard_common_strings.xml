@@ -11,6 +11,7 @@
   <string name="w_common_server">Serwer</string>
   <string name="w_common_server_desc">Domena serwera SIP/IP[:port]</string>
   <string name="create_account">Załóż konto</string>
+  <string name="already_have_account">Mam już konto</string>
   <string name="first_name">Imię</string>
   <string name="last_name">Nazwisko</string>
   <string name="email_address">Adres email</string>

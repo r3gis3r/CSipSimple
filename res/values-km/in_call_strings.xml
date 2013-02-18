@@ -25,4 +25,6 @@
   <string name="resume_call">បន្ត</string>
   <string name="transfer_to_call">ផ្ទេរ​ទៅ​ការ​ហៅ</string>
   <string name="send_dtmf">ផ្ញើ DTMF</string>
+  <string name="zrtp_trust_remote">ទុកចិត្ត​ ZRTP ពី​ចម្ងាយ</string>
+  <string name="zrtp_revoke_trusted_remote">ដក​ការ​ទុក​ចិត្ត ZRTP ពី​ចម្ងាយ</string>
 </resources>

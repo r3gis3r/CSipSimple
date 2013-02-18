@@ -18,4 +18,5 @@
   <string name="suffix_with">Suffixer avec</string>
   <string name="replace_match_by">Remplacer la correspondance par</string>
   <string name="replace_all_by">Tout remplacer par</string>
+  <string name="call_info_header">A le \"Call-Info\" pour l\'auto-décrochage</string>
 </resources>

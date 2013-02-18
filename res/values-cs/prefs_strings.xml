@@ -72,6 +72,7 @@
   <string name="enable_qos_desc">Zapnout Qos paketů</string>
   <string name="dscp_val">hodnota DSCP</string>
   <string name="dscp_val_desc">DSCP hodnota pro Sip komunikaci</string>
+  <string name="rtp_dscp_val_desc">DSCP hodnota pro RTP přenos</string>
   <string name="udp_keep_alive_interval_wifi">Udržet naživu Wifi UDP</string>
   <string name="udp_keep_alive_interval_mobile">Udržet naživu Mobilní UDP</string>
   <string name="tcp_keep_alive_interval_wifi">Udržet naživu Wifi TCP</string>
@@ -103,6 +104,8 @@
   <string name="network_route_polling_desc">Zjistit řešení Android 4.0 VPN. Nechte na 0, pokud naní tato věc  vypnouta.</string>
   <string name="disable_tcp_switch">Zakázat TCP přepínač</string>
   <string name="disable_tcp_switch_desc">Pokud je aktivní, brání zásobníku přejít na TCP pro velké pakety UDP.</string>
+  <string name="disable_rport">Zakázat rport v žádosti</string>
+  <string name="disable_rport_desc">Aktivovat pouze pro chybové servery. Zakázat RFC 3581 podporu nezasláním rport.</string>
   <string name="add_bandwidth_tias_in_sdp">Přidat šířku pásma modifikátorů TIAS v SDP</string>
   <string name="add_bandwidth_tias_in_sdp_desc">Podle RFC3890. Nutné pro video na serverech společnosti Avaya, avšak doby přerušení způsobují nespolehlivé parsování pro některé SIP servery.</string>
   <!--Security-->
@@ -165,6 +168,10 @@
   <string name="codecs_desc">Priorita</string>
   <string name="sip_dtmf">DTMF mód</string>
   <string name="sip_dtmf_desc">Jak poslat DTMF</string>
+  <string name="dtmf_pause_time">Čas pauzy DTMF</string>
+  <string name="dtmf_pause_time_desc">Pauza (,) oddělovač doby čekání v ms</string>
+  <string name="dtmf_wait_time">Čas čekání DTMF</string>
+  <string name="dtmf_wait_time_desc">Čekat (;) oddělovač doby čekání v ms</string>
   <string name="use_soft_volume">Použít softwarovou hlasitost</string>
   <string name="use_soft_volume_desc">Použít softwarovou hlasitost místo hlasitosti androidu</string>
   <string name="use_routing_api">Použít routování API</string>
@@ -241,8 +248,14 @@
   <string name="ilbc_frame_per_packet">iLBC RTP snímků za paket</string>
   <string name="codec_h264_profile">H264 profil</string>
   <string name="codec_h264_level">H264 úroveň</string>
+  <string name="codec_h264_bitrate">Datový tok H264</string>
+  <string name="codec_h264_bitrate_desc">Použijte 0 pro výchozí zvolenou úroveň</string>
   <string name="thread_count">Počet vláken</string>
   <string name="thread_count_desc">Počet vláken přidělených pro nativní zásobník</string>
+  <string name="setup_audio_before_init">Před inicializací nastavete audio</string>
+  <string name="setup_audio_before_init_desc">Zadejte audio ve správném režimu před  inicializací audio streamu</string>
+  <string name="video_capture_size">Velikost zachytávaného videa</string>
+  <string name="video_capture_size_desc">Velikost zachytávaných snímků</string>
   <!--UI-->
   <string name="general_ui">Obecné uživatelské rozhraní</string>
   <string name="native_dialer_integration">Nativní integrace vytáčení</string>
@@ -255,6 +268,8 @@
   <string name="integrate_with_native_calllogs_desc">Sip volání bude sloučeno do záznamu volání v telefonu</string>
   <string name="dial_press_tone">tóny při vytáčení</string>
   <string name="dial_press_tone_desc">přehrát zvuk u vytáčení</string>
+  <string name="dtmf_press_tone">DTMF zpětná vazba tónu</string>
+  <string name="dtmf_press_tone_desc">Přehrát dotčené tóny, při odesílání DTMF v hovoru</string>
   <string name="dial_press_vibrate">vibrace při vytáčení</string>
   <string name="dial_press_vibrate_desc">Hmatové odezvy při vytáčení</string>
   <string name="start_with_text_dialer">textové vytáčení</string>

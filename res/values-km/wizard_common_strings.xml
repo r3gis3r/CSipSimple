@@ -11,6 +11,7 @@
   <string name="w_common_server">ម៉ាស៊ីន​មេ</string>
   <string name="w_common_server_desc">ដែន​ម៉ាស៊ីន​មេ SIP/IP[:port]</string>
   <string name="create_account">បង្កើត​គណនី</string>
+  <string name="already_have_account">ខ្ញុំ​មាន​គណនី​រួច​ហើយ</string>
   <string name="first_name">នាម​ខ្លួន</string>
   <string name="last_name">នាម​ត្រកូល</string>
   <string name="email_address">អាសយដ្ឋាន​អ៊ីមែល</string>

@@ -39,4 +39,5 @@
   <string name="w_expert_mwi_enabled_desc">ទទួល​បាន​ការ​ជូន​ដំណឹង​ប្រអប់​​សំបុត្រ​ជា​សំឡេង</string>
   <string name="w_expert_allow_via_rewrite">អនុញ្ញាត​តាម​រយៈ​សរសេរ​ឡើង​វិញ</string>
   <string name="w_expert_allow_via_rewrite_desc">កំណត់​តាមរយៈ​អ្វី​បានផ្ញើ​ ដើម្បី​ប្រើ​​អាសយដ្ឋាន​ចំណុច​ប្រទាក់​តែ​មួយ​ដូច​មាន​ក្នុង​សំណើ​ចុះឈ្មោះ</string>
+  <string name="w_expert_ipv6_media_use">ប្រើ IPV6 សម្រាប់​មេឌៀ</string>
 </resources>

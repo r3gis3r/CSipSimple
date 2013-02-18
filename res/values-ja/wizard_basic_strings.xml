@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="w_basic_username">ユーザ</string>
-  <string name="w_basic_username_desc">アカウント名 / ログイン (@sip.serverを記入しないでください)</string>
+  <string name="w_basic_username">ユーザー名</string>
+  <string name="w_basic_username_desc">SIPアカウント名 / ログイン (@sip.serverを記入しないでください)</string>
   <string name="w_basic_password">パスワード</string>
-  <string name="w_basic_password_desc">アカウントへアクセスするパスワード</string>
+  <string name="w_basic_password_desc">アカウントへ接続するパスワード</string>
 </resources>

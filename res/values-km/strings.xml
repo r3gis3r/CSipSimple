@@ -51,6 +51,7 @@
   <string name="misc">ផ្សេងៗ</string>
   <string name="warning">ការ​ព្រមាន</string>
   <string name="disconnect_and_incoming_explaination">អ្នក​បាន​កំណត់​រចនាសម្ព័ន្ធ​ ដើម្បី​ប្រើ​​​បណ្ដាញ​នេះ!!! ចុច​យល់ព្រម​ ដើម្បី​បញ្ជាក់​ថា​ ​អ្នក​មិន​ចង់​ឲ្យ​ប្រើ​បាន លុះត្រា​តែ​ចាប់ផ្ដើម​កម្មវិធី​ពេល​ក្រោយ</string>
+  <string name="disconnect_and_future_incoming_explaination">ដោយ​ផ្ដាច់​កម្មវិធី អ្នកនឹង​មិន​អាច​​ប្រើ​បាន​នៅ​លើ SIP ទេ រហូត​ដល់​ពេលចាប់​ផ្ដើម​កម្មវិធី​លើក​ក្រោយ មិនថា​អ្នកបាន​កំណត់​បណ្ដាញ​អ្វី​ទេ</string>
   <string name="gadget_title">កម្មវិធី​ប្ដូរ​គណនី SIP</string>
   <string name="pickup_sip_uri">ជ្រើស​ទំនាក់ទំនង SIP</string>
   <string name="display_icon_in_status_bar_desc">តើ​កម្មវិធី​គួរ​បង្ហាញ​រូបតំណាង​ក្នុង​របារ​ស្ថានភាព​ដែរ​ឬទេ ​ពេល​បាន​ចុះឈ្មោះ</string>

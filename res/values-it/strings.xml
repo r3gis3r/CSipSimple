@@ -51,6 +51,7 @@
   <string name="misc">Misc</string>
   <string name="warning">Attenzione</string>
   <string name="disconnect_and_incoming_explaination">Configurato per essere disponibile per questa rete!!! Cliccando su OK confermi di non voler essere disponibile fino al prossimo avvio dell\'applicazione</string>
+  <string name="disconnect_and_future_incoming_explaination">Disconnettendo l\'applicazione, non sarà disponibile su SIP fino al successivo avvio, qualunque siano le impostazioni di rete</string>
   <string name="gadget_title">Switcher dell\'account SIP</string>
   <string name="pickup_sip_uri">Prendi il contatto SIP</string>
   <string name="display_icon_in_status_bar_desc">L\'applicazione dovrebbe visualizzare un\'icona nello status bar quando registrata</string>

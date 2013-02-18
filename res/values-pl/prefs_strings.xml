@@ -72,6 +72,7 @@
   <string name="enable_qos_desc">Zezwól na oznaczanie QoS pakietów</string>
   <string name="dscp_val">Wartość DSCP</string>
   <string name="dscp_val_desc">Wartość DSCP dla ruchu SIP</string>
+  <string name="rtp_dscp_val_desc">Wartość DSCP dla ruchu RTP</string>
   <string name="udp_keep_alive_interval_wifi">Utrzymywanie UDP na WiFi</string>
   <string name="udp_keep_alive_interval_mobile">Utrzymywanie UDP na sieci GSM</string>
   <string name="tcp_keep_alive_interval_wifi">Utrzymywanie TCP na WiFi</string>
@@ -103,6 +104,8 @@
   <string name="network_route_polling_desc">Obejście sprawdzania VPN Androida 4.0. Pozostaw na 0, jeśli nie w tym przypadku wyłączyć</string>
   <string name="disable_tcp_switch">Wyłącz przełącznik TCP</string>
   <string name="disable_tcp_switch_desc">Jeśli jest aktywny, zapobiega stosu przełączyć na TCP dla dużych pakietów UDP.</string>
+  <string name="disable_rport">Wyłącz rport we wniosku</string>
+  <string name="disable_rport_desc">Włącz tylko przy błędnych serwerach. Wyłącz wsparcie RFC 3581, nie wysyłając rport.</string>
   <string name="add_bandwidth_tias_in_sdp">Dodaj modyfikator przepustowości TIAS w SDP</string>
   <string name="add_bandwidth_tias_in_sdp_desc">Jak zdefiniowano w RFC3890. Wymagany dla widea na serwerach Avaya lecz wywołuje błędne parsowanie na niektórych serwerach SIP.</string>
   <!--Security-->
@@ -165,6 +168,10 @@
   <string name="codecs_desc">Priorytet (0 oznacza wyłączony)</string>
   <string name="sip_dtmf">Tryb DTMF</string>
   <string name="sip_dtmf_desc">Sposób przesyłania DTMF</string>
+  <string name="dtmf_pause_time">Czas pauzy DTMF</string>
+  <string name="dtmf_pause_time_desc">Czas pauzy (,) separatora oczekującego w ms</string>
+  <string name="dtmf_wait_time">Czas oczekiwania DTMF</string>
+  <string name="dtmf_wait_time_desc">Czas czekania (;) separatora oczekującego w ms</string>
   <string name="use_soft_volume">Używaj głośności oprogramowania</string>
   <string name="use_soft_volume_desc">Używaj głośności oprogramowania zamiast głośności Androida</string>
   <string name="use_routing_api">Używaj API routowania</string>
@@ -241,8 +248,14 @@
   <string name="ilbc_frame_per_packet">Klatki iLBC RTP na pakiet</string>
   <string name="codec_h264_profile">Profil H264</string>
   <string name="codec_h264_level">Poziom H264</string>
+  <string name="codec_h264_bitrate">Przepływność H264</string>
+  <string name="codec_h264_bitrate_desc">Użyj 0 dla domyślnie wybranego poziomu</string>
   <string name="thread_count">Ilość wątków</string>
   <string name="thread_count_desc">Liczba wątków przeznaczonych dla rodzimego stosu</string>
+  <string name="setup_audio_before_init">Skonfiguruj dźwięk przed jego inicjalizacją</string>
+  <string name="setup_audio_before_init_desc">Ustaw dźwięk w odpowiednim trybie przed inicjalizacją strumienia dźwiękowego</string>
+  <string name="video_capture_size">Rozmiar przechwytywania obrazu</string>
+  <string name="video_capture_size_desc">Rozmiar ramek przechwytywania</string>
   <!--UI-->
   <string name="general_ui">Ogólny interfejs użytkownika</string>
   <string name="native_dialer_integration">Integracja z domyślnym dialerem</string>
@@ -255,6 +268,8 @@
   <string name="integrate_with_native_calllogs_desc">Połączenia SIP będą wyświetlane w domyślnym rejestrze połączeń (jeśli jest to możliwe)</string>
   <string name="dial_press_tone">Dźwięk podczas wybierania</string>
   <string name="dial_press_tone_desc">Odtwarzaj dźwięk \"dotyku\" podczas wybierania</string>
+  <string name="dtmf_press_tone">Dźwięki DTMF</string>
+  <string name="dtmf_press_tone_desc">Włącz dźwięki dotyku przy wysyłaniu DTMF podczas połączenia</string>
   <string name="dial_press_vibrate">Wibracje podczas wybierania</string>
   <string name="dial_press_vibrate_desc">Efekt drgania (wibracja) podczas wybierania</string>
   <string name="start_with_text_dialer">Dialer tekstowy</string>

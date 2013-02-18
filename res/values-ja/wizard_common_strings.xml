@@ -11,6 +11,7 @@
   <string name="w_common_server">サーバ</string>
   <string name="w_common_server_desc">SIPサーバドメイン/IP[:ポート]</string>
   <string name="create_account">アカウントを作成</string>
+  <string name="already_have_account">アカウント取得済です</string>
   <string name="first_name">名</string>
   <string name="last_name">姓</string>
   <string name="email_address">メールアドレス</string>

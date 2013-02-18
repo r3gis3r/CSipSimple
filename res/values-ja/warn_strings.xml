@@ -3,19 +3,19 @@
   <string name="warn_ignore">無視</string>
   <!--STUN enabled-->
   <string name="warn_no_stun">STUNが有効化されていません</string>
-  <string name="warn_no_stun_description"> 電話をかけたときに相手からの音声が聞こえない場合、恐らくネットワーク接続がNATされていて接続しているSIPプロバイダーがそれに対応してないのが原因と思われます。\n \n       このようなケースに対応する方法としては、STUNオプションを有効にするのが良い場合があります。\n\n       \t相手からの音声に問題ない場合には、この警告は無視してください。\n\n       \tインターネットが他のインターネットと接続していない国では、STUNサーバを変更する必要があるかもしれません。\n\n       \tSTUNの使用は、電池をより消耗します。</string>
+  <string name="warn_no_stun_description"> 電話をかけたときに相手からの音声が聞こえない場合、恐らくSIPプロバイダーがネットワークのNAT接続に対応してないのが原因でしょう。\n \n       このようなケースに対応する方法としては、STUNオプションを有効にするのが良い場合があります。\n\n       \t相手からの音声に問題ない場合には、この警告は無視してください。\n\n       \tインターネットが他のインターネットと接続していない国では、STUNサーバを変更する必要があるかもしれません。\n\n       \tSTUNを使うと電池をより消耗します。</string>
   <string name="warn_no_stun_enable">無音呼び出し中</string>
   <string name="warn_no_stun_ignore">通話は正常です。</string>
   <!--Vpn on android 4.0-->
-  <string name="warn_vpn_ics">4.0でのVPNの変更</string>
-  <string name="warn_vpn_ics_description"> android 4.0 を使用している場合、VPNの状態を通知しません。\n\n        取り得る対処方法は、通常の間隔で経路をチェックすることです。</string>
+  <string name="warn_vpn_ics">Android 4.0でのVPNの変更点</string>
+  <string name="warn_vpn_ics_description"> Android 4.0 を使用している場合、VPNの状態を通知しません。\n\n        暫定対応として通常の間隔で経路をチェックしてください。</string>
   <string name="warn_vpn_ics_1">1分毎にチェック</string>
   <string name="warn_vpn_ics_5">5分毎にチェック</string>
   <!--Privileged intent-->
-  <string name="warn_priv_int">ダイヤラー連携</string>
-  <string name="warn_priv_int_description">携帯電話にインストールされたアプリケーションはAndroidに統合されます。\n\n\t    それによりフィルタリング/リライトルールのようなインテリジェントな特徴を利用をすることができません。\n\n\t    選択肢が2つあります : \n\n\t    我々の統合を使い続けて、その他のアプリケーションをサポートするプラグインをインストールする。(これによりそれらのアプリケーションにもフィルタリングや改変のルールを使うことが出来ます)。 \n\n\t    その場合、次にダイヤルするときから他のアプリケーションの代わりに端末のダイヤラーを常に使うを選択する必要があります。</string>
-  <string name="warn_priv_int_description2">二つ目の解決法は他のアプリケーションと違うnonインテリジェントな方法で連携する。\n\n\t    この方法は、アプリケーションでサポートされている設定方法ですが、お勧めしません。それはインテリジェントではなく、ひどい使い勝手にしかならないからです。</string>
+  <string name="warn_priv_int">ダイヤラー統合</string>
+  <string name="warn_priv_int_description">これにより携帯電話にインストールされたその他のアプリケーションもAndroidに統合されたように見えます。\n\n\t    それによりフィルタリング/リライトルールのようなインテリジェントな特徴を利用をすることが可能になります。\n\n\t    2つの選択肢があります : \n\n\t    一つ目は、まず統合を利用し、その他のアプリケーションをサポートするプラグインをインストールします。(これによりこれらのアプリケーションもフィルタリングやリライトルールを使うことができるようになります。) \n\n\t    そうすると、次のダイヤルからいつでも端末ダイヤラーを使って他のアプリケーションをチェックボックスにより利用選択することができます。</string>
+  <string name="warn_priv_int_description2">二つ目はこれまでと同じ不便な方法で他のアプリケーションと連携する方法です。\n\n\t    この方法は、様々なアプリケーションでサポートされている方法ですが、お勧めしません。なぜなら、それはインテリジェントではなく、ひどい使い勝手にしかならないからです。</string>
   <string name="warn_priv_int_register">インテリジェントな統合を使用しない</string>
   <string name="warn_sdcard">SDカードにインストール</string>
-  <string name="warn_sdcard_description">着信できるように設定しました。しかし、アプリケーションをSDカードに移動しています。\nこれは推奨しません。この場合はアプリケーションを内蔵ストレージに保存しておくべきです。</string>
+  <string name="warn_sdcard_description">着信できるように設定しました。しかし、アプリケーションがSDカードに移動されています。\nSDカードに保存するのはお勧めしません、着信する場合アプリケーションは内蔵ストレージに保存しておくべきです。</string>
 </resources>

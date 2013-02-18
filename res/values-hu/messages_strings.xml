@@ -1,56 +1,116 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="app_label">Üzenetküldés</string>
-    <string name="new_message">Új üzenet</string>
-    <string name="create_new_message">Új üzenet szerkesztése</string>
-    <string name="menu_compose_new">Szerkesztés</string>
-    <string name="menu_call">Hívás</string>
-    <string name="menu_delete_all">Mind törlése</string>
-    <string name="menu_delete">Üzenetszál törlése</string>
-    <string name="menu_view">Üzenetszál Mutatása</string>
-    <string name="anonymous_recipient">Ismeretlen címzett</string>
-    <string name="messagelist_sender_self">Magam</string>
-    <string name="delete_message">Az üzenet törlése</string>
-    <string name="kilobyte">KB</string>
-    <string name="undelivered_msg_dialog_title">Elküldetlen üzenet</string>
-    <string name="undelivered_sms_dialog_body">Nem lehet elküldeni ezt az üzenetet.</string>
-    <string name="delete_thread">Üzenetszál törlése</string>
-    <string name="download">Letöltés</string>
-    <string name="downloading">Letöltés</string>
-    <string name="copy_message_text">Üzenet másolása</string>
-    <string name="message_options">Üzenet beállítások</string>
-    <string name="done">Kész</string>
-    <string name="compose_title">Szerkesztés</string>
-    <string name="add_attachment">Csatol</string>
-    <string name="view">Megnéz</string>
-    <string name="send">Küldés</string>
-    <string name="all_threads">Minden üzenetszál</string>
-    <string name="type_to_compose_text_enter_to_send">Pötty ide a szerkesztéshez</string>
-    <string name="open_keyboard_to_compose_message">Szerkesztéshez ki kell nyitni a gombsort</string>
-    <string name="image_too_large">A kép túl nagy</string>
-    <string name="ask_for_automatically_resize">Küldés előtt átméreteződjon a kép?</string>
-    <string name="compressing">A kép túl nagy. Tömörítés…</string>
-    <string name="menu_view_contact">Kapcsolat mutatása</string>
-    <string name="menu_add_to_contacts">Kapcsolatokhoz hozáad</string>
-    <string name="hidden_sender_address">Küldő címének elrejtése</string>
-    <string name="yes">Rendben</string>
-    <string name="no">Mégsem</string>
-    <string name="edit">Szerkeszt</string>
-    <string name="restore_default">Alap beállítások visszaállítása</string>
-    <string name="confirm_dialog_title">Töröl</string>
-    <string name="confirm_delete_conversation">Ezen üzenetszál törlődni fog.</string>
-    <string name="confirm_delete_all_conversations">Minden üzenetszál törlődni fog.</string>
-    <string name="confirm_delete_message">Az üzenet törlődni fog.</string>
-    <string name="confirm_delete_locked_message">Valóban törlődjön ez a zárolt üzenet?</string>
-    <string name="confirm_delete_all_messages">Ezen üzenetszál törlődni fog.</string>
-    <string name="delete">Töröl</string>
-    <string name="status_none">(Nincs)</string>
-    <string name="status_pending">Folyamatban</string>
-    <string name="status_received">Fogadott</string>
-    <string name="status_failed">Sikertelen</string>
-    <string name="status_unread">Olvasatlan</string>
-    <string name="status_rejected">Elutasított</string>
-    <string name="recipient_label">Címzett:</string>
-
+  <!--The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc.-->
+  <string name="app_label">Üzenetküldés</string>
+  <!--Command name to open a Compose screen; displays in conversation list-->
+  <string name="new_message">Új üzenet</string>
+  <!--Summary text under "New Message" command; displays in conversation list-->
+  <string name="create_new_message">Új üzenet szerkesztése</string>
+  <!--Menu item for starting a new conversation-->
+  <string name="menu_compose_new">Szerkesztés</string>
+  <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
+  <string name="menu_call">Hívás</string>
+  <!--Menu item for deleting all conversations-->
+  <string name="menu_delete_all">Mind törlése</string>
+  <!--Context menu item on an individual conversation for deleting that conversation-->
+  <string name="menu_delete">Üzenetszál törlése</string>
+  <!--Context menu item on an individual conversation for viewing that conversation-->
+  <string name="menu_view">Üzenetszál Mutatása</string>
+  <!--Name to use when we have an unspecified sender-->
+  <string name="anonymous_recipient">Ismeretlen címzett</string>
+  <!--Name of the local user when displaying sender of an outgoing message (personal pronoun)-->
+  <string name="messagelist_sender_self">Magam</string>
+  <string name="delete_message">Az üzenet törlése</string>
+  <!--Abbreviation for "kilobyte"-->
+  <string name="kilobyte">KB</string>
+  <!--Dialog box title brought up when warning the user that a message could not be delivered-->
+  <string name="undelivered_msg_dialog_title">Elküldetlen üzenet</string>
+  <!--Dialog box message indicating that a message could not be delivered-->
+  <string name="undelivered_sms_dialog_body">Nem lehet elküldeni ezt az üzenetet.</string>
+  <!--Menu item for deleting the entire conversation currently being viewed-->
+  <string name="delete_thread">Üzenetszál törlése</string>
+  <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
+         to be downloaded (imperative verb)-->
+  <string name="download">Letöltés</string>
+  <!--Message displayed in place of the "download message" button once it has been pressed,
+         indicating that the download is in progress-->
+  <string name="downloading">Letöltés</string>
+  <!--Individual message context menu item-->
+  <string name="copy_message_text">Üzenet másolása</string>
+  <!--Header for context menu on an individual message-->
+  <string name="message_options">Üzenet beállítások</string>
+  <!--Button text on edit slide screen indicating the user wants to finish editing that slide-->
+  <string name="done">Kész</string>
+  <!--Title bar displayed in compose message activity before a recipient has been selected-->
+  <string name="compose_title">Szerkesztés</string>
+  <!--Menu item in conversation screen for attaching something to the message being composed-->
+  <string name="add_attachment">Csatol</string>
+  <!--Button next to an attachment during message composition to view the attachment (imperative verb)-->
+  <string name="view">Megnéz</string>
+  <!--Button in conversation screen for sending the SMS message currently being composed (imperative verb)-->
+  <string name="send">Küldés</string>
+  <!--Menu item in conversation screen for returning to the conversation list-->
+  <string name="all_threads">Minden üzenetszál</string>
+  <!--Hint text in message body field when keyboard is exposed-->
+  <string name="type_to_compose_text_enter_to_send">Pötty ide a szerkesztéshez</string>
+  <!--Hint text in message body field when keyboard is hidden-->
+  <string name="open_keyboard_to_compose_message">Szerkesztéshez ki kell nyitni a gombsort</string>
+  <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
+  <string name="image_too_large">A kép túl nagy</string>
+  <!--Dialog message text asking the user if he wants to resize the picture being attached-->
+  <string name="ask_for_automatically_resize">Küldés előtt átméreteződjon a kép?</string>
+  <!--Toast message while an image is being resized-->
+  <string name="compressing">A kép túl nagy. Tömörítés…</string>
+  <!--Context menu item on a message recipient for viewing their contact info-->
+  <string name="menu_view_contact">Kapcsolat mutatása</string>
+  <!--Context menu item on a message recipient for adding them to the user's
+         contacts (used if the recipient is not already in the address book)-->
+  <string name="menu_add_to_contacts">Kapcsolatokhoz hozáad</string>
+  <!--Sender to be used if the sender address has been hidden-->
+  <string name="hidden_sender_address">Küldő címének elrejtése</string>
+  <!--Text to be used for affirmative response button in dialog boxes-->
+  <string name="yes">Rendben</string>
+  <!--Text to be used for negative response button in dialog boxes-->
+  <string name="no">Mégsem</string>
+  <!--Button text used for editing a slideshow (imperative verb)-->
+  <string name="edit">Szerkeszt</string>
+  <!--Settings screen menu item for restoring all settings to default-->
+  <string name="restore_default">Alap beállítások visszaállítása</string>
+  <!--Confirm Delete-->
+  <!--Delete confirmation dialog title-->
+  <string name="confirm_dialog_title">Töröl</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <string name="confirm_delete_conversation">Ezen üzenetszál törlődni fog.</string>
+  <!--Delete all threads confirmation dialog message-->
+  <string name="confirm_delete_all_conversations">Minden üzenetszál törlődni fog.</string>
+  <!--Delete message confirmation dialog message-->
+  <string name="confirm_delete_message">Az üzenet törlődni fog.</string>
+  <!--Delete message confirmation dialog message for a locked message-->
+  <string name="confirm_delete_locked_message">Valóban törlődjön ez a zárolt üzenet?</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <string name="confirm_delete_all_messages">Ezen üzenetszál törlődni fog.</string>
+  <!--Delete button title-->
+  <string name="delete">Töröl</string>
+  <!--Status in "Report" window-->
+  <string name="status_none">(Nincs)</string>
+  <!--Status in "Report" window-->
+  <string name="status_pending">Folyamatban</string>
+  <!--Status in "Report" window-->
+  <string name="status_received">Fogadott</string>
+  <!--Status in "Report" window-->
+  <string name="status_failed">Sikertelen</string>
+  <!--Status in "Report" window-->
+  <string name="status_unread">Olvasatlan</string>
+  <!--Status in "Report" window-->
+  <string name="status_rejected">Elutasított</string>
+  <!--Label in "Report" window-->
+  <string name="recipient_label">Címzett:</string>
+  <!--Label in "Report" window-->
+  <string name="status_label">Státusz</string>
+  <!--Menu item-->
+  <string name="menu_insert_smiley">Szmájli beszúrása</string>
+  <!--Label for the "Me" number of this phone.-->
+  <string name="me">Én</string>
+  <!--Brief small label shown to right of message when it is being sent.-->
+  <string name="sending_message">Küldés</string>
 </resources>

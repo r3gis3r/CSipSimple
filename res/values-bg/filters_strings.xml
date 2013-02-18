@@ -18,4 +18,5 @@
   <string name="suffix_with">Има наставка</string>
   <string name="replace_match_by">Замени съвпадащите с</string>
   <string name="replace_all_by">Замени всички с</string>
+  <string name="call_info_header">Has Call-Info for immediate answer</string>
 </resources>

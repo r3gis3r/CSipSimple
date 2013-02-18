@@ -18,4 +18,5 @@
   <string name="suffix_with">připona s</string>
   <string name="replace_match_by">Nahradit shodu</string>
   <string name="replace_all_by">nahradit vše</string>
+  <string name="call_info_header">Obsahovat Call-Info pro bezprostřední odpověď</string>
 </resources>

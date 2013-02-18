@@ -1,10 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="optional_sip_code">Opcionális sip kód</string>
   <string name="cant_call">Nem hívható</string>
   <string name="rewrite">Átírás</string>
   <string name="stop_processing">Feldolgozás leállítása</string>
   <string name="direct_call">Közvetlen hívás</string>
   <string name="auto_answer">Automatikus válasz</string>
+  <string name="starts_with">A szám elején</string>
+  <string name="ends_with">A szám végén</string>
+  <string name="contains">A szám tartalmazza</string>
+  <string name="all">Mind</string>
+  <string name="has_exactly_n_digits">Pontosan N számból áll</string>
+  <string name="has_more_than_n_digits">Több mint N számból áll</string>
+  <string name="is_exactly">Megegyezik</string>
   <string name="custom_regexp">Saját RegExp</string>
   <string name="prefix_by">Előtag:</string>
   <string name="suffix_with">Utótag:</string>

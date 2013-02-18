@@ -86,8 +86,8 @@
         android:defaultValue="2"
         android:key="media_thread_count"
         android:numeric="signed"
-        android:summary="@string/thread_count_desc"
-        android:title="@string/thread_count" />
+        android:summary="@string/media_thread_count_desc"
+        android:title="@string/media_thread_count" />
 
     <CheckBoxPreference
         android:defaultValue="true"

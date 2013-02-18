@@ -11,6 +11,7 @@
   <string name="w_common_server">Server</string>
   <string name="w_common_server_desc">SIP server Doména/ip [:port]</string>
   <string name="create_account">Vytvořit účet</string>
+  <string name="already_have_account">Již mám účet</string>
   <string name="first_name">Jméno</string>
   <string name="last_name">Příjmení</string>
   <string name="email_address">E-mail</string>

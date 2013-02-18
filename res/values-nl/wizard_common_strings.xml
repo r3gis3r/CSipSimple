@@ -11,6 +11,7 @@
   <string name="w_common_server">Server</string>
   <string name="w_common_server_desc">SIP-server domein/IP[:poort]</string>
   <string name="create_account">Account creëren </string>
+  <string name="already_have_account">Ik heb al een account</string>
   <string name="first_name">Voornaam</string>
   <string name="last_name">Achternaam</string>
   <string name="email_address">E-mail adres</string>

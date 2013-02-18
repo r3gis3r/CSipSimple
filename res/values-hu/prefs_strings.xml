@@ -9,6 +9,8 @@
   <string name="prefs_media_desc">Hívásbeli és hangkódolási beállítások</string>
   <string name="prefs_ui">Felhasználói felület</string>
   <string name="prefs_ui_desc">Testreszabás</string>
+  <string name="prefs_calls">Hívási opciók</string>
+  <string name="prefs_calls_desc">Hivásra vonatkozó opciók</string>
   <!--Network-->
   <string name="for_incomings">Bejövő hívások</string>
   <string name="for_outgoings">Kimenő hívások</string>
@@ -54,6 +56,8 @@
   <string name="turn_server_desc">TURN szerver megadása (HOST:PORT)</string>
   <string name="enable_stun">STUN engedélyezése</string>
   <string name="enable_stun_desc">STUN funkció bekapcsolása</string>
+  <string name="stun_server">STUN szerverek</string>
+  <string name="stun_server_desc">STUN szerverek (HOSZT[:PORT],....)</string>
   <string name="enable_qos">QoS engedélyezve</string>
   <string name="enable_qos_desc">QoS engedélyezve csomag szinten</string>
   <string name="dscp_val">DSCP érték</string>

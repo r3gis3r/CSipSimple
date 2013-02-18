@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="w_cryptel_password">Cryptoキー</string>
-  <string name="w_cryptel_password_desc">Cryptoキー</string>
+  <string name="w_cryptel_password">暗号鍵</string>
+  <string name="w_cryptel_password_desc">暗号鍵</string>
 </resources>

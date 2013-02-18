@@ -25,4 +25,6 @@
   <string name="resume_call">Riprendi</string>
   <string name="transfer_to_call">Trasferisci a chiamata</string>
   <string name="send_dtmf">Invia DTMF</string>
+  <string name="zrtp_trust_remote">Trust ZRTP remota</string>
+  <string name="zrtp_revoke_trusted_remote">Revoca trust ZRTP remota</string>
 </resources>
