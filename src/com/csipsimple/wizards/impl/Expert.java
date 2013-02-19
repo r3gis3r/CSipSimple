@@ -42,7 +42,9 @@ public class Expert extends BaseImplementation {
 	private EditTextPreference accountRegUri;
 	private EditTextPreference accountUserName;
 	private EditTextPreference accountData;
-	private ListPreference accountDataType;
+    private CheckBoxPreference accountInitAuth;
+    private EditTextPreference  accountAuthAlgo;
+    private ListPreference accountDataType;
 	private EditTextPreference accountRealm;
 	private ListPreference accountScheme;
 	private ListPreference accountTransport;
@@ -81,6 +83,8 @@ public class Expert extends BaseImplementation {
 		accountUserName = (EditTextPreference) findPreference(SipProfile.FIELD_USERNAME);
 		accountData = (EditTextPreference) findPreference(SipProfile.FIELD_DATA);
 		accountDataType = (ListPreference) findPreference(SipProfile.FIELD_DATATYPE);
+        accountAuthAlgo = (EditTextPreference) findPreference(SipProfile.FIELD_AUTH_ALGO);
+        accountInitAuth = (CheckBoxPreference) findPreference(SipProfile.FIELD_AUTH_INITIAL_AUTH);
 		accountScheme = (ListPreference) findPreference(SipProfile.FIELD_SCHEME);
 		accountTransport = (ListPreference) findPreference(SipProfile.FIELD_TRANSPORT);
 		accountUseSrtp = (ListPreference) findPreference(SipProfile.FIELD_USE_SRTP);
@@ -154,6 +158,8 @@ public class Expert extends BaseImplementation {
 				accountDataType.setValueIndex(0);
 			}
 		}
+		accountInitAuth.setChecked(account.initial_auth);
+		accountAuthAlgo.setText(account.auth_algo);
 
 		accountTransport.setValue(account.transport.toString());
 		accountPublishEnabled.setChecked((account.publish_enabled == 1));
@@ -306,6 +312,8 @@ public class Expert extends BaseImplementation {
 			account.scheme = SipProfile.CRED_SCHEME_DIGEST;
 			account.datatype = SipProfile.CRED_DATA_PLAIN_PASSWD;
 		}
+		account.initial_auth = accountInitAuth.isChecked();
+		account.auth_algo = accountAuthAlgo.getText();
 
 		account.publish_enabled = accountPublishEnabled.isChecked() ? 1 : 0;
 		int regTo = getIntValue(accountRegTimeout, -1);

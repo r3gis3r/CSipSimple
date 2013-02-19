@@ -46,7 +46,7 @@ public class DBAdapter {
 
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
-		private static final int DATABASE_VERSION = 36;
+		private static final int DATABASE_VERSION = 37;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -88,6 +88,8 @@ public class DBAdapter {
 				+ SipProfile.FIELD_USERNAME				+ " TEXT," 
 				+ SipProfile.FIELD_DATATYPE 			+ " INTEGER," 
 				+ SipProfile.FIELD_DATA 				+ " TEXT,"
+				+ SipProfile.FIELD_AUTH_INITIAL_AUTH + " INTEGER," 
+		        + SipProfile.FIELD_AUTH_ALGO      + " TEXT,"
 				
 				
 				+ SipProfile.FIELD_SIP_STACK 			+ " INTEGER," 
@@ -405,6 +407,15 @@ public class DBAdapter {
                     // Enable try to clean register for all but ones that doesn't support contact rewrite normal (legacy)
                     db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TRY_CLEAN_REGISTERS + "=1 WHERE 1");
                     db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_TRY_CLEAN_REGISTERS + "=0 WHERE "+SipProfile.FIELD_CONTACT_REWRITE_METHOD+"=1");
+                }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
+            }
+            if(oldVersion < 37) {
+                try {
+                    // Enable try to clean register for all but ones that doesn't support contact rewrite normal (legacy)
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_AUTH_INITIAL_AUTH, "INTEGER DEFAULT 0");
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_AUTH_ALGO, "TEXT");
                 }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
                 }

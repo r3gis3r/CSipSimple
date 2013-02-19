@@ -20,11 +20,22 @@
  */
 package com.csipsimple.pjsip;
 
+import android.content.Context;
+import android.text.TextUtils;
+
+import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
+import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesProviderWrapper;
+
 import org.pjsip.pjsua.csipsimple_acc_config;
 import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_qos_type;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_srtp_use;
+import org.pjsip.pjsua.pjsip_auth_clt_pref;
 import org.pjsip.pjsua.pjsip_cred_info;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
@@ -36,16 +47,6 @@ import org.pjsip.pjsua.pjsua_stun_use;
 import org.pjsip.pjsua.pjsua_transport_config;
 import org.pjsip.pjsua.pjsua_turn_config;
 import org.pjsip.pjsua.pjsua_turn_config_use;
-
-import android.content.Context;
-import android.text.TextUtils;
-
-import com.csipsimple.api.SipConfigManager;
-import com.csipsimple.api.SipProfile;
-import com.csipsimple.api.SipUri;
-import com.csipsimple.api.SipUri.ParsedSipContactInfos;
-import com.csipsimple.utils.Log;
-import com.csipsimple.utils.PreferencesProviderWrapper;
 
 public class PjSipAccount {
 	
@@ -168,6 +169,16 @@ public class PjSipAccount {
 			}
 		}else {
 			cfg.setCred_count(0);
+		}
+		
+		// Auth prefs
+		{
+		     pjsip_auth_clt_pref authPref = cfg.getAuth_pref();
+    		 authPref.setInitial_auth(profile.initial_auth ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+    		 if(!TextUtils.isEmpty(profile.auth_algo)) {
+    		     authPref.setAlgorithm(pjsua.pj_str_copy(profile.auth_algo));
+    		 }
+    		 cfg.setAuth_pref(authPref);
 		}
 		
         cfg.setMwi_enabled(profile.mwi_enabled ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);

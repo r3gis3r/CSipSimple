@@ -398,9 +398,7 @@ public class PjSipService {
                 pjsua.config_default(cfg);
                 cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
                 cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent(service)));
-                // With new timer implementation, thread count of pjsip can be 0
-                // it will use less CPU since now thread are launched by
-                // alarmManager
+                // We need at least one thread
                 int threadCount = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.THREAD_COUNT);
                 if(threadCount <= 0) {
                     threadCount = 1;
@@ -485,8 +483,12 @@ public class PjSipService {
                 // Disabled ? because only one thread enabled now for battery perfs on normal state
                 int mediaThreadCount = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.MEDIA_THREAD_COUNT);
                 mediaCfg.setThread_cnt(mediaThreadCount);
-                boolean hasIoQueue = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE);
-                mediaCfg.setHas_ioqueue((hasIoQueue && (mediaThreadCount > 0)) ? 1 : 0);
+                boolean hasOwnIoQueue = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE);
+                if(threadCount <= 0) {
+                    // Global thread count is 0, so don't use sip one anyway
+                    hasOwnIoQueue = false;
+                }
+                mediaCfg.setHas_ioqueue( hasOwnIoQueue ? 1 : 0);
 
                 // ICE
                 mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());

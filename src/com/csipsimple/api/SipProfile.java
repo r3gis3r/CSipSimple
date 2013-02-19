@@ -511,6 +511,26 @@ public class SipProfile implements Parcelable {
      * @see String
      */
     public static final String FIELD_DATA = "data";
+    
+    /**
+     * If this flag is set, the authentication client framework will send an empty Authorization header in each initial request. Default is no.
+     *  <a target="_blank" href=
+     * "http://www.pjsip.org/docs/latest/pjsip/docs/html/structpjsip__auth__clt__pref.htm#ac3487e53d8d6b3ea392315b08e2aac4a"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     */
+    public static final String FIELD_AUTH_INITIAL_AUTH = "initial_auth";
+    
+    /**
+     * If this flag is set, the authentication client framework will send an empty Authorization header in each initial request. Default is no.
+     *  <a target="_blank" href=
+     * "http://www.pjsip.org/docs/latest/pjsip/docs/html/structpjsip__auth__clt__pref.htm#ac3487e53d8d6b3ea392315b08e2aac4a"
+     * >Pjsip documentation</a>
+     * 
+     * @see Integer
+     */
+    public static final String FIELD_AUTH_ALGO = "auth_algo";
 
     // Android stuff
     /**
@@ -821,6 +841,14 @@ public class SipProfile implements Parcelable {
      */
     public String data = null;
     /**
+     * @see #FIELD_AUTH_INITIAL_AUTH
+     */
+    public boolean initial_auth = false;
+    /**
+     * @see #FIELD_AUTH_ALGO
+     */
+    public String  auth_algo = ""; 
+    /**
      * @see #FIELD_USE_SRTP
      */
     public int use_srtp = -1;
@@ -1021,6 +1049,8 @@ public class SipProfile implements Parcelable {
         turn_cfg_user = getReadParcelableString(in.readString());
         turn_cfg_password = getReadParcelableString(in.readString());
         ipv6_media_use = in.readInt();
+        initial_auth = (in.readInt() != 0);
+        auth_algo = getReadParcelableString(in.readString());
     }
 
     /**
@@ -1106,6 +1136,8 @@ public class SipProfile implements Parcelable {
         dest.writeString(getWriteParcelableString(turn_cfg_user));
         dest.writeString(getWriteParcelableString(turn_cfg_password));
         dest.writeInt(ipv6_media_use);
+        dest.writeInt(initial_auth ? 1 : 0);
+        dest.writeString(getWriteParcelableString(auth_algo));
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -1258,6 +1290,15 @@ public class SipProfile implements Parcelable {
         if (tmp_s != null) {
             data = tmp_s;
         }
+        tmp_i = args.getAsInteger(FIELD_AUTH_INITIAL_AUTH);
+        if (tmp_i != null) {
+            initial_auth = (tmp_i == 1);
+        }
+        tmp_s = args.getAsString(FIELD_AUTH_ALGO);
+        if (tmp_s != null) {
+            auth_algo = tmp_s;
+        }
+        
 
         tmp_i = args.getAsInteger(FIELD_SIP_STACK);
         if (tmp_i != null && tmp_i >= 0) {
@@ -1421,6 +1462,10 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_DATATYPE, datatype);
         if (!TextUtils.isEmpty(data)) {
             args.put(FIELD_DATA, data);
+        }
+        args.put(FIELD_AUTH_INITIAL_AUTH, initial_auth);
+        if(!TextUtils.isEmpty(auth_algo)) {
+            args.put(FIELD_AUTH_ALGO, auth_algo);
         }
 
         args.put(FIELD_SIP_STACK, sip_stack);

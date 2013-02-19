@@ -64,6 +64,16 @@
             android:entryValues="@array/scheme_values"
             android:key="scheme"
             android:title="Scheme" />
+
+        <CheckBoxPreference
+            android:key="initial_auth"
+            android:summary="Send an empty Authorization header in each initial request"
+            android:title="Send empty auth header" />
+
+        <EditTextPreference
+            android:key="auth_algo"
+            android:summary="Algorithm text to use when empty Authorization header"
+            android:title="Auth algo for empty auth header" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Connection" >
         <ListPreference

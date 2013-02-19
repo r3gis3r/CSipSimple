@@ -823,3 +823,25 @@ enum pjrpid_activity
     PJRPID_ACTIVITY_BUSY
 
 };
+
+/**
+ * From sip_auth.h
+ * This structure describes client authentication session preference.
+ * The preference can be set by calling #pjsip_auth_clt_set_prefs().
+ */
+struct pjsip_auth_clt_pref
+{
+    /**
+     * If this flag is set, the authentication client framework will
+     * send an empty Authorization header in each initial request.
+     * Default is no.
+     */
+    pj_bool_t   initial_auth;
+
+    /**
+     * Specify the algorithm to use when empty Authorization header 
+     * is to be sent for each initial request (see above)
+     */
+    pj_str_t    algorithm;
+
+};

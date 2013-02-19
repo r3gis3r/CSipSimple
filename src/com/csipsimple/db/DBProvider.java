@@ -113,6 +113,8 @@ public class DBProvider extends ContentProvider {
 		SipProfile.FIELD_REALM, SipProfile.FIELD_SCHEME, SipProfile.FIELD_USERNAME, SipProfile.FIELD_DATATYPE,
 		SipProfile.FIELD_DATA, 
 		
+		SipProfile.FIELD_AUTH_INITIAL_AUTH, SipProfile.FIELD_AUTH_ALGO,
+		
 		// CSipSimple specific
 		SipProfile.FIELD_SIP_STACK, SipProfile.FIELD_VOICE_MAIL_NBR, 
 		SipProfile.FIELD_TRY_CLEAN_REGISTERS, SipProfile.FIELD_ANDROID_GROUP,
@@ -155,6 +157,8 @@ public class DBProvider extends ContentProvider {
         // Credentials
 		String.class, String.class, String.class, Integer.class,
 		String.class,
+		
+		Integer.class, String.class,
 		
 		// CSipSimple specific
 		Integer.class, String.class,
