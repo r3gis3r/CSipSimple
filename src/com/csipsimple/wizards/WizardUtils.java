@@ -357,10 +357,6 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voiptelie, 45, 
                     new Locale[]{}, false, true, 
                     GatherCall.class));
-            WIZARDS_DICT.put("TRAVELTELE", new WizardInfo("TRAVELTELE", "Travel Telekom", 
-                    R.drawable.ic_wizard_traveltele, 45, 
-                    new Locale[]{}, false, true, 
-                    TravelTele.class));
             
 			
 			//Locales
@@ -913,6 +909,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_mtel, 10, 
                     new Locale[]{new Locale("sr")}, false, false, 
                     MTel.class));
+            WIZARDS_DICT.put("TRAVELTELE", new WizardInfo("TRAVELTELE", "Travel Telekom", 
+                    R.drawable.ic_wizard_traveltele, 45, 
+                    new Locale[]{new Locale("UK", "ua"), locale("ru_RU"), locale("cs_CZ"), locale("be_BY"), locale("uz_UZ"), locale("kk_KZ") }, false, false, 
+                    TravelTele.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
