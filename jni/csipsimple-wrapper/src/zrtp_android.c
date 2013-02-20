@@ -354,5 +354,13 @@ PJ_DECL(void) jzrtp_SASVerified(pjsua_call_id call_id) {
 PJ_DECL(void) jzrtp_SASRevoked(pjsua_call_id call_id) {
 	//TODO : log
 }
+PJ_DECL(zrtp_state_info) jzrtp_getInfoFromCall(pjsua_call_id call_id){
+    zrtp_state_info state;
+    state.call_id = call_id;
+    state.secure = PJ_FALSE;
+    state.sas.slen = 0;
+    state.cipher.slen = 0;
+    state.sas_verified = PJ_FALSE;
+    return state;
 }
 #endif
