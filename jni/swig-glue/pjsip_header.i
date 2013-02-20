@@ -465,6 +465,10 @@ PJ_DECL(pj_status_t) pjmedia_tonegen_play_digits(pjmedia_port *tonegen,
 	 unsigned options);
 // From pjmedia/include/pjmedia/tonegen.h:206
 PJ_DECL(pj_status_t) pjmedia_tonegen_rewind(pjmedia_port *tonegen);
+// From pjmedia/include/pjmedia/tonegen.h
+PJ_DECL(pj_status_t) pjmedia_tonegen_stop(pjmedia_port *tonegen);
+//From pjmedia/include/pjmedia/port.h
+PJ_DECL(pj_status_t) pjmedia_port_destroy( pjmedia_port *port );
 
 // From pjmedia/include/pjmedia/transport_srtp.h:109
 enum pjmedia_srtp_use

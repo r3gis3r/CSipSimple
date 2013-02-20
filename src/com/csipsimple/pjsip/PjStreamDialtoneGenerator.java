@@ -83,7 +83,8 @@ public class PjStreamDialtoneGenerator {
 			return status;
 		}
 		dialtoneSlot = dialtoneSlotPtr[0];
-		status = pjsua.conf_connect(dialtoneSlot, info.getConf_slot());
+		int callConfSlot = info.getConf_slot();
+		status = pjsua.conf_connect(dialtoneSlot, callConfSlot);
 		if (status != pjsua.PJ_SUCCESS) {
 			dialtoneSlot = -1;
 			stopDialtoneGenerator();
@@ -98,14 +99,17 @@ public class PjStreamDialtoneGenerator {
 	 * This has to be called manually when no more DTMF codes are to be send for the associated call
 	 */
 	public synchronized void stopDialtoneGenerator() {
+	    stopSending();
 		// Destroy the port
 		if (dialtoneSlot != -1) {
 			pjsua.conf_remove_port(dialtoneSlot);
 			dialtoneSlot = -1;
 		}
-
-		dialtoneGen = null;
-		// pjsua.port_destroy(dialtoneGen);
+		
+        if (dialtoneGen != null) {
+            pjsua.pjmedia_port_destroy(dialtoneGen);
+            dialtoneGen = null;
+        }
 
 		if (dialtonePool != null) {
 			pjsua.pj_pool_release(dialtonePool);
@@ -126,6 +130,7 @@ public class PjStreamDialtoneGenerator {
 			}
 		}
 		int status = pjsuaConstants.PJ_SUCCESS;
+		stopSending();
 		
 		for(int i = 0 ; i < dtmfChars.length(); i++ ) {
 		    char d = dtmfChars.charAt(i);
@@ -144,6 +149,12 @@ public class PjStreamDialtoneGenerator {
 		}
 
 		return status;
+	}
+	
+	private void stopSending() {
+        if (dialtoneGen != null) {
+            pjsua.pjmedia_tonegen_stop(dialtoneGen);
+        }
 	}
 
 }
