@@ -21,62 +21,50 @@
 
 package com.csipsimple.wizards.impl;
 
-import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
 
-public class MTel extends AuthorizationImplementation {
+public class CallMyWay extends SimpleImplementation {
 	
+
 	@Override
 	protected String getDomain() {
-		return "mtel.ba";
+		return "sip2.callmyway.net";
 	}
 	
 	@Override
 	protected String getDefaultName() {
-		return "m:tel";
+		return " CallMyWay";
 	}
 
-	
 	//Customization
 	@Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
-		accountUsername.setTitle("IMPU");
-		accountUsername.setDialogTitle(R.string.w_common_phone_number);
 		
-		accountAuthorization.setTitle("IMPI");
-		accountAuthorization.setDialogTitle(R.string.w_authorization_auth_name);
 	}
 	@Override
 	public String getDefaultFieldSummary(String fieldName) {
-		if(fieldName.equals(USER_NAME)) {
-			return parent.getString(R.string.w_common_phone_number_desc);
-		}else if(fieldName.equals(USER_NAME)) {
-            return parent.getString(R.string.w_authorization_auth_name);
-        }
 		return super.getDefaultFieldSummary(fieldName);
 	}
 	
-	
+	@Override
 	public SipProfile buildAccount(SipProfile account) {
-		account = super.buildAccount(account);
-		account.proxies = new String[] {"sip:89.111.231.49"};
-		String user = getText(accountUsername).trim();
-		if(user.contains("@")) {
-		    account.username =  user;
-		}else {
-		    account.username =  user + "@" + getDomain();
-		}
-		account.use_rfc5626 = true;
-		return account;
+	    SipProfile acc = super.buildAccount(account);
+	    return acc;
+	}
+	
+	@Override
+	public boolean needRestart() {
+	    return true;
 	}
 	
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
-		super.setDefaultParams(prefs);
-		prefs.setPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS, true);
+	    super.setDefaultParams(prefs);
+	    prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
+	    
 	}
 }

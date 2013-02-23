@@ -357,6 +357,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voiptelie, 45, 
                     new Locale[]{}, false, true, 
                     GatherCall.class));
+            WIZARDS_DICT.put("SECURDATA", new WizardInfo("SECURDATA", "Secur Data", 
+                    R.drawable.ic_wizard_securdata, 45, 
+                    new Locale[]{}, false, true, 
+                    SecurData.class));
             
 			
 			//Locales
@@ -917,6 +921,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_sipcentric, 45, 
                     new Locale[]{Locale.UK }, false, false, 
                     SipCentric.class));
+            WIZARDS_DICT.put("CALLMYWAY", new WizardInfo("CALLMYWAY", "CallMyWay", 
+                    R.drawable.ic_wizard_callmyway, 5, 
+                    new Locale[]{locale("es_MX"), locale("es_CR")}, false, false, 
+                    CallMyWay.class));
+            WIZARDS_DICT.put("050PLUS", new WizardInfo("050PLUS", "050Plus", 
+                    R.drawable.ic_wizard_050plus, 5, 
+                    new Locale[]{Locale.JAPAN}, false, false, 
+                    Zero50plus.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
