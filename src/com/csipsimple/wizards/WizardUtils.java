@@ -917,7 +917,7 @@ public class WizardUtils {
                     R.drawable.ic_wizard_traveltele, 45, 
                     new Locale[]{new Locale("UK", "ua"), locale("ru_RU"), locale("cs_CZ"), locale("be_BY"), locale("uz_UZ"), locale("kk_KZ") }, false, false, 
                     TravelTele.class));
-            WIZARDS_DICT.put("SIPCENTRIC", new WizardInfo("SIPCENTRIC", "SipCentric", 
+            WIZARDS_DICT.put("SIPCENTRIC", new WizardInfo("SIPCENTRIC", "Sipcentric", 
                     R.drawable.ic_wizard_sipcentric, 45, 
                     new Locale[]{Locale.UK }, false, false, 
                     SipCentric.class));

@@ -36,7 +36,7 @@ public class SipCentric extends SimpleImplementation {
 	
 	@Override
 	protected String getDefaultName() {
-		return "SipCentric";
+		return "Sipcentric";
 	}
 
 	
