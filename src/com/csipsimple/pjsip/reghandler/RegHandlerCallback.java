@@ -41,8 +41,10 @@ public class RegHandlerCallback extends MobileRegHandlerCallback {
     
     private SparseIntArray accountCleanRegisters = new SparseIntArray();
     private pj_str_t EMPTY_STR = pjsua.pj_str_copy("");
+    private Context mCtxt;
     
     public RegHandlerCallback(Context ctxt) {
+        mCtxt = ctxt;
         prefs_db = ctxt.getSharedPreferences("reg_handler_db", Context.MODE_PRIVATE);
     }
     
@@ -56,10 +58,13 @@ public class RegHandlerCallback extends MobileRegHandlerCallback {
         if(active == 0) {
             return EMPTY_STR;
         }
-        int expires = prefs_db.getInt(REG_EXPIRES_PREFIX + acc_id, 0);
+        long db_acc_id = PjSipService.getAccountIdForPjsipId(mCtxt, acc_id);
+        String key_expires = REG_EXPIRES_PREFIX + Long.toString(db_acc_id);
+        String key_uri = REG_URI_PREFIX + Long.toString(db_acc_id);
+        int expires = prefs_db.getInt(key_expires, 0);
         int now = (int) Math.ceil(System.currentTimeMillis() / 1000);
         if(expires >= now) {
-            String ret = prefs_db.getString(REG_URI_PREFIX + acc_id, "");
+            String ret = prefs_db.getString(key_uri, "");
             Log.d(THIS_FILE, "We restore " + ret);
             return pjsua.pj_str_copy(ret);
         }
@@ -68,10 +73,13 @@ public class RegHandlerCallback extends MobileRegHandlerCallback {
     
     @Override
     public void on_save_contact(int acc_id, pj_str_t contact, int expires) {
+        long db_acc_id = PjSipService.getAccountIdForPjsipId(mCtxt, acc_id);
+        String key_expires = REG_EXPIRES_PREFIX + Long.toString(db_acc_id);
+        String key_uri = REG_URI_PREFIX + Long.toString(db_acc_id);
         Editor edt = prefs_db.edit();
-        edt.putString(REG_URI_PREFIX + acc_id, PjSipService.pjStrToString(contact));
+        edt.putString(key_uri, PjSipService.pjStrToString(contact));
         int now = (int) Math.ceil(System.currentTimeMillis() / 1000);
-        edt.putInt(REG_EXPIRES_PREFIX + acc_id, now + expires);
+        edt.putInt(key_expires, now + expires);
         // TODO : have this asynchronous
         edt.commit();
     }

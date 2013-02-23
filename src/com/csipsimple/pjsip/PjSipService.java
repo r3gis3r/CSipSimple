@@ -890,7 +890,7 @@ public class PjSipService {
         if (!created) {
             return;
         }
-        long accId = getAccountIdForPjsipId(pjsuaId);
+        long accId = getAccountIdForPjsipId(service, pjsuaId);
         Log.d(THIS_FILE, "Update profile from service for " + pjsuaId + " aka in db " + accId);
         if (accId != SipProfile.INVALID_ID) {
             int success = pjsuaConstants.PJ_FALSE;
@@ -1647,10 +1647,10 @@ public class PjSipService {
         return presence == PresenceStatus.ONLINE ? 1 : 0;
     }
 
-    public long getAccountIdForPjsipId(int pjId) {
+    public static long getAccountIdForPjsipId(Context ctxt, int pjId) {
         long accId = SipProfile.INVALID_ID;
 
-        Cursor c = service.getContentResolver().query(SipProfile.ACCOUNT_STATUS_URI, null, null,
+        Cursor c = ctxt.getContentResolver().query(SipProfile.ACCOUNT_STATUS_URI, null, null,
                 null, null);
         if (c != null) {
             try {
@@ -1673,7 +1673,7 @@ public class PjSipService {
     }
 
     public SipProfile getAccountForPjsipId(int pjId) {
-        long accId = getAccountIdForPjsipId(pjId);
+        long accId = getAccountIdForPjsipId(service, pjId);
         if (accId == SipProfile.INVALID_ID) {
             return null;
         } else {

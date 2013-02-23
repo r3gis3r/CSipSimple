@@ -21,6 +21,7 @@
 
 package com.csipsimple.pjsip;
 
+import android.content.Context;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
@@ -57,7 +58,7 @@ public final class PjSipCalls {
      * @param service PjSipService Sip service to retrieve pjsip accounts infos
      * @throws SameThreadException
      */
-    public static void updateSessionFromPj(SipCallSessionImpl session, pjsip_event e, PjSipService service)
+    public static void updateSessionFromPj(SipCallSessionImpl session, pjsip_event e, Context context)
             throws SameThreadException {
         Log.d(THIS_FILE, "Update call " + session.getCallId());
         pjsua_call_info pjInfo = new pjsua_call_info();
@@ -65,7 +66,7 @@ public final class PjSipCalls {
 
         if (status == pjsua.PJ_SUCCESS) {
             // Transform pjInfo into CallSession object
-            updateSession(session, pjInfo, service);
+            updateSession(session, pjInfo, context);
             
             // Update state here because we have pjsip_event here and can get q.850 state
             if(e != null) {
@@ -116,7 +117,7 @@ public final class PjSipCalls {
      * @param service PjSipService Sip service to retrieve pjsip accounts infos
      */
     private static void updateSession(SipCallSessionImpl session, pjsua_call_info pjCallInfo,
-            PjSipService service) {
+            Context context) {
         // Should be unecessary cause we usually copy infos from a valid
         session.setCallId(pjCallInfo.getId());
 
@@ -129,7 +130,7 @@ public final class PjSipCalls {
 
         // Try to retrieve sip account related to this call
         int pjAccId = pjCallInfo.getAcc_id();
-        session.setAccId(service.getAccountIdForPjsipId(pjAccId));
+        session.setAccId(PjSipService.getAccountIdForPjsipId(context, pjAccId));
 
         pj_time_val duration = pjCallInfo.getConnect_duration();
         session.setConnectStart(SystemClock.elapsedRealtime() - duration.getSec() * 1000

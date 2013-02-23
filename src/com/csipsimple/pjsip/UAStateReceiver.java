@@ -542,7 +542,7 @@ public class UAStateReceiver extends Callback {
 			}
 		}
 		// We update session infos. callInfo is both in/out and will be updated
-		PjSipCalls.updateSessionFromPj(callInfo, e, pjService);
+		PjSipCalls.updateSessionFromPj(callInfo, e, pjService.service);
 		// We update from our current recording state
 		callInfo.setIsRecording(pjService.isRecording(callId));
 		callInfo.setCanRecord(pjService.canRecord(callId));
