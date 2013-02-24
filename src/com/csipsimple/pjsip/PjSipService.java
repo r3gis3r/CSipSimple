@@ -51,6 +51,7 @@ import com.csipsimple.pjsip.player.impl.SimpleWavPlayerHandler;
 import com.csipsimple.pjsip.recorder.IRecorderHandler;
 import com.csipsimple.pjsip.recorder.impl.SimpleWavRecorderHandler;
 import com.csipsimple.pjsip.reghandler.RegHandlerModule;
+import com.csipsimple.pjsip.sipclf.SipClfModule;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
@@ -2203,6 +2204,11 @@ public class PjSipService {
         // TODO : this should be more modular and done from outside
         PjsipModule rModule = new RegHandlerModule();
         pjsipModules.put(RegHandlerModule.class.getCanonicalName(), rModule);
+        
+        if(false) {
+            rModule = new SipClfModule();
+            pjsipModules.put(SipClfModule.class.getCanonicalName(), rModule);
+        }
         
         for(PjsipModule mod : pjsipModules.values()) {
             mod.setContext(service);

@@ -56,6 +56,7 @@ LOCAL_STATIC_LIBRARIES += swig-glue pjsip pjmedia swig-glue pjnath pjlib-util pj
 
 # Pjsip modules
 LOCAL_STATIC_LIBRARIES += pjsip_mod_reghandler
+LOCAL_STATIC_LIBRARIES += pjsip_mod_sipclf
 
 ifeq ($(MY_USE_ILBC),1)
 	LOCAL_STATIC_LIBRARIES += ilbc
