@@ -2205,10 +2205,8 @@ public class PjSipService {
         PjsipModule rModule = new RegHandlerModule();
         pjsipModules.put(RegHandlerModule.class.getCanonicalName(), rModule);
         
-        if(false) {
-            rModule = new SipClfModule();
-            pjsipModules.put(SipClfModule.class.getCanonicalName(), rModule);
-        }
+        rModule = new SipClfModule();
+        pjsipModules.put(SipClfModule.class.getCanonicalName(), rModule);
         
         for(PjsipModule mod : pjsipModules.values()) {
             mod.setContext(service);

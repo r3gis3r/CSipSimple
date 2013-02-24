@@ -32,18 +32,23 @@ import org.pjsip.pjsua.pjsua;
 public class SipClfModule implements PjsipModule {
 
     private static final String THIS_FILE = "SipClfModule";
+    private boolean enableModule = false;
 
     public SipClfModule() {
     }
 
     @Override
     public void setContext(Context ctxt) {
+        // TODO : set enableModule and settings in respect with settings
+        
     }
 
     @Override
     public void onBeforeStartPjsip() {
-        int status = pjsua.sipclf_mod_init();
-        Log.d(THIS_FILE, "SipClfModule module added with status " + status);
+        if(enableModule ) {
+            int status = pjsua.sipclf_mod_init();
+            Log.d(THIS_FILE, "SipClfModule module added with status " + status);
+        }
     }
 
     @Override

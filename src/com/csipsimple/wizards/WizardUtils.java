@@ -533,12 +533,16 @@ public class WizardUtils {
 					R.drawable.ic_wizard_ipcomms, 19, 
 					new Locale[]{ Locale.US, Locale.CANADA }, false, false, 
 					IPComms.class));
-			WIZARDS_DICT.put("VOIPTELIE", new WizardInfo("VOIPTELIE", "Voiptel Mobile", 
-					R.drawable.ic_wizard_voiptelie, 20, 
-					new Locale[]{ 
-					Locale.UK, Locale.CANADA, Locale.US, locale("en_IE"), locale("en_AU"),
-					locale("es_ES"), locale("es_CO") }, false, false, 
-					VoipTel.class));
+			WIZARDS_DICT.put("INGETEL", new WizardInfo("INGETEL", "Ingetel Mobile", 
+					R.drawable.ic_wizard_ingetel, 20, 
+					new Locale[]{ locale("es_ES") }, false, false, 
+					Ingetel.class));
+            WIZARDS_DICT.put("VOIPTELIE", new WizardInfo("VOIPTELIE", "Voiptel Mobile", 
+                    R.drawable.ic_wizard_voiptelie, 20, 
+                    new Locale[]{ 
+                    Locale.UK, Locale.CANADA, Locale.US, locale("en_IE"), locale("en_AU"),
+                    locale("es_ES"), locale("es_CO") }, false, false, 
+                    VoipTel.class));
 			WIZARDS_DICT.put("EASYBELL", new WizardInfo("EASYBELL", "EasyBell", 
 					R.drawable.ic_wizard_easybell, 20, 
 					new Locale[]{ Locale.GERMANY }, false, false, 
