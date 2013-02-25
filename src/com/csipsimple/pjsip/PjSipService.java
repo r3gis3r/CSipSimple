@@ -734,7 +734,7 @@ public class PjSipService {
         if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_QOS)) {
             Log.d(THIS_FILE, "Activate qos for this transport");
             pj_qos_params qosParam = cfg.getQos_params();
-            qosParam.setDscp_val((short) prefsWrapper.getDSCPVal());
+            qosParam.setDscp_val((short) prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DSCP_VAL));
             qosParam.setFlags((short) 1); // DSCP
             cfg.setQos_params(qosParam);
         }

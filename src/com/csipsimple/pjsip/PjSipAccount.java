@@ -334,8 +334,7 @@ public class PjSipAccount {
             rtpCfg.setQos_type(pj_qos_type.PJ_QOS_TYPE_VOICE);
             pj_qos_params qosParam = rtpCfg.getQos_params();
             // Default for RTP layer is different than default for SIP layer.
-            // Use 184 as discussed in issue 340.
-            short dscpVal = (short) 48;
+            short dscpVal = (short) prefs.getPreferenceIntegerValue(SipConfigManager.DSCP_RTP_VAL);
             if(profile_qos_dscp >= 0) {
                 // If not set, we don't need to change dscp value
                 dscpVal = (short) profile_qos_dscp;

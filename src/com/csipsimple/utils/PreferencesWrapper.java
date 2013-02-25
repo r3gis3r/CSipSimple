@@ -118,7 +118,8 @@ public class PreferencesWrapper {
 		put(SipConfigManager.TLS_METHOD, "0");
 		put(SipConfigManager.NETWORK_ROUTES_POLLING, "0");
 		
-		put(SipConfigManager.DSCP_VAL, "26");
+		put(SipConfigManager.DSCP_VAL, "24");
+        put(SipConfigManager.DSCP_RTP_VAL, "46");
 		put(SipConfigManager.DTMF_MODE, "0");
         put(SipConfigManager.DTMF_PAUSE_TIME, "300");
         put(SipConfigManager.DTMF_WAIT_TIME, "2000");

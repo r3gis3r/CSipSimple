@@ -842,6 +842,9 @@ public final class Compatibility {
             prefWrapper.setPreferenceStringValue(SipConfigManager.MEDIA_THREAD_COUNT, "2");
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE, true);
         }
+        if(lastSeenVersion < 2147) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.DSCP_RTP_VAL, "48");
+        }
         prefWrapper.endEditing();
     }
 

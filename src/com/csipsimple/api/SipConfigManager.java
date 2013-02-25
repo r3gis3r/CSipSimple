@@ -699,7 +699,7 @@ public class SipConfigManager {
      */
     public static final String ENABLE_QOS = "enable_qos";
     /**
-     * DSCP value.<br/>
+     * DSCP value for SIP packets.<br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjlib/docs/html/structpj__qos__params.htm#afa7a796d83d188894d207ebba951e425"
      * >Pjsip documentation</a><br/>
@@ -707,6 +707,15 @@ public class SipConfigManager {
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String DSCP_VAL = "dscp_val";
+    /**
+     * DSCP value for RTP packets.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjlib/docs/html/structpj__qos__params.htm#afa7a796d83d188894d207ebba951e425"
+     * >Pjsip documentation</a><br/>
+     * 
+     * @see #setPreferenceIntegerValue(Context, String, Integer)
+     */
+    public static final String DSCP_RTP_VAL = "dscp_rtp_val";
     /**
      * Send UDP socket keep alive when connected using wifi, in seconds.
      * 

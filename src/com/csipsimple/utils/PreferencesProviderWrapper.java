@@ -402,11 +402,6 @@ public class PreferencesProviderWrapper {
 		return getPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV);
 	}
 	
-	
-	public int getDSCPVal() {
-		return getPreferenceIntegerValue(SipConfigManager.DSCP_VAL);
-	}
-	
 	public int getTLSMethod() {
 		return getPreferenceIntegerValue(SipConfigManager.TLS_METHOD);
 	}
