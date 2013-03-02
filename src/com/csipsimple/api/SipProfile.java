@@ -250,6 +250,16 @@ public class SipProfile implements Parcelable {
      * @see String
      */
     public static final String FIELD_ACC_ID = "acc_id";
+    
+    /**
+     * Data useful for the wizard internal use.
+     * The format here is specific to the wizard and no assumption is made.
+     * Could be simplestring, json, base64 encoded stuff etc.
+     * 
+     * @see String
+     */
+    public static final String FIELD_WIZARD_DATA = "wizard_data";
+    
     /**
      * This is the URL to be put in the request URI for the registration, and
      * will look something like "sip:serviceprovider".<br/>
@@ -966,11 +976,14 @@ public class SipProfile implements Parcelable {
      * @see #FIELD_TURN_CFG_PASSWORD
      */
     public String turn_cfg_password = "";
-    
     /**
      * @see #FIELD_IPV6_MEDIA_USE
      */
     public int ipv6_media_use = 0;
+    /**
+     * @see #FIELD_WIZARD_DATA
+     */
+    public String wizard_data = "";
     
     public SipProfile() {
         display_name = "";
@@ -1051,6 +1064,7 @@ public class SipProfile implements Parcelable {
         ipv6_media_use = in.readInt();
         initial_auth = (in.readInt() != 0);
         auth_algo = getReadParcelableString(in.readString());
+        wizard_data = getReadParcelableString(in.readString());
     }
 
     /**
@@ -1138,6 +1152,7 @@ public class SipProfile implements Parcelable {
         dest.writeInt(ipv6_media_use);
         dest.writeInt(initial_auth ? 1 : 0);
         dest.writeString(getWriteParcelableString(auth_algo));
+        dest.writeString(getWriteParcelableString(wizard_data));
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -1197,6 +1212,10 @@ public class SipProfile implements Parcelable {
         tmp_s = args.getAsString(FIELD_ANDROID_GROUP);
         if (tmp_s != null) {
             android_group = tmp_s;
+        }
+        tmp_s = args.getAsString(FIELD_WIZARD_DATA);
+        if (tmp_s != null) {
+            wizard_data = tmp_s;
         }
 
         // General account settings
@@ -1430,6 +1449,7 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_WIZARD, wizard);
         args.put(FIELD_DISPLAY_NAME, display_name);
         args.put(FIELD_TRANSPORT, transport);
+        args.put(FIELD_WIZARD_DATA, wizard_data);
 
         args.put(FIELD_PRIORITY, priority);
         args.put(FIELD_ACC_ID, acc_id);

@@ -342,9 +342,7 @@ public class PjSipAccount {
                 qosParam.setFlags((short) 1); // DSCP
             }
         }
-        
 	}
-	
 	
 	/**
 	 * @return the displayName
