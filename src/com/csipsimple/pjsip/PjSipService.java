@@ -111,15 +111,15 @@ public class PjSipService {
 
     private boolean hasSipStack = false;
     private boolean sipStackIsCorrupted = false;
-    private Integer localUdpAccPjId, localUdp6AccPjId, 
-        localTcpAccPjId, localTcp6AccPjId, 
-        localTlsAccPjId, localTls6AccPjId;
+    private Integer localUdpAccPjId, localUdp6AccPjId,
+            localTcpAccPjId, localTcp6AccPjId,
+            localTlsAccPjId, localTls6AccPjId;
     public PreferencesProviderWrapper prefsWrapper;
-    //private PjStreamDialtoneGenerator dialtoneGenerator;
+    // private PjStreamDialtoneGenerator dialtoneGenerator;
 
     private Integer hasBeenHoldByGSM = null;
     private Integer hasBeenChangedRingerMode = null;
-    
+
     public UAStateReceiver userAgentReceiver;
     public ZrtpStateReceiver zrtpReceiver;
     public MediaManager mediaManager;
@@ -127,8 +127,9 @@ public class PjSipService {
     private Timer tasksTimer;
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
     private SparseArray<TimerTask> dtmfTasks = new SparseArray<TimerTask>(5);
-    private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
-    
+    private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(
+            5);
+
     // -------
     // Locks
     // -------
@@ -223,7 +224,8 @@ public class PjSipService {
                     userAgentReceiver = new UAStateReceiver();
                     userAgentReceiver.initService(this);
                 }
-                if(zrtpReceiver == null) {
+                userAgentReceiver.reconfigure(service);
+                if (zrtpReceiver == null) {
                     Log.d(THIS_FILE, "create zrtp receiver");
                     zrtpReceiver = new ZrtpStateReceiver(this);
                 }
@@ -231,17 +233,18 @@ public class PjSipService {
                     mediaManager = new MediaManager(service);
                 }
                 mediaManager.startService();
-                
+
                 initModules();
-                
-                DTMF_TONE_PAUSE_LENGTH = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DTMF_PAUSE_TIME);
-                DTMF_TONE_WAIT_LENGTH = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DTMF_WAIT_TIME);
+
+                DTMF_TONE_PAUSE_LENGTH = prefsWrapper
+                        .getPreferenceIntegerValue(SipConfigManager.DTMF_PAUSE_TIME);
+                DTMF_TONE_WAIT_LENGTH = prefsWrapper
+                        .getPreferenceIntegerValue(SipConfigManager.DTMF_WAIT_TIME);
 
                 pjsua.setCallbackObject(userAgentReceiver);
                 pjsua.setZrtpCallbackObject(zrtpReceiver);
 
                 Log.d(THIS_FILE, "Attach is done to callback");
-                
 
                 // CSS CONFIG
                 pjsua.csipsimple_config_default(cssCfg);
@@ -257,10 +260,10 @@ public class PjSipService {
                 cssCfg.setUse_noise_suppressor(prefsWrapper
                         .getPreferenceBooleanValue(SipConfigManager.ENABLE_NOISE_SUPPRESSION) ? pjsua.PJ_TRUE
                         : pjsua.PJ_FALSE);
-                
+
                 cssCfg.setTcp_keep_alive_interval(prefsWrapper.getTcpKeepAliveInterval());
                 cssCfg.setTls_keep_alive_interval(prefsWrapper.getTlsKeepAliveInterval());
-                
+
                 cssCfg.setDisable_tcp_switch(prefsWrapper
                         .getPreferenceBooleanValue(SipConfigManager.DISABLE_TCP_SWITCH) ? pjsuaConstants.PJ_TRUE
                         : pjsuaConstants.PJ_FALSE);
@@ -272,23 +275,23 @@ public class PjSipService {
                         : pjsuaConstants.PJ_FALSE);
 
                 // Transaction timeouts
-                int tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_T1_TIMEOUT);
-                if(tsx_to > 0) {
+                int tsx_to = prefsWrapper
+                        .getPreferenceIntegerValue(SipConfigManager.TSX_T1_TIMEOUT);
+                if (tsx_to > 0) {
                     cssCfg.setTsx_t1_timeout(tsx_to);
                 }
                 tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_T2_TIMEOUT);
-                if(tsx_to > 0) {
+                if (tsx_to > 0) {
                     cssCfg.setTsx_t2_timeout(tsx_to);
                 }
                 tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_T4_TIMEOUT);
-                if(tsx_to > 0) {
+                if (tsx_to > 0) {
                     cssCfg.setTsx_t4_timeout(tsx_to);
                 }
                 tsx_to = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TSX_TD_TIMEOUT);
-                if(tsx_to > 0) {
+                if (tsx_to > 0) {
                     cssCfg.setTsx_td_timeout(tsx_to);
                 }
-                
 
                 // -- USE_ZRTP 1 is no_zrtp, 2 is create_zrtp
                 File zrtpFolder = PreferencesWrapper.getZrtpFolder(service);
@@ -302,7 +305,8 @@ public class PjSipService {
                     cssCfg.setStorage_folder(pjsua.pj_str_copy(""));
                 }
 
-                Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynCodecPlugins(service, SipManager.ACTION_GET_EXTRA_CODECS);
+                Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynCodecPlugins(
+                        service, SipManager.ACTION_GET_EXTRA_CODECS);
                 dynamic_factory[] cssCodecs = cssCfg.getExtra_aud_codecs();
                 int i = 0;
                 for (Entry<String, DynCodecInfos> availableCodec : availableCodecs.entrySet()) {
@@ -329,14 +333,16 @@ public class PjSipService {
                 }
 
                 // Video implementation
-                if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)){
-                    // TODO :: Have plugins per capture / render / video codec / converter
-                    Map<String, DynCodecInfos> videoPlugins = ExtraPlugins.getDynCodecPlugins(service, SipManager.ACTION_GET_VIDEO_PLUGIN);
-                    
-                    if(videoPlugins.size() > 0) {
+                if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO)) {
+                    // TODO :: Have plugins per capture / render / video codec /
+                    // converter
+                    Map<String, DynCodecInfos> videoPlugins = ExtraPlugins.getDynCodecPlugins(
+                            service, SipManager.ACTION_GET_VIDEO_PLUGIN);
+
+                    if (videoPlugins.size() > 0) {
                         DynCodecInfos videoPlugin = videoPlugins.values().iterator().next();
                         pj_str_t pjVideoFile = pjsua.pj_str_copy(videoPlugin.libraryPath);
-                        Log.d(THIS_FILE, "Load video plugin at " + videoPlugin.libraryPath );
+                        Log.d(THIS_FILE, "Load video plugin at " + videoPlugin.libraryPath);
                         // Render
                         {
                             dynamic_factory vidImpl = cssCfg.getVideo_render_implementation();
@@ -350,18 +356,20 @@ public class PjSipService {
                             vidImpl.setInit_factory_name(pjsua
                                     .pj_str_copy("pjmedia_webrtc_vid_capture_factory"));
                             vidImpl.setShared_lib_path(pjVideoFile);
-                            /* -- For testing video screen -- Not yet released
-                            try {
-                                ComponentName cmp = new ComponentName("com.csipsimple.plugins.video", "com.csipsimple.plugins.video.CaptureReceiver");
-                                DynCodecInfos screenCapt = new ExtraPlugins.DynCodecInfos(service, cmp);
-                                vidImpl.setInit_factory_name(pjsua
-                                        .pj_str_copy(screenCapt.factoryInitFunction));
-                                vidImpl.setShared_lib_path(pjsua
-                                        .pj_str_copy(screenCapt.libraryPath));
-                            } catch (NameNotFoundException e) {
-                                Log.e(THIS_FILE, "Not found capture plugin");
-                            }
-                            */
+                            /*
+                             * -- For testing video screen -- Not yet released
+                             * try { ComponentName cmp = new
+                             * ComponentName("com.csipsimple.plugins.video",
+                             * "com.csipsimple.plugins.video.CaptureReceiver");
+                             * DynCodecInfos screenCapt = new
+                             * ExtraPlugins.DynCodecInfos(service, cmp);
+                             * vidImpl.setInit_factory_name(pjsua
+                             * .pj_str_copy(screenCapt.factoryInitFunction));
+                             * vidImpl.setShared_lib_path(pjsua
+                             * .pj_str_copy(screenCapt.libraryPath)); } catch
+                             * (NameNotFoundException e) { Log.e(THIS_FILE,
+                             * "Not found capture plugin"); }
+                             */
                         }
                         // Video codecs
                         availableCodecs = ExtraPlugins.getDynCodecPlugins(service,
@@ -386,7 +394,7 @@ public class PjSipService {
                             i++;
                         }
                         cssCfg.setExtra_vid_codecs_cnt(i);
-                        
+
                         // Converter
                         dynamic_factory convertImpl = cssCfg.getVid_converter();
                         convertImpl.setShared_lib_path(pjVideoFile);
@@ -400,8 +408,9 @@ public class PjSipService {
                 cfg.setCb(pjsuaConstants.WRAPPER_CALLBACK_STRUCT);
                 cfg.setUser_agent(pjsua.pj_str_copy(prefsWrapper.getUserAgent(service)));
                 // We need at least one thread
-                int threadCount = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.THREAD_COUNT);
-                if(threadCount <= 0) {
+                int threadCount = prefsWrapper
+                        .getPreferenceIntegerValue(SipConfigManager.THREAD_COUNT);
+                if (threadCount <= 0) {
                     threadCount = 1;
                 }
                 cfg.setThread_cnt(threadCount);
@@ -441,7 +450,9 @@ public class PjSipService {
                         stunServersCount++;
                     }
                     cfg.setStun_srv(stunServers);
-                    cfg.setStun_map_use_stun2(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_STUN2) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+                    cfg.setStun_map_use_stun2(prefsWrapper
+                            .getPreferenceBooleanValue(SipConfigManager.ENABLE_STUN2) ? pjsuaConstants.PJ_TRUE
+                            : pjsuaConstants.PJ_FALSE);
                 }
 
                 // LOGGING CONFIG
@@ -449,10 +460,11 @@ public class PjSipService {
                 logCfg.setConsole_level(prefsWrapper.getLogLevel());
                 logCfg.setLevel(prefsWrapper.getLogLevel());
                 logCfg.setMsg_logging(pjsuaConstants.PJ_TRUE);
-                
-                if(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.LOG_USE_DIRECT_FILE, false)) {
+
+                if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.LOG_USE_DIRECT_FILE,
+                        false)) {
                     File outFile = PreferencesWrapper.getLogsFile(service, true);
-                    if( outFile != null) {
+                    if (outFile != null) {
                         logCfg.setLog_filename(pjsua.pj_str_copy(outFile.getAbsolutePath()));
                         logCfg.setLog_file_flags(0x1108 /* PJ_O_APPEND */);
                     }
@@ -480,16 +492,19 @@ public class PjSipService {
                 mediaCfg.setClock_rate(clockRate);
                 mediaCfg.setAudio_frame_ptime(prefsWrapper
                         .getPreferenceIntegerValue(SipConfigManager.SND_PTIME));
-                
-                // Disabled ? because only one thread enabled now for battery perfs on normal state
-                int mediaThreadCount = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.MEDIA_THREAD_COUNT);
+
+                // Disabled ? because only one thread enabled now for battery
+                // perfs on normal state
+                int mediaThreadCount = prefsWrapper
+                        .getPreferenceIntegerValue(SipConfigManager.MEDIA_THREAD_COUNT);
                 mediaCfg.setThread_cnt(mediaThreadCount);
-                boolean hasOwnIoQueue = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE);
-                if(threadCount <= 0) {
+                boolean hasOwnIoQueue = prefsWrapper
+                        .getPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE);
+                if (threadCount <= 0) {
                     // Global thread count is 0, so don't use sip one anyway
                     hasOwnIoQueue = false;
                 }
-                mediaCfg.setHas_ioqueue( hasOwnIoQueue ? 1 : 0);
+                mediaCfg.setHas_ioqueue(hasOwnIoQueue ? 1 : 0);
 
                 // ICE
                 mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());
@@ -501,11 +516,11 @@ public class PjSipService {
                     mediaCfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
                     pjsua.set_turn_credentials(
                             pjsua.pj_str_copy(prefsWrapper
-                                    .getPreferenceStringValue(SipConfigManager.TURN_USERNAME)), 
+                                    .getPreferenceStringValue(SipConfigManager.TURN_USERNAME)),
                             pjsua.pj_str_copy(prefsWrapper
-                                    .getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)), 
-                                   pjsua.pj_str_copy("*"), mediaCfg.getTurn_auth_cred());
-                }else {
+                                    .getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)),
+                            pjsua.pj_str_copy("*"), mediaCfg.getTurn_auth_cred());
+                } else {
                     mediaCfg.setEnable_turn(pjsua.PJ_FALSE);
                 }
 
@@ -525,10 +540,10 @@ public class PjSipService {
             {
                 // TODO : allow to configure local accounts.
 
-                // We need a local account for each transport 
+                // We need a local account for each transport
                 // to not have the
                 // application lost when direct call to the IP
-                
+
                 // UDP
                 if (prefsWrapper.isUDPEnabled()) {
                     int udpPort = prefsWrapper.getUDPTransportPort();
@@ -546,7 +561,7 @@ public class PjSipService {
                                 udpPort == 0 ? udpPort : udpPort + 10);
                     }
                 }
-                
+
                 // TCP
                 if (prefsWrapper.isTCPEnabled()) {
                     int tcpPort = prefsWrapper.getTCPTransportPort();
@@ -576,18 +591,18 @@ public class PjSipService {
                         cleanPjsua();
                         return false;
                     }
-                    
+
                     // TLS v6
-                    if(prefsWrapper.useIPv6()) {
+                    if (prefsWrapper.useIPv6()) {
                         localTls6AccPjId = createLocalTransportAndAccount(
                                 pjsip_transport_type_e.PJSIP_TRANSPORT_TLS6,
                                 tlsPort == 0 ? tlsPort : tlsPort + 10);
                     }
                 }
             }
-            
+
             // Add pjsip modules
-            for(PjsipModule mod : pjsipModules.values()){
+            for (PjsipModule mod : pjsipModules.values()) {
                 mod.onBeforeStartPjsip();
             }
 
@@ -635,7 +650,7 @@ public class PjSipService {
         if (created) {
             cleanPjsua();
         }
-        if(tasksTimer != null) {
+        if (tasksTimer != null) {
             tasksTimer.cancel();
             tasksTimer.purge();
             tasksTimer = null;
@@ -647,11 +662,11 @@ public class PjSipService {
         Log.d(THIS_FILE, "Detroying...");
         // This will destroy all accounts so synchronize with accounts
         // management lock
-        //long flags = 1; /*< Lazy disconnect : only RX */
+        // long flags = 1; /*< Lazy disconnect : only RX */
         // Try with TX & RX if network is considered as available
         long flags = 0;
-        if(!prefsWrapper.isValidConnectionForOutgoing()) {
-            // If we are current not valid for outgoing, 
+        if (!prefsWrapper.isValidConnectionForOutgoing()) {
+            // If we are current not valid for outgoing,
             // it means that we don't want the network for SIP now
             // so don't use RX | TX to not consume data at all
             flags = 3;
@@ -669,7 +684,7 @@ public class PjSipService {
         }
 
         TimerWrapper.destroy();
-        
+
         created = false;
     }
 
@@ -689,14 +704,14 @@ public class PjSipService {
         if (type.equals(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS)) {
             pjsip_tls_setting tlsSetting = cfg.getTls_setting();
 
-            /* TODO : THIS IS OBSOLETE -- remove from UI
-            String serverName = prefsWrapper
-                    .getPreferenceStringValue(SipConfigManager.TLS_SERVER_NAME);
-            if (!TextUtils.isEmpty(serverName)) {
-                tlsSetting.setServer_name(pjsua.pj_str_copy(serverName));
-            }
-            */
-            
+            /*
+             * TODO : THIS IS OBSOLETE -- remove from UI String serverName =
+             * prefsWrapper
+             * .getPreferenceStringValue(SipConfigManager.TLS_SERVER_NAME); if
+             * (!TextUtils.isEmpty(serverName)) {
+             * tlsSetting.setServer_name(pjsua.pj_str_copy(serverName)); }
+             */
+
             String caListFile = prefsWrapper
                     .getPreferenceStringValue(SipConfigManager.CA_LIST_FILE);
             if (!TextUtils.isEmpty(caListFile)) {
@@ -734,7 +749,8 @@ public class PjSipService {
         if (prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_QOS)) {
             Log.d(THIS_FILE, "Activate qos for this transport");
             pj_qos_params qosParam = cfg.getQos_params();
-            qosParam.setDscp_val((short) prefsWrapper.getPreferenceIntegerValue(SipConfigManager.DSCP_VAL));
+            qosParam.setDscp_val((short) prefsWrapper
+                    .getPreferenceIntegerValue(SipConfigManager.DSCP_VAL));
             qosParam.setFlags((short) 1); // DSCP
             cfg.setQos_params(qosParam);
         }
@@ -752,17 +768,17 @@ public class PjSipService {
         }
         return tId[0];
     }
-    
+
     private Integer createLocalAccount(Integer transportId)
-            throws SameThreadException  {
-        if(transportId == null) {
+            throws SameThreadException {
+        if (transportId == null) {
             return null;
         }
         int[] p_acc_id = new int[1];
         pjsua.acc_add_local(transportId, pjsua.PJ_FALSE, p_acc_id);
         return p_acc_id[0];
     }
-    
+
     private Integer createLocalTransportAndAccount(pjsip_transport_type_e type, int port)
             throws SameThreadException {
         Integer transportId = createTransport(type, port);
@@ -781,26 +797,15 @@ public class PjSipService {
 
         // Force the use of a transport
         /*
-        switch (account.transport) {
-            case SipProfile.TRANSPORT_UDP:
-                if (udpTranportId != null) {
-                    //account.cfg.setTransport_id(udpTranportId);
-                }
-                break;
-            case SipProfile.TRANSPORT_TCP:
-                if (tcpTranportId != null) {
-                    // account.cfg.setTransport_id(tcpTranportId);
-                }
-                break;
-            case SipProfile.TRANSPORT_TLS:
-                if (tlsTransportId != null) {
-                    // account.cfg.setTransport_id(tlsTransportId);
-                }
-                break;
-            default:
-                break;
-        }
-        */
+         * switch (account.transport) { case SipProfile.TRANSPORT_UDP: if
+         * (udpTranportId != null) {
+         * //account.cfg.setTransport_id(udpTranportId); } break; case
+         * SipProfile.TRANSPORT_TCP: if (tcpTranportId != null) { //
+         * account.cfg.setTransport_id(tcpTranportId); } break; case
+         * SipProfile.TRANSPORT_TLS: if (tlsTransportId != null) { //
+         * account.cfg.setTransport_id(tlsTransportId); } break; default: break;
+         * }
+         */
 
         SipProfileState currentAccountStatus = getProfileState(profile);
         account.cfg.setRegister_on_acc_add(pjsuaConstants.PJ_FALSE);
@@ -830,7 +835,7 @@ public class PjSipService {
                 // We already have local account by default
                 // For now consider we are talking about UDP one
                 // In the future local account should be set per transport
-                switch(account.transport) {
+                switch (account.transport) {
                     case SipProfile.TRANSPORT_UDP:
                         accId[0] = localUdpAccPjId;
                         break;
@@ -845,7 +850,7 @@ public class PjSipService {
                         accId[0] = localUdpAccPjId;
                         break;
                 }
-                
+
                 pjsua_acc_config nCfg = new pjsua_acc_config();
                 pjsua.acc_get_config(accId[0], nCfg);
                 pjsua.csipsimple_set_acc_user_data(nCfg, account.css_cfg);
@@ -875,15 +880,16 @@ public class PjSipService {
 
         return status == pjsuaConstants.PJ_SUCCESS;
     }
-    
+
     void beforeAccountRegistration(int pjId, SipProfile profile) {
-        for(PjsipModule mod : pjsipModules.values()) {
+        for (PjsipModule mod : pjsipModules.values()) {
             mod.onBeforeAccountStartRegistration(pjId, profile);
         }
     }
 
     /**
      * Synchronize content provider backend from pjsip stack
+     * 
      * @param pjsuaId the pjsua id of the account to synchronize
      * @throws SameThreadException
      */
@@ -926,14 +932,15 @@ public class PjSipService {
 
     /**
      * Get the dynamic state of the profile
-     * @param account the sip profile from database. Important field is id. 
+     * 
+     * @param account the sip profile from database. Important field is id.
      * @return the dynamic sip profile state
      */
     public SipProfileState getProfileState(SipProfile account) {
         if (!created || account == null) {
             return null;
         }
-        if(account.id == SipProfile.INVALID_ID) {
+        if (account.id == SipProfile.INVALID_ID) {
             return null;
         }
         SipProfileState accountInfo = new SipProfileState(account);
@@ -973,8 +980,9 @@ public class PjSipService {
     }
 
     /**
-     * Retrieve codecs from pjsip stack and store it inside preference storage 
+     * Retrieve codecs from pjsip stack and store it inside preference storage
      * so that it can be retrieved in the interface view
+     * 
      * @throws SameThreadException
      */
     private void initCodecs() throws SameThreadException {
@@ -982,7 +990,7 @@ public class PjSipService {
         synchronized (codecs) {
             if (!codecs_initialized) {
                 int nbrCodecs, i;
-                
+
                 // Audio codecs
                 nbrCodecs = pjsua.codecs_get_nbr();
                 for (i = 0; i < nbrCodecs; i++) {
@@ -992,7 +1000,7 @@ public class PjSipService {
                 }
                 // Set it in prefs if not already set correctly
                 prefsWrapper.setCodecList(codecs);
-                
+
                 // Video codecs
                 nbrCodecs = pjsua.codecs_vid_get_nbr();
                 for (i = 0; i < nbrCodecs; i++) {
@@ -1002,7 +1010,7 @@ public class PjSipService {
                 }
                 // Set it in prefs if not already set correctly
                 prefsWrapper.setVideoCodecList(video_codecs);
-                
+
                 codecs_initialized = true;
                 // We are now always capable of tls and srtp !
                 prefsWrapper.setLibCapability(PreferencesProviderWrapper.LIB_CAP_TLS, true);
@@ -1011,9 +1019,10 @@ public class PjSipService {
         }
 
     }
-    
+
     /**
      * Append log for the codec in String builder
+     * 
      * @param sb the buffer to be appended with the codec info
      * @param codec the codec name
      * @param prio the priority of the codec
@@ -1029,28 +1038,29 @@ public class PjSipService {
 
     /**
      * Set the codec priority in pjsip stack layer based on preference store
+     * 
      * @throws SameThreadException
      */
     private void setCodecsPriorities() throws SameThreadException {
         ConnectivityManager cm = ((ConnectivityManager) service
                 .getSystemService(Context.CONNECTIVITY_SERVICE));
-        
+
         synchronized (codecs) {
             if (codecs_initialized) {
                 NetworkInfo ni = cm.getActiveNetworkInfo();
                 if (ni != null) {
-                    
+
                     StringBuilder audioSb = new StringBuilder();
                     StringBuilder videoSb = new StringBuilder();
                     audioSb.append("Audio codecs : ");
                     videoSb.append("Video codecs : ");
-                    
+
                     String currentBandType = prefsWrapper.getPreferenceStringValue(
                             SipConfigManager.getBandTypeKey(ni.getType(), ni.getSubtype()),
                             SipConfigManager.CODEC_WB);
-                    
+
                     synchronized (codecs) {
-                        
+
                         for (String codec : codecs) {
                             short aPrio = prefsWrapper.getCodecPriority(codec, currentBandType,
                                     "-1");
@@ -1059,53 +1069,64 @@ public class PjSipService {
                             if (aPrio >= 0) {
                                 pjsua.codec_set_priority(codecStr, aPrio);
                             }
-                            
-                            String codecKey = SipConfigManager.getCodecKey(codec, SipConfigManager.FRAMES_PER_PACKET_SUFFIX);
-                            Integer frmPerPacket = SipConfigManager.getPreferenceIntegerValue(service, codecKey);
-                            if(frmPerPacket != null && frmPerPacket > 0) {
+
+                            String codecKey = SipConfigManager.getCodecKey(codec,
+                                    SipConfigManager.FRAMES_PER_PACKET_SUFFIX);
+                            Integer frmPerPacket = SipConfigManager.getPreferenceIntegerValue(
+                                    service, codecKey);
+                            if (frmPerPacket != null && frmPerPacket > 0) {
                                 Log.v(THIS_FILE, "Set codec " + codec + " fpp : " + frmPerPacket);
                                 pjsua.codec_set_frames_per_packet(codecStr, frmPerPacket);
                             }
                         }
-                        
-                        for(String codec : video_codecs) {
+
+                        for (String codec : video_codecs) {
                             short aPrio = prefsWrapper.getCodecPriority(codec, currentBandType,
                                     "-1");
                             buffCodecLog(videoSb, codec, aPrio);
                             if (aPrio >= 0) {
                                 pjsua.vid_codec_set_priority(pjsua.pj_str_copy(codec), aPrio);
                             }
-                            String videoSize = SipConfigManager.getPreferenceStringValue(service, SipConfigManager.VIDEO_CAPTURE_SIZE, "");
-                            if(TextUtils.isEmpty(videoSize) || videoSize.equalsIgnoreCase("0x0@0")) {
-                                List<VideoCaptureDeviceInfo> cps = VideoUtilsWrapper.getInstance().getVideoCaptureDevices(service);
-                                if(cps.size() > 0) {
-                                    videoSize = cps.get(cps.size() - 1).bestCapability.toPreferenceValue();
+                            String videoSize = SipConfigManager.getPreferenceStringValue(service,
+                                    SipConfigManager.VIDEO_CAPTURE_SIZE, "");
+                            if (TextUtils.isEmpty(videoSize) || videoSize.equalsIgnoreCase("0x0@0")) {
+                                List<VideoCaptureDeviceInfo> cps = VideoUtilsWrapper.getInstance()
+                                        .getVideoCaptureDevices(service);
+                                if (cps.size() > 0) {
+                                    videoSize = cps.get(cps.size() - 1).bestCapability
+                                            .toPreferenceValue();
                                 }
                             }
-                            VideoCaptureCapability videoCap = new VideoUtilsWrapper.VideoCaptureCapability(videoSize);
-                            if(codec.startsWith("H264")) {
-                                int h264profile = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_PROFILE, 66);
-                                int h264level = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_LEVEL, 30);
-                                int h264bitrate = SipConfigManager.getPreferenceIntegerValue(service, SipConfigManager.H264_BITRATE, 0);
-                                
-                                if(h264profile > 0) {
-                                    pjsua.codec_h264_set_profile(h264profile, h264level, 
-                                            videoCap.width, 
-                                            videoCap.height, 
-                                            videoCap.fps, 
+                            VideoCaptureCapability videoCap = new VideoUtilsWrapper.VideoCaptureCapability(
+                                    videoSize);
+                            if (codec.startsWith("H264")) {
+                                int h264profile = SipConfigManager.getPreferenceIntegerValue(
+                                        service, SipConfigManager.H264_PROFILE, 66);
+                                int h264level = SipConfigManager.getPreferenceIntegerValue(service,
+                                        SipConfigManager.H264_LEVEL, 30);
+                                int h264bitrate = SipConfigManager.getPreferenceIntegerValue(
+                                        service, SipConfigManager.H264_BITRATE, 0);
+
+                                if (h264profile > 0) {
+                                    pjsua.codec_h264_set_profile(h264profile, h264level,
+                                            videoCap.width,
+                                            videoCap.height,
+                                            videoCap.fps,
                                             h264bitrate, 0);
-                                    //pjsua.codec_h264_set_profile(h264profile, h264level, 352, 480, 15, h264bitrate, 0); // 352×480 
-                                    Log.d(THIS_FILE, "Set h264 profile : " + h264profile + ", " + h264level + ", "+ h264bitrate);
+                                    // pjsua.codec_h264_set_profile(h264profile,
+                                    // h264level, 352, 480, 15, h264bitrate, 0);
+                                    // // 352×480
+                                    Log.d(THIS_FILE, "Set h264 profile : " + h264profile + ", "
+                                            + h264level + ", " + h264bitrate);
                                 }
                             }
                         }
                     }
-                    
+
                     Log.d(THIS_FILE, audioSb.toString());
                     Log.d(THIS_FILE, videoSb.toString());
                 }
-                
-                
+
             }
         }
     }
@@ -1126,10 +1147,11 @@ public class PjSipService {
             pjsua_call_setting cs = new pjsua_call_setting();
             pjsua.call_setting_default(cs);
             cs.setAud_cnt(1);
-            cs.setVid_cnt(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO) ? 1 : 0);
+            cs.setVid_cnt(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO) ? 1
+                    : 0);
             cs.setFlag(0);
             return pjsua.call_answer2(callId, cs, code, null, null);
-            //return pjsua.call_answer(callId, code, null, null);
+            // return pjsua.call_answer(callId, code, null, null);
         }
         return -1;
     }
@@ -1183,44 +1205,46 @@ public class PjSipService {
             pjsua_call_setting cs = new pjsua_call_setting();
             pjsua_msg_data msgData = new pjsua_msg_data();
             int pjsuaAccId = toCall.getPjsipAccountId();
-            
+
             // Call settings to add video
             pjsua.call_setting_default(cs);
             cs.setAud_cnt(1);
             cs.setVid_cnt(0);
-            if(b != null && b.getBoolean(SipCallSession.OPT_CALL_VIDEO, false)) {
+            if (b != null && b.getBoolean(SipCallSession.OPT_CALL_VIDEO, false)) {
                 cs.setVid_cnt(1);
             }
             cs.setFlag(0);
-            
+
             pj_pool_t pool = pjsua.pool_create("call_tmp", 512, 512);
-            
+
             // Msg data to add headers
             pjsua.msg_data_init(msgData);
             pjsua.csipsimple_init_acc_msg_data(pool, pjsuaAccId, msgData);
-            if(b != null) {
+            if (b != null) {
                 Bundle extraHeaders = b.getBundle(SipCallSession.OPT_CALL_EXTRA_HEADERS);
-                if(extraHeaders != null) {
-                    for(String key : extraHeaders.keySet()) {
+                if (extraHeaders != null) {
+                    for (String key : extraHeaders.keySet()) {
                         try {
                             String value = extraHeaders.getString(key);
-                            if(!TextUtils.isEmpty(value)) {
-                                int res = pjsua.csipsimple_msg_data_add_string_hdr(pool, msgData, pjsua.pj_str_copy(key), pjsua.pj_str_copy(value));
-                                if(res == pjsuaConstants.PJ_SUCCESS) {
-                                    Log.e(THIS_FILE, "Failed to add Xtra hdr (" + key + " : " + value + ") probably not X- header");
+                            if (!TextUtils.isEmpty(value)) {
+                                int res = pjsua.csipsimple_msg_data_add_string_hdr(pool, msgData,
+                                        pjsua.pj_str_copy(key), pjsua.pj_str_copy(value));
+                                if (res == pjsuaConstants.PJ_SUCCESS) {
+                                    Log.e(THIS_FILE, "Failed to add Xtra hdr (" + key + " : "
+                                            + value + ") probably not X- header");
                                 }
                             }
-                        }catch(Exception e) {
+                        } catch (Exception e) {
                             Log.e(THIS_FILE, "Invalid header value for key : " + key);
                         }
                     }
                 }
             }
-            
+
             int status = pjsua.call_make_call(pjsuaAccId, uri, cs, userData, msgData, callId);
-            if(status == pjsuaConstants.PJ_SUCCESS) {
+            if (status == pjsuaConstants.PJ_SUCCESS) {
                 dtmfToAutoSend.put(callId[0], toCall.getDtmf());
-                Log.d(THIS_FILE, "DTMF - Store for " + callId[0] + " - "+toCall.getDtmf());
+                Log.d(THIS_FILE, "DTMF - Store for " + callId[0] + " - " + toCall.getDtmf());
             }
             pjsua.pj_pool_release(pool);
             return status;
@@ -1230,26 +1254,27 @@ public class PjSipService {
         }
         return -1;
     }
-    
+
     public int updateCallOptions(int callId, Bundle options) {
         // TODO : if more options we should redesign this part.
-        if(options.containsKey(SipCallSession.OPT_CALL_VIDEO)) {
+        if (options.containsKey(SipCallSession.OPT_CALL_VIDEO)) {
             boolean add = options.getBoolean(SipCallSession.OPT_CALL_VIDEO);
             SipCallSession ci = getCallInfo(callId);
-            if(add && ci.mediaHasVideo()) {
+            if (add && ci.mediaHasVideo()) {
                 // We already have one video running -- refuse to send another
                 return -1;
-            }else if (!add && !ci.mediaHasVideo()) {
+            } else if (!add && !ci.mediaHasVideo()) {
                 // We have no current video, no way to remove.
                 return -1;
             }
-            pjsua_call_vid_strm_op op = add ? pjsua_call_vid_strm_op.PJSUA_CALL_VID_STRM_ADD : pjsua_call_vid_strm_op.PJSUA_CALL_VID_STRM_REMOVE;
-            if(!add) {
+            pjsua_call_vid_strm_op op = add ? pjsua_call_vid_strm_op.PJSUA_CALL_VID_STRM_ADD
+                    : pjsua_call_vid_strm_op.PJSUA_CALL_VID_STRM_REMOVE;
+            if (!add) {
                 // TODO : manage remove case
             }
             return pjsua.call_set_vid_strm(callId, op, null);
         }
-        
+
         return -1;
     }
 
@@ -1265,60 +1290,63 @@ public class PjSipService {
             return -1;
         }
         String keyPressed = "";
-        // Since some device (xoom...) are apparently buggy with key character map loading... 
+        // Since some device (xoom...) are apparently buggy with key character
+        // map loading...
         // we have to do crappy thing here
-        if(keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9 ) {
+        if (keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
             keyPressed = Integer.toString(keyCode - KeyEvent.KEYCODE_0);
-        } else if (keyCode == KeyEvent.KEYCODE_POUND){
+        } else if (keyCode == KeyEvent.KEYCODE_POUND) {
             keyPressed = "#";
-        } else if (keyCode == KeyEvent.KEYCODE_STAR){
+        } else if (keyCode == KeyEvent.KEYCODE_STAR) {
             keyPressed = "*";
         } else {
-            // Fallback... should never be there if using visible dialpad, but possible using keyboard
+            // Fallback... should never be there if using visible dialpad, but
+            // possible using keyboard
             KeyCharacterMap km = KeyCharacterMap.load(KeyCharacterMap.NUMERIC);
             keyPressed = Integer.toString(km.getNumber(keyCode));
         }
         return sendDtmf(callId, keyPressed);
     }
-    
+
     private int sendDtmf(final int callId, String keyPressed) throws SameThreadException {
-        if(TextUtils.isEmpty(keyPressed)) {
+        if (TextUtils.isEmpty(keyPressed)) {
             return pjsua.PJ_SUCCESS;
         }
-        
 
-        if(pjsua.call_is_active(callId) != pjsuaConstants.PJ_TRUE) {
+        if (pjsua.call_is_active(callId) != pjsuaConstants.PJ_TRUE) {
             return -1;
         }
-        
+
         String dtmfToDial = keyPressed;
         String remainingDtmf = "";
         int pauseBeforeRemaining = 0;
         boolean foundSeparator = false;
-        if(keyPressed.contains(",") || keyPressed.contains(";")) {
+        if (keyPressed.contains(",") || keyPressed.contains(";")) {
             dtmfToDial = "";
-            for(int i = 0; i < keyPressed.length(); i++) {
+            for (int i = 0; i < keyPressed.length(); i++) {
                 char c = keyPressed.charAt(i);
-                if(!foundSeparator) {
-                    if(c == ',' || c == ';') {
-                        pauseBeforeRemaining += (c == ',') ? DTMF_TONE_PAUSE_LENGTH : DTMF_TONE_WAIT_LENGTH;
+                if (!foundSeparator) {
+                    if (c == ',' || c == ';') {
+                        pauseBeforeRemaining += (c == ',') ? DTMF_TONE_PAUSE_LENGTH
+                                : DTMF_TONE_WAIT_LENGTH;
                         foundSeparator = true;
                     } else {
                         dtmfToDial += c;
                     }
-                }else {
-                    if ((c == ',' || c == ';') && TextUtils.isEmpty(remainingDtmf)){
-                        pauseBeforeRemaining += (c == ',') ? DTMF_TONE_PAUSE_LENGTH : DTMF_TONE_WAIT_LENGTH;
-                    }else {
+                } else {
+                    if ((c == ',' || c == ';') && TextUtils.isEmpty(remainingDtmf)) {
+                        pauseBeforeRemaining += (c == ',') ? DTMF_TONE_PAUSE_LENGTH
+                                : DTMF_TONE_WAIT_LENGTH;
+                    } else {
                         remainingDtmf += c;
                     }
                 }
             }
-            
+
         }
 
         int res = 0;
-        if(!TextUtils.isEmpty(dtmfToDial)) {
+        if (!TextUtils.isEmpty(dtmfToDial)) {
             pj_str_t pjKeyPressed = pjsua.pj_str_copy(dtmfToDial);
             res = -1;
             if (prefsWrapper.useSipInfoDtmf()) {
@@ -1330,7 +1358,7 @@ public class PjSipService {
                     res = pjsua.call_dial_dtmf(callId, pjKeyPressed);
                     Log.d(THIS_FILE, "Has been sent in RTP DTMF : " + res);
                 }
-    
+
                 if (res != pjsua.PJ_SUCCESS && !prefsWrapper.forceDtmfRTP()) {
                     // Generate using analogic inband
                     if (dtmfDialtoneGenerators.get(callId) == null) {
@@ -1341,13 +1369,12 @@ public class PjSipService {
                 }
             }
         }
-        
-        
+
         // Finally, push remaining DTMF in the future
-        if(!TextUtils.isEmpty(remainingDtmf)) {
+        if (!TextUtils.isEmpty(remainingDtmf)) {
             dtmfToAutoSend.put(callId, remainingDtmf);
-            
-            if(tasksTimer == null) {
+
+            if (tasksTimer == null) {
                 tasksTimer = new Timer("com.csipsimple.PjSipServiceTasks");
             }
             TimerTask tt = new TimerTask() {
@@ -1363,18 +1390,17 @@ public class PjSipService {
                 }
             };
             dtmfTasks.put(callId, tt);
-            Log.d(THIS_FILE, "Schedule DTMF " + remainingDtmf + " in "+ pauseBeforeRemaining);
+            Log.d(THIS_FILE, "Schedule DTMF " + remainingDtmf + " in " + pauseBeforeRemaining);
             tasksTimer.schedule(tt, pauseBeforeRemaining);
-        }else {
-            if(dtmfToAutoSend.get(callId) != null) {
+        } else {
+            if (dtmfToAutoSend.get(callId) != null) {
                 dtmfToAutoSend.put(callId, null);
             }
-            if(dtmfTasks.get(callId) != null) {
+            if (dtmfTasks.get(callId) != null) {
                 dtmfTasks.put(callId, null);
             }
         }
-        
-        
+
         return res;
     }
 
@@ -1405,9 +1431,10 @@ public class PjSipService {
         }
         return toCall;
     }
-    
+
     /**
      * Add a buddy to buddies list
+     * 
      * @param buddyUri the uri to register to
      * @throws SameThreadException
      */
@@ -1416,19 +1443,20 @@ public class PjSipService {
             return -1;
         }
         int[] p_buddy_id = new int[1];
-        
+
         pjsua_buddy_config buddy_cfg = new pjsua_buddy_config();
         pjsua.buddy_config_default(buddy_cfg);
         buddy_cfg.setSubscribe(1);
         buddy_cfg.setUri(pjsua.pj_str_copy(buddyUri));
-        
-        pjsua.buddy_add(buddy_cfg , p_buddy_id);
-        
+
+        pjsua.buddy_add(buddy_cfg, p_buddy_id);
+
         return p_buddy_id[0];
     }
-    
+
     /**
      * Remove one buddy from the buddy list managed by pjsip
+     * 
      * @param buddyUri he uri to unregister
      * @throws SameThreadException
      */
@@ -1437,14 +1465,15 @@ public class PjSipService {
             return;
         }
         int buddyId = pjsua.buddy_find(pjsua.pj_str_copy(buddyUri));
-        if(buddyId >= 0) {
+        if (buddyId >= 0) {
             pjsua.buddy_del(buddyId);
         }
     }
-    
+
     public void sendPendingDtmf(int callId) throws SameThreadException {
-        if(dtmfToAutoSend.get(callId) != null) {
-            Log.d(THIS_FILE, "DTMF - Send pending dtmf " + dtmfToAutoSend.get(callId) + " for " + callId);
+        if (dtmfToAutoSend.get(callId) != null) {
+            Log.d(THIS_FILE, "DTMF - Send pending dtmf " + dtmfToAutoSend.get(callId) + " for "
+                    + callId);
             sendDtmf(callId, dtmfToAutoSend.get(callId));
         }
     }
@@ -1454,10 +1483,10 @@ public class PjSipService {
             dtmfDialtoneGenerators.get(callId).stopDialtoneGenerator();
             dtmfDialtoneGenerators.put(callId, null);
         }
-        if(dtmfToAutoSend.get(callId) != null) {
+        if (dtmfToAutoSend.get(callId) != null) {
             dtmfToAutoSend.put(callId, null);
         }
-        if(dtmfTasks.get(callId) != null) {
+        if (dtmfTasks.get(callId) != null) {
             dtmfTasks.get(callId).cancel();
             dtmfTasks.put(callId, null);
         }
@@ -1495,6 +1524,7 @@ public class PjSipService {
 
     /**
      * Mute microphone
+     * 
      * @param on true if microphone has to be muted
      * @throws SameThreadException
      */
@@ -1506,6 +1536,7 @@ public class PjSipService {
 
     /**
      * Change speaker phone mode
+     * 
      * @param on true if the speaker mode has to be on.
      * @throws SameThreadException
      */
@@ -1557,9 +1588,12 @@ public class PjSipService {
 
     /**
      * Change account registration / adding state
+     * 
      * @param account The account to modify registration
-     * @param renew if 0 we ask for deletion of this account; if 1 we ask for registration of this account (and add if necessary)
-     * @param forceReAdd if true, we will first remove the account and then re-add it
+     * @param renew if 0 we ask for deletion of this account; if 1 we ask for
+     *            registration of this account (and add if necessary)
+     * @param forceReAdd if true, we will first remove the account and then
+     *            re-add it
      * @return true if the operation get completed without problem
      * @throws SameThreadException
      */
@@ -1570,24 +1604,26 @@ public class PjSipService {
             Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
             return false;
         }
-        if(account.id == SipProfile.INVALID_ID) {
+        if (account.id == SipProfile.INVALID_ID) {
             Log.w(THIS_FILE, "Trying to set registration on a deleted account");
             return false;
         }
 
-        // If local account -- Ensure we are not deleting, because this would be invalid
-        if(account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
-            if(renew == 0) {
+        // If local account -- Ensure we are not deleting, because this would be
+        // invalid
+        if (account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
+            if (renew == 0) {
                 return false;
             }
         }
-        
+
         SipProfileState profileState = getProfileState(account);
-        
+
         // In case of already added, we have to act finely
-        // If it's local we can just consider that we have to re-add account 
+        // If it's local we can just consider that we have to re-add account
         // since it will actually just touch the account with a modify
-        if (profileState != null && profileState.isAddedToStack() && !account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
+        if (profileState != null && profileState.isAddedToStack()
+                && !account.wizard.equalsIgnoreCase(WizardUtils.LOCAL_WIZARD_TAG)) {
             // The account is already there in accounts list
             service.getContentResolver().delete(
                     ContentUris.withAppendedId(SipProfile.ACCOUNT_STATUS_URI, account.id), null,
@@ -1598,7 +1634,8 @@ public class PjSipService {
                     status = pjsua.acc_del(profileState.getPjsuaId());
                     addAccount(account);
                 } else {
-                    pjsua.acc_set_online_status(profileState.getPjsuaId(), getOnlineForStatus(service.getPresence()));
+                    pjsua.acc_set_online_status(profileState.getPjsuaId(),
+                            getOnlineForStatus(service.getPresence()));
                     status = pjsua.acc_set_registration(profileState.getPjsuaId(), renew);
                 }
             } else {
@@ -1617,15 +1654,16 @@ public class PjSipService {
         // PJ_SUCCESS = 0
         return status == 0;
     }
-    
 
     /**
      * Set self presence
+     * 
      * @param presence the SipManager.SipPresence
      * @param statusText the text of the presence
      * @throws SameThreadException
      */
-    public void setPresence(PresenceStatus presence, String statusText, long accountId) throws SameThreadException  {
+    public void setPresence(PresenceStatus presence, String statusText, long accountId)
+            throws SameThreadException {
         if (!created) {
             Log.e(THIS_FILE, "PJSIP is not started here, nothing can be done");
             return;
@@ -1633,17 +1671,17 @@ public class PjSipService {
         SipProfile account = new SipProfile();
         account.id = accountId;
         SipProfileState profileState = getProfileState(account);
-        
+
         // In case of already added, we have to act finely
-        // If it's local we can just consider that we have to re-add account 
+        // If it's local we can just consider that we have to re-add account
         // since it will actually just touch the account with a modify
         if (profileState != null && profileState.isAddedToStack()) {
             // The account is already there in accounts list
             pjsua.acc_set_online_status(profileState.getPjsuaId(), getOnlineForStatus(presence));
         }
-        
+
     }
-    
+
     private int getOnlineForStatus(PresenceStatus presence) {
         return presence == PresenceStatus.ONLINE ? 1 : 0;
     }
@@ -1688,7 +1726,7 @@ public class PjSipService {
         }
         return -1;
     }
-    
+
     public void setAudioInCall(int beforeInit) {
         if (mediaManager != null) {
             mediaManager.setAudioInCall(beforeInit == pjsuaConstants.PJ_TRUE);
@@ -1708,12 +1746,12 @@ public class PjSipService {
         }
         return null;
     }
-    
+
     public void refreshCallMediaState(final int callId) {
         service.getExecutor().execute(new SipRunnable() {
             @Override
             public void doRun() throws SameThreadException {
-                if(created && userAgentReceiver != null) {
+                if (created && userAgentReceiver != null) {
                     userAgentReceiver.updateCallMediaState(callId);
                 }
             }
@@ -1739,7 +1777,6 @@ public class PjSipService {
         account.id = accountId;
         SipProfileState profileState = getProfileState(account);
         long finalAccountId = accountId;
-        
 
         // If this is an invalid account id
         if (accountId == SipProfile.INVALID_ID || !profileState.isAddedToStack()) {
@@ -1790,45 +1827,46 @@ public class PjSipService {
         }
 
         // Check integrity of callee field
-        
+
         ParsedSipContactInfos finalCallee = SipUri.parseSipContact(callee);
-        
+
         if (TextUtils.isEmpty(finalCallee.domain) ||
                 TextUtils.isEmpty(finalCallee.scheme)) {
             Log.d(THIS_FILE, "default acc : " + finalAccountId);
             account = service.getAccount((int) finalAccountId);
         }
-        
+
         if (TextUtils.isEmpty(finalCallee.domain)) {
             String defaultDomain = account.getDefaultDomain();
             finalCallee.domain = defaultDomain;
         }
-        if(TextUtils.isEmpty(finalCallee.scheme)) {
-            if(account.transport == SipProfile.TRANSPORT_TLS) {
+        if (TextUtils.isEmpty(finalCallee.scheme)) {
+            if (account.transport == SipProfile.TRANSPORT_TLS) {
                 finalCallee.scheme = SipManager.PROTOCOL_SIPS;
-            }else {
+            } else {
                 finalCallee.scheme = SipManager.PROTOCOL_SIP;
             }
         }
         String digitsToAdd = null;
-        if(!TextUtils.isEmpty(finalCallee.userName) && 
+        if (!TextUtils.isEmpty(finalCallee.userName) &&
                 (finalCallee.userName.contains(",") || finalCallee.userName.contains(";"))) {
             int commaIndex = finalCallee.userName.indexOf(",");
-            int semiColumnIndex =finalCallee.userName.indexOf(";"); 
-            if(semiColumnIndex > 0 && semiColumnIndex < commaIndex) {
+            int semiColumnIndex = finalCallee.userName.indexOf(";");
+            if (semiColumnIndex > 0 && semiColumnIndex < commaIndex) {
                 commaIndex = semiColumnIndex;
             }
             digitsToAdd = finalCallee.userName.substring(commaIndex);
             finalCallee.userName = finalCallee.userName.substring(0, commaIndex);
         }
-        
+
         Log.d(THIS_FILE, "will call " + finalCallee);
-        
+
         if (pjsua.verify_sip_url(finalCallee.toString(false)) == 0) {
             // In worse worse case, find back the account id for uri.. but
             // probably useless case
             if (pjsipAccountId == SipProfile.INVALID_ID) {
-                pjsipAccountId = pjsua.acc_find_for_outgoing(pjsua.pj_str_copy(finalCallee.toString(false)));
+                pjsipAccountId = pjsua.acc_find_for_outgoing(pjsua.pj_str_copy(finalCallee
+                        .toString(false)));
             }
             return new ToCall(pjsipAccountId, finalCallee.toString(false), digitsToAdd);
         }
@@ -1842,8 +1880,6 @@ public class PjSipService {
             mediaManager.stopRingAndUnfocus();
         }
 
-        
-        
         // If new call state is not idle
         if (state != TelephonyManager.CALL_STATE_IDLE && userAgentReceiver != null) {
             SipCallSession currentActiveCall = userAgentReceiver.getActiveCallOngoing();
@@ -1863,7 +1899,7 @@ public class PjSipService {
                     hasBeenChangedRingerMode = am.getRingerMode();
                     am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                     // And try to notify with tone
-                    if(mediaManager != null) {
+                    if (mediaManager != null) {
                         mediaManager.playInCallTone(MediaManager.TONE_CALL_WAITING);
                     }
                 }
@@ -1876,9 +1912,10 @@ public class PjSipService {
                 callReinvite(hasBeenHoldByGSM, true);
                 hasBeenHoldByGSM = null;
             }
-            
-            // GSM is now back to an IDLE state, reset ringerMode if was changed.
-            if(hasBeenChangedRingerMode != null) {
+
+            // GSM is now back to an IDLE state, reset ringerMode if was
+            // changed.
+            if (hasBeenChangedRingerMode != null) {
                 AudioManager am = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
                 am.setRingerMode(hasBeenChangedRingerMode);
                 hasBeenChangedRingerMode = null;
@@ -1921,46 +1958,48 @@ public class PjSipService {
                 List<String> dnsServers;
                 List<String> dnsServersAll = new ArrayList<String>();
                 List<String> dnsServersIpv4 = new ArrayList<String>();
-                for(int i = 1; i <= 2; i++) {
-                    String dnsName = prefsWrapper.getSystemProp("net.dns"+i);
-                    if(!TextUtils.isEmpty(dnsName)) {
+                for (int i = 1; i <= 2; i++) {
+                    String dnsName = prefsWrapper.getSystemProp("net.dns" + i);
+                    if (!TextUtils.isEmpty(dnsName)) {
                         dnsName = dnsName.replaceAll(ipv6Escape, "");
                         if (!TextUtils.isEmpty(dnsName) && !dnsServersAll.contains(dnsName)) {
-                                if(dnsName.matches(ipv4Matcher) || dnsName.matches(ipv6Matcher)) {
-                                    dnsServersAll.add(dnsName);
-                                }
-                                if(dnsName.matches(ipv4Matcher)) {
-                                    dnsServersIpv4.add(dnsName);
-                                }
+                            if (dnsName.matches(ipv4Matcher) || dnsName.matches(ipv6Matcher)) {
+                                dnsServersAll.add(dnsName);
+                            }
+                            if (dnsName.matches(ipv4Matcher)) {
+                                dnsServersIpv4.add(dnsName);
+                            }
                         }
                     }
                 }
-                
-                if(dnsServersIpv4.size() > 0) {
-                    // Prefer pure ipv4 list since pjsua doesn't manage ipv6 resolution yet
+
+                if (dnsServersIpv4.size() > 0) {
+                    // Prefer pure ipv4 list since pjsua doesn't manage ipv6
+                    // resolution yet
                     dnsServers = dnsServersIpv4;
-                }else {
+                } else {
                     dnsServers = dnsServersAll;
                 }
-                
+
                 if (dnsServers.size() == 0) {
-                    // This is the ultimate fallback... we should never be there !
+                    // This is the ultimate fallback... we should never be there
+                    // !
                     nameservers = new pj_str_t[] {
-                        pjsua.pj_str_copy("127.0.0.1")
+                            pjsua.pj_str_copy("127.0.0.1")
                     };
                 } else if (dnsServers.size() == 1) {
                     nameservers = new pj_str_t[] {
-                        pjsua.pj_str_copy(dnsServers.get(0))
+                            pjsua.pj_str_copy(dnsServers.get(0))
                     };
                 } else {
                     nameservers = new pj_str_t[] {
-                        pjsua.pj_str_copy(dnsServers.get(0)),
-                        pjsua.pj_str_copy(dnsServers.get(1))
+                            pjsua.pj_str_copy(dnsServers.get(0)),
+                            pjsua.pj_str_copy(dnsServers.get(1))
                     };
                 }
             } else {
                 nameservers = new pj_str_t[] {
-                    pjsua.pj_str_copy(prefsDNS)
+                        pjsua.pj_str_copy(prefsDNS)
                 };
             }
         }
@@ -1971,7 +2010,7 @@ public class PjSipService {
         try {
             int use_srtp = Integer.parseInt(prefsWrapper
                     .getPreferenceStringValue(SipConfigManager.USE_SRTP));
-            if(use_srtp >= 0) {
+            if (use_srtp >= 0) {
                 return pjmedia_srtp_use.swigToEnum(use_srtp);
             }
         } catch (NumberFormatException e) {
@@ -1994,14 +2033,15 @@ public class PjSipService {
         pjsua.set_snd_dev(0, 0);
     }
 
-
     // Recorder
     private SparseArray<List<IRecorderHandler>> callRecorders = new SparseArray<List<IRecorderHandler>>();
+
     /**
      * Start recording of a call.
      * 
      * @param callId the call id of the call to record
-     * @throws SameThreadException virtual exception to be sure we are calling this from correct thread
+     * @throws SameThreadException virtual exception to be sure we are calling
+     *             this from correct thread
      */
     public void startRecording(int callId, int way) throws SameThreadException {
         // Make sure we are in a valid state for recording
@@ -2009,21 +2049,23 @@ public class PjSipService {
             return;
         }
         // Sanitize call way : if 0 assume all
-        if(way == 0) {
+        if (way == 0) {
             way = SipManager.BITMASK_ALL;
         }
-        
+
         try {
             File recFolder = PreferencesProviderWrapper.getRecordsFolder(service);
-            IRecorderHandler recoder = new SimpleWavRecorderHandler(getCallInfo(callId), recFolder, way);
-            List<IRecorderHandler> recordersList = callRecorders.get(callId, new ArrayList<IRecorderHandler>());
+            IRecorderHandler recoder = new SimpleWavRecorderHandler(getCallInfo(callId), recFolder,
+                    way);
+            List<IRecorderHandler> recordersList = callRecorders.get(callId,
+                    new ArrayList<IRecorderHandler>());
             recordersList.add(recoder);
             callRecorders.put(callId, recordersList);
             recoder.startRecording();
             userAgentReceiver.updateRecordingStatus(callId, false, true);
-        }catch(IOException e) {
+        } catch (IOException e) {
             service.notifyUserOfMessage(R.string.cant_write_file);
-        }catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             Log.e(THIS_FILE, "Impossible to record ", e);
         }
     }
@@ -2032,15 +2074,16 @@ public class PjSipService {
      * Stop recording of a call.
      * 
      * @param callId the call to stop record for.
-     * @throws SameThreadException virtual exception to be sure we are calling this from correct thread
+     * @throws SameThreadException virtual exception to be sure we are calling
+     *             this from correct thread
      */
     public void stopRecording(int callId) throws SameThreadException {
         if (!created) {
             return;
         }
         List<IRecorderHandler> recoders = callRecorders.get(callId, null);
-        if(recoders != null) {
-            for(IRecorderHandler recoder : recoders) {
+        if (recoders != null) {
+            for (IRecorderHandler recoder : recoders) {
                 recoder.stopRecording();
                 // Broadcast to other apps the a new sip record has been done
                 SipCallSession callInfo = getCallInfo(callId);
@@ -2054,7 +2097,7 @@ public class PjSipService {
             userAgentReceiver.updateRecordingStatus(callId, true, false);
         }
     }
-    
+
     /**
      * Can we record for this call id ?
      * 
@@ -2072,31 +2115,31 @@ public class PjSipService {
             return false;
         }
         int ms = callInfo.getMediaStatus();
-        if( ms != SipCallSession.MediaState.ACTIVE &&
-             ms != SipCallSession.MediaState.REMOTE_HOLD) {
+        if (ms != SipCallSession.MediaState.ACTIVE &&
+                ms != SipCallSession.MediaState.REMOTE_HOLD) {
             // We can't record if media state not running on our side
             return false;
         }
         return true;
     }
-    
+
     /**
      * Are we currently recording the call?
      * 
-     * @param callId The call id to test for a recorder presence 
+     * @param callId The call id to test for a recorder presence
      * @return true if recording this call
      */
     public boolean isRecording(int callId) throws SameThreadException {
         List<IRecorderHandler> recorders = callRecorders.get(callId, null);
-        if(recorders == null) {
+        if (recorders == null) {
             return false;
         }
         return recorders.size() > 0;
     }
 
-
     // Stream players
-    // We use a list for future possible extensions. For now api only manages one
+    // We use a list for future possible extensions. For now api only manages
+    // one
     private SparseArray<List<IPlayerHandler>> callPlayers = new SparseArray<List<IPlayerHandler>>();
 
     /**
@@ -2104,11 +2147,12 @@ public class PjSipService {
      * 
      * @param filePath The path to the file we'd like to play
      * @param callId The call id we want to play to. Even if we only use
-     *            {@link SipManager#BITMASK_IN} this must correspond to some call since
-     *            it's used to identify internally created player.
+     *            {@link SipManager#BITMASK_IN} this must correspond to some
+     *            call since it's used to identify internally created player.
      * @param way The way we want to play this file to. Bitmasked value that
-     *            could be compounded of {@link SipManager#BITMASK_IN} (read local) and
-     *            {@link SipManager#BITMASK_OUT} (read to remote party of the call)
+     *            could be compounded of {@link SipManager#BITMASK_IN} (read
+     *            local) and {@link SipManager#BITMASK_OUT} (read to remote
+     *            party of the call)
      * @throws SameThreadException virtual exception to be sure we are calling
      *             this from correct thread
      */
@@ -2118,26 +2162,27 @@ public class PjSipService {
         }
         // Stop any current player
         stopPlaying(callId);
-        if(TextUtils.isEmpty(filePath)) {
+        if (TextUtils.isEmpty(filePath)) {
             // Nothing to do if we have not file path
             return;
         }
-        if(way == 0) {
+        if (way == 0) {
             way = SipManager.BITMASK_ALL;
         }
-        
+
         // We create a new player conf port.
         try {
             IPlayerHandler player = new SimpleWavPlayerHandler(getCallInfo(callId), filePath, way);
-            List<IPlayerHandler> playersList = callPlayers.get(callId, new ArrayList<IPlayerHandler>());
+            List<IPlayerHandler> playersList = callPlayers.get(callId,
+                    new ArrayList<IPlayerHandler>());
             playersList.add(player);
             callPlayers.put(callId, playersList);
-            
+
             player.startPlaying();
-        }catch(IOException e) {
+        } catch (IOException e) {
             // TODO : add a can't read file txt
             service.notifyUserOfMessage(R.string.cant_write_file);
-        }catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             Log.e(THIS_FILE, "Impossible to play file", e);
         }
     }
@@ -2152,8 +2197,8 @@ public class PjSipService {
      */
     public void stopPlaying(int callId) throws SameThreadException {
         List<IPlayerHandler> players = callPlayers.get(callId, null);
-        if(players != null) {
-            for(IPlayerHandler player : players) {
+        if (players != null) {
+            for (IPlayerHandler player : players) {
                 player.stopPlaying();
             }
             callPlayers.delete(callId);
@@ -2173,12 +2218,12 @@ public class PjSipService {
             if (pjStr != null) {
                 // If there's utf-8 ptr length is possibly lower than slen
                 int len = pjStr.getSlen();
-                if(len > 0 && pjStr.getPtr() != null) {
+                if (len > 0 && pjStr.getPtr() != null) {
                     // Be robust to smaller length detected
-                    if(pjStr.getPtr().length() < len) {
+                    if (pjStr.getPtr().length() < len) {
                         len = pjStr.getPtr().length();
                     }
-                
+
                     if (len > 0) {
                         return pjStr.getPtr().substring(0, len);
                     }
@@ -2194,29 +2239,29 @@ public class PjSipService {
         long[] rx_level = new long[1];
         long[] tx_level = new long[1];
         pjsua.conf_get_signal_level(port, tx_level, rx_level);
-        return (rx_level[0] << 8 | tx_level[0] );
+        return (rx_level[0] << 8 | tx_level[0]);
     }
 
-
-    private Map<String, PjsipModule> pjsipModules  = new  HashMap<String, PjsipModule>();
+    private Map<String, PjsipModule> pjsipModules = new HashMap<String, PjsipModule>();
 
     private void initModules() {
         // TODO : this should be more modular and done from outside
         PjsipModule rModule = new RegHandlerModule();
         pjsipModules.put(RegHandlerModule.class.getCanonicalName(), rModule);
-        
+
         rModule = new SipClfModule();
         pjsipModules.put(SipClfModule.class.getCanonicalName(), rModule);
-        
-        for(PjsipModule mod : pjsipModules.values()) {
+
+        for (PjsipModule mod : pjsipModules.values()) {
             mod.setContext(service);
         }
     }
 
     public interface PjsipModule {
         /**
-         * Set the android context for the module.
-         * Could be usefull to get preferences for examples.
+         * Set the android context for the module. Could be usefull to get
+         * preferences for examples.
+         * 
          * @param ctxt android context
          */
         void setContext(Context ctxt);
@@ -2225,10 +2270,11 @@ public class PjSipService {
          * Here pjsip endpoint should have this module added.
          */
         void onBeforeStartPjsip();
-        
+
         /**
-         * This is fired just after account was added to pjsip and before will be registered.
-         * Modules does not necessarily implement something here.
+         * This is fired just after account was added to pjsip and before will
+         * be registered. Modules does not necessarily implement something here.
+         * 
          * @param pjId the pjsip id of the added account.
          * @param acc the profile account.
          */
