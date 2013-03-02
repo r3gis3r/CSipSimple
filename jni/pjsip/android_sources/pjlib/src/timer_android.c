@@ -99,7 +99,7 @@ static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 
 		PJ_LOG(
 				5,
-				(THIS_FILE, "Scheduling timer %d of %d in %ld ms", entry->_timer_id, ht->heap_id, ft));
+				(THIS_FILE, "Scheduling timer %d of %d in %ld ms @ %p", entry->_timer_id, ht->heap_id, ft, entry));
 
 		timer_schedule_wrapper((int) entry, get_entry_id(ht, entry), (int) ft);
 
@@ -125,11 +125,13 @@ static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
 	PJ_LOG(5, (THIS_FILE, "Cancel timer %d", entry->_timer_id));
 
 	// This includes case where the entry is not linked to the heap anymore
+	/*
 	if (ht->entries[entry->_timer_id] != entry) {
 		PJ_LOG(1,
-				(THIS_FILE, "Cancelling something not linked to this heap : %d", entry->_timer_id));
+				(THIS_FILE, "Cancelling something not linked to this heap : %d : %p vs %p", entry->_timer_id, entry, ht->entries[entry->_timer_id]));
 		return 0;
 	}
+	*/
 
 	// Note -- due to the fact we rely on android alarm manager, nothing ensure here that cancelCount is actually valid.
 	// Previous checks should do the trick to be sure we have actually 1 cancelled timer here.
@@ -264,13 +266,17 @@ PJ_DEF(pj_timer_entry*) pj_timer_entry_init( pj_timer_entry *entry,
     entry->id = id;
     entry->user_data = user_data;
     entry->cb = cb;
+    entry->_grp_lock = NULL;
 
     return entry;
 }
 
-PJ_DEF(pj_status_t) pj_timer_heap_schedule( pj_timer_heap_t *ht,
-					    pj_timer_entry *entry, 
-					    const pj_time_val *delay)
+static pj_status_t schedule_w_grp_lock(pj_timer_heap_t *ht,
+                                       pj_timer_entry *entry,
+                                       const pj_time_val *delay,
+                                       pj_bool_t set_id,
+                                       int id_val,
+                                       pj_grp_lock_t *grp_lock)
 {
     pj_status_t status;
     pj_time_val expires;
@@ -286,13 +292,39 @@ PJ_DEF(pj_status_t) pj_timer_heap_schedule( pj_timer_heap_t *ht,
     
     lock_timer_heap(ht);
     status = schedule_entry(ht, entry, &expires, delay);
+    if (status == PJ_SUCCESS) {
+        if (set_id)
+            entry->id = id_val;
+        entry->_grp_lock = grp_lock;
+        if (entry->_grp_lock) {
+            pj_grp_lock_add_ref(entry->_grp_lock);
+        }
+    }
     unlock_timer_heap(ht);
 
     return status;
 }
 
-PJ_DEF(int) pj_timer_heap_cancel( pj_timer_heap_t *ht,
-				  pj_timer_entry *entry)
+PJ_DEF(pj_status_t) pj_timer_heap_schedule( pj_timer_heap_t *ht,
+					    pj_timer_entry *entry,
+					    const pj_time_val *delay)
+{
+    return schedule_w_grp_lock(ht, entry, delay, PJ_FALSE, 1, NULL);
+}
+
+PJ_DEF(pj_status_t) pj_timer_heap_schedule_w_grp_lock(pj_timer_heap_t *ht,
+                                                      pj_timer_entry *entry,
+                                                      const pj_time_val *delay,
+                                                      int id_val,
+                                                      pj_grp_lock_t *grp_lock)
+{
+    return schedule_w_grp_lock(ht, entry, delay, PJ_TRUE, id_val, grp_lock);
+}
+
+static int cancel_timer(pj_timer_heap_t *ht,
+            pj_timer_entry *entry,
+            pj_bool_t set_id,
+            int id_val)
 {
     int count;
 
@@ -300,10 +332,33 @@ PJ_DEF(int) pj_timer_heap_cancel( pj_timer_heap_t *ht,
 
     lock_timer_heap(ht);
     count = cancel(ht, entry, 1);
+    if (set_id) {
+        entry->id = id_val;
+     }
+     if (entry->_grp_lock) {
+        pj_grp_lock_t *grp_lock = entry->_grp_lock;
+        entry->_grp_lock = NULL;
+        pj_grp_lock_dec_ref(grp_lock);
+    }
     unlock_timer_heap(ht);
 
     return count;
 }
+
+
+PJ_DEF(int) pj_timer_heap_cancel( pj_timer_heap_t *ht,
+				  pj_timer_entry *entry)
+{
+    return cancel_timer(ht, entry, PJ_FALSE, 0);
+}
+
+PJ_DEF(int) pj_timer_heap_cancel_if_active(pj_timer_heap_t *ht,
+        pj_timer_entry *entry,
+        int id_val)
+{
+    return cancel_timer(ht, entry, PJ_TRUE, id_val);
+}
+
 
 PJ_DEF(unsigned) pj_timer_heap_poll( pj_timer_heap_t *ht, 
                                      pj_time_val *next_delay )
@@ -374,9 +429,11 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 	// Find corresponding ht
 	pj_timer_heap_t *ht = sHeaps[heap_id];
 	if (ht != NULL) {
-		PJ_LOG(5, (THIS_FILE, "FIRE timer %d of heap %d", entry_id, heap_id));
+	    pj_timer_heap_callback* cb = NULL;
+	    pj_grp_lock_t *grp_lock;
 
-		pj_timer_heap_callback* cb = NULL;
+	    PJ_LOG(5, (THIS_FILE, "FIRE timer %d of heap %d", entry_id, heap_id));
+
 		lock_timer_heap(ht);
 
 		// Get callback if entry valid
@@ -384,9 +441,10 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 		if (entry != NULL && entry->_timer_id >= 0) {
 			cb = entry->cb;
 		}
-        //unlock_timer_heap(ht);
+		// Store the group lock
+	    grp_lock = entry->_grp_lock;
+	    entry->_grp_lock = NULL;
 
-        //lock_timer_heap(ht);
 		// Release slot
 		ht->entries[entry_id] = NULL;
 		entry->_timer_id = -1;
@@ -396,9 +454,10 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
         if (cb) {
             cb(ht, entry);
         }
-
+        if (grp_lock) {
+            pj_grp_lock_dec_ref(grp_lock);
+        }
 		PJ_LOG(5, (THIS_FILE, "FIRE done and released"));
-
 	} else {
 		PJ_LOG(2, (THIS_FILE, "FIRE Ignore : No heap found at %d for this entry %d", heap_id, entry_code_id));
 	}
