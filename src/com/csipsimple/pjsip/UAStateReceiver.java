@@ -38,6 +38,7 @@ import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.SparseArray;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
@@ -69,9 +70,8 @@ import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsua_buddy_info;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -538,7 +538,7 @@ public class UAStateReceiver extends Callback {
      * information it gets comes from the stack. Except recording status that
      * comes from service.
      */
-    private Map<Integer, SipCallSessionImpl> callsList = new HashMap<Integer, SipCallSessionImpl>();
+    private SparseArray<SipCallSessionImpl> callsList = new SparseArray<SipCallSessionImpl>();
 
     /**
      * Update the call information from pjsip stack by calling pjsip primitives.
@@ -582,7 +582,7 @@ public class UAStateReceiver extends Callback {
     public SipCallSessionImpl getCallInfo(Integer callId) {
         SipCallSessionImpl callInfo;
         synchronized (callsList) {
-            callInfo = callsList.get(callId);
+            callInfo = callsList.get(callId, null);
         }
         return callInfo;
     }
@@ -594,20 +594,15 @@ public class UAStateReceiver extends Callback {
      */
     public SipCallSessionImpl[] getCalls() {
         if (callsList != null) {
+            List<SipCallSessionImpl> calls = new ArrayList<SipCallSessionImpl>();
 
-            SipCallSessionImpl[] callsInfos = new SipCallSessionImpl[callsList.size()];
-            int i = 0;
-            for (Entry<Integer, SipCallSessionImpl> entry : callsList.entrySet()) {
-                callsInfos[i] = entry.getValue();
-                /*
-                 * if(callsInfos[i] != null) { Log.d(THIS_FILE,
-                 * "Has one call with id " + callsInfos[i].getCallId() + " " +
-                 * callsInfos[i]); }else { Log.w(THIS_FILE,
-                 * "One of the cached calls is not valid... at index " + i); }
-                 */
-                i++;
+            for (int i = 0; i < callsList.size(); i++) {
+                SipCallSessionImpl callInfo = getCallInfo(i);
+                if (callInfo != null) {
+                    calls.add(callInfo);
+                }
             }
-            return callsInfos;
+            return calls.toArray(new SipCallSessionImpl[calls.size()]);
         }
         return new SipCallSessionImpl[0];
     }
@@ -927,9 +922,9 @@ public class UAStateReceiver extends Callback {
      */
     public SipCallSession getActiveCallInProgress() {
         // Go through the whole list of calls and find the first active state.
-        for (Integer i : callsList.keySet()) {
+        for (int i = 0; i < callsList.size(); i++) {
             SipCallSession callInfo = getCallInfo(i);
-            if (callInfo.isActive()) {
+            if (callInfo != null && callInfo.isActive()) {
                 return callInfo;
             }
         }
@@ -943,9 +938,9 @@ public class UAStateReceiver extends Callback {
      */
     public SipCallSession getActiveCallOngoing() {
         // Go through the whole list of calls and find the first active state.
-        for (Integer i : callsList.keySet()) {
+        for (int i = 0; i < callsList.size(); i++) {
             SipCallSession callInfo = getCallInfo(i);
-            if (callInfo.isActive() && callInfo.isOngoing()) {
+            if (callInfo != null && callInfo.isActive() && callInfo.isOngoing()) {
                 return callInfo;
             }
         }
