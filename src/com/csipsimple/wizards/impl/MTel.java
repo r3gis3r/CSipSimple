@@ -49,12 +49,14 @@ public class MTel extends AuthorizationImplementation {
 		
 		accountAuthorization.setTitle("IMPI");
 		accountAuthorization.setDialogTitle(R.string.w_authorization_auth_name);
+		
+		hidePreference(null, SERVER);
 	}
 	@Override
 	public String getDefaultFieldSummary(String fieldName) {
 		if(fieldName.equals(USER_NAME)) {
 			return parent.getString(R.string.w_common_phone_number_desc);
-		}else if(fieldName.equals(USER_NAME)) {
+		}else if(fieldName.equals(AUTH_NAME)) {
             return parent.getString(R.string.w_authorization_auth_name);
         }
 		return super.getDefaultFieldSummary(fieldName);
@@ -64,12 +66,12 @@ public class MTel extends AuthorizationImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		account.proxies = new String[] {"sip:89.111.231.49"};
+		// Manage IMPU
 		String user = getText(accountUsername).trim();
-		if(user.contains("@")) {
-		    account.username =  user;
-		}else {
-		    account.username =  user + "@" + getDomain();
+		if(!user.contains("@")) {
+		    user =  user + "@" + getDomain();
 		}
+        account.acc_id = "<sip:" + user + ">";
 		account.use_rfc5626 = true;
 		return account;
 	}
@@ -78,5 +80,20 @@ public class MTel extends AuthorizationImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		prefs.setPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS, true);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.csipsimple.wizards.impl.AuthorizationImplementation#canSave()
+	 */
+	@Override
+	public boolean canSave() {
+        boolean isValid = true;
+        
+        isValid &= checkField(accountDisplayName, isEmpty(accountDisplayName));
+        isValid &= checkField(accountUsername, isEmpty(accountUsername));
+        isValid &= checkField(accountAuthorization, isEmpty(accountAuthorization));
+        isValid &= checkField(accountPassword, isEmpty(accountPassword));
+
+        return isValid;
 	}
 }
