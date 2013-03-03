@@ -1,21 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="optional_sip_code">Código SIP opcional</string>
-  <string name="cant_call">Impossivel chamar</string>
-  <string name="rewrite">Reescrever número</string>
-  <string name="stop_processing">Parar processamento</string>
-  <string name="direct_call">Chamar diretamente</string>
-  <string name="auto_answer">Atendimento automático</string>
-  <string name="starts_with">Começa com</string>
-  <string name="ends_with">Termina com</string>
-  <string name="contains">Contém</string>
-  <string name="all">Todos</string>
-  <string name="has_exactly_n_digits">Tem exactamente N dígitos</string>
-  <string name="has_more_than_n_digits">Tem mais de N dígitos</string>
-  <string name="is_exactly">É exactamente</string>
-  <string name="custom_regexp">RegExp personalizada</string>
-  <string name="prefix_by">Adicionar prefixo</string>
-  <string name="suffix_with">Adicionar sufixo</string>
-  <string name="replace_match_by">Substituir ocorrência por</string>
-  <string name="replace_all_by">Substituir tudo por</string>
+
+    <string name="optional_sip_code">Código SIP opcional</string>
+    <string name="cant_call">Impossivel chamar</string>
+    <string name="rewrite">Reescrever número</string>
+    <string name="stop_processing">Parar processamento</string>
+    <string name="direct_call">Chamar diretamente</string>
+    <string name="auto_answer">Atendimento automático</string>
+    <string name="starts_with">Começa com</string>
+    <string name="ends_with">Termina com</string>
+    <string name="contains">Contém</string>
+    <string name="has_exactly_n_digits">Tem exactamente N dígitos</string>
+    <string name="has_more_than_n_digits">Tem mais de N dígitos</string>
+    <string name="is_exactly">É exactamente</string>
+    <string name="custom_regexp">RegExp personalizada</string>
+    <string name="prefix_by">Adicionar prefixo</string>
+    <string name="suffix_with">Adicionar sufixo</string>
+    <string name="replace_match_by">Substituir ocorrência por</string>
+    <string name="replace_all_by">Substituir tudo por</string>
+
 </resources>

@@ -1,20 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="cant_call">無法呼叫</string>
-  <string name="rewrite">改寫</string>
-  <string name="stop_processing">停止處理</string>
-  <string name="direct_call">直接呼叫</string>
-  <string name="auto_answer">自動應答</string>
-  <string name="starts_with">起始為</string>
-  <string name="ends_with">結束為</string>
-  <string name="contains">包含</string>
-  <string name="all">全部</string>
-  <string name="has_exactly_n_digits">有N個數字</string>
-  <string name="has_more_than_n_digits">大於N個數字</string>
-  <string name="is_exactly">全等於</string>
-  <string name="custom_regexp">自訂正規式</string>
-  <string name="prefix_by">字首為</string>
-  <string name="suffix_with">字尾為</string>
-  <string name="replace_match_by">符合替換為</string>
-  <string name="replace_all_by">全部替換為</string>
+
+    <string name="cant_call">無法呼叫</string>
+    <string name="rewrite">改寫</string>
+    <string name="stop_processing">停止處理</string>
+    <string name="direct_call">直接呼叫</string>
+    <string name="auto_answer">自動應答</string>
+    <string name="starts_with">起始為</string>
+    <string name="ends_with">結束為</string>
+    <string name="contains">包含</string>
+    <string name="has_exactly_n_digits">有N個數字</string>
+    <string name="has_more_than_n_digits">大於N個數字</string>
+    <string name="is_exactly">全等於</string>
+    <string name="custom_regexp">自訂正規式</string>
+    <string name="prefix_by">字首為</string>
+    <string name="suffix_with">字尾為</string>
+    <string name="replace_match_by">符合替換為</string>
+    <string name="replace_all_by">全部替換為</string>
+
 </resources>

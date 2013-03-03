@@ -101,7 +101,8 @@
         android:required="false" />
 
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
+        android:backupAgent="com.csipsimple.backup.SipBackupAgent"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher_nightly"
         android:label="@string/app_name" >
@@ -111,6 +112,9 @@
         <meta-data
             android:name="app_channel"
             android:value="trunk" />
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIL5x8Klvg-Y8nV4j4PNSy2JH6yQZ49yKbrqKJAw" />
 
         <activity
             android:name="com.csipsimple.ui.SipHome"

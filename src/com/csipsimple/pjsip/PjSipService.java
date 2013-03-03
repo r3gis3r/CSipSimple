@@ -127,8 +127,7 @@ public class PjSipService {
     private Timer tasksTimer;
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
     private SparseArray<TimerTask> dtmfTasks = new SparseArray<TimerTask>(5);
-    private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(
-            5);
+    private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
 
     // -------
     // Locks
@@ -837,13 +836,13 @@ public class PjSipService {
                 // In the future local account should be set per transport
                 switch (account.transport) {
                     case SipProfile.TRANSPORT_UDP:
-                        accId[0] = localUdpAccPjId;
+                        accId[0] = prefsWrapper.useIPv6() ? localUdp6AccPjId : localUdpAccPjId;
                         break;
                     case SipProfile.TRANSPORT_TCP:
-                        accId[0] = localTcpAccPjId;
+                        accId[0] = prefsWrapper.useIPv6() ? localTcp6AccPjId : localTcpAccPjId;
                         break;
                     case SipProfile.TRANSPORT_TLS:
-                        accId[0] = localTlsAccPjId;
+                        accId[0] = prefsWrapper.useIPv6() ? localTls6AccPjId : localTlsAccPjId;
                         break;
                     default:
                         // By default use UDP

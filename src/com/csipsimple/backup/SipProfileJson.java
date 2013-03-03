@@ -19,7 +19,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.utils;
+package com.csipsimple.backup;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -33,6 +33,9 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.db.DBProvider;
 import com.csipsimple.models.Filter;
+import com.csipsimple.utils.CallHandlerPlugin;
+import com.csipsimple.utils.Log;
+import com.csipsimple.utils.PreferencesWrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,7 +101,7 @@ public final class SipProfileJson {
         return jsonProfile;
     }
 
-    private static JSONArray serializeSipProfiles(Context ctxt) {
+    public static JSONArray serializeSipProfiles(Context ctxt) {
 
         JSONArray jsonSipProfiles = new JSONArray();
         Cursor c = ctxt.getContentResolver().query(SipProfile.ACCOUNT_URI,
@@ -141,7 +144,7 @@ public final class SipProfileJson {
         return jsonSipProfiles;
     }
 
-    private static JSONObject serializeSipSettings(Context ctxt) {
+    public static JSONObject serializeSipSettings(Context ctxt) {
         PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
         return prefs.serializeSipSettings();
     }
@@ -229,7 +232,7 @@ public final class SipProfileJson {
         return false;
     }
 
-    private static void restoreSipSettings(Context ctxt, JSONObject settingsObj) {
+    public static void restoreSipSettings(Context ctxt, JSONObject settingsObj) {
         PreferencesWrapper prefs = new PreferencesWrapper(ctxt);
         prefs.restoreSipSettings(settingsObj);
     }
@@ -282,20 +285,7 @@ public final class SipProfileJson {
         }
 
         if (accounts != null && accounts.length() > 0) {
-            ContentResolver cr = ctxt.getContentResolver();
-            // Clear old existing accounts
-            cr.delete(SipProfile.ACCOUNT_URI, "1", null);
-            cr.delete(SipManager.FILTER_URI, "1", null);
-
-            // Add each accounts
-            for (int i = 0; i < accounts.length(); i++) {
-                try {
-                    JSONObject account = accounts.getJSONObject(i);
-                    restoreSipProfile(account, cr);
-                } catch (JSONException e) {
-                    Log.e(THIS_FILE, "Unable to parse item " + i, e);
-                }
-            }
+            restoreSipAccounts(ctxt, accounts);
         }
 
         if (settings != null) {
@@ -304,5 +294,22 @@ public final class SipProfileJson {
         }
 
         return false;
+    }
+
+    public static void restoreSipAccounts(Context ctxt, JSONArray accounts) {
+        ContentResolver cr = ctxt.getContentResolver();
+        // Clear old existing accounts
+        cr.delete(SipProfile.ACCOUNT_URI, "1", null);
+        cr.delete(SipManager.FILTER_URI, "1", null);
+
+        // Add each accounts
+        for (int i = 0; i < accounts.length(); i++) {
+            try {
+                JSONObject account = accounts.getJSONObject(i);
+                restoreSipProfile(account, cr);
+            } catch (JSONException e) {
+                Log.e(THIS_FILE, "Unable to parse item " + i, e);
+            }
+        }
     }
 }

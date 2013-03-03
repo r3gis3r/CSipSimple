@@ -1,22 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="optional_sip_code">កូដ sip ជា​ជម្រើស</string>
-  <string name="cant_call">មិន​អាច​ហៅ​</string>
-  <string name="rewrite">សរសេរ​ឡើងវិញ</string>
-  <string name="stop_processing">បញ្ឈប់​ដំណើរការ</string>
-  <string name="direct_call">ហៅ​ដោយ​ផ្ទាល់</string>
-  <string name="auto_answer">ឆ្លើយតប​ស្វ័យប្រវត្តិ</string>
-  <string name="starts_with">ចាប់ផ្ដើម​ដោយ</string>
-  <string name="ends_with">បញ្ចប់​ដោយ</string>
-  <string name="contains">មាន</string>
-  <string name="all">ទាំងអស់</string>
-  <string name="has_exactly_n_digits">មាន​ចំនួន N តួ</string>
-  <string name="has_more_than_n_digits">មាន​ច្រើន​ជាង N តួ</string>
-  <string name="is_exactly">ដូច</string>
-  <string name="custom_regexp">RegExp ផ្ទាល់ខ្លួន</string>
-  <string name="prefix_by">បន្ថែម​ពី​មុខ​ដោយ</string>
-  <string name="suffix_with">បន្ថែមពី​ក្រោយ​ដោយ</string>
-  <string name="replace_match_by">ជំនួស​ការ​ផ្គូផ្គង​ដោយ</string>
-  <string name="replace_all_by">ជំនួស​ទាំងអស់​ដោយ</string>
-  <string name="call_info_header">មាន​ព័ត៌មាន​ការ​ហៅ​សម្រាប់​ការ​ឆ្លើយតប​ភ្លាមៗ</string>
+
+    <string name="optional_sip_code">កូដ sip ជា​ជម្រើស</string>
+    <string name="cant_call">មិន​អាច​ហៅ​</string>
+    <string name="rewrite">សរសេរ​ឡើងវិញ</string>
+    <string name="stop_processing">បញ្ឈប់​ដំណើរការ</string>
+    <string name="direct_call">ហៅ​ដោយ​ផ្ទាល់</string>
+    <string name="auto_answer">ឆ្លើយតប​ស្វ័យប្រវត្តិ</string>
+    <string name="starts_with">ចាប់ផ្ដើម​ដោយ</string>
+    <string name="ends_with">បញ្ចប់​ដោយ</string>
+    <string name="contains">មាន</string>
+    <string name="has_exactly_n_digits">មាន​ចំនួន N តួ</string>
+    <string name="has_more_than_n_digits">មាន​ច្រើន​ជាង N តួ</string>
+    <string name="is_exactly">ដូច</string>
+    <string name="custom_regexp">RegExp ផ្ទាល់ខ្លួន</string>
+    <string name="prefix_by">បន្ថែម​ពី​មុខ​ដោយ</string>
+    <string name="suffix_with">បន្ថែមពី​ក្រោយ​ដោយ</string>
+    <string name="replace_match_by">ជំនួស​ការ​ផ្គូផ្គង​ដោយ</string>
+    <string name="replace_all_by">ជំនួស​ទាំងអស់​ដោយ</string>
+    <string name="call_info_header">មាន​ព័ត៌មាន​ការ​ហៅ​សម្រាប់​ការ​ឆ្លើយតប​ភ្លាមៗ</string>
+
 </resources>

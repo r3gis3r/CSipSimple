@@ -76,6 +76,7 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Theme;
 import com.csipsimple.utils.UriUtils;
+import com.csipsimple.utils.backup.BackupWrapper;
 import com.csipsimple.wizards.BasePrefsWizard;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
@@ -866,6 +867,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == CHANGE_PREFS) {
             sendBroadcast(new Intent(SipManager.ACTION_SIP_REQUEST_RESTART));
+            BackupWrapper.getInstance(this).dataChanged();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

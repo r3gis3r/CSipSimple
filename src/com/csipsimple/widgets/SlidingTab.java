@@ -35,8 +35,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 
 import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.csipsimple.R;
@@ -381,19 +381,23 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 	public void resetView() {
 		leftSlider.reset();
 		rightSlider.reset();
-		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+        recomputeLayout(getLeft(), getTop(), getRight(), getBottom());
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		if (!changed) {
-			return;
-		}
+        if (!changed) {
+            return;
+        }
+		recomputeLayout(l, t, r, b);
+	}
+
+    public void recomputeLayout(int l, int t, int r, int b) {
 		// Center the widgets in the view
 		leftSlider.layout(l, t, r, b, Slider.ALIGN_LEFT);
 		rightSlider.layout(l, t, r, b, Slider.ALIGN_RIGHT);
 		invalidate();
-	}
+    }
 
 	private void moveHandle(float x, float y) {
 		final View handle = currentSlider.tab;

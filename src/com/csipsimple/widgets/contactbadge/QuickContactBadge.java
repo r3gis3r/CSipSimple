@@ -113,7 +113,6 @@ public class QuickContactBadge extends FrameLayout {
 
     
     public void overlay(Canvas c, ImageView img) {
-        super.onDraw(c);
         if (arrowPos != ArrowPosition.NONE) {
             
             int x_border = (arrowPos == ArrowPosition.LEFT) ? 0 : img.getWidth();

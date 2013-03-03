@@ -1,22 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="optional_sip_code">Volitelný sip kód</string>
-  <string name="cant_call">Nelze volat</string>
-  <string name="rewrite">Přepsat</string>
-  <string name="stop_processing">Zastavit zpracování</string>
-  <string name="direct_call">Přímé volání</string>
-  <string name="auto_answer">Automatická odpověď</string>
-  <string name="starts_with">začít s</string>
-  <string name="ends_with">ukončit s</string>
-  <string name="contains">Obsahuje</string>
-  <string name="all">Vše</string>
-  <string name="has_exactly_n_digits">Má přesně n číslic</string>
-  <string name="has_more_than_n_digits">Má více než N číslic</string>
-  <string name="is_exactly">Je přesně</string>
-  <string name="custom_regexp">vlastní nastavení vypršení registrace</string>
-  <string name="prefix_by">předvolba</string>
-  <string name="suffix_with">připona s</string>
-  <string name="replace_match_by">Nahradit shodu</string>
-  <string name="replace_all_by">nahradit vše</string>
-  <string name="call_info_header">Obsahovat Call-Info pro bezprostřední odpověď</string>
+
+    <string name="optional_sip_code">Volitelný sip kód</string>
+    <string name="cant_call">Nelze volat</string>
+    <string name="rewrite">Přepsat</string>
+    <string name="stop_processing">Zastavit zpracování</string>
+    <string name="direct_call">Přímé volání</string>
+    <string name="auto_answer">Automatická odpověď</string>
+    <string name="starts_with">začít s</string>
+    <string name="ends_with">ukončit s</string>
+    <string name="contains">Obsahuje</string>
+    <string name="has_exactly_n_digits">Má přesně n číslic</string>
+    <string name="has_more_than_n_digits">Má více než N číslic</string>
+    <string name="is_exactly">Je přesně</string>
+    <string name="custom_regexp">vlastní nastavení vypršení registrace</string>
+    <string name="prefix_by">předvolba</string>
+    <string name="suffix_with">připona s</string>
+    <string name="replace_match_by">Nahradit shodu</string>
+    <string name="replace_all_by">nahradit vše</string>
+    <string name="call_info_header">Obsahovat Call-Info pro bezprostřední odpověď</string>
+
 </resources>

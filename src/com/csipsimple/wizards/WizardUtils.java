@@ -21,16 +21,6 @@
 
 package com.csipsimple.wizards;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -41,6 +31,16 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.wizards.impl.*;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 
 public class WizardUtils {

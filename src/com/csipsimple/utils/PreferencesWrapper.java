@@ -240,14 +240,18 @@ public class PreferencesWrapper {
 		// Check if we need an upgrade here
 		// BUNDLE MODE -- upgrade settings
 		if(!HAS_MANAGED_VERSION_UPGRADE) {
-            Integer runningVersion = needUpgrade();
-            if (runningVersion != null) {
-                Editor editor = prefs.edit();
-                editor.putInt(LAST_KNOWN_VERSION_PREF, runningVersion);
-                editor.commit();
-            }
-            HAS_MANAGED_VERSION_UPGRADE = true;
+            forceCheckUpgrade();
 		}
+	}
+	
+	public void forceCheckUpgrade() {
+	    Integer runningVersion = needUpgrade();
+        if (runningVersion != null) {
+            Editor editor = prefs.edit();
+            editor.putInt(LAST_KNOWN_VERSION_PREF, runningVersion);
+            editor.commit();
+        }
+        HAS_MANAGED_VERSION_UPGRADE = true;
 	}
 
     /**

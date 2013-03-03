@@ -10,7 +10,6 @@
     <string name="starts_with">Starts with</string>
     <string name="ends_with">Ends with</string>
     <string name="contains">Contains</string>
-    <string name="all">All</string>
     <string name="has_exactly_n_digits">Has exactly N digits</string>
     <string name="has_more_than_n_digits">Has more than N digits</string>
     <string name="is_exactly">Is exactly</string>

@@ -23,13 +23,15 @@
  * Copyright 2010 Google Inc.
  */
 
-package com.csipsimple.utils;
+package com.csipsimple.backup;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
+import com.csipsimple.utils.Log;
 
 public class Columns {
 

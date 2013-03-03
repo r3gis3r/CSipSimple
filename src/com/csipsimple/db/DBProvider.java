@@ -43,6 +43,7 @@ import com.csipsimple.api.SipProfileState;
 import com.csipsimple.db.DBAdapter.DatabaseHelper;
 import com.csipsimple.models.Filter;
 import com.csipsimple.utils.Log;
+import com.csipsimple.utils.backup.BackupWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,6 +91,8 @@ public class DBProvider extends ContentProvider {
 		SipProfile.FIELD_ID,
 		// Application relative fields
 		SipProfile.FIELD_ACTIVE, SipProfile.FIELD_WIZARD, SipProfile.FIELD_DISPLAY_NAME,
+		// Custom datas
+		SipProfile.FIELD_WIZARD_DATA,
 
 		// Here comes pjsua_acc_config fields
 		SipProfile.FIELD_PRIORITY, SipProfile.FIELD_ACC_ID, SipProfile.FIELD_REG_URI, 
@@ -137,6 +140,8 @@ public class DBProvider extends ContentProvider {
 		
 		Integer.class, String.class, String.class,
 		
+		String.class,
+		
 		Integer.class, String.class, String.class,
 		Boolean.class, Integer.class, Integer.class, Integer.class, 
 		String.class,
@@ -158,7 +163,7 @@ public class DBProvider extends ContentProvider {
 		String.class, String.class, String.class, Integer.class,
 		String.class,
 		
-		Integer.class, String.class,
+		Boolean.class, String.class,
 		
 		// CSipSimple specific
 		Integer.class, String.class,
@@ -714,6 +719,7 @@ public class DBProvider extends ContentProvider {
 		Intent publishIntent = new Intent(SipManager.ACTION_SIP_ACCOUNT_CHANGED);
 		publishIntent.putExtra(SipProfile.FIELD_ID, accountId);
 		getContext().sendBroadcast(publishIntent);
+		BackupWrapper.getInstance(getContext()).dataChanged();
 	}
 	
 	/**

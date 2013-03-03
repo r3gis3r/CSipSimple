@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="starts_with">Začne z</string>
-  <string name="ends_with">Konča z</string>
-  <string name="contains">Vsebuje</string>
-  <string name="all">Vsi</string>
-  <string name="has_exactly_n_digits">Ima točno N številk</string>
-  <string name="has_more_than_n_digits">Ima več kot N številk</string>
-  <string name="is_exactly">Je točen</string>
-  <string name="custom_regexp">RegExp po meri</string>
+
+    <string name="starts_with">Začne z</string>
+    <string name="ends_with">Konča z</string>
+    <string name="contains">Vsebuje</string>
+    <string name="has_exactly_n_digits">Ima točno N številk</string>
+    <string name="has_more_than_n_digits">Ima več kot N številk</string>
+    <string name="is_exactly">Je točen</string>
+    <string name="custom_regexp">RegExp po meri</string>
+
 </resources>

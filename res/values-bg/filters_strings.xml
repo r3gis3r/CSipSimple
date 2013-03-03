@@ -1,22 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="optional_sip_code">SIP код (по избор)</string>
-  <string name="cant_call">Обаждането е невъзможно</string>
-  <string name="rewrite">Пренаписване</string>
-  <string name="stop_processing">Спиране на обработката</string>
-  <string name="direct_call">Директно обаждане</string>
-  <string name="auto_answer">Автоматично отговоряне</string>
-  <string name="starts_with">Започва с</string>
-  <string name="ends_with">Завършва на</string>
-  <string name="contains">Съдържа</string>
-  <string name="all">Всички</string>
-  <string name="has_exactly_n_digits">Има точно N цифри</string>
-  <string name="has_more_than_n_digits">Има повече от N цифри</string>
-  <string name="is_exactly">Е точно</string>
-  <string name="custom_regexp">Персонализиран RegExp</string>
-  <string name="prefix_by">Има представка</string>
-  <string name="suffix_with">Има наставка</string>
-  <string name="replace_match_by">Замени съвпадащите с</string>
-  <string name="replace_all_by">Замени всички с</string>
-  <string name="call_info_header">Has Call-Info for immediate answer</string>
+
+    <string name="optional_sip_code">SIP код (по избор)</string>
+    <string name="cant_call">Обаждането е невъзможно</string>
+    <string name="rewrite">Пренаписване</string>
+    <string name="stop_processing">Спиране на обработката</string>
+    <string name="direct_call">Директно обаждане</string>
+    <string name="auto_answer">Автоматично отговоряне</string>
+    <string name="starts_with">Започва с</string>
+    <string name="ends_with">Завършва на</string>
+    <string name="contains">Съдържа</string>
+    <string name="has_exactly_n_digits">Има точно N цифри</string>
+    <string name="has_more_than_n_digits">Има повече от N цифри</string>
+    <string name="is_exactly">Е точно</string>
+    <string name="custom_regexp">Персонализиран RegExp</string>
+    <string name="prefix_by">Има представка</string>
+    <string name="suffix_with">Има наставка</string>
+    <string name="replace_match_by">Замени съвпадащите с</string>
+    <string name="replace_all_by">Замени всички с</string>
+    <string name="call_info_header">Has Call-Info for immediate answer</string>
+
 </resources>

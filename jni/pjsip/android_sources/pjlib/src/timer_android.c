@@ -368,7 +368,7 @@ PJ_DEF(unsigned) pj_timer_heap_poll( pj_timer_heap_t *ht,
      */
     PJ_UNUSED_ARG(ht);
     if (next_delay) {
-    	next_delay->sec = 1;
+    	next_delay->sec = 600;
     	next_delay->msec = 0;
     }
     return 0;

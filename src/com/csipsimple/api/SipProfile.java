@@ -1483,7 +1483,7 @@ public class SipProfile implements Parcelable {
         if (!TextUtils.isEmpty(data)) {
             args.put(FIELD_DATA, data);
         }
-        args.put(FIELD_AUTH_INITIAL_AUTH, initial_auth);
+        args.put(FIELD_AUTH_INITIAL_AUTH, initial_auth ? 1 : 0);
         if(!TextUtils.isEmpty(auth_algo)) {
             args.put(FIELD_AUTH_ALGO, auth_algo);
         }

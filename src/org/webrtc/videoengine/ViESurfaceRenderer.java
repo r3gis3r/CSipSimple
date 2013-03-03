@@ -12,19 +12,20 @@ package org.webrtc.videoengine;
 
 // The following four imports are needed saveBitmapToJPEG which
 // is for debug only
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.SurfaceHolder.Callback;
+import android.view.SurfaceView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class ViESurfaceRenderer implements Callback {
 
@@ -142,6 +143,7 @@ public class ViESurfaceRenderer implements Callback {
     }
 
     // It saves bitmap data to a JPEG picture, this function is for debug only.
+    @SuppressLint("SdCardPath")
     private void saveBitmapToJPEG(int width, int height) {
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteOutStream);
