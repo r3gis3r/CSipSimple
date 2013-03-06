@@ -68,6 +68,7 @@ import com.csipsimple.utils.video.VideoUtilsWrapper.VideoCaptureCapability;
 import com.csipsimple.utils.video.VideoUtilsWrapper.VideoCaptureDeviceInfo;
 import com.csipsimple.wizards.WizardUtils;
 
+import org.pjsip.pjsua.SWIGTYPE_p_pj_stun_auth_cred;
 import org.pjsip.pjsua.csipsimple_config;
 import org.pjsip.pjsua.dynamic_factory;
 import org.pjsip.pjsua.pj_pool_t;
@@ -511,6 +512,7 @@ public class PjSipService {
                 // TURN
                 int isTurnEnabled = prefsWrapper.getTurnEnabled();
                 if (isTurnEnabled == 1) {
+                    SWIGTYPE_p_pj_stun_auth_cred creds = mediaCfg.getTurn_auth_cred();
                     mediaCfg.setEnable_turn(isTurnEnabled);
                     mediaCfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
                     pjsua.set_turn_credentials(
@@ -518,7 +520,9 @@ public class PjSipService {
                                     .getPreferenceStringValue(SipConfigManager.TURN_USERNAME)),
                             pjsua.pj_str_copy(prefsWrapper
                                     .getPreferenceStringValue(SipConfigManager.TURN_PASSWORD)),
-                            pjsua.pj_str_copy("*"), mediaCfg.getTurn_auth_cred());
+                            pjsua.pj_str_copy("*"), creds);
+                    // Normally this step is useless as manipulating a pointer in C memory at this point, but in case this changes reassign
+                    mediaCfg.setTurn_auth_cred(creds);
                 } else {
                     mediaCfg.setEnable_turn(pjsua.PJ_FALSE);
                 }

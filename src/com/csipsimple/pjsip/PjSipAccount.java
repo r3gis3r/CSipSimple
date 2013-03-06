@@ -30,6 +30,7 @@ import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 
+import org.pjsip.pjsua.SWIGTYPE_p_pj_stun_auth_cred;
 import org.pjsip.pjsua.csipsimple_acc_config;
 import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_qos_type;
@@ -228,13 +229,16 @@ public class PjSipAccount {
         if(profile.turn_cfg_use == 1) {
             cfg.setTurn_cfg_use(pjsua_turn_config_use.PJSUA_TURN_CONFIG_USE_CUSTOM);
             pjsua_turn_config turnCfg = cfg.getTurn_cfg();
+            SWIGTYPE_p_pj_stun_auth_cred creds = turnCfg.getTurn_auth_cred();
             turnCfg.setEnable_turn( (profile.turn_cfg_enable == 1) ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
             turnCfg.setTurn_server( pjsua.pj_str_copy(profile.turn_cfg_server) );
             pjsua.set_turn_credentials(
                     pjsua.pj_str_copy(profile.turn_cfg_user),
                     pjsua.pj_str_copy(profile.turn_cfg_password), 
                     pjsua.pj_str_copy("*"), 
-                    turnCfg.getTurn_auth_cred());
+                    creds);
+            // Normally this step is useless as manipulating a pointer in C memory at this point, but in case this changes reassign
+            turnCfg.setTurn_auth_cred(creds);
         }else {
             cfg.setTurn_cfg_use(pjsua_turn_config_use.PJSUA_TURN_CONFIG_USE_DEFAULT);
         }

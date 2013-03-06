@@ -961,7 +961,7 @@ public class SipProfile implements Parcelable {
      */
     public int turn_cfg_use = -1;
     /**
-     * @see #FIELD_ICE_CFG_ENABLE
+     * @see #FIELD_TURN_CFG_ENABLE
      */
     public int turn_cfg_enable = 0;
     /**
@@ -1403,7 +1403,7 @@ public class SipProfile implements Parcelable {
         if (tmp_i != null && tmp_i >= 0) {
             turn_cfg_use = tmp_i;
         }
-        tmp_i = args.getAsInteger(FIELD_ICE_CFG_ENABLE);
+        tmp_i = args.getAsInteger(FIELD_TURN_CFG_ENABLE);
         if (tmp_i != null && tmp_i >= 0) {
             turn_cfg_enable = tmp_i;
         }
