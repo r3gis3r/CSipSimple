@@ -26,7 +26,9 @@ public abstract class CameraUtilsWrapper {
 
     public static CameraUtilsWrapper getInstance() {
         if (instance == null) {
-            if (Compatibility.isCompatible(9)) {
+            if (Compatibility.isCompatible(11)) {
+                instance = new org.webrtc.videoengine.camera.CameraUtils11();
+            } else if (Compatibility.isCompatible(9)) {
                 instance = new org.webrtc.videoengine.camera.CameraUtils9();
             } else if (Compatibility.isCompatible(8)) {
                 instance = new org.webrtc.videoengine.camera.CameraUtils8();
@@ -96,4 +98,9 @@ public abstract class CameraUtilsWrapper {
      * @param resultRotation the rotation to use
      */
     public abstract void setDisplayOrientation(Camera camera, int resultRotation);
+
+    /**
+     * @param camera
+     */
+    public abstract void setDummyTexture(Camera camera);
 }

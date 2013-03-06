@@ -72,4 +72,12 @@ public class CameraUtils3 extends CameraUtilsWrapper {
 
     }
 
+    /* (non-Javadoc)
+     * @see org.webrtc.videoengine.camera.CameraUtilsWrapper#setDummyTexture(android.hardware.Camera)
+     */
+    @Override
+    public void setDummyTexture(Camera camera) {
+        // Not supported
+    }
+
 }

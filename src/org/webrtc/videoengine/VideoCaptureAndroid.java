@@ -12,9 +12,9 @@ package org.webrtc.videoengine;
 
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
-
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 
@@ -23,6 +23,7 @@ import com.csipsimple.utils.Log;
 import org.webrtc.videoengine.VideoCaptureDeviceInfoAndroid.AndroidVideoCaptureDevice;
 import org.webrtc.videoengine.camera.CameraUtilsWrapper;
 
+import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class VideoCaptureAndroid implements PreviewCallback, Callback {
@@ -50,8 +51,7 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
     // C++ callback context variable.
     private long context = 0;
     private SurfaceHolder localPreview = null;
-    // True if this class owns the preview video buffers.
-    private boolean ownsBuffers = false;
+    private SurfaceTexture dummySurfaceTexture = null;
 
     private int mCaptureWidth = -1;
     private int mCaptureHeight = -1;
@@ -60,7 +60,9 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
     public static
     void DeleteVideoCaptureAndroid(VideoCaptureAndroid captureAndroid) {
         Log.d(TAG, "DeleteVideoCaptureAndroid");
-
+        if(captureAndroid.camera == null) {
+            return;
+        }
         captureAndroid.StopCapture();
         captureAndroid.camera.release();
         captureAndroid.camera = null;
@@ -83,48 +85,38 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
             return -1;
         }
 
-        Log.d(TAG, "tryStartCapture " + width +
-                " height " + height +" frame rate " + frameRate +
-                " isCaptureRunning " + isCaptureRunning +
-                " isSurfaceReady " + isSurfaceReady +
-                " isCaptureStarted " + isCaptureStarted);
+        Log.d(TAG, "tryStartCapture: " + width +
+            "x" + height +", frameRate: " + frameRate +
+            ", isCaptureRunning: " + isCaptureRunning +
+            ", isSurfaceReady: " + isSurfaceReady +
+            ", isCaptureStarted: " + isCaptureStarted);
 
-        if (isCaptureRunning || !isSurfaceReady || !isCaptureStarted) {
+        if (isCaptureRunning || !isCaptureStarted) {
             return 0;
         }
 
-        try {
-            camera.setPreviewDisplay(surfaceHolder);
+        CaptureCapabilityAndroid currentCapability =
+                new CaptureCapabilityAndroid();
+        currentCapability.width = width;
+        currentCapability.height = height;
+        currentCapability.maxFPS = frameRate;
+        PixelFormat.getPixelFormatInfo(PIXEL_FORMAT, pixelFormat);
 
-            CaptureCapabilityAndroid currentCapability =
-                    new CaptureCapabilityAndroid();
-            currentCapability.width = width;
-            currentCapability.height = height;
-            currentCapability.maxFPS = frameRate;
-            PixelFormat.getPixelFormatInfo(PIXEL_FORMAT, pixelFormat);
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.setPreviewSize(currentCapability.width,
+                currentCapability.height);
+        parameters.setPreviewFormat(PIXEL_FORMAT);
+        parameters.setPreviewFrameRate(currentCapability.maxFPS);
+        camera.setParameters(parameters);
 
-            Camera.Parameters parameters = camera.getParameters();
-            parameters.setPreviewSize(currentCapability.width,
-                    currentCapability.height);
-            parameters.setPreviewFormat(PIXEL_FORMAT);
-            parameters.setPreviewFrameRate(currentCapability.maxFPS);
-            camera.setParameters(parameters);
+        int bufSize = width * height * pixelFormat.bitsPerPixel / 8;
+        cameraUtils.setCallback(this, numCaptureBuffers, bufSize, camera);
 
-            int bufSize = width * height * pixelFormat.bitsPerPixel / 8;
-            cameraUtils.setCallback(this, numCaptureBuffers, bufSize, camera);
-            ownsBuffers = true;
-
-            camera.startPreview();
-            previewBufferLock.lock();
-            expectedFrameSize = bufSize;
-            isCaptureRunning = true;
-            previewBufferLock.unlock();
-
-        }
-        catch (Exception ex) {
-            Log.e(TAG, "Failed to start camera");
-            return -1;
-        }
+        camera.startPreview();
+        previewBufferLock.lock();
+        expectedFrameSize = bufSize;
+        isCaptureRunning = true;
+        previewBufferLock.unlock();
 
         isCaptureRunning = true;
         return 0;
@@ -136,9 +128,19 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
         // Get the local preview SurfaceHolder from the static render class
         localPreview = ViERenderer.GetLocalRenderer();
         if (localPreview != null) {
+            if (localPreview.getSurface() != null) {
+                surfaceCreated(localPreview);
+            }
             localPreview.addCallback(this);
+        } else {
+            // No local renderer. Camera won't capture without
+            // setPreview{Texture,Display}, so we create a dummy SurfaceTexture
+            // and hand it over to Camera, but never listen for frame-ready
+            // callbacks, and never call updateTexImage on it.
+            captureLock.lock();
+            cameraUtils.setDummyTexture(camera);
+            captureLock.unlock();
         }
-
         captureLock.lock();
         isCaptureStarted = true;
         mCaptureWidth = width;
@@ -160,7 +162,7 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
             camera.stopPreview();
             cameraUtils.unsetCallback(camera);
         }
-        catch (Exception ex) {
+        catch (RuntimeException ex) {
             Log.e(TAG, "Failed to stop camera");
             return -1;
         }
@@ -182,10 +184,8 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
             // Call the C++ layer with the captured frame
             if (data.length == expectedFrameSize) {
                 ProvideCameraFrame(data, expectedFrameSize, context);
-                if (ownsBuffers) {
-                    // Give the video buffer to the camera service again.
-                    cameraUtils.addCallbackBuffer(camera, data);
-                }
+                // Give the video buffer to the camera service again.
+                cameraUtils.addCallbackBuffer(camera, data);
             }
         }
         previewBufferLock.unlock();
@@ -233,24 +233,27 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
     public void surfaceChanged(SurfaceHolder holder,
                                int format, int width, int height) {
         Log.d(TAG, "VideoCaptureAndroid::surfaceChanged");
-
-        captureLock.lock();
-        isSurfaceReady = true;
-        surfaceHolder = holder;
-
-        tryStartCapture(mCaptureWidth, mCaptureHeight, mCaptureFPS);
-        captureLock.unlock();
-        return;
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(TAG, "VideoCaptureAndroid::surfaceCreated");
+        captureLock.lock();
+        try {
+            camera.setPreviewDisplay(holder);
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to set preview surface!", e);
+        }
+        captureLock.unlock();
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.d(TAG, "VideoCaptureAndroid::surfaceDestroyed");
-        isSurfaceReady = false;
-        surfaceHolder = null;
-        StopCapture();
+        captureLock.lock();
+        try {
+            camera.setPreviewDisplay(null);
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to clear preview surface!", e);
+        }
+        captureLock.unlock();
     }
 }
