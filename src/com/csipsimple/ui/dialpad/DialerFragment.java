@@ -73,6 +73,7 @@ import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
+import com.csipsimple.ui.dialpad.DialerLayout.OnAutoCompleteListVisibilityChangedListener;
 import com.csipsimple.utils.CallHandlerPlugin;
 import com.csipsimple.utils.CallHandlerPlugin.OnLoadListener;
 import com.csipsimple.utils.DialingFeedback;
@@ -88,7 +89,8 @@ import com.csipsimple.widgets.Dialpad;
 import com.csipsimple.widgets.Dialpad.OnDialKeyListener;
 
 public class DialerFragment extends SherlockFragment implements OnClickListener, OnLongClickListener,
-        OnDialKeyListener, TextWatcher, OnDialActionListener, ViewPagerVisibilityListener, OnKeyListener {
+        OnDialKeyListener, TextWatcher, OnDialActionListener, ViewPagerVisibilityListener, OnKeyListener,
+        OnAutoCompleteListVisibilityChangedListener {
 
     private static final String THIS_FILE = "DialerFragment";
 
@@ -155,6 +157,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
     private DialerLayout dialerLayout;
 
+	@Override
+	public void onAutoCompleteListVisibiltyChanged() {
+        applyTextToAutoComplete();
+	}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -204,6 +210,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         
         // Layout 
         dialerLayout.setForceNoList(mDualPane);
+        dialerLayout.setAutoCompleteListVisibiltyChangedListener(this);
 
         // Account chooser button setup
         accountChooserButton.setShowExternals(true);
@@ -542,7 +549,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         //        : R.drawable.ic_menu_switch_digit);
 
         // Invalidate to ask to require the text button to a digit button
-        getSherlockActivity().invalidateOptionsMenu();
+        getSherlockActivity().supportInvalidateOptionsMenu();
     }
     
     private boolean hasAutocompleteList() {

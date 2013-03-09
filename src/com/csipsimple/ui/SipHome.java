@@ -328,7 +328,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                     if (mNextPosition >= 0) {
                         sendFragmentVisibilityChange(mNextPosition, true);
                     }
-                    invalidateOptionsMenu();
+                    supportInvalidateOptionsMenu();
 
                     mCurrentPosition = mNextPosition;
                     break;
@@ -739,7 +739,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                     ab.selectTab(toSelectTab);
                     initTabId = toSelectId;
                 }else {
-                    initTabId = null;
+                    initTabId = 0;
                 }
                 
             }
